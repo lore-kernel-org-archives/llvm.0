@@ -1,224 +1,266 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C91710F1;
-	Tue, 31 Dec 2024 08:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735635486; cv=fail; b=t5NXTMYLfn/qZf8Z11MUbW0k1gCHCjwqakYP6JvWgdaFLlgiU888YQ/BNV0CDICVoY70XlQZYM0gl4BMRXKP2tFA+H5+7NRzz4Yd4xH9HXm0NZm+ShmmLPbomllf+fg+l0CZY1c0cvIrrBXFdUUARRD0pOANcVRVBhAX1WOJRes=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735635486; c=relaxed/simple;
-	bh=EArPBVYOZevnqERrHrBA1hZvj0h6f9n2aSrFZNsqQ1Q=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Bss2wBAn3iFHA1qJcpzkh6qsex8XmJifkuUIvGR53SLclBvZn9ezVrfuqyp8Ph6Eb1ubclB8rbMuuKpEviHPKZhi2Ff43Yd8oSBCm4U0M5JPvjhexr9N9cIvaN/irFThlC5TwPW9X7pee58BDRzxwTyK2XMmVoXThqtvCX3Ul4U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QgY5Xk+n; arc=fail smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4D21ADFE4;
+	Tue, 31 Dec 2024 17:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735667106; cv=none; b=UKAeNCT/3FARL5N8uIW9AnpZMeMnBal8pGYwIsrSph6S0Q9uEYq89sAp5twQCjaMPiDMcH8WmRxnOWaurF3P/tpQo8dlMAUDn7lm0bRAT9JQj/lzsuM3l10EoPHoSzaEYEa13V+mFRhPQ3MMB7/F+h0M4D6JwfZ3aZUH7O9DTik=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735667106; c=relaxed/simple;
+	bh=ZpmvY4WfUCtTIVJc5GldttAgWV/tE9xoQOUP40JR8xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=a7+kvSgW94ukyYvhXPEYFPz/uXuFw5ufzlvFkuKdMKF18xMiQuf32WM+lnQBAqGa68mHFoSCE7284RsPBng11UsO2Nvd5KknauN8zm/oOyzdW8kJOuvITV2LobTq20hxQA2QIlxgPr9Sos883T8dnnNvFY9vKBJe64dhxYQrGhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j9iJGnQZ; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QgY5Xk+n"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j9iJGnQZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735635485; x=1767171485;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=EArPBVYOZevnqERrHrBA1hZvj0h6f9n2aSrFZNsqQ1Q=;
-  b=QgY5Xk+n7tM+P5QeMJyl3A7+R+sl6kmkcagCgBLQyq9dKsmlan1qYdyr
-   mPlzL4BJyXQ5+BZ3jkBT8p80ycmBqUv6V0MiNQLPqBdxGsDOv2JlBU5tv
-   SN6qhzhvMNNrGf9KjCa5iiMwSGxfsscgKl+i7YguU1Rl/pdShhWfvKn31
-   10T3QEuSrT8i/1XfnHPQiJ1RVOFjX6PiO7yD3GkLJJCT1jd2Yfe2+u6kk
-   8WP7tJ8ki7og4l4D181kz5cLq9d23hQYfiOQT0sMZqY0q+IRfVO5ohLZc
-   EhnQ0Il3/55Ioy8X6qG/h0cnUYHxDDw4vMdzMEG+rLJi+FELnkNkH4oW+
-   w==;
-X-CSE-ConnectionGUID: AD/69nF5SCaXmucv1r+Crg==
-X-CSE-MsgGUID: 9ZW7wn1dTZ2hptq9o0XgxA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="35799306"
-X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
-   d="scan'208";a="35799306"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2024 00:57:59 -0800
-X-CSE-ConnectionGUID: gJ8OVMwDQiOEOCrBz8+HCQ==
-X-CSE-MsgGUID: 5ZKTMMFVSNenDffCBOoYOg==
+  t=1735667103; x=1767203103;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZpmvY4WfUCtTIVJc5GldttAgWV/tE9xoQOUP40JR8xo=;
+  b=j9iJGnQZMuJD1jFq+u9j5UheOlqWRJYd6WBz+ZVIs/BWXc/L0plMpE+H
+   FqKK2GShBC6UqnhJBcVgNmh6Ky7fsNvVU9TgrjOY7qbUCe05E+9ym2UAV
+   5ZdoiEphOs0AfN3OVn7Ip5AOK+wwJGBEjQ/AjNG0MFDUtlLaLnnvTdDBZ
+   so0bAjwD1REVwFwU84qh4YQS8FexTlvEB13DBjh76rFjA/57yGyf3arNX
+   GYuhJqrpfrQQJzbyuH5FvG4Mg/VY36wxPxst7SuVIAPN8phWW+58A2Mzb
+   /sV/W6y3ydWBqyik6kDenQ5DwPHfHb4YWKKM52WeaiDiWR0FaVZTcMRjM
+   g==;
+X-CSE-ConnectionGUID: FhOd5vhNRwCsHMalIGiIMQ==
+X-CSE-MsgGUID: FgmclS0qQvaeIZJX1rIN2A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11302"; a="47363258"
+X-IronPort-AV: E=Sophos;i="6.12,279,1728975600"; 
+   d="scan'208";a="47363258"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2024 09:45:02 -0800
+X-CSE-ConnectionGUID: Hpukq8BcTRC26tWx2QiCJg==
+X-CSE-MsgGUID: auHWF4R5RdOk5m8GIExl6w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
-   d="scan'208";a="100870248"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Dec 2024 00:57:58 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Tue, 31 Dec 2024 00:57:58 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Tue, 31 Dec 2024 00:57:58 -0800
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Tue, 31 Dec 2024 00:57:57 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hDOtD2xbsG795py4GM1cWGcXOuxJLSrjvS2vvzlXvyABeyV0IWyullFI86vtbEXKHuy5FinLU6B72rfdv1BpKAUeZ6pedvdPU+BxAY6pDwd5B1V+7fuxuBxbTK60JYTbDR7ZygyTHYlyIjrdJaRnA8utOTwqLhjNvwOdMwHhweOrCBLMhHWRclM8i6xT3lVotKP2lX39eqlE75KglPaIC92hnghmIGoLxIl8AA+PWoMAN4k/5ZHHd5DZjNPOWHczb8QcsJkXUc+7n7e3sVh6oiTrHVLi6aHM1M/cTxMcubefuyMVE6DguIHJm0wIjfzzhmxtc/jQmDNnqIA0MH0ZGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dNddJv2m5wlKBw67itHEtABgwfwweYWy/bncjyHz2dI=;
- b=LjC+1af4nSUNkbM2GrZQNC0tGFY4rR7NuYqpdfkb1Bhmk5nAsXwYwT0JB1YZs62EqxbO9tPiaof5TPYQ5KFQHAS+inhgDUwE8D/ps00WhIZYrdvTTHWJbEMh0+jVrURnJVH6u3m1XIQTx82HRcjW9JiJgWdF0V17uRxux2wDxf+B/P2U/0/3VYO/Tsj+kYxedAZNAqKwq7PoV+0dHe0JYxupzxuSMj5AIvp77gJ3B7F1Vrptb1BrQnUh4VQ833weZC++UM4hXf7e1J2Ti37q1hKdoVmg0KnOiNiPphxnzdWVi6jRqRh59/aV2fT7ZGWL8OCVm7poM7WZtEfxgEziGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BN9PR11MB5420.namprd11.prod.outlook.com (2603:10b6:408:101::6)
- by DS0PR11MB8688.namprd11.prod.outlook.com (2603:10b6:8:1a0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.19; Tue, 31 Dec
- 2024 08:57:46 +0000
-Received: from BN9PR11MB5420.namprd11.prod.outlook.com
- ([fe80::7a2d:5b5d:f9ce:594f]) by BN9PR11MB5420.namprd11.prod.outlook.com
- ([fe80::7a2d:5b5d:f9ce:594f%2]) with mapi id 15.20.8293.020; Tue, 31 Dec 2024
- 08:57:46 +0000
-Date: Tue, 31 Dec 2024 16:57:36 +0800
-From: Philip Li <philip.li@intel.com>
-To: kernel test robot <lkp@intel.com>
-CC: Alice Ryhl <aliceryhl@google.com>, <llvm@lists.linux.dev>,
-	<oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Steven
- Rostedt (Google)" <rostedt@goodmis.org>, Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: error[E0425]: cannot find value
- `__tracepoint_rust_sample_loaded` in crate `$crate::bindings`
-Message-ID: <Z3OyANq7fAkCs+Qi@rli9-mobl>
-References: <202412311507.14xdiaIX-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202412311507.14xdiaIX-lkp@intel.com>
-X-ClientProxiedBy: SG2PR04CA0172.apcprd04.prod.outlook.com (2603:1096:4::34)
- To BN9PR11MB5420.namprd11.prod.outlook.com (2603:10b6:408:101::6)
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="132034202"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 31 Dec 2024 09:45:01 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tSgIc-0007Lv-21;
+	Tue, 31 Dec 2024 17:44:58 +0000
+Date: Wed, 1 Jan 2025 01:44:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning:
+ Function parameter or struct member 'out' not described in 'efi_load_initrd'
+Message-ID: <202501010146.LSAElru1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR11MB5420:EE_|DS0PR11MB8688:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ee610de-e735-4db5-2830-08dd297931bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?MoDUtIr8XxJHzA73XX89fquAQO3d/s9VbzU0uh9ENYrJ5JpcDOvSzA/pBpuy?=
- =?us-ascii?Q?BcOt8E9AuykIWTTDX3rl9kbtB5iQIWgS1iwITOkN+6Kqgxr+RVyYB09LItK1?=
- =?us-ascii?Q?g8EyG12djZZ5ElwX+bQnK79hmmeo9KhwryTpfOJo7fqIhbi9KJ4DirPpC6tS?=
- =?us-ascii?Q?fzha4tUnfMYkBYewHEchUy9ICmHKxLMWBFp+6lKADslm6g9koTktSYRH+G9u?=
- =?us-ascii?Q?wL6Js6svmw6BcyaHJmsgPRrQKXUC8vOZlbVX+5yWzcMgbO0ZVjUNcircnqYE?=
- =?us-ascii?Q?vHNzofYtjFp12qoT+zbQtehFTpUJpvZv0CHbtWdi6YCtu7b9ud2ASuwsiwAD?=
- =?us-ascii?Q?ROFaAokTYSvs8p7jYC128OXxhJNVMap1fFL9ZWTvIOD/K09p7sepmE26bZJ0?=
- =?us-ascii?Q?fTEDdV1ysFvpMYh7roAzwFff4IPqJoFpbsxm9gX0M7SUUcqdEuN9uM8tDZwn?=
- =?us-ascii?Q?1HsoaTumUs6QMArqNihH1cMuvYXCkRy8A1fX30Nr1hocQeIQhHsv6GdugZ/W?=
- =?us-ascii?Q?FGKuAbsqaXyMQmz0p/tadAVBQAaAwCaM3sUQk4kpy55TxVNAFuQ923WrIzMg?=
- =?us-ascii?Q?1/t9v/jelApfviLhzH0xZHGhAOP1CKvWZ2zTeJClZoEYnOhqPzMsFMPhgYR6?=
- =?us-ascii?Q?TONu/0KMpdo+GrVYvlE7rrBGSVyOLsdoVByfRTmPY3iD92K/PJhilBbDApUL?=
- =?us-ascii?Q?5HGmN2M9RbFfDroVDwF+ckPRDlC1h54ZM9BywdxfVXRTUha6SFHXpHGdOfzJ?=
- =?us-ascii?Q?Y/omdlDbcvVkrLgxCRFY5UB/B8ePOz0jFUg8gJOP3jkvcxJaOSb26V4DNrP9?=
- =?us-ascii?Q?CgnDFMN5xL8eLfh19QAcggjc9PURn96yWzP/t+gNOg75D2QkUqg7rbR5rpmV?=
- =?us-ascii?Q?KyAnDXdk+OHwQtrlMep5FlQttbI1F1YSgFRvDGzEvrEVoJ8vwz4gIOvk1pqr?=
- =?us-ascii?Q?yB0/lMhaW+mUSGkU+BKDQjj7ZMyGLCoeaFi8iLqhJSk9e0wSQSbBbe4r7F67?=
- =?us-ascii?Q?Fja/OfkSa/x2DT/6IvyMv2RAgLNxA/8TtLLDfF9jk4PizxoOkzQRsUTFuFsq?=
- =?us-ascii?Q?/SeF01cV7OFk517iu7gvO58/fGwUuFNu/Zb+YOImEJgnbEpCWa1qBVM4BQG3?=
- =?us-ascii?Q?9uGjsuM60qNY+Ms6ymS886NJEfGESRJT7covhdmKqBj62d7eYdfJNYdE1p0E?=
- =?us-ascii?Q?fFnDgxLKdqtT2keRVoO6m9NXmJwY/QrF37jsEBuGsWnbb2WO/30t1EPxA8F4?=
- =?us-ascii?Q?fLXH9y4Dft1SwXwauSHQKqgQeKTgQsx9gzUIXYsPKihNy3GImr8RHZzCT31n?=
- =?us-ascii?Q?4tCPl91cUkAwXrMb+vYoWZLOLxrKL79Zj8VQ0Fwv6sh2zA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5420.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZQXOFG5iYTtbWCMbUDELUx+Y3KO/PRn4QOI3TeFaHYYU+qA7AEOosHuGXWmN?=
- =?us-ascii?Q?CTQr6z/N6Lw6RHY+ITW3yxYcIa6KweW8xx3aAuGIAU8Fpi6UtDSNAaLfTM5n?=
- =?us-ascii?Q?unir+aXcqtvTIjeN3o2nPuGAYU576sTra7CuCNiPxeW+p4A58A4u5Jce5eYb?=
- =?us-ascii?Q?pn2re4eysBJDVr9Z8Wdoz/wCA5xgohU1+uPvudk1mpTi8jVdDlhPy8oqsDYB?=
- =?us-ascii?Q?39/eN9dMtQ4mAeZSwtWksENVUXJ9dgRlDt0HBDfKzlRrCaHpkALxMush8dX0?=
- =?us-ascii?Q?zmssVzABzwopAFUPuXdv8AP2eeIsEAUc3ZdGhS9Mdv699gfmh7w9P1FxeStH?=
- =?us-ascii?Q?3sBuyS2WY+QmPVU/LYLJCbnC+Kgtrn8P20bTAolTI4EEOoWmr5bEWCqgxnXg?=
- =?us-ascii?Q?kBFXIeoi0sM2KDC4SijzoexL86qUrTqCFqeKtMmCezBBrBOE+Z/+RNuuUiUt?=
- =?us-ascii?Q?ASb6JbvahO12Lbt4NQfNebn91V34RxG2YOlTWiGFegdkMhI9UEXeSMeGnQoL?=
- =?us-ascii?Q?J5FPmsO6mRXEKO/9IAjP9RWW3pcKA5ijZ+U4D2LjPwXdTykILu4MIF4Z4S17?=
- =?us-ascii?Q?menpBIZKYYdnCylMa+QlBtuv7kxo7EiKT3/kjLlUphW0ESrJcsnyaMLdGBwG?=
- =?us-ascii?Q?Xpe3PugVCciwZauRRz/P+P0z9jNDFDNL7IirjCK0XgTf176i2UaJBjlO1pOd?=
- =?us-ascii?Q?E2IRplFzBZXsDBH64aTyhIriDxUStu/3pcOWKM1uAOo0/TloT7WPbkoP7Csl?=
- =?us-ascii?Q?MrvwCqVaTv2/IjcQR5tlkV4dc5jNE1dYuwXXL19ES6QqsrjLjgwhdKW6uw+I?=
- =?us-ascii?Q?wUbTi7110VoFE+AjjbiFvZUl7zhtnDHpDMAx/98gHzneIojy8MWGdHWYbKzf?=
- =?us-ascii?Q?niE53O/UXgJxUoKaRDHmnp5g0bReH8h51weW0ubDBqRfP3zAJOc4ARx32siU?=
- =?us-ascii?Q?GUBWu5jbHj32OEbz1Zek+zQ3QY+mTDtPGzzOUeY3jXp45UaHfVsBvCM9C7UQ?=
- =?us-ascii?Q?DkuGRJ68nX7AHOrm4XLA+uLezAsIZAGFntB7JCPLDau7DCsyeb5uIwFFivmv?=
- =?us-ascii?Q?LEghGW651a00FHNmw2qc4wqFWjJArox0NK4cQWrFDUT5aTuMo9PCQ7Jhb+pr?=
- =?us-ascii?Q?uAUdZkerp4cek4AYYr0nHtS7wv5MSW8ykGnz+eddMEs0a447Vi+vd6U67513?=
- =?us-ascii?Q?4SNKVC4PF4L1al1ippT5C81seKXffoIwbv721mIkWXm/VuaQnSn1T8AcM0FC?=
- =?us-ascii?Q?av9F9nY7w3//psml0utZiR9HmBzSXxM49PPSee0rYBMeSwdqZzZY6RxuCxda?=
- =?us-ascii?Q?rTBBkeYTZWX+2gomOGtnktPpk1RReVACa5szpvJpBUBu6KPpiauMembwjxFv?=
- =?us-ascii?Q?7ajLBp44iE74ho006MklgRAjHncqdBblxeyY4SWWAbWWTN4/dEUOsyZyrdTY?=
- =?us-ascii?Q?Dn+ECj+t0BgVUyYSsHdfXAkiqsQRTmvZnM0k1PnXgFlakWr+WpQMfyBynDgB?=
- =?us-ascii?Q?zGyTQLB/4nXPWcJf15MjKaDvijV9x9oBOq69pIroSzkLe3AIpIfxWcj9Q9CZ?=
- =?us-ascii?Q?e/1CtQq3ouV4Movxy9+p0IewQeEJpU/cCtDpU1Vg?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ee610de-e735-4db5-2830-08dd297931bd
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5420.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2024 08:57:46.4684
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 33dLGAGRwPx3OzoQ9jaPidbq+d/QP9QGQSPW8DUtVya7HG2AMaMuhcpsYRbbFsBnfyekw5hfzs1Xak/tE8LijQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8688
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Dec 31, 2024 at 03:15:47PM +0800, kernel test robot wrote:
-> Hi Alice,
-> 
-> FYI, the error/warning still remains.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
+commit: f4dc7fffa9873db50ec25624572f8217a6225de8 efi: libstub: unify initrd loading between architectures
+date:   2 years, 3 months ago
+config: arm64-randconfig-003-20241220 (https://download.01.org/0day-ci/archive/20250101/202501010146.LSAElru1-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250101/202501010146.LSAElru1-lkp@intel.com/reproduce)
 
-Kindly ignore this report, which had already been discussed in [1]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501010146.LSAElru1-lkp@intel.com/
 
-[1] https://lore.kernel.org/oe-kbuild-all/CAH5fLggEzmerC6Qg1fjuc_wiy21BJQGGYdZSZA+KV=oP6q9iJg@mail.gmail.com/ 
+All warnings (new ones prefixed by >>):
 
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
-> commit: 91d39024e1b02914cc5e2dbc137908e29b269ce4 rust: samples: add tracepoint to Rust sample
-> date:   8 weeks ago
-> config: x86_64-buildonly-randconfig-001-20241230 (https://download.01.org/0day-ci/archive/20241231/202412311507.14xdiaIX-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241231/202412311507.14xdiaIX-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202412311507.14xdiaIX-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> error[E0425]: cannot find value `__tracepoint_rust_sample_loaded` in crate `$crate::bindings`
->    --> samples/rust/rust_print.rs:87:5
->    |
->    87 | /     kernel::declare_trace! {
->    88 | |         /// # Safety
->    89 | |         ///
->    90 | |         /// Always safe to call.
->    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
->    92 | |     }
->    | |_____^ not found in `$crate::bindings`
->    |
->    = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
-> >> error[E0425]: cannot find function `rust_do_trace_rust_sample_loaded` in crate `$crate::bindings`
->    --> samples/rust/rust_print.rs:87:5
->    |
->    87 | /     kernel::declare_trace! {
->    88 | |         /// # Safety
->    89 | |         ///
->    90 | |         /// Always safe to call.
->    91 | |         unsafe fn rust_sample_loaded(magic: c_int);
->    92 | |     }
->    | |_____^ not found in `$crate::bindings`
->    |
->    = note: this error originates in the macro `kernel::declare_trace` (in Nightly builds, run with -Z macro-backtrace for more info)
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Function parameter or struct member 'initrd' not described in 'efi_load_initrd_dev_path'
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_addr' description in 'efi_load_initrd_dev_path'
+   drivers/firmware/efi/libstub/efi-stub-helper.c:559: warning: Excess function parameter 'load_size' description in 'efi_load_initrd_dev_path'
+>> drivers/firmware/efi/libstub/efi-stub-helper.c:662: warning: Function parameter or struct member 'out' not described in 'efi_load_initrd'
+
+
+vim +662 drivers/firmware/efi/libstub/efi-stub-helper.c
+
+ec93fc371f014a Ard Biesheuvel      2020-02-03  542  
+ec93fc371f014a Ard Biesheuvel      2020-02-03  543  /**
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  544   * efi_load_initrd_dev_path() - load the initrd from the Linux initrd device path
+ec93fc371f014a Ard Biesheuvel      2020-02-03  545   * @load_addr:	pointer to store the address where the initrd was loaded
+ec93fc371f014a Ard Biesheuvel      2020-02-03  546   * @load_size:	pointer to store the size of the loaded initrd
+ec93fc371f014a Ard Biesheuvel      2020-02-03  547   * @max:	upper limit for the initrd memory allocation
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  548   *
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  549   * Return:
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  550   * * %EFI_SUCCESS if the initrd was loaded successfully, in which
+ec93fc371f014a Ard Biesheuvel      2020-02-03  551   *   case @load_addr and @load_size are assigned accordingly
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  552   * * %EFI_NOT_FOUND if no LoadFile2 protocol exists on the initrd device path
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  553   * * %EFI_OUT_OF_RESOURCES if memory allocation failed
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  554   * * %EFI_LOAD_ERROR in all other cases
+ec93fc371f014a Ard Biesheuvel      2020-02-03  555   */
+f61900fd0ebf6c Arvind Sankar       2020-04-30  556  static
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  557  efi_status_t efi_load_initrd_dev_path(struct linux_efi_initrd *initrd,
+ec93fc371f014a Ard Biesheuvel      2020-02-03  558  				      unsigned long max)
+ec93fc371f014a Ard Biesheuvel      2020-02-03 @559  {
+ec93fc371f014a Ard Biesheuvel      2020-02-03  560  	efi_guid_t lf2_proto_guid = EFI_LOAD_FILE2_PROTOCOL_GUID;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  561  	efi_device_path_protocol_t *dp;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  562  	efi_load_file2_protocol_t *lf2;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  563  	efi_handle_t handle;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  564  	efi_status_t status;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  565  
+ec93fc371f014a Ard Biesheuvel      2020-02-03  566  	dp = (efi_device_path_protocol_t *)&initrd_dev_path;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  567  	status = efi_bs_call(locate_device_path, &lf2_proto_guid, &dp, &handle);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  568  	if (status != EFI_SUCCESS)
+ec93fc371f014a Ard Biesheuvel      2020-02-03  569  		return status;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  570  
+ec93fc371f014a Ard Biesheuvel      2020-02-03  571  	status = efi_bs_call(handle_protocol, handle, &lf2_proto_guid,
+ec93fc371f014a Ard Biesheuvel      2020-02-03  572  			     (void **)&lf2);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  573  	if (status != EFI_SUCCESS)
+ec93fc371f014a Ard Biesheuvel      2020-02-03  574  		return status;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  575  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  576  	initrd->size = 0;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  577  	status = efi_call_proto(lf2, load_file, dp, false, &initrd->size, NULL);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  578  	if (status != EFI_BUFFER_TOO_SMALL)
+ec93fc371f014a Ard Biesheuvel      2020-02-03  579  		return EFI_LOAD_ERROR;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  580  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  581  	status = efi_allocate_pages(initrd->size, &initrd->base, max);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  582  	if (status != EFI_SUCCESS)
+ec93fc371f014a Ard Biesheuvel      2020-02-03  583  		return status;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  584  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  585  	status = efi_call_proto(lf2, load_file, dp, false, &initrd->size,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  586  				(void *)initrd->base);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  587  	if (status != EFI_SUCCESS) {
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  588  		efi_free(initrd->size, initrd->base);
+ec93fc371f014a Ard Biesheuvel      2020-02-03  589  		return EFI_LOAD_ERROR;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  590  	}
+ec93fc371f014a Ard Biesheuvel      2020-02-03  591  	return EFI_SUCCESS;
+ec93fc371f014a Ard Biesheuvel      2020-02-03  592  }
+f61900fd0ebf6c Arvind Sankar       2020-04-30  593  
+f61900fd0ebf6c Arvind Sankar       2020-04-30  594  static
+f61900fd0ebf6c Arvind Sankar       2020-04-30  595  efi_status_t efi_load_initrd_cmdline(efi_loaded_image_t *image,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  596  				     struct linux_efi_initrd *initrd,
+f61900fd0ebf6c Arvind Sankar       2020-04-30  597  				     unsigned long soft_limit,
+f61900fd0ebf6c Arvind Sankar       2020-04-30  598  				     unsigned long hard_limit)
+f61900fd0ebf6c Arvind Sankar       2020-04-30  599  {
+f61900fd0ebf6c Arvind Sankar       2020-04-30  600  	if (!IS_ENABLED(CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER) ||
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  601  	    (IS_ENABLED(CONFIG_X86) && (!efi_is_native() || image == NULL)))
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  602  		return EFI_UNSUPPORTED;
+f61900fd0ebf6c Arvind Sankar       2020-04-30  603  
+f61900fd0ebf6c Arvind Sankar       2020-04-30  604  	return handle_cmdline_files(image, L"initrd=", sizeof(L"initrd=") - 2,
+f61900fd0ebf6c Arvind Sankar       2020-04-30  605  				    soft_limit, hard_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  606  				    &initrd->base, &initrd->size);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  607  }
+f61900fd0ebf6c Arvind Sankar       2020-04-30  608  
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  609  static const struct {
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  610  	efi_tcg2_event_t	event_data;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  611  	efi_tcg2_tagged_event_t tagged_event;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  612  	u8			tagged_event_data[];
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  613  } initrd_tcg2_event = {
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  614  	{
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  615  		sizeof(initrd_tcg2_event) + sizeof("Linux initrd"),
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  616  		{
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  617  			sizeof(initrd_tcg2_event.event_data.event_header),
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  618  			EFI_TCG2_EVENT_HEADER_VERSION,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  619  			9,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  620  			EV_EVENT_TAG,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  621  		},
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  622  	},
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  623  	{
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  624  		INITRD_EVENT_TAG_ID,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  625  		sizeof("Linux initrd"),
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  626  	},
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  627  	{ "Linux initrd" },
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  628  };
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  629  
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  630  static void efi_measure_initrd(unsigned long load_addr, unsigned long load_size)
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  631  {
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  632  	efi_guid_t tcg2_guid = EFI_TCG2_PROTOCOL_GUID;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  633  	efi_tcg2_protocol_t *tcg2 = NULL;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  634  	efi_status_t status;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  635  
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  636  	efi_bs_call(locate_protocol, &tcg2_guid, NULL, (void **)&tcg2);
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  637  	if (tcg2) {
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  638  		status = efi_call_proto(tcg2, hash_log_extend_event,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  639  					0, load_addr, load_size,
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  640  					&initrd_tcg2_event.event_data);
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  641  		if (status != EFI_SUCCESS)
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  642  			efi_warn("Failed to measure initrd data: 0x%lx\n",
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  643  				 status);
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  644  		else
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  645  			efi_info("Measured initrd data into PCR %d\n",
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  646  				 initrd_tcg2_event.event_data.event_header.pcr_index);
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  647  	}
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  648  }
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  649  
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  650  /**
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  651   * efi_load_initrd() - Load initial RAM disk
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  652   * @image:	EFI loaded image protocol
+947228cb9f1a2c Atish Patra         2021-07-02  653   * @soft_limit:	preferred address for loading the initrd
+947228cb9f1a2c Atish Patra         2021-07-02  654   * @hard_limit:	upper limit address for loading the initrd
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  655   *
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  656   * Return:	status code
+8c0a839c2bccb7 Heinrich Schuchardt 2020-06-16  657   */
+f61900fd0ebf6c Arvind Sankar       2020-04-30  658  efi_status_t efi_load_initrd(efi_loaded_image_t *image,
+f61900fd0ebf6c Arvind Sankar       2020-04-30  659  			     unsigned long soft_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  660  			     unsigned long hard_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  661  			     const struct linux_efi_initrd **out)
+f61900fd0ebf6c Arvind Sankar       2020-04-30 @662  {
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  663  	efi_guid_t tbl_guid = LINUX_EFI_INITRD_MEDIA_GUID;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  664  	efi_status_t status = EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  665  	struct linux_efi_initrd initrd, *tbl;
+f61900fd0ebf6c Arvind Sankar       2020-04-30  666  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  667  	if (!IS_ENABLED(CONFIG_BLK_DEV_INITRD) || efi_noinitrd)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  668  		return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  669  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  670  	status = efi_load_initrd_dev_path(&initrd, hard_limit);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  671  	if (status == EFI_SUCCESS) {
+f61900fd0ebf6c Arvind Sankar       2020-04-30  672  		efi_info("Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path\n");
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  673  		if (initrd.size > 0)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  674  			efi_measure_initrd(initrd.base, initrd.size);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  675  	} else if (status == EFI_NOT_FOUND) {
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  676  		status = efi_load_initrd_cmdline(image, &initrd, soft_limit,
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  677  						 hard_limit);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  678  		/* command line loader disabled or no initrd= passed? */
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  679  		if (status == EFI_UNSUPPORTED || status == EFI_NOT_READY)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  680  			return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  681  		if (status == EFI_SUCCESS)
+f61900fd0ebf6c Arvind Sankar       2020-04-30  682  			efi_info("Loaded initrd from command line option\n");
+f61900fd0ebf6c Arvind Sankar       2020-04-30  683  	}
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  684  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  685  		goto failed;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  686  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  687  	status = efi_bs_call(allocate_pool, EFI_LOADER_DATA, sizeof(initrd),
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  688  			     (void **)&tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  689  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  690  		goto free_initrd;
+f046fff8bc4c4d Ilias Apalodimas    2021-11-19  691  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  692  	*tbl = initrd;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  693  	status = efi_bs_call(install_configuration_table, &tbl_guid, tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  694  	if (status != EFI_SUCCESS)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  695  		goto free_tbl;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  696  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  697  	if (out)
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  698  		*out = tbl;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  699  	return EFI_SUCCESS;
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  700  
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  701  free_tbl:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  702  	efi_bs_call(free_pool, tbl);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  703  free_initrd:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  704  	efi_free(initrd.size, initrd.base);
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  705  failed:
+f4dc7fffa9873d Ard Biesheuvel      2022-09-16  706  	efi_err("Failed to load initrd: 0x%lx\n", status);
+f61900fd0ebf6c Arvind Sankar       2020-04-30  707  	return status;
+f61900fd0ebf6c Arvind Sankar       2020-04-30  708  }
+14c574f35cfbc9 Arvind Sankar       2020-05-18  709  
+
+:::::: The code at line 662 was first introduced by commit
+:::::: f61900fd0ebf6c6b91719d63272a54f4d11051df efi/libstub: Unify initrd loading across architectures
+
+:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
+:::::: CC: Ard Biesheuvel <ardb@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
