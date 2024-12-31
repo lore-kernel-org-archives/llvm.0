@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B11E136E;
-	Tue, 31 Dec 2024 04:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30072126C1E;
+	Tue, 31 Dec 2024 05:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735618425; cv=none; b=kzJmDnwekWujTJioAQpohEGoInKrtipJ+jKsQ50YiZN/HWLOzEkbkDf1eH/rvjo2+koiGq5qBTHVOQ9fYNmYOI7pC6+bhkOpvTl7Pjo2+uZ7eGRoGWUJBdLShtz0guwA+YxhirRxqLJc1kB1i3tEw8MG/qkmwjQEoinTd2W66/k=
+	t=1735621735; cv=none; b=Bf9XG7FiQH+/Qq2ApMzghIK3vjdt/tu+BV84yY6GJc9mFooFsPr42uFEZzGw+oQOP2G6k7pWwV1Yuq2IbaXja9t91NyR26yZvwDJvG903TrXudlOFwRMX9OU1h19kYUZDPU6jUuX3cxl95VA+85QxMQ0hZZy5N3wSK3IIQh7t1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735618425; c=relaxed/simple;
-	bh=DH1WiwE4kZAlkM1BR1tG9JqHjbRShP1PSmelBnR8kFc=;
+	s=arc-20240116; t=1735621735; c=relaxed/simple;
+	bh=ichSyoTfs8aFM/7781904WZUY8f1+1bxpOyEcuisl0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HnOtQyyKv3nGTyVxj+159ggVpG+tH9a/EKoK1eE3mzH0ABAJz4ltOcKjWeXBRIHpofsnHSoLLQUuHEfe2/+SnQDrtouvvfPvY0LRFijoprV8/jvAAMnh7vVrqOQJeLUJ3SUy9RHB19Mc75iDh1+rGcu03B2d7tcufkpKI2uINY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OrVhhjIv; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=nchpQaoAPUtMcfR2mI9g1G3iF8JumhfwFrrZwGCB6gbA3Fw4SkqYGdN5cH0l0qIfV/zKE8k98FYI8sHEnYhEeMKqy0Ybg5BRuOdFsDxMBrTekxocwoHGiAxYDJPpK0q24TprOixAh2rO540IAn79J4UsMIFMMUaM2WDnjsfRwBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jIfFp16C; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OrVhhjIv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jIfFp16C"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735618423; x=1767154423;
+  t=1735621732; x=1767157732;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DH1WiwE4kZAlkM1BR1tG9JqHjbRShP1PSmelBnR8kFc=;
-  b=OrVhhjIv89QmyI+tPp/xbM2MCruY4QtCdrsr56JuZSLO9h86MIy9LNTR
-   kmdDgnZnUcS7KahXaZX+WTOFgPaHmpmpxB3PoVFuc2AtoipUFHF91VPXB
-   TVxMTpadsh5GzVBo8NbP10GoqJHN/4nhBznDBwmNFLKQ/ARf5Iu+88rja
-   +P1FYrskIYIAuj/npgvve9u25fvcy7gccTM8996wRl68B9bcFoB4iIz+x
-   7X/R1TQNjE3e4SLu9Ugv5tSNZ8bwGb0IUzdZnI7mV6h/EiaHJ/C2lSKYW
-   Kf45+FCL4J5Phz7yZa4nfu6pWT2/a/0l75eq6e0tl1K0Nd4IZqdYI+UG2
-   g==;
-X-CSE-ConnectionGUID: Ia58ZWIJTSC+ZF5BfR+fjw==
-X-CSE-MsgGUID: Ozg2I5/lSPmiLlgq7RjXaw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="36059781"
+  bh=ichSyoTfs8aFM/7781904WZUY8f1+1bxpOyEcuisl0c=;
+  b=jIfFp16CIXiHbeupi0vX+JSWM/+01Kk9aV1+8EcSy3P34U0qn0ClWSnB
+   tAgO4VSLo5qJhundqSFSN2Kx0/4v926L11y+VnffXYv9CGfciMzZ1soxe
+   aGw1098nZiTTgcy4/taK/jNMeUjdf46k+3zOFWYnqviKTb75n90hNAnne
+   mUOu7KSckTyL4KJItDzGioi+HOGGCXxDqbuKK/3ns7h12VwaL9KZdy0S3
+   QJTcul8Z+DLuDdja1ZaG35cUzyiToWlDPQ1m9zaM6Oy7jrW1yKeDfFlLG
+   hnFt8Ro/7pxepFNfaVWS1VvKkEdTtZ3lrkqjoyBCxrZrIn35dLNiWbeuF
+   A==;
+X-CSE-ConnectionGUID: QQ0A14gRQEKFH8RimavPNQ==
+X-CSE-MsgGUID: LDeuY1euRYi0yKHoeJl6Ew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="46396815"
 X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
-   d="scan'208";a="36059781"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2024 20:13:43 -0800
-X-CSE-ConnectionGUID: DYpOiWp4RNCIy5242NWLSA==
-X-CSE-MsgGUID: a5+Fg2zNSUe2Pm8mxLCbbg==
+   d="scan'208";a="46396815"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2024 21:08:52 -0800
+X-CSE-ConnectionGUID: 41YYKxSOThe7D95LdRbBxg==
+X-CSE-MsgGUID: jw7w9mrgRrWunCF7b0XzyA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
-   d="scan'208";a="100814442"
+   d="scan'208";a="101379377"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 30 Dec 2024 20:13:41 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 30 Dec 2024 21:08:50 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tSTdT-0006hd-0t;
-	Tue, 31 Dec 2024 04:13:39 +0000
-Date: Tue, 31 Dec 2024 12:13:02 +0800
+	id 1tSUUp-0006lV-1s;
+	Tue, 31 Dec 2024 05:08:47 +0000
+Date: Tue, 31 Dec 2024 13:07:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linexp.org>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/thermal/max77620_thermal.c:48: warning: Function parameter
- or struct member 'tz' not described in 'max77620_thermal_read_temp'
-Message-ID: <202412311216.RBUETxdV-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Yury Norov <yury.norov@gmail.com>
+Subject: lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_333'
+ declared with 'error' attribute: BUILD_BUG_ON failed:
+ !__builtin_constant_p(~var)
+Message-ID: <202412311316.PpmprtIk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,74 +66,121 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Daniel,
+Hi Alexander,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+FYI, the error/warning still remains.
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 head:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
-commit: ae11d6a87c3e742418baa591be1e719a95788059 thermal/drivers/maxim: Switch to new of API
-date:   2 years, 5 months ago
-config: arm64-randconfig-003-20241220 (https://download.01.org/0day-ci/archive/20241231/202412311216.RBUETxdV-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241231/202412311216.RBUETxdV-lkp@intel.com/reproduce)
+commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
+date:   9 months ago
+config: x86_64-buildonly-randconfig-005-20241231 (https://download.01.org/0day-ci/archive/20241231/202412311316.PpmprtIk-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241231/202412311316.PpmprtIk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412311216.RBUETxdV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412311316.PpmprtIk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/thermal/max77620_thermal.c:48: warning: Function parameter or struct member 'tz' not described in 'max77620_thermal_read_temp'
->> drivers/thermal/max77620_thermal.c:48: warning: Excess function parameter 'data' description in 'max77620_thermal_read_temp'
+>> lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_333' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(~var)
+    1278 |         BUILD_BUG_ON(!__builtin_constant_p(~var));
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:460:2: note: expanded from macro 'compiletime_assert'
+     460 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+     448 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
+     441 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:163:1: note: expanded from here
+     163 | __compiletime_assert_333
+         | ^
+   1 error generated.
 
 
-vim +48 drivers/thermal/max77620_thermal.c
+vim +1278 lib/test_bitmap.c
 
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  32  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  33  /**
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  34   * max77620_thermal_read_temp: Read PMIC die temperatue.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  35   * @data:	Device specific data.
-0f43e646dddd60 Amit Kucheria   2019-11-20  36   * @temp:	Temperature in millidegrees Celsius
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  37   *
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  38   * The actual temperature of PMIC die is not available from PMIC.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  39   * PMIC only tells the status if it has crossed or not the threshold level
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  40   * of 120degC or 140degC.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  41   * If threshold has not been crossed then assume die temperature as 100degC
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  42   * else 120degC or 140deG based on the PMIC die temp threshold status.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  43   *
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  44   * Return 0 on success otherwise error number to show reason of failure.
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  45   */
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  46  
-ae11d6a87c3e74 Daniel Lezcano  2022-08-05  47  static int max77620_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23 @48  {
-ae11d6a87c3e74 Daniel Lezcano  2022-08-05  49  	struct max77620_therm_info *mtherm = tz->devdata;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  50  	unsigned int val;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  51  	int ret;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  52  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  53  	ret = regmap_read(mtherm->rmap, MAX77620_REG_STATLBT, &val);
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  54  	if (ret < 0) {
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  55  		dev_err(mtherm->dev, "Failed to read STATLBT: %d\n", ret);
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  56  		return ret;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  57  	}
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  58  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  59  	if (val & MAX77620_IRQ_TJALRM2_MASK)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  60  		*temp = MAX77620_TJALARM2_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  61  	else if (val & MAX77620_IRQ_TJALRM1_MASK)
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  62  		*temp = MAX77620_TJALARM1_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  63  	else
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  64  		*temp = MAX77620_NORMAL_OPERATING_TEMP;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  65  
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  66  	return 0;
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  67  }
-ec4664b3fd6d56 Laxman Dewangan 2016-08-23  68  
+291f93ca339f5b Barry Song        2021-08-06  1227  
+2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
+2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
+2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
+2356d198d2b4dd Yury Norov        2023-07-17  1231   */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
+dc34d5036692c6 Alexander Lobakin 2022-06-24 @1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
 
-:::::: The code at line 48 was first introduced by commit
-:::::: ec4664b3fd6d565a79eb562e4339528f74eb1cca thermal: max77620: Add thermal driver for reporting junction temp
+:::::: The code at line 1278 was first introduced by commit
+:::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
 
-:::::: TO: Laxman Dewangan <ldewangan@nvidia.com>
-:::::: CC: Zhang Rui <rui.zhang@intel.com>
+:::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
+:::::: CC: Yury Norov <yury.norov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
