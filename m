@@ -1,108 +1,242 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4698F7D
-	for <llvm@lists.linux.dev>; Thu,  2 Jan 2025 22:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED38213AA2A;
+	Thu,  2 Jan 2025 23:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735856531; cv=none; b=JXBl1zPi3ZKgZRALN9mtCO8YpPMrW3U9IZjaZCIhyuP6rSB6DYRKltFSU0N3zXT9xATtGfVt8JTmU1WzImGdE3gctMhaJ/EWGu7bnvUewtRj+kWwW5XTnuWRAUxhr3BFVzfsDAz/wjM7hEmKcRapeRZ5gbWXf+AaVEmuHY40Tjs=
+	t=1735861116; cv=none; b=sh7/5nwqf3ahDHAez5cbgzuSb+htzhX4HS3+RNJkO8EXhWSgokHV7T9snjQjljz7ktuj3dnWH3mM8fKP6Gx4PBLUn/iZ2e/WHBotJEVPLLWyA5cSEHr0zS9XX7aR9hefdL+JKsoGNVqBZLluUbXwClpgQeMozGWxqlk9mN9+Pek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735856531; c=relaxed/simple;
-	bh=lCtTCYo/Z/6Si+b0naBfpzeeTMrDUslrCDfByRJPP4k=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=X9qEwg4vjqAuVeMruB+8kRtyq8GmYpWXoBuM7wXdNqIK3bf5IKgvFIiVLpM8X9+ojF/7geNcab9cQSd9at1E1uQZPrcago+tbZO6NxvWIrT3hCY+qbFEPm+sSGwU6RP71ZyDPoPvhYm9c+SDXSsDg+OpsSTmlpBwrEfdzL3mgno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SdYDmufc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1735861116; c=relaxed/simple;
+	bh=1b/AhEaPjZimbGMp91k9Itg358bBUgv18jYnoqeYStE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tYKjncoil8pScprd3AQ3uie6N16e4MHenxA/RNGO4QJOUOPzn/7qJaF/VYKRUL/lIsYdr+TN6E5+3gOV3BLTwctNEnns5p6/JZvlT1XOrIGSyEUbq044rmB1/3TftS4CEFbvo30zcNhHcOClE3r+3WEiUpz9k53kaIAYr0I/1F0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQMHwQOF; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SdYDmufc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1735856528;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=kHklqH83oWnxmhn/gpUItLOUMvS3Tih+uK9Fbnt013w=;
-	b=SdYDmufchiEVhtQ4/2LiPCqIPKRKHBYvjt9yQ7FitapA6KCdBOXGPvj3//tj/ovBzb62Wu
-	xqP6ip42OMIxdv0COZrgMOU0tiOyVfX1cPJkVHXHPEss7ELQ+RAxeJrfeSNT/shO2D7919
-	IvxEQ32fLMJ4aDUuqwbpuUqySv2zmas=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-532-yJ3dyLi1OfCXJvHFQkC_yw-1; Thu,
- 02 Jan 2025 17:22:07 -0500
-X-MC-Unique: yJ3dyLi1OfCXJvHFQkC_yw-1
-X-Mimecast-MFC-AGG-ID: yJ3dyLi1OfCXJvHFQkC_yw
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 309BF19560AD
-	for <llvm@lists.linux.dev>; Thu,  2 Jan 2025 22:22:06 +0000 (UTC)
-Received: from [172.64.3.33] (unknown [10.30.32.189])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B016219560A2;
-	Thu,  2 Jan 2025 22:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc5,
- upstream-mainline, 0bc21e70)
-Date: Thu, 02 Jan 2025 22:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQMHwQOF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735861115; x=1767397115;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1b/AhEaPjZimbGMp91k9Itg358bBUgv18jYnoqeYStE=;
+  b=XQMHwQOFHQAQNXdNpjYmzXD1U8o7J/xWBfmTuc+dtzSyRWnaP3DaFHY/
+   yf7kq+3ISqyYXUWuses9/Srt6Tr5/f3FPoNFf9MOR2ImfiiYWN1Q6nDDc
+   UZfliXMQyzk4MdakCH7obmlG/zUEy2xIy97HBybCEvk2fNgQWq5R0scuF
+   DgGL/oBoSIzH+fSfAMcYgosa0lXpYLju8ookl3pQCuHfMLg0Jw5GOvFvS
+   4ZSb6jPu65+kbYmfcDfTFxBsI+vo2Ol1zUKsH1xvtfhV8nbz1ob8u3nic
+   S7HBtH0V+rzMq3muuHMRRZHFe1RsPx1GwZLHJIpr86pPGUPgsniNqzYaZ
+   w==;
+X-CSE-ConnectionGUID: hgKtIZDsRTulMcVMZZvJjg==
+X-CSE-MsgGUID: WFaf9dM4RJ+7Ti8+kYkLfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="53517132"
+X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
+   d="scan'208";a="53517132"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 15:38:34 -0800
+X-CSE-ConnectionGUID: ct2yV3wbSR2UCntT6cYRRA==
+X-CSE-MsgGUID: 49rFt0n2RtevTjwMJSek/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
+   d="scan'208";a="102104948"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 02 Jan 2025 15:38:32 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tTUlq-0008xz-1v;
+	Thu, 02 Jan 2025 23:38:30 +0000
+Date: Fri, 3 Jan 2025 07:37:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation
+ between different enumeration types ('enum sti_plane_type' and 'enum
+ sti_plane_id_of_type')
+Message-ID: <202501030713.36t97VZZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <42142.125010217220700555@us-mta-532.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: usxLXlMdqX8gE_qTMX-XhufbMxSuasHaFWkU7sBQGbQ_1735856526
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi Ville,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0bc21e701a6ffacfdde7f04f87d664d82e8a13bf
+commit: 74bde7581df3e18061119e1b27b63d0a9ea57b7a drm/sti: Allow build with COMPILE_TEST=y
+date:   7 months ago
+config: hexagon-randconfig-002-20250103 (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501030713.36t97VZZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:18:
+   In file included from include/drm/drm_vblank.h:32:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:20:
+   In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
+   In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
+>> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   12 errors generated.
+--
+   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
+   In file included from include/drm/drm_gem_dma_helper.h:5:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
+   In file included from include/drm/drm_gem_dma_helper.h:5:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
+   In file included from include/drm/drm_gem_dma_helper.h:5:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
+   In file included from include/drm/drm_gem_dma_helper.h:5:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/gpu/drm/sti/sti_plane.c:16:
+   In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
+   In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
+>> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   12 errors generated.
 
 
-Kernel information:
-    Commit message: MAINTAINERS: Remove Olof from SoC maintainers
+vim +32 drivers/gpu/drm/sti/sti_plane.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1609422049
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  30  
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  31  enum sti_plane_desc {
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31 @32  	STI_GDP_0       = STI_GDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  33  	STI_GDP_1       = STI_GDP | STI_ID_1,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  34  	STI_GDP_2       = STI_GDP | STI_ID_2,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  35  	STI_GDP_3       = STI_GDP | STI_ID_3,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  36  	STI_HQVDP_0     = STI_VDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  37  	STI_CURSOR      = STI_CUR,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  38  	STI_BACK        = STI_BCK
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  39  };
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  40  
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1609422049-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1609422049-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1609422049-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+:::::: The code at line 32 was first introduced by commit
+:::::: 871bcdfea68560991bd650406e47a801ab9d635d drm/sti: code clean up
 
+:::::: TO: Vincent Abriou <vincent.abriou@st.com>
+:::::: CC: Benjamin Gaignard <benjamin.gaignard@linaro.org>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
