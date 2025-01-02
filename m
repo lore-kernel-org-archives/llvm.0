@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED38213AA2A;
-	Thu,  2 Jan 2025 23:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5562C43173;
+	Thu,  2 Jan 2025 23:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735861116; cv=none; b=sh7/5nwqf3ahDHAez5cbgzuSb+htzhX4HS3+RNJkO8EXhWSgokHV7T9snjQjljz7ktuj3dnWH3mM8fKP6Gx4PBLUn/iZ2e/WHBotJEVPLLWyA5cSEHr0zS9XX7aR9hefdL+JKsoGNVqBZLluUbXwClpgQeMozGWxqlk9mN9+Pek=
+	t=1735862377; cv=none; b=KEyAevSgl5Uw+OTyMTL7bzEBO5WEs5Fhcd6B5S724wuuiguZjeekLPwMmLmmBrP5Epmtxly5sHqgUkwEMe9//YgtEl8DCB3ZTUZR0GCtitMjKA2buK+pvTlHopk0GcRLejwcAy7ZU7Cr0mgJXIzHtbqvqrP6Gkrc2pzStHs3cOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735861116; c=relaxed/simple;
-	bh=1b/AhEaPjZimbGMp91k9Itg358bBUgv18jYnoqeYStE=;
+	s=arc-20240116; t=1735862377; c=relaxed/simple;
+	bh=m2XR+o72/0/ZmVylmsugDZ5iQ5PDvrgrSbjZQgk68M0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tYKjncoil8pScprd3AQ3uie6N16e4MHenxA/RNGO4QJOUOPzn/7qJaF/VYKRUL/lIsYdr+TN6E5+3gOV3BLTwctNEnns5p6/JZvlT1XOrIGSyEUbq044rmB1/3TftS4CEFbvo30zcNhHcOClE3r+3WEiUpz9k53kaIAYr0I/1F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQMHwQOF; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=OUiXfN37mlIcPFZmsym63d60ksKv7bCyww879H6dgnoLYMKy0DmTo+wz3Yv3Bnkpxi51fWt7g2qfnYWFTL5tNh8N2+68N9xZRAtLMqVzl2Xh0EwShndzQpmmvA9nUGlyXXGw7OW1OJ+uX+loUD//qzGrb9CZ3X8qPOWT787HJLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XF+44xT3; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQMHwQOF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XF+44xT3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735861115; x=1767397115;
+  t=1735862376; x=1767398376;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1b/AhEaPjZimbGMp91k9Itg358bBUgv18jYnoqeYStE=;
-  b=XQMHwQOFHQAQNXdNpjYmzXD1U8o7J/xWBfmTuc+dtzSyRWnaP3DaFHY/
-   yf7kq+3ISqyYXUWuses9/Srt6Tr5/f3FPoNFf9MOR2ImfiiYWN1Q6nDDc
-   UZfliXMQyzk4MdakCH7obmlG/zUEy2xIy97HBybCEvk2fNgQWq5R0scuF
-   DgGL/oBoSIzH+fSfAMcYgosa0lXpYLju8ookl3pQCuHfMLg0Jw5GOvFvS
-   4ZSb6jPu65+kbYmfcDfTFxBsI+vo2Ol1zUKsH1xvtfhV8nbz1ob8u3nic
-   S7HBtH0V+rzMq3muuHMRRZHFe1RsPx1GwZLHJIpr86pPGUPgsniNqzYaZ
-   w==;
-X-CSE-ConnectionGUID: hgKtIZDsRTulMcVMZZvJjg==
-X-CSE-MsgGUID: WFaf9dM4RJ+7Ti8+kYkLfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="53517132"
+  bh=m2XR+o72/0/ZmVylmsugDZ5iQ5PDvrgrSbjZQgk68M0=;
+  b=XF+44xT3O1Ji+PM1puKS2rvGRyOhfRM3GBoVXbShn+efi8L1FzUp3wze
+   V2mWIvelaiVIFm64HcfSrnbeOoueO4UHjvXIusDN6a1hfeTrbuCOBOMj5
+   qrUElQ3VGR2hkSBF/9HGl+qI4UPYqOPJRtpCi/tOF68IqPa+XaCHB58vO
+   Z2B76lSa70iUzFiK/ZZ6IG25c3BAkXliCj+9F3fZhZhcrZ0pwv0HbIiRZ
+   Q0WudXVKCuiNCNimNUIjPVfMtcoc7M6OPj806xhAxxvgrK8FQnf5HuZ7T
+   E8hNW4aSnH7W1CiozXGQIBmzr3v9R9anO3ELrdYFfe/lpzyOrvDvdhBv9
+   A==;
+X-CSE-ConnectionGUID: +9YEALALQZSKq9c1LYUg3A==
+X-CSE-MsgGUID: KQzv6o7tSTuQ3A6p0tnxSQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="36014751"
 X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="53517132"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 15:38:34 -0800
-X-CSE-ConnectionGUID: ct2yV3wbSR2UCntT6cYRRA==
-X-CSE-MsgGUID: 49rFt0n2RtevTjwMJSek/A==
+   d="scan'208";a="36014751"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 15:59:36 -0800
+X-CSE-ConnectionGUID: V3H1+PrpRoe1VD1IZYWciA==
+X-CSE-MsgGUID: EOKqf0FaRBO2hu2+3E9DkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="102104948"
+   d="scan'208";a="101825355"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 02 Jan 2025 15:38:32 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 02 Jan 2025 15:59:34 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tTUlq-0008xz-1v;
-	Thu, 02 Jan 2025 23:38:30 +0000
-Date: Fri, 3 Jan 2025 07:37:52 +0800
+	id 1tTV6B-0008yd-3C;
+	Thu, 02 Jan 2025 23:59:31 +0000
+Date: Fri, 3 Jan 2025 07:59:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation
- between different enumeration types ('enum sti_plane_type' and 'enum
- sti_plane_id_of_type')
-Message-ID: <202501030713.36t97VZZ-lkp@intel.com>
+	devel@driverdev.osuosl.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [driver-core:driver-core-next 20/29] error[E0433]: failed to
+ resolve: could not find `pci_device_table` in `kernel`
+Message-ID: <202501030744.4ucqC1cB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,178 +64,49 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Ville,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0bc21e701a6ffacfdde7f04f87d664d82e8a13bf
-commit: 74bde7581df3e18061119e1b27b63d0a9ea57b7a drm/sti: Allow build with COMPILE_TEST=y
-date:   7 months ago
-config: hexagon-randconfig-002-20250103 (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-next
+head:   86a5f32ed8813d5534d3d6c77aad29184a9f99b6
+commit: 685376d18e9ae2f08ab6ac36285dc3a949c8cb77 [20/29] samples: rust: add Rust PCI sample driver
+config: x86_64-randconfig-005-20250102 (https://download.01.org/0day-ci/archive/20250103/202501030744.4ucqC1cB-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030744.4ucqC1cB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501030713.36t97VZZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501030744.4ucqC1cB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/sti/sti_compositor.c:18:
-   In file included from include/drm/drm_vblank.h:32:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/sti/sti_compositor.c:20:
-   In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
-   In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
->> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   12 errors generated.
+>> error[E0432]: unresolved import `kernel::pci`
+   --> samples/rust/rust_driver_pci.rs:7:47
+   |
+   7  | use kernel::{bindings, c_str, devres::Devres, pci, prelude::*};
+   |                                               ^^^ no `pci` in the root
+   |
+   note: found an item that was configured out
+   --> rust/kernel/lib.rs:86:9
+   |
+   86 | pub mod pci;
+   |         ^^^
 --
-   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
-   In file included from include/drm/drm_gem_dma_helper.h:5:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
-   In file included from include/drm/drm_gem_dma_helper.h:5:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
-   In file included from include/drm/drm_gem_dma_helper.h:5:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/sti/sti_plane.c:14:
-   In file included from include/drm/drm_gem_dma_helper.h:5:
-   In file included from include/drm/drm_file.h:39:
-   In file included from include/drm/drm_prime.h:37:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/sti/sti_plane.c:16:
-   In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
-   In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
->> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
-      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
-         |                           ~~~~~~~ ^ ~~~~~~~~
-   12 errors generated.
-
-
-vim +32 drivers/gpu/drm/sti/sti_plane.h
-
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  30  
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  31  enum sti_plane_desc {
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31 @32  	STI_GDP_0       = STI_GDP | STI_ID_0,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  33  	STI_GDP_1       = STI_GDP | STI_ID_1,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  34  	STI_GDP_2       = STI_GDP | STI_ID_2,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  35  	STI_GDP_3       = STI_GDP | STI_ID_3,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  36  	STI_HQVDP_0     = STI_VDP | STI_ID_0,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  37  	STI_CURSOR      = STI_CUR,
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  38  	STI_BACK        = STI_BCK
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  39  };
-871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  40  
-
-:::::: The code at line 32 was first introduced by commit
-:::::: 871bcdfea68560991bd650406e47a801ab9d635d drm/sti: code clean up
-
-:::::: TO: Vincent Abriou <vincent.abriou@st.com>
-:::::: CC: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+>> error[E0433]: failed to resolve: could not find `pci_device_table` in `kernel`
+   --> samples/rust/rust_driver_pci.rs:33:9
+   |
+   33 | kernel::pci_device_table!(
+   |         ^^^^^^^^^^^^^^^^ could not find `pci_device_table` in `kernel`
+--
+>> error[E0433]: failed to resolve: could not find `module_pci_driver` in `kernel`
+   --> samples/rust/rust_driver_pci.rs:104:9
+   |
+   104 | kernel::module_pci_driver! {
+   |         ^^^^^^^^^^^^^^^^^ could not find `module_pci_driver` in `kernel`
+--
+>> error[E0425]: cannot find value `PCI_TABLE` in this scope
+   --> samples/rust/rust_driver_pci.rs:63:51
+   |
+   63 |     const ID_TABLE: pci::IdTable<Self::IdInfo> = &PCI_TABLE;
+   |                                                   ^^^^^^^^^ not found in this scope
 
 -- 
 0-DAY CI Kernel Test Service
