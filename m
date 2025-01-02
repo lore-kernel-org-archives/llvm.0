@@ -1,172 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FB31B87DD;
-	Thu,  2 Jan 2025 20:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4698F7D
+	for <llvm@lists.linux.dev>; Thu,  2 Jan 2025 22:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735850783; cv=none; b=dFNuYa5TXHu9L/EDpbqP2/kZLd++aAMvFagxdl5Lx0a7eQkFhSK6r6D6ClAg4f+VV3RSpIIBXSaTSxASDX91lry0Zp6bwu0v6A5gL1K3ZV+l0/2nAaSJ/8t5RjZZqov185Z7rZklElcGgX9u9KCIi/roU3trgBf/sbVrB8Raps4=
+	t=1735856531; cv=none; b=JXBl1zPi3ZKgZRALN9mtCO8YpPMrW3U9IZjaZCIhyuP6rSB6DYRKltFSU0N3zXT9xATtGfVt8JTmU1WzImGdE3gctMhaJ/EWGu7bnvUewtRj+kWwW5XTnuWRAUxhr3BFVzfsDAz/wjM7hEmKcRapeRZ5gbWXf+AaVEmuHY40Tjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735850783; c=relaxed/simple;
-	bh=lXtHheUcWiplOvGAaTqAv+gEmAbp2r9+jFsyAWbuv5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJwP/OuX27fWBKStcEFUtBRR3Yb8G38jIubx69Ujn/bRgbEZPZ+rFa0a+neiI22dRYE4S3xuzC2SWqMeSRAcXlBt+WI0H7Nhy64IgMU4D6nkpgheuJrz8zGsyi737eHTh3ltjpDYGzrvz3OLwmjXoZ6+9GjJCdzSR05GUuPkAyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZNCwyeNv; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1735856531; c=relaxed/simple;
+	bh=lCtTCYo/Z/6Si+b0naBfpzeeTMrDUslrCDfByRJPP4k=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=X9qEwg4vjqAuVeMruB+8kRtyq8GmYpWXoBuM7wXdNqIK3bf5IKgvFIiVLpM8X9+ojF/7geNcab9cQSd9at1E1uQZPrcago+tbZO6NxvWIrT3hCY+qbFEPm+sSGwU6RP71ZyDPoPvhYm9c+SDXSsDg+OpsSTmlpBwrEfdzL3mgno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SdYDmufc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZNCwyeNv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735850781; x=1767386781;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lXtHheUcWiplOvGAaTqAv+gEmAbp2r9+jFsyAWbuv5E=;
-  b=ZNCwyeNvRKg0HLuvlV3FDoXglFvv7zJzgs2MXKs8ei4K3hf3w/YKpxZI
-   uA8OfU/S3EEKaR9U/9qDkvB2LI3reFC0HiSU73ZUo3iHBAYXAJS5bZFzY
-   43dKffeLcAYgzAIWbxUmXiddrh7w3suA6mphLmgR+Ew6m/oIZxRJdgsck
-   56YuEZi1VPo0o/2oj48TXiwUtdWOjSTKzAuSJ9IrRfwjcytuirIhy85PV
-   WRupGpLHm+k49Qj07y9lx6nefKV151PNb0X8vch7cW9YNvPsjnDbylAsO
-   Kv6duJ9+nkAYXwE+BiIOKMoi7aFdQrf2mIf5+KG44OQdQzmH4HFC8NsnQ
-   w==;
-X-CSE-ConnectionGUID: LO+CqNU0SFu72d0ZHHzaNA==
-X-CSE-MsgGUID: bxfltKihTICVS3Ls5DILpA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="38926848"
-X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="38926848"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 12:46:19 -0800
-X-CSE-ConnectionGUID: JXo9s0gESbW+wTzPOGbn+Q==
-X-CSE-MsgGUID: vzOAfbDNR5eBh3vmRD4fPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="105654733"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Jan 2025 12:46:16 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tTS58-0008rD-0U;
-	Thu, 02 Jan 2025 20:46:14 +0000
-Date: Fri, 3 Jan 2025 04:46:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hans Zhang <18255117159@163.com>, manivannan.sadhasivam@linaro.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kw@linux.com,
-	kishon@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rockswang7@gmail.com, Hans Zhang <18255117159@163.com>,
-	kernel test robot <lkp@intel.com>,
-	Niklas Cassel <cassel@kernel.org>
-Subject: Re: [v6] misc: pci_endpoint_test: Fix overflow of bar_size
-Message-ID: <202501030414.p0DE9xNK-lkp@intel.com>
-References: <20250102120222.1403906-1-18255117159@163.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SdYDmufc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1735856528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=kHklqH83oWnxmhn/gpUItLOUMvS3Tih+uK9Fbnt013w=;
+	b=SdYDmufchiEVhtQ4/2LiPCqIPKRKHBYvjt9yQ7FitapA6KCdBOXGPvj3//tj/ovBzb62Wu
+	xqP6ip42OMIxdv0COZrgMOU0tiOyVfX1cPJkVHXHPEss7ELQ+RAxeJrfeSNT/shO2D7919
+	IvxEQ32fLMJ4aDUuqwbpuUqySv2zmas=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-532-yJ3dyLi1OfCXJvHFQkC_yw-1; Thu,
+ 02 Jan 2025 17:22:07 -0500
+X-MC-Unique: yJ3dyLi1OfCXJvHFQkC_yw-1
+X-Mimecast-MFC-AGG-ID: yJ3dyLi1OfCXJvHFQkC_yw
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 309BF19560AD
+	for <llvm@lists.linux.dev>; Thu,  2 Jan 2025 22:22:06 +0000 (UTC)
+Received: from [172.64.3.33] (unknown [10.30.32.189])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B016219560A2;
+	Thu,  2 Jan 2025 22:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc5,
+ upstream-mainline, 0bc21e70)
+Date: Thu, 02 Jan 2025 22:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250102120222.1403906-1-18255117159@163.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <42142.125010217220700555@us-mta-532.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: usxLXlMdqX8gE_qTMX-XhufbMxSuasHaFWkU7sBQGbQ_1735856526
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hans,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on ccb98ccef0e543c2bd4ef1a72270461957f3d8d0]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/misc-pci_endpoint_test-Fix-overflow-of-bar_size/20250102-200548
-base:   ccb98ccef0e543c2bd4ef1a72270461957f3d8d0
-patch link:    https://lore.kernel.org/r/20250102120222.1403906-1-18255117159%40163.com
-patch subject: [v6] misc: pci_endpoint_test: Fix overflow of bar_size
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20250103/202501030414.p0DE9xNK-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030414.p0DE9xNK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501030414.p0DE9xNK-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/misc/pci_endpoint_test.c:311:11: warning: comparison of distinct pointer types ('typeof ((bar_size)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-     311 |         remain = do_div(bar_size, buf_size);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:183:28: note: expanded from macro 'do_div'
-     183 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/misc/pci_endpoint_test.c:311:11: error: incompatible pointer types passing 'resource_size_t *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-     311 |         remain = do_div(bar_size, buf_size);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:199:22: note: expanded from macro 'do_div'
-     199 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-      24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-         |                                             ^
->> drivers/misc/pci_endpoint_test.c:311:11: warning: shift count >= width of type [-Wshift-count-overflow]
-     311 |         remain = do_div(bar_size, buf_size);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:195:25: note: expanded from macro 'do_div'
-     195 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   2 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +311 drivers/misc/pci_endpoint_test.c
+Kernel information:
+    Commit message: MAINTAINERS: Remove Olof from SoC maintainers
 
-   279	
-   280	static bool pci_endpoint_test_bar(struct pci_endpoint_test *test,
-   281					  enum pci_barno barno)
-   282	{
-   283		void *write_buf __free(kfree) = NULL;
-   284		void *read_buf __free(kfree) = NULL;
-   285		struct pci_dev *pdev = test->pdev;
-   286		int j, buf_size, iters, remain;
-   287		resource_size_t bar_size;
-   288	
-   289		if (!test->bar[barno])
-   290			return false;
-   291	
-   292		bar_size = pci_resource_len(pdev, barno);
-   293	
-   294		if (barno == test->test_reg_bar)
-   295			bar_size = 0x4;
-   296	
-   297		/*
-   298		 * Allocate a buffer of max size 1MB, and reuse that buffer while
-   299		 * iterating over the whole BAR size (which might be much larger).
-   300		 */
-   301		buf_size = min(SZ_1M, bar_size);
-   302	
-   303		write_buf = kmalloc(buf_size, GFP_KERNEL);
-   304		if (!write_buf)
-   305			return false;
-   306	
-   307		read_buf = kmalloc(buf_size, GFP_KERNEL);
-   308		if (!read_buf)
-   309			return false;
-   310	
- > 311		remain = do_div(bar_size, buf_size);
-   312		iters = bar_size;
-   313		for (j = 0; j < iters; j++)
-   314			if (pci_endpoint_test_bar_memcmp(test, barno, buf_size * j,
-   315							 write_buf, read_buf, buf_size))
-   316				return false;
-   317	
-   318		if (remain)
-   319			if (pci_endpoint_test_bar_memcmp(test, barno, buf_size * iters,
-   320							 write_buf, read_buf, remain))
-   321				return false;
-   322	
-   323		return true;
-   324	}
-   325	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1609422049
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1609422049-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1609422049-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1609422049-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
