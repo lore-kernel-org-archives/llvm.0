@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F0616F8F5;
-	Fri,  3 Jan 2025 06:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB5F1CBE95;
+	Fri,  3 Jan 2025 08:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735886242; cv=none; b=Lxyh9E21lgj/mrlc+5o5kR20PC0uEZQAbT4NlIsHa/tHLOl6uLsUnHj9Tk4x/Ee35f6ezFYokDUrcslqLgTQd/V1PQHxn9N7QaAdjJJlE6xhb3GimxtworDvTDfdkS5IqDQMYoMqq1elfBjr4lLIQtuidXOG1ndM0+Fx9kY23Gk=
+	t=1735891955; cv=none; b=dYVSzn3ssZZvkFBNYtoJDghBo0wI4xMAa4lfodJAMRmGmgFW+7RxwrAqcVtSgWNIZAqA7JpxqPqk6sHylFlB7jWd5Cka7SxB7bM0ZenZMo6rka0kb0DP9u3PxztdQns5wPtHbBWgHFpPcOJva0EuIrHEUaLWbFIEP9sCSoWC1x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735886242; c=relaxed/simple;
-	bh=swa0sd5oQOc9XUtQm/qmA1DFctV4MTCKJnYQe6z+xEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KU1S+PyVnkUV9X1xTrxY2Ao3rMwh6JrwQcc/cPZ/nbrTuF0Mv1QQPhxUUKIC0bdinihP8VivqGYhj3NNt6P+oeKCHy2K4ipTJqti4AHo9GjBTa5izlmFER/6h281oiB8pVWRmfeettwRYfoWjWKgC7I1Yz/Za3mA1+sQVNOZfxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DWnuD/l9; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1735891955; c=relaxed/simple;
+	bh=EYAHXl3CvaBhMHvkvveYzvjx1c1Lk/5xpjSieijDD3E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t4H9kP5uTUYWeeCSrJ+O2BOLBcqtXdyJ9MOW25PoErS4emlqHd1YSAP5oipZw80p/fId+1mXDUnBwBdLZwUL6NXUdwVbur1J6sJaq+dk9VRIy43GTZD25UNn4/yqGDMo9ONugED3jqYFw0LTA8LCxyq8ZPOJdlZY9rdbt+O08YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RbH0SMV0; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DWnuD/l9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RbH0SMV0"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735886240; x=1767422240;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=swa0sd5oQOc9XUtQm/qmA1DFctV4MTCKJnYQe6z+xEw=;
-  b=DWnuD/l9U0hwjLD0VSfAp5VlthPJw9MjuICOzUohOmFNeiFvnZcUskSv
-   BdE1CDn+N7cdZlKeb1Y/YxjwYUIfbEZvhcncpc9pm84JPUJdHkJSjpzxc
-   BmVVu3253muDJ8MLCbC76Me7pc2AG+qsaGyZjwaqYOnUKv+KURVisXuDe
-   oLe+2ZCXtNIXZPGsHzydJJDpdmLSgHIiIm8LRqZB4kZqFB148Hz1h4uy1
-   Z5k7pIkWfiIqcGxxeaHca12C6xRzMX63wWnvCJ1i5He2yxgmuiizYJubM
-   65GcCwsoLuWta3XwgxpFMZ/AP37JXvMNBfBklYl8PWTAmrjeZCoADYOhG
+  t=1735891953; x=1767427953;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EYAHXl3CvaBhMHvkvveYzvjx1c1Lk/5xpjSieijDD3E=;
+  b=RbH0SMV0/2XLYdCwnw0ISsaA7JqXMDfAm5alGizzRpKMZGtoGQsxgOAS
+   YXZuDsOr6kxogV91Iui5nfLZDJ0xWi0q/7enISFncRWmTNkGQ8fFtrybb
+   6kEOh5FF7CkBDerYA85cH88JohTER4jrdM46ZTwPzmljbi1brxi5KHQ6c
+   dEm6IGJ0tUk09REWsMQg/7eRI54s5XYWGr6tY7cLgSs/M79mwA/hBD4pp
+   5/9npu28C3+XxgvuGrzgrXiv6rGiBt13ncqGqj8QPp6GeIt7TIUOUcFlR
+   p0Mrd2ENhjjWcq/6rtmWCghJXOgZ//9RAkgfBA/uGVeblWmZHmYbdGDQP
    w==;
-X-CSE-ConnectionGUID: wltMoYD6Rhykc1P3vcMXZg==
-X-CSE-MsgGUID: DmiH7PGISHeFZz4Az+/AdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="36039096"
+X-CSE-ConnectionGUID: YwMLkug+TOqAXflOUfLynw==
+X-CSE-MsgGUID: j4ddjzYIQ7yTWHGVhpemJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="35384473"
 X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="36039096"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 22:37:19 -0800
-X-CSE-ConnectionGUID: b3XF0eCaQFGNHhaEWA+Isg==
-X-CSE-MsgGUID: 48DVjJHsShO8RZn2M1ASwA==
+   d="scan'208";a="35384473"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2025 00:12:32 -0800
+X-CSE-ConnectionGUID: X5Dw3mooQxuUzQCLathtxA==
+X-CSE-MsgGUID: e28ANAOaRyyKyJ8L1bRAyQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="102212103"
+X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
+   d="scan'208";a="102217915"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 02 Jan 2025 22:37:19 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 03 Jan 2025 00:12:29 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tTbJ5-0009KN-2q;
-	Fri, 03 Jan 2025 06:37:15 +0000
-Date: Fri, 3 Jan 2025 14:36:23 +0800
+	id 1tTcnD-0009RH-1w;
+	Fri, 03 Jan 2025 08:12:27 +0000
+Date: Fri, 3 Jan 2025 16:11:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Saeed Mahameed <saeedm@nvidia.com>
+To: Samiullah Khawaja <skhawaja@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Jiang <dave.jiang@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [djiang:cxl/fwctl 7/28] drivers/fwctl/mlx5/main.c:334:18: error:
- expected ';' after top level declarator
-Message-ID: <202501031439.4XUHMJ4x-lkp@intel.com>
+	netdev@vger.kernel.org, skhawaja@google.com
+Subject: Re: [PATCH net-next 3/3] Extend napi threaded polling to allow
+ kthread based busy polling
+Message-ID: <202501031537.QXSNLahs-lkp@intel.com>
+References: <20250102191227.2084046-4-skhawaja@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,31 +67,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250102191227.2084046-4-skhawaja@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
-head:   50c59ffd9367d000b9a4fe2ef9a587a2e81f287f
-commit: 6cca98fde35c7ebc475ed809427e29de09a0d635 [7/28] fwctl/mlx5: Support for communicating with mlx5 fw
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250103/202501031439.4XUHMJ4x-lkp@intel.com/config)
+Hi Samiullah,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samiullah-Khawaja/Add-support-to-set-napi-threaded-for-individual-napi/20250103-031428
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250102191227.2084046-4-skhawaja%40google.com
+patch subject: [PATCH net-next 3/3] Extend napi threaded polling to allow kthread based busy polling
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250103/202501031537.QXSNLahs-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501031439.4XUHMJ4x-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501031537.QXSNLahs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501031439.4XUHMJ4x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501031537.QXSNLahs-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/fwctl/mlx5/main.c:5:
-   In file included from include/linux/fwctl.h:7:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
+   In file included from drivers/net/ethernet/atheros/atl1c/atl1c_main.c:9:
+   In file included from drivers/net/ethernet/atheros/atl1c/atl1c.h:16:
+   In file included from include/linux/pci.h:1658:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
@@ -98,21 +106,188 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      512 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/fwctl/mlx5/main.c:334:18: error: expected ';' after top level declarator
-     334 | MODULE_IMPORT_NS(FWCTL);
-         |                  ^
-   3 warnings and 1 error generated.
+>> drivers/net/ethernet/atheros/atl1c/atl1c_main.c:2691:27: error: use of undeclared identifier 'DEV_NAPI_THREADED'; did you mean 'NAPI_THREADED'?
+    2691 |         dev_set_threaded(netdev, DEV_NAPI_THREADED);
+         |                                  ^~~~~~~~~~~~~~~~~
+         |                                  NAPI_THREADED
+   include/linux/netdevice.h:581:2: note: 'NAPI_THREADED' declared here
+     581 |         NAPI_THREADED = 1,
+         |         ^
+   4 warnings and 1 error generated.
 
 
-vim +334 drivers/fwctl/mlx5/main.c
+vim +2691 drivers/net/ethernet/atheros/atl1c/atl1c_main.c
 
-   333	
- > 334	MODULE_IMPORT_NS(FWCTL);
+  2600	
+  2601	/**
+  2602	 * atl1c_probe - Device Initialization Routine
+  2603	 * @pdev: PCI device information struct
+  2604	 * @ent: entry in atl1c_pci_tbl
+  2605	 *
+  2606	 * Returns 0 on success, negative on failure
+  2607	 *
+  2608	 * atl1c_probe initializes an adapter identified by a pci_dev structure.
+  2609	 * The OS initialization, configuring of the adapter private structure,
+  2610	 * and a hardware reset occur.
+  2611	 */
+  2612	static int atl1c_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+  2613	{
+  2614		struct net_device *netdev;
+  2615		struct atl1c_adapter *adapter;
+  2616		static int cards_found;
+  2617		u8 __iomem *hw_addr;
+  2618		enum atl1c_nic_type nic_type;
+  2619		u32 queue_count = 1;
+  2620		int err = 0;
+  2621		int i;
+  2622	
+  2623		/* enable device (incl. PCI PM wakeup and hotplug setup) */
+  2624		err = pci_enable_device_mem(pdev);
+  2625		if (err)
+  2626			return dev_err_probe(&pdev->dev, err, "cannot enable PCI device\n");
+  2627	
+  2628		/*
+  2629		 * The atl1c chip can DMA to 64-bit addresses, but it uses a single
+  2630		 * shared register for the high 32 bits, so only a single, aligned,
+  2631		 * 4 GB physical address range can be used at a time.
+  2632		 *
+  2633		 * Supporting 64-bit DMA on this hardware is more trouble than it's
+  2634		 * worth.  It is far easier to limit to 32-bit DMA than update
+  2635		 * various kernel subsystems to support the mechanics required by a
+  2636		 * fixed-high-32-bit system.
+  2637		 */
+  2638		err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+  2639		if (err) {
+  2640			dev_err(&pdev->dev, "No usable DMA configuration,aborting\n");
+  2641			goto err_dma;
+  2642		}
+  2643	
+  2644		err = pci_request_regions(pdev, atl1c_driver_name);
+  2645		if (err) {
+  2646			dev_err(&pdev->dev, "cannot obtain PCI resources\n");
+  2647			goto err_pci_reg;
+  2648		}
+  2649	
+  2650		pci_set_master(pdev);
+  2651	
+  2652		hw_addr = pci_ioremap_bar(pdev, 0);
+  2653		if (!hw_addr) {
+  2654			err = -EIO;
+  2655			dev_err(&pdev->dev, "cannot map device registers\n");
+  2656			goto err_ioremap;
+  2657		}
+  2658	
+  2659		nic_type = atl1c_get_mac_type(pdev, hw_addr);
+  2660		if (nic_type == athr_mt)
+  2661			queue_count = 4;
+  2662	
+  2663		netdev = alloc_etherdev_mq(sizeof(struct atl1c_adapter), queue_count);
+  2664		if (netdev == NULL) {
+  2665			err = -ENOMEM;
+  2666			goto err_alloc_etherdev;
+  2667		}
+  2668	
+  2669		err = atl1c_init_netdev(netdev, pdev);
+  2670		if (err) {
+  2671			dev_err(&pdev->dev, "init netdevice failed\n");
+  2672			goto err_init_netdev;
+  2673		}
+  2674		adapter = netdev_priv(netdev);
+  2675		adapter->bd_number = cards_found;
+  2676		adapter->netdev = netdev;
+  2677		adapter->pdev = pdev;
+  2678		adapter->hw.adapter = adapter;
+  2679		adapter->hw.nic_type = nic_type;
+  2680		adapter->msg_enable = netif_msg_init(-1, atl1c_default_msg);
+  2681		adapter->hw.hw_addr = hw_addr;
+  2682		adapter->tx_queue_count = queue_count;
+  2683		adapter->rx_queue_count = queue_count;
+  2684	
+  2685		/* init mii data */
+  2686		adapter->mii.dev = netdev;
+  2687		adapter->mii.mdio_read  = atl1c_mdio_read;
+  2688		adapter->mii.mdio_write = atl1c_mdio_write;
+  2689		adapter->mii.phy_id_mask = 0x1f;
+  2690		adapter->mii.reg_num_mask = MDIO_CTRL_REG_MASK;
+> 2691		dev_set_threaded(netdev, DEV_NAPI_THREADED);
+  2692		for (i = 0; i < adapter->rx_queue_count; ++i)
+  2693			netif_napi_add(netdev, &adapter->rrd_ring[i].napi,
+  2694				       atl1c_clean_rx);
+  2695		for (i = 0; i < adapter->tx_queue_count; ++i)
+  2696			netif_napi_add_tx(netdev, &adapter->tpd_ring[i].napi,
+  2697					  atl1c_clean_tx);
+  2698		timer_setup(&adapter->phy_config_timer, atl1c_phy_config, 0);
+  2699		/* setup the private structure */
+  2700		err = atl1c_sw_init(adapter);
+  2701		if (err) {
+  2702			dev_err(&pdev->dev, "net device private data init failed\n");
+  2703			goto err_sw_init;
+  2704		}
+  2705		/* set max MTU */
+  2706		atl1c_set_max_mtu(netdev);
+  2707	
+  2708		atl1c_reset_pcie(&adapter->hw, ATL1C_PCIE_L0S_L1_DISABLE);
+  2709	
+  2710		/* Init GPHY as early as possible due to power saving issue  */
+  2711		atl1c_phy_reset(&adapter->hw);
+  2712	
+  2713		err = atl1c_reset_mac(&adapter->hw);
+  2714		if (err) {
+  2715			err = -EIO;
+  2716			goto err_reset;
+  2717		}
+  2718	
+  2719		/* reset the controller to
+  2720		 * put the device in a known good starting state */
+  2721		err = atl1c_phy_init(&adapter->hw);
+  2722		if (err) {
+  2723			err = -EIO;
+  2724			goto err_reset;
+  2725		}
+  2726		if (atl1c_read_mac_addr(&adapter->hw)) {
+  2727			/* got a random MAC address, set NET_ADDR_RANDOM to netdev */
+  2728			netdev->addr_assign_type = NET_ADDR_RANDOM;
+  2729		}
+  2730		eth_hw_addr_set(netdev, adapter->hw.mac_addr);
+  2731		if (netif_msg_probe(adapter))
+  2732			dev_dbg(&pdev->dev, "mac address : %pM\n",
+  2733				adapter->hw.mac_addr);
+  2734	
+  2735		atl1c_hw_set_mac_addr(&adapter->hw, adapter->hw.mac_addr);
+  2736		INIT_WORK(&adapter->common_task, atl1c_common_task);
+  2737		adapter->work_event = 0;
+  2738		err = register_netdev(netdev);
+  2739		if (err) {
+  2740			dev_err(&pdev->dev, "register netdevice failed\n");
+  2741			goto err_register;
+  2742		}
+  2743	
+  2744		cards_found++;
+  2745		return 0;
+  2746	
+  2747	err_reset:
+  2748	err_register:
+  2749	err_sw_init:
+  2750	err_init_netdev:
+  2751		free_netdev(netdev);
+  2752	err_alloc_etherdev:
+  2753		iounmap(hw_addr);
+  2754	err_ioremap:
+  2755		pci_release_regions(pdev);
+  2756	err_pci_reg:
+  2757	err_dma:
+  2758		pci_disable_device(pdev);
+  2759		return err;
+  2760	}
+  2761	
 
 -- 
 0-DAY CI Kernel Test Service
