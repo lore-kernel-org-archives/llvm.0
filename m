@@ -1,351 +1,326 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57838DDAB;
-	Fri,  3 Jan 2025 00:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735864711; cv=fail; b=HYAirl6x6Yr8u3yJ7gdEaX9Wah13v2uKTOc0flfcFHG5lNumtG26zij8owH2ECUqwhlPL0jLr0roSMPL0v8xz+MDxqIrxNuV4Gt/ZU8Ze2sH3EdkojK4WEVQp7COxatEnRpfysAWK8L450MULMVXdeKzffqEX+vFtCfM62ZiRJA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735864711; c=relaxed/simple;
-	bh=jJsKaEfWl1FxwQ+lNBY5aPxMyyE792sRbaa5vJmS+Rk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=NtWJwqspKnmBD5WIznuvZpwuomkKJ4/yjAzdCKz86D+COuVsIhzWqOh4qfOHHMJUPO2RGUn110cKkyRTjYlwvFDQ+xI7iUOIY2PXv+MCh48B7sTSu6kukyQqHoxZCKBoZDNk5B8i7IVNl2vsPLNLzLG6qLr/I38g4PuCjXOGSgU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rh8SNwik; arc=fail smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318551119A;
+	Fri,  3 Jan 2025 01:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735867669; cv=none; b=ICFmSefU60BdzxKcE4h3Uy3z+RW2nwI0uuefHTLti1sL/GoLg0GP1rfAr2fXyufs6/2znoZUIuKGCLaT2/sEnn5jlDrfo825lL7iNK9sqvfCHX0YUg2FvIaTeblzBKgYGb1aUM5f0Tt1lXvaE9smozui5SiIRN0xD8gIs76+95M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735867669; c=relaxed/simple;
+	bh=ptRUqwZs3s6gGOiimsjKiQ6EY7//h/g0YuvC6G6iYxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PVl5TK3HFYSkBO09mutmpwOb6Ih4uugLnzFTLtf2rFt57h9FH2sD979ys/maZiYDpBbYqR3hNzo/WtFYaOO+IcdcTx6MVF7SJkUmvX7JH7zKKPtn3i+PuosqK73gAPCEAcn3UK170vSnPK36o4h17gKmDSPLj/BYzQpjOfPGMTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GYJmeevM; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rh8SNwik"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GYJmeevM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735864709; x=1767400709;
+  t=1735867667; x=1767403667;
   h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=jJsKaEfWl1FxwQ+lNBY5aPxMyyE792sRbaa5vJmS+Rk=;
-  b=Rh8SNwiksgmeifVi5Kn4RGX/9Z8sVUoeRvo2reUHBxnYdPt8m2RLKZxl
-   yLdnh6SC0LIDwdIiAKNpFkW11AwBFpDzFeLFTIT9JGsgRAuTAQ9fnqqjZ
-   VzCWy3n8u+0ft2MgwxatORCewKQEQXJ9VZ8cOD1+O6nC86It6hUeT78oa
-   dgRh1wf2AVSPYdWjGhwddyt5IkqOiu6rQCGevhUi4auLVnKBnlkPHlfeg
-   NedaJWo5Ixdo0nHnarCyiljcmBBEu0v/662RYSTaGH1HFXWWgPzZA1gFR
-   u2V0nKzKmIIJNMfPYZVM3gdrQvQ15RjkxdyFAX7++GEzzx48PRcpXIRrD
-   g==;
-X-CSE-ConnectionGUID: azOC34+LQsW7uZG7neZByw==
-X-CSE-MsgGUID: lE7LLN56SFWIT+mvsiLDHQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="23705897"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ptRUqwZs3s6gGOiimsjKiQ6EY7//h/g0YuvC6G6iYxE=;
+  b=GYJmeevMUoThBsFe78hUULfD40b8zF3AF620D4Ts1ajhDYp/mJARa4hL
+   wE6gZ+MsxzNR+dCD6Go7S9BZwdP0xXR5/F6uiIjlFh/DfoOP27S4WH4mS
+   gZLefbAqyE3w7/5IRR+Bq8VT8Qq8uopCReHKM2LzjeFE98FkwW6dCRabM
+   tI8TjO9K6nVItnOMFbwzIeSTjBvct/kqHxxe/jV/3QCu0NrE+r0mCGMHH
+   3Xz2RF5jUZCx0wgikeDsvBIXMzCb8/o+PU4ZDYhk1BY/OBowZn7AxsOWW
+   2/lVCofm+YEuWSAWAUbKv6Cuk7zCGsb23MTrqjQPFf2ZNGZXVJRUwkFUo
+   w==;
+X-CSE-ConnectionGUID: y/orx3M0SBSrjIopXkr7PQ==
+X-CSE-MsgGUID: z0GyFEsQQveydQf2v3rHxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="36021498"
 X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="23705897"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 16:38:19 -0800
-X-CSE-ConnectionGUID: 13Iom6QIS5audgQZteLqxw==
-X-CSE-MsgGUID: QChH1EAMR4Ogd5vtqAmdIQ==
+   d="scan'208";a="36021498"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 17:27:47 -0800
+X-CSE-ConnectionGUID: 8H6QjGfNSfG4Yao3s4pKeA==
+X-CSE-MsgGUID: N2XSNvqySGyr/B0oG5ciJg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="102165537"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 02 Jan 2025 16:38:13 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 2 Jan 2025 16:38:12 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Thu, 2 Jan 2025 16:38:12 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Thu, 2 Jan 2025 16:38:11 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CGGLAiLrOigjRfniBva0tdvd50chxym0rhSL3ELpd0XF38WidnvjPB8JfqpPw6GqqsIRGFG8Ps1FN18EK5nPIp+k7jhX6tpzm2KvLo8UK7meAVsMwUBJZeJ3bJW4YtZyxd1Buum9sbbrI2dBJr2fDrMch6d1Hn9+nZ/G6My1O72SAtwcoywgR9aqdexgoiB4i7TkoWVjIXVHfHrtXC7c9Q8k/FAEWJxLBVk2g7kCEtxyPY8UsqL5CPU04oS9o2G8uTGQkWQjDlycJY+tTm5oAQBsvO9qx0NrA3GgwfA85DM1OtYBGjrWpOYOMysoEI+lV7tEMqh4N36gAFgj+cV53w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bq/HNA1h8UiUip+xGanUm3uzNsvUlDvlJyvBfX7Y4/M=;
- b=NGjNm8kv85JG6ouNF2Fk4MGL8nOtcOeYP+BZMEe+kJURyCBXJrjUjZZOtsmZyPhBQASznBGHGW7g8Jf5lklBTDHrTkuGkeAi7kHYYbU9MItvs8rFNaX3NMiy7SBdvpxXJBy1Agtw0fPY6bRgulIaID5jtuA439ibBYe1a9zPqlMOq4XLYyCpdjrMZ3vHzJ4N9onhWROhLNjKzC5MoJzACDmZc5u8l4teay/e3ELTjUZNY/v8R7fY7v5k7UxqctY0xpXiXfmpnpKRJewFYYnZJhWHa8SBiLOarW3QadeRIyKksXgm/XwmlcKKqNuiOP36dadWSpIS9HJSgXZt7Nnaew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
- by CH0PR11MB5316.namprd11.prod.outlook.com (2603:10b6:610:bf::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.14; Fri, 3 Jan
- 2025 00:37:38 +0000
-Received: from DM4PR11MB5423.namprd11.prod.outlook.com
- ([fe80::dffa:e0c8:dbf1:c82e]) by DM4PR11MB5423.namprd11.prod.outlook.com
- ([fe80::dffa:e0c8:dbf1:c82e%6]) with mapi id 15.20.8314.013; Fri, 3 Jan 2025
- 00:37:38 +0000
-Date: Fri, 3 Jan 2025 08:37:30 +0800
-From: Philip Li <philip.li@intel.com>
-To: kernel test robot <lkp@intel.com>
-CC: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	<llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation
- between different enumeration types ('enum sti_plane_type' and 'enum
- sti_plane_id_of_type')
-Message-ID: <Z3cxSmk2OJYdyp41@rli9-mobl>
-References: <202501030713.36t97VZZ-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202501030713.36t97VZZ-lkp@intel.com>
-X-ClientProxiedBy: SG2PR04CA0174.apcprd04.prod.outlook.com (2603:1096:4::36)
- To DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="132577781"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 02 Jan 2025 17:27:43 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tTWTU-00092N-1n;
+	Fri, 03 Jan 2025 01:27:40 +0000
+Date: Fri, 3 Jan 2025 09:27:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Adri=E1n?= Larumbe <adrian.larumbe@collabora.com>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Steven Price <steven.price@arm.com>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel@collabora.com,
+	=?iso-8859-1?Q?Adri=E1n?= Larumbe <adrian.larumbe@collabora.com>,
+	Mihail Atanassov <mihail.atanassov@arm.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] drm/panthor: Expose size of driver internal BO's
+ over fdinfo
+Message-ID: <202501030900.s8FkUPV1-lkp@intel.com>
+References: <20250102203817.956790-2-adrian.larumbe@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5423:EE_|CH0PR11MB5316:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78129b33-f4ac-408a-bc8e-08dd2b8ed330
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?P0udn57B3voYhKzk9HKpV8QVuXf/2OwTWOcKqfH4y+e/94rw7ajkPfrDPb7q?=
- =?us-ascii?Q?eBrq3p7A7fy9hv0E5YzBfBs/qpdNICtkupaiidueDl4lWXxs+4wzwI3EAx1S?=
- =?us-ascii?Q?za1CJT2fycm+cWqBhM4z3WKtjKPn2qvr2eNo4qliYcDwIma3LyhTmySYgmPt?=
- =?us-ascii?Q?MTmyYsLr3vDdBV6b4v7rBD4WzQKhoqrGkmDNObKnXbvQmeYXDZSLIFCVBO4Z?=
- =?us-ascii?Q?iSLXuQOi6TaLBiWGC7R+hKUGljson3nfLhQdSlECyX4qCEaHCe+aNq1KLVLL?=
- =?us-ascii?Q?ZJngJHU2PZY4aov1pgtf/wuTQ8QBqnLEM2V0RpeXVjtvmuoTUNTbRyNMJja8?=
- =?us-ascii?Q?1QfR/gxZL9W6jakI10jHAMfQesPp5eoVkUik7LQHpo58BFxgRXKdiykzNsll?=
- =?us-ascii?Q?ji/cxLaKftqhvHntDLWWjd6BDckOzj8Jx/JguA1ATrMKnIkLn08aYIHO/6Df?=
- =?us-ascii?Q?xMqq8l7YXwQdR0pVhLmshxjVeiZoUtBQttf/jZ7NwWz0VJHJwqdho9aVJ6nR?=
- =?us-ascii?Q?mixa9gWy++R9xOU5q+9wO8ZUd2pazRX5bMLS8PxBjC+r6MLqVDP6Q/r7qhao?=
- =?us-ascii?Q?EdWN5jnUPWABqfGnovkBj/5P5zQOB0gpDGTPR4N8zswO810QC6v3nvwtFPeC?=
- =?us-ascii?Q?Pr8UAKNjhKnOe6sNiHvnRsmolf+MvDz2sfQYFf7SfKX7JyVSHdK0pOP9y9Wb?=
- =?us-ascii?Q?Yp45hpGdHM17Dnnoczf+8gqfkP1QkA9f37X+xDOVXmlfPLnX0Z/jmDjuxjp9?=
- =?us-ascii?Q?lVe4Rt9SWHviUgOmZmQuXbvViog5UxKFfK1O7suGT2lcd/NbSYf6Uhigd6SE?=
- =?us-ascii?Q?ItVpick/LFYMnh0R+mRbtwvXmxUgjY1+D2QexEOxCMXXK3wMGOfpbQUhkfOo?=
- =?us-ascii?Q?5rUsG+sq3d6GlkBlj8yvRVUUbl7N31/BJWxsU9mIH18Xi8vRjZALf0jXcVvF?=
- =?us-ascii?Q?EVDatS93E/4rswSKVRR23e8K+Flp8CD5wO6NoDpusgv4WbSkcBu+fA3VbETA?=
- =?us-ascii?Q?dqRiRvbCwNEj9zNTw4+mRa9QqxxXgCo7kKG5NR6tZp2R0wBPTvXQptzthYJp?=
- =?us-ascii?Q?EYZCiW5nJerd21/s1CqVHLWf2QToqwpeQPnq2iUioDaV0vJCdbtomv0ET1YK?=
- =?us-ascii?Q?vC6wESeGtIPT4Dx2316m0U26SbxZRa1N3y6tk6V2sGI1COGrqf02IqaKTYt9?=
- =?us-ascii?Q?zacVrgHVSEUOcT1+pYQKCbG7YoBaxDMMg0n19POamIKcWIDL9ui/ldLlMPJo?=
- =?us-ascii?Q?HvP8JRIweo0Haq4L3TScy6npVCp63b58KZ8uC4XSNSnIHmBFBbQo4+PfwYh6?=
- =?us-ascii?Q?e10Yh+hiTIXjZPQN1Ck0GsDcWybexUsn7hkkWi2tdv2r1g=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5423.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4LZXR1NhVdTbWJLaE8t3E8uyr+jrGETcD68yOV/IVaymo0gXnGvNDGa3Ut44?=
- =?us-ascii?Q?e3EJntlanCLivw8XoMqcI5FhxCtn6+BggJiYLVwg92D8Xpz8BV8gwOdkirLq?=
- =?us-ascii?Q?oNSvswLHUDSWIPxTXnjeNmUomT1YkeJnwjKg8LPi1pTxKR/Tr965v/vmJ3q9?=
- =?us-ascii?Q?AtPtv8zWndHN5PQ4oQKNowt4eTa4kqn308ley1fhQY/c8/6ySK6O8YmvqFMA?=
- =?us-ascii?Q?a01eLrBqeqaU9otz+G9mtlq7C8S3X7Glwvk1w6iWkWfUGkL1wEbUvndd1zKp?=
- =?us-ascii?Q?6nSwH3obodlhxjya7FVyWsyMR1SWUgkvMm9bH+qEvJj3T0H2m/nPHpfoGajz?=
- =?us-ascii?Q?Ppn9f4ZHIv40sYTnjgMYGZzdXkE59w0JupjgNtsBwkho0TChlBHMEZ3wcCrY?=
- =?us-ascii?Q?r+yLQwHMQCAwyQCgIO9XjyF0/isYUgbqGpz8x44UbSiyE/cZ5+8dwCIdCVsW?=
- =?us-ascii?Q?LYbxvOhUfLcyzpZQ3/LOCpn5imU8pmWODP+dxhKGTHbn2wEgYaWlSB1UUTUV?=
- =?us-ascii?Q?yG1RkZYUdOb2YHaySrPfKts23ImxkXaItBa93v7L7eI4OKLEMFrO+WVtCV7i?=
- =?us-ascii?Q?EpB+sGMYV9CwrCzFmto4uEvMUcaLdRz02aw9CPu6RPyNLm862fd+QtDhoLvC?=
- =?us-ascii?Q?v944sJGBD4pAsPLpBqxyx2O13L9hXJuyBfoBB5ByX4w85iMm/iyPBae6ks4Y?=
- =?us-ascii?Q?VRxXHu0Jd31rbDp4dAVs7l9KRzRJGKLUovxJYGnlq7BkxMHgPfR3GfxTYDeD?=
- =?us-ascii?Q?ZE9zfRylFUKkv10S8aWMMr7GJLbW8T95Y6jcYhJYpDkF2c4zvR1aNFIhRXmt?=
- =?us-ascii?Q?bl8ShOFd9g2GhGefXDrxw5x6tAv4C1UQHZs9I9Gr6lb81h3zvTOy7pvrRiE7?=
- =?us-ascii?Q?7PhRWROGs5f+QCi+b4K18fzXljZtDRpV+4CEAbQwypDfhVZxnT1VJViTWMXS?=
- =?us-ascii?Q?Fr+v4ldKn1yj9e9lBBVKkcQVx+4CmBUQy0xT6kHySMahePEXb2D16qmgCFMA?=
- =?us-ascii?Q?Xn2HBkNeFBarwM5MBwlEQsDhuhc/z8T1ulu/plp5QDVGUY1wDYjXsZQx1bjK?=
- =?us-ascii?Q?IaL+bCgRkovJCZAXe+Sxk32ab0sYuHJnNO2KAOJd9NseFbR0coIxbnCFxCqw?=
- =?us-ascii?Q?279MxIpxprjQAmTcbuPLD7BmFUkFxvkGPk3QitVuDvqsI7sVAuDDSp+GIVpj?=
- =?us-ascii?Q?GRpt18+cj6+BuZLwuiTjhk/JBfBi8zdJZuq1joOIKivrys7kicCBrTZLbmKJ?=
- =?us-ascii?Q?UFazgkdU8TVTrRxb6TIzuxT+N97R1RwwueInc/lgSssQC1nAtu9Hciy0u35q?=
- =?us-ascii?Q?tw8r9pWhTZp3+v9NctSV0eJoZsgXPDM7iEjH32fjMsLhamrsHcj8WL+v0FMr?=
- =?us-ascii?Q?oIr8/O8yainPfNMs5Jj5EsPzcHdQn4QPpiGoQqqbXSxhw6otD5iv0Y9n5nPy?=
- =?us-ascii?Q?um+QjcSLB3zx+b3lylLzd5r+6tnzJPmC0JpnKSEWAMuumehWjEiCqeACcfg1?=
- =?us-ascii?Q?T3YBDalL1HTiaFQCNo1rU5/oEdqnvyPDJTRtQHeTB55fE+FnH3T/ybZ2Mogp?=
- =?us-ascii?Q?yvBwLBzf9mYbPsB/BdOZgkmM+mf71dOsiB4q0rWc?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78129b33-f4ac-408a-bc8e-08dd2b8ed330
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5423.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2025 00:37:38.7162
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xcGX21QZY/ybtdCUWzIXX4N6DLY9u2YpfxNPr0DR8UO79BTOQrE7J3gDZrt4m7gradvb2XT5pmXZmqkK07I2Lg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5316
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250102203817.956790-2-adrian.larumbe@collabora.com>
 
-On Fri, Jan 03, 2025 at 07:37:52AM +0800, kernel test robot wrote:
-> Hi Ville,
-> 
-> FYI, the error/warning still remains.
+Hi Adrián,
 
-Sorry, kindly ignore this report that the commit is not the initial cause of the issue.
+kernel test robot noticed the following build warnings:
 
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   0bc21e701a6ffacfdde7f04f87d664d82e8a13bf
-> commit: 74bde7581df3e18061119e1b27b63d0a9ea57b7a drm/sti: Allow build with COMPILE_TEST=y
-> date:   7 months ago
-> config: hexagon-randconfig-002-20250103 (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030713.36t97VZZ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202501030713.36t97VZZ-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    In file included from drivers/gpu/drm/sti/sti_compositor.c:18:
->    In file included from include/drm/drm_vblank.h:32:
->    In file included from include/drm/drm_file.h:39:
->    In file included from include/drm/drm_prime.h:37:
->    In file included from include/linux/scatterlist.h:8:
->    In file included from include/linux/mm.h:2253:
->    include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
->      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    In file included from drivers/gpu/drm/sti/sti_compositor.c:20:
->    In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
->    In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
-> >> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    12 errors generated.
-> --
->    In file included from drivers/gpu/drm/sti/sti_plane.c:14:
->    In file included from include/drm/drm_gem_dma_helper.h:5:
->    In file included from include/drm/drm_file.h:39:
->    In file included from include/drm/drm_prime.h:37:
->    In file included from include/linux/scatterlist.h:8:
->    In file included from include/linux/mm.h:2253:
->    include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
->      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    In file included from drivers/gpu/drm/sti/sti_plane.c:14:
->    In file included from include/drm/drm_gem_dma_helper.h:5:
->    In file included from include/drm/drm_file.h:39:
->    In file included from include/drm/drm_prime.h:37:
->    In file included from include/linux/scatterlist.h:9:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:548:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from drivers/gpu/drm/sti/sti_plane.c:14:
->    In file included from include/drm/drm_gem_dma_helper.h:5:
->    In file included from include/drm/drm_file.h:39:
->    In file included from include/drm/drm_prime.h:37:
->    In file included from include/linux/scatterlist.h:9:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:574:61: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from drivers/gpu/drm/sti/sti_plane.c:14:
->    In file included from include/drm/drm_gem_dma_helper.h:5:
->    In file included from include/drm/drm_file.h:39:
->    In file included from include/drm/drm_prime.h:37:
->    In file included from include/linux/scatterlist.h:9:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:585:33: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    In file included from drivers/gpu/drm/sti/sti_plane.c:16:
->    In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
->    In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
-> >> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
->       36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
->          |                           ~~~~~~~ ^ ~~~~~~~~
->    12 errors generated.
-> 
-> 
-> vim +32 drivers/gpu/drm/sti/sti_plane.h
-> 
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  30  
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  31  enum sti_plane_desc {
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31 @32  	STI_GDP_0       = STI_GDP | STI_ID_0,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  33  	STI_GDP_1       = STI_GDP | STI_ID_1,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  34  	STI_GDP_2       = STI_GDP | STI_ID_2,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  35  	STI_GDP_3       = STI_GDP | STI_ID_3,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  36  	STI_HQVDP_0     = STI_VDP | STI_ID_0,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  37  	STI_CURSOR      = STI_CUR,
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  38  	STI_BACK        = STI_BCK
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  39  };
-> 871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  40  
-> 
-> :::::: The code at line 32 was first introduced by commit
-> :::::: 871bcdfea68560991bd650406e47a801ab9d635d drm/sti: code clean up
-> 
-> :::::: TO: Vincent Abriou <vincent.abriou@st.com>
-> :::::: CC: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-> 
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on next-20241220]
+[cannot apply to linus/master v6.13-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Adri-n-Larumbe/drm-panthor-Expose-size-of-driver-internal-BO-s-over-fdinfo/20250103-044151
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20250102203817.956790-2-adrian.larumbe%40collabora.com
+patch subject: [PATCH v6 1/2] drm/panthor: Expose size of driver internal BO's over fdinfo
+config: i386-buildonly-randconfig-004-20250103 (https://download.01.org/0day-ci/archive/20250103/202501030900.s8FkUPV1-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501030900.s8FkUPV1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501030900.s8FkUPV1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'runnable' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'idle' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'waiting' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'has_ref' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'in_progress' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:320: warning: Excess struct member 'stopped_groups' description in 'panthor_scheduler'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'mem' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'input' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'output' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'input_fw_va' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'output_fw_va' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'gpu_va' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'ref' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'gt' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'sync64' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'bo' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'offset' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'kmap' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'lock' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'id' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'seqno' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'last_fence' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'in_flight_jobs' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'slots' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'slot_count' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:492: warning: Excess struct member 'seqno' description in 'panthor_queue'
+   drivers/gpu/drm/panthor/panthor_sched.c:701: warning: Excess struct member 'data' description in 'panthor_group'
+   drivers/gpu/drm/panthor/panthor_sched.c:701: warning: Excess struct member 'lock' description in 'panthor_group'
+>> drivers/gpu/drm/panthor/panthor_sched.c:701: warning: Excess struct member 'kbo_sizes' description in 'panthor_group'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'start' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'size' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'latest_flush' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'start' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'end' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'mask' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:837: warning: Excess struct member 'slot' description in 'panthor_job'
+   drivers/gpu/drm/panthor/panthor_sched.c:1766: warning: Function parameter or struct member 'ptdev' not described in 'panthor_sched_report_fw_events'
+   drivers/gpu/drm/panthor/panthor_sched.c:1766: warning: Function parameter or struct member 'events' not described in 'panthor_sched_report_fw_events'
+   drivers/gpu/drm/panthor/panthor_sched.c:2659: warning: Function parameter or struct member 'ptdev' not described in 'panthor_sched_report_mmu_fault'
+
+
+vim +701 drivers/gpu/drm/panthor/panthor_sched.c
+
+de85488138247d Boris Brezillon 2024-02-29  529  
+de85488138247d Boris Brezillon 2024-02-29  530  /**
+de85488138247d Boris Brezillon 2024-02-29  531   * struct panthor_group - Scheduling group object
+de85488138247d Boris Brezillon 2024-02-29  532   */
+de85488138247d Boris Brezillon 2024-02-29  533  struct panthor_group {
+de85488138247d Boris Brezillon 2024-02-29  534  	/** @refcount: Reference count */
+de85488138247d Boris Brezillon 2024-02-29  535  	struct kref refcount;
+de85488138247d Boris Brezillon 2024-02-29  536  
+de85488138247d Boris Brezillon 2024-02-29  537  	/** @ptdev: Device. */
+de85488138247d Boris Brezillon 2024-02-29  538  	struct panthor_device *ptdev;
+de85488138247d Boris Brezillon 2024-02-29  539  
+de85488138247d Boris Brezillon 2024-02-29  540  	/** @vm: VM bound to the group. */
+de85488138247d Boris Brezillon 2024-02-29  541  	struct panthor_vm *vm;
+de85488138247d Boris Brezillon 2024-02-29  542  
+de85488138247d Boris Brezillon 2024-02-29  543  	/** @compute_core_mask: Mask of shader cores that can be used for compute jobs. */
+de85488138247d Boris Brezillon 2024-02-29  544  	u64 compute_core_mask;
+de85488138247d Boris Brezillon 2024-02-29  545  
+de85488138247d Boris Brezillon 2024-02-29  546  	/** @fragment_core_mask: Mask of shader cores that can be used for fragment jobs. */
+de85488138247d Boris Brezillon 2024-02-29  547  	u64 fragment_core_mask;
+de85488138247d Boris Brezillon 2024-02-29  548  
+de85488138247d Boris Brezillon 2024-02-29  549  	/** @tiler_core_mask: Mask of tiler cores that can be used for tiler jobs. */
+de85488138247d Boris Brezillon 2024-02-29  550  	u64 tiler_core_mask;
+de85488138247d Boris Brezillon 2024-02-29  551  
+de85488138247d Boris Brezillon 2024-02-29  552  	/** @max_compute_cores: Maximum number of shader cores used for compute jobs. */
+de85488138247d Boris Brezillon 2024-02-29  553  	u8 max_compute_cores;
+de85488138247d Boris Brezillon 2024-02-29  554  
+be7ffc821f5fc2 Liviu Dudau     2024-04-02  555  	/** @max_fragment_cores: Maximum number of shader cores used for fragment jobs. */
+de85488138247d Boris Brezillon 2024-02-29  556  	u8 max_fragment_cores;
+de85488138247d Boris Brezillon 2024-02-29  557  
+de85488138247d Boris Brezillon 2024-02-29  558  	/** @max_tiler_cores: Maximum number of tiler cores used for tiler jobs. */
+de85488138247d Boris Brezillon 2024-02-29  559  	u8 max_tiler_cores;
+de85488138247d Boris Brezillon 2024-02-29  560  
+de85488138247d Boris Brezillon 2024-02-29  561  	/** @priority: Group priority (check panthor_csg_priority). */
+de85488138247d Boris Brezillon 2024-02-29  562  	u8 priority;
+de85488138247d Boris Brezillon 2024-02-29  563  
+de85488138247d Boris Brezillon 2024-02-29  564  	/** @blocked_queues: Bitmask reflecting the blocked queues. */
+de85488138247d Boris Brezillon 2024-02-29  565  	u32 blocked_queues;
+de85488138247d Boris Brezillon 2024-02-29  566  
+de85488138247d Boris Brezillon 2024-02-29  567  	/** @idle_queues: Bitmask reflecting the idle queues. */
+de85488138247d Boris Brezillon 2024-02-29  568  	u32 idle_queues;
+de85488138247d Boris Brezillon 2024-02-29  569  
+de85488138247d Boris Brezillon 2024-02-29  570  	/** @fatal_lock: Lock used to protect access to fatal fields. */
+de85488138247d Boris Brezillon 2024-02-29  571  	spinlock_t fatal_lock;
+de85488138247d Boris Brezillon 2024-02-29  572  
+de85488138247d Boris Brezillon 2024-02-29  573  	/** @fatal_queues: Bitmask reflecting the queues that hit a fatal exception. */
+de85488138247d Boris Brezillon 2024-02-29  574  	u32 fatal_queues;
+de85488138247d Boris Brezillon 2024-02-29  575  
+de85488138247d Boris Brezillon 2024-02-29  576  	/** @tiler_oom: Mask of queues that have a tiler OOM event to process. */
+de85488138247d Boris Brezillon 2024-02-29  577  	atomic_t tiler_oom;
+de85488138247d Boris Brezillon 2024-02-29  578  
+de85488138247d Boris Brezillon 2024-02-29  579  	/** @queue_count: Number of queues in this group. */
+de85488138247d Boris Brezillon 2024-02-29  580  	u32 queue_count;
+de85488138247d Boris Brezillon 2024-02-29  581  
+de85488138247d Boris Brezillon 2024-02-29  582  	/** @queues: Queues owned by this group. */
+de85488138247d Boris Brezillon 2024-02-29  583  	struct panthor_queue *queues[MAX_CS_PER_CSG];
+de85488138247d Boris Brezillon 2024-02-29  584  
+de85488138247d Boris Brezillon 2024-02-29  585  	/**
+de85488138247d Boris Brezillon 2024-02-29  586  	 * @csg_id: ID of the FW group slot.
+de85488138247d Boris Brezillon 2024-02-29  587  	 *
+de85488138247d Boris Brezillon 2024-02-29  588  	 * -1 when the group is not scheduled/active.
+de85488138247d Boris Brezillon 2024-02-29  589  	 */
+de85488138247d Boris Brezillon 2024-02-29  590  	int csg_id;
+de85488138247d Boris Brezillon 2024-02-29  591  
+de85488138247d Boris Brezillon 2024-02-29  592  	/**
+de85488138247d Boris Brezillon 2024-02-29  593  	 * @destroyed: True when the group has been destroyed.
+de85488138247d Boris Brezillon 2024-02-29  594  	 *
+de85488138247d Boris Brezillon 2024-02-29  595  	 * If a group is destroyed it becomes useless: no further jobs can be submitted
+de85488138247d Boris Brezillon 2024-02-29  596  	 * to its queues. We simply wait for all references to be dropped so we can
+de85488138247d Boris Brezillon 2024-02-29  597  	 * release the group object.
+de85488138247d Boris Brezillon 2024-02-29  598  	 */
+de85488138247d Boris Brezillon 2024-02-29  599  	bool destroyed;
+de85488138247d Boris Brezillon 2024-02-29  600  
+de85488138247d Boris Brezillon 2024-02-29  601  	/**
+de85488138247d Boris Brezillon 2024-02-29  602  	 * @timedout: True when a timeout occurred on any of the queues owned by
+de85488138247d Boris Brezillon 2024-02-29  603  	 * this group.
+de85488138247d Boris Brezillon 2024-02-29  604  	 *
+4700fd3e050da8 Boris Brezillon 2024-10-29  605  	 * Timeouts can be reported by drm_sched or by the FW. If a reset is required,
+4700fd3e050da8 Boris Brezillon 2024-10-29  606  	 * and the group can't be suspended, this also leads to a timeout. In any case,
+4700fd3e050da8 Boris Brezillon 2024-10-29  607  	 * any timeout situation is unrecoverable, and the group becomes useless. We
+4700fd3e050da8 Boris Brezillon 2024-10-29  608  	 * simply wait for all references to be dropped so we can release the group
+4700fd3e050da8 Boris Brezillon 2024-10-29  609  	 * object.
+de85488138247d Boris Brezillon 2024-02-29  610  	 */
+de85488138247d Boris Brezillon 2024-02-29  611  	bool timedout;
+de85488138247d Boris Brezillon 2024-02-29  612  
+4181576d85c642 Boris Brezillon 2024-12-11  613  	/**
+4181576d85c642 Boris Brezillon 2024-12-11  614  	 * @innocent: True when the group becomes unusable because the group suspension
+4181576d85c642 Boris Brezillon 2024-12-11  615  	 * failed during a reset.
+4181576d85c642 Boris Brezillon 2024-12-11  616  	 *
+4181576d85c642 Boris Brezillon 2024-12-11  617  	 * Sometimes the FW was put in a bad state by other groups, causing the group
+4181576d85c642 Boris Brezillon 2024-12-11  618  	 * suspension happening in the reset path to fail. In that case, we consider the
+4181576d85c642 Boris Brezillon 2024-12-11  619  	 * group innocent.
+4181576d85c642 Boris Brezillon 2024-12-11  620  	 */
+4181576d85c642 Boris Brezillon 2024-12-11  621  	bool innocent;
+4181576d85c642 Boris Brezillon 2024-12-11  622  
+de85488138247d Boris Brezillon 2024-02-29  623  	/**
+de85488138247d Boris Brezillon 2024-02-29  624  	 * @syncobjs: Pool of per-queue synchronization objects.
+de85488138247d Boris Brezillon 2024-02-29  625  	 *
+de85488138247d Boris Brezillon 2024-02-29  626  	 * One sync object per queue. The position of the sync object is
+de85488138247d Boris Brezillon 2024-02-29  627  	 * determined by the queue index.
+de85488138247d Boris Brezillon 2024-02-29  628  	 */
+de85488138247d Boris Brezillon 2024-02-29  629  	struct panthor_kernel_bo *syncobjs;
+de85488138247d Boris Brezillon 2024-02-29  630  
+1026b1b65955e8 Adrián Larumbe  2025-01-02  631  	/** @fdinfo: Per-group total cycle and timestamp values and kernel BO sizes. */
+e16635d88fa07b Adrián Larumbe  2024-09-24  632  	struct {
+e16635d88fa07b Adrián Larumbe  2024-09-24  633  		/** @data: Total sampled values for jobs in queues from this group. */
+e16635d88fa07b Adrián Larumbe  2024-09-24  634  		struct panthor_gpu_usage data;
+e16635d88fa07b Adrián Larumbe  2024-09-24  635  
+e16635d88fa07b Adrián Larumbe  2024-09-24  636  		/**
+e16635d88fa07b Adrián Larumbe  2024-09-24  637  		 * @lock: Mutex to govern concurrent access from drm file's fdinfo callback
+e16635d88fa07b Adrián Larumbe  2024-09-24  638  		 * and job post-completion processing function
+e16635d88fa07b Adrián Larumbe  2024-09-24  639  		 */
+e16635d88fa07b Adrián Larumbe  2024-09-24  640  		struct mutex lock;
+1026b1b65955e8 Adrián Larumbe  2025-01-02  641  
+1026b1b65955e8 Adrián Larumbe  2025-01-02  642  		/** @kbo_sizes: Aggregate size of private kernel BO's held by the group. */
+1026b1b65955e8 Adrián Larumbe  2025-01-02  643  		size_t kbo_sizes;
+e16635d88fa07b Adrián Larumbe  2024-09-24  644  	} fdinfo;
+e16635d88fa07b Adrián Larumbe  2024-09-24  645  
+de85488138247d Boris Brezillon 2024-02-29  646  	/** @state: Group state. */
+de85488138247d Boris Brezillon 2024-02-29  647  	enum panthor_group_state state;
+de85488138247d Boris Brezillon 2024-02-29  648  
+de85488138247d Boris Brezillon 2024-02-29  649  	/**
+de85488138247d Boris Brezillon 2024-02-29  650  	 * @suspend_buf: Suspend buffer.
+de85488138247d Boris Brezillon 2024-02-29  651  	 *
+de85488138247d Boris Brezillon 2024-02-29  652  	 * Stores the state of the group and its queues when a group is suspended.
+de85488138247d Boris Brezillon 2024-02-29  653  	 * Used at resume time to restore the group in its previous state.
+de85488138247d Boris Brezillon 2024-02-29  654  	 *
+de85488138247d Boris Brezillon 2024-02-29  655  	 * The size of the suspend buffer is exposed through the FW interface.
+de85488138247d Boris Brezillon 2024-02-29  656  	 */
+de85488138247d Boris Brezillon 2024-02-29  657  	struct panthor_kernel_bo *suspend_buf;
+de85488138247d Boris Brezillon 2024-02-29  658  
+de85488138247d Boris Brezillon 2024-02-29  659  	/**
+de85488138247d Boris Brezillon 2024-02-29  660  	 * @protm_suspend_buf: Protection mode suspend buffer.
+de85488138247d Boris Brezillon 2024-02-29  661  	 *
+de85488138247d Boris Brezillon 2024-02-29  662  	 * Stores the state of the group and its queues when a group that's in
+de85488138247d Boris Brezillon 2024-02-29  663  	 * protection mode is suspended.
+de85488138247d Boris Brezillon 2024-02-29  664  	 *
+de85488138247d Boris Brezillon 2024-02-29  665  	 * Used at resume time to restore the group in its previous state.
+de85488138247d Boris Brezillon 2024-02-29  666  	 *
+de85488138247d Boris Brezillon 2024-02-29  667  	 * The size of the protection mode suspend buffer is exposed through the
+de85488138247d Boris Brezillon 2024-02-29  668  	 * FW interface.
+de85488138247d Boris Brezillon 2024-02-29  669  	 */
+de85488138247d Boris Brezillon 2024-02-29  670  	struct panthor_kernel_bo *protm_suspend_buf;
+de85488138247d Boris Brezillon 2024-02-29  671  
+de85488138247d Boris Brezillon 2024-02-29  672  	/** @sync_upd_work: Work used to check/signal job fences. */
+de85488138247d Boris Brezillon 2024-02-29  673  	struct work_struct sync_upd_work;
+de85488138247d Boris Brezillon 2024-02-29  674  
+de85488138247d Boris Brezillon 2024-02-29  675  	/** @tiler_oom_work: Work used to process tiler OOM events happening on this group. */
+de85488138247d Boris Brezillon 2024-02-29  676  	struct work_struct tiler_oom_work;
+de85488138247d Boris Brezillon 2024-02-29  677  
+de85488138247d Boris Brezillon 2024-02-29  678  	/** @term_work: Work used to finish the group termination procedure. */
+de85488138247d Boris Brezillon 2024-02-29  679  	struct work_struct term_work;
+de85488138247d Boris Brezillon 2024-02-29  680  
+de85488138247d Boris Brezillon 2024-02-29  681  	/**
+de85488138247d Boris Brezillon 2024-02-29  682  	 * @release_work: Work used to release group resources.
+de85488138247d Boris Brezillon 2024-02-29  683  	 *
+de85488138247d Boris Brezillon 2024-02-29  684  	 * We need to postpone the group release to avoid a deadlock when
+de85488138247d Boris Brezillon 2024-02-29  685  	 * the last ref is released in the tick work.
+de85488138247d Boris Brezillon 2024-02-29  686  	 */
+de85488138247d Boris Brezillon 2024-02-29  687  	struct work_struct release_work;
+de85488138247d Boris Brezillon 2024-02-29  688  
+de85488138247d Boris Brezillon 2024-02-29  689  	/**
+de85488138247d Boris Brezillon 2024-02-29  690  	 * @run_node: Node used to insert the group in the
+de85488138247d Boris Brezillon 2024-02-29  691  	 * panthor_group::groups::{runnable,idle} and
+de85488138247d Boris Brezillon 2024-02-29  692  	 * panthor_group::reset.stopped_groups lists.
+de85488138247d Boris Brezillon 2024-02-29  693  	 */
+de85488138247d Boris Brezillon 2024-02-29  694  	struct list_head run_node;
+de85488138247d Boris Brezillon 2024-02-29  695  
+de85488138247d Boris Brezillon 2024-02-29  696  	/**
+de85488138247d Boris Brezillon 2024-02-29  697  	 * @wait_node: Node used to insert the group in the
+de85488138247d Boris Brezillon 2024-02-29  698  	 * panthor_group::groups::waiting list.
+de85488138247d Boris Brezillon 2024-02-29  699  	 */
+de85488138247d Boris Brezillon 2024-02-29  700  	struct list_head wait_node;
+de85488138247d Boris Brezillon 2024-02-29 @701  };
+de85488138247d Boris Brezillon 2024-02-29  702  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
