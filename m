@@ -1,63 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C7719AD89;
-	Sat,  4 Jan 2025 11:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1485134BD
+	for <llvm@lists.linux.dev>; Sat,  4 Jan 2025 16:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735990178; cv=none; b=Z42AD2E/cIA1ILvmXo4UBJ0dt6eDxr0JQSJrPArWFIILkFlRk9yW7QCUUZcvc5C/9hZ+ioaC8yw1komZXi+J1zKWscosjkIYuCCRcexYqlfJyakEtP7oWviuoUGeeENdvJRWRkTJdApI8iswwjF4tGgX7/pL/BhGvFvpXdUPnH4=
+	t=1736008000; cv=none; b=bvdTsG0HjPERR3rG/kpt7A16CGJvQopl2YmK7mA9zYYh5q0e+5dh2VrI1bnrr1IXgHDQGjHOuxOzipCj5CnsplsxMdgG8Lbjs2vkrkqTRMPlK5BvmZqHbMOIPcMIJn0/lr0D99N+CUlYlULwxDpbVBjYp7VZIEr7ZA8OdupJ5tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735990178; c=relaxed/simple;
-	bh=O9e5wiW1yLi7F+o3o0lqnCbhSuiSTuSEbgt//a05WEQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QZwVESbsACjBprW8lq1gCRVYa+Sq7dek9mzwK3mQ6ASqEkTN4QwkA6tGqqkeKnbuVT0KUgQBlvR1Qick0QkgjTL/OSTSReCm7hV+J3PIW33IfL7s8UGaybA40jQKty3RHaZkutfJt2IpB8uIC+LV2kofb6ZmSaPXtjEmpO70iyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z47ZoaWk; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736008000; c=relaxed/simple;
+	bh=+2hu2HBFZ3z098bnGj2w0wakHLQJ1X+CDDzNKkFvSo4=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NWijTr3xylPD8Ea+ti+KiDZoGQrhCECwNoFFjEWonsznpNGI82l31X/AsXUGNygAD4MpgK+/FM2kbf3ClB+pekercBEeXRwSkci86zdeZp0TAEXqC0sKmnGH78v7JSwJvbNyhHWlGmVZCaRmXu6S7FZwWLbP2yfG0IQSYNwRQpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AyXpBUFo; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z47ZoaWk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735990177; x=1767526177;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O9e5wiW1yLi7F+o3o0lqnCbhSuiSTuSEbgt//a05WEQ=;
-  b=Z47ZoaWkSJFhw2AshkmFy92Ykeumpp5JwnPgvQPSfQ3pXTEO9bsVpa66
-   W7UQ6a6oeb9mHMsGN1q2pxNB4Qw4wJwh3Wb6eMaFF/lO0X6uneEiivtAS
-   er5x0dRbeZqdiqFv3WCBmUF8n1NjzhesG+xUVbNyhs6r5f2QB5q1Vu5u7
-   2oPRqEz4+d8UH6JbzXkMnurErMpav8ifXyJwBCVAGXXakPq6xu3AKoa9N
-   D3cth6T/TrVluHKo2kf+yOnPuK//+8NLW84BDvwn5g6WOzrRFLcb2hWmP
-   g3vNErbTk6kYrVxwNdzIcShT8OlfIyCHMroUyJc8yar9XCcv8SHqcDNAv
-   g==;
-X-CSE-ConnectionGUID: s/xf06CJTm+aVY74TdiTkQ==
-X-CSE-MsgGUID: 4QbqDDtnR7uVl3GTS1f0cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11304"; a="36088846"
-X-IronPort-AV: E=Sophos;i="6.12,288,1728975600"; 
-   d="scan'208";a="36088846"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2025 03:29:36 -0800
-X-CSE-ConnectionGUID: jBZErxqVSmW1tQUPDzNn8Q==
-X-CSE-MsgGUID: B1kwv7fMRbWxHQJW49Yaig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,288,1728975600"; 
-   d="scan'208";a="106856287"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 04 Jan 2025 03:29:33 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tU2LT-000Asd-0p;
-	Sat, 04 Jan 2025 11:29:31 +0000
-Date: Sat, 4 Jan 2025 19:28:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: yangge1116@126.com, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, 21cnbao@gmail.com, david@redhat.com,
-	baolin.wang@linux.alibaba.com, hannes@cmpxchg.org,
-	liuzixing@hygon.cn, yangge <yangge1116@126.com>
-Subject: Re: [PATCH] mm: compaction: skip memory compaction when there are
- not enough migratable pages
-Message-ID: <202501041908.jDpLhAgL-lkp@intel.com>
-References: <1735981122-2085-1-git-send-email-yangge1116@126.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyXpBUFo"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-435f8f29f8aso94806245e9.2
+        for <llvm@lists.linux.dev>; Sat, 04 Jan 2025 08:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736007996; x=1736612796; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nTlW5tpHNJbidyn2Hd1CGByd7XKtmPkVfZjZnPxhfiU=;
+        b=AyXpBUFo3g3dLV9iXy7wC29DvNnzXUfAjOpVOP5UszFq2gshCbPiLmdcs9yxanY69T
+         JnSFWpJtQmC76ebypVgFsftVQDN5lT4FCbo9Wf155TWyMB9MHlEc6tdKJyutwOSQ9v9v
+         9USvH70YwpnjmjjZd5olrDmzHatEKGmRr57wkYOsqbkJDHoOKnLOQ2Cesh1InaMnHWEE
+         YZpfv/El/SLS+4f3HxAUcWiYt3Z448DCzC4tj1KzgEs01oCrBTkXu5KrwdnW9EEj6j2x
+         6ems0Y7038EJv67Vv27mELvaxjzw4zCeEIOKkhq0hrpW2mofyONJLO0R7ZVXtq/HdP7x
+         xJ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736007996; x=1736612796;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nTlW5tpHNJbidyn2Hd1CGByd7XKtmPkVfZjZnPxhfiU=;
+        b=pp05L4PzFaVSWVpd3qcI2ejMor4QN4JQwa6MbFnLoMe1euo5Mj1bQVL+8mgJvSE1qm
+         7kFIv+u2JHPmhBnefIgKesZ091wsN0LXUTmgUPJ0OAoe77ok7TaC8dP4EU4nNDCAsbjQ
+         3QBJOkZ3MTWLuPnEREGzOcPj3LG5+gO92U49kEsw9N2LqRxMNkJ6Yn8mhV5KPNWDwKLt
+         xB0VKMyskqMQgG3HI0BlUXgiaxA16LN60lUsUiKuBFif52zIYWXzYQYHsSwiP/tMTyG1
+         dzG50qGCwyblsVK/nW5+BofnLkJeYMHGkQMYmIyep+C8OJQPy5oKneJmU4MOsYjwSTs8
+         6nmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUp9YVEwTH+e+g/EVELkICiBTz6exyFcUziu2MrxU0cu7TjxgLoKxED9z1nCTluBM989f5Q@lists.linux.dev
+X-Gm-Message-State: AOJu0YzB2AP8zsNXp45HopDOD8NFocPei4fTIv3MDpM5s/wPn+9T0ZB0
+	tRdgtfBOmRkkeA1I3hHRTKN5DZKzlt5RMqGnrj9gyNePwwBEWt3F
+X-Gm-Gg: ASbGncsgclB4pnh6RtoVVMrppKMJkOW0g7zR3L9h3aBKp1Ps19nqufDrIAZRA/03hSS
+	fccp+MrMm+arPEOzWyJk0DVw5q7VdcZ9CeHXkk8m3njRHqfi6heYg4zMncNm565gJ/e3a8qGKEm
+	NUmDHGa+Ddgsuf0iWAp1tAgPd4JMe0HQlmdcG9WK8RFwuReVsxNzITYTZCeBKCTpknTDdj97gZr
+	GLTGsgsNFitGEby1VdBmW+32Ft9dEduSCz3BAwGpe4ywWwadqqmdu7oMiCnDR1cL3kBIqtdFuys
+	1CvScRa0jJK7xVy1eEFNpLek6EPg
+X-Google-Smtp-Source: AGHT+IEYyWCHbe8Xmh/2fe8JTYwqsP1+JeqaC3d0GDdR+GXkSctHI+hIK/4TMHem5BXiKUDqAK4wFA==
+X-Received: by 2002:a05:600c:470a:b0:434:f767:68ea with SMTP id 5b1f17b1804b1-43668548337mr441848705e9.5.1736007995848;
+        Sat, 04 Jan 2025 08:26:35 -0800 (PST)
+Received: from Ansuel-XPS. (host-95-246-253-26.retail.telecomitalia.it. [95.246.253.26])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366127c488sm515449015e9.27.2025.01.04.08.26.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jan 2025 08:26:34 -0800 (PST)
+Message-ID: <6779613a.050a0220.184c1c.c90e@mx.google.com>
+X-Google-Original-Message-ID: <Z3lhNNTbHX6We7M8@Ansuel-XPS.>
+Date: Sat, 4 Jan 2025 17:26:28 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v9 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+References: <20241214132808.19449-1-ansuelsmth@gmail.com>
+ <20241214132808.19449-4-ansuelsmth@gmail.com>
+ <Z2aqHmrVAm3adVG6@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,91 +88,50 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1735981122-2085-1-git-send-email-yangge1116@126.com>
+In-Reply-To: <Z2aqHmrVAm3adVG6@gondor.apana.org.au>
 
-Hi,
+On Sat, Dec 21, 2024 at 07:44:30PM +0800, Herbert Xu wrote:
+> On Sat, Dec 14, 2024 at 02:27:54PM +0100, Christian Marangi wrote:
+> >
+> > +	ahash_tfm = crypto_alloc_ahash(alg_name, 0, 0);
+> > +	if (IS_ERR(ahash_tfm))
+> > +		return PTR_ERR(ahash_tfm);
+> > +
+> > +	req = ahash_request_alloc(ahash_tfm, GFP_ATOMIC);
+> > +	if (!req) {
+> > +		ret = -ENOMEM;
+> > +		goto err_ahash;
+> > +	}
+> > +
+> > +	rctx = ahash_request_ctx_dma(req);
+> > +	crypto_init_wait(&wait);
+> > +	ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
+> > +				   crypto_req_done, &wait);
+> > +
+> > +	/* Hash the key if > SHA256_BLOCK_SIZE */
+> > +	if (keylen > SHA256_BLOCK_SIZE) {
+> > +		sg_init_one(&sg[0], key, keylen);
+> > +
+> > +		ahash_request_set_crypt(req, sg, ipad, keylen);
+> > +		ret = crypto_wait_req(crypto_ahash_digest(req), &wait);
+> 
+> Sleeping in setkey is no longer allowed.  I don't think it's
+> fatal yet because the main user driving this currently uses
+> sync ahashes only.  But we should avoid this in all new driver
+> code.
+> 
+> Easiest fix would be to allocate a sync ahash:
+> 
+> 	ahash_tfm = crypto_alloc_ahash(alg_name, 0, CRYPTO_ALG_SYNC);
+>
 
-kernel test robot noticed the following build warnings:
+Hi Herbert,
 
-[auto build test WARNING on akpm-mm/mm-everything]
+I'm a bit confused by this... I can't find any reference of
+CRYPTO_ALG_SYNC, is this something new? Any hint on where to look for
+it? Can't find it in include/linux/crypto.h
 
-url:    https://github.com/intel-lab-lkp/linux/commits/yangge1116-126-com/mm-compaction-skip-memory-compaction-when-there-are-not-enough-migratable-pages/20250104-170112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/1735981122-2085-1-git-send-email-yangge1116%40126.com
-patch subject: [PATCH] mm: compaction: skip memory compaction when there are not enough migratable pages
-config: i386-buildonly-randconfig-001-20250104 (https://download.01.org/0day-ci/archive/20250104/202501041908.jDpLhAgL-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250104/202501041908.jDpLhAgL-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501041908.jDpLhAgL-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/compaction.c:15:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/compaction.c:2386:13: warning: unused variable 'pgdat' [-Wunused-variable]
-    2386 |         pg_data_t *pgdat = zone->zone_pgdat;
-         |                    ^~~~~
-   3 warnings generated.
-
-
-vim +/pgdat +2386 mm/compaction.c
-
-  2381	
-  2382	static bool __compaction_suitable(struct zone *zone, int order,
-  2383					  int highest_zoneidx,
-  2384					  unsigned long wmark_target)
-  2385	{
-> 2386		pg_data_t *pgdat = zone->zone_pgdat;
-  2387		unsigned long sum, nr_pinned;
-  2388		unsigned long watermark;
-  2389	
-  2390		sum = node_page_state(pgdat, NR_INACTIVE_FILE) +
-  2391			node_page_state(pgdat, NR_INACTIVE_ANON) +
-  2392			node_page_state(pgdat, NR_ACTIVE_FILE) +
-  2393			node_page_state(pgdat, NR_ACTIVE_ANON);
-  2394	
-  2395		nr_pinned = node_page_state(pgdat, NR_FOLL_PIN_ACQUIRED) -
-  2396			node_page_state(pgdat, NR_FOLL_PIN_RELEASED);
-  2397	
-  2398		/*
-  2399		 * Gup-pinned pages are non-migratable. After subtracting these pages,
-  2400		 * we need to check if the remaining pages are sufficient for memory
-  2401		 * compaction.
-  2402		 */
-  2403		if ((sum - nr_pinned) < (1 << order))
-  2404			return false;
-  2405	
-  2406		/*
-  2407		 * Watermarks for order-0 must be met for compaction to be able to
-  2408		 * isolate free pages for migration targets. This means that the
-  2409		 * watermark and alloc_flags have to match, or be more pessimistic than
-  2410		 * the check in __isolate_free_page(). We don't use the direct
-  2411		 * compactor's alloc_flags, as they are not relevant for freepage
-  2412		 * isolation. We however do use the direct compactor's highest_zoneidx
-  2413		 * to skip over zones where lowmem reserves would prevent allocation
-  2414		 * even if compaction succeeds.
-  2415		 * For costly orders, we require low watermark instead of min for
-  2416		 * compaction to proceed to increase its chances.
-  2417		 * ALLOC_CMA is used, as pages in CMA pageblocks are considered
-  2418		 * suitable migration targets
-  2419		 */
-  2420		watermark = (order > PAGE_ALLOC_COSTLY_ORDER) ?
-  2421					low_wmark_pages(zone) : min_wmark_pages(zone);
-  2422		watermark += compact_gap(order);
-  2423		return __zone_watermark_ok(zone, 0, watermark, highest_zoneidx,
-  2424					   ALLOC_CMA, wmark_target);
-  2425	}
-  2426	
+Following the codeflow of crypto_alloc_ahash is a bit problematic.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Ansuel
