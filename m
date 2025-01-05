@@ -1,35 +1,36 @@
 Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020105.outbound.protection.outlook.com [52.101.196.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641123224
-	for <llvm@lists.linux.dev>; Sun,  5 Jan 2025 20:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AF83224
+	for <llvm@lists.linux.dev>; Sun,  5 Jan 2025 20:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.105
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736107368; cv=fail; b=JnBFmtmoI3PrR6ThGCCLVirrRWfQpgJjIHLroMkv24Wlgc9GjWAPsHNdIo6k1Ijy90sNJCv7EJ4LzPrxP6L7eQRDH9hjAQzRQNOPsNYfZ4fBWVdd95wymWY0fC2usHTvix6uh+uk7v3gZe6jZEv5dA9BfUH62xF5J6zlpuk43M0=
+	t=1736107369; cv=fail; b=gPq1hBKezctF18aiWOOgWjjUtD/Jx8ehG3hFwz3AQRRMZjT9uNXIbYsOD0zQnuoSpnM6L80Im0XJGbSiiTXYNCfKMafFi3Xp9eq3x0xM9+FGcV77l0KBBw8MMJ3yMds75kR3v8bUr2LDIMWBl7zFs0UXrNiKsMRJ+bQ/qm8+Pt4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736107368; c=relaxed/simple;
-	bh=UYW2wMfzb+Sngg3KsrCTtADe9SQD1r6vMLCKMkZaX9Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=c/SvkdU26f893qGr//X4hBZFxVrxylbsFe+6ObtTKPURl5Vd7elSFQXlkTvqyHqfJg9gkByoqDJSioIofZWA6RCpLzspdulIOy0ZYPEPyvdUOW9sNlwn0Cjay4Bx31OFntRaPBaNzcVZONRVSRPtZXyAREkWTBrqvKnjkBfwxzs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=nPFuofaa; arc=fail smtp.client-ip=52.101.196.105
+	s=arc-20240116; t=1736107369; c=relaxed/simple;
+	bh=QPtZX6mKZDnj1+8Zg/aMe74BtrEo5R9qY3rlUv0GHWM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=C5rGyDbQwCzkEovZXdvNRAhbxYyC7J8tkWRzoo7D0KhZGz4gDy8DRoEcRE+PGiRxDeJUAk88XXjcCtjJgdA0fEc9YIUhwK9NorBaOwNRZcVSeBcVMXMUMbKFwoxWvdBg1R5Orkv3LX/f6zgVcvVY9Nmt6LUD9mMoWjb1uPlzQF0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=C9Lo6vAY; arc=fail smtp.client-ip=52.101.196.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="nPFuofaa"
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="C9Lo6vAY"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fUyrmj8R+HSuGipOPa/4dK9MqV1MijdwGC3dIk3sP7zs7Wbdc/DK/SeViXXIcJSua+Oi0UNzVtKEAjWIU4tF25dhoJYbsiqGwI6MOwv3IB/ExqripEJVI3VPZ8G0yfrdjY9lGlXRDpWe5z1vzK92aHiu++8HOT80sgjflzTcJ7ua1qETmUSd6O2jr5jslWmeGAfrD/7gXkQnbTxubrsjldxnhhdTCq3BP56voPB6xfNvI82LueNKFyr2oVG6w+LW/igJ2e6hfknSkEzvOGxTuTRMwFDyPNIl4D+UPNeOpnusQHg73g99fkO3lphNatnOf/gSx8Fmo1Wjq3VjKeqedw==
+ b=r26ikuptcGfPCTojaeXC2QGZdoAcWC8RqaN+6Pr+cB9720v+qWYdoGEKPCTXRTHiPTzGDhxrQARKnsbJUotBOTnNcEgo+mg7aEn2mm08rKvHgbsCeR/sqgtZotXwhemkrbXfSLnIEJOucQNnpjf2BOoPNu4SSS7/VEi3TJRs4BM4NECGKkoikhoi5e9BpQE5T8ACNSNVuG8ckJ+ZNY0+dM7aeR9UJ+KZQ2/gZXjcCD70rxHxB4lorzwFmquGganslZdB9XLxaRPytzFURffrENpVpS+F34a/EGj2n0hi8Q9Lh6Oic7bXTWJ3m/9HLMkDBsr/OhQOg9zzyrUUmOIt5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+XBQYKOI/SanTwrlBtxZZZvsVrooELeLr2m7bhofHrg=;
- b=qDYvY/AVilGkBqwJolREOC7J9QAUTnCl+hgT7R7XGLORLBDBD4TxopHd9yNfMkb1PCyAlgxg/N2o0i1aMdBuLuyVPDukps55ZvxQrxjh9qdvGX3XShlz9L7HXVWd/ngRh1MoOhzRY792CGw0emjVA1/T0ARiW9RQQQPYuvBVAEFwy5IxMmzC2aj6e2qi8CB1OfEh0/DcNK4EimtOwa2js94TFiBQFSWo25Av7u2PA76MkgRiB4nKIVp8wd3vqtbKbhDgmcNuQ3ugJSRBmkB32GcLtz6nDFMdH1A6u29FCbLbOWA8gKvJNCKUT0gMW8gMp0u9X/xLoFkikSHLUxTxTQ==
+ bh=avwPbbMixVi+x6wEkYTotrgDM1i4ITljx77YhgpOBPk=;
+ b=WO0LGN2IiemdqqUjMC+zm2EYJSek8Flv/J/3gAWUfWHvswfxNv+cuSwqzaBVDks2EnnDqr6RvnCalQ1GJSeY/AseQJtZBBFvhjI/J65kKpLtn2dHRd7VPFgZ6eM0Srz6eriwqi/ms+bU2E3Av6lUwwAwUkzyIAwHYSuuyPmec/bVCaQjL0ANLfFhH5rF99OEOkn0QmWANnYJodWC8Z9ktobgzVhxbAq2NmdZCp4xQJcvYqylc181m/A/zY6rmgggjKxHVeJpP3fQBukpecGVEY0XgidssXUxOmflLUE09CJX+HlGZoE9dCxiHplMPtRKT5/l5hf/FOkRfnSX6OP1gg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+XBQYKOI/SanTwrlBtxZZZvsVrooELeLr2m7bhofHrg=;
- b=nPFuofaaKhCnwNBbTY8OmY55c7tMekb6jvzNFt1NdO3DJoaasYTXsJbyiFb3tMc/nIuhc84FvEIOnp9nYEuENmDQ8KFmigXWoEHc6/egh5dxe8RYHGp3XkaBsc4INHQaWvQ6QxKKK4KHpTSmAnb59ZEYxTrdyzwkJrEfkT2Ot+M=
+ bh=avwPbbMixVi+x6wEkYTotrgDM1i4ITljx77YhgpOBPk=;
+ b=C9Lo6vAYRvAhYV56yTZfErZ44nni833QU0yYalKw3GMs2QhHnuXDEkMy4jLPaBu1C/mqbfK2VKZwVa8T2CatyISLolGqY4aHv8L3UHF3+l0O4WQifN5NAfPzBEY5b5pBjN8z55tONOIp6dmRwMl4CRPfehbMBsObOWhjWE1aQWw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
@@ -40,7 +41,7 @@ Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1818:a2bf:38a7:a1e7%5]) with mapi id 15.20.8314.015; Sun, 5 Jan 2025
- 20:02:37 +0000
+ 20:02:43 +0000
 From: Gary Guo <gary@garyguo.net>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
@@ -54,13 +55,27 @@ To: Miguel Ojeda <ojeda@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Tejun Heo <tj@kernel.org>,
+	Yoann Congal <yoann.congal@smile.fr>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jens Axboe <axboe@kernel.dk>,
+	Chen Ridong <chenridong@huawei.com>,
+	Jann Horn <jannh@google.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
 Cc: rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 0/3] kbuild: rust: provide an option to inline C helpers into Rust
-Date: Sun,  5 Jan 2025 19:40:03 +0000
-Message-ID: <20250105194054.545201-1-gary@garyguo.net>
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
+Date: Sun,  5 Jan 2025 19:40:04 +0000
+Message-ID: <20250105194054.545201-2-gary@garyguo.net>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20250105194054.545201-1-gary@garyguo.net>
+References: <20250105194054.545201-1-gary@garyguo.net>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: LO4P123CA0068.GBRP123.PROD.OUTLOOK.COM
@@ -74,145 +89,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO8P265MB7704:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9da33397-8887-4da4-e133-08dd2dc3e6be
+X-MS-Office365-Filtering-Correlation-Id: 3d55d723-40dc-4bdc-4217-08dd2dc3e8aa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|10070799003|7416014|1800799024|376014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?gGH1ED/ToOHrFkLAi4qjK30HSlo20YPN6APqOiySkd1sJRLJaGTj2OulQBJc?=
- =?us-ascii?Q?JXzswfN/0xN7ex/o/PdbwT+cls6q3eFpojEci0bu6DoBGR6+O+p6HKun+O1I?=
- =?us-ascii?Q?pUost/51vKvWeUt4tuw2mnpx5rgfiPVuwia6WkGAywp7tt6I3wlu507aLj1n?=
- =?us-ascii?Q?eHiVv+4MRW2YcVC4/aFcvHO0MM8nVSAxkuAz/y94xI/8/FCUtjR1L8oC/L0C?=
- =?us-ascii?Q?ffnnQGZBsI/EbLCS1oFKVqfsCk9y9J4A4BHsmqKkQ+mf4TZg0wMFVSBtmt/X?=
- =?us-ascii?Q?ZnKM4TC6MasQ0chmUxkgfPO06JqUQQeWiKQ77fQW1Fkkr9VcPdS4FVmkyB74?=
- =?us-ascii?Q?USJWV44Rfet9CA1y0DwQGwn/5rbWNfbQCnLzSNox6+N4BTLdaVQR8/N1RZzg?=
- =?us-ascii?Q?251aE41Lp0Re3mb6wSjRkN6vHMCH6TCRBMQzocOFeaehuJgfg4nAaws62zOw?=
- =?us-ascii?Q?tM5FMZhY9EWb6a3i8mGHLdE920ccaFfLip7EyzMJ4JQyDCttbfDqq93mE4ab?=
- =?us-ascii?Q?LPCgiOGFcZpnWAqO2DiRxwPZF8ZkZhiNGV4FpojYTM5ErMDaxanrhS9/Dlqi?=
- =?us-ascii?Q?vYQiAQakUJ7Vp4/g9Gq18HPzZ6V6I4lNsITq6jaH80B45LngNyHCbJCXKAYf?=
- =?us-ascii?Q?I1ng8n9P6Zb665NAt1K5watlavmQOX49d7tvYdZO7+bPsmWqNptIE5DHYmnt?=
- =?us-ascii?Q?BRyWrxFUAJhKI9BV0MWEWEhoClZbiodcSfE7b5shasHCNidz1nOrFchnwgio?=
- =?us-ascii?Q?fcvAXHTZ2n1FBjiJIq7CLD3ph/WoFmimiBpMQEY7DbmrWnySFhu/3IDGhWhC?=
- =?us-ascii?Q?dW6rqt69IMdSbeBy52ZlOwdsrA326LJfPZH/LyhEPnLTt0GzoKP1gx5W2VMk?=
- =?us-ascii?Q?NaPAjq7hUQ4G1xo5DQeBYsyRyHI8nrXTwQT9bMpgDh6an0ilJbVNJurLcoOx?=
- =?us-ascii?Q?9+5GhDuDup81afxsxK2rW4BFIohimQTjz4hGZd2Bp3UHgm9vtarxO74yfJM1?=
- =?us-ascii?Q?GDuGJVzHHcF2571vYZydTUHWTCsjY9d563Y8QxDKsC//j4tR67rc4CsQrGmK?=
- =?us-ascii?Q?sK+FKhQuv45K6FhdBs3ZRHCi7BlEU9swricbG72A6L82wYxuFE9JUrs91/C4?=
- =?us-ascii?Q?txbERbMntY5k7LQ59pQ7lHjqeFbuL2zCCm7xMCUuy4eHjyRevVyVC1sXN5G4?=
- =?us-ascii?Q?vKifqsnoOfhbSHDaAgMrjdYrCcW7ZhciJN8M1bhtgzDakIdBWD14I8W9TpFF?=
- =?us-ascii?Q?7inACxPWtBP3IDwsfPGGVjBq1FIMxtCpfx7tsmOIjeDFgBA6n56DG3vlZ9Gk?=
- =?us-ascii?Q?ZFRt4pU5AuSGZB88yfh6Kp1SYmjS2Jq//bCwDNukbVVOgqoYFmag1S5UyLTZ?=
- =?us-ascii?Q?/XzK8TNVoW1T1tmCWGkITMgGGt/BoF/O/VmGE9DRzqgqVXROPIu8fjKmCqZW?=
- =?us-ascii?Q?BA5mJXx40yY=3D?=
+	=?us-ascii?Q?vF0l7ajiAnRsgyr+QglI2DWMnxoAXTaN+UKrigkkKzTvDtJHK8fGSdp4UN1k?=
+ =?us-ascii?Q?C+kys9UXMUv14knZVA3Ro2cfxxODKuBUXd4A5H12shi8mIYYqDuf3pdk+Jw8?=
+ =?us-ascii?Q?cVCh1K82+3ETK5TF8wUuv5xyroE76u/2VouayTFdf3++zCndj69UYTQiuu/+?=
+ =?us-ascii?Q?zgsNurRJAMycpivCyQLfrrCjp30IAhzAWiZl1w2doR9NJV/JWBMYpXpszfK+?=
+ =?us-ascii?Q?uApXYMNy4kBTuGWBel35qVYSU477Bm2J2JGZQtHOCENH809oBGhzjKK4GQ/+?=
+ =?us-ascii?Q?SAiYoySMlDozUWRnoz1ASg6eECkumRVN0SeNSinMCwtz85maWsiTw+cn0m2Z?=
+ =?us-ascii?Q?dTXTk/STOmwY0vz+dAYTyOJoBpjjrMimguFZMVI6e4Lt3tVQIWoGx6t5I8hC?=
+ =?us-ascii?Q?i7nv+4WMf2wRNs7+5lTMIKioACfs9GgwgUKOj/c0Z6T2ANOoe9gOseGo7E25?=
+ =?us-ascii?Q?/66CT5B0CZ4Pt+rKy362lI9U+A2HB237+S8OAppF6gTzHmjS6i8FFack0+TT?=
+ =?us-ascii?Q?frWIX9RhfYSJGvXJE0hmA9rXvHA8oDdicXG2fQwF61yq2PRN3aFA7AVpKxmh?=
+ =?us-ascii?Q?2QJbhvyjX8rClCkL03htNDfbVXNb6bXrGkPJ77BnTsgQvvxBH+HLUI3CWZS+?=
+ =?us-ascii?Q?6b7FBlBJ2ScrxxwaE8+6DizeHf/pbVwykx2GLd9y3v1Ac6Diw2FPT+pcoyeP?=
+ =?us-ascii?Q?6ld+ALIX+Wh/K3QSa/8GNYmVP2AC9s9jQZClzyRp2R9vSOyUcZSNxVqdHfZ2?=
+ =?us-ascii?Q?gjQfq8bG9+xhOuxetBJdyV9waRvHywQrVGHz+cqnN6NKIxhFa2YvsXjfoVE5?=
+ =?us-ascii?Q?y1oHLYElzYTZ9q1pa/HTr9NcPbObzFEKJsaDc2F+aaEMG1XbfgyBrTyKjpuM?=
+ =?us-ascii?Q?fOkzYe2knKJP3y7iFMt46qP8JBt96HrgLWvR181rT7BAhR/j0NICTeiOW/7a?=
+ =?us-ascii?Q?USjWPtCvJWA996zV2aahYlTdvttJQGBixFmUwxRKopBbluJ5KL7MGfsvRpMx?=
+ =?us-ascii?Q?1OPfNXVvokNI4hEIthqz/9qfmBT99LbCmj/7hXYVZVuA2pwv4yrvqfGoKD5T?=
+ =?us-ascii?Q?1y8EW9Ld8nW3S/Lu6kQkJ/VR95cJseApULHyxKVNxOXJKKZv+2X0QYtzMEOb?=
+ =?us-ascii?Q?+O47S2XFxMIhrjonnaI+LGCqPPZ2Cfi585KWdhiWbfL0FuE1Ld7zz0IcfMZW?=
+ =?us-ascii?Q?VSi7MEo6JBLC//FA2DoC72s5R7Ek5xyTPbNkejzJvHb/glNLBcaJyHXFuUXO?=
+ =?us-ascii?Q?ynmnBhVl1xQv77BU4mDkuMjHe474gzEBfAcO5lxJRreNyWH6qNUnF0WXt0An?=
+ =?us-ascii?Q?OTMA3bMRXNZm1oR7mTwZO3OGOqX1bufX9ZVrV9pxu1Mwz8uHM7/DCwnl9enA?=
+ =?us-ascii?Q?kShEeF8vQKqj0ej6qB/NoRI4mflT?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(7416014)(1800799024)(376014)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?RFZUyAb/fhVaop8RRg4oHj7pxvesOWwwNOz9MAAjDW1CBUkuaM4gPbZ9jiAf?=
- =?us-ascii?Q?GPbtp5oQNaXw0r7w8oJiRgItD8MCmZ2uWK99xmKnnlheHHyaM7LV/L2PPctM?=
- =?us-ascii?Q?nog7PWChOXEzo74kx+1K9Cruqaz+iWMwqDer6lJky6kyLz+KlsvRFwrj+zgb?=
- =?us-ascii?Q?5xqQdBbl17X79Itpa/BuSu/XjfWXsknkawv9I6wgb9DSChBdcmPgPtyfjhZl?=
- =?us-ascii?Q?W45rVXslgnUZltweYdEEDpWLAwIQbQo4puv/fSzfP2QgmpC6JvbzzDvq3421?=
- =?us-ascii?Q?c1RhFWgEv19+q/iVKUNgzpUqDNLHWAlcZZpCbU3pMUpuPO6BWw3hj1sKeGpe?=
- =?us-ascii?Q?7rqYH8h+auo8UFQbGlFBxC+YItIXRijyr6pHIOW8nkX1g8L7YOcUzzh7ZYd8?=
- =?us-ascii?Q?XlMlDUJHVIGGFhn0iBYyDqm6FIDun6Laiq6+c6++UblGt9qo8PK1xB0zi0b0?=
- =?us-ascii?Q?f8ul3HfiWClOm6QFkZgOZMbPuY5Zg38n2LOoEwQ2ZfGwLs5vIJR0nknD6J1l?=
- =?us-ascii?Q?TThijyw/BcAhsAn+C4o9yDQLEMq0e9OxZvgzAPnq64744hDoY4kwb3pRyDF4?=
- =?us-ascii?Q?7GwPvPx4DShqiLJraXUT+jtmIz5yKaOIAZKpoyd3JHfAN9oHDaeEZUaMmyQV?=
- =?us-ascii?Q?Bomtc6gC1dNFtgtE6K0uLmTdzHpBREWLenKvpMDyjbh0Yr2Bkhro/1RvY4mw?=
- =?us-ascii?Q?74XU7UazQiTFFiJtzBJjIT9ACd2FfBnbWdKyA3W+Ah66pQ3GfMWd1ay2wBtu?=
- =?us-ascii?Q?4Ge+XXOja6pmaS1ythgiQpyKzD7SfU7jK3askzNxoIZdn/xd/oTr7Gq35mrr?=
- =?us-ascii?Q?FR1xsyeyXNFoeFB0XSvSAyoIKeUv7tm/bc/kiGSPR9K0jEfXXbSmWvzb6qMI?=
- =?us-ascii?Q?BWwvBj6RrG/ZKquXHF2duJfo8aqPTU49CjjNsU2KAC6Blue9MXMzTJUSCPeg?=
- =?us-ascii?Q?IyHqlJr8jWfU074vV//SuBLznCrS6Y3KnRFZFEcnvz0Iuqt887iY/RObJi9g?=
- =?us-ascii?Q?CmVkXdbv9XgeAaufOKpWUIvjF/48hnjkd/sro84JgsYRpmp32eUrcFulO70Q?=
- =?us-ascii?Q?myGZhGHQpMS+4R6uY1sc/CKgwIe6BW3Xgbzm9GsDCALojT4CmP5/DeP3F5Te?=
- =?us-ascii?Q?w1v6n1s1CgYa9hs+JcMoiGlHYx6wO0fmxNoILG/2qc5/pqrj79Q6V0xNmknA?=
- =?us-ascii?Q?VY9NsBxo8kAN0+3relTYQI636TvAZBdNr/E78hZ1b/5aCCrR4X97TnrhlBji?=
- =?us-ascii?Q?86mQVzrQHbPpJ8UKHgPSTc718iNzJO1tWt+M0DbNFpYLYXfx9D2Yir8gcpvu?=
- =?us-ascii?Q?HUcGbXUKmZzMGqzyOnH5oiQVKAS1rmw8G3Y0Ag9FZYehanXnOd/O5ohYYBYA?=
- =?us-ascii?Q?z6DBC2oZteOlb0XapviZJAw9q2hS7nqnf8zzqz2rd5rsBqKvWUBpeljF8QHS?=
- =?us-ascii?Q?/H8vHEAjUWx5NYamfcFU4fygh4Put9BTw9ET8ZJY4A0m+kRq0p++JTfhMn2u?=
- =?us-ascii?Q?WPqkHYfN9BZwwUQG1eGaTTeN5tqXBvAVYE8HDX9etNaPjjZL6VP3PJiKivme?=
- =?us-ascii?Q?5GvwIiQmSGBmaMzKN9T9Dy+d/nZe7gH0qOVfHS1nFUuH4KqeUgURS3nbYpBC?=
- =?us-ascii?Q?6A=3D=3D?=
+	=?us-ascii?Q?Qg0VAGOt7JzF/p37ceGfHFZH8fVqSvsZgEF09BjOAk0cU2xXG5SmDgWwZAw2?=
+ =?us-ascii?Q?9ueEeooax5QKDsDgoehTQvoDh4ZLkt7DjDtL9hrG/KzfnKZ/fm8BJTbLaJSk?=
+ =?us-ascii?Q?do94mPtXjJ8wkJsPtOrOgtsbDktjppviNBzYcRnocHpVj7kxMq2ieNjM9kNp?=
+ =?us-ascii?Q?FAC0OG7FOqanmPKv1juzPg3JREAo3C172rNg+isNvSkvZpZb+ic/Uuw06/G/?=
+ =?us-ascii?Q?91/Qva+B1gaVIsJNpcQ2iUUwFXeR/bzXK7a+QzGY/cGxBFLOmrjVUr1g4R8K?=
+ =?us-ascii?Q?NJV9X9nYy3fM3GuFIQI3maLoLXKxVksjoqqtUyjCw6cU4y1Uvfn9y0GciCI8?=
+ =?us-ascii?Q?QtMY7UnTD/LOZK4bolCn1/54J+Pcwk/03BVPJveBIPUtzgEAmQTVnWEarR9M?=
+ =?us-ascii?Q?MKOHzZ2iSSXKVPkb4WdRXD9XuO+VtqHeMnhdNYWeDTdWgXhqeaAvZIF+OE/C?=
+ =?us-ascii?Q?OZ6t8EBTh0QVySdzhv4hUdHSKHZy6oM9qoe4yGs0O6IK1+wSVLKRMl7goGFk?=
+ =?us-ascii?Q?ySmbV7f86AjZRPd1FU/gHKznGmGiAHrQWpLPPMQwRT0v/NAi0N/sAEl3wj9U?=
+ =?us-ascii?Q?rNHma9lPFKOT+Vbswa8DFaxfUB/PTC/BZb6o44KsYKtxYDeUJ0yeyiEG9Li1?=
+ =?us-ascii?Q?xhpcF+KPakEjj7DcJcVUlXDL8jx7KVOGQxpfB1w3oyAprzLmWcV4Jfch22wT?=
+ =?us-ascii?Q?I84a4i6FKmp9qYHERvZrdg+o4C2X9ResiFJShLCet/XZyiYYeNOn+4xbNTnS?=
+ =?us-ascii?Q?BOqBwkrCJlRUtsp6sD1JlfoTATAaxmoVV4A0AUl9rWA3sygZb0F/XtegnLXl?=
+ =?us-ascii?Q?++Nhs2WK9L/XTLFBkftIL8PtN0SU8d+c6zrAiWD7Mr6OArujAdFKssqRVDVQ?=
+ =?us-ascii?Q?k25Eoc4JqU4AGYsB5NwnR/Ak7eMeSbedCX1bMU8utVe28BbWLZoc/Pq9SJgu?=
+ =?us-ascii?Q?uNERHbrtNp5oGMmEFnLLxmALHzqpYNihK7BMS3ZNG6dCv0vXNEHLML9l+RYV?=
+ =?us-ascii?Q?8lq/nrobAT8M5Hlpg20gwosoXH8w8qywNHdYxew5kRvipfwZBbDxJfH2Nvnf?=
+ =?us-ascii?Q?6xC3jThBMUj3/ZtnirnKcJpDGZm/5LGEzIpChd2vnV8JGUo84Nt139mXhVew?=
+ =?us-ascii?Q?FyjjV0H8gyTagobJ2deqwsxDY4VX2ocgXqVzUIVqiU8zEmjkn2rZXog+3hHG?=
+ =?us-ascii?Q?ge4iKLzpV8ylJyq/D6ifopsAS2VV+MBDGxmpCAWYMi5sjuAWU6AWeW1UPzrb?=
+ =?us-ascii?Q?iy3V0uLteJdFcygDz1kCGWkzC4yiDwMqfQhMvB1Z55BGBBpOArNoKJfBZ7Tv?=
+ =?us-ascii?Q?8HxpJe8+3s6vHX/iVwrxTN8tJWhukEoapIsApuDL96QUJWera/hBoiNvByEc?=
+ =?us-ascii?Q?ljNUp1vbhvWAh6lY8oVMPLTpICsk2sN7BVcNAirN/zRe2yIPV1CCblE96IHS?=
+ =?us-ascii?Q?vdx83+izz5T5DoSE2lRJK7k6KbHcSqS6GdyddQL4T4ESlReB4l3+JqfCD5+y?=
+ =?us-ascii?Q?/gDl0yCRqginEV0g/hQPhca6KaXylti9AZvtr1QzVwafNgWOyhcLWPHACXNo?=
+ =?us-ascii?Q?rx97F5ZSt+SP1CTU9T9cIZPOWyaX3oLmeEaEfHBk7B4MDw5zdXDu0XJsrv8C?=
+ =?us-ascii?Q?3A=3D=3D?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9da33397-8887-4da4-e133-08dd2dc3e6be
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d55d723-40dc-4bdc-4217-08dd2dc3e8aa
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2025 20:02:37.1660
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2025 20:02:40.3438
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DtO2U6ucLQn0qIidfwWh5KZm2u5FzPOlDTFOY4n8R0jZaKmmQyb+FI6p0Zh+oTx1ozsBmMO+94qGYhtLv0QzCA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 98zS4ROBmdNsrjsD2/0X6qE/yIMkFvZ/1TP1qgGpl/uQfU4vI7QUY/+CGx/K20F6M+XCpGmNIIUM5AiEg7GFOQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO8P265MB7704
 
-Currently we have quite a few helper function to aid calling from Rust
-into inline/macro functions in C. These functions are typically
-implemented with macros or inline functions because we want them to be
-fast, so we want to actually have them inlined without the additional
-function call overhead. However, we also don't want to re-implement
-these functions in Rust to avoid accidental behaviour divergence.
+This config detects if Rust and Clang have matching LLVM major version.
+All IR or bitcode operations (e.g. LTO) rely on LLVM major version to be
+matching, otherwise it may generate errors, or worse, miscompile silently
+due to change of IR semantics.
 
-This series add an option `RUST_INLINE_HELPERS` to inline C helpers into
-Rust. This is similar to LTO, but we perform the extra inlining and
-optimisation per Rust crate (compilation unit) instead of at final
-linking time, thus has better compilation speed. It also means that this
-presented approach work for loadable modules as well.
+It's usually suggested to use the exact same LLVM version, but this can
+be difficult to guarantee. Rust's suggestion [1] is also major-version only,
+so I think this check is sufficient for the kernel.
 
-This option can only be enabled when Clang is used as C compiler, and
-that the LLVM major version between Clang and Rust matches.
+Link: https://doc.rust-lang.org/rustc/linker-plugin-lto.html [1]
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ init/Kconfig | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Changes from v1:
-- Added LLVM version compatibility check
-- Adapted to account for newly added helpers and removal of alloc crate.
-- Added a patch to make `ReallocFunc::call` which prevents some helpers
-  from being inlined.
-- Link to v1:
-  https://lore.kernel.org/rust-for-linux/20240529202817.3641974-1-gary@garyguo.net/
-
-Gary Guo (3):
-  kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
-  kbuild: rust: provide an option to inline C helpers into Rust
-  rust: alloc: make `ReallocFunc::call` inline
-
- Makefile                       |  4 +++-
- init/Kconfig                   | 15 +++++++++++++++
- lib/Kconfig.debug              | 14 ++++++++++++++
- rust/Makefile                  | 31 +++++++++++++++++++++++++++----
- rust/exports.c                 |  5 ++++-
- rust/helpers/blk.c             |  5 +++--
- rust/helpers/bug.c             |  3 ++-
- rust/helpers/build_bug.c       |  3 ++-
- rust/helpers/cred.c            |  5 +++--
- rust/helpers/err.c             |  7 ++++---
- rust/helpers/fs.c              |  3 ++-
- rust/helpers/helpers.h         | 12 ++++++++++++
- rust/helpers/jump_label.c      |  3 ++-
- rust/helpers/kunit.c           |  3 ++-
- rust/helpers/mutex.c           |  7 ++++---
- rust/helpers/page.c            |  8 +++++---
- rust/helpers/pid_namespace.c   |  7 ++++---
- rust/helpers/rbtree.c          |  6 ++++--
- rust/helpers/refcount.c        |  7 ++++---
- rust/helpers/security.c        |  7 ++++---
- rust/helpers/signal.c          |  3 ++-
- rust/helpers/slab.c            |  5 +++--
- rust/helpers/spinlock.c        | 11 ++++++-----
- rust/helpers/task.c            | 23 ++++++++++++-----------
- rust/helpers/uaccess.c         |  9 +++++----
- rust/helpers/vmalloc.c         |  3 ++-
- rust/helpers/wait.c            |  3 ++-
- rust/helpers/workqueue.c       |  9 ++++++---
- rust/kernel/alloc/allocator.rs |  1 +
- scripts/Makefile.build         |  5 ++++-
- 30 files changed, 163 insertions(+), 64 deletions(-)
- create mode 100644 rust/helpers/helpers.h
-
-
-base-commit: 0c5928deada15a8d075516e6e0d9ee19011bb000
+diff --git a/init/Kconfig b/init/Kconfig
+index a20e6efd3f0f..cbe4b2922ce2 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -82,6 +82,21 @@ config RUSTC_LLVM_VERSION
+ 	int
+ 	default $(rustc-llvm-version)
+ 
++config RUSTC_LLVM_MAJOR_VERSION
++	int
++	default $(shell,expr $(rustc-llvm-version) / 10000)
++
++config RUSTC_CLANG_LLVM_COMPATIBLE
++	bool
++	default y if CC_IS_CLANG && RUSTC_LLVM_MAJOR_VERSION = $(shell,expr $(cc-version) / 10000)
++	help
++	  This indicates whether Rust and Clang use LLVM of the same major
++	  version.
++
++	  Operations involving handling LLVM IR or bitcode (e.g. cross-language
++	  LTO) requires the same LLVM major version to work properly. For best
++	  compatible it is recommended that the exact same LLVM is used.
++
+ config CC_CAN_LINK
+ 	bool
+ 	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
 -- 
 2.47.0
 
