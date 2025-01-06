@@ -1,357 +1,130 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966AD1D6DDD;
-	Mon,  6 Jan 2025 09:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C2A1D63CF
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 09:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736154086; cv=none; b=Vfy8aGbvmiilA2FTPmHANL0f0yTlYBpCAZtKwYIJM0a91KJuPHVHIB63cTjIKRUL5TnNWYoHhT65NenNqysUvg6g9L6PGxVNL0+36VcGOpB23g9rVoggtNmGfCkrMtZy5wyzAUfqTsblvaLAxrAj/eJnCA8q7PWcG/h4eSJhkS4=
+	t=1736154177; cv=none; b=ZjUxtq55VC9dY0b1rIwtQ1VcnO1ei/2GPSzTrNSo7Viotc8cy4GJYONGiM4tQCqmLpYk99HZN6Zs9V+OyoCpQRM+WZ/tWz+8d884je8xxxr/02hp5w3xNDveXuykWUk0GKT/g0adh3cr+o3WgCzWMdrxk+FjclTdmlVh0e9UETo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736154086; c=relaxed/simple;
-	bh=MLXEyCIiMDWktlr2iqhQjbEZtBYosjMmeoiMpQX1mH4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NTQGO9US5pCeTTn/5xfzJCO84lPPpra4KgYCTs5k0XmKh6ymbKwxIiS4HB0irLSe2wstKTXYyirz+TOTHI7SMMJUC3mSu5gWJSV3ItqivdGGMqqkloKqjESlRuK6zPUTqSqbZcorPf0QGfpWRznBXSkdj8Y/nEnq1j53e34OLMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8BxIK_fm3tnw45eAA--.30545S3;
-	Mon, 06 Jan 2025 17:01:19 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMDx_8fTm3tn2UgWAA--.31746S2;
-	Mon, 06 Jan 2025 17:01:07 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	loongarch@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] drm/amd/display: Replace SPL_ASSERT() with SPL_ASSERT_WARN()
-Date: Mon,  6 Jan 2025 17:01:06 +0800
-Message-ID: <20250106090106.4683-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20250106085755.3268-1-yangtiezhu@loongson.cn>
-References: <20250106085755.3268-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1736154177; c=relaxed/simple;
+	bh=ln+xipIWtR756VpfjRBcdsXgI7ozwANiQoTrmUHi5dk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k1o6Dh3iZJ/vc3BcmO9xBvNu0ivMY2mwYrZoEncHDJ1vAdepwIWosdbf941YsapzJwWrZisZ7LOSeTSEAjtksE24v/2Lh8SEO50Yh3/Kt7Nj8Swac3zQRAfW+8/z99EYc0LbzAjtbg9UIavP0wU3I7xBv1NLnwtTDXI+noPQP+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jQ3A2hjs; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jQ3A2hjs"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43624b2d453so145995465e9.2
+        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 01:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736154173; x=1736758973; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sNwuZVs/WFX1AlyLcnmThK24HPexmJnIk9uzVui8y2c=;
+        b=jQ3A2hjsjHF9qJBtl9EVJPDpVl840LmHjYV8xgcCfBg2VmmiHvUK5tqUEWEnxaKoio
+         1SYFPifx8P+1ZFjM97GfDiNRVdpXquha5Nl1HXZIz6iDh8EE7wIJwTxR2zgjqaHL67uw
+         LAsns1Ogesh3aTnnO8Q9hWlaAUMeS4cIQpS+EzRmRm97xgiDxpyQ4yqwAN68uqzpy8Dq
+         JT6YB7aq8exH4q45l6zuG0Y9+/u8HmP+XJPv1p7YLn03w1xqDZcvzxf7xVpuGnq/1IuB
+         nQk1oaxcqjPnfxqVs2XEkNKcKQMajRz7XAZCobwXDRVUnVTwXvv836lZjUyWwChZM4hE
+         J2ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736154173; x=1736758973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sNwuZVs/WFX1AlyLcnmThK24HPexmJnIk9uzVui8y2c=;
+        b=sIW6XHgbPLaD3zoGfcldnofDARIi6GQw11qE56kqE0BQbdKZ4ocyWA8nGGgJPrZTYA
+         zyvATrmsglAgRSlf2HnOZJP/1CCoMh4QTYKzYGfskc7hokMIiD2hwq1VjxZR52ovE7/f
+         jam4R/Ee+nN4meS0k/7bWvBMnFaf+svApid2oocQBkCgnfRNTkXiuY80yYSxgDZ7T1ki
+         oq593DmExHEdwllrtFtAcyk1++65w96ZkuejI8nXg8qtG03jN/NsY+FGR8CjlaEr5daT
+         RuSuaNK15l0Ev6BGIuqNCZ1b+SRhsdN1xG4yotG+o/iafmxznd2ljrE6hDSBg5KYe86C
+         eTJA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9SU4cU8Tc2eEcLI29TlxLoUHqKvizuUm7mGPSpma5KHDqXkxFM70DgrYA4TJiRYoFORnq@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw8GaTJiTdAYMiDCEaVmvW0Yj4CrHRPRWtMw0DaGG/roNCJFn+K
+	sFq/eYxsH+7+qdgjqNsIeNMBhDBCFeMxMGO6OWg8eRIj2zoQxIWPm6VulHheRE9UusjD/F01TTu
+	JwsTW84IGT2q4SMyCximgo3uIey+zdtMHinh6
+X-Gm-Gg: ASbGncvSJdtFMVIucCBq93MmsfBOtL0BMPR6tov/wM6XKqFUrqkKPTMTkTV3ZzD2Bty
+	Zv59ZtbcmQmsh7IkFOGlBUt7zHdzyQTQunLfLnlyCzMR6Akx91Mebw8qUSWWRM6j8BxG0
+X-Google-Smtp-Source: AGHT+IGY5t3j7JLgOnK7GQ+pcy6E1PtQP3lWc94uYa/uhct4TgLrGv6fdtYVOO02HRihn6+eHc7Z3uPLO6tQyR2RxAc=
+X-Received: by 2002:a05:6000:4028:b0:385:ded5:86ee with SMTP id
+ ffacd0b85a97d-38a224069b1mr48733909f8f.57.1736154173480; Mon, 06 Jan 2025
+ 01:02:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDx_8fTm3tn2UgWAA--.31746S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWfGrW8KFyxZrWfZFyfuF43CFX_yoWkAr4xpa
-	1fJry8ZF4jqayvqFZrW34UuF93Ja4rtrW2q3Z3W3ykWa4xCw15Ja9rtrs3Ar4UCr9xAa47
-	AFyFgrWUKayktwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EPfPUUUUU==
+References: <20250105194054.545201-1-gary@garyguo.net> <20250105194054.545201-2-gary@garyguo.net>
+In-Reply-To: <20250105194054.545201-2-gary@garyguo.net>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 6 Jan 2025 10:02:41 +0100
+Message-ID: <CAH5fLgjjWW5Jrt+k76wJUhmLKTKUW5zThwUoxXuwBmk2-gyMxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
+To: Gary Guo <gary@garyguo.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, Tejun Heo <tj@kernel.org>, 
+	Yoann Congal <yoann.congal@smile.fr>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Jens Axboe <axboe@kernel.dk>, Chen Ridong <chenridong@huawei.com>, Jann Horn <jannh@google.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SPL_ASSERT() is actually SPL_ASSERT_WARN() according to the macro
-definition in drivers/gpu/drm/amd/display/dc/spl/spl_debug.h, just
-replace the macro name SPL_ASSERT() with explicit SPL_ASSERT_WARN()
-to avoid ambiguous.
+On Sun, Jan 5, 2025 at 9:02=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> This config detects if Rust and Clang have matching LLVM major version.
+> All IR or bitcode operations (e.g. LTO) rely on LLVM major version to be
+> matching, otherwise it may generate errors, or worse, miscompile silently
+> due to change of IR semantics.
+>
+> It's usually suggested to use the exact same LLVM version, but this can
+> be difficult to guarantee. Rust's suggestion [1] is also major-version on=
+ly,
+> so I think this check is sufficient for the kernel.
+>
+> Link: https://doc.rust-lang.org/rustc/linker-plugin-lto.html [1]
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
+>  init/Kconfig | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/init/Kconfig b/init/Kconfig
+> index a20e6efd3f0f..cbe4b2922ce2 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -82,6 +82,21 @@ config RUSTC_LLVM_VERSION
+>         int
+>         default $(rustc-llvm-version)
+>
+> +config RUSTC_LLVM_MAJOR_VERSION
+> +       int
+> +       default $(shell,expr $(rustc-llvm-version) / 10000)
+> +
+> +config RUSTC_CLANG_LLVM_COMPATIBLE
+> +       bool
+> +       default y if CC_IS_CLANG && RUSTC_LLVM_MAJOR_VERSION =3D $(shell,=
+expr $(cc-version) / 10000)
+> +       help
+> +         This indicates whether Rust and Clang use LLVM of the same majo=
+r
+> +         version.
+> +
+> +         Operations involving handling LLVM IR or bitcode (e.g. cross-la=
+nguage
+> +         LTO) requires the same LLVM major version to work properly. For=
+ best
+> +         compatible it is recommended that the exact same LLVM is used.
 
-Here is the one-line script:
+typo: compatibility
 
-  sed -i "s/\<SPL_ASSERT\>/SPL_ASSERT_WARN/g" `grep SPL_ASSERT -rwl drivers/gpu/drm/amd/display`
-
-This is in preparation to add SPL_ASSERT_BUG() in later patch to harden
-the callers of division functions, no functional change intended.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- drivers/gpu/drm/amd/display/dc/spl/dc_spl.c   | 12 +++----
- .../gpu/drm/amd/display/dc/spl/spl_debug.h    |  6 ++--
- .../drm/amd/display/dc/spl/spl_fixpt31_32.c   | 32 +++++++++----------
- .../drm/amd/display/dc/spl/spl_fixpt31_32.h   | 12 +++----
- 4 files changed, 31 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/dc_spl.c b/drivers/gpu/drm/amd/display/dc/spl/dc_spl.c
-index 73a65913cb12..664343102f46 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/dc_spl.c
-+++ b/drivers/gpu/drm/amd/display/dc/spl/dc_spl.c
-@@ -146,7 +146,7 @@ static struct spl_rect calculate_mpc_slice_in_timing_active(
- 	mpc_rec.x = plane_clip_rec->x + mpc_rec.width * mpc_slice_idx;
- 	mpc_rec.height = plane_clip_rec->height;
- 	mpc_rec.y = plane_clip_rec->y;
--	SPL_ASSERT(mpc_slice_count == 1 ||
-+	SPL_ASSERT_WARN(mpc_slice_count == 1 ||
- 			spl_in->basic_out.view_format != SPL_VIEW_3D_SIDE_BY_SIDE ||
- 			mpc_rec.width % 2 == 0);
- 
-@@ -159,7 +159,7 @@ static struct spl_rect calculate_mpc_slice_in_timing_active(
- 	}
- 
- 	if (spl_in->basic_out.view_format == SPL_VIEW_3D_TOP_AND_BOTTOM) {
--		SPL_ASSERT(mpc_rec.height % 2 == 0);
-+		SPL_ASSERT_WARN(mpc_rec.height % 2 == 0);
- 		mpc_rec.height /= 2;
- 	}
- 	return mpc_rec;
-@@ -666,7 +666,7 @@ static void spl_calculate_inits_and_viewports(struct spl_in *spl_in,
- 	}
- 	spl_scratch->scl_data.viewport.x += src.x;
- 	spl_scratch->scl_data.viewport.y += src.y;
--	SPL_ASSERT(src.x % vpc_div == 0 && src.y % vpc_div == 0);
-+	SPL_ASSERT_WARN(src.x % vpc_div == 0 && src.y % vpc_div == 0);
- 	spl_scratch->scl_data.viewport_c.x += src.x / vpc_div;
- 	spl_scratch->scl_data.viewport_c.y += src.y / vpc_div;
- }
-@@ -679,7 +679,7 @@ static void spl_handle_3d_recout(struct spl_in *spl_in, struct spl_rect *recout)
- 	 * This may break with rotation, good thing we aren't mixing hw rotation and 3d
- 	 */
- 	if (spl_in->basic_in.mpc_combine_v) {
--		SPL_ASSERT(spl_in->basic_in.rotation == SPL_ROTATION_ANGLE_0 ||
-+		SPL_ASSERT_WARN(spl_in->basic_in.rotation == SPL_ROTATION_ANGLE_0 ||
- 			(spl_in->basic_out.view_format != SPL_VIEW_3D_TOP_AND_BOTTOM &&
- 					spl_in->basic_out.view_format != SPL_VIEW_3D_SIDE_BY_SIDE));
- 		if (spl_in->basic_out.view_format == SPL_VIEW_3D_TOP_AND_BOTTOM)
-@@ -1052,7 +1052,7 @@ static bool spl_get_optimal_number_of_taps(
- 				*enable_easf_v = true;
- 				*enable_easf_h = true;
- 			}
--			SPL_ASSERT((spl_scratch->scl_data.taps.v_taps > 1) &&
-+			SPL_ASSERT_WARN((spl_scratch->scl_data.taps.v_taps > 1) &&
- 				(spl_scratch->scl_data.taps.v_taps_c > 1));
- 		} else { /* RGB */
- 			if (spl_scratch->scl_data.taps.h_taps <= 3) {
-@@ -1065,7 +1065,7 @@ static bool spl_get_optimal_number_of_taps(
- 				*enable_easf_v = true;
- 				*enable_easf_h = true;
- 			}
--			SPL_ASSERT(spl_scratch->scl_data.taps.v_taps > 1);
-+			SPL_ASSERT_WARN(spl_scratch->scl_data.taps.v_taps > 1);
- 		}
- 	} else {
- 		*enable_easf_v = false;
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_debug.h b/drivers/gpu/drm/amd/display/dc/spl/spl_debug.h
-index a6f6132df241..f01c932d550d 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/spl_debug.h
-+++ b/drivers/gpu/drm/amd/display/dc/spl/spl_debug.h
-@@ -20,11 +20,11 @@
- #endif /* CONFIG_HAVE_KGDB || CONFIG_KGDB */
- 
- #if defined(CONFIG_DEBUG_KERNEL_DC)
--#define SPL_ASSERT(expr) SPL_ASSERT_CRITICAL(expr)
-+#define SPL_ASSERT_WARN(expr) SPL_ASSERT_CRITICAL(expr)
- #else
--#define SPL_ASSERT(expr) WARN_ON(!(expr))
-+#define SPL_ASSERT_WARN(expr) WARN_ON(!(expr))
- #endif /* CONFIG_DEBUG_KERNEL_DC */
- 
--#define SPL_BREAK_TO_DEBUGGER() SPL_ASSERT(0)
-+#define SPL_BREAK_TO_DEBUGGER() SPL_ASSERT_WARN(0)
- 
- #endif  // SPL_DEBUG_H
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-index 131f1e3949d3..07a5c09b250e 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-@@ -29,7 +29,7 @@ static inline unsigned long long spl_complete_integer_division_u64(
- {
- 	unsigned long long result;
- 
--	SPL_ASSERT(divisor);
-+	SPL_ASSERT_WARN(divisor);
- 
- 	result = spl_div64_u64_rem(dividend, divisor, remainder);
- 
-@@ -63,7 +63,7 @@ struct spl_fixed31_32 spl_fixpt_from_fraction(long long numerator, long long den
- 	unsigned long long res_value = spl_complete_integer_division_u64(
- 		arg1_value, arg2_value, &remainder);
- 
--	SPL_ASSERT(res_value <= (unsigned long long)LONG_MAX);
-+	SPL_ASSERT_WARN(res_value <= (unsigned long long)LONG_MAX);
- 
- 	/* determine fractional part */
- 	{
-@@ -85,7 +85,7 @@ struct spl_fixed31_32 spl_fixpt_from_fraction(long long numerator, long long den
- 	{
- 		unsigned long long summand = (remainder << 1) >= arg2_value;
- 
--		SPL_ASSERT(res_value <= (unsigned long long)LLONG_MAX - summand);
-+		SPL_ASSERT_WARN(res_value <= (unsigned long long)LLONG_MAX - summand);
- 
- 		res_value += summand;
- 	}
-@@ -118,19 +118,19 @@ struct spl_fixed31_32 spl_fixpt_mul(struct spl_fixed31_32 arg1, struct spl_fixed
- 
- 	res.value = arg1_int * arg2_int;
- 
--	SPL_ASSERT(res.value <= (long long)LONG_MAX);
-+	SPL_ASSERT_WARN(res.value <= (long long)LONG_MAX);
- 
- 	res.value <<= FIXED31_32_BITS_PER_FRACTIONAL_PART;
- 
- 	tmp = arg1_int * arg2_fra;
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
- 	tmp = arg2_int * arg1_fra;
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
-@@ -139,7 +139,7 @@ struct spl_fixed31_32 spl_fixpt_mul(struct spl_fixed31_32 arg1, struct spl_fixed
- 	tmp = (tmp >> FIXED31_32_BITS_PER_FRACTIONAL_PART) +
- 		(tmp >= (unsigned long long)spl_fixpt_half.value);
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
-@@ -163,17 +163,17 @@ struct spl_fixed31_32 spl_fixpt_sqr(struct spl_fixed31_32 arg)
- 
- 	res.value = arg_int * arg_int;
- 
--	SPL_ASSERT(res.value <= (long long)LONG_MAX);
-+	SPL_ASSERT_WARN(res.value <= (long long)LONG_MAX);
- 
- 	res.value <<= FIXED31_32_BITS_PER_FRACTIONAL_PART;
- 
- 	tmp = arg_int * arg_fra;
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
-@@ -182,7 +182,7 @@ struct spl_fixed31_32 spl_fixpt_sqr(struct spl_fixed31_32 arg)
- 	tmp = (tmp >> FIXED31_32_BITS_PER_FRACTIONAL_PART) +
- 		(tmp >= (unsigned long long)spl_fixpt_half.value);
- 
--	SPL_ASSERT(tmp <= (unsigned long long)(LLONG_MAX - res.value));
-+	SPL_ASSERT_WARN(tmp <= (unsigned long long)(LLONG_MAX - res.value));
- 
- 	res.value += tmp;
- 
-@@ -196,7 +196,7 @@ struct spl_fixed31_32 spl_fixpt_recip(struct spl_fixed31_32 arg)
- 	 * Good idea to use Newton's method
- 	 */
- 
--	SPL_ASSERT(arg.value);
-+	SPL_ASSERT_WARN(arg.value);
- 
- 	return spl_fixpt_from_fraction(
- 		spl_fixpt_one.value,
-@@ -295,7 +295,7 @@ static struct spl_fixed31_32 spl_fixed31_32_exp_from_taylor_series(struct spl_fi
- 		n + 1);
- 	/* TODO find correct res */
- 
--	SPL_ASSERT(spl_fixpt_lt(arg, spl_fixpt_one));
-+	SPL_ASSERT_WARN(spl_fixpt_lt(arg, spl_fixpt_one));
- 
- 	do
- 		res = spl_fixpt_add(
-@@ -337,9 +337,9 @@ struct spl_fixed31_32 spl_fixpt_exp(struct spl_fixed31_32 arg)
- 				spl_fixpt_ln2,
- 				m));
- 
--		SPL_ASSERT(m != 0);
-+		SPL_ASSERT_WARN(m != 0);
- 
--		SPL_ASSERT(spl_fixpt_lt(
-+		SPL_ASSERT_WARN(spl_fixpt_lt(
- 			spl_fixpt_abs(r),
- 			spl_fixpt_one));
- 
-@@ -364,7 +364,7 @@ struct spl_fixed31_32 spl_fixpt_log(struct spl_fixed31_32 arg)
- 
- 	struct spl_fixed31_32 error;
- 
--	SPL_ASSERT(arg.value > 0);
-+	SPL_ASSERT_WARN(arg.value > 0);
- 	/* TODO if arg is negative, return NaN */
- 	/* TODO if arg is zero, return -INF */
- 
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.h b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.h
-index ed2647f9a099..b285f4397f07 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.h
-+++ b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.h
-@@ -191,7 +191,7 @@ static inline struct spl_fixed31_32 spl_fixpt_clamp(
-  */
- static inline struct spl_fixed31_32 spl_fixpt_shl(struct spl_fixed31_32 arg, unsigned char shift)
- {
--	SPL_ASSERT(((arg.value >= 0) && (arg.value <= LLONG_MAX >> shift)) ||
-+	SPL_ASSERT_WARN(((arg.value >= 0) && (arg.value <= LLONG_MAX >> shift)) ||
- 		((arg.value < 0) && (arg.value >= ~(LLONG_MAX >> shift))));
- 
- 	arg.value = arg.value << shift;
-@@ -228,7 +228,7 @@ static inline struct spl_fixed31_32 spl_fixpt_add(struct spl_fixed31_32 arg1, st
- {
- 	struct spl_fixed31_32 res;
- 
--	SPL_ASSERT(((arg1.value >= 0) && (LLONG_MAX - arg1.value >= arg2.value)) ||
-+	SPL_ASSERT_WARN(((arg1.value >= 0) && (LLONG_MAX - arg1.value >= arg2.value)) ||
- 		((arg1.value < 0) && (LLONG_MIN - arg1.value <= arg2.value)));
- 
- 	res.value = arg1.value + arg2.value;
-@@ -253,7 +253,7 @@ static inline struct spl_fixed31_32 spl_fixpt_sub(struct spl_fixed31_32 arg1, st
- {
- 	struct spl_fixed31_32 res;
- 
--	SPL_ASSERT(((arg2.value >= 0) && (LLONG_MIN + arg2.value <= arg1.value)) ||
-+	SPL_ASSERT_WARN(((arg2.value >= 0) && (LLONG_MIN + arg2.value <= arg1.value)) ||
- 		((arg2.value < 0) && (LLONG_MAX + arg2.value >= arg1.value)));
- 
- 	res.value = arg1.value - arg2.value;
-@@ -445,7 +445,7 @@ static inline int spl_fixpt_round(struct spl_fixed31_32 arg)
- 
- 	const long long summand = spl_fixpt_half.value;
- 
--	SPL_ASSERT(LLONG_MAX - (long long)arg_value >= summand);
-+	SPL_ASSERT_WARN(LLONG_MAX - (long long)arg_value >= summand);
- 
- 	arg_value += summand;
- 
-@@ -466,7 +466,7 @@ static inline int spl_fixpt_ceil(struct spl_fixed31_32 arg)
- 	const long long summand = spl_fixpt_one.value -
- 		spl_fixpt_epsilon.value;
- 
--	SPL_ASSERT(LLONG_MAX - (long long)arg_value >= summand);
-+	SPL_ASSERT_WARN(LLONG_MAX - (long long)arg_value >= summand);
- 
- 	arg_value += summand;
- 
-@@ -501,7 +501,7 @@ static inline struct spl_fixed31_32 spl_fixpt_truncate(struct spl_fixed31_32 arg
- 	bool negative = arg.value < 0;
- 
- 	if (frac_bits >= FIXED31_32_BITS_PER_FRACTIONAL_PART) {
--		SPL_ASSERT(frac_bits == FIXED31_32_BITS_PER_FRACTIONAL_PART);
-+		SPL_ASSERT_WARN(frac_bits == FIXED31_32_BITS_PER_FRACTIONAL_PART);
- 		return arg;
- 	}
- 
--- 
-2.42.0
-
+Alice
