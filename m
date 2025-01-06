@@ -1,130 +1,95 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C2A1D63CF
-	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 09:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE7B1D6DDD;
+	Mon,  6 Jan 2025 09:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736154177; cv=none; b=ZjUxtq55VC9dY0b1rIwtQ1VcnO1ei/2GPSzTrNSo7Viotc8cy4GJYONGiM4tQCqmLpYk99HZN6Zs9V+OyoCpQRM+WZ/tWz+8d884je8xxxr/02hp5w3xNDveXuykWUk0GKT/g0adh3cr+o3WgCzWMdrxk+FjclTdmlVh0e9UETo=
+	t=1736154203; cv=none; b=S1z8ZdE6IUmD0OP65bFS61EWO3KnjeQPrs4VY/ME/lBWQy0uZbXNLEB26ya+jt+9Utft7l7h0vV+aEEuhXe4gMdfaxDfwvnk2KKxrB4/NbLalADQDk5yFkyLcCBW3BWGIi8dy2f+XKU70N8GnMg+lVtv3I2PTce0LULXt5Q3IgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736154177; c=relaxed/simple;
-	bh=ln+xipIWtR756VpfjRBcdsXgI7ozwANiQoTrmUHi5dk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k1o6Dh3iZJ/vc3BcmO9xBvNu0ivMY2mwYrZoEncHDJ1vAdepwIWosdbf941YsapzJwWrZisZ7LOSeTSEAjtksE24v/2Lh8SEO50Yh3/Kt7Nj8Swac3zQRAfW+8/z99EYc0LbzAjtbg9UIavP0wU3I7xBv1NLnwtTDXI+noPQP+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jQ3A2hjs; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jQ3A2hjs"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43624b2d453so145995465e9.2
-        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 01:02:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736154173; x=1736758973; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sNwuZVs/WFX1AlyLcnmThK24HPexmJnIk9uzVui8y2c=;
-        b=jQ3A2hjsjHF9qJBtl9EVJPDpVl840LmHjYV8xgcCfBg2VmmiHvUK5tqUEWEnxaKoio
-         1SYFPifx8P+1ZFjM97GfDiNRVdpXquha5Nl1HXZIz6iDh8EE7wIJwTxR2zgjqaHL67uw
-         LAsns1Ogesh3aTnnO8Q9hWlaAUMeS4cIQpS+EzRmRm97xgiDxpyQ4yqwAN68uqzpy8Dq
-         JT6YB7aq8exH4q45l6zuG0Y9+/u8HmP+XJPv1p7YLn03w1xqDZcvzxf7xVpuGnq/1IuB
-         nQk1oaxcqjPnfxqVs2XEkNKcKQMajRz7XAZCobwXDRVUnVTwXvv836lZjUyWwChZM4hE
-         J2ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736154173; x=1736758973;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sNwuZVs/WFX1AlyLcnmThK24HPexmJnIk9uzVui8y2c=;
-        b=sIW6XHgbPLaD3zoGfcldnofDARIi6GQw11qE56kqE0BQbdKZ4ocyWA8nGGgJPrZTYA
-         zyvATrmsglAgRSlf2HnOZJP/1CCoMh4QTYKzYGfskc7hokMIiD2hwq1VjxZR52ovE7/f
-         jam4R/Ee+nN4meS0k/7bWvBMnFaf+svApid2oocQBkCgnfRNTkXiuY80yYSxgDZ7T1ki
-         oq593DmExHEdwllrtFtAcyk1++65w96ZkuejI8nXg8qtG03jN/NsY+FGR8CjlaEr5daT
-         RuSuaNK15l0Ev6BGIuqNCZ1b+SRhsdN1xG4yotG+o/iafmxznd2ljrE6hDSBg5KYe86C
-         eTJA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9SU4cU8Tc2eEcLI29TlxLoUHqKvizuUm7mGPSpma5KHDqXkxFM70DgrYA4TJiRYoFORnq@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw8GaTJiTdAYMiDCEaVmvW0Yj4CrHRPRWtMw0DaGG/roNCJFn+K
-	sFq/eYxsH+7+qdgjqNsIeNMBhDBCFeMxMGO6OWg8eRIj2zoQxIWPm6VulHheRE9UusjD/F01TTu
-	JwsTW84IGT2q4SMyCximgo3uIey+zdtMHinh6
-X-Gm-Gg: ASbGncvSJdtFMVIucCBq93MmsfBOtL0BMPR6tov/wM6XKqFUrqkKPTMTkTV3ZzD2Bty
-	Zv59ZtbcmQmsh7IkFOGlBUt7zHdzyQTQunLfLnlyCzMR6Akx91Mebw8qUSWWRM6j8BxG0
-X-Google-Smtp-Source: AGHT+IGY5t3j7JLgOnK7GQ+pcy6E1PtQP3lWc94uYa/uhct4TgLrGv6fdtYVOO02HRihn6+eHc7Z3uPLO6tQyR2RxAc=
-X-Received: by 2002:a05:6000:4028:b0:385:ded5:86ee with SMTP id
- ffacd0b85a97d-38a224069b1mr48733909f8f.57.1736154173480; Mon, 06 Jan 2025
- 01:02:53 -0800 (PST)
+	s=arc-20240116; t=1736154203; c=relaxed/simple;
+	bh=uOvE5uvtUrPimmZjDM5zKfZP1LQpoTUdCebdlKOKMik=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dWi1Vh6R/P2MkYac25DcCkWmce7m1gXyc4coVjM5gk6FU+SjwWx5Plmoky/m+D4wbaAkQDPCNsbOpCRaLssv9TQl8QUz+e8WT8i1y5rAtPv0LqK+04h/EmoF+RdLuqSd1BEZA4SALYf+prgs944AcAB/POME1zUYA46cOYVt0/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8DxWOFPnHtnFY9eAA--.54653S3;
+	Mon, 06 Jan 2025 17:03:11 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMAx7+VNnHtnkUkWAA--.31560S2;
+	Mon, 06 Jan 2025 17:03:10 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alex Deucher <alexander.deucher@amd.com>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Xinhui Pan <Xinhui.Pan@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Leo Li <sunpeng.li@amd.com>,
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	loongarch@lists.linux.dev,
+	amd-gfx@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/5] drm/amd/display: Add ASSERT_BUG() macro definition
+Date: Mon,  6 Jan 2025 17:03:06 +0800
+Message-ID: <20250106090306.5579-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20250106085755.3268-1-yangtiezhu@loongson.cn>
+References: <20250106085755.3268-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250105194054.545201-1-gary@garyguo.net> <20250105194054.545201-2-gary@garyguo.net>
-In-Reply-To: <20250105194054.545201-2-gary@garyguo.net>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Mon, 6 Jan 2025 10:02:41 +0100
-Message-ID: <CAH5fLgjjWW5Jrt+k76wJUhmLKTKUW5zThwUoxXuwBmk2-gyMxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kbuild: rust: add `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Petr Mladek <pmladek@suse.com>, Tejun Heo <tj@kernel.org>, 
-	Yoann Congal <yoann.congal@smile.fr>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Jens Axboe <axboe@kernel.dk>, Chen Ridong <chenridong@huawei.com>, Jann Horn <jannh@google.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAx7+VNnHtnkUkWAA--.31560S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7XrWfuw4UZrykZr1UWw4UGFX_yoWfXrb_KF
+	48XrySqw1jyF1vgFy0yrWfuFyI9w4rur48WrW8t3sIv343Ww4DX3y0kr18Wr1fCF12yFZ0
+	v34jg3WrA3ZrGosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbSAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04
+	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7Cj
+	xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jz-eOUUUUU=
 
-On Sun, Jan 5, 2025 at 9:02=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
->
-> This config detects if Rust and Clang have matching LLVM major version.
-> All IR or bitcode operations (e.g. LTO) rely on LLVM major version to be
-> matching, otherwise it may generate errors, or worse, miscompile silently
-> due to change of IR semantics.
->
-> It's usually suggested to use the exact same LLVM version, but this can
-> be difficult to guarantee. Rust's suggestion [1] is also major-version on=
-ly,
-> so I think this check is sufficient for the kernel.
->
-> Link: https://doc.rust-lang.org/rustc/linker-plugin-lto.html [1]
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
->  init/Kconfig | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index a20e6efd3f0f..cbe4b2922ce2 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -82,6 +82,21 @@ config RUSTC_LLVM_VERSION
->         int
->         default $(rustc-llvm-version)
->
-> +config RUSTC_LLVM_MAJOR_VERSION
-> +       int
-> +       default $(shell,expr $(rustc-llvm-version) / 10000)
-> +
-> +config RUSTC_CLANG_LLVM_COMPATIBLE
-> +       bool
-> +       default y if CC_IS_CLANG && RUSTC_LLVM_MAJOR_VERSION =3D $(shell,=
-expr $(cc-version) / 10000)
-> +       help
-> +         This indicates whether Rust and Clang use LLVM of the same majo=
-r
-> +         version.
-> +
-> +         Operations involving handling LLVM IR or bitcode (e.g. cross-la=
-nguage
-> +         LTO) requires the same LLVM major version to work properly. For=
- best
-> +         compatible it is recommended that the exact same LLVM is used.
+In order to keep the current ability for the aim of debugging and avoid
+printing the warning message twice, add ASSERT_BUG() macro definition to
+harden the callers of division functions.
 
-typo: compatibility
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ drivers/gpu/drm/amd/display/dc/os_types.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Alice
+diff --git a/drivers/gpu/drm/amd/display/dc/os_types.h b/drivers/gpu/drm/amd/display/dc/os_types.h
+index 42f3712aef9e..13efefb24899 100644
+--- a/drivers/gpu/drm/amd/display/dc/os_types.h
++++ b/drivers/gpu/drm/amd/display/dc/os_types.h
+@@ -79,6 +79,11 @@
+ 			dc_breakpoint();	\
+ 	} while (0)
+ 
++#define ASSERT_BUG(expr) do {			\
++		dc_breakpoint();		\
++		BUG_ON(!(expr));		\
++	} while (0)
++
+ #define BREAK_TO_DEBUGGER() \
+ 	do { \
+ 		DRM_DEBUG_DRIVER("%s():%d\n", __func__, __LINE__); \
+-- 
+2.42.0
+
