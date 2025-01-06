@@ -1,109 +1,173 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82117149C7B
-	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 15:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0471DED79;
+	Mon,  6 Jan 2025 17:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736178790; cv=none; b=nC7/4SPRkbl0ow05cUGJrS+8qyB9BhY7s2dDYu6qDP0zKNxeUat74CDyt3eDkyz3vA9UNgPwbE3ycf7/VXtxf3hRwmsWwdGO9ur8gCPP949oPgvdHSQnNRWkfRbJjCAbb9wW8zDjrQcqvI4c7I7iMCdDKBCz1ZEdiKeAS7b0Qok=
+	t=1736184587; cv=none; b=lfFm4b4cJTMBT8GBpKaW2ona9GNQHSJw8x0UN8/8EltFjgl+9vt2Ml90E6SXHkXDPxld3MAcbJXHupWe6F/YABBr2j/J0qDXIITpdiB8nSUQpwtse2RSxmq2Rq0K8MIDhIVBnlj80+3SqsI+uy1IxzpHKGnj6vQPzSoaWGUuCxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736178790; c=relaxed/simple;
-	bh=BYNH9bJ+bW0BzvC490EKO6MHlbOHqvmxoBtUcw9b44Q=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HHK2yATNOoHTXlvMBdsp9Mx5ZVm8/M3wWd4dPxcXDwbHd2LkQqM1Z9ONWo7cPWWOQfLadMtyx9wOjRurY3cVfpgjgDeXCqJdv0JFjZWEdSL0OpnYG6uMBsR8x/umbRCEoqCuIcvJWyaBKeww/25iO8xm/FDCuTfbUYwcpfrkVVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BZsJtNp0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736184587; c=relaxed/simple;
+	bh=mN2Rqk7LFGOVDpFVo3Ijud0gGQREIuQiJPT/ANYxmoY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iGORJfe4yXjASVpNARNTRrqb9VhAqqTR7lCAOdTholevRCzWmqstfwoexPnUiu2k2VWJauoHDBQkpGFsN/roplen7t18qs/xc6UkiHr5BkSzzctWV5l11UZtaKNzseoWHKtnlWJD6zy6+Tkkk4WRtUUhtzfmnDM36Jnzv8K9aV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfi82iF6; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BZsJtNp0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736178787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=d6vmyWhOesiYsvmIgBleF2+0Ml7RBq15X68BbtSiJIg=;
-	b=BZsJtNp0Qrb67AZ65hiH8Fx9g362VyXLoxim1hR1Pe5hkLFI/QH7Ynyvo3sNowcxYW9eMd
-	LBc29ZYn5zZOg3FyuVggR0u9gXIBhwl5imd0RY4oFXyMbN/B4uqz1hXabbiLl4m1oxzGbg
-	3sXnvjH7B1MW6uujlt56I4d9ydA27uk=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-441-Sln5GKPXOKSUcri8-FoZDw-1; Mon,
- 06 Jan 2025 10:53:05 -0500
-X-MC-Unique: Sln5GKPXOKSUcri8-FoZDw-1
-X-Mimecast-MFC-AGG-ID: Sln5GKPXOKSUcri8-FoZDw
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C01BD19560B6
-	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 15:53:03 +0000 (UTC)
-Received: from [172.64.11.15] (unknown [10.30.34.132])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 59E4E19560A3;
-	Mon,  6 Jan 2025 15:53:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
- upstream-mainline, 5428dc19)
-Date: Mon, 06 Jan 2025 15:53:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfi82iF6"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2f45526dea0so2921353a91.1;
+        Mon, 06 Jan 2025 09:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736184585; x=1736789385; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vBoNhSu6q49cqdqVQhKrU93NZBtBZPk5jCQdSRfDNk8=;
+        b=bfi82iF6gyoihWqSC+Tfj0F65lxDYFK3fTq2jCXS9g//IqfDZwPQtScc4wAGXDuzKK
+         15ArOh1FO3pB9EgJ2uE23ZKkAZiszF+WDianZGWlXATPGLoohy9WB81v8cPbqvKroa9T
+         2eGpMMjBjlc7g3+F350TdfzyEtGkwRWtF/py9R89gJgKo6V902BUOFapG5PCscc9mrnE
+         kgjZMAP+FS+yVU3ssAoQu/+M/KKlkUEAn8XL/O2L0PVwXVtex7ylK/LoL8TmaX2GYG0r
+         bKuI8fOti9c7twEnb/T8Py2U/4zggXQG2UoB6gO4+IWQqTKqyglrdWcV5kK7hrx4wCyx
+         qgkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736184585; x=1736789385;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vBoNhSu6q49cqdqVQhKrU93NZBtBZPk5jCQdSRfDNk8=;
+        b=A6F1hTeIsipSJCgb8H2GTkdy9xWArhXYXEVA7pZv7U7bUE8xydBQ6hW2HMfnaIoGIE
+         OEAHp6M/TyZZa6fTsWvqmnYn2ujHmqQWyCq2UrkFXgp3fu24cJqMgiwpHQG7s9O64g0R
+         HoDdFVkbUGPWMOfmDuCdkDDI0Rk42jJjIgpaWkMKc/KWQ+MTJtkBys1MemEdS2rUPtlt
+         08LlYqNPHLo12MaxRZ2VLkdIkDC1GpmgAdX8ZVUcXlk2o2sfPHhpIhAsgy/rUlGr8t7g
+         ZG0KrA/iAnmpUmGtaSzquvlWo5KTmiJ0uGIA/lPHDgxxbc/XYrKNQ5UFlq7bsht1g6hh
+         xFCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpXxhCUqJI1Urf8kff4taBuhV6pzdAiegy+n6uLmGYgr5Crvc6/oLANDIr8cOGhnqVoDOZh4P0Hw==@lists.linux.dev, AJvYcCV46GQrIzA4hoL8E8340tF6baFm+EFEBmAHXYpDqf8ldKqsV2OaHyww9XZUE4MwxvY8emkH@lists.linux.dev
+X-Gm-Message-State: AOJu0YwiqADyPtW16JV5w1SWl1YJNkaWEBFxKM5d6T+5e47+RQf8Hqk7
+	goKOrJRIUgRbhPJK71xKULY1chGpfND+l27zlurWNiABud30yHqapjS33B8AcBM5Kc+TtVZalrK
+	ec1VPUFnJmudGFfMMcLtx4rF5u5w=
+X-Gm-Gg: ASbGncvtrvn5348XQdVUz1M/lsQJ24u50DRWg2nuGvEdz3xhFowwH4+Vdw59iOb8Kkw
+	XDTMETWv+hIjwBJfPax7B5WDYO2TclFf5R9yiNg==
+X-Google-Smtp-Source: AGHT+IHCcADNAqOOaN+ufllc9x/Tbyw4zJm26vrtFwMVXoU/ZabvIUGlzJgCdr6YqtB+H/RX0NBzjQqvbNL5EVjm2+0=
+X-Received: by 2002:a17:90b:2b8f:b0:2ea:853a:99e0 with SMTP id
+ 98e67ed59e1d1-2f452ec6f12mr33610613a91.5.1736184584899; Mon, 06 Jan 2025
+ 09:29:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <79552.125010610530503238@us-mta-441.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: LNKI-wzPtro73_nKe6Q9EziY3BXMfqNmoFymxilQ4fc_1736178784
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
+In-Reply-To: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 6 Jan 2025 12:29:32 -0500
+Message-ID: <CADnq5_Pun+zN1=B0eFMw1w8k_oD3fw626SdaEug24YRg8aOLKw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: Increase sanitizer frame larger than
+ limit when compile testing with clang
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Chaitanya Dhere <chaitanya.dhere@amd.com>, Jun Lei <jun.lei@amd.com>, 
+	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Xinhui Pan <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Applied.  Thanks!
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'exfat-for-6.13-rc7' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/linkinjeon/exfat
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1613119307
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1613119307-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1613119307-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1613119307-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+On Thu, Dec 19, 2024 at 6:46=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Commit 24909d9ec7c3 ("drm/amd/display: Overwriting dualDPP UBF values
+> before usage") added a new warning in dml2/display_mode_core.c when
+> building allmodconfig with clang:
+>
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6268:=
+13: error: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_ch=
+eck' [-Werror,-Wframe-larger-than]
+>    6268 | static void dml_prefetch_check(struct display_mode_lib_st *mode=
+_lib)
+>         |             ^
+>
+> Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
+> Fixes") introduced one in dml2_core/dml2_core_dcn4_calcs.c with the same
+> configuration:
+>
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_=
+core_dcn4_calcs.c:7236:13: error: stack frame size (3256) exceeds limit (30=
+72) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
+>    7236 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_s=
+upport_ex *in_out_params)
+>         |             ^
+>
+> In the case of the first warning, the stack usage was already at the
+> limit at the parent change, so the offending change was rather
+> innocuous. In the case of the second warning, there was a rather
+> dramatic increase in stack usage compared to the parent:
+>
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_=
+core_dcn4_calcs.c:7032:13: error: stack frame size (2696) exceeds limit (20=
+48) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
+>    7032 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_s=
+upport_ex *in_out_params)
+>         |             ^
+>
+> This is an unfortunate interaction between an issue with stack slot
+> reuse in LLVM that gets exacerbated by sanitization (which gets enabled
+> with all{mod,yes}config) and function calls using a much higher number
+> of parameters than is typical in the kernel, necessitating passing most
+> of these values on the stack.
+>
+> While it is possible that there should be source code changes to address
+> these warnings, this code is difficult to modify for various reasons, as
+> has been noted in other changes that have occurred for similar reasons,
+> such as commit 6740ec97bcdb ("drm/amd/display: Increase frame warning
+> limit with KASAN or KCSAN in dml2").
+>
+> Increase the frame larger than limit when compile testing with clang and
+> the sanitizers enabled to avoid this breakage in all{mod,yes}config, as
+> they are commonly used and valuable testing targets. While it is not the
+> best to hide this issue, it is not really relevant when compile testing,
+> as the sanitizers are commonly stressful on optimizations and they are
+> only truly useful at runtime, which COMPILE_TEST states will not occur
+> with the current build.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202412121748.chuX4sap-lkp@i=
+ntel.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/amd/display/dc/dml2/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/d=
+rm/amd/display/dc/dml2/Makefile
+> index d9c27ebe12ee08d6330eb199cd8ca9c8489fa5b2..91c4f3b4bd5f46ac5c1c74f66=
+5b06dbe61081917 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+> @@ -29,7 +29,11 @@ dml2_rcflags :=3D $(CC_FLAGS_NO_FPU)
+>
+>  ifneq ($(CONFIG_FRAME_WARN),0)
+>  ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
+> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
+> +frame_warn_flag :=3D -Wframe-larger-than=3D4096
+> +else
+>  frame_warn_flag :=3D -Wframe-larger-than=3D3072
+> +endif
+>  else
+>  frame_warn_flag :=3D -Wframe-larger-than=3D2048
+>  endif
+>
+> ---
+> base-commit: 695c2c745e5dff201b75da8a1d237ce403600d04
+> change-id: 20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig=
+-f034d9c5118e
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
