@@ -1,163 +1,155 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0A21DED4A
-	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 17:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923171DF74F
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 18:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736185364; cv=none; b=WfpDS5l6feYFZeTCyCXSZFIYhbBmnVADhBTjXMVYD9bSnwZ/p52M0xqAZvGpJLUfWcNxN3ht6SZRykMIxnmOYznYBfakAxKulYnbRZsubP+GLXguYPbhGpahGVytV/bQck4LpGCKXF/sruUQDIbCNouGzjn9wi9K7qr5s0+enkM=
+	t=1736186455; cv=none; b=Rvog0XRxj7lUM3oCVtZBDZPV6qQryvhze6Ln+tdjxpks4Chu8tr39wNFgPCpb6U+z+xEE+o0AafBGAoHDqh6S+aW7j1h1tukXeBV5+nbZb1ZiDPFs3OBeq7er5iM6WTPiMQFKV/cvd69dyfiyJIGgFImHIoxK0a9Pch7NhObP6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736185364; c=relaxed/simple;
-	bh=euNe+uI/PgOIa7aGEaXUnViMhKcy7CDB1HKJkQabzVU=;
+	s=arc-20240116; t=1736186455; c=relaxed/simple;
+	bh=C/tw2D77F66nxRbbmCdQXH6xlG644LkMa0e1oRlDt0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uqxt1Glnlqf85Xp7vSd+l+2vreTsAaPmfDOM/gJoeukXcYIN00tHL/VMMag1uH+9WOLqA+hiEi8amv4jaeQtgju8l5J9LZLquOUukz5WuqO77AMItZ+uoEktHbGg7nzrra+OJKsDGM+FztWmWfutpq1fEHvxHsPHvgg7yLF6jIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ScGbYC6a; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GU07uXfSqRK3jJveE3T3BqJsv7mYZaEypc0fa1JrH29HsFODc617HVCDOHa3kArCzDJODWD+yhTqzRlpQ5g9XYIuX1cX03IMHsVwX3jZu/oQy9M1AtpHKR1RaikOjwUzvlJhrqlRsUq8lMrdhWW3OBenaj4lJ0xcqBWA695AhMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lQy88ilq; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ScGbYC6a"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6f1be1daeso1371973085a.0
-        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 09:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736185361; x=1736790161; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uQuQO9Rm3yTV+CxAoCi/zzgut6k6eBAAVPLnTwUskl4=;
-        b=ScGbYC6aVeRuh3Tz3dV5fX8Icg2R6GIc0BXjo1n7SEAvfX5/r9ObR7KRZnwAfEchcU
-         zhJ2Opbvmn1v1YUYjf0oHSHWe3IVodfb7mlyB55pMciu6qI/AfNdgLCDbvTvVHpZWeZt
-         bs1VIAJMSNV+85PbPzm567ueFVxFOe9yWpQa7v8ZM0YRG+ZVqBgaok+OF7Id8RWGRyJk
-         WijOLEuXMNbIsSfy+u2F/bXy8X630fyINzno8qdJUdJnDXYXPja/18C+7pK9AY0eT/Cy
-         AsDo0H7JkhA+D/jKtQUQp6fOhbFz+iUpgB3cpmm6e10eC0eTF2G9tD09vvLe0X7JLNhP
-         HkuA==
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lQy88ilq"
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506A2YtW027074
+	for <llvm@lists.linux.dev>; Mon, 6 Jan 2025 18:00:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=; b=lQy88ilqDlzqL+GY
+	QjMXbWJNWzNE+pzyiXnFKIe/Gby4pM+TT+wDSXe+srfCXcaqFavJDs/Rpz0Y6BAz
+	/ZgVkfKeH4s0cO3BGdMC5IZAlR2gclRS8b8+/q8sc3tl5FyLjvIC/iSP5mogbkLT
+	4AcIqRhJmvamSFF/XdqinujJ2WPYZrG8JFE57MpDqVq1o+2H5R7aiGyb/bFvTFBC
+	U38gBezXgUzuZ/b83/BKPbUYpqybUXoMK/BAH3JsSYi4iKQaxBsyec27HYavXQDw
+	g1ALEWybu+8yuVQJbMZ7Bah4RBPZaNjWWGiyVZ2icrTHlHBM7jv+GgzhWQIrQp4q
+	Oja+5w==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440d2wh20y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 18:00:51 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2166464e236so365072525ad.1
+        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 10:00:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736185361; x=1736790161;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uQuQO9Rm3yTV+CxAoCi/zzgut6k6eBAAVPLnTwUskl4=;
-        b=v4ydUHyUysc+kMJZ9+kzfA7pM3pVEGY9PQVeXLEzY/3EH0+m4Ls9EFiDVCo0F2gEpS
-         C5adr7AC1tLpgf+4uIyJzxnzhSpNENiKgshtXt3vbixmAAMBR0XPSx3DLbiUlB6CJJLO
-         hAgXG3WJroRsLTxSaBgSBU2YxT7SqtUYbIUZ285KErO2jCydK5RwNRnyk0Pm68Ql8D5o
-         2Io9xEeHa9F6IjHAndUNafd5wadI7ZwssiqokLEsy135UTZtwKWXzvezys0iasBewfOY
-         UU58U9SkMBYqvMKZXlKYVcN3DTyPI0aLfxi2NIdJvEiw/q+8m9ewyNDgH36JTte3/cI0
-         3REA==
-X-Forwarded-Encrypted: i=1; AJvYcCXt0bhmcQI0vnxI/HXEGhhHgfCMA93cGs24RW/edQbDBLEOSjF+gIJLEoaYUxWgsw6BiDbS@lists.linux.dev
-X-Gm-Message-State: AOJu0YwbMXqucuRuPOmtFs4Q//VQ45zYkVJ3t+2LehpImU/ce1Q8FHx2
-	KDZVKnabKkB1o7DCnuHnhPf2LndR4jtYCgau50lLujnx5p3NXpwA
-X-Gm-Gg: ASbGncsAjWZRxjnq3OyzoNBd+uAXOrj/Deene3306cMTPYKxtAWQeyWeSTN8RycYDwS
-	3H528n5OdDwGNuqlecivQoUtZn8ixhwb0eU1riN8Hv7Th76b/4oyczW7Si+T2L8iv+4mFo8ojhk
-	Q08wjkQyNR201xoAEsUymS9UQwlql19Fyi8Pp2jItpOT0k4u7QL6fAf2tcEaKRPjy6Z6xucHGem
-	8DTiR7OJLwzmuNM+TIWxs+N5ydNAXiZ2JEc2ZBTZ+3biFwiL2MzsazSFYyloyVaKprANVAe56Q0
-	249A0sg4WiU7RDN/+gS9LkhaqJ3VXfU/k6pQ1QuID87WOP8=
-X-Google-Smtp-Source: AGHT+IEHv9MpzBGIYb2QQv8o4gZu+xwb/nICclZ5JDGhNewocsxJm40gIGUHKlkceb1Ekth/oBjqmQ==
-X-Received: by 2002:a05:620a:618e:b0:7b7:342:a0a5 with SMTP id af79cd13be357-7b9ba821e36mr10703968485a.55.1736185361368;
-        Mon, 06 Jan 2025 09:42:41 -0800 (PST)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2e89a4sm1522946485a.50.2025.01.06.09.42.40
+        d=1e100.net; s=20230601; t=1736186451; x=1736791251;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=;
+        b=L/x4O2GJ+p6YdSZHn8sr07ZGlGQVtmLdlkd/yacnxK/2hSDvk7A2lDqsjFECWCpiYp
+         z/ngszMTlaxqN2Wq95AJs6hTojpUJcZChm/0vWKi98vIcctTfQf/EbtTCWEx27wn1eKH
+         j7N2jsvtfaaquRFcXQYQ2tPpDA6h3ubyH/I+XvoJLeYRxU4beY92/bPfHqRSxzd2HS5U
+         UiCtThRDNXNCszrarQ4jY10v0RUdA1VJ5b8HrAmMxjyvyu6/pCLTQqjUFKgGrv5Hhun1
+         m99M+kgCPpkXR2IbDQu+bjENtJmtooE1cOhtzrY1k9xJYBFJ4vAnii63j0LJk+4FLS9l
+         ak2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXaP0OE+iowW0dXbPgyKDkUaE0Q8Eqm9laadjuE0tmmJCDeJb2RIwpjalurKhbEZUy0P9JY@lists.linux.dev
+X-Gm-Message-State: AOJu0YytJci49Ebaxa9ieKFcOA8W/bWueUYvGAeDW+oJvVOimVSsWQeL
+	4BG8V2mL9fFXChK5nObrwoRimS5PfaUQXPw1JuEYOemmFWbeRdbvlhKnh1rdZmc7bB8zfvE4Ctg
+	tz7igI0Q2JmXkByEhagP+F6fVaY6rP8QLQSiKAsqTR8cQN/IwYrCq
+X-Gm-Gg: ASbGncvAbj54SFEHs/p0+UaM9Z8MT5r4ksxXBfWFwAeuj0PIWCVBLQtWtqmcxrtEYzb
+	h45O/vUXNOfBNhhFCOvEJchFnbtYd2V6HQ9jcE+dSD7g75Us6v04ED2zzAP73RcoUvd2TKWiY2C
+	XJcBORv5o7e+yKCyhFFdheQ7it3hV/2couJrSWKfSwromxF9QWJ3jvfzVvGDSgeD+fis3jkFEvY
+	DFZ8rtSptnmA5UWvZV//F9ZrGNwKS0hjhuaEbyGD+GhUTjoT8+94gN/k9ROPqDd+84cQICSUJ8n
+	Rv4EMIjobR3wOLjxKo/cyzuqiCzLK1z+uioP
+X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718635ad.47.1736186450488;
+        Mon, 06 Jan 2025 10:00:50 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHKxeP0fYXWNRSuBo63GlatOZdUBa1wq+1u6CfOeT7r7LLcU9ZygtK9cUJtqM9KXRbYsaYzoA==
+X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718005ad.47.1736186449960;
+        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
+Received: from hu-eberman-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f7457sm289404095ad.201.2025.01.06.10.00.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 09:42:40 -0800 (PST)
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 35B8F1200043;
-	Mon,  6 Jan 2025 12:42:40 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Mon, 06 Jan 2025 12:42:40 -0500
-X-ME-Sender: <xms:EBZ8Z-v6AwC8fQKDhN1HuuB72X7Kop6SL_YD66aVN3NpMltcfojvsQ>
-    <xme:EBZ8ZzcUu_dMqeD-FYwkNa_y1UcXMFc6-Ytb6VnN2cvtOBwLnrettKYydVuw9GAzl
-    fPaqNEgrosLmdYPEw>
-X-ME-Received: <xmr:EBZ8Z5xd5drcbXkjx01Auco-8QaqvoCiuke6lONrrZ9CmUE6UJqGztmR_Uk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegtddguddtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
-    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
-    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedujedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpd
-    hrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgig
-    rdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopegsjhhorhhnfegpghhhse
-    hprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopegsvghnnhhordhlohhsshhinhes
-    phhrohhtohhnrdhmvgdprhgtphhtthhopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghp
-    thhtohepthhmghhrohhsshesuhhmihgthhdrvgguuhdprhgtphhtthhopehnrghthhgrnh
-    eskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:EBZ8Z5Nvdh76sXizqpj0pD9txl_1jHBA6dw0zw3gd3YDY1B_yjoRlQ>
-    <xmx:EBZ8Z-9Xc_KzmcY2xUyWoDBOT-M5KWrnqR4xEn3-nngePNqxRcYzVg>
-    <xmx:EBZ8ZxXHV68iJkZZRMLFR88YO3HDBqRNg6kLdIPIK9psSuI2nwTMZA>
-    <xmx:EBZ8Z3czNrWw4GdkWs1x9x0oPWttSO0N6yUq8B2DZK4Ebe-AYSosZg>
-    <xmx:EBZ8Z4egtYbmKqlyR-ohWGPHhSieSb8rio3Pt1oF0ACjD33YzNrBvt4u>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Jan 2025 12:42:39 -0500 (EST)
-Date: Mon, 6 Jan 2025 09:42:38 -0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] rust: alloc: make `ReallocFunc::call` inline
-Message-ID: <Z3wWDgSe5D-Pc1Cf@tardis.local>
-References: <20250105194054.545201-1-gary@garyguo.net>
- <20250105194054.545201-4-gary@garyguo.net>
+        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
+Date: Mon, 6 Jan 2025 10:00:47 -0800
+From: Elliot Berman <elliot.berman@oss.qualcomm.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Gomez <da.gomez@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Pavlu <petr.pavlu@suse.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Elliot Berman <quic_eberman@quicinc.com>, Kees Cook <kees@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
+Message-ID: <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
+References: <20241220174731.514432-1-bigeasy@linutronix.de>
+ <20241220174731.514432-29-bigeasy@linutronix.de>
+ <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250105194054.545201-4-gary@garyguo.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: CCpxw6Nb8SvhLJRlJLx1PzP5lpg3VnLo
+X-Proofpoint-GUID: CCpxw6Nb8SvhLJRlJLx1PzP5lpg3VnLo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501060158
 
-On Sun, Jan 05, 2025 at 07:40:06PM +0000, Gary Guo wrote:
-> This function can be called with different function pointers when
-> different allocator (e.g. Kmalloc, Vmalloc, KVmalloc), however since
-> this function is not polymorphic, only one instance is generated,
-> and function pointers are used. Given that this function is called
-> for any Rust-side allocation/deallocation, performance matters a lot,
-> so making this function inlineable.
+On Thu, Jan 02, 2025 at 04:24:22PM -0800, Sami Tolvanen wrote:
+> Hi Elliot,
 > 
-> This is discovered when doing helper inlining work, since it's discovered
-> that even with helpers inlined, rust_helper_ symbols are still present
-> in final vmlinux binary, and it turns out this function is inhibiting
-> the inlining, and introducing indirect function calls.
+> On Mon, Dec 30, 2024 at 7:33 PM Elliot Berman
+> <elliot.berman@oss.qualcomm.com> wrote:
+> >
+> > On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior wrote:
+> > > __module_address() can be invoked within a RCU section, there is no
+> > > requirement to have preemption disabled.
+> > >
+> > > I'm not sure if using rcu_read_lock() will introduce the regression that
+> > > has been fixed in commit 14c4c8e41511a ("cfi: Use
+> > > rcu_read_{un}lock_sched_notrace").
+> > >
+> >
+> > You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
+> > Regular rcu lock doesn't generate function traces, so the recursive loop
+> > isn't possible.
+> >
+> > I've tested:
+> >  - the current kernel (no recursive loop)
+> >  - Revert back to rcu_read_lock_sched() (fails)
 > 
-> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Which kernel version did you test? I assume something pre-KCFI as
+> arm64 doesn't use this code since v6.1.
+> 
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Ah, thanks for calling me out. I dug a bit more, I thought I was looking
+at a recursive loop in the ftrace buffers, but was actually the expected
+behavior. When I tested on the other configurations, the stm dummy
+driver hadn't kicked in yet by the time I looked at the ftrace. Indeed,
+this function code is not used on arm64.
 
-This should go in even without the first 2 patches, right?
+I experimented with an x86 build as well and I was able to get the hang
+I remember seeing after some tweaks to force a CFI failure. Still,
+guard(rcu)() is okay by me :)
+
+> >  - Your series as-is (no recurisve loop)
+> 
+> Note that this patch only adds a comment to is_module_cfi_trap(), so I
+> wouldn't expect a functional change.
+> 
+
+Agreed I wouldn't expect it to make any issues; I mentioned it for
+completeness sake.
 
 Regards,
-Boqun
-
-> ---
->  rust/kernel/alloc/allocator.rs | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/rust/kernel/alloc/allocator.rs b/rust/kernel/alloc/allocator.rs
-> index 439985e29fbc..aa2dfa9dca4c 100644
-> --- a/rust/kernel/alloc/allocator.rs
-> +++ b/rust/kernel/alloc/allocator.rs
-> @@ -80,6 +80,7 @@ impl ReallocFunc {
->      /// This method has the same guarantees as `Allocator::realloc`. Additionally
->      /// - it accepts any pointer to a valid memory allocation allocated by this function.
->      /// - memory allocated by this function remains valid until it is passed to this function.
-> +    #[inline]
->      unsafe fn call(
->          &self,
->          ptr: Option<NonNull<u8>>,
-> -- 
-> 2.47.0
-> 
+Elliot
