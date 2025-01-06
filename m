@@ -1,155 +1,180 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923171DF74F
-	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 18:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790B11DED5A;
+	Mon,  6 Jan 2025 18:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736186455; cv=none; b=Rvog0XRxj7lUM3oCVtZBDZPV6qQryvhze6Ln+tdjxpks4Chu8tr39wNFgPCpb6U+z+xEE+o0AafBGAoHDqh6S+aW7j1h1tukXeBV5+nbZb1ZiDPFs3OBeq7er5iM6WTPiMQFKV/cvd69dyfiyJIGgFImHIoxK0a9Pch7NhObP6E=
+	t=1736188042; cv=none; b=KRv9xQXxU9ISuukXn4TFyzkkmcGN6MfnOCVgG+dtsRAA+Bj29xwN+3nWqhPK4F3kSeNrjBQn6i5U0fHei51D2BvVdHAjC8rRIN/U9kFb2osVImx0eZPjek647SecwSfAU+qd+7GTwINYrf4Ww2DMZKxLBUuEVE+Ng1uC/g3XC2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736186455; c=relaxed/simple;
-	bh=C/tw2D77F66nxRbbmCdQXH6xlG644LkMa0e1oRlDt0s=;
+	s=arc-20240116; t=1736188042; c=relaxed/simple;
+	bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GU07uXfSqRK3jJveE3T3BqJsv7mYZaEypc0fa1JrH29HsFODc617HVCDOHa3kArCzDJODWD+yhTqzRlpQ5g9XYIuX1cX03IMHsVwX3jZu/oQy9M1AtpHKR1RaikOjwUzvlJhrqlRsUq8lMrdhWW3OBenaj4lJ0xcqBWA695AhMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lQy88ilq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJbEEXOOjO2DjvFOr+Yz+8p8RsIVEKdf6c0AFaDIDsAyzSUQxn7OSkcySYN47ZW9N702fN0sho5zTbg5iqdqSY1NlnN6EqN4csuctbY7gc3aMnJA0z/xhO8zHZpYhMi6oChKEB5Wc+xq18ipiHqDiTI0ckPMiC2dmo1SB67xMDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nivM7HUu; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lQy88ilq"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506A2YtW027074
-	for <llvm@lists.linux.dev>; Mon, 6 Jan 2025 18:00:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=; b=lQy88ilqDlzqL+GY
-	QjMXbWJNWzNE+pzyiXnFKIe/Gby4pM+TT+wDSXe+srfCXcaqFavJDs/Rpz0Y6BAz
-	/ZgVkfKeH4s0cO3BGdMC5IZAlR2gclRS8b8+/q8sc3tl5FyLjvIC/iSP5mogbkLT
-	4AcIqRhJmvamSFF/XdqinujJ2WPYZrG8JFE57MpDqVq1o+2H5R7aiGyb/bFvTFBC
-	U38gBezXgUzuZ/b83/BKPbUYpqybUXoMK/BAH3JsSYi4iKQaxBsyec27HYavXQDw
-	g1ALEWybu+8yuVQJbMZ7Bah4RBPZaNjWWGiyVZ2icrTHlHBM7jv+GgzhWQIrQp4q
-	Oja+5w==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440d2wh20y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 18:00:51 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2166464e236so365072525ad.1
-        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 10:00:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736186451; x=1736791251;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=;
-        b=L/x4O2GJ+p6YdSZHn8sr07ZGlGQVtmLdlkd/yacnxK/2hSDvk7A2lDqsjFECWCpiYp
-         z/ngszMTlaxqN2Wq95AJs6hTojpUJcZChm/0vWKi98vIcctTfQf/EbtTCWEx27wn1eKH
-         j7N2jsvtfaaquRFcXQYQ2tPpDA6h3ubyH/I+XvoJLeYRxU4beY92/bPfHqRSxzd2HS5U
-         UiCtThRDNXNCszrarQ4jY10v0RUdA1VJ5b8HrAmMxjyvyu6/pCLTQqjUFKgGrv5Hhun1
-         m99M+kgCPpkXR2IbDQu+bjENtJmtooE1cOhtzrY1k9xJYBFJ4vAnii63j0LJk+4FLS9l
-         ak2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXaP0OE+iowW0dXbPgyKDkUaE0Q8Eqm9laadjuE0tmmJCDeJb2RIwpjalurKhbEZUy0P9JY@lists.linux.dev
-X-Gm-Message-State: AOJu0YytJci49Ebaxa9ieKFcOA8W/bWueUYvGAeDW+oJvVOimVSsWQeL
-	4BG8V2mL9fFXChK5nObrwoRimS5PfaUQXPw1JuEYOemmFWbeRdbvlhKnh1rdZmc7bB8zfvE4Ctg
-	tz7igI0Q2JmXkByEhagP+F6fVaY6rP8QLQSiKAsqTR8cQN/IwYrCq
-X-Gm-Gg: ASbGncvAbj54SFEHs/p0+UaM9Z8MT5r4ksxXBfWFwAeuj0PIWCVBLQtWtqmcxrtEYzb
-	h45O/vUXNOfBNhhFCOvEJchFnbtYd2V6HQ9jcE+dSD7g75Us6v04ED2zzAP73RcoUvd2TKWiY2C
-	XJcBORv5o7e+yKCyhFFdheQ7it3hV/2couJrSWKfSwromxF9QWJ3jvfzVvGDSgeD+fis3jkFEvY
-	DFZ8rtSptnmA5UWvZV//F9ZrGNwKS0hjhuaEbyGD+GhUTjoT8+94gN/k9ROPqDd+84cQICSUJ8n
-	Rv4EMIjobR3wOLjxKo/cyzuqiCzLK1z+uioP
-X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718635ad.47.1736186450488;
-        Mon, 06 Jan 2025 10:00:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHKxeP0fYXWNRSuBo63GlatOZdUBa1wq+1u6CfOeT7r7LLcU9ZygtK9cUJtqM9KXRbYsaYzoA==
-X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718005ad.47.1736186449960;
-        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
-Received: from hu-eberman-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f7457sm289404095ad.201.2025.01.06.10.00.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
-Date: Mon, 6 Jan 2025 10:00:47 -0800
-From: Elliot Berman <elliot.berman@oss.qualcomm.com>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Gomez <da.gomez@samsung.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Elliot Berman <quic_eberman@quicinc.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
-Message-ID: <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
- <20241220174731.514432-29-bigeasy@linutronix.de>
- <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
- <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nivM7HUu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736188041; x=1767724041;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
+  b=nivM7HUuYfpQxv8Z0FZ0ZibFb5VDHEDvn6gJPH3AlJR6hmMo7bG0BUEh
+   1cTo4WGegJW5RuXGLojP8MnIg32A9vbv4S9mXUYJbeGM8zObMK4i7j0Fs
+   +WeTgzX9rN8s+AVj223NLEfn9I2xvGbCOOEePfGnsjFyqlUuczwT1bRDo
+   OTIF57lC8SV8+0tau+iolgVam8IoDfJjeIupr0V+YgiBgnb5CSzhS1iH9
+   PJnpoMDLslNEoaYXa/x49txZ+dXAeypdUAmQQenKOklRc1P+SUmPijIEv
+   +adn7IjaOtl73//0mKRyOg5zGoqlUxJMVl4CH43mFIZzuez9HWX+bhgyH
+   w==;
+X-CSE-ConnectionGUID: r//vdIsxRMqepiaHl6nk/A==
+X-CSE-MsgGUID: F3OGIRcsT528knPhqC2DLA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="47337760"
+X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
+   d="scan'208";a="47337760"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 10:27:20 -0800
+X-CSE-ConnectionGUID: H4cNptL1RQa/uJfpJZqLsQ==
+X-CSE-MsgGUID: htWPl3GMRWeJn3SLA/Lyqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
+   d="scan'208";a="102317803"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 06 Jan 2025 10:27:18 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tUroq-000Dod-0L;
+	Mon, 06 Jan 2025 18:27:16 +0000
+Date: Tue, 7 Jan 2025 02:26:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tomasz =?utf-8?Q?Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
+	jikos@kernel.org, bentiss@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and
+ supported device ids
+Message-ID: <202501070200.pA9ifqd5-lkp@intel.com>
+References: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
-X-Proofpoint-ORIG-GUID: CCpxw6Nb8SvhLJRlJLx1PzP5lpg3VnLo
-X-Proofpoint-GUID: CCpxw6Nb8SvhLJRlJLx1PzP5lpg3VnLo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- suspectscore=0 phishscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1015 lowpriorityscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501060158
+In-Reply-To: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
 
-On Thu, Jan 02, 2025 at 04:24:22PM -0800, Sami Tolvanen wrote:
-> Hi Elliot,
-> 
-> On Mon, Dec 30, 2024 at 7:33 PM Elliot Berman
-> <elliot.berman@oss.qualcomm.com> wrote:
-> >
-> > On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior wrote:
-> > > __module_address() can be invoked within a RCU section, there is no
-> > > requirement to have preemption disabled.
-> > >
-> > > I'm not sure if using rcu_read_lock() will introduce the regression that
-> > > has been fixed in commit 14c4c8e41511a ("cfi: Use
-> > > rcu_read_{un}lock_sched_notrace").
-> > >
-> >
-> > You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
-> > Regular rcu lock doesn't generate function traces, so the recursive loop
-> > isn't possible.
-> >
-> > I've tested:
-> >  - the current kernel (no recursive loop)
-> >  - Revert back to rcu_read_lock_sched() (fails)
-> 
-> Which kernel version did you test? I assume something pre-KCFI as
-> arm64 doesn't use this code since v6.1.
-> 
+Hi Tomasz,
 
-Ah, thanks for calling me out. I dug a bit more, I thought I was looking
-at a recursive loop in the ftrace buffers, but was actually the expected
-behavior. When I tested on the other configurations, the stm dummy
-driver hadn't kicked in yet by the time I looked at the ftrace. Indeed,
-this function code is not used on arm64.
+kernel test robot noticed the following build errors:
 
-I experimented with an x86 build as well and I was able to get the hang
-I remember seeing after some tweaks to force a CFI failure. Still,
-guard(rcu)() is okay by me :)
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on linus/master v6.13-rc6 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> >  - Your series as-is (no recurisve loop)
-> 
-> Note that this patch only adds a comment to is_module_cfi_trap(), so I
-> wouldn't expect a functional change.
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Tomasz-Paku-a/HID-pidff-Convert-infinite-length-from-Linux-API-to-PID-standard/20250106-033931
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20250105193628.296350-11-tomasz.pakula.oficjalny%40gmail.com
+patch subject: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and supported device ids
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/reproduce)
 
-Agreed I wouldn't expect it to make any issues; I mentioned it for
-completeness sake.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501070200.pA9ifqd5-lkp@intel.com/
 
-Regards,
-Elliot
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hid/hid-universal-pidff.c:11:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/hid-universal-pidff.c:90:16: error: incompatible function pointer types assigning to 'void (*)(struct hid_device *, __u32)' (aka 'void (*)(struct hid_device *, unsigned int)') from 'int (struct hid_device *, __u32)' (aka 'int (struct hid_device *, unsigned int)') [-Wincompatible-function-pointer-types]
+      90 |         init_function = hid_pidff_init_with_quirks;
+         |                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/hid-universal-pidff.c:97:8: error: assigning to 'int' from incompatible type 'void'
+      97 |         error = init_function(hdev, id->driver_data);
+         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 2 errors generated.
+
+
+vim +90 drivers/hid/hid-universal-pidff.c
+
+    66	
+    67	
+    68	/*
+    69	 * Check if the device is PID and initialize it
+    70	 * Add quirks after initialisation
+    71	 */
+    72	static int universal_pidff_probe(struct hid_device *hdev,
+    73					 const struct hid_device_id *id)
+    74	{
+    75		int error;
+    76		error = hid_parse(hdev);
+    77		if (error) {
+    78			hid_err(hdev, "HID parse failed\n");
+    79			goto err;
+    80		}
+    81	
+    82		error = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
+    83		if (error) {
+    84			hid_err(hdev, "HID hw start failed\n");
+    85			goto err;
+    86		}
+    87	
+    88		// Check if HID_PID support is enabled
+    89		void (*init_function)(struct hid_device *, __u32);
+  > 90		init_function = hid_pidff_init_with_quirks;
+    91	
+    92		if (!init_function) {
+    93			hid_warn(hdev, "HID_PID support not enabled!\n");
+    94			return 0;
+    95		}
+    96	
+  > 97		error = init_function(hdev, id->driver_data);
+    98		if (error) {
+    99			hid_warn(hdev, "Force Feedback initialization failed\n");
+   100			goto err;
+   101		}
+   102	
+   103		hid_info(hdev, "Universal pidff driver loaded sucesfully!");
+   104	
+   105		return 0;
+   106	err:
+   107		return error;
+   108	}
+   109	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
