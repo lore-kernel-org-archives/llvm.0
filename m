@@ -1,185 +1,330 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F791CDFC2;
-	Mon,  6 Jan 2025 12:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240601514F6
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 15:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736165090; cv=none; b=EXY+AIFW0fdRFXfu5CWWP0/ARSiaJHGrP9x2Sp/x1NINm/3w3U2AGcu/XCiu9gbB3NaKMVteFGC/91cj37Z0ChzKQoVJqPImLTDYKYdZPW4RFlChCUsC2dgK1LCqLVLkSFmwWDhOiIlllPAU+MU8UOFYxeHm48/F93a3kZAKoIg=
+	t=1736176967; cv=none; b=jWLFn/U68+EPH8kXxde3zl4HUKYOsJCeoL+HMiC4TK8K8iPz5ogY0lXDMaqVIfdUUAHuw+wDkIu06bDixgpDSzF2UzdSHDR90MscE8psDJ7vGG8rol6dk9nx6MGHmvrAhw4gIVg+V4jXEF+C4bG/TxjR+rcotBLCstmuyOU/5rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736165090; c=relaxed/simple;
-	bh=NfJHdrBGwxLD4KXgBvfFDw2dyyxkbKlKk/G9mt3LZRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KFiF/8GR2uJCj34RV7hLCd7JwTygX32anCbRYdR2zVFHbsUjD4WeUXFjsODPKbgR8Ej9AraiVf/uHXsXadcfyP0nEbZ5vRMvGL1pKBrwWBaySqKhaJ2M2rer/MP69+fpY+oGqAGBqa9G+rbjiPW4Kvrl42ViWww8HbC2igvhzuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SiVxF5hm; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736176967; c=relaxed/simple;
+	bh=TPM09t71Gar0RR26L0B7e+mYMDtYgPmhg8NSDi6znNQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B2kFlBleHgNxkcqTA1ENDJBt7BbbSqa5ObtQ4gwpTV4nQKABD+fwkJ1uoUfTMrc8cj6I8AYHylS5F0/9cXQxY3VWcseNsvTX6Vucm6zW28Bss8h4wuP/V4SWZ7ie2CIzYs9MrQ0eVxU9axhbDXZTGBM+g1gpPaTmJOamYe9wuDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q4lwEgCW; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SiVxF5hm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736165088; x=1767701088;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NfJHdrBGwxLD4KXgBvfFDw2dyyxkbKlKk/G9mt3LZRg=;
-  b=SiVxF5hmZ7VLe4y8F3Af+ZckiwMBVYLxBxJj3ywZbWhmD6rHnZORcDOa
-   vWJo5KFO+WSNvPGdWPntLrXqhJuWwWyLS+3jmAR1/FMKR/+9lZYygMfOt
-   pCCH4tDJppnLjvP5ojCMGUR1erfaEhsnBsL5m3jXTg4HisK7KBmIF4/Yf
-   wcpY0KGH6t6Y46v/CX3cvrlJXGIoJj8PA4LiQ3AVxZdM+oThgKWSJxXrR
-   u7q28WhDqr0LkW3C3Qn92dRfhDu+kckLl6cjYbAGrdFp3lyNzaoULrERq
-   IB2OspJwgxt04G9QSBjxqVI/8eGJb81I4oSCNbxZf/oVGUi6S/OQxGy2p
-   A==;
-X-CSE-ConnectionGUID: 7rWBVPYBTVux5AUDhL37kQ==
-X-CSE-MsgGUID: ivUvSMAgSVqwpUbgvgKNkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="40081297"
-X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
-   d="scan'208";a="40081297"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 04:04:48 -0800
-X-CSE-ConnectionGUID: kR/KRLXITESOX5ZmQ2HLXw==
-X-CSE-MsgGUID: lzy1oEUZT2uwsB8DV3SmAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
-   d="scan'208";a="102320508"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 06 Jan 2025 04:04:45 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tUlqd-000CZ5-1K;
-	Mon, 06 Jan 2025 12:04:43 +0000
-Date: Mon, 6 Jan 2025 20:03:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chukun Pan <amadeus@jmu.edu.cn>, Vinod Koul <vkoul@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Heiko Stuebner <heiko@sntech.de>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Jianfeng Liu <liujianfeng1994@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: [PATCH 1/1] phy: rockchip: naneng-combphy: compatible with old
- DT for RK3568
-Message-ID: <202501061921.ToV59CNC-lkp@intel.com>
-References: <20250106070000.605284-1-amadeus@jmu.edu.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q4lwEgCW"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ef70c7efa5so16769725a91.2
+        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 07:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736176965; x=1736781765; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WGQ+r7vqUQnRNc23J7HWAq90M1xR5Zs0BJ0WUhbygV8=;
+        b=Q4lwEgCWjweSiOS4iqJ+BHE9QUj0dAFGMy5pPy8mEtr9qYVQJQCQX+Gq4COrNBjnj8
+         SXibLT0hb9/ysyJFI+K45dMQtVPlHPtCVkhvfuY7caMmxSQGx3oaEpz0tPueY7RMZx22
+         dZm59TRtaz/+rTVjqncgFnJV1Vu0c2YRKN+J+jXfHryOYFsRlcaP2R5plZegf81AyTKn
+         1dghSYSsehQO4BeiMYw2iYKyusfEkriESXV5kFOC2mh2L4JALKTvifVlLAgb2Y6bxXqI
+         DBYLJo1iFhN3p5kVUaD4zo1XwBi64CM27X4V7fMGcc25yPEs0AbWuxp69/nRGmuf9OxS
+         KohQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736176965; x=1736781765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WGQ+r7vqUQnRNc23J7HWAq90M1xR5Zs0BJ0WUhbygV8=;
+        b=BWB80MJER5/od0KXygChVw0F/z5Aws7ftaVVlP8xIoC+9LrdMTn0dvcxJimn5AT1hz
+         tqatjn3xWx6vhgDI2jrYecqO3gATax8UmOcHT3QBEsoXgZF0f3b3wR0psGV9vhPW/hta
+         /waVutP2M4xUvlU55MVVACShfS0zYimZvJQfwV5CgYav/0Tb0X25sdJ0bRwkfB16+IN8
+         x8Z/xv/VtjQiCL+BLW/ofUKK2+B1o64YFva+pIKJ+P8WCD4eZiL9hIuSCgCNqEPLjwLa
+         /tiVoW3/SYfu0VGwbUqzBL3P4SehBlze+Vs2NuqrZ5MQgTL0Y32JHh8VObaNW5HjiaQA
+         7kXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxIyas4DrFV7Vd96Slxqf0Xs324RQVqA5xshmDrGT5EUt0H+BKbkyrYlLSXk3T0dXv7gXG@lists.linux.dev
+X-Gm-Message-State: AOJu0YweYLq1UwG+b9q8DST46DhyS74FTDmXfaV0kiaKlvEISVOdhzUr
+	4/ZKAgCn0O7a1yL/ir3fw1ZORnQRESA6OJLgWbSs5pd363vvpwkK9BJi7NbvM/2bPUEKqvNCRFF
+	zuAoc6yfYaSTgZfkoZsdHZZ8cMAA=
+X-Gm-Gg: ASbGncvobirrqbt3B1OjQNyAaixIncIXOgo958B52NKC0aSWiWTL8JUdSLWZrriDrP7
+	k6FKjypiw3azMtmdrqWWJ5acuDOmNlzsr+/H+l34=
+X-Google-Smtp-Source: AGHT+IHNV6t/RuCj0nlxoSW4YsIl2uVS7K+lFjl5wPoBhxAWnUePntKbC0FpxYRocTQPkdjlgMlJoz/g+ddJ7DpRwsk=
+X-Received: by 2002:a17:90b:3cc6:b0:2ee:a04b:92d3 with SMTP id
+ 98e67ed59e1d1-2f452eeda37mr76174111a91.34.1736176965234; Mon, 06 Jan 2025
+ 07:22:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106070000.605284-1-amadeus@jmu.edu.cn>
+References: <20241127172908.17149-1-andybnac@gmail.com> <87frncmkre.fsf@all.your.base.are.belong.to.us>
+ <20241223221556.1f5e598f@gandalf.local.home> <CAFTtA3Nb66VZGoMVfrVs6cYLorjbSX8GmThyKB1FFvfg2HknpA@mail.gmail.com>
+In-Reply-To: <CAFTtA3Nb66VZGoMVfrVs6cYLorjbSX8GmThyKB1FFvfg2HknpA@mail.gmail.com>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Mon, 6 Jan 2025 23:22:34 +0800
+Message-ID: <CAFTtA3NjHibAJcdfLRD2ybf=Lb_D7OtR0V_S+3TVPVH_543cdQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] riscv: ftrace: atmoic patching and preempt improvements
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, bjorn@rivosinc.com, 
+	puranjay12@gmail.com, alexghiti@rivosinc.com, yongxuan.wang@sifive.com, 
+	greentime.hu@sifive.com, nick.hu@sifive.com, nylon.chen@sifive.com, 
+	tommy.wu@sifive.com, eric.lin@sifive.com, viccent.chen@sifive.com, 
+	zong.li@sifive.com, samuel.holland@sifive.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Chukun,
+Andy Chiu <andybnac@gmail.com> =E6=96=BC 2024=E5=B9=B412=E6=9C=8830=E6=97=
+=A5 =E9=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=883:08=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> Steven Rostedt <rostedt@goodmis.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8824=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=8811:15=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > On Wed, 27 Nov 2024 22:25:57 +0100
+> > Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wrote:
+> >
+> > > Adding Steven.
+> >
+> > And this has been in my draft folder for almost a month :-p
+> >
+> > I kept coming to this email, but then got distracted by something else.
+> >
+> > >
+> > > Andy Chiu <andybnac@gmail.com> writes:
+> > >
+> > > > This series makes atmoic code patching possible in riscv ftrace. A
+> > > > direct benefit of this is that we can get rid of stop_machine() whe=
+n
+> > > > patching function entries. This also makes it possible to run ftrac=
+e
+> > > > with full kernel preemption. Before this series, the kernel initial=
+izes
+> > > > patchable function entries to NOP4 + NOP4. To start tracing, it upd=
+ates
+> > > > entries to AUIPC + JALR while holding other cores in stop_machine.
+> > > > stop_machine() is required because it is impossible to update 2
+> > > > instructions, and be seen atomically. And preemption must have to b=
+e
+> > > > prevented, as kernel preemption allows process to be scheduled out =
+while
+> > > > executing on one of these instruction pairs.
+> > > >
+> > > > This series addresses the problem by initializing the first NOP4 to
+> > > > AUIPC. So, atmoic patching is possible because the kernel only has =
+to
+> > > > update one instruction. As long as the instruction is naturally ali=
+gned,
+> > > > then it is expected to be updated atomically.
+> > > >
+> > > > However, the address range of the ftrace trampoline is limited to +=
+-2K
+> > > > from ftrace_caller after appplying this series. This issue is expec=
+ted
+> > > > to be solved by Puranjay's CALL_OPS, where it adds 8B naturally ali=
+gn
+> > > > data in front of pacthable functions and can  use it to direct exec=
+ution
+> > > > out to any custom trampolines.
+> > > >
+> > > > The series is composed by three parts. The first part cleans up the
+> > > > existing issues when the kernel is compiled with clang.The second p=
+art
+> > > > modifies the ftrace code patching mechanism (2-4) as mentioned abov=
+e.
+> > > > Then prepare ftrace to be able to run with kernel preemption (5,6)
+> > > >
+> > > > An ongoing fix:
+> > > >
+> > > > Since there is no room for marking *kernel_text_address as notrace[=
+1] at
+> > > > source code level, there is a significant performance regression wh=
+en
+> > > > using function_graph with TRACE_IRQFLAGS enabled. There can be as m=
+uch as
+> > > > 8 graph handler being called in each function-entry. The current
+> > > > workaround requires us echo "*kernel_text_address" into
+> > > > set_ftrace_notrace before starting the trace. However, we observed =
+that
+> > > > the kernel still enables the patch site in some cases even with
+> > > > *kernel_text_address properly added in the file While the root caus=
+e is
+> > > > still under investagtion, we consider that it should not be the rea=
+son
+> > > > for holding back the code patching, in order to unblock the call_op=
+s
+> > > > part.
+> > >
+> > > Maybe Steven knows this from the top of his head!
+> > >
+> > > As Andy points out, "*kernel_text_address" is used in the stack
+> > > unwinding on RISC-V. So, if you do a tracing without filtering *and*
+> > > TRACE_IRQFLAGS, one will drown in traces.
+> >
+> > I tested set_ftrace_notrace on x86 and the function graph tracer does h=
+onor
+> > it. I wonder if there's a kernel
+>
+> After checking the log buffer, I can confirm that riscv does also
+> honor set_ftrace_notrace. It does not print out "*kernel_text_address"
+> in the trace buffer. Sorry for not making this clear.
+>
+> However, the problem is that the patch sites "*kernel_text_address"
+> were enabled, allowing the code flow into ftrace and parts of fgraph.
+> In particular, with TRACE_IRQFLAGS enabled, the functions are called
+> extensively, causing the significant slow down.
+>
+> IIUC, it is reasonable to enable a patch site if there is at least one
+> tracing instance that request the function. However, in another
+> experiment, the patch sites of "*kernel_text_address"  are enabled
+> even when all instances have them disabled. Here is a way to reproduce
+> it:
+>
+> cd /sys/kernel/
+> mount -t tracefs t tracing/
+> cd tracing/
+> mkdir instances/1
+> mkdir instances/2
+> cd instances/1/
+> echo *kernel_text_address > set_ftrace_notrace
+> echo *sched* > set_ftrace_filter # this is just to make the kernel
+> more responsive
+> cat set_ftrace_notrace
+> echo function_graph > current_tracer
+> cd ../2/
+> echo *kernel_text_address > set_ftrace_notrace
+> cat set_ftrace_notrace
+> echo function_graph > current_tracer
+>
+> To figure out this problem, it is probably worth trying to understand
+> why the patch site is enabled after the above sequence:
+>
+> It seems like the ftrace_ops being passed into
+> __ftrace_hash_rec_update() at the start of the second tracer has an
+> empty notrace hash. This leads to the eventual activation of the patch
+> sites. However, graph_ops does not have the empty notrace hash when
+> the user starts the first graph tracer. I am trying to understand this
+> part of the code, and the relationship between graph_ops and ops in
+> the fgraph_array.
 
-kernel test robot noticed the following build errors:
+Here might be the possible reason: the updated notrace hash for
+Manager's ops is not reflecting the intersections of all users'
+notrace hashes. According to the comment section at
+ftrace_startup_subops():
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.13-rc6 next-20250106]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+         *   o If either notrace_hash is empty then the final stays empty
+         *      o Otherwise, the final is an intersection between the hashe=
+s
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chukun-Pan/phy-rockchip-naneng-combphy-compatible-with-old-DT-for-RK3568/20250106-150311
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250106070000.605284-1-amadeus%40jmu.edu.cn
-patch subject: [PATCH 1/1] phy: rockchip: naneng-combphy: compatible with old DT for RK3568
-config: arm64-randconfig-004-20250106 (https://download.01.org/0day-ci/archive/20250106/202501061921.ToV59CNC-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250106/202501061921.ToV59CNC-lkp@intel.com/reproduce)
+It seems like wrong arguments were passed into the intersect_hash().
+Instead of user's notrace hash, the filter hash was passed into the
+function. As a result, even if the function is marked as notrace in
+all ftrace instances, the notrace hash in Manager's ops would not
+contain notrace function, leading to enabled call site at the
+notrace'd function. If I understand correctly, we should pass notrace
+hash instead of filter hash, as shown in the following modification.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501061921.ToV59CNC-lkp@intel.com/
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 4c28dd177ca6..3a194559d220 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3515,18 +3515,17 @@ int ftrace_startup_subops(struct ftrace_ops
+*ops, struct ftrace_ops *subops, int
+            ftrace_hash_empty(subops->func_hash->notrace_hash)) {
+                notrace_hash =3D EMPTY_HASH;
+        } else {
+-               size_bits =3D max(ops->func_hash->filter_hash->size_bits,
+-                               subops->func_hash->filter_hash->size_bits);
++               size_bits =3D max(ops->func_hash->notrace_hash->size_bits,
++                               subops->func_hash->notrace_hash->size_bits)=
+;
+                notrace_hash =3D alloc_ftrace_hash(size_bits);
+                if (!notrace_hash) {
+-                       free_ftrace_hash(filter_hash);
++                       free_ftrace_hash(notrace_hash);
+                        return -ENOMEM;
+                }
 
-All errors (new ones prefixed by >>):
+-               ret =3D intersect_hash(&notrace_hash, ops->func_hash->filte=
+r_hash,
+-                                    subops->func_hash->filter_hash);
++               ret =3D intersect_hash(&notrace_hash,
+ops->func_hash->notrace_hash,
++                                    subops->func_hash->notrace_hash);
+                if (ret < 0) {
+-                       free_ftrace_hash(filter_hash);
+                        free_ftrace_hash(notrace_hash);
+                        return ret;
+                }
 
-   In file included from drivers/phy/rockchip/phy-rockchip-naneng-combphy.c:12:
-   In file included from include/linux/phy/phy.h:17:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/phy/rockchip/phy-rockchip-naneng-combphy.c:314:21: error: incompatible pointer to integer conversion passing 'struct reset_control *' to parameter of type 'long' [-Wint-conversion]
-     314 |         if (IS_ERR(ERR_PTR(priv->phy_rst)))
-         |                            ^~~~~~~~~~~~~
-   include/linux/err.h:39:48: note: passing argument to parameter 'error' here
-      39 | static inline void * __must_check ERR_PTR(long error)
-         |                                                ^
-   3 warnings and 1 error generated.
+I can confirm that callsites at *kernel_text_address are no longer
+patched after applying the above patch, if they are set as notrace in
+each ftrace instance. I can send out a fix patch if this sounds like a
+proper fix.
 
+>
+> >
+> > >
+> > > E.g. the ftrace selftest:
+> > >   | $ ./ftracetest -vvv test.d/ftrace/fgraph-multi.tc
+> > >
+> > > will generate a lot of traces.
+> > >
+> > > Now, if we add:
+> > > --8<--
+> > > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-mult=
+i.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > > index ff88f97e41fb..4f30a4d81d99 100644
+> > > --- a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+> > > @@ -84,6 +84,7 @@ cd $INSTANCE2
+> > >  do_test '*rcu*' 'rcu'
+> > >  cd $WD
+> > >  cd $INSTANCE3
+> > > +echo '*kernel_text_address' > set_ftrace_notrace
+> > >  echo function_graph > current_tracer
+> > >
+> > >  sleep 1
+> > > -->8--
+> > >
+> > > The graph tracer will not honor the "set_ftrace_notrace" in $INSTANCE=
+3,
+> > > but still enable the *kernel_text_address traces. (Note that there ar=
+e
+> > > no filters in the test, so *all* ftrace recs will be enabled.)
+> > >
+> > > Are we holding the graph tracer wrong?
+> >
+> > What do you get when you do:
+> >
+> >   # grep kernel_text_address available_filter_functions
+> >
+> > ?
+>
+> We get:
+> kernel_text_address
+> __kernel_text_address
+>
+> >
+> > >
+> > >
+> > > Happy thanksgiving!
+> > > Bj=C3=B6rn
+> >
+> > And Merry Christmas!
+> >
+> > -- Steve
+> >
+>
+> And Happy New Year!
+>
+>
+> Andy
 
-vim +314 drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
-
-   274	
-   275	static int rockchip_combphy_parse_dt(struct device *dev, struct rockchip_combphy_priv *priv)
-   276	{
-   277		int i;
-   278	
-   279		priv->num_clks = devm_clk_bulk_get_all(dev, &priv->clks);
-   280		if (priv->num_clks < 1)
-   281			return -EINVAL;
-   282	
-   283		priv->refclk = NULL;
-   284		for (i = 0; i < priv->num_clks; i++) {
-   285			if (!strncmp(priv->clks[i].id, "ref", 3)) {
-   286				priv->refclk = priv->clks[i].clk;
-   287				break;
-   288			}
-   289		}
-   290	
-   291		if (!priv->refclk) {
-   292			dev_err(dev, "no refclk found\n");
-   293			return -EINVAL;
-   294		}
-   295	
-   296		priv->pipe_grf = syscon_regmap_lookup_by_phandle(dev->of_node, "rockchip,pipe-grf");
-   297		if (IS_ERR(priv->pipe_grf)) {
-   298			dev_err(dev, "failed to find peri_ctrl pipe-grf regmap\n");
-   299			return PTR_ERR(priv->pipe_grf);
-   300		}
-   301	
-   302		priv->phy_grf = syscon_regmap_lookup_by_phandle(dev->of_node, "rockchip,pipe-phy-grf");
-   303		if (IS_ERR(priv->phy_grf)) {
-   304			dev_err(dev, "failed to find peri_ctrl pipe-phy-grf regmap\n");
-   305			return PTR_ERR(priv->phy_grf);
-   306		}
-   307	
-   308		priv->enable_ssc = device_property_present(dev, "rockchip,enable-ssc");
-   309	
-   310		priv->ext_refclk = device_property_present(dev, "rockchip,ext-refclk");
-   311	
-   312		priv->phy_rst = devm_reset_control_get(dev, "phy");
-   313		/* fallback to old behaviour */
- > 314		if (IS_ERR(ERR_PTR(priv->phy_rst)))
-   315			priv->phy_rst = devm_reset_control_array_get_exclusive(dev);
-   316	
-   317		if (IS_ERR(priv->phy_rst))
-   318			return dev_err_probe(dev, PTR_ERR(priv->phy_rst), "failed to get phy reset\n");
-   319	
-   320		return 0;
-   321	}
-   322	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Andy
