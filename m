@@ -1,173 +1,163 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0471DED79;
-	Mon,  6 Jan 2025 17:29:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0A21DED4A
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 17:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736184587; cv=none; b=lfFm4b4cJTMBT8GBpKaW2ona9GNQHSJw8x0UN8/8EltFjgl+9vt2Ml90E6SXHkXDPxld3MAcbJXHupWe6F/YABBr2j/J0qDXIITpdiB8nSUQpwtse2RSxmq2Rq0K8MIDhIVBnlj80+3SqsI+uy1IxzpHKGnj6vQPzSoaWGUuCxA=
+	t=1736185364; cv=none; b=WfpDS5l6feYFZeTCyCXSZFIYhbBmnVADhBTjXMVYD9bSnwZ/p52M0xqAZvGpJLUfWcNxN3ht6SZRykMIxnmOYznYBfakAxKulYnbRZsubP+GLXguYPbhGpahGVytV/bQck4LpGCKXF/sruUQDIbCNouGzjn9wi9K7qr5s0+enkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736184587; c=relaxed/simple;
-	bh=mN2Rqk7LFGOVDpFVo3Ijud0gGQREIuQiJPT/ANYxmoY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iGORJfe4yXjASVpNARNTRrqb9VhAqqTR7lCAOdTholevRCzWmqstfwoexPnUiu2k2VWJauoHDBQkpGFsN/roplen7t18qs/xc6UkiHr5BkSzzctWV5l11UZtaKNzseoWHKtnlWJD6zy6+Tkkk4WRtUUhtzfmnDM36Jnzv8K9aV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfi82iF6; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1736185364; c=relaxed/simple;
+	bh=euNe+uI/PgOIa7aGEaXUnViMhKcy7CDB1HKJkQabzVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uqxt1Glnlqf85Xp7vSd+l+2vreTsAaPmfDOM/gJoeukXcYIN00tHL/VMMag1uH+9WOLqA+hiEi8amv4jaeQtgju8l5J9LZLquOUukz5WuqO77AMItZ+uoEktHbGg7nzrra+OJKsDGM+FztWmWfutpq1fEHvxHsPHvgg7yLF6jIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ScGbYC6a; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfi82iF6"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2f45526dea0so2921353a91.1;
-        Mon, 06 Jan 2025 09:29:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ScGbYC6a"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6f1be1daeso1371973085a.0
+        for <llvm@lists.linux.dev>; Mon, 06 Jan 2025 09:42:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736184585; x=1736789385; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736185361; x=1736790161; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vBoNhSu6q49cqdqVQhKrU93NZBtBZPk5jCQdSRfDNk8=;
-        b=bfi82iF6gyoihWqSC+Tfj0F65lxDYFK3fTq2jCXS9g//IqfDZwPQtScc4wAGXDuzKK
-         15ArOh1FO3pB9EgJ2uE23ZKkAZiszF+WDianZGWlXATPGLoohy9WB81v8cPbqvKroa9T
-         2eGpMMjBjlc7g3+F350TdfzyEtGkwRWtF/py9R89gJgKo6V902BUOFapG5PCscc9mrnE
-         kgjZMAP+FS+yVU3ssAoQu/+M/KKlkUEAn8XL/O2L0PVwXVtex7ylK/LoL8TmaX2GYG0r
-         bKuI8fOti9c7twEnb/T8Py2U/4zggXQG2UoB6gO4+IWQqTKqyglrdWcV5kK7hrx4wCyx
-         qgkw==
+        bh=uQuQO9Rm3yTV+CxAoCi/zzgut6k6eBAAVPLnTwUskl4=;
+        b=ScGbYC6aVeRuh3Tz3dV5fX8Icg2R6GIc0BXjo1n7SEAvfX5/r9ObR7KRZnwAfEchcU
+         zhJ2Opbvmn1v1YUYjf0oHSHWe3IVodfb7mlyB55pMciu6qI/AfNdgLCDbvTvVHpZWeZt
+         bs1VIAJMSNV+85PbPzm567ueFVxFOe9yWpQa7v8ZM0YRG+ZVqBgaok+OF7Id8RWGRyJk
+         WijOLEuXMNbIsSfy+u2F/bXy8X630fyINzno8qdJUdJnDXYXPja/18C+7pK9AY0eT/Cy
+         AsDo0H7JkhA+D/jKtQUQp6fOhbFz+iUpgB3cpmm6e10eC0eTF2G9tD09vvLe0X7JLNhP
+         HkuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736184585; x=1736789385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1736185361; x=1736790161;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vBoNhSu6q49cqdqVQhKrU93NZBtBZPk5jCQdSRfDNk8=;
-        b=A6F1hTeIsipSJCgb8H2GTkdy9xWArhXYXEVA7pZv7U7bUE8xydBQ6hW2HMfnaIoGIE
-         OEAHp6M/TyZZa6fTsWvqmnYn2ujHmqQWyCq2UrkFXgp3fu24cJqMgiwpHQG7s9O64g0R
-         HoDdFVkbUGPWMOfmDuCdkDDI0Rk42jJjIgpaWkMKc/KWQ+MTJtkBys1MemEdS2rUPtlt
-         08LlYqNPHLo12MaxRZ2VLkdIkDC1GpmgAdX8ZVUcXlk2o2sfPHhpIhAsgy/rUlGr8t7g
-         ZG0KrA/iAnmpUmGtaSzquvlWo5KTmiJ0uGIA/lPHDgxxbc/XYrKNQ5UFlq7bsht1g6hh
-         xFCA==
-X-Forwarded-Encrypted: i=1; AJvYcCUpXxhCUqJI1Urf8kff4taBuhV6pzdAiegy+n6uLmGYgr5Crvc6/oLANDIr8cOGhnqVoDOZh4P0Hw==@lists.linux.dev, AJvYcCV46GQrIzA4hoL8E8340tF6baFm+EFEBmAHXYpDqf8ldKqsV2OaHyww9XZUE4MwxvY8emkH@lists.linux.dev
-X-Gm-Message-State: AOJu0YwiqADyPtW16JV5w1SWl1YJNkaWEBFxKM5d6T+5e47+RQf8Hqk7
-	goKOrJRIUgRbhPJK71xKULY1chGpfND+l27zlurWNiABud30yHqapjS33B8AcBM5Kc+TtVZalrK
-	ec1VPUFnJmudGFfMMcLtx4rF5u5w=
-X-Gm-Gg: ASbGncvtrvn5348XQdVUz1M/lsQJ24u50DRWg2nuGvEdz3xhFowwH4+Vdw59iOb8Kkw
-	XDTMETWv+hIjwBJfPax7B5WDYO2TclFf5R9yiNg==
-X-Google-Smtp-Source: AGHT+IHCcADNAqOOaN+ufllc9x/Tbyw4zJm26vrtFwMVXoU/ZabvIUGlzJgCdr6YqtB+H/RX0NBzjQqvbNL5EVjm2+0=
-X-Received: by 2002:a17:90b:2b8f:b0:2ea:853a:99e0 with SMTP id
- 98e67ed59e1d1-2f452ec6f12mr33610613a91.5.1736184584899; Mon, 06 Jan 2025
- 09:29:44 -0800 (PST)
+        bh=uQuQO9Rm3yTV+CxAoCi/zzgut6k6eBAAVPLnTwUskl4=;
+        b=v4ydUHyUysc+kMJZ9+kzfA7pM3pVEGY9PQVeXLEzY/3EH0+m4Ls9EFiDVCo0F2gEpS
+         C5adr7AC1tLpgf+4uIyJzxnzhSpNENiKgshtXt3vbixmAAMBR0XPSx3DLbiUlB6CJJLO
+         hAgXG3WJroRsLTxSaBgSBU2YxT7SqtUYbIUZ285KErO2jCydK5RwNRnyk0Pm68Ql8D5o
+         2Io9xEeHa9F6IjHAndUNafd5wadI7ZwssiqokLEsy135UTZtwKWXzvezys0iasBewfOY
+         UU58U9SkMBYqvMKZXlKYVcN3DTyPI0aLfxi2NIdJvEiw/q+8m9ewyNDgH36JTte3/cI0
+         3REA==
+X-Forwarded-Encrypted: i=1; AJvYcCXt0bhmcQI0vnxI/HXEGhhHgfCMA93cGs24RW/edQbDBLEOSjF+gIJLEoaYUxWgsw6BiDbS@lists.linux.dev
+X-Gm-Message-State: AOJu0YwbMXqucuRuPOmtFs4Q//VQ45zYkVJ3t+2LehpImU/ce1Q8FHx2
+	KDZVKnabKkB1o7DCnuHnhPf2LndR4jtYCgau50lLujnx5p3NXpwA
+X-Gm-Gg: ASbGncsAjWZRxjnq3OyzoNBd+uAXOrj/Deene3306cMTPYKxtAWQeyWeSTN8RycYDwS
+	3H528n5OdDwGNuqlecivQoUtZn8ixhwb0eU1riN8Hv7Th76b/4oyczW7Si+T2L8iv+4mFo8ojhk
+	Q08wjkQyNR201xoAEsUymS9UQwlql19Fyi8Pp2jItpOT0k4u7QL6fAf2tcEaKRPjy6Z6xucHGem
+	8DTiR7OJLwzmuNM+TIWxs+N5ydNAXiZ2JEc2ZBTZ+3biFwiL2MzsazSFYyloyVaKprANVAe56Q0
+	249A0sg4WiU7RDN/+gS9LkhaqJ3VXfU/k6pQ1QuID87WOP8=
+X-Google-Smtp-Source: AGHT+IEHv9MpzBGIYb2QQv8o4gZu+xwb/nICclZ5JDGhNewocsxJm40gIGUHKlkceb1Ekth/oBjqmQ==
+X-Received: by 2002:a05:620a:618e:b0:7b7:342:a0a5 with SMTP id af79cd13be357-7b9ba821e36mr10703968485a.55.1736185361368;
+        Mon, 06 Jan 2025 09:42:41 -0800 (PST)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2e89a4sm1522946485a.50.2025.01.06.09.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 09:42:40 -0800 (PST)
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 35B8F1200043;
+	Mon,  6 Jan 2025 12:42:40 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Mon, 06 Jan 2025 12:42:40 -0500
+X-ME-Sender: <xms:EBZ8Z-v6AwC8fQKDhN1HuuB72X7Kop6SL_YD66aVN3NpMltcfojvsQ>
+    <xme:EBZ8ZzcUu_dMqeD-FYwkNa_y1UcXMFc6-Ytb6VnN2cvtOBwLnrettKYydVuw9GAzl
+    fPaqNEgrosLmdYPEw>
+X-ME-Received: <xmr:EBZ8Z5xd5drcbXkjx01Auco-8QaqvoCiuke6lONrrZ9CmUE6UJqGztmR_Uk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegtddguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
+    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
+    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
+    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
+    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
+    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedujedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpd
+    hrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgig
+    rdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopegsjhhorhhnfegpghhhse
+    hprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopegsvghnnhhordhlohhsshhinhes
+    phhrohhtohhnrdhmvgdprhgtphhtthhopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghp
+    thhtohepthhmghhrohhsshesuhhmihgthhdrvgguuhdprhgtphhtthhopehnrghthhgrnh
+    eskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:EBZ8Z5Nvdh76sXizqpj0pD9txl_1jHBA6dw0zw3gd3YDY1B_yjoRlQ>
+    <xmx:EBZ8Z-9Xc_KzmcY2xUyWoDBOT-M5KWrnqR4xEn3-nngePNqxRcYzVg>
+    <xmx:EBZ8ZxXHV68iJkZZRMLFR88YO3HDBqRNg6kLdIPIK9psSuI2nwTMZA>
+    <xmx:EBZ8Z3czNrWw4GdkWs1x9x0oPWttSO0N6yUq8B2DZK4Ebe-AYSosZg>
+    <xmx:EBZ8Z4egtYbmKqlyR-ohWGPHhSieSb8rio3Pt1oF0ACjD33YzNrBvt4u>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Jan 2025 12:42:39 -0500 (EST)
+Date: Mon, 6 Jan 2025 09:42:38 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Gary Guo <gary@garyguo.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] rust: alloc: make `ReallocFunc::call` inline
+Message-ID: <Z3wWDgSe5D-Pc1Cf@tardis.local>
+References: <20250105194054.545201-1-gary@garyguo.net>
+ <20250105194054.545201-4-gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
-In-Reply-To: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Mon, 6 Jan 2025 12:29:32 -0500
-Message-ID: <CADnq5_Pun+zN1=B0eFMw1w8k_oD3fw626SdaEug24YRg8aOLKw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Increase sanitizer frame larger than
- limit when compile testing with clang
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Chaitanya Dhere <chaitanya.dhere@amd.com>, Jun Lei <jun.lei@amd.com>, 
-	Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Xinhui Pan <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250105194054.545201-4-gary@garyguo.net>
 
-Applied.  Thanks!
+On Sun, Jan 05, 2025 at 07:40:06PM +0000, Gary Guo wrote:
+> This function can be called with different function pointers when
+> different allocator (e.g. Kmalloc, Vmalloc, KVmalloc), however since
+> this function is not polymorphic, only one instance is generated,
+> and function pointers are used. Given that this function is called
+> for any Rust-side allocation/deallocation, performance matters a lot,
+> so making this function inlineable.
+> 
+> This is discovered when doing helper inlining work, since it's discovered
+> that even with helpers inlined, rust_helper_ symbols are still present
+> in final vmlinux binary, and it turns out this function is inhibiting
+> the inlining, and introducing indirect function calls.
+> 
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-On Thu, Dec 19, 2024 at 6:46=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Commit 24909d9ec7c3 ("drm/amd/display: Overwriting dualDPP UBF values
-> before usage") added a new warning in dml2/display_mode_core.c when
-> building allmodconfig with clang:
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6268:=
-13: error: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_ch=
-eck' [-Werror,-Wframe-larger-than]
->    6268 | static void dml_prefetch_check(struct display_mode_lib_st *mode=
-_lib)
->         |             ^
->
-> Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
-> Fixes") introduced one in dml2_core/dml2_core_dcn4_calcs.c with the same
-> configuration:
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_=
-core_dcn4_calcs.c:7236:13: error: stack frame size (3256) exceeds limit (30=
-72) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
->    7236 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_s=
-upport_ex *in_out_params)
->         |             ^
->
-> In the case of the first warning, the stack usage was already at the
-> limit at the parent change, so the offending change was rather
-> innocuous. In the case of the second warning, there was a rather
-> dramatic increase in stack usage compared to the parent:
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_=
-core_dcn4_calcs.c:7032:13: error: stack frame size (2696) exceeds limit (20=
-48) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
->    7032 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_s=
-upport_ex *in_out_params)
->         |             ^
->
-> This is an unfortunate interaction between an issue with stack slot
-> reuse in LLVM that gets exacerbated by sanitization (which gets enabled
-> with all{mod,yes}config) and function calls using a much higher number
-> of parameters than is typical in the kernel, necessitating passing most
-> of these values on the stack.
->
-> While it is possible that there should be source code changes to address
-> these warnings, this code is difficult to modify for various reasons, as
-> has been noted in other changes that have occurred for similar reasons,
-> such as commit 6740ec97bcdb ("drm/amd/display: Increase frame warning
-> limit with KASAN or KCSAN in dml2").
->
-> Increase the frame larger than limit when compile testing with clang and
-> the sanitizers enabled to avoid this breakage in all{mod,yes}config, as
-> they are commonly used and valuable testing targets. While it is not the
-> best to hide this issue, it is not really relevant when compile testing,
-> as the sanitizers are commonly stressful on optimizations and they are
-> only truly useful at runtime, which COMPILE_TEST states will not occur
-> with the current build.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202412121748.chuX4sap-lkp@i=
-ntel.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+
+This should go in even without the first 2 patches, right?
+
+Regards,
+Boqun
+
 > ---
->  drivers/gpu/drm/amd/display/dc/dml2/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/d=
-rm/amd/display/dc/dml2/Makefile
-> index d9c27ebe12ee08d6330eb199cd8ca9c8489fa5b2..91c4f3b4bd5f46ac5c1c74f66=
-5b06dbe61081917 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-> +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-> @@ -29,7 +29,11 @@ dml2_rcflags :=3D $(CC_FLAGS_NO_FPU)
->
->  ifneq ($(CONFIG_FRAME_WARN),0)
->  ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-> +frame_warn_flag :=3D -Wframe-larger-than=3D4096
-> +else
->  frame_warn_flag :=3D -Wframe-larger-than=3D3072
-> +endif
->  else
->  frame_warn_flag :=3D -Wframe-larger-than=3D2048
->  endif
->
-> ---
-> base-commit: 695c2c745e5dff201b75da8a1d237ce403600d04
-> change-id: 20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig=
--f034d9c5118e
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+>  rust/kernel/alloc/allocator.rs | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/rust/kernel/alloc/allocator.rs b/rust/kernel/alloc/allocator.rs
+> index 439985e29fbc..aa2dfa9dca4c 100644
+> --- a/rust/kernel/alloc/allocator.rs
+> +++ b/rust/kernel/alloc/allocator.rs
+> @@ -80,6 +80,7 @@ impl ReallocFunc {
+>      /// This method has the same guarantees as `Allocator::realloc`. Additionally
+>      /// - it accepts any pointer to a valid memory allocation allocated by this function.
+>      /// - memory allocated by this function remains valid until it is passed to this function.
+> +    #[inline]
+>      unsafe fn call(
+>          &self,
+>          ptr: Option<NonNull<u8>>,
+> -- 
+> 2.47.0
+> 
