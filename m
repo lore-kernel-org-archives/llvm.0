@@ -1,180 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790B11DED5A;
-	Mon,  6 Jan 2025 18:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EDE360
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 19:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736188042; cv=none; b=KRv9xQXxU9ISuukXn4TFyzkkmcGN6MfnOCVgG+dtsRAA+Bj29xwN+3nWqhPK4F3kSeNrjBQn6i5U0fHei51D2BvVdHAjC8rRIN/U9kFb2osVImx0eZPjek647SecwSfAU+qd+7GTwINYrf4Ww2DMZKxLBUuEVE+Ng1uC/g3XC2M=
+	t=1736193188; cv=none; b=SMDS2/5509SjuiHAs7OLsB9zXfcIqkkL8oTI9kHOMnw4tPFim9gjOBj6wbTfmo16VFXo9mBKMbOh3Kj0VhLXFQYPwTveQYFxyCzqlMqa9QsSwsqkYfkLNoOot1jYZTT6MalrN+p6FR+LzjRuj9yRChxxFcLEEbffh2VghXmbBwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736188042; c=relaxed/simple;
-	bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BJbEEXOOjO2DjvFOr+Yz+8p8RsIVEKdf6c0AFaDIDsAyzSUQxn7OSkcySYN47ZW9N702fN0sho5zTbg5iqdqSY1NlnN6EqN4csuctbY7gc3aMnJA0z/xhO8zHZpYhMi6oChKEB5Wc+xq18ipiHqDiTI0ckPMiC2dmo1SB67xMDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nivM7HUu; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736193188; c=relaxed/simple;
+	bh=ktR4U64PaHkHkYtT6uKkFaTcngP2uE5NgXFG6OFMVM8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MyiSg1P6nfqQPPT7rwnkhyw12FfKIUiNAFa0c+VgaMHdoG++QDj+O3fXCPyCbhO5T5Qbca9+4hJJUWPQGulYq4ZXncv9n9x6G+36HUz3quNsu0dpQtQsE0bS7SP8xtvwOFgsE3X6i3JOnbLJX6If1/iIAQDbVaW94EiwGf5whrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vkj9LwBc; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nivM7HUu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736188041; x=1767724041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
-  b=nivM7HUuYfpQxv8Z0FZ0ZibFb5VDHEDvn6gJPH3AlJR6hmMo7bG0BUEh
-   1cTo4WGegJW5RuXGLojP8MnIg32A9vbv4S9mXUYJbeGM8zObMK4i7j0Fs
-   +WeTgzX9rN8s+AVj223NLEfn9I2xvGbCOOEePfGnsjFyqlUuczwT1bRDo
-   OTIF57lC8SV8+0tau+iolgVam8IoDfJjeIupr0V+YgiBgnb5CSzhS1iH9
-   PJnpoMDLslNEoaYXa/x49txZ+dXAeypdUAmQQenKOklRc1P+SUmPijIEv
-   +adn7IjaOtl73//0mKRyOg5zGoqlUxJMVl4CH43mFIZzuez9HWX+bhgyH
-   w==;
-X-CSE-ConnectionGUID: r//vdIsxRMqepiaHl6nk/A==
-X-CSE-MsgGUID: F3OGIRcsT528knPhqC2DLA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="47337760"
-X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
-   d="scan'208";a="47337760"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 10:27:20 -0800
-X-CSE-ConnectionGUID: H4cNptL1RQa/uJfpJZqLsQ==
-X-CSE-MsgGUID: htWPl3GMRWeJn3SLA/Lyqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
-   d="scan'208";a="102317803"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 06 Jan 2025 10:27:18 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tUroq-000Dod-0L;
-	Mon, 06 Jan 2025 18:27:16 +0000
-Date: Tue, 7 Jan 2025 02:26:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tomasz =?utf-8?Q?Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
-	jikos@kernel.org, bentiss@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and
- supported device ids
-Message-ID: <202501070200.pA9ifqd5-lkp@intel.com>
-References: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vkj9LwBc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736193185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=meLwZ0iDlGuX8I2h1Oc9kfUxKA5axabdPkGsOE+Xv2g=;
+	b=Vkj9LwBcPMGP0U9P84JGDOysG+1hTu9oVP42aWlAQ8B0rJ4pDykDqiZsRXifsfSEHOHH/u
+	FEO5rmbnT+ciRWm/rO38L2l57Klhhh3QbIqY9Rpj/d7d43r0krNVvQq9OxQ6dG9vYyCNtk
+	wsh1/lgXHQ5pcsQ9KFyv/q9ToyusWWM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-472-SWfqT0PPMISxmwyd1NsUdg-1; Mon,
+ 06 Jan 2025 14:53:04 -0500
+X-MC-Unique: SWfqT0PPMISxmwyd1NsUdg-1
+X-Mimecast-MFC-AGG-ID: SWfqT0PPMISxmwyd1NsUdg
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E8BD1956046
+	for <llvm@lists.linux.dev>; Mon,  6 Jan 2025 19:53:03 +0000 (UTC)
+Received: from [172.64.11.15] (unknown [10.30.34.132])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 374113000197;
+	Mon,  6 Jan 2025 19:53:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
+ upstream-mainline, fbfd64d2)
+Date: Mon, 06 Jan 2025 19:53:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <02532.125010614530400831@us-mta-472.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NlTGfToIp7Pn027Prcxt1sBW1Kl6LH-Ku23cRb2QTyg_1736193183
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tomasz,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.13-rc6 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tomasz-Paku-a/HID-pidff-Convert-infinite-length-from-Linux-API-to-PID-standard/20250106-033931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20250105193628.296350-11-tomasz.pakula.oficjalny%40gmail.com
-patch subject: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and supported device ids
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501070200.pA9ifqd5-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hid/hid-universal-pidff.c:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/hid-universal-pidff.c:90:16: error: incompatible function pointer types assigning to 'void (*)(struct hid_device *, __u32)' (aka 'void (*)(struct hid_device *, unsigned int)') from 'int (struct hid_device *, __u32)' (aka 'int (struct hid_device *, unsigned int)') [-Wincompatible-function-pointer-types]
-      90 |         init_function = hid_pidff_init_with_quirks;
-         |                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/hid-universal-pidff.c:97:8: error: assigning to 'int' from incompatible type 'void'
-      97 |         error = init_function(hdev, id->driver_data);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +90 drivers/hid/hid-universal-pidff.c
+Kernel information:
+    Commit message: Merge tag 'vfs-6.13-rc7.fixes' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/vfs/vfs
 
-    66	
-    67	
-    68	/*
-    69	 * Check if the device is PID and initialize it
-    70	 * Add quirks after initialisation
-    71	 */
-    72	static int universal_pidff_probe(struct hid_device *hdev,
-    73					 const struct hid_device_id *id)
-    74	{
-    75		int error;
-    76		error = hid_parse(hdev);
-    77		if (error) {
-    78			hid_err(hdev, "HID parse failed\n");
-    79			goto err;
-    80		}
-    81	
-    82		error = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-    83		if (error) {
-    84			hid_err(hdev, "HID hw start failed\n");
-    85			goto err;
-    86		}
-    87	
-    88		// Check if HID_PID support is enabled
-    89		void (*init_function)(struct hid_device *, __u32);
-  > 90		init_function = hid_pidff_init_with_quirks;
-    91	
-    92		if (!init_function) {
-    93			hid_warn(hdev, "HID_PID support not enabled!\n");
-    94			return 0;
-    95		}
-    96	
-  > 97		error = init_function(hdev, id->driver_data);
-    98		if (error) {
-    99			hid_warn(hdev, "Force Feedback initialization failed\n");
-   100			goto err;
-   101		}
-   102	
-   103		hid_info(hdev, "Universal pidff driver loaded sucesfully!");
-   104	
-   105		return 0;
-   106	err:
-   107		return error;
-   108	}
-   109	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1613417307
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1613417307-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1613417307-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1613417307-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
