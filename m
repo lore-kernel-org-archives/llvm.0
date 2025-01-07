@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66581E9B0A;
-	Tue,  7 Jan 2025 11:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920C21EB9F4;
+	Tue,  7 Jan 2025 11:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736249530; cv=none; b=ReI72ERie1gwLFyowa0XfVVWLwGtmJv8BuNDdBmyaXrmcGK1ymbb/dCwSDWJ5o0E4Ft01xng8+9y0hVQ0gbYBsvIcTxgsqXq2Eu/sKQ7cTTzSNc/EGrXA68rZwdckDoY3mq7nMOAfswx6k00ReH5W6r8JTwbvYryKeIOmziMgtQ=
+	t=1736249536; cv=none; b=TYiV7cI1dgVXDiu09QJg+c0vZa4YIHYJ+4Wt8uf+DckvB007wjAWMHWRBlkRiogUTXpWW5RL/rr7mA4/aNjQaXWMIX4rzXOakI+s+W87XzehtRqcf3YNNRf+Ed/deLoHxqJM9dSkg6EZTWFLS+kanILc5P82G9f5FvaMCSupZWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736249530; c=relaxed/simple;
-	bh=phn3hwLXnNphs7vvlhjVmpFho6Dc/2pwkrPxE1EmRDQ=;
+	s=arc-20240116; t=1736249536; c=relaxed/simple;
+	bh=lG4Nce+uZ0sTr28rqk1YUfOYT97MSuZqJYXmHKbftKM=;
 	h=From:To:Cc:Subject:In-Reply-To:Message-ID:References:Date:
-	 MIME-Version:Content-Type; b=SvGbozqq0Ly93+lTLYmoUHzydwpTf6g2G6oU6OizuIRE6kMwUN3F5A7gM6UaYQaC74EA2kxzx3KWkUnLt7czwLU1x2l1/aUIPV0NEQdEhIlvERKNjyf7p/EixzCwJKQSsfASp+fYOGFsyJWtkLioHbEPx/yLXwXi1bJlsllaTpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owHFS/n6; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=mhY+Bj1g7l56ghR5CuUN2g/wmapruvUG79b+f0rYzXBqeqM0RMf0RMEvFD8y+VJ2B8MKi5AJ+ygMaMmv7DfHwtlci/TdtAGaXX7MBQKAh1hsnkFRKI0ZNm6BgtKu9H7xA3vqz4xM1M4cE2X+v4QYM6Gsj1SFiuqN65+j0cREdZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3mBKXyf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owHFS/n6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2136AC4CED6;
-	Tue,  7 Jan 2025 11:32:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3mBKXyf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C2CC4CEDD;
+	Tue,  7 Jan 2025 11:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736249529;
-	bh=phn3hwLXnNphs7vvlhjVmpFho6Dc/2pwkrPxE1EmRDQ=;
+	s=k20201202; t=1736249535;
+	bh=lG4Nce+uZ0sTr28rqk1YUfOYT97MSuZqJYXmHKbftKM=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=owHFS/n6PeQp48GHDuuV3BdrmJnB1h9pACV5ka2DTlgaTWJs8lHDzmIfKi1EoCegp
-	 +owCgOp4ucRTyv5YOylTU3pLPHMVBniJj2YxdlUIlLD9t+9pG5c6GN3quyGpvrRGng
-	 YjfQilR51YZ1gs0UDephTo17w7HCw1mHdpK4fj8Nn20WH+1n6GDZSOfkbk02o9xz7I
-	 DGNUewwA143ZBFarKwXmepGK7SoeAWmsNybztCzp0YSMmCrfELaAUA7cbucpnbdGVq
-	 qZi0Sx1SmIuz5es2Rh+dbR0gk+otWSrAA4+7ZZa+D+2aFug7wcurVwDnJ15VUmOT/s
-	 Jx//h8pvNWOVg==
+	b=c3mBKXyfhUPHX3Lm01KTM2LluhVu4RigTuHqECCc0HNJO07sJla02YOTYs1b10rDo
+	 LDaZXSkWzbYVOjCNLh9zZAVD2hM0CpFbR5gzQXm5Wc4spUv1YLjmhK/ZuC1cYXqBKm
+	 K9geIa1IFv6NknaUDkUHSgyjkAvGnr+apgOxj2OskvwBjVHddtmnhB/nKfixHqwRRR
+	 YIlJzA75Nah0PFdmH3bXuOLmhQahbrwaVDb6lI1c0DiwqIDtyg9EAfiXtcEHV+Pw4D
+	 lwKLWMvEIL3vmWvVbHBOYgbuIWHZL+Ex22DBnLEy+FDsk4u+Ekn490r/RBDRl3jEly
+	 kjBv7VO/8AvGQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
 To: "Gary Guo" <gary@garyguo.net>
 Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
@@ -36,28 +36,24 @@ Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
  Gross" <tmgross@umich.edu>,  "Nathan Chancellor" <nathan@kernel.org>,
   "Nick Desaulniers" <ndesaulniers@google.com>,  "Bill Wendling"
  <morbo@google.com>,  "Justin Stitt" <justinstitt@google.com>,  "Masahiro
- Yamada" <masahiroy@kernel.org>,  "Nicolas Schier" <nicolas@fjasle.eu>,
-  "Andrew Morton" <akpm@linux-foundation.org>,  "Dirk Behme"
- <dirk.behme@de.bosch.com>,  "Tamir Duberstein" <tamird@gmail.com>,
-  "Christian Brauner" <brauner@kernel.org>,  "Martin Rodriguez Reboredo"
- <yakoyoku@gmail.com>,  "Paul Moore" <paul@paul-moore.com>,  "Wedson
- Almeida Filho" <wedsonaf@gmail.com>,  "Steven Rostedt (Google)"
- <rostedt@goodmis.org>,  "Matt Gilbride" <mattgilbride@google.com>,
-  "Danilo Krummrich" <dakr@kernel.org>,  "Eder Zulian"
- <ezulian@redhat.com>,  "Filipe Xavier" <felipe_life@live.com>,
-  <rust-for-linux@vger.kernel.org>,  <llvm@lists.linux.dev>,  "Kees Cook"
- <kees@kernel.org>,  "Daniel Xu" <dxu@dxuuu.xyz>,
-  <linux-kbuild@vger.kernel.org>,  <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] kbuild: rust: provide an option to inline C
- helpers into Rust
-In-Reply-To: <20250105194054.545201-3-gary@garyguo.net> (Gary Guo's message of
-	"Sun, 05 Jan 2025 19:40:05 +0000")
-Message-ID: <87msg26fxt.fsf@kernel.org>
+ Yamada" <masahiroy@kernel.org>,  "Andrew Morton"
+ <akpm@linux-foundation.org>,  "Petr Mladek" <pmladek@suse.com>,  "Tejun
+ Heo" <tj@kernel.org>,  "Yoann Congal" <yoann.congal@smile.fr>,  "Roman
+ Gushchin" <roman.gushchin@linux.dev>,  "Jens Axboe" <axboe@kernel.dk>,
+  "Chen Ridong" <chenridong@huawei.com>,  "Jann Horn" <jannh@google.com>,
+  "Mark Rutland" <mark.rutland@arm.com>,  "Vincent Guittot"
+ <vincent.guittot@linaro.org>,  <rust-for-linux@vger.kernel.org>,
+  <llvm@lists.linux.dev>,  <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] kbuild: rust: add
+ `CONFIG_RUSTC_CLANG_LLVM_COMPATIBLE`
+In-Reply-To: <20250105194054.545201-2-gary@garyguo.net> (Gary Guo's message of
+	"Sun, 05 Jan 2025 19:40:04 +0000")
+Message-ID: <87sepu6g01.fsf@kernel.org>
 References: <20250105194054.545201-1-gary@garyguo.net>
-	<iBq_cLfbfAlkVpp_rSu0KOou6nPf2GahTQAxQVWuACzz5zggxHp-_AEzLnEl-ZnFZHLEVCudIZJNic7xI5G2mg==@protonmail.internalid>
-	<20250105194054.545201-3-gary@garyguo.net>
+	<g0aCpjtjrF4h4VqDb6tPmmnpMuCSrny8aEjIp9Ljh2oCMHauEcnZJcWWgJRPbLz5v2vx2wMhP-DccxS6fi-nSg==@protonmail.internalid>
+	<20250105194054.545201-2-gary@garyguo.net>
 User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Tue, 07 Jan 2025 12:31:32 +0100
+Date: Tue, 07 Jan 2025 12:29:39 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,53 +64,21 @@ Content-Type: text/plain
 
 "Gary Guo" <gary@garyguo.net> writes:
 
-> A new Kconfig option, `RUST_INLINE_HELPERS` is added to allow C helpers
-> (which was created to allow Rust to call into inline/macro C functions
-> without having to re-implement the logic in Rust) to be inlined into
-> Rust crates without performing a global LTO.
+> This config detects if Rust and Clang have matching LLVM major version.
+> All IR or bitcode operations (e.g. LTO) rely on LLVM major version to be
+> matching, otherwise it may generate errors, or worse, miscompile silently
+> due to change of IR semantics.
 >
-> If the option is enabled, the following is performed:
-> * For helpers, instead of compiling them to object file to be linked
->   into vmlinux, we compile them to LLVM IR.
-> * The LLVM IR is patched to add `linkonce_odr` linkage. This linkage
->   means that the function is inlineable (effect of `_odr`), and the
->   symbols generated will have weak linkage if emitted into object file
->   (important since as later described, we might have multiple copies of
->   the same symbol) and it will may be discarded if it is not invoked or
->   all invocations are inlined.
-> * The LLVM IR is compiled to bitcode (This is step is not necessary, but
->   is a performance optimisation to prevent LLVM from always have to
->   reparse the same IR).
-> * When a Rust crate is compiled, instead of generating object file, we
->   ask LLVM bitcode to be generated.
-> * llvm-link is invoked to combine the helper bitcode with the crate
->   bitcode. This step is similar to LTO, but this is much faster since it
->   only needs to inline the helpers.
-> * clang is invoked to turn the combined bitcode into object file.
+> It's usually suggested to use the exact same LLVM version, but this can
+> be difficult to guarantee. Rust's suggestion [1] is also major-version only,
+> so I think this check is sufficient for the kernel.
 >
-> Some caveats with the option:
-> * clang and Rust doesn't have the exact target string. Manual inspection
->   shows that they should be compatible, but since they are not exactly
->   the same LLVM seems to prefer not inlining them. This is bypassed with
->   `--ignore-tti-inline-compatible`.
-> * LLVM doesn't want to inline functions combined with
->   `-fno-delete-null-pointer-checks` with code compiled without. So we
->   remove this command when compiling helpers. I think this should be
->   okay since this is one of the hardening features and we shouldn't have
->   null pointer dereferences in these helpers.
->
-> The checks can also be bypassed with force inlining (`__always_inline`)
-> but the behaviour is the same with extra options.
->
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Link: https://doc.rust-lang.org/rustc/linker-plugin-lto.html [1]
 > Signed-off-by: Gary Guo <gary@garyguo.net>
 
 
 Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
-Tested-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-Tested with downstream rnull tree, works as expected.
 
 Best regards,
 Andreas Hindborg
