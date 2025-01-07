@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB2D1F94D;
-	Tue,  7 Jan 2025 00:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2D813AA35;
+	Tue,  7 Jan 2025 03:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736209707; cv=none; b=vAME8Ull6HMO+Nzp9EtIvrsu95htqO3W5a5H+XBMtDOo4KdNtL8k7heA02p/0Kna1bCNBo6yX+TMsawiIppyDiCoQbwG3Xo8Mles70N+N2FDkvHVR09TNS0vIyyfa6rLrFSZeWpg/dkS0CFwEtoEOY4Y5pB/uhLao+5ACee5ZUc=
+	t=1736220290; cv=none; b=T/NDngtyCaUS9SsDRTS3qpxK8HlAdQTxn/gJDaOF+Vc/pvZ2MVHzboLy4e06u/8l70PvRN2ohZVu/n77gwWiNU85BOYgYOInuN52rDnhuOfSSXQchZhRDfDIxeKQdYbtRk9Vo6BoHs7WKn40KBOO3hGGbFfs+zVYomavoh8r1PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736209707; c=relaxed/simple;
-	bh=qmqefdqoS9kwe511JLOTEW2dug3ocg9HCh2QFR15pM4=;
+	s=arc-20240116; t=1736220290; c=relaxed/simple;
+	bh=VhaJ+WKPJ8M5XPwTnkUCfauA4bU/exGPflvODp8cjfA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=i0Ce4+zEJ8R0iYgAQ0x1CL9aOb9/4bJ7CNv7bEqdaBbpdBdHrwdkmA3WsS/84wjaHAeCJqn4uGxko4wrNqfr9EHoL5vxlh/F/EKuyPjF1pe4T1WJUJ9z0GfQFUsJTZv5CMmveZe23cE3PBUgeRFXJCiZu+WFn/ycpRrqcV821hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IuW+c3HE; arc=none smtp.client-ip=198.175.65.15
+	 Content-Disposition; b=a9d7XFDJNujI1wyodUp8IpC2CUvTR8EyxiUvE7Ocd3QH1BnwEFGsS46OO894/Ydb38j2m5OVWII4pMq+ITH16iPxpjF0J/Gek8ZUg369y6EUPNnGxx4lFRYr93Onj5qU4+PJehtxD3EHjTI5ZjbFg0FxFl12nmdtFX/8j7s6QPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ViiS1w2u; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IuW+c3HE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ViiS1w2u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736209706; x=1767745706;
+  t=1736220286; x=1767756286;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qmqefdqoS9kwe511JLOTEW2dug3ocg9HCh2QFR15pM4=;
-  b=IuW+c3HESrL5CKuyD5qzDGDQ1vow+T2wiyqrDIkfYqO8SYaEhw/Q26t/
-   tUtRUDWgmly9owVODawNvPy7I9Fd+2GSF45/wX9lVUIFMUcVgPT4TvbIn
-   iBMFugXDSXL296N7QFLSJjN0pyHg8Qp5CmZwdA2gMlHkFvINi8BzjdLAq
-   dRyv/+Vp3EF95CKfpG4ma6G69KfxZj0560/pIbZaG4Nl3cOLOnYcqcfc7
-   N3V2zkK9AnU4EPayXpmY+H5G0LBslXAIZZrb+osQ0wFTn+O72xA9EPGOZ
-   XA2E2+idj4XA4HDIogsgcbJT+m9mAmAtbaiGBwpvCcLvE0D2BiCokctV7
-   A==;
-X-CSE-ConnectionGUID: EjIuA4TJRWKRvZDmLQItkA==
-X-CSE-MsgGUID: Etojhs5bTzG9ZOEmNtZu6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="40048341"
+  bh=VhaJ+WKPJ8M5XPwTnkUCfauA4bU/exGPflvODp8cjfA=;
+  b=ViiS1w2uEndtBIm8kttVimVcZTuD+EGodLlHSzqNXqgfAvR1c1ooZzed
+   0KG6AmcryIOWmEM71YaOJ17DVoGrKs7CpRavZn/HJtnyRBhiq4gv4oGNp
+   AgQKZqkEQu9mH4hJPJiz26/oadvPDLr9evYTw/zEa8/fp+KIi8t1WHwbn
+   5We3rvjACO9m+fCTFafuA5x5Xuj05zGRMQ+aMXy21IDpaksSQ8mLa4Mfl
+   tTZs/YOf/WjG2Rrabz7aoN+bwMa5pnpBKj+BVHYRf/y75/RBYphAz/QjV
+   yamI3KzaRPlfYRqUwdXMhj215PFVbIGsVnmq3GoOEdorpMhHPqkdr4rP6
+   w==;
+X-CSE-ConnectionGUID: WLnXmHFpTiClnX7Kin25lA==
+X-CSE-MsgGUID: tJnDHZRwT3GXApEV2Wdw5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="36080795"
 X-IronPort-AV: E=Sophos;i="6.12,294,1728975600"; 
-   d="scan'208";a="40048341"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 16:28:25 -0800
-X-CSE-ConnectionGUID: XQuArpEMRd6t2heSFEBwbQ==
-X-CSE-MsgGUID: WSjhEsjYQE2HIuvCyrGM5A==
+   d="scan'208";a="36080795"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 19:24:46 -0800
+X-CSE-ConnectionGUID: rCufYbkFT7uFws6CfDtbBg==
+X-CSE-MsgGUID: aGavQgiGQ6OIXvKIu+0Y+Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,294,1728975600"; 
-   d="scan'208";a="103120057"
+   d="scan'208";a="133486831"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 06 Jan 2025 16:28:21 -0800
+  by orviesa002.jf.intel.com with ESMTP; 06 Jan 2025 19:24:44 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tUxSF-000E3L-1W;
-	Tue, 07 Jan 2025 00:28:19 +0000
-Date: Tue, 7 Jan 2025 08:27:21 +0800
+	id 1tV0Cw-000EBG-1j;
+	Tue, 07 Jan 2025 03:24:42 +0000
+Date: Tue, 7 Jan 2025 11:24:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Gregory Price <gourry@gourry.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-efi@vger.kernel.org
-Subject: [efi:next 6/9] drivers/firmware/efi/libstub/gop.c:283:7: warning:
- variable 'depth' is used uninitialized whenever switch case is taken
-Message-ID: <202501070836.Xd7wJiOd-lkp@intel.com>
+	Gregory Price <gourry@gourry.net>
+Subject: [gourryinverse:gourry_pagecache 5/6] include/linux/migrate.h:159:5:
+ warning: no previous prototype for function 'migrate_misplaced_folio_batch'
+Message-ID: <202501071136.MXhN3C8N-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,110 +63,188 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-head:   159ec6de007d8a2791bdba850ec4dbe83272561c
-commit: 5169cdfff5af8a40f4152d19d7fd70320567f2e6 [6/9] efi/libstub: Refactor and clean up GOP resolution picker code
-config: riscv-randconfig-001-20250107 (https://download.01.org/0day-ci/archive/20250107/202501070836.Xd7wJiOd-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501070836.Xd7wJiOd-lkp@intel.com/reproduce)
+tree:   https://github.com/gourryinverse/linux gourry_pagecache
+head:   0b481ba53a1ea6337129cbe63f9234a748df4843
+commit: 853ef17ea1577e0a625e695acd45250f2610f004 [5/6] migrate: implement migrate_misplaced_folio_batch
+config: i386-buildonly-randconfig-003-20250107 (https://download.01.org/0day-ci/archive/20250107/202501071136.MXhN3C8N-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501071136.MXhN3C8N-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501070836.Xd7wJiOd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501071136.MXhN3C8N-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/firmware/efi/libstub/gop.c:283:7: warning: variable 'depth' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case PIXEL_BLT_ONLY:
-                ^~~~~~~~~~~~~~
-   drivers/firmware/efi/libstub/efistub.h:522:28: note: expanded from macro 'PIXEL_BLT_ONLY'
-   #define PIXEL_BLT_ONLY                                  3
-                                                           ^
-   drivers/firmware/efi/libstub/gop.c:297:13: note: uninitialized use occurs here
-                       dstr, depth);
-                             ^~~~~
-   drivers/firmware/efi/libstub/gop.c:276:7: warning: variable 'depth' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case PIXEL_BGR_RESERVED_8BIT_PER_COLOR:
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/efi/libstub/efistub.h:520:44: note: expanded from macro 'PIXEL_BGR_RESERVED_8BIT_PER_COLOR'
-   #define PIXEL_BGR_RESERVED_8BIT_PER_COLOR               1
-                                                           ^
-   drivers/firmware/efi/libstub/gop.c:297:13: note: uninitialized use occurs here
-                       dstr, depth);
-                             ^~~~~
-   drivers/firmware/efi/libstub/gop.c:273:7: warning: variable 'depth' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-           case PIXEL_RGB_RESERVED_8BIT_PER_COLOR:
-                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/firmware/efi/libstub/efistub.h:519:44: note: expanded from macro 'PIXEL_RGB_RESERVED_8BIT_PER_COLOR'
-   #define PIXEL_RGB_RESERVED_8BIT_PER_COLOR               0
-                                                           ^
-   drivers/firmware/efi/libstub/gop.c:297:13: note: uninitialized use occurs here
-                       dstr, depth);
-                             ^~~~~
->> drivers/firmware/efi/libstub/gop.c:286:2: warning: variable 'depth' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-           default:
-           ^~~~~~~
-   drivers/firmware/efi/libstub/gop.c:297:13: note: uninitialized use occurs here
-                       dstr, depth);
-                             ^~~~~
-   drivers/firmware/efi/libstub/gop.c:268:10: note: initialize the variable 'depth' to silence this warning
-           u8 depth;
-                   ^
-                    = '\0'
-   4 warnings generated.
+   In file included from mm/zsmalloc.c:47:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   mm/zsmalloc.c:455:20: warning: function 'is_first_zpdesc' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+     455 | static inline bool is_first_zpdesc(struct zpdesc *zpdesc)
+         |                    ^~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from mm/compaction.c:13:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   In file included from mm/compaction.c:15:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   3 warnings generated.
+--
+   In file included from mm/vmscan.c:30:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:42:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   mm/vmscan.c:409:51: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     409 |                         size += zone_page_state(zone, NR_ZONE_LRU_BASE + lru);
+         |                                                       ~~~~~~~~~~~~~~~~ ^ ~~~
+   mm/vmscan.c:1773:4: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    1773 |                         __count_zid_vm_events(PGSCAN_SKIP, zid, nr_skipped[zid]);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/vmscan.c:2279:51: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2279 |         inactive = lruvec_page_state(lruvec, NR_LRU_BASE + inactive_lru);
+         |                                              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   mm/vmscan.c:2280:49: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2280 |         active = lruvec_page_state(lruvec, NR_LRU_BASE + active_lru);
+         |                                            ~~~~~~~~~~~ ^ ~~~~~~~~~~
+   mm/vmscan.c:6292:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    6292 |                 __count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   8 warnings generated.
+--
+   In file included from mm/memory.c:44:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/memory.c:67:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   3 warnings generated.
+--
+   In file included from mm/page_alloc.c:44:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:46:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   mm/page_alloc.c:2933:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    2933 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:3050:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    3050 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:4692:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    4692 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   6 warnings generated.
+--
+   In file included from fs/btrfs/disk-io.c:13:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   1 warning generated.
+--
+   In file included from zsmalloc.c:47:
+>> include/linux/migrate.h:159:5: warning: no previous prototype for function 'migrate_misplaced_folio_batch' [-Wmissing-prototypes]
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         |     ^
+   include/linux/migrate.h:159:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     159 | int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+         | ^
+         | static 
+   zsmalloc.c:455:20: warning: function 'is_first_zpdesc' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+     455 | static inline bool is_first_zpdesc(struct zpdesc *zpdesc)
+         |                    ^~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/depth +283 drivers/firmware/efi/libstub/gop.c
+vim +/migrate_misplaced_folio_batch +159 include/linux/migrate.h
 
-45d97a749e9fec Arvind Sankar  2020-03-28  260  
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  261  static bool match_list(const efi_graphics_output_mode_info_t *info, u32 mode, void *ctx)
-14c574f35cfbc9 Arvind Sankar  2020-05-18  262  {
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  263  	efi_pixel_bitmask_t pi = info->pixel_information;
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  264  	u32 cur_mode = (unsigned long)ctx;
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  265  	int pf = info->pixel_format;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  266  	const char *dstr;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  267  	bool valid;
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  268  	u8 depth;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  269  
-14c574f35cfbc9 Arvind Sankar  2020-05-18  270  	valid = !(pf == PIXEL_BLT_ONLY || pf >= PIXEL_FORMAT_MAX);
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  271  
-14c574f35cfbc9 Arvind Sankar  2020-05-18  272  	switch (pf) {
-14c574f35cfbc9 Arvind Sankar  2020-05-18  273  	case PIXEL_RGB_RESERVED_8BIT_PER_COLOR:
-14c574f35cfbc9 Arvind Sankar  2020-05-18  274  		dstr = "rgb";
-14c574f35cfbc9 Arvind Sankar  2020-05-18  275  		break;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  276  	case PIXEL_BGR_RESERVED_8BIT_PER_COLOR:
-14c574f35cfbc9 Arvind Sankar  2020-05-18  277  		dstr = "bgr";
-14c574f35cfbc9 Arvind Sankar  2020-05-18  278  		break;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  279  	case PIXEL_BIT_MASK:
-14c574f35cfbc9 Arvind Sankar  2020-05-18  280  		dstr = "";
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  281  		depth = pixel_bpp(pf, pi);
-14c574f35cfbc9 Arvind Sankar  2020-05-18  282  		break;
-14c574f35cfbc9 Arvind Sankar  2020-05-18 @283  	case PIXEL_BLT_ONLY:
-14c574f35cfbc9 Arvind Sankar  2020-05-18  284  		dstr = "blt";
-14c574f35cfbc9 Arvind Sankar  2020-05-18  285  		break;
-14c574f35cfbc9 Arvind Sankar  2020-05-18 @286  	default:
-14c574f35cfbc9 Arvind Sankar  2020-05-18  287  		dstr = "xxx";
-14c574f35cfbc9 Arvind Sankar  2020-05-18  288  		break;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  289  	}
-14c574f35cfbc9 Arvind Sankar  2020-05-18  290  
-14c574f35cfbc9 Arvind Sankar  2020-05-18  291  	efi_printk("Mode %3u %c%c: Resolution %ux%u-%s%.0hhu\n",
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  292  		    mode,
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  293  		    (mode == cur_mode) ? '*' : ' ',
-14c574f35cfbc9 Arvind Sankar  2020-05-18  294  		    !valid ? '-' : ' ',
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  295  		    info->horizontal_resolution,
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  296  		    info->vertical_resolution,
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  297  		    dstr, depth);
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  298  
-5169cdfff5af8a Ard Biesheuvel 2024-12-20  299  	return false;
-14c574f35cfbc9 Arvind Sankar  2020-05-18  300  }
-14c574f35cfbc9 Arvind Sankar  2020-05-18  301  
-
-:::::: The code at line 283 was first introduced by commit
-:::::: 14c574f35cfbc9272fc67b41f074c847db139652 efi/gop: Add an option to list out the available GOP modes
-
-:::::: TO: Arvind Sankar <nivedita@alum.mit.edu>
-:::::: CC: Ard Biesheuvel <ardb@kernel.org>
+   143	
+   144	#ifdef CONFIG_NUMA_BALANCING
+   145	int migrate_misplaced_folio_prepare(struct folio *folio,
+   146			struct vm_area_struct *vma, int node);
+   147	int migrate_misplaced_folio(struct folio *folio, int node);
+   148	int migrate_misplaced_folio_batch(struct list_head *foliolist, int node);
+   149	#else
+   150	static inline int migrate_misplaced_folio_prepare(struct folio *folio,
+   151			struct vm_area_struct *vma, int node)
+   152	{
+   153		return -EAGAIN; /* can't migrate now */
+   154	}
+   155	static inline int migrate_misplaced_folio(struct folio *folio, int node)
+   156	{
+   157		return -EAGAIN; /* can't migrate now */
+   158	}
+ > 159	int migrate_misplaced_folio_batch(struct list_head *foliolist, int node)
+   160	{
+   161		return -EAGAIN; /* can't migrate now */
+   162	}
+   163	#endif /* CONFIG_NUMA_BALANCING */
+   164	
 
 -- 
 0-DAY CI Kernel Test Service
