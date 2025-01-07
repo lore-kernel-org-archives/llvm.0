@@ -1,94 +1,122 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB59156F3F
-	for <llvm@lists.linux.dev>; Tue,  7 Jan 2025 10:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66581E9B0A;
+	Tue,  7 Jan 2025 11:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736245292; cv=none; b=GNCghUFt/2eZbHygDCXjP1n7zas+R4cur2L5BafFYnuIIs6KU/vs4+LKoeasIapkkDHZWXB95ZQVOwt3PhwhIj94aWI22fmyNga/56ibwoUIlAuNk3Apbc5Btq1RCaLUF6iTjUpakrnhl+sq0Fxk/Xco1Thsxvq5r60vBEi0baE=
+	t=1736249530; cv=none; b=ReI72ERie1gwLFyowa0XfVVWLwGtmJv8BuNDdBmyaXrmcGK1ymbb/dCwSDWJ5o0E4Ft01xng8+9y0hVQ0gbYBsvIcTxgsqXq2Eu/sKQ7cTTzSNc/EGrXA68rZwdckDoY3mq7nMOAfswx6k00ReH5W6r8JTwbvYryKeIOmziMgtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736245292; c=relaxed/simple;
-	bh=FRIGQ/JB661jNzhXc6tK0hhdfh1dIA4HG9B/GvPjBIc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=krgPfuwzwKe9SH2a4/4p8umEX/+tpN3CX10YfRZLtmaiiDst65kDUbo77UGxkcsCvn3kOC/ZR5WV5JakXYvc+zPPWQxBotSU6hwntNkoI6d5H5mzCwwyYGUN5AFkVlZwklaOzudE8hssSXVNqgGDQy9ngglXqlsCHj8134Zy70I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lpQjWGLs; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1736249530; c=relaxed/simple;
+	bh=phn3hwLXnNphs7vvlhjVmpFho6Dc/2pwkrPxE1EmRDQ=;
+	h=From:To:Cc:Subject:In-Reply-To:Message-ID:References:Date:
+	 MIME-Version:Content-Type; b=SvGbozqq0Ly93+lTLYmoUHzydwpTf6g2G6oU6OizuIRE6kMwUN3F5A7gM6UaYQaC74EA2kxzx3KWkUnLt7czwLU1x2l1/aUIPV0NEQdEhIlvERKNjyf7p/EixzCwJKQSsfASp+fYOGFsyJWtkLioHbEPx/yLXwXi1bJlsllaTpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=owHFS/n6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lpQjWGLs"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43623f0c574so105549145e9.2
-        for <llvm@lists.linux.dev>; Tue, 07 Jan 2025 02:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736245287; x=1736850087; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FRIGQ/JB661jNzhXc6tK0hhdfh1dIA4HG9B/GvPjBIc=;
-        b=lpQjWGLsBXL9DfNu6mhgdq5tJkgatPVqb9GTj3lQeWCz/qzfXxpg9XqcHnPSD7uCSL
-         epfvFmJZtRKCKHTmAmpHv5/J6jzLstrg+M76UH7CvPQsBn11N9vQ6u8nGshvCbxT013I
-         cfVjswdf65BEb7fP3dJPttSaShF3Q8L+7ZEABdjgPhbyvu1eivzbr1ISOF3k1txGkGUS
-         LqpKy0FgmPQWRvXV4at65tO1q5p0dp6S3Ik1U2EDtA0us2zGZOinAhdl/OMW0XEEos6Z
-         oGpqt9fbdfIzmpu8OxqQBINNoObZO1sSR8MWstWJYmH+zLZeBBGOiD3R2foJwFLAjp1B
-         uTaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736245287; x=1736850087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FRIGQ/JB661jNzhXc6tK0hhdfh1dIA4HG9B/GvPjBIc=;
-        b=G1PWPzTP9htLxYmL3QhhAhfukeKAelF2lI5wLpdfgEMt7aoYVJPoOWpEhLpM9DQFP3
-         obQmPRDmahq5lStdftEWnGTYMIXP5jyTcgQR7usSsKc6y6aCxlgm4uRaABTb3GaPMQ3L
-         ssq91tTWukXfCM+TjTz0oiKRYswQp8Aw0e+HEp97GN/VE1qySz7AQpOn9b+lMw5S+J7R
-         7WGq0Muo9JS6V1oBfQe0gJWTwekLKL39gnpVpKgZfYAm2lmpyyHoQVFePhTRVkQsaaiX
-         2aqiUG8sBmTsBH0fKZRfHx0dZfYxXnYHfG+sIfdpbEJyK9+/32B3otx8d162h39rRmbk
-         NKjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXRlI3yOFUeHSaI7qsJrV9d4zT7WMmQppm4g6cKaL/iHH9run26p1l9sDkSqRTH+h6R/v0F@lists.linux.dev
-X-Gm-Message-State: AOJu0YxPB8XknjwrF8KTK7NE33A9jsgZezAbQRo4yZRBQAaxgKwS9jrJ
-	LsuOsU0WKKyzWrVo2tXcqtdjFmvyrTlnpKDJhRDKPqOnNTlVkCX+7Ugr65NjqL4zQzI52NTZdGW
-	wEis8nU1MOMI/Y/MPbKGZPMyhnBro9CnPfFB5
-X-Gm-Gg: ASbGncs9ZdBg0XkBABb7q9gylfLXpPedoHLyxJPONV6ItSxpLFmv+03KpyiOApDJ1fT
-	jdtMveDDeKWQ/t6Xt62wh4IkRsqLnAWJZDM4nNVhvgdSrDG9Iq5B6Z1NYAliV0QoScN8n
-X-Google-Smtp-Source: AGHT+IHcS3m3JDYGwTz9T/lHb+HT4UdeoHfbIPpg3qp3MMGbxT3aBg2nIFZIvpvAU1f15dKkyLCChwrMCrXyaN0wWkU=
-X-Received: by 2002:a05:6000:4a05:b0:386:380d:2cac with SMTP id
- ffacd0b85a97d-38a221f91a1mr54506465f8f.26.1736245286668; Tue, 07 Jan 2025
- 02:21:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="owHFS/n6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2136AC4CED6;
+	Tue,  7 Jan 2025 11:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736249529;
+	bh=phn3hwLXnNphs7vvlhjVmpFho6Dc/2pwkrPxE1EmRDQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=owHFS/n6PeQp48GHDuuV3BdrmJnB1h9pACV5ka2DTlgaTWJs8lHDzmIfKi1EoCegp
+	 +owCgOp4ucRTyv5YOylTU3pLPHMVBniJj2YxdlUIlLD9t+9pG5c6GN3quyGpvrRGng
+	 YjfQilR51YZ1gs0UDephTo17w7HCw1mHdpK4fj8Nn20WH+1n6GDZSOfkbk02o9xz7I
+	 DGNUewwA143ZBFarKwXmepGK7SoeAWmsNybztCzp0YSMmCrfELaAUA7cbucpnbdGVq
+	 qZi0Sx1SmIuz5es2Rh+dbR0gk+otWSrAA4+7ZZa+D+2aFug7wcurVwDnJ15VUmOT/s
+	 Jx//h8pvNWOVg==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Gary Guo" <gary@garyguo.net>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,
+  =?us-ascii?Q?=3D=3Futf-8=3FQ=3FBj=3DC3=3DB6rn=3F=3D?= Roy
+ Baron <bjorn3_gh@protonmail.com>,  "Benno Lossin"
+ <benno.lossin@proton.me>,  "Alice Ryhl" <aliceryhl@google.com>,  "Trevor
+ Gross" <tmgross@umich.edu>,  "Nathan Chancellor" <nathan@kernel.org>,
+  "Nick Desaulniers" <ndesaulniers@google.com>,  "Bill Wendling"
+ <morbo@google.com>,  "Justin Stitt" <justinstitt@google.com>,  "Masahiro
+ Yamada" <masahiroy@kernel.org>,  "Nicolas Schier" <nicolas@fjasle.eu>,
+  "Andrew Morton" <akpm@linux-foundation.org>,  "Dirk Behme"
+ <dirk.behme@de.bosch.com>,  "Tamir Duberstein" <tamird@gmail.com>,
+  "Christian Brauner" <brauner@kernel.org>,  "Martin Rodriguez Reboredo"
+ <yakoyoku@gmail.com>,  "Paul Moore" <paul@paul-moore.com>,  "Wedson
+ Almeida Filho" <wedsonaf@gmail.com>,  "Steven Rostedt (Google)"
+ <rostedt@goodmis.org>,  "Matt Gilbride" <mattgilbride@google.com>,
+  "Danilo Krummrich" <dakr@kernel.org>,  "Eder Zulian"
+ <ezulian@redhat.com>,  "Filipe Xavier" <felipe_life@live.com>,
+  <rust-for-linux@vger.kernel.org>,  <llvm@lists.linux.dev>,  "Kees Cook"
+ <kees@kernel.org>,  "Daniel Xu" <dxu@dxuuu.xyz>,
+  <linux-kbuild@vger.kernel.org>,  <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] kbuild: rust: provide an option to inline C
+ helpers into Rust
+In-Reply-To: <20250105194054.545201-3-gary@garyguo.net> (Gary Guo's message of
+	"Sun, 05 Jan 2025 19:40:05 +0000")
+Message-ID: <87msg26fxt.fsf@kernel.org>
+References: <20250105194054.545201-1-gary@garyguo.net>
+	<iBq_cLfbfAlkVpp_rSu0KOou6nPf2GahTQAxQVWuACzz5zggxHp-_AEzLnEl-ZnFZHLEVCudIZJNic7xI5G2mg==@protonmail.internalid>
+	<20250105194054.545201-3-gary@garyguo.net>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Tue, 07 Jan 2025 12:31:32 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250105194054.545201-1-gary@garyguo.net> <20250105194054.545201-4-gary@garyguo.net>
-In-Reply-To: <20250105194054.545201-4-gary@garyguo.net>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Tue, 7 Jan 2025 11:21:14 +0100
-Message-ID: <CAH5fLggUVBQytWk5d8GHBMAnBTR6MkQEwki+F62PDaeunt4qVA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] rust: alloc: make `ReallocFunc::call` inline
-To: Gary Guo <gary@garyguo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Sun, Jan 5, 2025 at 9:03=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+"Gary Guo" <gary@garyguo.net> writes:
+
+> A new Kconfig option, `RUST_INLINE_HELPERS` is added to allow C helpers
+> (which was created to allow Rust to call into inline/macro C functions
+> without having to re-implement the logic in Rust) to be inlined into
+> Rust crates without performing a global LTO.
 >
-> This function can be called with different function pointers when
-> different allocator (e.g. Kmalloc, Vmalloc, KVmalloc), however since
-> this function is not polymorphic, only one instance is generated,
-> and function pointers are used. Given that this function is called
-> for any Rust-side allocation/deallocation, performance matters a lot,
-> so making this function inlineable.
+> If the option is enabled, the following is performed:
+> * For helpers, instead of compiling them to object file to be linked
+>   into vmlinux, we compile them to LLVM IR.
+> * The LLVM IR is patched to add `linkonce_odr` linkage. This linkage
+>   means that the function is inlineable (effect of `_odr`), and the
+>   symbols generated will have weak linkage if emitted into object file
+>   (important since as later described, we might have multiple copies of
+>   the same symbol) and it will may be discarded if it is not invoked or
+>   all invocations are inlined.
+> * The LLVM IR is compiled to bitcode (This is step is not necessary, but
+>   is a performance optimisation to prevent LLVM from always have to
+>   reparse the same IR).
+> * When a Rust crate is compiled, instead of generating object file, we
+>   ask LLVM bitcode to be generated.
+> * llvm-link is invoked to combine the helper bitcode with the crate
+>   bitcode. This step is similar to LTO, but this is much faster since it
+>   only needs to inline the helpers.
+> * clang is invoked to turn the combined bitcode into object file.
 >
-> This is discovered when doing helper inlining work, since it's discovered
-> that even with helpers inlined, rust_helper_ symbols are still present
-> in final vmlinux binary, and it turns out this function is inhibiting
-> the inlining, and introducing indirect function calls.
+> Some caveats with the option:
+> * clang and Rust doesn't have the exact target string. Manual inspection
+>   shows that they should be compatible, but since they are not exactly
+>   the same LLVM seems to prefer not inlining them. This is bypassed with
+>   `--ignore-tti-inline-compatible`.
+> * LLVM doesn't want to inline functions combined with
+>   `-fno-delete-null-pointer-checks` with code compiled without. So we
+>   remove this command when compiling helpers. I think this should be
+>   okay since this is one of the hardening features and we shouldn't have
+>   null pointer dereferences in these helpers.
 >
+> The checks can also be bypassed with force inlining (`__always_inline`)
+> but the behaviour is the same with extra options.
+>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 > Signed-off-by: Gary Guo <gary@garyguo.net>
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+
+Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
+Tested-by: Andreas Hindborg <a.hindborg@kernel.org>
+
+Tested with downstream rnull tree, works as expected.
+
+Best regards,
+Andreas Hindborg
+
+
