@@ -1,101 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27223259499;
-	Tue,  7 Jan 2025 14:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D93F1F238E
+	for <llvm@lists.linux.dev>; Tue,  7 Jan 2025 15:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736261936; cv=none; b=paSpUkfaq8J16p6DmJyJnrUssMTowCJdmwljhZB3xjahtSfeAQMOnReM1r/N/fPS39vAnENW00whLf88V9zMq+qj9TC9u30xhtr69BXdRBiqSR7UbGgJpodELregMvaS0SM0dGMmYYd9Fvo00KrymAQxNv/LGa/B6d05gVMdeCI=
+	t=1736264651; cv=none; b=MlJDXEy/MgUDrQy+RquQjdCSGwDfnVLE9ledNAfEtr8XCc4U5pmdAdfm/MQaFgS9hUEqK3YQ7lEYpObQHrcB/PH114DcaMMPObJjX26j4og3tD2Jm1Qx1eqzhjHS1pN0nPGn+PDKciOcpCNRNOqcvhhw0/MNE4QUplyZ6jFc5rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736261936; c=relaxed/simple;
-	bh=Fdd/qXxUOKyLEbfLqRWJaHAiGNUfNCVPGjChUerDnn8=;
+	s=arc-20240116; t=1736264651; c=relaxed/simple;
+	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OdEB1Nth4VAVnH3jDUE8KzFRpXWgAtoqT1GgaH/ZGHEU4vwwLgPRqNrTEleDh5J2XqL8ubpACmeBuWM4A7SXGfmIerIEp4IRY52juTtGIZRqs8aqCp/p6CwFL2h+6iU1i9+7GNvizzuKvByLf/OOlHdieYz6P9riPdVH4mPzNdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bt7rzF2h; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=PfQv2TOKmrl2V8P9/rv5Gwkgjt+2I55LarKx7PXhJjzTEaG7DmKAId2UezmFNsxL0uvrKr2s2mMKMk5bMSC1SptCkaS2++3A3sTLk7OSnOJZZKYnf4N9h5vsZhhEQ227SwGicMWeep6uFMI0PYDf1kAAMZqBLU/3SO4qHxbE8T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=b/qNQf8G; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8pXOIZM8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bt7rzF2h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736261933; x=1767797933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fdd/qXxUOKyLEbfLqRWJaHAiGNUfNCVPGjChUerDnn8=;
-  b=bt7rzF2hU27PBzyKl/v7hqE3Ym6PciaUqelcngndUq7iGn1P8idnEm5e
-   4dksPjDv7kEdEPQ710H0GKMy2d1UrdD9MvM9F8wMxLHBmHC5lgZs7o4Vm
-   MA8qHk88gIp0AAgyEt3eIYaIUh7noCnCh1byEuhec+RXC7Gfp5KtqFdH9
-   +v1359w3wEqC2YevB8szHhUzP3nBqPneRz9WtU/e65o/aGRu164J7gh4N
-   5m8FfyfCmipoOHd2TK/fv9XLevbhjDniLleZtrIGIWEHO/C4bs6VdqZt7
-   GFNS1UdvZRnbzdku2QzZPHOuIxmQxJDX79aRwL358Vdw7EvUrSgX0FYjk
-   Q==;
-X-CSE-ConnectionGUID: pZZFCAdKQ+msVXYA9/kCRg==
-X-CSE-MsgGUID: 0mbHo4j+Q9+rD2JH4VSPxQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="46944098"
-X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
-   d="scan'208";a="46944098"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 06:58:52 -0800
-X-CSE-ConnectionGUID: RDvuaEXnQpa/h9OCAEyF9g==
-X-CSE-MsgGUID: cqy4g4trSk6yPYPHjwBx0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="106811591"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Jan 2025 06:58:50 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVB2e-000ErL-0F;
-	Tue, 07 Jan 2025 14:58:48 +0000
-Date: Tue, 7 Jan 2025 22:58:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: niravkumar.l.rabara@intel.com, Dinh Nguyen <dinguyen@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH] arm64: dts: socfpga: agilex5: add NAND board file
-Message-ID: <202501072244.kNb1e8KP-lkp@intel.com>
-References: <20250107084831.2750035-2-niravkumar.l.rabara@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="b/qNQf8G";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8pXOIZM8"
+Date: Tue, 7 Jan 2025 16:44:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736264648;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
+	b=b/qNQf8GcYl+46U4LTJorAjjfpbr+6GIagX7nBtMsZyd/gx/BHWUeZnyIMLHRKNaVLjw+U
+	ze6X3HQPxZARmuhswrGB87y8YKI4tg4HEz0QJstdFYQrpEJ3YUhpvCoke7jpsfQznSUngT
+	AHL5cp0KFQSJRYs6S663F+axfSoDVqx/GurMz97VnLEJdAfklwEDJ/k+yzD4t/PtJiDi1M
+	WjA1rj+CtRtJaeKYIHu1MqPozCVertX97y+XbpbJnX1ORy8T0DFwiJ/E8WE0aJFPObFVSm
+	mDQf+WNa/v/pLBmYQpzPrkzbwGajmyoeY2X6bwOpwMwl67PIfyPSRlMBItbkKA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736264648;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
+	b=8pXOIZM8lK0ml8vG3dEWoYnKZ6d5JffB3ifgCjbM8Pt8UXfIaOjyNX+nFKhiOC8KFhCxFT
+	zraYG1CM1wjS1yAQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Elliot Berman <elliot.berman@oss.qualcomm.com>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
+Message-ID: <20250107154407.OQ2ml1iY@linutronix.de>
+References: <20241220174731.514432-1-bigeasy@linutronix.de>
+ <20241220174731.514432-29-bigeasy@linutronix.de>
+ <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
+ <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <CABCJKucPR7ty7oPn1NYkJidv_Mk46+E0B0vmGhBXz4Stt+vujA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250107084831.2750035-2-niravkumar.l.rabara@intel.com>
+In-Reply-To: <CABCJKucPR7ty7oPn1NYkJidv_Mk46+E0B0vmGhBXz4Stt+vujA@mail.gmail.com>
 
+On 2025-01-06 13:24:28 [-0800], Sami Tolvanen wrote:
+> Hi,
 Hi,
 
-kernel test robot noticed the following build errors:
+> OK, great. That makes sense. Thanks for taking the time to test this!
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.13-rc6 next-20250107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you two for testing, confirming and adding more informations to
+what and why. I take some of this for the patch description.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/niravkumar-l-rabara-intel-com/arm64-dts-socfpga-agilex5-add-NAND-board-file/20250107-165406
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250107084831.2750035-2-niravkumar.l.rabara%40intel.com
-patch subject: [PATCH] arm64: dts: socfpga: agilex5: add NAND board file
-config: arm64-randconfig-002-20250107 (https://download.01.org/0day-ci/archive/20250107/202501072244.kNb1e8KP-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501072244.kNb1e8KP-lkp@intel.com/reproduce)
+> Sami
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501072244.kNb1e8KP-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/intel/socfpga_agilex5_socdk_nand.dts:39.1-7 Label or path gpio0 not found
-   FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sebastian
