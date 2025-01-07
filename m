@@ -1,82 +1,154 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D93F1F238E
-	for <llvm@lists.linux.dev>; Tue,  7 Jan 2025 15:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8087B1F37A3
+	for <llvm@lists.linux.dev>; Tue,  7 Jan 2025 16:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736264651; cv=none; b=MlJDXEy/MgUDrQy+RquQjdCSGwDfnVLE9ledNAfEtr8XCc4U5pmdAdfm/MQaFgS9hUEqK3YQ7lEYpObQHrcB/PH114DcaMMPObJjX26j4og3tD2Jm1Qx1eqzhjHS1pN0nPGn+PDKciOcpCNRNOqcvhhw0/MNE4QUplyZ6jFc5rg=
+	t=1736266205; cv=none; b=GJxswlCwmvEUFfv/MGSwAyVMqdQG3A4aWq/FOgtwcc98jZWkvXl7UjQUFxVXbn9Jbv2shi7aoqTD4ehb3C0FFzk7T83jCQ5feq+UIyjh5C2jRZHiOiuSH0zOuJAnVkzgzuogmJbqznB6S0CUPVGlkGBl0lVLtw9a2VdRjRy9JEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736264651; c=relaxed/simple;
-	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PfQv2TOKmrl2V8P9/rv5Gwkgjt+2I55LarKx7PXhJjzTEaG7DmKAId2UezmFNsxL0uvrKr2s2mMKMk5bMSC1SptCkaS2++3A3sTLk7OSnOJZZKYnf4N9h5vsZhhEQ227SwGicMWeep6uFMI0PYDf1kAAMZqBLU/3SO4qHxbE8T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=b/qNQf8G; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8pXOIZM8; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1736266205; c=relaxed/simple;
+	bh=BLvBXkcC6ssstTngM2MxSIifHbhzF+9k4d6CngTIMN8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iUarqRW72nEZyqtCgBg+CVHf2I6H97WH1/xfNA09N14w7nj5xUDbCqEy8r5q/oxI16vdzJD6x2qwrzGeD71z9SBZKYTlE3QC9JPjcAoDq0NSofF5q6AzxvFbOBXy901pkVQUQrVT4mewA25Jwv6mvScqqi7ma9kpZmHBHxfPkyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ijSVPE01; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="b/qNQf8G";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8pXOIZM8"
-Date: Tue, 7 Jan 2025 16:44:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736264648;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
-	b=b/qNQf8GcYl+46U4LTJorAjjfpbr+6GIagX7nBtMsZyd/gx/BHWUeZnyIMLHRKNaVLjw+U
-	ze6X3HQPxZARmuhswrGB87y8YKI4tg4HEz0QJstdFYQrpEJ3YUhpvCoke7jpsfQznSUngT
-	AHL5cp0KFQSJRYs6S663F+axfSoDVqx/GurMz97VnLEJdAfklwEDJ/k+yzD4t/PtJiDi1M
-	WjA1rj+CtRtJaeKYIHu1MqPozCVertX97y+XbpbJnX1ORy8T0DFwiJ/E8WE0aJFPObFVSm
-	mDQf+WNa/v/pLBmYQpzPrkzbwGajmyoeY2X6bwOpwMwl67PIfyPSRlMBItbkKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736264648;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9FRRC2Sx1ANlYfEV2Wva1xaqYX27Qfnh9caqO/slSS4=;
-	b=8pXOIZM8lK0ml8vG3dEWoYnKZ6d5JffB3ifgCjbM8Pt8UXfIaOjyNX+nFKhiOC8KFhCxFT
-	zraYG1CM1wjS1yAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Elliot Berman <elliot.berman@oss.qualcomm.com>,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Elliot Berman <quic_eberman@quicinc.com>,
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
-Message-ID: <20250107154407.OQ2ml1iY@linutronix.de>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
- <20241220174731.514432-29-bigeasy@linutronix.de>
- <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
- <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
- <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
- <CABCJKucPR7ty7oPn1NYkJidv_Mk46+E0B0vmGhBXz4Stt+vujA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ijSVPE01"
+Received: from [192.168.1.13] (pool-96-241-22-207.washdc.fios.verizon.net [96.241.22.207])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E41AB206AB9C;
+	Tue,  7 Jan 2025 08:10:00 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E41AB206AB9C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1736266202;
+	bh=7ddpPet55sgnfnLofuy1LQslUTu20r7I0nEzfZLkYYQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ijSVPE01H9JNPGr1EMzstpni+NHe7hl0ZK05v73Xdle2NDWbPpfRYcdlhzuWlLjJ5
+	 S+KFyNplFbImqHwzxIcLQRKl7XhDzGQw5fzCpvdUa7X9EAj1+xxPyS0sb9Mv+v3S9s
+	 jAUUtX0JiLw/4e+Tgb5iopjIhnYzK44C5X+YOT7g=
+Message-ID: <6b9cd467-cc34-4ded-b68e-c98bd5870537@linux.microsoft.com>
+Date: Tue, 7 Jan 2025 11:09:59 -0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CABCJKucPR7ty7oPn1NYkJidv_Mk46+E0B0vmGhBXz4Stt+vujA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 22/22] selinux: restrict policy strings
+To: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+ selinux@vger.kernel.org
+Cc: Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Paul Moore <paul@paul-moore.com>, Ondrej Mosnacek <omosnace@redhat.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ =?UTF-8?Q?Bram_Bonn=C3=A9?= <brambonne@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Joe Nall <joenall@gmail.com>
+References: <20241216164055.96267-1-cgoettsche@seltendoof.de>
+ <20241216164055.96267-22-cgoettsche@seltendoof.de>
+ <CAEjxPJ7NdTWu4dspY9cbPMtRsW_jERoRbKBsObbvsEnwgmZ8Ew@mail.gmail.com>
+ <EF4B3759-2C4C-4A15-A721-6B2D0FAFD84F@gmail.com>
+ <CAJ2a_Dcw3KQUNv1HQFp4qPOoZ972hjr6Qa2LAXTTv6SkV_Pd0A@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Burgener <dburgener@linux.microsoft.com>
+In-Reply-To: <CAJ2a_Dcw3KQUNv1HQFp4qPOoZ972hjr6Qa2LAXTTv6SkV_Pd0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2025-01-06 13:24:28 [-0800], Sami Tolvanen wrote:
-> Hi,
-Hi,
+On 1/7/2025 9:04 AM, Christian Göttsche wrote:
+> On Mon, 6 Jan 2025 at 00:26, Joe Nall <joenall@gmail.com> wrote:
+>>
+>>
+>>
+>>> On Jan 3, 2025, at 2:12 PM, Stephen Smalley <stephen.smalley.work@gmail.com> wrote:
+>>>
+>>> On Mon, Dec 16, 2024 at 11:42 AM Christian Göttsche
+>>> <cgoettsche@seltendoof.de> wrote:
+>>>>
+>>>> From: Christian Göttsche <cgzones@googlemail.com>
+>>>>
+>>>> Validate the characters and the lengths of strings parsed from binary
+>>>> policies.
+>> Excellent idea.
+>>
+>>>>   * Disallow control characters
+>> Fine here.
+>>
+>>>>   * Limit characters of identifiers to alphanumeric, underscore, dash,
+>>>>     and dot
+>> Fine again.
+>>
+>>>>   * Limit identifiers in length to 128,
+>> Fine again, our longest
+>>   - type is 51 characters
+>>   - attribute is 31
+>>   - boolean is 46
+>>   - role is 12
+>>
+>>>> expect types to 1024 and
+>> I don’t understand what this means.
+> 
+> Similar to your list of the length in you policy boolean, role, user,
+> class, and permission identifiers are limited to 128 charatcers (not
+> including NUL), types (and attributes, which are just special types)
+> are limited to 1024 characters, and individual sensitivities and
+> categories are limited to 32 characters.
+> 
+>>
+>>>>     categories to 32, characters (excluding NUL-terminator)
+>> One category or the whole category string? A single category longer than 7 characters seems pretty unlikely and 32 is wildly short for the whole string.
+> 
+> This only affects individual sensitivities and categories, like "s9"
+> or "c1023", not whole MCS/MLS parts.
+> 
+>> Joe
+>>
+>>> One option if we are concerned about breaking backward compatibility
+>>> with policies in the wild would be to make these restrictions
+>>> conditional on whether the policy is being loaded into a non-init
+>>> SELinux namespace, similar to:
+>>> https://lore.kernel.org/selinux/20250102164509.25606-38-stephen.smalley.work@gmail.com/T/#u
+>>>
+>>> That said, it seems hard to imagine real-world policies that would
+>>> exceed these limits, and likely could make them even smaller.
+>>> But as Daniel said, we should make them consistently enforced in both
+>>> userspace and kernel, and potentially these should all be #define'd
+>>> symbols in a uapi header that can be referenced by both.
+>>> Looks like you left the type limit at 1024 despite Daniel's
+>>> observation that CIL uses 2048 as the limit, but as you noted, given
+>>> the page size limit on the entire context by various kernel
+>>> interfaces,
+>>> this is likely fine.
+> 
+> I interpreted Daniels comment more like a assessment what CIL
+> currently constrains, not as a request for a change, maybe I
+> misunderstood?
 
-> OK, great. That makes sense. Thanks for taking the time to test this!
+That is what I intended, yes.  My related request was "I would think 
+that we'd want to end up in a situation where the kernel is either 
+equally restrictive or less restrictive than CIL".  In isolation, my 
+opinion is that the 1024 limit is fine, but I've been hoping James would 
+chime in about the feasibility of dropping the CIL limit at some point 
+to get them in sync.
 
-Thank you two for testing, confirming and adding more informations to
-what and why. I take some of this for the patch description.
+FWIW we have a few generated type names internally that subjectively 
+feel long to humans, but are still under 100 characters.  So 1024 is 
+plenty of extra margin in my opinion.
 
-> Sami
+-Daniel
 
-Sebastian
+> 
+> Exporting the limits via a public headers seems reasonable.
+> 
+> Maybe for a smooth transition one could introduce a build time
+> configuration (CONFIG_SELINUX_STRICT_IDENTIFIERS?).
+> This configuration can be disabled by default, leading to identifiers
+> not being rejected only logged.
+> Than after two releases the default can change to reject instead of log.
+> And after the next LTS release the configuration can be dropped again.
+> 
+>>>
+>>
+
