@@ -1,63 +1,63 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C110E19F421
-	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 03:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09D21A2C27
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 03:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736305208; cv=none; b=AsOoSVwry5sI6obooknnA5cgYPlhcUpZYONjDnW5DDIZkcZ7s+VVciCDr2BbfXmS4doDE8OuuRJ+5+IljhOKmZKoFx8ZUvsUN4z/8oM+c1KVBGN7jRctR2m7l3pJHyxticQju91jzc86/oBC1MQI4CG81e52sEuRtWWDA5qOhnk=
+	t=1736305210; cv=none; b=fl8nXtXonB3l9wwfjEHmYtm6pKICeli1sdTA0ec9UDVttz5UzQDKXWe2MCffigvHI4JG+ACR1bInZMjd7wvFXw7XNEie6PjPdy94+0M5HSGW/eOU64IM17Kj/kdjeSZ9XEfTgRmaYhozlZkyef9Qw9QH+NT8HdnGSKLW6mwSdVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736305208; c=relaxed/simple;
-	bh=kg/oZJ9Hh7esGFqie1eJQ0q3uOex3G6vTcn9GQYIXuc=;
+	s=arc-20240116; t=1736305210; c=relaxed/simple;
+	bh=HU8Sp7rs/6eXrWhZ8ytCpUps6t1FpHVBVNPG68KgZeA=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Fh5JCDd95bm5edN3ifFjPze3H/e969u6jxYVBTHEv1aQLKQRprmuoigMZb68GLR21GYxLj8pEcFIvoWUm7LtF8585EblG7tcBeHoGm4RVQ6++f++YIBMnwH1rkG9CdBrpLdNyIsxYbZPYgq89YMYq/AIybpQtB+hLBIhDmHObzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fYCdSUdj; arc=none smtp.client-ip=209.85.160.170
+	 References:In-Reply-To; b=mKkDSw+/uzqBTC91FMdgM4lqdz4lbx3irvvn6srp1Bm9ZQ6Ah4P4tY+tzaPEYi0fEau7FL5qZ7EW8wPKFfMMtO261i6ov5FexyAMlwlgHJSbVXAVU2lqqIcNV+Yz16Tngl53TM5yyBJFe17DcHE8BSRSvSIMmKqa/erGlGS56ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Wgm5171S; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fYCdSUdj"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-46783d44db0so155342351cf.1
-        for <llvm@lists.linux.dev>; Tue, 07 Jan 2025 19:00:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Wgm5171S"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6d92cd1e811so3758796d6.1
+        for <llvm@lists.linux.dev>; Tue, 07 Jan 2025 19:00:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736305203; x=1736910003; darn=lists.linux.dev;
+        d=paul-moore.com; s=google; t=1736305206; x=1736910006; darn=lists.linux.dev;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=arepOiqJBhTy8LJBXLbNVTvzMEQrYQ0+bVCvA32Q0h8=;
-        b=fYCdSUdjzFdBTBdWNFMKyB8ES6s5otsdn9x8EvpTtjF7kKfqfGR/EjPR7ZDbzJKj2I
-         UBNKaKW8ev6kLLjR3QnHv9Al8GGTVNoCK0LHwPsBSEKJUFsMuYfNj1biufKmbe5YGXmz
-         t1EFJRqjxiPXy9PIXEsNYmivaeDjHr2FwBXHR5f2Mq6vEMNeT5cHHh7d9PGu6PR80qLj
-         cMcjiMBZ2/G4jdhkGBFuoc4wb4DwZsbT3ZuKqV8zOZCkDF8t+zm3lqJGbZL5Kp+ZJzsk
-         RRRC9IWgzMHC8H/8YZykhxVAr14WGSAHL6R9H0y/v1UucrclEWgPXJnsdpiHtdZvn9/L
-         r3Eg==
+        bh=nFffj8OyFUR0Q+SLXK1K0ik0lcMFfCXWhx7x0gzeudo=;
+        b=Wgm5171SQ1ZSbjv/zWU6qq+cKpfc1Ej6RQtvD9QfI3FSAsjHm6DwY30O8aXKOpHMwv
+         ZCYUR/W6IGdJ5Swrw3M6eLfOR5faAm2WklIvl4wMTEGGqFXIvb1rKMYVDgESebEmdeFl
+         hfylR4LxcUFnE7qUeFBsvWEvK9wqa7r7THeY1QftGmkPw16M7tq4C2OQft8/vp1CL2CI
+         YNvS6GKB0Fb+itFo8TBWQI6og40kW8NkZiR+2JSZ45lwJPs0G8uQCoMQ2Bi1CB+69ZJ8
+         e5+AGjey2GXR8vGmWV0/f7r+rmu3oM7+Jak869dOkfF9Q0TG0Td2mgqjMToySDhcWH5d
+         nOTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736305203; x=1736910003;
+        d=1e100.net; s=20230601; t=1736305206; x=1736910006;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=arepOiqJBhTy8LJBXLbNVTvzMEQrYQ0+bVCvA32Q0h8=;
-        b=YyenYAA3w085Ilqudywvc77J9EN6XyPdCARDzkGahvIKvqTzEfogV+98UfiofcT2bF
-         rpY8QrnmCdVbfe365AVHlITg2l9+duk1huDUfhLaykd5SORvvdWfx8sOFzGiNC6hy7r3
-         VvHa17/F3K6PA2MftN6H1ibkWJ5I2Ta+CSg+PYApRLfp7P8fbNvjjJ7IgKrA9IWGRVZv
-         aE1ys1e9rNaeBVejCMcq5nIQe7Mnx7+5Vdn5D63FIXwoMJhcJFQc+uqRzf4eDXnCJZdU
-         x08CoyvspWsP/JCqYMcKRB6LAusBsQTWraUr97LLunm9aYWK7VnUoRHuOOKpso5A+WoV
-         zkoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJJZjrpexsHMThQxHEodPBdzHtP2E2Uz9WGnl7A3OjkD0oQZ07jkF9vz0zjEPf8nWsu9Vk@lists.linux.dev
-X-Gm-Message-State: AOJu0YxLAclgnKQPRmvb5GMvMTqYbO6jge34P1nuUW5RqA9+aHQ+TaQd
-	75erYRjiHEEUGr0bpTlSD3z/pfXNa6bJN1GAu/gRQFqXP2V/JjJ/oJF0X3jVnQ==
-X-Gm-Gg: ASbGncs1vPbn28YrtnoowIg72CoL0SqnaajViFw5e7Ump+WVbPryAfIyYuIws/r1De8
-	tCJqufHAziqHP64aHzW3einUPcJRt0z95MeB7PbkTkgrecIIgsW+pqryHboABDFXjgZdF6vVz5U
-	W3q6zxMAPEP7Ey90aHe3nCElnalE0eWDB4GvSqgZkiIzXlyVJZ2q9phyOtqntt2y3T4nJ2PgY5k
-	5+yvFyRlngQUvML7OdmHmNuQDZkfT7qJWm9EBWDBqFhHZJxnKg=
-X-Google-Smtp-Source: AGHT+IG2V4LdZ1+ix3UVm8fGy1Wny0zEJRa4xmmG4X0BNNqJo5+iK5Quw2/BwBAPmfvec7zGf1CJTg==
-X-Received: by 2002:a05:622a:1a06:b0:466:a091:aa3f with SMTP id d75a77b69052e-46c7109f0b1mr19801741cf.51.1736305203620;
-        Tue, 07 Jan 2025 19:00:03 -0800 (PST)
+        bh=nFffj8OyFUR0Q+SLXK1K0ik0lcMFfCXWhx7x0gzeudo=;
+        b=pPf/As7hl3gK0lkKacy5TPCZadVIlk2x4UOMry/AA2Kq7ieyFxGRjHEpPJ8KreiYxC
+         dMl8ayTJU9S2biKS+0/JAY/uYsQigSzJ/OwXkK0FmntY3Etkbkkm4IWuh+fOPN66xJWm
+         JXBZ8hjnpWe5mcKa1NtBP93SDFwz2qeUSZpdcjlYSBjzzp1zkiWXWSbEZ7RGaQ6XRkqr
+         VWlkY9wgp3TY5djj38XQxJ8ispsxSNlZw+xGFLwuynJduADxAwrfIN4vuL7GhBEzMQpx
+         r+YWS361DJ/hILE0cz8avyCdaoYW8BrjHjH+VyhdLn8h5Bvtj6935eXytTrD1JLtKTb4
+         Bs0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXPcWskAvuUOXoqSFr+jvSCNd/DUd6LW8jxwR5ULgrObdCUadazraDv5hQLZovgQT+5Vrco@lists.linux.dev
+X-Gm-Message-State: AOJu0YyaiX2axDmRWejVJuIlrQVNb6Of2wgz4soi+8VvmwaaP4+jThjo
+	6R4diTOpSYTgi8bEMhaurQ8uvXqUtYOlvmsRrPWV1I2togXsNspFdBGowQ3PPw==
+X-Gm-Gg: ASbGncuRO4hGDCPfrxQUK2Vd0ORGmx1Z/ozewXxEW+0RCci938zNgO3D7ql9C2WUFRS
+	zUEIgXLLlnMRfdIC1OZonEt1NTphJFqHVPRzNIHMWZJ6A1ocmlDw+K9IQd6gfnNAxuA+OvxqLEB
+	+DPGdkiGRy66I9M4of+PGab3DUCFl2PHmiroj/DHzmqyNeBAz2RHU94eeeCsbFrx0Gw/Yrzswe8
+	iow8ZgGIGYl5dlFr2xpBN3gQ/Xk7bSQ3uHug4RikkJYIMJGKQM=
+X-Google-Smtp-Source: AGHT+IGdp03/voSTgKYILgCBQb+C3zrHmVmP/meSGBil56EB+87hk12MwVh/nz/ecoIFTIdWZ/X//A==
+X-Received: by 2002:ad4:5ba6:0:b0:6d8:ab3c:5d7 with SMTP id 6a1803df08f44-6df9ae6a5ebmr23852956d6.24.1736305205990;
+        Tue, 07 Jan 2025 19:00:05 -0800 (PST)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46b385c95edsm17454991cf.87.2025.01.07.19.00.02
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd180eaaa8sm186245836d6.1.2025.01.07.19.00.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 19:00:03 -0800 (PST)
-Date: Tue, 07 Jan 2025 22:00:02 -0500
-Message-ID: <d7895d5cfc09a64b91721fdc4796fdb3@paul-moore.com>
+        Tue, 07 Jan 2025 19:00:05 -0800 (PST)
+Date: Tue, 07 Jan 2025 22:00:04 -0500
+Message-ID: <06eb43271d150c5003b00baef7350161@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,24 +69,77 @@ Content-Transfer-Encoding: 8bit
 X-Mailer: pstg-pwork:20250107_1610/pstg-lib:20250107_1603/pstg-pwork:20250107_1610
 From: Paul Moore <paul@paul-moore.com>
 To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, selinux@vger.kernel.org
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>, =?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH RFC v2 8/22] selinux: avoid unnecessary indirection in  struct level_datum
-References: <20241216164055.96267-8-cgoettsche@seltendoof.de>
-In-Reply-To: <20241216164055.96267-8-cgoettsche@seltendoof.de>
+Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>, =?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>, John Johansen <john.johansen@canonical.com>, GUO Zihua <guozihua@huawei.com>, Canfeng Guo <guocanfeng@uniontech.com>
+Subject: Re: [PATCH RFC v2 10/22] selinux: use u16 for security classes
+References: <20241216164055.96267-10-cgoettsche@seltendoof.de>
+In-Reply-To: <20241216164055.96267-10-cgoettsche@seltendoof.de>
 
 On Dec 16, 2024 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de> wrote:
 > 
-> Store the owned member of type struct mls_level directly in the parent
-> struct instead of an extra heap allocation.
+> Security class identifiers are limited to 2^16, thus use the appropriate
+> type u16 consistently.
 > 
 > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 > ---
->  security/selinux/ss/mls.c      |  6 +++---
->  security/selinux/ss/policydb.c | 19 ++++++-------------
->  security/selinux/ss/policydb.h |  2 +-
->  3 files changed, 10 insertions(+), 17 deletions(-)
+>  security/selinux/ss/policydb.c | 52 +++++++++++++++++++++++++---------
+>  security/selinux/ss/policydb.h | 10 +++----
+>  security/selinux/ss/services.c |  2 +-
+>  3 files changed, 45 insertions(+), 19 deletions(-)
+> 
+> diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policydb.c
+> index 2408c3e8ae39..eeca470cc90c 100644
+> --- a/security/selinux/ss/policydb.c
+> +++ b/security/selinux/ss/policydb.c
+> @@ -927,7 +927,7 @@ int policydb_load_isids(struct policydb *p, struct sidtab *s)
+>  	return 0;
+>  }
+>  
+> -int policydb_class_isvalid(struct policydb *p, unsigned int class)
+> +int policydb_class_isvalid(struct policydb *p, u16 class)
+>  {
+>  	if (!class || class > p->p_classes.nprim)
+>  		return 0;
+> @@ -1321,7 +1321,7 @@ static int class_read(struct policydb *p, struct symtab *s, struct policy_file *
+>  	char *key = NULL;
+>  	struct class_datum *cladatum;
+>  	__le32 buf[6];
+> -	u32 i, len, len2, ncons, nel;
+> +	u32 i, len, len2, ncons, nel, val;
+>  	int rc;
+>  
+>  	cladatum = kzalloc(sizeof(*cladatum), GFP_KERNEL);
+> @@ -1334,9 +1334,14 @@ static int class_read(struct policydb *p, struct symtab *s, struct policy_file *
+>  
+>  	len = le32_to_cpu(buf[0]);
+>  	len2 = le32_to_cpu(buf[1]);
+> -	cladatum->value = le32_to_cpu(buf[2]);
+>  	nel = le32_to_cpu(buf[4]);
+>  
+> +	val = le32_to_cpu(buf[2]);
+> +	rc = -EINVAL;
+> +	if (val >= U16_MAX)
+> +		goto bad;
 
-Merged into selinux/dev, thanks.
+While this is a major issue, isn't U16_MAX technically still valid?  In
+other words should this be: '(val > U16_MAX)'?
+
+> @@ -1939,7 +1948,11 @@ static int filename_trans_read_helper_compat(struct policydb *p, struct policy_f
+>  
+>  	stype = le32_to_cpu(buf[0]);
+>  	key.ttype = le32_to_cpu(buf[1]);
+> -	key.tclass = le32_to_cpu(buf[2]);
+> +	val = le32_to_cpu(buf[2]);
+> +	rc = -EINVAL;
+> +	if (val > U16_MAX || !policydb_class_isvalid(p, val))
+> +		goto out;
+
+We should split out the class validity check into a separate patch and
+keep this just as the subject states: consolidate the class type to u16.
+
+As an aside, I'm going to do a quick review pass on the rest of the
+patches in this series, but I'm not going to merge them as I keep
+hitting a number of merge failures due to this patch not being applied
+and I'd rather not have to fix them all up :)
 
 --
 paul-moore.com
