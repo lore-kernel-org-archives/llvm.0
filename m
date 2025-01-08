@@ -1,63 +1,63 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D1B198E6F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F79919AD5C
 	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 02:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736305201; cv=none; b=Kly3d+SS5d0DRLQKZZTH/k+py9xq0rS3kQdZ5AtfV5hj4n1d2myr6IYJ28hceIRtE9CB8e6EdCebVtt/KXPjKf8z0tqm/U6SMLqcMaL0tBmMGxxhT5Rol6WOTJ7d/cDMTz3MdOszJhFgXypXtgXbmZHvW4UbTGgf91JpxyUwHoo=
+	t=1736305201; cv=none; b=Y/AISJeTU+uA2VGSz/3+zfElFJWrQ36cCZzHKk152zwYPcXeuFSixAbi8ChpFsbEeDOmv8as3bLuZfYwWjmjAObCW1OrESbHJZ+RqSubM9I47EXjubpZG6kVd6E0X3aJ1DUDP6pCm/WYmm8YYJKn19csFT9n6Mst/HbZWVWnR0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736305201; c=relaxed/simple;
-	bh=mCGrJ9w5jYhzkvrMtMVnrjGpgTQEY9PcNzgxPvwS5so=;
+	bh=x66hmIGILhwKaBIsLRM+S0y66E+k9BuE/weApjH/UBI=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=HxWpP9utByItJl+Nl3rWXe4GbgiFEH1srzk7WzVIVuJF+xNpAH00gZyYp6HSlAUxJssNFqMffedWH1IuKCu9ViI+G3k9DgiIitEbvHc187ha1Tpjn8n52QZTSpXolbRDlgI92oing6yIJuWrZJbI4XJHU8ReWdmoywvasEWZkxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZlHq6Rvq; arc=none smtp.client-ip=209.85.219.48
+	 References:In-Reply-To; b=TAklSb4hN2CUn9a653YTtVfev/JWyQTRWfJr6xyYMRGmfPe3FSgovfczYIepjV2NPk0Yk8zk+Nko0G+iyJQbWSMy0pFr9dgKG8RHjWvHdG9nF1V08yY9EIXghr7YXiXXAh2IIWerbbvkufj5JvqBDvspgms5eQ9NXU/wnSSmBmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MwpkhASA; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZlHq6Rvq"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6df83fd01cbso14114156d6.2
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MwpkhASA"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-467b955e288so157629361cf.1
         for <llvm@lists.linux.dev>; Tue, 07 Jan 2025 18:59:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736305198; x=1736909998; darn=lists.linux.dev;
+        d=paul-moore.com; s=google; t=1736305199; x=1736909999; darn=lists.linux.dev;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QIXJVCIS8DfcCstGykVKJfPorx6LhUEdkQ8NsNCAgOk=;
-        b=ZlHq6Rvq9PzZ7lb18SYTpIcgqqKiTLTlUHVopWG/7lbnFB4XapdM8GG890PUr4SBY4
-         DIdZcdNOe7uhWrZ6f6WEmUIXhXOz2WasN5Cm+xw0UNJo/u0HRXYvHv5nM0O+oisRv3u3
-         PjIldQVugiysMTubWL6VV2ZD0OzebSF/ckXL1tvVBvSGFrWvyLRodzwO85hFBYXL9p+U
-         LYBY9fQwcNaBgVLGtowCeclkghcj7LBuo2ojy55J8a28LCbDgLAXE+nJYhIVViI3BeI2
-         ex8OUO2wj63RrAn3/g+F+JDUZEtGQf6s2FShX+VE2+9PYEojq6HROWJSnycEt04IJtR8
-         80zA==
+        bh=nTMN0fZnjdwbZaPCb5FrQLxLApwEte1/54lx0D/jILQ=;
+        b=MwpkhASA7ayLvj5H4sPAAH0WoyxD55aIjBaVWlD3FsMB4xP/kzJL4DXQfyzIBSUxfK
+         wfoq5t/8WRJbS1cfCjGR0E0PNahKFAvCy2/TwxOlxyRKCzWez79nvjHdvXFG3b24CW5L
+         gnplLbfz5xE/tvY724o59NabGrApslpt579McDyibJnCGHLOKDjp6yv9JZnhqN5M3EZO
+         hyZl9I27XoqvLm86vxFBnRYKDW3NRfU9EKz7SglwqTAee5VpPhrgDkAjHs5Jssox2Xz3
+         fmSs6WP2vToS6gul2HMYb9ti8KmMAYteT9VRaowMbBCbn/AZMwppcKrtv+azPFIp5tkC
+         PATQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736305198; x=1736909998;
+        d=1e100.net; s=20230601; t=1736305199; x=1736909999;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=QIXJVCIS8DfcCstGykVKJfPorx6LhUEdkQ8NsNCAgOk=;
-        b=QXmyDPtGSzMM0L+WWDwAYqOZHkmzPqRJPUW1qDQ9TJHQDFraw+mC2CdX3uMY156kko
-         TmHtfj/wK9dPl8eO4RvNbN9vOnHbqGbloxyO4SRwmtH5Q1ny+7ICZYIocRKp0VsR599G
-         mk3xh1XEBqLXhDAVcWHuLKSLSTIKjGcGTTwSsXMPeJr3dkhuCkEbB2VYqa+q/xepwtqb
-         yb4UYi+gGenosHVFn6DtjXH8CGNNl8mlkXa9R1jYmwMfvFm3PCdLxARlxGiM+8VxpFTr
-         EmZRPNCwJb8j6C7MD9ADFjjmxlbi98yw4oAJqJJkZEgy0U2VJzMMA25ci5zIimMrBPq0
-         kuBA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9dMstCsrUpBf73Ry+/Ne1rRZMNGoLJcifiYYtYFh+UucdqXgk7i3WEBh5twcpqo2FcKjq@lists.linux.dev
-X-Gm-Message-State: AOJu0YwxiTUFtNNiCblnTREGa7qGbBSylgPBR+zP/HXm6t/79GIlArAu
-	691GU6rSlRms6KMYdgJjz5IzWc2PIrW3m/OmEO3UhELpMNOINMsH/3JKT2L9yA==
-X-Gm-Gg: ASbGncsaoM8aP+aVSgcMx1M88bE7s1jUKSSPx5Qr0wN9vQxVqlO/tyrRFZF4FWkLRgX
-	Pk32EaBvXkVFXVAMGbzJsdyxpOzOO9LH6lMomXXf0YKplVJ2obAgtEP0MfvABM+Ib3KTM/raOZK
-	Zi727ZIHcsu75jPNKExizFCk3wU7sCRMZWM1TUFChZpRhv2F/dYOMxqz0UKCoCn7Hwo4pDBgtfq
-	KDMWvUzJTzNKv3nUTagriI9oWAjrMMVvvsKc6hshkV1RnZpU7s=
-X-Google-Smtp-Source: AGHT+IFpYCc0tjOwUQ5yZY3mSaoFRtDcQMBYeoAYHiU4H5ZdQilgu/HQagMJIkV1QvqZLDg3EzGOOw==
-X-Received: by 2002:a05:6214:21e1:b0:6d8:8a60:ef2c with SMTP id 6a1803df08f44-6df9b1d2299mr26806426d6.2.1736305197802;
-        Tue, 07 Jan 2025 18:59:57 -0800 (PST)
+        bh=nTMN0fZnjdwbZaPCb5FrQLxLApwEte1/54lx0D/jILQ=;
+        b=Kk/0jL5cKZUQXIlTop1X0JnPQlNpLKpJTzGAR5PsfTvMW+SIqfu4h2ERsHJGwldY8D
+         LuvYMKke96hotZ2kjqtpHeiuse+96uEbsuKstsi7MyadQPeUlhsV30Lo6cthgoYUBwoV
+         cUwm9WoIKh3aUpPf2I9sjMfqkaEN4+TekSSX/wRUVTqwoO32s1rg/FKHOktgiGbOKYvH
+         TYE/1n4/7fD5kApJ7q/41AxSbQI52zy8dbKp6sdMJVKF5SGbsGGvTlfBoyXwT8t4qevD
+         OMeHGE+hb3wWifxWy33d5/lFl2OXh+XLcHp5KBfhiaLh7OZtsImMFdHDU9AvOgi+EZC/
+         m+Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWdd92AiGZEDnkM6is9YFXpZd6zrmiKVc7lYZ7rV3tdEZglTEFrWrR3TFjDxv+OjtbF5WR@lists.linux.dev
+X-Gm-Message-State: AOJu0YzdfPkm/G6kfApz6qhGe2AJAOMGW0aiM5HpoGyWn47DH8Ry/T4t
+	xkvZticPCeAEDY7UKlcLYzjZYtgRSSFTuEiRJjIMP1QBfr4OEous0h6PM9JG0A==
+X-Gm-Gg: ASbGncvCsh6hOTJEQPC83wSEeeqzcMnSFmOxkbD23JF+/pPuKmJ6VeuQL0oysdilESF
+	xvnPlCBQ5/YsngeAmqDxyQohvyGchexsjDz/zWTIunIzHeBx6DIOLuwmocjxJxhlRTs4zohUMB+
+	W3SN7UMohk0G6w66LVrtlggUMjW0ydeLbo9zP+7gU184ksI01G63ptcpkq/W0uLMnYFb005YY7X
+	4/sjci6qpB4l6xZjlRM+6JvpXhgu5XCNSRM2fr7/EXieaGQUdA=
+X-Google-Smtp-Source: AGHT+IEk9o+lqCx9JhOO2ZsHFc/qXlWJ0wAp87lFv1hIl4E+FwexInYRHy3Gb8LgewH65wTTxnEBVA==
+X-Received: by 2002:a05:622a:6082:b0:46c:726a:178c with SMTP id d75a77b69052e-46c726a18d8mr10961201cf.11.1736305199031;
+        Tue, 07 Jan 2025 18:59:59 -0800 (PST)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd181373f6sm186933336d6.62.2025.01.07.18.59.57
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46a3e6892ddsm191617051cf.29.2025.01.07.18.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 18:59:57 -0800 (PST)
-Date: Tue, 07 Jan 2025 21:59:56 -0500
-Message-ID: <b63ec305ef9e7e3eb4baa298ce60e1ec@paul-moore.com>
+        Tue, 07 Jan 2025 18:59:58 -0800 (PST)
+Date: Tue, 07 Jan 2025 21:59:58 -0500
+Message-ID: <0a1328b83f79fab79ded9e333240c6bd@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,23 +69,21 @@ Content-Transfer-Encoding: 8bit
 X-Mailer: pstg-pwork:20250107_1610/pstg-lib:20250107_1603/pstg-pwork:20250107_1610
 From: Paul Moore <paul@paul-moore.com>
 To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, selinux@vger.kernel.org
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>, =?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>, Mimi Zohar <zohar@linux.ibm.com>, Canfeng Guo <guocanfeng@uniontech.com>, GUO Zihua <guozihua@huawei.com>
-Subject: Re: [PATCH RFC v2 3/22] selinux: align and constify functions
-References: <20241216164055.96267-3-cgoettsche@seltendoof.de>
-In-Reply-To: <20241216164055.96267-3-cgoettsche@seltendoof.de>
+Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>, =?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Casey Schaufler <casey@schaufler-ca.com>, Canfeng Guo <guocanfeng@uniontech.com>, John Johansen <john.johansen@canonical.com>, GUO Zihua <guozihua@huawei.com>
+Subject: Re: [PATCH RFC v2 4/22] selinux: rework match_ipv6_addrmask()
+References: <20241216164055.96267-4-cgoettsche@seltendoof.de>
+In-Reply-To: <20241216164055.96267-4-cgoettsche@seltendoof.de>
 
 On Dec 16, 2024 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de> wrote:
 > 
-> Align the parameter names between declarations and definitions, and
-> constify read-only parameters.
+> Constify parameters, add size hints, and simplify control flow.
+> 
+> According to godbolt the same assembly is generated.
 > 
 > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 > ---
->  security/selinux/include/conditional.h | 2 +-
->  security/selinux/include/security.h    | 4 ++--
->  security/selinux/ss/avtab.h            | 2 +-
->  security/selinux/ss/services.c         | 4 ++--
->  4 files changed, 6 insertions(+), 6 deletions(-)
+>  security/selinux/ss/services.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 
 Merged into selinux/dev, thanks.
 
