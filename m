@@ -1,109 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1904E1AE875
-	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 20:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949601AB505;
+	Wed,  8 Jan 2025 21:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736367731; cv=none; b=k0snxwvfudyrmeBtUfDooDr11LEUVQtHZy3NfRKdjvNZheoXNf2gabZ7jJOvoe5ccfuh43pqCkHTt+ae8ErrDIg79c1OjNvHpD67OgM1+TBiSuCA9B0jxke8NHTolvnQWVaxjOxyss6PE0qIrUovBLRhTn17seKNxWjNKXKjbjI=
+	t=1736372814; cv=none; b=NzOHdPGB+9mqHn6RB3JA/d6VBDMmRURsIHqDYZ2m4bNkdMLImYmzarUTuUtQaYb896ghiVaTchAFXykDflvCtMFYqunIwoYeaikP69CN00Qv3t1iLc/95+ultFGF7jkxgfKf+IUJvywO2Y3vMnegIAet7gdWOcSt3d7cAvVQ/pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736367731; c=relaxed/simple;
-	bh=604ND5SMZDy8f6XHY+BJxliTRQS6neEfKyfIUD7/LUc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fGm1P0jeyxJpn7GZHmLpICM2rG/RGfST8NTZ4pvWZSo6fqvWVJP/GXEVmSlNSUqLl+jmGBqCqwUSzbKVEN8uDxXNnYYCXKWtu7uChgICAkpOjtjn1nFJL9w1mUsh+YE0sxroO+R+JDI3pGsc40gVc/dJRg3XuPxOdPYmq7vzIIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U5ZR0Myg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736372814; c=relaxed/simple;
+	bh=IqHNz4jGCSHdLU/v7gFB90RubCkbGOwNmD62v759kLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YFQPjMWxJ3c8F60SnRIJKlhy6i4O/tW2T6yF10a3vVkVN1t1JIZ0k2zF+fvFZF4TxiAzR7Uy+20rVTmoWGvuxHAG1173eqZy7stNbtl0qfLZXzaVs2GLHPQ+cnfOhxOpMV4Y0yEZ6oeEu5HRmkrQxanJmbA+isoDGiz1iqAXolk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jqqhld36; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U5ZR0Myg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736367728;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=y6xr6c4SzMqA5a+yktp06An/iDLiHNFKegZp9Ys9II0=;
-	b=U5ZR0MygobbIJrX2ijXkF9pW6ed6geMh9Sw/+uQJn2VtQfFfNXCDgYiPXA2OTJJdk5tfSG
-	bZPc6AyWc81GaoHA8aWllPyurAQp8Fvuy3+aJeXxwa+TK41leki6C3l9BFUF53RFMfRYKj
-	XOV1aVqeOWCK+qkhL7xlzQqBNTtmSmo=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-435-HqB2O3VGOr6aGmBKjqXfBw-1; Wed,
- 08 Jan 2025 15:22:07 -0500
-X-MC-Unique: HqB2O3VGOr6aGmBKjqXfBw-1
-X-Mimecast-MFC-AGG-ID: HqB2O3VGOr6aGmBKjqXfBw
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C52C1977699
-	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 20:22:06 +0000 (UTC)
-Received: from [172.64.12.18] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BA4D11956052;
-	Wed,  8 Jan 2025 20:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
- upstream-mainline, 0b7958fa)
-Date: Wed, 08 Jan 2025 20:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jqqhld36"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC40C4CED3;
+	Wed,  8 Jan 2025 21:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736372814;
+	bh=IqHNz4jGCSHdLU/v7gFB90RubCkbGOwNmD62v759kLU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Jqqhld36VaOhc4U4M6kxct6fFS8kHdK7lHw2xlVmw2zO7NyQalVVcV1CxmxwXIxij
+	 Yu/7EzhGOdoS1OBpRr/t0wxXZTJ2BRmHaD6+EomU8EIyKP7MGPtAnnuIdrVTjYwA8g
+	 zekmpdi+IBweYQMYG6B1s38NplkCl78gsiDc5ryqo6OR0OxKTwoBgpxNkpIhOX2QX1
+	 NNz9ZK+LidHprUGIY1ymhRk7hwsb6VMJz+0g0ftH58s5Tm4bAx1YPTCO5/fg600k0g
+	 vmvhQsJ1pNaT1YxqnWqH4Lgz+9pp37nSyqzFJ2GPSDdd7CTqmrv0GFvSjhvxhDKUGs
+	 LeColx5kjEuOQ==
+Date: Wed, 8 Jan 2025 13:46:50 -0800
+From: Kees Cook <kees@kernel.org>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	David Laight <david.laight@aculab.com>,
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] fortify: turn strlen() into an inline function using
+ __builtin_constant_p()
+Message-ID: <202501081331.E4B6DF747@keescook>
+References: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <55450.125010815220700362@us-mta-435.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 7bMV5gIWYEU00Mc86G6HaL3JqYb6c1uHYMZhWvrqtU8_1736367726
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Jan 08, 2025 at 11:27:51PM +0900, Vincent Mailhol wrote:
+> The strlen(p) function-like macro uses:
+> 
+>   __is_constexpr(__builtin_strlen(p))
+> 
+> in which GCC would only yield true if the argument p is a string
+> literal. Otherwise, GCC would return false even if p is a const
+> string.
+> 
+> In contrary, by using:
+> 
+>   __builtin_constant_p(__builtin_strlen(p))
+> 
+> then GCC can also recognizes when p is a compile time constant string.
+> 
+> The above is illustrated in [1].
+> 
+> N.B.: clang is not impacted by any of this and gives the same results
+> with either __is_constexpr() and __builting_constant_p().
+> 
+> Use __builtin_constant_p() instead of __is_constexpr() so that GCC can
+> do the folding on constant strings. This done, strlen() does not
+> require any more to be a function-like macro, so turn it into a static
+> inline function. In the process, __fortify_strlen() had to be moved
+> above strlen() so that it became visible to strlen().
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+This is what __compiletime_strlen() ended up doing, so this seems
+reasonable to me.
+
+> On a side note, strlen() did a double expansion of its argument p.
+
+It did? Ah, was it due to __is_constexpr() wrapping? The other
+expressions should have been side-effect free:
+
+       __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)), \
+               __builtin_strlen(p), __fortify_strlen(p))
 
 
-Kernel information:
-    Commit message: Merge tag 'for-6.13/dm-fixes' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/device-mapper/linux-dm
+I don't think you build-tested this with Clang, though?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1616739135
+  CC      scripts/mod/devicetable-offsets.s
+In file included from ../scripts/mod/devicetable-offsets.c:3:
+In file included from ../include/linux/mod_devicetable.h:14:
+In file included from ../include/linux/uuid.h:11:
+In file included from ../include/linux/string.h:389:
+../include/linux/fortify-string.h:272:17: error: redeclaration of 'strlen' must not have the 'overloadable' attribute
+  272 | __kernel_size_t strlen(const char *p)
+      |                 ^
+../include/linux/string.h:200:24: note: previous unmarked overload of function is here
+  200 | extern __kernel_size_t strlen(const char *);
+      |                        ^
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1616739135-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1616739135-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1616739135-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+The externs will need to be reworked if it's no longer depending on asm
+renaming.
 
+> Turning it into an inline function also resolved this side issue.
+> 
+> [1] https://godbolt.org/z/rqr3YvoP4
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> This patch is the successor of patch [1] which was part of a longer
+> series [2]. Meanwhile, I decided to split it, so I am sending this again,
+> but as a stand-alone patch.
+> 
+> Changelog since [1]: use __builtin_constant_p() instead and turn
+> strlen() into an inline function
+> 
+> [1] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-6-4e4cbaecc216@wanadoo.fr/
+> [2] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr/
+> ---
+>  include/linux/fortify-string.h | 34 +++++++++++++++++++---------------
+>  1 file changed, 19 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index e4ce1cae03bf770047ce8a7c032b183683388cd5..bd22dd66e5f5b66ad839df42247e6436e0afd053 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -4,7 +4,6 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bug.h>
+> -#include <linux/const.h>
+>  #include <linux/limits.h>
+>  
+>  #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
+> @@ -241,6 +240,21 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
+>   * possible for strlen() to be used on compile-time strings for use in
+>   * static initializers (i.e. as a constant expression).
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+^^ This comment, however, is I think what sinks this patch. Please see
+commit 67ebc3ab4462 ("fortify: Make sure strlen() may still be used as a
+constant expression") which required that strlen() not be an inline. I'm
+pretty sure the build will start failing again (though perhaps only on
+older GCC versions).
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+The lib/test_fortify/ target still successfully builds, so that's good
+though. :)
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Kees Cook
