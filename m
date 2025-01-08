@@ -1,178 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EABD1F9F61;
-	Wed,  8 Jan 2025 11:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D085B1F940F
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 12:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736334429; cv=none; b=iOmRD2KGERlmOWtZG1DDf6m5qx7fYtbdChDdtNTgmS+Pjml0r6zfvFvc52wSj0BrcUjpuqrJ+MXFnKjnPmc98L4yAZOYxyHZKWubafXbyKspsBuFyBXnXvavVLyksbySanKR6jeAficZ5JOvN8Kfytu3E2TQB3rMaRm5+flRimI=
+	t=1736337764; cv=none; b=qwQ6KdFJCBWS/N18S/vx3rh/sYSgI2O/H79YRp+hgcRws4sA7GBXCMjwxm9SK/vzIlhTxjmdJ4aEFPiwDRB8w2Z7yp91tdrMRiz6VNA2bYEoCniW2SF8xeoabm/9q1ZQvKKUCjhnrO6xZv7PfaegooV+7EWk7PDhBkjOCKqg1KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736334429; c=relaxed/simple;
-	bh=KfteZbyV26PCsgidSMPbtLu3MzZ0qK03E76djIPw6lc=;
+	s=arc-20240116; t=1736337764; c=relaxed/simple;
+	bh=IRcFUEnTe1JCKcKtnWX/qLTSGUTw9/fWw8tLCIvzbDU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DJ9U/8pZ7TlH/FYfXteBb7oG1S6hEpc66vnJywVA1YheZkL4oFI+HnhhhrfifChWkhDI2zXRaTntz0fwwSQOSiqSsictuOxPYmow7huEFCUPBil3l3qPBHT/gMcouGm6/bzewhokEm3WEiAwzlO/GM0Z410kxEBXeF5AgJI9wtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G1Dfu5nx; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type:Content-Disposition; b=bFL7VMzTnTpt9wbCdZKdxOp9aptSBsZH6pvCKSYePvwMAw5lJgRVDLvh9o9PUNKASJm2i6P8XyVnmlmnUJaCQG6HiLztBvwk5KeCyG9KT1KM9c1HRdc4MEetfvDvv6kQ8+PL9SQO38ntuhsvlz8u12+kr9WMXGODbHSLTBlEedI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Zs9ANkA0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G1Dfu5nx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736334427; x=1767870427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KfteZbyV26PCsgidSMPbtLu3MzZ0qK03E76djIPw6lc=;
-  b=G1Dfu5nx5/pCm+GRTKBZqntKWD4vJcwguEY8C7Jc6Rnhs6TMXkN6Fo7E
-   Aub+QVY8gGDqXsMajGKGk7xcrnA7LU0JXAQFLFuCPQ95aEFE2zGUGgRPh
-   oVDSeVEvMpkw0dFUWsrPK5ijEOVUZrtRngcqo0TywDh1I5JoJg5PJV8K2
-   yiYNdLLezIR371/7bWJrgUm+JGyNcYFGvVSY6d/975ZEtyyfbt3LEl6WC
-   VHkqOjEh1SFtIWRWcVhn465PdVmy8TzIXDH6j+OvKBND/uYTKtT5qGdLx
-   uDHiNFwWCTs+isaWkRa3RiGElmXm7AM6w1iIAVArk4Og7ZjEuuirYcdoY
-   A==;
-X-CSE-ConnectionGUID: 2Tc0efteSNC4luBCn9Papg==
-X-CSE-MsgGUID: 1wH2Oly4QcurFwIx84PnJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="36437708"
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="36437708"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 03:07:06 -0800
-X-CSE-ConnectionGUID: voMTk4fwS0yN6I6PUQIA2A==
-X-CSE-MsgGUID: cpSxP4hASJuqIUJpEAA6IQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="103548158"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Jan 2025 03:07:01 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVTtq-000Fyd-2v;
-	Wed, 08 Jan 2025 11:06:58 +0000
-Date: Wed, 8 Jan 2025 19:06:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	Liu Ying <victor.liu@nxp.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	dri-devel@lists.freedesktop.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] drm/bridge: imx8qxp-pxl2dpi: Use dev_err_probe
-Message-ID: <202501081822.A69smnpW-lkp@intel.com>
-References: <20250107143900.988567-2-alexander.stein@ew.tq-group.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zs9ANkA0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736337761;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YLqYtIizfpzeEDN0YbG2hxxynEcPRAfxOqYGH5kCnXM=;
+	b=Zs9ANkA0uoPaonAqvEpEYGS/WQ9BIE2EP9Gz95n2WhS6IohaV+EggmrhNnKFB5kG1AxmbQ
+	x57iDnj+jR3mJk2tasQfWiW0glzxM9FyyfmlRAVKAE0IQwuedwUvWCNIS7ZudWByWobYgm
+	VfKmNzkaaXrr4+V83O5PijYE6EE+/0c=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-AhnQblrJOmOWqFnuy1kUAw-1; Wed, 08 Jan 2025 07:02:40 -0500
+X-MC-Unique: AhnQblrJOmOWqFnuy1kUAw-1
+X-Mimecast-MFC-AGG-ID: AhnQblrJOmOWqFnuy1kUAw
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-436723db6c4so96226225e9.3
+        for <llvm@lists.linux.dev>; Wed, 08 Jan 2025 04:02:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736337759; x=1736942559;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YLqYtIizfpzeEDN0YbG2hxxynEcPRAfxOqYGH5kCnXM=;
+        b=tlo8w6GFuyogtH30qRU/31+VLyiymBOX0w6vrU0rXnjQoFYtiavl0i2hpMW2DQ2RL6
+         zVAoUHyBaQSZXqziIdC9TSN/3Wtn+/bD1Eh+XrHz47dUlCtKK9j6A07Yjse9nobji+lN
+         weDGLjcb5SXdPtnezLZWGGC5yBjJxZfDC+U4DxSmIFN0kS/V2IAK2R6I8uGYgSlCBb+U
+         8xKryHykOGdV47S7EyOv42ItQgagXvYaaPZge4AnxNRp6QWm5L6hToJc/zn4GCuKwcx4
+         +SYVfwnuBoUCQH4wdXlD/0/a6avDSJ4Y3Z5B2w2ywXAgH8VxUlT9BJUEn4dXoMMOeHcH
+         OE/w==
+X-Forwarded-Encrypted: i=1; AJvYcCXDqIcWpetvHD2zb+JBuuorJeb2FrYbtXGCXmD00CSvIYdYxR06xLtcEG8ArKMzgKZNL0zb@lists.linux.dev
+X-Gm-Message-State: AOJu0YyzdyNWkJr51AcSFnUp0mgD4rvdK3611EVzdon/V8jrRWVy5yRR
+	pVhZdsI0bi5Prdr3nihsYFMjSkfHNwS3txi3kyNHwWoM30Io5lA28Tz/SU8qR94WZG9q2MR2miQ
+	uj5ANPlDjfMZtOODBiOuddE/oSMh4KCFqijLAe1/oYar+Hn57EEs=
+X-Gm-Gg: ASbGnct5OQGMlEa+Z6Ja3IVrLZtoDqgHXSWhk3/dKXGzRv4jQinMrFrs73Y4ZLuBPu1
+	Umn8F56jujd8vfkkdjXsf9wWUTKRK/l91/7INGAyUr3p4Crae2eiMJ+HcB3GFDFNFqOdi6jo7Rs
+	PsOmroMrPfFwtI3CddNeQVGmfsyLkXm0jBuQYY7rNz62vPY/zWsSw9i2qJ0zaSt7Ai5GDtbiKz7
+	UE5bOTp/sA1K7kJ0xv+nNKCOIz5Iasy21kY/Ves1RwfR5Kcd0M=
+X-Received: by 2002:a05:600c:46ce:b0:436:6ddf:7a27 with SMTP id 5b1f17b1804b1-436e27072a7mr17628585e9.23.1736337759390;
+        Wed, 08 Jan 2025 04:02:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGScykllzbh31utZyOyhyPCeqeJOHfUUx2k3Z8hq3BxWlAiscDN3qnY2p23jYlKYf6YnAI+gQ==
+X-Received: by 2002:a05:600c:46ce:b0:436:6ddf:7a27 with SMTP id 5b1f17b1804b1-436e27072a7mr17628305e9.23.1736337758928;
+        Wed, 08 Jan 2025 04:02:38 -0800 (PST)
+Received: from redhat.com ([2a02:14f:175:d62d:93ef:d7e2:e7da:ed72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2ddcf38sm18472675e9.20.2025.01.08.04.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jan 2025 04:02:38 -0800 (PST)
+Date: Wed, 8 Jan 2025 07:02:33 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: "Yuxue Liu yuxue.liu@jaguarmicro.com" <yuxue.liu@jaguarmicro.com>
+Cc: jasowang@redhat.com, lkp@intel.com, angus.chen@jaguarmicro.com,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	xuanzhuo@linux.alibaba.com, oe-kbuild-all@lists.linux.dev,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] vdpa/vp_vdpa: implement kick_vq_with_data callback
+Message-ID: <20250108070206-mutt-send-email-mst@kernel.org>
+References: <CACGkMEvf9TS6c9PTiwWn3POr33m7m1shNfHOkviZpk-Pkbf79Q@mail.gmail.com>
+ <20241203023743.1757-1-yuxue.liu@jaguarmicro.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20241203023743.1757-1-yuxue.liu@jaguarmicro.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: _3_DmRSobqUsLUFnz60lkG98Fbj-GW135jzIRdVNlII_1736337759
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250107143900.988567-2-alexander.stein@ew.tq-group.com>
 
-Hi Alexander,
+On Tue, Dec 03, 2024 at 10:37:43AM +0800, Yuxue Liu yuxue.liu@jaguarmicro.com wrote:
+> From: Yuxue Liu <yuxue.liu@jaguarmicro.com>
+> 
+> Implement the kick_vq_with_data vDPA callback.
+> On kick, we pass the next available data to the hardware by writing it in
+> the kick offset.
+> 
+> Signed-off-by: Yuxue Liu <yuxue.liu@jaguarmicro.com>
 
-kernel test robot noticed the following build warnings:
+Pls do not send v2 as reply to v1.
+I am not sure all tools test the patch if you do.
 
-[auto build test WARNING on shawnguo/for-next]
-[also build test WARNING on linus/master v6.13-rc6 next-20250107]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> ---
+> v2: fix build error for kernel test robot
+> 
+>  drivers/vdpa/virtio_pci/vp_vdpa.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> index 16380764275e..8787407f75b0 100644
+> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> @@ -367,6 +367,14 @@ static void vp_vdpa_kick_vq(struct vdpa_device *vdpa, u16 qid)
+>  	vp_iowrite16(qid, vp_vdpa->vring[qid].notify);
+>  }
+>  
+> +static void vp_vdpa_kick_vq_with_data(struct vdpa_device *vdpa, u32 data)
+> +{
+> +	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+> +	u16 qid = data & 0xFFFF;
+> +
+> +	vp_iowrite32(data, vp_vdpa->vring[qid].notify);
+> +}
+> +
+>  static u32 vp_vdpa_get_generation(struct vdpa_device *vdpa)
+>  {
+>  	struct virtio_pci_modern_device *mdev = vdpa_to_mdev(vdpa);
+> @@ -472,6 +480,7 @@ static const struct vdpa_config_ops vp_vdpa_ops = {
+>  	.get_vq_size	= vp_vdpa_get_vq_size,
+>  	.set_vq_address	= vp_vdpa_set_vq_address,
+>  	.kick_vq	= vp_vdpa_kick_vq,
+> +	.kick_vq_with_data      = vp_vdpa_kick_vq_with_data,
+>  	.get_generation	= vp_vdpa_get_generation,
+>  	.get_device_id	= vp_vdpa_get_device_id,
+>  	.get_vendor_id	= vp_vdpa_get_vendor_id,
+> -- 
+> 2.34.1
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/drm-bridge-imx8qxp-pxl2dpi-Use-dev_err_probe/20250107-224125
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250107143900.988567-2-alexander.stein%40ew.tq-group.com
-patch subject: [PATCH v2 1/4] drm/bridge: imx8qxp-pxl2dpi: Use dev_err_probe
-config: arm-randconfig-004-20250108 (https://download.01.org/0day-ci/archive/20250108/202501081822.A69smnpW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250108/202501081822.A69smnpW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501081822.A69smnpW-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c:402:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     402 |                 return dev_err_probe(dev, ret, "failed to get regmap\n");
-         |                                           ^~~
-   drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c:394:9: note: initialize the variable 'ret' to silence this warning
-     394 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +/ret +402 drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
-
-   388	
-   389	static int imx8qxp_pxl2dpi_bridge_probe(struct platform_device *pdev)
-   390	{
-   391		struct imx8qxp_pxl2dpi *p2d;
-   392		struct device *dev = &pdev->dev;
-   393		struct device_node *np = dev->of_node;
-   394		int ret;
-   395	
-   396		p2d = devm_kzalloc(dev, sizeof(*p2d), GFP_KERNEL);
-   397		if (!p2d)
-   398			return -ENOMEM;
-   399	
-   400		p2d->regmap = syscon_node_to_regmap(np->parent);
-   401		if (IS_ERR(p2d->regmap))
- > 402			return dev_err_probe(dev, ret, "failed to get regmap\n");
-   403	
-   404		ret = imx_scu_get_handle(&p2d->ipc_handle);
-   405		if (ret)
-   406			return dev_err_probe(dev, ret, "failed to get SCU ipc handle\n");
-   407	
-   408		p2d->dev = dev;
-   409	
-   410		ret = of_property_read_u32(np, "fsl,sc-resource", &p2d->sc_resource);
-   411		if (ret) {
-   412			DRM_DEV_ERROR(dev, "failed to get SC resource %d\n", ret);
-   413			return ret;
-   414		}
-   415	
-   416		p2d->next_bridge = imx8qxp_pxl2dpi_find_next_bridge(p2d);
-   417		if (IS_ERR(p2d->next_bridge))
-   418			return dev_err_probe(dev, PTR_ERR(p2d->next_bridge),
-   419					     "failed to find next bridge\n");
-   420	
-   421		ret = imx8qxp_pxl2dpi_set_pixel_link_sel(p2d);
-   422		if (ret)
-   423			return ret;
-   424	
-   425		ret = imx8qxp_pxl2dpi_parse_dt_companion(p2d);
-   426		if (ret)
-   427			return ret;
-   428	
-   429		platform_set_drvdata(pdev, p2d);
-   430		pm_runtime_enable(dev);
-   431	
-   432		p2d->bridge.driver_private = p2d;
-   433		p2d->bridge.funcs = &imx8qxp_pxl2dpi_bridge_funcs;
-   434		p2d->bridge.of_node = np;
-   435	
-   436		drm_bridge_add(&p2d->bridge);
-   437	
-   438		return ret;
-   439	}
-   440	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
