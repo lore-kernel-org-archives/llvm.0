@@ -1,166 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992AB1FC7E0;
-	Wed,  8 Jan 2025 14:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54C971FCFE5
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 15:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736348371; cv=none; b=f8pjek5x+ai9xA0d2njZvD0+AXytWxZP6hl4KMKAVZ9THj95sbT6nJAdb5So0+DDglP8iJrzXa2kA/wjrwISmVMD4e5ro9qIJCCcdDnireVKVJcBCfbgO5tERNSf9ucUKYB5C+xmtbz+/k3F4MHRRVmXNJM9NcfEGRaNDfnkHnw=
+	t=1736348822; cv=none; b=lvq4u9BKVAr0nQINqm/6InIxNmIYwugqHAXawUTT6bYvyZjC1FKLj0y2iVVIVi+YbCCtIj4hTa8Vo6jAg4UInyJxVEALZQaIqFeWooMTQAqa0tuYf4QKdRyjpNoSDoIRDDDbU94r9Zm612Ul3K5f1dRAyOwRzxmoSBq4FMXVfpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736348371; c=relaxed/simple;
-	bh=hvlbd6k/iNbp1dFwhti5m02aRgksQ4i/6azTS2S//Z4=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p99IboZSanfIVmVIrd1D+VXGjpDg35sfAtbvtyfucCgRmRUeLDuTr3CCPQDe/P9WayspyJAC0q+ZJRjEQhiUyLZ/xbv8hCnEfvI7a/Qx1wgLkuo3xzmIlnolFpEyV2HyqlJ+Vlj5ykaIiLgWy2fNeHMzf5QxA+CsfYIDxAdpNmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kJLfSitT; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736348822; c=relaxed/simple;
+	bh=soyxPENF5yRD/vNYDGrcMk72y0wBsij0YIRwjEDdhdE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Kvyljz92Xn5muRQLoYSy7h1RPg9Exi1mLFH8egjty0ED1yh8CitYu8/1jiyV9c0d/mS24GRZwy1/tcQa2RneienXyTxiszDAw5+WB8oEoVkXvOt0F8mFlFdodltpSFk0UXcYLKlQQGpvgQFv3vC2QL1ROpEhuM3PcA8/VoiO144=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=L2XZ8Jtf; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kJLfSitT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736348369; x=1767884369;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=hvlbd6k/iNbp1dFwhti5m02aRgksQ4i/6azTS2S//Z4=;
-  b=kJLfSitTqPHSX5lpJZkG5aIvMS+MjRKLytAJmlsdUYkBHaTBXXZSyQEh
-   By+rD/ttCI+EwxA7NroZpUadw0eKwTlUsdvPgoM59Car+4OBvVBk+SngQ
-   jZX5/quS17BKi2mdBQTHB5sx4m5xnrKwGoYDsYX5QQGV7Grx/O+TAjLVO
-   cCJrPItmi2RK3bvygQVKK5tH2SI78WlTT4omRy+0yC9+fcjla5HXNfccx
-   szjGr9Oy3z7LVQLiq/AvNpzD09lY+l7fG4VacDsZlBfcmho7qMf0MHwRO
-   xM7ZbYC0j34QXzfhceYrLzwFuiKJMNpBVViWVyiNPkZBw/HCQ4KCx0jb6
-   w==;
-X-CSE-ConnectionGUID: DKjyj2V4SR2vT70rpwy+IQ==
-X-CSE-MsgGUID: h4c9XsP1SVKg01s9ii6Fyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47076503"
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="47076503"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:59:28 -0800
-X-CSE-ConnectionGUID: FVOysFVNRI6QddOqHEGhbQ==
-X-CSE-MsgGUID: AaoaQBlaRhWNlEoEO+qulA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="140458021"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 08 Jan 2025 06:59:28 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVXWm-000GF9-2d;
-	Wed, 08 Jan 2025 14:59:24 +0000
-Date: Wed, 8 Jan 2025 22:59:09 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: drivers/staging/gpib/eastwood/fluke_gpib.c:196:23: warning: variable
- 'nec_priv' set but not used
-Message-ID: <202501082213.4JCKIepk-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="L2XZ8Jtf"
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e54bd61e793so5747845276.2
+        for <llvm@lists.linux.dev>; Wed, 08 Jan 2025 07:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1736348820; x=1736953620; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fYeijlJhb8/hUscYVxlFwBT9DMI5FRL4gN/jsJsz5W0=;
+        b=L2XZ8JtfJsDohXj01hqXzCjJmUxIxkyVPE3UA80pM+rjm6jgZ4/u8m1Fz0YOMacPRm
+         uuyMLQiruLnbK0OwtTYlpjswgPMPl/zDjeRtJoC5VXl5l5JZ8M1ccaTWzFp/eOVWt98k
+         OyQTD8cliF+FZxQV8/eeH38Yh3mKaTlv+KP77IjHYp+pH/Rxt+VFt75Ym64thfRRc0bG
+         G+qnR+f44o7ad7O9SfTMUSdGNiWeU59TY+GA+tUbjWFWVB91/l5/g3O0xcoo0kSz1Llj
+         g0LMd2a31fvg7kzbc+IbKwGsTSzGvOc9LkeROVtigV+jK9GOCtSWFiGNTDl3irz0kLQ9
+         NvFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736348820; x=1736953620;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fYeijlJhb8/hUscYVxlFwBT9DMI5FRL4gN/jsJsz5W0=;
+        b=esdgPF1Re3XJw7sW7lvAKJWYfrERjbBNc1+QcYHe4kyEatvTipXG5QJB7aIuEtX2jc
+         SZ0rc+KGsgm+umHwypW1QDk/+afkhv92CxAFyKY+h10chJhTVYCAlqv74S+7EQmrFMh9
+         chb3oEq5qEDuxh1zFbUE+8tPRuPrvx+DXMxoepy3H6PVUnBCbPjdu7eWIkyBmoQiWx/m
+         ESG7yh8YNuZablEZ53jcOwwfpD0aFNRRRySk06oK/1VY37HpDECKOPM/vAB+cp8lAj0/
+         +JvrmDE/XiselKtaWcESGkSafL+8bNe4CbzXcPgj7rklHHv6XgL5NBnQlM8PzcudjPKr
+         Q7uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUEoySblVAh77krDpBW8brEWQRgLPPBrt15Qcdpm7x9ogj1Nyq+/2TBlY0J+ZAeGOrlqqro@lists.linux.dev
+X-Gm-Message-State: AOJu0YxbwkCIFJXW3KZM62GEGirhtWrPZSG0jocEyaQek6d2idhD4l/m
+	njsBnDtSrEAW7KNNBflIih17Vll0l9q1tzPaBXXtwzljunA8WGD7+ksEcQDXTJON03WayAGz/ud
+	LBu4wm1cYCzeZkzuccsvf2gj8PoU=
+X-Gm-Gg: ASbGnct0Vy9fpgHrXc2VCzuXmuCgjc1lTU/jeJBdFjxUhTX+exze8O0TjsSYaJuAfBR
+	CbMR31Q86fFsndVgeh70Q6L9q9tzJRPUwsUhm
+X-Google-Smtp-Source: AGHT+IGGm3l2oxrf3+zWOkjSO6t07aSjkSBoeyHSaJxV3miZwqOavRZ0KXeHI3LOettm6bkm2lsOwJ/oGS3l4akaQQo=
+X-Received: by 2002:a05:690c:6707:b0:6ef:6f74:9b18 with SMTP id
+ 00721157ae682-6f5312a6375mr26852567b3.32.1736348820205; Wed, 08 Jan 2025
+ 07:07:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241216164055.96267-5-cgoettsche@seltendoof.de>
+ <01df64ed8f6eb9e6f2780b5b0aa3be5c@paul-moore.com> <CAJ2a_Dei0Bg14N2E9U2FzM0OEvEQbOcTvQ76FH4Ut6JYq5VybA@mail.gmail.com>
+In-Reply-To: <CAJ2a_Dei0Bg14N2E9U2FzM0OEvEQbOcTvQ76FH4Ut6JYq5VybA@mail.gmail.com>
+From: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date: Wed, 8 Jan 2025 16:06:49 +0100
+X-Gm-Features: AbW1kvZf3lTwTc8MUnTJ9mwBMMlk3lMwFXegltwaB3DKwHH3bIGKFAqjqVZg4A0
+Message-ID: <CAJ2a_DegsCWSB224rFVNjs7QOy0xR-k5OhoQuSvpT7w_+RD_ew@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 5/22] selinux: avoid nontransitive comparison
+To: Paul Moore <paul@paul-moore.com>
+Cc: =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, 
+	selinux@vger.kernel.org, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>, 
+	=?UTF-8?Q?Bram_Bonn=C3=A9?= <brambonne@google.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Dave Penkler <dpenkler@gmail.com>
+On Wed, 8 Jan 2025 at 14:17, Christian G=C3=B6ttsche <cgzones@googlemail.co=
+m> wrote:
+>
+> On Wed, 8 Jan 2025 at 04:00, Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Dec 16, 2024 =3D?UTF-8?q?Christian=3D20G=3DC3=3DB6ttsche?=3D <cgoett=
+sche@seltendoof.de> wrote:
+> > >
+> > > Avoid using nontransitive comparison to prevent unexpected sorting
+> > > results due to (well-defined) overflows.
+> > > See https://www.qualys.com/2024/01/30/qsort.txt for a related issue i=
+n
+> > > glibc's qsort(3).
+> > >
+> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > ---
+> > >  security/selinux/ss/policydb.c | 18 ++++++++++--------
+> > >  1 file changed, 10 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/pol=
+icydb.c
+> > > index 3ba5506a3fff..eb944582d7a6 100644
+> > > --- a/security/selinux/ss/policydb.c
+> > > +++ b/security/selinux/ss/policydb.c
+> > > @@ -37,6 +37,8 @@
+> > >  #include "mls.h"
+> > >  #include "services.h"
+> > >
+> > > +#define spaceship_cmp(a, b) (((a) > (b)) - ((a) < (b)))
+> >
+> > I'll admit that it took me a while to figure out why you decided to
+> > name this macro "spaceship_cmp", and then I had a little laugh when
+> > I realized why it was called the "spaceship" operator :)
+> >
+> > Anyway, while the spaceship operator is likely familiar to people who
+> > have a Perl background, the kernel is still mostly a C project so I
+> > don't think we can expect a base understanding of Perl, especially
+> > these days as Perl isn't as popular as in the past.  Can we rename
+> > this to something else that makes more sense in the context of C?
+>
+> There seem to be 4 similar macros already in the kernel, 3 named
+> cmp_int() and one instance named cmp_ptr().
+> So I am going with cmp_int() in v3 for now, but I am open for other sugge=
+stions.
 
-Hi Dave,
+p.s.: C++ also had takeoff:
+https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0515r3.pdf
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   09a0fa92e5b45e99cf435b2fbf5ebcf889cf8780
-commit: 165e8cc3cfec9ef51f3376b0d49b115294f34f3b staging: gpib: Add KBUILD files for GPIB drivers
-date:   3 months ago
-config: arm-randconfig-003-20250105 (https://download.01.org/0day-ci/archive/20250108/202501082213.4JCKIepk-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250108/202501082213.4JCKIepk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501082213.4JCKIepk-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/staging/gpib/eastwood/fluke_gpib.c:10:
-   In file included from drivers/staging/gpib/eastwood/fluke_gpib.h:9:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/staging/gpib/eastwood/fluke_gpib.c:196:23: warning: variable 'nec_priv' set but not used [-Wunused-but-set-variable]
-     196 |         struct nec7210_priv *nec_priv;
-         |                              ^
-   2 warnings generated.
---
-   In file included from drivers/staging/gpib/nec7210/nec7210.c:14:
-   In file included from include/linux/pci.h:2676:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/staging/gpib/nec7210/nec7210.c:940:16: warning: variable 'command' set but not used [-Wunused-but-set-variable]
-     940 |                 unsigned int command;
-         |                              ^
->> drivers/staging/gpib/nec7210/nec7210.c:1000:23: warning: bitwise operation between different enumeration types ('enum auxmr_bits' and 'enum ppr_bits') [-Wenum-enum-conversion]
-    1000 |         write_byte(priv, PPR | HR_PPU, AUXMR);
-         |                          ~~~ ^ ~~~~~~
->> drivers/staging/gpib/nec7210/nec7210.c:1004:26: warning: bitwise operation between different enumeration types ('enum auxmr_bits' and 'enum auxra_bits') [-Wenum-enum-conversion]
-    1004 |         priv->auxa_bits = AUXRA | HR_HLDA;
-         |                           ~~~~~ ^ ~~~~~~~
->> drivers/staging/gpib/nec7210/nec7210.c:1010:26: warning: bitwise operation between different enumeration types ('enum auxmr_bits' and 'enum auxrb_bits') [-Wenum-enum-conversion]
-    1010 |         priv->auxb_bits = AUXRB | HR_CPTE;
-         |                           ~~~~~ ^ ~~~~~~~
-   5 warnings generated.
-
-
-vim +/nec_priv +196 drivers/staging/gpib/eastwood/fluke_gpib.c
-
-55936779f49612 Dave Penkler 2024-09-18  190  
-55936779f49612 Dave Penkler 2024-09-18  191  static int fluke_line_status(const gpib_board_t *board)
-55936779f49612 Dave Penkler 2024-09-18  192  {
-55936779f49612 Dave Penkler 2024-09-18  193  	int status = ValidALL;
-55936779f49612 Dave Penkler 2024-09-18  194  	int bsr_bits;
-55936779f49612 Dave Penkler 2024-09-18  195  	struct fluke_priv *e_priv;
-55936779f49612 Dave Penkler 2024-09-18 @196  	struct nec7210_priv *nec_priv;
-55936779f49612 Dave Penkler 2024-09-18  197  
-55936779f49612 Dave Penkler 2024-09-18  198  	e_priv = board->private_data;
-55936779f49612 Dave Penkler 2024-09-18  199  	nec_priv = &e_priv->nec7210_priv;
-55936779f49612 Dave Penkler 2024-09-18  200  
-55936779f49612 Dave Penkler 2024-09-18  201  	bsr_bits = fluke_paged_read_byte(e_priv, BUS_STATUS, BUS_STATUS_PAGE);
-55936779f49612 Dave Penkler 2024-09-18  202  
-55936779f49612 Dave Penkler 2024-09-18  203  	if ((bsr_bits & BSR_REN_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  204  		status |= BusREN;
-55936779f49612 Dave Penkler 2024-09-18  205  	if ((bsr_bits & BSR_IFC_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  206  		status |= BusIFC;
-55936779f49612 Dave Penkler 2024-09-18  207  	if ((bsr_bits & BSR_SRQ_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  208  		status |= BusSRQ;
-55936779f49612 Dave Penkler 2024-09-18  209  	if ((bsr_bits & BSR_EOI_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  210  		status |= BusEOI;
-55936779f49612 Dave Penkler 2024-09-18  211  	if ((bsr_bits & BSR_NRFD_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  212  		status |= BusNRFD;
-55936779f49612 Dave Penkler 2024-09-18  213  	if ((bsr_bits & BSR_NDAC_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  214  		status |= BusNDAC;
-55936779f49612 Dave Penkler 2024-09-18  215  	if ((bsr_bits & BSR_DAV_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  216  		status |= BusDAV;
-55936779f49612 Dave Penkler 2024-09-18  217  	if ((bsr_bits & BSR_ATN_BIT) == 0)
-55936779f49612 Dave Penkler 2024-09-18  218  		status |= BusATN;
-55936779f49612 Dave Penkler 2024-09-18  219  
-55936779f49612 Dave Penkler 2024-09-18  220  	return status;
-55936779f49612 Dave Penkler 2024-09-18  221  }
-55936779f49612 Dave Penkler 2024-09-18  222  
-
-:::::: The code at line 196 was first introduced by commit
-:::::: 55936779f4961299efa99a6843c8ff3b019d3858 staging: gpib: Add Fluke cda based cards GPIB driver
-
-:::::: TO: Dave Penkler <dpenkler@gmail.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >
+> > --
+> > paul-moore.com
