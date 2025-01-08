@@ -1,104 +1,128 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35261AB533
-	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 08:40:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081BE1F8AC5
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 09:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736325619; cv=none; b=sKSSLwXFjbMp6ACBpg34pZuqFQcUYuvxEUOBfOX/sTi1JLn43P0kfQe1P19XO/DaZYsy8d7CLrEYDMvek8l7e8efCJvyOBGDautsvaQiW8AR2X8HvuPZ9JP1HwVMVLvnve/UhVL/rjxfoN4sdmPxFbn0AT5xWRVgb9DkJaJDVOM=
+	t=1736327126; cv=none; b=nCHt0tLNcYkFHAoxnkdwBlzFteV1IHIRLzz7V7t6iOIV9ru2PPOF7Oujhb/CPml7JRkXjL6ax12GvFQ8lV8SudgRcDOkpBjsKWFFwYFMqtdXv+y4OCBUjvhvvko/y/qy0Grj8SNG9B3YQiauz+pxoS92KfR6R50cd6J5E78mPWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736325619; c=relaxed/simple;
-	bh=x5mIvVNKGyy2aWx0VaD1TwfygyA0rOOc55zKg1dxEPg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jeYmw0nuailqY87W6OtJ6apN1iZ9bAPSqm9x7pDj5La65kFGOjkocDj42VPDz02RvDdymjNqkg9hfn5nvd3cK08f6xrH5CMjw/pqtw2hAiaQGekU3kbuDSVpN1Ea3qAb2a0d8Oy2301jINF3IOHSoda2OEfWE+2tWVfeaUbxpi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hTT3jTgz; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1736327126; c=relaxed/simple;
+	bh=oLOdODeMcawG2LLLnTFfjNKMo+cYM0/7nhosikokPXo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TLkQ3rXnieHCIaIfUozA5f9eZ9tYSa98tQSuNTDMBvxkLd+8pS7ymvgZy15zmZZNAN4bSVqNotdsDWVGaB1BnDIgpdhXJvr6KFSWAtPwyHM2k8qF2A1llLwmEwsfH/CGy09aXtwAFq+hBdDCSY0dsx0PZLdtVSrs+n72CA1SEuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=T4jBf+7C; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qztIvoOg; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hTT3jTgz"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-435f8f29f8aso118733995e9.2
-        for <llvm@lists.linux.dev>; Wed, 08 Jan 2025 00:40:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736325616; x=1736930416; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x5mIvVNKGyy2aWx0VaD1TwfygyA0rOOc55zKg1dxEPg=;
-        b=hTT3jTgznnRY7SDxdTXAKGaqBkrZbX26+M+xwc7a5zgpOzlksHErZ/LuKtRuPx3Q/1
-         U79lZdtF7zTaDnPs1Ane5nKHX8rOzug1DXVRAI/WAFG9IEkez6EaxerMBzuFKrTbpXSA
-         CfQqp6+QklRFmEU+FXW+aJL0kxdwtEn+F0H7JxngViwREvpHbaFTgPfNztExa2vPYyfF
-         v776ZSIRzgVv7Dd8u51WnRRi28NT37DJrRZW9lLEE6dAoE21JNV5qjmfeEDuWR/DTO2n
-         AqyUttGNLKcTBSkX071/FcG/8Zimf32DI+83ORk2G98eSOjKmt+pEuWjgU7fE4CHncTP
-         LEyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736325616; x=1736930416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x5mIvVNKGyy2aWx0VaD1TwfygyA0rOOc55zKg1dxEPg=;
-        b=jOUA/5/TNa8HksvqdQE1J2DMWh39jLKKgg83xEGCU97/yyl6OXN6FJUxv/+Zl5n/SK
-         hxrArFjWriLE40kNW19G7QZOLRGqCSzB0m+dJLH7KOnEe4MI3dkzGTv0XTsSPFQaiiPu
-         4lcM3KudyBC8/xHfVPcr9kaFnHc5xtNKb17zfYQVn7XPBoAAivwpGypJlQZrxd2zB/eZ
-         FGPEiQL5KgC7SqEPbI9vqbEKM1j8zwD/KXelJfRX2K9jyZ7tdnmZEiPs3uskGxLbw6pQ
-         HWvDcFAX/7RfvparfdmhdiBAV7SJWSuqxHIJTK9nHs6jczUPjxv4nFp+lYsnbmvuyXwq
-         oPqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUmaMhXx2Bgpm86tt4HsdkoeJI+rfCdG+ArDwNZ1MRChDCWLNLtaTAeEHGnXoZta5ni4EDl@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3e0Ay2OCWo2r+b3X8370jDObQAJvN1KYT/IbMUAuWUn/4S3Gl
-	YqzjOpAfh8fXkOJ5kjtv5RSpyT+J+Vk6O+YS+/r9SoFJDcuqMfJ5bQ2YT76fWwV0YIUvXBQWn6P
-	q9Al3CrRkPEe82KK8T+fGti0hy10uBGvrVfF7PPEbxZ4/7c0l/A==
-X-Gm-Gg: ASbGnctmLWU7VRkq7qD2wmINw6z6JpmN4dK8F2nK82VnFB68Z7wIT9Dq+PT6V7WoXGj
-	gJD48R3t2G1C5i48O9MEihpUa5LnyarvLc/lk1RtoHjqmEY5B1oFb9XMQlHz7zyg1jcMK
-X-Google-Smtp-Source: AGHT+IFl8H+0Y5zTJzlBfI5aIydyFDaWJ1GV39q6UZ01B11fzHBRDnHXE0FV7FUDOqKvCczWXUZt4FhIPpZacI5ligg=
-X-Received: by 2002:a5d:47c4:0:b0:385:f892:c8fe with SMTP id
- ffacd0b85a97d-38a87306ddcmr1605877f8f.21.1736325615885; Wed, 08 Jan 2025
- 00:40:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="T4jBf+7C";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qztIvoOg"
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736327122;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=THX2NyChGogo3Kth4sMAsXNutUP9P3pw+jNEWRR9NrU=;
+	b=T4jBf+7CrkH3J1Rd1UOzoEpqLYVQpHHS1gwCmJhR46N2jWCrkBdSbK7by7qWjt0YGhV4MM
+	951PWXsNhK6EO8n/pa8ueI7le6PkxGkJ2RrULoy+bbv5xqc0QySLey5R1LMS8uO2dYInBF
+	n6ixMKw2Ugku/bh7U6OvGM0wLNjYYqRSW7GaxM9F1qzQeiIGSDYuXrGaL2wkdp798LBQCg
+	1uh7RkcxM7Evd7fl5k8szTkBrJ1sfYAprSyzSjYE1a+LmKGakMww09QwrcHKG0TKSAoXdw
+	Eg/B2/jggwfOhWCV7S/+QqwCSlxOOD3EIGbN5XwyLj/oh+22sYTpWzVy/7i2Rg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736327122;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=THX2NyChGogo3Kth4sMAsXNutUP9P3pw+jNEWRR9NrU=;
+	b=qztIvoOg4O/H0Tj/WlT2tQcGX0BI8x6o+7eiQXnGVnKGsifQNL2002sAHg44Vtvak+SAe6
+	9pN1x0mwDCZt1gDw==
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Daniel Gomez <da.gomez@samsung.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	llvm@lists.linux.dev,
+	Elliot Berman <elliot.berman@oss.qualcomm.com>
+Subject: [PATCH v3 21/28] cfi: Use RCU while invoking __module_address().
+Date: Wed,  8 Jan 2025 10:04:50 +0100
+Message-ID: <20250108090457.512198-22-bigeasy@linutronix.de>
+In-Reply-To: <20250108090457.512198-1-bigeasy@linutronix.de>
+References: <20250108090457.512198-1-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202412311507.14xdiaIX-lkp@intel.com> <Z3OyANq7fAkCs+Qi@rli9-mobl>
- <CAH5fLghNqbu2LO6SMr2Nsciji5k01tagaAEMZQ-WKJ8b9E56hg@mail.gmail.com> <Z33NUGpt7FM6FKuJ@rli9-mobl>
-In-Reply-To: <Z33NUGpt7FM6FKuJ@rli9-mobl>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 8 Jan 2025 09:40:02 +0100
-X-Gm-Features: AbW1kvZq1qORT0gFbWfSwaaryRaKvr2Sdho2Mc5xAhDXDEz__7FPQG8iIFou4rQ
-Message-ID: <CAH5fLgj0X6AkUjv72axApE7=+47qXSPFdqp71dSPG7URsFpbMA@mail.gmail.com>
-Subject: Re: error[E0425]: cannot find value `__tracepoint_rust_sample_loaded`
- in crate `$crate::bindings`
-To: Philip Li <philip.li@intel.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
-	Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 8, 2025 at 1:57=E2=80=AFAM Philip Li <philip.li@intel.com> wrot=
-e:
->
-> On Mon, Jan 06, 2025 at 12:49:43PM +0100, Alice Ryhl wrote:
-> > On Tue, Dec 31, 2024 at 9:58=E2=80=AFAM Philip Li <philip.li@intel.com>=
- wrote:
-> > >
-> > > On Tue, Dec 31, 2024 at 03:15:47PM +0800, kernel test robot wrote:
-> > > > Hi Alice,
-> > > >
-> > > > FYI, the error/warning still remains.
-> > >
-> > > Kindly ignore this report, which had already been discussed in [1]
-> > >
-> > > [1] https://lore.kernel.org/oe-kbuild-all/CAH5fLggEzmerC6Qg1fjuc_wiy2=
-1BJQGGYdZSZA+KV=3DoP6q9iJg@mail.gmail.com/
-> >
-> > Would it be possible to upgrade bindgen used by this robot? Please see:
-> > https://lore.kernel.org/all/CAH5fLgjmtuZ7Sxp49GoGC079sXqS4wmsEmZKM-T4Mh=
-9FycDYGQ@mail.gmail.com/
->
-> Sorry, i missed this suggestion. Sure, the bot side will follow up to
-> upgrade bindgen, so far, it follows scripts/min-tool-version.sh to choose
-> which version to use.
+__module_address() can be invoked within a RCU section, there is no
+requirement to have preemption disabled.
 
-Thanks!
+The _notrace() variant was introduced in commit 14c4c8e41511a ("cfi: Use
+rcu_read_{un}lock_sched_notrace"). The recursive case where
+__cfi_slowpath_diag() could end up calling itself is no longer present,
+as all that logic is gone since commit 89245600941e ("cfi: Switch to
+-fsanitize=3Dkcfi").
+Sami Tolvanen said that KCFI checks don't perform function calls.
 
-Alice
+Elliot Berman verified it with
+| modprobe -a dummy_stm stm_ftrace stm_p_basic
+| mkdir -p /sys/kernel/config/stp-policy/dummy_stm.0.my-policy/default
+| echo function > /sys/kernel/tracing/current_tracer
+| echo 1 > /sys/kernel/tracing/tracing_on
+| echo dummy_stm.0 > /sys/class/stm_source/ftrace/stm_source_link
+
+Replace the rcu_read_lock_sched_notrace() section around
+__module_address() with RCU.
+
+Cc: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev
+Tested-by: Elliot Berman <elliot.berman@oss.qualcomm.com>  # sm8650-qrd
+Link: https://lore.kernel.org/all/20241230185812429-0800.eberman@hu-eberman=
+-lv.qualcomm.com
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ kernel/cfi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/kernel/cfi.c b/kernel/cfi.c
+index 08caad7767176..abcd4d1f98eab 100644
+--- a/kernel/cfi.c
++++ b/kernel/cfi.c
+@@ -71,14 +71,11 @@ static bool is_module_cfi_trap(unsigned long addr)
+ 	struct module *mod;
+ 	bool found =3D false;
+=20
+-	rcu_read_lock_sched_notrace();
+-
++	guard(rcu)();
+ 	mod =3D __module_address(addr);
+ 	if (mod)
+ 		found =3D is_trap(addr, mod->kcfi_traps, mod->kcfi_traps_end);
+=20
+-	rcu_read_unlock_sched_notrace();
+-
+ 	return found;
+ }
+ #else /* CONFIG_MODULES */
+--=20
+2.47.1
+
