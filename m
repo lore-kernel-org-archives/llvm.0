@@ -1,92 +1,141 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA961A262A
-	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 03:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B23225D7;
+	Wed,  8 Jan 2025 06:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736305213; cv=none; b=BV82If+f5aOaUwJAgdsUoMkXrcbx6nD3jIh8gzSzD75TGyCEk2STIn3PLAgZtSU3fGI5OZzmlB+fGU4OuMAq0RuK+N2jEOjZi8Dh4Ixr8+9eu2pe+Ek3C5qg9zz4LWrHVEKdd1t1hIcMOJ/RG6ShwL+KBCWsForV2Fgs4+wakK8=
+	t=1736316775; cv=none; b=sx5IOG64ZJd6rRBza9Mf6ch7g4puwJOLxVa9arHlN4mmaKgPqq6eLWjWkbIhZAVDGhN78F7EN6MOKKaD57KR/NyRvKdYf8IuidHGjMNfifpxl1zHlzzqDyIpi11RnEe2uGdbRfVBogxcRcVoA25F5yzE+EF2F0oGP2g8bGKXrSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736305213; c=relaxed/simple;
-	bh=dpW07r02+vAWiXyYKKllW9tQ/V7+u4ovL/HDCCgJWQE=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=ZnHiyW5Rpuj+zvsfcEcp4jyo1RekKKEeur4D9zUpz2g5vsqTMTTZgfutNtHgyt1s35nTnBlnEAg9yeSzdF2GPik0zrrAyLQ34wskXvZM+sDYOUDasja+0lDNf4MFfHpUa/8yNX4oGFOhaEKRXqv+XRz2ECN3CtSOgcQrb9EAuHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=FJ9bPJsi; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1736316775; c=relaxed/simple;
+	bh=VqxxnRtlfAx43ASDeMjZUHwKdePTk1sp4wEFD/3fNyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=N/oV+t1yOOylbssDizgZvP4Aa9RoCVBE9s2JPuYW98ZfePpw5vxYQOUvyfRzu4pDxE1aJH3FIai+FeyoYGPPyrQtlkRThGY4Br4heAfjqAS/sVoQw09mG//AQr83xuD+ARXpRC07VaCyZcLazH1m2H08GJjk0cjkgLBGYR5Oms4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RqqIIWl+; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="FJ9bPJsi"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6e8fe401eso1344278285a.2
-        for <llvm@lists.linux.dev>; Tue, 07 Jan 2025 19:00:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1736305210; x=1736910010; darn=lists.linux.dev;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zpwGF4ZPc5zkh/c6DMxwRDr8v/VzMYpFaykW6r71bZk=;
-        b=FJ9bPJsi3ylcWIfeeQHMoPIRGSW8Pu4zphxBrT8YDHxb1B37Vas8ceHYr4L9LgGTas
-         5ZUld4j0d/IpPRbg5BrrEHCwuh03csIfra38ooomX4dSW3ljC0nRRWTbE5Bp0WZ249d/
-         +NNxQccHnWpXXI1LzRBoo/FWBXnJ6mpwz1jqw0e7XEaQYwKM40uqKraT85V1Njq01E42
-         CMmCx0zEOYqp8BDKxRynHINM7E6TZ/+YkoJVpGkJ1qQNaWeTTQnd1Y9/FqmHXQo6Z6Nl
-         BnsAF/pLxj4hlZc7iayaUh+xrHO78gC84LEYnuFDnOWGH77MqHwnuIJ3EVOKa97fmkG7
-         IBoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736305210; x=1736910010;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zpwGF4ZPc5zkh/c6DMxwRDr8v/VzMYpFaykW6r71bZk=;
-        b=sFj2vqNejYCpBnAsjkFX5tXH/s9AR3pogZ+gU+obPzDVkhyRKjasvI/mzmiFSopa/c
-         XQ22IUCzVDexREemBVNnNYL5ctAgQ2msFCKjbn9seR1fHbLCjiK3YFXkjrMXgjHdFgBX
-         UE68hyzIc9kn+hiPxbgpR0IZgE5VKEHt8oEp1rE1iTD6N/QYEKBVfsiGMFNNzZGQhrV5
-         B98inZhEcFHSi3JQaGPjT98nr4F4wkvhVlSlX4j7RGZvid18bQVQtJMRzi9SAeEeMgEp
-         NvCxdEHQMy/vHKru/TOmN8aYNodEqffWUyU+bFhBRcQHEj89sAMFCHcl1Q065KMwKwfW
-         m8Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCWUU3ReKo/3WkgOhmr1Xt7RHVdKsGcfZ7NmtISWxSJzRHIMWRRAEVtFPM8rnS1TJhWZOooJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx/6r3UJfeotVYM4m4tiMIzHiVYzm3GrjkJJtXc2Nv8ja0GKPnb
-	hHKDqmqMRYhfNVs1pOh9K7scZd94y3sTr3B6L/nfepx+O5yvCBoSv59USPXtZQ==
-X-Gm-Gg: ASbGncvutW3PQ7F4mwFFD35rHx0f9GOud/Ij7/m7XT4+FvspbBWQ0QFUr8vuvAAuTb6
-	jSR77RHcYcDtF7XFCW97CgiLJBzR8QI9kJZfVPXdol9z7DfnSBcrBYQpno9n6ImWMMUt68MpGFE
-	56wxrdvN56ElQZn5l/pyfDgtKfXuSJx5WFHb+n8EVhDIr+Ut4dQCOnGmyJyUe9Qotwduas0aaUu
-	BWf7UqSnDKy/btWfwl/9Va6EUnWsiC3zzT/cVrE2FJ35L0UYpA=
-X-Google-Smtp-Source: AGHT+IG9lHm2hSXpL2ALHMVYpNGR+NPhmNlgxnbcIWTjNSbgzaPtBoqVZFBXmmBFrsxuavT1v+9vtg==
-X-Received: by 2002:a05:620a:240d:b0:7b1:e0f:bf9b with SMTP id af79cd13be357-7bcd97afd59mr145106485a.45.1736305210186;
-        Tue, 07 Jan 2025 19:00:10 -0800 (PST)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2f8fe6sm1637237185a.51.2025.01.07.19.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 19:00:09 -0800 (PST)
-Date: Tue, 07 Jan 2025 22:00:09 -0500
-Message-ID: <e1e67dea8520f71bc54377a93e26d849@paul-moore.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RqqIIWl+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736316774; x=1767852774;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VqxxnRtlfAx43ASDeMjZUHwKdePTk1sp4wEFD/3fNyI=;
+  b=RqqIIWl+BpTo15eOkzst80uGQKMsd/s6SOYdUaQi9R4suQlcBev3AWBP
+   S3GzWC/GmPTspkXzhDxd2GceRF9o7RmMVTlfX6/aC8NmiWEBO1xDSuC+K
+   8SioHqTsDliiAsJbX+NXt9iYH2eY6knvUkH0mhdJtLg9RyNtBuPs308fc
+   UNmwDw9aIL4oiIzNamkDDSP1uFQ7FCJ3+pwR0AEK+5oTmw7S42ZQ95bQO
+   n7zbWHayi0Pk8tacVz2PO5abm7t27te+ZqXloIgbSePK+Kn9s/Zshwoxk
+   dJYEzQX9lchZIEyx0t4eYiISzD0XJfwUpZNLs6D4+M3u0WXIDuW5eQPAi
+   g==;
+X-CSE-ConnectionGUID: TYlcT8Y+Tj6fYJpEWrvQ2Q==
+X-CSE-MsgGUID: ETeM8tkzSGeIJmt4YqfWWA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="47519498"
+X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
+   d="scan'208";a="47519498"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 22:12:53 -0800
+X-CSE-ConnectionGUID: EMZAWn0ASna8glhp4LUs4Q==
+X-CSE-MsgGUID: RaOd9UJXROiofvyrZ5jYeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,297,1728975600"; 
+   d="scan'208";a="103499995"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 07 Jan 2025 22:12:51 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tVPJB-000FgB-1T;
+	Wed, 08 Jan 2025 06:12:49 +0000
+Date: Wed, 8 Jan 2025 14:12:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [linux-next:master 6430/6768] drivers/watchdog/da9052_wdt.c:176:14:
+ error: no member named 'fault_log' in 'struct da9052'
+Message-ID: <202501081401.S714JKUr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20250107_1610/pstg-lib:20250107_1603/pstg-pwork:20250107_1610
-From: Paul Moore <paul@paul-moore.com>
-To: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>, selinux@vger.kernel.org
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>, =?UTF-8?q?Bram=20Bonn=C3=A9?= <brambonne@google.com>, Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH RFC v2 19/22] selinux: validate symbols
-References: <20241216164055.96267-19-cgoettsche@seltendoof.de>
-In-Reply-To: <20241216164055.96267-19-cgoettsche@seltendoof.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Dec 16, 2024 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de> wrote:
-> 
-> Some symbol tables need to be validated after indexing, since during
-> indexing their referenced entries might not yet have been indexed.
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/ss/policydb.c | 94 ++++++++++++++++++++++++++++++++++
->  1 file changed, 94 insertions(+)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   7b4b9bf203da94fbeac75ed3116c84aa03e74578
+commit: 651b5fde35d67a2f669d2c0f5e1b702cac3400b2 [6430/6768] watchdog: da9052_wdt: add support for bootstatus bits
+config: i386-randconfig-016-20250108 (https://download.01.org/0day-ci/archive/20250108/202501081401.S714JKUr-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250108/202501081401.S714JKUr-lkp@intel.com/reproduce)
 
-Out of curiosity, have you measured the policy load times before and
-after this patchset?  I'd like to understand the performance impact of
-the additional checks and validations.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501081401.S714JKUr-lkp@intel.com/
 
---
-paul-moore.com
+Note: the linux-next/master HEAD 7b4b9bf203da94fbeac75ed3116c84aa03e74578 builds fine.
+      It may have been fixed somewhere.
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/da9052_wdt.c:176:14: error: no member named 'fault_log' in 'struct da9052'
+     176 |         if (da9052->fault_log & DA9052_FAULTLOG_TWDERROR)
+         |             ~~~~~~  ^
+   drivers/watchdog/da9052_wdt.c:178:14: error: no member named 'fault_log' in 'struct da9052'
+     178 |         if (da9052->fault_log & DA9052_FAULTLOG_TEMPOVER)
+         |             ~~~~~~  ^
+   drivers/watchdog/da9052_wdt.c:180:14: error: no member named 'fault_log' in 'struct da9052'
+     180 |         if (da9052->fault_log & DA9052_FAULTLOG_VDDFAULT)
+         |             ~~~~~~  ^
+   3 errors generated.
+
+
+vim +176 drivers/watchdog/da9052_wdt.c
+
+   153	
+   154	
+   155	static int da9052_wdt_probe(struct platform_device *pdev)
+   156	{
+   157		struct device *dev = &pdev->dev;
+   158		struct da9052 *da9052 = dev_get_drvdata(dev->parent);
+   159		struct da9052_wdt_data *driver_data;
+   160		struct watchdog_device *da9052_wdt;
+   161		int ret;
+   162	
+   163		driver_data = devm_kzalloc(dev, sizeof(*driver_data), GFP_KERNEL);
+   164		if (!driver_data)
+   165			return -ENOMEM;
+   166		driver_data->da9052 = da9052;
+   167	
+   168		da9052_wdt = &driver_data->wdt;
+   169	
+   170		da9052_wdt->timeout = DA9052_DEF_TIMEOUT;
+   171		da9052_wdt->info = &da9052_wdt_info;
+   172		da9052_wdt->ops = &da9052_wdt_ops;
+   173		da9052_wdt->parent = dev;
+   174		watchdog_set_drvdata(da9052_wdt, driver_data);
+   175	
+ > 176		if (da9052->fault_log & DA9052_FAULTLOG_TWDERROR)
+   177			da9052_wdt->bootstatus |= WDIOF_CARDRESET;
+   178		if (da9052->fault_log & DA9052_FAULTLOG_TEMPOVER)
+   179			da9052_wdt->bootstatus |= WDIOF_OVERHEAT;
+   180		if (da9052->fault_log & DA9052_FAULTLOG_VDDFAULT)
+   181			da9052_wdt->bootstatus |= WDIOF_POWERUNDER;
+   182	
+   183		ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
+   184					DA9052_CONTROLD_TWDSCALE, 0);
+   185		if (ret < 0) {
+   186			dev_err(dev, "Failed to disable watchdog bits, %d\n", ret);
+   187			return ret;
+   188		}
+   189	
+   190		return devm_watchdog_register_device(dev, &driver_data->wdt);
+   191	}
+   192	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
