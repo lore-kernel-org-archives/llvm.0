@@ -1,134 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C631E515;
-	Wed,  8 Jan 2025 19:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1904E1AE875
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 20:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736363657; cv=none; b=NZ4Rc6i06eWBWugXuaZPLjkaF65KygLyQksjN+UTqfWuNUKRE2lnwCGAQDaumDQG6HFhl0zSuUfD2hFzbppWQE3fOAfPH3uku8n3IkHJipnKvUwV4dLbQZl0jaQVLDuGn/xtThUBwlpAd9bgp/7MpWEYcMXAsC0MyLdWSG492JI=
+	t=1736367731; cv=none; b=k0snxwvfudyrmeBtUfDooDr11LEUVQtHZy3NfRKdjvNZheoXNf2gabZ7jJOvoe5ccfuh43pqCkHTt+ae8ErrDIg79c1OjNvHpD67OgM1+TBiSuCA9B0jxke8NHTolvnQWVaxjOxyss6PE0qIrUovBLRhTn17seKNxWjNKXKjbjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736363657; c=relaxed/simple;
-	bh=fEEwz81jltL87npWfR4By9hgJJHNAUW8odUCf6SU+p8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IOZlUIKhfPlcYzcpEUrSmwkwB3Qa5X2g+pWIxTOV16xe6bRgWnlNMBMUZYKqG5rVNIS8YSvA5k9ZQaUDt4lYZvEd8/cBv9B+zW7bj09rUh5K9UcGrC64zeKPhpnvCuhX8DTF6GXaxTTtjrCGSF8fLagJ9v6trQqJkWAEki9b30c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fEmLFC6v; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736367731; c=relaxed/simple;
+	bh=604ND5SMZDy8f6XHY+BJxliTRQS6neEfKyfIUD7/LUc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fGm1P0jeyxJpn7GZHmLpICM2rG/RGfST8NTZ4pvWZSo6fqvWVJP/GXEVmSlNSUqLl+jmGBqCqwUSzbKVEN8uDxXNnYYCXKWtu7uChgICAkpOjtjn1nFJL9w1mUsh+YE0sxroO+R+JDI3pGsc40gVc/dJRg3XuPxOdPYmq7vzIIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U5ZR0Myg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fEmLFC6v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736363656; x=1767899656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fEEwz81jltL87npWfR4By9hgJJHNAUW8odUCf6SU+p8=;
-  b=fEmLFC6vTUvaK5YRe4vEKYG/cuj+78dPU/hYNeLLkh3trXDRYZAIRto8
-   03m2u5uiPyDfdQfWsODnGN78rMejCFznEkDecBeEhJu/iXO99odtEAKec
-   FSmjDr+vIZVLDRafrigWO7HAlBys3u5vFpCA3+uk7QJxjuD4Nxq4xdYzK
-   pVMu5cuDD05qiFwtZ48y7rX5uN9bNUV4I+RbgZunOfnWRn3J/TCjyzP8i
-   0aZKOQxabRbDVpOXCUfBh/hle/+ffRSQhWmkMpvBA3uJoZ1qcv0a93bqr
-   ryHtlaafBqOiNi1EaY/XIHNs+sxglJe0i3ZxVhksYjINjPhOG7QWzjg4F
-   g==;
-X-CSE-ConnectionGUID: d8GAyOaISRGApdhCg3nHIw==
-X-CSE-MsgGUID: OmhMFBa3QvW7Pco8GpN6lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="40372537"
-X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
-   d="scan'208";a="40372537"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 11:14:15 -0800
-X-CSE-ConnectionGUID: IIqfRtmQTRWupD6IMQWNJA==
-X-CSE-MsgGUID: rM2xe3LsRGuaCbOiJvH+fg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
-   d="scan'208";a="102989976"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Jan 2025 11:14:14 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVbVL-000GXX-2R;
-	Wed, 08 Jan 2025 19:14:11 +0000
-Date: Thu, 9 Jan 2025 03:14:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <yunshenglin0825@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_frag_cache_part2_v3_250105 8/8]
- net/core/skbuff.c:3091:28: warning: variable 'nc_page' is uninitialized when
- used here
-Message-ID: <202501090341.yJ16qGyH-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U5ZR0Myg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736367728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=y6xr6c4SzMqA5a+yktp06An/iDLiHNFKegZp9Ys9II0=;
+	b=U5ZR0MygobbIJrX2ijXkF9pW6ed6geMh9Sw/+uQJn2VtQfFfNXCDgYiPXA2OTJJdk5tfSG
+	bZPc6AyWc81GaoHA8aWllPyurAQp8Fvuy3+aJeXxwa+TK41leki6C3l9BFUF53RFMfRYKj
+	XOV1aVqeOWCK+qkhL7xlzQqBNTtmSmo=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-435-HqB2O3VGOr6aGmBKjqXfBw-1; Wed,
+ 08 Jan 2025 15:22:07 -0500
+X-MC-Unique: HqB2O3VGOr6aGmBKjqXfBw-1
+X-Mimecast-MFC-AGG-ID: HqB2O3VGOr6aGmBKjqXfBw
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C52C1977699
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 20:22:06 +0000 (UTC)
+Received: from [172.64.12.18] (unknown [10.30.33.24])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BA4D11956052;
+	Wed,  8 Jan 2025 20:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
+ upstream-mainline, 0b7958fa)
+Date: Wed, 08 Jan 2025 20:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <55450.125010815220700362@us-mta-435.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 7bMV5gIWYEU00Mc86G6HaL3JqYb6c1uHYMZhWvrqtU8_1736367726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/gestionlin/linux.git page_frag_cache_part2_v3_250105
-head:   c94404d3ba31c8322393ffbabf85a5c98e965b4f
-commit: c94404d3ba31c8322393ffbabf85a5c98e965b4f [8/8] replace fix
-config: riscv-randconfig-002-20250109 (https://download.01.org/0day-ci/archive/20250109/202501090341.yJ16qGyH-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501090341.yJ16qGyH-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501090341.yJ16qGyH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/core/skbuff.c:3091:28: warning: variable 'nc_page' is uninitialized when used here [-Wuninitialized]
-           if (spd_can_coalesce(spd, nc_page, nc_offset)) {
-                                     ^~~~~~~
-   net/core/skbuff.c:3081:22: note: initialize the variable 'nc_page' to silence this warning
-           struct page *nc_page;
-                               ^
-                                = NULL
->> net/core/skbuff.c:3091:37: warning: variable 'nc_offset' is uninitialized when used here [-Wuninitialized]
-           if (spd_can_coalesce(spd, nc_page, nc_offset)) {
-                                              ^~~~~~~~~
-   net/core/skbuff.c:3080:24: note: initialize the variable 'nc_offset' to silence this warning
-           unsigned int nc_offset;
-                                 ^
-                                  = 0
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/nc_page +3091 net/core/skbuff.c
+Kernel information:
+    Commit message: Merge tag 'for-6.13/dm-fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/device-mapper/linux-dm
 
-  3074	
-  3075	static bool spd_fill_linear_page(struct splice_pipe_desc *spd,
-  3076					 struct page *page, unsigned int offset,
-  3077					 unsigned int *len, struct sock *sk)
-  3078	{
-  3079		struct page_frag_cache *nc = sk_page_frag_cache(sk);
-  3080		unsigned int nc_offset;
-  3081		struct page *nc_page;
-  3082		void *va;
-  3083	
-  3084		if (!sk_page_frag_cache_refill(sk, nc))
-  3085			return true;
-  3086	
-  3087		*len = min_t(unsigned int, *len, page_frag_cache_remaining(nc));
-  3088		va = page_frag_cache_virt(nc);
-  3089		memcpy(va, page_address(page) + offset, *len);
-  3090	
-> 3091		if (spd_can_coalesce(spd, nc_page, nc_offset)) {
-  3092			spd->partial[spd->nr_pages - 1].len += *len;
-  3093			page_frag_cache_commit_noref(nc, *len);
-  3094			return false;
-  3095		}
-  3096	
-  3097		page_frag_cache_commit(nc, *len);
-  3098		spd->pages[spd->nr_pages] = nc_page;
-  3099		spd->partial[spd->nr_pages].len = *len;
-  3100		spd->partial[spd->nr_pages].offset = nc_offset;
-  3101		spd->nr_pages++;
-  3102	
-  3103		return false;
-  3104	}
-  3105	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1616739135
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1616739135-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1616739135-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1616739135-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
