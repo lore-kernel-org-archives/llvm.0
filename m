@@ -1,123 +1,183 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9041FDE09;
-	Wed,  8 Jan 2025 14:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0E21FCD11
+	for <llvm@lists.linux.dev>; Wed,  8 Jan 2025 14:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736347051; cv=none; b=Jx2lm8AtNXOG0vwvPSBSTiZjx3f7csFxFZHXeIx1HWnEDKnTEfC5gjgX+QU2aVAKoM84k8UKbjdsLYiyPvmhhRW3qqnFzwwpZk4vRZaMOhXJ5DgO79dLzXKHZE+B+PMQuavY8Comc9KtPVCT0OEVkyf1cz/bAwC59+5Xur/X8cw=
+	t=1736347065; cv=none; b=sCck55wNZiYuHwCD2Lhr/DP8J1PK5b6tYz/umO2CdbWpddEt72wUrkSr2K7rSgUJLT2bNcyeI8uYrtprsbUC8nF1fFbmkihzbyKJsqNs+JTGO+5Da5oF5P5hm6SRH8JzyXMeLeRWD0Rw7vv6QT/TmerhZf+PT3VIKCxOqr8DqV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736347051; c=relaxed/simple;
-	bh=zMQd5Q3V9sn3h/BJ0+XSItuzZ2x8m7x43xFqCmhtiW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b9rBuB/uGGoj58jimPKJsASCZD7Nu47RlW2dX/KM36giMmhSrWGyR3T7cDTiEEFk/sHsO/8GnFCGIYkRCmY49OzYwYtVB8higuRF96THC3tTA9OGOqUrUhn2NTvLDdnRyH+nXDbGKZnmp8SX6nV+4jYEHobg2Pt4f+AAxoVEYHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gbZ9WqS+; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736347065; c=relaxed/simple;
+	bh=MjKh/LYH2VJL6NObanB7K6M3t56T0vtIQHEjOYRh5zA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lXbR9A228bcifB+qCwSwjERzdFbREQcTrC4OVQ8c4khCBuFzLc6YO/i6e7BygnPazwZas4CrIn2V9UllKusYJ87jOe8Ze1eCGUQqKKRhkNYZ0Mxo3LVfId23/VmdCgNiARUtzUIY7A8GtrpZxZUAoYs1lGqqL2/RlE//v/kHCg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Bjgml3gP; arc=none smtp.client-ip=193.252.22.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gbZ9WqS+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736347048; x=1767883048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zMQd5Q3V9sn3h/BJ0+XSItuzZ2x8m7x43xFqCmhtiW4=;
-  b=gbZ9WqS+/1Tm8vCx/7tnUJwJnm5ezApTL2WRKKV5U1422rjxcV27kRU9
-   jKlPBIuiDrMQ9d2RJQYSzhws+D1yOXcxFmMP/9qiFXj7RpTpUfph5Sgyk
-   o8isi3dIj6bVYiSGyklYmhjuhwFuKpp1pAMCq8Scry+CDnAjrcOMkUchL
-   rlc41BgryLJLbBXF5idMkxxwXUpdME2f+9gJw7ncnJsWGDPviPrlzZMwa
-   Z6HFkAWUwboeZHDUq/6olYYrfCCHhLpEjcifZc7SKQixZbrAZHz3o3GSi
-   6m8jPQS0CSpiEgEnapXHDcrhz6hbO5DTaSFnzuN6N2WfFwuxBDp5MB2uq
-   g==;
-X-CSE-ConnectionGUID: loUWd6rRTOuiZWFB6giPKQ==
-X-CSE-MsgGUID: xltU1faiSu6Sa+PD+4W+7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36458584"
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="36458584"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:37:28 -0800
-X-CSE-ConnectionGUID: wmcM7VuUSjCMXGmJ+oqDnw==
-X-CSE-MsgGUID: ZPTHOSS6S1CximYuf+ni/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="140453223"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 08 Jan 2025 06:37:25 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVXBS-000GDx-2X;
-	Wed, 08 Jan 2025 14:37:22 +0000
-Date: Wed, 8 Jan 2025 22:37:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yushan Wang <wangyushan12@huawei.com>, xuwei5@hisilicon.com,
-	yangyicong@hisilicon.com, Jonathan.Cameron@huawei.com,
-	wangjie125@huawei.com, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	prime.zeng@hisilicon.com, fanghao11@huawei.com,
-	wangyushan12@huawei.com, linuxarm@huawei.com
-Subject: Re: [PATCH 2/2] soc cache: L3 cache lockdown support for HiSilicon
- SoC
-Message-ID: <202501082259.J9fBJZTQ-lkp@intel.com>
-References: <20250107132907.3521574-3-wangyushan12@huawei.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Bjgml3gP"
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id VX2itMI6Y32NAVX2wtbvIw; Wed, 08 Jan 2025 15:28:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736346518;
+	bh=PxUQztcRuYrMXkHTXs3g2OIgo2Eb99UYd7M2XyP7GGY=;
+	h=From:Date:Subject:MIME-Version:Message-Id:To;
+	b=Bjgml3gPKGys52oJgsdVvdK/uHRRw+hM7qU7y7Pir/wVmQbEbC9DweYecPtQNCRHz
+	 PUL+7GKKQnx3Sy9UkHeKG+skzb5einAbFLV1KmeaVIZ23P6tiP1IEJpKHYn5taK2WP
+	 Ka+P7vnw8SC8y8ygZVSnSMM+RXhPN7vbf049DhaAMd2DYmvPDo/b+v2DYUlb+v1wuP
+	 XGpc7GrWUt+p9UNDYIrj2OnxfPVK/EtFp/PWfkO6CCdder2Bu7zIsWjmpRyN25q5p5
+	 anxxAZ+ZTeuxqfMoHT2saZCqIt8JgAEjOW217jLufBxYMHUdKcy0VXzEcu77/DXtK5
+	 IwQrFy8vKdsvw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 08 Jan 2025 15:28:38 +0100
+X-ME-IP: 124.33.176.97
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Wed, 08 Jan 2025 23:27:51 +0900
+Subject: [PATCH] fortify: turn strlen() into an inline function using
+ __builtin_constant_p()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250107132907.3521574-3-wangyushan12@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
+X-B4-Tracking: v=1; b=H4sIAGaLfmcC/x3MQQqEMAwAwK9IzltoxVz8ikjJdqMGJEpTZUH8u
+ 8XjXOYC4yxs0DcXZD7FZNOK8GkgLaQzO/lVQ+tb9MGjs5JX1ngYx+8haxGNaVMrpCXuDgNSIvS
+ YqIN67Jkn+b//MN73Ax/i9yVvAAAA
+X-Change-ID: 20250105-strlen_use_builtin_constant_p-515aca505ca4
+To: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: David Laight <david.laight@aculab.com>, linux-hardening@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4123;
+ i=mailhol.vincent@wanadoo.fr; h=from:subject:message-id;
+ bh=MjKh/LYH2VJL6NObanB7K6M3t56T0vtIQHEjOYRh5zA=;
+ b=owGbwMvMwCV2McXO4Xp97WbG02pJDOl13X1S4t9b06asfTuHz1Dvn+0t/r3bxVhNz5wSFkn+c
+ 4pHyquno5SFQYyLQVZMkWVZOSe3Qkehd9ihv5Ywc1iZQIYwcHEKwEQkVjL807ZmOP7X3Xn+hlRx
+ wcjriVM3BIhPbJ9eca4t+HD1sx9NhYwMDTxhAsZfK3+cEHnT1VvVH7I4+wjjUbmYK5uU2YK3xLr
+ zAgA=
+X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp;
+ fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
 
-Hi Yushan,
+The strlen(p) function-like macro uses:
 
-kernel test robot noticed the following build warnings:
+  __is_constexpr(__builtin_strlen(p))
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.13-rc6 next-20250108]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+in which GCC would only yield true if the argument p is a string
+literal. Otherwise, GCC would return false even if p is a const
+string.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yushan-Wang/soc-cache-Add-framework-driver-for-HiSilicon-SoC-cache/20250107-213022
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250107132907.3521574-3-wangyushan12%40huawei.com
-patch subject: [PATCH 2/2] soc cache: L3 cache lockdown support for HiSilicon SoC
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250108/202501082259.J9fBJZTQ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250108/202501082259.J9fBJZTQ-lkp@intel.com/reproduce)
+In contrary, by using:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501082259.J9fBJZTQ-lkp@intel.com/
+  __builtin_constant_p(__builtin_strlen(p))
 
-All warnings (new ones prefixed by >>):
+then GCC can also recognizes when p is a compile time constant string.
 
->> drivers/soc/hisilicon/hisi_soc_l3c.c:146: warning: Function parameter or struct member 'regset' not described in 'hisi_soc_l3c_free_lock_reg_set'
->> drivers/soc/hisilicon/hisi_soc_l3c.c:146: warning: Excess function parameter 'addr' description in 'hisi_soc_l3c_free_lock_reg_set'
+The above is illustrated in [1].
 
+N.B.: clang is not impacted by any of this and gives the same results
+with either __is_constexpr() and __builting_constant_p().
 
-vim +146 drivers/soc/hisilicon/hisi_soc_l3c.c
+Use __builtin_constant_p() instead of __is_constexpr() so that GCC can
+do the folding on constant strings. This done, strlen() does not
+require any more to be a function-like macro, so turn it into a static
+inline function. In the process, __fortify_strlen() had to be moved
+above strlen() so that it became visible to strlen().
 
-   136	
-   137	/**
-   138	 * hisi_soc_l3c_free_lock_reg_set - Free an allocated register set by locked
-   139	 *				    address.
-   140	 *
-   141	 * @soc_l3c:	The L3C instance on which the register set is allocated.
-   142	 * @addr:	The locked address.
-   143	 */
-   144	static void hisi_soc_l3c_free_lock_reg_set(struct hisi_soc_l3c *soc_l3c,
-   145						   int regset)
- > 146	{
-   147		if (regset < 0)
-   148			return;
-   149	
-   150		xa_erase(&soc_l3c->lock_sets, regset);
-   151	}
-   152	
+On a side note, strlen() did a double expansion of its argument p.
+Turning it into an inline function also resolved this side issue.
 
+[1] https://godbolt.org/z/rqr3YvoP4
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+This patch is the successor of patch [1] which was part of a longer
+series [2]. Meanwhile, I decided to split it, so I am sending this again,
+but as a stand-alone patch.
+
+Changelog since [1]: use __builtin_constant_p() instead and turn
+strlen() into an inline function
+
+[1] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-6-4e4cbaecc216@wanadoo.fr/
+[2] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr/
+---
+ include/linux/fortify-string.h | 34 +++++++++++++++++++---------------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index e4ce1cae03bf770047ce8a7c032b183683388cd5..bd22dd66e5f5b66ad839df42247e6436e0afd053 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -4,7 +4,6 @@
+ 
+ #include <linux/bitfield.h>
+ #include <linux/bug.h>
+-#include <linux/const.h>
+ #include <linux/limits.h>
+ 
+ #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
+@@ -241,6 +240,21 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
+  * possible for strlen() to be used on compile-time strings for use in
+  * static initializers (i.e. as a constant expression).
+  */
++__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
++__kernel_size_t __fortify_strlen(const char * const POS p)
++{
++	const size_t p_size = __member_size(p);
++	__kernel_size_t ret;
++
++	/* Give up if we don't know how large p is. */
++	if (p_size == SIZE_MAX)
++		return __underlying_strlen(p);
++	ret = strnlen(p, p_size);
++	if (p_size <= ret)
++		fortify_panic(FORTIFY_FUNC_strlen, FORTIFY_READ, p_size, ret + 1, ret);
++	return ret;
++}
++
+ /**
+  * strlen - Return count of characters in a NUL-terminated string
+  *
+@@ -254,22 +268,12 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
+  * Returns number of characters in @p (NOT including the final NUL).
+  *
+  */
+-#define strlen(p)							\
+-	__builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),	\
+-		__builtin_strlen(p), __fortify_strlen(p))
+ __FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
+-__kernel_size_t __fortify_strlen(const char * const POS p)
++__kernel_size_t strlen(const char *p)
+ {
+-	const size_t p_size = __member_size(p);
+-	__kernel_size_t ret;
+-
+-	/* Give up if we don't know how large p is. */
+-	if (p_size == SIZE_MAX)
+-		return __underlying_strlen(p);
+-	ret = strnlen(p, p_size);
+-	if (p_size <= ret)
+-		fortify_panic(FORTIFY_FUNC_strlen, FORTIFY_READ, p_size, ret + 1, ret);
+-	return ret;
++	if (__builtin_constant_p(__builtin_strlen(p)))
++		return __builtin_strlen(p);
++	return __fortify_strlen(p);
+ }
+ 
+ /* Defined after fortified strnlen() to reuse it. */
+
+---
+base-commit: 9d89551994a430b50c4fffcb1e617a057fa76e20
+change-id: 20250105-strlen_use_builtin_constant_p-515aca505ca4
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
