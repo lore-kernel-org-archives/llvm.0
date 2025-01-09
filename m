@@ -1,46 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA8310A3E;
-	Thu,  9 Jan 2025 08:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830414A1A
+	for <llvm@lists.linux.dev>; Thu,  9 Jan 2025 08:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736410069; cv=none; b=JsTzVSodFSUVckY+ZBUbSX/onmBez4nfDg0DnEICAlTqnbEfPGyqECEwPdidqwV+5GM1WTY4YznQohraklL+mSuAp9kOuvjufCojpUw7iGnnmtR8EiyL1ok2B6dt7MXQBeLi2R9NOIzuvJOCybcnQBpf6IdjsDNvhOyPfW7oZkY=
+	t=1736412383; cv=none; b=Cmtrl4f3bBUE0L/VDFC6WG7AnZ3eGsloxypF0nPjNVvFOXQADLNrMDBfAqgUPPv935+LLyfoviV3Qf54znAbGZSdsI5QL9DdGd9B8fXJNbSwYJA7QvRe18E7zUtswM7NYvB6QMWJlKC9CXF7aOudTWxNOpi+EVpePRqhdI7AZog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736410069; c=relaxed/simple;
-	bh=B2yoJq6pKJpHj/MqGKeZtQFZAWjREci13lLhyUBacuo=;
+	s=arc-20240116; t=1736412383; c=relaxed/simple;
+	bh=eWYNxw22dlFCgATzM6mV5kTwq+fuFqMkVkErigCE1tM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OO5ae0PcpiH7WfvUDdsIQneSBwh66H+zfwrY5LbAdOEEib0m5/VCARfnIbGgB3dQ+TV41C3nNRFNFhIGh4uNoDFwsIF0eQ8iWtzhTlovDvwuQdrdO8ZwD1bB0/tLpvEziW5+JD2FSVvU7N3QLlec4YrAkbYN/0FkL+4ctV1quOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB+C8Sz2; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=L3iJuQvyXWFIx3Byh68JKLig/tDXFeSSSNTuxSWWVj1tEfdrDwDhNkmlZPZowXg3nQETeF+9tmcxDz2j7jy56zsiTuo4iV718jroyw6HOkwD9SaufM3cdnql8/vhlaPLA4tKtHcNSwWvru6cS7GLQVPVYkuoPC7ESdDjIVLTJAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=C1XknM5k; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB+C8Sz2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD2BC4CEDF;
-	Thu,  9 Jan 2025 08:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736410068;
-	bh=B2yoJq6pKJpHj/MqGKeZtQFZAWjREci13lLhyUBacuo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mB+C8Sz2tSXvTKvPfuJsGUFL7ArL6jt7VRSWoyZFLnro5PLQcdE2l5JJXVF+6ZLBD
-	 xsApdJBRyArxWyvL6IB5BFv2dry33odbPDPqid2mL7bh50cZ/zbCRCm9DWLAP5XXkK
-	 q5xsW8uxL8Av4CRJSdHca2OAPLXnxPKCUAEEyzzkMG/AIWCfQ+V+TVuC5pV5w7V5Ax
-	 vgwVV4RljpUyqnmBn9EiqZ4sLKwmr5qG7UuaeCrhBA6EElIb07j2HKUddlLDGa/kkz
-	 fMA0m6/K+DlY3KlJ5BFEWRvVcdFtGUbVaAWCTCapTBh9CPTQCA1aaGuW2vEcTXInxb
-	 WrXd69qmsYkoQ==
-Date: Thu, 9 Jan 2025 09:07:43 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Damien Le Moal <dlemoal@kernel.org>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 3/6] PCI: dwc: endpoint: Add support for BAR type
- BAR_RESIZABLE
-Message-ID: <Z3-Dz42s7uYoNCuV@ryzen>
-References: <20250107181450.3182430-11-cassel@kernel.org>
- <202501090927.zMSzHORM-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="C1XknM5k"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385e3621518so341386f8f.1
+        for <llvm@lists.linux.dev>; Thu, 09 Jan 2025 00:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1736412379; x=1737017179; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aT6h16XRgOZytfcOtsHfB55s6clvjsMb3AN4nmtAEpg=;
+        b=C1XknM5kzTDLIa6hglvchUFKKlTocULL5S/LLk6BRSge9RsiS6gYiwAMFVjpuqeRwP
+         SNq2ut+hjHwAeFT0PNHh+DzRrJPSkTF8MDpPrYTr0hFOwm3xbJ2BQvevR0LRuwF3lPLI
+         uigoLp0fXvb66t170Cx7fUwyP9nNa3mcujYNZ9wuS7VMsEL1YPmex+dIJn9PpDFRIWMK
+         upE9y3OydNMRlNysvAIyRmUAWR5ejAwl66FGfR2RIaytrX2lkDhWsOKw8ZzsXM+ZCwCm
+         tpKJPuMeJvfN/fekohsM1CtwD6V4X4tMJthXFuvzEo1O5S4pt889x/9i5LRBhPOrgYnM
+         P27g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736412379; x=1737017179;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aT6h16XRgOZytfcOtsHfB55s6clvjsMb3AN4nmtAEpg=;
+        b=hquQXa6wxRuRY+MMAp6z1QYpHMDvc1eL+PHK0rR4qjy4Jwmu58WHe5zwJze5f0Osgh
+         O4Bvu84AYGD6J9t2fpCfIY/4qA8dVHAmEI70ImY4AVaLSZG7WZ2O1zZ2elH7mfhGQqdp
+         uBSBD1ujCXMa6wb+trPmk9wsCLGnKmreNn0dR88DrqomJFR+71EQvLnzp6HfWROOiH/2
+         14UDYDRMOMfMF8kNIfW7PCiXAw8M/Q7LGLZhLTaqcsjv1zQQxJXF2A1Tbn6GRwNqoR0i
+         mVQnqHmfRsLQpSao1YJwEypDoq5EYQhJ/1lb99jstIMviHPZBeBZBIeriYkUuTOSmdFg
+         m/Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQkp9ZRZL+jed/rYG8BX33aRYNA4ExYbtFkmgifKKT91c6/FcWoEEAxG6ZLxBTd7lszmwx@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxh0goDJ09t/21jvswzfoGtGgZAQVdUDWb4O0BY+jY5naSMftNI
+	qXB5zAhDp6ffUD0oujXa1NGKs17bAZvRla3UujkC/1F0aP+EzKYULyL9gP/JJ8M=
+X-Gm-Gg: ASbGncvJfUwLoV1U5gor3Oj4DRKwYztg6/fawsBgJ4tgBJ45V7saOaceDMSDw4kGAjf
+	YqL1vp+suh99jE9PHfeYxEtqPjGzSaYWVWAEojzYIVtQO0ORJpiFBuo5e9mLHWS7URNB8mwgl2R
+	+lhH0dZSsNgeocmxaH6sSJgVjOka/wAne7nXS+Tm7TCM9TEpy/Q4Cf83kuF+vAYoBj+jRE76W6i
+	Jt6PrVbwsNKi2mr4gIXCcjssJsyK3I96po6AMHA2rANJMs=
+X-Google-Smtp-Source: AGHT+IGSdbhxVCHDC3vLUUMrjAIP9JM4UG/RcKQTMKms3Xt2J5RXb7IyeybxZB64334rg0W1LTjhbQ==
+X-Received: by 2002:a05:6000:1849:b0:386:2ebe:7ae2 with SMTP id ffacd0b85a97d-38a8733df9emr5690120f8f.45.1736412378954;
+        Thu, 09 Jan 2025 00:46:18 -0800 (PST)
+Received: from localhost ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e37d007sm1174655f8f.20.2025.01.09.00.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 00:46:18 -0800 (PST)
+Date: Thu, 9 Jan 2025 09:46:18 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Nysal Jan K.A." <nysal@linux.ibm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Segher Boessenkool <segher@kernel.crashing.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	linuxppc-dev@lists.ozlabs.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Brown <broonie@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] sched/membarrier: Fix redundant load of
+ membarrier_state
+Message-ID: <Z3-M2pVQHCqWZhZy@tiehlicka>
+References: <20241007053936.833392-1-nysal@linux.ibm.com>
+ <20241029055133.121418-1-nysal@linux.ibm.com>
+ <ZzsDEvJn-vauz9gE@tiehlicka>
+ <20241118092517.GE39245@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,81 +90,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202501090927.zMSzHORM-lkp@intel.com>
+In-Reply-To: <20241118092517.GE39245@noisy.programming.kicks-ass.net>
 
-On Thu, Jan 09, 2025 at 10:22:07AM +0800, kernel test robot wrote:
-> Hi Niklas,
+On Mon 18-11-24 10:25:17, Peter Zijlstra wrote:
+> On Mon, Nov 18, 2024 at 10:04:18AM +0100, Michal Hocko wrote:
+> > I do not see this patch staged in any tree (e.g. linux-next). Is this on
+> > its way to be merged?
 > 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on pci/next]
-> [also build test WARNING on next-20250108]
-> [cannot apply to pci/for-linus linus/master v6.13-rc6]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-Cassel/PCI-endpoint-Add-BAR-type-BAR_RESIZABLE/20250108-021844
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-> patch link:    https://lore.kernel.org/r/20250107181450.3182430-11-cassel%40kernel.org
-> patch subject: [PATCH 3/6] PCI: dwc: endpoint: Add support for BAR type BAR_RESIZABLE
-> config: arm-randconfig-003-20250109 (https://download.01.org/0day-ci/archive/20250109/202501090927.zMSzHORM-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501090927.zMSzHORM-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202501090927.zMSzHORM-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from drivers/pci/controller/dwc/pcie-designware-ep.c:14:
->    In file included from drivers/pci/controller/dwc/pcie-designware.h:17:
->    In file included from include/linux/dma-mapping.h:8:
->    In file included from include/linux/scatterlist.h:8:
->    In file included from include/linux/mm.h:2223:
->    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
-> >> drivers/pci/controller/dwc/pcie-designware-ep.c:259:27: warning: result of comparison of constant 140737488355328 with expression of type 'size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
->      259 |         if (size < SZ_1M || size > (SZ_128G * 1024))
->          |                             ~~~~ ^ ~~~~~~~~~~~~~~~~
->    2 warnings generated.
->
+> I only now found it -- it doesn't look super urgent. I'll get it into a
+> git tree after -rc1.
 
-The compiler is correct that this condition can never happen on 32-bit,
-but the code is correct, and the compiler will be able to optimize the
-check away on 32-bit, so I will simply add a cast to shut up the warning.
+I cannot seem to be able to find it in linux-next. Which tree is this
+sitting in?
 
-
-Kind regards,
-Niklas
-
-> 
-> vim +259 drivers/pci/controller/dwc/pcie-designware-ep.c
-> 
->    249	
->    250	static u32 dw_pcie_ep_bar_size_to_rebar_cap(size_t size)
->    251	{
->    252		u32 val;
->    253	
->    254		/*
->    255		 * According to PCIe base spec, min size for a resizable BAR is 1 MB,
->    256		 * thus disallow a requested BAR size smaller than 1 MB.
->    257		 * Disallow a requested BAR size larger than 128 TB.
->    258		 */
->  > 259		if (size < SZ_1M || size > (SZ_128G * 1024))
->    260			return 0;
->    261	
->    262		val = ilog2(size);
->    263		val -= 20;
->    264	
->    265		/* Sizes in REBAR_CAP start at BIT(4). */
->    266		return BIT(val + 4);
->    267	}
->    268	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs
