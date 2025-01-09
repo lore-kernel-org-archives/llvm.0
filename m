@@ -1,65 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C6879F5;
-	Thu,  9 Jan 2025 01:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C2B677;
+	Thu,  9 Jan 2025 02:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736386703; cv=none; b=FV//xQpcJebaoQzKKweQRmaXlmw4jR0n+F7TV9QenlhgwJFy5WJOIZs9U9VM5RDEWHFOdIPFw3lNA4pqpQ+m5rzwYCSpqQJhV1iwpQ6XZw3jMez/yrkQEMtZ7VOyzbSD1x+orijoEmHsfL0eO79iuvmAhifsH2KY3LZMqQKBhfE=
+	t=1736389354; cv=none; b=PXW4gftWaz9xPCVTbH4xJte7TeOZPAz1JnF/LMMLxD1+LEGjChWnHIeOXYiHiXu724ND5KsvXTMlUXEFXqWoFPyp1D6ErWcJ8aTOaaSxEF7GNr6lKugJlZKsC91VWqRD/m1zfS89B3toX7DDNrD4va2ua3+MUiF81iN+ws1rP20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736386703; c=relaxed/simple;
-	bh=oF7Y6SMiN0ONR3SZWTXiT+ru74SS/1HZRQIhYEsngmg=;
+	s=arc-20240116; t=1736389354; c=relaxed/simple;
+	bh=SMQyMsf70HjSuInrammB94kyTqcQWkTMR5YYsDwFvk0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pIsjZ1iF8AJ8Dj1PdkpEZfacVr452DPIwwMrM2Cvy29wHAzEAdelnkhCCVSqVLDgXaNtLke9xNRvHELwDoO0IB1rym1+fAGRLQVv3I1p2F9M+GjSrU722ujK3rOJHJJwAU/pG/N8Mmwc4JMtf35WZ/Mm7VTvjNuJz0RaQROFOoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m6DXrIDU; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=XS+kkAtqPxkUWJlaq/LUD00qHXLFzKtCqePgwKWHCpMix2J208a47aGCMBbXC7I81Lwssu33+QZvxc1W1z1s5OQ5kT/2qnhXiARogBS1QoWsUi1Zpbh+HwF8enLK4ha7WhCWiz2ViYYZwMPHjXuvxWtonYPahX1kMRTd5tFAIfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XysRnAkw; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m6DXrIDU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XysRnAkw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736386702; x=1767922702;
+  t=1736389352; x=1767925352;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oF7Y6SMiN0ONR3SZWTXiT+ru74SS/1HZRQIhYEsngmg=;
-  b=m6DXrIDUn3tSD6inRsIbLBNN6r7AZEN2pH1clg62EUS9PqV3r2cYGeUH
-   pFc5FkyzVd/fVj/Tsw6T3Tfwwvs21HAc+n+nLPuQd5gLmyqoefO/LhJ+w
-   l8u7MYDOp6apAf+3Q3S4avq8/emRO/OgkLJZOEVMk61vBb3KbLgZBceWy
-   qfdawUtu4T73kXNITmWU0Xb5+hlTvrxTgThH3h9iDDTTPDzNWk+i/3avn
-   JIov+CMgGdQALu5PafQn3JoG+s4bEw79Skh+MzgixqlgCh7j9WEp4//+p
-   1ZTFUqkBrL2leuX+rMSBLCDI2uEP6V5k1t8alYAWRi79vemYg42/jS0r7
-   g==;
-X-CSE-ConnectionGUID: l7aWQC/gSrWAiQKr+LTDVw==
-X-CSE-MsgGUID: dsctF071T62X5kEZzl+aDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47992711"
+  bh=SMQyMsf70HjSuInrammB94kyTqcQWkTMR5YYsDwFvk0=;
+  b=XysRnAkw7oqHjda1GU+AZYTtjc0qCb2bCX2MZbKAqdOV3KnPYhNyzRE2
+   X0L8Mv50vSW9N0tM3ZktyiWFo5mPisjZBoivrCgZojtfRpJ3XBeWuQZ6S
+   Nz4HqaotINRk1OobnU2XTgwCTOT0A+sUk18NxQB+5x7DfVJY/NktT3SF6
+   iltmzMa5P/IPPdfEb+dAfzc7eM2O0KRZMUgLQODs66ltqP3KvyCyh3fsy
+   8nsqHRXfpJCJkDNP+W3IrLPJisdXmdRZM/hV5SDrpDCW/s1ca9I7+OF5s
+   LaHih5q/Rhtqy0m6CvbOzlqu7+DlHpD/woLlZD1RoE18Q3jip7OyWtjKt
+   w==;
+X-CSE-ConnectionGUID: 5loJxHtRRSGnuQKQ8oDOPQ==
+X-CSE-MsgGUID: J2pcz+84TAWNKewRb4XX4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47303495"
 X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
-   d="scan'208";a="47992711"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 17:38:22 -0800
-X-CSE-ConnectionGUID: zuCBD9jVRF+/TqWg5oXmMg==
-X-CSE-MsgGUID: cbOIGZXrTBOmuK5jJR1EEw==
+   d="scan'208";a="47303495"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 18:22:31 -0800
+X-CSE-ConnectionGUID: HKd4THWQQMqaPVHrMhGiaA==
+X-CSE-MsgGUID: l2ubIJo5TfGCuSmKCWmt5A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="107865031"
+X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
+   d="scan'208";a="134111749"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Jan 2025 17:38:18 -0800
+  by orviesa002.jf.intel.com with ESMTP; 08 Jan 2025 18:22:27 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tVhV2-000GtX-0E;
-	Thu, 09 Jan 2025 01:38:16 +0000
-Date: Thu, 9 Jan 2025 09:37:13 +0800
+	id 1tViBl-000Gvv-0W;
+	Thu, 09 Jan 2025 02:22:25 +0000
+Date: Thu, 9 Jan 2025 10:22:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>
+To: Niklas Cassel <cassel@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org
-Subject: Re: [PATCH 5/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO request
-Message-ID: <202501090919.TiLTOhaq-lkp@intel.com>
-References: <20250107230456.GE30633@strace.io>
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 3/6] PCI: dwc: endpoint: Add support for BAR type
+ BAR_RESIZABLE
+Message-ID: <202501090927.zMSzHORM-lkp@intel.com>
+References: <20250107181450.3182430-11-cassel@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,86 +69,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250107230456.GE30633@strace.io>
+In-Reply-To: <20250107181450.3182430-11-cassel@kernel.org>
 
-Hi Dmitry,
+Hi Niklas,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on openrisc/for-next]
-[also build test ERROR on powerpc/next powerpc/fixes s390/features uml/next jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master vgupta-arc/for-curr arm64/for-next/core linus/master uml/fixes tip/x86/core vgupta-arc/for-next v6.13-rc6 next-20250108]
+[auto build test WARNING on pci/next]
+[also build test WARNING on next-20250108]
+[cannot apply to pci/for-linus linus/master v6.13-rc6]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-V-Levin/Revert-arch-remove-unused-function-syscall_set_arguments/20250108-070658
-base:   https://github.com/openrisc/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250107230456.GE30633%40strace.io
-patch subject: [PATCH 5/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO request
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20250109/202501090919.TiLTOhaq-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-Cassel/PCI-endpoint-Add-BAR-type-BAR_RESIZABLE/20250108-021844
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250107181450.3182430-11-cassel%40kernel.org
+patch subject: [PATCH 3/6] PCI: dwc: endpoint: Add support for BAR type BAR_RESIZABLE
+config: arm-randconfig-003-20250109 (https://download.01.org/0day-ci/archive/20250109/202501090927.zMSzHORM-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501090919.TiLTOhaq-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501090927.zMSzHORM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501090919.TiLTOhaq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501090927.zMSzHORM-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/ptrace.c:1053:3: error: call to undeclared function 'syscall_set_return_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1053 |                 syscall_set_return_value(child, regs, -ENOSYS, 0);
-         |                 ^
-   kernel/ptrace.c:1053:3: note: did you mean 'syscall_get_return_value'?
-   arch/hexagon/include/asm/syscall.h:56:20: note: 'syscall_get_return_value' declared here
-      56 | static inline long syscall_get_return_value(struct task_struct *task,
-         |                    ^
-   kernel/ptrace.c:1075:3: error: call to undeclared function 'syscall_set_return_value'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1075 |                 syscall_set_return_value(child, regs, info->exit.rval, 0);
-         |                 ^
-   2 errors generated.
+   In file included from drivers/pci/controller/dwc/pcie-designware-ep.c:14:
+   In file included from drivers/pci/controller/dwc/pcie-designware.h:17:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/pci/controller/dwc/pcie-designware-ep.c:259:27: warning: result of comparison of constant 140737488355328 with expression of type 'size_t' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     259 |         if (size < SZ_1M || size > (SZ_128G * 1024))
+         |                             ~~~~ ^ ~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/syscall_set_return_value +1053 kernel/ptrace.c
+vim +259 drivers/pci/controller/dwc/pcie-designware-ep.c
 
-  1021	
-  1022	static unsigned long
-  1023	ptrace_set_syscall_info_entry(struct task_struct *child, struct pt_regs *regs,
-  1024				      struct ptrace_syscall_info *info)
-  1025	{
-  1026		unsigned long args[ARRAY_SIZE(info->entry.args)];
-  1027		int nr = info->entry.nr;
-  1028		int i;
-  1029	
-  1030		if (nr != info->entry.nr)
-  1031			return -ERANGE;
-  1032	
-  1033		for (i = 0; i < ARRAY_SIZE(args); i++) {
-  1034			args[i] = info->entry.args[i];
-  1035			if (args[i] != info->entry.args[i])
-  1036				return -ERANGE;
-  1037		}
-  1038	
-  1039		syscall_set_nr(child, regs, nr);
-  1040		syscall_set_arguments(child, regs, args);
-  1041		if (nr == -1) {
-  1042			/*
-  1043			 * When the syscall number is set to -1, the syscall will be
-  1044			 * skipped.  In this case also set the syscall return value to
-  1045			 * -ENOSYS, otherwise on some architectures the corresponding
-  1046			 * struct pt_regs field will remain unchanged.
-  1047			 *
-  1048			 * Note that on some architectures syscall_set_return_value()
-  1049			 * modifies one of the struct pt_regs fields also modified by
-  1050			 * syscall_set_arguments(), so the former should be called
-  1051			 * after the latter.
-  1052			 */
-> 1053			syscall_set_return_value(child, regs, -ENOSYS, 0);
-  1054		}
-  1055	
-  1056		return 0;
-  1057	}
-  1058	
+   249	
+   250	static u32 dw_pcie_ep_bar_size_to_rebar_cap(size_t size)
+   251	{
+   252		u32 val;
+   253	
+   254		/*
+   255		 * According to PCIe base spec, min size for a resizable BAR is 1 MB,
+   256		 * thus disallow a requested BAR size smaller than 1 MB.
+   257		 * Disallow a requested BAR size larger than 128 TB.
+   258		 */
+ > 259		if (size < SZ_1M || size > (SZ_128G * 1024))
+   260			return 0;
+   261	
+   262		val = ilog2(size);
+   263		val -= 20;
+   264	
+   265		/* Sizes in REBAR_CAP start at BIT(4). */
+   266		return BIT(val + 4);
+   267	}
+   268	
 
 -- 
 0-DAY CI Kernel Test Service
