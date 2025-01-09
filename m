@@ -1,147 +1,245 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA7D214235;
-	Thu,  9 Jan 2025 05:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7202833C9
+	for <llvm@lists.linux.dev>; Thu,  9 Jan 2025 05:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736399200; cv=none; b=LlMeL3JSHaPwucYi2YvPIfG4G2Ubg0uaCZ7qv6kVMPCEfteCtL+mlLmPMjE950vVI1N+Q5TW9NKWm3MpCPTHvONxXFRbn5rBzIM3XlePShcrA329cwxGdq8LX1Pr0jZIejYfWyBEbk/hwYl7W4zCaVv9PE6TqjweH+qvpHKnbvY=
+	t=1736400923; cv=none; b=RZfr/jmBu/+A5dY52sTlQJZCvUhFlLbctGMSV7HYD0eGLG87EL8QHxkRlBlwTOkFtDkYCrlPdxK+C/W6gakYdKX8fTckMIEHaTPn++N+y2WDOZHPI4PmEYX2/ZcysT5KYQG9KTiu82u5lTzLlJ1JLv7EDIfgBiOldFMHJ6LqG/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736399200; c=relaxed/simple;
-	bh=CtGctgHU9yLvubsT9bMm0yStuOWITuMnMgbPCQ9TtW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtbyEtPJyaOkR6QRcSF5ua2fj/Ho2eFfBCFU2qX/j4EK4wxhjZMzwCiDRz/r4Oj3zajduVeiXkP11ufgoAptzvBhp7qm0dLBrko8yW+KrjGb0U7ZvAGWHOCajrgZAch9QyLC01ZAuuENw163liKPMc66Gb7tbf1zGv9u4iY8HY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T9fqrVSg; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736400923; c=relaxed/simple;
+	bh=sRToh2cb0vsMptfGOo9adh1nqnXrc+YUCfy2brT0Z1s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jIps+xTxN6vC/6VbSAeP6K31r3Jd+xsLNusaUrx9Ps2zB4N/7m2atI8oakwBxoy3mvXiWV0cIUL61iDpaqtbU0BxTBxcwIL6UNTxQO8x5KZMMbdt4FRs/LvopszLJyYti5xC7QPU4/kAqL4BgU1TWZqBcMROI/M4CWB0huGYzS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q7Y1EU74; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T9fqrVSg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736399200; x=1767935200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CtGctgHU9yLvubsT9bMm0yStuOWITuMnMgbPCQ9TtW8=;
-  b=T9fqrVSgBbGMKPExY/l9LWsVufqMHGeND0TeYG3atbguAl43g+P3ApyN
-   5wnXj36eeJS2+gpRGFwL416EUqr6PwbxG1PEhOJSRSCRP4x80Ih/2QtJQ
-   gaEIIEZ6x6skW8p87Wh05h373E8OyOO2BtcmMTPlcx7J0o+Ijt3APJDKT
-   WZSOcUbyqHuNnnxots1k+wshPtCS4qqffQSdpDo5bNOamAnQ1OJFJKc6Y
-   +YSE/OZCpGu8LnnP88lH08G3yqzw3YPVWmijXfmW6T9/DL94Tc40UhDHw
-   N2ilFa4pGLMdKcG0h9rGd+KfZPP3Z7YKuMy2H19n+Pk7Lmq89TJ7J9rJh
-   A==;
-X-CSE-ConnectionGUID: rI7BNWM8R0Wf38nCmrl6YA==
-X-CSE-MsgGUID: 5TWu/eusTeCx4A3uRYp9nQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36340335"
-X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
-   d="scan'208";a="36340335"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 21:06:39 -0800
-X-CSE-ConnectionGUID: h4Hq8411SWS6j/HUs6rxIQ==
-X-CSE-MsgGUID: xTEzb9jUT/u/CW+2t7y7KA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,300,1728975600"; 
-   d="scan'208";a="103801982"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Jan 2025 21:06:35 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVkkb-000H4J-0s;
-	Thu, 09 Jan 2025 05:06:33 +0000
-Date: Thu, 9 Jan 2025 13:05:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
-	devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH 1/3] hwmon: (max31827) refactor enum chips to chip info
-Message-ID: <202501091228.9APcsnSs-lkp@intel.com>
-References: <20250108082531.15467-2-johnerasmusmari.geronimo@analog.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q7Y1EU74"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0DEC4CED3;
+	Thu,  9 Jan 2025 05:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736400923;
+	bh=sRToh2cb0vsMptfGOo9adh1nqnXrc+YUCfy2brT0Z1s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=q7Y1EU74PJNmnyg/3DPKksERpVSCwgektc23WVWhDoCclSlH1meiRfQG32gMD+C1z
+	 Foz9felvKVplAbDibs/Kk++uyqJJyVo+vPSJjZ9caCBqiKpYTwhB0sO3fMXdDh0gGi
+	 GPWV5VfiRslI4W6LEA93jgsoZPjotwkpbMxRmMJgZOU/ANYBlRjfPJaxNuP85JYqaU
+	 d3yJmqqYgw8rEICh+qUIs/ww00eME6knENBAlM4mdts42JBfcsAcPdxCYAo9MAmIwz
+	 CrptGegPVn17DognvDey1xVafqkew9/+c1+Ik1dRHOG7cmleO0yQrW2iYW+vdYEvGS
+	 X0l8lzve8+6uQ==
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: chaitanya.dhere@amd.com,
+	jun.lei@amd.com
+Cc: harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com,
+	alexander.deucher@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev,
+	tzungbi@kernel.org
+Subject: [PATCH] drm/amd/display: mark static functions noinline_for_stack
+Date: Thu,  9 Jan 2025 05:35:04 +0000
+Message-ID: <20250109053504.2998728-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250108082531.15467-2-johnerasmusmari.geronimo@analog.com>
+Content-Transfer-Encoding: 8bit
 
-Hi John,
+When compiling allmodconfig (CONFIG_WERROR=y) with clang-19, see the
+following errors:
 
-kernel test robot noticed the following build warnings:
+.../display/dc/dml2/display_mode_core.c:6268:13: warning: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Wframe-larger-than]
+.../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: warning: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Wframe-larger-than]
 
-[auto build test WARNING on adc52dd4078067fabf1431036ba180eafd8a7eee]
+Mark static functions called by dml_prefetch_check() and
+dml_core_mode_support() noinline_for_stack to avoid them become huge
+functions and thus exceed the frame size limit.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/John-Erasmus-Mari-Geronimo/hwmon-max31827-refactor-enum-chips-to-chip-info/20250108-162739
-base:   adc52dd4078067fabf1431036ba180eafd8a7eee
-patch link:    https://lore.kernel.org/r/20250108082531.15467-2-johnerasmusmari.geronimo%40analog.com
-patch subject: [PATCH 1/3] hwmon: (max31827) refactor enum chips to chip info
-config: hexagon-randconfig-001-20250109 (https://download.01.org/0day-ci/archive/20250109/202501091228.9APcsnSs-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501091228.9APcsnSs-lkp@intel.com/reproduce)
+A way to reproduce:
+$ git checkout next-20250107
+$ mkdir build_dir
+$ export PATH=/tmp/llvm-19.1.6-x86_64/bin:$PATH
+$ make LLVM=1 O=build_dir allmodconfig
+$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501091228.9APcsnSs-lkp@intel.com/
+The way how it chose static functions to mark:
+[0] Unset CONFIG_WERROR in build_dir/.config.
+To get display_mode_core.o without errors.
 
-All warnings (new ones prefixed by >>):
+[1] Get a function list called by dml_prefetch_check().
+$ sed -n '6268,6711p' drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c \
+  | sed -n -r 's/.*\W(\w+)\(.*/\1/p' | sort -u >/tmp/syms
 
->> drivers/hwmon/max31827.c:93:40: warning: tentative definition of variable with internal linkage has incomplete non-array type 'const struct max31827_chip_info' [-Wtentative-definition-incomplete-type]
-   static const struct max31827_chip_info max31827;
-                                          ^
-   drivers/hwmon/max31827.c:93:21: note: forward declaration of 'struct max31827_chip_info'
-   static const struct max31827_chip_info max31827;
-                       ^
-   drivers/hwmon/max31827.c:94:40: warning: tentative definition of variable with internal linkage has incomplete non-array type 'const struct max31827_chip_info' [-Wtentative-definition-incomplete-type]
-   static const struct max31827_chip_info max31828;
-                                          ^
-   drivers/hwmon/max31827.c:93:21: note: forward declaration of 'struct max31827_chip_info'
-   static const struct max31827_chip_info max31827;
-                       ^
-   drivers/hwmon/max31827.c:95:40: warning: tentative definition of variable with internal linkage has incomplete non-array type 'const struct max31827_chip_info' [-Wtentative-definition-incomplete-type]
-   static const struct max31827_chip_info max31829;
-                                          ^
-   drivers/hwmon/max31827.c:93:21: note: forward declaration of 'struct max31827_chip_info'
-   static const struct max31827_chip_info max31827;
-                       ^
-   drivers/hwmon/max31827.c:96:40: warning: tentative definition of variable with internal linkage has incomplete non-array type 'const struct max31827_chip_info' [-Wtentative-definition-incomplete-type]
-   static const struct max31827_chip_info max31875;
-                                          ^
-   drivers/hwmon/max31827.c:93:21: note: forward declaration of 'struct max31827_chip_info'
-   static const struct max31827_chip_info max31827;
-                       ^
-   drivers/hwmon/max31827.c:602:1: error: expected expression
-   static const struct max31827_chip_info max31829 = {
-   ^
-   drivers/hwmon/max31827.c:677:23: error: expected '}'
-   MODULE_LICENSE("GPL");
-                         ^
-   drivers/hwmon/max31827.c:598:51: note: to match this '{'
-   static const struct max31827_chip_info max31828 = {
-                                                     ^
-   drivers/hwmon/max31827.c:677:23: error: expected ';' after top level declarator
-   MODULE_LICENSE("GPL");
-                         ^
-                         ;
-   4 warnings and 3 errors generated.
+[2] Get the non-inline function list.
+Objdump won't show the symbols if they are inline functions.
 
+$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+$ objdump -d build_dir/.../display_mode_core.o | \
+  ./scripts/checkstack.pl x86_64 0 | \
+  grep -f /tmp/syms | cut -d' ' -f2- >/tmp/orig
 
-vim +93 drivers/hwmon/max31827.c
+[3] Get the full function list.
+Append "-fno-inline" to `CFLAGS_.../display_mode_core.o` in
+drivers/gpu/drm/amd/display/dc/dml2/Makefile.
 
-    91	
-    92	struct max31827_state;
-  > 93	static const struct max31827_chip_info max31827;
-    94	static const struct max31827_chip_info max31828;
-    95	static const struct max31827_chip_info max31829;
-    96	static const struct max31827_chip_info max31875;
-    97	
+$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+$ objdump -d build_dir/.../display_mode_core.o | \
+  ./scripts/checkstack.pl x86_64 0 | \
+  grep -f /tmp/syms | cut -d' ' -f2- >/tmp/noinline
 
+[4] Get the inline function list.
+If a symbol only in /tmp/noinline but not in /tmp/orig, it is a good
+candidate to mark noinline.
+
+$ diff /tmp/orig /tmp/noinline
+
+Chosen functions and their stack sizes:
+CalculateBandwidthAvailableForImmediateFlip [display_mode_core.o]:144
+CalculateExtraLatency [display_mode_core.o]:176
+CalculateTWait [display_mode_core.o]:64
+CalculateVActiveBandwithSupport [display_mode_core.o]:112
+set_calculate_prefetch_schedule_params [display_mode_core.o]:48
+
+CheckGlobalPrefetchAdmissibility [dml2_core_dcn4_calcs.o]:544
+calculate_bandwidth_available [dml2_core_dcn4_calcs.o]:320
+calculate_vactive_det_fill_latency [dml2_core_dcn4_calcs.o]:272
+CalculateDCFCLKDeepSleep [dml2_core_dcn4_calcs.o]:208
+CalculateODMMode [dml2_core_dcn4_calcs.o]:208
+CalculateOutputLink [dml2_core_dcn4_calcs.o]:176
+
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+ .../gpu/drm/amd/display/dc/dml2/display_mode_core.c  | 12 ++++++------
+ .../dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c  | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
+index 35bc917631ae..84a2de9a76d4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
++++ b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
+@@ -1736,7 +1736,7 @@ static void CalculateBytePerPixelAndBlockSizes(
+ #endif
+ } // CalculateBytePerPixelAndBlockSizes
+ 
+-static dml_float_t CalculateTWait(
++static noinline_for_stack dml_float_t CalculateTWait(
+ 		dml_uint_t PrefetchMode,
+ 		enum dml_use_mall_for_pstate_change_mode UseMALLForPStateChange,
+ 		dml_bool_t SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+@@ -4458,7 +4458,7 @@ static void CalculateSwathWidth(
+ 	}
+ } // CalculateSwathWidth
+ 
+-static  dml_float_t CalculateExtraLatency(
++static noinline_for_stack dml_float_t CalculateExtraLatency(
+ 		dml_uint_t RoundTripPingLatencyCycles,
+ 		dml_uint_t ReorderingBytes,
+ 		dml_float_t DCFCLK,
+@@ -5915,7 +5915,7 @@ static dml_uint_t DSCDelayRequirement(
+ 	return DSCDelayRequirement_val;
+ }
+ 
+-static dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
++static noinline_for_stack dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
+ 										dml_float_t ReturnBW,
+ 										dml_bool_t NotUrgentLatencyHiding[],
+ 										dml_float_t ReadBandwidthLuma[],
+@@ -6019,7 +6019,7 @@ static void CalculatePrefetchBandwithSupport(
+ #endif
+ }
+ 
+-static dml_float_t CalculateBandwidthAvailableForImmediateFlip(
++static noinline_for_stack dml_float_t CalculateBandwidthAvailableForImmediateFlip(
+ 													dml_uint_t NumberOfActiveSurfaces,
+ 													dml_float_t ReturnBW,
+ 													dml_float_t ReadBandwidthLuma[],
+@@ -6213,7 +6213,7 @@ static dml_uint_t CalculateMaxVStartup(
+ 	return max_vstartup_lines;
+ }
+ 
+-static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
++static noinline_for_stack void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
+ 						   struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params,
+ 						   dml_uint_t j,
+ 						   dml_uint_t k)
+@@ -6265,7 +6265,7 @@ static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *m
+ 				CalculatePrefetchSchedule_params->Tno_bw = &mode_lib->ms.Tno_bw[k];
+ }
+ 
+-static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
++static noinline_for_stack void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+ {
+ 	struct dml_core_mode_support_locals_st *s = &mode_lib->scratch.dml_core_mode_support_locals;
+ 	struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params = &mode_lib->scratch.CalculatePrefetchSchedule_params;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+index b9ec243cf9ba..7fffca67ca9d 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
++++ b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+@@ -2778,7 +2778,7 @@ static double dml_get_return_bandwidth_available(
+ 	return return_bw_mbps;
+ }
+ 
+-static void calculate_bandwidth_available(
++static noinline_for_stack void calculate_bandwidth_available(
+ 	double avg_bandwidth_available_min[dml2_core_internal_soc_state_max],
+ 	double avg_bandwidth_available[dml2_core_internal_soc_state_max][dml2_core_internal_bw_max],
+ 	double urg_bandwidth_available_min[dml2_core_internal_soc_state_max], // min between SDP and DRAM
+@@ -3531,7 +3531,7 @@ static void CalculateUrgentBurstFactor(
+ 
+ }
+ 
+-static void CalculateDCFCLKDeepSleep(
++static noinline_for_stack void CalculateDCFCLKDeepSleep(
+ 	const struct dml2_display_cfg *display_cfg,
+ 	unsigned int NumberOfActiveSurfaces,
+ 	unsigned int BytePerPixelY[],
+@@ -4076,7 +4076,7 @@ static bool ValidateODMMode(enum dml2_odm_mode ODMMode,
+ 	return true;
+ }
+ 
+-static void CalculateODMMode(
++static noinline_for_stack void CalculateODMMode(
+ 	unsigned int MaximumPixelsPerLinePerDSCUnit,
+ 	unsigned int HActive,
+ 	enum dml2_output_format_class OutFormat,
+@@ -4173,7 +4173,7 @@ static void CalculateODMMode(
+ #endif
+ }
+ 
+-static void CalculateOutputLink(
++static noinline_for_stack void CalculateOutputLink(
+ 	struct dml2_core_internal_scratch *s,
+ 	double PHYCLK,
+ 	double PHYCLKD18,
+@@ -5928,7 +5928,7 @@ static double calculate_impacted_Tsw(unsigned int exclude_plane_idx, unsigned in
+ }
+ 
+ // a global check against the aggregate effect of the per plane prefetch schedule
+-static bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
++static noinline_for_stack bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
+ 											 struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_params *p)
+ {
+ 	struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_locals *s = &scratch->CheckGlobalPrefetchAdmissibility_locals;
+@@ -6941,7 +6941,7 @@ static void calculate_bytes_to_fetch_required_to_hide_latency(
+ 	}
+ }
+ 
+-static void calculate_vactive_det_fill_latency(
++static noinline_for_stack void calculate_vactive_det_fill_latency(
+ 		const struct dml2_display_cfg *display_cfg,
+ 		unsigned int num_active_planes,
+ 		unsigned int bytes_required_l[],
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1.613.gc27f4b7a9f-goog
+
