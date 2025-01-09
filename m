@@ -1,245 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7202833C9
-	for <llvm@lists.linux.dev>; Thu,  9 Jan 2025 05:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9FB21481B
+	for <llvm@lists.linux.dev>; Thu,  9 Jan 2025 07:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736400923; cv=none; b=RZfr/jmBu/+A5dY52sTlQJZCvUhFlLbctGMSV7HYD0eGLG87EL8QHxkRlBlwTOkFtDkYCrlPdxK+C/W6gakYdKX8fTckMIEHaTPn++N+y2WDOZHPI4PmEYX2/ZcysT5KYQG9KTiu82u5lTzLlJ1JLv7EDIfgBiOldFMHJ6LqG/Q=
+	t=1736409183; cv=none; b=kHk7lQ/I7Ma7xPY8LB+Y/m8/9QQ+pQ7eYyGqHNzE7sGECFUVt3hdaDFiCn41sEyxug4qCvBecUsT8ufqlBrkc2+FmNne/iC1+AJOlOLPZ+txufMz7+Lx73IC0s1qT4cvqp3Qaynm8CkfsCPBIDswnQhS5lbJkBSsjatNMBLVXJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736400923; c=relaxed/simple;
-	bh=sRToh2cb0vsMptfGOo9adh1nqnXrc+YUCfy2brT0Z1s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jIps+xTxN6vC/6VbSAeP6K31r3Jd+xsLNusaUrx9Ps2zB4N/7m2atI8oakwBxoy3mvXiWV0cIUL61iDpaqtbU0BxTBxcwIL6UNTxQO8x5KZMMbdt4FRs/LvopszLJyYti5xC7QPU4/kAqL4BgU1TWZqBcMROI/M4CWB0huGYzS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q7Y1EU74; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736409183; c=relaxed/simple;
+	bh=O5ZNgmW3t3fAPZh1YBRP6KjXZhiqggJR9M35+R5lk6U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fOwZ2JGTJHx8VI94h0RJRdMnwD+nN8RLg3rXMRtmMsrBtTJ+wtcB9VI1yjUHGPyGjeTpGFUAtzsNRLxhHtzLy0VP2cLK5fRxDdwOmyDkmHBhrJogi4nL/VszE9H2UZu1cxUg0lOA0bYTTj0L1byn4W1KZ7x1cNdOrj37asHLNe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=T/9m6N8+; arc=none smtp.client-ip=193.252.22.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q7Y1EU74"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0DEC4CED3;
-	Thu,  9 Jan 2025 05:35:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736400923;
-	bh=sRToh2cb0vsMptfGOo9adh1nqnXrc+YUCfy2brT0Z1s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=q7Y1EU74PJNmnyg/3DPKksERpVSCwgektc23WVWhDoCclSlH1meiRfQG32gMD+C1z
-	 Foz9felvKVplAbDibs/Kk++uyqJJyVo+vPSJjZ9caCBqiKpYTwhB0sO3fMXdDh0gGi
-	 GPWV5VfiRslI4W6LEA93jgsoZPjotwkpbMxRmMJgZOU/ANYBlRjfPJaxNuP85JYqaU
-	 d3yJmqqYgw8rEICh+qUIs/ww00eME6knENBAlM4mdts42JBfcsAcPdxCYAo9MAmIwz
-	 CrptGegPVn17DognvDey1xVafqkew9/+c1+Ik1dRHOG7cmleO0yQrW2iYW+vdYEvGS
-	 X0l8lzve8+6uQ==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: chaitanya.dhere@amd.com,
-	jun.lei@amd.com
-Cc: harry.wentland@amd.com,
-	sunpeng.li@amd.com,
-	Rodrigo.Siqueira@amd.com,
-	alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev,
-	tzungbi@kernel.org
-Subject: [PATCH] drm/amd/display: mark static functions noinline_for_stack
-Date: Thu,  9 Jan 2025 05:35:04 +0000
-Message-ID: <20250109053504.2998728-1-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="T/9m6N8+"
+Received: from mail-ed1-f51.google.com ([209.85.208.51])
+	by smtp.orange.fr with ESMTPSA
+	id VnLVtwEl3rXfGVnLYt149Y; Thu, 09 Jan 2025 08:52:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736409172;
+	bh=UL4vb0fbvLbR1U8J+05ODzNTSN8C6D9E9x0FSE1uPd8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=T/9m6N8+6X154iRiAt/znJxdyVSZvUrQczfyTi5ExkXRPShTO8qt3WlaYaHWLX9HL
+	 5QjmPwnd6C9xQQIFRCuqZDXmB9bJIU5Jagk0a7MhVUd4Lq4wChkmKOhI3xXR7P65NP
+	 62i6aqP2vE4h/mg5bRtmjSRCe09hCpSVJRpZXkDCBfcX3RdQdnE70/rA6icfG74CY6
+	 BrMaPf3j/WoNT+HGntGMf4ntown5FRQMMmwMWYQ9M5Ts2wtkVBjziwPPmu7x5RUFBm
+	 Gv5iI1Nu9zWop0b3N/xAEykdNPW08HJCDUNJKRLVIz/rd1gwEZzmNeIIgoNj1QYjDL
+	 l2rG3UiYi0uBw==
+X-ME-Helo: mail-ed1-f51.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 09 Jan 2025 08:52:52 +0100
+X-ME-IP: 209.85.208.51
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d3e6f6cf69so863556a12.1
+        for <llvm@lists.linux.dev>; Wed, 08 Jan 2025 23:52:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVigzz0WrlePfYgspSOwH+THT6vLHYAmJ3Z3X/AVAxypUsxrN2IKEEqJ3LMsi1dScftxBeB@lists.linux.dev
+X-Gm-Message-State: AOJu0YxHm5FJsRHbxWuYMLU9zaou+Gneg7PGe96eGvVSYPxqLRGqpSM/
+	PJam7mLQoqo0NsOLMeZN2ryknK/X1LE0E//Acz0m4PfrZE/bvvJC4pT6j0AF9q5VYog+urVklOs
+	KKdgSH2dogXXqRsEt/5FO14v9QQI=
+X-Google-Smtp-Source: AGHT+IGrVE57aM35lRnQR/iOi4swLH7E8gsU9cV2VQps8o7HOzflIs1aP9S81XCABdsqlNBrPs3PTe6w4eYJHxXeNXE=
+X-Received: by 2002:a17:906:fd87:b0:aab:cce0:f8b4 with SMTP id
+ a640c23a62f3a-ab2abc9ed6cmr488956266b.52.1736409169155; Wed, 08 Jan 2025
+ 23:52:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
+ <202501081331.E4B6DF747@keescook>
+In-Reply-To: <202501081331.E4B6DF747@keescook>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Thu, 9 Jan 2025 16:52:40 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqJS5FwuBUdvVdXoZj6wZOJz8Nao4FzSzCK1VtbNF41sMw@mail.gmail.com>
+X-Gm-Features: AbW1kvYoZb-oBlASEyfzMJmtYkCQlSTuCO-o2yO14tE6fQRp0GGVay-N1kPrfGk
+Message-ID: <CAMZ6RqJS5FwuBUdvVdXoZj6wZOJz8Nao4FzSzCK1VtbNF41sMw@mail.gmail.com>
+Subject: Re: [PATCH] fortify: turn strlen() into an inline function using __builtin_constant_p()
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	David Laight <david.laight@aculab.com>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-When compiling allmodconfig (CONFIG_WERROR=y) with clang-19, see the
-following errors:
+On Thu. 9 Jan 2025 at 06:46, Kees Cook <kees@kernel.org> wrote:
+> On Wed, Jan 08, 2025 at 11:27:51PM +0900, Vincent Mailhol wrote:
+> > The strlen(p) function-like macro uses:
+> >
+> >   __is_constexpr(__builtin_strlen(p))
+> >
+> > in which GCC would only yield true if the argument p is a string
+> > literal. Otherwise, GCC would return false even if p is a const
+> > string.
+> >
+> > In contrary, by using:
+> >
+> >   __builtin_constant_p(__builtin_strlen(p))
+> >
+> > then GCC can also recognizes when p is a compile time constant string.
+> >
+> > The above is illustrated in [1].
+> >
+> > N.B.: clang is not impacted by any of this and gives the same results
+> > with either __is_constexpr() and __builting_constant_p().
+> >
+> > Use __builtin_constant_p() instead of __is_constexpr() so that GCC can
+> > do the folding on constant strings. This done, strlen() does not
+> > require any more to be a function-like macro, so turn it into a static
+> > inline function. In the process, __fortify_strlen() had to be moved
+> > above strlen() so that it became visible to strlen().
+>
+> This is what __compiletime_strlen() ended up doing, so this seems
+> reasonable to me.
+>
+> > On a side note, strlen() did a double expansion of its argument p.
+>
+> It did? Ah, was it due to __is_constexpr() wrapping? The other
+> expressions should have been side-effect free:
+>
+>        __builtin_choose_expr(__is_constexpr(__builtin_strlen(p)), \
+>                __builtin_strlen(p), __fortify_strlen(p))
 
-.../display/dc/dml2/display_mode_core.c:6268:13: warning: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Wframe-larger-than]
-.../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: warning: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Wframe-larger-than]
+This does not have a side-effect. The issue is not the side effect but
+the double expansion itself (actually here it is a triple expansion)
+because it may grow exponentially. Linus explained this in greater
+details here:
 
-Mark static functions called by dml_prefetch_check() and
-dml_core_mode_support() noinline_for_stack to avoid them become huge
-functions and thus exceed the frame size limit.
+  https://lore.kernel.org/all/CAHk-=wjpN4GWtnsWQ8XJvf=gBQ3UvBk512xK1S35=nGXA6yTiw@mail.gmail.com/
 
-A way to reproduce:
-$ git checkout next-20250107
-$ mkdir build_dir
-$ export PATH=/tmp/llvm-19.1.6-x86_64/bin:$PATH
-$ make LLVM=1 O=build_dir allmodconfig
-$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+Note that I do not believe this to be a big deal here. Unless the
+strlen() macro gets called in others macro which themselves do double
+parameter expansion, the issue should not surface. And honestly, I do
+not see this happening with strings. That's why I put this as a side
+note, it's more of a "follow a best practice" than solving an actual
+problem.
 
-The way how it chose static functions to mark:
-[0] Unset CONFIG_WERROR in build_dir/.config.
-To get display_mode_core.o without errors.
+On double thought, the risk does not seem real here. I will simply
+drop this paragraph about double expansion in v2.
 
-[1] Get a function list called by dml_prefetch_check().
-$ sed -n '6268,6711p' drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c \
-  | sed -n -r 's/.*\W(\w+)\(.*/\1/p' | sort -u >/tmp/syms
+> I don't think you build-tested this with Clang, though?
 
-[2] Get the non-inline function list.
-Objdump won't show the symbols if they are inline functions.
+I just did and...
 
-$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
-$ objdump -d build_dir/.../display_mode_core.o | \
-  ./scripts/checkstack.pl x86_64 0 | \
-  grep -f /tmp/syms | cut -d' ' -f2- >/tmp/orig
+  ./include/linux/fortify-string.h:272:17: error: redeclaration of
+'strlen' must not have the 'overloadable' attribute
+    272 | __kernel_size_t strlen(const char *p)
+        |                 ^
+  ./include/linux/string.h:200:24: note: previous unmarked overload of
+function is here
+    200 | extern __kernel_size_t strlen(const char *);
+        |                        ^
+  1 error generated.
 
-[3] Get the full function list.
-Append "-fno-inline" to `CFLAGS_.../display_mode_core.o` in
-drivers/gpu/drm/amd/display/dc/dml2/Makefile.
+OK, guilty here! Changing the function prototype to:
 
-$ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
-$ objdump -d build_dir/.../display_mode_core.o | \
-  ./scripts/checkstack.pl x86_64 0 | \
-  grep -f /tmp/syms | cut -d' ' -f2- >/tmp/noinline
+  __FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
+  __kernel_size_t strlen(const char * const POS p)
 
-[4] Get the inline function list.
-If a symbol only in /tmp/noinline but not in /tmp/orig, it is a good
-candidate to mark noinline.
+resolves the issue. I was wondering what this POS was for, guess I
+have my answer.
 
-$ diff /tmp/orig /tmp/noinline
+>   CC      scripts/mod/devicetable-offsets.s
+> In file included from ../scripts/mod/devicetable-offsets.c:3:
+> In file included from ../include/linux/mod_devicetable.h:14:
+> In file included from ../include/linux/uuid.h:11:
+> In file included from ../include/linux/string.h:389:
+> ../include/linux/fortify-string.h:272:17: error: redeclaration of 'strlen' must not have the 'overloadable' attribute
+>   272 | __kernel_size_t strlen(const char *p)
+>       |                 ^
+> ../include/linux/string.h:200:24: note: previous unmarked overload of function is here
+>   200 | extern __kernel_size_t strlen(const char *);
+>       |                        ^
+>
+> The externs will need to be reworked if it's no longer depending on asm
+> renaming.
+>
+> > Turning it into an inline function also resolved this side issue.
+> >
+> > [1] https://godbolt.org/z/rqr3YvoP4
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > ---
+> > This patch is the successor of patch [1] which was part of a longer
+> > series [2]. Meanwhile, I decided to split it, so I am sending this again,
+> > but as a stand-alone patch.
+> >
+> > Changelog since [1]: use __builtin_constant_p() instead and turn
+> > strlen() into an inline function
+> >
+> > [1] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-6-4e4cbaecc216@wanadoo.fr/
+> > [2] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr/
+> > ---
+> >  include/linux/fortify-string.h | 34 +++++++++++++++++++---------------
+> >  1 file changed, 19 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> > index e4ce1cae03bf770047ce8a7c032b183683388cd5..bd22dd66e5f5b66ad839df42247e6436e0afd053 100644
+> > --- a/include/linux/fortify-string.h
+> > +++ b/include/linux/fortify-string.h
+> > @@ -4,7 +4,6 @@
+> >
+> >  #include <linux/bitfield.h>
+> >  #include <linux/bug.h>
+> > -#include <linux/const.h>
+> >  #include <linux/limits.h>
+> >
+> >  #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
+> > @@ -241,6 +240,21 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
+> >   * possible for strlen() to be used on compile-time strings for use in
+> >   * static initializers (i.e. as a constant expression).
+>
+> ^^ This comment, however, is I think what sinks this patch. Please see
+> commit 67ebc3ab4462 ("fortify: Make sure strlen() may still be used as a
+> constant expression") which required that strlen() not be an inline. I'm
+> pretty sure the build will start failing again (though perhaps only on
+> older GCC versions).
 
-Chosen functions and their stack sizes:
-CalculateBandwidthAvailableForImmediateFlip [display_mode_core.o]:144
-CalculateExtraLatency [display_mode_core.o]:176
-CalculateTWait [display_mode_core.o]:64
-CalculateVActiveBandwithSupport [display_mode_core.o]:112
-set_calculate_prefetch_schedule_params [display_mode_core.o]:48
+Strange. I tested it with GCC 5.1 on godbolt and it worked fine. After
+more investigation, I only got complains from GCC up to 4.9.4:
 
-CheckGlobalPrefetchAdmissibility [dml2_core_dcn4_calcs.o]:544
-calculate_bandwidth_available [dml2_core_dcn4_calcs.o]:320
-calculate_vactive_det_fill_latency [dml2_core_dcn4_calcs.o]:272
-CalculateDCFCLKDeepSleep [dml2_core_dcn4_calcs.o]:208
-CalculateODMMode [dml2_core_dcn4_calcs.o]:208
-CalculateOutputLink [dml2_core_dcn4_calcs.o]:176
+  https://godbolt.org/z/rW8r74vE3
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
- .../gpu/drm/amd/display/dc/dml2/display_mode_core.c  | 12 ++++++------
- .../dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c  | 12 ++++++------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+I also just did a successful defconfig build using GCC 5.4 (sorry, I
+do not have an environment with GCC 5.1).
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
-index 35bc917631ae..84a2de9a76d4 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
-@@ -1736,7 +1736,7 @@ static void CalculateBytePerPixelAndBlockSizes(
- #endif
- } // CalculateBytePerPixelAndBlockSizes
- 
--static dml_float_t CalculateTWait(
-+static noinline_for_stack dml_float_t CalculateTWait(
- 		dml_uint_t PrefetchMode,
- 		enum dml_use_mall_for_pstate_change_mode UseMALLForPStateChange,
- 		dml_bool_t SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
-@@ -4458,7 +4458,7 @@ static void CalculateSwathWidth(
- 	}
- } // CalculateSwathWidth
- 
--static  dml_float_t CalculateExtraLatency(
-+static noinline_for_stack dml_float_t CalculateExtraLatency(
- 		dml_uint_t RoundTripPingLatencyCycles,
- 		dml_uint_t ReorderingBytes,
- 		dml_float_t DCFCLK,
-@@ -5915,7 +5915,7 @@ static dml_uint_t DSCDelayRequirement(
- 	return DSCDelayRequirement_val;
- }
- 
--static dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
-+static noinline_for_stack dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
- 										dml_float_t ReturnBW,
- 										dml_bool_t NotUrgentLatencyHiding[],
- 										dml_float_t ReadBandwidthLuma[],
-@@ -6019,7 +6019,7 @@ static void CalculatePrefetchBandwithSupport(
- #endif
- }
- 
--static dml_float_t CalculateBandwidthAvailableForImmediateFlip(
-+static noinline_for_stack dml_float_t CalculateBandwidthAvailableForImmediateFlip(
- 													dml_uint_t NumberOfActiveSurfaces,
- 													dml_float_t ReturnBW,
- 													dml_float_t ReadBandwidthLuma[],
-@@ -6213,7 +6213,7 @@ static dml_uint_t CalculateMaxVStartup(
- 	return max_vstartup_lines;
- }
- 
--static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
-+static noinline_for_stack void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
- 						   struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params,
- 						   dml_uint_t j,
- 						   dml_uint_t k)
-@@ -6265,7 +6265,7 @@ static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *m
- 				CalculatePrefetchSchedule_params->Tno_bw = &mode_lib->ms.Tno_bw[k];
- }
- 
--static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-+static noinline_for_stack void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
- {
- 	struct dml_core_mode_support_locals_st *s = &mode_lib->scratch.dml_core_mode_support_locals;
- 	struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params = &mode_lib->scratch.CalculatePrefetchSchedule_params;
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
-index b9ec243cf9ba..7fffca67ca9d 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
-@@ -2778,7 +2778,7 @@ static double dml_get_return_bandwidth_available(
- 	return return_bw_mbps;
- }
- 
--static void calculate_bandwidth_available(
-+static noinline_for_stack void calculate_bandwidth_available(
- 	double avg_bandwidth_available_min[dml2_core_internal_soc_state_max],
- 	double avg_bandwidth_available[dml2_core_internal_soc_state_max][dml2_core_internal_bw_max],
- 	double urg_bandwidth_available_min[dml2_core_internal_soc_state_max], // min between SDP and DRAM
-@@ -3531,7 +3531,7 @@ static void CalculateUrgentBurstFactor(
- 
- }
- 
--static void CalculateDCFCLKDeepSleep(
-+static noinline_for_stack void CalculateDCFCLKDeepSleep(
- 	const struct dml2_display_cfg *display_cfg,
- 	unsigned int NumberOfActiveSurfaces,
- 	unsigned int BytePerPixelY[],
-@@ -4076,7 +4076,7 @@ static bool ValidateODMMode(enum dml2_odm_mode ODMMode,
- 	return true;
- }
- 
--static void CalculateODMMode(
-+static noinline_for_stack void CalculateODMMode(
- 	unsigned int MaximumPixelsPerLinePerDSCUnit,
- 	unsigned int HActive,
- 	enum dml2_output_format_class OutFormat,
-@@ -4173,7 +4173,7 @@ static void CalculateODMMode(
- #endif
- }
- 
--static void CalculateOutputLink(
-+static noinline_for_stack void CalculateOutputLink(
- 	struct dml2_core_internal_scratch *s,
- 	double PHYCLK,
- 	double PHYCLKD18,
-@@ -5928,7 +5928,7 @@ static double calculate_impacted_Tsw(unsigned int exclude_plane_idx, unsigned in
- }
- 
- // a global check against the aggregate effect of the per plane prefetch schedule
--static bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
-+static noinline_for_stack bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
- 											 struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_params *p)
- {
- 	struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_locals *s = &scratch->CheckGlobalPrefetchAdmissibility_locals;
-@@ -6941,7 +6941,7 @@ static void calculate_bytes_to_fetch_required_to_hide_latency(
- 	}
- }
- 
--static void calculate_vactive_det_fill_latency(
-+static noinline_for_stack void calculate_vactive_det_fill_latency(
- 		const struct dml2_display_cfg *display_cfg,
- 		unsigned int num_active_planes,
- 		unsigned int bytes_required_l[],
--- 
-2.47.1.613.gc27f4b7a9f-goog
+So, it looks like an issue of the past to me. But in 67ebc3ab4462, the
+minimum compiler version was already 5.1:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/min-tool-version.sh?id=67ebc3ab4462#n20
+
+In the end, I am not sure what was the issue you encountered at that time.
+
+Well, I am not able to reproduce, but if you tell me this is an issue,
+then I can just keep the s/__is_constexpr/__builtin_constant_p/g
+change in v2 and drop the inline function part (thus keeping the
+triple expansion).
+
+Let me know if you still think that having it as a function is a no
+go. In the end, the main purpose here is to get rid of the
+__is_constexpr. Turning the macro into a function still looks slightly
+better to me, but at the end I do not really mind.
+
+
+Yours sincerely,
+Vincent Mailhol
