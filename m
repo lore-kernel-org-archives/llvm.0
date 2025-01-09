@@ -1,144 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5C1218EB8;
-	Thu,  9 Jan 2025 14:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C9721B196;
+	Thu,  9 Jan 2025 14:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736432164; cv=none; b=mLPA1WNQS0RmDVIsv6Fo8WvcYslRt3fit5fFdzUHY2Bo7GZCaPNrVeKHdl13PEQpJ+ii+SHxTmqHvkzRRTQfHDcfkI1GrwNir2v18oqLCkN0N/N08C+uJq02KyEr5lKUjKe/MXp0+6MCUmewSfLWlH8LrCy7/JcM0tgmTiv1K8M=
+	t=1736434320; cv=none; b=AHWDB04Z6tv5mTug3zpbXMRiXhBDPhxM7oLVMdo7gkr+YOb5/c/aKxBpNxzK4P6PvXCkqV/aAxOY8wDC2hGMKkYx5phv3yds2aiqiQ6PFuFbO/k243/REjcKgyJ2+tL6vWMzHBaMv5gA3r8EpoO6WjxZCTmTwIQoWsBQ1+Fjf08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736432164; c=relaxed/simple;
-	bh=sdeQGCyr/6RBTBZSYkpvRmADjOTqsbaOlHnGzWZq1Kg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L1tFfvIIspd6iwUhd8hyMH5Cu3/Z+8lYiqrtSkcSqQMNtMMRefSn3Mv1bcUOCS9jlYSXk4cgTt5aaTHwPwI/jcuZ6FjKWL4OpXuGzQvxQiiB7SXhZ3w6C+6s89hTEGExCCBoeHoxTbkhuVPALc3d9ySdwIQczwkkc4yJeL6LDq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hm4A7MNb; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736434320; c=relaxed/simple;
+	bh=vGufw494e7AVXh5tSsVjnihLIZW0pgD5E8k9h5gHXP0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EdYWaw0gYhkIpf482c4oihmOtyT/+rdbQK+heQBTSN5Kvf6IyQ/wULTtC375UCWVeQVnKyURZLRp4X618O3MQsEC1uj73uBJxtQXmzBCD/fxYiXd4jWj50qJktlsLEvGS3lK35XAi9Lls/vv6YtJtddfDKkbOiIeI6JmSDILcmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFtU6tFT; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hm4A7MNb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736432163; x=1767968163;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sdeQGCyr/6RBTBZSYkpvRmADjOTqsbaOlHnGzWZq1Kg=;
-  b=hm4A7MNbcrV33itTVyWgE/+JyhUPfSS6dT/baRx0Zs49hNw7OAgsrHVl
-   q1qzq7IMwvnFcB5Pkvmkpyw67HywnmC8gGqkcQtpCxk7364Q0DJ1kjOdk
-   UI7QEKQCwNU5P8nF24FSJTsz4qKGLgd0cx12bouy77VeqYzbrsYyKPql2
-   YLYRc634BxKI9z7J94KETAi9zPPLvqKk/+v2E0ULx8WYH9ZLDFKhyH/U5
-   Ac/fR9A5chp58p5o3cG8wPWa1EE9ydwW88TloFFJCOWUHRQfhAG/wRbNZ
-   8rR6NmZokanMLWCtgUfMQgAEm1rPITzBYNbrsz/lVHJEirnDpb10AMLG4
-   Q==;
-X-CSE-ConnectionGUID: gswvldUAR+C/Kyk9s5VO8A==
-X-CSE-MsgGUID: uZMA6kkJR96ldxikJl/iwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="48056737"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="48056737"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 06:16:02 -0800
-X-CSE-ConnectionGUID: L+gnH5aWTuaDbJXjzZ8Dnw==
-X-CSE-MsgGUID: yBX6xaFBTq6yqYI26GrCcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104293021"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 Jan 2025 06:15:58 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVtKF-000Hel-1g;
-	Thu, 09 Jan 2025 14:15:55 +0000
-Date: Thu, 9 Jan 2025 22:14:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Laight <david.laight@aculab.com>,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH] fortify: turn strlen() into an inline function using
- __builtin_constant_p()
-Message-ID: <202501092158.Gp5vNOZy-lkp@intel.com>
-References: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFtU6tFT"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21634417587so2128695ad.3;
+        Thu, 09 Jan 2025 06:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736434319; x=1737039119; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vGufw494e7AVXh5tSsVjnihLIZW0pgD5E8k9h5gHXP0=;
+        b=iFtU6tFTnVZuBpW5RraaB3Rp5R4za08Hjd2FfnC0Q3KMD8dDkmro7c5CeZCdxeeDOd
+         ZY+fP4tjYgr4BrWkjqMR7YjcyrL9cCK8+IgFj0OZzDVuMGISgnsw5iFfI8wmzzLQeU9S
+         K1aLpEyyxImc23GVtJ1HiTaAAAYYUMXh2dzbHDaHEYpcFt5zTeWByaEsJijMDpTlqF1Z
+         tpsaKAiQYJo+9LfhPIN0ypJUDo9vlSfS6eCCFn9AaxJiYnMwL7OTPKjOGyqoGhpkC/UV
+         wOAL758cFHNNloqYhQ/AaRqaX3Y5CTBGAjX+Fk2ib24/mYY3/F7iCOd/vPY0zseCgqLQ
+         Hp5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736434319; x=1737039119;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vGufw494e7AVXh5tSsVjnihLIZW0pgD5E8k9h5gHXP0=;
+        b=Qlf/zAbIOnM6QGF4FHZNz2abqgcEwEXoXRwwrhzhGmd2biCCOMW8vrWXCABtHQfKKH
+         puuZH0fqyK++94bK0ESE9zPQad0W4vlM4BZjzbkeDpaFXY54Z8wKd2C4vvb/r2Y/Trbm
+         t/Q2A6oK+0ZDmXqc7wyGXFCOGHUzT7Brcf5WLLpF8eXk6tG7GfFytbhudEcqkbaBmwqg
+         MGp26SLtdsGVm+JtuWg3ygCWiNsnIdTkSTVduV5bPp7EJydRdtscNHrk23+tb8OVrqZQ
+         xcSsatP9ppPBpyhW4VD6vLtrHnjo+kUf/GQpfZtxcVycNKxg/JTX7q/EzFEWC6LJ5hcd
+         zDUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWHWixOlAmgSIpsHUv+esucklocCut2hP3LJ5h+CPQ2Utdf/CJj2KJxuRPw7GKcnDB6GBU9@lists.linux.dev, AJvYcCXbBFTO/NqPA2n5Ija0GNkY4OYoNBVoMEqbZw9AGjHxGaPSAyojZV3nczO3PkxjtCykFIst915sXQ==@lists.linux.dev
+X-Gm-Message-State: AOJu0YytMA/7rrNGXcX3GnPncLRxnEOsTdTXdgeXtjtAPDV91qIHYmHS
+	fNGbzhJcZCh4K3FPDX5yrGz/1k72+ZE7PR3FqlDVQxFX6We7PVO09aRehmROdDT39X6LyoG5JHU
+	nUKpQt9xnWf80q+kB8/tH62Ku/QI=
+X-Gm-Gg: ASbGnctPmC9PBreuElv4ZDa2qAbiiNdzpfw5yoSD1ONgd3+fe3Xluc4G28Ptop63sUs
+	XbvtllOhnYdiCZ7vuk6kUY6/zyZFwPIg1bx/+5g==
+X-Google-Smtp-Source: AGHT+IFqNT8q1pSMMob7gWW6dLdc3C5jBhpyogdxQ4jQ4PQacYaeZXz/JaXG5GK+wbEAFynpACiar/4mvaK6X3mkMkE=
+X-Received: by 2002:a17:902:e5c2:b0:215:a97a:c6bc with SMTP id
+ d9443c01a7336-21a83da2ae3mr39042525ad.0.1736434318601; Thu, 09 Jan 2025
+ 06:51:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
+References: <20241119185747.862544-1-ojeda@kernel.org>
+In-Reply-To: <20241119185747.862544-1-ojeda@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 9 Jan 2025 15:51:46 +0100
+X-Gm-Features: AbW1kvZR7Xwq8pBqsleSoij5Li9YxDLLzZcWeC8ntsndOTqzMLEhMpAg4Nk5iUQ
+Message-ID: <CANiq72n4Fw96hcuqQeorsfH7z4Tb+R1gdf80H_XkD-oA6z5TSA@mail.gmail.com>
+Subject: Re: [RFC PATCH] rust: allow Clang-native `RANDSTRUCT` configs
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	patches@lists.linux.dev, Aaron Ballman <aaron@aaronballman.com>, 
+	Bill Wendling <isanbard@gmail.com>, Cole Nixon <nixontcole@gmail.com>, 
+	Connor Kuehl <cipkuehl@gmail.com>, Fangrui Song <i@maskray.me>, James Foster <jafosterja@gmail.com>, 
+	Jeff Takahashi <jeffrey.takahashi@gmail.com>, Jordan Cantrell <jordan.cantrell@mail.com>, 
+	Matthew Maurer <mmaurer@google.com>, Nikk Forbus <nicholas.forbus@gmail.com>, 
+	Qing Zhao <qing.zhao@oracle.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Tim Pugh <nwtpugh@gmail.com>, Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vincent,
+On Tue, Nov 19, 2024 at 7:57=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wro=
+te:
+>
+> So a patch like this one may just work already, at least in some cases.
+> But a fair amount of testing is probably needed for this one, so if you
+> have a workload and some time, please give it a go!
 
-kernel test robot noticed the following build errors:
+I may pick this very early next cycle so that we can get some testing
+during the -rc's, and just drop it if something breaks for anyone.
 
-[auto build test ERROR on 9d89551994a430b50c4fffcb1e617a057fa76e20]
+But any other testing beforehand would be still very welcome...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Mailhol/fortify-turn-strlen-into-an-inline-function-using-__builtin_constant_p/20250108-223159
-base:   9d89551994a430b50c4fffcb1e617a057fa76e20
-patch link:    https://lore.kernel.org/r/20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f%40wanadoo.fr
-patch subject: [PATCH] fortify: turn strlen() into an inline function using __builtin_constant_p()
-config: x86_64-randconfig-001-20250109 (https://download.01.org/0day-ci/archive/20250109/202501092158.Gp5vNOZy-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501092158.Gp5vNOZy-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501092158.Gp5vNOZy-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from scripts/mod/devicetable-offsets.c:3:
-   In file included from include/linux/mod_devicetable.h:14:
-   In file included from include/linux/uuid.h:11:
-   In file included from include/linux/string.h:389:
->> include/linux/fortify-string.h:272:17: error: redeclaration of 'strlen' must not have the 'overloadable' attribute
-     272 | __kernel_size_t strlen(const char *p)
-         |                 ^
-   include/linux/string.h:200:24: note: previous unmarked overload of function is here
-     200 | extern __kernel_size_t strlen(const char *);
-         |                        ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:102: scripts/mod/devicetable-offsets.s] Error 1 shuffle=1556232066
-   make[3]: Target 'scripts/mod/' not remade because of errors.
-   make[2]: *** [Makefile:1262: prepare0] Error 2 shuffle=1556232066
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=1556232066
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=1556232066
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +272 include/linux/fortify-string.h
-
-   257	
-   258	/**
-   259	 * strlen - Return count of characters in a NUL-terminated string
-   260	 *
-   261	 * @p: pointer to NUL-terminated string to count.
-   262	 *
-   263	 * Do not use this function unless the string length is known at
-   264	 * compile-time. When @p is unterminated, this function may crash
-   265	 * or return unexpected counts that could lead to memory content
-   266	 * exposures. Prefer strnlen().
-   267	 *
-   268	 * Returns number of characters in @p (NOT including the final NUL).
-   269	 *
-   270	 */
-   271	__FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
- > 272	__kernel_size_t strlen(const char *p)
-   273	{
-   274		if (__builtin_constant_p(__builtin_strlen(p)))
-   275			return __builtin_strlen(p);
-   276		return __fortify_strlen(p);
-   277	}
-   278	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
