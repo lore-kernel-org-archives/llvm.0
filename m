@@ -1,66 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352C021516E;
-	Fri, 10 Jan 2025 19:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E46ECC;
+	Fri, 10 Jan 2025 20:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736539143; cv=none; b=dSKKYYttxpHnkZGcM0gtHXauQ1EK6wBRC1aBn7+422unkXMDn8w/t34xOx0FLgw5x2vgEzJlHp+NzBYWF9AxNnUpTnZqEO1gsNJ9vwTXgAI9Tz5nzDL0rS3BuU+4Cl0ohSieCuXbaYXYBBomuzmYLvlQ6NcAhlgHg4PGqQX/zDM=
+	t=1736541067; cv=none; b=NQeE15p5QRPpMwVSCD9X8KQzwRTU4GMCQv6RbH3637DT3Lz5C0E8Y4zEcwV04vC5lVaE6/FrF6SDv9mI16dC+LcfRkP6gkMDoI2AmVCSbZ175R4hI03A33VFLLdAxuDACphhmDKytyuqCbrSzV81di2yJrsLSBdi2efUiR8pPR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736539143; c=relaxed/simple;
-	bh=l1whIIccZw9RwJGfk2f/RPM4K5voCB9m0pojCebFulc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XZhP/tLLUTeXs3QjtYloCkwjmJijdF5PDkfM4QN4nt61X9ZdMfKkltHNFg8JmxnDipb89JXb9rkYHsH7qQ1P6nIemdsznCk8Wgpe7+zHr18JeGYxGj7I+sbWgJGp/bx9Gbb1hhjpUUG9yh31M61E+Wuo3/OphAWZVa5BR0ZbYJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rf2cdt2K; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1736541067; c=relaxed/simple;
+	bh=YwLYF5sy5ZJMxhF8fodIWyUGbggAFXUtv/SxjAAJ/4I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UegrsSVTsuPtrT3XBQzplT81xCPxD7BXlMS0BfrH9MzNw74V/TS2h9RqH4I7L9GLd90kis3J27iXFZsDZ/vLRMxzMZgONVqHM5kghhSuHt9XlaDjQj2PE+S+S1C1+JSr09GMDCfDkfQUUis7FC2ZE0lYM1X/bcDm+Rf9guHTLs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2nOj8s6; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rf2cdt2K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2nOj8s6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736539142; x=1768075142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l1whIIccZw9RwJGfk2f/RPM4K5voCB9m0pojCebFulc=;
-  b=Rf2cdt2K4iBzNUnjBrpn5ww6pMypjvXMCVLo9nXMBSHzZcc8vrSDceAL
-   tOMmikaQG56z1vG3Ed3Hx/yPxN2Rtb1zTdjraOwRPBr2o01UwFjH89kdB
-   iV2f37OkWPvlVIuRmqjV/PNjjaYZs14iiGXxVDXqTksVuvXntyyIvc+5o
-   WwQh5HMD6SptMby2J4z8qPhkmX7y2gDTGQavkQvAMWZN+4nZxd8Wj7+sG
-   +huaBpN4nSYyIiTzoQW+pUY5Vo0DsFopsNfN6hNqEWO3n/quuwiTTbFwt
-   tg1pG9gsW+U0Zu0PROaEow3J1VN0EmKtFpnMChXfFvbvXWYaWdcMHl/S3
-   w==;
-X-CSE-ConnectionGUID: OKFayTtKRUqLrFoE71kOKw==
-X-CSE-MsgGUID: UCkuUYbhTQScKdss7NnzCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="36531274"
+  t=1736541065; x=1768077065;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YwLYF5sy5ZJMxhF8fodIWyUGbggAFXUtv/SxjAAJ/4I=;
+  b=b2nOj8s6v4fut/iKRzGAUL86ovM/bFOcQJ4Ftvm6nBqPYuUOkWhB6Va3
+   6q14y68aZayNmz9Tiv78bvwBkaCLz1cfv+NvLfuqHnCG5jUI6wGb3mP/i
+   i+GfW8mH22ac3XqMC+Kopiz/eglrRrOwnFjHn3/G/4XoMXdqoBG0a9vJY
+   /bs0OGCKE9kRMjTna9yYYrBd6rs1WpatT48HaXf2tdNfYQ0NjVXaAsoZQ
+   gk6bsDzvDzxpGCOVfJbmrD7rSgNx54OuNvFX2cKkSWV4FqJULCMeQzbB6
+   +hJ39Zs/uUSylC5eCEfRVvqFljGhZYZKVEamQ5p+0tFS78d8gHtKVpTM/
+   A==;
+X-CSE-ConnectionGUID: 0AdaUkAdTSCileo1ft6wtA==
+X-CSE-MsgGUID: 5Lc1ZBESRg2/Qp9U/wSvuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="40529462"
 X-IronPort-AV: E=Sophos;i="6.12,305,1728975600"; 
-   d="scan'208";a="36531274"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 11:59:01 -0800
-X-CSE-ConnectionGUID: hAQkn7a3TJK27gieJiGP3g==
-X-CSE-MsgGUID: RGjG7ftrRTyWalftZf6LFA==
+   d="scan'208";a="40529462"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 12:31:04 -0800
+X-CSE-ConnectionGUID: LxcTPbSrTIetyBfpW+wTnQ==
+X-CSE-MsgGUID: VtTOrqyfTzS8VTasHSSO1g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,305,1728975600"; 
-   d="scan'208";a="103634248"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="108457884"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Jan 2025 11:58:58 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 10 Jan 2025 12:31:02 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWL9k-000Jgh-0P;
-	Fri, 10 Jan 2025 19:58:56 +0000
-Date: Sat, 11 Jan 2025 03:57:57 +0800
+	id 1tWLel-000Jix-1u;
+	Fri, 10 Jan 2025 20:30:59 +0000
+Date: Sat, 11 Jan 2025 04:30:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	jochensp@jochen.sprickerhof.de
-Subject: Re: [PATCH] ftrace: Implement :mod: cache filtering on kernel
- command line
-Message-ID: <202501110314.8tTxSS0N-lkp@intel.com>
-References: <20250109174639.32e6f43a@gandalf.local.home>
+To: Saurabh Sengar <saurabh.singh@xilinx.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
+	Michal Simek <monstr@monstr.eu>, Hyun Kwon <hyun.kwon@xilinx.com>
+Subject: [xilinx-xlnx:lkp_test 199/504]
+ drivers/gpu/drm/xlnx/xlnx_sdi.c:264:2: error: call to undeclared function
+ 'writel'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202501110456.Rp1A9JK0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,90 +63,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250109174639.32e6f43a@gandalf.local.home>
 
-Hi Steven,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.13-rc6 next-20250110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ftrace-Implement-mod-cache-filtering-on-kernel-command-line/20250110-064649
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250109174639.32e6f43a%40gandalf.local.home
-patch subject: [PATCH] ftrace: Implement :mod: cache filtering on kernel command line
-config: i386-randconfig-013-20250111 (https://download.01.org/0day-ci/archive/20250111/202501110314.8tTxSS0N-lkp@intel.com/config)
+tree:   https://github.com/Xilinx/linux-xlnx lkp_test
+head:   9ac6b4acf9144465ac1408d4d799635dec0223a0
+commit: fd4e677cfcfc2c6455abc12955015afd8c3790e6 [199/504] drm: xlnx: sdi: Adding sdi-tx driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250111/202501110456.Rp1A9JK0-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501110314.8tTxSS0N-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501110456.Rp1A9JK0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501110314.8tTxSS0N-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501110456.Rp1A9JK0-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/trace/ftrace.c:6232:6: warning: variable 'mod' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    6232 |         if (next) {
-         |             ^~~~
-   kernel/trace/ftrace.c:6246:67: note: uninitialized use occurs here
-    6246 |         ret = ftrace_set_hash(ops, func, len, NULL, 0, 0, reset, enable, mod);
-         |                                                                          ^~~
-   kernel/trace/ftrace.c:6232:2: note: remove the 'if' if its condition is always true
-    6232 |         if (next) {
-         |         ^~~~~~~~~
-   kernel/trace/ftrace.c:6224:11: note: initialize the variable 'mod' to silence this warning
-    6224 |         char *mod, *func, *command, *next = buf;
-         |                  ^
-         |                   = NULL
-   1 warning generated.
+   In file included from drivers/gpu/drm/xlnx/xlnx_sdi.c:10:
+   In file included from include/drm/drm_atomic_helper.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:30:
+   In file included from include/linux/hdmi.h:28:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/xlnx/xlnx_sdi.c:264:2: error: call to undeclared function 'writel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     264 |         writel(val, base + offset);
+         |         ^
+>> drivers/gpu/drm/xlnx/xlnx_sdi.c:269:9: error: call to undeclared function 'readl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     269 |         return readl(base + offset);
+         |                ^
+   4 warnings and 2 errors generated.
 
 
-vim +6232 kernel/trace/ftrace.c
+vim +/writel +264 drivers/gpu/drm/xlnx/xlnx_sdi.c
 
-  6219	
-  6220	static int
-  6221	ftrace_set_regex(struct ftrace_ops *ops, unsigned char *buf, int len,
-  6222			 int reset, int enable)
-  6223	{
-  6224		char *mod, *func, *command, *next = buf;
-  6225		char *tmp __free(kfree) = NULL;
-  6226		struct trace_array *tr = ops->private;
-  6227		int ret;
-  6228	
-  6229		func = strsep(&next, ":");
-  6230	
-  6231		/* This can also handle :mod: parsing */
-> 6232		if (next) {
-  6233			if (!tr)
-  6234				return -EINVAL;
-  6235	
-  6236			command = strsep(&next, ":");
-  6237			if (strcmp(command, "mod") != 0)
-  6238				return -EINVAL;
-  6239	
-  6240			mod = next;
-  6241			len = command - func;
-  6242			/* Save the original func as ftrace_set_hash() can modify it */
-  6243			tmp = kstrdup(func, GFP_KERNEL);
-  6244		}
-  6245	
-  6246		ret = ftrace_set_hash(ops, func, len, NULL, 0, 0, reset, enable, mod);
-  6247	
-  6248		if (tr && mod && ret < 0) {
-  6249			/* Did tmp fail to allocate? */
-  6250			if (!tmp)
-  6251				return -ENOMEM;
-  6252			ret = cache_mod(tr, tmp, mod, enable);
-  6253		}
-  6254	
-  6255		return ret;
-  6256	}
-  6257	
+   261	
+   262	static inline void xlnx_sdi_writel(void __iomem *base, int offset, u32 val)
+   263	{
+ > 264		writel(val, base + offset);
+   265	}
+   266	
+   267	static inline u32 xlnx_sdi_readl(void __iomem *base, int offset)
+   268	{
+ > 269		return readl(base + offset);
+   270	}
+   271	
 
 -- 
 0-DAY CI Kernel Test Service
