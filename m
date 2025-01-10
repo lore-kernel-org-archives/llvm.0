@@ -1,60 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45775B661;
-	Fri, 10 Jan 2025 03:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99F317B500;
+	Fri, 10 Jan 2025 06:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736480836; cv=none; b=f+2mrFjJb8ZHf+5sPu6+vXMiCwxFp8C4M3junj7Ab9LbCSA+dxwvNiVwNDBcx0S/AvkoZd42KcqjMEtK1jSOqjVbtStPgRZM81/HqQtSbzbDCjr1VG/DvdObdG5L334YUyP8xMdEckAmEsbM7X4b9unLSTgx5L99lVmpLpDP5dg=
+	t=1736490307; cv=none; b=kIrGkElgwtY+4yK2GCJHtCL+Sf8WDxwYESft7LVKdfa2JKVkNpJjr4wo2Sy61j+O66eNZc7U0pAjqPEbaDP7dckXu4q8kiC0BC3wtyB+AXg64FXheeJMINmfg5YoNzLW2WC6GKsPpSz0CrBW9pZmmn+ehHpvT9owTO6MuZzcqGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736480836; c=relaxed/simple;
-	bh=KjKowHOTBxutd5Z05iZ1UuGOm4z51o31/kCUn7wFKjg=;
+	s=arc-20240116; t=1736490307; c=relaxed/simple;
+	bh=G9uvnRFMuhoAo14vVQa/Tv9kv9GoagX6PyHav1yNgqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ze+3T518iTD4wHS4SCCPYoh3s9EIxTn8Ux4MaRClorG6+LhjuP3ZugSwhI3AH3zmoGL1b0r/HGE3jrkBlqFfI0bnMX3XahkmnvCxJkcvVlC6w7YkU4Tw+WyUveyIB48Ux8MuGEcLRZK+ElO+Va3zj3fqQavcXA4hgfenT7TtMAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xvnd0GG/; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=mla+ahZksKpc+dIKz7oVi9OUBinh+oShoddTFqThL3Sk+VsJaHcYozFmqpqlwifMNBUdxmFsMeJ8DP2BvDdAyyLOxX5rX6PIQukq17B5cmXqVV178Fqn5KroRQ0+xKbTFbsfXXtmPLdPZOl8h/VEUL8eAKIuwlJpsJQc4womD5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VUUqiEZW; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xvnd0GG/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VUUqiEZW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736480834; x=1768016834;
+  t=1736490305; x=1768026305;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KjKowHOTBxutd5Z05iZ1UuGOm4z51o31/kCUn7wFKjg=;
-  b=Xvnd0GG/SxLS7yC49UoGJu/r8qNJahE47jnY+N0YJ62bmjBk5PGZYA3U
-   2ltXB3NWwfY8PCNgMP4zrZaFQykoY+D5BOLt2rii8kR7yDGOkdNyDaUmV
-   ACbV1Jux8bEbxVwvo5D87RnuhNSMFANkc7V/2N2+YZbcmjgBQ1IwNY/BF
-   kgyYLHZHxHqFc1KHgeSFjZeFee7/tX6UQ4m0Hk+lW8jP4U0B9QcQd9h1e
-   qWGW3Rce2EquJug6zUTcjmOILhZ9oC2UwKfgsxuK9QX2BCU2sDXM3m3Mt
-   rZfZpoYufwfytdg2xRuhko61H6C1LiWspokvjwi5RBgTegDxvrWJqKVtS
-   w==;
-X-CSE-ConnectionGUID: y8tFne9ZT+e2hCCeWm7y7Q==
-X-CSE-MsgGUID: wDSJcmGoSmmhuTE2fXEwTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="24369069"
+  bh=G9uvnRFMuhoAo14vVQa/Tv9kv9GoagX6PyHav1yNgqU=;
+  b=VUUqiEZWab8LJGiwwQkUy+v425UrmX1btcp6ahdE20v6vKb42XNUQI39
+   ASNQUhpZBDW83dZ/C0IwmrsCrqLVAWXxAHmmhF4ev1S3GblcP9HQCZNwH
+   Q6THzRStlC8Xsyp5Kgo5n59TbffpAR2a7G2u4V3/HYJYjoUZLJBgxzfag
+   4+uuumtKWr+rfgazi84AYJlBPLqLok599faNpw41CI0Bba0n5Ztc0BsF8
+   Pa16wsKN3h/jNBJAo6CiIPkcCv7W1QorpiX4/Brx9VZ1131bjaDfS60K9
+   W+UMltub+NCPz69W7ElgRR00ChC+toYezP0o/qwrZ4F0I+AG5kO1TUWk6
+   Q==;
+X-CSE-ConnectionGUID: EFOWzvGGSvW0ZVblWIY1mw==
+X-CSE-MsgGUID: LOfoYCDjQn6w2V4D0cAPFQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="36935785"
 X-IronPort-AV: E=Sophos;i="6.12,303,1728975600"; 
-   d="scan'208";a="24369069"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 19:47:13 -0800
-X-CSE-ConnectionGUID: 6TVp+HLCTgOuWGKaf5PJ7Q==
-X-CSE-MsgGUID: aelnAd06RnGBNPxbZsteJg==
+   d="scan'208";a="36935785"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 22:25:04 -0800
+X-CSE-ConnectionGUID: msyrf1VWQNyEB7kyDFUdMw==
+X-CSE-MsgGUID: c44VkyVnSiOmtnn/jI20HQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104491941"
+   d="scan'208";a="104162426"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 Jan 2025 19:47:12 -0800
+  by orviesa007.jf.intel.com with ESMTP; 09 Jan 2025 22:25:02 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tW5zJ-000IVv-31;
-	Fri, 10 Jan 2025 03:47:09 +0000
-Date: Fri, 10 Jan 2025 11:46:13 +0800
+	id 1tW8S3-000IdX-31;
+	Fri, 10 Jan 2025 06:24:59 +0000
+Date: Fri, 10 Jan 2025 14:24:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nico Pache <npache@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 08/11] khugepaged: introduce khugepaged_scan_bitmap for
- mTHP support
-Message-ID: <202501101110.Y2RdAOgc-lkp@intel.com>
-References: <20250108233128.14484-9-npache@redhat.com>
+To: Lizhi Xu <lizhi.xu@windriver.com>,
+	syzbot+80e60df48923e1b7691d@syzkaller.appspotmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	aivazian.tigran@gmail.com, linux-kernel@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] bfs: put a inode if link count is 0
+Message-ID: <202501101459.tVj2wd8p-lkp@intel.com>
+References: <20250109034946.1386748-1-lizhi.xu@windriver.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,36 +65,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250108233128.14484-9-npache@redhat.com>
+In-Reply-To: <20250109034946.1386748-1-lizhi.xu@windriver.com>
 
-Hi Nico,
+Hi Lizhi,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
+[auto build test WARNING on brauner-vfs/vfs.all]
 [also build test WARNING on linus/master v6.13-rc6 next-20250109]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nico-Pache/introduce-khugepaged_collapse_single_pmd-to-collapse-a-single-pmd/20250109-073542
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250108233128.14484-9-npache%40redhat.com
-patch subject: [RFC 08/11] khugepaged: introduce khugepaged_scan_bitmap for mTHP support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250110/202501101110.Y2RdAOgc-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Xu/bfs-put-a-inode-if-link-count-is-0/20250109-123423
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250109034946.1386748-1-lizhi.xu%40windriver.com
+patch subject: [PATCH] bfs: put a inode if link count is 0
+config: x86_64-buildonly-randconfig-005-20250110 (https://download.01.org/0day-ci/archive/20250110/202501101459.tVj2wd8p-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250110/202501101110.Y2RdAOgc-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250110/202501101459.tVj2wd8p-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501101110.Y2RdAOgc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501101459.tVj2wd8p-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from mm/khugepaged.c:4:
-   In file included from include/linux/mm.h:2289:
+   In file included from fs/bfs/dir.c:12:
+   In file included from include/linux/buffer_head.h:12:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
@@ -103,96 +110,103 @@ All warnings (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      512 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      525 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/khugepaged.c:10:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/khugepaged.c:1330:7: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
-    1330 |                 if (!(enabled_orders >> (order +  MIN_MTHP_ORDER)) & 1)
-         |                     ^                                              ~
-   mm/khugepaged.c:1330:7: note: add parentheses after the '!' to evaluate the bitwise operator first
-    1330 |                 if (!(enabled_orders >> (order +  MIN_MTHP_ORDER)) & 1)
-         |                     ^                                                 
-         |                      (                                                )
-   mm/khugepaged.c:1330:7: note: add parentheses around left hand side expression to silence this warning
-    1330 |                 if (!(enabled_orders >> (order +  MIN_MTHP_ORDER)) & 1)
-         |                     ^
-         |                     (                                             )
-   mm/khugepaged.c:1308:12: warning: unused function 'khugepaged_scan_bitmap' [-Wunused-function]
-    1308 | static int khugepaged_scan_bitmap(struct mm_struct *mm, unsigned long address,
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
+>> fs/bfs/dir.c:225:6: warning: variable 'new_inode' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     225 |         if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/bfs/dir.c:254:6: note: uninitialized use occurs here
+     254 |         if (new_inode && !new_inode->i_nlink)
+         |             ^~~~~~~~~
+   fs/bfs/dir.c:225:2: note: remove the 'if' if its condition is always false
+     225 |         if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     226 |                 goto end_rename;
+         |                 ~~~~~~~~~~~~~~~
+>> fs/bfs/dir.c:225:6: warning: variable 'new_inode' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+     225 |         if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
+         |             ^~~~~~~
+   fs/bfs/dir.c:254:6: note: uninitialized use occurs here
+     254 |         if (new_inode && !new_inode->i_nlink)
+         |             ^~~~~~~~~
+   fs/bfs/dir.c:225:6: note: remove the '||' if its condition is always false
+     225 |         if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
+         |             ^~~~~~~~~~
+   fs/bfs/dir.c:206:37: note: initialize the variable 'new_inode' to silence this warning
+     206 |         struct inode *old_inode, *new_inode;
+         |                                            ^
+         |                                             = NULL
+   6 warnings generated.
 
 
-vim +1330 mm/khugepaged.c
+vim +225 fs/bfs/dir.c
 
-  1306	
-  1307	// Recursive function to consume the bitmap
-  1308	static int khugepaged_scan_bitmap(struct mm_struct *mm, unsigned long address,
-  1309				int referenced, int unmapped, struct collapse_control *cc,
-  1310				bool *mmap_locked, unsigned long enabled_orders)
-  1311	{
-  1312		u8 order, offset;
-  1313		int num_chunks;
-  1314		int bits_set, max_percent, threshold_bits;
-  1315		int next_order, mid_offset;
-  1316		int top = -1;
-  1317		int collapsed = 0;
-  1318		int ret;
-  1319		struct scan_bit_state state;
-  1320	
-  1321		cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1322			{ HPAGE_PMD_ORDER - MIN_MTHP_ORDER, 0 };
-  1323	
-  1324		while (top >= 0) {
-  1325			state = cc->mthp_bitmap_stack[top--];
-  1326			order = state.order;
-  1327			offset = state.offset;
-  1328			num_chunks = 1 << order;
-  1329			// Skip mTHP orders that are not enabled
-> 1330			if (!(enabled_orders >> (order +  MIN_MTHP_ORDER)) & 1)
-  1331				goto next;
-  1332	
-  1333			// copy the relavant section to a new bitmap
-  1334			bitmap_shift_right(cc->mthp_bitmap_temp, cc->mthp_bitmap, offset,
-  1335					  MTHP_BITMAP_SIZE);
-  1336	
-  1337			bits_set = bitmap_weight(cc->mthp_bitmap_temp, num_chunks);
-  1338	
-  1339			// Check if the region is "almost full" based on the threshold
-  1340			max_percent = ((HPAGE_PMD_NR - khugepaged_max_ptes_none - 1) * 100)
-  1341							/ (HPAGE_PMD_NR - 1);
-  1342			threshold_bits = (max_percent * num_chunks) / 100;
-  1343	
-  1344			if (bits_set >= threshold_bits) {
-  1345				ret = collapse_huge_page(mm, address, referenced, unmapped, cc,
-  1346						mmap_locked, order + MIN_MTHP_ORDER, offset * MIN_MTHP_NR);
-  1347				if (ret == SCAN_SUCCEED)
-  1348					collapsed += (1 << (order + MIN_MTHP_ORDER));
-  1349				continue;
-  1350			}
-  1351	
-  1352	next:
-  1353			if (order > 0) {
-  1354				next_order = order - 1;
-  1355				mid_offset = offset + (num_chunks / 2);
-  1356				cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1357					{ next_order, mid_offset };
-  1358				cc->mthp_bitmap_stack[++top] = (struct scan_bit_state)
-  1359					{ next_order, offset };
-  1360				}
-  1361		}
-  1362		return collapsed;
-  1363	}
-  1364	
+^1da177e4c3f41 Linus Torvalds    2005-04-16  201  
+e18275ae55e07a Christian Brauner 2023-01-13  202  static int bfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+549c7297717c32 Christian Brauner 2021-01-21  203  		      struct dentry *old_dentry, struct inode *new_dir,
+549c7297717c32 Christian Brauner 2021-01-21  204  		      struct dentry *new_dentry, unsigned int flags)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  205  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  206  	struct inode *old_inode, *new_inode;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  207  	struct buffer_head *old_bh, *new_bh;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  208  	struct bfs_dirent *old_de, *new_de;
+3f165e4cf2af04 Dmitri Vorobiev   2008-07-25  209  	struct bfs_sb_info *info;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  210  	int error = -ENOENT;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  211  
+f03b8ad8d38634 Miklos Szeredi    2016-09-27  212  	if (flags & ~RENAME_NOREPLACE)
+f03b8ad8d38634 Miklos Szeredi    2016-09-27  213  		return -EINVAL;
+f03b8ad8d38634 Miklos Szeredi    2016-09-27  214  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  215  	old_bh = new_bh = NULL;
+2b0143b5c986be David Howells     2015-03-17  216  	old_inode = d_inode(old_dentry);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  217  	if (S_ISDIR(old_inode->i_mode))
+^1da177e4c3f41 Linus Torvalds    2005-04-16  218  		return -EINVAL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  219  
+3f165e4cf2af04 Dmitri Vorobiev   2008-07-25  220  	info = BFS_SB(old_inode->i_sb);
+3f165e4cf2af04 Dmitri Vorobiev   2008-07-25  221  
+3f165e4cf2af04 Dmitri Vorobiev   2008-07-25  222  	mutex_lock(&info->bfs_lock);
+33ebdebece6d5d Al Viro           2018-04-30  223  	old_bh = bfs_find_entry(old_dir, &old_dentry->d_name, &old_de);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  224  
+f433dc56344cb7 Dmitri Vorobiev   2007-11-14 @225  	if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
+^1da177e4c3f41 Linus Torvalds    2005-04-16  226  		goto end_rename;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  227  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  228  	error = -EPERM;
+2b0143b5c986be David Howells     2015-03-17  229  	new_inode = d_inode(new_dentry);
+33ebdebece6d5d Al Viro           2018-04-30  230  	new_bh = bfs_find_entry(new_dir, &new_dentry->d_name, &new_de);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  231  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  232  	if (new_bh && !new_inode) {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  233  		brelse(new_bh);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  234  		new_bh = NULL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  235  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  236  	if (!new_bh) {
+b455ecd4bb4db1 Al Viro           2018-04-30  237  		error = bfs_add_entry(new_dir, &new_dentry->d_name,
+f433dc56344cb7 Dmitri Vorobiev   2007-11-14  238  					old_inode->i_ino);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  239  		if (error)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  240  			goto end_rename;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  241  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  242  	old_de->ino = 0;
+ce17a80c388cd1 Jeff Layton       2023-10-04  243  	inode_set_mtime_to_ts(old_dir, inode_set_ctime_current(old_dir));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  244  	mark_inode_dirty(old_dir);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  245  	if (new_inode) {
+73d9b9d028176b Jeff Layton       2023-07-05  246  		inode_set_ctime_current(new_inode);
+9a53c3a783c2fa Dave Hansen       2006-09-30  247  		inode_dec_link_count(new_inode);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  248  	}
+4427f0c36e22e2 Al Viro           2009-06-08  249  	mark_buffer_dirty_inode(old_bh, old_dir);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  250  	error = 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  251  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  252  end_rename:
+3f165e4cf2af04 Dmitri Vorobiev   2008-07-25  253  	mutex_unlock(&info->bfs_lock);
+56423717549f8d Lizhi Xu          2025-01-09 @254  	if (new_inode && !new_inode->i_nlink)
+56423717549f8d Lizhi Xu          2025-01-09  255  		iput(new_inode);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  256  	brelse(old_bh);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  257  	brelse(new_bh);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  258  	return error;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  259  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  260  
 
 -- 
 0-DAY CI Kernel Test Service
