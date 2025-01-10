@@ -1,109 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53354257D
-	for <llvm@lists.linux.dev>; Fri, 10 Jan 2025 08:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CAD18787A;
+	Fri, 10 Jan 2025 11:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736497291; cv=none; b=MrFLHPb9hldVSciW2mkaaA4rMupqy08+l3WksONK6WmdhfXJ6eYoKNowH1p7sCrCdYSa3YH/wV0wjna9cFmXNCs3zJCsyd3iqLmoVKt+KlmPxrhOWZpHGb5TCdYiXJEmFC6Jp1+ZlXnzvn5SK7ZU6r9u1toaLqlFNjcD4KEEonI=
+	t=1736507811; cv=none; b=gdXcIjjNU104mmA3wP9L8QaphBIwzbMOunxEQAmpMHqjzsu4RRvklj8211gQMReJAAfLGfBG38MDa/MSAHq088ROmyad4i0FdGfMk5KKDCRn7js8x85ddch0orj5jw6XrqtQrJRYjh+2YaGoPwlpDOmcDnB2L5HKi/vlsQfXdmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736497291; c=relaxed/simple;
-	bh=Dy075btzMlMcWfzem46MbP+RD8rq/QKp7VRIV8rHbTU=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:Date:
-	 Message-ID:Content-Type; b=OYzR62qBNZh6ocI9e8NwaIHUSM45yN/7pXVaY8MvxCsE5gJXoFnw3V+oZdSXSVV70IwQocT/PxWqJ6Y8nkaxifK7PFOoqr/jAgGwuZRJT4ZGrcF7iZKKwweouzmf0kvUynDwtDz8CS14EixrmB6erzWBGerfonLwB1kqtjMCRj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ReAtwQHV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736507811; c=relaxed/simple;
+	bh=n8qQb0zR1hYN5wtZf7LW+CHfwc3NWyAOaCCpLXVYVFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O8e5BXBcdYEP8ksyAy7NfhPDRLwJlNzO3ftCpVHyVUtJGmS+Nup6LWoEjGywSsw2CNx/MUtyiteIpTQ8V/bUnTWBuZtetfEm3GcnUv5mS0AlFWXO+xvq/CHAwvUGos8TD4tG5PB8iK0xR16XpsX4US+npDsHEIS8XD5+tZeo4GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VaQ8J13U; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ReAtwQHV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736497287;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y81cyk+ToM46RV8Tpev9A8BpP4FpLQ7NaEobR6X0ZTY=;
-	b=ReAtwQHVs1YV4kHsep47gWcXURa2Xs9mW9f1O20V3lSILjRO712MO4o2QP8WfMT/4sg+vs
-	SQtgCh+CclJVbW3xHWAJ746CeCNtS1+mB8d2tMKdRK1RocOk3+M3yLKN6EO56IPu28ZQr7
-	Hj5WxyEbmOh4MbM7M8G4GEiEdnMFeNU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-656-6eEPwoexNeKSFjTluWcwVw-1; Fri,
- 10 Jan 2025 03:21:26 -0500
-X-MC-Unique: 6eEPwoexNeKSFjTluWcwVw-1
-X-Mimecast-MFC-AGG-ID: 6eEPwoexNeKSFjTluWcwVw
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E20A819560B2;
-	Fri, 10 Jan 2025 08:21:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.12])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4D5261954B24;
-	Fri, 10 Jan 2025 08:21:23 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <202501101527.4qvP3A25-lkp@intel.com>
-References: <202501101527.4qvP3A25-lkp@intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: dhowells@redhat.com, llvm@lists.linux.dev,
-    oe-kbuild-all@lists.linux.dev
-Subject: Re: [dhowells-fs:crypto-krb5 7/8] net/rxrpc/rxgk.c:273:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VaQ8J13U"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ef6ee55225so393167a91.0;
+        Fri, 10 Jan 2025 03:16:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736507809; x=1737112609; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m2xATKuzby+pI+lcil7Erl5IxGsbheqxq50Sx1NALsI=;
+        b=VaQ8J13Un9SKFG5SMZ9EB2rZNuCAqo6/8B0MIUhAunl/i1lFiun060GySwnwxr1Egd
+         2wbRB41HkZJKCVfgbbRZgmRI0yKB5CWnDQk5noqjNHnuMYQNGpBSLzwNMVCISH8DWXmF
+         qUWUm7wrrIQxAk0jwvHwGrN72a6IIByq4z2pm611nPtbnZwu7ZKpo9i70OZV2Dqk7nTs
+         61uQ9FS3joDDne0rZ7Eav7B3NvGvFepuqyTG6UsaUxeOtxdMgFPkPuIDMhXErHtgBkCo
+         SRFRZf9mpKxqwZnsc/DmvI2xfyV2JqxiaOxw88KZS4kIon85M797BddSTUq6hHdOHrMu
+         deOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736507809; x=1737112609;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m2xATKuzby+pI+lcil7Erl5IxGsbheqxq50Sx1NALsI=;
+        b=ZqL+7Bx21kTCIbOjVBcUY+o72AF5ZH/b975LAl214WvnGpzbY5in9456VKI4iRNDcG
+         pPOfTrILIDdyv+jryZpSIodXHiYUlSiZzn4iSay534u8tezhxRv27UWuLSW11tKhvdIx
+         DqxX2E2XpPQ8mda1ZkpckcTVUwVaS2g9iZUh1pDhJ0iCHOGiXLm0UBmPIlsBClASembt
+         zKwlq0CdiBIwkIFDqWw2YO6njyvWa1h8Y2lT6JjPFnNAEvd7J1N2A/MdV9EbVXSBS5Lx
+         fcDSczfGzPaRtgsP6AVRrQ/soCCUimkWiHO7eR3kQMd12LOMfngFGXGwHy3ppoBUuhJD
+         s56w==
+X-Forwarded-Encrypted: i=1; AJvYcCULrHbcejP4WHa8ZgKCSQtFsX4p/rdQyMAZHCzp15LEu8fupSMZWdR7DIKvOHhjPvG71wS6@lists.linux.dev, AJvYcCWOxZ4PW5CKq5WL8YqEG+yOc06FZ6wetWkO65/rlJYSDVYr2xERLm6e0dhsQP12q8fkNIS+WPaiGREsCUVHwQ==@lists.linux.dev
+X-Gm-Message-State: AOJu0YzwPqzjBddC7WCwHlUrg9TgsLmHCUtTvptBCUlv+ytYbbuLogkQ
+	bZnwSxFcKcKQwod77gJ/E3AAiYe1IXfHo7yx/Z2V9wdoGIP2k48n5g0z/jmuDOinjGZpnz4IT2L
+	yNuH8UT7uzpYs0haB5lfbqRDQIu4=
+X-Gm-Gg: ASbGnctviuiPnc69ayreEF+YUUrJ66R7NgpLk7HKkh8c2VErHL6CF+rbVtTt5D05Wor
+	IutJLJbmy9x17qxROZTL4orUmgM4OtrAFZLLo+w==
+X-Google-Smtp-Source: AGHT+IEZ3LiCgaKM2pt11/adB6e7hLinDuLKOXwdC38XEzNoaeZ8cYtzlq3RtjyBIypMRgvoZ1kBEzAbvnGfmX2hTRc=
+X-Received: by 2002:a17:90b:2709:b0:2ee:d372:91bd with SMTP id
+ 98e67ed59e1d1-2f548f1a252mr5717385a91.2.1736507809112; Fri, 10 Jan 2025
+ 03:16:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Fri, 10 Jan 2025 08:21:22 +0000
-Message-ID: <1481889.1736497282@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 45ZQdEJoWl0FK6dIfbbA0HBDW4M594yuCqv2ZLhCh6o_1736497285
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1481888.1736497282.1@warthog.procyon.org.uk>
+References: <202501101527.4qvP3A25-lkp@intel.com> <1481889.1736497282@warthog.procyon.org.uk>
+In-Reply-To: <1481889.1736497282@warthog.procyon.org.uk>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 10 Jan 2025 12:16:37 +0100
+X-Gm-Features: AbW1kvasfCYeen7KuyPlceWOHfpbIBco9f861jrTpVr5UMbMZS19ak8eAF_HwNg
+Message-ID: <CANiq72mGE_UQsXpP38XVdzGS5MO_=Reist+drLfQOqpQ816z2g@mail.gmail.com>
+Subject: Re: [dhowells-fs:crypto-krb5 7/8] net/rxrpc/rxgk.c:273:6: warning:
+ variable 'ret' is used uninitialized whenever 'if' condition is true
+To: David Howells <dhowells@redhat.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-kernel test robot <lkp@intel.com> wrote:
+On Fri, Jan 10, 2025 at 9:21=E2=80=AFAM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> I think this is a clang bug.  The lines prior to that:
 
-> >> net/rxrpc/rxgk.c:273:6: warning: variable 'ret' is used uninitialized =
-whenever 'if' condition is true [-Wsometimes-uninitialized]
->      273 |         if (!req)
->          |             ^~~~
->    net/rxrpc/rxgk.c:310:9: note: uninitialized use occurs here
->      310 |         return ret;
->          |                ^~~
+> show req being initialised directly above the if-statement that is being
+> flagged.  Did "sizeof(*req)" cause the issue?
 
-I think this is a clang bug.  The lines prior to that:
+Note `ret` vs. `req`, i.e. it is complaining about `ret` (the former)
+being used uninitialized when `req` (the latter) is true.
 
->    262=09=09struct aead_request *req;
->    263=09=09struct rxgk_header *hdr;
->    264=09=09struct scatterlist sg[1];
->    265=09=09size_t data_offset, data_len;
->    266=09=09void *payload =3D whdr + 1;
->    267=09=09int ret;
->    268=09
->    269=09=09_enter("%x", txb->len);
->    270=09
->    271=09=09req =3D kzalloc(sizeof(*req) + crypto_aead_reqsize(gk->tx_cry=
-pto),
->    272=09=09=09      GFP_NOFS);
->  > 273=09=09if (!req)
->    274=09=09=09goto error_gk;
-
-show req being initialised directly above the if-statement that is being
-flagged.  Did "sizeof(*req)" cause the issue?
-
->    net/rxrpc/rxgk.c:435:6: warning: variable 'ret' is used uninitialized =
-whenever 'if' condition is true [-Wsometimes-uninitialized]
->      435 |         if (!req)
-
-Ditto.
-
-David
-
+Cheers,
+Miguel
