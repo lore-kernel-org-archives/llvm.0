@@ -1,109 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89B6213E7D
-	for <llvm@lists.linux.dev>; Fri, 10 Jan 2025 17:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF2D205AA2;
+	Fri, 10 Jan 2025 18:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736530987; cv=none; b=Pe2wNrnK93gg2b99UQYKXd8acnQ54+CpmspNWieOrraKDaoAy+mgnpIsEZLca+dpne6FwTtchko55GyFU5JN0V/+sq421p1DzpHfb2zuyeh57h7rUixLJLhfoYCU/9TeJhJY7BYQJtBtTJ36mbWmVJkdWvCoOZ9gt8TxmdMEV8s=
+	t=1736532162; cv=none; b=AiDyGb4yZtOpFHBoLe+TG6lwNnpDzr7RFo3X71YlaNs56HZKgtQld9x+2MsVJdPdVJr9v4dkoI4+iQuybf3qolNkeRH3nHblj2KCG5RQitdLujzDMdW8khfN++JRyDmW7ynahsQ73Yjcj45Nhd0ehBK29WsKD8+U7Kp3HNYCzqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736530987; c=relaxed/simple;
-	bh=XlKKL5XWj1f4zeZ+Mj591rFVvOMIsHYFumErSkgm/cg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=t5jyFi9/W9t4kcbBiz8HW3VeZ4V6HjFJJ2CKu3SvdQ+D6DEcHZ9LcwlNcRWGrQ6aQxkWNzuBzuhL6qxX6AFT8MYwXNI7jpu0x4WB9DAMzD3iEuL6sSXHNQPkNJJ4c1W79Se/yJXOjD+L3YkS6kVj+nsDDfWEx7e5yOCz7i/Xprg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N2oXFSYq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736532162; c=relaxed/simple;
+	bh=wWTI+J+GqDlibzTHylOSVS60+DoqiT0ax232mSj9/3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WtZWraQFf3SEyGK82W3pPjDz3SHaP879l49kCtUd5agUUl8sJMlIRQzorzaUlldJvjbC7AzYpQKHlBB2lNRkyPcOdo5WwAldigjPk6/6W8QxrHA1tteuavRX0nsDQSjXRsz6q4OW3sBolUthyyptiKAjcgouK3vKPVawHp6NqCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n5NOaEgn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N2oXFSYq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736530984;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZdnttxAmxm4K3TCIqclWSjLQe3HHr9zkt/kmoVCawBI=;
-	b=N2oXFSYq4tBDiFiaaNYiuTeQaNsNxsRR1ayeH1U0Bgv/d5K2xyDXMlCEa/7J+UJ5WSyKZL
-	8TVkayaWKObARehJG30z+nPAIEkH8kFrvNWM+dLj9y05/ZQexXaWPgAP1h8Xh3guGXMvLz
-	jSJGt3ueKGngv7T3k2JUVsO2V1OZ2Co=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-509-4ASvCp4TPPyHMKq3eDprDg-1; Fri,
- 10 Jan 2025 12:43:03 -0500
-X-MC-Unique: 4ASvCp4TPPyHMKq3eDprDg-1
-X-Mimecast-MFC-AGG-ID: 4ASvCp4TPPyHMKq3eDprDg
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AD9F319560BB
-	for <llvm@lists.linux.dev>; Fri, 10 Jan 2025 17:43:02 +0000 (UTC)
-Received: from [172.64.12.18] (unknown [10.30.33.24])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E620195E3D9;
-	Fri, 10 Jan 2025 17:43:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
- upstream-mainline, 8c8d5411)
-Date: Fri, 10 Jan 2025 17:43:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n5NOaEgn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A2CC4CED6;
+	Fri, 10 Jan 2025 18:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736532161;
+	bh=wWTI+J+GqDlibzTHylOSVS60+DoqiT0ax232mSj9/3c=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=n5NOaEgnGVoHONmajKOFuSFe01v8pG56uh7Jz59jYpvELG6xDVGEJvoIdY6IKXilg
+	 GeRnF7gPxt4qZQ81A11NvJpAcdhh5XR+qvp1R9+Dt0+4d14sZSKAjVwAZ1IZy5v6zb
+	 4gZZj+le5m6UHdgH3odJqiEftJXeqMATXaM9+aDVpu6GZ05D9qEV932dj0Jgci3ju5
+	 PfS6iSPtl1wEeMNv6a+4V7ldw1xM2IOUkQFXYhWsrWI9oXeB06JN9lAQXHrOQ9qkmA
+	 iKkD4RQjf/jTkMabkHLE0tX8XYvVipA8dROYLkEMbxUxK7zN/5EHA0UAohNg8Vbx/n
+	 k0BARd93xUXXQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 18827CE0D99; Fri, 10 Jan 2025 10:02:41 -0800 (PST)
+Date: Fri, 10 Jan 2025 10:02:41 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [paulmckrcu:dev.2025.01.07a 46/56] kernel/rcu/srcutree.c:800:18:
+ error: passing 'atomic_long_t' (aka 'atomic64_t') to parameter of
+ incompatible type 'atomic_long_t *' (aka 'atomic64_t *'); take the address
+ with &
+Message-ID: <8dfa30fb-03a6-4851-aeda-4e2701840209@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202501101426.H4VxxBgO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <33911.125011012430300270@us-mta-509.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ezQEEqIWe2q4qKEikl0sHfgSRNtSo2HR1AA8w90TxdA_1736530982
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202501101426.H4VxxBgO-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jan 10, 2025 at 02:56:39PM +0800, kernel test robot wrote:
+> tree:   https://github.com/paulmckrcu/linux dev.2025.01.07a
+> head:   88e44a908bff076d1e7f47634f06a8a4560c19e9
+> commit: 88b0a38dd85e2d8a633c78ad39dd82168b9b4e94 [46/56] srcu: Pull integer-to-pointer conversion into __srcu_ctr_to_ptr()
+> config: powerpc64-randconfig-001-20250110 (https://download.01.org/0day-ci/archive/20250110/202501101426.H4VxxBgO-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250110/202501101426.H4VxxBgO-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202501101426.H4VxxBgO-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/rcu/srcutree.c:800:18: error: passing 'atomic_long_t' (aka 'atomic64_t') to parameter of incompatible type 'atomic_long_t *' (aka 'atomic64_t *'); take the address with &
+>      800 |         atomic_long_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
+>          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>          |                         &
+>    include/linux/atomic/atomic-instrumented.h:3589:32: note: passing argument to parameter 'v' here
+>     3589 | atomic_long_inc(atomic_long_t *v)
+>          |                                ^
+>    1 error generated.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Good catch!  Does the diff below fix this?
 
+And yes, I am adding a Kconfig option to allow me to easily test this
+code on x86 systems.  Why do you ask?  ;-)
 
-Kernel information:
-    Commit message: Merge tag 'platform-drivers-x86-v6.13-5' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+							Thanx, Paul
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1619938623
+------------------------------------------------------------------------
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1619938623-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1619938623-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1619938623-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index ec4232b0a72f5..1e75b35bf7550 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -797,7 +797,7 @@ void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
+ 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
+ 
+ 	smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section. */
+-	atomic_long_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
++	atomic_long_inc(&__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
+ }
+ EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
+ 
