@@ -1,44 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF2D205AA2;
-	Fri, 10 Jan 2025 18:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F28B2144D4;
+	Fri, 10 Jan 2025 19:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736532162; cv=none; b=AiDyGb4yZtOpFHBoLe+TG6lwNnpDzr7RFo3X71YlaNs56HZKgtQld9x+2MsVJdPdVJr9v4dkoI4+iQuybf3qolNkeRH3nHblj2KCG5RQitdLujzDMdW8khfN++JRyDmW7ynahsQ73Yjcj45Nhd0ehBK29WsKD8+U7Kp3HNYCzqM=
+	t=1736537761; cv=none; b=ia6vLJDeKj4wMa4xFhThSXzdKaVlKZLv9KO7QSIZai8pMYd8vL5aTVg1w2GY0wpktRC+gRJSbZao3O9GbMp2qhVVrWKsn2HFA0m0nw5ftU9QsOMiVEKVycYFVdhDlKTBdfH/jm9KsRZGa9QMyp1hrnR5xvUABiqGDQRZkVVGxvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736532162; c=relaxed/simple;
-	bh=wWTI+J+GqDlibzTHylOSVS60+DoqiT0ax232mSj9/3c=;
+	s=arc-20240116; t=1736537761; c=relaxed/simple;
+	bh=PIpsMswTdT020iPzqG5ntp7t7JspQE2rc/trtkI3nIo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WtZWraQFf3SEyGK82W3pPjDz3SHaP879l49kCtUd5agUUl8sJMlIRQzorzaUlldJvjbC7AzYpQKHlBB2lNRkyPcOdo5WwAldigjPk6/6W8QxrHA1tteuavRX0nsDQSjXRsz6q4OW3sBolUthyyptiKAjcgouK3vKPVawHp6NqCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n5NOaEgn; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=APZkFfiSehm4jJ1omOqpL2+171vJMqlD93d49c0DpezsKQreNMvgMtrHh59/v4FOUjKGjEtpowPgwiffNA8lZlmTMGITheeTcDK1Pf4NP1djr1cKQO77dr/cnpgMhNrnzSE+7Rfokq/jXxGaKtiZOlBI9onnb/A3qyKdW6aEUUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YTbHLPmS; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n5NOaEgn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A2CC4CED6;
-	Fri, 10 Jan 2025 18:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736532161;
-	bh=wWTI+J+GqDlibzTHylOSVS60+DoqiT0ax232mSj9/3c=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=n5NOaEgnGVoHONmajKOFuSFe01v8pG56uh7Jz59jYpvELG6xDVGEJvoIdY6IKXilg
-	 GeRnF7gPxt4qZQ81A11NvJpAcdhh5XR+qvp1R9+Dt0+4d14sZSKAjVwAZ1IZy5v6zb
-	 4gZZj+le5m6UHdgH3odJqiEftJXeqMATXaM9+aDVpu6GZ05D9qEV932dj0Jgci3ju5
-	 PfS6iSPtl1wEeMNv6a+4V7ldw1xM2IOUkQFXYhWsrWI9oXeB06JN9lAQXHrOQ9qkmA
-	 iKkD4RQjf/jTkMabkHLE0tX8XYvVipA8dROYLkEMbxUxK7zN/5EHA0UAohNg8Vbx/n
-	 k0BARd93xUXXQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 18827CE0D99; Fri, 10 Jan 2025 10:02:41 -0800 (PST)
-Date: Fri, 10 Jan 2025 10:02:41 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [paulmckrcu:dev.2025.01.07a 46/56] kernel/rcu/srcutree.c:800:18:
- error: passing 'atomic_long_t' (aka 'atomic64_t') to parameter of
- incompatible type 'atomic_long_t *' (aka 'atomic64_t *'); take the address
- with &
-Message-ID: <8dfa30fb-03a6-4851-aeda-4e2701840209@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202501101426.H4VxxBgO-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YTbHLPmS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736537759; x=1768073759;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PIpsMswTdT020iPzqG5ntp7t7JspQE2rc/trtkI3nIo=;
+  b=YTbHLPmSuCWysksa2p984BSHBHiCGB7HbR/sjyFW1j5/qwDLzf6ith0n
+   Nkj2W1gaJrpjKHNPgmDk1QiYowBb6Pzie4do1VkzixpDaS8nIIfamnefA
+   8uasFx57mE7ZdVjTt4CG7jgCz3qtqnh4mr/TKJckXHMEohNC7uUs8m6Ds
+   82awnQvEC5SxRlWRnkpSv13sG+Z9i4TOLaCt2FLwLFS3sUZcx9VEsNYAx
+   3d8+zwGHYJ63GrZh7TkCwXKSXTNJ62yCNd6pf4bH+xKwEd/q3xVSkjluH
+   C0FO9KDOLQ2nMaOBs9TlcOmoC1zyPCYTNXWPy8G+HuOMwpEtD4LW/D9nV
+   g==;
+X-CSE-ConnectionGUID: GB6gVaYLS6aJQpRw4339/w==
+X-CSE-MsgGUID: VcV4ltDnQ2imoutBIVzWkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="48256976"
+X-IronPort-AV: E=Sophos;i="6.12,305,1728975600"; 
+   d="scan'208";a="48256976"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 11:35:57 -0800
+X-CSE-ConnectionGUID: 3gzyvtpoTHqJZFLPYsbUZQ==
+X-CSE-MsgGUID: nyw5/AI0QoG2DQtlKXk2zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,305,1728975600"; 
+   d="scan'208";a="134653766"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 10 Jan 2025 11:35:54 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tWKnQ-000Jfz-12;
+	Fri, 10 Jan 2025 19:35:52 +0000
+Date: Sat, 11 Jan 2025 03:35:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	jochensp@jochen.sprickerhof.de
+Subject: Re: [PATCH] ftrace: Implement :mod: cache filtering on kernel
+ command line
+Message-ID: <202501110319.xY9ltUxL-lkp@intel.com>
+References: <20250109174639.32e6f43a@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,51 +69,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202501101426.H4VxxBgO-lkp@intel.com>
+In-Reply-To: <20250109174639.32e6f43a@gandalf.local.home>
 
-On Fri, Jan 10, 2025 at 02:56:39PM +0800, kernel test robot wrote:
-> tree:   https://github.com/paulmckrcu/linux dev.2025.01.07a
-> head:   88e44a908bff076d1e7f47634f06a8a4560c19e9
-> commit: 88b0a38dd85e2d8a633c78ad39dd82168b9b4e94 [46/56] srcu: Pull integer-to-pointer conversion into __srcu_ctr_to_ptr()
-> config: powerpc64-randconfig-001-20250110 (https://download.01.org/0day-ci/archive/20250110/202501101426.H4VxxBgO-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250110/202501101426.H4VxxBgO-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202501101426.H4VxxBgO-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/rcu/srcutree.c:800:18: error: passing 'atomic_long_t' (aka 'atomic64_t') to parameter of incompatible type 'atomic_long_t *' (aka 'atomic64_t *'); take the address with &
->      800 |         atomic_long_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
->          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->          |                         &
->    include/linux/atomic/atomic-instrumented.h:3589:32: note: passing argument to parameter 'v' here
->     3589 | atomic_long_inc(atomic_long_t *v)
->          |                                ^
->    1 error generated.
+Hi Steven,
 
-Good catch!  Does the diff below fix this?
+kernel test robot noticed the following build warnings:
 
-And yes, I am adding a Kconfig option to allow me to easily test this
-code on x86 systems.  Why do you ask?  ;-)
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.13-rc6 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-							Thanx, Paul
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ftrace-Implement-mod-cache-filtering-on-kernel-command-line/20250110-064649
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250109174639.32e6f43a%40gandalf.local.home
+patch subject: [PATCH] ftrace: Implement :mod: cache filtering on kernel command line
+config: i386-randconfig-012-20250111 (https://download.01.org/0day-ci/archive/20250111/202501110319.xY9ltUxL-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501110319.xY9ltUxL-lkp@intel.com/reproduce)
 
-------------------------------------------------------------------------
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501110319.xY9ltUxL-lkp@intel.com/
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index ec4232b0a72f5..1e75b35bf7550 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -797,7 +797,7 @@ void __srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
- 	struct srcu_data *sdp = raw_cpu_ptr(ssp->sda);
- 
- 	smp_mb__before_atomic(); /* C */  /* Avoid leaking the critical section. */
--	atomic_long_inc(__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
-+	atomic_long_inc(&__srcu_ctr_to_ptr(ssp, idx)->srcu_unlocks);
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock_nmisafe);
- 
+All warnings (new ones prefixed by >>):
+
+>> kernel/trace/trace.c:10664:28: warning: no previous prototype for function 'trace_get_global_array' [-Wmissing-prototypes]
+    10664 | __init struct trace_array *trace_get_global_array(void)
+          |                            ^
+   kernel/trace/trace.c:10664:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    10664 | __init struct trace_array *trace_get_global_array(void)
+          |        ^
+          |        static 
+   1 warning generated.
+
+
+vim +/trace_get_global_array +10664 kernel/trace/trace.c
+
+ 10662	
+ 10663	/* Used to set module cached ftrace filtering at boot up */
+ 10664	__init struct trace_array *trace_get_global_array(void)
+ 10665	{
+ 10666		return &global_trace;
+ 10667	}
+ 10668	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
