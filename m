@@ -1,123 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8ABF125DF;
-	Fri, 10 Jan 2025 03:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9D8158DC4
+	for <llvm@lists.linux.dev>; Fri, 10 Jan 2025 03:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736478084; cv=none; b=o8XRIF5C3M0NM4Z71IWtBWd2tXw6uEbQ/fGsN0uwuOWq2hbYKsyIydYbygxioXzlR5HDrgkNZX2lOZ1EgS8jQdjhA97dSXgXfqtSGixd5VbI5MvcMcOu8zBOGpB6/698bDk0Kf2hbCpzXd09LD9LAEcjVH6fKtLlmeKAf8D+5ZU=
+	t=1736479931; cv=none; b=hPXVDwrsaCNyKwYuPpwPuy7B3JiLVG/V4fpqmS+0pXdZFgbb79gZ53T94mAcTHuYn1shuPmDQ3z4nqx/MavkPn54X9gBUZVwRYIfH8r5HcX3fuJHZgKnewtNhsfNMBiNwjkksCAUxgWzyhDMRFMRYlnlS+VYNGtywYNCXPuSWXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736478084; c=relaxed/simple;
-	bh=OxkOxjTS3fWMLwihl4/17Mf9luvPmMspJ48TJAbinbQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VgWdeQ/5fcPe+Cvm/r5U+mfANwkAmb7bZpO1E6/bBHMJ9XhklRydOBGQBpbqW1R8W+yMdTawyW8BKcsaY3EkV4CvFzp3fu9BiHVKXdZB9nC9N0jObokMeQAKmEP/M5hJf/S9Kl5VanUXsohXnUmOzRli5PgmwT4SpmPXLSP+eIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OUzLN7H2; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736479931; c=relaxed/simple;
+	bh=sMsAVyS/VipFh8kMWuwuJj4wrQrMyRhQ0N7kLKlYxIQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=sqFG0FFue62IurXTKRp7NPkNsRr2M6qSzkY46OwZgggoYIa+O5x3lFSMMbFms0sRqy899ZxalTtZFzBJeW0DCueaykY8jTATjzB872q+Q9tMiTGMBkW+BvVdO8KkA//gRqO5NPYKBRa8jsjgZ4yf5BfcvI+bpwKexsukTktrpG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JOqkjqhz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OUzLN7H2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736478082; x=1768014082;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OxkOxjTS3fWMLwihl4/17Mf9luvPmMspJ48TJAbinbQ=;
-  b=OUzLN7H2Yb0D0Kyl9M0GzSjVF2WvOeN8/xtaB6uIle8+/c1h/1l42Xac
-   Jxlwx00leZ4OujrRRHOMx2iPWQBozptmhaOeHwmZdLMG7kAQjTLjv5WnA
-   RDTi/24jpOeldk7rHA4QErOE/2HGyHnHnRCSzEIVtJuew2dlxIwf0/Zaq
-   VO+NSGh5G+OLZk8VKbVBJLRwktCrKoe+Hln7aIX1561sDqKmSm40Uw5GP
-   Ctvmdb7dPp+T0rVOiha0XHQSTBA+3YRWrb4XSOBrrkITeyPMrXe3ZeofM
-   cHDeMeuXT0IVTADFqtamottEE6c7x9xv2mcP5QDeIpzlYblR0pTo1HhIk
-   g==;
-X-CSE-ConnectionGUID: w02gKzPYTjOPFtuBCAD43g==
-X-CSE-MsgGUID: Yy4W99mOSuiNU4GH3mct4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="54306660"
-X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
-   d="scan'208";a="54306660"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 19:01:22 -0800
-X-CSE-ConnectionGUID: 6w9N8g2pRayk35v4Gfiu1A==
-X-CSE-MsgGUID: qGCggdHAT+CYpiYMF0jpow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
-   d="scan'208";a="104128428"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Jan 2025 19:01:18 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tW5Gu-000IRn-00;
-	Fri, 10 Jan 2025 03:01:16 +0000
-Date: Fri, 10 Jan 2025 11:00:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ahmed Zaki <ahmed.zaki@intel.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-wired-lan@lists.osuosl.org, andrew+netdev@lunn.ch,
-	edumazet@google.com, kuba@kernel.org, horms@kernel.org,
-	pabeni@redhat.com, davem@davemloft.net, michael.chan@broadcom.com,
-	tariqt@nvidia.com, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com, jdamato@fastly.com, shayd@nvidia.com,
-	akpm@linux-foundation.org, shayagr@amazon.com,
-	kalesh-anakkur.purayil@broadcom.com,
-	Ahmed Zaki <ahmed.zaki@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH net-next v4 3/6] net: napi: add CPU
- affinity to napi_config
-Message-ID: <202501101047.KVl1kI5I-lkp@intel.com>
-References: <20250109233107.17519-4-ahmed.zaki@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JOqkjqhz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736479927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/bTV1VHnb+aW8INeRR1e0su154xHA66CJVkOzP+eUnQ=;
+	b=JOqkjqhzkgFmrrbWJVDwRc6t/KUNG6nmCumokkKwHORhx0gHGROWkR4VW46HtcCYHFpzJk
+	7STPwg2C1jQ7MRON9uo//bWQw+i1yiEurULRN5TnREZHJJrCY9AwrtGRVMfRdHIyF/Es0C
+	cnZZ7qMiIUvqOtywZB+i7d24kCXnr8c=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-BN4wmAptOwWZkCp1GIdp0g-1; Thu,
+ 09 Jan 2025 22:32:05 -0500
+X-MC-Unique: BN4wmAptOwWZkCp1GIdp0g-1
+X-Mimecast-MFC-AGG-ID: BN4wmAptOwWZkCp1GIdp0g
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 724331955DD0
+	for <llvm@lists.linux.dev>; Fri, 10 Jan 2025 03:32:04 +0000 (UTC)
+Received: from [172.64.12.18] (unknown [10.30.33.24])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1416D30001BE;
+	Fri, 10 Jan 2025 03:32:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
+ upstream-mainline, 2144da25)
+Date: Fri, 10 Jan 2025 03:32:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250109233107.17519-4-ahmed.zaki@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <66462.125010922320500371@us-mta-584.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 9metKkT__GIf4CQBohLn2NuL31EY4vAJw_aWrX9bJck_1736479924
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ahmed,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ahmed-Zaki/net-move-ARFS-rmap-management-to-core/20250110-073339
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250109233107.17519-4-ahmed.zaki%40intel.com
-patch subject: [Intel-wired-lan] [PATCH net-next v4 3/6] net: napi: add CPU affinity to napi_config
-config: arm-randconfig-003-20250110 (https://download.01.org/0day-ci/archive/20250110/202501101047.KVl1kI5I-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250110/202501101047.KVl1kI5I-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501101047.KVl1kI5I-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/dev.c:6795:37: error: no member named 'rx_cpu_rmap' in 'struct net_device'
-    6795 |         struct cpu_rmap *rmap = napi->dev->rx_cpu_rmap;
-         |                                 ~~~~~~~~~  ^
->> net/core/dev.c:6797:18: error: no member named 'napi_rmap_idx' in 'struct napi_struct'
-    6797 |         rmap->obj[napi->napi_rmap_idx] = NULL;
-         |                   ~~~~  ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +6795 net/core/dev.c
+Kernel information:
+    Commit message: Merge tag '6.13-rc6-ksmbd-server-fixes' of git://git.sa=
+mba.org/ksmbd
 
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6789  
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6790  static void
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6791  netif_napi_affinity_release(struct kref *ref)
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6792  {
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6793  	struct napi_struct *napi =
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6794  		container_of(ref, struct napi_struct, notify.kref);
-064d6072cac4f4 Ahmed Zaki 2025-01-09 @6795  	struct cpu_rmap *rmap = napi->dev->rx_cpu_rmap;
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6796  
-064d6072cac4f4 Ahmed Zaki 2025-01-09 @6797  	rmap->obj[napi->napi_rmap_idx] = NULL;
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6798  	cpu_rmap_put(rmap);
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6799  }
-064d6072cac4f4 Ahmed Zaki 2025-01-09  6800  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1618850707
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1618850707-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1618850707-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1618850707-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
