@@ -1,118 +1,116 @@
-Received: from out.smtpout.orange.fr (out-14.smtpout.orange.fr [193.252.22.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF541B4232
-	for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 18:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B50322083;
+	Sat, 11 Jan 2025 19:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736618826; cv=none; b=ZOxTVZQ1YuqZXZo255VWrMJaN6O3eG9ry4ucxQfqRUZYPQcXc048Gnw0fwLlqAdw4BW1KHZmEju1IKPFZrZrBSgWik3TFu/TMbXGfL6Jc1b7dcPkbhgSp35XdhmMdasaZYVeUWtnrIS6f5NFBx+5pkqy2BUSjo7oqbnGxUQ3mNQ=
+	t=1736622541; cv=none; b=Hpitqo7hbr9LbA4QGWBNJLSuKJZa6yLrvwHaN6tysuLFlLkHaFJx4se/Y9Yegv03RCDhMo1uPh1HxKXwbwQDV5P4OTye/JjBGEmImaqchQ9ZauLlPi/uHW9hF0CoSRwD7SA/wPOmUa5qbs4SRQGyWPU82XaWAluJZBE65JTAi6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736618826; c=relaxed/simple;
-	bh=OVK9SjWXpGZvw9hGbObnBv3+rekvaJSPYHtN9w2oxMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pw+DOVqy+g5w9McAA8Uw8iqy7Hr3lVKTyGE8X8YqZaI6O86bXCH1NDcBEm1GL+HBU81ZsmseBsCIurqMeR0cOC/AEvz2Kzg3TgZHL5uwkjvIOfc9mWRtsPCN/BPPDE3i0vnyos2jNxKwH75OwoeSscfO1GddWrwVQ1GkyidOjMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=I1wJFUZU; arc=none smtp.client-ip=193.252.22.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1736622541; c=relaxed/simple;
+	bh=WwYW42JvpW0nfeStKB+/FvmdEPZw4aogO0d6MLliTLw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ocKH8SON3wmWWHKUYlO3mwKg4MMDQoyVmcJzXFCML65cfMMcKzOGGTskePrQG2SJ7Wikf9h+5nW5Z/i06THtlq0zzfHGnWt8AdewzponEawjZKnRCnAcpa7sEQ3lRNiFH+FRg1bVB6RQL30DmnRQVF+z4vKVqWBZuVHkfV1cCho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=deuvm6q9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="I1wJFUZU"
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id Wfrbt1Qp809tEWfrotXeNr; Sat, 11 Jan 2025 19:05:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736618751;
-	bh=oLX8h4gOkJP1CaxpXBjOQxOK8825Z4ZZC430REsD5QA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=I1wJFUZUT5kxaQ4+ERZJ3yU8Ezs+VJZgWgHi7ViktJMz6Sjr5RWAc4MNZ/usFm6Dm
-	 PFRXdByEqzJCk3kGwMCWlY0kIzRQwaBrCyqCdKndx3aTDGsDLYQEJGNfTVn63Kv/dq
-	 YzXGM5TL9LMxZiCrOTjan+zkEIJeWHgX5/YDu94JMKnf8FW5Fn672cTmnACdlUswwi
-	 MKAvbeeFKeui3135PVcUJNMGPF4/pyq19a1468UTJIufCthnM5a+S9KjsbosrbVAQ0
-	 sTOMNRYYP5wyysCLdVDp2kY4c3Zzm3RCGXJdPKdCXVSVI4UWzsmbUMm1mOD4NATey9
-	 nZR5dtF/osybA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 11 Jan 2025 19:05:51 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <f0bef267-b9e2-4d7a-8a2f-77eb6fcc5235@wanadoo.fr>
-Date: Sun, 12 Jan 2025 03:05:34 +0900
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="deuvm6q9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B505EC4CED2;
+	Sat, 11 Jan 2025 19:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736622541;
+	bh=WwYW42JvpW0nfeStKB+/FvmdEPZw4aogO0d6MLliTLw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=deuvm6q91DkUntjgvy5pexbYEWzZGD3mddRs9+nvLNNDVuDtpOhQXwgMxUzJgkT7C
+	 UMOI5UhnXXP5Ls7f5YvfYuACBxvulQKueKCATIYNi/HlcXFy/ZEvGzYixsqENYARAp
+	 KqJMutSrFU+M06yS7xz4cfJms4E+xPy2918/wAeNWNlwiK5AOX7i9V58Z7++jDKM/o
+	 kmMYLC2f6WXoNMCU5WaeOI4/Vb4LlUPDCBLsNCb0P1s88q6Bipvsu/n6g5ESN0ys2a
+	 OBUeqGCQaPW8UV99L8DvEIv5NREUBbV5L7BOQmK0HFu0LgrgWlqVFP9fg/vvWBk6Wy
+	 firOeeAZphltg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Sat, 11 Jan 2025 12:08:38 -0700
+Subject: [PATCH] spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] fortify: turn strlen() into an inline function using
- __builtin_constant_p()
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- David Laight <david.laight@aculab.com>, linux-hardening@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
- <202501081331.E4B6DF747@keescook>
- <CAMZ6RqJS5FwuBUdvVdXoZj6wZOJz8Nao4FzSzCK1VtbNF41sMw@mail.gmail.com>
- <CAMZ6RqJbinVpsGf6ADUtQTYPRRQN=D8Ne_n6pHtDUPXxED5ZvQ@mail.gmail.com>
- <20250111165844.6d95600f@pumpkin>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250111165844.6d95600f@pumpkin>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250111-spi-amd-fix-uninitialized-ret-v1-1-c66ab9f6a23d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALXBgmcC/x3MQQrDIBBG4auEWWcgarNorxKyMDo2P7RGNAmlw
+ btXuvzg8S4qkiGFHt1FWU4UbLFB9R251canMHwz6UGPg1KKSwLbt+eADx8RETvsC1/xnGXnxS1
+ OizE23G/UHilLC///aa71B+j+BSdvAAAA
+X-Change-ID: 20250111-spi-amd-fix-uninitialized-ret-bcbc2e33af94
+To: Raju Rangoju <Raju.Rangoju@amd.com>, Mark Brown <broonie@kernel.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: linux-spi@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1941; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=WwYW42JvpW0nfeStKB+/FvmdEPZw4aogO0d6MLliTLw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOlNB09XL3kSZXDtpLGrUOji24ut2LimBP9UjFe/Nn/fO
+ b/bKcX1HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAinRKMDF+1Padc+/zv4qRX
+ bnOPcu4JzvFZZLL9/pvSP16L+VK0rqxhZFiwM9b62j2uHZq8e5fq54lP92g/vtXxyzHx7UWT4gx
+ 4/bkB
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 12/01/2025 at 01:58, David Laight wrote:
-> On Sat, 11 Jan 2025 23:40:41 +0900
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
-> 
->> On Thu. 9 Jan 2025 at 16:52, Vincent Mailhol <mailhol.vincent@wanadoo.fr> wrote:
-> ...
->> Actually, I did more investigation and it is working for some strange
->> reasons. Whenever the argument of a function named strlen() is a
->> compile time constant, the compiler (both GCC and clang) will replace
->> it with the string length on the argument, even if strlen() is
->> programmed to return something else:
->>
->>   https://godbolt.org/z/nK4b3fnM7
->>
->> So it is only working because the compiler uses its builtin strlen()
->> instead of the function we provided.
-> 
-> It depends on whether -ffreestanding is set.
-> If not set gcc/clang assume a lot of the basic libc functions have their expected
-> behaviour.
+After commit e6204f39fe3a ("spi: amd: Drop redundant check"), clang warns (or
+errors with CONFIG_WERROR=y):
 
-Thanks! This rings a bell.
+  drivers/spi/spi-amd.c:695:9: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+    695 |         return ret;
+        |                ^~~
+  drivers/spi/spi-amd.c:673:9: note: initialize the variable 'ret' to silence this warning
+    673 |         int ret;
+        |                ^
+        |                 = 0
+  1 error generated.
 
-More precisely, rather than -ffreestanding, it depends on -fno-builtin
-(which is implied by -ffreestanding). But some architectures do not
-provide these flags. Most famously, x86-64 has neither of -fno-builtin
-nor -ffreestanding c.f.:
+ret is no longer set on anything other than the default switch path.
+Replace ret with a direct return of 0 at the end of the function and
+-EOPNOTSUPP in the default case to resolve the warning.
 
+Fixes: e6204f39fe3a ("spi: amd: Drop redundant check")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202501112315.ugYQ7Ce7-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/spi/spi-amd.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-https://lore.kernel.org/all/20220306171009.1973074-1-mailhol.vincent@wanadoo.fr/T/#u
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index fbe795bbcf507abcbbd973b226b5db0de1584898..c85997478b81903c97636d271baf7d378914c50a 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -670,7 +670,6 @@ static int amd_spi_exec_mem_op(struct spi_mem *mem,
+ 			       const struct spi_mem_op *op)
+ {
+ 	struct amd_spi *amd_spi;
+-	int ret;
+ 
+ 	amd_spi = spi_controller_get_devdata(mem->spi->controller);
+ 
+@@ -689,10 +688,10 @@ static int amd_spi_exec_mem_op(struct spi_mem *mem,
+ 		amd_spi_mem_data_out(amd_spi, op);
+ 		break;
+ 	default:
+-		ret = -EOPNOTSUPP;
++		return -EOPNOTSUPP;
+ 	}
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static const struct spi_controller_mem_ops amd_spi_mem_ops = {
 
-(above thread is a bit old, but I did a make V=1 to confirm that the
-flags are still missing as of today).
+---
+base-commit: 226d6cb3cb799aae46d0dd19a521133997d9db11
+change-id: 20250111-spi-amd-fix-uninitialized-ret-bcbc2e33af94
 
-And with either of -fno-builtin or -ffreestanding, the strlen() inline
-function doesn't work anymore as a static initializer (at least it
-didn't work in my tests on godbolt).
-
-So now, I am convinced that turning this strlen() in a function was a
-bad idea. I am glad I removed it in v2.
-
-
-Yours sincerely,
-Vincent Mailhol
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
