@@ -1,65 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BC718C002;
-	Sat, 11 Jan 2025 10:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB39191F92;
+	Sat, 11 Jan 2025 10:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736592277; cv=none; b=ZmeUhc6FPg7gTSu+tubB8pdxXMytNrIYRQDnR4ZrWDBzImuaif7M6caD5O8aqtsID7TJRu//qKy1kaGJLRULYwYocMoPZOaW/LeKPVTlskO2iu5mWQj4Mn4FcF0gG9mvxhRzfBBT2KKHFX8B6fFbGMZjaErKtOWeMwzjxeNHApw=
+	t=1736592998; cv=none; b=vAZXo2ta0RBgxeUFQIHZQfAZ2hfM+Ok9q7WlSfpHT7OeaVLSqr40zgq3jeWxWqwCZKFQ1/BSebhJh9t2MocJRYTatwlBG8ycB1FaUkrrFRvpjh8sCUbmddXe79d4NmQwIbo1VfCO3zxQcPtEOh2I5hrGp+AooQKj3VDdvkY2EOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736592277; c=relaxed/simple;
-	bh=k53UvnXOx/G3Q0f+sZRsqAkJgIpoPizB5KvAGnxQfSw=;
+	s=arc-20240116; t=1736592998; c=relaxed/simple;
+	bh=0Z+ddtiqDHNlGgWEjjrzLld3Ky+lgoFXWRejQisWuYM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kdL+TZB7ZGDDDuswBNrh8zzTK02HTIjuxm2IVs5bWAC4IZizlCaRTnUN6cjJ1f7MB4rwPto6+REvOL7Pxx6D5EbZ4x5QE21wb7gRoYgwQoeQR7wliNWttZQwXkPr91J6qLLEEXWwRWYvvtJAZSQ4MpY7X1yAKDYguWkuhiuh9MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dGBHaBo5; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=cKj9ndz1aDmk3VlKBqZ66dqI+zps2w3Zi7BlZ/JYkj0b0sgArc5xL0Z6S7WT4W6VMKmKnK8pqHXe3ryU2LbTDdRrbGLHKbCxHWlcWNtOeD7b6pAqdfCHkfy/MQRqAZQiVxF7kSZIuLwbrpSeTyOiGc+lw/WFFoqc6pEa2oVQrqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jA84OdH8; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dGBHaBo5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jA84OdH8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736592276; x=1768128276;
+  t=1736592997; x=1768128997;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=k53UvnXOx/G3Q0f+sZRsqAkJgIpoPizB5KvAGnxQfSw=;
-  b=dGBHaBo5CTrzK1VInMDZSPZM0/jSH5iILr8xcB2LLimtDFTKb6667TVx
-   BD+Um5mm5cn/7cTtFRdfGHqiFVXCk7zgBBZVln1aduu//N34IcVLrxLRF
-   5gV7o+YFBS8i1XqVIAs0+Xgja/p7eO8RX40f0GBN0dKDp/hWJUn9JEohn
-   qRhSJZ/GjHyKVcinHqcFDhZg2DN36vcWXKnPsghgQVthaAfnNkPrkI1jh
-   wrza2xrwxB+KtGm3LNH2RNmV8PPfU8vYD3Y4+3Z/iM/39+w2NfAKAvA6x
-   VMhvtvrF713iUHPugQrB+cv4CBlG5WWguwVDUyz8eZXqF+iZeTSSNtCw+
+  bh=0Z+ddtiqDHNlGgWEjjrzLld3Ky+lgoFXWRejQisWuYM=;
+  b=jA84OdH8WqAQRMBoq4mQtVDY+9FT9QtKYyHOYjxTcjsUejJ3llmSCMXi
+   hAVPip4DDSi+mhQxsx15Nf/2gUZJQKb4+/LrIkvMT3jIDzVv/1ePsX2C6
+   u6/988wBm/Om14KNV+71p8KUXkhqmTJ9qqAg/IoHCsRoXthw5KfcQ7Nb9
+   i45RIeTx2dHR82Nxnz6kqUtG5E806SE0cGjLJGeDHNyJoSxmXSxENr1Gc
+   1CA6x6mGQvxxvbTpL9D6IF0vX9mg51UPFscoqNUuTBafFtCXQps2C+2PM
+   exuEC6L4+1xYdMdz9grrmJJug67exBCO1TV43gRyjP+mn70f0PUXWQB8G
    A==;
-X-CSE-ConnectionGUID: mZmZp0AgTJOYYRq+L+BK9g==
-X-CSE-MsgGUID: uK9T+9I2RaebQ7bUJPJVOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="40823156"
+X-CSE-ConnectionGUID: JsOlOLs0RiGFiqOcjxF+AQ==
+X-CSE-MsgGUID: tVrv3yzWQvSmQoyvd2BzXQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="47457736"
 X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="40823156"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 02:44:35 -0800
-X-CSE-ConnectionGUID: zBWcrZmFRaibzSH9seaBfA==
-X-CSE-MsgGUID: a1JtxI6yTomU1pIhOr/GDg==
+   d="scan'208";a="47457736"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 02:56:36 -0800
+X-CSE-ConnectionGUID: WHhWcZfQQzusnBMqPEiJZQ==
+X-CSE-MsgGUID: 3AQNwkH/SxGZlxIrnCl7uA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="108869450"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="127249660"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 11 Jan 2025 02:44:33 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 11 Jan 2025 02:56:34 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWYyk-000KVL-2m;
-	Sat, 11 Jan 2025 10:44:30 +0000
-Date: Sat, 11 Jan 2025 18:43:37 +0800
+	id 1tWZAN-000KVv-2x;
+	Sat, 11 Jan 2025 10:56:31 +0000
+Date: Sat, 11 Jan 2025 18:55:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wencheng Yang <east.moutain.yang@gmail.com>
+To: Badal Nilawar <badal.nilawar@intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wencheng Yang <east.moutain.yang@gmail.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drviers/iommu/amd: support P2P access through IOMMU when
- SME is enabled
-Message-ID: <202501111847.N7CwntR4-lkp@intel.com>
-References: <20250110130756.333265-1-east.moutain.yang@gmail.com>
+	anshuman.gupta@intel.com, rodrigo.vivi@intel.com,
+	andrzej.hajda@intel.com, andi.shyti@intel.com
+Subject: Re: [PATCH 1/2] drm/i915/mtl: Disable render power-gating during
+ selftest only
+Message-ID: <202501111817.Kz3T41my-lkp@intel.com>
+References: <20250110140947.3471824-2-badal.nilawar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,81 +66,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110130756.333265-1-east.moutain.yang@gmail.com>
+In-Reply-To: <20250110140947.3471824-2-badal.nilawar@intel.com>
 
-Hi Wencheng,
+Hi Badal,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on arm-perf/for-next/perf]
-[also build test WARNING on linus/master joro-iommu/next v6.13-rc6 next-20250110]
+[auto build test ERROR on linus/master]
+[also build test ERROR on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip v6.13-rc6 next-20250110]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wencheng-Yang/drviers-iommu-amd-support-P2P-access-through-IOMMU-when-SME-is-enabled/20250110-210948
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
-patch link:    https://lore.kernel.org/r/20250110130756.333265-1-east.moutain.yang%40gmail.com
-patch subject: [PATCH] drviers/iommu/amd: support P2P access through IOMMU when SME is enabled
-config: x86_64-buildonly-randconfig-001-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111847.N7CwntR4-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Badal-Nilawar/drm-i915-mtl-Disable-render-power-gating-during-selftest-only/20250110-214933
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250110140947.3471824-2-badal.nilawar%40intel.com
+patch subject: [PATCH 1/2] drm/i915/mtl: Disable render power-gating during selftest only
+config: i386-randconfig-014-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111817.Kz3T41my-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111847.N7CwntR4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111817.Kz3T41my-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111847.N7CwntR4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501111817.Kz3T41my-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iommu/amd/io_pgtable_v2.c:14:
-   In file included from include/linux/io-pgtable.h:6:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/iommu/amd/io_pgtable_v2.c:68:6: warning: variable 'pte' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-      68 |         if (!(prot & IOMMU_PROT_MMIO))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iommu/amd/io_pgtable_v2.c:71:2: note: uninitialized use occurs here
-      71 |         pte |= IOMMU_PAGE_PRESENT | IOMMU_PAGE_USER;
-         |         ^~~
-   drivers/iommu/amd/io_pgtable_v2.c:68:2: note: remove the 'if' if its condition is always true
-      68 |         if (!(prot & IOMMU_PROT_MMIO))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      69 |                 pte = __sme_set(paddr & PM_ADDR_MASK);
-   drivers/iommu/amd/io_pgtable_v2.c:66:9: note: initialize the variable 'pte' to silence this warning
-      66 |         u64 pte;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+>> drivers/gpu/drm/i915/gt/intel_rc6.c:126:6: error: use of undeclared identifier 'i915_selftest'
+     126 |         if (i915_selftest.live && IS_GFX_GT_IP_RANGE(gt, IP_VER(12, 70), IP_VER(12, 74)))
+         |             ^
+   1 error generated.
 
 
-vim +68 drivers/iommu/amd/io_pgtable_v2.c
+vim +/i915_selftest +126 drivers/gpu/drm/i915/gt/intel_rc6.c
 
-    63	
-    64	static u64 set_pte_attr(u64 paddr, u64 pg_size, int prot)
-    65	{
-    66		u64 pte;
-    67	
-  > 68		if (!(prot & IOMMU_PROT_MMIO))
-    69			pte = __sme_set(paddr & PM_ADDR_MASK);
-    70	
-    71		pte |= IOMMU_PAGE_PRESENT | IOMMU_PAGE_USER;
-    72		pte |= IOMMU_PAGE_ACCESS | IOMMU_PAGE_DIRTY;
-    73	
-    74		if (prot & IOMMU_PROT_IW)
-    75			pte |= IOMMU_PAGE_RW;
-    76	
-    77		/* Large page */
-    78		if (pg_size == IOMMU_PAGE_SIZE_1G || pg_size == IOMMU_PAGE_SIZE_2M)
-    79			pte |= IOMMU_PAGE_PSE;
-    80	
-    81		return pte;
-    82	}
-    83	
+    55	
+    56	static void gen11_rc6_enable(struct intel_rc6 *rc6)
+    57	{
+    58		struct intel_gt *gt = rc6_to_gt(rc6);
+    59		struct intel_uncore *uncore = gt->uncore;
+    60		struct intel_engine_cs *engine;
+    61		enum intel_engine_id id;
+    62		u32 pg_enable;
+    63		int i;
+    64	
+    65		/*
+    66		 * With GuCRC, these parameters are set by GuC
+    67		 */
+    68		if (!intel_uc_uses_guc_rc(&gt->uc)) {
+    69			/* 2b: Program RC6 thresholds.*/
+    70			intel_uncore_write_fw(uncore, GEN6_RC6_WAKE_RATE_LIMIT, 54 << 16 | 85);
+    71			intel_uncore_write_fw(uncore, GEN10_MEDIA_WAKE_RATE_LIMIT, 150);
+    72	
+    73			intel_uncore_write_fw(uncore, GEN6_RC_EVALUATION_INTERVAL, 125000); /* 12500 * 1280ns */
+    74			intel_uncore_write_fw(uncore, GEN6_RC_IDLE_HYSTERSIS, 25); /* 25 * 1280ns */
+    75			for_each_engine(engine, rc6_to_gt(rc6), id)
+    76				intel_uncore_write_fw(uncore, RING_MAX_IDLE(engine->mmio_base), 10);
+    77	
+    78			intel_uncore_write_fw(uncore, GUC_MAX_IDLE_COUNT, 0xA);
+    79	
+    80			intel_uncore_write_fw(uncore, GEN6_RC_SLEEP, 0);
+    81	
+    82			intel_uncore_write_fw(uncore, GEN6_RC6_THRESHOLD, 50000); /* 50/125ms per EI */
+    83		}
+    84	
+    85		/*
+    86		 * 2c: Program Coarse Power Gating Policies.
+    87		 *
+    88		 * Bspec's guidance is to use 25us (really 25 * 1280ns) here. What we
+    89		 * use instead is a more conservative estimate for the maximum time
+    90		 * it takes us to service a CS interrupt and submit a new ELSP - that
+    91		 * is the time which the GPU is idle waiting for the CPU to select the
+    92		 * next request to execute. If the idle hysteresis is less than that
+    93		 * interrupt service latency, the hardware will automatically gate
+    94		 * the power well and we will then incur the wake up cost on top of
+    95		 * the service latency. A similar guide from plane_state is that we
+    96		 * do not want the enable hysteresis to less than the wakeup latency.
+    97		 *
+    98		 * igt/gem_exec_nop/sequential provides a rough estimate for the
+    99		 * service latency, and puts it under 10us for Icelake, similar to
+   100		 * Broadwell+, To be conservative, we want to factor in a context
+   101		 * switch on top (due to ksoftirqd).
+   102		 */
+   103		intel_uncore_write_fw(uncore, GEN9_MEDIA_PG_IDLE_HYSTERESIS, 60);
+   104		intel_uncore_write_fw(uncore, GEN9_RENDER_PG_IDLE_HYSTERESIS, 60);
+   105	
+   106		/* 3a: Enable RC6
+   107		 *
+   108		 * With GuCRC, we do not enable bit 31 of RC_CTL,
+   109		 * thus allowing GuC to control RC6 entry/exit fully instead.
+   110		 * We will not set the HW ENABLE and EI bits
+   111		 */
+   112		if (!intel_guc_rc_enable(gt_to_guc(gt)))
+   113			rc6->ctl_enable = GEN6_RC_CTL_RC6_ENABLE;
+   114		else
+   115			rc6->ctl_enable =
+   116				GEN6_RC_CTL_HW_ENABLE |
+   117				GEN6_RC_CTL_RC6_ENABLE |
+   118				GEN6_RC_CTL_EI_MODE(1);
+   119	
+   120		/*
+   121		 * BSpec 52698 - Render powergating must be off.
+   122		 * FIXME BSpec is outdated, disabling powergating for MTL is just
+   123		 * temporary wa and should be removed after fixing real cause
+   124		 * of forcewake timeouts.
+   125		 */
+ > 126		if (i915_selftest.live && IS_GFX_GT_IP_RANGE(gt, IP_VER(12, 70), IP_VER(12, 74)))
+   127			pg_enable =
+   128				GEN9_MEDIA_PG_ENABLE |
+   129				GEN11_MEDIA_SAMPLER_PG_ENABLE;
+   130		else
+   131			pg_enable =
+   132				GEN9_RENDER_PG_ENABLE |
+   133				GEN9_MEDIA_PG_ENABLE |
+   134				GEN11_MEDIA_SAMPLER_PG_ENABLE;
+   135	
+   136		if (GRAPHICS_VER(gt->i915) >= 12 && !IS_DG1(gt->i915)) {
+   137			for (i = 0; i < I915_MAX_VCS; i++)
+   138				if (HAS_ENGINE(gt, _VCS(i)))
+   139					pg_enable |= (VDN_HCP_POWERGATE_ENABLE(i) |
+   140						      VDN_MFX_POWERGATE_ENABLE(i));
+   141		}
+   142	
+   143		intel_uncore_write_fw(uncore, GEN9_PG_ENABLE, pg_enable);
+   144	}
+   145	
 
 -- 
 0-DAY CI Kernel Test Service
