@@ -1,156 +1,137 @@
-Received: from out.smtpout.orange.fr (out-69.smtpout.orange.fr [193.252.22.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF6B18FC75
-	for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 15:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDB9D82899;
+	Sat, 11 Jan 2025 16:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736607883; cv=none; b=dqCO6xNMgAZpr+zJ6MaMTJv0Dr+xI53wZZuLjBZ85FmCt/SjjT5+CV89H3u7sOZA8Qb12kUfDYwuC5mRUSLzt3q1AcxeUdyCT1GErN2kqte8wM7nnyQh2wNlhU0Fw15ePK6yWHMTdwlq6X90NCbzTxWDi54xtiybeT5aAH+OTrQ=
+	t=1736611778; cv=none; b=sBOn5oZl0KpfsIh/RmClE+oO30FJZMJIqeB+MQeWYllulAAp7DRokrOXUH4iFHNg4JdS2yxysE1ICACLPIFoLcJwbCOxcuNeYTF+Y3hlS5UjvYBF/m2A6DJocat1lsjiCJEgMLfxCJP0aWadPb8zPF4YDawMzGJ7DtTjYFf/4oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736607883; c=relaxed/simple;
-	bh=AjlDSPViCridkQpq/axEpjEcH2ItgMEytzK4T4hZ99U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=s7+X4UpdwdgjER76lcwPcNRzlgGAfnJhJhNCGRgB1bvICIJYw3jjWIzoOs2q01WGmyz7Hyais+iRWtM5HXj3wRCw90lT8rUvCRErUicq9rqdCrZmgG6rZGrOyH4iUp6vue/zusOi1Df7CKNG2ezMLENkhIhLOuvJ69HzJQCDwxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=rwcSoy+y; arc=none smtp.client-ip=193.252.22.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+	s=arc-20240116; t=1736611778; c=relaxed/simple;
+	bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dsfxLfJhNf4w3/M5i0OPT1BCDM3daMIzVl8mREi4Iyw+JzH+4JKPpxBQs4SZAocVQbbADBO10YyA45LTzAsTjXdq9J+lf2vxOaPNsvOrV0foaI6bW3z2d9ISwJZibMXzqWgV/0t2xm7jxbtuA6gPlP+UGMKVyBm5SASeNqSCG9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MwZuO9Hi; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="rwcSoy+y"
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id Wd11tBPCOefOOWd1MtOLAs; Sat, 11 Jan 2025 16:03:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736607812;
-	bh=iLyNQXsWimEYn00kpoNr+aeM2yTPkfGCnVt3CoWTuwI=;
-	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=rwcSoy+yjtypvX2MBVFS3iHZPrD97i2ugCHuOWuZciRuhN8oqwVd1IkqM1BN8Uu3H
-	 pIjASPYBEf8EXS3JdFnjv7CYzqjzLhCrwLGODlMZLO620+A9yNUaqDgl3W+3LIhNVJ
-	 BBF2y18WUQ0DEA9I8Hw+gYpHspiEzxMlCVYVf9vHtc3tejPznJGzp7bCTtz7h1IlF7
-	 AIsa5tD0vI5xqUYASRnJt3y8s33wIfo+H11drcBqUunMNkZzenDWcz3b4AxFgzwtR7
-	 HsH+VUPO56LlPXC86XZR3c+yPs8lGpPo+/3smdrQhq+UubtE7QWXgIWRbADpO6Q2NJ
-	 1dbp4R3JtJGpQ==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 11 Jan 2025 16:03:32 +0100
-X-ME-IP: 124.33.176.97
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Date: Sun, 12 Jan 2025 00:03:05 +0900
-Subject: [PATCH v2] fortify: use __builtin_constant_p() in strlen()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MwZuO9Hi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736611776; x=1768147776;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
+  b=MwZuO9HiiMMo4JtLCvCEpElt3ai1LBcoSIsWaYR4BFT04Rvr/LW4+nwI
+   h0Wke3FHbulvvhnADLJycVyzembhHhCkesG3eh2IvALt3h+BuMYYGkSwL
+   N/2qL2QJ1+oi6nJP+6+YN6guf0EstnuVkRPoUFiWpqoUAcOqFLI2j54QT
+   4iz7fcoj6QBuYePKfwHmBknsZATwQZZq7NMvHaOlfVolY62bjXabsg2NI
+   euFvL1oUnXUMxe5vTEtDFyt/ZeEgRxCfumZimWaFtSjwr2dCmid/XsN9D
+   NVj3/vY020Kad9Hz1LUKaW8sxbuGmnQHtHQKDQd9Eo+ldiSssozJ0oZWA
+   g==;
+X-CSE-ConnectionGUID: 3l0X6m24TvuZYTBQt//ygw==
+X-CSE-MsgGUID: Vk99rX+VTFKnbhI4wUZDLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="47550632"
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="47550632"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 08:09:35 -0800
+X-CSE-ConnectionGUID: fjaPA+9sQ4S8NJMwvbh0zg==
+X-CSE-MsgGUID: JRDKHizWTimPSGxTu/gzng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="103817800"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 08:09:34 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tWe3H-000Kvd-2m;
+	Sat, 11 Jan 2025 16:09:31 +0000
+Date: Sun, 12 Jan 2025 00:08:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-spi:for-next 4/22] drivers/spi/spi-amd.c:695:9: warning:
+ variable 'ret' is uninitialized when used here
+Message-ID: <202501112315.ugYQ7Ce7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250112-strlen_use_builtin_constant_p-v2-1-2c85b928c9f4@wanadoo.fr>
-X-B4-Tracking: v=1; b=H4sIACiIgmcC/4XNQQrCMBCF4auUrI0kwUh15T2khGk6tQMlKZm0K
- qV3NxZcu/zf4nurYEyELK7VKhIuxBRDCXOohB8gPFBSV1oYZazSykrOacTgZkbXzjRmCs7HwBl
- CdpO02oIHq6yHkyjGlLCn1+7fm9IDcY7pvd8t+rv+5PqPvGip5Vnr1hqsFVz62xMCdDEe+ySab
- ds+A+kficsAAAA=
-X-Change-ID: 20250105-strlen_use_builtin_constant_p-515aca505ca4
-To: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: David Laight <david.laight@aculab.com>, linux-hardening@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3207;
- i=mailhol.vincent@wanadoo.fr; h=from:subject:message-id;
- bh=AjlDSPViCridkQpq/axEpjEcH2ItgMEytzK4T4hZ99U=;
- b=kA0DAAoW0WQ+QNd/fbMByyZiAGeCiDug+Lw0i8eUGaTUDvrUfqn7bY09z5tfkGVZwge1bMgvF
- Ih1BAAWCgAdFiEEpncJCyCIcUtWwv050WQ+QNd/fbMFAmeCiDsACgkQ0WQ+QNd/fbPVsAD+NL2q
- 6gueOQC8oKCWVv6xrm6+cN17/IFz7I7xegNdM6MBAKPZsV/ME+qfZHgAfnM7Wav1a7UBFAERyiy
- ZsAZ0XSQK
-X-Developer-Key: i=mailhol.vincent@wanadoo.fr; a=openpgp;
- fpr=ED8F700574E67F20E574E8E2AB5FEB886DBB99C2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The strlen(p) function-like macro uses:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+head:   fd85b6b7bc53409d0be82763419bdcdaa48f2c91
+commit: e6204f39fe3a7b4538815a2d778b601bd543649e [4/22] spi: amd: Drop redundant check
+config: i386-randconfig-005-20250111 (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/reproduce)
 
-  __is_constexpr(__builtin_strlen(p))
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501112315.ugYQ7Ce7-lkp@intel.com/
 
-in which GCC would only yield true if the argument p is a string
-literal. Otherwise, GCC would return false even if p is a const
-string.
+All warnings (new ones prefixed by >>):
 
-In contrary, by using:
+>> drivers/spi/spi-amd.c:695:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     695 |         return ret;
+         |                ^~~
+   drivers/spi/spi-amd.c:673:9: note: initialize the variable 'ret' to silence this warning
+     673 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-  __builtin_constant_p(__builtin_strlen(p))
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
 
-then GCC can also recognizes when p is a compile time constant string.
 
-The above is illustrated in [1].
+vim +/ret +695 drivers/spi/spi-amd.c
 
-N.B.: clang is not impacted by any of this and gives the same results
-with either __is_constexpr() and __builting_constant_p().
+9674f1694e644a Raju Rangoju  2024-09-25  668  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  669  static int amd_spi_exec_mem_op(struct spi_mem *mem,
+6defadbe6cbc3a Raju Rangoju  2024-02-29  670  			       const struct spi_mem_op *op)
+6defadbe6cbc3a Raju Rangoju  2024-02-29  671  {
+6defadbe6cbc3a Raju Rangoju  2024-02-29  672  	struct amd_spi *amd_spi;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  673  	int ret;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  674  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  675  	amd_spi = spi_controller_get_devdata(mem->spi->controller);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  676  
+e6204f39fe3a7b Miquel Raynal 2024-12-24  677  	amd_set_spi_freq(amd_spi, op->max_freq);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  678  
+9674f1694e644a Raju Rangoju  2024-09-25  679  	if (amd_spi->version == AMD_SPI_V2)
+9674f1694e644a Raju Rangoju  2024-09-25  680  		amd_set_spi_addr_mode(amd_spi, op);
+9674f1694e644a Raju Rangoju  2024-09-25  681  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  682  	switch (op->data.dir) {
+6defadbe6cbc3a Raju Rangoju  2024-02-29  683  	case SPI_MEM_DATA_IN:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  684  		amd_spi_mem_data_in(amd_spi, op);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  685  		break;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  686  	case SPI_MEM_DATA_OUT:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  687  		fallthrough;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  688  	case SPI_MEM_NO_DATA:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  689  		amd_spi_mem_data_out(amd_spi, op);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  690  		break;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  691  	default:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  692  		ret = -EOPNOTSUPP;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  693  	}
+6defadbe6cbc3a Raju Rangoju  2024-02-29  694  
+6defadbe6cbc3a Raju Rangoju  2024-02-29 @695  	return ret;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  696  }
+6defadbe6cbc3a Raju Rangoju  2024-02-29  697  
 
-Use __builtin_constant_p() instead of __is_constexpr() so that GCC can
-do the folding on compile time constant strings.
+:::::: The code at line 695 was first introduced by commit
+:::::: 6defadbe6cbc3a87dc39c119a6748d19bfba0544 spi: spi_amd: Add support for SPI MEM framework
 
-Replace the __builtin_choose_expr() by a ternary expression because it
-is sufficient and it is the pattern advertised in GCC documentation
-for initializers for static data [2].
+:::::: TO: Raju Rangoju <Raju.Rangoju@amd.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
-Finally, __is_constexpr() was historically defined in linux/const.h.
-Meanwhile is has been moved to compiler.h. Regardless, the
-linux/const.h include directive is not needed any more so remove it.
-
-[1] https://godbolt.org/z/rqr3YvoP4
-[2] https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-_005f_005fbuiltin_005fconstant_005fp
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-This patch is the successor of patch [1] which was part of a longer
-series [2]. Meanwhile, I decided to split it, so I am sending this again,
-but as a stand-alone patch.
-
-Changes in v2:
-
-  - only keep the s/__is_constexpr/__builtin_constant_p/g, do not
-    change strlen() into an inline function anymore
-  - Link to v1: https://lore.kernel.org/r/20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr
-
-Changes since [1]:
-
-  - use __builtin_constant_p() instead and turn strlen() into an
-    inline function
-
-[1] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-6-4e4cbaecc216@wanadoo.fr/
-[2] https://lore.kernel.org/all/20241203-is_constexpr-refactor-v1-0-4e4cbaecc216@wanadoo.fr/
----
- include/linux/fortify-string.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index e4ce1cae03bf770047ce8a7c032b183683388cd5..ae56a52bf0c5c5d34c4f7029c821ac6ea9f52c3b 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -4,7 +4,6 @@
- 
- #include <linux/bitfield.h>
- #include <linux/bug.h>
--#include <linux/const.h>
- #include <linux/limits.h>
- 
- #define __FORTIFY_INLINE extern __always_inline __gnu_inline __overloadable
-@@ -255,8 +254,8 @@ __FORTIFY_INLINE __kernel_size_t strnlen(const char * const POS p, __kernel_size
-  *
-  */
- #define strlen(p)							\
--	__builtin_choose_expr(__is_constexpr(__builtin_strlen(p)),	\
--		__builtin_strlen(p), __fortify_strlen(p))
-+	(__builtin_constant_p(__builtin_strlen(p)) ?			\
-+		__builtin_strlen(p) : __fortify_strlen(p))
- __FORTIFY_INLINE __diagnose_as(__builtin_strlen, 1)
- __kernel_size_t __fortify_strlen(const char * const POS p)
- {
-
----
-base-commit: 9d89551994a430b50c4fffcb1e617a057fa76e20
-change-id: 20250105-strlen_use_builtin_constant_p-515aca505ca4
-
-Best regards,
 -- 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
