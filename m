@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FB124B238;
-	Sat, 11 Jan 2025 11:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C27195985;
+	Sat, 11 Jan 2025 12:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736595707; cv=none; b=W5bQqzQjB1BbMdcJpvMzHW/k3CswHaQZTjB5ZWuxmOTvUsWPuoSNCEDau7hGuof0CnXB4oEiFzd2oqF7hEYDPjOg8w9G22qCAsPVlSo4+u0eoLJoiR4oAsTSJoXLHurHCWaGdx3uw4jPzHpGfS8sDCRNP8t5k3l5kavxjdFPNIo=
+	t=1736598307; cv=none; b=JpmJCkpHhSBMIiFaQ39u9eG60BRFDYIt5VF4690iFrugUNS5xww0cbhXu93Tpy+dMUFRk/Py8iMWNiqMeZhH6KXnC3czhJ8BnQVzYLh5daK5wX4ylGiDrJYM5EstRiXCWMgtP8FE/q7fOX7G3j/76y3XFhgoigEziiofSa6gHLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736595707; c=relaxed/simple;
-	bh=C+EI4djAdiW22BkQAHjJXOYHzIxWKN1n1egRxagk8WM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QwVxAUSstk9HBlZxu5VbPa3Bkh36dpEuDw2a1bKL86zh1VAxxwWtXFcpdVB/j84prIvnWWdkPWQPVTAAm6O9Fwc/v+c8a593Dis7PxIKxj7JvC/EDMuWVdzp46dc/DlDv9wxPp2/r7uS2sbisnXV8/9CmLLgrAqoi8c8ouzFRAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SkaYe+6e; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1736598307; c=relaxed/simple;
+	bh=A/8dZvb4PodA5W5f8//xP4ydt9geI9IEAZNNNqDbBBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DSXWSqu5lA8AQFEwDL5CyEyk707pObBSrTVGAQu+8MzhbMWeXh3h3Zen5FA5ZVycUyvotziBcEAwm1W25G4/3ZTkRpwOhP07tWlLp0fu7WHtD+Isctkax+eJIDY2A1731MoaFyvFyRD4CjRIbwtAvIR7J5AtzaRSEY4SVTuElLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLDrIcO+; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SkaYe+6e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLDrIcO+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736595705; x=1768131705;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C+EI4djAdiW22BkQAHjJXOYHzIxWKN1n1egRxagk8WM=;
-  b=SkaYe+6erIOkXSTW2dY0ehHuopdjLOnVZE+iMdX3/fe+ZcAWknA8wF25
-   WHWwl1/rKOv+ThjiAwTmsbPQnGZUZpp15gJdyd2qRFE2dAvOHVSx2hs5C
-   0hbMil3KSJJSYXEjfBLR4QdLBjA4E27DanW9o5ICWcLbw4R6YzYtTZ1xx
-   Jp4bHeioKAxHZnHnADVH1JVdxQBVQPDd3csrVYC5AxbbXItWcTibOLIqu
-   BiNKdasdx8tPGUgDwGVJEA49hDlzoO9nOk4JpGt+TEo4/WSvvcxZoauy4
-   +NhP5N2R2Ci0bqY5xAigmvv1cxF3cEooKmVyfRhytQVF3NHPJ4sbbE5fK
-   w==;
-X-CSE-ConnectionGUID: 7VZZI1/wSN2T8Cah8cIAgg==
-X-CSE-MsgGUID: rkAcq4wjQ+SP5IE7uz1WJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="47876713"
+  t=1736598302; x=1768134302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A/8dZvb4PodA5W5f8//xP4ydt9geI9IEAZNNNqDbBBk=;
+  b=XLDrIcO+Jf85iOgzD/1XOTwSQ9F4LxWjpu4wUfCQYYeZSxLoo+rL3Nm1
+   SbPmBZBApAIa4yMk6WEpY7pqA/LxW1gR8yP7R5NjgHUJEaGLMGdH7qf1V
+   przaWUD/qYD4zpFM7fTxRuVYM3taK/4f75wsW2oY/J5nWcJH8ZT+K+laI
+   rRaR9xyV/YPDuZJIc+KAyAWCfnEbmbiSHx5673r+USleYsqFiZb/h/q2n
+   Da0PGMuirPAZD7QJYAo8uxZlsTRIwc2Mp0E/96M74gAiKVCYrSrcn3yLq
+   KRekvhEVasKLAaQUjvc9tUxYpPuCitkGMJnfwXCKUCQ6Mij7V0bEUwszF
+   g==;
+X-CSE-ConnectionGUID: tTJZAmvfTHyDdat0c7i9Cg==
+X-CSE-MsgGUID: nnLHwAJuTYaiaokXEKjElQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="36568763"
 X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="47876713"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 03:41:45 -0800
-X-CSE-ConnectionGUID: gawo485gQr+A0epHE3wrpg==
-X-CSE-MsgGUID: H2QMicbpS+mgouTbN2u/Yw==
+   d="scan'208";a="36568763"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 04:24:59 -0800
+X-CSE-ConnectionGUID: s7uiThp/StuhE0Qw+ZroYg==
+X-CSE-MsgGUID: wIRlLujDR0CozHf5o3+rzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104492287"
+   d="scan'208";a="127260895"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Jan 2025 03:41:42 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 11 Jan 2025 04:24:56 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWZs4-000Kav-1D;
-	Sat, 11 Jan 2025 11:41:40 +0000
-Date: Sat, 11 Jan 2025 19:40:41 +0800
+	id 1tWaXu-000Kcp-06;
+	Sat, 11 Jan 2025 12:24:54 +0000
+Date: Sat, 11 Jan 2025 20:24:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Pranjal Shrivastava <praan@google.com>
+To: Roger Pau Monne <roger.pau@citrix.com>, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-pci@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Will Deacon <will@kernel.org>, Nicolin Chen <nicolinc@nvidia.com>
-Subject: [iommu:arm/smmu/updates 25/26]
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1910:4: error: call to
- undeclared function 'str_read_write'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202501111926.qOpnlK9J-lkp@intel.com>
+	Roger Pau Monne <roger.pau@citrix.com>,
+	Juergen Gross <jgross@suse.com>, Bjorn Helgaas <helgaas@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
+Message-ID: <202501112048.6yCFh2ma-lkp@intel.com>
+References: <20250110140152.27624-4-roger.pau@citrix.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,90 +69,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250110140152.27624-4-roger.pau@citrix.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/iommu/linux.git arm/smmu/updates
-head:   1f3dc29d2445c89c85e451c02e41a8e0cd22423c
-commit: f2c77f6e41e68e1b24c165acbf6d4da6b3117e23 [25/26] iommu/arm-smmu-v3: Use str_read_write helper w/ logs
-config: arm64-randconfig-004-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111926.qOpnlK9J-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111926.qOpnlK9J-lkp@intel.com/reproduce)
+Hi Roger,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus xen-tip/linux-next tip/irq/core linus/master v6.13-rc6 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Roger-Pau-Monne/xen-pci-do-not-register-devices-outside-of-PCI-segment-scope/20250110-220331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250110140152.27624-4-roger.pau%40citrix.com
+patch subject: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250111/202501112048.6yCFh2ma-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112048.6yCFh2ma-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111926.qOpnlK9J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501112048.6yCFh2ma-lkp@intel.com/
 
-Note: the iommu/arm/smmu/updates HEAD 1f3dc29d2445c89c85e451c02e41a8e0cd22423c builds fine.
-      It only hurts bisectability.
+All errors (new ones prefixed by >>):
 
-All error/warnings (new ones prefixed by >>):
+   In file included from drivers/pci/msi/msi.c:12:
+   In file included from include/linux/irq.h:23:
+   In file included from arch/riscv/include/asm/irq.h:10:
+   In file included from include/linux/interrupt.h:22:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/pci/msi/msi.c:288:40: error: incomplete definition of type 'const struct irq_domain'
+     288 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   drivers/pci/msi/msi.c:604:40: error: incomplete definition of type 'const struct irq_domain'
+     604 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   drivers/pci/msi/msi.c:714:40: error: incomplete definition of type 'const struct irq_domain'
+     714 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   1 warning and 3 errors generated.
 
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1910:4: error: call to undeclared function 'str_read_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           str_read_write(evt->read),
-                           ^
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1910:4: note: did you mean 'sb_end_write'?
-   include/linux/fs.h:1811:20: note: 'sb_end_write' declared here
-   static inline void sb_end_write(struct super_block *sb)
-                      ^
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1910:4: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
-                           str_read_write(evt->read),
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   1 warning and 1 error generated.
 
+vim +288 drivers/pci/msi/msi.c
 
-vim +/str_read_write +1910 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-
-  1888	
-  1889	static void arm_smmu_dump_event(struct arm_smmu_device *smmu, u64 *raw,
-  1890					struct arm_smmu_event *evt,
-  1891					struct ratelimit_state *rs)
-  1892	{
-  1893		if (!__ratelimit(rs))
-  1894			return;
-  1895	
-  1896		arm_smmu_dump_raw_event(smmu, raw, evt);
-  1897	
-  1898		switch (evt->id) {
-  1899		case EVT_ID_TRANSLATION_FAULT:
-  1900		case EVT_ID_ADDR_SIZE_FAULT:
-  1901		case EVT_ID_ACCESS_FAULT:
-  1902		case EVT_ID_PERMISSION_FAULT:
-  1903			dev_err(smmu->dev, "event: %s client: %s sid: %#x ssid: %#x iova: %#llx ipa: %#llx",
-  1904				ARM_SMMU_LOG_EVT_STR(evt), ARM_SMMU_LOG_CLIENT(evt),
-  1905				evt->sid, evt->ssid, evt->iova, evt->ipa);
-  1906	
-  1907			dev_err(smmu->dev, "%s %s %s %s \"%s\"%s%s stag: %#x",
-  1908				evt->privileged ? "priv" : "unpriv",
-  1909				evt->instruction ? "inst" : "data",
-> 1910				str_read_write(evt->read),
-  1911				evt->s2 ? "s2" : "s1", event_class_str[evt->class],
-  1912				evt->class_tt ? (evt->ttrnw ? " ttd_read" : " ttd_write") : "",
-  1913				evt->stall ? " stall" : "", evt->stag);
-  1914	
-  1915			break;
-  1916	
-  1917		case EVT_ID_STE_FETCH_FAULT:
-  1918		case EVT_ID_CD_FETCH_FAULT:
-  1919		case EVT_ID_VMS_FETCH_FAULT:
-  1920			dev_err(smmu->dev, "event: %s client: %s sid: %#x ssid: %#x fetch_addr: %#llx",
-  1921				ARM_SMMU_LOG_EVT_STR(evt), ARM_SMMU_LOG_CLIENT(evt),
-  1922				evt->sid, evt->ssid, evt->fetch_addr);
-  1923	
-  1924			break;
-  1925	
-  1926		default:
-  1927			dev_err(smmu->dev, "event: %s client: %s sid: %#x ssid: %#x",
-  1928				ARM_SMMU_LOG_EVT_STR(evt), ARM_SMMU_LOG_CLIENT(evt),
-  1929				evt->sid, evt->ssid);
-  1930		}
-  1931	}
-  1932	
+   283	
+   284	static int msi_setup_msi_desc(struct pci_dev *dev, int nvec,
+   285				      struct irq_affinity_desc *masks)
+   286	{
+   287		const struct irq_domain *d = dev_get_msi_domain(&dev->dev);
+ > 288		const struct msi_domain_info *info = d->host_data;
+   289		struct msi_desc desc;
+   290		u16 control;
+   291	
+   292		/* MSI Entry Initialization */
+   293		memset(&desc, 0, sizeof(desc));
+   294	
+   295		pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &control);
+   296		/* Lies, damned lies, and MSIs */
+   297		if (dev->dev_flags & PCI_DEV_FLAGS_HAS_MSI_MASKING)
+   298			control |= PCI_MSI_FLAGS_MASKBIT;
+   299		if (info->flags & MSI_FLAG_NO_MASK)
+   300			control &= ~PCI_MSI_FLAGS_MASKBIT;
+   301	
+   302		desc.nvec_used			= nvec;
+   303		desc.pci.msi_attrib.is_64	= !!(control & PCI_MSI_FLAGS_64BIT);
+   304		desc.pci.msi_attrib.can_mask	= !!(control & PCI_MSI_FLAGS_MASKBIT);
+   305		desc.pci.msi_attrib.default_irq	= dev->irq;
+   306		desc.pci.msi_attrib.multi_cap	= FIELD_GET(PCI_MSI_FLAGS_QMASK, control);
+   307		desc.pci.msi_attrib.multiple	= ilog2(__roundup_pow_of_two(nvec));
+   308		desc.affinity			= masks;
+   309	
+   310		if (control & PCI_MSI_FLAGS_64BIT)
+   311			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_64;
+   312		else
+   313			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_32;
+   314	
+   315		/* Save the initial mask status */
+   316		if (desc.pci.msi_attrib.can_mask)
+   317			pci_read_config_dword(dev, desc.pci.mask_pos, &desc.pci.msi_mask);
+   318	
+   319		return msi_insert_msi_desc(&dev->dev, &desc);
+   320	}
+   321	
 
 -- 
 0-DAY CI Kernel Test Service
