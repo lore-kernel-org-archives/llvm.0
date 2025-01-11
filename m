@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D692517A5BE;
-	Sat, 11 Jan 2025 11:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E058D17A5BE;
+	Sat, 11 Jan 2025 11:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736593723; cv=none; b=a96CUBSVNnCGynREF0kzswI7PMsKtOZhHah+Vh47VPiWUBGOCX3RjPuzXdtDMCwgW7G2/b8MC1vI61UXjSdXpX1u8oZjHo/YU3F+2/wuZrzZTlGLVGgh5m3+zZx1PMd054e3tKW4WphPMPXZqX46zwcN4W76fqosmMd4fGu5RmI=
+	t=1736593784; cv=none; b=QM0+VWcvWfOlwz2WfXL0HZk8zOHJs4Uha3SBs5Ede8GLv/bC2xsnq09YJL4UekNFq+Shy6kQecZd0FCqlaQkau44LY8jpK/+JcHfysWQAZGrPcvSN8Jw67vIpowv4izE8YEu8B0dVAcfC6Bm0IFIEydoVjfDvyIR5v193UbaFg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736593723; c=relaxed/simple;
-	bh=lMLO0dcUORssrKr9qrPFKNLYppk/gH1MfFcMjt+CV+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sdJj2Y3G6rOZIDJgypHPRBdA/lV91iEQ1Nv/9Ds9IAH0U9uM3S0e1wZSKB62NPhJ0fsoB80MZAGS+1Xq0GxuA+3OoFCulwB74HG3rr9Nwuaf53RcKuG+rHjJ5xZdn3bwVgVluILTXq9rycN8R8Xlwdmdfz0AGJ939gEENIMkjGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IVtGEGer; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1736593784; c=relaxed/simple;
+	bh=EPRt+kkcZBvWzhnBv8y7+iUHRzGlu9gQ1lTAJLYHr68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qlKiVTkZP8WTYsE2fW1KZH3axuECdtW5C6z9XC1lCK4l7ixMMe1G0+aMftq5vcav7TouD9OZmb+Hz3i8vUcWHHxKaHBUffn26PE9tFuJPtaZepJ0K4lHYxzT1wCdRq+RrYjBBT6op7/xAN9JRK+8r7jDF+HxhfttuJ2tUVt+AoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kdFNufYb; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IVtGEGer"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kdFNufYb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736593721; x=1768129721;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lMLO0dcUORssrKr9qrPFKNLYppk/gH1MfFcMjt+CV+8=;
-  b=IVtGEGerHRZ9r7cH815n6kbry8ccpsLa2edwPdZd3w/MzgpogMXDmEZ+
-   0RdvYRNfqq7T2NXhPDtaZkfheV90e6NvEBOU5FLyYNZeg0sZhgJ/UXUM+
-   NMFPXue3a4XHwkHN1jj5xFUo5F/TiL4IxkVlHIUKOML/brka5xBzQ6eVj
-   sTt0C3CFdqmHJSYHKTEP/KzRYlYFpb+DjgHlMttYqn/l2pyCFLJjcoD0r
-   D8KkN2AMaIgj3M83Qf2sQNodwxq04d+pTKEFxCrvBj7WVhwdRlqFQKjso
-   oaIXpVh4l5H2uT9y+F643hIRdFo3lqLd+IanxVtmw1OQaHzNjubtKafxs
-   Q==;
-X-CSE-ConnectionGUID: 5On1ypo5Sxa5/VKZHxbN1w==
-X-CSE-MsgGUID: TzUbNtVRSA2zVesuAu8bgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="24489598"
+  t=1736593783; x=1768129783;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EPRt+kkcZBvWzhnBv8y7+iUHRzGlu9gQ1lTAJLYHr68=;
+  b=kdFNufYborH24+L5R5XKIFSBjbS/lQu1jJyD4U7cYjjw9YYKvmLGeW2z
+   0bRTPz2wL8s+vGlixlgpayGVHQauuBCFOhZOmaiX26y1p7VnllfCpk1BR
+   lsgoX4RZLW5qWWP4Yg1ErnG7motcoE89QhxtZkX5IjOu4ApP6yqPrfNWC
+   2xj/Raz7k8detE39su7zAizjCeKAdq0+Ns2C0Jw0Xv5Tdi3DvjFvhZx8s
+   /owmIkvLTBfUea+civO+HrGfvlbdn1eb059fK380r9tczwF18Y3/PAOf2
+   ytLKw1R/Nl1Bn9VU9RtAebhPdJP+A9wlmlw59wUBj9jFSw7dLa8eHGsS+
+   A==;
+X-CSE-ConnectionGUID: WBb/wff8QaKGttbmF4TXLQ==
+X-CSE-MsgGUID: P4JVIgpfRkmWYC4w6IsAmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="39698423"
 X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="24489598"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 03:08:40 -0800
-X-CSE-ConnectionGUID: fyu+Ga14SZuN9rWEqVVHdQ==
-X-CSE-MsgGUID: okqjJf/JTsKU9sZfmLzrsg==
+   d="scan'208";a="39698423"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 03:09:42 -0800
+X-CSE-ConnectionGUID: tgfbQNgiRQWNL1IdbkLGug==
+X-CSE-MsgGUID: zWHsp1HuRgmlsZU4b7yXxg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="104486946"
+   d="scan'208";a="104150974"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Jan 2025 03:08:38 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 11 Jan 2025 03:09:39 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWZM4-000KZ3-0h;
-	Sat, 11 Jan 2025 11:08:36 +0000
-Date: Sat, 11 Jan 2025 19:08:22 +0800
+	id 1tWZN2-000KZD-0q;
+	Sat, 11 Jan 2025 11:09:36 +0000
+Date: Sat, 11 Jan 2025 19:08:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lakshmi Prasanna Eachuri <lakshmi.prasanna.eachuri@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Vishal Sagar <vishal.sagar@amd.com>
-Subject: [xilinx-xlnx:lkp_test 267/504]
- drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c:312:6: warning: stack frame
- size (1032) exceeds limit (1024) in 'xlnx_hdcp2x_tx_compute_hprime'
-Message-ID: <202501111807.GgRdE5tE-lkp@intel.com>
+To: Roger Pau Monne <roger.pau@citrix.com>, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-pci@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Roger Pau Monne <roger.pau@citrix.com>,
+	Juergen Gross <jgross@suse.com>, Bjorn Helgaas <helgaas@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
+Message-ID: <202501111839.HXJGe5FL-lkp@intel.com>
+References: <20250110140152.27624-4-roger.pau@citrix.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,214 +69,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250110140152.27624-4-roger.pau@citrix.com>
 
-tree:   https://github.com/Xilinx/linux-xlnx lkp_test
-head:   9ac6b4acf9144465ac1408d4d799635dec0223a0
-commit: 6c8caf3eeadd38ffab47f6cfb7dba45556256143 [267/504] drm: xlnx: Add HDCP2X TX support
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250111/202501111807.GgRdE5tE-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111807.GgRdE5tE-lkp@intel.com/reproduce)
+Hi Roger,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus xen-tip/linux-next tip/irq/core linus/master v6.13-rc6 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Roger-Pau-Monne/xen-pci-do-not-register-devices-outside-of-PCI-segment-scope/20250110-220331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20250110140152.27624-4-roger.pau%40citrix.com
+patch subject: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
+config: arm64-randconfig-003-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111839.HXJGe5FL-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111839.HXJGe5FL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111807.GgRdE5tE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501111839.HXJGe5FL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c:312:6: warning: stack frame size (1032) exceeds limit (1024) in 'xlnx_hdcp2x_tx_compute_hprime' [-Wframe-larger-than]
-     312 | void xlnx_hdcp2x_tx_compute_hprime(const u8 *r_rx, const u8 *rxcaps,
-         |      ^
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c:380:6: warning: stack frame size (1040) exceeds limit (1024) in 'xlnx_hdcp2x_tx_compute_lprime' [-Wframe-larger-than]
-     380 | void xlnx_hdcp2x_tx_compute_lprime(const u8 *rn, const u8 *km,
-         |      ^
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c:411:6: warning: stack frame size (1192) exceeds limit (1024) in 'xlnx_hdcp2x_tx_compute_v' [-Wframe-larger-than]
-     411 | void xlnx_hdcp2x_tx_compute_v(const u8 *rn, const u8 *r_rx, const u8 *rx_info,
-         |      ^
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c:446:6: warning: stack frame size (1216) exceeds limit (1024) in 'xlnx_hdcp2x_tx_compute_m' [-Wframe-larger-than]
-     446 | void xlnx_hdcp2x_tx_compute_m(const u8 *rn, const u8 *r_rx, const u8 *r_tx,
-         |      ^
-   4 warnings generated.
+>> drivers/pci/msi/msi.c:288:40: error: incomplete definition of type 'struct irq_domain'
+     288 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   drivers/pci/msi/msi.c:604:40: error: incomplete definition of type 'struct irq_domain'
+     604 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   drivers/pci/msi/msi.c:714:40: error: incomplete definition of type 'struct irq_domain'
+     714 |         const struct msi_domain_info *info = d->host_data;
+         |                                              ~^
+   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
+     130 | struct irq_domain;
+         |        ^
+   3 errors generated.
 
 
-vim +/xlnx_hdcp2x_tx_compute_hprime +312 drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp2x_crypt.c
+vim +288 drivers/pci/msi/msi.c
 
-   311	
- > 312	void xlnx_hdcp2x_tx_compute_hprime(const u8 *r_rx, const u8 *rxcaps,
-   313					   const u8 *r_tx, const u8 *txcaps,
-   314					   const u8 *km, u8 *hprime)
-   315	{
-   316		u8 kd[HDCP2X_TX_DKEY_SIZE * HDCP2X_TX_AES128_SIZE] = {0};
-   317		u8 aes_iv[HDCP2X_TX_AES128_SIZE] = {0};
-   318		u8 aes_key[HDCP2X_TX_AES128_SIZE] = {0};
-   319		u8 hash_input[HDCP_2_2_RTX_LEN + HDCP_2_2_RXCAPS_LEN +
-   320					HDCP2X_TX_TXCAPS_SIZE] = {0};
-   321		int idx = 0;
-   322	
-   323		memcpy(aes_key, km, HDCP2X_TX_KM_SIZE);
-   324		memcpy(aes_iv, r_tx, HDCP_2_2_RTX_LEN);
-   325		memcpy(&aes_iv[HDCP_2_2_RTX_LEN], r_rx, HDCP_2_2_RRX_LEN);
-   326	
-   327		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, kd);
-   328	
-   329		/* Determine dkey1, counter is 1: Rrx | 0x01. */
-   330	
-   331		/*
-   332		 * Reference: Section 2.7.1: Key derivation
-   333		 * https://www.digital-cp.com/sites/default/files/HDCP%20on%20DisplayPort%20Specification%20Rev2_3.pdf
-   334		 */
-   335		aes_iv[HDCP2X_TX_DKEY] ^= HDCP2X_TX_DKEY_CTR1;
-   336	
-   337		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, &kd[HDCP2X_TX_KM_SIZE]);
-   338		memcpy(hash_input, r_tx, HDCP_2_2_RTX_LEN);
-   339		idx += HDCP_2_2_RTX_LEN;
-   340		memcpy(&hash_input[idx], rxcaps, HDCP_2_2_RXCAPS_LEN);
-   341		idx += HDCP_2_2_RXCAPS_LEN;
-   342		memcpy(&hash_input[idx], txcaps, HDCP2X_TX_TXCAPS_SIZE);
-   343	
-   344		xlnx_hdcp2x_cmn_hmac_sha256_hash(hash_input, sizeof(hash_input), kd,
-   345						 sizeof(kd), hprime);
-   346	}
-   347	
-   348	void xlnx_hdcp2x_tx_compute_edkey_ks(const u8 *rn, const u8 *km, const u8 *ks,
-   349					     const u8 *r_rx, const u8 *r_tx,
-   350					     u8 *encrypted_ks)
-   351	{
-   352		u8 aes_iv[HDCP2X_TX_AES128_SIZE] = {0};
-   353		u8 aes_key[HDCP2X_TX_AES128_SIZE] = {0};
-   354		u8 dkey2[HDCP2X_TX_AES128_SIZE] = {0};
-   355	
-   356		memcpy(&aes_key[HDCP_2_2_RN_LEN], rn, HDCP_2_2_RN_LEN);
-   357	
-   358		xlnx_hdcp2x_tx_memxor(aes_key, aes_key, km, HDCP2X_TX_KM_SIZE);
-   359	
-   360		/* Determine dkey2. */
-   361		/* Add m = Rtx || Rrx. */
-   362		memcpy(aes_iv, r_tx, HDCP_2_2_RTX_LEN);
-   363		memcpy(&aes_iv[HDCP_2_2_RTX_LEN], r_rx, HDCP_2_2_RRX_LEN);
-   364	
-   365		aes_iv[HDCP2X_TX_DKEY] ^= HDCP2X_TX_DKEY_CTR2;
-   366	
-   367		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, dkey2);
-   368	
-   369		/* EdkeyKs = Ks XOR (Dkey2 XOR Rrx). */
-   370		/* Rrx XOR Dkey2. */
-   371		memset(encrypted_ks, 0, HDCP_2_2_E_DKEY_KS_LEN);
-   372	
-   373		memcpy(&encrypted_ks[HDCP_2_2_E_DKEY_KS_LEN - HDCP_2_2_RRX_LEN], r_rx,
-   374		       HDCP_2_2_RRX_LEN);
-   375	
-   376		xlnx_hdcp2x_tx_memxor(encrypted_ks, encrypted_ks, dkey2, HDCP2X_TX_AES128_SIZE);
-   377		xlnx_hdcp2x_tx_memxor(encrypted_ks, encrypted_ks, ks, HDCP2X_TX_KS_SIZE);
-   378	}
-   379	
- > 380	void xlnx_hdcp2x_tx_compute_lprime(const u8 *rn, const u8 *km,
-   381					   const u8 *r_rx, const u8 *r_tx,
-   382					   u8 *lprime)
-   383	{
-   384		u8 hash_key[HDCP2X_TX_SHA256_HASH_SIZE] = {0};
-   385		u8 aes_iv[HDCP2X_TX_AES128_SIZE] = {0};
-   386		u8 aes_key[HDCP2X_TX_AES128_SIZE] = {0};
-   387		u8 kd[HDCP2X_TX_DKEY_SIZE * HDCP2X_TX_AES128_SIZE] = {0};
-   388	
-   389		memcpy(aes_key, km, HDCP2X_TX_KM_SIZE);
-   390		memcpy(aes_iv, r_tx, HDCP_2_2_RTX_LEN);
-   391		memcpy(&aes_iv[HDCP_2_2_RTX_LEN], r_rx, HDCP_2_2_RRX_LEN);
-   392	
-   393		/* Compute Dkey0. */
-   394		/* Add m = Rtx || Rrx. */
-   395		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, kd);
-   396	
-   397		/* Compute Dkey , counter is 1: Rrx | 0x01. */
-   398		aes_iv[HDCP2X_TX_DKEY] ^= HDCP2X_TX_DKEY_CTR1;
-   399		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, &kd[HDCP2X_TX_KM_SIZE]);
-   400	
-   401		/* Create hash with HMAC-SHA256. */
-   402		/* Key:	Kd XOR Rrx (least sign. 64 bits). */
-   403		memcpy(&hash_key[HDCP2X_TX_SHA256_HASH_SIZE - HDCP_2_2_RRX_LEN], r_rx,
-   404		       HDCP_2_2_RRX_LEN);
-   405	
-   406		xlnx_hdcp2x_tx_memxor(hash_key, hash_key, kd, HDCP2X_TX_SHA256_HASH_SIZE);
-   407		xlnx_hdcp2x_cmn_hmac_sha256_hash(rn, HDCP_2_2_RN_LEN, hash_key,
-   408						 HDCP2X_TX_SHA256_HASH_SIZE, lprime);
-   409	}
-   410	
- > 411	void xlnx_hdcp2x_tx_compute_v(const u8 *rn, const u8 *r_rx, const u8 *rx_info,
-   412				      const u8 *r_tx, const u8 *rcvid_list, const u8 rcvid_count,
-   413				      const u8 *seq_num_v, const u8 *km, u8 *hash_v)
-   414	{
-   415		u8 kd[HDCP2X_TX_DKEY_SIZE * HDCP2X_TX_AES128_SIZE] = {0};
-   416		u8 aes_iv[HDCP2X_TX_AES128_SIZE] = {0};
-   417		u8 aes_key[HDCP2X_TX_AES128_SIZE] = {0};
-   418		u8 hash_input[(HDCP_2_2_MAX_DEVICE_COUNT * HDCP_2_2_RECEIVER_ID_LEN) +
-   419					  HDCP_2_2_RXINFO_LEN + HDCP_2_2_SEQ_NUM_LEN];
-   420		int idx = 0;
-   421	
-   422		memcpy(aes_key, km, HDCP2X_TX_KM_SIZE);
-   423	
-   424		/* Determine Dkey. */
-   425		/* Add m = Rtx || Rrx. */
-   426		memcpy(aes_iv, r_tx, HDCP_2_2_RTX_LEN);
-   427		memcpy(&aes_iv[HDCP_2_2_RTX_LEN], r_rx, HDCP_2_2_RRX_LEN);
-   428	
-   429		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, kd);
-   430	
-   431		aes_iv[HDCP2X_TX_DKEY] ^= HDCP2X_TX_DKEY_CTR1;
-   432		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, &kd[HDCP2X_TX_KM_SIZE]);
-   433	
-   434		/* Create hash with HMAC-SHA256. */
-   435		/* Input: ReceiverID list || RxInfo || seq_num_V. */
-   436		memcpy(hash_input, rcvid_list, (rcvid_count * HDCP_2_2_RECEIVER_ID_LEN));
-   437		idx += (rcvid_count * HDCP_2_2_RECEIVER_ID_LEN);
-   438		memcpy(&hash_input[idx], rx_info, HDCP_2_2_RXINFO_LEN);
-   439		idx += HDCP_2_2_RXINFO_LEN;
-   440		memcpy(&hash_input[idx], seq_num_v, HDCP_2_2_SEQ_NUM_LEN);
-   441		idx += HDCP_2_2_SEQ_NUM_LEN;
-   442	
-   443		xlnx_hdcp2x_cmn_hmac_sha256_hash(hash_input, idx, kd, sizeof(kd), hash_v);
-   444	}
-   445	
- > 446	void xlnx_hdcp2x_tx_compute_m(const u8 *rn, const u8 *r_rx, const u8 *r_tx,
-   447				      const u8 *stream_id_type, const u8 *k,
-   448				      const u8 *seq_num_m, const u8 *km, u8 *m_hash)
-   449	{
-   450		u8 aes_iv[HDCP2X_TX_AES128_SIZE];
-   451		u8 aes_key[HDCP2X_TX_AES128_SIZE];
-   452		u8 kd[HDCP2X_TX_DKEY_SIZE * HDCP2X_TX_AES128_SIZE];
-   453		u8 sha256_kd[HDCP2X_TX_SHA256_HASH_SIZE];
-   454		u8 hash_input[(HDCP_2_2_MAX_DEVICE_COUNT * HDCP_2_2_RECEIVER_ID_LEN) +
-   455					  HDCP_2_2_RXINFO_LEN + HDCP_2_2_SEQ_NUM_LEN];
-   456		u16 stream_id_count;
-   457		int idx = 0;
-   458	
-   459		stream_id_count  = k[0] << BITS_PER_BYTE;
-   460		stream_id_count |= k[1];
-   461	
-   462		memcpy(aes_key, km, HDCP2X_TX_KM_SIZE);
-   463		memcpy(aes_iv, r_tx, HDCP_2_2_RTX_LEN);
-   464		memcpy(&aes_iv[HDCP_2_2_RTX_LEN], r_rx, HDCP_2_2_RRX_LEN);
-   465	
-   466		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, kd);
-   467	
-   468		/* Determine Dkey0. */
-   469		/* Add m = Rtx || Rrx. */
-   470		aes_iv[HDCP2X_TX_DKEY] ^= HDCP2X_TX_DKEY_CTR1;
-   471	
-   472		xlnx_hdcp2x_tx_aes128_encrypt(aes_iv, aes_key, &kd[HDCP2X_TX_KM_SIZE]);
-   473	
-   474		sha256(kd, sizeof(kd), sha256_kd);
-   475	
-   476		/* Create hash with HMAC-SHA256. */
-   477		/* Input: StreamID_Type list || seq_num_M. */
-   478		memcpy(hash_input, stream_id_type, (stream_id_count * HDCP2X_TX_STREAMID_TYPE_SIZE));
-   479		idx += (stream_id_count * HDCP2X_TX_STREAMID_TYPE_SIZE);
-   480		memcpy(&hash_input[idx], seq_num_m, HDCP_2_2_SEQ_NUM_LEN);
-   481		idx += HDCP_2_2_SEQ_NUM_LEN;
-   482	
-   483		/* HashKey:	SHA256(Kd) */
-   484		xlnx_hdcp2x_cmn_hmac_sha256_hash(hash_input, idx, sha256_kd, sizeof(sha256_kd), m_hash);
-   485	}
-   486	
+   283	
+   284	static int msi_setup_msi_desc(struct pci_dev *dev, int nvec,
+   285				      struct irq_affinity_desc *masks)
+   286	{
+   287		const struct irq_domain *d = dev_get_msi_domain(&dev->dev);
+ > 288		const struct msi_domain_info *info = d->host_data;
+   289		struct msi_desc desc;
+   290		u16 control;
+   291	
+   292		/* MSI Entry Initialization */
+   293		memset(&desc, 0, sizeof(desc));
+   294	
+   295		pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &control);
+   296		/* Lies, damned lies, and MSIs */
+   297		if (dev->dev_flags & PCI_DEV_FLAGS_HAS_MSI_MASKING)
+   298			control |= PCI_MSI_FLAGS_MASKBIT;
+   299		if (info->flags & MSI_FLAG_NO_MASK)
+   300			control &= ~PCI_MSI_FLAGS_MASKBIT;
+   301	
+   302		desc.nvec_used			= nvec;
+   303		desc.pci.msi_attrib.is_64	= !!(control & PCI_MSI_FLAGS_64BIT);
+   304		desc.pci.msi_attrib.can_mask	= !!(control & PCI_MSI_FLAGS_MASKBIT);
+   305		desc.pci.msi_attrib.default_irq	= dev->irq;
+   306		desc.pci.msi_attrib.multi_cap	= FIELD_GET(PCI_MSI_FLAGS_QMASK, control);
+   307		desc.pci.msi_attrib.multiple	= ilog2(__roundup_pow_of_two(nvec));
+   308		desc.affinity			= masks;
+   309	
+   310		if (control & PCI_MSI_FLAGS_64BIT)
+   311			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_64;
+   312		else
+   313			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_32;
+   314	
+   315		/* Save the initial mask status */
+   316		if (desc.pci.msi_attrib.can_mask)
+   317			pci_read_config_dword(dev, desc.pci.mask_pos, &desc.pci.msi_mask);
+   318	
+   319		return msi_insert_msi_desc(&dev->dev, &desc);
+   320	}
+   321	
 
 -- 
 0-DAY CI Kernel Test Service
