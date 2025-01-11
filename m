@@ -1,205 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-68.smtpout.orange.fr [193.252.22.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4A2199921;
-	Sat, 11 Jan 2025 13:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDE11ADFFE
+	for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 14:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736603536; cv=none; b=B4yUwk5Dnd5Xxw+ybCTxZLeX9pwQWHE85JrbxbJFcSPdmsqEfhxfWoEl5ylmRUjr0916Ui90MUGEpLXf0kp2ikod/ZEOrZ5dF2xH+U/Xst7cWRyy2Z1OQHrVUWsuiUCfH4uHTyPCJq5fGNy4pWhwtCB4Hk5tz4R0MyFQtrMl3mU=
+	t=1736607024; cv=none; b=NNurdrOvoooOjgRYvimsf0Gb5HrChC1/j/wVWDblZSUIsX61w+BRem/R0r1W/6caRdLej1ihctS+zd5GRXp+Ee9Q+GjtI8+V8w2dFpZn3snvu099SIWuVh+vVKYUSOYyvqtYMM/7NbOM6Vw522M43fmCI2o22MJx/w9LuBfgVWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736603536; c=relaxed/simple;
-	bh=4mzNc+R5hTivEu+R8FMcSGVx6fteb5tJK8Cu8z5CYTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hTiONzrsfUYROiSI7h3axA/QsWFhem43H77HPLJZkEErn8g6e3yMJXfWc6ub06DoIMgWwbUAwaBdXSsw/eoLhz4WkLSGzCs1T8LaOr3hPdL7XoaS+xv2oka5WV+Q3c+ZFiPIzd/IelAbeAMsFbPABnhP1A6iwsIFkA5zXju9O8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IMetyrM7; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736607024; c=relaxed/simple;
+	bh=MWY8Vh9vyzPLy4+o8smc3TSgBb2SpB71E2D4V/zKYlQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LlQp7tKwkFpnxDKUJhF8Aj+a51506xGaiiHTxogvZhc3u3YbZY8m8fzemT5vYbmQcJ3fzjC+Vo+SF/Veue55Lo3EuIdkbWwkEKVRS9J9AGjQL3mJ+dqgzKPNW6l8gql8S2pQP51EX1JwNqGPLK6Ww28SkyTPbmeneN7YOY9AMAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=RFV2eecN; arc=none smtp.client-ip=193.252.22.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IMetyrM7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736603535; x=1768139535;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4mzNc+R5hTivEu+R8FMcSGVx6fteb5tJK8Cu8z5CYTk=;
-  b=IMetyrM73d1cEIhUnfVXEui/DsVL1B+uif/OWplLgWR5uOVTUCxsXteA
-   K1xwxInHRRqzk18e7sBI1q2Ru+bO4wm4wwCd74s6lJSaMfN6esuN+3RNT
-   JyvlkuJNjYdoByoTVc90ywUz0ODtatvkN0KaDPBMU3r5ggdqaW9ZKBjQQ
-   L6Uawr9Sm/U1b5JZy05ZidA6dixtiDOmWoLLR/3oKMjIkuFOENpk59ISm
-   qanQ/ZDTeWAerNqJoYrRZkadEoCUvNa/b4TunqtcdQESXi3zAUherGOTs
-   4vGmhezVsD6tlpLIlzhKi1RtKnUCNaH7ptKF9KvMKTSz2l3xObJK8gbXC
-   g==;
-X-CSE-ConnectionGUID: kVXsdfAQSLaIzPXzOGC2bg==
-X-CSE-MsgGUID: kGjJm2QZTVyAB9vIu8C2Tg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="40567681"
-X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="40567681"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 05:52:13 -0800
-X-CSE-ConnectionGUID: l8zuaSk5Ra6SkWZZzjQwnQ==
-X-CSE-MsgGUID: tB/Wby5JSJyM4KlHfOY/RQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="104172198"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 11 Jan 2025 05:52:11 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tWbuL-000KiF-0i;
-	Sat, 11 Jan 2025 13:52:09 +0000
-Date: Sat, 11 Jan 2025 21:51:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Katta Dhanunjanrao <katta.dhanunjanrao@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>
-Subject: [xilinx-xlnx:lkp_test 284/504]
- drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:185:22: error: field has
- incomplete type 'struct delayed_work'
-Message-ID: <202501112143.cOO7OCGd-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="RFV2eecN"
+Received: from mail-ej1-f49.google.com ([209.85.218.49])
+	by smtp.orange.fr with ESMTPSA
+	id WcfVtv3nGwULAWcfYt0R1L; Sat, 11 Jan 2025 15:40:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736606456;
+	bh=HnmEdRI/JuEW7Q0XlIQvyBGESggVLrnEqhLzSdi7NTk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To;
+	b=RFV2eecNGBDURff6CsmQiUnSMGZ+OILUfQ3CT4jHPHY2iKa52cWELI57f8pWk4Kn1
+	 p81xzRI/Nskg+BnzU5Ztax0n4RfzGKferszYGoBl7BEiadq5WgQU+DjLIyQziXiUv1
+	 4TksPNibevjESAT3w+KczQp8DidNMBcAB00KRXm5/K3baBZ9ltRsKQvOTA4lo2bDT+
+	 1MbnWX+1RSaGiV0A/yd1HPWUCFiVP56jEKhHMJ15OAa7NLxK/fJziSylSiYkQAGJiK
+	 4/SBfCWekqCqmj/CADo/K75crqIkYLprpZZTUYTaMxyj+elSErYdQubMZ0IEpIFJai
+	 +8+LxzYZftxhw==
+X-ME-Helo: mail-ej1-f49.google.com
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 11 Jan 2025 15:40:56 +0100
+X-ME-IP: 209.85.218.49
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aab925654d9so567433166b.2
+        for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 06:40:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX0a1F3XtI98+PTN25Kadxj9cOuZKS4FslhBb51+a1EpIVBowMcAC1KvcnrOyDLfpb88VSS@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw0P/5KMxGiwuVhbx6xziMqTh/93/mPP7xsRQInkH7GtH3jzo0e
+	gOnCZ8fXaLE4CBm9LhDR3DpJMtSIbRnC20MRr91zSV+b+ZRnNU65v84fMK1Gz8425cn7Y0h5oJG
+	upYH4/zKQD5mob7QdcfN6zdALVfk=
+X-Google-Smtp-Source: AGHT+IEWbXRgdQ6oOnCXEsh9qkGATUuGBQ1omOgQ7o8G7l70E+lYhM/OujP8uUXCdcbR/4GmuEOy9WZ4dA9GwgveI6A=
+X-Received: by 2002:a17:907:70c:b0:ab2:e7c0:6561 with SMTP id
+ a640c23a62f3a-ab2e7c076c7mr401455566b.22.1736606452879; Sat, 11 Jan 2025
+ 06:40:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250108-strlen_use_builtin_constant_p-v1-1-611b52e80a9f@wanadoo.fr>
+ <202501081331.E4B6DF747@keescook> <CAMZ6RqJS5FwuBUdvVdXoZj6wZOJz8Nao4FzSzCK1VtbNF41sMw@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJS5FwuBUdvVdXoZj6wZOJz8Nao4FzSzCK1VtbNF41sMw@mail.gmail.com>
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Date: Sat, 11 Jan 2025 23:40:41 +0900
+X-Gmail-Original-Message-ID: <CAMZ6RqJbinVpsGf6ADUtQTYPRRQN=D8Ne_n6pHtDUPXxED5ZvQ@mail.gmail.com>
+X-Gm-Features: AbW1kvb4zdGjZYAy4UF-AWwj-igw1bOTlLKn6fbLiVDPF6WP_Sm6v2Df_P1KUsw
+Message-ID: <CAMZ6RqJbinVpsGf6ADUtQTYPRRQN=D8Ne_n6pHtDUPXxED5ZvQ@mail.gmail.com>
+Subject: Re: [PATCH] fortify: turn strlen() into an inline function using __builtin_constant_p()
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	David Laight <david.laight@aculab.com>, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/Xilinx/linux-xlnx lkp_test
-head:   9ac6b4acf9144465ac1408d4d799635dec0223a0
-commit: 18423b91613062a236168cdd7df7a0ce5d999c9f [284/504] drm: xlnx: dptx: Add HDCP1x support for DPTx subsystem
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250111/202501112143.cOO7OCGd-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112143.cOO7OCGd-lkp@intel.com/reproduce)
+On Thu. 9 Jan 2025 at 16:52, Vincent Mailhol <mailhol.vincent@wanadoo.fr> w=
+rote:
+(...)
+> > >   * possible for strlen() to be used on compile-time strings for use =
+in
+> > >   * static initializers (i.e. as a constant expression).
+> >
+> > ^^ This comment, however, is I think what sinks this patch. Please see
+> > commit 67ebc3ab4462 ("fortify: Make sure strlen() may still be used as =
+a
+> > constant expression") which required that strlen() not be an inline. I'=
+m
+> > pretty sure the build will start failing again (though perhaps only on
+> > older GCC versions).
+>
+> Strange. I tested it with GCC 5.1 on godbolt and it worked fine. After
+> more investigation, I only got complains from GCC up to 4.9.4:
+>
+>   https://godbolt.org/z/rW8r74vE3
+>
+> I also just did a successful defconfig build using GCC 5.4 (sorry, I
+> do not have an environment with GCC 5.1).
+>
+> So, it looks like an issue of the past to me. But in 67ebc3ab4462, the
+> minimum compiler version was already 5.1:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/scripts/min-tool-version.sh?id=3D67ebc3ab4462#n20
+>
+> In the end, I am not sure what was the issue you encountered at that time=
+.
+>
+> Well, I am not able to reproduce, but if you tell me this is an issue,
+> then I can just keep the s/__is_constexpr/__builtin_constant_p/g
+> change in v2 and drop the inline function part (thus keeping the
+> triple expansion).
+>
+> Let me know if you still think that having it as a function is a no
+> go. In the end, the main purpose here is to get rid of the
+> __is_constexpr. Turning the macro into a function still looks slightly
+> better to me, but at the end I do not really mind.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501112143.cOO7OCGd-lkp@intel.com/
+Actually, I did more investigation and it is working for some strange
+reasons. Whenever the argument of a function named strlen() is a
+compile time constant, the compiler (both GCC and clang) will replace
+it with the string length on the argument, even if strlen() is
+programmed to return something else:
 
-All errors (new ones prefixed by >>):
+  https://godbolt.org/z/nK4b3fnM7
 
-   In file included from drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c:22:
-   In file included from drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c:22:
-   In file included from drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c:22:
-   In file included from drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/xlnx/hdcp/xhdcp1x_tx.c:22:
->> drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:185:22: error: field has incomplete type 'struct delayed_work'
-     185 |         struct delayed_work     sm_work;
-         |                                 ^
-   drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h:185:9: note: forward declaration of 'struct delayed_work'
-     185 |         struct delayed_work     sm_work;
-         |                ^
-   12 warnings and 1 error generated.
+So it is only working because the compiler uses its builtin strlen()
+instead of the function we provided.
+
+Actually, we could just do:
+
+  extern inline size_t strlen(const char *p)
+  {
+          return __fortify_strlen(p);
+  }
+
+and it would work: the compiler ignores the content whenever p is a
+compile time constant =C2=AF\_(=E3=83=84)_/=C2=AF
+
+Well, all this is really ugly. I will drop the inline function and
+send a v2 just with the s/__is_constexpr/__builtin_constant_p/g
+replacement.
 
 
-vim +185 drivers/gpu/drm/xlnx/hdcp/xlnx_hdcp1x_tx.h
-
-   153	
-   154	/*
-   155	 * struct xlnx_hdcp1x_config - This structure contains Hdcp1x driver
-   156	 * configuration information
-   157	 * @dev: device information
-   158	 * @handlers: Callback handlers
-   159	 * @sm_work: state machine worker
-   160	 * @curr_state: current authentication state
-   161	 * @prev_sate: Previous Authentication State
-   162	 * @repeatervalues: The downstream repeater capabilities
-   163	 * @stats: authentication status
-   164	 * @hdcp1x_keymgmt_base: Key management base address
-   165	 * @cipher: Pointer to cipher driver instance
-   166	 * @interface_ref: Pointer to interface(DP/HDMI) driver instance
-   167	 * @interface_base: Pointer to instance iomem base
-   168	 * @pending_events: Evenets that are set by interface driver
-   169	 * @downstreamready: To check the downstream device status ready or not
-   170	 * @is_repeater: says whether downstream is repeater or receiver
-   171	 * @hdcp1x_key_availble: The KMS block has key exists or not.
-   172	 * @lane_count: number of lanes data to be encrypted
-   173	 * @hdcp1x_key: hdcp1x key pointer
-   174	 * @auth_status: first stage authentication status
-   175	 * @keyinit: Key Management Block with key initiliazed properly or not
-   176	 * @is_encryption_en: Encryption enbalemnet is done or not
-   177	 * @is_cipher: is cipher init is done or not
-   178	 * @state_helper: to store the An value temp basis
-   179	 * @encryption_map: To check the encryption progress
-   180	 *
-   181	 */
-   182	struct xlnx_hdcp1x_config {
-   183		struct device *dev;
-   184		struct xhdcp1x_tx_callbacks handlers;
- > 185		struct delayed_work	sm_work;
-   186		enum hdcp1x_tx_state	curr_state;
-   187		enum hdcp1x_tx_state	prev_state;
-   188		struct xhdcp1x_tx_status stats;
-   189		struct regmap *hdcp1x_keymgmt_base;
-   190		void	*cipher;
-   191		void	*interface_ref;
-   192		void __iomem	*interface_base;
-   193		u32	pending_events;
-   194		u32	downstreamready;
-   195		bool	is_repeater;
-   196		bool	hdcp1x_key_available;
-   197		u8	lane_count;
-   198		u8	*hdcp1x_key;
-   199		u8	auth_status;
-   200		u8	keyinit;
-   201		u8	is_encryption_en;
-   202		u8	is_enabled;
-   203		u8	is_cipher;
-   204		u64	state_helper;
-   205		u64	encryption_map;
-   206	};
-   207	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yours sincerely,
+Vincent Mailhol
