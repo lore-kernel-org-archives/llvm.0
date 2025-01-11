@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA231632F3;
-	Sat, 11 Jan 2025 10:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BC718C002;
+	Sat, 11 Jan 2025 10:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736590293; cv=none; b=lAnaPWku4Z6j+NYJEZk8Z3mweR1POIGuUUdD4czSTFnITsD+klDfmTHrKY+B6KatNgZQyr5lrbiv/RL74A7S62ml2D24YQYWGN6nCce1qX4yKUF3R42q4TYHBaiG8G+6+UmwLBkf+mjiA3DmNF4jXne80CnOewtPnONYO5lDHkQ=
+	t=1736592277; cv=none; b=ZmeUhc6FPg7gTSu+tubB8pdxXMytNrIYRQDnR4ZrWDBzImuaif7M6caD5O8aqtsID7TJRu//qKy1kaGJLRULYwYocMoPZOaW/LeKPVTlskO2iu5mWQj4Mn4FcF0gG9mvxhRzfBBT2KKHFX8B6fFbGMZjaErKtOWeMwzjxeNHApw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736590293; c=relaxed/simple;
-	bh=ISWB2mLK42iOVD+gNQv+Tr9tvjWE9t1s+wUZnQ4tS+U=;
+	s=arc-20240116; t=1736592277; c=relaxed/simple;
+	bh=k53UvnXOx/G3Q0f+sZRsqAkJgIpoPizB5KvAGnxQfSw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r59A4DOLe8joaA/U7Vw/NAAqBrq7TcN/NQ4lAkWdZbP76/nSmKgmlNzjaTcmlgmy+UwJTVal0sruZEufplOwL8IHciXHBg/5Y4JOCiruNf5KU+xHNZ4JgYfhZEG7vBimlY+GbZ7G/oZp0HdWtIuI/9JpbdCAtGL02M0MqEdVXuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LxzuZsee; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=kdL+TZB7ZGDDDuswBNrh8zzTK02HTIjuxm2IVs5bWAC4IZizlCaRTnUN6cjJ1f7MB4rwPto6+REvOL7Pxx6D5EbZ4x5QE21wb7gRoYgwQoeQR7wliNWttZQwXkPr91J6qLLEEXWwRWYvvtJAZSQ4MpY7X1yAKDYguWkuhiuh9MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dGBHaBo5; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LxzuZsee"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dGBHaBo5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736590291; x=1768126291;
+  t=1736592276; x=1768128276;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ISWB2mLK42iOVD+gNQv+Tr9tvjWE9t1s+wUZnQ4tS+U=;
-  b=LxzuZseeme42LX+zLW2pWfmrg0Y8qLQ3Lrkwi+BNQJ5g6O7Y7wXk9Y/c
-   m5Y692rkifGJjV0I4lTTwegex2oHaU98qTZH48s0wcW4KSUIw/dzvUiKY
-   jN3rCKOCrV+GD7BQjuEbmh5zhjnsLTz845Kcf/VJriTzgq+F4y+if9dx3
-   He1CLdA4ZzEMMqw7MHAv3RD7LvEVJv8HFM0yx4gesWSEvw31hVCqiLRlo
-   lz2a8dIumGQuRBfiGqN3C/LILj6HHAB6rS73fvZrGTImXeQejDJqSbKbi
-   s7crng9nTqeBj9feaFgc5kU7EKmONsV4kpgpTdjcAaKKti/u10EeNqOUc
-   Q==;
-X-CSE-ConnectionGUID: dWxWQu47QKmGKPGa6+ynSw==
-X-CSE-MsgGUID: gxBDhfJhTQy0/xKRPqVvzA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="24488182"
-X-IronPort-AV: E=Sophos;i="6.12,306,1728975600"; 
-   d="scan'208";a="24488182"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 02:11:31 -0800
-X-CSE-ConnectionGUID: 796Yn37bRzeTFdiuL4iOkQ==
-X-CSE-MsgGUID: sdmfv2L7SmujnHGwVYlBRQ==
+  bh=k53UvnXOx/G3Q0f+sZRsqAkJgIpoPizB5KvAGnxQfSw=;
+  b=dGBHaBo5CTrzK1VInMDZSPZM0/jSH5iILr8xcB2LLimtDFTKb6667TVx
+   BD+Um5mm5cn/7cTtFRdfGHqiFVXCk7zgBBZVln1aduu//N34IcVLrxLRF
+   5gV7o+YFBS8i1XqVIAs0+Xgja/p7eO8RX40f0GBN0dKDp/hWJUn9JEohn
+   qRhSJZ/GjHyKVcinHqcFDhZg2DN36vcWXKnPsghgQVthaAfnNkPrkI1jh
+   wrza2xrwxB+KtGm3LNH2RNmV8PPfU8vYD3Y4+3Z/iM/39+w2NfAKAvA6x
+   VMhvtvrF713iUHPugQrB+cv4CBlG5WWguwVDUyz8eZXqF+iZeTSSNtCw+
+   A==;
+X-CSE-ConnectionGUID: mZmZp0AgTJOYYRq+L+BK9g==
+X-CSE-MsgGUID: uK9T+9I2RaebQ7bUJPJVOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="40823156"
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="40823156"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 02:44:35 -0800
+X-CSE-ConnectionGUID: zBWcrZmFRaibzSH9seaBfA==
+X-CSE-MsgGUID: a1JtxI6yTomU1pIhOr/GDg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="108996034"
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="108869450"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Jan 2025 02:11:30 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 11 Jan 2025 02:44:33 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWYSl-000KTP-0f;
-	Sat, 11 Jan 2025 10:11:27 +0000
-Date: Sat, 11 Jan 2025 18:10:39 +0800
+	id 1tWYyk-000KVL-2m;
+	Sat, 11 Jan 2025 10:44:30 +0000
+Date: Sat, 11 Jan 2025 18:43:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Oxana Kharitonova <oxana@cloudflare.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH resend] hung_task: add task->flags, blocked by coredump
- to log
-Message-ID: <202501111752.UjvzAplN-lkp@intel.com>
-References: <20250110160328.64947-1-oxana@cloudflare.com>
+To: Wencheng Yang <east.moutain.yang@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Wencheng Yang <east.moutain.yang@gmail.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drviers/iommu/amd: support P2P access through IOMMU when
+ SME is enabled
+Message-ID: <202501111847.N7CwntR4-lkp@intel.com>
+References: <20250110130756.333265-1-east.moutain.yang@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,103 +68,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110160328.64947-1-oxana@cloudflare.com>
+In-Reply-To: <20250110130756.333265-1-east.moutain.yang@gmail.com>
 
-Hi Oxana,
+Hi Wencheng,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on tip/sched/core brauner-vfs/vfs.all linus/master v6.13-rc6 next-20250110]
+[auto build test WARNING on arm-perf/for-next/perf]
+[also build test WARNING on linus/master joro-iommu/next v6.13-rc6 next-20250110]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oxana-Kharitonova/hung_task-add-task-flags-blocked-by-coredump-to-log/20250111-000505
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250110160328.64947-1-oxana%40cloudflare.com
-patch subject: [PATCH resend] hung_task: add task->flags, blocked by coredump to log
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250111/202501111752.UjvzAplN-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111752.UjvzAplN-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wencheng-Yang/drviers-iommu-amd-support-P2P-access-through-IOMMU-when-SME-is-enabled/20250110-210948
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git for-next/perf
+patch link:    https://lore.kernel.org/r/20250110130756.333265-1-east.moutain.yang%40gmail.com
+patch subject: [PATCH] drviers/iommu/amd: support P2P access through IOMMU when SME is enabled
+config: x86_64-buildonly-randconfig-001-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111847.N7CwntR4-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111847.N7CwntR4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111752.UjvzAplN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501111847.N7CwntR4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/sched/core.c:7706:9: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-    7704 |         pr_cont(" stack:%-5lu pid:%-5d tgid:%-5d ppid:%-6d task_flags:0x%08lx flags:0x%08lx\n",
-         |                                                                         ~~~~~
-         |                                                                         %08x
-    7705 |                 free, task_pid_nr(p), task_tgid_nr(p),
-    7706 |                 ppid, p->flags, read_task_thread_flags(p));
-         |                       ^~~~~~~~
-   include/linux/printk.h:586:26: note: expanded from macro 'pr_cont'
-     586 |         printk(KERN_CONT fmt, ##__VA_ARGS__)
-         |                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   kernel/sched/core.c:3642:20: warning: unused function 'rq_has_pinned_tasks' [-Wunused-function]
-    3642 | static inline bool rq_has_pinned_tasks(struct rq *rq)
-         |                    ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5816:20: warning: unused function 'sched_tick_start' [-Wunused-function]
-    5816 | static inline void sched_tick_start(int cpu) { }
-         |                    ^~~~~~~~~~~~~~~~
-   kernel/sched/core.c:5817:20: warning: unused function 'sched_tick_stop' [-Wunused-function]
-    5817 | static inline void sched_tick_stop(int cpu) { }
-         |                    ^~~~~~~~~~~~~~~
-   kernel/sched/core.c:6535:20: warning: unused function 'sched_core_cpu_starting' [-Wunused-function]
-    6535 | static inline void sched_core_cpu_starting(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6536:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6536 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/core.c:6537:20: warning: unused function 'sched_core_cpu_dying' [-Wunused-function]
-    6537 | static inline void sched_core_cpu_dying(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
+   In file included from drivers/iommu/amd/io_pgtable_v2.c:14:
+   In file included from include/linux/io-pgtable.h:6:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/iommu/amd/io_pgtable_v2.c:68:6: warning: variable 'pte' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      68 |         if (!(prot & IOMMU_PROT_MMIO))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/amd/io_pgtable_v2.c:71:2: note: uninitialized use occurs here
+      71 |         pte |= IOMMU_PAGE_PRESENT | IOMMU_PAGE_USER;
+         |         ^~~
+   drivers/iommu/amd/io_pgtable_v2.c:68:2: note: remove the 'if' if its condition is always true
+      68 |         if (!(prot & IOMMU_PROT_MMIO))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      69 |                 pte = __sme_set(paddr & PM_ADDR_MASK);
+   drivers/iommu/amd/io_pgtable_v2.c:66:9: note: initialize the variable 'pte' to silence this warning
+      66 |         u64 pte;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +7706 kernel/sched/core.c
+vim +68 drivers/iommu/amd/io_pgtable_v2.c
 
-  7685	
-  7686	void sched_show_task(struct task_struct *p)
-  7687	{
-  7688		unsigned long free;
-  7689		int ppid;
-  7690	
-  7691		if (!try_get_task_stack(p))
-  7692			return;
-  7693	
-  7694		pr_info("task:%-15.15s state:%c", p->comm, task_state_to_char(p));
-  7695	
-  7696		if (task_is_running(p))
-  7697			pr_cont("  running task    ");
-  7698		free = stack_not_used(p);
-  7699		ppid = 0;
-  7700		rcu_read_lock();
-  7701		if (pid_alive(p))
-  7702			ppid = task_pid_nr(rcu_dereference(p->real_parent));
-  7703		rcu_read_unlock();
-  7704		pr_cont(" stack:%-5lu pid:%-5d tgid:%-5d ppid:%-6d task_flags:0x%08lx flags:0x%08lx\n",
-  7705			free, task_pid_nr(p), task_tgid_nr(p),
-> 7706			ppid, p->flags, read_task_thread_flags(p));
-  7707	
-  7708		print_worker_info(KERN_INFO, p);
-  7709		print_stop_info(KERN_INFO, p);
-  7710		print_scx_info(KERN_INFO, p);
-  7711		show_stack(p, NULL, KERN_INFO);
-  7712		put_task_stack(p);
-  7713	}
-  7714	EXPORT_SYMBOL_GPL(sched_show_task);
-  7715	
+    63	
+    64	static u64 set_pte_attr(u64 paddr, u64 pg_size, int prot)
+    65	{
+    66		u64 pte;
+    67	
+  > 68		if (!(prot & IOMMU_PROT_MMIO))
+    69			pte = __sme_set(paddr & PM_ADDR_MASK);
+    70	
+    71		pte |= IOMMU_PAGE_PRESENT | IOMMU_PAGE_USER;
+    72		pte |= IOMMU_PAGE_ACCESS | IOMMU_PAGE_DIRTY;
+    73	
+    74		if (prot & IOMMU_PROT_IW)
+    75			pte |= IOMMU_PAGE_RW;
+    76	
+    77		/* Large page */
+    78		if (pg_size == IOMMU_PAGE_SIZE_1G || pg_size == IOMMU_PAGE_SIZE_2M)
+    79			pte |= IOMMU_PAGE_PSE;
+    80	
+    81		return pte;
+    82	}
+    83	
 
 -- 
 0-DAY CI Kernel Test Service
