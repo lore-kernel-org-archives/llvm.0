@@ -1,66 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCA414F132;
-	Sat, 11 Jan 2025 09:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BD51494D9;
+	Sat, 11 Jan 2025 09:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736587650; cv=none; b=IdpaIBHYm+rw09Wxv/ZI1LC+aAwkQrpWtb/XdwcDupTvnsXT29V6jb0cTc+Mc9/euASWWHiMeg+2LRJoaIVIH8fNvItPbEMsz4MYFHhbzl91fyX76mGMA1HDZDtJW7TmhLb09cYFObhntNEv66WXksNULToJoCsXHEqk4OKv6ns=
+	t=1736588973; cv=none; b=f22Nv9f65kgdzHUd1ES6XT7IdmAh1T9ZpEO2E9bh+YwStmZOJGMtiiRFAGjjWQS+13fiwEgsgKZwbpPtAOY1Rimh5YIH1BUO0fEUECol6JKgMdTfTGdUIYXtyVBnSoGlPDiKS1s2GP5i7EZW9D97630iiE3pw22/0xe5mde0Cq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736587650; c=relaxed/simple;
-	bh=GOfrlgeXQrDZvxQihWPXR4B1GvTFhWoKCUJYDKzc80o=;
+	s=arc-20240116; t=1736588973; c=relaxed/simple;
+	bh=AblgLSACwiCrBiCNEaHlTkmLhzH/lPXUfMBmIVezkAQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YHS9qEDu5CDOxS/OqYiQh04OMkynPq/31G+x4nkl/9SSdjN+9litUdYhogGhez0LmFESg8bQGowvvjQ2f9tbmC48biC+BCWqgB7O9RUxMcItZrT75urElQ7SDQX3hTXioDBTUHJNDzZCgSSSuKKR1nIZT5AtFmPloon5THTxefQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuhRq4t+; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=bLIdhXHqRP3hprW8mY2bL4NRbINbasZjWnHho04P1NGCkeFiDcqu/lXgEM3xCN2NmqAaf3KhmG5GIXoAj3VD7ObnWw05ii+zKaar4ueu5AcT10YCi2ao1H+nz6xn8+xsrDw5P5HSbew8AjwbRa5sNtWnDrXpyiFSs5iIxzjOcE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ht/uXrGz; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuhRq4t+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ht/uXrGz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736587648; x=1768123648;
+  t=1736588971; x=1768124971;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GOfrlgeXQrDZvxQihWPXR4B1GvTFhWoKCUJYDKzc80o=;
-  b=BuhRq4t+NFeeqv/uyGu+H1KPfvEHRdC6hufP1DFqj75UAsodkKmZrf6G
-   cQz/qBvga/dnwrlk5sY78jw9H/N/dXKf8kW3zhtUD5FKXDbFj2udWUNqG
-   TfUnrQGKjSKuqm4OzbAKQx3O0h+wWcnXAT+rCGuYye+AVp/+ITj7L3JKS
-   JA+zlnl+3nN6MIN2HRTbnYLcf8p4tfnTftlOWTCQUBWNW3eSedVXxADka
-   lskUUTuKgKdt3MrEcDcSrS3y5nd6+SdLkf21lTS98Cu0+a39gn5PQA+VZ
-   W8d3v3TtL9FuSMLpoGaUFGybWfgvFmfY3w0llCLkhjWlA+7zg9vS2AzHj
+  bh=AblgLSACwiCrBiCNEaHlTkmLhzH/lPXUfMBmIVezkAQ=;
+  b=Ht/uXrGzy3BfpWj+laobCi9UbBPI0+R3l6CT6+gtDFDnfWtmEjmZd9T5
+   yTQ3f0kARVUQ/YrHfrAXuxyjcPwYSVfzmOS3XPCxbTah02vDo9/IyM6jW
+   RTvwQj9UZxDbMvBG4qO0bpAeWt1Lca79X/BuKkLAich2I+zSLdhZX26IM
+   blkRFJ27EphefIueXJsWZKSsLeEL4kmG/3aMlJOLDQ1JjTDAjRFIn1RK0
+   Fzta59jABu23Aaeb0lX+1gUs06vJ9aahepodOcC14C8SNh3J3o0ZjTRCz
+   P8GZX2FKZTlIt9Paa78lS1Q29e0kkrFcfQWssy8OsvEjm6LG5FdFWztoS
    w==;
-X-CSE-ConnectionGUID: OL2yV9LdTiemGq8iUzj4Pw==
-X-CSE-MsgGUID: rw9NMrAFTf2dMzTNna8PyQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="36781791"
+X-CSE-ConnectionGUID: 5hL74K/vTGqdj631s7jhzw==
+X-CSE-MsgGUID: JYJ/mQ2WSb+ldcJpqGDmiA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="40646912"
 X-IronPort-AV: E=Sophos;i="6.12,306,1728975600"; 
-   d="scan'208";a="36781791"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 01:27:28 -0800
-X-CSE-ConnectionGUID: 8HrRzHbrQYGz0eyCpnh0wg==
-X-CSE-MsgGUID: +Y70tL11SF2QTds53BqZJw==
+   d="scan'208";a="40646912"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 01:49:30 -0800
+X-CSE-ConnectionGUID: HhaMVm9fQD27h95k9unS1A==
+X-CSE-MsgGUID: BsC9mfnxRnmZUCtprqZFeQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="108988526"
+X-IronPort-AV: E=Sophos;i="6.12,306,1728975600"; 
+   d="scan'208";a="103766867"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Jan 2025 01:27:24 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 01:49:26 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWXm5-000KQx-2U;
-	Sat, 11 Jan 2025 09:27:21 +0000
-Date: Sat, 11 Jan 2025 17:26:53 +0800
+	id 1tWY7Q-000KSS-1h;
+	Sat, 11 Jan 2025 09:49:24 +0000
+Date: Sat, 11 Jan 2025 17:49:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Bruel <christian.bruel@foss.st.com>, vkoul@kernel.org,
-	kishon@kernel.org, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com, p.zabel@pengutronix.de,
-	linux-phy@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	fabrice.gasnier@foss.st.com
+To: Kuniyuki Iwashima <kuniyu@amazon.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Bruel <christian.bruel@foss.st.com>
-Subject: Re: [PATCH 1/1] phy: stm32: Optimize tuning values from DT.
-Message-ID: <202501111758.hNwYV0yg-lkp@intel.com>
-References: <20250110123356.974839-2-christian.bruel@foss.st.com>
+	netdev@vger.kernel.org, Donald Hunter <donald.hunter@redhat.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>
+Subject: Re: [PATCH v1 net-next 07/12] af_unix: Set drop reason in
+ unix_stream_sendmsg().
+Message-ID: <202501111754.vEJ6CJgk-lkp@intel.com>
+References: <20250110092641.85905-8-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,186 +69,170 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110123356.974839-2-christian.bruel@foss.st.com>
+In-Reply-To: <20250110092641.85905-8-kuniyu@amazon.com>
 
-Hi Christian,
+Hi Kuniyuki,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on v6.13-rc6]
-[also build test WARNING on linus/master next-20250110]
-[cannot apply to atorgue-stm32/stm32-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Bruel/phy-stm32-Optimize-tuning-values-from-DT/20250110-203802
-base:   v6.13-rc6
-patch link:    https://lore.kernel.org/r/20250110123356.974839-2-christian.bruel%40foss.st.com
-patch subject: [PATCH 1/1] phy: stm32: Optimize tuning values from DT.
-config: hexagon-randconfig-002-20250111 (https://download.01.org/0day-ci/archive/20250111/202501111758.hNwYV0yg-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111758.hNwYV0yg-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/net-dropreason-Gather-SOCKET_-drop-reasons/20250110-173850
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250110092641.85905-8-kuniyu%40amazon.com
+patch subject: [PATCH v1 net-next 07/12] af_unix: Set drop reason in unix_stream_sendmsg().
+config: mips-ci20_defconfig (https://download.01.org/0day-ci/archive/20250111/202501111754.vEJ6CJgk-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501111754.vEJ6CJgk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501111758.hNwYV0yg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501111754.vEJ6CJgk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/phy/st/phy-stm32-combophy.c:250:35: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
-                              SYSCFG_COMBOPHY_CR4_RX0_EQ, val);
-                                                          ^~~
-   drivers/phy/st/phy-stm32-combophy.c:165:40: note: initialize the variable 'val' to silence this warning
-           u32 refclksel, pllmult, propcntrl, val;
-                                                 ^
-                                                  = 0
+>> net/unix/af_unix.c:2303:6: warning: variable 'reason' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2303 |         if (READ_ONCE(sk->sk_shutdown) & SEND_SHUTDOWN)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:47:28: note: expanded from macro 'READ_ONCE'
+      47 | #define READ_ONCE(x)                                                    \
+         |                                                                         ^
+   net/unix/af_unix.c:2403:24: note: uninitialized use occurs here
+    2403 |         kfree_skb_reason(skb, reason);
+         |                               ^~~~~~
+   net/unix/af_unix.c:2303:2: note: remove the 'if' if its condition is always false
+    2303 |         if (READ_ONCE(sk->sk_shutdown) & SEND_SHUTDOWN)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2304 |                 goto out_pipe;
+         |                 ~~~~~~~~~~~~~
+   net/unix/af_unix.c:2268:2: note: variable 'reason' is declared here
+    2268 |         enum skb_drop_reason reason;
+         |         ^
    1 warning generated.
 
 
-vim +/val +250 drivers/phy/st/phy-stm32-combophy.c
+vim +2303 net/unix/af_unix.c
 
-47e1bb6b4ba098 Christian Bruel 2024-09-30  161  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  162  static int stm32_combophy_pll_init(struct stm32_combophy *combophy)
-47e1bb6b4ba098 Christian Bruel 2024-09-30  163  {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  164  	int ret;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  165  	u32 refclksel, pllmult, propcntrl, val;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  166  	u32 clk_rate;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  167  	struct clk *clk;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  168  	u32 cr1_val = 0, cr1_mask = 0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  169  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  170  	if (combophy->have_pad_clk)
-47e1bb6b4ba098 Christian Bruel 2024-09-30  171  		clk = combophy->clks[PAD_CLK].clk;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  172  	else
-47e1bb6b4ba098 Christian Bruel 2024-09-30  173  		clk = combophy->clks[KER_CLK].clk;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  174  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  175  	clk_rate = clk_get_rate(clk);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  176  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  177  	dev_dbg(combophy->dev, "%s pll init rate %d\n",
-47e1bb6b4ba098 Christian Bruel 2024-09-30  178  		combophy->have_pad_clk ? "External" : "Ker", clk_rate);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  179  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  180  	if (combophy->type != PHY_TYPE_PCIE) {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  181  		cr1_mask |= SYSCFG_COMBOPHY_CR1_REFSSPEN;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  182  		cr1_val |= SYSCFG_COMBOPHY_CR1_REFSSPEN;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  183  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  184  
-ce8b4a3e6b1975 Christian Bruel 2025-01-10  185  	if (combophy->have_ssc) {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  186  		dev_dbg(combophy->dev, "Enabling clock with SSC\n");
-47e1bb6b4ba098 Christian Bruel 2024-09-30  187  		cr1_mask |= SYSCFG_COMBOPHY_CR1_SSCEN;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  188  		cr1_val |= SYSCFG_COMBOPHY_CR1_SSCEN;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  189  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  190  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  191  	switch (clk_rate) {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  192  	case 100000000:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  193  		pllmult = MPLLMULT_100;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  194  		refclksel = REFCLKSEL_0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  195  		propcntrl = 0x8u << 4;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  196  		break;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  197  	case 19200000:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  198  		pllmult = MPLLMULT_19_2;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  199  		refclksel = REFCLKSEL_1;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  200  		propcntrl = 0x8u << 4;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  201  		break;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  202  	case 25000000:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  203  		pllmult = MPLLMULT_25;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  204  		refclksel = REFCLKSEL_0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  205  		propcntrl = 0xeu << 4;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  206  		break;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  207  	case 24000000:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  208  		pllmult = MPLLMULT_24;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  209  		refclksel = REFCLKSEL_1;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  210  		propcntrl = 0xeu << 4;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  211  		break;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  212  	case 20000000:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  213  		pllmult = MPLLMULT_20;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  214  		refclksel = REFCLKSEL_0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  215  		propcntrl = 0xeu << 4;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  216  		break;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  217  	default:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  218  		dev_err(combophy->dev, "Invalid rate 0x%x\n", clk_rate);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  219  		return -EINVAL;
-e592a65584fce0 Yang Li         2024-10-17  220  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  221  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  222  	cr1_mask |= SYSCFG_COMBOPHY_CR1_REFCLKDIV2;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  223  	cr1_val |= REFCLDIV_0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  224  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  225  	cr1_mask |= SYSCFG_COMBOPHY_CR1_REFCLKSEL;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  226  	cr1_val |= refclksel;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  227  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  228  	cr1_mask |= SYSCFG_COMBOPHY_CR1_MPLLMULT;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  229  	cr1_val |= pllmult;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  230  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  231  	/*
-47e1bb6b4ba098 Christian Bruel 2024-09-30  232  	 * vddcombophy is interconnected with vddcore. Isolation bit should be unset
-47e1bb6b4ba098 Christian Bruel 2024-09-30  233  	 * before using the ComboPHY.
-47e1bb6b4ba098 Christian Bruel 2024-09-30  234  	 */
-47e1bb6b4ba098 Christian Bruel 2024-09-30  235  	regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR2,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  236  			   SYSCFG_COMBOPHY_CR2_ISO_DIS, SYSCFG_COMBOPHY_CR2_ISO_DIS);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  237  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  238  	reset_control_assert(combophy->phy_reset);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  239  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  240  	if (combophy->type == PHY_TYPE_PCIE) {
-ce8b4a3e6b1975 Christian Bruel 2025-01-10  241  		stm32_impedance_tune(combophy);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  242  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  243  		cr1_mask |= SYSCFG_COMBOPHY_CR1_REFUSEPAD;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  244  		cr1_val |= combophy->have_pad_clk ? SYSCFG_COMBOPHY_CR1_REFUSEPAD : 0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  245  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  246  
-ce8b4a3e6b1975 Christian Bruel 2025-01-10  247  	if (combophy->rx_eq != -1) {
-ce8b4a3e6b1975 Christian Bruel 2025-01-10  248  		dev_dbg(combophy->dev, "Set RX equalizer %u\n", combophy->rx_eq);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  249  		regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR4,
-47e1bb6b4ba098 Christian Bruel 2024-09-30 @250  			   SYSCFG_COMBOPHY_CR4_RX0_EQ, val);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  251  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  252  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  253  	regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR1, cr1_mask, cr1_val);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  254  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  255  	/*
-47e1bb6b4ba098 Christian Bruel 2024-09-30  256  	 * Force elasticity buffer to be tuned for the reference clock as
-47e1bb6b4ba098 Christian Bruel 2024-09-30  257  	 * the separated clock model is not supported
-47e1bb6b4ba098 Christian Bruel 2024-09-30  258  	 */
-47e1bb6b4ba098 Christian Bruel 2024-09-30  259  	regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR5,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  260  			   SYSCFG_COMBOPHY_CR5_COMMON_CLOCKS, SYSCFG_COMBOPHY_CR5_COMMON_CLOCKS);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  261  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  262  	reset_control_deassert(combophy->phy_reset);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  263  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  264  	ret = regmap_read_poll_timeout(combophy->regmap, SYSCFG_COMBOPHY_SR, val,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  265  				       !(val & STM32MP25_PIPE0_PHYSTATUS),
-47e1bb6b4ba098 Christian Bruel 2024-09-30  266  				       10, 1000);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  267  	if (ret) {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  268  		dev_err(combophy->dev, "timeout, cannot lock PLL\n");
-47e1bb6b4ba098 Christian Bruel 2024-09-30  269  		if (combophy->type == PHY_TYPE_PCIE && !combophy->have_pad_clk)
-47e1bb6b4ba098 Christian Bruel 2024-09-30  270  			regmap_update_bits(combophy->regmap, SYSCFG_PCIEPRGCR,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  271  					   STM32MP25_PCIEPRGCR_EN, 0);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  272  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  273  		if (combophy->type != PHY_TYPE_PCIE)
-47e1bb6b4ba098 Christian Bruel 2024-09-30  274  			regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR1,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  275  					   SYSCFG_COMBOPHY_CR1_REFSSPEN, 0);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  276  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  277  		goto out;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  278  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  279  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  280  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  281  	if (combophy->type == PHY_TYPE_PCIE) {
-47e1bb6b4ba098 Christian Bruel 2024-09-30  282  		if (!combophy->have_pad_clk)
-47e1bb6b4ba098 Christian Bruel 2024-09-30  283  			regmap_update_bits(combophy->regmap, SYSCFG_PCIEPRGCR,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  284  					   STM32MP25_PCIEPRGCR_EN, STM32MP25_PCIEPRGCR_EN);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  285  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  286  		val = readl_relaxed(combophy->base + COMBOPHY_SUP_ANA_MPLL_LOOP_CTL);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  287  		val &= ~COMBOPHY_PROP_CNTRL;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  288  		val |= propcntrl;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  289  		writel_relaxed(val, combophy->base + COMBOPHY_SUP_ANA_MPLL_LOOP_CTL);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  290  	}
-47e1bb6b4ba098 Christian Bruel 2024-09-30  291  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  292  	return 0;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  293  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  294  out:
-47e1bb6b4ba098 Christian Bruel 2024-09-30  295  	regmap_update_bits(combophy->regmap, SYSCFG_COMBOPHY_CR2,
-47e1bb6b4ba098 Christian Bruel 2024-09-30  296  			   SYSCFG_COMBOPHY_CR2_ISO_DIS, 0);
-47e1bb6b4ba098 Christian Bruel 2024-09-30  297  
-47e1bb6b4ba098 Christian Bruel 2024-09-30  298  	return ret;
-47e1bb6b4ba098 Christian Bruel 2024-09-30  299  }
-47e1bb6b4ba098 Christian Bruel 2024-09-30  300  
+314001f0bf9270 Rao Shoaib        2021-08-01  2264  
+1b784140474e4f Ying Xue          2015-03-02  2265  static int unix_stream_sendmsg(struct socket *sock, struct msghdr *msg,
+1b784140474e4f Ying Xue          2015-03-02  2266  			       size_t len)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2267  {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2268  	enum skb_drop_reason reason;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2269  	struct sock *sk = sock->sk;
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2270  	struct sk_buff *skb = NULL;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2271  	struct sock *other = NULL;
+7cc05662682da4 Christoph Hellwig 2015-01-28  2272  	struct scm_cookie scm;
+8ba69ba6a324b1 Miklos Szeredi    2009-09-11  2273  	bool fds_sent = false;
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2274  	int err, sent = 0;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2275  
+7cc05662682da4 Christoph Hellwig 2015-01-28  2276  	err = scm_send(sock, msg, &scm, false);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2277  	if (err < 0)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2278  		return err;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2279  
+d9f21b3613337b Kuniyuki Iwashima 2024-01-23  2280  	wait_for_unix_gc(scm.fp);
+d9f21b3613337b Kuniyuki Iwashima 2024-01-23  2281  
+314001f0bf9270 Rao Shoaib        2021-08-01  2282  	if (msg->msg_flags & MSG_OOB) {
+6c444255b193b5 Kuniyuki Iwashima 2024-12-13  2283  		err = -EOPNOTSUPP;
+4edf21aa94ee33 Kuniyuki Iwashima 2022-03-17  2284  #if IS_ENABLED(CONFIG_AF_UNIX_OOB)
+314001f0bf9270 Rao Shoaib        2021-08-01  2285  		if (len)
+314001f0bf9270 Rao Shoaib        2021-08-01  2286  			len--;
+314001f0bf9270 Rao Shoaib        2021-08-01  2287  		else
+314001f0bf9270 Rao Shoaib        2021-08-01  2288  #endif
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2289  			goto out_err;
+314001f0bf9270 Rao Shoaib        2021-08-01  2290  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2291  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2292  	if (msg->msg_namelen) {
+8a34d4e8d9742a Kuniyuki Iwashima 2024-06-04  2293  		err = READ_ONCE(sk->sk_state) == TCP_ESTABLISHED ? -EISCONN : -EOPNOTSUPP;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2294  		goto out_err;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2295  	} else {
+830a1e5c212fb3 Benjamin LaHaise  2005-12-13  2296  		other = unix_peer(sk);
+6c444255b193b5 Kuniyuki Iwashima 2024-12-13  2297  		if (!other) {
+6c444255b193b5 Kuniyuki Iwashima 2024-12-13  2298  			err = -ENOTCONN;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2299  			goto out_err;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2300  		}
+6c444255b193b5 Kuniyuki Iwashima 2024-12-13  2301  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2302  
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10 @2303  	if (READ_ONCE(sk->sk_shutdown) & SEND_SHUTDOWN)
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2304  		goto out_pipe;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2305  
+6eba6a372b501a Eric Dumazet      2008-11-16  2306  	while (sent < len) {
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2307  		int size = len - sent;
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2308  		int data_len;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2309  
+a0dbf5f818f908 David Howells     2023-05-22  2310  		if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES)) {
+a0dbf5f818f908 David Howells     2023-05-22  2311  			skb = sock_alloc_send_pskb(sk, 0, 0,
+a0dbf5f818f908 David Howells     2023-05-22  2312  						   msg->msg_flags & MSG_DONTWAIT,
+a0dbf5f818f908 David Howells     2023-05-22  2313  						   &err, 0);
+a0dbf5f818f908 David Howells     2023-05-22  2314  		} else {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2315  			/* Keep two messages in the pipe so it schedules better */
+b0632e53e0da80 Kuniyuki Iwashima 2024-06-04  2316  			size = min_t(int, size, (READ_ONCE(sk->sk_sndbuf) >> 1) - 64);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2317  
+e370a723632177 Eric Dumazet      2013-08-08  2318  			/* allow fallback to order-0 allocations */
+e370a723632177 Eric Dumazet      2013-08-08  2319  			size = min_t(int, size, SKB_MAX_HEAD(0) + UNIX_SKB_FRAGS_SZ);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2320  
+e370a723632177 Eric Dumazet      2013-08-08  2321  			data_len = max_t(int, 0, size - SKB_MAX_HEAD(0));
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2322  
+31ff6aa5c86f75 Kirill Tkhai      2014-05-15  2323  			data_len = min_t(size_t, size, PAGE_ALIGN(data_len));
+31ff6aa5c86f75 Kirill Tkhai      2014-05-15  2324  
+e370a723632177 Eric Dumazet      2013-08-08  2325  			skb = sock_alloc_send_pskb(sk, size - data_len, data_len,
+28d6427109d13b Eric Dumazet      2013-08-08  2326  						   msg->msg_flags & MSG_DONTWAIT, &err,
+28d6427109d13b Eric Dumazet      2013-08-08  2327  						   get_order(UNIX_SKB_FRAGS_SZ));
+a0dbf5f818f908 David Howells     2023-05-22  2328  		}
+e370a723632177 Eric Dumazet      2013-08-08  2329  		if (!skb)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2330  			goto out_err;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2331  
+f78a5fda911652 David S. Miller   2011-09-16  2332  		/* Only send the fds in the first buffer */
+7cc05662682da4 Christoph Hellwig 2015-01-28  2333  		err = unix_scm_to_skb(&scm, skb, !fds_sent);
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2334  		if (err < 0) {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2335  			reason = unix_scm_err_to_reason(err);
+d460b04bc452cf Kuniyuki Iwashima 2024-12-13  2336  			goto out_free;
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2337  		}
+d460b04bc452cf Kuniyuki Iwashima 2024-12-13  2338  
+8ba69ba6a324b1 Miklos Szeredi    2009-09-11  2339  		fds_sent = true;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2340  
+a0dbf5f818f908 David Howells     2023-05-22  2341  		if (unlikely(msg->msg_flags & MSG_SPLICE_PAGES)) {
+6bd8614fc2d076 Frederik Deweerdt 2024-12-09  2342  			skb->ip_summed = CHECKSUM_UNNECESSARY;
+a0dbf5f818f908 David Howells     2023-05-22  2343  			err = skb_splice_from_iter(skb, &msg->msg_iter, size,
+a0dbf5f818f908 David Howells     2023-05-22  2344  						   sk->sk_allocation);
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2345  			if (err < 0) {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2346  				reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
+d460b04bc452cf Kuniyuki Iwashima 2024-12-13  2347  				goto out_free;
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2348  			}
+d460b04bc452cf Kuniyuki Iwashima 2024-12-13  2349  
+a0dbf5f818f908 David Howells     2023-05-22  2350  			size = err;
+a0dbf5f818f908 David Howells     2023-05-22  2351  			refcount_add(size, &sk->sk_wmem_alloc);
+a0dbf5f818f908 David Howells     2023-05-22  2352  		} else {
+e370a723632177 Eric Dumazet      2013-08-08  2353  			skb_put(skb, size - data_len);
+e370a723632177 Eric Dumazet      2013-08-08  2354  			skb->data_len = data_len;
+e370a723632177 Eric Dumazet      2013-08-08  2355  			skb->len = size;
+c0371da6047abd Al Viro           2014-11-24  2356  			err = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2357  			if (err) {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2358  				reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
+d460b04bc452cf Kuniyuki Iwashima 2024-12-13  2359  				goto out_free;
+a0dbf5f818f908 David Howells     2023-05-22  2360  			}
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2361  		}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2362  
+1c92b4e50ef926 David S. Miller   2007-05-31  2363  		unix_state_lock(other);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2364  
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2365  		if (sock_flag(other, SOCK_DEAD)) {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2366  			reason = SKB_DROP_REASON_SOCKET_CLOSE;
+49efbfa661b688 Kuniyuki Iwashima 2025-01-10  2367  			goto out_pipe_unlock;
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2368  		}
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2369  
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2370  		if (other->sk_shutdown & RCV_SHUTDOWN) {
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2371  			reason = SKB_DROP_REASON_SOCKET_RCV_SHUTDOWN;
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2372  			goto out_pipe_unlock;
+6ca5ecbc3d69e6 Kuniyuki Iwashima 2025-01-10  2373  		}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2374  
+16e5726269611b Eric Dumazet      2011-09-19  2375  		maybe_add_creds(skb, sock, other);
+3c32da19a858fb Kirill Tkhai      2019-12-09  2376  		scm_stat_add(other, skb);
+7782040b950b5d Paolo Abeni       2020-02-28  2377  		skb_queue_tail(&other->sk_receive_queue, skb);
+1c92b4e50ef926 David S. Miller   2007-05-31  2378  		unix_state_unlock(other);
+676d23690fb62b David S. Miller   2014-04-11  2379  		other->sk_data_ready(other);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2380  		sent += size;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2381  	}
+^1da177e4c3f41 Linus Torvalds    2005-04-16  2382  
 
 -- 
 0-DAY CI Kernel Test Service
