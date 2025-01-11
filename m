@@ -1,66 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C27195985;
-	Sat, 11 Jan 2025 12:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B01139D;
+	Sat, 11 Jan 2025 13:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736598307; cv=none; b=JpmJCkpHhSBMIiFaQ39u9eG60BRFDYIt5VF4690iFrugUNS5xww0cbhXu93Tpy+dMUFRk/Py8iMWNiqMeZhH6KXnC3czhJ8BnQVzYLh5daK5wX4ylGiDrJYM5EstRiXCWMgtP8FE/q7fOX7G3j/76y3XFhgoigEziiofSa6gHLY=
+	t=1736600890; cv=none; b=WcX+Amg9GnbPlKagqM8xq7YbAdQkFnT+RqvS9/Z899BTtfRWdFCKw//BR5SXrZwDcllGnn0fos3IpRfcVOrgZ63xvb+qdReCMKvDnRXZbuYq6IMiV0Ri6SBtGi7yuPXFwsPPMpjwUk1adAawWzhyJojRS90YCgepCGuGKk+8j1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736598307; c=relaxed/simple;
-	bh=A/8dZvb4PodA5W5f8//xP4ydt9geI9IEAZNNNqDbBBk=;
+	s=arc-20240116; t=1736600890; c=relaxed/simple;
+	bh=wdSwZqiGhYyZAx+e2IQorQXp43S0F5s8LS6LS3NEPn0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DSXWSqu5lA8AQFEwDL5CyEyk707pObBSrTVGAQu+8MzhbMWeXh3h3Zen5FA5ZVycUyvotziBcEAwm1W25G4/3ZTkRpwOhP07tWlLp0fu7WHtD+Isctkax+eJIDY2A1731MoaFyvFyRD4CjRIbwtAvIR7J5AtzaRSEY4SVTuElLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLDrIcO+; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=VB1/upF1GbSSkNQ077tysBKr6nwEFrQHyCySPCGHLyBxAZsmAMrpmyYwd/zROO4l0W2PnabBk35PT4g3NedulkAognC73pph5QAXQfoK+tPdbFJpzk1m2VCyPTkFxKc4c9BfPcXvnvEjqjsJQvRzIXYlKJ33apHn9H4TZNrg+ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GZjBtyPN; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLDrIcO+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GZjBtyPN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736598302; x=1768134302;
+  t=1736600889; x=1768136889;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=A/8dZvb4PodA5W5f8//xP4ydt9geI9IEAZNNNqDbBBk=;
-  b=XLDrIcO+Jf85iOgzD/1XOTwSQ9F4LxWjpu4wUfCQYYeZSxLoo+rL3Nm1
-   SbPmBZBApAIa4yMk6WEpY7pqA/LxW1gR8yP7R5NjgHUJEaGLMGdH7qf1V
-   przaWUD/qYD4zpFM7fTxRuVYM3taK/4f75wsW2oY/J5nWcJH8ZT+K+laI
-   rRaR9xyV/YPDuZJIc+KAyAWCfnEbmbiSHx5673r+USleYsqFiZb/h/q2n
-   Da0PGMuirPAZD7QJYAo8uxZlsTRIwc2Mp0E/96M74gAiKVCYrSrcn3yLq
-   KRekvhEVasKLAaQUjvc9tUxYpPuCitkGMJnfwXCKUCQ6Mij7V0bEUwszF
-   g==;
-X-CSE-ConnectionGUID: tTJZAmvfTHyDdat0c7i9Cg==
-X-CSE-MsgGUID: nnLHwAJuTYaiaokXEKjElQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="36568763"
+  bh=wdSwZqiGhYyZAx+e2IQorQXp43S0F5s8LS6LS3NEPn0=;
+  b=GZjBtyPN58OTXZUM6ChEmXOWdLK4whViA66vmRivabd/YMD5R2sThkPz
+   c3sYpvZbZDP7Sy4uyNtwrgId9XKMfHF6U77MlJHCSoAy1LM10mgDXPmR+
+   42KQ535mMViBIRXfkMz6aFVS279EhVcUGEJmjl8F0aH2EqxGAC2G5L42k
+   nd8iHYsUU/gj+nUmZv8UFu8Ypb5Skj7GF8/ruJDkNdMYGk1Q2lhE1a9bY
+   xM8W2oCzGBA6MdW+Jg33cIw/oxzwSPdGkG2vnVojCzG7uOzJ9jkgAOdH8
+   zFbvoJLcvZlqdRPDpeSX5203zX1P/SWvMbLpjC0A4gm8jWqc6g6vfeGO8
+   w==;
+X-CSE-ConnectionGUID: tIwx/+VaSoesUVEKniVOGg==
+X-CSE-MsgGUID: lFJwKhoVQxKkEwfNnbRSDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="59370311"
 X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="36568763"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 04:24:59 -0800
-X-CSE-ConnectionGUID: s7uiThp/StuhE0Qw+ZroYg==
-X-CSE-MsgGUID: wIRlLujDR0CozHf5o3+rzQ==
+   d="scan'208";a="59370311"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 05:08:09 -0800
+X-CSE-ConnectionGUID: 3/wqF2ZURhC4WRstUhiavQ==
+X-CSE-MsgGUID: 6Lir+QKzQ4WRshUr7vMXAQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="127260895"
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="104040539"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 11 Jan 2025 04:24:56 -0800
+  by orviesa006.jf.intel.com with ESMTP; 11 Jan 2025 05:08:01 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWaXu-000Kcp-06;
-	Sat, 11 Jan 2025 12:24:54 +0000
-Date: Sat, 11 Jan 2025 20:24:15 +0800
+	id 1tWbDa-000KfP-2E;
+	Sat, 11 Jan 2025 13:07:58 +0000
+Date: Sat, 11 Jan 2025 21:07:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roger Pau Monne <roger.pau@citrix.com>, linux-kernel@vger.kernel.org,
-	xen-devel@lists.xenproject.org, linux-pci@vger.kernel.org
+To: Andrey Albershteyn <aalbersh@redhat.com>, linux-fsdevel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Roger Pau Monne <roger.pau@citrix.com>,
-	Juergen Gross <jgross@suse.com>, Bjorn Helgaas <helgaas@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
-Message-ID: <202501112048.6yCFh2ma-lkp@intel.com>
-References: <20250110140152.27624-4-roger.pau@citrix.com>
+	Andrey Albershteyn <aalbersh@redhat.com>, linux-api@vger.kernel.org,
+	monstr@monstr.eu, mpe@ellerman.id.au, npiggin@gmail.com,
+	christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+	luto@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	chris@zankel.net, jcmvbkbc@gmail.com, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, jack@suse.cz, arnd@arndb.de,
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <202501112052.ZJEvfjhd-lkp@intel.com>
+References: <20250109174540.893098-1-aalbersh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,104 +73,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110140152.27624-4-roger.pau@citrix.com>
+In-Reply-To: <20250109174540.893098-1-aalbersh@kernel.org>
 
-Hi Roger,
+Hi Andrey,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus xen-tip/linux-next tip/irq/core linus/master v6.13-rc6 next-20250110]
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on geert-m68k/for-next powerpc/next powerpc/fixes s390/features linus/master v6.13-rc6 next-20250110]
+[cannot apply to geert-m68k/for-linus deller-parisc/for-next jcmvbkbc-xtensa/xtensa-for-next arnd-asm-generic/master tip/x86/asm]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roger-Pau-Monne/xen-pci-do-not-register-devices-outside-of-PCI-segment-scope/20250110-220331
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250110140152.27624-4-roger.pau%40citrix.com
-patch subject: [PATCH 3/3] pci/msi: remove pci_msi_ignore_mask
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250111/202501112048.6yCFh2ma-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112048.6yCFh2ma-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrey-Albershteyn/fs-introduce-getfsxattrat-and-setfsxattrat-syscalls/20250110-014739
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250109174540.893098-1-aalbersh%40kernel.org
+patch subject: [PATCH] fs: introduce getfsxattrat and setfsxattrat syscalls
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250111/202501112052.ZJEvfjhd-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112052.ZJEvfjhd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501112048.6yCFh2ma-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501112052.ZJEvfjhd-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/pci/msi/msi.c:12:
-   In file included from include/linux/irq.h:23:
-   In file included from arch/riscv/include/asm/irq.h:10:
-   In file included from include/linux/interrupt.h:22:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/pci/msi/msi.c:288:40: error: incomplete definition of type 'const struct irq_domain'
-     288 |         const struct msi_domain_info *info = d->host_data;
-         |                                              ~^
-   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
-     130 | struct irq_domain;
-         |        ^
-   drivers/pci/msi/msi.c:604:40: error: incomplete definition of type 'const struct irq_domain'
-     604 |         const struct msi_domain_info *info = d->host_data;
-         |                                              ~^
-   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
-     130 | struct irq_domain;
-         |        ^
-   drivers/pci/msi/msi.c:714:40: error: incomplete definition of type 'const struct irq_domain'
-     714 |         const struct msi_domain_info *info = d->host_data;
-         |                                              ~^
-   include/linux/irq.h:130:8: note: forward declaration of 'struct irq_domain'
-     130 | struct irq_domain;
-         |        ^
-   1 warning and 3 errors generated.
-
-
-vim +288 drivers/pci/msi/msi.c
-
-   283	
-   284	static int msi_setup_msi_desc(struct pci_dev *dev, int nvec,
-   285				      struct irq_affinity_desc *masks)
-   286	{
-   287		const struct irq_domain *d = dev_get_msi_domain(&dev->dev);
- > 288		const struct msi_domain_info *info = d->host_data;
-   289		struct msi_desc desc;
-   290		u16 control;
-   291	
-   292		/* MSI Entry Initialization */
-   293		memset(&desc, 0, sizeof(desc));
-   294	
-   295		pci_read_config_word(dev, dev->msi_cap + PCI_MSI_FLAGS, &control);
-   296		/* Lies, damned lies, and MSIs */
-   297		if (dev->dev_flags & PCI_DEV_FLAGS_HAS_MSI_MASKING)
-   298			control |= PCI_MSI_FLAGS_MASKBIT;
-   299		if (info->flags & MSI_FLAG_NO_MASK)
-   300			control &= ~PCI_MSI_FLAGS_MASKBIT;
-   301	
-   302		desc.nvec_used			= nvec;
-   303		desc.pci.msi_attrib.is_64	= !!(control & PCI_MSI_FLAGS_64BIT);
-   304		desc.pci.msi_attrib.can_mask	= !!(control & PCI_MSI_FLAGS_MASKBIT);
-   305		desc.pci.msi_attrib.default_irq	= dev->irq;
-   306		desc.pci.msi_attrib.multi_cap	= FIELD_GET(PCI_MSI_FLAGS_QMASK, control);
-   307		desc.pci.msi_attrib.multiple	= ilog2(__roundup_pow_of_two(nvec));
-   308		desc.affinity			= masks;
-   309	
-   310		if (control & PCI_MSI_FLAGS_64BIT)
-   311			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_64;
-   312		else
-   313			desc.pci.mask_pos = dev->msi_cap + PCI_MSI_MASK_32;
-   314	
-   315		/* Save the initial mask status */
-   316		if (desc.pci.msi_attrib.can_mask)
-   317			pci_read_config_dword(dev, desc.pci.mask_pos, &desc.pci.msi_mask);
-   318	
-   319		return msi_insert_msi_desc(&dev->dev, &desc);
-   320	}
-   321	
+>> <stdin>:1615:2: warning: syscall getfsxattrat not implemented [-W#warnings]
+    1615 | #warning syscall getfsxattrat not implemented
+         |  ^
+>> <stdin>:1618:2: warning: syscall setfsxattrat not implemented [-W#warnings]
+    1618 | #warning syscall setfsxattrat not implemented
+         |  ^
+   2 warnings generated.
+--
+>> <stdin>:1615:2: warning: syscall getfsxattrat not implemented [-W#warnings]
+    1615 | #warning syscall getfsxattrat not implemented
+         |  ^
+>> <stdin>:1618:2: warning: syscall setfsxattrat not implemented [-W#warnings]
+    1618 | #warning syscall setfsxattrat not implemented
+         |  ^
+   2 warnings generated.
 
 -- 
 0-DAY CI Kernel Test Service
