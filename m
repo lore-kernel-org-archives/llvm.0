@@ -1,109 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C374B14F102
-	for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 21:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B01C2C9;
+	Sun, 12 Jan 2025 00:42:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736629929; cv=none; b=hfxvftl1pVifP1ViowOhKytq6KfMIrNGeMDeVK7x5ASfqKFqA4ECLZhtQBsXRLSvmg96fiDSJMuEwQLKnt3wlQDPNOoJlFJ1yXbgw1R+u0NifqtAyuMJyY4IjE3jVhMQ6K9Y1i5YI1g/glNWlKzqwtOuusM0pntPYzSaRJSCmCc=
+	t=1736642552; cv=none; b=pzAG2ZUrMozCw47/Bij5441b61imhY0b2ItT1TqjZImU2WRinZWkkmODBHsFBxTZX2vaAKEZ4W7AMElAHfckk3jMaW45lCQSJDH2bb1hH/xrXQamtS4cZaMTwDCN5XH1l3crZAeGbU5Ys7TSvW9b6i8r2V73aNCkJM8R1kGYe2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736629929; c=relaxed/simple;
-	bh=p8+BgX+X9/RgEiGEcJmxLyaY/FZSdSjIZsCSvZp9FVw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=p7Af0h0fuhESa9xT6328mvuHE07Y2GeupoJ/Zc50vooCl1cJST7X0Z9gt4N7TJ1B6wr1T1F/wmkyRxPwWHe5rw865phVmxXkzCfGxcjLcdE5Me/dFR+a4tHiGbmTj0+ut9qMAEWXmpJdmzYCdsC2TExx67K7eTL85AI9VFIwdAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e/f6ZE28; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736642552; c=relaxed/simple;
+	bh=Z1BKUv222L4W5EpLjlS5rXbNNqX1dnJIFJb1SINHK6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tr9MUsPtJTFTmUooa8vrIsEDFZN4LwJwXijA+ZulU6UoSaHx1VB1w0jjTTuJ2BXdIXudVdZwI+7zY35rBdCxjhYxguL4vWtChymxHRQuzVHMHVy1trLt9JO0QBHl23R+3yYM1W7hkSNpfk2RHhEtXTYeZkpKJDM/53ros0a3qsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hd9p6Igj; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e/f6ZE28"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736629926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mvfjX8MikZqrrrYuAT2MhjkmDW3vJLRnlTpOnGVf0aE=;
-	b=e/f6ZE28SQ7LoHzlb+NnNqonlGlma2PkAwVerRA/rusjddGM0zxkNAFje4MTwQ4d47jQNR
-	JaWk/9klSctLkgBJqoj0/xf8w3t/rrhzCAS1E2LbN9FO4Wt26fclVM4DQm7MLQNPF1IseI
-	F6wvVV8TBkjIslYC/j3B7n/DxMcf1ws=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-316-a5_VEoK-MpOjV41Rf3CE1Q-1; Sat,
- 11 Jan 2025 16:12:04 -0500
-X-MC-Unique: a5_VEoK-MpOjV41Rf3CE1Q-1
-X-Mimecast-MFC-AGG-ID: a5_VEoK-MpOjV41Rf3CE1Q
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C1C40195608A
-	for <llvm@lists.linux.dev>; Sat, 11 Jan 2025 21:12:03 +0000 (UTC)
-Received: from [172.64.12.18] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4D32A1956056;
-	Sat, 11 Jan 2025 21:12:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc6,
- upstream-mainline, b62cef9a)
-Date: Sat, 11 Jan 2025 21:12:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hd9p6Igj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736642550; x=1768178550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z1BKUv222L4W5EpLjlS5rXbNNqX1dnJIFJb1SINHK6c=;
+  b=hd9p6Igj2m3lwTVtguUCxltxP0j2YxLfoWvEXopxsww03CxTMHdRAKUO
+   9/mw9ZZfbc+J+itmkTnwFPa5FzhVdVPgiiYvZjqZ6gYgpkGgL7Amx5cB3
+   bFg9CNt08nIQTS8kcd7rU7C0PDgJGUXyB0l8wU4nD9/vwTCWCIfB6tVOV
+   4H/QqegvADCbWErFbAEYUnrlko+wCx3ThHxpw5SdOXaaYGbLH2f9gKyzp
+   ByEZdw7atnWR8ASfEqRubUhr9NPBwEaVhtJ2shAHx+cffmi5hVMfsmwB/
+   SZpV7eH772ya6X0wT/YtdOG+CeVN7e5VNJjIKVM2b1M2044udB84AbG3b
+   g==;
+X-CSE-ConnectionGUID: +c+4FlbcRb2/4thwg9aTQg==
+X-CSE-MsgGUID: IXh4qiTDSWmMHvDEAiBODw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="59387757"
+X-IronPort-AV: E=Sophos;i="6.12,308,1728975600"; 
+   d="scan'208";a="59387757"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 16:42:30 -0800
+X-CSE-ConnectionGUID: 0P+b6rxfT0W1z3/oMwlZdw==
+X-CSE-MsgGUID: OufXYvbTTXeHj7WKqoVPBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,308,1728975600"; 
+   d="scan'208";a="104131216"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 11 Jan 2025 16:42:24 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tWm3a-000LN4-1o;
+	Sun, 12 Jan 2025 00:42:22 +0000
+Date: Sun, 12 Jan 2025 08:41:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abdiel Janulgue <abdiel.janulgue@gmail.com>,
+	daniel.almeida@collabora.com, aliceryhl@google.com,
+	robin.murphy@arm.com, rust-for-linux@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Valentin Obst <kernel@valentinobst.de>,
+	linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	Marek Szyprowski <m.szyprowski@samsung.com>, airlied@redhat.com,
+	iommu@lists.linux.dev, Abdiel Janulgue <abdiel.janulgue@gmail.com>
+Subject: Re: [PATCH v8 2/2] rust: add dma coherent allocator abstraction.
+Message-ID: <202501120855.PXuydC6T-lkp@intel.com>
+References: <20250108122825.136021-3-abdiel.janulgue@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <67712.125011116120400673@us-mta-316.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: xUFAamK4oL0oQVZgmk5V-fku2Sd1ytGPiw_d977XYlc_1736629924
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250108122825.136021-3-abdiel.janulgue@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Abdiel,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on v6.13-rc6]
+[also build test ERROR on linus/master]
+[cannot apply to next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'hwmon-for-v6.13-rc7' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/groeck/linux-staging
+url:    https://github.com/intel-lab-lkp/linux/commits/Abdiel-Janulgue/rust-error-Add-EOVERFLOW/20250108-202929
+base:   v6.13-rc6
+patch link:    https://lore.kernel.org/r/20250108122825.136021-3-abdiel.janulgue%40gmail.com
+patch subject: [PATCH v8 2/2] rust: add dma coherent allocator abstraction.
+config: um-randconfig-001-20250112 (https://download.01.org/0day-ci/archive/20250112/202501120855.PXuydC6T-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250112/202501120855.PXuydC6T-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1621087540
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501120855.PXuydC6T-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1621087540-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1621087540-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1621087540-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+All errors (new ones prefixed by >>):
 
+>> error[E0425]: cannot find function `dma_alloc_attrs` in crate `bindings`
+   --> rust/kernel/dma.rs:145:23
+   |
+   145   |               bindings::dma_alloc_attrs(
+   |                         ^^^^^^^^^^^^^^^ help: a function with a similar name exists: `dma_alloc_pages`
+   |
+   ::: rust/bindings/bindings_generated.rs:39433:5
+   |
+   39433 | /     pub fn dma_alloc_pages(
+   39434 | |         dev: *mut device,
+   39435 | |         size: usize,
+   39436 | |         dma_handle: *mut dma_addr_t,
+   39437 | |         dir: dma_data_direction,
+   39438 | |         gfp: gfp_t,
+   39439 | |     ) -> *mut page;
+   | |__________________- similarly named function `dma_alloc_pages` defined here
+--
+>> error[E0425]: cannot find function `dma_free_attrs` in crate `bindings`
+   --> rust/kernel/dma.rs:262:23
+   |
+   262   |               bindings::dma_free_attrs(
+   |                         ^^^^^^^^^^^^^^ help: a function with a similar name exists: `dma_free_pages`
+   |
+   ::: rust/bindings/bindings_generated.rs:39442:5
+   |
+   39442 | /     pub fn dma_free_pages(
+   39443 | |         dev: *mut device,
+   39444 | |         size: usize,
+   39445 | |         page: *mut page,
+   39446 | |         dma_handle: dma_addr_t,
+   39447 | |         dir: dma_data_direction,
+   39448 | |     );
+   | |_____- similarly named function `dma_free_pages` defined here
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
