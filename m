@@ -1,62 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1DCA41;
-	Sun, 12 Jan 2025 03:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C40B1DFD1;
+	Sun, 12 Jan 2025 04:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736654324; cv=none; b=HyJUWLKFz1Y6jxT2BvIpQEYTVE0NIgik+b5GC+PFewH5nWsnjmkk2VqZ7NY9J01+5rHq7F48oXGg5gEY3v1XPH3xBiEX++bAFOSrha6YvilS/6+UioktKLjtxQ9RBtO18giJ8y38TueiBfgD+twTfC+xWjtutY9f479u8f4Imqg=
+	t=1736655649; cv=none; b=f6dMkHYIaRu3rdChA/WFkOEX/AznRtAGHRV9dQQbQBaGx5v9oYPd5FpQsHinlB3rxxXom0hSDFYL37sf56en6H73xcmMiM/ACnBZ+VNIkzETgaHLjgH1trZpUj1GS6SK/V0UOYI5Q9kKNsTTvZA59IotVWBGR1lqluxfX7dD79U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736654324; c=relaxed/simple;
-	bh=yRtSHR5ikPqwnpRlqXQpXe4Ph+gt9b0jfyDRqRdKI9U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VgnTopVsX1sIpUg2jrXMUYhcy2StOw4pJb//cLS3P1stAPEdcHujhcWKyX/9G40q6CGKWPbgSkag+w0VYBVuBp8mV9NWokySkkPCuYA7VNvLYTnuyw7MiJgkd6e53mHRFTkGs/7y675tk5u0tJH9stFaiEzq+kzlBZz35CQDpfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SCBazJc0; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1736655649; c=relaxed/simple;
+	bh=PsXlJXwMTiylzvvaJJ5glc9HgqWL/RFU5UJO4hTG0I4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F+hanZJ/3/9wUHqW2SrOpAdvNz0hpOd7CIH2JJa5kFK4lLsLzFejwOebAtR6HHnpB2vRcXqXXz2N9Odw4VYxRsnhED4c0pSQy/J/H7JAcZea5i4ceMj+jAkg7xIMcESa45DztO8hhNKUdlvPlgeYyS9Jm56bS0JE5cYQSVZi6Co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W/iSl+FC; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SCBazJc0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W/iSl+FC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736654323; x=1768190323;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yRtSHR5ikPqwnpRlqXQpXe4Ph+gt9b0jfyDRqRdKI9U=;
-  b=SCBazJc0asQNjBeqrjuD9EIV5ZtR4Rb9jd0hrUTGJQkwgQhS4qt6R+L7
-   I3QcAsYqzGRf5GlmOipaprSknT3ZKZXM+XCfugbRAcCojmyAGsIdzB7hC
-   pdepuc8G3htACidhV8vuHXk76U5hTrOAut+9m4ljckstweesO0OdQ72PC
-   veW1yRaROX0lU0mNyqvTOspTYIxI9lpNgZ2x1sn5hdvH0UxgVSLJ5skOr
-   UmJGIiNaVbWEg0liLXy89gtLoRpUivjn+tz2+Cgmpkp8TC2rx0juYbU0h
-   ms3KYTQcoOHDd6wQRbePj0K3z6YBSTslwvXgH6Ner0ZrVXDtHZ40SdMSZ
-   g==;
-X-CSE-ConnectionGUID: JOIh9cXiS26dO7ZI2LeIPg==
-X-CSE-MsgGUID: 7hRyjTnbRtyjM8UjwI6rWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="36123569"
+  t=1736655647; x=1768191647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PsXlJXwMTiylzvvaJJ5glc9HgqWL/RFU5UJO4hTG0I4=;
+  b=W/iSl+FCGSvkbuBLpylBsifZM/KHSLgNcojawXWjlQjbntpZAOre1GNE
+   pk6Z/HTYi/4WmOWtaZVaXMxZ+kAeZaGLruonkHogx1YkaiQ5+N1RsvSN0
+   7YiEIJ7A6SAnzmgeus6v0Ggvqb2TAZk7IGOxhc855zsnnzrriGpYbp/8o
+   D7SSDDj2wD5dqDRdMxtRZRxD70kdoRfpLgj7wjaJBR0C5gXCUDAQqKYA7
+   gstxkSHAMViR6wu4lZ++Flcgz8V0pTvgBNwz7+uH5/+iFALynssNwHkWK
+   StQ1zHSe/NRLWi8Amo+Xumu5gPArTA+YhffNCJkfIj9a6HJcH0qiXtWCU
+   w==;
+X-CSE-ConnectionGUID: jSAvT+9bR+2e6fmcd8DmUA==
+X-CSE-MsgGUID: gt975XCBRzK/vz2IWGomvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="40848697"
 X-IronPort-AV: E=Sophos;i="6.12,308,1728975600"; 
-   d="scan'208";a="36123569"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 19:58:42 -0800
-X-CSE-ConnectionGUID: sYu/AdrpR76DghNnyBPB6Q==
-X-CSE-MsgGUID: I7EEJwnDSP62Ej5xe4brYg==
+   d="scan'208";a="40848697"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 20:20:47 -0800
+X-CSE-ConnectionGUID: sn4n80bVT1u2NrlKa7XqSw==
+X-CSE-MsgGUID: zbElPrt2SViwkc8TIZ7Q5Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,308,1728975600"; 
-   d="scan'208";a="104039852"
+   d="scan'208";a="103908282"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Jan 2025 19:58:40 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 20:20:43 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tWp7W-000LYR-0W;
-	Sun, 12 Jan 2025 03:58:38 +0000
-Date: Sun, 12 Jan 2025 11:58:38 +0800
+	id 1tWpSr-000LZH-1C;
+	Sun, 12 Jan 2025 04:20:41 +0000
+Date: Sun, 12 Jan 2025 12:20:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [driver-core:driver-core-next 16/68] rust/helpers/io.c:12:10: error:
- passing 'volatile void *' to parameter of type 'void *' discards qualifiers
-Message-ID: <202501121150.MkxnT13y-lkp@intel.com>
+To: Robert Budai <robert.budai@analog.com>, Nuno Sa <nuno.sa@analog.com>,
+	Ramona Gradinariu <ramona.gradinariu@analog.com>,
+	Antoniu Miclaus <antoniu.miclaus@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Alex Lanzano <lanzano.alex@gmail.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 5/6] iio: imu: adis16550: add adis16550 support
+Message-ID: <202501121221.84e3uKFl-lkp@intel.com>
+References: <20250110074254.38966-6-robert.budai@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,79 +73,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250110074254.38966-6-robert.budai@analog.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-next
-head:   8ff656643d3075154419680470dbfdbd6092e31f
-commit: ce30d94e6855a4f6dc687f658e63c225fcc1d690 [16/68] rust: add `io::{Io, IoRaw}` base types
-config: um-randconfig-001-20250112 (https://download.01.org/0day-ci/archive/20250112/202501121150.MkxnT13y-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250112/202501121150.MkxnT13y-lkp@intel.com/reproduce)
+Hi Robert,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.13-rc6 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Budai/iio-imu-adis-Add-custom-ops-struct/20250110-154645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250110074254.38966-6-robert.budai%40analog.com
+patch subject: [PATCH v4 5/6] iio: imu: adis16550: add adis16550 support
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250112/202501121221.84e3uKFl-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250112/202501121221.84e3uKFl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501121150.MkxnT13y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501121221.84e3uKFl-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 20.0.0
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
-   In file included from rust/helpers/helpers.c:10:
-   In file included from rust/helpers/blk.c:3:
-   In file included from include/linux/blk-mq.h:5:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/um/include/asm/cacheflush.h:4:
-   In file included from arch/um/include/asm/tlbflush.h:9:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from rust/helpers/helpers.c:17:
->> rust/helpers/io.c:12:10: error: passing 'volatile void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      12 |         iounmap(addr);
-         |                 ^~~~
-   arch/um/include/asm/io.h:19:42: note: passing argument to parameter 'addr' here
-      19 | static inline void iounmap(void __iomem *addr)
-         |                                          ^
-   1 warning and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:194: rust/helpers/helpers.o] Error 1 shuffle=1529487087
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->> rust/helpers/io.c:12:10: error: passing 'volatile void *' to parameter of type 'void *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
-   arch/um/include/asm/io.h:19:42: note: passing argument to parameter 'addr' here
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   make[3]: *** [rust/Makefile:330: rust/bindings/bindings_helpers_generated.rs] Error 101 shuffle=1529487087
-   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-   make[3]: Target 'rust/' not remade because of errors.
-   make[2]: *** [Makefile:1269: prepare] Error 2 shuffle=1529487087
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=1529487087
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=1529487087
-   make: Target 'prepare' not remade because of errors.
+>> drivers/iio/imu/adis16550.c:1202:18: error: expected ';' after top level declarator
+    1202 | MODULE_IMPORT_NS(IIO_ADISLIB);
+         |                  ^
+   1 error generated.
 
 
-vim +12 rust/helpers/io.c
+vim +1202 drivers/iio/imu/adis16550.c
 
-     9	
-    10	void rust_helper_iounmap(volatile void __iomem *addr)
-    11	{
-  > 12		iounmap(addr);
-    13	}
-    14	
+  1196	
+  1197	MODULE_AUTHOR("Nuno Sa <nuno.sa@analog.com>");
+  1198	MODULE_AUTHOR("Ramona Gradinariu <ramona.gradinariu@analog.com>");
+  1199	MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com>");
+  1200	MODULE_DESCRIPTION("Analog Devices ADIS16550 IMU driver");
+  1201	MODULE_LICENSE("GPL");
+> 1202	MODULE_IMPORT_NS(IIO_ADISLIB);
 
 -- 
 0-DAY CI Kernel Test Service
