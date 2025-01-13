@@ -1,66 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1C8230D0B;
-	Mon, 13 Jan 2025 06:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DA5235BF5;
+	Mon, 13 Jan 2025 09:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736751202; cv=none; b=lL07IOevKHAKS68RFqQP/aglxjxggehqy+hikG215UCzXpCcWG/Zy2h2sJgVWy1WvVlxtkMAUpFXZ82EQWabdXMUoB7C3AxCGlViqtRSIYkzerlBFnR6aLILkzy+xsVMtkzUufT02MwFs6NXjTPIuBaC+6oARzxaN7HpeGtVpnI=
+	t=1736761585; cv=none; b=rkwkdtsipTQa1o1h4thubDqe8sjSNQzrwhw35NQ0Cxr9xs5rzlvnEwsDy6RDkGGHRZ9eY1Az7ZgAiqExUAQ63UCuXQ94GM2RwweGicCGNW3BXCIQgeWodGw+n4/xJzWC98XFx15yPooBio9uMfxVM+jdJ7PInqhII9wjdMSuVog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736751202; c=relaxed/simple;
-	bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
+	s=arc-20240116; t=1736761585; c=relaxed/simple;
+	bh=FDkhtEmu4sK9PKqGIFanAodedTF9nXkHJEJ8tLAR2Ew=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mETzEq1wboEaIWuJndfA/ixHeKBzzIOzLkvpRjSlG65ghDI6p0wZHEpqfwXrO5jhUw0RnAQQe5BlfjXUqPjp/RyKwn3Bbxmo43/NAt2Y3Y1tu7eW1k+9Axo1Jz5LS5PxhS0eFIiwenqhP5NUqo3Ewx8K5cpS28YTkE96R+hf4j0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRKVWuN/; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGhkcHrkEDEC5QpIL0REKhHZ/j0cybubK8bOWDexRpGU5NF608KLobw/Ivr8OcFKqGuqvZFoy0CYRM9D+nKW6ngCj6R4YUe/FHFLUZED7z9in3oNkeT5IfmhbD4o8Z/oerMjIGbAx2WMyH88vC9UGZda6yASwBIIX6N9aMhY/2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hMJ9Y40J; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRKVWuN/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hMJ9Y40J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736751200; x=1768287200;
+  t=1736761583; x=1768297583;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
-  b=jRKVWuN/6byds76xJIWSeow4Oi9hQBaOVjWCw6LTSbWtU0d7MPQe/I+m
-   8Ri+7LOdQJbtIyFvt2tsLK960hAdeFw2ZD9C2obNYPAR+lIh1UBdBQJyc
-   t/0MYym1lPa1hLbWEgWqRwmniqaqcNlxIHvCs/3uNtn4yhM4S637WcSOo
-   O1YxH5T4Y9bawZCIhL7QuIShwhV2WlCO0F3RmdrFtUjSaZoDZeruRo6QC
-   k8H1SChgl+Xqv5PU85TbXf3Uz7I+76fZPzl6+Z/ybPoN1pNTc5lGzf0pE
-   8vSz5EC6f2uLPR3+BaJTcU8FQSmjr7BZcrypP68F8NL/YRak3jJFt5YgJ
-   g==;
-X-CSE-ConnectionGUID: yZvM0vDPTmO8g6j9rLHsGg==
-X-CSE-MsgGUID: JaNNru4jQAmR9DnEQev7oQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="36278959"
+  bh=FDkhtEmu4sK9PKqGIFanAodedTF9nXkHJEJ8tLAR2Ew=;
+  b=hMJ9Y40JtCSPB3Mx5MOAzzbhxgCO4pY2j87iLeMoe5zDckrh4h6V1bHV
+   DWWVnyacLZKlT+uEQBRWuxFOvQQL+SNwgdkrq/mLg3BM+YPzo5i0N/QA2
+   ZVzIDLpBpN/utfbURvUn9ltYuZhuydbxcTT4q/P5cz4U6gXzSuOuYOHp4
+   YHz15pkwZlCDjhnISQqY+jS0P0M3O41wdcojyquSKJpGqflfNo2MU5mEs
+   ByYI7x0iPttK1zXkafWGrTkbft/3salyHkAAXcV7YIFvE64JfgBVMOxL/
+   /5YLfrjARGRS8HRA6+/Ce/twg+u/RIuzI1kaYA3HsIxxPtLbCS0xt5eeP
+   A==;
+X-CSE-ConnectionGUID: TvozRTzZTuy2SAsFZt5XLg==
+X-CSE-MsgGUID: IqlAsxDhS9ORafCoubw+lA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="39828267"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="36278959"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 22:53:19 -0800
-X-CSE-ConnectionGUID: S09VXZZlQym3XWivhV2RiQ==
-X-CSE-MsgGUID: sW9YO4M8Q0mRFxY5PIpqSg==
+   d="scan'208";a="39828267"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 01:46:22 -0800
+X-CSE-ConnectionGUID: ujf3P+vVTeu5cbC9n3bvMw==
+X-CSE-MsgGUID: fSOZWjVpQ0yD0KZzpXhfbA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="109364775"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105290145"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 12 Jan 2025 22:53:16 -0800
+  by orviesa008.jf.intel.com with ESMTP; 13 Jan 2025 01:46:20 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tXEK2-000MpH-04;
-	Mon, 13 Jan 2025 06:53:14 +0000
-Date: Mon, 13 Jan 2025 14:52:18 +0800
+	id 1tXH1W-000MyU-0x;
+	Mon, 13 Jan 2025 09:46:18 +0000
+Date: Mon, 13 Jan 2025 17:45:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
-	Jean Delvare <jdelvare@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wenliang Yan <wenliang202407@163.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
-Message-ID: <202501131420.UQWnurXD-lkp@intel.com>
-References: <20250113035023.365697-3-wenliang202407@163.com>
+To: I Hsin Cheng <richard120310@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] cpumask: Implement "random" version of
+ cpumask_any_but()
+Message-ID: <202501131709.T02YI6Rr-lkp@intel.com>
+References: <20250113061839.22131-1-richard120310@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,259 +63,315 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113035023.365697-3-wenliang202407@163.com>
+In-Reply-To: <20250113061839.22131-1-richard120310@gmail.com>
 
-Hi Wenliang,
+Hi Hsin,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.13-rc7 next-20250110]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.13-rc7 next-20250113]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang-Yan/dt-bindings-Add-SQ52206-to-ina2xx-devicetree-bindings/20250113-115457
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250113035023.365697-3-wenliang202407%40163.com
-patch subject: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
-config: i386-buildonly-randconfig-004-20250113 (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/I-Hsin-Cheng/cpumask-Implement-random-version-of-cpumask_any_but/20250113-142111
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250113061839.22131-1-richard120310%40gmail.com
+patch subject: [RFC PATCH] cpumask: Implement "random" version of cpumask_any_but()
+config: i386-buildonly-randconfig-001-20250113 (https://download.01.org/0day-ci/archive/20250113/202501131709.T02YI6Rr-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250113/202501131709.T02YI6Rr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501131420.UQWnurXD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501131709.T02YI6Rr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/ina238.c:11:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:15:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:63:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+>> include/linux/cpumask.h:407:11: error: call to undeclared function 'cpumask_weight'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     407 |         weight = cpumask_weight(mask);
+         |                  ^
+>> include/linux/cpumask.h:408:6: error: call to undeclared function 'get_random_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     408 |         n = get_random_u32() % weight;
+         |             ^
+>> include/linux/cpumask.h:415:6: error: call to undeclared function 'cpumask_nth'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     415 |         i = cpumask_nth(n, mask);
+         |             ^
+   include/linux/cpumask.h:415:6: note: did you mean 'cpumask_next'?
+   include/linux/cpumask.h:217:14: note: 'cpumask_next' declared here
+     217 | unsigned int cpumask_next(int n, const struct cpumask *srcp)
+         |              ^
+>> include/linux/cpumask.h:450:14: error: static declaration of 'cpumask_nth' follows non-static declaration
+     450 | unsigned int cpumask_nth(unsigned int cpu, const struct cpumask *srcp)
+         |              ^
+   include/linux/cpumask.h:415:6: note: previous implicit declaration is here
+     415 |         i = cpumask_nth(n, mask);
+         |             ^
+>> include/linux/cpumask.h:779:37: error: static declaration of 'cpumask_weight' follows non-static declaration
+     779 | static __always_inline unsigned int cpumask_weight(const struct cpumask *srcp)
+         |                                     ^
+   include/linux/cpumask.h:407:11: note: previous implicit declaration is here
+     407 |         weight = cpumask_weight(mask);
+         |                  ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:18:
+   In file included from include/linux/nodemask.h:98:
+>> include/linux/random.h:42:5: error: conflicting types for 'get_random_u32'
+      42 | u32 get_random_u32(void);
+         |     ^
+   include/linux/cpumask.h:408:6: note: previous implicit declaration is here
+     408 |         n = get_random_u32() % weight;
+         |             ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
    In file included from include/linux/suspend.h:5:
    In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/ina238.c:594:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     594 |         case hwmon_temp:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
          |         ^
-   drivers/hwmon/ina238.c:594:2: note: insert '__attribute__((fallthrough));' to silence this warning
-     594 |         case hwmon_temp:
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
          |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/hwmon/ina238.c:594:2: note: insert 'break;' to avoid fall-through
-     594 |         case hwmon_temp:
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
          |         ^
-         |         break; 
->> drivers/hwmon/ina238.c:702:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
-     702 |                 else if (data->gain == 2)
-         |                 ^
-   3 warnings generated.
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
 
 
-vim +594 drivers/hwmon/ina238.c
+vim +/cpumask_weight +407 include/linux/cpumask.h
 
-eacb52f010a807 Nathan Rossi        2021-11-02  552  
-eacb52f010a807 Nathan Rossi        2021-11-02  553  static umode_t ina238_is_visible(const void *drvdata,
-eacb52f010a807 Nathan Rossi        2021-11-02  554  				 enum hwmon_sensor_types type,
-eacb52f010a807 Nathan Rossi        2021-11-02  555  				 u32 attr, int channel)
-eacb52f010a807 Nathan Rossi        2021-11-02  556  {
-f08436905922ae Wenliang Yan        2025-01-13  557  	const struct ina238_data *data = drvdata;
-f08436905922ae Wenliang Yan        2025-01-13  558  	bool has_power_highest = data->config->has_power_highest;
-f08436905922ae Wenliang Yan        2025-01-13  559  
-eacb52f010a807 Nathan Rossi        2021-11-02  560  	switch (type) {
-eacb52f010a807 Nathan Rossi        2021-11-02  561  	case hwmon_in:
-eacb52f010a807 Nathan Rossi        2021-11-02  562  		switch (attr) {
-eacb52f010a807 Nathan Rossi        2021-11-02  563  		case hwmon_in_input:
-eacb52f010a807 Nathan Rossi        2021-11-02  564  		case hwmon_in_max_alarm:
-eacb52f010a807 Nathan Rossi        2021-11-02  565  		case hwmon_in_min_alarm:
-eacb52f010a807 Nathan Rossi        2021-11-02  566  			return 0444;
-eacb52f010a807 Nathan Rossi        2021-11-02  567  		case hwmon_in_max:
-eacb52f010a807 Nathan Rossi        2021-11-02  568  		case hwmon_in_min:
-eacb52f010a807 Nathan Rossi        2021-11-02  569  			return 0644;
-eacb52f010a807 Nathan Rossi        2021-11-02  570  		default:
-eacb52f010a807 Nathan Rossi        2021-11-02  571  			return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  572  		}
-eacb52f010a807 Nathan Rossi        2021-11-02  573  	case hwmon_curr:
-eacb52f010a807 Nathan Rossi        2021-11-02  574  		switch (attr) {
-eacb52f010a807 Nathan Rossi        2021-11-02  575  		case hwmon_curr_input:
-eacb52f010a807 Nathan Rossi        2021-11-02  576  			return 0444;
-eacb52f010a807 Nathan Rossi        2021-11-02  577  		default:
-eacb52f010a807 Nathan Rossi        2021-11-02  578  			return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  579  		}
-eacb52f010a807 Nathan Rossi        2021-11-02  580  	case hwmon_power:
-eacb52f010a807 Nathan Rossi        2021-11-02  581  		switch (attr) {
-eacb52f010a807 Nathan Rossi        2021-11-02  582  		case hwmon_power_input:
-eacb52f010a807 Nathan Rossi        2021-11-02  583  		case hwmon_power_max_alarm:
-eacb52f010a807 Nathan Rossi        2021-11-02  584  			return 0444;
-eacb52f010a807 Nathan Rossi        2021-11-02  585  		case hwmon_power_max:
-eacb52f010a807 Nathan Rossi        2021-11-02  586  			return 0644;
-f08436905922ae Wenliang Yan        2025-01-13  587  		case hwmon_power_input_highest:
-f08436905922ae Wenliang Yan        2025-01-13  588  			if (has_power_highest)
-f08436905922ae Wenliang Yan        2025-01-13  589  				return 0444;
-f08436905922ae Wenliang Yan        2025-01-13  590  			break;
-eacb52f010a807 Nathan Rossi        2021-11-02  591  		default:
-eacb52f010a807 Nathan Rossi        2021-11-02  592  			return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  593  		}
-eacb52f010a807 Nathan Rossi        2021-11-02 @594  	case hwmon_temp:
-eacb52f010a807 Nathan Rossi        2021-11-02  595  		switch (attr) {
-eacb52f010a807 Nathan Rossi        2021-11-02  596  		case hwmon_temp_input:
-eacb52f010a807 Nathan Rossi        2021-11-02  597  		case hwmon_temp_max_alarm:
-eacb52f010a807 Nathan Rossi        2021-11-02  598  			return 0444;
-eacb52f010a807 Nathan Rossi        2021-11-02  599  		case hwmon_temp_max:
-eacb52f010a807 Nathan Rossi        2021-11-02  600  			return 0644;
-eacb52f010a807 Nathan Rossi        2021-11-02  601  		default:
-eacb52f010a807 Nathan Rossi        2021-11-02  602  			return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  603  		}
-eacb52f010a807 Nathan Rossi        2021-11-02  604  	default:
-eacb52f010a807 Nathan Rossi        2021-11-02  605  		return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  606  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  607  }
-eacb52f010a807 Nathan Rossi        2021-11-02  608  
-eacb52f010a807 Nathan Rossi        2021-11-02  609  #define INA238_HWMON_IN_CONFIG (HWMON_I_INPUT | \
-eacb52f010a807 Nathan Rossi        2021-11-02  610  				HWMON_I_MAX | HWMON_I_MAX_ALARM | \
-eacb52f010a807 Nathan Rossi        2021-11-02  611  				HWMON_I_MIN | HWMON_I_MIN_ALARM)
-eacb52f010a807 Nathan Rossi        2021-11-02  612  
-bf9b7f92df7376 Krzysztof Kozlowski 2023-04-06  613  static const struct hwmon_channel_info * const ina238_info[] = {
-eacb52f010a807 Nathan Rossi        2021-11-02  614  	HWMON_CHANNEL_INFO(in,
-eacb52f010a807 Nathan Rossi        2021-11-02  615  			   /* 0: shunt voltage */
-eacb52f010a807 Nathan Rossi        2021-11-02  616  			   INA238_HWMON_IN_CONFIG,
-eacb52f010a807 Nathan Rossi        2021-11-02  617  			   /* 1: bus voltage */
-eacb52f010a807 Nathan Rossi        2021-11-02  618  			   INA238_HWMON_IN_CONFIG),
-eacb52f010a807 Nathan Rossi        2021-11-02  619  	HWMON_CHANNEL_INFO(curr,
-eacb52f010a807 Nathan Rossi        2021-11-02  620  			   /* 0: current through shunt */
-eacb52f010a807 Nathan Rossi        2021-11-02  621  			   HWMON_C_INPUT),
-eacb52f010a807 Nathan Rossi        2021-11-02  622  	HWMON_CHANNEL_INFO(power,
-eacb52f010a807 Nathan Rossi        2021-11-02  623  			   /* 0: power */
-f08436905922ae Wenliang Yan        2025-01-13  624  			   HWMON_P_INPUT | HWMON_P_MAX |
-f08436905922ae Wenliang Yan        2025-01-13  625  			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
-eacb52f010a807 Nathan Rossi        2021-11-02  626  	HWMON_CHANNEL_INFO(temp,
-eacb52f010a807 Nathan Rossi        2021-11-02  627  			   /* 0: die temperature */
-eacb52f010a807 Nathan Rossi        2021-11-02  628  			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
-eacb52f010a807 Nathan Rossi        2021-11-02  629  	NULL
-eacb52f010a807 Nathan Rossi        2021-11-02  630  };
-eacb52f010a807 Nathan Rossi        2021-11-02  631  
-eacb52f010a807 Nathan Rossi        2021-11-02  632  static const struct hwmon_ops ina238_hwmon_ops = {
-eacb52f010a807 Nathan Rossi        2021-11-02  633  	.is_visible = ina238_is_visible,
-eacb52f010a807 Nathan Rossi        2021-11-02  634  	.read = ina238_read,
-eacb52f010a807 Nathan Rossi        2021-11-02  635  	.write = ina238_write,
-eacb52f010a807 Nathan Rossi        2021-11-02  636  };
-eacb52f010a807 Nathan Rossi        2021-11-02  637  
-eacb52f010a807 Nathan Rossi        2021-11-02  638  static const struct hwmon_chip_info ina238_chip_info = {
-eacb52f010a807 Nathan Rossi        2021-11-02  639  	.ops = &ina238_hwmon_ops,
-eacb52f010a807 Nathan Rossi        2021-11-02  640  	.info = ina238_info,
-eacb52f010a807 Nathan Rossi        2021-11-02  641  };
-eacb52f010a807 Nathan Rossi        2021-11-02  642  
-f08436905922ae Wenliang Yan        2025-01-13  643  /* energy attributes are 5bytes wide so we need u64 */
-f08436905922ae Wenliang Yan        2025-01-13  644  static DEVICE_ATTR_RO(energy1_input);
-f08436905922ae Wenliang Yan        2025-01-13  645  
-f08436905922ae Wenliang Yan        2025-01-13  646  static struct attribute *ina238_attrs[] = {
-f08436905922ae Wenliang Yan        2025-01-13  647  	&dev_attr_energy1_input.attr,
-f08436905922ae Wenliang Yan        2025-01-13  648  	NULL,
-f08436905922ae Wenliang Yan        2025-01-13  649  };
-f08436905922ae Wenliang Yan        2025-01-13  650  ATTRIBUTE_GROUPS(ina238);
-f08436905922ae Wenliang Yan        2025-01-13  651  
-eacb52f010a807 Nathan Rossi        2021-11-02  652  static int ina238_probe(struct i2c_client *client)
-eacb52f010a807 Nathan Rossi        2021-11-02  653  {
-eacb52f010a807 Nathan Rossi        2021-11-02  654  	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
-eacb52f010a807 Nathan Rossi        2021-11-02  655  	struct device *dev = &client->dev;
-eacb52f010a807 Nathan Rossi        2021-11-02  656  	struct device *hwmon_dev;
-eacb52f010a807 Nathan Rossi        2021-11-02  657  	struct ina238_data *data;
-eacb52f010a807 Nathan Rossi        2021-11-02  658  	int config;
-f08436905922ae Wenliang Yan        2025-01-13  659  	enum ina238_ids chip;
-eacb52f010a807 Nathan Rossi        2021-11-02  660  	int ret;
-eacb52f010a807 Nathan Rossi        2021-11-02  661  
-f08436905922ae Wenliang Yan        2025-01-13  662  	chip = (uintptr_t)i2c_get_match_data(client);
-f08436905922ae Wenliang Yan        2025-01-13  663  
-eacb52f010a807 Nathan Rossi        2021-11-02  664  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-eacb52f010a807 Nathan Rossi        2021-11-02  665  	if (!data)
-eacb52f010a807 Nathan Rossi        2021-11-02  666  		return -ENOMEM;
-eacb52f010a807 Nathan Rossi        2021-11-02  667  
-eacb52f010a807 Nathan Rossi        2021-11-02  668  	data->client = client;
-f08436905922ae Wenliang Yan        2025-01-13  669  	/* set the device type */
-f08436905922ae Wenliang Yan        2025-01-13  670  	data->config = &ina238_config[chip];
-f08436905922ae Wenliang Yan        2025-01-13  671  
-eacb52f010a807 Nathan Rossi        2021-11-02  672  	mutex_init(&data->config_lock);
-eacb52f010a807 Nathan Rossi        2021-11-02  673  
-eacb52f010a807 Nathan Rossi        2021-11-02  674  	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
-eacb52f010a807 Nathan Rossi        2021-11-02  675  	if (IS_ERR(data->regmap)) {
-eacb52f010a807 Nathan Rossi        2021-11-02  676  		dev_err(dev, "failed to allocate register map\n");
-eacb52f010a807 Nathan Rossi        2021-11-02  677  		return PTR_ERR(data->regmap);
-eacb52f010a807 Nathan Rossi        2021-11-02  678  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  679  
-eacb52f010a807 Nathan Rossi        2021-11-02  680  	/* load shunt value */
-eacb52f010a807 Nathan Rossi        2021-11-02  681  	data->rshunt = INA238_RSHUNT_DEFAULT;
-eacb52f010a807 Nathan Rossi        2021-11-02  682  	if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0 && pdata)
-eacb52f010a807 Nathan Rossi        2021-11-02  683  		data->rshunt = pdata->shunt_uohms;
-eacb52f010a807 Nathan Rossi        2021-11-02  684  	if (data->rshunt == 0) {
-eacb52f010a807 Nathan Rossi        2021-11-02  685  		dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
-eacb52f010a807 Nathan Rossi        2021-11-02  686  		return -EINVAL;
-eacb52f010a807 Nathan Rossi        2021-11-02  687  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  688  
-eacb52f010a807 Nathan Rossi        2021-11-02  689  	/* load shunt gain value */
-eacb52f010a807 Nathan Rossi        2021-11-02  690  	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
-eacb52f010a807 Nathan Rossi        2021-11-02  691  		data->gain = 4; /* Default of ADCRANGE = 0 */
-f08436905922ae Wenliang Yan        2025-01-13  692  	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
-eacb52f010a807 Nathan Rossi        2021-11-02  693  		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
-eacb52f010a807 Nathan Rossi        2021-11-02  694  		return -EINVAL;
-eacb52f010a807 Nathan Rossi        2021-11-02  695  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  696  
-eacb52f010a807 Nathan Rossi        2021-11-02  697  	/* Setup CONFIG register */
-f08436905922ae Wenliang Yan        2025-01-13  698  	config = data->config->config_default;
-f08436905922ae Wenliang Yan        2025-01-13  699  	if (chip == sq52206)
-eacb52f010a807 Nathan Rossi        2021-11-02  700  		if (data->gain == 1)
-f08436905922ae Wenliang Yan        2025-01-13  701  			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
-f08436905922ae Wenliang Yan        2025-01-13 @702  		else if (data->gain == 2)
-f08436905922ae Wenliang Yan        2025-01-13  703  			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
-f08436905922ae Wenliang Yan        2025-01-13  704  	else if (data->gain == 1)
-eacb52f010a807 Nathan Rossi        2021-11-02  705  		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
-eacb52f010a807 Nathan Rossi        2021-11-02  706  	ret = regmap_write(data->regmap, INA238_CONFIG, config);
-eacb52f010a807 Nathan Rossi        2021-11-02  707  	if (ret < 0) {
-eacb52f010a807 Nathan Rossi        2021-11-02  708  		dev_err(dev, "error configuring the device: %d\n", ret);
-eacb52f010a807 Nathan Rossi        2021-11-02  709  		return -ENODEV;
-eacb52f010a807 Nathan Rossi        2021-11-02  710  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  711  
-eacb52f010a807 Nathan Rossi        2021-11-02  712  	/* Setup ADC_CONFIG register */
-eacb52f010a807 Nathan Rossi        2021-11-02  713  	ret = regmap_write(data->regmap, INA238_ADC_CONFIG,
-eacb52f010a807 Nathan Rossi        2021-11-02  714  			   INA238_ADC_CONFIG_DEFAULT);
-eacb52f010a807 Nathan Rossi        2021-11-02  715  	if (ret < 0) {
-eacb52f010a807 Nathan Rossi        2021-11-02  716  		dev_err(dev, "error configuring the device: %d\n", ret);
-eacb52f010a807 Nathan Rossi        2021-11-02  717  		return -ENODEV;
-eacb52f010a807 Nathan Rossi        2021-11-02  718  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  719  
-eacb52f010a807 Nathan Rossi        2021-11-02  720  	/* Setup SHUNT_CALIBRATION register with fixed value */
-eacb52f010a807 Nathan Rossi        2021-11-02  721  	ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
-eacb52f010a807 Nathan Rossi        2021-11-02  722  			   INA238_CALIBRATION_VALUE);
-eacb52f010a807 Nathan Rossi        2021-11-02  723  	if (ret < 0) {
-eacb52f010a807 Nathan Rossi        2021-11-02  724  		dev_err(dev, "error configuring the device: %d\n", ret);
-eacb52f010a807 Nathan Rossi        2021-11-02  725  		return -ENODEV;
-eacb52f010a807 Nathan Rossi        2021-11-02  726  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  727  
-eacb52f010a807 Nathan Rossi        2021-11-02  728  	/* Setup alert/alarm configuration */
-eacb52f010a807 Nathan Rossi        2021-11-02  729  	ret = regmap_write(data->regmap, INA238_DIAG_ALERT,
-eacb52f010a807 Nathan Rossi        2021-11-02  730  			   INA238_DIAG_ALERT_DEFAULT);
-eacb52f010a807 Nathan Rossi        2021-11-02  731  	if (ret < 0) {
-eacb52f010a807 Nathan Rossi        2021-11-02  732  		dev_err(dev, "error configuring the device: %d\n", ret);
-eacb52f010a807 Nathan Rossi        2021-11-02  733  		return -ENODEV;
-eacb52f010a807 Nathan Rossi        2021-11-02  734  	}
-eacb52f010a807 Nathan Rossi        2021-11-02  735  
-eacb52f010a807 Nathan Rossi        2021-11-02  736  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
-eacb52f010a807 Nathan Rossi        2021-11-02  737  							 &ina238_chip_info,
-f08436905922ae Wenliang Yan        2025-01-13  738  							 data->config->has_energy ?
-f08436905922ae Wenliang Yan        2025-01-13  739  								NULL : ina238_groups);
-eacb52f010a807 Nathan Rossi        2021-11-02  740  	if (IS_ERR(hwmon_dev))
-eacb52f010a807 Nathan Rossi        2021-11-02  741  		return PTR_ERR(hwmon_dev);
-eacb52f010a807 Nathan Rossi        2021-11-02  742  
-eacb52f010a807 Nathan Rossi        2021-11-02  743  	dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
-eacb52f010a807 Nathan Rossi        2021-11-02  744  		 client->name, data->rshunt, data->gain);
-eacb52f010a807 Nathan Rossi        2021-11-02  745  
-eacb52f010a807 Nathan Rossi        2021-11-02  746  	return 0;
-eacb52f010a807 Nathan Rossi        2021-11-02  747  }
-eacb52f010a807 Nathan Rossi        2021-11-02  748  
+   317	
+   318	/**
+   319	 * for_each_cpu_wrap - iterate over every cpu in a mask, starting at a specified location
+   320	 * @cpu: the (optionally unsigned) integer iterator
+   321	 * @mask: the cpumask pointer
+   322	 * @start: the start location
+   323	 *
+   324	 * The implementation does not assume any bit in @mask is set (including @start).
+   325	 *
+   326	 * After the loop, cpu is >= nr_cpu_ids.
+   327	 */
+   328	#define for_each_cpu_wrap(cpu, mask, start)				\
+   329		for_each_set_bit_wrap(cpu, cpumask_bits(mask), small_cpumask_bits, start)
+   330	
+   331	/**
+   332	 * for_each_cpu_and - iterate over every cpu in both masks
+   333	 * @cpu: the (optionally unsigned) integer iterator
+   334	 * @mask1: the first cpumask pointer
+   335	 * @mask2: the second cpumask pointer
+   336	 *
+   337	 * This saves a temporary CPU mask in many places.  It is equivalent to:
+   338	 *	struct cpumask tmp;
+   339	 *	cpumask_and(&tmp, &mask1, &mask2);
+   340	 *	for_each_cpu(cpu, &tmp)
+   341	 *		...
+   342	 *
+   343	 * After the loop, cpu is >= nr_cpu_ids.
+   344	 */
+   345	#define for_each_cpu_and(cpu, mask1, mask2)				\
+   346		for_each_and_bit(cpu, cpumask_bits(mask1), cpumask_bits(mask2), small_cpumask_bits)
+   347	
+   348	/**
+   349	 * for_each_cpu_andnot - iterate over every cpu present in one mask, excluding
+   350	 *			 those present in another.
+   351	 * @cpu: the (optionally unsigned) integer iterator
+   352	 * @mask1: the first cpumask pointer
+   353	 * @mask2: the second cpumask pointer
+   354	 *
+   355	 * This saves a temporary CPU mask in many places.  It is equivalent to:
+   356	 *	struct cpumask tmp;
+   357	 *	cpumask_andnot(&tmp, &mask1, &mask2);
+   358	 *	for_each_cpu(cpu, &tmp)
+   359	 *		...
+   360	 *
+   361	 * After the loop, cpu is >= nr_cpu_ids.
+   362	 */
+   363	#define for_each_cpu_andnot(cpu, mask1, mask2)				\
+   364		for_each_andnot_bit(cpu, cpumask_bits(mask1), cpumask_bits(mask2), small_cpumask_bits)
+   365	
+   366	/**
+   367	 * for_each_cpu_or - iterate over every cpu present in either mask
+   368	 * @cpu: the (optionally unsigned) integer iterator
+   369	 * @mask1: the first cpumask pointer
+   370	 * @mask2: the second cpumask pointer
+   371	 *
+   372	 * This saves a temporary CPU mask in many places.  It is equivalent to:
+   373	 *	struct cpumask tmp;
+   374	 *	cpumask_or(&tmp, &mask1, &mask2);
+   375	 *	for_each_cpu(cpu, &tmp)
+   376	 *		...
+   377	 *
+   378	 * After the loop, cpu is >= nr_cpu_ids.
+   379	 */
+   380	#define for_each_cpu_or(cpu, mask1, mask2)				\
+   381		for_each_or_bit(cpu, cpumask_bits(mask1), cpumask_bits(mask2), small_cpumask_bits)
+   382	
+   383	/**
+   384	 * for_each_cpu_from - iterate over CPUs present in @mask, from @cpu to the end of @mask.
+   385	 * @cpu: the (optionally unsigned) integer iterator
+   386	 * @mask: the cpumask pointer
+   387	 *
+   388	 * After the loop, cpu is >= nr_cpu_ids.
+   389	 */
+   390	#define for_each_cpu_from(cpu, mask)				\
+   391		for_each_set_bit_from(cpu, cpumask_bits(mask), small_cpumask_bits)
+   392	
+   393	/**
+   394	 * cpumask_any_but - return a "random" in a cpumask, but not this one.
+   395	 * @mask: the cpumask to search
+   396	 * @cpu: the cpu to ignore.
+   397	 *
+   398	 * Often used to find any cpu but smp_processor_id() in a mask.
+   399	 * Return: >= nr_cpu_ids if no cpus set.
+   400	 */
+   401	static __always_inline
+   402	unsigned int cpumask_any_but(const struct cpumask *mask, unsigned int cpu)
+   403	{
+   404		unsigned int i, n, weight;
+   405	
+   406		cpumask_check(cpu);
+ > 407		weight = cpumask_weight(mask);
+ > 408		n = get_random_u32() % weight;
+   409	
+   410		/* If we accidentally pick "n" equal to "cpu",
+   411		 * then simply choose "n + 1"th cpu.
+   412		 */
+   413		if (n == cpu)
+   414			n = (n + 1) % weight;
+ > 415		i = cpumask_nth(n, mask);
+   416		return i;
+   417	}
+   418	
+   419	/**
+   420	 * cpumask_any_and_but - pick a "random" cpu from *mask1 & *mask2, but not this one.
+   421	 * @mask1: the first input cpumask
+   422	 * @mask2: the second input cpumask
+   423	 * @cpu: the cpu to ignore
+   424	 *
+   425	 * Returns >= nr_cpu_ids if no cpus set.
+   426	 */
+   427	static __always_inline
+   428	unsigned int cpumask_any_and_but(const struct cpumask *mask1,
+   429					 const struct cpumask *mask2,
+   430					 unsigned int cpu)
+   431	{
+   432		unsigned int i;
+   433	
+   434		cpumask_check(cpu);
+   435		i = cpumask_first_and(mask1, mask2);
+   436		if (i != cpu)
+   437			return i;
+   438	
+   439		return cpumask_next_and(cpu, mask1, mask2);
+   440	}
+   441	
+   442	/**
+   443	 * cpumask_nth - get the Nth cpu in a cpumask
+   444	 * @srcp: the cpumask pointer
+   445	 * @cpu: the Nth cpu to find, starting from 0
+   446	 *
+   447	 * Return: >= nr_cpu_ids if such cpu doesn't exist.
+   448	 */
+   449	static __always_inline
+ > 450	unsigned int cpumask_nth(unsigned int cpu, const struct cpumask *srcp)
+   451	{
+   452		return find_nth_bit(cpumask_bits(srcp), small_cpumask_bits, cpumask_check(cpu));
+   453	}
+   454	
 
 -- 
 0-DAY CI Kernel Test Service
