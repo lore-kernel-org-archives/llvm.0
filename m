@@ -1,61 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904BE14AA9;
-	Mon, 13 Jan 2025 02:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1C8230D0B;
+	Mon, 13 Jan 2025 06:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736736327; cv=none; b=YNIg3Z2CY+/NtUECyV8MlJTblsjDs+CV3luEz2BsWwhQWprz1L711OdOcBNd9zOL1KoUWY6zube0f5ftdni1D2/qVxG3Q868EsE8Oc3jAUE2aq00UJJJfKK92x3IUgfQ/ntnYQioy77weBqenQaJUPJ+siWFZmnzkwXVS4K35EQ=
+	t=1736751202; cv=none; b=lL07IOevKHAKS68RFqQP/aglxjxggehqy+hikG215UCzXpCcWG/Zy2h2sJgVWy1WvVlxtkMAUpFXZ82EQWabdXMUoB7C3AxCGlViqtRSIYkzerlBFnR6aLILkzy+xsVMtkzUufT02MwFs6NXjTPIuBaC+6oARzxaN7HpeGtVpnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736736327; c=relaxed/simple;
-	bh=rwuymBKNC1xJJb3cN3Hxy1sDdE03AL/DPwsrMP6BJ7U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kzRpz5zIWwqFx4b60T6QPkkdS6+y9GpgK6CEk0SFUNBMOd+h/OT7EokMSoqWTvQ2TdwcoDaJtt+c4d+RQMEkJa3LjLk/HpACtsq+hNeoBYzNIUSs8WiK2+1wQW8iNIn70RoFmyiovstXwDHgxW3pMWFygT0l6W7Y8HhN3GD6DFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gJdCCf/Y; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1736751202; c=relaxed/simple;
+	bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mETzEq1wboEaIWuJndfA/ixHeKBzzIOzLkvpRjSlG65ghDI6p0wZHEpqfwXrO5jhUw0RnAQQe5BlfjXUqPjp/RyKwn3Bbxmo43/NAt2Y3Y1tu7eW1k+9Axo1Jz5LS5PxhS0eFIiwenqhP5NUqo3Ewx8K5cpS28YTkE96R+hf4j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jRKVWuN/; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gJdCCf/Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jRKVWuN/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736736326; x=1768272326;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rwuymBKNC1xJJb3cN3Hxy1sDdE03AL/DPwsrMP6BJ7U=;
-  b=gJdCCf/YWZ1g7+KDk1SvNr+4S7wijdBXZYKJS+L986VONn1IbaoKiyqV
-   qDCCDbfjBmyamsrq3mO9SxOYLQB/SEDqySsvHWkYmRgCOChZeSvdYBuFC
-   +AUFdWlaQzEVusfShRX8VP98RL6dAi7T5txyWFwaInXGNitaOW6dMsCwI
-   CVRNlKYLvucDNXHMgajT3srcw6RnGul0KQNRslH9trHyHD8c6/IcEOz6R
-   uzACe5A/EgGl1GxYUWsVvlqdq0DfOcx346oayynyICE5v7f7sVH+5Q73G
-   x8/cmfQcjMrYkCPCzGdlmEkaMfW6ejV1op5SNsIQHoJB09MlFUh9khdSC
-   w==;
-X-CSE-ConnectionGUID: OeCgmteMTtWQrQS/W0rHUg==
-X-CSE-MsgGUID: UYlGyO/HQze8XqVKYopaZg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="48353268"
+  t=1736751200; x=1768287200;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ElOFKS/oFvpY9RMb8FNc82vYKk4BTq/9KyQTg2M/45o=;
+  b=jRKVWuN/6byds76xJIWSeow4Oi9hQBaOVjWCw6LTSbWtU0d7MPQe/I+m
+   8Ri+7LOdQJbtIyFvt2tsLK960hAdeFw2ZD9C2obNYPAR+lIh1UBdBQJyc
+   t/0MYym1lPa1hLbWEgWqRwmniqaqcNlxIHvCs/3uNtn4yhM4S637WcSOo
+   O1YxH5T4Y9bawZCIhL7QuIShwhV2WlCO0F3RmdrFtUjSaZoDZeruRo6QC
+   k8H1SChgl+Xqv5PU85TbXf3Uz7I+76fZPzl6+Z/ybPoN1pNTc5lGzf0pE
+   8vSz5EC6f2uLPR3+BaJTcU8FQSmjr7BZcrypP68F8NL/YRak3jJFt5YgJ
+   g==;
+X-CSE-ConnectionGUID: yZvM0vDPTmO8g6j9rLHsGg==
+X-CSE-MsgGUID: JaNNru4jQAmR9DnEQev7oQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="36278959"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="48353268"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 18:45:26 -0800
-X-CSE-ConnectionGUID: q9sIMqf2QLSJSfxy1e8QBw==
-X-CSE-MsgGUID: c32pmQqcRt+inXnJwG/Qng==
+   d="scan'208";a="36278959"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 22:53:19 -0800
+X-CSE-ConnectionGUID: S09VXZZlQym3XWivhV2RiQ==
+X-CSE-MsgGUID: sW9YO4M8Q0mRFxY5PIpqSg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104847338"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="109364775"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Jan 2025 18:45:23 -0800
+  by orviesa004.jf.intel.com with ESMTP; 12 Jan 2025 22:53:16 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tXAS8-000Mdp-2H;
-	Mon, 13 Jan 2025 02:45:20 +0000
-Date: Mon, 13 Jan 2025 10:44:29 +0800
+	id 1tXEK2-000MpH-04;
+	Mon, 13 Jan 2025 06:53:14 +0000
+Date: Mon, 13 Jan 2025 14:52:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matthew Garrett <mjg59@google.com>
+To: Wenliang Yan <wenliang202407@163.com>, linux@roeck-us.net,
+	Jean Delvare <jdelvare@suse.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-	Bartosz Szczepanek <bsz@semihalf.com>
-Subject: include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size'
- set but not used
-Message-ID: <202501131033.emEdcL5L-lkp@intel.com>
+	Wenliang Yan <wenliang202407@163.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
+Message-ID: <202501131420.UQWnurXD-lkp@intel.com>
+References: <20250113035023.365697-3-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,183 +69,259 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250113035023.365697-3-wenliang202407@163.com>
 
-Hi Matthew,
+Hi Wenliang,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   be548645527a131a097fdc884b7fca40c8b86231
-commit: c46f3405692de1ac82240d927b9c7a0f9d6a4a36 tpm: Reserve the TPM final events table
-date:   6 years ago
-config: x86_64-randconfig-071-20241231 (https://download.01.org/0day-ci/archive/20250113/202501131033.emEdcL5L-lkp@intel.com/config)
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.13-rc7 next-20250110]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang-Yan/dt-bindings-Add-SQ52206-to-ina2xx-devicetree-bindings/20250113-115457
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250113035023.365697-3-wenliang202407%40163.com
+patch subject: [PATCH v2 2/2] hwmon:(ina238)Add support for SQ52206
+config: i386-buildonly-randconfig-004-20250113 (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250113/202501131033.emEdcL5L-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250113/202501131420.UQWnurXD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501131033.emEdcL5L-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501131420.UQWnurXD-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/char/tpm/tpm-chip.c:24:
->> include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-     165 |         int mapping_size;
-         |             ^
-   drivers/char/tpm/tpm-chip.c:422:11: warning: cast from 'void (*)(struct device *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
-     422 |                                       (void (*)(void *)) put_device,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from drivers/char/tpm/tpm-dev-common.c:19:
-   In file included from drivers/char/tpm/tpm.h:29:
->> include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-     165 |         int mapping_size;
-         |             ^
-   1 warning generated.
---
-   In file included from drivers/char/tpm/eventlog/tpm1.c:24:
->> include/linux/tpm_eventlog.h:165:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
-     165 |         int mapping_size;
-         |             ^
-   drivers/char/tpm/eventlog/tpm1.c:253:6: warning: variable 'len' set but not used [-Wunused-but-set-variable]
-     253 |         int len = 0;
-         |             ^
-   2 warnings generated.
+   In file included from drivers/hwmon/ina238.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/ina238.c:594:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     594 |         case hwmon_temp:
+         |         ^
+   drivers/hwmon/ina238.c:594:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     594 |         case hwmon_temp:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/hwmon/ina238.c:594:2: note: insert 'break;' to avoid fall-through
+     594 |         case hwmon_temp:
+         |         ^
+         |         break; 
+>> drivers/hwmon/ina238.c:702:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+     702 |                 else if (data->gain == 2)
+         |                 ^
+   3 warnings generated.
 
 
-vim +/mapping_size +165 include/linux/tpm_eventlog.h
+vim +594 drivers/hwmon/ina238.c
 
-   138	
-   139	/**
-   140	 * __calc_tpm2_event_size - calculate the size of a TPM2 event log entry
-   141	 * @event:        Pointer to the event whose size should be calculated
-   142	 * @event_header: Pointer to the initial event containing the digest lengths
-   143	 * @do_mapping:   Whether or not the event needs to be mapped
-   144	 *
-   145	 * The TPM2 event log format can contain multiple digests corresponding to
-   146	 * separate PCR banks, and also contains a variable length of the data that
-   147	 * was measured. This requires knowledge of how long each digest type is,
-   148	 * and this information is contained within the first event in the log.
-   149	 *
-   150	 * We calculate the length by examining the number of events, and then looking
-   151	 * at each event in turn to determine how much space is used for events in
-   152	 * total. Once we've done this we know the offset of the data length field,
-   153	 * and can calculate the total size of the event.
-   154	 *
-   155	 * Return: size of the event on success, <0 on failure
-   156	 */
-   157	
-   158	static inline int __calc_tpm2_event_size(struct tcg_pcr_event2_head *event,
-   159						 struct tcg_pcr_event *event_header,
-   160						 bool do_mapping)
-   161	{
-   162		struct tcg_efi_specid_event_head *efispecid;
-   163		struct tcg_event_field *event_field;
-   164		void *mapping = NULL;
- > 165		int mapping_size;
-   166		void *marker;
-   167		void *marker_start;
-   168		u32 halg_size;
-   169		size_t size;
-   170		u16 halg;
-   171		int i;
-   172		int j;
-   173	
-   174		marker = event;
-   175		marker_start = marker;
-   176		marker = marker + sizeof(event->pcr_idx) + sizeof(event->event_type)
-   177			+ sizeof(event->count);
-   178	
-   179		/* Map the event header */
-   180		if (do_mapping) {
-   181			mapping_size = marker - marker_start;
-   182			mapping = TPM_MEMREMAP((unsigned long)marker_start,
-   183					       mapping_size);
-   184			if (!mapping) {
-   185				size = 0;
-   186				goto out;
-   187			}
-   188		} else {
-   189			mapping = marker_start;
-   190		}
-   191	
-   192		event = (struct tcg_pcr_event2_head *)mapping;
-   193	
-   194		efispecid = (struct tcg_efi_specid_event_head *)event_header->event;
-   195	
-   196		/* Check if event is malformed. */
-   197		if (event->count > efispecid->num_algs) {
-   198			size = 0;
-   199			goto out;
-   200		}
-   201	
-   202		for (i = 0; i < event->count; i++) {
-   203			halg_size = sizeof(event->digests[i].alg_id);
-   204	
-   205			/* Map the digest's algorithm identifier */
-   206			if (do_mapping) {
-   207				TPM_MEMUNMAP(mapping, mapping_size);
-   208				mapping_size = halg_size;
-   209				mapping = TPM_MEMREMAP((unsigned long)marker,
-   210						     mapping_size);
-   211				if (!mapping) {
-   212					size = 0;
-   213					goto out;
-   214				}
-   215			} else {
-   216				mapping = marker;
-   217			}
-   218	
-   219			memcpy(&halg, mapping, halg_size);
-   220			marker = marker + halg_size;
-   221	
-   222			for (j = 0; j < efispecid->num_algs; j++) {
-   223				if (halg == efispecid->digest_sizes[j].alg_id) {
-   224					marker +=
-   225						efispecid->digest_sizes[j].digest_size;
-   226					break;
-   227				}
-   228			}
-   229			/* Algorithm without known length. Such event is unparseable. */
-   230			if (j == efispecid->num_algs) {
-   231				size = 0;
-   232				goto out;
-   233			}
-   234		}
-   235	
-   236		/*
-   237		 * Map the event size - we don't read from the event itself, so
-   238		 * we don't need to map it
-   239		 */
-   240		if (do_mapping) {
-   241			TPM_MEMUNMAP(mapping, mapping_size);
-   242			mapping_size += sizeof(event_field->event_size);
-   243			mapping = TPM_MEMREMAP((unsigned long)marker,
-   244					       mapping_size);
-   245			if (!mapping) {
-   246				size = 0;
-   247				goto out;
-   248			}
-   249		} else {
-   250			mapping = marker;
-   251		}
-   252	
-   253		event_field = (struct tcg_event_field *)mapping;
-   254	
-   255		marker = marker + sizeof(event_field->event_size)
-   256			+ event_field->event_size;
-   257		size = marker - marker_start;
-   258	
-   259		if ((event->event_type == 0) && (event_field->event_size == 0))
-   260			size = 0;
-   261	out:
-   262		if (do_mapping)
-   263			TPM_MEMUNMAP(mapping, mapping_size);
-   264		return size;
-   265	}
-   266	
+eacb52f010a807 Nathan Rossi        2021-11-02  552  
+eacb52f010a807 Nathan Rossi        2021-11-02  553  static umode_t ina238_is_visible(const void *drvdata,
+eacb52f010a807 Nathan Rossi        2021-11-02  554  				 enum hwmon_sensor_types type,
+eacb52f010a807 Nathan Rossi        2021-11-02  555  				 u32 attr, int channel)
+eacb52f010a807 Nathan Rossi        2021-11-02  556  {
+f08436905922ae Wenliang Yan        2025-01-13  557  	const struct ina238_data *data = drvdata;
+f08436905922ae Wenliang Yan        2025-01-13  558  	bool has_power_highest = data->config->has_power_highest;
+f08436905922ae Wenliang Yan        2025-01-13  559  
+eacb52f010a807 Nathan Rossi        2021-11-02  560  	switch (type) {
+eacb52f010a807 Nathan Rossi        2021-11-02  561  	case hwmon_in:
+eacb52f010a807 Nathan Rossi        2021-11-02  562  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  563  		case hwmon_in_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  564  		case hwmon_in_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  565  		case hwmon_in_min_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  566  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  567  		case hwmon_in_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  568  		case hwmon_in_min:
+eacb52f010a807 Nathan Rossi        2021-11-02  569  			return 0644;
+eacb52f010a807 Nathan Rossi        2021-11-02  570  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  571  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  572  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  573  	case hwmon_curr:
+eacb52f010a807 Nathan Rossi        2021-11-02  574  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  575  		case hwmon_curr_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  576  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  577  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  578  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  579  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  580  	case hwmon_power:
+eacb52f010a807 Nathan Rossi        2021-11-02  581  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  582  		case hwmon_power_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  583  		case hwmon_power_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  584  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  585  		case hwmon_power_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  586  			return 0644;
+f08436905922ae Wenliang Yan        2025-01-13  587  		case hwmon_power_input_highest:
+f08436905922ae Wenliang Yan        2025-01-13  588  			if (has_power_highest)
+f08436905922ae Wenliang Yan        2025-01-13  589  				return 0444;
+f08436905922ae Wenliang Yan        2025-01-13  590  			break;
+eacb52f010a807 Nathan Rossi        2021-11-02  591  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  592  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  593  		}
+eacb52f010a807 Nathan Rossi        2021-11-02 @594  	case hwmon_temp:
+eacb52f010a807 Nathan Rossi        2021-11-02  595  		switch (attr) {
+eacb52f010a807 Nathan Rossi        2021-11-02  596  		case hwmon_temp_input:
+eacb52f010a807 Nathan Rossi        2021-11-02  597  		case hwmon_temp_max_alarm:
+eacb52f010a807 Nathan Rossi        2021-11-02  598  			return 0444;
+eacb52f010a807 Nathan Rossi        2021-11-02  599  		case hwmon_temp_max:
+eacb52f010a807 Nathan Rossi        2021-11-02  600  			return 0644;
+eacb52f010a807 Nathan Rossi        2021-11-02  601  		default:
+eacb52f010a807 Nathan Rossi        2021-11-02  602  			return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  603  		}
+eacb52f010a807 Nathan Rossi        2021-11-02  604  	default:
+eacb52f010a807 Nathan Rossi        2021-11-02  605  		return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  606  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  607  }
+eacb52f010a807 Nathan Rossi        2021-11-02  608  
+eacb52f010a807 Nathan Rossi        2021-11-02  609  #define INA238_HWMON_IN_CONFIG (HWMON_I_INPUT | \
+eacb52f010a807 Nathan Rossi        2021-11-02  610  				HWMON_I_MAX | HWMON_I_MAX_ALARM | \
+eacb52f010a807 Nathan Rossi        2021-11-02  611  				HWMON_I_MIN | HWMON_I_MIN_ALARM)
+eacb52f010a807 Nathan Rossi        2021-11-02  612  
+bf9b7f92df7376 Krzysztof Kozlowski 2023-04-06  613  static const struct hwmon_channel_info * const ina238_info[] = {
+eacb52f010a807 Nathan Rossi        2021-11-02  614  	HWMON_CHANNEL_INFO(in,
+eacb52f010a807 Nathan Rossi        2021-11-02  615  			   /* 0: shunt voltage */
+eacb52f010a807 Nathan Rossi        2021-11-02  616  			   INA238_HWMON_IN_CONFIG,
+eacb52f010a807 Nathan Rossi        2021-11-02  617  			   /* 1: bus voltage */
+eacb52f010a807 Nathan Rossi        2021-11-02  618  			   INA238_HWMON_IN_CONFIG),
+eacb52f010a807 Nathan Rossi        2021-11-02  619  	HWMON_CHANNEL_INFO(curr,
+eacb52f010a807 Nathan Rossi        2021-11-02  620  			   /* 0: current through shunt */
+eacb52f010a807 Nathan Rossi        2021-11-02  621  			   HWMON_C_INPUT),
+eacb52f010a807 Nathan Rossi        2021-11-02  622  	HWMON_CHANNEL_INFO(power,
+eacb52f010a807 Nathan Rossi        2021-11-02  623  			   /* 0: power */
+f08436905922ae Wenliang Yan        2025-01-13  624  			   HWMON_P_INPUT | HWMON_P_MAX |
+f08436905922ae Wenliang Yan        2025-01-13  625  			   HWMON_P_MAX_ALARM | HWMON_P_INPUT_HIGHEST),
+eacb52f010a807 Nathan Rossi        2021-11-02  626  	HWMON_CHANNEL_INFO(temp,
+eacb52f010a807 Nathan Rossi        2021-11-02  627  			   /* 0: die temperature */
+eacb52f010a807 Nathan Rossi        2021-11-02  628  			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_ALARM),
+eacb52f010a807 Nathan Rossi        2021-11-02  629  	NULL
+eacb52f010a807 Nathan Rossi        2021-11-02  630  };
+eacb52f010a807 Nathan Rossi        2021-11-02  631  
+eacb52f010a807 Nathan Rossi        2021-11-02  632  static const struct hwmon_ops ina238_hwmon_ops = {
+eacb52f010a807 Nathan Rossi        2021-11-02  633  	.is_visible = ina238_is_visible,
+eacb52f010a807 Nathan Rossi        2021-11-02  634  	.read = ina238_read,
+eacb52f010a807 Nathan Rossi        2021-11-02  635  	.write = ina238_write,
+eacb52f010a807 Nathan Rossi        2021-11-02  636  };
+eacb52f010a807 Nathan Rossi        2021-11-02  637  
+eacb52f010a807 Nathan Rossi        2021-11-02  638  static const struct hwmon_chip_info ina238_chip_info = {
+eacb52f010a807 Nathan Rossi        2021-11-02  639  	.ops = &ina238_hwmon_ops,
+eacb52f010a807 Nathan Rossi        2021-11-02  640  	.info = ina238_info,
+eacb52f010a807 Nathan Rossi        2021-11-02  641  };
+eacb52f010a807 Nathan Rossi        2021-11-02  642  
+f08436905922ae Wenliang Yan        2025-01-13  643  /* energy attributes are 5bytes wide so we need u64 */
+f08436905922ae Wenliang Yan        2025-01-13  644  static DEVICE_ATTR_RO(energy1_input);
+f08436905922ae Wenliang Yan        2025-01-13  645  
+f08436905922ae Wenliang Yan        2025-01-13  646  static struct attribute *ina238_attrs[] = {
+f08436905922ae Wenliang Yan        2025-01-13  647  	&dev_attr_energy1_input.attr,
+f08436905922ae Wenliang Yan        2025-01-13  648  	NULL,
+f08436905922ae Wenliang Yan        2025-01-13  649  };
+f08436905922ae Wenliang Yan        2025-01-13  650  ATTRIBUTE_GROUPS(ina238);
+f08436905922ae Wenliang Yan        2025-01-13  651  
+eacb52f010a807 Nathan Rossi        2021-11-02  652  static int ina238_probe(struct i2c_client *client)
+eacb52f010a807 Nathan Rossi        2021-11-02  653  {
+eacb52f010a807 Nathan Rossi        2021-11-02  654  	struct ina2xx_platform_data *pdata = dev_get_platdata(&client->dev);
+eacb52f010a807 Nathan Rossi        2021-11-02  655  	struct device *dev = &client->dev;
+eacb52f010a807 Nathan Rossi        2021-11-02  656  	struct device *hwmon_dev;
+eacb52f010a807 Nathan Rossi        2021-11-02  657  	struct ina238_data *data;
+eacb52f010a807 Nathan Rossi        2021-11-02  658  	int config;
+f08436905922ae Wenliang Yan        2025-01-13  659  	enum ina238_ids chip;
+eacb52f010a807 Nathan Rossi        2021-11-02  660  	int ret;
+eacb52f010a807 Nathan Rossi        2021-11-02  661  
+f08436905922ae Wenliang Yan        2025-01-13  662  	chip = (uintptr_t)i2c_get_match_data(client);
+f08436905922ae Wenliang Yan        2025-01-13  663  
+eacb52f010a807 Nathan Rossi        2021-11-02  664  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+eacb52f010a807 Nathan Rossi        2021-11-02  665  	if (!data)
+eacb52f010a807 Nathan Rossi        2021-11-02  666  		return -ENOMEM;
+eacb52f010a807 Nathan Rossi        2021-11-02  667  
+eacb52f010a807 Nathan Rossi        2021-11-02  668  	data->client = client;
+f08436905922ae Wenliang Yan        2025-01-13  669  	/* set the device type */
+f08436905922ae Wenliang Yan        2025-01-13  670  	data->config = &ina238_config[chip];
+f08436905922ae Wenliang Yan        2025-01-13  671  
+eacb52f010a807 Nathan Rossi        2021-11-02  672  	mutex_init(&data->config_lock);
+eacb52f010a807 Nathan Rossi        2021-11-02  673  
+eacb52f010a807 Nathan Rossi        2021-11-02  674  	data->regmap = devm_regmap_init_i2c(client, &ina238_regmap_config);
+eacb52f010a807 Nathan Rossi        2021-11-02  675  	if (IS_ERR(data->regmap)) {
+eacb52f010a807 Nathan Rossi        2021-11-02  676  		dev_err(dev, "failed to allocate register map\n");
+eacb52f010a807 Nathan Rossi        2021-11-02  677  		return PTR_ERR(data->regmap);
+eacb52f010a807 Nathan Rossi        2021-11-02  678  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  679  
+eacb52f010a807 Nathan Rossi        2021-11-02  680  	/* load shunt value */
+eacb52f010a807 Nathan Rossi        2021-11-02  681  	data->rshunt = INA238_RSHUNT_DEFAULT;
+eacb52f010a807 Nathan Rossi        2021-11-02  682  	if (device_property_read_u32(dev, "shunt-resistor", &data->rshunt) < 0 && pdata)
+eacb52f010a807 Nathan Rossi        2021-11-02  683  		data->rshunt = pdata->shunt_uohms;
+eacb52f010a807 Nathan Rossi        2021-11-02  684  	if (data->rshunt == 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  685  		dev_err(dev, "invalid shunt resister value %u\n", data->rshunt);
+eacb52f010a807 Nathan Rossi        2021-11-02  686  		return -EINVAL;
+eacb52f010a807 Nathan Rossi        2021-11-02  687  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  688  
+eacb52f010a807 Nathan Rossi        2021-11-02  689  	/* load shunt gain value */
+eacb52f010a807 Nathan Rossi        2021-11-02  690  	if (device_property_read_u32(dev, "ti,shunt-gain", &data->gain) < 0)
+eacb52f010a807 Nathan Rossi        2021-11-02  691  		data->gain = 4; /* Default of ADCRANGE = 0 */
+f08436905922ae Wenliang Yan        2025-01-13  692  	if (data->gain != 1 && data->gain != 2 && data->gain != 4) {
+eacb52f010a807 Nathan Rossi        2021-11-02  693  		dev_err(dev, "invalid shunt gain value %u\n", data->gain);
+eacb52f010a807 Nathan Rossi        2021-11-02  694  		return -EINVAL;
+eacb52f010a807 Nathan Rossi        2021-11-02  695  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  696  
+eacb52f010a807 Nathan Rossi        2021-11-02  697  	/* Setup CONFIG register */
+f08436905922ae Wenliang Yan        2025-01-13  698  	config = data->config->config_default;
+f08436905922ae Wenliang Yan        2025-01-13  699  	if (chip == sq52206)
+eacb52f010a807 Nathan Rossi        2021-11-02  700  		if (data->gain == 1)
+f08436905922ae Wenliang Yan        2025-01-13  701  			config |= SQ52206_CONFIG_ADCRANGE_HIGH; /* ADCRANGE = 10/11 is /1 */
+f08436905922ae Wenliang Yan        2025-01-13 @702  		else if (data->gain == 2)
+f08436905922ae Wenliang Yan        2025-01-13  703  			config |= SQ52206_CONFIG_ADCRANGE_LOW; /* ADCRANGE = 01 is /2 */
+f08436905922ae Wenliang Yan        2025-01-13  704  	else if (data->gain == 1)
+eacb52f010a807 Nathan Rossi        2021-11-02  705  		config |= INA238_CONFIG_ADCRANGE; /* ADCRANGE = 1 is /1 */
+eacb52f010a807 Nathan Rossi        2021-11-02  706  	ret = regmap_write(data->regmap, INA238_CONFIG, config);
+eacb52f010a807 Nathan Rossi        2021-11-02  707  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  708  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  709  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  710  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  711  
+eacb52f010a807 Nathan Rossi        2021-11-02  712  	/* Setup ADC_CONFIG register */
+eacb52f010a807 Nathan Rossi        2021-11-02  713  	ret = regmap_write(data->regmap, INA238_ADC_CONFIG,
+eacb52f010a807 Nathan Rossi        2021-11-02  714  			   INA238_ADC_CONFIG_DEFAULT);
+eacb52f010a807 Nathan Rossi        2021-11-02  715  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  716  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  717  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  718  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  719  
+eacb52f010a807 Nathan Rossi        2021-11-02  720  	/* Setup SHUNT_CALIBRATION register with fixed value */
+eacb52f010a807 Nathan Rossi        2021-11-02  721  	ret = regmap_write(data->regmap, INA238_SHUNT_CALIBRATION,
+eacb52f010a807 Nathan Rossi        2021-11-02  722  			   INA238_CALIBRATION_VALUE);
+eacb52f010a807 Nathan Rossi        2021-11-02  723  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  724  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  725  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  726  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  727  
+eacb52f010a807 Nathan Rossi        2021-11-02  728  	/* Setup alert/alarm configuration */
+eacb52f010a807 Nathan Rossi        2021-11-02  729  	ret = regmap_write(data->regmap, INA238_DIAG_ALERT,
+eacb52f010a807 Nathan Rossi        2021-11-02  730  			   INA238_DIAG_ALERT_DEFAULT);
+eacb52f010a807 Nathan Rossi        2021-11-02  731  	if (ret < 0) {
+eacb52f010a807 Nathan Rossi        2021-11-02  732  		dev_err(dev, "error configuring the device: %d\n", ret);
+eacb52f010a807 Nathan Rossi        2021-11-02  733  		return -ENODEV;
+eacb52f010a807 Nathan Rossi        2021-11-02  734  	}
+eacb52f010a807 Nathan Rossi        2021-11-02  735  
+eacb52f010a807 Nathan Rossi        2021-11-02  736  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, data,
+eacb52f010a807 Nathan Rossi        2021-11-02  737  							 &ina238_chip_info,
+f08436905922ae Wenliang Yan        2025-01-13  738  							 data->config->has_energy ?
+f08436905922ae Wenliang Yan        2025-01-13  739  								NULL : ina238_groups);
+eacb52f010a807 Nathan Rossi        2021-11-02  740  	if (IS_ERR(hwmon_dev))
+eacb52f010a807 Nathan Rossi        2021-11-02  741  		return PTR_ERR(hwmon_dev);
+eacb52f010a807 Nathan Rossi        2021-11-02  742  
+eacb52f010a807 Nathan Rossi        2021-11-02  743  	dev_info(dev, "power monitor %s (Rshunt = %u uOhm, gain = %u)\n",
+eacb52f010a807 Nathan Rossi        2021-11-02  744  		 client->name, data->rshunt, data->gain);
+eacb52f010a807 Nathan Rossi        2021-11-02  745  
+eacb52f010a807 Nathan Rossi        2021-11-02  746  	return 0;
+eacb52f010a807 Nathan Rossi        2021-11-02  747  }
+eacb52f010a807 Nathan Rossi        2021-11-02  748  
 
 -- 
 0-DAY CI Kernel Test Service
