@@ -1,109 +1,55 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DFE8493
-	for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 21:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389A42080DA;
+	Tue, 14 Jan 2025 21:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736888589; cv=none; b=pkoxNDuFw6iGhXkGS68BjD+iB51scsvpMyD7Pog/DHpSXTGmE8M25aeIikyPUWXide94WIVCDDfo3h/u0tt2ARvzm2QQ7g0gJGWJb346/7xhCoCqr2PTSNxL5qV/D0LXeVwzGGqocXo/PfMgG5uBBsZxpJA8jCpMeC8JiNLPsAI=
+	t=1736890864; cv=none; b=UwfTW5bv+YdjK4Zc607wXe1iEdtQNb6G8qs2EcOLVnbvgQ3jq8JbMIPNtGRIOODqYbtf0CmJC5Q3Q12fC1ul6yFmxwHGe4whqRrPN4Z7TD42UZjqTCoEMyElklJW0DoaAlHSgsfkvYzOKiEuN9fOiW10xMOcG/dSDxrbwNB9N7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736888589; c=relaxed/simple;
-	bh=7Z0D3S+AZciGSCFXPvXaD21yXzKG+gmAXwYeM6OkB1w=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DnvaAtJ0GCbNFklTMVllp1d83WUNjNWrLZ2p/UYIBKJND/+BI9A12OYjDYJ/NydU8vEIk3itv+GejHPP/YOZkTgblTd7YqkQ+vXj6stikr6haZoyWGg6siW52tLGi9w49lDhYs22zIOCT3dWuRmLZ4jvmjpqIexYkVY7XeBGoEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E+7J6uNE; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736890864; c=relaxed/simple;
+	bh=plg/Q6ofa18FL4UN3PcTWR+2FNwNHvTV+qNM/TSn/8Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=m9nKtCk8hue4UNZiNfFozBk7X6TARIVJ+yjLUCrns8i32wB4AUPHxFpBZtS/tFWJ2FEcJ88+nO1TEicDotgZmnFwpR/lKbYWcFkIvD4dPi1tuXXt0xS9U1nvQ0DYqBPniom3nbT/7ZtqBamO1fvfiBfK5gpzO+a4Tpw7rsrz5gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YptTMFvt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E+7J6uNE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736888586;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=1FAPxBxjsp6pho5TPizU/hu9zhC/eVDcxdQIcEUoPHs=;
-	b=E+7J6uNE/W8S9hCmUgnBP9M87mSBFH7to3j6xxB3KQSyeSSmWu0pjAxSOHyXMoNr+I+ZnP
-	cO+5ugplpHY7F+Lk6WZ6NbPxevNlF4un8OrV8ZhOvCZGO5Oq10/2OUt7IDoojCWTJ3YP2O
-	KTi/pY10RA3osJP+gQ224QaTD41mMD0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-uIyul-a5Mbu4gL6OsNXYrw-1; Tue,
- 14 Jan 2025 16:03:05 -0500
-X-MC-Unique: uIyul-a5Mbu4gL6OsNXYrw-1
-X-Mimecast-MFC-AGG-ID: uIyul-a5Mbu4gL6OsNXYrw
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6BBC11955E88
-	for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 21:03:04 +0000 (UTC)
-Received: from [172.64.12.20] (unknown [10.30.33.24])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CFD10195608A;
-	Tue, 14 Jan 2025 21:03:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc7,
- upstream-mainline, 7f5b6a8e)
-Date: Tue, 14 Jan 2025 21:03:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YptTMFvt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA600C4CEDD;
+	Tue, 14 Jan 2025 21:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736890863;
+	bh=plg/Q6ofa18FL4UN3PcTWR+2FNwNHvTV+qNM/TSn/8Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YptTMFvtt9E2HSJUMkoerC9UREjwu2jI/bHUJkxk2y6P5s1XplzI3n6Lb++vJz6Uj
+	 yV26fKx5Vmwy5KferV+wnot+YvbRp65oKv0sdnaY9mZ2vv2HIysqb1QZyEwaDgkpNB
+	 /SofYDEt5D0DzkG+dQTu2CnUHgRTwkIZ3yJK36OlEi8eJ/9ZKDJYMlfLN6khWAWPVJ
+	 TNyrExnAw6YpaTff5sPC5nnffI3G9g4CCcNMca9nLMvaM195+6/aN2ktmqA3UqRWwQ
+	 G7bl9k6UCX8CKt+jzOriIa8Y2AowkDrJcAYyCa0RSl2KbPcPtspnfaTmRGVd8qr7kj
+	 +TBTefWWJ6zFA==
+Date: Tue, 14 Jan 2025 14:41:00 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: conor@kernel.org, ojeda@kernel.org
+Subject: Prebuilt LLVM 19.1.7 uploaded
+Message-ID: <20250114214100.GA331869@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <54939.125011416030500703@us-mta-67.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: C7pdPoBur0_KSnkB13b-XH1YRtSur861dsgBajnv-WM_1736888584
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+Hi all,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+I have built and uploaded LLVM 19.1.7 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 19.x
+series is no longer supported.
 
-Kernel information:
-    Commit message: Merge tag 'pci-v6.13-fixes-3' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/pci/pci
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1625063801
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1625063801-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1625063801-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1625063801-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
