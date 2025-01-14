@@ -1,136 +1,152 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD5223244B;
-	Tue, 14 Jan 2025 13:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33014A4CC;
+	Tue, 14 Jan 2025 15:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736861454; cv=none; b=q0vD9sKTIaXrOBPdrFu8xBAgSapbUIH+6QUy4Rt+DDt9SbQfmiokdQ/2SkPkhZviPuNm5pBMrVpY7hzeWKynXFL8YhtZa749OaGNzoYTUSKYzLAhZOVT5Aql0Mww9UUhuhu5ZTwGFHMbk3xMPWK7v46MHakS3ocdSYAqKFOI4AU=
+	t=1736867884; cv=none; b=iDmCsC5pGhsW/YxF88plxBNdl+NqexCKwQmpPMz65lkWzvFGbdpAc3tYlKV+d3vUQ03vSVk+KCwYw8NEMdbXuVtHY2HrHG3ORQbfuKbAkWczVwht2eydyIWVIFclVZAEI+dprE0umPPd4C3bd/h75AtOS8q3S4cdayJPbGvloqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736861454; c=relaxed/simple;
-	bh=7hnfsE41/2Gp2qzS6i+3qD6GwwaLceZuAZXi6PsflqM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a/BC/7r518rP0JK4hHsKjJ0ZizjeQv+URv3hG+TuhplN7WrXQedyQl5HAoayoYTTabiGDMSa6n9EzXldcHwv7BGFOfrdfPnYbDMmDOKmIKa1hMpIYLz7D6vTGw0KhZde9hNjeteDZ6Zp17qM+m4lQoAekX2slW4PvlOhJUjydfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8AxaeAJZ4ZnAT1jAA--.42768S3;
-	Tue, 14 Jan 2025 21:30:49 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMDxfccGZ4ZnEiYiAA--.3726S2;
-	Tue, 14 Jan 2025 21:30:46 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alex Deucher <alexander.deucher@amd.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	loongarch@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] drm/amd/display: Harden callers of division functions
-Date: Tue, 14 Jan 2025 21:30:35 +0800
-Message-ID: <20250114133035.20178-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20250114132856.19463-1-yangtiezhu@loongson.cn>
-References: <20250114132856.19463-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1736867884; c=relaxed/simple;
+	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qOUPPQ7RDHbHH+/Ev3JKtgqshprbxfsKsDorDgTUvQ7qN5U7bF5RWL9wsC4rYsOPWyVUIxEVrRzT5QbIWzOG4WM3RITgJz4a4/t9pCfssjD+xaYoO9LclWRYuVe3BwyjzaeE1aNe39PcpAYUeH81EbrA2WO24hD+iw8HkiXcyvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qu/9pFaj; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qu/9pFaj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57A0C4CEDD;
+	Tue, 14 Jan 2025 15:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736867883;
+	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qu/9pFajRI6OFPR54X4zaadjDYvXKGcbBr2W4xsyhguKlnfoKTEmPNdwyaBr1UTQ/
+	 BtH4x/U02Z7Epjan3mU/bHnJuWVacAFguzj0zJSwUsyKKJuY5aCbVmue1P11XFZHlq
+	 fneGg5/K5f1ggjMgGxadtKdQoMP5EvqfNW7mghGMh1GHjFsKhpLEBQaU0BoSY9WWTo
+	 Kx0edjfHEIel0E8oqTP12sOx2vjs41z7nkJCu4jaXh+Xw2VdEP0NBtnRvqoyowxmWr
+	 9uqwaCWzedp1RFXZFCgpVs+quvcpcUJ5VMcNPSx+G63H21mmluXVOF0JbOi2UPmd6s
+	 YGuCHLm2kLNpw==
+Date: Tue, 14 Jan 2025 15:17:59 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Raju Rangoju <Raju.Rangoju@amd.com>,
+	Nathan Chancellor <nathan@kernel.org>, linux-spi@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
+Message-ID: <a20383dd-57cc-4c0d-8bab-09a9260f2378@sirena.org.uk>
+References: <20250111-spi-amd-fix-uninitialized-ret-v1-1-c66ab9f6a23d@kernel.org>
+ <173678670956.71125.2320310623665812760.b4-ty@kernel.org>
+ <87h661u2z9.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxfccGZ4ZnEiYiAA--.3726S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxWry8uF1ktw1UJFWUCFWUJrc_yoW5GF4fpa
-	13GFyUXryDZFZ2yFZ7C3W7WFZxAa93JF4v9F43Cws5u347Zan8urZ3J3Z5Gr429rWIyF4a
-	vFs8GrWjqF1vyrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-	XwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-	xGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8qXdUUUUU=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2iPXVcBfzc1mAQZJ"
+Content-Disposition: inline
+In-Reply-To: <87h661u2z9.fsf@bootlin.com>
+X-Cookie: Sauron is alive in Argentina!
 
-There are objtool warnings compiled with the latest mainline LLVM:
 
-  dc_fixpt_recip() falls through to next function dc_fixpt_sinc()
-  spl_fixpt_recip() falls through to next function spl_fixpt_sinc()
+--2iPXVcBfzc1mAQZJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Here are the call paths:
+On Tue, Jan 14, 2025 at 11:03:22AM +0100, Miquel Raynal wrote:
+> On 13/01/2025 at 16:45:09 GMT, Mark Brown <broonie@kernel.org> wrote:
 
-  dc_fixpt_recip()
-    dc_fixpt_from_fraction()
-      complete_integer_division_u64()
-        div64_u64_rem()
+> > Applied to
 
-  spl_fixpt_recip()
-    spl_fixpt_from_fraction()
-      spl_complete_integer_division_u64()
-        spl_div64_u64_rem()
+> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This was introduced by a change in Clang from a few months:
+> > Thanks!
 
-  [SimplifyCFG] Deduce paths unreachable if they cause div/rem UB)
-  https://github.com/llvm/llvm-project/commit/37932643abab
+> I'm wondering whether it's relevant to pull the branch you shared
+> as-is. Do you plan on pushing this patch of top of it? Or shall I wait
+> -rc1 for the SPI NAND part?
 
-The current ASSERT() and SPL_ASSERT() do not do anything to prevent
-the divide by zero and the rest of the code does not either, this
-is the root cause.
+Well, it's not a branch but rather a tag which complicates matters a
+bit.  I could cherry pick the patch over and make a new tag I guess?  Or
+you could just not do allmodconfig builds with clang?
 
-The callers of division functions should be hardened against dividing
-by zero to avoid undefined behavior, so use the new added ASSERT_BUG()
-and SPL_ASSERT_BUG() to stop the control flow if the divisior is zero.
+The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
 
-Suggested-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Xi Ruoyao <xry111@xry111.site>
-Suggested-by: Rui Wang <wangrui@loongson.cn>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Link: https://lore.kernel.org/lkml/20241220223403.GA2605890@ax162/
----
- drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  | 2 +-
- drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-index 88d3f9d7dd55..f78c6702bc42 100644
---- a/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c
-@@ -51,7 +51,7 @@ static inline unsigned long long complete_integer_division_u64(
- {
- 	unsigned long long result;
- 
--	ASSERT(divisor);
-+	ASSERT_BUG(divisor);
- 
- 	result = div64_u64_rem(dividend, divisor, remainder);
- 
-diff --git a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-index 131f1e3949d3..b3e6840e4715 100644
---- a/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-+++ b/drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c
-@@ -29,7 +29,7 @@ static inline unsigned long long spl_complete_integer_division_u64(
- {
- 	unsigned long long result;
- 
--	SPL_ASSERT(divisor);
-+	SPL_ASSERT_BUG(divisor);
- 
- 	result = spl_div64_u64_rem(dividend, divisor, remainder);
- 
--- 
-2.42.0
+are available in the Git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-mem-dtr-2
+
+for you to fetch changes up to e896c04890aeff2292364c19632fc15d890d436c:
+
+  spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op() (2025-01-14 15:07:11 +0000)
+
+----------------------------------------------------------------
+spi: Support DTR in spi-mem
+
+Changes to support DTR with spi-mem.
+
+----------------------------------------------------------------
+Miquel Raynal (20):
+      spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
+      spi: spi-mem: Add a new controller capability
+      spi: amd: Support per spi-mem operation frequency switches
+      spi: amd: Drop redundant check
+      spi: amlogic-spifc-a1: Support per spi-mem operation frequency switches
+      spi: cadence-qspi: Support per spi-mem operation frequency switches
+      spi: dw: Support per spi-mem operation frequency switches
+      spi: fsl-qspi: Support per spi-mem operation frequency switches
+      spi: microchip-core-qspi: Support per spi-mem operation frequency switches
+      spi: mt65xx: Support per spi-mem operation frequency switches
+      spi: mxic: Support per spi-mem operation frequency switches
+      spi: nxp-fspi: Support per spi-mem operation frequency switches
+      spi: rockchip-sfc: Support per spi-mem operation frequency switches
+      spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
+      spi: spi-ti-qspi: Support per spi-mem operation frequency switches
+      spi: zynq-qspi: Support per spi-mem operation frequency switches
+      spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
+      spi: spi-mem: Reorder spi-mem macro assignments
+      spi: spi-mem: Create macros for DTR operation
+      spi: spi-mem: Estimate the time taken by operations
+
+Nathan Chancellor (1):
+      spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
+
+ drivers/mtd/nand/spi/core.c           |  2 ++
+ drivers/spi/spi-amd.c                 | 26 +++++++-------
+ drivers/spi/spi-amlogic-spifc-a1.c    |  7 +++-
+ drivers/spi/spi-cadence-quadspi.c     |  3 +-
+ drivers/spi/spi-dw-core.c             | 10 ++++--
+ drivers/spi/spi-fsl-qspi.c            | 12 +++++--
+ drivers/spi/spi-mem.c                 | 64 +++++++++++++++++++++++++++++++++++
+ drivers/spi/spi-microchip-core-qspi.c | 26 +++++++++++---
+ drivers/spi/spi-mt65xx.c              |  7 +++-
+ drivers/spi/spi-mxic.c                |  3 +-
+ drivers/spi/spi-nxp-fspi.c            | 12 +++++--
+ drivers/spi/spi-rockchip-sfc.c        | 11 ++++--
+ drivers/spi/spi-sn-f-ospi.c           |  8 +++--
+ drivers/spi/spi-ti-qspi.c             |  7 +++-
+ drivers/spi/spi-zynq-qspi.c           | 13 +++++--
+ drivers/spi/spi-zynqmp-gqspi.c        | 13 ++++---
+ include/linux/spi/spi-mem.h           | 56 +++++++++++++++++++++++++++++-
+ 17 files changed, 237 insertions(+), 43 deletions(-)
+
+--2iPXVcBfzc1mAQZJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeGgCYACgkQJNaLcl1U
+h9C5Dgf/RQhmGbs3CM6H/hRKhwFsGtKWssBC2kOLN+PiUG1tXi0R4xXhhCG1YZ+I
+mmbh18x03b5AkS7mgA7/Hv3cBlWU20+9Lbum30vy3m/6tv65PbMRKhJP7Wp8fVZ4
+peAWt9t/DOgczBGOKn1hOmdK0DKl5Ud53TcrLs8Euo21rg0fwPYzTomir2KOCSSw
+eR3zY6WsfdKAvS+jx0sbRJc3QoI92Lt5vOilGl4nTf2YG7aXt4kYryWg9srWJ3bp
+dID0aBfHHIxncNmQFigJhaxoG70pMR35LG3ZeN4FTwzyEVyg1/nP4yGYDG5MFyfA
+FLHg1nVdJ8hdV+MnnPPsYH4aGXTdCQ==
+=4HD+
+-----END PGP SIGNATURE-----
+
+--2iPXVcBfzc1mAQZJ--
