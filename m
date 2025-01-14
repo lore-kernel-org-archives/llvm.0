@@ -1,159 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B51236A61;
-	Tue, 14 Jan 2025 12:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416B41ADC7C
+	for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 12:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736858267; cv=none; b=BffXlboe/4BwKbMkPhZI+B0OLpBkDbflBl9Wr1No1BF9N3GOcdCOs1zrqhVATgcjJJC35r31i52jNETfFIx8xgzPnL7mb2Oys1mx0gRWGCTuONfKO+beo1FzgQJJjSMpf4RDJ2iCVTyDfyhd8Ehp4SN6hRUpAMeTtDFvPh+Da9s=
+	t=1736858519; cv=none; b=XtHqEhYMl8miEni0RupTTeSnyXs+SDVuUw+Q9UH4cFs6ZuyDC1RNBztza632EC0+PfX3Tr8SJyHS2ZpjGysoy0xmyhohmtZ1hSxjRdaUlERr2kcFJ7N/4u5SddQnlHkxekaCSxX9d/Bqu8D9Dpr9iSsmRIAIkwduWh7uznRJnks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736858267; c=relaxed/simple;
-	bh=Hbyj/X9IpuGU3wSl/vJoZSu3m8IS9FoLMiOWEK6qgKA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=C0r8exqqEqsKX+cPDGqMq+ui6kHNYBz/y9EAsYqjFc6/5YgcXVWJMvjeUdCOh6Lv87y/lrpiiqyuDsrn4hJMtfwHc6/F9riHLmLCIqbHhiZ204XPyYk4osREp9l5dDJmadJuGN/gTHHMrj1RnZg0ABtuKy4T/T46gGhbZAmleo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HPHe4ihJ; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736858519; c=relaxed/simple;
+	bh=PwVHIqhZkU7VSiKTgzgFML3bKwvEqDKfozFrlDyLep0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=AXvYGoKySsqM3TrFZs0YF+LKAyhzSXBva5laCON8rwoBnWEQNM2be2L6MdcSETHKDe8n0VPW2+R3oIP765g9jAXjcsUppfo+wVYec6IDuoANO9qoFKFoYCXvN97Pb7fRlHA/IfTL0w+y4vTY3rlY06TisQ2O6fdqndKWX/SHw0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nV/IquTG; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HPHe4ihJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736858266; x=1768394266;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Hbyj/X9IpuGU3wSl/vJoZSu3m8IS9FoLMiOWEK6qgKA=;
-  b=HPHe4ihJPxi3QkZF4MPYAg1XQaZ53YqoVG4o9suhtOkeYFYSkRJffKT/
-   NUnGlndP9mTR9Wh4FWkfUv1sc/8XFxpmNoPp2SiptXsblGokV1kyJ9sOd
-   ZUaTOwF84lZJMfb5gbGFn5xdUKtK5yqcRuh5vokQL4wpBMhUntj50DXY0
-   m7QKVQfV9F6OPhC8Q8MmMgJ7//bVR2CgdNF+4PnszDQPoRJG0XJRFqi+T
-   rhy4rqh+j6MTTK+RHjdf4HDdb2d2ZR/zrhkucZQ9tlmdRKTXxZM/oO/f7
-   vDxUXG+2aAO2sPjCtZq4krNhGJAgJW8Se/Ff/S2/2lM62adrD52yfygIm
-   A==;
-X-CSE-ConnectionGUID: 3Md500jhQe6YyFX31qyP3g==
-X-CSE-MsgGUID: udJL6on7S9+WE7qPd4l2mQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="48533710"
-X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
-   d="scan'208";a="48533710"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 04:37:46 -0800
-X-CSE-ConnectionGUID: jiMTXMfMQquUd9lUJ9/RCw==
-X-CSE-MsgGUID: UFkaDVyiRVOZUP+htReLNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
-   d="scan'208";a="105368376"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Jan 2025 04:37:43 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tXgAv-000OVh-1E;
-	Tue, 14 Jan 2025 12:37:41 +0000
-Date: Tue, 14 Jan 2025 20:36:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Xiang Gao <xiang@kernel.org>
-Subject: [xiang:lz4-macros 1/1] lib/lz4/lz4hc_compress.c:86:15: error: use of
- undeclared identifier 'LZ4_MAX_DISTANCE'
-Message-ID: <202501142005.DqdNQGKc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nV/IquTG"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-388cae9eb9fso2892003f8f.3
+        for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 04:41:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736858515; x=1737463315; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bxKHNbldLr2KPjRhb+DsTvrYykc7jhuWUFNqFwWd4MI=;
+        b=nV/IquTGYK6k0z1hkeBbVAEZ7oIb9Foib2yFP1JboyQHW5M9q1N3oQev1E8Man/E9V
+         jFXJUr3KKBH2d5KMAa7rBjqu9qduR3zIwQUkc8hX+wwRGNHjgsXfic+HgzWK5h+3Jxgn
+         Kc8Vt26Bwa8M18WIrwBZ1gpy7WNmki7piXim9rYUvxKofCy03KJYEqKcCmo5409R8m2a
+         NCYNtNbtuJT+wsWIPfwBlLGHmhmpl+zy1CJFveWSnuu52Ri4UilOw6qM+c/DBm/ueaLQ
+         7QIHT2ipNVJnqf2iQ7m1xZJYdnMt3mI2MEDk8V5VpVRjj42wiGFOWgUK35P5nCsPlfhL
+         qnFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736858515; x=1737463315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bxKHNbldLr2KPjRhb+DsTvrYykc7jhuWUFNqFwWd4MI=;
+        b=nbIYrDr8IG91W7r2BbshbPQDUlPDn6Wc+m62Sugdw1bU2aALQH+ugzFB4D7W9S7DEd
+         rEGLtgFjmrRsTbAdFwWx3jk1IuYgF+C1IDDIFDhNDS8kPcfvSmgHnLWcIsTyUwqR4Ksl
+         NOQH9opNNeQKD1amGKr/fjy6SHUA7xhIQEuAjXMLgTYpbKm7ssIRSI0MZnb/xRj5CD4Y
+         OrOh87RxoyMLox4arMExGpLS5H/jYgLiBYjhIc89Zb1o8ASpfe/UEQ//evA1cmsPoi1v
+         Wf1I2/kQWzpwWSmcSsfu5Q4kHyWYAMBoV+P8mGMUBZQ9Q5lQjhorQ0cfWLSDPX2vpNjg
+         fpkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8rw0NK7W9AuoshrRNvqWiyDZeLCqYnM1rP6jbbwwSzeAYSZJ35VcQFz3NiI4cAMfc1CPw@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywq8XAK7ml900yGgK2H9Doam2zx1vlomtlbYSLSW7YLfAghTc0p
+	2HuvDl9K4tv5qJV7O0IctmaYF+/wOlSvYMbfTF/bOnsYUUBpEoDv
+X-Gm-Gg: ASbGncsUYpHmdhlxOhgALGu/DHEfi09zSneV2K09V94x8lrz4qxOXGja9dxma5T6rOK
+	6hBe9rnFsuqfwtDhv+OaP/OFfJRp3MCnAiZ7wm34ddxVtJXQMw2nbtOPSQFSuy0mDioH9SmJ/Xg
+	yPHX8ncJ6MfqoEafIKr8Gm2fRLyfNOIs8qscgLtKfW1DDV7mD4TCQRX5cM/9k6+Lbl1BXl7e+y+
+	V/o+ss85KfXaDvy76Os4LHE0dnwDU7YHa1xH66H8F4xjr9uvo/r+MnMFYEuEmrKbneBpJAMUCb0
+	VNDIop+Kf8zWnitKyXlTirB3Yg==
+X-Google-Smtp-Source: AGHT+IFqsYA3x5QlY9vO8Znk97lUtOQbkl8bJPQAZxX2XqUU5HAXMx0jymkTJDCc6PnFJiYiF+/hPQ==
+X-Received: by 2002:a5d:6d0d:0:b0:385:f1df:2502 with SMTP id ffacd0b85a97d-38a87308abemr19025172f8f.36.1736858515343;
+        Tue, 14 Jan 2025 04:41:55 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38a8e38c6a2sm14798771f8f.54.2025.01.14.04.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 04:41:54 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	upstream@airoha.com
+Subject: [PATCH v11 0/3] crypto: Add EIP-93 crypto engine support
+Date: Tue, 14 Jan 2025 13:36:33 +0100
+Message-ID: <20250114123935.18346-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/linux.git lz4-macros
-head:   cc151de616805bc027b30cfc99853989274e2a2d
-commit: cc151de616805bc027b30cfc99853989274e2a2d [1/1] include/linux/lz4.h: add some missing macros
-config: arm-randconfig-002-20250114 (https://download.01.org/0day-ci/archive/20250114/202501142005.DqdNQGKc-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250114/202501142005.DqdNQGKc-lkp@intel.com/reproduce)
+This small series add support for the Inside Secure EIP-93.
+This is a predecessor of the current supported EIP197. It doesn't
+require a firmware but instead it's embedded in the SoC.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501142005.DqdNQGKc-lkp@intel.com/
+First patch extend guard for spinlock_bh.
 
-All errors (new ones prefixed by >>):
+The other actually implement Documentation and Driver.
 
->> lib/lz4/lz4hc_compress.c:86:15: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-      86 |                 if (delta > MAX_DISTANCE)
-         |                             ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   lib/lz4/lz4hc_compress.c:87:12: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-      87 |                         delta = MAX_DISTANCE;
-         |                                 ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   2 errors generated.
---
->> lib/lz4/lz4_compress.c:287:17: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-     287 |                                         : (match + MAX_DISTANCE < ip))
-         |                                                    ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   lib/lz4/lz4_compress.c:416:16: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-     416 |                         && (match + MAX_DISTANCE >= ip)
-         |                                     ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   lib/lz4/lz4_compress.c:597:16: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-     597 |                                 : (match + MAX_DISTANCE < ip))
-         |                                            ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   lib/lz4/lz4_compress.c:676:16: error: use of undeclared identifier 'LZ4_MAX_DISTANCE'
-     676 |                 if ((match + MAX_DISTANCE >= ip)
-         |                              ^
-   lib/lz4/lz4defs.h:96:22: note: expanded from macro 'MAX_DISTANCE'
-      96 | #define MAX_DISTANCE LZ4_MAX_DISTANCE
-         |                      ^
-   4 errors generated.
+The Driver pass all the normal selft test for the supported
+algo and also pass the EXTRA test with fuzz_iterations set to 10000.
 
+Changes v11:
+- Drop any mtk variable reference and use eip93 instead
+- Mute smatch warning for context unbalance by using scoped_guard instead
+  of guard cleanup API
+Changes v10:
+- Use CRYPTO_ALG_ASYNC for eip93_hmac_setkey
+Changes v9:
+- Rework hash code to alloc DMA only when needed
+- Rework hash code to only alloc needed blocks and use
+  local struct in req for everything else
+- Rework hash code to use GFP_ATOMIC
+- Simplify hash update function
+- Generalize hmac key set function
+Changes v8:
+- Rework export and update to not sleep on exporting state
+  (consume pending packet in update and return -EINPROGRESS)
+Changes v7:
+- Fix copypaste error in __eip93_hash_init
+- Rework import/export to actually export the partial hash
+  (we actually unmap DMA on export)
+- Rename no_finalize variable to better partial_hash
+- Rename 3rd commit title and drop Mediatek from title.
+- Add Cover Letter
+- Add Reviewed-by to DT commit
+(cumulative changes from old series that had changelog in each patch)
+Changes v6:
+- Add SoC specific compatible
+- Add now supported entry for compatible with no user
+Changes v5:
+- Add Ack tag to guard patch
+- Comment out compatible with no current user
+- Fix smatch warning (reported by Dan Carpenter)
+Changes v4:
+- Out of RFC
+- Add missing bitfield.h
+- Drop useless header
+Changes v3:
+- Mute warning from Clang about C23
+- Fix not inizialized err
+- Drop unused variable
+- Add SoC compatible with generic one
+Changes v2:
+- Rename all variables from mtk to eip93
+- Move to inside-secure directory
+- Check DMA map errors
+- Use guard API for spinlock
+- Minor improvements to code
+- Add guard patch
+- Change to better compatible
+- Add description for EIP93 models
 
-vim +/LZ4_MAX_DISTANCE +86 lib/lz4/lz4hc_compress.c
+Christian Marangi (3):
+  spinlock: extend guard with spinlock_bh variants
+  dt-bindings: crypto: Add Inside Secure SafeXcel EIP-93 crypto engine
+  crypto: Add Inside Secure SafeXcel EIP-93 crypto engine support
 
-c72ac7a1a926db Chanho Min   2013-07-08  71  
-c72ac7a1a926db Chanho Min   2013-07-08  72  /* Update chains up to ip (excluded) */
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  73  static FORCE_INLINE void LZ4HC_Insert(LZ4HC_CCtx_internal *hc4,
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  74  	const BYTE *ip)
-c72ac7a1a926db Chanho Min   2013-07-08  75  {
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  76  	U16 * const chainTable = hc4->chainTable;
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  77  	U32 * const hashTable	= hc4->hashTable;
-c72ac7a1a926db Chanho Min   2013-07-08  78  	const BYTE * const base = hc4->base;
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  79  	U32 const target = (U32)(ip - base);
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  80  	U32 idx = hc4->nextToUpdate;
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  81  
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  82  	while (idx < target) {
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  83  		U32 const h = LZ4HC_hashPtr(base + idx);
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  84  		size_t delta = idx - hashTable[h];
-c72ac7a1a926db Chanho Min   2013-07-08  85  
-c72ac7a1a926db Chanho Min   2013-07-08 @86  		if (delta > MAX_DISTANCE)
-c72ac7a1a926db Chanho Min   2013-07-08  87  			delta = MAX_DISTANCE;
-c72ac7a1a926db Chanho Min   2013-07-08  88  
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  89  		DELTANEXTU16(idx) = (U16)delta;
-c72ac7a1a926db Chanho Min   2013-07-08  90  
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  91  		hashTable[h] = idx;
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  92  		idx++;
-c72ac7a1a926db Chanho Min   2013-07-08  93  	}
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  94  
-4e1a33b105ddf2 Sven Schmidt 2017-02-24  95  	hc4->nextToUpdate = target;
-c72ac7a1a926db Chanho Min   2013-07-08  96  }
-c72ac7a1a926db Chanho Min   2013-07-08  97  
-
-:::::: The code at line 86 was first introduced by commit
-:::::: c72ac7a1a926dbffb59daf0f275450e5eecce16f lib: add lz4 compressor module
-
-:::::: TO: Chanho Min <chanho.min@lge.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+ .../crypto/inside-secure,safexcel-eip93.yaml  |  67 ++
+ MAINTAINERS                                   |   7 +
+ drivers/crypto/Kconfig                        |   1 +
+ drivers/crypto/Makefile                       |   1 +
+ drivers/crypto/inside-secure/eip93/Kconfig    |  20 +
+ drivers/crypto/inside-secure/eip93/Makefile   |   5 +
+ .../crypto/inside-secure/eip93/eip93-aead.c   | 711 ++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-aead.h   |  38 +
+ .../crypto/inside-secure/eip93/eip93-aes.h    |  16 +
+ .../crypto/inside-secure/eip93/eip93-cipher.c | 413 +++++++++
+ .../crypto/inside-secure/eip93/eip93-cipher.h |  60 ++
+ .../crypto/inside-secure/eip93/eip93-common.c | 809 ++++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-common.h |  24 +
+ .../crypto/inside-secure/eip93/eip93-des.h    |  16 +
+ .../crypto/inside-secure/eip93/eip93-hash.c   | 866 ++++++++++++++++++
+ .../crypto/inside-secure/eip93/eip93-hash.h   |  82 ++
+ .../crypto/inside-secure/eip93/eip93-main.c   | 501 ++++++++++
+ .../crypto/inside-secure/eip93/eip93-main.h   | 151 +++
+ .../crypto/inside-secure/eip93/eip93-regs.h   | 335 +++++++
+ include/linux/spinlock.h                      |  13 +
+ 20 files changed, 4136 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+ create mode 100644 drivers/crypto/inside-secure/eip93/Kconfig
+ create mode 100644 drivers/crypto/inside-secure/eip93/Makefile
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aes.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-des.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.c
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.h
+ create mode 100644 drivers/crypto/inside-secure/eip93/eip93-regs.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2
+
