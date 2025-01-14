@@ -1,110 +1,123 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E49234D1C;
-	Tue, 14 Jan 2025 11:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5611F2361DD
+	for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 12:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736855547; cv=none; b=fZg8lO85DX31nbk4x+mVI/OGRCQEVAaiIMSpDKCc1fwn+ubOn9GhPGu0I84qV47187NtiwzQxOJEub5Yk4FM7WD2xgx0SD+vb7Vp5svZ1KQZ/2Gfc9duf3Js7D9x7nLRGbQ22uzBbJROXjlRyvzsgciVYS79jzuS7/5e/pn7DBc=
+	t=1736858026; cv=none; b=j/k1nU0nYMRqq4myWGg0PHF8O5oXzBa7ewHV1YBbEMMphsV9oK+XZi8qCpgyRGf8R+V309o1SpRAUK0Y1wq0HXZPf0hGQuOxbNNpn6JM8aLi2BRHVPM7sYWz+3wofy+sGH/J0yd0qMpuZp82uIs2ASeTX8zDYaO4+rtgBQoLnAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736855547; c=relaxed/simple;
-	bh=YOX/xU89auD/UKcd+tCqe6W35N4P31nROAtyQUh9/Is=;
-	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=gCLZ3/ki2in0zFIcyc3MEc+kQEpbQUjbK34aAkF68Z0fdngdpjcwxxUk8XOINESzIRt1whjqfqCpBXu8pEcL1144jiu6t5j5pRi2UDPLHR9k4/KUHXYd0wv7qdv/J/Mfcr5OE7n0EdIAjsKAsQIURVBFpklmr7YtFIoQeJUdC20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8CxrnP2T4ZneiljAA--.8859S3;
-	Tue, 14 Jan 2025 19:52:22 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMBxReT0T4Zn2gUiAA--.2756S3;
-	Tue, 14 Jan 2025 19:52:21 +0800 (CST)
-Subject: Re: [PATCH v3 1/3] drm/amd/display: Add ASSERT_BUG() macro definition
-To: Huacai Chen <chenhuacai@kernel.org>
-References: <20250114061507.30765-1-yangtiezhu@loongson.cn>
- <20250114061557.31120-1-yangtiezhu@loongson.cn>
- <CAAhV-H56-xQm5XnS7M4weHj29Z_bB8ZBiF_H4fd+eGe6g+naow@mail.gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Xinhui Pan <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>,
- Leo Li <sunpeng.li@amd.com>, Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
- Nathan Chancellor <nathan@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
- amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev,
- linux-kernel@vger.kernel.org
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1d34d05c-d408-4ee3-c385-f9367b7c3be5@loongson.cn>
-Date: Tue, 14 Jan 2025 19:52:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+	s=arc-20240116; t=1736858026; c=relaxed/simple;
+	bh=/YJr8UpKRDc+0utfD6HmlO4vHLwuJEf1t/xcHKocVQ4=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KAwm0gfS6y8pbsMyS3ms/KWDHZUO0s/5lISVYXtiBcIeyz2ueKyUnS9NHdzS7IIXexMGy/u39OXzm1zBZwOHjz22OBDbj9YO3eYmT0MCCrOfUugCDV6Uf/B3x8+GRmDnNi+3h2WuZBbSzOBpeMpvI4wrxo1JoiJ2bcdqIxRYwT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KdojrWOn; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KdojrWOn"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-436281c8a38so38645675e9.3
+        for <llvm@lists.linux.dev>; Tue, 14 Jan 2025 04:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736858022; x=1737462822; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e0G14l1knOdaruc+I1unnIDR29LSZs4T072x9bMUSOk=;
+        b=KdojrWOnhTlFXGroSfabsGFDSLe/k6xPqoYvjaa44qSAfdbvzrVYsimJkYGcoEHGtu
+         WGn9knt1mBNqRxn2Uey9jKoeTxZHFhI1Ft99Kpb2oWzGrpgYbBC0nE5sp8VMb0dSGAz2
+         2l6x6Z75iSEdeI9TbSvmYBQRtN9tTRL7Pwv5I+35qQQ86Jtre6lPHrGlZ9f2cUU4NuBd
+         bIqc6ej5pS+T5+g2BonCrUT6/xPpmZ4oQ5rh1iorWGAiTXMF0IzLcG7xWNmeh9p1SJb8
+         Kp9k8lsh3IqB8gOPyFLirxnMezEmaKo0Lm0bx/aY2QRcXmkW0e9nT/UFgbAjegLtZeH8
+         ulaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736858022; x=1737462822;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e0G14l1knOdaruc+I1unnIDR29LSZs4T072x9bMUSOk=;
+        b=c7j9s4zUZH5PtPOG27mZ9yrc5v7ooXKL4mkoWdCySVFgdjBXxhh0udrMyMkOAmPseZ
+         pO0eHzTTK9CHaiXFVQHGLL3PbS0zit+BI/W9Be2O7JYNJRfWmztQxcAr/f+eO0+T2EXi
+         pDL6hb0ZG7+8AGndDPeiJzid3Er/h0V6L3vKQVhK3rmOLo3Bx062YSODh0ECryTsGpxK
+         JEtS6v0cx6+0dkh+VKzjMzkveRJ7E4mU3Gs+WTOeBguswLCSshNRghxHANDgF7WrKfNp
+         sfvPMFfxPz13IGH9jSXDUGf08IEjqQFKfQ84bBlcEbGpxnBAdqHs5FgDIr6CzWmyTQ7X
+         DBGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWKLf2SB9PtlTeu/OatbKM1TY+ZgnrVidJTTGC9PClzkGAxVB0EWvc8l4IYNZfEtp78lPr8@lists.linux.dev
+X-Gm-Message-State: AOJu0YwUflhi8blJr21GrD1lt8meDlf3TI98EApkZkpY90VWAgnDLc1M
+	KnyW6ZV8cHBn23ByufK0VuPdYD0tqtZhQ1jKguQBRpvPyonAshMQ
+X-Gm-Gg: ASbGncvyre/rQIWfkKrmP2URZV4WfYIHF2Ymv/qCE9zyTMd8cm5WLEeOHYvQbohDxTW
+	17/xyocu1ughbjefuKZm3LV4ivCKSIhi5b8vnUijqTEJC3tPIr3/70LEHCslWFHtQRUbxOKi23W
+	vWDTMKOCPRiRoEs+KGs/hUwLhx+0dNfzR5QZaGg7EFmjv2evWFY+STWesfjhKSxhxJ9J6Xe030E
+	Hzv28fba17N0gXy+0NC2tkxZIV0Jfw4jVNP2GPZXXZBw+Ewpyng3CxLC9aCiSN1KcqgkIOBAf9+
+	MFcMbIJ76QSb
+X-Google-Smtp-Source: AGHT+IHCsdPFaJF6vWjg+pdCa0iGNxZHxd+p3cTgxOveEGdFXhRJJcBQjoZk8a5ZgIUGLsHlqteHJQ==
+X-Received: by 2002:a05:600c:1552:b0:434:fb65:ebbb with SMTP id 5b1f17b1804b1-436e26be5a3mr241842435e9.17.1736858022273;
+        Tue, 14 Jan 2025 04:33:42 -0800 (PST)
+Received: from Ansuel-XPS. (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9e37d7fsm172267105e9.32.2025.01.14.04.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 04:33:41 -0800 (PST)
+Message-ID: <678659a5.050a0220.17d5d0.749c@mx.google.com>
+X-Google-Original-Message-ID: <Z4ZZof-GeNjDEUOB@Ansuel-XPS.>
+Date: Tue, 14 Jan 2025 13:33:37 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v10 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+References: <20250105143106.20989-1-ansuelsmth@gmail.com>
+ <20250105143106.20989-4-ansuelsmth@gmail.com>
+ <Z4XbwyrBXXcQvqiO@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H56-xQm5XnS7M4weHj29Z_bB8ZBiF_H4fd+eGe6g+naow@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMBxReT0T4Zn2gUiAA--.2756S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7GF4UZw4xKw47WFyrGF15GFX_yoW8JrWfpw
-	48GFyqka1DJa17KwnxKa15Xry3G3ykGFW8G34rW3s0yFyDZ39xGFn8CF4UGFW8uFW2k3WS
-	qasaq39xWF4qyrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17
-	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7189UUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z4XbwyrBXXcQvqiO@gondor.apana.org.au>
 
-On 01/14/2025 04:29 PM, Huacai Chen wrote:
-> Hi, Tiezhu,
+On Tue, Jan 14, 2025 at 11:36:35AM +0800, Herbert Xu wrote:
+> On Sun, Jan 05, 2025 at 03:30:48PM +0100, Christian Marangi wrote:
+> > Add support for the Inside Secure SafeXcel EIP-93 Crypto Engine used on
+> > Mediatek MT7621 SoC and new Airoha SoC.
+> > 
+> > EIP-93 IP supports AES/DES/3DES ciphers in ECB/CBC and CTR modes as well as
+> > authenc(HMAC(x), cipher(y)) using HMAC MD5, SHA1, SHA224 and SHA256.
+> > 
+> > EIP-93 provide regs to signal support for specific chipers and the
+> > driver dynamically register only the supported one by the chip.
+> > 
+> > Signed-off-by: Richard van Schagen <vschagen@icloud.com>
+> > Co-developed-by: Christian Marangi <ansuelsmth@gmail.com>
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> 
+> I get a compile-time warning with this patch (C=1 W=1):
+> 
+>   CHECK   ../drivers/crypto/inside-secure/eip93/eip93-common.c
+>   ../drivers/crypto/inside-secure/eip93/eip93-common.c:101:5: warning: context imbalance in 'eip93_put_descriptor' - wrong count at exit
+>   ../drivers/crypto/inside-secure/eip93/eip93-common.c:126:6: warning: context imbalance in 'eip93_get_descriptor' - wrong count at exit
+> 
+> Could you please take a look?
 >
-> On Tue, Jan 14, 2025 at 2:16 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> In order to keep the current ability for the aim of debugging and avoid
->> printing the warning message twice, add ASSERT_BUG() macro definition to
->> harden the callers of division functions.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>  drivers/gpu/drm/amd/display/dc/os_types.h | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/display/dc/os_types.h b/drivers/gpu/drm/amd/display/dc/os_types.h
->> index f2ba76c1e0c0..932bbe05ee0a 100644
->> --- a/drivers/gpu/drm/amd/display/dc/os_types.h
->> +++ b/drivers/gpu/drm/amd/display/dc/os_types.h
->> @@ -79,6 +79,11 @@
->>                         dc_breakpoint();        \
->>         } while (0)
->>
->> +#define ASSERT_BUG(expr) do {                  \
->> +               dc_breakpoint();                \
->> +               BUG_ON(!(expr));                \
->> +       } while (0)
-> I don't think this is correct, if KGDB is enabled, then whether expr
-> is true or false, ASSERT_BUG() will break to KGDB.
 
-It should check expr first, something like this:
+Hi, this is just a false-positive with the usage of the cleanup API.
+Sending new revision muting this by using scoped_guard instead.
 
-#define ASSERT_BUG(expr) do {                   \
-                 if (!(expr)) {                  \
-                         dc_breakpoint();        \
-                         BUG();                  \
-                 }                               \
-         } while (0)
+Will also make cleanup guy aware of this bug.
 
-I will send v4 later.
-
-Thanks,
-Tiezhu
-
+-- 
+	Ansuel
