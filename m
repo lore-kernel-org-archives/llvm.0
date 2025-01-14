@@ -1,66 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFCE23245A;
-	Tue, 14 Jan 2025 17:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897C81BD9E7;
+	Tue, 14 Jan 2025 17:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736875049; cv=none; b=qlUobXteuIRsNrhTYWaercbE2+BsGqDzOwZGDvreqTRnLhHeS0rsGeT3RG6O1ErKv9SZG7Fn4qCLs06kPZrxY2Je0QgKElkx/NkBWq/No+WwrrsEkzJ3X1iVk6uYwyWlRc0iLnTnMbA4n/763RcyoHV6EMirap+Ie9bo5udZJxU=
+	t=1736875101; cv=none; b=Ph713tEL4sWXNRyhtFCd7m14hG6y/AWEVYqCcjbtrpk2RsngMxwql+5ySg3lmxfVsz0Z/aPblsa9vWBcirrUkJ5XxBL/YCeXhgj+UH1oE+lsHktXaQOIiAHsAPxina5OI0uITVcpKR40uRq5/7tjJ/RAsBSZZ6fDNWfQSy1ou10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736875049; c=relaxed/simple;
-	bh=U5JjmE7PtmCm8nJEk9tVTmqsXLSCNFXiXPuKAm5dVuU=;
+	s=arc-20240116; t=1736875101; c=relaxed/simple;
+	bh=r8aH0okh6XUsDkYzNmBIKs01nwcI68VyXznpfVQwNFU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NmvIdvppCJoU5DFah8R/BOll1nGC03BPJk7iM1HzcW1P9lHSzdEHSi5ryHYHrcKhjoVTQjmcMTzh331oMjtEcnkofEsdNW3iDIZN4ImGXdaE+lqlNF15cpbYS34yGvguREyvEbTZ4zDkcFFXsj5mVm2cDwS1MTjdIROI7OaB0Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ht63IOGl; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pd5r1sNYKPUbnm3oU9C4Xta0WKCZHaRxF/osYuWCMMGwfkj/v1nneGGMkQ+8xZdK6rUPixE0QutjPuyXNEp4FX5f0pwJEwkk5Ov0XVSnbbfg5O1YL3gY2dtEYkz/SiL7YO9cpKaJFPu17xD0uGdadqqSNai3Fr1rxDdT/tDTEL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKQDgl05; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ht63IOGl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736875048; x=1768411048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U5JjmE7PtmCm8nJEk9tVTmqsXLSCNFXiXPuKAm5dVuU=;
-  b=Ht63IOGl77VkDp9+sAaIbYTDtv79mxBB3TaKqmvwLzVRfPRh0E2zSvDC
-   7FuJfiYN6rsWkWztvGgyH/q4rxnB5/SMjltE3MpXCWP9BBiGrVsEI0Qd+
-   D1y9+jb3vsDGe1LuL4sYzPb14mirKGGK424Lxjs4+st8PXWTv8q+jsLbY
-   uvpeKota2BO3hAyffJc69TI/+wA3jyCaibU8vQhhG6xI8za0AtwklUhK8
-   w75Ko1Rp/PnIgybfDLKFsM76TdlixkIH6hh2ZqLlSnktu/sb6dQRbb32B
-   JoQ0vI7/fV5b1fRn9zcfmS9Ulxg0kdJWs34fdaGrJgul0UHPFCxUj/yNn
-   w==;
-X-CSE-ConnectionGUID: aJK0xPS/T3SOY9/wgmWUOQ==
-X-CSE-MsgGUID: GK+sxXrYStCTm1RXM2idlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="37338568"
-X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
-   d="scan'208";a="37338568"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 09:17:27 -0800
-X-CSE-ConnectionGUID: GaB4D4N5TsyoBtOwLpxvcA==
-X-CSE-MsgGUID: 0sjUhexdSkq9xK5YWneOeQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
-   d="scan'208";a="104699422"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 14 Jan 2025 09:17:23 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tXkXZ-000Onj-1K;
-	Tue, 14 Jan 2025 17:17:21 +0000
-Date: Wed, 15 Jan 2025 01:17:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xin Long <lucien.xin@gmail.com>, network dev <netdev@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, kuba@kernel.org,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	ast@fiberby.net, Shuang Li <shuali@redhat.com>
-Subject: Re: [PATCHv2 net] net: sched: refine software bypass handling in
- tc_run
-Message-ID: <202501150119.PO2Xlm4u-lkp@intel.com>
-References: <17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKQDgl05"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8164C4CEDD;
+	Tue, 14 Jan 2025 17:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736875101;
+	bh=r8aH0okh6XUsDkYzNmBIKs01nwcI68VyXznpfVQwNFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BKQDgl05vPAC75mvj1DNH2NCNIAOB5khlaQHfqoB7Rv7biQObFsByi4aAW2jCeL6a
+	 NiR/PakvIykiPy4IKKjw3D+KqFYObSQ4WnhBZYKS5c+Eyc5MOOQBV/17logGO7jnBI
+	 j4etqhwspq8kbKf81PrAD7eJb6g8Vxi7IzW+iesuo/m1ynn2haGrS1Cp8sxAfDijxq
+	 5KXwlAyH06y/rwvIfmlFM6StYJm+KQENpRQeD08jYBkH7eYWIh2bWAGnFFgCi8nBK2
+	 Cuu2VM0NSTdDQqj45FvmGVs+JDOWNtnj+2b8QcvwFxu2buXJfEHDc0dyYvoJ12mDvp
+	 M2KvWP0Bb6jCw==
+Date: Tue, 14 Jan 2025 10:18:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Klaus Kusche <klaus.kusche@computerix.info>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: peterz@infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: "Bad or missing .orc_unwind table. Disabling unwinder." Clang 19
+ problem? 6.12.8 problem?
+Message-ID: <20250114171816.GA3416405@ax162>
+References: <b248a0fb-e182-42e3-abf5-83945ee992f6@computerix.info>
+ <20250113214122.g4lluwpzj3tnamx3@jpoimboe>
+ <20250113235835.vqgvb7cdspksy5dn@jpoimboe>
+ <20250114095159.GA1580513@ax162>
+ <46c1ffa7-7531-4d4c-b302-e3ae244b57a4@computerix.info>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,58 +48,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin@gmail.com>
+In-Reply-To: <46c1ffa7-7531-4d4c-b302-e3ae244b57a4@computerix.info>
 
-Hi Xin,
+On Tue, Jan 14, 2025 at 10:59:44AM +0100, Klaus Kusche wrote:
+> On 14/01/2025 10:51, Nathan Chancellor wrote:
+> >> Nathan, I think this is a Clang 19 issue, where one of the jump table
+> >> entries is pointing past the end of the function.  When we saw this in
+> >> the past I think it was due to some leftover optimization, where the
+> >> jump table entry ended up unused so it was harmless.  Are you aware of
+> >> any recent bugs in that area?
+> > 
+> > I am not aware of any recent bugs there but if you or Klaus have a
+> > configuration file that triggers this, I would be happy to bisect LLVM
+> > to see what change introduced it to give us a better understanding of
+> > what is happening here.
+> 
+> Kernel .config files are attached to both
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=219685
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=219686
 
-kernel test robot noticed the following build errors:
+Thanks a lot, I missed that since I do not interact with Bugzilla much.
 
-[auto build test ERROR on net/main]
+I bisected this change in behavior to LLVM commit 64ed699b3d81 ("Reland
+"[SimplifyCFG] When only one case value is missing, replace default with
+that case (#76669)"") [1]. I can see how that would cause this issue but
+I am not sure how it is specifically interacting with this particular
+kernel code. I am going to try and tease out a reproducer for this and
+report it upstream but it would still probably be good to consider if
+objtool could handle this, especially in the face of the upcoming
+--Werror.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Long/net-sched-refine-software-bypass-handling-in-tc_run/20250114-025301
-base:   net/main
-patch link:    https://lore.kernel.org/r/17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin%40gmail.com
-patch subject: [PATCHv2 net] net: sched: refine software bypass handling in tc_run
-config: i386-buildonly-randconfig-005-20250114 (https://download.01.org/0day-ci/archive/20250115/202501150119.PO2Xlm4u-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501150119.PO2Xlm4u-lkp@intel.com/reproduce)
+[1]: https://github.com/llvm/llvm-project/commit/64ed699b3d811407e5a9f1111f63e11dc7f7dd80
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501150119.PO2Xlm4u-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/sched/cls_api.c:422:23: error: use of undeclared identifier 'tcf_bypass_check_needed_key'
-     422 |                         static_branch_dec(&tcf_bypass_check_needed_key);
-         |                                            ^
-   net/sched/cls_api.c:2385:24: error: use of undeclared identifier 'tcf_bypass_check_needed_key'
-    2385 |                                 static_branch_inc(&tcf_bypass_check_needed_key);
-         |                                                    ^
-   2 errors generated.
-
-
-vim +/tcf_bypass_check_needed_key +422 net/sched/cls_api.c
-
-   415	
-   416	static void tcf_proto_destroy(struct tcf_proto *tp, bool rtnl_held,
-   417				      bool sig_destroy, struct netlink_ext_ack *extack)
-   418	{
-   419		tp->ops->destroy(tp, rtnl_held, extack);
-   420		if (tp->usesw && tp->counted) {
-   421			if (!atomic_dec_return(&tp->chain->block->useswcnt))
- > 422				static_branch_dec(&tcf_bypass_check_needed_key);
-   423			tp->counted = false;
-   424		}
-   425		if (sig_destroy)
-   426			tcf_proto_signal_destroyed(tp->chain, tp);
-   427		tcf_chain_put(tp->chain);
-   428		module_put(tp->ops->owner);
-   429		kfree_rcu(tp, rcu);
-   430	}
-   431	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
