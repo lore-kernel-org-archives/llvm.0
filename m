@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED91230D0A;
-	Tue, 14 Jan 2025 02:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FF42343C1;
+	Tue, 14 Jan 2025 03:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736822721; cv=none; b=Q4/cY98HIf057PF5TEL1nQk7rrRbqyu2AfySKMWrWXBXaM2i1PABaXEkRbwxDlg+PUDWn0hMNGqwEuuxDFncz/idH8iB3FV/Ku2LhrjR3odo1AqwNCa11a9P92zQOE9zQSUsBUXsXo6qpxa+BBuL6ur16Qo3VqPr5NI4+cOIgjs=
+	t=1736825819; cv=none; b=Vpw3CisF+3b86Jjy24yeTQ+rvi3fRoa4srLGL30xgCQnJhp/6KQGdSJxRCiaTL2Dhr/3VySUpvfHM+DFtxhIhxu+MflOcgcMayTPu905Lkxp+Z94UXjVY0HPnrafIOB6hyAaclp5aDVaCfRSChbmLDLiXwtPpCm+EXBM3qHDJVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736822721; c=relaxed/simple;
-	bh=cioVE+JuE8/2v4PUIiU4Ie2P2LoSQjNifrJPTTyOYaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OCqbQLqskfP/Sgyl4rGiJx3awlNOsDRRsLuawaOcluTC++bkFA+Zo3E7b2wVnbm3LxIv3ZgF9t556KPDgoV/yFHz0jq2m7qYgLhGOJF/HfThnMj/9Zcw/2uuxKiJcPkgw2Jz7DNB+8brkXcHzRVFhrGd5wSsxp18a5E4UqJlt7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R8MggWEC; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1736825819; c=relaxed/simple;
+	bh=XI58++6TtQ82xswAkhpDySdUrIiXLyvDpIPHGUoYIpI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jXs7SCHUCw7U7la3KS269OJASXPVkNDTnPf4uW5yTJSDIucRKDnzXJWSdVrrFoTsX7N7mvCr/VP9XLhc09b9IcDgVyTvvmQyYIG/E6Z7k6mgE+nnNzUs6mP+MojzhF6euAqQctkt2uFthA00lJbf5l+vqSgHifcwBVFgp3VKzJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=ZKQDh28N; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R8MggWEC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736822720; x=1768358720;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cioVE+JuE8/2v4PUIiU4Ie2P2LoSQjNifrJPTTyOYaY=;
-  b=R8MggWECWL+IpVf08fEWNFpQiGDO88BF/GjfPY5UcVa/XblPUmbn9/O5
-   AUZsuAQQto8BlT31rIxrKFxssMFYARxeFhMPbEQp28l82zXFkagrCza19
-   T8bIOq2JCcJr9HvjmEHv1w2yfmmAAd510BrCnodpP58oaOq3ew8rzS4Tr
-   PlrKaL0GJ+zrFyRe14+AJOSQONLsVt7vUNTUSPZOgQMQT9gYs98g9L5vm
-   bd8THV5r4u7yzXmK2f2JdY3pG1Om5HcuYQWK4xgjwZxgK4+VR8ZwTN6ft
-   YuEUllFiNLvqqqWCCNUvRpkYPYaBbZya8aeyRW7ApiVVPMcl9PcjijTyP
-   A==;
-X-CSE-ConnectionGUID: N5iaikVeTUi/0r+4Sgev3Q==
-X-CSE-MsgGUID: 91DRyRHYRLeeke9h8x6MdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="36995726"
-X-IronPort-AV: E=Sophos;i="6.12,313,1728975600"; 
-   d="scan'208";a="36995726"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 18:45:19 -0800
-X-CSE-ConnectionGUID: m5gP7cBgTku4+l0gjpx/tQ==
-X-CSE-MsgGUID: 6MX59i6vSGmgZeicN+tVkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,313,1728975600"; 
-   d="scan'208";a="104440125"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 13 Jan 2025 18:45:17 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tXWvb-000O2F-1Z;
-	Tue, 14 Jan 2025 02:45:15 +0000
-Date: Tue, 14 Jan 2025 10:44:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:x86-efi-zboot 17/23]
- drivers/firmware/efi/libstub/zboot.c:36:15: warning: no previous prototype
- for function 'entry_offset'
-Message-ID: <202501141028.zTzPS0N7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="ZKQDh28N"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=70J6vzkPIXlCxUfJYdiD36nXRWaj4H0pYUMl2HSnMo0=; b=ZKQDh28NdkjbA8YTvkbWfA/s2N
+	YmuY1lg/8BNTOJementF8NzLJROljHdYN1ptGcFS/kMGXZ6AzIKEStAJ5SHwj0aYMxxHAMTUT1ZpH
+	xMAQWyeUxOcEMCNqBSd2csFFphcan8r/Jgb7fVIe3RTe0/wQHymi8ZPxFHcrLXV3WG5xIRIXM4z6/
+	Dgp9SriTVeS3oBJpWVSO9t23mvIhsDmUHf8me4sEk7fchVumSOGM57GOjwVs29udRJSMh64VrKUCq
+	6elmx6/GGydXsolOto0DQEPpI7vU/z84gIn0JRwjE92mAn8+A/JAqamgXPFTEW1VyqgxAP+3YQQxg
+	u37Mt5wQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1tXXWN-008xTJ-0C;
+	Tue, 14 Jan 2025 11:36:36 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 14 Jan 2025 11:36:35 +0800
+Date: Tue, 14 Jan 2025 11:36:35 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com,
+	Richard van Schagen <vschagen@icloud.com>
+Subject: Re: [PATCH v10 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
+ engine support
+Message-ID: <Z4XbwyrBXXcQvqiO@gondor.apana.org.au>
+References: <20250105143106.20989-1-ansuelsmth@gmail.com>
+ <20250105143106.20989-4-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,64 +63,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250105143106.20989-4-ansuelsmth@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git x86-efi-zboot
-head:   0b1f356cc24d8a8d151b33e33cbc2d28f510cc5b
-commit: e46e411b8a3cc2340076239155158681b3d25b53 [17/23] efi/zboot: Add support for ELF payloads
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250114/202501141028.zTzPS0N7-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250114/202501141028.zTzPS0N7-lkp@intel.com/reproduce)
+On Sun, Jan 05, 2025 at 03:30:48PM +0100, Christian Marangi wrote:
+> Add support for the Inside Secure SafeXcel EIP-93 Crypto Engine used on
+> Mediatek MT7621 SoC and new Airoha SoC.
+> 
+> EIP-93 IP supports AES/DES/3DES ciphers in ECB/CBC and CTR modes as well as
+> authenc(HMAC(x), cipher(y)) using HMAC MD5, SHA1, SHA224 and SHA256.
+> 
+> EIP-93 provide regs to signal support for specific chipers and the
+> driver dynamically register only the supported one by the chip.
+> 
+> Signed-off-by: Richard van Schagen <vschagen@icloud.com>
+> Co-developed-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501141028.zTzPS0N7-lkp@intel.com/
+I get a compile-time warning with this patch (C=1 W=1):
 
-All warnings (new ones prefixed by >>):
+  CHECK   ../drivers/crypto/inside-secure/eip93/eip93-common.c
+  ../drivers/crypto/inside-secure/eip93/eip93-common.c:101:5: warning: context imbalance in 'eip93_put_descriptor' - wrong count at exit
+  ../drivers/crypto/inside-secure/eip93/eip93-common.c:126:6: warning: context imbalance in 'eip93_get_descriptor' - wrong count at exit
 
-   In file included from drivers/firmware/efi/libstub/zboot.c:3:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:22:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/firmware/efi/libstub/zboot.c:36:15: warning: no previous prototype for function 'entry_offset' [-Wmissing-prototypes]
-      36 | unsigned long entry_offset(void)
-         |               ^
-   drivers/firmware/efi/libstub/zboot.c:36:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      36 | unsigned long entry_offset(void)
-         | ^
-         | static 
-   5 warnings generated.
+Could you please take a look?
 
-
-vim +/entry_offset +36 drivers/firmware/efi/libstub/zboot.c
-
-    35	
-  > 36	unsigned long entry_offset(void)
-    37	{
-    38		return entrypoint;
-    39	}
-    40	
-
+Thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
