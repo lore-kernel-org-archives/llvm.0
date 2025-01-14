@@ -1,152 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33014A4CC;
-	Tue, 14 Jan 2025 15:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFCE23245A;
+	Tue, 14 Jan 2025 17:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736867884; cv=none; b=iDmCsC5pGhsW/YxF88plxBNdl+NqexCKwQmpPMz65lkWzvFGbdpAc3tYlKV+d3vUQ03vSVk+KCwYw8NEMdbXuVtHY2HrHG3ORQbfuKbAkWczVwht2eydyIWVIFclVZAEI+dprE0umPPd4C3bd/h75AtOS8q3S4cdayJPbGvloqw=
+	t=1736875049; cv=none; b=qlUobXteuIRsNrhTYWaercbE2+BsGqDzOwZGDvreqTRnLhHeS0rsGeT3RG6O1ErKv9SZG7Fn4qCLs06kPZrxY2Je0QgKElkx/NkBWq/No+WwrrsEkzJ3X1iVk6uYwyWlRc0iLnTnMbA4n/763RcyoHV6EMirap+Ie9bo5udZJxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736867884; c=relaxed/simple;
-	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
+	s=arc-20240116; t=1736875049; c=relaxed/simple;
+	bh=U5JjmE7PtmCm8nJEk9tVTmqsXLSCNFXiXPuKAm5dVuU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qOUPPQ7RDHbHH+/Ev3JKtgqshprbxfsKsDorDgTUvQ7qN5U7bF5RWL9wsC4rYsOPWyVUIxEVrRzT5QbIWzOG4WM3RITgJz4a4/t9pCfssjD+xaYoO9LclWRYuVe3BwyjzaeE1aNe39PcpAYUeH81EbrA2WO24hD+iw8HkiXcyvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qu/9pFaj; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=NmvIdvppCJoU5DFah8R/BOll1nGC03BPJk7iM1HzcW1P9lHSzdEHSi5ryHYHrcKhjoVTQjmcMTzh331oMjtEcnkofEsdNW3iDIZN4ImGXdaE+lqlNF15cpbYS34yGvguREyvEbTZ4zDkcFFXsj5mVm2cDwS1MTjdIROI7OaB0Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ht63IOGl; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qu/9pFaj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57A0C4CEDD;
-	Tue, 14 Jan 2025 15:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736867883;
-	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qu/9pFajRI6OFPR54X4zaadjDYvXKGcbBr2W4xsyhguKlnfoKTEmPNdwyaBr1UTQ/
-	 BtH4x/U02Z7Epjan3mU/bHnJuWVacAFguzj0zJSwUsyKKJuY5aCbVmue1P11XFZHlq
-	 fneGg5/K5f1ggjMgGxadtKdQoMP5EvqfNW7mghGMh1GHjFsKhpLEBQaU0BoSY9WWTo
-	 Kx0edjfHEIel0E8oqTP12sOx2vjs41z7nkJCu4jaXh+Xw2VdEP0NBtnRvqoyowxmWr
-	 9uqwaCWzedp1RFXZFCgpVs+quvcpcUJ5VMcNPSx+G63H21mmluXVOF0JbOi2UPmd6s
-	 YGuCHLm2kLNpw==
-Date: Tue, 14 Jan 2025 15:17:59 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Raju Rangoju <Raju.Rangoju@amd.com>,
-	Nathan Chancellor <nathan@kernel.org>, linux-spi@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
-Message-ID: <a20383dd-57cc-4c0d-8bab-09a9260f2378@sirena.org.uk>
-References: <20250111-spi-amd-fix-uninitialized-ret-v1-1-c66ab9f6a23d@kernel.org>
- <173678670956.71125.2320310623665812760.b4-ty@kernel.org>
- <87h661u2z9.fsf@bootlin.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ht63IOGl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736875048; x=1768411048;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U5JjmE7PtmCm8nJEk9tVTmqsXLSCNFXiXPuKAm5dVuU=;
+  b=Ht63IOGl77VkDp9+sAaIbYTDtv79mxBB3TaKqmvwLzVRfPRh0E2zSvDC
+   7FuJfiYN6rsWkWztvGgyH/q4rxnB5/SMjltE3MpXCWP9BBiGrVsEI0Qd+
+   D1y9+jb3vsDGe1LuL4sYzPb14mirKGGK424Lxjs4+st8PXWTv8q+jsLbY
+   uvpeKota2BO3hAyffJc69TI/+wA3jyCaibU8vQhhG6xI8za0AtwklUhK8
+   w75Ko1Rp/PnIgybfDLKFsM76TdlixkIH6hh2ZqLlSnktu/sb6dQRbb32B
+   JoQ0vI7/fV5b1fRn9zcfmS9Ulxg0kdJWs34fdaGrJgul0UHPFCxUj/yNn
+   w==;
+X-CSE-ConnectionGUID: aJK0xPS/T3SOY9/wgmWUOQ==
+X-CSE-MsgGUID: GK+sxXrYStCTm1RXM2idlA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="37338568"
+X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
+   d="scan'208";a="37338568"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 09:17:27 -0800
+X-CSE-ConnectionGUID: GaB4D4N5TsyoBtOwLpxvcA==
+X-CSE-MsgGUID: 0sjUhexdSkq9xK5YWneOeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,314,1728975600"; 
+   d="scan'208";a="104699422"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 14 Jan 2025 09:17:23 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tXkXZ-000Onj-1K;
+	Tue, 14 Jan 2025 17:17:21 +0000
+Date: Wed, 15 Jan 2025 01:17:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Xin Long <lucien.xin@gmail.com>, network dev <netdev@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, kuba@kernel.org,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	ast@fiberby.net, Shuang Li <shuali@redhat.com>
+Subject: Re: [PATCHv2 net] net: sched: refine software bypass handling in
+ tc_run
+Message-ID: <202501150119.PO2Xlm4u-lkp@intel.com>
+References: <17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2iPXVcBfzc1mAQZJ"
-Content-Disposition: inline
-In-Reply-To: <87h661u2z9.fsf@bootlin.com>
-X-Cookie: Sauron is alive in Argentina!
-
-
---2iPXVcBfzc1mAQZJ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin@gmail.com>
 
-On Tue, Jan 14, 2025 at 11:03:22AM +0100, Miquel Raynal wrote:
-> On 13/01/2025 at 16:45:09 GMT, Mark Brown <broonie@kernel.org> wrote:
+Hi Xin,
 
-> > Applied to
+kernel test robot noticed the following build errors:
 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+[auto build test ERROR on net/main]
 
-> > Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Long/net-sched-refine-software-bypass-handling-in-tc_run/20250114-025301
+base:   net/main
+patch link:    https://lore.kernel.org/r/17d459487b61c5d0276a01a3bc1254c6432b5d12.1736793775.git.lucien.xin%40gmail.com
+patch subject: [PATCHv2 net] net: sched: refine software bypass handling in tc_run
+config: i386-buildonly-randconfig-005-20250114 (https://download.01.org/0day-ci/archive/20250115/202501150119.PO2Xlm4u-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501150119.PO2Xlm4u-lkp@intel.com/reproduce)
 
-> I'm wondering whether it's relevant to pull the branch you shared
-> as-is. Do you plan on pushing this patch of top of it? Or shall I wait
-> -rc1 for the SPI NAND part?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501150119.PO2Xlm4u-lkp@intel.com/
 
-Well, it's not a branch but rather a tag which complicates matters a
-bit.  I could cherry pick the patch over and make a new tag I guess?  Or
-you could just not do allmodconfig builds with clang?
+All errors (new ones prefixed by >>):
 
-The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
+>> net/sched/cls_api.c:422:23: error: use of undeclared identifier 'tcf_bypass_check_needed_key'
+     422 |                         static_branch_dec(&tcf_bypass_check_needed_key);
+         |                                            ^
+   net/sched/cls_api.c:2385:24: error: use of undeclared identifier 'tcf_bypass_check_needed_key'
+    2385 |                                 static_branch_inc(&tcf_bypass_check_needed_key);
+         |                                                    ^
+   2 errors generated.
 
-  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
 
-are available in the Git repository at:
+vim +/tcf_bypass_check_needed_key +422 net/sched/cls_api.c
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-mem-dtr-2
+   415	
+   416	static void tcf_proto_destroy(struct tcf_proto *tp, bool rtnl_held,
+   417				      bool sig_destroy, struct netlink_ext_ack *extack)
+   418	{
+   419		tp->ops->destroy(tp, rtnl_held, extack);
+   420		if (tp->usesw && tp->counted) {
+   421			if (!atomic_dec_return(&tp->chain->block->useswcnt))
+ > 422				static_branch_dec(&tcf_bypass_check_needed_key);
+   423			tp->counted = false;
+   424		}
+   425		if (sig_destroy)
+   426			tcf_proto_signal_destroyed(tp->chain, tp);
+   427		tcf_chain_put(tp->chain);
+   428		module_put(tp->ops->owner);
+   429		kfree_rcu(tp, rcu);
+   430	}
+   431	
 
-for you to fetch changes up to e896c04890aeff2292364c19632fc15d890d436c:
-
-  spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op() (2025-01-14 15:07:11 +0000)
-
-----------------------------------------------------------------
-spi: Support DTR in spi-mem
-
-Changes to support DTR with spi-mem.
-
-----------------------------------------------------------------
-Miquel Raynal (20):
-      spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
-      spi: spi-mem: Add a new controller capability
-      spi: amd: Support per spi-mem operation frequency switches
-      spi: amd: Drop redundant check
-      spi: amlogic-spifc-a1: Support per spi-mem operation frequency switches
-      spi: cadence-qspi: Support per spi-mem operation frequency switches
-      spi: dw: Support per spi-mem operation frequency switches
-      spi: fsl-qspi: Support per spi-mem operation frequency switches
-      spi: microchip-core-qspi: Support per spi-mem operation frequency switches
-      spi: mt65xx: Support per spi-mem operation frequency switches
-      spi: mxic: Support per spi-mem operation frequency switches
-      spi: nxp-fspi: Support per spi-mem operation frequency switches
-      spi: rockchip-sfc: Support per spi-mem operation frequency switches
-      spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
-      spi: spi-ti-qspi: Support per spi-mem operation frequency switches
-      spi: zynq-qspi: Support per spi-mem operation frequency switches
-      spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
-      spi: spi-mem: Reorder spi-mem macro assignments
-      spi: spi-mem: Create macros for DTR operation
-      spi: spi-mem: Estimate the time taken by operations
-
-Nathan Chancellor (1):
-      spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
-
- drivers/mtd/nand/spi/core.c           |  2 ++
- drivers/spi/spi-amd.c                 | 26 +++++++-------
- drivers/spi/spi-amlogic-spifc-a1.c    |  7 +++-
- drivers/spi/spi-cadence-quadspi.c     |  3 +-
- drivers/spi/spi-dw-core.c             | 10 ++++--
- drivers/spi/spi-fsl-qspi.c            | 12 +++++--
- drivers/spi/spi-mem.c                 | 64 +++++++++++++++++++++++++++++++++++
- drivers/spi/spi-microchip-core-qspi.c | 26 +++++++++++---
- drivers/spi/spi-mt65xx.c              |  7 +++-
- drivers/spi/spi-mxic.c                |  3 +-
- drivers/spi/spi-nxp-fspi.c            | 12 +++++--
- drivers/spi/spi-rockchip-sfc.c        | 11 ++++--
- drivers/spi/spi-sn-f-ospi.c           |  8 +++--
- drivers/spi/spi-ti-qspi.c             |  7 +++-
- drivers/spi/spi-zynq-qspi.c           | 13 +++++--
- drivers/spi/spi-zynqmp-gqspi.c        | 13 ++++---
- include/linux/spi/spi-mem.h           | 56 +++++++++++++++++++++++++++++-
- 17 files changed, 237 insertions(+), 43 deletions(-)
-
---2iPXVcBfzc1mAQZJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeGgCYACgkQJNaLcl1U
-h9C5Dgf/RQhmGbs3CM6H/hRKhwFsGtKWssBC2kOLN+PiUG1tXi0R4xXhhCG1YZ+I
-mmbh18x03b5AkS7mgA7/Hv3cBlWU20+9Lbum30vy3m/6tv65PbMRKhJP7Wp8fVZ4
-peAWt9t/DOgczBGOKn1hOmdK0DKl5Ud53TcrLs8Euo21rg0fwPYzTomir2KOCSSw
-eR3zY6WsfdKAvS+jx0sbRJc3QoI92Lt5vOilGl4nTf2YG7aXt4kYryWg9srWJ3bp
-dID0aBfHHIxncNmQFigJhaxoG70pMR35LG3ZeN4FTwzyEVyg1/nP4yGYDG5MFyfA
-FLHg1nVdJ8hdV+MnnPPsYH4aGXTdCQ==
-=4HD+
------END PGP SIGNATURE-----
-
---2iPXVcBfzc1mAQZJ--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
