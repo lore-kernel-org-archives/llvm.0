@@ -1,86 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417AE20F091;
-	Tue, 14 Jan 2025 21:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AB520F09D;
+	Tue, 14 Jan 2025 23:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736891888; cv=none; b=lLlBiwCDWCjxTpYV6HPeywPgqoVGzd/Ftqz06vhYJhoo+QvwKFzFpa1k28vrLzsD5DrGnrKCNZWHLhnSFtLk8AhjCN7GyK9RXIl3Sh+FenRfOBNFLCdlY2maWIWAWW/dqncb1s7JhGRcRAaoijo3AucC29i45/VEn8zBsOith0E=
+	t=1736896171; cv=none; b=gzKU1nI0wzvJsIgkIoaG9v1WBjQ4/XAdxcfEG27ZhtRUmHPm/KXk9n+EcQJEuiXF7y5bGP/iOew9DVpn+6uwI+TDGGmGDjJMOvH1xydY0XgsVkvuaXaxP1hFOV2+O/Gxyrk/ciBrMIIE0h4cPVvho/6075H3Bx8L3zRWF1jpGaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736891888; c=relaxed/simple;
-	bh=7K1GWy0qyUvyfFok6bxfHipNUh3Cwi3NkcOXS2UWcME=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rr5t3nrXREHOUyvsS4M505okf61gC6iWZiapSs1Td3knwpxWwuuBoeAkVrPA1zhixZxSxw5xFZbJ1XC7vvxvjqA2c6KsianSRLLbOkWtv2yF0gcbmvyakOPI9YalD9gzlZbmzh+NnlN4RcyUF6KJVO/so6UrdzX48CN/fscVunI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIx+HWXy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736896171; c=relaxed/simple;
+	bh=3fWxNw4bt47hR8mNtbe5Y9zatankWU55HKXYPlzgsXc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Onvi/BILsCAh0TMkG/g+EZBhhqBXLFtqqwAWuIHNdRg+QnfBgYk0SgdF5PxUdQUKMD4qPhBB0KVAkja26Wc25JRPPMZkTCJW3tOVXiYj/9DX7UwJvy4w0QersYhC7pTFnWANPD6hfQRTJJmPJ1gz+c1pf4h06+sCCfKVL2nhuiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D/07qiZ7; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIx+HWXy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA3BC4CEDD;
-	Tue, 14 Jan 2025 21:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736891886;
-	bh=7K1GWy0qyUvyfFok6bxfHipNUh3Cwi3NkcOXS2UWcME=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kIx+HWXy8pxVqO/J85IgEU/uKVis1OEiKh9zHEgXIs0vg0Ghb9mBxsgerjKqxMoGq
-	 uvYdJZhrKztFytxMm0ASSPQTaVB5XnVkXuO4lDDn8WK5eEKIDlIaq8Ev96Y8brNK8Q
-	 mO7RWJ0aIPMFvrZ1hY0HHAyY+Lb4OtPe9z74zDu+P2292Mz4yZrlVx0vrhSgVzKLUr
-	 xtciQ3u36JJFTgAN8KTJiO2P+lFwIuXB7XDruEDxNKXo8xvhvgO74Brq0trVnNd/r/
-	 JaM52lIUc1MEtkbaOYaH0/Pop7lHijy2QlDDGeTRG0oBSRHWuuMUK6+LugwHMck+w3
-	 YYapHfLUxcSCg==
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Klaus Kusche <klaus.kusche@computerix.info>
-Subject: [PATCH] objtool: Ignore dangling jump table entries
-Date: Tue, 14 Jan 2025 13:57:58 -0800
-Message-ID: <ee25c0b7e80113e950bd1d4c208b671d35774ff4.1736891751.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.47.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D/07qiZ7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736896170; x=1768432170;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3fWxNw4bt47hR8mNtbe5Y9zatankWU55HKXYPlzgsXc=;
+  b=D/07qiZ7QmrvNG7rauaprn8WciTyhd5NuzIHLl9l2oCuhVWDm/hr0qcm
+   ap5T4Ms+SHCBrr1xT+xrAwuf4QVt5Yc4nvfrTG1pArUKwRW+XQSNovRc5
+   CuFwN+PnIK0W+KdZa/SSbpl+GeZqDyX7nFkdXHdvjcllWf1F65YRy66Q9
+   PRcN9evNyoRiAtHQ/rqKSfy+VBckPjkh/dnck1l72vXVwMlDYFwpO1i70
+   UnsKKaVQEoYpqnx0trzdbX8cm0J6hg/8W9xVkseJBUOxgRYTklKCQqpkz
+   t/ZqUaEHsIPQQzc3giyhrpjJwkznR0ER/D8cdxN9U6WSTZOwaPuzKS3Jp
+   w==;
+X-CSE-ConnectionGUID: CAHqpMyVQ9+tl2n6vTf++A==
+X-CSE-MsgGUID: agyGMTI3Rmev88JsUEHG8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="36909616"
+X-IronPort-AV: E=Sophos;i="6.12,315,1728975600"; 
+   d="scan'208";a="36909616"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 15:09:29 -0800
+X-CSE-ConnectionGUID: OlB+Es/bRNyonvkkJ/dJnw==
+X-CSE-MsgGUID: INcJ/NicRj+b6u/hq+5QAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105441537"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 14 Jan 2025 15:09:27 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tXq2G-000P9H-2W;
+	Tue, 14 Jan 2025 23:09:24 +0000
+Date: Wed, 15 Jan 2025 07:09:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dave Airlie <airlied@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-drivers:master 17/54]
+ drivers/gpu/drm/bridge/lontium-lt9611.c:1147:10: error: no member named
+ 'audio_pdev' in 'struct lt9611'
+Message-ID: <202501150653.OSZGL4LT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang sometimes leaves dangling unused jump table entries which point to
-the end of the function.  Ignore them.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
+head:   d088502a519fb7834bf6e34cb4e531c1e8113bd1
+commit: b49bbb5dbe7654f0d7996206f543d91bbed33569 [17/54] Merge remote-tracking branch 'drm/drm-next' into renesas-drivers
+config: hexagon-randconfig-001-20250115 (https://download.01.org/0day-ci/archive/20250115/202501150653.OSZGL4LT-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501150653.OSZGL4LT-lkp@intel.com/reproduce)
 
-Reported-by: Klaus Kusche <klaus.kusche@computerix.info>
-Closes: https://lore.kernel.org/20250113235835.vqgvb7cdspksy5dn@jpoimboe
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/check.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501150653.OSZGL4LT-lkp@intel.com/
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 76060da755b5..4a0c5bb7e457 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2099,6 +2099,14 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
- 		    reloc_addend(reloc) == pfunc->offset)
- 			break;
- 
-+		/*
-+		 * Clang sometimes leaves dangling unused jump table entries
-+		 * which point to the end of the function.  Ignore them.
-+		 */
-+		if (reloc->sym->sec == pfunc->sec &&
-+		    reloc_addend(reloc) == pfunc->offset + pfunc->len)
-+			goto next;
-+
- 		dest_insn = find_insn(file, reloc->sym->sec, reloc_addend(reloc));
- 		if (!dest_insn)
- 			break;
-@@ -2116,6 +2124,7 @@ static int add_jump_table(struct objtool_file *file, struct instruction *insn,
- 		alt->insn = dest_insn;
- 		alt->next = insn->alts;
- 		insn->alts = alt;
-+next:
- 		prev_offset = reloc_offset(reloc);
- 	}
- 
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/bridge/lontium-lt9611.c:1147:10: error: no member named 'audio_pdev' in 'struct lt9611'
+    1147 |         lt9611->audio_pdev =
+         |         ~~~~~~  ^
+   drivers/gpu/drm/bridge/lontium-lt9611.c:1152:33: error: no member named 'audio_pdev' in 'struct lt9611'
+    1152 |         return PTR_ERR_OR_ZERO(lt9611->audio_pdev);
+         |                                ~~~~~~  ^
+   drivers/gpu/drm/bridge/lontium-lt9611.c:1157:14: error: no member named 'audio_pdev' in 'struct lt9611'
+    1157 |         if (lt9611->audio_pdev) {
+         |             ~~~~~~  ^
+   drivers/gpu/drm/bridge/lontium-lt9611.c:1158:38: error: no member named 'audio_pdev' in 'struct lt9611'
+    1158 |                 platform_device_unregister(lt9611->audio_pdev);
+         |                                            ~~~~~~  ^
+   drivers/gpu/drm/bridge/lontium-lt9611.c:1159:11: error: no member named 'audio_pdev' in 'struct lt9611'
+    1159 |                 lt9611->audio_pdev = NULL;
+         |                 ~~~~~~  ^
+   5 errors generated.
+
+
+vim +1147 drivers/gpu/drm/bridge/lontium-lt9611.c
+
+23278bf54afe18 Vinod Koul 2020-07-23  1143  
+23278bf54afe18 Vinod Koul 2020-07-23  1144  static int lt9611_audio_init(struct device *dev, struct lt9611 *lt9611)
+23278bf54afe18 Vinod Koul 2020-07-23  1145  {
+23278bf54afe18 Vinod Koul 2020-07-23  1146  	codec_data.data = lt9611;
+23278bf54afe18 Vinod Koul 2020-07-23 @1147  	lt9611->audio_pdev =
+23278bf54afe18 Vinod Koul 2020-07-23  1148  		platform_device_register_data(dev, HDMI_CODEC_DRV_NAME,
+23278bf54afe18 Vinod Koul 2020-07-23  1149  					      PLATFORM_DEVID_AUTO,
+23278bf54afe18 Vinod Koul 2020-07-23  1150  					      &codec_data, sizeof(codec_data));
+23278bf54afe18 Vinod Koul 2020-07-23  1151  
+23278bf54afe18 Vinod Koul 2020-07-23  1152  	return PTR_ERR_OR_ZERO(lt9611->audio_pdev);
+23278bf54afe18 Vinod Koul 2020-07-23  1153  }
+23278bf54afe18 Vinod Koul 2020-07-23  1154  
+
+:::::: The code at line 1147 was first introduced by commit
+:::::: 23278bf54afe180967069bdc8c0f1c7a365fc63e drm/bridge: Introduce LT9611 DSI to HDMI bridge
+
+:::::: TO: Vinod Koul <vkoul@kernel.org>
+:::::: CC: Sam Ravnborg <sam@ravnborg.org>
+
 -- 
-2.47.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
