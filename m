@@ -1,37 +1,36 @@
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967C51DD9AC
-	for <llvm@lists.linux.dev>; Wed, 15 Jan 2025 22:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E421DE4D7
+	for <llvm@lists.linux.dev>; Wed, 15 Jan 2025 22:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736981428; cv=none; b=SNO1HGjP2uRgKT6Vld4hPlR1FDotuulRCenG5sPGcHzIZHf/op9jSJOz2nc0M81b/+A5iANaUYIrJsTWG94uVkz8cu11ttcrKanQ927o/7BRiRdXTsuYyogyxlcXmLpgr96jTa5nsC0BPD/9/DlHAAtjWP/+4O7IzeM+w1Bto+8=
+	t=1736981433; cv=none; b=Rts4fs1dftenZJ9HpyCAaUdDA7y9qt+BmBlVredbAGrMqifUbKqxPeoS8VYL9Doj0pPP96QaiTXvK9ZPyIsZaguZkdMQskERxnCbA9OolmZEm8t4NU8MdHgG4Pen5ByPfb5pLwdr0x4CkmWeNMCybOhqRmMYopN2WF0df5O3fbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736981428; c=relaxed/simple;
-	bh=jUmgRhfOUOKcm47vVLJz0Uk+vweVINDmw47p9P553do=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J90MH2O0GA2OkkZdLmxxKqjSIsq3Oy24dLaDSlX7R98AMDLWkuOuTDa4KCu5/nN6FMLa1g4xdvR/xIn7IiNKqGd+DFOGLrPoF3ku9xDzHiuI6hiPkWOkZye93u4xKMAz5VzbQg5+3ob7Ce8VsylT5Zl7zMfMaZWhzv1UufTltsA=
+	s=arc-20240116; t=1736981433; c=relaxed/simple;
+	bh=CdIISZBocgbe8t+SQ+txY3ClfKL67HiAPAf+YkEoSpw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=clhZMk0jZxnmjg9pKn1CtbM9lRGYpuYAYFQ2oQYxIwzvCbgyGXbTZO7nujQf1YDKsQMjnx4yudSk+epj6hiWmgVevH+RsJWgRCfvPIk8x5dVp8z0x5ekzdRQqiYgVFKrG3Q8ztaqC5W9Fd600kMKloZaIFy5U6XTN/DSfoJaeEM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4YYLcn297Rz9sSh;
-	Wed, 15 Jan 2025 23:43:21 +0100 (CET)
+	by localhost (Postfix) with ESMTP id 4YYLcB1Vvtz9sPd;
+	Wed, 15 Jan 2025 23:42:50 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id fuPRgmlINGTC; Wed, 15 Jan 2025 23:43:21 +0100 (CET)
+	with ESMTP id nae6Cb_QzfA6; Wed, 15 Jan 2025 23:42:50 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4YYLcn13D6z9sSg;
-	Wed, 15 Jan 2025 23:43:21 +0100 (CET)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4YYLcB0PxDz9rvV;
+	Wed, 15 Jan 2025 23:42:50 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 13A798B77A;
-	Wed, 15 Jan 2025 23:43:21 +0100 (CET)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id F07258B77A;
+	Wed, 15 Jan 2025 23:42:49 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id TTrr0vm5x28f; Wed, 15 Jan 2025 23:43:20 +0100 (CET)
+	with ESMTP id mofC_rqjJG3K; Wed, 15 Jan 2025 23:42:49 +0100 (CET)
 Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.202.221])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id E1CBB8B774;
-	Wed, 15 Jan 2025 23:43:18 +0100 (CET)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 596DC8B774;
+	Wed, 15 Jan 2025 23:42:47 +0100 (CET)
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
 To: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -50,104 +49,106 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v5 12/15] objtool: Add support for more complex UACCESS control
-Date: Wed, 15 Jan 2025 23:42:52 +0100
-Message-ID: <64a6921ec7bc78c4b25561cf13e8147f26e884a6.1736955567.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v5 00/15] powerpc/objtool: uaccess validation for PPC32 (v5)
+Date: Wed, 15 Jan 2025 23:42:40 +0100
+Message-ID: <cover.1736955567.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1736955567.git.christophe.leroy@csgroup.eu>
-References: <cover.1736955567.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736980964; l=3081; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=jUmgRhfOUOKcm47vVLJz0Uk+vweVINDmw47p9P553do=; b=PvDeZ1WUGIKvE/gRmmck4Oiaz1dQxNwL0Klut/cRBsip4QjA8Cuhi0vktmLlI0qxgq4GTnG0y eXtRWgLdHSeApvZuNEn1PuyKh8XD4VLq3y6BPOz72m6IFeg10tqv7oo
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736980963; l=4151; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=CdIISZBocgbe8t+SQ+txY3ClfKL67HiAPAf+YkEoSpw=; b=5SggZsFckY2DyHQzOMzxQqVglzO8I/aelkmx8rKM5fGhNlzq9k4g0j2SDTOETZcsT5WDZAfSS zsAdr0uT7R8DUY08Q+I3HiaA2onHdvy7hxA6jQ60SEujHnirdNdVDiX
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-On x86, UACCESS is controlled by two instructions: STAC and CLAC.
-STAC instruction enables UACCESS while CLAC disables UACCESS.
-This is simple enough for objtool to locate UACCESS enable and
-disable.
+This series adds UACCESS validation for PPC32. It includes
+a dozen of changes to objtool core.
 
-But on powerpc it is a bit more complex, the same instruction is
-used for enabling and disabling UACCESS, and the same instruction
-can be used for many other things. It would be too complex to use
-exclusively instruction decoding.
+It applies on top of series "Cleanup/Optimise KUAP (v3)"
+https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=363368&state=*
 
-To help objtool, annotate such instructions, on the same principle as
-reachable/unreachable instructions. And add ANNOTATE_UACCESS_BEGIN
-and ANNOTATE_UACCESS_END macros to be used in inline assembly code to
-annotate UACCESS enable and UACCESS disable instructions.
+It is almost mature, performs code analysis for all PPC32.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v5: Use generic annotation infrastructure
----
- include/linux/objtool.h             | 3 +++
- include/linux/objtool_types.h       | 2 ++
- tools/include/linux/objtool_types.h | 2 ++
- tools/objtool/check.c               | 8 ++++++++
- 4 files changed, 15 insertions(+)
+In this version objtool switch table lookup has been enhanced to
+handle nested switch tables.
 
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index c722a921165b..7efd731da2a2 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -183,6 +183,9 @@
-  */
- #define ANNOTATE_REACHABLE(label)	__ASM_ANNOTATE(label, ANNOTYPE_REACHABLE)
- 
-+#define ANNOTATE_UACCESS_BEGIN		ASM_ANNOTATE(ANNOTYPE_UACCESS_BEGIN)
-+#define ANNOTATE_UACCESS_END		ASM_ANNOTATE(ANNOTYPE_UACCESS_END)
-+
- #else
- #define ANNOTATE_NOENDBR		ANNOTATE type=ANNOTYPE_NOENDBR
- #define ANNOTATE_RETPOLINE_SAFE		ANNOTATE type=ANNOTYPE_RETPOLINE_SAFE
-diff --git a/include/linux/objtool_types.h b/include/linux/objtool_types.h
-index df5d9fa84dba..28da3d989e65 100644
---- a/include/linux/objtool_types.h
-+++ b/include/linux/objtool_types.h
-@@ -65,5 +65,7 @@ struct unwind_hint {
- #define ANNOTYPE_IGNORE_ALTS		6
- #define ANNOTYPE_INTRA_FUNCTION_CALL	7
- #define ANNOTYPE_REACHABLE		8
-+#define ANNOTYPE_UACCESS_BEGIN		9
-+#define ANNOTYPE_UACCESS_END		10
- 
- #endif /* _LINUX_OBJTOOL_TYPES_H */
-diff --git a/tools/include/linux/objtool_types.h b/tools/include/linux/objtool_types.h
-index df5d9fa84dba..28da3d989e65 100644
---- a/tools/include/linux/objtool_types.h
-+++ b/tools/include/linux/objtool_types.h
-@@ -65,5 +65,7 @@ struct unwind_hint {
- #define ANNOTYPE_IGNORE_ALTS		6
- #define ANNOTYPE_INTRA_FUNCTION_CALL	7
- #define ANNOTYPE_REACHABLE		8
-+#define ANNOTYPE_UACCESS_BEGIN		9
-+#define ANNOTYPE_UACCESS_END		10
- 
- #endif /* _LINUX_OBJTOOL_TYPES_H */
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 91436f4b3622..54625f09d831 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2422,6 +2422,14 @@ static int __annotate_late(struct objtool_file *file, int type, struct instructi
- 		insn->dead_end = false;
- 		break;
- 
-+	case ANNOTYPE_UACCESS_BEGIN:
-+		insn->type = INSN_STAC;
-+		break;
-+
-+	case ANNOTYPE_UACCESS_END:
-+		insn->type = INSN_CLAC;
-+		break;
-+
- 	default:
- 		WARN_INSN(insn, "Unknown annotation type: %d", type);
- 		break;
+Most object files are correctly decoded, only a few
+'unreachable instruction' warnings remain due to more complex
+fonctions which include back and forth jumps or branches. Two types
+of switch tables are missed at the time being:
+- When switch table address is temporarily saved in the stack before
+being used.
+- When there are backwards jumps in the path.
+
+It allowed to detect some UACCESS mess in a few files. They've been
+fixed through other patches.
+
+Changes in v5:
+- Rebased on top of https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git branch tip/objtool/core
+- Use generic annotation infrastructure to annotate uaccess begin and end instructions
+
+Changes in v4:
+- Split series in two parts, the powerpc uaccess rework is submitted
+separately, see https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=363368&state=*
+- Support of UACCESS on all PPC32 including book3s/32 which was missing in v3.
+- More elaborated switch tables lookup.
+- Patches 2, 7, 8, 9, 10, 11 are new
+- Patch 11 in series v3 is now removed.
+
+Changes in v3:
+- Rebased on top of a merge of powerpc tree and tip/objtool/core tree
+- Simplified support for relative switch tables based on relocation type
+- Taken comments from Peter
+
+
+Christophe Leroy (15):
+  objtool: Fix generic annotation infrastructure cross build
+  objtool: Move back misplaced comment
+  objtool: Allow an architecture to disable objtool on ASM files
+  objtool: Fix JUMP_ENTRY_SIZE for bi-arch like powerpc
+  objtool: Add INSN_RETURN_CONDITIONAL
+  objtool: Add support for relative switch tables
+  objtool: Merge mark_func_jump_tables() and add_func_jump_tables()
+  objtool: Track general purpose register used for switch table base
+  objtool: Find end of switch table directly
+  objtool: When looking for switch tables also follow conditional and
+    dynamic jumps
+  objtool: .rodata.cst{2/4/8/16} are not switch tables
+  objtool: Add support for more complex UACCESS control
+  objtool: Prepare noreturns.h for more architectures
+  powerpc/bug: Annotate reachable after warning trap
+  powerpc: Implement UACCESS validation on PPC32
+
+ arch/Kconfig                                  |   5 +
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/book3s/32/kup.h      |   2 +
+ arch/powerpc/include/asm/bug.h                |  14 +-
+ arch/powerpc/include/asm/nohash/32/kup-8xx.h  |   4 +-
+ arch/powerpc/include/asm/nohash/kup-booke.h   |   4 +-
+ arch/powerpc/kexec/core_32.c                  |   4 +-
+ arch/powerpc/mm/nohash/kup.c                  |   2 +
+ include/linux/objtool.h                       |   3 +
+ include/linux/objtool_types.h                 |   2 +
+ scripts/Makefile.lib                          |   4 +
+ tools/include/linux/objtool_types.h           |   2 +
+ tools/objtool/arch/powerpc/decode.c           | 150 +++++++++++++++++-
+ .../arch/powerpc/include/arch/noreturns.h     |  11 ++
+ .../arch/powerpc/include/arch/special.h       |  11 +-
+ tools/objtool/arch/powerpc/special.c          |  40 ++++-
+ .../objtool/arch/x86/include/arch/noreturns.h |  20 +++
+ tools/objtool/arch/x86/special.c              |   8 +-
+ tools/objtool/check.c                         | 129 ++++++++++-----
+ tools/objtool/include/objtool/arch.h          |   1 +
+ tools/objtool/include/objtool/check.h         |   6 +-
+ tools/objtool/include/objtool/special.h       |   3 +-
+ tools/objtool/noreturns.h                     |  14 +-
+ tools/objtool/special.c                       |  55 ++++---
+ 24 files changed, 386 insertions(+), 110 deletions(-)
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/noreturns.h
+ create mode 100644 tools/objtool/arch/x86/include/arch/noreturns.h
+
 -- 
 2.47.0
 
