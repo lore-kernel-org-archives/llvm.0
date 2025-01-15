@@ -1,77 +1,118 @@
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C1B1D63D9;
-	Wed, 15 Jan 2025 18:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515311D63C7;
+	Wed, 15 Jan 2025 20:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736965819; cv=none; b=XfySiGx+YNFUThy/x+FsSMO9HPMWuncT7yhKzrNFQAdVlSBoqa0HByt6JHX8G6Gc2d8QhzkN380pM26FoK+G8bKqZFnwKYK0QA7kdpdHLFB2BzwFvR8HdpjYhw/pz20T8n2o1pr8Wk6XZCtRCGSadC+JR3FVM636m7emhuo8QPg=
+	t=1736974093; cv=none; b=bxiKVHgfSAZUbFFxpbU9EXA4UTWyG5Sx25Wom2nmKC8cBFjZz9jXUYt8Sj8HCULAkrV3fgGs/w5lcVOWFIb6p34bo0iEACOZSNHvVUgvVhF5IDhjUxOmxw9hzUDXOyfgj1R+FkkvK2kVcr3TISwTWQ2o/qC2OZ9M5dQ0Snjso5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736965819; c=relaxed/simple;
-	bh=2IeLlHk2idwVKBXU4FgWrO2CoxQDyfsGXbk96BDsC8A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=C/fxQT3wnZgz+4LqpznwcChzhpAqJDHvTYfXnht1nMV0F7FOWathJnTpQNZOk118QLyCAkj4Y6PVpfjFUL4oRaXIairkVhiY7kcpNGPYmkrVsymwG9ZmF290AFkkcZSM2TaXxnuZ/qNjr6OSXPp5QIksn5GIKHtge7MmnUTvSLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HL9OoHot; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1736974093; c=relaxed/simple;
+	bh=NBmFqEdQWXlXOmVjvWnaHQhn5HTvwDLz7apgLNcurQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j2vcNKA8a9N7PbZywemO6MMkcRHgrJNWEX7L7C1Mh79FvCZwr8/x0rHX//DxWkCryO2TGVPODU9x6I6T3iQibUmXXcabeUT3n5kR7ROdnitM3l3z5her/AHfYLJgu+GnVu+S9b+/wyIMtWxlfeCfH4LIXsCXoCUzsnv3nF5BB30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cZtYe1VQ; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HL9OoHot"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DBE11BF203;
-	Wed, 15 Jan 2025 18:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736965815;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GqBj7+G6NFiicKFyViQdTNE8H5JWq2ncE2tH/y9s9To=;
-	b=HL9OoHotnvd6k/ocwHWV9azeSaVwqMLnUmrkYGe5HvzXG6m3NHStbpCemgE8jXfU77pCCS
-	zfrEBNL5Y7TCDg2jKiBAqx4FNiFt0YG0uJ7ns9LoohDaXeEkyxZYGfrCeMvQU5rpLaceKp
-	8vFGVHgchHmQSDEmmj2idq6IBbJh2EfBCe1n68k2uBZIoBGv/m5JxzA+3AGJUMw7B08tiM
-	YwlIhQaIZYcMahFMxRU+V4hIgefBwSxDMEEpysW8PAZfj57QRM3JfBShBwqjRxdqFu4Zr6
-	m4zqhK2XlwECuGngCJ7tB1T/5O7+Rw+mFVVB8hrHCC6FH9Ch1HMJl3UOPPvbeA==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Raju Rangoju <Raju.Rangoju@amd.com>,  Nathan Chancellor
- <nathan@kernel.org>,  linux-spi@vger.kernel.org,  llvm@lists.linux.dev,
-  patches@lists.linux.dev,  kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
-In-Reply-To: <a20383dd-57cc-4c0d-8bab-09a9260f2378@sirena.org.uk> (Mark
-	Brown's message of "Tue, 14 Jan 2025 15:17:59 +0000")
-References: <20250111-spi-amd-fix-uninitialized-ret-v1-1-c66ab9f6a23d@kernel.org>
-	<173678670956.71125.2320310623665812760.b4-ty@kernel.org>
-	<87h661u2z9.fsf@bootlin.com>
-	<a20383dd-57cc-4c0d-8bab-09a9260f2378@sirena.org.uk>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Wed, 15 Jan 2025 19:30:14 +0100
-Message-ID: <874j20nd55.fsf@bootlin.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cZtYe1VQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736974092; x=1768510092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NBmFqEdQWXlXOmVjvWnaHQhn5HTvwDLz7apgLNcurQo=;
+  b=cZtYe1VQtksWHovDATOgoJSzdyw0WxmkatYanEIKAVUqgJqoAC555oCx
+   UbCa70aYmat+wfaetijxhD4vVXtbpIV3eWC2itcmh+kvf1hcxlQA4pogU
+   sSSh5tRpd1BX0DosOaMXjAp9Pyq16SBTij6nZq/Wn2zC7WsU7kCW+wIbv
+   fL2FokMPqGUjLPA3ZO9g2PQVvT2OFhpWTrQXkYUauneuhgffj/GmTYIZA
+   BCuxKbk8lZwUw4bVRBAZZkBThO0lbEcLxUoVJGWz5q4QNF7+mDoGDDbod
+   n5C0FjHOBIyyz+KFnhX+4X4oOdr6croMdcoS3S9Swink20sNApDmhkD6p
+   Q==;
+X-CSE-ConnectionGUID: gUzkLydjR+aFAI8Z3gGfHg==
+X-CSE-MsgGUID: zfQGc7r6QeGpLNqAe76i9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="37359033"
+X-IronPort-AV: E=Sophos;i="6.13,207,1732608000"; 
+   d="scan'208";a="37359033"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 12:48:11 -0800
+X-CSE-ConnectionGUID: wkYOM2pFTBG7tT3+IK/nSQ==
+X-CSE-MsgGUID: Wb4Ztt1ATqGwNcp3rxZurw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105102930"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 15 Jan 2025 12:48:07 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYAJ2-000Qpv-1t;
+	Wed, 15 Jan 2025 20:48:04 +0000
+Date: Thu, 16 Jan 2025 04:48:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yenchia Chen <yenchia.chen@mediatek.com>, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	yenchia.chen@mediatek.com, yj.chiang@mediatek.com,
+	tbergstrom@nvidia.com, yujiaoliang@vivo.com,
+	u.kleine-koenig@baylibre.com, treapking@chromium.org,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] serial: 8250_mtk: Add ACPI support
+Message-ID: <202501160444.iXv8byKW-lkp@intel.com>
+References: <20250114033324.3533292-1-yenchia.chen@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114033324.3533292-1-yenchia.chen@mediatek.com>
+
+Hi Yenchia,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on tty/tty-next tty/tty-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.13-rc7 next-20250115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yenchia-Chen/serial-8250_mtk-Add-ACPI-support/20250114-113715
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20250114033324.3533292-1-yenchia.chen%40mediatek.com
+patch subject: [PATCH] serial: 8250_mtk: Add ACPI support
+config: powerpc-randconfig-001-20250116 (https://download.01.org/0day-ci/archive/20250116/202501160444.iXv8byKW-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250116/202501160444.iXv8byKW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501160444.iXv8byKW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/tty/serial/8250/8250_mtk.c:662:36: warning: unused variable 'mtk8250_acpi_match' [-Wunused-const-variable]
+     662 | static const struct acpi_device_id mtk8250_acpi_match[] = {
+         |                                    ^~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
->> I'm wondering whether it's relevant to pull the branch you shared
->> as-is. Do you plan on pushing this patch of top of it? Or shall I wait
->> -rc1 for the SPI NAND part?
->
-> Well, it's not a branch but rather a tag which complicates matters a
-> bit.  I could cherry pick the patch over and make a new tag I guess?  Or
-> you could just not do allmodconfig builds with clang?
+vim +/mtk8250_acpi_match +662 drivers/tty/serial/8250/8250_mtk.c
 
-I'm worried about the others, if Linus happens to pull my tree before
-yours :) I don't specifically use clang :)
+   661	
+ > 662	static const struct acpi_device_id mtk8250_acpi_match[] = {
+   663		{ "MTKI0511", 0 },
+   664		{},
+   665	};
+   666	MODULE_DEVICE_TABLE(acpi, mtk8250_acpi_match);
+   667	
 
-> for you to fetch changes up to e896c04890aeff2292364c19632fc15d890d436c:
->
->   spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op() (2025-01-14
->   15:07:11 +0000)
-
-Pulled into nand/next. Thanks a lot!
-
-Miqu=C3=A8l
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
