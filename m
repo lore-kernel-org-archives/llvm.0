@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1931A63A9;
-	Wed, 15 Jan 2025 01:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A42F13AA2F;
+	Wed, 15 Jan 2025 02:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736902886; cv=none; b=uh2j+kuc0XPuoBd6S43c+ZPIUbvtrMqxmvOkmgu9oo+d2HW5oYDXkTTKb6cV7/4T2wVOI8DuOvoWEBORQrmOLBYrcU4rtmQKChScI46I18hGt1FtBASnqKikl9lCGNmfiLuls2YvuWGhC0yKvJlrBaQbn6NX1oyJWMAsAUBKolI=
+	t=1736908598; cv=none; b=sfwle3++X9JXcwZ/BDy7Mg90GMco4SgCOysgVzfHXx+sdS1jn/DOG9AwClI/zw2J4+qTUmdRgm3LRMFfSrdIWoPXdf69mU44x5bssZRA+tdHsDP5JEQVG7k8ZP+PpSWCtxzSEa5nGkCSDRNg+4w/cwtyoRhlv/WJQIoZgf8yPjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736902886; c=relaxed/simple;
-	bh=GC5kqXpiPPHlUkljBXkFPKUgNYKp9H2Vuz12foOZBJs=;
+	s=arc-20240116; t=1736908598; c=relaxed/simple;
+	bh=PB75WLOE7w+/FRjSy1KFWk/24RfWKojRwtG8o7vKSnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DWOle8bZKm3fPqt2nZhv4KIgm2mDdFUgRk2LYm4VXpRwjGswdYu+7BVVfPopVM4u01Eu3ef0dErTJLyP38GZY7f/HtYnUtErhADc31LwHsOKs1MsFzEKIIq3uEygZQCCCVLx41LXpTasE3QgzuoTbwttuf2RvJ0IH/DKKo2asLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VoTflGGX; arc=none smtp.client-ip=198.175.65.20
+	 Content-Disposition; b=CoLI7B0jSkzaydrbIbYLdoUK5qpde8nJscpEtMR0NUNwshKnT+jHzo4549QjiPqUzZWe+ePQlh6LHyheoyCxPD/RHpLPHnW0Tt19qpBgwgooyyQLka3sgoTDjT1m1km5vU1zSIlqfsCaprPjkfMD5UixxntNGVYLwJDRkn0uxLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y4xfopmy; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VoTflGGX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y4xfopmy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736902885; x=1768438885;
+  t=1736908597; x=1768444597;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GC5kqXpiPPHlUkljBXkFPKUgNYKp9H2Vuz12foOZBJs=;
-  b=VoTflGGX6VxPbuwi788S63gDoSpHgc5CP3H/v+8wiMwb5bXiNhSSwAC7
-   rCF2QJlgeTSXaXQJlPCmdFhkgcG3fpWp4Vz9zQxpKiQT9wk7DR2wpIUTX
-   HSJOKGTRK3WCjoA5XIvfM1SPnCZDASdnSkwx+6DCmlqvdVe92G+twEjb+
-   IEhk5a54SN7Jdzfh4E8GyYGoVu2vn/jknR5EANUQZvE460BGisy0zciLX
-   MwPFlygbMJGnnUczNAh5IthF70SmyTIQsCU1y1qtKzEgJAlXlks2RY+dl
-   xKgGzxZqfc2rCjP10ZXP13QVxk2rPMfmgR+ks6JEd2GTiuANFm4EQgaK5
-   A==;
-X-CSE-ConnectionGUID: Lff5DGs+R/OuG/XMn8iQxA==
-X-CSE-MsgGUID: QoPAwrQaR7K/AqUT3+a1WA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="36918726"
-X-IronPort-AV: E=Sophos;i="6.12,315,1728975600"; 
-   d="scan'208";a="36918726"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 17:01:25 -0800
-X-CSE-ConnectionGUID: uWstmVRBQBW0JbNwz6mnng==
-X-CSE-MsgGUID: NbBgi4TgSm2qv715CSSHJg==
+  bh=PB75WLOE7w+/FRjSy1KFWk/24RfWKojRwtG8o7vKSnQ=;
+  b=Y4xfopmyhZ/D7Vp+woUU+38cxmYEdPBP2PI5qGogt+n9Cm/dFqjoL2YT
+   T2c0FDqWbcwPZa32H5Ts0SvJYLceRbvJvB+EUyLpKShvjKXy7nZ/fyqNa
+   8UYB0rhz1xXmLNyCe1ymITREUOr3B9YbZO+sFTPj2j8M9GIlACrJZFr+a
+   JAOiujzL3ERObIFeRSPqU63tRAFibpcemFOVWkMx5eBkzl0X4ivPiFZGJ
+   fz0QjVR+pf/aO+rU0z7eb4t4qCgt6UyrN1KXcAjsi0jWTUGbv0AVtGf9f
+   KihTjGQlo+wCxk75Oo14QT74OOfhR9PodGFV1SDXQozurHJC/u5aRPyXC
+   w==;
+X-CSE-ConnectionGUID: KHsvF794SueSwFGAOo9klA==
+X-CSE-MsgGUID: IaLaYNHQQvq8T2qI3RR9yQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="41166572"
+X-IronPort-AV: E=Sophos;i="6.12,316,1728975600"; 
+   d="scan'208";a="41166572"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 18:36:36 -0800
+X-CSE-ConnectionGUID: HdH7FbAaQ1iM3J/bEbAd7g==
+X-CSE-MsgGUID: Fj+3LovjRba8Ux2fQwB43A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,315,1728975600"; 
-   d="scan'208";a="105055347"
+X-IronPort-AV: E=Sophos;i="6.12,316,1728975600"; 
+   d="scan'208";a="109951253"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 14 Jan 2025 17:01:23 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 14 Jan 2025 18:36:35 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tXrmZ-000PFZ-30;
-	Wed, 15 Jan 2025 01:01:19 +0000
-Date: Wed, 15 Jan 2025 09:00:36 +0800
+	id 1tXtGi-000PK9-2b;
+	Wed, 15 Jan 2025 02:36:32 +0000
+Date: Wed, 15 Jan 2025 10:35:50 +0800
 From: kernel test robot <lkp@intel.com>
 To: Manish Narani <manish.narani@xilinx.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
 	Michal Simek <monstr@monstr.eu>,
 	Piyush Mehta <piyush.mehta@amd.com>,
 	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [xilinx-xlnx:lkp_test 331/504] ERROR: modpost: "ulpi_write"
- [drivers/usb/dwc3/dwc3.ko] undefined!
-Message-ID: <202501150809.Id0SsfQS-lkp@intel.com>
+Subject: [xilinx-xlnx:lkp_test 331/503] ld.lld: error: undefined symbol:
+ ulpi_write
+Message-ID: <202501151038.bxIRLNf2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,23 +67,23 @@ Content-Disposition: inline
 
 tree:   https://github.com/Xilinx/linux-xlnx lkp_test
 head:   816b29d4609d74a6a2e3290af1ef0061f2976e6c
-commit: ba5e49ae789e8f4cf738103c73ca1bd9952c6e7c [331/504] usb: dwc3: Add power management support in DWC3 Xilinx driver
-config: x86_64-buildonly-randconfig-006-20250115 (https://download.01.org/0day-ci/archive/20250115/202501150809.Id0SsfQS-lkp@intel.com/config)
+commit: d2979f2d14e0711384fca4ca5ae81afc00171254 [331/503] usb: dwc3: Add power management support in DWC3 Xilinx driver
+config: i386-buildonly-randconfig-006-20250114 (https://download.01.org/0day-ci/archive/20250115/202501151038.bxIRLNf2-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501150809.Id0SsfQS-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501151038.bxIRLNf2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501150809.Id0SsfQS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501151038.bxIRLNf2-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "ulpi_write" [drivers/usb/dwc3/dwc3.ko] undefined!
+>> ld.lld: error: undefined symbol: ulpi_write
+   >>> referenced by core.c:2526 (drivers/usb/dwc3/core.c:2526)
+   >>>               drivers/usb/dwc3/core.o:(dwc3_suspend_common) in archive vmlinux.a
+   >>> referenced by core.c:2612 (drivers/usb/dwc3/core.c:2612)
+   >>>               drivers/usb/dwc3/core.o:(dwc3_resume_common) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
