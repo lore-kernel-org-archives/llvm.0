@@ -1,117 +1,138 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D6351DE2BD
-	for <llvm@lists.linux.dev>; Wed, 15 Jan 2025 22:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C97F1DAC80;
+	Wed, 15 Jan 2025 23:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736981472; cv=none; b=uCtSpVlCfgtfB8dpTVm/ipvsgpkPumpsuF50vWOU7MWHLtfI96chB0KTDYkq8o4BqKCLXQf02V/F+xBhBw0GBOLpUO6+TgN5QPGVCclJXYqPJL5YfpF25sYgkeSZl+08/tOgNB+Otr9/1uz+k3Hy3Sy3dPzq/HfCMjaq0ttl8PQ=
+	t=1736983059; cv=none; b=recsyP+RpfSXHjKg71oUwWgulgjyiOtvk0l7zm30tE+KWlzeTK/1mR3jZi7KqaHBVlOeNwj+N9RfSKHAid7N3YxxlSPHU3m7TNfRR6Cba4p8VNzmTqUUNHNbBALnNvTURRc2AzvOF9juaKv0oAgao0nB3G04FUvx0TWEQIwJll4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736981472; c=relaxed/simple;
-	bh=s34YeKjlQMgJ0BPjun7wq17Hk3TXlOThHycw1E0DOE4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CO90RL2Q1EfVyWBYrMlLG950pHx9sQj8LoPd/id2lkaF8/9+RRV1Lh1IDn/TSqPxj2X3zWdcuoncXkpWUDWM1zbvoT4vK+G2WaQzjtdr0tZfsOpZNBd3pmSkhdxNejkTygB2SNfRWxBvCBHu6EK4QAq4FFC719OVDHhqIKC7iqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4YYLcH0Tmjz9sRy;
-	Wed, 15 Jan 2025 23:42:55 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Lk43c_pRbiud; Wed, 15 Jan 2025 23:42:54 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4YYLcG6jFkz9sRs;
-	Wed, 15 Jan 2025 23:42:54 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D0BB48B77A;
-	Wed, 15 Jan 2025 23:42:54 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id v0ej-sZ1G8Ss; Wed, 15 Jan 2025 23:42:54 +0100 (CET)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.202.221])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 97C768B774;
-	Wed, 15 Jan 2025 23:42:52 +0100 (CET)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Julien Thierry <jthierry@redhat.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Raphael Gault <raphael.gault@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v5 02/15] objtool: Move back misplaced comment
-Date: Wed, 15 Jan 2025 23:42:42 +0100
-Message-ID: <2700fb1284bc4f72bc835911a4ec914083ab88c7.1736955567.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1736955567.git.christophe.leroy@csgroup.eu>
-References: <cover.1736955567.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1736983059; c=relaxed/simple;
+	bh=KpiWwHPBU8cn7bfIaWcZtYTJFTB9Ri7oDlqiBOCgGzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XiuiU/k6HJSYPDx8OToHZ4KOiUw96tzFRjfx44PDtFV4SaphNCLY2b5jbfMZFyXFXM3Y7ZlPuyJp++CohAVElZbswixLWB00O8s39LpgCYJATvC1aLP1HsiaaMA1j7jSbwv2NhcyYHVjkwGIRdsmcfZmD2DgYfD7pw4iH0EjR7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CwzcOaNf; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CwzcOaNf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736983057; x=1768519057;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KpiWwHPBU8cn7bfIaWcZtYTJFTB9Ri7oDlqiBOCgGzY=;
+  b=CwzcOaNflH9hThBhlWwxC9v+KLi2LGs4WSbgPh4K+vck9Id3D7My2UCD
+   gAYpuWOL2q9yfmE1M87KyRaFogjXu5U8WZWFGR7lrKWLqMBA5M/7LkBsj
+   9F9UbIPpr/DYBaf5W9WNDlm8Z7M1DECb11p5AFoaLCWaeUUNo2r6xFQQu
+   aaeMU3O+/JcB4K234pdogbXb7DQZMqoHuF33e3JMhTTCdIbrV65yDYdlM
+   08sYqncpTXAacEllVrRawdKGPhEgtvZsuli8u1A3DAno5F7M16QEZoaPl
+   VPWGtGhF57njMNsHKxUC3DPY77UYexU78Bcw5UtvdXi8fRfs5LpuUkcFu
+   w==;
+X-CSE-ConnectionGUID: aruG+SlaQCWPvLBD4WteFg==
+X-CSE-MsgGUID: SUoVqfCASk6Qpo/TfljlQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="48734521"
+X-IronPort-AV: E=Sophos;i="6.13,207,1732608000"; 
+   d="scan'208";a="48734521"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 15:17:37 -0800
+X-CSE-ConnectionGUID: kgZIbBxjQdGjPvS6DawAcQ==
+X-CSE-MsgGUID: TS12OjrKSU+x5+ILfGs6PA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,207,1732608000"; 
+   d="scan'208";a="110266871"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 15 Jan 2025 15:17:36 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYCdg-000QzP-2Y;
+	Wed, 15 Jan 2025 23:17:32 +0000
+Date: Thu, 16 Jan 2025 07:16:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aloka Dixit <quic_alokad@quicinc.com>, ath11k@lists.infradead.org,
+	ath12k@lists.infradead.org, linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Aloka Dixit <quic_alokad@quicinc.com>
+Subject: Re: [PATCH 1/5] wifi: ath11k: refactor transmitted arvif retrieval
+Message-ID: <202501160626.Jbb3GHnk-lkp@intel.com>
+References: <20250114223612.2979310-2-quic_alokad@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736980963; l=1950; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=s34YeKjlQMgJ0BPjun7wq17Hk3TXlOThHycw1E0DOE4=; b=FjZMuTKO1BBEU/WNDtvmcSAP87mwnWMHPfelMSZxYWv7DX6+kEpMCzJSD2yYB5uE0Ar+DqUkH CJPdTNqKIY9CRZbyQyxefgC7e5KtjsPtOfvWnYr2wWKft32htJZaqT6
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114223612.2979310-2-quic_alokad@quicinc.com>
 
-A comment was introduced by commit 113d4bc90483 ("objtool: Fix
-clang switch table edge case") and wrongly moved by
-commit d871f7b5a6a2 ("objtool: Refactor jump table code to support
-other architectures") without the piece of code added with the
-comment in the original commit.
+Hi Aloka,
 
-Fixes: d871f7b5a6a2 ("objtool: Refactor jump table code to support other architectures")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- tools/objtool/arch/x86/special.c | 5 -----
- tools/objtool/check.c            | 6 ++++++
- 2 files changed, 6 insertions(+), 5 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/objtool/arch/x86/special.c b/tools/objtool/arch/x86/special.c
-index 9c1c9df09aaa..76c7933bcb19 100644
---- a/tools/objtool/arch/x86/special.c
-+++ b/tools/objtool/arch/x86/special.c
-@@ -142,11 +142,6 @@ struct reloc *arch_find_switch_table(struct objtool_file *file,
- 	    strcmp(table_sec->name, C_JUMP_TABLE_SECTION))
- 		return NULL;
- 
--	/*
--	 * Each table entry has a rela associated with it.  The rela
--	 * should reference text in the same function as the original
--	 * instruction.
--	 */
- 	rodata_reloc = find_reloc_by_dest(file->elf, table_sec, table_offset);
- 	if (!rodata_reloc)
- 		return NULL;
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 129c4e2245ae..58d9b1a750e3 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2036,6 +2036,12 @@ static void find_jump_table(struct objtool_file *file, struct symbol *func,
- 		table_reloc = arch_find_switch_table(file, insn, &table_size);
- 		if (!table_reloc)
- 			continue;
-+
-+		/*
-+		 * Each table entry has a rela associated with it.  The rela
-+		 * should reference text in the same function as the original
-+		 * instruction.
-+		 */
- 		dest_insn = find_insn(file, table_reloc->sym->sec, reloc_addend(table_reloc));
- 		if (!dest_insn || !insn_func(dest_insn) || insn_func(dest_insn)->pfunc != func)
- 			continue;
+[auto build test WARNING on 0c5fcd9069dd5f984e39820629acbfbe0f1b4256]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aloka-Dixit/wifi-ath11k-refactor-transmitted-arvif-retrieval/20250115-063922
+base:   0c5fcd9069dd5f984e39820629acbfbe0f1b4256
+patch link:    https://lore.kernel.org/r/20250114223612.2979310-2-quic_alokad%40quicinc.com
+patch subject: [PATCH 1/5] wifi: ath11k: refactor transmitted arvif retrieval
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250116/202501160626.Jbb3GHnk-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250116/202501160626.Jbb3GHnk-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501160626.Jbb3GHnk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/ath11k/mac.c:6349:46: warning: variable 'tx_vif' is uninitialized when used here [-Wuninitialized]
+    6349 |                 if (ar->hw->wiphy != ieee80211_vif_to_wdev(tx_vif)->wiphy)
+         |                                                            ^~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c:6339:30: note: initialize the variable 'tx_vif' to silence this warning
+    6339 |         struct ieee80211_vif *tx_vif;
+         |                                     ^
+         |                                      = NULL
+   1 warning generated.
+
+
+vim +/tx_vif +6349 drivers/net/wireless/ath/ath11k/mac.c
+
+d5c65159f28953 Kalle Valo  2019-11-23  6333  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6334  static int ath11k_mac_setup_vdev_params_mbssid(struct ath11k_vif *arvif,
+5a81610acf66c4 Aloka Dixit 2023-05-05  6335  					       u32 *flags, u32 *tx_vdev_id)
+5a81610acf66c4 Aloka Dixit 2023-05-05  6336  {
+5a81610acf66c4 Aloka Dixit 2023-05-05  6337  	struct ath11k *ar = arvif->ar;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6338  	struct ath11k_vif *tx_arvif;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6339  	struct ieee80211_vif *tx_vif;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6340  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6341  	*tx_vdev_id = 0;
+72f88bc503a76c Aloka Dixit 2025-01-14  6342  	tx_arvif = ath11k_mac_get_tx_arvif(arvif);
+72f88bc503a76c Aloka Dixit 2025-01-14  6343  	if (!tx_arvif) {
+5a81610acf66c4 Aloka Dixit 2023-05-05  6344  		*flags = WMI_HOST_VDEV_FLAGS_NON_MBSSID_AP;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6345  		return 0;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6346  	}
+5a81610acf66c4 Aloka Dixit 2023-05-05  6347  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6348  	if (arvif->vif->bss_conf.nontransmitted) {
+5a81610acf66c4 Aloka Dixit 2023-05-05 @6349  		if (ar->hw->wiphy != ieee80211_vif_to_wdev(tx_vif)->wiphy)
+5a81610acf66c4 Aloka Dixit 2023-05-05  6350  			return -EINVAL;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6351  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6352  		*flags = WMI_HOST_VDEV_FLAGS_NON_TRANSMIT_AP;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6353  		*tx_vdev_id = ath11k_vif_to_arvif(tx_vif)->vdev_id;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6354  	} else if (tx_arvif == arvif) {
+5a81610acf66c4 Aloka Dixit 2023-05-05  6355  		*flags = WMI_HOST_VDEV_FLAGS_TRANSMIT_AP;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6356  	} else {
+5a81610acf66c4 Aloka Dixit 2023-05-05  6357  		return -EINVAL;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6358  	}
+5a81610acf66c4 Aloka Dixit 2023-05-05  6359  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6360  	if (arvif->vif->bss_conf.ema_ap)
+5a81610acf66c4 Aloka Dixit 2023-05-05  6361  		*flags |= WMI_HOST_VDEV_FLAGS_EMA_MODE;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6362  
+5a81610acf66c4 Aloka Dixit 2023-05-05  6363  	return 0;
+5a81610acf66c4 Aloka Dixit 2023-05-05  6364  }
+5a81610acf66c4 Aloka Dixit 2023-05-05  6365  
+
 -- 
-2.47.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
