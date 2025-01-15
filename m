@@ -1,98 +1,336 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE6C248BD1;
-	Wed, 15 Jan 2025 10:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331321E98F5;
+	Wed, 15 Jan 2025 12:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736938517; cv=none; b=Gm9qIKbLshkDQy1V8ODVWt9EoM5w02CePrD59+0lY2GRDxiwRfA3gNPLbFhde/CEVnL6e212piHxR4EAS1hCxi/rWiC5jSRAY2Jt+wxSER4Ln1Az5atKXuWWE8YmA5ZqyWS4R07krB+6+JQLhp8OEpm74+4MqoRXO3F+XChSXhM=
+	t=1736942999; cv=none; b=Hb2QALHYFWPt7FOZTPlw/WF0JF4PFBi/d5LqqqdXTsI/L8FXuePI0K0+y3GkbOZOZSRr80MptqxLXYdeiO4vxYF9rBwLmp9+9dc6SBCQn86tg7PVnjShWScypPWTTUIPIoGFskABavpKkw91g5GPGYMvhc3KM0b/DPMHo4gYnCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736938517; c=relaxed/simple;
-	bh=lyd7zEr33mWz8zrx+UHujuU6H7PLeHkzFRXn0brnSdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sHiDL3vphq3jgcsxby1qC5Dd5O65yQCqOtqq2LLimMHvFqz7Jw7WYKeZITCtY9a21L2QA9KFh5UBA6gtSusdpGMQGQg4lmpfMPF5JmaoStXTcXz9FFucoplS7VCv40yrrandOaRCB1JQ/Ht5C3lyiXhR97kyxjAyNuTF+4dK23k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=au99P/xe; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736942999; c=relaxed/simple;
+	bh=LXXGZ0cQj15hypa+sI8RXnIU4kaFiSj/FTjV/MDGXr4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kXN1Rd/D4ktdPBJjsp/vx+tnHaui9xck7w34OdQUqgPu1ghiapCc88AHRMuRNtO5xRTGLlwIUHntidaDihFST7jr/YSwTCM7LERehVgn/KKNPwhQb+HCD6K2KwHSD6Wn/QS75r6TWQRjinWC401TMGrIqLGaOxAXsHU9VJlzeCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XVBOXtLE; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="au99P/xe"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2166db59927so11412645ad.0;
-        Wed, 15 Jan 2025 02:55:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736938515; x=1737543315; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GHfvlbvA+NRQ/YtCOxD4S8ER62bPooKhwLbssU4Sj9I=;
-        b=au99P/xeFWmE7whya71hfPyB27o4EP9fFI52wbc8aVFYzVe2eqBGQnTteXtda2pVkw
-         mGCEwNUwv/IPnFaq82hwtpLxYltxGqorteYTWHwGLo5IuZzDX9sgm5KodZet0FtClS8Y
-         cacKF4Cval9CcBSqImaOOqwvJhUh3dQND+TCAUCHwpoj2tJ3NHwjwqWxqzKYYvZ3/A+y
-         ImQjFKzSGq92qZjYU/MYDLPmVe9Yu66HpjkyuaroqQ60zqBsdNF1d1zZU9IkQ7dgc3xp
-         nI+QCnvPyhe2mf1T3poVoLJeRBDNsluD/ZnADXIvKTnCNgu2EOGr/L8mIv2mkseTmfKt
-         tX9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736938515; x=1737543315;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GHfvlbvA+NRQ/YtCOxD4S8ER62bPooKhwLbssU4Sj9I=;
-        b=AbXjqezIv28St3gCs6nsA3ajkZuKu07u0cbO9EJLh1DFgGpIpoRBX7YId9ZbohlaK2
-         SMgvbBSXZtosEbUo1pmqDD/f/tK94DAeOD568cQyYqIfLPpwjAUY1+wOj9TPl8hsOc74
-         wXwKZb30d0akdPfBv/K/1CAyNYY23WGmM8d4vb9/baQR9Jt28GDge1VbnbPDw6jUktFP
-         7FXygzXwplyWdbPecZLYC3ALKbL3ZUfHRtAKhSCgz7+8Ez8++W4oaoEPgi4gEfsbiX9M
-         XmtcRasbnlcXEk22TsTEgv54Qx/QU9vIhHm16hsKxR7svv2qwMLIGDV/bXWEKXqsdk16
-         qBsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVct9akwAOIi/2hCyZvHLs1rcVTf5rhyo+D9kK4OAtgOfMgTU3KiibB5uctmQFjaVjn4PDY@lists.linux.dev, AJvYcCXQSZywsR7jEFIoIqC26Oq9Mq2TO9XERYeFMdlzvyZI01R5OIPYTF8ThZFdUHbuDQOOMsOvmjfFeVpiDpnZdA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YwfvSAWDFG8I5BBwhr7KqtsDcr373PmuF7sBNCdayO/N/Ep2qhU
-	MTRWJfRuqSFt408N2BEJiT+F1wNA9C8sGYBuhg1WIaleUqK2zF8x9q4Nuk0BVRufwCKiJdvwaPw
-	Ig6ArjBQa1/kTx7pVgWBalwFegH8=
-X-Gm-Gg: ASbGncvSMlJgRT5B4t1/n/YqlEoRq9f/5RJJ5iYdRc3vNg9otmhc3cbdrTE42mCMsWz
-	KCQ49u1Li6yBRSShAtR7XRcFhsonueoSTcTXjVQ==
-X-Google-Smtp-Source: AGHT+IGFodW2OuJJDnW0zLMl1WF8rCBkDNMDqlgzq7tQ9GajbnzMlXfvVBJn937G24nnTBsxSCh/kYV/jLqnvTWnJY0=
-X-Received: by 2002:a17:902:dacd:b0:215:a3fd:61f8 with SMTP id
- d9443c01a7336-21a83face65mr171789125ad.10.1736938515308; Wed, 15 Jan 2025
- 02:55:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XVBOXtLE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736942997; x=1768478997;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LXXGZ0cQj15hypa+sI8RXnIU4kaFiSj/FTjV/MDGXr4=;
+  b=XVBOXtLEL2c1B+/Gu49KVWvQ74BxJhZHbr1pCKsHYE5MZgwZtm4tPE8q
+   tRi+E1NV0OZlU17FRS6nfoKk527+84nHLQdJLo4l4Ly8zt+bs6CiBNKxS
+   DJCKQc0HfG3mq4DupC/a7UJYcnwFKHpsmj8gJXN0MAaabKCbSTLo1LjWA
+   F8CPBwJxXmp1j0tpYbyFqvamwVIklThkS/MVpJk0CP5kktht53k4+iLx4
+   pbusLwT6YqR2Q6qfdoaGgg1tNArXLZYP0N1qofpJCyqBn6GJ0uDzURmxC
+   YalJcNZ0vUbAxjYgHYbLQuyB++ZGY9GPz9/PJwSfAUR0hmrjP6g8mfUj5
+   g==;
+X-CSE-ConnectionGUID: sku4IvCtTjKrgHbSOunBgg==
+X-CSE-MsgGUID: +/Ew2ieYTjWDWq7iLukMmg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="36969295"
+X-IronPort-AV: E=Sophos;i="6.12,206,1728975600"; 
+   d="scan'208";a="36969295"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 04:09:56 -0800
+X-CSE-ConnectionGUID: Gt+mNmOhSfSqtAfedispIQ==
+X-CSE-MsgGUID: B5Hc8A6iQGWA6d/y7iVAlA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110253286"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 15 Jan 2025 04:09:54 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tY2DX-000QJj-19;
+	Wed, 15 Jan 2025 12:09:51 +0000
+Date: Wed, 15 Jan 2025 20:09:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org
+Subject: [pci:next 15/20] drivers/pci/controller/dwc/pci-imx6.c:1224:35:
+ error: use of undeclared identifier 'IMX_PCIE_FLAG_CPU_ADDR_FIXUP'
+Message-ID: <202501151913.zNl1cXD5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202501150216.3RVz44uS-lkp@intel.com> <34e7c573-8af8-dab9-d435-ffa50e9efea2@huawei.com>
-In-Reply-To: <34e7c573-8af8-dab9-d435-ffa50e9efea2@huawei.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 15 Jan 2025 11:55:02 +0100
-X-Gm-Features: AbW1kva4fgu_HpB69Vlu4M5GjirHHd_wyfbjW8BRRRNhO6ACBVwFtfou9JOufmc
-Message-ID: <CANiq72n6jb62PzgP-3T6sBQRZCDb4Mi1wq6X8vEwRDT-2OvKrg@mail.gmail.com>
-Subject: Re: [sysctl:sysctl-testing 8/16] mm/nommu.c:394:12: error: static
- declaration of 'sysctl_nr_trim_pages' follows non-static declaration
-To: yukaixiong <yukaixiong@huawei.com>
-Cc: Joel Granados <joel.granados@kernel.org>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 15, 2025 at 9:14=E2=80=AFAM yukaixiong <yukaixiong@huawei.com> =
-wrote:
->
->          I have deleted the line : "extern int sysctl_nr_trim_pages;" in
-> patch8 of v5. Why still produce this error? I don't understand!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+head:   19501c8805572d695bc694a761b3e61f0aa32ae4
+commit: 7a6f84fed4abbee48ea03897340040dfced9ceee [15/20] Merge branch 'controller/imx6'
+config: arm-randconfig-002-20250115 (https://download.01.org/0day-ci/archive/20250115/202501151913.zNl1cXD5-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250115/202501151913.zNl1cXD5-lkp@intel.com/reproduce)
 
-As far as I understand, the report is against the tree mentioned in
-the report, not against a patch series. So I would recommend checking
-the tree to see what it contains (e.g. what version).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501151913.zNl1cXD5-lkp@intel.com/
 
-> The compile steps as below:
->
-> 1. export ARCH=3Darm;export CROSS_COMPILE=3Darm-linux-gnueabihf-
-> 2. cp ../stm32_config.log ./.config
-> 3. make ARCH=3Darm olddefconfig
-> 4. make -j200
+All errors (new ones prefixed by >>):
 
-Are you using Clang (ideally the same version) and `W=3D1` to match the rep=
-ort?
+   In file included from drivers/pci/controller/dwc/pci-imx6.c:22:
+   In file included from include/linux/pci.h:1647:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/pci/controller/dwc/pci-imx6.c:1109:11: warning: variable 'sid' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1109 |         else if (!err_m)
+         |                  ^~~~~~
+   drivers/pci/controller/dwc/pci-imx6.c:1112:41: note: uninitialized use occurs here
+    1112 |         return imx_pcie_add_lut(imx_pcie, rid, sid);
+         |                                                ^~~
+   drivers/pci/controller/dwc/pci-imx6.c:1109:7: note: remove the 'if' if its condition is always true
+    1109 |         else if (!err_m)
+         |              ^~~~~~~~~~~
+    1110 |                 sid = sid_m & IMX95_SID_MASK;
+   drivers/pci/controller/dwc/pci-imx6.c:1037:9: note: initialize the variable 'sid' to silence this warning
+    1037 |         u32 sid;
+         |                ^
+         |                 = 0
+>> drivers/pci/controller/dwc/pci-imx6.c:1224:35: error: use of undeclared identifier 'IMX_PCIE_FLAG_CPU_ADDR_FIXUP'
+    1224 |         if (!(imx_pcie->drvdata->flags & IMX_PCIE_FLAG_CPU_ADDR_FIXUP))
+         |                                          ^
+   drivers/pci/controller/dwc/pci-imx6.c:1360:34: warning: shift count >= width of type [-Wshift-count-overflow]
+    1360 |                 dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+         |                                                ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   drivers/pci/controller/dwc/pci-imx6.c:1790:5: error: use of undeclared identifier 'IMX_PCIE_FLAG_CPU_ADDR_FIXUP'
+    1790 |                          IMX_PCIE_FLAG_CPU_ADDR_FIXUP |
+         |                          ^
+   3 warnings and 2 errors generated.
 
-I hope that helps.
 
-Cheers,
-Miguel
+vim +/IMX_PCIE_FLAG_CPU_ADDR_FIXUP +1224 drivers/pci/controller/dwc/pci-imx6.c
+
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1028  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1029  static int imx_pcie_enable_device(struct pci_host_bridge *bridge,
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1030  				  struct pci_dev *pdev)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1031  {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1032  	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1033  	u32 sid_i, sid_m, rid = pci_dev_id(pdev);
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1034  	struct device_node *target;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1035  	struct device *dev;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1036  	int err_i, err_m;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1037  	u32 sid;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1038  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1039  	dev = imx_pcie->pci->dev;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1040  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1041  	target = NULL;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1042  	err_i = of_map_id(dev->of_node, rid, "iommu-map", "iommu-map-mask",
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1043  			  &target, &sid_i);
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1044  	if (target) {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1045  		of_node_put(target);
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1046  	} else {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1047  		/*
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1048  		 * "target == NULL && err_i == 0" means RID out of map range.
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1049  		 * Use 1:1 map RID to streamID. Hardware can't support this
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1050  		 * because the streamID is only 6 bits
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1051  		 */
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1052  		err_i = -EINVAL;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1053  	}
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1054  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1055  	target = NULL;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1056  	err_m = of_map_id(dev->of_node, rid, "msi-map", "msi-map-mask",
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1057  			  &target, &sid_m);
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1058  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1059  	/*
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1060  	 *   err_m      target
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1061  	 *	0	NULL		RID out of range. Use 1:1 map RID to
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1062  	 *				streamID, Current hardware can't
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1063  	 *				support it, so return -EINVAL.
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1064  	 *      != 0    NULL		msi-map does not exist, use built-in MSI
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1065  	 *	0	!= NULL		Get correct streamID from RID
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1066  	 *	!= 0	!= NULL		Invalid combination
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1067  	 */
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1068  	if (!err_m && !target)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1069  		return -EINVAL;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1070  	else if (target)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1071  		of_node_put(target); /* Find streamID map entry for RID in msi-map */
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1072  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1073  	/*
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1074  	 * msi-map        iommu-map
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1075  	 *   N                N            DWC MSI Ctrl
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1076  	 *   Y                Y            ITS + SMMU, require the same SID
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1077  	 *   Y                N            ITS
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1078  	 *   N                Y            DWC MSI Ctrl + SMMU
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1079  	 */
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1080  	if (err_i && err_m)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1081  		return 0;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1082  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1083  	if (!err_i && !err_m) {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1084  		/*
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1085  		 *	    Glue Layer
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1086  		 *          <==========>
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1087  		 * ┌─────┐                  ┌──────────┐
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1088  		 * │ LUT │ 6-bit streamID   │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1089  		 * │     │─────────────────►│  MSI     │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1090  		 * └─────┘   2-bit ctrl ID  │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1091  		 *             ┌───────────►│          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1092  		 *  (i.MX95)   │            │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1093  		 *  00 PCIe0   │            │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1094  		 *  01 ENETC   │            │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1095  		 *  10 PCIe1   │            │          │
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1096  		 *             │            └──────────┘
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1097  		 * The MSI glue layer auto adds 2 bits controller ID ahead of
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1098  		 * streamID, so mask these 2 bits to get streamID. The
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1099  		 * IOMMU glue layer doesn't do that.
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1100  		 */
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1101  		if (sid_i != (sid_m & IMX95_SID_MASK)) {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1102  			dev_err(dev, "iommu-map and msi-map entries mismatch!\n");
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1103  			return -EINVAL;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1104  		}
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1105  	}
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1106  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1107  	if (!err_i)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1108  		sid = sid_i;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14 @1109  	else if (!err_m)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1110  		sid = sid_m & IMX95_SID_MASK;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1111  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1112  	return imx_pcie_add_lut(imx_pcie, rid, sid);
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1113  }
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1114  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1115  static void imx_pcie_disable_device(struct pci_host_bridge *bridge,
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1116  				    struct pci_dev *pdev)
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1117  {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1118  	struct imx_pcie *imx_pcie;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1119  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1120  	imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1121  	imx_pcie_remove_lut(imx_pcie, pci_dev_id(pdev));
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1122  }
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1123  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1124  static int imx_pcie_host_init(struct dw_pcie_rp *pp)
+fa33a6d87eac1a drivers/pci/host/pci-imx6.c           Marek Vasut            2013-12-12  1125  {
+442ec4c04d1235 drivers/pci/dwc/pci-imx6.c            Kishon Vijay Abraham I 2017-02-15  1126  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+9751f65db025a1 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1127  	struct device *dev = pci->dev;
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1128  	struct imx_pcie *imx_pcie = to_imx_pcie(pci);
+9751f65db025a1 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1129  	int ret;
+bb38919ec56e07 drivers/pci/host/pci-imx6.c           Sean Cross             2013-09-26  1130  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1131  	if (imx_pcie->vpcie) {
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1132  		ret = regulator_enable(imx_pcie->vpcie);
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1133  		if (ret) {
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1134  			dev_err(dev, "failed to enable vpcie regulator: %d\n",
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1135  				ret);
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1136  			return ret;
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1137  		}
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1138  	}
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1139  
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1140  	if (pp->bridge && imx_check_flag(imx_pcie, IMX_PCIE_FLAG_HAS_LUT)) {
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1141  		pp->bridge->enable_device = imx_pcie_enable_device;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1142  		pp->bridge->disable_device = imx_pcie_disable_device;
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1143  	}
+bc92494deb1c40 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2025-01-14  1144  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1145  	imx_pcie_assert_core_reset(imx_pcie);
+21ad80b0e0ce5f drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-02-20  1146  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1147  	if (imx_pcie->drvdata->init_phy)
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1148  		imx_pcie->drvdata->init_phy(imx_pcie);
+21ad80b0e0ce5f drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-02-20  1149  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1150  	imx_pcie_configure_type(imx_pcie);
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1151  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1152  	ret = imx_pcie_clk_enable(imx_pcie);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1153  	if (ret) {
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1154  		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1155  		goto err_reg_disable;
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1156  	}
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1157  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1158  	if (imx_pcie->phy) {
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1159  		ret = phy_init(imx_pcie->phy);
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1160  		if (ret) {
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1161  			dev_err(dev, "pcie PHY power up failed\n");
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1162  			goto err_clk_disable;
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1163  		}
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1164  
+0dafa2a5c9e14e drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-11-19  1165  		ret = phy_set_mode_ext(imx_pcie->phy, PHY_MODE_PCIE,
+0dafa2a5c9e14e drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-11-19  1166  				       imx_pcie->drvdata->mode == DW_PCIE_EP_TYPE ?
+0dafa2a5c9e14e drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-11-19  1167  						PHY_MODE_PCIE_EP : PHY_MODE_PCIE_RC);
+8026f2d8e8a95a drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1168  		if (ret) {
+8026f2d8e8a95a drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1169  			dev_err(dev, "unable to set PCIe PHY mode\n");
+8026f2d8e8a95a drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1170  			goto err_phy_exit;
+8026f2d8e8a95a drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1171  		}
+8026f2d8e8a95a drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1172  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1173  		ret = phy_power_on(imx_pcie->phy);
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1174  		if (ret) {
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1175  			dev_err(dev, "waiting for PHY ready timeout!\n");
+5b04d44d5c74e4 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1176  			goto err_phy_exit;
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1177  		}
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1178  	}
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1179  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1180  	ret = imx_pcie_deassert_core_reset(imx_pcie);
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1181  	if (ret < 0) {
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1182  		dev_err(dev, "pcie deassert core reset failed: %d\n", ret);
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1183  		goto err_phy_off;
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1184  	}
+ae6b9a65af4801 drivers/pci/controller/dwc/pci-imx6.c Sascha Hauer           2022-11-01  1185  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1186  	imx_setup_phy_mpll(imx_pcie);
+4a301766f5263d drivers/pci/dwc/pci-imx6.c            Bjorn Andersson        2017-07-15  1187  
+4a301766f5263d drivers/pci/dwc/pci-imx6.c            Bjorn Andersson        2017-07-15  1188  	return 0;
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1189  
+cf236e0c0d59b3 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1190  err_phy_off:
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1191  	phy_power_off(imx_pcie->phy);
+5b04d44d5c74e4 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1192  err_phy_exit:
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1193  	phy_exit(imx_pcie->phy);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1194  err_clk_disable:
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1195  	imx_pcie_clk_disable(imx_pcie);
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1196  err_reg_disable:
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1197  	if (imx_pcie->vpcie)
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1198  		regulator_disable(imx_pcie->vpcie);
+f0691e326b270d drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1199  	return ret;
+bb38919ec56e07 drivers/pci/host/pci-imx6.c           Sean Cross             2013-09-26  1200  }
+bb38919ec56e07 drivers/pci/host/pci-imx6.c           Sean Cross             2013-09-26  1201  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1202  static void imx_pcie_host_exit(struct dw_pcie_rp *pp)
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1203  {
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1204  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1205  	struct imx_pcie *imx_pcie = to_imx_pcie(pci);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1206  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1207  	if (imx_pcie->phy) {
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1208  		if (phy_power_off(imx_pcie->phy))
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1209  			dev_err(pci->dev, "unable to power off PHY\n");
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1210  		phy_exit(imx_pcie->phy);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1211  	}
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1212  	imx_pcie_clk_disable(imx_pcie);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1213  
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1214  	if (imx_pcie->vpcie)
+d657ea28d55037 drivers/pci/controller/dwc/pci-imx6.c Frank Li               2024-07-29  1215  		regulator_disable(imx_pcie->vpcie);
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1216  }
+835a345b18b013 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2022-07-14  1217  
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1218  static u64 imx_pcie_cpu_addr_fixup(struct dw_pcie *pcie, u64 cpu_addr)
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1219  {
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1220  	struct imx_pcie *imx_pcie = to_imx_pcie(pcie);
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1221  	struct dw_pcie_rp *pp = &pcie->pp;
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1222  	struct resource_entry *entry;
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1223  
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29 @1224  	if (!(imx_pcie->drvdata->flags & IMX_PCIE_FLAG_CPU_ADDR_FIXUP))
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1225  		return cpu_addr;
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1226  
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1227  	entry = resource_list_first_type(&pp->bridge->windows, IORESOURCE_MEM);
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1228  	if (!entry)
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1229  		return cpu_addr;
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1230  
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1231  	return cpu_addr - entry->offset;
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1232  }
+c2699778e6be47 drivers/pci/controller/dwc/pci-imx6.c Richard Zhu            2024-07-29  1233  
+
+:::::: The code at line 1224 was first introduced by commit
+:::::: c2699778e6be4757ee0b16449ab8777c6b46e6d0 PCI: imx6: Add i.MX8Q PCIe Root Complex (RC) support
+
+:::::: TO: Richard Zhu <hongxing.zhu@nxp.com>
+:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
