@@ -1,111 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488EB22BAC9
-	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 16:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9628022D4D5
+	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 18:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043672; cv=none; b=OdP2CDIiQ/HHsqyM18IGuxjS0MoEMcousE/SiW6VZrGgQKR+DD0Lvz7SI0gpGXqotC83B5+4iAh1zqxboeHUNom7lqyGzJFC/VyjXuBVKRM+PaONuYO4fZJ7I9rHrAn2MGgpNqNymoyoHC4TDU4WM569joST8KR307QbhyY5lYQ=
+	t=1737051787; cv=none; b=kvTa6y80nnobmED53+bB74zBqjFw8XoMotJMXljSyFLhvmTVqBMjtP8ONV94jIPIFq8PiP3IQqPoiwvvEU55gbcTjxiNxsIIp4EoiWBVyPIZDDz8FuGsngE7uFhtMXHLXqxCIQHHnIhwi8z4HBPrBNjpdM88/ARESaLdDBiTkpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043672; c=relaxed/simple;
-	bh=IV9vvNN02Low+JW0KLrqn3VHCizq83zC8CcHTwx6xvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oSPJPJSBvf7ADlXoSNTpDlk8A0MIhvfalkqo7upUTObCq0EMhXIZp00jMARylLESQ6c+M9oNGU7qVslcCnX6VG3RnaAmoZedm2W8k9l3jCeDWEUWXTWzrxwaLpsJk/0VvkvkN77XT3yirMmLXSIXRdMwm3bCPp/+GfX21g32CN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CnxDHBUC; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1737051787; c=relaxed/simple;
+	bh=RndU3CSpXrAOlj30uudqpekCuSD9rFn2Eh85FshWsTI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kV1TFpwn/ae9VwGTRkcWcnkYD47XC5fg0RHsx2js5qucZg7Af9dDrvyNqPpCOqrFQPyTVz75msAatxEPvH0pUnlnNPd1IqpkcoilE4pf6HtXHxJaUnOFzP0vamIZ1MdmUsMFpfyIrmrSBSka0NhZ0SQKJipPAfIIt/MKwTTbRxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sn14vVQb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CnxDHBUC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737043671; x=1768579671;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IV9vvNN02Low+JW0KLrqn3VHCizq83zC8CcHTwx6xvA=;
-  b=CnxDHBUCtUPxG2UR3san6GzaG7EycJCkCMFk5JROLt8hrZ5XtRECnCBu
-   YGXYMpSR2eoyIlvzhPR5CL3mw3R2GP2WA850qBiWDVGfdGg4G3zjBWRf/
-   O/0Ducn3dCdmenbmE56eejFYtfAbXjHPtBIQrylmhhjcoyQUv/K/8a0io
-   C3oim3uzHIABRqSFtjQ42w8mvzGLjEv333MqSWRy2/pqfBucWyAKv7+TR
-   +r5JDLjBi2+GTX319bHfHB3wPuBdZWDq0umiYGR+TJmyXsmCfqzRj3Wqs
-   RlOpN+4oES8VToC7aCbTPFMThh96OeEzE79kjIm1w09o3ODnY44JFbqnS
-   g==;
-X-CSE-ConnectionGUID: DhP7OrD1SO67rV0a5b5KJg==
-X-CSE-MsgGUID: qplrSPKyRsC7suLGHqx5cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="36651128"
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="36651128"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:07:51 -0800
-X-CSE-ConnectionGUID: PntF8R4YRyyvbrYqHphzGg==
-X-CSE-MsgGUID: qORDLl7SRQyYvY2vGdiigg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="128783603"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 16 Jan 2025 08:07:48 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 4D49E39C; Thu, 16 Jan 2025 18:07:47 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] hrtimer: Mark is_migration_base() with __maybe_unused
-Date: Thu, 16 Jan 2025 18:07:45 +0200
-Message-ID: <20250116160745.243358-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sn14vVQb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737051784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Alcr1HT/QCVH5thgMkGN/lCs+DGu8gvctJ3U4B/+SSc=;
+	b=Sn14vVQbT8HTBLbebYdwU4boMQ/syCcS3l6CrsA3HgRxrSXJySJPjk3i22LPc2DeqX7NLY
+	PKjfmVobE0HtyeRQV8rFQIjCBw1qSNsbcsSXcx+7a2mtCwa/ymaV5999cpUn50K+cKmtz5
+	lo4iRUEAAPOHeFRFs0Odmpf+FpvS/U0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-458-omUv55QwMomBl7QK-sUb8Q-1; Thu,
+ 16 Jan 2025 13:23:02 -0500
+X-MC-Unique: omUv55QwMomBl7QK-sUb8Q-1
+X-Mimecast-MFC-AGG-ID: omUv55QwMomBl7QK-sUb8Q
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D32B31955DD7
+	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 18:23:01 +0000 (UTC)
+Received: from [172.64.12.20] (unknown [10.30.33.24])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5C0DA195605F;
+	Thu, 16 Jan 2025 18:23:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc7,
+ upstream-mainline, ce69b401)
+Date: Thu, 16 Jan 2025 18:23:00 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <74268.125011613230202197@us-mta-458.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: bvokEXvFCB2LY8P5GVEAd98FF4c2ifkrPmor-9n-i6M_1737051782
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-When is_migration_base() is unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+Hi, we tested your kernel and here are the results:
 
-kernel/time/hrtimer.c:156:20: error: unused function 'is_migration_base' [-Werror,-Wunused-function]
-  156 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
-      |                    ^~~~~~~~~~~~~~~~~
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Fix this by marking it with __maybe_unused.
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
+Kernel information:
+    Commit message: Merge tag 'net-6.13-rc8' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- kernel/time/hrtimer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1628549265
 
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 80fe3749d2db..0a2b90f99412 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -145,7 +145,7 @@ static struct hrtimer_cpu_base migration_cpu_base = {
- 
- #define migration_base	migration_cpu_base.clock_base[0]
- 
--static inline bool is_migration_base(struct hrtimer_clock_base *base)
-+static inline __maybe_unused bool is_migration_base(struct hrtimer_clock_base *base)
- {
- 	return base == &migration_base;
- }
-@@ -275,7 +275,7 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
- 
- #else /* CONFIG_SMP */
- 
--static inline bool is_migration_base(struct hrtimer_clock_base *base)
-+static inline __maybe_unused bool is_migration_base(struct hrtimer_clock_base *base)
- {
- 	return false;
- }
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1628549265-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1628549265-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1628549265-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
