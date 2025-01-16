@@ -1,250 +1,257 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B191E24A7C9
-	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 14:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800FD1DE88C
+	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 14:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737037935; cv=none; b=bM1VhM++Ive8XUY0aooUm+eyBEuKaSox30Y6+vOaJZw0OfNxs4iPzJbRvLG2QA5e3JQ3jpbiwmlclbs64fhhccztQ+tnhbChYCXD13GomDwB0MU7Y3/PZSiNPVY4+6XeIgvXQUklGItoGytspPYm3oKJ/TysOH1GN9s1sZC4RV8=
+	t=1737038455; cv=none; b=q2ZUu2tbAcksCkar84wpQz7YNZELtAmSZmfHyWrFnhhVQrRfoHLpXkl5oVjtrVmUawknedk71DP4JI+2274LNLYaezcioSmVrMUKG6y06g3M1cDfGchW2dEskosTKUBaTdFPGbyTw4Uxvfsj6FytYzZ4YUvxO1WjeaNM/VSacLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737037935; c=relaxed/simple;
-	bh=HeD4vbuuMHaAUYRozT0nimXyvHpbDEcXMiVPDEb9xi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iKU+7SoWLyvRNidNKvZp9cANZXQoNqwNs3cWTIp5tkGvGD48VgGtb8XhXFwhSlu1PqLI87xljDpu/nghYHJsFNTxt48ihjgaFU9etlhZVr14YLdP5XHUdORQoBwIPLH+GP3YxagHQD+J5gm5Q5XiyNmC3MLdnsUDmknCxVhx5bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UMQxc4gN; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1737038455; c=relaxed/simple;
+	bh=FZlOafbMVTA45sxqfM2NthYjknMNgjVBiAHaGQgAIWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H/ozXN6e37Six1EE8WVErrg/y3j80OPOe5bsCTIyx9kIM18C2+UU/CQAp5ouMSqJcOVC8zmHdLPmNZMPNjY+yy1+N/9NIuj7nvoeuqfOZjSqmk3TVnXVlWiGy7MXCHlOvcgVRx35KqlHBkx4vSZRJl0liRXyH0VrEndWq22DMgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iam3uS7j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UMQxc4gN"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so568901f8f.0
-        for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 06:32:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1737037932; x=1737642732; darn=lists.linux.dev;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HeD4vbuuMHaAUYRozT0nimXyvHpbDEcXMiVPDEb9xi0=;
-        b=UMQxc4gNmPGLOufmWQOv4OVXQ3UJXKL7G9pMr3bhBC5JMAnGPqOwDDYiSxmszlXKHl
-         a1yuWSAvYAkBIAN92U66b4uOxKEg52suLBFTEjeIL5Bzn2Jc2hiYgCsWxhhBgvL8twSH
-         6RyUsdvRcx0xoVjprTIuSJcfCRbPMLQBWtUNSVGUVJpJuOwLmfVdZoDrUAGErgE2+4gw
-         eeyZZ8qRkHApHb6ui6vihqXCoX+TJ05nKHLKZgXFl5r63wBPPJVnfagoBpfwEzW8ORlN
-         zKOJIjx6S+m6QmnyieaMnCm3px4xflSqBEktRrw7FLrQyZInItTVS63ToUEKsDa54vDs
-         xIFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737037932; x=1737642732;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HeD4vbuuMHaAUYRozT0nimXyvHpbDEcXMiVPDEb9xi0=;
-        b=u5Nq8omEKYKzolZph1oR5ecBAzP3NGM184nrHjB1aLUZtn1rKs8/cCeWbBaaSW5/y7
-         vWHJoA+Q1MaQ5T3w6nsR8XLE0kh6J7R48GaxdxYjEeIRyExFqj0G1vUCrYrbVBtiEVI/
-         IrxLfnBMIboNy0McgFUjS4NeNWwmBCR8PCQgkdJdCn+3M1PnypQJJEow8SGdAbb4wFnA
-         aS3ThRfCIbB2b2MogWSERZOTZ+mVaM5nYjJUc7b75vZPiU0gvSzufLc4Fh32TW0Nyswx
-         JqyTFQGONdwHVLeC0vEWvL0leQFwUk71g3CiGaqOZGmX6PYcmXtQbsf6UW+d7fcVbJ4d
-         tifw==
-X-Forwarded-Encrypted: i=1; AJvYcCVziL/Eh5sdgkB33zngiq+gNijhszItmpzcXcQtAwcRlmDMzBrXkNsYAlNuRhkCoCe385Fi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz6sBseyT4XzygoqA3h/3ipGny9KQ8ma5NzyGH+1m/1sfwPS06Z
-	PPykfgjKzfCwUG+itXkoNQYn/9BT9aUjGBpBiAN83aq2nB2rGaVnC1js7kUtWS4=
-X-Gm-Gg: ASbGncvddu80qmYi0cRZ9uX6piXebmdrD32g28YQBiR+14POhZfpszM/cPvhc+85lHe
-	FkkwiHQGnN5Ha6zDHDEBk08lEc0vGJbXv6MhPsgB97R0eG40G7KD3KujZGcK5gwIiJ0ld/3RnWM
-	R3uYny5QjKq0YyXMD616do98e27QWwloNO/53Iwz4yOwqY4/7QbY9mdjP5a3NDRiQXlEUQVgV9s
-	eA8e7qcCoEe4nV4zPznNaowJGmZIUv1L//aTdVu8rKmAoe+8Mg/yThE4XDiQayt8g/mcnVbYv5s
-	vW9XH8Ivtwh1xYNDNg7bBEDbvc31IMLcPJVOSQORDQwC9U6xYT6dAqJZzq8CpVQLSmbb8GamtQ9
-	u3TXbhw==
-X-Google-Smtp-Source: AGHT+IFfVuow8gjbNlxCzPB+h1PiQ6M/UMTPHFPAcxLFTyAqCQzjX60tVkUugqqgwTjoqdegJFTnUg==
-X-Received: by 2002:a05:6000:184e:b0:385:f560:7911 with SMTP id ffacd0b85a97d-38a872c93e3mr30716855f8f.10.1737037931946;
-        Thu, 16 Jan 2025 06:32:11 -0800 (PST)
-Received: from ?IPV6:2003:e5:8731:2800:842d:42a0:5992:3595? (p200300e587312800842d42a059923595.dip0.t-ipconnect.de. [2003:e5:8731:2800:842d:42a0:5992:3595])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c7499942sm60981805e9.6.2025.01.16.06.32.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jan 2025 06:32:11 -0800 (PST)
-Message-ID: <14145470-070f-4249-8d6b-1a35a1b3ef21@suse.com>
-Date: Thu, 16 Jan 2025 15:32:10 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iam3uS7j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A84C4CED6;
+	Thu, 16 Jan 2025 14:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737038455;
+	bh=FZlOafbMVTA45sxqfM2NthYjknMNgjVBiAHaGQgAIWE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Iam3uS7jmaS6mMveHumo+vd+ZHke+TolZzhz+MpIrOEbLY5RghhcPaO8NCYKTYaK9
+	 nmQLSr6054w+DxWFFdJr8GqZTb3VAMKEWhipgnATfyk/eStegfAFUHovSjfKdv6BSj
+	 4q8CBksgXLprHMRzc8W42hkp2rFZ1cEFkAy5gnWD8N3XY/wmdL1hoValAqQe8pfL1V
+	 u78cyIFrHnO/kdEEMJ+AM1EeV2p01THdV89G+td39f9yZMgRLg6/P08BdwMLE/lVFL
+	 eaRF6xGKS63dnRBc/voundMFd+rWO7D+DGtLhiQH7Pdf/TkaPWhxZsGDgV9OrdLQil
+	 aTJxDjghekdIg==
+Date: Thu, 16 Jan 2025 07:40:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: chaitanya.dhere@amd.com, jun.lei@amd.com, harry.wentland@amd.com,
+	sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	Xinhui.Pan@amd.com, airlied@gmail.com, simona@ffwll.ch,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/amd/display: mark static functions noinline_for_stack
+Message-ID: <20250116144049.GA1810277@ax162>
+References: <20250109053504.2998728-1-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/asm: Always inline serialize()
-To: Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel test robot <lkp@intel.com>, Sean Christopherson <seanjc@google.com>,
- Linux Kernel Functional Testing <lkft@linaro.org>
-References: <20250116-always-inline-serialize-for-noinstr-v1-1-b7a37b2af04b@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <20250116-always-inline-serialize-for-noinstr-v1-1-b7a37b2af04b@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------SVLlXjV08wpGpOkaooPRgk02"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109053504.2998728-1-tzungbi@kernel.org>
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------SVLlXjV08wpGpOkaooPRgk02
-Content-Type: multipart/mixed; boundary="------------Nmo2DBNUBS6zyDtwZNRuk0ZW";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Nathan Chancellor <nathan@kernel.org>, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- kernel test robot <lkp@intel.com>, Sean Christopherson <seanjc@google.com>,
- Linux Kernel Functional Testing <lkft@linaro.org>
-Message-ID: <14145470-070f-4249-8d6b-1a35a1b3ef21@suse.com>
-Subject: Re: [PATCH] x86/asm: Always inline serialize()
-References: <20250116-always-inline-serialize-for-noinstr-v1-1-b7a37b2af04b@kernel.org>
-In-Reply-To: <20250116-always-inline-serialize-for-noinstr-v1-1-b7a37b2af04b@kernel.org>
+Hi Tzung-Bi,
 
---------------Nmo2DBNUBS6zyDtwZNRuk0ZW
-Content-Type: multipart/mixed; boundary="------------TZbndA0OEsSX5WH2pS0kkfic"
+First of all, thanks for the patch!
 
---------------TZbndA0OEsSX5WH2pS0kkfic
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Thu, Jan 09, 2025 at 05:35:04AM +0000, Tzung-Bi Shih wrote:
+> When compiling allmodconfig (CONFIG_WERROR=y) with clang-19, see the
+> following errors:
+> 
+> .../display/dc/dml2/display_mode_core.c:6268:13: warning: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Wframe-larger-than]
+> .../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: warning: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Wframe-larger-than]
+> 
+> Mark static functions called by dml_prefetch_check() and
+> dml_core_mode_support() noinline_for_stack to avoid them become huge
+> functions and thus exceed the frame size limit.
 
-T24gMTYuMDEuMjUgMTU6MjgsIE5hdGhhbiBDaGFuY2VsbG9yIHdyb3RlOg0KPiBzZXJpYWxp
-emUoKSBtYXkgYmUgY2FsbGVkIGZyb20gbm9pbnN0ciBjb2RlIGFuZCBpZiBpdCBpcyBub3Qg
-aW5saW5lZCwNCj4gb2JqdG9vbCBtYXkgd2FybiBsaWtlOg0KPiANCj4gICAgdm1saW51eC5v
-OiB3YXJuaW5nOiBvYmp0b29sOiBfX3N0YXRpY19jYWxsX3VwZGF0ZV9lYXJseSsweDJhOiBj
-YWxsIHRvIHNlcmlhbGl6ZSgpIGxlYXZlcyAubm9pbnN0ci50ZXh0IHNlY3Rpb24NCj4gDQo+
-IE1hcmsgc2VyaWFsaXplKCkgd2l0aCBfX2Fsd2F5c19pbmxpbmUgdG8gY2xlYXIgdXAgdGhl
-IHdhcm5pbmcgYW5kDQo+IHByZXZlbnQgZnV0dXJlIG9uZXMgZnJvbSBvY2N1cnJpbmcuDQo+
-IA0KPiBGaXhlczogMGVmODA0N2I3MzdkICgieDg2L3N0YXRpYy1jYWxsOiBwcm92aWRlIGEg
-d2F5IHRvIGRvIHZlcnkgZWFybHkgc3RhdGljLWNhbGwgdXBkYXRlcyIpDQo+IFJlcG9ydGVk
-LWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNvbT4NCj4gQ2xvc2VzOiBodHRw
-czovL2xvcmUua2VybmVsLm9yZy8yMDI0MTIxODE3NTYuYUp2emloMkstbGtwQGludGVsLmNv
-bS8NCj4gUmVwb3J0ZWQtYnk6IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUu
-Y29tPg0KPiBDbG9zZXM6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL1o0YlduV1lxdTFMYUQt
-SkdAZ29vZ2xlLmNvbS8NCj4gUmVwb3J0ZWQtYnk6IExpbnV4IEtlcm5lbCBGdW5jdGlvbmFs
-IFRlc3RpbmcgPGxrZnRAbGluYXJvLm9yZz4NCj4gQ2xvc2VzOiBodHRwczovL2xvcmUua2Vy
-bmVsLm9yZy9DQStHOWZZdi1BZ2VVcFAxeVBEbXk0OFQ4NjlNczgwamdVZGpud3RCTm9KbUNL
-UXZaRFFAbWFpbC5nbWFpbC5jb20vDQo+IFNpZ25lZC1vZmYtYnk6IE5hdGhhbiBDaGFuY2Vs
-bG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4NCj4gLS0tDQo+ICAgYXJjaC94ODYvaW5jbHVkZS9h
-c20vc3BlY2lhbF9pbnNucy5oIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2Vy
-dGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2lu
-Y2x1ZGUvYXNtL3NwZWNpYWxfaW5zbnMuaCBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL3NwZWNp
-YWxfaW5zbnMuaA0KPiBpbmRleCBmYWI3YzhhZjI3YTRkMDA2NDdmMmY1MmU3ZmU0ZjkxYmQ0
-MmE3MjkxLi4wM2U3YzJkNDk1NTk3NTk3YTYzNWY4MzExNmZhZmExYTk1ZWQzNTdlIDEwMDY0
-NA0KPiAtLS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9zcGVjaWFsX2luc25zLmgNCj4gKysr
-IGIvYXJjaC94ODYvaW5jbHVkZS9hc20vc3BlY2lhbF9pbnNucy5oDQo+IEBAIC0yMTEsNyAr
-MjExLDcgQEAgc3RhdGljIGlubGluZSBpbnQgd3JpdGVfdXNlcl9zaHN0a182NCh1NjQgX191
-c2VyICphZGRyLCB1NjQgdmFsKQ0KPiAgIA0KPiAgICNkZWZpbmUgbm9wKCkgYXNtIHZvbGF0
-aWxlICgibm9wIikNCj4gICANCj4gLXN0YXRpYyBpbmxpbmUgdm9pZCBzZXJpYWxpemUodm9p
-ZCkNCj4gK3N0YXRpYyBfX2Fsd2F5c19pbmxpbmUgdm9pZCBzZXJpYWxpemUodm9pZCkNCj4g
-ICB7DQo+ICAgCS8qIEluc3RydWN0aW9uIG9wY29kZSBmb3IgU0VSSUFMSVpFOyBzdXBwb3J0
-ZWQgaW4gYmludXRpbHMgPj0gMi4zNS4gKi8NCj4gICAJYXNtIHZvbGF0aWxlKCIuYnl0ZSAw
-eGYsIDB4MSwgMHhlOCIgOjo6ICJtZW1vcnkiKTsNCj4gDQo+IC0tLQ0KPiBiYXNlLWNvbW1p
-dDogMzdiYzkxNWM2YWQwZmI4YTE5MmRhZmI2YjcwNDZjNzljYWQxZjRhMg0KPiBjaGFuZ2Ut
-aWQ6IDIwMjUwMTE2LWFsd2F5cy1pbmxpbmUtc2VyaWFsaXplLWZvci1ub2luc3RyLTRlOWU5
-ODI2ZDk2Nw0KPiANCj4gQmVzdCByZWdhcmRzLA0KDQpJIGhhdmUgc2VudCB0aGUgdmVyeSBz
-YW1lIHBhdGNoIG9uIERlYy4gMTh0aCBhbHJlYWR5Lg0KDQoNCkp1ZXJnZW4NCg==
---------------TZbndA0OEsSX5WH2pS0kkfic
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+So I fixed these particular instances by hiding them when certain
+sanitizers are enabled:
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+https://gitlab.freedesktop.org/agd5f/linux/-/commit/e4479aecf6581af81bc0908575447878d2a07e01
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+However, there are still reports of the regular 2048 limit being hit
+with certain configurations such as LTO (the issue number is somewhat
+funny given the situation):
 
---------------TZbndA0OEsSX5WH2pS0kkfic--
+https://github.com/ClangBuiltLinux/linux/issues/2048
 
---------------Nmo2DBNUBS6zyDtwZNRuk0ZW--
+So I think it would be a good idea for the AMD folks to consider
+applying this patch as well.
 
---------------SVLlXjV08wpGpOkaooPRgk02
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmeJGGoFAwAAAAAACgkQsN6d1ii/Ey8A
-0wgAnTIMGS6KhcLIc8Ea/jf6p0PE2f7lcNU4rP0J3LCC4h6bkgxpIjhvk/m2w0u98v7ZJbkIsxBY
-NTBEHRbDn3fh9PVQrZrJIwFuSAfpw6vmIkCnMJ1eAPa6fct8WaozoBGl3E4s5H4SpcgB519IZ7Vi
-sybmoq1ix28amD/jriLTQ9Ua7OIznTjqCY//7cgmtU9OK1STL2Z4o9Yl4ERB7Gnq3z0nxhYcVtVa
-X0555RwZg+QaNLiq2W3LgHhBQYGl9DT1HZZATXVH/fuNrcWgu2XmDCbazTg823SKVuHQVAb9PiJZ
-M3oXVkxJKjsJ1yimdBJuOhRWeqqff+GPSNffvyN/Og==
-=DH7+
------END PGP SIGNATURE-----
-
---------------SVLlXjV08wpGpOkaooPRgk02--
+> A way to reproduce:
+> $ git checkout next-20250107
+> $ mkdir build_dir
+> $ export PATH=/tmp/llvm-19.1.6-x86_64/bin:$PATH
+> $ make LLVM=1 O=build_dir allmodconfig
+> $ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+> 
+> The way how it chose static functions to mark:
+> [0] Unset CONFIG_WERROR in build_dir/.config.
+> To get display_mode_core.o without errors.
+> 
+> [1] Get a function list called by dml_prefetch_check().
+> $ sed -n '6268,6711p' drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c \
+>   | sed -n -r 's/.*\W(\w+)\(.*/\1/p' | sort -u >/tmp/syms
+> 
+> [2] Get the non-inline function list.
+> Objdump won't show the symbols if they are inline functions.
+> 
+> $ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+> $ objdump -d build_dir/.../display_mode_core.o | \
+>   ./scripts/checkstack.pl x86_64 0 | \
+>   grep -f /tmp/syms | cut -d' ' -f2- >/tmp/orig
+> 
+> [3] Get the full function list.
+> Append "-fno-inline" to `CFLAGS_.../display_mode_core.o` in
+> drivers/gpu/drm/amd/display/dc/dml2/Makefile.
+> 
+> $ make LLVM=1 O=build_dir drivers/gpu/drm/ -j
+> $ objdump -d build_dir/.../display_mode_core.o | \
+>   ./scripts/checkstack.pl x86_64 0 | \
+>   grep -f /tmp/syms | cut -d' ' -f2- >/tmp/noinline
+> 
+> [4] Get the inline function list.
+> If a symbol only in /tmp/noinline but not in /tmp/orig, it is a good
+> candidate to mark noinline.
+> 
+> $ diff /tmp/orig /tmp/noinline
+> 
+> Chosen functions and their stack sizes:
+> CalculateBandwidthAvailableForImmediateFlip [display_mode_core.o]:144
+> CalculateExtraLatency [display_mode_core.o]:176
+> CalculateTWait [display_mode_core.o]:64
+> CalculateVActiveBandwithSupport [display_mode_core.o]:112
+> set_calculate_prefetch_schedule_params [display_mode_core.o]:48
+> 
+> CheckGlobalPrefetchAdmissibility [dml2_core_dcn4_calcs.o]:544
+> calculate_bandwidth_available [dml2_core_dcn4_calcs.o]:320
+> calculate_vactive_det_fill_latency [dml2_core_dcn4_calcs.o]:272
+> CalculateDCFCLKDeepSleep [dml2_core_dcn4_calcs.o]:208
+> CalculateODMMode [dml2_core_dcn4_calcs.o]:208
+> CalculateOutputLink [dml2_core_dcn4_calcs.o]:176
+> 
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+>  .../gpu/drm/amd/display/dc/dml2/display_mode_core.c  | 12 ++++++------
+>  .../dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c  | 12 ++++++------
+>  2 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
+> index 35bc917631ae..84a2de9a76d4 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml2/display_mode_core.c
+> @@ -1736,7 +1736,7 @@ static void CalculateBytePerPixelAndBlockSizes(
+>  #endif
+>  } // CalculateBytePerPixelAndBlockSizes
+>  
+> -static dml_float_t CalculateTWait(
+> +static noinline_for_stack dml_float_t CalculateTWait(
+>  		dml_uint_t PrefetchMode,
+>  		enum dml_use_mall_for_pstate_change_mode UseMALLForPStateChange,
+>  		dml_bool_t SynchronizeDRRDisplaysForUCLKPStateChangeFinal,
+> @@ -4458,7 +4458,7 @@ static void CalculateSwathWidth(
+>  	}
+>  } // CalculateSwathWidth
+>  
+> -static  dml_float_t CalculateExtraLatency(
+> +static noinline_for_stack dml_float_t CalculateExtraLatency(
+>  		dml_uint_t RoundTripPingLatencyCycles,
+>  		dml_uint_t ReorderingBytes,
+>  		dml_float_t DCFCLK,
+> @@ -5915,7 +5915,7 @@ static dml_uint_t DSCDelayRequirement(
+>  	return DSCDelayRequirement_val;
+>  }
+>  
+> -static dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
+> +static noinline_for_stack dml_bool_t CalculateVActiveBandwithSupport(dml_uint_t NumberOfActiveSurfaces,
+>  										dml_float_t ReturnBW,
+>  										dml_bool_t NotUrgentLatencyHiding[],
+>  										dml_float_t ReadBandwidthLuma[],
+> @@ -6019,7 +6019,7 @@ static void CalculatePrefetchBandwithSupport(
+>  #endif
+>  }
+>  
+> -static dml_float_t CalculateBandwidthAvailableForImmediateFlip(
+> +static noinline_for_stack dml_float_t CalculateBandwidthAvailableForImmediateFlip(
+>  													dml_uint_t NumberOfActiveSurfaces,
+>  													dml_float_t ReturnBW,
+>  													dml_float_t ReadBandwidthLuma[],
+> @@ -6213,7 +6213,7 @@ static dml_uint_t CalculateMaxVStartup(
+>  	return max_vstartup_lines;
+>  }
+>  
+> -static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
+> +static noinline_for_stack void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *mode_lib,
+>  						   struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params,
+>  						   dml_uint_t j,
+>  						   dml_uint_t k)
+> @@ -6265,7 +6265,7 @@ static void set_calculate_prefetch_schedule_params(struct display_mode_lib_st *m
+>  				CalculatePrefetchSchedule_params->Tno_bw = &mode_lib->ms.Tno_bw[k];
+>  }
+>  
+> -static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+> +static noinline_for_stack void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+>  {
+>  	struct dml_core_mode_support_locals_st *s = &mode_lib->scratch.dml_core_mode_support_locals;
+>  	struct CalculatePrefetchSchedule_params_st *CalculatePrefetchSchedule_params = &mode_lib->scratch.CalculatePrefetchSchedule_params;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+> index b9ec243cf9ba..7fffca67ca9d 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c
+> @@ -2778,7 +2778,7 @@ static double dml_get_return_bandwidth_available(
+>  	return return_bw_mbps;
+>  }
+>  
+> -static void calculate_bandwidth_available(
+> +static noinline_for_stack void calculate_bandwidth_available(
+>  	double avg_bandwidth_available_min[dml2_core_internal_soc_state_max],
+>  	double avg_bandwidth_available[dml2_core_internal_soc_state_max][dml2_core_internal_bw_max],
+>  	double urg_bandwidth_available_min[dml2_core_internal_soc_state_max], // min between SDP and DRAM
+> @@ -3531,7 +3531,7 @@ static void CalculateUrgentBurstFactor(
+>  
+>  }
+>  
+> -static void CalculateDCFCLKDeepSleep(
+> +static noinline_for_stack void CalculateDCFCLKDeepSleep(
+>  	const struct dml2_display_cfg *display_cfg,
+>  	unsigned int NumberOfActiveSurfaces,
+>  	unsigned int BytePerPixelY[],
+> @@ -4076,7 +4076,7 @@ static bool ValidateODMMode(enum dml2_odm_mode ODMMode,
+>  	return true;
+>  }
+>  
+> -static void CalculateODMMode(
+> +static noinline_for_stack void CalculateODMMode(
+>  	unsigned int MaximumPixelsPerLinePerDSCUnit,
+>  	unsigned int HActive,
+>  	enum dml2_output_format_class OutFormat,
+> @@ -4173,7 +4173,7 @@ static void CalculateODMMode(
+>  #endif
+>  }
+>  
+> -static void CalculateOutputLink(
+> +static noinline_for_stack void CalculateOutputLink(
+>  	struct dml2_core_internal_scratch *s,
+>  	double PHYCLK,
+>  	double PHYCLKD18,
+> @@ -5928,7 +5928,7 @@ static double calculate_impacted_Tsw(unsigned int exclude_plane_idx, unsigned in
+>  }
+>  
+>  // a global check against the aggregate effect of the per plane prefetch schedule
+> -static bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
+> +static noinline_for_stack bool CheckGlobalPrefetchAdmissibility(struct dml2_core_internal_scratch *scratch,
+>  											 struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_params *p)
+>  {
+>  	struct dml2_core_calcs_CheckGlobalPrefetchAdmissibility_locals *s = &scratch->CheckGlobalPrefetchAdmissibility_locals;
+> @@ -6941,7 +6941,7 @@ static void calculate_bytes_to_fetch_required_to_hide_latency(
+>  	}
+>  }
+>  
+> -static void calculate_vactive_det_fill_latency(
+> +static noinline_for_stack void calculate_vactive_det_fill_latency(
+>  		const struct dml2_display_cfg *display_cfg,
+>  		unsigned int num_active_planes,
+>  		unsigned int bytes_required_l[],
+> -- 
+> 2.47.1.613.gc27f4b7a9f-goog
+> 
