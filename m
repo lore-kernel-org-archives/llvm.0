@@ -1,89 +1,236 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858CD1B653C;
-	Thu, 16 Jan 2025 09:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF691D5ADD
+	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 10:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737020340; cv=none; b=Dfm7bm/sSolaWplwYzS9hXqNblAHvXNm2npdp/voystf7a3A+XWVtJQdmDNWPJiRK2hkiF802FrabB/RxvSLy09vRYayV+E2DkgvqzCo/NR53g51WG3i3G9r8zoI2neDVOqd6I88JDUicXoBp8thO0rFIPY2AEFn4ltMRBySPeQ=
+	t=1737022805; cv=none; b=qoDX1WxgIHW3ZBuv3BnyoTCRnIF8wXm2HBS8Phc+wRLmuKMWQfLf5EG6C+OMQ6VT9LQ7I7oD0KNYGuXALCOVm0ZYnei1Q+2W9yb9YbRQci/n9agg+vWaSh1sfH26+Keu1uWvoHR+vBVVmxPRVIwAo7cV34zVDAY/bBBmSgwwGQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737020340; c=relaxed/simple;
-	bh=dYyKJqHdhrwmk1YZjRBX/J3WYWm/qlv/Y88sHPXJ9Rg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ubqE9C4j3VUDjmDeJMRSQAavgWErU4qiopjQLwgwnfYInJPMc4P7WJSF3QWw+gWcbZgFU2IV5T5F+K6Llue5Y9io8UQNPUymACte3sTAIhUFTJs7dGmsR7fe5PPwoZV6iLhltB8d26Zp/ZgltjWA5bnpWfAkAU3cgId2GjSJtn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tNEt+TND; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1737022805; c=relaxed/simple;
+	bh=r/PdQZCIiaSOmdTKkSGIGRdKH8nSCZ430OLi3pjld0U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=deNo9nwHVjyQhcTUncsZRqiXnLSWvW9kvzR/UvWoUMpV/ut2IbJJ8fGXGSCfDceCIAGu/hOeVdxSZvIoVZNmIHYLnbVVP+CG1MlO3DNSio8RWfc6p/+7GUeap2Aj9sqBmakZw735cAAn/ISNUUE7eF5Lzk2RsFIY/TdX00wS86I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UyYCL7+G; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tNEt+TND"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=sp+FxjCkzTW4qc2F4mDkdN/WiXSt2JPHkUPS5ECiaJE=; b=tNEt+TNDhov73YFgV4d3QuFfxV
-	wodGVIjMSeOy/uoYu4slydOluGBThtgfGTQSUSMXUqUkBx3FZUEI/jieBTlfjTs+JrstOjNPh5ioh
-	zE9igoQMNvxowDWCDekEhektqAE29BAxX2tAZsnzMKN6Wo/KQd1SaoRbTfLD3NNtmvwP1rvdHY0I9
-	K0JYXKyMwq1Q52W6HrVWbF9QTpKEbmdf0+nMip3iVnlpCbl4AUSuSXow6ozld2psjbUfqduuxVZmL
-	7xSwg49F9U3irbLXqcyfUSVJcwrhOu6EtTR4fdt8N8h3xIt2AJJWw0SD/UoXLJCKg4ltNYstPQ1OE
-	LwIawK4Q==;
-Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tYMKu-0000000BO6o-0Ees;
-	Thu, 16 Jan 2025 09:38:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2920A300777; Thu, 16 Jan 2025 10:38:47 +0100 (CET)
-Date: Thu, 16 Jan 2025 10:38:47 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Julien Thierry <jthierry@redhat.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Raphael Gault <raphael.gault@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v5 00/15] powerpc/objtool: uaccess validation for PPC32
- (v5)
-Message-ID: <20250116093847.GH8362@noisy.programming.kicks-ass.net>
-References: <cover.1736955567.git.christophe.leroy@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UyYCL7+G"
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-85c4c9349b3so137032241.3
+        for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 02:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737022802; x=1737627602; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wWTcprBJAJma4CuHivwxMfhBEdMs6vyqa3RMxgQxWEc=;
+        b=UyYCL7+GXpWDDV0EaAitazbddjkTH6F1l0YB91ve6hien9CUNeDgYWM5JUK2Mefxht
+         hMJSNPxXtDVntkp9FCwWcT8OywbASjvhMOvSaqLR5TCnzL7JqSVJaqa0bJWxUmip7Wam
+         p5/syr7h2UtNdp+ehSb67OApg9J+SggjuI+KihsEshXMDZ07TCxcz/hQsvQHI++j1WuY
+         L1xcu14S8td6TAAysJD1oEemMd8M2V305KaWazQ7WS+GxkxX1kRTQKvXZddT9G4F47YQ
+         rkFv35Bg1E/QOUK9N9pnQMUJ99FR/9Loi4QxNcuCRD6JLLiufvVVPONsXkdJsAA/COSZ
+         WoLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737022802; x=1737627602;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wWTcprBJAJma4CuHivwxMfhBEdMs6vyqa3RMxgQxWEc=;
+        b=paTNLbm0O/02TfB8KxsE1cDiypr89fHOAcmqY3qNs946HsZgCC8nv6V7NqsbAilnsV
+         8i3k40rCOHuAkOwDmfC+OrImOAklGr+kJ2xpO8QsXR7h8/XLPDs8DMiXj2w86L8uFRKM
+         HRuxYwkQwHMf+a3BAFbMEH4CUTWAEYTza4PDXH2gbSQ+F1BBqkuDsPS9HErYfoM0gtaa
+         2fLlkfnnyANAGFC2k3fcfXJOsi3pqPryKykcVESI2ciluO32Qj3rWS/cpOBjO00cpfm1
+         1jTDALBzNNyxCEA75B9JrVcO0ZSACZHCR3lsg/NtAQrfjtpPQ+Vr0yjBc8Bysm68s7Ws
+         OxGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVi7MjAC6Fg0pctwifB9pv6ihs6Imo26GzAOnVbXjvVMbJ48bzIA4x3lo17Zs9W3cV6D5en@lists.linux.dev
+X-Gm-Message-State: AOJu0YyXvHeJSuYA1dFFaR9Wn9vRiutCIqQwne71d8W/uR/XCIqaoogr
+	lyz3xwnRfJzb1zJdlUmVwRpRYRBLqy5dSrTSAg6ifYYsuZ4V7Pjv/aGniD856NNCtKOduLWViZR
+	BcjINtm2kKMKTaErzwYUc+IwEooYfV7hM38z4jA==
+X-Gm-Gg: ASbGncvvEqJmHwrAufu6JCHQMIrmGuc62KaHQbli+A0gdhurYGVFA1IhWYrlF4sq3aD
+	lwuWIAc+4jrrLrvZXcJBJks2V/7PIrbZMD7UFHos=
+X-Google-Smtp-Source: AGHT+IErC7T/bZRIDZPFx3j4uL/0qHL4VIXPJviQj8dD5wqQFuUWCOuFA8M5C697TCUDkU1kNzeILJe38Krp0m8mcUw=
+X-Received: by 2002:a05:6102:290f:b0:4b2:5d63:a0f3 with SMTP id
+ ada2fe7eead31-4b3d0f2d89cmr27621975137.15.1737022802183; Thu, 16 Jan 2025
+ 02:20:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1736955567.git.christophe.leroy@csgroup.eu>
+References: <20250115103606.357764746@linuxfoundation.org>
+In-Reply-To: <20250115103606.357764746@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 16 Jan 2025 15:49:51 +0530
+X-Gm-Features: AbW1kvYgOTGuVDKU-uEsiPEWyUP5JKx5iTOKmdYD8p90NPG3Azs5Y5IdtGW2ALU
+Message-ID: <CA+G9fYv-AgeUpP1yPDmy48T869Ms80jgUdjnwtBNoJmCKQvZDQ@mail.gmail.com>
+Subject: Re: [PATCH 6.12 000/189] 6.12.10-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2025 at 11:42:40PM +0100, Christophe Leroy wrote:
-> Christophe Leroy (15):
->   objtool: Fix generic annotation infrastructure cross build
->   objtool: Move back misplaced comment
->   objtool: Allow an architecture to disable objtool on ASM files
->   objtool: Fix JUMP_ENTRY_SIZE for bi-arch like powerpc
->   objtool: Add INSN_RETURN_CONDITIONAL
->   objtool: Add support for relative switch tables
->   objtool: Merge mark_func_jump_tables() and add_func_jump_tables()
->   objtool: Track general purpose register used for switch table base
->   objtool: Find end of switch table directly
->   objtool: When looking for switch tables also follow conditional and
->     dynamic jumps
->   objtool: .rodata.cst{2/4/8/16} are not switch tables
->   objtool: Add support for more complex UACCESS control
->   objtool: Prepare noreturns.h for more architectures
->   powerpc/bug: Annotate reachable after warning trap
->   powerpc: Implement UACCESS validation on PPC32
+On Wed, 15 Jan 2025 at 16:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.12.10 release.
+> There are 189 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 17 Jan 2025 10:34:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.12.10-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.12.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This mostly looks okay to me. You have a tendency to violate the reverse
-xmas tree for variables thing, but meh.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-I would like Josh to have a hard look at this though, jump tables are
-his thing :-)
+NOTE:
+---
+The following build warnings noticed on x86
+vmlinux.o: warning: objtool: __static_call_update_early+0x33: call to
+serialize() leaves .noinstr.text section
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.12.10-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git commit: d056ad259f16555e7fe0d129820d01fa6b6c468c
+* git describe: v6.12.9-190-gd056ad259f16
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.12.y/build/v6.12=
+.9-190-gd056ad259f16
+
+## Test Regressions (compared to v6.12-4-g11741096a22c)
+
+## Metric Regressions (compared to v6.12-4-g11741096a22c)
+* x86_64, build
+  - clang-19-x86_64_defconfig-warnings
+    -- https://storage.tuxsuite.com/public/linaro/lkft/builds/2rf9vPfX8BaAN=
+y9mq6s2tWqaVJ1/
+
+## Test Fixes (compared to v6.12-4-g11741096a22c)
+
+## Metric Fixes (compared to v6.12-4-g11741096a22c)
+
+## Test result summary
+total: 97783, pass: 78194, fail: 4177, skip: 15342, xfail: 70
+
+## Build Summary
+* arc: 6 total, 5 passed, 1 failed
+* arm: 143 total, 137 passed, 6 failed
+* arm64: 58 total, 56 passed, 2 failed
+* i386: 22 total, 19 passed, 3 failed
+* mips: 38 total, 33 passed, 5 failed
+* parisc: 5 total, 3 passed, 2 failed
+* powerpc: 44 total, 40 passed, 4 failed
+* riscv: 27 total, 24 passed, 3 failed
+* s390: 26 total, 22 passed, 4 failed
+* sh: 6 total, 5 passed, 1 failed
+* sparc: 5 total, 3 passed, 2 failed
+* x86_64: 50 total, 49 passed, 1 failed
+
+## Test suites summary
+* boot
+* commands
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-filesystems-epoll
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-mptcp
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-rust
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-x86
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-build-clang
+* log-parser-build-gcc
+* log-parser-test
+* ltp-capability
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
+
+--
+Linaro LKFT
+https://lkft.linaro.org
