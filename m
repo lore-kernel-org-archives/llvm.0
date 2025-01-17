@@ -1,64 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DAC71750;
-	Fri, 17 Jan 2025 15:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603B919F438;
+	Fri, 17 Jan 2025 17:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737127864; cv=none; b=GSlggoF2gnYZDeVU04dd5gFVzbCYEiGJuZ/V4sTI1wxHvTqURpVB1e3i1w7XoCu4dHGAxxZUzc0vrBThxomkaefBkWUpKjpd2vgfbIm8ZzzWbbJGeJvJiBAiYDNcLRL2MHDsr1L9UWMttv4xvWKzi4DtH5+oUUHedhIN7Il6gJo=
+	t=1737136042; cv=none; b=Kw0lZ9n1HWF97ONTw4ALK0krhK+Ww4oXRertwtHO4pJmzuRNbCuuxe6bUd449ZqSKAIYpZuZOyKNI7jEUFfHt06EUp5/ABD3QxBjR8if+FBczu8NTcZXyNwnTR3Mrls4R/I9UcN7asdiXuNbZbBf3h/5sLmJg1kTiiX3DNow6fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737127864; c=relaxed/simple;
-	bh=Ct2LBolJssi12orV1vqNr8g5NmfBpVvpwl8vuoKzVU8=;
+	s=arc-20240116; t=1737136042; c=relaxed/simple;
+	bh=eRP1jBCa4I9W05NTuQlOCzeDAgnWgcjSg5ryuvhjbqw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fv1cS8EL6Ewr0um8ONqzYpJgIHMuN7s0XdGnkVBzkbiR0J5Ej0pLhmUvq6Jpm32E64hbRRB5RnvCDTTP1rlONmwKjXXSgCyn1+fYaKHnAFhv0ZXPYmhu/tpoZfvDe+eMxKZfUiXEcPripQL/hUEmrTmcsAhbuhVWUH+EyKTcyeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgb9GYza; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=oHpAetEJ9/aVkBdDrB5L9i6NyuJJYrpWIOX3xtfsapAG3BRQnxfwHE9oJUJ1iHbuW6XIsco7yiZCrcQLoVO30WbDv6zo26dGMLY50UtGiqQPGx14knILNM5wYfOO/DiGr0+unkQ5LiHIp/91esQDmCEGu2INSLpvIKUXuA2RIes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ihuj+vLT; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgb9GYza"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ihuj+vLT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737127862; x=1768663862;
+  t=1737136039; x=1768672039;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ct2LBolJssi12orV1vqNr8g5NmfBpVvpwl8vuoKzVU8=;
-  b=dgb9GYzatESFgYI9fNbO8knXHQtfSPerDUwqKzofZzkqIbK9R1fN5qBD
-   oCev0fa4q9AEW0ZazyvydMxyF78QsXPVWZKiVZxOTedg/gLfjIAOM2yth
-   R/PfHzSBIm0wou+afHc2RmQj5NAOM0qP0IlLfFopD4OC+6D9dBkknWqB5
-   pjO83+JIsdwRPw6olCi7cLOkL3QRszqIttvf0lOm5/290qncp2YHjT/mM
-   s3hHMRWcMU9BtkczlMjLBbG6+7C+JSMNc+CHElJqF7jUJ51ROAjhTZBK8
-   GlkcyJP1WNQspuvmy4W9nU85intD5Dj1p2xLTYsGeWPcLx4vwGEwmwTcr
-   Q==;
-X-CSE-ConnectionGUID: n9Xqj+1cSl200wJ0eGiIhA==
-X-CSE-MsgGUID: MV8yFoNYRNWNEAVLrEHINg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37584361"
+  bh=eRP1jBCa4I9W05NTuQlOCzeDAgnWgcjSg5ryuvhjbqw=;
+  b=Ihuj+vLTVLpkH9urC19jC5xYepUWZyvo3PqszTxNtaZ4/sqAss1RUR5o
+   mURSpSOiOOTElTrYBp5tlyNSpmVQdBHpyTZQ/ORIqbjusP8sAb67YNKgr
+   5LjFPtzByitUdVNcQ6xnfCMD+9AYrMl2dwm9HtE3XjjU89Eu0T0olWqtA
+   b8jW0PLKJftj5yN6Oi/cOiLHpBnh84bkclh9PjkFTPvXzyx5PQ0cbeA4X
+   IKaCTKFppX/GW32DtIincFA6Jetxm0h8krxwDfEKpyR8tILIU677JAzpt
+   fnnhk4GmFFROkzsVNl+lGmVmAt+MG0MBiLPpEGarhM2tF5n0CTTwGMrhb
+   A==;
+X-CSE-ConnectionGUID: uCwRqBHCRiSvsamU43Sc1g==
+X-CSE-MsgGUID: Hkp0lhm7T9usjhjEirfd/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="36786666"
 X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="37584361"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 07:31:02 -0800
-X-CSE-ConnectionGUID: leJajOJ/RsS1s8BvVNvDSw==
-X-CSE-MsgGUID: WvXFisaaTFKfscJp/ddSng==
+   d="scan'208";a="36786666"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 09:47:18 -0800
+X-CSE-ConnectionGUID: B0+WehJbS1GfiAMDiJFPoQ==
+X-CSE-MsgGUID: xcYSeKIhR6GOgvOePao0ug==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110940513"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="105912316"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 17 Jan 2025 07:30:56 -0800
+  by orviesa006.jf.intel.com with ESMTP; 17 Jan 2025 09:47:15 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYoJE-000TP5-0d;
-	Fri, 17 Jan 2025 15:30:56 +0000
-Date: Fri, 17 Jan 2025 23:30:47 +0800
+	id 1tYqR6-000TXb-2I;
+	Fri, 17 Jan 2025 17:47:12 +0000
+Date: Sat, 18 Jan 2025 01:46:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>,
-	wei.fang@nxp.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, imx@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
-Subject: Re: [PATCH net-next] net: fec: implement TSO descriptor cleanup
-Message-ID: <202501172328.IoOTB8n0-lkp@intel.com>
-References: <20250116130920.30984-1-dheeraj.linuxdev@gmail.com>
+To: Shree Ramamoorthy <s-ramamoorthy@ti.com>, aaro.koskinen@iki.fi,
+	andreas@kemnade.info, khilman@baylibre.com, rogerq@kernel.org,
+	tony@atomide.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, m-leonard@ti.com,
+	praneeth@ti.com, christophe.jaillet@wanadoo.fr
+Subject: Re: [PATCH v3 1/3] gpio: tps65215: Add TPS65215 to
+ platform_device_id table
+Message-ID: <202501180129.Eu47rQjQ-lkp@intel.com>
+References: <20250113225530.124213-2-s-ramamoorthy@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,155 +68,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250116130920.30984-1-dheeraj.linuxdev@gmail.com>
+In-Reply-To: <20250113225530.124213-2-s-ramamoorthy@ti.com>
 
-Hi Dheeraj,
+Hi Shree,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
+[auto build test ERROR on next-20250113]
+[also build test ERROR on linus/master v6.13-rc7]
+[cannot apply to tmlind-omap/for-next v6.13-rc7 v6.13-rc6 v6.13-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dheeraj-Reddy-Jonnalagadda/net-fec-implement-TSO-descriptor-cleanup/20250116-211046
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250116130920.30984-1-dheeraj.linuxdev%40gmail.com
-patch subject: [PATCH net-next] net: fec: implement TSO descriptor cleanup
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501172328.IoOTB8n0-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shree-Ramamoorthy/gpio-tps65215-Add-TPS65215-to-platform_device_id-table/20250114-065813
+base:   next-20250113
+patch link:    https://lore.kernel.org/r/20250113225530.124213-2-s-ramamoorthy%40ti.com
+patch subject: [PATCH v3 1/3] gpio: tps65215: Add TPS65215 to platform_device_id table
+config: i386-randconfig-004-20250117 (https://download.01.org/0day-ci/archive/20250118/202501180129.Eu47rQjQ-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501172328.IoOTB8n0-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180129.Eu47rQjQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501172328.IoOTB8n0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180129.Eu47rQjQ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/freescale/fec_main.c:25:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/freescale/fec_main.c:917:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     917 |         struct bufdesc *tmp_bdp = txq->bd.cur;
-         |         ^
-   4 warnings generated.
+>> drivers/gpio/gpio-tps65219.c:173:21: error: use of undeclared identifier 'TPS65215'
+     173 |         { "tps65215-gpio", TPS65215 },
+         |                            ^
+>> drivers/gpio/gpio-tps65219.c:177:1: error: definition of variable with array type needs an explicit size or an initializer
+     177 | MODULE_DEVICE_TABLE(platform, tps6521x_gpio_id_table);
+         | ^
+   include/linux/module.h:250:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
+     250 | extern typeof(name) __mod_device_table__##type##__##name                \
+         |                     ^
+   <scratch space>:249:1: note: expanded from here
+     249 | __mod_device_table__platform__tps6521x_gpio_id_table
+         | ^
+   2 errors generated.
 
 
-vim +917 drivers/net/ethernet/freescale/fec_main.c
+vim +/TPS65215 +173 drivers/gpio/gpio-tps65219.c
 
-   835	
-   836	static int fec_enet_txq_submit_tso(struct fec_enet_priv_tx_q *txq,
-   837					   struct sk_buff *skb,
-   838					   struct net_device *ndev)
-   839	{
-   840		struct fec_enet_private *fep = netdev_priv(ndev);
-   841		int hdr_len, total_len, data_left;
-   842		struct bufdesc *bdp = txq->bd.cur;
-   843		struct tso_t tso;
-   844		unsigned int index = 0;
-   845		int ret;
-   846	
-   847		if (tso_count_descs(skb) >= fec_enet_get_free_txdesc_num(txq)) {
-   848			dev_kfree_skb_any(skb);
-   849			if (net_ratelimit())
-   850				netdev_err(ndev, "NOT enough BD for TSO!\n");
-   851			return NETDEV_TX_OK;
-   852		}
-   853	
-   854		/* Protocol checksum off-load for TCP and UDP. */
-   855		if (fec_enet_clear_csum(skb, ndev)) {
-   856			dev_kfree_skb_any(skb);
-   857			return NETDEV_TX_OK;
-   858		}
-   859	
-   860		/* Initialize the TSO handler, and prepare the first payload */
-   861		hdr_len = tso_start(skb, &tso);
-   862	
-   863		total_len = skb->len - hdr_len;
-   864		while (total_len > 0) {
-   865			char *hdr;
-   866	
-   867			index = fec_enet_get_bd_index(bdp, &txq->bd);
-   868			data_left = min_t(int, skb_shinfo(skb)->gso_size, total_len);
-   869			total_len -= data_left;
-   870	
-   871			/* prepare packet headers: MAC + IP + TCP */
-   872			hdr = txq->tso_hdrs + index * TSO_HEADER_SIZE;
-   873			tso_build_hdr(skb, hdr, &tso, data_left, total_len == 0);
-   874			ret = fec_enet_txq_put_hdr_tso(txq, skb, ndev, bdp, index);
-   875			if (ret)
-   876				goto err_release;
-   877	
-   878			while (data_left > 0) {
-   879				int size;
-   880	
-   881				size = min_t(int, tso.size, data_left);
-   882				bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
-   883				index = fec_enet_get_bd_index(bdp, &txq->bd);
-   884				ret = fec_enet_txq_put_data_tso(txq, skb, ndev,
-   885								bdp, index,
-   886								tso.data, size,
-   887								size == data_left,
-   888								total_len == 0);
-   889				if (ret)
-   890					goto err_release;
-   891	
-   892				data_left -= size;
-   893				tso_build_data(skb, &tso, size);
-   894			}
-   895	
-   896			bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
-   897		}
-   898	
-   899		/* Save skb pointer */
-   900		txq->tx_buf[index].buf_p = skb;
-   901	
-   902		skb_tx_timestamp(skb);
-   903		txq->bd.cur = bdp;
-   904	
-   905		/* Trigger transmission start */
-   906		if (!(fep->quirks & FEC_QUIRK_ERR007885) ||
-   907		    !readl(txq->bd.reg_desc_active) ||
-   908		    !readl(txq->bd.reg_desc_active) ||
-   909		    !readl(txq->bd.reg_desc_active) ||
-   910		    !readl(txq->bd.reg_desc_active))
-   911			writel(0, txq->bd.reg_desc_active);
-   912	
-   913		return 0;
-   914	
-   915	err_release:
-   916		/* Release all used data descriptors for TSO */
- > 917		struct bufdesc *tmp_bdp = txq->bd.cur;
-   918	
-   919		while (tmp_bdp != bdp) {
-   920			tmp_bdp->cbd_sc = 0;
-   921			tmp_bdp->cbd_bufaddr = 0;
-   922			tmp_bdp->cbd_datlen = 0;
-   923			tmp_bdp = fec_enet_get_nextdesc(tmp_bdp, &txq->bd);
-   924		}
-   925	
-   926		dev_kfree_skb_any(skb);
-   927	
-   928		return ret;
-   929	}
-   930	
+   171	
+   172	static const struct platform_device_id tps6521x_gpio_id_table[] = {
+ > 173		{ "tps65215-gpio", TPS65215 },
+   174		{ "tps65219-gpio", TPS65219 },
+   175		{ }
+   176	};
+ > 177	MODULE_DEVICE_TABLE(platform, tps6521x_gpio_id_table);
+   178	
 
 -- 
 0-DAY CI Kernel Test Service
