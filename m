@@ -1,59 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB9C25A63A;
-	Fri, 17 Jan 2025 06:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8421F78E0;
+	Fri, 17 Jan 2025 07:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737094438; cv=none; b=I+SI+sUFYqM83NbQ8KBnPK45NqPrr5mdaJsTDFAb1YiT/Y7722Ce7sq27FRHwPs50HNS7/k9P0OCPZNZQeE1M/XuA1zhdNi3awswiwsvbHCTWL1HJDcDnKFataV4gGUYmnL0r7nwciM7b0ZOvEYTeGr19tHYtcRvB/ay6L9Ts5s=
+	t=1737097690; cv=none; b=o2/hJB/UeqD9LCRweHkXe+gD4sUV0Qn5Eg6G1o93SdKrhTJrc5yvhbgHfnAIC64hdZBBH2mutBx7q34wwmneoqMmgWmdNISuJbnIAGkzxvdTWgg/SYo8E4pzGgNeVF6h93hThIh8rTl1cT377Bqyq9uZ1V8JG9C/bS556oNBiCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737094438; c=relaxed/simple;
-	bh=BiEyDaFX463Z0lzGRKp+wfcfAnK8tEANm6dcp2hGIeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NFoTRxyA5ymiIwbkF/0Hi9ecYrpcK6gVWnx9SylGwPZvSlx/F1qJEtqTHMxFK2rqyEPAFNnMW8IRwg6uNgXemKc2K11mqotbrxCtIQRFZ5jFlL+8aQOvwQwQXN4CuVXlxK+SsCJZKexZjmSEvgCUHVbfWGQLSJJpqfP96KG4ef4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW5utrLY; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1737097690; c=relaxed/simple;
+	bh=A9YabGAz9F0I03ZVr6BHi8PnA+DJl2DrzQAK/6IyhOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZKkd596SYJ910K7ZF1+8lRAxsaVm1+VExj3MufZM1fdPUVz7mNhQcmHJOnJ45LVkWvJgdAH8noW+hh0EmrC2usMW7mqn1P9zTwfBxILzB4NqUL6y1I5eYI8RznJySNHwbhnxYtiaxNmEaY5GrniX9CmT8qTS3MWYq9K7PlAzxZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BwP9QT76; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW5utrLY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BwP9QT76"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737094437; x=1768630437;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BiEyDaFX463Z0lzGRKp+wfcfAnK8tEANm6dcp2hGIeM=;
-  b=NW5utrLY9rObzVjOFGTP72YK43hNVvG8JlfT/ePX/LY8QOXpr3Cr9pqZ
-   COioLBuf3FCJdEuTLjSUkQtKkKmV/XT8AMhMpymuI5PxJDtneGWcFYm2w
-   ko5nVmU5LnsJRoH0Oig2M4BAL2MsW+LNASc3sI3jpNJnQwBzxb0giQk/L
-   H+piBstHhwJRa8qWqyEF62BxVJ+YtkjXYKkhF2InE8WewnMYeHnYB7vaU
-   7D0C1WQLzcROQaX2vK00b6M+eqcMxQw/1a7Y9AO74Ddj+CK/cuEOL8iX2
-   ocY2govq7oCoNd1mPJMpawqlnWH8TTqI9dzliQ1Fr/o6mH2+GaYDpWetA
-   Q==;
-X-CSE-ConnectionGUID: fzH+akprTtKN2N8etUOrVQ==
-X-CSE-MsgGUID: CKMWcgRqT+SImM82zA9a9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="48933779"
+  t=1737097688; x=1768633688;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=A9YabGAz9F0I03ZVr6BHi8PnA+DJl2DrzQAK/6IyhOU=;
+  b=BwP9QT76Xs6CRbZVqP0E30b1JkHpI+4Qf7tItzCj/SrNBANnC+n6MkBo
+   Q16hB4gIlZK4FADH9xudEuzck3aRN0TfbtLdeFx+h6uo/VBsdaSgRgkd7
+   OQC3N+RDO2g/0XlJg0umQALnwSTRTCzn1OZl1feTrToYgDk+7aLOb01NJ
+   kbI3ovjCiWwnfFVUicB4wkHyEU/UKXfxlMTqzFyiKxgYPztccw0jqNb3c
+   y/vZu8oe6f9sF2eWlEfykUCebIti6E9PtMpAFXlEjeLuGeh5TmMnIE03T
+   Q57lWztza/e0BZTpLEWrKHzDusVKAgnOh/CFTAXVr45YihxRScar4tMqb
+   g==;
+X-CSE-ConnectionGUID: 44Db83R6QICJwiSaLirHQw==
+X-CSE-MsgGUID: rQiOmRgkQR6cJ75VNz/xKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="48937465"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="48933779"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 22:13:56 -0800
-X-CSE-ConnectionGUID: vs4eNFQ5Qu+3HgPHLwSz+A==
-X-CSE-MsgGUID: undcwHGKS9SXKqH/EtU9GA==
+   d="scan'208";a="48937465"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 23:08:07 -0800
+X-CSE-ConnectionGUID: vljCoSYjS7yxeDj8iRCbgg==
+X-CSE-MsgGUID: zlF27OjpQf6rVjKY1e3N5A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
-   d="scan'208";a="106263523"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="136604791"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Jan 2025 22:13:55 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 16 Jan 2025 23:08:03 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYfc9-000Spt-1I;
-	Fri, 17 Jan 2025 06:13:53 +0000
-Date: Fri, 17 Jan 2025 14:13:44 +0800
+	id 1tYgSW-000Stx-0B;
+	Fri, 17 Jan 2025 07:08:00 +0000
+Date: Fri, 17 Jan 2025 15:07:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-01-16-2 7/23]
- sound/soc/generic/audio-graph-card2.c:1013:4: error: cannot jump from this
- goto statement to its label
-Message-ID: <202501171455.ZDrGYjE5-lkp@intel.com>
+To: Ruidong Tian <tianruidong@linux.alibaba.com>, catalin.marinas@arm.com,
+	will@kernel.org, lpieralisi@kernel.org, guohanjun@huawei.com,
+	sudeep.holla@arm.com, xueshuai@linux.alibaba.com,
+	baolin.wang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
+	bp@alien8.de, yazen.ghannam@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v3 3/5] RAS/AEST: Introduce AEST inject interface to test
+ AEST driver
+Message-ID: <202501171406.o7oztilo-lkp@intel.com>
+References: <20250115084228.107573-4-tianruidong@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,126 +70,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250115084228.107573-4-tianruidong@linux.alibaba.com>
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2025-01-16-2
-head:   e3977d58d39b9fd3d4f04615aa580d4fa702aa0e
-commit: 08af04b193d94a1cbda7863d699552bd674dacd2 [7/23] ASoC: audio-graph-card2: use snd_soc_ret()
-config: i386-randconfig-013-20250117 (https://download.01.org/0day-ci/archive/20250117/202501171455.ZDrGYjE5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171455.ZDrGYjE5-lkp@intel.com/reproduce)
+Hi Ruidong,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge arm64/for-next/core ras/edac-for-next linus/master tip/smp/core v6.13-rc7 next-20250116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ruidong-Tian/ACPI-RAS-AEST-Initial-AEST-driver/20250115-164601
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250115084228.107573-4-tianruidong%40linux.alibaba.com
+patch subject: [PATCH v3 3/5] RAS/AEST: Introduce AEST inject interface to test AEST driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501171406.o7oztilo-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171406.o7oztilo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501171455.ZDrGYjE5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501171406.o7oztilo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/generic/audio-graph-card2.c:1013:4: error: cannot jump from this goto statement to its label
-    1013 |                         goto end;
-         |                         ^
-   sound/soc/generic/audio-graph-card2.c:1030:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1030 |         struct device_node *codec1_port __free(device_node) = of_graph_get_remote_port(ep1);
-         |                             ^
-   sound/soc/generic/audio-graph-card2.c:1029:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1029 |         struct device_node *codec0_port __free(device_node) = of_graph_get_remote_port(ep0);
-         |                             ^
-   sound/soc/generic/audio-graph-card2.c:1027:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1027 |         struct device_node *ep1 __free(device_node) = of_graph_get_next_port_endpoint(port1, NULL);
-         |                             ^
-   sound/soc/generic/audio-graph-card2.c:1026:22: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1026 |         struct device_node *ep0 __free(device_node) = of_graph_get_next_port_endpoint(port0, NULL);
-         |                             ^
+>> drivers/ras/aest/aest-core.c:280:13: error: static declaration of 'aest_proc_record' follows non-static declaration
+     280 | static void aest_proc_record(struct aest_record *record, void *data)
+         |             ^
+   drivers/ras/aest/aest.h:338:6: note: previous declaration is here
+     338 | void aest_proc_record(struct aest_record *record, void *data);
+         |      ^
    1 error generated.
 
 
-vim +1013 sound/soc/generic/audio-graph-card2.c
+vim +/aest_proc_record +280 drivers/ras/aest/aest-core.c
 
-   969	
-   970	int audio_graph2_link_c2c(struct simple_util_priv *priv,
-   971				  struct device_node *lnk,
-   972				  struct link_info *li)
-   973	{
-   974		struct snd_soc_dai_link *dai_link = simple_priv_to_link(priv, li->link);
-   975		struct device_node *port0 = lnk;
-   976		struct device_node *ports __free(device_node) = port_to_ports(port0);
-   977		struct device_node *port1 __free(device_node) = of_graph_get_next_port(ports, port0);
-   978		u32 val = 0;
-   979		int ret = -ENOMEM;
-   980	
-   981		/*
-   982		 * codec2codec {
-   983		 *	ports {
-   984		 *		rate = <48000>;
-   985		 * =>	lnk:	port@0 { c2c0_ep: { ... = codec0_ep; }; };
-   986		 *		port@1 { c2c1_ep: { ... = codec1_ep; }; };
-   987		 *	};
-   988		 * };
-   989		 *
-   990		 * Codec {
-   991		 *	ports {
-   992		 *		port@0 { codec0_ep: ... }; };
-   993		 *		port@1 { codec1_ep: ... }; };
-   994		 *	};
-   995		 * };
-   996		 */
-   997	
-   998		/*
-   999		 * Card2 can use original Codec2Codec settings if DT has.
-  1000		 * It will use default settings if no settings on DT.
-  1001		 * see
-  1002		 *	simple_util_init_for_codec2codec()
-  1003		 *
-  1004		 * Add more settings here if needed
-  1005		 */
-  1006		of_property_read_u32(ports, "rate", &val);
-  1007		if (val) {
-  1008			struct device *dev = simple_priv_to_dev(priv);
-  1009			struct snd_soc_pcm_stream *c2c_conf;
-  1010	
-  1011			c2c_conf = devm_kzalloc(dev, sizeof(*c2c_conf), GFP_KERNEL);
-  1012			if (!c2c_conf)
-> 1013				goto end;
-  1014	
-  1015			c2c_conf->formats	= SNDRV_PCM_FMTBIT_S32_LE; /* update ME */
-  1016			c2c_conf->rates		= SNDRV_PCM_RATE_8000_384000;
-  1017			c2c_conf->rate_min	=
-  1018			c2c_conf->rate_max	= val;
-  1019			c2c_conf->channels_min	=
-  1020			c2c_conf->channels_max	= 2; /* update ME */
-  1021	
-  1022			dai_link->c2c_params		= c2c_conf;
-  1023			dai_link->num_c2c_params	= 1;
-  1024		}
-  1025	
-  1026		struct device_node *ep0 __free(device_node) = of_graph_get_next_port_endpoint(port0, NULL);
-  1027		struct device_node *ep1 __free(device_node) = of_graph_get_next_port_endpoint(port1, NULL);
-  1028	
-  1029		struct device_node *codec0_port __free(device_node) = of_graph_get_remote_port(ep0);
-  1030		struct device_node *codec1_port __free(device_node) = of_graph_get_remote_port(ep1);
-  1031	
-  1032		/*
-  1033		 * call Codec first.
-  1034		 * see
-  1035		 *	__graph_parse_node() :: DAI Naming
-  1036		 */
-  1037		ret = graph_parse_node(priv, GRAPH_C2C, codec1_port, li, 0);
-  1038		if (ret < 0)
-  1039			goto end;
-  1040	
-  1041		/*
-  1042		 * call CPU, and set DAI Name
-  1043		 */
-  1044		ret = graph_parse_node(priv, GRAPH_C2C, codec0_port, li, 1);
-  1045		if (ret < 0)
-  1046			goto end;
-  1047	
-  1048		graph_link_init(priv, lnk, codec0_port, codec1_port, li, 1);
-  1049	end:
-  1050		return graph_ret(priv, ret);
-  1051	}
-  1052	EXPORT_SYMBOL_GPL(audio_graph2_link_c2c);
-  1053	
+b6c745ae1213b2 Ruidong Tian 2025-01-15  279  
+b6c745ae1213b2 Ruidong Tian 2025-01-15 @280  static void aest_proc_record(struct aest_record *record, void *data)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  281  {
+b6c745ae1213b2 Ruidong Tian 2025-01-15  282  	struct ras_ext_regs regs = {0};
+b6c745ae1213b2 Ruidong Tian 2025-01-15  283  	int *count = data;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  284  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  285  	regs.err_status = record_read(record, ERXSTATUS);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  286  	if (!(regs.err_status & ERR_STATUS_V))
+b6c745ae1213b2 Ruidong Tian 2025-01-15  287  		return;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  288  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  289  	(*count)++;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  290  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  291  	if (regs.err_status & ERR_STATUS_AV)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  292  		regs.err_addr = record_read(record, ERXADDR);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  293  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  294  	regs.err_fr = record->fr;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  295  	regs.err_ctlr = record_read(record, ERXCTLR);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  296  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  297  	if (regs.err_status & ERR_STATUS_MV) {
+b6c745ae1213b2 Ruidong Tian 2025-01-15  298  		regs.err_misc[0] = record_read(record, ERXMISC0);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  299  		regs.err_misc[1] = record_read(record, ERXMISC1);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  300  		if (record->node->version >= ID_AA64PFR0_EL1_RAS_V1P1) {
+b6c745ae1213b2 Ruidong Tian 2025-01-15  301  			regs.err_misc[2] = record_read(record, ERXMISC2);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  302  			regs.err_misc[3] = record_read(record, ERXMISC3);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  303  		}
+b6c745ae1213b2 Ruidong Tian 2025-01-15  304  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  305  		if (record->node->info->interface_hdr->flags &
+b6c745ae1213b2 Ruidong Tian 2025-01-15  306  			AEST_XFACE_FLAG_CLEAR_MISC) {
+b6c745ae1213b2 Ruidong Tian 2025-01-15  307  			record_write(record, ERXMISC0, 0);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  308  			record_write(record, ERXMISC1, 0);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  309  			if (record->node->version >= ID_AA64PFR0_EL1_RAS_V1P1) {
+b6c745ae1213b2 Ruidong Tian 2025-01-15  310  				record_write(record, ERXMISC2, 0);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  311  				record_write(record, ERXMISC3, 0);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  312  			}
+b6c745ae1213b2 Ruidong Tian 2025-01-15  313  		/* ce count is 0 if record do not support ce */
+b6c745ae1213b2 Ruidong Tian 2025-01-15  314  		} else if (record->ce.count > 0)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  315  			record_write(record, ERXMISC0, record->ce.reg_val);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  316  	}
+b6c745ae1213b2 Ruidong Tian 2025-01-15  317  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  318  	/* panic if unrecoverable and uncontainable error encountered */
+b6c745ae1213b2 Ruidong Tian 2025-01-15  319  	if ((regs.err_status & ERR_STATUS_UE) &&
+b6c745ae1213b2 Ruidong Tian 2025-01-15  320  		(regs.err_status & ERR_STATUS_UET) > ERR_STATUS_UET_UEU)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  321  		aest_panic(record, &regs, "AEST: unrecoverable error encountered");
+b6c745ae1213b2 Ruidong Tian 2025-01-15  322  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  323  	aest_log(record, &regs);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  324  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  325  	/* Write-one-to-clear the bits we've seen */
+b6c745ae1213b2 Ruidong Tian 2025-01-15  326  	regs.err_status &= ERR_STATUS_W1TC;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  327  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  328  	/* Multi bit filed need to write all-ones to clear. */
+b6c745ae1213b2 Ruidong Tian 2025-01-15  329  	if (regs.err_status & ERR_STATUS_CE)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  330  		regs.err_status |= ERR_STATUS_CE;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  331  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  332  	/* Multi bit filed need to write all-ones to clear. */
+b6c745ae1213b2 Ruidong Tian 2025-01-15  333  	if (regs.err_status & ERR_STATUS_UET)
+b6c745ae1213b2 Ruidong Tian 2025-01-15  334  		regs.err_status |= ERR_STATUS_UET;
+b6c745ae1213b2 Ruidong Tian 2025-01-15  335  
+b6c745ae1213b2 Ruidong Tian 2025-01-15  336  	record_write(record, ERXSTATUS, regs.err_status);
+b6c745ae1213b2 Ruidong Tian 2025-01-15  337  }
+b6c745ae1213b2 Ruidong Tian 2025-01-15  338  
 
 -- 
 0-DAY CI Kernel Test Service
