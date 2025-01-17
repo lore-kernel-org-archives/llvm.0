@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26261AA78D;
-	Fri, 17 Jan 2025 21:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50BA1D5ACD;
+	Fri, 17 Jan 2025 23:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737150230; cv=none; b=NpRRmDI4Y4+0Wx1fGneEBlxddV1Z+S5/qrAEMq4HPJdwHgb8yhcBCjFx8Ni74K6g4P65K9OibHk9zNszYVoBfaSgQPs+q5uEISYpxofrBv/Q5BbXv6Ld9Qz68+j/Tz6fD8XQfo1or3Lo7Q8nj82HD8jTfPVwLwf4mnXwZl8CGXc=
+	t=1737155272; cv=none; b=UsQ+zcJfeGkToD+KcaCztqAlQBnpCpSK5OKpuXmzLnr/Yrj0mGtS303DL6GiJ9ILzXIYt8zSoo93D9ZCumuIbT66y2wUxCSh0OwnFv4DCyGz4wE+dZ4PmCEYAEns691dOO5sYRyxLd87blSeLCpEp6PBgMWqG6i4DY0vPychp/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737150230; c=relaxed/simple;
-	bh=bt+iaM8D67xqSUTcgjIRhfM/w9pGt4T6tLNCCe2z/oA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=U5Vo+9AzDFjGwvLXNAQGnYjOKJj3/HI/Flth4f7P2K1MGiZnefOctgt4+EdZD9tz1QrOeHGtaiXh8cEgaBkk+qllVyQvWrJgofHoyyEhtH4Q8JtLtuLEvL9MHddT41LDV3aBG2XcJR1XdLsqq+y2eYFur8n2XWgnNeBLBaLzANY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KScER/2p; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1737155272; c=relaxed/simple;
+	bh=ZSC1mkGXnt6s6z6IiVGuAN4/We6rPMRT7Oe1ciDb+hk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=As5UbQdIPLZ7yS5c9DQn/bjUn5qkxkyq8ZPzYlJo+Rz9ONiHsSejTYeBNhhOnkRC0MxzFXQztphbcR6gS5sbg9+cbW8QBeeCoLEBg5MpfuQpFM5XdSg2QI8pLKhDY8jPeaGs9xEFWDdSmM1gPPgjFhFk0bZPnvlnV/uda0sySOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vi/eBf+z; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KScER/2p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vi/eBf+z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737150229; x=1768686229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bt+iaM8D67xqSUTcgjIRhfM/w9pGt4T6tLNCCe2z/oA=;
-  b=KScER/2pplLEQPa755rSumPvGk+HnjHxBffMtLRf73bP1vGVfNLsFGgg
-   9wV8MNjI3mcx1HCHp+xTWdwv5NwEz2iqPND/3fvHeODz7J3gaq3HqY8P7
-   KknNijDlBJiy9/lowUbWKCqiZH8d5e9Ih9ZYPVsmMuw9GZgNQSAKmA5KY
-   TyLSvSOc0bUtJ9syDzOuwVb2H3fEi5AHXSC8lPuiNDtmsbRjmqn2aIe4Z
-   xODdHLXu23dy+LKgGCLXuZMxHf685OMYBDq8p1qNnBlZKtY/Ms8EN+XHV
-   G5ilLxoY1rWzSsqUMS3D0RFaRtgKrRchWNkXRrlcx747JQ1dfQkWcSKCO
-   w==;
-X-CSE-ConnectionGUID: sQxmV6ZPTve/Q7cxMp3NYA==
-X-CSE-MsgGUID: RSEdzYimT1+0O2onByac6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48261912"
+  t=1737155271; x=1768691271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZSC1mkGXnt6s6z6IiVGuAN4/We6rPMRT7Oe1ciDb+hk=;
+  b=Vi/eBf+z+N675Y2r8yxroohF8TJlrSIKULi3+le+0Nk7bk03lPNy8MH2
+   hJcbEZ0dsb4vwOiX+FaCdzvZbpL+UyDnK2R2SBq3dB8olzPgtM7V0Jwq0
+   weyPucA2Xgfb9ObKK4G2B/9UAGG6UPmclIwY/8Qgai11ng1CJQBYQG2lQ
+   Tj1b2J5txQqfPIZJf/gnUg4E8X1VuWh3OMoyfX8vYXIdtXYx98qIReLhS
+   G6AyVzWp9Fr+75JN0GVAOuHvbTs1HhHVhlcAOZGmO7AghX/wsPyLTjpYX
+   Nrviw9RMowbqz/3Q9m8r/27VXPC8PaSPxqSQeFNLSklmp2Xa46JTtkYqY
+   Q==;
+X-CSE-ConnectionGUID: vYhtepBuThyo6jm0aew9Xg==
+X-CSE-MsgGUID: Wiq880B1Qvi5Vkh9FrpFIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37296344"
 X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
-   d="scan'208";a="48261912"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 13:43:40 -0800
-X-CSE-ConnectionGUID: SGO3N2LzQKOXaF0jmZ2i4g==
-X-CSE-MsgGUID: lu98KPr1RaaFwzyAA6eVwA==
+   d="scan'208";a="37296344"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 15:07:51 -0800
+X-CSE-ConnectionGUID: PkYA1xqxRfOWyuB+92QB6g==
+X-CSE-MsgGUID: 3Xr87cIPRbuQ+GtNfl7iTg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="109977899"
+X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
+   d="scan'208";a="105966793"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Jan 2025 13:43:38 -0800
+  by orviesa006.jf.intel.com with ESMTP; 17 Jan 2025 15:07:47 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYu7r-000Tk5-2i;
-	Fri, 17 Jan 2025 21:43:35 +0000
-Date: Sat, 18 Jan 2025 05:43:26 +0800
+	id 1tYvRI-000ToF-1Q;
+	Fri, 17 Jan 2025 23:07:44 +0000
+Date: Sat, 18 Jan 2025 07:07:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:vmx/nested_hlt_pause_intercept 7/7]
- arch/x86/kvm/vmx/vmx.c:8084:40: error: too few arguments to function call,
- expected 3, have 2
-Message-ID: <202501180547.K24Poiak-lkp@intel.com>
+To: Leo Yang <leo.yang.sy0@gmail.com>, jdelvare@suse.com,
+	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, Leo-Yang@quantatw.com, corbet@lwn.net,
+	Delphine_CC_Chiu@wiwynn.com, linux-hwmon@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leo Yang <leo.yang.sy0@gmail.com>
+Subject: Re: [PATCH v3 2/2] hwmon: Add driver for TI INA233 Current and Power
+ Monitor
+Message-ID: <202501180656.96daAp3W-lkp@intel.com>
+References: <20250115015519.950795-3-leo.yang.sy0@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,141 +69,198 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250115015519.950795-3-leo.yang.sy0@gmail.com>
 
-tree:   https://github.com/sean-jc/linux vmx/nested_hlt_pause_intercept
-head:   3eba42004fd15e5353a24b6527ea809e83e2985a
-commit: 3eba42004fd15e5353a24b6527ea809e83e2985a [7/7] KVM: nVMX: Synthesize nested VM-Exit for supported emulation intercepts
-config: i386-randconfig-005-20250117 (https://download.01.org/0day-ci/archive/20250118/202501180547.K24Poiak-lkp@intel.com/config)
+Hi Leo,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.13-rc7 next-20250117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Leo-Yang/dt-bindings-hwmon-ti-ina2xx-Add-INA233-device/20250115-095801
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250115015519.950795-3-leo.yang.sy0%40gmail.com
+patch subject: [PATCH v3 2/2] hwmon: Add driver for TI INA233 Current and Power Monitor
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180656.96daAp3W-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180547.K24Poiak-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180656.96daAp3W-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501180547.K24Poiak-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180656.96daAp3W-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kvm/vmx/vmx.c:17:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from drivers/hwmon/pmbus/ina233.c:9:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> arch/x86/kvm/vmx/vmx.c:8084:40: error: too few arguments to function call, expected 3, have 2
-    8084 |                 if (!vmx_is_io_intercepted(vcpu, info))
-         |                      ~~~~~~~~~~~~~~~~~~~~~           ^
-   arch/x86/kvm/vmx/vmx.c:8010:13: note: 'vmx_is_io_intercepted' declared here
-    8010 | static bool vmx_is_io_intercepted(struct kvm_vcpu *vcpu,
-         |             ^                     ~~~~~~~~~~~~~~~~~~~~~~
-    8011 |                                   struct x86_instruction_info *info,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8012 |                                   unsigned long *exit_qualification)
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/pmbus/ina233.c:147:10: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     146 |                                      "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+         |                                                                  ~~~
+         |                                                                  %u
+     147 |                                      current_lsb, rshunt);
+         |                                      ^~~~~~~~~~~
+   drivers/hwmon/pmbus/ina233.c:147:23: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     146 |                                      "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+         |                                                                                         ~~~
+         |                                                                                         %u
+     147 |                                      current_lsb, rshunt);
+         |                                                   ^~~~~~
+   drivers/hwmon/pmbus/ina233.c:153:17: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     152 |         dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+         |                                                  ~~~
+         |                                                  %u
+     153 |                 client->name, rshunt, current_lsb);
+         |                               ^~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/hwmon/pmbus/ina233.c:153:25: warning: format specifies type 'unsigned long' but the argument has type 'u32' (aka 'unsigned int') [-Wformat]
+     152 |         dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+         |                                                                          ~~~
+         |                                                                          %u
+     153 |                 client->name, rshunt, current_lsb);
+         |                                       ^~~~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   8 warnings generated.
 
 
-vim +8084 arch/x86/kvm/vmx/vmx.c
+vim +147 drivers/hwmon/pmbus/ina233.c
 
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8055  
-5f18c642ff7e21 arch/x86/kvm/vmx/vmx.c Paolo Bonzini       2024-03-18  8056  int vmx_check_intercept(struct kvm_vcpu *vcpu,
-8a76d7f25f8f24 arch/x86/kvm/vmx.c     Joerg Roedel        2011-04-04  8057  			struct x86_instruction_info *info,
-21f1b8f29ea5b2 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2020-02-18  8058  			enum x86_intercept_stage stage,
-21f1b8f29ea5b2 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2020-02-18  8059  			struct x86_exception *exception)
-8a76d7f25f8f24 arch/x86/kvm/vmx.c     Joerg Roedel        2011-04-04  8060  {
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8061  	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8062  	unsigned long exit_qualification = 0;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8063  	u32 vm_exit_reason;
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8064  
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8065  	switch (info->intercept) {
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8066  	case x86_intercept_rdpid:
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8067  		/*
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8068  		 * RDPID causes #UD if not enabled through secondary execution
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8069  		 * controls (ENABLE_RDTSCP).  Note, the implicit MSR access to
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8070  		 * TSC_AUX is NOT subject to interception, i.e. checking only
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8071  		 * the dedicated execution control is architecturally correct.
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8072  		 */
-7f3603b6313623 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2020-09-23  8073  		if (!nested_cpu_has2(vmcs12, SECONDARY_EXEC_ENABLE_RDTSCP)) {
-21f1b8f29ea5b2 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2020-02-18  8074  			exception->vector = UD_VECTOR;
-21f1b8f29ea5b2 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2020-02-18  8075  			exception->error_code_valid = false;
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8076  			return X86EMUL_PROPAGATE_FAULT;
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8077  		}
-4948ba1f4b2af0 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8078  		return X86EMUL_CONTINUE;
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8079  
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8080  	case x86_intercept_in:
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8081  	case x86_intercept_ins:
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8082  	case x86_intercept_out:
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8083  	case x86_intercept_outs:
-b057118e8af266 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16 @8084  		if (!vmx_is_io_intercepted(vcpu, info))
-b057118e8af266 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8085  			return X86EMUL_CONTINUE;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8086  
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8087  		vm_exit_reason = EXIT_REASON_IO_INSTRUCTION;
-b057118e8af266 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8088  		break;
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8089  
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8090  	case x86_intercept_lgdt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8091  	case x86_intercept_lidt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8092  	case x86_intercept_lldt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8093  	case x86_intercept_ltr:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8094  	case x86_intercept_sgdt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8095  	case x86_intercept_sidt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8096  	case x86_intercept_sldt:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8097  	case x86_intercept_str:
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8098  		if (!nested_cpu_has2(vmcs12, SECONDARY_EXEC_DESC))
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8099  			return X86EMUL_CONTINUE;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8100  
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8101  		if (info->intercept == x86_intercept_lldt ||
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8102  		    info->intercept == x86_intercept_ltr ||
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8103  		    info->intercept == x86_intercept_sldt ||
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8104  		    info->intercept == x86_intercept_str)
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8105  			vm_exit_reason = EXIT_REASON_LDTR_TR;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8106  		else
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8107  			vm_exit_reason = EXIT_REASON_GDTR_IDTR;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8108  		/*
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8109  		 * FIXME: Decode the ModR/M to generate the correct exit
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8110  		 *        qualification for memory operands.
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8111  		 */
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8112  		break;
-86f7e90ce840aa arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-29  8113  
-9bbc38752725d4 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8114  	case x86_intercept_hlt:
-9bbc38752725d4 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8115  		if (!nested_cpu_has(vmcs12, CPU_BASED_HLT_EXITING))
-9bbc38752725d4 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8116  			return X86EMUL_CONTINUE;
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8117  
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8118  		vm_exit_reason = EXIT_REASON_HLT;
-9bbc38752725d4 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8119  		break;
-9bbc38752725d4 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8120  
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8121  	case x86_intercept_pause:
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8122  		/*
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8123  		 * PAUSE is a single-byte NOP with a REPE prefix, i.e. collides
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8124  		 * with vanilla NOPs in the emulator.  Apply the interception
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8125  		 * check only to actual PAUSE instructions.  Don't check
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8126  		 * PAUSE-loop-exiting, software can't expect a given PAUSE to
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8127  		 * exit, i.e. KVM is within its rights to allow L2 to execute
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8128  		 * the PAUSE.
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8129  		 */
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8130  		if ((info->rep_prefix != REPE_PREFIX) ||
-7a223b397dc217 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8131  		    !nested_cpu_has(vmcs12, CPU_BASED_PAUSE_EXITING))
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8132  			return X86EMUL_CONTINUE;
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8133  
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8134  		vm_exit_reason = EXIT_REASON_PAUSE_INSTRUCTION;
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8135  		break;
-4984563823f003 arch/x86/kvm/vmx/vmx.c Sean Christopherson 2023-04-04  8136  
-fb6d4d340e0532 arch/x86/kvm/vmx.c     Paolo Bonzini       2016-07-12  8137  	/* TODO: check more intercepts... */
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8138  	default:
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8139  		return X86EMUL_UNHANDLEABLE;
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8140  	}
-35a571346a94fb arch/x86/kvm/vmx/vmx.c Oliver Upton        2020-02-04  8141  
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8142  	nested_vmx_vmexit(vcpu, vm_exit_reason, 0, exit_qualification);
-3eba42004fd15e arch/x86/kvm/vmx/vmx.c Sean Christopherson 2025-01-16  8143  	return X86EMUL_INTERCEPTED;
-8a76d7f25f8f24 arch/x86/kvm/vmx.c     Joerg Roedel        2011-04-04  8144  }
-8a76d7f25f8f24 arch/x86/kvm/vmx.c     Joerg Roedel        2011-04-04  8145  
-
-:::::: The code at line 8084 was first introduced by commit
-:::::: b057118e8af2668869986a817ef0196510be9818 KVM: nVMX: Consolidate missing X86EMUL_INTERCEPTED logic in L2 emulation
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Sean Christopherson <seanjc@google.com>
+    81	
+    82	static int ina233_probe(struct i2c_client *client)
+    83	{
+    84		struct device *dev = &client->dev;
+    85		int ret, m, R;
+    86		u32 rshunt;
+    87		u32 current_lsb;
+    88		u16 calibration;
+    89		struct pmbus_driver_info *info;
+    90	
+    91		info = devm_kzalloc(dev, sizeof(struct pmbus_driver_info),
+    92				    GFP_KERNEL);
+    93		if (!info)
+    94			return -ENOMEM;
+    95	
+    96		info->pages = 1;
+    97		info->format[PSC_VOLTAGE_IN] = direct;
+    98		info->format[PSC_VOLTAGE_OUT] = direct;
+    99		info->format[PSC_CURRENT_OUT] = direct;
+   100		info->format[PSC_POWER] = direct;
+   101		info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_INPUT
+   102			| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+   103			| PMBUS_HAVE_POUT
+   104			| PMBUS_HAVE_VMON | PMBUS_HAVE_STATUS_VMON;
+   105		info->m[PSC_VOLTAGE_IN] = 8;
+   106		info->R[PSC_VOLTAGE_IN] = 2;
+   107		info->m[PSC_VOLTAGE_OUT] = 8;
+   108		info->R[PSC_VOLTAGE_OUT] = 2;
+   109		info->read_word_data = ina233_read_word_data;
+   110	
+   111		/* If INA233 skips current/power, shunt-resistor and current-lsb aren't needed.	*/
+   112		/* read rshunt value (uOhm) */
+   113		ret = device_property_read_u32(dev, "shunt-resistor", &rshunt);
+   114		if (ret) {
+   115			if (ret != -EINVAL)
+   116				return dev_err_probe(dev, ret, "Shunt resistor property read fail.\n");
+   117			rshunt = INA233_RSHUNT_DEFAULT;
+   118		}
+   119	
+   120		/* read current_lsb value (uA) */
+   121		ret = device_property_read_u32(dev, "ti,current-lsb-microamp", &current_lsb);
+   122		if (ret) {
+   123			if (ret != -EINVAL)
+   124				return dev_err_probe(dev, ret, "Current_LSB property read fail.\n");
+   125			current_lsb = INA233_CURRENT_LSB_DEFAULT;
+   126		}
+   127	
+   128		if (!rshunt || !current_lsb)
+   129			return dev_err_probe(dev, -EINVAL,
+   130					     "Shunt resistor and Current_LSB cannot be zero.\n");
+   131	
+   132		/* calculate current coefficient */
+   133		calculate_coef(&m, &R, current_lsb, 1);
+   134		info->m[PSC_CURRENT_OUT] = m;
+   135		info->R[PSC_CURRENT_OUT] = R;
+   136	
+   137		/* calculate power coefficient */
+   138		calculate_coef(&m, &R, current_lsb, 25);
+   139		info->m[PSC_POWER] = m;
+   140		info->R[PSC_POWER] = R;
+   141	
+   142		/* write MFR_CALIBRATION register, Apply formula from spec with unit scaling. */
+   143		calibration = div64_u64(5120000000ULL, (u64)rshunt * current_lsb);
+   144		if (calibration > 0x7FFF)
+   145			return dev_err_probe(dev, -EINVAL,
+   146					     "The product of Current_LSB %lu and shunt resistor %lu exceed MFR_CALIBRATION register limit.\n",
+ > 147					     current_lsb, rshunt);
+   148		ret = i2c_smbus_write_word_data(client, MFR_CALIBRATION, calibration);
+   149		if (ret < 0)
+   150			return dev_err_probe(dev, ret, "Unable to write calibration.\n");
+   151	
+   152		dev_dbg(dev, "power monitor %s (Rshunt = %lu uOhm, Current_LSB = %lu uA/bit)\n",
+   153			client->name, rshunt, current_lsb);
+   154	
+   155		return pmbus_do_probe(client, info);
+   156	}
+   157	
 
 -- 
 0-DAY CI Kernel Test Service
