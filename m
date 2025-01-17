@@ -1,154 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3136E166F29;
-	Fri, 17 Jan 2025 14:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E708C13C3F2;
+	Fri, 17 Jan 2025 14:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737123413; cv=none; b=EXEaYOUitO5i0jE+Jc1MAXNdNdab/fZ9lZ/sQucYohnVGlPXhvZsPLy+3Qx3hg/v21hXZfgGYwuKEfOhGFKsVx11UaZPqDDIk+CFQ7enhO4ZrMCrWwiL9XFNU5m5rvfm5NTQFLGm3SHMMCOHlxryqaobDbY9rhiY7pGyx47v5sE=
+	t=1737123644; cv=none; b=pVHzTImnbjnLE7+by4q+Zl6S5B3e5YevF8ppy62p8/XW2TjYgtwFkOvqf5con5EHNoIkWf54xhh+urv8a0GAzN9FG0XWJb9aT36B9brlv4/5wSc6qj/zvUQ01djIs4K/XyDPWEItKPabBPEp2Z37LI9XakTvj9TGF61375g5t0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737123413; c=relaxed/simple;
-	bh=14ciKrEXUQtwTOla9ClEyvwfPsCnIydzYbCISVbfx+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XAA0xlxyj9WO8InqUuihWKIi2D9MRzWy7PpG2slc4IBokZKiNzKVauFfoo0MvAUcPHC+4gAwR9li6LBShnZbzw0mkIVyawaUYC0U+qdAwikw6L+Oi1FRmb4kxoFhi2Xk7c3id1YSQWOxutBZUwdXEDOZxMhtJTSSC0lvXV751QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0qpJiUE; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0qpJiUE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737123411; x=1768659411;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=14ciKrEXUQtwTOla9ClEyvwfPsCnIydzYbCISVbfx+s=;
-  b=b0qpJiUEh7i48raAm/WSmcCpRBbGV0U+pv0o4uFsriDZ66hM+hV5tkSj
-   yMyr355tcdb5GBAkY1VGh1fi/rglmCJtJHiXH+soYiNmA/Lnu7AnH0cGN
-   BO6wb3IAhaesMcEXsbPIQGbdvZFlYNj1A91bg7VgvyLAi+GSfjsKBdavZ
-   4bct10dn3s2dbgz73bEz7jk8bhOPt6rWHHrvCP308gV2tGPzvZuOjsnEB
-   fwDL3xsAIk6J92BRj839/297K4LqaXj2WKzWPigLxebXX3WS3q/zdAqqs
-   JlsQ1vJC8Bg6jXuo2g3bc+9on6WbEQ/Gyulus3boF9lWdy8piWWxk87S2
-   w==;
-X-CSE-ConnectionGUID: TJQdxzsiT36i33CT9lAy/Q==
-X-CSE-MsgGUID: qlPnXO2HSSaB8KuSMAB7cQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37715077"
-X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="37715077"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 06:16:51 -0800
-X-CSE-ConnectionGUID: jhYmPnGdRVy+7FlK/L8zew==
-X-CSE-MsgGUID: v5PBERN1RkuvW9OTEoedxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="110816818"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Jan 2025 06:16:50 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tYn9T-000TIt-0i;
-	Fri, 17 Jan 2025 14:16:47 +0000
-Date: Fri, 17 Jan 2025 22:16:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Donet Tom <donettom@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC] mm/swap.c: Enable promotion of unmapped MGLRU page cache
- pages
-Message-ID: <202501172113.JJBKAvMq-lkp@intel.com>
-References: <20250115120625.3785-1-donettom@linux.ibm.com>
+	s=arc-20240116; t=1737123644; c=relaxed/simple;
+	bh=66c/hDheuUsI4JSewMVqfKpYOOyESzCxH0pX5Yc4IUg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sVpCrAjRKtY62Dsu5OXTMqhTuHaniqS4FNnKapakx96L+7nB6bePNhfumxVatE8pY+CtWDcz9o2OcM57Vd1tOwLS2dzjJSbXgtafzCmlxgM7zRKaIXt1uao14g/mjJWdEY9T/chujxInsOsX8AwWsOKjULx8NRWK5DqlTzcT/sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=shelob.surriel.com; arc=none smtp.client-ip=96.67.55.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shelob.surriel.com
+Received: from fangorn.home.surriel.com ([10.0.13.7])
+	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <riel@shelob.surriel.com>)
+	id 1tYnCn-000000003Z2-1auh;
+	Fri, 17 Jan 2025 09:20:13 -0500
+Message-ID: <44837964d67d6f35a20139fbe310f621141a0404.camel@surriel.com>
+Subject: Re: [PATCH v5 05/12] x86/mm: add INVLPGB support code
+From: Rik van Riel <riel@surriel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm <llvm@lists.linux.dev>, x86 <x86@kernel.org>, Borislav Petkov
+	 <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra
+	 <peterz@infradead.org>, kernel-team <kernel-team@meta.com>, 
+ "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Date: Fri, 17 Jan 2025 09:20:13 -0500
+In-Reply-To: <202501171121.nQcwVI41-lkp@intel.com>
+References: <20250116023127.1531583-6-riel@surriel.com>
+	 <202501171121.nQcwVI41-lkp@intel.com>
+Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
+ keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
+ eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
+ Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
+ lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
+ dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
+ mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
+ gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
+ r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
+ WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
+ 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
+ Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
+ +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
+ g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
+ KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
+ fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
+ 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
+ G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
+ okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
+ TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
+ cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
+ omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
+ QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
+ c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250115120625.3785-1-donettom@linux.ibm.com>
+Sender: riel@surriel.com
 
-Hi Donet,
+On Fri, 2025-01-17 at 11:37 +0800, kernel test robot wrote:
+>=20
+> compiler: clang version 19.1.3
+> (https://github.com/llvm/llvm-project=C2=A0ab51eccf88f5321e7c60591c5546b2=
+5
+> 4b6afab99)
+> reproduce (this is a W=3D1 build):
+> (https://download.01.org/0day-ci/archive/20250117/202501171121.nQcwVI
+> 41-lkp@intel.com/reproduce)
+>=20
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+> > > arch/x86/include/asm/invlpgb.h:26:49: error: invalid input size
+> > > for constraint 'a'
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 26 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 asm volatile(".byte 0x0f, 0x01, 0xfe" : : "a"
+> (rax), "c" (ecx), "d" (edx));
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 ^
+>=20
 
-[auto build test ERROR on akpm-mm/mm-everything]
+What do I do about this?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Donet-Tom/mm-swap-c-Enable-promotion-of-unmapped-MGLRU-page-cache-pages/20250115-200910
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250115120625.3785-1-donettom%40linux.ibm.com
-patch subject: [RFC] mm/swap.c: Enable promotion of unmapped MGLRU page cache pages
-config: arm64-randconfig-003-20250116 (https://download.01.org/0day-ci/archive/20250117/202501172113.JJBKAvMq-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501172113.JJBKAvMq-lkp@intel.com/reproduce)
+It didn't used to complain when we had a named
+assembler operator there:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501172113.JJBKAvMq-lkp@intel.com/
+    asm volatile("invlpgb" : : "a" (rax), "c" (ecx), "d" (edx));
 
-All errors (new ones prefixed by >>):
+However, now that we're using .byte for compatibility
+with older binutils, things break with newer llvm?
 
-   mm/swap.c:413:4: error: use of undeclared identifier 'sysctl_numa_balancing_mode'
-                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-                    ^
-   mm/swap.c:413:33: error: use of undeclared identifier 'NUMA_BALANCING_MEMORY_TIERING'
-                   (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-                                                 ^
-   mm/swap.c:414:3: error: use of undeclared identifier 'numa_pagecache_promotion_enabled'
-                   numa_pagecache_promotion_enabled) {
-                   ^
->> mm/swap.c:421:5: error: call to undeclared function 'promotion_candidate'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                                   promotion_candidate(folio);
-                                   ^
-   4 errors generated.
-
-
-vim +/promotion_candidate +421 mm/swap.c
-
-   382	
-   383	static void lru_gen_inc_refs(struct folio *folio)
-   384	{
-   385		struct mem_cgroup *memcg;
-   386		struct lruvec *lruvec;
-   387		int gen;
-   388		unsigned long new_flags, old_flags = READ_ONCE(folio->flags);
-   389	
-   390		if (folio_test_unevictable(folio))
-   391			return;
-   392	
-   393		/* see the comment on LRU_REFS_FLAGS */
-   394		if (!folio_test_referenced(folio)) {
-   395			set_mask_bits(&folio->flags, LRU_REFS_MASK, BIT(PG_referenced));
-   396			return;
-   397		}
-   398	
-   399		do {
-   400			if ((old_flags & LRU_REFS_MASK) == LRU_REFS_MASK) {
-   401				if (!folio_test_workingset(folio)) {
-   402					folio_set_workingset(folio);
-   403					return;
-   404				}
-   405				goto promo_candid;
-   406			}
-   407	
-   408			new_flags = old_flags + BIT(LRU_REFS_PGOFF);
-   409		} while (!try_cmpxchg(&folio->flags, &old_flags, new_flags));
-   410	
-   411	promo_candid:
-   412		if (!folio_test_isolated(folio) &&
- > 413			(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-   414			numa_pagecache_promotion_enabled) {
-   415			memcg = folio_memcg(folio);
-   416			if (memcg) {
-   417				lruvec = mem_cgroup_lruvec(memcg, folio_pgdat(folio));
-   418				gen = folio_lru_gen(folio);
-   419	
-   420				if ((gen < MAX_NR_GENS) && lru_gen_is_active(lruvec, gen))
- > 421					promotion_candidate(folio);
-   422			}
-   423		}
-   424	}
-   425	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+All Rights Reversed.
