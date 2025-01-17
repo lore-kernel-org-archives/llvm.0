@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1F41F76C2;
-	Fri, 17 Jan 2025 10:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03701FCCEE;
+	Fri, 17 Jan 2025 13:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737109888; cv=none; b=oahJRyYybblHJJPgsp9uRWcDqTNTfRlaHK5cz2IFXpYnG3nbg1Idbr2kC8pBA1ndX0eJIgVS3t+VDpx3+18jlw92ZJEILuaabvsclQeYW9bvS2iOdrNGRq1rZnQ2DflHcbp/WNpRw0gskjETSLGMf36D00cMkUlJHsrA8DqzLmk=
+	t=1737119564; cv=none; b=LroIYpy45OharZiHkuG78iN0tl59+U9LoZ6yWywIzVJwleAP8CUC6YB1Up6Orl65EAlxl7VDnFLy2OZtEJAL6UGG2qMcKyOehQNO5z+NlluVWvzcwnEwjZeTg1BDMWYCsF/66gi39QQBr52G7nNlra+zJvIRUe+sf9GN9BUbZa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737109888; c=relaxed/simple;
-	bh=DZOM3HZgs6PTS7mom2SnNPsK0a/bjhq53HE4sUbtxw0=;
+	s=arc-20240116; t=1737119564; c=relaxed/simple;
+	bh=lVdRxp+ddpxdFG2GBWqbP8LAUKT3tZ9Yu+BmmTnsJKI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p1ZfR8dk5x7TFP9PANSCvWddpfyxG3mT1OsKGtlBnOTQhnq/+3aLJH0lM+9GWXp0F/5C4OY1P6VzE8Xzs49dde3Oa1sMN39b+rpCMu/RGLUcPUO0PW05hIkZB4x6+YwAzY0XDSa8s+cyECZncwVEqHcVgfztyEDrzdwxYtQkDOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P4faAvjf; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=D+zM406DaqFmNLe8WT82ikgVVnuw5px3wKKNoOXahgGgiVZlCRdcIe4cDjU6UhM8TecjDZV7GCGFFQULHNafJuU9vyowaqL1N0EkSDlfUZGXoVoGXJVNKc0dOOlDqHVlWnsbOlYg9+BLlG/PERSNSWhJrVjxFX92x/0K6Ulv45Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mj6LLFo/; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P4faAvjf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mj6LLFo/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737109887; x=1768645887;
+  t=1737119563; x=1768655563;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DZOM3HZgs6PTS7mom2SnNPsK0a/bjhq53HE4sUbtxw0=;
-  b=P4faAvjfdJhbr5SKFa7PYAKa52YOneHUIR3qltwHzFUZC0eHY+PnnlS9
-   HErZkSSfKY/OWM/XlDjB9EtXGCTltUIzhjoPccxpJGHb1VlLpiPFlzgvl
-   NgJuubPG1YV+STD7SN99tt+4M9srQ6nQtUeHe5+mZjmeY96m1Pq7/CdIm
-   VpssE62HLZ6eXUymWUptOcztcZ02MozCW9CvZ/fRbOzlL0D/rcan5q9gO
-   tvEgo58peAw4AK+HP2haKZNyZSC1vHzuSKStfDxzsNqq9QVBcGhtMgjsQ
-   4gzIKuokXV5wIq5PqikTTG860OdtFFwib5GqLWqr+Mj9RXySHofWCELyL
-   A==;
-X-CSE-ConnectionGUID: /1h1T6hETTyVdrc2lWs7QA==
-X-CSE-MsgGUID: 7qy0mB2LQrmvtVV2tdkr8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="37655127"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="37655127"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 02:31:24 -0800
-X-CSE-ConnectionGUID: 8/t4W8mnTf+k6t27im6cOg==
-X-CSE-MsgGUID: CJfscxrtSiC+89BznowzMA==
+  bh=lVdRxp+ddpxdFG2GBWqbP8LAUKT3tZ9Yu+BmmTnsJKI=;
+  b=Mj6LLFo/5HfZazWyBaAzWVKLbXpo6t+5jEgI8Bufm/gpdljj97mKQeRo
+   YffXkEvlXcFq4fyBLEMutsYBrXkV1nmSTYuYL4QmzqE13/b0hZi6mmiVw
+   duqfKNTYwKkG5EAAmKfSd/4tMQ9G6CvpNNYZBiLP9DzX++RxAMx5ts5hr
+   Nco+7K3QD74dFeSc8T6wZit3PMxB2b105OMOiDDwCbx4LbGX7FnqglIVk
+   hFyK/QSbN5+caUNILPqp/IJEMdwZKhC4LfBl7tStxR2gS6yFX/EbctXvj
+   q8wNIpOQWba3sGShGh4KleqdPgArg38sxGCNpoAJn+jVdEq0KG+l/qsUP
+   g==;
+X-CSE-ConnectionGUID: 21rte27hSNea/Oi4d5j6TQ==
+X-CSE-MsgGUID: 8W9m/zeDTYuPWuIYSvdiiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37461532"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="37461532"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 05:12:42 -0800
+X-CSE-ConnectionGUID: brvEa7IPQDS0ejtOvyIgkg==
+X-CSE-MsgGUID: XLp9RR0tTbOcvcafKvFAng==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
-   d="scan'208";a="106359930"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="105981846"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Jan 2025 02:31:23 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 17 Jan 2025 05:12:41 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYjdJ-000T4L-0n;
-	Fri, 17 Jan 2025 10:31:21 +0000
-Date: Fri, 17 Jan 2025 18:30:33 +0800
+	id 1tYm9P-000TER-0H;
+	Fri, 17 Jan 2025 13:12:39 +0000
+Date: Fri, 17 Jan 2025 21:11:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:ipsec-fixes 11/11] net/xfrm/xfrm_output.c:837:5: error:
- redefinition of 'xfrm6_tunnel_check_size'
-Message-ID: <202501171817.JV1YopmX-lkp@intel.com>
+To: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ping-Ke Shih <pkshih@realtek.com>
+Subject: [linux-next:master 7211/9563]
+ drivers/net/wireless/realtek/rtw88/led.c:19:6: error: redefinition of
+ 'rtw_led_init'
+Message-ID: <202501172139.9wCzBpW1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,97 +64,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git ipsec-fixes
-head:   3bbb0d5d23db82d8493191fc103c4c2b26decc13
-commit: 3bbb0d5d23db82d8493191fc103c4c2b26decc13 [11/11] xfrm: check for PMTU in tunnel mode for packet offload
-config: powerpc64-randconfig-001-20250116 (https://download.01.org/0day-ci/archive/20250117/202501171817.JV1YopmX-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171817.JV1YopmX-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0907e7fb35756464aa34c35d6abb02998418164b
+commit: 4b6652bc6d8d5fb0648b3a7a16ef8af4e0345bcd [7211/9563] wifi: rtw88: Add support for LED blinking
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501172139.9wCzBpW1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501172139.9wCzBpW1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501171817.JV1YopmX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501172139.9wCzBpW1-lkp@intel.com/
+
+Note: the linux-next/master HEAD 0907e7fb35756464aa34c35d6abb02998418164b builds fine.
+      It may have been fixed somewhere.
 
 All errors (new ones prefixed by >>):
 
-   In file included from net/xfrm/xfrm_output.c:10:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> net/xfrm/xfrm_output.c:837:5: error: redefinition of 'xfrm6_tunnel_check_size'
-     837 | int xfrm6_tunnel_check_size(struct sk_buff *skb)
-         |     ^
-   include/net/xfrm.h:1789:19: note: previous definition is here
-    1789 | static inline int xfrm6_tunnel_check_size(struct sk_buff *skb)
-         |                   ^
->> net/xfrm/xfrm_output.c:851:42: error: call to undeclared function 'ip6_skb_dst_mtu'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     851 |              !skb_gso_validate_network_len(skb, ip6_skb_dst_mtu(skb)))) {
-         |                                                 ^
-   net/xfrm/xfrm_output.c:851:42: note: did you mean 'ip_skb_dst_mtu'?
-   include/net/ip.h:503:28: note: 'ip_skb_dst_mtu' declared here
-     503 | static inline unsigned int ip_skb_dst_mtu(struct sock *sk,
-         |                            ^
->> net/xfrm/xfrm_output.c:855:7: error: call to undeclared function 'xfrm6_local_dontfrag'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     855 |                 if (xfrm6_local_dontfrag(skb->sk))
-         |                     ^
-   3 warnings and 3 errors generated.
+>> drivers/net/wireless/realtek/rtw88/led.c:19:6: error: redefinition of 'rtw_led_init'
+      19 | void rtw_led_init(struct rtw_dev *rtwdev)
+         |      ^
+   drivers/net/wireless/realtek/rtw88/led.h:15:20: note: previous definition is here
+      15 | static inline void rtw_led_init(struct rtw_dev *rtwdev)
+         |                    ^
+>> drivers/net/wireless/realtek/rtw88/led.c:64:6: error: redefinition of 'rtw_led_deinit'
+      64 | void rtw_led_deinit(struct rtw_dev *rtwdev)
+         |      ^
+   drivers/net/wireless/realtek/rtw88/led.h:19:20: note: previous definition is here
+      19 | static inline void rtw_led_deinit(struct rtw_dev *rtwdev)
+         |                    ^
+   2 errors generated.
 
 
-vim +/xfrm6_tunnel_check_size +837 net/xfrm/xfrm_output.c
+vim +/rtw_led_init +19 drivers/net/wireless/realtek/rtw88/led.c
 
-   836	
- > 837	int xfrm6_tunnel_check_size(struct sk_buff *skb)
-   838	{
-   839		int mtu, ret = 0;
-   840		struct dst_entry *dst = skb_dst(skb);
-   841	
-   842		if (skb->ignore_df)
-   843			goto out;
-   844	
-   845		mtu = dst_mtu(dst);
-   846		if (mtu < IPV6_MIN_MTU)
-   847			mtu = IPV6_MIN_MTU;
-   848	
-   849		if ((!skb_is_gso(skb) && skb->len > mtu) ||
-   850		    (skb_is_gso(skb) &&
- > 851		     !skb_gso_validate_network_len(skb, ip6_skb_dst_mtu(skb)))) {
-   852			skb->dev = dst->dev;
-   853			skb->protocol = htons(ETH_P_IPV6);
-   854	
- > 855			if (xfrm6_local_dontfrag(skb->sk))
-   856				ipv6_stub->xfrm6_local_rxpmtu(skb, mtu);
-   857			else if (skb->sk)
-   858				xfrm_local_error(skb, mtu);
-   859			else
-   860				icmpv6_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
-   861			ret = -EMSGSIZE;
-   862		}
-   863	out:
-   864		return ret;
-   865	}
-   866	EXPORT_SYMBOL_GPL(xfrm6_tunnel_check_size);
-   867	
+    18	
+  > 19	void rtw_led_init(struct rtw_dev *rtwdev)
+    20	{
+    21		static const struct ieee80211_tpt_blink rtw_tpt_blink[] = {
+    22			{ .throughput = 0 * 1024, .blink_time = 334 },
+    23			{ .throughput = 1 * 1024, .blink_time = 260 },
+    24			{ .throughput = 5 * 1024, .blink_time = 220 },
+    25			{ .throughput = 10 * 1024, .blink_time = 190 },
+    26			{ .throughput = 20 * 1024, .blink_time = 170 },
+    27			{ .throughput = 50 * 1024, .blink_time = 150 },
+    28			{ .throughput = 70 * 1024, .blink_time = 130 },
+    29			{ .throughput = 100 * 1024, .blink_time = 110 },
+    30			{ .throughput = 200 * 1024, .blink_time = 80 },
+    31			{ .throughput = 300 * 1024, .blink_time = 50 },
+    32		};
+    33		struct led_classdev *led = &rtwdev->led_cdev;
+    34		int err;
+    35	
+    36		if (!rtwdev->chip->ops->led_set)
+    37			return;
+    38	
+    39		if (rtw_hci_type(rtwdev) == RTW_HCI_TYPE_PCIE)
+    40			led->brightness_set = rtwdev->chip->ops->led_set;
+    41		else
+    42			led->brightness_set_blocking = rtw_led_set_blocking;
+    43	
+    44		snprintf(rtwdev->led_name, sizeof(rtwdev->led_name),
+    45			 "rtw88-%s", dev_name(rtwdev->dev));
+    46	
+    47		led->name = rtwdev->led_name;
+    48		led->max_brightness = LED_ON;
+    49		led->default_trigger =
+    50			ieee80211_create_tpt_led_trigger(rtwdev->hw,
+    51							 IEEE80211_TPT_LEDTRIG_FL_RADIO,
+    52							 rtw_tpt_blink,
+    53							 ARRAY_SIZE(rtw_tpt_blink));
+    54	
+    55		err = led_classdev_register(rtwdev->dev, led);
+    56		if (err) {
+    57			rtw_warn(rtwdev, "Failed to register the LED, error %d\n", err);
+    58			return;
+    59		}
+    60	
+    61		rtwdev->led_registered = true;
+    62	}
+    63	
+  > 64	void rtw_led_deinit(struct rtw_dev *rtwdev)
 
 -- 
 0-DAY CI Kernel Test Service
