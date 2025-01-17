@@ -1,66 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE241A2643;
-	Fri, 17 Jan 2025 18:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAF81EE00B;
+	Fri, 17 Jan 2025 18:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737137306; cv=none; b=rVyJJajdwwJxM1z3tk/pX0KRopeVpqNtW+BJDrihqWQc3BP+n4Mdsrst/ucsYchu+OzbVlRe2hQt9WKvJM7K5ipJCW9HwgnWhA0nfiIfDRSLleAWyIP9p7EqtvJhF9O60bpH9rPlA9Eq/PRGEEduVUGV0ch2AIWjU6XmGtnf7GA=
+	t=1737139349; cv=none; b=eGTSv+tuhPCOIAvlasyxRq03UXhneLA1sNjchDFtVFfeLUo0glV/JQTVm9zBnbq6fLxEbTML5V73Li4fgBx203XxLkJBBxM9Wh1StCVAl/C1eRPCnKwXIrKvG3MOmBuA8sMukyqRNvzPlhhMLdy23YlsKPizEcPQyGFlnundjdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737137306; c=relaxed/simple;
-	bh=Y4YWV1CT+hDz1TP5htXiTZnj5qNptC1nzOOJ5dGxE+I=;
+	s=arc-20240116; t=1737139349; c=relaxed/simple;
+	bh=+2nmW2NKMU28nyZzdx1UxlGMW1MKoytc0yORwfK08tI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CWGc25X67uTV4H+kc6umKSSSs3gXBeMVj7cAwp2BvRQ0jMNthRts64uu2vZRcew/O8l74cTF30srl5vvTAH9Ijar4343H+npcnHeK+KgiSFLskAfqAPVTeCFVJBgkO9Ty+p5KxjuEllzgGWywsa7JO5h3ZFhVkyEfAQ2DG8ArQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6Q2j37q; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=lOezf/vzhOBUgTimvp1yBSmingy7cwefL4O/LppKsB21NPQ0ivRVHze9BHjnS4ney3VAu6UVG9+eIfVkrZJcAatzPbtEs7pvc/iE3bD9wPsVJ+/XCFPA5YlV63Swd3bXrbnl2v+yQwidSU0kbQZ8l6XaZ5Z7t0B3mUPAeve7+tM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YOo5Ogzw; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6Q2j37q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YOo5Ogzw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737137303; x=1768673303;
+  t=1737139348; x=1768675348;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Y4YWV1CT+hDz1TP5htXiTZnj5qNptC1nzOOJ5dGxE+I=;
-  b=S6Q2j37qBefbmeyAfco7SEEwZ6ypD4+zK4LpFG1t8dz6tsxqWSD4EMUZ
-   kNGq3Lh+R2l7qdJaPswu46RnfxF9dIhY1ZPwR6lXwMfQNIlqa1D7rNToo
-   rwvxMC/MCEaZbPjJAd0qxVRMD/BJbqywhXw1jdjQEc9KN4LirF7069Sw/
-   TKPuC7AigM5KzSgSHIsaefeGbbit+QqHSeSums0KOwG+UPlv9RWNyfGas
-   SXFfJE7qhUiG2NaDRw3Uw2DsmmEGLVg1a/VeB/Ns0g9CgOBKEUK399D8q
-   lmpF0TIzrXI3HcVrsF+9EU+Hky7ug5sKqvL63+0OIJz+Sj/YXLYqzQ2KL
-   Q==;
-X-CSE-ConnectionGUID: 15FIbJEZSI+Y6nzVFYLvbA==
-X-CSE-MsgGUID: xkTr21MvQZugSiEd8QsKbQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="41344730"
+  bh=+2nmW2NKMU28nyZzdx1UxlGMW1MKoytc0yORwfK08tI=;
+  b=YOo5OgzwMVkBRAVTpGwsbu+gnw6kXUAMdSXlZ9zdhdieKQb6g74qoUfw
+   csWN0bFgS49KLcgq5QGSiWBuVeMilM4cwDwff/kvPXeKPlhvJnmwZE1xg
+   VxopNovbANy1z/Q9g4NGsAsp90htnOcD7bJ18L5xpMgPkwJ6V241l6qpI
+   ITF+RmAD2k4H9tiPeu+FdHrFzwz+z8uywro0b3VDYMb+CeRFf2daUZ/Du
+   o7BizAKwcZ365KSzEj9zF6PjmFen9AZhog+bpQhMQLIxzp4+SFgqAuodP
+   wYotYHl5jejPT61I2k2DkxWyUTnV5p9HK5/FlA97uA8jRcKNkTGmyWMx8
+   g==;
+X-CSE-ConnectionGUID: AQ2sVmCTSrqSuY8mcNOiqQ==
+X-CSE-MsgGUID: tw4YcpdMQOS3jHISnBM5yQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48244882"
 X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="41344730"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 10:08:20 -0800
-X-CSE-ConnectionGUID: VaL0eCJUSA+R5H2pzJFeSg==
-X-CSE-MsgGUID: KROQNmgrRGalH8d9q2wacA==
+   d="scan'208";a="48244882"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 10:42:27 -0800
+X-CSE-ConnectionGUID: DFlZGaCrRF+VTsoFUySQWw==
+X-CSE-MsgGUID: sC6n3vS5Tt2eoHcile/hHA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="105710223"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="110871489"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 17 Jan 2025 10:08:17 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 17 Jan 2025 10:42:21 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYqlS-000TYJ-1n;
-	Fri, 17 Jan 2025 18:08:14 +0000
-Date: Sat, 18 Jan 2025 02:07:58 +0800
+	id 1tYrIQ-000TaB-2o;
+	Fri, 17 Jan 2025 18:42:18 +0000
+Date: Sat, 18 Jan 2025 02:41:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	chunkuang.hu@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, pavan.chebbi@broadcom.com,
-	andrew.gospodarek@broadcom.com, michal.swiatkowski@linux.intel.com,
-	helgaas@kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-	Ajit Khaparde <ajit.khaparde@broadcom.com>,
-	David Wei <dw@davidwei.uk>
-Subject: Re: [PATCH net-next v2 09/10] bnxt_en: Extend queue stop/start for
- TX rings
-Message-ID: <202501180109.z7pduJQw-lkp@intel.com>
-References: <20250116192343.34535-10-michael.chan@broadcom.com>
+	p.zabel@pengutronix.de, airlied@gmail.com, simona@ffwll.ch,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, ck.hu@mediatek.com,
+	jitao.shi@mediatek.com, jie.qiu@mediatek.com,
+	junzhi.zhao@mediatek.com, dri-devel@lists.freedesktop.org,
+	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kernel@collabora.com, dmitry.baryshkov@linaro.org,
+	lewis.liao@mediatek.com, ives.chenjh@mediatek.com,
+	tommyyl.chen@mediatek.com, jason-jh.lin@mediatek.com
+Subject: Re: [PATCH v5 32/34] drm/mediatek: Introduce HDMI/DDC v2 for
+ MT8195/MT8188
+Message-ID: <202501180257.A2Og8gLK-lkp@intel.com>
+References: <20250113145232.227674-33-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,182 +76,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250116192343.34535-10-michael.chan@broadcom.com>
+In-Reply-To: <20250113145232.227674-33-angelogioacchino.delregno@collabora.com>
 
-Hi Michael,
+Hi AngeloGioacchino,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
+[auto build test ERROR on next-20250113]
+[cannot apply to robh/for-next pza/reset/next linus/master pza/imx-drm/next drm-misc/drm-misc-next v6.13-rc7 v6.13-rc6 v6.13-rc5 v6.13-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Chan/bnxt_en-Set-NAPR-1-2-support-when-registering-with-firmware/20250117-032822
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250116192343.34535-10-michael.chan%40broadcom.com
-patch subject: [PATCH net-next v2 09/10] bnxt_en: Extend queue stop/start for TX rings
-config: i386-randconfig-012-20250117 (https://download.01.org/0day-ci/archive/20250118/202501180109.z7pduJQw-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180109.z7pduJQw-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/dt-bindings-display-mediatek-dpi-Add-MT8195-and-MT8188-compat/20250113-225554
+base:   next-20250113
+patch link:    https://lore.kernel.org/r/20250113145232.227674-33-angelogioacchino.delregno%40collabora.com
+patch subject: [PATCH v5 32/34] drm/mediatek: Introduce HDMI/DDC v2 for MT8195/MT8188
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180257.A2Og8gLK-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180257.A2Og8gLK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501180109.z7pduJQw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180257.A2Og8gLK-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:15725:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    15725 |         if (rc)
-          |         ^~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
-    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
-          |                             ^~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15725:2: note: remove the 'if' if its condition is always false
-    15725 |         if (rc)
-          |         ^~~~~~~
-    15726 |                 goto err_reset_rx;
-          |                 ~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>> drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:345:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     345 |         val = FIELD_PREP(SD0_MAP, sd0) | FIELD_PREP(SD1_MAP, sd1);
+         |               ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:378:51: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     378 |         regmap_update_bits(hdmi->regs, AIP_CTRL, I2S_EN, FIELD_PREP(I2S_EN, chnum));
+         |                                                          ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:410:13: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     410 |         fifo_map = FIELD_PREP(FIFO0_MAP, 0) | FIELD_PREP(FIFO1_MAP, 1);
+         |                    ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:477:53: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     477 |         regmap_update_bits(hdmi->regs, AIP_CTRL, SPDIF_EN, FIELD_PREP(SPDIF_EN, spdif_i2s));
+         |                                                            ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:554:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     554 |                            FIELD_PREP(MAX_2UI_I2S_HI_WRITE, swapbit));
+         |                            ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:579:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     579 |                            FIELD_PREP(MAX_1UI_WRITE, 4));
+         |                            ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:715:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     715 |                            FIELD_PREP(TMDS_PACK_MODE, TMDS_PACK_MODE_8BPP));
+         |                            ^
+>> drivers/gpu/drm/mediatek/mtk_hdmi_v2.c:812:16: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     812 |         hpd_pin_sta = FIELD_GET(HPD_PIN_STA, hpd_status);
          |                       ^
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15721:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    15721 |         if (rc)
-          |         ^~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
-    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
-          |                             ^~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15721:2: note: remove the 'if' if its condition is always false
-    15721 |         if (rc)
-          |         ^~~~~~~
-    15722 |                 goto err_reset_rx;
-          |                 ~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15717:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    15717 |         if (rc)
-          |         ^~~~~~~
-   include/linux/compiler.h:55:28: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
-      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
-    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
-          |                             ^~~
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15717:2: note: remove the 'if' if its condition is always false
-    15717 |         if (rc)
-          |         ^~~~~~~
-    15718 |                 goto err_reset_rx;
-          |                 ~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:55:23: note: expanded from macro 'if'
-      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                       ^
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15695:31: note: initialize the variable 'cpr' to silence this warning
-    15695 |         struct bnxt_cp_ring_info *cpr;
-          |                                      ^
-          |                                       = NULL
-   3 warnings generated.
+   8 errors generated.
+--
+>> drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:59:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      59 |                                    FIELD_PREP(DDC_CTRL_CMD, DDC_CMD_CLOCK_SCL));
+         |                                    ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:87:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      87 |                            FIELD_PREP(HPD_DDC_DELAY_CNT, DDC2_DLY_CNT));
+         |                            ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:133:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     133 |                            FIELD_PREP(DDC_CTRL_CMD, DDC_CMD_CLEAR_FIFO));
+         |                            ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:139:9: warning: comparison of distinct pointer types ('typeof ((loop_counter)) *' (aka 'unsigned short *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+     139 |                 rem = do_div(loop_counter, temp_length);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:183:28: note: expanded from macro 'do_div'
+     183 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:139:9: error: incompatible pointer types passing 'u16 *' (aka 'unsigned short *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+     139 |                 rem = do_div(loop_counter, temp_length);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:199:22: note: expanded from macro 'do_div'
+     199 |                 __rem = __div64_32(&(n), __base);       \
+         |                                    ^~~~
+   include/asm-generic/div64.h:174:38: note: passing argument to parameter 'dividend' here
+     174 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
+         |                                      ^
+>> drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:207:26: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     207 |                         puc_value[read_idx] = FIELD_GET(DDC_DATA_OUT, val);
+         |                                               ^
+   drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c:139:9: warning: shift count >= width of type [-Wshift-count-overflow]
+     139 |                 rem = do_div(loop_counter, temp_length);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/div64.h:195:25: note: expanded from macro 'do_div'
+     195 |         } else if (likely(((n) >> 32) == 0)) {          \
+         |                                ^  ~~
+   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   2 warnings and 5 errors generated.
 
 
-vim +15725 drivers/net/ethernet/broadcom/bnxt/bnxt.c
+vim +/FIELD_PREP +345 drivers/gpu/drm/mediatek/mtk_hdmi_v2.c
 
-2d694c27d32efc David Wei     2024-06-18  15690  
-2d694c27d32efc David Wei     2024-06-18  15691  static int bnxt_queue_start(struct net_device *dev, void *qmem, int idx)
-2d694c27d32efc David Wei     2024-06-18  15692  {
-2d694c27d32efc David Wei     2024-06-18  15693  	struct bnxt *bp = netdev_priv(dev);
-2d694c27d32efc David Wei     2024-06-18  15694  	struct bnxt_rx_ring_info *rxr, *clone;
-2d694c27d32efc David Wei     2024-06-18  15695  	struct bnxt_cp_ring_info *cpr;
-b9d2956e869c78 David Wei     2024-08-07  15696  	struct bnxt_vnic_info *vnic;
-5d2310614bc883 Somnath Kotur 2025-01-16  15697  	struct bnxt_napi *bnapi;
-b9d2956e869c78 David Wei     2024-08-07  15698  	int i, rc;
-2d694c27d32efc David Wei     2024-06-18  15699  
-2d694c27d32efc David Wei     2024-06-18  15700  	rxr = &bp->rx_ring[idx];
-2d694c27d32efc David Wei     2024-06-18  15701  	clone = qmem;
-2d694c27d32efc David Wei     2024-06-18  15702  
-2d694c27d32efc David Wei     2024-06-18  15703  	rxr->rx_prod = clone->rx_prod;
-2d694c27d32efc David Wei     2024-06-18  15704  	rxr->rx_agg_prod = clone->rx_agg_prod;
-2d694c27d32efc David Wei     2024-06-18  15705  	rxr->rx_sw_agg_prod = clone->rx_sw_agg_prod;
-2d694c27d32efc David Wei     2024-06-18  15706  	rxr->rx_next_cons = clone->rx_next_cons;
-bd649c5cc95816 David Wei     2024-12-03  15707  	rxr->rx_tpa = clone->rx_tpa;
-bd649c5cc95816 David Wei     2024-12-03  15708  	rxr->rx_tpa_idx_map = clone->rx_tpa_idx_map;
-2d694c27d32efc David Wei     2024-06-18  15709  	rxr->page_pool = clone->page_pool;
-bd649c5cc95816 David Wei     2024-12-03  15710  	rxr->head_pool = clone->head_pool;
-b537633ce57b29 Taehee Yoo    2024-07-21  15711  	rxr->xdp_rxq = clone->xdp_rxq;
-2d694c27d32efc David Wei     2024-06-18  15712  
-2d694c27d32efc David Wei     2024-06-18  15713  	bnxt_copy_rx_ring(bp, rxr, clone);
-2d694c27d32efc David Wei     2024-06-18  15714  
-5d2310614bc883 Somnath Kotur 2025-01-16  15715  	bnapi = rxr->bnapi;
-2d694c27d32efc David Wei     2024-06-18  15716  	rc = bnxt_hwrm_rx_ring_alloc(bp, rxr);
-2d694c27d32efc David Wei     2024-06-18  15717  	if (rc)
-5d2310614bc883 Somnath Kotur 2025-01-16  15718  		goto err_reset_rx;
-377e78a9e08ce5 Somnath Kotur 2025-01-16  15719  
-377e78a9e08ce5 Somnath Kotur 2025-01-16  15720  	rc = bnxt_hwrm_cp_ring_alloc_p5(bp, rxr->rx_cpr);
-2d694c27d32efc David Wei     2024-06-18  15721  	if (rc)
-5d2310614bc883 Somnath Kotur 2025-01-16  15722  		goto err_reset_rx;
-2d694c27d32efc David Wei     2024-06-18  15723  
-377e78a9e08ce5 Somnath Kotur 2025-01-16  15724  	rc = bnxt_hwrm_rx_agg_ring_alloc(bp, rxr);
-377e78a9e08ce5 Somnath Kotur 2025-01-16 @15725  	if (rc)
-5d2310614bc883 Somnath Kotur 2025-01-16  15726  		goto err_reset_rx;
-377e78a9e08ce5 Somnath Kotur 2025-01-16  15727  
-2d694c27d32efc David Wei     2024-06-18  15728  	bnxt_db_write(bp, &rxr->rx_db, rxr->rx_prod);
-2d694c27d32efc David Wei     2024-06-18  15729  	if (bp->flags & BNXT_FLAG_AGG_RINGS)
-2d694c27d32efc David Wei     2024-06-18  15730  		bnxt_db_write(bp, &rxr->rx_agg_db, rxr->rx_agg_prod);
-2d694c27d32efc David Wei     2024-06-18  15731  
-5d2310614bc883 Somnath Kotur 2025-01-16  15732  	cpr = &bnapi->cp_ring;
-2d694c27d32efc David Wei     2024-06-18  15733  	cpr->sw_stats->rx.rx_resets++;
-2d694c27d32efc David Wei     2024-06-18  15734  
-5d2310614bc883 Somnath Kotur 2025-01-16  15735  	if (bp->flags & BNXT_FLAG_SHARED_RINGS) {
-5d2310614bc883 Somnath Kotur 2025-01-16  15736  		cpr->sw_stats->tx.tx_resets++;
-5d2310614bc883 Somnath Kotur 2025-01-16  15737  		rc = bnxt_tx_queue_start(bp, idx);
-5d2310614bc883 Somnath Kotur 2025-01-16  15738  		if (rc) {
-5d2310614bc883 Somnath Kotur 2025-01-16  15739  			netdev_warn(bp->dev,
-5d2310614bc883 Somnath Kotur 2025-01-16  15740  				    "tx queue restart failed: rc=%d\n", rc);
-5d2310614bc883 Somnath Kotur 2025-01-16  15741  			bnapi->tx_fault = 1;
-5d2310614bc883 Somnath Kotur 2025-01-16  15742  			goto err_reset;
-5d2310614bc883 Somnath Kotur 2025-01-16  15743  		}
-5d2310614bc883 Somnath Kotur 2025-01-16  15744  	}
-5d2310614bc883 Somnath Kotur 2025-01-16  15745  
-5d2310614bc883 Somnath Kotur 2025-01-16  15746  	napi_enable(&bnapi->napi);
-5d2310614bc883 Somnath Kotur 2025-01-16  15747  	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
-5d2310614bc883 Somnath Kotur 2025-01-16  15748  
-b9d2956e869c78 David Wei     2024-08-07  15749  	for (i = 0; i <= BNXT_VNIC_NTUPLE; i++) {
-b9d2956e869c78 David Wei     2024-08-07  15750  		vnic = &bp->vnic_info[i];
-5ac066b7b062ee Somnath Kotur 2024-11-22  15751  
-5ac066b7b062ee Somnath Kotur 2024-11-22  15752  		rc = bnxt_hwrm_vnic_set_rss_p5(bp, vnic, true);
-5ac066b7b062ee Somnath Kotur 2024-11-22  15753  		if (rc) {
-5ac066b7b062ee Somnath Kotur 2024-11-22  15754  			netdev_err(bp->dev, "hwrm vnic %d set rss failure rc: %d\n",
-5ac066b7b062ee Somnath Kotur 2024-11-22  15755  				   vnic->vnic_id, rc);
-5ac066b7b062ee Somnath Kotur 2024-11-22  15756  			return rc;
-5ac066b7b062ee Somnath Kotur 2024-11-22  15757  		}
-b9d2956e869c78 David Wei     2024-08-07  15758  		vnic->mru = bp->dev->mtu + ETH_HLEN + VLAN_HLEN;
-b9d2956e869c78 David Wei     2024-08-07  15759  		bnxt_hwrm_vnic_update(bp, vnic,
-b9d2956e869c78 David Wei     2024-08-07  15760  				      VNIC_UPDATE_REQ_ENABLES_MRU_VALID);
-b9d2956e869c78 David Wei     2024-08-07  15761  	}
-b9d2956e869c78 David Wei     2024-08-07  15762  
-2d694c27d32efc David Wei     2024-06-18  15763  	return 0;
-2d694c27d32efc David Wei     2024-06-18  15764  
-5d2310614bc883 Somnath Kotur 2025-01-16  15765  err_reset_rx:
-5d2310614bc883 Somnath Kotur 2025-01-16  15766  	rxr->bnapi->in_reset = true;
-5d2310614bc883 Somnath Kotur 2025-01-16  15767  err_reset:
-5d2310614bc883 Somnath Kotur 2025-01-16  15768  	napi_enable(&bnapi->napi);
-5d2310614bc883 Somnath Kotur 2025-01-16  15769  	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
-5d2310614bc883 Somnath Kotur 2025-01-16  15770  	bnxt_reset_task(bp, true);
-2d694c27d32efc David Wei     2024-06-18  15771  	return rc;
-2d694c27d32efc David Wei     2024-06-18  15772  }
-2d694c27d32efc David Wei     2024-06-18  15773  
+   333	
+   334	static u32 mtk_hdmi_v2_aud_output_channel_map(u8 sd0, u8 sd1, u8 sd2, u8 sd3,
+   335						      u8 sd4, u8 sd5, u8 sd6, u8 sd7)
+   336	{
+   337		u32 val;
+   338	
+   339		/*
+   340		 * Each of the Output Channels (0-7) can be mapped to get their input
+   341		 * from any of the available Input Channels (0-7): this function
+   342		 * takes input channel numbers and formats a value that must then
+   343		 * be written to the TOP_AUD_MAP hardware register by the caller.
+   344		 */
+ > 345		val = FIELD_PREP(SD0_MAP, sd0) | FIELD_PREP(SD1_MAP, sd1);
+   346		val |= FIELD_PREP(SD2_MAP, sd2) | FIELD_PREP(SD3_MAP, sd3);
+   347		val |= FIELD_PREP(SD4_MAP, sd4) | FIELD_PREP(SD5_MAP, sd5);
+   348		val |= FIELD_PREP(SD6_MAP, sd6) | FIELD_PREP(SD7_MAP, sd7);
+   349	
+   350		return val;
+   351	}
+   352	
 
 -- 
 0-DAY CI Kernel Test Service
