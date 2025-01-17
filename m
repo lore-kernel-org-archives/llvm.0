@@ -1,109 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9628022D4D5
-	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 18:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91B325A643;
+	Fri, 17 Jan 2025 03:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737051787; cv=none; b=kvTa6y80nnobmED53+bB74zBqjFw8XoMotJMXljSyFLhvmTVqBMjtP8ONV94jIPIFq8PiP3IQqPoiwvvEU55gbcTjxiNxsIIp4EoiWBVyPIZDDz8FuGsngE7uFhtMXHLXqxCIQHHnIhwi8z4HBPrBNjpdM88/ARESaLdDBiTkpE=
+	t=1737085060; cv=none; b=hwjHIJA4k+204b2fdfa04WmdjPC4lWCoA/n5+sIbvfL4Dj/E6uFaer31iwZfuAQoja11TAc88vlb8ts2nILVoOs1Zku8rV9HWgNb0FcJzV2iW8SevV5cxrVWx9Bhp5LXGWJt5/cZB/FBCwfOBV1EZIk+moWGkswODwS07xDFE+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737051787; c=relaxed/simple;
-	bh=RndU3CSpXrAOlj30uudqpekCuSD9rFn2Eh85FshWsTI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kV1TFpwn/ae9VwGTRkcWcnkYD47XC5fg0RHsx2js5qucZg7Af9dDrvyNqPpCOqrFQPyTVz75msAatxEPvH0pUnlnNPd1IqpkcoilE4pf6HtXHxJaUnOFzP0vamIZ1MdmUsMFpfyIrmrSBSka0NhZ0SQKJipPAfIIt/MKwTTbRxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sn14vVQb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1737085060; c=relaxed/simple;
+	bh=HMUUDGxdOQTfRDHxaMnVQv2gVwyu1y0efKo/sfsIA6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cbnrcMrGUyVwNz53oIq6B0/bgbIHiRe5y/pZel16Taf6AEOlL0pZUvZT5JprGaS+xhAxk0oORHylf6/EjBQsqYjHtPY9JhQe//GRHLFwErL1myW3N84oQHY8FrNAEomF23D65n1m1Mk5TUzM7JGR3yEbB20cLEhle3wzLwUEONk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFLwkiLu; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sn14vVQb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737051784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Alcr1HT/QCVH5thgMkGN/lCs+DGu8gvctJ3U4B/+SSc=;
-	b=Sn14vVQbT8HTBLbebYdwU4boMQ/syCcS3l6CrsA3HgRxrSXJySJPjk3i22LPc2DeqX7NLY
-	PKjfmVobE0HtyeRQV8rFQIjCBw1qSNsbcsSXcx+7a2mtCwa/ymaV5999cpUn50K+cKmtz5
-	lo4iRUEAAPOHeFRFs0Odmpf+FpvS/U0=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-458-omUv55QwMomBl7QK-sUb8Q-1; Thu,
- 16 Jan 2025 13:23:02 -0500
-X-MC-Unique: omUv55QwMomBl7QK-sUb8Q-1
-X-Mimecast-MFC-AGG-ID: omUv55QwMomBl7QK-sUb8Q
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D32B31955DD7
-	for <llvm@lists.linux.dev>; Thu, 16 Jan 2025 18:23:01 +0000 (UTC)
-Received: from [172.64.12.20] (unknown [10.30.33.24])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5C0DA195605F;
-	Thu, 16 Jan 2025 18:23:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc7,
- upstream-mainline, ce69b401)
-Date: Thu, 16 Jan 2025 18:23:00 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFLwkiLu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737085059; x=1768621059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HMUUDGxdOQTfRDHxaMnVQv2gVwyu1y0efKo/sfsIA6c=;
+  b=VFLwkiLuywngzPyKIu6XYd5EPCFDC8v2+Pw4/dvZtyvhJlLzIDagRCt2
+   ZqVpre58+FsKJskXQ+7FWX7AYBRHyZk48O+P3/NqVNRpdAFCIl6/N0CBc
+   xO8QIeNqpeptiQLoSwaSQplYgis4YJjTj14/x4EkDo4GIyAg6dI9Kw0p1
+   umL98qA9LITKoNDSxGTpE4ClrH/cK1zTG+Q0tQexNYJm1kBoPELgKbvbX
+   Kich/1UmtL2BEbeMBty2aKPfnEIunvKt6LXdb7C7cvvtIwkP5eWukMcZo
+   YnLzDLrwwkcFQIzO5xis3YYRYB5Y8KSEDdg/n7yMCF6T0NbUnK5TLwScR
+   g==;
+X-CSE-ConnectionGUID: s4sJmJCsTjqW4/o956i2Eg==
+X-CSE-MsgGUID: BX+bNfQmTVa+Va9gpUVgXA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="47994674"
+X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
+   d="scan'208";a="47994674"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 19:37:38 -0800
+X-CSE-ConnectionGUID: F/uXfhJoRlGFp7QxPl5O9A==
+X-CSE-MsgGUID: SIdSKJNZR7WXAK5LqKdzWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110321782"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 16 Jan 2025 19:37:36 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYdAs-000ShT-15;
+	Fri, 17 Jan 2025 03:37:34 +0000
+Date: Fri, 17 Jan 2025 11:37:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rik van Riel <riel@surriel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v5 05/12] x86/mm: add INVLPGB support code
+Message-ID: <202501171121.nQcwVI41-lkp@intel.com>
+References: <20250116023127.1531583-6-riel@surriel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <74268.125011613230202197@us-mta-458.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: bvokEXvFCB2LY8P5GVEAd98FF4c2ifkrPmor-9n-i6M_1737051782
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250116023127.1531583-6-riel@surriel.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Rik,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/x86/mm]
+[also build test ERROR on tip/master linus/master tip/x86/core v6.13-rc7]
+[cannot apply to tip/auto-latest next-20250116]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Rik-van-Riel/x86-mm-make-MMU_GATHER_RCU_TABLE_FREE-unconditional/20250116-103657
+base:   tip/x86/mm
+patch link:    https://lore.kernel.org/r/20250116023127.1531583-6-riel%40surriel.com
+patch subject: [PATCH v5 05/12] x86/mm: add INVLPGB support code
+config: i386-buildonly-randconfig-001-20250117 (https://download.01.org/0day-ci/archive/20250117/202501171121.nQcwVI41-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171121.nQcwVI41-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501171121.nQcwVI41-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:17:
+   In file included from arch/x86/include/asm/tlbflush.h:13:
+>> arch/x86/include/asm/invlpgb.h:26:49: error: invalid input size for constraint 'a'
+      26 |         asm volatile(".byte 0x0f, 0x01, 0xfe" : : "a" (rax), "c" (ecx), "d" (edx));
+         |                                                        ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   1 warning and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=3995685176
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1263: prepare0] Error 2 shuffle=3995685176
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=3995685176
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=3995685176
+   make: Target 'prepare' not remade because of errors.
 
 
-Kernel information:
-    Commit message: Merge tag 'net-6.13-rc8' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
+vim +/a +26 arch/x86/include/asm/invlpgb.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1628549265
+     7	
+     8	/*
+     9	 * INVLPGB does broadcast TLB invalidation across all the CPUs in the system.
+    10	 *
+    11	 * The INVLPGB instruction is weakly ordered, and a batch of invalidations can
+    12	 * be done in a parallel fashion.
+    13	 *
+    14	 * TLBSYNC is used to ensure that pending INVLPGB invalidations initiated from
+    15	 * this CPU have completed.
+    16	 */
+    17	static inline void __invlpgb(unsigned long asid, unsigned long pcid,
+    18				     unsigned long addr, u16 extra_count,
+    19				     bool pmd_stride, unsigned long flags)
+    20	{
+    21		u32 edx = (pcid << 16) | asid;
+    22		u32 ecx = (pmd_stride << 31) | extra_count;
+    23		u64 rax = addr | flags;
+    24	
+    25		/* INVLPGB; supported in binutils >= 2.36. */
+  > 26		asm volatile(".byte 0x0f, 0x01, 0xfe" : : "a" (rax), "c" (ecx), "d" (edx));
+    27	}
+    28	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1628549265-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1628549265-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1628549265-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
