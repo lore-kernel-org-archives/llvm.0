@@ -1,109 +1,222 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21079443;
-	Fri, 17 Jan 2025 15:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DAC71750;
+	Fri, 17 Jan 2025 15:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737126116; cv=none; b=gWax960rpPrX9alb1j/kVMNOIbXzjFjpD4Bc6XcJs8Cq9VbIeiHtb+po0zsN9uKt7UB7kiQYTQQDfj+lb7jRWZh3l4ILhCz1lUDY1qyf6BHctDSR6QjwkuYVlF+vXWW89XdLjhgEsw9AYfRGbxru7IxcmMPwtZdrgoGHcDycb4c=
+	t=1737127864; cv=none; b=GSlggoF2gnYZDeVU04dd5gFVzbCYEiGJuZ/V4sTI1wxHvTqURpVB1e3i1w7XoCu4dHGAxxZUzc0vrBThxomkaefBkWUpKjpd2vgfbIm8ZzzWbbJGeJvJiBAiYDNcLRL2MHDsr1L9UWMttv4xvWKzi4DtH5+oUUHedhIN7Il6gJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737126116; c=relaxed/simple;
-	bh=yFcdzI0FGMchHt5BH56kkzohA7DDoCTuShmTdqpAZ/8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YTb0+h0zXbpYwahFfHDi1FjK9gK2qPzClOikoQ6Ez7PX9zy2FZdbJewyAk6M8g7odQs69u8erzodIMEBI1x5jGI/ElzbRM2orNqis3FJ/zyJKBFpzpkTUtC8+rWUjx146NxslcggBXpjhQ3Ut6nv84u+w2prLBpHaX+7rYJIpxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=shelob.surriel.com; arc=none smtp.client-ip=96.67.55.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shelob.surriel.com
-Received: from fangorn.home.surriel.com ([10.0.13.7])
-	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.97.1)
-	(envelope-from <riel@shelob.surriel.com>)
-	id 1tYnr1-0000000044b-1hOa;
-	Fri, 17 Jan 2025 10:01:47 -0500
-Message-ID: <ba472948f241411361ebbf15b5af16a43ac903fe.camel@surriel.com>
-Subject: Re: [PATCH v5 05/12] x86/mm: add INVLPGB support code
-From: Rik van Riel <riel@surriel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm <llvm@lists.linux.dev>, x86 <x86@kernel.org>, Borislav Petkov
-	 <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra
-	 <peterz@infradead.org>, kernel-team <kernel-team@meta.com>, 
- "linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>
-Date: Fri, 17 Jan 2025 10:01:47 -0500
-In-Reply-To: <44837964d67d6f35a20139fbe310f621141a0404.camel@surriel.com>
-References: <20250116023127.1531583-6-riel@surriel.com>
-		 <202501171121.nQcwVI41-lkp@intel.com>
-	 <44837964d67d6f35a20139fbe310f621141a0404.camel@surriel.com>
-Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
- keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
- eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
- Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
- lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
- dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
- mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
- gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
- r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
- WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
- 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
- Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
- +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
- g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
- KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
- fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
- 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
- G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
- okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
- TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
- cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
- omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
- QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
- c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	s=arc-20240116; t=1737127864; c=relaxed/simple;
+	bh=Ct2LBolJssi12orV1vqNr8g5NmfBpVvpwl8vuoKzVU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fv1cS8EL6Ewr0um8ONqzYpJgIHMuN7s0XdGnkVBzkbiR0J5Ej0pLhmUvq6Jpm32E64hbRRB5RnvCDTTP1rlONmwKjXXSgCyn1+fYaKHnAFhv0ZXPYmhu/tpoZfvDe+eMxKZfUiXEcPripQL/hUEmrTmcsAhbuhVWUH+EyKTcyeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgb9GYza; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgb9GYza"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737127862; x=1768663862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ct2LBolJssi12orV1vqNr8g5NmfBpVvpwl8vuoKzVU8=;
+  b=dgb9GYzatESFgYI9fNbO8knXHQtfSPerDUwqKzofZzkqIbK9R1fN5qBD
+   oCev0fa4q9AEW0ZazyvydMxyF78QsXPVWZKiVZxOTedg/gLfjIAOM2yth
+   R/PfHzSBIm0wou+afHc2RmQj5NAOM0qP0IlLfFopD4OC+6D9dBkknWqB5
+   pjO83+JIsdwRPw6olCi7cLOkL3QRszqIttvf0lOm5/290qncp2YHjT/mM
+   s3hHMRWcMU9BtkczlMjLBbG6+7C+JSMNc+CHElJqF7jUJ51ROAjhTZBK8
+   GlkcyJP1WNQspuvmy4W9nU85intD5Dj1p2xLTYsGeWPcLx4vwGEwmwTcr
+   Q==;
+X-CSE-ConnectionGUID: n9Xqj+1cSl200wJ0eGiIhA==
+X-CSE-MsgGUID: MV8yFoNYRNWNEAVLrEHINg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37584361"
+X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
+   d="scan'208";a="37584361"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 07:31:02 -0800
+X-CSE-ConnectionGUID: leJajOJ/RsS1s8BvVNvDSw==
+X-CSE-MsgGUID: WvXFisaaTFKfscJp/ddSng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110940513"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 17 Jan 2025 07:30:56 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYoJE-000TP5-0d;
+	Fri, 17 Jan 2025 15:30:56 +0000
+Date: Fri, 17 Jan 2025 23:30:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>,
+	wei.fang@nxp.com, shenwei.wang@nxp.com, xiaoning.wang@nxp.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, imx@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dheeraj Reddy Jonnalagadda <dheeraj.linuxdev@gmail.com>
+Subject: Re: [PATCH net-next] net: fec: implement TSO descriptor cleanup
+Message-ID: <202501172328.IoOTB8n0-lkp@intel.com>
+References: <20250116130920.30984-1-dheeraj.linuxdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Sender: riel@surriel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250116130920.30984-1-dheeraj.linuxdev@gmail.com>
 
-On Fri, 2025-01-17 at 09:20 -0500, Rik van Riel wrote:
-> On Fri, 2025-01-17 at 11:37 +0800, kernel test robot wrote:
-> >=20
-> > compiler: clang version 19.1.3
-> > (
-> > https://github.com/llvm/llvm-project=C2=A0ab51eccf88f5321e7c60591c5546b=
-25
-> > 4b6afab99)
-> > reproduce (this is a W=3D1 build):
-> > (
-> > https://download.01.org/0day-ci/archive/20250117/202501171121.nQcwVI
-> > 41-lkp@intel.com/reproduce)
-> >=20
->=20
-> > > > arch/x86/include/asm/invlpgb.h:26:49: error: invalid input size
-> > > > for constraint 'a'
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 26 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 asm volatile(".byte 0x0f, 0x01, 0xfe" : : "a"
-> > (rax), "c" (ecx), "d" (edx));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 ^
-> >=20
->=20
-> What do I do about this?
+Hi Dheeraj,
 
-Ohhh, never mind.
+kernel test robot noticed the following build warnings:
 
-The failing build is a 32 bit build!
+[auto build test WARNING on net-next/main]
 
-I just need to use unsigned long instead of u64 in the
-next version.
+url:    https://github.com/intel-lab-lkp/linux/commits/Dheeraj-Reddy-Jonnalagadda/net-fec-implement-TSO-descriptor-cleanup/20250116-211046
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250116130920.30984-1-dheeraj.linuxdev%40gmail.com
+patch subject: [PATCH net-next] net: fec: implement TSO descriptor cleanup
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501172328.IoOTB8n0-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501172328.IoOTB8n0-lkp@intel.com/reproduce)
 
---=20
-All Rights Reversed.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501172328.IoOTB8n0-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/freescale/fec_main.c:25:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/freescale/fec_main.c:917:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     917 |         struct bufdesc *tmp_bdp = txq->bd.cur;
+         |         ^
+   4 warnings generated.
+
+
+vim +917 drivers/net/ethernet/freescale/fec_main.c
+
+   835	
+   836	static int fec_enet_txq_submit_tso(struct fec_enet_priv_tx_q *txq,
+   837					   struct sk_buff *skb,
+   838					   struct net_device *ndev)
+   839	{
+   840		struct fec_enet_private *fep = netdev_priv(ndev);
+   841		int hdr_len, total_len, data_left;
+   842		struct bufdesc *bdp = txq->bd.cur;
+   843		struct tso_t tso;
+   844		unsigned int index = 0;
+   845		int ret;
+   846	
+   847		if (tso_count_descs(skb) >= fec_enet_get_free_txdesc_num(txq)) {
+   848			dev_kfree_skb_any(skb);
+   849			if (net_ratelimit())
+   850				netdev_err(ndev, "NOT enough BD for TSO!\n");
+   851			return NETDEV_TX_OK;
+   852		}
+   853	
+   854		/* Protocol checksum off-load for TCP and UDP. */
+   855		if (fec_enet_clear_csum(skb, ndev)) {
+   856			dev_kfree_skb_any(skb);
+   857			return NETDEV_TX_OK;
+   858		}
+   859	
+   860		/* Initialize the TSO handler, and prepare the first payload */
+   861		hdr_len = tso_start(skb, &tso);
+   862	
+   863		total_len = skb->len - hdr_len;
+   864		while (total_len > 0) {
+   865			char *hdr;
+   866	
+   867			index = fec_enet_get_bd_index(bdp, &txq->bd);
+   868			data_left = min_t(int, skb_shinfo(skb)->gso_size, total_len);
+   869			total_len -= data_left;
+   870	
+   871			/* prepare packet headers: MAC + IP + TCP */
+   872			hdr = txq->tso_hdrs + index * TSO_HEADER_SIZE;
+   873			tso_build_hdr(skb, hdr, &tso, data_left, total_len == 0);
+   874			ret = fec_enet_txq_put_hdr_tso(txq, skb, ndev, bdp, index);
+   875			if (ret)
+   876				goto err_release;
+   877	
+   878			while (data_left > 0) {
+   879				int size;
+   880	
+   881				size = min_t(int, tso.size, data_left);
+   882				bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
+   883				index = fec_enet_get_bd_index(bdp, &txq->bd);
+   884				ret = fec_enet_txq_put_data_tso(txq, skb, ndev,
+   885								bdp, index,
+   886								tso.data, size,
+   887								size == data_left,
+   888								total_len == 0);
+   889				if (ret)
+   890					goto err_release;
+   891	
+   892				data_left -= size;
+   893				tso_build_data(skb, &tso, size);
+   894			}
+   895	
+   896			bdp = fec_enet_get_nextdesc(bdp, &txq->bd);
+   897		}
+   898	
+   899		/* Save skb pointer */
+   900		txq->tx_buf[index].buf_p = skb;
+   901	
+   902		skb_tx_timestamp(skb);
+   903		txq->bd.cur = bdp;
+   904	
+   905		/* Trigger transmission start */
+   906		if (!(fep->quirks & FEC_QUIRK_ERR007885) ||
+   907		    !readl(txq->bd.reg_desc_active) ||
+   908		    !readl(txq->bd.reg_desc_active) ||
+   909		    !readl(txq->bd.reg_desc_active) ||
+   910		    !readl(txq->bd.reg_desc_active))
+   911			writel(0, txq->bd.reg_desc_active);
+   912	
+   913		return 0;
+   914	
+   915	err_release:
+   916		/* Release all used data descriptors for TSO */
+ > 917		struct bufdesc *tmp_bdp = txq->bd.cur;
+   918	
+   919		while (tmp_bdp != bdp) {
+   920			tmp_bdp->cbd_sc = 0;
+   921			tmp_bdp->cbd_bufaddr = 0;
+   922			tmp_bdp->cbd_datlen = 0;
+   923			tmp_bdp = fec_enet_get_nextdesc(tmp_bdp, &txq->bd);
+   924		}
+   925	
+   926		dev_kfree_skb_any(skb);
+   927	
+   928		return ret;
+   929	}
+   930	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
