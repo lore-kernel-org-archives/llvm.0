@@ -1,67 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8421F78E0;
-	Fri, 17 Jan 2025 07:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AB922619;
+	Fri, 17 Jan 2025 07:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737097690; cv=none; b=o2/hJB/UeqD9LCRweHkXe+gD4sUV0Qn5Eg6G1o93SdKrhTJrc5yvhbgHfnAIC64hdZBBH2mutBx7q34wwmneoqMmgWmdNISuJbnIAGkzxvdTWgg/SYo8E4pzGgNeVF6h93hThIh8rTl1cT377Bqyq9uZ1V8JG9C/bS556oNBiCw=
+	t=1737098406; cv=none; b=qufRstTY36BLZ8C0E9hqKkl1hTHm44Vhkggc2jiEe9c1hRfChNkmCKa1/IlOyNCxFIXuDHvAO72bjuI7jzR+dTdr3ArnhFJTAe2VkvpGVfM0QDRS6+L7VrEl8F0gyqpmj2gCWNM1FjILSyYwKi704Eoyc1UQT5s/GDzF662yjFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737097690; c=relaxed/simple;
-	bh=A9YabGAz9F0I03ZVr6BHi8PnA+DJl2DrzQAK/6IyhOU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZKkd596SYJ910K7ZF1+8lRAxsaVm1+VExj3MufZM1fdPUVz7mNhQcmHJOnJ45LVkWvJgdAH8noW+hh0EmrC2usMW7mqn1P9zTwfBxILzB4NqUL6y1I5eYI8RznJySNHwbhnxYtiaxNmEaY5GrniX9CmT8qTS3MWYq9K7PlAzxZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BwP9QT76; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1737098406; c=relaxed/simple;
+	bh=9OqbDH8cFpvGxPnAlZOcAheuxt1jMIT28WNum3S8wzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OLVWL03zSmcWQOeaxgwRPdiO/ek8uGVFDaKmoRPV02LeijXh8NNTb6o/TDh3IsqBN6fEYoSgAeQqUUWtoP6ypj3mQ0eXOUM1KZbI7PQ3OrhFm7EfMJI4v3WkjkbT4WsyRLV42FMv4sV7NcOa9K4M7vDrD+n97KYdHWarJrDBB+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RfhJWrjO; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BwP9QT76"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RfhJWrjO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737097688; x=1768633688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A9YabGAz9F0I03ZVr6BHi8PnA+DJl2DrzQAK/6IyhOU=;
-  b=BwP9QT76Xs6CRbZVqP0E30b1JkHpI+4Qf7tItzCj/SrNBANnC+n6MkBo
-   Q16hB4gIlZK4FADH9xudEuzck3aRN0TfbtLdeFx+h6uo/VBsdaSgRgkd7
-   OQC3N+RDO2g/0XlJg0umQALnwSTRTCzn1OZl1feTrToYgDk+7aLOb01NJ
-   kbI3ovjCiWwnfFVUicB4wkHyEU/UKXfxlMTqzFyiKxgYPztccw0jqNb3c
-   y/vZu8oe6f9sF2eWlEfykUCebIti6E9PtMpAFXlEjeLuGeh5TmMnIE03T
-   Q57lWztza/e0BZTpLEWrKHzDusVKAgnOh/CFTAXVr45YihxRScar4tMqb
+  t=1737098405; x=1768634405;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9OqbDH8cFpvGxPnAlZOcAheuxt1jMIT28WNum3S8wzw=;
+  b=RfhJWrjOpwsSwhmQ2PfPRYmaZ/TGgF566sxAlOUYfs8BVtblBIZOnRcj
+   mu9UYHKoR4dNlDHOTckxWHxUH66iN81HYrsLDbKUxzOqskOPFUpDfKLPP
+   uNi98qMAQbEpladEkr6X50O6N2ZtQMqNsJ8eQy5fBEQLBcJhsTbQNlIjr
+   RbdP5dFgOKLq0yd9wnZjuGbyfZNS7l8F2i/QZXZyF+iZye5z3BQbCcaS6
+   aTzZRhiEo7EVEDJfeGcM6Zagf3WHA0NnbzrzF7llnQyZU6jczrUux6fXX
+   yCyh85NQfKdMJNG1j3HCH8aRLO8QsXPlz4Tfr/QDLkx7f7VdZYMKoOcFK
    g==;
-X-CSE-ConnectionGUID: 44Db83R6QICJwiSaLirHQw==
-X-CSE-MsgGUID: rQiOmRgkQR6cJ75VNz/xKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="48937465"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="48937465"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 23:08:07 -0800
-X-CSE-ConnectionGUID: vljCoSYjS7yxeDj8iRCbgg==
-X-CSE-MsgGUID: zlF27OjpQf6rVjKY1e3N5A==
+X-CSE-ConnectionGUID: c/Bf+KQSS2+4ALbhnflHCw==
+X-CSE-MsgGUID: 4pMhmuHcSIiov6JElKBtuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="62894103"
+X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
+   d="scan'208";a="62894103"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 23:20:04 -0800
+X-CSE-ConnectionGUID: l8+2YN6ZQFuIbQzb9mXB5g==
+X-CSE-MsgGUID: NDzvrDPqQWaHbl9F4Porgw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="136604791"
+X-IronPort-AV: E=Sophos;i="6.13,211,1732608000"; 
+   d="scan'208";a="106318386"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 16 Jan 2025 23:08:03 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 16 Jan 2025 23:20:03 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYgSW-000Stx-0B;
-	Fri, 17 Jan 2025 07:08:00 +0000
-Date: Fri, 17 Jan 2025 15:07:58 +0800
+	id 1tYge9-000Sub-0o;
+	Fri, 17 Jan 2025 07:20:01 +0000
+Date: Fri, 17 Jan 2025 15:19:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ruidong Tian <tianruidong@linux.alibaba.com>, catalin.marinas@arm.com,
-	will@kernel.org, lpieralisi@kernel.org, guohanjun@huawei.com,
-	sudeep.holla@arm.com, xueshuai@linux.alibaba.com,
-	baolin.wang@linux.alibaba.com, linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	rafael@kernel.org, lenb@kernel.org, tony.luck@intel.com,
-	bp@alien8.de, yazen.ghannam@amd.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v3 3/5] RAS/AEST: Introduce AEST inject interface to test
- AEST driver
-Message-ID: <202501171406.o7oztilo-lkp@intel.com>
-References: <20250115084228.107573-4-tianruidong@linux.alibaba.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:sframe 27/36] include/linux/unwind_deferred.h:49:6:
+ warning: no previous prototype for function 'unwind_deferred_cancel'
+Message-ID: <202501171532.NKzVp1XB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,104 +61,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250115084228.107573-4-tianruidong@linux.alibaba.com>
 
-Hi Ruidong,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge arm64/for-next/core ras/edac-for-next linus/master tip/smp/core v6.13-rc7 next-20250116]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ruidong-Tian/ACPI-RAS-AEST-Initial-AEST-driver/20250115-164601
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20250115084228.107573-4-tianruidong%40linux.alibaba.com
-patch subject: [PATCH v3 3/5] RAS/AEST: Introduce AEST inject interface to test AEST driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250117/202501171406.o7oztilo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171406.o7oztilo-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git sframe
+head:   dc92bc7c1009e5d80cd83d21ead7228bc6887c23
+commit: 0b9c279e2f1ea50bbb9d78c3a3744e2d4df4a441 [27/36] unwind: Add deferred userspace unwinding API
+config: i386-buildonly-randconfig-002-20250117 (https://download.01.org/0day-ci/archive/20250117/202501171532.NKzVp1XB-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250117/202501171532.NKzVp1XB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501171406.o7oztilo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501171532.NKzVp1XB-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/ras/aest/aest-core.c:280:13: error: static declaration of 'aest_proc_record' follows non-static declaration
-     280 | static void aest_proc_record(struct aest_record *record, void *data)
-         |             ^
-   drivers/ras/aest/aest.h:338:6: note: previous declaration is here
-     338 | void aest_proc_record(struct aest_record *record, void *data);
+   In file included from arch/x86/entry/common.c:13:
+   In file included from include/linux/entry-common.h:6:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/x86/entry/common.c:13:
+   In file included from include/linux/entry-common.h:15:
+>> include/linux/unwind_deferred.h:49:6: warning: no previous prototype for function 'unwind_deferred_cancel' [-Wmissing-prototypes]
+      49 | bool unwind_deferred_cancel(struct task_struct *task, struct unwind_work *work) { return false; }
          |      ^
-   1 error generated.
+   include/linux/unwind_deferred.h:49:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      49 | bool unwind_deferred_cancel(struct task_struct *task, struct unwind_work *work) { return false; }
+         | ^
+         | static 
+   In file included from arch/x86/entry/common.c:13:
+   include/linux/entry-common.h:366:2: error: call to undeclared function 'unwind_exit_to_user_mode'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     366 |         unwind_exit_to_user_mode();
+         |         ^
+   include/linux/entry-common.h:366:2: note: did you mean 'arch_exit_to_user_mode'?
+   include/linux/entry-common.h:290:29: note: 'arch_exit_to_user_mode' declared here
+     290 | static __always_inline void arch_exit_to_user_mode(void);
+         |                             ^
+   arch/x86/include/asm/entry-common.h:102:32: note: expanded from macro 'arch_exit_to_user_mode'
+     102 | #define arch_exit_to_user_mode arch_exit_to_user_mode
+         |                                ^
+   2 warnings and 1 error generated.
 
 
-vim +/aest_proc_record +280 drivers/ras/aest/aest-core.c
+vim +/unwind_deferred_cancel +49 include/linux/unwind_deferred.h
 
-b6c745ae1213b2 Ruidong Tian 2025-01-15  279  
-b6c745ae1213b2 Ruidong Tian 2025-01-15 @280  static void aest_proc_record(struct aest_record *record, void *data)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  281  {
-b6c745ae1213b2 Ruidong Tian 2025-01-15  282  	struct ras_ext_regs regs = {0};
-b6c745ae1213b2 Ruidong Tian 2025-01-15  283  	int *count = data;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  284  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  285  	regs.err_status = record_read(record, ERXSTATUS);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  286  	if (!(regs.err_status & ERR_STATUS_V))
-b6c745ae1213b2 Ruidong Tian 2025-01-15  287  		return;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  288  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  289  	(*count)++;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  290  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  291  	if (regs.err_status & ERR_STATUS_AV)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  292  		regs.err_addr = record_read(record, ERXADDR);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  293  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  294  	regs.err_fr = record->fr;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  295  	regs.err_ctlr = record_read(record, ERXCTLR);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  296  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  297  	if (regs.err_status & ERR_STATUS_MV) {
-b6c745ae1213b2 Ruidong Tian 2025-01-15  298  		regs.err_misc[0] = record_read(record, ERXMISC0);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  299  		regs.err_misc[1] = record_read(record, ERXMISC1);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  300  		if (record->node->version >= ID_AA64PFR0_EL1_RAS_V1P1) {
-b6c745ae1213b2 Ruidong Tian 2025-01-15  301  			regs.err_misc[2] = record_read(record, ERXMISC2);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  302  			regs.err_misc[3] = record_read(record, ERXMISC3);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  303  		}
-b6c745ae1213b2 Ruidong Tian 2025-01-15  304  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  305  		if (record->node->info->interface_hdr->flags &
-b6c745ae1213b2 Ruidong Tian 2025-01-15  306  			AEST_XFACE_FLAG_CLEAR_MISC) {
-b6c745ae1213b2 Ruidong Tian 2025-01-15  307  			record_write(record, ERXMISC0, 0);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  308  			record_write(record, ERXMISC1, 0);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  309  			if (record->node->version >= ID_AA64PFR0_EL1_RAS_V1P1) {
-b6c745ae1213b2 Ruidong Tian 2025-01-15  310  				record_write(record, ERXMISC2, 0);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  311  				record_write(record, ERXMISC3, 0);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  312  			}
-b6c745ae1213b2 Ruidong Tian 2025-01-15  313  		/* ce count is 0 if record do not support ce */
-b6c745ae1213b2 Ruidong Tian 2025-01-15  314  		} else if (record->ce.count > 0)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  315  			record_write(record, ERXMISC0, record->ce.reg_val);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  316  	}
-b6c745ae1213b2 Ruidong Tian 2025-01-15  317  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  318  	/* panic if unrecoverable and uncontainable error encountered */
-b6c745ae1213b2 Ruidong Tian 2025-01-15  319  	if ((regs.err_status & ERR_STATUS_UE) &&
-b6c745ae1213b2 Ruidong Tian 2025-01-15  320  		(regs.err_status & ERR_STATUS_UET) > ERR_STATUS_UET_UEU)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  321  		aest_panic(record, &regs, "AEST: unrecoverable error encountered");
-b6c745ae1213b2 Ruidong Tian 2025-01-15  322  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  323  	aest_log(record, &regs);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  324  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  325  	/* Write-one-to-clear the bits we've seen */
-b6c745ae1213b2 Ruidong Tian 2025-01-15  326  	regs.err_status &= ERR_STATUS_W1TC;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  327  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  328  	/* Multi bit filed need to write all-ones to clear. */
-b6c745ae1213b2 Ruidong Tian 2025-01-15  329  	if (regs.err_status & ERR_STATUS_CE)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  330  		regs.err_status |= ERR_STATUS_CE;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  331  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  332  	/* Multi bit filed need to write all-ones to clear. */
-b6c745ae1213b2 Ruidong Tian 2025-01-15  333  	if (regs.err_status & ERR_STATUS_UET)
-b6c745ae1213b2 Ruidong Tian 2025-01-15  334  		regs.err_status |= ERR_STATUS_UET;
-b6c745ae1213b2 Ruidong Tian 2025-01-15  335  
-b6c745ae1213b2 Ruidong Tian 2025-01-15  336  	record_write(record, ERXSTATUS, regs.err_status);
-b6c745ae1213b2 Ruidong Tian 2025-01-15  337  }
-b6c745ae1213b2 Ruidong Tian 2025-01-15  338  
+    46	
+    47	static inline void unwind_deferred_init(struct unwind_work *work, unwind_callback_t func) {}
+    48	static inline int unwind_deferred_request(struct task_struct *task, struct unwind_work *work, u64 *cookie) { return -ENOSYS; }
+  > 49	bool unwind_deferred_cancel(struct task_struct *task, struct unwind_work *work) { return false; }
+    50	
 
 -- 
 0-DAY CI Kernel Test Service
