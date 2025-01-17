@@ -1,65 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603B919F438;
-	Fri, 17 Jan 2025 17:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE241A2643;
+	Fri, 17 Jan 2025 18:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737136042; cv=none; b=Kw0lZ9n1HWF97ONTw4ALK0krhK+Ww4oXRertwtHO4pJmzuRNbCuuxe6bUd449ZqSKAIYpZuZOyKNI7jEUFfHt06EUp5/ABD3QxBjR8if+FBczu8NTcZXyNwnTR3Mrls4R/I9UcN7asdiXuNbZbBf3h/5sLmJg1kTiiX3DNow6fM=
+	t=1737137306; cv=none; b=rVyJJajdwwJxM1z3tk/pX0KRopeVpqNtW+BJDrihqWQc3BP+n4Mdsrst/ucsYchu+OzbVlRe2hQt9WKvJM7K5ipJCW9HwgnWhA0nfiIfDRSLleAWyIP9p7EqtvJhF9O60bpH9rPlA9Eq/PRGEEduVUGV0ch2AIWjU6XmGtnf7GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737136042; c=relaxed/simple;
-	bh=eRP1jBCa4I9W05NTuQlOCzeDAgnWgcjSg5ryuvhjbqw=;
+	s=arc-20240116; t=1737137306; c=relaxed/simple;
+	bh=Y4YWV1CT+hDz1TP5htXiTZnj5qNptC1nzOOJ5dGxE+I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHpAetEJ9/aVkBdDrB5L9i6NyuJJYrpWIOX3xtfsapAG3BRQnxfwHE9oJUJ1iHbuW6XIsco7yiZCrcQLoVO30WbDv6zo26dGMLY50UtGiqQPGx14knILNM5wYfOO/DiGr0+unkQ5LiHIp/91esQDmCEGu2INSLpvIKUXuA2RIes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ihuj+vLT; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=CWGc25X67uTV4H+kc6umKSSSs3gXBeMVj7cAwp2BvRQ0jMNthRts64uu2vZRcew/O8l74cTF30srl5vvTAH9Ijar4343H+npcnHeK+KgiSFLskAfqAPVTeCFVJBgkO9Ty+p5KxjuEllzgGWywsa7JO5h3ZFhVkyEfAQ2DG8ArQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6Q2j37q; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ihuj+vLT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6Q2j37q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737136039; x=1768672039;
+  t=1737137303; x=1768673303;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eRP1jBCa4I9W05NTuQlOCzeDAgnWgcjSg5ryuvhjbqw=;
-  b=Ihuj+vLTVLpkH9urC19jC5xYepUWZyvo3PqszTxNtaZ4/sqAss1RUR5o
-   mURSpSOiOOTElTrYBp5tlyNSpmVQdBHpyTZQ/ORIqbjusP8sAb67YNKgr
-   5LjFPtzByitUdVNcQ6xnfCMD+9AYrMl2dwm9HtE3XjjU89Eu0T0olWqtA
-   b8jW0PLKJftj5yN6Oi/cOiLHpBnh84bkclh9PjkFTPvXzyx5PQ0cbeA4X
-   IKaCTKFppX/GW32DtIincFA6Jetxm0h8krxwDfEKpyR8tILIU677JAzpt
-   fnnhk4GmFFROkzsVNl+lGmVmAt+MG0MBiLPpEGarhM2tF5n0CTTwGMrhb
-   A==;
-X-CSE-ConnectionGUID: uCwRqBHCRiSvsamU43Sc1g==
-X-CSE-MsgGUID: Hkp0lhm7T9usjhjEirfd/A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="36786666"
+  bh=Y4YWV1CT+hDz1TP5htXiTZnj5qNptC1nzOOJ5dGxE+I=;
+  b=S6Q2j37qBefbmeyAfco7SEEwZ6ypD4+zK4LpFG1t8dz6tsxqWSD4EMUZ
+   kNGq3Lh+R2l7qdJaPswu46RnfxF9dIhY1ZPwR6lXwMfQNIlqa1D7rNToo
+   rwvxMC/MCEaZbPjJAd0qxVRMD/BJbqywhXw1jdjQEc9KN4LirF7069Sw/
+   TKPuC7AigM5KzSgSHIsaefeGbbit+QqHSeSums0KOwG+UPlv9RWNyfGas
+   SXFfJE7qhUiG2NaDRw3Uw2DsmmEGLVg1a/VeB/Ns0g9CgOBKEUK399D8q
+   lmpF0TIzrXI3HcVrsF+9EU+Hky7ug5sKqvL63+0OIJz+Sj/YXLYqzQ2KL
+   Q==;
+X-CSE-ConnectionGUID: 15FIbJEZSI+Y6nzVFYLvbA==
+X-CSE-MsgGUID: xkTr21MvQZugSiEd8QsKbQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="41344730"
 X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="36786666"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 09:47:18 -0800
-X-CSE-ConnectionGUID: B0+WehJbS1GfiAMDiJFPoQ==
-X-CSE-MsgGUID: xcYSeKIhR6GOgvOePao0ug==
+   d="scan'208";a="41344730"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 10:08:20 -0800
+X-CSE-ConnectionGUID: VaL0eCJUSA+R5H2pzJFeSg==
+X-CSE-MsgGUID: KROQNmgrRGalH8d9q2wacA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,212,1732608000"; 
-   d="scan'208";a="105912316"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105710223"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 17 Jan 2025 09:47:15 -0800
+  by orviesa010.jf.intel.com with ESMTP; 17 Jan 2025 10:08:17 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYqR6-000TXb-2I;
-	Fri, 17 Jan 2025 17:47:12 +0000
-Date: Sat, 18 Jan 2025 01:46:36 +0800
+	id 1tYqlS-000TYJ-1n;
+	Fri, 17 Jan 2025 18:08:14 +0000
+Date: Sat, 18 Jan 2025 02:07:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shree Ramamoorthy <s-ramamoorthy@ti.com>, aaro.koskinen@iki.fi,
-	andreas@kemnade.info, khilman@baylibre.com, rogerq@kernel.org,
-	tony@atomide.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, m-leonard@ti.com,
-	praneeth@ti.com, christophe.jaillet@wanadoo.fr
-Subject: Re: [PATCH v3 1/3] gpio: tps65215: Add TPS65215 to
- platform_device_id table
-Message-ID: <202501180129.Eu47rQjQ-lkp@intel.com>
-References: <20250113225530.124213-2-s-ramamoorthy@ti.com>
+To: Michael Chan <michael.chan@broadcom.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, pavan.chebbi@broadcom.com,
+	andrew.gospodarek@broadcom.com, michal.swiatkowski@linux.intel.com,
+	helgaas@kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
+	Ajit Khaparde <ajit.khaparde@broadcom.com>,
+	David Wei <dw@davidwei.uk>
+Subject: Re: [PATCH net-next v2 09/10] bnxt_en: Extend queue stop/start for
+ TX rings
+Message-ID: <202501180109.z7pduJQw-lkp@intel.com>
+References: <20250116192343.34535-10-michael.chan@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,59 +69,182 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113225530.124213-2-s-ramamoorthy@ti.com>
+In-Reply-To: <20250116192343.34535-10-michael.chan@broadcom.com>
 
-Hi Shree,
+Hi Michael,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on next-20250113]
-[also build test ERROR on linus/master v6.13-rc7]
-[cannot apply to tmlind-omap/for-next v6.13-rc7 v6.13-rc6 v6.13-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shree-Ramamoorthy/gpio-tps65215-Add-TPS65215-to-platform_device_id-table/20250114-065813
-base:   next-20250113
-patch link:    https://lore.kernel.org/r/20250113225530.124213-2-s-ramamoorthy%40ti.com
-patch subject: [PATCH v3 1/3] gpio: tps65215: Add TPS65215 to platform_device_id table
-config: i386-randconfig-004-20250117 (https://download.01.org/0day-ci/archive/20250118/202501180129.Eu47rQjQ-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Chan/bnxt_en-Set-NAPR-1-2-support-when-registering-with-firmware/20250117-032822
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250116192343.34535-10-michael.chan%40broadcom.com
+patch subject: [PATCH net-next v2 09/10] bnxt_en: Extend queue stop/start for TX rings
+config: i386-randconfig-012-20250117 (https://download.01.org/0day-ci/archive/20250118/202501180109.z7pduJQw-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180129.Eu47rQjQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180109.z7pduJQw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501180129.Eu47rQjQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180109.z7pduJQw-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/gpio/gpio-tps65219.c:173:21: error: use of undeclared identifier 'TPS65215'
-     173 |         { "tps65215-gpio", TPS65215 },
-         |                            ^
->> drivers/gpio/gpio-tps65219.c:177:1: error: definition of variable with array type needs an explicit size or an initializer
-     177 | MODULE_DEVICE_TABLE(platform, tps6521x_gpio_id_table);
-         | ^
-   include/linux/module.h:250:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     250 | extern typeof(name) __mod_device_table__##type##__##name                \
-         |                     ^
-   <scratch space>:249:1: note: expanded from here
-     249 | __mod_device_table__platform__tps6521x_gpio_id_table
-         | ^
-   2 errors generated.
+>> drivers/net/ethernet/broadcom/bnxt/bnxt.c:15725:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    15725 |         if (rc)
+          |         ^~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
+    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
+          |                             ^~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15725:2: note: remove the 'if' if its condition is always false
+    15725 |         if (rc)
+          |         ^~~~~~~
+    15726 |                 goto err_reset_rx;
+          |                 ~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15721:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    15721 |         if (rc)
+          |         ^~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
+    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
+          |                             ^~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15721:2: note: remove the 'if' if its condition is always false
+    15721 |         if (rc)
+          |         ^~~~~~~
+    15722 |                 goto err_reset_rx;
+          |                 ~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15717:2: warning: variable 'cpr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    15717 |         if (rc)
+          |         ^~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15769:22: note: uninitialized use occurs here
+    15769 |         bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
+          |                             ^~~
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15717:2: note: remove the 'if' if its condition is always false
+    15717 |         if (rc)
+          |         ^~~~~~~
+    15718 |                 goto err_reset_rx;
+          |                 ~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   drivers/net/ethernet/broadcom/bnxt/bnxt.c:15695:31: note: initialize the variable 'cpr' to silence this warning
+    15695 |         struct bnxt_cp_ring_info *cpr;
+          |                                      ^
+          |                                       = NULL
+   3 warnings generated.
 
 
-vim +/TPS65215 +173 drivers/gpio/gpio-tps65219.c
+vim +15725 drivers/net/ethernet/broadcom/bnxt/bnxt.c
 
-   171	
-   172	static const struct platform_device_id tps6521x_gpio_id_table[] = {
- > 173		{ "tps65215-gpio", TPS65215 },
-   174		{ "tps65219-gpio", TPS65219 },
-   175		{ }
-   176	};
- > 177	MODULE_DEVICE_TABLE(platform, tps6521x_gpio_id_table);
-   178	
+2d694c27d32efc David Wei     2024-06-18  15690  
+2d694c27d32efc David Wei     2024-06-18  15691  static int bnxt_queue_start(struct net_device *dev, void *qmem, int idx)
+2d694c27d32efc David Wei     2024-06-18  15692  {
+2d694c27d32efc David Wei     2024-06-18  15693  	struct bnxt *bp = netdev_priv(dev);
+2d694c27d32efc David Wei     2024-06-18  15694  	struct bnxt_rx_ring_info *rxr, *clone;
+2d694c27d32efc David Wei     2024-06-18  15695  	struct bnxt_cp_ring_info *cpr;
+b9d2956e869c78 David Wei     2024-08-07  15696  	struct bnxt_vnic_info *vnic;
+5d2310614bc883 Somnath Kotur 2025-01-16  15697  	struct bnxt_napi *bnapi;
+b9d2956e869c78 David Wei     2024-08-07  15698  	int i, rc;
+2d694c27d32efc David Wei     2024-06-18  15699  
+2d694c27d32efc David Wei     2024-06-18  15700  	rxr = &bp->rx_ring[idx];
+2d694c27d32efc David Wei     2024-06-18  15701  	clone = qmem;
+2d694c27d32efc David Wei     2024-06-18  15702  
+2d694c27d32efc David Wei     2024-06-18  15703  	rxr->rx_prod = clone->rx_prod;
+2d694c27d32efc David Wei     2024-06-18  15704  	rxr->rx_agg_prod = clone->rx_agg_prod;
+2d694c27d32efc David Wei     2024-06-18  15705  	rxr->rx_sw_agg_prod = clone->rx_sw_agg_prod;
+2d694c27d32efc David Wei     2024-06-18  15706  	rxr->rx_next_cons = clone->rx_next_cons;
+bd649c5cc95816 David Wei     2024-12-03  15707  	rxr->rx_tpa = clone->rx_tpa;
+bd649c5cc95816 David Wei     2024-12-03  15708  	rxr->rx_tpa_idx_map = clone->rx_tpa_idx_map;
+2d694c27d32efc David Wei     2024-06-18  15709  	rxr->page_pool = clone->page_pool;
+bd649c5cc95816 David Wei     2024-12-03  15710  	rxr->head_pool = clone->head_pool;
+b537633ce57b29 Taehee Yoo    2024-07-21  15711  	rxr->xdp_rxq = clone->xdp_rxq;
+2d694c27d32efc David Wei     2024-06-18  15712  
+2d694c27d32efc David Wei     2024-06-18  15713  	bnxt_copy_rx_ring(bp, rxr, clone);
+2d694c27d32efc David Wei     2024-06-18  15714  
+5d2310614bc883 Somnath Kotur 2025-01-16  15715  	bnapi = rxr->bnapi;
+2d694c27d32efc David Wei     2024-06-18  15716  	rc = bnxt_hwrm_rx_ring_alloc(bp, rxr);
+2d694c27d32efc David Wei     2024-06-18  15717  	if (rc)
+5d2310614bc883 Somnath Kotur 2025-01-16  15718  		goto err_reset_rx;
+377e78a9e08ce5 Somnath Kotur 2025-01-16  15719  
+377e78a9e08ce5 Somnath Kotur 2025-01-16  15720  	rc = bnxt_hwrm_cp_ring_alloc_p5(bp, rxr->rx_cpr);
+2d694c27d32efc David Wei     2024-06-18  15721  	if (rc)
+5d2310614bc883 Somnath Kotur 2025-01-16  15722  		goto err_reset_rx;
+2d694c27d32efc David Wei     2024-06-18  15723  
+377e78a9e08ce5 Somnath Kotur 2025-01-16  15724  	rc = bnxt_hwrm_rx_agg_ring_alloc(bp, rxr);
+377e78a9e08ce5 Somnath Kotur 2025-01-16 @15725  	if (rc)
+5d2310614bc883 Somnath Kotur 2025-01-16  15726  		goto err_reset_rx;
+377e78a9e08ce5 Somnath Kotur 2025-01-16  15727  
+2d694c27d32efc David Wei     2024-06-18  15728  	bnxt_db_write(bp, &rxr->rx_db, rxr->rx_prod);
+2d694c27d32efc David Wei     2024-06-18  15729  	if (bp->flags & BNXT_FLAG_AGG_RINGS)
+2d694c27d32efc David Wei     2024-06-18  15730  		bnxt_db_write(bp, &rxr->rx_agg_db, rxr->rx_agg_prod);
+2d694c27d32efc David Wei     2024-06-18  15731  
+5d2310614bc883 Somnath Kotur 2025-01-16  15732  	cpr = &bnapi->cp_ring;
+2d694c27d32efc David Wei     2024-06-18  15733  	cpr->sw_stats->rx.rx_resets++;
+2d694c27d32efc David Wei     2024-06-18  15734  
+5d2310614bc883 Somnath Kotur 2025-01-16  15735  	if (bp->flags & BNXT_FLAG_SHARED_RINGS) {
+5d2310614bc883 Somnath Kotur 2025-01-16  15736  		cpr->sw_stats->tx.tx_resets++;
+5d2310614bc883 Somnath Kotur 2025-01-16  15737  		rc = bnxt_tx_queue_start(bp, idx);
+5d2310614bc883 Somnath Kotur 2025-01-16  15738  		if (rc) {
+5d2310614bc883 Somnath Kotur 2025-01-16  15739  			netdev_warn(bp->dev,
+5d2310614bc883 Somnath Kotur 2025-01-16  15740  				    "tx queue restart failed: rc=%d\n", rc);
+5d2310614bc883 Somnath Kotur 2025-01-16  15741  			bnapi->tx_fault = 1;
+5d2310614bc883 Somnath Kotur 2025-01-16  15742  			goto err_reset;
+5d2310614bc883 Somnath Kotur 2025-01-16  15743  		}
+5d2310614bc883 Somnath Kotur 2025-01-16  15744  	}
+5d2310614bc883 Somnath Kotur 2025-01-16  15745  
+5d2310614bc883 Somnath Kotur 2025-01-16  15746  	napi_enable(&bnapi->napi);
+5d2310614bc883 Somnath Kotur 2025-01-16  15747  	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
+5d2310614bc883 Somnath Kotur 2025-01-16  15748  
+b9d2956e869c78 David Wei     2024-08-07  15749  	for (i = 0; i <= BNXT_VNIC_NTUPLE; i++) {
+b9d2956e869c78 David Wei     2024-08-07  15750  		vnic = &bp->vnic_info[i];
+5ac066b7b062ee Somnath Kotur 2024-11-22  15751  
+5ac066b7b062ee Somnath Kotur 2024-11-22  15752  		rc = bnxt_hwrm_vnic_set_rss_p5(bp, vnic, true);
+5ac066b7b062ee Somnath Kotur 2024-11-22  15753  		if (rc) {
+5ac066b7b062ee Somnath Kotur 2024-11-22  15754  			netdev_err(bp->dev, "hwrm vnic %d set rss failure rc: %d\n",
+5ac066b7b062ee Somnath Kotur 2024-11-22  15755  				   vnic->vnic_id, rc);
+5ac066b7b062ee Somnath Kotur 2024-11-22  15756  			return rc;
+5ac066b7b062ee Somnath Kotur 2024-11-22  15757  		}
+b9d2956e869c78 David Wei     2024-08-07  15758  		vnic->mru = bp->dev->mtu + ETH_HLEN + VLAN_HLEN;
+b9d2956e869c78 David Wei     2024-08-07  15759  		bnxt_hwrm_vnic_update(bp, vnic,
+b9d2956e869c78 David Wei     2024-08-07  15760  				      VNIC_UPDATE_REQ_ENABLES_MRU_VALID);
+b9d2956e869c78 David Wei     2024-08-07  15761  	}
+b9d2956e869c78 David Wei     2024-08-07  15762  
+2d694c27d32efc David Wei     2024-06-18  15763  	return 0;
+2d694c27d32efc David Wei     2024-06-18  15764  
+5d2310614bc883 Somnath Kotur 2025-01-16  15765  err_reset_rx:
+5d2310614bc883 Somnath Kotur 2025-01-16  15766  	rxr->bnapi->in_reset = true;
+5d2310614bc883 Somnath Kotur 2025-01-16  15767  err_reset:
+5d2310614bc883 Somnath Kotur 2025-01-16  15768  	napi_enable(&bnapi->napi);
+5d2310614bc883 Somnath Kotur 2025-01-16  15769  	bnxt_db_nq_arm(bp, &cpr->cp_db, cpr->cp_raw_cons);
+5d2310614bc883 Somnath Kotur 2025-01-16  15770  	bnxt_reset_task(bp, true);
+2d694c27d32efc David Wei     2024-06-18  15771  	return rc;
+2d694c27d32efc David Wei     2024-06-18  15772  }
+2d694c27d32efc David Wei     2024-06-18  15773  
 
 -- 
 0-DAY CI Kernel Test Service
