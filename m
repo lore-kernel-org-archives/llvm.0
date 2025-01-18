@@ -1,109 +1,199 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522CDB640
-	for <llvm@lists.linux.dev>; Sat, 18 Jan 2025 00:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C311C68F;
+	Sat, 18 Jan 2025 01:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737161590; cv=none; b=LohonzxCFUuzxPP5VAYhH4zwYzpVL93RWqa5P1Il9qPty19LV/ll0StPBMeAkI9QezdiUpLx8T1VCnGl2g7rxTGOGzYFlEgkPicJ7K+7/jw+e1ytSNXtbsxzdNvF4TSHB/jgvxI7yL3BRK21TOD9r/IJe/sVOaZahyG5x4ILV6M=
+	t=1737163678; cv=none; b=uKf2mkWK6g8XELM/ETsM+pNzEcu7Qv7p+ANcng10Ws4c6HtCl8iz3jTpUHRfm3YJoMA95Cch5w7+CduERKn7R+v5o6jHXhy0O1mUx8KY3JUFaYSVM71xlhClFUPSTZ9ahIFs2EgZNzSlwy1xZwUS/e9bSljXhgfxixMmvy38bOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737161590; c=relaxed/simple;
-	bh=IE3Ft+m6AerpqpaeXlKy8y2RB0YcLQaoK0V46iKq/8w=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=MryGDBLdziQQNaFmeQpnZI3lU5p4/UL5odrJwz/3SViKf0sG0cO+gbTiqzoMVlavKz/y0Iagj1Dz+IOXji71w13JQ9ip3id/mEy7iOsMsoJh7t7HRjYkBmf6aYkTpLE67eucOq2npoPj4wPf0pbzyUZnBAJlxSBtIAcv8NZE/ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LfAY/UvV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1737163678; c=relaxed/simple;
+	bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HdBkUeahrlIDmSL6B32jLzmJ3gvdaqw35yWUJcWuDcJs5MOfy35XSZbFHlE5qpBcuvQMLUN566yixCXN1AY44yPjmQEDAALqCijah8HXW/YmHraYjo7i+sMyE5EXvhRAdAoziFTHXym0Y5LGKEZTPhO0VJxRFIQ8jdiBdzwVITc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fjtjrZMZ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LfAY/UvV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737161587;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=elfrFBDS8na1e9y6lR4DjBd621g6n3vaAaflAOhIHg8=;
-	b=LfAY/UvVzh9CboPSun9WgbuNHqsuRKMyxrxmPuaXPxE1wDbayRSfYomKzxgyyoOQPvPokE
-	N3APljz0ev8xKWV1+3IdbyvGD51QKgkwH+gM05a4IEIZqJlmw2NLHlk41/MGfFGujQdvl+
-	eqK536xsIVSXXFd7ctL5ksztDwYjxkU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-517-mNj8Ws0lMGiBUZlVEWx2YA-1; Fri,
- 17 Jan 2025 19:53:05 -0500
-X-MC-Unique: mNj8Ws0lMGiBUZlVEWx2YA-1
-X-Mimecast-MFC-AGG-ID: mNj8Ws0lMGiBUZlVEWx2YA
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CD32B19560BB
-	for <llvm@lists.linux.dev>; Sat, 18 Jan 2025 00:53:04 +0000 (UTC)
-Received: from [172.64.12.20] (unknown [10.30.33.24])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 58D001955BE3;
-	Sat, 18 Jan 2025 00:53:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0-rc7,
- upstream-mainline, 59552394)
-Date: Sat, 18 Jan 2025 00:53:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fjtjrZMZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737163676; x=1768699676;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
+  b=fjtjrZMZmypVJm6pMGuhQnVTy0lbiPX8FHBYWHGYxiPjUe+6ODWUtbLn
+   Q4sNir0tB9akOmgqAjb+fWaPRynRTJ5vFtDXwQH/FRZ6l48GR8Ag0FfZh
+   fzBk6P/lVDAww3hYwrx5XGQUsNSSJPN3OsVnWKHi9+wAB3KSpVy/Jf0V2
+   y5IKfWpcFQFH4ck4alU00t+t+qlu0I4CDfQ6eKr12F+Ge0VRIUGpP3WR4
+   Aghbyx7PABTLwkXcvjIChbsEmRVlk71yEFbCgQAB4J47VC6f7lr8m2wuC
+   IIAUqVwYzJ2o9xzoMAf3KEZv+sdvpIr30c+mNoEMU0ZJVsiC5tTdiQa4E
+   Q==;
+X-CSE-ConnectionGUID: ZRZ0RFBZSyCnL+fBgwJLHA==
+X-CSE-MsgGUID: dn1Bu+/YQuOQleIQDNoGDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48109037"
+X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
+   d="scan'208";a="48109037"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 17:26:04 -0800
+X-CSE-ConnectionGUID: YF6ihR7NRbiiP+WXuKS8Hg==
+X-CSE-MsgGUID: nOEoJEz+RFawfS70s10erA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="106426027"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 17 Jan 2025 17:26:02 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYxb4-000Tv5-2H;
+	Sat, 18 Jan 2025 01:25:58 +0000
+Date: Sat, 18 Jan 2025 09:25:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	wim@linux-watchdog.org, linux@roeck-us.net, dober@lenovo.com,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo
+ SE30 platform
+Message-ID: <202501180914.vD2HyOZ2-lkp@intel.com>
+References: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <31708.125011719530501062@us-mta-517.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Z8GgsCq5puLrk7qSp-OqQ9aFEAs2tpTehWwDY2N2hRA_1737161585
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
 
-Hi, we tested your kernel and here are the results:
+Hi Mark,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.13-rc7 next-20250117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Pearson/watchdog-lenovo_se30_wdt-Watchdog-driver-for-Lenovo-SE30-platform/20250115-220703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250115140510.2017-1-mpearson-lenovo%40squebb.ca
+patch subject: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30 platform
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180914.vD2HyOZ2-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/watchdog/lenovo_se30_wdt.c:11:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/watchdog/lenovo_se30_wdt.c:314:24: error: call to undeclared function 'ioremap_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+         |                               ^
+   drivers/watchdog/lenovo_se30_wdt.c:314:24: note: did you mean 'ioremap_uc'?
+   include/asm-generic/io.h:1145:29: note: 'ioremap_uc' declared here
+    1145 | static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
+         |                             ^
+   include/asm-generic/io.h:1144:20: note: expanded from macro 'ioremap_uc'
+    1144 | #define ioremap_uc ioremap_uc
+         |                    ^
+>> drivers/watchdog/lenovo_se30_wdt.c:314:22: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
+     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+         |                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'devicetree-fixes-for-6.13-2' of git://git.ke=
-rnel.org/pub/scm/linux/kernel/git/robh/linux
+vim +/ioremap_cache +314 drivers/watchdog/lenovo_se30_wdt.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1630556422
+   276	
+   277	static int lenovo_se30_wdt_probe(struct platform_device *pdev)
+   278	{
+   279		struct device *dev = &pdev->dev;
+   280		struct lenovo_se30_wdt *priv;
+   281		unsigned long base_phys;
+   282		unsigned short val;
+   283		int err;
+   284	
+   285		err = superio_enter(UNLOCK_KEY, SIO_REG, LNV_SE30_NAME);
+   286		if (err)
+   287			return err;
+   288	
+   289		val = superio_inb(SIO_REG, CHIPID_REG) << 8;
+   290		val |= superio_inb(SIO_REG, CHIPID_REG + 1);
+   291	
+   292		if ((val & CHIPID_MASK) != LNV_SE30_ID) {
+   293			superio_exit(LOCK_KEY, SIO_REG);
+   294			return -ENODEV;
+   295		}
+   296	
+   297		superio_outb(SIO_REG, LDN_REG, LD_NUM_SHM);
+   298		base_phys = (superio_inb(SIO_REG, LD_BASE_ADDR) |
+   299				 (superio_inb(SIO_REG, LD_BASE_ADDR + 1) << 8) |
+   300				 (superio_inb(SIO_REG, LD_BASE_ADDR + 2) << 16) |
+   301				 (superio_inb(SIO_REG, LD_BASE_ADDR + 3) << 24)) &
+   302				0xFFFFFFFF;
+   303	
+   304		superio_exit(LOCK_KEY, SIO_REG);
+   305		if (base_phys == 0xFFFFFFFF || base_phys == 0)
+   306			return -ENODEV;
+   307	
+   308		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+   309		if (!priv)
+   310			return -ENOMEM;
+   311	
+   312		priv->sio.base_phys = base_phys;
+   313		priv->shm.base_phys = base_phys;
+ > 314		priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+   315	
+   316		priv->wdt_cfg.mod = WDT_MODULE;
+   317		priv->wdt_cfg.idx = WDT_CFG_INDEX;
+   318		priv->wdt_cnt.mod = WDT_MODULE;
+   319		priv->wdt_cnt.idx = WDT_CNT_INDEX;
+   320	
+   321		priv->wdt.ops = &lenovo_se30_wdt_ops;
+   322		priv->wdt.info = &lenovo_se30_wdt_info;
+   323		priv->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
+   324		priv->wdt.min_timeout = MIN_TIMEOUT;
+   325		priv->wdt.max_timeout = MAX_TIMEOUT;
+   326		priv->wdt.parent = dev;
+   327	
+   328		watchdog_init_timeout(&priv->wdt, timeout, dev);
+   329		watchdog_set_drvdata(&priv->wdt, priv);
+   330		watchdog_set_nowayout(&priv->wdt, nowayout);
+   331		watchdog_stop_on_reboot(&priv->wdt);
+   332		watchdog_stop_on_unregister(&priv->wdt);
+   333	
+   334		return devm_watchdog_register_device(dev, &priv->wdt);
+   335	}
+   336	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1630556422-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1630556422-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1630556422-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
