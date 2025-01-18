@@ -1,67 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF5019F117;
-	Sat, 18 Jan 2025 16:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3389A92F;
+	Sat, 18 Jan 2025 17:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737217240; cv=none; b=EQOpd5l1ySZO1YMlBS5XNRSzThzjeHJlL3GhoV86gZRS2rjZlVWQbboM4EtlkKYFPOMlHAbWB1lSPdCXF20cxGA3NIyLoJ5pPoz/Cv573Mp6qTKA45MUC1grY+/4DBW37hAIauEFppgZ7rsYQjsXxh13aBrufUFppJF+fR789hE=
+	t=1737220905; cv=none; b=nUYltHQZ0EtD8JIqbGzB6xqyDWV4fEY/lD6bNP1+Wh4JtXBShClnMpRpU3wsougVRvgByvms1l/fHkYocQ2fu7LUZTJ9it0FRoxcnc2hHGCwGJbJ1Yit9cYmRqAnx0krsDLUOMNQDc8+riZF56li/KqDsR+/yGXeqA/7Rv9DlzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737217240; c=relaxed/simple;
-	bh=E1T9oqD8aJVCIjrPRbuov/XGWcAKXN4X1EoJY6MK4Lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PUZ+Bs+owN6qruCVn0J8DO+lN0j6zz8MlxXtQR9nAd7v7hEJlZjgcLTAC68+LpPq5w3teaTNYkZ6cICh/JvABnvwLxlPnhsU5EfOD8rQcFukguTit1xMXsM4UOSVCUd3md5GWSOcER+sluBUT/gcuxY5t+WedMCrFV/tWvs0WZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hTMUt138; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1737220905; c=relaxed/simple;
+	bh=a4yM/PY0OuNyP3PRXl+DwXG6/veP4fV1RfilhGc4J8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lISYE8B/0gi4XVMRw9pxfuIS2ldUKkHl0nR/i6AvbO85NMro2HEf1Ex0WcviGnakvrWaUfy0bJQ7P7/ecOBLNJCyUHZDdKwiU0OrOzJkQI6Zmb7hsF9LzRJt8sYsFqE25rwGdQU0FJDt6ETDRh7CW61+kJEUnM1/PB95cDQqxdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DJlxdP6t; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hTMUt138"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DJlxdP6t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737217239; x=1768753239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E1T9oqD8aJVCIjrPRbuov/XGWcAKXN4X1EoJY6MK4Lo=;
-  b=hTMUt138pOG4JK31sNECeBmBYWEhVFzUTmsszVnLlD33AWLGygVZ7bCM
-   YDf9OmK3LiN8qt69BIPTthz9gI5NLQ3YeooEm/ll9ywiBQmEQ5lc+SiBk
-   ccdgYOr66frux/HOI6SOLxlZpCrYDu4HYTGyxXu5ybNSV8q/EUyOJtRL3
-   XYDVv21/Mt0vAfCmsWkqGU/BDAi4UK5jP7kEADXT8uncsHomj9LZfATQA
-   hk+h8CC37hEOzBqikQP7e7KrpCNCQxxR3fo9PlZ2R6VHwf+c4kMNO94b5
-   O4+Su+/soKrr+hhGUltg6j5kaQf/uQ5qKq3arLd8S70gjS9oQjX0cbd16
+  t=1737220903; x=1768756903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a4yM/PY0OuNyP3PRXl+DwXG6/veP4fV1RfilhGc4J8Y=;
+  b=DJlxdP6thZWXo0BbATWV9SjiJVMebaR+Ek3fW7ZVn2Y0eGFQb2EbaFrG
+   O3bmVNxcJU7vman8pRblP2NwsRNBYpdMQwCgMt9eKx0i8jgRhGCDdSf8T
+   37lMHO7EPTh2mC9b7l3JtEoZqM1eHWBYO0UHoTUv5P2hcMv6DpCyPjTI7
+   oA3EsJjBlWSaW4Lq6fxkuEgqC1LDTIHhusPuAH85fZ22tjcgU+wviIUgx
+   i2+iQY//XfvJm3pIJbtwS95zuUxUmXLYrx+uYurJXWWb1knnGtyAYlgfB
+   5/HgrlMY28CXEtRmSZV4IOOFS0nTJsqEBPydx7ZBJbyqZeAeM11nYwFJA
    g==;
-X-CSE-ConnectionGUID: cfJc5xfZSt64GbteuVqm2Q==
-X-CSE-MsgGUID: qVNvet/NTcOYOtyIcaG6HQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="41396062"
+X-CSE-ConnectionGUID: axbZr4mpQOqkLbFnC7T2LQ==
+X-CSE-MsgGUID: Ng7iIkf5QXqVR9B+nh6jOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="37875579"
 X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
-   d="scan'208";a="41396062"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2025 08:20:38 -0800
-X-CSE-ConnectionGUID: EP1rpWieRcyhDE1ZqeJpzQ==
-X-CSE-MsgGUID: POYbcqp9SPq7LIs2y2kuFw==
+   d="scan'208";a="37875579"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2025 09:21:42 -0800
+X-CSE-ConnectionGUID: Jsn7BgJ5TAeO1M0zQGPZmQ==
+X-CSE-MsgGUID: T7NoFOTbRomN85qiBvmH3g==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
-   d="scan'208";a="111069483"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105931787"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 18 Jan 2025 08:20:35 -0800
+  by orviesa010.jf.intel.com with ESMTP; 18 Jan 2025 09:21:41 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tZBYl-000Ubl-2X;
-	Sat, 18 Jan 2025 16:20:31 +0000
-Date: Sun, 19 Jan 2025 00:19:39 +0800
+	id 1tZCVu-000Uf9-2z;
+	Sat, 18 Jan 2025 17:21:38 +0000
+Date: Sun, 19 Jan 2025 01:21:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, bp@alien8.de,
-	dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
-	mingo@redhat.com, ssengar@linux.microsoft.com, tglx@linutronix.de,
-	wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	apais@microsoft.com, benhill@microsoft.com, sunilmut@microsoft.com,
-	vdso@hexbites.dev
-Subject: Re: [PATCH hyperv-next 2/2] x86/hyperv: VTL mode callback for
- restarting the system
-Message-ID: <202501182304.lZJpR7pL-lkp@intel.com>
-References: <20250117210702.1529580-3-romank@linux.microsoft.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [trace:trace/for-next 21/22] kernel/trace/trace_events.c:860:5:
+ warning: 'CONFIG_MODULES' is not defined, evaluates to 0
+Message-ID: <202501190121.E2CIJuUj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,44 +61,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250117210702.1529580-3-romank@linux.microsoft.com>
 
-Hi Roman,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 2e03358be78b65d28b66e17aca9e0c8700b0df78]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/x86-hyperv-VTL-mode-emergency-restart-callback/20250118-050923
-base:   2e03358be78b65d28b66e17aca9e0c8700b0df78
-patch link:    https://lore.kernel.org/r/20250117210702.1529580-3-romank%40linux.microsoft.com
-patch subject: [PATCH hyperv-next 2/2] x86/hyperv: VTL mode callback for restarting the system
-config: x86_64-buildonly-randconfig-003-20250118 (https://download.01.org/0day-ci/archive/20250118/202501182304.lZJpR7pL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/for-next
+head:   542079b4b12e89f82c8a689b6e9b119ab7d52018
+commit: b355247df104ef6644288884afd2c08b7bf49897 [21/22] tracing: Cache ":mod:" events for modules not loaded yet
+config: i386-buildonly-randconfig-005-20250118 (https://download.01.org/0day-ci/archive/20250119/202501190121.E2CIJuUj-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501182304.lZJpR7pL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250119/202501190121.E2CIJuUj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501182304.lZJpR7pL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501190121.E2CIJuUj-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/hyperv/hv_vtl.c:48:46: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      48 | static void  __noreturn hv_vtl_restart(char *)
-         |                                              ^
+>> kernel/trace/trace_events.c:860:5: warning: 'CONFIG_MODULES' is not defined, evaluates to 0 [-Wundef]
+     860 | #if CONFIG_MODULES
+         |     ^
    1 warning generated.
 
 
-vim +48 arch/x86/hyperv/hv_vtl.c
+vim +/CONFIG_MODULES +860 kernel/trace/trace_events.c
 
-    46	
-    47	/* The only way to restart is triple fault */
-  > 48	static void  __noreturn hv_vtl_restart(char *)
-    49	{
-    50		hv_vtl_emergency_restart();
-    51	}
-    52	
+   859	
+ > 860	#if CONFIG_MODULES
+   861	struct event_mod_load {
+   862		struct list_head	list;
+   863		char			*module;
+   864		char			*match;
+   865		char			*system;
+   866		char			*event;
+   867	};
+   868	
 
 -- 
 0-DAY CI Kernel Test Service
