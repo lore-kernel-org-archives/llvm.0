@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C311C68F;
-	Sat, 18 Jan 2025 01:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46792E64A;
+	Sat, 18 Jan 2025 03:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737163678; cv=none; b=uKf2mkWK6g8XELM/ETsM+pNzEcu7Qv7p+ANcng10Ws4c6HtCl8iz3jTpUHRfm3YJoMA95Cch5w7+CduERKn7R+v5o6jHXhy0O1mUx8KY3JUFaYSVM71xlhClFUPSTZ9ahIFs2EgZNzSlwy1xZwUS/e9bSljXhgfxixMmvy38bOI=
+	t=1737171679; cv=none; b=pR0G7GXPpSLSv5KdhXOmRM66GI7ECU2zFlupg6wguoAiXL8xcqxUCQjOtRLVon/qzR3NJNMmmT/1OvL4d7iyYGXy1dQAA1W6wWOiJnYWg6u3EvNzUID5yBxYYQUiQFPup9aUfho79YEy9XQ5dxK+8BNv2fNs6Jvg8cTwotSPwco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737163678; c=relaxed/simple;
-	bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
+	s=arc-20240116; t=1737171679; c=relaxed/simple;
+	bh=Xt8J2DgTzrF+pulzx7Iqufn4gxEibGOzwtVrBq3pguk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HdBkUeahrlIDmSL6B32jLzmJ3gvdaqw35yWUJcWuDcJs5MOfy35XSZbFHlE5qpBcuvQMLUN566yixCXN1AY44yPjmQEDAALqCijah8HXW/YmHraYjo7i+sMyE5EXvhRAdAoziFTHXym0Y5LGKEZTPhO0VJxRFIQ8jdiBdzwVITc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fjtjrZMZ; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=jaeXdHcJs0VGlsSbStEtUItNMDF/vAcdJVt3kbaHSZ1OD5KzFDpLsCWxgJp85O66PHSy0Fmp1SLZt7JteBKgVGX2h4Kw/dw/36w0KQEsm6vBFCXMxIvLPsFMfhr0D4lGboQlux+aZwTA2DWEXNTto6btA0UZsah51EoyRQmmytM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPfQnyPW; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fjtjrZMZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPfQnyPW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737163676; x=1768699676;
+  t=1737171677; x=1768707677;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
-  b=fjtjrZMZmypVJm6pMGuhQnVTy0lbiPX8FHBYWHGYxiPjUe+6ODWUtbLn
-   Q4sNir0tB9akOmgqAjb+fWaPRynRTJ5vFtDXwQH/FRZ6l48GR8Ag0FfZh
-   fzBk6P/lVDAww3hYwrx5XGQUsNSSJPN3OsVnWKHi9+wAB3KSpVy/Jf0V2
-   y5IKfWpcFQFH4ck4alU00t+t+qlu0I4CDfQ6eKr12F+Ge0VRIUGpP3WR4
-   Aghbyx7PABTLwkXcvjIChbsEmRVlk71yEFbCgQAB4J47VC6f7lr8m2wuC
-   IIAUqVwYzJ2o9xzoMAf3KEZv+sdvpIr30c+mNoEMU0ZJVsiC5tTdiQa4E
+  bh=Xt8J2DgTzrF+pulzx7Iqufn4gxEibGOzwtVrBq3pguk=;
+  b=UPfQnyPWi+BQA2uOSXXBmuXycQmH9M0FDUyb/+ayZEuFQk8mGSF9LGkx
+   4si+jlY87AIf8VKt/zuNXxUL52rVHKoiYdpMkGviNO4H49ijjga/WpPwJ
+   VpYtFV1MHvZItrjjxZqXSn8YkNkJtlhFfduQOIkB7xek1Wq/zr9SFUUlR
+   wTrh5vQ3e+XaAAR7hgqhrPtVJdzn3/0B/HIeIVukd8+qnPKWpeSQmyAPM
+   W4njqrf/n2aHxHf+IBkfgzGbk600jvlWZouJuBhvD2HRltwy+eRFFwwB+
+   HoEO/xK8EF8yHKBgMyeFEO6axZC2AMh7ZRZLTWOEjGb/yP67ouz9ryfMh
    Q==;
-X-CSE-ConnectionGUID: ZRZ0RFBZSyCnL+fBgwJLHA==
-X-CSE-MsgGUID: dn1Bu+/YQuOQleIQDNoGDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48109037"
-X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
-   d="scan'208";a="48109037"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 17:26:04 -0800
-X-CSE-ConnectionGUID: YF6ihR7NRbiiP+WXuKS8Hg==
-X-CSE-MsgGUID: nOEoJEz+RFawfS70s10erA==
+X-CSE-ConnectionGUID: wCuZVdZiQUG3dg6os4IkEg==
+X-CSE-MsgGUID: mWF1dMRUTKqW4rfRdj4HxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="36894952"
+X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
+   d="scan'208";a="36894952"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 19:41:17 -0800
+X-CSE-ConnectionGUID: WCwymjT1QaOkOCQPG4Fh4A==
+X-CSE-MsgGUID: FHpuALH/SWCdDhyEpOc8mw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="106426027"
+   d="scan'208";a="110040689"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Jan 2025 17:26:02 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 17 Jan 2025 19:41:15 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYxb4-000Tv5-2H;
-	Sat, 18 Jan 2025 01:25:58 +0000
-Date: Sat, 18 Jan 2025 09:25:05 +0800
+	id 1tYzhx-000U3X-0g;
+	Sat, 18 Jan 2025 03:41:13 +0000
+Date: Sat, 18 Jan 2025 11:40:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
+To: Jonas Andreasson <jonas.andreasson@axis.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wim@linux-watchdog.org, linux@roeck-us.net, dober@lenovo.com,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo
- SE30 platform
-Message-ID: <202501180914.vD2HyOZ2-lkp@intel.com>
-References: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
+	linux-kernel@vger.kernel.org, kernel@axis.com,
+	Jonas Andreasson <jonas.andreasson@axis.com>
+Subject: Re: [PATCH] regulator: TPS6287X: Use min/max uV to get VRANGE
+Message-ID: <202501181129.ygE03Iho-lkp@intel.com>
+References: <20250115-tps-fix-v1-1-2bd7b316409d@axis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,134 +66,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
+In-Reply-To: <20250115-tps-fix-v1-1-2bd7b316409d@axis.com>
 
-Hi Mark,
+Hi Jonas,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.13-rc7 next-20250117]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on adc218676eef25575469234709c2d87185ca223a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Pearson/watchdog-lenovo_se30_wdt-Watchdog-driver-for-Lenovo-SE30-platform/20250115-220703
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250115140510.2017-1-mpearson-lenovo%40squebb.ca
-patch subject: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30 platform
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonas-Andreasson/regulator-TPS6287X-Use-min-max-uV-to-get-VRANGE/20250115-175832
+base:   adc218676eef25575469234709c2d87185ca223a
+patch link:    https://lore.kernel.org/r/20250115-tps-fix-v1-1-2bd7b316409d%40axis.com
+patch subject: [PATCH] regulator: TPS6287X: Use min/max uV to get VRANGE
+config: i386-randconfig-002-20250116 (https://download.01.org/0day-ci/archive/20250118/202501181129.ygE03Iho-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501181129.ygE03Iho-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501180914.vD2HyOZ2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501181129.ygE03Iho-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/watchdog/lenovo_se30_wdt.c:11:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/regulator/tps6287x-regulator.c:10:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2213:
    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/watchdog/lenovo_se30_wdt.c:314:24: error: call to undeclared function 'ioremap_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
-         |                               ^
-   drivers/watchdog/lenovo_se30_wdt.c:314:24: note: did you mean 'ioremap_uc'?
-   include/asm-generic/io.h:1145:29: note: 'ioremap_uc' declared here
-    1145 | static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
-         |                             ^
-   include/asm-generic/io.h:1144:20: note: expanded from macro 'ioremap_uc'
-    1144 | #define ioremap_uc ioremap_uc
-         |                    ^
->> drivers/watchdog/lenovo_se30_wdt.c:314:22: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
-     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
-         |                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 2 errors generated.
+>> drivers/regulator/tps6287x-regulator.c:203:49: error: passing 'const struct regulator_desc *' to parameter of type 'struct regulator_desc *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     203 |         reg_data->range = tps6287x_best_range(&config, &tps6287x_reg);
+         |                                                        ^~~~~~~~~~~~~
+   drivers/regulator/tps6287x-regulator.c:59:88: note: passing argument to parameter 'desc' here
+      59 | static int tps6287x_best_range(struct regulator_config *config, struct regulator_desc *desc)
+         |                                                                                        ^
+   1 warning and 1 error generated.
 
 
-vim +/ioremap_cache +314 drivers/watchdog/lenovo_se30_wdt.c
+vim +203 drivers/regulator/tps6287x-regulator.c
 
-   276	
-   277	static int lenovo_se30_wdt_probe(struct platform_device *pdev)
-   278	{
-   279		struct device *dev = &pdev->dev;
-   280		struct lenovo_se30_wdt *priv;
-   281		unsigned long base_phys;
-   282		unsigned short val;
-   283		int err;
-   284	
-   285		err = superio_enter(UNLOCK_KEY, SIO_REG, LNV_SE30_NAME);
-   286		if (err)
-   287			return err;
-   288	
-   289		val = superio_inb(SIO_REG, CHIPID_REG) << 8;
-   290		val |= superio_inb(SIO_REG, CHIPID_REG + 1);
-   291	
-   292		if ((val & CHIPID_MASK) != LNV_SE30_ID) {
-   293			superio_exit(LOCK_KEY, SIO_REG);
-   294			return -ENODEV;
-   295		}
-   296	
-   297		superio_outb(SIO_REG, LDN_REG, LD_NUM_SHM);
-   298		base_phys = (superio_inb(SIO_REG, LD_BASE_ADDR) |
-   299				 (superio_inb(SIO_REG, LD_BASE_ADDR + 1) << 8) |
-   300				 (superio_inb(SIO_REG, LD_BASE_ADDR + 2) << 16) |
-   301				 (superio_inb(SIO_REG, LD_BASE_ADDR + 3) << 24)) &
-   302				0xFFFFFFFF;
-   303	
-   304		superio_exit(LOCK_KEY, SIO_REG);
-   305		if (base_phys == 0xFFFFFFFF || base_phys == 0)
-   306			return -ENODEV;
-   307	
-   308		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   309		if (!priv)
-   310			return -ENOMEM;
-   311	
-   312		priv->sio.base_phys = base_phys;
-   313		priv->shm.base_phys = base_phys;
- > 314		priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
-   315	
-   316		priv->wdt_cfg.mod = WDT_MODULE;
-   317		priv->wdt_cfg.idx = WDT_CFG_INDEX;
-   318		priv->wdt_cnt.mod = WDT_MODULE;
-   319		priv->wdt_cnt.idx = WDT_CNT_INDEX;
-   320	
-   321		priv->wdt.ops = &lenovo_se30_wdt_ops;
-   322		priv->wdt.info = &lenovo_se30_wdt_info;
-   323		priv->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
-   324		priv->wdt.min_timeout = MIN_TIMEOUT;
-   325		priv->wdt.max_timeout = MAX_TIMEOUT;
-   326		priv->wdt.parent = dev;
-   327	
-   328		watchdog_init_timeout(&priv->wdt, timeout, dev);
-   329		watchdog_set_drvdata(&priv->wdt, priv);
-   330		watchdog_set_nowayout(&priv->wdt, nowayout);
-   331		watchdog_stop_on_reboot(&priv->wdt);
-   332		watchdog_stop_on_unregister(&priv->wdt);
-   333	
-   334		return devm_watchdog_register_device(dev, &priv->wdt);
-   335	}
-   336	
+   179	
+   180	static int tps6287x_i2c_probe(struct i2c_client *i2c)
+   181	{
+   182		struct device *dev = &i2c->dev;
+   183		struct regulator_config config = {};
+   184		struct tps6287x_reg_data *reg_data;
+   185		struct regulator_dev *rdev;
+   186	
+   187		reg_data = devm_kzalloc(dev, sizeof(struct tps6287x_reg_data), GFP_KERNEL);
+   188	
+   189		if (!reg_data)
+   190			return -ENOMEM;
+   191	
+   192		config.regmap = devm_regmap_init_i2c(i2c, &tps6287x_regmap_config);
+   193		if (IS_ERR(config.regmap)) {
+   194			dev_err(dev, "Failed to init i2c\n");
+   195			return PTR_ERR(config.regmap);
+   196		}
+   197	
+   198		config.dev = dev;
+   199		config.of_node = dev->of_node;
+   200		config.init_data = of_get_regulator_init_data(dev, dev->of_node,
+   201							      &tps6287x_reg);
+   202	
+ > 203		reg_data->range = tps6287x_best_range(&config, &tps6287x_reg);
+   204	
+   205		rdev = devm_regulator_register(dev, &tps6287x_reg, &config);
+   206		if (IS_ERR(rdev)) {
+   207			dev_err(dev, "Failed to register regulator\n");
+   208			return PTR_ERR(rdev);
+   209		}
+   210	
+   211		rdev->reg_data = (void *)reg_data;
+   212		dev_dbg(dev, "Probed regulator\n");
+   213	
+   214		return 0;
+   215	}
+   216	
 
 -- 
 0-DAY CI Kernel Test Service
