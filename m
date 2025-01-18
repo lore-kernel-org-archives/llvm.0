@@ -1,170 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F568155757;
-	Sat, 18 Jan 2025 11:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8137C18CBFB;
+	Sat, 18 Jan 2025 12:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737200938; cv=none; b=Cov9ngVnaLY0L/Co0PtUl3tPKNbodVB6rdvXciP0iBEXGxTy4LbQvmhR+MPk0b8EbTvcBwlYJ9sANKFkoYnzewcQwatLhbUwYwLMGuBg/zab9keU/nQJDdykLk1xBZ+25XJZtXDsBnOV8sGeQPgDVKKQYWsHxvPOSKLZ/yO5OpA=
+	t=1737203352; cv=none; b=IN3QxxjEj8vRPy/VdE259m3Bnt2mpQ3DmmnJ45Ube1ns1FscYY+Pl+Y2hiIlGHbxoPo/RXHpxr5B3YgMlPmo7IHv3EFspgxhkx+LwQ4QVtdrKytKlxxz2MPxCaS7ihv/r2m82SQ/IU10lzAnW7yD6YgOuMLi0SN+MO2ouM59NBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737200938; c=relaxed/simple;
-	bh=b3Vwi+XF2Ta2nU9vcSwCYJ9xZaxTn7sxWh2usC3XLjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zc0pd0dRvuqbT3oZCcCWFEa+Y8bi74a6gKbSxuA57V9sFZt8LUj9riR3j9nmQDEX+10sRL2P4YSNwkkzN2o/fb6RdL7E+RiCSr8mBk7Vi6dQ3TDpvM8fRxJsDhlDfgHFDPEYWn1t8Az5LZ0Q/jQBwfBFWxTgGGZl7ecyk1OpWGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k770SPkq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737203352; c=relaxed/simple;
+	bh=vM7gZujibXks/wmu6XmRXYJpsfQVC+J/dNwYoM6F3Ho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MKfCGW98MDfBdUMV+/YvTW3NK3ZvKO9LES2PxQus9xOWEPX3wFJz9uZl9ir5T4GLP8pyE3m20FSsQdotJUnVuVgfu1GFolUqtsyzqJtuN2DAsaqhHN4qVg/pxCTT+X67k7MvlNV7Gk8fDZ10rgNkgVVQqFRds/W5zw6QqKgLrE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CwhNfZf/; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k770SPkq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F10CC4CED1;
-	Sat, 18 Jan 2025 11:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737200937;
-	bh=b3Vwi+XF2Ta2nU9vcSwCYJ9xZaxTn7sxWh2usC3XLjY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=k770SPkqI1tbX9Pwba+mp4XqGWfB+b0ywtSAZkXei5adlA3xYs8bmYN73DWb13IrY
-	 NgTCPc6Y62aNKkad+VNE8kGCQlxwcRodiTo6U5GAPN1PfgSdt+CmIDDzUP6QxeoXxO
-	 V6YIQhraqK8wXlyCjWrYIABBu0VAEYxtce2p1HBqFtfmLutzQcflq7vDEr2SsxbbuI
-	 0S72Omdum54L9Dz4ZJAKYmW2h6fOHLVfABlDyVyH6G1iJM6qbY/3IRiVOUxsCoTnpk
-	 BBvaGSIomTmQLJuw8ojghv8nZydL2xb+zJwoh58TuHzT151I1PmXWjBQihe0x8fQPd
-	 pcr1qpmSXjIGw==
-Date: Sat, 18 Jan 2025 11:48:46 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Cc: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Mikael
- Gonella-Bolduc <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: iio: light: Add APDS9160 binding
-Message-ID: <20250118114846.78ce0b67@jic23-huawei>
-In-Reply-To: <Z4UeCyxgbzCUQtRz@uva.nl>
-References: <20250106-apds9160-driver-v4-0-f88d9fc45d84@dimonoff.com>
-	<20250106-apds9160-driver-v4-1-f88d9fc45d84@dimonoff.com>
-	<20250112111059.677f8708@jic23-huawei>
-	<Z4UeCyxgbzCUQtRz@uva.nl>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CwhNfZf/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737203350; x=1768739350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vM7gZujibXks/wmu6XmRXYJpsfQVC+J/dNwYoM6F3Ho=;
+  b=CwhNfZf/teQG1bKvT2lJRuaGKMeXcKX6zzAglNoMJgG3Y1767cCdPpsF
+   KrkTCJ17iAKTdLTMQDrLXHTYgA4T/9xwcHF9e65gXWQPUVZsnQ3ul+ZUD
+   sUDPKs1TYqPobHvzGZOsVRLd+QyZJc2KVHgt9i7qBIED0M8vwxWYnqWk7
+   lrCmZjgZNfkTR/kIIqseNxfu+/UizW5t/J4/uuR5b18LJ8nsPDtejUZsd
+   a+H9YGOZEf0EZXDqupcrc3KIdAmTkrL6sVMkuIcQeN9lrYXsFPElRzmh4
+   lXNEpGeCeSrJRKX3XqNYXYHRPJVEFCCizJS9mN49R9yigGb5NniNmVE2b
+   g==;
+X-CSE-ConnectionGUID: k1aeR4CJTUSq9qdK4WKoJA==
+X-CSE-MsgGUID: p2daWOTAT3i5HPl3PVqkJA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="37538957"
+X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
+   d="scan'208";a="37538957"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2025 04:29:09 -0800
+X-CSE-ConnectionGUID: K7dsNpvfQsG2cYdsV5Ad2w==
+X-CSE-MsgGUID: STArnz2ESf2WJ8QkfQ36Qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
+   d="scan'208";a="111040540"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 18 Jan 2025 04:29:07 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tZ7wn-000UQx-1R;
+	Sat, 18 Jan 2025 12:29:05 +0000
+Date: Sat, 18 Jan 2025 20:28:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Sperbeck <jsperbeck@google.com>,
+	Joel Granados <joel.granados@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	John Sperbeck <jsperbeck@google.com>, Kees Cook <kees@kernel.org>,
+	Wen Yang <wen.yang@linux.dev>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3] sysctl: expose sysctl_check_table for unit testing
+ and use it
+Message-ID: <202501182003.Gfi63jzH-lkp@intel.com>
+References: <20250113070001.143690-1-jsperbeck@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250113070001.143690-1-jsperbeck@google.com>
 
-On Mon, 13 Jan 2025 09:07:07 -0500
-Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com> wrote:
+Hi John,
 
-> On Sun, Jan 12, 2025 at 11:10:59AM +0000, Jonathan Cameron wrote:
-> > On Mon, 06 Jan 2025 17:23:01 -0500
-> > Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
-> >   
-> > > From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-> > > 
-> > > Add device tree bindings for APDS9160
-> > > Note: Using alternate email for maintainer
-> > > 
-> > > Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-> > > ---
-> > >  .../bindings/iio/light/brcm,apds9160.yaml          | 86 ++++++++++++++++++++++
-> > >  1 file changed, 86 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml b/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
-> > > new file mode 100644
-> > > index 0000000000000000000000000000000000000000..756d46c2edb171da840ee49a7339cb781fe84ad2
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
-> > > @@ -0,0 +1,86 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/iio/light/brcm,apds9160.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Broadcom Combined Proximity & Ambient light sensor
-> > > +
-> > > +maintainers:
-> > > +  - Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
-> > > +
-> > > +description: |
-> > > +  Datasheet: https://docs.broadcom.com/docs/APDS-9160-003-DS
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - brcm,apds9160
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  vdd-supply: true
-> > > +
-> > > +  ps-cancellation-duration:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description: |
-> > > +      Proximity sensor cancellation pulse duration in half clock cycles.
-> > > +      This parameter determines a cancellation pulse duration.
-> > > +      The cancellation is applied in the integration phase to cancel out
-> > > +      unwanted reflected light from very near objects such as tempered glass
-> > > +      in front of the sensor.
-> > > +    minimum: 0
-> > > +    maximum: 63
-> > > +    default: 0
-> > > +
-> > > +  ps-cancellation-current-coarse:  
-> > 
-> > I've lost track on what we've discussed previously but I'm curious as to whether
-> > we can end up with a cleaner binding for this.  We may well see other identical
-> > controls in future, so nice to have something more 'generic'.  I'm not suggesting
-> > we don't keep it vendor specific though as not sure it will generalize beyond
-> > different broadcomm parts.
-> > 
-> > It is a multiple of nA, so can we just express the combination of
-> > this and ps-cancellation-current-fine as a single parameter, probably in pA
-> > 
-> > The tricky bit being there seem to be holes, so the allowed list would be complex.
-> > 
-> > Even if we can't do that can we express it as two nA values rather than indexes?  
-> 
-> Hi Jonathan,
-> 
-> These holes just have me puzzled on what to do. There's many of them, and the range in value is very large.
-> I thought about just having a single more generic parameter in pA but like you said but I found it was confusing to 
-> describe the allowed values and confusing as well to just round up or down since the holes are so large.
-> 
-> Having two values as a multiplier is more straightfoward for this chip since it's just based on what's described in the datasheet.
+kernel test robot noticed the following build errors:
 
-I would like them in common standard units even if we go this way.
+[auto build test ERROR on kees/for-next/kspp]
+[also build test ERROR on linus/master sysctl/sysctl-next v6.13-rc7]
+[cannot apply to kees/for-next/pstore]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> If you prefer to keep a more generic parameter, I'm open to the idea of going back to just a single one in pA and
-> log a warning in the driver if the value provided ends up in a hole and round to the nearest allowed value.
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Sperbeck/sysctl-expose-sysctl_check_table-for-unit-testing-and-use-it/20250113-150214
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/kspp
+patch link:    https://lore.kernel.org/r/20250113070001.143690-1-jsperbeck%40google.com
+patch subject: [PATCH v3] sysctl: expose sysctl_check_table for unit testing and use it
+config: um-randconfig-002-20250118 (https://download.01.org/0day-ci/archive/20250118/202501182003.Gfi63jzH-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501182003.Gfi63jzH-lkp@intel.com/reproduce)
 
-That makes sense to me as the cleanest option.
-Just rely on descriptive text to tell writer of DT binding what values are allowed.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501182003.Gfi63jzH-lkp@intel.com/
 
-> 
-> Are you confortable with this plan?
-> 
-> If so, there's another problem with the above. I don't see any picoamp suffix in the dt bindings property-units.yaml.
-> How should I handle this?
+All errors (new ones prefixed by >>):
 
-Add it.  They tend to get added on first requirement.  Here
-nothing above picoamp works for us.
+>> kernel/sysctl-test.c:414:4: error: call to undeclared function 'sysctl_check_table_test_helper'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           sysctl_check_table_test_helper("foo", table_foo));
+                           ^
+   kernel/sysctl-test.c:416:4: error: call to undeclared function 'sysctl_check_table_test_helper'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           sysctl_check_table_test_helper("foo", table_bar));
+                           ^
+   kernel/sysctl-test.c:418:4: error: call to undeclared function 'sysctl_check_table_test_helper'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           sysctl_check_table_test_helper("foo", table_qux));
+                           ^
+   3 errors generated.
 
-Jonathan.
 
-> 
-> Best regards,
-> Mikael
-> 
-> 
-> 
+vim +/sysctl_check_table_test_helper +414 kernel/sysctl-test.c
 
+   369	
+   370	/*
+   371	 * Test that registering an invalid extra value is not allowed.
+   372	 */
+   373	static void sysctl_test_register_sysctl_sz_invalid_extra_value(
+   374			struct kunit *test)
+   375	{
+   376		unsigned char data = 0;
+   377		struct ctl_table table_foo[] = {
+   378			{
+   379				.procname	= "foo",
+   380				.data		= &data,
+   381				.maxlen		= sizeof(u8),
+   382				.mode		= 0644,
+   383				.proc_handler	= proc_dou8vec_minmax,
+   384				.extra1		= SYSCTL_FOUR,
+   385				.extra2		= SYSCTL_ONE_THOUSAND,
+   386			},
+   387		};
+   388	
+   389		struct ctl_table table_bar[] = {
+   390			{
+   391				.procname	= "bar",
+   392				.data		= &data,
+   393				.maxlen		= sizeof(u8),
+   394				.mode		= 0644,
+   395				.proc_handler	= proc_dou8vec_minmax,
+   396				.extra1		= SYSCTL_NEG_ONE,
+   397				.extra2		= SYSCTL_ONE_HUNDRED,
+   398			},
+   399		};
+   400	
+   401		struct ctl_table table_qux[] = {
+   402			{
+   403				.procname	= "qux",
+   404				.data		= &data,
+   405				.maxlen		= sizeof(u8),
+   406				.mode		= 0644,
+   407				.proc_handler	= proc_dou8vec_minmax,
+   408				.extra1		= SYSCTL_ZERO,
+   409				.extra2		= SYSCTL_TWO_HUNDRED,
+   410			},
+   411		};
+   412	
+   413		KUNIT_EXPECT_EQ(test, -EINVAL,
+ > 414				sysctl_check_table_test_helper("foo", table_foo));
+   415		KUNIT_EXPECT_EQ(test, -EINVAL,
+   416				sysctl_check_table_test_helper("foo", table_bar));
+   417		KUNIT_EXPECT_EQ(test, 0,
+   418				sysctl_check_table_test_helper("foo", table_qux));
+   419	}
+   420	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
