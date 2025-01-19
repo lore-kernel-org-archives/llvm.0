@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB321F5FA;
-	Sun, 19 Jan 2025 10:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EBF1DFD8;
+	Sun, 19 Jan 2025 12:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737281907; cv=none; b=sjxAw6EhkJr1TAuNGEyjuSm+biz6Ui6blIa5rJ01RIxghySU8cpWXmFHynOvwM7vxw8X9/SpC2pMvRjz9AgQL3nFsV58y+euyPNDbGi4cBMqnOEoMXum8A9TtJKK1uaa7b4epPV+zfjjuFr+nFuO5F9FpyAw4S43Lb33EUtXOPU=
+	t=1737289420; cv=none; b=aaboikV/K/fAR2SMM9rPlhIGH9DoQjMdokkr1j6U8A1ply5OcdlKsPSfV58HR9qNnfRFOqw33m82TcRnI2i/3cV5jwDzZdiVtmTSGbqUKb9VRX1PgRRYRfjrbxyQy/+ucbpWGcvSM+V1ZEGz+Rnlbyv2apofo6ORcJ4EG7GiKqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737281907; c=relaxed/simple;
-	bh=fbDflAL469mFiNpSh8914Re9e765/OJwGE9qPeluOUY=;
+	s=arc-20240116; t=1737289420; c=relaxed/simple;
+	bh=G7qkiKdY7o4/+y78NwZfqHgg2iTIPpjRjpuZkvRUnB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KVE7OBslv+c/uJJRnIl7ns40/PMaUlclJkaMKl78LAOLyZEprpXRU0O6l+awLl1srb2ZdnUXN1jvH/sCVGsmyEAp59VfrjoQIvghccYadfq2VrhW8gWritzTyeL9Pl/wCGjkmfbEGRv4KMq8xtwCl+TQ1rWVR2jWgqNAF9dd3YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k8Sjz1Qx; arc=none smtp.client-ip=198.175.65.11
+	 Content-Disposition; b=EwFCY0px3yLMgxKNC4PU3kEakgxajo47DONAS2q1hKezD7TmWoO0Jlcofs8RM541fPcDPUfUVuwevPdRbojNWzAS8orB/Or9RyiNo5VSjylqt5GWUj0akaU15JH+J4ueFNwGmsmv962cHM6Foqtp4pDwJh5AKQvnHqsoLorfknw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gAp12a5u; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k8Sjz1Qx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gAp12a5u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737281906; x=1768817906;
+  t=1737289418; x=1768825418;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fbDflAL469mFiNpSh8914Re9e765/OJwGE9qPeluOUY=;
-  b=k8Sjz1QxHyeQvzaDQtVp0yzCVVTwg5U717Qhrf0RARoz5FkrRCqgQY6k
-   0zMPBgdFR+P3Ui4Xq14pUyWtNEwaIsIJW6Nl7gENjjwkoqKi076NWd3vR
-   Qnl8HtATlyJlDBbOa/FgGVGLLq4dTAeG0bQ3SGzsBUUsXGbejJzuJvMwf
-   Z/SfUe1OK1qqKz83SYmLeCvxbYIAacUsHzz3Rg734RSLN6preyrkSBmgO
-   BR5Rx8b+UDRxiCi22ih96rrzYvzZ3+qdw+UyYpV/jiXs4xFxlsZ7VJxv2
-   O4b/vlbD2U8C0jTcQD143YCXFpeNsVFVC+ehPuG/zqFZoHz6lpy/AGMLr
-   A==;
-X-CSE-ConnectionGUID: urMcTazBTPiO/mHTSWLmmQ==
-X-CSE-MsgGUID: 8WJRrABXQz+MTMsWVjzDwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="48157725"
+  bh=G7qkiKdY7o4/+y78NwZfqHgg2iTIPpjRjpuZkvRUnB4=;
+  b=gAp12a5uy4aYN/F0tkAWvFFGdTdfPjaBRS7cYR5F5rGKsGTvGVENyhfm
+   nRLvCeYYE8cQyifkF859PEAygzAlwpyjdr90hUyxdV5x1jLgUME8sztDF
+   /RvFighXc8dWAPyVuYbSxziJATd2e0hbWCzrZNuhytEwuZqZ19TWiMjur
+   D4XdeVqaoiHfxfKHxtD/CtKnIhHUdwMzemRDtLYFvmGIxfY8RX4J6lXg2
+   3ffpkiiw/bS1TKt/Tl6CPnxFhEc9SslDOfqcdbK5wFmDIZc7AFleAUo6s
+   ZmPnIlzq3rutQxEk/bGUdXrf6td5gkvvvvSXBl9K1Z5BEVjI4BErgrs0v
+   Q==;
+X-CSE-ConnectionGUID: eiUGcbRsSByji56LXN/AqQ==
+X-CSE-MsgGUID: Ud66KQB3TzGHelhHM0/kZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="37815504"
 X-IronPort-AV: E=Sophos;i="6.13,217,1732608000"; 
-   d="scan'208";a="48157725"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 02:18:25 -0800
-X-CSE-ConnectionGUID: qmDwwgjqSf64zFyYFHaMRw==
-X-CSE-MsgGUID: pmFL76bXQUaNqIkv6w1pMw==
+   d="scan'208";a="37815504"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 04:23:38 -0800
+X-CSE-ConnectionGUID: /9M6EfexQy+xQh6QxQgIpw==
+X-CSE-MsgGUID: IR00JcY6Sz6HGYS1xFX+Yw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,217,1732608000"; 
-   d="scan'208";a="106374482"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110847759"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Jan 2025 02:18:23 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 19 Jan 2025 04:23:36 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tZSNp-000VMF-0k;
-	Sun, 19 Jan 2025 10:18:21 +0000
-Date: Sun, 19 Jan 2025 18:18:16 +0800
+	id 1tZUL0-000VQs-1R;
+	Sun, 19 Jan 2025 12:23:34 +0000
+Date: Sun, 19 Jan 2025 20:23:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Johansen <john.johansen@canonical.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jj-apparmor:apparmor-next 9/19] security/apparmor/label.c:206:15:
- warning: address of array 'new->vec' will always evaluate to 'true'
-Message-ID: <202501191802.bDp2voTJ-lkp@intel.com>
+To: Baojun Xu <baojun.xu@ti.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
+Subject: [tiwai-sound:for-next 49/52] sound/pci/hda/tas2781_hda_spi.c:110:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202501192006.Hm9GmKiV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,82 +64,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jj/linux-apparmor.git apparmor-next
-head:   e6b087676954e36a7b1ed51249362bb499f8c1c2
-commit: de4754c801f4ceefc6ce0d13480c506e0a91b449 [9/19] apparmor: carry mediation check on label
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250119/202501191802.bDp2voTJ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250119/202501191802.bDp2voTJ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+head:   dd85bbb7fc482b5cdb78f8b5e8f9ef7a3919d6ef
+commit: bb5f86ea50ffb292f42eb1ebdb99991d5c5ac3ba [49/52] ALSA: hda/tas2781: Add tas2781 hda SPI driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250119/202501192006.Hm9GmKiV-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250119/202501192006.Hm9GmKiV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501191802.bDp2voTJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501192006.Hm9GmKiV-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from security/apparmor/label.c:10:
-   In file included from include/linux/audit.h:13:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> security/apparmor/label.c:206:15: warning: address of array 'new->vec' will always evaluate to 'true' [-Wpointer-bool-conversion]
-     206 |         AA_BUG(!new->vec);
-         |                ~~~~~~^~~
-   security/apparmor/include/lib.h:56:15: note: expanded from macro 'AA_BUG'
-      56 |                 AA_BUG_FMT((X), "" args);                                   \
-         |                             ^
-   security/apparmor/include/lib.h:61:8: note: expanded from macro 'AA_BUG_FMT'
-      61 |         WARN((X), "AppArmor WARN %s: (" #X "): " fmt, __func__, ##args)
-         |               ^
-   include/asm-generic/bug.h:132:25: note: expanded from macro 'WARN'
-     132 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   5 warnings generated.
+>> sound/pci/hda/tas2781_hda_spi.c:110:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     110 |         if (tas_priv->cur_book != TASDEVICE_BOOK_ID(reg)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/pci/hda/tas2781_hda_spi.c:119:9: note: uninitialized use occurs here
+     119 |         return ret;
+         |                ^~~
+   sound/pci/hda/tas2781_hda_spi.c:110:2: note: remove the 'if' if its condition is always true
+     110 |         if (tas_priv->cur_book != TASDEVICE_BOOK_ID(reg)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/pci/hda/tas2781_hda_spi.c:108:9: note: initialize the variable 'ret' to silence this warning
+     108 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +206 security/apparmor/label.c
+vim +110 sound/pci/hda/tas2781_hda_spi.c
 
-   200	
-   201	static void accum_label_info(struct aa_label *new)
-   202	{
-   203		long u = FLAG_UNCONFINED;
-   204		int i;
-   205	
- > 206		AA_BUG(!new->vec);
-   207	
-   208		/* size == 1 is a profile and flags must be set as part of creation */
-   209		if (new->size == 1)
-   210			return;
-   211	
-   212		for (i = 0; i < new->size; i++) {
-   213			u |= new->vec[i]->label.flags & (FLAG_DEBUG1 | FLAG_DEBUG2 |
-   214							 FLAG_STALE);
-   215			if (!(u & new->vec[i]->label.flags & FLAG_UNCONFINED))
-   216				u &= ~FLAG_UNCONFINED;
-   217			new->mediates |= new->vec[i]->label.mediates;
-   218		}
-   219		new->flags |= u;
-   220	}
-   221	
+   104	
+   105	static int tasdevice_spi_switch_book(struct tasdevice_priv *tas_priv, int reg)
+   106	{
+   107		struct regmap *map = tas_priv->regmap;
+   108		int ret;
+   109	
+ > 110		if (tas_priv->cur_book != TASDEVICE_BOOK_ID(reg)) {
+   111			ret = regmap_write(map, TASDEVICE_BOOKCTL_REG,
+   112					   TASDEVICE_BOOK_ID(reg));
+   113			if (ret < 0) {
+   114				dev_err(tas_priv->dev, "Switch Book E=%d\n", ret);
+   115				return ret;
+   116			}
+   117			tas_priv->cur_book = TASDEVICE_BOOK_ID(reg);
+   118		}
+   119		return ret;
+   120	}
+   121	
 
 -- 
 0-DAY CI Kernel Test Service
