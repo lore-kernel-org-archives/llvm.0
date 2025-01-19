@@ -1,61 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E656184;
-	Sun, 19 Jan 2025 13:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656581DF730;
+	Sun, 19 Jan 2025 18:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737293810; cv=none; b=ZsFaklBEvMCm8sUabvtL9/8S2nXJYZL5Y850pzifzkXaF4FBxLfecV51ZjYsCtLWxbElDjSVsPKXX1o0ZnECIqcTzbioOBKHKcIp2gBMlM1R9e3/35oDdj33yFijuHO9fyYaB+giEURaicyBaiCMgwEu/l6WcMtWHFzirRTtTRA=
+	t=1737311342; cv=none; b=eqMYT1P6DmvPdPC0q/VO688vZ7T981XV4O/tk3kfkmMA708Pxisn1ozoZoxQZ1jmWDTxCaVo4UjCGRh0mktOLMWt6gZAN++jkM7Fhsd4s04FuiSktHkYbQRdjwV+N56LHfda18LNS7xEpBbc/4sRZH1/vLsXHkOmktAY14/IU8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737293810; c=relaxed/simple;
-	bh=rp2zxmK7qT7G2nJZhbsisz5AiYOdSAk6sWo+oRoq+uw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lMlunRjavTuhS6/jqwr67on7tsnnqt83yJ0MJbKboyqoMf3Pl+e/cZYONDSmRf06NgDyXSRKxvKhNK8a85fyZD763nQidfL54nTkHt2Nhvp1rLHRjaC64QwqkYHfUN6HC3AkYi0tnUOjqUVmnfFdNIoia9AhL+nhSfgAXHuPQ44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eYdblQvP; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1737311342; c=relaxed/simple;
+	bh=dtdJln9DUCS47S020Z5+ywS+CP+www9ECg77IDvoP54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AcjTMVxu1IXaOhCRVnsdbTVa6BdPdsjeDlURJ29GROKFwtfobsbXqOPTPn4+jTTpXzLabvUZDhuZwvhX4WQ31LCWtKGppfxgGbRhZZepbph9iL4iL5OFG/LFQaN8FoWGwSWFhLTNzaLOLM40Ke99s34It66Ko4Dce5r7ktBqCnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E8LIWyK1; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eYdblQvP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E8LIWyK1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737293807; x=1768829807;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rp2zxmK7qT7G2nJZhbsisz5AiYOdSAk6sWo+oRoq+uw=;
-  b=eYdblQvPmMNuTYJ37+/x1i2NKqRh/hJEwgbBhf6AL0grkdiHtJHG+/G+
-   lU9xqa1bk86XxShRmwuRuljP6BMWCWIcg2o1iKVOd5sp+Srslr7NHGRdN
-   7rM8doLlpqVdoFa1f6Bx+teNQA9GXywX/ZQk+AXReFanWi4cwJBdCjV5G
-   nG3xdl2dP0xnoEYuVv+eFM5SrwojTGo35gii/LQX3tdFY3i9zsPdBVY62
-   0v2liW+aUxBeeYY3fKGo0aVIeKCXq1Oaf6T8po46uhcus7KA4UqRA1Ifd
-   H8LQl/pNzRctHX6CzV2w7P+x7lZlKVBynfB6XultCjuxSd4El4n/oEGGK
-   w==;
-X-CSE-ConnectionGUID: uSw/oo76Tci+YwcyjEqrrg==
-X-CSE-MsgGUID: Ll861h9UT9GI3sOsYahFbQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="41427871"
-X-IronPort-AV: E=Sophos;i="6.13,217,1732608000"; 
-   d="scan'208";a="41427871"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 05:36:46 -0800
-X-CSE-ConnectionGUID: jflZGsDaQtaT8+8nr/XkGg==
-X-CSE-MsgGUID: 8BxCOC04RKWT6jIzw8aPfg==
+  t=1737311340; x=1768847340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dtdJln9DUCS47S020Z5+ywS+CP+www9ECg77IDvoP54=;
+  b=E8LIWyK1Gaw+ZnBG5TO0D7xoZFthVIIeZmwPWYgONlxp6g+GzoUslmT8
+   D3NH6D9iL8nDgZA1aG/UdwvyAC1HMzxk/xRu9IohuTc7zNh/TGUZMMULN
+   +1CSCZdXHPKVZqgFBhElPwAFY3UGgy2FnPbPe+eYoZcrFNUPi83kde4rp
+   ny1uQp9KbSGgpMA7m6JfVWn2lEAbuPtIwKZqAosNIUdt5+iUIlzmy7rla
+   Djn9+g7cxyIhHHHhfbFb5OaTaUtZX8QeAzWi18iKi9m9HvCoCmVa+OHBa
+   5j9XKnaSPdv3AMuYyeyKwJVIhF3QqnjJxNhH6ARmDgOx5dwtg0WPYo4X8
+   Q==;
+X-CSE-ConnectionGUID: WOKGjbXvTs6AuPRETN5o8Q==
+X-CSE-MsgGUID: +oxgXCbtTs6p5aqlxzjm0g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="41604324"
+X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
+   d="scan'208";a="41604324"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 10:28:59 -0800
+X-CSE-ConnectionGUID: ZEPFNY+RQiqKs6R7yDTrww==
+X-CSE-MsgGUID: 7c6nzuunRrC7J0D4SBCz7w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="106692499"
+   d="scan'208";a="129543362"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 19 Jan 2025 05:36:45 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 19 Jan 2025 10:28:52 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tZVTm-000VUJ-0L;
-	Sun, 19 Jan 2025 13:36:42 +0000
-Date: Sun, 19 Jan 2025 21:35:52 +0800
+	id 1tZa2U-000Vhb-0R;
+	Sun, 19 Jan 2025 18:28:50 +0000
+Date: Mon, 20 Jan 2025 02:28:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Geoffrey D. Bennett" <g@b4.vu>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-media@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.de>
-Subject: [tiwai-sound:for-next 50/52] sound/usb/fcp.c:889:15: error:
- incompatible function pointer types assigning to 'long (*)(struct snd_hwdep
- *, char *, long, loff_t *)' (aka 'long (*)(struct snd_hwdep *, char *, long,
- long long *)') from 'ssize_t (struct snd_hwdep *, char *, ssize_t, loff...
-Message-ID: <202501192122.ngosycnT-lkp@intel.com>
+	Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+	Sylvain Petinot <sylvain.petinot@foss.st.com>,
+	Yong Zhi <yong.zhi@intel.com>, Dan Scally <djrscally@gmail.com>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>, hverkuil@xs4all.nl,
+	laurent.pinchart@ideasonboard.com, bingbu.cao@intel.com,
+	Tianshu Qiu <tian.shu.qiu@intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Martin Kepplinger <martink@posteo.de>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Robert Foss <rfoss@kernel.org>,
+	Todor Tomov <todor.too@gmail.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Benoit Parrot <bparrot@ti.com>,
+	Ricardo Ribalda <ribalda@chromium.org>,
+	"Duc-Long, Le" <duclong.linux@gmail.com>
+Subject: Re: [PATCH v9 9/9] media: v4l: Convert the users of
+ v4l2_get_link_freq to call it on a pad
+Message-ID: <202501200204.0M82bJgt-lkp@intel.com>
+References: <20250119143904.114991-10-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,51 +89,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250119143904.114991-10-sakari.ailus@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
-head:   dd85bbb7fc482b5cdb78f8b5e8f9ef7a3919d6ef
-commit: 46757a3e7d50dac923888e7fbe68377736f13c70 [50/52] ALSA: FCP: Add Focusrite Control Protocol driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250119/202501192122.ngosycnT-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250119/202501192122.ngosycnT-lkp@intel.com/reproduce)
+Hi Sakari,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on c4b7779abc6633677e6edb79e2809f4f61fde157]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sakari-Ailus/media-v4l-Support-passing-media-pad-argument-to-v4l2_get_link_freq/20250119-224053
+base:   c4b7779abc6633677e6edb79e2809f4f61fde157
+patch link:    https://lore.kernel.org/r/20250119143904.114991-10-sakari.ailus%40linux.intel.com
+patch subject: [PATCH v9 9/9] media: v4l: Convert the users of v4l2_get_link_freq to call it on a pad
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250120/202501200204.0M82bJgt-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250120/202501200204.0M82bJgt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501192122.ngosycnT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501200204.0M82bJgt-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> sound/usb/fcp.c:889:15: error: incompatible function pointer types assigning to 'long (*)(struct snd_hwdep *, char *, long, loff_t *)' (aka 'long (*)(struct snd_hwdep *, char *, long, long long *)') from 'ssize_t (struct snd_hwdep *, char *, ssize_t, loff_t *)' (aka 'int (struct snd_hwdep *, char *, int, long long *)') [-Wincompatible-function-pointer-types]
-     889 |         hw->ops.read = fcp_hwdep_read;
-         |                      ^ ~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from drivers/media/platform/qcom/camss/camss.c:14:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/platform/qcom/camss/camss.c:2057:2: error: use of undeclared identifier 'sensor_pad'
+    2057 |         sensor_pad = camss_find_sensor_pad(entity);
+         |         ^
+   drivers/media/platform/qcom/camss/camss.c:2058:7: error: use of undeclared identifier 'sensor_pad'; did you mean 'seq_pad'?
+    2058 |         if (!sensor_pad)
+         |              ^~~~~~~~~~
+         |              seq_pad
+   include/linux/seq_file.h:105:6: note: 'seq_pad' declared here
+     105 | void seq_pad(struct seq_file *m, char c);
+         |      ^
+>> drivers/media/platform/qcom/camss/camss.c:2058:7: warning: address of function 'seq_pad' will always evaluate to 'true' [-Wpointer-bool-conversion]
+    2058 |         if (!sensor_pad)
+         |             ~^~~~~~~~~~
+   drivers/media/platform/qcom/camss/camss.c:2058:7: note: prefix with the address-of operator to silence this warning
+    2058 |         if (!sensor_pad)
+         |              ^
+         |              &
+   drivers/media/platform/qcom/camss/camss.c:2061:39: error: use of undeclared identifier 'sensor_pad'
+    2061 |         subdev = media_entity_to_v4l2_subdev(sensor_pad->entity);
+         |                                              ^
+   drivers/media/platform/qcom/camss/camss.c:2061:39: error: use of undeclared identifier 'sensor_pad'
+   5 warnings and 4 errors generated.
 
 
-vim +889 sound/usb/fcp.c
+vim +/sensor_pad +2057 drivers/media/platform/qcom/camss/camss.c
 
-   874	
-   875	static int fcp_hwdep_init(struct usb_mixer_interface *mixer)
-   876	{
-   877		struct snd_hwdep *hw;
-   878		int err;
-   879	
-   880		err = snd_hwdep_new(mixer->chip->card, "Focusrite Control", 0, &hw);
-   881		if (err < 0)
-   882			return err;
-   883	
-   884		hw->private_data = mixer;
-   885		hw->exclusive = 1;
-   886		hw->ops.open = fcp_hwdep_open;
-   887		hw->ops.ioctl = fcp_hwdep_ioctl;
-   888		hw->ops.ioctl_compat = fcp_hwdep_ioctl;
- > 889		hw->ops.read = fcp_hwdep_read;
-   890		hw->ops.poll = fcp_hwdep_poll;
-   891		hw->ops.release = fcp_hwdep_release;
-   892	
-   893		return 0;
-   894	}
-   895	
+  2043	
+  2044	/*
+  2045	 * camss_get_pixel_clock - Get pixel clock rate from sensor
+  2046	 * @entity: Media entity in the current pipeline
+  2047	 * @pixel_clock: Received pixel clock value
+  2048	 *
+  2049	 * Return 0 on success or a negative error code otherwise
+  2050	 */
+  2051	int camss_get_pixel_clock(struct media_entity *entity, u64 *pixel_clock)
+  2052	{
+  2053		struct media_pad *sensor;
+  2054		struct v4l2_subdev *subdev;
+  2055		struct v4l2_ctrl *ctrl;
+  2056	
+> 2057		sensor_pad = camss_find_sensor_pad(entity);
+> 2058		if (!sensor_pad)
+  2059			return -ENODEV;
+  2060	
+  2061		subdev = media_entity_to_v4l2_subdev(sensor_pad->entity);
+  2062	
+  2063		ctrl = v4l2_ctrl_find(subdev->ctrl_handler, V4L2_CID_PIXEL_RATE);
+  2064	
+  2065		if (!ctrl)
+  2066			return -EINVAL;
+  2067	
+  2068		*pixel_clock = v4l2_ctrl_g_ctrl_int64(ctrl);
+  2069	
+  2070		return 0;
+  2071	}
+  2072	
 
 -- 
 0-DAY CI Kernel Test Service
