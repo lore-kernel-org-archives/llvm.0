@@ -1,103 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E371917EB;
-	Mon, 20 Jan 2025 11:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA111DF257;
+	Mon, 20 Jan 2025 12:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737371725; cv=none; b=lIr4npNb8R0vrRMCOD/J0HGKd4vSIlv5y6ZZJHfgRgIAaTzzdoWraWMBWorDviS7vodBoil8+bz1eMvKTrOolvSQNvqHX6Shozcj/lfCye3+RBZpQX++rvOt8zn2s8rSIlMfnPzoUoYjyCqC6wrI1oYM5g7CVFAHvn0/qwSObro=
+	t=1737376172; cv=none; b=B4+3wcxYEOdkjkilLDpLyu5zAD4RsktAMFkBlUQL6gwpKUASZmJIHAD/p43WZzbR6O8bZokKXQTHvK0TgtrneiSxRGlMaESHzdONzrAeBhJAJz/Dlepc9v7iV5IxSsZ+LyGEVzT6ZMA/iHTjyItmLXK1ylzXFqsJwBrEm/muEig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737371725; c=relaxed/simple;
-	bh=se8iuTeVfpUizEwLzuSXzkzwvCHJFsZ6DnPXyjataaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PODQ8SjaewiN9ckibcl3VXBSy8sgF03UIZ8IqXJ6p5Br2oNIH2az4KvI3nBmAwW+7VBn1z0Oirl9zCvelEO3KkqypGsGJWJiI4Y9jwxFLtDRINmoCJcIY2/KtUYbZ0gc/HDscPwGcg7PaYcUmITD03agNZ6e8JoiB6OgWpHupzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gXl1Bzvh; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737376172; c=relaxed/simple;
+	bh=2Tv1ry/n+QJXnO0d2oWFSgenQrO7SpDhoSbrCv14hvo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rBVIaMdzY1V802ZoW1qBsnNpRxWJut8xPtVmrr5/J0kJSUnyJfsNBOLtckMsJel8O8wvjmzM9ZqgJGzfn57mozXwSuvX8meK8vwlDyTHp+NVNrM4FVgqKs3mzmBkT/G7zRDpbZLq96WrE2ZrkzHSwguet4T2Bbssd8ldH1RMLsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWfEwF6E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gXl1Bzvh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737371724; x=1768907724;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=se8iuTeVfpUizEwLzuSXzkzwvCHJFsZ6DnPXyjataaY=;
-  b=gXl1BzvhIBYOXyoMcSoIUCcgQdzQwiMym6QhRyaAvBFdAzFwt0HBro97
-   PTpLoeCEz+oOX8zCq0LfJxK91v9liWbuqnt4Utk7nl0lZgtFL+jwCrxsR
-   1FL+GxfvlEAIUsop5P/G2GMQwui9AKp7aeZ8lQHMQW1if3fksEICPzBNe
-   2NTW2nS1kfBv09UFLo5Dwe5I9i/MICQUEpLcXpEDFro9UPS64W4ZQppar
-   KunTas1/HYmUKVJE26YQ/IKmfKQ3F0NfuUmMQvk7kaEHXSTnCXamgc/rt
-   3C8TGwTP41rBiblgTwbGFGrtpKP/AptEWtmAXVs1mqzVviFJBL2kweBr0
-   g==;
-X-CSE-ConnectionGUID: wExRh4g/QKGm2otZLQRFcg==
-X-CSE-MsgGUID: Q9PmGHl9RXmJsjcULeLWiA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="60222857"
-X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
-   d="scan'208";a="60222857"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2025 03:15:23 -0800
-X-CSE-ConnectionGUID: XZijA5KOTfWgT9j2hVzDPw==
-X-CSE-MsgGUID: joDIB92rTjWlprtOHd3htA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
-   d="scan'208";a="106301303"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Jan 2025 03:15:19 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tZpkS-000WTj-2W;
-	Mon, 20 Jan 2025 11:15:16 +0000
-Date: Mon, 20 Jan 2025 19:14:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiawen Wu <jiawenwu@trustnetic.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, richardcochran@gmail.com, linux@armlinux.org.uk,
-	horms@kernel.org, jacob.e.keller@intel.com, netdev@vger.kernel.org,
-	vadim.fedorenko@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	mengyuanlou@net-swift.com, Jiawen Wu <jiawenwu@trustnetic.com>
-Subject: Re: [PATCH net-next v5 1/4] net: wangxun: Add support for PTP clock
-Message-ID: <202501201812.CX71IRuQ-lkp@intel.com>
-References: <20250117062051.2257073-2-jiawenwu@trustnetic.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWfEwF6E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9721C4CEDD;
+	Mon, 20 Jan 2025 12:29:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737376171;
+	bh=2Tv1ry/n+QJXnO0d2oWFSgenQrO7SpDhoSbrCv14hvo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=aWfEwF6ETjUWi4gCMTMWsAm6fVtdIy4FSLpVvqRm8sjozIOMPgkQ57RGPOCMh0O/M
+	 7D9lquyrXutwWmkSqDtBGxxcvLtJfa5ZB1byITL4646dC5evLWkmqMBZFVth7J44n3
+	 tQCXuTiE+HXvNR9kXxCkkgjJYVGA9mfxQAA1sEVYMCHaIniI+9IuvtvtpDiAmySP8v
+	 JqVAdhtQtHeBdLRIYW5mUQSA22MoxTsRWfASWmjaAYloQChBTZYxaYa+TsAr1tKxQR
+	 zWDLMjGaPR+r9RarzfLq1ihofWHV8FYSOwStFqF3VkYKi8v+MWn8lgvnuBsuLoADwm
+	 g0CYpnvsYKQbg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 20 Jan 2025 05:29:24 -0700
+Subject: [PATCH] tracing: Fix -Wundef around 'struct event_mod_load'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250117062051.2257073-2-jiawenwu@trustnetic.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250120-trace_events-fix-wundef-v1-1-61259cbbaa75@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKNBjmcC/x2MSwqEMBAFryK9tiEdCYJXGQYJ8UV7EyXxMyDef
+ YLLoqi6qSArCg3NTRmnFl1TBWkbCotPM1inymSNdUas4T37gBEn0l446o+vI02I3HsR14lx0UW
+ q9ZZR7Xv+fJ/nDxsk/e1pAAAA
+X-Change-ID: 20250120-trace_events-fix-wundef-7a1153105f5f
+To: Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ kernel test robot <lkp@intel.com>, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1239; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=2Tv1ry/n+QJXnO0d2oWFSgenQrO7SpDhoSbrCv14hvo=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOl9jiuXZeS6rDGY3nbwFFPY77MfLPzV3R6qyP++PS99l
+ /UFjTtiHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi1YEM/2zl1Ng/G15ec3CD
+ D89l5r/WOo+aVixg+7gvVsjsWdOliQGMDCe89NcqR/dyqJxa/Cb1a/NCuTk8b9I/3HosYXRofSm
+ nKxsA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi Jiawen,
+When CONFIG_MODULES is disabled, clang warns:
 
-kernel test robot noticed the following build errors:
+  kernel/trace/trace_events.c:872:5: warning: 'CONFIG_MODULES' is not defined, evaluates to 0 [-Wundef]
+    872 | #if CONFIG_MODULES
+        |     ^
 
-[auto build test ERROR on net-next/main]
+Use '#ifdef' to resolve the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiawen-Wu/net-wangxun-Add-support-for-PTP-clock/20250117-142347
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250117062051.2257073-2-jiawenwu%40trustnetic.com
-patch subject: [PATCH net-next v5 1/4] net: wangxun: Add support for PTP clock
-config: i386-randconfig-004-20250120 (https://download.01.org/0day-ci/archive/20250120/202501201812.CX71IRuQ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250120/202501201812.CX71IRuQ-lkp@intel.com/reproduce)
+Fixes: b355247df104 ("tracing: Cache ":mod:" events for modules not loaded yet")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202501190121.E2CIJuUj-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ kernel/trace/trace_events.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501201812.CX71IRuQ-lkp@intel.com/
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index ab04994e4510..de934332ba36 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -869,7 +869,7 @@ static int ftrace_event_enable_disable(struct trace_event_file *file,
+ 	return __ftrace_event_enable_disable(file, enable, 0);
+ }
+ 
+-#if CONFIG_MODULES
++#ifdef CONFIG_MODULES
+ struct event_mod_load {
+ 	struct list_head	list;
+ 	char			*module;
 
-All errors (new ones prefixed by >>):
+---
+base-commit: 9f3ccaeedbe0088f1b89474bcf4187c49cfe8de2
+change-id: 20250120-trace_events-fix-wundef-7a1153105f5f
 
->> ld.lld: error: undefined symbol: ptp_clock_register
-   >>> referenced by wx_ptp.c:306 (drivers/net/ethernet/wangxun/libwx/wx_ptp.c:306)
-   >>>               drivers/net/ethernet/wangxun/libwx/wx_ptp.o:(wx_ptp_init) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: ptp_clock_unregister
-   >>> referenced by wx_ptp.c:650 (drivers/net/ethernet/wangxun/libwx/wx_ptp.c:650)
-   >>>               drivers/net/ethernet/wangxun/libwx/wx_ptp.o:(wx_ptp_stop) in archive vmlinux.a
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
