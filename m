@@ -1,51 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14854EC0;
-	Mon, 20 Jan 2025 18:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACEB1EBFF0;
+	Mon, 20 Jan 2025 18:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737396161; cv=none; b=T16vqU2Kzsj8oU4jCl4lWhHwtnlrSonRCh/Qvguw1t7NdiJAGM5rEHW8Jl3hJLf2BLalwNOJxKyNtLaaWA5sTWimmDmvdQBgEX/1MQIBIe3ZdGitsfFpTtzxNh3tPGtuqs4PZTwXAYfcOIlLHJrradLg4N2w5xQEkjzkY3smtgM=
+	t=1737396336; cv=none; b=nPMmGjIOPbdkWd+uOBUYbSyZlplO6aR/K4qnlH8DVMx8LCOOTNR3oF8Zcqlbkjs011+Z/C7a75o9w50kxxX7xM9A7oYaJt+3pO9Dzc+5p0vOGRrkjJ6WxmZP8oTIE1R/lKaOFeXEnnv5SaNhLnZYVMJRsU+P9L1cuIjQPrwyRZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737396161; c=relaxed/simple;
-	bh=5UY3CnzO23/FfdGkctCqfbY/bk5Ng1X3KfWkPn0IDKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iWbiJRWu8hdOa0qUvwObYTN1QnKiqabwJQ2y3f/3PBzsPcfP/QjSuVevIN4mO/vYcVRdJuGeX5d3tK2JN0RBJa62HfN+d1LG70AeB79IN3vDCnwi+PnPDQaWNSLCIZNSd/L0RhaXuJX1kMrClgv4hv7w7SC5P+HPibA4t+iiLCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8tjOrfT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737396336; c=relaxed/simple;
+	bh=Yr2jZ8FMxjmsp9bVLjMEx6gPvAU0ztGYgh78NazUIHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jj34z3kN1sBKobwoO7ye3QLoKSHC0eXXv9pn/3A4mgBnBsDbp8T920qQuGMyfQrnNT2FZg7Jpsqs5GJ3Kc5eaXxmpx4UJidXZB5kpZ/SWCylEugCuPwIqmK23KI/0JBqyyDwrsbloIcsxGc3Z04TvRfZ/AbF5cSLZu72ZkiRx+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JT20wWrE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8tjOrfT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15761C4CEE2;
-	Mon, 20 Jan 2025 18:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737396160;
-	bh=5UY3CnzO23/FfdGkctCqfbY/bk5Ng1X3KfWkPn0IDKo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B8tjOrfTJ9gX/jTcGqYcP4rbqsSFZW+pycrmMVpJ/5clNc4aVUCxaRV5DUia8W9Zv
-	 sJJv7wk4UuIUhf7bNFSf4Z1FqQzjIelTRMx3Xa0BEG7yCXATd0AeWJZwHJfv6piMzp
-	 QfisnPdgqHvUW7uSOkLC0XabnSsArKuDVkDsZ2rkJ+XOO4xwTrhV6dRg9cNcLaPLxY
-	 6EyGfLORxBHTk7X2sNObd8uBZunlonh7oyAT5OclH5bCuAk3aPcZZxDaGRjte8lRSG
-	 rGKx0mZY1WqM/8KBj+XhXSgieWdtbAOp2zChoHqhfWKxsNuKi8RX0wuCzCeJPhjgGC
-	 nQOId2D3EYIQQ==
-Date: Mon, 20 Jan 2025 11:02:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>,
-	kernel test robot <lkp@intel.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [linux-next:master 9185/10024]
- drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c:59:2: error: write to
- reserved register 'R7'
-Message-ID: <20250120180236.GA484463@ax162>
-References: <202501201840.XmpHXpQ4-lkp@intel.com>
- <CA+_ehUysXuqYk_SWs7TFTPPT9Nu5gPEcNU+nspuh6sn+==tj5A@mail.gmail.com>
- <CAPDyKFqrvPr0NXtgfsY1SdVCeEZOghheXnuncN=QzbF_VxftGw@mail.gmail.com>
- <Z45Q9zJ8mvE_ut2R@bogus>
- <CA+_ehUzNMb2sGALem+Y3eDnJVPRTryybKGVja5QmC8u0_KagsA@mail.gmail.com>
- <Z45TSqieqbzufJWS@bogus>
- <CA+_ehUzBBCwaoLRfm+eQ_DC=JwGRGJ_+cn2TeuOtD51Z97ER8A@mail.gmail.com>
- <20250120172802.GA955657@ax162>
- <CA+_ehUw2wxDk=bqYoH0XYGVFzbzndCrd2Uz9BUTmEaLH6zUtWw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JT20wWrE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737396335; x=1768932335;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yr2jZ8FMxjmsp9bVLjMEx6gPvAU0ztGYgh78NazUIHY=;
+  b=JT20wWrEY++aSVpDKGh+SrPlwfLJG/P3ES6sOsYoCRheBVRM8ph/+RGV
+   BNlFbBllcblHysnEo9xxyeIqnTju6iEq9mwO2DdTB/3huEOM51tmmPjxc
+   LlJlj/Z22vR55+RxWRs561xBl/q9Gmn4FfpWsyA9B85XY3xyPEA4JcTuY
+   F8MWMJQEtFQlUdYXq6+/ww22Puy8xFJBiy6AZ6NJhHZGXD4VhcfWt0G+A
+   XxH3xXen+P5ck8VFXNRPGWSNOX2GaRDS392ttbVOyT+dkq3wm+6ZEuxlx
+   /e7iNWH1fX4qNZLCmnJCeog1Uf2G0wRkbVY5A0kYZQTtaMaTHvhqWaKJT
+   A==;
+X-CSE-ConnectionGUID: XyxEnc3KT7OjkMzMyjoh6g==
+X-CSE-MsgGUID: vlRH/MdPRJKvIh7uiblAVw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="37676582"
+X-IronPort-AV: E=Sophos;i="6.13,219,1732608000"; 
+   d="scan'208";a="37676582"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2025 10:05:32 -0800
+X-CSE-ConnectionGUID: Legl/rM8RHqpQ6Ec4268CA==
+X-CSE-MsgGUID: RfOkbzX4Su+JzcQSgZslpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="129861742"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Jan 2025 10:05:30 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tZw9Q-000Wqc-0X;
+	Mon, 20 Jan 2025 18:05:28 +0000
+Date: Tue, 21 Jan 2025 02:05:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rickard Andersson <rickard.andersson@axis.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Richard Weinberger <richard@nod.at>,
+	Zhihao Cheng <chengzhihao1@huawei.com>
+Subject: [linux-next:master 9665/10024] drivers/mtd/ubi/cdev.c:854:7: error:
+ cast to incomplete type 'typeof (ureq->erase_counters)' (aka 'int[]')
+Message-ID: <202501210248.iDT47UZQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,65 +63,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+_ehUw2wxDk=bqYoH0XYGVFzbzndCrd2Uz9BUTmEaLH6zUtWw@mail.gmail.com>
 
-On Mon, Jan 20, 2025 at 06:39:10PM +0100, Christian Marangi (Ansuel) wrote:
-> Il giorno lun 20 gen 2025 alle ore 18:28 Nathan Chancellor
-> <nathan@kernel.org> ha scritto:
-> >
-> > On Mon, Jan 20, 2025 at 03:52:09PM +0100, Christian Marangi (Ansuel) wrote:
-> > > If only these test report were easy to report instead of me having to build
-> > > the massive llvm-20 dev version...
-> > >
-> > > Any hint if anyone knows if precompiled cross tool are present around the web
-> > > (with llvm-20?)
-> >
-> > I see this has been resolved based on my understanding of the rest of
-> > the comments in this thread but I figured I would comment on this bit.
-> > You generally do not need a version of LLVM from main (i.e., 20 right
-> > now) to reproduce these reports, it just happens to be the version that
-> > the robot used to flag this issue. I maintain precompiled versions of
-> > stable LLVM releases on kernel.org, which would show this issue with
-> > that same configuration, no building needed :)
-> >
-> > https://mirrors.edge.kernel.org/pub/tools/llvm/
-> >
-> > If you try the latest version and the problem does not show up, feel
-> > free to comment on the report (which should have llvm@lists.linux.dev in
-> > CC) to let us know and we can see if it is an LLVM main problem (and
-> > bisect it to get it reported and fixed upstream at that point).
-> >
-> 
-> Hi Nathan,
-> 
-> I would like to first thank you and anyone involved in this kernel boot test
-> project. It's a life saviour and helped me a lot to catch all kind of corner
-> case with randconfig.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   1573c8d4cb206a2d1454ff711e79f8df2353290b
+commit: 01099f635a4c68b8574d350a972ba062dd5142e9 [9665/10024] ubi: Implement ioctl for detailed erase counters
+config: riscv-randconfig-001-20250120 (https://download.01.org/0day-ci/archive/20250121/202501210248.iDT47UZQ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250121/202501210248.iDT47UZQ-lkp@intel.com/reproduce)
 
-Heh, thanks for the high praise but I do not maintain or help with this
-service. I am focused on maintaining the LLVM build support in the
-kernel and our list is CC'd on reports that use clang so we can help
-with issues that appear only with clang (such as this one). Sorry I was
-unable to jump in sooner.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501210248.iDT47UZQ-lkp@intel.com/
 
-> My main complain is that a lot of times, the repro step reference clang
-> version or also gcc version that are actually not present in the download
-> link making the repro step (and script) not usable.
-> 
-> Now I can use and try the previous version but given some compilation
-> error happens only on the most recent build tools (due to additional
-> warning and check introduced) It might be hard to repro.
-> 
-> My honest suggestion to make this even more accessible would be
-> to also provide beta release of the build tool. Or at least add some
-> comments in the repro file suggesting also to try with the previous
-> version.
+All errors (new ones prefixed by >>):
 
-This sounds like good feedback for the LKP folks. I have my own wrapper
-and processes for reproducing these issues because I do it a lot so I am
-unaware of the potential jagged edges with the reproducers. They are
-usually pretty responsive to requests/reports of problems with their
-stuff in my experience.
+>> drivers/mtd/ubi/cdev.c:854:7: error: cast to incomplete type 'typeof (ureq->erase_counters)' (aka 'int[]')
+     854 |         if (!access_ok(ureq->erase_counters, (end_peb-req.start) * sizeof(int32_t)))
+         |              ^
+   arch/riscv/include/asm/uaccess.h:42:50: note: expanded from macro 'access_ok'
+      42 | #define access_ok(addr, size) likely(__access_ok(untagged_addr(addr), size))
+         |                                                  ^
+   arch/riscv/include/asm/uaccess.h:33:2: note: expanded from macro 'untagged_addr'
+      33 |         (__force __typeof__(addr))__untagged_addr_remote(current->mm, __addr);  \
+         |         ^
+   1 error generated.
 
-Cheers,
-Nathan
+
+vim +854 drivers/mtd/ubi/cdev.c
+
+   830	
+   831	static int ubi_get_ec_info(struct ubi_device *ubi, struct ubi_ecinfo_req __user *ureq)
+   832	{
+   833		struct ubi_ecinfo_req req;
+   834		struct ubi_wl_entry *wl;
+   835		int read_cnt;
+   836		int peb;
+   837		int end_peb;
+   838	
+   839		/* Copy the input arguments */
+   840		if (copy_from_user(&req, ureq, sizeof(struct ubi_ecinfo_req)))
+   841			return -EFAULT;
+   842	
+   843		/* Check input arguments */
+   844		if (req.length <= 0 || req.start < 0 || req.start >= ubi->peb_count)
+   845			return -EINVAL;
+   846	
+   847		if (check_add_overflow(req.start, req.length, &end_peb))
+   848			return -EINVAL;
+   849	
+   850		if (end_peb > ubi->peb_count)
+   851			end_peb = ubi->peb_count;
+   852	
+   853		/* Check access rights before filling erase_counters array */
+ > 854		if (!access_ok(ureq->erase_counters, (end_peb-req.start) * sizeof(int32_t)))
+   855			return -EFAULT;
+   856	
+   857		/* Fill erase counter array */
+   858		read_cnt = 0;
+   859		for (peb = req.start; peb < end_peb; read_cnt++, peb++) {
+   860			int ec;
+   861	
+   862			if (ubi_io_is_bad(ubi, peb)) {
+   863				if (__put_user(UBI_UNKNOWN, ureq->erase_counters+read_cnt))
+   864					return -EFAULT;
+   865	
+   866				continue;
+   867			}
+   868	
+   869			spin_lock(&ubi->wl_lock);
+   870	
+   871			wl = ubi->lookuptbl[peb];
+   872			if (wl)
+   873				ec = wl->ec;
+   874			else
+   875				ec = UBI_UNKNOWN;
+   876	
+   877			spin_unlock(&ubi->wl_lock);
+   878	
+   879			if (__put_user(ec, ureq->erase_counters+read_cnt))
+   880				return -EFAULT;
+   881	
+   882		}
+   883	
+   884		/* Return actual read length */
+   885		req.read_length = read_cnt;
+   886	
+   887		/* Copy everything except erase counter array */
+   888		if (copy_to_user(ureq, &req, sizeof(struct ubi_ecinfo_req)))
+   889			return -EFAULT;
+   890	
+   891		return 0;
+   892	}
+   893	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
