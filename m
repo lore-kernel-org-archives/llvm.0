@@ -1,63 +1,67 @@
 Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC235149C69
-	for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 17:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111EE17BB21
+	for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 17:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737394345; cv=none; b=WjLCmeN8xBffMdVT2Oey7h89vgqFC6Dl9WC3O1O5cZVS89oS3dX74YPsWA8929WMPCVknZxa2eSednd/TcOWZ4FGLRlFwwL373QGwaCnXH+ivKuD0+Xh2qY0dI9lmEhGKmuEXkUICY/s72t6X40cIIx31KsWTjDhXSYvvOtHJfU=
+	t=1737394350; cv=none; b=jbcizcn38pJZYNm17u6aiM9QqO5tRjGHU4xq1eHbzeSeWeOoFoq1e6/THcLOZvozgbGvs6X7fJwKwR75U/dhXzmuJl6YZPER3PKqVY/KPogQ2u+9dfqrtQ18f6s7MYQP53Qyq16r8Lo8rWpGpQ3hrQml1nwTylOVSdJrnPuuAlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737394345; c=relaxed/simple;
-	bh=XoxEYV+VDCUQVGr/fXdELyMg5VnHtJqPGO/sRS5XXiA=;
-	h=Date:Message-Id:Mime-Version:Subject:From:To:Content-Type; b=h2iAPRN/JhacbJh0rlMM9vawkSouf+pN7pcu5pOzoV+aQPV52J5yccLmFIWJ3zYSfqv93y85Q+7CADd75Imm/erfn/8ftYF3VmPCQZiI5GRGhLWlWl5Nshrfh7rn1Jjn1/dMctucJZhqutynarhBM1lFwafHamgz6Mn+gsklL5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OsBiVpnW; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1737394350; c=relaxed/simple;
+	bh=vFb+HyGIMnTuE4+8yPur8hNT1aQ25ULyLOvz1kWdv/8=;
+	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
+	 To:Content-Type; b=NPeJpv5+tu+LPXqxwaZTIi9Ii2JPAFQAqKOaVDsQmQ2IGYauDDY9tkr6wXZW7EmlDDBtpWbjDzX7820nIkYXTgcBqAiJ9t+K3vz5ZvReBEsIigNcEeto7pwjjbT/7y08iYLo4sQwauP1gTgoEy6Z+CCNlH4JBbK59q67etdjCrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gVWdBWka; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OsBiVpnW"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e54e14f7cbcso382436276.1
-        for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 09:32:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gVWdBWka"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e3c61a11a40so12399927276.2
+        for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 09:32:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737394343; x=1737999143; darn=lists.linux.dev;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tkLT2dzsqbCe/JB8KOi2Tl3KKIFyxEh2X9A7KSrmrTY=;
-        b=OsBiVpnWeHV+tjev3M+TRZUplRUAQyiwaK6B7hBFKL96soV0yoJKDj4QLdDT9x+Bbr
-         B8Qpj2pFPWqNWcQOyUH4cyHCab1CBQcsNR5wRwcQfAimqidau2hJN74GSNetWd4jprc8
-         ESWxap87feJ6BeBd0vsXvkZT9CaQB46zvLqockLSmKQtf00QbnnUl0+zWdoHN2QVj3a2
-         2alab9ix0mYEXc0EDAWWpRQamnF/nd0vfH5eue56J2ruDpw9d8eKyBKLj65BI1klq+tR
-         mG0YAmmw/dtk7ZR1OEZ5g4FxfUSjuf235ct8cv4NwqAvBiHPDZm+CpdUXmK9vimCTQD1
-         fq1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737394343; x=1737999143;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20230601; t=1737394345; x=1737999145; darn=lists.linux.dev;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tkLT2dzsqbCe/JB8KOi2Tl3KKIFyxEh2X9A7KSrmrTY=;
-        b=a8GoroTp7CC/hdDbwCTCWmf66/jsdZvGV0+MCNZx7tMskoYOC5XFSeL8pp5Vr8QaGK
-         563qkPxIM0QKMweIzDTDPv5LhIFvFkmBeI1ytEqimwI6TMpFhVFhbXbvsEDDuw9gCm6A
-         uVbyc6zGVdZHhs//Vt/Qq/fX/D88kPxjda5+a69djtsyO8UNPmjje0/aUztaehY8DXUi
-         sehgWBekEGmVgweJ3XDNFomXPcpSZtwF7UKNNA1Zej1TVdylmpw7q7NVHD345rEUj/V0
-         nPRtF8FerPUkH96XE6t+WNG3UBJZRyXATWKVkcJnEzpHJAJNI6HYairgeS9FSwJU8UpC
-         X+bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUzOsQd7DNXrBKB8m5FWYHB15LkSxo0+f5Oim1ulY1XKG7D43Ua4j+Ok4Wf5xMFRW4Jt5Ls@lists.linux.dev
-X-Gm-Message-State: AOJu0YwA0RqiwiaHU4zu4YNDTZ9V9u69aYWvTgH2EB0pqy4hFFh8gwyz
-	CNl9SkofQWkazq1KlxnrxGKEvV76oTAlcSCnImkE8XN7VUHw7Nnj6gE2K6Y5pHu0HhKfnicI9XG
-	8v21YCQ==
-X-Google-Smtp-Source: AGHT+IGyt38/W4/BJDU9pXXSoXiIU1Y17e/2AaBaByDFhkf5NXiPNpYen3rqRmeKMY//v6VlvxwMbsh0wDML
+        bh=V/Xkh0A7UQ6xsQQnl38+jJR7kMCb05O19GL71kRj76o=;
+        b=gVWdBWka72ZEB3oBwsNf2i5ekItFUHzAqpE9vZIe9BPYFHePvdScWRGXjP0RtRgADz
+         4jqRp2Vz2ITAvdF9pktgzvMYYshXsaGOV9H4FHeaQMDL/LXfG5vv6/416gfZxVQeFqNi
+         FEjy3VQRB+nOMKNZf+AQEpTm/NrnJBCv6o4v9jy54yV3IPpfqMLRohyK1rU7mLLgLGCz
+         MutfLKOIWLWzFcd12ETT2llZjFLzfXM1yi1HQ9R45OkLQUqRjGfZkh5nmh4w45Uy6IDT
+         j3gjOAc9VIZE0YiyQoK1CwjfcD91gtWxdS0gYTKoKLh08M34EOvxzbOBwsbJdFOMlZKL
+         pY9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737394345; x=1737999145;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V/Xkh0A7UQ6xsQQnl38+jJR7kMCb05O19GL71kRj76o=;
+        b=HNI8Uw61jiTMjKsQXeVO6pDkg45zpYbCDG+C/nOWd/uoN1AfPevyN0NlfAqesce4Nx
+         mFkNRQefJNa8Ayc6EYJYQnaGZ7JQh7paBDc1HoyqYBoovatEAzQGw0JFfm9YavcnBbvK
+         WZ5YvfPb4TOJmFejhqCkVLDWEuKa5+3uv9xKebhsvH1UkU8UBz6Tc/YUFgH4vvbmQIW1
+         qWBcea+28V5tiTkpQyZTtfU5Do9O7Os6jAeK+y25O4XzaCEdztJUPjGdihN4rZ7GxpVq
+         EDK/ZNgiWZ/IsgcblikjCVXDB8Fd4uNHcvdDhgZrC/+osZMdzCaQHoQfV7hEKRqhE7sT
+         v7sw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmsAZWF5s+3SfU4S3wLvf/F7jIXpAS0sHCcVjOgwacyD7lnpXqzvQpXytd4sAIgbmvp27/@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzj5Ye4l81ruDveENPkttK8Bo8JWTnXgGwnazLqBBfIVNqMb1Ix
+	Fo1ID/PiYZkxkQjDax9+GaEq3nM/xnZKAz8zfRXOYA4coQ0sHRU4cADULynR9oRMPlQPpMP3oXL
+	1nFYrzw==
+X-Google-Smtp-Source: AGHT+IFov20M4Y2z1SXZfvP04/sFfvC62WQVMQ+tXXFdHVuUl8QTEpzPHb1bpztL1S7O1bUgg51ax79UZmjK
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:fc95:312:c7ce:d18e])
- (user=irogers job=sendgmr) by 2002:a25:d642:0:b0:e38:225a:c3be with SMTP id
- 3f1490d57ef6-e578a3e1d28mr61426276.5.1737394342834; Mon, 20 Jan 2025 09:32:22
- -0800 (PST)
-Date: Mon, 20 Jan 2025 09:32:03 -0800
-Message-Id: <20250120173208.344231-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:690c:6b83:b0:6f5:22d8:1c6a with SMTP
+ id 00721157ae682-6f6eb51d2dfmr362777b3.0.1737394345059; Mon, 20 Jan 2025
+ 09:32:25 -0800 (PST)
+Date: Mon, 20 Jan 2025 09:32:04 -0800
+In-Reply-To: <20250120173208.344231-1-irogers@google.com>
+Message-Id: <20250120173208.344231-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
+References: <20250120173208.344231-1-irogers@google.com>
 X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
-Subject: [PATCH v1 0/5] Support dynamic opening of capstone and libLLVM
+Subject: [PATCH v1 1/5] perf capstone: Move capstone functionality into its
+ own file
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -75,51 +79,1181 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Linking against libcapstone and libLLVM can be a significant increase
-in dependencies and size of memory footprint. For something like `perf
-record` the disassembler and addr2line functionality won't be
-used. Support dynamically loading these libraries using dlopen and
-then calling the appropriate functions found using dlsym.
+Capstone disassembly support was split between disasm.c and
+print_insn.c. Move support out of these files into capstone.[ch] and
+remove include capstone/capstone.h from those files. As disassembly
+routines can fail, make failure the only option without
+HAVE_LIBCAPSTONE_SUPPORT. For simplicity's sake, duplicate the
+read_symbol utility function.
 
-The patch series:
-1) moves the capstone and LLVM code to their own C files,
-2) simplifies a little the capstone code,
-3) adds perf_ variants of the functions that will either directly call
-   the function or use dlsym to discover it.
+The intent with moving capstone support into a single file is that
+dynamic support, using dlopen for libcapstone, can be added in later
+patches. This can potentially always succeed or fail, so relying on
+ifdefs isn't sufficient. Using dlopen is a useful option to minimize
+the perf tools dependencies and potentially size.
 
-The addr2line LLVM functionality is written in C++. To avoid linking
-against libLLVM for this, a new LIBLLVM_DYNAMIC option is added where
-the C++ code with the libLLVM dependency will be built into a
-libperf-llvm.so and that dlsym-ed and called against.
-
-Ian Rogers (5):
-  perf capstone: Move capstone functionality into its own file
-  perf llvm: Move llvm functionality into its own file
-  perf capstone: Remove open_capstone_handle
-  perf capstone: Support for dlopen-ing libcapstone.so
-  perf llvm: Support for dlopen-ing libLLVM.so
-
- tools/perf/Makefile.config         |  13 +
- tools/perf/Makefile.perf           |  23 +-
- tools/perf/builtin-script.c        |   2 -
- tools/perf/tests/make              |   2 +
- tools/perf/util/Build              |   4 +-
- tools/perf/util/capstone.c         | 723 +++++++++++++++++++++++++++++
- tools/perf/util/capstone.h         |  24 +
- tools/perf/util/disasm.c           | 612 +-----------------------
- tools/perf/util/disasm.h           |   2 +
- tools/perf/util/llvm-c-helpers.cpp | 113 ++++-
- tools/perf/util/llvm.c             | 537 +++++++++++++++++++++
- tools/perf/util/llvm.h             |  24 +
- tools/perf/util/print_insn.c       | 117 +----
- tools/perf/util/srcline.c          |  65 +--
- tools/perf/util/srcline.h          |   6 +
- 15 files changed, 1481 insertions(+), 786 deletions(-)
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-script.c  |   2 -
+ tools/perf/util/Build        |   1 +
+ tools/perf/util/capstone.c   | 536 +++++++++++++++++++++++++++++++++++
+ tools/perf/util/capstone.h   |  24 ++
+ tools/perf/util/disasm.c     | 358 +----------------------
+ tools/perf/util/print_insn.c | 117 +-------
+ 6 files changed, 569 insertions(+), 469 deletions(-)
  create mode 100644 tools/perf/util/capstone.c
  create mode 100644 tools/perf/util/capstone.h
- create mode 100644 tools/perf/util/llvm.c
- create mode 100644 tools/perf/util/llvm.h
 
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 33667b534634..f05b2b70d5a7 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -1200,7 +1200,6 @@ static int any_dump_insn(struct evsel *evsel __maybe_unused,
+ 			 u8 *inbuf, int inlen, int *lenp,
+ 			 FILE *fp)
+ {
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+ 	if (PRINT_FIELD(BRSTACKDISASM)) {
+ 		int printed = fprintf_insn_asm(x->machine, x->thread, x->cpumode, x->is64bit,
+ 					       (uint8_t *)inbuf, inlen, ip, lenp,
+@@ -1209,7 +1208,6 @@ static int any_dump_insn(struct evsel *evsel __maybe_unused,
+ 		if (printed > 0)
+ 			return printed;
+ 	}
+-#endif
+ 	return fprintf(fp, "%s", dump_insn(x, ip, inbuf, inlen, lenp));
+ }
+ 
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 5ec97e8d6b6d..9542decf9625 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -8,6 +8,7 @@ perf-util-y += block-info.o
+ perf-util-y += block-range.o
+ perf-util-y += build-id.o
+ perf-util-y += cacheline.o
++perf-util-y += capstone.o
+ perf-util-y += config.o
+ perf-util-y += copyfile.o
+ perf-util-y += ctype.o
+diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+new file mode 100644
+index 000000000000..c0a6d94ebc18
+--- /dev/null
++++ b/tools/perf/util/capstone.c
+@@ -0,0 +1,536 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "capstone.h"
++#include "annotate.h"
++#include "addr_location.h"
++#include "debug.h"
++#include "disasm.h"
++#include "dso.h"
++#include "machine.h"
++#include "map.h"
++#include "namespaces.h"
++#include "print_insn.h"
++#include "symbol.h"
++#include "thread.h"
++#include <fcntl.h>
++#include <string.h>
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++#include <capstone/capstone.h>
++#endif
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++static int capstone_init(struct machine *machine, csh *cs_handle, bool is64,
++			 bool disassembler_style)
++{
++	cs_arch arch;
++	cs_mode mode;
++
++	if (machine__is(machine, "x86_64") && is64) {
++		arch = CS_ARCH_X86;
++		mode = CS_MODE_64;
++	} else if (machine__normalized_is(machine, "x86")) {
++		arch = CS_ARCH_X86;
++		mode = CS_MODE_32;
++	} else if (machine__normalized_is(machine, "arm64")) {
++		arch = CS_ARCH_ARM64;
++		mode = CS_MODE_ARM;
++	} else if (machine__normalized_is(machine, "arm")) {
++		arch = CS_ARCH_ARM;
++		mode = CS_MODE_ARM + CS_MODE_V8;
++	} else if (machine__normalized_is(machine, "s390")) {
++		arch = CS_ARCH_SYSZ;
++		mode = CS_MODE_BIG_ENDIAN;
++	} else {
++		return -1;
++	}
++
++	if (cs_open(arch, mode, cs_handle) != CS_ERR_OK) {
++		pr_warning_once("cs_open failed\n");
++		return -1;
++	}
++
++	if (machine__normalized_is(machine, "x86")) {
++		/*
++		 * In case of using capstone_init while symbol__disassemble
++		 * setting CS_OPT_SYNTAX_ATT depends if disassembler_style opts
++		 * is set via annotation args
++		 */
++		if (disassembler_style)
++			cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OPT_SYNTAX_ATT);
++		/*
++		 * Resolving address operands to symbols is implemented
++		 * on x86 by investigating instruction details.
++		 */
++		cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
++	}
++
++	return 0;
++}
++#endif
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++static size_t print_insn_x86(struct thread *thread, u8 cpumode, cs_insn *insn,
++			     int print_opts, FILE *fp)
++{
++	struct addr_location al;
++	size_t printed = 0;
++
++	if (insn->detail && insn->detail->x86.op_count == 1) {
++		cs_x86_op *op = &insn->detail->x86.operands[0];
++
++		addr_location__init(&al);
++		if (op->type == X86_OP_IMM &&
++		    thread__find_symbol(thread, cpumode, op->imm, &al)) {
++			printed += fprintf(fp, "%s ", insn[0].mnemonic);
++			printed += symbol__fprintf_symname_offs(al.sym, &al, fp);
++			if (print_opts & PRINT_INSN_IMM_HEX)
++				printed += fprintf(fp, " [%#" PRIx64 "]", op->imm);
++			addr_location__exit(&al);
++			return printed;
++		}
++		addr_location__exit(&al);
++	}
++
++	printed += fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_str);
++	return printed;
++}
++#endif
++
++
++ssize_t capstone__fprintf_insn_asm(struct machine *machine __maybe_unused,
++				   struct thread *thread __maybe_unused,
++				   u8 cpumode __maybe_unused, bool is64bit __maybe_unused,
++				   const uint8_t *code __maybe_unused,
++				   size_t code_size __maybe_unused,
++				   uint64_t ip __maybe_unused, int *lenp __maybe_unused,
++				   int print_opts __maybe_unused, FILE *fp __maybe_unused)
++{
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++	size_t printed;
++	cs_insn *insn;
++	csh cs_handle;
++	size_t count;
++	int ret;
++
++	/* TODO: Try to initiate capstone only once but need a proper place. */
++	ret = capstone_init(machine, &cs_handle, is64bit, true);
++	if (ret < 0)
++		return ret;
++
++	count = cs_disasm(cs_handle, code, code_size, ip, 1, &insn);
++	if (count > 0) {
++		if (machine__normalized_is(machine, "x86"))
++			printed = print_insn_x86(thread, cpumode, &insn[0], print_opts, fp);
++		else
++			printed = fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_str);
++		if (lenp)
++			*lenp = insn->size;
++		cs_free(insn, count);
++	} else {
++		printed = -1;
++	}
++
++	cs_close(&cs_handle);
++	return printed;
++#else
++	return -1;
++#endif
++}
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++static int open_capstone_handle(struct annotate_args *args, bool is_64bit, csh *handle)
++{
++	struct annotation_options *opt = args->options;
++	cs_mode mode = is_64bit ? CS_MODE_64 : CS_MODE_32;
++
++	/* TODO: support more architectures */
++	if (!arch__is(args->arch, "x86"))
++		return -1;
++
++	if (cs_open(CS_ARCH_X86, mode, handle) != CS_ERR_OK)
++		return -1;
++
++	if (!opt->disassembler_style ||
++	    !strcmp(opt->disassembler_style, "att"))
++		cs_option(*handle, CS_OPT_SYNTAX, CS_OPT_SYNTAX_ATT);
++
++	/*
++	 * Resolving address operands to symbols is implemented
++	 * on x86 by investigating instruction details.
++	 */
++	cs_option(*handle, CS_OPT_DETAIL, CS_OPT_ON);
++
++	return 0;
++}
++#endif
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++static void print_capstone_detail(cs_insn *insn, char *buf, size_t len,
++				  struct annotate_args *args, u64 addr)
++{
++	int i;
++	struct map *map = args->ms.map;
++	struct symbol *sym;
++
++	/* TODO: support more architectures */
++	if (!arch__is(args->arch, "x86"))
++		return;
++
++	if (insn->detail == NULL)
++		return;
++
++	for (i = 0; i < insn->detail->x86.op_count; i++) {
++		cs_x86_op *op = &insn->detail->x86.operands[i];
++		u64 orig_addr;
++
++		if (op->type != X86_OP_MEM)
++			continue;
++
++		/* only print RIP-based global symbols for now */
++		if (op->mem.base != X86_REG_RIP)
++			continue;
++
++		/* get the target address */
++		orig_addr = addr + insn->size + op->mem.disp;
++		addr = map__objdump_2mem(map, orig_addr);
++
++		if (dso__kernel(map__dso(map))) {
++			/*
++			 * The kernel maps can be splitted into sections,
++			 * let's find the map first and the search the symbol.
++			 */
++			map = maps__find(map__kmaps(map), addr);
++			if (map == NULL)
++				continue;
++		}
++
++		/* convert it to map-relative address for search */
++		addr = map__map_ip(map, addr);
++
++		sym = map__find_symbol(map, addr);
++		if (sym == NULL)
++			continue;
++
++		if (addr == sym->start) {
++			scnprintf(buf, len, "\t# %"PRIx64" <%s>",
++				  orig_addr, sym->name);
++		} else {
++			scnprintf(buf, len, "\t# %"PRIx64" <%s+%#"PRIx64">",
++				  orig_addr, sym->name, addr - sym->start);
++		}
++		break;
++	}
++}
++#endif
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++struct find_file_offset_data {
++	u64 ip;
++	u64 offset;
++};
++
++/* This will be called for each PHDR in an ELF binary */
++static int find_file_offset(u64 start, u64 len, u64 pgoff, void *arg)
++{
++	struct find_file_offset_data *data = arg;
++
++	if (start <= data->ip && data->ip < start + len) {
++		data->offset = pgoff + data->ip - start;
++		return 1;
++	}
++	return 0;
++}
++#endif
++
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++static u8 *
++read_symbol(const char *filename, struct map *map, struct symbol *sym,
++	    u64 *len, bool *is_64bit)
++{
++	struct dso *dso = map__dso(map);
++	struct nscookie nsc;
++	u64 start = map__rip_2objdump(map, sym->start);
++	u64 end = map__rip_2objdump(map, sym->end);
++	int fd, count;
++	u8 *buf = NULL;
++	struct find_file_offset_data data = {
++		.ip = start,
++	};
++
++	*is_64bit = false;
++
++	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
++	fd = open(filename, O_RDONLY);
++	nsinfo__mountns_exit(&nsc);
++	if (fd < 0)
++		return NULL;
++
++	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
++			    is_64bit) == 0)
++		goto err;
++
++	*len = end - start;
++	buf = malloc(*len);
++	if (buf == NULL)
++		goto err;
++
++	count = pread(fd, buf, *len, data.offset);
++	close(fd);
++	fd = -1;
++
++	if ((u64)count != *len)
++		goto err;
++
++	return buf;
++
++err:
++	if (fd >= 0)
++		close(fd);
++	free(buf);
++	return NULL;
++}
++#endif
++
++int symbol__disassemble_capstone(const char *filename __maybe_unused,
++				 struct symbol *sym __maybe_unused,
++				 struct annotate_args *args __maybe_unused)
++{
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++	struct annotation *notes = symbol__annotation(sym);
++	struct map *map = args->ms.map;
++	u64 start = map__rip_2objdump(map, sym->start);
++	u64 len;
++	u64 offset;
++	int i, count, free_count;
++	bool is_64bit = false;
++	bool needs_cs_close = false;
++	u8 *buf = NULL;
++	csh handle;
++	cs_insn *insn = NULL;
++	char disasm_buf[512];
++	struct disasm_line *dl;
++
++	if (args->options->objdump_path)
++		return -1;
++
++	buf = read_symbol(filename, map, sym, &len, &is_64bit);
++	if (buf == NULL)
++		return -1;
++
++	/* add the function address and name */
++	scnprintf(disasm_buf, sizeof(disasm_buf), "%#"PRIx64" <%s>:",
++		  start, sym->name);
++
++	args->offset = -1;
++	args->line = disasm_buf;
++	args->line_nr = 0;
++	args->fileloc = NULL;
++	args->ms.sym = sym;
++
++	dl = disasm_line__new(args);
++	if (dl == NULL)
++		goto err;
++
++	annotation_line__add(&dl->al, &notes->src->source);
++
++	if (open_capstone_handle(args, is_64bit, &handle) < 0)
++		goto err;
++
++	needs_cs_close = true;
++
++	free_count = count = cs_disasm(handle, buf, len, start, len, &insn);
++	for (i = 0, offset = 0; i < count; i++) {
++		int printed;
++
++		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
++				    "       %-7s %s",
++				    insn[i].mnemonic, insn[i].op_str);
++		print_capstone_detail(&insn[i], disasm_buf + printed,
++				      sizeof(disasm_buf) - printed, args,
++				      start + offset);
++
++		args->offset = offset;
++		args->line = disasm_buf;
++
++		dl = disasm_line__new(args);
++		if (dl == NULL)
++			goto err;
++
++		annotation_line__add(&dl->al, &notes->src->source);
++
++		offset += insn[i].size;
++	}
++
++	/* It failed in the middle: probably due to unknown instructions */
++	if (offset != len) {
++		struct list_head *list = &notes->src->source;
++
++		/* Discard all lines and fallback to objdump */
++		while (!list_empty(list)) {
++			dl = list_first_entry(list, struct disasm_line, al.node);
++
++			list_del_init(&dl->al.node);
++			disasm_line__free(dl);
++		}
++		count = -1;
++	}
++
++out:
++	if (needs_cs_close) {
++		cs_close(&handle);
++		if (free_count > 0)
++			cs_free(insn, free_count);
++	}
++	free(buf);
++	return count < 0 ? count : 0;
++
++err:
++	if (needs_cs_close) {
++		struct disasm_line *tmp;
++
++		/*
++		 * It probably failed in the middle of the above loop.
++		 * Release any resources it might add.
++		 */
++		list_for_each_entry_safe(dl, tmp, &notes->src->source, al.node) {
++			list_del(&dl->al.node);
++			disasm_line__free(dl);
++		}
++	}
++	count = -1;
++	goto out;
++#else
++	return -1;
++#endif
++}
++
++int symbol__disassemble_capstone_powerpc(const char *filename __maybe_unused,
++					 struct symbol *sym __maybe_unused,
++					 struct annotate_args *args __maybe_unused)
++{
++#ifdef HAVE_LIBCAPSTONE_SUPPORT
++	struct annotation *notes = symbol__annotation(sym);
++	struct map *map = args->ms.map;
++	struct dso *dso = map__dso(map);
++	struct nscookie nsc;
++	u64 start = map__rip_2objdump(map, sym->start);
++	u64 end = map__rip_2objdump(map, sym->end);
++	u64 len = end - start;
++	u64 offset;
++	int i, fd, count;
++	bool is_64bit = false;
++	bool needs_cs_close = false;
++	u8 *buf = NULL;
++	struct find_file_offset_data data = {
++		.ip = start,
++	};
++	csh handle;
++	char disasm_buf[512];
++	struct disasm_line *dl;
++	u32 *line;
++	bool disassembler_style = false;
++
++	if (args->options->objdump_path)
++		return -1;
++
++	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
++	fd = open(filename, O_RDONLY);
++	nsinfo__mountns_exit(&nsc);
++	if (fd < 0)
++		return -1;
++
++	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
++			    &is_64bit) == 0)
++		goto err;
++
++	if (!args->options->disassembler_style ||
++	    !strcmp(args->options->disassembler_style, "att"))
++		disassembler_style = true;
++
++	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
++		goto err;
++
++	needs_cs_close = true;
++
++	buf = malloc(len);
++	if (buf == NULL)
++		goto err;
++
++	count = pread(fd, buf, len, data.offset);
++	close(fd);
++	fd = -1;
++
++	if ((u64)count != len)
++		goto err;
++
++	line = (u32 *)buf;
++
++	/* add the function address and name */
++	scnprintf(disasm_buf, sizeof(disasm_buf), "%#"PRIx64" <%s>:",
++		  start, sym->name);
++
++	args->offset = -1;
++	args->line = disasm_buf;
++	args->line_nr = 0;
++	args->fileloc = NULL;
++	args->ms.sym = sym;
++
++	dl = disasm_line__new(args);
++	if (dl == NULL)
++		goto err;
++
++	annotation_line__add(&dl->al, &notes->src->source);
++
++	/*
++	 * TODO: enable disassm for powerpc
++	 * count = cs_disasm(handle, buf, len, start, len, &insn);
++	 *
++	 * For now, only binary code is saved in disassembled line
++	 * to be used in "type" and "typeoff" sort keys. Each raw code
++	 * is 32 bit instruction. So use "len/4" to get the number of
++	 * entries.
++	 */
++	count = len/4;
++
++	for (i = 0, offset = 0; i < count; i++) {
++		args->offset = offset;
++		sprintf(args->line, "%x", line[i]);
++
++		dl = disasm_line__new(args);
++		if (dl == NULL)
++			break;
++
++		annotation_line__add(&dl->al, &notes->src->source);
++
++		offset += 4;
++	}
++
++	/* It failed in the middle */
++	if (offset != len) {
++		struct list_head *list = &notes->src->source;
++
++		/* Discard all lines and fallback to objdump */
++		while (!list_empty(list)) {
++			dl = list_first_entry(list, struct disasm_line, al.node);
++
++			list_del_init(&dl->al.node);
++			disasm_line__free(dl);
++		}
++		count = -1;
++	}
++
++out:
++	if (needs_cs_close)
++		cs_close(&handle);
++	free(buf);
++	return count < 0 ? count : 0;
++
++err:
++	if (fd >= 0)
++		close(fd);
++	count = -1;
++	goto out;
++#else
++	return -1;
++#endif
++}
+diff --git a/tools/perf/util/capstone.h b/tools/perf/util/capstone.h
+new file mode 100644
+index 000000000000..0f030ea034b6
+--- /dev/null
++++ b/tools/perf/util/capstone.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __PERF_CAPSTONE_H
++#define __PERF_CAPSTONE_H
++
++#include <stdbool.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <linux/types.h>
++
++struct annotate_args;
++struct machine;
++struct symbol;
++struct thread;
++
++ssize_t capstone__fprintf_insn_asm(struct machine *machine, struct thread *thread, u8 cpumode,
++				   bool is64bit, const uint8_t *code, size_t code_size,
++				   uint64_t ip, int *lenp, int print_opts, FILE *fp);
++int symbol__disassemble_capstone(const char *filename, struct symbol *sym,
++				 struct annotate_args *args);
++int symbol__disassemble_capstone_powerpc(const char *filename, struct symbol *sym,
++					 struct annotate_args *args);
++
++#endif /* __PERF_CAPSTONE_H */
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index b7de4d9fd004..0e5881189ae8 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -14,6 +14,7 @@
+ #include "annotate.h"
+ #include "annotate-data.h"
+ #include "build-id.h"
++#include "capstone.h"
+ #include "debug.h"
+ #include "disasm.h"
+ #include "disasm_bpf.h"
+@@ -1329,39 +1330,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 	return 0;
+ }
+ 
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+-#include <capstone/capstone.h>
+-
+-int capstone_init(struct machine *machine, csh *cs_handle, bool is64, bool disassembler_style);
+-
+-static int open_capstone_handle(struct annotate_args *args, bool is_64bit,
+-				csh *handle)
+-{
+-	struct annotation_options *opt = args->options;
+-	cs_mode mode = is_64bit ? CS_MODE_64 : CS_MODE_32;
+-
+-	/* TODO: support more architectures */
+-	if (!arch__is(args->arch, "x86"))
+-		return -1;
+-
+-	if (cs_open(CS_ARCH_X86, mode, handle) != CS_ERR_OK)
+-		return -1;
+-
+-	if (!opt->disassembler_style ||
+-	    !strcmp(opt->disassembler_style, "att"))
+-		cs_option(*handle, CS_OPT_SYNTAX, CS_OPT_SYNTAX_ATT);
+-
+-	/*
+-	 * Resolving address operands to symbols is implemented
+-	 * on x86 by investigating instruction details.
+-	 */
+-	cs_option(*handle, CS_OPT_DETAIL, CS_OPT_ON);
+-
+-	return 0;
+-}
+-#endif
+-
+-#if defined(HAVE_LIBCAPSTONE_SUPPORT) || defined(HAVE_LIBLLVM_SUPPORT)
++#if defined(HAVE_LIBLLVM_SUPPORT)
+ struct find_file_offset_data {
+ 	u64 ip;
+ 	u64 offset;
+@@ -1427,322 +1396,6 @@ read_symbol(const char *filename, struct map *map, struct symbol *sym,
+ }
+ #endif
+ 
+-#if !defined(HAVE_LIBCAPSTONE_SUPPORT) || !defined(HAVE_LIBLLVM_SUPPORT)
+-static void symbol__disassembler_missing(const char *disassembler, const char *filename,
+-					 struct symbol *sym)
+-{
+-	pr_debug("The %s disassembler isn't linked in for %s in %s\n",
+-		 disassembler, sym->name, filename);
+-}
+-#endif
+-
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+-static void print_capstone_detail(cs_insn *insn, char *buf, size_t len,
+-				  struct annotate_args *args, u64 addr)
+-{
+-	int i;
+-	struct map *map = args->ms.map;
+-	struct symbol *sym;
+-
+-	/* TODO: support more architectures */
+-	if (!arch__is(args->arch, "x86"))
+-		return;
+-
+-	if (insn->detail == NULL)
+-		return;
+-
+-	for (i = 0; i < insn->detail->x86.op_count; i++) {
+-		cs_x86_op *op = &insn->detail->x86.operands[i];
+-		u64 orig_addr;
+-
+-		if (op->type != X86_OP_MEM)
+-			continue;
+-
+-		/* only print RIP-based global symbols for now */
+-		if (op->mem.base != X86_REG_RIP)
+-			continue;
+-
+-		/* get the target address */
+-		orig_addr = addr + insn->size + op->mem.disp;
+-		addr = map__objdump_2mem(map, orig_addr);
+-
+-		if (dso__kernel(map__dso(map))) {
+-			/*
+-			 * The kernel maps can be splitted into sections,
+-			 * let's find the map first and the search the symbol.
+-			 */
+-			map = maps__find(map__kmaps(map), addr);
+-			if (map == NULL)
+-				continue;
+-		}
+-
+-		/* convert it to map-relative address for search */
+-		addr = map__map_ip(map, addr);
+-
+-		sym = map__find_symbol(map, addr);
+-		if (sym == NULL)
+-			continue;
+-
+-		if (addr == sym->start) {
+-			scnprintf(buf, len, "\t# %"PRIx64" <%s>",
+-				  orig_addr, sym->name);
+-		} else {
+-			scnprintf(buf, len, "\t# %"PRIx64" <%s+%#"PRIx64">",
+-				  orig_addr, sym->name, addr - sym->start);
+-		}
+-		break;
+-	}
+-}
+-
+-static int symbol__disassemble_capstone_powerpc(char *filename, struct symbol *sym,
+-					struct annotate_args *args)
+-{
+-	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
+-	struct dso *dso = map__dso(map);
+-	struct nscookie nsc;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 end = map__rip_2objdump(map, sym->end);
+-	u64 len = end - start;
+-	u64 offset;
+-	int i, fd, count;
+-	bool is_64bit = false;
+-	bool needs_cs_close = false;
+-	u8 *buf = NULL;
+-	struct find_file_offset_data data = {
+-		.ip = start,
+-	};
+-	csh handle;
+-	char disasm_buf[512];
+-	struct disasm_line *dl;
+-	u32 *line;
+-	bool disassembler_style = false;
+-
+-	if (args->options->objdump_path)
+-		return -1;
+-
+-	nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
+-	fd = open(filename, O_RDONLY);
+-	nsinfo__mountns_exit(&nsc);
+-	if (fd < 0)
+-		return -1;
+-
+-	if (file__read_maps(fd, /*exe=*/true, find_file_offset, &data,
+-			    &is_64bit) == 0)
+-		goto err;
+-
+-	if (!args->options->disassembler_style ||
+-			!strcmp(args->options->disassembler_style, "att"))
+-		disassembler_style = true;
+-
+-	if (capstone_init(maps__machine(args->ms.maps), &handle, is_64bit, disassembler_style) < 0)
+-		goto err;
+-
+-	needs_cs_close = true;
+-
+-	buf = malloc(len);
+-	if (buf == NULL)
+-		goto err;
+-
+-	count = pread(fd, buf, len, data.offset);
+-	close(fd);
+-	fd = -1;
+-
+-	if ((u64)count != len)
+-		goto err;
+-
+-	line = (u32 *)buf;
+-
+-	/* add the function address and name */
+-	scnprintf(disasm_buf, sizeof(disasm_buf), "%#"PRIx64" <%s>:",
+-		  start, sym->name);
+-
+-	args->offset = -1;
+-	args->line = disasm_buf;
+-	args->line_nr = 0;
+-	args->fileloc = NULL;
+-	args->ms.sym = sym;
+-
+-	dl = disasm_line__new(args);
+-	if (dl == NULL)
+-		goto err;
+-
+-	annotation_line__add(&dl->al, &notes->src->source);
+-
+-	/*
+-	 * TODO: enable disassm for powerpc
+-	 * count = cs_disasm(handle, buf, len, start, len, &insn);
+-	 *
+-	 * For now, only binary code is saved in disassembled line
+-	 * to be used in "type" and "typeoff" sort keys. Each raw code
+-	 * is 32 bit instruction. So use "len/4" to get the number of
+-	 * entries.
+-	 */
+-	count = len/4;
+-
+-	for (i = 0, offset = 0; i < count; i++) {
+-		args->offset = offset;
+-		sprintf(args->line, "%x", line[i]);
+-
+-		dl = disasm_line__new(args);
+-		if (dl == NULL)
+-			break;
+-
+-		annotation_line__add(&dl->al, &notes->src->source);
+-
+-		offset += 4;
+-	}
+-
+-	/* It failed in the middle */
+-	if (offset != len) {
+-		struct list_head *list = &notes->src->source;
+-
+-		/* Discard all lines and fallback to objdump */
+-		while (!list_empty(list)) {
+-			dl = list_first_entry(list, struct disasm_line, al.node);
+-
+-			list_del_init(&dl->al.node);
+-			disasm_line__free(dl);
+-		}
+-		count = -1;
+-	}
+-
+-out:
+-	if (needs_cs_close)
+-		cs_close(&handle);
+-	free(buf);
+-	return count < 0 ? count : 0;
+-
+-err:
+-	if (fd >= 0)
+-		close(fd);
+-	count = -1;
+-	goto out;
+-}
+-
+-static int symbol__disassemble_capstone(char *filename, struct symbol *sym,
+-					struct annotate_args *args)
+-{
+-	struct annotation *notes = symbol__annotation(sym);
+-	struct map *map = args->ms.map;
+-	u64 start = map__rip_2objdump(map, sym->start);
+-	u64 len;
+-	u64 offset;
+-	int i, count, free_count;
+-	bool is_64bit = false;
+-	bool needs_cs_close = false;
+-	u8 *buf = NULL;
+-	csh handle;
+-	cs_insn *insn = NULL;
+-	char disasm_buf[512];
+-	struct disasm_line *dl;
+-
+-	if (args->options->objdump_path)
+-		return -1;
+-
+-	buf = read_symbol(filename, map, sym, &len, &is_64bit);
+-	if (buf == NULL)
+-		return -1;
+-
+-	/* add the function address and name */
+-	scnprintf(disasm_buf, sizeof(disasm_buf), "%#"PRIx64" <%s>:",
+-		  start, sym->name);
+-
+-	args->offset = -1;
+-	args->line = disasm_buf;
+-	args->line_nr = 0;
+-	args->fileloc = NULL;
+-	args->ms.sym = sym;
+-
+-	dl = disasm_line__new(args);
+-	if (dl == NULL)
+-		goto err;
+-
+-	annotation_line__add(&dl->al, &notes->src->source);
+-
+-	if (open_capstone_handle(args, is_64bit, &handle) < 0)
+-		goto err;
+-
+-	needs_cs_close = true;
+-
+-	free_count = count = cs_disasm(handle, buf, len, start, len, &insn);
+-	for (i = 0, offset = 0; i < count; i++) {
+-		int printed;
+-
+-		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
+-				    "       %-7s %s",
+-				    insn[i].mnemonic, insn[i].op_str);
+-		print_capstone_detail(&insn[i], disasm_buf + printed,
+-				      sizeof(disasm_buf) - printed, args,
+-				      start + offset);
+-
+-		args->offset = offset;
+-		args->line = disasm_buf;
+-
+-		dl = disasm_line__new(args);
+-		if (dl == NULL)
+-			goto err;
+-
+-		annotation_line__add(&dl->al, &notes->src->source);
+-
+-		offset += insn[i].size;
+-	}
+-
+-	/* It failed in the middle: probably due to unknown instructions */
+-	if (offset != len) {
+-		struct list_head *list = &notes->src->source;
+-
+-		/* Discard all lines and fallback to objdump */
+-		while (!list_empty(list)) {
+-			dl = list_first_entry(list, struct disasm_line, al.node);
+-
+-			list_del_init(&dl->al.node);
+-			disasm_line__free(dl);
+-		}
+-		count = -1;
+-	}
+-
+-out:
+-	if (needs_cs_close) {
+-		cs_close(&handle);
+-		if (free_count > 0)
+-			cs_free(insn, free_count);
+-	}
+-	free(buf);
+-	return count < 0 ? count : 0;
+-
+-err:
+-	if (needs_cs_close) {
+-		struct disasm_line *tmp;
+-
+-		/*
+-		 * It probably failed in the middle of the above loop.
+-		 * Release any resources it might add.
+-		 */
+-		list_for_each_entry_safe(dl, tmp, &notes->src->source, al.node) {
+-			list_del(&dl->al.node);
+-			disasm_line__free(dl);
+-		}
+-	}
+-	count = -1;
+-	goto out;
+-}
+-#else // HAVE_LIBCAPSTONE_SUPPORT
+-static int symbol__disassemble_capstone(char *filename, struct symbol *sym,
+-					struct annotate_args *args __maybe_unused)
+-{
+-	symbol__disassembler_missing("capstone", filename, sym);
+-	return -1;
+-}
+-
+-static int symbol__disassemble_capstone_powerpc(char *filename, struct symbol *sym,
+-						struct annotate_args *args __maybe_unused)
+-{
+-	symbol__disassembler_missing("capstone powerpc", filename, sym);
+-	return -1;
+-}
+-#endif // HAVE_LIBCAPSTONE_SUPPORT
+-
+ static int symbol__disassemble_raw(char *filename, struct symbol *sym,
+ 					struct annotate_args *args)
+ {
+@@ -2010,10 +1663,11 @@ static int symbol__disassemble_llvm(char *filename, struct symbol *sym,
+ 	return ret;
+ }
+ #else // HAVE_LIBLLVM_SUPPORT
+-static int symbol__disassemble_llvm(char *filename, struct symbol *sym,
++static int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 				    struct annotate_args *args __maybe_unused)
+ {
+-	symbol__disassembler_missing("LLVM", filename, sym);
++	pr_debug("The LLVM disassembler isn't linked in for %s in %s\n",
++		 sym->name, filename);
+ 	return -1;
+ }
+ #endif // HAVE_LIBLLVM_SUPPORT
+@@ -2225,9 +1879,7 @@ static int annotation_options__init_disassemblers(struct annotation_options *opt
+ #ifdef HAVE_LIBLLVM_SUPPORT
+ 				"llvm,"
+ #endif
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+ 				"capstone,"
+-#endif
+ 				"objdump";
+ 
+ 		options->disassemblers_str = strdup(default_disassemblers_str);
+diff --git a/tools/perf/util/print_insn.c b/tools/perf/util/print_insn.c
+index a33a7726422d..02e6fbb8ca04 100644
+--- a/tools/perf/util/print_insn.c
++++ b/tools/perf/util/print_insn.c
+@@ -7,6 +7,7 @@
+ #include <inttypes.h>
+ #include <string.h>
+ #include <stdbool.h>
++#include "capstone.h"
+ #include "debug.h"
+ #include "sample.h"
+ #include "symbol.h"
+@@ -29,84 +30,6 @@ size_t sample__fprintf_insn_raw(struct perf_sample *sample, FILE *fp)
+ 	return printed;
+ }
+ 
+-#ifdef HAVE_LIBCAPSTONE_SUPPORT
+-#include <capstone/capstone.h>
+-
+-int capstone_init(struct machine *machine, csh *cs_handle, bool is64, bool disassembler_style);
+-
+-int capstone_init(struct machine *machine, csh *cs_handle, bool is64, bool disassembler_style)
+-{
+-	cs_arch arch;
+-	cs_mode mode;
+-
+-	if (machine__is(machine, "x86_64") && is64) {
+-		arch = CS_ARCH_X86;
+-		mode = CS_MODE_64;
+-	} else if (machine__normalized_is(machine, "x86")) {
+-		arch = CS_ARCH_X86;
+-		mode = CS_MODE_32;
+-	} else if (machine__normalized_is(machine, "arm64")) {
+-		arch = CS_ARCH_ARM64;
+-		mode = CS_MODE_ARM;
+-	} else if (machine__normalized_is(machine, "arm")) {
+-		arch = CS_ARCH_ARM;
+-		mode = CS_MODE_ARM + CS_MODE_V8;
+-	} else if (machine__normalized_is(machine, "s390")) {
+-		arch = CS_ARCH_SYSZ;
+-		mode = CS_MODE_BIG_ENDIAN;
+-	} else {
+-		return -1;
+-	}
+-
+-	if (cs_open(arch, mode, cs_handle) != CS_ERR_OK) {
+-		pr_warning_once("cs_open failed\n");
+-		return -1;
+-	}
+-
+-	if (machine__normalized_is(machine, "x86")) {
+-		/*
+-		 * In case of using capstone_init while symbol__disassemble
+-		 * setting CS_OPT_SYNTAX_ATT depends if disassembler_style opts
+-		 * is set via annotation args
+-		 */
+-		if (disassembler_style)
+-			cs_option(*cs_handle, CS_OPT_SYNTAX, CS_OPT_SYNTAX_ATT);
+-		/*
+-		 * Resolving address operands to symbols is implemented
+-		 * on x86 by investigating instruction details.
+-		 */
+-		cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
+-	}
+-
+-	return 0;
+-}
+-
+-static size_t print_insn_x86(struct thread *thread, u8 cpumode, cs_insn *insn,
+-			     int print_opts, FILE *fp)
+-{
+-	struct addr_location al;
+-	size_t printed = 0;
+-
+-	if (insn->detail && insn->detail->x86.op_count == 1) {
+-		cs_x86_op *op = &insn->detail->x86.operands[0];
+-
+-		addr_location__init(&al);
+-		if (op->type == X86_OP_IMM &&
+-		    thread__find_symbol(thread, cpumode, op->imm, &al)) {
+-			printed += fprintf(fp, "%s ", insn[0].mnemonic);
+-			printed += symbol__fprintf_symname_offs(al.sym, &al, fp);
+-			if (print_opts & PRINT_INSN_IMM_HEX)
+-				printed += fprintf(fp, " [%#" PRIx64 "]", op->imm);
+-			addr_location__exit(&al);
+-			return printed;
+-		}
+-		addr_location__exit(&al);
+-	}
+-
+-	printed += fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_str);
+-	return printed;
+-}
+-
+ static bool is64bitip(struct machine *machine, struct addr_location *al)
+ {
+ 	const struct dso *dso = al->map ? map__dso(al->map) : NULL;
+@@ -123,32 +46,8 @@ ssize_t fprintf_insn_asm(struct machine *machine, struct thread *thread, u8 cpum
+ 			 bool is64bit, const uint8_t *code, size_t code_size,
+ 			 uint64_t ip, int *lenp, int print_opts, FILE *fp)
+ {
+-	size_t printed;
+-	cs_insn *insn;
+-	csh cs_handle;
+-	size_t count;
+-	int ret;
+-
+-	/* TODO: Try to initiate capstone only once but need a proper place. */
+-	ret = capstone_init(machine, &cs_handle, is64bit, true);
+-	if (ret < 0)
+-		return ret;
+-
+-	count = cs_disasm(cs_handle, code, code_size, ip, 1, &insn);
+-	if (count > 0) {
+-		if (machine__normalized_is(machine, "x86"))
+-			printed = print_insn_x86(thread, cpumode, &insn[0], print_opts, fp);
+-		else
+-			printed = fprintf(fp, "%s %s", insn[0].mnemonic, insn[0].op_str);
+-		if (lenp)
+-			*lenp = insn->size;
+-		cs_free(insn, count);
+-	} else {
+-		printed = -1;
+-	}
+-
+-	cs_close(&cs_handle);
+-	return printed;
++	return capstone__fprintf_insn_asm(machine, thread, cpumode, is64bit, code, code_size,
++					  ip, lenp, print_opts, fp);
+ }
+ 
+ size_t sample__fprintf_insn_asm(struct perf_sample *sample, struct thread *thread,
+@@ -166,13 +65,3 @@ size_t sample__fprintf_insn_asm(struct perf_sample *sample, struct thread *threa
+ 
+ 	return printed;
+ }
+-#else
+-size_t sample__fprintf_insn_asm(struct perf_sample *sample __maybe_unused,
+-				struct thread *thread __maybe_unused,
+-				struct machine *machine __maybe_unused,
+-				FILE *fp __maybe_unused,
+-				struct addr_location *al __maybe_unused)
+-{
+-	return 0;
+-}
+-#endif
 -- 
 2.48.0.rc2.279.g1de40edade-goog
 
