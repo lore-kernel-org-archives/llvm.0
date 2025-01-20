@@ -1,169 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3711188A0E;
-	Mon, 20 Jan 2025 21:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21621EEA5F
+	for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 23:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737408236; cv=none; b=IJTKJq/JszJbkoT8k8Uj2SjevE/pnIZJYtMsejOxPl/pbtTRcgLnO5hKG2PL8CP/AfWxkUWYbDWIMUMUYGk+lDwPM2yg3R9XbV90ZbngL6os7qN6zpqFupeserDNnmAf7xUcogftgXR3NmtONz4o/iyWIK6PCN2hoNYTjn7I5HU=
+	t=1737417193; cv=none; b=ADxzHHtJaKZ1JgrWWwTQ3Xzb7vQMArxJx7Cps1Sdby/mkNrQO1wPB7nyYeNKsl7ZG/L/ytbLtfu7OS2WUaO2megEyXcpbWpV+wIvzYukv2GHgF4z2XeQyjMTSiE7VXASuiSxazZGK3BJkdmmQR4hX2xEXwYxrG86gJEaHsz/EJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737408236; c=relaxed/simple;
-	bh=Wx669Eku0p++oxL5aBcxIscOG1U811p95jb+HGHtjA0=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=D28HezA8a67ajCqwr11VLKDUJ2abpQE+LmyHvrLaMoe+8BvcoyGdbcvvIQO78M9SqGL5mhHrtqsUxDXeGYjr5nqTUiKo/BqwpDtWq44FcEllZ9DvHqggThEakR4DFrVJM210YcfM0zc3J6WDrAgxJBXfy4DQkbhDCWGgvny7ID4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ER+AQqgP; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737417193; c=relaxed/simple;
+	bh=OG5+t8ozsoDMfUjE8E2ZNz5vvW1b3HpDR1QDCYkJED8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kg4QTTRk1CIv9UyUksfMrO0UsLxNvR4LJ5cm2/vIZhxIxTnIemeZMs0ZW1CVfruaT/l8cBL4FA7Ckc5X9DXugeVqz5d5NsZ/qb1HArorth6ueqh5tdBUbkKXgcho9PSjKww9e8Xm5IsvZsoTIeDGTYKrv4OqWF+1xwPJJcZaKRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ALwJm6gj; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ER+AQqgP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737408234; x=1768944234;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Wx669Eku0p++oxL5aBcxIscOG1U811p95jb+HGHtjA0=;
-  b=ER+AQqgPB+7A0xCfNdMQNWPuJyzXyhxEV4DcGp+/14ZjblQB21q/VpFX
-   m9BXoKUqJ4NCtUDXh/mmhO1t7K9U+JPHPCSjPQ9CkOdDQTxuc2xboXACa
-   Bk80HEOmcirFqdncFSsOStDSG42szD85hux1c4aJP5DlPWvYgaQdsN2Bc
-   gYkvp0Eo+A2UdhWkg0+HJB1c9rufJ7WMezmteGMiBS+9F1t2Qrm+rzfCe
-   5ih28GAxvbXvCiTmtTPPpXB8nA97lR9rwFWEmGkTd5PODdJLKK7ADCIS5
-   55GRPWJF00u4q5qfomot5iiSW54L4Uk+CcpzqZYcF2u373/VxeTUunxWS
-   Q==;
-X-CSE-ConnectionGUID: VIqCQjdhSQ65LQbSmLpLJg==
-X-CSE-MsgGUID: /nIA99mxTXCPJlb9NV1pLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="48475917"
-X-IronPort-AV: E=Sophos;i="6.13,220,1732608000"; 
-   d="scan'208";a="48475917"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2025 13:23:52 -0800
-X-CSE-ConnectionGUID: HT5kaVDBTeOsCW1fEvY+TQ==
-X-CSE-MsgGUID: zi73t1KlTGKwkBMSN8PftA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,220,1732608000"; 
-   d="scan'208";a="106434224"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Jan 2025 13:23:51 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tZzFN-000WzA-0c;
-	Mon, 20 Jan 2025 21:23:49 +0000
-Date: Tue, 21 Jan 2025 05:23:03 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/devlink/devl_internal.h:21:19: warning: arithmetic between
- different enumeration types ('enum devlink_reload_limit' and 'enum
- devlink_reload_action')
-Message-ID: <202501210517.jThZTX6K-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ALwJm6gj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737417190;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iwdfgrBaXB13BIEpkY4g2WkkFvTZRZ731pjnIVpF+0k=;
+	b=ALwJm6gjFPX7s3wswYp/1MwhaBjxfTsLG+/l9Wp4kqA2Lq37J8oVXyjuwfFLingy0NIkAs
+	R+qFamvclaUetfnJW4MwHST9+PyHTcNXiM8L6JFNB5RyMmvlj/gOtXzOoCpk6tXyX+AUqT
+	nKAOvIm9l9Yt1O87OcmP5kn2elJi0Ho=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-31-DfqtQwSLN2-2Ys0p-FNVDg-1; Mon,
+ 20 Jan 2025 18:53:06 -0500
+X-MC-Unique: DfqtQwSLN2-2Ys0p-FNVDg-1
+X-Mimecast-MFC-AGG-ID: DfqtQwSLN2-2Ys0p-FNVDg
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D27B119560A2
+	for <llvm@lists.linux.dev>; Mon, 20 Jan 2025 23:53:05 +0000 (UTC)
+Received: from [172.64.13.55] (unknown [10.30.32.164])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6CC2A19560A3;
+	Mon, 20 Jan 2025 23:53:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, 3d3a9c8b)
+Date: Mon, 20 Jan 2025 23:53:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <03905.125012018530600495@us-mta-31.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: jdlaCI35-7oIu4cu0-ffYZ_ZS7AefR_210X4faqOC6g_1737417185
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Jakub Kicinski <kuba@kernel.org>
-CC: Jacob Keller <jacob.e.keller@intel.com>
-CC: Jiri Pirko <jiri@nvidia.com>
+Hi, we tested your kernel and here are the results:
 
-Hi Jakub,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ffd294d346d185b70e28b1a28abe367bbfe53c04
-commit: 687125b5799cd5120437fa455cfccbe8537916ff devlink: split out core code
-date:   2 years, 1 month ago
-config: arm-randconfig-004-20241229 (https://download.01.org/0day-ci/archive/20250121/202501210517.jThZTX6K-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250121/202501210517.jThZTX6K-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501210517.jThZTX6K-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from net/devlink/leftover.c:10:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/leftover.c:34:
->> net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/leftover.c:4473:20: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-    4473 |                 stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-         |                            ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/leftover.c:4521:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-    4521 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
---
-   In file included from net/devlink/core.c:7:
-   In file included from include/net/genetlink.h:5:
-   In file included from include/linux/genetlink.h:5:
-   In file included from include/uapi/linux/genetlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/core.c:9:
->> net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +21 net/devlink/devl_internal.h
+Kernel information:
+    Commit message: Merge tag 'dlm-6.14' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/teigland/linux-dlm
 
-    16	
-    17	#define DEVLINK_RELOAD_STATS_ARRAY_SIZE \
-    18		(__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-    19	
-    20	struct devlink_dev_stats {
-  > 21		u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-    22		u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-    23	};
-    24	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1633364068
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1633364068-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1633364068-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1633364068-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
