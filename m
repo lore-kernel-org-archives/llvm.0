@@ -1,59 +1,50 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B040363D;
-	Mon, 20 Jan 2025 03:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD909189B8B;
+	Mon, 20 Jan 2025 08:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737343862; cv=none; b=PlEZdqjLC6cir+Z1VWOWDVenceILhdhCzBS4ZEo2tsfrVyiQj8iNysLbkwwPusn2LztAjzdtXv9P/u/ncgMFOEo1OIuksaVl9URqeD4Xifxmcy6QkYE+We8223T6ZkKDiU8PfwcuHzqwwblyb8xQIOBB3dGdcrKCWvmNDNe7nDA=
+	t=1737360675; cv=none; b=W9+xCvEMReGr2n6IW2ieRiwKVJ3KSHtARNu8ydjc+uwsANY2rR2/k0V7olscz9WPVF+05LC58LYjPEPS7MM4uaOczYZlm9KIdS3BZrIUPLv2Pg5PGN6eA3FWqmRFYeqzPrvAer/9B6MRsIJKqWM9m0BYEeeJE1E2whPsOsRCVoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737343862; c=relaxed/simple;
-	bh=x+2KSvh3kW5Y8A8PaOdALEEnkRD/r7vNxQyUcUgCXDg=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BVbOcjALBHG8PAbZ28HdyRIxFPuAOie3EXRGl5MuN1IKW00YiQiXyICU6vrHO35qbBup/tokJm8OHeKCo2Oqm0Fonq6GY+vJeNYESBQURuW7Wo661lTCBTg1wzdOXOu3kVYy23A9CZkaLHP+unWjK9o9Q2pvHi8p1XGWNQwC8rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q442lsYo; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737360675; c=relaxed/simple;
+	bh=BDSk0In+tWagHet17hDyqWapV2cnvVPpQ+yKTEALR+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pG7FUWO+rwctE6E63t/rKKbibqQ2/7jQ2wqjLKsS6DlDATmF/7TMD9skPuh3MHBrIXgM7jW7t7SALVwY4WxKB0DyTS5WOYgau41mHAXqCqs4D34Zaf9gdQNt1b1chJl6eLQwrEF3S10Gq7qE11OrF4nc7T3POX/sEvNZ4cMBTe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MObVoFng; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q442lsYo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737343861; x=1768879861;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=x+2KSvh3kW5Y8A8PaOdALEEnkRD/r7vNxQyUcUgCXDg=;
-  b=Q442lsYoHQqcWzI+66GDsDJkf/8qNwopgvYHFWVtCW9wnk4G/kqagZS0
-   BuvV2TVIn4P1/p98ekXs9mhAsBZB21pjpV/IrE80puWNn0fRAJYLfUVhi
-   7UNxKt1t8lcHHPpjxZfFrh3PLiWYKd06w5W0Z3odVY59aVd0OQbBOa28V
-   yylzvmpAvNuKBNAEQL0wImnQsUfTNrq+TS2yaaWsWacXzNQySYQT7tyUY
-   C4ZPN49ltjw88vZulWQQOElG5bcKCQMz+tRcP6eUkmg/YPmR2AiPBc04Q
-   Cs8hfq4+8Q/u0ffH2bdw/DTAm8UugSaWvD8GPGPW+AQV5aaFSppZqIX7K
-   Q==;
-X-CSE-ConnectionGUID: K9oIglPnSkCNtKyINCHG3A==
-X-CSE-MsgGUID: j+4OMVXYTQSXL1U0REKLBA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="48367177"
-X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
-   d="scan'208";a="48367177"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 19:31:00 -0800
-X-CSE-ConnectionGUID: IBsAnFNWQK+qeIBUIX3X3g==
-X-CSE-MsgGUID: 2aKeDDPwShawsP9izppKIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="129620551"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Jan 2025 19:30:59 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tZiV7-000W83-12;
-	Mon, 20 Jan 2025 03:30:57 +0000
-Date: Mon, 20 Jan 2025 11:30:28 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 284/287] ld.lld: error:
- vmlinux.o:(function __i2c_transfer: .text.__i2c_transfer+0x88): relocation
- R_RISCV_HI20 out of range: 528388 is not in [-524288, 524287]; references
- '.L.str.163'
-Message-ID: <202501201130.nXIfW1E3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MObVoFng"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BACEC4CEDD;
+	Mon, 20 Jan 2025 08:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737360675;
+	bh=BDSk0In+tWagHet17hDyqWapV2cnvVPpQ+yKTEALR+4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MObVoFngx6M82eujh9+FFbM7dSl3I/HMiD3H6pLAiTLaWwcjjNXidaEcGsF8W8Yag
+	 zyBQ7BJ53TnEFjKiEecJwZmmxn7PPcEqWPBGhqKplZcKOZ84FGLpOqfuVyz0jsJekW
+	 8mbGl5HdugGGK2JYRMlXGCGS4wCjdbo/y/vmcmd8J4kHQzDAZ4jwVoKuxXH19p9mhV
+	 quHvbHWSPvW40Kw9mxlFa4OZ0Qr7gXWEplHVs17xbe+wegr89ORmfOfBbh3GkMfAJM
+	 wgRfNt/0dJMWOfJ3mXbL8j3F9Whb77iUI3q4U9ruxk8KqsD2n1e+6Q4/1gnevLhpRu
+	 a2fHLMkZzVzUA==
+Date: Mon, 20 Jan 2025 09:11:09 +0100
+From: Ingo Molnar <mingo@kernel.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] lockdep: Mark chain_hlock_class_idx() with
+ __maybe_unused
+Message-ID: <Z44FHR2Z_i54PHfJ@gmail.com>
+References: <20241209170810.1485183-1-andriy.shevchenko@linux.intel.com>
+ <Z180HFO6a61PtzYm@tardis.local>
+ <Z19IYHyBbxf4csGB@smile.fi.intel.com>
+ <Z2SWypPS7Lc2CXb6@tardis.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,30 +53,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Z2SWypPS7Lc2CXb6@tardis.local>
 
-TO: Kent Overstreet <kent.overstreet@linux.dev>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   52053481537e7029801317de832078cb40a82f17
-commit: 6e297c556d1c4419bb5610f1a3a462a78c655fc6 [284/287] bcachefs: Bail out early on alloc_nowait data updates
-config: riscv-randconfig-002-20250120 (https://download.01.org/0day-ci/archive/20250120/202501201130.nXIfW1E3-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250120/202501201130.nXIfW1E3-lkp@intel.com/reproduce)
+* Boqun Feng <boqun.feng@gmail.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501201130.nXIfW1E3-lkp@intel.com/
+> On Sun, Dec 15, 2024 at 11:21:36PM +0200, Andy Shevchenko wrote:
+> > On Sun, Dec 15, 2024 at 11:55:08AM -0800, Boqun Feng wrote:
+> > > On Mon, Dec 09, 2024 at 07:08:10PM +0200, Andy Shevchenko wrote:
+> > > > When chain_hlock_class_idx() is unused, it prevents kernel builds with clang,
+> > > > `make W=1` and CONFIG_WERROR=y:
+> > > > 
+> > > > kernel/locking/lockdep.c:435:28: error: unused function 'chain_hlock_class_idx' [-Werror,-Wunused-function]
+> > > > 
+> > > > Fix this by marking it with __maybe_unused.
+> > > > 
+> > > > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > > > inline functions for W=1 build").
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > 
+> > > This looks fine to me, so I'm going to queue it, but could you do me
+> > > favor if you could share the exact configs that would make
+> > > chain_hlock_class_idx() an unused fuction in kernel/locking/lockdep.c ?
+> > 
+> > I might harvest this when I come from vacations (some around mid-January).
+> > 
+> 
+> After some investigation myself, it turns out that
+> chain_hlock_class_idx() is defined outside "#ifdef CONFIG_PROVING_LOCK",
+> but only used under CONFIG_PROVING_LOCK=y, hence the unused warning.
+> 
+> TBH, I feel we should really clean-up/consolidate those "#ifdef" to make
+> internal definition/usage more clear. But nothing blocks this patch, it
+> fixes a real issue, I will add the CONFIG_PROVING_LOCK part in the
+> commit log. Thanks!
 
-Note: the koverstreet-bcachefs/bcachefs-testing HEAD 52053481537e7029801317de832078cb40a82f17 builds fine.
-      It only hurts bisectability.
+So now that we have:
 
-All errors (new ones prefixed by >>):
+   343060092585 lockdep: Move lockdep_assert_locked() under #ifdef CONFIG_PROVE_LOCKING
 
->> ld.lld: error: vmlinux.o:(function __i2c_transfer: .text.__i2c_transfer+0x88): relocation R_RISCV_HI20 out of range: 528388 is not in [-524288, 524287]; references '.L.str.163'
-   >>> referenced by i2c-core-base.c:2216 (drivers/i2c/i2c-core-base.c:2216)
-   >>> defined in vmlinux.o
+Do we really need:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+   8148fa2e022b lockdep: Mark chain_hlock_class_idx() with __maybe_unused
+
+As it would hide the problem fixed by 343060092585?
+
+__maybe_unused annotations are almost always canaries of something 
+messy being hidden.
+
+Thanks,
+
+	Ingo
