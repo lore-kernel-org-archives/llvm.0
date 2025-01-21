@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6881EB2F;
-	Tue, 21 Jan 2025 19:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B73F1B041B;
+	Tue, 21 Jan 2025 22:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737489318; cv=none; b=gY0QcNVAelRnuQoqgPOsV8rY+ivxvX/1FJVcrAs16IPvBNwhg2bHh/yVTo277p4ufl7h9PBTqm8iCA0fxDYGpC+px0x1kWDrC0f7hJHXoOqE25IQGSPhFd4CcCQQ0LqGvUH8DIQzBN7tOu7z7Bs0n7OdvA66FXPOjXtZuBndW9w=
+	t=1737497497; cv=none; b=kB2juzmhA+tPI1U2CPitTg6Oi3ItrSB/hZuaCNvKaGKpHuGJN41aZOq7+v9F1+Xte7GrRNxB2QTYWeh5pNgEkX2XT5kfTW6O9CnRhYjEeNC2A7G/2tftfV9K8Q3/1EouGRqrOdzaym+RSQVC6Gu2lqfKETlHTQylx5noH1gz7L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737489318; c=relaxed/simple;
-	bh=EpU5uKc87Jtb4CxNSIVDnLzZpm4V8fX0q2UO8pT/VTs=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FLHI4ZzInGMY+nrjNa5CdA6eOepa5tMfvu3TrzRLKO1CkiFY3LhbcfZO2JvcpJgud4r1r2olNEdd83o3bRZLBQl7rWc7ucWibxfeB28OsOOov4ICZu1MzZxDtPHjiTDBuqlUaZx+z0ZkhZiz9a8tXjAM35bT7SMhcILJ5lHtVCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEsIJdfA; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1737497497; c=relaxed/simple;
+	bh=rm3D/yJ//rcZyPQNwKEXPKd/3t4PxULOVLpKt/RAuIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pAfugUGHvL5zZ7gPSkGFG1M/Kz8qBKU4s/ibNj48LE5jLcBESG52179XDSNKNOOzR6b7JViYTB4LmNNtm+QiEhNd8lAW1M5ZRVYNlYJ8jXR1ksGzrkBzeVzQNdBfOHhMgJ4ViLElLgolnxX71g1Ycpss2LQ632me4C+JfSN70Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OW66tgIt; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEsIJdfA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OW66tgIt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737489316; x=1769025316;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=EpU5uKc87Jtb4CxNSIVDnLzZpm4V8fX0q2UO8pT/VTs=;
-  b=kEsIJdfAPTDCFq8O0HlInGvnyqhSjCv9aikIL3T0v3vS8NsqaGQoO4n3
-   skIJaNcrwpAefd/ORRCytmG/snkG/Bv8/PwJGb+LZdy4XdiHqTSvIysJJ
-   mwSIvuhMEcaBrdCMJ2K58gXnf5FHCfV9ZMQpLU9GnSd1xCYtAp8U3nYiG
-   sdANxlOts8Pya2onBxd4Q7K6PLKKDmPCGDbSZNUIn367J3TZZbfi0zHVC
-   a3q+3T6eQ2IiuYKMCCQJHhPVVUURyD94GSLiNaBgzw21HFbSVoEbd/k2C
-   Que2f464z7I0BrRIQgYo/cRQov4MFcNAQxK2StU3wdm8/mBLVGOrcd8kc
-   g==;
-X-CSE-ConnectionGUID: 5mGIt8KETmqpW/6Eevjk/g==
-X-CSE-MsgGUID: RAw1CpObRuqD7qh31RZVOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11322"; a="49319745"
-X-IronPort-AV: E=Sophos;i="6.13,222,1732608000"; 
-   d="scan'208";a="49319745"
+  t=1737497495; x=1769033495;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rm3D/yJ//rcZyPQNwKEXPKd/3t4PxULOVLpKt/RAuIc=;
+  b=OW66tgItamC7MApT851xxpilO3dc/wsBNVSS4y5/F4/xCiPayViI8ljh
+   E1dy6fugU1h2y5o6EaIlUXJtO8H2JNWxSKmIt0dbOZ00rOYjR/Am8RX9Y
+   fH9dU0uscxaTTbdw1LNkx1zr2Vnt6vdlQCBFvPNrojY4jU41JzYoeRCK9
+   FKKYUpMticEXtPoF5Bh39v3Xjg40rqZXy3gjiYjUX/ZJ6uug9vp7ZoDex
+   ArPhu9acgHFLZvzNuLbUIKHu8PIhAYZMiLgeL0kk4AH2e77ck/jMrf9LG
+   yFQsJdrulyGETRmIWwlPQwjaYqt/72CUYPpthumCugCmMefzGC7gcuHHe
+   Q==;
+X-CSE-ConnectionGUID: XkoipjANSbuGNbUpDXyatw==
+X-CSE-MsgGUID: 5wzw6PnEQNKAparRjKrcmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11322"; a="41861470"
+X-IronPort-AV: E=Sophos;i="6.13,223,1732608000"; 
+   d="scan'208";a="41861470"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 11:55:15 -0800
-X-CSE-ConnectionGUID: AeJsLEXQSoOUehV+oG9diw==
-X-CSE-MsgGUID: aeq8kFVrR4KxjiyIQzDbzg==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 14:11:34 -0800
+X-CSE-ConnectionGUID: TglcsWj6QcuXvR7LdYURBQ==
+X-CSE-MsgGUID: orlzGtlAQiuwbtX7P+OUCA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="111992078"
+   d="scan'208";a="112025038"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 21 Jan 2025 11:55:15 -0800
+  by orviesa005.jf.intel.com with ESMTP; 21 Jan 2025 14:11:33 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1taKLA-000YuB-1e;
-	Tue, 21 Jan 2025 19:55:12 +0000
-Date: Wed, 22 Jan 2025 03:54:57 +0800
+	id 1taMT4-000Z2t-0v;
+	Tue, 21 Jan 2025 22:11:30 +0000
+Date: Wed, 22 Jan 2025 06:11:28 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 295/296] ld.lld: error:
- vmlinux.o:(function perf_trace_i2c_write: .text.perf_trace_i2c_write+0x30):
- relocation R_RISCV_HI20 out of range: 531804 is not in [-524288, 524287];
- references '__per_cpu_offset'
-Message-ID: <202501220335.ZPneFzfZ-lkp@intel.com>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [joel-granados:jag/mv_ctltables 10/10]
+ arch/x86/kernel/setup.c:207:2: error: invalid application of 'sizeof' to an
+ incomplete type 'const struct ctl_table[]'
+Message-ID: <202501220544.HWIDvZIL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,25 +63,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: Kent Overstreet <kent.overstreet@linux.dev>
-
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   2fae09e2329530b08ec62b44a799cedfb7a0ef22
-commit: cb4af57eb5a0046c43df9141f8f0cc7aed9f49c0 [295/296] bcachefs: Scrub
-config: riscv-randconfig-002-20250120 (https://download.01.org/0day-ci/archive/20250122/202501220335.ZPneFzfZ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250122/202501220335.ZPneFzfZ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/joel.granados/linux.git jag/mv_ctltables
+head:   18654655ca1b5e5bc57b89c5e88645cd3284764c
+commit: 18654655ca1b5e5bc57b89c5e88645cd3284764c [10/10] x86: Move sysctls into arch/x86
+config: i386-randconfig-011-20250122 (https://download.01.org/0day-ci/archive/20250122/202501220544.HWIDvZIL-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250122/202501220544.HWIDvZIL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501220335.ZPneFzfZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501220544.HWIDvZIL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.o:(function perf_trace_i2c_write: .text.perf_trace_i2c_write+0x30): relocation R_RISCV_HI20 out of range: 531804 is not in [-524288, 524287]; references '__per_cpu_offset'
-   >>> referenced by i2c.h:25 (include/trace/events/i2c.h:25)
-   >>> defined in vmlinux.o
+   arch/x86/kernel/setup.c:153:13: error: use of undeclared identifier 'panic_on_unrecovered_nmi'
+     153 |                 .data           = &panic_on_unrecovered_nmi,
+         |                                    ^
+   arch/x86/kernel/setup.c:160:13: error: use of undeclared identifier 'panic_on_io_nmi'
+     160 |                 .data           = &panic_on_io_nmi,
+         |                                    ^
+>> arch/x86/kernel/setup.c:207:2: error: invalid application of 'sizeof' to an incomplete type 'const struct ctl_table[]'
+     207 |         register_sysctl_init("kernel", x86_sysctl_table);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sysctl.h:233:46: note: expanded from macro 'register_sysctl_init'
+     233 |         __register_sysctl_init(path, table, #table, ARRAY_SIZE(table))
+         |                                                     ^~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   3 errors generated.
+
+
+vim +207 arch/x86/kernel/setup.c
+
+   205	
+   206	static int __init init_x86_sysctl(void) {
+ > 207		register_sysctl_init("kernel", x86_sysctl_table);
+   208		return 0;
+   209	}
+   210	arch_initcall(init_x86_sysctl);
+   211	
 
 -- 
 0-DAY CI Kernel Test Service
