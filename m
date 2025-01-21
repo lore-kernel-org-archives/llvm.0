@@ -1,120 +1,180 @@
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A40B1B3950
-	for <llvm@lists.linux.dev>; Tue, 21 Jan 2025 09:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA57C1F1307;
+	Tue, 21 Jan 2025 10:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737452811; cv=none; b=nOB/1K6v9A/wsh6e5ism0g9juOSU9qEYuetBW6cMRvO+O0liZyOd5B46BtYuHLtr0h5GYYIadvunHWtJzdrHQDvk9sDTRzpV+1r4rgv8tzV+cfVSqaBKPRROePqPeyLkH26L4MFfuL2UMKAhKoHIGDZuF0a3s9VGOQMDJekwX6Q=
+	t=1737456843; cv=none; b=cXo2H1hEpN6K7cL0ON6x5Zb/IDP5WsJplki9X0ouMXqzJeVihRucTfc8RkmJR+8xkZUTszqjfr2XM5Rh5VIyTe+p5IUtZOuA+Qe9N7UQrdmDqaR9Imzv9d2Rl+KNI/l0JpJXI3XpWlNaeXqjKQZGo5K1oDai0hDCsHeOGgK1Nwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737452811; c=relaxed/simple;
-	bh=1I+Uuama9ugZyQKsEohJdKjjc55GB3IcqY9SnNbolsQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SKGa7+kWt/2AJlc3anToT4MI0KTgoZLaAD+ymC4MjcHKFG6prdEOj5O/4HN6jLcIvEN2/yjB1BJcHTUM7PlHawnowivuFyZk3OY+GPSQnB8YwS18uxYqHpyB2NrHAndNfxMTb0fkH+iZJ1ucRZYpJQ5E0wehfP/owjRTZ3fHbAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/IzR21L; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1737456843; c=relaxed/simple;
+	bh=gyH292xQIxBO5MQVhSMOh9N7Ct/+tb2k3ECH3xnl5uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d9IGVHm2OSuKyRYG7u2T44fTamytHHK4FTd1lyy0X1GbnUzKVhX+yUO9aBVQPKdlA9Gt90NWPe5TC/M3kMDRUOFcDfVZi/mTydvLgW/18tXa2jYL0AgQ7gBaVHwACrdXWMkVaVLcU3z0qXpDm7Bd/0Wg0Y/NKe7mxvaVOrsOOFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VjrWeWII; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/IzR21L"
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e3a26de697fso8427530276.3
-        for <llvm@lists.linux.dev>; Tue, 21 Jan 2025 01:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737452807; x=1738057607; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
-        b=Y/IzR21L6fpn3jsGhO7wjVnQrdCRprFkttpA7Aveicrsn4V2dFCRA12EJ4+l7YtedQ
-         cL8JZo3KVIlEHo5d6hFm6C+SA8xPd0v+Klm27rm4HvQCRNLk3AX3u2q/9B86B4LTpZk5
-         B+Lt3j1IjxJYrWQU57CtSVmnrty94Mh9BB2VKemBhvfQwBrK7k8yUpQ+iKfHUOmv+Udo
-         gFjnACbAM0oWuVSBq8XyEStisZPbImEdKVDcy3n8Gu3s8AZIZUqD+eKBE50UXbDfdMRT
-         QOWt9w9bCOSjen9Kx0/t6tnMVNnXH9ajiU33jG2oxWXKrGeUDagbiSFRYBdkwL2yCUPP
-         Z/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737452807; x=1738057607;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
-        b=UWbBnSJxMxlhOQ5KuqHzmQnHoXtaNOpvosdSSmsSvdZIC9+SmWin20fKfuewtm0LVm
-         +XVTG3dTKbGCPNd/AML2A9l5NV15DS0cQ3isqLohloUfQ+Iq/eIC2Af0fCyiw3UVbZut
-         9pgXxC1l5Jr6Ixm4v3h34F6m5vd1u+guG+73mgKiYdq8OyXjfSZ9RIe/xiDGHx6jDSeC
-         y1SRUFkKtADBMF1fLYC8hupQxJoosiML19smYWOmgRlzVYGkyNGiZkws7XVoz6+V8ZRc
-         7RBOZ70RSfrwz3i+myQFwOLdPo+H5pmW94pIB3CU9j2NEE1fDJHefJUThS/hY6Cu1PH6
-         xNlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVf6HkEmh4LhSFV3AJ30cNPot89xZCIH/5jJGXuwzuk0YDABGRvUBMIy5yv+4K4MsG6xIEj@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz8EmRzpXgjKIoImu+gtO+zwlYOS21UxEaubUx1bBk3RA26t1B8
-	999YEIQNEze47c1vAYpz5J/kW/VMgeg5R6NbmxS4Nn7iYJnvanrhkz797xYQNb/k3oM+Ru5pma3
-	nDLxgyIn2VQdAkmMGj3/lxT5XqS/reVUPhSrumQ==
-X-Gm-Gg: ASbGncty402esk8xfqynObiDVdBxyAcS7oNgcjsNO4MAbxPiXVYOC3nQ6nMPBmzJVqc
-	udbfSrYA/jo9ZuTdHjL+Zt8G+lz6EspLjfs8kXOtOmvc7BHK9cBs=
-X-Google-Smtp-Source: AGHT+IE4NvWjhVwcZefMFMPsNF1/yZL/+GizgE7O5W0l1UUq/sk+Rp9xLLX7buviHENqfSARwR8NAFZJ6rRHBgoskwA=
-X-Received: by 2002:a05:690c:7344:b0:6ef:5ab8:2c53 with SMTP id
- 00721157ae682-6f6eb68695cmr133051747b3.19.1737452807535; Tue, 21 Jan 2025
- 01:46:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VjrWeWII"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737456842; x=1768992842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gyH292xQIxBO5MQVhSMOh9N7Ct/+tb2k3ECH3xnl5uc=;
+  b=VjrWeWIIaD8/xeuPvw4gOhT/vjklMbhFTEe+7drfp+rf0OxWpTkqxv0j
+   j5WTVh5nKouIEmlV8UfXb5jn/x7tvvbs25TMU6lln8vlH3udTqDMoxaRC
+   lLk7xKMAOYUSWrR6ElitdVoHhRAsgrOLPzcq9H6ghCb4yQLnKc8ViblQh
+   b75Eh8VQlBcBLusn/uhdzgmhDbAZb0aw5jeU+kx3F1sfQtfYWs2IxDcoo
+   oNM5KU+ddTAA34ft69N7M8HlbMBifvzZuu9adQM3SDYo+B5c4PrwUbqZs
+   qr/4iXKpWHdfxkCO1l0ZRNen+4S4D4Z9aizaKsayrlaNSZqY4M/OB1QcF
+   w==;
+X-CSE-ConnectionGUID: 3eklPAFyR/Oc3zKh59Giuw==
+X-CSE-MsgGUID: JphKqw2mRBecomk8/RJwAA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11321"; a="37076289"
+X-IronPort-AV: E=Sophos;i="6.13,221,1732608000"; 
+   d="scan'208";a="37076289"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 02:54:01 -0800
+X-CSE-ConnectionGUID: T/UXhYd5QlSPYDORjZvWcA==
+X-CSE-MsgGUID: TsFzvSDLTYCU5NRxAUYLyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="107201662"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 21 Jan 2025 02:53:57 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1taBtK-000XxH-1v;
+	Tue, 21 Jan 2025 10:53:54 +0000
+Date: Tue, 21 Jan 2025 18:53:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Schrefl <chrisi.schrefl@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Lee Jones <lee@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Christian Schrefl <chrisi.schrefl@gmail.com>
+Subject: Re: [PATCH 2/3] rust: miscdevice: Add additional data to
+ MiscDeviceRegistration
+Message-ID: <202501211825.Vefi6H2q-lkp@intel.com>
+References: <20250119-b4-rust_miscdevice_registrationdata-v1-2-edbf18dde5fc@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250120153817.11807-1-ansuelsmth@gmail.com>
-In-Reply-To: <20250120153817.11807-1-ansuelsmth@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Jan 2025 10:46:11 +0100
-X-Gm-Features: AbW1kvZ21pVNkI7qM7rGH-9wFnhv5SdIw9t28_ewxvHO8LS13hlMrra20J6gTIc
-Message-ID: <CAPDyKFpBtnsEfMg73UHdXzZvSNHaL8H4N1h6-2wAMnFWNTM75w@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: airoha: Fix compilation error with Clang-20 and
- Thumb2 mode
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev, 
-	Sudeep Holla <sudeep.holla@arm.com>, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250119-b4-rust_miscdevice_registrationdata-v1-2-edbf18dde5fc@gmail.com>
 
-On Mon, 20 Jan 2025 at 16:38, Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
-> pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
-> hooks are inserted via the -pg switch.
->
-> This is a known issue and similar driver workaround this with a Makefile
-> ifdef. Exact workaround are applied in
-> drivers/firmware/arm_scmi/transports/Makefile and other similar driver.
->
-> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202501201840.XmpHXpQ4-lkp@intel.com/
-> Fixes: 82e703dd438b ("pmdomain: airoha: Add Airoha CPU PM Domain support")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Hi Christian,
 
-Applied for next, thanks!
+kernel test robot noticed the following build errors:
 
-Kind regards
-Uffe
+[auto build test ERROR on 01b3cb620815fc3feb90ee117d9445a5b608a9f7]
 
-> ---
->  drivers/pmdomain/mediatek/Makefile | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
-> index 0f6edce9239b..18ba92e3c418 100644
-> --- a/drivers/pmdomain/mediatek/Makefile
-> +++ b/drivers/pmdomain/mediatek/Makefile
-> @@ -2,3 +2,10 @@
->  obj-$(CONFIG_MTK_SCPSYS)               += mtk-scpsys.o
->  obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS)    += mtk-pm-domains.o
->  obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN)     += airoha-cpu-pmdomain.o
-> +
-> +ifeq ($(CONFIG_THUMB2_KERNEL)$(CONFIG_CC_IS_CLANG),yy)
-> +# The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
-> +# pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
-> +# hooks are inserted via the -pg switch.
-> +CFLAGS_REMOVE_airoha-cpu-pmdomain.o += $(CC_FLAGS_FTRACE)
-> +endif
-> --
-> 2.47.1
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Schrefl/rust-add-Aliased-type/20250120-061340
+base:   01b3cb620815fc3feb90ee117d9445a5b608a9f7
+patch link:    https://lore.kernel.org/r/20250119-b4-rust_miscdevice_registrationdata-v1-2-edbf18dde5fc%40gmail.com
+patch subject: [PATCH 2/3] rust: miscdevice: Add additional data to MiscDeviceRegistration
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250121/202501211825.Vefi6H2q-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250121/202501211825.Vefi6H2q-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501211825.Vefi6H2q-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 19.1.3
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+   In file included from rust/helpers/helpers.c:10:
+   In file included from rust/helpers/blk.c:3:
+   In file included from include/linux/blk-mq.h:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>> error[E0658]: associated type bounds are unstable
+   --> rust/kernel/miscdevice.rs:64:27
+   |
+   64 | unsafe impl<T: MiscDevice<RegistrationData: Send>> Send for MiscDeviceRegistration<T> {}
+   |                           ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #52662 <https://github.com/rust-lang/rust/issues/52662> for more information
+   = help: add `#![feature(associated_type_bounds)]` to the crate attributes to enable
+   = note: this compiler was built on 2024-04-29; consider upgrading it if it is out of date
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
