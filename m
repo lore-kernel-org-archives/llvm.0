@@ -1,131 +1,107 @@
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D16214A83
-	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 16:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716B621505B;
+	Wed, 22 Jan 2025 16:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737562312; cv=none; b=TCCpfprZOHo/5ObGvhQivQt80Jb9bY7ufXFt6kIbZNl6xi7a4+25GXRAG9I29a9yl8rJaZ6joaqYC5JBv1P//WHljcXSY4wfw80taFFcNugi0Zc2pdQNjKRBcNKc0eAdjYKz1KJ3UXSQJTKt84ZpUKa/lqai8lFPZfs6RlB3rsk=
+	t=1737562805; cv=none; b=muEKX3tCnts5ANSvZHtyyuTsJmRwSLCGtd1nXPKLkmPVKGkAepZJtr6zy66qHoK5vls0ub5kC9xZQzeR9/2d1FbAmbdcWvrduY+2GeemsaM65O23RNfNx7NWS70hfqw+0UADc/lXU7JaO0FC9GMIqJHF8WYlRU1rktJJ45vfaag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737562312; c=relaxed/simple;
-	bh=jNCWiuGwLIrwAxoH6c87tzyM63E/aK+e20wre6ZWSr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=umFDhh9WiHzmmpgxQaJa3sHExW+E5U18etctxHk+6ue42+jBnhLid6y/SBxY64Alh3hz/lHJYw2LT4L+DCrFhgUO/+zoL88zx9Toh3OX9vZUUweHrh+7YJ19WVAbQEIUd/m5CYus+/MH2GmHFJlFvupaW5gS0rOmdsk2dHNRfas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qobjCwSi; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1737562805; c=relaxed/simple;
+	bh=YCx6T97ezyDoVDsRwmmaQ98AqxuHSycNU8QBqF/etDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LhThBPF0V9YrbyxWlM75UUAFkgITW7fpgChZgnyG+GOZSJZlyVyPYnpMxA7S4HolfJNhEZNiU8TxIC8Crr1JqsIPj7I7ava6laFmLqTjxQKOh5OL41aTpmyvb2Jh5R7hH8gbnv3u/aFP8LMKMnHSQmXF2TD8a073wwJ8SVh52f8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Csrk7IkU; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qobjCwSi"
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3ce82195aa0so214615ab.0
-        for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 08:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737562310; x=1738167110; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jNCWiuGwLIrwAxoH6c87tzyM63E/aK+e20wre6ZWSr0=;
-        b=qobjCwSigwmsdyNls99UECUsL6WC8ChDvh/MJjje9C2hqeW7V1NhBZ5FjoaQW5zOud
-         rtpBnoECk+1sBbJkVwJJC1+4Xz63yLcL16bIc7SqB7UKiBYikUNbys70LMUy+AOaOeht
-         KNxU3tgUOGv1lNNgT3J/gEWRRhA2DwxaBUlHGaGSV5C1+3AONkwE9qGt047MuamasRzO
-         Hw9usF7gpnEjV/qBmG2V3moTlb0XrkGKGuG9SQZT4s2ij8aHBHv9/33EcptUQnRphhJM
-         Vqvq7T8OI1ttRh5Ec1oA7EdrZe8OXDPO2x698sGfr9WEqs7orW/qtIkz/NvLTX0ZE/F/
-         Lj7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737562310; x=1738167110;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jNCWiuGwLIrwAxoH6c87tzyM63E/aK+e20wre6ZWSr0=;
-        b=h/pnEUPFIvTI2V5i1DfoPbgZYuZ12x/XyFcHhDSMlyH6f9qh6mqS50aQFawLmL5FtB
-         nrZpFp8UxPwo5SMkedh9xzSZ7eU9wxNh6C2i8p9uw/1zW2WIvvZvDvx+jXa3Fxz4LEud
-         B7aCvBvpPrPU6H5jZzsIwrwe0GQpIRzypkOIGLpweztiEVLaNQxHtWx0pT96i0XHQ1LE
-         NQxk50K1euVsD2QPCFhBXw2s2zENbX2RLH5gz6l+1aQeoMcXlkx2yW3LecD1Qp7mkJ/m
-         5DMBpJCoFH5GfUP5JB8iTitzCzj0g61qQg06UiSOPw0zWud6wKGm71tLP6yZft85sHdA
-         EO9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWlff/SiI/LADw8kG3DTxGZujaezhrWruOqTNAA62tQYRbUj5ynWjGk6JdTlJBx/LkE5rqi@lists.linux.dev
-X-Gm-Message-State: AOJu0YzKs+AKtqmzQSN9DnSs7jL6xavVURUWyvRiUKEDnaNQBlKJlApt
-	fPWguZ1YNvFFpqIzd07E3kIz1eLSX5MCY1GFFYfXbS2Ca5jc/jOtJ+1nxCvC1RuSsiS8z1GS0mF
-	TOJ1zLMow6VLIXdl5Owvla/X+BVWwDTv9i4yS
-X-Gm-Gg: ASbGncv5A9IgNNeecvoeOWBDZPa2wdMNej2//Mnyg6akUiBPgxrRoToqhXFIa+mRckF
-	q44K0hydqcNtJB5RAt9h64lL1LkR+ul1MTKW292dsLkOYzWVqvDAtpS696gj+od4PtONMrXeFaF
-	5WZRs=
-X-Google-Smtp-Source: AGHT+IEiFLgAYdHIXS9mFH9WxNkvJOsHn2tSvvkkY8zJ54ZbyBmpqfFOVwUtOm1Q1WCVFVs1ws31sUh2kq3VR1xaSo0=
-X-Received: by 2002:a05:6e02:348f:b0:3ce:7852:1e9 with SMTP id
- e9e14a558f8ab-3cfb3fa3d80mr3094505ab.17.1737562310187; Wed, 22 Jan 2025
- 08:11:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Csrk7IkU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737562803; x=1769098803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YCx6T97ezyDoVDsRwmmaQ98AqxuHSycNU8QBqF/etDw=;
+  b=Csrk7IkUw+rkNWQ7/gKjSpUCJuAX9lKmUFK3kIB8y9LnutjJBOkz7Qwn
+   a89K9gwN56NcSi9WjMK93UNQQSTaZ6uO9l3LeigyOL3it8jvUl5o+P6rc
+   WY2dABe8FDoqLRm7kwJ021yoUgi2Q5DDJ3uf9b/1p8CwBFL+agfe4Fnn2
+   bTAHTkyW1A3r8nNOYjToq6c86VkF1EWiZinISgupxjYwrLlWxRK4GSYc3
+   GSsqXms1nPibpcEshb2Pgl7TiXF29eM74uYqGhE++pdnsTWZvhFIcr1se
+   qkjo7Rl8JouHlJQHEBvFejIhnRHb9HBDWdLZBG+7tedeTwuZcXScHbBQC
+   Q==;
+X-CSE-ConnectionGUID: jFf1lykxQ4y6elWvzQxXtw==
+X-CSE-MsgGUID: RODQNxlURUWFdYyInftUzQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="48693860"
+X-IronPort-AV: E=Sophos;i="6.13,225,1732608000"; 
+   d="scan'208";a="48693860"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 08:20:03 -0800
+X-CSE-ConnectionGUID: ZNah69FSTXmvVThOaRJ97w==
+X-CSE-MsgGUID: BNQ2hdZwSzeqLkaaoQeCnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="144433313"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 22 Jan 2025 08:20:01 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tadSR-000a5v-03;
+	Wed, 22 Jan 2025 16:19:59 +0000
+Date: Thu, 23 Jan 2025 00:19:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:b4/sm8750-display-dts-and-panel 66/74]
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c:158: warning: Function parameter
+ or struct member 'mdss_ver' not described in 'dpu_hw_lm_init'
+Message-ID: <202501230012.SPO4zoud-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250122062332.577009-1-irogers@google.com> <Z5EM24qWVQF2VdI8@tassilo>
-In-Reply-To: <Z5EM24qWVQF2VdI8@tassilo>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 22 Jan 2025 08:11:38 -0800
-X-Gm-Features: AbW1kvafVY7CkArTm06Ofo62Z-sE61GIelJQE_qFuHGUl5T-U-N_90G7y7SWyBY
-Message-ID: <CAP-5=fW6ZWf6jF3Xnike81S9s_5tZ9w4DS8=8Ff1Ve87O32_Sg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
-To: Andi Kleen <ak@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jan 22, 2025 at 7:21=E2=80=AFAM Andi Kleen <ak@linux.intel.com> wro=
-te:
->
-> On Tue, Jan 21, 2025 at 10:23:15PM -0800, Ian Rogers wrote:
-> > Linking against libcapstone and libLLVM can be a significant increase
-> > in dependencies and size of memory footprint. For something like `perf
-> > record` the disassembler and addr2line functionality won't be
-> > used. Support dynamically loading these libraries using dlopen and
-> > then calling the appropriate functions found using dlsym.
->
-> It's unclear to me what this actually fixes. If the code is not used
-> it should not be faulted in and the dynamic linker is lazy too, so
-> if it's not used, it won't even be linked.
->
-> I don't see any numbers, but it won't surprise me if it improved
-> actual run time or memory usage significantly.
+tree:   https://github.com/krzk/linux b4/sm8750-display-dts-and-panel
+head:   3d4ec7553fa4310579528818ee68ffff4b614b66
+commit: 75857f186facb0a7190877ce945dcc645fb96986 [66/74] BACKPORT: drm/msm/dpu: get rid of DPU_MIXER_COMBINED_ALPHA (partial)
+config: arm64-randconfig-002-20250122 (https://download.01.org/0day-ci/archive/20250123/202501230012.SPO4zoud-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501230012.SPO4zoud-lkp@intel.com/reproduce)
 
-In certain scenarios, like data centers, it can be useful to
-statically link all your dependencies to avoid dll hell. The X86
-disassembler alone in libllvm is of a size comparable to the perf tool
-- I think this speaks to us doing a reasonably good job of size
-optimization of the events/metrics in the perf tool. We want these
-dependencies for the performance over forking objdump and addr2line,
-but we don't want it baked in - unless the person doing the build
-wants this and this is still the default if the libraries are detected
-by Makefile.config. Using dlopen also means distributions can have a
-perf tool that doesn't drag in libLLVM.so and a universe of
-dependencies, but when it is installed get the performance advantages.
-In data centres having fast disassembly/addr2line is less of a
-priority over the binary size cost replicated over 10,000s of machines
-because those machines don't tend to be running the annotate/report
-commands.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501230012.SPO4zoud-lkp@intel.com/
 
-Fwiw, Namhyung's uftrace is doing something similar for python:
-https://github.com/namhyung/uftrace/blob/master/utils/script-python.c#L139
-and I wish the perf tool were also doing this. I think it is much
-nicer to have the tool fail at runtime because of a missing dependency
-which you can then install should you want it, rather than doing an
-equivalent within the code base with #ifdefs and needing users to
-recompile. This patch series significantly reduces the #ifdefs in
-places like the core disasm code.
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Ian
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c:158: warning: Function parameter or struct member 'mdss_ver' not described in 'dpu_hw_lm_init'
+
+
+vim +158 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c
+
+25fdd5933e4c0f Jeykumar Sankaran   2018-06-27  146  
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  147  /**
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  148   * dpu_hw_lm_init() - Initializes the mixer hw driver object.
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  149   * should be called once before accessing every mixer.
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  150   * @dev:  Corresponding device for devres management
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  151   * @cfg:  mixer catalog entry for which driver object is required
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  152   * @addr: mapped register io address of MDP
+86313a9cd15233 Dmitry Baryshkov    2024-11-02  153   */
+a106ed98af6848 Dmitry Baryshkov    2023-12-02  154  struct dpu_hw_mixer *dpu_hw_lm_init(struct drm_device *dev,
+a106ed98af6848 Dmitry Baryshkov    2023-12-02  155  				    const struct dpu_lm_cfg *cfg,
+75857f186facb0 Krzysztof Kozlowski 2025-01-16  156  				    void __iomem *addr,
+75857f186facb0 Krzysztof Kozlowski 2025-01-16  157  				    const struct dpu_mdss_version *mdss_ver)
+25fdd5933e4c0f Jeykumar Sankaran   2018-06-27 @158  {
+
+:::::: The code at line 158 was first introduced by commit
+:::::: 25fdd5933e4c0f5fe2ea5cd59994f8ac5fbe90ef drm/msm: Add SDM845 DPU support
+
+:::::: TO: Jeykumar Sankaran <jsanka@codeaurora.org>
+:::::: CC: Sean Paul <seanpaul@chromium.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
