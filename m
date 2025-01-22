@@ -1,57 +1,57 @@
 Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC03921ADB0
-	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 17:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E330221ADDE
+	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 17:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737567826; cv=none; b=twJqK8N5Z501zCq2SJWMocSBNQLG90AqcIUWg83OcMNyxSt0z2r4y+pb7tx/a0JZCPmKBPJLpw41qH8z9dhK6HjmMTJVqp/9dYXrZCVo3GbFi/3+lYr7LCpN026kwM5FEmJJRbFZtPooKd4LVeNcH/bIlMjf2n2Zjqyk6Qw0U4g=
+	t=1737567828; cv=none; b=AK69RSm0dF/6bpqxVde/zH8S5VO4RX7QNnnJXNKx6AdfmjVTl55m4GY+vislQv5U3KgJiLioapidAFTk6LMVbI1pHm3AfvOqsgpIvTSvR4bXLty74dTKq/Gc9K/a8/zwBJ4/onUIqq3aEj+XXAxY8uFlIHx5lFlIf/o/ZGg0ep8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737567826; c=relaxed/simple;
-	bh=mdaHPKAoKWAvFgch/t6QjrxjLj68hIBhC6OxXPIMVSw=;
+	s=arc-20240116; t=1737567828; c=relaxed/simple;
+	bh=9GHPNHyvRxxMxBGIIob8u2neND2k/95QMi/45gOynCo=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=pJSABABlxw1/JIj+RntoOLC90DNbG99E20H99SNmbCJf7Lq3ScaYrElj42rZDtVqalVJ6AGM6NjHlGYm7UI8hKlOxaokXuvw5qXVMnM2z4K0vtpcKWAKFf7u3rwpuDWUor8s49ysxZrt3gJBwfgHvas+s8MvyAwGEp1j6qLxbqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mSRSnYqL; arc=none smtp.client-ip=209.85.219.201
+	 To:Content-Type; b=EqtdAwX896Ng5bTxRGIalNwWqy+YW+i3KC7eL9v5ltANqKSe4lJJp/t0gqq3xx0CIlyGEDK+OkdMCreIXFmklhFh+oullndqKHaQpUszUMlgG/gX8PhYgoyBxf9hVbIAW6VkC0KrOTmfd19Cq7gQX/LR9TiixoB45FtyXX6hfkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qz7MoAu4; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mSRSnYqL"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e549c458692so11834064276.2
-        for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 09:43:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qz7MoAu4"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e48beea5778so17574645276.1
+        for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 09:43:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737567824; x=1738172624; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1737567826; x=1738172626; darn=lists.linux.dev;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=z8GrJZ0fsWrHpsTUZU18QyLM9IZZokR195LxXJCULNw=;
-        b=mSRSnYqLwhqyNiQuL8bigEPw+XhRePjhfU3BR3iEHfU8oxEQseAAfQNsjf7Qi4Ln2f
-         s3aZnHtutEIULAAwrNyC4mcPTBX3CpUkXxgcg34tarnvfPqOKDDjqPq3xKjZ78opV9vI
-         nRtOS6HD0SfcXD+BIO0zhW0ezLxXdvNYTErDvjt5D2phOQSDabQGMEolTMh5Bmz+IEhj
-         Soe1NV6nLW8GL1fesIXzSUrmMv62NbzTxiwrsSW6YW6LuLjQGm99FfblOyJUpnMpWYCL
-         JzfEq8o/Q7n6Bop/wGd0UBowgIw/tZDNX1L1QNAqv8nDqwYhlZA2p4Rl2lT419xtDJ8f
-         2NNQ==
+        bh=DKH3yiTdGj08fSShzNsREAUyrrSH2fL/PhPrqngZihY=;
+        b=Qz7MoAu4XRGlT24H7K5xDawTLDSo0f/kmpHQFQVc527c2i1C+PIWgZ/L9dO1Pjvsd3
+         VLpSnLnOsNGSKw9nTmrv9/kv4n/JJdAdSGgBmm2/8T5dxphJSyMUF51xD4HQiipq0Icv
+         AMUQFYkQj0MjHxBjx6hKIi5t0kn6mCwamP+YPrAsAxAOKpy4B/OJ48s7xLT+rW96wGz3
+         33G0mQypFDPhTvGnHMVWoHkiWB2BXu9Ak1B/PIgkpkPdHklQilHKU5yJ18Zv1fB0L/sJ
+         dglac/OB1ZXm97fRCPuRv/Dz6TNJOLbQLTxAg1iE2N2GJ/+u59vZl28A5vJmndR7Iygo
+         WIKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737567824; x=1738172624;
+        d=1e100.net; s=20230601; t=1737567826; x=1738172626;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8GrJZ0fsWrHpsTUZU18QyLM9IZZokR195LxXJCULNw=;
-        b=YklLgncEiIKHQscOwo6ADqj+a65d+Wbdj/9zI9O3IIndLLYMVTa8NByG28+hUf3oLf
-         v98W7DNQvzpZPGs+FGggnbwdpBmOcyqpuSLm3YSoRZN+GNo2PNJeXvL3DrDul/OeoG7O
-         CSTf/pXfOvNMMls3eqKR8lJpHQ3f0yhOVk4WWZlYOGspihSROBlLeNj7LYGeNkJp5rIO
-         vAb93BAt7D/+kTGdbUEJ4qkLYqHhspurfhHvOBZfKoAf4j3pKFJgs2oAkJdInGrSVGXd
-         MYOc+ujzAMwo08hsgMEPVWDGqzdil6CftTdEYg/dy2u61YgXfPZkzw4BdDSihmpp5u42
-         ZfXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXjez0oJiXUDSZBHWzKUKIttjZUxqqOwDh1JS5kempPqW8UHTVQMrFUXCGL8LxxNV5/TMtQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxuCuU6BvNUVVOlkmKs3jVkytfUjtlm3Mh5YuKrN5PPD9f5JNqM
-	OZ1zTYHp9x4mlwMFZ1qYJr2Wko9YJN8Zq1tW4aelKB+K8PmGYrzT2AJgllpLSpaXBMt2NfpMBQ/
-	LfRgTjA==
-X-Google-Smtp-Source: AGHT+IEYTvIMCq+d8mMxsLaBCnWLHLN3S0/RB1ZC439k7yTn7O1snOVUkYPg4+trYjQ3ownolXyolli2Ngj9
+        bh=DKH3yiTdGj08fSShzNsREAUyrrSH2fL/PhPrqngZihY=;
+        b=OXM/fmRu1GX85wixCFsMDqly1GNlCiMqLl51uyk2Zy/Y3lEcH+Oo2zeEgEauCXvQbW
+         4p95xkdtdeF5tUQMyhgkDbfjXoqZuWKhR96j/9jr0SIdU4pdmki7pkj6kujUQrlc6wG+
+         FXDqeF/PBPiYWjztDQm9mdSaU1q376wQoPIEl2IgteHY3yMV1qc07BiWtiqGBpS/Aw7w
+         CKOGqgfaJScogyINseSxxmBNKDGnpGz+/YWM+R/ShpYn1yUaE/uHxcTpQOie/QJP9xsM
+         MdykBOoJPfBFzQaUHvogdJh32aEgxyO/ViA+SQA6cV9mYyVOb0HfbrYMPDTNUGNsukqW
+         IJ5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVwY0cU+mjmd2Bu57cLGE4lCbuGGOcOnVEBTYjmRgGKCsBKnzgv0HhC5jkpnTNfyhyJGnIc@lists.linux.dev
+X-Gm-Message-State: AOJu0YxZqtKlTdh0N7byUA0pHXIz0FpCyUCOsvD56VUVVQAsYEUezPXS
+	guI3eG/NiqUTRTTw+39qWAkezP8MtABVgd8Iw9doYW0PglvEscdCqyCz6PKfngyGpV5bn3Wz6AJ
+	qLjwErw==
+X-Google-Smtp-Source: AGHT+IGkgldheuVJupTzX6Fn2FVkqpNrVggcg4lpMEETVTUUw5th46LrdjZLruG7yN68AX8sRQNCtrYz2Dr0
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:807b:be79:d5c3:ee5c])
- (user=irogers job=sendgmr) by 2002:a05:690c:84e:b0:6ef:7d06:1eb7 with SMTP id
- 00721157ae682-6f6eb649981mr495107b3.2.1737567823833; Wed, 22 Jan 2025
- 09:43:43 -0800 (PST)
-Date: Wed, 22 Jan 2025 09:43:04 -0800
+ (user=irogers job=sendgmr) by 2002:a05:690c:61c5:b0:6f3:d334:b7e5 with SMTP
+ id 00721157ae682-6f6eb92efbfmr570387b3.5.1737567826016; Wed, 22 Jan 2025
+ 09:43:46 -0800 (PST)
+Date: Wed, 22 Jan 2025 09:43:05 -0800
 In-Reply-To: <20250122174308.350350-1-irogers@google.com>
-Message-Id: <20250122174308.350350-15-irogers@google.com>
+Message-Id: <20250122174308.350350-16-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250122174308.350350-1-irogers@google.com>
 X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
-Subject: [PATCH v3 14/18] perf build: Remove libiberty support
+Subject: [PATCH v3 15/18] perf build: Remove unused defines
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -80,156 +80,60 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Song Liu <song@kernel.org>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-libiberty is license incompatible with perf and building requires the
-BUILD_NONDISTRO=1 build flag. libiberty is used for
-HAVE_CPLUS_DEMANGLE_SUPPORT. Remove the code to simplify the code base
-as it can't be distributed. Remove the BUILD_NONDISTRO build flag and
-test as they no longer enable/disable support.
+DISASM_FOUR_ARGS_SIGNATURE and DISASM_INIT_STYLED were used with
+libbfd support. Remove now that libbfd support is removed.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config       | 12 ------------
- tools/perf/Makefile.perf         | 11 ++++-------
- tools/perf/tests/make            |  2 --
- tools/perf/util/demangle-cxx.cpp | 13 +------------
- tools/perf/util/symbol-elf.c     | 13 -------------
- 5 files changed, 5 insertions(+), 46 deletions(-)
+ tools/perf/Makefile.config | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
 diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 900be0349de9..513dd5cab605 100644
+index 513dd5cab605..ba60a5b47be7 100644
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
-@@ -949,18 +949,6 @@ ifndef NO_DEMANGLE
-     CXXFLAGS += -DHAVE_CXA_DEMANGLE_SUPPORT
-     $(call detected,CONFIG_CXX_DEMANGLE)
-   endif
--  ifdef BUILD_NONDISTRO
--    ifeq ($(filter -liberty,$(EXTLIBS)),)
--      $(call feature_check,cplus-demangle)
--      ifeq ($(feature-cplus-demangle), 1)
--        EXTLIBS += -liberty
--      endif
--    endif
--    ifneq ($(filter -liberty,$(EXTLIBS)),)
--      CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
--      CXXFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
--    endif
--  endif
+@@ -320,9 +320,6 @@ FEATURE_CHECK_LDFLAGS-libpython := $(PYTHON_EMBED_LDOPTS)
+ 
+ FEATURE_CHECK_LDFLAGS-libaio = -lrt
+ 
+-FEATURE_CHECK_LDFLAGS-disassembler-four-args = -lbfd -lopcodes -ldl
+-FEATURE_CHECK_LDFLAGS-disassembler-init-styled = -lbfd -lopcodes -ldl
+-
+ CORE_CFLAGS += -fno-omit-frame-pointer
+ CORE_CFLAGS += -Wall
+ CORE_CFLAGS += -Wextra
+@@ -349,7 +346,7 @@ endif
+ 
+ ifeq ($(FEATURES_DUMP),)
+ # We will display at the end of this Makefile.config, using $(call feature_display_entries)
+-# As we may retry some feature detection here, see the disassembler-four-args case, for instance
++# As we may retry some feature detection here.
+   FEATURE_DISPLAY_DEFERRED := 1
+ include $(srctree)/tools/build/Makefile.feature
+ else
+@@ -1001,14 +998,6 @@ ifdef HAVE_KVM_STAT_SUPPORT
+     CFLAGS += -DHAVE_KVM_STAT_SUPPORT
  endif
  
- ifndef NO_LZMA
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index a2886abd4f02..398c30b6bdce 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -123,9 +123,6 @@ include ../scripts/utilities.mak
- #
- # Set BUILD_BPF_SKEL to 0 to override BUILD_BPF_SKEL and not build BPF skeletons
- #
--# Define BUILD_NONDISTRO to enable building an linking against libbfd and
--# libiberty distribution license incompatible libraries.
--#
- # Define EXTRA_TESTS to enable building extra tests useful mainly to perf
- # developers, such as:
- #	x86 instruction decoder - new instructions test
-@@ -329,10 +326,10 @@ LIBSYMBOL_DIR   = $(srctree)/tools/lib/symbol/
- LIBPERF_DIR     = $(srctree)/tools/lib/perf/
- DOC_DIR         = $(srctree)/tools/perf/Documentation/
- 
--# Set FEATURE_TESTS to 'all' so all possible feature checkers are executed.
--# Without this setting the output feature dump file misses some features, for
--# example, liberty. Select all checkers so we won't get an incomplete feature
--# dump file.
-+# Set FEATURE_TESTS to 'all' so all possible feature checkers are
-+# executed.  Without this setting the output feature dump file misses
-+# some features. Select all checkers so we won't get an incomplete
-+# feature dump file.
- ifeq ($(config),1)
- ifdef MAKECMDGOALS
- ifeq ($(filter feature-dump,$(MAKECMDGOALS)),feature-dump)
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 44d76eacce49..4a1ed20bff7e 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -68,7 +68,6 @@ python_perf_so := $(shell $(MAKE) python_perf_target|grep "Target is:"|awk '{pri
- make_clean_all      := clean all
- make_python_perf_so := $(python_perf_so)
- make_debug          := DEBUG=1
--make_nondistro      := BUILD_NONDISTRO=1
- make_extra_tests    := EXTRA_TESTS=1
- make_jevents_all    := JEVENTS_ARCH=all
- make_no_bpf_skel    := BUILD_BPF_SKEL=0
-@@ -139,7 +138,6 @@ MAKE_F := $(MAKE) -f $(MK)
- endif
- run += make_python_perf_so
- run += make_debug
--run += make_nondistro
- run += make_extra_tests
- run += make_jevents_all
- run += make_no_bpf_skel
-diff --git a/tools/perf/util/demangle-cxx.cpp b/tools/perf/util/demangle-cxx.cpp
-index bd657eb37efc..36801ea327a6 100644
---- a/tools/perf/util/demangle-cxx.cpp
-+++ b/tools/perf/util/demangle-cxx.cpp
-@@ -8,13 +8,6 @@
- #include <cxxabi.h>
- #endif
- 
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--#ifndef DMGL_PARAMS
--#define DMGL_PARAMS     (1 << 0)  /* Include function args */
--#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
--#endif
--#endif
+-ifeq ($(feature-disassembler-four-args), 1)
+-    CFLAGS += -DDISASM_FOUR_ARGS_SIGNATURE
+-endif
 -
- /*
-  * Demangle C++ function signature
-  *
-@@ -24,11 +17,7 @@ extern "C"
- char *cxx_demangle_sym(const char *str, bool params __maybe_unused,
-                        bool modifiers __maybe_unused)
- {
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--        int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
+-ifeq ($(feature-disassembler-init-styled), 1)
+-    CFLAGS += -DDISASM_INIT_STYLED
+-endif
 -
--        return cplus_demangle(str, flags);
--#elif defined(HAVE_CXA_DEMANGLE_SUPPORT)
-+#if defined(HAVE_CXA_DEMANGLE_SUPPORT)
-         char *output;
-         int status;
+ ifeq (${IS_64_BIT}, 1)
+   ifndef NO_PERF_READ_VDSO32
+     $(call feature_check,compile-32)
+@@ -1286,6 +1275,6 @@ endif
  
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 8140f60af1e5..121db55b9709 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -27,13 +27,6 @@
- #include <symbol/kallsyms.h>
- #include <internal/lib.h>
- 
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--#ifndef DMGL_PARAMS
--#define DMGL_PARAMS     (1 << 0)  /* Include function args */
--#define DMGL_ANSI       (1 << 1)  /* Include const, volatile, etc */
--#endif
--#endif
--
- #ifndef EM_AARCH64
- #define EM_AARCH64	183  /* ARM 64 bit */
- #endif
-@@ -286,13 +279,7 @@ static bool want_demangle(bool is_kernel_sym)
- char *cxx_demangle_sym(const char *str __maybe_unused, bool params __maybe_unused,
- 		       bool modifiers __maybe_unused)
- {
--#if defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
--	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
--
--	return cplus_demangle(str, flags);
--#else
- 	return NULL;
--#endif
- }
- #endif /* !HAVE_CXA_DEMANGLE_SUPPORT */
- 
+ # re-generate FEATURE-DUMP as we may have called feature_check, found out
+ # extra libraries to add to LDFLAGS of some other test and then redo those
+-# tests, see the block about disassembler-four-args, for instance.
++# tests.
+ $(shell rm -f $(FEATURE_DUMP_FILENAME))
+ $(foreach feat,$(FEATURE_TESTS),$(shell echo "$(call feature_assign,$(feat))" >> $(FEATURE_DUMP_FILENAME)))
 -- 
 2.48.1.262.g85cc9f2d1e-goog
 
