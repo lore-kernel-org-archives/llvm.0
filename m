@@ -1,129 +1,169 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB081C5F13
-	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 22:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3581CAA66;
+	Wed, 22 Jan 2025 22:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737585763; cv=none; b=qqjmI/cVS1iHIIlII9u6N2Ucx2h97vemwkauHJ2wMpT8h0vFbQJe1Xx8pYG8DUXF8IH0gaEBT9/ANWwjInn+m0eV3GRciHPsgTef1QxRlNTeOza5G0xfG48VAR7JdOxES/zNZ9verfXfFY/Bwg1f4NE048KGrMX9cyMruzmlNU8=
+	t=1737586781; cv=none; b=KkKMxdIugQpfCnbAC7EV2KQThkCdcagyXN46nTJCPcVOEZoC8jJ/qxhK0ovLCD2eBATEHF0vUmomW5sWT6uAI6O9xeMBo3YpbkAgdo4ZtMhjJJ3gP/aLnWZ17f4tCzjsuZmweB8dwAFgSXZqgYCJuvL3PixLZSLn9qTA+iamWCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737585763; c=relaxed/simple;
-	bh=WxRxLNmAPyUcLLxVYpsAStNNFy32ldZHtuS8YS/VnZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jDUccyn8Mp27J1eACNq0tc5TgQyBL7Xupix76ikWlw0YbmWkdI+Zq8vA8lPwINUW0caXxFzyQlXSISRLr5z6J4MBNltlDKCf62DbGv9V8yBBsb5xF3L/t9WltFyS9ZXDxLkHc+R2XCDfZ0v6lTwYIkwYcwya5mQs4qsDtH07als=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lEL/dRrl; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1737586781; c=relaxed/simple;
+	bh=HH+mzIWNRJ6mwaIxEqdaYZOxqHZ1ytOzSJjW0HOyCkk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=lazGlfDuvC+W1wbePZ5hwDIt5LjkgNcOARN+glvV9xTSKmt4QeUBBDAvE10SxLpH8ITj6tMeLQCJkFOsEn/T4NbmWj5jxzWdPlVXdQj+cy5gzGpCFMiG3xejH0yOiGexgf7PwcqO1xP/0bmXhhZsVLg8KLBYXcSlIS7lNJk7+gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ytnc3MpH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lEL/dRrl"
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3ce82195aa0so59095ab.0
-        for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 14:42:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737585760; x=1738190560; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BdQqEYylhQnR7GmUoqf/ZNlCgiFdYKItjGOj+KMaLn4=;
-        b=lEL/dRrlIsbqOX44YMh2lNTx/NPM339DLNSjlQXC5diVLAKnQKpZnPNsT2JhMysDQ1
-         1CDkJzFr9ZEfr/hyTbg3GeyGuFZ0VeCdU87lOMN4aTnFh+6vSBdhY5d/YQ5M44wJsTDe
-         CAKcNU1ozLSkHzlMZbwQRmQ00kGmBawpwnLzviAE7qrgwR69sjwYI9pLgQd/MmmmbEd1
-         ZGmRrAPxKSjQdIBgS+Uy4AkMtPbXV9dAMomuOs42gxiPwRjXUJJUjbQW3zfh9GK5Se70
-         IVNbirmk5scXwp8SBJSV4UIJs4XR4jIo/ADq+cTN7YKGLxEqxzVBqU0J5S20JgNXE60N
-         +OXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737585760; x=1738190560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BdQqEYylhQnR7GmUoqf/ZNlCgiFdYKItjGOj+KMaLn4=;
-        b=EUG+uEbERz0uVIvvcAca6Y2Ojz6f67fU1C3osp3c2+tRgiLfh7qJxu+j/bheBuQlPt
-         0QIfhWqnuyI0I0h2BXvO4Z0sg2rcOK6RBygUzSoLzX9lugv9Qz7JFTOs1W8T6KeanwRE
-         dd0ibs8WfAnkYUnMrLwZkdOjwztEIJRW/1j5dUXasMv3+x3PahdWDi+WAAHZCypKsXKQ
-         eVmSoIxrfd/+X2xx+2EJXywibqiopRNQDvpu+VuTxx5WT1XNWAsBGPvGAKwwtISRNq1s
-         NDwntOr5pbu1Cn321xFZ7ImukxCnSeaCNZppkhmoTaEM5sFG8h39L2QRlEx3jbiQI6DA
-         wVYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWuMS4nnBff2HVAqEqEU3XSv/1jjkHaaOylvtoIG4YL+Wd4UvFDGepwVDHzdW7tE3giue+@lists.linux.dev
-X-Gm-Message-State: AOJu0YyQDupqqhzbepXu+DyEZM8uQlScgzaq5B2q/YzcjnL+hUOvXd64
-	+6yKLCNG6w5M8au1ipzRELzorUwo0rjocNx8aMBmJdgi2o+l0HGvPEucPTAUXJpYPYeXSdH/Ssf
-	jT+HonUQRA7gkuCVfBTiVh24F0wa5tgduxWeO
-X-Gm-Gg: ASbGncvTDgSg8HJ0Tta8RX/VhnoQGGYN8DSddLaMQ9ktrbAIH0012eVvzhw4Ytrndvu
-	JpslRns/TdAPAW+/Xq46EW/1g1TRIQjLOCna3hoNC1G3SnGNh5t3I56zwfE9MqrWSEvfMt6H+0i
-	t/RBg=
-X-Google-Smtp-Source: AGHT+IGbhqyoaqIScjShtSZ3NK5yA9WeXZYjaOofa6tWB0i9NR0wrImqL2d01e0QGGh2Hae78dUu0r3/IV0owzY7wBM=
-X-Received: by 2002:a05:6e02:1a0c:b0:3ce:6758:24fe with SMTP id
- e9e14a558f8ab-3cfbdd83c7cmr384555ab.1.1737585760333; Wed, 22 Jan 2025
- 14:42:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ytnc3MpH"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 52152C4CED2;
+	Wed, 22 Jan 2025 22:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737586781;
+	bh=HH+mzIWNRJ6mwaIxEqdaYZOxqHZ1ytOzSJjW0HOyCkk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=Ytnc3MpHq2aSLyZ4kzSh/htN9nksBMV055Y+8+VK5yKfprEAyR+/gPb1adyjhyLG0
+	 ghU+1H/rROM6DFW/U/JH+PPT9UjgoFnK2D3CA8T7ncByM6xr/FuxXQJMfHpx4n4WZL
+	 upHNZeDd0IYxvFkKB9JR07LXNCueVDZgGYYqn7L3ysqgQW/c26JO//UnCogumc4bWk
+	 YxvS6NGjae+1VxS2YVyxYkPL8CCafxx71MsEzlm20yd+RFJPD89OV4GFtF8pwv+jd4
+	 7I5ddPSUG4/AsS+dsxEVjnXsI1O39ZscgKDGPwC6DpmxQyv08dFuAGAXn71D7z/qie
+	 kdsN73mXCNCLw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 466FEC0218D;
+	Wed, 22 Jan 2025 22:59:41 +0000 (UTC)
+From: Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org>
+Date: Wed, 22 Jan 2025 17:59:33 -0500
+Subject: [PATCH v5 1/2] dt-bindings: iio: light: Add APDS9160 binding
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250120173208.344231-1-irogers@google.com> <20250120173208.344231-5-irogers@google.com>
- <Z5FwusFZ_bYlu6aK@google.com>
-In-Reply-To: <Z5FwusFZ_bYlu6aK@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 22 Jan 2025 14:42:28 -0800
-X-Gm-Features: AbW1kvZPdNegWIwwKqz2CFL7jWTDXTlWqfLgpKyMAo5cBo1YUpx2gsEF0tmQ8Qw
-Message-ID: <CAP-5=fX4vtKzMtrEbZhqH0dmKpXY3Ke+pVJ-ZbnHnAVuto7Z8g@mail.gmail.com>
-Subject: Re: [PATCH v1 4/5] perf capstone: Support for dlopen-ing libcapstone.so
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"Steinar H. Gunderson" <sesse@google.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Changbin Du <changbin.du@huawei.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Li Huafei <lihuafei1@huawei.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250122-apds9160-driver-v5-1-5393be10279a@dimonoff.com>
+References: <20250122-apds9160-driver-v5-0-5393be10279a@dimonoff.com>
+In-Reply-To: <20250122-apds9160-driver-v5-0-5393be10279a@dimonoff.com>
+To: Jonathan Cameron <jic23@kernel.org>, 
+ Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>, 
+ linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737586780; l=2849;
+ i=mgonellabolduc@dimonoff.com; s=20241119; h=from:subject:message-id;
+ bh=hKuTDSH0XmEpjVDIx28SQC5NbWNqqOrY7dOGPzuivBA=;
+ b=Fq41pZdHJ4spxfLxY1i88NGOEHaoEpjQQ/622cMdXQlnIRCsHITrR7WwyfmQbtn6De/SFp7CE
+ bvaottf/hJHBe2HzYngxx70A7rv1YbcjP4PO9lldmPy5p3+wK/vlCR5
+X-Developer-Key: i=mgonellabolduc@dimonoff.com; a=ed25519;
+ pk=p4tvPfGPfXRyChsgHc6s7HwB6YBl2JqqcP3BXtoDitE=
+X-Endpoint-Received: by B4 Relay for mgonellabolduc@dimonoff.com/20241119
+ with auth_id=279
+X-Original-From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Reply-To: mgonellabolduc@dimonoff.com
 
-On Wed, Jan 22, 2025 at 2:27=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> Hi Ian,
->
-> On Mon, Jan 20, 2025 at 09:32:07AM -0800, Ian Rogers wrote:
-> > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT,
-> > support dlopen-ing libcapstone.so and then calling the necessary
-> > functions by looking them up using dlsym. Reverse engineer the types
-> > in the API using pahole, adding only what's used in the perf code or
-> > necessary for the sake of struct size and alignment.
->
-> I think reverse engineering the types is fragile.  Can we simply change
-> to dlopen if libcapstone is available?
+From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
 
-The current behavior is if HAVE_LIBCAPSTONE_SUPPORT then we will link
-against libcapstone and can assume the header files are present.
+Add device tree bindings for APDS9160
+Note: Using alternate email for maintainer
 
-The reverse engineering of structs and constants I agree is brittle,
-but these things shouldn't change, it is used in this code when the
-capstone/capstone.h isn't present. If capstone/capstone.h is required
-we could change the ifdefs to indicate:
-1) capstone is present and we're linking against it (this is
-HAVE_LIBCAPSTONE_SUPPORT today);
-2) capstone is present but use it by way of dlopen;
-3) capstone isn't present don't #include, don't link and don't dlopen.
+Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+---
+ .../bindings/iio/light/brcm,apds9160.yaml          | 78 ++++++++++++++++++++++
+ 1 file changed, 78 insertions(+)
 
-My thought was that this is less good than the reverse engineering.
-(1) relies on the builder having libcapstone, which at build time is a
-warning that flies by. (2) also relies on the builder having to have
-libcapstone and to opt into a dlopen behavior, they'll need to read
-Makefiles to discover this. (3) gives a less good perf tool with in
-the source lots of __maybe_unused and ifdef-ed out functions all over
-the place.
+diff --git a/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml b/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..bb1cc4404a55760d3f2ef3818d8f5c14782dc5b8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
+@@ -0,0 +1,78 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/brcm,apds9160.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Combined Proximity & Ambient light sensor
++
++maintainers:
++  - Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
++
++description: |
++  Datasheet: https://docs.broadcom.com/docs/APDS-9160-003-DS
++
++properties:
++  compatible:
++    enum:
++      - brcm,apds9160
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply: true
++
++  ps-cancellation-duration:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Proximity sensor cancellation pulse duration in half clock cycles.
++      This parameter determines a cancellation pulse duration.
++      The cancellation is applied in the integration phase to cancel out
++      unwanted reflected light from very near objects such as tempered glass
++      in front of the sensor.
++    default: 0
++    maximum: 63
++
++  ps-cancellation-current-picoamp:
++    description:
++      Proximity sensor crosstalk cancellation current in picoampere.
++      This parameter adjusts the current in steps of 2400 pA up to 276000 pA.
++      The provided value must be a multiple of 2400 and in one of these ranges
++      [60000 - 96000]
++      [120000 - 156000]
++      [180000 - 216000]
++      [240000 - 276000]
++      This parameter is used in conjunction with the cancellation duration.
++    minimum: 60000
++    maximum: 276000
++    multipleOf: 2400
++
++required:
++  - compatible
++  - reg
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        light-sensor@53 {
++            compatible = "brcm,apds9160";
++            reg = <0x53>;
++            vdd-supply = <&vdd_reg>;
++            interrupts = <29 IRQ_TYPE_EDGE_FALLING>;
++            interrupt-parent = <&pinctrl>;
++            ps-cancellation-duration = <10>;
++            ps-cancellation-current-picoamp = <62400>;
++        };
++    };
++...
 
-With the reverse engineered values if you have libcapstone then
-HAVE_LIBCAPSTONE_SUPPORT works as before - no change. If you don't
-then you will be opted into getting something better than objdump -
-albeit it could break if the reverse engineered values drift from
-those in capstone/capstone.h. Less build options also is less
-complexity and cleaner code.
+-- 
+2.34.1
 
-Thanks,
-Ian
+
