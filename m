@@ -1,349 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010057.outbound.protection.outlook.com [52.101.228.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C268854279;
-	Wed, 22 Jan 2025 01:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737510006; cv=none; b=GPsK0YaoL/o+uT96BAAdtinCLC5k7UGzs4qR0ZeqJdDz/yIXSxZPixc9dikYDOLJsvCSncisjJlBl1UVT1biz5yuiIvQc6j5uWVueLIwADzmio16rDQwehcojWzhqWpZoyVe5Y7rI41b23so4s6WBhoGPtqXVkheW+dxYFiLn5E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737510006; c=relaxed/simple;
-	bh=X8svDz7HtPQcW44cGU47R6oNOze1fOKboudbN+MY4wY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iP/B0gdbvhzK7pniVe0Ku+c9rKVieaZsnTWrl+8RU0cwovkaCO4DpbKOy3UWMbIFX4OMKetboPWSZixOo56+pKp1BxKbjqZyQJ6e0mQmNc6Uj9dnZqutX+5zp6swmcczM4TZaoTdQLW3yBu6CZ3RR+8ucX/1t49/pjUDEn60oeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nE9yEoLr; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36C57462;
+	Wed, 22 Jan 2025 01:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737510138; cv=fail; b=ubVCGH5AgdQBTJHWY6/UyTzScuB1w7J9Sx0XDBrI+7Wu/xW6wa87nfEoPgPa9CsiMJOG6yQ1HP26x1Fw83Hu46V6PmRQYOEpxe7OJ9VE2wLw4iTmC9frh5RTmAb6ADAHdLsMHtWoKd1s6HDGUo5yVwY4LPFIk2Bx3kVG4dEYKk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737510138; c=relaxed/simple;
+	bh=PyQG4Zn9lBBTRpyHTGzm2MNPPmSGuNcDi6dQu+cfNDU=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=h0bJxE3nr15cHV8Il2PUUNgosEVug8whcVvRVZdXFLn8Be0NPkm7LRz+U3er+jcjThWhutAsQy8olz0WrR6LqLrAnvY6pJ5ug8PQdV9lddJ2Cx5EswYhZ6/cbCkKAtCvO+3IrfNen0dcmYsWhU+5WIBJuXyc8bj1m+2qb/0CpCQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=TR/irnSn; arc=fail smtp.client-ip=52.101.228.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nE9yEoLr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737510005; x=1769046005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X8svDz7HtPQcW44cGU47R6oNOze1fOKboudbN+MY4wY=;
-  b=nE9yEoLr7Gdhvz6B2a0qJPjwMSaWcJQ7gnGo2DZcc3/MkBl9Am0BCGd5
-   G6oayZpqwAMlwShSb5EvBWL44BTzeWlqPw5eOU0AWIzeAIkUox9mZTL9v
-   xXutmv309pmXymSm4mml+O7bPFA3i/DfM0qaWIh5YMztGXrQIKn1+w6mw
-   WSax+3e4MyaMveNn9nepRRK8Mxob9AMedu0TmERdIxCrg2IZG3XAMeKhL
-   QfT1yKYfrPnTefE354CEkK9qclUyLEJPgQUQSfuhhxhqyTzoKyMef863e
-   hLZxteJh43FRW3sf8nKFm+AKr6vsKsGTc7fEt5/1YF3rw+LFit98TR7Kg
-   A==;
-X-CSE-ConnectionGUID: 9VnslP0vSOWYCrL3xwnWHw==
-X-CSE-MsgGUID: OyPeFShhRwWImLQ/RyFCkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="49366760"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="49366760"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 17:40:04 -0800
-X-CSE-ConnectionGUID: wuHn2nd+Rk+Hj1FK4AmuRw==
-X-CSE-MsgGUID: PWNJUa90RTefNNVdM3knSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,223,1732608000"; 
-   d="scan'208";a="106900654"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Jan 2025 17:40:02 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1taPip-000ZGJ-2h;
-	Wed, 22 Jan 2025 01:39:59 +0000
-Date: Wed, 22 Jan 2025 09:39:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ramya Gnanasekar <ramya.gnanasekar@oss.qualcomm.com>,
-	ath12k@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org,
-	Rajat Soni <rajat.soni@oss.qualcomm.com>,
-	Ramya Gnanasekar <ramya.gnanasekar@oss.qualcomm.com>
-Subject: Re: [PATCH v3] wifi: ath12k: Add WMI control path stats infra
-Message-ID: <202501220916.o70hNSkA-lkp@intel.com>
-References: <20250120184447.658660-1-ramya.gnanasekar@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="TR/irnSn"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xDJkLyemiIFxRXWNeQWNvAwV/GekF4SRrsllmGwJmHIIswJLVWGlxDI+vQ139um8goUfF7h22/HNIcAjWkRDCnTe4Ph0gM47yV1vfXLN4pBjHjRp8nkQK1m+a3BO7rMWhdVf3Ym3IIEglLl1CjaO9Uyme2kBsy/JHOQ2N0hQ8Hl0PkafVEoVbZ/fqetE/52xsQEtshRSsvpVGS/M9VhvbxTZRGj+7Q7vlKxytyyVECMR052j3sSp9+WhgsnAnbD4kHs1UFpZthEA7gEH6kMLAkGYEaYrETj6nzRZlgjp19X8d+ayd6bvbnaNBBQrQk94FBG1ZBASVKv2+sneOsFvRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PyQG4Zn9lBBTRpyHTGzm2MNPPmSGuNcDi6dQu+cfNDU=;
+ b=pfNGk+oPjwT8L4QfCRi01SqcAvodxeCUz/Dx+akOJmNB5WxbKg4y/J6A5OD2FRmiZTwuslrgyW+uGxZFfNrFvLlmS44Wh1ty1SfiIjKu2sAb3XgrQoDemqzLxFC+ztYf/yLpV8Dk7ol1LtQk7ZTIWsEZAIG9dU2VJ7pOW7bK3GVJRH4FQNrGG/mJgC5Qd7oEjY9Hb7OvVVb7IUfzzQrF2+4fwpiVi65oGzJxSppNHfISeYzZF+7TxwGV6wPXisqN1jyJrOEVGK1xNgapuk+QN7a5/2Ayd6ZYkFzNRrergPF64R44AQpSkFabwzsQRtcXxB2LyswwfkU+prCEpcpRFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PyQG4Zn9lBBTRpyHTGzm2MNPPmSGuNcDi6dQu+cfNDU=;
+ b=TR/irnSnZIBKTma/eKr7fuwHSPhRaVUfeOmwkKkXpd9qAbj1lcsWSoVepTKUdmBVBBql+MfKImtXZYckFMhOMse8mbtYDDz+rPl00YSQqCMAi35trawVKA8VWPfiGU98Sst6ZLH2kiNTFxTFBaeBuidgmp5P96opRYQLj5RHzUE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11) by TYCPR01MB7074.jpnprd01.prod.outlook.com
+ (2603:1096:400:c1::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.17; Wed, 22 Jan
+ 2025 01:42:12 +0000
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11%5]) with mapi id 15.20.8377.009; Wed, 22 Jan 2025
+ 01:42:12 +0000
+Message-ID: <875xm7k4jw.wl-kuninori.morimoto.gx@renesas.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [morimoto:sound-cleanup-2025-01-16-2 7/23] sound/soc/generic/audio-graph-card2.c:1013:4: error: cannot jump from this goto statement to its label
+In-Reply-To: <20250122012933.GA1058871@ax162>
+References: <202501171455.ZDrGYjE5-lkp@intel.com>
+	<878qr3k5lo.wl-kuninori.morimoto.gx@renesas.com>
+	<20250122012933.GA1058871@ax162>
+User-Agent: Wanderlust/2.15.9 Emacs/29.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date: Wed, 22 Jan 2025 01:42:11 +0000
+X-ClientProxiedBy: TYAPR01CA0188.jpnprd01.prod.outlook.com
+ (2603:1096:404:ba::32) To TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250120184447.658660-1-ramya.gnanasekar@oss.qualcomm.com>
-
-Hi Ramya,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on d7bef42fc98f2d8f67546d1ea1a3f2c2932fd72b]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ramya-Gnanasekar/wifi-ath12k-Add-WMI-control-path-stats-infra/20250121-024618
-base:   d7bef42fc98f2d8f67546d1ea1a3f2c2932fd72b
-patch link:    https://lore.kernel.org/r/20250120184447.658660-1-ramya.gnanasekar%40oss.qualcomm.com
-patch subject: [PATCH v3] wifi: ath12k: Add WMI control path stats infra
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250122/202501220916.o70hNSkA-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250122/202501220916.o70hNSkA-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501220916.o70hNSkA-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/ath/ath12k/wmi.c:6:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/ath/ath12k/wmi.c:6:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/ath/ath12k/wmi.c:6:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/wireless/ath/ath12k/wmi.c:7504:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
-    7504 |         case WMI_TAG_CTRL_PATH_STATS_EV_FIXED_PARAM:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:7518:9: note: uninitialized use occurs here
-    7518 |         return ret;
-         |                ^~~
-   drivers/net/wireless/ath/ath12k/wmi.c:7501:9: note: initialize the variable 'ret' to silence this warning
-    7501 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/net/wireless/ath/ath12k/wmi.c:7597:7: warning: variable 'ar' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    7597 |                 if (!param.ar)
-         |                     ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/wmi.c:7638:16: note: uninitialized use occurs here
-    7638 |         spin_lock_bh(&ar->debug.wmi_ctrl_path_stats_lock);
-         |                       ^~
-   drivers/net/wireless/ath/ath12k/wmi.c:7597:3: note: remove the 'if' if its condition is always true
-    7597 |                 if (!param.ar)
-         |                 ^~~~~~~~~~~~~~
-    7598 |                         return;
-   drivers/net/wireless/ath/ath12k/wmi.c:7562:19: note: initialize the variable 'ar' to silence this warning
-    7562 |         struct ath12k *ar;
-         |                          ^
-         |                           = NULL
-   14 warnings generated.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|TYCPR01MB7074:EE_
+X-MS-Office365-Filtering-Correlation-Id: 506fbcd9-e37d-4f50-a8cf-08dd3a85fdd9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?1PpY3MDWoVaK1aEF8Rp9/mQeCeJKqf+C5ahATDVWvO/ZLGpzLiHjSb2A3Ywn?=
+ =?us-ascii?Q?bCcbk/gXJkYoA3J8WD2G4jPtvmeBpbkPGzQecras4VfhDd9K7J8iBScGP9KI?=
+ =?us-ascii?Q?QLxitU5x5/EE7aLs31cIJ9BkFArR/LmV5LV2lpA20I8nJut8m5BGhPQ/QHT2?=
+ =?us-ascii?Q?6dvej2bQFSRRPE9ErGp7SHok2sAHs+0vdLgi6Z7Jrti6GFtxsCfd3nopw/Jm?=
+ =?us-ascii?Q?cGmYP71KNMmMocQzG9DMnyoKY+/sM6rmwnG3axoCkXKZt1TdnFWqYCd7XrRI?=
+ =?us-ascii?Q?W4i6n5ku0ZGDmy6OrEOPeSTKckPljs2KmjNtsn3MZ161DwuaNHuV1E+ovpCE?=
+ =?us-ascii?Q?fJ1mUx56qyK7iyJ/DXO0dNnxtNq4Z7NGOBNI8Tyh+gX7K1uZOWCsS5pv1mpF?=
+ =?us-ascii?Q?IVzpr/ZX9oYghZXXi9hUGZTxGwk1I+vcPcP9fw9PzZ0c2r4XY3JmPrDtUFBT?=
+ =?us-ascii?Q?ZTcPhZFoP1zl6Jsz7595ZriJVKedwW6OrndOGvTaad22hUOmwM8amx3MfQJ6?=
+ =?us-ascii?Q?jAUN+i3UiNUyRfc/51LMcJlHrz9PCt493ry5A83blosA05HR8R3Op+ZziAxu?=
+ =?us-ascii?Q?TAuAigFnEDBiqGyYJYx4dd/dpdc1a8bwflKN0jSQQOl8FLzajVNXmoglgKEb?=
+ =?us-ascii?Q?QCVWkFUwwKQeTQeolGc7f7aENSCQXV+GKQsuWatr9HfDTLSZH0HwQ5jKeYc8?=
+ =?us-ascii?Q?OAhp85lNzb3NIav7CxKINphUr5mm8mxWMPznB7E6P2N3bcnwZuRp8sCnd/b2?=
+ =?us-ascii?Q?rLfKoyludW/pHdL4R0lZo8XJLUnz50VZyKznwhfMEFf4ASnW8OJfAEUxqzj9?=
+ =?us-ascii?Q?3tfNJOH5e4fLyX2BDdGgN5v2ZChKMAVpNOt9y8/m2svb8eQaXbR946eAQFo1?=
+ =?us-ascii?Q?f/zxU6BvasQr3hUuIHtUc1kQVGOwoiRl0KbFcDz18bXxARfhTuYpVDyEf82d?=
+ =?us-ascii?Q?MIhDhBVF4niyrQSwGaGsCVpMJrQcj70yk/VDaI6xvrk5aN+5cVk9Oz4hEQ1X?=
+ =?us-ascii?Q?EPetT7oonJqh61G8KQZZWWT96GGHNHNX3FjmkNwOCNV7URmB5wU4pjO2IzKn?=
+ =?us-ascii?Q?LPSdTIviQAD5VTAtvQBC/lyY2SYrT2fqMFXE5uuINo/tWj6PtBn6v1vTysWZ?=
+ =?us-ascii?Q?f1K+23bbR6EpTgSZK9yiK9mGECDuiEoS6AGnMhrhBXDyEH8C9lubpRsnwTW+?=
+ =?us-ascii?Q?Km1vH2v5hyyftKE6zM2zwpDn4lkQcrYpkZixTQ9DouLqYkbBcj9QrNeLbmdD?=
+ =?us-ascii?Q?dSr2TEtLdI5mScAhQAnfzQOPaIJdBiRxXFNmqixLgrgakG1ccBODsKp5u8qa?=
+ =?us-ascii?Q?sDn57e7yH4STbS9OFp/nwA8ffb9PNAdKv2VlV7sTnnBx1mlgTWa5gXKaLUgS?=
+ =?us-ascii?Q?H4kS+biyjRM6sbVxp9XNKiBtv59lUMf1ZuLezRrwK7TPApYu6wFFvuwUlxCd?=
+ =?us-ascii?Q?sRxHbL+dSaqpGsu8Wh4M6mv5WLjH6era?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?LK6ReenobPMwaRuV+RQqBBcgcsKTR8vc8XCrEQWo/nXD9MSwFrdqDuzOs/0h?=
+ =?us-ascii?Q?WY2baUVtxqSLrzmcdhrwc7Qdge4z8C0yg5CgmuT9D9fJJffSpd7fO8Po8Vi/?=
+ =?us-ascii?Q?Wq6v3DByluwixYANoqYvUJEvGgsUFvSCssdLzNCGzL4noorngTYmWDsnAYV6?=
+ =?us-ascii?Q?XA3H3I++aOu8L6tpg6sD21T/v2c7Hkg8nERnYkOGB6Momutq6xUO8F/kBpV4?=
+ =?us-ascii?Q?VBEh5+2MmfkfODFSE/G8d/mTFacQEbauikF5FMeZ+ZnhKc3y1l8V4TLRn2md?=
+ =?us-ascii?Q?zkuCOQiYbS32lKtKGi+Gz+UbDr4ldqrgmHbDz1t5Fw/tJpPTD3ic/Gv6plUv?=
+ =?us-ascii?Q?NvYVIiKSekdyXbDeBlllD0JA6rs8CDN5LJhONj/yqmLZ6sJwd7r1y2ItH0xl?=
+ =?us-ascii?Q?bkd1L21lOUZBw/2RNHC+Zc+C9XX3luim1+L53ZibofuKmhRLv4MOvy9Q/HSb?=
+ =?us-ascii?Q?HBGHkcjIWs5OBEFkspEn6+NEacuRG/6+Xd+JtqOg2qV4mFP0V+wwI+KahQ9v?=
+ =?us-ascii?Q?n/ZiFUc5V3utqlOUco1D1Mr758Oc4Kx6W9PC3mVa41o458U4vfSVVlJROO2u?=
+ =?us-ascii?Q?ESce4YyTC2Ib8WReoE0Nq71dKQsgV9sMhaDe42JWl9VRPHpVZN6AwppsKl6l?=
+ =?us-ascii?Q?1wis2sBVed3+qECVQZoXZi9/tIHAvxvfFq1ltAW4isAondcRT95SoOwfDLJg?=
+ =?us-ascii?Q?ku6P0PRzvUTZbHqLNXXAuSOJ29H8W34IrdLElhjjvPklAgeU1UqdOD0H9zf6?=
+ =?us-ascii?Q?3hFErTZSIZM1+hpat+bTO0q0TX6eWdSgyA/q2BjNSGayC1wc0yZlT5+VXF0u?=
+ =?us-ascii?Q?EzaLfrY77ilo/n+W0ozPnQeM7sUlfH67Ab2PmSWMsAD7zEXXE1iknaNYWpop?=
+ =?us-ascii?Q?2fx0Z2m24fhncIZDGBPwIi7W32FsOuyDutKrkrCbGGR818EHGsRmyefQ2Rmx?=
+ =?us-ascii?Q?JvxKmLoVZMYUdOn3vsjZeaS/oytj0v9GEULQulMjfoUSwzIdYKLBSVhUtzGw?=
+ =?us-ascii?Q?qm3khW1AIv0Om+oRklC6yQGkvcGVsz8j8v4DwUHCs3azASK/l58ztxcN8XrU?=
+ =?us-ascii?Q?KTXxvXTgqUyGZUaEWmu/he1Nn5mcBs7A5uKJItCT9NOkCutFrQca3KR8b1gp?=
+ =?us-ascii?Q?+AFu6M/XFrEfE0WhRK8YOzqeFT56ZTYhy2W3swZ0r+nw8BEtRFaexGqIlK2T?=
+ =?us-ascii?Q?njwmBpocB569wIZAF7E8Q18gmqUIoSNzg/ryrpvCMWIg94VbQMp3JAoEZUN5?=
+ =?us-ascii?Q?3VPejvndOYRgaHPEpwy187AmdPf3tNLYnF9Q5FRcoIoyWdKdIhvDJLIQfAvs?=
+ =?us-ascii?Q?ULq5pVebY3ZIK0wT0fF5ZbJyhty6/n0VZ4Cf4CQhEupmCQCKJQNa0ksLaxnB?=
+ =?us-ascii?Q?p1LhfBnLe86xKPVL5RDfV42YKGMM67NXfLb1NXLlO9Vk17aHQF4aqiZOfHrQ?=
+ =?us-ascii?Q?49BTJzBba2On13M55T90pJGOInbElfZiVQKax5Ax+YtuVuPSNc2Gt+DYxIwM?=
+ =?us-ascii?Q?KIvd4SNaR0DeYzJlIvDAJgY5X/oqZ951tg4s9HMrutiwxa7DR969r89QRK6m?=
+ =?us-ascii?Q?LD8b3bg9o0n91IV34P+2ZrWytcH1X/f8fG83VBnE1yp3JVvw4OaWEaQXdTuR?=
+ =?us-ascii?Q?ADZIEYHwdAWgH2FPbG+OFng=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 506fbcd9-e37d-4f50-a8cf-08dd3a85fdd9
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2025 01:42:12.1267
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ETKovx3/J0Sf5U5ExZJ/P7jigu/6y1HiRG4SIy7nx2uHRHs5B/H/Wsu3hGniiUhLmGBx6Bb0ozIt5nhM/ogTM1JAsdcJj4Anm481nf6xc1huWbYcrOoV2avFazLOD7rV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB7074
 
 
-vim +/ret +7504 drivers/net/wireless/ath/ath12k/wmi.c
+Hi Nathan
 
-  7496	
-  7497	static int ath12k_wmi_ctrl_stats_subtlv_parser(struct ath12k_base *ab,
-  7498						       u16 tag, u16 len,
-  7499						       const void *ptr, void *data)
-  7500	{
-  7501		int ret;
-  7502	
-  7503		switch (tag) {
-> 7504		case WMI_TAG_CTRL_PATH_STATS_EV_FIXED_PARAM:
-  7505			break;
-  7506		case WMI_TAG_CTRL_PATH_PDEV_STATS:
-  7507			ret = wmi_pull_ctrl_path_pdev_tx_stats_tlv(ab, len, ptr, data);
-  7508			break;
-  7509			/* Add case for newly wmi ctrl path added stats here */
-  7510		default:
-  7511			ath12k_warn(ab,
-  7512				    "Received invalid tag for wmi ctrl path stats in subtlvs, tag : 0x%x\n",
-  7513				    tag);
-  7514			ret = -EINVAL;
-  7515			break;
-  7516		}
-  7517	
-  7518		return ret;
-  7519	}
-  7520	
-  7521	static int ath12k_wmi_ctrl_stats_event_parser(struct ath12k_base *ab,
-  7522						      u16 tag, u16 len,
-  7523						      const void *ptr, void *data)
-  7524	{
-  7525		int ret;
-  7526	
-  7527		ath12k_dbg(ab, ATH12K_DBG_WMI, "wmi ctrl path stats tag 0x%x of len %d rcvd\n",
-  7528			   tag, len);
-  7529	
-  7530		switch (tag) {
-  7531		case WMI_TAG_CTRL_PATH_STATS_EV_FIXED_PARAM:
-  7532			/* Fixed param is already processed*/
-  7533			ret = 0;
-  7534			break;
-  7535		case WMI_TAG_ARRAY_STRUCT:
-  7536			/* len 0 is expected for array of struct when there
-  7537			 * is no content of that type to pack inside that tlv
-  7538			 */
-  7539			if (len == 0)
-  7540				return 0;
-  7541	
-  7542			ret = ath12k_wmi_tlv_iter(ab, ptr, len,
-  7543						  ath12k_wmi_ctrl_stats_subtlv_parser,
-  7544						  data);
-  7545			break;
-  7546		default:
-  7547			ath12k_warn(ab, "Received invalid tag for wmi ctrl path stats\n");
-  7548			ret = -EINVAL;
-  7549			break;
-  7550		}
-  7551	
-  7552		return ret;
-  7553	}
-  7554	
-  7555	static void ath12k_wmi_ctrl_path_stats_event(struct ath12k_base *ab, struct sk_buff *skb)
-  7556	{
-  7557		struct wmi_ctrl_path_stats_event *fixed_param;
-  7558		struct ath12k_wmi_ctrl_path_stats_list param = {0};
-  7559		struct ath12k_wmi_ctrl_path_stats_list *stats;
-  7560		const struct wmi_tlv *tlv;
-  7561		struct list_head *src, *dst;
-  7562		struct ath12k *ar;
-  7563		void *ptr = skb->data;
-  7564		u16 tlv_tag, tag_id;
-  7565		u32 more;
-  7566		int ret;
-  7567	
-  7568		if (!skb->data) {
-  7569			ath12k_warn(ab, "No data present in wmi ctrl stats event\n");
-  7570			return;
-  7571		}
-  7572	
-  7573		if (skb->len < (sizeof(*fixed_param) + TLV_HDR_SIZE)) {
-  7574			ath12k_warn(ab, "wmi ctrl stats event size invalid\n");
-  7575			return;
-  7576		}
-  7577	
-  7578		param.ar = NULL;
-  7579	
-  7580		tlv = ptr;
-  7581		tlv_tag = le32_get_bits(tlv->header, WMI_TLV_TAG);
-  7582		ptr += sizeof(*tlv);
-  7583	
-  7584		if (tlv_tag != WMI_TAG_CTRL_PATH_STATS_EV_FIXED_PARAM) {
-  7585			ath12k_warn(ab, "wmi ctrl stats without fixed param tlv at start\n");
-  7586			return;
-  7587		}
-  7588	
-  7589		INIT_LIST_HEAD(&param.pdev_stats);
-  7590	
-  7591		fixed_param = ptr;
-  7592		ret = ath12k_wmi_tlv_iter(ab, skb->data, skb->len,
-  7593					  ath12k_wmi_ctrl_stats_event_parser,
-  7594					  &param);
-  7595		if (ret) {
-  7596			ath12k_warn(ab, "failed to parse wmi_ctrl_path_stats tlv: %d\n", ret);
-> 7597			if (!param.ar)
-  7598				return;
-  7599			goto free;
-  7600		}
-  7601	
-  7602		ar = param.ar;
-  7603		if (!ar)
-  7604			return;
-  7605	
-  7606		tag_id = ar->debug.wmi_ctrl_path_stats_tagid;
-  7607		stats = &ar->debug.wmi_ctrl_path_stats;
-  7608		more = __le32_to_cpu(fixed_param->more);
-  7609	
-  7610		switch (tag_id) {
-  7611		case WMI_TAG_CTRL_PATH_PDEV_STATS:
-  7612			src = &param.pdev_stats;
-  7613			dst = &stats->pdev_stats;
-  7614			break;
-  7615		default:
-  7616			goto free;
-  7617		}
-  7618	
-  7619		spin_lock_bh(&ar->debug.wmi_ctrl_path_stats_lock);
-  7620		if (!more) {
-  7621			if (!ar->debug.wmi_ctrl_path_stats_more_enabled)
-  7622				ath12k_wmi_ctrl_path_stats_list_free(stats);
-  7623			else
-  7624				ar->debug.wmi_ctrl_path_stats_more_enabled = false;
-  7625	
-  7626			list_splice_tail_init(src, dst);
-  7627			complete(&ar->debug.wmi_ctrl_path_stats_rcvd);
-  7628		} else {
-  7629			if (!ar->debug.wmi_ctrl_path_stats_more_enabled) {
-  7630				ath12k_wmi_ctrl_path_stats_list_free(stats);
-  7631				ar->debug.wmi_ctrl_path_stats_more_enabled = true;
-  7632			}
-  7633			list_splice_tail_init(src, dst);
-  7634		}
-  7635		spin_unlock_bh(&ar->debug.wmi_ctrl_path_stats_lock);
-  7636		return;
-  7637	free:
-  7638		spin_lock_bh(&ar->debug.wmi_ctrl_path_stats_lock);
-  7639		ath12k_wmi_ctrl_path_stats_list_free(&param);
-  7640		spin_unlock_bh(&ar->debug.wmi_ctrl_path_stats_lock);
-  7641	}
-  7642	#else
-  7643	static void ath12k_wmi_ctrl_path_stats_event(struct ath12k_base *ab,
-  7644						     struct sk_buff *skb)
-  7645	{
-  7646	}
-  7647	#endif /* CONFIG_ATH12K_DEBUGFS */
-  7648	
+> Not a part of the kernel test robot team but I help maintain the clang
+> build support so I hope I can help.
+(snip)
+> Odd, this check has been around in clang for some time, I can reproduce
+> it with clang-14 using the configuration that the test robot used.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thank you for helping me !
+
+It was just my environment issue.
+I could reproduce it.
+
+Best regards
+---
+Kuninori Morimoto
