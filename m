@@ -1,109 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AB8145FE0
-	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 05:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0698D38384;
+	Wed, 22 Jan 2025 05:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737522732; cv=none; b=cqx8frTIw2umoMilPsiN85Y5CHQMbAn0XCkdJ4qBenObx9XlQwm0o+GPvtb5pYw1SB/OwePdzIGMg+sO7a1kDuY1+dEcoCBjSUriWF1hVYRgu2cZ4fyjcSuJoGs2gm8pBkeRfjZMmspdfUdSng7u/F2OPptOWQrYr1Zin+k6sSs=
+	t=1737524138; cv=none; b=TKWu0+gRrCZZX5VXjlyB1r5cQVZujOVk8W+Hh0+8NDCsG5ca2MdlmmhkFt1+svXwge/9lTZuNxWXffl/nq9kK2/67uAuUDvO9lcas+mzHcr2lxxLjIQ4St78KIXQl9G8sJ0PNNej0INPh/vwP/uUkJAkLLGbgz460ixqtT2QB7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737522732; c=relaxed/simple;
-	bh=f0VfubwrxPXSeJv5iYcF7xOS+x7hsMhB+CMkjrDCd+k=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YXTHpvLTTZE+7Xbas2wmFeS2LFSL8rxAd0Vwkj1IRF7YW8jCqmv1qqb9hs3eRY3A9MXREGuPbWYgIGI5SRVNvqKTBHrzI+pOrzzkK+4dKZeFXMO33Ak/RyNdvJtT67+MZpRwtudKArKh//PdMTUvMRXu4rdgEnlSLmxxbUS6cBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MRsYxB1D; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1737524138; c=relaxed/simple;
+	bh=EhMCmiZM42Z6k1xpRjwwfO6fcpW/OrvZeYBtkQqouK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=c5z+xAH6GC2ryNCICsoYNIsO2dT4IvkA9S8FdUt9mK9pfV2awcfTulPZ9Lhwuqcac3W9QbamjW1K3tn77xFqH6vpcGY6FgdSbRa9/WneWxhsZXb4NFKaQXlhUDjyXG9B5m3mnV3jVetrTtM5dDvdskIDMuLUmuFsrXv216fgiuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DBjIwcrx; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MRsYxB1D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737522729;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=laUTo8F85OeDsorTzlg50yU8vly/eOROINB93ZjxtrU=;
-	b=MRsYxB1Dz5pyd8OT1LA+4/jEP2LaU1r2aJlgVswU0itRMLiO7QsapoJ801iVL90OOPYoWe
-	aPSpt3m4UE3mIdSRJlRWOiW5Ce8PUFM5cOkSQR9V07XKwWFHpuxJscSz7hyoQQ+nAUOnsB
-	aOMdT06fbmipj1VLHki2vBlcL1ngs3I=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-303-sAuqfPUgOpiQbSpy4LwUkw-1; Wed,
- 22 Jan 2025 00:12:06 -0500
-X-MC-Unique: sAuqfPUgOpiQbSpy4LwUkw-1
-X-Mimecast-MFC-AGG-ID: sAuqfPUgOpiQbSpy4LwUkw
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F39C19560BB
-	for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 05:12:05 +0000 (UTC)
-Received: from [172.64.13.55] (unknown [10.30.32.164])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C17093003E7F;
-	Wed, 22 Jan 2025 05:12:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, b394eabd)
-Date: Wed, 22 Jan 2025 05:12:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DBjIwcrx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737524136; x=1769060136;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EhMCmiZM42Z6k1xpRjwwfO6fcpW/OrvZeYBtkQqouK4=;
+  b=DBjIwcrxISFeg5LNgf+v4A5lY6hOlNUL038sJjoGSyM+D2GF9gM4JZuN
+   j7Z9KhodSkTYv+z4CD6rv9g4cM4/MFtjSiyFhSVw13z7ks5VJ5YOQDMxW
+   pkX5ABN2/Rc7c0ue+Tw+GjIRBonabYiJzT9oc8e4qNHimQXq6zUlU7VkE
+   wHcE4CyVH7QSokRS/z1XxjKWeprU7H9F2bWNS6/ONHlfK3xTjEoG3jfo+
+   Pc7qdQve1eUr2j4AXMXspHdH/+Yr8PX4M8qMrGQH+qPUD53xYupUWYJ0a
+   tEYx5R5y1gmzby+sWtpJ7ICM/zIX9rzZXGaGHfYHphtSGMOMWq6njJdWz
+   Q==;
+X-CSE-ConnectionGUID: AEVSMJKPRZSNaV1E+ZAw/A==
+X-CSE-MsgGUID: 9gzkQJkqSPqgvPQ0jS9i4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11322"; a="38117778"
+X-IronPort-AV: E=Sophos;i="6.13,224,1732608000"; 
+   d="scan'208";a="38117778"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2025 21:35:35 -0800
+X-CSE-ConnectionGUID: 9q3StaXTQyqFeQF4PbuWxA==
+X-CSE-MsgGUID: bYbS3uIVRmCeX6M0AGFHvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,224,1732608000"; 
+   d="scan'208";a="112037122"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 21 Jan 2025 21:35:34 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1taTOl-000ZW7-29;
+	Wed, 22 Jan 2025 05:35:31 +0000
+Date: Wed, 22 Jan 2025 13:35:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org
+Subject: [sailus-media-tree:metadata-raw 53/58]
+ include/uapi/linux/v4l2-controls.h:1235:9: warning:
+ 'V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL' macro redefined
+Message-ID: <202501221338.bsfIQBc7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <26284.125012200120600189@us-mta-303.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: kJVd_7A2XamR5IudwV7bOeJahF4uod3bofJxNJDgni8_1737522725
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   git://linuxtv.org/sailus/media_tree.git metadata-raw
+head:   0e59c4e23bb8fe4a5c206cfbeabef1405c6df8b0
+commit: b6809d1089a75ee690514c533a6d7e2e6a5e7353 [53/58] media: v4l: uapi: Add a control for colour pattern flipping effect
+config: arm-randconfig-001-20250122 (https://download.01.org/0day-ci/archive/20250122/202501221338.bsfIQBc7-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250122/202501221338.bsfIQBc7-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501221338.bsfIQBc7-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/leds/flash/leds-aat1290.c:21:
+   In file included from include/media/v4l2-flash-led-class.h:12:
+   In file included from include/media/v4l2-ctrls.h:13:
+   In file included from include/linux/videodev2.h:61:
+   In file included from include/uapi/linux/videodev2.h:67:
+>> include/uapi/linux/v4l2-controls.h:1235:9: warning: 'V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL' macro redefined [-Wmacro-redefined]
+    1235 | #define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL     (1U << 1)
+         |         ^
+   include/uapi/linux/v4l2-controls.h:1234:9: note: previous definition is here
+    1234 | #define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL     (1U << 0)
+         |         ^
+   In file included from drivers/leds/flash/leds-aat1290.c:21:
+   In file included from include/media/v4l2-flash-led-class.h:12:
+   In file included from include/media/v4l2-ctrls.h:14:
+   In file included from include/media/media-request.h:20:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2686:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   2 warnings generated.
+--
+   In file included from drivers/leds/flash/leds-max77693.c:14:
+   In file included from include/linux/mfd/max77693-private.h:14:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/leds/flash/leds-max77693.c:20:
+   In file included from include/media/v4l2-flash-led-class.h:12:
+   In file included from include/media/v4l2-ctrls.h:13:
+   In file included from include/linux/videodev2.h:61:
+   In file included from include/uapi/linux/videodev2.h:67:
+>> include/uapi/linux/v4l2-controls.h:1235:9: warning: 'V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL' macro redefined [-Wmacro-redefined]
+    1235 | #define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL     (1U << 1)
+         |         ^
+   include/uapi/linux/v4l2-controls.h:1234:9: note: previous definition is here
+    1234 | #define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL     (1U << 0)
+         |         ^
+   2 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'chrome-platform-v6.14' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/chrome-platform/linux
+vim +/V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL +1235 include/uapi/linux/v4l2-controls.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1635304921
+  1232	
+  1233	#define V4L2_CID_COLOUR_PATTERN_FLIP		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 11)
+  1234	#define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL	(1U << 0)
+> 1235	#define V4L2_COLOUR_PATTERN_FLIP_HORIZONTAL	(1U << 1)
+  1236	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1635304921-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1635304921-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1635304921-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
