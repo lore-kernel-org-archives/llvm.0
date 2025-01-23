@@ -1,59 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15D74C6D;
-	Thu, 23 Jan 2025 00:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E75BC2FD
+	for <llvm@lists.linux.dev>; Thu, 23 Jan 2025 00:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737592686; cv=none; b=a44C0HAJjAhtfc/OdfomY52CRTCXBnrWX7Sk5lQdQvLE6NjNYcsjZb2opYtyAp81tzhlb+csm9Tyr90gVrbYBSiyTMmnDjBh6yFPRLSYy5jP7/GjlmRsHIMJ3Cp6kFKB5oINpj8c+bDDZfqw2DAuK6QVZ7XgWjs8mMQUpsLtQDQ=
+	t=1737593191; cv=none; b=AlXE8wYkzWjV+rdiKu92J3qUjVNXnFUqQugNneRAgPdWFOBrbK8Wdo7Zw78H0Clw48Agsbp6cXaui34zp3HbRsuWOq1OhUH2GITNdDjgc4MWshGKFN4/Nrex5zrzdC2c5xPlUJpMTEd3kPf7TXRtIjcG00ezAwmnsIP+ZfXKYFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737592686; c=relaxed/simple;
-	bh=IlcjQdetLDJBJIu6k/SEO/LJU5koZErlJ02WyyNhfKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AuGFFpmYumbXa7VXQ6Ovg7nuDSCFbOpuz1L4L2M0cym3XuYO7pglZr2jhq1ZO0dIYRN6g4gLk+oF/XJ1amyUXb/Jf2wdwl4IzJ3VeDipOvFoBqmtqe0HKddKWnPcQWi6y1AHhr78f0ZYrz0PK+bNUknaGJmAAUn6IkcftXDjg+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HROcbKna; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737593191; c=relaxed/simple;
+	bh=U1o0uJbluqbirKA9JKFb2rUwcgzv9vB6gtfSG3Rf2uY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bNTEPQCkARub3UtbE4xWsD+ZBFXQ4kLcBP9ToDLJti7u1yXOicjiF+ahUrHi49x5F82LKJMbJG74lwFlm/PlQPagrp8atw8y1tRU5EL16xOg19wo9UTb7noCNbR/kfKZh0WVgak0NYNuxBlBSdWyxjIna4yyustmBUq8d5LTM3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=NVAUG6N6; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HROcbKna"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737592685; x=1769128685;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IlcjQdetLDJBJIu6k/SEO/LJU5koZErlJ02WyyNhfKI=;
-  b=HROcbKna4fhNXA3CwjZBW3QqBpPCNEyXGF2eIDwvB73nOjGbxucgOYP4
-   YGZY417Enwncp9Mqlmg8d95Q0CvzEO/P9aAPZ3RW0QFrhRfoRlBCwbocb
-   +tmg45uCLeXWdFslzTqaIFPybvvo7FReHdbYR95LgaKM7h3fxE+XWmgC3
-   JqDNHSL8APJF1Zeur06L4VeEvJGZqnr2UQaeqrYA3Wpy8dPd8XsvlMaUu
-   CKYuC2nCbAM0lfy1JP6aUn+ZLQu9b/634BdT18xXjqywQmB7W2RPZIqz0
-   p533KyoM9t38k4LMX4gZFl2iOqhepMji81VlsCQk3wAChj6YSV0O4QR2C
-   Q==;
-X-CSE-ConnectionGUID: zDj52Ra5QYGwJC9EfpjS/A==
-X-CSE-MsgGUID: o5nZqgKuQcGuXg3+V7OUSg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="49066545"
-X-IronPort-AV: E=Sophos;i="6.13,226,1732608000"; 
-   d="scan'208";a="49066545"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 16:38:05 -0800
-X-CSE-ConnectionGUID: Ze9d+ba4RiiopflgkZzbhg==
-X-CSE-MsgGUID: 27kQVz3vR1ShplkT2tXg8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,226,1732608000"; 
-   d="scan'208";a="107115492"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 22 Jan 2025 16:38:04 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1talEO-000aTh-3C;
-	Thu, 23 Jan 2025 00:38:00 +0000
-Date: Thu, 23 Jan 2025 08:37:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: net/6lowpan/nhc_udp.o: warning: objtool: .discard.annotate_insn:
- dodgy linker, sh_entsize != 8
-Message-ID: <202501230818.n7HgoHnK-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="NVAUG6N6"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21634338cfdso6427115ad.2
+        for <llvm@lists.linux.dev>; Wed, 22 Jan 2025 16:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1737593188; x=1738197988; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J9FimL65AT95FTsXLJ1JBaWHHfWY8mNzbtvVRi654Bs=;
+        b=NVAUG6N6Awklc5K9eOuxDn9y/IAWKdcryREiwX6+mkSUUJqvad3fpmYHvgXxVr+pSy
+         XyQzhaJBzSbYLD/JwYALn2Y5aE3yU6FGhdkIW0vFMGaeXdeQx9xSGZWviE5moLJ2DwfK
+         ukFnEE480GefT0ujYWlzZf1VhsMQiwL4YS0VU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737593188; x=1738197988;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J9FimL65AT95FTsXLJ1JBaWHHfWY8mNzbtvVRi654Bs=;
+        b=Yz5+Iy/zhvhUaU1sXeDJvOozbL5NoWd1Cq4jlXjyIokjQiL6nDz9QyorpAZLvlSrXP
+         uNDtYnM3mupAiOV01uh4KY/LOTUiS65C6F6AK325m9o+99QuLPQFulHiISzMdDOy3+Ax
+         DPchG+e08iWkrD/Tnqbzz79BUTEkwWtvclBamLUPswT5Wq8k+onytMNRP2FYnKQ50TxW
+         GShQ1kEHOOnpp8+xWcwEP07Y6AciUFPgfIc+9idvhIbsiZH7d5tPUWhNfDPuUBHaDFSm
+         jIxqP+GCv1zTXIOdX86ovDEnrDPdKYYCadZubSEnNE8dQMcvzd5AgFrAYSMaP5BkI91u
+         +7dA==
+X-Forwarded-Encrypted: i=1; AJvYcCXc9l16Clod0aaDiGKE60PPFm7v6icQxkf6G1Q27DMkxiz02WADFM6VmnaXaEeGQvTVzliy@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyrkqnz7rcYcJG901LNIgil6AXxOjrqv4vEzXXYUxf5YaE/KWTF
+	QjWU1x2MlYsW4QUnJhZobGm6Ve3Ryk7OWYaP3Erxo+9urHx6SGzk7eOEA58n9n0=
+X-Gm-Gg: ASbGncuwMRuZlwiXdhwvEnoZjpgs0iOPK4e9j2Fsnhdfo6nrupeWmYNdOqh0VZUnb/l
+	j+IySJyBfbTYU+EMOmOfBo+msy8b5Exe7+MglUPbvVTTCwCfCIGkNdej8RzDNOghOrHujKdxxYe
+	fOpEq6FqgfoJKUJp4UEapn2pfgbxAMDlYNKwC74UmzJ9J7mhx7XXh14oqueOBYnvk/GulXuYJ04
+	aGYf50MTnm0WInDmQYOk+q7fUl8o1jsTuGrucvSiiQ4DavIPI+eICZvZOAkz0ihhm1CnWHZoVYr
+	tpbLD8hq8sGTeh0DXEp+yTpCukntl74zD2i+
+X-Google-Smtp-Source: AGHT+IGjgpeDWAuLmxBo55PskWfOqvJ4s5qAK5gXG4aCdoCgfrNfYdWdQdBEfR8FsY9FCrj0uaA5vg==
+X-Received: by 2002:a17:902:ea11:b0:215:b5d6:5fa8 with SMTP id d9443c01a7336-21c355c84a9mr344603415ad.22.1737593188352;
+        Wed, 22 Jan 2025 16:46:28 -0800 (PST)
+Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2d3e088bsm100989905ad.173.2025.01.22.16.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jan 2025 16:46:27 -0800 (PST)
+Date: Wed, 22 Jan 2025 16:46:24 -0800
+From: Joe Damato <jdamato@fastly.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	saeedm@nvidia.com, tariqt@nvidia.com, leon@kernel.org,
+	andrew+netdev@lunn.ch, nathan@kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, witu@nvidia.com,
+	parav@nvidia.com
+Subject: Re: [PATCH net] net/mlx5e: add missing cpu_to_node to kvzalloc_node
+ in mlx5e_open_xdpredirect_sq
+Message-ID: <Z5GRYMB8dIJXKGxD@LQ3V64L9R2>
+Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	saeedm@nvidia.com, tariqt@nvidia.com, leon@kernel.org,
+	andrew+netdev@lunn.ch, nathan@kernel.org, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, witu@nvidia.com,
+	parav@nvidia.com
+References: <20250123000407.3464715-1-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,101 +85,84 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250123000407.3464715-1-sdf@fomichev.me>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7004a2e46d1693848370809aa3d9c340a209edbb
-commit: 317f2a64618c528539d17fe6957a64106087fbd2 objtool: Convert instrumentation_{begin,end}() to ANNOTATE
-date:   7 weeks ago
-config: x86_64-randconfig-074-20250122 (https://download.01.org/0day-ci/archive/20250123/202501230818.n7HgoHnK-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501230818.n7HgoHnK-lkp@intel.com/reproduce)
+On Wed, Jan 22, 2025 at 04:04:07PM -0800, Stanislav Fomichev wrote:
+> kvzalloc_node is not doing a runtime check on the node argument
+> (__alloc_pages_node_noprof does have a VM_BUG_ON, but it expands to
+> nothing on !CONFIG_DEBUG_VM builds), so doing any ethtool/netlink
+> operation that calls mlx5e_open on a CPU that's larger that MAX_NUMNODES
+> triggers OOB access and panic (see the trace below).
+> 
+> Add missing cpu_to_node call to convert cpu id to node id.
+> 
+> [  165.427394] mlx5_core 0000:5c:00.0 beth1: Link up
+> [  166.479327] BUG: unable to handle page fault for address: 0000000800000010
+> [  166.494592] #PF: supervisor read access in kernel mode
+> [  166.505995] #PF: error_code(0x0000) - not-present page
+> ...
+> [  166.816958] Call Trace:
+> [  166.822380]  <TASK>
+> [  166.827034]  ? __die_body+0x64/0xb0
+> [  166.834774]  ? page_fault_oops+0x2cd/0x3f0
+> [  166.843862]  ? exc_page_fault+0x63/0x130
+> [  166.852564]  ? asm_exc_page_fault+0x22/0x30
+> [  166.861843]  ? __kvmalloc_node_noprof+0x43/0xd0
+> [  166.871897]  ? get_partial_node+0x1c/0x320
+> [  166.880983]  ? deactivate_slab+0x269/0x2b0
+> [  166.890069]  ___slab_alloc+0x521/0xa90
+> [  166.898389]  ? __kvmalloc_node_noprof+0x43/0xd0
+> [  166.908442]  __kmalloc_node_noprof+0x216/0x3f0
+> [  166.918302]  ? __kvmalloc_node_noprof+0x43/0xd0
+> [  166.928354]  __kvmalloc_node_noprof+0x43/0xd0
+> [  166.938021]  mlx5e_open_channels+0x5e2/0xc00
+> [  166.947496]  mlx5e_open_locked+0x3e/0xf0
+> [  166.956201]  mlx5e_open+0x23/0x50
+> [  166.963551]  __dev_open+0x114/0x1c0
+> [  166.971292]  __dev_change_flags+0xa2/0x1b0
+> [  166.980378]  dev_change_flags+0x21/0x60
+> [  166.988887]  do_setlink+0x38d/0xf20
+> [  166.996628]  ? ep_poll_callback+0x1b9/0x240
+> [  167.005910]  ? __nla_validate_parse.llvm.10713395753544950386+0x80/0xd70
+> [  167.020782]  ? __wake_up_sync_key+0x52/0x80
+> [  167.030066]  ? __mutex_lock+0xff/0x550
+> [  167.038382]  ? security_capable+0x50/0x90
+> [  167.047279]  rtnl_setlink+0x1c9/0x210
+> [  167.055403]  ? ep_poll_callback+0x1b9/0x240
+> [  167.064684]  ? security_capable+0x50/0x90
+> [  167.073579]  rtnetlink_rcv_msg+0x2f9/0x310
+> [  167.082667]  ? rtnetlink_bind+0x30/0x30
+> [  167.091173]  netlink_rcv_skb+0xb1/0xe0
+> [  167.099492]  netlink_unicast+0x20f/0x2e0
+> [  167.108191]  netlink_sendmsg+0x389/0x420
+> [  167.116896]  __sys_sendto+0x158/0x1c0
+> [  167.125024]  __x64_sys_sendto+0x22/0x30
+> [  167.133534]  do_syscall_64+0x63/0x130
+> [  167.141657]  ? __irq_exit_rcu.llvm.17843942359718260576+0x52/0xd0
+> [  167.155181]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+> 
+> Fixes: bb135e40129d ("net/mlx5e: move XDP_REDIRECT sq to dynamic allocation")
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index bd41b75d246e..a814b63ed97e 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -2087,7 +2087,7 @@ static struct mlx5e_xdpsq *mlx5e_open_xdpredirect_sq(struct mlx5e_channel *c,
+>  	struct mlx5e_xdpsq *xdpsq;
+>  	int err;
+>  
+> -	xdpsq = kvzalloc_node(sizeof(*xdpsq), GFP_KERNEL, c->cpu);
+> +	xdpsq = kvzalloc_node(sizeof(*xdpsq), GFP_KERNEL, cpu_to_node(c->cpu));
+>  	if (!xdpsq)
+>  		return ERR_PTR(-ENOMEM);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501230818.n7HgoHnK-lkp@intel.com/
+Nice catch!
 
-All warnings (new ones prefixed by >>):
+Just out of curiosity, I looked at the other calls to kvzalloc_node
+in mlx5 and they seem fine, as far as I can tell.
 
-   In file included from net/6lowpan/nhc_udp.c:13:
-   In file included from net/6lowpan/nhc.h:5:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> net/6lowpan/nhc_udp.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from net/ipv4/ip_tunnel.c:14:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> net/ipv4/ip_tunnel.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from net/ipv4/tcp_westwood.c:25:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> net/ipv4/tcp_westwood.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from net/ipv6/ip6_udp_tunnel.c:6:
-   In file included from include/linux/udp.h:16:
-   In file included from include/net/inet_sock.h:19:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> net/ipv6/ip6_udp_tunnel.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from drivers/acpi/acpi_pad.c:20:
-   In file included from include/linux/perf_event.h:18:
-   In file included from include/uapi/linux/bpf_perf_event.h:11:
-   In file included from ./arch/x86/include/generated/uapi/asm/bpf_perf_event.h:1:
-   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/acpi/acpi_pad.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/ntb/ntb.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
->> drivers/vdpa/ifcvf/ifcvf.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
---
-   In file included from drivers/xen/pvcalls-front.c:7:
-   In file included from include/linux/net.h:24:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   1 warning generated.
->> drivers/xen/pvcalls-front.o: warning: objtool: .discard.annotate_insn: dodgy linker, sh_entsize != 8
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Joe Damato <jdamato@fastly.com>
