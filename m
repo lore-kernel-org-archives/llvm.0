@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BB51C07ED;
-	Thu, 23 Jan 2025 08:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8787515AF6;
+	Thu, 23 Jan 2025 08:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737621989; cv=none; b=f7YMny9ncDWmDofsgWQ+abuNRLg0jc3vMaeQSz/6qc0yeMlySkojJhDTPtnC1ZkCcNID6AcWbOoiopK99iDcFboYdF2UA4O5rZ0MvQa2NrZ3wLRxt4TtspDEXfkHE7RtzpuatTXn/1XZ0i05nlqYiAAZsqHJr64wf5vZStf4uIo=
+	t=1737622651; cv=none; b=BNShCNzc8DrKVE3CdT0CJB2gCd7ss5dKp4kIfAOwsM/9Cqm8AGClIsF/0hGA7Q6qwHB1KfHFJ0rNG+ti3ckMXfkTPM1NdykBzqseMSCZGe9CeVfZ2rWDfoSH8wVfjNGtGTe6/RQI1uoAOzmOSK2VbLbtEdsIxj6Drpyleta+TsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737621989; c=relaxed/simple;
-	bh=8mE2zglnZVlKcFppUtEPanT9kJQchQtFlle5ljj4PnY=;
+	s=arc-20240116; t=1737622651; c=relaxed/simple;
+	bh=Q+uQg7IRKNWxnFFMPXRTE3TTGIaVywdrP5SifrcyvhE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=avFtYN8nhnEty38dyeEcS0/IPdHOEScxhJOInvKmPdtvJCXCgGz077HpJYvr0t0kUpgcKPWEjKFRcsCjz9DyOx1+slfBkeHVAGVZ3oEFwYqIPGNKbxqB10R1oTUDTJXdXdYd+kS5k5qux4GXjynTZuFpMeu8TPjsd2gZlil1w54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DQV+UZBK; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=Si2gPKxG+40z5wcCWLXq2Iz++UgXqxuz9KTB63KaPz82ApfXD0eZEphLn4JkJgrdlGlKmVZ83XSu5CIYDWHtA7+1e0vjS/T9nIDrltveMPUhXuP2wHYBJ+pshsYmmJap1Id+4pSw7JyvWYOMJnFMM2CQ8EccNCXqBcFSY0WtZZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nhjWfWxn; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DQV+UZBK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nhjWfWxn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737621988; x=1769157988;
+  t=1737622649; x=1769158649;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8mE2zglnZVlKcFppUtEPanT9kJQchQtFlle5ljj4PnY=;
-  b=DQV+UZBKSvL+xbAKk/Xb6h7Wc9AE5PazPU6c8p7tP3tNgVVimPD52CeL
-   uX2XrxdUcybZN2AlW2lDkMs8nClOkzH1cwiKcZILh7/eI5jJqBk+vtY95
-   0POzl4DPAJkQDHwFqW4VoeytmQkpgJtBGWK6y8NvL1XHfy4LnfJHf47sg
-   JVhDF88AX1j4Bq6eJyPzcftV90jGFSQKZaFZzcXsavKT3jti2ihSOa5IM
-   lJdJrzcmoG1R+nvOTCnjR0dRmH+A7/uayOtpScLuLPTFG06lrBVt+C+xT
-   7eYsFXBQ4WpcSmnPVQdMen+CJpJZUiuSuEcPgNMBL+uO1XtoLvpBTjI6R
-   w==;
-X-CSE-ConnectionGUID: u/RK3BDjQ3mrtpx065n9iA==
-X-CSE-MsgGUID: EH22oMKUS4KpxUSVIPX5fA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="40935300"
+  bh=Q+uQg7IRKNWxnFFMPXRTE3TTGIaVywdrP5SifrcyvhE=;
+  b=nhjWfWxn33my/TNvACcwPpe2BUyHYbrOb4JrDTavEAVhcPsv1Wf/IefH
+   vW8IwxCDWDNJt6yOuDLgAa+lKcNr2sNtXZecscCqK/A7xguZDqRY4IXZb
+   5jlrGzZCnYsqf9DkClf6R59pgwobRuC9NUWzrRKxzDqwnumH3Zhc7YS7F
+   Z3Do4gjPNNu/OPfuqYeN1aZ9pSzUReu3QefQYPYMS50VVooCKPBy2BYG4
+   CQ3k1GIrk7xy3X4nITXwoJrwJSr30pCx2iKK5/FOmcEYh/y2vg9Cy8E12
+   oKW57li5rII2UGKGxOt8wDbst0Wd9yPh4REtzRiZyt/QVqX2XVIb/sGRh
+   A==;
+X-CSE-ConnectionGUID: N2zZpSaQQf6vf2AOEKM9Cw==
+X-CSE-MsgGUID: wMXMITZ0QkGm2KNfVfCvJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="48610977"
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="40935300"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:46:27 -0800
-X-CSE-ConnectionGUID: njJwaVUlTH6IVJlOWDdSXA==
-X-CSE-MsgGUID: RE6CU6+pQjOqA6Cpa4c8IQ==
+   d="scan'208";a="48610977"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:57:29 -0800
+X-CSE-ConnectionGUID: XqKzY+kiSb6AUrR8citRLg==
+X-CSE-MsgGUID: H3BMA3M2TvigFtL2rgcUpw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="108000488"
+   d="scan'208";a="107508341"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 23 Jan 2025 00:46:26 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 23 Jan 2025 00:57:27 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tasr2-000ax9-1h;
-	Thu, 23 Jan 2025 08:46:24 +0000
-Date: Thu, 23 Jan 2025 16:45:56 +0800
+	id 1tat1h-000axf-1m;
+	Thu, 23 Jan 2025 08:57:25 +0000
+Date: Thu, 23 Jan 2025 16:56:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+To: Sarika Sharma <quic_sarishar@quicinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH net-next RFC v2 5/6] net: phy: dp83822: Add support for
- phy_port representation
-Message-ID: <202501231640.3bytq5PW-lkp@intel.com>
-References: <20250122174252.82730-6-maxime.chevallier@bootlin.com>
+Subject: Re: [PATCH RFC 3/3] wifi: ath12k: add EHT support for TX rate
+Message-ID: <202501231635.HMCvXlli-lkp@intel.com>
+References: <20250122133424.1226555-4-quic_sarishar@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,79 +62,214 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250122174252.82730-6-maxime.chevallier@bootlin.com>
+In-Reply-To: <20250122133424.1226555-4-quic_sarishar@quicinc.com>
 
-Hi Maxime,
+Hi Sarika,
 
 [This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on net-next/main]
+[auto build test ERROR on e7ef944b3e2c31b608800925e784f67596375770]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-ethtool-common-Make-BaseT-a-4-lanes-mode/20250123-014546
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250122174252.82730-6-maxime.chevallier%40bootlin.com
-patch subject: [PATCH net-next RFC v2 5/6] net: phy: dp83822: Add support for phy_port representation
-config: arm64-randconfig-002-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231640.3bytq5PW-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231640.3bytq5PW-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-correct-RX-stats-packet-increment-for-multi-link/20250122-213719
+base:   e7ef944b3e2c31b608800925e784f67596375770
+patch link:    https://lore.kernel.org/r/20250122133424.1226555-4-quic_sarishar%40quicinc.com
+patch subject: [PATCH RFC 3/3] wifi: ath12k: add EHT support for TX rate
+config: i386-buildonly-randconfig-006-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231635.HMCvXlli-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231635.HMCvXlli-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501231640.3bytq5PW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501231635.HMCvXlli-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/net/phy/dp83822.c:893:29: error: use of undeclared identifier 'dev'
-     893 |                                 device_property_present(dev, "ti,link-loss-low");
-         |                                                         ^
-   drivers/net/phy/dp83822.c:896:29: error: use of undeclared identifier 'dev'
-     896 |                                 device_property_present(dev, "ti,fiber-mode");
-         |                                                         ^
-   2 errors generated.
+>> drivers/net/wireless/ath/ath12k/dp_rx.c:1488:26: error: call to undeclared function 'ath12k_eht_gi_to_nl80211_eht_gi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1488 |                 arsta->txrate.eht_gi = ath12k_eht_gi_to_nl80211_eht_gi(sgi);
+         |                                        ^
+   drivers/net/wireless/ath/ath12k/dp_rx.c:1488:26: note: did you mean 'ath12k_he_gi_to_nl80211_he_gi'?
+   drivers/net/wireless/ath/ath12k/dp_rx.h:68:19: note: 'ath12k_he_gi_to_nl80211_he_gi' declared here
+      68 | static inline u32 ath12k_he_gi_to_nl80211_he_gi(u8 sgi)
+         |                   ^
+>> drivers/net/wireless/ath/ath12k/dp_rx.c:1491:7: error: call to undeclared function 'ath12k_mac_eht_ru_tones_to_nl80211_eht_ru_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1491 |                 v = ath12k_mac_eht_ru_tones_to_nl80211_eht_ru_alloc(tones);
+         |                     ^
+   drivers/net/wireless/ath/ath12k/dp_rx.c:1491:7: note: did you mean 'ath12k_he_ru_tones_to_nl80211_he_ru_alloc'?
+   drivers/net/wireless/ath/ath12k/hal_rx.h:645:26: note: 'ath12k_he_ru_tones_to_nl80211_he_ru_alloc' declared here
+     645 | enum nl80211_he_ru_alloc ath12k_he_ru_tones_to_nl80211_he_ru_alloc(u16 ru_tones)
+         |                          ^
+   drivers/net/wireless/ath/ath12k/dp_rx.c:1364:24: warning: variable 'sta' set but not used [-Wunused-but-set-variable]
+    1364 |         struct ieee80211_sta *sta;
+         |                               ^
+   1 warning and 2 errors generated.
 
 
-vim +/dev +893 drivers/net/phy/dp83822.c
+vim +/ath12k_eht_gi_to_nl80211_eht_gi +1488 drivers/net/wireless/ath/ath12k/dp_rx.c
 
-   875	
-   876	static int dp83822_attach_port(struct phy_device *phydev, struct phy_port *port)
-   877	{
-   878		struct dp83822_private *dp83822 = phydev->priv;
-   879		int ret;
-   880	
-   881		if (port->mediums) {
-   882			if (phy_port_is_fiber(port) ||
-   883			    port->mediums & BIT(ETHTOOL_LINK_MEDIUM_BASEX))
-   884				dp83822->fx_enabled = true;
-   885		} else {
-   886			ret = dp83822_read_straps(phydev);
-   887			if (ret)
-   888				return ret;
-   889	
-   890	#ifdef CONFIG_OF_MDIO
-   891			if (dp83822->fx_enabled && dp83822->fx_sd_enable)
-   892				dp83822->fx_signal_det_low =
- > 893					device_property_present(dev, "ti,link-loss-low");
-   894			if (!dp83822->fx_enabled)
-   895				dp83822->fx_enabled =
-   896					device_property_present(dev, "ti,fiber-mode");
-   897	#endif
-   898	
-   899			if (dp83822->fx_enabled) {
-   900				port->lanes = 1;
-   901				port->mediums = BIT(ETHTOOL_LINK_MEDIUM_BASEF) |
-   902						BIT(ETHTOOL_LINK_MEDIUM_BASEX);
-   903			} else {
-   904				/* This PHY can only to 100BaseTX max, so on 2 lanes */
-   905				port->lanes = 2;
-   906				port->mediums = BIT(ETHTOOL_LINK_MEDIUM_BASET);
-   907			}
-   908		}
-   909	
-   910		return 0;
-   911	}
-   912	
+  1357	
+  1358	static void
+  1359	ath12k_update_per_peer_tx_stats(struct ath12k *ar,
+  1360					struct htt_ppdu_stats *ppdu_stats, u8 user)
+  1361	{
+  1362		struct ath12k_base *ab = ar->ab;
+  1363		struct ath12k_peer *peer;
+  1364		struct ieee80211_sta *sta;
+  1365		struct ath12k_link_sta *arsta;
+  1366		struct htt_ppdu_stats_user_rate *user_rate;
+  1367		struct ath12k_per_peer_tx_stats *peer_stats = &ar->peer_tx_stats;
+  1368		struct htt_ppdu_user_stats *usr_stats = &ppdu_stats->user_stats[user];
+  1369		struct htt_ppdu_stats_common *common = &ppdu_stats->common;
+  1370		int ret;
+  1371		u8 flags, mcs, nss, bw, sgi, dcm, rate_idx = 0;
+  1372		u32 v, succ_bytes = 0;
+  1373		u16 tones, rate = 0, succ_pkts = 0;
+  1374		u32 tx_duration = 0;
+  1375		u8 tid = HTT_PPDU_STATS_NON_QOS_TID;
+  1376		bool is_ampdu = false;
+  1377	
+  1378		if (!(usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_RATE)))
+  1379			return;
+  1380	
+  1381		if (usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_COMMON))
+  1382			is_ampdu =
+  1383				HTT_USR_CMPLTN_IS_AMPDU(usr_stats->cmpltn_cmn.flags);
+  1384	
+  1385		if (usr_stats->tlv_flags &
+  1386		    BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_ACK_BA_STATUS)) {
+  1387			succ_bytes = le32_to_cpu(usr_stats->ack_ba.success_bytes);
+  1388			succ_pkts = le32_get_bits(usr_stats->ack_ba.info,
+  1389						  HTT_PPDU_STATS_ACK_BA_INFO_NUM_MSDU_M);
+  1390			tid = le32_get_bits(usr_stats->ack_ba.info,
+  1391					    HTT_PPDU_STATS_ACK_BA_INFO_TID_NUM);
+  1392		}
+  1393	
+  1394		if (common->fes_duration_us)
+  1395			tx_duration = le32_to_cpu(common->fes_duration_us);
+  1396	
+  1397		user_rate = &usr_stats->rate;
+  1398		flags = HTT_USR_RATE_PREAMBLE(user_rate->rate_flags);
+  1399		bw = HTT_USR_RATE_BW(user_rate->rate_flags) - 2;
+  1400		nss = HTT_USR_RATE_NSS(user_rate->rate_flags) + 1;
+  1401		mcs = HTT_USR_RATE_MCS(user_rate->rate_flags);
+  1402		sgi = HTT_USR_RATE_GI(user_rate->rate_flags);
+  1403		dcm = HTT_USR_RATE_DCM(user_rate->rate_flags);
+  1404	
+  1405		/* Note: If host configured fixed rates and in some other special
+  1406		 * cases, the broadcast/management frames are sent in different rates.
+  1407		 * Firmware rate's control to be skipped for this?
+  1408		 */
+  1409	
+  1410		if (flags == WMI_RATE_PREAMBLE_HE && mcs > ATH12K_HE_MCS_MAX) {
+  1411			ath12k_warn(ab, "Invalid HE mcs %d peer stats",  mcs);
+  1412			return;
+  1413		}
+  1414	
+  1415		if (flags == WMI_RATE_PREAMBLE_VHT && mcs > ATH12K_VHT_MCS_MAX) {
+  1416			ath12k_warn(ab, "Invalid VHT mcs %d peer stats",  mcs);
+  1417			return;
+  1418		}
+  1419	
+  1420		if (flags == WMI_RATE_PREAMBLE_HT && (mcs > ATH12K_HT_MCS_MAX || nss < 1)) {
+  1421			ath12k_warn(ab, "Invalid HT mcs %d nss %d peer stats",
+  1422				    mcs, nss);
+  1423			return;
+  1424		}
+  1425	
+  1426		if (flags == WMI_RATE_PREAMBLE_CCK || flags == WMI_RATE_PREAMBLE_OFDM) {
+  1427			ret = ath12k_mac_hw_ratecode_to_legacy_rate(mcs,
+  1428								    flags,
+  1429								    &rate_idx,
+  1430								    &rate);
+  1431			if (ret < 0)
+  1432				return;
+  1433		}
+  1434	
+  1435		rcu_read_lock();
+  1436		spin_lock_bh(&ab->base_lock);
+  1437		peer = ath12k_peer_find_by_id(ab, usr_stats->peer_id);
+  1438	
+  1439		if (!peer || !peer->sta) {
+  1440			spin_unlock_bh(&ab->base_lock);
+  1441			rcu_read_unlock();
+  1442			return;
+  1443		}
+  1444	
+  1445		sta = peer->sta;
+  1446		arsta = ath12k_peer_get_link_sta(ab, peer);
+  1447		if (!arsta) {
+  1448			spin_unlock_bh(&ab->base_lock);
+  1449			rcu_read_unlock();
+  1450			return;
+  1451		}
+  1452	
+  1453		memset(&arsta->txrate, 0, sizeof(arsta->txrate));
+  1454	
+  1455		switch (flags) {
+  1456		case WMI_RATE_PREAMBLE_OFDM:
+  1457			arsta->txrate.legacy = rate;
+  1458			break;
+  1459		case WMI_RATE_PREAMBLE_CCK:
+  1460			arsta->txrate.legacy = rate;
+  1461			break;
+  1462		case WMI_RATE_PREAMBLE_HT:
+  1463			arsta->txrate.mcs = mcs + 8 * (nss - 1);
+  1464			arsta->txrate.flags = RATE_INFO_FLAGS_MCS;
+  1465			if (sgi)
+  1466				arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
+  1467			break;
+  1468		case WMI_RATE_PREAMBLE_VHT:
+  1469			arsta->txrate.mcs = mcs;
+  1470			arsta->txrate.flags = RATE_INFO_FLAGS_VHT_MCS;
+  1471			if (sgi)
+  1472				arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
+  1473			break;
+  1474		case WMI_RATE_PREAMBLE_HE:
+  1475			arsta->txrate.mcs = mcs;
+  1476			arsta->txrate.flags = RATE_INFO_FLAGS_HE_MCS;
+  1477			arsta->txrate.he_dcm = dcm;
+  1478			arsta->txrate.he_gi = ath12k_he_gi_to_nl80211_he_gi(sgi);
+  1479			tones = le16_to_cpu(user_rate->ru_end) -
+  1480				le16_to_cpu(user_rate->ru_start) + 1;
+  1481			v = ath12k_he_ru_tones_to_nl80211_he_ru_alloc(tones);
+  1482			arsta->txrate.he_ru_alloc = v;
+  1483			break;
+  1484		case WMI_RATE_PREAMBLE_EHT:
+  1485			arsta->txrate.mcs = mcs;
+  1486			arsta->txrate.flags = RATE_INFO_FLAGS_EHT_MCS;
+  1487			arsta->txrate.he_dcm = dcm;
+> 1488			arsta->txrate.eht_gi = ath12k_eht_gi_to_nl80211_eht_gi(sgi);
+  1489			tones = le16_to_cpu(user_rate->ru_end) -
+  1490				le16_to_cpu(user_rate->ru_start) + 1;
+> 1491			v = ath12k_mac_eht_ru_tones_to_nl80211_eht_ru_alloc(tones);
+  1492			arsta->txrate.eht_ru_alloc = v;
+  1493			break;
+  1494		}
+  1495	
+  1496		arsta->txrate.nss = nss;
+  1497		arsta->txrate.bw = ath12k_mac_bw_to_mac80211_bw(bw);
+  1498		arsta->tx_duration += tx_duration;
+  1499		memcpy(&arsta->last_txrate, &arsta->txrate, sizeof(struct rate_info));
+  1500	
+  1501		/* PPDU stats reported for mgmt packet doesn't have valid tx bytes.
+  1502		 * So skip peer stats update for mgmt packets.
+  1503		 */
+  1504		if (tid < HTT_PPDU_STATS_NON_QOS_TID) {
+  1505			memset(peer_stats, 0, sizeof(*peer_stats));
+  1506			peer_stats->succ_pkts = succ_pkts;
+  1507			peer_stats->succ_bytes = succ_bytes;
+  1508			peer_stats->is_ampdu = is_ampdu;
+  1509			peer_stats->duration = tx_duration;
+  1510			peer_stats->ba_fails =
+  1511				HTT_USR_CMPLTN_LONG_RETRY(usr_stats->cmpltn_cmn.flags) +
+  1512				HTT_USR_CMPLTN_SHORT_RETRY(usr_stats->cmpltn_cmn.flags);
+  1513		}
+  1514	
+  1515		spin_unlock_bh(&ab->base_lock);
+  1516		rcu_read_unlock();
+  1517	}
+  1518	
 
 -- 
 0-DAY CI Kernel Test Service
