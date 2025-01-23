@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B1620CCF7;
-	Thu, 23 Jan 2025 11:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D442729B0;
+	Thu, 23 Jan 2025 11:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737631689; cv=none; b=SAHyQt6uuuOpJ+Y9evF40RioLfQVgYW7kAjEZAXB7b9hFanB4UxFWy5BBncDNfX+LU74hO3KGXm54zMkcehQuFN3z5bl9ruUrY0wWOyQ5X5+BRq9CKG0fbKwynCeQFQeEXCFTVVLnUJinuUozxLS0II6iADexuZjlVDKXAOdlYY=
+	t=1737633316; cv=none; b=moBy/Ou3+p4MwruvgrJuLsfYIwzUMx2FOWqP29L7pNiUELjJR/zsumPIUl3WnMgU2OqLemXKhTuDRLSWa+8BcsHdTsdklPyPU73gb7fN7XQbio7zojp1L8DHSAVU1LyIAo7TuP9GzEdhw7KdTdFjs/j6wcdaz+6RJJlgpgTIZcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737631689; c=relaxed/simple;
-	bh=vHbakJvsCi9B8Cw1zeMQtg6NtNHek0/F8hDJUHBwZ70=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OWYGGpsCqSdEF/SFe7XZLfL8VyYzn7Y2q0mVXJShGUBTJIbTv1QQOPuhdoUMMHWEuzY72RzZM0HBffv7AgePDyxv3TxGSlGLOK2Fn6TzLln7bO75M6U14+OyqDr7dOWUkehsydE4yFAj2aXKpglEHbPUkxm2Pq38/eD8s2QB6Eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov1rDREG; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1737633316; c=relaxed/simple;
+	bh=P6Km8srof5mA6WEeJG5U9M4FtGeOcGvSbWdKjnJxEWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=T7EmMhCtO3aNG0LCO+tCvX1teFqaUSEl2X5sYaAunbVqmmdqnUPVN8gWoLvwk2m66HJcygYG5H0lI+/LJv/pafOI8+Z+1JqGgnAUsIwQj/kOvIpQh/3+03HanqBr6wJRBWiU9CyOA4LDhxBPxS55cqwHK6UaCNoij7CshMP92JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OVWFHS79; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov1rDREG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OVWFHS79"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737631688; x=1769167688;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=vHbakJvsCi9B8Cw1zeMQtg6NtNHek0/F8hDJUHBwZ70=;
-  b=Ov1rDREGNu5Lr0bZLIFHVY0lwAE96nQyK2TcKoJqVn0joxUSEoe8tmCC
-   nZSaKMnJakylIEQgCW35caHfQKSYksRNBefcDLIVsxy8jUMfzxuOGxjLx
-   V7coONE+RDkLShQPl0Ca/iIKw2bCWkq28ClBPvwA6XJxrKuyebd7qBquI
-   HjiuaGVgYpX8s29UC5PQyEQXGfIUHSoy8bFVYKK919zx5TD8z42wXcnfv
-   0ct+H06YYzcEQtzx3mlrMP2M7V/2qlvXt6xdqQdtFE9em7q8NafYLnx6b
-   wlx/18ZWSj8+mXggp2snGJ1kDZDAWqpRZeTEIsfSugX9qXQZf4PnmCyXV
-   Q==;
-X-CSE-ConnectionGUID: m7HYwKwpSKCvQIkVSgtobw==
-X-CSE-MsgGUID: 7eoWrxoMQMyIjpvVAYiGVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="49537606"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="49537606"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 03:28:07 -0800
-X-CSE-ConnectionGUID: KrzqyaS/T9+rCsyvQcrDYw==
-X-CSE-MsgGUID: Cp/c/NVmToSIOq1WfHyZvA==
+  t=1737633315; x=1769169315;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P6Km8srof5mA6WEeJG5U9M4FtGeOcGvSbWdKjnJxEWQ=;
+  b=OVWFHS79SCaB9qE0JJT3wa3BGB0Mm/E0IsmPw66+Z9WBC+5CFUsfTwbS
+   DQO2+PfAgqPV+uot1WokFFOuNpuwUUo2SkztJ2H4twZ4s2Mzupt+CDd6b
+   WphgzyJFSLPZHOKEL1PRHLY3bHdFBOPzu9ec5uQtwgFUQyF4fzwIHT4PT
+   bxkf/tLoJp3ZuQcOuL9uyG8XNj6mSRzYOx2ghwKgOUsqJoh/MkuIFqmdI
+   prdLt9bRWpT4QLs8x8GrjcJrIWSANsisJ/ovVvY1ukyhW2GciKbPy0+On
+   RLIHHiXn8SVh/Snx+UYsHLiZU2BkwyQAUOBae2C0onqKb1JPhZ+Q3JJq1
+   g==;
+X-CSE-ConnectionGUID: P5b/3jBfQfuHcXFxl7iSRg==
+X-CSE-MsgGUID: mKWX3SPuTguPH+xc9aSvFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11324"; a="48792614"
+X-IronPort-AV: E=Sophos;i="6.13,228,1732608000"; 
+   d="scan'208";a="48792614"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 03:55:14 -0800
+X-CSE-ConnectionGUID: aM53XUAsTUqDYIJkqa2F9w==
+X-CSE-MsgGUID: opHTRDHfS7+rRSutNK/pjw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="112077678"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="112403311"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Jan 2025 03:28:06 -0800
+  by orviesa003.jf.intel.com with ESMTP; 23 Jan 2025 03:55:13 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tavNT-000b7P-1m;
-	Thu, 23 Jan 2025 11:28:03 +0000
-Date: Thu, 23 Jan 2025 19:27:26 +0800
+	id 1tavni-000b8e-35;
+	Thu, 23 Jan 2025 11:55:10 +0000
+Date: Thu, 23 Jan 2025 19:54:20 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/devlink/dev.c:248:20: warning: arithmetic between different
- enumeration types ('enum devlink_reload_limit' and 'enum
- devlink_reload_action')
-Message-ID: <202501231939.ZuULxMdQ-lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:slub-tiny-kfree_rcu 7/7] ERROR: modpost: "kvfree_call_rcu"
+ [kernel/rcu/rcuscale.ko] undefined!
+Message-ID: <202501231907.BX4JFBtN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,87 +62,31 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: Moshe Shemesh <moshe@nvidia.com>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Jiri Pirko <jiri@nvidia.com>
-
-Hi Moshe,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   21266b8df5224c4f677acf9f353eecc9094731f0
-commit: c6ed7d6ef929a4502cc89c90a3c57e8814f4fcc9 devlink: Move devlink dev reload code to dev
-date:   2 years ago
-config: arm-randconfig-004-20241229 (https://download.01.org/0day-ci/archive/20250123/202501231939.ZuULxMdQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231939.ZuULxMdQ-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-tiny-kfree_rcu
+head:   d8cf97ccfbdeb8f997ea14888a148a02384b3188
+commit: d8cf97ccfbdeb8f997ea14888a148a02384b3188 [7/7] slab: don't batch kvfree_rcu() with SLUB_TINY
+config: arm64-randconfig-003-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231907.BX4JFBtN-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c23f2417dc5f6dc371afb07af5627ec2a9d373a0)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231907.BX4JFBtN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501231939.ZuULxMdQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501231907.BX4JFBtN-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from net/devlink/dev.c:7:
-   In file included from include/net/genetlink.h:5:
-   In file included from include/linux/genetlink.h:5:
-   In file included from include/uapi/linux/genetlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/dev.c:9:
-   net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/devlink/dev.c:248:20: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-     248 |                 stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-         |                            ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/dev.c:349:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-     349 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
-
-
-vim +248 net/devlink/dev.c
-
-   238	
-   239	static void
-   240	__devlink_reload_stats_update(struct devlink *devlink, u32 *reload_stats,
-   241				      enum devlink_reload_limit limit, u32 actions_performed)
-   242	{
-   243		unsigned long actions = actions_performed;
-   244		int stat_idx;
-   245		int action;
-   246	
-   247		for_each_set_bit(action, &actions, __DEVLINK_RELOAD_ACTION_MAX) {
- > 248			stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-   249			reload_stats[stat_idx]++;
-   250		}
-   251		devlink_notify(devlink, DEVLINK_CMD_NEW);
-   252	}
-   253	
+>> ERROR: modpost: "kvfree_call_rcu" [kernel/rcu/rcuscale.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [fs/autofs/autofs4.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [fs/orangefs/orangefs.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [fs/xfs/xfs.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [fs/ceph/ceph.ko] undefined!
+ERROR: modpost: "kvfree_call_rcu" [lib/test_vmalloc.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [drivers/gpu/drm/etnaviv/etnaviv.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [drivers/infiniband/core/ib_core.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [drivers/infiniband/core/ib_cm.ko] undefined!
+>> ERROR: modpost: "kvfree_call_rcu" [drivers/infiniband/core/ib_uverbs.ko] undefined!
+WARNING: modpost: suppressed 26 unresolved symbol warnings because there were too many)
 
 -- 
 0-DAY CI Kernel Test Service
