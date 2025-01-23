@@ -1,184 +1,214 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CA020B81F;
-	Thu, 23 Jan 2025 08:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737620002; cv=none; b=kHOQcY+BF/BiHypUBsScGJBb55sBByzGgmRSZfUDsuamFcgprt6egfoL+jAtkNf16s+xAF3AXvYb6cF30H0aAovxB9LFm5Wlx0gsEy7B45WzOpPm9OHlIIJx2A9EvtfPBxqVeId7INCqUkaJOYKYmnzE+dnmAW/AGDLHsLW4xHY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737620002; c=relaxed/simple;
-	bh=jcCdauiHNJa0pjJlx3jdbeh1z1RLOy70cymrXf3sNzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lYd+g+PJ11WklR1zokojqgSwk7OeI/gT+mdLWVCN+j5w0E3OoeSZpPmF9N4YijNnOl+gXFSheNlU6Y6urL+tBUU6hyJ1bE5+c068V8uV6IzCL9o87i4PuPpiXSK7CNTGub4t5UH20FuXnXSEjNLOoC3ss98JPpCrOCEGYBU6C1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hy0ume0G; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A514202C2B;
+	Thu, 23 Jan 2025 08:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737621329; cv=fail; b=ECn/EuLaKigpI+e0esXr8mu2T89ss1a5R0vqWE3uYxOb3sHDyci1oeXztbeHAlnBgEjkIXknIUSREx/XJqVEER8Udst+3BpbeCJi3EKSucMH0wBflZMwa5CV5AVY0KRhz4NNAmrltUxZ9Ln/pgQW2h+rNa9I6LQdXGBuBRKcdD8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737621329; c=relaxed/simple;
+	bh=fVrpCzQL3dRD8qHNHCmjJEaV044znRVUyIJV6oKOkt8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rkPEq5tmFjq0Akeb2BX7g3zHugmCCViR5pHNi9Dj/LrKVqmx8n7Kq0d/nVmkE17k1XR5+RNcKKZGhvvuuiQaAfzUWUJwBk0AeyryypZCMt4CWR9zIXRCNbxryttLyZrg8yAWMx1zN15XUtWuxzHavyQFN1S+sOUGC2P4WbIcZos=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuERGCXt; arc=fail smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hy0ume0G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuERGCXt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737620000; x=1769156000;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jcCdauiHNJa0pjJlx3jdbeh1z1RLOy70cymrXf3sNzc=;
-  b=Hy0ume0GGWjH0jRBlsiFqExC1nI2lejTd6JjDmf6ch56K+xUKmVmosyF
-   dlAhmueDTPWqy6/YTS788fPm1kCJtOEAOxM8qcawOW8w7cAyfuU6vPbqO
-   WpIUJ34cuQMCyMFw8MWlVc9W8AiW+rXQfGUD93jxhnEYJGlm5QIGEW1e9
-   4WmaG9NuBPHYZOQXrChk1xRYvnJ7XWeFJTBZl1xqQlJCSa/aL0aQMYXK0
-   mY47J22QBlxX7E5lHDhUI8zjGm85s3C8cZ2ROGUV/qMzET6sVmshC/z0W
-   IHVwiykXK7+YkTpWV8sBS/i9phuLpxx/vk8kJ3f4B9WAHBy5czg4Hunbv
+  t=1737621328; x=1769157328;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=fVrpCzQL3dRD8qHNHCmjJEaV044znRVUyIJV6oKOkt8=;
+  b=BuERGCXtOXi6b5Hw02TEA30blKvd6n0kbgY+s67K1HrK2LaI0kLP4gyR
+   09Jf4oYIOVzxwuMOFHae0Pn5Q1FC9L1MZl9X+6ynrY6qoVnOM+3nMw85N
+   i3SJlhL3d0HnjEtsHkI7Cooea/lhvNCPuTXQcbyWIPxw/PhUpN2rh+wMZ
+   KLBjbTw3ZEy6hD/Gs5UINHJkRGsMpkVfImRmV2J5eMrxZTeRrGg8uHx26
+   /6BMFJawHHa94YMPrioEO8h2duDJ4Dje/bPZ2Y9ThBo8oXZ0z87ou8sR6
+   8UL1FElQGnch2eZLzYg8vz2ODRRXPBVyJG2nrHkmEA5plUiPSJlkk2+kr
    A==;
-X-CSE-ConnectionGUID: u6JhsPfFQBisgfwGBtbwdg==
-X-CSE-MsgGUID: 76ic5AnjTQW1o20NlM98cA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="25706841"
+X-CSE-ConnectionGUID: FJd2q3xST4ea71yCRObYdQ==
+X-CSE-MsgGUID: oW1IwFtVS0OblPpxxoyVUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="25709554"
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="25706841"
+   d="scan'208";a="25709554"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:13:18 -0800
-X-CSE-ConnectionGUID: aUhZJh7CR0GVuBWiasvwBg==
-X-CSE-MsgGUID: TkgXNxTpQIm/3UweijlX7w==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:35:27 -0800
+X-CSE-ConnectionGUID: Fx0EYaWeSiKPCELzjHqN4A==
+X-CSE-MsgGUID: 3tr9YC6+SZaShXjA+eoXJA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="112414187"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 23 Jan 2025 00:13:18 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tasKx-000auw-0O;
-	Thu, 23 Jan 2025 08:13:15 +0000
-Date: Thu, 23 Jan 2025 16:13:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bard Liao <yung-chuan.liao@linux.intel.com>
-Subject: [thesofproject:topic/sof-dev 16/18]
- drivers/soundwire/debugfs.c:301:3: warning: format specifies type 'long' but
- the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202501231655.XTYbJ9rZ-lkp@intel.com>
+   d="scan'208";a="112419981"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 23 Jan 2025 00:35:27 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Thu, 23 Jan 2025 00:35:27 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Thu, 23 Jan 2025 00:35:27 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Thu, 23 Jan 2025 00:35:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Mrmpsy7nXgqM5EQz8NX8j6/PbRcBaMuXwT7ss9vUoVA53GMIG5jJm4cDBJE9hU6sa/CZ8NXhHYCTiJp7IBijq3961nRMtdwVRNw8rRQ4UBpCCpERtGJeib6Z/Ez/8tJbc5tdIsNNPkJ0NS/+yne086yeTtKSIsKa0wdBmPyAkSijMeUnN+aBL4CyNU3JjkSGzUfSIB8G39LGQQz1+ksLkWbrYh4uH/BsmAD/IR65fIcYK57eUKfHU0a2oFgFVPVlomCfz5ih45J6xKYEbCdsCCekTcvNHPHM5NqO+TJAPK+irUeMLVc5ZwM6uWQ4M6yojih6k2jSkF62mu9yZocpnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JPDzMDrRtEaTpH3yQZlW9RzrM6KgmcfesY53Yz2d0ss=;
+ b=Nhi3WlJj/5dBJsqHfCTRMYWq+vbJB+iJqRFL+7trZcn3wXJxcQkwkbibIDgZtVA8ZTMJaHwPnSfzKsCIASDbYPh8lPVAic+TRHj5Luslw+C2y0b65K/pqygGe48RF0s7p+s6QMWhVZmthIxhMN8p+VLjo+NO1eg/43TLUA3oD2v4WitKqMcPIw/WmGcjkSjsH6EoXqb7Br4UfkpvSskNwjnMRNag5go4sThEZTA/iDOkg2mRntKvE+V/fCIZ6lA94zRoTpLjgCMl0QsC4x+bg5p0ZzTUcVNsx/3NbD7hRb8T1/QdQEl3waA/eFbaPXyQxwxEHDb8MsSoC9Br+qdXhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH8PR11MB6611.namprd11.prod.outlook.com (2603:10b6:510:1ce::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Thu, 23 Jan
+ 2025 08:35:24 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fdb:309:3df9:a06b]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fdb:309:3df9:a06b%4]) with mapi id 15.20.8356.020; Thu, 23 Jan 2025
+ 08:35:24 +0000
+From: "Huang, Kai" <kai.huang@intel.com>
+To: lkp <lkp@intel.com>, Paolo Bonzini <pbonzini@redhat.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "Chen, Farrah"
+	<farrah.chen@intel.com>
+Subject: RE: [kvm:kvm-coco-queue 39/125] WARNING: modpost: vmlinux: section
+ mismatch in reference: vt_init+0x2f (section: .init.text) -> vmx_exit
+ (section: .exit.text)
+Thread-Topic: [kvm:kvm-coco-queue 39/125] WARNING: modpost: vmlinux: section
+ mismatch in reference: vt_init+0x2f (section: .init.text) -> vmx_exit
+ (section: .exit.text)
+Thread-Index: AQHbbVMKBkgBuXo+D0WtIKxpAV33FrMkCA2g
+Date: Thu, 23 Jan 2025 08:35:24 +0000
+Message-ID: <BL1PR11MB59780AA56D67068C906A40BAF7E02@BL1PR11MB5978.namprd11.prod.outlook.com>
+References: <202501231202.viiY8Abl-lkp@intel.com>
+In-Reply-To: <202501231202.viiY8Abl-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH8PR11MB6611:EE_
+x-ms-office365-filtering-correlation-id: a39c5562-fdb0-4c05-c660-08dd3b88e1dc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?K/KdhVmM1D9X0dHQYAW6A8aqizxgFAiY861vLsGTWjWA+v4ed20RNlHwDYk6?=
+ =?us-ascii?Q?gZg+jfO9YITilSIF2dOexL/+9UsfdE2HlzrplKwILCob2X+RWN2k1MTDLV3V?=
+ =?us-ascii?Q?kZCI21xVD77HSVfvoN0YsVFUOWVBC12NLGGtTCZD9yiUPyg8cDmKG0xg+X79?=
+ =?us-ascii?Q?SOEYBJVM8X2iu2AkWU8rxEwwlylFAhSsbIm6g1FjoDCZK8szUBi6HpWv2AMb?=
+ =?us-ascii?Q?6X2kAwWfYJuo925PG9XW2EU3ucoh42ebi1nu0CF/rDzES0sT1TbcmVwlk9hB?=
+ =?us-ascii?Q?K3uEM15olcyXyvr2xlM6xTYRQqXmQojOOSyCjexan/QpdYlGGONRq9uLqvw/?=
+ =?us-ascii?Q?4+uAiwoYL9LatgaO1iwHpSJm3JtOtM3xqszjQUCTTgVlG5Oc5MdNn7ciNzM9?=
+ =?us-ascii?Q?LAQA6grdc2Dinv9ztJuxsRFE5UOu1GLMR90NkUN+R0fllLiVI5K8px9PcIXf?=
+ =?us-ascii?Q?6f283em033g5tI+/CY8gwHm9We11dBVbkNRSj3KzEiqHUPe04fZVSaUD8Whj?=
+ =?us-ascii?Q?aGbcqLQcjybiKR1al+iB0/RCZPGSuvD5LeiiuW+aNkKvXmDuGIHTvtr573rp?=
+ =?us-ascii?Q?S6ct/AQzXmqUpD9DZjX9bpdaLeoW7qVGBcdm6F8VSP+FM4Yshd0NGGcQTuX1?=
+ =?us-ascii?Q?J3HpPazaMILo02Wm9a4JPcjGDtO83Hjr/JX/YQfp5RuJCe4HesoB9cM+w1j2?=
+ =?us-ascii?Q?EFPYNUepZS79ofFMbX9DtnVjgKo2XINrLcdhP1rBJpiQNdZuIgmyYSR1BvVh?=
+ =?us-ascii?Q?zgI9dKts5zAZ8F58L7IQP2CdQ283RN6+VJUzyvKcHPlJGYpmbwJw57WShd1C?=
+ =?us-ascii?Q?tYK56kLWPKKt9tFym12fONVfz4wPn2VhvLUFw4AZXUklaFgjcUIJqUl7K4O7?=
+ =?us-ascii?Q?4caDIliIH4812zr2Ho+QCzllU+pk5x1ZSMUztUvjwMv/uHbh70TtuF296P4R?=
+ =?us-ascii?Q?hgLYxtKmu4wLt9O5ahxv+0ANZIVfnbHTLCVQ8biDfhiwTxwSNSgUygRH6E21?=
+ =?us-ascii?Q?xhzuYzVbY+fMn+Y/0Y03qvWfYQvA0vz5bPbrWOcVqfgjolCMc7uDOO4dQbej?=
+ =?us-ascii?Q?QgdmHQQVBAfkOZQ4VD1LzLhZwWiiGp/fGBghX0BcXS5rHu9z/wMzfeIaueAS?=
+ =?us-ascii?Q?W2VlzfNHjHBLStnCArSllfChtgGawg/nDi9S7olFYRXGoUouvci+PQkYsx2J?=
+ =?us-ascii?Q?nXxIt83wUFeU+4XwCcxYKQL2u/jzFlbw+YngkbHUHWybQa7lB+crmRSspBsf?=
+ =?us-ascii?Q?Zo2zk/G2c9RKCrA427x19QRaRKO/22skzw9gZDG/0CvcJugNdjGszuXkEgvF?=
+ =?us-ascii?Q?m11F8lMHYmgghm/LSjeh7NqZTexlTkuWmawboJreiGzkV6bDuN3WqWTQVzaP?=
+ =?us-ascii?Q?8nskLRKtf/kTI2HX8unHnjUYPh6GDLuBqie08GMZ/mncIQfQmw=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?shJ8ZI+a5v0wM8ep3dtCZmnd6BoIyF7oNYhF21pQnBxvR7zbaq2cBI6bODfV?=
+ =?us-ascii?Q?cwtSdinZDtgjYH0cL3Uy0OkxNEzWIEynAN1zvWvfW/LycIi1tisuAzOtxkK1?=
+ =?us-ascii?Q?AigjrE5uFBf0T2bzos4p/nkfq01FgI46oT7sH1BmyxEKN7I071hXnXhOh1bw?=
+ =?us-ascii?Q?2GlH2+y+OwWjOIy8JSfF7zdTIIBoQmNQlQbtcIeqigXkA/pD5fH7rQjyiRal?=
+ =?us-ascii?Q?dciFzxvXr0O0v3AfQiC5frdhnf+LyJ5eJoCuc76f/7/UJ/D7YJK+wpedmZs8?=
+ =?us-ascii?Q?8sogIxfBfxxrZ4Ve4SvcMHlRc5aH8RHzphcgOceMW5qw9m+5+0b+ds8lG/Hs?=
+ =?us-ascii?Q?qJ9LPBdEw5UmMBat22z23ipl7rL+B9Sk+AC/noEoGCMj2C8lzMrHUbeGOP5R?=
+ =?us-ascii?Q?7bnhjBVZewDC1nN7DJ66cgpkaQWfCmHFK4iVhxEhqmaMVU3UBwvfUu6VoEel?=
+ =?us-ascii?Q?7twDmQeSWmvtab0A6jvwBC0lh9gnIE7dT/Hx31WgwjJw8tHPmU93hn5ZHa0h?=
+ =?us-ascii?Q?tOQLxaHrM6LpNwryJ+3ns/KyrcLRm2WuLrO/KN21wB46CLys9zVXhRzF3P2b?=
+ =?us-ascii?Q?hP6w+nzJ+hRoq7bIYzRdYV4EWGJCUsZH3jcpCpShTKzcs2m+lSFI/uMXwfcM?=
+ =?us-ascii?Q?LwFq76M0CkZ+FdFvBzFa3ak58h+TjryMOX8k41dA1lxzEskDlMqiElvlJXTX?=
+ =?us-ascii?Q?NOOzd6DCrMwao7cHDwMKz55rKLJQZ1O3sDvm3R+Pxrr0GoKALJa6F1HICwrc?=
+ =?us-ascii?Q?W5JhRQPwmqW+sEhZJp3W509OJvnarE27yRMs1jI+KOFlCzlzUZlb4HfVyMB+?=
+ =?us-ascii?Q?yO83QvgKDzeen8AOICV+/SyxMtDD5LgJacPiaEGRxB/ESQdqPz64WlC+d5pJ?=
+ =?us-ascii?Q?CvI+1f1m3LQ/UMWZUKqK4Y6V89tlGPHu0CM35rMeZq+ezGfOkoO8789wIkly?=
+ =?us-ascii?Q?5ta45H962PTiRReQlywik2mdJOnciII4IZ4sVc6VhO3UKWnIhTS57X03kklS?=
+ =?us-ascii?Q?z9nr8MpLPOuGdaas4ASTuQpNGgK2rQxLju/ZqaJP+QbZiy+759YVUcBL/d0U?=
+ =?us-ascii?Q?fr4YMu2m3fSpOfQGJgTAIx1Oiwh/kAaJAVSVX55JiayU6Kxe1LpKBRISxzS9?=
+ =?us-ascii?Q?DoYd8RWfmIgL79iWw536Db39r6OG7ozmPE8nfs7Nuxde5KLH6JMDft+cjsPk?=
+ =?us-ascii?Q?wtk32YrVZfhIAGydIt2o+yjEA/vK7j+kILghFaNoqvvBn5g6imfwo8T8iDFK?=
+ =?us-ascii?Q?pH8DAkezRcZ8tzqayURCT5uTw9ApYFQ3gfAil3szCFdUDfD6/l0b33964He6?=
+ =?us-ascii?Q?8rRe1GRX/zF92Rt1FJshp8rrv3HepuxdaWwqVmw1GEmWytfcqWQdDoDz1m95?=
+ =?us-ascii?Q?U0vFXeOmJJ34QpnUPRV4TXg6S4WV0TEAL5oknRu0I33NDBpzzvV3Cd1iWrWq?=
+ =?us-ascii?Q?9L4P1DbMCzB1v63rcgqa5u8sMlsqqauzoCPUm4Jf314Uxr8F9LKoKxHCf0XB?=
+ =?us-ascii?Q?IK44tBb9A1F72qpU0hbrkmCZxd2udClCS47VrAmaMbw63bxfgO3W7Nmri+xN?=
+ =?us-ascii?Q?owRcl528bvN9mb6ASY5IMBbaDP6gNOX1vTT3Dq4v?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a39c5562-fdb0-4c05-c660-08dd3b88e1dc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2025 08:35:24.7269
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: E1KrHvJu0HMHNa8fjajzrtyFXeUBoE6vOV4XDM7KlzFkHEDofKggdwWAnG83bSsRn/tOi2sK8DNTa5BMW1me8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6611
+X-OriginatorOrg: intel.com
 
-tree:   https://github.com/thesofproject/linux topic/sof-dev
-head:   965963c9c3d7f1433fa353a420b31af0ca279a83
-commit: 63c78350b3707920cb42c0dbb86cc454aacfb6a5 [16/18] soundwire: debugfs: add interface for BPT/BRA transfers
-config: i386-buildonly-randconfig-002-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231655.XTYbJ9rZ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231655.XTYbJ9rZ-lkp@intel.com/reproduce)
+> tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
+> head:   46bf7963a06a56a6c411329d06642836450d19a7
+> commit: 45c7c4a6fbf00d0ca3f033f30c39e6c12c517381 [39/125] KVM: VMX:
+> Refactor VMX module init/exit functions
+> config: i386-buildonly-randconfig-002-20250123
+> (https://download.01.org/0day-ci/archive/20250123/202501231202.viiY8Abl-
+> lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project
+> ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-
+> ci/archive/20250123/202501231202.viiY8Abl-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes:
+> | https://lore.kernel.org/oe-kbuild-all/202501231202.viiY8Abl-lkp@intel.
+> | com/
+>=20
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+>=20
+> >> WARNING: modpost: vmlinux: section mismatch in reference:
+> >> vt_init+0x2f (section: .init.text) -> vmx_exit (section: .exit.text)
+>=20
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501231655.XTYbJ9rZ-lkp@intel.com/
+I checked the code, I think it is because vt_init() calls vmx_exit() in the=
+ error path when kvm_init() fails.
 
-All warnings (new ones prefixed by >>):
+vt_init() is annotated with __init and vmx_exit() is annotated with __exit.
 
->> drivers/soundwire/debugfs.c:301:3: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     300 |         dev_dbg(&slave->dev, "command completed, num_byte %ld status %d, time %lld ms\n",
-         |                                                           ~~~
-         |                                                           %zu
-     301 |                 num_bytes, ret, div_u64(finish_t - start_t, NSEC_PER_MSEC));
-         |                 ^~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   1 warning generated.
+Perhaps we need to remove the __exit annotation from vmx_exit().
 
+However I will be on airplane soon so cannot actually work on the code to v=
+erify.  Will do it once have time.
 
-vim +301 drivers/soundwire/debugfs.c
-
-   234	
-   235	static int cmd_go(void *data, u64 value)
-   236	{
-   237		const struct firmware *fw = NULL;
-   238		struct sdw_slave *slave = data;
-   239		ktime_t start_t;
-   240		ktime_t finish_t;
-   241		int ret;
-   242	
-   243		if (value != 1)
-   244			return -EINVAL;
-   245	
-   246		/* one last check */
-   247		if (start_addr > SDW_REG_MAX ||
-   248		    num_bytes == 0 || num_bytes > MAX_CMD_BYTES)
-   249			return -EINVAL;
-   250	
-   251		ret = pm_runtime_get_sync(&slave->dev);
-   252		if (ret < 0 && ret != -EACCES) {
-   253			pm_runtime_put_noidle(&slave->dev);
-   254			return ret;
-   255		}
-   256	
-   257		if (cmd == 0) {
-   258			ret = request_firmware(&fw, firmware_file, &slave->dev);
-   259			if (ret < 0) {
-   260				dev_err(&slave->dev, "firmware %s not found\n", firmware_file);
-   261				goto out;
-   262			}
-   263			if (fw->size < num_bytes) {
-   264				dev_err(&slave->dev,
-   265					"firmware %s: firmware size %zd, desired %zd\n",
-   266					firmware_file, fw->size, num_bytes);
-   267				goto out;
-   268			}
-   269		}
-   270	
-   271		/* Userspace changed the hardware state behind the kernel's back */
-   272		add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-   273	
-   274		dev_dbg(&slave->dev, "starting command\n");
-   275		start_t = ktime_get();
-   276	
-   277		if (cmd == 0) {
-   278			if (cmd_type)
-   279				ret = do_bpt_sequence(slave, true, (u8 *)fw->data);
-   280			else
-   281				ret = sdw_nwrite_no_pm(slave, start_addr, num_bytes, fw->data);
-   282		} else {
-   283			memset(read_buffer, 0, sizeof(read_buffer));
-   284	
-   285			if (cmd_type)
-   286				ret = do_bpt_sequence(slave, false, read_buffer);
-   287			else
-   288				ret = sdw_nread_no_pm(slave, start_addr, num_bytes, read_buffer);
-   289		}
-   290	
-   291		finish_t = ktime_get();
-   292	
-   293	out:
-   294		if (fw)
-   295			release_firmware(fw);
-   296	
-   297		pm_runtime_mark_last_busy(&slave->dev);
-   298		pm_runtime_put(&slave->dev);
-   299	
-   300		dev_dbg(&slave->dev, "command completed, num_byte %ld status %d, time %lld ms\n",
- > 301			num_bytes, ret, div_u64(finish_t - start_t, NSEC_PER_MSEC));
-   302	
-   303		return ret;
-   304	}
-   305	DEFINE_DEBUGFS_ATTRIBUTE(cmd_go_fops, NULL,
-   306				 cmd_go, "%llu\n");
-   307	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
