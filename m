@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD0535953;
-	Thu, 23 Jan 2025 02:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9F31ADC72;
+	Thu, 23 Jan 2025 04:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737600734; cv=none; b=RTYihoX6FZl79ZOIWXMqbstu3/7Jy//usc06R4/y/+LjvBHD5fNJIsUzxsxd7iIdX/j4jXsuEgvsOS16Sr2QhJ2B/gbx4GAAd1uiC4f0pAUQTVCxxbnhya0am4PvnIRni4vew0kafjdcioAPAhaTrMj2BbySkWZnj3TzDEbdoPE=
+	t=1737608123; cv=none; b=TdIa52VkfbpjJwDKrz0jqfT2FG28NXFX9iS50lpzE0cJ0lHDeciUIzgabgaoyK0kvHKKEPVq1xN3Z65Q0nTIlc90UJJ7No9SvnMj8lC6hVbItzGIrGgfFegIqaDiLrVlgF9+eb6/azHPCiDR1nQVg6EKdXR650aQl/kNKbbM/cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737600734; c=relaxed/simple;
-	bh=wDtOq+sejLWGcOoyl110f6ndMPVWly3RIixaIZwijzk=;
+	s=arc-20240116; t=1737608123; c=relaxed/simple;
+	bh=VyA4uoNfosH/DwJ21QQIVISCOKFxWhYI5osXNJ7Bz+k=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=paCQkWWYenIlW+NtvhoCZdlB6kbfGDkaiGDpxhZdPYPplvOLItIcJBzR+PtMP5h5Aise2TZJpijHGKDbdd+FQrup1wy++rii/dhB635As4olBiX0Pnfh20QTiVdrmz0UK6h31mCT8cksIDsueuXpjUnvQGDkQdTOU9fyKzCEdBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TUARFwuR; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=dW95Mh/JJ7K/U8Aob6PK3fDHE8/kaTr49eibUf1FyDvo3JOQYoXzxCVv3dqZYo1hPXSWKSCQNJyR1acDbitBenB244fXUEtLX7fUa+UnM74rma1P0A5HkWgyCjMF1v+OT9oLBTI92/UbhmCmG6mR3dj+C8Is/mFmP2cvfqDVi6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UqWXUQrb; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TUARFwuR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UqWXUQrb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737600733; x=1769136733;
+  t=1737608122; x=1769144122;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wDtOq+sejLWGcOoyl110f6ndMPVWly3RIixaIZwijzk=;
-  b=TUARFwuR7uHjUBIjs76feabEnim6kYHfIpdKOl6KDPlg0SarFFQ1YANW
-   82QbIuTitNoQjkmMEaLB3Ejb+b8Aox95aSKzZCie6CnAhK5/BfRbg0WJt
-   Ogv8wM71rRmn3YfhoqFP6UTGZO2wSLCqGPWF50Fl5nSfsUM4R2McUIT7A
-   98VyWskp0Am3msynRj8bzgzjbme6MN0aGQtcgbNSAmJuKVtVvPIBkgIeP
-   iRAUy4XAPr2aX2v9q5vRl31CQr0EYm7n0kGxgOlTQaZvvql5XOW8HvL+/
-   ON5PBJGDD+g3Pb7GkW4k4hukjIrTTH/k9Kd3d/rXcA1CiDy2BB+cccdko
+  bh=VyA4uoNfosH/DwJ21QQIVISCOKFxWhYI5osXNJ7Bz+k=;
+  b=UqWXUQrbD1kd2vsHeUiiI9dKL/nFVpwsmKw3zBl+6rLkUfhv9FIwWtuZ
+   x5hP6TW8Q1PftrsxI/axpqTJIxNt3VNtT73Or2cDxbF06JzCJAbziEc63
+   A6Zly4vrhQiHpqqsSv3pPGhQtMb+/vJ7BLMGG2ga682OeG10NeAAsSIt9
+   H5tnwMmja6v4ieCu9/RmADcthFNSSqkKEhkZS+d/EJlnEI6dBGg2UlGm0
+   +L2eQjJ0/WcG3C6k71IYcjMeE1aSupfHT49QGuZ/sdSQkKlbhyFyAhXU9
+   grvtZ2XnP7pQ+GWcJlP+glAtruNkYz6oKdmkqAP9CORy5VAL5AmDK0gqE
    A==;
-X-CSE-ConnectionGUID: 7LhLP8egQ/+Wi+CCAGTzSA==
-X-CSE-MsgGUID: 5cw3uv01Td6cme7Pw1yfeA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="41843835"
+X-CSE-ConnectionGUID: DtIWCjufRdWRn5THPFOWCQ==
+X-CSE-MsgGUID: kBI8TbdPSca0VycamGhL/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="38240183"
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="41843835"
+   d="scan'208";a="38240183"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 18:52:12 -0800
-X-CSE-ConnectionGUID: meTZRkCXQP6wIadkX7FzTg==
-X-CSE-MsgGUID: CcGxtojXQY6kSwZKE69sWw==
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 20:55:22 -0800
+X-CSE-ConnectionGUID: f5MiJtl4RpGXD7KKl3an5w==
+X-CSE-MsgGUID: 5B6Gq2DNQN2LyDjwo50JTQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="112322594"
+   d="scan'208";a="112341016"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 22 Jan 2025 18:52:09 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 22 Jan 2025 20:55:19 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tanKB-000aa9-12;
-	Thu, 23 Jan 2025 02:52:07 +0000
-Date: Thu, 23 Jan 2025 10:51:48 +0800
+	id 1tapFN-000agV-1j;
+	Thu, 23 Jan 2025 04:55:17 +0000
+Date: Thu, 23 Jan 2025 12:54:30 +0800
 From: kernel test robot <lkp@intel.com>
 To: Paolo Bonzini <pbonzini@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>,
 	Kai Huang <kai.huang@intel.com>
-Subject: [kvm:kvm-coco-queue 39/125] WARNING: modpost:
- arch/x86/kvm/kvm-intel: section mismatch in reference: init_module+0x32
- (section: .init.text) -> vmx_exit (section: .exit.text)
-Message-ID: <202501231000.7Uhj46SO-lkp@intel.com>
+Subject: [kvm:kvm-coco-queue 39/125] WARNING: modpost: vmlinux: section
+ mismatch in reference: vt_init+0x2f (section: .init.text) -> vmx_exit
+ (section: .exit.text)
+Message-ID: <202501231202.viiY8Abl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,18 +68,18 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
 head:   46bf7963a06a56a6c411329d06642836450d19a7
 commit: 45c7c4a6fbf00d0ca3f033f30c39e6c12c517381 [39/125] KVM: VMX: Refactor VMX module init/exit functions
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250123/202501231000.7Uhj46SO-lkp@intel.com/config)
+config: i386-buildonly-randconfig-002-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231202.viiY8Abl-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231000.7Uhj46SO-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231202.viiY8Abl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501231000.7Uhj46SO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501231202.viiY8Abl-lkp@intel.com/
 
 All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> WARNING: modpost: arch/x86/kvm/kvm-intel: section mismatch in reference: init_module+0x32 (section: .init.text) -> vmx_exit (section: .exit.text)
+>> WARNING: modpost: vmlinux: section mismatch in reference: vt_init+0x2f (section: .init.text) -> vmx_exit (section: .exit.text)
 
 -- 
 0-DAY CI Kernel Test Service
