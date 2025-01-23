@@ -1,110 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4755F13E41A;
-	Thu, 23 Jan 2025 20:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D2A1C5D66
+	for <llvm@lists.linux.dev>; Thu, 23 Jan 2025 21:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737665840; cv=none; b=F89HOohjbQthv7DTA/DtDdh5+MejKiGZ4maZlF00Q/NwHlPPQFykVDYHbuCOJWAUi3tu2NrunNAfsJA1lX4gXTZsegT/yQNGTGwvch+YXvZke/OFIePkKhQETdNs7sPavV1Nf1TRU0oCpggZ+onBOwoDjAHriUeGwh/63T0XzFA=
+	t=1737667498; cv=none; b=FQy9C1ekSDysrPjwbeH3ISOPbRDjLrKUhDacgVdv4Cui0/6bEroOhCTdgHBuMB9RRPGrw/ZhSLT2hG9HkovVy9UCWdXapTcmPT8QbqRzcZbG4kvc3qJS6U/JoWgenjzTgr98X50T7Vco/Cnzrba08hB/3Gb6nLR+mBZDzUtplHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737665840; c=relaxed/simple;
-	bh=vcgzOAWW1RnY5DFAuGmop61CEvLD/zcS5/f/ggmWOU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SR5a6j4eN5p7IKZroQm6pULg69ZEFH5RmU0DeMQPiHQ3vzPB0/O8uZKErO411x3TxrlU4RE8GCMKpLn2YOb0qsWNH3256J73QXask7YfpHBVlU6//PWNg7WrInEFv9lnnE+mcEaAPsO2eLrxZtcJmvlMCk7JENeQkQjVtgnDPCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aBta2iSX; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737667498; c=relaxed/simple;
+	bh=M5BXGpgwMCnIFqEQNLncr323vXpk/UyBJI1PvRa54rE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KIAMa/M9sxkbT4wa2aiKudfll1ajv8oEYzHZvIgQZMiFJSovKzd+I08y8uzQ8HPl7JYGD+i2V91M+ZzOIreJI0vzdwiN8sb/0VG6tm2zK/wFLvhG2z2aU2WKW3uuvE8CRo5T7yAx8iTzMjY0cRXED241PQqPKnABJ1lONJrHtCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hB1jv/EQ; arc=none smtp.client-ip=209.85.166.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aBta2iSX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737665839; x=1769201839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vcgzOAWW1RnY5DFAuGmop61CEvLD/zcS5/f/ggmWOU4=;
-  b=aBta2iSXhrOReBkJT+ADJAqmKlUjT1zCnFkLXHfoLl15q/MrHCyiAtyP
-   2Xa+4wRC/QlhZgcxzOj+HhN6D17NaM+NtP9MkH6eIZkhgLb6TQX/oqT8/
-   lFbzhRsjXY3F7AE8BIM5z8RB+cHvqqYVCLO534CVdc3BTV8VQqtRfbyVo
-   qNbTxyvhPCLF+71L7LXkEIoaTlxjqsBkoRJkV6Sn4hIIitqf3VxmCkzlA
-   lEaIp6tLhhrCOZXdTIdBeQLlkmBRRbaiu88ZWSIP5jq3tMvhupdsXSmr2
-   kdkIiLp7SMoMn5FgQb++a4tC6KdhsDja0MauZPcyP9vrQkYsnXYobvY+V
-   w==;
-X-CSE-ConnectionGUID: KNSmRPxtSQmx84C3B9qwaA==
-X-CSE-MsgGUID: KC5tOZwkQZe9BzQHZFqkNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11324"; a="38079144"
-X-IronPort-AV: E=Sophos;i="6.13,229,1732608000"; 
-   d="scan'208";a="38079144"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 12:57:17 -0800
-X-CSE-ConnectionGUID: xiy2+7ojQGyzgTpuUS4SQQ==
-X-CSE-MsgGUID: TeUzAgiUT3i7VPaYrDBjLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,229,1732608000"; 
-   d="scan'208";a="107572638"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 23 Jan 2025 12:57:16 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tb4GH-000bfz-1h;
-	Thu, 23 Jan 2025 20:57:13 +0000
-Date: Fri, 24 Jan 2025 04:56:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_rm_ops_pgsize 22/23]
- drivers/iommu/riscv/iommu.c:1535:3: error: field designator 'pgsize_bitmap'
- does not refer to any field in type 'const struct iommu_ops'
-Message-ID: <202501240431.7HOXfICP-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hB1jv/EQ"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a814c54742so7705ab.1
+        for <llvm@lists.linux.dev>; Thu, 23 Jan 2025 13:24:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737667496; x=1738272296; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M5BXGpgwMCnIFqEQNLncr323vXpk/UyBJI1PvRa54rE=;
+        b=hB1jv/EQ7H67+d4OGGOZyGoWQWAwEdnQkRLd34FRmGnLaVZbHyhJ54WjqpTDIigvyi
+         6H72mhQAuFDFdjcHt+ZutU3/ahIoG+QptPxJ28lILFAzOaHuUuN0C+rqs6N3Y07mxlL0
+         JlMjdK/uaA1XcLU5hK50XiKVx99QTXJHt9EXZoAe7brpOE+d69Dcnv5WrEyXLy/DijlW
+         lwaHINj5AS5C0/pZ0LA4KSPmlRvOvcozU0y9BbIKf8uoaQAK7swSo0DESMFM5LZKv+jZ
+         ipvolyNHRxzTu1VOdW8qHEVunyAmhkNvJsu9okm9F5BDuuORtchbB9duFnlOlbC1SPu7
+         CQuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737667496; x=1738272296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M5BXGpgwMCnIFqEQNLncr323vXpk/UyBJI1PvRa54rE=;
+        b=QOBrFjUjmiWaNmnPPrtLTEXMJSZyRglcLudVuU2lM03QnPtD1twA0yykSpQ2w4hdZp
+         bSr2HXT8yz1vyYF7nuIG6Br/CjIXq/u0Vk/3tymbROj46lfxzGCNfKbrYh50VwYS4lI6
+         y0NJjYZkyDVBTyKc9v2PY91XMt3sNiSu0fPFzZiTGLN+FYdG0Wd6CXgdZ1YW1Id8gNs/
+         WIZIAnLrVgjJNv06zqgUOcqhbwKTozRpy1SESEVLyHFa4Hd+u5xZuuDhwrK81WUx77Uk
+         8L7U9hDdkGhChopGAkjQl9B56W47w/J0+HOZenUX4HdfRIbOi3IJDdcYM0dItTQ2gd53
+         Y9Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCXu7ipflz1/wj+rbxj4iTMXoRZCbIKDWn52qPK32m/8ntt1CFPfrmg53yTPPTM9GPzJwRiR@lists.linux.dev
+X-Gm-Message-State: AOJu0YwQVjnMWIS0vxTZuZJQ2dZ48mX0UkRrV/yr5bBbaPoBYHJnHncz
+	kkol2/7lV0qVCS3lWm3BsDwe/4eDtTyG0xatxlBJTZlVMnwSUsf/gfB008gS4yiL7Vv2apSizrr
+	VRko67TVvLYqUtuzLHh/1Q9kLfDnav8hPOhjz
+X-Gm-Gg: ASbGncsXhYjp7DnxK0U+ej1QeVt9df2P/D5bpojfdfdzyTp6m4r9Ta6y7s7LWlDFitV
+	MwdtiMhi7ngkRJJtMFp891IHBdbaVmn7gH77nNcRvlPDYCszRoRlXcBrIoRQZAmgpxcth0PuMnw
+	c6MpAgXjtbqda8+Q==
+X-Google-Smtp-Source: AGHT+IGwvofrtUyEuSwOuV3OUTAsv9p7IO9zxK0RoTXVD1YmkrPrc9vYfh/5phhlnpuNXd8qGJMfJHgAwe0IUpnUZuM=
+X-Received: by 2002:a92:da09:0:b0:3cf:c1af:99f with SMTP id
+ e9e14a558f8ab-3cfc1af0b2bmr2536455ab.24.1737667495808; Thu, 23 Jan 2025
+ 13:24:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250122062332.577009-1-irogers@google.com> <Z5EM24qWVQF2VdI8@tassilo>
+ <CAP-5=fW6ZWf6jF3Xnike81S9s_5tZ9w4DS8=8Ff1Ve87O32_Sg@mail.gmail.com> <Z5KILXC9-dN4Vo1o@tassilo>
+In-Reply-To: <Z5KILXC9-dN4Vo1o@tassilo>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 23 Jan 2025 13:24:44 -0800
+X-Gm-Features: AWEUYZm6s3k1Q3-4dxuPxZe5_z1NgGEQjOMpv31v0pNOZT3BbLBoJ2mkb87R2IA
+Message-ID: <CAP-5=fW5xmir_26CrQN50TWkzab3GueUvne4VWhWhqc82p6LvA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
+To: Andi Kleen <ak@linux.intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
+	Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/jgunthorpe/linux iommu_rm_ops_pgsize
-head:   8e7229d631eab655526324f9d867904ee1351605
-commit: 7e198028456d41f2aa10f07650728e74a09f427a [22/23] iommu: Remove ops->pgsize_bitmap
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20250124/202501240431.7HOXfICP-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250124/202501240431.7HOXfICP-lkp@intel.com/reproduce)
+On Thu, Jan 23, 2025 at 10:19=E2=80=AFAM Andi Kleen <ak@linux.intel.com> wr=
+ote:
+>
+> > In certain scenarios, like data centers, it can be useful to
+> > statically link all your dependencies to avoid dll hell.
+>
+> Yes but it won't be loaded into memory if not used. Executable
+> loading is all lazy. Maybe look a page fault trace for loading
+> perf if you don't believe me.
+>
+> So you're trying to optimize disk space here?
+>
+> I didn't see that in the cover letter.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501240431.7HOXfICP-lkp@intel.com/
+For me yes, for distributions it is dependencies. This is already in
+the v3 message:
+https://lore.kernel.org/lkml/20250122174308.350350-1-irogers@google.com/
 
-All errors (new ones prefixed by >>):
+> It doesn't seem like a very good reason for such an intrusive patch kit.
 
->> drivers/iommu/riscv/iommu.c:1535:3: error: field designator 'pgsize_bitmap' does not refer to any field in type 'const struct iommu_ops'
-    1535 |         .pgsize_bitmap = SZ_4K,
-         |         ~^~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+The capstone and LLVM code is preexisting. Moving the capstone/llvm
+code to their own files isn't dependent on dlopen, it does make it
+nicer to have a single place we're doing dlopen. The change to shim
+the capstone/LLVM calls looks like this:
+https://github.com/googleprodkernel/linux-perf/blob/google_tools_master/too=
+ls/perf/util/llvm.c#L160-L182
+That is a shim is introduced that either calls through to the function
+if we're linking against libcapstone/llvm or does the dlsym. There are
+7 such functions in the LLVM code. I don't think shimming 7 functions
+is at the scale of hugely intrusive.
 
+> If it's a serious concern maybe investigate an executable compressor?
 
-vim +1535 drivers/iommu/riscv/iommu.c
+Perhaps just have a squashfs partition.
 
-488ffbf181718b Tomasz Jeznach 2024-10-15  1533  
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1534  static const struct iommu_ops riscv_iommu_ops = {
-488ffbf181718b Tomasz Jeznach 2024-10-15 @1535  	.pgsize_bitmap = SZ_4K,
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1536  	.of_xlate = riscv_iommu_of_xlate,
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1537  	.identity_domain = &riscv_iommu_identity_domain,
-1bac10c557adb2 Tomasz Jeznach 2024-10-15  1538  	.blocked_domain = &riscv_iommu_blocking_domain,
-1bac10c557adb2 Tomasz Jeznach 2024-10-15  1539  	.release_domain = &riscv_iommu_blocking_domain,
-488ffbf181718b Tomasz Jeznach 2024-10-15  1540  	.domain_alloc_paging = riscv_iommu_alloc_paging_domain,
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1541  	.device_group = riscv_iommu_device_group,
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1542  	.probe_device = riscv_iommu_probe_device,
-488ffbf181718b Tomasz Jeznach 2024-10-15  1543  	.release_device	= riscv_iommu_release_device,
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1544  };
-822e8bc6850582 Tomasz Jeznach 2024-10-15  1545  
+Fwiw, excluding dependencies I think compression on the events is a
+good solution. Convert json events/metrics to a sysfs file with the
+cpuid in the path, add the compressed file to the binary as data, find
+"json" events by iterating the directories in the compressed file,
+etc. A single filesystem approach to event lookup can mean we do some
+kind of unionfs style lookup of events, which could support users
+adding their own events/metrics in a directory. Zip doesn't support
+compressing across files, which is something of a requirement here,
+other formats do but it's a case of optimizing for some kind of
+libarchive sweet spot. The opportunity here is that about 70% of the
+binary is event encodings, a compressed file is about 30% of the
+current binary size, so we could reduce the binary size by about 40%.
 
-:::::: The code at line 1535 was first introduced by commit
-:::::: 488ffbf181718b9ad8c1838cb249d60973e78eda iommu/riscv: Paging domain support
+> > The X86
+> > disassembler alone in libllvm is of a size comparable to the perf tool
+>
+> I agree that LLVM is a serious bloat and DLL hell concern, but I don't th=
+ink
+> dlopen is the answer here.
 
-:::::: TO: Tomasz Jeznach <tjeznach@rivosinc.com>
-:::::: CC: Joerg Roedel <jroedel@suse.de>
+Agreed, but it's where the code is at. addr2line command or use LLVM
+for some performance. I think having an inbuilt solution would be best
+longer term - we spend energy trying to parse and understand text
+output from tools/libraries when the information is just sitting there
+in the instruction encoding. Such a solution would be brittle for
+things like new dwarf information, so we may want to have fallbacks
+like LLVM but having a loosely coupled dependency using dlopen feels
+preferable there, to aid package maintainers.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Ian
