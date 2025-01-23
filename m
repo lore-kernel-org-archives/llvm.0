@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6AF26AF5;
-	Thu, 23 Jan 2025 08:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CA020B81F;
+	Thu, 23 Jan 2025 08:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737619401; cv=none; b=lPkPL5VmU3ym2qlRXzl333GJawoCHMRm78nGUzDRQF47/h4sCyAawpcmVgzMqDyyLiJVtMhiU3PVOyfz+Nn4f4dtuzs2iyup2ytOTvcmYz7G+dbouZZAiXcw/tUsI+fMoUK11fheNvKrReByccxsyEwOJdOs9RSxCiV+OCqI9TU=
+	t=1737620002; cv=none; b=kHOQcY+BF/BiHypUBsScGJBb55sBByzGgmRSZfUDsuamFcgprt6egfoL+jAtkNf16s+xAF3AXvYb6cF30H0aAovxB9LFm5Wlx0gsEy7B45WzOpPm9OHlIIJx2A9EvtfPBxqVeId7INCqUkaJOYKYmnzE+dnmAW/AGDLHsLW4xHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737619401; c=relaxed/simple;
-	bh=/se8P4KTT0Lrdhagi2bnRCwMe/IvgFk2gWNs6gJzsSI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oCMGZWJLoUU77eBdXUDqTnlaDbdjfuq9DDR2t3vjD7S4G6FAaqt61lu7PVsewfc4bwR91zoXvbLdt/ot5ypq3bL+nJ1k3zxNOcU0u8HgArsyefH3PTI4MboLGesZNrI9f5dlnp5gtflozOSKN3z+KOIgRrrHyFpwcX6zzq0pa/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wo517BGn; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1737620002; c=relaxed/simple;
+	bh=jcCdauiHNJa0pjJlx3jdbeh1z1RLOy70cymrXf3sNzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lYd+g+PJ11WklR1zokojqgSwk7OeI/gT+mdLWVCN+j5w0E3OoeSZpPmF9N4YijNnOl+gXFSheNlU6Y6urL+tBUU6hyJ1bE5+c068V8uV6IzCL9o87i4PuPpiXSK7CNTGub4t5UH20FuXnXSEjNLOoC3ss98JPpCrOCEGYBU6C1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hy0ume0G; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wo517BGn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hy0ume0G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737619399; x=1769155399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/se8P4KTT0Lrdhagi2bnRCwMe/IvgFk2gWNs6gJzsSI=;
-  b=Wo517BGnYB/2Zl8Ug/bQUn6Zm/MVQRxuh3KmqZGINN/NCh/uQ66ErLSP
-   RwXLLWy4n25Z9oXH29uxq6D5NBD65ILB5D+TaqKtLEso7sDZaQDZy/qhf
-   eKlnXPTG8K6XH+880goT6Um7uzg7rGZHRJm36gpD/1VAJVVui/8YuAY4L
-   wRTWbmjrQzIaYN9aKvGEGzpdDYIvDYYDYVA54olIOXuinN6kWoDUGkM3I
-   ZijwrgOh6TrOYzzturPfiWnwPlqNHVMf2g3+36VoftrLk49FhZV5Rdwz3
-   XkpwO23BsfJp64P09dNghY9hlsIkqG+hndp+97BGPHA3ej3c+wGmgkh0w
-   g==;
-X-CSE-ConnectionGUID: 6p1rZFsMRTS74irf37tcnQ==
-X-CSE-MsgGUID: MkEJX6RUTsuC9x1vr4cWMg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="38356587"
+  t=1737620000; x=1769156000;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jcCdauiHNJa0pjJlx3jdbeh1z1RLOy70cymrXf3sNzc=;
+  b=Hy0ume0GGWjH0jRBlsiFqExC1nI2lejTd6JjDmf6ch56K+xUKmVmosyF
+   dlAhmueDTPWqy6/YTS788fPm1kCJtOEAOxM8qcawOW8w7cAyfuU6vPbqO
+   WpIUJ34cuQMCyMFw8MWlVc9W8AiW+rXQfGUD93jxhnEYJGlm5QIGEW1e9
+   4WmaG9NuBPHYZOQXrChk1xRYvnJ7XWeFJTBZl1xqQlJCSa/aL0aQMYXK0
+   mY47J22QBlxX7E5lHDhUI8zjGm85s3C8cZ2ROGUV/qMzET6sVmshC/z0W
+   IHVwiykXK7+YkTpWV8sBS/i9phuLpxx/vk8kJ3f4B9WAHBy5czg4Hunbv
+   A==;
+X-CSE-ConnectionGUID: u6JhsPfFQBisgfwGBtbwdg==
+X-CSE-MsgGUID: 76ic5AnjTQW1o20NlM98cA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="25706841"
 X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="38356587"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:03:17 -0800
-X-CSE-ConnectionGUID: pVojxfXVTre8wDeWFdQBIA==
-X-CSE-MsgGUID: Cp7OlIc3RQe7UEnzkgz1Tg==
+   d="scan'208";a="25706841"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 00:13:18 -0800
+X-CSE-ConnectionGUID: aUhZJh7CR0GVuBWiasvwBg==
+X-CSE-MsgGUID: TkgXNxTpQIm/3UweijlX7w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="112033618"
+X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
+   d="scan'208";a="112414187"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 23 Jan 2025 00:03:15 -0800
+  by orviesa004.jf.intel.com with ESMTP; 23 Jan 2025 00:13:18 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tasBF-000au3-21;
-	Thu, 23 Jan 2025 08:03:13 +0000
-Date: Thu, 23 Jan 2025 16:02:22 +0800
+	id 1tasKx-000auw-0O;
+	Thu, 23 Jan 2025 08:13:15 +0000
+Date: Thu, 23 Jan 2025 16:13:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sarika Sharma <quic_sarishar@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/3] wifi: ath12k: add link support for multi-link in
- arsta
-Message-ID: <202501231541.MkWxZOQ7-lkp@intel.com>
-References: <20250122133424.1226555-3-quic_sarishar@quicinc.com>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Bard Liao <yung-chuan.liao@linux.intel.com>
+Subject: [thesofproject:topic/sof-dev 16/18]
+ drivers/soundwire/debugfs.c:301:3: warning: format specifies type 'long' but
+ the argument has type 'size_t' (aka 'unsigned int')
+Message-ID: <202501231655.XTYbJ9rZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,190 +63,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250122133424.1226555-3-quic_sarishar@quicinc.com>
 
-Hi Sarika,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on e7ef944b3e2c31b608800925e784f67596375770]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-correct-RX-stats-packet-increment-for-multi-link/20250122-213719
-base:   e7ef944b3e2c31b608800925e784f67596375770
-patch link:    https://lore.kernel.org/r/20250122133424.1226555-3-quic_sarishar%40quicinc.com
-patch subject: [PATCH RFC 2/3] wifi: ath12k: add link support for multi-link in arsta
-config: i386-buildonly-randconfig-006-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231541.MkWxZOQ7-lkp@intel.com/config)
+tree:   https://github.com/thesofproject/linux topic/sof-dev
+head:   965963c9c3d7f1433fa353a420b31af0ca279a83
+commit: 63c78350b3707920cb42c0dbb86cc454aacfb6a5 [16/18] soundwire: debugfs: add interface for BPT/BRA transfers
+config: i386-buildonly-randconfig-002-20250123 (https://download.01.org/0day-ci/archive/20250123/202501231655.XTYbJ9rZ-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231541.MkWxZOQ7-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250123/202501231655.XTYbJ9rZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501231541.MkWxZOQ7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501231655.XTYbJ9rZ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/ath/ath12k/dp_rx.c:1364:24: warning: variable 'sta' set but not used [-Wunused-but-set-variable]
-    1364 |         struct ieee80211_sta *sta;
-         |                               ^
+>> drivers/soundwire/debugfs.c:301:3: warning: format specifies type 'long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     300 |         dev_dbg(&slave->dev, "command completed, num_byte %ld status %d, time %lld ms\n",
+         |                                                           ~~~
+         |                                                           %zu
+     301 |                 num_bytes, ret, div_u64(finish_t - start_t, NSEC_PER_MSEC));
+         |                 ^~~~~~~~~
+   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                      ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                                 ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
    1 warning generated.
 
 
-vim +/sta +1364 drivers/net/wireless/ath/ath12k/dp_rx.c
+vim +301 drivers/soundwire/debugfs.c
 
-d889913205cf7e Kalle Valo    2022-11-28  1357  
-d889913205cf7e Kalle Valo    2022-11-28  1358  static void
-d889913205cf7e Kalle Valo    2022-11-28  1359  ath12k_update_per_peer_tx_stats(struct ath12k *ar,
-d889913205cf7e Kalle Valo    2022-11-28  1360  				struct htt_ppdu_stats *ppdu_stats, u8 user)
-d889913205cf7e Kalle Valo    2022-11-28  1361  {
-d889913205cf7e Kalle Valo    2022-11-28  1362  	struct ath12k_base *ab = ar->ab;
-d889913205cf7e Kalle Valo    2022-11-28  1363  	struct ath12k_peer *peer;
-d889913205cf7e Kalle Valo    2022-11-28 @1364  	struct ieee80211_sta *sta;
-b89b5dbea65294 Sriram R      2024-10-15  1365  	struct ath12k_link_sta *arsta;
-d889913205cf7e Kalle Valo    2022-11-28  1366  	struct htt_ppdu_stats_user_rate *user_rate;
-d889913205cf7e Kalle Valo    2022-11-28  1367  	struct ath12k_per_peer_tx_stats *peer_stats = &ar->peer_tx_stats;
-d889913205cf7e Kalle Valo    2022-11-28  1368  	struct htt_ppdu_user_stats *usr_stats = &ppdu_stats->user_stats[user];
-d889913205cf7e Kalle Valo    2022-11-28  1369  	struct htt_ppdu_stats_common *common = &ppdu_stats->common;
-d889913205cf7e Kalle Valo    2022-11-28  1370  	int ret;
-d889913205cf7e Kalle Valo    2022-11-28  1371  	u8 flags, mcs, nss, bw, sgi, dcm, rate_idx = 0;
-d889913205cf7e Kalle Valo    2022-11-28  1372  	u32 v, succ_bytes = 0;
-d889913205cf7e Kalle Valo    2022-11-28  1373  	u16 tones, rate = 0, succ_pkts = 0;
-d889913205cf7e Kalle Valo    2022-11-28  1374  	u32 tx_duration = 0;
-d889913205cf7e Kalle Valo    2022-11-28  1375  	u8 tid = HTT_PPDU_STATS_NON_QOS_TID;
-d889913205cf7e Kalle Valo    2022-11-28  1376  	bool is_ampdu = false;
-d889913205cf7e Kalle Valo    2022-11-28  1377  
-d889913205cf7e Kalle Valo    2022-11-28  1378  	if (!(usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_RATE)))
-d889913205cf7e Kalle Valo    2022-11-28  1379  		return;
-d889913205cf7e Kalle Valo    2022-11-28  1380  
-d889913205cf7e Kalle Valo    2022-11-28  1381  	if (usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_COMMON))
-d889913205cf7e Kalle Valo    2022-11-28  1382  		is_ampdu =
-d889913205cf7e Kalle Valo    2022-11-28  1383  			HTT_USR_CMPLTN_IS_AMPDU(usr_stats->cmpltn_cmn.flags);
-d889913205cf7e Kalle Valo    2022-11-28  1384  
-d889913205cf7e Kalle Valo    2022-11-28  1385  	if (usr_stats->tlv_flags &
-d889913205cf7e Kalle Valo    2022-11-28  1386  	    BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_ACK_BA_STATUS)) {
-d889913205cf7e Kalle Valo    2022-11-28  1387  		succ_bytes = le32_to_cpu(usr_stats->ack_ba.success_bytes);
-d889913205cf7e Kalle Valo    2022-11-28  1388  		succ_pkts = le32_get_bits(usr_stats->ack_ba.info,
-d889913205cf7e Kalle Valo    2022-11-28  1389  					  HTT_PPDU_STATS_ACK_BA_INFO_NUM_MSDU_M);
-d889913205cf7e Kalle Valo    2022-11-28  1390  		tid = le32_get_bits(usr_stats->ack_ba.info,
-d889913205cf7e Kalle Valo    2022-11-28  1391  				    HTT_PPDU_STATS_ACK_BA_INFO_TID_NUM);
-d889913205cf7e Kalle Valo    2022-11-28  1392  	}
-d889913205cf7e Kalle Valo    2022-11-28  1393  
-d889913205cf7e Kalle Valo    2022-11-28  1394  	if (common->fes_duration_us)
-d889913205cf7e Kalle Valo    2022-11-28  1395  		tx_duration = le32_to_cpu(common->fes_duration_us);
-d889913205cf7e Kalle Valo    2022-11-28  1396  
-d889913205cf7e Kalle Valo    2022-11-28  1397  	user_rate = &usr_stats->rate;
-d889913205cf7e Kalle Valo    2022-11-28  1398  	flags = HTT_USR_RATE_PREAMBLE(user_rate->rate_flags);
-d889913205cf7e Kalle Valo    2022-11-28  1399  	bw = HTT_USR_RATE_BW(user_rate->rate_flags) - 2;
-d889913205cf7e Kalle Valo    2022-11-28  1400  	nss = HTT_USR_RATE_NSS(user_rate->rate_flags) + 1;
-d889913205cf7e Kalle Valo    2022-11-28  1401  	mcs = HTT_USR_RATE_MCS(user_rate->rate_flags);
-d889913205cf7e Kalle Valo    2022-11-28  1402  	sgi = HTT_USR_RATE_GI(user_rate->rate_flags);
-d889913205cf7e Kalle Valo    2022-11-28  1403  	dcm = HTT_USR_RATE_DCM(user_rate->rate_flags);
-d889913205cf7e Kalle Valo    2022-11-28  1404  
-d889913205cf7e Kalle Valo    2022-11-28  1405  	/* Note: If host configured fixed rates and in some other special
-d889913205cf7e Kalle Valo    2022-11-28  1406  	 * cases, the broadcast/management frames are sent in different rates.
-d889913205cf7e Kalle Valo    2022-11-28  1407  	 * Firmware rate's control to be skipped for this?
-d889913205cf7e Kalle Valo    2022-11-28  1408  	 */
-d889913205cf7e Kalle Valo    2022-11-28  1409  
-d889913205cf7e Kalle Valo    2022-11-28  1410  	if (flags == WMI_RATE_PREAMBLE_HE && mcs > ATH12K_HE_MCS_MAX) {
-d889913205cf7e Kalle Valo    2022-11-28  1411  		ath12k_warn(ab, "Invalid HE mcs %d peer stats",  mcs);
-d889913205cf7e Kalle Valo    2022-11-28  1412  		return;
-d889913205cf7e Kalle Valo    2022-11-28  1413  	}
-d889913205cf7e Kalle Valo    2022-11-28  1414  
-d889913205cf7e Kalle Valo    2022-11-28  1415  	if (flags == WMI_RATE_PREAMBLE_VHT && mcs > ATH12K_VHT_MCS_MAX) {
-d889913205cf7e Kalle Valo    2022-11-28  1416  		ath12k_warn(ab, "Invalid VHT mcs %d peer stats",  mcs);
-d889913205cf7e Kalle Valo    2022-11-28  1417  		return;
-d889913205cf7e Kalle Valo    2022-11-28  1418  	}
-d889913205cf7e Kalle Valo    2022-11-28  1419  
-d889913205cf7e Kalle Valo    2022-11-28  1420  	if (flags == WMI_RATE_PREAMBLE_HT && (mcs > ATH12K_HT_MCS_MAX || nss < 1)) {
-d889913205cf7e Kalle Valo    2022-11-28  1421  		ath12k_warn(ab, "Invalid HT mcs %d nss %d peer stats",
-d889913205cf7e Kalle Valo    2022-11-28  1422  			    mcs, nss);
-d889913205cf7e Kalle Valo    2022-11-28  1423  		return;
-d889913205cf7e Kalle Valo    2022-11-28  1424  	}
-d889913205cf7e Kalle Valo    2022-11-28  1425  
-d889913205cf7e Kalle Valo    2022-11-28  1426  	if (flags == WMI_RATE_PREAMBLE_CCK || flags == WMI_RATE_PREAMBLE_OFDM) {
-d889913205cf7e Kalle Valo    2022-11-28  1427  		ret = ath12k_mac_hw_ratecode_to_legacy_rate(mcs,
-d889913205cf7e Kalle Valo    2022-11-28  1428  							    flags,
-d889913205cf7e Kalle Valo    2022-11-28  1429  							    &rate_idx,
-d889913205cf7e Kalle Valo    2022-11-28  1430  							    &rate);
-d889913205cf7e Kalle Valo    2022-11-28  1431  		if (ret < 0)
-d889913205cf7e Kalle Valo    2022-11-28  1432  			return;
-d889913205cf7e Kalle Valo    2022-11-28  1433  	}
-d889913205cf7e Kalle Valo    2022-11-28  1434  
-d889913205cf7e Kalle Valo    2022-11-28  1435  	rcu_read_lock();
-d889913205cf7e Kalle Valo    2022-11-28  1436  	spin_lock_bh(&ab->base_lock);
-d889913205cf7e Kalle Valo    2022-11-28  1437  	peer = ath12k_peer_find_by_id(ab, usr_stats->peer_id);
-d889913205cf7e Kalle Valo    2022-11-28  1438  
-d889913205cf7e Kalle Valo    2022-11-28  1439  	if (!peer || !peer->sta) {
-d889913205cf7e Kalle Valo    2022-11-28  1440  		spin_unlock_bh(&ab->base_lock);
-d889913205cf7e Kalle Valo    2022-11-28  1441  		rcu_read_unlock();
-d889913205cf7e Kalle Valo    2022-11-28  1442  		return;
-d889913205cf7e Kalle Valo    2022-11-28  1443  	}
-d889913205cf7e Kalle Valo    2022-11-28  1444  
-d889913205cf7e Kalle Valo    2022-11-28  1445  	sta = peer->sta;
-16188cf35df3cd Sarika Sharma 2025-01-22  1446  	arsta = ath12k_peer_get_link_sta(ab, peer);
-16188cf35df3cd Sarika Sharma 2025-01-22  1447  	if (!arsta) {
-16188cf35df3cd Sarika Sharma 2025-01-22  1448  		spin_unlock_bh(&ab->base_lock);
-16188cf35df3cd Sarika Sharma 2025-01-22  1449  		rcu_read_unlock();
-16188cf35df3cd Sarika Sharma 2025-01-22  1450  		return;
-16188cf35df3cd Sarika Sharma 2025-01-22  1451  	}
-d889913205cf7e Kalle Valo    2022-11-28  1452  
-d889913205cf7e Kalle Valo    2022-11-28  1453  	memset(&arsta->txrate, 0, sizeof(arsta->txrate));
-d889913205cf7e Kalle Valo    2022-11-28  1454  
-d889913205cf7e Kalle Valo    2022-11-28  1455  	switch (flags) {
-d889913205cf7e Kalle Valo    2022-11-28  1456  	case WMI_RATE_PREAMBLE_OFDM:
-d889913205cf7e Kalle Valo    2022-11-28  1457  		arsta->txrate.legacy = rate;
-d889913205cf7e Kalle Valo    2022-11-28  1458  		break;
-d889913205cf7e Kalle Valo    2022-11-28  1459  	case WMI_RATE_PREAMBLE_CCK:
-d889913205cf7e Kalle Valo    2022-11-28  1460  		arsta->txrate.legacy = rate;
-d889913205cf7e Kalle Valo    2022-11-28  1461  		break;
-d889913205cf7e Kalle Valo    2022-11-28  1462  	case WMI_RATE_PREAMBLE_HT:
-d889913205cf7e Kalle Valo    2022-11-28  1463  		arsta->txrate.mcs = mcs + 8 * (nss - 1);
-d889913205cf7e Kalle Valo    2022-11-28  1464  		arsta->txrate.flags = RATE_INFO_FLAGS_MCS;
-d889913205cf7e Kalle Valo    2022-11-28  1465  		if (sgi)
-d889913205cf7e Kalle Valo    2022-11-28  1466  			arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
-d889913205cf7e Kalle Valo    2022-11-28  1467  		break;
-d889913205cf7e Kalle Valo    2022-11-28  1468  	case WMI_RATE_PREAMBLE_VHT:
-d889913205cf7e Kalle Valo    2022-11-28  1469  		arsta->txrate.mcs = mcs;
-d889913205cf7e Kalle Valo    2022-11-28  1470  		arsta->txrate.flags = RATE_INFO_FLAGS_VHT_MCS;
-d889913205cf7e Kalle Valo    2022-11-28  1471  		if (sgi)
-d889913205cf7e Kalle Valo    2022-11-28  1472  			arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
-d889913205cf7e Kalle Valo    2022-11-28  1473  		break;
-d889913205cf7e Kalle Valo    2022-11-28  1474  	case WMI_RATE_PREAMBLE_HE:
-d889913205cf7e Kalle Valo    2022-11-28  1475  		arsta->txrate.mcs = mcs;
-d889913205cf7e Kalle Valo    2022-11-28  1476  		arsta->txrate.flags = RATE_INFO_FLAGS_HE_MCS;
-d889913205cf7e Kalle Valo    2022-11-28  1477  		arsta->txrate.he_dcm = dcm;
-d889913205cf7e Kalle Valo    2022-11-28  1478  		arsta->txrate.he_gi = ath12k_he_gi_to_nl80211_he_gi(sgi);
-d889913205cf7e Kalle Valo    2022-11-28  1479  		tones = le16_to_cpu(user_rate->ru_end) -
-d889913205cf7e Kalle Valo    2022-11-28  1480  			le16_to_cpu(user_rate->ru_start) + 1;
-d889913205cf7e Kalle Valo    2022-11-28  1481  		v = ath12k_he_ru_tones_to_nl80211_he_ru_alloc(tones);
-d889913205cf7e Kalle Valo    2022-11-28  1482  		arsta->txrate.he_ru_alloc = v;
-d889913205cf7e Kalle Valo    2022-11-28  1483  		break;
-d889913205cf7e Kalle Valo    2022-11-28  1484  	}
-d889913205cf7e Kalle Valo    2022-11-28  1485  
-d889913205cf7e Kalle Valo    2022-11-28  1486  	arsta->txrate.nss = nss;
-d889913205cf7e Kalle Valo    2022-11-28  1487  	arsta->txrate.bw = ath12k_mac_bw_to_mac80211_bw(bw);
-d889913205cf7e Kalle Valo    2022-11-28  1488  	arsta->tx_duration += tx_duration;
-d889913205cf7e Kalle Valo    2022-11-28  1489  	memcpy(&arsta->last_txrate, &arsta->txrate, sizeof(struct rate_info));
-d889913205cf7e Kalle Valo    2022-11-28  1490  
-d889913205cf7e Kalle Valo    2022-11-28  1491  	/* PPDU stats reported for mgmt packet doesn't have valid tx bytes.
-d889913205cf7e Kalle Valo    2022-11-28  1492  	 * So skip peer stats update for mgmt packets.
-d889913205cf7e Kalle Valo    2022-11-28  1493  	 */
-d889913205cf7e Kalle Valo    2022-11-28  1494  	if (tid < HTT_PPDU_STATS_NON_QOS_TID) {
-d889913205cf7e Kalle Valo    2022-11-28  1495  		memset(peer_stats, 0, sizeof(*peer_stats));
-d889913205cf7e Kalle Valo    2022-11-28  1496  		peer_stats->succ_pkts = succ_pkts;
-d889913205cf7e Kalle Valo    2022-11-28  1497  		peer_stats->succ_bytes = succ_bytes;
-d889913205cf7e Kalle Valo    2022-11-28  1498  		peer_stats->is_ampdu = is_ampdu;
-d889913205cf7e Kalle Valo    2022-11-28  1499  		peer_stats->duration = tx_duration;
-d889913205cf7e Kalle Valo    2022-11-28  1500  		peer_stats->ba_fails =
-d889913205cf7e Kalle Valo    2022-11-28  1501  			HTT_USR_CMPLTN_LONG_RETRY(usr_stats->cmpltn_cmn.flags) +
-d889913205cf7e Kalle Valo    2022-11-28  1502  			HTT_USR_CMPLTN_SHORT_RETRY(usr_stats->cmpltn_cmn.flags);
-d889913205cf7e Kalle Valo    2022-11-28  1503  	}
-d889913205cf7e Kalle Valo    2022-11-28  1504  
-d889913205cf7e Kalle Valo    2022-11-28  1505  	spin_unlock_bh(&ab->base_lock);
-d889913205cf7e Kalle Valo    2022-11-28  1506  	rcu_read_unlock();
-d889913205cf7e Kalle Valo    2022-11-28  1507  }
-d889913205cf7e Kalle Valo    2022-11-28  1508  
+   234	
+   235	static int cmd_go(void *data, u64 value)
+   236	{
+   237		const struct firmware *fw = NULL;
+   238		struct sdw_slave *slave = data;
+   239		ktime_t start_t;
+   240		ktime_t finish_t;
+   241		int ret;
+   242	
+   243		if (value != 1)
+   244			return -EINVAL;
+   245	
+   246		/* one last check */
+   247		if (start_addr > SDW_REG_MAX ||
+   248		    num_bytes == 0 || num_bytes > MAX_CMD_BYTES)
+   249			return -EINVAL;
+   250	
+   251		ret = pm_runtime_get_sync(&slave->dev);
+   252		if (ret < 0 && ret != -EACCES) {
+   253			pm_runtime_put_noidle(&slave->dev);
+   254			return ret;
+   255		}
+   256	
+   257		if (cmd == 0) {
+   258			ret = request_firmware(&fw, firmware_file, &slave->dev);
+   259			if (ret < 0) {
+   260				dev_err(&slave->dev, "firmware %s not found\n", firmware_file);
+   261				goto out;
+   262			}
+   263			if (fw->size < num_bytes) {
+   264				dev_err(&slave->dev,
+   265					"firmware %s: firmware size %zd, desired %zd\n",
+   266					firmware_file, fw->size, num_bytes);
+   267				goto out;
+   268			}
+   269		}
+   270	
+   271		/* Userspace changed the hardware state behind the kernel's back */
+   272		add_taint(TAINT_USER, LOCKDEP_STILL_OK);
+   273	
+   274		dev_dbg(&slave->dev, "starting command\n");
+   275		start_t = ktime_get();
+   276	
+   277		if (cmd == 0) {
+   278			if (cmd_type)
+   279				ret = do_bpt_sequence(slave, true, (u8 *)fw->data);
+   280			else
+   281				ret = sdw_nwrite_no_pm(slave, start_addr, num_bytes, fw->data);
+   282		} else {
+   283			memset(read_buffer, 0, sizeof(read_buffer));
+   284	
+   285			if (cmd_type)
+   286				ret = do_bpt_sequence(slave, false, read_buffer);
+   287			else
+   288				ret = sdw_nread_no_pm(slave, start_addr, num_bytes, read_buffer);
+   289		}
+   290	
+   291		finish_t = ktime_get();
+   292	
+   293	out:
+   294		if (fw)
+   295			release_firmware(fw);
+   296	
+   297		pm_runtime_mark_last_busy(&slave->dev);
+   298		pm_runtime_put(&slave->dev);
+   299	
+   300		dev_dbg(&slave->dev, "command completed, num_byte %ld status %d, time %lld ms\n",
+ > 301			num_bytes, ret, div_u64(finish_t - start_t, NSEC_PER_MSEC));
+   302	
+   303		return ret;
+   304	}
+   305	DEFINE_DEBUGFS_ATTRIBUTE(cmd_go_fops, NULL,
+   306				 cmd_go, "%llu\n");
+   307	
 
 -- 
 0-DAY CI Kernel Test Service
