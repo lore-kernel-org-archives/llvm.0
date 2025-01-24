@@ -1,168 +1,157 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC301B3948
-	for <llvm@lists.linux.dev>; Thu, 23 Jan 2025 23:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267F92FC52;
+	Fri, 24 Jan 2025 00:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737675388; cv=none; b=AWTzPX1criA5HVfRoFrLufCuH6zr5L7WJ9woCgutVQAESbUbmcr+uqHYfj7wxc7lxvbWJnkWQ34E51XbD18BVtYOjffLy14Rf0AFmZ7uCfO8cuBcKu1Rn4YcspmFdrTjCGruCEikd95RfcEXyrykAf7Nj0vkFPR0FGtI7cAoA0A=
+	t=1737680298; cv=none; b=mMp3wR2tnwkDd2mwFmK5hgtyLVzguz0kuyY/Tikx/93dwUzu55U1TJqWYfeycGWcN4BkmS1vlCdCENA+HRFujmWF3vzSXOfo6rA9DofUXZlW5Qmk1mx0Lyu7UCDWGzTcA0bY4UAM01kv+6j7Dq6weViVURltNvJJ12OUNRWl1NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737675388; c=relaxed/simple;
-	bh=mX+bhjaU4+tyU0YNDvGKwPHDqYwLaTa0D1aykgl1osM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XLN+6IIfhnPrRqnbDjtpWY5eD/ikx9czKA1t/Is90fmc32+GfcINuLBRavaEc2cx+7JMe1v0D58OXVklRdPs8MEiuht7AhHtnorTiDRoNO60xCGXGdECAwb9Dntkq60OXBdY6z2JCc/r0QteZP+t2ZzrzoepWdc4h9KnbmlsIU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VhMsbqrg; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1737680298; c=relaxed/simple;
+	bh=LJBWz7gpPx6pYor80sUUmn3yFQaUSRq1SmFUxTQS2wY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FDpbz3U/b64ln3R1oalokUQ0rVfI2MUHF9jl6sODVB1IVpVtnhUEqDlZGYN6Y0rrfQHPP63f7wYU+EfUaVlJOS2M1ICT2D2bqeWww3Ee82LoOQehNgq4A0FUVbvsBtBW5ll58Q3K0HZprv03/oGqQnCaHVZ8tcBc7hBrmp0he2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XDOhq5Qn; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VhMsbqrg"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a814c54742so24775ab.1
-        for <llvm@lists.linux.dev>; Thu, 23 Jan 2025 15:36:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737675386; x=1738280186; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sQWIJTKgmSuU/0hLaYv81afc36/rsOvr4FPywbIsP+o=;
-        b=VhMsbqrgiD5Sr3lfFXnIn4lTbFRuG4TUyKEaj59Z/djdUV66Fv7MIEklJf8WgZNm0m
-         GQBEVNEXc0B+RLxyTXuLQRDJbLBHEvuzFtWoLW6lzZKXIQWN514yVE5xbU/dzoTpbR1p
-         HeFhkd1pnnTLVw9wkUH1Gyhk2jvVLQNCr+yEQCPhb97X16rZq3EzzqjhZu2k3Xuv0Xk5
-         eW/aGOt05/u78dBR1W3alW3MKdOYPUHbkDcEicN6svJ5jrtEKpZ4ToBwfAqH7S0ZsMEZ
-         7vohEIqGRDwhtj2OxMsyVtnMPygMvn6EKOTwnOyi7vE4n2ovdPHr2oVdNNtyizNThC6v
-         RTxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737675386; x=1738280186;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sQWIJTKgmSuU/0hLaYv81afc36/rsOvr4FPywbIsP+o=;
-        b=JZlHpsHYG5jxz/bdY1x5rwsWDA6OJ8qqSylT5Ob2rccVzGiOsuja0k5/2KiqUm1fb0
-         tld5nUC6GqJvuCni5MnJGJwtzMHpndcwaDWM46Ee1/lF3GERB/DhqSI34XYdLwfwSldv
-         3FApZWPbD7Sru0XEy6ci1TS2T5q3/MKwTXEAP7/bYkiwtD79n9UYBg4FIWPjJBLLWwIV
-         +4viy6amm6NylbkvjAmHiVvx/+sm0sXFBmu9urZdpBQ1sbP+UBXp8dm/k6dBIaxJB0lH
-         gnTdJ5HZTXgaDE2Q0txJLLJwH6hicg5RGVqqadOrttXV+ikuWAVMAr+nazMRdXl0sDwL
-         moVA==
-X-Forwarded-Encrypted: i=1; AJvYcCUz/vYrreHWG5Mcwf5drwQSdxjypn1KalqHf0k4eYwHt4aNAWpE5WDbst0bG6pAJZUeX4Eh@lists.linux.dev
-X-Gm-Message-State: AOJu0YzOv4rLrzhKIzXJ32RoL+6cx32p1Y0IzRPsN9xXkQzV5KNhoF16
-	GBaAIHKBksffLsOD6gpkqQErUckD42+SSEacVgomg0Jkj2KTC9ax24JUVkTVYiE5Zd8LkTxB6q7
-	ClaK879xRErmAY0cwPy/jTVCubCZcwB15IkIJ
-X-Gm-Gg: ASbGncsHm25vOU/BwfMSeO1JhyKQYcADFFPIas/tFQ61Xu0YQKtN+Czj5RbSNC2wBR+
-	HfDEEb8oyV4dAs54zOXpJicBma1QZ2d63Ay4buAm1o+gYaLggLDNKmCds1sR9skE0gdEJrQQlky
-	rWSlWea11mNMITwQ==
-X-Google-Smtp-Source: AGHT+IFFEHA8S7Jm/MSuIYwTx+AWwwIIWpO6M06a1I7jCX8Tk9g/h+72gUDoKNlt1oo07ukMe4cZ1nUCIWXHOq77Hk4=
-X-Received: by 2002:a05:6e02:2685:b0:3a7:683e:2fb0 with SMTP id
- e9e14a558f8ab-3cfbc90ccc7mr6269445ab.6.1737675385869; Thu, 23 Jan 2025
- 15:36:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XDOhq5Qn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737680297; x=1769216297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LJBWz7gpPx6pYor80sUUmn3yFQaUSRq1SmFUxTQS2wY=;
+  b=XDOhq5QnuhHEvTa+6KpajxUXvsgIGrpSa2UGK3eHkwDkkZqrTdbMWpGC
+   ZRDYD2K8H+6o3/FOkwNpgRfQ2IcI2FeSJTs+q43vq7yek5Il7Ati/JUok
+   PveGMfBNv72bRhKolZZdiqvMIi470ECyhnfifggVogkWPozZShFU6uO3H
+   f+fNgaXA2lP3THUce+D7ZpXHDA+U9RJ74jw9OCxBIexl86EEQeZZzQfdT
+   +aT3O56w7r6GhmMFw5zIK51RthhKOsuVqRBvvbHO/JBaa31mVpQzV/myW
+   1j4pW5iSkG0gHIbAyI0W104e4Msur7UFmZkRIJDPCGNkAQRylMH+XU93g
+   g==;
+X-CSE-ConnectionGUID: 7TLdNkMPTkupd3tBryaVVQ==
+X-CSE-MsgGUID: iuo6iUQfR1uqKMJhirct7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11324"; a="25811792"
+X-IronPort-AV: E=Sophos;i="6.13,230,1732608000"; 
+   d="scan'208";a="25811792"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 16:58:15 -0800
+X-CSE-ConnectionGUID: 4UsT8Xz8R32ht4pJyvthmg==
+X-CSE-MsgGUID: ELh5nu3KRZCA+ABFH0wYDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,230,1732608000"; 
+   d="scan'208";a="138490980"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Jan 2025 16:58:14 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tb81S-000bvn-30;
+	Fri, 24 Jan 2025 00:58:10 +0000
+Date: Fri, 24 Jan 2025 08:57:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Olga Kornievskaia <okorniev@redhat.com>, chuck.lever@oracle.com,
+	jlayton@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, Olga Kornievskaia <okorniev@redhat.com>
+Subject: Re: [PATCH 1/3] llist: add ability to remove a particular entry from
+ the list
+Message-ID: <202501240848.ZH81rjTD-lkp@intel.com>
+References: <20250115232406.44815-2-okorniev@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250122062332.577009-1-irogers@google.com> <Z5K712McgLXkN6aR@google.com>
-In-Reply-To: <Z5K712McgLXkN6aR@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 23 Jan 2025 15:36:14 -0800
-X-Gm-Features: AWEUYZlsArDtt5C7cJjJiyeindS8a6XImZjqfVccO_XajuQQ3sp6lx_PcTyJvBY
-Message-ID: <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115232406.44815-2-okorniev@redhat.com>
 
-On Thu, Jan 23, 2025 at 1:59=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Tue, Jan 21, 2025 at 10:23:15PM -0800, Ian Rogers wrote:
-> > Linking against libcapstone and libLLVM can be a significant increase
-> > in dependencies and size of memory footprint. For something like `perf
-> > record` the disassembler and addr2line functionality won't be
-> > used. Support dynamically loading these libraries using dlopen and
-> > then calling the appropriate functions found using dlsym.
->
-> It's not clear from the description how you would use dlopen/dlsym.
-> Based on an offline discussion, you want to leave the current linking
-> model as is, and to support dlopen/dlsym when it's NOT detected at
-> build-time, right?
+Hi Olga,
 
-Yep. Current behavior is no header file than these options fail, new
-behavior is that we try to use dlopen/dlsym and fail if the dlopen
-fails.
+kernel test robot noticed the following build errors:
 
-> For that, you need to carry some definitions of the functions and types
-> for the used APIs.  But I'm not sure if it's right to carry them in the
-> perf code base.
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on brauner-vfs/vfs.all linus/master v6.13 next-20250123]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Right. I mention that here:
-https://lore.kernel.org/lkml/CAP-5=3DfUhNuybCU-2_5EgcCwgwXnxvyFMvyhzKe=3DZP=
-1bssQwXHw@mail.gmail.com/
-For LLVM we need 3 typedefs and 5 #defines, for capstone we need 2
-structs and 5 enums (if we #ifdef some x86 only formatting code).
+url:    https://github.com/intel-lab-lkp/linux/commits/Olga-Kornievskaia/llist-add-ability-to-remove-a-particular-entry-from-the-list/20250116-072951
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20250115232406.44815-2-okorniev%40redhat.com
+patch subject: [PATCH 1/3] llist: add ability to remove a particular entry from the list
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250124/202501240848.ZH81rjTD-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250124/202501240848.ZH81rjTD-lkp@intel.com/reproduce)
 
-The problem in not carrying those definitions is:
-1) if the header file isn't present a build won't support
-LLVM/capstone even by dlopen - everything falls through to
-objdump/addr2line that have known performance issues;
-2) package maintainers either need to spot a warning message to
-realize they've done this by having a missing header file (hard to
-spot and brittle) or we require the build to fail and people without
-capstone.h opt out of the build error with NO_CAPSTONE=3D1 - something
-perf developers will probably not like;
-3) the LLVM/capstone code needs #ifdefs and __maybe_unused to suppress
-compiler warnings, or perhaps we have a minimal version of those
-files, leading to extra code complexity.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501240848.ZH81rjTD-lkp@intel.com/
 
-I believe the approach here is no worse than what we do with vmlinux.h
-for BPF code and is robust as depending on dlsym being able to look up
-the function names. It is not perfect but I think it is more perfect
-and less complex than the alternative.
+All errors (new ones prefixed by >>):
 
-> >
-> > BUILD_NONDISTRO is used to build perf against the license incompatible
-> > libbfd and libiberty libraries. As this has been opt-in for nearly 2
-> > years, commit dd317df07207 ("perf build: Make binutil libraries opt
-> > in"), remove the code to simplify the code base.
->
-> This part can be a separate series.
+   In file included from lib/test_bitops.c:10:
+   In file included from include/linux/module.h:17:
+   In file included from include/linux/kmod.h:9:
+   In file included from include/linux/umh.h:4:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:63:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:15:
+   In file included from include/linux/smp_types.h:5:
+>> include/linux/llist.h:283:7: error: variable 'pos' is uninitialized when used here [-Werror,-Wuninitialized]
+     283 |                 if (pos->next == entry) {
+         |                     ^~~
+   include/linux/llist.h:269:24: note: initialize the variable 'pos' to silence this warning
+     269 |         struct llist_node *pos;
+         |                               ^
+         |                                = NULL
+   1 error generated.
 
-Right, I posted it as a series here:
-https://lore.kernel.org/lkml/20250111202851.1075338-1-irogers@google.com/
-as mentioned in the v2 notes below. The issue was that Arnaldo pointed
-out removing BUILD_NONDISTRO removed disassemble_bpf that had only
-been implemented for libbfd. This series adds the LLVM/capstone
-definitions built into the symbol__disassemble refactor. Merging that
-series would conflict with this series, so I posted everything
-together to avoid having series of patches depending upon one another.
-I also wanted to check that what is in disasm.c in the end is
-reasonable, which I believe it is with significantly reduced
-ifdef-ery.
 
-> >
-> > The patch series:
-> > 1) does some initial clean up;
-> > 2) moves the capstone and LLVM code to their own C files,
-> > 3) simplifies a little the capstone code;
->
-> I like changes up to this in general.  Let me take a look at the
-> patches.
+vim +/pos +283 include/linux/llist.h
 
-Thanks,
-Ian
-Ian
+   255	
+   256	/**
+   257	 * llist_del_entry - remove a particular entry from a lock-less list
+   258	 * @head: head of the list to remove the entry from
+   259	 * @entry: entry to be removed from the list
+   260	 *
+   261	 * Walk the list, find the given entry and remove it from the list.
+   262	 * The caller must ensure that nothing can race in and change the
+   263	 * list while this is running.
+   264	 *
+   265	 * Returns true if the entry was found and removed.
+   266	 */
+   267	static inline bool llist_del_entry(struct llist_head *head, struct llist_node *entry)
+   268	{
+   269		struct llist_node *pos;
+   270	
+   271		if (!head->first)
+   272			return false;
+   273	
+   274		/* Is it the first entry? */
+   275		if (head->first == entry) {
+   276			head->first = entry->next;
+   277			entry->next = entry;
+   278			return true;
+   279		}
+   280	
+   281		/* Find it in the list */
+   282		llist_for_each(head->first, pos) {
+ > 283			if (pos->next == entry) {
+   284				pos->next = entry->next;
+   285				entry->next = entry;
+   286				return true;
+   287			}
+   288		}
+   289		return false;
+   290	}
+   291	
 
-> Thanks,
-> Namhyung
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
