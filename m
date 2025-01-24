@@ -1,109 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDFC1DC98D
-	for <llvm@lists.linux.dev>; Fri, 24 Jan 2025 21:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3002912EBDB;
+	Fri, 24 Jan 2025 21:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737753790; cv=none; b=lgY9WbPXJu/uetTmp4yc2RSlkrNHun5pUB0ie74Ph8n+F5xlb6JAVLDuVmkVO2NEp6r9ZhkAGnDOTvCQkg/eJtTG28+ES3vajhpi1kh/wwPdU+a3N9TY6LYJSxw5zIBHWfjEeQoBErT8mLTenOZem5eKcqE5wINoCRXOiAU2Nfo=
+	t=1737754315; cv=none; b=YJMJAd180ueW3AjHLkaH8s4sCoOCqsjY00281X0yllQul+Dud3I7/yspCGrwjW9jyapkF1USGHiWOMGexQB2wAhajuW0PR7fh+DmmDc7sLih1ltSRSrVZROeM0MXBc+P3I5NjM3GwZjech0AtxUgXHghQTQ0GT8aIyWNj3wbVzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737753790; c=relaxed/simple;
-	bh=0vbCAH6peRmyF5Dq3lERxI4cWpPTtTI5QtwDxhz+Yts=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TJZBi3KJhMGNCBL9T2Hn0/73NB4ZCvnF6eXunGPzEDSX0D+TuVUx4gl1sbCl0A/0MEMCdU2i2hS+cZ7Sz5DZYIh3AtZF6tYs+WuRzg1/i3O6s8lfsxYFI/Q1z4A0TNkI8pii0/ftjMvPHtV/NWotO88V8XwGb2k106/OlUs7gOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O00W6jUG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1737754315; c=relaxed/simple;
+	bh=y3+tzdTCeITPXm5rMFBmL1j5tGgi6F/rV8K16ZmvxHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TeX0t1kiadU0MJujxiBd9kdZu87zFP6SCQqLB15wA9lS/JdxiE4DKyiH49GYkfsXPIM/XduMBBoCn3sgT9RUTgvUKc+fZZeKxMzuKRuZ5elERDpiCUIxyR/QZtgqkzowmWogixXXu2f+hNVD3iA2HMBlYMlTs8eAj2uE74CUMCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPoFV/oI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O00W6jUG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737753787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=avpIsHB/SNeoh3i0X5ivmT3kw1j9sf4L1FZUgyMseLA=;
-	b=O00W6jUGtDXENavyNvrhAEhhzlbTxAHz7xyHsCJyX02i7oxAMFmJN5GL3ATkRS6Hkk6kAR
-	uDpVloy0NiV/G5ufUO7t1Gy9nM9jnMt807ZdJimzG5Alr46xpNYVO1Kbz7i7UuN9D4jI2n
-	ZvoEEM0uCGckVjZU7rnwhDYb797WSCs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-bRxIBVb_MsiE4OTJjOettg-1; Fri,
- 24 Jan 2025 16:23:06 -0500
-X-MC-Unique: bRxIBVb_MsiE4OTJjOettg-1
-X-Mimecast-MFC-AGG-ID: bRxIBVb_MsiE4OTJjOettg
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 31A2719560AF
-	for <llvm@lists.linux.dev>; Fri, 24 Jan 2025 21:23:05 +0000 (UTC)
-Received: from [172.64.13.55] (unknown [10.30.32.164])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A1027195608E;
-	Fri, 24 Jan 2025 21:23:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, 47d65738)
-Date: Fri, 24 Jan 2025 21:23:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPoFV/oI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E58C4CED2;
+	Fri, 24 Jan 2025 21:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737754314;
+	bh=y3+tzdTCeITPXm5rMFBmL1j5tGgi6F/rV8K16ZmvxHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TPoFV/oIe5oDeYgRPzzXsB9IWESp0goS/sTSpLZ+eAubwCFwoFYMNqF0eS31wvEft
+	 hAQtdfl+qHLOJDMkwAo5uiHg4wMm0jGzuPoLh7cTxqzilUlcE+YoBm3GnCbbJKTm9Z
+	 7daJNKk87GpMfQdaRXtsJriwohJL/1SXUad0eD/BphgpkV4Kc0kbS3p7A/cgF1DYBM
+	 CEb97qXGIqXXWcbi1ZeJTb0gUh37KOwC2ZCG6tnzk3WInmNIc4A41tdWPr7MXd2WrP
+	 eg2NBYAitNVTY+7HXYoN9DfCWoGMAKsmfuT5k138B6VSRo3Z973gzCvY3geR3u3l8T
+	 oHIS9DA6bv0jQ==
+Date: Fri, 24 Jan 2025 13:31:52 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v1 4/5] perf capstone: Support for dlopen-ing
+ libcapstone.so
+Message-ID: <Z5QGyGQ9SfXiE3WH@google.com>
+References: <20250120173208.344231-1-irogers@google.com>
+ <20250120173208.344231-5-irogers@google.com>
+ <Z5FwusFZ_bYlu6aK@google.com>
+ <CAP-5=fX4vtKzMtrEbZhqH0dmKpXY3Ke+pVJ-ZbnHnAVuto7Z8g@mail.gmail.com>
+ <CAP-5=fXx=q-LHcb9BtjE1AFZGmV55NBWy3HvfWQaABo-YO=4gA@mail.gmail.com>
+ <CAP-5=fUhNuybCU-2_5EgcCwgwXnxvyFMvyhzKe=ZP1bssQwXHw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <93437.125012416230600829@us-mta-682.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: O_dkVCD1j0GUGCJ1jNxHGMuKe3Z07XXPwWb-MaJeyu4_1737753785
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fUhNuybCU-2_5EgcCwgwXnxvyFMvyhzKe=ZP1bssQwXHw@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Thu, Jan 23, 2025 at 01:37:16PM -0800, Ian Rogers wrote:
+> > > On Wed, Jan 22, 2025 at 2:27 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > > I think reverse engineering the types is fragile.  Can we simply change
+> > > > to dlopen if libcapstone is available?
+> 
+> To understand the scope of the problem, here is the LLVM code:
+> https://github.com/googleprodkernel/linux-perf/blob/google_tools_master/tools/perf/util/llvm.c#L22
+> 3 typedefs and 5 #defines on 13 lines of code.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+It doesn't look that bad than I thought. :)
 
+> 
+> The capstone code is larger primarily due to needing to define cs_x86
+> (and its dependencies) which are used for extra detail in printing:
+> https://github.com/googleprodkernel/linux-perf/blob/google_tools_master/tools/perf/util/capstone.c#L23-L132
+> We could opt out of providing the extra detail if capstone.h isn't
+> present. I believe this can remove lines 49 to 123. This would mean
+> there would be 37 lines of reverse engineered types - 2 structs and 5
+> enums.
 
-Kernel information:
-    Commit message: Merge tag 'parisc-for-6.14-rc1' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/deller/parisc-linux
+Probably, we don't need to carry the full details of instructions when
+the library support was not built.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1640239740
+> 
+> My feeling is that this isn't significant and better than returning
+> errors for capstone/llvm, having #ifdefs/__maybe_unused for the cases
+> we lack the types throughout the code and relying on people building
+> noticing a warning to realize they need to install a dependency - the
+> alternative of failing the build if the capstone/LLVM header files
+> aren't present, and unless some NO_... build option isn't passed,
+> likely won't fly with perf developers.
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1640239740-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1640239740-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1640239740-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+I don't think failing the build due to the optional dependencies is an
+option.  I'm not against the idea of dlopen but my concern is to carry
+those external definitions in the perf code base.  Maybe it'd be ok if
+we could keep it minimally.
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks,
+Namhyung
 
