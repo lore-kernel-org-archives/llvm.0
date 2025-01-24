@@ -1,114 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F7A4D8DA
-	for <llvm@lists.linux.dev>; Fri, 24 Jan 2025 13:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767DE23B0
+	for <llvm@lists.linux.dev>; Fri, 24 Jan 2025 17:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737726925; cv=none; b=bVckioBkREeppAtp8DdAX+GtICOsnraGLknzBZOtq5HhM3A7QGhdjmXty8qDOw21gMFrxf7+/or+TOKBxhjAcvG+S9chmaMzU/4abUmVbyEm/uPbo0x5112cJoGIS/HT+xjTUI0Sd6zvQtEU70aGqjFCSU94KKQj+LzW0g2BewI=
+	t=1737738569; cv=none; b=bU7K15xo/y+n/RQlWB+eZ3epKTdSD1wjbunzgU9jANHY9kr4Q+fXeLr+u+K6nFu99B4SaJM+dUpWh+ey2G0gzIuP0+PoxsocXi67GELWSnADaGOCaStJRlz0di6bLvTMFfHerrzibBeJ0P4E6i5AkrTC4us+uf0vs2+Y3zvn7GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737726925; c=relaxed/simple;
-	bh=a2mjlcNJ6Ulz6xXxtNxQXGSj/QcazXRE4HjOleqyyVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dSmNBr6RKv/5ekasC5knwEg+cWB1faRCMsisgHRvpEZViYom3yF+0UDdlGRHE147BtTKfqe2R+A0oztbrbOdNLyjeexHQtkVldQyuRuUUk0XV4LniPQXqbKwsdCgaBw9XxFRmRoFjwJDgAgpMC9sPWmKi0tUtlE3I0GctKEDBw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jd88naVX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737738569; c=relaxed/simple;
+	bh=0V1RhQIzxLz557lqsrFUasI3dpksdT7hiqRwP6q6X5Q=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lT7n4LWgk9jgUqup8iBD+MteDASb0UKst43NQIXGms6MFjeaT2yz64mEj9V50kj5BU/YWbWORYc448O54G9ZsG7qp3WPHHb5WYcONBDQdb1Li3UdPBqh4E9TYDDG9H3+zBNb3LE9xzqSOcKdJS0zMLOAF5MuXLLYq/QaWKwGM2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LPNiyiPZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jd88naVX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAC1C4CED2;
-	Fri, 24 Jan 2025 13:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737726924;
-	bh=a2mjlcNJ6Ulz6xXxtNxQXGSj/QcazXRE4HjOleqyyVY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jd88naVXtW+z5vzrS+DnU5ckUob7b/QjvanSKazU31C/AD0W23qjfhmfhYZ+zhvy/
-	 yNG5D0wjH/QIS2uDvKlcj5RBcrdjxnAujrvZQcR6XUpCPMIiL4ttqcPl3TjO83C/Li
-	 CepT6j5BqDp0+v08FgcCuM6aGJfkbEmO0ml8ayNK+mFp/SYqpGB6/gBZRzw+x6CrFd
-	 Gboc6aMF2CgxqM+HzVjqft/yYIBEOrkJYaIJU/xdROtPn7/Wlf3dASfvCUUUK+epR9
-	 ASLmg2yyzbsJfODGAkK5SvokAouaKVBW+Xp2z6x+orZQmH+EJmjh3Z1by6rMl+1OkT
-	 tB4PoMCuP0MPA==
-Date: Fri, 24 Jan 2025 06:55:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-20-init-18802-gee99c4d4845d: Failure on
- aarch64
-Message-ID: <20250124135521.GA2502091@ax162>
-References: <1238599551.120293.1737701750619@jenkins.jenkins>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LPNiyiPZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737738565;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EWfeEtqQkH0XaBwfC4x1Y8BORG78PXOvz9cO9jVWvXM=;
+	b=LPNiyiPZFsY94VmOe0KhUg02HOH7ytYw4uUtbxb/pECPQ+6pXpUmHqudSIwopkZFAu7WZN
+	va/3Z0uMkvZ3ocsHLjIEpBCU3kCF5I73QmMNe9JtTxYRFV4MwyALziXbm+38CnpXS1v1Ne
+	blKXwSph8T580+1zn7dvspnhA3q/qq8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-13-FgrBlInKOsmesWesT7FWsw-1; Fri,
+ 24 Jan 2025 12:09:20 -0500
+X-MC-Unique: FgrBlInKOsmesWesT7FWsw-1
+X-Mimecast-MFC-AGG-ID: FgrBlInKOsmesWesT7FWsw
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E2601A16A0E
+	for <llvm@lists.linux.dev>; Fri, 24 Jan 2025 15:12:03 +0000 (UTC)
+Received: from [172.64.13.55] (unknown [10.30.32.164])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1778A195608A;
+	Fri, 24 Jan 2025 15:12:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, 113691ce)
+Date: Fri, 24 Jan 2025 15:12:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1238599551.120293.1737701750619@jenkins.jenkins>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <44070.125012412092001535@us-mta-13.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 7nDwM3Ul2DyBQvTQGTiSJD5V5iOeDHfTWna0yDrYJm8_1737738558
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 24, 2025 at 06:55:49AM +0000, ci_notify@linaro.org wrote:
-> Dear contributor,
-> 
-> Our automatic CI has detected problems related to your patch(es). Please find some details below.
-> 
-> In tcwg_kernel/llvm-master-aarch64-stable-allmodconfig, after:
->   | commit llvmorg-20-init-18802-gee99c4d4845d
->   | Author: SivanShani-Arm <sivan.shani@arm.com>
->   | Date:   Thu Jan 23 09:46:59 2025 +0000
->   | 
->   |     [LLVM][Clang][AArch64] Implement AArch64 build attributes (#123990)
->   |     
->   |     - Added support for AArch64-specific build attributes.
->   |     - Print AArch64 build attributes to assembly.
->   |     - Emit AArch64 build attributes to ELF.
->   | ... 2 lines of the commit log omitted.
-> 
-> Produces Failure:
->   | Results changed to
->   | # reset_artifacts:
->   | -10
->   | # build_abe binutils:
->   | -9
->   | # build_kernel_llvm:
->   | -5
->   | # build_abe qemu:
->   | -2
->   | # linux_n_obj:
->   | 40
->   | 
->   | From
->   | # reset_artifacts:
->   | -10
->   | # build_abe binutils:
->   | -9
->   | # build_kernel_llvm:
->   | -5
->   | # build_abe qemu:
->   | -2
->   | # linux_n_obj:
->   | 25849
-> 
-> Used configuration :
->  tcwg_kernel/llvm-master-aarch64-stable-allmodconfig
-> 
-> We track this bug report under https://linaro.atlassian.net/browse/LLVM-1530. Please let us know if you have a fix.
-> 
-> If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-> 
-> -----------------8<--------------------------8<--------------------------8<--------------------------
-> 
-> The information below contains the details of the failures, and the ways to reproduce a debug environment:
-> 
-> 
-> 
-> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allmodconfig-build/252/artifact/artifacts
-> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allmodconfig-build/251/artifact/artifacts
-> 
-> Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/ee99c4d4845db66c4daa2373352133f4b237c942/tcwg_kernel/llvm-master-aarch64-stable-allmodconfig/reproduction_instructions.txt
-> 
-> Full commit : https://github.com/llvm/llvm-project/commit/ee99c4d4845db66c4daa2373352133f4b237c942
+Hi, we tested your kernel and here are the results:
 
-Thanks for the report, this change needs adaption on the kernel side:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-https://lore.kernel.org/20250124-arm64-handle-arm-attributes-in-linker-script-v1-1-74135b6cf349@kernel.org/
 
-Cheers,
-Nathan
+Kernel information:
+    Commit message: Merge tag 'x86_tdx_for_6.14-rc1' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/tip/tip
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1639772980
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1639772980-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1639772980-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1639772980-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
