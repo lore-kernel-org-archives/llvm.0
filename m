@@ -1,62 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267F92FC52;
-	Fri, 24 Jan 2025 00:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D522D2B9A6;
+	Fri, 24 Jan 2025 01:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737680298; cv=none; b=mMp3wR2tnwkDd2mwFmK5hgtyLVzguz0kuyY/Tikx/93dwUzu55U1TJqWYfeycGWcN4BkmS1vlCdCENA+HRFujmWF3vzSXOfo6rA9DofUXZlW5Qmk1mx0Lyu7UCDWGzTcA0bY4UAM01kv+6j7Dq6weViVURltNvJJ12OUNRWl1NI=
+	t=1737682225; cv=none; b=Y9h/CvVxXCJX3sMAO5rV+BTX75zN/4auWWlUbn9trxxYcjKeWvs8MBnTpFzQyYST5GBCtCUmFXp0nwhJ5K8A92Q4f+UOEF0AW/UOnsQl9B795Sadrs+xdJN3vuPK4hzw/iELA0B5SFAC9AcUGDoP8mWd01GnM4uiDI7tYI0cLMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737680298; c=relaxed/simple;
-	bh=LJBWz7gpPx6pYor80sUUmn3yFQaUSRq1SmFUxTQS2wY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FDpbz3U/b64ln3R1oalokUQ0rVfI2MUHF9jl6sODVB1IVpVtnhUEqDlZGYN6Y0rrfQHPP63f7wYU+EfUaVlJOS2M1ICT2D2bqeWww3Ee82LoOQehNgq4A0FUVbvsBtBW5ll58Q3K0HZprv03/oGqQnCaHVZ8tcBc7hBrmp0he2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XDOhq5Qn; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1737682225; c=relaxed/simple;
+	bh=Edg/rahXr6zMPT1GULY2J2glCSsVxW8a+267Rjz8WYc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OZ3hZmdpJ1T8betFxf6yaf2NG/stwVEd8oSbkyi3lOZHk6aQ8ib74cFlT34+NJKb3w62LOsCEF//UKsJ830XlBZtaXQso7HmbIB2wj+D/neyxzUtvylmVVf99PA5qdvnlY9hp4O3Fq/yL1ZBgpAAxjYXa2KZY47686Qec0LYr3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFzlswML; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XDOhq5Qn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFzlswML"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737680297; x=1769216297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LJBWz7gpPx6pYor80sUUmn3yFQaUSRq1SmFUxTQS2wY=;
-  b=XDOhq5QnuhHEvTa+6KpajxUXvsgIGrpSa2UGK3eHkwDkkZqrTdbMWpGC
-   ZRDYD2K8H+6o3/FOkwNpgRfQ2IcI2FeSJTs+q43vq7yek5Il7Ati/JUok
-   PveGMfBNv72bRhKolZZdiqvMIi470ECyhnfifggVogkWPozZShFU6uO3H
-   f+fNgaXA2lP3THUce+D7ZpXHDA+U9RJ74jw9OCxBIexl86EEQeZZzQfdT
-   +aT3O56w7r6GhmMFw5zIK51RthhKOsuVqRBvvbHO/JBaa31mVpQzV/myW
-   1j4pW5iSkG0gHIbAyI0W104e4Msur7UFmZkRIJDPCGNkAQRylMH+XU93g
-   g==;
-X-CSE-ConnectionGUID: 7TLdNkMPTkupd3tBryaVVQ==
-X-CSE-MsgGUID: iuo6iUQfR1uqKMJhirct7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11324"; a="25811792"
+  t=1737682224; x=1769218224;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Edg/rahXr6zMPT1GULY2J2glCSsVxW8a+267Rjz8WYc=;
+  b=lFzlswML+ulPHIi2r1uSDGd7vDEDiN0rkoMQtfxoWeB7SVHlG5cwft6y
+   X3Z8ZxhxBweZ1eEClDK4JT/1NHVv6XHBpPNaZA0lXUK1UMcuqTOh++5Rl
+   1wur5zsX3erM9lUr+gOM6FFeQIDrlilvFovEWHbkKJIQ1r8KzEjFkPJA8
+   6U74ICJOgHjLyg+SYGfPrbjV7xl8jGPpt230+KPbEfS+66ucpekUwFk1U
+   WEP13qGltkG/oU6TOWvSOCqMHjrdI5V+TB+gsB75CNPn8OOprYIck1Kcw
+   DrsqSvcW8f8XxJO9B4RUSzsfJWrx2CkrVXmAdfU+q72KVQBn3tHuhOL+g
+   Q==;
+X-CSE-ConnectionGUID: 0qL9t9wFSXSWjIi68Vc8cA==
+X-CSE-MsgGUID: 4pZg35i6TbeJDbMdQDVm8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11324"; a="48713795"
 X-IronPort-AV: E=Sophos;i="6.13,230,1732608000"; 
-   d="scan'208";a="25811792"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 16:58:15 -0800
-X-CSE-ConnectionGUID: 4UsT8Xz8R32ht4pJyvthmg==
-X-CSE-MsgGUID: ELh5nu3KRZCA+ABFH0wYDQ==
+   d="scan'208";a="48713795"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 17:30:24 -0800
+X-CSE-ConnectionGUID: F+XhDzzVRbOoXELv9Lawww==
+X-CSE-MsgGUID: NvIcBsStQq6Toy4iYHCIVg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,230,1732608000"; 
-   d="scan'208";a="138490980"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112766529"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Jan 2025 16:58:14 -0800
+  by orviesa005.jf.intel.com with ESMTP; 23 Jan 2025 17:30:21 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tb81S-000bvn-30;
-	Fri, 24 Jan 2025 00:58:10 +0000
-Date: Fri, 24 Jan 2025 08:57:12 +0800
+	id 1tb8WZ-000byt-1i;
+	Fri, 24 Jan 2025 01:30:19 +0000
+Date: Fri, 24 Jan 2025 09:30:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Olga Kornievskaia <okorniev@redhat.com>, chuck.lever@oracle.com,
-	jlayton@kernel.org
+To: Alex Shi <alexs@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, Olga Kornievskaia <okorniev@redhat.com>
-Subject: Re: [PATCH 1/3] llist: add ability to remove a particular entry from
- the list
-Message-ID: <202501240848.ZH81rjTD-lkp@intel.com>
-References: <20250115232406.44815-2-okorniev@redhat.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [linux-next:master 8826/10150] mm/zsmalloc.c:431:20: warning:
+ function 'is_first_zpdesc' is not needed and will not be emitted
+Message-ID: <202501240958.4ILzuBrH-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,92 +64,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250115232406.44815-2-okorniev@redhat.com>
 
-Hi Olga,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on trondmy-nfs/linux-next]
-[also build test ERROR on brauner-vfs/vfs.all linus/master v6.13 next-20250123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Olga-Kornievskaia/llist-add-ability-to-remove-a-particular-entry-from-the-list/20250116-072951
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20250115232406.44815-2-okorniev%40redhat.com
-patch subject: [PATCH 1/3] llist: add ability to remove a particular entry from the list
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250124/202501240848.ZH81rjTD-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250124/202501240848.ZH81rjTD-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   853d1f41ba73e78d22e7075d9a95670aab187eba
+commit: 1c6c153b503f90d1099ae606198e080a452687f6 [8826/10150] mm/zsmalloc: use zpdesc in trylock_zspage()/lock_zspage()
+config: i386-randconfig-005-20250124 (https://download.01.org/0day-ci/archive/20250124/202501240958.4ILzuBrH-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250124/202501240958.4ILzuBrH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501240848.ZH81rjTD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501240958.4ILzuBrH-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from lib/test_bitops.c:10:
-   In file included from include/linux/module.h:17:
-   In file included from include/linux/kmod.h:9:
-   In file included from include/linux/umh.h:4:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:63:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:15:
-   In file included from include/linux/smp_types.h:5:
->> include/linux/llist.h:283:7: error: variable 'pos' is uninitialized when used here [-Werror,-Wuninitialized]
-     283 |                 if (pos->next == entry) {
-         |                     ^~~
-   include/linux/llist.h:269:24: note: initialize the variable 'pos' to silence this warning
-     269 |         struct llist_node *pos;
-         |                               ^
-         |                                = NULL
-   1 error generated.
+>> mm/zsmalloc.c:431:20: warning: function 'is_first_zpdesc' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+     431 | static inline bool is_first_zpdesc(struct zpdesc *zpdesc)
+         |                    ^~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/pos +283 include/linux/llist.h
+vim +/is_first_zpdesc +431 mm/zsmalloc.c
 
-   255	
-   256	/**
-   257	 * llist_del_entry - remove a particular entry from a lock-less list
-   258	 * @head: head of the list to remove the entry from
-   259	 * @entry: entry to be removed from the list
-   260	 *
-   261	 * Walk the list, find the given entry and remove it from the list.
-   262	 * The caller must ensure that nothing can race in and change the
-   263	 * list while this is running.
-   264	 *
-   265	 * Returns true if the entry was found and removed.
-   266	 */
-   267	static inline bool llist_del_entry(struct llist_head *head, struct llist_node *entry)
-   268	{
-   269		struct llist_node *pos;
-   270	
-   271		if (!head->first)
-   272			return false;
-   273	
-   274		/* Is it the first entry? */
-   275		if (head->first == entry) {
-   276			head->first = entry->next;
-   277			entry->next = entry;
-   278			return true;
-   279		}
-   280	
-   281		/* Find it in the list */
-   282		llist_for_each(head->first, pos) {
- > 283			if (pos->next == entry) {
-   284				pos->next = entry->next;
-   285				entry->next = entry;
-   286				return true;
-   287			}
-   288		}
-   289		return false;
-   290	}
-   291	
+   430	
+ > 431	static inline bool is_first_zpdesc(struct zpdesc *zpdesc)
+   432	{
+   433		return PagePrivate(zpdesc_page(zpdesc));
+   434	}
+   435	
 
 -- 
 0-DAY CI Kernel Test Service
