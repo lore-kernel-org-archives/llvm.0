@@ -1,108 +1,291 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596A3182B4;
-	Sat, 25 Jan 2025 14:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5911EB5B;
+	Sat, 25 Jan 2025 14:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737814632; cv=none; b=bxKChG6ZPQf75tMc+WV4DOgrasxgWNEhrl0qNf5SGiXLpugsHW/rYKM6IxTvsf/AXjCZjQrtUuatDXu5s13E9TDJ/so4x7BEbrtiqTdgJuboq6MXCBZOMKbK8P2Ni97UXFcunOju+4bP37CuptaTb8tH7hQhOPTx0qbggPCoOHc=
+	t=1737814851; cv=none; b=sLdaKiPxArOOSAa5/KH2S3+gwsmD3NKqrnre5M6rR5MkDckqm2I526P/1Dr307K/XblieFxZAytOGZ2OjUROVpn3QaaW+rZVdr8VzMR/LsxO5BFMDLmEiL6z7BYgkgYpq1CUhSIJ79VSxezp1jsMPUT39t18jAdBVKhXyXhjmi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737814632; c=relaxed/simple;
-	bh=n061RGa+kaKqL8sBVggcMoEDPZpHwdp/oQgGOd5Ya8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ssAiHFHGuQZuM1ArRPqbRSI5WnyCAmab2epxeDqBAzXpsrn0mvQjqFgUgc6dMlT/pD8/OQ/xMYclvr0VUTgkWDOS+QuG68l2WQqNHjloNlNyuU56RcEk7rxGbI9ReyA4YyF7y0ykdoZUCeS6Urp1WfHLaoCV5GxpVswDySq5Lv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=haovLgjc; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737814851; c=relaxed/simple;
+	bh=gRkPCy6rRZT0kv6LpId7ihiyPgtJzG4AEo31nddyytU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qzyzXDJVvZmEhf58mnxagKx3f/IjfycyigTCTOmJjnPnSPbBmiSFQenFsYlPk3IX/ekImyWuviCi4Pr+A2oVfLXE+BdF7slC8HQKz3lhSzzyTcKn9W4/CS3LmOFvqDr2Nitks0gmdJY9Dy5EdPhB2mumbMK0JKQiVbK/hlPIzpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UEBpDpIW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="haovLgjc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737814630; x=1769350630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n061RGa+kaKqL8sBVggcMoEDPZpHwdp/oQgGOd5Ya8M=;
-  b=haovLgjcoGBI1W8Ym1ho79bTpg52QTeAniziCSoZGIJU9VCkNpJRpsRF
-   Myr673s7pVxcHFM2HoJiY5AXEb6DgufpKfvAea2WamaBXg4Qfz7zOk4pM
-   N5bU3RP147TdCPkax/Tc876fn/hrW3SBKZUcu5gdvaiv80fxanW+J6MbO
-   8AFatbA8PoirqSIVeazkL4Nm+PYbwjZ7sxxxsNjvDBBRZA3Yqq2u4MI+i
-   NgTjRD5CokJXHmOkeJpZNfYsqf+miAv5zHZXrCsJUtsrpIoROUXjEpBku
-   u8BTd2R3ivRt2+8tGXoOuHUwm5JZY9xK9HIFqu4qe0bVtN3JcD70ixNnt
-   g==;
-X-CSE-ConnectionGUID: r+baPICkSbKUOhOzl77wHw==
-X-CSE-MsgGUID: Hz3AsCmiTU28RBtDjI3c5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11326"; a="41175468"
-X-IronPort-AV: E=Sophos;i="6.13,234,1732608000"; 
-   d="scan'208";a="41175468"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2025 06:17:07 -0800
-X-CSE-ConnectionGUID: rJPDmvVkSoeYACLfVfwo1A==
-X-CSE-MsgGUID: FvBR6pg/SU+VRDCGUvCaqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,234,1732608000"; 
-   d="scan'208";a="107820529"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Jan 2025 06:17:06 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tbgy7-000dsF-2T;
-	Sat, 25 Jan 2025 14:17:03 +0000
-Date: Sat, 25 Jan 2025 22:16:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Penkler <dpenkler@gmail.com>, gregkh@linuxfoundation.org,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Penkler <dpenkler@gmail.com>
-Subject: Re: [PATCH 3/3] staging: gpib: Remove depends on BROKEN
-Message-ID: <202501252218.eaGgSuN3-lkp@intel.com>
-References: <20250124105900.27592-4-dpenkler@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UEBpDpIW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B86C4CED6;
+	Sat, 25 Jan 2025 14:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737814851;
+	bh=gRkPCy6rRZT0kv6LpId7ihiyPgtJzG4AEo31nddyytU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=UEBpDpIWVyZx3j/iXU0t8mzTVyXh5FsqOZcjYSThSfD4SLam/55frp6lSip+dH5Vi
+	 7iwnnXPHKMGAvbkOtmakXvHfNwjVNDuV/MZ1kGku9jvi1GAHUMPXDR8GgXLpV+G5/h
+	 kfRmmJ/p9U4fUn1Eh5pLZ1lSynC8y97qCB1fVolr5gxvbBnhMngXHoOQ54kH2kM4pH
+	 6Ug2tkCa6HVR4GTc3qlu2r5i73+yNHUTP0TrL4Z5qXCTnRxvb8MfPmHeP/l46W4wYq
+	 2puQI/uRToGITwClVqBxCkgGGBQmwagmQEXOUK+lnEgqsheyuxaMfYE+6BlD4K0BEO
+	 BIHrPnSn33UUw==
+Date: Sat, 25 Jan 2025 14:20:40 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Mikael Gonella-Bolduc via B4 Relay
+ <devnull+mgonellabolduc.dimonoff.com@kernel.org>
+Cc: mgonellabolduc@dimonoff.com, Lars-Peter Clausen <lars@metafoo.de>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Mikael Gonella-Bolduc
+ <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
+ Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v5 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
+ driver
+Message-ID: <20250125142040.273f9cd6@jic23-huawei>
+In-Reply-To: <20250122-apds9160-driver-v5-2-5393be10279a@dimonoff.com>
+References: <20250122-apds9160-driver-v5-0-5393be10279a@dimonoff.com>
+	<20250122-apds9160-driver-v5-2-5393be10279a@dimonoff.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250124105900.27592-4-dpenkler@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Dave,
+On Wed, 22 Jan 2025 17:59:34 -0500
+Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
 
-kernel test robot noticed the following build warnings:
+> From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+> 
+> APDS9160 is a combination of ALS and proximity sensors.
+> 
+> This patch add supports for:
+>     - Intensity clear data and illuminance data
+>     - Proximity data
+>     - Gain control, rate control
+>     - Event thresholds
+> 
+> Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
+Hi Mikael,
 
-[auto build test WARNING on staging/staging-testing]
+Some minor things inline. I tidied up whilst applying.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Penkler/staging-gpib-Fix-pr_err-format-warning/20250124-190232
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250124105900.27592-4-dpenkler%40gmail.com
-patch subject: [PATCH 3/3] staging: gpib: Remove depends on BROKEN
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250125/202501252218.eaGgSuN3-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250125/202501252218.eaGgSuN3-lkp@intel.com/reproduce)
+Applied to the togreg branch of iio.git; initially pushed out as testing
+as I'll be rebasing on rc1 once available.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501252218.eaGgSuN3-lkp@intel.com/
+thanks,
 
-All warnings (new ones prefixed by >>):
-
->> drivers/staging/gpib/hp_82341/hp_82341.c:802:35: warning: unused variable 'hp_82341_pnp_table' [-Wunused-const-variable]
-     802 | static const struct pnp_device_id hp_82341_pnp_table[] = {
-         |                                   ^~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Jonathan
 
 
-vim +/hp_82341_pnp_table +802 drivers/staging/gpib/hp_82341/hp_82341.c
 
-6d4f8749cd5da8 Dave Penkler 2024-09-18  801  
-6d4f8749cd5da8 Dave Penkler 2024-09-18 @802  static const struct pnp_device_id hp_82341_pnp_table[] = {
-6d4f8749cd5da8 Dave Penkler 2024-09-18  803  	{.id = "HWP1411"},
-6d4f8749cd5da8 Dave Penkler 2024-09-18  804  	{.id = ""}
-6d4f8749cd5da8 Dave Penkler 2024-09-18  805  };
-6d4f8749cd5da8 Dave Penkler 2024-09-18  806  MODULE_DEVICE_TABLE(pnp, hp_82341_pnp_table);
-6d4f8749cd5da8 Dave Penkler 2024-09-18  807  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  MAINTAINERS                  |    7 +
+>  drivers/iio/light/Kconfig    |   11 +
+>  drivers/iio/light/Makefile   |    1 +
+>  drivers/iio/light/apds9160.c | 1597 ++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 1616 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e69d1632c382fe0e366f7bb20e72ee0c9e91e30b..23d9fcbf71a311940ff86d8dc4cabd5be77925aa 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4340,6 +4340,13 @@ F:	kernel/bpf/stackmap.c
+>  F:	kernel/trace/bpf_trace.c
+>  F:	lib/buildid.c
+>  
+> +BROADCOM APDS9160 AMBIENT LIGHT SENSOR AND PROXIMITY DRIVER
+> +M:	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
+> +L:	linux-iio@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
+> +F:	drivers/iio/light/apds9160.c
+> +
+>  BROADCOM ASP 2.0 ETHERNET DRIVER
+>  M:	Justin Chen <justin.chen@broadcom.com>
+>  M:	Florian Fainelli <florian.fainelli@broadcom.com>
+> diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
+> index 29ffa84919273d64b8464ab8bbf59661b0102f97..419360661d53973eda71d7d986ff7fd481c7aa2c 100644
+> --- a/drivers/iio/light/Kconfig
+> +++ b/drivers/iio/light/Kconfig
+> @@ -63,6 +63,17 @@ config AL3320A
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called al3320a.
+>  
+> +config APDS9160
+> +	tristate "APDS9160 combined als and proximity sensor"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	   Say Y here if you want to build support for a Broadcom APDS9160
+> +		combined ambient light and proximity sensor.
+
+Strange indent.
+
+> +
+> +	   To compile this driver as a module, choose M here: the
+> +	   module will be called apds9160.
+> +
+
+> diff --git a/drivers/iio/light/apds9160.c b/drivers/iio/light/apds9160.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e98006de473790da66b92734a0527359e9cd1f40
+> --- /dev/null
+> +++ b/drivers/iio/light/apds9160.c
+
+> +/*
+> + * This parameter works in conjunction with the cancellation pulse duration
+> + * The value determines the current used for crosstalk cancellation
+> + * Coarse value is in steps of 60 nA
+> + * Fine value is in steps of 2.4 nA
+> + */
+> +static int apds9160_set_ps_cancellation_current(struct apds9160_chip *data,
+> +						int coarse_val,
+> +						int fine_val)
+> +{
+> +	int ret, val;
+> +
+> +	if (coarse_val < 0 || coarse_val > 4)
+> +		return -EINVAL;
+> +
+> +	if (fine_val < 0 || fine_val > 15)
+> +		return -EINVAL;
+> +
+> +	/* Coarse value at B4:B5 and fine value at B0:B3 */
+> +	val = (coarse_val << 4) | fine_val;
+> +
+> +	ret = regmap_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_ANA_CURRENT,
+> +			   val);
+> +
+> +	return ret;
+return regmap_write()
+
+> +}
+> +
+> +static int apds9160_ps_init_analog_cancellation(struct device *dev,
+> +						struct apds9160_chip *data)
+> +{
+> +	int ret, duration, picoamp, idx, coarse, fine;
+> +
+> +	ret = device_property_read_u32(dev,
+> +			"ps-cancellation-duration", &duration);
+> +
+Good to keep call + return together so no blank line here.
+> +	if (ret || duration == 0)
+
+Given the comment is in the block, I think this wants {} for readability
+reasons (not correctness).
+
+> +		/* Don't fail since this is not required */
+> +		return 0;
+> +
+> +	ret = device_property_read_u32(dev,
+> +			"ps-cancellation-current-picoamp", &picoamp);
+> +
+Odd line break here.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (picoamp < 60000 || picoamp > 276000 || picoamp % 2400 != 0)
+> +		return dev_err_probe(dev, -EINVAL,
+> +					"Invalid cancellation current\n");
+> +
+> +	/* Compute required coarse and fine value from requested current */
+> +	fine = 0;
+> +	coarse = 0;
+> +	for (idx = 60000; idx < picoamp; idx += 2400) {
+> +		if (fine == 15) {
+> +			fine = 0;
+> +			coarse++;
+> +			idx += 21600;
+> +		} else {
+> +			fine++;
+> +		}
+> +	}
+> +
+> +	if (picoamp != idx)
+> +		dev_warn(dev,
+> +			"Invalid cancellation current %i, rounding to %i\n",
+> +			picoamp, idx);
+> +
+> +	ret = apds9160_set_ps_analog_cancellation(data, duration);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return apds9160_set_ps_cancellation_current(data, coarse, fine);
+> +}
+
+> +
+> +/*
+> + *	Setting the integration time ajusts resolution, rate, scale and gain
+
+Odd indent of the comment.
+
+> + */
+> +static int apds9160_set_als_int_time(struct apds9160_chip *data, int val)
+
+> +static int apds9160_read_avail(struct iio_dev *indio_dev,
+> +			       struct iio_chan_spec const *chan,
+> +			       const int **vals, int *type, int *length,
+> +			       long mask)
+> +{
+> +	struct apds9160_chip *data = iio_priv(indio_dev);
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_INT_TIME:
+> +		switch (chan->type) {
+> +		case IIO_LIGHT:
+> +			*length = ARRAY_SIZE(apds9160_als_rate_avail);
+> +			*vals = (const int *)apds9160_als_rate_avail;
+> +			*type = IIO_VAL_INT;
+> +
+> +			return IIO_AVAIL_LIST;
+> +		case IIO_PROXIMITY:
+> +			*length = ARRAY_SIZE(apds9160_ps_rate_avail);
+> +			*vals = (const int *)apds9160_ps_rate_avail;
+> +			*type = IIO_VAL_INT;
+> +
+> +			return IIO_AVAIL_LIST;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	case IIO_CHAN_INFO_SCALE:
+> +		switch (chan->type) {
+> +		case IIO_PROXIMITY:
+> +			*length = ARRAY_SIZE(apds9160_ps_gain_avail);
+> +			*vals = (const int *)apds9160_ps_gain_avail;
+> +			*type = IIO_VAL_INT;
+> +
+> +			return IIO_AVAIL_LIST;
+> +		case IIO_LIGHT:
+> +			/* The available scales changes depending on itime */
+> +			switch (data->als_itime) {
+> +			case 25:
+> +				*length = ARRAY_SIZE(apds9160_25ms_avail) * 2;
+> +				*vals = (const int *) apds9160_25ms_avail;
+> +				*type = IIO_VAL_INT_PLUS_MICRO;
+> +
+> +				return IIO_AVAIL_LIST;
+> +			case 50:
+> +				*length = ARRAY_SIZE(apds9160_50ms_avail) * 2;
+> +				*vals = (const int *) apds9160_50ms_avail;
+> +				*type = IIO_VAL_INT_PLUS_MICRO;
+> +
+> +				return IIO_AVAIL_LIST;
+> +			case 100:
+> +				*length = ARRAY_SIZE(apds9160_100ms_avail) * 2;
+> +				*vals = (const int *) apds9160_100ms_avail;
+> +				*type = IIO_VAL_INT_PLUS_MICRO;
+> +
+> +				return IIO_AVAIL_LIST;
+> +			case 200:
+> +				*length = ARRAY_SIZE(apds9160_200ms_avail) * 2;
+> +				*vals = (const int *) apds9160_200ms_avail;
+Completely trivial but the spacing here after) isn't consistent with some cases above.
+
+> +				*type = IIO_VAL_INT_PLUS_MICRO;
