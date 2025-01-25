@@ -1,291 +1,454 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5911EB5B;
-	Sat, 25 Jan 2025 14:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D87A2770B;
+	Sat, 25 Jan 2025 15:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737814851; cv=none; b=sLdaKiPxArOOSAa5/KH2S3+gwsmD3NKqrnre5M6rR5MkDckqm2I526P/1Dr307K/XblieFxZAytOGZ2OjUROVpn3QaaW+rZVdr8VzMR/LsxO5BFMDLmEiL6z7BYgkgYpq1CUhSIJ79VSxezp1jsMPUT39t18jAdBVKhXyXhjmi0=
+	t=1737819680; cv=none; b=UlnUiWGk3Q8EozAskY2qJio8v8TGTcPts5w0NSk4rulQ18xeDDjN0e7hfG0OCQ9YPYzkGXwKmK8Ask343q81z1rk4WgWp9kQWVe2VFdO5avxj+RsZOxiJYdA0VssZk7DKTXZXETDnextu/7d1O2TOShUNOdjk5JYKGOEaiQI4+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737814851; c=relaxed/simple;
-	bh=gRkPCy6rRZT0kv6LpId7ihiyPgtJzG4AEo31nddyytU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qzyzXDJVvZmEhf58mnxagKx3f/IjfycyigTCTOmJjnPnSPbBmiSFQenFsYlPk3IX/ekImyWuviCi4Pr+A2oVfLXE+BdF7slC8HQKz3lhSzzyTcKn9W4/CS3LmOFvqDr2Nitks0gmdJY9Dy5EdPhB2mumbMK0JKQiVbK/hlPIzpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UEBpDpIW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737819680; c=relaxed/simple;
+	bh=9PGUnIpityFd8iv4sDmNS6FOsJFZNCszTXx0cqDkvb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YyBqM4Tk7Y3lC3ytMAPbfs1ftKNBA+Wdr9eSFWp4wjyahsp2oapRxhzs0XxzrIkw8/8LRkeSKuQJSNSDL2shCSTs4K5YuE/Dkt8aIvFD4SsAMSY9iEZ8Z5yIBrrW144ZFrZzCMxes7rgdPAF22VjNwUloyhWx9/hcUFMsS9s3hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=duNbV1/f; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UEBpDpIW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B86C4CED6;
-	Sat, 25 Jan 2025 14:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737814851;
-	bh=gRkPCy6rRZT0kv6LpId7ihiyPgtJzG4AEo31nddyytU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UEBpDpIWVyZx3j/iXU0t8mzTVyXh5FsqOZcjYSThSfD4SLam/55frp6lSip+dH5Vi
-	 7iwnnXPHKMGAvbkOtmakXvHfNwjVNDuV/MZ1kGku9jvi1GAHUMPXDR8GgXLpV+G5/h
-	 kfRmmJ/p9U4fUn1Eh5pLZ1lSynC8y97qCB1fVolr5gxvbBnhMngXHoOQ54kH2kM4pH
-	 6Ug2tkCa6HVR4GTc3qlu2r5i73+yNHUTP0TrL4Z5qXCTnRxvb8MfPmHeP/l46W4wYq
-	 2puQI/uRToGITwClVqBxCkgGGBQmwagmQEXOUK+lnEgqsheyuxaMfYE+6BlD4K0BEO
-	 BIHrPnSn33UUw==
-Date: Sat, 25 Jan 2025 14:20:40 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mikael Gonella-Bolduc via B4 Relay
- <devnull+mgonellabolduc.dimonoff.com@kernel.org>
-Cc: mgonellabolduc@dimonoff.com, Lars-Peter Clausen <lars@metafoo.de>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Mikael Gonella-Bolduc
- <m.gonella.bolduc@gmail.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hugo Villeneuve <hvilleneuve@dimonoff.com>, Matti
- Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v5 2/2] iio: light: Add APDS9160 ALS & Proximity sensor
- driver
-Message-ID: <20250125142040.273f9cd6@jic23-huawei>
-In-Reply-To: <20250122-apds9160-driver-v5-2-5393be10279a@dimonoff.com>
-References: <20250122-apds9160-driver-v5-0-5393be10279a@dimonoff.com>
-	<20250122-apds9160-driver-v5-2-5393be10279a@dimonoff.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="duNbV1/f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737819678; x=1769355678;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9PGUnIpityFd8iv4sDmNS6FOsJFZNCszTXx0cqDkvb4=;
+  b=duNbV1/f7hy3oElgYqnvm9jb4jK7lLmmCdRUxW85qVkJCXFwdilMZM5i
+   QDGyRp5zHfQN0lCosS2MSEyzn7PDALLtWkG5rb27Ql2SE6SlSWMYV3RDG
+   Vb+SRGUKLNC/Frvc8XxmjjzDG0ulq3NV0g/GtoqFgNa70Nh11u3Dn1FdC
+   yoiaqH2uXigqrQ4ZUhOmCKxrYmCPzx6ho9Cn0+7MyE3UxkQKOxb7Qvq06
+   ALFGngzeLjYyLRQvqhElsXKGx7llokLu5k160mNoMmepX0T4Pv1m4JAB+
+   IUiiIU1Gxnp3yj3j26jddfEnQhMjdS4DclGa/Lc7OC5ngHzBoehP2sIU8
+   g==;
+X-CSE-ConnectionGUID: 9uHqWmk6TxKXWtc8bmyK/g==
+X-CSE-MsgGUID: yAoLzHBSS2eWY7nZe2/olw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11326"; a="48927677"
+X-IronPort-AV: E=Sophos;i="6.13,234,1732608000"; 
+   d="scan'208";a="48927677"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2025 07:41:17 -0800
+X-CSE-ConnectionGUID: TOxT7N/XSmacA/eUsG59kQ==
+X-CSE-MsgGUID: B0Y0BSVPQSimZpQZDPgMOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,234,1732608000"; 
+   d="scan'208";a="107824959"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 25 Jan 2025 07:41:16 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tbiHZ-000dxt-0W;
+	Sat, 25 Jan 2025 15:41:13 +0000
+Date: Sat, 25 Jan 2025 23:40:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Roopni Devanathan <quic_rdevanat@quicinc.com>,
+	ath12k@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org,
+	Roopni Devanathan <quic_rdevanat@quicinc.com>
+Subject: Re: [PATCH v2 1/5] wifi: cfg80211: Add Support to Set RTS Threshold
+ for each Radio
+Message-ID: <202501252150.mBnKxse3-lkp@intel.com>
+References: <20250124171756.3418663-2-quic_rdevanat@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250124171756.3418663-2-quic_rdevanat@quicinc.com>
 
-On Wed, 22 Jan 2025 17:59:34 -0500
-Mikael Gonella-Bolduc via B4 Relay <devnull+mgonellabolduc.dimonoff.com@kernel.org> wrote:
+Hi Roopni,
 
-> From: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-> 
-> APDS9160 is a combination of ALS and proximity sensors.
-> 
-> This patch add supports for:
->     - Intensity clear data and illuminance data
->     - Proximity data
->     - Gain control, rate control
->     - Event thresholds
-> 
-> Signed-off-by: Mikael Gonella-Bolduc <mgonellabolduc@dimonoff.com>
-Hi Mikael,
+kernel test robot noticed the following build warnings:
 
-Some minor things inline. I tidied up whilst applying.
+[auto build test WARNING on e7ef944b3e2c31b608800925e784f67596375770]
 
-Applied to the togreg branch of iio.git; initially pushed out as testing
-as I'll be rebasing on rc1 once available.
+url:    https://github.com/intel-lab-lkp/linux/commits/Roopni-Devanathan/wifi-cfg80211-Add-Support-to-Set-RTS-Threshold-for-each-Radio/20250125-012016
+base:   e7ef944b3e2c31b608800925e784f67596375770
+patch link:    https://lore.kernel.org/r/20250124171756.3418663-2-quic_rdevanat%40quicinc.com
+patch subject: [PATCH v2 1/5] wifi: cfg80211: Add Support to Set RTS Threshold for each Radio
+config: arm-imx_v6_v7_defconfig (https://download.01.org/0day-ci/archive/20250125/202501252150.mBnKxse3-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250125/202501252150.mBnKxse3-lkp@intel.com/reproduce)
 
-thanks,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501252150.mBnKxse3-lkp@intel.com/
 
-Jonathan
+All warnings (new ones prefixed by >>):
+
+>> net/wireless/nl80211.c:3603:12: warning: stack frame size (1128) exceeds limit (1024) in 'nl80211_set_wiphy' [-Wframe-larger-than]
+    3603 | static int nl80211_set_wiphy(struct sk_buff *skb, struct genl_info *info)
+         |            ^
+   1 warning generated.
 
 
+vim +/nl80211_set_wiphy +3603 net/wireless/nl80211.c
 
+f444de05d20e27 Johannes Berg          2010-05-05  3602  
+556829657397b9 Johannes Berg          2007-09-20 @3603  static int nl80211_set_wiphy(struct sk_buff *skb, struct genl_info *info)
+556829657397b9 Johannes Berg          2007-09-20  3604  {
+a05829a7222e9d Johannes Berg          2021-01-22  3605  	struct cfg80211_registered_device *rdev = NULL;
+f444de05d20e27 Johannes Berg          2010-05-05  3606  	struct net_device *netdev = NULL;
+f444de05d20e27 Johannes Berg          2010-05-05  3607  	struct wireless_dev *wdev;
+a1e567c83f5414 Bill Jordan            2010-09-10  3608  	int result = 0, rem_txq_params = 0;
+318884875bdddc Jouni Malinen          2008-10-30  3609  	struct nlattr *nl_txq_params;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3610  	u32 changed;
+c23c182175594b Roopni Devanathan      2025-01-24  3611  	u8 retry_short = 0, retry_long = 0, radio_id = NL80211_WIPHY_RADIO_ID_MAX;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3612  	u32 frag_threshold = 0, rts_threshold = 0;
+81077e82c3f591 Lukáš Turek            2009-12-21  3613  	u8 coverage_class = 0;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3614  	u32 txq_limit = 0, txq_memory_limit = 0, txq_quantum = 0;
+556829657397b9 Johannes Berg          2007-09-20  3615  
+a05829a7222e9d Johannes Berg          2021-01-22  3616  	rtnl_lock();
+f444de05d20e27 Johannes Berg          2010-05-05  3617  	/*
+f444de05d20e27 Johannes Berg          2010-05-05  3618  	 * Try to find the wiphy and netdev. Normally this
+f444de05d20e27 Johannes Berg          2010-05-05  3619  	 * function shouldn't need the netdev, but this is
+f444de05d20e27 Johannes Berg          2010-05-05  3620  	 * done for backward compatibility -- previously
+f444de05d20e27 Johannes Berg          2010-05-05  3621  	 * setting the channel was done per wiphy, but now
+f444de05d20e27 Johannes Berg          2010-05-05  3622  	 * it is per netdev. Previous userland like hostapd
+f444de05d20e27 Johannes Berg          2010-05-05  3623  	 * also passed a netdev to set_wiphy, so that it is
+f444de05d20e27 Johannes Berg          2010-05-05  3624  	 * possible to let that go to the right netdev!
+f444de05d20e27 Johannes Berg          2010-05-05  3625  	 */
+4bbf4d56583dd5 Johannes Berg          2009-03-24  3626  
+f444de05d20e27 Johannes Berg          2010-05-05  3627  	if (info->attrs[NL80211_ATTR_IFINDEX]) {
+f444de05d20e27 Johannes Berg          2010-05-05  3628  		int ifindex = nla_get_u32(info->attrs[NL80211_ATTR_IFINDEX]);
+f444de05d20e27 Johannes Berg          2010-05-05  3629  
+7f2b8562c2ee6e Ying Xue               2014-01-15  3630  		netdev = __dev_get_by_index(genl_info_net(info), ifindex);
+5fe231e873729f Johannes Berg          2013-05-08  3631  		if (netdev && netdev->ieee80211_ptr)
+f26cbf401be935 Zhao, Gang             2014-04-21  3632  			rdev = wiphy_to_rdev(netdev->ieee80211_ptr->wiphy);
+5fe231e873729f Johannes Berg          2013-05-08  3633  		else
+f444de05d20e27 Johannes Berg          2010-05-05  3634  			netdev = NULL;
+f444de05d20e27 Johannes Berg          2010-05-05  3635  	}
+f444de05d20e27 Johannes Berg          2010-05-05  3636  
+f444de05d20e27 Johannes Berg          2010-05-05  3637  	if (!netdev) {
+878d9ec7367816 Johannes Berg          2012-06-15  3638  		rdev = __cfg80211_rdev_from_attrs(genl_info_net(info),
+878d9ec7367816 Johannes Berg          2012-06-15  3639  						  info->attrs);
+a05829a7222e9d Johannes Berg          2021-01-22  3640  		if (IS_ERR(rdev)) {
+a05829a7222e9d Johannes Berg          2021-01-22  3641  			rtnl_unlock();
+4c476991062a0a Johannes Berg          2010-10-04  3642  			return PTR_ERR(rdev);
+a05829a7222e9d Johannes Berg          2021-01-22  3643  		}
+f444de05d20e27 Johannes Berg          2010-05-05  3644  		wdev = NULL;
+f444de05d20e27 Johannes Berg          2010-05-05  3645  		netdev = NULL;
+f444de05d20e27 Johannes Berg          2010-05-05  3646  		result = 0;
+71fe96bf9db8b1 Johannes Berg          2012-10-24  3647  	} else
+f444de05d20e27 Johannes Berg          2010-05-05  3648  		wdev = netdev->ieee80211_ptr;
+f444de05d20e27 Johannes Berg          2010-05-05  3649  
+f42d22d3f79639 Johannes Berg          2024-11-22  3650  	guard(wiphy)(&rdev->wiphy);
+a05829a7222e9d Johannes Berg          2021-01-22  3651  
+f444de05d20e27 Johannes Berg          2010-05-05  3652  	/*
+f444de05d20e27 Johannes Berg          2010-05-05  3653  	 * end workaround code, by now the rdev is available
+f444de05d20e27 Johannes Berg          2010-05-05  3654  	 * and locked, and wdev may or may not be NULL.
+f444de05d20e27 Johannes Berg          2010-05-05  3655  	 */
+4bbf4d56583dd5 Johannes Berg          2009-03-24  3656  
+4bbf4d56583dd5 Johannes Berg          2009-03-24  3657  	if (info->attrs[NL80211_ATTR_WIPHY_NAME])
+318884875bdddc Jouni Malinen          2008-10-30  3658  		result = cfg80211_dev_rename(
+318884875bdddc Jouni Malinen          2008-10-30  3659  			rdev, nla_data(info->attrs[NL80211_ATTR_WIPHY_NAME]));
+0391a45c800780 Johannes Berg          2021-01-28  3660  	rtnl_unlock();
+4bbf4d56583dd5 Johannes Berg          2009-03-24  3661  
+318884875bdddc Jouni Malinen          2008-10-30  3662  	if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3663  		return result;
+318884875bdddc Jouni Malinen          2008-10-30  3664  
+c23c182175594b Roopni Devanathan      2025-01-24  3665  	if (info->attrs[NL80211_ATTR_WIPHY_RADIO_INDEX]) {
+c23c182175594b Roopni Devanathan      2025-01-24  3666  		/* Radio idx is not expected for non-multi radio wiphy */
+c23c182175594b Roopni Devanathan      2025-01-24  3667  		if (!rdev->wiphy.n_radio)
+c23c182175594b Roopni Devanathan      2025-01-24  3668  			return -EINVAL;
+c23c182175594b Roopni Devanathan      2025-01-24  3669  
+c23c182175594b Roopni Devanathan      2025-01-24  3670  		radio_id = nla_get_u8(info->attrs[NL80211_ATTR_WIPHY_RADIO_INDEX]);
+c23c182175594b Roopni Devanathan      2025-01-24  3671  		if (radio_id > rdev->wiphy.n_radio)
+c23c182175594b Roopni Devanathan      2025-01-24  3672  			return -EINVAL;
+c23c182175594b Roopni Devanathan      2025-01-24  3673  	}
+c23c182175594b Roopni Devanathan      2025-01-24  3674  
+318884875bdddc Jouni Malinen          2008-10-30  3675  	if (info->attrs[NL80211_ATTR_WIPHY_TXQ_PARAMS]) {
+318884875bdddc Jouni Malinen          2008-10-30  3676  		struct ieee80211_txq_params txq_params;
+318884875bdddc Jouni Malinen          2008-10-30  3677  		struct nlattr *tb[NL80211_TXQ_ATTR_MAX + 1];
+318884875bdddc Jouni Malinen          2008-10-30  3678  
+f42d22d3f79639 Johannes Berg          2024-11-22  3679  		if (!rdev->ops->set_txq_params)
+f42d22d3f79639 Johannes Berg          2024-11-22  3680  			return -EOPNOTSUPP;
+318884875bdddc Jouni Malinen          2008-10-30  3681  
+f42d22d3f79639 Johannes Berg          2024-11-22  3682  		if (!netdev)
+f42d22d3f79639 Johannes Berg          2024-11-22  3683  			return -EINVAL;
+f70f01c2ebbe31 Eliad Peller           2011-09-25  3684  
+133a3ff2c93422 Johannes Berg          2011-11-03  3685  		if (netdev->ieee80211_ptr->iftype != NL80211_IFTYPE_AP &&
+f42d22d3f79639 Johannes Berg          2024-11-22  3686  		    netdev->ieee80211_ptr->iftype != NL80211_IFTYPE_P2P_GO)
+f42d22d3f79639 Johannes Berg          2024-11-22  3687  			return -EINVAL;
+133a3ff2c93422 Johannes Berg          2011-11-03  3688  
+f42d22d3f79639 Johannes Berg          2024-11-22  3689  		if (!netif_running(netdev))
+f42d22d3f79639 Johannes Berg          2024-11-22  3690  			return -ENETDOWN;
+2b5f8b0b44e17e Johannes Berg          2012-04-02  3691  
+318884875bdddc Jouni Malinen          2008-10-30  3692  		nla_for_each_nested(nl_txq_params,
+318884875bdddc Jouni Malinen          2008-10-30  3693  				    info->attrs[NL80211_ATTR_WIPHY_TXQ_PARAMS],
+318884875bdddc Jouni Malinen          2008-10-30  3694  				    rem_txq_params) {
+8cb081746c031f Johannes Berg          2019-04-26  3695  			result = nla_parse_nested_deprecated(tb,
+8cb081746c031f Johannes Berg          2019-04-26  3696  							     NL80211_TXQ_ATTR_MAX,
+bfe2c7b1cce4a1 Johannes Berg          2016-10-26  3697  							     nl_txq_params,
+fe52145f91fe81 Johannes Berg          2017-04-12  3698  							     txq_params_policy,
+fe52145f91fe81 Johannes Berg          2017-04-12  3699  							     info->extack);
+ae811e21df28de Johannes Berg          2014-01-24  3700  			if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3701  				return result;
+f42d22d3f79639 Johannes Berg          2024-11-22  3702  
+318884875bdddc Jouni Malinen          2008-10-30  3703  			result = parse_txq_params(tb, &txq_params);
+318884875bdddc Jouni Malinen          2008-10-30  3704  			if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3705  				return result;
+318884875bdddc Jouni Malinen          2008-10-30  3706  
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3707  			txq_params.link_id =
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3708  				nl80211_link_id_or_invalid(info->attrs);
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3709  
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3710  			if (txq_params.link_id >= 0 &&
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3711  			    !(netdev->ieee80211_ptr->valid_links &
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3712  			      BIT(txq_params.link_id)))
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3713  				result = -ENOLINK;
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3714  			else if (txq_params.link_id >= 0 &&
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3715  				 !netdev->ieee80211_ptr->valid_links)
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3716  				result = -EINVAL;
+9d2bb84d54a403 Shaul Triebitz         2022-08-02  3717  			else
+e35e4d28b687d4 Hila Gonen             2012-06-27  3718  				result = rdev_set_txq_params(rdev, netdev,
+318884875bdddc Jouni Malinen          2008-10-30  3719  							     &txq_params);
+318884875bdddc Jouni Malinen          2008-10-30  3720  			if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3721  				return result;
+318884875bdddc Jouni Malinen          2008-10-30  3722  		}
+318884875bdddc Jouni Malinen          2008-10-30  3723  	}
+556829657397b9 Johannes Berg          2007-09-20  3724  
+72bdcf34380917 Jouni Malinen          2008-11-26  3725  	if (info->attrs[NL80211_ATTR_WIPHY_FREQ]) {
+69c3f2d30c3576 Ilan Peer              2022-06-12  3726  		int link_id = nl80211_link_id_or_invalid(info->attrs);
+69c3f2d30c3576 Ilan Peer              2022-06-12  3727  
+4e2f3d67e3afef Johannes Berg          2022-06-20  3728  		if (wdev) {
+e16821bcfb364b Jouni Malinen          2014-04-28  3729  			result = __nl80211_set_channel(
+e16821bcfb364b Jouni Malinen          2014-04-28  3730  				rdev,
+e16821bcfb364b Jouni Malinen          2014-04-28  3731  				nl80211_can_set_dev_channel(wdev) ? netdev : NULL,
+69c3f2d30c3576 Ilan Peer              2022-06-12  3732  				info, link_id);
+4e2f3d67e3afef Johannes Berg          2022-06-20  3733  		} else {
+69c3f2d30c3576 Ilan Peer              2022-06-12  3734  			result = __nl80211_set_channel(rdev, netdev, info, link_id);
+4e2f3d67e3afef Johannes Berg          2022-06-20  3735  		}
+69c3f2d30c3576 Ilan Peer              2022-06-12  3736  
+72bdcf34380917 Jouni Malinen          2008-11-26  3737  		if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3738  			return result;
+72bdcf34380917 Jouni Malinen          2008-11-26  3739  	}
+72bdcf34380917 Jouni Malinen          2008-11-26  3740  
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3741  	if (info->attrs[NL80211_ATTR_WIPHY_TX_POWER_SETTING]) {
+c8442118ad9cd0 Johannes Berg          2012-10-24  3742  		struct wireless_dev *txp_wdev = wdev;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3743  		enum nl80211_tx_power_setting type;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3744  		int idx, mbm = 0;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3745  
+c8442118ad9cd0 Johannes Berg          2012-10-24  3746  		if (!(rdev->wiphy.features & NL80211_FEATURE_VIF_TXPOWER))
+c8442118ad9cd0 Johannes Berg          2012-10-24  3747  			txp_wdev = NULL;
+c8442118ad9cd0 Johannes Berg          2012-10-24  3748  
+f42d22d3f79639 Johannes Berg          2024-11-22  3749  		if (!rdev->ops->set_tx_power)
+f42d22d3f79639 Johannes Berg          2024-11-22  3750  			return -EOPNOTSUPP;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3751  
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3752  		idx = NL80211_ATTR_WIPHY_TX_POWER_SETTING;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3753  		type = nla_get_u32(info->attrs[idx]);
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3754  
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3755  		if (!info->attrs[NL80211_ATTR_WIPHY_TX_POWER_LEVEL] &&
+f42d22d3f79639 Johannes Berg          2024-11-22  3756  		    (type != NL80211_TX_POWER_AUTOMATIC))
+f42d22d3f79639 Johannes Berg          2024-11-22  3757  			return -EINVAL;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3758  
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3759  		if (type != NL80211_TX_POWER_AUTOMATIC) {
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3760  			idx = NL80211_ATTR_WIPHY_TX_POWER_LEVEL;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3761  			mbm = nla_get_u32(info->attrs[idx]);
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3762  		}
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3763  
+c8442118ad9cd0 Johannes Berg          2012-10-24  3764  		result = rdev_set_tx_power(rdev, txp_wdev, type, mbm);
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3765  		if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3766  			return result;
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3767  	}
+98d2ff8bec82fc Juuso Oikarinen        2010-06-23  3768  
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3769  	if (info->attrs[NL80211_ATTR_WIPHY_ANTENNA_TX] &&
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3770  	    info->attrs[NL80211_ATTR_WIPHY_ANTENNA_RX]) {
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3771  		u32 tx_ant, rx_ant;
+7a087e7484c9e4 Kirtika Ruchandani     2016-05-29  3772  
+7f531e03abf016 Bruno Randolf          2010-12-16  3773  		if ((!rdev->wiphy.available_antennas_tx &&
+7f531e03abf016 Bruno Randolf          2010-12-16  3774  		     !rdev->wiphy.available_antennas_rx) ||
+f42d22d3f79639 Johannes Berg          2024-11-22  3775  		    !rdev->ops->set_antenna)
+f42d22d3f79639 Johannes Berg          2024-11-22  3776  			return -EOPNOTSUPP;
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3777  
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3778  		tx_ant = nla_get_u32(info->attrs[NL80211_ATTR_WIPHY_ANTENNA_TX]);
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3779  		rx_ant = nla_get_u32(info->attrs[NL80211_ATTR_WIPHY_ANTENNA_RX]);
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3780  
+a7ffac9591a2a0 Bruno Randolf          2010-12-08  3781  		/* reject antenna configurations which don't match the
+7f531e03abf016 Bruno Randolf          2010-12-16  3782  		 * available antenna masks, except for the "all" mask */
+7f531e03abf016 Bruno Randolf          2010-12-16  3783  		if ((~tx_ant && (tx_ant & ~rdev->wiphy.available_antennas_tx)) ||
+f42d22d3f79639 Johannes Berg          2024-11-22  3784  		    (~rx_ant && (rx_ant & ~rdev->wiphy.available_antennas_rx)))
+f42d22d3f79639 Johannes Berg          2024-11-22  3785  			return -EINVAL;
+a7ffac9591a2a0 Bruno Randolf          2010-12-08  3786  
+7f531e03abf016 Bruno Randolf          2010-12-16  3787  		tx_ant = tx_ant & rdev->wiphy.available_antennas_tx;
+7f531e03abf016 Bruno Randolf          2010-12-16  3788  		rx_ant = rx_ant & rdev->wiphy.available_antennas_rx;
+a7ffac9591a2a0 Bruno Randolf          2010-12-08  3789  
+e35e4d28b687d4 Hila Gonen             2012-06-27  3790  		result = rdev_set_antenna(rdev, tx_ant, rx_ant);
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3791  		if (result)
+f42d22d3f79639 Johannes Berg          2024-11-22  3792  			return result;
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3793  	}
+afe0cbf87500f0 Bruno Randolf          2010-11-10  3794  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3795  	changed = 0;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3796  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3797  	if (info->attrs[NL80211_ATTR_WIPHY_RETRY_SHORT]) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3798  		retry_short = nla_get_u8(
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3799  			info->attrs[NL80211_ATTR_WIPHY_RETRY_SHORT]);
+7f2b8562c2ee6e Ying Xue               2014-01-15  3800  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3801  		changed |= WIPHY_PARAM_RETRY_SHORT;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3802  	}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3803  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3804  	if (info->attrs[NL80211_ATTR_WIPHY_RETRY_LONG]) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3805  		retry_long = nla_get_u8(
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3806  			info->attrs[NL80211_ATTR_WIPHY_RETRY_LONG]);
+7f2b8562c2ee6e Ying Xue               2014-01-15  3807  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3808  		changed |= WIPHY_PARAM_RETRY_LONG;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3809  	}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3810  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3811  	if (info->attrs[NL80211_ATTR_WIPHY_FRAG_THRESHOLD]) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3812  		frag_threshold = nla_get_u32(
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3813  			info->attrs[NL80211_ATTR_WIPHY_FRAG_THRESHOLD]);
+f42d22d3f79639 Johannes Berg          2024-11-22  3814  		if (frag_threshold < 256)
+f42d22d3f79639 Johannes Berg          2024-11-22  3815  			return -EINVAL;
+7f2b8562c2ee6e Ying Xue               2014-01-15  3816  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3817  		if (frag_threshold != (u32) -1) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3818  			/*
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3819  			 * Fragments (apart from the last one) are required to
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3820  			 * have even length. Make the fragmentation code
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3821  			 * simpler by stripping LSB should someone try to use
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3822  			 * odd threshold value.
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3823  			 */
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3824  			frag_threshold &= ~0x1;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3825  		}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3826  		changed |= WIPHY_PARAM_FRAG_THRESHOLD;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3827  	}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3828  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3829  	if (info->attrs[NL80211_ATTR_WIPHY_RTS_THRESHOLD]) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3830  		rts_threshold = nla_get_u32(
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3831  			info->attrs[NL80211_ATTR_WIPHY_RTS_THRESHOLD]);
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3832  		changed |= WIPHY_PARAM_RTS_THRESHOLD;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3833  	}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3834  
+81077e82c3f591 Lukáš Turek            2009-12-21  3835  	if (info->attrs[NL80211_ATTR_WIPHY_COVERAGE_CLASS]) {
+f42d22d3f79639 Johannes Berg          2024-11-22  3836  		if (info->attrs[NL80211_ATTR_WIPHY_DYN_ACK])
+f42d22d3f79639 Johannes Berg          2024-11-22  3837  			return -EINVAL;
+3057dbfdab1b86 Lorenzo Bianconi       2014-09-04  3838  
+81077e82c3f591 Lukáš Turek            2009-12-21  3839  		coverage_class = nla_get_u8(
+81077e82c3f591 Lukáš Turek            2009-12-21  3840  			info->attrs[NL80211_ATTR_WIPHY_COVERAGE_CLASS]);
+81077e82c3f591 Lukáš Turek            2009-12-21  3841  		changed |= WIPHY_PARAM_COVERAGE_CLASS;
+81077e82c3f591 Lukáš Turek            2009-12-21  3842  	}
+81077e82c3f591 Lukáš Turek            2009-12-21  3843  
+3057dbfdab1b86 Lorenzo Bianconi       2014-09-04  3844  	if (info->attrs[NL80211_ATTR_WIPHY_DYN_ACK]) {
+f42d22d3f79639 Johannes Berg          2024-11-22  3845  		if (!(rdev->wiphy.features & NL80211_FEATURE_ACKTO_ESTIMATION))
+f42d22d3f79639 Johannes Berg          2024-11-22  3846  			return -EOPNOTSUPP;
+3057dbfdab1b86 Lorenzo Bianconi       2014-09-04  3847  
+3057dbfdab1b86 Lorenzo Bianconi       2014-09-04  3848  		changed |= WIPHY_PARAM_DYN_ACK;
+81077e82c3f591 Lukáš Turek            2009-12-21  3849  	}
+81077e82c3f591 Lukáš Turek            2009-12-21  3850  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3851  	if (info->attrs[NL80211_ATTR_TXQ_LIMIT]) {
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3852  		if (!wiphy_ext_feature_isset(&rdev->wiphy,
+f42d22d3f79639 Johannes Berg          2024-11-22  3853  					     NL80211_EXT_FEATURE_TXQS))
+f42d22d3f79639 Johannes Berg          2024-11-22  3854  			return -EOPNOTSUPP;
+f42d22d3f79639 Johannes Berg          2024-11-22  3855  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3856  		txq_limit = nla_get_u32(
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3857  			info->attrs[NL80211_ATTR_TXQ_LIMIT]);
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3858  		changed |= WIPHY_PARAM_TXQ_LIMIT;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3859  	}
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3860  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3861  	if (info->attrs[NL80211_ATTR_TXQ_MEMORY_LIMIT]) {
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3862  		if (!wiphy_ext_feature_isset(&rdev->wiphy,
+f42d22d3f79639 Johannes Berg          2024-11-22  3863  					     NL80211_EXT_FEATURE_TXQS))
+f42d22d3f79639 Johannes Berg          2024-11-22  3864  			return -EOPNOTSUPP;
+f42d22d3f79639 Johannes Berg          2024-11-22  3865  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3866  		txq_memory_limit = nla_get_u32(
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3867  			info->attrs[NL80211_ATTR_TXQ_MEMORY_LIMIT]);
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3868  		changed |= WIPHY_PARAM_TXQ_MEMORY_LIMIT;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3869  	}
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3870  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3871  	if (info->attrs[NL80211_ATTR_TXQ_QUANTUM]) {
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3872  		if (!wiphy_ext_feature_isset(&rdev->wiphy,
+f42d22d3f79639 Johannes Berg          2024-11-22  3873  					     NL80211_EXT_FEATURE_TXQS))
+f42d22d3f79639 Johannes Berg          2024-11-22  3874  			return -EOPNOTSUPP;
+f42d22d3f79639 Johannes Berg          2024-11-22  3875  
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3876  		txq_quantum = nla_get_u32(
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3877  			info->attrs[NL80211_ATTR_TXQ_QUANTUM]);
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3878  		changed |= WIPHY_PARAM_TXQ_QUANTUM;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3879  	}
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3880  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3881  	if (changed) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3882  		u8 old_retry_short, old_retry_long;
+c23c182175594b Roopni Devanathan      2025-01-24  3883  		u32 old_frag_threshold, old_rts_threshold[NL80211_WIPHY_RADIO_ID_MAX];
+c23c182175594b Roopni Devanathan      2025-01-24  3884  		u8 old_coverage_class, i;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3885  		u32 old_txq_limit, old_txq_memory_limit, old_txq_quantum;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3886  
+f42d22d3f79639 Johannes Berg          2024-11-22  3887  		if (!rdev->ops->set_wiphy_params)
+f42d22d3f79639 Johannes Berg          2024-11-22  3888  			return -EOPNOTSUPP;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3889  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3890  		old_retry_short = rdev->wiphy.retry_short;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3891  		old_retry_long = rdev->wiphy.retry_long;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3892  		old_frag_threshold = rdev->wiphy.frag_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3893  		if (radio_id >= rdev->wiphy.n_radio) {
+c23c182175594b Roopni Devanathan      2025-01-24  3894  			old_rts_threshold[0] = rdev->wiphy.rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3895  			for (i = 0; i < rdev->wiphy.n_radio; i++)
+c23c182175594b Roopni Devanathan      2025-01-24  3896  				old_rts_threshold[i] = rdev->wiphy.radio_cfg[i].rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3897  		} else {
+c23c182175594b Roopni Devanathan      2025-01-24  3898  			old_rts_threshold[radio_id] = rdev->wiphy.radio_cfg[radio_id].rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3899  		}
+81077e82c3f591 Lukáš Turek            2009-12-21  3900  		old_coverage_class = rdev->wiphy.coverage_class;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3901  		old_txq_limit = rdev->wiphy.txq_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3902  		old_txq_memory_limit = rdev->wiphy.txq_memory_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3903  		old_txq_quantum = rdev->wiphy.txq_quantum;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3904  
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3905  		if (changed & WIPHY_PARAM_RETRY_SHORT)
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3906  			rdev->wiphy.retry_short = retry_short;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3907  		if (changed & WIPHY_PARAM_RETRY_LONG)
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3908  			rdev->wiphy.retry_long = retry_long;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3909  		if (changed & WIPHY_PARAM_FRAG_THRESHOLD)
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3910  			rdev->wiphy.frag_threshold = frag_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3911  		if (changed & WIPHY_PARAM_RTS_THRESHOLD) {
+c23c182175594b Roopni Devanathan      2025-01-24  3912  			if (radio_id >= rdev->wiphy.n_radio) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3913  				rdev->wiphy.rts_threshold = rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3914  				for (i = 0; i < rdev->wiphy.n_radio; i++)
+c23c182175594b Roopni Devanathan      2025-01-24  3915  					rdev->wiphy.radio_cfg[i].rts_threshold = rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3916  			} else {
+c23c182175594b Roopni Devanathan      2025-01-24  3917  				rdev->wiphy.radio_cfg[radio_id].rts_threshold =	rts_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3918  			}
+c23c182175594b Roopni Devanathan      2025-01-24  3919  		}
+81077e82c3f591 Lukáš Turek            2009-12-21  3920  		if (changed & WIPHY_PARAM_COVERAGE_CLASS)
+81077e82c3f591 Lukáš Turek            2009-12-21  3921  			rdev->wiphy.coverage_class = coverage_class;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3922  		if (changed & WIPHY_PARAM_TXQ_LIMIT)
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3923  			rdev->wiphy.txq_limit = txq_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3924  		if (changed & WIPHY_PARAM_TXQ_MEMORY_LIMIT)
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3925  			rdev->wiphy.txq_memory_limit = txq_memory_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3926  		if (changed & WIPHY_PARAM_TXQ_QUANTUM)
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3927  			rdev->wiphy.txq_quantum = txq_quantum;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3928  
+c23c182175594b Roopni Devanathan      2025-01-24  3929  		result = rdev_set_wiphy_params(rdev, radio_id, changed);
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3930  		if (result) {
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3931  			rdev->wiphy.retry_short = old_retry_short;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3932  			rdev->wiphy.retry_long = old_retry_long;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3933  			rdev->wiphy.frag_threshold = old_frag_threshold;
+c23c182175594b Roopni Devanathan      2025-01-24  3934  			if (radio_id >= rdev->wiphy.n_radio) {
+c23c182175594b Roopni Devanathan      2025-01-24  3935  				rdev->wiphy.rts_threshold = old_rts_threshold[0];
+c23c182175594b Roopni Devanathan      2025-01-24  3936  				for (i = 0; i < rdev->wiphy.n_radio; i++)
+c23c182175594b Roopni Devanathan      2025-01-24  3937  					rdev->wiphy.radio_cfg[i].rts_threshold = old_rts_threshold[i];
+c23c182175594b Roopni Devanathan      2025-01-24  3938  			} else {
+c23c182175594b Roopni Devanathan      2025-01-24  3939  				rdev->wiphy.radio_cfg[radio_id].rts_threshold = old_rts_threshold[radio_id];
+c23c182175594b Roopni Devanathan      2025-01-24  3940  			}
+81077e82c3f591 Lukáš Turek            2009-12-21  3941  			rdev->wiphy.coverage_class = old_coverage_class;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3942  			rdev->wiphy.txq_limit = old_txq_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3943  			rdev->wiphy.txq_memory_limit = old_txq_memory_limit;
+52539ca89f365d Toke Høiland-Jørgensen 2018-05-08  3944  			rdev->wiphy.txq_quantum = old_txq_quantum;
+f42d22d3f79639 Johannes Berg          2024-11-22  3945  			return result;
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3946  		}
+b9a5f8cab751d3 Jouni Malinen          2009-04-20  3947  	}
+a05829a7222e9d Johannes Berg          2021-01-22  3948  
+f42d22d3f79639 Johannes Berg          2024-11-22  3949  	return 0;
+556829657397b9 Johannes Berg          2007-09-20  3950  }
+556829657397b9 Johannes Berg          2007-09-20  3951  
 
-> ---
->  MAINTAINERS                  |    7 +
->  drivers/iio/light/Kconfig    |   11 +
->  drivers/iio/light/Makefile   |    1 +
->  drivers/iio/light/apds9160.c | 1597 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 1616 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e69d1632c382fe0e366f7bb20e72ee0c9e91e30b..23d9fcbf71a311940ff86d8dc4cabd5be77925aa 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4340,6 +4340,13 @@ F:	kernel/bpf/stackmap.c
->  F:	kernel/trace/bpf_trace.c
->  F:	lib/buildid.c
->  
-> +BROADCOM APDS9160 AMBIENT LIGHT SENSOR AND PROXIMITY DRIVER
-> +M:	Mikael Gonella-Bolduc <m.gonella.bolduc@gmail.com>
-> +L:	linux-iio@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/iio/light/brcm,apds9160.yaml
-> +F:	drivers/iio/light/apds9160.c
-> +
->  BROADCOM ASP 2.0 ETHERNET DRIVER
->  M:	Justin Chen <justin.chen@broadcom.com>
->  M:	Florian Fainelli <florian.fainelli@broadcom.com>
-> diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
-> index 29ffa84919273d64b8464ab8bbf59661b0102f97..419360661d53973eda71d7d986ff7fd481c7aa2c 100644
-> --- a/drivers/iio/light/Kconfig
-> +++ b/drivers/iio/light/Kconfig
-> @@ -63,6 +63,17 @@ config AL3320A
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called al3320a.
->  
-> +config APDS9160
-> +	tristate "APDS9160 combined als and proximity sensor"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	   Say Y here if you want to build support for a Broadcom APDS9160
-> +		combined ambient light and proximity sensor.
-
-Strange indent.
-
-> +
-> +	   To compile this driver as a module, choose M here: the
-> +	   module will be called apds9160.
-> +
-
-> diff --git a/drivers/iio/light/apds9160.c b/drivers/iio/light/apds9160.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..e98006de473790da66b92734a0527359e9cd1f40
-> --- /dev/null
-> +++ b/drivers/iio/light/apds9160.c
-
-> +/*
-> + * This parameter works in conjunction with the cancellation pulse duration
-> + * The value determines the current used for crosstalk cancellation
-> + * Coarse value is in steps of 60 nA
-> + * Fine value is in steps of 2.4 nA
-> + */
-> +static int apds9160_set_ps_cancellation_current(struct apds9160_chip *data,
-> +						int coarse_val,
-> +						int fine_val)
-> +{
-> +	int ret, val;
-> +
-> +	if (coarse_val < 0 || coarse_val > 4)
-> +		return -EINVAL;
-> +
-> +	if (fine_val < 0 || fine_val > 15)
-> +		return -EINVAL;
-> +
-> +	/* Coarse value at B4:B5 and fine value at B0:B3 */
-> +	val = (coarse_val << 4) | fine_val;
-> +
-> +	ret = regmap_write(data->regmap, APDS9160_REG_PS_CAN_LEVEL_ANA_CURRENT,
-> +			   val);
-> +
-> +	return ret;
-return regmap_write()
-
-> +}
-> +
-> +static int apds9160_ps_init_analog_cancellation(struct device *dev,
-> +						struct apds9160_chip *data)
-> +{
-> +	int ret, duration, picoamp, idx, coarse, fine;
-> +
-> +	ret = device_property_read_u32(dev,
-> +			"ps-cancellation-duration", &duration);
-> +
-Good to keep call + return together so no blank line here.
-> +	if (ret || duration == 0)
-
-Given the comment is in the block, I think this wants {} for readability
-reasons (not correctness).
-
-> +		/* Don't fail since this is not required */
-> +		return 0;
-> +
-> +	ret = device_property_read_u32(dev,
-> +			"ps-cancellation-current-picoamp", &picoamp);
-> +
-Odd line break here.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (picoamp < 60000 || picoamp > 276000 || picoamp % 2400 != 0)
-> +		return dev_err_probe(dev, -EINVAL,
-> +					"Invalid cancellation current\n");
-> +
-> +	/* Compute required coarse and fine value from requested current */
-> +	fine = 0;
-> +	coarse = 0;
-> +	for (idx = 60000; idx < picoamp; idx += 2400) {
-> +		if (fine == 15) {
-> +			fine = 0;
-> +			coarse++;
-> +			idx += 21600;
-> +		} else {
-> +			fine++;
-> +		}
-> +	}
-> +
-> +	if (picoamp != idx)
-> +		dev_warn(dev,
-> +			"Invalid cancellation current %i, rounding to %i\n",
-> +			picoamp, idx);
-> +
-> +	ret = apds9160_set_ps_analog_cancellation(data, duration);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return apds9160_set_ps_cancellation_current(data, coarse, fine);
-> +}
-
-> +
-> +/*
-> + *	Setting the integration time ajusts resolution, rate, scale and gain
-
-Odd indent of the comment.
-
-> + */
-> +static int apds9160_set_als_int_time(struct apds9160_chip *data, int val)
-
-> +static int apds9160_read_avail(struct iio_dev *indio_dev,
-> +			       struct iio_chan_spec const *chan,
-> +			       const int **vals, int *type, int *length,
-> +			       long mask)
-> +{
-> +	struct apds9160_chip *data = iio_priv(indio_dev);
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_INT_TIME:
-> +		switch (chan->type) {
-> +		case IIO_LIGHT:
-> +			*length = ARRAY_SIZE(apds9160_als_rate_avail);
-> +			*vals = (const int *)apds9160_als_rate_avail;
-> +			*type = IIO_VAL_INT;
-> +
-> +			return IIO_AVAIL_LIST;
-> +		case IIO_PROXIMITY:
-> +			*length = ARRAY_SIZE(apds9160_ps_rate_avail);
-> +			*vals = (const int *)apds9160_ps_rate_avail;
-> +			*type = IIO_VAL_INT;
-> +
-> +			return IIO_AVAIL_LIST;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->type) {
-> +		case IIO_PROXIMITY:
-> +			*length = ARRAY_SIZE(apds9160_ps_gain_avail);
-> +			*vals = (const int *)apds9160_ps_gain_avail;
-> +			*type = IIO_VAL_INT;
-> +
-> +			return IIO_AVAIL_LIST;
-> +		case IIO_LIGHT:
-> +			/* The available scales changes depending on itime */
-> +			switch (data->als_itime) {
-> +			case 25:
-> +				*length = ARRAY_SIZE(apds9160_25ms_avail) * 2;
-> +				*vals = (const int *) apds9160_25ms_avail;
-> +				*type = IIO_VAL_INT_PLUS_MICRO;
-> +
-> +				return IIO_AVAIL_LIST;
-> +			case 50:
-> +				*length = ARRAY_SIZE(apds9160_50ms_avail) * 2;
-> +				*vals = (const int *) apds9160_50ms_avail;
-> +				*type = IIO_VAL_INT_PLUS_MICRO;
-> +
-> +				return IIO_AVAIL_LIST;
-> +			case 100:
-> +				*length = ARRAY_SIZE(apds9160_100ms_avail) * 2;
-> +				*vals = (const int *) apds9160_100ms_avail;
-> +				*type = IIO_VAL_INT_PLUS_MICRO;
-> +
-> +				return IIO_AVAIL_LIST;
-> +			case 200:
-> +				*length = ARRAY_SIZE(apds9160_200ms_avail) * 2;
-> +				*vals = (const int *) apds9160_200ms_avail;
-Completely trivial but the spacing here after) isn't consistent with some cases above.
-
-> +				*type = IIO_VAL_INT_PLUS_MICRO;
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
