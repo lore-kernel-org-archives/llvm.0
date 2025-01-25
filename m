@@ -1,207 +1,126 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEF7204C37;
-	Sat, 25 Jan 2025 02:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B262046AD;
+	Sat, 25 Jan 2025 04:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737773808; cv=none; b=hvhP8fqPnKNJMTlIhyBml63HV/BwI1426H51VD4ruabNQ8FHqecBkrCU17W4TsWjwjK479GDuWqYAPOfQ2vVOJ7756LzzEwI3BqXm+dkEfNSyKZ8P0aLjzL0V5PWV0yhrbl/Clpt7DmdB1y9nt31nDBnah/LB4PsY2sMphJjYug=
+	t=1737780261; cv=none; b=XQ7OrY9s6MCNs+eWpcnMCrynpXAeiWN7UmYz7/zbvLyd84zpzPRetSXsr5BIiBRrMfG52e2Iby7ooXSVLzdXstmSF96U9nJYW5N/+LY/LtGXEvkUizDjM82fPcM4dSmDuSz5k6oaa3rbpqdzh9xlR/h2OCE5CnDWRA+015+jCko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737773808; c=relaxed/simple;
-	bh=UZqdgzd8EUw6SM/sJNokFouLdM8S9L7VyPoUK4NabOo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Jh2B2DAH0p6LlkrGKrfE8fRgjiYlvHC5fcOWM23i33+w7S1eMaQKf3MkNFjR9cr0JxBZEwyhxGGDOGvZy2Q1GxfbNzFvy6cXDpigJNZccnigPo27xfNRhqVuIMuFgXDBEz+L3P4g0n42eS7s/EAmtauTktfjezwjQN5d2dGbrug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=huE/Gfn8; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	s=arc-20240116; t=1737780261; c=relaxed/simple;
+	bh=GeK+ivtm9xNDqBOzHa6NJe8s56YeRpslIZPxkq3MgSI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rAlCDKaA4zgs//2SJ5lJzgiT2s5BM9cXspVVA0MdrrkDNowPSIjgBaKMjEubbY6cRpVvkc94MtI9f+tqmkwutDYY/by7hAb00mdu7IQHQKx8txj17g5Qz+RnilwhbgEoiYK6ok0XiiGcOEagZ2B3aHVo73j/k82GHThoUGBj+fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nq4xBhkX; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="huE/Gfn8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=QGutGOzJ4Co3VkfpT/t2wxb6M/f0IZF/aDABHVyFPNA=; b=huE/Gfn894Ct4BkQDmkHb+tV+Z
-	bs25xAAOPSQSCqiUn6CoV5rMz08RmidBXnUVqU5Tg3BujGps8vah0n2PECgZwgc+aCxGBJae5bdXR
-	9BkWscuBtw8Ay70RyanNiN4KiyYhT8xueJ4h9yX6XJmLwcdcRbLeAdJ8hnyoqx+n5hIPWxZAACFb0
-	ZX7KSmoNkGk4O6ezJStOMNzfZAVWAENT80A/yvrdlLBqR/izySHvP4wxUrEsJCpuJQHw8NO4+AgoW
-	IFDcjok0iGwd2FvCFijHSAgwJNAK2WsTJG9nsbR5k24jbB4Z90zReEYkGhruHQNcTXYyvd85/qWWg
-	cLSkSeWQ==;
-Received: from [205.251.233.179] (helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tbWLi-00000002kH9-20nu;
-	Sat, 25 Jan 2025 02:56:43 +0000
-Message-ID: <2efca4b5750b46003512d33019bf2e1d3b9d067d.camel@infradead.org>
-Subject: Re: [dwmw2:kexec-debug-6 5/7] arch/x86/kernel/early_printk.c:148:3:
- error: use of undeclared identifier 'kexec_debug_8250_port'
-From: David Woodhouse <dwmw2@infradead.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kexec
-	 <kexec@lists.infradead.org>
-Date: Fri, 24 Jan 2025 18:56:40 -0800
-In-Reply-To: <202501250944.JEBhawoz-lkp@intel.com>
-References: <202501250944.JEBhawoz-lkp@intel.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-xivremf9rYAmjVsXVgKb"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nq4xBhkX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737780259; x=1769316259;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GeK+ivtm9xNDqBOzHa6NJe8s56YeRpslIZPxkq3MgSI=;
+  b=Nq4xBhkX18MNWtTqnOCSVb1p0ploAf3CzYfY2IPNW3ovQim5Jj1kUXIF
+   yDrONRC8k9iiiwwYxRtxYrn/N1fz6SMfFQO1be2368nJBPdREMctciOqK
+   yMyGkdCvyhVDjM31Tm2JVuOS5WwOmFPrDjt0ZMzQF86jUavB4wI76AIJQ
+   mUMjfguS2HUJtlfn28+rIWTAOkZmaKc30BnjSJbr8U1zL3GLVbb4pSGUI
+   T8QdVvK0kjiUz6k7fbAJ2Ro9sYDLjW43fB7XNjjz88DsQQAbW3dwIL4V0
+   O5LPLGBwcCFZjWjzg4f9bZMJplIPuqAhliVQkgeRbyl+Y7095fAt8WmDc
+   A==;
+X-CSE-ConnectionGUID: QtynhaIaR8+ZCP8ZtKkntA==
+X-CSE-MsgGUID: aRBM85hvQHy7PYRf1u6NrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="42082561"
+X-IronPort-AV: E=Sophos;i="6.13,233,1732608000"; 
+   d="scan'208";a="42082561"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 20:44:19 -0800
+X-CSE-ConnectionGUID: 8Xh/AhveRQ+v/LGju9F9HQ==
+X-CSE-MsgGUID: mxQRwmRITJSKxgS1h5tsZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,233,1732608000"; 
+   d="scan'208";a="108483131"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 24 Jan 2025 20:44:14 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tbY1j-000dTz-2j;
+	Sat, 25 Jan 2025 04:44:11 +0000
+Date: Sat, 25 Jan 2025 12:44:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hwmon@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Radu Sabau <radu.sabau@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Alexis Czezar Torreno <alexisczezar.torreno@analog.com>,
+	Cedric Encarnacion <cedricjustine.encarnacion@analog.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051,
+ adp1055 and ltp8800
+Message-ID: <202501251226.f8RpjAfp-lkp@intel.com>
+References: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250124151746.1130-3-cedricjustine.encarnacion@analog.com>
+
+Hi Cedric,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on a76539b293677c5c163b9285b0cd8dd420d33989]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cedric-Encarnacion/dt-bindings-hwmon-pmbus-adp1050-Add-adp1051-adp1055-and-ltp8800/20250124-233047
+base:   a76539b293677c5c163b9285b0cd8dd420d33989
+patch link:    https://lore.kernel.org/r/20250124151746.1130-3-cedricjustine.encarnacion%40analog.com
+patch subject: [PATCH v4 2/3] hwmon: (pmbus/adp1050): Add support for adp1051, adp1055 and ltp8800
+config: arm-randconfig-003-20250125 (https://download.01.org/0day-ci/archive/20250125/202501251226.f8RpjAfp-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250125/202501251226.f8RpjAfp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501251226.f8RpjAfp-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/pmbus/adp1050.c:74:7: error: assigning to 'struct pmbus_driver_info *' from 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      74 |         info = i2c_get_match_data(client);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
---=-xivremf9rYAmjVsXVgKb
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+vim +74 drivers/hwmon/pmbus/adp1050.c
 
-On Sat, 2025-01-25 at 09:38 +0800, kernel test robot wrote:
->=20
-> =C2=A0=C2=A0 In file included from arch/x86/kernel/early_printk.c:4:
-> =C2=A0=C2=A0 In file included from include/linux/kexec.h:18:
-> =C2=A0=C2=A0 In file included from include/linux/vmcore_info.h:6:
-> =C2=A0=C2=A0 In file included from include/linux/elfcore.h:11:
-> =C2=A0=C2=A0 In file included from include/linux/ptrace.h:10:
-> =C2=A0=C2=A0 In file included from include/linux/pid_namespace.h:7:
-> =C2=A0=C2=A0 In file included from include/linux/mm.h:2223:
-> =C2=A0=C2=A0 include/linux/vmstat.h:518:36: warning: arithmetic between d=
-ifferent enumeration types ('enum node_stat_item' and 'enum lru_list') [-We=
-num-enum-conversion]
-> =C2=A0=C2=A0=C2=A0=C2=A0 518 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 ~~~~~~~~~~~ ^ ~~~
+    69	
+    70	static int adp1050_probe(struct i2c_client *client)
+    71	{
+    72		struct pmbus_driver_info *info;
+    73	
+  > 74		info = i2c_get_match_data(client);
+    75		if (!info)
+    76			return -ENODEV;
+    77	
+    78		return pmbus_do_probe(client, info);
+    79	}
+    80	
 
-I don't believe that one's mine.
-
-> > > arch/x86/kernel/early_printk.c:148:3: error: use of undeclared identi=
-fier 'kexec_debug_8250_port'
-> =C2=A0=C2=A0=C2=A0=C2=A0 148 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kexec_debug_8250_por=
-t =3D early_serial_base;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- ^
-> =C2=A0=C2=A0 1 warning and 1 error generated.
-
-That one is though; turns out I was allowing CONFIG_KEXEC_DEBUG to be
-set without KEXEC_CORE.
-
-Rolling this into the next revision:
-
---- a/kernel/Kconfig.kexec
-+++ b/kernel/Kconfig.kexec
-@@ -100,7 +100,7 @@ config KEXEC_JUMP
-=20
- config KEXEC_DEBUG
-        bool "Debug kexec transition"
--       depends on HAVE_KEXEC_DEBUG
-+       depends on HAVE_KEXEC_DEBUG && KEXEC_CORE
-        help
-          Faults during kexec can be difficult to debug. This installs exce=
-ption
-          handlers and attempts to report faults. On x86_64 this would use =
-the
-
-
-
---=-xivremf9rYAmjVsXVgKb
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI1MDEyNTAyNTY0
-MFowLwYJKoZIhvcNAQkEMSIEIMRdjD7B88V+1Bcl+vcsw7yG3Dzkfoa6o0ISLAZkG4HlMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAsd9NTNO1iraW
-AyOz6Ov0KoGxDhkm4js5CB9un9bsjdSBkLfUKDc5hcSO/WMxANQlKJnqx53zzciURLEg3XcjzwUP
-ENz9EWRrHI6PNiBIsYXAiGI3mfjM/dIaJ8Lrk9IqDRKU4gh+ieiBLGQIf8nQ3ZF5XHo0CCvR+g0v
-Rk2oDn8u5gDVdCvLYgjhEwOSeXzPxMLN7GozMl8jKjYzZal4BYMyjENSLuspbvhR/JkqlhGkXg17
-++n+O226z9BmwDqz4tfhoNpRFf31qtNjXPueYtQnzzvZxaOX8qUeL4B8oSbJN3cSknM0DOS3zo3b
-nOlqKIMdGsiLg46mbUDwq4Fq8/jKud5S6DO6MFM4Ns/uWnyWPHnMXltT4FIwkZJoWdY6ASqYwCH4
-ftXy4n6gBbNvyqWyMPORIfrQEkVxHBq5/gLAebRrqd62EJ+nzDjISSKAqwB/NfL9yx9bYWQKIZp1
-eJJ51GVPMKLCAQmin2GdTX0bX2DowLHCnciZ+VMZU7ako6vKlJsjGf5dOBZX98jfGQ8XI8uAXBhc
-earg315uOGmfuCy9PZqi28RzH38doTJU/12HI1AMlaKE2sTcQ/WcwCKnaa5uf/7B7wt9sDsGtgZj
-jRHaARLX2JSfeiJS6lOnx4ZP3EV0hg9PCoDjhDLOHBTCYGwG1y5Lcc6yeHFvu0wAAAAAAAA=
-
-
---=-xivremf9rYAmjVsXVgKb--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
