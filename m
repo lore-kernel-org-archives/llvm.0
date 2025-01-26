@@ -1,141 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1431FC10E;
-	Sun, 26 Jan 2025 14:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7865570838;
+	Sun, 26 Jan 2025 17:32:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737903367; cv=none; b=YCw/fXeXLQwPoHZVaS5svJlBJojCN4IrU2U+l22woprjwswBhWuz9wBQJnvwHDJJKT/ONvOYlBnoGHccw8oPBXsvUq4fNOgnDAs+bQGwWoI7YtVd3Vd51iXHCh3bw9WOaAlhbXKEcoTrYscxttG6uHpG764Qadtg0eMU3aMmUuk=
+	t=1737912781; cv=none; b=DMgYbc3YnAa+dPAXcOBE2FUMzCmr0nr3PZ2wx6WWH+CfMfy86AwP1Tio8IUpkMZf1r+Zyl/gLpIibKALTEFS+iAWyh8v2BCsUdJmeuXHokR3tgtooJgV4RAdzUbNZr0/OgQbFe0o0qdITqpSXDjLeHs04nJBP3nUyJF+QEYzL1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737903367; c=relaxed/simple;
-	bh=lUa6hxzSEHrVv1Pb4M3DcXtPzy5jghDECoP62giwwcU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jIr+v77YrKp2BeyuQc99zXpfuHIIKMmqXTLJBFAZy+GhxoGsrcbZOuihb0TmWE9aqtBwidc2FfjXH57eh/Ox73iyJhbYgWXqrduu9fmQkiQNcbiAMReojqzOBGgqmmfsCsZ6K+WfUqBr+qXKC73P0MTusK8+sK2q3EaodJt+DUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qKlu+KF9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737912781; c=relaxed/simple;
+	bh=BQctYNtSLOoIPFjdQfrVV5zXYN/YYnvAjkW6DxvgAbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TAXtOgkIwuQDATm+qp73NdicQsVRETN6Otq9KuuM7rE1UeZVdk/Eqb6qW/Kfe7F1cN9uJVjQuoNl4hBPF3fMgWnJavet3iqepXUj6rWf+StNmrfH/Rzgcr0k9cDCBYHruJkS/eJOiQ7+ReniYX0si7CcCTGt+6RQiyfiN59LFdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uiauu7nG; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qKlu+KF9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF72C4CEE2;
-	Sun, 26 Jan 2025 14:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737903367;
-	bh=lUa6hxzSEHrVv1Pb4M3DcXtPzy5jghDECoP62giwwcU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qKlu+KF98CaUamyKtaVvn7dhg3pcLBPTfgQ7bXglqyRRv0av9Z8heNzN4WvjdNTuI
-	 ALX1ZWb6SbReP9ZhA8K/QgJN4ey2anGkWBL/ub8u7Ssy2Nvb6ho8wrJmeyTn0U5hLp
-	 9JXbh5H7yG12yMciA6suEOX6hBAma4BeqcJNvMK29Wi8cdcuRSSTw2ibnnzf4ZqU8x
-	 FGWNd8OAKE95Tq2d65eEEp/f5WQy743tiz7iKfRezGhZSPgAoih81i8ett7QDVcARl
-	 +bWYH+8SM78XF1PYjiUOTH05oGSSmbFVnhW/+DdOY4xzq7MUJC0bvKnixHrXM7aQPb
-	 27Aj245jXjqJA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Sasha Levin <sashal@kernel.org>,
-	chaitanya.dhere@amd.com,
-	jun.lei@amd.com,
-	harry.wentland@amd.com,
-	sunpeng.li@amd.com,
-	Rodrigo.Siqueira@amd.com,
-	christian.koenig@amd.com,
-	Xinhui.Pan@amd.com,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.12 29/31] drm/amd/display: Increase sanitizer frame larger than limit when compile testing with clang
-Date: Sun, 26 Jan 2025 09:54:45 -0500
-Message-Id: <20250126145448.930220-29-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250126145448.930220-1-sashal@kernel.org>
-References: <20250126145448.930220-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uiauu7nG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737912780; x=1769448780;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BQctYNtSLOoIPFjdQfrVV5zXYN/YYnvAjkW6DxvgAbk=;
+  b=Uiauu7nGs/mrvxeiS8mfpELRK3bcg2O1EtLcDKEzdwBtdMk0YdWjByQv
+   qf6CYfBt8nsXg7DVsREezcdT1rBrKL7r4ugfB3kK0NDPBBERo2lW8ZRtD
+   tUQfj54Dz3H+E43C9MHEC7BP4MZIq3qNy5SH+WyTvnETApGltd2ce+elo
+   mCA0jJzQhgyIzXvzZVQE86qymIGCXvEV2f+iJJnQkvsLzd3L2z20Yf3k8
+   L/v+p9jks/O8b7h0NBOqKeXv3Z+Y1xnT6c792tIOLTdx+b2EyTEMqajOZ
+   qaT34lYB1djfoMBu9K6IcbUtWiRCmZZX34ky1ot1avFYNB8BdjcJYcfTL
+   w==;
+X-CSE-ConnectionGUID: 8n2qwPR7RpKR5+MIf3E9pg==
+X-CSE-MsgGUID: 43mpkoOTS5umIyFXeXf8kw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11327"; a="42139585"
+X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
+   d="scan'208";a="42139585"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2025 09:32:59 -0800
+X-CSE-ConnectionGUID: BzxpIR/iTzeoQQhVfC0N5g==
+X-CSE-MsgGUID: 4IDWNxUHSRGF8KEuUKYExQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
+   d="scan'208";a="108816157"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 26 Jan 2025 09:32:57 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tc6VC-000fZh-2k;
+	Sun, 26 Jan 2025 17:32:54 +0000
+Date: Mon, 27 Jan 2025 01:32:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
+Subject: include/linux/ftrace.h:138:9: error: call to undeclared function
+ 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202501270111.x1TyJKg8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.11
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Nathan Chancellor <nathan@kernel.org>
+Hi Puranjay,
 
-[ Upstream commit e4479aecf6581af81bc0908575447878d2a07e01 ]
+FYI, the error/warning still remains.
 
-Commit 24909d9ec7c3 ("drm/amd/display: Overwriting dualDPP UBF values
-before usage") added a new warning in dml2/display_mode_core.c when
-building allmodconfig with clang:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aa22f4da2a46b484a257d167c67a2adc1b7aaf68
+commit: 7caa9765465f60b6d88e22264892cee12d971888 ftrace: riscv: move from REGS to ARGS
+date:   8 months ago
+config: riscv-randconfig-002-20250127 (https://download.01.org/0day-ci/archive/20250127/202501270111.x1TyJKg8-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250127/202501270111.x1TyJKg8-lkp@intel.com/reproduce)
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6268:13: error: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
-   6268 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
-        |             ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501270111.x1TyJKg8-lkp@intel.com/
 
-Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
-Fixes") introduced one in dml2_core/dml2_core_dcn4_calcs.c with the same
-configuration:
+All errors (new ones prefixed by >>):
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: error: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
-   7236 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
-        |             ^
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+>> include/linux/ftrace.h:138:9: error: call to undeclared function 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return arch_ftrace_get_regs(fregs);
+                  ^
+   include/linux/ftrace.h:138:9: note: did you mean 'ftrace_get_regs'?
+   include/linux/ftrace.h:133:40: note: 'ftrace_get_regs' declared here
+   static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+                                          ^
+>> include/linux/ftrace.h:138:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct pt_regs *' [-Wint-conversion]
+           return arch_ftrace_get_regs(fregs);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=3312181336
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2 shuffle=3312181336
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=3312181336
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2 shuffle=3312181336
+   make: Target 'prepare' not remade because of errors.
 
-In the case of the first warning, the stack usage was already at the
-limit at the parent change, so the offending change was rather
-innocuous. In the case of the second warning, there was a rather
-dramatic increase in stack usage compared to the parent:
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7032:13: error: stack frame size (2696) exceeds limit (2048) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
-   7032 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
-        |             ^
+vim +/arch_ftrace_get_regs +138 include/linux/ftrace.h
 
-This is an unfortunate interaction between an issue with stack slot
-reuse in LLVM that gets exacerbated by sanitization (which gets enabled
-with all{mod,yes}config) and function calls using a much higher number
-of parameters than is typical in the kernel, necessitating passing most
-of these values on the stack.
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  132) 
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  133) static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  134) {
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  135) 	if (!fregs)
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  136) 		return NULL;
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  137) 
+02a474ca266a47 Steven Rostedt (VMware  2020-10-27 @138) 	return arch_ftrace_get_regs(fregs);
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  139) }
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  140) 
 
-While it is possible that there should be source code changes to address
-these warnings, this code is difficult to modify for various reasons, as
-has been noted in other changes that have occurred for similar reasons,
-such as commit 6740ec97bcdb ("drm/amd/display: Increase frame warning
-limit with KASAN or KCSAN in dml2").
+:::::: The code at line 138 was first introduced by commit
+:::::: 02a474ca266a47ea8f4d5a11f4ffa120f83730ad ftrace/x86: Allow for arguments to be passed in to ftrace_regs by default
 
-Increase the frame larger than limit when compile testing with clang and
-the sanitizers enabled to avoid this breakage in all{mod,yes}config, as
-they are commonly used and valuable testing targets. While it is not the
-best to hide this issue, it is not really relevant when compile testing,
-as the sanitizers are commonly stressful on optimizations and they are
-only truly useful at runtime, which COMPILE_TEST states will not occur
-with the current build.
+:::::: TO: Steven Rostedt (VMware) <rostedt@goodmis.org>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202412121748.chuX4sap-lkp@intel.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/amd/display/dc/dml2/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-index c4378e620cbf9..986a69c5bd4bc 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-@@ -29,7 +29,11 @@ dml2_rcflags := $(CC_FLAGS_NO_FPU)
- 
- ifneq ($(CONFIG_FRAME_WARN),0)
- ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-+ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-+frame_warn_flag := -Wframe-larger-than=4096
-+else
- frame_warn_flag := -Wframe-larger-than=3072
-+endif
- else
- frame_warn_flag := -Wframe-larger-than=2048
- endif
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
