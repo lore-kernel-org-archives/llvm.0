@@ -1,132 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7865570838;
-	Sun, 26 Jan 2025 17:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDC525A62A
+	for <llvm@lists.linux.dev>; Sun, 26 Jan 2025 19:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737912781; cv=none; b=DMgYbc3YnAa+dPAXcOBE2FUMzCmr0nr3PZ2wx6WWH+CfMfy86AwP1Tio8IUpkMZf1r+Zyl/gLpIibKALTEFS+iAWyh8v2BCsUdJmeuXHokR3tgtooJgV4RAdzUbNZr0/OgQbFe0o0qdITqpSXDjLeHs04nJBP3nUyJF+QEYzL1k=
+	t=1737920532; cv=none; b=QWfwQ6bZyq7D/vbRJTnfJIyp5sebSbe/CBwWJeHBHO6Up1bW8VTK6eMQMdW6wy6rJ5NRRo8acY0XssVGE+npq3IQNH6rFhxz7oNlvWsZMYbGXcRS0SUdz80/h0Nw0nk9Nv0dX3FIc+NyvBntXp3o+yxHGonyo/ULrFmuy3iFztw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737912781; c=relaxed/simple;
-	bh=BQctYNtSLOoIPFjdQfrVV5zXYN/YYnvAjkW6DxvgAbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TAXtOgkIwuQDATm+qp73NdicQsVRETN6Otq9KuuM7rE1UeZVdk/Eqb6qW/Kfe7F1cN9uJVjQuoNl4hBPF3fMgWnJavet3iqepXUj6rWf+StNmrfH/Rzgcr0k9cDCBYHruJkS/eJOiQ7+ReniYX0si7CcCTGt+6RQiyfiN59LFdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uiauu7nG; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737920532; c=relaxed/simple;
+	bh=keCc6CAYUHIXbJoxlA4cCc654XU+OC7Sr2ognYMmfc8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UF6jXcUoCB5wUCh/i+qIBnm5h5usjTmc/OqSSnaVi5zmT9h9aI3Ht5DgH5A9diCDPlv6eVXwPMRuLgRCf/fKa1azdNiRjukPwLmLqgGxaYkaSLYiJP6w1j8CQlj0T6rNWSiGAPiFmwvA4X5QYa/OoHH+RR3K5nkumPnEhwEPpjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RcdjgoqE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uiauu7nG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737912780; x=1769448780;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BQctYNtSLOoIPFjdQfrVV5zXYN/YYnvAjkW6DxvgAbk=;
-  b=Uiauu7nGs/mrvxeiS8mfpELRK3bcg2O1EtLcDKEzdwBtdMk0YdWjByQv
-   qf6CYfBt8nsXg7DVsREezcdT1rBrKL7r4ugfB3kK0NDPBBERo2lW8ZRtD
-   tUQfj54Dz3H+E43C9MHEC7BP4MZIq3qNy5SH+WyTvnETApGltd2ce+elo
-   mCA0jJzQhgyIzXvzZVQE86qymIGCXvEV2f+iJJnQkvsLzd3L2z20Yf3k8
-   L/v+p9jks/O8b7h0NBOqKeXv3Z+Y1xnT6c792tIOLTdx+b2EyTEMqajOZ
-   qaT34lYB1djfoMBu9K6IcbUtWiRCmZZX34ky1ot1avFYNB8BdjcJYcfTL
-   w==;
-X-CSE-ConnectionGUID: 8n2qwPR7RpKR5+MIf3E9pg==
-X-CSE-MsgGUID: 43mpkoOTS5umIyFXeXf8kw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11327"; a="42139585"
-X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
-   d="scan'208";a="42139585"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2025 09:32:59 -0800
-X-CSE-ConnectionGUID: BzxpIR/iTzeoQQhVfC0N5g==
-X-CSE-MsgGUID: 4IDWNxUHSRGF8KEuUKYExQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
-   d="scan'208";a="108816157"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 26 Jan 2025 09:32:57 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tc6VC-000fZh-2k;
-	Sun, 26 Jan 2025 17:32:54 +0000
-Date: Mon, 27 Jan 2025 01:32:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
-Subject: include/linux/ftrace.h:138:9: error: call to undeclared function
- 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202501270111.x1TyJKg8-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RcdjgoqE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737920528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4nX5PvAJ/kLQnCMKV0XbukfsJwX5svg6sR5f613XW2E=;
+	b=RcdjgoqE95jXdtCB5Cpl78sbR0LenColE+OJs0fsW2SUXHzP9iKktIykx9VGfPN9mb4uTm
+	9oYu+6ld5xHQSeLJKqKbscqCzQ2CSasu1t8GJq6fG68kBHByOdHY3MGeKiP3g9kSy9q38Z
+	o1UE0LkLYFwh5YSMtfH11rjZKmJN19U=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-225-cYAEImEaMNmByNIDnaylcA-1; Sun,
+ 26 Jan 2025 14:42:06 -0500
+X-MC-Unique: cYAEImEaMNmByNIDnaylcA-1
+X-Mimecast-MFC-AGG-ID: cYAEImEaMNmByNIDnaylcA
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C7B1519560AA
+	for <llvm@lists.linux.dev>; Sun, 26 Jan 2025 19:42:05 +0000 (UTC)
+Received: from [172.64.13.55] (unknown [10.30.32.164])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 70EB030001BE;
+	Sun, 26 Jan 2025 19:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, c2da8b3f)
+Date: Sun, 26 Jan 2025 19:42:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <90124.125012614420600273@us-mta-225.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 9v1MXevanLvyh0FI3VJ8AApX-BG4pBC__SiOgXGY670_1737920526
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Puranjay,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aa22f4da2a46b484a257d167c67a2adc1b7aaf68
-commit: 7caa9765465f60b6d88e22264892cee12d971888 ftrace: riscv: move from REGS to ARGS
-date:   8 months ago
-config: riscv-randconfig-002-20250127 (https://download.01.org/0day-ci/archive/20250127/202501270111.x1TyJKg8-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250127/202501270111.x1TyJKg8-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501270111.x1TyJKg8-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
->> include/linux/ftrace.h:138:9: error: call to undeclared function 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           return arch_ftrace_get_regs(fregs);
-                  ^
-   include/linux/ftrace.h:138:9: note: did you mean 'ftrace_get_regs'?
-   include/linux/ftrace.h:133:40: note: 'ftrace_get_regs' declared here
-   static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-                                          ^
->> include/linux/ftrace.h:138:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct pt_regs *' [-Wint-conversion]
-           return arch_ftrace_get_regs(fregs);
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-   make[3]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=3312181336
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1203: prepare0] Error 2 shuffle=3312181336
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=3312181336
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:240: __sub-make] Error 2 shuffle=3312181336
-   make: Target 'prepare' not remade because of errors.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/arch_ftrace_get_regs +138 include/linux/ftrace.h
+Kernel information:
+    Commit message: Merge tag 'erofs-for-6.14-rc1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/xiang/erofs
 
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  132) 
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  133) static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  134) {
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  135) 	if (!fregs)
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  136) 		return NULL;
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  137) 
-02a474ca266a47 Steven Rostedt (VMware  2020-10-27 @138) 	return arch_ftrace_get_regs(fregs);
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  139) }
-d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  140) 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1641583432
 
-:::::: The code at line 138 was first introduced by commit
-:::::: 02a474ca266a47ea8f4d5a11f4ffa120f83730ad ftrace/x86: Allow for arguments to be passed in to ftrace_regs by default
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1641583432-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1641583432-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1641583432-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-:::::: TO: Steven Rostedt (VMware) <rostedt@goodmis.org>
-:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
