@@ -1,175 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7257B25A64C;
-	Sun, 26 Jan 2025 14:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9856B1F78E7;
+	Sun, 26 Jan 2025 14:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737900584; cv=none; b=pq6w4pWSorcyVk4Z4m3YJHR8389GcXJUnUV8w8ze2aFUynKvwbBtf8TBYrEElq6mvVWu8vcAZY/Vg3r0PlH+Va3Pjx4rxjel0sel4ZxkJlGhg9O+KZSmYGhXwZ1aj7u9EZyJGpUlSDDF+VMc7+q7gKTqh66lKB1YrVgFJ/uC+xs=
+	t=1737903282; cv=none; b=ZI/upkaUEQ5JBm39gRM/c5a4mcl2LM4UnJficUFpubT88RRTeGJJH46iwh+o3poZwyixFQ06QCc+uHPc8+upe35hnwgD0iDNEOEgrlnnPTdPgPTUp3OiJ8cSgkJyVP/ETEl3Tx2GFseufPMTxMojxv3STJQ26AuQUfz8kOJDzZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737900584; c=relaxed/simple;
-	bh=SN28Hz4kBPo9CE4Gfvp1PzH22or5pSlMhQJuJbCKFdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iS7eN2Qe4HPCkclTR/AzqpGUMBtKxTDIFsPlvvr+YVDNaQ+EZgn9F2Py5ljp3K1YVRWTWlZxDdCDWsvcXJZAVkXOg4dPulrCuVlIlE/cLApTx5p7iaRrQYdGqwOQelvisHjAiXiciIOFcj/ZK8JOn5DZ7vR1EV2Z3l2x26ovXWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CIn+aKcO; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1737903282; c=relaxed/simple;
+	bh=lUa6hxzSEHrVv1Pb4M3DcXtPzy5jghDECoP62giwwcU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=FuMJWJrN0jLgBsDx2SvqLaBhXBQM4M+bJPdBUbzlS/hRZoAlAkaA4gj5bDNsm8Ow+DAOiNxNGvVIFHysgkTeMRDA/A7/NsyyJ2MUx4VSRN+rH1LDHy65DVtB38BAUq0poepB+PeeII8v5YpF1v+KN/J55p92vjCaC1rhmqNl8Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r57ZkTfa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CIn+aKcO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737900582; x=1769436582;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SN28Hz4kBPo9CE4Gfvp1PzH22or5pSlMhQJuJbCKFdE=;
-  b=CIn+aKcO8KTSNYaLtfo+fJhg5iPpbSE0Kn3N6C2LAmDhjTa1863u50zp
-   eW6eg+9SEJkvjMPcmw1C/uJ9BguS3V1XQsv6rRUNHSXeBLOydHBnzBHj9
-   Ft+t0UYu9/70j6siTUYTNH+6COf0bbt6NLOaIfmNgjRXe0pdhDwaG1W63
-   bPeDDTJH8tTwzlKux6YLyZFH6S5kbMN0NLN6K3zbd9ai/qetk41YllF0J
-   k2A3LmLDrTu8PIUuCAAUtiBDUohk4tTGPQz8O+1TocqTSHqy2+HNloY3H
-   6nU0QCkKzIv/TZeGNnxqp2TVLSGjd+hdbpdS38tOSWfWuiXB5OzqZg8pg
-   A==;
-X-CSE-ConnectionGUID: M+rLhA01QCGNJFtSXRrDXw==
-X-CSE-MsgGUID: kclsBV0sSOi2MEXz8wXdqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11327"; a="63729722"
-X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
-   d="scan'208";a="63729722"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2025 06:09:42 -0800
-X-CSE-ConnectionGUID: 1LQVlRlOSDSoDpCzpDXxAQ==
-X-CSE-MsgGUID: xny16wPYTAeSahberUmNcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,236,1732608000"; 
-   d="scan'208";a="113233046"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 26 Jan 2025 06:09:39 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tc3KS-000fPz-1h;
-	Sun, 26 Jan 2025 14:09:36 +0000
-Date: Sun, 26 Jan 2025 22:08:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jordan Rome <linux@jordanrome.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Alexander Potapenko <glider@google.com>
-Subject: Re: [bpf-next v4 1/3] mm: add copy_remote_vm_str
-Message-ID: <202501262133.9mKauA5U-lkp@intel.com>
-References: <20250126124147.3154108-1-linux@jordanrome.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r57ZkTfa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9859BC4CEE2;
+	Sun, 26 Jan 2025 14:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737903282;
+	bh=lUa6hxzSEHrVv1Pb4M3DcXtPzy5jghDECoP62giwwcU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=r57ZkTfaS5R71AcfN+CONsN+ab8tMvA5nkaXRkreIvd10L5aGuAX3FqmmNajkd6x3
+	 3IiA6lWxDOmvIo4+8vjOS/SB6EnQI8ZHsWP6AOHH3pYWZesOOxZuvhKc0BBHBSLd09
+	 NyCoCQECZ3Ko6YgDK+EewwGJXj98Xd+O759oipcAwiQC6Kfhs4tGqybBEQJkUc6tC8
+	 gGb+Cn+VMEqHEuc0t3iJATEIv7KKaD8rQg20C92t5CzYwQGyN71K0mZnVOpIi/JCEm
+	 Ldkjky+GvfKoTDdQ9iSE4ZWxqLEDdfPDlRI4tfo9Ac3lq6+VkWQyom20kTcbg0YWlW
+	 LE9XmhKx/VDfw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Sasha Levin <sashal@kernel.org>,
+	chaitanya.dhere@amd.com,
+	jun.lei@amd.com,
+	harry.wentland@amd.com,
+	sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com,
+	christian.koenig@amd.com,
+	Xinhui.Pan@amd.com,
+	airlied@gmail.com,
+	simona@ffwll.ch,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.13 32/34] drm/amd/display: Increase sanitizer frame larger than limit when compile testing with clang
+Date: Sun, 26 Jan 2025 09:53:08 -0500
+Message-Id: <20250126145310.926311-32-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250126145310.926311-1-sashal@kernel.org>
+References: <20250126145310.926311-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250126124147.3154108-1-linux@jordanrome.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13
+Content-Transfer-Encoding: 8bit
 
-Hi Jordan,
+From: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit e4479aecf6581af81bc0908575447878d2a07e01 ]
 
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on bpf/master linus/master v6.13 next-20250124]
-[cannot apply to akpm-mm/mm-everything]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Commit 24909d9ec7c3 ("drm/amd/display: Overwriting dualDPP UBF values
+before usage") added a new warning in dml2/display_mode_core.c when
+building allmodconfig with clang:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rome/bpf-Add-bpf_copy_from_user_task_str-kfunc/20250126-204439
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250126124147.3154108-1-linux%40jordanrome.com
-patch subject: [bpf-next v4 1/3] mm: add copy_remote_vm_str
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20250126/202501262133.9mKauA5U-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250126/202501262133.9mKauA5U-lkp@intel.com/reproduce)
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6268:13: error: stack frame size (3128) exceeds limit (3072) in 'dml_prefetch_check' [-Werror,-Wframe-larger-than]
+   6268 | static void dml_prefetch_check(struct display_mode_lib_st *mode_lib)
+        |             ^
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501262133.9mKauA5U-lkp@intel.com/
+Commit be4e3509314a ("drm/amd/display: DML21 Reintegration For Various
+Fixes") introduced one in dml2_core/dml2_core_dcn4_calcs.c with the same
+configuration:
 
-All errors (new ones prefixed by >>):
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7236:13: error: stack frame size (3256) exceeds limit (3072) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
+   7236 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
+        |             ^
 
->> mm/nommu.c:1717:2: error: use of undeclared identifier 'vma'
-    1717 |         vma = find_vma(mm, addr);
-         |         ^
-   mm/nommu.c:1718:6: error: use of undeclared identifier 'vma'; did you mean 'vmap'?
-    1718 |         if (vma) {
-         |             ^~~
-         |             vmap
-   mm/nommu.c:303:15: note: 'vmap' declared here
-     303 | EXPORT_SYMBOL(vmap);
-         |               ^
-   mm/nommu.c:1720:21: error: use of undeclared identifier 'vma'
-    1720 |                 if (addr + len >= vma->vm_end)
-         |                                   ^
-   mm/nommu.c:1721:10: error: use of undeclared identifier 'vma'
-    1721 |                         len = vma->vm_end - addr;
-         |                               ^
-   mm/nommu.c:1724:7: error: use of undeclared identifier 'vma'
-    1724 |                 if (vma->vm_flags & VM_MAYREAD) {
-         |                     ^
->> mm/nommu.c:1725:23: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'const char *' [-Wint-conversion]
-    1725 |                         ret = strscpy(buf, addr, len);
-         |                                            ^~~~
-   include/linux/string.h:113:55: note: expanded from macro 'strscpy'
-     113 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                                                              ^~~
-   include/linux/string.h:82:21: note: expanded from macro '__strscpy1'
-      82 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                            ^~~
-   include/linux/string.h:72:43: note: passing argument to parameter here
-      72 | ssize_t sized_strscpy(char *, const char *, size_t);
-         |                                           ^
-   6 errors generated.
+In the case of the first warning, the stack usage was already at the
+limit at the parent change, so the offending change was rather
+innocuous. In the case of the second warning, there was a rather
+dramatic increase in stack usage compared to the parent:
 
+  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7032:13: error: stack frame size (2696) exceeds limit (2048) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
+   7032 | static bool dml_core_mode_support(struct dml2_core_calcs_mode_support_ex *in_out_params)
+        |             ^
 
-vim +/vma +1717 mm/nommu.c
+This is an unfortunate interaction between an issue with stack slot
+reuse in LLVM that gets exacerbated by sanitization (which gets enabled
+with all{mod,yes}config) and function calls using a much higher number
+of parameters than is typical in the kernel, necessitating passing most
+of these values on the stack.
 
-  1703	
-  1704	/*
-  1705	 * Copy a string from another process's address space as given in mm.
-  1706	 * If there is any error return -EFAULT.
-  1707	 */
-  1708	static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-  1709				      void *buf, int len)
-  1710	{
-  1711		int ret;
-  1712	
-  1713		if (mmap_read_lock_killable(mm))
-  1714			return -EFAULT;
-  1715	
-  1716		/* the access must start within one of the target process's mappings */
-> 1717		vma = find_vma(mm, addr);
-  1718		if (vma) {
-  1719			/* don't overrun this mapping */
-> 1720			if (addr + len >= vma->vm_end)
-  1721				len = vma->vm_end - addr;
-  1722	
-  1723			/* only read mappings where it is permitted */
-  1724			if (vma->vm_flags & VM_MAYREAD) {
-> 1725				ret = strscpy(buf, addr, len);
-  1726				if (ret < 0)
-  1727					ret = len - 1;
-  1728			} else {
-  1729				ret = -EFAULT;
-  1730			}
-  1731		} else {
-  1732			ret = -EFAULT;
-  1733		}
-  1734	
-  1735		mmap_read_unlock(mm);
-  1736		return ret;
-  1737	}
-  1738	
+While it is possible that there should be source code changes to address
+these warnings, this code is difficult to modify for various reasons, as
+has been noted in other changes that have occurred for similar reasons,
+such as commit 6740ec97bcdb ("drm/amd/display: Increase frame warning
+limit with KASAN or KCSAN in dml2").
 
+Increase the frame larger than limit when compile testing with clang and
+the sanitizers enabled to avoid this breakage in all{mod,yes}config, as
+they are commonly used and valuable testing targets. While it is not the
+best to hide this issue, it is not really relevant when compile testing,
+as the sanitizers are commonly stressful on optimizations and they are
+only truly useful at runtime, which COMPILE_TEST states will not occur
+with the current build.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202412121748.chuX4sap-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/display/dc/dml2/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+index c4378e620cbf9..986a69c5bd4bc 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
++++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
+@@ -29,7 +29,11 @@ dml2_rcflags := $(CC_FLAGS_NO_FPU)
+ 
+ ifneq ($(CONFIG_FRAME_WARN),0)
+ ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
++ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
++frame_warn_flag := -Wframe-larger-than=4096
++else
+ frame_warn_flag := -Wframe-larger-than=3072
++endif
+ else
+ frame_warn_flag := -Wframe-larger-than=2048
+ endif
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
