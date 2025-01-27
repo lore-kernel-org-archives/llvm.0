@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E88E194A53;
-	Mon, 27 Jan 2025 20:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81DB13C809;
+	Mon, 27 Jan 2025 20:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738008889; cv=none; b=KJGRdom0nrv1DQgekh/XPdRlpzAFLuLDj2E2EyjLixcoesp70fWpQqFmc7IbcfZXvaslXjv9bTJVmBUjWl818n54v1J7llxKP1oe4k5IXP2MAHV9bMqO50/88a7CX1m2L1DBBc++rpFgloFiTmdXZ3siRVRop0gQjYXGiNjM7HE=
+	t=1738010150; cv=none; b=PXO/OtUg7swbfMNmJQoA1OgbyVcIzRLH64nR4wlVMPlWqBQHBWr68vXsvjzXRAF0VLRBax5kXIcUjqEbnfRvS1pym7q6t0RPsSqZIJtYBUxEmRmyOyj0k5h1+MPA9ddt1tCts7/ON69djUk1Io1FyY6zaTrqQURAsJhVai/OAfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738008889; c=relaxed/simple;
-	bh=MkWqeW0Ep+kSVYc/sL14/9OAz9FIkQdZ2Yi0TVhAJ+8=;
+	s=arc-20240116; t=1738010150; c=relaxed/simple;
+	bh=w/wD3uESN/rV6akSAOPbkfLQV1WXV/RH4R6OaenX90E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aw2HPYx8iVDloKu+s4+7KI99i7TSyyZ3aG16AhvCh5NDdszsCSJgQ0wxvr4/Hj1dQt4d/Xr+LoUwKB1AsveoualWPA1LDDhHSZCJa5IKM8NkqvEJZ8zG+uplQtBHMCglPaPjDkiJniUKdde6YOJrzeN3ZUBz9SeERkLejB3uiwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U+JZ7gg0; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+jCMC5iNA6RhO9uogtHQyKbCJGutTmDVjnDSEz4DH9PXziUCPADycDb2QIgHm9lya5ZgzEdtA71bD1pSwHTJ1EPzM2fTVFhZHOlH0Fz14B8DZzCWhOIGq42+jdz69JAWcciqKLAIjGVFi94xHTjL8FSwNdzE7wT7REGT7uqIhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iuWu9Hqq; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U+JZ7gg0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iuWu9Hqq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738008887; x=1769544887;
+  t=1738010148; x=1769546148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MkWqeW0Ep+kSVYc/sL14/9OAz9FIkQdZ2Yi0TVhAJ+8=;
-  b=U+JZ7gg0mpSsCpcrKsjG+7HVmeHuwoTAwYfVg0mdMeHzlVEDTlqvvNfh
-   8uJ5Peo07WFxa0UYDulXjdgL71G5zXNs08fgGP19IAbzNip3WWPT69FBu
-   sY9naM9tqEhei8zYCIzvXgwXyZyNLd/2+D9bRYgTlH9CSHYviJr6cLKcd
-   CxBJi7+w7I7JQSD5qd+nI4Tzq4fMKHnvKIhdvMxlvXN18h8TJ3seFddod
-   V6IRa5xnYjCU/JeGR6oiz44SUIvQbmi0qtaQZri2K9HeXonRXcqtntkUf
-   h+/iwKqyrEzEKLb8G4QP7LZYkXFSWOk5B2bI9/tfCiLB+kRbY8rzVvbL6
-   Q==;
-X-CSE-ConnectionGUID: IlASfHvIRH+VJQ/S6Tw4Cw==
-X-CSE-MsgGUID: yEosS27zRii7AuBdt/b4Gw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="48980514"
+  bh=w/wD3uESN/rV6akSAOPbkfLQV1WXV/RH4R6OaenX90E=;
+  b=iuWu9HqqGt8sa0MYK4GWlZLtQ23EYvoJ3xSqwNr6/LUK/7NedeeIPdQg
+   dGdd9CbxLyb1ZiXivbusNMwvKnl1IewUCVE/LXS12nyTtEIBLUX1lf9OJ
+   RVvYQfC1Uy01G6lEDDp7I8J0VtBk1wYigWUVQPUlSVesDEnr2TiVJ5yUx
+   T4V87pHytRGVYIixh9TRYXYoLB9+FeT314ElF9kU8nQFymtvYW2c9Y2Mp
+   ynop3UUZPLfDCvg80Uu3213tZ+qDrvZc3rnS6PM4zt+yQMGvxvXvfoHBj
+   ZagmE/3X4KWQal7CVR5FN8ystaeY5KRgHVxlVIRMsWAbFnfa3EAxDvi2a
+   g==;
+X-CSE-ConnectionGUID: yr5SVuHmTc+Q7jiGXn3jPA==
+X-CSE-MsgGUID: mKpwypbITgatcdAROImhkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="63845724"
 X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
-   d="scan'208";a="48980514"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 12:14:47 -0800
-X-CSE-ConnectionGUID: T7o5iwAqS4+6KqaDEQz1Ug==
-X-CSE-MsgGUID: +D0ESP75SE6fuWtoBSE96Q==
+   d="scan'208";a="63845724"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 12:35:47 -0800
+X-CSE-ConnectionGUID: TCgK1d2FQleVCDa1DOUjfQ==
+X-CSE-MsgGUID: 2Yk18LAEQn2l97MUvGOaBA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
-   d="scan'208";a="108327517"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113171424"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 27 Jan 2025 12:14:43 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 27 Jan 2025 12:35:45 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tcVVJ-000h7n-1e;
-	Mon, 27 Jan 2025 20:14:41 +0000
-Date: Tue, 28 Jan 2025 04:13:52 +0800
+	id 1tcVpf-000h8b-10;
+	Mon, 27 Jan 2025 20:35:43 +0000
+Date: Tue, 28 Jan 2025 04:35:30 +0800
 From: kernel test robot <lkp@intel.com>
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Andrew Morton <akpm@linux-foundation.org>
@@ -58,7 +58,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 5/5] mm: completely abstract unnecessary adj_start
  calculation
-Message-ID: <202501280337.7bKYRAYQ-lkp@intel.com>
+Message-ID: <202501280408.9NtSz2Lt-lkp@intel.com>
 References: <ef00aec42a892fe6ac9557b3a11f18f30a2e51b3.1737929364.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -72,58 +72,50 @@ In-Reply-To: <ef00aec42a892fe6ac9557b3a11f18f30a2e51b3.1737929364.git.lorenzo.st
 
 Hi Lorenzo,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on akpm-mm/mm-everything]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-simplify-vma-merge-structure-and-expand-comments/20250127-235322
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 patch link:    https://lore.kernel.org/r/ef00aec42a892fe6ac9557b3a11f18f30a2e51b3.1737929364.git.lorenzo.stoakes%40oracle.com
 patch subject: [PATCH 5/5] mm: completely abstract unnecessary adj_start calculation
-config: hexagon-randconfig-001-20250128 (https://download.01.org/0day-ci/archive/20250128/202501280337.7bKYRAYQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501280337.7bKYRAYQ-lkp@intel.com/reproduce)
+config: hexagon-randconfig-002-20250128 (https://download.01.org/0day-ci/archive/20250128/202501280408.9NtSz2Lt-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501280408.9NtSz2Lt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501280337.7bKYRAYQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501280408.9NtSz2Lt-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/vma.c:7:
-   In file included from mm/vma_internal.h:29:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/vma.c:518:50: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'long' [-Wint-conversion]
-     518 |         vma_adjust_trans_huge(vma, vma->vm_start, addr, NULL);
-         |                                                         ^~~~
+>> mm/vma.c:518:50: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'long' [-Wint-conversion]
+           vma_adjust_trans_huge(vma, vma->vm_start, addr, NULL);
+                                                           ^~~~
    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
    include/linux/huge_mm.h:574:12: note: passing argument to parameter 'adjust_next' here
-     574 |                                          long adjust_next)
-         |                                               ^
->> mm/vma.c:704:10: error: incompatible pointer to integer conversion passing 'struct vm_area_struct *' to parameter of type 'long' [-Wint-conversion]
-     704 |                               adj_middle ? vmg->middle : NULL);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                            long adjust_next)
+                                                 ^
+>> mm/vma.c:704:10: warning: incompatible pointer to integer conversion passing 'struct vm_area_struct *' to parameter of type 'long' [-Wint-conversion]
+                                 adj_middle ? vmg->middle : NULL);
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    include/linux/huge_mm.h:574:12: note: passing argument to parameter 'adjust_next' here
-     574 |                                          long adjust_next)
-         |                                               ^
-   mm/vma.c:1141:41: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'long' [-Wint-conversion]
-    1141 |         vma_adjust_trans_huge(vma, start, end, NULL);
-         |                                                ^~~~
+                                            long adjust_next)
+                                                 ^
+   mm/vma.c:1141:41: warning: incompatible pointer to integer conversion passing 'void *' to parameter of type 'long' [-Wint-conversion]
+           vma_adjust_trans_huge(vma, start, end, NULL);
+                                                  ^~~~
    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
+   #define NULL ((void *)0)
+                ^~~~~~~~~~~
    include/linux/huge_mm.h:574:12: note: passing argument to parameter 'adjust_next' here
-     574 |                                          long adjust_next)
-         |                                               ^
-   2 warnings and 3 errors generated.
+                                            long adjust_next)
+                                                 ^
+   3 warnings generated.
 
 
 vim +518 mm/vma.c
