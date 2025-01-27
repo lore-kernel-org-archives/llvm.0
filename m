@@ -1,139 +1,219 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556B619066D;
-	Mon, 27 Jan 2025 19:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4FE19066D;
+	Mon, 27 Jan 2025 19:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738005035; cv=none; b=NLgvEREF+w7YZp3Pekq+CquptyR6Mu4oI6YUXVnesqvVzTjFs5HoRy7RonwBiOWNontYeH3WESwbFKlzO+q52cpKD/uOZ/WLXZV/S2Jv8m0ujInQbdC4KuV8ECTcuHgkvcEXiAnoGETnuzvOzc+6zV2GxXiWf/uxiM7tDlIRkTs=
+	t=1738006966; cv=none; b=Ustmtip2zcaODuDUNLPBIXdx39VkRW+U8iNK/pmtv+dhl1Ffb6mJje0UHb0TjPnP2ccGK2hOE9ZinrK0FabaqwcUWaLzWRLYi7s+P/ssswV60qZvaGGx2I3o8DOnjTiL8rD1CqQgLWPGMLrS9UcutHMR65i34jCw/ZgO5/QKhuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738005035; c=relaxed/simple;
-	bh=GYMmPFEcdDc8y552EQFjhJ7bjqBPWsEEeQCv/amnOaI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AdN7YEZX6V/2V9ASN955LNAsxEYpMNZ56jCTiWbYsrdX00RxozCPjnmHzYPRbXBO54qdKwwvC3myN1VPmNqIRIv9AHtwkZmYFAFc085cRWwBQRnE/nUCWD/MM9Fbz/u05xDvOehNPHOSubUufzuw0lqdbnvQyKJpiG1LyLOJJ4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWlta6Iz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738006966; c=relaxed/simple;
+	bh=sc0INDQPjOZC+fi8GJ99iinD73q7hXoo8r7sHWInbIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Rtz4/H6gbkBH36PZBA96ltvzQfn6T180dWxofEADHcamXXpQZvH03w7IkV0jeTNAsw3WBU/PdGYn8sAhUwZ/kNjP/D18OoldEiRL/ZBiA8mx5Y7WP6jtrS5GzsTzh2Lfj7R3z0vGUcT0XOET/cCM/LBCxIezcQNEnZDGWBZRP2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EjFWX1zK; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWlta6Iz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1702C4AF0B;
-	Mon, 27 Jan 2025 19:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738005034;
-	bh=GYMmPFEcdDc8y552EQFjhJ7bjqBPWsEEeQCv/amnOaI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VWlta6IzQTA1ABSxOrNDjzQaOW7P4RDttBsd78zjqNk9ETq1cN3stjHXreeRNx0eZ
-	 DThelRoLKJ2/RyaV9ShD3tdIUlBl/6oBDZKbvJ04F/PUS8Pl8DDPpl5HOh5rpo3ZsC
-	 55/oWpMnWAhXENjYIVTSz91JcU81fOyS11ldMOq5B9h9cwt7hOX9uTlBFXXDeH+HS7
-	 3aTte0Ud4B6sPQIxxNFQkQMH+Ex6uT9KdhytQ5f21y5+OG/FYu7975qgFsqp8DVTFU
-	 npnFiZJhQIOk/EWX0rKyy3/QgCZwzKgUAEyeOMgMHEbg9XBWkDglsyJUkCHyTvA77n
-	 NqpmN9L10GjSw==
-From: Kees Cook <kees@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Jakub Jelinek <jakub@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	linux-kbuild@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 3/3] kbuild: Use -fzero-init-padding-bits=all
-Date: Mon, 27 Jan 2025 11:10:28 -0800
-Message-Id: <20250127191031.245214-3-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250127190636.it.745-kees@kernel.org>
-References: <20250127190636.it.745-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EjFWX1zK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738006964; x=1769542964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sc0INDQPjOZC+fi8GJ99iinD73q7hXoo8r7sHWInbIA=;
+  b=EjFWX1zKrdJKunEttelSubIkAC5x+ZQ8ByRYL5lLSejEL/DPTW6NFRxb
+   RYacGEf7vhuz7hx/HJQ3Kka+va/BszjilhOxRBQIV/BIX3xXaTko44VyQ
+   QvgvlXxaNLCJAd/Z4Ox+hmIlKj3HvlqEe4ssHETkWGwx39q355ysYVmCQ
+   Xivua07v2DBBJXerLooH/u9Rpd8VrWaXX/2qE+j/OWWpnC1FBOsW01xpn
+   Q1j4wv/e+QtrgY3C4nMXWGavPrDYxorj/KvWww/p9tCpOSvCQLhxMM062
+   4tO5kMVLRA5MbLelJe0ghwAieLtz/hgES9MK6919K7OB2bZEO3H9q3ty8
+   A==;
+X-CSE-ConnectionGUID: gleGLtjKTHu22ZrvzofKRQ==
+X-CSE-MsgGUID: gr7ya5oXRkiPPCjdsG3ZcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="49139597"
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="49139597"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 11:42:43 -0800
+X-CSE-ConnectionGUID: t8HStpnUTU6HkNR2WXMOvw==
+X-CSE-MsgGUID: koErNDuETxSH4LhGWfh/nw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,239,1732608000"; 
+   d="scan'208";a="139411175"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 27 Jan 2025 11:42:41 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tcV0I-000h5z-1a;
+	Mon, 27 Jan 2025 19:42:38 +0000
+Date: Tue, 28 Jan 2025 03:42:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20250124 6/15]
+ drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2163:2: error: call to
+ '__compiletime_assert_1138' declared with 'error' attribute: BUILD_BUG_ON
+ failed: conf->keylen < WLAN_KEY_LEN_GCMP_256
+Message-ID: <202501280314.duK3nD3Q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3925; i=kees@kernel.org; h=from:subject; bh=GYMmPFEcdDc8y552EQFjhJ7bjqBPWsEEeQCv/amnOaI=; b=owGbwMvMwCVmps19z/KJym7G02pJDOnTbylvrX7DITXvIsOETR/aVfoeTvU5pttk1/5vj4PT+ s9MeuESHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABNROcjwP6j59Zf9Bb3G6W0/ fy5q2dN5q6vJ2oFbZdZqQ9Mu/zU/3zH84ZlvGd4swaUtven2HOsd2+58u8JjMt969clGy7xK3Qe lLAA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-GCC 15 introduces a regression in "= { 0 }" style initialization of
-unions that Linux has depended on for eliminating uninitialized variable
-contents. GCC does not seem likely to fix it[1], instead suggesting[2]
-that affected projects start using -fzero-init-padding-bits=unions.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20250124
+head:   86b653e4edef7b0f7b7afe5dd8e0241fc1165238
+commit: e37f7001ef33528ce10e3821fc5c07b84fc4fca7 [6/15] wifi: iwlwifi: mvm: Use __counted_by() and avoid -Wfamnae warnings
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250128/202501280314.duK3nD3Q-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501280314.duK3nD3Q-lkp@intel.com/reproduce)
 
-To avoid future surprises beyond just the current situation with unions,
-enable -fzero-init-padding-bits=all when available (GCC 15+). This will
-correctly zero padding bits in unions and structs that might have been
-left uninitialized, and will make sure there is no immediate regression
-in union initializations. As seen in the stackinit KUnit selftest union
-cases, which were passing before, were failing under GCC 15:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501280314.duK3nD3Q-lkp@intel.com/
 
-    not ok 18 test_small_start_old_zero
-    ok 29 test_small_start_dynamic_partial # SKIP XFAIL uninit bytes: 63
-    ok 32 test_small_start_assigned_dynamic_partial # SKIP XFAIL uninit bytes: 63
-    ok 67 test_small_start_static_partial # SKIP XFAIL uninit bytes: 63
-    ok 70 test_small_start_static_all # SKIP XFAIL uninit bytes: 56
-    ok 73 test_small_start_dynamic_all # SKIP XFAIL uninit bytes: 56
-    ok 82 test_small_start_assigned_static_partial # SKIP XFAIL uninit bytes: 63
-    ok 85 test_small_start_assigned_static_all # SKIP XFAIL uninit bytes: 56
-    ok 88 test_small_start_assigned_dynamic_all # SKIP XFAIL uninit bytes: 56
+All errors (new ones prefixed by >>):
 
-The above all now pass again with -fzero-init-padding-bits=all added.
+   In file included from drivers/net/wireless/intel/iwlwifi/mvm/d3.c:7:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/riscv/include/asm/cacheflush.h:9:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2163:2: error: call to '__compiletime_assert_1138' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_GCMP_256
+    2163 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:542:2: note: expanded from macro 'compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:530:2: note: expanded from macro '_compiletime_assert'
+     530 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:523:4: note: expanded from macro '__compiletime_assert'
+     523 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:167:1: note: expanded from here
+     167 | __compiletime_assert_1138
+         | ^
+>> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2162:2: error: call to '__compiletime_assert_1137' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_CCMP
+    2162 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:542:2: note: expanded from macro 'compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:530:2: note: expanded from macro '_compiletime_assert'
+     530 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:523:4: note: expanded from macro '__compiletime_assert'
+     523 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:163:1: note: expanded from here
+     163 | __compiletime_assert_1137
+         | ^
+   3 warnings and 2 errors generated.
 
-This also fixes the following cases for struct initialization that had
-been XFAIL until now because there was no compiler support beyond the
-larger "-ftrivial-auto-var-init=zero" option:
 
-    ok 38 test_small_hole_static_all # SKIP XFAIL uninit bytes: 3
-    ok 39 test_big_hole_static_all # SKIP XFAIL uninit bytes: 124
-    ok 40 test_trailing_hole_static_all # SKIP XFAIL uninit bytes: 7
-    ok 42 test_small_hole_dynamic_all # SKIP XFAIL uninit bytes: 3
-    ok 43 test_big_hole_dynamic_all # SKIP XFAIL uninit bytes: 124
-    ok 44 test_trailing_hole_dynamic_all # SKIP XFAIL uninit bytes: 7
-    ok 58 test_small_hole_assigned_static_all # SKIP XFAIL uninit bytes: 3
-    ok 59 test_big_hole_assigned_static_all # SKIP XFAIL uninit bytes: 124
-    ok 60 test_trailing_hole_assigned_static_all # SKIP XFAIL uninit bytes: 7
-    ok 62 test_small_hole_assigned_dynamic_all # SKIP XFAIL uninit bytes: 3
-    ok 63 test_big_hole_assigned_dynamic_all # SKIP XFAIL uninit bytes: 124
-    ok 64 test_trailing_hole_assigned_dynamic_all # SKIP XFAIL uninit bytes: 7
+vim +2163 drivers/net/wireless/intel/iwlwifi/mvm/d3.c
 
-All of the above now pass when built under GCC 15. Tests can be seen
-with:
+  2148	
+  2149	static bool iwl_mvm_gtk_rekey(struct iwl_wowlan_status_data *status,
+  2150				      struct ieee80211_vif *vif,
+  2151				      struct iwl_mvm *mvm, u32 gtk_cipher)
+  2152	{
+  2153		int i, j;
+  2154		struct ieee80211_key_conf *key;
+  2155		DEFINE_FLEX(struct ieee80211_key_conf, conf, key, keylen,
+  2156			    WOWLAN_KEY_MAX_SIZE);
+  2157		int link_id = vif->active_links ? __ffs(vif->active_links) : -1;
+  2158	
+  2159		conf->cipher = gtk_cipher;
+  2160	
+  2161		BUILD_BUG_ON(WLAN_KEY_LEN_CCMP != WLAN_KEY_LEN_GCMP);
+> 2162		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
+> 2163		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
+  2164		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_TKIP);
+  2165		BUILD_BUG_ON(conf->keylen < sizeof(status->gtk[0].key));
+  2166	
+  2167		switch (gtk_cipher) {
+  2168		case WLAN_CIPHER_SUITE_CCMP:
+  2169		case WLAN_CIPHER_SUITE_GCMP:
+  2170			conf->keylen = WLAN_KEY_LEN_CCMP;
+  2171			break;
+  2172		case WLAN_CIPHER_SUITE_GCMP_256:
+  2173			conf->keylen = WLAN_KEY_LEN_GCMP_256;
+  2174			break;
+  2175		case WLAN_CIPHER_SUITE_TKIP:
+  2176			conf->keylen = WLAN_KEY_LEN_TKIP;
+  2177			break;
+  2178		default:
+  2179			WARN_ON(1);
+  2180		}
+  2181	
+  2182		for (i = 0; i < ARRAY_SIZE(status->gtk); i++) {
+  2183			if (!status->gtk[i].len)
+  2184				continue;
+  2185	
+  2186			conf->keyidx = status->gtk[i].id;
+  2187			IWL_DEBUG_WOWLAN(mvm,
+  2188					 "Received from FW GTK cipher %d, key index %d\n",
+  2189					 conf->cipher, conf->keyidx);
+  2190			memcpy(conf->key, status->gtk[i].key,
+  2191			       sizeof(status->gtk[i].key));
+  2192	
+  2193			key = ieee80211_gtk_rekey_add(vif, conf, link_id);
+  2194			if (IS_ERR(key))
+  2195				return false;
+  2196	
+  2197			for (j = 0; j < ARRAY_SIZE(status->gtk_seq); j++) {
+  2198				if (!status->gtk_seq[j].valid ||
+  2199				    status->gtk_seq[j].key_id != key->keyidx)
+  2200					continue;
+  2201				iwl_mvm_set_key_rx_seq_idx(key, status, j);
+  2202				break;
+  2203			}
+  2204			WARN_ON(j == ARRAY_SIZE(status->gtk_seq));
+  2205		}
+  2206	
+  2207		return true;
+  2208	}
+  2209	
 
-    ./tools/testing/kunit/kunit.py run stackinit --arch=x86_64 \
-        --make_option CC=gcc-15
-
-Clang continues to fully initialize these kinds of variables[3] with
-additional flags.
-
-Suggested-by: Jakub Jelinek <jakub@redhat.com>
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118403 [1]
-Link: https://lore.kernel.org/linux-toolchains/Z0hRrrNU3Q+ro2T7@tucnak/ [2]
-Link: https://github.com/llvm/llvm-project/commit/7a086e1b2dc05f54afae3591614feede727601fa [3]
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: linux-kbuild@vger.kernel.org
----
- scripts/Makefile.extrawarn | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 1d13cecc7cc7..eb719f6d8d53 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -77,6 +77,9 @@ KBUILD_CFLAGS += $(call cc-option,-Werror=designated-init)
- # Warn if there is an enum types mismatch
- KBUILD_CFLAGS += $(call cc-option,-Wenum-conversion)
- 
-+# Explicitly clear padding bits during variable initialization
-+KBUILD_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
-+
- KBUILD_CFLAGS += -Wextra
- KBUILD_CFLAGS += -Wunused
- 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
