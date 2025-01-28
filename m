@@ -1,222 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A603B1DED68;
-	Tue, 28 Jan 2025 20:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD10F1DE4D4
+	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 21:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738097883; cv=none; b=Bf7gzd/eKrJr2jK732+bixsGVO+dKds5b/DfdH69KQiyd3u5hofwmgQK9DzAuIs3OdmpMuanTDUv0+pE6es+QA+S0Vj3f+FfPYWdUwwKrF1bcZatMS0isTMbYrFbvUqFJmyUlAd792/We/YnDc7olGDC3RCgxi1t7UFQ1X/1EB0=
+	t=1738100230; cv=none; b=qXcooNTll1EE73qmUQ9EQ/YWqzGzrN2uWWNwNUQEHEU8n3v2Pt8+Ou1N2lCW+BZuQSX4uvJmTIpN7FJcSXBH2Ug5qj/AjfOXf3zfnYU3y1TEIkSj8eVMbbRtAn1WkYT4BI8RY9XdToQiSlF0isK1UqVg5drxc8NQ2s42KjGonKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738097883; c=relaxed/simple;
-	bh=a96zUL8woR/oDc/KLnuutHpBtiL9Sc2/WwWTwdHbXbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xi6BEObRsqTyk/JNNKRLydZJNGyKWxLOA6NkEGX2yy/xQk3nz6x4fAlqA+fPtPk3HHTskplUoHgl88qmnsj4gLDDIeP7MwcSdGD23sAHQpEb5kWAFs/qbjlIZc1eh8Y2uFTob0b6wH82N53deiRWzIISz3BKe5FaM6pFLdKabUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWzsL7ap; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738100230; c=relaxed/simple;
+	bh=t9v9MrLhQXftvOBAs3wP1knReZZnZ9nfwNfQRZ1P9gM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Mch8fXqZgxtfY/t2L5L4jwGkR92sH4Tt46LmnyorribyNpayu6ZjoQZ27sdQjJTRU3ldlkPUq4KZR4mxfZHhlA8Ti+vfFl7iHjH/nl5jRYipDC6vK3qdEnEWw+RkCMoCC2yW7Q9FIomeT5Sxnrfui0DK+jf5s3BqUZfx+bb9v5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=SudOELqd; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWzsL7ap"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 210C0C4CEE1;
-	Tue, 28 Jan 2025 20:58:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738097883;
-	bh=a96zUL8woR/oDc/KLnuutHpBtiL9Sc2/WwWTwdHbXbo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LWzsL7apgXFCF33hgtqZqklxfO55L7C/q2hmlt+bCrLkLRIaIKHXYtSwfu9BjpBEl
-	 N14hmdHeJbeuAIaCJY5JDIWm7BHQk/XVzD6btA10nQQKw0lK89hR/RCD92xuW1KkRb
-	 ooL9KIJ4nIRroQPN3XCPBHx44vSTSPfperDQl4IhdMSfcyCJEmHccmeyK6iRTGvgvE
-	 8eeH6qcQgRWXKz9rfHZGSukacSv6d8cyeQ03QeIuLro6g4jZK9mvdtCiSFvoC/n1bh
-	 97SGvaQ0rntN40M32HyM2Tb+P5UsYGTrA41W9xVcldQkmRq/18YKq9aYAutl9xYUAx
-	 hleKC7EYtsOoA==
-Date: Tue, 28 Jan 2025 12:58:00 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Li Huafei <lihuafei1@huawei.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v3 06/18] perf capstone: Support for dlopen-ing
- libcapstone.so
-Message-ID: <Z5lE2MC0wh3WDVnX@google.com>
-References: <20250122174308.350350-1-irogers@google.com>
- <20250122174308.350350-7-irogers@google.com>
- <Z5QSm-w0efS9xh47@google.com>
- <CAP-5=fWNy8CM8nKOAH=aXyNKg5h4U4vWfB92io_T5KpCsSgv9Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="SudOELqd"
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YjJXF6hSHzlgMVb;
+	Tue, 28 Jan 2025 21:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1738100209; x=1740692210; bh=Cb5Ew8HL0XbNt41H04ArOXHw
+	yWZezSxHGJd8TBs12Mc=; b=SudOELqdAsDAwxiDHH88IhEj4iUAUENck+4gPD1X
+	DsG+RA/BJUxugXyCCU+v807ObSJ6sx3RiofdFU5N1fuQOePR8ZXJKRqSQyr2+3sZ
+	7vs1CKCm6mBYNvIZ2dc6BiMs/3vZgf16KaDQAbeBhHUIjb2bCMQsjV3TQDknKbHc
+	GJuaOpeLSar87LvVoGaop2piTmvCK2u1qOYzeLElqnRQU0cQqt9ZbbrtPEy4oEPM
+	3dENFyroJTKifkQeHRHRjZW+B2ezgGR7wOKLOrz0EN8TmgaaRMACS8ghD2DZbz3R
+	ZpcFmnE6VwtRaXOEBcR82FGiqH1U6EbLiWKHxaZ5ANEviQ==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id FFA6bTQLJjIv; Tue, 28 Jan 2025 21:36:49 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YjJWt19GBzlgMVQ;
+	Tue, 28 Jan 2025 21:36:41 +0000 (UTC)
+Message-ID: <6a45a521-71a3-4087-9320-b8aeecea205a@acm.org>
+Date: Tue, 28 Jan 2025 13:36:39 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWNy8CM8nKOAH=aXyNKg5h4U4vWfB92io_T5KpCsSgv9Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/vmstat: Fix a W=1 clang compiler warning
+To: Ivan Shapovalov <intelfx@intelfx.name>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>,
+ David Rientjes <rientjes@google.com>, David Hildenbrand <david@redhat.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Joel Granados <joel.granados@kernel.org>,
+ Sourav Panda <souravpanda@google.com>, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+ Johannes Weiner <hannes@cmpxchg.org>,
+ Konstantin Khlebnikov <koct9i@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20241212182425.ad1f7894cd0f00b2e34bbaed@linux-foundation.org>
+ <20250122015818.3308696-1-intelfx@intelfx.name>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250122015818.3308696-1-intelfx@intelfx.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 24, 2025 at 09:20:15PM -0800, Ian Rogers wrote:
-> On Fri, Jan 24, 2025 at 2:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Wed, Jan 22, 2025 at 09:42:56AM -0800, Ian Rogers wrote:
-> > > If perf wasn't built against libcapstone, no HAVE_LIBCAPSTONE_SUPPORT,
-> > > support dlopen-ing libcapstone.so and then calling the necessary
-> > > functions by looking them up using dlsym. Reverse engineer the types
-> > > in the API using pahole, adding only what's used in the perf code or
-> > > necessary for the sake of struct size and alignment.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/util/capstone.c | 287 ++++++++++++++++++++++++++++++++-----
-> > >  1 file changed, 248 insertions(+), 39 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-> > > index c9845e4d8781..8d65c7a55a8b 100644
-> > > --- a/tools/perf/util/capstone.c
-> > > +++ b/tools/perf/util/capstone.c
-> > > @@ -11,19 +11,249 @@
-> > >  #include "print_insn.h"
-> > >  #include "symbol.h"
-> > >  #include "thread.h"
-> > > +#include <dlfcn.h>
-> > >  #include <fcntl.h>
-> > > +#include <inttypes.h>
-> >
-> > These two can go under #else (!HAVE_LIBCAPSTONE_SUPPORT).
+On 1/21/25 5:57 PM, Ivan Shapovalov wrote:
+>> Spose so.  One always suspects that adding a typecast is a sign that we
+>> screwed things up somehow.  The relationship between enums lru_list and
+>> node_stat_item is foggy, and I'm unsure whether this is the place to
+>> make the transition it.  Perhaps lru_list_name() should take an
+>> `unsigned int' arg instead.
 > 
-> Ack.
-> 
-> > >  #include <string.h>
-> > >
-> > >  #ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > >  #include <capstone/capstone.h>
-> > > +#else
-> > > +typedef size_t csh;
-> > > +enum cs_arch {
-> > > +     CS_ARCH_ARM = 0,
-> > > +     CS_ARCH_ARM64 = 1,
-> > > +     CS_ARCH_X86 = 3,
-> > > +     CS_ARCH_SYSZ = 6,
-> > > +};
-> > > +enum cs_mode {
-> > > +     CS_MODE_ARM = 0,
-> > > +     CS_MODE_32 = 1 << 2,
-> > > +     CS_MODE_64 = 1 << 3,
-> > > +     CS_MODE_V8 = 1 << 6,
-> > > +     CS_MODE_BIG_ENDIAN = 1 << 31,
-> > > +};
-> > > +enum cs_opt_type {
-> > > +     CS_OPT_SYNTAX = 1,
-> > > +     CS_OPT_DETAIL = 2,
-> > > +};
-> > > +enum cs_opt_value {
-> > > +     CS_OPT_SYNTAX_ATT = 2,
-> > > +     CS_OPT_ON = 3,
-> > > +};
-> > > +enum cs_err {
-> > > +     CS_ERR_OK = 0,
-> > > +     CS_ERR_HANDLE = 3,
-> > > +};
-> > > +enum x86_op_type {
-> > > +     X86_OP_IMM = 2,
-> > > +     X86_OP_MEM = 3,
-> > > +};
-> > > +enum x86_reg {
-> > > +     X86_REG_RIP = 41,
-> > > +};
-> > > +typedef int32_t x86_avx_bcast;
-> > > +struct x86_op_mem {
-> > > +     enum x86_reg segment;
-> > > +     enum x86_reg base;
-> > > +     enum x86_reg index;
-> > > +     int scale;
-> > > +     int64_t disp;
-> > > +};
-> > > +
-> > > +struct cs_x86_op {
-> > > +     enum x86_op_type type;
-> > > +     union {
-> > > +             enum x86_reg  reg;
-> > > +             int64_t imm;
-> > > +             struct x86_op_mem mem;
-> > > +     };
-> > > +     uint8_t size;
-> > > +     uint8_t access;
-> > > +     x86_avx_bcast avx_bcast;
-> > > +     bool avx_zero_opmask;
-> > > +};
-> > > +struct cs_x86_encoding {
-> > > +     uint8_t modrm_offset;
-> > > +     uint8_t disp_offset;
-> > > +     uint8_t disp_size;
-> > > +     uint8_t imm_offset;
-> > > +     uint8_t imm_size;
-> > > +};
-> > > +typedef int32_t  x86_xop_cc;
-> > > +typedef int32_t  x86_sse_cc;
-> > > +typedef int32_t  x86_avx_cc;
-> > > +typedef int32_t  x86_avx_rm;
-> > > +struct cs_x86 {
-> > > +     uint8_t prefix[4];
-> > > +     uint8_t opcode[4];
-> > > +     uint8_t rex;
-> > > +     uint8_t addr_size;
-> > > +     uint8_t modrm;
-> > > +     uint8_t sib;
-> > > +     int64_t disp;
-> > > +     enum x86_reg sib_index;
-> > > +     int8_t sib_scale;
-> > > +     enum x86_reg sib_base;
-> > > +     x86_xop_cc xop_cc;
-> > > +     x86_sse_cc sse_cc;
-> > > +     x86_avx_cc avx_cc;
-> > > +     bool avx_sae;
-> > > +     x86_avx_rm avx_rm;
-> > > +     union {
-> > > +             uint64_t eflags;
-> > > +             uint64_t fpu_flags;
-> > > +     };
-> > > +     uint8_t op_count;
-> > > +     struct cs_x86_op operands[8];
-> > > +     struct cs_x86_encoding encoding;
-> > > +};
-> > > +struct cs_detail {
-> > > +     uint16_t regs_read[12];
-> > > +     uint8_t regs_read_count;
-> > > +     uint16_t regs_write[20];
-> > > +     uint8_t regs_write_count;
-> > > +     uint8_t groups[8];
-> > > +     uint8_t groups_count;
-> > > +
-> > > +     union {
-> > > +             struct cs_x86 x86;
-> > > +     };
-> > > +};
-> >
-> > As discussed, let's remove the detail part.
-> 
-> I kind of feel there should be a #warning in that case. I'd rather
-> leave it as is and not have a build warning.
+> All of these *_name() functions do seem to expect arguments in range of
+> the corresponding enums, so perhaps keep those args typed as a form of
+> self-documenting code, and do this instead?
 
-What kind of build warning are you talking about?
+If nobody objects I will submit this patch for review after the merge
+window has closed:
 
-Thanks,
-Namhyung
+Subject: [PATCH] mm/vmstat: Fix W=1 clang compiler warnings
+
+Commit 30c2de0a267c ("mm/vmstat: fix a W=1 clang compiler warning")
+suppresses some but not all compiler warnings that are reported by clang
+when building with W=1 about NR_LRU_BASE and NR_ZONE_LRU_BASE. Hence
+revert commit 30c2de0a267c and instead make NR_LRU_BASE and
+NR_ZONE_LRU_BASE integer constants instead of enumeration constants.
+
+Cc: Ivan Shapovalov <intelfx@intelfx.name>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+  include/linux/mmzone.h | 22 +++++++++++++++++++---
+  include/linux/vmstat.h |  9 +++++++--
+  2 files changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 9540b41894da..92ed919ea99d 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -135,10 +135,19 @@ enum numa_stat_item {
+  #define NR_VM_NUMA_EVENT_ITEMS 0
+  #endif
+
++/*
++ * NR_ZONE_LRU_BASE and NR_VM_ZONE_STAT_ITEMS are often added to 
+enumeration
++ * constants of another type than enum_zone_stat_item. Define these 
+constants
++ * as an integer instead of enum node_stat_item to prevent that the 
+compiler
++ * warns about enumeration type mismatches when these constants are used.
++ */
++#define NR_ZONE_LRU_BASE	(1 * __NR_ZONE_LRU_BASE)
++#define NR_VM_ZONE_STAT_ITEMS	(1 * __NR_VM_ZONE_STAT_ITEMS)
++
+  enum zone_stat_item {
+  	/* First 128 byte cacheline (assuming 64 bit words) */
+  	NR_FREE_PAGES,
+-	NR_ZONE_LRU_BASE, /* Used only for compaction and reclaim retry */
++	__NR_ZONE_LRU_BASE, /* Used only for compaction and reclaim retry */
+  	NR_ZONE_INACTIVE_ANON = NR_ZONE_LRU_BASE,
+  	NR_ZONE_ACTIVE_ANON,
+  	NR_ZONE_INACTIVE_FILE,
+@@ -155,10 +164,17 @@ enum zone_stat_item {
+  #ifdef CONFIG_UNACCEPTED_MEMORY
+  	NR_UNACCEPTED,
+  #endif
+-	NR_VM_ZONE_STAT_ITEMS };
++	__NR_VM_ZONE_STAT_ITEMS };
++
++/*
++ * enum lru_list constants are often added to NR_LRU_BASE. Define 
+NR_LRU_BASE
++ * as an integer instead of enum node_stat_item to prevent that the 
+compiler
++ * warns about enumeration type mismatches.
++ */
++#define NR_LRU_BASE (1 * __NR_LRU_BASE)
+
+  enum node_stat_item {
+-	NR_LRU_BASE,
++	__NR_LRU_BASE,
+  	NR_INACTIVE_ANON = NR_LRU_BASE, /* must match order of LRU_[IN]ACTIVE */
+  	NR_ACTIVE_ANON,		/*  "     "     "   "       "         */
+  	NR_INACTIVE_FILE,	/*  "     "     "   "       "         */
+diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
+index 9f3a04345b86..eb115b9a50f4 100644
+--- a/include/linux/vmstat.h
++++ b/include/linux/vmstat.h
+@@ -135,8 +135,13 @@ static inline void vm_events_fold_cpu(int cpu)
+  #define count_vm_vma_lock_event(x) do {} while (0)
+  #endif
+
++/*
++ * item##_NORMAL has type enum vm_event_item while ZONE_NORMAL and zid have
++ * type enum zone_type. Suppress compiler warnings about mixing different
++ * enumeration types by converting item##_NORMAL into an int with '1 *'.
++ */
+  #define __count_zid_vm_events(item, zid, delta) \
+-	__count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
++	__count_vm_events(1 * item##_NORMAL - ZONE_NORMAL + zid, delta)
+
+  /*
+   * Zone and node-based page accounting with per cpu differentials.
+@@ -515,7 +520,7 @@ static inline const char *node_stat_name(enum 
+node_stat_item item)
+
+  static inline const char *lru_list_name(enum lru_list lru)
+  {
+-	return node_stat_name(NR_LRU_BASE + (enum node_stat_item)lru) + 3; // 
+skip "nr_"
++	return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+  }
+
+  #if defined(CONFIG_VM_EVENT_COUNTERS) || defined(CONFIG_MEMCG)
 
