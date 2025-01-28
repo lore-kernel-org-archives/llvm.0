@@ -1,109 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B698B18C004
-	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 18:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD381B413D;
+	Tue, 28 Jan 2025 20:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738088289; cv=none; b=O+xwM3jn5JV0NnqC4f4IZvNmmRZ0wZDvKrBmFA3fSHvKZycRzbwgpfZNwdqvlMaZrgTMMGV/RjCPR37TJm1ZJUoom9eysrHVaoMCivwrM5go5dkOwspp8Muajd+wX49+7ybA6q1Ylyb873Q0akEE+KA3BhAKNwT+3HPUoYLVG9c=
+	t=1738097785; cv=none; b=AnBxNNnDjERc2bPO67ipM1FlBPZTkctBX82+KAgBlMD0kHdl73i/6zY9H/pQMcroEexrtkoUXD7uP2TFTvh5qaN70C7fOTSX0OyU824vugRj/wMPpuPXIR7vxNTey6RNZbid16LBkESaQ5SjJYnvwwtX69N33u8DFFXK0/Kc1k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738088289; c=relaxed/simple;
-	bh=5ER2d9p3jsoggZ1pm9yJoIAhdy7sdAnLR+1lxGxhU/I=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=aqzXgYdMYN8GKwDDg0I2tzlr+pWgHVK8ZLfouUJ0MLxddDOff7UY6xZoTc+IzUPEbK4cB8dFSbijcmyg78VDIqcWoqiM+zoMTJnreyrvQk9va1XEdYd5Ohxc7WDoIsicQ9JiO20EWTN3a4YmFbw3bnPxFI1buwYudhzTVkl1ynU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AjM6m0TH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1738097785; c=relaxed/simple;
+	bh=VmxxfpxrQ1lkQIBflaPl6Q/VZxmO9YQUzyZeBiIxp9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lFE6X66WmQRRClFmU+tjhJHuOZWUiO4hUmNNzamt61byCZqZfrG4v1ol1yp+r0Fi7Qn9q5vrhDvDdICv+bbk14X3j8ZK0Ct7SXfuCWZ+nZz+KiDXlBXibCUNju9wqgE3a2PD+UFTii5sIOJ81p+iLUj5vnQu5RRN0OvOhjfjF6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t10S4Ir6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AjM6m0TH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738088286;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YFh0jXqNKvlbmFSDHbd/Vl91J192JwZsfUkkIOjB3AE=;
-	b=AjM6m0THyrknAZUJT7+7qNUXleDMCkcuanyuP7LgRaznOsZcoa8GX46/2CE+nwvyYG4/zd
-	63CTRS5Hj5wvQtvsmhEW0qPOFWuoYEw1WJhVACXq1lcX068lqu53CspPI+VkG7sgv3OLsX
-	tHau+I5fRlbXY34HgWzUkK7duXqOzk4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-614-843iXi7_NP6-mCOPQOs4KA-1; Tue,
- 28 Jan 2025 13:18:05 -0500
-X-MC-Unique: 843iXi7_NP6-mCOPQOs4KA-1
-X-Mimecast-MFC-AGG-ID: 843iXi7_NP6-mCOPQOs4KA
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2F07C1800269
-	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 18:18:04 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.32.189])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B0DA5195608E;
-	Tue, 28 Jan 2025 18:18:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, e2ee2e9b)
-Date: Tue, 28 Jan 2025 18:18:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t10S4Ir6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3CBC4CED3;
+	Tue, 28 Jan 2025 20:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738097785;
+	bh=VmxxfpxrQ1lkQIBflaPl6Q/VZxmO9YQUzyZeBiIxp9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t10S4Ir6CTfVDknapbp1g4H2UYZbNAc6zTZwZH85xu8FXYc1lgmyxa28ZsFjupiU1
+	 Mp9z+3guOjM4S7ennIhTJ5xIk3tcg52dlbHjTHbo71P/reOYDf8QR8EcHBLidvoPi+
+	 PvOmbnbtzeIKzjupB/e9DMZd+LwIBW19FsyDOlKsTeN085Xn4KZYNfGg2S6Q3xdgaE
+	 F1kGVeggU0v/LaaBz2zYnYkfbOViArme0/k7tzfFlppGBUawUugEE829Z4D6yvDBa+
+	 Fr+QNJnO+J3pdA31MWSN7iapasLvSj0kFWi0wmwUWxniZsEq6CsD61npByVIZ4/vfF
+	 XTxIFI3i5APNQ==
+Date: Tue, 28 Jan 2025 12:56:22 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v3 03/18] perf capstone: Move capstone functionality into
+ its own file
+Message-ID: <Z5lEdtLVHRZwxuY8@google.com>
+References: <20250122174308.350350-1-irogers@google.com>
+ <20250122174308.350350-4-irogers@google.com>
+ <Z5QM8nHzwuQYczyQ@google.com>
+ <CAP-5=fV0w9tLFr7xYHFUH=UUq+tr+o5EYUik0d74rMWa9=Qi+A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <95396.125012813180500711@us-mta-614.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: sLvd75eLN5lXaOwCLvToIX5C9p4PH9rEB2um2h8EX_8_1738088284
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fV0w9tLFr7xYHFUH=UUq+tr+o5EYUik0d74rMWa9=Qi+A@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jan 24, 2025 at 04:59:21PM -0800, Ian Rogers wrote:
+> On Fri, Jan 24, 2025 at 1:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Wed, Jan 22, 2025 at 09:42:53AM -0800, Ian Rogers wrote:
+> > > Capstone disassembly support was split between disasm.c and
+> > > print_insn.c. Move support out of these files into capstone.[ch] and
+> > > remove include capstone/capstone.h from those files. As disassembly
+> > > routines can fail, make failure the only option without
+> > > HAVE_LIBCAPSTONE_SUPPORT. For simplicity's sake, duplicate the
+> > > read_symbol utility function.
+> > >
+> > > The intent with moving capstone support into a single file is that
+> > > dynamic support, using dlopen for libcapstone, can be added in later
+> > > patches. This can potentially always succeed or fail, so relying on
+> > > ifdefs isn't sufficient. Using dlopen is a useful option to minimize
+> > > the perf tools dependencies and potentially size.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/builtin-script.c  |   2 -
+> > >  tools/perf/util/Build        |   1 +
+> > >  tools/perf/util/capstone.c   | 536 +++++++++++++++++++++++++++++++++++
+> > >  tools/perf/util/capstone.h   |  24 ++
+> > >  tools/perf/util/disasm.c     | 358 +----------------------
+> > >  tools/perf/util/print_insn.c | 117 +-------
+> > >  6 files changed, 569 insertions(+), 469 deletions(-)
+> > >  create mode 100644 tools/perf/util/capstone.c
+> > >  create mode 100644 tools/perf/util/capstone.h
+> > >
+> > > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> > > index 33667b534634..f05b2b70d5a7 100644
+> > > --- a/tools/perf/builtin-script.c
+> > > +++ b/tools/perf/builtin-script.c
+> > > @@ -1200,7 +1200,6 @@ static int any_dump_insn(struct evsel *evsel __maybe_unused,
+> > >                        u8 *inbuf, int inlen, int *lenp,
+> > >                        FILE *fp)
+> > >  {
+> > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > >       if (PRINT_FIELD(BRSTACKDISASM)) {
+> > >               int printed = fprintf_insn_asm(x->machine, x->thread, x->cpumode, x->is64bit,
+> > >                                              (uint8_t *)inbuf, inlen, ip, lenp,
+> > > @@ -1209,7 +1208,6 @@ static int any_dump_insn(struct evsel *evsel __maybe_unused,
+> > >               if (printed > 0)
+> > >                       return printed;
+> > >       }
+> > > -#endif
+> > >       return fprintf(fp, "%s", dump_insn(x, ip, inbuf, inlen, lenp));
+> > >  }
+> > >
+> > > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> > > index 5ec97e8d6b6d..9542decf9625 100644
+> > > --- a/tools/perf/util/Build
+> > > +++ b/tools/perf/util/Build
+> > > @@ -8,6 +8,7 @@ perf-util-y += block-info.o
+> > >  perf-util-y += block-range.o
+> > >  perf-util-y += build-id.o
+> > >  perf-util-y += cacheline.o
+> > > +perf-util-y += capstone.o
+> > >  perf-util-y += config.o
+> > >  perf-util-y += copyfile.o
+> > >  perf-util-y += ctype.o
+> > > diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+> > > new file mode 100644
+> > > index 000000000000..c0a6d94ebc18
+> > > --- /dev/null
+> > > +++ b/tools/perf/util/capstone.c
+> > > @@ -0,0 +1,536 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +#include "capstone.h"
+> > > +#include "annotate.h"
+> > > +#include "addr_location.h"
+> > > +#include "debug.h"
+> > > +#include "disasm.h"
+> > > +#include "dso.h"
+> > > +#include "machine.h"
+> > > +#include "map.h"
+> > > +#include "namespaces.h"
+> > > +#include "print_insn.h"
+> > > +#include "symbol.h"
+> > > +#include "thread.h"
+> > > +#include <fcntl.h>
+> > > +#include <string.h>
+> > > +
+> > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
+> > > +#include <capstone/capstone.h>
+> > > +#endif
+> >
+> > I think you can use a big #ifdef throughout the file to minimize the
+> > #ifdef dances.  Usually it goes to the header to provide dummy static
+> > inlines and make the .c file depends on config.  But I know you will
+> > add dlopen code for the #else case later.
+> 
+> So I think big ifdefs like:
+> 
+> #if HAVE_xyz
+> // 100s of lines
+> #else
+> // 100s of lines
+> #endif
+> 
+> are best avoided. It is also the point of the shim-ing that we do
+> 
+> ... perf_foobar(...)
+> {
+> #if NO_SHIM
+>   ... foobar(...);
+> #else
+>   //dlsym code
+> #endif
+> }
+> 
+> Having the shimming and not shimming as two separate functions buried
+> in a 100 #ifdef loses that the code is common except for the shimming.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Right, can we split the common part and move it out of #ifdef?
 
+> 
+> For example, in the current code we have find_file_offset:
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/disasm.c?h=perf-tools-next&id=91b7747dc70d64b5ec56ffe493310f207e7ffc99#n1371
+> 
+> It is only possible to understand the use of this seemingly common
+> code by trying to interpret what's going on with the #ifdefs.
+> 
+> I think it stylistically it is okay to have multiple stubbed out
+> functions inside a #if or #else, such as:
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/include/linux/perf_event.h?h=perf-tools-next&id=91b7747dc70d64b5ec56ffe493310f207e7ffc99#n1797
 
-Kernel information:
-    Commit message: Merge tag 'arm64-upstream' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/arm64/linux
+I think the convention in the kernel community is that it's better to
+remove #ifdef's in .c files and add a dummy functions under !condition
+in .h files.  If that's not possible, I think we should make the code
+less conditional by minimizing the #ifdef's.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1645354831
+> 
+> But when the logic is shared and all in one file it becomes next to
+> impossible to determine what's in use and what's not. Other than by
+> tweaking things and trying to get build errors.
+> 
+> So for the shims I've placed the #if inside the function to make it
+> clear the function is a shim. For the other functions that are over
+> 100s of lines, for clarity the individual functions have #if
+> HAVE_LIBLLVM_SUPPORT around them to make it clear that the function
+> only has a meaning in that context - ie the source code doesn't make
+> you go on a #ifdef finding expedition to try to understand when the
+> code is in use.
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1645354831-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1645354831-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1645354831-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+I think the both approaches have their own pros and cons.  Some people
+prefer one and others may have different opinions.  I think the big
+conditional block is better and easy to follow.  Maybe we cannot agree
+on this.  Then I believe it'd be better to follow the convention, no?
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks,
+Namhyung
 
