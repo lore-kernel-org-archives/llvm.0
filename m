@@ -1,163 +1,149 @@
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF091607AA
-	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 07:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4544E4A1D;
+	Tue, 28 Jan 2025 08:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738050416; cv=none; b=NbKyUiu3gKp0AUrEqOWlNOhk/is/187weC3SfqwWrLs6mB7EV/FCvZogeILBj860FX0s/MrL1atN4Tj4zANG+X5i6N5bfPV/l7idGnfYqo2xtD081pgTq4BOuysG2qAUNahq2BV1Mpz2RFeBqFygYF0dGLleobKmdz9BuhTPnSs=
+	t=1738054761; cv=none; b=Nilk5TZaTJeHQoDULUKbCtLylSk0Eu6GXV+SdT5yRhNDzvJ8vNXYKFAc1PKNXsHjxVusz+kizYM+nDIgXNxFR6e9zHSMiF/eyv/Pfjo81TlcgIXWk11pZ7JDbm9aFN0rM7oDBY2Lu/kf6tUh2jrq6neN8iaMAuZfyQxBS47haHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738050416; c=relaxed/simple;
-	bh=HoFnfKNIxlQFIpRI6i6Nga0bkUmYF+rmpL7IrlCQpfE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q9gb30SEDsCntwUd9hMEX1nhq5KeCBne9b/AjW8Z/aGWPWcsrvWFkvWev7bBWseucEcWtfNJfi2cWaUJGcteTMDNFk1YNQp0785kPu5o0CLWr0k6Y26eDdntJnErA8xw6VQZ9iDj3ALYtZX9E/bSeRXnpPqMrM9Q8bTpu4CiR5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-85bad7be09dso3064338241.0
-        for <llvm@lists.linux.dev>; Mon, 27 Jan 2025 23:46:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738050412; x=1738655212;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sgNHrZqOh5I+Nq0sLYkdt+xY+8gHWM07xUx8EPjp/r4=;
-        b=wPiee1gGyChClMj1rcfT/SAn4Wm+eBeAzJP75ISWN/RfUv1+vVN+dk7nbmQOjlaBby
-         L0JU+mTlLR0yhmOm5QdRMP9mV4KMufB5AnCSm9/YOOb30slHFQnfbaKVGrXZigw+kh5s
-         6G/BB5i/b4Ox/axGz2boF+6i8f7iwGun9cujtm8BMm/BcFnvr5UtpQEZPgXfH/+Ng5oJ
-         C0rwUh2G6CPs1k2I3+KWPyWeGwX/KDzfUD5v7sy3XPSyMxoeGZ/te0Ja2mefTaKzDoq2
-         enbcZT/Djbe7+56CebHo4NQoQ3JR5GSX9Ie7h7C94oGThPPhYgkNBC9shgKuYffg+1PF
-         0pJw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0yAKmhlCtmhgwXZQd3FgViRsZ3nbr8M7K6gpSd7KhNsh+JYC3eXlVbomaIwMep6oxAxQq@lists.linux.dev
-X-Gm-Message-State: AOJu0YzeyC92CqjuRww+LtGeNeJ5Wx6eQLIkMahrfGhgrLKXVQorU2Zz
-	6+GEbAXBlfQrLa3ihQaezQisBIlfL46nTXdd8QGJ/KYRyuNKnIRFW8IzZNctqws=
-X-Gm-Gg: ASbGnctLjRjD9QWMCyatHwq4pfd7bBACD/LBq6eyBAuEbdYyw4NlULxzzlPsQX5/nVj
-	x64kuWUj1iZtShUiiJ1wN/GRJna0ruDkuYVqhOhLMVkBRMNa3smjCgBJiFvn0TdWWPE5Zl5O+lS
-	LxUOkuGH15+NHASpQAx3Z3TWH4L70geCHeCGSM/fnkZaFve7sZjZjp4n3jqagbtEPOKeJv2bC5m
-	XiEIfMfADyqT+MWyFC1wnjoIAXEhDG/8f/gdbc+Nsa45HmNIUMI9iK/jx/CkhJjjMK1d4W0x6Td
-	jUh8urQDqvhdqUZcDUBz2ZM6NdWqy3IGOyTatJ5NlXS6di7FuYj9mQ==
-X-Google-Smtp-Source: AGHT+IGU00XENK7BAHlenA5zs+7uZabw6iMKPyO/bnyDDpvsJ8GdDJY9C4lKPbHLzEUwgYBAq/9Ong==
-X-Received: by 2002:a05:6102:2923:b0:4b6:1a64:1c95 with SMTP id ada2fe7eead31-4b690cf1487mr37904854137.22.1738050411959;
-        Mon, 27 Jan 2025 23:46:51 -0800 (PST)
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-864a9adb4b0sm2272504241.3.2025.01.27.23.46.51
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2025 23:46:51 -0800 (PST)
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-4b2c0a7ef74so3120362137.2
-        for <llvm@lists.linux.dev>; Mon, 27 Jan 2025 23:46:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVbZ9AXM3WZLsiv74Rxellai3zcvJzkYOo9U8lBMUIDqBxVuTHCVFwwJROivJ23sLsTrXPi@lists.linux.dev
-X-Received: by 2002:a05:6102:f97:b0:4b4:27dc:ffe3 with SMTP id
- ada2fe7eead31-4b69099e6f9mr42788280137.0.1738050411311; Mon, 27 Jan 2025
- 23:46:51 -0800 (PST)
+	s=arc-20240116; t=1738054761; c=relaxed/simple;
+	bh=gx6dYKi7oGABr+WugjD5T75yTLQLxXoWHTkPv2BS8VI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JOg39UtHl5FtT1fuWjrB6UVLs1RJlnLeIEEXuVgn3dz2T6O5TpD/VswhdIWC3AZzbh1SXQ6746kueq3Y6pnM6THdIb4aXY5pnxP4u1X6fskJNdYKsfdcuybJNaU93J5/qMX6l+yCS1a1yeexKvAL2dV0lj4LDiAsrwM40phTvWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hgwTbixF; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hgwTbixF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738054760; x=1769590760;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gx6dYKi7oGABr+WugjD5T75yTLQLxXoWHTkPv2BS8VI=;
+  b=hgwTbixF8kCNwNyE2u8Qi7uMfaOpJf0wrfHTWIv0FAa+MqjWELbHsUE/
+   X9HMOMfEGv4Xps5S7JO2Xq8fqg1UgEcd1QUN3vy9D39DXDTfUDCobdWvR
+   f9OU+VCzOlupfgytCav4Pgdoz6d+L8fU6ppslkoTuxmHhNLR0YsLCY5i1
+   HL0TzKmFvSIfMnp6CdDa2nkp4TFqxy/eWCfjVlJ2EDEWQTnDTWooo+Siw
+   A/pqScMVxextscB8UEPfbD9GHvtnCVMtVdphVlWLxkHsz94y7jgg3DD/6
+   Cu1l2+bmK2oQviZsUx1b9XgTycRsoXB3Yojxa85PJg5CLQ4t2YaOD2upC
+   g==;
+X-CSE-ConnectionGUID: 8Fx2HkKcTZSh6WJL0ihlLw==
+X-CSE-MsgGUID: JDAs5sF6TP+STcdj0UJIqg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="60999058"
+X-IronPort-AV: E=Sophos;i="6.13,240,1732608000"; 
+   d="scan'208";a="60999058"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 00:59:20 -0800
+X-CSE-ConnectionGUID: S387vRjdQGG1e7zjsmmo8g==
+X-CSE-MsgGUID: AAXe1U/KR1+16GAduWGfTQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,240,1732608000"; 
+   d="scan'208";a="108786425"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Jan 2025 00:59:17 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tchRD-000hch-1N;
+	Tue, 28 Jan 2025 08:59:15 +0000
+Date: Tue, 28 Jan 2025 16:58:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-xe@lists.freedesktop.org,
+	Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [drm-xe:drm-xe-next 3/3] drivers/gpu/drm/xe/xe_guc_ct.c:1727:43:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'size_t' (aka 'unsigned int')
+Message-ID: <202501281659.elCnHJvL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250127190636.it.745-kees@kernel.org> <20250127191031.245214-2-kees@kernel.org>
-In-Reply-To: <20250127191031.245214-2-kees@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 28 Jan 2025 08:46:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWvcKOc6v5o3-9-SqP_4oh5-GZQjZZb=-krhY=mVRED_Q@mail.gmail.com>
-X-Gm-Features: AWEUYZlRJyqtu46GFLPmK_2UxNTy_ZZ3I5OahfBQNH_UNqTJSeeHUl0QUknH2n0
-Message-ID: <CAMuHMdWvcKOc6v5o3-9-SqP_4oh5-GZQjZZb=-krhY=mVRED_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] stackinit: Add union initialization to selftests
-To: Kees Cook <kees@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jakub Jelinek <jakub@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Kees,
+tree:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+head:   cb1f868ca13756c0c18ba54d1591332476760d07
+commit: cb1f868ca13756c0c18ba54d1591332476760d07 [3/3] drm/xe: Make GUC binaries dump consistent with other binaries in devcoredump
+config: i386-buildonly-randconfig-004-20250128 (https://download.01.org/0day-ci/archive/20250128/202501281659.elCnHJvL-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250128/202501281659.elCnHJvL-lkp@intel.com/reproduce)
 
-On Mon, 27 Jan 2025 at 20:11, Kees Cook <kees@kernel.org> wrote:
-> The stack initialization selftests were checking scalars, strings,
-> and structs, but not unions. Add union tests (which are mostly identical
-> setup to structs). This catches the recent union initialization behavioral
-> changes seen in GCC 15. Before GCC 15, this new test passes:
->
->     ok 18 test_small_start_old_zero
->
-> With GCC 15, it fails:
->
->     not ok 18 test_small_start_old_zero
->
-> Specifically, a union with a larger member where a smaller member is
-> initialized with the older "= { 0 }" syntax:
->
-> union test_small_start {
->      char one:1;
->      char two;
->      short three;
->      unsigned long four;
->      struct big_struct {
->              unsigned long array[8];
->      } big;
-> };
->
-> This is a regression in compiler behavior that Linux has depended on.
-> GCC does not seem likely to fix it, instead suggesting that affected
-> projects start using -fzero-init-padding-bits=unions:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118403
->
-> Signed-off-by: Kees Cook <kees@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501281659.elCnHJvL-lkp@intel.com/
 
-Thanks for your patch!
+All warnings (new ones prefixed by >>):
 
-> --- a/lib/stackinit_kunit.c
-> +++ b/lib/stackinit_kunit.c
-
-> @@ -295,6 +330,33 @@ struct test_user {
->         unsigned long four;
->  };
->
-> +/* No padding: all members are the same size. */
-> +union test_same_sizes {
-> +       unsigned long one;
-> +       unsigned long two;
-> +       unsigned long three;
-> +       unsigned long four;
-> +};
-> +
-> +/* Mismatched sizes, with one and two being small */
-> +union test_small_start {
-> +       char one:1;
-> +       char two;
-> +       short three;
-> +       unsigned long four;
-> +       struct big_struct {
-> +               unsigned long array[8];
-> +       } big;
-> +};
-> +
-> +/* Mismatched sizes, with one and two being small */
-
-three and four
-
-> +union test_small_end {
-> +       short one;
-> +       unsigned long two;
-> +       char three:1;
-> +       char four;
-> +};
-> +
->  #define ALWAYS_PASS    WANT_SUCCESS
->  #define ALWAYS_FAIL    XFAIL
->
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
+   In file included from drivers/gpu/drm/xe/xe_guc_ct.c:20:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:9:
+   In file included from include/drm/ttm/ttm_tt.h:30:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/xe/xe_guc_ct.c:1727:43: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+    1727 |                         drm_printf(p, "[CTB].length: 0x%lx\n", snapshot->ctb_size);
+         |                                                        ~~~     ^~~~~~~~~~~~~~~~~~
+         |                                                        %zx
+   2 warnings generated.
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+   In file included from drivers/gpu/drm/xe/xe_guc_log.c:13:
+   In file included from drivers/gpu/drm/xe/xe_bo.h:9:
+   In file included from include/drm/ttm/ttm_tt.h:30:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/xe/xe_guc_log.c:207:41: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     207 |         drm_printf(p, "[LOG].length: 0x%lx\n", snapshot->size);
+         |                                        ~~~     ^~~~~~~~~~~~~~
+         |                                        %zx
+   2 warnings generated.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+vim +1727 drivers/gpu/drm/xe/xe_guc_ct.c
+
+  1703	
+  1704	/**
+  1705	 * xe_guc_ct_snapshot_print - Print out a given GuC CT snapshot.
+  1706	 * @snapshot: GuC CT snapshot object.
+  1707	 * @p: drm_printer where it will be printed out.
+  1708	 *
+  1709	 * This function prints out a given GuC CT snapshot object.
+  1710	 */
+  1711	void xe_guc_ct_snapshot_print(struct xe_guc_ct_snapshot *snapshot,
+  1712				      struct drm_printer *p)
+  1713	{
+  1714		if (!snapshot)
+  1715			return;
+  1716	
+  1717		if (snapshot->ct_enabled) {
+  1718			drm_puts(p, "H2G CTB (all sizes in DW):\n");
+  1719			guc_ctb_snapshot_print(&snapshot->h2g, p);
+  1720	
+  1721			drm_puts(p, "G2H CTB (all sizes in DW):\n");
+  1722			guc_ctb_snapshot_print(&snapshot->g2h, p);
+  1723			drm_printf(p, "\tg2h outstanding: %d\n",
+  1724				   snapshot->g2h_outstanding);
+  1725	
+  1726			if (snapshot->ctb) {
+> 1727				drm_printf(p, "[CTB].length: 0x%lx\n", snapshot->ctb_size);
+  1728				xe_print_blob_ascii85(p, "[CTB].data", '\n',
+  1729						      snapshot->ctb, 0, snapshot->ctb_size);
+  1730			}
+  1731		} else {
+  1732			drm_puts(p, "CT disabled\n");
+  1733		}
+  1734	}
+  1735	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
