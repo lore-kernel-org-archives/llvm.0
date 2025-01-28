@@ -1,183 +1,110 @@
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD10F1DE4D4
-	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 21:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831471A841A
+	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 21:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738100230; cv=none; b=qXcooNTll1EE73qmUQ9EQ/YWqzGzrN2uWWNwNUQEHEU8n3v2Pt8+Ou1N2lCW+BZuQSX4uvJmTIpN7FJcSXBH2Ug5qj/AjfOXf3zfnYU3y1TEIkSj8eVMbbRtAn1WkYT4BI8RY9XdToQiSlF0isK1UqVg5drxc8NQ2s42KjGonKo=
+	t=1738100686; cv=none; b=dvuc1O2uoKtNK+9V2O96rrDIUmFX7ZlOhJoXv1dbDyKdib6AQK9usR/FQt/9SdP8MTLg6F/ZE5fuVJJw68G8uInHpziwGb3flu+qqwzFdk8QZNPaDQjOp5oDyjhr+EojjJ7rGeEu5i4kT2+HZlfiX9SEcB+bXkNCXHRZcQtl7i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738100230; c=relaxed/simple;
-	bh=t9v9MrLhQXftvOBAs3wP1knReZZnZ9nfwNfQRZ1P9gM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mch8fXqZgxtfY/t2L5L4jwGkR92sH4Tt46LmnyorribyNpayu6ZjoQZ27sdQjJTRU3ldlkPUq4KZR4mxfZHhlA8Ti+vfFl7iHjH/nl5jRYipDC6vK3qdEnEWw+RkCMoCC2yW7Q9FIomeT5Sxnrfui0DK+jf5s3BqUZfx+bb9v5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=SudOELqd; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1738100686; c=relaxed/simple;
+	bh=/ZVfTjb6OB6mwOq5oov2dfGCKk9jKalsU95smqbbt3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M77peLUTUa4Nubd/Xnh/uFBRgOB5LvcOH00VaJRpsNa7OMf51wvCCbMQ7KEm1oHN0hYReFkBtt3IYm4wfTZy5AN+1gHVDgco88plH/gFPcNGcnJ8IHuUYT0aNTGicahrlVJrf8ARY0Kj+9PM0YAg0dNYw/fIPe4/9lSD+trXHK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=e9DpxoKe; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="SudOELqd"
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YjJXF6hSHzlgMVb;
-	Tue, 28 Jan 2025 21:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1738100209; x=1740692210; bh=Cb5Ew8HL0XbNt41H04ArOXHw
-	yWZezSxHGJd8TBs12Mc=; b=SudOELqdAsDAwxiDHH88IhEj4iUAUENck+4gPD1X
-	DsG+RA/BJUxugXyCCU+v807ObSJ6sx3RiofdFU5N1fuQOePR8ZXJKRqSQyr2+3sZ
-	7vs1CKCm6mBYNvIZ2dc6BiMs/3vZgf16KaDQAbeBhHUIjb2bCMQsjV3TQDknKbHc
-	GJuaOpeLSar87LvVoGaop2piTmvCK2u1qOYzeLElqnRQU0cQqt9ZbbrtPEy4oEPM
-	3dENFyroJTKifkQeHRHRjZW+B2ezgGR7wOKLOrz0EN8TmgaaRMACS8ghD2DZbz3R
-	ZpcFmnE6VwtRaXOEBcR82FGiqH1U6EbLiWKHxaZ5ANEviQ==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id FFA6bTQLJjIv; Tue, 28 Jan 2025 21:36:49 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YjJWt19GBzlgMVQ;
-	Tue, 28 Jan 2025 21:36:41 +0000 (UTC)
-Message-ID: <6a45a521-71a3-4087-9320-b8aeecea205a@acm.org>
-Date: Tue, 28 Jan 2025 13:36:39 -0800
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="e9DpxoKe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1738100682;
+	bh=/ZVfTjb6OB6mwOq5oov2dfGCKk9jKalsU95smqbbt3M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e9DpxoKedhbbEEwT6cJk8l+hJKEnzOeN6eIPyv+mEHwWnhhERrdM7T12crNn9FfXZ
+	 m4IK1QIwqBd37RjmvZrFW7U8x2uk8y3GejhrhiXglitMco3yIU9suq3SQzK6imzfZy
+	 9/bMPULruTldNrbPcRild5kQvmhlE8fR6BEDF0b4=
+Date: Tue, 28 Jan 2025 22:44:42 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Daniel Gomez <da.gomez@samsung.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev, iovisor-dev@lists.iovisor.org, gost.dev@samsung.com
+Subject: Re: [PATCH 1/2] module: allow for module error injection
+Message-ID: <559c6c43-e081-454b-9e87-c30600a97ae1@t-8ch.de>
+References: <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <CGME20250122131158eucas1p133e9989e5b972e0658b4ef7255901085@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-1-910590a04fd5@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/vmstat: Fix a W=1 clang compiler warning
-To: Ivan Shapovalov <intelfx@intelfx.name>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- David Rientjes <rientjes@google.com>, David Hildenbrand <david@redhat.com>,
- Vlastimil Babka <vbabka@suse.cz>, Joel Granados <joel.granados@kernel.org>,
- Sourav Panda <souravpanda@google.com>, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
- Johannes Weiner <hannes@cmpxchg.org>,
- Konstantin Khlebnikov <koct9i@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20241212182425.ad1f7894cd0f00b2e34bbaed@linux-foundation.org>
- <20250122015818.3308696-1-intelfx@intelfx.name>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250122015818.3308696-1-intelfx@intelfx.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250122-modules-error-injection-v1-1-910590a04fd5@samsung.com>
 
-On 1/21/25 5:57 PM, Ivan Shapovalov wrote:
->> Spose so.  One always suspects that adding a typecast is a sign that we
->> screwed things up somehow.  The relationship between enums lru_list and
->> node_stat_item is foggy, and I'm unsure whether this is the place to
->> make the transition it.  Perhaps lru_list_name() should take an
->> `unsigned int' arg instead.
+On 2025-01-22 14:11:13+0100, Daniel Gomez wrote:
+> Allow to test kernel module initialization with eBPF error injection
+> by forcing errors when any of the below annotated functions with
+> ALLOW_ERROR_INJECTION() return.
 > 
-> All of these *_name() functions do seem to expect arguments in range of
-> the corresponding enums, so perhaps keep those args typed as a form of
-> self-documenting code, and do this instead?
+> Allow to debug and test module load error behaviour when:
+> 
+> complete_formation(): when module initialization switches from
+> MODULE_STATE_UNFORMED to MODULE_STATE_COMING stage.
+> 
+> do_init_module(): when an error occurs during module initialization and
+> before we switch from MODULE_STATE_COMING to MODULE_STATE_LIVE stage.
+> 
+> module_enable_rodata_ro_after_init(): when an error occurs while
+> setting memory to RO after module initialization. This is when module
+> initialization reaches MODULE_STATE_LIVE stage.
+> 
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+>  kernel/module/main.c       | 3 +++
+>  kernel/module/strict_rwx.c | 2 ++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 1fb9ad289a6f8f328fc37c6d93730882d0e6e613..54e6c4d0aab23ae5001a52c26417e7e7957ea3fd 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -59,6 +59,7 @@
+>  #include <linux/codetag.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/execmem.h>
+> +#include <linux/bpf.h>
 
-If nobody objects I will submit this patch for review after the merge
-window has closed:
+This should be <linux/error-injection.h>, no?
 
-Subject: [PATCH] mm/vmstat: Fix W=1 clang compiler warnings
+>  #include <uapi/linux/module.h>
+>  #include "internal.h"
+>  
+> @@ -3089,6 +3090,7 @@ static noinline int do_init_module(struct module *mod)
+>  
+>  	return ret;
+>  }
+> +ALLOW_ERROR_INJECTION(do_init_module, ERRNO);
+>  
+>  static int may_init_module(void)
+>  {
+> @@ -3225,6 +3227,7 @@ static int complete_formation(struct module *mod, struct load_info *info)
+>  	mutex_unlock(&module_mutex);
+>  	return err;
+>  }
+> +ALLOW_ERROR_INJECTION(complete_formation, ERRNO);
+>  
+>  static int prepare_coming_module(struct module *mod)
+>  {
 
-Commit 30c2de0a267c ("mm/vmstat: fix a W=1 clang compiler warning")
-suppresses some but not all compiler warnings that are reported by clang
-when building with W=1 about NR_LRU_BASE and NR_ZONE_LRU_BASE. Hence
-revert commit 30c2de0a267c and instead make NR_LRU_BASE and
-NR_ZONE_LRU_BASE integer constants instead of enumeration constants.
-
-Cc: Ivan Shapovalov <intelfx@intelfx.name>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
-  include/linux/mmzone.h | 22 +++++++++++++++++++---
-  include/linux/vmstat.h |  9 +++++++--
-  2 files changed, 26 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 9540b41894da..92ed919ea99d 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -135,10 +135,19 @@ enum numa_stat_item {
-  #define NR_VM_NUMA_EVENT_ITEMS 0
-  #endif
-
-+/*
-+ * NR_ZONE_LRU_BASE and NR_VM_ZONE_STAT_ITEMS are often added to 
-enumeration
-+ * constants of another type than enum_zone_stat_item. Define these 
-constants
-+ * as an integer instead of enum node_stat_item to prevent that the 
-compiler
-+ * warns about enumeration type mismatches when these constants are used.
-+ */
-+#define NR_ZONE_LRU_BASE	(1 * __NR_ZONE_LRU_BASE)
-+#define NR_VM_ZONE_STAT_ITEMS	(1 * __NR_VM_ZONE_STAT_ITEMS)
-+
-  enum zone_stat_item {
-  	/* First 128 byte cacheline (assuming 64 bit words) */
-  	NR_FREE_PAGES,
--	NR_ZONE_LRU_BASE, /* Used only for compaction and reclaim retry */
-+	__NR_ZONE_LRU_BASE, /* Used only for compaction and reclaim retry */
-  	NR_ZONE_INACTIVE_ANON = NR_ZONE_LRU_BASE,
-  	NR_ZONE_ACTIVE_ANON,
-  	NR_ZONE_INACTIVE_FILE,
-@@ -155,10 +164,17 @@ enum zone_stat_item {
-  #ifdef CONFIG_UNACCEPTED_MEMORY
-  	NR_UNACCEPTED,
-  #endif
--	NR_VM_ZONE_STAT_ITEMS };
-+	__NR_VM_ZONE_STAT_ITEMS };
-+
-+/*
-+ * enum lru_list constants are often added to NR_LRU_BASE. Define 
-NR_LRU_BASE
-+ * as an integer instead of enum node_stat_item to prevent that the 
-compiler
-+ * warns about enumeration type mismatches.
-+ */
-+#define NR_LRU_BASE (1 * __NR_LRU_BASE)
-
-  enum node_stat_item {
--	NR_LRU_BASE,
-+	__NR_LRU_BASE,
-  	NR_INACTIVE_ANON = NR_LRU_BASE, /* must match order of LRU_[IN]ACTIVE */
-  	NR_ACTIVE_ANON,		/*  "     "     "   "       "         */
-  	NR_INACTIVE_FILE,	/*  "     "     "   "       "         */
-diff --git a/include/linux/vmstat.h b/include/linux/vmstat.h
-index 9f3a04345b86..eb115b9a50f4 100644
---- a/include/linux/vmstat.h
-+++ b/include/linux/vmstat.h
-@@ -135,8 +135,13 @@ static inline void vm_events_fold_cpu(int cpu)
-  #define count_vm_vma_lock_event(x) do {} while (0)
-  #endif
-
-+/*
-+ * item##_NORMAL has type enum vm_event_item while ZONE_NORMAL and zid have
-+ * type enum zone_type. Suppress compiler warnings about mixing different
-+ * enumeration types by converting item##_NORMAL into an int with '1 *'.
-+ */
-  #define __count_zid_vm_events(item, zid, delta) \
--	__count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-+	__count_vm_events(1 * item##_NORMAL - ZONE_NORMAL + zid, delta)
-
-  /*
-   * Zone and node-based page accounting with per cpu differentials.
-@@ -515,7 +520,7 @@ static inline const char *node_stat_name(enum 
-node_stat_item item)
-
-  static inline const char *lru_list_name(enum lru_list lru)
-  {
--	return node_stat_name(NR_LRU_BASE + (enum node_stat_item)lru) + 3; // 
-skip "nr_"
-+	return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-  }
-
-  #if defined(CONFIG_VM_EVENT_COUNTERS) || defined(CONFIG_MEMCG)
-
+<snip>
