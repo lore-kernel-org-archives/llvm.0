@@ -1,103 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBDEAF6;
-	Wed, 29 Jan 2025 04:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61B619B3CB;
+	Wed, 29 Jan 2025 08:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738126276; cv=none; b=ApGdJ/h6orYOX429Vr8+Ju4TgsP17MOga5um+V61WY8UCAj08ciTy9WGDxyeeOV1PvyLb1PJ1Ju+JOI/BXrhe9VT5fz3SyvRZe7vmGe/1PZ64xtVRQZFS/zvenokTsEWPi5hc9WvptxGi7IhI3hamJTFTPF6g6/qhxY0tavL8Yk=
+	t=1738138177; cv=none; b=iOTyXoe0BWNA4HXIBsl/5qAjWh9N49Punn19g12Ev/NGNAqaK8zVRhJscjE84QqphBOrr7EWhtDF4k3uwSBDjPSILltWI0tUtXrszcsCnYEE9fcvb58m/Aot+0SPwYU68ccEeX50WrtlJstIwaXg6NKH5/CdIbBpJ2CBl4cdCyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738126276; c=relaxed/simple;
-	bh=zDXs6l9RG3bx/xv+Z7xxh9vD/zJAv6yMqt5JCZmm9RQ=;
+	s=arc-20240116; t=1738138177; c=relaxed/simple;
+	bh=0uIxjEV5UgPkEu6sF6iYdFlijA47E4P/xIdKHZFMREw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PMILuX4iVq8TEM7WULJcGOseQoYTH2QViLgglUGjEOcSi9JmT1TYG6AQRgPx+OT+6mDoMHCcmgFeh9iJMRE3tNuMY5cz2D9BpdgdE99Aby7JDnlKYvFxxedOA1iqIO0sU6c5mem5yAbYNOQjigBhwd7gIuScQSKE+xqsAVYKUsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dA+033vC; arc=none smtp.client-ip=192.198.163.18
+	 Content-Disposition; b=iN4/Ij+ElnZqSu/N6FlYsCGnv2sBRiTJ1Lcn9C12nLR6HZRXNCEyFqwAy14Ga1i4B4NXXIZ5UcWlhVfTC2xfqqfIvFvRyPiDLCvQk7me2nv8Lq9sg2ehlFfG0i8+KsG0hdR1QJOTJyIY5wzOre88mGAmRIHr0wfAwNRPr8569Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AzVVwXdo; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dA+033vC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AzVVwXdo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738126275; x=1769662275;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zDXs6l9RG3bx/xv+Z7xxh9vD/zJAv6yMqt5JCZmm9RQ=;
-  b=dA+033vCFQ2HWgYrzP633k0dphmfnfwxwcbBCvjX341Rbj7pF1LhywFL
-   jz8gIGGpGc8uKvFkHkKMfVUwHREajC6cupAzLlz02tXC7HdCl74Or8l8z
-   PjqWCacoUX10HvvwIWSU+FcLmkECilBiI1yUly4Xd4ZNVrPJn/st6ZbiI
-   FPMTGQzqdwCiZsbh8WwPV+bhZeyIp8sf4Ql5G5ugs1/0U4WSX2oWA+wTl
-   ouPEvdwE2wNVIbmuR9K8YCgWNR+4tNWyuE2zlQ1ep1GoW4dgTD7Xk59BZ
-   v048ToaCKzoMOZWDVgws9qPoxsAiJXmEqhazhHpQ/IhecxCl/XjrzFi8D
+  t=1738138175; x=1769674175;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0uIxjEV5UgPkEu6sF6iYdFlijA47E4P/xIdKHZFMREw=;
+  b=AzVVwXdoVg6xZKgWNGoGe0D0CC9xHr6N6xb/MQsc8PPz+p3faMkXtQm5
+   HWLk8Kxs+wx7yZeSY0EiHRSsraDMLT57WjkebEUExT3X/+58MlwaQN0/j
+   0zrxveypnsMpNzIwFUebIF/0BiSyJ6gQGq/ZWtA4FhYSWT4pmFhQW+1uZ
+   YsG05Pdn1TNTp83NTJ38nVWcEvnwbG73BHecVSCOL+pjFGF4upVsqCqJu
+   k5I/L9+owYBKLkNWGkQZHz641APrUXckeAZFEJeVvlXQNdhqRNaFVnyCf
+   sx66G+fxMZf3nzuQYX9TyP/qqWSnnuWY0PCeyT7lpJKhqWw3LOhP93jPw
    A==;
-X-CSE-ConnectionGUID: m31vxvA1RCKkhXiegFXPgQ==
-X-CSE-MsgGUID: BQASrVpESvOD4Hdh0v+XNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="37873188"
+X-CSE-ConnectionGUID: ESDtEILURYyduJRfUPw5sA==
+X-CSE-MsgGUID: VqV8ITXFSlOYEbn9LRJs7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="38524041"
 X-IronPort-AV: E=Sophos;i="6.13,242,1732608000"; 
-   d="scan'208";a="37873188"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 20:51:14 -0800
-X-CSE-ConnectionGUID: 88H/x59fQDa0DEzz0SjyBA==
-X-CSE-MsgGUID: YJmlDYTuT2CS6jjDqEYr6w==
+   d="scan'208";a="38524041"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 00:09:35 -0800
+X-CSE-ConnectionGUID: tNqToKeqSHu0ViVv2bQpOw==
+X-CSE-MsgGUID: TZAUG+y0T7G8emQDXm108A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="108780600"
+X-IronPort-AV: E=Sophos;i="6.13,242,1732608000"; 
+   d="scan'208";a="139855812"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Jan 2025 20:51:13 -0800
+  by orviesa002.jf.intel.com with ESMTP; 29 Jan 2025 00:09:33 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1td02g-000iaJ-1f;
-	Wed, 29 Jan 2025 04:51:10 +0000
-Date: Wed, 29 Jan 2025 12:50:51 +0800
+	id 1td38b-000ikV-32;
+	Wed, 29 Jan 2025 08:09:29 +0000
+Date: Wed, 29 Jan 2025 16:08:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_pages 12/20] drivers/iommu/iommu-pages.c:76:
- warning: Function parameter or struct member 'list' not described in
- 'iommu_put_pages_list'
-Message-ID: <202501291246.gO5lkZQ0-lkp@intel.com>
+To: Maximilian Luz <luzmaximilian@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: drivers/platform/surface/surface3_power.c:243:2: warning: 'snprintf'
+ will always be truncated; specified size is 10, but format string expands to
+ at least 12
+Message-ID: <202501291646.VtwF98qd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/jgunthorpe/linux iommu_pages
-head:   470a82a6588cba1a19210a78a710620a15b6019b
-commit: ccc2b9fbf982bd3f5b8057056fcb7c6edbc1a838 [12/20] iommu/pages: Remove iommu_put_pages_list_old and the _Generic
-config: s390-randconfig-002-20250129 (https://download.01.org/0day-ci/archive/20250129/202501291246.gO5lkZQ0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250129/202501291246.gO5lkZQ0-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
+commit: 85f7582cd484dbf491b6d9bb2af6ef1467a024d2 platform/surface: Move Surface 3 Power OpRegion driver to platform/surface
+date:   4 years, 3 months ago
+config: x86_64-randconfig-071-20241231 (https://download.01.org/0day-ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501291246.gO5lkZQ0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501291646.VtwF98qd-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iommu/iommu-pages.c:76: warning: Function parameter or struct member 'list' not described in 'iommu_put_pages_list'
->> drivers/iommu/iommu-pages.c:76: warning: Excess function parameter 'head' description in 'iommu_put_pages_list'
+>> drivers/platform/surface/surface3_power.c:243:2: warning: 'snprintf' will always be truncated; specified size is 10, but format string expands to at least 12 [-Wformat-truncation-non-kprintf]
+     243 |         snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
+         |         ^
+   1 warning generated.
 
 
-vim +76 drivers/iommu/iommu-pages.c
+vim +/snprintf +243 drivers/platform/surface/surface3_power.c
 
-6c72aac62af905 Jason Gunthorpe 2025-01-24  68  
-6c72aac62af905 Jason Gunthorpe 2025-01-24  69  /**
-6c72aac62af905 Jason Gunthorpe 2025-01-24  70   * iommu_put_pages_list - free a list of pages.
-6c72aac62af905 Jason Gunthorpe 2025-01-24  71   * @head: the head of the lru list to be freed.
-6c72aac62af905 Jason Gunthorpe 2025-01-24  72   *
-6c72aac62af905 Jason Gunthorpe 2025-01-24  73   * Frees a list of pages allocated by iommu_alloc_pages_node().
-6c72aac62af905 Jason Gunthorpe 2025-01-24  74   */
-ccc2b9fbf982bd Jason Gunthorpe 2025-01-26  75  void iommu_put_pages_list(struct iommu_pages_list *list)
-6c72aac62af905 Jason Gunthorpe 2025-01-24 @76  {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  207  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  208  static int mshw0011_bix(struct mshw0011_data *cdata, struct bix *bix)
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  209  {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  210  	struct i2c_client *client = cdata->bat0;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  211  	char buf[SURFACE_3_STRLEN];
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  212  	int ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  213  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  214  	*bix = default_bix;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  215  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  216  	/* get design capacity */
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  217  	ret = i2c_smbus_read_word_data(client,
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  218  				       MSHW0011_BAT0_REG_DESIGN_CAPACITY);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  219  	if (ret < 0) {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  220  		dev_err(&client->dev, "Error reading design capacity: %d\n",
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  221  			ret);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  222  		return ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  223  	}
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  224  	bix->design_capacity = ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  225  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  226  	/* get last full charge capacity */
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  227  	ret = i2c_smbus_read_word_data(client,
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  228  				       MSHW0011_BAT0_REG_FULL_CHG_CAPACITY);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  229  	if (ret < 0) {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  230  		dev_err(&client->dev,
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  231  			"Error reading last full charge capacity: %d\n", ret);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  232  		return ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  233  	}
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  234  	bix->last_full_charg_capacity = ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  235  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  236  	/* get serial number */
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  237  	ret = i2c_smbus_read_i2c_block_data(client, MSHW0011_BAT0_REG_SERIAL_NO,
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  238  					    sizeof(buf), buf);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  239  	if (ret != sizeof(buf)) {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  240  		dev_err(&client->dev, "Error reading serial no: %d\n", ret);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  241  		return ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  242  	}
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21 @243  	snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  244  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  245  	/* get cycle count */
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  246  	ret = i2c_smbus_read_word_data(client, MSHW0011_BAT0_REG_CYCLE_CNT);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  247  	if (ret < 0) {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  248  		dev_err(&client->dev, "Error reading cycle count: %d\n", ret);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  249  		return ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  250  	}
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  251  	bix->cycle_count = ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  252  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  253  	/* get OEM name */
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  254  	ret = i2c_smbus_read_i2c_block_data(client, MSHW0011_BAT0_REG_OEM,
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  255  					    4, buf);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  256  	if (ret != 4) {
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  257  		dev_err(&client->dev, "Error reading cycle count: %d\n", ret);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  258  		return ret;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  259  	}
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  260  	snprintf(bix->OEM, ARRAY_SIZE(bix->OEM), "%3pE", buf);
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  261  
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  262  	return 0;
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  263  }
+b1f81b496b0d14 drivers/platform/x86/surface3_power.c Blaž Hrastnik 2020-03-21  264  
 
-:::::: The code at line 76 was first introduced by commit
-:::::: 6c72aac62af905e9c969c12aa399d8bed4b4d033 iommu/pages: De-inline the substantial functions
+:::::: The code at line 243 was first introduced by commit
+:::::: b1f81b496b0d14382a9cf160cc4dbdefb233f936 platform/x86: surface3_power: MSHW0011 rev-eng implementation
 
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+:::::: TO: Blaž Hrastnik <blaz@mxxn.io>
+:::::: CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
