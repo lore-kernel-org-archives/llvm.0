@@ -1,219 +1,109 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096F22AE7C;
-	Wed, 29 Jan 2025 21:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738184570; cv=fail; b=RFBYQ9d2Do5x6oX7Ih/LpXRBNsY39NWuQsU741f3r+G8yDhg4PvIhbg1gVw56otEV8qLTWkWOAy3TZfTvo2HEP8E0voYp1HA+BszZWfQC5YbAUVjyNZnNhblUsPUjNpBhGcbjv6RUHDfIbpyF9cV4xFrU7MZ/B1Pl8L3qopxG4g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738184570; c=relaxed/simple;
-	bh=8lkcLhx9HXh5mkyUNXbzcAowkNgvyG1wIxLW1JzoIQ4=;
-	h=Message-ID:Date:To:Cc:References:Subject:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=JAlgj7fsQMHmMxOQkMsbJCmh1YPi6UC8bNqIP2neUaBMz14ipDP2kRytUYRRl0PPGJ7TS6QHGzrm/KieT8fJxx0SYvEC1hLNrmb5cD0ha5HaqSXJDxC+WFoBfT7N+2NNSHmExMi1y2gsTdDB+GoDbL7iXx+RxumIvlkfLHvsFCA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fXalxs9Y; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=wEcZL7z3; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6628942A92
+	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 21:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738185129; cv=none; b=eg2ykrCMOW5sJJI58nS33Kiyrm6bowHO+WzcFNUuk/RzgM9QLQKH4p7zFfF4gAcCeJdQ7duyqFt+Qr6Oc6TsuqlWameTQYpYd3y2ShdAmxePM4Fp9GBmVkEBPgkMKJUMBFMhq27ykj8b21PvHFJ97geLYJ40Oiha/4hxbm2ljLs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738185129; c=relaxed/simple;
+	bh=saBbaBKpp7Z9iZYa8pa6Qm+nwdf12KH08732cPT3hbI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=juNABCGW+UHSQQLK41Indg4pLdZ0Ze2z8Hw7Ah24ZBOxAiLDbpmtzzOlp76FjntllKy0D5DMrdm/CP7kKT9Uw/7X5rXfvxf7Z3fwJweAOLTHaY4RsgVNSnJCmQQ3BfOsTUDysRYuHsv0lSSlXatS8WiOXIiWd2p9keQ8rHwnPMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FUbeAuCn; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fXalxs9Y";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="wEcZL7z3"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50TKttLT011994;
-	Wed, 29 Jan 2025 21:02:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=Wwk1QjUXTIb1F3EFAtLCGDKlwOb7AjmhElP7ECs8Wro=; b=
-	fXalxs9YxEKXYd8iqgChkDEKSuR8+A5mLxgrrwEpAHMnqsWP1girijWxLqpztRZt
-	rsubzHH0hw2eH3ka4vO92Qlc0dP+8wk5+3xMUqUq7dXFosyJNPpbuarAf8XFhHH0
-	lc5Htltccz3QN7MlOesBrrBq8rmUNwmqrJAm1pEGoNzt0ylRJCaNDCh8T4xvQyox
-	9urJS+Rvj8bEcYskpqxwZiqWZRYKTKMgi5IZahI3ig1NGu21NEKu8FZWg+VdguCg
-	WO9HaDCWFxo1OEuzQ2x/GmzzKHT49KldbK7/3VkltvyNmpGvVPfzLM/ZnJEFg6xh
-	iT5GTRiTQ1JqY+DWVdjKtQ==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44fsfh8jq2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Jan 2025 21:02:22 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50TKQhX4023978;
-	Wed, 29 Jan 2025 21:02:21 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44cpdaaqrn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Jan 2025 21:02:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F+qeIepkbe5WX7E9DExp7Sn8y4crQDVf8O8uexxavXkD9Cq65IO9jJyJhPiDE1Fu9zYxDLghqsdrsefXtrHn7xMcZmrlnQVQAn64pg3Tg8A3NPNgtB5T44YT0irYb1HZP1qOzRk7LFXSUIUACBiQ6vwBY4fgKBjbyaecqQQ9uCl+52FDrv4YtNJB6TR2H2sE6/SifE+gpsfgYw7N6XYnrrcWreRJbxtM9VWljqQxnFNteJaWw4Ym0DjgwfdVzAQhvr7FCnt69BkYczVWIYKO7+DZ61Oiq+k1crNnk/bHvRmSZ6mTEEfsTDOKT9bgB/V0pFKlCBDOm602Iw4xRZ5xVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wwk1QjUXTIb1F3EFAtLCGDKlwOb7AjmhElP7ECs8Wro=;
- b=k90fRZnbs9cwT0+L7jxDgLyyOjn2GALr+vYRDyoy6+l4XBjAV2Kwd2f4Nm6xO6IdCxIT9LhUJLcUNdu9kEKgqYZiWaGU49+vbyquUD8hZMF5Yw6SQat0gRFklJQ2DHZ/QhIra8uHSPBYnUNE3XJf6Gq3ztaTYJzJnJlNlsDLmeDilzIhY6h2YgEijHAcfvn0Zfp8rKceg1AcBCKTSh19DEWALHWxWWXVYFYyYoxX+X4IsXMXY4jB/JdCJ1yGF2ICo+1KQGSyqoZl9Ck/8RXuVLwGSQArPbFRcLoH3S/amiD5uosViCE+N2VCJZMimRK2/gV2AFoZgNsJq5bTn9hMKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wwk1QjUXTIb1F3EFAtLCGDKlwOb7AjmhElP7ECs8Wro=;
- b=wEcZL7z3KAfHmtXMpxCKtAitKuZljrUcTCy5qze/433MwXJTXLZTqGcHjQDrfMFqpvxRvFFMRtDQKy6AoxkllL2i2H/K5bcS+XJeMJmCUPTAjC6sLilYR3oitx5LPB4Sg+svogDYYlDtV5Q9KJtW7Kbha0YXiYfE6hweyCWX4O0=
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
- by MN6PR10MB8144.namprd10.prod.outlook.com (2603:10b6:208:4fa::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.18; Wed, 29 Jan
- 2025 21:02:18 +0000
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::eab6:6dcc:f05f:5cb2]) by CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::eab6:6dcc:f05f:5cb2%3]) with mapi id 15.20.8398.017; Wed, 29 Jan 2025
- 21:02:18 +0000
-Message-ID: <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com>
-Date: Wed, 29 Jan 2025 16:02:16 -0500
-User-Agent: Mozilla Thunderbird
-To: tamird@gmail.com
-Cc: akpm@linux-foundation.org, christophe.leroy@csgroup.eu,
-        geert@linux-m68k.org, justinstitt@google.com,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
-        maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au,
-        nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com,
-        npiggin@gmail.com, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
-Subject: Re: [PATCH] xarray: port tests to kunit
-Content-Language: en-US
-From: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-In-Reply-To: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0319.namprd03.prod.outlook.com
- (2603:10b6:408:112::24) To CH0PR10MB5113.namprd10.prod.outlook.com
- (2603:10b6:610:c9::8)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FUbeAuCn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738185126;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xRq4lXoUjwGssrSA40u0I87Q/N8XaZ8i9jFzM8k076E=;
+	b=FUbeAuCnSXkTXRAzgW8uEFXYfCGHG/7k782tB90IpcgYvsgmdqZOamQbHt+xD+G6hwBGmd
+	PEBASyDGgTDRVs2Ohs5DUis9eDwT/qbNkE6+JyiZZ7uQeBWmXu1ifhUSNetCvY+14UWUa7
+	d6uFbFnf523s8QRlqq7mjSiJRn8IQog=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-gphL0hajPSCNg9RReUPSXg-1; Wed,
+ 29 Jan 2025 16:12:04 -0500
+X-MC-Unique: gphL0hajPSCNg9RReUPSXg-1
+X-Mimecast-MFC-AGG-ID: gphL0hajPSCNg9RReUPSXg
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CFB22195609E
+	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 21:12:03 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3AE4619560A3;
+	Wed, 29 Jan 2025 21:12:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, ebbb8be4)
+Date: Wed, 29 Jan 2025 21:12:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|MN6PR10MB8144:EE_
-X-MS-Office365-Filtering-Correlation-Id: bbc1e7f3-bde0-4f68-8491-08dd40a8374c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|10070799003|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?N0Jud1RGSmhyeWhtblBRc0RLcDNza3I1RzhiWVNSeTZZWnkxRFBIbjZmbXdp?=
- =?utf-8?B?MUc0VmIzRDlqa1kzTkM0ZWRFRk9CWGN1dTJxQkllQTlXMzV2Mmw5SHY1cWox?=
- =?utf-8?B?NGlrL0J3T3pHRWowUHJKK1lFYm9PZWp2dFVRUjlNdUhwRXZHYVN3Ylk1M1Vu?=
- =?utf-8?B?MXYxOCtvbmpPdlFTaVdYa3gxM05wQWV6Ny9GRVdXVksvZ1c3ajlremR4bzdJ?=
- =?utf-8?B?U2NWZHN3TjNKY2FoakRRdmZOSjBMNEsyZVIzQ0tjb0hyNHBUMmU4UE9aRXQ3?=
- =?utf-8?B?V2t0bEJHcG9Pc3NYaE5scm44d2VTbGlkUFFkREh6V3RTeGZRNHYyM2Z3cEQ1?=
- =?utf-8?B?VjF1TVhiRU0xbmxrOVV0M0FKRzNkbGZlYUpKV21KcFZHdmJYOEZVcWI1bWZ0?=
- =?utf-8?B?aTFJSGs3MzE1TGxwT1BRY2tYa1puU2lPVkdwY0ppN2dJR2QxaW10eU02Q3JE?=
- =?utf-8?B?Wlg1MzRQQ0dGM1E5MEl2dDl1TWdLVmN0YW8yUnZRU2h3a0cxTXRIbDNPcjc1?=
- =?utf-8?B?MUVVN0dzbzFZR1Q5UEJ2c2Z1bHY4S1ZmdXBwTVArZnNnU25hblNxakswUHMy?=
- =?utf-8?B?T1ZlVjBsQkFxS2hmU3oyRDloaTlxM1pINnVObEdLcFJiMUIrMW5xVHNZWG1O?=
- =?utf-8?B?NjFzMEJIMXRZcXRNRjdmWmUyVCt1K0w5RGNJbHpBYXNMTDZLd3VPSFVKdFky?=
- =?utf-8?B?TTVDSkZCWjhpeXIrVlZ2eGVyUjNIM3ovdzRwT1JkK2F4eVgzZ3hQL1VHNGtp?=
- =?utf-8?B?SllOaDhBYWRuY3VoMzlXaVhpdkZEaVMzS2J2OU1kZDloQ0drdzR5a1pMelVD?=
- =?utf-8?B?V21qc2NDcC9HVlJEUUdOQXh3N2JxYVlBOWsvUnpFTzBqRFY5V0RnYTZxRFhu?=
- =?utf-8?B?Q2NLNUNBWElpN25jOHVJK0NKR3UxcEdBUVc4c21PZURtUWFVclh3cXAvNTQy?=
- =?utf-8?B?WFNnR1hhdVo5TVRCalFYU1N6aUI3Q2dCWmtYR3d4alloa1FUUS82ZkFXNGxx?=
- =?utf-8?B?NEV0SXB6SGF6dm9BcXJacHFROGF1dGxxZnpHVmFDUTJnaGVheHF3Z3pmZVlH?=
- =?utf-8?B?MU9yZGppOTRHeDlUejZDcUttRkdLUkdGcDh3VVdWM3hGZCtiN3k0SWpYSGkz?=
- =?utf-8?B?V1F6NGtrZm1jajJjaVIwUmNuS0pxYkdORE1JcFVvaTVkMUdUeHhzK21qKzl1?=
- =?utf-8?B?QXZBSEpsUzJ1VW9GeXZRYmhPcVpianFxZzRKUDRuKzhBOWpodmkwdFJzQ2Y3?=
- =?utf-8?B?WjZ2dXA0SW1FN2YyYjNzSHd4QzVMZU9yeU5uYmw2Y0V5WlVsVU9ZVzRaZStN?=
- =?utf-8?B?MEhDRmszaHpPOWswNEJKUEdXVVBhaDhkOHJuTmtENHNWZVd4Qy9WOEl4bnJK?=
- =?utf-8?B?amRCeWIwV2pSUFJaRTNZRVRzQ2JkVDZudzlqYS9ZWkZwMmdwZ1dZc2tMZTB6?=
- =?utf-8?B?a0pzMGQ4ZVVDeVY0Mm91Rkhvak10aFlFZ3dIUUg5TnJHbXFMUy9yUWZ6MWFL?=
- =?utf-8?B?V24xWTczbzVWa0orWHArTEV1bmxZd2NqZUhoZXYvTkVqUDZRMnc5T21qUkxq?=
- =?utf-8?B?U1VZenlWWkdLOWFDN3FoWTdyTHI5K0VnSE9SaGNkWUpzNDEzTHFhMjFFaUlh?=
- =?utf-8?B?SFM4dmVMWlVuUlJxRWExWkZBWEgyZS9Cbk9paVJpektleUMwUHZsRVhyRWhF?=
- =?utf-8?B?N0l3cmJlK3lQSWJKZlN3ODM5emRvY28yN2FPT04rSlVFemk1SDVCSTZxZGtN?=
- =?utf-8?B?MlVuMFNNODloaVA5ak1kb0g2eHdqTVJOMk9FSFBMRWVPNXU2VitqaG4vRWMv?=
- =?utf-8?Q?EvH9ZQrj2PKIOIql7AoQUchT/hlv2MUHnhINw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(10070799003)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V0hGaURlS2NVSDJ2Z1ZIZ2pTcVN1WXA2Mk4xVDVGQW41bytpVXc5OFBXQmRp?=
- =?utf-8?B?VGxiV3M4cXFRaHgweGR4b2xWVm8yU1dZTTdCRC9hVlp1TzhEWmRTalNPbVdU?=
- =?utf-8?B?OEtJTDlHL3YwWXdwTE5MeWRsUWZQWklmcDc4Q1Ria2ZLeUhUZEowR0hBdWt1?=
- =?utf-8?B?OVBFZzNvVHYrR2xIeUg3bVhWZDRGN2R0U1lvcEFuL2dBRlkzWHZqM2RCUFBU?=
- =?utf-8?B?SjBiMGVzU2tvOTRQelBSaXl0WGN4eFhTVU12K0tIekFCQ3ROVWpCaXRkejcv?=
- =?utf-8?B?c0R5NU5ObTQ3eEphV1YzdHpFYXphUlFZamRtWU5TejA2a0RvL2RXaUxvNEZh?=
- =?utf-8?B?dmc2WDJGK1ZGWHRqTXFxM1V6a1NnRlluZkJ2THFycEMzdTd1S2NnM2RIZjRi?=
- =?utf-8?B?eTZGUTVuY2hEaGkvNUdlVElGczNKditKeGNGRHNJOWI3OWRobnJ3TW51aS92?=
- =?utf-8?B?SldOSHY0QUlLNnNOR0hTSHozUUtMWW5DcC9HUEFCM2ozNEVWQ0dnTW1oRktU?=
- =?utf-8?B?VklvNXhKc2l6M2JTNDl4TzdsMTllMTU1U3VjU3FBK3FwS09aMkQzNjUyV21a?=
- =?utf-8?B?OUtkMndJSlVDS1M0NFdNY1ZweHV0eGNNODRzNVp5cElYTFVEVmc2SGxtdFg4?=
- =?utf-8?B?Z2RlMHcvS3UwamdXbTZSK3h0ejFmS0RrNURhRkh5K205bmxUWGxBcjZaejN5?=
- =?utf-8?B?TGFuVFp2aVIvaDlLSlNnVDBYWndKV1ZTTmpaRWhLcmpHVkJBU25SZzBsOVFH?=
- =?utf-8?B?T2NieVEvTFZnMno0UG9CdXpNMi9VYktidmFIcDNuUDhoOW1hdDFoZlJVZ1U0?=
- =?utf-8?B?d2wxcDl5MWlUOGRmY2VOdDVDMllOcGx3SE1GUDE2Y2RlNmlmbW1UbWZaOXE0?=
- =?utf-8?B?bC91YWFEbTdwUGFEU1k1RTk1VGZTeGYxTjJ6Vmc3K3VSVXQxVS8zaW9kNFp4?=
- =?utf-8?B?N3RnR1N2VTlMYXZQYnVPSzd6aVVESmN6eUpzN012UDVpTFBOaHVmUFhGUFdJ?=
- =?utf-8?B?eVdGcEVER0plNUlUcDlxcFlGZVE1NUdpQnVVQlRnc01nMVBtR3NidXhpblhn?=
- =?utf-8?B?cGJPZDIyQUE5b2JBSUszMGlqVFdzY2NrMExkTmFyZVloaU1FOUFRMllKSHZm?=
- =?utf-8?B?M3FadjFWS3dtdWI1UlV6REIzM2t5c2ExMlpveEVVaEl2M2xZdW1SMkZRRTZv?=
- =?utf-8?B?K0Y5cFpjb0Foc21iMmRjbDBjZS93ekVGRGJiS3RBNG5XYXdYd09iMTVQRjEx?=
- =?utf-8?B?Yy9ydWp1TUZOZGoraTYwSXRPYUYvUFhsVjZmZnYxdE9zU2FIU1JsTW16REVF?=
- =?utf-8?B?UVRERVN0U2FSeVlGQ2c3ZXdpdHJmYmNZU09HWk1neVFQN3NSMktmT1dnckxo?=
- =?utf-8?B?bnVxcm80cDlxeElEWEM2K3VxeU5IR3l2OXdZMUtQcUVKQ29QUHVHS1ZtMXJo?=
- =?utf-8?B?NWxCU0hHZHVUT1BEWFpnUmhuWHROQytyV1BCYVJEUkZ5QVl2WHB1VllwQlhQ?=
- =?utf-8?B?MVZsbGg2c3lCMll0NTdHTTJtWmNLNWtZT0xBYUpFWXh1eTEwWFhtY0JQUmNH?=
- =?utf-8?B?Lzh3YmNXdDVrTmR3cVBnOEg1ZWkrWXJla2gwVXM5Um9kZ2daMjBTd25xeVhN?=
- =?utf-8?B?cWpJY1pZazZxWURWanZXMkg1NVNTRnFBbkY5MTJWWkNjVTlQZ2t5RXlqRFNo?=
- =?utf-8?B?UWlqMXlBUWh1OU85VnFQanFwTWJxaFNTb2pUZURkb1czT2xqcUhXdFFGV3g1?=
- =?utf-8?B?STlaNWVURHl2RWx1SEEyTXNvNFRGek50ejJJR0hHSnZSWVBCdmFobjErSUgx?=
- =?utf-8?B?TSs3YzdjR0xWRnFpLzNZOWJ6Q1pMeVR2T2pYaHVJYXZxNXAyazJWODRHSjFw?=
- =?utf-8?B?cFYwN3p2RzVMWk1NZUNJc284LzZxZ092dWhwWkg1V3Bzckg1NndPUDhQMXN6?=
- =?utf-8?B?WVVQUUUwNGZ4WkdOUkNnZk4wNTRXSkRwaUlCa0VDamJva0xoaUdQOXBuYUNq?=
- =?utf-8?B?MFhrQjVLa3dkTytpM2g1ZmxubmJlU1ZDZmdORnZUQmVNbWRGYjFWUjVhMTl5?=
- =?utf-8?B?aDVnNjlrdlhvK1M1YWN2YmxmVXZETlB4M21tZWVCeUJNRXN6OWt6KzZ5ZnRi?=
- =?utf-8?B?SldwU2hHa1NpR2VJTEFNRGU5QW5EVWVBaTc0NmdEazRoOVU3UVRPT2R1NUJv?=
- =?utf-8?Q?3EMvZaPAR8uo6cygeGh3KyQ=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	QqTNsoP2idFxRI+LFLU0eCxYaBC6QR8w7oQaukG4wSeyBhuQQNSp8XzLg9GWlVQO993XOI1aziaCLVuXwLrSYK2xUnvDoys6S/wDO899ZWWsoDwuJIoq/S2AMRgg1JUbKF6g8h1Lq9VEOG81cV1rDBg/TyFBQcpoOwVr2Tjb1X9OnPPUfiO+ra0NMmqQYAHOucKiJdffCNze2hOn4RHbAY9VLFvOI6PpTa/QDRpeY7IsnkZMd4bsyNzOJsXkkJFw8Rn308MKyM3lC90fMFAnrii0JR4M41RyO5Na+QdwI0mAi9uQ1jGPuy48vFGS7YqHA83EmE90qIPsZlzfEZ0jPHUP0wkqPtNTJCERMN30SJ8ta2i0IyMxiDHCvVtqGlF+gxb2SE4SQYZ1UkXRbFc2zLwAis2FvCqMneTarcGR46YDmk0Uob9qzxbYNVtsp3f1TU06dcn1kPsb6ZMitYU7aEMZF9nzQOu1hchhS8xhjT6+WjUt5OIHTdrYrt5l6WlTmzoiwzCoQwULcPyYXcdefy1QlEPyT3CIdXf6//vYitI6cIA7LZHevScsrQk1S0AhTFmDgM1+OJsFZaRV8XDmz2UKKPPBXBG0poO303zt1KI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbc1e7f3-bde0-4f68-8491-08dd40a8374c
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2025 21:02:18.4504
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A5zLCXgPjAM13XuUL+lETYFWBHG+0y4M2Mmu9IqvCQ4LIcisio1i+XfaMXrjKT+ndVq11GkXY9EDlJLe0m+Bnot2Sw5lcJgUsMQa2gAZNmU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB8144
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-29_04,2025-01-29_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- mlxlogscore=942 bulkscore=0 phishscore=0 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2411120000 definitions=main-2501290160
-X-Proofpoint-ORIG-GUID: k-XGJ0CyNFA6_MNot6W7Q4wBu6yQ_ufp
-X-Proofpoint-GUID: k-XGJ0CyNFA6_MNot6W7Q4wBu6yQ_ufp
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <17766.125012916120500129@us-mta-682.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: yMXfyJToRLKp8hzHeWIw_SchXv88CX2D7NRfo0awp28_1738185124
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-+ Liam, Matthew
+Hi, we tested your kernel and here are the results:
 
-Hello,
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-I believe this patch needs to be reverted for now as it breaks the 
-user-space build of /tools/testing/radix-tree with:
 
-In file included from xarray.c:11:
-../../../lib/test_xarray.c:9:10: fatal error: kunit/test.h: No such file
-or directory
-      9 | #include <kunit/test.h>
-        |          ^~~~~~~~~~~~~~
-compilation terminated.
-make: *** [<builtin>: xarray.o] Error 1
-make: *** Waiting for unfinished jobs....
+Kernel information:
+    Commit message: Merge tag 'regulator-fix-v6.14-merge-window' of git://g=
+it.kernel.org/pub/scm/linux/kernel/git/broonie/regulator
 
-this then prevents the maple tree test suite from building.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1647388542
 
-Thanks,
-Sid
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1647388542-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1647388542-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1647388542-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
