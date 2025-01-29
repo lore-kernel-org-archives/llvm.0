@@ -1,109 +1,228 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6628942A92
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 21:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738185129; cv=none; b=eg2ykrCMOW5sJJI58nS33Kiyrm6bowHO+WzcFNUuk/RzgM9QLQKH4p7zFfF4gAcCeJdQ7duyqFt+Qr6Oc6TsuqlWameTQYpYd3y2ShdAmxePM4Fp9GBmVkEBPgkMKJUMBFMhq27ykj8b21PvHFJ97geLYJ40Oiha/4hxbm2ljLs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738185129; c=relaxed/simple;
-	bh=saBbaBKpp7Z9iZYa8pa6Qm+nwdf12KH08732cPT3hbI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=juNABCGW+UHSQQLK41Indg4pLdZ0Ze2z8Hw7Ah24ZBOxAiLDbpmtzzOlp76FjntllKy0D5DMrdm/CP7kKT9Uw/7X5rXfvxf7Z3fwJweAOLTHaY4RsgVNSnJCmQQ3BfOsTUDysRYuHsv0lSSlXatS8WiOXIiWd2p9keQ8rHwnPMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FUbeAuCn; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAFD1E2843;
+	Wed, 29 Jan 2025 21:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738186037; cv=fail; b=ZwSV9NlXd8ONQyj+7v5ofBmC3ufEGl9nTeCjdFcrQ5IK/n4U2LufyRyrdj6VJc0OfC/eqLFow4y/BUWBQvRO5AH2zGTr06LO0J8TaEvhF3UIJmXCLoU3IKenLB5WjOFYhqNgSjiy+gX6zhywaDZ29q2ZExCTloCABop9GYaBItk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738186037; c=relaxed/simple;
+	bh=sYC7YymLil1h8l5SmvdWy3b2UJZl13ax3nX+YkFo3u4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HjaPl+A6D9HaAoMbNkiwoMg5MaenB8SRrbwNerOUL0sCZMvGydcJDq8+OpHn+1kn+3g0mjAuqy6L0HXSagNy69qpqiww5ATs1s8o4MndqLHmvjOF0z+QDhXY4qvxRNqWeYPRqO5XuRWuCCS5zCUCQ/WAvI+RZpCTRTYOgS/Tj7k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=OYBi2RnQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=eKMSWxak; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FUbeAuCn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738185126;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xRq4lXoUjwGssrSA40u0I87Q/N8XaZ8i9jFzM8k076E=;
-	b=FUbeAuCnSXkTXRAzgW8uEFXYfCGHG/7k782tB90IpcgYvsgmdqZOamQbHt+xD+G6hwBGmd
-	PEBASyDGgTDRVs2Ohs5DUis9eDwT/qbNkE6+JyiZZ7uQeBWmXu1ifhUSNetCvY+14UWUa7
-	d6uFbFnf523s8QRlqq7mjSiJRn8IQog=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-gphL0hajPSCNg9RReUPSXg-1; Wed,
- 29 Jan 2025 16:12:04 -0500
-X-MC-Unique: gphL0hajPSCNg9RReUPSXg-1
-X-Mimecast-MFC-AGG-ID: gphL0hajPSCNg9RReUPSXg
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CFB22195609E
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 21:12:03 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.32.189])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3AE4619560A3;
-	Wed, 29 Jan 2025 21:12:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, ebbb8be4)
-Date: Wed, 29 Jan 2025 21:12:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="OYBi2RnQ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="eKMSWxak"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50TLBt4Z000756;
+	Wed, 29 Jan 2025 21:26:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=mlICB2LZqYBoNcXPOx
+	yH9n6VcIRZchUQew41+3eLiBA=; b=OYBi2RnQTXr+LrzEb3Pw30e4mWf8DLpAK1
+	wwJIfjEkHFUMPULRIbWK7m5thiid4zAEsRrT9KGvTqK4GeQZP5kxESYRn3ZIQWzJ
+	5FuVWo9HYif9DV2JFee3hO/f1MfcirfWjZzU+Bz/cnDBX/VbwRy/bS52fDryfAJ+
+	ySu6aFKyT32bv84em0YyAvF+8nPxbrTvuOj6Nen/UyLwohbjwyAt59s+s1OXcCVX
+	6iEHwz4BX7CttVt0fezMgQ3m+gXgqW9/bOCFjwTtMKDe1Jq29qVGono48oKNSBRz
+	5vjtiAay4fiLe8eI5SM+Vp95Mlr0EXgNHLM1K0lpnXtD9iZ/+iqQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44fu5f87tr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Jan 2025 21:26:14 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50TLEuEk022052;
+	Wed, 29 Jan 2025 21:26:13 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2044.outbound.protection.outlook.com [104.47.55.44])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44cpdabg8y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Jan 2025 21:26:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PfAOfZ6laci0xlFH3HetQacc831hPa02rDyqvPeztLbxtQvEt2/S2iq0LoYZ17iMr/JRB7eBXhgctqVCxfluVlAOU++Mbul62anbS/oqJPlZODmsWpIE7RlObVMh6v7Pi62mrdE5lI14M4D9YzV4IDM83OHU1DRdvaw5vkWo/w1JBhOh39/RLkxmqP+/o3TcqX/WSQ7arsEIYAn1EhP9IdqZuLI2S41+hIzD5rfojMT2kttaJotaThGDNyq3YH+0j/sZkzaWFk3AHZT2pcmagY6AOStE5SorE8gIX9StPz/XWY3LcKRcEKBx9L5ApFbGODrwnC1tT4ZRVxgtMbr/3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mlICB2LZqYBoNcXPOxyH9n6VcIRZchUQew41+3eLiBA=;
+ b=Tm41q/KMqM5AEASOY3KK6OzHYQThl1iyFFyaemEXaHeGiLljeomp1E7Dq6sXy1B+8rUBpr8fTP1occyidp4RiGYmAH+p/YyTBqRy1KtR/04MhTcMm3zbZCicbNaxAwPiIT983Fb94K5i3rNzo8IzUMTlV9l51oWCZhszRSEYRwzZ0R+sI7G3CLAVNB4NjUQKQyGa/4MP6r8PTa8GIIUqsa41zi5+YPTqNUF3iSbuZtA0IVUXE4vn+8g02exM4n7djUU37nNR3iiPM1dP3S8Ax3tPYIvMxNEn+cbmjb6SJixFWwElFMGjq1td3ZTVBJW8uf4zf66zIiNp9mnGkkY8HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mlICB2LZqYBoNcXPOxyH9n6VcIRZchUQew41+3eLiBA=;
+ b=eKMSWxakGP7AYqTOHi726mmVw1PszKAM2PqHnrR/KR+s0fIG83vMEaUsnYO+Kfwxkd0UH+ZVw8xSFpE+ChA6KgwI8GFW/c6rfpdD+G0koaG/sr7kY8o+WatDTZSyxYhdsOJ5FKwaInIThiKmi6xJ1i76FwR8g3A10I5wqRAjDyw=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by PH7PR10MB6675.namprd10.prod.outlook.com (2603:10b6:510:20d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.17; Wed, 29 Jan
+ 2025 21:26:10 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c%4]) with mapi id 15.20.8377.021; Wed, 29 Jan 2025
+ 21:26:10 +0000
+Date: Wed, 29 Jan 2025 16:26:06 -0500
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc: tamird@gmail.com, akpm@linux-foundation.org, christophe.leroy@csgroup.eu,
+        geert@linux-m68k.org, justinstitt@google.com,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
+        maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au,
+        nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com,
+        npiggin@gmail.com, Matthew Wilcox <willy@infradead.org>,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] xarray: port tests to kunit
+Message-ID: <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, tamird@gmail.com, akpm@linux-foundation.org, 
+	christophe.leroy@csgroup.eu, geert@linux-m68k.org, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev, maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au, 
+	nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com, npiggin@gmail.com, 
+	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com>
+User-Agent: NeoMutt/20240425
+X-ClientProxiedBy: YT1PR01CA0102.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2c::11) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <17766.125012916120500129@us-mta-682.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: yMXfyJToRLKp8hzHeWIw_SchXv88CX2D7NRfo0awp28_1738185124
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|PH7PR10MB6675:EE_
+X-MS-Office365-Filtering-Correlation-Id: f546995b-0bc7-4ad4-a448-08dd40ab8c91
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3FzeSsZ4oWw1XNTzFl6J3T3xRQcW7LyTmjaMH/DQisLCRbNNzwQi848dXgSh?=
+ =?us-ascii?Q?k69SaQAEjzmr2w4xYHyOWT865vPQEcRE/bWCaMSG/yDwWYcOQvUXZL3F58Ao?=
+ =?us-ascii?Q?jsI47IVmq/Xyhgyg5VC32uxDWxXouAcDpozDnWn7NLjW7jd4zWMSraaY8FRm?=
+ =?us-ascii?Q?GNM/NRxUNvwm/5kmIriRr/fQezNFu6Qw+/eLuWdUU13AG3Tw+J7LyLpCWFiQ?=
+ =?us-ascii?Q?wqDrDvMz6DnsYyYHCr02lyXBduoBV1i4PczyETDzof5Igpz+0C69GS9D6mOg?=
+ =?us-ascii?Q?EaXPzy9HN4xU8bZpNRdVp8dqwb0ekXU9DLFHWbe+wbtHuktC+0pkD7vxExCe?=
+ =?us-ascii?Q?u1SEgpcyuionwhWj4GTBYYoqacovmkdf1J6UdRTXZ4wYKBnj6qC1OpBSM9Bz?=
+ =?us-ascii?Q?X1rOZNDf3EtpkmBBkZa+fvD54+GVcDOfOA+U2HfPrecT7onWKzrHhZhk9bby?=
+ =?us-ascii?Q?e0HE1HspO57JqlbMT6t6rDB/5K41JkM4yMCGj+YiQzC+BDQboQh9T+HfnTRw?=
+ =?us-ascii?Q?ZzghQ07WYy9n05xSiZU3fkSUhxlYai/F2S0LS+XfUXqP2wH/GgPbu6kF1nRc?=
+ =?us-ascii?Q?0A8sNzLorDcSd4uzZ5ilXrxZP8ptEFs+DTat6Sa0c9yrNZpBVkqRbXwYc/m4?=
+ =?us-ascii?Q?LKvP6wUOpoNNYXvjed0j8pUZCdG64NPmsDdSk8K+TK77BgZKIAJOdErwKNDb?=
+ =?us-ascii?Q?ocbnIlJl8PTCErnoX4etbwdg3o7ipAOQvgARR2efZdmp0f2Qh3TVMi4TBdRK?=
+ =?us-ascii?Q?kqkOuspQ6J5jMe/O98wI7z0P5Rb3En77uqdGj8NvEMiOrtskDq9Nm0MnnBLh?=
+ =?us-ascii?Q?WBwQ+IA+SmXPlzKuzSZq7/rUpIXDjQ2E4AQBsRlF8dptgruCMVRSlwJ7R/AW?=
+ =?us-ascii?Q?Bl9Wy/z7TRD5xWYvedpBPt517X8qrQ+Uu8WWiex7/K49i5DO4F7G7IcSKKQK?=
+ =?us-ascii?Q?87iwjZR1xy2bZ1moSDsrO+4pKYK4eHIPJg3UbM6sFLESQSCTcXsXMMH+MI37?=
+ =?us-ascii?Q?dQfWorIxwVtAaMghIxTXbYRqCInnfrJ/VMCXb7X6TayogSeNVBM4prSqJ2WJ?=
+ =?us-ascii?Q?VXGq9zhUMQ0vN/FEHPq3ixlGIxdWqiS6GSyuwiLmDhGCgs9x4DqyAU6YNBeu?=
+ =?us-ascii?Q?CTyuygIkrM8YA72G9DdPL6HaEmA2rD44FtDa/HxnfIqgjF+OXpBWEN9x7Ctv?=
+ =?us-ascii?Q?10p2EabLWzOCtRtEwlc6nErm/q01EZmIynd94s0lWvP4Qbf0ywDmGdx59oRt?=
+ =?us-ascii?Q?xOwWEg5vEnXOnWagiHvbgLO6voORlePtMez/M9w2JhAU/MRi7egA8l94d8Eb?=
+ =?us-ascii?Q?B7tqVi/il/R+J1sDiLpWuN4h+a1b8rBgCmPjUYlQ2axgBw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/9Q7gk3OX7qNhZ++oU54VkUtiGpjftJVtRELqP3NLhwAOo1EFaU9yl4oEFCK?=
+ =?us-ascii?Q?CpPbl2/X4k7SIfv/zRwl+0xpzgH8GraDxETHpMWENRMvjITCDh9rvVfveiZM?=
+ =?us-ascii?Q?Oc8H05+0kn+REakHtGIhrKvAD7D0Hi2mXmvYRP8/hUGN3aeVH7zk7f23GQGS?=
+ =?us-ascii?Q?tKQI5cJSDci6mtHbUMDSaTzjymubAKt5jbC9NfKsYxkS/p0spOpO2HTXmVDR?=
+ =?us-ascii?Q?u/EqwwsbpIAInzjqXrxutUYOZUQOEGXbmq9hjwntINbOIN6ODt5dAl77QWXI?=
+ =?us-ascii?Q?QJEX+tu2ObJDa3pqrW+QUEWXMg9yR+DEpZYWKDlCB6bd7Yf1E9/5Yyt4tXDT?=
+ =?us-ascii?Q?q4n4moniWBnUDMcoLhurkMKP5aFVykZLoQcU6tGhK12Et2WSOd4tezWUcsMY?=
+ =?us-ascii?Q?9dlUZ6T1f18xsgVzIxTfXEBVeulHe3I/p/ij+tvBADW9d6l9A4PiHnVujrYl?=
+ =?us-ascii?Q?UBX3wAZ4/emNEzKIvx5XLQIg7cWMfhYYQdVM35QvO/I60SDYM+85n/i9q1hO?=
+ =?us-ascii?Q?SqCV0n+nJTFTogkPVdmWEi2RcoSZM3Zr6rrxMhgRla1tLr4thUDh4K7FN6YG?=
+ =?us-ascii?Q?ZL1+bMknFsPuDqz08LMnCvZ9XHWHqblDk2wSXBIOEk9nM5c6CSqr6wfGWYWU?=
+ =?us-ascii?Q?ZCX8NxlVxydDRBuB7Bw8AZlAMxrMkubxfP4Ntp6vNRVJFi1uAAzcV0pBJuN+?=
+ =?us-ascii?Q?kfU1KrKxAZ5AETcqBkyEuqHags8a2gwOiUj8X73PLOeVlSVjVwk7zBg6/Oqn?=
+ =?us-ascii?Q?yHPH0kOyNKfELOZpMqWkGOTd7aFtcIUhD+D1A8da1CPXB67laK/YGm9tX+1/?=
+ =?us-ascii?Q?ss9en2xiW4MlxCtXLo7kcqhtOc/t0U1h8crOwJJGy1FfTFXMmsZ2+qUxHqyw?=
+ =?us-ascii?Q?+psLI0aA6mQfpuKWf4U4SOYU7KcZycWd5QoVVx2tXkur+hOnhyx45KM4lNXB?=
+ =?us-ascii?Q?W83l46wHZ0/vs13XFgedtCyMfvo2QcsX8U+AtRewYU7ivrnVu+tZnd9YfiNG?=
+ =?us-ascii?Q?d9L74WS0XreOJNMD1l8mlNjgGCyZ3f2y0oJgMCKAejDWOF0kj9ESXbqiHEp5?=
+ =?us-ascii?Q?zTihIUI/2sXpR4qJlKqTRA54lBt/Jy4EEjGslipHmwzMjfiqk1GS8bi03rPM?=
+ =?us-ascii?Q?uvJ9b8Z501P+FSvSNjBzNNmD06m6WX+ESplKA0qP56pX52YXT6C74j5fTWC+?=
+ =?us-ascii?Q?CSUxLBK5lhPX2LIczuBahRyEs/Xdl9l+Nu8GmXEEwGf9+LkdeMnlwti3/MuD?=
+ =?us-ascii?Q?WIG7NiaAInhUejyTGcHhhtlTvFQ7PnlvSRbJzNr1dTm9JLQ/xtwDFp1w6Yxd?=
+ =?us-ascii?Q?3LtptbyNO4EfUu5JnLiHzasctrDHTS4kTzgSrZ0hVm6VcFwFQCPqsdBN5U+e?=
+ =?us-ascii?Q?s4l8l2Q+kBU7BsOVRrkJVAXuW0xrbUoav1qQ3P4PrpEpHJHAL9hgDAwLGUPP?=
+ =?us-ascii?Q?J8wcZaj46mS7KFaNWL/CylBw3EFgXsOqTvy4k64/HJ+oFvpOG6vcP+KQZTm1?=
+ =?us-ascii?Q?75cWyFDBz0mBZObtt9VBXreqwuCl1R6CJutldCHykR/BNSoOSFghNoltbuNd?=
+ =?us-ascii?Q?oDmEszF15/ZaYasHRpueQGnXUavJOqa2asXazjrN?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	7VcGwYqoDtDhq3wvVpe6LomvX2ElkLahczf7loBJd0V2WoQ8vmZKZyMBwG1YeSGMfPQeSZC8L5H4fi9Whyztv2Aq0655sJizBa1aFKksbDKkug5FADNVzBALJZDpuFrF/Kw/p0Z1tSpApQwTYZhCjD+eU4iCet6oOFccJDYMMx2IpLPR/RApQvOFvtCA1Gftjy59tv6nRSphmAsKKCFQGObq3a2jW3OEcgHxRxxLVBANekXJ63zzKxb/jS5EWDOdQnAB4NuiobonCdENUWW+4IuRYCgfRsN7IQrY4OeOVXjTyFPoO62nY7VCImVmxgE51o/P3OGIJkgv8qEPS8xbYgbD5bTyfzSkX/YCTnn6YJtAUgRXbCvsir7ycEKjxycGXHThs8J5uJXefYmGz7PPszIJc66eK4Hf+NCqoNd9j/zyomGok+BZK9s8lHOmoXujJ9Q2vKDWL4fdUfSmhxxZ2Zz5MrWqrDubtHBpR5duRt/5xQa9UNEeqG+SinjygQe0h8zrO6A/JF0j5wTwtHKfPF88tZ1p+j+7+DPZiTaC9cLXFh+DoseItC5NeedJT3HZ2szfdEX+DHdbxn0GDMWtUIeJA5ZZ48Hm1JClPZzzRiQ=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f546995b-0bc7-4ad4-a448-08dd40ab8c91
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2025 21:26:10.3672
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rg8CGMzYXhdRKnEU7QaNDM8Clsf1NnF3GfLUULsn4bQGbHztlpoUqU/IBYTrWpiZzAdcoBW0Tiusb9fjhl4yMg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6675
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-29_04,2025-01-29_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 mlxscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2411120000 definitions=main-2501290163
+X-Proofpoint-ORIG-GUID: 50NzgcVZjlod_ABiyfuU6WYhkfLVxF8C
+X-Proofpoint-GUID: 50NzgcVZjlod_ABiyfuU6WYhkfLVxF8C
 
-Hi, we tested your kernel and here are the results:
+* Sidhartha Kumar <sidhartha.kumar@oracle.com> [250129 16:02]:
+> + Liam, Matthew
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
++ linux-mm
 
+Thank you Sid.
 
-Kernel information:
-    Commit message: Merge tag 'regulator-fix-v6.14-merge-window' of git://g=
-it.kernel.org/pub/scm/linux/kernel/git/broonie/regulator
+> 
+> Hello,
+> 
+> I believe this patch needs to be reverted for now as it breaks the
+> user-space build of /tools/testing/radix-tree with:
+> 
+> In file included from xarray.c:11:
+> ../../../lib/test_xarray.c:9:10: fatal error: kunit/test.h: No such file
+> or directory
+>      9 | #include <kunit/test.h>
+>        |          ^~~~~~~~~~~~~~
+> compilation terminated.
+> make: *** [<builtin>: xarray.o] Error 1
+> make: *** Waiting for unfinished jobs....
+> 
+> this then prevents the maple tree test suite from building.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1647388542
+How are grammar corrections going to the right person (but not the
+mailing list) while an entire conversion to kunit is not [1]?
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1647388542-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1647388542-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1647388542-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+Does the patch really need to drop the module testing too?
 
+What exactly is the point of converting one testing system to another
+besides disruption of actual work?  Who asked for this?  What is the
+point?
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+Is anyone doing work on the xarray running the kunit tests?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+This should be reverted as it should never have been merged.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Regards,
+Liam
 
+[1]. https://lore.kernel.org/all/20241009193602.41797-2-tamird@gmail.com/
