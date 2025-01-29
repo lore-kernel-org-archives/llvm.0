@@ -1,125 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B803C38;
-	Wed, 29 Jan 2025 13:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17B3156678;
+	Wed, 29 Jan 2025 16:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738158413; cv=none; b=YuMVLpv6tQabses+xpfrbbBcnFmc48XkJB7zXb8x7b6/+j1c3HRU7c7tINr3RYKkTL0rifgpSLisTlU15nCHGRe22i/D5SKzcN5DCfHKEaxTYrF6R+gjQQvO93GHYu4cUdFLeDg6YGKCa5/cbzwkfRi0Ii14hu45zdrH1GieIAM=
+	t=1738166961; cv=none; b=oKeSVq43Hgrw45nBAtULQhRnfp8pWU94DE3aa5Q1aH384MDVwETI17V1snVhJNMwyPmM8C19gjeIwrkKD7ugJ93Qs14STi9OvPNP2zgWSyVXvyGVpZxa/kGd78k01sNyxgp9nJG7rQ32iGDx3u+JaHucmUsKJisHoJAmj5+/pS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738158413; c=relaxed/simple;
-	bh=9mzkm+Oz6Y+AjP4AzXjIl8gbqty5LiiCcQU5PR3ySuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCBCZ/23xme3vctstvyTRdcXiKkrF2mZhl5GHWl54X++0SS/484Ql4XWc5XlV0ANS5VINwsvVSK94CyDhngatY+r0hOyuFasplIEO/DASxxb3PP7IlhoFR5PZzFjp3Agfat7UpdPE63QCP1H9Ag0kJhlhqTJUsOxt6nKXGJt6oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSNxnJuW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738166961; c=relaxed/simple;
+	bh=IH4J4LuKiaJPMrOS3CAsX80u/mR7BdI4hHwd/FUmGEc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RsU13h2yfeAwI2RT8qF19JbDSAzbRjN7s3qNvG07CUpwaLsw8HW3rIWh4oXZVdkBnu7ELA4+11z/PUBl/9I25u6PafLKz2AVAsDkjTbx5VtV61r/Q4GNqK1FYiVKCQDFLHFCdbTEzb0rjbhI6zTi75uDrhJbONRGwZU90ayxWGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsiptbKW; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSNxnJuW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76866C4CED1;
-	Wed, 29 Jan 2025 13:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738158413;
-	bh=9mzkm+Oz6Y+AjP4AzXjIl8gbqty5LiiCcQU5PR3ySuI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kSNxnJuWeParDruisF7PTxoVNGivPPMbgYbw+ObXhXpRTwTHujmm+RfMjkGLYb5uW
-	 qyU7N0ffytX6V+E90mcaakH9gMacU4a5dOj7dtJNGF6Km9cNitN4nvQGVk4C4Qhihu
-	 ok6yXJVIsst5uVp5fK2IUAnqkkn2ZGUSvhF78UvX3kSfaxEHtWAysesAA6AXivqtaR
-	 wcCMkDATJahbCTf/A+pJ6P8Rqptf0JiXse3opf/Jb2lFLtqD0wR9OiOcFaeUGK8kKY
-	 TvMFz8M4B9/oCU32KeWIhccHfKzKto5SY9K++ibwt49xfIRUcQE0TtHCDRcfp9sEnZ
-	 4HBCDgQ/p4Lgg==
-Date: Wed, 29 Jan 2025 06:46:48 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: kernel test robot <lkp@intel.com>,
-	Maximilian Luz <luzmaximilian@gmail.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Hans de Goede <hdegoede@redhat.com>
-Subject: Re: drivers/platform/surface/surface3_power.c:243:2: warning:
- 'snprintf' will always be truncated; specified size is 10, but format string
- expands to at least 12
-Message-ID: <20250129134648.GA3884012@ax162>
-References: <202501291646.VtwF98qd-lkp@intel.com>
- <CAHp75VcOYyVx=wcopvi-0iA5XePsGOrNO1wUSzYcYB4q86=7gA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsiptbKW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738166959; x=1769702959;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IH4J4LuKiaJPMrOS3CAsX80u/mR7BdI4hHwd/FUmGEc=;
+  b=OsiptbKWj/4suptH9Tw3LQAxOSDv0dQaG5Is1b8zjogigM41ZPAC/fMx
+   pJNbHtYl2NK8wT/RRaWScRhvmXJz+46CRfgpoXqD4+7SlLaiPdPGR7sg2
+   0Qwm6eY8UNNVozBnTMOVM7NY6ktSn0FW5Y/cTIfnH9aLa9Qkt6H7PQvXE
+   tZ3Hkveaj5ZVWMtJzXKNTqvcR+dxzApP05G4F6JXo3hdrfkxkeSQL0SQn
+   4v3DaXvKClj7/nsohOeoV+GuLKKgTV/Nv/fUkFjDciH2FnA5mbKwe070c
+   jyMUziizJ1vVddeEf0xCcwIgFK/fCik892eWdJr61WGaYUFSr0SrJZNXO
+   w==;
+X-CSE-ConnectionGUID: hDS42hYlT/KDGB8CfdfdOA==
+X-CSE-MsgGUID: zg2aNaApSyWoMCVU3I4epw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="42347506"
+X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
+   d="scan'208";a="42347506"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 08:09:18 -0800
+X-CSE-ConnectionGUID: zpN3vyJrS0eS/3jq13evqg==
+X-CSE-MsgGUID: QZyXq/4MSz+UZ7s8ClRH6A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
+   d="scan'208";a="108887983"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Jan 2025 08:09:16 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdAcs-000j6E-0g;
+	Wed, 29 Jan 2025 16:09:14 +0000
+Date: Thu, 30 Jan 2025 00:08:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: SeongJae Park <sj@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sj:damon/next 60/63] mm/damon/core.c:1339:16: warning: variable
+ 'nr_regions' set but not used
+Message-ID: <202501300041.usRaByZc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VcOYyVx=wcopvi-0iA5XePsGOrNO1wUSzYcYB4q86=7gA@mail.gmail.com>
 
-On Wed, Jan 29, 2025 at 02:45:38PM +0200, Andy Shevchenko wrote:
-> On Wed, Jan 29, 2025 at 10:09 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
-> > commit: 85f7582cd484dbf491b6d9bb2af6ef1467a024d2 platform/surface: Move Surface 3 Power OpRegion driver to platform/surface
-> > date:   4 years, 3 months ago
-> > config: x86_64-randconfig-071-20241231 (https://download.01.org/0day-ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/config)
-> > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202501291646.VtwF98qd-lkp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/platform/surface/surface3_power.c:243:2: warning: 'snprintf' will always be truncated; specified size is 10, but format string expands to at least 12 [-Wformat-truncation-non-kprintf]
-> >      243 |         snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3pE%6pE", buf + 7, buf);
-> 
-> 3 + 'E' + 6 + 'E' + NUL, that's how the compiler thinks about this
-> formatting string...
-> 
-> >          |         ^
-> >    1 warning generated.
-> 
-> I do not know how to properly address this because it's false positive
-> due to the compiler not being aware of pointer extensions used in
-> Linux kernel. The w/a is to increase the buffer if we can, but is it
-> practical? OTOH, this warning will be translated to a compilation
-> error in case of default WERROR settings on `make W=1` builds which is
-> also annoying to people what want have that clean.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
+head:   db09358b42a2d75f76c297d9eedceeb9786c96fd
+commit: dcd0807d5a93d6e7b64f63de86de810f55a19bfb [60/63] mm/damon: intervals tuning parameters refactoring
+config: s390-randconfig-001-20250129 (https://download.01.org/0day-ci/archive/20250130/202501300041.usRaByZc-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501300041.usRaByZc-lkp@intel.com/reproduce)
 
-Hmmm, I missed that -Wformat-truncation-non-kprintf was only disabled in
-the non-W=1 block in scripts/Makefile.extrawarn. We never want to see
-these warnings at any level because they will almost always be a false
-positive, that's why the "non-kprintf" flags even exist in the first
-place:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501300041.usRaByZc-lkp@intel.com/
 
-https://github.com/llvm/llvm-project/pull/65969
+All warnings (new ones prefixed by >>):
 
-I suspect we want something like this.
+   mm/damon/core.c:1351:65: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+    1351 |         pr_info("access_samples %lu/%lu, score_bp %lu, adaptation bp %lu\n",
+         |                                                                      ~~^
+   include/linux/printk.h:574:26: note: expanded from macro 'pr_info'
+     574 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                 ^~~
+   mm/damon/core.c:8:31: note: expanded from macro 'pr_fmt'
+       8 | #define pr_fmt(fmt) "damon: " fmt
+         |                               ^~~
+   include/linux/printk.h:501:53: note: expanded from macro 'printk'
+     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ^~~
+   include/linux/printk.h:473:11: note: expanded from macro 'printk_index_wrap'
+     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+>> mm/damon/core.c:1339:16: warning: variable 'nr_regions' set but not used [-Wunused-but-set-variable]
+    1339 |         unsigned long nr_regions = 0, access_samples = 0, score_bp;
+         |                       ^
+   mm/damon/core.c:1358:31: warning: unused variable 'sample_to_aggr_bp' [-Wunused-variable]
+    1358 |         unsigned long adaptation_bp, sample_to_aggr_bp;
+         |                                      ^~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 1d13cecc7cc7..8878f71463fc 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -31,6 +31,11 @@ KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
- ifdef CONFIG_CC_IS_CLANG
- # The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
- KBUILD_CFLAGS += -Wno-gnu
-+
-+# Clang checks for overflow/truncation with '%p', while GCC does not:
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
-+KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
-+KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
- else
- 
- # gcc inanely warns about local variables called 'main'
-@@ -102,11 +107,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
- KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow)
- ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation)
--else
--# Clang checks for overflow/truncation with '%p', while GCC does not:
--# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
--KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
--KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
- endif
- KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
- 
+
+vim +/nr_regions +1339 mm/damon/core.c
+
+  1331	
+  1332	static unsigned long damon_feed_loop_next_input(unsigned long last_input,
+  1333			unsigned long score);
+  1334	
+  1335	static unsigned long damon_get_intervals_adaptation_bp(struct damon_ctx *c)
+  1336	{
+  1337		struct damon_target *t;
+  1338		struct damon_region *r;
+> 1339		unsigned long nr_regions = 0, access_samples = 0, score_bp;
+  1340		unsigned long adaptation_bp;
+  1341	
+  1342		damon_for_each_target(t, c) {
+  1343			nr_regions += damon_nr_regions(t);
+  1344			damon_for_each_region(r, t)
+  1345				access_samples += r->nr_accesses;
+  1346		}
+  1347		score_bp = access_samples * 10000 / c->attrs.intervals_goal.samples;
+  1348		adaptation_bp = damon_feed_loop_next_input(100000000, score_bp) /
+  1349			10000;
+  1350	
+  1351		pr_info("access_samples %lu/%lu, score_bp %lu, adaptation bp %lu\n",
+  1352				access_samples, score_bp, adaptation_bp);
+  1353		return adaptation_bp;
+  1354	}
+  1355	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
