@@ -1,267 +1,149 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B4F19CC17
-	for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 22:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1795015534D
+	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 00:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738102591; cv=none; b=MVeG5Xrl4UaYod9EVJLfZ+xMdbPhvRraSmosGgVOve6owVRbWbI29kWFZSNfRdaSJ/Cx8po75mA3nH7GilQ5W7uOqoo/22rQFTtQEKNhEOMkbVebva1eoSODeFF4nhwWFS0h9ilGCix3qGQrcUP484VywD4gGjp/KgFNXdfGI5M=
+	t=1738110279; cv=none; b=qSAy9xPshZsjCpxx4Vlcf12SgDlnew3hj92lP+6jWQx9W1kLMYLvqUujNkN4YVOc+zgGfIC9vreBRZr09BhGMbU0vKEL7zkMx1LTXKoOB+LBCRTpLxcqGlCBc8vtb/BsPonG+Hy7VJ4HNkCePVd44xRn4dofyHDUKpS5/e1V0cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738102591; c=relaxed/simple;
-	bh=yFM1drfDCyYii33JCCgfl0iNAkmuf/K9UQeme7D5bH0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EXX9/dcFNdyuTAf0KnFQSaVhkZ3BfXvTRnz3gSwAIvCwNA3BfwEP4gDVpHFT+jgXjSp9pXB8XPaHx95/mcm/5Hl1FF0iutLqbE+XfSY+QjM7nCzCb+Ac308Sq/gNOX+dYPXpWevAoX3n06GXzxJk0HjYIr2cmIPqHHjbfNJGaZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bnAmMUs4; arc=none smtp.client-ip=209.85.166.174
+	s=arc-20240116; t=1738110279; c=relaxed/simple;
+	bh=Tye1ZieSPZQmo1mo8HoGA/TZnzVuj35yU1agRawQNig=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=enIhEtkDBahrSY6UBlFlBqUtjpMwmBI6X4JI/FrHo/R4v4/X9a6C8Ut2qehDbRQ0gfC+txsn8HqlTJDe3excY9lKrIQksG1MyhehNzgZiqPFPWNFQTA+s+2YRRm3zjakWAkPqmctNA3GAsfY5CRG5T3JaF44GxP9dCqyX+UWMbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rH9uoZh3; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bnAmMUs4"
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a814c54742so225775ab.1
-        for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 14:16:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rH9uoZh3"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2167141e00eso136355195ad.2
+        for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 16:24:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738102588; x=1738707388; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9thD99sxYOxhZcIVt1CWIvx0RPYfcuFGVdmxBJHmWDw=;
-        b=bnAmMUs4ZWHsU9QZhPpyhFkmvTVZj1xLKa4+zzUcjorkAzA/1HOOrtfxf7NHgKeMez
-         UsAlun8A/mb7QbLUDZGzG89SjLwSwigtmJ1AmBhx5BaCs6GzeyTaMFLwpmz4inJsKccZ
-         N+s3PrfWGI0bcFppaqQAQOb4KhvZ4rB1R1re5S8+peq8hkh/jJFWeapTnrWXQO0zb9A1
-         Lx09XGRoArNvSXQ9xk4kgTelyWPnA+kC3pO8sUmZaxvt7FqbdWjEHoPStoqBXcXXZBsh
-         YY0imsAffq8Spo0f89MB496XSFglMTiEoIk/GsEWK36qOWB/l7wYgFF97Wt65yyPaTGR
-         hy0Q==
+        d=google.com; s=20230601; t=1738110277; x=1738715077; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ss8IRXPQuROgaPFI2n/Tn6B8Bw+CUwUeulj0ny/+twg=;
+        b=rH9uoZh30v9I8blRhqCAXUyEDxhsSziDgA7PEbpdmwI9kW/+JLNOPsNHbTrnj2inv4
+         LsCqi6Ufr4x3CYfPsSh63DPMZ70QQK/FhuZrgEh85uD8EJO/LxnMRXXkZ11zqK+YUJlK
+         U6q4816m3KvzKMAUCt8FUOkMeOprHx5RHwAIREf7Id98cMimhNJzaCYTQXBL4TQrs4YJ
+         Sl9A0Ykb9cUIJHGNsEey7IQ99vG1shptoLQP0GCmo0SOkxIszD537zzmyiIURubZGIQy
+         BQaLiuFA2t4KfvgOBj6wIBbsgSMrow8jUIFTjC3AauCB/1uGcsX7Z10pI62p5dNgiNLs
+         tahg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738102588; x=1738707388;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9thD99sxYOxhZcIVt1CWIvx0RPYfcuFGVdmxBJHmWDw=;
-        b=VRZrottWlIgvkxgQgSJCw4vb6L0GLk7jEiatRxAHU+BBD3qlyQARRIi15vQ21XHleE
-         LamGLb3AlPvABe7lVQHcopwU7fkc8oAI6n9aDfoFDdXKxssmZgJhCsgUlL2E39OLA39e
-         I8w5MYbbGDz0eB3uud/BfpeJL+JqoziAnu/CeT4iPynEhlzidqzQ4Vzd/ooY0OGP/A2b
-         IAsLVXIko8RffjryN+EssOEfQz02KlAM+/FjL8iH9ikpcf+n/pfIzxG1yPz9smTTNt6E
-         tks/+NGTbpnW9HbZD2Qtbal8f+BVwJaRRNDba5SeIgJ2U24JmpEBQXfkkmkyY8St4K+3
-         WmeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ3G1VkwAQsqeQllSMQeJMcKcjGwEBdLRDjvS+18/KNxThnBA4eojREJI/CHd7T+/S0LpJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx7ipmOEqivZJ377Fa7gFgZBQ7U+6dKZU14q8va/fePHDIL+2zi
-	W2AkOaSw6s+BG2V4xBonSbvIgofPyobftKz89Qd1Zi1VLzo6RorKGHZ/KqatEAPokRX3yYH+MYA
-	6QzCO2BHPWI0MCnzju8Uurs5y4XyRhGcuHh6D
-X-Gm-Gg: ASbGncv6wYQ2WiNVK0aCo3fEoNFDSk/4/ddoITrweNyLuicubAWNH2/EHPTq13fr5+b
-	6iU7IQp0mOOVtS4UHViDMiOXN2AmRYDHjQQtwcPPJGqN4ORab1z+/5DiMnyXTksxlrEFqYTJSNs
-	PaRxSo0VNdoWFtrvyeZRjA7pMK1SIWTjrTOCM=
-X-Google-Smtp-Source: AGHT+IGtqIx6PgyLvYpYwW+PR2OriKGx9AdoInnVjbPzjZdYdwtGYpVsyGldmefUzK9d6ImyEATO7nAaU8dl251a9qQ=
-X-Received: by 2002:a05:6e02:1aa4:b0:3a7:c962:95d1 with SMTP id
- e9e14a558f8ab-3cfffaa327dmr320135ab.5.1738102587960; Tue, 28 Jan 2025
- 14:16:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738110277; x=1738715077;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ss8IRXPQuROgaPFI2n/Tn6B8Bw+CUwUeulj0ny/+twg=;
+        b=hhCJ1cA2oLm9p8lGmzKTjEc1NHe+3+SemHGap9p3Froa3OH4KLx5kBgGwXltHP+zvg
+         BaycZl6BjPNZnfG2jWl2RvmjhbJ/YHvgtevx1SkQiMGnZslRHPB+EET9U9walR/IMQRj
+         AKo88Spw3tcrlJiLnP1AEglQVvAjDCR86RAYXwlv+qDgKcskTzVAdvc2W4CoRHy4wZvg
+         MfSSL32CSY+PLbU8/Og4LaXjuhdSJi+UrbaIbVPfvWtHEMiEJSct6JhyG9ycMcwxkGxc
+         6KnbrAYbm+C1G2CMzv7OYIv0X6c/bBQeuFHCHiuNygaNmw/FFEHiFmWV7RtP008b/ULh
+         hcsA==
+X-Forwarded-Encrypted: i=1; AJvYcCViX7+6uNlIi3DgbMTwr8ex0lQ9SNzOgGyzt1oNljbzAY2Pg6UC1LovcCi9DXzMhLoUNTLS@lists.linux.dev
+X-Gm-Message-State: AOJu0YwdlhsO4ROf8r5E2YVDW7e5FTwA8FsvJlDTf5GUGObZIdLjvV2f
+	AS5pxtdQRbtMF5VeWZKQnFdnYuGaMT7/36917Y0rJ4f19WXWyN2b+B3DLqY1HpcbhAvjRM0mSkt
+	2Qw==
+X-Google-Smtp-Source: AGHT+IECz3VTxLM4O986OseoNSxZB/C8h78XB8HxPSOGl8b2+z2HK2SySwPs7DImzJI+zObNWYsOE+c8sYo=
+X-Received: from pgbcl4.prod.google.com ([2002:a05:6a02:984:b0:a88:3e2b:cada])
+ (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a0e:b0:1e2:2e4:689a
+ with SMTP id adf61e73a8af0-1ed7a6e183bmr1992091637.41.1738110277341; Tue, 28
+ Jan 2025 16:24:37 -0800 (PST)
+Date: Tue, 28 Jan 2025 16:14:56 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20250122174308.350350-1-irogers@google.com> <20250122174308.350350-4-irogers@google.com>
- <Z5QM8nHzwuQYczyQ@google.com> <CAP-5=fV0w9tLFr7xYHFUH=UUq+tr+o5EYUik0d74rMWa9=Qi+A@mail.gmail.com>
- <Z5lEdtLVHRZwxuY8@google.com>
-In-Reply-To: <Z5lEdtLVHRZwxuY8@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 28 Jan 2025 14:16:15 -0800
-X-Gm-Features: AWEUYZlB9pwGJzob7bkqmuwI_Kstr1xWBj7EqDzPTNRqrFBjlPerFeGCGcxR96s
-Message-ID: <CAP-5=fWabK5a2C5Qyy2GPtmx1uXM2bu+pQO+JKpfZ2VhtLt2zg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/18] perf capstone: Move capstone functionality into
- its own file
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
+Message-ID: <20250129001905.619859-1-ctshao@google.com>
+Subject: [PATCH v3 0/5] Tracing contention lock owner call stack
+From: Chun-Tse Shao <ctshao@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
+	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 28, 2025 at 12:56=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
- wrote:
->
-> On Fri, Jan 24, 2025 at 04:59:21PM -0800, Ian Rogers wrote:
-> > On Fri, Jan 24, 2025 at 1:58=E2=80=AFPM Namhyung Kim <namhyung@kernel.o=
-rg> wrote:
-> > >
-> > > On Wed, Jan 22, 2025 at 09:42:53AM -0800, Ian Rogers wrote:
-> > > > Capstone disassembly support was split between disasm.c and
-> > > > print_insn.c. Move support out of these files into capstone.[ch] an=
-d
-> > > > remove include capstone/capstone.h from those files. As disassembly
-> > > > routines can fail, make failure the only option without
-> > > > HAVE_LIBCAPSTONE_SUPPORT. For simplicity's sake, duplicate the
-> > > > read_symbol utility function.
-> > > >
-> > > > The intent with moving capstone support into a single file is that
-> > > > dynamic support, using dlopen for libcapstone, can be added in late=
-r
-> > > > patches. This can potentially always succeed or fail, so relying on
-> > > > ifdefs isn't sufficient. Using dlopen is a useful option to minimiz=
-e
-> > > > the perf tools dependencies and potentially size.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/perf/builtin-script.c  |   2 -
-> > > >  tools/perf/util/Build        |   1 +
-> > > >  tools/perf/util/capstone.c   | 536 +++++++++++++++++++++++++++++++=
-++++
-> > > >  tools/perf/util/capstone.h   |  24 ++
-> > > >  tools/perf/util/disasm.c     | 358 +----------------------
-> > > >  tools/perf/util/print_insn.c | 117 +-------
-> > > >  6 files changed, 569 insertions(+), 469 deletions(-)
-> > > >  create mode 100644 tools/perf/util/capstone.c
-> > > >  create mode 100644 tools/perf/util/capstone.h
-> > > >
-> > > > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-scrip=
-t.c
-> > > > index 33667b534634..f05b2b70d5a7 100644
-> > > > --- a/tools/perf/builtin-script.c
-> > > > +++ b/tools/perf/builtin-script.c
-> > > > @@ -1200,7 +1200,6 @@ static int any_dump_insn(struct evsel *evsel =
-__maybe_unused,
-> > > >                        u8 *inbuf, int inlen, int *lenp,
-> > > >                        FILE *fp)
-> > > >  {
-> > > > -#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > > >       if (PRINT_FIELD(BRSTACKDISASM)) {
-> > > >               int printed =3D fprintf_insn_asm(x->machine, x->threa=
-d, x->cpumode, x->is64bit,
-> > > >                                              (uint8_t *)inbuf, inle=
-n, ip, lenp,
-> > > > @@ -1209,7 +1208,6 @@ static int any_dump_insn(struct evsel *evsel =
-__maybe_unused,
-> > > >               if (printed > 0)
-> > > >                       return printed;
-> > > >       }
-> > > > -#endif
-> > > >       return fprintf(fp, "%s", dump_insn(x, ip, inbuf, inlen, lenp)=
-);
-> > > >  }
-> > > >
-> > > > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> > > > index 5ec97e8d6b6d..9542decf9625 100644
-> > > > --- a/tools/perf/util/Build
-> > > > +++ b/tools/perf/util/Build
-> > > > @@ -8,6 +8,7 @@ perf-util-y +=3D block-info.o
-> > > >  perf-util-y +=3D block-range.o
-> > > >  perf-util-y +=3D build-id.o
-> > > >  perf-util-y +=3D cacheline.o
-> > > > +perf-util-y +=3D capstone.o
-> > > >  perf-util-y +=3D config.o
-> > > >  perf-util-y +=3D copyfile.o
-> > > >  perf-util-y +=3D ctype.o
-> > > > diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.=
-c
-> > > > new file mode 100644
-> > > > index 000000000000..c0a6d94ebc18
-> > > > --- /dev/null
-> > > > +++ b/tools/perf/util/capstone.c
-> > > > @@ -0,0 +1,536 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +#include "capstone.h"
-> > > > +#include "annotate.h"
-> > > > +#include "addr_location.h"
-> > > > +#include "debug.h"
-> > > > +#include "disasm.h"
-> > > > +#include "dso.h"
-> > > > +#include "machine.h"
-> > > > +#include "map.h"
-> > > > +#include "namespaces.h"
-> > > > +#include "print_insn.h"
-> > > > +#include "symbol.h"
-> > > > +#include "thread.h"
-> > > > +#include <fcntl.h>
-> > > > +#include <string.h>
-> > > > +
-> > > > +#ifdef HAVE_LIBCAPSTONE_SUPPORT
-> > > > +#include <capstone/capstone.h>
-> > > > +#endif
-> > >
-> > > I think you can use a big #ifdef throughout the file to minimize the
-> > > #ifdef dances.  Usually it goes to the header to provide dummy static
-> > > inlines and make the .c file depends on config.  But I know you will
-> > > add dlopen code for the #else case later.
-> >
-> > So I think big ifdefs like:
-> >
-> > #if HAVE_xyz
-> > // 100s of lines
-> > #else
-> > // 100s of lines
-> > #endif
-> >
-> > are best avoided. It is also the point of the shim-ing that we do
-> >
-> > ... perf_foobar(...)
-> > {
-> > #if NO_SHIM
-> >   ... foobar(...);
-> > #else
-> >   //dlsym code
-> > #endif
-> > }
-> >
-> > Having the shimming and not shimming as two separate functions buried
-> > in a 100 #ifdef loses that the code is common except for the shimming.
->
-> Right, can we split the common part and move it out of #ifdef?
->
-> >
-> > For example, in the current code we have find_file_offset:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/tools/perf/util/disasm.c?h=3Dperf-tools-next&id=3D91b7747dc70d64b5ec=
-56ffe493310f207e7ffc99#n1371
-> >
-> > It is only possible to understand the use of this seemingly common
-> > code by trying to interpret what's going on with the #ifdefs.
-> >
-> > I think it stylistically it is okay to have multiple stubbed out
-> > functions inside a #if or #else, such as:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
-t/tree/include/linux/perf_event.h?h=3Dperf-tools-next&id=3D91b7747dc70d64b5=
-ec56ffe493310f207e7ffc99#n1797
->
-> I think the convention in the kernel community is that it's better to
-> remove #ifdef's in .c files and add a dummy functions under !condition
-> in .h files.  If that's not possible, I think we should make the code
-> less conditional by minimizing the #ifdef's.
->
-> >
-> > But when the logic is shared and all in one file it becomes next to
-> > impossible to determine what's in use and what's not. Other than by
-> > tweaking things and trying to get build errors.
-> >
-> > So for the shims I've placed the #if inside the function to make it
-> > clear the function is a shim. For the other functions that are over
-> > 100s of lines, for clarity the individual functions have #if
-> > HAVE_LIBLLVM_SUPPORT around them to make it clear that the function
-> > only has a meaning in that context - ie the source code doesn't make
-> > you go on a #ifdef finding expedition to try to understand when the
-> > code is in use.
->
-> I think the both approaches have their own pros and cons.  Some people
-> prefer one and others may have different opinions.  I think the big
-> conditional block is better and easy to follow.  Maybe we cannot agree
-> on this.  Then I believe it'd be better to follow the convention, no?
+For perf lock contention, the current owner tracking (-o option) only
+works with per-thread mode (-t option). Enabling call stack mode for
+owner can be useful for diagnosing why a system running slow in
+lock contention.
 
-You are talking about a different convention. We're not doing
-something or having a dummy function, we're having a direct call to
-the underlying function or doing a shim through a dlsym. Having those
-in 2 separate functions and having the #ifdefs separated from the code
-it controls will impact the readability and lose the association I'm
-very much after having.
+Example output:
+  $ sudo ~/linux/tools/perf/perf lock con -abvo -Y mutex -E16 perf bench sched pipe
+   ...
+   contended   total wait     max wait     avg wait         type   caller
 
-Thanks,
-Ian
+         171      1.55 ms     20.26 us      9.06 us        mutex   pipe_read+0x57
+                          0xffffffffac6318e7  pipe_read+0x57
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+          36    193.71 us     15.27 us      5.38 us        mutex   pipe_write+0x50
+                          0xffffffffac631ee0  pipe_write+0x50
+                          0xffffffffac6241db  vfs_write+0x3bb
+                          0xffffffffac6244ab  ksys_write+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           4     51.22 us     16.47 us     12.80 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac69249b  do_epoll_pwait.part.0+0xb
+                          0xffffffffac693ba5  __x64_sys_epoll_pwait+0x95
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           2     20.88 us     11.95 us     10.44 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac693943  __x64_sys_epoll_wait+0x73
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      7.33 us      7.33 us      7.33 us        mutex   do_epoll_ctl+0x6c1
+                          0xffffffffac692e01  do_epoll_ctl+0x6c1
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      6.64 us      6.64 us      6.64 us        mutex   do_epoll_ctl+0x3d4
+                          0xffffffffac692b14  do_epoll_ctl+0x3d4
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+
+  === owner stack trace ===
+
+           3     31.24 us     15.27 us     10.41 us        mutex   pipe_read+0x348
+                          0xffffffffac631bd8  pipe_read+0x348
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+  ...
+
+v3: Edit based on Namhyung's review.
+
+v2: Fix logic deficit in patch 2/4.
+Chun-Tse Shao (4):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
+Chun-Tse Shao (5):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
+  perf lock: Update documentation for -o option in contention mode
+
+ tools/perf/builtin-lock.c                     |  60 +++-
+ tools/perf/util/bpf_lock_contention.c         |  70 ++++-
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 277 +++++++++++++++++-
+ tools/perf/util/bpf_skel/lock_data.h          |   7 +
+ tools/perf/util/lock-contention.h             |   7 +
+ 5 files changed, 398 insertions(+), 23 deletions(-)
+
+--
+2.48.1.262.g85cc9f2d1e-goog
+
