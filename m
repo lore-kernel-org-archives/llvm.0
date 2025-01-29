@@ -1,196 +1,253 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DAD13957E
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 16:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3BF42A8B;
+	Wed, 29 Jan 2025 17:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738169225; cv=none; b=NtG02hqJzTEhBXqJ3Je7X6Vn1vYJ75ks4+0lMiu4eLwNheJ1CQOEDTRORaP22PObqtEwTg9kSXZwEeU13en9a5EsrRK5nSyHR/PI9hEtWPaAcdgdhL/5N1yddNtmqSWHpfoLMit5NIE7cOaSP0Zjasq9Y2KsYoymFWEEpbBfXHY=
+	t=1738170087; cv=none; b=hdAVIFx/YnY/pzmgjDtr4OY23Rjrz7ZpYO/feUFY7854Oij0cniFDtFJrC3Odt/wwv4MbXc69nCcdhPUubFdgLOdw3Chfly8TsmN+qlShGmgI+ZRgxBPV5SMGWoDJFDLdu56YgJma97T00LAp2ZKyLmjhT3TAnzCqMFt6sYCre4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738169225; c=relaxed/simple;
-	bh=r1nG52j9rH5FCWzEjjRLiGuF+MRwAEw2xmFk2SM8rMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X3B8TouQhiPmhArKYGzQg57TrQHbPHzsz05p1L7llxdIRw9rJrfaPf6MSa069YGjlLl/QAIPxt0CXfo6NLGkCn9SEPwVhl0my7TA64I5z3b4YAZeLwuiBSEUwzvtuuLN7O7lFrUju0TdAJ1eS09pdgTYlKi03+mmHKn62wnl9oE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=U9hDD9mF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LBrTDyEr; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1738170087; c=relaxed/simple;
+	bh=COwRKJRLOfvN6VczMs+rEupv18oBz7nDINnGzWllMv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YibKjg+J8zwYs40kntIdh410YuIN7DiVtjJykZ0Msupx3cFZOCfvxfHu0T6yLlk+p/oQSRfe2+YFmfgKGj1x6aHbhfQlO/Gs9XHwBCfxViCAQq9FnHel+o0XJ0wwuavGB/D6bkEfno6FImOGmbrTrz/cD2/6rpPgqtdkatsOmzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=laL/SZID; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="U9hDD9mF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LBrTDyEr"
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id 397321380B1F;
-	Wed, 29 Jan 2025 11:47:02 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Wed, 29 Jan 2025 11:47:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1738169222;
-	 x=1738255622; bh=hxHNdS7WS0R6RbySdyoltquzgKovzLwAMtD/wCqj+rw=; b=
-	U9hDD9mFL2aSc9BQcw/Eqm3mgMLVqKE0fkRF7wL98R0gWrMtIA+by/gvelFG7lHO
-	hJ3F2jFIliIi294xipHz/raU3hKqp8SSaqFoIKg4FhxH0yM4GC95FsQvfCRKcxdv
-	b5Pk3rMvyuKDqh7aL/nwmoD6z9q9exZD/Dsvqic9mZaoprgBECqUm8EKagK19EAM
-	mhK07xmum4wk9WzYjE3ZZoxoHfKhQiDZ+jKo06chwqheq8fq9s1l49uie8Tqu1uZ
-	J5MrZBQcGCVnLVUMBWDbYZgs8263ihd349OYhUDi0MzZv2bfafWpPDbYMuQoo2wB
-	gHzb9GVl4eEWlnaHcMa7AQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738169222; x=
-	1738255622; bh=hxHNdS7WS0R6RbySdyoltquzgKovzLwAMtD/wCqj+rw=; b=L
-	BrTDyEr5ZzhuSGtRlzjV/kcWlY1/DbnWnvXZsjbyVBmk6FwtWvErNCB0FBWm6cYs
-	Is8UogEGm+G1Ba5CVQD2P2xLCdTKVQJ+7d33yUgO70QwX7axY1yaS/1pW3nhRW8c
-	+xajFw57brgHltQ2ClZxyucqbx2gboGmuGy5lRrQlwY8ZyknIuZf1JZ6jfNACGCq
-	NRS+3qMoCAEII4l5eTWKElte1t/zePostkJtHNczwPFPuST+Mr2/231ZmQpj0igJ
-	55IMC7VbDAFw0Ez8ebSJE1khCF6U8tm3BGR48z/qIrg1hKPjSwW7J5fRXm4tyvoT
-	odca5uM/I78dRaIVHAx+w==
-X-ME-Sender: <xms:hFuaZwv57J0VT4o0lStYEjEsIMnEQKLce7_rYEMcsYnmWYy0EqZ3nQ>
-    <xme:hFuaZ9cHwI3r-xyNnmnj59HyVm7n-z86IH-nvz0RX6PcJYliRnyDtS3yNYdo7WMkw
-    WYPH_Bw6Kdc2z_WnA>
-X-ME-Received: <xmr:hFuaZ7zYYoXKBcC6BCyCfCvGe-ZFP_Nf35O9-Kr2o4Nj2BmqFHfnTpg4iVaf0qSSr1CW7Xk9AZdj55ihAHHrQclUpvTioY-yu1frTkS3Ds8J8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefhedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhf
-    gggtugfgjgestheksfdttddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeffudfhgfduheeuieeivdehgfej
-    udegueevheevgeehfeekieduhffhheelvdfgudenucffohhmrghinhepkhgvrhhnvghlrd
-    horhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgtphhtthhope
-    efuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepihhrohhgvghrshesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpd
-    hrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprggtmhgv
-    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghmhhihuhhngheskhgvrhhnvghlrd
-    horhhgpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghp
-    thhtoheprghlvgigrghnuggvrhdrshhhihhshhhkihhnsehlihhnuhigrdhinhhtvghlrd
-    gtohhmpdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    rggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomh
-X-ME-Proxy: <xmx:hFuaZzOcArRnJ_FJ2Vtn3w4gjlBNtLTx_BUQIRwVR7OWoh7EY_xPwQ>
-    <xmx:hFuaZw8YunJUVdW1yEsxaLGkCqypTU7cNXui_uO6NFoi3lDJMWrYtQ>
-    <xmx:hFuaZ7VUlLvYdM80h17oLgxKy8vHudbw9MEJPiZuaSMdhquZYuMCgA>
-    <xmx:hFuaZ5dAvKH0Im2uZFBvUm1c-P7MuDcfAIml-ERSoFM30wZOMrh9tg>
-    <xmx:hluaZx5kTHbOJ_5lvg0et1AUXGoEdBrEL0XCC_Pmhe3ubgBgLy734eYg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 29 Jan 2025 11:46:57 -0500 (EST)
-Date: Wed, 29 Jan 2025 09:46:56 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- 	Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, 	Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- 	Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- 	Kan Liang <kan.liang@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- 	Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, 	Justin Stitt <justinstitt@google.com>,
- Aditya Gupta <adityag@linux.ibm.com>,
- 	"Steinar H. Gunderson" <sesse@google.com>,
- Charlie Jenkins <charlie@rivosinc.com>,
- 	Changbin Du <changbin.du@huawei.com>,
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- 	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>,
- 	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Li Huafei <lihuafei1@huawei.com>, 	Dmitry Vyukov <dvyukov@google.com>,
- Andi Kleen <ak@linux.intel.com>,
- 	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- 	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Subject: Re: [PATCH v3 13/18] perf build: Remove libbfd support
-Message-ID: <jgxfnphfo3nzlfipnuuzdlfc4ehbr2tnh2evz3mdhynd6wvrsu@fcz6vrvepybb>
-References: <20250122174308.350350-1-irogers@google.com>
- <20250122174308.350350-14-irogers@google.com>
- <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
- <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="laL/SZID"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738170086; x=1769706086;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=COwRKJRLOfvN6VczMs+rEupv18oBz7nDINnGzWllMv0=;
+  b=laL/SZIDY+O5RtIy/ka9dll8EVjR60xtR0ba24w/gYGYMsMCL3RSzszx
+   oKSIhgtNf6VVL5m7L1RI4dDFI/nUaDOHFjV8fFVvCmzEDIzWIblxOg46G
+   5seOzv0qFtIAs2ZRq9u05Hng1YICW3cPrajEnbPruUacAM2bWi4OTeemZ
+   D+VzRbwFSgcDTMtkmH0cnI5mPKsKgkb7NF9wA+pPQD0cl7iR6q5pByWX0
+   c3wGZBuMBAJ/BzxsXLif0CfYEikt1iQMut0T9VSoLGzDXQpsXN81dSWFY
+   LsoLt5Hhzn14hJpNiorQve2bZvgwq1RyNXBD2bfigwx/y2/R/Sa5Ix0XM
+   w==;
+X-CSE-ConnectionGUID: XBbnyr2jQgWbPQGRcOq4RA==
+X-CSE-MsgGUID: lAd5tZ9sR8mIKq0loxN5HQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="38796713"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="38796713"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 09:01:25 -0800
+X-CSE-ConnectionGUID: 26Snl3anSe22OGs5u01JPQ==
+X-CSE-MsgGUID: t8q38qmDRTKigyrctmDBoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
+   d="scan'208";a="109063454"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 29 Jan 2025 09:01:23 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdBRJ-000jAN-0J;
+	Wed, 29 Jan 2025 17:01:21 +0000
+Date: Thu, 30 Jan 2025 01:00:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 43/43] include/trace/events/netfs.h:249:25:
+ error: redefinition of enumerator 'netfs_sreq_trace_need_retry'
+Message-ID: <202501300009.BsbCOQzD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
 
-On Tue, Jan 28, 2025 at 05:40:44PM -0800, Ian Rogers wrote:
-> On Tue, Jan 28, 2025 at 4:31 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > Hi Ian,
-> >
-> > On Wed, Jan 22, 2025 at 09:43:03AM -0800, Ian Rogers wrote:
-> > > libbfd is license incompatible with perf and building requires the
-> > > BUILD_NONDISTRO=1 build flag. Remove the code to simplify the code
-> > > base.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/Documentation/perf-check.txt |   1 -
-> > >  tools/perf/Makefile.config              |  38 +---
-> > >  tools/perf/builtin-check.c              |   1 -
-> > >  tools/perf/tests/Build                  |   1 -
-> > >  tools/perf/tests/builtin-test.c         |   1 -
-> > >  tools/perf/tests/pe-file-parsing.c      | 101 ----------
-> > >  tools/perf/tests/tests.h                |   1 -
-> > >  tools/perf/util/demangle-cxx.cpp        |  13 +-
-> > >  tools/perf/util/disasm_bpf.c            | 166 ----------------
-> > >  tools/perf/util/srcline.c               | 243 +-----------------------
-> > >  tools/perf/util/symbol-elf.c            |  86 +--------
-> > >  tools/perf/util/symbol.c                | 135 -------------
-> > >  tools/perf/util/symbol.h                |   4 -
-> > >  13 files changed, 7 insertions(+), 784 deletions(-)
-> > >  delete mode 100644 tools/perf/tests/pe-file-parsing.c
-> >
-> > [..]
-> >
-> > I was briefly investigating why the centos build of perf was not
-> > demangling rust v0 symbols [0]. From looking at the rust issue [1], it
-> > appears the rust team somehow delivered support for v0 demangling
-> > through libbfd. The code itself looked a bit odd (relying on cxx
-> > demangle to run first?), but that's a separate thing.
-> 
-> There is still C++ demangling support by way of cxxabi:
-> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/demangle-cxx.cpp?h=perf-tools-next#n44
-> that was in libstdc++ (GNU) and libcxx (LLVM) when I looked.
-> 
-> > The centos build does not build with libbfd for the license issues you
-> > mentioned. So your change probably won't regress any distro use cases.
-> > But it does remove support for motivated users who don't have
-> > re-distribution requirements.
-> >
-> > But since this patchset came up first in my search, I thought it'd be
-> > good to mention that someone probably needs to add v0 support to
-> > tools/perf/util/demangle-rust.c.
-> 
-> So I don't see any libbfd dependencies in demangle-rust.c:
-> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/demangle-rust.c?h=perf-tools-next#n8
-> Unusually we don't have any tests on the Rust demangling, we do for
-> Java and OCaml:
-> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/tests/demangle-java-test.c?h=perf-tools-next
-> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/tests/demangle-ocaml-test.c?h=perf-tools-next
-> 
-> Reading a bit more it seems that previous libiberty was coming to the
-> rescue by way of C++ demangling. I'll see if I can write a demangler
-> by way of lex and yacc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   99bca1b95b54b7a3e7260c2431b587639482a71d
+commit: 99bca1b95b54b7a3e7260c2431b587639482a71d [43/43] ceph: Use netfslib
+config: s390-randconfig-002-20250129 (https://download.01.org/0day-ci/archive/20250130/202501300009.BsbCOQzD-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501300009.BsbCOQzD-lkp@intel.com/reproduce)
 
-Cool :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501300009.BsbCOQzD-lkp@intel.com/
 
-> If we have a v0 standard one is there any
-> value in the existing demangler or legacy demangling? It seems this
-> has been broken for the best part of 5 years.
+All errors (new ones prefixed by >>):
 
-I believe the "legacy" symbol format is still the rust default. So
-probably can't remove that. Looks like there's some desire to change
-that, probably probably not very soon [0].
+   In file included from fs/ceph/rdwr.c:51:
+>> include/trace/events/netfs.h:249:25: error: redefinition of enumerator 'netfs_sreq_trace_need_retry'
+     249 | enum netfs_sreq_trace { netfs_sreq_traces } __mode(byte);
+         |                         ^
+   include/trace/events/netfs.h:110:5: note: expanded from macro 'netfs_sreq_traces'
+     110 |         EM(netfs_sreq_trace_need_retry,         "ND-RT")        \
+         |            ^
+   include/trace/events/netfs.h:249:25: note: previous definition is here
+   include/trace/events/netfs.h:107:5: note: expanded from macro 'netfs_sreq_traces'
+     107 |         EM(netfs_sreq_trace_need_retry,         "NRTRY")        \
+         |            ^
+>> fs/ceph/rdwr.c:644:22: error: use of undeclared identifier 'ceph_invalidate_folio'; did you mean 'netfs_invalidate_folio'?
+     644 |         .invalidate_folio = ceph_invalidate_folio,
+         |                             ^~~~~~~~~~~~~~~~~~~~~
+         |                             netfs_invalidate_folio
+   include/linux/netfs.h:475:6: note: 'netfs_invalidate_folio' declared here
+     475 | void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length);
+         |      ^
+>> fs/ceph/rdwr.c:847:14: error: call to undeclared function 'ceph_direct_read_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     847 |                         written = ceph_direct_read_write(iocb, &data, snapc,
+         |                                   ^
+   fs/ceph/rdwr.c:847:14: note: did you mean 'ceph_prepare_write'?
+   fs/ceph/rdwr.c:211:13: note: 'ceph_prepare_write' declared here
+     211 | static void ceph_prepare_write(struct netfs_io_subrequest *subreq)
+         |             ^
+>> fs/ceph/rdwr.c:850:14: error: call to undeclared function 'ceph_sync_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     850 |                         written = ceph_sync_write(iocb, &data, pos, snapc);
+         |                                   ^
+   fs/ceph/rdwr.c:850:14: note: did you mean 'ceph_issue_write'?
+   fs/ceph/rdwr.c:144:13: note: 'ceph_issue_write' declared here
+     144 | static void ceph_issue_write(struct netfs_io_subrequest *subreq)
+         |             ^
+   4 errors generated.
+--
+   In file included from fs/ceph/addr.c:16:
+>> include/trace/events/netfs.h:249:25: error: redefinition of enumerator 'netfs_sreq_trace_need_retry'
+     249 | enum netfs_sreq_trace { netfs_sreq_traces } __mode(byte);
+         |                         ^
+   include/trace/events/netfs.h:110:5: note: expanded from macro 'netfs_sreq_traces'
+     110 |         EM(netfs_sreq_trace_need_retry,         "ND-RT")        \
+         |            ^
+   include/trace/events/netfs.h:249:25: note: previous definition is here
+   include/trace/events/netfs.h:107:5: note: expanded from macro 'netfs_sreq_traces'
+     107 |         EM(netfs_sreq_trace_need_retry,         "NRTRY")        \
+         |            ^
+   1 error generated.
+--
+   In file included from fs/netfs/main.c:12:
+   In file included from fs/netfs/internal.h:15:
+>> include/trace/events/netfs.h:249:25: error: redefinition of enumerator 'netfs_sreq_trace_need_retry'
+     249 | enum netfs_sreq_trace { netfs_sreq_traces } __mode(byte);
+         |                         ^
+   include/trace/events/netfs.h:110:5: note: expanded from macro 'netfs_sreq_traces'
+     110 |         EM(netfs_sreq_trace_need_retry,         "ND-RT")        \
+         |            ^
+   include/trace/events/netfs.h:249:25: note: previous definition is here
+   include/trace/events/netfs.h:107:5: note: expanded from macro 'netfs_sreq_traces'
+     107 |         EM(netfs_sreq_trace_need_retry,         "NRTRY")        \
+         |            ^
+   In file included from fs/netfs/main.c:14:
+   In file included from include/trace/events/netfs.h:759:
+   In file included from include/trace/define_trace.h:113:
+   In file included from include/trace/trace_events.h:107:
+>> include/trace/events/netfs.h:273:1: error: redefinition of '__TRACE_SYSTEM_netfs_sreq_trace_need_retry'
+     273 | netfs_sreq_traces;
+         | ^
+   include/trace/events/netfs.h:110:2: note: expanded from macro 'netfs_sreq_traces'
+     110 |         EM(netfs_sreq_trace_need_retry,         "ND-RT")        \
+         |         ^
+   include/trace/events/netfs.h:265:18: note: expanded from macro 'EM'
+     265 | #define EM(a, b) TRACE_DEFINE_ENUM(a);
+         |                  ^
+   include/trace/stages/init.h:16:2: note: expanded from macro 'TRACE_DEFINE_ENUM'
+      16 |         __##TRACE_SYSTEM##_##a =                        \
+         |         ^
+   <scratch space>:157:1: note: expanded from here
+     157 | __TRACE_SYSTEM_netfs_sreq_trace_need_retry
+         | ^
+   include/trace/events/netfs.h:273:1: note: previous definition is here
+   include/trace/events/netfs.h:107:2: note: expanded from macro 'netfs_sreq_traces'
+     107 |         EM(netfs_sreq_trace_need_retry,         "NRTRY")        \
+         |         ^
+   include/trace/events/netfs.h:265:18: note: expanded from macro 'EM'
+     265 | #define EM(a, b) TRACE_DEFINE_ENUM(a);
+         |                  ^
+   include/trace/stages/init.h:16:2: note: expanded from macro 'TRACE_DEFINE_ENUM'
+      16 |         __##TRACE_SYSTEM##_##a =                        \
+         |         ^
+   <scratch space>:124:1: note: expanded from here
+     124 | __TRACE_SYSTEM_netfs_sreq_trace_need_retry
+         | ^
+   In file included from fs/netfs/main.c:14:
+   In file included from include/trace/events/netfs.h:759:
+   In file included from include/trace/define_trace.h:113:
+   In file included from include/trace/trace_events.h:107:
+>> include/trace/events/netfs.h:273:1: error: redefinition of 'TRACE_SYSTEM_netfs_sreq_trace_need_retry'
+     273 | netfs_sreq_traces;
+         | ^
+   include/trace/events/netfs.h:110:2: note: expanded from macro 'netfs_sreq_traces'
+     110 |         EM(netfs_sreq_trace_need_retry,         "ND-RT")        \
+         |         ^
+   include/trace/events/netfs.h:265:18: note: expanded from macro 'EM'
+     265 | #define EM(a, b) TRACE_DEFINE_ENUM(a);
+         |                  ^
+   include/trace/stages/init.h:24:3: note: expanded from macro 'TRACE_DEFINE_ENUM'
+      24 |         *TRACE_SYSTEM##_##a = &__##TRACE_SYSTEM##_##a
+         |          ^
+   <scratch space>:4:1: note: expanded from here
+       4 | TRACE_SYSTEM_netfs_sreq_trace_need_retry
+         | ^
+   include/trace/events/netfs.h:273:1: note: previous definition is here
+   include/trace/events/netfs.h:107:2: note: expanded from macro 'netfs_sreq_traces'
+     107 |         EM(netfs_sreq_trace_need_retry,         "NRTRY")        \
+         |         ^
+   include/trace/events/netfs.h:265:18: note: expanded from macro 'EM'
+     265 | #define EM(a, b) TRACE_DEFINE_ENUM(a);
+         |                  ^
+   include/trace/stages/init.h:24:3: note: expanded from macro 'TRACE_DEFINE_ENUM'
+      24 |         *TRACE_SYSTEM##_##a = &__##TRACE_SYSTEM##_##a
+         |          ^
+   <scratch space>:128:1: note: expanded from here
+     128 | TRACE_SYSTEM_netfs_sreq_trace_need_retry
+         | ^
+   3 errors generated.
 
-That probably also explains why nobody reported the breakage - only very
-cool kids are using v0 scheme currently.
 
-Thanks,
-Daniel
+vim +/netfs_sreq_trace_need_retry +249 include/trace/events/netfs.h
 
+5ac417d24c6cc2 David Howells 2022-02-02  245  
+5ac417d24c6cc2 David Howells 2022-02-02  246  enum netfs_read_trace { netfs_read_traces } __mode(byte);
+0e0f2dfe880fb1 David Howells 2021-06-29  247  enum netfs_write_trace { netfs_write_traces } __mode(byte);
+5ac417d24c6cc2 David Howells 2022-02-02  248  enum netfs_rreq_trace { netfs_rreq_traces } __mode(byte);
+5ac417d24c6cc2 David Howells 2022-02-02 @249  enum netfs_sreq_trace { netfs_sreq_traces } __mode(byte);
+5ac417d24c6cc2 David Howells 2022-02-02  250  enum netfs_failure { netfs_failures } __mode(byte);
+de74023befa187 David Howells 2022-02-17  251  enum netfs_rreq_ref_trace { netfs_rreq_ref_traces } __mode(byte);
+6cd3d6fd1fe2fe David Howells 2022-02-17  252  enum netfs_sreq_ref_trace { netfs_sreq_ref_traces } __mode(byte);
+c38f4e96e605f1 David Howells 2021-06-17  253  enum netfs_folio_trace { netfs_folio_traces } __mode(byte);
+288ace2f57c9d0 David Howells 2024-03-18  254  enum netfs_collect_contig_trace { netfs_collect_contig_traces } __mode(byte);
+ee4cdf7ba857a8 David Howells 2024-07-02  255  enum netfs_donate_trace { netfs_donate_traces } __mode(byte);
+aabcabf2746062 David Howells 2024-12-16  256  enum netfs_folioq_trace { netfs_folioq_traces } __mode(byte);
+5ac417d24c6cc2 David Howells 2022-02-02  257  
+5ac417d24c6cc2 David Howells 2022-02-02  258  #endif
+77b4d2c6316ab0 David Howells 2020-09-18  259  
+77b4d2c6316ab0 David Howells 2020-09-18  260  /*
+77b4d2c6316ab0 David Howells 2020-09-18  261   * Export enum symbols via userspace.
+77b4d2c6316ab0 David Howells 2020-09-18  262   */
+77b4d2c6316ab0 David Howells 2020-09-18  263  #undef EM
+77b4d2c6316ab0 David Howells 2020-09-18  264  #undef E_
+77b4d2c6316ab0 David Howells 2020-09-18  265  #define EM(a, b) TRACE_DEFINE_ENUM(a);
+77b4d2c6316ab0 David Howells 2020-09-18  266  #define E_(a, b) TRACE_DEFINE_ENUM(a);
+77b4d2c6316ab0 David Howells 2020-09-18  267  
+77b4d2c6316ab0 David Howells 2020-09-18  268  netfs_read_traces;
+0e0f2dfe880fb1 David Howells 2021-06-29  269  netfs_write_traces;
+663dfb65c3b3ea David Howells 2021-08-26  270  netfs_rreq_origins;
+77b4d2c6316ab0 David Howells 2020-09-18  271  netfs_rreq_traces;
+77b4d2c6316ab0 David Howells 2020-09-18  272  netfs_sreq_sources;
+77b4d2c6316ab0 David Howells 2020-09-18 @273  netfs_sreq_traces;
+0246f3e5737d0b David Howells 2021-04-06  274  netfs_failures;
+de74023befa187 David Howells 2022-02-17  275  netfs_rreq_ref_traces;
+6cd3d6fd1fe2fe David Howells 2022-02-17  276  netfs_sreq_ref_traces;
+c38f4e96e605f1 David Howells 2021-06-17  277  netfs_folio_traces;
+288ace2f57c9d0 David Howells 2024-03-18  278  netfs_collect_contig_traces;
+ee4cdf7ba857a8 David Howells 2024-07-02  279  netfs_donate_traces;
+aabcabf2746062 David Howells 2024-12-16  280  netfs_folioq_traces;
+77b4d2c6316ab0 David Howells 2020-09-18  281  
 
-[0]: https://github.com/rust-lang/rust/pull/89917
+:::::: The code at line 249 was first introduced by commit
+:::::: 5ac417d24c6cc2fa9ac69d8b9f4510a38ec40486 netfs: Generate enums from trace symbol mapping lists
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
