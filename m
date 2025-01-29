@@ -1,151 +1,88 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A651AA1D8
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 22:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B870C18FDCE;
+	Wed, 29 Jan 2025 23:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738190811; cv=none; b=sRe5K+CtQUaV13F/3wK0oIic6Hq8yX+hTBYC8QBYFx/JQZCfNaTcR9at3R1zE6l0POI0R6TcNCCG4wK/tftNBeKNn/x/zMrgbO0Kftvv5NH9pCQR4cJv8gkq7hK2HYhTDa/cWiCXLTdzIG5X4xFLPJlDy7UwDYCU4fxRq+6YE+I=
+	t=1738191777; cv=none; b=QYPL0dh4GY/XZku9z+RMDTtQkqZ1gr6giqAHwdry8NijkTRAh0GXfgXLjoZfHghIwPHjJ9X8DLt5Nd+UimjzK+4M8KXVkTeRFb829X0Y2wS+7GKVxCK9I2Tiygk8dGGM4LJmBFwbBbG4jEodCN4aSe5sgEhbPeO+HNHvmORdy6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738190811; c=relaxed/simple;
-	bh=jM+JF1tuc0aPq+iNTEeRlvQCh0lTlkEWbnnMIMUHuqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZifFfbkRpVouMztNcZjkqzuxYI/wSQ3vt+VtWQtkMLmOBXt7AfHUWWhns2jRSBvNSVLbkz5DmLGiTYDZkPfveK7cROY2T2Bt6AqWe2wbp+sDtNvx/SHU116oFB1aOUKI3+wVtY5dtTy5WCEd1npgtFwyv82k+mWyqn93AKlZJvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eT5Q5vmP; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738191777; c=relaxed/simple;
+	bh=uUyVDczqk1R0mh5t5rj/thcPy+rTmbPHGUuCVgvW7Jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsbLLpn6rCqEsBEMPjihTw6J8vJ8hD8pC6cS5uVkPILi6QItE6RykQ2Ne5wW1p7+Ys1eiFyAw0sKGhS5MsUQ1W6IkCMeNIvqcod7On0R7pNjv7dkze1IlWvSporuaix6nEAv6CY00klGVMqxDzqc/vlOanmYSlcpLUVTufSv8hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=itWlX2OR; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eT5Q5vmP"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so725015e9.1
-        for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 14:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738190808; x=1738795608; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GmvxfS/EO0PIn6aCNLLuoJebE/8xsvo0sCWW4T8X2eE=;
-        b=eT5Q5vmPN9LjP7hM1M4ZPHGSeLPI/h/XIfaqUDmMmofT3LoycOX1WfDsiytTEzaaIf
-         jlKWsGz1ARpT8zcmikofXKSTsMQnejCbLvHd0NbnZZyohE40wGyCvJA67AAgd50T9iuE
-         RyLT/UtAsAHjneN3+KkyezjNXYr47DTLBB4+po6fJlrMtHE7DPuYI3Pm3sWIn9c5rBBm
-         Qk4F+tHmY7N33o2qQE7yaE6aiXL8kGzrF1/4H9SuFTwFTz9xnputNSr7OCY7Pr6tnq6V
-         TzvtZSkza7IbymJWNmmbkOGFiAcDr/ojxGZysJlOJhlznkskVLGJvQtV48UXu7bceaEK
-         5svg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738190808; x=1738795608;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GmvxfS/EO0PIn6aCNLLuoJebE/8xsvo0sCWW4T8X2eE=;
-        b=vSWxJxbx65u50M+5kA2uDVzOFr7ABUSZN2Rb8yX0sexzRHM16kfAlcJatjhrlbggIw
-         4/bOhoa3uIFZQKZBWT1WjDpo4f33f00OUpxJDPywKvipaBXmWY9CeXb8y+6HgPmve7Yd
-         F7CM1CTJqOEdN4bxSlXb64qwoZD3uTDqxhEUvJblSmNfB8e+Of4hLNhKs4f6aDhCgeAn
-         /mST6phVynKhn9jr+F00wy8dDgqNGbOg8obBA2LYHvxTU3Is8c0QI3zb5p7cU/mY1wrl
-         ooagaLOHzVypDrWR4Ay/37QtVOPIAeV7c55+TPNHef1RWkihKOCd88msmJxzhG3dLJR7
-         olaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWMB80newEHuuStUGzAWTnq5+1CJGYyg/INTclvDQ4pREaKeEztWyAacZNq8u3Uc943UpI8@lists.linux.dev
-X-Gm-Message-State: AOJu0YyNWMCqeyShalwXwdeucG4WYoUkqjetIZyBejc7W3JiGN4qPG8K
-	2nvlX8y57thTNFaJic2o9JBxn2wzHQkxtlw7ZDcdWLUwIVKJKp6f
-X-Gm-Gg: ASbGncsxdT1RiV+t7CxXXvbjQmikwn/D83lh6uRBwK6F0DYk2vyV9aBparhdcfIhXoU
-	VtGpEv0y+R54P/mvCNVxcEimkt2S2wBL35EtIxij/gIfwMSk1GSRao15HIZBt+s+4Fb/mg6qSl/
-	cjbtl4CTIRrrXMXJdQxyFDKcg50XFnTULB8ssIfEoIzKwU7KmMi7zw6fiugOsrzQAMazBZJjm6I
-	JK4+d+Wv5trvAqamrTzN7Dyq8DcGXqhHSmHIwb21Jb99M2IFcydFC2r5wELMxk5pe+Jb4Ick2hM
-	ZL2lxZokOQ01OMHtY9tSFTUbAF/EJL2GaSrR6tpwC1B/NPjH4ALUfg==
-X-Google-Smtp-Source: AGHT+IEbiT0NntEOD+phSpXzHaEDeog5yXd+fKeNamOBs2OoNyYQ2pruZWg7BKcGdm/hSVEfYQUk+A==
-X-Received: by 2002:a05:6000:1788:b0:385:ef39:6ce9 with SMTP id ffacd0b85a97d-38c5194c69amr5482326f8f.21.1738190806495;
-        Wed, 29 Jan 2025 14:46:46 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e244f38esm1406115e9.26.2025.01.29.14.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 14:46:45 -0800 (PST)
-Date: Wed, 29 Jan 2025 22:46:44 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Bart Van Assche <bvanassche@acm.org>, Ivan Shapovalov
- <intelfx@intelfx.name>, Andrew Morton <akpm@linux-foundation.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, David Rientjes
- <rientjes@google.com>, David Hildenbrand <david@redhat.com>, Joel Granados
- <joel.granados@kernel.org>, Sourav Panda <souravpanda@google.com>, Kaiyang
- Zhao <kaiyang2@cs.cmu.edu>, Johannes Weiner <hannes@cmpxchg.org>,
- Konstantin Khlebnikov <koct9i@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm/vmstat: Fix a W=1 clang compiler warning
-Message-ID: <20250129224644.0f7228db@pumpkin>
-In-Reply-To: <a4dc3313-b9b7-4075-b082-7232b3b7717b@suse.cz>
-References: <20241212182425.ad1f7894cd0f00b2e34bbaed@linux-foundation.org>
-	<20250122015818.3308696-1-intelfx@intelfx.name>
-	<6a45a521-71a3-4087-9320-b8aeecea205a@acm.org>
-	<a4dc3313-b9b7-4075-b082-7232b3b7717b@suse.cz>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="itWlX2OR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=KfRVwiVvoIL5yKlVMJTKUtLAc62tnU62cuq5lssPDUQ=; b=itWlX2ORYkxDIMR7KkPfVOS3of
+	mA85c29LcGu6a4faK14Mlody6Myv+SWb1GHg19xlyJhbt5kNYKL2B6FpdlCzEbLARSUcwIQ41cQp2
+	X3vUGRs2gB+fEnK2awaGyv8k71Lho6DGBejeORiCL09uQN8gi/TjYFeHTA8uo4HmrpRscM4j6aLIz
+	P3lIYaOUS7rd0pVqvJZizXk+7R5iOVbXpM+PqOLscrJzqevkL7Q7zxDqivU4iNaKk9v71jIu7WHqj
+	TR4S7YHpuau7rMlzD3CKsqBglLYiS4B7CSyb0omVXOzya/c7BmEEinKDhwyRgTc5VhdLT/3KJbYAk
+	J771SZTQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tdH51-0000000CYOC-1aDq;
+	Wed, 29 Jan 2025 23:02:43 +0000
+Date: Wed, 29 Jan 2025 23:02:43 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+	akpm@linux-foundation.org, christophe.leroy@csgroup.eu,
+	geert@linux-m68k.org, justinstitt@google.com,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
+	maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au,
+	nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com,
+	npiggin@gmail.com, linux-mm@kvack.org
+Subject: Re: [PATCH] xarray: port tests to kunit
+Message-ID: <Z5qzk_92KU0xoLcP@casper.infradead.org>
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com>
+ <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+ <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
+ <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+ <CAJ-ks9=hNGRFbr3sTQBma3u84Yhog7i33Oc=16FqFjE_JYNERA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ-ks9=hNGRFbr3sTQBma3u84Yhog7i33Oc=16FqFjE_JYNERA@mail.gmail.com>
 
-On Wed, 29 Jan 2025 11:22:00 +0100
-Vlastimil Babka <vbabka@suse.cz> wrote:
-
-> On 1/28/25 22:36, Bart Van Assche wrote:
-> > On 1/21/25 5:57 PM, Ivan Shapovalov wrote:  
-> >>> Spose so.  One always suspects that adding a typecast is a sign that we
-> >>> screwed things up somehow.  The relationship between enums lru_list and
-> >>> node_stat_item is foggy, and I'm unsure whether this is the place to
-> >>> make the transition it.  Perhaps lru_list_name() should take an
-> >>> `unsigned int' arg instead.  
-> >> 
-> >> All of these *_name() functions do seem to expect arguments in range of
-> >> the corresponding enums, so perhaps keep those args typed as a form of
-> >> self-documenting code, and do this instead?  
-> > 
-> > If nobody objects I will submit this patch for review after the merge
-> > window has closed:
-> > 
-> > Subject: [PATCH] mm/vmstat: Fix W=1 clang compiler warnings
-> > 
-> > Commit 30c2de0a267c ("mm/vmstat: fix a W=1 clang compiler warning")
-> > suppresses some but not all compiler warnings that are reported by clang
-> > when building with W=1 about NR_LRU_BASE and NR_ZONE_LRU_BASE. Hence
-> > revert commit 30c2de0a267c and instead make NR_LRU_BASE and
-> > NR_ZONE_LRU_BASE integer constants instead of enumeration constants.
-> > 
-> > Cc: Ivan Shapovalov <intelfx@intelfx.name>
-> > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> > ---
-> >   include/linux/mmzone.h | 22 +++++++++++++++++++---
-> >   include/linux/vmstat.h |  9 +++++++--
-> >   2 files changed, 26 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > index 9540b41894da..92ed919ea99d 100644
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -135,10 +135,19 @@ enum numa_stat_item {
-> >   #define NR_VM_NUMA_EVENT_ITEMS 0
-> >   #endif
-> > 
-> > +/*
-> > + * NR_ZONE_LRU_BASE and NR_VM_ZONE_STAT_ITEMS are often added to 
-> > enumeration
-> > + * constants of another type than enum_zone_stat_item. Define these 
-> > constants
-> > + * as an integer instead of enum node_stat_item to prevent that the 
-> > compiler
-> > + * warns about enumeration type mismatches when these constants are used.
-> > + */
-> > +#define NR_ZONE_LRU_BASE	(1 * __NR_ZONE_LRU_BASE)
-> > +#define NR_VM_ZONE_STAT_ITEMS	(1 * __NR_VM_ZONE_STAT_ITEMS)  
+On Wed, Jan 29, 2025 at 05:33:06PM -0500, Tamir Duberstein wrote:
+> >  $ ./scripts/get_maintainer.pl --git lib/xarray.c
+> > Matthew Wilcox <willy@infradead.org> (supporter:XARRAY,commit_signer:1/3=33%,authored:1/3=33%,added_lines:19/52=37%,removed_lines:4/23=17%)
+> > Andrew Morton <akpm@linux-foundation.org> (supporter:LIBRARY CODE,commit_signer:3/3=100%)
 > 
-> Seems an acceptable approach, dunno if this multiply by one is any better
-> than casting to int?
+> I'm not sure what you're asking. I used `b4 prep --auto-to-cc`. It
+> doesn't know that test_xarray.c and xarray.c have the same maintainer.
 
-I'd probably use (enum_value + 0) rather than a multiply.
-And, if you are going to use multiply, I think it should be (value * 1)
-for the same reason that 'if (1 == x)' horrible.
+You need to use your brain.  You can't just say "I used the tool".
+Tools are just tools.  Sometimes they're wrong.  My email address is
+listed as the Author: of test_xarray.c.  You should have noticed that.
 
-	David
+> For what it's worth the kunit invocation, while obscure, is
+> self-documenting. There's usage information that's reasonably
+> understandable embedded in the tool itself. I looked for the userspace
+> testing initially but failed to find
+> tools/testing/radix-tree/xarray.c. Even now, I'm not sure how I'm
+> meant to compile this.
 
+kunit is useless.  The test_xarray.c module is useless.  If you break
+xarray, the kernel won't boot far enough to load any modules.  You
+haven't thought about this AT ALL.
+
+cd tools/testing/radix-tree
+make
+
+Then you can run the tests, whichever ones make sense for you to run.
