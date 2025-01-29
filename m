@@ -1,161 +1,162 @@
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3EF169AE6
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 00:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BED42A92
+	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 01:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738110699; cv=none; b=We+haoJ/U456buaz8oNKP3m7jM6Y25w5xNNt9+6sf1nVY8NTTRFfOFjWwY0XUHf8f+9osBBehh85HnZI4bh+znD1eWvGMrXoB5er69vr0tJBlg6vcBRtOhe4lZm4PJDjwirsraS8Ut8WnLS8FrIXVKg7HLkIPv7/CAihJL2uhTo=
+	t=1738114859; cv=none; b=lwPPLMtS9mDRoaRSiHF/gtfa+3O8Ab+Wgiv9EBaO9yaRmJcWtW1N8XokEx+slzU4B6tjGfHzKBPjpT7WpKz/Wz8dI7/MMn2tcDfozeAQ1VLDREi6khjEYyndFxTDhByQ6nbVoNuL3DK+MyFLSXonealhOOHbGwNtvMnt6/Z7Qms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738110699; c=relaxed/simple;
-	bh=eCqeLqH9biuRPzq/KGZcQHmzNxdJAr70MWsQC6pKABk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+9VpqZGkzbiuITx/iv6y32OsprPR6ZZxAMRb6t5N/Ex69lFQ03wTRX11UQBx+OKrTITn1i/7svIfHnhfKdhwius9yozPzLSBisweMrQ/+MiaamFKKfPCBm3b0aJEhV5GGNsqy3ZiyrrQ4aVXVjffBr146RLgm+dVExhg+8/xVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=tCrHPXrL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JgPZVS4T; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1738114859; c=relaxed/simple;
+	bh=3IaWesmiWr2cicrwXcF3eLCCczCO762Csg6QxbQA5w4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CZUzTJ8WvrC4Y5ifiyQ1R0mguZwI1alpLxgqgpzsQEVTmm33hUQmJbrCrirYI/ipPAAenrwViXNIs9jLvT2CmBae3GMIDukROJlhlmsU2GKrYw8GPZIdzcwnORkXE9itJFpSHlUbZXxyeEzcXi1MxiU/g9KVV17quxsJt7dYyVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OA3OC2tv; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="tCrHPXrL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JgPZVS4T"
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id B1BE7114010B;
-	Tue, 28 Jan 2025 19:31:35 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Tue, 28 Jan 2025 19:31:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1738110695; x=1738197095; bh=8uxv+XnXP4
-	dlGYUIe/KbHZjoyeo/fIPm1KYp4tp5OIU=; b=tCrHPXrLL3ftk2mGqGGOr0WfMp
-	njYtZGJP7UuqNo89q1RLOpbKfpgZLs1OcgOl2IrI7KpBKIVno9dDM0W7beo5MHtE
-	AzooU8piCEPbeNLLudA0QA5REG0tm6LlOAHr72FprIx0xeYHpIHo9XiqxJAC+vjZ
-	DYvKcmmqcuqnld/z69Xy6FN6yt6bT9KxdytFnEhm0OBCU1HJMSHvb+YTTDWrXSZg
-	ZSik75Sb7lKZ6F1TSg+XMDhbntgO6hi6DhDqPqtVsw4vGsc4MhOtbD9otZ8YcA6G
-	K1Ukdw5Snwh7MTL8bE8TZ+2PCIbgi1LHuoMRbU9nwk/z+yeKeHkVn2/LRASg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1738110695; x=1738197095; bh=8uxv+XnXP4dlGYUIe/KbHZjoyeo/fIPm1KY
-	p4tp5OIU=; b=JgPZVS4TkCBlncSr+vp8Fi3bstlCh/92SKaARkejxvZXBcpwY51
-	SP5WmeHq2F4vO/KP0AMF0EQGX87KgP78I1JTxvoxBXs0+uvHQfFZFwtaCHyaU8QO
-	wC96grjgEQ3P/k7uz5JRaQFTAUnY0clzwQxkfultpeofc0mYpGY1M36Ks2ACGwQT
-	kATHsxOvSfIxZF6/2W9bk8EnVcuFXq3/EpYBeZqAM/YzgI86VuAqZLWAvlrLJfiC
-	7M5ku3Fpxm6zxKGMgrvv6OjdoId3sgBqw/3DubFvFuuPLCLspyjlMiWsSLLiPUaA
-	0AOout7rf9Tses0o8hyxe//KeZwlwkrk5uQ==
-X-ME-Sender: <xms:5XaZZ83_f_4kAeWdtY5DFoTrZ86U3DEhbme8F5UMQLQa_esv1SNDEw>
-    <xme:5XaZZ3E0RDsz5Bpi4_jLAQv7T-HWBW-jKV38qZIoY10jk2-AhG4P8yy-0kDQFynGm
-    -1iaxUUzmdm6dwEhg>
-X-ME-Received: <xmr:5XaZZ04ytNBf17EHf77LH0wyuqIm8JQKPY9FvLUuinHOh8ylgSjdwJm9C0JFPVdmDF2rkV-_Jz3v5fNrNxjMoQ-oKviX8JGxU59tcU2OZSBW7g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhf
-    gggtuggjsehttdfstddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesug
-    iguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepfeetvdekkeevgeehtddvvedtgedt
-    teevfedvvddvieehueetffegieekkedvieegnecuffhomhgrihhnpehruhhsthdqlhgrnh
-    hgrdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgtphhtth
-    hopeefuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepihhrohhgvghrshesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorh
-    hgpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprggt
-    mhgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghmhhihuhhngheskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhr
-    tghpthhtoheprghlvgigrghnuggvrhdrshhhihhshhhkihhnsehlihhnuhigrdhinhhtvg
-    hlrdgtohhmpdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomh
-X-ME-Proxy: <xmx:5XaZZ13rtgrL-iDA1vQJSWBrzYWKpKAgjpmPzTLF5fG8VYXwN-XI_Q>
-    <xmx:5XaZZ_GIV8Pndb_ibg6dm6Yi__jWc22aZTLGRHCn7oPbUEmFOKcwoA>
-    <xmx:5XaZZ-9wYI4lKQMPtTmc3ZDtv-MBsOQVggMOAUaQ037Di-SMDXgA3w>
-    <xmx:5XaZZ0lheBUjG_ZjBNUzW0GpyAaCS1FKpuzIiazlkDVbP37qoqlDtA>
-    <xmx:53aZZ_i-xUbqg2iVYMZOzxfFyMh4V2jrRSQZPc0u8TXnWRf4x4NZDLFo>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Jan 2025 19:31:30 -0500 (EST)
-Date: Tue, 28 Jan 2025 17:31:28 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- 	Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, 	Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- 	Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- 	Kan Liang <kan.liang@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- 	Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, 	Justin Stitt <justinstitt@google.com>,
- Aditya Gupta <adityag@linux.ibm.com>,
- 	"Steinar H. Gunderson" <sesse@google.com>,
- Charlie Jenkins <charlie@rivosinc.com>,
- 	Changbin Du <changbin.du@huawei.com>,
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- 	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>,
- 	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
- Li Huafei <lihuafei1@huawei.com>, 	Dmitry Vyukov <dvyukov@google.com>,
- Andi Kleen <ak@linux.intel.com>,
- 	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- 	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Subject: Re: [PATCH v3 13/18] perf build: Remove libbfd support
-Message-ID: <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
-References: <20250122174308.350350-1-irogers@google.com>
- <20250122174308.350350-14-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OA3OC2tv"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a9d0c28589so193465ab.0
+        for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 17:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738114857; x=1738719657; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gDsy6RSZpz9ow77za79sOYqCvwLqRyj79gdVd/xMSAY=;
+        b=OA3OC2tvwP/9kvfBcQAQlpZA8p4FGjE8g42ebBmSbHdDu54PvG93vB8///mgG+6Eud
+         LDPV+VBJ/kx5jZJBjqpKtnS4Sgmol/OVXDlIYv9PtBXvPCBu7SWckMUEaDh/niHpeXyA
+         +a21dEno4zHcZe/mvlkdUZ0E2iBvHH+DlZDZz+y4pby+QktljChUu+Eh5bf8KWK0IqoI
+         pxInpZ2ppWW/AZcs5KDDxHn9L8YwY+o5CJThZSupKinfOQCKrwj6SvwrYjeXNY5LXJ7f
+         AlWK0GhyMjkx3ySmhdWqWhjlX4ojmbpoKQN5o04CxLZnQEQGSekv2TgXFTA6/3FozrPQ
+         IXrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738114857; x=1738719657;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gDsy6RSZpz9ow77za79sOYqCvwLqRyj79gdVd/xMSAY=;
+        b=etYlqD0jCCimBoqDqWI+Gz0banmqG6LYGTnfy3MzbC+Iycb+Ot7y78GNSAn4r7ExRD
+         o/maybkaxGQFGiiaSXAn33L3M/Vk+R48NO+PnEsZ8CCCgMuni+DVb5OF+Kf3ysQBNj4x
+         F1W7OlAy0EreqVTjpFzwpmqCfcMknwJVd5uw5ojiwzrGWMuyRb4RHD9lzWrwPbzVrwvr
+         NfFFYOQYbNo7Q1TfDxpL9ggo0QDAiF8FTv1YrNZv0QfMGaYouT6kUu/xkRlzRcnIctEj
+         gIRDtjGCPsgSWaaRGhtJ/Z8td8bkKYpGCjfJ8YN6v+7dOwfu6ghmJyNjucq9Iv7mDPpz
+         xnrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvKvdWF0yUE+T/RRxnv9sqAKLopcSxza7mIuqR/Y7DK1gLrTpbHyv7RZCDT+m8TyXHWnT3@lists.linux.dev
+X-Gm-Message-State: AOJu0YwivFupU2NugSxfTT/dW/uCBE7usd4egfZ8MZX7OhRw/CQejs/D
+	2UVDzCYyuAbA/m70ckGQkY0G7ybY42BWrGfe/DZn2wDc/du2Akfcs1uLQb7tG/I+Uvyzz2LAy0s
+	FguUZemUSiU8W3sk8zhJR83X7NoOF+S2rKKVu
+X-Gm-Gg: ASbGncsi6BgduwfNKaPNAAjnDUikNVB8F0vYfNnH8wlzZ76KJbWwWvcFHHh1q0ud2bb
+	JzpqCIOP52cfyMwm6lIskM8z6AsD4nIV/FglHRHPZZHDsrlrI+xBKlavqN4H9eSGoF4+/zu7v0Q
+	==
+X-Google-Smtp-Source: AGHT+IFtwPircGx0cNqjWjLXFmuseDyJD49YXj0Fjsi0wsyI07WjwQhxx/Ru+LcHanJh3mJtoFcQQlcSOkqFnI4iTpw=
+X-Received: by 2002:a05:6e02:1fc3:b0:3cf:c8b9:8826 with SMTP id
+ e9e14a558f8ab-3cffeb833fdmr1919285ab.10.1738114856600; Tue, 28 Jan 2025
+ 17:40:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250122174308.350350-14-irogers@google.com>
+References: <20250122174308.350350-1-irogers@google.com> <20250122174308.350350-14-irogers@google.com>
+ <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
+In-Reply-To: <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 28 Jan 2025 17:40:44 -0800
+X-Gm-Features: AWEUYZlLjbLqgBHdACScPUyTzPQSG4bYslu6-GduAeDhlw3y6CZbVRjCdWJ9YaA
+Message-ID: <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
+Subject: Re: [PATCH v3 13/18] perf build: Remove libbfd support
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ian,
+On Tue, Jan 28, 2025 at 4:31=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> Hi Ian,
+>
+> On Wed, Jan 22, 2025 at 09:43:03AM -0800, Ian Rogers wrote:
+> > libbfd is license incompatible with perf and building requires the
+> > BUILD_NONDISTRO=3D1 build flag. Remove the code to simplify the code
+> > base.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/Documentation/perf-check.txt |   1 -
+> >  tools/perf/Makefile.config              |  38 +---
+> >  tools/perf/builtin-check.c              |   1 -
+> >  tools/perf/tests/Build                  |   1 -
+> >  tools/perf/tests/builtin-test.c         |   1 -
+> >  tools/perf/tests/pe-file-parsing.c      | 101 ----------
+> >  tools/perf/tests/tests.h                |   1 -
+> >  tools/perf/util/demangle-cxx.cpp        |  13 +-
+> >  tools/perf/util/disasm_bpf.c            | 166 ----------------
+> >  tools/perf/util/srcline.c               | 243 +-----------------------
+> >  tools/perf/util/symbol-elf.c            |  86 +--------
+> >  tools/perf/util/symbol.c                | 135 -------------
+> >  tools/perf/util/symbol.h                |   4 -
+> >  13 files changed, 7 insertions(+), 784 deletions(-)
+> >  delete mode 100644 tools/perf/tests/pe-file-parsing.c
+>
+> [..]
+>
+> I was briefly investigating why the centos build of perf was not
+> demangling rust v0 symbols [0]. From looking at the rust issue [1], it
+> appears the rust team somehow delivered support for v0 demangling
+> through libbfd. The code itself looked a bit odd (relying on cxx
+> demangle to run first?), but that's a separate thing.
 
-On Wed, Jan 22, 2025 at 09:43:03AM -0800, Ian Rogers wrote:
-> libbfd is license incompatible with perf and building requires the
-> BUILD_NONDISTRO=1 build flag. Remove the code to simplify the code
-> base.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Documentation/perf-check.txt |   1 -
->  tools/perf/Makefile.config              |  38 +---
->  tools/perf/builtin-check.c              |   1 -
->  tools/perf/tests/Build                  |   1 -
->  tools/perf/tests/builtin-test.c         |   1 -
->  tools/perf/tests/pe-file-parsing.c      | 101 ----------
->  tools/perf/tests/tests.h                |   1 -
->  tools/perf/util/demangle-cxx.cpp        |  13 +-
->  tools/perf/util/disasm_bpf.c            | 166 ----------------
->  tools/perf/util/srcline.c               | 243 +-----------------------
->  tools/perf/util/symbol-elf.c            |  86 +--------
->  tools/perf/util/symbol.c                | 135 -------------
->  tools/perf/util/symbol.h                |   4 -
->  13 files changed, 7 insertions(+), 784 deletions(-)
->  delete mode 100644 tools/perf/tests/pe-file-parsing.c
+There is still C++ demangling support by way of cxxabi:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/demangle-cxx.cpp?h=3Dperf-tools-next#n44
+that was in libstdc++ (GNU) and libcxx (LLVM) when I looked.
 
-[..]
+> The centos build does not build with libbfd for the license issues you
+> mentioned. So your change probably won't regress any distro use cases.
+> But it does remove support for motivated users who don't have
+> re-distribution requirements.
+>
+> But since this patchset came up first in my search, I thought it'd be
+> good to mention that someone probably needs to add v0 support to
+> tools/perf/util/demangle-rust.c.
 
-I was briefly investigating why the centos build of perf was not
-demangling rust v0 symbols [0]. From looking at the rust issue [1], it
-appears the rust team somehow delivered support for v0 demangling
-through libbfd. The code itself looked a bit odd (relying on cxx
-demangle to run first?), but that's a separate thing.
+So I don't see any libbfd dependencies in demangle-rust.c:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/util/demangle-rust.c?h=3Dperf-tools-next#n8
+Unusually we don't have any tests on the Rust demangling, we do for
+Java and OCaml:
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/tests/demangle-java-test.c?h=3Dperf-tools-next
+https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
+ee/tools/perf/tests/demangle-ocaml-test.c?h=3Dperf-tools-next
 
-The centos build does not build with libbfd for the license issues you
-mentioned. So your change probably won't regress any distro use cases.
-But it does remove support for motivated users who don't have
-re-distribution requirements.
-
-But since this patchset came up first in my search, I thought it'd be
-good to mention that someone probably needs to add v0 support to
-tools/perf/util/demangle-rust.c.
+Reading a bit more it seems that previous libiberty was coming to the
+rescue by way of C++ demangling. I'll see if I can write a demangler
+by way of lex and yacc. If we have a v0 standard one is there any
+value in the existing demangler or legacy demangling? It seems this
+has been broken for the best part of 5 years.
 
 Thanks,
-Daniel
+Ian
 
-
-[0]: https://doc.rust-lang.org/rustc/symbol-mangling/v0.html
-[1]: https://github.com/rust-lang/rust/issues/60705
+> Thanks,
+> Daniel
+>
+>
+> [0]: https://doc.rust-lang.org/rustc/symbol-mangling/v0.html
+> [1]: https://github.com/rust-lang/rust/issues/60705
