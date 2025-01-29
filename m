@@ -1,162 +1,104 @@
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BED42A92
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 01:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CBDEAF6;
+	Wed, 29 Jan 2025 04:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738114859; cv=none; b=lwPPLMtS9mDRoaRSiHF/gtfa+3O8Ab+Wgiv9EBaO9yaRmJcWtW1N8XokEx+slzU4B6tjGfHzKBPjpT7WpKz/Wz8dI7/MMn2tcDfozeAQ1VLDREi6khjEYyndFxTDhByQ6nbVoNuL3DK+MyFLSXonealhOOHbGwNtvMnt6/Z7Qms=
+	t=1738126276; cv=none; b=ApGdJ/h6orYOX429Vr8+Ju4TgsP17MOga5um+V61WY8UCAj08ciTy9WGDxyeeOV1PvyLb1PJ1Ju+JOI/BXrhe9VT5fz3SyvRZe7vmGe/1PZ64xtVRQZFS/zvenokTsEWPi5hc9WvptxGi7IhI3hamJTFTPF6g6/qhxY0tavL8Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738114859; c=relaxed/simple;
-	bh=3IaWesmiWr2cicrwXcF3eLCCczCO762Csg6QxbQA5w4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CZUzTJ8WvrC4Y5ifiyQ1R0mguZwI1alpLxgqgpzsQEVTmm33hUQmJbrCrirYI/ipPAAenrwViXNIs9jLvT2CmBae3GMIDukROJlhlmsU2GKrYw8GPZIdzcwnORkXE9itJFpSHlUbZXxyeEzcXi1MxiU/g9KVV17quxsJt7dYyVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OA3OC2tv; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1738126276; c=relaxed/simple;
+	bh=zDXs6l9RG3bx/xv+Z7xxh9vD/zJAv6yMqt5JCZmm9RQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PMILuX4iVq8TEM7WULJcGOseQoYTH2QViLgglUGjEOcSi9JmT1TYG6AQRgPx+OT+6mDoMHCcmgFeh9iJMRE3tNuMY5cz2D9BpdgdE99Aby7JDnlKYvFxxedOA1iqIO0sU6c5mem5yAbYNOQjigBhwd7gIuScQSKE+xqsAVYKUsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dA+033vC; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OA3OC2tv"
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a9d0c28589so193465ab.0
-        for <llvm@lists.linux.dev>; Tue, 28 Jan 2025 17:40:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738114857; x=1738719657; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gDsy6RSZpz9ow77za79sOYqCvwLqRyj79gdVd/xMSAY=;
-        b=OA3OC2tvwP/9kvfBcQAQlpZA8p4FGjE8g42ebBmSbHdDu54PvG93vB8///mgG+6Eud
-         LDPV+VBJ/kx5jZJBjqpKtnS4Sgmol/OVXDlIYv9PtBXvPCBu7SWckMUEaDh/niHpeXyA
-         +a21dEno4zHcZe/mvlkdUZ0E2iBvHH+DlZDZz+y4pby+QktljChUu+Eh5bf8KWK0IqoI
-         pxInpZ2ppWW/AZcs5KDDxHn9L8YwY+o5CJThZSupKinfOQCKrwj6SvwrYjeXNY5LXJ7f
-         AlWK0GhyMjkx3ySmhdWqWhjlX4ojmbpoKQN5o04CxLZnQEQGSekv2TgXFTA6/3FozrPQ
-         IXrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738114857; x=1738719657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gDsy6RSZpz9ow77za79sOYqCvwLqRyj79gdVd/xMSAY=;
-        b=etYlqD0jCCimBoqDqWI+Gz0banmqG6LYGTnfy3MzbC+Iycb+Ot7y78GNSAn4r7ExRD
-         o/maybkaxGQFGiiaSXAn33L3M/Vk+R48NO+PnEsZ8CCCgMuni+DVb5OF+Kf3ysQBNj4x
-         F1W7OlAy0EreqVTjpFzwpmqCfcMknwJVd5uw5ojiwzrGWMuyRb4RHD9lzWrwPbzVrwvr
-         NfFFYOQYbNo7Q1TfDxpL9ggo0QDAiF8FTv1YrNZv0QfMGaYouT6kUu/xkRlzRcnIctEj
-         gIRDtjGCPsgSWaaRGhtJ/Z8td8bkKYpGCjfJ8YN6v+7dOwfu6ghmJyNjucq9Iv7mDPpz
-         xnrA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvKvdWF0yUE+T/RRxnv9sqAKLopcSxza7mIuqR/Y7DK1gLrTpbHyv7RZCDT+m8TyXHWnT3@lists.linux.dev
-X-Gm-Message-State: AOJu0YwivFupU2NugSxfTT/dW/uCBE7usd4egfZ8MZX7OhRw/CQejs/D
-	2UVDzCYyuAbA/m70ckGQkY0G7ybY42BWrGfe/DZn2wDc/du2Akfcs1uLQb7tG/I+Uvyzz2LAy0s
-	FguUZemUSiU8W3sk8zhJR83X7NoOF+S2rKKVu
-X-Gm-Gg: ASbGncsi6BgduwfNKaPNAAjnDUikNVB8F0vYfNnH8wlzZ76KJbWwWvcFHHh1q0ud2bb
-	JzpqCIOP52cfyMwm6lIskM8z6AsD4nIV/FglHRHPZZHDsrlrI+xBKlavqN4H9eSGoF4+/zu7v0Q
-	==
-X-Google-Smtp-Source: AGHT+IFtwPircGx0cNqjWjLXFmuseDyJD49YXj0Fjsi0wsyI07WjwQhxx/Ru+LcHanJh3mJtoFcQQlcSOkqFnI4iTpw=
-X-Received: by 2002:a05:6e02:1fc3:b0:3cf:c8b9:8826 with SMTP id
- e9e14a558f8ab-3cffeb833fdmr1919285ab.10.1738114856600; Tue, 28 Jan 2025
- 17:40:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dA+033vC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738126275; x=1769662275;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zDXs6l9RG3bx/xv+Z7xxh9vD/zJAv6yMqt5JCZmm9RQ=;
+  b=dA+033vCFQ2HWgYrzP633k0dphmfnfwxwcbBCvjX341Rbj7pF1LhywFL
+   jz8gIGGpGc8uKvFkHkKMfVUwHREajC6cupAzLlz02tXC7HdCl74Or8l8z
+   PjqWCacoUX10HvvwIWSU+FcLmkECilBiI1yUly4Xd4ZNVrPJn/st6ZbiI
+   FPMTGQzqdwCiZsbh8WwPV+bhZeyIp8sf4Ql5G5ugs1/0U4WSX2oWA+wTl
+   ouPEvdwE2wNVIbmuR9K8YCgWNR+4tNWyuE2zlQ1ep1GoW4dgTD7Xk59BZ
+   v048ToaCKzoMOZWDVgws9qPoxsAiJXmEqhazhHpQ/IhecxCl/XjrzFi8D
+   A==;
+X-CSE-ConnectionGUID: m31vxvA1RCKkhXiegFXPgQ==
+X-CSE-MsgGUID: BQASrVpESvOD4Hdh0v+XNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="37873188"
+X-IronPort-AV: E=Sophos;i="6.13,242,1732608000"; 
+   d="scan'208";a="37873188"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 20:51:14 -0800
+X-CSE-ConnectionGUID: 88H/x59fQDa0DEzz0SjyBA==
+X-CSE-MsgGUID: YJmlDYTuT2CS6jjDqEYr6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="108780600"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 28 Jan 2025 20:51:13 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1td02g-000iaJ-1f;
+	Wed, 29 Jan 2025 04:51:10 +0000
+Date: Wed, 29 Jan 2025 12:50:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jgunthorpe:iommu_pages 12/20] drivers/iommu/iommu-pages.c:76:
+ warning: Function parameter or struct member 'list' not described in
+ 'iommu_put_pages_list'
+Message-ID: <202501291246.gO5lkZQ0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250122174308.350350-1-irogers@google.com> <20250122174308.350350-14-irogers@google.com>
- <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
-In-Reply-To: <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 28 Jan 2025 17:40:44 -0800
-X-Gm-Features: AWEUYZlLjbLqgBHdACScPUyTzPQSG4bYslu6-GduAeDhlw3y6CZbVRjCdWJ9YaA
-Message-ID: <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
-Subject: Re: [PATCH v3 13/18] perf build: Remove libbfd support
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Jan 28, 2025 at 4:31=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> Hi Ian,
->
-> On Wed, Jan 22, 2025 at 09:43:03AM -0800, Ian Rogers wrote:
-> > libbfd is license incompatible with perf and building requires the
-> > BUILD_NONDISTRO=3D1 build flag. Remove the code to simplify the code
-> > base.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/Documentation/perf-check.txt |   1 -
-> >  tools/perf/Makefile.config              |  38 +---
-> >  tools/perf/builtin-check.c              |   1 -
-> >  tools/perf/tests/Build                  |   1 -
-> >  tools/perf/tests/builtin-test.c         |   1 -
-> >  tools/perf/tests/pe-file-parsing.c      | 101 ----------
-> >  tools/perf/tests/tests.h                |   1 -
-> >  tools/perf/util/demangle-cxx.cpp        |  13 +-
-> >  tools/perf/util/disasm_bpf.c            | 166 ----------------
-> >  tools/perf/util/srcline.c               | 243 +-----------------------
-> >  tools/perf/util/symbol-elf.c            |  86 +--------
-> >  tools/perf/util/symbol.c                | 135 -------------
-> >  tools/perf/util/symbol.h                |   4 -
-> >  13 files changed, 7 insertions(+), 784 deletions(-)
-> >  delete mode 100644 tools/perf/tests/pe-file-parsing.c
->
-> [..]
->
-> I was briefly investigating why the centos build of perf was not
-> demangling rust v0 symbols [0]. From looking at the rust issue [1], it
-> appears the rust team somehow delivered support for v0 demangling
-> through libbfd. The code itself looked a bit odd (relying on cxx
-> demangle to run first?), but that's a separate thing.
+tree:   https://github.com/jgunthorpe/linux iommu_pages
+head:   470a82a6588cba1a19210a78a710620a15b6019b
+commit: ccc2b9fbf982bd3f5b8057056fcb7c6edbc1a838 [12/20] iommu/pages: Remove iommu_put_pages_list_old and the _Generic
+config: s390-randconfig-002-20250129 (https://download.01.org/0day-ci/archive/20250129/202501291246.gO5lkZQ0-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250129/202501291246.gO5lkZQ0-lkp@intel.com/reproduce)
 
-There is still C++ demangling support by way of cxxabi:
-https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
-ee/tools/perf/util/demangle-cxx.cpp?h=3Dperf-tools-next#n44
-that was in libstdc++ (GNU) and libcxx (LLVM) when I looked.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501291246.gO5lkZQ0-lkp@intel.com/
 
-> The centos build does not build with libbfd for the license issues you
-> mentioned. So your change probably won't regress any distro use cases.
-> But it does remove support for motivated users who don't have
-> re-distribution requirements.
->
-> But since this patchset came up first in my search, I thought it'd be
-> good to mention that someone probably needs to add v0 support to
-> tools/perf/util/demangle-rust.c.
+All warnings (new ones prefixed by >>):
 
-So I don't see any libbfd dependencies in demangle-rust.c:
-https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
-ee/tools/perf/util/demangle-rust.c?h=3Dperf-tools-next#n8
-Unusually we don't have any tests on the Rust demangling, we do for
-Java and OCaml:
-https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
-ee/tools/perf/tests/demangle-java-test.c?h=3Dperf-tools-next
-https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tr=
-ee/tools/perf/tests/demangle-ocaml-test.c?h=3Dperf-tools-next
+>> drivers/iommu/iommu-pages.c:76: warning: Function parameter or struct member 'list' not described in 'iommu_put_pages_list'
+>> drivers/iommu/iommu-pages.c:76: warning: Excess function parameter 'head' description in 'iommu_put_pages_list'
 
-Reading a bit more it seems that previous libiberty was coming to the
-rescue by way of C++ demangling. I'll see if I can write a demangler
-by way of lex and yacc. If we have a v0 standard one is there any
-value in the existing demangler or legacy demangling? It seems this
-has been broken for the best part of 5 years.
 
-Thanks,
-Ian
+vim +76 drivers/iommu/iommu-pages.c
 
-> Thanks,
-> Daniel
->
->
-> [0]: https://doc.rust-lang.org/rustc/symbol-mangling/v0.html
-> [1]: https://github.com/rust-lang/rust/issues/60705
+6c72aac62af905 Jason Gunthorpe 2025-01-24  68  
+6c72aac62af905 Jason Gunthorpe 2025-01-24  69  /**
+6c72aac62af905 Jason Gunthorpe 2025-01-24  70   * iommu_put_pages_list - free a list of pages.
+6c72aac62af905 Jason Gunthorpe 2025-01-24  71   * @head: the head of the lru list to be freed.
+6c72aac62af905 Jason Gunthorpe 2025-01-24  72   *
+6c72aac62af905 Jason Gunthorpe 2025-01-24  73   * Frees a list of pages allocated by iommu_alloc_pages_node().
+6c72aac62af905 Jason Gunthorpe 2025-01-24  74   */
+ccc2b9fbf982bd Jason Gunthorpe 2025-01-26  75  void iommu_put_pages_list(struct iommu_pages_list *list)
+6c72aac62af905 Jason Gunthorpe 2025-01-24 @76  {
+
+:::::: The code at line 76 was first introduced by commit
+:::::: 6c72aac62af905e9c969c12aa399d8bed4b4d033 iommu/pages: De-inline the substantial functions
+
+:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
+:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
