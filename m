@@ -1,134 +1,151 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C951E25EC
-	for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 21:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4933B18DF60;
+	Wed, 29 Jan 2025 22:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738186152; cv=none; b=CxSzDM5WO/6N9goakoampEsQ75LhzYfk9LhmQsULJ538xs9VldOA795rcCycBPmXGX7eNiQ5xOV238U+MNZMAr1IgDBlzdceQQsCPIPMq96oW/OvO5b48QJb9bV9/52eLzIDtVHxGPCV5sD3fVFihxtnnubJ6anPn7rv5AG/SRM=
+	t=1738188979; cv=none; b=aqNIqdJ7kdXCRaSY4fMW9A01zn2eVDGj1neJykSM1qHZpZ6jIwzxRNTuMEYmgKDx3r6vJv48qpzys8ooc4E4h2tTxUeP2yrqhC0DQ9LSFt9Qaz2sAG8YwOxaU5/w+fhfg+xvnLx3Z2xtvNnZDK8q3h2x7Xtzi3L+zbfD0KQSH64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738186152; c=relaxed/simple;
-	bh=c8nW3ZmYDs1X/So5oD/3bpCh5qukpkvLJpoz+Jwk82Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=lyKXF9WPZT9zHItoj0wPThxPD11TUQCFpto/jvqAV/9SmU2uPA01nCS58Fy1DnAN7JgcAz004lxnaY/nnRXJVE1oB3O5Wc13GWqIJNcmzKPbAE6Jh6IC6XzF3Mfnya/Br9TlZHkBUmHo1dwZWvkZEFlUAM9f+Kb574xcYuINNHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJoe+XBw; arc=none smtp.client-ip=209.85.208.182
+	s=arc-20240116; t=1738188979; c=relaxed/simple;
+	bh=CBjBxfBArHaP5+KFSMSovBvLkn91zi5YvQjUjm6Fkxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VDb4fiQxM0EkVwcopx9+xeAZCKtA1uXj6yi9VrCVg9r24e+ffnV9K3s6BGPV64Y+XNHbKHsS68CKDAKGsTPqfRsHxW7HHPllCixTAcnz5nqHz5gsPFiYGeecg5+LP9U/KO4/w7N804rXQvV+MRfjN6ED740BYGneTvgINCJFyes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AP5iDm4J; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJoe+XBw"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-3061513d353so520271fa.2
-        for <llvm@lists.linux.dev>; Wed, 29 Jan 2025 13:29:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AP5iDm4J"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so594935e9.1;
+        Wed, 29 Jan 2025 14:16:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738186149; x=1738790949; darn=lists.linux.dev;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1738188975; x=1738793775; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GT0rFmaKToeuXSjRSzkL/lRENUooY068EpzaG7EWYO0=;
-        b=QJoe+XBwyLyRYCMHRMQhVv3+JkEHLMvJPIAhE6UQoUWfS0EGlUh/fMqOhGB6BP4x3A
-         2hVu+rmnZBkXSUm4b4373nY6q0fDJ1PxLPu1NAxIDrcndckO/S1QjADKQuxVLZMglREg
-         vyxMCooYrdg0S48Qo9NX1R6vNFBmVqD981wiuhbpHBG6r5krQXVaoEquzCj7rrbR1sbF
-         zpJ9FcReKG5UMTkVyakGOvYlbo7lbkzHhTfiG51VjmUj6/MIKxeMkJI338pl3mPJ8EHo
-         LTRJCi0jviv3h4R7vFD+U1jubkPOqWeMw2FBizpq9fLcg7TIs8epihuNnECvXOMtIRv4
-         +/3g==
+        bh=daPgdxKytpeJo/vzJrQd3hQxPDtGozJJzmn9okR5/Yk=;
+        b=AP5iDm4J61USKZzIiPBvvGkvFNoQxZE+7zuxDBgNj7HM02LnQ9QN9OoNqQIvuWeA1P
+         YiNoZIZv8bnn4cXC/bwoGMOcdzCsUo2gTMZUCX4p9uGzla9Orz9wintfOBQ0YbOAEkhb
+         nLtDo1gBOA36ElXKr7Tck/aM6o941r4uMaqQfhBygCzqeXytDGXOYI7crl6z1ZWaEepu
+         DwUjXZ3Xjzwz6M7eIdvywN3Je+90iDpTSbXcTbWb6PNAJsUSA8rMcCq6/cL6PjPe9cW0
+         Jni9leGYbMUU35OoIKMz46gHFFtF9Jr73eMW2CAqYMzPXna7/47PBorsGVySUJokCwdm
+         wBPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738186149; x=1738790949;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1738188975; x=1738793775;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GT0rFmaKToeuXSjRSzkL/lRENUooY068EpzaG7EWYO0=;
-        b=KlcItJlYGk1EN94VHUn3ZamJnjFVRiw9eEyqo15YkR7H7Zo1884OH3PUbxiaIUNtHx
-         bT54Pd57ai1ZeulVeh7FW0MTXEXGMpC+cb+1XTMWD+MtA33BJk1kaZn2uNq5v7tpB2/K
-         X9dS670ndosfw5DTlP4JuVLbGGjrbamika8s6tlCyuS1HblJTZ366zclMO8dv4hBLgh/
-         fxGjwCHRWNnMjQ6+cnb9sJGlhTt9DOlgHZovltdK0F5+dPaYYSy2msIVAHYFi4oeCTaC
-         FAXoxJVDmoqyAQrFgCja2BagdqeBUQ+rm4UIScoAvbrFpha8ssR7UF+NRsrGNQtDEx+q
-         cb9g==
-X-Forwarded-Encrypted: i=1; AJvYcCXD3mJutvI7xfzyumk4JRYf0Emf6F3pKI4iLy60plqso6qsRlXwA/4K1Iz8HV6gZmCulgtX@lists.linux.dev
-X-Gm-Message-State: AOJu0YxUgjA1l+jBOJYGH324QYmH51Xz9ZENByNBmSa6AmvytoOxK17c
-	lF+eFWE2Wlbn02TXRwbR4n2A6ez95onXkr+u058iAV5NdePVWWL1XNBtoyq8sKmUjT37B+/5ECo
-	ACInqiNTBsoaZEQu8RV26GpcfD2Y=
-X-Gm-Gg: ASbGnctF20RiRe4HhnB8Xa8td8EnMXCXZUCUjumFENlQ+tSCEkXJ7ubnJSF/88S2Pgj
-	CvAuM2HS7elnsHa9Q7FQXXSrMFH5n2lv8pfMN3/JxKQR645WmSWI4TXlcjcNyfx04D6vI8n7szr
-	qXEUaaMQLFSqtcGN3MCErHj6MgsilW0A==
-X-Google-Smtp-Source: AGHT+IEini7TIAvHWFfZWJAA/DIhlgY7ELxTDYTMmVhvFmOP3+WEeVrbZSpqp7JMDeFBEGMKPTMSdGVLiQ0G7+RO3zE=
-X-Received: by 2002:a2e:bc26:0:b0:302:49ba:2550 with SMTP id
- 38308e7fff4ca-307968572cemr17704121fa.21.1738186149080; Wed, 29 Jan 2025
- 13:29:09 -0800 (PST)
+        bh=daPgdxKytpeJo/vzJrQd3hQxPDtGozJJzmn9okR5/Yk=;
+        b=QiKGw2lTXBdk5g2oLJZri0Fs+J1RzLbpF2aODYj3erTCp4neAX/Yqmjk/vl47fUuNm
+         bDPNeWYBnefF7po73M3yWGSE6hPGjlDFJgwVQpjo5oAkSwJ3E4UEALUt4AS+QTN6WkIO
+         0zPEjB5CTvFdOl8Hs1H0YypIVWNbhH0pa0NIFAbff0ebPokRPY7OXp5IJp94EqLwiPhx
+         +a/dhXfIW3QY/tqkxgKoihAG/4shUh9xK5YFs8P64vCSjBWykMemOwa0xcOUI3eTZ4tk
+         2on+BnHSkU0NhNkKvNow4f0Kefn9ZrmhGAsOoUYWJ53z/KpgiaSDnsqd6zDZj9cseH5q
+         Tx7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUdMmlN75KcTtkv0D4kY9NI/2uuq6ZYve8Hjoard4CYcHC3EHDeS2zZzDxNwtGT+Ld9xxe/@lists.linux.dev, AJvYcCXyEca1KaQawB3w5R5eDz7NYyDbwcHxIExw30AickX6a6RKpF97+eMzntoo3THFErvgCchfGWbmPmuZY1aWNw==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/+w5XHMJdgBCNwW1Z2P8XPzhtSpRlARcG+PThxlNfJ6xBqkcj
+	iBJoqAMcHDLfwK1O647ADshmkinZ5UqyLN3ZNZlXJ9eXUK2o7DIz
+X-Gm-Gg: ASbGncusqM/JLtZGrijAHgSzHarWkdqKZqULncPANhsSOHSeTmZAxnChkbnxATur3RV
+	AL08WmLM2eiR56AzjV/jZCUliJu+cr878xwzTxlsXeGIoBqSuRfbk8xA+H7Nz4nTE//PsnOxrBD
+	7ryDvmoRzPNa22JTI7D4qlDF3CbAYUE2jSXX1krQiHYsCR3DAPhLcOfJcRM4tPYDwK21QivZA4Q
+	nzPfhVGp/m6TsMPoZ4cS924iydqKeKRwj/QU6qIFPrFjOjf4lesvmELGL2N/b0aFODhGN3+7gzy
+	oU1UUopq3lNtUL7VfNERdpXg9gKQ9CRoTywQoFBZnasia19sm+ZIhQ==
+X-Google-Smtp-Source: AGHT+IEi0h/P9Ax4zfeG0ZIoZCiltydXmJWGbhNxx79y1e5qOKwoDDFKlFRLIG3wS4UCeaXx6Lgc2A==
+X-Received: by 2002:a05:600c:474f:b0:434:a10f:c3 with SMTP id 5b1f17b1804b1-438dc3c346fmr36972515e9.9.1738188975404;
+        Wed, 29 Jan 2025 14:16:15 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c0ec7f1sm68166f8f.9.2025.01.29.14.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 14:16:15 -0800 (PST)
+Date: Wed, 29 Jan 2025 22:16:14 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>, kernel test robot <lkp@intel.com>, Maximilian Luz
+ <luzmaximilian@gmail.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Hans de Goede
+ <hdegoede@redhat.com>
+Subject: Re: drivers/platform/surface/surface3_power.c:243:2: warning:
+ 'snprintf' will always be truncated; specified size is 10, but format
+ string expands to at least 12
+Message-ID: <20250129221614.6510f165@pumpkin>
+In-Reply-To: <20250129134648.GA3884012@ax162>
+References: <202501291646.VtwF98qd-lkp@intel.com>
+	<CAHp75VcOYyVx=wcopvi-0iA5XePsGOrNO1wUSzYcYB4q86=7gA@mail.gmail.com>
+	<20250129134648.GA3884012@ax162>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
- <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
-In-Reply-To: <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Wed, 29 Jan 2025 16:28:32 -0500
-X-Gm-Features: AWEUYZm30qzC7OYicUCyM7022EFlqK5dvrSLqA0Ri2_QEk_6Vs9gveN9uXDYy-8
-Message-ID: <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
-Subject: Re: [PATCH] xarray: port tests to kunit
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Sidhartha Kumar <sidhartha.kumar@oracle.com>, 
-	tamird@gmail.com, akpm@linux-foundation.org, christophe.leroy@csgroup.eu, 
-	geert@linux-m68k.org, justinstitt@google.com, linux-kernel@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev, maddy@linux.ibm.com, morbo@google.com, 
-	mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
-	ndesaulniers@google.com, npiggin@gmail.com, 
-	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 29, 2025 at 4:26=E2=80=AFPM Liam R. Howlett <Liam.Howlett@oracl=
-e.com> wrote:
->
-> * Sidhartha Kumar <sidhartha.kumar@oracle.com> [250129 16:02]:
-> > + Liam, Matthew
->
-> + linux-mm
->
-> Thank you Sid.
->
-> >
-> > Hello,
-> >
-> > I believe this patch needs to be reverted for now as it breaks the
-> > user-space build of /tools/testing/radix-tree with:
-> >
-> > In file included from xarray.c:11:
-> > ../../../lib/test_xarray.c:9:10: fatal error: kunit/test.h: No such fil=
-e
-> > or directory
-> >      9 | #include <kunit/test.h>
-> >        |          ^~~~~~~~~~~~~~
-> > compilation terminated.
-> > make: *** [<builtin>: xarray.o] Error 1
-> > make: *** Waiting for unfinished jobs....
-> >
-> > this then prevents the maple tree test suite from building.
->
-> How are grammar corrections going to the right person (but not the
-> mailing list) while an entire conversion to kunit is not [1]?
+On Wed, 29 Jan 2025 06:46:48 -0700
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Very simple: the tests are not properly included in MAINTAINERS. I
-sent https://lore.kernel.org/all/20250129-xarray-test-maintainer-v1-1-482e3=
-1f30f47@gmail.com/
-a few minutes ago for this reason.
+> On Wed, Jan 29, 2025 at 02:45:38PM +0200, Andy Shevchenko wrote:
+> > On Wed, Jan 29, 2025 at 10:09=E2=80=AFAM kernel test robot <lkp@intel.c=
+om> wrote: =20
+> > >
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
+x.git master
+> > > head:   05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
+> > > commit: 85f7582cd484dbf491b6d9bb2af6ef1467a024d2 platform/surface: Mo=
+ve Surface 3 Power OpRegion driver to platform/surface
+> > > date:   4 years, 3 months ago
+> > > config: x86_64-randconfig-071-20241231 (https://download.01.org/0day-=
+ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/config)
+> > > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project =
+ab51eccf88f5321e7c60591c5546b254b6afab99)
+> > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
+rchive/20250129/202501291646.VtwF98qd-lkp@intel.com/reproduce)
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
+version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202501291646.VtwF98qd=
+-lkp@intel.com/
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > > =20
+> > > >> drivers/platform/surface/surface3_power.c:243:2: warning: 'snprint=
+f' will always be truncated; specified size is 10, but format string expand=
+s to at least 12 [-Wformat-truncation-non-kprintf] =20
+> > >      243 |         snprintf(bix->serial, ARRAY_SIZE(bix->serial), "%3=
+pE%6pE", buf + 7, buf); =20
+> >=20
+> > 3 + 'E' + 6 + 'E' + NUL, that's how the compiler thinks about this
+> > formatting string...
+> >  =20
+> > >          |         ^
+> > >    1 warning generated. =20
+> >=20
+> > I do not know how to properly address this because it's false positive
+> > due to the compiler not being aware of pointer extensions used in
+> > Linux kernel. The w/a is to increase the buffer if we can, but is it
+> > practical? OTOH, this warning will be translated to a compilation
+> > error in case of default WERROR settings on `make W=3D1` builds which is
+> > also annoying to people what want have that clean. =20
+>=20
+> Hmmm, I missed that -Wformat-truncation-non-kprintf was only disabled in
+> the non-W=3D1 block in scripts/Makefile.extrawarn. We never want to see
+> these warnings at any level because they will almost always be a false
+> positive, that's why the "non-kprintf" flags even exist in the first
+> place:
+...
 
-> Does the patch really need to drop the module testing too?
->
-> What exactly is the point of converting one testing system to another
-> besides disruption of actual work?  Who asked for this?  What is the
-> point?
+There is a separate issue that it doesn't seem to be easy to mark a specific
+snprintf() as one that will not actually overflow or where truncation is fi=
+ne.
 
-All this is described in the commit message.
+Persuading the compiler that the buffer size isn't constant currently works,
+but I expect the compiler will start double checking against ARRAY_SIZE(buf=
+fer)
+'any time soon' which will require the same treatment applied to the buffer
+address.
 
-> Is anyone doing work on the xarray running the kunit tests?
-
-I was doing work on xarray and I was running the kunit tests.
-
-> This should be reverted as it should never have been merged.
->
-> Regards,
-> Liam
->
-> [1]. https://lore.kernel.org/all/20241009193602.41797-2-tamird@gmail.com/
+	David
