@@ -1,365 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4539B1EE003;
-	Thu, 30 Jan 2025 16:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC33154BF0;
+	Thu, 30 Jan 2025 16:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738254688; cv=none; b=n1ZtbBn322j+cH4iuIW97rQq3Fmkr1RnAqaTZCzzaHGXG8jpJ4cdHD5kzu6RlPFKiRUHAV+6dUI4rf3uEW/0Kg5Y8rUd1du9JLRc5SR8CNw4+E/VR/1KGWNJgdWniiy/Eb+MASgVkLjBEY5xQlyU/6edlTH8SzknYzmMKwJ0XRs=
+	t=1738255899; cv=none; b=nHFBvZpfCBwrgmitiHvnVxQVSo9gyCY6LymFGidTlE+HbosI1HRIS34kiHRhOk2Dd9P5cL4LreaWEUfL+gv/IBE+yMNnxKxR1Nk9Gh3wyNGdnSHRMVvyQ+pjU555hv2wl8QVOLwG2GRI8u6jvUZGZvicdikhufnx6zonnMMpl2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738254688; c=relaxed/simple;
-	bh=VWSoO1/bo1WdOcFbjx7VPWk3Nu9O5LGhJQspvZ+ivu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jt+oKncrPoHW099ROxMXYkBHcxrRiW+7RESZeNxzRuhOm4UroJYjgqJ0dxwcYuT7FP8OZnPCF4pNiyd4A5C/J1BR76t271aeL+zvoIXSlfRgo2xHsdJPme8MkJcP70AMEvkkxpEPtc4StRl7Sjr4pR5nkW7xiwku6lHMBb9nJ2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j9H8UpW2; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738255899; c=relaxed/simple;
+	bh=2bRUWw2O9Noy/C1Q5lFO5hLXAY9YkzOTUGuuFGIficY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FkAxvWRel24P/vgrZSJsPJ74ilGlU3xDsFpXWzKRILaXAQQkUR76z7Zj+Z4DXgWMPSxy68iJHB834fB+sxbOEi19hBq9aYQ32hEdTWcuSw9ka8Da5cZbsiQ5+53J1nlKrukmFwYUPkjzpg0A9BF0zhf7GjcpfQvJTjmf+3MlypE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+65w+8R; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j9H8UpW2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738254687; x=1769790687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VWSoO1/bo1WdOcFbjx7VPWk3Nu9O5LGhJQspvZ+ivu0=;
-  b=j9H8UpW2Gqde9R7HkAtbY+nVcGxSvMJrlLEnHesPLoa8D1YdeM4F4RUy
-   wzWeH/26X0J4srLozkBmdsA/J079w74YxcBFRX7GB+kfhbbgLrJWmc+Zf
-   MysWLvAayeROf8LaKT1ZOw0rjrF429rr1hsXyrRG/3eocylp8GxnRl/XM
-   EAfJ0UR22Dotzlkeki+AVoI/5AufQs68eCnp3RUvX4QC2rl57+r7plrLB
-   Z47dFYjwA+2ta/VAuX1332wmljJ8lmMTgVpFntaYvDsDoTJLRsJ+DzzHM
-   zwjePBVqDzV2toAX4NdXRrs+MfyBM4sJw47GUsmGQ+MFm7lO8P+sbhPzf
-   w==;
-X-CSE-ConnectionGUID: x82ZbXo2SN+/kztAJzzWzQ==
-X-CSE-MsgGUID: OOvOXc2tQdOY013K8ISBng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="56237100"
-X-IronPort-AV: E=Sophos;i="6.13,245,1732608000"; 
-   d="scan'208";a="56237100"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2025 08:31:24 -0800
-X-CSE-ConnectionGUID: CwGSPk3KTXaSNbgp/C+0hg==
-X-CSE-MsgGUID: HmhFl2v/Rz2zGkzMmheNUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,245,1732608000"; 
-   d="scan'208";a="109977891"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 30 Jan 2025 08:31:22 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdXRo-000kgJ-0c;
-	Thu, 30 Jan 2025 16:31:20 +0000
-Date: Fri, 31 Jan 2025 00:30:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20250124 14/15]
- fs/hpfs/anode.c:103:11: error: use of undeclared identifier 'anode_btree';
- did you mean 'node_state'?
-Message-ID: <202501310035.jc65cSS0-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+65w+8R"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ab2c9b8aecaso177156266b.0;
+        Thu, 30 Jan 2025 08:51:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738255895; x=1738860695; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=81HSDWEdiMAQgD6KhXnAvyTh/gnHSXEcWZxUzDH+tPE=;
+        b=D+65w+8RXgmglZANiHqlnFd2nip3gapAR9tVJtn3Zbu62aNusSccquPOlfgq0j8++w
+         Xi/HNiNSeigVptqLv0eCykmWi12Ekp99OFhrnZleAGf9GgCAVqUymnXXW6qQCtANIbkU
+         i7FuSSSa/CwfBBhGMrRAlmMq2BPTPh1tA0bRT48azMfIq/BwWhnDXqv2JLXy0UdXIrvD
+         mm7eAXK07uduekG6dZ1COdJIaHVqPUExv1t/hca6BuKR9r695hcKpl7iipIkuyzgjmRl
+         y2PDVblMP+5cUVlGhi8z4PMOglx0UCOwGryYVCNol6b9+koZiJ77ugBaHWhcUsix5yLG
+         oP8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738255895; x=1738860695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=81HSDWEdiMAQgD6KhXnAvyTh/gnHSXEcWZxUzDH+tPE=;
+        b=c5gc07XRnNT8PNcMY6uXUIhBFScfbOkupc8Vj9jo6o7dG1wdWBYX3wShLHNrJRSdjK
+         4kCwxnDkIpkUM0cRzc9QyGWSc4G3zNtILKBTpk2zZ0rwKtz3++/6PwBCmCast98iQuVu
+         ln+mWNMJHFE5QysW8226tNFDFKRB1Kb6bB3gx8Gd0soUxhl0f6JRpusHaB+TpnDJrnwB
+         x3D1YdY9+5ph7SISQz27UVFwLt/6bopQCCngAYeWGvViSssM0q1HbaBce33N7qP+WRCT
+         CKMkru2gecAQOiTUjckzP9RXNlCFx5Q3XM+TCMY3Aqrp8wacgKiG2FyrQl8GzipWCTkO
+         GirA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBh9VEEYKamt8ja5BRtCHNOWsNAwAkkewvfgRNBkwcNTDbh5Q7dgCIMSiLuuKkyhvh9J09GC9iE//t3ARoFg==@lists.linux.dev, AJvYcCWSsVYcZZQ5cpa7/2ei4R6E64wisfyTz0eLq5yoxu+2ABev+PpJY2RvsL8b/nmRmWZy34jN@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4nFQEG9Mi8wL5NIsONsLfiiBAOZLccE2ua4qYUv3Amcz8L2+r
+	dISYT/9av/lH/dPtdP83DJsI5yMAjLouwhGxJeKpEUGMdNcDC4d7uSMm0OHXo5bYqn35NkKTKOG
+	ZTXqSkTWZFfiYSspItYCMzYbz5ZY=
+X-Gm-Gg: ASbGnctQqnwUDqYiKUzR3XNdtvRbmDLo7DpNdQ6rALhWLfszvNiAG/ICB6BZLG46Hnj
+	julNdgVhCO/tFrzrd1lD2LkA0hB57kM6QHQDt3arkCV687QcwSLZ9O25dzEf50mUm1dr1rrne
+X-Google-Smtp-Source: AGHT+IHcvuC0uEwgAU5Pv5wffcB1EVUbDGkSKyYmw4kAdumq2eCkcdMgs4YHeNNiGeLdokpjp5siFjdtJlL/G8kwOXw=
+X-Received: by 2002:a17:907:1c13:b0:ab6:36fd:942a with SMTP id
+ a640c23a62f3a-ab6cfe27037mr883979966b.50.1738255895318; Thu, 30 Jan 2025
+ 08:51:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <202501291646.VtwF98qd-lkp@intel.com> <CAHp75VcOYyVx=wcopvi-0iA5XePsGOrNO1wUSzYcYB4q86=7gA@mail.gmail.com>
+ <CAHp75VcUEaUSeu5K2GDbkgevTkFjR8=4ppw_e5FAy28iW=NhSQ@mail.gmail.com> <CAMuHMdVsCt=x_3KdHKHFmr9xgqcMvFNjKGjd4WNHx+LEwiEDOA@mail.gmail.com>
+In-Reply-To: <CAMuHMdVsCt=x_3KdHKHFmr9xgqcMvFNjKGjd4WNHx+LEwiEDOA@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 30 Jan 2025 18:50:59 +0200
+X-Gm-Features: AWEUYZn0zOWPpu25GOiVPEugFi9n6vxgdNY0v-zO10JxexKk9vaGfgUqQMagZZw
+Message-ID: <CAHp75VecdT+p3GANoYphVea67j6mFSXAPSxvO=fNjbcha8o-jA@mail.gmail.com>
+Subject: Re: drivers/platform/surface/surface3_power.c:243:2: warning:
+ 'snprintf' will always be truncated; specified size is 10, but format string
+ expands to at least 12
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: kernel test robot <lkp@intel.com>, Maximilian Luz <luzmaximilian@gmail.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20250124
-head:   63f1602f557a3ea1a3396e876b6648cf6c3635c4
-commit: 140def2fc1dc741f3f85d6d90e65ac79b8d8fc06 [14/15] fs: hpfs: Avoid multiple -Wflex-array-member-not-at-end warnings
-config: powerpc64-randconfig-003-20250130 (https://download.01.org/0day-ci/archive/20250131/202501310035.jc65cSS0-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501310035.jc65cSS0-lkp@intel.com/reproduce)
+On Thu, Jan 30, 2025 at 10:57=E2=80=AFAM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Wed, 29 Jan 2025 at 13:51, Andy Shevchenko <andy.shevchenko@gmail.com>=
+ wrote:
+> > On Wed, Jan 29, 2025 at 2:45=E2=80=AFPM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Wed, Jan 29, 2025 at 10:09=E2=80=AFAM kernel test robot <lkp@intel=
+.com> wrote:
+> >
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
+nux.git master
+> > > > head:   05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
+> > > > commit: 85f7582cd484dbf491b6d9bb2af6ef1467a024d2 platform/surface: =
+Move Surface 3 Power OpRegion driver to platform/surface
+> > > > date:   4 years, 3 months ago
+> > > > config: x86_64-randconfig-071-20241231 (https://download.01.org/0da=
+y-ci/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/config)
+> > > > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-projec=
+t ab51eccf88f5321e7c60591c5546b254b6afab99)
+> > > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci=
+/archive/20250129/202501291646.VtwF98qd-lkp@intel.com/reproduce)
+> > > >
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a ne=
+w version of
+> > > > the same patch/commit), kindly add following tags
+> > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202501291646.VtwF98=
+qd-lkp@intel.com/
+> > > >
+> > > > All warnings (new ones prefixed by >>):
+> > > >
+> > > > >> drivers/platform/surface/surface3_power.c:243:2: warning: 'snpri=
+ntf' will always be truncated; specified size is 10, but format string expa=
+nds to at least 12 [-Wformat-truncation-non-kprintf]
+> > > >      243 |         snprintf(bix->serial, ARRAY_SIZE(bix->serial), "=
+%3pE%6pE", buf + 7, buf);
+> > >
+> > > 3 + 'E' + 6 + 'E' + NUL, that's how the compiler thinks about this
+> > > formatting string...
+> > >
+> > > >          |         ^
+> > > >    1 warning generated.
+> > >
+> > > I do not know how to properly address this because it's false positiv=
+e
+> > > due to the compiler not being aware of pointer extensions used in
+> > > Linux kernel. The w/a is to increase the buffer if we can, but is it
+> > > practical? OTOH, this warning will be translated to a compilation
+> > > error in case of default WERROR settings on `make W=3D1` builds which=
+ is
+> > > also annoying to people who want to have that clean.
+> >
+> > Actually using %pE implies that the buffer should be 4 times bigger
+> > than the input string. So, with the given format string the
+> > ARRAY_SIZE(bix->serial) has to be equal to or greater than 3 * 4 + 6 *
+> > 4 + 1, i.e. 37.
+>
+>     #define SURFACE_3_STRLEN                10
+>
+>     struct bix {
+>             ...
+>             char    serial[SURFACE_3_STRLEN];
+>
+> Oops...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501310035.jc65cSS0-lkp@intel.com/
+It works because IRL we haven't seen the broken strings that %pE
+escapes with help of an octal code. But if one doesn't trust that
+input and uses %pE they should provide enough buffer for that
+translation to happen.
 
-All errors (new ones prefixed by >>):
-
->> fs/hpfs/anode.c:103:11: error: use of undeclared identifier 'anode_btree'; did you mean 'node_state'?
-     103 |                 btree = anode_btree;
-         |                         ^~~~~~~~~~~
-         |                         node_state
-   include/linux/nodemask.h:472:28: note: 'node_state' declared here
-     472 | static __always_inline int node_state(int node, enum node_states state)
-         |                            ^
-   fs/hpfs/anode.c:165:11: error: use of undeclared identifier 'anode_btree'; did you mean 'ranode_btree'?
-     165 |                 btree = anode_btree;
-         |                         ^~~~~~~~~~~
-         |                         ranode_btree
-   fs/hpfs/anode.c:161:24: note: 'ranode_btree' declared here
-     161 |                 struct bplus_header *ranode_btree =
-         |                                      ^
-   fs/hpfs/anode.c:182:12: error: use of undeclared identifier 'anode_btree'; did you mean 'node_state'?
-     182 |                         btree = anode_btree;
-         |                                 ^~~~~~~~~~~
-         |                                 node_state
-   include/linux/nodemask.h:472:28: note: 'node_state' declared here
-     472 | static __always_inline int node_state(int node, enum node_states state)
-         |                            ^
->> fs/hpfs/anode.c:185:12: error: use of undeclared identifier 'fnode_btree'
-     185 |                         btree = fnode_btree;
-         |                                 ^
-   fs/hpfs/anode.c:220:4: error: use of undeclared identifier 'anode_btree'
-     220 |                         anode_btree->u.internal[0].down = cpu_to_le32(a);
-         |                         ^
-   fs/hpfs/anode.c:221:4: error: use of undeclared identifier 'anode_btree'
-     221 |                         anode_btree->u.internal[0].file_secno = cpu_to_le32(-1);
-         |                         ^
-   fs/hpfs/anode.c:243:11: error: use of undeclared identifier 'anode_btree'; did you mean 'node_state'?
-     243 |                 btree = anode_btree;
-         |                         ^~~~~~~~~~~
-         |                         node_state
-   include/linux/nodemask.h:472:28: note: 'node_state' declared here
-     472 | static __always_inline int node_state(int node, enum node_states state)
-         |                            ^
-   fs/hpfs/anode.c:249:11: error: use of undeclared identifier 'fnode_btree'
-     249 |                 btree = fnode_btree;
-         |                         ^
-   fs/hpfs/anode.c:255:2: error: use of undeclared identifier 'ranode_btree'
-     255 |         ranode_btree->n_free_nodes = (bp_internal(ranode_btree) ? 60 : 40) - ranode_btree->n_used_nodes;
-         |         ^
-   fs/hpfs/anode.c:255:44: error: use of undeclared identifier 'ranode_btree'
-     255 |         ranode_btree->n_free_nodes = (bp_internal(ranode_btree) ? 60 : 40) - ranode_btree->n_used_nodes;
-         |                                                   ^
-   fs/hpfs/anode.c:255:71: error: use of undeclared identifier 'ranode_btree'
-     255 |         ranode_btree->n_free_nodes = (bp_internal(ranode_btree) ? 60 : 40) - ranode_btree->n_used_nodes;
-         |                                                                              ^
-   fs/hpfs/anode.c:256:18: error: use of undeclared identifier 'ranode_btree'
-     256 |         if (bp_internal(ranode_btree)) for (n = 0; n < ranode_btree->n_used_nodes; n++) {
-         |                         ^
-   fs/hpfs/anode.c:256:49: error: use of undeclared identifier 'ranode_btree'
-     256 |         if (bp_internal(ranode_btree)) for (n = 0; n < ranode_btree->n_used_nodes; n++) {
-         |                                                        ^
-   13 errors generated.
-
-
-vim +103 fs/hpfs/anode.c
-
-    60	
-    61	secno hpfs_add_sector_to_btree(struct super_block *s, secno node, int fnod, unsigned fsecno)
-    62	{
-    63		struct bplus_header *btree;
-    64		struct anode *anode = NULL, *ranode = NULL;
-    65		struct fnode *fnode;
-    66		anode_secno a, na = -1, ra, up = -1;
-    67		secno se;
-    68		struct buffer_head *bh, *bh1, *bh2;
-    69		int n;
-    70		unsigned fs;
-    71		int c1, c2 = 0;
-    72	
-    73		if (fnod) {
-    74			if (!(fnode = hpfs_map_fnode(s, node, &bh))) return -1;
-    75			struct bplus_header *fnode_btree =
-    76						container_of(&fnode->btree,
-    77							     struct bplus_header,
-    78							     __hdr);
-    79			btree = fnode_btree;
-    80		} else {
-    81			if (!(anode = hpfs_map_anode(s, node, &bh))) return -1;
-    82			struct bplus_header *anode_btree =
-    83						container_of(&anode->btree,
-    84							     struct bplus_header,
-    85							     __hdr);
-    86			btree = anode_btree;
-    87		}
-    88		a = node;
-    89		go_down:
-    90		if ((n = btree->n_used_nodes - 1) < -!!fnod) {
-    91			hpfs_error(s, "anode %08x has no entries", a);
-    92			brelse(bh);
-    93			return -1;
-    94		}
-    95		if (bp_internal(btree)) {
-    96			a = le32_to_cpu(btree->u.internal[n].down);
-    97			btree->u.internal[n].file_secno = cpu_to_le32(-1);
-    98			mark_buffer_dirty(bh);
-    99			brelse(bh);
-   100			if (hpfs_sb(s)->sb_chk)
-   101				if (hpfs_stop_cycles(s, a, &c1, &c2, "hpfs_add_sector_to_btree #1")) return -1;
-   102			if (!(anode = hpfs_map_anode(s, a, &bh))) return -1;
- > 103			btree = anode_btree;
-   104			goto go_down;
-   105		}
-   106		if (n >= 0) {
-   107			if (le32_to_cpu(btree->u.external[n].file_secno) + le32_to_cpu(btree->u.external[n].length) != fsecno) {
-   108				hpfs_error(s, "allocated size %08x, trying to add sector %08x, %cnode %08x",
-   109					le32_to_cpu(btree->u.external[n].file_secno) + le32_to_cpu(btree->u.external[n].length), fsecno,
-   110					fnod?'f':'a', node);
-   111				brelse(bh);
-   112				return -1;
-   113			}
-   114			if (hpfs_alloc_if_possible(s, se = le32_to_cpu(btree->u.external[n].disk_secno) + le32_to_cpu(btree->u.external[n].length))) {
-   115				le32_add_cpu(&btree->u.external[n].length, 1);
-   116				mark_buffer_dirty(bh);
-   117				brelse(bh);
-   118				return se;
-   119			}
-   120		} else {
-   121			if (fsecno) {
-   122				hpfs_error(s, "empty file %08x, trying to add sector %08x", node, fsecno);
-   123				brelse(bh);
-   124				return -1;
-   125			}
-   126			se = !fnod ? node : (node + 16384) & ~16383;
-   127		}	
-   128		if (!(se = hpfs_alloc_sector(s, se, 1, fsecno*ALLOC_M>ALLOC_FWD_MAX ? ALLOC_FWD_MAX : fsecno*ALLOC_M<ALLOC_FWD_MIN ? ALLOC_FWD_MIN : fsecno*ALLOC_M))) {
-   129			brelse(bh);
-   130			return -1;
-   131		}
-   132		fs = n < 0 ? 0 : le32_to_cpu(btree->u.external[n].file_secno) + le32_to_cpu(btree->u.external[n].length);
-   133		if (!btree->n_free_nodes) {
-   134			up = a != node ? le32_to_cpu(anode->up) : -1;
-   135			if (!(anode = hpfs_alloc_anode(s, a, &na, &bh1))) {
-   136				brelse(bh);
-   137				hpfs_free_sectors(s, se, 1);
-   138				return -1;
-   139			}
-   140			if (a == node && fnod) {
-   141				anode->up = cpu_to_le32(node);
-   142				anode->btree.flags |= BP_fnode_parent;
-   143				anode->btree.n_used_nodes = btree->n_used_nodes;
-   144				anode->btree.first_free = btree->first_free;
-   145				anode->btree.n_free_nodes = 40 - anode->btree.n_used_nodes;
-   146				memcpy(&anode->u, &btree->u, btree->n_used_nodes * 12);
-   147				btree->flags |= BP_internal;
-   148				btree->n_free_nodes = 11;
-   149				btree->n_used_nodes = 1;
-   150				btree->first_free = cpu_to_le16((char *)&(btree->u.internal[1]) - (char *)btree);
-   151				btree->u.internal[0].file_secno = cpu_to_le32(-1);
-   152				btree->u.internal[0].down = cpu_to_le32(na);
-   153				mark_buffer_dirty(bh);
-   154			} else if (!(ranode = hpfs_alloc_anode(s, /*a*/0, &ra, &bh2))) {
-   155				brelse(bh);
-   156				brelse(bh1);
-   157				hpfs_free_sectors(s, se, 1);
-   158				hpfs_free_sectors(s, na, 1);
-   159				return -1;
-   160			}
-   161			struct bplus_header *ranode_btree =
-   162						container_of(&ranode->btree, struct bplus_header, __hdr);
-   163			brelse(bh);
-   164			bh = bh1;
-   165			btree = anode_btree;
-   166		}
-   167		btree->n_free_nodes--; n = btree->n_used_nodes++;
-   168		le16_add_cpu(&btree->first_free, 12);
-   169		btree->u.external[n].disk_secno = cpu_to_le32(se);
-   170		btree->u.external[n].file_secno = cpu_to_le32(fs);
-   171		btree->u.external[n].length = cpu_to_le32(1);
-   172		mark_buffer_dirty(bh);
-   173		brelse(bh);
-   174		if ((a == node && fnod) || na == -1) return se;
-   175		c2 = 0;
-   176		while (up != (anode_secno)-1) {
-   177			struct anode *new_anode;
-   178			if (hpfs_sb(s)->sb_chk)
-   179				if (hpfs_stop_cycles(s, up, &c1, &c2, "hpfs_add_sector_to_btree #2")) return -1;
-   180			if (up != node || !fnod) {
-   181				if (!(anode = hpfs_map_anode(s, up, &bh))) return -1;
-   182				btree = anode_btree;
-   183			} else {
-   184				if (!(fnode = hpfs_map_fnode(s, up, &bh))) return -1;
- > 185				btree = fnode_btree;
-   186			}
-   187			if (btree->n_free_nodes) {
-   188				btree->n_free_nodes--; n = btree->n_used_nodes++;
-   189				le16_add_cpu(&btree->first_free, 8);
-   190				btree->u.internal[n].file_secno = cpu_to_le32(-1);
-   191				btree->u.internal[n].down = cpu_to_le32(na);
-   192				btree->u.internal[n-1].file_secno = cpu_to_le32(fs);
-   193				mark_buffer_dirty(bh);
-   194				brelse(bh);
-   195				brelse(bh2);
-   196				hpfs_free_sectors(s, ra, 1);
-   197				if ((anode = hpfs_map_anode(s, na, &bh))) {
-   198					anode->up = cpu_to_le32(up);
-   199					if (up == node && fnod)
-   200						anode->btree.flags |= BP_fnode_parent;
-   201					else
-   202						anode->btree.flags &= ~BP_fnode_parent;
-   203					mark_buffer_dirty(bh);
-   204					brelse(bh);
-   205				}
-   206				return se;
-   207			}
-   208			up = up != node ? le32_to_cpu(anode->up) : -1;
-   209			btree->u.internal[btree->n_used_nodes - 1].file_secno = cpu_to_le32(/*fs*/-1);
-   210			mark_buffer_dirty(bh);
-   211			brelse(bh);
-   212			a = na;
-   213			if ((new_anode = hpfs_alloc_anode(s, a, &na, &bh))) {
-   214				anode = new_anode;
-   215				/*anode->up = cpu_to_le32(up != -1 ? up : ra);*/
-   216				anode->btree.flags |= BP_internal;
-   217				anode->btree.n_used_nodes = 1;
-   218				anode->btree.n_free_nodes = 59;
-   219				anode->btree.first_free = cpu_to_le16(16);
-   220				anode_btree->u.internal[0].down = cpu_to_le32(a);
-   221				anode_btree->u.internal[0].file_secno = cpu_to_le32(-1);
-   222				mark_buffer_dirty(bh);
-   223				brelse(bh);
-   224				if ((anode = hpfs_map_anode(s, a, &bh))) {
-   225					anode->up = cpu_to_le32(na);
-   226					mark_buffer_dirty(bh);
-   227					brelse(bh);
-   228				}
-   229			} else na = a;
-   230		}
-   231		if ((anode = hpfs_map_anode(s, na, &bh))) {
-   232			anode->up = cpu_to_le32(node);
-   233			if (fnod)
-   234				anode->btree.flags |= BP_fnode_parent;
-   235			mark_buffer_dirty(bh);
-   236			brelse(bh);
-   237		}
-   238		if (!fnod) {
-   239			if (!(anode = hpfs_map_anode(s, node, &bh))) {
-   240				brelse(bh2);
-   241				return -1;
-   242			}
-   243			btree = anode_btree;
-   244		} else {
-   245			if (!(fnode = hpfs_map_fnode(s, node, &bh))) {
-   246				brelse(bh2);
-   247				return -1;
-   248			}
-   249			btree = fnode_btree;
-   250		}
-   251		ranode->up = cpu_to_le32(node);
-   252		memcpy(&ranode->btree, btree, le16_to_cpu(btree->first_free));
-   253		if (fnod)
-   254			ranode->btree.flags |= BP_fnode_parent;
-   255		ranode_btree->n_free_nodes = (bp_internal(ranode_btree) ? 60 : 40) - ranode_btree->n_used_nodes;
-   256		if (bp_internal(ranode_btree)) for (n = 0; n < ranode_btree->n_used_nodes; n++) {
-   257			struct anode *unode;
-   258			if ((unode = hpfs_map_anode(s, le32_to_cpu(ranode->u.internal[n].down), &bh1))) {
-   259				unode->up = cpu_to_le32(ra);
-   260				unode->btree.flags &= ~BP_fnode_parent;
-   261				mark_buffer_dirty(bh1);
-   262				brelse(bh1);
-   263			}
-   264		}
-   265		btree->flags |= BP_internal;
-   266		btree->n_free_nodes = fnod ? 10 : 58;
-   267		btree->n_used_nodes = 2;
-   268		btree->first_free = cpu_to_le16((char *)&btree->u.internal[2] - (char *)btree);
-   269		btree->u.internal[0].file_secno = cpu_to_le32(fs);
-   270		btree->u.internal[0].down = cpu_to_le32(ra);
-   271		btree->u.internal[1].file_secno = cpu_to_le32(-1);
-   272		btree->u.internal[1].down = cpu_to_le32(na);
-   273		mark_buffer_dirty(bh);
-   274		brelse(bh);
-   275		mark_buffer_dirty(bh2);
-   276		brelse(bh2);
-   277		return se;
-   278	}
-   279	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+With Best Regards,
+Andy Shevchenko
