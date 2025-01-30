@@ -1,221 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3EF3E499;
-	Thu, 30 Jan 2025 07:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6458C19DF60
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 08:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738220810; cv=none; b=X4zGBTZAKvRprCP/dx0qMU+mCl9sJKdUQL3an+z7DfAUIyVN8RMCoFkUH5pEqC9mU2kcVznCsRYnPVftWfYtb6taZLkyOQ+jR6YT41r/L3kNscekRpVnB3C7G8OatmbjRiC6hGb9sJYEYu3bv75Yb5uIAGHmo2YUNg9Ln/EmdcI=
+	t=1738225290; cv=none; b=smFRptYE6ntxWIjhhZvgTEJXJze5fsFfNfopf93tzrXRzmKvev+mdWwhKEHBoUUckAb4Z1rPJqXcMfMsTv1vgCKN+N6CpbiHFuPsoTuXlUEPYs8/xncelMHWIqLOjcez4QViV1VOff0L21mShIFT4OtFHzzzNniN0c9slUUojyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738220810; c=relaxed/simple;
-	bh=65jUJG9caq9cyJDHIoGlVpeLv7gZ/BdZBMxmRdScOUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QZAAW2FeopG8QJnAhkBwIoax4IIc0pJfk9fgwYn1+QbQ2GAoUnWBepjhmp5OY5ZlBuoyA2t/dyFdknHKlyKDFfR5zNyoa0cQvpQBolFr/ykVlBGUoquVHtvt/OB3YqyY4a/bqdzw/Chg8G2dslC/an6XM2/armXKYk8uwN76a80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cY0ejh1f; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cY0ejh1f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738220809; x=1769756809;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=65jUJG9caq9cyJDHIoGlVpeLv7gZ/BdZBMxmRdScOUU=;
-  b=cY0ejh1f15p3ZqYZQ5eNCL9H0ArMXyoCAJNlnve9xQPjEcAqnO8YQuNx
-   lDntX0blJcnTMde6VrxHT1tfgCaAjvU4Xy005hiAmFwb+DF82zxfleJQ7
-   Y8O0IXs3pLAkQf5MFC1ZhGyoInXDJ4SMxCLIDK61GF93YVB+3IuNHOp0I
-   yBuVU7YZezi6wQcBzdWwVqjFVHls4fUba3O2lI1BlflyBQLx6xVklmM0n
-   jDBL6glaiviI9U6tEMvLZl6DEMipHqeAf4dfIt9L5XBQmJN2pmB/ZzdMT
-   6Vvj+cXnaER3jo96ja3gh5+nFTA28VTeznSdi/Qmyo4bk93X3Kvx1YBs4
-   g==;
-X-CSE-ConnectionGUID: YxJBMCJGSBCpNfDb2WXSbA==
-X-CSE-MsgGUID: inJjNioJQ1WTni05cMOHkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="38644958"
-X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
-   d="scan'208";a="38644958"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 23:06:48 -0800
-X-CSE-ConnectionGUID: 4R2em9WISe6rmx+fcBbQPg==
-X-CSE-MsgGUID: Ol3WKRjvQqu/rasfbGtq1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
-   d="scan'208";a="109157064"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Jan 2025 23:06:46 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdOdQ-000jnT-0f;
-	Thu, 30 Jan 2025 07:06:44 +0000
-Date: Thu, 30 Jan 2025 15:06:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_pages 12/20] drivers/iommu/iommu-pages.c:75:6:
- error: conflicting types for 'iommu_put_pages_list'
-Message-ID: <202501301544.LclxCLKY-lkp@intel.com>
+	s=arc-20240116; t=1738225290; c=relaxed/simple;
+	bh=DM9D4FDbGNU5mWpG91VU/qPeDc9li7yVy2LWC1+OY8w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eFHNOIbZ8tQE0xWKggp38cx0Qvh9ZqeLussItKLPalpJrTIk5aB/eYu2Jdk53xNcANtIsBFheJ+E5DSRSxuLLkvBh5FQAfF4iXdRRmRRDxzx7AL48q9uXAaZGo4GcFFh7KDNHfF/MXtTBv0SAHzIEHsqaaMWHgR4gupFGsSTQm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-518ae5060d4so168252e0c.0
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 00:21:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738225285; x=1738830085;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GaD/E6PXTaDQ2QuYo/3qqTDpp2nzD7hhPFRo29uLk0A=;
+        b=aiyqUHgSJaDWvFwT5LR4i9TVFLCaGuILWDVqzKOLh0dS4ouL9qiCn518EbouFDgshK
+         lJnMA8rOy7yr8w4CFOTLCKxMe6LbHAucYws8pevfMapjz1atG2ii2B3LukKZHwCrkhHY
+         5jF0KZKiSRdTwM7QNZRRiUn5hJdOKww/BYc7bbTRvUzU+tysadDh7iOiPCFHktiXWNxi
+         LzK/PS59G60DTrKoxpqCc/m3ely/4BP9+jpw4sQVIRynMLfaF4JBgmEeaZrkV3bHDyFm
+         FlwsN3HwjWVUC1yt9x8/YuqDLWuXQN2q098K64BQXmbmAj9K+oBD43b5xX5K2JvPT2ra
+         kDJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVOoHG3RNXSUITNmPnaQXWJDV+dLedS3HtrRPFjUJ9gbunfERok6+dkYQuV7W3tuTGAXQSR@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz1XVMDgNd6UblGQzoxYn5ihOv2i6z4msQgx8zoTXVzqUi0ukEw
+	Ep3BmqRBcidpY4ijQ+y7THp8+nhUKlaM+rd20dd7LIL5tHia6gcPYWuIWoxo
+X-Gm-Gg: ASbGncsvfy4+PuT4WsJXX9EuUOjii3j2RCPcdjXjzfldNmUVPnkvAb2ASIu7s2aTTUc
+	kx+vUdfLqnov6N9YHT4dGe3Kj5m7na9mlNKZrQOkzNXO7AlPlha1Mrj15OXvzDcH3NiVCeb/1vC
+	7imLuxuqg6o6Lc7Szvn8L1Mls6WSOn00+u1XpNIJq60BOrfZErFfGd6ymmWpf95/P4yiznstOAG
+	ueI7+ofTE3CstDyofKwPttxzBQn1Na3qVfqwLjbHx++Gzj83WDKCGlGYGeLSXqzWFEdr3FN4X14
+	uHVI2my80t+95K5A3X2aANkSwjnuqlVOvF1Fys38fPTASSmldiAd4EFFIg==
+X-Google-Smtp-Source: AGHT+IEKpm8ErjYZ8G5SGcHO4la13CA/64SnIkB421LpRePv+9M/AH3RzAdgd2e9lK0ePzeSRmhaGw==
+X-Received: by 2002:a05:6122:348a:b0:517:4fb0:74bc with SMTP id 71dfb90a1353d-51e9e3fd1b3mr6641479e0c.3.1738225285321;
+        Thu, 30 Jan 2025 00:21:25 -0800 (PST)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51eb1d62eedsm136964e0c.33.2025.01.30.00.21.24
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2025 00:21:24 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-51eb18130f9so73072e0c.3
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 00:21:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjse7kaGAxtftspS+9xwhzNrw+d6MnJ3dhhYs+PfJVMbXuo14LmOTABBLoT5AEG4Go1B3K@lists.linux.dev
+X-Received: by 2002:a05:6102:a52:b0:4b2:7996:6ba4 with SMTP id
+ ada2fe7eead31-4b9a5266e7amr5391829137.25.1738225284361; Thu, 30 Jan 2025
+ 00:21:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+ <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com> <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+In-Reply-To: <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 30 Jan 2025 09:21:12 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
+X-Gm-Features: AWEUYZniYx50uUBB4BKLzCpQ-mS0oONl2y__yoxAs6c6zYEzharbM-CAzfEZmbQ
+Message-ID: <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
+Subject: Re: [PATCH] xarray: port tests to kunit
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Sidhartha Kumar <sidhartha.kumar@oracle.com>, akpm@linux-foundation.org, 
+	christophe.leroy@csgroup.eu, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, maddy@linux.ibm.com, 
+	morbo@google.com, mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
+	ndesaulniers@google.com, npiggin@gmail.com, 
+	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/jgunthorpe/linux iommu_pages
-head:   b21a333dd68ad1bca44a6a4ff61c91a9d43fba3a
-commit: 828ed1aedcab6ea687a2a6c81e5fb2b6f01328da [12/20] iommu/pages: Remove iommu_put_pages_list_old and the _Generic
-config: um-defconfig (https://download.01.org/0day-ci/archive/20250130/202501301544.LclxCLKY-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501301544.LclxCLKY-lkp@intel.com/reproduce)
+Hi Liam,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501301544.LclxCLKY-lkp@intel.com/
+On Wed, 29 Jan 2025 at 23:26, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> I've never used the kunit testing of xarray and have used the userspace
+> testing instead, so I can't speak to the obscure invocation as both
+> commands seem insanely long and obscure to me.
 
-All errors (new ones prefixed by >>):
+The long and obscure command line is a red herring: a simple
+"modprobe test_xarray" is all it takes...
 
-   In file included from drivers/iommu/iommu-pages.c:6:
-   drivers/iommu/iommu-pages.h:14:34: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      14 | void iommu_put_pages_list(struct iommu_pages_list *list);
-         |                                  ^
-   drivers/iommu/iommu-pages.h:21:48: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      21 | static inline void iommu_pages_list_add(struct iommu_pages_list *list,
-         |                                                ^
-   drivers/iommu/iommu-pages.h:24:47: error: incomplete definition of type 'struct iommu_pages_list'
-      24 |         list_add_tail(&virt_to_page(virt)->lru, &list->pages);
-         |                                                  ~~~~^
-   drivers/iommu/iommu-pages.h:21:48: note: forward declaration of 'struct iommu_pages_list'
-      21 | static inline void iommu_pages_list_add(struct iommu_pages_list *list,
-         |                                                ^
-   drivers/iommu/iommu-pages.h:35:51: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      35 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:38:19: error: incomplete definition of type 'struct iommu_pages_list'
-      38 |         list_splice(&from->pages, &to->pages);
-         |                      ~~~~^
-   drivers/iommu/iommu-pages.h:35:51: note: forward declaration of 'struct iommu_pages_list'
-      35 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:38:31: error: incomplete definition of type 'struct iommu_pages_list'
-      38 |         list_splice(&from->pages, &to->pages);
-         |                                    ~~^
-   drivers/iommu/iommu-pages.h:35:51: note: forward declaration of 'struct iommu_pages_list'
-      35 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:45:50: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      45 | static inline bool iommu_pages_list_empty(struct iommu_pages_list *list)
-         |                                                  ^
-   drivers/iommu/iommu-pages.h:47:25: error: incomplete definition of type 'struct iommu_pages_list'
-      47 |         return list_empty(&list->pages);
-         |                            ~~~~^
-   drivers/iommu/iommu-pages.h:45:50: note: forward declaration of 'struct iommu_pages_list'
-      45 | static inline bool iommu_pages_list_empty(struct iommu_pages_list *list)
-         |                                                  ^
-   drivers/iommu/iommu-pages.c:75:34: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |                                  ^
->> drivers/iommu/iommu-pages.c:75:6: error: conflicting types for 'iommu_put_pages_list'
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |      ^
-   drivers/iommu/iommu-pages.h:14:6: note: previous declaration is here
-      14 | void iommu_put_pages_list(struct iommu_pages_list *list);
-         |      ^
-   drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   include/linux/container_of.h:19:26: note: expanded from macro 'container_of'
-      19 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
-   drivers/iommu/iommu-pages.c:75:34: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |                                  ^
-   drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/iommu/iommu-pages.c:75:34: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |                                  ^
-   drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/iommu/iommu-pages.c:75:34: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |                                  ^
-   drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:859:32: note: expanded from macro 'list_for_each_entry_safe'
-     859 |              !list_entry_is_head(pos, head, member);                    \
-         |                                       ^~~~
-   include/linux/list.h:761:30: note: expanded from macro 'list_entry_is_head'
-     761 |         list_is_head(&pos->member, (head))
-         |                                     ^~~~
-   drivers/iommu/iommu-pages.c:75:34: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list(struct iommu_pages_list *list)
-         |                                  ^
-   5 warnings and 9 errors generated.
+> You should look at the userspace testing (that this broke) as it has
+> been really useful in certain scenarios.
+
+BTW, how do I even build tools/testing/radix-tree?
+"make tools/help" doesn't show the radix-tree test.
+"make tools/all" doesn't seem to try to build it.
+Same for "make kselftest-all".
+When trying the above, and ignoring failures due to missing packages
+on my host:
+  - there are several weird build errors,
+  - this doesn't play well with O=,
+  - lots of scary warnings when building for 32-bit,
+  - ...
+
+At least the kunit tests build (and run[1] ;-) most of the time...
+
+[1] test_xarray started failing on m68k recently
+    https://lore.kernel.org/all/CAMuHMdU_bfadUO=0OZ=AoQ9EAmQPA4wsLCBqohXR+QCeCKRn4A@mail.gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 
-vim +/iommu_put_pages_list +75 drivers/iommu/iommu-pages.c
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-    68	
-    69	/**
-    70	 * iommu_put_pages_list - free a list of pages.
-    71	 * @list: The list of pages to be freed
-    72	 *
-    73	 * Frees a list of pages allocated by iommu_alloc_pages_node().
-    74	 */
-  > 75	void iommu_put_pages_list(struct iommu_pages_list *list)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
