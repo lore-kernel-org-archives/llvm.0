@@ -1,82 +1,161 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE51E2853
-	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 14:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAC41E9B15
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 14:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738247816; cv=none; b=dspOR5N9gv9ROE2y7s4DLT8tmbh4xSh5p6XBGrnMHutFoTODGggfbic3xa3EIHkbfWRBF/J6sxnxyZZfoNMToQEeXH+8TsKG+8lyzVqg3HnyGT8+O9SVgbyDC2t/x+V4sCQvjhKcewILdH9arLjYCiG5RxyWv5Q/5hOwpfSMkww=
+	t=1738247936; cv=none; b=QZgeMnCsK2XBkNFxyqDGhp06dJAtiXe70WbHY3PjETuzDD5T9f5tGKsPzCtudKb4rHuLJZXGNLhUsxI0tDbuj3xos5F85vfgptNDFrd0oY3AF9UE7a6lBcqvOmszCD8VViT0vuWdUNybiEqRTmhzfz8vJy4Y2+Atr+Dbv4OvYXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738247816; c=relaxed/simple;
-	bh=w4zTxfa4CCDrQAqGDdWlBpCt/2B8kWrn1L7k7sZwIxw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Sr8QbhO9sA14/AMJsFleFefqK7aLmFnPbnhPJxJTdT70fv1WTS7R0Jgy2w3Gk35WYxUJfxfAyc8BfYr+PToiVnIhNsS9tZ1ANgoCkh+z6CqxBiT2r4/782/lShni0C1SApDjCmksFVzzOC2yJ2Wm5NXWAIswkYReQ3a0kPjbJq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=sKEKC6A5; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="sKEKC6A5"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2A488411A9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1738247474; bh=o6c9Xty8LBnNCjw4IIteZjg2Dft0pgS1FqTeBELLb/s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=sKEKC6A5mJNrWh2OnYdq4XrzlSBVffqzWdJUguTsQbBj9drsXtFOgeef3xmLeJ4lg
-	 /PjJl21/gpJUMJcSlyoXz4wFPT5XDnIcqabEboDohTJeSD0N/MfB7WMqkGWTIS7Rcy
-	 OdwEOZI8s7lHDnUmCsPWv2hkfgANWG5YaoqVMpVDiqq/zBgs1t86wEURsyuYWeOxwq
-	 DCzAjUgxGr+l3ZThZ45iElLUMPxwPJmLa6d/E+S7QRpN+O0OoPytaxBrAxtTyGVA4I
-	 GhkQXOyCZymZcfdaKhZnERHVIT5HC1AE/yqk7CauHk3/AfrlNZnuMxWIRveSQykYgD
-	 xUI2FJhDNiPiA==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 2A488411A9;
-	Thu, 30 Jan 2025 14:31:14 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Donald Hunter <donald.hunter@gmail.com>, Mauro Carvalho Chehab
- <mchehab+huawei@kernel.org>
-Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
- linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Nick
- Desaulniers <ndesaulniers@google.com>, bpf@vger.kernel.org,
- llvm@lists.linux.dev, workflows@vger.kernel.org
-Subject: Re: [RFC 0/6] Raise the bar with regards to Python and Sphinx
- requirements
-In-Reply-To: <m2zfj87ij9.fsf@gmail.com>
-References: <cover.1738166451.git.mchehab+huawei@kernel.org>
- <m2zfj87ij9.fsf@gmail.com>
-Date: Thu, 30 Jan 2025 07:31:13 -0700
-Message-ID: <87jzac2x1q.fsf@trenco.lwn.net>
+	s=arc-20240116; t=1738247936; c=relaxed/simple;
+	bh=ndA1DqYJeLDgwxI0sFTIswtI2TRbJRaDwStsY7tYaU0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QeMVOen6efJbKSqgx0Y19j2RvmYnGE9sjQzgbUgSJS8Qcw+uEV7Wv30doM3iUF5Ajx2sWxdZ1MhgZWE1InqYHL0R4cg8sE3l4VMAy4YcM3ps/Eo3oVD+SJtm6tL8UZ6G89hc2gNDjN6JBpt6nZJg030QyD57sg27U8H5vJUMG/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4aff1c57377so481925137.0
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 06:38:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738247932; x=1738852732;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3koQwFtsYEj+sBiSRxwOt8Kdl4P9BIA497a/eImNeSg=;
+        b=SpoTh71o7OudY1ns192mCOeRzdJrWNRHldS6h8gyEfxXZBNsWpwo+tXuMHF3GpSM3C
+         g9jwUm9oDsIUAH8zdw6hyZRShU0iEvRS6vR0XASr+HBIgSoAPz7vhQ5L9aRKzMSlGA7z
+         FMXFGTs94rACi2HgS948fE66nqrKbmJxmFsGWVO0hCS1RCRgh3/o/qMUoB15YF1pNmZs
+         qLRaKOYtvrI1Gpsj3IbvhtnJGv7y2oS7r5fLg6xBhsWHrnLyIHGkdOU5siTT5ciL+xGY
+         4wldY9UlF0z7a2Fvh1fXO2uD9lB8lRLNckxWS2ewhF7gpmc15wDg88ys9h+bC8IrLH5W
+         LgMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlJKRW0Ri6I3/HcyjsBPfZmSFzCEYdruwgPf+Ys4WlBlNqHyiMKBHZNcED3JOgP2o70YCh@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx5xQGPzVEoFgYiFh+yt/Vi6AlqdGGwtxNJnEB2Ud0BW59hlnf2
+	9O7No7FSiEz6e0SpbQnNCN0cYQjPlW05QFi8c44GwXuQRqSKmmZ7a7Wl1aLtPBk=
+X-Gm-Gg: ASbGncsEgBBj7c+Zq4PH6jNCjYDcM+gDs2JVsiBbDHuCDFMW5hWBld2LC3AM8DSc5XW
+	oMxiixUWB1TKpYlinZ6SUtgMUHul7SOoXYHeglNY2CkGj1t3pYEw0yxBGGpXwGPK1r3DW7hqR70
+	wKfrRj1p34zPll32urXrcFtr+/OSRcwEDXIMxwhlgJaN0drU2smXRwVuE4mxTYKxVbQ0RCDTKu5
+	9VnIHsjUyNP+ODm9OAPULDMAXqiNQpvaZsyikqx6JfLw67LCNnvMzylb2XEyC7UL2DeEsI9BNOG
+	Hpya7EhOnn1XvEZvZxPhZuq9olSW6yiCtt5DvTjlnwnYVvbQlmFq9A==
+X-Google-Smtp-Source: AGHT+IHPlAjoprGfTi/01uvXYBfp4LmZAWqv/08jYcs5wiJJg+egii7oodITxRilg2TLRJHofVfsSQ==
+X-Received: by 2002:a05:6102:442a:b0:4b5:c302:37b3 with SMTP id ada2fe7eead31-4b9b7187ff0mr3171759137.5.1738247932323;
+        Thu, 30 Jan 2025 06:38:52 -0800 (PST)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9bad67a17sm254806137.30.2025.01.30.06.38.49
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2025 06:38:49 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4aff1c57377so481862137.0
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 06:38:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVKpooMe6Is3kg2nsMN63pFS6ziq8lcSGkI6MXVjxPzeJ1gmF6SQRsZQ7Yj/feE5soZwpT0@lists.linux.dev
+X-Received: by 2002:a67:f318:0:b0:4af:d48d:5142 with SMTP id
+ ada2fe7eead31-4b9b70f3a0bmr2755704137.3.1738247929070; Thu, 30 Jan 2025
+ 06:38:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+ <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
+ <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+ <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
+ <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
+ <CAMuHMdWDRLi8AE0PgfAnXundbS0hyTyovUH7yScrY7GtmYYPOQ@mail.gmail.com> <9636ed9d-3bfb-4dda-98dc-f945c9d53698@lucifer.local>
+In-Reply-To: <9636ed9d-3bfb-4dda-98dc-f945c9d53698@lucifer.local>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 30 Jan 2025 15:38:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUFbhzi8J3rmyvVn7HmrxbeyoOwu97w8cnuKJxksa8iaw@mail.gmail.com>
+X-Gm-Features: AWEUYZmOwEzWB0gEceqhOwmudbYpt2s9uwC-1Re-pPG58BUZxS-FmbWZ_JWw55Q
+Message-ID: <CAMuHMdUFbhzi8J3rmyvVn7HmrxbeyoOwu97w8cnuKJxksa8iaw@mail.gmail.com>
+Subject: Re: [PATCH] xarray: port tests to kunit
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Sidhartha Kumar <sidhartha.kumar@oracle.com>, 
+	akpm@linux-foundation.org, christophe.leroy@csgroup.eu, 
+	justinstitt@google.com, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev, maddy@linux.ibm.com, morbo@google.com, 
+	mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
+	ndesaulniers@google.com, npiggin@gmail.com, 
+	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-Donald Hunter <donald.hunter@gmail.com> writes:
+Hi Lorenzo,
 
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On Thu, 30 Jan 2025 at 15:09, Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+> Having written a ton of test code, I've unfortunately encountered a lot of
+> this sort of push-back and it's HUGELY off-putting. Writing test code
+> should be ENCOURAGED not litigated against.
+
+I am not discouraging nor pushing back on any testing code (on the
+contrary, I test every single new kunit test that appears upstream).
+My apologies if I gave the impression.
+
+> The truth is far too little kernel code is tested to any degree, and this
+> is part of why.
 >
->> This series comes after https://lore.kernel.org/linux-doc/87a5b96296.fsf@trenco.lwn.net/T/#t
->> It  increases the minimal requirements for Sphinx and Python.
->>
->> Sphinx release dates:
->>
->> 	Release 2.4.0 (released Feb 09, 2020)
->> 	Release 2.4.4 (released Mar 05, 2020) (current minimal requirement)
->> 	Release 3.4.0 (released Dec 20, 2020)
->> 	Release 3.4.3 (released Jan 08, 2021)
->>
->> 	(https://www.sphinx-doc.org/en/master/changes/index.html)
+> On kunit collaboration, I attended an in-person talk at LPC on kunit
+> userland testing where it was broadly agreed that at this point in time,
+> the xarray/radix tree tests weren't really suited to the framework.
 >
-> It's worth mentioning here that my fix for the C performance regression
-> landed in Sphinx 7.4.0. All versions from 3.0.0 to 7.3.x are much slower
-> for building the kernel docs. See #12162 here:
+> Therefore I think the healthy means of pushing forward with integration is
+> in sensible discussion and if patches, RFC patches in collaboration with
+> authors.
+
+Good.
+
+> The unhealthy approach is to needle one of the biggest contributors to core
+> test code in the kernel on a thread because you don't seem to want to cd to
+> a directory and run make.
+
+My initial issue was that I could not find out where that is documented.
+
+    $ make help
+    ...
+    Userspace tools targets:
+      use "make tools/help"
+      or  "cd tools; make help"
+
+    $ make tools/help
+    Possible targets:
+    ...
+    You can do:
+      ...
+      $ make tools/all
+
+      builds all tools.
+
+But that command does not build tools/testing/radix-tree, so I was
+completely lost.
+
+> Why is this relevant to me? I am the author of the VMA test suite, on which
+> I spent countless hours + relied heavily on Liam's work to do so, and
+> equally there you have to cd to a directory and run make.
+
+Thanks for your work!  One suggestion for improvement: tools/testing/vma
+does not seem to be built by "make tools/all" either.
+
+> But at the same time in both cases, testability of key internal components
+> is ENORMOUSLY improved and allows for REALLY exciting possibilities in test
+> coverage, really isolating functions for unit testing, enormously fast
+> iteration speed, etc. etc.
 >
-> https://www.sphinx-doc.org/en/master/changes/7.4.html#id7
+> I ask you to weigh up the desire to enumerate your misgivings about the
+> testing approach used here vs. all of the above.
 
-Indeed, we have noticed the speedup - much appreciated, thank you!
+I repeat: I am not against these tests.
 
-jon
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
