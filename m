@@ -1,59 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93EF33987;
-	Thu, 30 Jan 2025 06:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A2033987;
+	Thu, 30 Jan 2025 06:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738218226; cv=none; b=F5vpAprN/I5hyx8Ylsy1yQBaCIrsFWRuAgUvzZpv5ciOOOcgcOGBbk4oWdrJ/NTE/rCJ+A4bEb4zsOxr+Rae1CjkvBDPdXh80ZJdHRNrsJcs/o9FbVpVqDLjuG3EhUdsFb9G5cxHmDqy0oYVLHRlPRsL6VXA2OSlhFpouNui2zk=
+	t=1738218227; cv=none; b=oGRqAX9iJ4lT9u4TWbzltv8O17FMVvkuv1GxrWuk4QrivcqQd6lMOgfK5zUiV/b1ueVq29DVOmpN9SgJXFtU89oFl/HSnIu+riIrK19i4+jB92nWPajJRPpfiyqX6TlP2wIr+bPYebql235FcVIu4M8m5SZIdsY4r0EvZasZ+3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738218226; c=relaxed/simple;
-	bh=LfCdPygos0pL+AlQegcU9RLuu0UcBJUY6KwAT8p1Vro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WAXiKLJG+rpyWao8nCtw9x9j6SRaQJ/lPBWx/pv6fENE5JmyJAAQwGJcsJRx2YgRYmpZ9wIAfB4up2o68a0Xr05VxhFwoPqBPxQghLV2I4A0f0ysk94nRsXq9D6YlnqqWC3gc0w6Rl/sMrYCvchvxSV275QeVDb3UCUOiQ7tdEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZPBbPf1f; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1738218227; c=relaxed/simple;
+	bh=Nl/YWI1yKOVuCByauSXO2HREAsA55kmP4bTZqJ5HIPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DXFPHdmOlWwiGG9B3pt7jP+xWlM+q6vGzb3p/oFq041mVRJwv+PQXcIn1PfPkTLqYmAZt9cY40Xpqq6as0EVioLhlYvhtNuwta5Pm3XF1rVecIAlKgzZ2IFqxQsmUnFEKV3xu1Cm9gtyL30uEQAg0gS2eTuWjpuq8k14dRwMGz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JojvjWC7; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZPBbPf1f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JojvjWC7"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738218222; x=1769754222;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LfCdPygos0pL+AlQegcU9RLuu0UcBJUY6KwAT8p1Vro=;
-  b=ZPBbPf1fEOLLGWpCVD3RClKRT8bua5Vpj2q9WT4s9IwMw+aBWt5vlrqf
-   In/jk3M9+mHEzHuv5NeGA+rLHVyVmdOfix5G34PdMO06V3dwSfyLMfGRw
-   lOIm/T4+hHJp3iUfhdQP7oTEBaHLRGJ20UDAC5lizFmglNCn+Wp7xsZoh
-   BRF/3hd15YtNpLh54EEeLGxLuxsUDiAkd3SneLfpA/nO1XE9Bq960lTzD
-   hNdQC8XRPyemDpUOAxinKS3ieJ1YJhQqREtt0AjpErmeRJgR0OLXVHjHd
-   l+lGw8+0Wie0EbqCEcLbCnnCi96UGUpeKRvVO7Bb31fd/kr9lTQwfOFOY
-   A==;
-X-CSE-ConnectionGUID: 5fBPknGtQdyjGHP4sEE94A==
-X-CSE-MsgGUID: oHiqOUKtRJyxJuS3hBaLTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="42678655"
+  t=1738218227; x=1769754227;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Nl/YWI1yKOVuCByauSXO2HREAsA55kmP4bTZqJ5HIPo=;
+  b=JojvjWC7bxWzgEU+e4dW4QeOPEMjTG6wHbpKeKzDBXB2y2RfD0FVKqQR
+   DsRz5BSO7I7cdHQDWfamGrMPazXPjK/V+9hIqmlg3TboQCNsjSsFBpCCb
+   ToImOE1AkS/bst8ljbFG9+SH3Y9T8fkfzYDc6Os4xi/bU2B8xUxButkFQ
+   w6ciZWNMngAViULxYYm8y2GshxrPSs7POBLbqTQr2bA29WEnzGUCce96t
+   WXqNfH/7mxVFJF5DqHMrmBcbU4LrC6l/sv5h0N14Ox91snGh3hUEOXCs1
+   SJTZyLSkPPh3lMhmnSXgZwVGQgGfc3kh9oudbtE3v9HEd6leYBtaT0zqs
+   w==;
+X-CSE-ConnectionGUID: eimVnbUJTZClTKIYz2T/kg==
+X-CSE-MsgGUID: DmRof4HaQ4ytqeDa3+cqXg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="61225400"
 X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
-   d="scan'208";a="42678655"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 22:23:42 -0800
-X-CSE-ConnectionGUID: 820QTpr2QvyODJN9PLs5XQ==
-X-CSE-MsgGUID: stO9517kTQyWJZ+LQm/8bA==
+   d="scan'208";a="61225400"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 22:23:43 -0800
+X-CSE-ConnectionGUID: S7eBHSxUQxm0ihZas/e9eQ==
+X-CSE-MsgGUID: mhbBBZ+TRKeSMVE+4eNFRA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113253956"
+   d="scan'208";a="113853400"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 29 Jan 2025 22:23:41 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 29 Jan 2025 22:23:41 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tdNxi-000jkB-3D;
+	id 1tdNxj-000jkJ-0B;
 	Thu, 30 Jan 2025 06:23:39 +0000
-Date: Thu, 30 Jan 2025 14:23:35 +0800
+Date: Thu, 30 Jan 2025 14:23:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joe Damato <jdamato@fastly.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC net-next 1/2] netdev-genl: Add an XSK attribute to queues
-Message-ID: <202501301434.ZoSDVYrs-lkp@intel.com>
-References: <20250129172431.65773-2-jdamato@fastly.com>
+To: John Madieu <john.madieu.xa@bp.renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-devel:renesas-drivers-for-v6.15 4/6]
+ drivers/soc/renesas/r9a09g047-sys.c:51:6: error: call to undeclared function
+ 'FIELD_GET'; ISO C99 and later do not support implicit function declarations
+Message-ID: <202501301435.kjJVK6kR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,95 +64,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250129172431.65773-2-jdamato@fastly.com>
 
-Hi Joe,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 0ad9617c78acbc71373fb341a6f75d4012b01d69]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netdev-genl-Add-an-XSK-attribute-to-queues/20250130-012820
-base:   0ad9617c78acbc71373fb341a6f75d4012b01d69
-patch link:    https://lore.kernel.org/r/20250129172431.65773-2-jdamato%40fastly.com
-patch subject: [RFC net-next 1/2] netdev-genl: Add an XSK attribute to queues
-config: hexagon-randconfig-002-20250130 (https://download.01.org/0day-ci/archive/20250130/202501301434.ZoSDVYrs-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git renesas-drivers-for-v6.15
+head:   106b182b2d7f05703d27e37cbcf23a6fb652872f
+commit: 1e5827262bc7f29b3735889919009b744ea8f55d [4/6] soc: renesas: rz-sysc: Add support for RZ/G3E family
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250130/202501301435.kjJVK6kR-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501301434.ZoSDVYrs-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501301435.kjJVK6kR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501301434.ZoSDVYrs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501301435.kjJVK6kR-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/core/netdev-genl.c:397:51: error: no member named 'pool' in 'struct netdev_rx_queue'
-     397 |                 if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!rxq->pool))
-         |                                                            ~~~  ^
->> net/core/netdev-genl.c:407:51: error: no member named 'pool' in 'struct netdev_queue'
-     407 |                 if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!txq->pool))
-         |                                                            ~~~  ^
-   2 errors generated.
+>> drivers/soc/renesas/r9a09g047-sys.c:51:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      51 |         if (FIELD_GET(SYS_LSI_MODE_STAT_BOOTPLLCA55, mode_val) != SYS_LSI_MODE_CA55_1_7GHZ)
+         |             ^
+   1 error generated.
 
 
-vim +397 net/core/netdev-genl.c
+vim +/FIELD_GET +51 drivers/soc/renesas/r9a09g047-sys.c
 
-   366	
-   367	static int
-   368	netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
-   369				 u32 q_idx, u32 q_type, const struct genl_info *info)
-   370	{
-   371		struct net_devmem_dmabuf_binding *binding;
-   372		struct netdev_rx_queue *rxq;
-   373		struct netdev_queue *txq;
-   374		void *hdr;
-   375	
-   376		hdr = genlmsg_iput(rsp, info);
-   377		if (!hdr)
-   378			return -EMSGSIZE;
-   379	
-   380		if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx) ||
-   381		    nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type) ||
-   382		    nla_put_u32(rsp, NETDEV_A_QUEUE_IFINDEX, netdev->ifindex))
-   383			goto nla_put_failure;
-   384	
-   385		switch (q_type) {
-   386		case NETDEV_QUEUE_TYPE_RX:
-   387			rxq = __netif_get_rx_queue(netdev, q_idx);
-   388			if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
-   389						     rxq->napi->napi_id))
-   390				goto nla_put_failure;
-   391	
-   392			binding = rxq->mp_params.mp_priv;
-   393			if (binding &&
-   394			    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id))
-   395				goto nla_put_failure;
-   396	
- > 397			if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!rxq->pool))
-   398				goto nla_put_failure;
-   399	
-   400			break;
-   401		case NETDEV_QUEUE_TYPE_TX:
-   402			txq = netdev_get_tx_queue(netdev, q_idx);
-   403			if (txq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
-   404						     txq->napi->napi_id))
-   405				goto nla_put_failure;
-   406	
- > 407			if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!txq->pool))
-   408				goto nla_put_failure;
-   409		}
-   410	
-   411		genlmsg_end(rsp, hdr);
-   412	
-   413		return 0;
-   414	
-   415	nla_put_failure:
-   416		genlmsg_cancel(rsp, hdr);
-   417		return -EMSGSIZE;
-   418	}
-   419	
+    30	
+    31	static void rzg3e_sys_print_id(struct device *dev,
+    32					void __iomem *sysc_base,
+    33					struct soc_device_attribute *soc_dev_attr)
+    34	{
+    35		bool is_quad_core, npu_enabled;
+    36		u32 prr_val, mode_val;
+    37	
+    38		prr_val = readl(sysc_base + SYS_LSI_PRR);
+    39		mode_val = readl(sysc_base + SYS_LSI_MODE);
+    40	
+    41		/* Check CPU and NPU configuration */
+    42		is_quad_core = !(prr_val & SYS_LSI_PRR_CA55_DIS);
+    43		npu_enabled = !(prr_val & SYS_LSI_PRR_NPU_DIS);
+    44	
+    45		dev_info(dev, "Detected Renesas %s Core %s %s Rev %s%s\n",
+    46			 is_quad_core ? "Quad" : "Dual", soc_dev_attr->family,
+    47			 soc_dev_attr->soc_id, soc_dev_attr->revision,
+    48			 npu_enabled ? " with Ethos-U55" : "");
+    49	
+    50		/* Check CA55 PLL configuration */
+  > 51		if (FIELD_GET(SYS_LSI_MODE_STAT_BOOTPLLCA55, mode_val) != SYS_LSI_MODE_CA55_1_7GHZ)
+    52			dev_warn(dev, "CA55 PLL is not set to 1.7GHz\n");
+    53	}
+    54	
 
 -- 
 0-DAY CI Kernel Test Service
