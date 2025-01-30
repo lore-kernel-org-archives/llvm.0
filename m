@@ -1,200 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61DE1EB9E1;
-	Thu, 30 Jan 2025 17:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C221F03F1
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 18:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738259469; cv=none; b=EiKRgBMtDz/nhc/Ecead0bsthRve8J++xjh6DioJSPxT14oIp33Olpqnmj/nfiVlkU4IhiOZs7ZfhkW9BdNKkO4UwKv65ES0GDL27FMvgaz0GY83tPD3MD4MU6N9lTcqS11XZuUO+99el6SYaVZor2cw8Y9sZyK5N0KjdvX/HuE=
+	t=1738262557; cv=none; b=ffxqfy+bUdjuwtudEctPTtMATMBiaSpP2Ixd/XKSJu2xnLZXD7/KG94zNDoouxKCjzdizIfdaTprmjFCQirMEZMkMyVt0sDhk4RxG35Eu5RMMQY7y/t7vGMoyO7dX8iuRuRro+Q6nSrjQ46tJJVVDWOK/tClvk7mb4TmrCnh3jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738259469; c=relaxed/simple;
-	bh=8ILs2EZ7y01odK/7QB5fifvei6UxkDe+Ir0p9+/191I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XM4tLPLRS+PPe/nD3IT+A7iLNQbMGnEWGPVNXjoBqfOiDwifRklM+h790Ts680x5G7c4JUnMRt1zmXKqZyLqL03E2DxPQc6HJovGodOjoliRmXTAJp2Ph+yQqExFxRLlkMURU7fSU+9EOShwe82L7JX2sH6VFF9Z7i1H7RoHKEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8oX5K9c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738262557; c=relaxed/simple;
+	bh=4FMxPDIJfnHU7dsNz18vMkoIeARwABroAgNlLcN3wBw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BZSnUAin3M3djX34bJfeY2YXtHEN8U4iZAtYD2P98xOn4ybZHISRdtt0uFaXc+4CY4qUY/5sSkS7GwRRuUqRTaSndCrNumKdtPsMH6DKYtZDlnMVqoN3r6SHxOSAMptnFY9Z6DgTNzGU8k2ZZP2viXnqLt5cN0KuNzP4ZJS6fH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BfZOzuGg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8oX5K9c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37509C4CED2;
-	Thu, 30 Jan 2025 17:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738259469;
-	bh=8ILs2EZ7y01odK/7QB5fifvei6UxkDe+Ir0p9+/191I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G8oX5K9c4LRa4Pr5PDZozggkVjj1XeWFu7puLplRrtcTdo+I700IuF3WswCeMcL1T
-	 /kp5mPc649rlST//FQgyr46iaZR8YYqxm3/dPgmUzOQ1JT05QcWaS62W+2adRyS/Cc
-	 o7x49moNqhdFGU+O9EKsSueNQmtSHFAxBqCkEYiq9AfqePeLKvKbVar9dsQbW0gybG
-	 GanDmfUNpscb6fB/fIN5hw9x0ijJJemGHC4TpvY4wliwI1XPC8ToIhlQXtw++sUoo9
-	 KNhxhHYOWdDhdHTEoM/9BjXxF/QQmLqbVClONZzuAGt4VdlKbBrh7Sxgzy2o8CZET6
-	 1cXh+A8ImG0VA==
-Date: Thu, 30 Jan 2025 10:51:03 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Harry Wentland <harry.wentland@amd.com>,
-	Greg KH <gregkh@linuxfoundation.org>
-Cc: Alex Deucher <alexdeucher@gmail.com>,
-	Chaitanya Dhere <chaitanya.dhere@amd.com>,
-	Jun Lei <jun.lei@amd.com>, Leo Li <sunpeng.li@amd.com>,
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] drm/amd/display: Increase sanitizer frame larger than
- limit when compile testing with clang
-Message-ID: <20250130175103.GA3394637@ax162>
-References: <20241219-amdgpu-dml2-address-clang-frame-larger-than-allconfig-v1-1-8c53a644d486@kernel.org>
- <CADnq5_Pun+zN1=B0eFMw1w8k_oD3fw626SdaEug24YRg8aOLKw@mail.gmail.com>
- <2025013058-fasting-gibberish-9718@gregkh>
- <2025013003-audience-opposing-7f95@gregkh>
- <5d1cfcee-b575-4e01-8ec0-dd1bcbba9bc0@amd.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BfZOzuGg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738262554;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9RPTtKnJOJ1wsrPK7Jevm7cgQq+X84ISvNUg4c0tz9U=;
+	b=BfZOzuGg+8i/hTFmtgUPyTXFE6HyWVBbb8ZBF+h+/bbYuSAX/u8kCCAcfvVpTrLi3TuBf1
+	bEx4UgFtSdCaykW6HsCX98KOHdv/VvPXcJR3ZmQpqUG+ADrFSL0U39W63q+2h10V5SAb/C
+	apMePiNXikk8pa6O87vdTaEdSt0w248=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-442-nEjUvfGSOkqhXFaLE-197g-1; Thu,
+ 30 Jan 2025 13:42:32 -0500
+X-MC-Unique: nEjUvfGSOkqhXFaLE-197g-1
+X-Mimecast-MFC-AGG-ID: nEjUvfGSOkqhXFaLE-197g
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6EACF1805EDF
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 18:42:24 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 832301800BE7;
+	Thu, 30 Jan 2025 18:42:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, d3d90cc2)
+Date: Thu, 30 Jan 2025 18:42:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d1cfcee-b575-4e01-8ec0-dd1bcbba9bc0@amd.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <44192.125013013423300108@us-mta-442.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: dYIY-ihaUP8f1IDMtdf7_9sO56TMOVuX6dMbs3VXNEk_1738262552
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hey Greg and Harry,
+Hi, we tested your kernel and here are the results:
 
-On Thu, Jan 30, 2025 at 11:02:37AM -0500, Harry Wentland wrote:
-> On 2025-01-30 02:04, Greg KH wrote:
-> > On Thu, Jan 30, 2025 at 07:47:59AM +0100, Greg KH wrote:
-> > > Thanks, but I am still getting this error on Linus's current tree right
-> > > now, with this commit applied:
-> > > 
-> > >    CC [M]  drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.o
-> > > drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6713:12: error: stack frame size (2056) exceeds limit (2048) in 'dml_core_mode_support' [-Werror,-Wframe-larger-than]
-> > >   6713 | dml_bool_t dml_core_mode_support(struct display_mode_lib_st *mode_lib)
-> > >        |            ^
-> > > 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Bummer, that means that commit a8d42cd228ec ("drm/amd/display: mark
-static functions noinline_for_stack") did not help this case like I had
-hoped that it would.
 
-> > > I think the issue is:
-> > > 
-> > > > > --- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-> > > > > +++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-> > > > > @@ -29,7 +29,11 @@ dml2_rcflags := $(CC_FLAGS_NO_FPU)
-> > > > > 
-> > > > >   ifneq ($(CONFIG_FRAME_WARN),0)
-> > > > >   ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-> > > 
-> > > I do not have CONFIG_KASAN or CONFIG_KCSAN enabled, but I do have:
-> > > 
-> > > > > +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-> > > 
-> > > These two options enabled, and for some reason:
-> > > 	CONFIG_FRAME_WARN=2048
-> > > as well.
-> > > 
-> > > Ah, 2048 is the default value, that's how.
-> > > 
-> > > So this warning triggers even without KASAN or KCSAN being enabled, is
-> > > that to be expected?  Is the stack really being used that much here?
+Kernel information:
+    Commit message: Merge tag 'pull-revalidate' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/viro/vfs
 
-It is entirely possible. Look at how many parameters there are to some
-of these functions, which have to be passed on the stack when the
-compiler runs out of registers. When I looked into this at one point,
-GCC was barely doing better than Clang in certain configurations. What
-version of clang is this and would you mind sharing your configuration?
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1648989737
 
-> > > I'll go bump FRAME_WARN up to get some local testing working again, but
-> > > odds are others are going to hit this if I am in my "normal" build
-> > > tests.
-> > 
-> > Ick, no, bumping CONFIG_FRAME_WARN=8192 doesn't fix this here either.
-> > Any hints?
-> > 
-> 
-> It looks like we always override CONFIG_FRAME_WARN...
-> 
-> > ifneq ($(CONFIG_FRAME_WARN),0)
-> > ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-> > ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-> > frame_warn_flag := -Wframe-larger-than=4096
-> > else
-> > frame_warn_flag := -Wframe-larger-than=3072
-> > endif
-> > else
-> > frame_warn_flag := -Wframe-larger-than=2048
-> 
-> ... right here for the default case.
-> 
-> You could bump that locally.
-> 
-> A more robust solution would be to do a greater-than check here
-> (for all the cases) and only set -Wframe-larger-than if the value
-> is greater than the one defined by CONFIG_FRAME_WARN. There are
-> a few "-gt" uses in other Makefiles, so I would think it's fine
-> to use that.
-> 
-> I'm no Makefile expert but if this seems like a reasonable course
-> of action I can take a stab at it.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1648989737-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1648989737-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1648989737-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-Something like this would work I think? I added indentation because it
-was getting a little gnarly. I am happy to write a formal patch and send
-it off if this looks acceptable.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-index 46f9c05de16e..e1d500633dfa 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-@@ -29,11 +29,15 @@ dml_ccflags := $(CC_FLAGS_FPU)
- dml_rcflags := $(CC_FLAGS_NO_FPU)
- 
- ifneq ($(CONFIG_FRAME_WARN),0)
--ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
--frame_warn_flag := -Wframe-larger-than=3072
--else
--frame_warn_flag := -Wframe-larger-than=2048
--endif
-+    ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-+        frame_warn_limit := 3072
-+    else
-+        frame_warn_limit := 2048
-+    endif
-+
-+    ifeq ($(call test-lt, $(CONFIG_FRAME_WARN), $(frame_warn_limit)),y)
-+        frame_warn_flag := -Wframe-larger-than=$(frame_warn_limit)
-+    endif
- endif
- 
- CFLAGS_$(AMDDALPATH)/dc/dml/display_mode_lib.o := $(dml_ccflags)
-diff --git a/drivers/gpu/drm/amd/display/dc/dml2/Makefile b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-index 91c4f3b4bd5f..21fd466dba26 100644
---- a/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml2/Makefile
-@@ -28,15 +28,19 @@ dml2_ccflags := $(CC_FLAGS_FPU)
- dml2_rcflags := $(CC_FLAGS_NO_FPU)
- 
- ifneq ($(CONFIG_FRAME_WARN),0)
--ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
--ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
--frame_warn_flag := -Wframe-larger-than=4096
--else
--frame_warn_flag := -Wframe-larger-than=3072
--endif
--else
--frame_warn_flag := -Wframe-larger-than=2048
--endif
-+    ifeq ($(filter y,$(CONFIG_KASAN)$(CONFIG_KCSAN)),y)
-+        ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_COMPILE_TEST),yy)
-+            frame_warn_limit := 4096
-+        else
-+            frame_warn_limit := 3072
-+        endif
-+    else
-+        frame_warn_limit := 2048
-+    endif
-+
-+    ifeq ($(call test-lt, $(CONFIG_FRAME_WARN), $(frame_warn_limit)),y)
-+        frame_warn_flag := -Wframe-larger-than=$(frame_warn_limit)
-+    endif
- endif
- 
- subdir-ccflags-y += -I$(FULL_AMD_DISPLAY_PATH)/dc/dml2
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
