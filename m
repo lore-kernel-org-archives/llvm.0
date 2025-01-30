@@ -1,250 +1,164 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704401AF0C5;
-	Thu, 30 Jan 2025 12:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738241549; cv=fail; b=UBv4pfCz36H7qu8i1HpqR9DPJknjgF4hUo1GwzCRBxFOJc1vKYlKK003AULlYhL7mifuetMSYkXBL11O9q8Ya56pM0CpHAonzIgXwclEmHJDFe4QsmFaj72HjPExZ15sge9tnaP14EqLMs900P8HmzX5rOS9d1evLW+fa+IVg4E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738241549; c=relaxed/simple;
-	bh=zhEtR+K1qM4R1AkgCr+tah/OVkPKQHNxA8xAeQmYpIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=MY9wArYxunsDMuIQX+opdzDRp2xDzj45uOy9P8IicWWUtVy+GueFDix+f1nTGIgquZXX+4AySPAf9VwwEFZvdVg6JR8uAXGV6su57o534TJEjk5Lfs3K4WiUhkj78vvoGlFVWNp8xoxwSzSHMXJuAvcgq0ZNMorj5gWYOkPwjH4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RIoGbK9C; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=YEr3RMzs; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RIoGbK9C";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="YEr3RMzs"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50UCauux022582;
-	Thu, 30 Jan 2025 12:51:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=qYezRoozm9Wjx2E3RJ
-	Han+GQspple+HA5+1gMy2bn3E=; b=RIoGbK9CY/eTLbG/tu0tu3KIbOpCRteVoX
-	qAaO1/I9jv0QBPE8A7xFO8RF5xVfpVV91TnqlqvMfHhW1UfRkF9t9C9sXJHp9S6n
-	LPcF6rBuaoRpxWqmEgrSbF36Lm8pHxG7xrOijqS/R3vQK1fpSfRXTG+mKfN8pU8i
-	vjrbRKQbxrqYJMBgXaj967maYNfR6xH1i2nBrVkYKy5DBRCbspv2LyfnN0anYcJC
-	FLkxUAD2ZOCvZ20FG23j+ZCRIJzYDpwIo4QL9FT4FycgVqMHSKgp5QufbCarZSCp
-	kB1IeHSzezgvlYpsnLVoMN4ZAnUIIRQ4e7h8ia4sg78A8f2YFbXQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44g9k4r0m7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jan 2025 12:51:56 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50UATX2J005386;
-	Thu, 30 Jan 2025 12:51:54 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2042.outbound.protection.outlook.com [104.47.57.42])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44cpdb6496-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jan 2025 12:51:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rzHepfceB838+17Bvdu4NpQWw3cwU2Z954Jo4W0eh1ipdUAJLvqVcC3C/81NPDI2Ti3C+M5toUBZaoT0CRO8XB1e4U5FSBufZ5ML/lkaWHWRBH0AjGM0XjDfSzH/pvcK20OrU4xY/zt6P1WBQbAb1mFCKQM+a/W9KLp0LO6GVvWtgkXYLLEp7cq1djPwqXgelOAO3z3+JSVFfeimhpuBfgKps2la4X8Gm0g7Q+HheXSSdAXJd6oGmmoI1XxVWCOZoRe3iPnHdWl6NTYp7I4lzDNxEWZ2Skgjsx9XBUKYK2j2md8WNXAMJQWZu6JaixK11LlE4dKzdJ/FvyXPqMPrbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qYezRoozm9Wjx2E3RJHan+GQspple+HA5+1gMy2bn3E=;
- b=mWjYkWgqYFE1EWcygmGKwBy72UDzV22V6spN3R1uwN1xclm0sUn9GpRZ8euV6OvDapJEdMiN5zv6CTg0QYc3iZmkGUREcQcj2bUjspkFn56mYg1wYhaX9XdKI+DbYZ+WqKK0qCVgqWPqZsjIN0mnqUzVSV95Zpaa8fFh/N14BSVmh6ro9jWYK/OMc+b9kYkPIzhd3sVHHOtpJePqZCybolxICw3vltYHdK/H4RKAJz+7Jw3+MjKqCEOQWDrPGEMGyrkdzpKsTQUn/UK1DgtPY+1X2vk2b0tHidjE0UqRFPYuSQanzy8OWZ3d0XEHLW11hecKlOq8042zAhczpUtpgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qYezRoozm9Wjx2E3RJHan+GQspple+HA5+1gMy2bn3E=;
- b=YEr3RMzs3kIhPEi9NCdv5jU0nu59mOBUT7z3UXsKxjKuNWHsEWe57zbnP6R5UeYGR9hNs/sni1+qKaqdOGqa8UsWPK5lbGn7MkqjBzMJvdFlGztvjcFUK1BNypDDtbRDErCSD6YwSrujP5sQHFvveS5byZOi5NeRF0Zge2qkFnU=
-Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
- by MN2PR10MB4333.namprd10.prod.outlook.com (2603:10b6:208:199::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.20; Thu, 30 Jan
- 2025 12:51:52 +0000
-Received: from PH0PR10MB5777.namprd10.prod.outlook.com
- ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
- ([fe80::75a8:21cc:f343:f68c%4]) with mapi id 15.20.8398.018; Thu, 30 Jan 2025
- 12:51:52 +0000
-Date: Thu, 30 Jan 2025 07:51:48 -0500
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Sidhartha Kumar <sidhartha.kumar@oracle.com>, akpm@linux-foundation.org,
-        christophe.leroy@csgroup.eu, justinstitt@google.com,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
-        maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au,
-        nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com,
-        npiggin@gmail.com, Matthew Wilcox <willy@infradead.org>,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] xarray: port tests to kunit
-Message-ID: <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Sidhartha Kumar <sidhartha.kumar@oracle.com>, 
-	akpm@linux-foundation.org, christophe.leroy@csgroup.eu, justinstitt@google.com, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev, maddy@linux.ibm.com, morbo@google.com, mpe@ellerman.id.au, 
-	nathan@kernel.org, naveen@kernel.org, ndesaulniers@google.com, npiggin@gmail.com, 
-	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
-References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
- <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com>
- <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
- <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
- <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
- <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
-User-Agent: NeoMutt/20240425
-X-ClientProxiedBy: YT1PR01CA0136.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2f::15) To PH0PR10MB5777.namprd10.prod.outlook.com
- (2603:10b6:510:128::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29ED6199939
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 13:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738243994; cv=none; b=CNNW6KqPVEwC5AE1pL5U601tz0QnHqPGN6wvog5uVtPp3755AYOTWKxXJig6jO0Kz/QZwR/Cl0toA9+gadDWD/XPgO/h3vHzY39HWT9T5OwbZsFMkZt2uv0YBM0bhPmD6y26v6BEahWwmxmSASGqbdtz0WfBR1PqmrGfEAElWEQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738243994; c=relaxed/simple;
+	bh=EluioHgTrDfBtlMLrqNjhpzUXx5fQlBJiL9K5UDjawM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fIsYILw4Oe7iMMIAUIJ92K85UHP7wYdqhcm1oq3W4KVhFfB2hJqhE3Q+3XZVEf0EZi7QW1h8kRlpnstby7BFbqZAxlXD1hLfEdeb+zddAHKpaH6gF0PrltA+JWlaRQZeI0D2yLgnLRL0XM/o6qffuZtXbdUvlEwJO7JxzrKPVwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21670dce0a7so15693605ad.1
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 05:33:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738243992; x=1738848792;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RcnCdea0Cg2xhZ905GiM0LEi2fn/A0TJy6vLZwAFU5g=;
+        b=Zrbc0WnifL3j8ZcWp+aO3U8zN3seCvpC9IodwwUapu+STazmI5/cOohXZ/e5fi3Opo
+         df/rMS5QUALC7yt9t9+JIeyBIHsZRY7mwwb9RLfN1wfXlrh4rnG9bm6LwkIKaeU47RzA
+         cVqoO+qbG+HBA/+DTRFbp2CbefZxte/mcm3KZ03PCD9diP2e2+wE3/c+6oxivTqvv3Kj
+         6RZ12NZE73kWifwoVdhIMJ0AUqYsUZWm5ngYsZdleIO3AYrd3TSK1q8ZAw9EvJ5mSMoE
+         x+Gn9T0bq2T5TO2EXqoFkEcplZ11FZUMtfUlTlTdoXIfDBIGd8wClA9+fJ97Qrv25mQH
+         DQxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUo1BV8YsAbjMNF1++NjnrvSUEVONHZXIz51cqM0fXx1ZLXDnMwJ9Blm6VAYv4vYb+u7Ao2@lists.linux.dev
+X-Gm-Message-State: AOJu0YywkXa08cqUU0FqsDd8WGnXDbSQ5MgQGetmkvi8D0cmkbZiEe+n
+	sW2IZxD7CNp3EDTIV6NN8exDlodZLJvUBUgFYQjK2eCadBlMNrnpZ4OhBA5t
+X-Gm-Gg: ASbGncuNYSwtiKLM3sPuw3vUj2galyGeMNloc8kINweheBwPslXi9GoCoCzoI41z/Wn
+	jG3soobRJUMlp52v0U5SSE8cZ+nd6wtUuklkdNV0yP5McV05gfCVRVeXCOFyZEDALNk0+otljyi
+	3Dw+yVt+Sa7bXUCwAD48X3dyjYDF19WsmuinzcoKcTedlso0hdFe1hdpieW7k9d4qGInJjvCxAP
+	R2waap5CjeSifl0nyIhUJGhwSxGJilKMH41guXH03yOcNKhmplF4P7IBFuqvCROArrbrA6XzrR4
+	n1icfd0UL4NlNTgvfl86xR+1UQplO+JOEA1S71XNUQQVOD9CsqmIiQ==
+X-Google-Smtp-Source: AGHT+IF9nQ3mFhYMyCpYrC3PnXX95Yc055Z/A02aGajSx+RC05BYK5SZBH/gHLP8ghtX41cv81BQcw==
+X-Received: by 2002:a17:902:f687:b0:215:b9a7:526d with SMTP id d9443c01a7336-21dd7dcb29emr117079755ad.32.1738243991554;
+        Thu, 30 Jan 2025 05:33:11 -0800 (PST)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com. [209.85.216.52])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de3324b65sm13341955ad.252.2025.01.30.05.33.10
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2025 05:33:11 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2f441904a42so1260232a91.1
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 05:33:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVgi2Td1JcGnFH9UUKfu8botPz9qRQVIFwpn2Q4ZzMq2FLyIB4H5fgDEvfT37YzYo/gcbnx@lists.linux.dev
+X-Received: by 2002:a05:6102:2ad3:b0:4af:bb06:62d with SMTP id
+ ada2fe7eead31-4b9a4f499c9mr6186530137.11.1738243569336; Thu, 30 Jan 2025
+ 05:26:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|MN2PR10MB4333:EE_
-X-MS-Office365-Filtering-Correlation-Id: ce4013fb-8d7b-45d7-c303-08dd412cde2e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6IldgG4hhoXTuXGTTfK6YIpMJFZjxg3e9yam6GFTmYo6t0hMkpH92oTDwWSB?=
- =?us-ascii?Q?wTGA1ahRi4RVW8UJQa9M7/JJYUT8GT5jcD0uJjtGtxIOsbpwlsJRgOIiyTO5?=
- =?us-ascii?Q?YsxiouSzb85KPck+hYoZVWvl5S7KSdtLfWMPaXKiI3mWbCo8z3HtBnLqXeIo?=
- =?us-ascii?Q?WXv7RIFaqHWjAmy/UFEc0f1gFv6hvRyKSUQtVulZUJ9yFa1b9P0vVN9242RQ?=
- =?us-ascii?Q?hhYQrnOnxQDqiwzFklTsChf0aRy1alRcSZ6oMlTsxrkwA9w8UtOnwfvQX7/i?=
- =?us-ascii?Q?92reNv99XdNBb6OhYzekmtgDeltRZJo1j1OLapoXmza89A2seV4YkqZLfE47?=
- =?us-ascii?Q?4tq5YOCfqu+3WG+Leu235dhyD6p5wGcM/bnK9U+a5ExMBxqUPmKQEKmCvEiK?=
- =?us-ascii?Q?YfwS50D9pHoPR+LlsenQL/nWdlwcbVIkJsleZ2OI5LLvpvqRFWWsCPVQbW/q?=
- =?us-ascii?Q?kf6u9r2CZnL9d9kEJhUqSdxiSnZ+6Maz9ejHREfy7swya4dBOfNRiZ/KOOYN?=
- =?us-ascii?Q?Ip2ZtMGXK+oF1ka+iAJVvqzMWRRxz59fArEnrt+rts4Rug54DolKpdDtq/pp?=
- =?us-ascii?Q?oHfd7/uaPhItYqJ8P+EasxMv6MpFi9IShOOttm6rHakaJKyvtQZEjCK2eTu8?=
- =?us-ascii?Q?UbZoUcG37DzCygIScViNfctZm1alPec80SgOFZLrMcknQERP0b3CNjZLbI6B?=
- =?us-ascii?Q?GVueFUN4tLTejOnp3KCfFudMJYB+layTqEFjYSiWPxDuMWJcaTHYTaiiRi2+?=
- =?us-ascii?Q?OWzj6sboIIo/kS//h5Nt5J9Ae48TevTv/BdqmvonFobRYVJeU9J+hNEaPfXT?=
- =?us-ascii?Q?g0gptSgVEMfws8eFD43o9XrmbSUELrPCUc7BsftinFwZy/DAKqm9dLbSDkaQ?=
- =?us-ascii?Q?Oqe4UgAkh35AIAj8a1EWGCRR6ewprchcofOuznOx9883lIOiyACz+8OLFIlS?=
- =?us-ascii?Q?8PY2hfrbmxLGFSRAu5HeLhalOZLkpPXMLOiCbfpWB0uJqIKtO2wQ7hQUvFhl?=
- =?us-ascii?Q?cKkfZ4nlkPaXmjbZgL5B6kxH1EeE+zdxplqinTIYoekCxpDx+GQ0Dn+XOgq1?=
- =?us-ascii?Q?hljV32etrZJu/LEP/PcIaGAwJ0jgUhJVZU4QeTF2KYvzH403wGavKUQymMgf?=
- =?us-ascii?Q?U2j7bFaTPzPfgh+gqJoZ8JlSXh/ho9K+nfewXSwnFCybzuiZKzMgLgV6frXg?=
- =?us-ascii?Q?1e/YnYxjEBk2jd5g+JBG2QOP67spDj+OHx+i2W1yBKJdZM7i9aujek+5/+dW?=
- =?us-ascii?Q?b+Z496JxZq2Nx5fhjCHKK0WkLU51lJfS6k4tNY9P9uONs2S1jfJMt2ACa9mg?=
- =?us-ascii?Q?wz1bNWDC0TUoE5u7eTbtufzxvJvECRBheukM4KS0ALmIIw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3ivupZKyebXgnmVGHdVKBJpOXwUilbtnIsFptNVTdKCQc2p9wl+wi8BjKWVQ?=
- =?us-ascii?Q?brVPyZcWqD6rGWVx7ChXZ0fb4T+/XyePbBGV7SZWyv8VIayNg4NkLrYqbyGL?=
- =?us-ascii?Q?LNn/oWFWuEq3Xzrdsw5f8TXocPJsCUjn+AUDoMQk6PYAs8fWAYyg1htvZYXp?=
- =?us-ascii?Q?V05ewxpJb4EML0hrhB42cyJjOHPdi419x5dATzLkbhnbDIJJIR5BGirRmPfG?=
- =?us-ascii?Q?9QLPdXjlJ1tc1VQGNn/VzGKOK0eBWIXEhl1+yGLKlRfX0pAZCX0N33pRWD1k?=
- =?us-ascii?Q?7b1T5kfL9JjJ601ubjZitH/pCFI+UYsaBP+y+/dTJPDmXX0/4Ot86KLmm6SY?=
- =?us-ascii?Q?GH75jmn4bSUAtKAGMAJYN89CunYhN8zR96VBMAWp1zCD9hFy6FbKcyd1qzfs?=
- =?us-ascii?Q?edSkK19iievHDKMq1DtO/9ffx8zlB77N/lAH+cZoBdQCtSf6HlOtJN6V/eGV?=
- =?us-ascii?Q?lcPEhQHmppNbEPp1VwEjkIqCo4NHEhSwVnClLVF+dR91ad4zA5ViA75XaYI1?=
- =?us-ascii?Q?sd3fduzZDHiFqNDFeVfw8VmS8/z6ZBUEIc6jSXawh+R/RMuO8uecw3jd+B4K?=
- =?us-ascii?Q?XaLxwoIBT1d4/rUx+2pcOcVt2PkrxO4n639rAM1wwWBlrOhDragQXsBgd3uY?=
- =?us-ascii?Q?lYVoO1MojguGvNeHbE1vho4fF9rVrtgyDqIT6ZgXjrP45uRTygAZkcEgwKSf?=
- =?us-ascii?Q?4Z42XAqOv5rQRaVpc6W0fTe1BbuCFStjZlNjaxc3PZpWncJC4LVGZFwHYZ8R?=
- =?us-ascii?Q?CSq5kGdMJ2vQc0JhXQe5hleyxX0kXG531s7AAaB4csqBAwbOXSPAIySg84f4?=
- =?us-ascii?Q?IyzzxElt9PB345igU9u2DJZiiyES2w0qoiQZXOrPZHfuPrnBNX9tPN2cHlNw?=
- =?us-ascii?Q?gQxmNcBqk5N4hddPqEcA9ItHSuAoOqq92Hm226iwUJetbVSStcipads8RB1E?=
- =?us-ascii?Q?gPOCJaQvEbk/bFxHRMgRsdRlK2VJQa66D0w4pimHkf8MmdAOBdTjZt5ktFhY?=
- =?us-ascii?Q?+msVx3H793mVtaHoGr/GxsNsInW8d4uR25xQqZWLs3bUhqsyAamWNkYvd3HT?=
- =?us-ascii?Q?vLFKXhgss2NWxj9+B8sfdEELwHib/QrPPAVpolTCg6TmbPS6pej/am9LeVoE?=
- =?us-ascii?Q?57jvWlV2U8xxUunG/AUiVo65UJO6SazWmjsE1JfjoT+sL7U3yc/gFtDytJD/?=
- =?us-ascii?Q?vpV6DxfrZTDvM0OATP+o7kRqlyuzHcSMJ+wcPArKHC4PX9OzQixUHoIowoJY?=
- =?us-ascii?Q?Vr2Xs2fn11GCN6ZwfhPTDO9wglEb3OEcyHcmEkRWYlDaabS49GkShX0Xm2cz?=
- =?us-ascii?Q?ftE6l9cCTOs047eEP7EMLONK1puuisZCdDrB5HqjlU6RAe/UTlQgiBV57aQ0?=
- =?us-ascii?Q?SAan1MDIuWTlBZop7y7pU2vLANhn4Khw4FIEDO/cxBOhi8eGKtvbWs753FYZ?=
- =?us-ascii?Q?t0EoZE5CXsQAMDYJZAtrNexIyey6HIm79H7htGyevC7tMZTxGSApWKjmFiHe?=
- =?us-ascii?Q?kUuKDFgwYrEKRDeRlLg2Nj0YQRieysh2GMWkCh/NNbPfkzc9HiVNv5NBRBiF?=
- =?us-ascii?Q?BKtDhDl1yiFvyn9m3CXn+aE0qys4e2tume8xJi2j?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	TM1nm1/RjP28+db3kK4v3WmzYna6OIcteNyGZ+OF9uYRXFbDMNCjzP29FAPQWMnMZpjxuuNJBMqLCmV8/c8WLACuDFy1dS0zfztb+fk+cim/wHMk+GbRaU6QQYij94ieCDA1eLcoPPvFEFzP/XcgY3rsFxuov6i2vtj0+cezbWyJfCjqUxPoLFGjc/rARc6loWfn5VYLI1qv3ydTp1D4z+t2ZG7bREjwDIOz0+f+Jk0d7fjXhUzuYnNWQRT3T8xdt0D2CqEYncotErmQ8ROKrosuRj1JGDQxxTYQhpnn7ANGBcO2FbLRPCp07y5zJRhMYa8w82LyEC/qU626OVMGC3lzHFWxbkSgvRWvv3rPQwXYU2gbqcIPvncuuUEZKAPnaC7zEHoeDGIwuvVoUGIsCVSYnYiNnz9NrpxMEzIRzTTrCnISHHys1gT3Spn4QReJZKIXbIZCHYGk8FGAjARf4I6aqwjcIMTArRbnfKjdz0IgeIYhJx/5vn0PNMaCfIIB2w27FZshqa7mzzqDf+Z9fpwBG0l7LchupxlkOJR4S52I5w0eHfuzjgjyl/nJfbT/L/iqt4lVXXy/BOjKkBhr0PAnwD4/KGXl2VWswQ1s5fY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce4013fb-8d7b-45d7-c303-08dd412cde2e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 12:51:52.0835
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1ldHejpqkfdkyXF3f1Ndi8Jv0tpt+3LXAMkrAriyeJ2yPZHsPr3A1TMNPw1ArToy5Bvh9JStnFph8byA4C47ow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4333
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-30_06,2025-01-30_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 adultscore=0
- malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
- definitions=main-2501300099
-X-Proofpoint-GUID: dzbRpUesWZUfeeD1CdTQZPualMBJpj-U
-X-Proofpoint-ORIG-GUID: dzbRpUesWZUfeeD1CdTQZPualMBJpj-U
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+ <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
+ <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+ <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com> <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
+In-Reply-To: <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 30 Jan 2025 14:25:57 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWDRLi8AE0PgfAnXundbS0hyTyovUH7yScrY7GtmYYPOQ@mail.gmail.com>
+X-Gm-Features: AWEUYZn0su9wB3Rua7xZlN_jsLurJgHhePP-DQxZFLycHjingwrtS3E5xZdT-fo
+Message-ID: <CAMuHMdWDRLi8AE0PgfAnXundbS0hyTyovUH7yScrY7GtmYYPOQ@mail.gmail.com>
+Subject: Re: [PATCH] xarray: port tests to kunit
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Sidhartha Kumar <sidhartha.kumar@oracle.com>, akpm@linux-foundation.org, 
+	christophe.leroy@csgroup.eu, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, maddy@linux.ibm.com, 
+	morbo@google.com, mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
+	ndesaulniers@google.com, npiggin@gmail.com, 
+	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-* Geert Uytterhoeven <geert@linux-m68k.org> [250130 03:21]:
-> Hi Liam,
-> 
-> On Wed, 29 Jan 2025 at 23:26, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
-> > I've never used the kunit testing of xarray and have used the userspace
-> > testing instead, so I can't speak to the obscure invocation as both
-> > commands seem insanely long and obscure to me.
-> 
-> The long and obscure command line is a red herring: a simple
-> "modprobe test_xarray" is all it takes...
+Hi Liam,
 
-That command worked before too...
+On Thu, 30 Jan 2025 at 13:52, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> * Geert Uytterhoeven <geert@linux-m68k.org> [250130 03:21]:
+> > On Wed, 29 Jan 2025 at 23:26, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> > > I've never used the kunit testing of xarray and have used the userspace
+> > > testing instead, so I can't speak to the obscure invocation as both
+> > > commands seem insanely long and obscure to me.
+> >
+> > The long and obscure command line is a red herring: a simple
+> > "modprobe test_xarray" is all it takes...
+>
+> That command worked before too...
 
-> 
-> > You should look at the userspace testing (that this broke) as it has
-> > been really useful in certain scenarios.
-> 
-> BTW, how do I even build tools/testing/radix-tree?
-> "make tools/help" doesn't show the radix-tree test.
-> "make tools/all" doesn't seem to try to build it.
-> Same for "make kselftest-all".
+Exactly, great!
 
-make
+> > > You should look at the userspace testing (that this broke) as it has
+> > > been really useful in certain scenarios.
+> >
+> > BTW, how do I even build tools/testing/radix-tree?
+> > "make tools/help" doesn't show the radix-tree test.
+> > "make tools/all" doesn't seem to try to build it.
+> > Same for "make kselftest-all".
+>
+> make
 
-Or look at the make file and stop guessing.  Considering how difficult
-it is to get m68k to build, you should probably know how to read a
-makefile.
+Where?
 
-> When trying the above, and ignoring failures due to missing packages
-> on my host:
->   - there are several weird build errors,
->   - this doesn't play well with O=,
->   - lots of scary warnings when building for 32-bit,
->   - ...
-> 
-> At least the kunit tests build (and run[1] ;-) most of the time...
+> Or look at the make file and stop guessing.  Considering how difficult
 
-Do they?  How about you break something in xarray and then try to boot
-the kunit, or try to boot to load that module.
+There is no Makefile referencing tools/testing/radix-tree or the
+radix-tree subdir. That's why I asked...
 
+Oh, I am supposed to run make in tools/testing/radix-tree/?
+What a surprise!
 
-This exchange is a good argument against doing any kunit work on my
-tests.
+Which is a pain when building in a separate output directory, as you
+cannot just do "make -C tools/testing/radix-tree" there, but have to
+type the full "make -C tools/testing/radix-tree O=..." (and optionally
+ARCH=... and CROSS_COMPILE=...; oh wait, these are ignored :-( in the
+source directory instead...
 
-> 
-> [1] test_xarray started failing on m68k recently
->     https://lore.kernel.org/all/CAMuHMdU_bfadUO=0OZ=AoQ9EAmQPA4wsLCBqohXR+QCeCKRn4A@mail.gmail.com/
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+If these tests are not integrated into the normal build system (see
+also [1]), I am not so surprised the auto-builders don't build them,
+and breakages are introduced...
+
+> it is to get m68k to build, you should probably know how to read a
+> makefile.
+
+Like all other kernel cross-compilation? Usually you don't even have
+to know where your cross-compiler is living:
+
+    make ARCH=m68k
+
+> > When trying the above, and ignoring failures due to missing packages
+> > on my host:
+> >   - there are several weird build errors,
+> >   - this doesn't play well with O=,
+> >   - lots of scary warnings when building for 32-bit,
+> >   - ...
+> >
+> > At least the kunit tests build (and run[1] ;-) most of the time...
+>
+> Do they?  How about you break something in xarray and then try to boot
+> the kunit, or try to boot to load that module.
+
+If you break the kernel beyond the point of booting, you can indeed
+not run any test modules...
+
+Which does _not_ mean the userspace tests are not useful, and that I
+approve breaking the userspace tests...
+
+[1] https://lore.kernel.org/all/CAK7LNASdA+5_pdTjr1dY-cKGSDq804Huc_CX_8-Gg+ypFCmajQ@mail.gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
