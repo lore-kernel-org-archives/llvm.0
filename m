@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93B81922D4;
-	Thu, 30 Jan 2025 05:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93EF33987;
+	Thu, 30 Jan 2025 06:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738216307; cv=none; b=Muqr9jfSZLkAYTVln0DNVRu2Kn+nvs4KGn9v5NOT8JMIMRMJSpoR8UOJGTg6a1JPf7R+jpECAr/MgXqpkJo+cK6XGrxqUvxoovdjLSJPhHVFEJjkmT+mcM8ZFEBAkoj0l1CqgxhnAvvVmMUrBAJgKHjI8hsbWlKS+/qvAimbAiI=
+	t=1738218226; cv=none; b=F5vpAprN/I5hyx8Ylsy1yQBaCIrsFWRuAgUvzZpv5ciOOOcgcOGBbk4oWdrJ/NTE/rCJ+A4bEb4zsOxr+Rae1CjkvBDPdXh80ZJdHRNrsJcs/o9FbVpVqDLjuG3EhUdsFb9G5cxHmDqy0oYVLHRlPRsL6VXA2OSlhFpouNui2zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738216307; c=relaxed/simple;
-	bh=2oUZWhFRgfr9pvRVDiHPhUHnAAS7F/GEitJvK46KaIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=owoBFJwde4nO9wFiVLqVbrKhZr1EKnWFoVyK4wdnJrCRkR2i4vGdwT8LPcdeI5+jFSM4LsciAs46VY3ihUnKvgWGvz+0TFSu1DWU9fAH0UAA9cKVWko7R1KhFov1tOWYuGT7/76Y8jedZl1MO9asR58ldmiRewUfYHNGep9oD9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iuh4+E9a; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1738218226; c=relaxed/simple;
+	bh=LfCdPygos0pL+AlQegcU9RLuu0UcBJUY6KwAT8p1Vro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WAXiKLJG+rpyWao8nCtw9x9j6SRaQJ/lPBWx/pv6fENE5JmyJAAQwGJcsJRx2YgRYmpZ9wIAfB4up2o68a0Xr05VxhFwoPqBPxQghLV2I4A0f0ysk94nRsXq9D6YlnqqWC3gc0w6Rl/sMrYCvchvxSV275QeVDb3UCUOiQ7tdEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZPBbPf1f; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iuh4+E9a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZPBbPf1f"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738216306; x=1769752306;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2oUZWhFRgfr9pvRVDiHPhUHnAAS7F/GEitJvK46KaIA=;
-  b=iuh4+E9abDThEqz+bWJNM8XYgzkSsWNDI23KLbjfJYr+71pbN7rKuTVQ
-   hGTQYdjicqRpjIWPyT+pCkchOKonq6zgI30H+cRKXZ651PcEztdUJ0lpz
-   g9OwCNcBSrZxIp8BbBXbFkkdfhspnqh1Jvnoer7Ocu3M9x+WLws0Bnwyf
-   b9GkSGhe/KuT0akZY8g4M6TNlDW6SwRev2STIBZQcJmsCi1oFrmk+c8rC
-   K9ZGZMx1uawF1TdbmHj0kJx3ypaCSlaZwEc//Uscdv0ttBP/C0emPaL8n
-   SzpEXlMXx5zubQZWPLHQBHdNR/nzI67Focv8/p/y8y3B+z+juoSZGMqKM
-   Q==;
-X-CSE-ConnectionGUID: kvdba7rnTuenzIDVnyz3mA==
-X-CSE-MsgGUID: sRsusSw/RRCS83sTalnIXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50169677"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="50169677"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 21:51:40 -0800
-X-CSE-ConnectionGUID: UU8eQFvlQyuWW4KYN2gmSw==
-X-CSE-MsgGUID: bwuHiGaxTBedhuinQI40rA==
+  t=1738218222; x=1769754222;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LfCdPygos0pL+AlQegcU9RLuu0UcBJUY6KwAT8p1Vro=;
+  b=ZPBbPf1fEOLLGWpCVD3RClKRT8bua5Vpj2q9WT4s9IwMw+aBWt5vlrqf
+   In/jk3M9+mHEzHuv5NeGA+rLHVyVmdOfix5G34PdMO06V3dwSfyLMfGRw
+   lOIm/T4+hHJp3iUfhdQP7oTEBaHLRGJ20UDAC5lizFmglNCn+Wp7xsZoh
+   BRF/3hd15YtNpLh54EEeLGxLuxsUDiAkd3SneLfpA/nO1XE9Bq960lTzD
+   hNdQC8XRPyemDpUOAxinKS3ieJ1YJhQqREtt0AjpErmeRJgR0OLXVHjHd
+   l+lGw8+0Wie0EbqCEcLbCnnCi96UGUpeKRvVO7Bb31fd/kr9lTQwfOFOY
+   A==;
+X-CSE-ConnectionGUID: 5fBPknGtQdyjGHP4sEE94A==
+X-CSE-MsgGUID: oHiqOUKtRJyxJuS3hBaLTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="42678655"
+X-IronPort-AV: E=Sophos;i="6.13,244,1732608000"; 
+   d="scan'208";a="42678655"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 22:23:42 -0800
+X-CSE-ConnectionGUID: 820QTpr2QvyODJN9PLs5XQ==
+X-CSE-MsgGUID: stO9517kTQyWJZ+LQm/8bA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="132502975"
+   d="scan'208";a="113253956"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 29 Jan 2025 21:51:39 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 29 Jan 2025 22:23:41 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tdNSi-000jip-1T;
-	Thu, 30 Jan 2025 05:51:36 +0000
-Date: Thu, 30 Jan 2025 13:50:50 +0800
+	id 1tdNxi-000jkB-3D;
+	Thu, 30 Jan 2025 06:23:39 +0000
+Date: Thu, 30 Jan 2025 14:23:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
+To: Joe Damato <jdamato@fastly.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jgunthorpe:iommu_pages 8/20] drivers/iommu/iommu-pages.h:30:47:
- error: incomplete definition of type 'struct iommu_pages_list'
-Message-ID: <202501301330.2iIypjer-lkp@intel.com>
+Subject: Re: [RFC net-next 1/2] netdev-genl: Add an XSK attribute to queues
+Message-ID: <202501301434.ZoSDVYrs-lkp@intel.com>
+References: <20250129172431.65773-2-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,174 +62,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250129172431.65773-2-jdamato@fastly.com>
 
-tree:   https://github.com/jgunthorpe/linux iommu_pages
-head:   b21a333dd68ad1bca44a6a4ff61c91a9d43fba3a
-commit: 68f020177fc5b024a95372c15ec6f8f6f192e410 [8/20] iommu/pages: Formalize the freelist API
-config: um-defconfig (https://download.01.org/0day-ci/archive/20250130/202501301330.2iIypjer-lkp@intel.com/config)
+Hi Joe,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 0ad9617c78acbc71373fb341a6f75d4012b01d69]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netdev-genl-Add-an-XSK-attribute-to-queues/20250130-012820
+base:   0ad9617c78acbc71373fb341a6f75d4012b01d69
+patch link:    https://lore.kernel.org/r/20250129172431.65773-2-jdamato%40fastly.com
+patch subject: [RFC net-next 1/2] netdev-genl: Add an XSK attribute to queues
+config: hexagon-randconfig-002-20250130 (https://download.01.org/0day-ci/archive/20250130/202501301434.ZoSDVYrs-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 19306351a2c45e266fa11b41eb1362b20b6ca56d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501301330.2iIypjer-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250130/202501301434.ZoSDVYrs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501301330.2iIypjer-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501301434.ZoSDVYrs-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iommu/iommu-pages.c:6:
->> drivers/iommu/iommu-pages.h:14:38: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      14 | void iommu_put_pages_list_new(struct iommu_pages_list *list);
-         |                                      ^
-   drivers/iommu/iommu-pages.h:27:48: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      27 | static inline void iommu_pages_list_add(struct iommu_pages_list *list,
-         |                                                ^
->> drivers/iommu/iommu-pages.h:30:47: error: incomplete definition of type 'struct iommu_pages_list'
-      30 |         list_add_tail(&virt_to_page(virt)->lru, &list->pages);
-         |                                                  ~~~~^
-   drivers/iommu/iommu-pages.h:27:48: note: forward declaration of 'struct iommu_pages_list'
-      27 | static inline void iommu_pages_list_add(struct iommu_pages_list *list,
-         |                                                ^
-   drivers/iommu/iommu-pages.h:41:51: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      41 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:44:19: error: incomplete definition of type 'struct iommu_pages_list'
-      44 |         list_splice(&from->pages, &to->pages);
-         |                      ~~~~^
-   drivers/iommu/iommu-pages.h:41:51: note: forward declaration of 'struct iommu_pages_list'
-      41 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:44:31: error: incomplete definition of type 'struct iommu_pages_list'
-      44 |         list_splice(&from->pages, &to->pages);
-         |                                    ~~^
-   drivers/iommu/iommu-pages.h:41:51: note: forward declaration of 'struct iommu_pages_list'
-      41 | static inline void iommu_pages_list_splice(struct iommu_pages_list *from,
-         |                                                   ^
-   drivers/iommu/iommu-pages.h:51:50: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      51 | static inline bool iommu_pages_list_empty(struct iommu_pages_list *list)
-         |                                                  ^
-   drivers/iommu/iommu-pages.h:53:25: error: incomplete definition of type 'struct iommu_pages_list'
-      53 |         return list_empty(&list->pages);
-         |                            ~~~~^
-   drivers/iommu/iommu-pages.h:51:50: note: forward declaration of 'struct iommu_pages_list'
-      51 | static inline bool iommu_pages_list_empty(struct iommu_pages_list *list)
-         |                                                  ^
->> drivers/iommu/iommu-pages.c:75:38: warning: declaration of 'struct iommu_pages_list' will not be visible outside of this function [-Wvisibility]
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |                                      ^
-   drivers/iommu/iommu-pages.c:75:6: error: conflicting types for 'iommu_put_pages_list_new'
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |      ^
-   drivers/iommu/iommu-pages.h:14:6: note: previous declaration is here
-      14 | void iommu_put_pages_list_new(struct iommu_pages_list *list);
-         |      ^
->> drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   include/linux/container_of.h:19:26: note: expanded from macro 'container_of'
-      19 |         void *__mptr = (void *)(ptr);                                   \
-         |                                 ^~~
-   drivers/iommu/iommu-pages.c:75:38: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |                                      ^
->> drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/iommu/iommu-pages.c:75:38: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |                                      ^
->> drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:857:30: note: expanded from macro 'list_for_each_entry_safe'
-     857 |         for (pos = list_first_entry(head, typeof(*pos), member),        \
-         |                                     ^~~~
-   include/linux/list.h:612:14: note: expanded from macro 'list_first_entry'
-     612 |         list_entry((ptr)->next, type, member)
-         |                     ^~~
-   include/linux/list.h:601:15: note: expanded from macro 'list_entry'
-     601 |         container_of(ptr, type, member)
-         |                      ^~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                               ^
-   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-         |                                                  ^~~~
-   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   drivers/iommu/iommu-pages.c:75:38: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |                                      ^
->> drivers/iommu/iommu-pages.c:79:40: error: incomplete definition of type 'struct iommu_pages_list'
-      79 |         list_for_each_entry_safe(p, tmp, &list->pages, lru)
-         |                                           ~~~~^
-   include/linux/list.h:859:32: note: expanded from macro 'list_for_each_entry_safe'
-     859 |              !list_entry_is_head(pos, head, member);                    \
-         |                                       ^~~~
-   include/linux/list.h:761:30: note: expanded from macro 'list_entry_is_head'
-     761 |         list_is_head(&pos->member, (head))
-         |                                     ^~~~
-   drivers/iommu/iommu-pages.c:75:38: note: forward declaration of 'struct iommu_pages_list'
-      75 | void iommu_put_pages_list_new(struct iommu_pages_list *list)
-         |                                      ^
-   5 warnings and 9 errors generated.
+>> net/core/netdev-genl.c:397:51: error: no member named 'pool' in 'struct netdev_rx_queue'
+     397 |                 if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!rxq->pool))
+         |                                                            ~~~  ^
+>> net/core/netdev-genl.c:407:51: error: no member named 'pool' in 'struct netdev_queue'
+     407 |                 if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!txq->pool))
+         |                                                            ~~~  ^
+   2 errors generated.
 
 
-vim +30 drivers/iommu/iommu-pages.h
+vim +397 net/core/netdev-genl.c
 
-    11	
-    12	void *iommu_alloc_pages_node(int nid, gfp_t gfp, unsigned int order);
-    13	void iommu_free_page(void *virt);
-  > 14	void iommu_put_pages_list_new(struct iommu_pages_list *list);
-    15	void iommu_put_pages_list_old(struct list_head *head);
-    16	
-    17	#define iommu_put_pages_list(head)                                   \
-    18		_Generic(head,                                               \
-    19			struct iommu_pages_list *: iommu_put_pages_list_new, \
-    20			struct list_head *: iommu_put_pages_list_old)(head)
-    21	
-    22	/**
-    23	 * iommu_pages_list_add - add the page to a iommu_pages_list
-    24	 * @list: List to add the page to
-    25	 * @virt: Address returned from iommu_alloc_pages_node()
-    26	 */
-    27	static inline void iommu_pages_list_add(struct iommu_pages_list *list,
-    28						void *virt)
-    29	{
-  > 30		list_add_tail(&virt_to_page(virt)->lru, &list->pages);
-    31	}
-    32	
+   366	
+   367	static int
+   368	netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+   369				 u32 q_idx, u32 q_type, const struct genl_info *info)
+   370	{
+   371		struct net_devmem_dmabuf_binding *binding;
+   372		struct netdev_rx_queue *rxq;
+   373		struct netdev_queue *txq;
+   374		void *hdr;
+   375	
+   376		hdr = genlmsg_iput(rsp, info);
+   377		if (!hdr)
+   378			return -EMSGSIZE;
+   379	
+   380		if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx) ||
+   381		    nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type) ||
+   382		    nla_put_u32(rsp, NETDEV_A_QUEUE_IFINDEX, netdev->ifindex))
+   383			goto nla_put_failure;
+   384	
+   385		switch (q_type) {
+   386		case NETDEV_QUEUE_TYPE_RX:
+   387			rxq = __netif_get_rx_queue(netdev, q_idx);
+   388			if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
+   389						     rxq->napi->napi_id))
+   390				goto nla_put_failure;
+   391	
+   392			binding = rxq->mp_params.mp_priv;
+   393			if (binding &&
+   394			    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id))
+   395				goto nla_put_failure;
+   396	
+ > 397			if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!rxq->pool))
+   398				goto nla_put_failure;
+   399	
+   400			break;
+   401		case NETDEV_QUEUE_TYPE_TX:
+   402			txq = netdev_get_tx_queue(netdev, q_idx);
+   403			if (txq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
+   404						     txq->napi->napi_id))
+   405				goto nla_put_failure;
+   406	
+ > 407			if (nla_put_u32(rsp, NETDEV_A_QUEUE_XSK, !!txq->pool))
+   408				goto nla_put_failure;
+   409		}
+   410	
+   411		genlmsg_end(rsp, hdr);
+   412	
+   413		return 0;
+   414	
+   415	nla_put_failure:
+   416		genlmsg_cancel(rsp, hdr);
+   417		return -EMSGSIZE;
+   418	}
+   419	
 
 -- 
 0-DAY CI Kernel Test Service
