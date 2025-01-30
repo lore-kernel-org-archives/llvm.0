@@ -1,180 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5E21482E1;
-	Thu, 30 Jan 2025 21:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF901465A5
+	for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 22:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738271399; cv=none; b=V54Q7+pHcXOnw88PtbLnzs39bWwyA1Y/3O7PTp1jqCqft1yFVYkL+Q4pqBPYx1GbSX6oitTy5sAssBMroFGmk8+HzKfggP67+B26aJQvt3Sd9SOjnvcpQFsU4HgApcrmkIDlHC/ZkRa4Nez+Z02NG8HEnlCPq0oNzA/wh70OZSA=
+	t=1738276450; cv=none; b=DtED5UuibkQfVvR/8UhYzPf0SRlop/FTBkukrHDom6Sh0EwBbe6s6hn1m2ywkVVCCUEj2PP5fxPx1bD3AGY4OfnFaqytmOElIROfazcMuCbvf4lOnQoYRD/FAp3ZYvD1CHAteLKbYMhR9t2KL4IXR4yEaXoFILid32ZiBNf54w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738271399; c=relaxed/simple;
-	bh=uzkRoqr4uv4JMBPOSt5WZbBNtSmaS7277duHctSbaCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QwnFtHZ8Lw+ac59eicYep9u7eC5JaP1HK3q1qtRaurBu+PWh0NAi9TqF649cSblznZyTb7e7bHZ1n6vLfB5WK3cx/o/yQY5+jRh7tddT0iV1zZf9BQspTMJVIbVBt1B6v1zfUAuZM3zJZC5yoHLgvE3VACoqjRvW7WORulNOmcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Id78AGa+; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738276450; c=relaxed/simple;
+	bh=SBI0Gy9KUpzrrtm5Bgw3GKLY1+5MIQEuxMKqii/TIcc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D1dZzNonm0ImeNP0RjY7F3ltjI47m7RY3tM1MhgKXGnxokQHiw+I2VulJ/K2jTCMAZwIMo0nyJHVjWU2erDognpFEuFwpvK4MbVUXDmukpCpb8wcE3FyLEXdZijcPLfftkEZp2desg2X9KEnBjGksxOqmjvHbj3h0M+AMXe3Liw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=4u2cZ8hj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=w0qeQ0xh; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Id78AGa+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738271397; x=1769807397;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uzkRoqr4uv4JMBPOSt5WZbBNtSmaS7277duHctSbaCg=;
-  b=Id78AGa+cTLWkPGRjB9/dzdEkeZ0A9ugrXrCDtWiNvFZpmVeNJviVIr8
-   ciQrqSSKzGxZ6+klTCb1xAqSKCihpA7F7a8NevGXLmY+jGK9HcLmZRDgk
-   oEGIMYRwvcORdv8MivESSNyBoU1oWKNzTkOC8PRBKJpIplNd6ZAXcojre
-   +kQrCxtPaRSbGDxl4hTPBn9t3O+GcA+hYzsm1GCYzfz5Fvu5M1Q/3p6gp
-   zshH8jd2pHxFkLaHvBPRh77rPbAysN87uMyDDXJDbVCwLTwjQFo6wVq7M
-   mDht2M6mhAQSbrMQysZFlxIkAEBzfRCtpS+9HStQGPJYEzEXja4lAqFyi
-   Q==;
-X-CSE-ConnectionGUID: 6j/8BeScSUWwQcCHbgnRdQ==
-X-CSE-MsgGUID: n4VIYDM9S/uGVBvwSZX1/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="39110629"
-X-IronPort-AV: E=Sophos;i="6.13,246,1732608000"; 
-   d="scan'208";a="39110629"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2025 13:09:56 -0800
-X-CSE-ConnectionGUID: IqMpvQgNR1SgfNmoQYUDPg==
-X-CSE-MsgGUID: bUnf0E71SvOOeORM2v8s1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="146627827"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 Jan 2025 13:09:54 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdbnM-000kyV-1b;
-	Thu, 30 Jan 2025 21:09:52 +0000
-Date: Fri, 31 Jan 2025 05:09:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.mnt_idmap.statmount 4/5]
- samples/vfs/test-list-all-mounts.c:152:39: warning: format specifies type
- 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202501310452.wltposNc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="4u2cZ8hj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="w0qeQ0xh"
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailflow.stl.internal (Postfix) with ESMTP id 2238F1D40D4D;
+	Thu, 30 Jan 2025 17:34:07 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Thu, 30 Jan 2025 17:34:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm2; t=1738276446; x=1738283646; bh=pYA5QQ2gujW7NKTZMydkI
+	F3TfLqgo5o+zoRfFMxUleo=; b=4u2cZ8hjS0JGuwpIDpefzkUA+sq9dWUSJfY3B
+	tkR7nGgog15o18cS3pO7A1AV5ePNoj0UN2RjHYucnx2lWZnwFUAHVwrVk/68ZKcH
+	yrtLGStZlcOfw8VUM9LWzs1ZUpCIwHppZjj9yTkrTT5myEf92e/tOW/oEwmBBsgj
+	59ZdRwNjdb8ciCYRI2gGfxyhaDMpAzIkyN8uBLlc6GcIdakdbmjyWCErd7fp9dpV
+	VmSOXFBWxMUrgdLSGPjAnSMJKjNMsEVouta5hLe5or7BOYLuIYZsRbxq22ezX2mu
+	qPAyrf9MGxULk4AffQShCdwc6Aojklv7xO7xc0wV1UeLOix+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1738276446; x=1738283646; bh=pYA5QQ2gujW7NKTZMydkIF3TfLqgo5o+zoR
+	fFMxUleo=; b=w0qeQ0xhO7gK8Gk7umXljf1tPU2Qoq9VrZDo2B0TulUXub0XOCz
+	go4Kr+mkC8/oSPFcySFSwka8oUucp/LO0gEonRTM5lAWmOQ6KRdic0TBM+nMlwt/
+	0kg/rL85KM++S//Y5AkCJYnGOVfAaWWJMi4khKAplp9h5Emsnp/QdP71YqJ8mcRy
+	A7MuXGBxHibUWIYBzBCPmci+RhyyRdLMwx5/oJvtfHA8pdljwy4+Tg3zkt1l99vl
+	yRHwPqJevPaPzI+qiLRLR8Tc5DakjPiSKJEdyvIbrO5Ge1VyjVfJ9tQM+1BiJsFJ
+	c37M/j7kKjdFiCrEMtIQPJQinvWij201wfA==
+X-ME-Sender: <xms:Xv6bZ0p9k0Gj5MNxpb2Y_5wOp-e5GdhxEP-Pk0gsQRDROrMBTzMFpw>
+    <xme:Xv6bZ6rwimJfJ_hrE30_abgkMw4BTaujkQ-2kbKz9RHJD48i-l2fQ0MzisK8ip2gM
+    MvWRI4GxEWbsbS93A>
+X-ME-Received: <xmr:Xv6bZ5OMeQnpb2VpefvnX6-j8DNGTwMVpyOMOrTxlOELJe5g7qYfFL9cbCsf_E9s1HFv985gsG8Jpt5VTW3Vcy-GwNTq4yHs1PAp44VNArQgP1YjCLhF>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
+    dtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghn
+    ihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvd
+    eggfetgfelhefhueefkeduvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguh
+    huuhdrgiihiidpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhiih
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguugihiiekjeesghhmrghilhdrtgho
+    mhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghthh
+    grnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgs
+    ohigrdhnvghtpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpd
+    hrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeihohhnghhh
+    ohhnghdrshhonhhgsehlihhnuhigrdguvghv
+X-ME-Proxy: <xmx:Xv6bZ75YdJMsDtWl2x4mtYZrzhoo8sDlVNvgLzUw8esaJfEc1_xyrw>
+    <xmx:Xv6bZz5BsB9hFnvDXetb0uoN5jRlPto2Rm3_UmhAlt-OQqiaCsCqrQ>
+    <xmx:Xv6bZ7gXuEIefgA9NZJZGZS9_EN_eiFm3oIa9Gc1h3vtXIiydB9RvA>
+    <xmx:Xv6bZ9767q2HgJpX4o3JCuNmZsaiZV3ECAaRhMKPCHs3reMT3QPnWg>
+    <xmx:Xv6bZ9vwx9199PgLQiqGuO7gd6Dh9AUHuyDb3vRPc2c_ZbSJtJNFvsNs>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Jan 2025 17:34:00 -0500 (EST)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: shuah@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	nathan@kernel.org,
+	daniel@iogearbox.net
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] selftests: bpf: Support dynamic linking LLVM if static not available
+Date: Thu, 30 Jan 2025 15:33:45 -0700
+Message-ID: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.mnt_idmap.statmount
-head:   e44d6d871d9cf676fadd6b5cb4c68ff3c6f2fc24
-commit: 32ed618ba0faa39f735b4ef89fef1542d49a207f [4/5] samples/vfs: add STATMOUNT_MNT_{G,U}IDMAP
-config: i386-buildonly-randconfig-001-20250131 (https://download.01.org/0day-ci/archive/20250131/202501310452.wltposNc-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501310452.wltposNc-lkp@intel.com/reproduce)
+Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+libraries"), only statically linking test_progs is supported. However,
+some distros only provide a dynamically linkable LLVM.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501310452.wltposNc-lkp@intel.com/
+This commit adds a fallback for dynamically linking LLVM if static
+linking is not available. If both options are available, static linking
+is chosen.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/Makefile | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
->> samples/vfs/test-list-all-mounts.c:152:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     152 |                                         printf("mnt_uidmap[%lu]:\t%s\n", idx, idmap);
-         |                                                            ~~~           ^~~
-         |                                                            %zu
-   samples/vfs/test-list-all-mounts.c:161:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     161 |                                         printf("mnt_gidmap[%lu]:\t%s\n", idx, idmap);
-         |                                                            ~~~           ^~~
-         |                                                            %zu
-   2 warnings generated.
-
-
-vim +152 samples/vfs/test-list-all-mounts.c
-
-    70	
-    71	int main(int argc, char *argv[])
-    72	{
-    73	#define LISTMNT_BUFFER 10
-    74		__u64 list[LISTMNT_BUFFER], last_mnt_id = 0;
-    75		int ret, pidfd, fd_mntns;
-    76		struct mnt_ns_info info = {};
-    77	
-    78		pidfd = sys_pidfd_open(getpid(), 0);
-    79		if (pidfd < 0)
-    80			die_errno("pidfd_open failed");
-    81	
-    82		fd_mntns = ioctl(pidfd, PIDFD_GET_MNT_NAMESPACE, 0);
-    83		if (fd_mntns < 0)
-    84			die_errno("ioctl(PIDFD_GET_MNT_NAMESPACE) failed");
-    85	
-    86		ret = ioctl(fd_mntns, NS_MNT_GET_INFO, &info);
-    87		if (ret < 0)
-    88			die_errno("ioctl(NS_GET_MNTNS_ID) failed");
-    89	
-    90		printf("Listing %u mounts for mount namespace %" PRIu64 "\n",
-    91		       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-    92		for (;;) {
-    93			ssize_t nr_mounts;
-    94	next:
-    95			nr_mounts = sys_listmount(LSMT_ROOT, last_mnt_id,
-    96						  info.mnt_ns_id, list, LISTMNT_BUFFER,
-    97						  0);
-    98			if (nr_mounts <= 0) {
-    99				int fd_mntns_next;
-   100	
-   101				printf("Finished listing %u mounts for mount namespace %" PRIu64 "\n\n",
-   102				       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-   103				fd_mntns_next = ioctl(fd_mntns, NS_MNT_GET_NEXT, &info);
-   104				if (fd_mntns_next < 0) {
-   105					if (errno == ENOENT) {
-   106						printf("Finished listing all mount namespaces\n");
-   107						exit(0);
-   108					}
-   109					die_errno("ioctl(NS_MNT_GET_NEXT) failed");
-   110				}
-   111				close(fd_mntns);
-   112				fd_mntns = fd_mntns_next;
-   113				last_mnt_id = 0;
-   114				printf("Listing %u mounts for mount namespace %" PRIu64 "\n",
-   115				       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-   116				goto next;
-   117			}
-   118	
-   119			for (size_t cur = 0; cur < nr_mounts; cur++) {
-   120				struct statmount *stmnt;
-   121	
-   122				last_mnt_id = list[cur];
-   123	
-   124				stmnt = sys_statmount(last_mnt_id, info.mnt_ns_id,
-   125						      STATMOUNT_SB_BASIC |
-   126						      STATMOUNT_MNT_BASIC |
-   127						      STATMOUNT_MNT_ROOT |
-   128						      STATMOUNT_MNT_POINT |
-   129						      STATMOUNT_MNT_NS_ID |
-   130						      STATMOUNT_MNT_OPTS |
-   131						      STATMOUNT_FS_TYPE |
-   132						      STATMOUNT_MNT_UIDMAP |
-   133						      STATMOUNT_MNT_GIDMAP, 0);
-   134				if (!stmnt) {
-   135					printf("Failed to statmount(%" PRIu64 ") in mount namespace(%" PRIu64 ")\n",
-   136					       (uint64_t)last_mnt_id, (uint64_t)info.mnt_ns_id);
-   137					continue;
-   138				}
-   139	
-   140				printf("mnt_id:\t\t%" PRIu64 "\nmnt_parent_id:\t%" PRIu64 "\nfs_type:\t%s\nmnt_root:\t%s\nmnt_point:\t%s\nmnt_opts:\t%s\n",
-   141				       (uint64_t)stmnt->mnt_id,
-   142				       (uint64_t)stmnt->mnt_parent_id,
-   143				       (stmnt->mask & STATMOUNT_FS_TYPE)   ? stmnt->str + stmnt->fs_type   : "",
-   144				       (stmnt->mask & STATMOUNT_MNT_ROOT)  ? stmnt->str + stmnt->mnt_root  : "",
-   145				       (stmnt->mask & STATMOUNT_MNT_POINT) ? stmnt->str + stmnt->mnt_point : "",
-   146				       (stmnt->mask & STATMOUNT_MNT_OPTS)  ? stmnt->str + stmnt->mnt_opts  : "");
-   147	
-   148				if (stmnt->mask & STATMOUNT_MNT_UIDMAP) {
-   149					const char *idmap = stmnt->str + stmnt->mnt_uidmap;
-   150	
-   151					for (size_t idx = 0; idx < stmnt->mnt_uidmap_num; idx++) {
- > 152						printf("mnt_uidmap[%lu]:\t%s\n", idx, idmap);
-
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 6722080b2107..da514030a153 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
+   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+   # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
+   LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+-  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+-  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+-  LLVM_LDLIBS  += -lstdc++
++  # Prefer linking statically if it's available, otherwise fallback to shared
++  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
++    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
++    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
++    LLVM_LDLIBS  += -lstdc++
++  else
++    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
++  endif
+   LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+ endif
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
