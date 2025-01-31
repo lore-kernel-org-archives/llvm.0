@@ -1,96 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09ADD1386C9;
-	Fri, 31 Jan 2025 18:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A40F1F2C2E
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 19:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738347682; cv=none; b=iRaVkCfQLNn6YFLce7ub4JPDflj+ZYw+lg4DtNhil5qyf5mOq6V9SljJFuKJ4C/h158aeryyq9f/eDsMpAm12aHautofycRmzhut5ULFGUUMLH9k/LoDQ/rZ90Cy5E0HIjU0Sf2qwkRkNeu17gSq823eWzqr2u57n4ZaNdJ0Ch0=
+	t=1738350187; cv=none; b=e4jqApOj9viT/qaBZBfk/AVi1Xd+/z2MZjY1tzIclCuUABWRNkpYpYWv02Yf96j2XXhfnuXLImkPvHIEyGJNLxfGJL5K3k/dABqYfQtV/0/OfzSjC7ygq0QH0YAsc3hjAnPTV3IVvLSf9VS1Dy3vc7Cf51tLkHP9SJkBB9v/bj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738347682; c=relaxed/simple;
-	bh=++eLT7i6lhz3W55ckpmPOQ2S1UI2KmtDi/OQQKxhcPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fa8dPfsEpbyv5XPwzKw7WpPQai6zE01l+1cpWl9LAaYV9qcztWevqnmCjL4da7DwN0teJSV6Q5R7DXIPm1XrIos8BUixrUP0orQqGT/9mRnQJfLqtus32hrqcrd3ifMIJKXu3eZ9PNSn/Ftk0riI6TmcWlwE/IGPUSdhbKbOwJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsMsRjTh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738350187; c=relaxed/simple;
+	bh=13r3NjS5OZHyhxxnWy27IvP93Qkg7bGlLkGVLGhPqIY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ojhvEGL8bMdcf0Cun2/25P4+l7ZRGyrafE8dTP2PaTSnQppaPa5i3cH03HwHjihkU4krhtA6QRw8ZZxmyqKkA2yzHOiWnzpcgX9gMxsFusvFCdhUbIp3cIoXw4HLrcureAC3+DQXBzUg2zGteoJGJBgyHNwrA6yfkfoSQ9mamBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bhfzRh19; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsMsRjTh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108BAC4CED1;
-	Fri, 31 Jan 2025 18:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738347681;
-	bh=++eLT7i6lhz3W55ckpmPOQ2S1UI2KmtDi/OQQKxhcPo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bsMsRjThA0LaGECgNMKafWzFB0+vPGBwkoVJjm2E4JxGleI891Oo0o3SSDulXrhmi
-	 NBFHz/pCl2mpauFFbXaHdnLFDich8mXYSoRpFrpiDC7Q+PTHmTKVAnF57yT905G4Ev
-	 ktoUQL/mkh7THBivLJ3iaJBcNsag7nXToxbWZ7gQLFR53gqUU/oY1xVBisWHRlkzR9
-	 bUdfven6DZA7eqGh4lp3f8YR1D+EJF+oUWnT13k/MR/5oTJCgUHy+36U+8/bhbEzT5
-	 dZ5lGHDrbKHj3a+yZTOZskcAVagt1MNy9nZdGQlH3N3RckDCYoxx7yzZJo40EqTQiF
-	 NXqopK47OEjgg==
-Date: Fri, 31 Jan 2025 11:21:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: John Johansen <john.johansen@canonical.com>
-Cc: apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] apparmor: Fix checking address of an array in
- accum_label_info()
-Message-ID: <20250131182117.GA2398605@ax162>
-References: <20250120-apparmor-pointer-bool-conversion-label-v1-1-5957d28ffde6@kernel.org>
- <15e13942-965b-49f9-bf69-36579237a4cb@canonical.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bhfzRh19"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738350184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ErVRTJk2Ebi8P6W1z39yC2qzlbDUU2JHOyXyRbiVqMY=;
+	b=bhfzRh19LYcoWnQtObE0K8lmCDmEQ+L+dPlIJy+/CwzfqN5ACDBQaKlNR0SN2eNTkiVJqo
+	co6WQF6f8/4TaiIPjyuWYyzqelX0i6HZTII6qskM1n66eU8EP8Zssr17FDl2PXSgQjgmoM
+	Nv13PlsIvk1a+rAI4lNEJfOp5HdaYUg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-605-bxZC7sBWMfm6BNnj8DG3wg-1; Fri,
+ 31 Jan 2025 14:03:03 -0500
+X-MC-Unique: bxZC7sBWMfm6BNnj8DG3wg-1
+X-Mimecast-MFC-AGG-ID: bxZC7sBWMfm6BNnj8DG3wg
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4EA5B1800374
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 19:03:02 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D339D1800988;
+	Fri, 31 Jan 2025 19:03:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, 69b8923f)
+Date: Fri, 31 Jan 2025 19:03:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15e13942-965b-49f9-bf69-36579237a4cb@canonical.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <14103.125013114030301893@us-mta-605.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: RPveUROWnd8TfBr7tCQR9Kl3mRaKhiNOZoKi5Le9LD4_1738350182
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 24, 2025 at 01:59:36PM -0800, John Johansen wrote:
-> On 1/20/25 05:12, Nathan Chancellor wrote:
-> > clang warns:
-> > 
-> >    security/apparmor/label.c:206:15: error: address of array 'new->vec' will always evaluate to 'true' [-Werror,-Wpointer-bool-conversion]
-> >      206 |         AA_BUG(!new->vec);
-> >          |                ~~~~~~^~~
-> > 
-> > The address of this array can never be NULL because it is not at the
-> > beginning of a structure. Convert the assertion to check that the new
-> > pointer is not NULL.
-> > 
-> > Fixes: de4754c801f4 ("apparmor: carry mediation check on label")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202501191802.bDp2voTJ-lkp@intel.com/
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Acked-by: John Johansen <john.johansen@canonical.com>
-> 
-> I have pulled this into my tree
+Hi, we tested your kernel and here are the results:
 
-Thanks! Is this going to be pushed to -next soon? I am still seeing this
-on next-20240131.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> > ---
-> >   security/apparmor/label.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/security/apparmor/label.c b/security/apparmor/label.c
-> > index afded9996f61..79be2d3d604b 100644
-> > --- a/security/apparmor/label.c
-> > +++ b/security/apparmor/label.c
-> > @@ -203,7 +203,7 @@ static void accum_label_info(struct aa_label *new)
-> >   	long u = FLAG_UNCONFINED;
-> >   	int i;
-> > -	AA_BUG(!new->vec);
-> > +	AA_BUG(!new);
-> >   	/* size == 1 is a profile and flags must be set as part of creation */
-> >   	if (new->size == 1)
-> > 
-> > ---
-> > base-commit: e6b087676954e36a7b1ed51249362bb499f8c1c2
-> > change-id: 20250120-apparmor-pointer-bool-conversion-label-7c1027964c7f
-> > 
-> > Best regards,
-> 
-> 
+
+Kernel information:
+    Commit message: Merge tag 'for-linus-6.14-ofs4' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/hubcap/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1650715326
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1650715326-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1650715326-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1650715326-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
