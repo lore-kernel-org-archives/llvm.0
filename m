@@ -1,430 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE94749C;
-	Fri, 31 Jan 2025 00:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC51D139E
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 03:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738284604; cv=none; b=EEwYZG4mRKfukIPrkiwTyRbZRXZ0LJeRBAMFnuz8R1O1OSqJNnKAP9mXH/NN2QFMYRBp1ZNqkNZyZDHbXsGYNp4LNsQecoh8KKZMvXRD8f2rsJ/RkVhwIg3iUB3q1RJMNLLtESPoDU0z+Xhk2PzndZtf14W9chka+zQxvhV6do8=
+	t=1738294931; cv=none; b=Reu/D6dB1dkHZEha02bOnyDYSvlpt+S3t/FrYWkZ/KSgfG6HJDluX+dyccwgFTpIl8mZBzb+hUjoYa9DYZlYYzBqfr4HaWvPuFCgPus0ShrHkkUxs/xDff5HAqzWbfgQX7mD6nP0NeIi2IPTrypMiyctG1+LJn/KVg4BM3F9B0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738284604; c=relaxed/simple;
-	bh=GC0sS/ll7FXWrYk9wniRzbBVRTEj5hUDuN763X+smOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MtM2I0CLffXfcZOz1LlvZRVNzFj+b73+0UuZdzpq4eX938AVIlEu9JvWdU9K9PAYf0VCgV9wloYZz6KcybmqkyAU2wQ1P7RYvyW7FrbGm2Ft5JyRMgLTwFtCGWqI0XxmYd+RBG4YROxRmgg4owC7VYURz1CKBoxckDrdGJ8tnJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmqZ2njT; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738294931; c=relaxed/simple;
+	bh=o7yr1itDOnFkrFNhS7f5UnliKpMPyoEtT8KRzmpr0eM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PVbEuVC8iPvOlD9Z/JaQ2Rl5reQCQi8gCsWAP6uszRw+sfLlotDSaJkhkuKeiPUxCoEXQdrJBPDE1xKi8P5gci+n++082qX+uTtEEj7wm3hRMlj/iaFbE83wAbE7W40C1R+Ddj38oCnA78NNCKQyueSOGq8QnW/CF7mdW6fEHWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YmRYho/I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmqZ2njT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738284601; x=1769820601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GC0sS/ll7FXWrYk9wniRzbBVRTEj5hUDuN763X+smOE=;
-  b=PmqZ2njTjYdo4i42LoisI+ER8KH6nlgjoEZnTb+3dAIFqS7bEPYgxvU2
-   Lt+RVMLBqFFS/gdiIb3J37FT1mXOoJ6q0LoPDB1WSYWFxnOW74gi3TPYV
-   qhDjW3tt22bcoA+J7fjL6uiGt8As4OStgpx2MxMVER3bukKphgL0QdmH6
-   kk7byq7Rzl4ueghUxiCfUlWS2fnsPAmOjiDsgIk69Hq3SeJjyPFw4OnA0
-   tB1O4j1Hk/Yf0ZHj0VYR3DeV+VuRm3r9dBvlt5RkgAKz0fNFjVH54LuCj
-   JltSagDBbYFwspZuwQG/ejC7p8eoaKX8O53SNJrWGFSjVKzNbL3ZCdV4Z
-   w==;
-X-CSE-ConnectionGUID: lhu0Lk0yQ5C2lZuy8xNwqQ==
-X-CSE-MsgGUID: wA5+11oyTE+LP3Eq6rs+/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="56397277"
-X-IronPort-AV: E=Sophos;i="6.13,246,1732608000"; 
-   d="scan'208";a="56397277"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2025 16:50:00 -0800
-X-CSE-ConnectionGUID: r8ZTEX0XSDasLbs+cUvFIw==
-X-CSE-MsgGUID: edMp/LNAQIidQ7j1T2Rg8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="140374296"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 30 Jan 2025 16:48:42 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdfD6-000lbv-1P;
-	Fri, 31 Jan 2025 00:48:40 +0000
-Date: Fri, 31 Jan 2025 08:48:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Charlie Jenkins <charlie@rivosinc.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>,
-	Pasha Bouzarjomehri <pasha@rivosinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Charlie Jenkins <charlie@rivosinc.com>
-Subject: Re: [PATCH v3] riscv: Add runtime constant support
-Message-ID: <202501310838.EJsvg1L1-lkp@intel.com>
-References: <20250128-runtime_const_riscv-v3-1-11922989e2d3@rivosinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YmRYho/I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738294928;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N0UvNnDb2470GYRSAuktre3PAZFfwn7ncCM/m4xaUQ8=;
+	b=YmRYho/IaBLC9S6jb8ZckxeP166IVfEnM5Vasu5JwpNtUNxd76zAC0W8k5q8Otkl8xpP0Q
+	o2dw/Uk5HFhEpAVix3mM6Jq9MQqKZ2PPATV1bsus8BWmXYPAOA1BkPrg2/J8vdQd2JeoLb
+	5ydHThT6DWOwYTy1CULbDZUZakioZRI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-387-pwIBNGp2Oo2aaBIEwtNdMQ-1; Thu,
+ 30 Jan 2025 22:42:06 -0500
+X-MC-Unique: pwIBNGp2Oo2aaBIEwtNdMQ-1
+X-Mimecast-MFC-AGG-ID: pwIBNGp2Oo2aaBIEwtNdMQ
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 14DDE1800361
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 03:42:06 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6C0D81800980;
+	Fri, 31 Jan 2025 03:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, 69e858e0)
+Date: Fri, 31 Jan 2025 03:42:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250128-runtime_const_riscv-v3-1-11922989e2d3@rivosinc.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <22691.125013022420700178@us-mta-387.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vbGRwp4v0aykDaGJ3ywiuq3L6v5aHzFpTOwKxqmd95A_1738294926
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Charlie,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on ffd294d346d185b70e28b1a28abe367bbfe53c04]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Charlie-Jenkins/riscv-Add-runtime-constant-support/20250129-040853
-base:   ffd294d346d185b70e28b1a28abe367bbfe53c04
-patch link:    https://lore.kernel.org/r/20250128-runtime_const_riscv-v3-1-11922989e2d3%40rivosinc.com
-patch subject: [PATCH v3] riscv: Add runtime constant support
-config: riscv-randconfig-001-20250131 (https://download.01.org/0day-ci/archive/20250131/202501310838.EJsvg1L1-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501310838.EJsvg1L1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501310838.EJsvg1L1-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     812 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from fs/dcache.c:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     820 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from fs/dcache.c:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     829 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/dcache.c:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     838 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/dcache.c:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     847 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from fs/dcache.c:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> fs/dcache.c:112:9: warning: unused variable '__tmp' [-Wunused-variable]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/runtime-const.h:13:21: note: expanded from macro 'runtime_const_ptr'
-      13 |         typeof(sym) __ret, __tmp;                               \
-         |                            ^~~~~
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    s2,0x89abd
-         |                                     ^
->> fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    s2,-0x211
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
->> fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    a0,0x89abd
-         |                                     ^
->> fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    a0,-0x211
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
->> fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    a5,0x89abd
-         |                                     ^
->> fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    a5,-0x211
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
->> fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    a1,0x89abd
-         |                                     ^
->> fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    a1,-0x211
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
->> fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    a0,0x89abd
-         |                                     ^
->> fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    a0,-0x211
-         |                    ^
->> fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
-   fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
-   fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:14:13: note: expanded from macro 'runtime_const_ptr'
-      14 |         asm_inline("1:\t"                                       \
-         |                    ^
-   <inline asm>:1:25: note: instantiated into assembly here
-       1 |         1:      .option push.option norvclui    s2,0x89abd
-         |                                     ^
-   fs/dcache.c:112:9: error: invalid operand for instruction
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:17:26: note: expanded from macro 'runtime_const_ptr'
-      17 |                 "lui    %[__ret],0x89abd\n\t"                   \
-         |                                           ^
-   <inline asm>:2:10: note: instantiated into assembly here
-       2 |         addi    s2,-0x211
-         |                    ^
-   fs/dcache.c:112:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'arch', 'relax' or 'norelax' [-Winline-asm]
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:18:26: note: expanded from macro 'runtime_const_ptr'
-      18 |                 "addi   %[__ret],-0x211\n\t"                    \
-         |                                          ^
-   <inline asm>:3:26: note: instantiated into assembly here
-       3 |         .option pop.pushsection runtime_ptr_dentry_hashtable,"a"
-         |                                 ^
-   fs/dcache.c:112:9: error: .popsection without corresponding .pushsection
-     112 |         return runtime_const_ptr(dentry_hashtable) +
-         |                ^
-   arch/riscv/include/asm/runtime-const.h:21:18: note: expanded from macro 'runtime_const_ptr'
-      21 |                 ".long 1b - .\n\t"                              \
-         |                                ^
-   <inline asm>:5:13: note: instantiated into assembly here
-       5 |         .popsection
-         |                    ^
-   20 warnings and 12 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/__tmp +112 fs/dcache.c
+Kernel information:
+    Commit message: Merge tag 'uml-for-linus-6.14-rc1' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/uml/linux
 
-ceb5bdc2d246f6 Nicholas Piggin 2011-01-07  109  
-e60cc61153e61e Linus Torvalds  2024-06-10  110  static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
-ceb5bdc2d246f6 Nicholas Piggin 2011-01-07  111  {
-e78298556ee5d8 Linus Torvalds  2024-06-04 @112  	return runtime_const_ptr(dentry_hashtable) +
-e78298556ee5d8 Linus Torvalds  2024-06-04  113  		runtime_const_shift_right_32(hashlen, d_hash_shift);
-ceb5bdc2d246f6 Nicholas Piggin 2011-01-07  114  }
-ceb5bdc2d246f6 Nicholas Piggin 2011-01-07  115  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1649514362
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1649514362-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1649514362-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1649514362-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
