@@ -1,175 +1,210 @@
-Received: from mail-vs1-f65.google.com (mail-vs1-f65.google.com [209.85.217.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1D4C9F
-	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 07:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4B4158875;
+	Fri, 31 Jan 2025 09:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738309211; cv=none; b=aGzt8qPPIm+wdmC6aWyODgYKhrEHbMIZQIqynHfUUGx2O8qi45pegzTzjBxzMPx1fVTys7spi4Jmomhluzxv0/6QNQ8Q93o9cc88DT3A+7YfHLLu9LnNmWVN2eJwFVISBKY8zyKCuuLI943PtbuMiwpnEeIa07sATHRdQG/MrJg=
+	t=1738317290; cv=none; b=CHxqwUALneItZnLO7+jEYBlVsRqzjt1Uonhp3c586zbzmX4FgpqmQyjAxxPaxXlA8JaqSMP08JLhyUX+/rs6WjE8LfVQhdNW2oQdaNFeu4YRChsC8PGLl90B/pMgJ1ZnriVsExc/87x0IWjcZCuhW9M2skdHruKZZ6m/HBDjeXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738309211; c=relaxed/simple;
-	bh=eBBg1iptajengVqdm0pmKZfYXz/Bu4Dc0woU7WS/8QQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=Q2VbyRErA3xnRhwqLSCAZwFSYwTtrjl19C/rH/Vbwf/FCp6Wt3I506JF9y3K5eCfcLqEIivaEbsVVFSMHyZ677I3xikqC4+0B6uEUQ7KheGot1iTjFZCgpEiQIyc3uW/pnNasRrksioFHl67BWeoykMRrYWaGYIwiXSGkXouyIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f65.google.com with SMTP id ada2fe7eead31-4afde39e360so450842137.0
-        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 23:40:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738309206; x=1738914006;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8kQmZAAK+6ewvnmsf4szqYR99Nu9ojx8MPSG+efC0JQ=;
-        b=N6wrPNQ/l0D60iiiNEf0NCK3ShhmkdWn74sSD5Vkgfmg4FaJDf95DfIYGAPwkYvPBR
-         cq2onMXuHqr5s8oWeMKkxLSoOJOzySxJF/+YWdQlYmKT7L7g3E/5bYSIx1mOVgjzwcLq
-         +7eAXBYtkLWbjgz2+2f6dElbxe2o/CdGwxg58vH4or9tSWaZCa50doyzljDz5N1Tct2/
-         GkPiqrkxmSMF6nIK0Hhm7YybtHvHpryKrNl/tmDmHsg47y1R2hgpXkhnQr73OIHtTMTt
-         J5u7uzT188GN3cmGkTP+J1CGJdOjNAgQVkOWn3ogtlalTE0UZKcwO6rsWltZAI4DjNS9
-         so2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVNJ7+ELen2eRh41fwkmSABcC8r+KjR2E9FArFTs5BDq99EoBKv1Kv38+iz2rFy0904q49b@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz3PikuqbsU7OCAlym6lvVZPzHC8Tpkd/AeSiENIkGwj3PRXtLL
-	oOHI5HlYq/y6Wh5PcktTfUxe9hB2LTvzR0Vhm7wQryPycAdJYch5j+bhK4FBLeSJfw==
-X-Gm-Gg: ASbGncu8nUaUX0/asi/iISgoKtwdhG0sGFgEUqUdcxXuklOTj7JVTrm5v6epXL+IpM7
-	Nl4FzjrZbEysr0tp4qSOuDM6Yeg5M/kBOBzNlLbjUcLUTOgjy3AJDWo+DEfeoM6o9+wJhOe+2+g
-	oUUsaqajHZ2bMpAaQeyzANTattQ9B/dvOHVK492sWfA36P4EfWa6SWlpy36wfKC5q5gT+sC8akp
-	IgsL1dfduf5VSbv9vVn4P7lYDLHroDQGxdGLyuQa2Wq1ihPUZLTZyfXKWSnCHocMXy+gTTdEMjz
-	B8tLiK/HXGuL5VA+Jgu/Pub7E8l2zIF3LsY9P2+RQZ/bLu6X7DiPvQ==
-X-Google-Smtp-Source: AGHT+IHa+SycZ/j5ENKVbLzq5R9GmprXiW6HwOFpKHAUNADlKC97bYtimIZZFdWeMFv9KA8vHx+LHg==
-X-Received: by 2002:a05:6102:5e8b:b0:4af:e5fd:77fc with SMTP id ada2fe7eead31-4b9a4ebe487mr10341270137.3.1738309206320;
-        Thu, 30 Jan 2025 23:40:06 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9baa9aefcsm557164137.12.2025.01.30.23.40.05
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jan 2025 23:40:05 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-85c662ebbc3so403218241.0
-        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 23:40:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUv834g+dCdZABZemqxDMyBgG0exAAfQl/L5cREnxmHkQrm8Osl1ZUtlq2wyI+xm3NDScsS@lists.linux.dev
-X-Received: by 2002:a05:6122:d87:b0:518:81aa:899b with SMTP id
- 71dfb90a1353d-51e9e4e2f3cmr8999970e0c.6.1738309205451; Thu, 30 Jan 2025
- 23:40:05 -0800 (PST)
+	s=arc-20240116; t=1738317290; c=relaxed/simple;
+	bh=ZO3U4FjatEQbmMiZB7cITOMgXIpFvCAGyxbjuaZ11LY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PqLMXBXuPb7qkTlszywlvLN6o12ZXVdN7BF7T3bo4cG4TwWUDxdfulblnvUsQgi6gPPmrlCMo+inKY4MLE58N/2LDJTwwz/GoRBxdSTD4fhqcIx2VN5Y/I/fD96ELefy6avneaIrjcKH/EckmDGKilNGTKc8bQtGQ+I9SmsNfJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KsZeoozL; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KsZeoozL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738317288; x=1769853288;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZO3U4FjatEQbmMiZB7cITOMgXIpFvCAGyxbjuaZ11LY=;
+  b=KsZeoozLkMWN72pKk5Vef0e5cFf/8QJZySfAq6DRUnAmOKUSKbIOnSCj
+   XC4X/jFvFPBbiAv55Xo0F/B96Lvr6Ryjaa1TrNWFbBtRVoRUOsqszbuoS
+   Y1kxQuhraVXX5hXWgYV79xVLG2jollXyLRtU3SDjLG4r6IYFNfOw6wIso
+   F425/JPRggh1IDSe1q/Qq2YSqGRVBD2VnHaE5p9vZD/hde182QEyqJwdM
+   pNqx+TkvVpFdq/92SPv2n+7iUjnLyPBXfsiQu785DN92zcOm+mdWjnNbv
+   rePPEwwV8ESyDveBp7xm3ysdM0JHy3fdRSlmw6PYrntY2SD23WWPoJzFQ
+   Q==;
+X-CSE-ConnectionGUID: sSDcubE0QEyhmlXPzgsvQA==
+X-CSE-MsgGUID: tiRMJnIXRWuledqsni8/NQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="41717813"
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="41717813"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 01:54:48 -0800
+X-CSE-ConnectionGUID: XZlupioBQViIJEfTwOW96Q==
+X-CSE-MsgGUID: aux74vn1QCaSm1iOLJlLEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,248,1732608000"; 
+   d="scan'208";a="110161579"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 31 Jan 2025 01:54:46 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdnjY-000mEx-0D;
+	Fri, 31 Jan 2025 09:54:44 +0000
+Date: Fri, 31 Jan 2025 17:54:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>
+Subject: [akpm-mm:mm-unstable 106/111] mm/debug.c:270:17: warning: invalid
+ conversion specifier 'b'
+Message-ID: <202501311720.ZJWcwKLY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
- <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
- <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
- <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
- <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
- <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
- <CAMuHMdWDRLi8AE0PgfAnXundbS0hyTyovUH7yScrY7GtmYYPOQ@mail.gmail.com>
- <zlcagbwyskb4nkl4usbq4foc4vjcau3exp42zpfsl5b4tabr7u@o42mpfcsfygr>
- <CAMuHMdVUZQTgLpa9L9R117s39nEqxdGy=CJLyLQaTv_16EDhZg@mail.gmail.com> <ihl4bxs65uphmepoyw4xoa26mr4f3gci2mgtoq4osrzeyh3mup@hww2utbkxkfn>
-In-Reply-To: <ihl4bxs65uphmepoyw4xoa26mr4f3gci2mgtoq4osrzeyh3mup@hww2utbkxkfn>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 31 Jan 2025 08:39:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVUrCfL+UheG56tEtT6K7vm++dNHDmcaL3cWWHyzAaZnw@mail.gmail.com>
-X-Gm-Features: AWEUYZkH_w9tBM_pRW6Ohl7HsK0YqaRuQD-fO1ItmvH8HD9xdtZANpKrFhiastY
-Message-ID: <CAMuHMdVUrCfL+UheG56tEtT6K7vm++dNHDmcaL3cWWHyzAaZnw@mail.gmail.com>
-Subject: Re: [PATCH] xarray: port tests to kunit
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Sidhartha Kumar <sidhartha.kumar@oracle.com>, akpm@linux-foundation.org, 
-	christophe.leroy@csgroup.eu, justinstitt@google.com, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, maddy@linux.ibm.com, 
-	morbo@google.com, mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
-	ndesaulniers@google.com, npiggin@gmail.com, 
-	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Liam,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   f5604ad70091eabe663ea7106ced99449d653320
+commit: 951452b2ec82d352a69f14cfffdeb7c08461eefb [106/111] mm: further refactor commit_merge()
+config: arm-randconfig-002-20250131 (https://download.01.org/0day-ci/archive/20250131/202501311720.ZJWcwKLY-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501311720.ZJWcwKLY-lkp@intel.com/reproduce)
 
-On Thu, 30 Jan 2025 at 16:17, Liam R. Howlett <Liam.Howlett@oracle.com> wro=
-te:
-> * Geert Uytterhoeven <geert@linux-m68k.org> [250130 09:25]:
-> > On Thu, 30 Jan 2025 at 15:06, Liam R. Howlett <Liam.Howlett@oracle.com>=
- wrote:
-> > > > > it is to get m68k to build, you should probably know how to read =
-a
-> > > > > makefile.
-> > > >
-> > > > Like all other kernel cross-compilation? Usually you don't even hav=
-e
-> > > > to know where your cross-compiler is living:
-> > > >
-> > > >     make ARCH=3Dm68k
-> > >
-> > > Ignoring that I had to make a config - which asked challenging
-> > > questions...
-> >
-> > make ARCH=3Dm68k defconfig
->
-> That also prompts, defoldconfig did not.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501311720.ZJWcwKLY-lkp@intel.com/
 
-Hmm, using a defconfig should never ask for questions.
-Perhaps this might happen if it has an option enabled that depends on
-specific compiler support?
+All warnings (new ones prefixed by >>):
 
-> > > And ignoring the steps to get m68k compiler...
-> >
-> > apt install gcc-m68k-linux-gnu?
->
-> There are a few compilers, multilib or such?  I've had issues with
-> getting all the archs working for cross compile on the same machine
-> (arm, arm64, riscv, m68k, ppc, ppc64, parisc).
+>> mm/debug.c:270:17: warning: invalid conversion specifier 'b' [-Wformat-invalid-specifier]
+                   "just_expand %b __remove_middle %b __remove_next %b\n",
+                                ~^
+   include/linux/printk.h:554:29: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                      ^~~
+   include/linux/printk.h:391:21: note: expanded from macro 'pr_fmt'
+   #define pr_fmt(fmt) fmt
+                       ^~~
+   include/linux/printk.h:501:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^~~
+   include/linux/printk.h:473:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^~~~
+   mm/debug.c:270:36: warning: invalid conversion specifier 'b' [-Wformat-invalid-specifier]
+                   "just_expand %b __remove_middle %b __remove_next %b\n",
+                                                   ~^
+   include/linux/printk.h:554:29: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                      ^~~
+   include/linux/printk.h:391:21: note: expanded from macro 'pr_fmt'
+   #define pr_fmt(fmt) fmt
+                       ^~~
+   include/linux/printk.h:501:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^~~
+   include/linux/printk.h:473:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^~~~
+   mm/debug.c:270:53: warning: invalid conversion specifier 'b' [-Wformat-invalid-specifier]
+                   "just_expand %b __remove_middle %b __remove_next %b\n",
+                                                                    ~^
+   include/linux/printk.h:554:29: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+                                      ^~~
+   include/linux/printk.h:391:21: note: expanded from macro 'pr_fmt'
+   #define pr_fmt(fmt) fmt
+                       ^~~
+   include/linux/printk.h:501:53: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ^~~
+   include/linux/printk.h:473:11: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ^~~~
+>> mm/debug.c:284:3: warning: data argument not used by format string [-Wformat-extra-args]
+                   vmg->just_expand, vmg->__remove_middle, vmg->__remove_next);
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
+           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:501:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^
+   4 warnings generated.
 
-I have installed all of the above (and more) from Ubuntu
-(except for parisc, as Ubuntu does not have it), and more
-from https://www.kernel.org/pub/tools/crosstool/.
-All of them should work fine (for building kernels).
 
-> > > > > > When trying the above, and ignoring failures due to missing pac=
-kages
-> > > > > > on my host:
-> > > > > >   - there are several weird build errors,
-> > > > > >   - this doesn't play well with O=3D,
-> > > > > >   - lots of scary warnings when building for 32-bit,
-> > > > > >   - ...
-> > > > > >
-> > >
-> > > In file included from ./include/linux/sched.h:12,
-> > >                  from arch/m68k/kernel/asm-offsets.c:15:
-> > > ./arch/m68k/include/asm/current.h:7:30: error: invalid register name =
-for =E2=80=98current=E2=80=99
-> > >     7 | register struct task_struct *current __asm__("%a2");
-> >
-> > Which compiler are you using?
->
-> I've had a hard time getting m68k to boot in qemu because of the lack of
-> userspace.  I use m68k for nommu testing, but have a hard time getting
-> the buildroot to work correctly to build what I need.
+vim +/b +270 mm/debug.c
 
-I only do m68k with MMU, and use Debian (ports) userland.
-Perhaps https://landley.net/toybox/ might give you a nommu userland.
+   251	
+   252	void dump_vmg(const struct vma_merge_struct *vmg, const char *reason)
+   253	{
+   254		if (reason)
+   255			pr_warn("vmg %px dumped because: %s\n", vmg, reason);
+   256	
+   257		if (!vmg) {
+   258			pr_warn("vmg %px state: (NULL)\n", vmg);
+   259			return;
+   260		}
+   261	
+   262		pr_warn("vmg %px state: mm %px pgoff %lx\n"
+   263			"vmi %px [%lx,%lx)\n"
+   264			"prev %px middle %px next %px target %px\n"
+   265			"start %lx end %lx flags %lx\n"
+   266			"file %px anon_vma %px policy %px\n"
+   267			"uffd_ctx %px\n"
+   268			"anon_name %px\n"
+   269			"state %x\n"
+ > 270			"just_expand %b __remove_middle %b __remove_next %b\n",
+   271			vmg, vmg->mm, vmg->pgoff,
+   272			vmg->vmi, vmg->vmi ? vma_iter_addr(vmg->vmi) : 0,
+   273			vmg->vmi ? vma_iter_end(vmg->vmi) : 0,
+   274			vmg->prev, vmg->middle, vmg->next, vmg->target,
+   275			vmg->start, vmg->end, vmg->flags,
+   276			vmg->file, vmg->anon_vma, vmg->policy,
+   277	#ifdef CONFIG_USERFAULTFD
+   278			vmg->uffd_ctx.ctx,
+   279	#else
+   280			(void *)0,
+   281	#endif
+   282			vmg->anon_name,
+   283			(int)vmg->state,
+ > 284			vmg->just_expand, vmg->__remove_middle, vmg->__remove_next);
+   285	
+   286		if (vmg->mm) {
+   287			pr_warn("vmg %px mm:\n", vmg);
+   288			dump_mm(vmg->mm);
+   289		} else {
+   290			pr_warn("vmg %px mm: (NULL)\n", vmg);
+   291		}
+   292	
+   293		if (vmg->prev) {
+   294			pr_warn("vmg %px prev:\n", vmg);
+   295			dump_vma(vmg->prev);
+   296		} else {
+   297			pr_warn("vmg %px prev: (NULL)\n", vmg);
+   298		}
+   299	
+   300		if (vmg->middle) {
+   301			pr_warn("vmg %px middle:\n", vmg);
+   302			dump_vma(vmg->middle);
+   303		} else {
+   304			pr_warn("vmg %px middle: (NULL)\n", vmg);
+   305		}
+   306	
+   307		if (vmg->next) {
+   308			pr_warn("vmg %px next:\n", vmg);
+   309			dump_vma(vmg->next);
+   310		} else {
+   311			pr_warn("vmg %px next: (NULL)\n", vmg);
+   312		}
+   313	
 
-> More importantly, I think I get your point, you think that the testing
-> should be integrated and complain if it's broken - at least by bots.  I
-> don't think this is practical in all cases, unfortunately.
-
-Exactly:
-  - (cross)building kernel module tests is easy, and included in a
-     kernel build, so build failures are detected early.
-  - (cross)building the userland testing tools is cumbersome.
-So there's an opportunity for improvement...
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
