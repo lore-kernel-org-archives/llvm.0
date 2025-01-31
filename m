@@ -1,103 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F697081F;
-	Fri, 31 Jan 2025 21:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88B31F03DB
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 21:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738359625; cv=none; b=XGEQEOkuaUO1lPpKpdBQeQen7cuXQ+TzEIrT1A5POla8AwhCCnkhZlRY6x2fHmjT2FIjFrCmt3KrJ6dnb9C9wJlUCbS+8HPsTS4Kc1YzaozuXCxvQRriD/sHpo1yIfSVjTnCLCMuu1wrldO4JGJWg79AAHVlUF8DkHdVGkaVjMg=
+	t=1738359701; cv=none; b=kc641ODhoiWJT0GVvU7ppBGf3IKrpWAfV1qQ5IvRSJxfQ/JzyIUE9DXaPhOHE5fO0a3zWPqjG4lOFzdrEx4Dh7/JcYHGUvrxSlkSP6WZpNYtuILunz0Y4kIL453BA0CDMYlq2gHitm7EVMC+vU9iRteXh+yOh+LRhx/AJabAp+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738359625; c=relaxed/simple;
-	bh=9vYqqpZzm0LVzazmvzqC2RYIYydepZeqFB82Og+c4NQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Kwm+jgUwZwLSAKUXZBqF6SGAyKDpznwMMy1dleFA7HPplmVtBFXA8nxzLHLmw8AbADaZHbqt2/uZnZO+UTmB4R3VMoMiTiizfEKXn4zdAuj2BF3ksaKCRRgwDp+ay70+ysAs1YOr8V3sN6j0SkGu255ETYN05CVCyS4QCM/VRUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Saru8n+N; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738359701; c=relaxed/simple;
+	bh=xjrlPeBG4WNIUU7fpf7l1Xd1y0KhADy+YvMS2wRVdA4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sx8d4F9FgaeoXpS/jzFvcREuaE+DecO6pPfguldK00ESaDkaJdHA4FTkySbahFeSKQCa8WYYhFje4KpiVf/Dv+FP8LOcukgkxI0SNlbBOHBbuEonWfDFqXL8BegZluz6fcODn8LJgyb5A69N9o3l6fp4eb80qHrADpF31BjktVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLbMAb9s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Saru8n+N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738359623; x=1769895623;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9vYqqpZzm0LVzazmvzqC2RYIYydepZeqFB82Og+c4NQ=;
-  b=Saru8n+NCoGOSnv86CipraqmD7j5iRA1ht09/9xwsMHOKD1D6/fkLNdM
-   NvpTZ6uksFhLdEZSF6rjRd4fZditW0iNWR2s4Q56xaTcSlFZvXx6GRAHW
-   NvV1+jX8N+IjDC1QQYjGDke71mnObnAjw6/IvcO2t3i2HZGIsX739k88L
-   c6tWW9HDMNyFBA2p8Uqk6qefxC9sm2Cm7Z4pQgdCDbaAqxryhOiINRSBX
-   R39ouBXpn3CkBlby6MTRfhAPLcdLLMbEm3beGFSfbO8yRP74vXK0/bk6Y
-   +/hVV7Czif+mJraj5ETs8ntlfiKUm6bwyvfYPcIbguP/dCnkVTxiRPZIu
-   A==;
-X-CSE-ConnectionGUID: YXe/Ga0ZTMmsmZYc2ppxtg==
-X-CSE-MsgGUID: wtJF6axBQzeZHOWc4PmcDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="39094996"
-X-IronPort-AV: E=Sophos;i="6.13,249,1732608000"; 
-   d="scan'208";a="39094996"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 13:40:22 -0800
-X-CSE-ConnectionGUID: PH3uJuM4RZqjqK/3NpLt2w==
-X-CSE-MsgGUID: 5N9CkR5qRSuOpRSEpSlQRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="109576766"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 31 Jan 2025 13:40:21 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdykM-000nFx-2u;
-	Fri, 31 Jan 2025 21:40:18 +0000
-Date: Sat, 1 Feb 2025 05:39:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:crypto-krb5 33/33] ld.lld: error: undefined symbol:
- rxgk_kernel_respond_to_challenge
-Message-ID: <202502010542.hW3K2y57-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLbMAb9s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD2FC4CEE4
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 21:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738359701;
+	bh=xjrlPeBG4WNIUU7fpf7l1Xd1y0KhADy+YvMS2wRVdA4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gLbMAb9sJJIwnYWk6N6K1/LW630zPucoGYiBtdwDLlFIFq5papYnxtUGIF1nDXE6G
+	 AFGZmNJp8Mg7God2MtsrnzqwKL6uNleiIBypkcttBnFycLodU6gR6ElmjjN1/xgzXl
+	 B2W1xQZPmmUUieVKYwpf8fBJu/H1R5z2jisbWi96izrMfR14iQGA76H2PpUPVprh4g
+	 m/Dx2rURW82kE616fexCWpIBJWlD0/VWb9Hh5RJ+yUF48crQqxz6aco96MH7s6zNbR
+	 +Uu0OuGXu0K2gud72MLaNvoaS8P0FZ/sH5xRnYSyXb09iYOF+Cdai9KLOxrdD3y5qb
+	 dA/QKJKd8Blrw==
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3ce4b009465so7257875ab.0
+        for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 13:41:41 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXDAJ5QFXScbTYJ00ObJ+5K4quoU8GbUYDlDY8iOVohTB/PoYOFOwtU1NCtvQKpTRQUrG5@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw49cHB1ndaKPVxQ8Mzo8I8Yr+H/s1YYpFWqzElygVYRUDfKaDy
+	ds6p3h6tAs6Dxz7JImXocW98FkIIT/7B5QDPFI/Fx+Gz4KCTd2R9ekySMb17mmtfjA4WqFrgj8b
+	pmfw4KSbK201Qizxal9AMO/OhLDE=
+X-Google-Smtp-Source: AGHT+IGsRtOKF92cDzqILaRoJNyVEWQl3SaFoHvDWV0af5w3tbe8Hx3MCLHCzCExBblLuM0SzvndJDqxS/xn1MJQa10=
+X-Received: by 2002:a05:6e02:1fe4:b0:3ce:5af3:79d5 with SMTP id
+ e9e14a558f8ab-3cffe4277d0mr105176065ab.6.1738359700599; Fri, 31 Jan 2025
+ 13:41:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250131140407.1392008-1-masahiroy@kernel.org>
+In-Reply-To: <20250131140407.1392008-1-masahiroy@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Fri, 31 Jan 2025 13:41:29 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5GsWe-hV7MwMPbFMDK24W5OAPzjE+HJQjNKQ4CKtKqqA@mail.gmail.com>
+X-Gm-Features: AWEUYZnvnI5gCbcie_yGEuQm0lJs01jxgmXraMkjAxhN7ygTbHoevId4pUbOGAo
+Message-ID: <CAPhsuW5GsWe-hV7MwMPbFMDK24W5OAPzjE+HJQjNKQ4CKtKqqA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: fix Clang LTO with CONFIG_OBJTOOL=n
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Yonghong Song <yonghong.song@linux.dev>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git crypto-krb5
-head:   3108d67c535aa3ea00a95b1daf8efdc15bb074b4
-commit: 3108d67c535aa3ea00a95b1daf8efdc15bb074b4 [33/33] afs: Use rxgk RESPONSE to pass token for callback channel
-config: x86_64-buildonly-randconfig-005-20250131 (https://download.01.org/0day-ci/archive/20250201/202502010542.hW3K2y57-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502010542.hW3K2y57-lkp@intel.com/reproduce)
+On Fri, Jan 31, 2025 at 6:04=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> Since commit bede169618c6 ("kbuild: enable objtool for *.mod.o and
+> additional kernel objects"), Clang LTO builds do not perform any
+> optimizations when CONFIG_OBJTOOL is disable (e.g., for ARCH=3Darm64).
+> This is because every LLVM bitcode file is immediately converted to
+> ELF format before the object files are linked together.
+>
+> This commit fixes the breakage.
+>
+> Fixes: bede169618c6 ("kbuild: enable objtool for *.mod.o and additional k=
+ernel objects")
+> Reported-by: Yonghong Song <yonghong.song@linux.dev>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502010542.hW3K2y57-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: rxgk_kernel_respond_to_challenge
-   >>> referenced by cm_security.c:57 (fs/afs/cm_security.c:57)
-   >>>               vmlinux.o:(afs_respond_to_challenge)
---
->> ld.lld: error: undefined symbol: crypto_krb5_find_enctype
-   >>> referenced by cm_security.c:87 (fs/afs/cm_security.c:87)
-   >>>               vmlinux.o:(afs_create_token_key)
-   >>> referenced by cm_security.c:139 (fs/afs/cm_security.c:139)
-   >>>               vmlinux.o:(afs_create_cm_token)
---
->> ld.lld: error: undefined symbol: crypto_krb5_how_much_buffer
-   >>> referenced by cm_security.c:173 (fs/afs/cm_security.c:173)
-   >>>               vmlinux.o:(afs_create_cm_token)
---
->> ld.lld: error: undefined symbol: crypto_krb5_prepare_encryption
-   >>> referenced by cm_security.c:255 (fs/afs/cm_security.c:255)
-   >>>               vmlinux.o:(afs_create_cm_token)
---
->> ld.lld: error: undefined symbol: crypto_krb5_encrypt
-   >>> referenced by cm_security.c:263 (fs/afs/cm_security.c:263)
-   >>>               vmlinux.o:(afs_create_cm_token)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tested-by: Song Liu <song@kernel.org>
