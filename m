@@ -1,245 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761C2F9FE;
-	Fri, 31 Jan 2025 21:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDAD19AD89;
+	Fri, 31 Jan 2025 22:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738360286; cv=none; b=gCwFIBe61w10rLTerRTDUWp7LUBmzX0T/StW5LFunWyAYYEUcDLHF328zJBksHlu55EYkmMpL0HDH3WeiR/EC9uRUdSDWleyOLGPywBh9qI290yYFJlgQH375cx+SY2ywGIEpKF6mU3TuBhg47BWM5QcApGH1YQndI96oK/nfjQ=
+	t=1738364143; cv=none; b=H5/nkVIYksgV28NmuAWLgEpm8fb0DTUkp3wGIVyaa94mJhB6oPa8G0A48xF7DCV0/F2gky5F5svOM2ypnSBBZeJks0eUNRmFePYYTmmRAQNzuIXH3ACe4vyKW93jaEb/Hl07wYasfyofFz2/uHximyYOOW0cWOYSWfCirNG974E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738360286; c=relaxed/simple;
-	bh=oV7m9mCHY5qOTl4DvSLEx80+A3Vl32dz+XiHA3RBadY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Nl4Byh+o1K4ASsVKnXYTT4oZdHJxae40rHkd///EuEU5WF+W8iSQ1m5Buot/f7e0aI0uij5U4VdRVuJpH6+sKJ2CBiJgHmqSNMTnN4au0hVSvkc1xqlINeo1TTt8es06qUjAdJJGs4IkJImjvaMrOBZn7Q4+sMNcNSmxrjM+N0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UupMOWBB; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738364143; c=relaxed/simple;
+	bh=lOGd3AYXVfHBbSKgrkXk8Xz+aydLyMFpZVs4uwg2GIM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XkeU/arr8ipcSF66rjrdLkA9Z200pjC78SySUbVecojnNGJ4YcdALjlUxJ4xN507oke7HJup5/IfPFqeSQd8+cd12kOhwj3jhGv/GJ7mXBafNs4G4wCdvu266eOQGrOl2aVKWny/DilPRQvBNYx0EZjbXYsJs8ddJq7S2pqOOZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxpVhSkZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UupMOWBB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738360285; x=1769896285;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=oV7m9mCHY5qOTl4DvSLEx80+A3Vl32dz+XiHA3RBadY=;
-  b=UupMOWBBMmE97bNsQ3AxtD3MOJx4FahKfIWNikGj5UOzHH99f3Dl6org
-   upAJrhg9D/0zeccig2iJj7Mu29kXHVoTwiqxR9X9pZ3TJif3EKKE6YhTw
-   71Lpohm8cDRlwLPg4KSouddZuUzEaAJamlpXZ/2fJcj6w9k6hlQUSOZnp
-   DJZuvC3F+1RdSQ98RKayEtCG0oaGIAxK4DQ+BH1yQ9LmRljiu85kdJcLt
-   2sqa5Fmr0ft9KyBJfHE+poARBelOBtnzIY1hDqYJXuRzYItFevA7/+DH1
-   4lUjqufRrAL0ZXIR3mtj2qQ5w4uaZEwTIo34jFYIFJ6Ik9yicMPFJzbYx
-   A==;
-X-CSE-ConnectionGUID: hkFmOGamQAypTXZYywbnHA==
-X-CSE-MsgGUID: KKRxsr40Q56ItbITDwgwxg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="39077924"
-X-IronPort-AV: E=Sophos;i="6.13,249,1732608000"; 
-   d="scan'208";a="39077924"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 13:51:24 -0800
-X-CSE-ConnectionGUID: fI7imHPRT8uIebJxC6x7vg==
-X-CSE-MsgGUID: iU6i5L7FTPuf46YvsyD0FQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="132995507"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 31 Jan 2025 13:51:22 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdyv2-000nGn-0Y;
-	Fri, 31 Jan 2025 21:51:20 +0000
-Date: Sat, 1 Feb 2025 05:50:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:crypto-krb5 33/33] fs/afs/cm_security.c:253:10:
- warning: format specifies type 'size_t' (aka 'unsigned int') but the
- argument has type 'unsigned long'
-Message-ID: <202502010518.LCA4OLR3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxpVhSkZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCE9C4CED1;
+	Fri, 31 Jan 2025 22:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738364143;
+	bh=lOGd3AYXVfHBbSKgrkXk8Xz+aydLyMFpZVs4uwg2GIM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lxpVhSkZWfQJOpSjaQ8PD+QmcDjRQaeHFZtpGD9+tvwIRtHPAtuv+TjG7uSOdD3YZ
+	 nuMN2WK1UbMS8iVHOn/sVWtAqo5wWiIg+vhtLbMgdbFNLzZZm+C8wgsqM4XkoJV0yt
+	 /LeNs2/h5XzldL2KcHZDVJ+eaKQGREAk/9MJjm4eZOhRQE29muKWuExLdvEbh/SbJJ
+	 9sr9uSNVP2ZgQ713b63JBR/Pb43ReRFJRiVsgrOY3nZGpG+CI3OwvEgT1yV/xw41l/
+	 VGwSgvVYJeckMWihc2HvHfhwFbohI5Gl9w13jwkN44EAfMLXhZ/JYy/8PToyUblg49
+	 UtkNp+oCrmGMw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Fri, 31 Jan 2025 15:55:28 -0700
+Subject: [PATCH] scripts/Makefile.extrawarn: Do not show clang's
+ non-kprintf warnings at W=1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250131-makefile-extrawarn-fix-clang-format-non-kprintf-v1-1-6c6747ada0d4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAN9UnWcC/x2N0QqDMAxFf0XyvIC1DsZ+Zewhs+kW1FTSshXEf
+ 1/x8cA99+yQ2YQz3LsdjL+SJWkDd+lg+pC+GSU0hqEfrr3zDleaOcrCyLUY/cgUo1ScljbGmGy
+ lgpoU581ES8QwhsDkb8wvD+11s6bXs/h4HscfV/kad4EAAAA=
+X-Change-ID: 20250131-makefile-extrawarn-fix-clang-format-non-kprintf-d4ddea38eeb3
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nicolas Schier <nicolas@fjasle.eu>, Arnd Bergmann <arnd@arndb.de>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <lkp@intel.com>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2545; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=lOGd3AYXVfHBbSKgrkXk8Xz+aydLyMFpZVs4uwg2GIM=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOlzQ96ozV/Ra3BLaZnE74hqv437TPSPLjXWWxR8wOKlu
+ JwXj/yCjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRZ9cZGda2JsVMlrj+JzbW
+ uU87SKRxp/GVJ3zMz4P104+L2/7bXMfwv0Dn9NcLuctsbR127jKrVcuc2fJcL3LegR8vpFJ2X2j
+ k4wIA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git crypto-krb5
-head:   3108d67c535aa3ea00a95b1daf8efdc15bb074b4
-commit: 3108d67c535aa3ea00a95b1daf8efdc15bb074b4 [33/33] afs: Use rxgk RESPONSE to pass token for callback channel
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250201/202502010518.LCA4OLR3-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502010518.LCA4OLR3-lkp@intel.com/reproduce)
+Clang's -Wformat-overflow and -Wformat-truncation have chosen to check
+'%p' unlike GCC but it does not know about the kernel's pointer
+extensions in lib/vsprintf.c, so the developers split that part of the
+warning out for the kernel to disable because there will always be false
+positives.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502010518.LCA4OLR3-lkp@intel.com/
+Commit 908dd508276d ("kbuild: enable -Wformat-truncation on clang") did
+disabled these warnings but only in a block that would be called when
+W=1 was not passed, so they would appear with W=1. Move the disabling of
+the non-kprintf warnings to a block that always runs so that they are
+never seen, regardless of warning level.
 
-All warnings (new ones prefixed by >>):
+Fixes: 908dd508276d ("kbuild: enable -Wformat-truncation on clang")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202501291646.VtwF98qd-lkp@intel.com/
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.extrawarn | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
->> fs/afs/cm_security.c:253:10: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
-     252 |                 pr_err("Appdata size incorrect %zx != %zx\n",
-         |                                                ~~~
-         |                                                %lx
-     253 |                        (unsigned long)xdr - (unsigned long)token, adatasize);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:544:33: note: expanded from macro 'pr_err'
-     544 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   fs/afs/cm_security.c:170:2: warning: variable 'toksize' is uninitialized when used here [-Wuninitialized]
-     170 |         toksize += keysize + 8 + 4 + 4 + 8 + xdr_len_object(authsize);
-         |         ^~~~~~~
-   fs/afs/cm_security.c:131:45: note: initialize the variable 'toksize' to silence this warning
-     131 |         size_t keysize, uuidsize, authsize, toksize, encsize, contsize, adatasize, offset;
-         |                                                    ^
-         |                                                     = 0
-   2 warnings generated.
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 1d13cecc7cc7..8878f71463fc 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -31,6 +31,11 @@ KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+ ifdef CONFIG_CC_IS_CLANG
+ # The kernel builds with '-std=gnu11' so use of GNU extensions is acceptable.
+ KBUILD_CFLAGS += -Wno-gnu
++
++# Clang checks for overflow/truncation with '%p', while GCC does not:
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
++KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
++KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
+ else
+ 
+ # gcc inanely warns about local variables called 'main'
+@@ -102,11 +107,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, packed-not-aligned)
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow)
+ ifdef CONFIG_CC_IS_GCC
+ KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation)
+-else
+-# Clang checks for overflow/truncation with '%p', while GCC does not:
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111219
+-KBUILD_CFLAGS += $(call cc-disable-warning, format-overflow-non-kprintf)
+-KBUILD_CFLAGS += $(call cc-disable-warning, format-truncation-non-kprintf)
+ endif
+ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+ 
 
+---
+base-commit: fd8c09ad0d87783b9b6a27900d66293be45b7bad
+change-id: 20250131-makefile-extrawarn-fix-clang-format-non-kprintf-d4ddea38eeb3
 
-vim +253 fs/afs/cm_security.c
-
-   119	
-   120	/*
-   121	 * Create an RxGK GSS token to use as a ticket to the specified fileserver.
-   122	 */
-   123	int afs_create_cm_token(struct afs_server *server)
-   124	{
-   125		const struct krb5_enctype *krb5;
-   126		const struct krb5_buffer *server_key;
-   127		struct crypto_aead *aead;
-   128		struct scatterlist sg;
-   129		struct afs_net *net = server->cell->net;
-   130		const struct key *key = net->fs_cm_token_key;
-   131		size_t keysize, uuidsize, authsize, toksize, encsize, contsize, adatasize, offset;
-   132		__be32 *xdr;
-   133		void *token, *K0, *encxdr;
-   134		int ret;
-   135	
-   136		if (!key)
-   137			return -ENOKEY;
-   138	
-   139		krb5 = crypto_krb5_find_enctype(KRB5_ENCTYPE_AES128_CTS_HMAC_SHA1_96);
-   140		if (!krb5)
-   141			return -ENOPKG;
-   142		server_key = (const void *)&key->payload.data[2];
-   143	
-   144		/* struct rxgk_key {
-   145		 *	afs_uint32	enctype;
-   146		 *	opaque		key<>;
-   147		 * };
-   148		 */
-   149		keysize = 4 + xdr_len_object(krb5->key_len);
-   150	
-   151		/* struct RXGK_AuthName {
-   152		 *	afs_int32	kind;
-   153		 *	opaque		data<AUTHDATAMAX>;
-   154		 *	opaque		display<AUTHPRINTABLEMAX>;
-   155		 * };
-   156		 */
-   157		uuidsize = sizeof(server->uuid);
-   158		authsize = 4 + xdr_len_object(uuidsize) + xdr_len_object(0);
-   159	
-   160		/* struct RXGK_Token {
-   161		 *	rxgk_key		K0;
-   162		 *	RXGK_Level		level;
-   163		 *	rxgkTime		starttime;
-   164		 *	afs_int32		lifetime;
-   165		 *	afs_int32		bytelife;
-   166		 *	rxgkTime		expirationtime;
-   167		 *	struct RXGK_AuthName	identities<>;
-   168		 * };
-   169		 */
-   170		toksize += keysize + 8 + 4 + 4 + 8 + xdr_len_object(authsize);
-   171	
-   172		offset = 0;
-   173		encsize = crypto_krb5_how_much_buffer(krb5, KRB5_ENCRYPT_MODE, toksize, &offset);
-   174	
-   175		/* struct RXGK_TokenContainer {
-   176		 *	afs_int32	kvno;
-   177		 *	afs_int32	enctype;
-   178		 *	opaque		encrypted_token<>;
-   179		 * };
-   180		 */
-   181		contsize = 4 + 4 + xdr_len_object(encsize);
-   182	
-   183		/*
-   184		 * struct RXGK_Authenticator_AFSAppData {
-   185		 *	afsUUID client_uuid;
-   186		 *	RXGK_Data cb_tok;
-   187		 *	RXGK_Data cb_key;
-   188		 *	afs_int32 enctype;
-   189		 *	afsUUID target_uuid;
-   190		 * };
-   191		 */
-   192		adatasize = 44 + xdr_len_object(contsize) + xdr_len_object(krb5->key_len) + 4 + 44;
-   193	
-   194		ret = -ENOMEM;
-   195		token = kzalloc(adatasize, GFP_KERNEL);
-   196		if (!token)
-   197			goto out;
-   198		xdr = token;
-   199	
-   200		xdr[0] = net->uuid.time_low;	/* appdata.client_uuid */
-   201		xdr[1] = htonl(ntohs(net->uuid.time_mid));
-   202		xdr[2] = htonl(ntohs(net->uuid.time_hi_and_version));
-   203		xdr[3] = htonl((s8) net->uuid.clock_seq_hi_and_reserved);
-   204		xdr[4] = htonl((s8) net->uuid.clock_seq_low);
-   205		for (int loop = 0; loop < 6; loop++)
-   206			xdr[loop + 5] = htonl((s8)net->uuid.node[loop]);
-   207		xdr += 11;
-   208	
-   209		*xdr++ = htonl(contsize);		/* appdata.cb_tok.len */
-   210		*xdr++ = htonl(1);			/* cont.kvno */
-   211		*xdr++ = htonl(krb5->etype);		/* cont.enctype */
-   212		*xdr++ = htonl(encsize);		/* cont.encrypted_token.len */
-   213	
-   214		encxdr = xdr;
-   215		xdr += offset / 4;
-   216		*xdr++ = htonl(krb5->etype);		/* token.K0.enctype */
-   217		*xdr++ = htonl(krb5->key_len);		/* token.K0.key.len */
-   218		K0 = xdr;
-   219		get_random_bytes(K0, krb5->key_len);	/* token.K0.key.data */
-   220		xdr += xdr_round_up(krb5->key_len) / 4;
-   221	
-   222		*xdr++ = htonl(RXRPC_SECURITY_ENCRYPT);	/* token.level */
-   223		*xdr++ = htonl(0);			/* token.starttime */
-   224		*xdr++ = htonl(0);			/* " */
-   225		*xdr++ = htonl(0);			/* token.lifetime */
-   226		*xdr++ = htonl(0);			/* token.bytelife */
-   227		*xdr++ = htonl(0);			/* token.expirationtime */
-   228		*xdr++ = htonl(0);			/* " */
-   229		*xdr++ = htonl(1);			/* token.identities.count */
-   230		*xdr++ = htonl(0);			/* token.identities[0].kind */
-   231		*xdr++ = htonl(uuidsize);		/* token.identities[0].data.len */
-   232		memcpy(xdr, &server->uuid, uuidsize);
-   233		xdr += xdr_round_up(uuidsize) / 4;
-   234		*xdr++ = htonl(0);			/* token.identities[0].display.len */
-   235	
-   236		xdr = encxdr + xdr_round_up(encsize);
-   237	
-   238		*xdr++ = htonl(krb5->key_len);		/* appdata.cb_key.len */
-   239		memcpy(xdr, K0, krb5->key_len);		/* appdata.cb_key.data */
-   240		xdr += xdr_round_up(krb5->key_len) / 4;
-   241		*xdr++ = htonl(krb5->etype);		/* appdata.enctype */
-   242		xdr[0] = server->_uuid.time_low;	/* appdata.target_uuid */
-   243		xdr[1] = htonl(ntohs(server->_uuid.time_mid));
-   244		xdr[2] = htonl(ntohs(server->_uuid.time_hi_and_version));
-   245		xdr[3] = htonl((s8) server->_uuid.clock_seq_hi_and_reserved);
-   246		xdr[4] = htonl((s8) server->_uuid.clock_seq_low);
-   247		for (int loop = 0; loop < 6; loop++)
-   248			xdr[loop + 5] = htonl((s8)server->_uuid.node[loop]);
-   249		xdr += 11;
-   250	
-   251		if ((unsigned long)xdr - (unsigned long)token != adatasize)
-   252			pr_err("Appdata size incorrect %zx != %zx\n",
- > 253			       (unsigned long)xdr - (unsigned long)token, adatasize);
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
