@@ -1,109 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC51D139E
-	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 03:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D69418C31;
+	Fri, 31 Jan 2025 05:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738294931; cv=none; b=Reu/D6dB1dkHZEha02bOnyDYSvlpt+S3t/FrYWkZ/KSgfG6HJDluX+dyccwgFTpIl8mZBzb+hUjoYa9DYZlYYzBqfr4HaWvPuFCgPus0ShrHkkUxs/xDff5HAqzWbfgQX7mD6nP0NeIi2IPTrypMiyctG1+LJn/KVg4BM3F9B0U=
+	t=1738302083; cv=none; b=Nm6kDlnW7mFoGWKIXQ/PdxuTg4btxwfTUwXSbB0nsjaW0wR1CLGydh7FfchkHI4UGYBWpZfwsBpivBp4igNtgF+X81BjrqgA05kpo7VMAhNqDzHct87W9tMinrHPRau9MjXYNv28KlhP9Li+kMZ5+nSCPYUQheCT7CBzTpWU1BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738294931; c=relaxed/simple;
-	bh=o7yr1itDOnFkrFNhS7f5UnliKpMPyoEtT8KRzmpr0eM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=PVbEuVC8iPvOlD9Z/JaQ2Rl5reQCQi8gCsWAP6uszRw+sfLlotDSaJkhkuKeiPUxCoEXQdrJBPDE1xKi8P5gci+n++082qX+uTtEEj7wm3hRMlj/iaFbE83wAbE7W40C1R+Ddj38oCnA78NNCKQyueSOGq8QnW/CF7mdW6fEHWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YmRYho/I; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1738302083; c=relaxed/simple;
+	bh=pkknZO5pcaD4z6AViT3LsXU1gjlPCqeB7kG4vXmhMuU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lfHaV6Zcn1s/QW6t9p9QdDdmIEBdX2zharwyZbYTCffpEt5ZYUYNcnwB+PORNswe9vdvuwlKT5/gcdFVyJ8L7bCWu47rwc1bJy90gc+srm/SjWrvB7KpzJlN/8SD6wLndI3QKsdBPF/0gd70JgRWwlHXeG8duo/8ADZfBMkNZtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuaYZFa5; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YmRYho/I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738294928;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=N0UvNnDb2470GYRSAuktre3PAZFfwn7ncCM/m4xaUQ8=;
-	b=YmRYho/IaBLC9S6jb8ZckxeP166IVfEnM5Vasu5JwpNtUNxd76zAC0W8k5q8Otkl8xpP0Q
-	o2dw/Uk5HFhEpAVix3mM6Jq9MQqKZ2PPATV1bsus8BWmXYPAOA1BkPrg2/J8vdQd2JeoLb
-	5ydHThT6DWOwYTy1CULbDZUZakioZRI=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-387-pwIBNGp2Oo2aaBIEwtNdMQ-1; Thu,
- 30 Jan 2025 22:42:06 -0500
-X-MC-Unique: pwIBNGp2Oo2aaBIEwtNdMQ-1
-X-Mimecast-MFC-AGG-ID: pwIBNGp2Oo2aaBIEwtNdMQ
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 14DDE1800361
-	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 03:42:06 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.32.189])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6C0D81800980;
-	Fri, 31 Jan 2025 03:42:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, 69e858e0)
-Date: Fri, 31 Jan 2025 03:42:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuaYZFa5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738302081; x=1769838081;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=pkknZO5pcaD4z6AViT3LsXU1gjlPCqeB7kG4vXmhMuU=;
+  b=FuaYZFa5oR9c0KnCvKiIPrIlPQDdOPhV+dlBRB5rfYNAL8J3VaQox/T9
+   WI3Tv5cq6rS4JxS8kMGkfu8XLaJ+kL7Wdt94msfq/XJWYbODPoYHl8Szo
+   FHGwxP0P5ENQpLEyu6PLBNH7Kb0bZTRWBAHaDmp8JJyEjzid9Nmfb7PCp
+   OOg/rSXTUKb6omAhgRgfC39eLQXLtmVSg/Qij4em8OWLBhuQf4GCGIG7H
+   iK59NOrvlDYrD/IwIMKVQXp069darkIne1JT+Bp45fy+D6lUxkk4ULRUW
+   ftUCmJxhvPoZrJFFckckR3bmbO7yNNF7wXLC/4+8AoMdXa9E8M6wR99Cr
+   A==;
+X-CSE-ConnectionGUID: WZDBhbxGRLSd3Yo20uacXg==
+X-CSE-MsgGUID: QqB1do1MTySX6WOtlNasFg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="49528854"
+X-IronPort-AV: E=Sophos;i="6.13,247,1732608000"; 
+   d="scan'208";a="49528854"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2025 21:41:21 -0800
+X-CSE-ConnectionGUID: 2amJJEb/TKC/ivk4DepU7g==
+X-CSE-MsgGUID: 7fh5mGONSWm31ekBs2ffpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113565400"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Jan 2025 21:41:19 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tdjmH-000m2Q-2H;
+	Fri, 31 Jan 2025 05:41:17 +0000
+Date: Fri, 31 Jan 2025 13:40:45 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: drivers/platform/surface/surface_hotplug.c:79:39: warning:
+ arithmetic between different enumeration types ('enum shps_dsm_fn' and 'enum
+ shps_irq_type')
+Message-ID: <202501311309.bcshLrq3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <22691.125013022420700178@us-mta-387.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: vbGRwp4v0aykDaGJ3ywiuq3L6v5aHzFpTOwKxqmd95A_1738294926
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+TO: Maximilian Luz <luzmaximilian@gmail.com>
+CC: Hans de Goede <hdegoede@redhat.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69e858e0b8b2ea07759e995aa383e8780d9d140c
+commit: bd69bcce4aa089435e2891222236b1cb20395bec platform/surface: Add Surface Hot-Plug driver
+date:   4 years ago
+config: x86_64-randconfig-071-20241231 (https://download.01.org/0day-ci/archive/20250131/202501311309.bcshLrq3-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501311309.bcshLrq3-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501311309.bcshLrq3-lkp@intel.com/
 
-Kernel information:
-    Commit message: Merge tag 'uml-for-linus-6.14-rc1' of git://git.kernel.=
-org/pub/scm/linux/kernel/git/uml/linux
+All warnings (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1649514362
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1649514362-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1649514362-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1649514362-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+>> drivers/platform/surface/surface_hotplug.c:79:39: warning: arithmetic between different enumeration types ('enum shps_dsm_fn' and 'enum shps_irq_type') [-Wenum-enum-conversion]
+      79 |         return SHPS_DSM_FN_IRQ_BASE_PRESENCE + type;
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~
+   1 warning generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +79 drivers/platform/surface/surface_hotplug.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+    76	
+    77	static enum shps_dsm_fn shps_dsm_fn_for_irq(enum shps_irq_type type)
+    78	{
+  > 79		return SHPS_DSM_FN_IRQ_BASE_PRESENCE + type;
+    80	}
+    81	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
