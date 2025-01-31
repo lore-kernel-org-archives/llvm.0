@@ -1,113 +1,175 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f65.google.com (mail-vs1-f65.google.com [209.85.217.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA91710E0
-	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 06:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5E1D4C9F
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 07:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738304912; cv=none; b=WvW/eZGNISNHNNOorBu9ufLzjeaGI4nwMXqEvaMN9rHsTrdQ0Zoeu1ZyRr+2Eq921aJ4WCkuz3H23WVmPoo5MfuQMxa9VvWVwcK3M6Mz+KASRYzErYd7MMJ0TE2bwSwDat5WrIWYRfcry6nATpYKuVswph+XM+F6cSX7gSJh8TA=
+	t=1738309211; cv=none; b=aGzt8qPPIm+wdmC6aWyODgYKhrEHbMIZQIqynHfUUGx2O8qi45pegzTzjBxzMPx1fVTys7spi4Jmomhluzxv0/6QNQ8Q93o9cc88DT3A+7YfHLLu9LnNmWVN2eJwFVISBKY8zyKCuuLI943PtbuMiwpnEeIa07sATHRdQG/MrJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738304912; c=relaxed/simple;
-	bh=BNwj/cu2eiUOIuXNgpw6rKDwrnR4+fv5e/EebXhTC3A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RcjTvQpDuDp05CZTgzMSSvPOOOflePNO8a+DVqZSBrxTPWrGEH+qQMla2HgGU+7CYOlrNniSmVqQqCnwqQb0BNWVru9+xzCj9ZfPkafhY8Q3TCZkiVHn9oYITUHRLEPjuMubtesMbvppil7X6YhF2JTJJ2gakdekhAi7Gz725NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EX5+aK/6; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EX5+aK/6"
-Message-ID: <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738304898;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z6nr90zQBuI/mRmsANmm014cd25JJit1RNWXmjt1m1g=;
-	b=EX5+aK/6Og8svexi1PHU/CPZfYtsrcZHXTgeg9bnG1usrUIJepcjKdWtJ/vJ+z5PSfA0Ea
-	MYY6LzwY6152AJXDF6jRg00V/i185IwtKOBncbtJB79yqcLIICAmKfsHmLz20dhOxXom8c
-	BjwZCJDZHUWd8kVY2hIrVZW9D6iceTA=
-Date: Thu, 30 Jan 2025 22:28:11 -0800
+	s=arc-20240116; t=1738309211; c=relaxed/simple;
+	bh=eBBg1iptajengVqdm0pmKZfYXz/Bu4Dc0woU7WS/8QQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=Q2VbyRErA3xnRhwqLSCAZwFSYwTtrjl19C/rH/Vbwf/FCp6Wt3I506JF9y3K5eCfcLqEIivaEbsVVFSMHyZ677I3xikqC4+0B6uEUQ7KheGot1iTjFZCgpEiQIyc3uW/pnNasRrksioFHl67BWeoykMRrYWaGYIwiXSGkXouyIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f65.google.com with SMTP id ada2fe7eead31-4afde39e360so450842137.0
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 23:40:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738309206; x=1738914006;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8kQmZAAK+6ewvnmsf4szqYR99Nu9ojx8MPSG+efC0JQ=;
+        b=N6wrPNQ/l0D60iiiNEf0NCK3ShhmkdWn74sSD5Vkgfmg4FaJDf95DfIYGAPwkYvPBR
+         cq2onMXuHqr5s8oWeMKkxLSoOJOzySxJF/+YWdQlYmKT7L7g3E/5bYSIx1mOVgjzwcLq
+         +7eAXBYtkLWbjgz2+2f6dElbxe2o/CdGwxg58vH4or9tSWaZCa50doyzljDz5N1Tct2/
+         GkPiqrkxmSMF6nIK0Hhm7YybtHvHpryKrNl/tmDmHsg47y1R2hgpXkhnQr73OIHtTMTt
+         J5u7uzT188GN3cmGkTP+J1CGJdOjNAgQVkOWn3ogtlalTE0UZKcwO6rsWltZAI4DjNS9
+         so2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVNJ7+ELen2eRh41fwkmSABcC8r+KjR2E9FArFTs5BDq99EoBKv1Kv38+iz2rFy0904q49b@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz3PikuqbsU7OCAlym6lvVZPzHC8Tpkd/AeSiENIkGwj3PRXtLL
+	oOHI5HlYq/y6Wh5PcktTfUxe9hB2LTvzR0Vhm7wQryPycAdJYch5j+bhK4FBLeSJfw==
+X-Gm-Gg: ASbGncu8nUaUX0/asi/iISgoKtwdhG0sGFgEUqUdcxXuklOTj7JVTrm5v6epXL+IpM7
+	Nl4FzjrZbEysr0tp4qSOuDM6Yeg5M/kBOBzNlLbjUcLUTOgjy3AJDWo+DEfeoM6o9+wJhOe+2+g
+	oUUsaqajHZ2bMpAaQeyzANTattQ9B/dvOHVK492sWfA36P4EfWa6SWlpy36wfKC5q5gT+sC8akp
+	IgsL1dfduf5VSbv9vVn4P7lYDLHroDQGxdGLyuQa2Wq1ihPUZLTZyfXKWSnCHocMXy+gTTdEMjz
+	B8tLiK/HXGuL5VA+Jgu/Pub7E8l2zIF3LsY9P2+RQZ/bLu6X7DiPvQ==
+X-Google-Smtp-Source: AGHT+IHa+SycZ/j5ENKVbLzq5R9GmprXiW6HwOFpKHAUNADlKC97bYtimIZZFdWeMFv9KA8vHx+LHg==
+X-Received: by 2002:a05:6102:5e8b:b0:4af:e5fd:77fc with SMTP id ada2fe7eead31-4b9a4ebe487mr10341270137.3.1738309206320;
+        Thu, 30 Jan 2025 23:40:06 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b9baa9aefcsm557164137.12.2025.01.30.23.40.05
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2025 23:40:05 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-85c662ebbc3so403218241.0
+        for <llvm@lists.linux.dev>; Thu, 30 Jan 2025 23:40:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUv834g+dCdZABZemqxDMyBgG0exAAfQl/L5cREnxmHkQrm8Osl1ZUtlq2wyI+xm3NDScsS@lists.linux.dev
+X-Received: by 2002:a05:6122:d87:b0:518:81aa:899b with SMTP id
+ 71dfb90a1353d-51e9e4e2f3cmr8999970e0c.6.1738309205451; Thu, 30 Jan 2025
+ 23:40:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
- not available
-Content-Language: en-GB
-To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, nathan@kernel.org, daniel@iogearbox.net
-Cc: martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20241205-xarray-kunit-port-v1-1-ee44bc7aa201@gmail.com>
+ <07cf896e-adf8-414f-a629-a808fc26014a@oracle.com> <qdq4k6323orqifgzo7pbg5vakezr3gptfdehghxsyfrhc4kwvb@d4fxbwcl4gjm>
+ <CAJ-ks9=U4PZv4NgyH8B7SbHkecGLy+M=G639hSTv-hnPySqk6w@mail.gmail.com>
+ <xf3445vgszstqfwycf5wc5owhnifxb3mny5xjjaihghqgnozmd@3h7hnifir4vu>
+ <CAMuHMdVcuhzO57Qn-kcUJDM=HmkSwuheyNJPF1tx+gxRKnKZXA@mail.gmail.com>
+ <mp6lnt3stfnfd74rwaza5xffh2ya5gylqnxotgrnqaqo3eh2zl@5g257jeiugfn>
+ <CAMuHMdWDRLi8AE0PgfAnXundbS0hyTyovUH7yScrY7GtmYYPOQ@mail.gmail.com>
+ <zlcagbwyskb4nkl4usbq4foc4vjcau3exp42zpfsl5b4tabr7u@o42mpfcsfygr>
+ <CAMuHMdVUZQTgLpa9L9R117s39nEqxdGy=CJLyLQaTv_16EDhZg@mail.gmail.com> <ihl4bxs65uphmepoyw4xoa26mr4f3gci2mgtoq4osrzeyh3mup@hww2utbkxkfn>
+In-Reply-To: <ihl4bxs65uphmepoyw4xoa26mr4f3gci2mgtoq4osrzeyh3mup@hww2utbkxkfn>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 31 Jan 2025 08:39:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVUrCfL+UheG56tEtT6K7vm++dNHDmcaL3cWWHyzAaZnw@mail.gmail.com>
+X-Gm-Features: AWEUYZkH_w9tBM_pRW6Ohl7HsK0YqaRuQD-fO1ItmvH8HD9xdtZANpKrFhiastY
+Message-ID: <CAMuHMdVUrCfL+UheG56tEtT6K7vm++dNHDmcaL3cWWHyzAaZnw@mail.gmail.com>
+Subject: Re: [PATCH] xarray: port tests to kunit
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, akpm@linux-foundation.org, 
+	christophe.leroy@csgroup.eu, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev, maddy@linux.ibm.com, 
+	morbo@google.com, mpe@ellerman.id.au, nathan@kernel.org, naveen@kernel.org, 
+	ndesaulniers@google.com, npiggin@gmail.com, 
+	Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Liam,
 
-
-
-On 1/30/25 2:33 PM, Daniel Xu wrote:
-> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
-> libraries"), only statically linking test_progs is supported. However,
-> some distros only provide a dynamically linkable LLVM.
+On Thu, 30 Jan 2025 at 16:17, Liam R. Howlett <Liam.Howlett@oracle.com> wro=
+te:
+> * Geert Uytterhoeven <geert@linux-m68k.org> [250130 09:25]:
+> > On Thu, 30 Jan 2025 at 15:06, Liam R. Howlett <Liam.Howlett@oracle.com>=
+ wrote:
+> > > > > it is to get m68k to build, you should probably know how to read =
+a
+> > > > > makefile.
+> > > >
+> > > > Like all other kernel cross-compilation? Usually you don't even hav=
+e
+> > > > to know where your cross-compiler is living:
+> > > >
+> > > >     make ARCH=3Dm68k
+> > >
+> > > Ignoring that I had to make a config - which asked challenging
+> > > questions...
+> >
+> > make ARCH=3Dm68k defconfig
 >
-> This commit adds a fallback for dynamically linking LLVM if static
-> linking is not available. If both options are available, static linking
-> is chosen.
+> That also prompts, defoldconfig did not.
+
+Hmm, using a defconfig should never ask for questions.
+Perhaps this might happen if it has an option enabled that depends on
+specific compiler support?
+
+> > > And ignoring the steps to get m68k compiler...
+> >
+> > apt install gcc-m68k-linux-gnu?
 >
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->   tools/testing/selftests/bpf/Makefile | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
+> There are a few compilers, multilib or such?  I've had issues with
+> getting all the archs working for cross compile on the same machine
+> (arm, arm64, riscv, m68k, ppc, ppc64, parisc).
+
+I have installed all of the above (and more) from Ubuntu
+(except for parisc, as Ubuntu does not have it), and more
+from https://www.kernel.org/pub/tools/crosstool/.
+All of them should work fine (for building kernels).
+
+> > > > > > When trying the above, and ignoring failures due to missing pac=
+kages
+> > > > > > on my host:
+> > > > > >   - there are several weird build errors,
+> > > > > >   - this doesn't play well with O=3D,
+> > > > > >   - lots of scary warnings when building for 32-bit,
+> > > > > >   - ...
+> > > > > >
+> > >
+> > > In file included from ./include/linux/sched.h:12,
+> > >                  from arch/m68k/kernel/asm-offsets.c:15:
+> > > ./arch/m68k/include/asm/current.h:7:30: error: invalid register name =
+for =E2=80=98current=E2=80=99
+> > >     7 | register struct task_struct *current __asm__("%a2");
+> >
+> > Which compiler are you using?
 >
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6722080b2107..da514030a153 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
->     LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
->     # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
->     LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> -  LLVM_LDLIBS  += -lstdc++
-> +  # Prefer linking statically if it's available, otherwise fallback to shared
-> +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +    LLVM_LDLIBS  += -lstdc++
-> +  else
-> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> +  endif
->     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
->   endif
+> I've had a hard time getting m68k to boot in qemu because of the lack of
+> userspace.  I use m68k for nommu testing, but have a hard time getting
+> the buildroot to work correctly to build what I need.
 
-Although your change looks good, but maybe you can look at bpftool Makefile?
+I only do m68k with MMU, and use Debian (ports) userland.
+Perhaps https://landley.net/toybox/ might give you a nommu userland.
 
-   # If LLVM is available, use it for JIT disassembly
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
-   # (e.g. when bpftool build is called from selftests build as selftests
-   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
-   # compilation error due to redefinition. Let's filter it out here.
-   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-     LIBS += -lstdc++
-   endif
-   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+> More importantly, I think I get your point, you think that the testing
+> should be integrated and complain if it's broken - at least by bots.  I
+> don't think this is practical in all cases, unfortunately.
 
-It would be great if the selftests shared library handling to be the same as bpftool's.
+Exactly:
+  - (cross)building kernel module tests is easy, and included in a
+     kernel build, so build failures are detected early.
+  - (cross)building the userland testing tools is cumbersome.
+So there's an opportunity for improvement...
 
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
