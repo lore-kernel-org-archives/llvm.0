@@ -1,119 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8713110E0;
-	Fri, 31 Jan 2025 06:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA91710E0
+	for <llvm@lists.linux.dev>; Fri, 31 Jan 2025 06:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738304609; cv=none; b=b1jKlVd2Bdmm1vbwS39/mqRnmoVLvUpisbUrBxFkjAR9wfOyVZTW8MelLE6yd1qkah9SIS6jV2JJyMdZHkDgVyaN3lmfKL7su/Tcd/8ILyxNv2vT/KLVeOKRlneh89Ca03L4JzHgf6RR/QU94LO3X50qMAuIMTE6n6cbEfvXq70=
+	t=1738304912; cv=none; b=WvW/eZGNISNHNNOorBu9ufLzjeaGI4nwMXqEvaMN9rHsTrdQ0Zoeu1ZyRr+2Eq921aJ4WCkuz3H23WVmPoo5MfuQMxa9VvWVwcK3M6Mz+KASRYzErYd7MMJ0TE2bwSwDat5WrIWYRfcry6nATpYKuVswph+XM+F6cSX7gSJh8TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738304609; c=relaxed/simple;
-	bh=QXY/B5pMe0GGW3KUSN7S7GmU/ZqDPs/qCUCZTarbgnQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QW+J9I7j4sI//rGl3keelv3De3sTy6paksw4vP+hSXEKIVd/P7S3uZ97lo/ezCxR6R94rwK2OFsL15tQY4deYXHpb6iq/c7VbzUNopF9XZg8v3Vz3frYpueKe6WY6599CQIW2rUImN2FjR8MkllDw/onRs3LaPmJ2avU2mQUwkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VjqiLtig; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738304912; c=relaxed/simple;
+	bh=BNwj/cu2eiUOIuXNgpw6rKDwrnR4+fv5e/EebXhTC3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RcjTvQpDuDp05CZTgzMSSvPOOOflePNO8a+DVqZSBrxTPWrGEH+qQMla2HgGU+7CYOlrNniSmVqQqCnwqQb0BNWVru9+xzCj9ZfPkafhY8Q3TCZkiVHn9oYITUHRLEPjuMubtesMbvppil7X6YhF2JTJJ2gakdekhAi7Gz725NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EX5+aK/6; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VjqiLtig"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738304607; x=1769840607;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QXY/B5pMe0GGW3KUSN7S7GmU/ZqDPs/qCUCZTarbgnQ=;
-  b=VjqiLtigIPxWAipwfA+IuHTHEabKNgMzPjecDOjd5j54h22AiDRkiWF5
-   nxckG4ar8GsllmYgSerbAmbZ7iu9Io29RdnNP4pKRwBWhxB+ndzl8VsKG
-   H44u2VnGwKyDsiIU19BhSW1+my7YYtEcHnpQpDLkIFSAPOniDdUzsygDa
-   7mJTq9PwwMijJkl1tkvzsKEEwlypvJjh45fzwALNQ7asIzO3VtO6wAYjB
-   1xF3OtkRSMwuj1QUveMVh7hPm9ayybNRWnbDrEkiRnwGWszFS28Zvvi2S
-   d852Os0IgHclC/1/x9u2mYmBI8WB92hAej0z9gJd2azhT925TV/0sQdOC
-   g==;
-X-CSE-ConnectionGUID: Zlthcb62RESjszx8CxI9aQ==
-X-CSE-MsgGUID: Akv/idyVQ5WF08kyDBlNJw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11331"; a="61340355"
-X-IronPort-AV: E=Sophos;i="6.13,247,1732608000"; 
-   d="scan'208";a="61340355"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2025 22:23:27 -0800
-X-CSE-ConnectionGUID: s4LAcrseSB+3PGfGtaOLMg==
-X-CSE-MsgGUID: z1xYEFkLS6GxGWneqRF2rw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="146731783"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 Jan 2025 22:23:25 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tdkR0-000m5n-2F;
-	Fri, 31 Jan 2025 06:23:22 +0000
-Date: Fri, 31 Jan 2025 14:22:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/kvmclock_vs_tsc 6/16] arch/x86/kernel/tsc.c:1525:3:
- error: call to undeclared function 'tdx_tsc_init'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202501311459.U2DirNC3-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EX5+aK/6"
+Message-ID: <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738304898;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z6nr90zQBuI/mRmsANmm014cd25JJit1RNWXmjt1m1g=;
+	b=EX5+aK/6Og8svexi1PHU/CPZfYtsrcZHXTgeg9bnG1usrUIJepcjKdWtJ/vJ+z5PSfA0Ea
+	MYY6LzwY6152AJXDF6jRg00V/i185IwtKOBncbtJB79yqcLIICAmKfsHmLz20dhOxXom8c
+	BjwZCJDZHUWd8kVY2hIrVZW9D6iceTA=
+Date: Thu, 30 Jan 2025 22:28:11 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/sean-jc/linux x86/kvmclock_vs_tsc
-head:   39ec46a246988da8e58ee3caccb2b5ff6d07666a
-commit: e02c3f9b45df22178674c33ee15e37bfa9bf3e3c [6/16] x86/tdx: Override PV calibration routines with CPUID-based calibration
-config: x86_64-buildonly-randconfig-005-20250131 (https://download.01.org/0day-ci/archive/20250131/202501311459.U2DirNC3-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250131/202501311459.U2DirNC3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501311459.U2DirNC3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kernel/tsc.c:1525:3: error: call to undeclared function 'tdx_tsc_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1525 |                 tdx_tsc_init();
-         |                 ^
-   arch/x86/kernel/tsc.c:1525:3: note: did you mean 'tsc_init'?
-   arch/x86/include/asm/tsc.h:89:13: note: 'tsc_init' declared here
-      89 | extern void tsc_init(void);
-         |             ^
-   1 error generated.
+Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
+ not available
+Content-Language: en-GB
+To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, ast@kernel.org, nathan@kernel.org, daniel@iogearbox.net
+Cc: martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +/tdx_tsc_init +1525 arch/x86/kernel/tsc.c
 
-  1508	
-  1509	void __init tsc_early_init(void)
-  1510	{
-  1511		if (!boot_cpu_has(X86_FEATURE_TSC))
-  1512			return;
-  1513		/* Don't change UV TSC multi-chassis synchronization */
-  1514		if (is_early_uv_system())
-  1515			return;
-  1516	
-  1517		/*
-  1518		 * Do CoCo specific "secure" TSC initialization *after* hypervisor
-  1519		 * platform initialization so that the secure variant can override the
-  1520		 * hypervisor's PV calibration routine with a more trusted method.
-  1521		 */
-  1522		if (cc_platform_has(CC_ATTR_GUEST_SNP_SECURE_TSC))
-  1523			snp_secure_tsc_init();
-  1524		else if (boot_cpu_has(X86_FEATURE_TDX_GUEST))
-> 1525			tdx_tsc_init();
-  1526	
-  1527		if (!determine_cpu_tsc_frequencies(true))
-  1528			return;
-  1529		tsc_enable_sched_clock();
-  1530	}
-  1531	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 1/30/25 2:33 PM, Daniel Xu wrote:
+> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+> libraries"), only statically linking test_progs is supported. However,
+> some distros only provide a dynamically linkable LLVM.
+>
+> This commit adds a fallback for dynamically linking LLVM if static
+> linking is not available. If both options are available, static linking
+> is chosen.
+>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>   tools/testing/selftests/bpf/Makefile | 11 ++++++++---
+>   1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 6722080b2107..da514030a153 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
+>     LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>     # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
+>     LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> -  LLVM_LDLIBS  += -lstdc++
+> +  # Prefer linking statically if it's available, otherwise fallback to shared
+> +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
+> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +    LLVM_LDLIBS  += -lstdc++
+> +  else
+> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+> +  endif
+>     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>   endif
+
+Although your change looks good, but maybe you can look at bpftool Makefile?
+
+   # If LLVM is available, use it for JIT disassembly
+   CFLAGS  += -DHAVE_LLVM_SUPPORT
+   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+   # (e.g. when bpftool build is called from selftests build as selftests
+   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+   # compilation error due to redefinition. Let's filter it out here.
+   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+     LIBS += -lstdc++
+   endif
+   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+
+It would be great if the selftests shared library handling to be the same as bpftool's.
+
