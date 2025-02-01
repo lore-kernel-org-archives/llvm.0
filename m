@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF50613D504;
-	Sat,  1 Feb 2025 10:38:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5DD1ADC60;
+	Sat,  1 Feb 2025 13:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738406335; cv=none; b=HeXbgnsiE3erKnKHYblVfxfwSHmiQBVhRXZCT9IQp9EMQxwNW+PminGnFAQ8780euMzXYT2Ylev1sn3RxeJZ6clsi3nlkqMMBGJIbGQWGnvlVF5F5ldFBUA8yFHDlXshdGl4qroDkhfL2TvX7ee/IaGERAri8iin5/m3p1GLEh8=
+	t=1738415475; cv=none; b=p8jDscIxB6+9lcrKGsxS8GW2cHFpJvSMYWZosr/AQU1GUP7k5dkb7vPxLSTZn5jDlhBo0MZzFOhGVVYq83HxwKLg6EkvxQsJnOpanto1p7JOnJK/8LY0j1Ka7E7V6FHh0/cMqmnCF2adUg6N2vCA9cPNAuhCWjZxvwcdwP60lTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738406335; c=relaxed/simple;
-	bh=C30HS8zoEz5mXy6IItjgUVqI7rWrJsCmGabBzALefXw=;
+	s=arc-20240116; t=1738415475; c=relaxed/simple;
+	bh=8O3v1gQSlsG3tYV8ZTlep1WuOLYN6UmIQa9FBKxE7jc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MCRE02yMH2snfqK6Tg5cMLWilmbxu6U8kYpFahK4uCbXN6uLBH1Fc7sQm/xRA12BPyWTrWxvbluK1ubun2LTJF+jkMZIbTrDWHurzaaf5wqfT22XC88OlSSv1408SbANUTbOBa+kwDAwZtKgUvKOj2Dfbl6PHkHaC8BNrBFtUMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mag24BW6; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=BqR61imIW/2DuUulzUuc4uGlRI6pg8AtHWNJ7bjKYX7p/bb/xUho4SJZu9YjBf4eUaslnXJDHLkuCG06PU3mdonvHViDhbE5G1EPhR1Mlo+jPnFYAj2j2EvDOdbjQwKqgefP2My8a/Y/Lt3qBQf+X9QnAJt9c5fxlJuhRokG3CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MoKV3vtm; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mag24BW6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MoKV3vtm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738406333; x=1769942333;
+  t=1738415473; x=1769951473;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=C30HS8zoEz5mXy6IItjgUVqI7rWrJsCmGabBzALefXw=;
-  b=mag24BW62tvB8y+6Edu55jjEcXYdjoyk1/oBtkSDAYUeMiUrZYAoBA0R
-   /pOlza/0nC2bJsZoHce2Eu8OSOoSziV/PkAMEHlBts/9JNtxAnFhNq2Na
-   9hORkZ1G8/aMqz8qgCWDDWm92A7kRGeDN4mkdZQNaTgokJ6y9ZBLM8P69
-   6DU1naZNl9qXZIwbQw+dVcsMWO71N2JvSFeEWx5tm+I7K5ssCY460Gh/W
-   AkUegWO8X/e//xE1s4CAWx0bP/kSUFI2PODqt0+De9uBqbzKTrDFf8BhS
-   K6Ray1iGtqY8GT4PrOXiGe84kGpq3BGYSbwnvYJtFk3uY6MuKVf9on88o
-   w==;
-X-CSE-ConnectionGUID: eTXBm/9nRTmEGw4rrIXKXg==
-X-CSE-MsgGUID: xnH5Mc1zRpaeeZGb9wS6HQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38667204"
+  bh=8O3v1gQSlsG3tYV8ZTlep1WuOLYN6UmIQa9FBKxE7jc=;
+  b=MoKV3vtmWDWtJ0Vm1FnmE0Zn1gfTX5NtX7rQjcEFpUkqYEv17LcYj1gf
+   SCkNk0E3tjwRNPhAVbrFu+2AprNp7TpQmzbiiBU8JNSDTYYxVuXwBQcYX
+   sQCCLssy9MIGNLyDBYevmgXUaKLFEH6PXJagg58IcFT52UKekMhh3y7rz
+   jCs/mGYVat1EX2V1wfCpUtPRfJKoFPY4VuWsAtJj1ks7QC3s1PwHai8vn
+   bsuuaPXu8N8BjE467nYGWKAf87xcDnyfOqzQBLvvsVlEkHe2kWXZct3ts
+   mpBhtNf2sCVFQ0dZF8HP6ssfyJn4ZM4eJlJvY+9dWAUyWTYMaowowkK2s
+   g==;
+X-CSE-ConnectionGUID: qRw2RVK7T8uRYeFt/DfYfw==
+X-CSE-MsgGUID: 2dMwcNWKT9K1tLneoHp+JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="49567800"
 X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
-   d="scan'208";a="38667204"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 02:38:52 -0800
-X-CSE-ConnectionGUID: hwnUzIhaSASuDe1v89m3cQ==
-X-CSE-MsgGUID: BGOW20BnTzqaOMqxP0RWvg==
+   d="scan'208";a="49567800"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 05:11:12 -0800
+X-CSE-ConnectionGUID: GXZdOfWXSHKpEEd79FBwaA==
+X-CSE-MsgGUID: nyHwV57ETn6H+Vfe39m8bw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
-   d="scan'208";a="109980577"
+   d="scan'208";a="140745522"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Feb 2025 02:38:51 -0800
+  by orviesa002.jf.intel.com with ESMTP; 01 Feb 2025 05:11:10 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1teAtk-000o2B-2m;
-	Sat, 01 Feb 2025 10:38:48 +0000
-Date: Sat, 1 Feb 2025 18:38:14 +0800
+	id 1teDH8-000oAx-2e;
+	Sat, 01 Feb 2025 13:11:06 +0000
+Date: Sat, 1 Feb 2025 21:10:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 2/5] mfd: Add ROHM BD79124 ADC/GPO
-Message-ID: <202502011801.rWqfrePH-lkp@intel.com>
-References: <cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: [PATCH v6 2/2] rust: list: make the cursor point between elements
+Message-ID: <202502012009.gHmXhGHi-lkp@intel.com>
+References: <20250131-cursor-between-v6-2-603bdc7d4449@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,89 +69,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount@gmail.com>
+In-Reply-To: <20250131-cursor-between-v6-2-603bdc7d4449@google.com>
 
-Hi Matti,
+Hi Alice,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 5bc55a333a2f7316b58edc7573e8e893f7acb532]
+[auto build test ERROR on ceff0757f5dafb5be5205988171809c877b1d3e3]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-ROHM-BD79124-ADC-GPO/20250131-214129
-base:   5bc55a333a2f7316b58edc7573e8e893f7acb532
-patch link:    https://lore.kernel.org/r/cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount%40gmail.com
-patch subject: [RFC PATCH 2/5] mfd: Add ROHM BD79124 ADC/GPO
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250201/202502011801.rWqfrePH-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011801.rWqfrePH-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Alice-Ryhl/rust-list-extract-common-code-for-insertion/20250201-041918
+base:   ceff0757f5dafb5be5205988171809c877b1d3e3
+patch link:    https://lore.kernel.org/r/20250131-cursor-between-v6-2-603bdc7d4449%40google.com
+patch subject: [PATCH v6 2/2] rust: list: make the cursor point between elements
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250201/202502012009.gHmXhGHi-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502012009.gHmXhGHi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502011801.rWqfrePH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502012009.gHmXhGHi-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/mfd/rohm-bd79124.c:114:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     114 |                 return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
-         |                                           ^~~
-   drivers/mfd/rohm-bd79124.c:97:9: note: initialize the variable 'ret' to silence this warning
-      97 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-
-vim +/ret +114 drivers/mfd/rohm-bd79124.c
-
-    94	
-    95	static int bd79124_probe(struct i2c_client *i2c)
-    96	{
-    97		int ret;
-    98		struct regmap *map;
-    99		struct device *dev = &i2c->dev;
-   100		int *adc_vref;
-   101	
-   102		adc_vref = devm_kzalloc(dev, sizeof(*adc_vref), GFP_KERNEL);
-   103		if (!adc_vref)
-   104			return -ENOMEM;
-   105	
-   106		/*
-   107		 * Better to enable regulators here so we don't need to worry about the
-   108		 * order of sub-device instantiation. We also need to deliver the
-   109		 * reference voltage value to the ADC driver. This is done via
-   110		 * the MFD driver's drvdata.
-   111		 */
-   112		*adc_vref = devm_regulator_get_enable_read_voltage(dev, "vdd");
-   113		if (*adc_vref < 0)
- > 114			return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
-   115	
-   116		dev_set_drvdata(dev, adc_vref);
-   117	
-   118		ret = devm_regulator_get_enable(dev, "iovdd");
-   119		if (ret < 0)
-   120			return dev_err_probe(dev, ret, "Failed to enable I/O voltage\n");
-   121	
-   122		map = devm_regmap_init_i2c(i2c, &bd79124_regmap);
-   123		if (IS_ERR(map))
-   124			return dev_err_probe(dev, PTR_ERR(map),
-   125					     "Failed to initialize Regmap\n");
-   126	
-   127		if (i2c->irq) {
-   128			adc_alert = DEFINE_RES_IRQ_NAMED(i2c->irq, "thresh-alert");
-   129			bd79124_cells[CELL_ADC].resources = &adc_alert;
-   130			bd79124_cells[CELL_ADC].num_resources = 1;
-   131		}
-   132	
-   133		ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, bd79124_cells,
-   134					   ARRAY_SIZE(bd79124_cells), NULL, 0, NULL);
-   135		if (ret)
-   136			dev_err_probe(dev, ret, "Failed to create subdevices\n");
-   137	
-   138		return ret;
-   139	}
-   140	
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 19.1.3
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+   In file included from rust/helpers/helpers.c:10:
+   In file included from rust/helpers/blk.c:3:
+   In file included from include/linux/blk-mq.h:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   525 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>> error[E0596]: cannot borrow `self` as mutable, as it is not declared as mutable
+   --> rust/kernel/list.rs:838:9
+   |
+   838 |         self.insert_inner(item);
+   |         ^^^^ cannot borrow as mutable
+   |
+   help: consider changing this to be mutable
+   |
+   833 |     pub fn insert(mut self, item: ListArc<T, ID>) {
+   |                   +++
 
 -- 
 0-DAY CI Kernel Test Service
