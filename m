@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46B725761;
-	Sat,  1 Feb 2025 10:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF50613D504;
+	Sat,  1 Feb 2025 10:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738404410; cv=none; b=O1bCnsn4ynuSIY6Fr7H7roTDmX8BQKzrClkenEJ/UThWtaAeFAJ+ioenZSJ2hAWLPqQ9AfwpG3Tdqys8XQQ2dgCIDLtG2dqnxZiabFMESFzzJNDgBW+QigBMQe2mfUGR6ERwtQmezin0fJGV2nr5LwRsYpZBvTgo97k4R6Ygnr0=
+	t=1738406335; cv=none; b=HeXbgnsiE3erKnKHYblVfxfwSHmiQBVhRXZCT9IQp9EMQxwNW+PminGnFAQ8780euMzXYT2Ylev1sn3RxeJZ6clsi3nlkqMMBGJIbGQWGnvlVF5F5ldFBUA8yFHDlXshdGl4qroDkhfL2TvX7ee/IaGERAri8iin5/m3p1GLEh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738404410; c=relaxed/simple;
-	bh=YLDQeiwHjg5emqBmHRYATHZzZNx0PCX9CNimZfe9Mqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KN3tsXwERrJQAkvw3kQfpy/ybBAWc5sdk5rdcIx9Ltk9/RuIRbfCv+WC56G29ng+DTDQsIii+LaXIRfi/OG17F4xmq7T14X1lkhXCrYuV5DH8uCIf7+iU0ue7mcGKfqF57XZMrBV1DEN+KBmBUL0ijjKf0Q0JjfFfZJp7Zt8QH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aeWrE7WW; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1738406335; c=relaxed/simple;
+	bh=C30HS8zoEz5mXy6IItjgUVqI7rWrJsCmGabBzALefXw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MCRE02yMH2snfqK6Tg5cMLWilmbxu6U8kYpFahK4uCbXN6uLBH1Fc7sQm/xRA12BPyWTrWxvbluK1ubun2LTJF+jkMZIbTrDWHurzaaf5wqfT22XC88OlSSv1408SbANUTbOBa+kwDAwZtKgUvKOj2Dfbl6PHkHaC8BNrBFtUMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mag24BW6; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aeWrE7WW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mag24BW6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738404408; x=1769940408;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YLDQeiwHjg5emqBmHRYATHZzZNx0PCX9CNimZfe9Mqg=;
-  b=aeWrE7WWmCenKhbVtICq/Znev8IVpood6UrXu7llpwhYOQcn3d1b1LTG
-   jpv1nqQLUQyh9s52tfdxzJxkApT0e0OFbmJdn0ErCG783f/q++OzmxD9V
-   8lIBBhUBt8uqtQnOFnWNIHHicJO8QKy8AIJxquJMrd4HS3XEhxoKBxfpD
-   EpB6oqktA0UFkqokKCihiGPwGY6PdGSvi0s7WXfwijSqS7jdSenCaeNwH
-   eI7JiM5kVZqxBP7ZBYUOQfFsSB1YrHsZgIRSJfeAUeSgMpQUiWB1sI8St
-   E+g0AaavMp4D/exMJnCz1jUah4xrq+SGTXRmbBtWTMDceF2STx1RsZdTA
-   g==;
-X-CSE-ConnectionGUID: XZ8zJZ2hS3yeHxz9BYGJCw==
-X-CSE-MsgGUID: wqYRJWnrR2iDY3V6L/Ah7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="50350363"
+  t=1738406333; x=1769942333;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C30HS8zoEz5mXy6IItjgUVqI7rWrJsCmGabBzALefXw=;
+  b=mag24BW62tvB8y+6Edu55jjEcXYdjoyk1/oBtkSDAYUeMiUrZYAoBA0R
+   /pOlza/0nC2bJsZoHce2Eu8OSOoSziV/PkAMEHlBts/9JNtxAnFhNq2Na
+   9hORkZ1G8/aMqz8qgCWDDWm92A7kRGeDN4mkdZQNaTgokJ6y9ZBLM8P69
+   6DU1naZNl9qXZIwbQw+dVcsMWO71N2JvSFeEWx5tm+I7K5ssCY460Gh/W
+   AkUegWO8X/e//xE1s4CAWx0bP/kSUFI2PODqt0+De9uBqbzKTrDFf8BhS
+   K6Ray1iGtqY8GT4PrOXiGe84kGpq3BGYSbwnvYJtFk3uY6MuKVf9on88o
+   w==;
+X-CSE-ConnectionGUID: eTXBm/9nRTmEGw4rrIXKXg==
+X-CSE-MsgGUID: xnH5Mc1zRpaeeZGb9wS6HQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38667204"
 X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
-   d="scan'208";a="50350363"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 02:06:47 -0800
-X-CSE-ConnectionGUID: gA+7H1rAR7anT+liz1WYsw==
-X-CSE-MsgGUID: HjtTacp2Sg2q8/HG+byk4A==
+   d="scan'208";a="38667204"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 02:38:52 -0800
+X-CSE-ConnectionGUID: hwnUzIhaSASuDe1v89m3cQ==
+X-CSE-MsgGUID: BGOW20BnTzqaOMqxP0RWvg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
-   d="scan'208";a="110415766"
+   d="scan'208";a="109980577"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Feb 2025 02:06:46 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 01 Feb 2025 02:38:51 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1teAOh-000nzY-1f;
-	Sat, 01 Feb 2025 10:06:43 +0000
-Date: Sat, 1 Feb 2025 18:06:16 +0800
+	id 1teAtk-000o2B-2m;
+	Sat, 01 Feb 2025 10:38:48 +0000
+Date: Sat, 1 Feb 2025 18:38:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Craviee <dcraviee@internships.antmicro.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Gabriel Somlo <gsomlo@gmail.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [litex-hub:litex-rebase 10/15]
- drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function
- pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *,
- size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char
- *, unsigned long)') with an express...
-Message-ID: <202502011735.bkOUcCe6-lkp@intel.com>
+To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 2/5] mfd: Add ROHM BD79124 ADC/GPO
+Message-ID: <202502011801.rWqfrePH-lkp@intel.com>
+References: <cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,60 +63,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount@gmail.com>
 
-tree:   https://github.com/litex-hub/linux litex-rebase
-head:   d063b9bfd84d4ae32eaa664cd7b8906d1e5a4265
-commit: 3d002d5d735d84642819be0fbf1ae715f4b1aac4 [10/15] LiteX: driver for SPI Flash (mtd) device
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250201/202502011735.bkOUcCe6-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011735.bkOUcCe6-lkp@intel.com/reproduce)
+Hi Matti,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 5bc55a333a2f7316b58edc7573e8e893f7acb532]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-ROHM-BD79124-ADC-GPO/20250131-214129
+base:   5bc55a333a2f7316b58edc7573e8e893f7acb532
+patch link:    https://lore.kernel.org/r/cc30cf6859b5e5a7320282709f428cd42717ac6b.1738328714.git.mazziesaccount%40gmail.com
+patch subject: [RFC PATCH 2/5] mfd: Add ROHM BD79124 ADC/GPO
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250201/202502011801.rWqfrePH-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011801.rWqfrePH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502011735.bkOUcCe6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502011801.rWqfrePH-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/mtd/spi-nor/litex-spiflash.c:23:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *, size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') with an expression of type 'ssize_t (struct spi_nor *, u8, const u8 *, size_t)' (aka 'long (struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') [-Wincompatible-function-pointer-types]
-     305 |         .write_reg = spi_flash_nor_write_reg,
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings and 1 error generated.
+>> drivers/mfd/rohm-bd79124.c:114:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     114 |                 return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
+         |                                           ^~~
+   drivers/mfd/rohm-bd79124.c:97:9: note: initialize the variable 'ret' to silence this warning
+      97 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +305 drivers/mtd/spi-nor/litex-spiflash.c
+vim +/ret +114 drivers/mfd/rohm-bd79124.c
 
-   300	
-   301	static const struct spi_nor_controller_ops litex_spi_controller_ops = {
-   302		.read = spi_flash_nor_read,
-   303		.write = spi_flash_nor_write,
-   304		.read_reg = spi_flash_nor_read_reg,
- > 305		.write_reg = spi_flash_nor_write_reg,
-   306		.erase = spi_flash_nor_erase,
-   307	};
-   308	
+    94	
+    95	static int bd79124_probe(struct i2c_client *i2c)
+    96	{
+    97		int ret;
+    98		struct regmap *map;
+    99		struct device *dev = &i2c->dev;
+   100		int *adc_vref;
+   101	
+   102		adc_vref = devm_kzalloc(dev, sizeof(*adc_vref), GFP_KERNEL);
+   103		if (!adc_vref)
+   104			return -ENOMEM;
+   105	
+   106		/*
+   107		 * Better to enable regulators here so we don't need to worry about the
+   108		 * order of sub-device instantiation. We also need to deliver the
+   109		 * reference voltage value to the ADC driver. This is done via
+   110		 * the MFD driver's drvdata.
+   111		 */
+   112		*adc_vref = devm_regulator_get_enable_read_voltage(dev, "vdd");
+   113		if (*adc_vref < 0)
+ > 114			return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
+   115	
+   116		dev_set_drvdata(dev, adc_vref);
+   117	
+   118		ret = devm_regulator_get_enable(dev, "iovdd");
+   119		if (ret < 0)
+   120			return dev_err_probe(dev, ret, "Failed to enable I/O voltage\n");
+   121	
+   122		map = devm_regmap_init_i2c(i2c, &bd79124_regmap);
+   123		if (IS_ERR(map))
+   124			return dev_err_probe(dev, PTR_ERR(map),
+   125					     "Failed to initialize Regmap\n");
+   126	
+   127		if (i2c->irq) {
+   128			adc_alert = DEFINE_RES_IRQ_NAMED(i2c->irq, "thresh-alert");
+   129			bd79124_cells[CELL_ADC].resources = &adc_alert;
+   130			bd79124_cells[CELL_ADC].num_resources = 1;
+   131		}
+   132	
+   133		ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, bd79124_cells,
+   134					   ARRAY_SIZE(bd79124_cells), NULL, 0, NULL);
+   135		if (ret)
+   136			dev_err_probe(dev, ret, "Failed to create subdevices\n");
+   137	
+   138		return ret;
+   139	}
+   140	
 
 -- 
 0-DAY CI Kernel Test Service
