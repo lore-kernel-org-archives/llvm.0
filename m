@@ -1,91 +1,60 @@
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD772F9C1
-	for <llvm@lists.linux.dev>; Sat,  1 Feb 2025 08:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C031433BE;
+	Sat,  1 Feb 2025 09:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738398202; cv=none; b=M1CZOTNc7XZDXvaVk1khZlctODGqNdK+RYOvHoIbTelaGVBAKDgXprQP0X7hrfQtBRx9dG4aYWx0CV0x6gKSlE/1UE2aAuZQZxViquX7dr02TOSpuuLWPs5Tuc72OjaAexCeOWu8yXn7vRPFRan6pnIkjyhZ6yXuGJ7Dh1NmRr8=
+	t=1738403088; cv=none; b=Uqwy+bJHkfItpprohDAsO/qohr/BjsdoVtqBgZDRU8ZNRVlCbqSk5xYuEC8eDCCFreD/8PqojVXVkDY/QgELmFPitgHiWGlLdTfu5HZ1Q2sw858TA5716YxHR+i7EX8WHxkDYgi9gxfPhnVTN0YsrbhrOkTRe3QwgqlaroRXAx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738398202; c=relaxed/simple;
-	bh=I2x1xNDIv6a2xJQAVWZ6ZI7SUQRt30VNLur5TLaNNGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJ9UfwXMua8lxp9HefZGGoWwzn7QmZAXIWY03X09ZirPki1wIW0VE9eBg+YfDgrn/c4kxxCVJR+/bZkPwahAq8ne7dOo7+A/QOgRblS9XBK8fqyDQIdyD1HS5s58Z36xAfH2A1wyzzEb249ZADMUeAi2UMyNlVinCiUKo37Mk80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=hrnIrD3Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IlrQ3gOZ; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1738403088; c=relaxed/simple;
+	bh=gwEMc8C38Dk0JAKfHRB2VYHUEOC+P8taUoFkYNs2th8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=I3Kn/vaVnmAVqYxy9W09f7jg0z4t00RMYuOOmgdaucqsd72oSISVv7eyFI0jyU7+cBk7n83qSHgH11zCAv2c82JDXHaYjNDrAdmipmTFjr4kuX/Y7tfGtfTqaHLOpe1myeZv94hoR3+MhTyGYGgR9pipT7kA0YgHZFk4A1gOXU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i4csvrW+; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="hrnIrD3Z";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IlrQ3gOZ"
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id BB3482005FD;
-	Sat,  1 Feb 2025 03:23:18 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Sat, 01 Feb 2025 03:23:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1738398198; x=1738405398; bh=O1mPFwwAy2
-	XgJUG0+NNUDpAoMHPfDv8dSUIkUoZJEPg=; b=hrnIrD3ZWt+Au+iZtZx5K8KtGH
-	ug2UfjmYXUW7TzTy/LjWNqUjg1uzMTa8L5DArbC6nSg4kZA+dHt1tQCjDnxHK4iZ
-	hpMhUXR8yV5X0NmNdf+Rvcsj6OI5ckcFcp25hmwSBn4hjiPyzrF1eYEoG9zjW3xD
-	BHua/o8FUICD1DAA3jUDIjLgUgzO37ig4Z4qeAyQukZc+FLDw9lHi7IvoDDUD72p
-	kcNrXxZnIVK6vJSWIdTFyk3M3Ivv283RCpk5QlMcjq7W13cyUmRjVletdc0MNJWW
-	vnMhTYp0FVmVSpWtv8bsMqsikdhAMy83cbvaA0+fODED5RezClBby3RHmgJw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1738398198; x=1738405398; bh=O1mPFwwAy2XgJUG0+NNUDpAoMHPfDv8dSUI
-	kUoZJEPg=; b=IlrQ3gOZmjZRBVeQQIrKHtIoo0LSCWjeaI03u1ryMizInRhFbui
-	962y5IVxELD37rcClNURqUcXjJgcdbmMTbPlr+JGcEFuqa9pxLD+NlTnAAKHbimX
-	jb5O2opl4yU9d0DooSzgCKgGB3PnxnglVXQ/XjomkAdPoTm+cFIClJMO45UuUkJN
-	BSg1nWjDPs3svs5zM1g+FmFL7Ki9ppjrsjcLnDcXZtU6ODocLFTYEPJGizJ0OV22
-	H5i0msVFVA6Gg5oWQzszvCSnszJB0HV4+k4CaL4dpShmcVR/M6vynKn+5iZeIjGG
-	1Z/+RZsdke4sThrZ7dSZ5bEJ83vXB4xTxEw==
-X-ME-Sender: <xms:9dmdZ79-YJjqcUktUBCa4D-70msWLiYK2-BysjvNCFleoKoWGk1y_A>
-    <xme:9dmdZ3ut_1Qcozfw8kv951LqbFVFF8uSpKPbnWuU3n3pz-n2aBG9f_QOrPtBUT3e7
-    7GmK6TRRd9vzr3o-w>
-X-ME-Received: <xmr:9dmdZ5C3fXWrsJnnCh0-wIc-5vaCaMYnK_c_pJdODxbo6CdTXb-lLZue2ki4h8qmFLRmjqXAvV9VQG2TADsVjmVyDSnHtOhl0LIOXNhSAyNG9w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffk
-    fhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeff
-    keeuudekheduffduffffgfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
-    phhtthhopedvvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohephihonhhghhhonh
-    hgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehshhhurghhsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepmhgr
-    rhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepshhonhhgsehkvghrnh
-    gvlhdrohhrgh
-X-ME-Proxy: <xmx:9dmdZ3f0FVdGvftOqExcfQPNGXK_2Rpu1O-Ec6PhNbUVcxHNjYRKaA>
-    <xmx:9dmdZwPF85muZS5C5i7wn5AMOKmpgQCcJ20wskxIkAtPzVB-K9Hv4Q>
-    <xmx:9dmdZ5kwdkk2JAXWf_zcsLPZ6l0UK6hvbBRf8CJ-6XwKaW88Pc2WYQ>
-    <xmx:9dmdZ6u4pWRQs0PVeKEEjAFViA1pohBwgDKwbB84wGYirx-_95NNfQ>
-    <xmx:9tmdZxznGuhvfHFB51Ew1BhEjPiKn_KCo0QQqY5ai3aY2GfD9WZzCo-K>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 1 Feb 2025 03:23:15 -0500 (EST)
-Date: Sat, 1 Feb 2025 01:23:14 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: shuah@kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, 
-	nathan@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	jolsa@kernel.org, mykolal@fb.com, ndesaulniers@google.com, morbo@google.com, 
-	justinstitt@google.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
- not available
-Message-ID: <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
-References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
- <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i4csvrW+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738403086; x=1769939086;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gwEMc8C38Dk0JAKfHRB2VYHUEOC+P8taUoFkYNs2th8=;
+  b=i4csvrW+qjFkr1DPfs2ZHwD84Bo+9QYXgUygSXjhHivqg5k54M5gtULM
+   M/HLfUq3E8XbubnN36sN5Vkw3ORLJR3LKbdQ/MrGFby88gzIyIn4s2d9M
+   1bgKheCNeBtqZ5lk+DnoohO9UTsuyzdu7H1IUdfqmVUuUqujYNcthG6q7
+   Qssy7LkrNk54I/tapdo/txJ1eXtfrWa51DtAgzM9U3FsJ9MIJ9GUJ3fL5
+   ZwejRB2HIE/O9vBk0s3bqEYCsbTpLc1VVAsTo2oqBW/17meYVdBokUV88
+   E3niBcymRxPjhgV0q8dlhSDdnp8LF7Rf+UV/Ihu7jBVqd674VMIfxNIdy
+   A==;
+X-CSE-ConnectionGUID: lX9o7FsqQnGN9xOYDyo1xA==
+X-CSE-MsgGUID: HVCRgjK+Q32ZxRU7dfAK1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="50349539"
+X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
+   d="scan'208";a="50349539"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 01:44:45 -0800
+X-CSE-ConnectionGUID: 9hzC9pUHRFq7YMdiN8bkSA==
+X-CSE-MsgGUID: lmWSkPl1SO2HnxEDd93BiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
+   d="scan'208";a="109670396"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 01 Feb 2025 01:44:42 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1teA3M-000nyB-2Z;
+	Sat, 01 Feb 2025 09:44:40 +0000
+Date: Sat, 1 Feb 2025 17:44:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Himanshu Chauhan <hchauhan@ventanamicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anup Patel <anup@brainfault.org>
+Subject: [avpatel:riscv_defconfig_v1 59/71] kernel/iomem.c:12:25: error: call
+ to undeclared function 'ioremap_prot'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202502011735.AvVTLWSn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -94,75 +63,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
 
-Hi Yonghong,
+tree:   https://github.com/avpatel/linux.git riscv_defconfig_v1
+head:   151e6b62be87ee0e25a222878cbb915ea0a25a8a
+commit: 59e1479f0e3cda391a9cb02cff086226ca15af76 [59/71] riscv: Define ioremap_cache for RISC-V
+config: riscv-randconfig-001-20250201 (https://download.01.org/0day-ci/archive/20250201/202502011735.AvVTLWSn-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011735.AvVTLWSn-lkp@intel.com/reproduce)
 
-On Thu, Jan 30, 2025 at 10:28:11PM -0800, Yonghong Song wrote:
-> 
-> 
-> 
-> On 1/30/25 2:33 PM, Daniel Xu wrote:
-> > Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
-> > libraries"), only statically linking test_progs is supported. However,
-> > some distros only provide a dynamically linkable LLVM.
-> > 
-> > This commit adds a fallback for dynamically linking LLVM if static
-> > linking is not available. If both options are available, static linking
-> > is chosen.
-> > 
-> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 11 ++++++++---
-> >   1 file changed, 8 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 6722080b2107..da514030a153 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
-> >     LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-> >     # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
-> >     LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-> > -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> > -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> > -  LLVM_LDLIBS  += -lstdc++
-> > +  # Prefer linking statically if it's available, otherwise fallback to shared
-> > +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
-> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> > +    LLVM_LDLIBS  += -lstdc++
-> > +  else
-> > +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-> > +  endif
-> >     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-> >   endif
-> 
-> Although your change looks good, but maybe you can look at bpftool Makefile?
-> 
->   # If LLVM is available, use it for JIT disassembly
->   CFLAGS  += -DHAVE_LLVM_SUPPORT
->   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
->   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
->   # (e.g. when bpftool build is called from selftests build as selftests
->   # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
->   # compilation error due to redefinition. Let's filter it out here.
->   CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
->   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
->   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
->     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
->     LIBS += -lstdc++
->   endif
->   LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
-> 
-> It would be great if the selftests shared library handling to be the same as bpftool's.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502011735.AvVTLWSn-lkp@intel.com/
 
-So bpftool is both an internally consumed (from selftests) dependency as
-well as a tool packaged up by distros. For the latter case, distros
-prefer dynamic linking.
+All errors (new ones prefixed by >>):
 
-So unfortunately, I think these probably need to be defined separately.
-The code looks similar but the use cases are different.
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     804 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:107:53: note: expanded from macro 'insb'
+     107 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     812 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:108:53: note: expanded from macro 'insw'
+     108 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     820 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:109:53: note: expanded from macro 'insl'
+     109 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     829 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:121:55: note: expanded from macro 'outsb'
+     121 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:122:55: note: expanded from macro 'outsw'
+     122 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     847 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:123:55: note: expanded from macro 'outsl'
+     123 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from kernel/iomem.c:4:
+   In file included from include/linux/io.h:14:
+   In file included from arch/riscv/include/asm/io.h:139:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> kernel/iomem.c:12:25: error: call to undeclared function 'ioremap_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      12 |         return (__force void *)ioremap_cache(offset, size);
+         |                                ^
+   arch/riscv/include/asm/io.h:34:19: note: expanded from macro 'ioremap_cache'
+      34 |         ((__force void *)ioremap_prot((addr), (size), _PAGE_KERNEL))
+         |                          ^
+>> kernel/iomem.c:12:25: error: use of undeclared identifier '_PAGE_KERNEL'
+   arch/riscv/include/asm/io.h:34:48: note: expanded from macro 'ioremap_cache'
+      34 |         ((__force void *)ioremap_prot((addr), (size), _PAGE_KERNEL))
+         |                                                       ^
+   7 warnings and 2 errors generated.
 
-Thanks,
-Daniel
+
+vim +/ioremap_prot +12 kernel/iomem.c
+
+5981690ddb8f72 Dan Williams  2018-03-29   7  
+5981690ddb8f72 Dan Williams  2018-03-29   8  #ifndef arch_memremap_wb
+5981690ddb8f72 Dan Williams  2018-03-29   9  static void *arch_memremap_wb(resource_size_t offset, unsigned long size)
+5981690ddb8f72 Dan Williams  2018-03-29  10  {
+68af05143fd4b4 Arnd Bergmann 2023-07-26  11  #ifdef ioremap_cache
+5981690ddb8f72 Dan Williams  2018-03-29 @12  	return (__force void *)ioremap_cache(offset, size);
+68af05143fd4b4 Arnd Bergmann 2023-07-26  13  #else
+68af05143fd4b4 Arnd Bergmann 2023-07-26  14  	return (__force void *)ioremap(offset, size);
+68af05143fd4b4 Arnd Bergmann 2023-07-26  15  #endif
+5981690ddb8f72 Dan Williams  2018-03-29  16  }
+5981690ddb8f72 Dan Williams  2018-03-29  17  #endif
+5981690ddb8f72 Dan Williams  2018-03-29  18  
+
+:::::: The code at line 12 was first introduced by commit
+:::::: 5981690ddb8f72f9546a2d017a914cf56095fc1f memremap: split devm_memremap_pages() and memremap() infrastructure
+
+:::::: TO: Dan Williams <dan.j.williams@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
