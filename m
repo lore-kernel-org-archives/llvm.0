@@ -1,126 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE5084A2F;
-	Sat,  1 Feb 2025 04:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AA12F5E
+	for <llvm@lists.linux.dev>; Sat,  1 Feb 2025 05:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738383914; cv=none; b=h6013gTDboIRvF7vrAAe3MghBO9tyliJukzA8G3uw/Ah2qAZL6iRyCHIuzB/gnCd2jmndKfLdI9A/MSf6LkHxG5MrdVdd10WZMJ4z2IUQGLylSpzdt0o0TngN1yGTLnStd6KbPxQOVTtl+1C+2vvHeV33o5n4K6uXsmYgmxKKQY=
+	t=1738387332; cv=none; b=ml4UIMzxpGBaXUOHoyXu/ijzgFhrSJvZqWd/IMlOXmcPmmvZB54z9rcK4AIvhuQ86Z4ZCVqR/hUOck1xoc8U4xN2FLeWCwuqHd87tiKB4ya3AxHrQGSPq/ClS/ykZWxcazhiP57e5ZSfx6cYTPl4u5Rrr9wtYRpu84o0Mr+ptN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738383914; c=relaxed/simple;
-	bh=/QaRJNyS/xtps2c+16CQW9CyTcFj7p+B0NJrKUNN59Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KS5Plvp924PKDDMI5WHnDSDc8D2EiZm+PF05Q4HTg9RblLZiXarh3RwY/e4OHQVt7V74qv1HUs3AyxGvqvIbfCg7xi23KurJt51UDSN0a3/ixBmiuCPGF3f1HtYV2/A7R5MqsE1HWAeOZHV/itegj2iCOPB1tHMN+f0S97tBTAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EThrELVd; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738387332; c=relaxed/simple;
+	bh=BaT+yG96ZRpkYIBXpil9xHprBNEM0uvbSzrqAbVS5YQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UvOMM5M7KKiDeHA6FIh3uSAsCwGY8j/H7ExnaMepD1InEErn+wUrhSokshqs7uwKhiQd+9hj5KyGrwaEKvyuqOttF6Eer4Ob27BOfvChPX8QZpzFRkN2VaHAxZeK+KH9JkkSH+44hyztppRkpyuAChkbP6D/OvLowKWgynJ6QKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D2S8Mp6a; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EThrELVd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738383912; x=1769919912;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/QaRJNyS/xtps2c+16CQW9CyTcFj7p+B0NJrKUNN59Y=;
-  b=EThrELVd2I68ROSQSz33jFAIT5trvzn36H46gz/x80v5JongBUu3DUoD
-   wXKJPmq8uATdz/RG7A+pRxtb88K2LZz9WHv577CeUXlRYOu5fgj5UktH3
-   LkIDtMw4XRjqtstXtuBRBP+K0ArC2xU/FkzxxwugVOzY6fMCbt3Q3dAql
-   RUcP7Q6xCMOcnCCoYnvdj87E6sx2M38A2owJLkhssUkXBAV5NZYZemlB5
-   Rb3dXCD/Y+zSa+K4aqTYog3qBhZsOjfnWHFXi/6/J+mmIo1RlVdDp66U7
-   6MkKx2z+dvPQvoBLPD5spsVGWfoMRZNGog8rjQw/vuJB4Nnb5kXxNfjAR
-   Q==;
-X-CSE-ConnectionGUID: Byv+3ZAURBCVthzLIw+eJA==
-X-CSE-MsgGUID: CP1X+d3bT3GzRAgHPvtoAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38860686"
-X-IronPort-AV: E=Sophos;i="6.13,250,1732608000"; 
-   d="scan'208";a="38860686"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 20:25:12 -0800
-X-CSE-ConnectionGUID: +mMQA7IuTl+NuJRCu32mLg==
-X-CSE-MsgGUID: S9x0yOEDRm+taCIsRbdMZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="109639997"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 31 Jan 2025 20:25:09 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1te547-000nl9-3D;
-	Sat, 01 Feb 2025 04:25:07 +0000
-Date: Sat, 1 Feb 2025 12:24:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:fuse 2/3] fs/fuse/control.c:54:6: warning: variable 'value'
- is used uninitialized whenever 'if' condition is false
-Message-ID: <202502011249.NNx7K6U5-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D2S8Mp6a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738387329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OwwLD2gou6lflXeD9tW+VWxuU8XrP9f+Z67EwcAhIa8=;
+	b=D2S8Mp6arVx1sqd9CvmpeigYQYDa7G0n2TUlrkqRgXS3TOzv3vknNeGy+++wTISm6BtpFH
+	/r3DOJv28gnQpvHf5o6ClDSxqzOtxcfLytfL71eomd2JjREYF2PwtGxO/eNyvLv3ruX79b
+	elGZkDXR0g92TnCOMqlAPTrg/gdGMU0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-604-Gz-CkzVOMeuKS4_6sCmoOQ-1; Sat,
+ 01 Feb 2025 00:22:06 -0500
+X-MC-Unique: Gz-CkzVOMeuKS4_6sCmoOQ-1
+X-Mimecast-MFC-AGG-ID: Gz-CkzVOMeuKS4_6sCmoOQ
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CF7C4195608A
+	for <llvm@lists.linux.dev>; Sat,  1 Feb 2025 05:22:05 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5B4E619560A3;
+	Sat,  1 Feb 2025 05:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, 04a3389b)
+Date: Sat, 01 Feb 2025 05:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <39330.125020100220600714@us-mta-604.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: oEqjo5dVyugPmPwjNhuAaknaO3LWAPKmUbf3pi1KgRY_1738387326
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git fuse
-head:   dab78745e20591bc228e71dcdea06da75da7bbf8
-commit: 0eeb0bede371cbfe42ef9f2605da708ddd1b1ffd [2/3] fuse: don't set file->private_data in fuse_conn_waiting_read
-config: x86_64-buildonly-randconfig-005-20250201 (https://download.01.org/0day-ci/archive/20250201/202502011249.NNx7K6U5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011249.NNx7K6U5-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502011249.NNx7K6U5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/fuse/control.c:54:6: warning: variable 'value' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-      54 |         if (!*ppos) {
-         |             ^~~~~~
-   fs/fuse/control.c:62:30: note: uninitialized use occurs here
-      62 |         size = sprintf(tmp, "%d\n", value);
-         |                                     ^~~~~
-   fs/fuse/control.c:54:2: note: remove the 'if' if its condition is always true
-      54 |         if (!*ppos) {
-         |         ^~~~~~~~~~~
-   fs/fuse/control.c:52:11: note: initialize the variable 'value' to silence this warning
-      52 |         int value;
-         |                  ^
-         |                   = 0
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +54 fs/fuse/control.c
+Kernel information:
+    Commit message: Remove stale generated 'genheaders' file
 
-bafa96541b250a Miklos Szeredi 2006-06-25  46  
-bafa96541b250a Miklos Szeredi 2006-06-25  47  static ssize_t fuse_conn_waiting_read(struct file *file, char __user *buf,
-bafa96541b250a Miklos Szeredi 2006-06-25  48  				      size_t len, loff_t *ppos)
-bafa96541b250a Miklos Szeredi 2006-06-25  49  {
-bafa96541b250a Miklos Szeredi 2006-06-25  50  	char tmp[32];
-bafa96541b250a Miklos Szeredi 2006-06-25  51  	size_t size;
-0eeb0bede371cb Jeff Layton    2025-01-31  52  	int value;
-bafa96541b250a Miklos Szeredi 2006-06-25  53  
-bafa96541b250a Miklos Szeredi 2006-06-25 @54  	if (!*ppos) {
-bafa96541b250a Miklos Szeredi 2006-06-25  55  		struct fuse_conn *fc = fuse_ctl_file_conn_get(file);
-bafa96541b250a Miklos Szeredi 2006-06-25  56  		if (!fc)
-bafa96541b250a Miklos Szeredi 2006-06-25  57  			return 0;
-bafa96541b250a Miklos Szeredi 2006-06-25  58  
-1729a16c2c92bb Miklos Szeredi 2008-11-26  59  		value = atomic_read(&fc->num_waiting);
-bafa96541b250a Miklos Szeredi 2006-06-25  60  		fuse_conn_put(fc);
-bafa96541b250a Miklos Szeredi 2006-06-25  61  	}
-0eeb0bede371cb Jeff Layton    2025-01-31  62  	size = sprintf(tmp, "%d\n", value);
-bafa96541b250a Miklos Szeredi 2006-06-25  63  	return simple_read_from_buffer(buf, len, ppos, tmp, size);
-bafa96541b250a Miklos Szeredi 2006-06-25  64  }
-bafa96541b250a Miklos Szeredi 2006-06-25  65  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1651199928
 
-:::::: The code at line 54 was first introduced by commit
-:::::: bafa96541b250a7051e3fbc5de6e8369daf8ffec [PATCH] fuse: add control filesystem
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1651199928-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1651199928-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1651199928-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-:::::: TO: Miklos Szeredi <miklos@szeredi.hu>
-:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
