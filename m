@@ -1,125 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26CD2BD11;
-	Sun,  2 Feb 2025 19:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353A72F3B
+	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 22:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738524992; cv=none; b=MudjP73vyIvQLRQKco5ohrMcBOuyF0mz39h4vdiPXxvR6z31dagOrzPN5EEYP7dbYPMbVaE++2StbIe1zBGWiVzz3dpI2gk9+/Fg/IgZlKXmCIkw1ZvnmDI5jZ0BiNMKQE+PtbSkaYWZ3xy7Y146aqpzTZpraR7nXIYDbWtYKnA=
+	t=1738533730; cv=none; b=GryD/BZ2psb9U/looQlQVENOrgwsAJ/DhNEdqBkJiieUUU7xrcyz61zO6UcY1jt7qy+2OUqkQLxW1KOA2MLQPeNIaj/ySD6yQuk0m76ATmbDqbPh5b1mPU8xwO9xK+dPy3UxF1P+Q8CsHovNcWnsyu0KDqOnvMRVUmRDcOBA4EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738524992; c=relaxed/simple;
-	bh=423H48RKVlBKH9lUqUH62aqWKmvwsnAKJUfe7Vsrx6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LdKF5EPELKdk1uwgMQIqTiG/jxMpQ/vqFhtNjEjNlVdiCbKoqc5C4BYjAn+NYPu8HBZ44mu3dnn6EnYrTo41+43cX8k5lbr9IHSLeixQxAJQK1m1uiPz7rwhviyuc6YCE0RfRUTVhPKFy7zMYN+mG2cQpKx7SdibfwYEl/Z4TGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jK+oJBeU; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738533730; c=relaxed/simple;
+	bh=LDMP5ocCv2b54z5FTYdsobd086+fSbNWjE/7NKeVz1A=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fonjBg/gheG9u4bQakEmwR2taygGrDE2PdD9ptyfJFYZe6+VRq/S5selQZ6EBJFeLg82gI1PHxRnApS9uPMYly57Lc1ytMaN1i5YQKVP8Af1MzS/9kyi3okTTarAj792nO2aBJxJk9y16CJb8zfd+vx0pPVjAItzcZf9mU4Ll0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZXRcodMt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jK+oJBeU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738524991; x=1770060991;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=423H48RKVlBKH9lUqUH62aqWKmvwsnAKJUfe7Vsrx6c=;
-  b=jK+oJBeUBO4XijiBUgV7EfP0QLpE8B5IKuKFhmZnOxcv57nKFXENNCqA
-   vPEK/tvSRAG5c59/xwfja+OPpDpAq5kIuyIpSPWIIHG/qmuYR4Uk0kBBW
-   s4u+xhjlmVYG9y4Yu0n7xSpIdpmKdJKkp0mFEF+iM4Sy8wTvl6ALcSRD5
-   +pyhcy3DakqIvio47XRDGvlb+MsEmtKwIZowKGQuTtc699L/XyybHVrSc
-   jrV/YsM3PwncfUYSeSTuECkwJVE34rQbKabh3s5VUdaXiF819KpLK66Yc
-   hov+H9+1ouNBmT15xnGs3iOuQVcL2IHpv0SmJM4FS39eWA4wOZf4kKGKg
-   g==;
-X-CSE-ConnectionGUID: D37koi3TR1qV8iUcwKiIVw==
-X-CSE-MsgGUID: GATb4k8VTySdoKP+mrSFPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50436894"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="50436894"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 11:36:30 -0800
-X-CSE-ConnectionGUID: aZ8zY5owTve3tVIgXLazDw==
-X-CSE-MsgGUID: cAl0q1E8SKiJc3FjKJO4Mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110559517"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 02 Feb 2025 11:36:29 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tefla-000q1r-02;
-	Sun, 02 Feb 2025 19:36:26 +0000
-Date: Mon, 3 Feb 2025 03:35:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 75/80]
- drivers/video/fbdev/core/fb_defio.c:272:3: error: call to undeclared
- function 'mapping_wrprotect_page'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202502030356.JNL7I49s-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZXRcodMt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738533727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=m9jqbI58z8lbBCxnvnDR2lkGVJF04t11LqC30Ok4LBg=;
+	b=ZXRcodMtABjddIsjkKB2/6LS0RmedrYnNUNLmSmSmhK5fC/Z6NSPGa20j392wohSbngXMB
+	7bY1jlXKszTUG+dbM5inWzXbtndJ7m6qrEyFGdLDan+RMcvIzjI6vdnydCWQskKPB3XNSV
+	2dvQ3987XckB5NcXvGgOjk4sn/N2d60=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-278-QK2KLe8KNjOPyISNr3Pfjg-1; Sun,
+ 02 Feb 2025 17:02:03 -0500
+X-MC-Unique: QK2KLe8KNjOPyISNr3Pfjg-1
+X-Mimecast-MFC-AGG-ID: QK2KLe8KNjOPyISNr3Pfjg
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 020B418004A9
+	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 22:02:03 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9098D1956094;
+	Sun,  2 Feb 2025 22:02:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, d79bc8f7)
+Date: Sun, 02 Feb 2025 22:02:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <41725.125020217020301129@us-mta-278.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 76UrfRpaa9NuNiUoziho66qUG83Ly9tGpLAyP0kUwYk_1738533723
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   7de6fd8ab65003f050aa58e705592745717ed318
-commit: 6a9318f28d7e371692838677c364145fe04b1093 [75/80] fb_defio: do not use deprecated page->mapping, index fields
-config: arm-randconfig-001-20250203 (https://download.01.org/0day-ci/archive/20250203/202502030356.JNL7I49s-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030356.JNL7I49s-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502030356.JNL7I49s-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/video/fbdev/core/fb_defio.c:272:3: error: call to undeclared function 'mapping_wrprotect_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     272 |                 mapping_wrprotect_page(fbdefio->mapping, pgoff, 1, page);
-         |                 ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/mapping_wrprotect_page +272 drivers/video/fbdev/core/fb_defio.c
+Kernel information:
+    Commit message: Merge tag 'turbostat-2025.02.02' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/lenb/linux
 
-   258	
-   259	/* workqueue callback */
-   260	static void fb_deferred_io_work(struct work_struct *work)
-   261	{
-   262		struct fb_info *info = container_of(work, struct fb_info, deferred_work.work);
-   263		struct fb_deferred_io_pageref *pageref, *next;
-   264		struct fb_deferred_io *fbdefio = info->fbdefio;
-   265	
-   266		/* here we wrprotect the page's mappings, then do all deferred IO. */
-   267		mutex_lock(&fbdefio->lock);
-   268		list_for_each_entry(pageref, &fbdefio->pagereflist, list) {
-   269			struct page *page = pageref->page;
-   270			pgoff_t pgoff = pageref->offset >> PAGE_SHIFT;
-   271	
- > 272			mapping_wrprotect_page(fbdefio->mapping, pgoff, 1, page);
-   273		}
-   274	
-   275		/* driver's callback with pagereflist */
-   276		fbdefio->deferred_io(info, &fbdefio->pagereflist);
-   277	
-   278		/* clear the list */
-   279		list_for_each_entry_safe(pageref, next, &fbdefio->pagereflist, list)
-   280			fb_deferred_io_pageref_put(pageref, info);
-   281	
-   282		mutex_unlock(&fbdefio->lock);
-   283	}
-   284	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1652291603
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1652291603-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1652291603-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1652291603-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
