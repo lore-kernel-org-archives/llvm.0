@@ -1,109 +1,135 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B4C846D
-	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 00:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7923241C6E
+	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 06:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738456330; cv=none; b=mRw1UkIQAu5FwnfiAGNLB+VKlE961W6c4BE5iFVFPeyjEDLedM7JRd/VKPBzK8HiUu0OhE4Ov5pgTkvzr6e8Da2GN9c8fDnfONAUmToaWtSWEFbk5ldKkHJThLeFUTkw1L4TVljDkWDdiuZehoIjECS7a/m2MDKZZ9T4sMTJtwg=
+	t=1738477344; cv=none; b=VxcGcdKQYVOckQvdDJd1i81eKLipEniLR6xwZY4LEqW+CTEAibYJM2YCZNGJmrRGGtu+AlwZSNui283aSrJtm/xaPm3Vk2kiwONZTDjrk4FiqIDBUc32DtvcfAlUhuIoOsgHv0QBghyRSnXp6Qa2Wj95nIIBMyiP3GWnRcogfOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738456330; c=relaxed/simple;
-	bh=UH3atOoDwnmwkEuTcQ0WEEJzBUdE8r8HANwhuv7fuSY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lA1p2L4iSJGBvdkQAr+AVGcBlUXGM7hJ0/KzE5r+RN4fM280nyL4RWi4dPvKCAFU9FHgkQPxRNe52sSrPlpmyaOHexy1zScdtZ214kbZh38TBlFMXJyZV9joKPQTLOnurwG6tCq0Sl/tSZDQhyGJwohKzChZ/D5DZJl3VYrpqZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D5cadngJ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1738477344; c=relaxed/simple;
+	bh=T9jjr5yNJujIiKaW63A2Y58cBrapCoUrLyJT07flpW0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DbX30Wuu4osgfSqHF4kTYpGUyP6VdOIpYTHhxFQSNfWwFcn3AMBUBOz2psGWLR7bI0dYemWWJpL0MWnAo9Xzh+QPOp38YZntF7AbVe550N77CAxqfWFdPzUeSddU12DJEowCfp4NEJav77kpKbglieLMGL82deqLADBkmu4xy7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HYpdriww; arc=none smtp.client-ip=91.218.175.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D5cadngJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738456327;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HYpdriww"
+Message-ID: <1b7ae999-c081-45c8-a914-f215c829d57e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738477335;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=R0WaWP783f07jwI/q2XzhYPSHCA8mXMp0d/GRVp1PgU=;
-	b=D5cadngJ3JS5SDz5e637QULl4KB8lboj17IWR2cnri72CF48Bb2RyISpbR6Npb1mt6+wck
-	Lc62E8e/UFr4nvV+tRgVRCLQk8lDxwV+YJeuS8YFCiarRdg60POH6wEoEFfurTi4GpplqS
-	Yv+yVJfHNdPquYUTm4bVVvoKWutSHWk=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-471-cCAAB065N2OV7NaqTjOasQ-1; Sat,
- 01 Feb 2025 19:32:06 -0500
-X-MC-Unique: cCAAB065N2OV7NaqTjOasQ-1
-X-Mimecast-MFC-AGG-ID: cCAAB065N2OV7NaqTjOasQ
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7774C1800370
-	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 00:32:05 +0000 (UTC)
-Received: from [172.64.3.40] (unknown [10.30.32.189])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 22C4A1800980;
-	Sun,  2 Feb 2025 00:32:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
- upstream-mainline, a86bf228)
-Date: Sun, 02 Feb 2025 00:32:04 -0000
-To: llvm@lists.linux.dev
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VX6SmOLzx1meiUouVUG4j5d233T4zSo6WdF6Bre80cU=;
+	b=HYpdriwwjDJVozqO86kstPzP/UohWn8OJaVLab46/fI1sZkPvasOyAvX5XB6vp04m2j3h+
+	knbMs7p6IPCxJVv6QOcCwXo+4HIRzGoOpF4y9vUlLP6oHvgDayh39EFRq759Vau5mTNm1c
+	9Xbw61w4kJzmKpdV0D6Ek37gw9SuVMc=
+Date: Sat, 1 Feb 2025 22:22:07 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <14687.125020119320600483@us-mta-471.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: TN2M7zTB3_sytb2hCRLqWEA7YCE6lQEGgJi0bPhFP1I_1738456325
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'pull-misc' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/viro/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1651714562
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1651714562-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1651714562-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1651714562-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+Subject: Re: [PATCH] selftests: bpf: Support dynamic linking LLVM if static
+ not available
+Content-Language: en-GB
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: shuah@kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ nathan@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <872b64e93de9a6cd6a7a10e6a5c5e7893704f743.1738276344.git.dxu@dxuuu.xyz>
+ <2d4773f9-c3a4-4512-9c5c-92f841c326f5@linux.dev>
+ <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <rgcdc7zokwfoars7c2pzredogea3rvolbnzkvko7q6lbgjnvfx@oeyzed5zalpb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+On 2/1/25 12:23 AM, Daniel Xu wrote:
+> Hi Yonghong,
+>
+> On Thu, Jan 30, 2025 at 10:28:11PM -0800, Yonghong Song wrote:
+>>
+>>
+>> On 1/30/25 2:33 PM, Daniel Xu wrote:
+>>> Since 67ab80a01886 ("selftests/bpf: Prefer static linking for LLVM
+>>> libraries"), only statically linking test_progs is supported. However,
+>>> some distros only provide a dynamically linkable LLVM.
+>>>
+>>> This commit adds a fallback for dynamically linking LLVM if static
+>>> linking is not available. If both options are available, static linking
+>>> is chosen.
+>>>
+>>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+>>> ---
+>>>    tools/testing/selftests/bpf/Makefile | 11 ++++++++---
+>>>    1 file changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>>> index 6722080b2107..da514030a153 100644
+>>> --- a/tools/testing/selftests/bpf/Makefile
+>>> +++ b/tools/testing/selftests/bpf/Makefile
+>>> @@ -184,9 +184,14 @@ ifeq ($(feature-llvm),1)
+>>>      LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>>>      # both llvm-config and lib.mk add -D_GNU_SOURCE, which ends up as conflict
+>>>      LLVM_CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+>>> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> -  LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> -  LLVM_LDLIBS  += -lstdc++
+>>> +  # Prefer linking statically if it's available, otherwise fallback to shared
+>>> +  ifeq ($(shell $(LLVM_CONFIG) --link-static --libs &> /dev/null && echo static),static)
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-static --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +    LLVM_LDLIBS  += -lstdc++
+>>> +  else
+>>> +    LLVM_LDLIBS  += $(shell $(LLVM_CONFIG) --link-shared --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>> +  endif
+>>>      LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>>>    endif
+>> Although your change looks good, but maybe you can look at bpftool Makefile?
+>>
+>>    # If LLVM is available, use it for JIT disassembly
+>>    CFLAGS  += -DHAVE_LLVM_SUPPORT
+>>    LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
+>>    # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
+>>    # (e.g. when bpftool build is called from selftests build as selftests
+>>    # Makefile includes lib.mk which sets -D_GNU_SOURCE) which would cause
+>>    # compilation error due to redefinition. Let's filter it out here.
+>>    CFLAGS  += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
+>>    LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>    ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
+>>      LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
+>>      LIBS += -lstdc++
+>>    endif
+>>    LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
+>>
+>> It would be great if the selftests shared library handling to be the same as bpftool's.
+> So bpftool is both an internally consumed (from selftests) dependency as
+> well as a tool packaged up by distros. For the latter case, distros
+> prefer dynamic linking.
+
+I hacked llvm to have both static and shared libraries installed and indeed
+`llvm-config --shared-mode` prefers shared mode.
+
+So yes, your existing change looks good. Thanks.
+
+>
+> So unfortunately, I think these probably need to be defined separately.
+> The code looks similar but the use cases are different.
+>
+> Thanks,
+> Daniel
 
