@@ -1,58 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2645A29D0D;
-	Sun,  2 Feb 2025 17:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26CD2BD11;
+	Sun,  2 Feb 2025 19:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738515679; cv=none; b=X6rxPYch04aAglLYspQHBwKzkSAozpBhrd/Dm8gX7dH/3D1ppD5MntK9/0Bprb62TW5eWAX+44tuGqhKDLLQNRdlGcyLfCv0tmSpNWPz3eWZLiMGoNWmXKLZTIrYPEOp4wE+XZb8Fkq+JTFQT3uMqJCq1LsZCFI53jbY0o+5qfg=
+	t=1738524992; cv=none; b=MudjP73vyIvQLRQKco5ohrMcBOuyF0mz39h4vdiPXxvR6z31dagOrzPN5EEYP7dbYPMbVaE++2StbIe1zBGWiVzz3dpI2gk9+/Fg/IgZlKXmCIkw1ZvnmDI5jZ0BiNMKQE+PtbSkaYWZ3xy7Y146aqpzTZpraR7nXIYDbWtYKnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738515679; c=relaxed/simple;
-	bh=J/oLaV2P8FkecYC8k9GOwakzMeUlA5hQSlpcPfvoIjI=;
+	s=arc-20240116; t=1738524992; c=relaxed/simple;
+	bh=423H48RKVlBKH9lUqUH62aqWKmvwsnAKJUfe7Vsrx6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JveA/yOa0jbtCHsnUIGZVp6uBaBjb4NXDd5Bc1SU7qex3GXQzH/oxj5OiyJ7bvRqFOnjg7L1KjZA2V2oEaBYmtfPSS2J9pTbSfOrK+VCL1A0dvhlRa//YNVdWH77Hzti/jNgUW7mv6OSm9bOjqkPIrzv+x7gdHVPZgV0EYU5yHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fAFh0qSk; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=LdKF5EPELKdk1uwgMQIqTiG/jxMpQ/vqFhtNjEjNlVdiCbKoqc5C4BYjAn+NYPu8HBZ44mu3dnn6EnYrTo41+43cX8k5lbr9IHSLeixQxAJQK1m1uiPz7rwhviyuc6YCE0RfRUTVhPKFy7zMYN+mG2cQpKx7SdibfwYEl/Z4TGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jK+oJBeU; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fAFh0qSk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jK+oJBeU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738515678; x=1770051678;
+  t=1738524991; x=1770060991;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J/oLaV2P8FkecYC8k9GOwakzMeUlA5hQSlpcPfvoIjI=;
-  b=fAFh0qSkwjTBFukOUMs1rhdpnUfXrz2TM1OkmxEEYvX9X4tptEq/tPhJ
-   wrYKfqHaOlTYH0pvv3vgHK+j1/XEVWWpz0lCcNiIjLBo035vQ5p7+pJL1
-   Y2alQZuzqanPPenDWpbjPwtZS6LCXfDPEJxkOx90HdlUnnnIMt1/OgM6+
-   iuRGazqE3rYxPHCaqp8dA3ubB0OUkLopV9zGs15AeyyZkGUXuflndnuIl
-   z+v6SnIj/VrARRzXarnMCiFmQtHuMKwFJhekcMfFW07AA8make+pHoxqU
-   qwldwCg8tgwUvAp7sdunUCqi10f2Xvr8z+H0Hu9RPWnupvpN4Ij9tntVv
-   A==;
-X-CSE-ConnectionGUID: q8dZIIOKRYiqNzVwtAf6Jw==
-X-CSE-MsgGUID: tyD2JqiJQhGGYP7AhR37hA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="42769216"
-X-IronPort-AV: E=Sophos;i="6.13,254,1732608000"; 
-   d="scan'208";a="42769216"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 09:01:15 -0800
-X-CSE-ConnectionGUID: CLBpFGO4Trm9MUve+Evezw==
-X-CSE-MsgGUID: JEpXKWFnRI2qRH4YO19s3g==
+  bh=423H48RKVlBKH9lUqUH62aqWKmvwsnAKJUfe7Vsrx6c=;
+  b=jK+oJBeUBO4XijiBUgV7EfP0QLpE8B5IKuKFhmZnOxcv57nKFXENNCqA
+   vPEK/tvSRAG5c59/xwfja+OPpDpAq5kIuyIpSPWIIHG/qmuYR4Uk0kBBW
+   s4u+xhjlmVYG9y4Yu0n7xSpIdpmKdJKkp0mFEF+iM4Sy8wTvl6ALcSRD5
+   +pyhcy3DakqIvio47XRDGvlb+MsEmtKwIZowKGQuTtc699L/XyybHVrSc
+   jrV/YsM3PwncfUYSeSTuECkwJVE34rQbKabh3s5VUdaXiF819KpLK66Yc
+   hov+H9+1ouNBmT15xnGs3iOuQVcL2IHpv0SmJM4FS39eWA4wOZf4kKGKg
+   g==;
+X-CSE-ConnectionGUID: D37koi3TR1qV8iUcwKiIVw==
+X-CSE-MsgGUID: GATb4k8VTySdoKP+mrSFPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50436894"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="50436894"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 11:36:30 -0800
+X-CSE-ConnectionGUID: aZ8zY5owTve3tVIgXLazDw==
+X-CSE-MsgGUID: cAl0q1E8SKiJc3FjKJO4Mw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="115078622"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110559517"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 02 Feb 2025 09:01:13 -0800
+  by orviesa007.jf.intel.com with ESMTP; 02 Feb 2025 11:36:29 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tedLK-000pvL-2x;
-	Sun, 02 Feb 2025 17:01:10 +0000
-Date: Mon, 3 Feb 2025 01:00:38 +0800
+	id 1tefla-000q1r-02;
+	Sun, 02 Feb 2025 19:36:26 +0000
+Date: Mon, 3 Feb 2025 03:35:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bvanassche:thread-safety 7/28] WARNING: modpost:
- "__mnt_is_readonly" [fs/nfsd/nfsd.ko] has no CRC!
-Message-ID: <202502030002.BO2WF8s1-lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 75/80]
+ drivers/video/fbdev/core/fb_defio.c:272:3: error: call to undeclared
+ function 'mapping_wrprotect_page'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202502030356.JNL7I49s-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,194 +66,59 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/bvanassche/linux thread-safety
-head:   1fb61c841ca602318a356ae71432c2b8afbf7224
-commit: b62070be0ff6a179566a2603fba3d5b730d191b2 [7/28] include/linux/cleanup.h: Add thread-safety annotations
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20250203/202502030002.BO2WF8s1-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030002.BO2WF8s1-lkp@intel.com/reproduce)
+Hi Lorenzo,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   7de6fd8ab65003f050aa58e705592745717ed318
+commit: 6a9318f28d7e371692838677c364145fe04b1093 [75/80] fb_defio: do not use deprecated page->mapping, index fields
+config: arm-randconfig-001-20250203 (https://download.01.org/0day-ci/archive/20250203/202502030356.JNL7I49s-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030356.JNL7I49s-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502030002.BO2WF8s1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502030356.JNL7I49s-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: EXPORT symbol "sched_setattr_nocheck" [vmlinux] version generation failed, symbol will not be versioned.
-Is "sched_setattr_nocheck" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_trylock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock_killable" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock_killable" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_trylock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "atomic_dec_and_mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "atomic_dec_and_mutex_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__mnt_is_readonly" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__mnt_is_readonly" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/des_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/des_s390.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/aes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/aes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/paes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/paes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [arch/s390/crypto/prng.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/prng.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_lock_killable" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [kernel/torture.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [kernel/torture.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fuse/cuse.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fuse/cuse.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fuse/virtiofs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fuse/virtiofs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/configfs/configfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/configfs/configfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/dlm/dlm.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/dlm/dlm.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/netfs/netfs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/netfs/netfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/netfs/netfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/cramfs/cramfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/cramfs/cramfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/squashfs/squashfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/squashfs/squashfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fat/fat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/fat.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "atomic_dec_and_mutex_lock" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfs/nfsv4.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfs/nfsv4.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfsd/nfsd.ko] has no CRC!
->> WARNING: modpost: "__mnt_is_readonly" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/lockd/lockd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/lockd/lockd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "__mnt_is_readonly" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/udf/udf.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/udf/udf.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nilfs2/nilfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nilfs2/nilfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/ocfs2_stack_user.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/ocfs2_stack_user.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/cluster/ocfs2_nodemanager.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/cluster/ocfs2_nodemanager.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [crypto/crypto_user.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [crypto/crypto_user.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [lib/kunit/kunit.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [lib/kunit/kunit.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [lib/kunit/kunit.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [lib/math/prime_numbers.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [lib/math/prime_numbers.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [lib/test_lockup.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [lib/test_lockup.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/virtio/virtio_balloon.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/virtio/virtio_balloon.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [drivers/virtio/virtio_balloon.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/virtio/virtio_mem.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/virtio/virtio_mem.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/char/hw_random/rng-core.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [drivers/char/hw_random/rng-core.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/char/hw_random/rng-core.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock_interruptible" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "ww_mutex_unlock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "ww_mutex_trylock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "atomic_dec_and_mutex_lock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/gpu/drm/drm.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock_interruptible" [drivers/gpu/drm/drm_shmem_helper.ko] has no CRC!
-WARNING: modpost: "ww_mutex_unlock" [drivers/gpu/drm/drm_shmem_helper.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock" [drivers/gpu/drm/drm_shmem_helper.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/gpu/drm/drm_kms_helper.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [drivers/gpu/drm/drm_kms_helper.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/gpu/drm/drm_kms_helper.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock_interruptible" [drivers/gpu/drm/virtio/virtio-gpu.ko] has no CRC!
-WARNING: modpost: "ww_mutex_unlock" [drivers/gpu/drm/virtio/virtio-gpu.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/gpu/drm/virtio/virtio-gpu.ko] has no CRC!
-WARNING: modpost: "ww_mutex_lock" [drivers/gpu/drm/virtio/virtio-gpu.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/gpu/drm/virtio/virtio-gpu.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/block/loop.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/block/loop.ko] has no CRC!
-WARNING: modpost: "mutex_lock_killable" [drivers/block/loop.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/block/nbd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/block/nbd.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [drivers/block/nbd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/block/drbd/drbd.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [drivers/block/drbd/drbd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/block/drbd/drbd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/block/rbd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/block/rbd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/misc/enclosure.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/misc/enclosure.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/device_handler/scsi_dh_alua.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/device_handler/scsi_dh_alua.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/scsi_transport_spi.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/scsi_transport_spi.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/scsi_transport_iscsi.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/scsi_transport_iscsi.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/scsi_transport_sas.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/scsi_transport_sas.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/libsas/libsas.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [drivers/scsi/libsas/libsas.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/libsas/libsas.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/scsi_transport_srp.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [drivers/scsi/scsi_transport_srp.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [drivers/scsi/scsi_transport_srp.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [drivers/scsi/libiscsi.ko] has no CRC!
+>> drivers/video/fbdev/core/fb_defio.c:272:3: error: call to undeclared function 'mapping_wrprotect_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     272 |                 mapping_wrprotect_page(fbdefio->mapping, pgoff, 1, page);
+         |                 ^
+   1 error generated.
+
+
+vim +/mapping_wrprotect_page +272 drivers/video/fbdev/core/fb_defio.c
+
+   258	
+   259	/* workqueue callback */
+   260	static void fb_deferred_io_work(struct work_struct *work)
+   261	{
+   262		struct fb_info *info = container_of(work, struct fb_info, deferred_work.work);
+   263		struct fb_deferred_io_pageref *pageref, *next;
+   264		struct fb_deferred_io *fbdefio = info->fbdefio;
+   265	
+   266		/* here we wrprotect the page's mappings, then do all deferred IO. */
+   267		mutex_lock(&fbdefio->lock);
+   268		list_for_each_entry(pageref, &fbdefio->pagereflist, list) {
+   269			struct page *page = pageref->page;
+   270			pgoff_t pgoff = pageref->offset >> PAGE_SHIFT;
+   271	
+ > 272			mapping_wrprotect_page(fbdefio->mapping, pgoff, 1, page);
+   273		}
+   274	
+   275		/* driver's callback with pagereflist */
+   276		fbdefio->deferred_io(info, &fbdefio->pagereflist);
+   277	
+   278		/* clear the list */
+   279		list_for_each_entry_safe(pageref, next, &fbdefio->pagereflist, list)
+   280			fb_deferred_io_pageref_put(pageref, info);
+   281	
+   282		mutex_unlock(&fbdefio->lock);
+   283	}
+   284	
 
 -- 
 0-DAY CI Kernel Test Service
