@@ -1,65 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258A1D63CA;
-	Sun,  2 Feb 2025 11:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2816142AA4;
+	Sun,  2 Feb 2025 11:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738494700; cv=none; b=eHRE/5CIeRMR52/gJo+azOwfr+IAuPaCwdeM6KEWgaT0ze+7gck8ILF2Vx7ukdQHX/AFlDaVqUUCi5JCoCuUaCHkgowDYVZGtU9z7vYsLu5BIRQ8GVpcQehiQCFSo14mBIZX6ItOeU8FWCSF0E3SVrMTJc4dh2juuFRoEZARZHU=
+	t=1738495961; cv=none; b=B9sjhOwSVkY8wPJrLD9+3Ga0ECFdpxp1zr1ZRoZdo/EOXAiLSZyrHU7b4xNaHsXziAQsf5Yid/O7q+eLaEEZ/lwv7XcfPUq6DNxU9R5NIciJeTGFtXT9wkyvW9dQnnrXxQrVjBjpHA2Bt4EgDi4zPq+cs4QNS1TSdWQc0PTaTSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738494700; c=relaxed/simple;
-	bh=jz3MqgGH5E5HKEsnRKw2zBT4wqE3A51XYO9CnVtLyy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dyn4daedlouFgLOwNtqdAMD9qqJfnh6pDdZFsdXxEv/gWZa124Ci4C7yFaUq3v8K2FV+ypxpngI3mhS1sTciR9dgewh+icobhNwKWBMoNqo4Tvy5LNu/oLatDJdZjyRckRE68120Zh9fm4ChcNfZrTJchXdKN0dqsyH2LETft8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ug7MiW4r; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1738495961; c=relaxed/simple;
+	bh=Qmx5MWkJHxihCnDHNluyVHcDDLrjl1SQrJZ//Y2lZNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jObUzj9VONQUk5U7XftgxPojaI7CfDGxAAKL1VjQNfHEMX09/7U6WEJ90GPWcQtMkuFJKSNoGtvqwkA26NgqqHbatOprbxAjsN9ieQ7wXm8WPO12p/27/6IcVyTdGehmghhp7sHLp+rY+rtVJ00FAPldLoTqGl1FPusLKHFaKjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XnffBsm9; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ug7MiW4r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XnffBsm9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738494698; x=1770030698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jz3MqgGH5E5HKEsnRKw2zBT4wqE3A51XYO9CnVtLyy0=;
-  b=Ug7MiW4r8xzqm2q1ORyarsLVyyZXhPOyeCg65vOPsm2+lRfD1njjMmp+
-   464nV4KNFwojaVUj3IakTvFT2xpuE6X8z1KPIQV7hBxH4Yj1lphZWr9Uu
-   EBZlwvwGfsJLsTnzbBUJnzKRvHJjBiBaeoByPpy/oLgC46MYGUIOVIP7c
-   faeizCO9/k4ixeLTCYxWyhCuac/f+KVV7VYoRzQfcVtbV2CTmZxZWs8/z
-   1mV3tfnraCQ2jxoLeAACQiLlmWpgzdHl8/lTxYJpThqTR6vbFaaXv76y8
-   CmBTYUwDC9FYPlgGZhkF8zucyucoclONpOqpwB+B2YX0YqPOdJ4er1wjo
+  t=1738495959; x=1770031959;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Qmx5MWkJHxihCnDHNluyVHcDDLrjl1SQrJZ//Y2lZNI=;
+  b=XnffBsm9H/bIDPLKFASCaqwD8Wem9yP+gGY7mJi7pqqQhf9/ez3dzOU4
+   Ov+rdmVBbtDZITlFHE3Y6C7W3PcdX7mpGimF+WuU8HAZSCSNTIRSaBfsY
+   FAlYd1lazXXgiFGsBwT7mGzv4Q/frP22ZQqB5vHckRSrt6rsNzLcXW6AF
+   FzxdcB/wfVsS8X4qFNX4JYqgVAuS38snTx2AU4Xdo1vlnrQLueJAgKLjP
+   bTJ5+MlELw07cEE7/ucVJcDD/SXLpkN0LXG6o8WOiuaAlzpo/U5ceFRs3
+   b4lqOIvhSM0vn6ZjiBypCUV+itS39UPviy6OPjfrgdWFb1yF10ncmUoSy
    g==;
-X-CSE-ConnectionGUID: CS5DjOBiT2elGjVURwZHgw==
-X-CSE-MsgGUID: cdFo4td5Q96Z8Hjvfq/FgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="49663968"
+X-CSE-ConnectionGUID: m6+myj+OTy+sDbWnBcw+gw==
+X-CSE-MsgGUID: iGJgF38tTMGGFx5/Vaj38g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="49604007"
 X-IronPort-AV: E=Sophos;i="6.13,253,1732608000"; 
-   d="scan'208";a="49663968"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 03:11:38 -0800
-X-CSE-ConnectionGUID: AiCiN+YdRe69qT+ilPyNUQ==
-X-CSE-MsgGUID: fvqwam5BT6ORCsDBQpOHDg==
+   d="scan'208";a="49604007"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 03:32:38 -0800
+X-CSE-ConnectionGUID: esd5+4bCSeemdS73KlwlnQ==
+X-CSE-MsgGUID: MX/aaKvNSeS3zghNMw1ITA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110478693"
+   d="scan'208";a="110901589"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 02 Feb 2025 03:11:35 -0800
+  by orviesa008.jf.intel.com with ESMTP; 02 Feb 2025 03:32:37 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1teXsy-000pbT-1m;
-	Sun, 02 Feb 2025 11:11:32 +0000
-Date: Sun, 2 Feb 2025 19:10:54 +0800
+	id 1teYDK-000pcZ-1e;
+	Sun, 02 Feb 2025 11:32:34 +0000
+Date: Sun, 2 Feb 2025 19:32:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>,
-	Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Ricardo B. Marliere" <rbm@suse.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH 2/2] LoadPin: Make sysctl table const
-Message-ID: <202502021853.d0nqHvPc-lkp@intel.com>
-References: <20250123-sysctl-kees-v1-2-533359e74d66@suse.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bvanassche:thread-safety 6/28] WARNING: modpost: "mutex_lock"
+ [fs/fat/msdos.ko] has no CRC!
+Message-ID: <202502021944.ked9b99B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,102 +61,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250123-sysctl-kees-v1-2-533359e74d66@suse.com>
 
-Hi Ricardo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on a9a5e0bdc5a77a7c662ad4be0ad661f0b0d5e99d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-B-Marliere/yama-Make-sysctl-table-const/20250124-033808
-base:   a9a5e0bdc5a77a7c662ad4be0ad661f0b0d5e99d
-patch link:    https://lore.kernel.org/r/20250123-sysctl-kees-v1-2-533359e74d66%40suse.com
-patch subject: [PATCH 2/2] LoadPin: Make sysctl table const
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250202/202502021853.d0nqHvPc-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250202/202502021853.d0nqHvPc-lkp@intel.com/reproduce)
+tree:   https://github.com/bvanassche/linux thread-safety
+head:   1fb61c841ca602318a356ae71432c2b8afbf7224
+commit: 165738e93ed8ffda3d0ee4b2d958b89a23acd6d3 [6/28] linux/mutex.h: Annotate struct mutex and mutex functions
+config: arm-imx_v6_v7_defconfig (https://download.01.org/0day-ci/archive/20250202/202502021944.ked9b99B-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250202/202502021944.ked9b99B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502021853.d0nqHvPc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502021944.ked9b99B-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> security/loadpin/loadpin.c:75:34: error: cannot assign to variable 'loadpin_sysctl_table' with const-qualified type 'const struct ctl_table[1]'
-      75 |                 loadpin_sysctl_table[0].extra1 = SYSCTL_ZERO;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   security/loadpin/loadpin.c:56:31: note: variable 'loadpin_sysctl_table' declared const here
-      56 | static const struct ctl_table loadpin_sysctl_table[] = {
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-      57 |         {
-         |         ~
-      58 |                 .procname       = "enforce",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      59 |                 .data           = &enforce,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      60 |                 .maxlen         = sizeof(int),
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      61 |                 .mode           = 0644,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~
-      62 |                 .proc_handler   = proc_dointvec_minmax,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      63 |                 .extra1         = SYSCTL_ONE,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      64 |                 .extra2         = SYSCTL_ONE,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      65 |         },
-         |         ~~
-      66 | };
-         | ~
-   security/loadpin/loadpin.c:77:34: error: cannot assign to variable 'loadpin_sysctl_table' with const-qualified type 'const struct ctl_table[1]'
-      77 |                 loadpin_sysctl_table[0].extra1 = SYSCTL_ONE;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   security/loadpin/loadpin.c:56:31: note: variable 'loadpin_sysctl_table' declared const here
-      56 | static const struct ctl_table loadpin_sysctl_table[] = {
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
-      57 |         {
-         |         ~
-      58 |                 .procname       = "enforce",
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      59 |                 .data           = &enforce,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      60 |                 .maxlen         = sizeof(int),
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      61 |                 .mode           = 0644,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~
-      62 |                 .proc_handler   = proc_dointvec_minmax,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      63 |                 .extra1         = SYSCTL_ONE,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      64 |                 .extra2         = SYSCTL_ONE,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      65 |         },
-         |         ~~
-      66 | };
-         | ~
-   2 errors generated.
-
-
-vim +75 security/loadpin/loadpin.c
-
-9b091556a073a9 Kees Cook 2016-04-20  67  
-60ba1028fc7b73 Kees Cook 2022-12-09  68  static void set_sysctl(bool is_writable)
-9b091556a073a9 Kees Cook 2016-04-20  69  {
-9b091556a073a9 Kees Cook 2016-04-20  70  	/*
-9b091556a073a9 Kees Cook 2016-04-20  71  	 * If load pinning is not enforced via a read-only block
-9b091556a073a9 Kees Cook 2016-04-20  72  	 * device, allow sysctl to change modes for testing.
-9b091556a073a9 Kees Cook 2016-04-20  73  	 */
-60ba1028fc7b73 Kees Cook 2022-12-09  74  	if (is_writable)
-60ba1028fc7b73 Kees Cook 2022-12-09 @75  		loadpin_sysctl_table[0].extra1 = SYSCTL_ZERO;
-60ba1028fc7b73 Kees Cook 2022-12-09  76  	else
-60ba1028fc7b73 Kees Cook 2022-12-09  77  		loadpin_sysctl_table[0].extra1 = SYSCTL_ONE;
-60ba1028fc7b73 Kees Cook 2022-12-09  78  }
-60ba1028fc7b73 Kees Cook 2022-12-09  79  #else
-60ba1028fc7b73 Kees Cook 2022-12-09  80  static inline void set_sysctl(bool is_writable) { }
-60ba1028fc7b73 Kees Cook 2022-12-09  81  #endif
-60ba1028fc7b73 Kees Cook 2022-12-09  82  
+WARNING: modpost: EXPORT symbol "mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "mutex_lock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "mutex_unlock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "ww_mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "ww_mutex_unlock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "ww_mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "ww_mutex_trylock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
+Is "mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "mutex_lock_killable" [vmlinux] version generation failed, symbol will not be versioned.
+Is "mutex_lock_killable" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "mutex_trylock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "ww_mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "ww_mutex_lock" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "ww_mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
+Is "ww_mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
+WARNING: modpost: EXPORT symbol "atomic_dec_and_mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
+Is "atomic_dec_and_mutex_lock" prototyped in <asm/asm-prototypes.h>?
+>> WARNING: modpost: "mutex_lock" [fs/fat/msdos.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [fs/fat/msdos.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [fs/isofs/isofs.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [fs/isofs/isofs.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [fs/udf/udf.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [fs/udf/udf.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/gpio/gpio-siox.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/gpio/gpio-siox.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/dma/dmatest.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/dma/dmatest.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/net/wireless/ath/ath10k/ath10k_sdio.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/net/wireless/ath/ath10k/ath10k_sdio.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/net/wireless/marvell/mwifiex/mwifiex.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/net/wireless/marvell/mwifiex/mwifiex.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock_interruptible" [drivers/net/wireless/marvell/mwifiex/mwifiex.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock" [drivers/net/wireless/ti/wlcore/wlcore.ko] has no CRC!
+>> WARNING: modpost: "mutex_unlock" [drivers/net/wireless/ti/wlcore/wlcore.ko] has no CRC!
+>> WARNING: modpost: "mutex_lock_interruptible" [drivers/net/wireless/ti/wlcore/wlcore.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/net/wireless/ti/wl12xx/wl12xx.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/net/wireless/ti/wl12xx/wl12xx.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/net/wireless/ti/wl18xx/wl18xx.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/net/wireless/ti/wl18xx/wl18xx.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/usb/misc/usbtest.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/usb/misc/usbtest.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/usb/gadget/legacy/gadgetfs.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/usb/gadget/legacy/gadgetfs.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/usb/gadget/legacy/gadgetfs.ko] has no CRC!
+WARNING: modpost: "mutex_trylock" [drivers/usb/gadget/legacy/gadgetfs.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/usb/class/cdc-acm.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/usb/class/cdc-acm.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/usb/serial/usbserial.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/usb/serial/usbserial.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/usb/serial/ftdi_sio.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/usb/serial/ftdi_sio.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/input/mouse/psmouse.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/input/mouse/psmouse.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/input/mouse/psmouse.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/i2c/adv7180.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/i2c/adv7180.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/i2c/adv7180.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/i2c/ov2680.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/i2c/ov2680.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/i2c/ov5640.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/i2c/ov5640.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/mxl5007t.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/mxl5007t.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/r820t.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/r820t.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/si2157.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/si2157.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/tuner-simple.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/tuner-simple.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/tda18271.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/tda18271.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/tda9887.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/tda9887.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/xc2028.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/xc2028.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/xc4000.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/xc4000.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/tuners/xc5000.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/tuners/xc5000.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/au8522_common.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/au8522_common.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/bcm3510.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/bcm3510.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/cx24117.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/cx24117.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/cxd2099.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/cxd2099.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/cxd2880/cxd2880.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/cxd2880/cxd2880.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dibx000_common.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dibx000_common.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib7000m.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib7000m.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib7000p.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib7000p.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib8000.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib8000.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib9000.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib9000.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/drxd.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/drxd.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/drxk.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/drxk.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/mxl5xx.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/mxl5xx.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/mxl692.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/mxl692.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/rtl2832_sdr.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/rtl2832_sdr.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/rtl2832_sdr.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/si2168.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/si2168.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/stv090x.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/stv090x.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/stv0910.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/stv0910.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/tda10071.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/tda10071.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/dvb-frontends/ts2020.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/ts2020.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib0070.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib0070.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/dvb-frontends/dib0090.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/dvb-frontends/dib0090.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/platform/chips-media/coda/coda-vpu.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/platform/chips-media/coda/coda-vpu.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/usb/uvc/uvcvideo.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/usb/uvc/uvcvideo.ko] has no CRC!
+WARNING: modpost: "mutex_lock_interruptible" [drivers/media/usb/uvc/uvcvideo.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/media/spi/cxd2880-spi.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/media/spi/cxd2880-spi.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/hwmon/jc42.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/hwmon/jc42.ko] has no CRC!
+WARNING: modpost: "mutex_lock" [drivers/bluetooth/btnxpuart.ko] has no CRC!
+WARNING: modpost: "mutex_unlock" [drivers/bluetooth/btnxpuart.ko] has no CRC!
 
 -- 
 0-DAY CI Kernel Test Service
