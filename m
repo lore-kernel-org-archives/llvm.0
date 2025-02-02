@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A27A4A04;
-	Sun,  2 Feb 2025 23:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9F51D6195;
+	Sun,  2 Feb 2025 23:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738538517; cv=none; b=B0Fyvn2iMMwKWC4j+IYBym97/sB/qeXlOPBv2ZOD0fvrb1vQ86IZk92zf7quVCZqXC8miOy2IqKnXW1YuwqTwyqjcz63wtxxIQytlqGn3aRptfdJcKualDGto2hy3qxhDUTu5md6lXF7/MqJqnLIYG1PbuT9sCWRryjFpb2Q/Sc=
+	t=1738540444; cv=none; b=e4k57p+UvG9XXXKJ7/lBjp+EWeD5Pm6CEF/iyz45QuRo/8Q+kutn96q30nWE0iypu6nv/PraMK2NijgzRHieARALnWjP2sZgZLd4dXa3JRxXTgEp53oUi1t67DaooWvMn72scwsH3mjUrPfD05J/B53DYKTeNIyviUpfo/qyQfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738538517; c=relaxed/simple;
-	bh=694RFz1/VA0sdL07oF0/KKHf/9dCH3I9qjwGa8GQKrw=;
+	s=arc-20240116; t=1738540444; c=relaxed/simple;
+	bh=SUWqDsVHnwfoFPZ72GnF+anp/orwAfrIOZyK0oRQA3k=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XYEAtgCshZhapTmBd0cbO1asbh4XWyIWduReEdpLAt1f9CxsV7+IhFwyZYGJZyHzRTBUgvXfkTtUq1g3F3xTKyNIR8NSHW8v6WIuvm+a88o09uCIKyxcTIWnkgx/HaLm+nXZ6F1gu5NHTBRrkOAB+sP0MT3xPQGVTyhr/c7urLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LUddUjPa; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=hifMINj5FjaAykX4LktQdbztZ80Jd0EmMTD+IOS6eLEGZGy2yJ3TM1nmrsoSSd62EFf1esWzcN14tH1fCDX/k7Kxtan3adSGgvpVr9UkAYqlZF06bxeubNvBVfLTTy12h7H532CBCs916au6jNZYbzJ5XrTcMbJRGyz+yc3kl4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PvTc7Tec; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LUddUjPa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PvTc7Tec"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738538515; x=1770074515;
+  t=1738540442; x=1770076442;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=694RFz1/VA0sdL07oF0/KKHf/9dCH3I9qjwGa8GQKrw=;
-  b=LUddUjPazQIsgAAUzUoHL+y7VnXGpn/GT9t+6IOYPi9B1nob+6yr64f0
-   kGzYGhO4yUMHEmIlGP/ny3MWNAYqTkIb8Q28IxTHeFvrfODaI1DtYmjFX
-   /HnBRwllRr+M2Cfwf7u7C0NT0B3l2jA0Fcz0QFsfX3Y6vuiA5jXpBnIVc
-   Ck0MFsqIT7CWx0+HkzvP4OCQ5jH43054ikoo/90cX/BeIQdvkckJfK1xs
-   OJpJT1NgvFcXzZS5BRHMzRBVokM+w1sAtOH1WEVPMEkBzkKHuP6iS343b
-   s8oaVm+ms6YwDKy+DzWHy2s15cb0+XVI9W2zKj1IsXMMPSJyIfF0qPVBE
-   A==;
-X-CSE-ConnectionGUID: /KWXw31pTiSBY3qeWuR2OQ==
-X-CSE-MsgGUID: VB3SC45CShKPu1Al5faHGA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38233323"
+  bh=SUWqDsVHnwfoFPZ72GnF+anp/orwAfrIOZyK0oRQA3k=;
+  b=PvTc7TecPOufkAHyDCpeZSrqP8ISL0nscuPT6p2OO0AnnYExxW28D6jH
+   5f7vjjUAWGXEgrtybVXFHAN1UcYHMH/+sSY4BqbKhwTNN2WoYNRk/zLcE
+   /1XlPlmmbZuT+JHoUVXsoVthcaDJr07uDUfys19zkbWXmFwmopS3F6wf5
+   DWYsxiIdgvbc1BD85vxb9WUD9SB8CoZTBgxBVFHe2W1OyWLFbRrzeVMZR
+   53cqmo/HC0h9oJfVxDGvxAL+8vwgHOwHhj1k6Fu2YH013I1do2NhEd8rd
+   883nGHglNBqUBtOUAsxPYomgjg/uBOSYXuRsn5tKChi7rKuCS5kyk1Px+
+   w==;
+X-CSE-ConnectionGUID: flGd5YqUQ+eEGx837zSysw==
+X-CSE-MsgGUID: 6ajP9vPrRpmbvobrj4PXeg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38910844"
 X-IronPort-AV: E=Sophos;i="6.13,254,1732608000"; 
-   d="scan'208";a="38233323"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 15:21:54 -0800
-X-CSE-ConnectionGUID: FwO0+ZiARPqMzPbqcX2IoA==
-X-CSE-MsgGUID: 0VBUPvvERQ2RIGT6obcwnQ==
+   d="scan'208";a="38910844"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 15:53:59 -0800
+X-CSE-ConnectionGUID: iUO26MTCSD+9TzDzAw85QA==
+X-CSE-MsgGUID: slhW8cwuTuWbrWBMsE/lNg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114160547"
+   d="scan'208";a="115292449"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Feb 2025 15:21:52 -0800
+  by orviesa005.jf.intel.com with ESMTP; 02 Feb 2025 15:53:58 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tejHi-000qEx-1N;
-	Sun, 02 Feb 2025 23:21:50 +0000
-Date: Mon, 3 Feb 2025 07:21:44 +0800
+	id 1tejml-000qGS-1W;
+	Sun, 02 Feb 2025 23:53:55 +0000
+Date: Mon, 3 Feb 2025 07:53:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [bvanassche:thread-safety 27/28] WARNING: modpost: EXPORT symbol
- "dm_internal_suspend_fast" [vmlinux] version generation failed, symbol will
- not be versioned.
-Message-ID: <202502030702.xwLrhLOu-lkp@intel.com>
+Subject: [jic23-iio:sparse-friendly-direct-mode 111/166]
+ drivers/iio/adc/ad7173.c:1184:8: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202502030711.VjFc2dxK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,383 +63,104 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/bvanassche/linux thread-safety
-head:   1fb61c841ca602318a356ae71432c2b8afbf7224
-commit: 9982aac0189f15803125d3bcca57e5347586d442 [27/28] treewide: Annotate all struct mutex users
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20250203/202502030702.xwLrhLOu-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030702.xwLrhLOu-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git sparse-friendly-direct-mode
+head:   bada9cd0235b288b74ee2bd65fd4223d71f62b02
+commit: a0df9059bd2ef36d622cf94311dfb017b6b5de5d [111/166] iio: adc: Simple cases of switch to sparse friendly iio_device_claim/release_direct()
+config: hexagon-randconfig-001-20250203 (https://download.01.org/0day-ci/archive/20250203/202502030711.VjFc2dxK-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030711.VjFc2dxK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502030702.xwLrhLOu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502030711.VjFc2dxK-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: EXPORT symbol "kernel_param_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "kernel_param_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "sched_setattr_nocheck" [vmlinux] version generation failed, symbol will not be versioned.
-Is "sched_setattr_nocheck" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_trylock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_lock_killable" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_lock_killable" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mutex_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mutex_trylock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ww_mutex_lock_interruptible" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ww_mutex_lock_interruptible" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "console_list_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "console_list_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "console_list_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "console_list_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "generic_handle_irq" [vmlinux] version generation failed, symbol will not be versioned.
-Is "generic_handle_irq" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "msi_lock_descs" [vmlinux] version generation failed, symbol will not be versioned.
-Is "msi_lock_descs" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "msi_unlock_descs" [vmlinux] version generation failed, symbol will not be versioned.
-Is "msi_unlock_descs" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "call_srcu" [vmlinux] version generation failed, symbol will not be versioned.
-Is "call_srcu" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "srcutorture_get_gp_data" [vmlinux] version generation failed, symbol will not be versioned.
-Is "srcutorture_get_gp_data" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "synchronize_rcu_expedited" [vmlinux] version generation failed, symbol will not be versioned.
-Is "synchronize_rcu_expedited" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "__register_bpf_struct_ops" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__register_bpf_struct_ops" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "perf_allow_kernel" [vmlinux] version generation failed, symbol will not be versioned.
-Is "perf_allow_kernel" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pcpu_alloc_noprof" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pcpu_alloc_noprof" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "split_page" [vmlinux] version generation failed, symbol will not be versioned.
-Is "split_page" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "is_free_buddy_page" [vmlinux] version generation failed, symbol will not be versioned.
-Is "is_free_buddy_page" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "begin_new_exec" [vmlinux] version generation failed, symbol will not be versioned.
-Is "begin_new_exec" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "setup_new_exec" [vmlinux] version generation failed, symbol will not be versioned.
-Is "setup_new_exec" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "bprm_change_interp" [vmlinux] version generation failed, symbol will not be versioned.
-Is "bprm_change_interp" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pipe_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pipe_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pipe_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pipe_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "lock_rename" [vmlinux] version generation failed, symbol will not be versioned.
-Is "lock_rename" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "lock_rename_child" [vmlinux] version generation failed, symbol will not be versioned.
-Is "lock_rename_child" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "unlock_rename" [vmlinux] version generation failed, symbol will not be versioned.
-Is "unlock_rename" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "vfs_create" [vmlinux] version generation failed, symbol will not be versioned.
-Is "vfs_create" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "d_splice_alias" [vmlinux] version generation failed, symbol will not be versioned.
-Is "d_splice_alias" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "is_subdir" [vmlinux] version generation failed, symbol will not be versioned.
-Is "is_subdir" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "receive_fd" [vmlinux] version generation failed, symbol will not be versioned.
-Is "receive_fd" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__mnt_is_readonly" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__mnt_is_readonly" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "kernfs_notify" [vmlinux] version generation failed, symbol will not be versioned.
-Is "kernfs_notify" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "jbd2_journal_update_sb_errno" [vmlinux] version generation failed, symbol will not be versioned.
-Is "jbd2_journal_update_sb_errno" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "jbd2_journal_clear_features" [vmlinux] version generation failed, symbol will not be versioned.
-Is "jbd2_journal_clear_features" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "key_link" [vmlinux] version generation failed, symbol will not be versioned.
-Is "key_link" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "ima_file_hash" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ima_file_hash" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "bdev_freeze" [vmlinux] version generation failed, symbol will not be versioned.
-Is "bdev_freeze" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "bdev_thaw" [vmlinux] version generation failed, symbol will not be versioned.
-Is "bdev_thaw" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "bdev_mark_dead" [vmlinux] version generation failed, symbol will not be versioned.
-Is "bdev_mark_dead" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "blkg_conf_prep" [vmlinux] version generation failed, symbol will not be versioned.
-Is "blkg_conf_prep" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "blkg_conf_exit" [vmlinux] version generation failed, symbol will not be versioned.
-Is "blkg_conf_exit" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__do_once_sleepable_start" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__do_once_sleepable_start" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__do_once_sleepable_done" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__do_once_sleepable_done" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_lock_rescan_remove" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_lock_rescan_remove" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_unlock_rescan_remove" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_unlock_rescan_remove" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_dev_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_dev_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_dev_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_dev_trylock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_dev_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_dev_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_reset_function" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_reset_function" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "pci_probe_reset_slot" [vmlinux] version generation failed, symbol will not be versioned.
-Is "pci_probe_reset_slot" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tty_init_termios" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tty_init_termios" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tty_buffer_lock_exclusive" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tty_buffer_lock_exclusive" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tty_buffer_unlock_exclusive" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tty_buffer_unlock_exclusive" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tty_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tty_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tty_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tty_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tpm_chip_alloc" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tpm_chip_alloc" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tpm_is_tpm2" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tpm_is_tpm2" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tpm_pcr_read" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tpm_pcr_read" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tpm_pcr_extend" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tpm_pcr_extend" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tpm_get_random" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tpm_get_random" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "dev_driver_string" [vmlinux] version generation failed, symbol will not be versioned.
-Is "dev_driver_string" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_store_ulong" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_store_ulong" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_show_ulong" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_show_ulong" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_store_int" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_store_int" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_show_int" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_show_int" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_store_bool" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_store_bool" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_show_bool" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_show_bool" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_show_string" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_show_string" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "dev_vprintk_emit" [vmlinux] version generation failed, symbol will not be versioned.
-Is "dev_vprintk_emit" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "bus_rescan_devices" [vmlinux] version generation failed, symbol will not be versioned.
-Is "bus_rescan_devices" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "device_driver_attach" [vmlinux] version generation failed, symbol will not be versioned.
-Is "device_driver_attach" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "mddev_suspend" [vmlinux] version generation failed, symbol will not be versioned.
-Is "mddev_suspend" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "md_idle_sync_thread" [vmlinux] version generation failed, symbol will not be versioned.
-Is "md_idle_sync_thread" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "md_frozen_sync_thread" [vmlinux] version generation failed, symbol will not be versioned.
-Is "md_frozen_sync_thread" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "md_unfrozen_sync_thread" [vmlinux] version generation failed, symbol will not be versioned.
-Is "md_unfrozen_sync_thread" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "md_set_array_sectors" [vmlinux] version generation failed, symbol will not be versioned.
-Is "md_set_array_sectors" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "dm_get_md" [vmlinux] version generation failed, symbol will not be versioned.
-Is "dm_get_md" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "dm_internal_suspend_fast" [vmlinux] version generation failed, symbol will not be versioned.
-Is "dm_internal_suspend_fast" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "dm_internal_resume_fast" [vmlinux] version generation failed, symbol will not be versioned.
-Is "dm_internal_resume_fast" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__dev_get_by_name" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__dev_get_by_name" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__napi_schedule" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__napi_schedule" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "napi_schedule_prep" [vmlinux] version generation failed, symbol will not be versioned.
-Is "napi_schedule_prep" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "rtnl_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "rtnl_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "rtnl_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "rtnl_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "refcount_dec_and_rtnl_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "refcount_dec_and_rtnl_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "tcf_idr_release" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tcf_idr_release" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "tcf_generic_walker" [vmlinux] version generation failed, symbol will not be versioned.
-Is "tcf_generic_walker" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "__netlink_dump_start" [vmlinux] version generation failed, symbol will not be versioned.
-Is "__netlink_dump_start" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "genl_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "genl_lock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "genl_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "genl_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "ethtool_sprintf" [vmlinux] version generation failed, symbol will not be versioned.
-Is "ethtool_sprintf" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "devl_lock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "devl_lock" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "devl_trylock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "devl_trylock" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "devl_unlock" [vmlinux] version generation failed, symbol will not be versioned.
-Is "devl_unlock" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/des_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/des_s390.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/aes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/aes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/crypto/paes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/paes_s390.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [arch/s390/crypto/prng.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/crypto/prng.ko] has no CRC!
-WARNING: modpost: EXPORT symbol "kvm_set_internal_memslot" [arch/s390/kvm/kvm.ko] version generation failed, symbol will not be versioned.
-Is "kvm_set_internal_memslot" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_lock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_lock_killable" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [arch/s390/kvm/kvm.ko] has no CRC!
-WARNING: modpost: "torture_init_begin" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "torture_init_end" [kernel/rcu/rcutorture.ko] has no CRC!
->> WARNING: modpost: "torture_cleanup_begin" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "call_srcu" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "srcutorture_get_gp_data" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "synchronize_rcu_expedited" [kernel/rcu/rcutorture.ko] has no CRC!
-WARNING: modpost: "torture_init_begin" [kernel/rcu/refscale.ko] has no CRC!
-WARNING: modpost: "torture_init_end" [kernel/rcu/refscale.ko] has no CRC!
->> WARNING: modpost: "torture_cleanup_begin" [kernel/rcu/refscale.ko] has no CRC!
-WARNING: modpost: EXPORT symbol "torture_init_begin" [kernel/torture.ko] version generation failed, symbol will not be versioned.
-Is "torture_init_begin" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "torture_init_end" [kernel/torture.ko] version generation failed, symbol will not be versioned.
-Is "torture_init_end" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "torture_cleanup_begin" [kernel/torture.ko] version generation failed, symbol will not be versioned.
-Is "torture_cleanup_begin" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_lock" [kernel/torture.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [kernel/torture.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fuse/cuse.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fuse/cuse.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fuse/virtiofs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fuse/virtiofs.ko] has no CRC!
-WARNING: modpost: "bprm_change_interp" [fs/binfmt_misc.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/configfs/configfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/configfs/configfs.ko] has no CRC!
->> WARNING: modpost: "call_srcu" [fs/dlm/dlm.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/dlm/dlm.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/dlm/dlm.ko] has no CRC!
->> WARNING: modpost: EXPORT symbol "netfs_writeback_single" [fs/netfs/netfs.ko] version generation failed, symbol will not be versioned.
-Is "netfs_writeback_single" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_lock" [fs/netfs/netfs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/netfs/netfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/netfs/netfs.ko] has no CRC!
->> WARNING: modpost: "d_splice_alias" [fs/cramfs/cramfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/cramfs/cramfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/cramfs/cramfs.ko] has no CRC!
->> WARNING: modpost: "d_splice_alias" [fs/squashfs/squashfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/squashfs/squashfs.ko] has no CRC!
->> WARNING: modpost: "pcpu_alloc_noprof" [fs/squashfs/squashfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/squashfs/squashfs.ko] has no CRC!
->> WARNING: modpost: EXPORT symbol "fat_free_clusters" [fs/fat/fat.ko] version generation failed, symbol will not be versioned.
-Is "fat_free_clusters" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: EXPORT symbol "fat_build_inode" [fs/fat/fat.ko] version generation failed, symbol will not be versioned.
-Is "fat_build_inode" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "mutex_lock" [fs/fat/fat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/fat.ko] has no CRC!
->> WARNING: modpost: "fat_free_clusters" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "fat_build_inode" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/vfat.ko] has no CRC!
-WARNING: modpost: "fat_free_clusters" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "fat_build_inode" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/fat/msdos.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "bdev_thaw" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "bdev_freeze" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/exfat/exfat.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "lock_rename" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "unlock_rename" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "vfs_create" [fs/ecryptfs/ecryptfs.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "pcpu_alloc_noprof" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfs/nfs.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/nfs/nfsv4.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfs/nfsv4.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfs/nfsv4.ko] has no CRC!
-WARNING: modpost: "rpc_put_sb_net" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "lock_rename" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "rpc_get_sb_net" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "unlock_rename" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "__mnt_is_readonly" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "vfs_create" [fs/nfsd/nfsd.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/lockd/lockd.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/lockd/lockd.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/smb/client/cifs.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ntfs3/ntfs3.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/romfs/romfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/autofs/autofs4.ko] has no CRC!
-WARNING: modpost: "is_subdir" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "lock_rename" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_lock_interruptible" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "unlock_rename" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "__mnt_is_readonly" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "vfs_create" [fs/overlayfs/overlay.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/udf/udf.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/udf/udf.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/udf/udf.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/jfs/jfs.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/nilfs2/nilfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/nilfs2/nilfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/nilfs2/nilfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "lock_rename" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "unlock_rename" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/cachefiles/cachefiles.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "jbd2_journal_clear_features" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/ocfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/ocfs2_stack_user.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/ocfs2_stack_user.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/ocfs2/cluster/ocfs2_nodemanager.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/ocfs2/cluster/ocfs2_nodemanager.ko] has no CRC!
-WARNING: modpost: "is_subdir" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "pcpu_alloc_noprof" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/gfs2/gfs2.ko] has no CRC!
-WARNING: modpost: "d_splice_alias" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "call_srcu" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "bdev_thaw" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "bdev_freeze" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_trylock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "pcpu_alloc_noprof" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [fs/bcachefs/bcachefs.ko] has no CRC!
-WARNING: modpost: "mutex_lock" [crypto/crypto_user.ko] has no CRC!
-WARNING: modpost: "mutex_unlock" [crypto/crypto_user.ko] has no CRC!
-WARNING: modpost: "__netlink_dump_start" [crypto/crypto_user.ko] has no CRC!
-WARNING: modpost: "pcpu_alloc_noprof" [crypto/cryptd.ko] has no CRC!
-WARNING: modpost: EXPORT symbol "kunit_platform_device_prepare_wait_for_probe" [lib/kunit/kunit.ko] version generation failed, symbol will not be versioned.
-Is "kunit_platform_device_prepare_wait_for_probe" prototyped in <asm/asm-prototypes.h>?
+>> drivers/iio/adc/ad7173.c:1184:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    1184 |                         if (freq >= st->info->sinc5_data_rates[i])
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7173.c:1198:9: note: uninitialized use occurs here
+    1198 |         return ret;
+         |                ^~~
+   drivers/iio/adc/ad7173.c:1184:4: note: remove the 'if' if its condition is always false
+    1184 |                         if (freq >= st->info->sinc5_data_rates[i])
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1185 |                                 break;
+         |                                 ~~~~~
+>> drivers/iio/adc/ad7173.c:1183:39: warning: variable 'ret' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+    1183 |                 for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7173.c:1198:9: note: uninitialized use occurs here
+    1198 |         return ret;
+         |                ^~~
+   drivers/iio/adc/ad7173.c:1183:39: note: remove the condition if it is always true
+    1183 |                 for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
+         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad7173.c:1160:9: note: initialize the variable 'ret' to silence this warning
+    1160 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
+
+
+vim +1184 drivers/iio/adc/ad7173.c
+
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1152  
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1153  static int ad7173_write_raw(struct iio_dev *indio_dev,
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1154  			    struct iio_chan_spec const *chan,
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1155  			    int val, int val2, long info)
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1156  {
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1157  	struct ad7173_state *st = iio_priv(indio_dev);
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1158  	struct ad7173_channel_config *cfg;
+182bc496dc63ca Dumitru Ceclan   2024-05-30  1159  	unsigned int freq, i;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1160  	int ret;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1161  
+a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1162  	if (!iio_device_claim_direct(indio_dev))
+a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1163  		return -EBUSY;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1164  
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1165  	switch (info) {
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1166  	/*
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1167  	 * This attribute sets the sampling frequency for each channel individually.
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1168  	 * There are no issues for raw or buffered reads of an individual channel.
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1169  	 *
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1170  	 * When multiple channels are enabled in buffered mode, the effective
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1171  	 * sampling rate of a channel is lowered in correlation to the number
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1172  	 * of channels enabled and the sampling rate of the other channels.
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1173  	 *
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1174  	 * Example: 3 channels enabled with rates CH1:6211sps CH2,CH3:10sps
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1175  	 * While the reading of CH1 takes only 0.16ms, the reading of CH2 and CH3
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1176  	 * will take 100ms each.
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1177  	 *
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1178  	 * This will cause the reading of CH1 to be actually done once every
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1179  	 * 200.16ms, an effective rate of 4.99sps.
+f87b076b934f72 Dumitru Ceclan   2024-06-07  1180  	 */
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1181  	case IIO_CHAN_INFO_SAMP_FREQ:
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1182  		freq = val * MILLI + val2 / MILLI;
+37ae8381ccda3c Dumitru Ceclan   2024-03-06 @1183  		for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
+76a1e6a4280211 Dumitru Ceclan   2024-02-28 @1184  			if (freq >= st->info->sinc5_data_rates[i])
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1185  				break;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1186  
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1187  		cfg = &st->channels[chan->address].cfg;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1188  		cfg->odr = i;
+182bc496dc63ca Dumitru Ceclan   2024-05-30  1189  		cfg->live = false;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1190  		break;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1191  
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1192  	default:
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1193  		ret = -EINVAL;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1194  		break;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1195  	}
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1196  
+a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1197  	iio_device_release_direct(indio_dev);
+76a1e6a4280211 Dumitru Ceclan   2024-02-28 @1198  	return ret;
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1199  }
+76a1e6a4280211 Dumitru Ceclan   2024-02-28  1200  
+
+:::::: The code at line 1184 was first introduced by commit
+:::::: 76a1e6a4280211b1ceffec4f79f96e492c661229 iio: adc: ad7173: add AD7173 driver
+
+:::::: TO: Dumitru Ceclan <mitrutzceclan@gmail.com>
+:::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 -- 
 0-DAY CI Kernel Test Service
