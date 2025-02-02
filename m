@@ -1,139 +1,170 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B333288A5
-	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 10:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258A1D63CA;
+	Sun,  2 Feb 2025 11:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738492224; cv=none; b=TQVCT6L9Xzwqly0p8Ma3vU+PLf0avPBWWes33J3F6IdsAI1zUtiraE6dfyzVCRyVcdHl6nRssu1zjdPOnUn/0zJliZXoFkH45avrzJ8pNfe5hJl0eH9yJ8kxoFtJX3xl26wLFAafLjr1VO+nhCfrRqQK8KkICadNXIqQrVOVb8w=
+	t=1738494700; cv=none; b=eHRE/5CIeRMR52/gJo+azOwfr+IAuPaCwdeM6KEWgaT0ze+7gck8ILF2Vx7ukdQHX/AFlDaVqUUCi5JCoCuUaCHkgowDYVZGtU9z7vYsLu5BIRQ8GVpcQehiQCFSo14mBIZX6ItOeU8FWCSF0E3SVrMTJc4dh2juuFRoEZARZHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738492224; c=relaxed/simple;
-	bh=SmO4ukMEUk7kDV/UEd21BcjWZX5Cg+wqDf+7PUbNZFI=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=dCyZbEMOVkmECeB1SHjfDJd7HSIXqQlbzrLCliwW8fb5Pb/iRZsdC8nxjIJv0jomrNyb99/FDOQ5e9wYBuaiofMIqs4XxkybtfkC29LpLr96KxZ2uxehAYdUh5M5MHzCh341qR0tdPmsKAoif8q2S2uzwQJXy8QXD9qUpUFMBaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U6tgdYnh; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1738494700; c=relaxed/simple;
+	bh=jz3MqgGH5E5HKEsnRKw2zBT4wqE3A51XYO9CnVtLyy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dyn4daedlouFgLOwNtqdAMD9qqJfnh6pDdZFsdXxEv/gWZa124Ci4C7yFaUq3v8K2FV+ypxpngI3mhS1sTciR9dgewh+icobhNwKWBMoNqo4Tvy5LNu/oLatDJdZjyRckRE68120Zh9fm4ChcNfZrTJchXdKN0dqsyH2LETft8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ug7MiW4r; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U6tgdYnh"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso4873534a12.0
-        for <llvm@lists.linux.dev>; Sun, 02 Feb 2025 02:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738492220; x=1739097020; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=U0uIhTJvHUJM+LAbjfQ7ED9QfD+kzQdDwtyXq+Wx38Q=;
-        b=U6tgdYnhtToxFCeb+8ditVms2jFqZx2cBvzL/xYS1JXV28yw7YDmMrT7FM5/HALm7M
-         hgJCx1/tvhXOZa/zgIbWNTC09ZNOSbFKTtOEebJPvvLh/H2XbqdtiQH4cQnwtYEwNYsF
-         soj7QvZAVB6RWMJtSuNgygLe6cuiJtPCvkK4A5gCAqnXuECzn5H3AHIBpG4p4D+dzbew
-         v6a6pr7C8+ODmiqk47ed24uFY9JlbyeILldtVKuw9fxZbYBgtxNi64t6kcKgSo6kTRMp
-         QC2sYnRt4P27DXghOh9BsFdaWMq5OKdcwbCvRuvI40dnTGOut4ak5DzBNfSKf9Kp0v81
-         msdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738492220; x=1739097020;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U0uIhTJvHUJM+LAbjfQ7ED9QfD+kzQdDwtyXq+Wx38Q=;
-        b=eJmfF36jE9rg6I2l6WRRrmi17vF5iLTdmvamT8FWhewr4/9oldK5B2Kj2jzHwHb/9/
-         N/znFZnV0A8pWEhHCJOxQ+cfB7l0ZA2RloVEa2qlAATVxv24vkOh3O+deFdh2pOBBHJp
-         djhwehhD15zPE/QPupxtHDpxPgMUiG8hW/dZ4JPAKI+B2doasZ5IfdYpEO938ZhbbFkN
-         Dewqk5t5YDKmTgsphWkRopRGtzVfRu7gq1s6fXDObulwLRwkaLPhaxts7phvHQVZxFlW
-         D5V3hSZqrJBuFlfWpk6iC5Fhy+T9av1QVo4bBAM5Ud5oLLfFAWivGzta3j2F1WCkHWTM
-         RlJQ==
-X-Gm-Message-State: AOJu0YyvlDYw45mntwxQHzmiUW0lIkmYUIXdfA17TcjGAmfb0DV6Hdss
-	Yb+eM5FlV05BMeRJ/o5o5ItcmtB7NkPKNuACxEG18EMdrRHwURXqhSZ7kiNscHulzK1TSxd67B9
-	O
-X-Gm-Gg: ASbGncupbV0BLKKbC/zTGQrXxrDUEQ2M91uCvTqmgnVHn9XQtZbn0MmPGDXM2qebeJt
-	2zxYfJt/hIbKAvwNm0HoyW+Hh8y5zTGTx/qNcLI2RhFryXSpBCQGweQnhglvChD2zmjXBtgZnVE
-	VQAL6DdhU+FpZZr55L9ms0A1OhQfMoYheq3NfFXWdQTfOVwwQno70KXG2RBOuvfXxujT4ej61wa
-	BW443SvTKjyV6scbvG2Ac2tqsS86Jb4rII0JLrmqhMYSfbc6Z04O96WoNksKC9oowTuemcQuYdQ
-	Hi2mDvTghFvWVBQhLxT3YbOahovYEA6o80cVo+EOju983se7G/5cbCTt0nhfB+s=
-X-Google-Smtp-Source: AGHT+IG/mah3gncmao7XKleXHTKp4js8ILyW0jiMzTELJqA8gRRLJ0YdNPt2c+e7Uex8bnX4XYevVw==
-X-Received: by 2002:a05:6402:510f:b0:5dc:5ada:e0c7 with SMTP id 4fb4d7f45d1cf-5dc5efec13emr50173569a12.26.1738492220196;
-        Sun, 02 Feb 2025 02:30:20 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e47a7fc2sm557929266b.37.2025.02.02.02.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2025 02:30:19 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 2 Feb 2025 10:30:18 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1599984364.127113.1738492219737@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-21-init-262-gcff0a460ae86: Failure on arm
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ug7MiW4r"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738494698; x=1770030698;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jz3MqgGH5E5HKEsnRKw2zBT4wqE3A51XYO9CnVtLyy0=;
+  b=Ug7MiW4r8xzqm2q1ORyarsLVyyZXhPOyeCg65vOPsm2+lRfD1njjMmp+
+   464nV4KNFwojaVUj3IakTvFT2xpuE6X8z1KPIQV7hBxH4Yj1lphZWr9Uu
+   EBZlwvwGfsJLsTnzbBUJnzKRvHJjBiBaeoByPpy/oLgC46MYGUIOVIP7c
+   faeizCO9/k4ixeLTCYxWyhCuac/f+KVV7VYoRzQfcVtbV2CTmZxZWs8/z
+   1mV3tfnraCQ2jxoLeAACQiLlmWpgzdHl8/lTxYJpThqTR6vbFaaXv76y8
+   CmBTYUwDC9FYPlgGZhkF8zucyucoclONpOqpwB+B2YX0YqPOdJ4er1wjo
+   g==;
+X-CSE-ConnectionGUID: CS5DjOBiT2elGjVURwZHgw==
+X-CSE-MsgGUID: cdFo4td5Q96Z8Hjvfq/FgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="49663968"
+X-IronPort-AV: E=Sophos;i="6.13,253,1732608000"; 
+   d="scan'208";a="49663968"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 03:11:38 -0800
+X-CSE-ConnectionGUID: AiCiN+YdRe69qT+ilPyNUQ==
+X-CSE-MsgGUID: fvqwam5BT6ORCsDBQpOHDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="110478693"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 02 Feb 2025 03:11:35 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1teXsy-000pbT-1m;
+	Sun, 02 Feb 2025 11:11:32 +0000
+Date: Sun, 2 Feb 2025 19:10:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>,
+	Kees Cook <kees@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Ricardo B. Marliere" <rbm@suse.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 2/2] LoadPin: Make sysctl table const
+Message-ID: <202502021853.d0nqHvPc-lkp@intel.com>
+References: <20250123-sysctl-kees-v1-2-533359e74d66@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_127112_1888833574.1738492219105"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-arm-stable-allyesconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123-sysctl-kees-v1-2-533359e74d66@suse.com>
 
-------=_Part_127112_1888833574.1738492219105
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi Ricardo,
 
-Dear contributor,
+kernel test robot noticed the following build errors:
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+[auto build test ERROR on a9a5e0bdc5a77a7c662ad4be0ad661f0b0d5e99d]
 
-In tcwg_kernel/llvm-master-arm-stable-allyesconfig, after:
-  | commit llvmorg-21-init-262-gcff0a460ae86
-  | Author: Bill Wendling <morbo@google.com>
-  | Date:   Thu Jan 30 15:36:13 2025 -0800
-  | 
-  |     [Clang][counted_by] Refactor __builtin_dynamic_object_size on FAMs (#122198)
-  |     
-  |     Refactoring of how __builtin_dynamic_object_size() is calculated for
-  |     flexible array members (in preparation for adding support for the
-  |     'counted_by' attribute on pointers in structs).
-  | ... 86 lines of the commit log omitted.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ricardo-B-Marliere/yama-Make-sysctl-table-const/20250124-033808
+base:   a9a5e0bdc5a77a7c662ad4be0ad661f0b0d5e99d
+patch link:    https://lore.kernel.org/r/20250123-sysctl-kees-v1-2-533359e74d66%40suse.com
+patch subject: [PATCH 2/2] LoadPin: Make sysctl table const
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250202/202502021853.d0nqHvPc-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250202/202502021853.d0nqHvPc-lkp@intel.com/reproduce)
 
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 22473
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 22474
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502021853.d0nqHvPc-lkp@intel.com/
 
-Used configuration :
- tcwg_kernel/llvm-master-arm-stable-allyesconfig
+All errors (new ones prefixed by >>):
 
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1541. Please let us know if you have a fix.
+>> security/loadpin/loadpin.c:75:34: error: cannot assign to variable 'loadpin_sysctl_table' with const-qualified type 'const struct ctl_table[1]'
+      75 |                 loadpin_sysctl_table[0].extra1 = SYSCTL_ZERO;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   security/loadpin/loadpin.c:56:31: note: variable 'loadpin_sysctl_table' declared const here
+      56 | static const struct ctl_table loadpin_sysctl_table[] = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+      57 |         {
+         |         ~
+      58 |                 .procname       = "enforce",
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      59 |                 .data           = &enforce,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      60 |                 .maxlen         = sizeof(int),
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      61 |                 .mode           = 0644,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~
+      62 |                 .proc_handler   = proc_dointvec_minmax,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      63 |                 .extra1         = SYSCTL_ONE,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      64 |                 .extra2         = SYSCTL_ONE,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      65 |         },
+         |         ~~
+      66 | };
+         | ~
+   security/loadpin/loadpin.c:77:34: error: cannot assign to variable 'loadpin_sysctl_table' with const-qualified type 'const struct ctl_table[1]'
+      77 |                 loadpin_sysctl_table[0].extra1 = SYSCTL_ONE;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   security/loadpin/loadpin.c:56:31: note: variable 'loadpin_sysctl_table' declared const here
+      56 | static const struct ctl_table loadpin_sysctl_table[] = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+      57 |         {
+         |         ~
+      58 |                 .procname       = "enforce",
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      59 |                 .data           = &enforce,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      60 |                 .maxlen         = sizeof(int),
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      61 |                 .mode           = 0644,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~
+      62 |                 .proc_handler   = proc_dointvec_minmax,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      63 |                 .extra1         = SYSCTL_ONE,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      64 |                 .extra2         = SYSCTL_ONE,
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      65 |         },
+         |         ~~
+      66 | };
+         | ~
+   2 errors generated.
 
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
 
------------------8<--------------------------8<--------------------------8<--------------------------
+vim +75 security/loadpin/loadpin.c
 
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+9b091556a073a9 Kees Cook 2016-04-20  67  
+60ba1028fc7b73 Kees Cook 2022-12-09  68  static void set_sysctl(bool is_writable)
+9b091556a073a9 Kees Cook 2016-04-20  69  {
+9b091556a073a9 Kees Cook 2016-04-20  70  	/*
+9b091556a073a9 Kees Cook 2016-04-20  71  	 * If load pinning is not enforced via a read-only block
+9b091556a073a9 Kees Cook 2016-04-20  72  	 * device, allow sysctl to change modes for testing.
+9b091556a073a9 Kees Cook 2016-04-20  73  	 */
+60ba1028fc7b73 Kees Cook 2022-12-09  74  	if (is_writable)
+60ba1028fc7b73 Kees Cook 2022-12-09 @75  		loadpin_sysctl_table[0].extra1 = SYSCTL_ZERO;
+60ba1028fc7b73 Kees Cook 2022-12-09  76  	else
+60ba1028fc7b73 Kees Cook 2022-12-09  77  		loadpin_sysctl_table[0].extra1 = SYSCTL_ONE;
+60ba1028fc7b73 Kees Cook 2022-12-09  78  }
+60ba1028fc7b73 Kees Cook 2022-12-09  79  #else
+60ba1028fc7b73 Kees Cook 2022-12-09  80  static inline void set_sysctl(bool is_writable) { }
+60ba1028fc7b73 Kees Cook 2022-12-09  81  #endif
+60ba1028fc7b73 Kees Cook 2022-12-09  82  
 
-
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/233/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/232/artifact/artifacts
-
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/cff0a460ae864505bc2a064c269ebe548aa35949/tcwg_kernel/llvm-master-arm-stable-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/cff0a460ae864505bc2a064c269ebe548aa35949
-------=_Part_127112_1888833574.1738492219105--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
