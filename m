@@ -1,123 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1421C5F3B;
-	Sat,  1 Feb 2025 23:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B4C846D
+	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 00:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738453054; cv=none; b=Q7oX8hvNX7OvUJyiOIo4BE4uKgV88rS8FQztKROZAoio7A78hcd5uhe+fjrjTCpK2AYMVsZg04+oRKGqySpmdqS0RyakYlZrBhGHxBu4Cvo2NZ9+Hc4hRrIJRyJ8nOLdJi5JYvdx/lY/9lAaAem0jQUBCPW1uI176vlwQst/VtI=
+	t=1738456330; cv=none; b=mRw1UkIQAu5FwnfiAGNLB+VKlE961W6c4BE5iFVFPeyjEDLedM7JRd/VKPBzK8HiUu0OhE4Ov5pgTkvzr6e8Da2GN9c8fDnfONAUmToaWtSWEFbk5ldKkHJThLeFUTkw1L4TVljDkWDdiuZehoIjECS7a/m2MDKZZ9T4sMTJtwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738453054; c=relaxed/simple;
-	bh=VniUty94QaFSvir46bJwxI1Xq3DeV+IIZnzat/jKmTQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NAccUhzZcMPYYx6srKa4XRNPxJX1R5KZepdcU0cN5co+8klrnCMFSdaissXBCBLLQypNBMDHlluHT5liQ3KfIHkCSG8S7mah+OSj+Bkm9tUigpJZEAqdVW1iDnpw76EDyRv3SETT1Ar0T+ia9326CLxxOC/gKNCu9DYJU5MXs9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X944o5e9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738456330; c=relaxed/simple;
+	bh=UH3atOoDwnmwkEuTcQ0WEEJzBUdE8r8HANwhuv7fuSY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lA1p2L4iSJGBvdkQAr+AVGcBlUXGM7hJ0/KzE5r+RN4fM280nyL4RWi4dPvKCAFU9FHgkQPxRNe52sSrPlpmyaOHexy1zScdtZ214kbZh38TBlFMXJyZV9joKPQTLOnurwG6tCq0Sl/tSZDQhyGJwohKzChZ/D5DZJl3VYrpqZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D5cadngJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X944o5e9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738453052; x=1769989052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VniUty94QaFSvir46bJwxI1Xq3DeV+IIZnzat/jKmTQ=;
-  b=X944o5e9RKJPEO7C7+Kkuz0r1nWpBbH/eAtp8ye9ElSIDCvcI117wY/0
-   9tAgyt/9FiwEXzk/FCYn9qfVEbMGQsN0B3PJMzL/b1kV2/V96pBUH1YMI
-   kMUBz+l86VCtx3aabT7vxfqLteYzvKPTKDbFrL/H+j5T1yUT+EgsJXpjP
-   8hmJM3NcRIja1PUPDd3NY1goFg8xbqmsr+VSD6GrHKr1oOTQyamOw7ZpE
-   nRm45B+HyuI37Cne2qrsRqLUr6Ggw5U1cg9hGA0Ftb6tCDuQKk6aC7nTj
-   ebbQBivSrjBN+L4oNmAl0vOZILd1TI6IL4aFYYnQra5+/nXKx5uNR/uvu
-   A==;
-X-CSE-ConnectionGUID: LJ0bUFBdTUGjKZRZZXRGtQ==
-X-CSE-MsgGUID: JAHzO9K5TV2lHmhxyKLpyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="41817794"
-X-IronPort-AV: E=Sophos;i="6.13,252,1732608000"; 
-   d="scan'208";a="41817794"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 15:37:31 -0800
-X-CSE-ConnectionGUID: UhFc5lhwTheiX5AfnWEEcQ==
-X-CSE-MsgGUID: DDSgqk4YRIe/h/gpgI7ZGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="114932082"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 01 Feb 2025 15:37:24 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1teN3B-000p1L-3C;
-	Sat, 01 Feb 2025 23:37:21 +0000
-Date: Sun, 2 Feb 2025 07:36:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	agross@kernel.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org, konradybcio@kernel.org,
-	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-	thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-	subbaraman.narayanamurthy@oss.qualcomm.com,
-	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-	quic_kamalw@quicinc.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
-	jishnu.prakash@oss.qualcomm.com, quic_skakitap@quicinc.com,
-	neil.armstrong@linaro.org
-Subject: Re: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
-Message-ID: <202502020700.dqk9AzTu-lkp@intel.com>
-References: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D5cadngJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738456327;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=R0WaWP783f07jwI/q2XzhYPSHCA8mXMp0d/GRVp1PgU=;
+	b=D5cadngJ3JS5SDz5e637QULl4KB8lboj17IWR2cnri72CF48Bb2RyISpbR6Npb1mt6+wck
+	Lc62E8e/UFr4nvV+tRgVRCLQk8lDxwV+YJeuS8YFCiarRdg60POH6wEoEFfurTi4GpplqS
+	Yv+yVJfHNdPquYUTm4bVVvoKWutSHWk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-471-cCAAB065N2OV7NaqTjOasQ-1; Sat,
+ 01 Feb 2025 19:32:06 -0500
+X-MC-Unique: cCAAB065N2OV7NaqTjOasQ-1
+X-Mimecast-MFC-AGG-ID: cCAAB065N2OV7NaqTjOasQ
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7774C1800370
+	for <llvm@lists.linux.dev>; Sun,  2 Feb 2025 00:32:05 +0000 (UTC)
+Received: from [172.64.3.40] (unknown [10.30.32.189])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 22C4A1800980;
+	Sun,  2 Feb 2025 00:32:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.13.0,
+ upstream-mainline, a86bf228)
+Date: Sun, 02 Feb 2025 00:32:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <14687.125020119320600483@us-mta-471.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: TN2M7zTB3_sytb2hCRLqWEA7YCE6lQEGgJi0bPhFP1I_1738456325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jishnu,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 5ffa57f6eecefababb8cbe327222ef171943b183]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/dt-bindings-iio-adc-Move-QCOM-ADC-bindings-to-iio-adc-folder/20250201-023723
-base:   5ffa57f6eecefababb8cbe327222ef171943b183
-patch link:    https://lore.kernel.org/r/20250131183242.3653595-5-jishnu.prakash%40oss.qualcomm.com
-patch subject: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250202/202502020700.dqk9AzTu-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250202/202502020700.dqk9AzTu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502020700.dqk9AzTu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/adc/qcom-adc5-gen3-common.c:72:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      72 |         *data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
-         |                  ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/FIELD_PREP +72 drivers/iio/adc/qcom-adc5-gen3-common.c
+Kernel information:
+    Commit message: Merge tag 'pull-misc' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/viro/vfs
 
-    67	
-    68	void adc5_gen3_update_dig_param(struct adc5_channel_common_prop *prop, u8 *data)
-    69	{
-    70		/* Update calibration select and decimation ratio select */
-    71		*data &= ~(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK | ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK);
-  > 72		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
-    73		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK, prop->decimation);
-    74	}
-    75	EXPORT_SYMBOL(adc5_gen3_update_dig_param);
-    76	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1651714562
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1651714562-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1651714562-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1651714562-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
