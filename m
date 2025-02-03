@@ -1,124 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9AE1FBCB0;
-	Mon,  3 Feb 2025 08:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFE22940F
+	for <llvm@lists.linux.dev>; Mon,  3 Feb 2025 09:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738569913; cv=none; b=c380Z1dZaksdxhSDNYgAETlxBd40aS0QEtFd8dJmp8uEKoIxI29ejgYSaXgFa0rPxNnzdOlU/mq/cs4fRIjZAeLjvlNlEshP/sJBTbeA2rPdpYijKrZ45ldtP9w0bHP2HiCnahQXs2VNRVFhUurFad/IBK9yANLMXcpCL4v48Yo=
+	t=1738573521; cv=none; b=F42iUWm6vmuF9QWNE00laIDGlD0yITVN/aC6vDGfgLhM1h3UnOwAVVKIRuyY5Z2MDWEhT1+/84uvFNBrT+ShpfJ18xJiUqzctnewwYTT/XbxM/4qbtJah1X6s726hWl95LESV5ztWlOBNlTmSHkEy9IeV8y55UgVTnvPenhmyYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738569913; c=relaxed/simple;
-	bh=xlHn3pcZ8+WlMUhfZrITsZCJ6+VFQ7SuwSKKKjVaFek=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TlJC1860K8KwqtYR5Y4kiXLTrULcOYR5pjTXsKzRRLthqwZojl9i/qgvS/9rSktACOrZGOQPmMFo5b0ZObwrC78nvCPoZW6caNw4cCVdlWe5vYaYO+jJUeT+p/DD1D25ofhWOMn8n9fyphGt4UX6oAgkBFnDWQ7UF/p6N7R/TV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GgwLufPP; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738573521; c=relaxed/simple;
+	bh=qtkd2hdCgBubVpgZ1f1WoWHy4juewr1fhnt4HoOoStA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NuemHs6ylqzWRmHPYl//MjFmSb2cwJl+erhfuBosSKAQklSxpyt5dC8Q6NLDW9sfLGxcDXCipyHNV/p5hmruXgRWICTy1kt//5lWKOayfO2YORgsoJm94BJBHvRRM9l5xsjDbTQELksqsfAMXrqFtBiRtzmk+SLT992AyvW1neQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BM1GBrcV; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PSgoz+LE; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GgwLufPP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738569911; x=1770105911;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xlHn3pcZ8+WlMUhfZrITsZCJ6+VFQ7SuwSKKKjVaFek=;
-  b=GgwLufPPpHeoJnIll45YwkcwmkjfOj6mUIq0WbE8kp3r9ZbWhzKc0p+E
-   7gN1mvjR7nsi8FYc1l9v/PvsPLbDNbtsAEb0MTH1TpeOX88LAjWdvL4YX
-   EqI9655wl3ziN42IsqQENNnp+uZlomwhwK4siIn7qPsgxxpQlZ8lIkmdc
-   IbZiJdKrb+5zAcqnA6twVjsHYRcs1qytmzbrofC/2bRjGBBf5ZSUNvw4g
-   r5ydxRmQU2RX79UnSHXKajfVwR5CYfLGzva+4gkGgKvm57UrP9/1EBc34
-   aRrdVm3V0H5C4BfT2ZdOwYsqTyv3ZNPZRM4RUgxsd6v/TnB95kboRKNHu
-   g==;
-X-CSE-ConnectionGUID: 4+VsT2f7TR+hWGN+lTHlDw==
-X-CSE-MsgGUID: ugVekRvBT0mddpRyEOULjg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="39206917"
-X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="39206917"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:05:10 -0800
-X-CSE-ConnectionGUID: KpHln3aLT0Kd8HYyyjuiJQ==
-X-CSE-MsgGUID: EuMTAcs8TAWEQPM3Bkbd/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114847087"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Feb 2025 00:03:49 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1terQp-000qex-32;
-	Mon, 03 Feb 2025 08:03:47 +0000
-Date: Mon, 3 Feb 2025 16:03:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amadeuszx.slawinski@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>,
-	Cezary Rojewski <cezary.rojewski@intel.com>
-Subject: [broonie-ci:v2_20250123_cezary_rojewski_asoc_intel_avs_add_support_for_maliboulake_configuration
- 7/11] sound/soc/intel/avs/tgl.c:10:10: fatal error: 'asm/cpuid.h' file not
- found
-Message-ID: <202502031651.7qyLIQo7-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BM1GBrcV";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PSgoz+LE"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738573518;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9svjg41Pcb4q95Hb5VGVK6lEZkIdj5uSqvXSpwTfMMw=;
+	b=BM1GBrcVmwsrWLB5GL/P7R2WZVy4r1YQMh38SOtwBzuTh3DrDOBx5Yhdfk4X1+Ra3ITZvB
+	r6O9ETIO6uY1dbP+UcxA4jfZoQBHmM7jXzAACBzv0QqXhgg/x6RToCBLVkUrDd2knqautK
+	ihpEG8+1j/QWtTjdCBwCn0NBPppzLwwuVW1W1aYjD3lx38dV+efbGq7roO85bV/Rz2pd+N
+	Agqco1X35M/6QHIJGYlbOWBAr21Y0muexY72TsI+8SYFZcgNBYz7ZyMPFHfVWW6MjiylaS
+	K5r+9XZin+kI9ze5DmIf+Sd3KymyDwj4xtWJrFF9cu76GOLfiueb5HoVgpH83g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738573518;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9svjg41Pcb4q95Hb5VGVK6lEZkIdj5uSqvXSpwTfMMw=;
+	b=PSgoz+LEZ7QYWOCfE3g0Yk/sneAv7deJOU9lK8CtdBb0YbUVRbW9sjJQOu8Wqre3b4M+h9
+	BshUpUhKGHAvqDDA==
+Subject: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
+ nolibc
+Date: Mon, 03 Feb 2025 10:05:01 +0100
+Message-Id: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAL2GoGcC/22NQQqDMBBFryKzbkpG0lq76j2KlMRM6oAkkthgE
+ e/e6LrL9+C/v0KiyJTgXq0QKXPi4AvgqYJ+0P5Ngm1hqGWtUGIjJh0TvbJNQfgwsukFyWtrtG6
+ cUzcouymS4+VoPrvCA6c5xO9xkXG3e+0isZZ/ahmFFMZZQtMqrXp8jOw/cwyel7Ml6LZt+wFYQ
+ wXjtgAAAA==
+X-Change-ID: 20241017-parse_vdso-nolibc-e069baa7ff48
+To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1738573516; l=2806;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=qtkd2hdCgBubVpgZ1f1WoWHy4juewr1fhnt4HoOoStA=;
+ b=LD5lsmGmNqSYedmVbHeUuJTWpDkVvxKJxLsowMuVyi/7+rXSPvYRp5crdhi93iVtgj2kyZqyb
+ GfzR9bRQ3uyDePHXT4ZnkkKadNUFjRZDuQDFZiqWo3mPIt0XCT5CnTm
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v2_20250123_cezary_rojewski_asoc_intel_avs_add_support_for_maliboulake_configuration
-head:   3318c70b5b94baa4e764ab05fa97c74643e7dc35
-commit: de555b6bab20afcb0f7ba2b2ac3ba9877fa77a5c [7/11] ASoC: Intel: avs: Configure basefw on TGL-based platforms
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250203/202502031651.7qyLIQo7-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502031651.7qyLIQo7-lkp@intel.com/reproduce)
+For testing the functionality of the vDSO, it is necessary to build
+userspace programs for multiple different architectures.
+It is additional work to acquire matching userspace cross-compilers with
+full C libraries and then building root images out of those.
+The kernel tree already contains nolibc, a small, header-only C library.
+By using it, it is possible to build userspace programs without any
+additional dependencies.
+For example the kernel.org crosstools or multi-target clang can be used
+to build test programs for a multitude of architectures.
+While nolibc is very limited, it is enough for many selftests.
+With some minor adjustments it is possible to make parse_vdso.c
+compatible with nolibc.
+As an example, vdso_standalone_test_x86 is now built from the same C
+code as the regular vdso_test_gettimeofday, while still being completely
+standalone.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502031651.7qyLIQo7-lkp@intel.com/
+This should probably go through the kselftest tree.
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (16):
+      MAINTAINERS: Add vDSO selftests
+      elf, uapi: Add definition for STN_UNDEF
+      elf, uapi: Add definition for DT_GNU_HASH
+      elf, uapi: Add definitions for VER_FLG_BASE and VER_FLG_WEAK
+      elf, uapi: Add type ElfXX_Versym
+      elf, uapi: Add types ElfXX_Verdef and ElfXX_Veraux
+      tools/include: Add uapi/linux/elf.h
+      selftests: Add headers target
+      selftests: vDSO: vdso_standalone_test_x86: Use vdso_init_form_sysinfo_ehdr
+      selftests: vDSO: parse_vdso: Drop vdso_init_from_auxv()
+      selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers
+      selftests: vDSO: parse_vdso: Test __SIZEOF_LONG__ instead of ULONG_MAX
+      selftests: vDSO: parse_vdso: Make compatible with nolibc
+      selftests: vDSO: vdso_test_gettimeofday: Clean up includes
+      selftests: vDSO: vdso_test_gettimeofday: Make compatible with nolibc
+      selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc
 
-   In file included from sound/soc/intel/avs/tgl.c:9:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/intel/avs/tgl.c:10:10: fatal error: 'asm/cpuid.h' file not found
-      10 | #include <asm/cpuid.h>
-         |          ^~~~~~~~~~~~~
-   3 warnings and 1 error generated.
+ MAINTAINERS                                        |   1 +
+ include/uapi/linux/elf.h                           |  38 ++
+ tools/include/uapi/linux/elf.h                     | 524 +++++++++++++++++++++
+ tools/testing/selftests/lib.mk                     |   5 +-
+ tools/testing/selftests/vDSO/Makefile              |  11 +-
+ tools/testing/selftests/vDSO/parse_vdso.c          |  21 +-
+ tools/testing/selftests/vDSO/parse_vdso.h          |   1 -
+ .../selftests/vDSO/vdso_standalone_test_x86.c      | 143 +-----
+ .../selftests/vDSO/vdso_test_gettimeofday.c        |   4 +-
+ 9 files changed, 584 insertions(+), 164 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20241017-parse_vdso-nolibc-e069baa7ff48
 
-
-vim +10 sound/soc/intel/avs/tgl.c
-
-     8	
-     9	#include <linux/pci.h>
-  > 10	#include <asm/cpuid.h>
-    11	#include "avs.h"
-    12	#include "messages.h"
-    13	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
