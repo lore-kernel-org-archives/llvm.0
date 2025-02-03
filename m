@@ -1,59 +1,65 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EFA13C3C2;
-	Mon,  3 Feb 2025 20:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E401DC745;
+	Mon,  3 Feb 2025 21:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738613659; cv=none; b=Xix9oOCZ+wJdKyM6ml1RrXdx+1I3nFGaGIs7BbdpDWz6BKDF9zdm5AIaQLqeDm5viLGk9b9JgYypxJkC9Uaa18dxP/71qMIChiGwXOsn3QFgLvnIlGQa1wjC5v+XZRlP2N0Ey7FbsrLfVPdKD2x83RAf2oyTEZ+2xCm44qtyzUI=
+	t=1738616849; cv=none; b=NYDt/SqND6QkqyBfMIfLZhuZSwEfz3wowtb0QrVWEEih82JOgArFnghocHc8lHC7vY420DztsIrWsN6FWSSRAOgwDzr1Vc2tud2EWD55qkF549d1VWdonbA46wnRrXKfhpiS+Ruvd/CoFPV7ZUy3RD62y9XT0abOtScYyfeZVLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738613659; c=relaxed/simple;
-	bh=spYH+zlsX35SgQgy2SttxyNx9kOmpFPVKz6b+Qciaks=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AxBkicKQb38RJaYaKgkFPF4BSe0I4lrFKmi/+K2QLYd9WO9e+VBo1Xq8zJFmmw4NPbbR8Vm1DlZV7AMSVj0K34BKO51b+EW92zJ8WKCE7EFSpxSDhg0ZDXCo7aIzoBgmpyXGcNB3lmS8zil8E7tFvRpl3YRZC5xVe5o3cflNGIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZP/TWuoQ; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1738616849; c=relaxed/simple;
+	bh=I6E+KMf+GC7gcZDiOUy+LrrXr+s80/o+Eqd493BSBcw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=duN4NlzfLgP8BoE0+2IYpLPB79QPa3LbUWTDdfkz3QDSIXa0risq1PF9uq3FtcDEAWFLMY00LV2IJCHLrtsPaVE4wJmDgdQW7sjKQir3l+NJ8TWGOtCmiE+3Gv/3Xkwt3zFi1Z/fcGnyibMcb+36DbBw+7xxhQWHxw/FxA6nqi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hxmc/mCG; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZP/TWuoQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hxmc/mCG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738613658; x=1770149658;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=spYH+zlsX35SgQgy2SttxyNx9kOmpFPVKz6b+Qciaks=;
-  b=ZP/TWuoQA9Heh0WM59hfcx9cjPE41IvkVRSxImUeqC12JC/LOinM7feP
-   1lh/WEeifZzPBrEFfNbOg3qp8kW3TqB9rv4YKJmovCxTJxwyVeIOENt+a
-   v6mZKI8Gem5swA/kVfZq55xtJcHulETqyZAn0OxIWMn37DWAsw4g4b+Kf
-   toB91i41bw8TMHKp/85f2fNaf0g2P+J319cYq61rnkICYVRZQ+hxgZSpT
-   Gi6oqXaGAIhwhw7JzUhEsd+WkYwJ6XD6kjcxF8zlnr+fvBQB9THzcgauU
-   BLGIETqGJ2CuLC/WDyNhBcflhn0uxoJLEgiDLCh3vIaLNMYyPsH7mz1CG
-   Q==;
-X-CSE-ConnectionGUID: HQxnQGcXQ2WtCB5BXP6mcA==
-X-CSE-MsgGUID: vKsT2twGSvaoiwmIgp0eaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50533540"
+  t=1738616847; x=1770152847;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I6E+KMf+GC7gcZDiOUy+LrrXr+s80/o+Eqd493BSBcw=;
+  b=hxmc/mCGZI2jT6oeRYFAWd2YcKB/dKOXYzTJC7VSW38lZZdcLRhJzk4/
+   CyqPShPzaOr1vsdjDxnqInc2MMw6Drw+KI0DkGOFKqo5q7cb7ClREmtT3
+   sppVIKideOa/s3/g/TV9PfnnEo7E/vH2PRW/p/JbFjjVB6hXf8WXhyCsO
+   d8gFsD++4IpqCrXiHHcNDpQCQVBmvR3CY9itN1ORTUx2La5eudD4BKbSa
+   evM/sMBFocyy5FB+CBAe6ZpxKX2K5ofaZlhD39S5bdQZIEQ9g5rdMRkTs
+   tT01xuoUZMBnPQ34QTGmYU2YJ2yzVRGB2fiZq4cYo5egvT9UCygquUloF
+   g==;
+X-CSE-ConnectionGUID: NZneRmJlTZ+UVoCeGyWddg==
+X-CSE-MsgGUID: uPekbdgFSN+1JmU3I7g+lA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50538731"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="50533540"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 12:14:17 -0800
-X-CSE-ConnectionGUID: iDFqcQREQS6VfFz0Dvw2ng==
-X-CSE-MsgGUID: eC29nPuCTrimeZg3kUx9SA==
+   d="scan'208";a="50538731"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 13:07:26 -0800
+X-CSE-ConnectionGUID: u7ApK2OGQ0CWTyIheuKY8Q==
+X-CSE-MsgGUID: nAhNm/7wQ16zDiTFT72Ydg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="111232866"
+X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
+   d="scan'208";a="110171999"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 03 Feb 2025 12:14:16 -0800
+  by orviesa009.jf.intel.com with ESMTP; 03 Feb 2025 13:07:24 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tf2ph-000rRM-2l;
-	Mon, 03 Feb 2025 20:14:13 +0000
-Date: Tue, 4 Feb 2025 04:13:24 +0800
+	id 1tf3f8-000rX1-0I;
+	Mon, 03 Feb 2025 21:07:22 +0000
+Date: Tue, 4 Feb 2025 05:06:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leon Romanovsky <leonro@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [leon-rdma:rdma-next 51/75] drivers/vfio/pci/mlx5/cmd.c:502:12:
- error: call to undeclared function 'alloc_pages_bulk_array'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202502040442.QAAEuVfX-lkp@intel.com>
+To: "Naveen N Rao (AMD)" <naveen@kernel.org>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v2 2/2] KVM: SVM: Limit AVIC physical max index based on
+ configured max_vcpu_ids
+Message-ID: <202502040421.WqVoesZI-lkp@intel.com>
+References: <b79610c60de53048f3fda942fd45973c4ab1de97.1738563890.git.naveen@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,66 +68,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b79610c60de53048f3fda942fd45973c4ab1de97.1738563890.git.naveen@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   0fe95c8bb34ec3d2279ba62ae1b185cc1e607d42
-commit: be85f7333a1aeed1715592f936dd55c8282aaa94 [51/75] vfio/mlx5: Enable the DMA link API
-config: i386-buildonly-randconfig-003-20250204 (https://download.01.org/0day-ci/archive/20250204/202502040442.QAAEuVfX-lkp@intel.com/config)
+Hi Naveen,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on eb723766b1030a23c38adf2348b7c3d1409d11f0]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Naveen-N-Rao-AMD/KVM-SVM-Increase-X2AVIC-limit-to-4096-vcpus/20250203-144127
+base:   eb723766b1030a23c38adf2348b7c3d1409d11f0
+patch link:    https://lore.kernel.org/r/b79610c60de53048f3fda942fd45973c4ab1de97.1738563890.git.naveen%40kernel.org
+patch subject: [PATCH v2 2/2] KVM: SVM: Limit AVIC physical max index based on configured max_vcpu_ids
+config: x86_64-randconfig-008-20250203 (https://download.01.org/0day-ci/archive/20250204/202502040421.WqVoesZI-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502040442.QAAEuVfX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502040421.WqVoesZI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502040442.QAAEuVfX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502040421.WqVoesZI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/vfio/pci/mlx5/cmd.c:502:12: error: call to undeclared function 'alloc_pages_bulk_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     502 |                 filled = alloc_pages_bulk_array(GFP_KERNEL_ACCOUNT,
-         |                          ^
-   drivers/vfio/pci/mlx5/cmd.c:502:12: note: did you mean 'alloc_pages_bulk_noprof'?
-   include/linux/gfp.h:213:15: note: 'alloc_pages_bulk_noprof' declared here
-     213 | unsigned long alloc_pages_bulk_noprof(gfp_t gfp, int preferred_nid,
-         |               ^
-   1 error generated.
+   In file included from arch/x86/kvm/svm/avic.c:20:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/x86/kvm/svm/avic.c:88:66: error: expected ')'
+      88 | static inline u32 avic_get_max_physical_id(struct kvm *kvm, bool x2apic_mode)
+         |                                                                  ^
+   arch/x86/include/asm/apic.h:258:23: note: expanded from macro 'x2apic_mode'
+     258 | #define x2apic_mode             (0)
+         |                                  ^
+   arch/x86/kvm/svm/avic.c:88:66: note: to match this '('
+   arch/x86/include/asm/apic.h:258:22: note: expanded from macro 'x2apic_mode'
+     258 | #define x2apic_mode             (0)
+         |                                 ^
+   arch/x86/kvm/svm/avic.c:88:66: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+      88 | static inline u32 avic_get_max_physical_id(struct kvm *kvm, bool x2apic_mode)
+         |                                                                  ^
+   arch/x86/include/asm/apic.h:258:23: note: expanded from macro 'x2apic_mode'
+     258 | #define x2apic_mode             (0)
+         |                                  ^
+   2 warnings and 1 error generated.
 
 
-vim +/alloc_pages_bulk_array +502 drivers/vfio/pci/mlx5/cmd.c
+vim +88 arch/x86/kvm/svm/avic.c
 
-   491	
-   492	static int mlx5vf_add_pages(struct page ***page_list, unsigned int npages)
-   493	{
-   494		unsigned int filled, done = 0;
-   495		int i;
-   496	
-   497		*page_list = kvcalloc(npages, sizeof(struct page *), GFP_KERNEL_ACCOUNT);
-   498		if (!*page_list)
-   499			return -ENOMEM;
-   500	
-   501		for (;;) {
- > 502			filled = alloc_pages_bulk_array(GFP_KERNEL_ACCOUNT,
-   503							npages - done,
-   504							*page_list + done);
-   505			if (!filled)
-   506				goto err;
-   507	
-   508			done += filled;
-   509			if (done == npages)
-   510				break;
-   511		}
-   512	
-   513		return 0;
-   514	
-   515	err:
-   516		for (i = 0; i < done; i++)
-   517			__free_page(*page_list[i]);
-   518	
-   519		kvfree(*page_list);
-   520		*page_list = NULL;
-   521		return -ENOMEM;
-   522	}
-   523	
+    87	
+  > 88	static inline u32 avic_get_max_physical_id(struct kvm *kvm, bool x2apic_mode)
+    89	{
+    90		u32 avic_max_physical_id = x2apic_mode ? x2avic_max_physical_id : AVIC_MAX_PHYSICAL_ID;
+    91	
+    92		/*
+    93		 * Assume vcpu_id is the same as APIC ID. Per KVM_CAP_MAX_VCPU_ID, max_vcpu_ids
+    94		 * represents the max APIC ID for this vm, rather than the max vcpus.
+    95		 */
+    96		return min(kvm->arch.max_vcpu_ids - 1, avic_max_physical_id);
+    97	}
+    98	
 
 -- 
 0-DAY CI Kernel Test Service
