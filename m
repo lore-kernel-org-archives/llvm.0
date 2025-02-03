@@ -1,293 +1,284 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2077.outbound.protection.outlook.com [40.107.100.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46411FFC79
-	for <llvm@lists.linux.dev>; Mon,  3 Feb 2025 09:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738573530; cv=none; b=C2BXmQt8cZ41KOYWOZ9KAZTiLzJskh7wRmAorWzSXpexWIFywlWY6g2cdoY821E4zgq8+Hk00y92NSSOPfZ+plPQKDQGK3Q78kIERYpBfr8At0hvxaPvbnwWDk13j+EQkS5LDipkNw1gh4CmbTvI+ELaZu31m3vbLdQtMaD4huE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738573530; c=relaxed/simple;
-	bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AFUgl10Vr+uf2PG685b5w5pVFshppzguRoYhgcmZrE3vh2fKnBR62c5AI1Ku9YQ51Bw4aLGmynM+WXY+dkCzg6RPqi7/u/WsXWcUFl5ZErZAcrIyHyMHXiKZ+yxJGHuKFFjdkWfTxBb6IogFCKu+rG6yICyEY0Lx4MSATe9p8qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tu8Hh9hb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=M1mKAq5B; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B1013B787;
+	Mon,  3 Feb 2025 09:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738575464; cv=fail; b=qGjMBu4D3dAJPiUyK03ujfGcfjfWIa54KrxWUqLlcnUlnR2jNRjsWi3+YrsOfNDJX8y1PAgOgrJO1lKxfBFCfsO7bL+5qUA8R/mkGMNRg5ozWzZKfaey1eTVPq3OYEMMoNiyLvLwaH/i6lVdoDuLZKW4iwh55JLSQavTnbUnPVk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738575464; c=relaxed/simple;
+	bh=IKwYT/F+lrRRFWobhBGcLSumLdcnM4LnLCR6VRS1WZs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qvbSrYRpYowKNUY/0S9Px8RMuZ9ofvW3gVJocDxaizdajmUViRs/AnLnP3NxUkUgWyj5BzcvvLIYJzt5+o5gF0JJuCbGLtyskqgMdz6VTrj0Ygn++FE7qz2FtGXRJnT7Gg/kuC3ATglS1ghd3jTak0DwKBEhcO2HHedRKajzb/g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ksCwS3ZX; arc=fail smtp.client-ip=40.107.100.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tu8Hh9hb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="M1mKAq5B"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738573526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=tu8Hh9hbsWetkIDgzcpH2nG14ZI8nV2lcq3oKrs+KHbFh8KtE4qTpI38Igq94jhAvFsFQj
-	3yY9SX6JdKiD8tVe2lUU9LRtsvnnjdn1JhlJXI2mhmuz8+sLGmg738B9CYWqJu3GcKAmBR
-	eAZBHmf/DNUJNQ4HU3P4/HKvBWjUi8TdvgzhWp8BgOqw/UWfqmIFX4Ii8DQWyiZRkNMGxo
-	XnDY1pvwSsJZetB95mma2AdKtOTPOicddBbhqUJKIL7EuaTezJuUX5Ac44BaK7XUGYnMqr
-	qMdTdJVpXfOXIriZL4wt6wd6AqBXU45ogl118Na0xqoUU0pDPq51ih4XZk2scA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738573526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=M1mKAq5BEsyd2vw89rzEqIJlchsRF4h8bG5ZOfxZUaEDBVmgPocf4eab2VMqxI3symVNg2
-	4ntxneSBMmqJbIAA==
-Date: Mon, 03 Feb 2025 10:05:17 +0100
-Subject: [PATCH 16/16] selftests: vDSO: vdso_standalone_test_x86: Switch to
- nolibc
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ksCwS3ZX"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gcE+aMMSemNQLpUKxYcDwrgXhtCHDTW84cNBqdtiOefupIclSPkVPSEyVAF9CBUbb562DcMDfiVGnBqSTzYeECc9QfKzRQvFwf/Fb08PSGGI/qg9d4zxEElkGTTWXEPS0JkeymOyuhTY9MUMWSoRssYfXYv1gLt3GuBIWB9cYK17PNew9Ueepc2bh2HGqQbONUUkGEfULcR6utOEvaThy+ZxhM9lRItLsCMLEPj7FS5fFTsBA561KRIuGguptSpJjboZXEVBFhm4Kwgg29VGxUxSQbgEWXkcRU3zKQM4z9Uki9Od6Bkx1x3tk8fnvIWaolNcoiUsvKpzKC8QxK/04Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2EZlA0mMlbT4SbFVpvET5fwlPXjac+E7WHcCwznhNs0=;
+ b=oUnIV+5da85mT50QVYgJNF5pZOiXdJt6KwjnCj9trLGZsILt/+BaUANyw/Fn842S3mvTpk3XYlG3O1uQyE+4iq4OyX8lQgM9a+KIYZtyY/R/xFVjwUJNtANilIzhQuTfC2ps1NUSDmrWCg1IEg0PEuFvNfL3szLp3jDvDqbhBmcifjdLTs3cmX83z2/T3sO/MbLLHincqkhQrtGSHj9zWN9XMyqvmVgP7d712VlcZHQ1WpWM6GLUAOblkyS1MCh23znSziHVGzXEQb5ym0Wa2rZPTSuiggqJ/mHonXL9GDqUybedwWHmLYTGMEw01oiMCcRlMKkenB7TJuCiSDWhmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2EZlA0mMlbT4SbFVpvET5fwlPXjac+E7WHcCwznhNs0=;
+ b=ksCwS3ZXJTuRxZSRVGmSUgDfATzE4oPgVrUoQRpmN2gSzvnQ24C0/pXwWxWY98gD5V3Xxia2mdzBaDgOutrGGis+cOHXKem/Z8rkuLUes4kPfYPsrQDHb34DmOUJiBOlzSddHr1wdw6bhQ19l2AX9TMLfhsRvLvG4/0YoSj0jpprUe/lYxB18HvtInStT4Ee5VuSQNhAeGESKicmmPWnvixtu0TWjPCcpsuzCe2HVee27wAkC47UemDSgquVZzX+qc5f/TIdnAXnbtoZbu5pRaiRdT5Tw+eY+3MjGfNE5WT5AA0/boIm5mpZPnW7cLFJTB1MlZSXp+97gMDyelwqdg==
+Received: from BL3PR12MB6473.namprd12.prod.outlook.com (2603:10b6:208:3b9::16)
+ by SJ0PR12MB6831.namprd12.prod.outlook.com (2603:10b6:a03:47d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.24; Mon, 3 Feb
+ 2025 09:37:37 +0000
+Received: from BL3PR12MB6473.namprd12.prod.outlook.com
+ ([fe80::25e1:5ee7:117:8923]) by BL3PR12MB6473.namprd12.prod.outlook.com
+ ([fe80::25e1:5ee7:117:8923%5]) with mapi id 15.20.8398.021; Mon, 3 Feb 2025
+ 09:37:37 +0000
+From: "Sheetal ." <sheetal@nvidia.com>
+To: kernel test robot <lkp@intel.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, Mark Brown
+	<broonie@kernel.org>
+Subject: RE: [broonie-ci:fileaMnh6H 1/9]
+ sound/soc/tegra/tegra_isomgr_bw.c:44:37: warning: variable 'pcm_id' is
+ uninitialized when used here
+Thread-Topic: [broonie-ci:fileaMnh6H 1/9]
+ sound/soc/tegra/tegra_isomgr_bw.c:44:37: warning: variable 'pcm_id' is
+ uninitialized when used here
+Thread-Index: AQHbdfZ2+txG8Gz2m0CbfEzNk/ObTrM1UhGw
+Date: Mon, 3 Feb 2025 09:37:37 +0000
+Message-ID:
+ <BL3PR12MB647381B755EC4AA0B08C7FC8CAF52@BL3PR12MB6473.namprd12.prod.outlook.com>
+References: <202502031243.4biWFdNQ-lkp@intel.com>
+In-Reply-To: <202502031243.4biWFdNQ-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL3PR12MB6473:EE_|SJ0PR12MB6831:EE_
+x-ms-office365-filtering-correlation-id: c0cf4326-9757-43ad-d2bc-08dd44366569
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|366016|1800799024|38070700018|7053199007;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?QQL1D0LjiS+CNl/Plv6dmDpmjpGyvghzYWr+YmoLW7Iwk8fXXulEmhBYkCFk?=
+ =?us-ascii?Q?+Az1qE6Zfl1WUIlrHCi/gBLl1WGKxZ1Owd0SiBd2slL+wVnQk5ODNNjBmW/+?=
+ =?us-ascii?Q?wlvhquchgbmskcfhrRf2OsZdHMTrZH5tLLqhfYl4US3ir/3sscVrZe8oagUu?=
+ =?us-ascii?Q?//RoUVCGvvMPK8jDDGZdEKzjIzTueMhaunQIaZ882zCRB3rzzz7mNftnwThg?=
+ =?us-ascii?Q?xxprSqaxhMDU8kTp/yI4LElzZfe0q/VR8nMY8BnOEot5QXlIYYDpk8VU4SG2?=
+ =?us-ascii?Q?JbJAYm2U32IAoi8oSiGkwv+BcjuO3tpHXjO0eVkytiGKTGvuNl8PTDpkjRoo?=
+ =?us-ascii?Q?WgXqvZRx/3pRt61K1KaeSv0Y5GxCYmsz632/ykyYkDU+Tr5ivsLxjk52O/xG?=
+ =?us-ascii?Q?WajLvp0kAz0BqVU7C3acdZWIvztZoONJa87fmrFKDz0LFk0osDeJ2lVYpZrG?=
+ =?us-ascii?Q?s01d7qH/3utCnwHp7L24uE7+ExbbMlIHwOjWg4BGn1vXid+fOBb9ZefW0toh?=
+ =?us-ascii?Q?Jl9pEq6XssezAh0s4qVaKKv+G+PI8WKAgDUmyTekPL656U1vsmSp/SPpIWMN?=
+ =?us-ascii?Q?mg99QVj3qDKdXMW7kyg5dIvinSzHYKQKlp7dOkIR4LEgdTDTGgrWePE8zg4G?=
+ =?us-ascii?Q?g5/Cq75XnJuXggFageITiM0J50OXrNMIodBStfq+t3jWMbz5/liDMowRJjwY?=
+ =?us-ascii?Q?EeegIiQZ/z4SqrJ8AfzOupOih3K3R0Yxqk6gErWmlJ2pJ4JtsGKkJjJn+Vxl?=
+ =?us-ascii?Q?nYTmyYPoTWwa8lSVbilxGvtRGPNrlaTqEW8gjE8WJi+7PKevqj48WqyyvjKX?=
+ =?us-ascii?Q?pmTMoXgk7uC1+pn5FJaz5I3Jp6YXsuUFWdMYU0MVOn2Mz9QDwgSp6KRuJn6R?=
+ =?us-ascii?Q?RHdecnIWNz24/WPU5VRPlygfQ1QUV5AuaKAqEJKXSfGeHjukOHEWh2LJmlMy?=
+ =?us-ascii?Q?a85Cys4d2l6nbrKRP2/0NAQgJPNWh+tU/3502hUstWBDtIHwRk8mG5Pc2xEP?=
+ =?us-ascii?Q?fFaw/tNXQe4zqlKrxEECFNpvuJsqHbwz0rgNI0cSIsW0+OB3krZENW+lhEDP?=
+ =?us-ascii?Q?6VsMlR6UqdijBPQJbT4hOfMT57jZMFsXfl8o7tZTpDhNoNgtuOklMEEZ4sOU?=
+ =?us-ascii?Q?c/2/d1iqedYlLIK3C8FWvTk5cJBuq6aU4NcWR0aR5q2+2yXvgkQ6n66r3io3?=
+ =?us-ascii?Q?bnHwyoUIGgMyWHfKSqyr1+Cpbakxfj2iqALHcoXG78XrN1J4ZLmxlAtQRty2?=
+ =?us-ascii?Q?rnZVwwoho0tYIQuB5clfLTXfSXZUyH6zCDXMNaqLFRM9xwH5PJeQQQD35fKx?=
+ =?us-ascii?Q?YVo8qJlSzm0sydheHnLEQ0wISRY2JeIMLOHt6ESSHeXj4nn+bSuLYY8Xz5VR?=
+ =?us-ascii?Q?y1na9C0ncKWkPYmfeVWF94cWoSFdSAdfXPAEjOkBUNJFENjRdg=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR12MB6473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(7053199007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?/5FGa+F80pay19odUJ1xrv0iSiWjXD0OIr1D5PKF1WUpJ6O+w9nqONyW6wOv?=
+ =?us-ascii?Q?ruYgA6/2QmUuPTSW1ahmpEzckOWWo6THTIktSo7HoAitbWsO4PFC4XR1C/aZ?=
+ =?us-ascii?Q?ttbrDbDuCAS3WSMIrgLnF2fD5z9ZHk/8Kij4BB35sVKJtR+uUNBR+0F57LGk?=
+ =?us-ascii?Q?QvkG7nSbbv4EICdRGSbVbzrcdzRoKPFQbiHBn5x1+1WySGNDh2EkLCL+D+de?=
+ =?us-ascii?Q?Bc5HonT3Ds9Fj2hwS/9xULSVM6nWcRppOc9znSVrAKuZP1v3DuaNK6j1lDR0?=
+ =?us-ascii?Q?D53oT7so3uNpARNzIuU/qn65dqY28L0vKf5ADTPdVaG/Tc/3ovRxY6aiJf2i?=
+ =?us-ascii?Q?jkQwUzfDzq1ajPu4k2CEXyYQ/hRrj/79sonQ24ls0v6J5BZRkDdUeUUGJM6q?=
+ =?us-ascii?Q?NxoRsKU66wVH7j2V8AD9AqO/zcEJD+t0i8ZE7yR5F/TLdQudQK+SFLRkJ336?=
+ =?us-ascii?Q?6N6Im/h/qnFaTkbuotXnJuwx5KTfwqZkY7g87WV4FvH9rsGUjG5u9nO15dIw?=
+ =?us-ascii?Q?pHg2dP0vyvN/t5XUc8dIOq4eatzdMRIZL76ueLI7XuBG5OGqjDrQGXYlsOEc?=
+ =?us-ascii?Q?Gkbtlfk7OltWEvb4iKwE/4V5m9zjf+HJ+5oEFjvLolwvOtp/fradTkO1zGvk?=
+ =?us-ascii?Q?abnhtvlXsUDXDRIttL8Ar4fadS/nemRbaVTu7XVBKlnNU+pnGcFN51ib4GHK?=
+ =?us-ascii?Q?mlnJveo2uvYT8ZmM4+szm/9JU06mc6o0xWbqmWaLqGJtFaGZ3iRVDaef70lu?=
+ =?us-ascii?Q?QynEe8gtB5JGb5jZY2ywa3Vo+QI8+O5F6ok8jBUI/ZIUy/gDmzOQFI1/ghDI?=
+ =?us-ascii?Q?7nLxQ4D/9M2vwMnsrusvgW8hDEJdxp9AiMGn88txnhLUDrdmlgUFr5qeo/Av?=
+ =?us-ascii?Q?pKaEYISeGGo7gRJz/hTcdDMavmAc6l4C/AG9mAB5HnjSNZ3E9d7yJS7q9pW7?=
+ =?us-ascii?Q?J5x441jKzDXdvsMcgrHYD0EVI5kZ9zeVIC7RkTT1plIV9bcQmTGvUteqw11M?=
+ =?us-ascii?Q?kLBfEnwLcDpnYwMElAXyXH8ki7JF+ulSr3pUQfXfZoCblXLgZqbHkKp8mDn+?=
+ =?us-ascii?Q?z7GYgNrNLzbwK2hUvYISSGtkmAxM4dbCUCgvRsjugBooZjrRe8c9DVCYJBb7?=
+ =?us-ascii?Q?FVmfpwLOoer3YyXAzCrP6pnqaW+YWS3uBxGCyEb4TiT3q+Ert0x1VDICyVjc?=
+ =?us-ascii?Q?NpEeOqacURI7x2qTiaM9rAuLhcVoJ6S7gJGkXMhmgDE+yXQoSKLVveZOaC2i?=
+ =?us-ascii?Q?bgN5EYKn99tEPGmpriiTMKUrJ81L/XZOTE4Z58PzFi8H1qzRnpFi8xYeEfNb?=
+ =?us-ascii?Q?8nmX3LOTEQSI47YzfdoYviUXvGL6QoGrqaNGAc3gNWNZi5UzNJmt9g5Jjxqw?=
+ =?us-ascii?Q?c22B46q+3iJ7A1jdiYuwILzHEQwcABB0D1Hck/32nsZENUhyFieFwt5iqCm0?=
+ =?us-ascii?Q?fCvwALLg9+EYlUuEEQHdHzb5maXJajXn7nc+FcPY8rbwNcz/NPg9pso/3oI8?=
+ =?us-ascii?Q?c1zJFE94/uKFLgpcC0T1TOGvUo2eIe/7+f3GAClXDemJfc9ZnQkzizecgUMl?=
+ =?us-ascii?Q?SKHbxc42PPQVs6QrTzQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250203-parse_vdso-nolibc-v1-16-9cb6268d77be@linutronix.de>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
-In-Reply-To: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
-To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738573516; l=6263;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
- b=GwjI5bSquW7zdPwOw/ObHOwJd3uaE2TURfhr6wXyXJSxHF8582pBDftmeCnGijOcc4+cOJsgI
- vZbb5XCvvLxC6Hni87Pvz2ilsFxfk0A2G8pgIDBOlJWWLW/J36zx9Uk
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL3PR12MB6473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0cf4326-9757-43ad-d2bc-08dd44366569
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2025 09:37:37.6772
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UEWqmoj1d2wpiYXzfufR6Vig6j6JUh/Zfe7pede5rMVRTPYUg6Sto5RG/R0JPwYZ924wiDcFvyv9jmZeqpnM5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6831
 
-vdso_standalone_test_x86 provides its own ASM syscall wrappers and
-_start() implementation. The in-tree nolibc library already provides
-this functionality for multiple architectures. By making use of nolibc,
-the standalone testcase can be built from the exact same codebase as the
-non-standalone version.
+Thanks for pointing this, will fix it in the patch next version.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/vDSO/Makefile              |   8 +-
- .../selftests/vDSO/vdso_standalone_test_x86.c      | 168 +--------------------
- 2 files changed, 7 insertions(+), 169 deletions(-)
+Regards,
+Sheetal
 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index bc8ca186fb877dc11740c37f1e07e45e84c2ae92..12a0614b9fd4983deffe5d6a7cfa06ba8d92a516 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -22,13 +22,17 @@ include ../lib.mk
- 
- CFLAGS += $(TOOLS_INCLUDES)
- 
-+CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tables \
-+		 -fno-stack-protector -include $(top_srcdir)/tools/include/nolibc/nolibc.h \
-+		 -I$(top_srcdir)/tools/include/nolibc/ $(KHDR_INCLUDES)
-+
- $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
- $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
- $(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
- 
--$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
--$(OUTPUT)/vdso_standalone_test_x86: CFLAGS +=-nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-+$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c | headers
-+$(OUTPUT)/vdso_standalone_test_x86: CFLAGS:=$(CFLAGS_NOLIBC) $(CFLAGS)
- 
- $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
- $(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-deleted file mode 100644
-index 500608f89c66b5747e3d845ebc54e4c3a35b6ccd..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ /dev/null
-@@ -1,167 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * vdso_test.c: Sample code to test parse_vdso.c on x86
-- * Copyright (c) 2011-2014 Andy Lutomirski
-- *
-- * You can amuse yourself by compiling with:
-- * gcc -std=gnu99 -nostdlib
-- *     -Os -fno-asynchronous-unwind-tables -flto -lgcc_s
-- *      vdso_standalone_test_x86.c parse_vdso.c
-- * to generate a small binary.  On x86_64, you can omit -lgcc_s
-- * if you want the binary to be completely standalone.
-- */
--
--#include <sys/syscall.h>
--#include <sys/time.h>
--#include <unistd.h>
--#include <stdint.h>
--#include <linux/auxvec.h>
--
--#include "parse_vdso.h"
--
--/* We need some libc functions... */
--int strcmp(const char *a, const char *b)
--{
--	/* This implementation is buggy: it never returns -1. */
--	while (*a || *b) {
--		if (*a != *b)
--			return 1;
--		if (*a == 0 || *b == 0)
--			return 1;
--		a++;
--		b++;
--	}
--
--	return 0;
--}
--
--/*
-- * The clang build needs this, although gcc does not.
-- * Stolen from lib/string.c.
-- */
--void *memcpy(void *dest, const void *src, size_t count)
--{
--	char *tmp = dest;
--	const char *s = src;
--
--	while (count--)
--		*tmp++ = *s++;
--	return dest;
--}
--
--/* ...and two syscalls.  This is x86-specific. */
--static inline long x86_syscall3(long nr, long a0, long a1, long a2)
--{
--	long ret;
--#ifdef __x86_64__
--	asm volatile ("syscall" : "=a" (ret) : "a" (nr),
--		      "D" (a0), "S" (a1), "d" (a2) :
--		      "cc", "memory", "rcx",
--		      "r8", "r9", "r10", "r11" );
--#else
--	asm volatile ("int $0x80" : "=a" (ret) : "a" (nr),
--		      "b" (a0), "c" (a1), "d" (a2) :
--		      "cc", "memory" );
--#endif
--	return ret;
--}
--
--static inline long linux_write(int fd, const void *data, size_t len)
--{
--	return x86_syscall3(__NR_write, fd, (long)data, (long)len);
--}
--
--static inline void linux_exit(int code)
--{
--	x86_syscall3(__NR_exit, code, 0, 0);
--}
--
--void to_base10(char *lastdig, time_t n)
--{
--	while (n) {
--		*lastdig = (n % 10) + '0';
--		n /= 10;
--		lastdig--;
--	}
--}
--
--unsigned long getauxval(const unsigned long *auxv, unsigned long type)
--{
--	unsigned long ret;
--
--	if (!auxv)
--		return 0;
--
--	while (1) {
--		if (!auxv[0] && !auxv[1]) {
--			ret = 0;
--			break;
--		}
--
--		if (auxv[0] == type) {
--			ret = auxv[1];
--			break;
--		}
--
--		auxv += 2;
--	}
--
--	return ret;
--}
--
--void c_main(void **stack)
--{
--	/* Parse the stack */
--	long argc = (long)*stack;
--	stack += argc + 2;
--
--	/* Now we're pointing at the environment.  Skip it. */
--	while(*stack)
--		stack++;
--	stack++;
--
--	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
--	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
--
--	/* Find gettimeofday. */
--	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym("LINUX_2.6", "__vdso_gettimeofday");
--
--	if (!gtod)
--		linux_exit(1);
--
--	struct timeval tv;
--	long ret = gtod(&tv, 0);
--
--	if (ret == 0) {
--		char buf[] = "The time is                     .000000\n";
--		to_base10(buf + 31, tv.tv_sec);
--		to_base10(buf + 38, tv.tv_usec);
--		linux_write(1, buf, sizeof(buf) - 1);
--	} else {
--		linux_exit(ret);
--	}
--
--	linux_exit(0);
--}
--
--/*
-- * This is the real entry point.  It passes the initial stack into
-- * the C entry point.
-- */
--asm (
--	".text\n"
--	".global _start\n"
--	".type _start,@function\n"
--	"_start:\n\t"
--#ifdef __x86_64__
--	"mov %rsp,%rdi\n\t"
--	"and $-16,%rsp\n\t"
--	"sub $8,%rsp\n\t"
--	"jmp c_main"
--#else
--	"push %esp\n\t"
--	"call c_main\n\t"
--	"int $3"
--#endif
--	);
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-new file mode 120000
-index 0000000000000000000000000000000000000000..4d3d96f1e440c965474681a6f35375a60b3921be
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -0,0 +1 @@
-+vdso_test_gettimeofday.c
-\ No newline at end of file
+-----Original Message-----
+From: kernel test robot <lkp@intel.com>=20
+Sent: 03 February 2025 10:15
+To: Sheetal . <sheetal@nvidia.com>
+Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; Mark Brown <brooni=
+e@kernel.org>
+Subject: [broonie-ci:fileaMnh6H 1/9] sound/soc/tegra/tegra_isomgr_bw.c:44:3=
+7: warning: variable 'pcm_id' is uninitialized when used here
 
--- 
-2.48.1
+External email: Use caution opening links or attachments
 
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file=
+aMnh6H
+head:   500aea53057a952d584cbe1fa461c7adaaa9f655
+commit: 0ecef4e6d1d8e542df8eab71d4aa782bb8ae84e9 [1/9] ASoC: tegra: Add int=
+erconnect support
+config: arm-randconfig-001-20250203 (https://download.01.org/0day-ci/archiv=
+e/20250203/202502031243.4biWFdNQ-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c=
+1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20250203/202502031243.4biWFdNQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes:=20
+| https://lore.kernel.org/oe-kbuild-all/202502031243.4biWFdNQ-lkp@intel.
+| com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/tegra/tegra_isomgr_bw.c:44:37: warning: variable 'pcm_id'=20
+>> is uninitialized when used here [-Wuninitialized]
+      44 |         if ((adma_isomgr->bw_per_dev[type][pcm_id] && is_running=
+) ||
+         |                                            ^~~~~~
+   sound/soc/tegra/tegra_isomgr_bw.c:25:53: note: initialize the variable '=
+pcm_id' to silence this warning
+      25 |         u32 type =3D substream->stream, bandwidth =3D 0, pcm_id;
+         |                                                            ^
+         |                                                             =3D =
+0
+   1 warning generated.
+
+
+vim +/pcm_id +44 sound/soc/tegra/tegra_isomgr_bw.c
+
+    16
+    17  int tegra_isomgr_adma_setbw(struct snd_pcm_substream *substream,
+    18                              struct snd_soc_dai *dai, bool is_runnin=
+g)
+    19  {
+    20          struct device *dev =3D dai->dev;
+    21          struct tegra_admaif *admaif =3D snd_soc_dai_get_drvdata(dai=
+);
+    22          struct tegra_adma_isomgr *adma_isomgr =3D admaif->adma_isom=
+gr;
+    23          struct snd_pcm_runtime *runtime =3D substream->runtime;
+    24          struct snd_pcm *pcm =3D substream->pcm;
+    25          u32 type =3D substream->stream, bandwidth =3D 0, pcm_id;
+    26          int sample_bytes;
+    27
+    28          if (!adma_isomgr)
+    29                  return 0;
+    30
+    31          if (!runtime || !pcm)
+    32                  return -EINVAL;
+    33
+    34          if (pcm->device >=3D adma_isomgr->max_pcm_device) {
+    35                  dev_err(dev, "%s: PCM device number %d is greater t=
+han %d\n", __func__,
+    36                          pcm->device, adma_isomgr->max_pcm_device);
+    37                  return -EINVAL;
+    38          }
+    39
+    40          /*
+    41           * No action if  stream is running and bandwidth is already=
+ set or
+    42           * stream is not running and bandwidth is already reset
+    43           */
+  > 44          if ((adma_isomgr->bw_per_dev[type][pcm_id] && is_running) |=
+|
+    45              (!adma_isomgr->bw_per_dev[type][pcm_id] && !is_running)=
+)
+    46                  return 0;
+    47
+    48          if (is_running) {
+    49                  sample_bytes =3D snd_pcm_format_width(runtime->form=
+at) / 8;
+    50                  if (sample_bytes < 0)
+    51                          return sample_bytes;
+    52
+    53                  /* KB/s kilo bytes per sec */
+    54                  bandwidth =3D runtime->channels * (runtime->rate / =
+1000) *
+    55                                  sample_bytes;
+    56          }
+    57
+    58          mutex_lock(&adma_isomgr->mutex);
+    59
+    60          if (is_running) {
+    61                  if (bandwidth + adma_isomgr->current_bandwidth > ad=
+ma_isomgr->max_bw)
+    62                          bandwidth =3D adma_isomgr->max_bw - adma_is=
+omgr->current_bandwidth;
+    63
+    64                  adma_isomgr->current_bandwidth +=3D bandwidth;
+    65          } else {
+    66                  adma_isomgr->current_bandwidth -=3D adma_isomgr->bw=
+_per_dev[type][pcm_id];
+    67          }
+    68
+    69          mutex_unlock(&adma_isomgr->mutex);
+    70
+    71          adma_isomgr->bw_per_dev[type][pcm_id] =3D bandwidth;
+    72
+    73          dev_dbg(dev, "Setting up bandwidth to %d KBps\n", adma_isom=
+gr->current_bandwidth);
+    74
+    75          return icc_set_bw(adma_isomgr->icc_path_handle,
+    76                            adma_isomgr->current_bandwidth, adma_isom=
+gr->max_bw);
+    77  }
+    78  EXPORT_SYMBOL(tegra_isomgr_adma_setbw);
+    79
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
