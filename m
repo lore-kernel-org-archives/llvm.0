@@ -1,72 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D6C200BB8;
-	Mon,  3 Feb 2025 10:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A91C2A1CF;
+	Mon,  3 Feb 2025 11:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738579214; cv=none; b=le9luq6EyWfGhihN2k8wV0gzFyz12POg8My6aeIJE0pu6uLgzZzycbI6T7Fl0ag6f4GC+bD/PXC6xDplp6MgN0ShD+9vmPTxSQ43J24c/qV6d0gasMGbBdXprv8fcdtnSs2X3z7CnO83Tgmt3Ks5JQa+LEyAWxtPIOz+3Ah1XkY=
+	t=1738582313; cv=none; b=lXDy21oV89a7joFE/Gw/PGRqSsj6XJuy1pEnAR1O0FRe9jRIUeumBut9QFbRWFzxBg4g0cJc/6xAsJMEWe3BFMECIrDBArvXFJqQxea8o1/FjhkqZE7AEhxNb7E/x+Yfe+kxYpoSZlKAH0Rsrvv6I7y7x3oR81Utq2UhOgz3BwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738579214; c=relaxed/simple;
-	bh=d9bnQ06DO7o8o7Yyf6ImAcjPuUXrdTdUfK7SQ7Ls68Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oW5QgdAaIdM/CblA3lDuQJhqcVy5jmwK9vWsBEjPsZik6beIK8tAHb2qVskVkRjF2z9a9WqVAMT0lCaFfvLOHdIEvdlLBNg3WP18DNJ0JE6pnZ+yhNM+UMY1KVBVikkfIIZt8ZuTrwCZHfpZ2GZprZJRXbirXVj4Fa2IzRUmvRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c4n8tVP2; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1738582313; c=relaxed/simple;
+	bh=mQSyYAE5CDgx6x9Uk1QBq6kGIqHddm96FcS+wwOmmJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QwkZKpYvgwuN4XM6OnFjLkQ5LaPM2z7yFFd5oXJrqxUFGKkH8JIWY8XTaW4t94Ji2bSdOpHIaxdwPxROZXd2krPmxcr4xxmCbEVVG34cg3Z45xcQeFL56ceq2+nP6ZNDWPskirErE78eGqy0Ka8T4g4QdLWb8NkxyDMcA/SR9ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kjMqhQeM; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c4n8tVP2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kjMqhQeM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738579212; x=1770115212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d9bnQ06DO7o8o7Yyf6ImAcjPuUXrdTdUfK7SQ7Ls68Y=;
-  b=c4n8tVP2QzxqOL1xt6CVvb1ixzuE3XwwxKm0sNyVkVdeEjZY8nOryS38
-   WcTEmtYknpPWd+HolvAPUYuxCu+aFtb8yrWG6S8aSxzUv7LfgNNFt4Dbp
-   8QIxG7UZQ1qSs/Q8FjEoEAYYtFKsQo8Fw5rFu+731SmXrPMGkWcyxD+t4
-   qWstoLfU4bKUIJGEizX4wwTnqMCgmziKzwnYskXm/shY55UWuRWOyIFHu
-   TKD2UT6NnRI/t++fdwgmSa/RFOH4vZayhte/Y6Y84jglI0yOOPsTsEZW7
-   TmYUM5Jf8ucI6Y/FcJd1EY4i6xBVCFDIZKyynGcfIOwMY295KTXc+P2Vn
-   A==;
-X-CSE-ConnectionGUID: ybGLQcI0R5iZD6++fbmaXw==
-X-CSE-MsgGUID: 5T6FVh4CTda7WbHV7BmrsA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="41899843"
+  t=1738582310; x=1770118310;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mQSyYAE5CDgx6x9Uk1QBq6kGIqHddm96FcS+wwOmmJ4=;
+  b=kjMqhQeMDVf9Dn5TK61nuYLQbCiFOlCgv8zlUJcFEJbL0kmER5hvMQo/
+   cr5GzqbZOzlHpKbNBX8NbycmI8bVy8sWgm36u4gBk3tv4hBgzTNxwhGHU
+   4kJCAfk1WmBE9dPdYct6LXhjxY5asBBLAUPBdIoVLTCj1TyFz5aLmwiO4
+   XzS5Q6BAb0Ai2xhs0h9RGNj5ri4YDjL/1Xa6axoiWxOQm7ErKN3jeigwZ
+   tgEhATqGaxtZkiAquyZjh/JXi2yde3M6CztL6hplONB5bIUBDpsrPtVaZ
+   GVxhWAz/RtZziqCbWeGU0xsyf150oPiZ7mSta9ITBsmTXBUmnmhEQo7qb
+   g==;
+X-CSE-ConnectionGUID: COhM8l8+RUagnxdru3TFlQ==
+X-CSE-MsgGUID: 6Wde8n4vSF2g4V5iupc5lg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="42992559"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="41899843"
+   d="scan'208";a="42992559"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 02:40:11 -0800
-X-CSE-ConnectionGUID: wVdStkHSSNSCc0uj4NkzOQ==
-X-CSE-MsgGUID: f6KZqfDiSimv5rhMm+cJ7w==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 03:31:13 -0800
+X-CSE-ConnectionGUID: R2O5UoklRQyDoLISLuinUg==
+X-CSE-MsgGUID: af+uuzdvRYy2kuKr8xATnQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="110084518"
+   d="scan'208";a="110092845"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 03 Feb 2025 02:40:08 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 03 Feb 2025 03:31:12 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tets5-000qoF-16;
-	Mon, 03 Feb 2025 10:40:05 +0000
-Date: Mon, 3 Feb 2025 18:39:39 +0800
+	id 1teufV-000qqU-2y;
+	Mon, 03 Feb 2025 11:31:09 +0000
+Date: Mon, 3 Feb 2025 19:30:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Amirreza Zarrabi <quic_azarrabi@quicinc.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Sumit Garg <sumit.garg@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Amirreza Zarrabi <quic_azarrabi@quicinc.com>
-Subject: Re: [PATCH v2 6/8] tee: add Qualcomm TEE driver
-Message-ID: <202502031838.MfZgQhYA-lkp@intel.com>
-References: <20250202-qcom-tee-using-tee-ss-without-mem-obj-v2-6-297eacd0d34f@quicinc.com>
+To: Max Filippov <jcmvbkbc@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jcmvbkbc-xtensa:xtensa-6.13-esp32 50/53]
+ kernel/events/core.c:6572:15: warning: variable 'flags' set but not used
+Message-ID: <202502031928.lunYwouc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,444 +61,217 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250202-qcom-tee-using-tee-ss-without-mem-obj-v2-6-297eacd0d34f@quicinc.com>
 
-Hi Amirreza,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on dab2734f8e9ecba609d66d1dd087a392a7774c04]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Amirreza-Zarrabi/tee-allow-a-driver-to-allocate-a-tee_device-without-a-pool/20250203-104846
-base:   dab2734f8e9ecba609d66d1dd087a392a7774c04
-patch link:    https://lore.kernel.org/r/20250202-qcom-tee-using-tee-ss-without-mem-obj-v2-6-297eacd0d34f%40quicinc.com
-patch subject: [PATCH v2 6/8] tee: add Qualcomm TEE driver
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250203/202502031838.MfZgQhYA-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502031838.MfZgQhYA-lkp@intel.com/reproduce)
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.13-esp32
+head:   f4a6cef2509c4e81637b6d5d6f0c27966895985a
+commit: 88bd9eae01160b8518176ec8020990780152c0d6 [50/53] WIP: perf: support mmapping event on noMMU
+config: i386-buildonly-randconfig-003-20250203 (https://download.01.org/0day-ci/archive/20250203/202502031928.lunYwouc-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502031928.lunYwouc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502031838.MfZgQhYA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502031928.lunYwouc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/tee/qcomtee/call.c:419:40: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     419 |         struct qcomtee_object_invoke_ctx *oic __free(kfree) = NULL;
-         |                                               ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:41:1: note: expanded from here
-      41 | __free_kfree
-         | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
->> drivers/tee/qcomtee/call.c:419:40: error: 'cleanup' function '__free_pages' must take 1 parameter
-     419 |         struct qcomtee_object_invoke_ctx *oic __free(kfree) = NULL;
-         |                                               ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:41:1: note: expanded from here
-      41 | __free_kfree
-         | ^
-   drivers/tee/qcomtee/call.c:421:24: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     421 |         struct qcomtee_arg *u __free(kfree) = NULL;
-         |                               ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:42:1: note: expanded from here
-      42 | __free_kfree
-         | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
-   drivers/tee/qcomtee/call.c:421:24: error: 'cleanup' function '__free_pages' must take 1 parameter
-     421 |         struct qcomtee_arg *u __free(kfree) = NULL;
-         |                               ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:42:1: note: expanded from here
-      42 | __free_kfree
-         | ^
->> drivers/tee/qcomtee/call.c:439:8: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     439 |         oic = kzalloc(sizeof(*oic), GFP_KERNEL);
+>> kernel/events/core.c:6572:15: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    6572 |         int ret = 0, flags = 0;
+         |                      ^
+>> kernel/events/core.c:6788:15: warning: no previous prototype for function 'perf_get_unmapped_area' [-Wmissing-prototypes]
+    6788 | unsigned long perf_get_unmapped_area(struct file *file,
          |               ^
->> drivers/tee/qcomtee/call.c:439:6: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_object_invoke_ctx *' from 'int' [-Wint-conversion]
-     439 |         oic = kzalloc(sizeof(*oic), GFP_KERNEL);
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tee/qcomtee/call.c:444:6: error: call to undeclared function 'kcalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     444 |         u = kcalloc(arg->num_params + 1, sizeof(*u), GFP_KERNEL);
-         |             ^
->> drivers/tee/qcomtee/call.c:444:4: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_arg *' from 'int' [-Wint-conversion]
-     444 |         u = kcalloc(arg->num_params + 1, sizeof(*u), GFP_KERNEL);
-         |           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tee/qcomtee/call.c:584:39: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     584 |         struct qcomtee_context_data *ctxdata __free(kfree) = NULL;
-         |                                              ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:51:1: note: expanded from here
-      51 | __free_kfree
+   kernel/events/core.c:6788:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    6788 | unsigned long perf_get_unmapped_area(struct file *file,
          | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
-   drivers/tee/qcomtee/call.c:584:39: error: 'cleanup' function '__free_pages' must take 1 parameter
-     584 |         struct qcomtee_context_data *ctxdata __free(kfree) = NULL;
-         |                                              ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:51:1: note: expanded from here
-      51 | __free_kfree
-         | ^
-   drivers/tee/qcomtee/call.c:586:12: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     586 |         ctxdata = kzalloc(sizeof(*ctxdata), GFP_KERNEL);
-         |                   ^
->> drivers/tee/qcomtee/call.c:586:10: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_context_data *' from 'int' [-Wint-conversion]
-     586 |         ctxdata = kzalloc(sizeof(*ctxdata), GFP_KERNEL);
-         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tee/qcomtee/call.c:623:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     623 |         kfree(ctxdata);
-         |         ^
-   drivers/tee/qcomtee/call.c:655:26: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     655 |         struct qcomtee *qcomtee __free(kfree) = NULL;
-         |                                 ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:58:1: note: expanded from here
-      58 | __free_kfree
-         | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
-   drivers/tee/qcomtee/call.c:655:26: error: 'cleanup' function '__free_pages' must take 1 parameter
-     655 |         struct qcomtee *qcomtee __free(kfree) = NULL;
-         |                                 ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:58:1: note: expanded from here
-      58 | __free_kfree
-         | ^
-   drivers/tee/qcomtee/call.c:659:12: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     659 |         qcomtee = kzalloc(sizeof(*qcomtee), GFP_KERNEL);
-         |                   ^
->> drivers/tee/qcomtee/call.c:659:10: error: incompatible integer to pointer conversion assigning to 'struct qcomtee *' from 'int' [-Wint-conversion]
-     659 |         qcomtee = kzalloc(sizeof(*qcomtee), GFP_KERNEL);
-         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tee/qcomtee/call.c:721:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     721 |         kfree(qcomtee);
-         |         ^
-   18 errors generated.
---
->> drivers/tee/qcomtee/core.c:51:11: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      51 |         object = kzalloc(sizeof(*object), GFP_KERNEL);
-         |                  ^
->> drivers/tee/qcomtee/core.c:51:9: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_object *' from 'int' [-Wint-conversion]
-      51 |         object = kzalloc(sizeof(*object), GFP_KERNEL);
-         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tee/qcomtee/core.c:62:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      62 |         kfree(object->name);
-         |         ^
->> drivers/tee/qcomtee/core.c:378:12: error: call to undeclared function 'copy_from_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     378 |                 else if (copy_from_user(ptr, u[i].b.uaddr, u[i].b.size))
-         |                          ^
->> drivers/tee/qcomtee/core.c:458:12: error: call to undeclared function 'copy_to_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     458 |                 else if (copy_to_user(u[i].b.uaddr, ptr, u[i].b.size))
-         |                          ^
-   5 errors generated.
---
->> drivers/tee/qcomtee/user_obj.c:238:4: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     238 |                         kfree(ureq);
-         |                         ^
->> drivers/tee/qcomtee/user_obj.c:252:28: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     252 |         struct qcomtee_ureq *ureq __free(kfree) = NULL;
-         |                                   ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:59:1: note: expanded from here
-      59 | __free_kfree
-         | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
->> drivers/tee/qcomtee/user_obj.c:252:28: error: 'cleanup' function '__free_pages' must take 1 parameter
-     252 |         struct qcomtee_ureq *ureq __free(kfree) = NULL;
-         |                                   ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:59:1: note: expanded from here
-      59 | __free_kfree
-         | ^
->> drivers/tee/qcomtee/user_obj.c:255:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     255 |         ureq = kzalloc(sizeof(*ureq), GFP_KERNEL);
-         |                ^
->> drivers/tee/qcomtee/user_obj.c:255:7: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_ureq *' from 'int' [-Wint-conversion]
-     255 |         ureq = kzalloc(sizeof(*ureq), GFP_KERNEL);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tee/qcomtee/user_obj.c:336:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     336 |         kfree(ureq);
-         |         ^
-   drivers/tee/qcomtee/user_obj.c:352:9: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     352 |         ureq = kzalloc(sizeof(*ureq), GFP_KERNEL);
-         |                ^
-   drivers/tee/qcomtee/user_obj.c:352:7: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_ureq *' from 'int' [-Wint-conversion]
-     352 |         ureq = kzalloc(sizeof(*ureq), GFP_KERNEL);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tee/qcomtee/user_obj.c:361:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     361 |                 kfree(ureq);
-         |                 ^
-   drivers/tee/qcomtee/user_obj.c:370:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     370 |         kfree(uo);
-         |         ^
-   drivers/tee/qcomtee/user_obj.c:394:42: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
-     394 |         struct qcomtee_user_object *user_object __free(kfree) = NULL;
-         |                                                 ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:82:1: note: expanded from here
-      82 | __free_kfree
-         | ^
-   include/linux/gfp.h:359:13: note: '__free_pages' declared here
-     359 | extern void __free_pages(struct page *page, unsigned int order);
-         |             ^
-   drivers/tee/qcomtee/user_obj.c:394:42: error: 'cleanup' function '__free_pages' must take 1 parameter
-     394 |         struct qcomtee_user_object *user_object __free(kfree) = NULL;
-         |                                                 ^
-   include/linux/cleanup.h:200:33: note: expanded from macro '__free'
-     200 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:82:1: note: expanded from here
-      82 | __free_kfree
-         | ^
-   drivers/tee/qcomtee/user_obj.c:398:16: error: call to undeclared function 'kzalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     398 |         user_object = kzalloc(sizeof(*user_object), GFP_KERNEL);
-         |                       ^
->> drivers/tee/qcomtee/user_obj.c:398:14: error: incompatible integer to pointer conversion assigning to 'struct qcomtee_user_object *' from 'int' [-Wint-conversion]
-     398 |         user_object = kzalloc(sizeof(*user_object), GFP_KERNEL);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tee/qcomtee/user_obj.c:484:8: error: call to undeclared function 'copy_to_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     484 |                         if (copy_to_user(params[i].u.ubuf.uaddr, u[i].b.addr,
-         |                             ^
->> drivers/tee/qcomtee/user_obj.c:561:8: error: call to undeclared function 'copy_from_user'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     561 |                         if (copy_from_user(u[i].b.addr, params[i].u.ubuf.uaddr,
-         |                             ^
-   drivers/tee/qcomtee/user_obj.c:672:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     672 |                 kfree(ureq);
-         |                 ^
-   17 errors generated.
+         | static 
+   kernel/events/core.c:6844:17: warning: unused function 'perf_mmap_capabilities' [-Wunused-function]
+    6844 | static unsigned perf_mmap_capabilities(struct file *file)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +419 drivers/tee/qcomtee/call.c
+vim +/flags +6572 kernel/events/core.c
 
-   406	
-   407	/**
-   408	 * qcomtee_object_invoke() - Invoke a QTEE object.
-   409	 * @ctx: TEE context.
-   410	 * @arg: ioctl arguments.
-   411	 * @params: parameters for the object.
-   412	 *
-   413	 * Return: On success, returns 0; on failure, returns < 0.
-   414	 */
-   415	static int qcomtee_object_invoke(struct tee_context *ctx,
-   416					 struct tee_ioctl_object_invoke_arg *arg,
-   417					 struct tee_param *params)
-   418	{
- > 419		struct qcomtee_object_invoke_ctx *oic __free(kfree) = NULL;
-   420		struct qcomtee_context_data *ctxdata = ctx->data;
- > 421		struct qcomtee_arg *u __free(kfree) = NULL;
-   422		struct qcomtee_object *object;
-   423		int i, ret, result;
-   424	
-   425		if (qcomtee_params_check(params, arg->num_params))
-   426			return -EINVAL;
-   427	
-   428		/* First, handle reserved operations: */
-   429		if (arg->op == QCOMTEE_OBJREF_OP_RELEASE) {
-   430			del_qtee_object(arg->object, ctxdata);
-   431	
-   432			return 0;
-   433		} else if (arg->op > QCOMTEE_OBJREF_OP_MIN) {
-   434			return -EINVAL;
-   435		}
-   436	
-   437		/* Otherwise, invoke a QTEE object: */
-   438	
- > 439		oic = kzalloc(sizeof(*oic), GFP_KERNEL);
-   440		if (!oic)
-   441			return -ENOMEM;
-   442	
-   443		/* +1 for ending QCOMTEE_ARG_TYPE_INV. */
- > 444		u = kcalloc(arg->num_params + 1, sizeof(*u), GFP_KERNEL);
-   445		if (!u)
-   446			return -ENOMEM;
-   447	
-   448		/* Get an object to invoke. */
-   449		if (arg->object == TEE_OBJREF_NULL) {
-   450			/* Use ROOT if TEE_OBJREF_NULL is invoked. */
-   451			if (qcomtee_root_object_check(arg->op, params, arg->num_params))
-   452				return -EINVAL;
-   453	
-   454			object = ROOT_QCOMTEE_OBJECT;
-   455		} else if (find_qtee_object(&object, arg->object, ctxdata)) {
-   456			return -EINVAL;
-   457		}
-   458	
-   459		ret = qcomtee_params_to_args(u, params, arg->num_params, ctx);
-   460		if (ret)
-   461			goto out;
-   462	
-   463		ret = qcomtee_object_do_invoke(oic, object, arg->op, u, &result);
-   464		if (ret) {
-   465			qcomtee_arg_for_each_input_object(i, u) {
-   466				qcomtee_user_object_set_notify(u[i].o, false);
-   467				qcomtee_object_put(u[i].o);
-   468			}
-   469	
-   470			goto out;
-   471		}
-   472	
-   473		if (!result) {
-   474			/* Assume service is UNAVAIL if unable to process the result. */
-   475			if (qcomtee_params_from_args(params, u, arg->num_params, ctx))
-   476				result = QCOMTEE_MSG_ERROR_UNAVAIL;
-   477		} else {
-   478			/*
-   479			 * qcomtee_params_to_args() gets a copy of IO for the driver to
-   480			 * make sure they do not get released while in the middle of
-   481			 * invocation. On success (!result), qcomtee_params_from_args()
-   482			 * puts them.
-   483			 */
-   484			qcomtee_arg_for_each_input_object(i, u)
-   485				qcomtee_object_put(u[i].o);
-   486		}
-   487	
-   488		arg->ret = result;
-   489	out:
-   490		qcomtee_object_put(object);
-   491	
-   492		return ret;
-   493	}
-   494	
-   495	/**
-   496	 * qcomtee_supp_recv() - Wait for a request for the supplicant.
-   497	 * @ctx: TEE context.
-   498	 * @op: requested operation on the object.
-   499	 * @num_params: number of elements in the parameter array.
-   500	 * @params: parameters for @op.
-   501	 *
-   502	 * The first parameter is a meta %TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INOUT.
-   503	 * On input, it provides a user buffer. This buffer is used for parameters of
-   504	 * type %TEE_IOCTL_PARAM_ATTR_TYPE_UBUF_INPUT in qcomtee_cb_params_from_args().
-   505	 * On output, the object ID and request ID are stored in the meta parameter.
-   506	 *
-   507	 * @num_params is updated to the number of parameters that actually exist
-   508	 * in @params on return.
-   509	 *
-   510	 * Return: On success, returns 0; on failure, returns < 0.
-   511	 */
-   512	static int qcomtee_supp_recv(struct tee_context *ctx, u32 *op, u32 *num_params,
-   513				     struct tee_param *params)
-   514	{
-   515		struct qcomtee_user_object_request_data data;
-   516		void __user *uaddr;
-   517		size_t ubuf_size;
-   518		int i, ret;
-   519	
-   520		if (!*num_params)
-   521			return -EINVAL;
-   522	
-   523		/* We expect the first parameter to be an INOUT + meta parameter. */
-   524		if (params->attr !=
-   525		    (TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INOUT | TEE_IOCTL_PARAM_ATTR_META))
-   526			return -EINVAL;
-   527	
-   528		/* Other parameters are none. */
-   529		for (i = 1; i < *num_params; i++)
-   530			if (params[i].attr)
-   531				return -EINVAL;
-   532	
-   533		if (!IS_ALIGNED(params->u.value.a, 8))
-   534			return -EINVAL;
-   535	
-   536		/* User buffer and size from meta parameter. */
-   537		uaddr = u64_to_user_ptr(params->u.value.a);
-   538		ubuf_size = params->u.value.b;
-   539		/* Process TEE parameters. +/-1 to ignore the meta parameter. */
-   540		ret = qcomtee_user_object_select(ctx, params + 1, *num_params - 1,
-   541						 uaddr, ubuf_size, &data);
-   542		if (ret)
-   543			return ret;
-   544	
-   545		params->u.value.a = data.object_id;
-   546		params->u.value.b = data.id;
-   547		params->u.value.c = 0;
-   548		*op = data.op;
-   549		*num_params = data.np + 1;
-   550	
-   551		return 0;
-   552	}
-   553	
-   554	/**
-   555	 * qcomtee_supp_send() - Submit a response for a request.
-   556	 * @ctx: TEE context.
-   557	 * @errno: return value for the request.
-   558	 * @num_params: number of elements in the parameter array.
-   559	 * @params: returned parameters.
-   560	 *
-   561	 * The first parameter is a meta %TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT.
-   562	 * It specifies the request ID this response belongs to.
-   563	 *
-   564	 * Return: On success, returns 0; on failure, returns < 0.
-   565	 */
-   566	static int qcomtee_supp_send(struct tee_context *ctx, u32 errno, u32 num_params,
-   567				     struct tee_param *params)
-   568	{
-   569		if (!num_params)
-   570			return -EINVAL;
-   571	
-   572		/* We expect the first parameter to be an OUTPUT + meta parameter. */
-   573		if (params->attr != (TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT |
-   574				     TEE_IOCTL_PARAM_ATTR_META))
-   575			return -EINVAL;
-   576	
-   577		/* Process TEE parameters. +/-1 to ignore the meta parameter. */
-   578		return qcomtee_user_object_submit(ctx, params + 1, num_params - 1,
-   579						  params->u.value.a, errno);
-   580	}
-   581	
-   582	static int qcomtee_open(struct tee_context *ctx)
-   583	{
-   584		struct qcomtee_context_data *ctxdata __free(kfree) = NULL;
-   585	
- > 586		ctxdata = kzalloc(sizeof(*ctxdata), GFP_KERNEL);
-   587		if (!ctxdata)
-   588			return -ENOMEM;
-   589	
-   590		idr_init(&ctxdata->qtee_objects_idr);
-   591		spin_lock_init(&ctxdata->qtee_lock);
-   592		idr_init(&ctxdata->reqs_idr);
-   593		INIT_LIST_HEAD(&ctxdata->reqs_list);
-   594		mutex_init(&ctxdata->reqs_lock);
-   595		init_completion(&ctxdata->req_c);
-   596	
-   597		ctx->data = no_free_ptr(ctxdata);
-   598	
-   599		return 0;
-   600	}
-   601	
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6560  
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6561  static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6562  {
+cdd6c482c9ff9c kernel/perf_event.c   Ingo Molnar             2009-09-21  6563  	struct perf_event *event = file->private_data;
+22a4f650d686ee kernel/perf_counter.c Ingo Molnar             2009-06-01  6564  	unsigned long user_locked, user_lock_limit;
+789f90fcf6b0b5 kernel/perf_counter.c Peter Zijlstra          2009-05-15  6565  	struct user_struct *user = current_user();
+2ab9d830262c13 kernel/events/core.c  Peter Zijlstra          2024-09-02  6566  	struct mutex *aux_mutex = NULL;
+56de4e8f914668 kernel/events/core.c  Steven Rostedt (VMware  2019-12-13  6567) 	struct perf_buffer *rb = NULL;
+22a4f650d686ee kernel/perf_counter.c Ingo Molnar             2009-06-01  6568  	unsigned long locked, lock_limit;
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6569  	unsigned long vma_size;
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6570  	unsigned long nr_pages;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6571  	long user_extra = 0, extra = 0;
+d57e34fdd60be7 kernel/perf_event.c   Peter Zijlstra          2010-05-28 @6572  	int ret = 0, flags = 0;
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6573  
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6574  	/*
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6575  	 * Don't allow mmap() of inherited per-task counters. This would
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6576  	 * create a performance issue due to all children writing to the
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  6577  	 * same rb.
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6578  	 */
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6579  	if (event->cpu == -1 && event->attr.inherit)
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6580  		return -EINVAL;
+c7920614cebbf2 kernel/perf_event.c   Peter Zijlstra          2010-05-18  6581  
+43a21ea81a2400 kernel/perf_counter.c Peter Zijlstra          2009-03-25  6582  	if (!(vma->vm_flags & VM_SHARED))
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6583  		return -EINVAL;
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6584  
+da97e18458fb42 kernel/events/core.c  Joel Fernandes (Google  2019-10-14  6585) 	ret = security_perf_event_read(event);
+da97e18458fb42 kernel/events/core.c  Joel Fernandes (Google  2019-10-14  6586) 	if (ret)
+da97e18458fb42 kernel/events/core.c  Joel Fernandes (Google  2019-10-14  6587) 		return ret;
+da97e18458fb42 kernel/events/core.c  Joel Fernandes (Google  2019-10-14  6588) 
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6589  	vma_size = vma->vm_end - vma->vm_start;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6590  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6591  	if (vma->vm_pgoff == 0) {
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6592  		nr_pages = (vma_size / PAGE_SIZE) - 1;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6593  	} else {
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6594  		/*
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6595  		 * AUX area mapping: if rb->aux_nr_pages != 0, it's already
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6596  		 * mapped, all subsequent mappings should have the same size
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6597  		 * and offset. Must be above the normal perf buffer.
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6598  		 */
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6599  		u64 aux_offset, aux_size;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6600  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6601  		if (!event->rb)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6602  			return -EINVAL;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6603  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6604  		nr_pages = vma_size / PAGE_SIZE;
+dbc48c8f41c208 kernel/events/core.c  Adrian Hunter           2024-06-24  6605  		if (nr_pages > INT_MAX)
+dbc48c8f41c208 kernel/events/core.c  Adrian Hunter           2024-06-24  6606  			return -ENOMEM;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6607  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6608  		mutex_lock(&event->mmap_mutex);
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6609  		ret = -EINVAL;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6610  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6611  		rb = event->rb;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6612  		if (!rb)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6613  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6614  
+2ab9d830262c13 kernel/events/core.c  Peter Zijlstra          2024-09-02  6615  		aux_mutex = &rb->aux_mutex;
+2ab9d830262c13 kernel/events/core.c  Peter Zijlstra          2024-09-02  6616  		mutex_lock(aux_mutex);
+2ab9d830262c13 kernel/events/core.c  Peter Zijlstra          2024-09-02  6617  
+6aa7de059173a9 kernel/events/core.c  Mark Rutland            2017-10-23  6618  		aux_offset = READ_ONCE(rb->user_page->aux_offset);
+6aa7de059173a9 kernel/events/core.c  Mark Rutland            2017-10-23  6619  		aux_size = READ_ONCE(rb->user_page->aux_size);
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6620  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6621  		if (aux_offset < perf_data_size(rb) + PAGE_SIZE)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6622  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6623  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6624  		if (aux_offset != vma->vm_pgoff << PAGE_SHIFT)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6625  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6626  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6627  		/* already mapped with a different offset */
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6628  		if (rb_has_aux(rb) && rb->aux_pgoff != vma->vm_pgoff)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6629  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6630  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6631  		if (aux_size != vma_size || aux_size != nr_pages * PAGE_SIZE)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6632  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6633  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6634  		/* already mapped with a different size */
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6635  		if (rb_has_aux(rb) && rb->aux_nr_pages != nr_pages)
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6636  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6637  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6638  		if (!is_power_of_2(nr_pages))
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6639  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6640  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6641  		if (!atomic_inc_not_zero(&rb->mmap_count))
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6642  			goto aux_unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6643  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6644  		if (rb_has_aux(rb)) {
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6645  			atomic_inc(&rb->aux_mmap_count);
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6646  			ret = 0;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6647  			goto unlock;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6648  		}
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6649  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6650  		atomic_set(&rb->aux_mmap_count, 1);
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6651  		user_extra = nr_pages;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6652  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6653  		goto accounting;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6654  	}
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6655  
+7730d8655880f4 kernel/perf_counter.c Peter Zijlstra          2009-03-25  6656  	/*
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  6657  	 * If we have rb pages ensure they're a power-of-two number, so we
+7730d8655880f4 kernel/perf_counter.c Peter Zijlstra          2009-03-25  6658  	 * can do bitmasks instead of modulo.
+7730d8655880f4 kernel/perf_counter.c Peter Zijlstra          2009-03-25  6659  	 */
+2ed11312eb1950 kernel/events/core.c  Kan Liang               2015-03-02  6660  	if (nr_pages != 0 && !is_power_of_2(nr_pages))
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6661  		return -EINVAL;
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6662  
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6663  	if (vma_size != PAGE_SIZE * (1 + nr_pages))
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6664  		return -EINVAL;
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6665  
+cdd6c482c9ff9c kernel/perf_event.c   Ingo Molnar             2009-09-21  6666  	WARN_ON_ONCE(event->ctx->parent_ctx);
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6667  again:
+cdd6c482c9ff9c kernel/perf_event.c   Ingo Molnar             2009-09-21  6668  	mutex_lock(&event->mmap_mutex);
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  6669  	if (event->rb) {
+60490e7966659b kernel/events/core.c  Zhipeng Xie             2022-02-09  6670  		if (data_page_nr(event->rb) != nr_pages) {
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6671  			ret = -EINVAL;
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6672  			goto unlock;
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6673  		}
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6674  
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6675  		if (!atomic_inc_not_zero(&event->rb->mmap_count)) {
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6676  			/*
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  6677  			 * Raced against perf_mmap_close(); remove the
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  6678  			 * event and try again.
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6679  			 */
+68e3c69803dada kernel/events/core.c  Peter Zijlstra          2022-07-05  6680  			ring_buffer_attach(event, NULL);
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6681  			mutex_unlock(&event->mmap_mutex);
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6682  			goto again;
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6683  		}
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6684  
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6685  		goto unlock;
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6686  	}
+9bb5d40cd93c9d kernel/events/core.c  Peter Zijlstra          2013-06-04  6687  
+789f90fcf6b0b5 kernel/perf_counter.c Peter Zijlstra          2009-05-15  6688  	user_extra = nr_pages + 1;
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6689  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6690  accounting:
+cdd6c482c9ff9c kernel/perf_event.c   Ingo Molnar             2009-09-21  6691  	user_lock_limit = sysctl_perf_event_mlock >> (PAGE_SHIFT - 10);
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6692  
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6693  	/*
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6694  	 * Increase the limit linearly with more CPUs:
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6695  	 */
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6696  	user_lock_limit *= num_online_cpus();
+a3862d3f814ce7 kernel/perf_counter.c Ingo Molnar             2009-05-24  6697  
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6698  	user_locked = atomic_long_read(&user->locked_vm);
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6699  
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6700  	/*
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6701  	 * sysctl_perf_event_mlock may have changed, so that
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6702  	 *     user->locked_vm > user_lock_limit
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6703  	 */
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6704  	if (user_locked > user_lock_limit)
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6705  		user_locked = user_lock_limit;
+003461559ef7a9 kernel/events/core.c  Song Liu                2020-01-23  6706  	user_locked += user_extra;
+c5078f78b455fb kernel/perf_counter.c Peter Zijlstra          2009-05-05  6707  
+c4b75479741c9c kernel/events/core.c  Alexander Shishkin      2019-11-20  6708  	if (user_locked > user_lock_limit) {
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6709  		/*
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6710  		 * charge locked_vm until it hits user_lock_limit;
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6711  		 * charge the rest from pinned_vm
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6712  		 */
+789f90fcf6b0b5 kernel/perf_counter.c Peter Zijlstra          2009-05-15  6713  		extra = user_locked - user_lock_limit;
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6714  		user_extra -= extra;
+d44248a4133773 kernel/events/core.c  Song Liu                2019-09-04  6715  	}
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6716  
+78d7d407b62a02 kernel/perf_event.c   Jiri Slaby              2010-03-05  6717  	lock_limit = rlimit(RLIMIT_MEMLOCK);
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6718  	lock_limit >>= PAGE_SHIFT;
+70f8a3ca68d3e1 kernel/events/core.c  Davidlohr Bueso         2019-02-06  6719  	locked = atomic64_read(&vma->vm_mm->pinned_vm) + extra;
+37d81828385f8f kernel/perf_counter.c Paul Mackerras          2009-03-23  6720  
+da97e18458fb42 kernel/events/core.c  Joel Fernandes (Google  2019-10-14  6721) 	if ((locked > lock_limit) && perf_is_paranoid() &&
+459ec28ab404d7 kernel/perf_counter.c Ingo Molnar             2009-09-13  6722  		!capable(CAP_IPC_LOCK)) {
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6723  		ret = -EPERM;
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6724  		goto unlock;
+ebb3c4c4cb81d6 kernel/perf_counter.c Peter Zijlstra          2009-04-06  6725  	}
+7b732a75047738 kernel/perf_counter.c Peter Zijlstra          2009-03-23  6726  
+45bfb2e50471ab kernel/events/core.c  Peter Zijlstra          2015-01-14  6727  	WARN_ON(!rb && event->rb);
+906010b2134e14 kernel/perf_event.c   Peter Zijlstra          2009-09-21  6728  
+d57e34fdd60be7 kernel/perf_event.c   Peter Zijlstra          2010-05-28  6729  	if (vma->vm_flags & VM_WRITE)
+76369139ceb955 kernel/events/core.c  Frederic Weisbecker     2011-05-19  6730  		flags |= RING_BUFFER_WRITABLE;
+d57e34fdd60be7 kernel/perf_event.c   Peter Zijlstra          2010-05-28  6731  
+
+:::::: The code at line 6572 was first introduced by commit
+:::::: d57e34fdd60be7ffd0b1d86bfa1a553df86b7172 perf: Simplify the ring-buffer logic: make perf_buffer_alloc() do everything needed
+
+:::::: TO: Peter Zijlstra <a.p.zijlstra@chello.nl>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
 
 -- 
 0-DAY CI Kernel Test Service
