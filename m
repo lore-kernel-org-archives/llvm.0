@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9F51D6195;
-	Sun,  2 Feb 2025 23:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C26410FD;
+	Mon,  3 Feb 2025 00:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738540444; cv=none; b=e4k57p+UvG9XXXKJ7/lBjp+EWeD5Pm6CEF/iyz45QuRo/8Q+kutn96q30nWE0iypu6nv/PraMK2NijgzRHieARALnWjP2sZgZLd4dXa3JRxXTgEp53oUi1t67DaooWvMn72scwsH3mjUrPfD05J/B53DYKTeNIyviUpfo/qyQfM=
+	t=1738541764; cv=none; b=fZU49XV86SpCFoWVUjTZ6yZhruuzSoWGEo3jtFlPBuOR9NudW0adIAdiQy3A1p0yC+WGC4gJdfAtLtoFnLh6geJEMDmrHOrAYQi/taoR6ZMfi20JREQaGqqxuorHAB8PS8hjzW+6MrBl6AwOfKTeeHtnV1C7RIGsVJO0UGJvuos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738540444; c=relaxed/simple;
-	bh=SUWqDsVHnwfoFPZ72GnF+anp/orwAfrIOZyK0oRQA3k=;
+	s=arc-20240116; t=1738541764; c=relaxed/simple;
+	bh=j1Rk9EWS0Oh1lL0HeKjaiAa0BjHDB46QfGVxv9gys1k=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hifMINj5FjaAykX4LktQdbztZ80Jd0EmMTD+IOS6eLEGZGy2yJ3TM1nmrsoSSd62EFf1esWzcN14tH1fCDX/k7Kxtan3adSGgvpVr9UkAYqlZF06bxeubNvBVfLTTy12h7H532CBCs916au6jNZYbzJ5XrTcMbJRGyz+yc3kl4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PvTc7Tec; arc=none smtp.client-ip=198.175.65.19
+	 Content-Disposition; b=TKlnFB1U9sBcrR/DdEGLDOwJbfZ4BIZJ1zGGcVUM7RByUeO8wCXCiM/cLZ9AritYdPNVMGA7yUQT8A9+tTnfA/ilsOPQaXZKRVXRu1NSG0z+2ZVUmA8Js+llXXK5035jnQZ+jhLANl/pTBES7m7XvWvW3YFLG84Md810M1/t3mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuIM8OAT; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PvTc7Tec"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuIM8OAT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738540442; x=1770076442;
+  t=1738541761; x=1770077761;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SUWqDsVHnwfoFPZ72GnF+anp/orwAfrIOZyK0oRQA3k=;
-  b=PvTc7TecPOufkAHyDCpeZSrqP8ISL0nscuPT6p2OO0AnnYExxW28D6jH
-   5f7vjjUAWGXEgrtybVXFHAN1UcYHMH/+sSY4BqbKhwTNN2WoYNRk/zLcE
-   /1XlPlmmbZuT+JHoUVXsoVthcaDJr07uDUfys19zkbWXmFwmopS3F6wf5
-   DWYsxiIdgvbc1BD85vxb9WUD9SB8CoZTBgxBVFHe2W1OyWLFbRrzeVMZR
-   53cqmo/HC0h9oJfVxDGvxAL+8vwgHOwHhj1k6Fu2YH013I1do2NhEd8rd
-   883nGHglNBqUBtOUAsxPYomgjg/uBOSYXuRsn5tKChi7rKuCS5kyk1Px+
-   w==;
-X-CSE-ConnectionGUID: flGd5YqUQ+eEGx837zSysw==
-X-CSE-MsgGUID: 6ajP9vPrRpmbvobrj4PXeg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38910844"
+  bh=j1Rk9EWS0Oh1lL0HeKjaiAa0BjHDB46QfGVxv9gys1k=;
+  b=BuIM8OATW0T+4MEPI06THbAD9Q/TXHCcYO3fzi1kUh4v5/iWbnT4u8nu
+   5I7sxrBkE7mYy2KpAJG60ufakqhBkrnAi093W+RVtTNpsMSQGf8zZPh1+
+   uo9DfCRcTbgoHIS/Jx0hY0kJ42FVBQnWTcERjNgWKIr/KT8nmiawAff3q
+   X9NcvGddQjoGZbUi8NuZQr0SH72CHtucwj07XjP2wPPMJXpCre0zYoErx
+   tLntu7WLR7fIYFrSmiJpa/MFs4Cvn4EZ65jf3wIh3Coy+52O3tsAfMWtN
+   pM0ZYx+FzrPQ94FvYu0kFtJ2coPmfGkpuzLEoLSyxHMuW0xVlj08idsFK
+   Q==;
+X-CSE-ConnectionGUID: Y0bfARFnS7SkeAtN9T/gJQ==
+X-CSE-MsgGUID: ONr6cEKNTWykijilSrNd9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="49687345"
 X-IronPort-AV: E=Sophos;i="6.13,254,1732608000"; 
-   d="scan'208";a="38910844"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 15:53:59 -0800
-X-CSE-ConnectionGUID: iUO26MTCSD+9TzDzAw85QA==
-X-CSE-MsgGUID: slhW8cwuTuWbrWBMsE/lNg==
+   d="scan'208";a="49687345"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2025 16:16:00 -0800
+X-CSE-ConnectionGUID: QG+BmjXJRbCrhEkIugeGxg==
+X-CSE-MsgGUID: 3XjpAP6lRbmHYPP8Fshj4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="115292449"
+   d="scan'208";a="114771696"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 02 Feb 2025 15:53:58 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 02 Feb 2025 16:15:59 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tejml-000qGS-1W;
-	Sun, 02 Feb 2025 23:53:55 +0000
-Date: Mon, 3 Feb 2025 07:53:25 +0800
+	id 1tek85-000qHD-0u;
+	Mon, 03 Feb 2025 00:15:57 +0000
+Date: Mon, 3 Feb 2025 08:15:29 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jic23-iio:sparse-friendly-direct-mode 111/166]
- drivers/iio/adc/ad7173.c:1184:8: warning: variable 'ret' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202502030711.VjFc2dxK-lkp@intel.com>
+Subject: [jic23-iio:sparse-friendly-direct-mode 52/166]
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:1850:7: warning: variable 'err'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202502030800.FBFCF1CE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,101 +65,83 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git sparse-friendly-direct-mode
 head:   bada9cd0235b288b74ee2bd65fd4223d71f62b02
-commit: a0df9059bd2ef36d622cf94311dfb017b6b5de5d [111/166] iio: adc: Simple cases of switch to sparse friendly iio_device_claim/release_direct()
-config: hexagon-randconfig-001-20250203 (https://download.01.org/0day-ci/archive/20250203/202502030711.VjFc2dxK-lkp@intel.com/config)
+commit: 3e53e337047467484ef3689555b5fe392679790b [52/166] iio: imu: st_lsm6dsx: Switch to sparse friendly claim/release_direct()
+config: hexagon-randconfig-002-20250203 (https://download.01.org/0day-ci/archive/20250203/202502030800.FBFCF1CE-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030711.VjFc2dxK-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250203/202502030800.FBFCF1CE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502030711.VjFc2dxK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502030800.FBFCF1CE-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/iio/adc/ad7173.c:1184:8: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1184 |                         if (freq >= st->info->sinc5_data_rates[i])
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7173.c:1198:9: note: uninitialized use occurs here
-    1198 |         return ret;
+>> drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:1850:7: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1850 |                 if (val < 0)
+         |                     ^~~~~~~
+   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:1863:9: note: uninitialized use occurs here
+    1863 |         return err;
          |                ^~~
-   drivers/iio/adc/ad7173.c:1184:4: note: remove the 'if' if its condition is always false
-    1184 |                         if (freq >= st->info->sinc5_data_rates[i])
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1185 |                                 break;
-         |                                 ~~~~~
->> drivers/iio/adc/ad7173.c:1183:39: warning: variable 'ret' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-    1183 |                 for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
-         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7173.c:1198:9: note: uninitialized use occurs here
-    1198 |         return ret;
-         |                ^~~
-   drivers/iio/adc/ad7173.c:1183:39: note: remove the condition if it is always true
-    1183 |                 for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
-         |                                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7173.c:1160:9: note: initialize the variable 'ret' to silence this warning
-    1160 |         int ret;
+   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:1850:3: note: remove the 'if' if its condition is always true
+    1850 |                 if (val < 0)
+         |                 ^~~~~~~~~~~~
+    1851 |                         err = val;
+         |                                  ~
+    1852 |                 else
+         |                 ~~~~
+    1853 |                         sensor->odr = val;
+         |                         ~~~~~~~~~~~~~~~~~
+   drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c:1836:9: note: initialize the variable 'err' to silence this warning
+    1836 |         int err;
          |                ^
          |                 = 0
-   2 warnings generated.
+   1 warning generated.
 
 
-vim +1184 drivers/iio/adc/ad7173.c
+vim +1850 drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
 
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1152  
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1153  static int ad7173_write_raw(struct iio_dev *indio_dev,
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1154  			    struct iio_chan_spec const *chan,
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1155  			    int val, int val2, long info)
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1156  {
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1157  	struct ad7173_state *st = iio_priv(indio_dev);
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1158  	struct ad7173_channel_config *cfg;
-182bc496dc63ca Dumitru Ceclan   2024-05-30  1159  	unsigned int freq, i;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1160  	int ret;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1161  
-a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1162  	if (!iio_device_claim_direct(indio_dev))
-a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1163  		return -EBUSY;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1164  
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1165  	switch (info) {
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1166  	/*
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1167  	 * This attribute sets the sampling frequency for each channel individually.
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1168  	 * There are no issues for raw or buffered reads of an individual channel.
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1169  	 *
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1170  	 * When multiple channels are enabled in buffered mode, the effective
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1171  	 * sampling rate of a channel is lowered in correlation to the number
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1172  	 * of channels enabled and the sampling rate of the other channels.
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1173  	 *
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1174  	 * Example: 3 channels enabled with rates CH1:6211sps CH2,CH3:10sps
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1175  	 * While the reading of CH1 takes only 0.16ms, the reading of CH2 and CH3
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1176  	 * will take 100ms each.
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1177  	 *
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1178  	 * This will cause the reading of CH1 to be actually done once every
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1179  	 * 200.16ms, an effective rate of 4.99sps.
-f87b076b934f72 Dumitru Ceclan   2024-06-07  1180  	 */
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1181  	case IIO_CHAN_INFO_SAMP_FREQ:
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1182  		freq = val * MILLI + val2 / MILLI;
-37ae8381ccda3c Dumitru Ceclan   2024-03-06 @1183  		for (i = st->info->odr_start_value; i < st->info->num_sinc5_data_rates - 1; i++)
-76a1e6a4280211 Dumitru Ceclan   2024-02-28 @1184  			if (freq >= st->info->sinc5_data_rates[i])
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1185  				break;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1186  
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1187  		cfg = &st->channels[chan->address].cfg;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1188  		cfg->odr = i;
-182bc496dc63ca Dumitru Ceclan   2024-05-30  1189  		cfg->live = false;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1190  		break;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1191  
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1192  	default:
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1193  		ret = -EINVAL;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1194  		break;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1195  	}
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1196  
-a0df9059bd2ef3 Jonathan Cameron 2025-02-02  1197  	iio_device_release_direct(indio_dev);
-76a1e6a4280211 Dumitru Ceclan   2024-02-28 @1198  	return ret;
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1199  }
-76a1e6a4280211 Dumitru Ceclan   2024-02-28  1200  
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1830  
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1831  static int st_lsm6dsx_write_raw(struct iio_dev *iio_dev,
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1832  				struct iio_chan_spec const *chan,
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1833  				int val, int val2, long mask)
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1834  {
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1835  	struct st_lsm6dsx_sensor *sensor = iio_priv(iio_dev);
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1836  	int err;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1837  
+3e53e337047467 Jonathan Cameron 2025-01-05  1838  	if (!iio_device_claim_direct(iio_dev))
+3e53e337047467 Jonathan Cameron 2025-01-05  1839  		return -EBUSY;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1840  
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1841  	switch (mask) {
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1842  	case IIO_CHAN_INFO_SCALE:
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1843  		err = st_lsm6dsx_set_full_scale(sensor, val2);
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1844  		break;
+2ccc15036d812e Lorenzo Bianconi 2017-04-02  1845  	case IIO_CHAN_INFO_SAMP_FREQ: {
+2ccc15036d812e Lorenzo Bianconi 2017-04-02  1846  		u8 data;
+2ccc15036d812e Lorenzo Bianconi 2017-04-02  1847  
+f8710f0357bc36 Lorenzo Bianconi 2019-11-03  1848  		val = val * 1000 + val2 / 1000;
+fc3f6ad7f5dc6c Lorenzo Bianconi 2019-10-27  1849  		val = st_lsm6dsx_check_odr(sensor, val, &data);
+fc3f6ad7f5dc6c Lorenzo Bianconi 2019-10-27 @1850  		if (val < 0)
+fc3f6ad7f5dc6c Lorenzo Bianconi 2019-10-27  1851  			err = val;
+fc3f6ad7f5dc6c Lorenzo Bianconi 2019-10-27  1852  		else
+5e3c3e3382e87a Lorenzo Bianconi 2017-09-18  1853  			sensor->odr = val;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1854  		break;
+2ccc15036d812e Lorenzo Bianconi 2017-04-02  1855  	}
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1856  	default:
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1857  		err = -EINVAL;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1858  		break;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1859  	}
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1860  
+3e53e337047467 Jonathan Cameron 2025-01-05  1861  	iio_device_release_direct(iio_dev);
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1862  
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1863  	return err;
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1864  }
+290a6ce11d938b Lorenzo Bianconi 2017-01-10  1865  
 
-:::::: The code at line 1184 was first introduced by commit
-:::::: 76a1e6a4280211b1ceffec4f79f96e492c661229 iio: adc: ad7173: add AD7173 driver
+:::::: The code at line 1850 was first introduced by commit
+:::::: fc3f6ad7f5dc6c899fbda0255865737bac88c2e0 iio: imu: st_lsm6dsx: fix ODR check in st_lsm6dsx_write_raw
 
-:::::: TO: Dumitru Ceclan <mitrutzceclan@gmail.com>
+:::::: TO: Lorenzo Bianconi <lorenzo@kernel.org>
 :::::: CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 -- 
