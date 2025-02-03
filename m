@@ -1,58 +1,58 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0CD209F59
-	for <llvm@lists.linux.dev>; Mon,  3 Feb 2025 16:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31CE194AEC;
+	Mon,  3 Feb 2025 16:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738599282; cv=none; b=hgo2Vn0u5D6qMXE2xOzoikdLuKJdmClMQgGE6Ik9aGzv5x6OKs9TcaWOKthg4r4K3X7LENH2Go17MwGlgt3kPazuwyjgHx3678xIaJQW6CgHRw9/beosswEIEAqLEPXTKggTGTt2dzPsoz4elO6l+Iw+54al5toS4Hb4NsmL7lI=
+	t=1738601816; cv=none; b=obGkfSlaehzqeJnwDU7q++D6FRjl/cfxPzi+XwNSM7sIdwWsj3n7JTOtzxOMMp9+XLYv6lS2xbOqb6kX4OeQKtRjxbL7fAlZBGDN2d5meMOmVLQia+9UZQeOTlinmjwuz/chkSv/EXiweLu/uj0FJ3sPsB1/1znOt/D60nkfKiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738599282; c=relaxed/simple;
-	bh=EykmNP3rluS5wErrw7ovJbnACKEeoG9NBVz3oDMId4I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=itMMCy7LRJlXy8SnEqGx5Wu001HRltH2A7aNjU5xEJcyGfI2nd3C+V28tcRzQ+dwStVimhykW2ENa1j30Hpp2Lp0rHkMdAMug81ofVmbETsaIcil0KJvkxzfTNnHjWsZgLTB7fsUHmT2CxNk+XkvqG17GltFggo/9SXx15W4k40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S5D3jBy/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dTjtlolF; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1738601816; c=relaxed/simple;
+	bh=RPGi+hi5oCiLkTSSKY2KV+BpdD7LCwIa9QElia2VBT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iCCeHHQNxczb0C97whAom6qJirUO7bK0R15zGAa6MDW/k70jtxxwIR3YqQG32pUaVvAPcqcZ0fd44YSEAHS5mQO7PRw8i7kkt8qp3HEotp9jbdZ/D0GBE6dUFzS7VfISwKG82ppZ+WmZfCUowP7endVQbCbZT9m3/IhSc48a7KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iMdxCv7b; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S5D3jBy/";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dTjtlolF"
-Date: Mon, 3 Feb 2025 17:14:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738599278;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=asZhdw1u+KARy/b4tMAOwMpkr8n4az3G/BP7Mu330JE=;
-	b=S5D3jBy/sT0HegQpG/bxMlN7VEX+wbEsF6ffTEin8SUYVFio3vdIlffoEffOprdmQon+gD
-	QVpAGlzW58fZwQvzlQnpmFyC7V6/bMy/DbY/DmLanGm+3LwasiDd8VAzhaoMhkOopwv1Lv
-	sIk9tdCBWA1A1RoKhl4cMH6lejYIpCa6uR3fNuTvKOPzdrtxojqjDYojll05mUPIOApG3h
-	UGYVHxJaP+3wws+XVq3e32nnz2BTRfR5WeorfiDE6/NPs8voq5JC7f8ybhPV6UJAK4YkKH
-	69U6oG7/38+gfOjVQR9IrSEMAvuPcq6s/orvL7QJhA7A17Zz27IdTR+0Fg0Cjg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738599278;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=asZhdw1u+KARy/b4tMAOwMpkr8n4az3G/BP7Mu330JE=;
-	b=dTjtlolFTco+U66XNRG7CydXJoVHM9X6HvRGSZSw8iS4SW2LtJAyH01zeWKk/ilgf/1/L4
-	x7g6AVMb0aJ7zVCw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
- nolibc
-Message-ID: <20250203165859-8af1246b-6dd8-468a-8e05-68c7b0cad304@linutronix.de>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
- <20250203143640-70c59c53-af45-40cb-9a52-6395b3fdd263@linutronix.de>
- <937c99b3-3837-4510-be65-4eca3b280ce2@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iMdxCv7b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738601815; x=1770137815;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RPGi+hi5oCiLkTSSKY2KV+BpdD7LCwIa9QElia2VBT0=;
+  b=iMdxCv7bnYYx6zmKr36JN8E2piVlrkgH+NmjJ4TfCIKe8k7ktcyTJh2b
+   sZzP9rIBLrglBI18PQggO01jdVAQ6mdAdOIEVWEbmZP+zDWBfp9ZGRPNA
+   dDAdwCz2lbT5odWaw4C4+wUkSZeFABrRdnLVBp6YaKasnw1nqxvETMDpy
+   nlKXvf+OYYLYZ0TMs+n5dypN2+48DDtfw5wnhYdOT4xthjX8oF91+fAXk
+   O8xsrcJiS5qSUBZLfuVYHtgz64hUpM2ddLVaUlYXy4tHf6LN2deZwybix
+   TK7x7cqM5LEBMFW3NglTpllKY+QNEsTG3NIHtcp7igFCrJ4XwPnyrDMoY
+   w==;
+X-CSE-ConnectionGUID: HoDOLJ09R/iyQ7UcqvVfyA==
+X-CSE-MsgGUID: jodSq6JfSsi+hCIGu284eA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="49707283"
+X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
+   d="scan'208";a="49707283"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 08:56:54 -0800
+X-CSE-ConnectionGUID: rwTJZFdWTh+Rt8EfmxvyfA==
+X-CSE-MsgGUID: V19IV0oeQfiF67jMx/j9cw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="147547222"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 03 Feb 2025 08:56:54 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tezkg-000rD9-2U;
+	Mon, 03 Feb 2025 16:56:50 +0000
+Date: Tue, 4 Feb 2025 00:56:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Max Filippov <jcmvbkbc@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jcmvbkbc-xtensa:xtensa-6.13-esp32 35/53]
+ drivers/misc/esp32-ipc.c:228:34: warning: unused variable 'esp32_ipc_match'
+Message-ID: <202502040003.WRLTz6Ya-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,23 +61,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <937c99b3-3837-4510-be65-4eca3b280ce2@csgroup.eu>
 
-On Mon, Feb 03, 2025 at 04:43:22PM +0100, Christophe Leroy wrote:
-<snip>
+Hi Max,
 
-> Do you have any plan to get it work with nolibc for all test programs in
-> selftests/vDSO, not only the standalone x86 test ?
+First bad commit (maybe != root cause):
 
-Not directly as next step. I am focussing on some other work which will
-integrate (vDSO) selftests with nolibc slightly differently.
-However if you have interest in converting the tests now, that would be
-great and will also be useful for my future changes.
-The current issues I see:
-* Missing architecture support in nolibc (should be fairly easy to implement)
-* Missing kselftest_harness.h support in nolibc (I'm working on that)
-* Maybe some users want to stick with their regular libc
-  (Nothing should prevent that, but the mechanism may need some discussion)
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.13-esp32
+head:   f4a6cef2509c4e81637b6d5d6f0c27966895985a
+commit: 08b8a525de25b35564cb9ae5f7b5ad1122a84fed [35/53] esp_wifi: add IPC transport
+config: mips-jazz_defconfig (https://download.01.org/0day-ci/archive/20250204/202502040003.WRLTz6Ya-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502040003.WRLTz6Ya-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502040003.WRLTz6Ya-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/misc/esp32-ipc.c:228:34: warning: unused variable 'esp32_ipc_match' [-Wunused-const-variable]
+     228 | static const struct of_device_id esp32_ipc_match[] = {
+         |                                  ^~~~~~~~~~~~~~~
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ESP32_IPC
+   Depends on [n]: OF [=n] && HAS_IOMEM [=y]
+   Selected by [y]:
+   - ESP32_WIFI_SHMEM [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ESPRESSIF [=y]
 
 
-Thomas
+vim +/esp32_ipc_match +228 drivers/misc/esp32-ipc.c
+
+ff5d67ac76ee59 Max Filippov 2023-08-11  227  
+ff5d67ac76ee59 Max Filippov 2023-08-11 @228  static const struct of_device_id esp32_ipc_match[] = {
+ff5d67ac76ee59 Max Filippov 2023-08-11  229  	{
+ff5d67ac76ee59 Max Filippov 2023-08-11  230  		.compatible = "esp,esp32-ipc",
+ff5d67ac76ee59 Max Filippov 2023-08-11  231  	}, {},
+ff5d67ac76ee59 Max Filippov 2023-08-11  232  };
+ff5d67ac76ee59 Max Filippov 2023-08-11  233  MODULE_DEVICE_TABLE(of, esp32_ipc_match);
+ff5d67ac76ee59 Max Filippov 2023-08-11  234  
+
+:::::: The code at line 228 was first introduced by commit
+:::::: ff5d67ac76ee59b6351fd6f70df8d0178ef4f72a misc/esp32-ipc: introduce generic IPC for ESP32
+
+:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
+:::::: CC: Max Filippov <jcmvbkbc@gmail.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
