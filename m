@@ -1,147 +1,84 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCEA214207
-	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 15:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A999F2C181;
+	Tue,  4 Feb 2025 15:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738682899; cv=none; b=NwwkJnzRw2L6fQlXgXl4NAmedhNxLYaSY8+utAuIks3NfOn0AYMY1XG3bP/UhQkKWXsr3UryVJ47WSVlbGyQK3RtXGur+8Q/Pa3VPYQ3B+VuNiMSN00SRjrmDiTmspYXJ/L1xSGurcxv5YmoQqgr8U4M8RkufVjCuhgk+qxtJSQ=
+	t=1738683137; cv=none; b=RoYt7GIewpnyBMzWokzui1teqaec9CtFoNmJGSkcNjAiJTQBugFNmSY/Rs5gGGu5kp57cRucaNYq2Z8Jot9pq20POkEil1vY2LAKeqzldkr8OQH6Amnw8vtDd/OoEydxCGWwdDWfFpjwSCoqXt3BEp018rqTZfp0Tbao0lvc5hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738682899; c=relaxed/simple;
-	bh=+RTmhaHHaQGm4cIFZWnW7TQKI/e/CUSRnumlIk8Xc7M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CeKn6KtONSGYR/tJRPuETmltPFPyvfke1zdePNwIMUje5C12uHyHO2pTMjphr1hZMRtQ9A0sVQ52fivBOgvEz9+nK++JzbMn0V0bGq9jVAL+ZbFFBRT8e1cGBlta1H17IPv+FYd6qTr3encvWQg5osW+8V74rMxq6H+gmw6E/WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIkG+Elx; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738683137; c=relaxed/simple;
+	bh=lB6OvlDcA1DjkCRpW2o82kIiiXZLmOPFTXUyGT8+KkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W5vxefGQbSfVgk1haRpC3UkaLduuApU+sZR950tISofSOyqNx1Gkz7KiBrd3Mz42v7jpyKI+GLfP073JcRzccSACY+vz26Khsb4wB7uJvYtxKkGDLen1iJTryFpREvZ6w+NDXurj79QvdgDQ9vQfopmv5xPX+aK10XUXshJNHEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3GatPAW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIkG+Elx"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38daf1f5091so354373f8f.1
-        for <llvm@lists.linux.dev>; Tue, 04 Feb 2025 07:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738682896; x=1739287696; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CJhPx/n140dbE5Ug5FtKmDwUapQIL+7iGwFgWil94QY=;
-        b=ZIkG+ElxKP3qSsyim645TXI1MORMoXgwQrKPGqFUHZOqf8z1exdnTVzau5kDPCbAf6
-         WZwxz7xYRFriY5RDdm2WxYjoIJnCZrf2CrYeJ0Lk37zvZfTlLirhP8ZGmErHl4IInwPp
-         aBVOFfh4Fb/r5LLd5MKeZXZxRpvgAzyrxYVhNiZHxtq3OABmwaXz4L7MnNFeH0FihaUq
-         U/lCO5BMan18D8JV9sWDSjtZ8nXXXKcqzcONHO9pFKF5da/F1SaGAkG9TNK5fh2GPu43
-         VjcJVqR0ZavCdxDLNBjhEyuxkDQdqI7jJFDiutisU9yQZuW2xy6hqelfNWVPailLyQIy
-         m88A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738682896; x=1739287696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CJhPx/n140dbE5Ug5FtKmDwUapQIL+7iGwFgWil94QY=;
-        b=AhfNmlJVm7bHh4VWAdzfBQPbyvnnZWcSccGXkduKKj5cOCdNcW/I9k7xBl5Crmy/qo
-         NOKIrsV5/ZuOLOfw6dKMU5zm8S0IBI0i1JTk+S+uw+gvZPbSe9JelkjbID/Q1zk0qxG/
-         kRoFHX8HFr4/NGsmAf+o0hR2jerMVnuSrsCJF+dHOg3mC89KiGqYsFjsloIh8R4OWa2r
-         M8eEPzh7pAUvGB7HatVzjfrAXFoCla4E3j0AtSfExW3HjTlwpePA27lXVf0ydGLL1t9A
-         UqqFNzfOkT0HCB1ip8ZjKFeGpM9sfHz+iB6+vhpVaNV5JSZir8hg5E6wwftcqcH5YvZH
-         nJUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWD7qSld/8YcvDdLryA/eBViW39Rb1gVblVyPsaYfrNsxdiAKThF+u4A+zKvn9ovK2i0xDQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxhOLuMa3a5pbmPOq/4UBXNcERiqdsrQuLo03jfhFoMSiKRhJGQ
-	doEnDBQ267ePHEs5b84kwckyDfzOi/JJgsZdeHfIZgjczK9yCIZPqyVxywXFNQS5ddfmzu9nJI3
-	lhXeBcIPp10QCFyBRxsQ051mq/OQ=
-X-Gm-Gg: ASbGncu4DLrEzRwfqbJhuLu4tlcswVpG6cbLii2gHbS18PBguA9pG2oPIcg8ns5ZKVb
-	7BIdM228qBA+l1mYMovi8QIMSkVjrY2YxXli6fHAWUaFj49Kdc0X4RapuCxeebz4l9p0SY/Mnyd
-	y60cBKf+cyXXzy
-X-Google-Smtp-Source: AGHT+IFhUU0NGcAm74lqYKBjmVZFYxqKNWGzHqhC76jkheWflwBMBvUcfdp+145E+7L0HxVO/HGqB2zGjvC83k5JbeQ=
-X-Received: by 2002:a05:6000:1a8d:b0:386:36e7:f44f with SMTP id
- ffacd0b85a97d-38c519602famr21645102f8f.18.1738682896006; Tue, 04 Feb 2025
- 07:28:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3GatPAW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14A08C4CEDF;
+	Tue,  4 Feb 2025 15:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738683137;
+	bh=lB6OvlDcA1DjkCRpW2o82kIiiXZLmOPFTXUyGT8+KkQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k3GatPAW8DAmRoCF/yYbTBkS//29CtNtQiMM1q+sH7579KGGy+H+hBJJ1itEHnMmd
+	 qmAeMO4OJOPXW1tBObo2hytfnpECAAzu/ozSsw+oagpWk8wwWdu1TvXa+B9/6L9GUp
+	 2ARcrWMDPjIepldiYc5yJ5Ndm2U1tSZUo8ws917v/YeKBuqy9E5/OFpImcYi0DOIw1
+	 MFi9txFw5IMkdIqujPEi+hlNlpQYzXJKKc8s3Dp2tI6q4/uRN68qivxnP2FJ3m8nIJ
+	 ESNJWFBq36iV82J95BumlhNjZ9gntiK/UhvtTLFi52RIR0iKh4XNM0LcLHEmjDzp5R
+	 u6RxuCh6Hw2Zg==
+Date: Tue, 4 Feb 2025 07:32:14 -0800
+From: Kees Cook <kees@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 04/16] elf, uapi: Add definitions for VER_FLG_BASE and
+ VER_FLG_WEAK
+Message-ID: <202502040731.4EE9CCBB@keescook>
+References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
+ <20250203-parse_vdso-nolibc-v1-4-9cb6268d77be@linutronix.de>
+ <202502040708.6E9CF77@keescook>
+ <20250204161210-b788ff6b-9c77-4a9c-8ab8-8b727b0b2003@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
- <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com> <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
-In-Reply-To: <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 4 Feb 2025 15:28:03 +0000
-X-Gm-Features: AWEUYZm7qusB4k_yByZ1Yov0CkD9oT2bxmzUNE_2hxazTeM6MjG1S9C9NSBjpNk
-Message-ID: <CAADnVQLto_Zt7q4vmTFXby0QH8QX7r5am5inLskC5sKqL=0gow@mail.gmail.com>
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-modules@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
-	gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250204161210-b788ff6b-9c77-4a9c-8ab8-8b727b0b2003@linutronix.de>
 
-On Tue, Feb 4, 2025 at 1:30=E2=80=AFPM Daniel Gomez <da.gomez@kernel.org> w=
-rote:
->
-> On Wed, Jan 22, 2025 at 09:02:19AM +0100, Alexei Starovoitov wrote:
-> > On Wed, Jan 22, 2025 at 5:12=E2=80=AFAM Daniel Gomez <da.gomez@samsung.=
-com> wrote:
-> > >
-> > > Add support for a module error injection tool. The tool
-> > > can inject errors in the annotated module kernel functions
-> > > such as complete_formation(), do_init_module() and
-> > > module_enable_rodata_after_init(). Module name and module function ar=
-e
-> > > required parameters to have control over the error injection.
-> > >
-> > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
-> > > brd module:
-> > >
-> > > sudo moderr --modname=3Dbrd --modfunc=3Dmodule_enable_rodata_ro_after=
-_init \
-> > > --error=3D-22 --trace
-> > > Monitoring module error injection... Hit Ctrl-C to end.
-> > > MODULE     ERROR FUNCTION
-> > > brd        -22   module_enable_rodata_after_init()
-> > >
-> > > Kernel messages:
-> > > [   89.463690] brd: module loaded
-> > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22=
-,
-> > > ro_after_init data might still be writable
-> > >
-> > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > > ---
-> > >  tools/bpf/Makefile            |  13 ++-
-> > >  tools/bpf/moderr/.gitignore   |   2 +
-> > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
-> > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
-> > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++=
-++++++++++
-> > >  tools/bpf/moderr/moderr.h     |  40 +++++++
-> > >  6 files changed, 510 insertions(+), 3 deletions(-)
-> >
-> > The tool looks useful, but we don't add tools to the kernel repo.
-> > It has to stay out of tree.
->
-> Can you clarify what do you mean? There are other tools under tools/ and =
-tools/
-> bpf [1].
->
-> [1] https://lore.kernel.org/bpf/20200114184230.GA204154@krava/
+On Tue, Feb 04, 2025 at 04:17:03PM +0100, Thomas Weißschuh wrote:
+> On Tue, Feb 04, 2025 at 07:10:00AM -0800, Kees Cook wrote:
+> > On Mon, Feb 03, 2025 at 10:05:05AM +0100, Thomas Weißschuh wrote:
+> > > The definitions are used by tools/testing/selftests/vDSO/parse_vdso.c.
+> > > To be able to build the vDSO selftests without a libc dependency,
+> > > add the definitions to the kernels own UAPI headers.
+> > 
+> > For all the UAPI changes, where are the defines "normally" found? i.e.
+> > how does adding these to UAPI not break something that already has them?
+> > Or have these never been defined before? I'm confused about how removing
+> > the libc dependency exposes the lack of these defines. Are they defined
+> > in a non-exported libc header somewhere?
+> 
+> They are normally defined directly in libc <elf.h>, which does not use
+> UAPI headers. Libc elf.h and Linux UAPI elf.h can not be used at the
+> same time because they define the same symbols.
+> In theory some user of UAPI elf.h could have defined these new symbols
+> on their own without ifdef guards. However UAPI elf.h is regularly
+> updated with new symbols.
 
-As you noticed we added only one tool out of many and recently
-discussed removing it, since the value of keeping it in the tree
-is minimal.
+Okay, great. As long as the collision risk is low, I'm fine with all the
+UAPI additions. Thanks for doing this!
 
-> I will anyway move the tool to the suggested location in the other thread=
-.
-
-I don't think it's a good idea.
-Keep it outside. There is no reason for it to live in the tree.
+-- 
+Kees Cook
