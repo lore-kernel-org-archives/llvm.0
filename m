@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395F9223300;
-	Tue,  4 Feb 2025 13:46:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD91211703;
+	Tue,  4 Feb 2025 14:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738676772; cv=none; b=JD4U2UftHEpp2rfdgNjko+yjhHbLIIiget2kIeZLbzodN5yOh11hVXKn9YYBjY+mJLGhnHcSx7QImleh5+4ukUYwXncFY798NY4XiqIT2R66qrP/yD6ebEjq5KbMhAxKz74eHoqWQhAXxPZr/RFuAtLc+OqAktyOiOXjHfJZ1rE=
+	t=1738678093; cv=none; b=JLqQ66Eg9gkBrra2Yh/jPCCBgJsg2rsKEl+4iNFywHKB4Pj1iDxlXpJvU7c+M9F/AZv05uOYJ+71p9fTrjCa3XhhFOwWh0dogCpgy9z+rEF7zywKwiAw4QZhIMVg7DeOGeXLcLzSO5BnA5/lZyWhwt4RSv22sm660Isrilisfzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738676772; c=relaxed/simple;
-	bh=vidSXqskwPzJaP9Rviva5ccLiBArtnYHFgi7x8hmfM4=;
+	s=arc-20240116; t=1738678093; c=relaxed/simple;
+	bh=VUi06TS7MWl3WrxSYaECEG9QZL6OepAlFSezS8CGqf0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TSCwOJZTYPYH6DD4uq+eU70i4b4EBeosAD4LJUmrG54MWqnXPZHlvrQKC3+Ye+Jf39outsKwpfLXA97HL/QT93rTYrG4f0Lx/z+UymnrcSOrnvPGgz/6Z3rCSodWwjy04MBKy63hrnoe6clwcy0rr69Na4WGSfOKrWdCYpywNZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JuKL8DT1; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=XYcg6+SRv2pV2Z3DK27kzBxor+B6zDzta0B2GJd1q22antnV9enYPTPexKylZf5n3izWzbiokf5PGGZ9vFcTA+/+YS0+qtnFwt++x4C0CSLusu3rDDtxUebL4Tj21fgZxOEflWVOY5uEWzCc91gmz0S3bJiKAOVxO7CWv3089n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YpHqCJcK; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JuKL8DT1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YpHqCJcK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738676771; x=1770212771;
+  t=1738678092; x=1770214092;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vidSXqskwPzJaP9Rviva5ccLiBArtnYHFgi7x8hmfM4=;
-  b=JuKL8DT1v4EJJrncyhE5TR39GC3CmlE/Ibk7Fhk7dmw2r554SVwZ+Mpk
-   qR0Ty+OmYy/9/Qk5T8oOgpxe+W+h4JEsErg5UIfMTaDUvDsAf06qdDrEV
-   4pKuwp4bJlFHpO7LA3BihBDHI3O94OseQZA7ZjcDlMPKnA0/el1oQ+4o4
-   CEUVh8IIJQw0oz8f51eVqO35CSLLFQMVof+yIMoaBWHutelZ0ai6kdhnu
-   DRi8RuvfGhCdQwsssUJeajLc59SmMdbKXC2fGSXyqI0yWj7TL0Gm2yVBP
-   kMJ8sDBM47IHtzBEoDICaJXdBOK9NTGGtYCrNU5/mCQAcpQ0aKn8TAT1w
-   Q==;
-X-CSE-ConnectionGUID: 6jmliAMnQwyglZOgTxqNlQ==
-X-CSE-MsgGUID: hvppKQEeSIGcrlIw5ECaTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39463705"
-X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="39463705"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 05:46:08 -0800
-X-CSE-ConnectionGUID: +k/050W9Q9ed/lbXoUWXTA==
-X-CSE-MsgGUID: YqU6KvNvSQCagzOThndzUQ==
+  bh=VUi06TS7MWl3WrxSYaECEG9QZL6OepAlFSezS8CGqf0=;
+  b=YpHqCJcKzWcKtM5qhSa4wtqIhNND7kWMhmqoMUaENxASyGNS4vTuJDN1
+   5x4NR2BMeWjLmxFdsJdwS/5qdb5HZgADXKmMp3NzrHRRs19aDsSSFb8FI
+   3a3IWx9UPEUx7yYu8uGNUAfYXiLIuoff9gSKkrY4hEC+BbmAZTA2wYeSb
+   b/aHjhH/HfKkGFToUnEVwPeTu6JpZ/+JjIXAUO/UCd7K071RJdAVuIeAG
+   hQ5q6xLK7ZLais7XjA0Xhd/QYz4gmU//JMqPmlKmzknbTc53aU+iMEJeG
+   KM6zPDgIg8JhZuJWTPZ7KolPsABq4KlNKVmK0Bbz8r/NxjY31J39LWEod
+   A==;
+X-CSE-ConnectionGUID: Sycz9vCRSHiFj7Dgiqbbqw==
+X-CSE-MsgGUID: O58IC4NKR5S1JK8Xl/eFMQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="39309103"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="39309103"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 06:08:11 -0800
+X-CSE-ConnectionGUID: Kru85VL9Rm+NFBhzllo3hA==
+X-CSE-MsgGUID: LFBffYlnSvaFhhagkdBHkg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="115590147"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="110386803"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 04 Feb 2025 05:46:06 -0800
+  by orviesa009.jf.intel.com with ESMTP; 04 Feb 2025 06:08:10 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfJFc-000sXK-0m;
-	Tue, 04 Feb 2025 13:46:04 +0000
-Date: Tue, 4 Feb 2025 21:45:36 +0800
+	id 1tfJax-000sYZ-0c;
+	Tue, 04 Feb 2025 14:08:07 +0000
+Date: Tue, 4 Feb 2025 22:07:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Alexander Graf <graf@amazon.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:kho/v4 12/13] arch/x86/kernel/kexec-bzimage64.c:344:10: error:
- invalid application of 'sizeof' to an incomplete type 'struct kho_data'
-Message-ID: <202502042150.OfBc2oL8-lkp@intel.com>
+Subject: [rppt:kho/v4 12/13] error: arch/x86/include/uapi/asm/setup_data.h:
+ leak CONFIG_KEXEC_HANDOVER to user-space
+Message-ID: <202502042236.a8SqWoq8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,64 +66,26 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git kho/v4
 head:   a75b813f58b0bc19b2c4b06bd62afc87f02dcb43
 commit: dd730ee646a9855c98bf5e8ed8ccf1ee7c8fe122 [12/13] x86: Add KHO support
-config: x86_64-buildonly-randconfig-005-20250204 (https://download.01.org/0day-ci/archive/20250204/202502042150.OfBc2oL8-lkp@intel.com/config)
+config: x86_64-buildonly-randconfig-001-20250204 (https://download.01.org/0day-ci/archive/20250204/202502042236.a8SqWoq8-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502042150.OfBc2oL8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502042236.a8SqWoq8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502042150.OfBc2oL8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502042236.a8SqWoq8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/kexec-bzimage64.c:344:10: error: invalid application of 'sizeof' to an incomplete type 'struct kho_data'
-     344 |                                      sizeof(struct kho_data);
-         |                                      ^     ~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/kexec-bzimage64.c:344:24: note: forward declaration of 'struct kho_data'
-     344 |                                      sizeof(struct kho_data);
-         |                                                    ^
-   arch/x86/kernel/kexec-bzimage64.c:516:10: error: invalid application of 'sizeof' to an incomplete type 'struct kho_data'
-     516 |                               sizeof(struct kho_data);
-         |                               ^     ~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/kexec-bzimage64.c:516:24: note: forward declaration of 'struct kho_data'
-     516 |                               sizeof(struct kho_data);
-         |                                             ^
-   2 errors generated.
-
-
-vim +344 arch/x86/kernel/kexec-bzimage64.c
-
-   331	
-   332		if (IS_ENABLED(CONFIG_IMA_KEXEC)) {
-   333			/* Setup IMA log buffer state */
-   334			setup_ima_state(image, params, params_load_addr,
-   335					setup_data_offset);
-   336			setup_data_offset += sizeof(struct setup_data) +
-   337					     sizeof(struct ima_setup_data);
-   338		}
-   339	
-   340		if (IS_ENABLED(CONFIG_KEXEC_HANDOVER)) {
-   341			/* Setup space to store preservation metadata */
-   342			setup_kho(image, params, params_load_addr, setup_data_offset);
-   343			setup_data_offset += sizeof(struct setup_data) +
- > 344					     sizeof(struct kho_data);
-   345		}
-   346	
-   347		/* Setup RNG seed */
-   348		setup_rng_seed(params, params_load_addr, setup_data_offset);
-   349	
-   350		/* Setup EDD info */
-   351		memcpy(params->eddbuf, boot_params.eddbuf,
-   352					EDDMAXNR * sizeof(struct edd_info));
-   353		params->eddbuf_entries = boot_params.eddbuf_entries;
-   354	
-   355		memcpy(params->edd_mbr_sig_buffer, boot_params.edd_mbr_sig_buffer,
-   356		       EDD_MBR_SIG_MAX * sizeof(unsigned int));
-   357	
-   358		return ret;
-   359	}
-   360	
+>> error: arch/x86/include/uapi/asm/setup_data.h: leak CONFIG_KEXEC_HANDOVER to user-space
+   make[3]: *** [scripts/Makefile.headersinst:63: usr/include/asm/setup_data.h] Error 1 shuffle=1096944769
+   make[3]: Target '__headers' not remade because of errors.
+   make[2]: *** [Makefile:1361: headers] Error 2 shuffle=1096944769
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=1096944769
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=1096944769
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
