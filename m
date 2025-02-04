@@ -1,114 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813C3213E91;
-	Tue,  4 Feb 2025 13:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900FC223300;
+	Tue,  4 Feb 2025 13:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738675803; cv=none; b=KkBYuE3g2DbaTXF4OI0PJ9BEAnin79CJaQ73vS7B4CQe1soj2PylpwMbNXkonoPAUgAOpgOCHOsvNEZsxAs4J/C89+Y64krbl6A3SrMQ+R6MvqH4hqr7A6DhzHOfclGLl1oad3keTjQnUfkRP7lNpR0rAbh1elXe1th4+FStFDM=
+	t=1738676770; cv=none; b=Zh0itmOl685Gl/DPdH/y/GF2E94n6I9/h4LFVNvWYor19E0M3Sr+6eQ7eijSsqWA1HoqsXpt9ixpk1vPbJW3O8lKJIsbX/2ZWfA95DqV6arBH0D12nEAqYY2x4ObCsntL+CerJ3DRNmoXGs0GqTVbswLfOHW4zFCX6dumuEo7ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738675803; c=relaxed/simple;
-	bh=fhTHl3VMAD25DEjVrDF/ce4B/A45dAgzIuOCzAjg7YA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TwrjHdkLCCuxB01V0TpCl/8Nv01EYanE0vtlAnL0Sg9eML4bynuMC8yfMKmYmYU43PQC3vhNkkvqRmY61xB+VCIkjN30d5YFpvFqE0RpU6vDozIU6vmIGuqqpU82xGNWrQJ6NjInJLpCFfu4CmRMP1sOlSt52pAhfmmXqQktyWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKBwVWSv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738676770; c=relaxed/simple;
+	bh=dlTAZAaG+6sdezvpQKTm/E692yu0ivrLgtZ6UQKH0kk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Te43SAIBINa2HVQi8j2lOhXPK4V62wh5lD7c+b4B92wJ8ysZocd9vZeqmwn9AOsEyeRUgCCBdnmeRolxOSkpJIMfIx4fo1Zxf3OQrIyJrvN8Ru9vlkId4Mx0OwxE4U8SqaBlXA+cIOulAn8+UwTfEdEor8NGxZTILKFbSqvce0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ei0ea0NC; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKBwVWSv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA2DC4CEDF;
-	Tue,  4 Feb 2025 13:30:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738675802;
-	bh=fhTHl3VMAD25DEjVrDF/ce4B/A45dAgzIuOCzAjg7YA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eKBwVWSvNqgb3AdOdljELzEhnwjhVscNkOLcLkAZSm/09ITUmN2fkBKcDCAGar682
-	 i4P6xy4a3LJD4oLfuzILMeoEi4SbaB9br38RwFLr+G/6jw+K0Dp9zOZgNjVnQdzco3
-	 i1bC8DJmfpf4Ues0vsqZ3eW7gRGptROSwWA51OOBsqW1MxIpTU/pmhRYRZWGa+vHS6
-	 PWxolw4IEdvSK2sKpXoAxqNYgekZGSyJz0tLBeGvoRgUV7yw7iZPJtIDcq0AFsKLzs
-	 sFKOM07NdClkcA+go0NHr2rv5w7OqZcqr+ziMd/fZWfdUEZdr9ObA9OHoC/rhsFBah
-	 k1dbZgG7zWvRQ==
-Date: Tue, 4 Feb 2025 14:30:00 +0100
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Daniel Gomez <da.gomez@samsung.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
-	gost.dev@samsung.com
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-Message-ID: <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
- <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ei0ea0NC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738676768; x=1770212768;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dlTAZAaG+6sdezvpQKTm/E692yu0ivrLgtZ6UQKH0kk=;
+  b=Ei0ea0NCWUDkGYn+dt8UhE8g5NcsRYbYCcnQoeUxguTDuyDlBh5FDw1D
+   xr9D8TgFSkla5HDAVtzujnHR7xG8urTL9ILsI5u2eCdkQd09aZfWd1Q/m
+   mIilI0owv3E7QcDhApnVs1707ZlCqULtmwiR1r30Z38B9w/9H3JviUrzh
+   Qerpx4xK8MrCnUbpGY5pjPwwkDXOMZoe5kg174Xl1U7N5o0uHdtUVOtbg
+   P5BcS7yf2hievQzH9MURB9A5zgrVW3DsaZqRP0lcp8OmA7Vy+MJb57EVi
+   Rgvq7eqR58pHzxc5m0STN1LNPPWGX1poDkaYxhLseUCiWwNMoo9e5puQe
+   w==;
+X-CSE-ConnectionGUID: PIE4c6ghT1W1RMGuGgcIfg==
+X-CSE-MsgGUID: jYhhuv4UTCCyOvoWayZvfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="26803430"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="26803430"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 05:46:07 -0800
+X-CSE-ConnectionGUID: WOkxPb/tTXSBCbLm46Dbsg==
+X-CSE-MsgGUID: DH5ytsJxT2Sj5i7gtD4jBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="111144916"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 04 Feb 2025 05:46:06 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfJFc-000sXH-0G;
+	Tue, 04 Feb 2025 13:46:04 +0000
+Date: Tue, 4 Feb 2025 21:45:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shenghao Ding <shenghao-ding@ti.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:fileaMnh6H 2/9]
+ sound/pci/hda/tas2781_spi_fwlib.c:373:30: error: use of undeclared
+ identifier 'PPC3_VERSION_TAS2781'
+Message-ID: <202502042144.r94y4VGy-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
 
-On Wed, Jan 22, 2025 at 09:02:19AM +0100, Alexei Starovoitov wrote:
-> On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
-> >
-> > Add support for a module error injection tool. The tool
-> > can inject errors in the annotated module kernel functions
-> > such as complete_formation(), do_init_module() and
-> > module_enable_rodata_after_init(). Module name and module function are
-> > required parameters to have control over the error injection.
-> >
-> > Example: Inject error -22 to module_enable_rodata_ro_after_init for
-> > brd module:
-> >
-> > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
-> > --error=-22 --trace
-> > Monitoring module error injection... Hit Ctrl-C to end.
-> > MODULE     ERROR FUNCTION
-> > brd        -22   module_enable_rodata_after_init()
-> >
-> > Kernel messages:
-> > [   89.463690] brd: module loaded
-> > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
-> > ro_after_init data might still be writable
-> >
-> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > ---
-> >  tools/bpf/Makefile            |  13 ++-
-> >  tools/bpf/moderr/.gitignore   |   2 +
-> >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
-> >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
-> >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
-> >  tools/bpf/moderr/moderr.h     |  40 +++++++
-> >  6 files changed, 510 insertions(+), 3 deletions(-)
-> 
-> The tool looks useful, but we don't add tools to the kernel repo.
-> It has to stay out of tree.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git fileaMnh6H
+head:   500aea53057a952d584cbe1fa461c7adaaa9f655
+commit: 66789ed82adcd9c42118004e0fc5ff2b3d72d959 [2/9] ASoC: tas2781: Support dsp firmware Alpha and Beta seaies
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250204/202502042144.r94y4VGy-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502042144.r94y4VGy-lkp@intel.com/reproduce)
 
-Can you clarify what do you mean? There are other tools under tools/ and tools/
-bpf [1].
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502042144.r94y4VGy-lkp@intel.com/
 
-[1] https://lore.kernel.org/bpf/20200114184230.GA204154@krava/
+All errors (new ones prefixed by >>):
 
-I will anyway move the tool to the suggested location in the other thread.
+   In file included from sound/pci/hda/tas2781_spi_fwlib.c:17:
+   In file included from include/sound/pcm_params.h:10:
+   In file included from include/sound/pcm.h:15:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> sound/pci/hda/tas2781_spi_fwlib.c:373:30: error: use of undeclared identifier 'PPC3_VERSION_TAS2781'
+     373 |         if (fw_fixed_hdr->ppcver >= PPC3_VERSION_TAS2781) {
+         |                                     ^
+>> sound/pci/hda/tas2781_spi_fwlib.c:376:37: error: use of undeclared identifier 'PPC3_VERSION'
+     376 |         } else if (fw_fixed_hdr->ppcver >= PPC3_VERSION) {
+         |                                            ^
+   sound/pci/hda/tas2781_spi_fwlib.c:1608:17: error: use of undeclared identifier 'PPC3_VERSION'
+    1608 |                 if (ppcver >= PPC3_VERSION) {
+         |                               ^
+   3 warnings and 3 errors generated.
 
-> 
-> The value of error injection is not clear to me.
-> Other places in the kernel use it to test paths in the kernel
-> that are difficult to do otherwise.
 
-By any chance do you know which tool are they using?
+vim +/PPC3_VERSION_TAS2781 +373 sound/pci/hda/tas2781_spi_fwlib.c
 
-> These 3 functions don't seem to be in this category.
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  361  
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  362  /* fixed m68k compiling issue: mapping table can save code field */
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  363  static unsigned char map_dev_idx(struct tasdevice_fw *tas_fmw,
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  364  	struct tasdev_blk *block)
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  365  {
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  366  	struct blktyp_devidx_map *p =
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  367  		(struct blktyp_devidx_map *)non_ppc3_mapping_table;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  368  	struct tasdevice_dspfw_hdr *fw_hdr = &tas_fmw->fw_hdr;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  369  	struct tasdevice_fw_fixed_hdr *fw_fixed_hdr = &fw_hdr->fixed_hdr;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  370  	int i, n = ARRAY_SIZE(non_ppc3_mapping_table);
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  371  	unsigned char dev_idx = 0;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  372  
+bb5f86ea50ffb2 Baojun Xu 2024-12-16 @373  	if (fw_fixed_hdr->ppcver >= PPC3_VERSION_TAS2781) {
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  374  		p = (struct blktyp_devidx_map *)ppc3_tas2781_mapping_table;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  375  		n = ARRAY_SIZE(ppc3_tas2781_mapping_table);
+bb5f86ea50ffb2 Baojun Xu 2024-12-16 @376  	} else if (fw_fixed_hdr->ppcver >= PPC3_VERSION) {
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  377  		p = (struct blktyp_devidx_map *)ppc3_mapping_table;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  378  		n = ARRAY_SIZE(ppc3_mapping_table);
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  379  	}
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  380  
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  381  	for (i = 0; i < n; i++) {
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  382  		if (block->type == p[i].blktyp) {
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  383  			dev_idx = p[i].dev_idx;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  384  			break;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  385  		}
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  386  	}
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  387  
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  388  	return dev_idx;
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  389  }
+bb5f86ea50ffb2 Baojun Xu 2024-12-16  390  
 
-Luis already answered this.
+:::::: The code at line 373 was first introduced by commit
+:::::: bb5f86ea50ffb292f42eb1ebdb99991d5c5ac3ba ALSA: hda/tas2781: Add tas2781 hda SPI driver
+
+:::::: TO: Baojun Xu <baojun.xu@ti.com>
+:::::: CC: Takashi Iwai <tiwai@suse.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
