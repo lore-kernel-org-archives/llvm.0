@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49482165F3
-	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 17:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B1B21638A
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 17:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738690613; cv=none; b=R4qwmHRSlbjGDeq33JDQamYokpvycGO/irhqSoIeK3sbPt3nJDK7/Q3ehHAvjw2HnqIOxZjimQQfWGwdvhF3AlLJME4gkaWJXqSyYReHCEdHKZtvCx7ZmfUOVhCy2vKgQZ5ES/NyY16n4eplzaY1pDZ9+TU3qg6dj/CzpYOAtNU=
+	t=1738690627; cv=none; b=suFrfrutL4nderrj8Jsb9vLA8qhUQqFj6gqeuh9FjYps6QhsAvfKLSpzt6Dt2DCqG5AvdwZcq1upS8akU1v2K4MwMLR2yO5Uy1TC/9iWxU7vJxi4rptqU53nbaBuPRDzP/748xDgYtNNXau97AnIi5lxYttF3sMcuLLp3rDJVwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738690613; c=relaxed/simple;
-	bh=EUgvSoD6ZXvZMdQY8EXK092WIVXF++/3+F17U+GxOWU=;
+	s=arc-20240116; t=1738690627; c=relaxed/simple;
+	bh=r2iiDiPZOS4/QANoocz7hbq1LBuYUYYysQaiQVX4JUg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CMuAB3lv3r3A7etTG7NFCKeO+cQEnMC0s/qAu7RUahnANh505NaYFHGKjQ7FjWxQKsuLbsKNIr3EzzbRJLW+jonW47Ny5aXN1jb4bAZ7a71D7vpRDNGIPTmcn2V9YB/lG86DyfAzv/akBff/rp0OoSFspk+yJMNgzgvbygnX0vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jN/G8y/b; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version; b=nOrfn2Jm7lz9UDUADxwD2UmINo9nSVeM7X2MKF/n0NT/ngwq6Ibb5w3qPCHtCcQBW4FvbvjkzzTD2lF7eaIYieJSsO8M+t8LV+YHcXPihlPKCX5X+w9XHKgpmxGgJbZRb/bqgQz0e2Ym3Fo4hz35dKaCKJhiT4WwOe72YCbYqy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A9DnbX4Z; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jN/G8y/b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A9DnbX4Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738690612; x=1770226612;
+  t=1738690626; x=1770226626;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EUgvSoD6ZXvZMdQY8EXK092WIVXF++/3+F17U+GxOWU=;
-  b=jN/G8y/byn5XTgdkIACw6XW7C1VohBQMyPrFtalPd9T9ZlGzT/yUb7TN
-   3E46uSHOlZxq0AEg8aAQjd6g4ctgIlSVqm9PmU1MAoDYUds6RlFKhgyc6
-   Ow/TlbC4p61EYVro48hfLmZKMbf3yurlo/FW/zNYno/IKe1TWp2j7Yq+E
-   kLXbd6jOgTOK1Y134xkVQga8EM5TnW088inVReoH9F3DehcD5yeH+XXfA
-   XqAvK0ilUcadBDq/DU2AzZG0dKG15CYtsV4stA7EVpG7KNbBoHUPfFS0d
-   x0AgB/Resr/q0BoQt8CYyhP4KP+AvWgeVyMbUvz1e6ZiKOC9CiulCtOo0
-   g==;
-X-CSE-ConnectionGUID: FJZRyAjASfmtU6Z/4iHZIA==
-X-CSE-MsgGUID: Tsfn1AU4TbG0jnPn+SrXkg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="38930992"
+  bh=r2iiDiPZOS4/QANoocz7hbq1LBuYUYYysQaiQVX4JUg=;
+  b=A9DnbX4Z9IwBYz3VpbeJxIgfP3l52T38fvZC/JCnHlJRKN4J+P47wTOG
+   nWu9Pqab15e01pHqHX/3KmwEr8/EL2suF4dYHr3ixz0lwEDlKIjqp/dMw
+   CbltiCEzVwKYJBZ6zIJ17R1KyuOr8hqVbHtmwasZ39cn4Td5J1COGQNJz
+   i7ejcJOxS+W2mK/nUh8UfWloYT1jPRr8Uzwv2A591dzilinxCy5sRU229
+   KJMEmWTTjR5RwrkKbxuFBXBWMR2WzcOWUzA4EvtMHQfDbSz+gsdPP/Xmz
+   QaDvMHhwyMGyerdQHPZp3EYAdkfG1uMweLAumqZYKKQ79/F1kElLn+Qz6
+   A==;
+X-CSE-ConnectionGUID: +YHZJC7pSxuFOC2SNJInMQ==
+X-CSE-MsgGUID: WcXNN/qmSAm0iS5h3JC1rQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="38931040"
 X-IronPort-AV: E=Sophos;i="6.13,259,1732608000"; 
-   d="scan'208";a="38930992"
+   d="scan'208";a="38931040"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:36:51 -0800
-X-CSE-ConnectionGUID: P6du7V6VScafjuMIXvnbWA==
-X-CSE-MsgGUID: W7s9nIAMS+GBPujRL+zY2g==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:37:04 -0800
+X-CSE-ConnectionGUID: F7WrZE34TJC30qp8xAUvrQ==
+X-CSE-MsgGUID: 1Ko21FfoQgSOsBU65eanYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="147866889"
+   d="scan'208";a="147866985"
 Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.61])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:36:39 -0800
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:36:51 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: luto@kernel.org,
 	xin@zytor.com,
@@ -98,9 +98,9 @@ Cc: kasan-dev@googlegroups.com,
 	linux-mm@kvack.org,
 	llvm@lists.linux.dev,
 	linux-doc@vger.kernel.org
-Subject: [PATCH 11/15] x86: LAM initialization
-Date: Tue,  4 Feb 2025 18:33:52 +0100
-Message-ID: <01104816cdd0d430ac843847a8056d07b8770be0.1738686764.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH 12/15] x86: Minimal SLAB alignment
+Date: Tue,  4 Feb 2025 18:33:53 +0100
+Message-ID: <162610a0af3e04e2f42872401461b1d62ec78fbd.1738686764.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
 References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
@@ -112,51 +112,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To make use of KASAN's tag based mode on x86 Linear Address Masking
-(LAM) needs to be enabled. To do that the 28th bit in CR4 needs to be
-set.
-
-Set the bit in early memory initialization.
-
-When launching secondary CPUs the LAM bit gets lost. To avoid this it
-needs to get added in a mask in head_64.S. The bit mask permits some
-bits of CR4 to pass from the primary CPU to the secondary CPUs without
-being cleared.
+Adjust x86 minimal SLAB alignment to match KASAN granularity size. In
+tag-based mode the size changes to 16 bytes so the value needs to be 4.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- arch/x86/kernel/head_64.S | 3 +++
- arch/x86/mm/init.c        | 3 +++
- 2 files changed, 6 insertions(+)
+ arch/x86/include/asm/kasan.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 16752b8dfa89..7cdafcedbc70 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -199,6 +199,9 @@ SYM_INNER_LABEL(common_startup_64, SYM_L_LOCAL)
- 	 *  there will be no global TLB entries after the execution."
- 	 */
- 	movl	$(X86_CR4_PAE | X86_CR4_LA57), %edx
-+#ifdef CONFIG_ADDRESS_MASKING
-+	orl	$X86_CR4_LAM_SUP, %edx
-+#endif
- #ifdef CONFIG_X86_MCE
- 	/*
- 	 * Preserve CR4.MCE if the kernel will enable #MC support.
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..4dc3679fedd1 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -756,6 +756,9 @@ void __init init_mem_mapping(void)
- 	probe_page_size_mask();
- 	setup_pcid();
+diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
+index 8829337a75fa..f7a8d3763615 100644
+--- a/arch/x86/include/asm/kasan.h
++++ b/arch/x86/include/asm/kasan.h
+@@ -36,6 +36,8 @@
  
-+	if (boot_cpu_has(X86_FEATURE_LAM) && IS_ENABLED(CONFIG_KASAN_SW_TAGS))
-+		cr4_set_bits_and_update_boot(X86_CR4_LAM_SUP);
+ #ifdef CONFIG_KASAN_SW_TAGS
+ 
++#define ARCH_SLAB_MINALIGN (1ULL << KASAN_GRANULE_SHIFT)
 +
- #ifdef CONFIG_X86_64
- 	end = max_pfn << PAGE_SHIFT;
- #else
+ #define __tag_shifted(tag)		FIELD_PREP(GENMASK_ULL(60, 57), tag)
+ #define __tag_reset(addr)		(sign_extend64((u64)(addr), 56))
+ #define __tag_get(addr)			((u8)FIELD_GET(GENMASK_ULL(60, 57), (u64)addr))
 -- 
 2.47.1
 
