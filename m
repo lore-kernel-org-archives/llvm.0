@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B476725A624;
-	Tue,  4 Feb 2025 05:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A83271FFC75;
+	Tue,  4 Feb 2025 06:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738646419; cv=none; b=Fb51sC2czfUaQhh4PhpVMRQ6iLv/SgWUAbwx819x5xieuJCf96SwjwCC1IiekYCo16Uj9m9k9tegF40yGJtjWPC/yuzJi6bECvmjGQ85L+ewfKVOgwBTsl3IZCXBBpovVehXOexcgiwl9eCffzsHGp3b+buQw92EiPIIc0fputk=
+	t=1738649544; cv=none; b=lRBePXA/5tL0R/y+hHsv6XXmolkDgcfuKyJfPzjMN2xstXUr2Ttr/d8VwAoWXRtR1y9W6kLEv+uvk3x/1I1CpBVlBKsNYGwTXR7RRTaLtZDwyR8KlMTuhCmEeDB5TIFjHOOtsBMLx4mGTb7g15Rf/yEbemnwrUy74x6FDbe9B2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738646419; c=relaxed/simple;
-	bh=Omwe6LnT3uBQt67RB6V+zKSmwy98tmKpwDO4Vm43r7w=;
+	s=arc-20240116; t=1738649544; c=relaxed/simple;
+	bh=aqZp83J0Mli+PN3oSYxuPUebpjy+AB82aoEFMx8LYR0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=vCUecrKfY5TNl0jR4ZmsJvbESaTtMXeWnXh9nnLifITZDm4WnvfHD8QE+/KmRvncOroyYpq7sVAtXS+g39iEUbyMKeAseyZ3vOIn6nu/5RSjZTLNO/0yBdUeq2RNV65/HmGDTZBYT5aykwfU55eFmJD7DS2l+s1oh5V0+uRkgrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LfwLTHWx; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=JcuuzOWiZKgWomHEydxj2ydc6KrMvmOr2mriguuCdf76kAHKUodKEa0/h731b3vni39VrlAGp6Ihhs7hk8BaaTEtb0PKuHUS2UQoCPtP3SoEMLlKaEBbbYw3SBZrp/5J+Yk7KCyjcgwk8om0Lfs1+9OSNNRCaBUaRP8JnYpS4W4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dV842yZL; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LfwLTHWx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dV842yZL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738646418; x=1770182418;
+  t=1738649542; x=1770185542;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Omwe6LnT3uBQt67RB6V+zKSmwy98tmKpwDO4Vm43r7w=;
-  b=LfwLTHWxdXBBI9rkfX1Gum4tXUXgSP3kaj8I/CtwVaOVVUCoj/bk0TL8
-   aiwtrw+2o8sh3b7vige/BDaOzwcVbrP+Y5vEBrjuhIwyzGskJS3ID/LcS
-   WsjumLHgYVtfrVPZVJd0YK1kVuFHqQ1scvqqJmJQJMkvF/UaaIvcx7lbm
-   SZ7D9vUNt4p7oAFyKZ4Cy5TDgGJbUkQylY8uicYgmT6d3efws0abRNpw2
-   KgTVTqfkK2mNBFH4L+lOFI8RwIpd7VwPsmZG5E0/+BK6ad9skBALaFtQ1
-   PlMU/s0CZA/d2Jc9ujE08DGWTMZgNXOgoJZaaGB4/F400kNPOahwcZu2y
-   w==;
-X-CSE-ConnectionGUID: CUWzcP9xQx6thDwxFJ16eg==
-X-CSE-MsgGUID: MTE1CV9cSoC0Ujn0x5nCow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="50152226"
-X-IronPort-AV: E=Sophos;i="6.13,257,1732608000"; 
-   d="scan'208";a="50152226"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 21:20:17 -0800
-X-CSE-ConnectionGUID: UXSw7QxNSL+GMuka1kAmjg==
-X-CSE-MsgGUID: ZHR3/1V9Rsme0lCORDZVWA==
+  bh=aqZp83J0Mli+PN3oSYxuPUebpjy+AB82aoEFMx8LYR0=;
+  b=dV842yZLBOkS+ZcR2t+9+OSrFCyOhJ1G32Er/GhklNRdLccuOLiHS7k6
+   YsqxUyU4Zh2vASONO8SSDug2tWGUCFTWgpq3ml0MMiHdhJLogkL9u+Fmz
+   jBS9oTyPxQuWjbKqMqqAayMS4+DcnXvPNpfBA60Sl393ZtaYeK0zBiuW/
+   SHIpQYeWWRvyKxM5/A2lpNGfdRE3O7rQBxXo3wO4N5ZsymzliVRfRkloY
+   AK/tFAyf45fE14ae5VHf22Acu45luCrUYb9EbP9xUSSqDWsDB4iTk1Ft+
+   fIuMB5x1JQjDY7xz2u814Vbk/UOdW/w0dFEHkK0J9wolxFmI2nUoa/VX1
+   g==;
+X-CSE-ConnectionGUID: +R5QtX0PRVSkLPgtlUXHsw==
+X-CSE-MsgGUID: ORPJBbF1Q/CQfjWQ7ZBCVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="50551396"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="50551396"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 22:12:21 -0800
+X-CSE-ConnectionGUID: MJIxjJqTQ8CnNbXBizG5gA==
+X-CSE-MsgGUID: oVxDNQwhQL2YG99jXgcZnA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,257,1732608000"; 
-   d="scan'208";a="110457934"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="111088515"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 03 Feb 2025 21:20:16 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 03 Feb 2025 22:12:19 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfBM5-000s15-19;
-	Tue, 04 Feb 2025 05:20:13 +0000
-Date: Tue, 4 Feb 2025 13:19:36 +0800
+	id 1tfCAT-000s3X-27;
+	Tue, 04 Feb 2025 06:12:17 +0000
+Date: Tue, 4 Feb 2025 14:11:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>,
-	Vasant Hegde <vasant.hegde@amd.com>
-Subject: vmlinux.o: warning: objtool:
- amd_iommu_domain_alloc_paging_flags+0x2c3: unreachable instruction
-Message-ID: <202502041311.kWm3wyBl-lkp@intel.com>
+To: Max Filippov <jcmvbkbc@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jcmvbkbc-xtensa:xtensa-6.13-esp32 25/53]
+ drivers/net/wireless/espressif/esp32-ng/esp_bt.c:243:8: error: no member
+ named 'dev_type' in 'struct hci_dev'
+Message-ID: <202502041439.Q00SNGV7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,23 +63,72 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0de63bb7d91975e73338300a57c54b93d3cc151c
-commit: 082f1bcae8d1b5f76e92e369091176b8d61120ec iommu/amd: Fully decode all combinations of alloc_paging_flags
-date:   3 weeks ago
-config: x86_64-randconfig-075-20250203 (https://download.01.org/0day-ci/archive/20250204/202502041311.kWm3wyBl-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502041311.kWm3wyBl-lkp@intel.com/reproduce)
+tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.13-esp32
+head:   f4a6cef2509c4e81637b6d5d6f0c27966895985a
+commit: 6c0af79e75e54aeb74a525f9c6e958db674bf816 [25/53] drivers/net/wireless/espressif/esp32-ng: initial import
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250204/202502041439.Q00SNGV7-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502041439.Q00SNGV7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502041311.kWm3wyBl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502041439.Q00SNGV7-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   vmlinux.o: warning: objtool: ep_poll_callback+0x458: unreachable instruction
->> vmlinux.o: warning: objtool: amd_iommu_domain_alloc_paging_flags+0x2c3: unreachable instruction
+   In file included from drivers/net/wireless/espressif/esp32-ng/esp_bt.c:10:
+   drivers/net/wireless/espressif/esp32-ng/esp_kernel_port.h:181:32: error: variable has incomplete type 'struct cfg80211_rx_assoc_resp'
+     181 |         struct cfg80211_rx_assoc_resp resp = {0};
+         |                                       ^
+   drivers/net/wireless/espressif/esp32-ng/esp_kernel_port.h:181:9: note: forward declaration of 'struct cfg80211_rx_assoc_resp'
+     181 |         struct cfg80211_rx_assoc_resp resp = {0};
+         |                ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:14:6: warning: no previous prototype for function 'esp_hci_update_tx_counter' [-Wmissing-prototypes]
+      14 | void esp_hci_update_tx_counter(struct hci_dev *hdev, u8 pkt_type, size_t len)
+         |      ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:14:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      14 | void esp_hci_update_tx_counter(struct hci_dev *hdev, u8 pkt_type, size_t len)
+         | ^
+         | static 
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:29:6: warning: no previous prototype for function 'esp_hci_update_rx_counter' [-Wmissing-prototypes]
+      29 | void esp_hci_update_rx_counter(struct hci_dev *hdev, u8 pkt_type, size_t len)
+         |      ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:29:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      29 | void esp_hci_update_rx_counter(struct hci_dev *hdev, u8 pkt_type, size_t len)
+         | ^
+         | static 
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:167:5: warning: no previous prototype for function 'esp_deinit_bt' [-Wmissing-prototypes]
+     167 | int esp_deinit_bt(struct esp_adapter *adapter)
+         |     ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:167:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     167 | int esp_deinit_bt(struct esp_adapter *adapter)
+         | ^
+         | static 
+>> drivers/net/wireless/espressif/esp32-ng/esp_bt.c:243:8: error: no member named 'dev_type' in 'struct hci_dev'
+     243 |         hdev->dev_type = HCI_PRIMARY;
+         |         ~~~~  ^
+>> drivers/net/wireless/espressif/esp32-ng/esp_bt.c:243:19: error: use of undeclared identifier 'HCI_PRIMARY'; did you mean 'HCI_PRIVACY'?
+     243 |         hdev->dev_type = HCI_PRIMARY;
+         |                          ^~~~~~~~~~~
+         |                          HCI_PRIVACY
+   include/net/bluetooth/hci.h:417:2: note: 'HCI_PRIVACY' declared here
+     417 |         HCI_PRIVACY,
+         |         ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:184:5: warning: no previous prototype for function 'esp_init_bt' [-Wmissing-prototypes]
+     184 | int esp_init_bt(struct esp_adapter *adapter)
+         |     ^
+   drivers/net/wireless/espressif/esp32-ng/esp_bt.c:184:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     184 | int esp_init_bt(struct esp_adapter *adapter)
+         | ^
+         | static 
+   4 warnings and 3 errors generated.
+
+
+vim +243 drivers/net/wireless/espressif/esp32-ng/esp_bt.c
+
+   242	
+ > 243		hdev->dev_type = HCI_PRIMARY;
 
 -- 
 0-DAY CI Kernel Test Service
