@@ -1,72 +1,109 @@
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AEE224B14
-	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 19:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5586218AAC
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 19:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738698681; cv=none; b=VRfQGH5I0fIeFMrn66B2oIEQxhgeUF5RawpmnV3XtzOiqcdh4jFXa0XL+ZarS3xZDQUQeu641HvXvIxFmqUQcpCbr93Wa05D3oNYxlb0Ws0ojZ0X5JxLYUePdKSBwjbw0bCrlM/95dxx5z2sxIjo6ieziR5HAEXBI7HH5qXxKns=
+	t=1738698805; cv=none; b=WPE3la8qcpQdYkuMOBYu6D+GTPver2Cx+h0j6p3NQaPq5KpaLjcreTjAu/1HeDzvV4q3TIZC8v/OoT/SxTbPe7YmJTrZNN7Jakl8gJh5ZX9tSzDkWAmci9LTsG4aMq3mb0JZXQ0CE5b+f/xZevVODJAGR2f7pKyD/4ijvza2BFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738698681; c=relaxed/simple;
-	bh=L7hZ7sYPCCjt4cWuKdRqkFzNU2NINe/kZtlYF3GX+To=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=XahMSUOXvsiIr5ntPY1PCOF41Dwdblk7HtLBLREbybbtwR82H1M8ofEiz468LS7Ptor5PZmi8/m8o8eKWK5dNsou0xaFtR+McS9n0GLRNuE0lqGKDl8+YHoV4JXuk4swZciJUm/5bbQ7mzEf2aErz4VlmVhBEEjfNJX/WL6jgjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=jyGtOg/i; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	s=arc-20240116; t=1738698805; c=relaxed/simple;
+	bh=7MU82rpyv1/JuoPe+HcBgyV4F9UysRvib95/ndu+bfU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nD10HZ7XprKzjzvQ0RiENh6YfhYjbM9sSqD0tbM98AjuMWdjANnmDKn/m+U10DriHFGTTgP16ivWYMeE0uX82/LOTbn5tlShTIV3aoXGpPpjTWkeB5cqDExQogSsn1IjyfJcNYYe+/oULoYGfrqCRBBjdT2l9Ga2y5n3LqJmHBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XiCtLSlA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="jyGtOg/i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1738695503;
-	bh=L7hZ7sYPCCjt4cWuKdRqkFzNU2NINe/kZtlYF3GX+To=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=jyGtOg/iCyiwjp/g1mTcKme1MwefVaOX7wySyrZcham7FrqcugOECEhMIB5bHuVxw
-	 jxBiJ9xi5y9Ou8aDKij09mJEeZ7EVO+B4CuJIYNSPaLeZ0McyYcgp8ncn+IliZWl8N
-	 HZraV3iO1ZSruE8vDNlj7sXOI+AYMSwijILKB/nU=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id EC29D401EB; Tue,  4 Feb 2025 10:58:23 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id E915A401E9;
-	Tue,  4 Feb 2025 10:58:23 -0800 (PST)
-Date: Tue, 4 Feb 2025 10:58:23 -0800 (PST)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com, 
-    palmer@dabbelt.com, tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com, 
-    ardb@kernel.org, dave.hansen@linux.intel.com, jgross@suse.com, 
-    will@kernel.org, akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net, 
-    dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com, 
-    tglx@linutronix.de, hpa@zytor.com, seanjc@google.com, 
-    paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com, 
-    jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com, 
-    jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com, 
-    rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com, 
-    catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org, 
-    ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de, 
-    kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com, 
-    julian.stecklina@cyberus-technology.de, peterz@infradead.org, 
-    kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
-    linux-doc@vger.kernel.org
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode
- for x86
-In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
-Message-ID: <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XiCtLSlA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738698802;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n86qGYg/r6OhU3Nz46//ed5VuYIgunnpCIZXBRAfK/E=;
+	b=XiCtLSlA8r0Z6Gv9RkpGPKTcXwZfIazDBPTQNMJ64rerWYQ9spbjEh8/9L3Q551jLh9ap/
+	FAxstaxuOEuNCVCQhakhY6wbpT2LiMizdbKB4sQPGDd7uf/I32DB7kakSNNtJjQ38EN0Cm
+	RHqqhUq0XVLaVDHpDubqocJuJKkHC3I=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-635-texVD0PANOGy_mDcuyozNg-1; Tue,
+ 04 Feb 2025 14:53:06 -0500
+X-MC-Unique: texVD0PANOGy_mDcuyozNg-1
+X-Mimecast-MFC-AGG-ID: texVD0PANOGy_mDcuyozNg
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9B2F41956048
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 19:53:05 +0000 (UTC)
+Received: from [172.64.10.4] (unknown [10.30.34.106])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2C0191800360;
+	Tue,  4 Feb 2025 19:53:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc1,
+ upstream-mainline, d009de7d)
+Date: Tue, 04 Feb 2025 19:53:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <45357.125020414530601804@us-mta-635.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: s8ozXGLqE_ZTMYgAbuGNjytI1LXwGxgqtgS_YcAVS1E_1738698785
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-ARM64 supports MTE which is hardware support for tagging 16 byte granules
-and verification of tags in pointers all in hardware and on some platforms
-with *no* performance penalty since the tag is stored in the ECC areas of
-DRAM and verified at the same time as the ECC.
+Hi, we tested your kernel and here are the results:
 
-Could we get support for that? This would allow us to enable tag checking
-in production systems without performance penalty and no memory overhead.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'livepatching-for-6.14-rc2' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/livepatching/livepatching
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1655638982
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1655638982-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1655638982-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1655638982-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
