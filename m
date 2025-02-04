@@ -1,93 +1,203 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5172A217645;
-	Tue,  4 Feb 2025 17:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977492185AB
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 17:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738690659; cv=none; b=QF0nUYoYgHPE2bV4o6D5/gtvLT/Onob4N2YgeNBHxUpzyUIMTGTg3WDhuUssSqpxFvLH8AjXQQtWzt2drYGcFu2JuAjc7Uz7e9WH/fTGOKVaw5bieuvcOMjbj58tO3Jv/Qt1dSXo1CFRziIm6RmaEaYgDUp+x9bziFt5qNR925w=
+	t=1738690663; cv=none; b=iGjt8K+wqmo5Z3oX1uqdGP/Rq5qb2pipeAIL2EYekRpmZXIW0MhJhuMYpsP8xcdktLThbzfjN0sGvXIi0qk+K3QxOXnbvETTJounxSUoURVM5MTXOiBzogFtOXHt6WRhBLb6jqYShn7zH0OEVowBRfmMUQ0jW2pA0H+h7i3+b7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738690659; c=relaxed/simple;
-	bh=cFhW+HpoBr+7r9nw1AZd0Mo4cWC38oRKalx+p4MgK3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uyVttbmGpMNJvHWGNE33yjsGNtTRxpG96sGh8fsgDmFQFchhhlouMqgARIma7laEnJH1SPFYGKOaetG5QdOH/m4BRfcvusrOQn0HtDk1faGkz6hF6RpnMJYDtyvvAmPFQmQUbs3SLbaa+mjwal1vwfHuWjzxehqid1cgmCOApHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K9jvZ7in; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1738690663; c=relaxed/simple;
+	bh=Ht7/TOmkT+iwiNKb8KTAnbXFoYcUy6oM0kb2gCQ20Wc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JsUOUR4nqPYmfku8p69iEh51606tztEWGm6OPp1YRBVM4mLEZwrD3nq9H7O4n5JeqvaoY2zpH/0X46RfINwWTQhNmGQeNd6eNueZdY54GKeFRQ1bFSE3Xl0Mcp/MM6oN25DuohWT2BrM0wpnnO0bN0ZSYaygdy0jFELth8+nlVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c0ukMGiY; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K9jvZ7in"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c0ukMGiY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738690657; x=1770226657;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cFhW+HpoBr+7r9nw1AZd0Mo4cWC38oRKalx+p4MgK3M=;
-  b=K9jvZ7in3uBr6JfMDEeUT2VBj9rQ9GAlhVTPj9p68JaYGancsHeetYI7
-   KfUG/M9JvSrk3QUlgJ9OGQf09KAxvLaGLSZ8asMztAfMVlMGlKHydz9RB
-   qfFP5gVpC1kTGoz+zluboeoXwOi7OW1lloric2n+/5ru0akhJQP1Ce39+
-   6vDf1u1Mud3zc9DURofVY+6/aOEbDfFUd88Ym4zICB2Pm/5HzReLx5BnG
-   HZMrq74FA64q2PyfbKuc0wquGvFyPVD2Jr12oU9gWsx1YuRrMSkInf4yG
-   p1zA6wnfFiJ6DkrUy2B5nMS5uiarF/WPhNlwa2O9HuNROdR14eCHkIJrI
-   Q==;
-X-CSE-ConnectionGUID: oP1NaTxLR66ESI5VSlJ/Qw==
-X-CSE-MsgGUID: P9kRmIfyREi9v6Be/CMT1Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39384576"
+  t=1738690661; x=1770226661;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Ht7/TOmkT+iwiNKb8KTAnbXFoYcUy6oM0kb2gCQ20Wc=;
+  b=c0ukMGiYaJ3PYbA25zw99NQ3AkIl1Zzh623UYZLo9/2huizcCGk0GdmF
+   xpqPr81a4kK52gCDtyUcNqPOQDb4BN2dnXShXSXOZGj37GhwJKBtFlsZM
+   3W0nuW5mC6LsWJ6fZeQ7KCVYKp0nORU6+AzWG1oBumoKUbi3Wia6+HsiD
+   5JA+L+HCLrxxQyAsLutbPlK55KdUpBl7lecdOmaBuct6H137/Ifd8MTZZ
+   ypZJ+yR4oXWrno8A+lJt5jv3fFMwxNN4p+YSPjVkHZcpyDhronbStsNXK
+   Au6eA9aZXC5XYmnz1Uv7hyhtOH+E6uMzk5eHZOrK1Llicu9biv6v8BK/o
+   A==;
+X-CSE-ConnectionGUID: 1nQPKR+bTOe8+MsgnMrdEQ==
+X-CSE-MsgGUID: bbcW5oN6Sweb8JHPI8XoCQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="38931210"
 X-IronPort-AV: E=Sophos;i="6.13,259,1732608000"; 
-   d="scan'208";a="39384576"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:37:36 -0800
-X-CSE-ConnectionGUID: XQwSIomrQyaoPSiFTA3wNA==
-X-CSE-MsgGUID: TIdzbrvpSY6xsRv+6TseRg==
+   d="scan'208";a="38931210"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:37:41 -0800
+X-CSE-ConnectionGUID: UAr5/zW7Rha56MjtNiYK0Q==
+X-CSE-MsgGUID: 2nPTC7p0TeC/cQLyC4Ywqw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,259,1732608000"; 
-   d="scan'208";a="115643234"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 04 Feb 2025 09:37:34 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tfMrc-000so7-09;
-	Tue, 04 Feb 2025 17:37:32 +0000
-Date: Wed, 5 Feb 2025 01:37:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="147867266"
+Received: from mjarzebo-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.61])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 09:37:29 -0800
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: luto@kernel.org,
+	xin@zytor.com,
+	kirill.shutemov@linux.intel.com,
+	palmer@dabbelt.com,
+	tj@kernel.org,
+	andreyknvl@gmail.com,
+	brgerst@gmail.com,
+	ardb@kernel.org,
+	dave.hansen@linux.intel.com,
+	jgross@suse.com,
+	will@kernel.org,
+	akpm@linux-foundation.org,
+	arnd@arndb.de,
+	corbet@lwn.net,
+	maciej.wieczor-retman@intel.com,
+	dvyukov@google.com,
+	richard.weiyang@gmail.com,
+	ytcoode@gmail.com,
+	tglx@linutronix.de,
+	hpa@zytor.com,
+	seanjc@google.com,
+	paul.walmsley@sifive.com,
+	aou@eecs.berkeley.edu,
+	justinstitt@google.com,
+	jason.andryuk@amd.com,
+	glider@google.com,
+	ubizjak@gmail.com,
+	jannh@google.com,
+	bhe@redhat.com,
+	vincenzo.frascino@arm.com,
+	rafael.j.wysocki@intel.com,
+	ndesaulniers@google.com,
+	mingo@redhat.com,
+	catalin.marinas@arm.com,
+	junichi.nomura@nec.com,
+	nathan@kernel.org,
+	ryabinin.a.a@gmail.com,
+	dennis@kernel.org,
+	bp@alien8.de,
+	kevinloughlin@google.com,
+	morbo@google.com,
+	dan.j.williams@intel.com,
+	julian.stecklina@cyberus-technology.de,
+	peterz@infradead.org,
+	cl@linux.com,
+	kees@kernel.org
+Cc: kasan-dev@googlegroups.com,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>
-Subject: ld.lld: warning:
- src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6269:0:
- stack frame size (4048) exceeds limit (3072) in function
- 'dml_prefetch_check'
-Message-ID: <202502050105.2A6kZvev-lkp@intel.com>
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org
+Subject: [PATCH 15/15] kasan: Add mititgation and debug modes
+Date: Tue,  4 Feb 2025 18:33:56 +0100
+Message-ID: <450a1fe078b0e07bf2e4f3098c9110c9959c6524.1738686764.git.maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0de63bb7d91975e73338300a57c54b93d3cc151c
-commit: a8d42cd228ec41ad99c50a270db82f0dd9127a28 drm/amd/display: mark static functions noinline_for_stack
-date:   11 days ago
-config: x86_64-randconfig-075-20250203 (https://download.01.org/0day-ci/archive/20250205/202502050105.2A6kZvev-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502050105.2A6kZvev-lkp@intel.com/reproduce)
+With smaller memory footprint KASAN could be used in production systems.
+One problem is that saving stacktraces slowes memory allocation
+substantially - with KASAN enabled up to 90% of time spent on kmalloc()
+is spent on saving the stacktrace.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502050105.2A6kZvev-lkp@intel.com/
+Add mitigation mode to allow the option for running KASAN focused on
+performance and security. In mitigation mode disable saving stacktraces
+and set fault mode to always panic on KASAN error as a security
+mechanism.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+---
+ lib/Kconfig.kasan | 28 ++++++++++++++++++++++++++++
+ mm/kasan/report.c |  4 ++++
+ mm/kasan/tags.c   |  5 +++++
+ 3 files changed, 37 insertions(+)
 
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1725:0: stack frame size (3496) exceeds limit (3072) in function 'dml32_ModeSupportAndSystemConfigurationFull'
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6714:0: stack frame size (3416) exceeds limit (3072) in function 'dml_core_mode_support'
->> ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6269:0: stack frame size (4048) exceeds limit (3072) in function 'dml_prefetch_check'
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8290:0: stack frame size (3584) exceeds limit (3072) in function 'dml_core_mode_programming'
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:7308:0: stack frame size (4944) exceeds limit (3072) in function 'dml_core_mode_support.46549'
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:10360:0: stack frame size (3744) exceeds limit (3072) in function 'dml_core_mode_programming.46571'
-
+diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+index d08b4e9bf477..6daa62b40dea 100644
+--- a/lib/Kconfig.kasan
++++ b/lib/Kconfig.kasan
+@@ -244,4 +244,32 @@ config KASAN_SW_TAGS_DENSE
+ 	  ARCH_HAS_KASAN_SW_TAGS_DENSE is needed for this option since the
+ 	  special tag macros need to be properly set for 4-bit wide tags.
+ 
++choice
++	prompt "KASAN operation mode"
++	default KASAN_OPERATION_DEBUG
++	help
++	  Choose between the mitigation or debug operation modes.
++
++	  The first one disables stacktrace saving and enables panic on error.
++	  Faster memory allocation but less information. The second one is the
++	  default where KASAN operates with full functionality.
++
++config KASAN_OPERATION_DEBUG
++	bool "Debug operation mode"
++	depends on KASAN
++	help
++	  The default mode. Full functionality and all boot parameters
++	  available.
++
++config KASAN_OPERATION_MITIGATION
++	bool "Mitigation operation mode"
++	depends on KASAN
++	help
++	  Operation mode dedicated at faster operation at the cost of less
++	  information collection. Disables stacktrace saving for faster
++	  allocations and forces panic on KASAN error to mitigate malicious
++	  attacks.
++
++endchoice
++
+ endif # KASAN
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index ee9e406b0cdb..ae989d3bd919 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -47,7 +47,11 @@ enum kasan_arg_fault {
+ 	KASAN_ARG_FAULT_PANIC_ON_WRITE,
+ };
+ 
++#ifdef CONFIG_KASAN_OPERATION_MITIGATION
++static enum kasan_arg_fault kasan_arg_fault __ro_after_init = KASAN_ARG_FAULT_PANIC;
++#else
+ static enum kasan_arg_fault kasan_arg_fault __ro_after_init = KASAN_ARG_FAULT_DEFAULT;
++#endif
+ 
+ /* kasan.fault=report/panic */
+ static int __init early_kasan_fault(char *arg)
+diff --git a/mm/kasan/tags.c b/mm/kasan/tags.c
+index c111d98961ed..2414cddeaaf3 100644
+--- a/mm/kasan/tags.c
++++ b/mm/kasan/tags.c
+@@ -78,6 +78,11 @@ early_param("kasan.stack_ring_size", early_kasan_flag_stack_ring_size);
+ 
+ void __init kasan_init_tags(void)
+ {
++	if (IS_ENABLED(CONFIG_KASAN_OPERATION_MITIGATION)) {
++		static_branch_disable(&kasan_flag_stacktrace);
++		return;
++	}
++
+ 	switch (kasan_arg_stacktrace) {
+ 	case KASAN_ARG_STACKTRACE_DEFAULT:
+ 		/* Default is specified by kasan_flag_stacktrace definition. */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
