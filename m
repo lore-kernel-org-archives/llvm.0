@@ -1,55 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ED1215770;
-	Tue,  4 Feb 2025 18:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AEE224B14
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 19:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738692017; cv=none; b=dVH35GKaAnqTq6lJGmzrImjVY5MKsu2D0omxut7bsHKTsZ1xCtFZhOk7N79fhCGmfWfn13QhiJvu5fiykkbS1LYpiaNwtTIEGiZi3NH4Kcwf64sRBBlJmLwQenb8wpZU5T71wAWK/4qmWB1t1my7zHJDnzc45OrCBGNRJF1O6d0=
+	t=1738698681; cv=none; b=VRfQGH5I0fIeFMrn66B2oIEQxhgeUF5RawpmnV3XtzOiqcdh4jFXa0XL+ZarS3xZDQUQeu641HvXvIxFmqUQcpCbr93Wa05D3oNYxlb0Ws0ojZ0X5JxLYUePdKSBwjbw0bCrlM/95dxx5z2sxIjo6ieziR5HAEXBI7HH5qXxKns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738692017; c=relaxed/simple;
-	bh=ldYrvOL4QM7opLBTruDCwpZjG3E9SBjtI7Rt0cRdNQU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tRQShoplGSzOtZliIyj9GNK3Hd6CRpAW15nxblFAGpw/yuFNFpOqvpfahQthp46pNYIQVkkiLTOcWhvPjfUHxQFPe21BPtz/ccSZ9y7nN5xxKRMT3V6A33d5GnC20hFGOhXCqnao+JOBh8m5BMWsxF2enudD1a3HatF29FXJVWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTNMNKQu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738698681; c=relaxed/simple;
+	bh=L7hZ7sYPCCjt4cWuKdRqkFzNU2NINe/kZtlYF3GX+To=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=XahMSUOXvsiIr5ntPY1PCOF41Dwdblk7HtLBLREbybbtwR82H1M8ofEiz468LS7Ptor5PZmi8/m8o8eKWK5dNsou0xaFtR+McS9n0GLRNuE0lqGKDl8+YHoV4JXuk4swZciJUm/5bbQ7mzEf2aErz4VlmVhBEEjfNJX/WL6jgjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=jyGtOg/i; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTNMNKQu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1001C4CEDF;
-	Tue,  4 Feb 2025 18:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738692016;
-	bh=ldYrvOL4QM7opLBTruDCwpZjG3E9SBjtI7Rt0cRdNQU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=oTNMNKQuBLaTCsJ9QNGfltm97nQAyuGNP8iaSNHab9t+HJLq92azvks1AhQdt9Wke
-	 DlcuQbPfKna2SefTz19dqXKVAAOzV/gaGNStJf9BBEVmMwG/qzyEPU6hjTjdbzzqs4
-	 mn0lvNN7Pi7Hm0T6T9+pR/P75jwoU7ySOUy681+XO0E0EMvutrt5360zXvQCdGTjY5
-	 AHgk+owGmYohAlNhUOKTFEC3chB8xJFoqga9MU/J/RwPtNSK8g493xfUFWH86/aw3D
-	 5t+uNsoioYJ4Lrg29gOlu++kOqRGc9ZMFfBUAClCWUE48sT1oCyJsGn6aAOR6MmlOi
-	 bI7OzZ3i+L9tg==
-Date: Tue, 4 Feb 2025 11:00:13 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: conor@kernel.org, ojeda@kernel.org
-Subject: Prebuilt LLVM 20.1.0-rc1 uploaded
-Message-ID: <20250204180013.GA3940674@ax162>
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="jyGtOg/i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1738695503;
+	bh=L7hZ7sYPCCjt4cWuKdRqkFzNU2NINe/kZtlYF3GX+To=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=jyGtOg/iCyiwjp/g1mTcKme1MwefVaOX7wySyrZcham7FrqcugOECEhMIB5bHuVxw
+	 jxBiJ9xi5y9Ou8aDKij09mJEeZ7EVO+B4CuJIYNSPaLeZ0McyYcgp8ncn+IliZWl8N
+	 HZraV3iO1ZSruE8vDNlj7sXOI+AYMSwijILKB/nU=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id EC29D401EB; Tue,  4 Feb 2025 10:58:23 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id E915A401E9;
+	Tue,  4 Feb 2025 10:58:23 -0800 (PST)
+Date: Tue, 4 Feb 2025 10:58:23 -0800 (PST)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com, 
+    palmer@dabbelt.com, tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com, 
+    ardb@kernel.org, dave.hansen@linux.intel.com, jgross@suse.com, 
+    will@kernel.org, akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net, 
+    dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com, 
+    tglx@linutronix.de, hpa@zytor.com, seanjc@google.com, 
+    paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com, 
+    jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com, 
+    jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com, 
+    rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com, 
+    catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org, 
+    ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de, 
+    kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com, 
+    julian.stecklina@cyberus-technology.de, peterz@infradead.org, 
+    kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org, 
+    linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+    linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
+    linux-doc@vger.kernel.org
+Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode
+ for x86
+In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+Message-ID: <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
 
-Hi all,
+ARM64 supports MTE which is hardware support for tagging 16 byte granules
+and verification of tags in pointers all in hardware and on some platforms
+with *no* performance penalty since the tag is stored in the ECC areas of
+DRAM and verified at the same time as the ECC.
 
-I have built and uploaded LLVM 20.1.0-rc1 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+Could we get support for that? This would allow us to enable tag checking
+in production systems without performance penalty and no memory overhead.
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before 21.1.0 final
-is released.
-
-Cheers,
-Nathan
