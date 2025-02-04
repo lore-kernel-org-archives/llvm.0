@@ -1,69 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CC8214236;
-	Tue,  4 Feb 2025 15:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32D72135AC;
+	Tue,  4 Feb 2025 15:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738683220; cv=none; b=LwDK2AhpgqBmZlrOBJ5exjOMTLtxKdrG6G6A5HxFhdTqZ6X+9EnIrnL0gq5rayTFQTAy6jMLoHR/GwHr2ViLzAkXt0t/KIOYBWcQ0PxQJ2tyjLyreQQSfPJdlliGX6pFQCUQI0N2s32h+/uRCaMHRoFHDyvEGkf9uBmn8M2NjFk=
+	t=1738683691; cv=none; b=YurvlF78nplfj9IOCQa/b67s0uzMhsEebo5/x8UexVsZm2E6/T3tqqn+dJcBNZLAXyDs24yoxaoY4WhCUJoDDr7f1Wy/7L5yuWvttDzHHNYIrAuXCM2IYlN9X9pEvgGiBZcDE+QsJ2TxIRmhIhLXtM5Ljk320oe/v1a7v94g86Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738683220; c=relaxed/simple;
-	bh=A+Jz1v1lLieaNo0+qtah3EPygR7Gez8j9e4aVKCvo14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rjpNtCPUzIcuv5Q8KXv8nCdpXypCJxWaBA4rWgedHfASN4z/d65HcjcnkqgWT1gxB98kbExN2rCvVYQWkX0qAFX8bJGiiFbHKSHUQD87lteb66TaNZ+q1C7F7aKfjim70PmLnOYr1prBwM+r1GUYYTwbpRBRsVoOG3VC4KtpVt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GodJeCdC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738683691; c=relaxed/simple;
+	bh=vsH1yEDEiUP/0p98fR/7UqdPl5n5kegziq2UkPiIE3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l8pz6SV/WhUJaCH8vOy1B2W8uaCQBwdXCRk8EQzNgJN7hkqkH8FArAMSqgVyb4yvRIT2JHaCCWhA/e6fv77BKOvQgv9bIBNenfDZcIOMd9X0u4blOCFapkyngzOrfWIHZK2/H0brn2oYXRidS9coEq6Uiw6ZlH7BQdf7Xrm5H8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WuCj+Im9; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GodJeCdC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1F0C4CEDF;
-	Tue,  4 Feb 2025 15:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738683220;
-	bh=A+Jz1v1lLieaNo0+qtah3EPygR7Gez8j9e4aVKCvo14=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GodJeCdCtYI2xVdlbpMjq2zewZD6M3EjClgeUMRiyQvkyakgB0aJsrvkPWkcLklJ4
-	 pz68hVh0YCuVXZif3Nzc9sjKIIfLTshNFSFSEzqRoajJwWCZ6RvVaWJro0yDqRQp+9
-	 190IKmtx0j4jN1uJJ0zI3kBm8Y2DfuyYJXsDuhot5NcGjNG9MNrgM8A0Gztn3RMkmV
-	 XTvnn4C62uv0Ab90nywqgtZmhFvaea7ixCbV+oEPsUPfaE/+VWr2fEjcMjjHWY1CVA
-	 AhzsQe2x2HnHXv2ivh90MwBtLfRPon+C4mZO77L3fNyRi0YIUhnIyUn3hprf5zvwXd
-	 3wtOMg30cXNaQ==
-Date: Tue, 4 Feb 2025 07:33:37 -0800
-From: Kees Cook <kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WuCj+Im9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738683684; x=1770219684;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vsH1yEDEiUP/0p98fR/7UqdPl5n5kegziq2UkPiIE3A=;
+  b=WuCj+Im9BBWHfFivFyOj161Qx66Ii13dXWBkfE7JT+v+11yvbLKUrl+o
+   UH+S5JjSQaW5nsjabrepZSj59yHp76D27BSMA/6k59yTgXgmL9qWiTVsP
+   a73zTOqp1KqDmNVQ3K6q6/CwDMPTMxhKR73rMXG5/88ImMvafqwcm4Xcb
+   QXubLLstpYbRvZehGNYxY7i1iMvtP2q9kQmBfhPTwSTeLFlpl//1lhhg2
+   x6I+qljCiXNqKMJyDw+ALYvCXFII18dYXxsvYizW6stlIqyXapGxeNrIu
+   2bR+lVUKeXn5wEo9+wh0kHAuiYGTySGO2VfaNlzI70I5yc/ZMvtONFeHl
+   A==;
+X-CSE-ConnectionGUID: 6fTrvFMQQpOLaASM5/Qlaw==
+X-CSE-MsgGUID: 0s+hVSzcSYSOhmoG+JnJTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="49830940"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="49830940"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 07:41:21 -0800
+X-CSE-ConnectionGUID: N9gIT4uhQA+teZyFuiQhYQ==
+X-CSE-MsgGUID: S7sF5V4AR3ySVSOnAXZfmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="147835638"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 04 Feb 2025 07:41:20 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfL37-000sdd-0s;
+	Tue, 04 Feb 2025 15:41:17 +0000
+Date: Tue, 4 Feb 2025 23:40:54 +0800
+From: kernel test robot <lkp@intel.com>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH 04/16] elf, uapi: Add definitions for VER_FLG_BASE and
- VER_FLG_WEAK
-Message-ID: <202502040733.D7044581@keescook>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <20250203-parse_vdso-nolibc-v1-4-9cb6268d77be@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/kunit-kselftests 20/23]
+ kunit-uapi-example.c:undefined reference to `puts'
+Message-ID: <202502042336.1EG4c06S-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203-parse_vdso-nolibc-v1-4-9cb6268d77be@linutronix.de>
 
-On Mon, Feb 03, 2025 at 10:05:05AM +0100, Thomas Weiﬂschuh wrote:
-> The definitions are used by tools/testing/selftests/vDSO/parse_vdso.c.
-> To be able to build the vDSO selftests without a libc dependency,
-> add the definitions to the kernels own UAPI headers.
-> 
-> Link: https://docs.oracle.com/cd/E19683-01/816-1386/chapter6-80869/index.html
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/kunit-kselftests
+head:   6d126c0bfc92d0e1a6bdfa63079084a712cfaad6
+commit: 3bb4eba563cc71cd24e0ee6106cbd04a490a93c6 [20/23] kunit: uapi: Add example for UAPI tests
+config: i386-buildonly-randconfig-005-20250204 (https://download.01.org/0day-ci/archive/20250204/202502042336.1EG4c06S-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502042336.1EG4c06S-lkp@intel.com/reproduce)
 
-Reviewed-by: Kees Cook <kees@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502042336.1EG4c06S-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   /usr/bin/ld: /tmp/kunit-uapi-example-b6af0a.o: in function `main':
+>> kunit-uapi-example.c:(.text+0x10a): undefined reference to `puts'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
