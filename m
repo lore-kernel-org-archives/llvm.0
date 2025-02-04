@@ -1,93 +1,147 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85304213E81;
-	Tue,  4 Feb 2025 15:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCEA214207
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 15:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738682807; cv=none; b=LhK7c7gDlReLvduGqi9iEWgJ9Ics5b2wpys9dFWVzXNqas0ZwL9FeyHhE//p9WwYvRoqXXsBgcCNolaPSEdSuGSQy8yOZ2AKN9XQpiIZ4ob9B+k3xSd0D0C23OmCEUykRQuwS2VgzXi+xvp/wYqyhq38yybnopQv6IOHeGmF6HM=
+	t=1738682899; cv=none; b=NwwkJnzRw2L6fQlXgXl4NAmedhNxLYaSY8+utAuIks3NfOn0AYMY1XG3bP/UhQkKWXsr3UryVJ47WSVlbGyQK3RtXGur+8Q/Pa3VPYQ3B+VuNiMSN00SRjrmDiTmspYXJ/L1xSGurcxv5YmoQqgr8U4M8RkufVjCuhgk+qxtJSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738682807; c=relaxed/simple;
-	bh=5oxPJ8jy72qLFIDj1/K9xMM+HHBMdNhIFNGaxg0vH4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N1imV99hXr8bYIfwcJhCz1vcCE+u/wIyq7UsLO30urOQJgLZPrk8lZTgMGl7ku398R7O39NlRVPjhpZIUD2Bgj15v8uVNTZBgCOqwR3IEHP03bPk3B7He/OPNizHpliH1Wv8cK6H7WrE4MtNXWexOQSgDfdVnvEJXMEbNVb5cyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWKTOhUT; arc=none smtp.client-ip=209.85.222.173
+	s=arc-20240116; t=1738682899; c=relaxed/simple;
+	bh=+RTmhaHHaQGm4cIFZWnW7TQKI/e/CUSRnumlIk8Xc7M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CeKn6KtONSGYR/tJRPuETmltPFPyvfke1zdePNwIMUje5C12uHyHO2pTMjphr1hZMRtQ9A0sVQ52fivBOgvEz9+nK++JzbMn0V0bGq9jVAL+ZbFFBRT8e1cGBlta1H17IPv+FYd6qTr3encvWQg5osW+8V74rMxq6H+gmw6E/WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIkG+Elx; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWKTOhUT"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6ea711805so804583585a.1;
-        Tue, 04 Feb 2025 07:26:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIkG+Elx"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38daf1f5091so354373f8f.1
+        for <llvm@lists.linux.dev>; Tue, 04 Feb 2025 07:28:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738682804; x=1739287604; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a9/M1Sq3IU8+ynTHRlqAPqWJvQh8qM3cInBgFTNxjEU=;
-        b=iWKTOhUTyi9/JOZmka/RV/avgjESV4IsTknNXnBIH+KKDsSoxLNycA8CCfOIvwpYVH
-         YY6CLqAH9tKMsiOEkhJnVzF5brxL/ZVvj8ARJ4umFYYdRmlF4tq8r1ZlNINXuu2296aA
-         i+BoNccLp4Xa9TBfsyonBgq5K6Dv65Jy8WgZujXSAwFHtW3TxiqM+qTY6b7NoiC7ZPd+
-         wZzTjWTU+yMoCvdmp9H0KMZnbZyzDNvmGVRX+SdhMMkuOZSkdvnjrQsUnn/p6oBrcske
-         hLxche1i0nhVUv7AvSF4hl0HgT0rU8xJ8lcvl7RVIT98H4dL5B0BsJzmW65zIEyoXzoG
-         IpBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738682804; x=1739287604;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1738682896; x=1739287696; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=a9/M1Sq3IU8+ynTHRlqAPqWJvQh8qM3cInBgFTNxjEU=;
-        b=Nm+sEeEiTao2kJoux8KEgMyOTO9CCb2v3DhLbWyBv/vCDba8NkSBjyVuNH0y56JY9z
-         tNQJnSv1/p5jYYrqhGPZJF9B9sqA+O2K3LvBOMXf2LxNhBtFGMszXB38KSXNzgqym9nf
-         4Mj7x7MOs21X4S/SUdJwJgGlLQlz8lPqq3XyZi9Ai0Z3SJMaZbKwWDsQVWiZR5m5fSq3
-         x6Og/K1XV/mja6vJQnDcAPbIK5nKVPO6BPHVWZVU57ehWHmQb2cL6ISd/mOVdtR3cK/Y
-         MpHvXKaNNy9b+RUsXeZdIUNukA8DBmZlGjmQcO/wJ6nPAkCd+/42c5FWs4bwWFxPmFUg
-         kFqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVtYESOI5KbWJ3PAT1a4rnj5CLqlQQJz88cT+quvSSyzZU5BtyKzSSlQpl+VTVK4VLNGmw7H9RgL2pdl1coCg==@lists.linux.dev, AJvYcCX7hdgF0fwbn+j0rYQm+8hOE8PA7k5G+cAy/CDp2uAY2XprL2zko17up30baAq/z2WxNybn@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyu1lhbTtEQn5ZP9F217mZsDR7ytWJkInKXlgvB/km8Adva+80K
-	qnSadTjsS0JAEr8675LAi5l1h712KtD5/OijtEOemmFk8dty8cey
-X-Gm-Gg: ASbGncsVR+ATNaANBaH1lUp9YoHwX4jml5YwRH2Xj9QHgwg2g6TA2r0vMLc6dwLbCGj
-	a0fmoVdFPv4eDyL0kb0ISvCyBI0xGNox3og2AvsjIhWjKnDcWYPc+jyP7tuUKvkLSBAvS2XKay/
-	H95a9FjIX43XGlCQ057JqVklAtHTctmIYpiaE/y7p/HQV0PNjzTp8sfUc8FrjN60SivXpbiNo3d
-	Wqsnum+/HalxC33h/Z5TvYOghOcdws8B1bOH5ZF1rFPoJ23MFDJwkjGQ/UMDTzZGSWlds1EoDvR
-	8OqNtER+y+vsoXbIonirFxqrGWwyujo6tRIOJtGV+r9Oll8YEnU=
-X-Google-Smtp-Source: AGHT+IEZs1QoQFe7O34wQ91VXCKMpOjQQbMZO3pVYpq/6ZSbNskxpq+wA5hig24p0v+dRCeW0wr2WQ==
-X-Received: by 2002:a05:620a:2a0f:b0:7b6:f2a8:64d with SMTP id af79cd13be357-7bffcda88camr4314528185a.49.1738682804098;
-        Tue, 04 Feb 2025 07:26:44 -0800 (PST)
-Received: from glsmbp.wifi.local.cmu.edu (cmu-device2.nat.cmu.net. [128.2.149.252])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c00a9058e4sm649428085a.82.2025.02.04.07.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 07:26:43 -0800 (PST)
-Date: Tue, 4 Feb 2025 10:26:35 -0500
-From: "Gabriel L. Somlo" <gsomlo@gmail.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: kernel test robot <lkp@intel.com>,
-	Pawel Czarnecki <pczarnecki@internships.antmicro.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mateusz Holenko <mholenko@antmicro.com>
-Subject: Re: [litex-hub:litex-rebase 14/15] drivers/clk/clk-litex.c:539:21:
- warning: use of logical '&&' with constant operand
-Message-ID: <Z6Ixq9aJtowFgink@glsmbp.wifi.local.cmu.edu>
-References: <202502012258.KCOVEE5t-lkp@intel.com>
- <CAMuHMdUi8faCPsd5-bdG0ZR+DOZ-S212ZwRYr1LYZ3d3Vgkuhg@mail.gmail.com>
+        bh=CJhPx/n140dbE5Ug5FtKmDwUapQIL+7iGwFgWil94QY=;
+        b=ZIkG+ElxKP3qSsyim645TXI1MORMoXgwQrKPGqFUHZOqf8z1exdnTVzau5kDPCbAf6
+         WZwxz7xYRFriY5RDdm2WxYjoIJnCZrf2CrYeJ0Lk37zvZfTlLirhP8ZGmErHl4IInwPp
+         aBVOFfh4Fb/r5LLd5MKeZXZxRpvgAzyrxYVhNiZHxtq3OABmwaXz4L7MnNFeH0FihaUq
+         U/lCO5BMan18D8JV9sWDSjtZ8nXXXKcqzcONHO9pFKF5da/F1SaGAkG9TNK5fh2GPu43
+         VjcJVqR0ZavCdxDLNBjhEyuxkDQdqI7jJFDiutisU9yQZuW2xy6hqelfNWVPailLyQIy
+         m88A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738682896; x=1739287696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CJhPx/n140dbE5Ug5FtKmDwUapQIL+7iGwFgWil94QY=;
+        b=AhfNmlJVm7bHh4VWAdzfBQPbyvnnZWcSccGXkduKKj5cOCdNcW/I9k7xBl5Crmy/qo
+         NOKIrsV5/ZuOLOfw6dKMU5zm8S0IBI0i1JTk+S+uw+gvZPbSe9JelkjbID/Q1zk0qxG/
+         kRoFHX8HFr4/NGsmAf+o0hR2jerMVnuSrsCJF+dHOg3mC89KiGqYsFjsloIh8R4OWa2r
+         M8eEPzh7pAUvGB7HatVzjfrAXFoCla4E3j0AtSfExW3HjTlwpePA27lXVf0ydGLL1t9A
+         UqqFNzfOkT0HCB1ip8ZjKFeGpM9sfHz+iB6+vhpVaNV5JSZir8hg5E6wwftcqcH5YvZH
+         nJUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWD7qSld/8YcvDdLryA/eBViW39Rb1gVblVyPsaYfrNsxdiAKThF+u4A+zKvn9ovK2i0xDQ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxhOLuMa3a5pbmPOq/4UBXNcERiqdsrQuLo03jfhFoMSiKRhJGQ
+	doEnDBQ267ePHEs5b84kwckyDfzOi/JJgsZdeHfIZgjczK9yCIZPqyVxywXFNQS5ddfmzu9nJI3
+	lhXeBcIPp10QCFyBRxsQ051mq/OQ=
+X-Gm-Gg: ASbGncu4DLrEzRwfqbJhuLu4tlcswVpG6cbLii2gHbS18PBguA9pG2oPIcg8ns5ZKVb
+	7BIdM228qBA+l1mYMovi8QIMSkVjrY2YxXli6fHAWUaFj49Kdc0X4RapuCxeebz4l9p0SY/Mnyd
+	y60cBKf+cyXXzy
+X-Google-Smtp-Source: AGHT+IFhUU0NGcAm74lqYKBjmVZFYxqKNWGzHqhC76jkheWflwBMBvUcfdp+145E+7L0HxVO/HGqB2zGjvC83k5JbeQ=
+X-Received: by 2002:a05:6000:1a8d:b0:386:36e7:f44f with SMTP id
+ ffacd0b85a97d-38c519602famr21645102f8f.18.1738682896006; Tue, 04 Feb 2025
+ 07:28:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUi8faCPsd5-bdG0ZR+DOZ-S212ZwRYr1LYZ3d3Vgkuhg@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com> <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
+In-Reply-To: <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 4 Feb 2025 15:28:03 +0000
+X-Gm-Features: AWEUYZm7qusB4k_yByZ1Yov0CkD9oT2bxmzUNE_2hxazTeM6MjG1S9C9NSBjpNk
+Message-ID: <CAADnVQLto_Zt7q4vmTFXby0QH8QX7r5am5inLskC5sKqL=0gow@mail.gmail.com>
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-modules@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
+	gost.dev@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 04, 2025 at 03:59:56PM +0100, Geert Uytterhoeven wrote:
-> Nice catch!
-> 
-> All four "&& HL_TIME_MASK" should be changed to "& HL_TIME_MASK".
-> Gabriel: I guess you don't need me to send a patch? ;-)
- 
-Done -- applied, rebased, and force-pushed.
+On Tue, Feb 4, 2025 at 1:30=E2=80=AFPM Daniel Gomez <da.gomez@kernel.org> w=
+rote:
+>
+> On Wed, Jan 22, 2025 at 09:02:19AM +0100, Alexei Starovoitov wrote:
+> > On Wed, Jan 22, 2025 at 5:12=E2=80=AFAM Daniel Gomez <da.gomez@samsung.=
+com> wrote:
+> > >
+> > > Add support for a module error injection tool. The tool
+> > > can inject errors in the annotated module kernel functions
+> > > such as complete_formation(), do_init_module() and
+> > > module_enable_rodata_after_init(). Module name and module function ar=
+e
+> > > required parameters to have control over the error injection.
+> > >
+> > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > > brd module:
+> > >
+> > > sudo moderr --modname=3Dbrd --modfunc=3Dmodule_enable_rodata_ro_after=
+_init \
+> > > --error=3D-22 --trace
+> > > Monitoring module error injection... Hit Ctrl-C to end.
+> > > MODULE     ERROR FUNCTION
+> > > brd        -22   module_enable_rodata_after_init()
+> > >
+> > > Kernel messages:
+> > > [   89.463690] brd: module loaded
+> > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22=
+,
+> > > ro_after_init data might still be writable
+> > >
+> > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > > ---
+> > >  tools/bpf/Makefile            |  13 ++-
+> > >  tools/bpf/moderr/.gitignore   |   2 +
+> > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++=
+++++++++++
+> > >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> > >  6 files changed, 510 insertions(+), 3 deletions(-)
+> >
+> > The tool looks useful, but we don't add tools to the kernel repo.
+> > It has to stay out of tree.
+>
+> Can you clarify what do you mean? There are other tools under tools/ and =
+tools/
+> bpf [1].
+>
+> [1] https://lore.kernel.org/bpf/20200114184230.GA204154@krava/
 
-Thanks much!
+As you noticed we added only one tool out of many and recently
+discussed removing it, since the value of keeping it in the tree
+is minimal.
 
-Cheers,
---Gabriel
+> I will anyway move the tool to the suggested location in the other thread=
+.
+
+I don't think it's a good idea.
+Keep it outside. There is no reason for it to live in the tree.
