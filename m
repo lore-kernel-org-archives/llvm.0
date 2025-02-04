@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F961F8EF5;
-	Tue,  4 Feb 2025 07:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8158635E;
+	Tue,  4 Feb 2025 08:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738653270; cv=none; b=swEjMOKLsWtL7C8bpK8RLu2tjHiaaN3QpRSAgX3W1V2nAcxFetCVDtApOUJV+IAbZ79eFtNXpw60EirECwJONd+wyf/ddF5rH5hcLXnKGD+tXgFyq6+uCZ1jePslFpVawMdrFIGv6PFog2kDShan3m5lzMpOuC64QNxKs5Sj3iQ=
+	t=1738656395; cv=none; b=MOQQUUhx8hNIYa6wG3ge9T4u9OvhpRci9oxDRG/d6gacX7GJEpn0u69HudiuXqilNoa/qfKggGmGBKHfnSqsswYLzhqKlaeyHDuGe3sjeA3KDIJvtr4sxYxkqklVT/6uJou8QXTlK2IcqUUfyw7s1hr2HDrYsQ5pi4dmi/iPWxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738653270; c=relaxed/simple;
-	bh=1ycC49c2fsA14ZcrJdVRjHXXDqHdL076bO/6awXhSv4=;
+	s=arc-20240116; t=1738656395; c=relaxed/simple;
+	bh=TrvkCF04MEiPuvtlS3hO+AoilWK1NPuWpdTo4cFzql0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lpkGf9coW0cScp8HHHl0795yOK9+fnxjUpHyWmgT2D05jXnXf4x1sB0Fsh6RLWInwT3dMeZMA9+zl/wB/xdq7hWo32oXsb8xPVeZpt2sCm88meSUatf6Wk5ME/z/tbvPCoXx/B8GPmjuBo3J+KEVQpmydW/F9dFS21xOdxyL38g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mdunrnow; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=s7sWBK9ordHk0lXRGTRt7fLdNn0POShFHrTN5H2rFdn9POOpeut6/rBtxWnj0vfxyZ7yXBipGseUGWTtSK5VuaN8mf3OuHoQjO32gBauRVRakIB6+y+m0WoWDR+JKFE6U2mHE8tZXxbcVsEo146i2Q2i98XJecqdRli3IGkwN18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMSH4k0u; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mdunrnow"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMSH4k0u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738653269; x=1770189269;
+  t=1738656393; x=1770192393;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1ycC49c2fsA14ZcrJdVRjHXXDqHdL076bO/6awXhSv4=;
-  b=mdunrnow0O8uYrGF/rJCyXuix38fbAXHC8xdi4Gd1Pqe/bYpJwMgZLvS
-   +z2/rBk7KmbgTnRCePFFvlie8QFeIuuld2SIOlH3E3FcE/QNkpL17invo
-   qGMOUU78oL5HSD1PmmfJqX2jSPvazCl7IVTRaNulKKb6FKC/EU6/OzL8s
-   2lg50tky0TTqCDmtWpbSr6TlRYZtlCsPvE1ZdL/qeF/z1xXm7FDtgwERe
-   fA4i0m4BlqG5nskH7Fpojvc4oDRUa3MUpahTioU3Le4am/5YFXyMPyc4l
-   0N4fKO98f6dWbhshbju9Q0PSTpm2cRnvPTXS342ZHzlqbBoAiqZmONxY9
+  bh=TrvkCF04MEiPuvtlS3hO+AoilWK1NPuWpdTo4cFzql0=;
+  b=KMSH4k0u0RTxNIar6UVHgCHnQaQh+JoE3lsJxPQtmI9HFw3e4ktRYEOV
+   ywGFNRFRykXbHD3Wa3pcLrx0Mlj1wz7baHE9UPeLzJcmFv0QQvloO//5U
+   qMpdfcSYUByd6WHM8rznyk6w2Ms3lO+Lapb46ZDoE9JcEYxUMONUGv66d
+   K/MSLFxAO7ZbDigmG/P+1AAsakJU4pC9yGneBhdjoX/fXWqPZEPtQj7Cc
+   7/g7XFYOx6gQWDqZXqDydzMDqI3fVq1rAM/t5YFyRnzQhv9jj0nmJSOsF
+   86HnTPRedMe1RCJvOZsK/rP6lALw/csnZdUIb0vt4Uud+CLDmgurhyS22
    Q==;
-X-CSE-ConnectionGUID: us9DfQxRQi+XwzFF+h+Csw==
-X-CSE-MsgGUID: 7DFSCykMRUKkurJMUc3huQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="39321469"
+X-CSE-ConnectionGUID: cotHQs5rQxqduiggR40VgQ==
+X-CSE-MsgGUID: 39sY1luDQW2JVH9E7F5iiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="56707192"
 X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="39321469"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 23:14:28 -0800
-X-CSE-ConnectionGUID: 8iYRmaFZRXC+MwXEDp5ShA==
-X-CSE-MsgGUID: Y8OLfZz5SqeWgjAW1DWHGw==
+   d="scan'208";a="56707192"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 00:06:33 -0800
+X-CSE-ConnectionGUID: MRQ9FLLtSL+1bqYsdw2RlA==
+X-CSE-MsgGUID: 97tr8tbtSWOrrx927DjDWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="115529300"
+   d="scan'208";a="115524486"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 03 Feb 2025 23:14:26 -0800
+  by orviesa004.jf.intel.com with ESMTP; 04 Feb 2025 00:06:32 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfD8a-000s8G-1N;
-	Tue, 04 Feb 2025 07:14:24 +0000
-Date: Tue, 4 Feb 2025 15:13:57 +0800
+	id 1tfDwz-000sBX-0w;
+	Tue, 04 Feb 2025 08:06:29 +0000
+Date: Tue, 4 Feb 2025 16:05:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Selvin Xavier <selvin.xavier@broadcom.com>
+To: Jaegeuk Kim <jaegeuk@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>
-Subject: [leon-rdma:rdma-next 17/75]
- drivers/infiniband/hw/bnxt_re/debugfs.h:34:33: error: fields must have a
- constant size: 'variable length array in structure' extension will never be
- supported
-Message-ID: <202502041505.33zAsiMp-lkp@intel.com>
+	linux-f2fs-devel@lists.sourceforge.net
+Subject: [jaegeuk-f2fs:dev-test 4/4] fs/f2fs/sysfs.c:923:6: warning: variable
+ 'res' is used uninitialized whenever 'if' condition is false
+Message-ID: <202502041610.nmS1Brio-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,60 +63,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   10565c5cadcb629f7780d24dd351878de9f46db5
-commit: a3c71713d9548f1a9ee141c7cfb35550c3487443 [17/75] RDMA/bnxt_re: Congestion control settings using debugfs hook
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250204/202502041505.33zAsiMp-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   f0d674f43daa7e255465f8d847734a6b9b0f63db
+commit: f0d674f43daa7e255465f8d847734a6b9b0f63db [4/4] f2fs: add a sysfs entry to request donate file-backed pages
+config: i386-buildonly-randconfig-003-20250204 (https://download.01.org/0day-ci/archive/20250204/202502041610.nmS1Brio-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502041505.33zAsiMp-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250204/202502041610.nmS1Brio-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502041505.33zAsiMp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502041610.nmS1Brio-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/infiniband/hw/bnxt_re/main.c:39:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/infiniband/hw/bnxt_re/main.c:70:
->> drivers/infiniband/hw/bnxt_re/debugfs.h:34:44: warning: variable length array used [-Wvla]
-      34 |         struct bnxt_re_cc_param        gen0_parms[BNXT_RE_CC_PARAM_GEN0];
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/infiniband/hw/bnxt_re/debugfs.h:24:31: note: expanded from macro 'BNXT_RE_CC_PARAM_GEN0'
-      24 | #define BNXT_RE_CC_PARAM_GEN0   __ffs(CMDQ_MODIFY_ROCE_CC_MODIFY_MASK_INACTIVITY_CP)
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/infiniband/hw/bnxt_re/debugfs.h:34:33: error: fields must have a constant size: 'variable length array in structure' extension will never be supported
-      34 |         struct bnxt_re_cc_param        gen0_parms[BNXT_RE_CC_PARAM_GEN0];
-         |                                        ^
-   4 warnings and 1 error generated.
+>> fs/f2fs/sysfs.c:923:6: warning: variable 'res' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     923 |         if (!strcmp(a->attr.name, "reclaim_caches_kb"))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/f2fs/sysfs.c:926:33: note: uninitialized use occurs here
+     926 |         return sysfs_emit(buf, "%u\n", res);
+         |                                        ^~~
+   fs/f2fs/sysfs.c:923:2: note: remove the 'if' if its condition is always true
+     923 |         if (!strcmp(a->attr.name, "reclaim_caches_kb"))
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     924 |                 res = f2fs_donate_files();
+   fs/f2fs/sysfs.c:921:18: note: initialize the variable 'res' to silence this warning
+     921 |         unsigned int res;
+         |                         ^
+         |                          = 0
+   1 warning generated.
 
 
-vim +34 drivers/infiniband/hw/bnxt_re/debugfs.h
+vim +923 fs/f2fs/sysfs.c
 
-    32	
-    33	struct bnxt_re_dbg_cc_config_params {
-  > 34		struct bnxt_re_cc_param        gen0_parms[BNXT_RE_CC_PARAM_GEN0];
+   918	
+   919	static ssize_t f2fs_tune_show(struct f2fs_base_attr *a, char *buf)
+   920	{
+   921		unsigned int res;
+   922	
+ > 923		if (!strcmp(a->attr.name, "reclaim_caches_kb"))
+   924			res = f2fs_donate_files();
+   925	
+   926		return sysfs_emit(buf, "%u\n", res);
+   927	}
+   928	
 
 -- 
 0-DAY CI Kernel Test Service
