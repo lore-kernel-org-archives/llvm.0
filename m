@@ -1,204 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBCE203710;
-	Tue,  4 Feb 2025 21:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202DC215F6E
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 23:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738703161; cv=none; b=e6kAQT8O+17yqRWYgSCqs8xhd2XW5ZGcKOX4HqntUNWclaiRdUas36+/cPEDCHLxnUK1pWIHjNseotvhdppoH6kBXIL0L7RkQQxWR1YW3ak6l4grzlD2ECBf4jAApRmiXnpy8mBJ63lhZbHp0xzsfoWDFeXr+dFKgQSQzRWDsK4=
+	t=1738712199; cv=none; b=ggNs+XOAj59p6E0lP+85EWuooSHqS9ltzKgV5+cmJxJUlxWcMB1btaBWbZ2jrVwG4USWgzhAWzlrfoW+Wbk8TASfaGeslo39Xp2gskc+4oqrlVrnpVTJQ8R5LLkW/rwXY/auccf6IIcnrN5UTkTHlJ3UuuuzXkWlsR46Fn8k8gI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738703161; c=relaxed/simple;
-	bh=RuXgFcGDF9Ed66J6sTyG4wfX4s2ucDDE3qYghVIFRgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fHbHY+AYkzJP5KqDAdwOU6XLXyn1k4e9GYOqcquJPIIvLCrJRHTVkwYs0QSEXAmN0vvNw68lmMbxGkIrQD1RGBvz4EhKDcwYzK/3QQgclrmTdj2tgGDiSAJqeGf57tfdq0sjyNQQhAFnSxtcIHotLvXMhfdiR6HvDkF0HjRlPew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P59tqN8I; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738712199; c=relaxed/simple;
+	bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=mByg9/mOFZaSzS0IyY3YbdTDr0px/oIEFLS70oN+5uOhHVh0tvIsAyAh3gMXIvThhvccB8B5A7wVCl8DMoXQMA7EGV2iRDYI7s2ie9uCbNkXgd9cJUveWxW658zg8jpEJ7K03USqe6ISYUJCwTQOGt3K1YJ5MabymJDAtjfawfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com; spf=pass smtp.mailfrom=jrtc27.com; dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b=Yb+3iPu+; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jrtc27.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P59tqN8I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738703159; x=1770239159;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RuXgFcGDF9Ed66J6sTyG4wfX4s2ucDDE3qYghVIFRgE=;
-  b=P59tqN8IoZ7y1hsNxm9apnLq7h3BuYTOb/7lMmLHTma8l9r8SU2JK1qC
-   4wdTF2oLceRnMvONpBvu7kukl03OmLRegznoF2F/2P6wQ3oHACC+t4f9K
-   W3DtBUDvOVRQUzt5cZbYx1jMNnKYh2EBxaavBIzfLvwqLFMR1gzsGswzY
-   K8m4/jH0obL7Vrze0KaNrgRNsCoGA9r0DyXgTtnHjSvD/rmcMlLUuREIJ
-   TELWC38iXrSbCe8WNIGjUEfxsn9xC5ON7buQq7YjnwwjC770vDU9liPJm
-   T8ikr+9Lr/htXTOBG4Vyxg8WJdi164mN7zChKq02o0LoOCFBID/Uc0qfF
-   Q==;
-X-CSE-ConnectionGUID: F9BS4B0uSO+GB1BJJoHLjA==
-X-CSE-MsgGUID: dFKDtA+QTrKt905c5SNW3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="26849548"
-X-IronPort-AV: E=Sophos;i="6.13,259,1732608000"; 
-   d="scan'208";a="26849548"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 13:05:59 -0800
-X-CSE-ConnectionGUID: 5k0TK33ZTb6HYBI9eGZzyw==
-X-CSE-MsgGUID: tlaJ2HEzQcKplwhhYpyjMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="111573720"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 04 Feb 2025 13:05:56 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tfQ7F-000t0l-1w;
-	Tue, 04 Feb 2025 21:05:53 +0000
-Date: Wed, 5 Feb 2025 05:05:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Suraj Gupta <suraj.gupta2@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Subject: [xilinx-xlnx:lkp_test 371/504] drivers/phy/ti/phy-gmii-sel.c:120:33:
- warning: shift count >= width of type
-Message-ID: <202502050459.sfvpQSC6-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b="Yb+3iPu+"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3863494591bso3153052f8f.1
+        for <llvm@lists.linux.dev>; Tue, 04 Feb 2025 15:36:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user; t=1738712196; x=1739316996; darn=lists.linux.dev;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
+        b=Yb+3iPu+8EQ4EM19p+8wXslJxh4MV0oQ1/fgSMMMp9bLu6Zedjnn8F/U953Z32L7t9
+         DPHmgOjTi9OJ2R+6xPhz1IaVcHMK/LkFqfShCWkAK+JoNYR1hl+8/8PiigTjjYXhD80D
+         OCMdPe9au0lnZZYuTRsyhNVK9pLZEE7sGdNGhRBSIjUYaQ7eTgcVcPxHNB2Kmgycce4C
+         PX6tjshTx3/Gd7L9T98KttC5poCjJf/umjjc59qc6kfsrnid9on01GtPj4C1PXr5VDXT
+         xi1ih3miEnFV6+R4ds7+ILpO/H7r06U8EPuffCVOgXl6Az172ab4l9UoseB6iCREsvxe
+         VEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738712196; x=1739316996;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
+        b=WEj/u5wyk4Q/2CyKmLtB+fRtPMnX82F9UzPcypRHOYmN+LOEEU43d3o16deRoTdYsU
+         uJqFPJ8NzGh39mPsx2hl0/sZ5cy3grBKBsweNLcfIJPDSJ3XfItPHeBHxY0cymx2Tgyi
+         fENf4JVqMSVaZe3FGc8kJaYwpCb+wK4tX8xdca0nL6p1Fc106wz8itiddYnqQEGDEmVW
+         aUD7aT86ZSpeX0laTNNkUa431VmQNrMlOLP/s1L8rIdL6UCKvRvtLzOep7S13IGhR1Q2
+         XAiChJRGRyVoXhqeUiq94wGCrd0tvGbzgscL4QyvzhsGw+NOuamXIKGaoSRjAe5s3b6T
+         qCKA==
+X-Forwarded-Encrypted: i=1; AJvYcCUuA+XhiW4XGP4jxQGAisX6Oqy69uVD69PhzZ6gAeYw8cfu6JOcgseH7v8rsrxCkyJAe6+t@lists.linux.dev
+X-Gm-Message-State: AOJu0YzQ2TFwGzfLYmzOKT3eWmpQ4qtYfVKcQO18useNMebqLalPGhGb
+	lVHfvvbg3mx6TR/lLy9C+S8P72TKmVBXjGzQyPcXY7ac71qVFDSpuYPgXCBVsrA=
+X-Gm-Gg: ASbGnctfNl3q7utFa4sXRswTLKv/z2ljKc/NC8tHO1b3/kXp9n7O4Ivtw15TcXwmjI7
+	Mf+eJqRBssCVOH1M61cxzsOSUuFd3t9BJx2egRTl2n0a0vY8jrMfNhdXklJc8A9GcuPDzfgqjQK
+	TLLFVIC2BtgeF/8VK6od5+tYeiQiMIP4tY8akiFsBHhA9w4YiLR52ZPDZ2VbuBeqZeAT/8UPumv
+	btKPXeupGLzcv2k5nuEIPwEMiFVRmEPE1VWM8YpRHJy2MOcoMr1K3OAlpJbf1SnB8Fih3TDP5vV
+	qCE+6Qa8k1ECgUJEAHpvquGK7+eU
+X-Google-Smtp-Source: AGHT+IEbYs1SnazTxli1ivvCCDO1Cn9LUrxieFBceKbd6w0ve1uSZrVLlYscY7LZ+tYIHGaLpjoemg==
+X-Received: by 2002:a5d:4c47:0:b0:38b:dc3d:e4be with SMTP id ffacd0b85a97d-38db49214e3mr355994f8f.51.1738712196024;
+        Tue, 04 Feb 2025 15:36:36 -0800 (PST)
+Received: from smtpclient.apple ([131.111.5.201])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c0ec369sm16900115f8f.8.2025.02.04.15.36.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Feb 2025 15:36:35 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
+Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
+ x86
+From: Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+Date: Tue, 4 Feb 2025 23:36:23 +0000
+Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+ luto@kernel.org,
+ xin@zytor.com,
+ kirill.shutemov@linux.intel.com,
+ palmer@dabbelt.com,
+ tj@kernel.org,
+ andreyknvl@gmail.com,
+ brgerst@gmail.com,
+ ardb@kernel.org,
+ dave.hansen@linux.intel.com,
+ jgross@suse.com,
+ will@kernel.org,
+ akpm@linux-foundation.org,
+ arnd@arndb.de,
+ corbet@lwn.net,
+ dvyukov@google.com,
+ richard.weiyang@gmail.com,
+ ytcoode@gmail.com,
+ tglx@linutronix.de,
+ hpa@zytor.com,
+ seanjc@google.com,
+ paul.walmsley@sifive.com,
+ aou@eecs.berkeley.edu,
+ justinstitt@google.com,
+ jason.andryuk@amd.com,
+ glider@google.com,
+ ubizjak@gmail.com,
+ jannh@google.com,
+ bhe@redhat.com,
+ vincenzo.frascino@arm.com,
+ rafael.j.wysocki@intel.com,
+ ndesaulniers@google.com,
+ mingo@redhat.com,
+ catalin.marinas@arm.com,
+ junichi.nomura@nec.com,
+ nathan@kernel.org,
+ ryabinin.a.a@gmail.com,
+ dennis@kernel.org,
+ bp@alien8.de,
+ kevinloughlin@google.com,
+ morbo@google.com,
+ dan.j.williams@intel.com,
+ julian.stecklina@cyberus-technology.de,
+ peterz@infradead.org,
+ kees@kernel.org,
+ kasan-dev@googlegroups.com,
+ x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org,
+ llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0BDD645A-3BBE-4A85-9098-257B281A3BA0@jrtc27.com>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+ <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+X-Mailer: Apple Mail (2.3826.300.87.4.3)
 
-tree:   https://github.com/Xilinx/linux-xlnx lkp_test
-head:   4bb3217d050fc4871623ae6035fa7b73d33d90ad
-commit: 283af8498d05e86e44d20b589ac66a75860a795a [371/504] net: phy: Add phy interfaces 100Gbase-r, 200Gbase-r and 400Gbase-r
-config: arm-randconfig-003-20250205 (https://download.01.org/0day-ci/archive/20250205/202502050459.sfvpQSC6-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502050459.sfvpQSC6-lkp@intel.com/reproduce)
+On 4 Feb 2025, at 18:58, Christoph Lameter (Ampere) <cl@gentwo.org> =
+wrote:
+> ARM64 supports MTE which is hardware support for tagging 16 byte =
+granules
+> and verification of tags in pointers all in hardware and on some =
+platforms
+> with *no* performance penalty since the tag is stored in the ECC areas =
+of
+> DRAM and verified at the same time as the ECC.
+>=20
+> Could we get support for that? This would allow us to enable tag =
+checking
+> in production systems without performance penalty and no memory =
+overhead.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502050459.sfvpQSC6-lkp@intel.com/
+It=E2=80=99s not =E2=80=9Cno performance penalty=E2=80=9D, there is a =
+cost to tracking the MTE
+tags for checking. In asynchronous (or asymmetric) mode that=E2=80=99s =
+not too
+bad, but in synchronous mode there is a significant overhead even with
+ECC. Normally on a store, once you=E2=80=99ve translated it and have the =
+data,
+you can buffer it up and defer the actual write until some time later.
+If you hit in the L1 cache then that will probably be quite soon, but
+if you miss then you have to wait for the data to come back from lower
+levels of the hierarchy, potentially all the way out to DRAM. Or if you
+have a write-around cache then you just send it out to the next level
+when it=E2=80=99s ready. But now, if you have synchronous MTE, you =
+cannot
+retire your store instruction until you know what the tag for the
+location you=E2=80=99re storing to is; effectively you have to wait =
+until you
+can do the full cache lookup, and potentially miss, until it can
+retire. This puts pressure on the various microarchitectural structures
+that track instructions as they get executed, as instructions are now
+in flight for longer. Yes, it may well be that it is quicker for the
+memory controller to get the tags from ECC bits than via some other
+means, but you=E2=80=99re already paying many many cycles at that point, =
+with
+the relevant store being stuck unable to retire (and thus every
+instruction after it in the instruction stream) that whole time, and no
+write allocate or write around schemes can help you, because you
+fundamentally have to wait for the tags to be read before you know if
+the instruction is going to trap.
 
-All warnings (new ones prefixed by >>):
+Now, you can choose to not use synchronous mode due to that overhead,
+but that=E2=80=99s nuance that isn=E2=80=99t considered by your reply =
+here and has some
+consequences.
 
->> drivers/phy/ti/phy-gmii-sel.c:120:33: warning: shift count >= width of type [-Wshift-count-overflow]
-                   if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_USXGMII)))
-                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^  ~~~~
-   drivers/phy/ti/phy-gmii-sel.c:252:10: warning: shift count >= width of type [-Wshift-count-overflow]
-                          BIT(PHY_INTERFACE_MODE_USXGMII),
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-   #define BIT(nr)                 (UL(1) << (nr))
-                                          ^  ~~~~
-   2 warnings generated.
+Jess
 
-
-vim +120 drivers/phy/ti/phy-gmii-sel.c
-
-92b58b34741ff5 Grygorii Strashko   2018-11-25   69  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   70  static int phy_gmii_sel_mode(struct phy *phy, enum phy_mode mode, int submode)
-92b58b34741ff5 Grygorii Strashko   2018-11-25   71  {
-92b58b34741ff5 Grygorii Strashko   2018-11-25   72  	struct phy_gmii_sel_phy_priv *if_phy = phy_get_drvdata(phy);
-92b58b34741ff5 Grygorii Strashko   2018-11-25   73  	const struct phy_gmii_sel_soc_data *soc_data = if_phy->priv->soc_data;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   74  	struct device *dev = if_phy->priv->dev;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   75  	struct regmap_field *regfield;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   76  	int ret, rgmii_id = 0;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   77  	u32 gmii_sel_mode = 0;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   78  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   79  	if (mode != PHY_MODE_ETHERNET)
-92b58b34741ff5 Grygorii Strashko   2018-11-25   80  		return -EINVAL;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   81  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   82  	switch (submode) {
-92b58b34741ff5 Grygorii Strashko   2018-11-25   83  	case PHY_INTERFACE_MODE_RMII:
-92b58b34741ff5 Grygorii Strashko   2018-11-25   84  		gmii_sel_mode = AM33XX_GMII_SEL_MODE_RMII;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   85  		break;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   86  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   87  	case PHY_INTERFACE_MODE_RGMII:
-316b4294590662 Grygorii Strashko   2019-10-23   88  	case PHY_INTERFACE_MODE_RGMII_RXID:
-92b58b34741ff5 Grygorii Strashko   2018-11-25   89  		gmii_sel_mode = AM33XX_GMII_SEL_MODE_RGMII;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   90  		break;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   91  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   92  	case PHY_INTERFACE_MODE_RGMII_ID:
-92b58b34741ff5 Grygorii Strashko   2018-11-25   93  	case PHY_INTERFACE_MODE_RGMII_TXID:
-92b58b34741ff5 Grygorii Strashko   2018-11-25   94  		gmii_sel_mode = AM33XX_GMII_SEL_MODE_RGMII;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   95  		rgmii_id = 1;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   96  		break;
-92b58b34741ff5 Grygorii Strashko   2018-11-25   97  
-92b58b34741ff5 Grygorii Strashko   2018-11-25   98  	case PHY_INTERFACE_MODE_MII:
-58aa7729310db0 Grygorii Strashko   2020-02-14   99  	case PHY_INTERFACE_MODE_GMII:
-eefed634eb61e4 Grygorii Strashko   2020-02-14  100  		gmii_sel_mode = AM33XX_GMII_SEL_MODE_MII;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  101  		break;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  102  
-af96579dc31761 Siddharth Vadapalli 2022-09-12  103  	case PHY_INTERFACE_MODE_QSGMII:
-af96579dc31761 Siddharth Vadapalli 2022-09-12  104  		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_QSGMII)))
-af96579dc31761 Siddharth Vadapalli 2022-09-12  105  			goto unsupported;
-af96579dc31761 Siddharth Vadapalli 2022-09-12  106  		if (if_phy->priv->qsgmii_main_ports & BIT(if_phy->id - 1))
-af96579dc31761 Siddharth Vadapalli 2022-09-12  107  			gmii_sel_mode = J72XX_GMII_SEL_MODE_QSGMII;
-af96579dc31761 Siddharth Vadapalli 2022-09-12  108  		else
-af96579dc31761 Siddharth Vadapalli 2022-09-12  109  			gmii_sel_mode = J72XX_GMII_SEL_MODE_QSGMII_SUB;
-af96579dc31761 Siddharth Vadapalli 2022-09-12  110  		break;
-af96579dc31761 Siddharth Vadapalli 2022-09-12  111  
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  112  	case PHY_INTERFACE_MODE_SGMII:
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  113  		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_SGMII)))
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  114  			goto unsupported;
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  115  		else
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  116  			gmii_sel_mode = J72XX_GMII_SEL_MODE_SGMII;
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  117  		break;
-6a301188420ae5 Siddharth Vadapalli 2023-03-09  118  
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  119  	case PHY_INTERFACE_MODE_USXGMII:
-8d087a09c7017f Siddharth Vadapalli 2023-03-31 @120  		if (!(soc_data->extra_modes & BIT(PHY_INTERFACE_MODE_USXGMII)))
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  121  			goto unsupported;
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  122  		else
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  123  			gmii_sel_mode = J72XX_GMII_SEL_MODE_USXGMII;
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  124  		break;
-8d087a09c7017f Siddharth Vadapalli 2023-03-31  125  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  126  	default:
-af96579dc31761 Siddharth Vadapalli 2022-09-12  127  		goto unsupported;
-1a3a09270668d9 kbuild test robot   2018-12-09  128  	}
-92b58b34741ff5 Grygorii Strashko   2018-11-25  129  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  130  	if_phy->phy_if_mode = submode;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  131  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  132  	dev_dbg(dev, "%s id:%u mode:%u rgmii_id:%d rmii_clk_ext:%d\n",
-eefed634eb61e4 Grygorii Strashko   2020-02-14  133  		__func__, if_phy->id, submode, rgmii_id,
-92b58b34741ff5 Grygorii Strashko   2018-11-25  134  		if_phy->rmii_clock_external);
-92b58b34741ff5 Grygorii Strashko   2018-11-25  135  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  136  	regfield = if_phy->fields[PHY_GMII_SEL_PORT_MODE];
-92b58b34741ff5 Grygorii Strashko   2018-11-25  137  	ret = regmap_field_write(regfield, gmii_sel_mode);
-92b58b34741ff5 Grygorii Strashko   2018-11-25  138  	if (ret) {
-92b58b34741ff5 Grygorii Strashko   2018-11-25  139  		dev_err(dev, "port%u: set mode fail %d", if_phy->id, ret);
-92b58b34741ff5 Grygorii Strashko   2018-11-25  140  		return ret;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  141  	}
-92b58b34741ff5 Grygorii Strashko   2018-11-25  142  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  143  	if (soc_data->features & BIT(PHY_GMII_SEL_RGMII_ID_MODE) &&
-92b58b34741ff5 Grygorii Strashko   2018-11-25  144  	    if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE]) {
-92b58b34741ff5 Grygorii Strashko   2018-11-25  145  		regfield = if_phy->fields[PHY_GMII_SEL_RGMII_ID_MODE];
-92b58b34741ff5 Grygorii Strashko   2018-11-25  146  		ret = regmap_field_write(regfield, rgmii_id);
-92b58b34741ff5 Grygorii Strashko   2018-11-25  147  		if (ret)
-92b58b34741ff5 Grygorii Strashko   2018-11-25  148  			return ret;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  149  	}
-92b58b34741ff5 Grygorii Strashko   2018-11-25  150  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  151  	if (soc_data->features & BIT(PHY_GMII_SEL_RMII_IO_CLK_EN) &&
-92b58b34741ff5 Grygorii Strashko   2018-11-25  152  	    if_phy->fields[PHY_GMII_SEL_RMII_IO_CLK_EN]) {
-92b58b34741ff5 Grygorii Strashko   2018-11-25  153  		regfield = if_phy->fields[PHY_GMII_SEL_RMII_IO_CLK_EN];
-92b58b34741ff5 Grygorii Strashko   2018-11-25  154  		ret = regmap_field_write(regfield,
-92b58b34741ff5 Grygorii Strashko   2018-11-25  155  					 if_phy->rmii_clock_external);
-92b58b34741ff5 Grygorii Strashko   2018-11-25  156  	}
-92b58b34741ff5 Grygorii Strashko   2018-11-25  157  
-92b58b34741ff5 Grygorii Strashko   2018-11-25  158  	return 0;
-af96579dc31761 Siddharth Vadapalli 2022-09-12  159  
-af96579dc31761 Siddharth Vadapalli 2022-09-12  160  unsupported:
-af96579dc31761 Siddharth Vadapalli 2022-09-12  161  	dev_warn(dev, "port%u: unsupported mode: \"%s\"\n",
-af96579dc31761 Siddharth Vadapalli 2022-09-12  162  		 if_phy->id, phy_modes(submode));
-af96579dc31761 Siddharth Vadapalli 2022-09-12  163  	return -EINVAL;
-92b58b34741ff5 Grygorii Strashko   2018-11-25  164  }
-92b58b34741ff5 Grygorii Strashko   2018-11-25  165  
-
-:::::: The code at line 120 was first introduced by commit
-:::::: 8d087a09c7017f1425f3f1d36807eb4988410942 phy: ti: gmii-sel: Enable USXGMII mode for J784S4
-
-:::::: TO: Siddharth Vadapalli <s-vadapalli@ti.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
