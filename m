@@ -1,122 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CB018A6D4;
-	Tue,  4 Feb 2025 17:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ED1215770;
+	Tue,  4 Feb 2025 18:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738691351; cv=none; b=m9yIz34yBF1I0faHJkcqn/drglsr5oK+x2d+vQv6IIKdSj2QlNaf8JsncHOp74t8E6l1WT20YPFvEH2ho3m/x7+7gW7nfIjCEHD8xNu5IwoVZVFJJINuCjyBUj5wfvrvC7JUfSF1faVKA017LUPps/vPO7y7WVIy108fvvqSs/s=
+	t=1738692017; cv=none; b=dVH35GKaAnqTq6lJGmzrImjVY5MKsu2D0omxut7bsHKTsZ1xCtFZhOk7N79fhCGmfWfn13QhiJvu5fiykkbS1LYpiaNwtTIEGiZi3NH4Kcwf64sRBBlJmLwQenb8wpZU5T71wAWK/4qmWB1t1my7zHJDnzc45OrCBGNRJF1O6d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738691351; c=relaxed/simple;
-	bh=rXAK34OphyEItP6/+639hQrb7zlf+ZgtdRAQ99Mc1xA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jbil56Qpa7lm5WI5VC8XceXzYoanEF55L51EtDFH27KgcKEnxO5GsP636RyrG8yvsnhThu3U8inzjDXvGKkZtQf6YCA6AKHdYJT+unlpvGirSVPOlmOQRw/CKctfPueKUc7r/uTbEx0NyAYO6jDzqYMZXMD36IKdKEgaYMN42aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SHtnS5Kt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738692017; c=relaxed/simple;
+	bh=ldYrvOL4QM7opLBTruDCwpZjG3E9SBjtI7Rt0cRdNQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tRQShoplGSzOtZliIyj9GNK3Hd6CRpAW15nxblFAGpw/yuFNFpOqvpfahQthp46pNYIQVkkiLTOcWhvPjfUHxQFPe21BPtz/ccSZ9y7nN5xxKRMT3V6A33d5GnC20hFGOhXCqnao+JOBh8m5BMWsxF2enudD1a3HatF29FXJVWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTNMNKQu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SHtnS5Kt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5820C4CEDF;
-	Tue,  4 Feb 2025 17:49:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTNMNKQu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1001C4CEDF;
+	Tue,  4 Feb 2025 18:00:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738691351;
-	bh=rXAK34OphyEItP6/+639hQrb7zlf+ZgtdRAQ99Mc1xA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=SHtnS5KtsZ/GOENUm5oQLadqfIxf887yWaCuZngDsiv7/CyDO9QC34fijUzxSRrVQ
-	 kngZDnCH3unbXVxFTR1GxMquyEiACyFsVKrPj4yeLVPUlnNETP0mXxW7iswjxU3KlW
-	 /McoIFOGzYDLIuIXTUiRu4dlzQ7HXgW8WB1z+iTtn18pR6AMMLGsxZzC/x9kHfcIOh
-	 T3da3wf/qvYrWehDk8r5wVS0UMofLrV8hFynf+w7TTf+PY99/jrik4Y1hsfVmA6kxR
-	 tytim7CxgxFzQeV/FTL/cQmo6RQkZsCG7Olaw14EdKN/pSFujkGTkWP4PuNtNbF9jn
-	 0fogOD/mQ/kAQ==
+	s=k20201202; t=1738692016;
+	bh=ldYrvOL4QM7opLBTruDCwpZjG3E9SBjtI7Rt0cRdNQU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=oTNMNKQuBLaTCsJ9QNGfltm97nQAyuGNP8iaSNHab9t+HJLq92azvks1AhQdt9Wke
+	 DlcuQbPfKna2SefTz19dqXKVAAOzV/gaGNStJf9BBEVmMwG/qzyEPU6hjTjdbzzqs4
+	 mn0lvNN7Pi7Hm0T6T9+pR/P75jwoU7ySOUy681+XO0E0EMvutrt5360zXvQCdGTjY5
+	 AHgk+owGmYohAlNhUOKTFEC3chB8xJFoqga9MU/J/RwPtNSK8g493xfUFWH86/aw3D
+	 5t+uNsoioYJ4Lrg29gOlu++kOqRGc9ZMFfBUAClCWUE48sT1oCyJsGn6aAOR6MmlOi
+	 bI7OzZ3i+L9tg==
+Date: Tue, 4 Feb 2025 11:00:13 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 04 Feb 2025 10:48:55 -0700
-Subject: [PATCH v2] arm64: Handle .ARM.attributes section in linker scripts
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: conor@kernel.org, ojeda@kernel.org
+Subject: Prebuilt LLVM 20.1.0-rc1 uploaded
+Message-ID: <20250204180013.GA3940674@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-arm64-handle-arm-attributes-in-linker-script-v2-1-d684097f5554@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAZTomcC/5WNyw6CMBBFf4V07Rj6AB8r/8OwKGWAiVjItBIN4
- d8tJH6Ay3NPcs8iAjJhENdsEYwzBRp9AnXIhOut7xCoSSxUropcKg2Wn6WBpJoBNwAbI1P9ihi
- APAzkH8gQHNMU4awsoiq01NaJdDkxtvTec/cqcU8hjvzZ67Pc1l/I/BeaJUg4GamLunStNpdbk
- h6H48idqNZ1/QLKQtx56QAAAA==
-X-Change-ID: 20250123-arm64-handle-arm-attributes-in-linker-script-82aee25313ac
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2567; i=nathan@kernel.org;
- h=from:subject:message-id; bh=rXAK34OphyEItP6/+639hQrb7zlf+ZgtdRAQ99Mc1xA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOmLgkVPWnK9OzmvIvdskY3O/JnndpzanxPoV98gZS8Uo
- c038eCCjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARhamMDB0LlsU8eMydZMf/
- Jz9cUGOBxqbSa3cXLD0levu1rdbunX8ZGTa3exwvDM59N3HSnji5A3vPGxt9M9++e3fGg5o/iss
- j7dkA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A recent LLVM commit [1] started generating an .ARM.attributes section
-similar to the one that exists for 32-bit, which results in orphan
-section warnings (or errors if CONFIG_WERROR is enabled) from the linker
-because it is not handled in the arm64 linker scripts.
+Hi all,
 
-  ld.lld: error: arch/arm64/kernel/vdso/vgettimeofday.o:(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: arch/arm64/kernel/vdso/vgetrandom.o:(.ARM.attributes) is being placed in '.ARM.attributes'
+I have built and uploaded LLVM 20.1.0-rc1 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-  ld.lld: error: vmlinux.a(lib/vsprintf.o):(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: vmlinux.a(lib/win_minmax.o):(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: vmlinux.a(lib/xarray.o):(.ARM.attributes) is being placed in '.ARM.attributes'
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before 21.1.0 final
+is released.
 
-Discard the new sections in the necessary linker scripts to resolve the
-warnings, as the kernel and vDSO do not need to retain it, similar to
-the .note.gnu.property section.
-
-Cc: stable@vger.kernel.org
-Fixes: b3e5d80d0c48 ("arm64/build: Warn on orphan section placement")
-Link: https://github.com/llvm/llvm-project/commit/ee99c4d4845db66c4daa2373352133f4b237c942 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Discard the section instead of adding it to the final artifacts to
-  mirror the .note.gnu.property section handling (Will).
-- Link to v1: https://lore.kernel.org/r/20250124-arm64-handle-arm-attributes-in-linker-script-v1-1-74135b6cf349@kernel.org
----
- arch/arm64/kernel/vdso/vdso.lds.S | 1 +
- arch/arm64/kernel/vmlinux.lds.S   | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/arm64/kernel/vdso/vdso.lds.S b/arch/arm64/kernel/vdso/vdso.lds.S
-index 4ec32e86a8da..8095fef66209 100644
---- a/arch/arm64/kernel/vdso/vdso.lds.S
-+++ b/arch/arm64/kernel/vdso/vdso.lds.S
-@@ -80,6 +80,7 @@ SECTIONS
- 		*(.data .data.* .gnu.linkonce.d.* .sdata*)
- 		*(.bss .sbss .dynbss .dynsbss)
- 		*(.eh_frame .eh_frame_hdr)
-+		*(.ARM.attributes)
- 	}
- }
- 
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index f84c71f04d9e..e73326bd3ff7 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -162,6 +162,7 @@ SECTIONS
- 	/DISCARD/ : {
- 		*(.interp .dynamic)
- 		*(.dynsym .dynstr .hash .gnu.hash)
-+		*(.ARM.attributes)
- 	}
- 
- 	. = KIMAGE_VADDR;
-
----
-base-commit: 1dd3393696efba1598aa7692939bba99d0cffae3
-change-id: 20250123-arm64-handle-arm-attributes-in-linker-script-82aee25313ac
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
