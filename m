@@ -1,113 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2819F204589
-	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 20:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8697B219A8E
+	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 21:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738700126; cv=none; b=KtisJSg7F8ycSNrbl+aI0LQnyHYT8MisRFmZ1jMgR8Z3mVfgGM1PUfTOaZyHdXs5b+DOOOBoYhcVWKB7QRltArBUA4WRMuXqHZ7B239N8OzB/CXtspDd5YOIk/P+MzAOztOTyPscSnhCNRN6d3NMeil+Na030CSMI4IA50O1tG0=
+	t=1738703121; cv=none; b=smtQufMyBfXA/OQi4IfA24m+64t4rXoXqvghsTQY9Exc4IZduSWH0hFUd7BZyNYPE8TxEMkno2kodZdlyIriy7v4jFtH8W2iimZ7IuV07YhuMchUwf6XoChmCzXwmP/WD4gqBI0VlkIbEAEn9Uz1AlJqb475qonU9Q6OrWLftbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738700126; c=relaxed/simple;
-	bh=kJonMXNY9VlAmafGbnGEKg0Jo8628XvCVNXk/loVX9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2dZC8NzeU2OYRSgNUnudLV3/sYvaWRNBKZNiyR7S3Jm8FY2w9S7ht5NFG2Vf3nLZQr/o69+X+lPtE/YUWdbdb1l1DPflD26lQCa7qIm2NlYVqXDY5aFBh+xVZTswfyuDr+BFAWXmVDKZc3BZ3Ay94uKQ2hUuRUSSRHb7WOnj3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQ9IhiRx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738703121; c=relaxed/simple;
+	bh=cTEE1FYq21KfXTOwWnzEdtVlwskDuVhdFB7haDFkklE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I3LGDYVOOqYw4640cCtYz6PTJc0iMoi5bW5f5gtvG53FSUwn3PS3u86lwfkgfxdXal4foZiWWOYhixpBa+9VOwljDCH3IHrY+5DUPs6OobjMRXi1isfXqY5XtPDPfEPf0qADJnk8ALktooTF+CRVoASCXmBG59+o2rJccSUNbjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K7SLrg0/; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQ9IhiRx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB3FC4CEDF;
-	Tue,  4 Feb 2025 20:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738700125;
-	bh=kJonMXNY9VlAmafGbnGEKg0Jo8628XvCVNXk/loVX9w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aQ9IhiRxGMPVj7QTdLxIY3mNeHAIMD+/emAuqiNqwcOKyE/O+SKfYmTkKymhvYMap
-	 4kB/G0qbccODRErgNzlG4F6kThrBxkDeR3plDulRrd+PaLlyH9Dcay/ybJj5Jb18Qm
-	 AdP2Q1Aa0ZlMEXeC6si9wULIPsHWXJTUO1lB8ALBUci5brdPM7BbgI32nyljjog8eM
-	 7UejotQ0g3p9krjXvr48bexOUmKY4ckZ7GR/noT4Ral1uEtdG2wmfcIRPYrU6hXko5
-	 +dewYqnv74DRJgeiycjaiagutGAnh81FF8GJx9WhzPXGXOzUZTqLtqQIA0fULAohmO
-	 IXapiCAaK+37A==
-Date: Tue, 4 Feb 2025 13:15:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-21-init-262-gcff0a460ae86: Failure on
- arm
-Message-ID: <20250204201522.GB3466315@ax162>
-References: <1599984364.127113.1738492219737@jenkins.jenkins>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K7SLrg0/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738703120; x=1770239120;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cTEE1FYq21KfXTOwWnzEdtVlwskDuVhdFB7haDFkklE=;
+  b=K7SLrg0/HGdwYCHnCHB3JCZdjbzlE/zypyKjFmtLQbKRklm5w1Npmkz5
+   zpRVV8aYQNh998rC1SaR+42moB0HxpkvbGl6VVL7Tafex/BpE7hpntCyn
+   LFCaC1PRk44vqlFPeoWJwB4/cnT6YoplcNQ79xC94DLJ1vofpGJ3h1zwA
+   1nzpgQ5GdkO1GjoaKjKJJxOKioTYhdjSU8ZZd/Fu6PUDp5DyUjrKAb4PS
+   8J7j3DnwWhde7Pk+Sy1T0jHe4J24ZnSoORjgqaz3NYiY8Q4tNHhDH0RiH
+   NJxh690fzPdEmE/g+ZwK6Kd0yPfw9o6uyn8fbtdoKNYsV05y3OHt4tlbg
+   Q==;
+X-CSE-ConnectionGUID: jGlkBo2IRh6fEVJVaoeceA==
+X-CSE-MsgGUID: v097sgRaQs+ZXtDjVohrVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="26849385"
+X-IronPort-AV: E=Sophos;i="6.13,259,1732608000"; 
+   d="scan'208";a="26849385"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 13:05:18 -0800
+X-CSE-ConnectionGUID: 9dF2FT5NRFWiRHULia/eYQ==
+X-CSE-MsgGUID: L8qAtL/DQqe33Kcw+D4mcQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="115895089"
+Received: from jdoman-mobl3.amr.corp.intel.com (HELO [10.125.110.55]) ([10.125.110.55])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 13:05:17 -0800
+Message-ID: <fb30574a-d238-424c-a464-0f7a5707c46a@intel.com>
+Date: Tue, 4 Feb 2025 13:05:18 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599984364.127113.1738492219737@jenkins.jenkins>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
+ x86
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+ Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com,
+ palmer@dabbelt.com, tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com,
+ ardb@kernel.org, dave.hansen@linux.intel.com, jgross@suse.com,
+ will@kernel.org, akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net,
+ dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com,
+ tglx@linutronix.de, hpa@zytor.com, seanjc@google.com,
+ paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com,
+ jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com,
+ jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com,
+ rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com,
+ catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org,
+ ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de,
+ kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com,
+ julian.stecklina@cyberus-technology.de, peterz@infradead.org,
+ kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+ <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Feb 02, 2025 at 10:30:18AM +0000, ci_notify@linaro.org wrote:
-> Dear contributor,
+On 2/4/25 10:58, Christoph Lameter (Ampere) wrote:
+> ARM64 supports MTE which is hardware support for tagging 16 byte granules
+> and verification of tags in pointers all in hardware and on some platforms
+> with *no* performance penalty since the tag is stored in the ECC areas of
+> DRAM and verified at the same time as the ECC.
 > 
-> Our automatic CI has detected problems related to your patch(es). Please find some details below.
-> 
-> In tcwg_kernel/llvm-master-arm-stable-allyesconfig, after:
->   | commit llvmorg-21-init-262-gcff0a460ae86
->   | Author: Bill Wendling <morbo@google.com>
->   | Date:   Thu Jan 30 15:36:13 2025 -0800
->   | 
->   |     [Clang][counted_by] Refactor __builtin_dynamic_object_size on FAMs (#122198)
->   |     
->   |     Refactoring of how __builtin_dynamic_object_size() is calculated for
->   |     flexible array members (in preparation for adding support for the
->   |     'counted_by' attribute on pointers in structs).
->   | ... 86 lines of the commit log omitted.
-> 
-> Produces Failure:
->   | Results changed to
->   | # reset_artifacts:
->   | -10
->   | # build_abe binutils:
->   | -9
->   | # build_kernel_llvm:
->   | -5
->   | # build_abe qemu:
->   | -2
->   | # linux_n_obj:
->   | 22473
->   | 
->   | From
->   | # reset_artifacts:
->   | -10
->   | # build_abe binutils:
->   | -9
->   | # build_kernel_llvm:
->   | -5
->   | # build_abe qemu:
->   | -2
->   | # linux_n_obj:
->   | 22474
-> 
-> Used configuration :
->  tcwg_kernel/llvm-master-arm-stable-allyesconfig
-> 
-> We track this bug report under https://linaro.atlassian.net/browse/LLVM-1541. Please let us know if you have a fix.
-> 
-> If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-> 
-> -----------------8<--------------------------8<--------------------------8<--------------------------
-> 
-> The information below contains the details of the failures, and the ways to reproduce a debug environment:
-> 
-> 
-> 
-> Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/233/artifact/artifacts
-> Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/232/artifact/artifacts
-> 
-> Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/cff0a460ae864505bc2a064c269ebe548aa35949/tcwg_kernel/llvm-master-arm-stable-allyesconfig/reproduction_instructions.txt
-> 
-> Full commit : https://github.com/llvm/llvm-project/commit/cff0a460ae864505bc2a064c269ebe548aa35949
+> Could we get support for that? This would allow us to enable tag checking
+> in production systems without performance penalty and no memory overhead.
 
-Thanks, I think Bill fixed this with
-https://github.com/llvm/llvm-project/commit/2eb44aa0a94a8d4230c1c9a0c306af16bfc92925
+At least on the Intel side, there's no trajectory for doing something
+like the MTE architecture for memory tagging. The DRAM "ECC" area is in
+very high demand and if anything things are moving away from using ECC
+"bits" for anything other than actual ECC. Even the MKTME+integrity
+(used for TDX) metadata is probably going to find a new home at some point.
 
-Cheers,
-Nathan
+This shouldn't be a surprise to anyone on cc here. If it is, you should
+probably be reaching out to Intel over your normal channels.
