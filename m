@@ -1,108 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0A320B1EF;
-	Tue,  4 Feb 2025 11:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813C3213E91;
+	Tue,  4 Feb 2025 13:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738670073; cv=none; b=IENJBlc6YqKXwFOV1LVWzI6rWqjBuME2OMRyH3btISvTsHXnJz2JQONpjlQBnlnRdV8IONN9keozeNz+Ri9g1KCv3hPU5ySGj2Ga2kA7UJ4OVtoRXszZAGq7labnhVFEVhgJ1vdXcbhGiuLiwAT8UsMZpRcWgUQeBct2+KjkQsg=
+	t=1738675803; cv=none; b=KkBYuE3g2DbaTXF4OI0PJ9BEAnin79CJaQ73vS7B4CQe1soj2PylpwMbNXkonoPAUgAOpgOCHOsvNEZsxAs4J/C89+Y64krbl6A3SrMQ+R6MvqH4hqr7A6DhzHOfclGLl1oad3keTjQnUfkRP7lNpR0rAbh1elXe1th4+FStFDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738670073; c=relaxed/simple;
-	bh=cT2RxHJJvfh2ykj3Hm8+RhZNJZwL1VMP4Vlog4g2ZdA=;
+	s=arc-20240116; t=1738675803; c=relaxed/simple;
+	bh=fhTHl3VMAD25DEjVrDF/ce4B/A45dAgzIuOCzAjg7YA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ecjaYjJ9TH43FYika1Y13IyUamBXQmlIvkFBQ6CBAu3j8vp046OQ1CKteQmOUwPHBia6icuI0T8OXIJwwlSdA/koHSxTVxWZ7h3y6eMznj9yQwzAD1rPQhEscgen8oCb54UpffFsoEdVHdHczAzTOwD++qcR9ZoHMWSGntExziA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=csyVMxbT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwrjHdkLCCuxB01V0TpCl/8Nv01EYanE0vtlAnL0Sg9eML4bynuMC8yfMKmYmYU43PQC3vhNkkvqRmY61xB+VCIkjN30d5YFpvFqE0RpU6vDozIU6vmIGuqqpU82xGNWrQJ6NjInJLpCFfu4CmRMP1sOlSt52pAhfmmXqQktyWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKBwVWSv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="csyVMxbT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57E3C4CEE4;
-	Tue,  4 Feb 2025 11:54:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKBwVWSv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA2DC4CEDF;
+	Tue,  4 Feb 2025 13:30:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738670072;
-	bh=cT2RxHJJvfh2ykj3Hm8+RhZNJZwL1VMP4Vlog4g2ZdA=;
+	s=k20201202; t=1738675802;
+	bh=fhTHl3VMAD25DEjVrDF/ce4B/A45dAgzIuOCzAjg7YA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=csyVMxbTBOzapoMihhQvE3yBB8ppc3ebVwM/lxds5TbEb0QskmNEuc5MVFo6Xx+P5
-	 GOKGaVz6BDEjZ/op7qMjXlQDHZC4ZANHFYoGmF4fAmyqejfrps2lzmH4uL2R3ZfF3h
-	 530fpeFMTxa6u5klDBJ7K8PpMknYVepim2CnzVVrga7vONzOJl7DZIhORsTIchBZBh
-	 UjxCk8o65nAOIhrYdYArgTKr370ez30ggERV9Gx5ezQvtxHHLk3H2uxcRM0Tbb9nqi
-	 dcv4lN+OIJuQkx38F6IUBGMSX7u8RoAPeIdGog3AzZusfSP49GoSHYB9HsCU6MqDk4
-	 hCCLR03KTdAwg==
-Date: Tue, 4 Feb 2025 11:54:28 +0000
-From: Will Deacon <will@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] arm64: Handle .ARM.attributes section in linker scripts
-Message-ID: <20250204115427.GE893@willie-the-truck>
-References: <20250124-arm64-handle-arm-attributes-in-linker-script-v1-1-74135b6cf349@kernel.org>
+	b=eKBwVWSvNqgb3AdOdljELzEhnwjhVscNkOLcLkAZSm/09ITUmN2fkBKcDCAGar682
+	 i4P6xy4a3LJD4oLfuzILMeoEi4SbaB9br38RwFLr+G/6jw+K0Dp9zOZgNjVnQdzco3
+	 i1bC8DJmfpf4Ues0vsqZ3eW7gRGptROSwWA51OOBsqW1MxIpTU/pmhRYRZWGa+vHS6
+	 PWxolw4IEdvSK2sKpXoAxqNYgekZGSyJz0tLBeGvoRgUV7yw7iZPJtIDcq0AFsKLzs
+	 sFKOM07NdClkcA+go0NHr2rv5w7OqZcqr+ziMd/fZWfdUEZdr9ObA9OHoC/rhsFBah
+	 k1dbZgG7zWvRQ==
+Date: Tue, 4 Feb 2025 14:30:00 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Gomez <da.gomez@samsung.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
+	gost.dev@samsung.com
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+Message-ID: <xsg3mrozb3zd7g3hqki7lvdkc4zbi6bs3oiif64kvnnldaai5a@3g7gnpcz5igh>
+References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250124-arm64-handle-arm-attributes-in-linker-script-v1-1-74135b6cf349@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
 
-On Fri, Jan 24, 2025 at 06:31:57AM -0700, Nathan Chancellor wrote:
-> A recent LLVM commit [1] started generating an .ARM.attributes section
-> similar to the one that exists for 32-bit, which results in orphan
-> section warnings (or errors if CONFIG_WERROR is enabled) from the linker
-> because it is not handled in the arm64 linker scripts.
+On Wed, Jan 22, 2025 at 09:02:19AM +0100, Alexei Starovoitov wrote:
+> On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+> >
+> > Add support for a module error injection tool. The tool
+> > can inject errors in the annotated module kernel functions
+> > such as complete_formation(), do_init_module() and
+> > module_enable_rodata_after_init(). Module name and module function are
+> > required parameters to have control over the error injection.
+> >
+> > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > brd module:
+> >
+> > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
+> > --error=-22 --trace
+> > Monitoring module error injection... Hit Ctrl-C to end.
+> > MODULE     ERROR FUNCTION
+> > brd        -22   module_enable_rodata_after_init()
+> >
+> > Kernel messages:
+> > [   89.463690] brd: module loaded
+> > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
+> > ro_after_init data might still be writable
+> >
+> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > ---
+> >  tools/bpf/Makefile            |  13 ++-
+> >  tools/bpf/moderr/.gitignore   |   2 +
+> >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
+> >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> >  6 files changed, 510 insertions(+), 3 deletions(-)
 > 
->   ld.lld: error: arch/arm64/kernel/vdso/vgettimeofday.o:(.ARM.attributes) is being placed in '.ARM.attributes'
->   ld.lld: error: arch/arm64/kernel/vdso/vgetrandom.o:(.ARM.attributes) is being placed in '.ARM.attributes'
+> The tool looks useful, but we don't add tools to the kernel repo.
+> It has to stay out of tree.
+
+Can you clarify what do you mean? There are other tools under tools/ and tools/
+bpf [1].
+
+[1] https://lore.kernel.org/bpf/20200114184230.GA204154@krava/
+
+I will anyway move the tool to the suggested location in the other thread.
+
 > 
->   ld.lld: error: vmlinux.a(lib/vsprintf.o):(.ARM.attributes) is being placed in '.ARM.attributes'
->   ld.lld: error: vmlinux.a(lib/win_minmax.o):(.ARM.attributes) is being placed in '.ARM.attributes'
->   ld.lld: error: vmlinux.a(lib/xarray.o):(.ARM.attributes) is being placed in '.ARM.attributes'
-> 
-> Add this new section to the necessary linker scripts to resolve the warnings.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: b3e5d80d0c48 ("arm64/build: Warn on orphan section placement")
-> Link: https://github.com/llvm/llvm-project/commit/ee99c4d4845db66c4daa2373352133f4b237c942 [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/arm64/kernel/vdso/vdso.lds.S | 1 +
->  arch/arm64/kernel/vmlinux.lds.S   | 1 +
->  2 files changed, 2 insertions(+)
+> The value of error injection is not clear to me.
+> Other places in the kernel use it to test paths in the kernel
+> that are difficult to do otherwise.
 
-Hmm. I wonder what this new attributes section is for and how it will
-co-exist with .note.gnu.property in future? For example, the spec linked
-form the above commit:
+By any chance do you know which tool are they using?
 
-https://github.com/ARM-software/abi-aa/pull/230
+> These 3 functions don't seem to be in this category.
 
-has references to GCS, which I don't think has a corresponding feature
-bit for the ELF note (at least, Linux doesn't know about it if it does).
-
-> diff --git a/arch/arm64/kernel/vdso/vdso.lds.S b/arch/arm64/kernel/vdso/vdso.lds.S
-> index 4ec32e86a8da..f8418a3a2758 100644
-> --- a/arch/arm64/kernel/vdso/vdso.lds.S
-> +++ b/arch/arm64/kernel/vdso/vdso.lds.S
-> @@ -75,6 +75,7 @@ SECTIONS
->  
->  	DWARF_DEBUG
->  	ELF_DETAILS
-> +	.ARM.attributes 0 : { *(.ARM.attributes) }
-
-Let's just add this to the /DISCARD/ section higher up, where we chuck
-away .note.gnu.property.
-
-> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> index f84c71f04d9e..c94942e9eb46 100644
-> --- a/arch/arm64/kernel/vmlinux.lds.S
-> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> @@ -335,6 +335,7 @@ SECTIONS
->  	STABS_DEBUG
->  	DWARF_DEBUG
->  	ELF_DETAILS
-> +	.ARM.attributes 0 : { *(.ARM.attributes) }
-
-I think we should discard this too (afaict, RO_DATA() discards
-.note.gnu.property via NOTES()).
-
-Will
+Luis already answered this.
