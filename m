@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627E3215056;
-	Wed,  5 Feb 2025 04:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3103922ACC6;
+	Wed,  5 Feb 2025 08:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738729368; cv=none; b=g5tgh3Q/nOjs/dcGGHWTWWztkTo2dEy43jZNyJWkr9qfDCmckV8FNWkHZBrix8FGZVYeGdDh9a7zhHomdk1LOotS6Fnt8XDp0NcdOjOrK3UrWnFvw9dEMrKmFEmI8eTUcdBzys/FG6oYPaAw8O9SHDydvw1QNP2LMT4+Iv2rYzk=
+	t=1738745293; cv=none; b=I8Fxn7WSRGo6ujCuCh5FxeZ2ShLTxz8DKH7iEHEYa779QT8NB64faX22urSJF8PXybTMpBY10N4whaeX/F0fukky6bSZh/I3/QGyX/duW0Gl3g3VVaYP8rYcXZy/UpLtjO4D3vOf/KdcnSbzS/ZnZN5RMMrjKcYNRdjul8eiYys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738729368; c=relaxed/simple;
-	bh=qRCydSc1bWa9uXemEOUCMN4cJ6bF3gXl+tOLoHdi0TI=;
+	s=arc-20240116; t=1738745293; c=relaxed/simple;
+	bh=UNbgX1n5Uzf4j6uTC4YY7nuS80iheYtt8wJ86ky5yGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F2CFod3XAz/Fqtg0R5Gl4RRon+z1gW8Z4l2EZ9MpSuhLG1L7NuPFz81cnVIFY+dNN2q6+SpmSqLcdGt3YYHE6ksig/neCSF+K+ZVWOpvX7rZ74zkO5NdGIS5WzFQOA9NV8l+fHBSMUh4AOA2tCt/JOeWdu4QnaFlKfxKrkxoRjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FKggIGt7; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=u9hpXkYtkP8/CNmb80u1F3dUbcNx0KgRKk5DMAv9M3/9z2e7aB4kBQpY4zv5QaPGcovgjwoBoHQGsc5X0g8haqE23+zzstAUvNRn6kdNgvg2MJ5kSvCBE002PQJTRh8yidypoax0koC+Og0ka+8+eZ4dxy7/dPp0Kxd6+wuVaT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LBz4pF6i; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FKggIGt7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LBz4pF6i"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738729365; x=1770265365;
+  t=1738745291; x=1770281291;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qRCydSc1bWa9uXemEOUCMN4cJ6bF3gXl+tOLoHdi0TI=;
-  b=FKggIGt7GA51iXC3EHLXL+694Lc/eMUxLpGU+6FyVd363NxFE4FOxjiI
-   g/FIbjKVdPxq3h6CQNLJADYfhabS0FE8/jEJOtdTgm84D1iBsmfdFilIy
-   G3/oF3iw+HOsmUqOzM7uWcKmIFaymlpGEQPszXSvMFx22uyHOWexLh2bL
-   elJK6VFER7rkk0roJR8hN4Lc9rzKC1Iau9lrPg87xJ3KVvOuiC8GIEu7H
-   OnqQ/NlPifcPAsovgGkviJcpziERFAgLYlXrrHnCSEkLOf6BJBBpkgL9G
-   kXCwJNQtOPE8vgr0v0EskU3C4ct14TErdPRZWJcz2DCVaAIx6Dj3Rabo8
-   A==;
-X-CSE-ConnectionGUID: TYHUFfjBTgOzvXWAYLaLsA==
-X-CSE-MsgGUID: 1u5LBhlWSRmIsXmrfM/JBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39310326"
-X-IronPort-AV: E=Sophos;i="6.13,260,1732608000"; 
-   d="scan'208";a="39310326"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 20:22:44 -0800
-X-CSE-ConnectionGUID: zhYBfjrlRSKeCfHa9bhCnw==
-X-CSE-MsgGUID: 8gd/O9v4QGawVwWsTgitQA==
+  bh=UNbgX1n5Uzf4j6uTC4YY7nuS80iheYtt8wJ86ky5yGI=;
+  b=LBz4pF6iRZdV5q1jzY0U4EDKCHDk0Ay3KFCz/AUxHnysExipjF+nUpht
+   mloH9eCyc3VoIZInQc3rH+f1/zm3Gyj777ONz6TKvVH2NnVLd542UhbW5
+   wu2xuFY3lFIEDEAqjCM3YFOfvuGS7st0eTpZNX9wem1tQzcN1EhKiOxen
+   LFCTlpVocrYK1iAlgnPqnTojhU32y3xMxNr1sWReKjfQNIkWKar1ZoO5C
+   aXGmq9yaORYOReArDA+yAjR7okVk0MKPPA3UFTffay8zpsPCLca/4DQAW
+   s1AgG165Blhy8HZAFCwfGiIG1SaFYZ/mTL2SfZG5ICqmnxDa+jbsX66fm
+   w==;
+X-CSE-ConnectionGUID: eNONZBiwQCKz/IiEe/8vIQ==
+X-CSE-MsgGUID: XOFKCLB5SvyyGqKgoVzYqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="64658192"
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="64658192"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 00:48:10 -0800
+X-CSE-ConnectionGUID: cl/eQuUeRxKZh1g8anwIxQ==
+X-CSE-MsgGUID: Y/eaIo/bRD6XJcXKHhBmtg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114850175"
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="111422927"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 04 Feb 2025 20:22:43 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 05 Feb 2025 00:48:09 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfWvw-000tQn-2h;
-	Wed, 05 Feb 2025 04:22:40 +0000
-Date: Wed, 5 Feb 2025 12:21:42 +0800
+	id 1tfb4p-000tfd-1U;
+	Wed, 05 Feb 2025 08:48:07 +0000
+Date: Wed, 5 Feb 2025 16:47:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Graf <graf@amazon.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mike Rapoport <rppt@kernel.org>
-Subject: [rppt:kho/v4 10/13] kernel/kexec_handover.c:104: warning: Function
- parameter or struct member 'mem' not described in 'kho_return_mem'
-Message-ID: <202502051237.fgLGQZuN-lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:device_private 9/22] mm/ksm.c:1276:28: error:
+ passing 'pte_t *' to parameter of incompatible type 'pte_t'; dereference
+ with *
+Message-ID: <202502051640.vYN3JWVM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,102 +63,139 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Alexander,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git kho/v4
-head:   a75b813f58b0bc19b2c4b06bd62afc87f02dcb43
-commit: 4a0ee0e000d8043b5fea97eb1716f4eda837f9b6 [10/13] arm64: Add KHO support
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250205/202502051237.fgLGQZuN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051237.fgLGQZuN-lkp@intel.com/reproduce)
+tree:   https://github.com/davidhildenbrand/linux device_private
+head:   ddc42f5fd72394838fc2d280ff2486ccb7178b9a
+commit: e06705cb196ddea990ddec54bffd90ebff1ea85c [9/22] mm/ksm: handle device-exclusive entries correctly in write_protect_page()
+config: i386-buildonly-randconfig-006-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051640.vYN3JWVM-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051640.vYN3JWVM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502051237.fgLGQZuN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502051640.vYN3JWVM-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/kexec_handover.c:104: warning: Function parameter or struct member 'mem' not described in 'kho_return_mem'
->> kernel/kexec_handover.c:142: warning: Function parameter or struct member 'mem' not described in 'kho_claim_mem'
+   In file included from mm/ksm.c:18:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/ksm.c:1276:28: error: passing 'pte_t *' to parameter of incompatible type 'pte_t'; dereference with *
+    1276 |         if (unlikely(!pte_present(pvmw.pte))
+         |                                   ^~~~~~~~
+         |                                   *
+   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   arch/x86/include/asm/pgtable.h:1010:37: note: passing argument to parameter 'a' here
+    1010 | static inline int pte_present(pte_t a)
+         |                                     ^
+>> mm/ksm.c:1277:3: error: expected ')'
+    1277 |                 goto out_unlock;
+         |                 ^
+   mm/ksm.c:1276:5: note: to match this '('
+    1276 |         if (unlikely(!pte_present(pvmw.pte))
+         |            ^
+   2 warnings and 2 errors generated.
 
 
-vim +104 kernel/kexec_handover.c
+vim +1276 mm/ksm.c
 
-076599f0959a3c Alexander Graf 2024-01-17   94  
-076599f0959a3c Alexander Graf 2024-01-17   95  /**
-076599f0959a3c Alexander Graf 2024-01-17   96   * kho_return_mem - Notify the kernel that initially reserved memory is no
-076599f0959a3c Alexander Graf 2024-01-17   97   * longer needed.
-076599f0959a3c Alexander Graf 2024-01-17   98   * @mem - memory range that was preserved during kexec handover
-076599f0959a3c Alexander Graf 2024-01-17   99   *
-076599f0959a3c Alexander Graf 2024-01-17  100   * When the last consumer of a page returns their memory, kho returns the page
-076599f0959a3c Alexander Graf 2024-01-17  101   * to the buddy allocator as free page.
-076599f0959a3c Alexander Graf 2024-01-17  102   */
-076599f0959a3c Alexander Graf 2024-01-17  103  void kho_return_mem(const struct kho_mem *mem)
-076599f0959a3c Alexander Graf 2024-01-17 @104  {
-076599f0959a3c Alexander Graf 2024-01-17  105  	uint64_t start_pfn, end_pfn, pfn;
-076599f0959a3c Alexander Graf 2024-01-17  106  
-076599f0959a3c Alexander Graf 2024-01-17  107  	start_pfn = PFN_DOWN(mem->addr);
-076599f0959a3c Alexander Graf 2024-01-17  108  	end_pfn = PFN_UP(mem->addr + mem->size);
-076599f0959a3c Alexander Graf 2024-01-17  109  
-076599f0959a3c Alexander Graf 2024-01-17  110  	for (pfn = start_pfn; pfn < end_pfn; pfn++)
-076599f0959a3c Alexander Graf 2024-01-17  111  		kho_return_pfn(pfn);
-076599f0959a3c Alexander Graf 2024-01-17  112  }
-076599f0959a3c Alexander Graf 2024-01-17  113  EXPORT_SYMBOL_GPL(kho_return_mem);
-076599f0959a3c Alexander Graf 2024-01-17  114  
-076599f0959a3c Alexander Graf 2024-01-17  115  static int kho_claim_pfn(ulong pfn)
-076599f0959a3c Alexander Graf 2024-01-17  116  {
-076599f0959a3c Alexander Graf 2024-01-17  117  	struct page *page = pfn_to_online_page(pfn);
-076599f0959a3c Alexander Graf 2024-01-17  118  
-076599f0959a3c Alexander Graf 2024-01-17  119  	if (!page)
-076599f0959a3c Alexander Graf 2024-01-17  120  		return -ENOMEM;
-076599f0959a3c Alexander Graf 2024-01-17  121  
-076599f0959a3c Alexander Graf 2024-01-17  122  	/* almost as free_reserved_page(), just don't free the page */
-076599f0959a3c Alexander Graf 2024-01-17  123  	ClearPageReserved(page);
-076599f0959a3c Alexander Graf 2024-01-17  124  	init_page_count(page);
-076599f0959a3c Alexander Graf 2024-01-17  125  	adjust_managed_page_count(page, 1);
-076599f0959a3c Alexander Graf 2024-01-17  126  
-076599f0959a3c Alexander Graf 2024-01-17  127  	return 0;
-076599f0959a3c Alexander Graf 2024-01-17  128  }
-076599f0959a3c Alexander Graf 2024-01-17  129  
-076599f0959a3c Alexander Graf 2024-01-17  130  /**
-076599f0959a3c Alexander Graf 2024-01-17  131   * kho_claim_mem - Notify the kernel that a handed over memory range is now
-076599f0959a3c Alexander Graf 2024-01-17  132   * in use
-076599f0959a3c Alexander Graf 2024-01-17  133   * @mem - memory range that was preserved during kexec handover
-076599f0959a3c Alexander Graf 2024-01-17  134   *
-076599f0959a3c Alexander Graf 2024-01-17  135   * A kernel subsystem preserved that range during handover and it is going
-076599f0959a3c Alexander Graf 2024-01-17  136   * to reuse this range after kexec. The pages in the range are treated as
-076599f0959a3c Alexander Graf 2024-01-17  137   * allocated, but not %PG_reserved.
-076599f0959a3c Alexander Graf 2024-01-17  138   *
-076599f0959a3c Alexander Graf 2024-01-17  139   * Return: virtual address of the preserved memory range
-076599f0959a3c Alexander Graf 2024-01-17  140   */
-076599f0959a3c Alexander Graf 2024-01-17  141  void *kho_claim_mem(const struct kho_mem *mem)
-076599f0959a3c Alexander Graf 2024-01-17 @142  {
-076599f0959a3c Alexander Graf 2024-01-17  143  	u64 start_pfn, end_pfn, pfn;
-076599f0959a3c Alexander Graf 2024-01-17  144  	void *va = __va(mem->addr);
-076599f0959a3c Alexander Graf 2024-01-17  145  
-076599f0959a3c Alexander Graf 2024-01-17  146  	start_pfn = PFN_DOWN(mem->addr);
-076599f0959a3c Alexander Graf 2024-01-17  147  	end_pfn = PFN_UP(mem->addr + mem->size);
-076599f0959a3c Alexander Graf 2024-01-17  148  
-076599f0959a3c Alexander Graf 2024-01-17  149  	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
-076599f0959a3c Alexander Graf 2024-01-17  150  		int err = kho_claim_pfn(pfn);
-076599f0959a3c Alexander Graf 2024-01-17  151  
-076599f0959a3c Alexander Graf 2024-01-17  152  		if (err)
-076599f0959a3c Alexander Graf 2024-01-17  153  			return NULL;
-076599f0959a3c Alexander Graf 2024-01-17  154  	}
-076599f0959a3c Alexander Graf 2024-01-17  155  
-076599f0959a3c Alexander Graf 2024-01-17  156  	return va;
-076599f0959a3c Alexander Graf 2024-01-17  157  }
-076599f0959a3c Alexander Graf 2024-01-17  158  EXPORT_SYMBOL_GPL(kho_claim_mem);
-076599f0959a3c Alexander Graf 2024-01-17  159  
-
-:::::: The code at line 104 was first introduced by commit
-:::::: 076599f0959a3cd16a8d2a95e552f6f83607ef9a kexec: Add KHO parsing support
-
-:::::: TO: Alexander Graf <graf@amazon.com>
-:::::: CC: Mike Rapoport <rppt@kernel.org>
+  1245	
+  1246	static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
+  1247				      pte_t *orig_pte)
+  1248	{
+  1249		struct mm_struct *mm = vma->vm_mm;
+  1250		DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, 0, 0);
+  1251		int swapped;
+  1252		int err = -EFAULT;
+  1253		struct mmu_notifier_range range;
+  1254		bool anon_exclusive;
+  1255		pte_t entry;
+  1256	
+  1257		if (WARN_ON_ONCE(folio_test_large(folio)))
+  1258			return err;
+  1259	
+  1260		pvmw.address = page_address_in_vma(folio, folio_page(folio, 0), vma);
+  1261		if (pvmw.address == -EFAULT)
+  1262			goto out;
+  1263	
+  1264		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, pvmw.address,
+  1265					pvmw.address + PAGE_SIZE);
+  1266		mmu_notifier_invalidate_range_start(&range);
+  1267	
+  1268		if (!page_vma_mapped_walk(&pvmw))
+  1269			goto out_mn;
+  1270		if (WARN_ONCE(!pvmw.pte, "Unexpected PMD mapping?"))
+  1271			goto out_unlock;
+  1272		/*
+  1273		 * Handle PFN swap entries, such as device-exclusive ones, that
+  1274		 * actually map pages: give up just like the next folio_walk would.
+  1275		 */
+> 1276		if (unlikely(!pte_present(pvmw.pte))
+> 1277			goto out_unlock;
+  1278	
+  1279		anon_exclusive = PageAnonExclusive(&folio->page);
+  1280		entry = ptep_get(pvmw.pte);
+  1281		if (pte_write(entry) || pte_dirty(entry) ||
+  1282		    anon_exclusive || mm_tlb_flush_pending(mm)) {
+  1283			swapped = folio_test_swapcache(folio);
+  1284			flush_cache_page(vma, pvmw.address, folio_pfn(folio));
+  1285			/*
+  1286			 * Ok this is tricky, when get_user_pages_fast() run it doesn't
+  1287			 * take any lock, therefore the check that we are going to make
+  1288			 * with the pagecount against the mapcount is racy and
+  1289			 * O_DIRECT can happen right after the check.
+  1290			 * So we clear the pte and flush the tlb before the check
+  1291			 * this assure us that no O_DIRECT can happen after the check
+  1292			 * or in the middle of the check.
+  1293			 *
+  1294			 * No need to notify as we are downgrading page table to read
+  1295			 * only not changing it to point to a new page.
+  1296			 *
+  1297			 * See Documentation/mm/mmu_notifier.rst
+  1298			 */
+  1299			entry = ptep_clear_flush(vma, pvmw.address, pvmw.pte);
+  1300			/*
+  1301			 * Check that no O_DIRECT or similar I/O is in progress on the
+  1302			 * page
+  1303			 */
+  1304			if (folio_mapcount(folio) + 1 + swapped != folio_ref_count(folio)) {
+  1305				set_pte_at(mm, pvmw.address, pvmw.pte, entry);
+  1306				goto out_unlock;
+  1307			}
+  1308	
+  1309			/* See folio_try_share_anon_rmap_pte(): clear PTE first. */
+  1310			if (anon_exclusive &&
+  1311			    folio_try_share_anon_rmap_pte(folio, &folio->page)) {
+  1312				set_pte_at(mm, pvmw.address, pvmw.pte, entry);
+  1313				goto out_unlock;
+  1314			}
+  1315	
+  1316			if (pte_dirty(entry))
+  1317				folio_mark_dirty(folio);
+  1318			entry = pte_mkclean(entry);
+  1319	
+  1320			if (pte_write(entry))
+  1321				entry = pte_wrprotect(entry);
+  1322	
+  1323			set_pte_at(mm, pvmw.address, pvmw.pte, entry);
+  1324		}
+  1325		*orig_pte = entry;
+  1326		err = 0;
+  1327	
+  1328	out_unlock:
+  1329		page_vma_mapped_walk_done(&pvmw);
+  1330	out_mn:
+  1331		mmu_notifier_invalidate_range_end(&range);
+  1332	out:
+  1333		return err;
+  1334	}
+  1335	
 
 -- 
 0-DAY CI Kernel Test Service
