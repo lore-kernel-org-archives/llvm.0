@@ -1,58 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80184131E2D;
-	Wed,  5 Feb 2025 09:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BACA22A4D8;
+	Wed,  5 Feb 2025 09:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738746615; cv=none; b=P8npylj7g9ZtBlyiXvoQ1Pp9eW+cN7OAzQIZIqv+ZywvFLxnmDmqmLgOYVxWevajEAfkPCp1H1Mwgg8ZUl2Do6P5Nb/e8jYb0VELdhRy+JJYuybDiZQtSHL7D+RMA3Ph6ov2cNJBJy2VG0nByn0xnXjS4ALfot54wPpl6JVGBQY=
+	t=1738747338; cv=none; b=SzwSi0eouUynK2QWwqWv1DnGJ/83865Vvu/MXyy+cfCrE9dRFZN8/QEq70l/gWWfTWMu7achMFU8TOqDPZzUK39Q9RsGZybZmvVuCB5RJ78ft+5j/wzHFj5P4v4EFdsnG0YS1Pv/wOXGvFYYpw91v/7Gemk66v/iFAF6RULTVR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738746615; c=relaxed/simple;
-	bh=4Vz/xV52I5TY6e0hXgyl1C65dqvdNjDy5Q319T2OTjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=M3JfJyP3mlKWLgFv1RvtmzXcPuvTox4PSuubQTB2WsatMpTRP3c1STRUs7xuFrBUI7WfI3PTnlo0fUjMAnJeuuPjLCuNz4ZA6bHx5PEDYrGQX8ZAgaD55CxbHvlqXotUDqAcXyL22JOLz629Ns2HztN//bnqFybbjQ3P30Cn1aU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MOWb/TJr; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1738747338; c=relaxed/simple;
+	bh=omFieM6V/YBx+5h1gv1mtyqffa2yseE/TMNhk4/FaJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BOb5jXO3b0fY2cB+1ixbku1+oLquYPWJjCKn1LxwfWM+ScgmpSUxFFnggDYZG2vTZ0NJmmM00J+wPrT77RmOhsHBO9/zflHzogghW4aTBh+AK1puVtg0y1LfYyWYi/G3B1sV8jGzT5uPDvryRzw4tbJt78u0JoQbBLp7GqoitS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LbtZa1zQ; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MOWb/TJr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LbtZa1zQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738746613; x=1770282613;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Vz/xV52I5TY6e0hXgyl1C65dqvdNjDy5Q319T2OTjw=;
-  b=MOWb/TJrzmht1voW/tFy0E47o3/AO+e4zpwxwEVQiDk2saqG4bgd2bk4
-   x2MvZZmdiUe/OlNEJwCSjFdSFLnbp+1R9VtUnufSIBdQcfycLugOqcH7R
-   +KTU2Izm4jddRX6oqgPUARiqnwxtYv2YPtZcgMXqRPgy0dzUzSH80Q7cb
-   C50mB8R33xFHeldgZXntPGq0yEIuXlHsFtB6lk/7ziq1jf/SQr9wqgcLT
-   jZeb6bjZQ1Rw6kWGHX985FkYt3+L3+kI0pX8r26Mr/JRHZ/pa2arxgk9C
-   6eQeGfMH5wpeJoqsFO/zYu9M+fSRxmezId+5fLjuXY3UOOeMpt6PDATqa
-   w==;
-X-CSE-ConnectionGUID: a5kxentYS+as/gP21P1DzA==
-X-CSE-MsgGUID: jtJPz8qyQjeYx0FDsaAIqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50721719"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="50721719"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 01:10:12 -0800
-X-CSE-ConnectionGUID: 9F2zih6STh+zl9j5ZszEDQ==
-X-CSE-MsgGUID: VrQ+12c0TfWXDwqbaxoylQ==
+  t=1738747337; x=1770283337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=omFieM6V/YBx+5h1gv1mtyqffa2yseE/TMNhk4/FaJM=;
+  b=LbtZa1zQ8gaE9brLJY+CiFfldylr0VFvW/XMIk52WL20HI26hhyhuLiJ
+   7FynS3Y7Qkmp9xOR5JfcF0dVTYk+IctH6kEwnj5Ia5uMspW8mGKbnEifq
+   CqJPt4AfpA6BtP9xzWLjwDY2qvQQph3MZiUyOvTGuePQ1sza9tGJeJ3lV
+   zWTsqfWFNiiXhXBopoxmYyYKjI0YxMo+GhKaRznuXuK//Bs2SgQ/cNBQO
+   AKqL5k4pIdiJievN6G4yw6+Y4J+KvjYs6KCCXEExCf3FaoC86Xlj8X535
+   HErvD5pA6z1ezy14SGPGgl+S2A/3p9OsKYOo/TnwuWAjQgzsl6O56yakU
+   A==;
+X-CSE-ConnectionGUID: U7NW75CtSraqr8uLpQ3C/Q==
+X-CSE-MsgGUID: 9k/ks6OQSoWCK62yLfV7yQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="43056410"
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="43056410"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 01:22:16 -0800
+X-CSE-ConnectionGUID: UYzIa9LxQQ6j3d39LmOylA==
+X-CSE-MsgGUID: ujuNv5kERDC+mUiEhi0QAg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="110696884"
+   d="scan'208";a="115897627"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Feb 2025 01:10:12 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 05 Feb 2025 01:22:13 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfbQ9-000tgF-2M;
-	Wed, 05 Feb 2025 09:10:09 +0000
-Date: Wed, 5 Feb 2025 17:09:53 +0800
+	id 1tfbbn-000tgh-1V;
+	Wed, 05 Feb 2025 09:22:11 +0000
+Date: Wed, 5 Feb 2025 17:22:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:device_private 15/22] mm/damon/ops-common.c:50:17:
- warning: variable 'pteval' is uninitialized when used here
-Message-ID: <202502051656.Xa4isdxU-lkp@intel.com>
+To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
+	edumazet@google.com, sridhar.samudrala@intel.com,
+	Joe Damato <jdamato@fastly.com>, Jakub Kicinski <kuba@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Mina Almasry <almasrymina@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3] netdev-genl: Elide napi_id when not present
+Message-ID: <202502051721.hL1sw85A-lkp@intel.com>
+References: <20250204192724.199209-1-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,63 +67,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250204192724.199209-1-jdamato@fastly.com>
 
-tree:   https://github.com/davidhildenbrand/linux device_private
-head:   ddc42f5fd72394838fc2d280ff2486ccb7178b9a
-commit: 9440e0949cbc08fc248f6eacf05e4d47c48f1294 [15/22] mm/damon: handle device-exclusive entries correctly in damon_folio_mkold_one()
-config: i386-buildonly-randconfig-005-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051656.Xa4isdxU-lkp@intel.com/config)
+Hi Joe,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on c2933b2befe25309f4c5cfbea0ca80909735fd76]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netdev-genl-Elide-napi_id-when-not-present/20250205-033024
+base:   c2933b2befe25309f4c5cfbea0ca80909735fd76
+patch link:    https://lore.kernel.org/r/20250204192724.199209-1-jdamato%40fastly.com
+patch subject: [PATCH net-next v3] netdev-genl: Elide napi_id when not present
+config: i386-buildonly-randconfig-006-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051721.hL1sw85A-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051656.Xa4isdxU-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051721.hL1sw85A-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502051656.Xa4isdxU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502051721.hL1sw85A-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> mm/damon/ops-common.c:50:17: warning: variable 'pteval' is uninitialized when used here [-Wuninitialized]
-      50 |                 pfn = pte_pfn(pteval);
-         |                               ^~~~~~
-   mm/damon/ops-common.c:47:2: note: variable 'pteval' is declared here
-      47 |         pte_t pteval;
-         |         ^
-   1 warning generated.
+   net/core/netdev-genl.c:380:23: warning: variable 'txq' set but not used [-Wunused-but-set-variable]
+     380 |         struct netdev_queue *txq;
+         |                              ^
+>> net/core/netdev-genl.c:406:28: warning: variable 'rxq' is uninitialized when used here [-Wuninitialized]
+     406 |                 if (nla_put_napi_id(rsp, rxq->napi))
+         |                                          ^~~
+   net/core/netdev-genl.c:379:29: note: initialize the variable 'rxq' to silence this warning
+     379 |         struct netdev_rx_queue *rxq;
+         |                                    ^
+         |                                     = NULL
+   2 warnings generated.
 
 
-vim +/pteval +50 mm/damon/ops-common.c
+vim +/rxq +406 net/core/netdev-genl.c
 
-    41	
-    42	void damon_ptep_mkold(pte_t *pte, struct vm_area_struct *vma, unsigned long addr)
-    43	{
-    44		struct folio *folio = damon_get_folio(pte_pfn(ptep_get(pte)));
-    45		bool young = false;
-    46		unsigned long pfn;
-    47		pte_t pteval;
-    48	
-    49		if (likely(pte_present(pteval)))
-  > 50			pfn = pte_pfn(pteval);
-    51		else
-    52			pfn = swp_offset_pfn(pte_to_swp_entry(pteval));
-    53	
-    54		folio = damon_get_folio(pfn);
-    55		if (!folio)
-    56			return;
-    57	
-    58		/*
-    59		 * PFN swap entries, such as device-exclusive ones, are "old" from a
-    60		 * CPU perspective.
-    61		 */
-    62		if (likely(pte_present(pteval)))
-    63			young |= ptep_test_and_clear_young(vma, addr, pte);
-    64		young |= mmu_notifier_clear_young(vma->vm_mm, addr, addr + PAGE_SIZE);
-    65		if (young)
-    66			folio_set_young(folio);
-    67	
-    68		folio_set_idle(folio);
-    69		folio_put(folio);
-    70	}
-    71	
+   373	
+   374	static int
+   375	netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+   376				 u32 q_idx, u32 q_type, const struct genl_info *info)
+   377	{
+   378		struct net_devmem_dmabuf_binding *binding;
+   379		struct netdev_rx_queue *rxq;
+   380		struct netdev_queue *txq;
+   381		void *hdr;
+   382	
+   383		hdr = genlmsg_iput(rsp, info);
+   384		if (!hdr)
+   385			return -EMSGSIZE;
+   386	
+   387		if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx) ||
+   388		    nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type) ||
+   389		    nla_put_u32(rsp, NETDEV_A_QUEUE_IFINDEX, netdev->ifindex))
+   390			goto nla_put_failure;
+   391	
+   392		switch (q_type) {
+   393		case NETDEV_QUEUE_TYPE_RX:
+   394			rxq = __netif_get_rx_queue(netdev, q_idx);
+   395			if (nla_put_napi_id(rsp, rxq->napi))
+   396				goto nla_put_failure;
+   397	
+   398			binding = rxq->mp_params.mp_priv;
+   399			if (binding &&
+   400			    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id))
+   401				goto nla_put_failure;
+   402	
+   403			break;
+   404		case NETDEV_QUEUE_TYPE_TX:
+   405			txq = netdev_get_tx_queue(netdev, q_idx);
+ > 406			if (nla_put_napi_id(rsp, rxq->napi))
+   407				goto nla_put_failure;
+   408		}
+   409	
+   410		genlmsg_end(rsp, hdr);
+   411	
+   412		return 0;
+   413	
+   414	nla_put_failure:
+   415		genlmsg_cancel(rsp, hdr);
+   416		return -EMSGSIZE;
+   417	}
+   418	
 
 -- 
 0-DAY CI Kernel Test Service
