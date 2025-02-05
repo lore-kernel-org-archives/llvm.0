@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BACA22A4D8;
-	Wed,  5 Feb 2025 09:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E5D22B8DA;
+	Wed,  5 Feb 2025 11:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738747338; cv=none; b=SzwSi0eouUynK2QWwqWv1DnGJ/83865Vvu/MXyy+cfCrE9dRFZN8/QEq70l/gWWfTWMu7achMFU8TOqDPZzUK39Q9RsGZybZmvVuCB5RJ78ft+5j/wzHFj5P4v4EFdsnG0YS1Pv/wOXGvFYYpw91v/7Gemk66v/iFAF6RULTVR0=
+	t=1738753409; cv=none; b=l4a5AfgUYV4HrD8jyQTVidon3A3lLZVsLM3pxqybYfa3WfWH9wWwMpunT4TKUeYjVxUfPzoWszKjZKqHrqLAQcZD6mChP3urfNHsWfWyZLPp+aZZfqC8I4jXOUZI3mlogsJPn4FHAS9SJiV0b3+COMUZOJL06097Ko1HBQ6CGyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738747338; c=relaxed/simple;
-	bh=omFieM6V/YBx+5h1gv1mtyqffa2yseE/TMNhk4/FaJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BOb5jXO3b0fY2cB+1ixbku1+oLquYPWJjCKn1LxwfWM+ScgmpSUxFFnggDYZG2vTZ0NJmmM00J+wPrT77RmOhsHBO9/zflHzogghW4aTBh+AK1puVtg0y1LfYyWYi/G3B1sV8jGzT5uPDvryRzw4tbJt78u0JoQbBLp7GqoitS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LbtZa1zQ; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1738753409; c=relaxed/simple;
+	bh=WUbTXiKZFseAnQx3HgfxUzvV5oiAHVv5/NBFMDc74RA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=N9CWJ1uNgP+qyuFQuTOTvYciDu4MIFype5/tzipKMLeBFnAYkAnno78X3OxyhTi9Fe+tMDg9ebrwUBwtgxz4mmHlw0+3L5Nxu8oErBOuJKdySZieuWz/nDBR2ezvBR0B3fliNjjvuLTbbbSk1+VQvOltlob8WPsPYzm2AftNzSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWYwkovy; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LbtZa1zQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWYwkovy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738747337; x=1770283337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=omFieM6V/YBx+5h1gv1mtyqffa2yseE/TMNhk4/FaJM=;
-  b=LbtZa1zQ8gaE9brLJY+CiFfldylr0VFvW/XMIk52WL20HI26hhyhuLiJ
-   7FynS3Y7Qkmp9xOR5JfcF0dVTYk+IctH6kEwnj5Ia5uMspW8mGKbnEifq
-   CqJPt4AfpA6BtP9xzWLjwDY2qvQQph3MZiUyOvTGuePQ1sza9tGJeJ3lV
-   zWTsqfWFNiiXhXBopoxmYyYKjI0YxMo+GhKaRznuXuK//Bs2SgQ/cNBQO
-   AKqL5k4pIdiJievN6G4yw6+Y4J+KvjYs6KCCXEExCf3FaoC86Xlj8X535
-   HErvD5pA6z1ezy14SGPGgl+S2A/3p9OsKYOo/TnwuWAjQgzsl6O56yakU
-   A==;
-X-CSE-ConnectionGUID: U7NW75CtSraqr8uLpQ3C/Q==
-X-CSE-MsgGUID: 9k/ks6OQSoWCK62yLfV7yQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="43056410"
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="43056410"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 01:22:16 -0800
-X-CSE-ConnectionGUID: UYzIa9LxQQ6j3d39LmOylA==
-X-CSE-MsgGUID: ujuNv5kERDC+mUiEhi0QAg==
+  t=1738753408; x=1770289408;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WUbTXiKZFseAnQx3HgfxUzvV5oiAHVv5/NBFMDc74RA=;
+  b=NWYwkovy5h1yBEiOZcHWF51yz53f/g/77aSQcmWVZkqF9d0PF3C+5agq
+   E6DDe7EORqFJc4NlE4wFdTxidVquUQmLOqN5jDPM7LYoIhqFzcAmZcXgk
+   cqGDWt/XvDWdSiwHy+3Dg2YMtHqbEdd3EKo5lMou5MGZ8HjasJ3QvA7hZ
+   EeG1oIY0n+lmr6siYbsAur2qeqLoqmCcZZd+L8LDufF6s99RoKdoXMNmD
+   B21bZ3VLv8OT1WugeX/Z15MkM0WV7er3GuWR7wbizcsn93SWBkpncyNVj
+   toM5n9/i49tjwTLEGL6Mt3MxwmtjjpepBiaw/BH006Eci3eIOkFKusmxa
+   g==;
+X-CSE-ConnectionGUID: 951v5D6+T/CJPmieHLdi1w==
+X-CSE-MsgGUID: 7szc6zpXR/G+U4A6sGrQmA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50733227"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="50733227"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 03:03:27 -0800
+X-CSE-ConnectionGUID: dX+TtBxvQsuvv0Gis0Gm9g==
+X-CSE-MsgGUID: TYoU+u9VRWKYG0N+Rziicw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="115897627"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="114941022"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 05 Feb 2025 01:22:13 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 05 Feb 2025 03:03:25 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfbbn-000tgh-1V;
-	Wed, 05 Feb 2025 09:22:11 +0000
-Date: Wed, 5 Feb 2025 17:22:00 +0800
+	id 1tfdBj-000tnn-0m;
+	Wed, 05 Feb 2025 11:03:23 +0000
+Date: Wed, 5 Feb 2025 19:02:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-	edumazet@google.com, sridhar.samudrala@intel.com,
-	Joe Damato <jdamato@fastly.com>, Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3] netdev-genl: Elide napi_id when not present
-Message-ID: <202502051721.hL1sw85A-lkp@intel.com>
-References: <20250204192724.199209-1-jdamato@fastly.com>
+To: Thierry Reding <treding@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thierryreding:pmc 1/26] drivers/hv/vmbus_drv.c:2638:13: error:
+ incompatible function pointer types initializing 'int (*)(struct syscore_ops
+ *)' with an expression of type 'int (void)'
+Message-ID: <202502051808.kZGfNpnd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,90 +62,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250204192724.199209-1-jdamato@fastly.com>
 
-Hi Joe,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on c2933b2befe25309f4c5cfbea0ca80909735fd76]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netdev-genl-Elide-napi_id-when-not-present/20250205-033024
-base:   c2933b2befe25309f4c5cfbea0ca80909735fd76
-patch link:    https://lore.kernel.org/r/20250204192724.199209-1-jdamato%40fastly.com
-patch subject: [PATCH net-next v3] netdev-genl: Elide napi_id when not present
-config: i386-buildonly-randconfig-006-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051721.hL1sw85A-lkp@intel.com/config)
+tree:   https://github.com/thierryreding/linux pmc
+head:   a402c19b24a5dc1ba2f6fb41de0080a97c202c1b
+commit: f5ff652a1c2ce0a75ce86425cbc5f499933c9018 [1/26] syscore: Pass context data to callbacks
+config: i386-buildonly-randconfig-005-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051808.kZGfNpnd-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051721.hL1sw85A-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051808.kZGfNpnd-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502051721.hL1sw85A-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502051808.kZGfNpnd-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   net/core/netdev-genl.c:380:23: warning: variable 'txq' set but not used [-Wunused-but-set-variable]
-     380 |         struct netdev_queue *txq;
-         |                              ^
->> net/core/netdev-genl.c:406:28: warning: variable 'rxq' is uninitialized when used here [-Wuninitialized]
-     406 |                 if (nla_put_napi_id(rsp, rxq->napi))
-         |                                          ^~~
-   net/core/netdev-genl.c:379:29: note: initialize the variable 'rxq' to silence this warning
-     379 |         struct netdev_rx_queue *rxq;
-         |                                    ^
-         |                                     = NULL
-   2 warnings generated.
+>> drivers/hv/vmbus_drv.c:2638:13: error: incompatible function pointer types initializing 'int (*)(struct syscore_ops *)' with an expression of type 'int (void)' [-Wincompatible-function-pointer-types]
+    2638 |         .suspend = hv_synic_suspend,
+         |                    ^~~~~~~~~~~~~~~~
+>> drivers/hv/vmbus_drv.c:2639:12: error: incompatible function pointer types initializing 'void (*)(struct syscore_ops *)' with an expression of type 'void (void)' [-Wincompatible-function-pointer-types]
+    2639 |         .resume = hv_synic_resume,
+         |                   ^~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> arch/x86/kernel/cpu/intel_epb.c:188:20: error: too few arguments to function call, single argument 'ops' was not specified
+     188 |         intel_epb_restore();
+         |         ~~~~~~~~~~~~~~~~~ ^
+   arch/x86/kernel/cpu/intel_epb.c:92:13: note: 'intel_epb_restore' declared here
+      92 | static void intel_epb_restore(struct syscore_ops *ops)
+         |             ^                 ~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/cpu/intel_epb.c:202:17: error: too few arguments to function call, single argument 'ops' was not specified
+     202 |         intel_epb_save();
+         |         ~~~~~~~~~~~~~~ ^
+   arch/x86/kernel/cpu/intel_epb.c:78:12: note: 'intel_epb_save' declared here
+      78 | static int intel_epb_save(struct syscore_ops *ops)
+         |            ^              ~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> arch/x86/kernel/cpu/microcode/core.c:754:6: error: conflicting types for 'microcode_bsp_resume'
+     754 | void microcode_bsp_resume(struct syscore_ops *ops)
+         |      ^
+   arch/x86/include/asm/microcode.h:19:6: note: previous declaration is here
+      19 | void microcode_bsp_resume(void);
+         |      ^
+>> arch/x86/kernel/cpu/microcode/core.c:766:12: error: incompatible function pointer types initializing 'void (*)(struct syscore_ops *)' with an expression of type 'void (void)' [-Wincompatible-function-pointer-types]
+     766 |         .resume = microcode_bsp_resume,
+         |                   ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/rxq +406 net/core/netdev-genl.c
+vim +2638 drivers/hv/vmbus_drv.c
 
-   373	
-   374	static int
-   375	netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
-   376				 u32 q_idx, u32 q_type, const struct genl_info *info)
-   377	{
-   378		struct net_devmem_dmabuf_binding *binding;
-   379		struct netdev_rx_queue *rxq;
-   380		struct netdev_queue *txq;
-   381		void *hdr;
-   382	
-   383		hdr = genlmsg_iput(rsp, info);
-   384		if (!hdr)
-   385			return -EMSGSIZE;
-   386	
-   387		if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx) ||
-   388		    nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type) ||
-   389		    nla_put_u32(rsp, NETDEV_A_QUEUE_IFINDEX, netdev->ifindex))
-   390			goto nla_put_failure;
-   391	
-   392		switch (q_type) {
-   393		case NETDEV_QUEUE_TYPE_RX:
-   394			rxq = __netif_get_rx_queue(netdev, q_idx);
-   395			if (nla_put_napi_id(rsp, rxq->napi))
-   396				goto nla_put_failure;
-   397	
-   398			binding = rxq->mp_params.mp_priv;
-   399			if (binding &&
-   400			    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id))
-   401				goto nla_put_failure;
-   402	
-   403			break;
-   404		case NETDEV_QUEUE_TYPE_TX:
-   405			txq = netdev_get_tx_queue(netdev, q_idx);
- > 406			if (nla_put_napi_id(rsp, rxq->napi))
-   407				goto nla_put_failure;
-   408		}
-   409	
-   410		genlmsg_end(rsp, hdr);
-   411	
-   412		return 0;
-   413	
-   414	nla_put_failure:
-   415		genlmsg_cancel(rsp, hdr);
-   416		return -EMSGSIZE;
-   417	}
-   418	
+63ecc6d22ce466 Dexuan Cui 2019-09-05  2635  
+63ecc6d22ce466 Dexuan Cui 2019-09-05  2636  /* The callbacks run only on CPU0, with irqs_disabled. */
+63ecc6d22ce466 Dexuan Cui 2019-09-05  2637  static struct syscore_ops hv_synic_syscore_ops = {
+63ecc6d22ce466 Dexuan Cui 2019-09-05 @2638  	.suspend = hv_synic_suspend,
+63ecc6d22ce466 Dexuan Cui 2019-09-05 @2639  	.resume = hv_synic_resume,
+63ecc6d22ce466 Dexuan Cui 2019-09-05  2640  };
+63ecc6d22ce466 Dexuan Cui 2019-09-05  2641  
+
+:::::: The code at line 2638 was first introduced by commit
+:::::: 63ecc6d22ce46643165c391a9c90ba67e22e1c0f Drivers: hv: vmbus: Suspend/resume the synic for hibernation
+
+:::::: TO: Dexuan Cui <decui@microsoft.com>
+:::::: CC: Sasha Levin <sashal@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
