@@ -1,84 +1,64 @@
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CA3214804
-	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 20:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483E4208989;
+	Wed,  5 Feb 2025 21:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738788387; cv=none; b=SwPflNqt3epv05Q9ASx2lR1I4Np3IK0MVoRnHPovqiYa4HQTdUG2KWKTc5U5YGd5L5dR9sUr2sxtUwkTmpjCibXY0oipPhrxljiI/Jr9nk7losB2uWNeQDH2U2M3Av8O8LouQl+q9O172Nu5oJuzRX+E3iIexWOkYK3HWzFPFbc=
+	t=1738790917; cv=none; b=NgoFIi/SpeyelrZ61WSjxK39gEM1p8B75DJePm7Li7IwCzhOMscKcxLFxewWQy1hYMwFqHEXTG+H16C+xVPfHn30Jntv+O+QI2vM98R9h8vgUGBLE/Jm0tsAfbkJ5dRpX+9pJOqaagOXFDrE50JKDfbWVBPf/50HEM07F3JcJ54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738788387; c=relaxed/simple;
-	bh=33IQOomqEyLTQbaYoSoQ2PJ57XbkscwA0pHsfJIANsE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ezjJrrye52ahzJRlpeQzfqBp57zei4ufUPWZGUUvCk9ltXkeV3vpM1hTv+WEl4fS3l2QGHC/DtPlWV1B4QOISVUpG+o1ev4spRMkKfacq9mMgKglpoxjZY6tNe+zomjyoFDoK5XAt+ccC9PBfDrTSXYpEbirUEIHkB63ByHVGPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=hAl/xLVS; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	s=arc-20240116; t=1738790917; c=relaxed/simple;
+	bh=7cTiWKja8ahpB4cG7xBn/0D3VBJyS3IVnXM+ObDED60=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2PRcam2Cf+L0XLC27PTwnj2n6xbg2mWFwedhFK+fs1uMbcx8qJjB7IKjhsugPfMazKkcmWWU9o8wtcQ3j5YESwoUzLqHWJTc+teyQgMLE5eai7IjbUEpISNh5jgAgDll178ifMBW7AMD8BjrHgvBAo07LBr71KU3lvYqwjSwEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gzr7ovXh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="hAl/xLVS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1738781507;
-	bh=33IQOomqEyLTQbaYoSoQ2PJ57XbkscwA0pHsfJIANsE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=hAl/xLVS2r7Z4b6dKCNGQj1YxU7mBAFZLxa0QFxRcOfg9/MMOpCcpPaUILVgfMiCD
-	 2Xzh/SDNcO2OkjjW/9VtrMp95w0TNdf6eYPrtPnCGFvHDmq2AGyBc7FSCpF2aiSDIy
-	 PXbvCiMuZZA0WsQlqrDQ4EI9w2tceEb6ut8EvkwE=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 6887F401F1; Wed,  5 Feb 2025 10:51:47 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 6476D401E1;
-	Wed,  5 Feb 2025 10:51:47 -0800 (PST)
-Date: Wed, 5 Feb 2025 10:51:47 -0800 (PST)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Jessica Clarke <jrtc27@jrtc27.com>
-cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, luto@kernel.org, 
-    xin@zytor.com, kirill.shutemov@linux.intel.com, palmer@dabbelt.com, 
-    tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com, ardb@kernel.org, 
-    dave.hansen@linux.intel.com, jgross@suse.com, will@kernel.org, 
-    akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net, 
-    dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com, 
-    tglx@linutronix.de, hpa@zytor.com, seanjc@google.com, 
-    paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com, 
-    jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com, 
-    jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com, 
-    rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com, 
-    catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org, 
-    ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de, 
-    kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com, 
-    julian.stecklina@cyberus-technology.de, peterz@infradead.org, 
-    kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
-    linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
-    linux-doc@vger.kernel.org
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode
- for x86
-In-Reply-To: <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
-Message-ID: <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org>
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com> <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org> <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gzr7ovXh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA8B6C4CED1;
+	Wed,  5 Feb 2025 21:28:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738790916;
+	bh=7cTiWKja8ahpB4cG7xBn/0D3VBJyS3IVnXM+ObDED60=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gzr7ovXhUYUByQb2QlVylFjDoipQApTHo9KjwVI/thJyLkYaAGqufTnV79TA6yBVi
+	 kK8kwiNV2rSJFf2e+iYVvi3yf9h1m2CQt8ovUSRuS5vMEtIEkTr814VlCbQqn/JUNX
+	 zIxM8n/ohq6moz+2S3MJz36IUl1W+wyK5R/NcoAM/qRnd9xlvU6akvdAxoyjcNwBSi
+	 UO+GHb0QWH47yanJ8ORSg+CaACYC/Em4pHP5XNmzMo1cXolqJULApqRDfBDh0xZY0t
+	 FWVBvRRZNFhZoDrfg9MZgZLuqwb/YrUIkJd+QQDx71OjbjmGQ2kK/BCY/uUY9DS2/Q
+	 s2GRJZ/ba9heg==
+Date: Wed, 5 Feb 2025 13:28:36 -0800
+From: Kees Cook <kees@kernel.org>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+	justinstitt@google.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 1/1] alloc_tag: work around clang-14 issue with
+ __builtin_object_size()
+Message-ID: <202502051327.AE8C0706@keescook>
+References: <20250201200503.2532357-1-surenb@google.com>
+ <202502051056.B910C691C@keescook>
+ <jdnvctbd4kfzgjy4s4wpd24zpv66zsn3cjgnsialjbnrl3oa4e@vexb7u4ku2tr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1508829946-1738781507=:2407083"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jdnvctbd4kfzgjy4s4wpd24zpv66zsn3cjgnsialjbnrl3oa4e@vexb7u4ku2tr>
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, Feb 05, 2025 at 03:16:12PM -0500, Kent Overstreet wrote:
+> ARRAY_SIZE() is sizeof() underneath, just used creatively to guarantee
+> that the input is an array - although that property is probably what we
+> want here, since strtomem_pad() really only makes sense on static or
+> flex-arrays, no?
 
---8323329-1508829946-1738781507=:2407083
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Exactly. strtomem*/memtostr* are very picky about the destination being
+compile-time sized, so sizeof() under the hood seems correct. I'm making
+my way through testing a patch now...
 
-On Tue, 4 Feb 2025, Jessica Clarke wrote:
-
-> It’s not “no performance penalty”, there is a cost to tracking the MTE
-> tags for checking. In asynchronous (or asymmetric) mode that’s not too
-
-
-On Ampere Processor hardware there is no penalty since the logic is build
-into the usual read/write paths. This is by design. There may be on other
-platforms that cannot do this.
-
-
---8323329-1508829946-1738781507=:2407083--
+-- 
+Kees Cook
