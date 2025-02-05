@@ -1,71 +1,71 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCD31DAC81
-	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 23:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E995B2144A7
+	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 23:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738798874; cv=none; b=giHFDf00M/KMnff6ZdRl0Q8gd9deTGNyJP8BrNsC3CAA8CqAMB5yPRz9z8zOPhGyCAQST17MaxO4zvZGn0uTN1Ospm2dwYAIKMOhTRhoE9VxDEO3onknFLGYo2z+mnNrw2Z5gp22mALMVbRzXZiwpRP2ovXlhzbJU7nw3I0oKRs=
+	t=1738799040; cv=none; b=sEV/3pxk3eVVMCvfQ13BjGNO2Zou4pXRkc9bHWUPqX3ZCUcqlYqjrFQVSfK8VHnEfMXgfA1b8THhUf/NLIbjl4TCL4WZOCRl9ugYH4McW1tfChZ1YSnPnfgp0Q7GzA9Uj2lSZTECsuLJKcmX8jPR2cvbYPVP9sD6HHXyLdi8gXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738798874; c=relaxed/simple;
-	bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
+	s=arc-20240116; t=1738799040; c=relaxed/simple;
+	bh=caQT1VAruVJZyYFBwKqf+5DBhF9Jx8BYjjCDJbxi8Dk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fKVAT3C/Kct/gIcvlpJi6EgcrJKFwFI5BYImT72mJX6mV+vLLSj4hthZZk8zz0152BlwcwlrihTjtOc99rozwT4bHP0Xzu6TNO8SAL6cM++NMQWv4rbymHTQaOoOWxHKNE22bFYHRbEI5DxpTWgweHuaRV4ZyXplAvd+t6ffSqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KuMaSmds; arc=none smtp.client-ip=209.85.128.54
+	 To:Cc:Content-Type; b=du8EeQE6nh784MsHM0gZWB3Nv2bisyic9LgmYtCpbr9n7xNMxOkSohCMgyE6ot4eA8KlZrUma1slLIyGH4M9hJtiigyzaW7dzwkjh6QZA3wuxHJCYLGibubQPRwGUxJc+JuJS1OjDSWjrsOrOLvLT3lfoRJK9ppP+oVSID3pFM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kjijhn79; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KuMaSmds"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-437a92d7b96so2940865e9.2
-        for <llvm@lists.linux.dev>; Wed, 05 Feb 2025 15:41:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kjijhn79"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38daf156e97so144675f8f.0
+        for <llvm@lists.linux.dev>; Wed, 05 Feb 2025 15:43:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738798871; x=1739403671; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1738799037; x=1739403837; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
-        b=KuMaSmds0yorR/mtQd95I1jnZcZP17srZENRg8626lHVyjbgOh2afJYfwsRwN4Su5G
-         YRmcvYnDyDn8uZyODWouo7ydve0wRHRow44HaYmqEzBkytkZ5ZbsJzl0HH5Ob7h8qgcn
-         pix/qOpx4KffvYrLQnoCz2Y0+Qg+zFKP+3T5tob1qqDL/aWwn+7f2jN2iAvnZMCb+BfA
-         SAhTqi+QN7v19ZSo89su7l/MJxJXgHfSd+j3/zp6qw2aINVgERZf9giTQ4xkPu4/7ono
-         i/PmaaeuwXSvUZ/4qz5m8VT19rF4+q6at63G8NCA8BfJehb9AEK5DHpejPq1molaN+wR
-         VDvg==
+        bh=aGo4tCOA20uwm5WJCsot6mmTXWb0qFu219UCGH8y36Q=;
+        b=Kjijhn79tnS/w/xNZ6NUEwkCv9lbCWq1ulQb63MT1OFpLVAUi8wW59AjHZzV4mC1w+
+         bvU/3vQ/viEbFRFXG0IRBDmvTV1C3C8eIsji9q626EuDE0IDoksQ7oS6ywvHLTVj3cY+
+         /kdLMEFI70YcgID4z6L97Dzxi0ZGZk7/x8tXk7jEepZf4KQAGioc09m18v9s8aMrm9JZ
+         5APL8FFcwnBmAEuJg3wbKMqOJfsQAffNO3kax2UCT9PPvWdcIWsTvHxhMZUZc12t63Lg
+         dhmh5SWqUIheJjoluDT7GV55BnSpKnygmNtusdpIEcxS95JWnAwfIQ/NkWUs/inIT1I3
+         cE6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738798871; x=1739403671;
+        d=1e100.net; s=20230601; t=1738799037; x=1739403837;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
-        b=vQ6jPHFEptezdAdNqaEF3UAFbPa47GxAIl8mgUlAlF5ZDNDu/aoGUOZE3+nCY7dR/l
-         DteU4psSCm8yhPh+Z8WDRPO5UUfrDHjlbZp5lbtPiVY9/VQTPoLPVbUY0FVcnGuuNgCX
-         yAyNCdymEO1wAcOex0+IeiVGLDRmOCNwnPX6QW7DYBgxefHM8ErbesBgWKeENd32l/MI
-         ytIHO0GxIhxQW77QnUZyGvyevqU5zuq4CW3RxkFqYATdz88vKqmUMvZlrVaw9m3e801c
-         SIScDNQpa+0p1llyXMABXjQNjJqQ6T+zTGSAErrhvY3oFOpjHrwGf3p91rva0Tm0uB6v
-         qEuw==
-X-Forwarded-Encrypted: i=1; AJvYcCV5jPUouDBhH5xILygm2eTXX3fPmBbFPTHr+lNquy8XNoOVKKEseSCQGJtdRv3ib3O7zgRV@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywbp8lMi/gG9aOWpsPqaDU2FvI5uT3Dme+G32toXdoTem5kZNXs
-	J2pIFlDK6s0rZQ8IxVA+OVwGDTI8QMpd0p7u1SwNHTzg1FRTOtWWqFnbCSOXTrm93fjALtTn3+Z
-	f1SKd7LJ3rtkgvPucnu/IAMnIYRI=
-X-Gm-Gg: ASbGncvvYqGiVfOJkA8QFYN94Rh3PByUMyKN+pUurlEK7I6G2OmZ1EJRbCrTZsI9U+p
-	UtRBXDpf340NC5SqdNy/V1LiqjfjFIOangYRutUYRXLosenwFfWUVuzseOqiiOoF5HGA/o70LFg
+        bh=aGo4tCOA20uwm5WJCsot6mmTXWb0qFu219UCGH8y36Q=;
+        b=CGlgTTKeJuBXjlR5M9Grh9yzWGz63UZ6FQMV825KKCXG0riCG9xfe+nvI43TrG4Sew
+         7grWnSKoT1j4YM+BgyRZXKjNWkpAvIBvAYnEy9SCbyKb4g3CBCbzDQ5dGgf7+JGDY6nd
+         VeKm5xa3TB1EMP2FJYXxR1pddaCaubAgXPVXnaW5n1+FGiaj/W2YHqaw2r+I5yULx4eQ
+         8oPg53fWnKTjX7frkPpwZbqJDBsES5UKc7mjVY4WtMLZ78eDVtl1HOk/JFmD0YGc3zpA
+         c6EStk1T0ag4q0ncNM9uck9lIqwUpaLvrkKmf1NOH67r/8KSpziXFQbHaAB/7x4rT0f3
+         sDGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUoJez39iMlgOubCjFGRlymWayXtJknITYDXgJuOUfDs5n2wtKhMty9pCZomQmoMmVJ2FtB@lists.linux.dev
+X-Gm-Message-State: AOJu0YwlIRO+kWESRvs4WV1oCPb5iFjLxo6+vW/9X5abeTAUAKrdTvZY
+	EqotFoEQtewpQIiMH2r6mwc87ZHblrw0h/FD7NrTsiBsEgnL3AIy/Y2aIhyC8llP2vUsPjKss9e
+	nipEON99f45BTDGt4xJULD1WLEs8=
+X-Gm-Gg: ASbGncukv5ysG7fRfxRDKIjcLHrYk7cvQYBfzxu0Rby4oDu7LrviOAe1s70jUF8MFSG
+	EHWKqzLfWdf89pydYL173wAU6UuH0Uakqzspc8fFR6KgMuyKTfQ3wIQKSiwsea1LQ2eFb0b0/PA
 	==
-X-Google-Smtp-Source: AGHT+IFLTv0TDNnJU+yADljvGxMSoZCkyg9G4XwmiEyfBnbRTqPG2jvE/eed1EqqR6nVWHsb9vVYgVGcI2mkW+jV4yw=
-X-Received: by 2002:adf:f1d2:0:b0:38a:8906:6b66 with SMTP id
- ffacd0b85a97d-38db492abc4mr3094863f8f.38.1738798870580; Wed, 05 Feb 2025
- 15:41:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFKv9CmFOCpshmLHOVTz/+nJCvoTktlcFWAvpeIbb7F3am3sTbbPPiOxOKYQ2fGikByHOPLiYyKm0JTH3qTGZg=
+X-Received: by 2002:a05:6000:11c3:b0:38c:617c:ee22 with SMTP id
+ ffacd0b85a97d-38db48e8e74mr2835161f8f.54.1738799036822; Wed, 05 Feb 2025
+ 15:43:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
-In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com> <808cc6516f47d5f5e811d2c237983767952f3743.1738686764.git.maciej.wieczor-retman@intel.com>
+In-Reply-To: <808cc6516f47d5f5e811d2c237983767952f3743.1738686764.git.maciej.wieczor-retman@intel.com>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 6 Feb 2025 00:40:59 +0100
-X-Gm-Features: AWEUYZlz3dbMNs5uaCuCxvHCPA1V_UbROZFgxVVkwngTO-akZcC0zg4IFPaM-WQ
-Message-ID: <CA+fCnZd1dpqv+rM2jD1fNGvhU_0+6c8MjzsgEsi2V-RkHVteJg@mail.gmail.com>
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for x86
+Date: Thu, 6 Feb 2025 00:43:46 +0100
+X-Gm-Features: AWEUYZm1UyfErQs1w01vhNGFZmNjvN3ORJYc2s5iPoOpZVl-pALgPbNFMXszvaU
+Message-ID: <CA+fCnZd3sP1_x2c5FvztA6LzsBY3Fq3cD5cJ6FQ+FAnmawe06Q@mail.gmail.com>
+Subject: Re: [PATCH 01/15] kasan: Allocation enhancement for dense tag-based mode
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com, 
 	palmer@dabbelt.com, tj@kernel.org, brgerst@gmail.com, ardb@kernel.org, 
@@ -91,35 +91,238 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Feb 4, 2025 at 6:34=E2=80=AFPM Maciej Wieczor-Retman
 <maciej.wieczor-retman@intel.com> wrote:
 >
-> =3D=3D=3D=3D=3D=3D=3D Introduction
-> The patchset aims to add a KASAN tag-based mode for the x86 architecture
-> with the help of the new CPU feature called Linear Address Masking
-> (LAM). Main improvement introduced by the series is 4x lower memory
-> usage compared to KASAN's generic mode, the only currently available
-> mode on x86.
+> Tag-based KASAN (on arm64) works by generating a random 8-bit tag and
+> putting it in both the top byte of the pointer (that points to the
+> allocated memory) and into all bytes of shadow memory that correspond to
+> the chunk of allocated regular memory. Each byte of shadow memory covers
+> a 16 byte chunk of allocated memory - a value called KASAN granularity.
+> This means that out-of-bounds memory accesses that happen inside the 16
+> bytes can't be caught.
 >
-> There are two logical parts to this series. The first one attempts to
-> add a new memory saving mechanism called "dense mode" to the generic
-> part of the tag-based KASAN code. The second one focuses on implementing
-> and enabling the tag-based mode for the x86 architecture by using LAM.
+> The dense mode offers reducing the tag width from 8 to 4 bits and
+> storing two tags in one byte of shadow memory - one in the upper 4 bits
+> of the byte and one in the lower 4. This way one byte of shadow memory
+> can cover 32 bytes of allocated memory while still keeping the "16 bytes
+> per one tag" granularity. The lower 4 bits of each shadow byte map bytes
+> of memory with offsets 0-15 and the upper 4 bits map offsets 16-31.
+>
+> Example:
+> The example below shows how the shadow memory looks like after
+> allocating 48 bytes of memory in both normal tag-based mode and the
+> dense mode. The contents of shadow memory are overlaid onto address
+> offsets that they relate to in the allocated kernel memory. Each cell
+> |    | symbolizes one byte of shadow memory.
+>
+> =3D The regular tag based mode:
+> - Randomly generated 8-bit tag equals 0xAB.
+> - 0xFE is the tag that symbolizes unallocated memory.
+>
+> Shadow memory contents:           |  0xAB  |  0xAB  |  0xAB  |  0xFE  |
+> Shadow memory address offsets:    0        1        2        3        4
+> Allocated memory address offsets: 0        16       32       48       64
+>
+> =3D The dense tag based mode:
+> - Randomly generated 4-bit tag equals 0xC.
+> - 0xE is the tag that symbolizes unallocated memory.
+>
+> Shadow memory contents:           |0xC 0xC |0xC 0xE |0xE 0xE |0xE 0xE |
+> Shadow memory address offsets:    0        1        2        3        4
+> Allocated memory address offsets: 0        32       64       96       128
+>
+> Add a new config option and defines that can override the standard
+> system of one tag per one shadow byte.
+>
+> Add alternative version of the kasan_poison() that deals with tags not
+> being aligned to byte size in shadow memory.
+>
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+>  include/linux/kasan.h | 18 ++++++++++++++++++
+>  lib/Kconfig.kasan     | 21 +++++++++++++++++++++
+>  mm/kasan/kasan.h      |  4 +---
+>  mm/kasan/shadow.c     | 33 ++++++++++++++++++++++++++++++---
+>  4 files changed, 70 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+> index 03b440658817..ea0f5acd875b 100644
+> --- a/include/linux/kasan.h
+> +++ b/include/linux/kasan.h
+> @@ -35,6 +35,24 @@ typedef unsigned int __bitwise kasan_vmalloc_flags_t;
+>
+>  /* Software KASAN implementations use shadow memory. */
+>
+> +#ifdef CONFIG_KASAN_SW_TAGS_DENSE
+> +#define KASAN_GRANULE_SHIFT    (KASAN_SHADOW_SCALE_SHIFT - 1)
+> +#define KASAN_SHADOW_SCALE_SIZE        (1UL << KASAN_SHADOW_SCALE_SHIFT)
+> +static inline u8 kasan_dense_tag(u8 tag)
+> +{
+> +       return (tag << KASAN_TAG_WIDTH | tag);
+> +}
+> +#else
+> +#define KASAN_GRANULE_SHIFT    KASAN_SHADOW_SCALE_SHIFT
+> +#define KASAN_SHADOW_SCALE_SIZE        (1UL << KASAN_GRANULE_SHIFT)
+> +static inline u8 kasan_dense_tag(u8 tag)
+> +{
+> +       return tag;
+> +}
+> +#endif
+> +
+> +#define KASAN_GRANULE_SIZE     (1UL << KASAN_GRANULE_SHIFT)
+> +
 
-Hi Maciej,
+Is there a reason these definitions are added to
+include/linux/kasan.h? At least within this patch, they are only used
+within mm/kasan, so let's keep them in mm/kasan/kasan.h.
 
-Awesome work! Great to see SW_TAGS mode supported on x86!
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>  /* This matches KASAN_TAG_INVALID. */
+>  #define KASAN_SHADOW_INIT 0xFE
+> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> index 98016e137b7f..d08b4e9bf477 100644
+> --- a/lib/Kconfig.kasan
+> +++ b/lib/Kconfig.kasan
+> @@ -19,6 +19,13 @@ config ARCH_DISABLE_KASAN_INLINE
+>           Disables both inline and stack instrumentation. Selected by
+>           architectures that do not support these instrumentation types.
+>
+> +config ARCH_HAS_KASAN_SW_TAGS_DENSE
+> +       bool
+> +       help
+> +         Enables option to compile tag-based KASAN with densely packed t=
+ags -
+> +         two 4-bit tags per one byte of shadow memory. Set on architectu=
+res
+> +         that have 4-bit tag macros.
+> +
+>  config CC_HAS_KASAN_GENERIC
+>         def_bool $(cc-option, -fsanitize=3Dkernel-address)
+>
+> @@ -223,4 +230,18 @@ config KASAN_EXTRA_INFO
+>           boot parameter, it will add 8 * stack_ring_size bytes of additi=
+onal
+>           memory consumption.
+>
+> +config KASAN_SW_TAGS_DENSE
+> +       bool "Two 4-bit tags in one shadow memory byte"
+> +       depends on KASAN_SW_TAGS
+> +       depends on ARCH_HAS_KASAN_SW_TAGS_DENSE
 
-I started reviewing the patches, but this is somewhat complicated, as
-the dense mode changes are squashed together with the generic ones for
-x86 support. Could you please split this series into 2? Or at least
-reorder the patches so that everything needed for basic x86 support
-comes first and can be reviewed and tested separately.
+I think this should also depend on KASAN_OUTLINE: Clang/GCC aren't
+aware of the dense mode.
 
-I will post the comments for things I noted so far, including for the
-dense mode changes, but I'll take a closer look after the split.
+> +       help
+> +         Enables packing two tags into one shadow byte to half the memor=
+y usage
+> +         compared to normal tag-based mode.
 
-Also feel free to drop the dependency on that risc-v series, as it
-doesn't get updated very often. But up to you.
+But adds some performance impact?
 
-And please also update all affected parts of Documentation/dev-tools/kasan.=
-rst.
+> +
+> +         After setting this option, tag width macro is set to 4 and size=
+ macros
+> +         are adjusted based on used KASAN_SHADOW_SCALE_SHIFT.
 
-Thank you!
+I think this paragraph is an implementation detail and we can drop it.
+
+> +
+> +         ARCH_HAS_KASAN_SW_TAGS_DENSE is needed for this option since th=
+e
+> +         special tag macros need to be properly set for 4-bit wide tags.
+> +
+>  endif # KASAN
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index 72da5ddcceaa..0e04c5e2c405 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -128,9 +128,7 @@ static inline bool kasan_requires_meta(void)
+>
+>  #endif /* CONFIG_KASAN_GENERIC */
+>
+> -#if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
+> -#define KASAN_GRANULE_SIZE     (1UL << KASAN_SHADOW_SCALE_SHIFT)
+> -#else
+> +#ifdef CONFIG_KASAN_HW_TAGS
+>  #include <asm/mte-kasan.h>
+>  #define KASAN_GRANULE_SIZE     MTE_GRANULE_SIZE
+>  #endif
+> diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
+> index d6210ca48dda..368503f54b87 100644
+> --- a/mm/kasan/shadow.c
+> +++ b/mm/kasan/shadow.c
+> @@ -123,7 +123,8 @@ EXPORT_SYMBOL(__hwasan_memcpy);
+>
+>  void kasan_poison(const void *addr, size_t size, u8 value, bool init)
+>  {
+> -       void *shadow_start, *shadow_end;
+> +       u8 *shadow_start, *shadow_end, *shadow_start_aligned, *shadow_end=
+_aligned, tag;
+> +       u64 addr64, addr_start_aligned, addr_end_aligned;
+>
+>         if (!kasan_arch_is_ready())
+>                 return;
+> @@ -134,16 +135,42 @@ void kasan_poison(const void *addr, size_t size, u8=
+ value, bool init)
+>          * addresses to this function.
+>          */
+>         addr =3D kasan_reset_tag(addr);
+> +       addr64 =3D (u64)addr;
+>
+> -       if (WARN_ON((unsigned long)addr & KASAN_GRANULE_MASK))
+> +       if (WARN_ON(addr64 & KASAN_GRANULE_MASK))
+>                 return;
+>         if (WARN_ON(size & KASAN_GRANULE_MASK))
+>                 return;
+>
+>         shadow_start =3D kasan_mem_to_shadow(addr);
+>         shadow_end =3D kasan_mem_to_shadow(addr + size);
+> +       addr_start_aligned =3D round_up(addr64, KASAN_SHADOW_SCALE_SIZE);
+> +       addr_end_aligned =3D round_down(addr64 + size, KASAN_SHADOW_SCALE=
+_SIZE);
+> +       shadow_start_aligned =3D kasan_mem_to_shadow((void *)addr_start_a=
+ligned);
+> +       shadow_end_aligned =3D kasan_mem_to_shadow((void *)addr_end_align=
+ed);
+> +
+> +       /* If size is empty just return. */
+> +       if (!size)
+> +               return;
+>
+> -       __memset(shadow_start, value, shadow_end - shadow_start);
+> +       /* Memset the first unaligned tag in shadow memory. */
+> +       if (addr64 % KASAN_SHADOW_SCALE_SIZE) {
+
+So this is required, because KASAN_SHADOW_SCALE_SIZE is 32 but minimal
+slab alignment is still KASAN_GRANULE_SIZE =3D=3D 16... We should at least
+hide this check is under IS_ENABLED(KASAN_SW_TAGS_DENSE).
+
+> +               tag =3D *shadow_start & KASAN_TAG_MASK;
+> +               tag |=3D value << KASAN_TAG_WIDTH;
+> +               *shadow_start =3D tag;
+> +       }
+> +
+> +       /* Memset the middle aligned part in shadow memory. */
+> +       tag =3D kasan_dense_tag(value);
+> +       __memset(shadow_start_aligned, tag, shadow_end_aligned - shadow_s=
+tart_aligned);
+> +
+> +       /* Memset the last unaligned tag in shadow memory. */
+> +       if ((addr64 + size) % KASAN_SHADOW_SCALE_SIZE) {
+
+Would it be possible to move this part to kasan_poison_last_granule()?
+That functions seems to be serving a similar purpose but for the
+Generic mode.
+
+It might also be cleaner to add a kasan_poison_first_granule() that
+contains the if (addr64 % KASAN_SHADOW_SCALE_SIZE) check.
+
+> +               tag =3D KASAN_TAG_MASK << KASAN_TAG_WIDTH;
+> +               tag &=3D *shadow_end;
+> +               tag |=3D value;
+> +               *shadow_end =3D tag;
+> +       }
+>  }
+>  EXPORT_SYMBOL_GPL(kasan_poison);
+>
+> --
+> 2.47.1
+>
