@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3103922ACC6;
-	Wed,  5 Feb 2025 08:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80184131E2D;
+	Wed,  5 Feb 2025 09:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738745293; cv=none; b=I8Fxn7WSRGo6ujCuCh5FxeZ2ShLTxz8DKH7iEHEYa779QT8NB64faX22urSJF8PXybTMpBY10N4whaeX/F0fukky6bSZh/I3/QGyX/duW0Gl3g3VVaYP8rYcXZy/UpLtjO4D3vOf/KdcnSbzS/ZnZN5RMMrjKcYNRdjul8eiYys=
+	t=1738746615; cv=none; b=P8npylj7g9ZtBlyiXvoQ1Pp9eW+cN7OAzQIZIqv+ZywvFLxnmDmqmLgOYVxWevajEAfkPCp1H1Mwgg8ZUl2Do6P5Nb/e8jYb0VELdhRy+JJYuybDiZQtSHL7D+RMA3Ph6ov2cNJBJy2VG0nByn0xnXjS4ALfot54wPpl6JVGBQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738745293; c=relaxed/simple;
-	bh=UNbgX1n5Uzf4j6uTC4YY7nuS80iheYtt8wJ86ky5yGI=;
+	s=arc-20240116; t=1738746615; c=relaxed/simple;
+	bh=4Vz/xV52I5TY6e0hXgyl1C65dqvdNjDy5Q319T2OTjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=u9hpXkYtkP8/CNmb80u1F3dUbcNx0KgRKk5DMAv9M3/9z2e7aB4kBQpY4zv5QaPGcovgjwoBoHQGsc5X0g8haqE23+zzstAUvNRn6kdNgvg2MJ5kSvCBE002PQJTRh8yidypoax0koC+Og0ka+8+eZ4dxy7/dPp0Kxd6+wuVaT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LBz4pF6i; arc=none smtp.client-ip=192.198.163.7
+	 Content-Disposition; b=M3JfJyP3mlKWLgFv1RvtmzXcPuvTox4PSuubQTB2WsatMpTRP3c1STRUs7xuFrBUI7WfI3PTnlo0fUjMAnJeuuPjLCuNz4ZA6bHx5PEDYrGQX8ZAgaD55CxbHvlqXotUDqAcXyL22JOLz629Ns2HztN//bnqFybbjQ3P30Cn1aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MOWb/TJr; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LBz4pF6i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MOWb/TJr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738745291; x=1770281291;
+  t=1738746613; x=1770282613;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UNbgX1n5Uzf4j6uTC4YY7nuS80iheYtt8wJ86ky5yGI=;
-  b=LBz4pF6iRZdV5q1jzY0U4EDKCHDk0Ay3KFCz/AUxHnysExipjF+nUpht
-   mloH9eCyc3VoIZInQc3rH+f1/zm3Gyj777ONz6TKvVH2NnVLd542UhbW5
-   wu2xuFY3lFIEDEAqjCM3YFOfvuGS7st0eTpZNX9wem1tQzcN1EhKiOxen
-   LFCTlpVocrYK1iAlgnPqnTojhU32y3xMxNr1sWReKjfQNIkWKar1ZoO5C
-   aXGmq9yaORYOReArDA+yAjR7okVk0MKPPA3UFTffay8zpsPCLca/4DQAW
-   s1AgG165Blhy8HZAFCwfGiIG1SaFYZ/mTL2SfZG5ICqmnxDa+jbsX66fm
+  bh=4Vz/xV52I5TY6e0hXgyl1C65dqvdNjDy5Q319T2OTjw=;
+  b=MOWb/TJrzmht1voW/tFy0E47o3/AO+e4zpwxwEVQiDk2saqG4bgd2bk4
+   x2MvZZmdiUe/OlNEJwCSjFdSFLnbp+1R9VtUnufSIBdQcfycLugOqcH7R
+   +KTU2Izm4jddRX6oqgPUARiqnwxtYv2YPtZcgMXqRPgy0dzUzSH80Q7cb
+   C50mB8R33xFHeldgZXntPGq0yEIuXlHsFtB6lk/7ziq1jf/SQr9wqgcLT
+   jZeb6bjZQ1Rw6kWGHX985FkYt3+L3+kI0pX8r26Mr/JRHZ/pa2arxgk9C
+   6eQeGfMH5wpeJoqsFO/zYu9M+fSRxmezId+5fLjuXY3UOOeMpt6PDATqa
    w==;
-X-CSE-ConnectionGUID: eNONZBiwQCKz/IiEe/8vIQ==
-X-CSE-MsgGUID: XOFKCLB5SvyyGqKgoVzYqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="64658192"
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="64658192"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 00:48:10 -0800
-X-CSE-ConnectionGUID: cl/eQuUeRxKZh1g8anwIxQ==
-X-CSE-MsgGUID: Y/eaIo/bRD6XJcXKHhBmtg==
+X-CSE-ConnectionGUID: a5kxentYS+as/gP21P1DzA==
+X-CSE-MsgGUID: jtJPz8qyQjeYx0FDsaAIqA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50721719"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="50721719"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 01:10:12 -0800
+X-CSE-ConnectionGUID: 9F2zih6STh+zl9j5ZszEDQ==
+X-CSE-MsgGUID: VrQ+12c0TfWXDwqbaxoylQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="111422927"
+   d="scan'208";a="110696884"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Feb 2025 00:48:09 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 05 Feb 2025 01:10:12 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tfb4p-000tfd-1U;
-	Wed, 05 Feb 2025 08:48:07 +0000
-Date: Wed, 5 Feb 2025 16:47:49 +0800
+	id 1tfbQ9-000tgF-2M;
+	Wed, 05 Feb 2025 09:10:09 +0000
+Date: Wed, 5 Feb 2025 17:09:53 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:device_private 9/22] mm/ksm.c:1276:28: error:
- passing 'pte_t *' to parameter of incompatible type 'pte_t'; dereference
- with *
-Message-ID: <202502051640.vYN3JWVM-lkp@intel.com>
+Subject: [davidhildenbrand:device_private 15/22] mm/damon/ops-common.c:50:17:
+ warning: variable 'pteval' is uninitialized when used here
+Message-ID: <202502051656.Xa4isdxU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,137 +64,60 @@ Content-Disposition: inline
 
 tree:   https://github.com/davidhildenbrand/linux device_private
 head:   ddc42f5fd72394838fc2d280ff2486ccb7178b9a
-commit: e06705cb196ddea990ddec54bffd90ebff1ea85c [9/22] mm/ksm: handle device-exclusive entries correctly in write_protect_page()
-config: i386-buildonly-randconfig-006-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051640.vYN3JWVM-lkp@intel.com/config)
+commit: 9440e0949cbc08fc248f6eacf05e4d47c48f1294 [15/22] mm/damon: handle device-exclusive entries correctly in damon_folio_mkold_one()
+config: i386-buildonly-randconfig-005-20250205 (https://download.01.org/0day-ci/archive/20250205/202502051656.Xa4isdxU-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051640.vYN3JWVM-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051656.Xa4isdxU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502051640.vYN3JWVM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502051656.Xa4isdxU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/ksm.c:18:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/ksm.c:1276:28: error: passing 'pte_t *' to parameter of incompatible type 'pte_t'; dereference with *
-    1276 |         if (unlikely(!pte_present(pvmw.pte))
-         |                                   ^~~~~~~~
-         |                                   *
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   arch/x86/include/asm/pgtable.h:1010:37: note: passing argument to parameter 'a' here
-    1010 | static inline int pte_present(pte_t a)
-         |                                     ^
->> mm/ksm.c:1277:3: error: expected ')'
-    1277 |                 goto out_unlock;
-         |                 ^
-   mm/ksm.c:1276:5: note: to match this '('
-    1276 |         if (unlikely(!pte_present(pvmw.pte))
-         |            ^
-   2 warnings and 2 errors generated.
+>> mm/damon/ops-common.c:50:17: warning: variable 'pteval' is uninitialized when used here [-Wuninitialized]
+      50 |                 pfn = pte_pfn(pteval);
+         |                               ^~~~~~
+   mm/damon/ops-common.c:47:2: note: variable 'pteval' is declared here
+      47 |         pte_t pteval;
+         |         ^
+   1 warning generated.
 
 
-vim +1276 mm/ksm.c
+vim +/pteval +50 mm/damon/ops-common.c
 
-  1245	
-  1246	static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
-  1247				      pte_t *orig_pte)
-  1248	{
-  1249		struct mm_struct *mm = vma->vm_mm;
-  1250		DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, 0, 0);
-  1251		int swapped;
-  1252		int err = -EFAULT;
-  1253		struct mmu_notifier_range range;
-  1254		bool anon_exclusive;
-  1255		pte_t entry;
-  1256	
-  1257		if (WARN_ON_ONCE(folio_test_large(folio)))
-  1258			return err;
-  1259	
-  1260		pvmw.address = page_address_in_vma(folio, folio_page(folio, 0), vma);
-  1261		if (pvmw.address == -EFAULT)
-  1262			goto out;
-  1263	
-  1264		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, pvmw.address,
-  1265					pvmw.address + PAGE_SIZE);
-  1266		mmu_notifier_invalidate_range_start(&range);
-  1267	
-  1268		if (!page_vma_mapped_walk(&pvmw))
-  1269			goto out_mn;
-  1270		if (WARN_ONCE(!pvmw.pte, "Unexpected PMD mapping?"))
-  1271			goto out_unlock;
-  1272		/*
-  1273		 * Handle PFN swap entries, such as device-exclusive ones, that
-  1274		 * actually map pages: give up just like the next folio_walk would.
-  1275		 */
-> 1276		if (unlikely(!pte_present(pvmw.pte))
-> 1277			goto out_unlock;
-  1278	
-  1279		anon_exclusive = PageAnonExclusive(&folio->page);
-  1280		entry = ptep_get(pvmw.pte);
-  1281		if (pte_write(entry) || pte_dirty(entry) ||
-  1282		    anon_exclusive || mm_tlb_flush_pending(mm)) {
-  1283			swapped = folio_test_swapcache(folio);
-  1284			flush_cache_page(vma, pvmw.address, folio_pfn(folio));
-  1285			/*
-  1286			 * Ok this is tricky, when get_user_pages_fast() run it doesn't
-  1287			 * take any lock, therefore the check that we are going to make
-  1288			 * with the pagecount against the mapcount is racy and
-  1289			 * O_DIRECT can happen right after the check.
-  1290			 * So we clear the pte and flush the tlb before the check
-  1291			 * this assure us that no O_DIRECT can happen after the check
-  1292			 * or in the middle of the check.
-  1293			 *
-  1294			 * No need to notify as we are downgrading page table to read
-  1295			 * only not changing it to point to a new page.
-  1296			 *
-  1297			 * See Documentation/mm/mmu_notifier.rst
-  1298			 */
-  1299			entry = ptep_clear_flush(vma, pvmw.address, pvmw.pte);
-  1300			/*
-  1301			 * Check that no O_DIRECT or similar I/O is in progress on the
-  1302			 * page
-  1303			 */
-  1304			if (folio_mapcount(folio) + 1 + swapped != folio_ref_count(folio)) {
-  1305				set_pte_at(mm, pvmw.address, pvmw.pte, entry);
-  1306				goto out_unlock;
-  1307			}
-  1308	
-  1309			/* See folio_try_share_anon_rmap_pte(): clear PTE first. */
-  1310			if (anon_exclusive &&
-  1311			    folio_try_share_anon_rmap_pte(folio, &folio->page)) {
-  1312				set_pte_at(mm, pvmw.address, pvmw.pte, entry);
-  1313				goto out_unlock;
-  1314			}
-  1315	
-  1316			if (pte_dirty(entry))
-  1317				folio_mark_dirty(folio);
-  1318			entry = pte_mkclean(entry);
-  1319	
-  1320			if (pte_write(entry))
-  1321				entry = pte_wrprotect(entry);
-  1322	
-  1323			set_pte_at(mm, pvmw.address, pvmw.pte, entry);
-  1324		}
-  1325		*orig_pte = entry;
-  1326		err = 0;
-  1327	
-  1328	out_unlock:
-  1329		page_vma_mapped_walk_done(&pvmw);
-  1330	out_mn:
-  1331		mmu_notifier_invalidate_range_end(&range);
-  1332	out:
-  1333		return err;
-  1334	}
-  1335	
+    41	
+    42	void damon_ptep_mkold(pte_t *pte, struct vm_area_struct *vma, unsigned long addr)
+    43	{
+    44		struct folio *folio = damon_get_folio(pte_pfn(ptep_get(pte)));
+    45		bool young = false;
+    46		unsigned long pfn;
+    47		pte_t pteval;
+    48	
+    49		if (likely(pte_present(pteval)))
+  > 50			pfn = pte_pfn(pteval);
+    51		else
+    52			pfn = swp_offset_pfn(pte_to_swp_entry(pteval));
+    53	
+    54		folio = damon_get_folio(pfn);
+    55		if (!folio)
+    56			return;
+    57	
+    58		/*
+    59		 * PFN swap entries, such as device-exclusive ones, are "old" from a
+    60		 * CPU perspective.
+    61		 */
+    62		if (likely(pte_present(pteval)))
+    63			young |= ptep_test_and_clear_young(vma, addr, pte);
+    64		young |= mmu_notifier_clear_young(vma->vm_mm, addr, addr + PAGE_SIZE);
+    65		if (young)
+    66			folio_set_young(folio);
+    67	
+    68		folio_set_idle(folio);
+    69		folio_put(folio);
+    70	}
+    71	
 
 -- 
 0-DAY CI Kernel Test Service
