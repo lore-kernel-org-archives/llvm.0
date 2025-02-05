@@ -1,41 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE3A1519B4
-	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 23:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCD31DAC81
+	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 23:41:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738796671; cv=none; b=PmdnX/FoUKJwDxdWZ4Elljtov8WFVBVSAMyFwMliK+WISvrNwtfpjDfbb8eXawprosuVQSondFRMnOC0Lu6Od16MnJfyi9DxTDmjCstg58ClSANktef+TCcrDe5Sfd9fJv7NySOlRZ2ArbKOtTFQ0HmgSSkUfIBKfmIg5Goa3Jk=
+	t=1738798874; cv=none; b=giHFDf00M/KMnff6ZdRl0Q8gd9deTGNyJP8BrNsC3CAA8CqAMB5yPRz9z8zOPhGyCAQST17MaxO4zvZGn0uTN1Ospm2dwYAIKMOhTRhoE9VxDEO3onknFLGYo2z+mnNrw2Z5gp22mALMVbRzXZiwpRP2ovXlhzbJU7nw3I0oKRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738796671; c=relaxed/simple;
-	bh=S72eIFvgqEoxbQM8qfvjvrlejM+2TfjiaT1i5lkDoBg=;
+	s=arc-20240116; t=1738798874; c=relaxed/simple;
+	bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ng0Uw0cHCP0xk/GLnRjZeUU+c1ON+HHrw8e5SMNjAueYsl6VlpH4CHkFOFZ1K7FAaBzJfbzilt3lFGQUXpnqfROoDX/dzupeUHKOrPB2C1QFEsO5BpuIUkQOW7NnNHfP2xczprouqaVg7Kvp3gb09x+8521HCqQkO5XTvtswoIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gxyO/DkI; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=fKVAT3C/Kct/gIcvlpJi6EgcrJKFwFI5BYImT72mJX6mV+vLLSj4hthZZk8zz0152BlwcwlrihTjtOc99rozwT4bHP0Xzu6TNO8SAL6cM++NMQWv4rbymHTQaOoOWxHKNE22bFYHRbEI5DxpTWgweHuaRV4ZyXplAvd+t6ffSqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KuMaSmds; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gxyO/DkI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE07C4CEF4
-	for <llvm@lists.linux.dev>; Wed,  5 Feb 2025 23:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738796670;
-	bh=S72eIFvgqEoxbQM8qfvjvrlejM+2TfjiaT1i5lkDoBg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gxyO/DkIBHu33ghmCtkfFrFlUN3JY7dEJtRA4pQwuM07reGkxzbEhCZcgr4IMasDY
-	 pWDkdJQ+6UOIgP2OEhJun7Fwn7KpWXACgdOtQGO1CZwId+4GYindFn+9vuM2cQ2Mu3
-	 gfL/UtkDZsecXf6mijPtEpfQlDUu2e948Vzba6P7yWbyWXLOsd/ZDfN6AhNhWoHkhl
-	 MiDI4bMd97k6Am9qe0I1naMjos9I0Qs8bqqABHo06hyAUdnS4yX9U7EVX45tMXgGks
-	 cbdHqt7kn+WXlGr1y89W631siCs+AtscTCkMTFkhU5jbUVc8vOMSbaioAoWksoeGKU
-	 WbSixxOzuVMaw==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-304e4562516so2616631fa.1
-        for <llvm@lists.linux.dev>; Wed, 05 Feb 2025 15:04:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUWK7o6LdiZPUTz09xCYUlen1bQ8RWpF9T4JVhiUwbqPyJtez/te36B4sfKGEQCHRpnNmJu@lists.linux.dev
-X-Gm-Message-State: AOJu0YxLuRaya/RlnDFFGDd2wyIWiyWDuRZxHBhWKbvvIDy9/5lO7fXn
-	G8lCtkLwqALVzbtOQNM+7jyQIJwL7y63Ae1RBYeUqJnF/sZGsZavKFPR3BeOQY+ou0e2O8C3w+y
-	crWt4gRcGNL1ef8VPOVtUOGj5Owk=
-X-Google-Smtp-Source: AGHT+IF89pjNvxORXTiz/KZ99MrP0x5RvRSNjKSsJcaqJGPWoeuT1g3SMmILZLP5X4y5h0x0Un2+f4WGgAowvASu1X4=
-X-Received: by 2002:a2e:2c12:0:b0:302:41f6:2352 with SMTP id
- 38308e7fff4ca-307da5ae80amr3376651fa.16.1738796668357; Wed, 05 Feb 2025
- 15:04:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KuMaSmds"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-437a92d7b96so2940865e9.2
+        for <llvm@lists.linux.dev>; Wed, 05 Feb 2025 15:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738798871; x=1739403671; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
+        b=KuMaSmds0yorR/mtQd95I1jnZcZP17srZENRg8626lHVyjbgOh2afJYfwsRwN4Su5G
+         YRmcvYnDyDn8uZyODWouo7ydve0wRHRow44HaYmqEzBkytkZ5ZbsJzl0HH5Ob7h8qgcn
+         pix/qOpx4KffvYrLQnoCz2Y0+Qg+zFKP+3T5tob1qqDL/aWwn+7f2jN2iAvnZMCb+BfA
+         SAhTqi+QN7v19ZSo89su7l/MJxJXgHfSd+j3/zp6qw2aINVgERZf9giTQ4xkPu4/7ono
+         i/PmaaeuwXSvUZ/4qz5m8VT19rF4+q6at63G8NCA8BfJehb9AEK5DHpejPq1molaN+wR
+         VDvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738798871; x=1739403671;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WKEgMyHfPWTlLLqqrmnwtvQK3GmysT72SpoyvC2gz8E=;
+        b=vQ6jPHFEptezdAdNqaEF3UAFbPa47GxAIl8mgUlAlF5ZDNDu/aoGUOZE3+nCY7dR/l
+         DteU4psSCm8yhPh+Z8WDRPO5UUfrDHjlbZp5lbtPiVY9/VQTPoLPVbUY0FVcnGuuNgCX
+         yAyNCdymEO1wAcOex0+IeiVGLDRmOCNwnPX6QW7DYBgxefHM8ErbesBgWKeENd32l/MI
+         ytIHO0GxIhxQW77QnUZyGvyevqU5zuq4CW3RxkFqYATdz88vKqmUMvZlrVaw9m3e801c
+         SIScDNQpa+0p1llyXMABXjQNjJqQ6T+zTGSAErrhvY3oFOpjHrwGf3p91rva0Tm0uB6v
+         qEuw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5jPUouDBhH5xILygm2eTXX3fPmBbFPTHr+lNquy8XNoOVKKEseSCQGJtdRv3ib3O7zgRV@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywbp8lMi/gG9aOWpsPqaDU2FvI5uT3Dme+G32toXdoTem5kZNXs
+	J2pIFlDK6s0rZQ8IxVA+OVwGDTI8QMpd0p7u1SwNHTzg1FRTOtWWqFnbCSOXTrm93fjALtTn3+Z
+	f1SKd7LJ3rtkgvPucnu/IAMnIYRI=
+X-Gm-Gg: ASbGncvvYqGiVfOJkA8QFYN94Rh3PByUMyKN+pUurlEK7I6G2OmZ1EJRbCrTZsI9U+p
+	UtRBXDpf340NC5SqdNy/V1LiqjfjFIOangYRutUYRXLosenwFfWUVuzseOqiiOoF5HGA/o70LFg
+	==
+X-Google-Smtp-Source: AGHT+IFLTv0TDNnJU+yADljvGxMSoZCkyg9G4XwmiEyfBnbRTqPG2jvE/eed1EqqR6nVWHsb9vVYgVGcI2mkW+jV4yw=
+X-Received: by 2002:adf:f1d2:0:b0:38a:8906:6b66 with SMTP id
+ ffacd0b85a97d-38db492abc4mr3094863f8f.38.1738798870580; Wed, 05 Feb 2025
+ 15:41:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,43 +60,66 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
- <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org> <fb30574a-d238-424c-a464-0f7a5707c46a@intel.com>
- <3dcf7631-d839-7235-10c7-30f80d7f796a@gentwo.org>
-In-Reply-To: <3dcf7631-d839-7235-10c7-30f80d7f796a@gentwo.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 6 Feb 2025 00:04:17 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHktLC2F=suQoNF80-ZQ93-3pxWz20_L76_6morUGPaNQ@mail.gmail.com>
-X-Gm-Features: AWEUYZnX90yX3IKaA52q5S_M7G8eGfUWUp3XkEiKOjpcZPLHNrjrrMHxTq0wSUs
-Message-ID: <CAMj1kXHktLC2F=suQoNF80-ZQ93-3pxWz20_L76_6morUGPaNQ@mail.gmail.com>
+In-Reply-To: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Thu, 6 Feb 2025 00:40:59 +0100
+X-Gm-Features: AWEUYZlz3dbMNs5uaCuCxvHCPA1V_UbROZFgxVVkwngTO-akZcC0zg4IFPaM-WQ
+Message-ID: <CA+fCnZd1dpqv+rM2jD1fNGvhU_0+6c8MjzsgEsi2V-RkHVteJg@mail.gmail.com>
 Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for x86
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Cc: Dave Hansen <dave.hansen@intel.com>, 
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, luto@kernel.org, xin@zytor.com, 
-	kirill.shutemov@linux.intel.com, palmer@dabbelt.com, tj@kernel.org, 
-	andreyknvl@gmail.com, brgerst@gmail.com, dave.hansen@linux.intel.com, 
-	jgross@suse.com, will@kernel.org, akpm@linux-foundation.org, arnd@arndb.de, 
-	corbet@lwn.net, dvyukov@google.com, richard.weiyang@gmail.com, 
-	ytcoode@gmail.com, tglx@linutronix.de, hpa@zytor.com, seanjc@google.com, 
-	paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com, 
-	jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com, jannh@google.com, 
-	bhe@redhat.com, vincenzo.frascino@arm.com, rafael.j.wysocki@intel.com, 
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com, 
+	palmer@dabbelt.com, tj@kernel.org, brgerst@gmail.com, ardb@kernel.org, 
+	dave.hansen@linux.intel.com, jgross@suse.com, will@kernel.org, 
+	akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net, dvyukov@google.com, 
+	richard.weiyang@gmail.com, ytcoode@gmail.com, tglx@linutronix.de, 
+	hpa@zytor.com, seanjc@google.com, paul.walmsley@sifive.com, 
+	aou@eecs.berkeley.edu, justinstitt@google.com, jason.andryuk@amd.com, 
+	glider@google.com, ubizjak@gmail.com, jannh@google.com, bhe@redhat.com, 
+	vincenzo.frascino@arm.com, rafael.j.wysocki@intel.com, 
 	ndesaulniers@google.com, mingo@redhat.com, catalin.marinas@arm.com, 
 	junichi.nomura@nec.com, nathan@kernel.org, ryabinin.a.a@gmail.com, 
 	dennis@kernel.org, bp@alien8.de, kevinloughlin@google.com, morbo@google.com, 
 	dan.j.williams@intel.com, julian.stecklina@cyberus-technology.de, 
-	peterz@infradead.org, kees@kernel.org, kasan-dev@googlegroups.com, 
-	x86@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
+	peterz@infradead.org, cl@linux.com, kees@kernel.org, 
+	kasan-dev@googlegroups.com, x86@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
+	linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 5 Feb 2025 at 20:31, Christoph Lameter (Ampere) <cl@gentwo.org> wrote:
+On Tue, Feb 4, 2025 at 6:34=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
 >
-> MTE tagging is part of the processor standard for ARM64 and Linux will
-> need to support the 16 byte tagging feature one way or another even if
-> Intel does not like it. And AFAICT hardware tagging support is a critical
-> security feature for the future.
+> =3D=3D=3D=3D=3D=3D=3D Introduction
+> The patchset aims to add a KASAN tag-based mode for the x86 architecture
+> with the help of the new CPU feature called Linear Address Masking
+> (LAM). Main improvement introduced by the series is 4x lower memory
+> usage compared to KASAN's generic mode, the only currently available
+> mode on x86.
 >
+> There are two logical parts to this series. The first one attempts to
+> add a new memory saving mechanism called "dense mode" to the generic
+> part of the tag-based KASAN code. The second one focuses on implementing
+> and enabling the tag-based mode for the x86 architecture by using LAM.
 
-Can you explain what you feel is lacking in the existing MTE support
-in KAsan (enabled when selecting CONFIG_KASAN_HW_TAGS)?
+Hi Maciej,
+
+Awesome work! Great to see SW_TAGS mode supported on x86!
+
+I started reviewing the patches, but this is somewhat complicated, as
+the dense mode changes are squashed together with the generic ones for
+x86 support. Could you please split this series into 2? Or at least
+reorder the patches so that everything needed for basic x86 support
+comes first and can be reviewed and tested separately.
+
+I will post the comments for things I noted so far, including for the
+dense mode changes, but I'll take a closer look after the split.
+
+Also feel free to drop the dependency on that risc-v series, as it
+doesn't get updated very often. But up to you.
+
+And please also update all affected parts of Documentation/dev-tools/kasan.=
+rst.
+
+Thank you!
