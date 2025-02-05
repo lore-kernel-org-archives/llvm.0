@@ -1,184 +1,165 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7458E21B1B5
-	for <llvm@lists.linux.dev>; Tue,  4 Feb 2025 23:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627E3215056;
+	Wed,  5 Feb 2025 04:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738713016; cv=none; b=noZvPeDyb+55EPYwAiRowT1UQJJbjtyiguaPq47qKeANbNM+G1LeRrgyFwe0XRRvbkzXiy8uvzZkcZjYV06z/ZflnQi/eWP/L5mRAs68t+P3luITCLiLKcf5EzE6GKd0XyD5xO2h0hdZr8e80nW+ZNKu8LurDvFc9hjQwmAcnzY=
+	t=1738729368; cv=none; b=g5tgh3Q/nOjs/dcGGHWTWWztkTo2dEy43jZNyJWkr9qfDCmckV8FNWkHZBrix8FGZVYeGdDh9a7zhHomdk1LOotS6Fnt8XDp0NcdOjOrK3UrWnFvw9dEMrKmFEmI8eTUcdBzys/FG6oYPaAw8O9SHDydvw1QNP2LMT4+Iv2rYzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738713016; c=relaxed/simple;
-	bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=byON8coDmOjLMSB/T7n9gdVJDBo/VGawps+Tj1V9rfF670dDrYsmo85cpF7zgNltKfILlGLB6Kzj7VSBm2JzNAdBhpx6IcNW48V1YYrpf8bIaTJHjOVEoqkVXdnEWU9R6JISbKsNsO6srAFym2MOfKwxRanFdQbRKzULxLLFemY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com; spf=pass smtp.mailfrom=jrtc27.com; dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b=Y+TqlNtw; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jrtc27.com
+	s=arc-20240116; t=1738729368; c=relaxed/simple;
+	bh=qRCydSc1bWa9uXemEOUCMN4cJ6bF3gXl+tOLoHdi0TI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F2CFod3XAz/Fqtg0R5Gl4RRon+z1gW8Z4l2EZ9MpSuhLG1L7NuPFz81cnVIFY+dNN2q6+SpmSqLcdGt3YYHE6ksig/neCSF+K+ZVWOpvX7rZ74zkO5NdGIS5WzFQOA9NV8l+fHBSMUh4AOA2tCt/JOeWdu4QnaFlKfxKrkxoRjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FKggIGt7; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b="Y+TqlNtw"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38632b8ae71so5167110f8f.0
-        for <llvm@lists.linux.dev>; Tue, 04 Feb 2025 15:50:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1738713013; x=1739317813; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
-        b=Y+TqlNtwbnnhUGsfS7LXvwpgKM2CxXxZSsXreGwivjs21fMPjsWG3HMBRqs67rPWNU
-         XyCzcNrqbF6iMmAsjPDSM5yb6BPQedLDmeOTVraHjHYMlYd1XidVl9UQ0LzYd9t6xbum
-         NeCzPOusSXDGWYUr0VBq4hHo+/JwECOkpynAzp4Oav7G+r4SAY6CadPNB8dUcejP25NS
-         E9ghtDwZrgk+3th9rSdfZvNffHxfxrPaCnvJJTQaRDsQvPmxIxd+DWRN8fq9qQuTPRce
-         +YVQ9VV5rGwfj9RNYilrH7FHFo2j7s8CDW5yEV3ccVoo1NQ2CoO7mxR677r0qMS/jOx+
-         ajtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738713013; x=1739317813;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QjEre/G3BLqcrCF5wreFajQVoRGv9unmtvDg4S23UQU=;
-        b=hQc3so8DlZp7PaX/AghekHLMF2AjFr6Ke4xZTPojp4c4D7/ueDoC1kWAFFPrepYWbU
-         p2r38JC7xXhqQET9yQ1qLAkDpO/1dLvpeBMyjj8llI8+saMEaoNgXwTrcgkOCcko+JJ6
-         0yilnLToUG3MjIJrpiI34snir3DPP9wk3wSeNbe0RNa/PKzHD5QYYVZAoxPOUKTwFQiV
-         LTglmOtFiFDwGLYga5O5sUkfVnLU7xMvtuEkQXAWBSWTEww/m1ZLlAaqTG2XbEF6mbhU
-         ByOyQC36sfMhoq29fcvdjIBN8MZHpALZTwqiDK+/UvQpCF7XVcK62sdA/Z5qp1VbiRqP
-         fv1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV0qjs4BlPwK0CctlKtMJGIQFUBmpVPBaSMchl9fELR05C9W201bwHX5Rcd4WC0fdoOEQ1m@lists.linux.dev
-X-Gm-Message-State: AOJu0YwEXZrswbVYoBnesOOWzQoEm+v9Z6aiIfDW9JJLaLXfAlLAljKR
-	xX+n0dvB8xzkcsgp9qSwvvfAIEMMYmCuZ2PXn7qgcltayj+l9hqKoMo1TC0epTo=
-X-Gm-Gg: ASbGncu1XezbnG2ocW212jEHe/wnZVY1hO7ZUpQHo5LKgdcV9DykdXe8plPoMocUPxk
-	xnScpgQh3Ay94+5y1/xDfQASMar10lFM5Ha0EVCPWFJEQk7NgRv2T2BCZFpRD1FEtu7NbIOpi57
-	GKzk4uIp47JVmoVGQaGMTFkjefkSMefMdKUP+++0c5O3TLMY0bW3ySJ/MXma7ShgOdSwiTdbDEY
-	7di/5+wnyPa5hrfaAf5BoAXuGvTE4A7ypN0De0VhQ3aCnGstnhpR6sm5ORxQ0Mtb0bsm01NmkiP
-	WGYDXErrlS/5n8t+MUx9HI3423lT
-X-Google-Smtp-Source: AGHT+IEypTIpZh6mfBdWNl0Yo6S1z/L0NXKr61jortReoHSuVGBqrXhoBHP93m2FnFAjaJ4GCP4WRQ==
-X-Received: by 2002:a5d:5f56:0:b0:385:df43:2179 with SMTP id ffacd0b85a97d-38db48bccf9mr352139f8f.17.1738713011907;
-        Tue, 04 Feb 2025 15:50:11 -0800 (PST)
-Received: from smtpclient.apple ([131.111.5.201])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1cee41sm16885326f8f.81.2025.02.04.15.50.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Feb 2025 15:50:10 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FKggIGt7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738729365; x=1770265365;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qRCydSc1bWa9uXemEOUCMN4cJ6bF3gXl+tOLoHdi0TI=;
+  b=FKggIGt7GA51iXC3EHLXL+694Lc/eMUxLpGU+6FyVd363NxFE4FOxjiI
+   g/FIbjKVdPxq3h6CQNLJADYfhabS0FE8/jEJOtdTgm84D1iBsmfdFilIy
+   G3/oF3iw+HOsmUqOzM7uWcKmIFaymlpGEQPszXSvMFx22uyHOWexLh2bL
+   elJK6VFER7rkk0roJR8hN4Lc9rzKC1Iau9lrPg87xJ3KVvOuiC8GIEu7H
+   OnqQ/NlPifcPAsovgGkviJcpziERFAgLYlXrrHnCSEkLOf6BJBBpkgL9G
+   kXCwJNQtOPE8vgr0v0EskU3C4ct14TErdPRZWJcz2DCVaAIx6Dj3Rabo8
+   A==;
+X-CSE-ConnectionGUID: TYHUFfjBTgOzvXWAYLaLsA==
+X-CSE-MsgGUID: 1u5LBhlWSRmIsXmrfM/JBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39310326"
+X-IronPort-AV: E=Sophos;i="6.13,260,1732608000"; 
+   d="scan'208";a="39310326"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 20:22:44 -0800
+X-CSE-ConnectionGUID: zhYBfjrlRSKeCfHa9bhCnw==
+X-CSE-MsgGUID: 8gd/O9v4QGawVwWsTgitQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="114850175"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 04 Feb 2025 20:22:43 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfWvw-000tQn-2h;
+	Wed, 05 Feb 2025 04:22:40 +0000
+Date: Wed, 5 Feb 2025 12:21:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Graf <graf@amazon.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:kho/v4 10/13] kernel/kexec_handover.c:104: warning: Function
+ parameter or struct member 'mem' not described in 'kho_return_mem'
+Message-ID: <202502051237.fgLGQZuN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
- x86
-From: Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
-Date: Tue, 4 Feb 2025 23:36:23 +0000
-Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- luto@kernel.org,
- xin@zytor.com,
- kirill.shutemov@linux.intel.com,
- palmer@dabbelt.com,
- tj@kernel.org,
- andreyknvl@gmail.com,
- brgerst@gmail.com,
- ardb@kernel.org,
- dave.hansen@linux.intel.com,
- jgross@suse.com,
- will@kernel.org,
- akpm@linux-foundation.org,
- arnd@arndb.de,
- corbet@lwn.net,
- dvyukov@google.com,
- richard.weiyang@gmail.com,
- ytcoode@gmail.com,
- tglx@linutronix.de,
- hpa@zytor.com,
- seanjc@google.com,
- paul.walmsley@sifive.com,
- aou@eecs.berkeley.edu,
- justinstitt@google.com,
- jason.andryuk@amd.com,
- glider@google.com,
- ubizjak@gmail.com,
- jannh@google.com,
- bhe@redhat.com,
- vincenzo.frascino@arm.com,
- rafael.j.wysocki@intel.com,
- ndesaulniers@google.com,
- mingo@redhat.com,
- catalin.marinas@arm.com,
- junichi.nomura@nec.com,
- nathan@kernel.org,
- ryabinin.a.a@gmail.com,
- dennis@kernel.org,
- bp@alien8.de,
- kevinloughlin@google.com,
- morbo@google.com,
- dan.j.williams@intel.com,
- julian.stecklina@cyberus-technology.de,
- peterz@infradead.org,
- kees@kernel.org,
- kasan-dev@googlegroups.com,
- x86@kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- linux-mm@kvack.org,
- llvm@lists.linux.dev,
- linux-doc@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
- <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-X-Mailer: Apple Mail (2.3826.300.87.4.3)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4 Feb 2025, at 18:58, Christoph Lameter (Ampere) <cl@gentwo.org> =
-wrote:
-> ARM64 supports MTE which is hardware support for tagging 16 byte =
-granules
-> and verification of tags in pointers all in hardware and on some =
-platforms
-> with *no* performance penalty since the tag is stored in the ECC areas =
-of
-> DRAM and verified at the same time as the ECC.
->=20
-> Could we get support for that? This would allow us to enable tag =
-checking
-> in production systems without performance penalty and no memory =
-overhead.
+Hi Alexander,
 
-It=E2=80=99s not =E2=80=9Cno performance penalty=E2=80=9D, there is a =
-cost to tracking the MTE
-tags for checking. In asynchronous (or asymmetric) mode that=E2=80=99s =
-not too
-bad, but in synchronous mode there is a significant overhead even with
-ECC. Normally on a store, once you=E2=80=99ve translated it and have the =
-data,
-you can buffer it up and defer the actual write until some time later.
-If you hit in the L1 cache then that will probably be quite soon, but
-if you miss then you have to wait for the data to come back from lower
-levels of the hierarchy, potentially all the way out to DRAM. Or if you
-have a write-around cache then you just send it out to the next level
-when it=E2=80=99s ready. But now, if you have synchronous MTE, you =
-cannot
-retire your store instruction until you know what the tag for the
-location you=E2=80=99re storing to is; effectively you have to wait =
-until you
-can do the full cache lookup, and potentially miss, until it can
-retire. This puts pressure on the various microarchitectural structures
-that track instructions as they get executed, as instructions are now
-in flight for longer. Yes, it may well be that it is quicker for the
-memory controller to get the tags from ECC bits than via some other
-means, but you=E2=80=99re already paying many many cycles at that point, =
-with
-the relevant store being stuck unable to retire (and thus every
-instruction after it in the instruction stream) that whole time, and no
-write allocate or write around schemes can help you, because you
-fundamentally have to wait for the tags to be read before you know if
-the instruction is going to trap.
+First bad commit (maybe != root cause):
 
-Now, you can choose to not use synchronous mode due to that overhead,
-but that=E2=80=99s nuance that isn=E2=80=99t considered by your reply =
-here and has some
-consequences.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git kho/v4
+head:   a75b813f58b0bc19b2c4b06bd62afc87f02dcb43
+commit: 4a0ee0e000d8043b5fea97eb1716f4eda837f9b6 [10/13] arm64: Add KHO support
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250205/202502051237.fgLGQZuN-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250205/202502051237.fgLGQZuN-lkp@intel.com/reproduce)
 
-Jess
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502051237.fgLGQZuN-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> kernel/kexec_handover.c:104: warning: Function parameter or struct member 'mem' not described in 'kho_return_mem'
+>> kernel/kexec_handover.c:142: warning: Function parameter or struct member 'mem' not described in 'kho_claim_mem'
+
+
+vim +104 kernel/kexec_handover.c
+
+076599f0959a3c Alexander Graf 2024-01-17   94  
+076599f0959a3c Alexander Graf 2024-01-17   95  /**
+076599f0959a3c Alexander Graf 2024-01-17   96   * kho_return_mem - Notify the kernel that initially reserved memory is no
+076599f0959a3c Alexander Graf 2024-01-17   97   * longer needed.
+076599f0959a3c Alexander Graf 2024-01-17   98   * @mem - memory range that was preserved during kexec handover
+076599f0959a3c Alexander Graf 2024-01-17   99   *
+076599f0959a3c Alexander Graf 2024-01-17  100   * When the last consumer of a page returns their memory, kho returns the page
+076599f0959a3c Alexander Graf 2024-01-17  101   * to the buddy allocator as free page.
+076599f0959a3c Alexander Graf 2024-01-17  102   */
+076599f0959a3c Alexander Graf 2024-01-17  103  void kho_return_mem(const struct kho_mem *mem)
+076599f0959a3c Alexander Graf 2024-01-17 @104  {
+076599f0959a3c Alexander Graf 2024-01-17  105  	uint64_t start_pfn, end_pfn, pfn;
+076599f0959a3c Alexander Graf 2024-01-17  106  
+076599f0959a3c Alexander Graf 2024-01-17  107  	start_pfn = PFN_DOWN(mem->addr);
+076599f0959a3c Alexander Graf 2024-01-17  108  	end_pfn = PFN_UP(mem->addr + mem->size);
+076599f0959a3c Alexander Graf 2024-01-17  109  
+076599f0959a3c Alexander Graf 2024-01-17  110  	for (pfn = start_pfn; pfn < end_pfn; pfn++)
+076599f0959a3c Alexander Graf 2024-01-17  111  		kho_return_pfn(pfn);
+076599f0959a3c Alexander Graf 2024-01-17  112  }
+076599f0959a3c Alexander Graf 2024-01-17  113  EXPORT_SYMBOL_GPL(kho_return_mem);
+076599f0959a3c Alexander Graf 2024-01-17  114  
+076599f0959a3c Alexander Graf 2024-01-17  115  static int kho_claim_pfn(ulong pfn)
+076599f0959a3c Alexander Graf 2024-01-17  116  {
+076599f0959a3c Alexander Graf 2024-01-17  117  	struct page *page = pfn_to_online_page(pfn);
+076599f0959a3c Alexander Graf 2024-01-17  118  
+076599f0959a3c Alexander Graf 2024-01-17  119  	if (!page)
+076599f0959a3c Alexander Graf 2024-01-17  120  		return -ENOMEM;
+076599f0959a3c Alexander Graf 2024-01-17  121  
+076599f0959a3c Alexander Graf 2024-01-17  122  	/* almost as free_reserved_page(), just don't free the page */
+076599f0959a3c Alexander Graf 2024-01-17  123  	ClearPageReserved(page);
+076599f0959a3c Alexander Graf 2024-01-17  124  	init_page_count(page);
+076599f0959a3c Alexander Graf 2024-01-17  125  	adjust_managed_page_count(page, 1);
+076599f0959a3c Alexander Graf 2024-01-17  126  
+076599f0959a3c Alexander Graf 2024-01-17  127  	return 0;
+076599f0959a3c Alexander Graf 2024-01-17  128  }
+076599f0959a3c Alexander Graf 2024-01-17  129  
+076599f0959a3c Alexander Graf 2024-01-17  130  /**
+076599f0959a3c Alexander Graf 2024-01-17  131   * kho_claim_mem - Notify the kernel that a handed over memory range is now
+076599f0959a3c Alexander Graf 2024-01-17  132   * in use
+076599f0959a3c Alexander Graf 2024-01-17  133   * @mem - memory range that was preserved during kexec handover
+076599f0959a3c Alexander Graf 2024-01-17  134   *
+076599f0959a3c Alexander Graf 2024-01-17  135   * A kernel subsystem preserved that range during handover and it is going
+076599f0959a3c Alexander Graf 2024-01-17  136   * to reuse this range after kexec. The pages in the range are treated as
+076599f0959a3c Alexander Graf 2024-01-17  137   * allocated, but not %PG_reserved.
+076599f0959a3c Alexander Graf 2024-01-17  138   *
+076599f0959a3c Alexander Graf 2024-01-17  139   * Return: virtual address of the preserved memory range
+076599f0959a3c Alexander Graf 2024-01-17  140   */
+076599f0959a3c Alexander Graf 2024-01-17  141  void *kho_claim_mem(const struct kho_mem *mem)
+076599f0959a3c Alexander Graf 2024-01-17 @142  {
+076599f0959a3c Alexander Graf 2024-01-17  143  	u64 start_pfn, end_pfn, pfn;
+076599f0959a3c Alexander Graf 2024-01-17  144  	void *va = __va(mem->addr);
+076599f0959a3c Alexander Graf 2024-01-17  145  
+076599f0959a3c Alexander Graf 2024-01-17  146  	start_pfn = PFN_DOWN(mem->addr);
+076599f0959a3c Alexander Graf 2024-01-17  147  	end_pfn = PFN_UP(mem->addr + mem->size);
+076599f0959a3c Alexander Graf 2024-01-17  148  
+076599f0959a3c Alexander Graf 2024-01-17  149  	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
+076599f0959a3c Alexander Graf 2024-01-17  150  		int err = kho_claim_pfn(pfn);
+076599f0959a3c Alexander Graf 2024-01-17  151  
+076599f0959a3c Alexander Graf 2024-01-17  152  		if (err)
+076599f0959a3c Alexander Graf 2024-01-17  153  			return NULL;
+076599f0959a3c Alexander Graf 2024-01-17  154  	}
+076599f0959a3c Alexander Graf 2024-01-17  155  
+076599f0959a3c Alexander Graf 2024-01-17  156  	return va;
+076599f0959a3c Alexander Graf 2024-01-17  157  }
+076599f0959a3c Alexander Graf 2024-01-17  158  EXPORT_SYMBOL_GPL(kho_claim_mem);
+076599f0959a3c Alexander Graf 2024-01-17  159  
+
+:::::: The code at line 104 was first introduced by commit
+:::::: 076599f0959a3cd16a8d2a95e552f6f83607ef9a kexec: Add KHO parsing support
+
+:::::: TO: Alexander Graf <graf@amazon.com>
+:::::: CC: Mike Rapoport <rppt@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
