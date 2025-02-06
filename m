@@ -1,126 +1,74 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAA41990C1
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EE4199948;
+	Thu,  6 Feb 2025 18:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738865465; cv=none; b=sjC3g6uaxWVIxFsR2faQtiMyP2Wei0tJCyAprNlDFI9RspJvOacAhdXFR5qyFi96G8eaaKGRlNoaHG8yJr9mNTnsIjngjVoeZilCDHtikoqlZSltV1Dn7cu1EUE2PHwmZKSrWEUF8JeAI2r/7PwWMDIS/YCeZHH53t8UnDyZ7ZM=
+	t=1738865494; cv=none; b=NfFA1OPms/WEjm2WpV9DzDGNwx4YZTP1CJnqoylUzykNeFS52Uh5CdxPdiDRHnQORlyGiwz3CpdCItVfY+1aEAy823VDKSxVIWNB1VnOhkHRkVH4vx+7GYCtoDxhZqdy9gtScswjiOhZUNvJyFEX8ml0/qkIh5UsE54EY0KhbhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738865465; c=relaxed/simple;
-	bh=0ttuWAvJobLlg56YrOVOmHOt13ZH7wD3gGicocchpzQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ReZwOLoUVkuh7Ehv+uvyJKgYeltai0I+J2pkabiI8qaKXR4n2o2+cmLBNIaEx0ZJ7IGzsMDQ9D2akwEM2LvbqXOsSAPitZqXxtwMqFP93YM1eUdGEmEIUKdCkBSBWW4huOdOl6dZnXmsn++cfB/HASc0bIbOQWHDrp/Sd3+YFms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klDt5Uzm; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738865494; c=relaxed/simple;
+	bh=REWIDIpSqJfCqMQ3pqQq6PxFe9oC9dJ25XsThshVyhY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iEu4VZgQt6Wm4uqINuydF3A9P0YEtN5/9q00lHkCuRFy4Yf84rmggrIBDMuICAQfJImFhI2l8ZnxoQDu07Vv98WF5A46cZw13IXfH5G7wOSRQNbh9ZgwSHWHwCjdoVodqvX1tMhTrk6sAO4FS5sLb+0ZdWBGwh54SnUKcyD2xD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RNXO6GPG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klDt5Uzm"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so8331825e9.1
-        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738865461; x=1739470261; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ttuWAvJobLlg56YrOVOmHOt13ZH7wD3gGicocchpzQ=;
-        b=klDt5Uzm3G+vvjLUJa/pkdDCvGPlrU24y8XQk9LphJIMx8Pz0ezlp4Uvne4vtvr4bm
-         S1s18/1OZm0uYCgnl+4/yBHyW6laalLGvn8HFy2WGqpTWOChkX74ZI6D87ZPfauI3DNf
-         6s6R8ktoSv83gMOZAWETaC3A5BvoZanpYq1+1V75XBezxPDtMTrTXMiBYT3dFgtPpWDd
-         NrpSN//kBiFKcsQUZHp8wr856zf0s5D4zJuueHCBuTlPmULJ0miDRq46AgMXWdYSZrEc
-         j5IDGGxSsO6WmST3T1NEn3fp6RnlgYvHHxymJeOiQvhLaYakY2nMNMkF7YazsPoZ01q6
-         KlWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738865461; x=1739470261;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0ttuWAvJobLlg56YrOVOmHOt13ZH7wD3gGicocchpzQ=;
-        b=TdMHhegOXbGaOdtrvWd76zMN2kiEct3Om/2DO1LB8vpxDOk/oAyESrPwJkfApFnrc6
-         JigU8n3TvcV009J1yTfQQ3IRizqxAcWiG9hE+rUFv4IVv/XO7W0xAM+lGNvmCSzstiRe
-         ZbGlZeSnvIaJnZO5SVqpObORwbQn4ldlTJGwFWB2ZlU67ceZ+TBbjcMzdXM2k0jGjfQr
-         k/IRvFavbxYdl0zZ4bj9tP67cLUorq6sAhiSuCyC/m77bpoKmtnVu5xhpxo2WtQQEEQ/
-         6DPgkzuaahvxRGwf4W0SgNCR9ck3fHu5I7DBGSVKAcaT4Qt0LGEm8hotfQp9L0Xwoei3
-         WMHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGyEBfCsXWpdCxYQeLGMqHWHYPMB3ZR3HA7Dn8nJw09md0bA039FK9W7ZY9rv/crb7wkaq@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz2ZjpuT7K5q6NxbIxiRywXxA4p2aowFscx+1QZp9p/mLgWWfJu
-	jBYEIcA8gF1ojOY9LMeryQhwxsbNxo5d5AhvNQZW1AufYdkdTvuTWOprjRy4XWG3E8yvoz02VdP
-	h9rVZ8zboTkbjjf3YCaWros/XYbA=
-X-Gm-Gg: ASbGncvgt+FZ18w8XWKiBNw26a63UuueE1P7bKHQqwaxZbKlMhL7dNRdFWxr+z3rMza
-	FxeSypWvsvKLm9nH4nrbptlB6PLbSJQNAiRZoxi95q+i2ycr0951sI1hNZjUKLdm2QJ2E96dxfA
-	==
-X-Google-Smtp-Source: AGHT+IGjlT6+E7s19Biqi+L66hD4CAB7+vWZ8IxthOzy0VOqSvauytoG4hxkI1K7a56pR3Wt3sBZqEuajrgrIm/RerQ=
-X-Received: by 2002:a5d:6da4:0:b0:38c:5b52:3a5e with SMTP id
- ffacd0b85a97d-38dc8dc342amr4349f8f.8.1738865461496; Thu, 06 Feb 2025 10:11:01
- -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RNXO6GPG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7F5C4AF0C;
+	Thu,  6 Feb 2025 18:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738865493;
+	bh=REWIDIpSqJfCqMQ3pqQq6PxFe9oC9dJ25XsThshVyhY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RNXO6GPG7IKzvYunqmk/cCTZkEK/0wm9Y/8x/gBudQVQ/bc/RiYImqE0+eklide8J
+	 b4IhDBeUGkULtvXRU1/4Cm+06XkJ7X2x+WegXLBmXxf3nl9a7uFJs1D44ykPxsxuU3
+	 nt3smEpn2T42SmzWY8ebKGL3T0/6Gg8O/5NuGlm7gP2Ck3oHnMlZSHAkiklDu9hAZ6
+	 RyfajDD4i8lK5AqCNzFExP+EOpQ4Wyh8dY48IjyJ7JFe5AwU9kAePX6OM9ebRAyC2E
+	 EjkoKEGcxs7712k4LbaXTkzG3gshkMJgFBw4bVeBnXhY5wjwmlNv3p5fFUYv4dOdGp
+	 UsPU/8zaaNHZw==
+From: Kees Cook <kees@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Andy Shevchenko <andy@kernel.org>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Philipp Reisner <philipp.reisner@linbit.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 0/3] string.h: Use ARRAY_SIZE() for memtostr*()/strtomem*()
+Date: Thu,  6 Feb 2025 10:11:27 -0800
+Message-Id: <20250206175216.work.225-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZd1dpqv+rM2jD1fNGvhU_0+6c8MjzsgEsi2V-RkHVteJg@mail.gmail.com> <cj2w476ui6g6bjtrnmhozgruhudjx7dbeifxtx4q26c4sqmobt@ill63v5yc3ke>
-In-Reply-To: <cj2w476ui6g6bjtrnmhozgruhudjx7dbeifxtx4q26c4sqmobt@ill63v5yc3ke>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 6 Feb 2025 19:10:50 +0100
-X-Gm-Features: AWEUYZkYq87i7dcuraqL9nv2V2zM6XbkuTsSw_RSaFUD-ppNitROYVtIB8RMtyU
-Message-ID: <CA+fCnZfTvFzX32ZU=Xa0qsNACM4Y1vA1xQDtJkhhk1fYH1QxRA@mail.gmail.com>
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for x86
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: luto@kernel.org, xin@zytor.com, kirill.shutemov@linux.intel.com, 
-	palmer@dabbelt.com, tj@kernel.org, brgerst@gmail.com, ardb@kernel.org, 
-	dave.hansen@linux.intel.com, jgross@suse.com, will@kernel.org, 
-	akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net, dvyukov@google.com, 
-	richard.weiyang@gmail.com, ytcoode@gmail.com, tglx@linutronix.de, 
-	hpa@zytor.com, seanjc@google.com, paul.walmsley@sifive.com, 
-	aou@eecs.berkeley.edu, justinstitt@google.com, jason.andryuk@amd.com, 
-	glider@google.com, ubizjak@gmail.com, jannh@google.com, bhe@redhat.com, 
-	vincenzo.frascino@arm.com, rafael.j.wysocki@intel.com, 
-	ndesaulniers@google.com, mingo@redhat.com, catalin.marinas@arm.com, 
-	junichi.nomura@nec.com, nathan@kernel.org, ryabinin.a.a@gmail.com, 
-	dennis@kernel.org, bp@alien8.de, kevinloughlin@google.com, morbo@google.com, 
-	dan.j.williams@intel.com, julian.stecklina@cyberus-technology.de, 
-	peterz@infradead.org, cl@linux.com, kees@kernel.org, 
-	kasan-dev@googlegroups.com, x86@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=535; i=kees@kernel.org; h=from:subject:message-id; bh=REWIDIpSqJfCqMQ3pqQq6PxFe9oC9dJ25XsThshVyhY=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLfgcopQUdcXiVcCyXf9my5g1TSl8c6l8lv2OyUwfrP FP1mUIPOkpZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACYivouRoZcv2XaORrZKztXM N/KMzZu/rv193fAzq90iuTV8WVt1nBn+O3R9MUjdMGH9i3WTKgvsNJy8NRsLE/u/hr6R/XDZMvg KLwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 6, 2025 at 11:41=E2=80=AFAM Maciej Wieczor-Retman
-<maciej.wieczor-retman@intel.com> wrote:
->
-> >I started reviewing the patches, but this is somewhat complicated, as
-> >the dense mode changes are squashed together with the generic ones for
-> >x86 support. Could you please split this series into 2? Or at least
-> >reorder the patches so that everything needed for basic x86 support
-> >comes first and can be reviewed and tested separately.
->
-> I'll try reordering first and see if it looks nice. Since the dense mode =
-would
-> make some parts arch specific I think it's better to have the two parts i=
-n one
-> series for easier reference. But if it turns out more convoluted I'll jus=
-t split
-> it as you suggested.
+Work around a Clang 14 bug by switching to ARRAY_SIZE() (with the
+added benefit of explicitly checking for char array arguments) in
+memtostr*/strtomem*().
 
-Yes, please do. I also think if you split the series, we can land the
-basic x86 support fairly quickly, or at least I can do the review and
-give the ack from the KASAN side. For the dense mode part, I'd like to
-also hear the opinion of other KASAN developers wrt the overall
-design.
+-Kees
 
-> >Also feel free to drop the dependency on that risc-v series, as it
-> >doesn't get updated very often. But up to you.
->
-> Okay, I was mostly interested in the patch that redefines KASAN_SHADOW_EN=
-D as
-> KASAN_SHADOW_OFFSET and then gets shadow addresses by using a signed offs=
-et. But
-> I suppose I can just take that patch and prepend my series with that? (af=
-ter
-> applying your comments from that series)
+Kees Cook (3):
+  compiler.h: Move C string helpers into C-only kernel section
+  compiler.h: Introduce __must_be_char_array()
+  string.h: Use ARRAY_SIZE() for memtostr*()/strtomem*()
 
-Sounds good to me!
+ include/linux/compiler.h | 32 +++++++++++++++++++-------------
+ include/linux/string.h   | 12 ++++++++----
+ 2 files changed, 27 insertions(+), 17 deletions(-)
+
+-- 
+2.34.1
+
