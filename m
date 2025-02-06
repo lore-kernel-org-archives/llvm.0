@@ -1,139 +1,186 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B0B22FF24
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 22:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFD51F78E6;
+	Thu,  6 Feb 2025 22:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738879359; cv=none; b=YeAv7rPm9u3y1P4ZyrctwM1pRBfvZp5PsTIjiRpYk7pkKpxIQIUyMjhjg2Q7J45alyKW321eIsDppIkfC1ZrSsr6VZN4M6CCMKr3n+7PSFVEUKGhAB5ck/O4qAl6mGb2xYvBTQEkh87IE2bFqfi1JGZ7KIrDutD3oa+qiUOCquc=
+	t=1738881810; cv=none; b=cDkNSF9AHEAve78IspBDhfUt7fTO3amNzsvFKUzIjhmXQa8gqartYDwbZSFWb2mhWZlG5+PXFineUFZpROObLQywHeom8/opL4Sp7/0Oc8q79WQrVh+mQmVMEoXUqu3UFWPBxTl081CCw5JUGGIM4YhfYa2xIDcLmv3/WPpfZ+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738879359; c=relaxed/simple;
-	bh=yhX7RJVwaA+Lpx5zbK94yXYQtEnJwzrvecNure0CHC0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OzgZL05nUf0sHdW3v8QNVkMYmSr59LbTv5syYDG0Dqs6+jETQzUTF/+xnjlKLijOtZZZEgFdL0QCUYQSYZf619akpfn/cqEWGUsrb7jehJ93SKcf1R7iTFH/8ASYcvyxm582GZihyXKTe8P5L+5bltq6uHQf8Tr21OC28E4pJvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zEY8wlJh; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1738881810; c=relaxed/simple;
+	bh=RRyeWgDKYUXqPj9AK9HawjmXCxmssH+oPCpVBdzfC7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KYgYO+Flx8R3+XPiqbGvhL9RsGfIOnO5yqsBO5FE9R+OrR+7OqVdTJl/qEMi+4jrpnolkB/ILtNQ9DlXW44G04p1EVMKdY0KqfWPYfpzPwTG2rAE0R4yhJ8LnppUmNLx5zEXWNUNB7z5Ky5oH7bgZYfnP+YqUcpEB2Ih525vLBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WqBdpuyc; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zEY8wlJh"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2f9b9c0088fso2315535a91.0
-        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 14:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738879356; x=1739484156; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+VZ6pc7yhUf3GbCnbHnQECLXNAA4wAPKI9VijFmeNYk=;
-        b=zEY8wlJh8X2+2i/q5S72JiM2B6MverUEPLrgv7KcuFXJE48bBJuQ9vLZ0lSYgGxPKt
-         Z5px3dEiedrpJHykh8CHopSF/clZgwzN7jpa9IPrXP19SnE8P1Z+ii5yK0MMtZxPMbqe
-         ULWnYpqFkKPMHLWdKSC7uO3IaFPEnhNFd2BhZpy0XXNJo4TZ9GzfJCwnVEALQDucj2+E
-         3JH8QqWn2lypTHa2+cKeXLJPGoacZhICDqK9x3lxL7ZP+dXdHrlsLzIIGXFt7quOM8cz
-         CybVy8wWiY5jprhCJBj4EA+Fg80vt25upBk9wpsA0Gw2ZjuDlMQ10Zlu6t4YKfjl7sy8
-         TSSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738879356; x=1739484156;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+VZ6pc7yhUf3GbCnbHnQECLXNAA4wAPKI9VijFmeNYk=;
-        b=vKtUMKDQ7i9PTnK4p+YmcUQc5HBSQMqCFsAgIW2MW7effOBKEJQ6itnc8ARlpoSQaI
-         mSAtomJlr9Sw5hc5h1FRurmjxLDxoT3S7TCkInd8PqL+ntegfDc6aeZqfHusOUrfVtu+
-         ppwYu0jXtWbrIuk9QwW06wNW6G9MyMBH8cZqa3wx9CsgWawckObiRFf+ayCNfIgPZdtS
-         5byHIw4B/MInAcHwHmbuMYaPTVxts/1lps3lN5EvW8rcYngZkrOWxXaHxynNHZY8b3CF
-         zDzqz1xYp2DrV1HfRZVQpWYwctCy6A5LMLBkeVsrYdRzAlD1kTdQhKw+QsJzZnYcA9vQ
-         wHoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXiUSaLkX6HmX+WUKw7JeGpjpTC/zIsyWvMQdXVzhu+S3GHHqd4zdkZhevDENUC0cLYPbmo@lists.linux.dev
-X-Gm-Message-State: AOJu0YxseZuIjQgmO3BhBVVu9eUYAk8a0pKF6nXF3ccBieQQa5waGUlv
-	40sqJLwsUgvYZcGGAlmpb4jDO1BOHIOk8MlwEGVUUXUYePGY1OF1rMR68nvdBKYlDWlY0q+DvNW
-	SQxrt0eY0dGYN4VjHtK3u8YkAjN3v786wgcJ/
-X-Gm-Gg: ASbGncvVS+WFWzdrzokjFJtOGA59nn320oac2WtULvEKT7YVnkRKAzRVtvwFtxRUWGj
-	jy0miS1wlP8E9BN9wJzZE7pyUMvJZSshKSl2/a8QYEuh9anh3ozPsrOmcrtll1RaTS9PoNvOvl0
-	+pNvR604ipNKyeP/mj9XzhjPDZD6cL
-X-Google-Smtp-Source: AGHT+IHT0gKSH+kblZFLx/Wzk00J8ULB9nNNudVm2CwEFSzub8EVmI8aYK9egI+4TLHMpy13Xtg4Kl5eKF+OeEA9kSk=
-X-Received: by 2002:a17:90b:1a91:b0:2ef:949c:6f6b with SMTP id
- 98e67ed59e1d1-2f9ffb38596mr8748127a91.13.1738879355643; Thu, 06 Feb 2025
- 14:02:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WqBdpuyc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738881808; x=1770417808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RRyeWgDKYUXqPj9AK9HawjmXCxmssH+oPCpVBdzfC7s=;
+  b=WqBdpuyc8olEislBEVa8U8i39UUZOY/40rFrho5H058fJkIxTNk2fXDX
+   jBbDIOwBwkB3gWbrdsjMGHFi3J4nH0HzRbmLuZVruLgUotMYZaiiWzmqg
+   PRejsbeAzQQOPEgyN+rHzdK9WvkFKoIwyX7YQtoFyBlsIu7Btcvzhe2y8
+   +uxiGyK/SovrARCrHYU1e+k44bxnRuPLmSl205swOG2gVi6FTvRl7HOGH
+   J+N6kPpWZjR9CcW1C+XpN8cCKphAJizLmx6BcetyPCA6BSN3JU7A2DQIE
+   IKth3+Y/ol7uq/kSdpS9n+HKpVGlDBRoQ7LNN0awo0b/kJ4DYrdswBqPQ
+   A==;
+X-CSE-ConnectionGUID: o1R+9GmCSj295C2rASGZzA==
+X-CSE-MsgGUID: qZqQw6AZRC6D2DxuMKTnNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39385321"
+X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
+   d="scan'208";a="39385321"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 14:43:28 -0800
+X-CSE-ConnectionGUID: jROx22NBQcGGvRMsd4YqeA==
+X-CSE-MsgGUID: tiD9h/EPS9SDj5QwMK+YGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
+   d="scan'208";a="111181311"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 06 Feb 2025 14:43:24 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgAag-000xTb-17;
+	Thu, 06 Feb 2025 22:43:22 +0000
+Date: Fri, 7 Feb 2025 06:42:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Nuno Sa <nuno.sa@analog.com>,
+	David Lechner <dlechner@baylibre.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] iio: adc: Support ROHM BD79124 ADC
+Message-ID: <202502070654.5T9Nk6dN-lkp@intel.com>
+References: <4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250206181711.1902989-1-elver@google.com> <20250206181711.1902989-8-elver@google.com>
- <4ce8f5f2-4196-43e7-88a2-0b5fa2af37fb@acm.org>
-In-Reply-To: <4ce8f5f2-4196-43e7-88a2-0b5fa2af37fb@acm.org>
-From: Marco Elver <elver@google.com>
-Date: Thu, 6 Feb 2025 23:01:59 +0100
-X-Gm-Features: AWEUYZnffMY9S6S6so6pFI6Su5ySq6ByivopC2ArucfUZC95P3tyJXAV2JoDeGo
-Message-ID: <CANpmjNMGH36vs8K9Z8tnJc=4xSeeQjeZGyhZj5KSUwh0kQ06MQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 07/24] cleanup: Basic compatibility with capability analysis
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
-	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@kernel.org>, 
-	Jann Horn <jannh@google.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount@gmail.com>
 
-On Thu, 6 Feb 2025 at 22:29, Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 2/6/25 10:10 AM, Marco Elver wrote:
-> > @@ -243,15 +243,18 @@ const volatile void * __must_check_fn(const volatile void *val)
-> >   #define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)             \
-> >   typedef _type class_##_name##_t;                                    \
-> >   static inline void class_##_name##_destructor(_type *p)                     \
-> > +     __no_capability_analysis                                        \
-> >   { _type _T = *p; _exit; }                                           \
-> >   static inline _type class_##_name##_constructor(_init_args)         \
-> > +     __no_capability_analysis                                        \
-> >   { _type t = _init; return t; }
->
-> guard() uses the constructor and destructor functions defined by
-> DEFINE_GUARD(). The DEFINE_GUARD() implementation uses DEFINE_CLASS().
-> Here is an example that I found in <linux/mutex.h>:
->
-> DEFINE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
->
-> For this example, how is the compiler told that mutex _T is held around
-> the code protected by guard()?
+Hi Matti,
 
-DEFINE_GUARD is the generic variant usable for more than just locking
-primitives. DEFINE_LOCK_GUARD_X is a specialization of DEFINE_GUARD
-intended for locking primitives, all of which should be
-capability-enabled.
+kernel test robot noticed the following build warnings:
 
-So I added automatic support for DEFINE_LOCK_GUARD_1 (keeping in mind
-the limitations as described in the commit message). All later patches
-that introduce support for a locking primitive that had been using
-DEFINE_GUARD are switched over to DEFINE_LOCK_GUARD. There's no
-additional runtime cost (_T is just a struct containing _T->lock). For
-example, the change for mutex [1] switches it to use
-DEFINE_LOCK_GUARD_1.
+[auto build test WARNING on 5bc55a333a2f7316b58edc7573e8e893f7acb532]
 
-[1] https://lore.kernel.org/all/20250206181711.1902989-12-elver@google.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-ROHM-BD79124-ADC-GPO/20250205-214127
+base:   5bc55a333a2f7316b58edc7573e8e893f7acb532
+patch link:    https://lore.kernel.org/r/4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount%40gmail.com
+patch subject: [PATCH v2 3/5] iio: adc: Support ROHM BD79124 ADC
+config: i386-randconfig-004-20250207 (https://download.01.org/0day-ci/archive/20250207/202502070654.5T9Nk6dN-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250207/202502070654.5T9Nk6dN-lkp@intel.com/reproduce)
 
-(For every primitive added I have added tests in
-test_capability-analysis.c, including testing that the scoped guard()
-helpers work and do not produce false positives.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502070654.5T9Nk6dN-lkp@intel.com/
 
-The RCU patch [15/24] also makes it work for LOCK_GUARD_0, by simply
-adding an optional helper macro to declare the attributes for lock and
-unlock. There's no need for additional variants of
-DEFINE_LOCK_GUARD_X.
+All warnings (new ones prefixed by >>):
 
-Should the need arise to add add annotations for DEFINE_GUARD, we can
-introduce DECLARE_GUARD_ATTRS(), similar to
-DECLARE_LOCK_GUARD_0_ATTRS() introduced in [15/24]. But it's omitted
-because DEFINE_GUARD() can be replaced by DEFINE_LOCK_GUARD for
-locking primitives.
+>> drivers/iio/adc/rohm-bd79124.c:1072:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1072 |                 return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
+         |                                           ^~~
+   drivers/iio/adc/rohm-bd79124.c:1057:9: note: initialize the variable 'ret' to silence this warning
+    1057 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-In general I wanted to keep the current interface for defining guards
-untouched, and keeping it simpler.
+
+vim +/ret +1072 drivers/iio/adc/rohm-bd79124.c
+
+  1049	
+  1050	static int bd79124_probe(struct i2c_client *i2c)
+  1051	{
+  1052		struct bd79124_data *data;
+  1053		struct iio_dev *iio_dev;
+  1054		const struct iio_chan_spec *template;
+  1055		struct iio_chan_spec *cs;
+  1056		struct device *dev = &i2c->dev;
+  1057		int ret;
+  1058	
+  1059		iio_dev = devm_iio_device_alloc(dev, sizeof(*data));
+  1060		if (!iio_dev)
+  1061			return -ENOMEM;
+  1062	
+  1063		data = iio_priv(iio_dev);
+  1064		data->dev = dev;
+  1065		data->map = devm_regmap_init_i2c(i2c, &bd79124_regmap);
+  1066		if (IS_ERR(data->map))
+  1067			return dev_err_probe(dev, PTR_ERR(data->map),
+  1068					     "Failed to initialize Regmap\n");
+  1069	
+  1070		data->vmax = devm_regulator_get_enable_read_voltage(dev, "vdd");
+  1071		if (data->vmax < 0)
+> 1072			return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
+  1073	
+  1074		ret = devm_regulator_get_enable(dev, "iovdd");
+  1075		if (ret < 0)
+  1076			return dev_err_probe(dev, ret, "Failed to enable I/O voltage\n");
+  1077	
+  1078		ret = devm_delayed_work_autocancel(dev, &data->alm_enable_work,
+  1079						   bd79124_alm_enable_worker);
+  1080		if (ret)
+  1081			return ret;
+  1082	
+  1083		if (i2c->irq) {
+  1084			template = &bd79124_chan_template;
+  1085		} else {
+  1086			template = &bd79124_chan_template_noirq;
+  1087			dev_dbg(dev, "No IRQ found, events disabled\n");
+  1088		}
+  1089		ret = devm_iio_adc_device_alloc_chaninfo(dev, template, &cs);
+  1090		if (ret < 0)
+  1091			return ret;
+  1092	
+  1093		iio_dev->channels = cs;
+  1094		iio_dev->num_channels = ret;
+  1095		iio_dev->info = &bd79124_info;
+  1096		iio_dev->name = "bd79124";
+  1097		iio_dev->modes = INDIO_DIRECT_MODE;
+  1098	
+  1099		data->gc = bd79124gpo_chip;
+  1100		data->gc.parent = dev;
+  1101	
+  1102		mutex_init(&data->mutex);
+  1103	
+  1104		ret = bd79124_hw_init(data);
+  1105		if (ret)
+  1106			return ret;
+  1107	
+  1108		ret = devm_gpiochip_add_data(data->dev, &data->gc, data);
+  1109		if (ret)
+  1110			return dev_err_probe(data->dev, ret, "gpio init Failed\n");
+  1111	
+  1112		if (i2c->irq > 0) {
+  1113			ret = devm_request_threaded_irq(data->dev, i2c->irq,
+  1114						bd79124_irq_handler,
+  1115						&bd79124_event_handler, IRQF_ONESHOT,
+  1116						"adc-thresh-alert", iio_dev);
+  1117			if (ret)
+  1118				return dev_err_probe(data->dev, ret,
+  1119						     "Failed to register IRQ\n");
+  1120		}
+  1121	
+  1122		return devm_iio_device_register(data->dev, iio_dev);
+  1123	}
+  1124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
