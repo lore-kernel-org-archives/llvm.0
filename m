@@ -1,42 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85CF226558;
-	Thu,  6 Feb 2025 10:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382A9227581;
+	Thu,  6 Feb 2025 10:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738836653; cv=none; b=nOaVlQr9vjqM7BIR/IVczB0IWDUk0Ip0qtwh6bCukq+9FvEpV85fb59+ZDZfdFa2hflsRKN4x/yN9aDB2tqsSse1HwRVWCieXidE3mxt2GuU9BGwSLp8aONRWj4cNkFicnN7mpG+QVejllBMHSzTWTlfN9rWj7iPrBE4D93RmwY=
+	t=1738838408; cv=none; b=DRaprctvOvoFVUOc9lavXdqGmNwaW0JTep5tEgUhqTP2DFchOKohb8ZDcVZHXagjjFnAZMltv57mxUp30zruHqW8zNezmKZtNbRlIGChuDmNne7pi+hmcc2C5nHbof38+Nzx+MNB1TI1gvYVDMxX6F8NRCiHVOo9K5c7KvXMeXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738836653; c=relaxed/simple;
-	bh=zCjHUjcZrNNQyE/G00F8WoidXYqBgh6Qqa5j1GKT3q4=;
+	s=arc-20240116; t=1738838408; c=relaxed/simple;
+	bh=FdibQnL131/L0M2R5AMACpiiKHrQgNDDYYi3NknCtAE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dKdzEhAhm0CuksHpAM6EuxkwIQ+VLmIZk023rS4lib6+eloslM8p3cF5yiZzi8kYv8YOtkBqj5U7sQaEQeohmlt/HIngPgm7oUAz1VFnTHXl0JI1xz4udTmYRrBr70I2YNmL031g/8qkxw+Jccx/YNYqyjwcrAo6i3hyLH/t6HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tCfVNref; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=A/zPDnqZ1aQ7HZx9LzFfBb5REln+dtPv/Hbpku6lka5gKmHNML02EyaI2iH5WgtE1r1tc+NGiEKkyK4DhlVdKN6l564gFthM4R50ZYzOFdbJXKk0tU7Q+6gEuZiXB5u0lELVm3OMEcTILraekbcOttOMjzyJvGHX+nEQdL1JL6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D0+shFSY; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tCfVNref"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1360EC4CEE0;
-	Thu,  6 Feb 2025 10:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738836653;
-	bh=zCjHUjcZrNNQyE/G00F8WoidXYqBgh6Qqa5j1GKT3q4=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=tCfVNrefN+47cl/W2ip4YiHpINwNi5H3fE8mcllZ18IcnSxGanI61ZV1tNeN3XReO
-	 aRJmmQzwftIpNACJaevVoTqM2t79rtU4LOynE3BUcWmxj/KVSYzeEcgII2DYFvPWRw
-	 Mk352BOabnLLesMyDX7RuBlGGkBbjfqjzgntblQcnnku82H7kJKDZMDA7UubL65uGW
-	 P2O6iUNTW/qRpF15cKursZVU7YMtl2lpE4DXj88sYym1f1HXzAS+FIzjRa0vg2FJ3/
-	 8FX8mKUDIuHu1RCqLgvw3oEI+b0ElbaUZUJKt3kWcODsR99XvbgYMbugYei+OMsZh2
-	 GK0zCdHivGIvg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A1EA3CE0809; Thu,  6 Feb 2025 02:10:52 -0800 (PST)
-Date: Thu, 6 Feb 2025 02:10:52 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [paulmckrcu:dev.2025.01.30a 71/73]
- include/linux/printk.h:319:13: error: unused function 'pr_flush'
-Message-ID: <ca8a75a8-b6cd-41b6-bc9b-3a56e4452184@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202502061107.63OiEuce-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D0+shFSY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738838406; x=1770374406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FdibQnL131/L0M2R5AMACpiiKHrQgNDDYYi3NknCtAE=;
+  b=D0+shFSY4b9c89lynqr8NG8ajMYrhehj7fA8w8mFdBhDMdhGXrt3oVdm
+   cEVCLzMMqZgADCP8NfgR6OLdLbtx2ADpnX02328MFQ2TqBWpWSmlKyZzd
+   gMvMLXRPRVg+YKSrikdpXvXPDmqSiPHeF6CwnHPO3av0eCF5aWay8jWpS
+   5swucZlgwVL9IJF5dGCxQwQLlgchPFO/gK2GojE/Ex0HFZLwwB5l2w8Y1
+   tVWdLdkD1P+HnnNxF6QJyGX0XvuY1yOB5nOOwL6+zdYFYfpTfZ+OpbqJj
+   jSFeZqGXnNygKr3yFPwtA87fbgJk6yJhvlRpg/dRDfspudrOo6vpf/fDf
+   w==;
+X-CSE-ConnectionGUID: 7Sw9zaA9Seeh7zIrX1jGOw==
+X-CSE-MsgGUID: QcWzyBf1S9+VumtMv0VXfw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="49680107"
+X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
+   d="scan'208";a="49680107"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 02:40:06 -0800
+X-CSE-ConnectionGUID: FsrH/Y1kTC+E0tbcEPoU9w==
+X-CSE-MsgGUID: Buw5YOnuQZmiHLhcq5rqEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="142053882"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 06 Feb 2025 02:40:02 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfzId-000wkl-1i;
+	Thu, 06 Feb 2025 10:39:59 +0000
+Date: Thu, 6 Feb 2025 18:39:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeroen de Borst <jeroendb@google.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, jeroendb@google.com, pkaligineedi@google.com,
+	shailend@google.com, andrew+netdev@lunn.ch, willemb@google.com,
+	hramamurthy@google.com, ziweixiao@google.com, horms@kernel.org,
+	linux-kernel@vger.kernel.org, Jeroen de Borst <jeroend@google.com>
+Subject: Re: [PATCH net-next v2] gve: Add RSS cache for non RSS device option
+ scenario
+Message-ID: <202502061802.Co0dVfXU-lkp@intel.com>
+References: <20250204213121.14195-1-jeroendb@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,57 +68,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202502061107.63OiEuce-lkp@intel.com>
+In-Reply-To: <20250204213121.14195-1-jeroendb@google.com>
 
-On Thu, Feb 06, 2025 at 12:00:41PM +0800, kernel test robot wrote:
-> tree:   https://github.com/paulmckrcu/linux dev.2025.01.30a
-> head:   a87cfdd8dfd5499a8b2e29a40ce4ad6ffca6eb56
-> commit: 1edbc527e3d6610b4781edba8e927ebca102eaf6 [71/73] fixup! printk: Flush console log from kernel_power_off()
-> config: um-randconfig-001-20250206 (https://download.01.org/0day-ci/archive/20250206/202502061107.63OiEuce-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250206/202502061107.63OiEuce-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502061107.63OiEuce-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from lib/test_bitops.c:10:
->    In file included from include/linux/module.h:17:
->    In file included from include/linux/kmod.h:9:
->    In file included from include/linux/umh.h:4:
->    In file included from include/linux/gfp.h:7:
->    In file included from include/linux/mmzone.h:8:
->    In file included from include/linux/spinlock.h:56:
->    In file included from include/linux/preempt.h:79:
->    In file included from ./arch/um/include/generated/asm/preempt.h:1:
->    In file included from include/asm-generic/preempt.h:5:
->    In file included from include/linux/thread_info.h:13:
->    In file included from include/linux/bug.h:5:
->    In file included from ./arch/um/include/generated/asm/bug.h:1:
->    In file included from include/asm-generic/bug.h:22:
-> >> include/linux/printk.h:319:13: error: unused function 'pr_flush' [-Werror,-Wunused-function]
->    static bool pr_flush(int timeout_ms, bool reset_on_progress)
->                ^
->    1 error generated.
-> 
-> 
-> vim +/pr_flush +319 include/linux/printk.h
-> 
->    318	
->  > 319	static bool pr_flush(int timeout_ms, bool reset_on_progress)
+Hi Jeroen,
 
-This needs an "inline", good catch, will fix, thank you!
+kernel test robot noticed the following build warnings:
 
-							Thanx, Paul
+[auto build test WARNING on net-next/main]
 
->    320	{
->    321		return true;
->    322	}
->    323	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeroen-de-Borst/gve-Add-RSS-cache-for-non-RSS-device-option-scenario/20250205-053317
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250204213121.14195-1-jeroendb%40google.com
+patch subject: [PATCH net-next v2] gve: Add RSS cache for non RSS device option scenario
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250206/202502061802.Co0dVfXU-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250206/202502061802.Co0dVfXU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502061802.Co0dVfXU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/google/gve/gve_ethtool.c:7:
+   In file included from include/linux/rtnetlink.h:7:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/google/gve/gve_ethtool.c:502:6: warning: variable 'reset_rss' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     503 |             priv->cache_rss_config && !netif_is_rxfh_configured(netdev))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:509:57: note: uninitialized use occurs here
+     509 |         return gve_adjust_queues(priv, new_rx_cfg, new_tx_cfg, reset_rss);
+         |                                                                ^~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:502:2: note: remove the 'if' if its condition is always true
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     503 |             priv->cache_rss_config && !netif_is_rxfh_configured(netdev))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     504 |                 reset_rss = true;
+>> drivers/net/ethernet/google/gve/gve_ethtool.c:502:6: warning: variable 'reset_rss' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     503 |             priv->cache_rss_config && !netif_is_rxfh_configured(netdev))
+         |             ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:509:57: note: uninitialized use occurs here
+     509 |         return gve_adjust_queues(priv, new_rx_cfg, new_tx_cfg, reset_rss);
+         |                                                                ^~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:502:6: note: remove the '&&' if its condition is always true
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     503 |             priv->cache_rss_config && !netif_is_rxfh_configured(netdev))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/google/gve/gve_ethtool.c:502:6: warning: variable 'reset_rss' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:509:57: note: uninitialized use occurs here
+     509 |         return gve_adjust_queues(priv, new_rx_cfg, new_tx_cfg, reset_rss);
+         |                                                                ^~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:502:6: note: remove the '&&' if its condition is always true
+     502 |         if (new_rx != priv->rx_cfg.num_queues &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/ethernet/google/gve/gve_ethtool.c:485:16: note: initialize the variable 'reset_rss' to silence this warning
+     485 |         bool reset_rss;
+         |                       ^
+         |                        = 0
+   6 warnings generated.
+
+
+vim +502 drivers/net/ethernet/google/gve/gve_ethtool.c
+
+   475	
+   476	static int gve_set_channels(struct net_device *netdev,
+   477				    struct ethtool_channels *cmd)
+   478	{
+   479		struct gve_priv *priv = netdev_priv(netdev);
+   480		struct gve_queue_config new_tx_cfg = priv->tx_cfg;
+   481		struct gve_queue_config new_rx_cfg = priv->rx_cfg;
+   482		struct ethtool_channels old_settings;
+   483		int new_tx = cmd->tx_count;
+   484		int new_rx = cmd->rx_count;
+   485		bool reset_rss;
+   486	
+   487		gve_get_channels(netdev, &old_settings);
+   488	
+   489		/* Changing combined is not allowed */
+   490		if (cmd->combined_count != old_settings.combined_count)
+   491			return -EINVAL;
+   492	
+   493		if (!new_rx || !new_tx)
+   494			return -EINVAL;
+   495	
+   496		if (priv->num_xdp_queues &&
+   497		    (new_tx != new_rx || (2 * new_tx > priv->tx_cfg.max_queues))) {
+   498			dev_err(&priv->pdev->dev, "XDP load failed: The number of configured RX queues should be equal to the number of configured TX queues and the number of configured RX/TX queues should be less than or equal to half the maximum number of RX/TX queues");
+   499			return -EINVAL;
+   500		}
+   501	
+ > 502		if (new_rx != priv->rx_cfg.num_queues &&
+   503		    priv->cache_rss_config && !netif_is_rxfh_configured(netdev))
+   504			reset_rss = true;
+   505	
+   506		new_tx_cfg.num_queues = new_tx;
+   507		new_rx_cfg.num_queues = new_rx;
+   508	
+ > 509		return gve_adjust_queues(priv, new_rx_cfg, new_tx_cfg, reset_rss);
+   510	}
+   511	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
