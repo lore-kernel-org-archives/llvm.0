@@ -1,153 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EC6222595
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 21:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B0B22FF24
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 22:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738878092; cv=none; b=fJBTFImgVkjk9V3aarN0WCYC3nN/LeMBFr3yQ15CSwT8hLN/wW/3E6IftJmijnY8XkvDgZmofb0NgVw86E2RY0A3+hfvXFzLvIISUKOeP6yvYJt9Ymujx7zrcJJWSGKvF8obTMv4VNnjWiCI8MLdqisqWdSwBXyzd8MQtjEYGf8=
+	t=1738879359; cv=none; b=YeAv7rPm9u3y1P4ZyrctwM1pRBfvZp5PsTIjiRpYk7pkKpxIQIUyMjhjg2Q7J45alyKW321eIsDppIkfC1ZrSsr6VZN4M6CCMKr3n+7PSFVEUKGhAB5ck/O4qAl6mGb2xYvBTQEkh87IE2bFqfi1JGZ7KIrDutD3oa+qiUOCquc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738878092; c=relaxed/simple;
-	bh=3OgHs6tzCrAw+gGCDLhhtpN/agDfB2Z70E0T/xuo+TU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XLYY6e5WWYljEyU53ViN74p/ZZ8EUOD8JtNPlt1o7i77xOJ0BVbsrm3AHnEt15Wd/HGvlYe1cZk0rXWNxN3rKt27o/JMVlgCtoXsiU+UUmjacGfm3X7XkitWjrw5tyhO3uhClsP6wefZ4KAJoCFBIYw0oC0q+7ztpxMh3wTSuTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l5NBXOdv; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738879359; c=relaxed/simple;
+	bh=yhX7RJVwaA+Lpx5zbK94yXYQtEnJwzrvecNure0CHC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OzgZL05nUf0sHdW3v8QNVkMYmSr59LbTv5syYDG0Dqs6+jETQzUTF/+xnjlKLijOtZZZEgFdL0QCUYQSYZf619akpfn/cqEWGUsrb7jehJ93SKcf1R7iTFH/8ASYcvyxm582GZihyXKTe8P5L+5bltq6uHQf8Tr21OC28E4pJvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zEY8wlJh; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l5NBXOdv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738878091; x=1770414091;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3OgHs6tzCrAw+gGCDLhhtpN/agDfB2Z70E0T/xuo+TU=;
-  b=l5NBXOdvEmt50CBu7EhIPS5nDnbbFqktQfe/OOuK+GKmbohNTiDpcWWs
-   +1K9yo1QEZQ2E948NANx2eQ8+r7XTZB0+nd/xDzaf0BbVHsHMRbfD5hek
-   o0MO4QqpFxi1UyhxeA/NZEFwODwv8BGb0ZALTdv275UtmKEc/9KxB7kna
-   KSqOAgT1W6jqPQBxvwtYQuDbf3cK4mOczSdnpi65oXav0R54sd3doAE4D
-   kNuvyU3Bw2VnuOHuHHGiQqhcnjmI4x+qJBnF853cYmhGUGfcp8SyVQFZB
-   WnrfmV6HrtM7kfRS7JpsFqnuzf2thfvn+Ap6rLtvlSz1W4q6In1q1wXMy
-   g==;
-X-CSE-ConnectionGUID: whX6K1FZQwm2BmLz21BpoQ==
-X-CSE-MsgGUID: s0tkY736TDSpVxjk7n0wRQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="42345045"
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="42345045"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 13:41:28 -0800
-X-CSE-ConnectionGUID: 6H771ns0SpuSxG9hNzP1oQ==
-X-CSE-MsgGUID: Z+csMKT7SBO/Wvx19isNiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116528569"
-Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.111.17]) ([10.125.111.17])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 13:41:27 -0800
-Message-ID: <239de2b9-0787-4105-a481-418dbd4d861e@intel.com>
-Date: Thu, 6 Feb 2025 13:41:29 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zEY8wlJh"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2f9b9c0088fso2315535a91.0
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 14:02:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738879356; x=1739484156; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+VZ6pc7yhUf3GbCnbHnQECLXNAA4wAPKI9VijFmeNYk=;
+        b=zEY8wlJh8X2+2i/q5S72JiM2B6MverUEPLrgv7KcuFXJE48bBJuQ9vLZ0lSYgGxPKt
+         Z5px3dEiedrpJHykh8CHopSF/clZgwzN7jpa9IPrXP19SnE8P1Z+ii5yK0MMtZxPMbqe
+         ULWnYpqFkKPMHLWdKSC7uO3IaFPEnhNFd2BhZpy0XXNJo4TZ9GzfJCwnVEALQDucj2+E
+         3JH8QqWn2lypTHa2+cKeXLJPGoacZhICDqK9x3lxL7ZP+dXdHrlsLzIIGXFt7quOM8cz
+         CybVy8wWiY5jprhCJBj4EA+Fg80vt25upBk9wpsA0Gw2ZjuDlMQ10Zlu6t4YKfjl7sy8
+         TSSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738879356; x=1739484156;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+VZ6pc7yhUf3GbCnbHnQECLXNAA4wAPKI9VijFmeNYk=;
+        b=vKtUMKDQ7i9PTnK4p+YmcUQc5HBSQMqCFsAgIW2MW7effOBKEJQ6itnc8ARlpoSQaI
+         mSAtomJlr9Sw5hc5h1FRurmjxLDxoT3S7TCkInd8PqL+ntegfDc6aeZqfHusOUrfVtu+
+         ppwYu0jXtWbrIuk9QwW06wNW6G9MyMBH8cZqa3wx9CsgWawckObiRFf+ayCNfIgPZdtS
+         5byHIw4B/MInAcHwHmbuMYaPTVxts/1lps3lN5EvW8rcYngZkrOWxXaHxynNHZY8b3CF
+         zDzqz1xYp2DrV1HfRZVQpWYwctCy6A5LMLBkeVsrYdRzAlD1kTdQhKw+QsJzZnYcA9vQ
+         wHoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXiUSaLkX6HmX+WUKw7JeGpjpTC/zIsyWvMQdXVzhu+S3GHHqd4zdkZhevDENUC0cLYPbmo@lists.linux.dev
+X-Gm-Message-State: AOJu0YxseZuIjQgmO3BhBVVu9eUYAk8a0pKF6nXF3ccBieQQa5waGUlv
+	40sqJLwsUgvYZcGGAlmpb4jDO1BOHIOk8MlwEGVUUXUYePGY1OF1rMR68nvdBKYlDWlY0q+DvNW
+	SQxrt0eY0dGYN4VjHtK3u8YkAjN3v786wgcJ/
+X-Gm-Gg: ASbGncvVS+WFWzdrzokjFJtOGA59nn320oac2WtULvEKT7YVnkRKAzRVtvwFtxRUWGj
+	jy0miS1wlP8E9BN9wJzZE7pyUMvJZSshKSl2/a8QYEuh9anh3ozPsrOmcrtll1RaTS9PoNvOvl0
+	+pNvR604ipNKyeP/mj9XzhjPDZD6cL
+X-Google-Smtp-Source: AGHT+IHT0gKSH+kblZFLx/Wzk00J8ULB9nNNudVm2CwEFSzub8EVmI8aYK9egI+4TLHMpy13Xtg4Kl5eKF+OeEA9kSk=
+X-Received: by 2002:a17:90b:1a91:b0:2ef:949c:6f6b with SMTP id
+ 98e67ed59e1d1-2f9ffb38596mr8748127a91.13.1738879355643; Thu, 06 Feb 2025
+ 14:02:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
- x86
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>,
- Jessica Clarke <jrtc27@jrtc27.com>
-Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, luto@kernel.org,
- xin@zytor.com, kirill.shutemov@linux.intel.com, palmer@dabbelt.com,
- tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com, ardb@kernel.org,
- dave.hansen@linux.intel.com, jgross@suse.com, will@kernel.org,
- akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net,
- dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com,
- tglx@linutronix.de, hpa@zytor.com, seanjc@google.com,
- paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com,
- jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com,
- jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com,
- rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com,
- catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org,
- ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de,
- kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com,
- julian.stecklina@cyberus-technology.de, peterz@infradead.org,
- kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
- linux-doc@vger.kernel.org, "Shutemov, Kirill" <kirill.shutemov@intel.com>
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
- <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
- <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
- <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org>
- <29A74A26-E922-4A4F-9B4A-8DB0336B99DF@jrtc27.com>
- <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250206181711.1902989-1-elver@google.com> <20250206181711.1902989-8-elver@google.com>
+ <4ce8f5f2-4196-43e7-88a2-0b5fa2af37fb@acm.org>
+In-Reply-To: <4ce8f5f2-4196-43e7-88a2-0b5fa2af37fb@acm.org>
+From: Marco Elver <elver@google.com>
+Date: Thu, 6 Feb 2025 23:01:59 +0100
+X-Gm-Features: AWEUYZnffMY9S6S6so6pFI6Su5ySq6ByivopC2ArucfUZC95P3tyJXAV2JoDeGo
+Message-ID: <CANpmjNMGH36vs8K9Z8tnJc=4xSeeQjeZGyhZj5KSUwh0kQ06MQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 07/24] cleanup: Basic compatibility with capability analysis
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
+	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@kernel.org>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/6/25 11:11, Christoph Lameter (Ampere) wrote:
-> I also see that KASAN_HW_TAGS exist but this means that the tags can only
-> be used with CONFIG_KASAN which is a kernel configuration for debug
-> purposes.
-> 
-> What we are interested in is a *production* implementation with minimal
-> software overhead that will be the default on ARM64 if the appropriate
-> hardware is detected. 
+On Thu, 6 Feb 2025 at 22:29, Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> On 2/6/25 10:10 AM, Marco Elver wrote:
+> > @@ -243,15 +243,18 @@ const volatile void * __must_check_fn(const volatile void *val)
+> >   #define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)             \
+> >   typedef _type class_##_name##_t;                                    \
+> >   static inline void class_##_name##_destructor(_type *p)                     \
+> > +     __no_capability_analysis                                        \
+> >   { _type _T = *p; _exit; }                                           \
+> >   static inline _type class_##_name##_constructor(_init_args)         \
+> > +     __no_capability_analysis                                        \
+> >   { _type t = _init; return t; }
+>
+> guard() uses the constructor and destructor functions defined by
+> DEFINE_GUARD(). The DEFINE_GUARD() implementation uses DEFINE_CLASS().
+> Here is an example that I found in <linux/mutex.h>:
+>
+> DEFINE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
+>
+> For this example, how is the compiler told that mutex _T is held around
+> the code protected by guard()?
 
-Ahh, interesting. I'd assumed that once folks had in-hardware tag checks
-that they'd just turn on CONFIG_KASAN and be happy.  Guess not!
+DEFINE_GUARD is the generic variant usable for more than just locking
+primitives. DEFINE_LOCK_GUARD_X is a specialization of DEFINE_GUARD
+intended for locking primitives, all of which should be
+capability-enabled.
 
-> That in turn will hopefully allow other software instrumentation
-> that is currently used to keep small objects secure and in turn
-> creates overhead.
-OK, so KASAN as-is is too broad. Are you saying that the kernel
-_currently_ have "software instrumentation" like SLAB
-redzoning/poisoning and you'd like to see MTE used to replace those?
+So I added automatic support for DEFINE_LOCK_GUARD_1 (keeping in mind
+the limitations as described in the commit message). All later patches
+that introduce support for a locking primitive that had been using
+DEFINE_GUARD are switched over to DEFINE_LOCK_GUARD. There's no
+additional runtime cost (_T is just a struct containing _T->lock). For
+example, the change for mutex [1] switches it to use
+DEFINE_LOCK_GUARD_1.
 
-Are you just interested in small objects?  What counts as small?  I
-assume it's anything roughly <PAGE_SIZE.
+[1] https://lore.kernel.org/all/20250206181711.1902989-12-elver@google.com/
+
+(For every primitive added I have added tests in
+test_capability-analysis.c, including testing that the scoped guard()
+helpers work and do not produce false positives.)
+
+The RCU patch [15/24] also makes it work for LOCK_GUARD_0, by simply
+adding an optional helper macro to declare the attributes for lock and
+unlock. There's no need for additional variants of
+DEFINE_LOCK_GUARD_X.
+
+Should the need arise to add add annotations for DEFINE_GUARD, we can
+introduce DECLARE_GUARD_ATTRS(), similar to
+DECLARE_LOCK_GUARD_0_ATTRS() introduced in [15/24]. But it's omitted
+because DEFINE_GUARD() can be replaced by DEFINE_LOCK_GUARD for
+locking primitives.
+
+In general I wanted to keep the current interface for defining guards
+untouched, and keeping it simpler.
