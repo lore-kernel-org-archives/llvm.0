@@ -1,128 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C2D222591;
-	Thu,  6 Feb 2025 21:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65EC6222595
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 21:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738878016; cv=none; b=Hr4YVckvtB/mXKryM8QJFdy6VXTdbTWCObQ6FDN2JP/2C1MzAIlnFBNOUiExLQq1whgiWhIaHcm45yMnXVckHPK7Qp8r9ndkvg+AMisG5LC4zvm9WudaBCLTPCL9jI7TN99Guv/LVe1Dsg7wjQblahUbJC+1I6gYYf1PTogEQz8=
+	t=1738878092; cv=none; b=fJBTFImgVkjk9V3aarN0WCYC3nN/LeMBFr3yQ15CSwT8hLN/wW/3E6IftJmijnY8XkvDgZmofb0NgVw86E2RY0A3+hfvXFzLvIISUKOeP6yvYJt9Ymujx7zrcJJWSGKvF8obTMv4VNnjWiCI8MLdqisqWdSwBXyzd8MQtjEYGf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738878016; c=relaxed/simple;
-	bh=78wBv+9G2VAp0kLDdXBV3e2olGRXqyDiAENcay93QmU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XxB2+V8TwvZ3inRZHXFFJI3+zXEnWNLFIliIKjifB140lqG8J8UxDRi4q9w1XefT0ZLcKUPhT6JQTVNruEir3Tobj/gjP26rSkMhfWqB9ug5k/809ybOmFpo+yHw3VmOJSbpqlPflB1GHMw7sfG0mbYhmjnFnhzi7RXqSRVRm7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aCapocjT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738878092; c=relaxed/simple;
+	bh=3OgHs6tzCrAw+gGCDLhhtpN/agDfB2Z70E0T/xuo+TU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XLYY6e5WWYljEyU53ViN74p/ZZ8EUOD8JtNPlt1o7i77xOJ0BVbsrm3AHnEt15Wd/HGvlYe1cZk0rXWNxN3rKt27o/JMVlgCtoXsiU+UUmjacGfm3X7XkitWjrw5tyhO3uhClsP6wefZ4KAJoCFBIYw0oC0q+7ztpxMh3wTSuTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l5NBXOdv; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aCapocjT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80BBCC4CEE3;
-	Thu,  6 Feb 2025 21:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738878015;
-	bh=78wBv+9G2VAp0kLDdXBV3e2olGRXqyDiAENcay93QmU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aCapocjTUW0bLcHO2dxCdYtT6Z5+Pur7RgkZsr3gc8oAaEGJ1bZN3BjXnxie1hsDK
-	 6wbUTZ9XvHW8x0sXB4pOkQ8n8/sZY3IexkItUEjG6INHw9As1cOLjGgAJE33eKoQvc
-	 XDGW+WFFc9FTEy3bz1OOGSRHm2vCHDNJJv4vyDw0xBP2rEOHEXw+MBO3e14H4AyGuz
-	 akrcsu8dsHSO8CNs0HsOKQS8rqdFR18jiF90Sx15OABMkMoGUmUGLGDqAu3FR34pSe
-	 UJfFhaKe0mobCzLSTqQHMJ+gtNuUHliCmQxPcD/9SVeslzv76dR7XLv91jLfqPU1HY
-	 rhETZRVJa8A/A==
-From: Kees Cook <kees@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Kees Cook <kees@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	nathan@kernel.org,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-hardening@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Philipp Reisner <philipp.reisner@linbit.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 3/3] string.h: Use ARRAY_SIZE() for memtostr*()/strtomem*()
-Date: Thu,  6 Feb 2025 13:40:08 -0800
-Message-Id: <20250206214014.3567372-3-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250206213532.it.087-kees@kernel.org>
-References: <20250206213532.it.087-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l5NBXOdv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738878091; x=1770414091;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3OgHs6tzCrAw+gGCDLhhtpN/agDfB2Z70E0T/xuo+TU=;
+  b=l5NBXOdvEmt50CBu7EhIPS5nDnbbFqktQfe/OOuK+GKmbohNTiDpcWWs
+   +1K9yo1QEZQ2E948NANx2eQ8+r7XTZB0+nd/xDzaf0BbVHsHMRbfD5hek
+   o0MO4QqpFxi1UyhxeA/NZEFwODwv8BGb0ZALTdv275UtmKEc/9KxB7kna
+   KSqOAgT1W6jqPQBxvwtYQuDbf3cK4mOczSdnpi65oXav0R54sd3doAE4D
+   kNuvyU3Bw2VnuOHuHHGiQqhcnjmI4x+qJBnF853cYmhGUGfcp8SyVQFZB
+   WnrfmV6HrtM7kfRS7JpsFqnuzf2thfvn+Ap6rLtvlSz1W4q6In1q1wXMy
+   g==;
+X-CSE-ConnectionGUID: whX6K1FZQwm2BmLz21BpoQ==
+X-CSE-MsgGUID: s0tkY736TDSpVxjk7n0wRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="42345045"
+X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
+   d="scan'208";a="42345045"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 13:41:28 -0800
+X-CSE-ConnectionGUID: 6H771ns0SpuSxG9hNzP1oQ==
+X-CSE-MsgGUID: Z+csMKT7SBO/Wvx19isNiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116528569"
+Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.125.111.17]) ([10.125.111.17])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 13:41:27 -0800
+Message-ID: <239de2b9-0787-4105-a481-418dbd4d861e@intel.com>
+Date: Thu, 6 Feb 2025 13:41:29 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3189; i=kees@kernel.org; h=from:subject; bh=78wBv+9G2VAp0kLDdXBV3e2olGRXqyDiAENcay93QmU=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlLdczDhVbMnVuqFL2Dt6BbP+XT96rm3cqmL++vePTY/ b71OmHXjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgImoTGT4p2u2cdrvRo27Igaz u49fd/godPb4vzlbSnef1yhhdymfoMzwT/mA8HM31qubcm5JxPW9ONYj931z1lXTyfN6FKc71/S xMAIA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
+ x86
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+ Jessica Clarke <jrtc27@jrtc27.com>
+Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, luto@kernel.org,
+ xin@zytor.com, kirill.shutemov@linux.intel.com, palmer@dabbelt.com,
+ tj@kernel.org, andreyknvl@gmail.com, brgerst@gmail.com, ardb@kernel.org,
+ dave.hansen@linux.intel.com, jgross@suse.com, will@kernel.org,
+ akpm@linux-foundation.org, arnd@arndb.de, corbet@lwn.net,
+ dvyukov@google.com, richard.weiyang@gmail.com, ytcoode@gmail.com,
+ tglx@linutronix.de, hpa@zytor.com, seanjc@google.com,
+ paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com,
+ jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com,
+ jannh@google.com, bhe@redhat.com, vincenzo.frascino@arm.com,
+ rafael.j.wysocki@intel.com, ndesaulniers@google.com, mingo@redhat.com,
+ catalin.marinas@arm.com, junichi.nomura@nec.com, nathan@kernel.org,
+ ryabinin.a.a@gmail.com, dennis@kernel.org, bp@alien8.de,
+ kevinloughlin@google.com, morbo@google.com, dan.j.williams@intel.com,
+ julian.stecklina@cyberus-technology.de, peterz@infradead.org,
+ kees@kernel.org, kasan-dev@googlegroups.com, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org, "Shutemov, Kirill" <kirill.shutemov@intel.com>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+ <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
+ <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
+ <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org>
+ <29A74A26-E922-4A4F-9B4A-8DB0336B99DF@jrtc27.com>
+ <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+In-Reply-To: <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The destination argument of memtostr*() and strtomem*() must be a
-fixed-size char array at compile time, so there is no need to use
-__builtin_object_size() (which is useful for when an argument is
-either a pointer or unknown). Instead use ARRAY_SIZE(), which has the
-benefit of working around a bug in Clang (fixed[1] in 15+) that got
-__builtin_object_size() wrong sometimes.
+On 2/6/25 11:11, Christoph Lameter (Ampere) wrote:
+> I also see that KASAN_HW_TAGS exist but this means that the tags can only
+> be used with CONFIG_KASAN which is a kernel configuration for debug
+> purposes.
+> 
+> What we are interested in is a *production* implementation with minimal
+> software overhead that will be the default on ARM64 if the appropriate
+> hardware is detected. 
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202501310832.kiAeOt2z-lkp@intel.com/
-Suggested-by: Kent Overstreet <kent.overstreet@linux.dev>
-Link: https://github.com/llvm/llvm-project/commit/d8e0a6d5e9dd2311641f9a8a5d2bf90829951ddc [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: nathan@kernel.org
-Cc: Andy Shevchenko <andy@kernel.org>
-Cc: linux-hardening@vger.kernel.org
----
- include/linux/string.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Ahh, interesting. I'd assumed that once folks had in-hardware tag checks
+that they'd just turn on CONFIG_KASAN and be happy.  Guess not!
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 493ac4862c77..fc5ae145bd78 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -411,7 +411,8 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  * must be discoverable by the compiler.
-  */
- #define strtomem_pad(dest, src, pad)	do {				\
--	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 ARRAY_SIZE(dest);			\
- 	const size_t _src_len = __builtin_object_size(src, 1);		\
- 									\
- 	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
-@@ -434,7 +435,8 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  * must be discoverable by the compiler.
-  */
- #define strtomem(dest, src)	do {					\
--	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 ARRAY_SIZE(dest);			\
- 	const size_t _src_len = __builtin_object_size(src, 1);		\
- 									\
- 	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
-@@ -453,7 +455,8 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  * Note that sizes of @dest and @src must be known at compile-time.
-  */
- #define memtostr(dest, src)	do {					\
--	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 ARRAY_SIZE(dest);			\
- 	const size_t _src_len = __builtin_object_size(src, 1);		\
- 	const size_t _src_chars = strnlen(src, _src_len);		\
- 	const size_t _copy_len = min(_dest_len - 1, _src_chars);	\
-@@ -478,7 +481,8 @@ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
-  * Note that sizes of @dest and @src must be known at compile-time.
-  */
- #define memtostr_pad(dest, src)		do {				\
--	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+	const size_t _dest_len = __must_be_byte_array(dest) +		\
-+				 ARRAY_SIZE(dest);			\
- 	const size_t _src_len = __builtin_object_size(src, 1);		\
- 	const size_t _src_chars = strnlen(src, _src_len);		\
- 	const size_t _copy_len = min(_dest_len - 1, _src_chars);	\
--- 
-2.34.1
+> That in turn will hopefully allow other software instrumentation
+> that is currently used to keep small objects secure and in turn
+> creates overhead.
+OK, so KASAN as-is is too broad. Are you saying that the kernel
+_currently_ have "software instrumentation" like SLAB
+redzoning/poisoning and you'd like to see MTE used to replace those?
 
+Are you just interested in small objects?  What counts as small?  I
+assume it's anything roughly <PAGE_SIZE.
