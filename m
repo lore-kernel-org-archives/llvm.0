@@ -1,102 +1,90 @@
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D0123959E
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:40:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFE323957D
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738867241; cv=none; b=bQYThlHnuJVvtjmMbVjgOKCuto0NXOrFsxijwIpV7vG6hnTrf2hgV/Ve/XG6sdA3XzbEPMWbVK+Z5MpXbMrFmCYjx25dtzhIoDAMPTZAIKzBUI72UPZkrKYVObE3iz2yMqRxWdkXdulZQ2tqGLJC1RqV/+n9Z+1C0MjVQ370Sxo=
+	t=1738867348; cv=none; b=ajBMCAdkE4JAb1l7+vYGDjG17YfNFt5tm3oyQVw73MYLX392UW0fBTLdfTaF3ARxWCE32e3lXQ/a1QXyoA0AFrecvFafjNP4cPeTM9tD9ch5+TjUpof4vzK3FKdGk0y46Dh61xS6WzS/hzHI+HkOOCV/Ix2nyq0HmLCq62fO+yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738867241; c=relaxed/simple;
-	bh=M8bEQYxFgIZXGc3dK28iqCXF28r3p8omn6PZdXy7WdE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QvHX1nryv8WRQJHuWgiPG7GcTDOgo2WfDY4QcIcJky8ltxuUqYlqwlH6jqPHpzLdy9ljquN6zd/yLFB0+rVG1LItazNbh4VzjCIEBSvCRrxN5EACTZATmACVR1t9ETPaAgBonYqwXrSQnjrDVa5RdmuzaBm66P2uWxTZnsiBON8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=gQY7Abju; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1738867348; c=relaxed/simple;
+	bh=om6iglSSCmYujo+zLqAOL9kwNR8XDAzgdlKMsB0ogY8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JJycKkjX5eLxH1tT+eGnhF+Iho9QhIGy2hm/Pe08FXpMeE2qM4fjciTwid0ngLyQTyJ2ZWNbGgycBK59U5VJPWt9CTkkjsU9WlzfjjV52HDtNDN80rjl+G7YZ/FxbyGOHHuQpc5ZmMrRwG72R6JbX13QApmvs6FySf9lff7PrKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFOhaikI; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="gQY7Abju"
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YpmBb3nppzlgTwF;
-	Thu,  6 Feb 2025 18:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1738867227; x=1741459228; bh=Yyh2TZL3d6MbabLSKwMavcSP
-	t1k8xkVlfy9IlZ2yLS0=; b=gQY7AbjukeFYZRvynmv9xAl333JAUREgeUAW39M1
-	oI0dt8G0xdTi2bW8TGQDOUOB3ERhjsK+5HE8ji3ptEjVVJOeH5Q1AefgDqjpHTV1
-	8diTeX3KUTgfTXQnlsBPFtXrFiRrfsujAwjONQkkyeMYIPfIXNIfrn7M/+SbHi6F
-	qGK04lxZ2wOjgQXU+WnlaE1Xgj8sqmlSEKL5mpJygasHIIYt5NEp90jvbqUd9efL
-	x622wzdVmIjhfjIbfTSKXa3kFU9nKsVFNE5HsFWLOL1fbuLkxCCXqT6rLuomqLeV
-	xLpuDIknhfbflWYpCvplOPSYxi+/GIVHDbJXZl+Gjgvb2w==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id MKbvYFl6_0ku; Thu,  6 Feb 2025 18:40:27 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YpmBC6m3KzlgTw4;
-	Thu,  6 Feb 2025 18:40:19 +0000 (UTC)
-Message-ID: <552e940f-df40-4776-916e-78decdaafb49@acm.org>
-Date: Thu, 6 Feb 2025 10:40:16 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFOhaikI"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aaee2c5ee6eso229709866b.1
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:42:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738867345; x=1739472145; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=om6iglSSCmYujo+zLqAOL9kwNR8XDAzgdlKMsB0ogY8=;
+        b=iFOhaikIOQjBImg6jsvefTlBbtvSIy4mP9jLu2GsXE0plKeJkASPJjOsumHLDcTPAA
+         RXg2kiIyc5N0F+tQim2LeMiXrMOjMFACxlQ7fmacwFrCZ+kTV8d3fPaIu8NMaIAjR3bs
+         j0X5Ka++i+efXkFcdogvL8E6SDc5KWX/awuy3AXc9EsPSiEBMv+Il+ymnhgiHaEqX1mY
+         4gGinkWf/qQr4BjMtbJAkUurRMCZPo1M2AGZbVtmfFiTKhXcn+z8E9ZVNWbSLcQGYG3f
+         LQ4SeuYTvLxaLGiO1AMmv7hrKEAZ4Wr2a2xIDlp4bz9ivR4GOVTRQ89kNTezKapiZoyY
+         LtZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738867345; x=1739472145;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=om6iglSSCmYujo+zLqAOL9kwNR8XDAzgdlKMsB0ogY8=;
+        b=sOSz5cA/Ww35OptG8xhdMVMoWowrLa9YPXJW9xCaAaLo0uYpBtyV5THFTRa2Sunvft
+         sM45agOw9VABplH1yXyqJVzfYUDI59uRrmT+QZrt4uS39X4SapLn6OSx1tVSarS7H8Xn
+         R8nzaIQqvae32wHGMFaBg45my12zdZU6/0Mo66FkLbdld2g5zqG1O4/kK698gHKRpj+V
+         vyPn4Y7LOjTrd5KwOo2rkETsyufg2++JRalVbp5xks3UedJ0Y1vb5fb8cnNLQ4O1qJGq
+         z6JPqJiySI+jaXW0S+OSgM3nkKj/aWQaWNX3LJ545YBgfHa7A4DgqBj5J6aPQzkgUgiR
+         Yqeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZm4u9845PyaAe0YbTcjrHT1kF38Glq5u7sG0EKtgC5cngW5vyYqaIR5jXFrQi/nnCq9rm@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzz9O2fJEwNsbyGJx4fDiwYq0RD0QFVs9zCzZ+a/bBE3GQGWRoW
+	O7MSyXKgAOc62pgGDdek1sfk+g5V9KNbRlqIl8yeUm/nYvqCKqXxB16lcrOGvVP0Mb0NbX0Es7y
+	zXAtq1+rUUwtWlzpK3w71oJtep+0=
+X-Gm-Gg: ASbGnctuLsf77iKEmp5MH1+kjuOnAyW8oGK+DlLRHn2P3OQs8YEZQ4y8wbUfMAM2Xhr
+	I1iz1J+aLSS2Ux9axzXQbsN6WqWXjEuIUZ2jTfzHDpAUlGlXmuMfdMKgaX4RkJIJ0Nd5HHXz/PV
+	E=
+X-Google-Smtp-Source: AGHT+IEWHEDzohOks69wuoJrRSsoPvIZZnS9MPhUug/tADTjU+Ww4Xu0DLhCT+JLxCQNzWJE9hHQu9Tc8JLSkCEcgLs=
+X-Received: by 2002:a17:907:d88:b0:aa6:9176:61ed with SMTP id
+ a640c23a62f3a-ab75e33cea1mr942939766b.48.1738867344966; Thu, 06 Feb 2025
+ 10:42:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 01/24] compiler_types: Move lock checking attributes
- to compiler-capability-analysis.h
-To: Marco Elver <elver@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
- Alexander Potapenko <glider@google.com>, Bill Wendling <morbo@google.com>,
- Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
- Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
- Josh Triplett <josh@joshtriplett.org>, Justin Stitt
- <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
- Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
- Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
- kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
-References: <20250206181711.1902989-1-elver@google.com>
- <20250206181711.1902989-2-elver@google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250206181711.1902989-2-elver@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250206175216.work.225-kees@kernel.org>
+In-Reply-To: <20250206175216.work.225-kees@kernel.org>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Thu, 6 Feb 2025 20:41:48 +0200
+X-Gm-Features: AWEUYZmXPB_SWD2U7w5yvMEUIeYeTr88ZsFyl2FUP5r5pV6x7la9qV0rWZ1glOw
+Message-ID: <CAHp75Vf=84tWvv57Kj5A5bLenQSkC5yDHTHy-u0iK1_U87nvBw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] string.h: Use ARRAY_SIZE() for memtostr*()/strtomem*()
+To: Kees Cook <kees@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Andy Shevchenko <andy@kernel.org>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Philipp Reisner <philipp.reisner@linbit.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/6/25 10:09 AM, Marco Elver wrote:
-> +/* Sparse context/lock checking support. */
-> +# define __must_hold(x)		__attribute__((context(x,1,1)))
-> +# define __acquires(x)		__attribute__((context(x,0,1)))
-> +# define __cond_acquires(x)	__attribute__((context(x,0,-1)))
-> +# define __releases(x)		__attribute__((context(x,1,0)))
-> +# define __acquire(x)		__context__(x,1)
-> +# define __release(x)		__context__(x,-1)
-> +# define __cond_lock(x, c)	((c) ? ({ __acquire(x); 1; }) : 0)
+On Thu, Feb 6, 2025 at 8:11=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
+>
+> Work around a Clang 14 bug by switching to ARRAY_SIZE() (with the
+> added benefit of explicitly checking for char array arguments) in
+> memtostr*/strtomem*().
 
-If support for Clang thread-safety attributes is added, an important
-question is what to do with the sparse context attribute. I think that
-more developers are working on improving and maintaining Clang than
-sparse. How about reducing the workload of kernel maintainers by
-only supporting the Clang thread-safety approach and by dropping support
-for the sparse context attribute?
+What's the minimum Clang version we build kernel with? 12?
 
-Thanks,
-
-Bart.
+--=20
+With Best Regards,
+Andy Shevchenko
