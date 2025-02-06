@@ -1,55 +1,55 @@
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886751DEFF3
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE691DF730
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738865879; cv=none; b=GKaq9B2Gao4iMKfct62+QS5RkIGl0ebxa3DIuu+VB9VNUl4mmDrllw+OUIqPdEemW+I2eoFlNOwJQsNaHwsfPw0cVihO4JneYOYlOdfGzgrPIXkxO0WoOhC26RI1OB8+QQQWb2C0BdQOJF21hon0aCeQwzShePgE4SyEafW9ZOQ=
+	t=1738865882; cv=none; b=agtcz4JXF3UTSyEelfDulGIhySqUqQZPd3/5eBQ6HMvHuop5kF/o3Vrq8gItu8ck36JnRYViFRxqIuIhMc54v8Ts3Cd0tUbtbmRxuPAk7RzbUOrnLGtWyfmb6yw431MQ8SGHG1/ftyB8pE4pLgSIOvdK6RqIicxkDn2uu4aDxI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738865879; c=relaxed/simple;
-	bh=xGjyV1mmuJOCMCkvKm/wdONdE3U0T4zFS8a+y0DCXOQ=;
+	s=arc-20240116; t=1738865882; c=relaxed/simple;
+	bh=XCrStM0aHgrhET61z+k7oYXwhS7WvQ1g7ufeBP2YzBY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=drtiC0GGHQRQCOK9Kx/4ARyn3JtucFNmsZ9vV3VqkcHO6St2Z8jv4gmnKarRbn0VtzELm8CXndl5VxZXBw5YmhCtMuhQirP8pfx7dx41gKlx6Vy7KydrgGpf14zosDlj/nT/Ye4BEAugPwBls4w2CvwhNBMqwb5T64Lnz04j+/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3xKdhqJd; arc=none smtp.client-ip=209.85.208.73
+	 To:Cc:Content-Type; b=ZR3w903r9vYOgSsYfJG34hxxBle/e82EcCKQbYR93sEAr0jkHtz/7bDc91mGEcJjZoDpbqkH2orwip5ifPblZnJk5FlziiSwZ9jUp5KVjgjg9/FPXozHS5uGjauVbLneqfGXRdSTvFXg26NfS3D1HtqFiMTE9bVT8vV+WS9pSpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k/UlsHGu; arc=none smtp.client-ip=209.85.208.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3xKdhqJd"
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-5dcd3da2aa6so1069750a12.2
-        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:17:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k/UlsHGu"
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-5dc0de54194so2596217a12.0
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738865876; x=1739470676; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1738865879; x=1739470679; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NkeMRttk3RYqT58NIYnzD7f2BrALmFrVkg1AkAEzinM=;
-        b=3xKdhqJdsyRAg9z+CncEkT8w9Tkyxwu8vONbeuyLC3dUoKPK4wfPQOcMlymlAuuIo5
-         sufHSYKRG6MsOOWqmPKh8itMb8G8nxhhnBtiGsVevMS9THgbmheOjjQC+edA2z9EWDjT
-         FOp4HklTiFpZJv9T7WSjGaEbFn3WMz08QMeWo99pwFJFx0s4RhrjCiiVCLnI82carZf+
-         GXRDnrVURUB2o0QJvkK6oQEMvcjsLvSiByQIktizrJ7nYh60jZ7vDO6DIwg48LRilCEg
-         Eh8nI6Ke5nuo2AMtw+1jut9tICsyxDxhqNFRAGvfrC4eLd4WTeWOEBXwNC8WuKJ5GEeF
-         Y/aQ==
+        bh=3zCXzYYWNA/v8qcQtOcKIh5TmuX7E6oXR0H5ZAQV+vQ=;
+        b=k/UlsHGuLhjO+iI0idlLGRHHgN6yDQeXSNRKKjmp2EME+HKSYC4svgV6bpN/EzocJQ
+         KyXMlhAAd4mDHm3dk8P3Bb1SpFLxYs2N+p4G9bQH30PJcPrqBxMI4hTMTvsRhMTzHjRt
+         O73Vl3Zrhhe7+AseRGtsQdwO4gM1dKtWXoSvevZhff5aCsHt+mpuRFhU6EtcELkkPUM1
+         qw5EzWnFQh/PyrJpN9FtiNxaT55GID6yeX6+6QK19B7VboJHHU4kPuGQXu5EzixAMVNo
+         NPavS+Gdm3xZyzPg7U6qMy+ECknuc2KWZoZzo+5XFWxvi9vLEQvSXgmnLCsEp1A8YK5Z
+         EOTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738865876; x=1739470676;
+        d=1e100.net; s=20230601; t=1738865879; x=1739470679;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NkeMRttk3RYqT58NIYnzD7f2BrALmFrVkg1AkAEzinM=;
-        b=ePo3gZN0wjYluzWuHx97B0wOCyTRdkOYoLMTN0HRtXDuTnXzgKYd74eKPAX0nWcXvp
-         4n3aqHp3QtXbiHwk/JMhnS+e77Z7PNFCHIuCWj55z/pk8mBK3F4aAXZCh1zxkCjkfTxO
-         255gWsXBuvNxubm/eAE5v0KT/arku++nTVRicZsSdzu+t4noscZCrAJIW9oj8KIlY9Rv
-         4u2LJhXnc9FftEoQr5ULazOnqf3XWfcIbQkZlwLk4ORR7OHp9Ast0hfRYYxTqgYGjT05
-         wAJtEy6SkEAZesoSm97fTE6dIu0i+wEq8L0PuCw1K3SelZbOMSfx47zeFcClzLgi0jSy
-         K2rg==
-X-Forwarded-Encrypted: i=1; AJvYcCWX/xL1o3BHW8nLjOnkno9aXfmAOIljlm66UknVHNWDorgJdqu7uWOnk/YInNeqhyNkl5S4@lists.linux.dev
-X-Gm-Message-State: AOJu0YwSWKQxHbO42ckPL7/MjxC1sh2IGhLFx3IsJErma3JIc5wDEnb7
-	2qDl0VtDMUzkXCl0ivKByszFbuZmwiYkHHe4uqb4d9Ee1oCORTpePU2VpK/NKIthi5nU7greJQ=
+        bh=3zCXzYYWNA/v8qcQtOcKIh5TmuX7E6oXR0H5ZAQV+vQ=;
+        b=saHYglURulpjzKrsVeL2Le7vBUWSm9Pah2Uu1E0wVx/t4zR9Imr6uy60gdTFtXKXn3
+         fMgHmvdYO7h5a2JC5ozvGdekBPgz1+ecwkspy6ZGItTQ7k6mRUB+kSm8gc4MSPdNDu0I
+         EsB2ce9vTjlssX+NTWvZ3hf63PcRgLfYqr4OkTKoVbCyykSQsfo/43jDCBfGwNYOUb83
+         yoU74rBUNFbUuHxUnANO2v3WOCC6Qy40Fqsve7Myngb9JvLuU1vjEGeBq2KVYxgsSdsQ
+         DiGg3uq35BIdCBSnJCZUf+Px3FAwOemaJaiu+D1Nz6oWzNssqInim0U3lY+3BGRk9hJf
+         zg4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUzvaCEHQ4YG4S7yqNyY0KCkQrmMF8Rj2EndCdh1xz6fnX+n82/aq46GN5PH6BHOgCDGXcf@lists.linux.dev
+X-Gm-Message-State: AOJu0YyxZ9bkb2VKP6T2ONfC9gG/qufZmcUF/Js8YJBYeS7fB0FpUGn8
+	vgQel2WWabSozepRG67EmCr9pIu2+AHYZSb4coP74g8MA0HZp+bCAqpvPul+fohLb7thYrC0aw=
 	=
-X-Google-Smtp-Source: AGHT+IGXY3SpDaruUK6VARumHi3XqNDM2oza8GEyGvEbUTnudtsurff0yLICaOG9kxpXPQLackltedLCRQ==
-X-Received: from edat29.prod.google.com ([2002:a05:6402:241d:b0:5dc:764b:8e16])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:2801:b0:5dc:d31a:398d
- with SMTP id 4fb4d7f45d1cf-5de450059cbmr548326a12.10.1738865875912; Thu, 06
- Feb 2025 10:17:55 -0800 (PST)
-Date: Thu,  6 Feb 2025 19:09:58 +0100
+X-Google-Smtp-Source: AGHT+IE3fLvFaStZCPDAHMprTwdHS2CDtyLSA/FOO9gR6TbzSQgYNeNMtTUtaGDdnKoUqzREyKkIXGTCnw==
+X-Received: from edap10.prod.google.com ([2002:a05:6402:500a:b0:5d8:ab23:4682])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:4404:b0:5dc:abe4:9d8d
+ with SMTP id 4fb4d7f45d1cf-5dcecca9427mr4164056a12.9.1738865878495; Thu, 06
+ Feb 2025 10:17:58 -0800 (PST)
+Date: Thu,  6 Feb 2025 19:09:59 +0100
 In-Reply-To: <20250206181711.1902989-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250206181711.1902989-1-elver@google.com>
 X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
-Message-ID: <20250206181711.1902989-5-elver@google.com>
-Subject: [PATCH RFC 04/24] compiler-capability-analysis: Add test stub
+Message-ID: <20250206181711.1902989-6-elver@google.com>
+Subject: [PATCH RFC 05/24] Documentation: Add documentation for Compiler-Based
+ Capability Analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com
 Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
@@ -79,80 +80,204 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.
 	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add a simple test stub where we will add common supported patterns that
-should not generate false positive of each new supported capability.
+Adds documentation in Documentation/dev-tools/capability-analysis.rst,
+and adds it to the index and cross-references from Sparse's document.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- lib/Kconfig.debug              | 14 ++++++++++++++
- lib/Makefile                   |  3 +++
- lib/test_capability-analysis.c | 18 ++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 lib/test_capability-analysis.c
+ .../dev-tools/capability-analysis.rst         | 147 ++++++++++++++++++
+ Documentation/dev-tools/index.rst             |   1 +
+ Documentation/dev-tools/sparse.rst            |   4 +
+ 3 files changed, 152 insertions(+)
+ create mode 100644 Documentation/dev-tools/capability-analysis.rst
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 801ad28fe6d7..b76fa3dc59ec 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2764,6 +2764,20 @@ config LINEAR_RANGES_TEST
- 
- 	  If unsure, say N.
- 
-+config CAPABILITY_ANALYSIS_TEST
-+	bool "Compiler capability-analysis warnings test"
-+	depends on EXPERT
-+	help
-+	  This builds the test for compiler-based capability analysis. The test
-+	  does not add executable code to the kernel, but is meant to test that
-+	  common patterns supported by the analysis do not result in false
-+	  positive warnings.
-+
-+	  When adding support for new capabilities, it is strongly recommended
-+	  to add supported patterns to this test.
-+
-+	  If unsure, say N.
-+
- config CMDLINE_KUNIT_TEST
- 	tristate "KUnit test for cmdline API" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index d5cfc7afbbb8..1dbb59175eb0 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -394,6 +394,9 @@ obj-$(CONFIG_CRC_KUNIT_TEST) += crc_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
- obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
- 
-+CAPABILITY_ANALYSIS_test_capability-analysis.o := y
-+obj-$(CONFIG_CAPABILITY_ANALYSIS_TEST) += test_capability-analysis.o
-+
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
- obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
-diff --git a/lib/test_capability-analysis.c b/lib/test_capability-analysis.c
+diff --git a/Documentation/dev-tools/capability-analysis.rst b/Documentation/dev-tools/capability-analysis.rst
 new file mode 100644
-index 000000000000..a0adacce30ff
+index 000000000000..2211af90e01b
 --- /dev/null
-+++ b/lib/test_capability-analysis.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Compile-only tests for common patterns that should not generate false
-+ * positive errors when compiled with Clang's capability analysis.
-+ */
++++ b/Documentation/dev-tools/capability-analysis.rst
+@@ -0,0 +1,147 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. Copyright (C) 2025, Google LLC.
 +
-+#include <linux/build_bug.h>
++.. _capability-analysis:
 +
-+/*
-+ * Test that helper macros work as expected.
-+ */
-+static void __used test_common_helpers(void)
-+{
-+	BUILD_BUG_ON(capability_unsafe(3) != 3); /* plain expression */
-+	BUILD_BUG_ON(capability_unsafe((void)2; 3;) != 3); /* does not swallow semi-colon */
-+	BUILD_BUG_ON(capability_unsafe((void)2, 3) != 3); /* does not swallow commas */
-+	capability_unsafe(do { } while (0)); /* works with void statements */
-+}
++Compiler-Based Capability Analysis
++==================================
++
++Capability analysis is a C language extension, which enables statically
++checking that user-definable "capabilities" are acquired and released where
++required. An obvious application is lock-safety checking for the kernel's
++various synchronization primitives (each of which represents a "capability"),
++and checking that locking rules are not violated.
++
++The Clang compiler currently supports the full set of capability analysis
++features. To enable for Clang, configure the kernel with::
++
++    CONFIG_WARN_CAPABILITY_ANALYSIS=y
++
++The analysis is *opt-in by default*, and requires declaring which modules and
++subsystems should be analyzed in the respective `Makefile`::
++
++    CAPABILITY_ANALYSIS_mymodule.o := y
++
++Or for all translation units in the directory::
++
++    CAPABILITY_ANALYSIS := y
++
++It is possible to enable the analysis tree-wide, however, which will result in
++numerous false positive warnings currently and is *not* generally recommended::
++
++    CONFIG_WARN_CAPABILITY_ANALYSIS_ALL=y
++
++Independent of the above Clang support, a subset of the analysis is supported
++by :ref:`Sparse <sparse>`, with weaker guarantees (fewer false positives with
++tree-wide analysis, more more false negatives). Compared to Sparse, Clang's
++analysis is more complete.
++
++Programming Model
++-----------------
++
++The below describes the programming model around using capability-enabled
++types.
++
++.. note::
++   Enabling capability analysis can be seen as enabling a dialect of Linux C with
++   a Capability System. Some valid patterns involving complex control-flow are
++   constrained (such as conditional acquisition and later conditional release
++   in the same function, or returning pointers to capabilities from functions.
++
++Capability analysis is a way to specify permissibility of operations to depend
++on capabilities being held (or not held). Typically we are interested in
++protecting data and code by requiring some capability to be held, for example a
++specific lock. The analysis ensures that the caller cannot perform the
++operation without holding the appropriate capability.
++
++Capabilities are associated with named structs, along with functions that
++operate on capability-enabled struct instances to acquire and release the
++associated capability.
++
++Capabilities can be held either exclusively or shared. This mechanism allows
++assign more precise privileges when holding a capability, typically to
++distinguish where a thread may only read (shared) or also write (exclusive) to
++guarded data.
++
++The set of capabilities that are actually held by a given thread at a given
++point in program execution is a run-time concept. The static analysis works by
++calculating an approximation of that set, called the capability environment.
++The capability environment is calculated for every program point, and describes
++the set of capabilities that are statically known to be held, or not held, at
++that particular point. This environment is a conservative approximation of the
++full set of capabilities that will actually held by a thread at run-time.
++
++More details are also documented `here
++<https://clang.llvm.org/docs/ThreadSafetyAnalysis.html>`_.
++
++.. note::
++   Unlike Sparse's context tracking analysis, Clang's analysis explicitly does
++   not infer capabilities acquired or released by inline functions. It requires
++   explicit annotations to (a) assert that it's not a bug if a capability is
++   released or acquired, and (b) to retain consistency between inline and
++   non-inline function declarations.
++
++Supported Kernel Primitives
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++.. Currently the following synchronization primitives are supported:
++
++For capabilities with an initialization function (e.g., `spin_lock_init()`),
++calling this function on the capability instance before initializing any
++guarded members or globals prevents the compiler from issuing warnings about
++unguarded initialization.
++
++Lockdep assertions, such as `lockdep_assert_held()`, inform the compiler's
++capability analysis that the associated synchronization primitive is held after
++the assertion. This avoids false positives in complex control-flow scenarios
++and encourages the use of Lockdep where static analysis is limited. For
++example, this is useful when a function doesn't *always* require a lock, making
++`__must_hold()` inappropriate.
++
++Keywords
++~~~~~~~~
++
++.. kernel-doc:: include/linux/compiler-capability-analysis.h
++   :identifiers: struct_with_capability
++                 token_capability token_capability_instance
++                 __var_guarded_by __ref_guarded_by
++                 __must_hold
++                 __must_not_hold
++                 __acquires
++                 __cond_acquires
++                 __releases
++                 __must_hold_shared
++                 __acquires_shared
++                 __cond_acquires_shared
++                 __releases_shared
++                 __acquire
++                 __release
++                 __cond_acquire
++                 __acquire_shared
++                 __release_shared
++                 __cond_acquire_shared
++                 capability_unsafe
++                 __no_capability_analysis
++                 disable_capability_analysis enable_capability_analysis
++
++Background
++----------
++
++Clang originally called the feature `Thread Safety Analysis
++<https://clang.llvm.org/docs/ThreadSafetyAnalysis.html>`_, with some
++terminology still using the thread-safety-analysis-only names. This was later
++changed and the feature become more flexible, gaining the ability to define
++custom "capabilities".
++
++Indeed, its foundations can be found in `capability systems
++<https://www.cs.cornell.edu/talc/papers/capabilities.pdf>`_, used to specify
++the permissibility of operations to depend on some capability being held (or
++not held).
++
++Because the feature is not just able to express capabilities related to
++synchronization primitives, the naming chosen for the kernel departs from
++Clang's initial "Thread Safety" nomenclature and refers to the feature as
++"Capability Analysis" to avoid confusion. The implementation still makes
++references to the older terminology in some places, such as `-Wthread-safety`
++being the warning enabled option that also still appears in diagnostic
++messages.
+diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+index 65c54b27a60b..62ac23f797cd 100644
+--- a/Documentation/dev-tools/index.rst
++++ b/Documentation/dev-tools/index.rst
+@@ -18,6 +18,7 @@ Documentation/process/debugging/index.rst
+    :maxdepth: 2
+ 
+    testing-overview
++   capability-analysis
+    checkpatch
+    clang-format
+    coccinelle
+diff --git a/Documentation/dev-tools/sparse.rst b/Documentation/dev-tools/sparse.rst
+index dc791c8d84d1..8c2077834b6f 100644
+--- a/Documentation/dev-tools/sparse.rst
++++ b/Documentation/dev-tools/sparse.rst
+@@ -2,6 +2,8 @@
+ .. Copyright 2004 Pavel Machek <pavel@ucw.cz>
+ .. Copyright 2006 Bob Copeland <me@bobcopeland.com>
+ 
++.. _sparse:
++
+ Sparse
+ ======
+ 
+@@ -72,6 +74,8 @@ releasing the lock inside the function in a balanced way, no
+ annotation is needed.  The three annotations above are for cases where
+ sparse would otherwise report a context imbalance.
+ 
++Also see :ref:`Compiler-Based Capability Analysis <capability-analysis>`.
++
+ Getting sparse
+ --------------
+ 
 -- 
 2.48.1.502.g6dc24dfdaf-goog
 
