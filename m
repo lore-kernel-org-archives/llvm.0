@@ -1,186 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFD51F78E6;
-	Thu,  6 Feb 2025 22:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93922417CD
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 22:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738881810; cv=none; b=cDkNSF9AHEAve78IspBDhfUt7fTO3amNzsvFKUzIjhmXQa8gqartYDwbZSFWb2mhWZlG5+PXFineUFZpROObLQywHeom8/opL4Sp7/0Oc8q79WQrVh+mQmVMEoXUqu3UFWPBxTl081CCw5JUGGIM4YhfYa2xIDcLmv3/WPpfZ+A=
+	t=1738882609; cv=none; b=KKN3+X0L+Cm0mtd8JTyE+ntT7Xw3N1GFgQrT1ErDILXO4vpNYn1Jggdf3buiVQynaBs8Is7PYwWo3oUEajdpksRCTqzM2KhMG9uFY8QNG8DJGJePosAxGhu4iVRU4U0LWMbbUAv4hcT5hX6+qQTsLs2AVFDoDHRZjDUU3eS0C7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738881810; c=relaxed/simple;
-	bh=RRyeWgDKYUXqPj9AK9HawjmXCxmssH+oPCpVBdzfC7s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYgYO+Flx8R3+XPiqbGvhL9RsGfIOnO5yqsBO5FE9R+OrR+7OqVdTJl/qEMi+4jrpnolkB/ILtNQ9DlXW44G04p1EVMKdY0KqfWPYfpzPwTG2rAE0R4yhJ8LnppUmNLx5zEXWNUNB7z5Ky5oH7bgZYfnP+YqUcpEB2Ih525vLBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WqBdpuyc; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738882609; c=relaxed/simple;
+	bh=x5knv2spfc9/uulG9Q53u3Mnpd7d2DiRafDOH5viDeE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=P5++K7FbcXzBFXIvizpzWAKrBcb6DjmhOSBGvN6lArLHjcIk4For+Zoi0HPOF51f23K+F07yGKhmv+F02hiNL0BO3CXSkGrOSBSj+arnVkq9tGnhRS9CLH+SSdyFSollFf6C5W5itkKbfZlBGyB7aZV2/qZjO+U5LT3G5lzQoE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CAgvgYFN; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WqBdpuyc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738881808; x=1770417808;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RRyeWgDKYUXqPj9AK9HawjmXCxmssH+oPCpVBdzfC7s=;
-  b=WqBdpuyc8olEislBEVa8U8i39UUZOY/40rFrho5H058fJkIxTNk2fXDX
-   jBbDIOwBwkB3gWbrdsjMGHFi3J4nH0HzRbmLuZVruLgUotMYZaiiWzmqg
-   PRejsbeAzQQOPEgyN+rHzdK9WvkFKoIwyX7YQtoFyBlsIu7Btcvzhe2y8
-   +uxiGyK/SovrARCrHYU1e+k44bxnRuPLmSl205swOG2gVi6FTvRl7HOGH
-   J+N6kPpWZjR9CcW1C+XpN8cCKphAJizLmx6BcetyPCA6BSN3JU7A2DQIE
-   IKth3+Y/ol7uq/kSdpS9n+HKpVGlDBRoQ7LNN0awo0b/kJ4DYrdswBqPQ
-   A==;
-X-CSE-ConnectionGUID: o1R+9GmCSj295C2rASGZzA==
-X-CSE-MsgGUID: qZqQw6AZRC6D2DxuMKTnNw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39385321"
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="39385321"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 14:43:28 -0800
-X-CSE-ConnectionGUID: jROx22NBQcGGvRMsd4YqeA==
-X-CSE-MsgGUID: tiD9h/EPS9SDj5QwMK+YGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="111181311"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 06 Feb 2025 14:43:24 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgAag-000xTb-17;
-	Thu, 06 Feb 2025 22:43:22 +0000
-Date: Fri, 7 Feb 2025 06:42:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Nuno Sa <nuno.sa@analog.com>,
-	David Lechner <dlechner@baylibre.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] iio: adc: Support ROHM BD79124 ADC
-Message-ID: <202502070654.5T9Nk6dN-lkp@intel.com>
-References: <4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CAgvgYFN"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38dcb33cba1so85f8f.2
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 14:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738882603; x=1739487403; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oPdz+11/bNSSDH103V+kKB8X98fGo5sDYDlVXDLnzsQ=;
+        b=CAgvgYFNqLGPMjHT/SnBilqyf/Uh3bVKgptjk+BS4zXt5ma54fakhMiAHvPA59gTso
+         vHSRQvQCT/W+vFmeYW4Opu6kY1cuojd5vaNmhHujLf2zOkDsBaz5Ej+PgW0TwwjhoW6Z
+         ew3PvuEYKm/3LHQws2+3ARlDWETZwkiuQC/8ISs353qagDGggnjhDGdTQnEY6jueea12
+         qPe++PIMH0U85ik5jdBXFpzFK4cZjMSpv8IqDeV5u/6y/JCtlnW91nz8pz/pvIiNVNgn
+         b32XhVLtVAaGYDKSOxs965eIFoMxVmJisyW2/cs720jTa34vTNpSWjmgi8wJqniJ8Xl+
+         v3TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738882603; x=1739487403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oPdz+11/bNSSDH103V+kKB8X98fGo5sDYDlVXDLnzsQ=;
+        b=TZH6ddGKfUlxY5Ez9IY2njL5Yy1zX6BPAUSZq2Z9LzzZmJb40VwDmnS422+6yZVF9y
+         7iCyoRz8VBw46Srvc/ZYx2uVf04JPrdQ3n6gSTiTCfIw2mus8GPyDsCOSf220+PftdtS
+         CImCtZDAZFIGUDggkVIBiVEKavMx7iOC36kemB1/uCdOoVSYxSqeiCsXwURaFgpS51UH
+         mVRckNwxm6OldzWjeAOJtVQiJsS1Snei6HhR5jc5Y0F4MGm50zr+yeIGnAn2DUNrAuL+
+         tWqjYE1RHDgTBavqNP0jAwKddky6D54dMqYrmni/Zkn7myxQ1to6ywnmRaqj5jmCZVfl
+         jDhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVAEYh1UgX9GG3jp3HKHTk1Uirddy+HnkW5cr+uMpUTFXzqZi9zeFz1SjVpEAKcWYZV1yQy@lists.linux.dev
+X-Gm-Message-State: AOJu0YzZ2ySff+2W5byr04xnpL+tS2x3HOsmwhauSW+xn9RDbD6CKLvQ
+	yTVKXJX6/tItxDZ6NG0mcqVMBGt0diLrTq4aDfsKEseKIq2UvCqiwzbrSReMmXIKHULpJr+nccO
+	qLUVX6GV5inQ4KgGruKGx6A//LEk=
+X-Gm-Gg: ASbGncubIcR43SHnHpKZ3Um3SyQqpPBz7DYSQhhE1cQK9EmTse0gIr8LHaSnVRJnAlg
+	BzOgpCzz0GSAYjO+Tcdrr43GuGX1yzF7zPWEnGsD8JdyD6h62Cw+5pM46tySQf4U0VpnrVY/YZL
+	U=
+X-Google-Smtp-Source: AGHT+IHgNzZylaM+zZeGmJCVW0wzeCzutFnm9tOjVqNinitAROSpEV6CxJxouNvJvwmUY/VWDRJbY8vF9dcNb2OIQgw=
+X-Received: by 2002:a05:6000:154b:b0:38a:8ed1:c5c7 with SMTP id
+ ffacd0b85a97d-38dc9491e7amr426795f8f.46.1738882602687; Thu, 06 Feb 2025
+ 14:56:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount@gmail.com>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+ <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org> <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
+ <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org> <29A74A26-E922-4A4F-9B4A-8DB0336B99DF@jrtc27.com>
+ <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
+In-Reply-To: <94f81328-a135-b99b-7f73-43fb77bd7292@gentwo.org>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Thu, 6 Feb 2025 23:56:31 +0100
+X-Gm-Features: AWEUYZmoPWHhToAFkBuF21oc_INOOZFv4ej_J9A_VfxRgRnaQMcmFMInFI5cvqQ
+Message-ID: <CA+fCnZfzPLiBcCLQTwkgBqP1D6Cw-gFrpKEpTHs5PYp07hYXug@mail.gmail.com>
+Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for x86
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Jessica Clarke <jrtc27@jrtc27.com>, 
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, luto@kernel.org, xin@zytor.com, 
+	kirill.shutemov@linux.intel.com, palmer@dabbelt.com, tj@kernel.org, 
+	brgerst@gmail.com, ardb@kernel.org, dave.hansen@linux.intel.com, 
+	jgross@suse.com, will@kernel.org, akpm@linux-foundation.org, arnd@arndb.de, 
+	corbet@lwn.net, dvyukov@google.com, richard.weiyang@gmail.com, 
+	ytcoode@gmail.com, tglx@linutronix.de, hpa@zytor.com, seanjc@google.com, 
+	paul.walmsley@sifive.com, aou@eecs.berkeley.edu, justinstitt@google.com, 
+	jason.andryuk@amd.com, glider@google.com, ubizjak@gmail.com, jannh@google.com, 
+	bhe@redhat.com, vincenzo.frascino@arm.com, rafael.j.wysocki@intel.com, 
+	ndesaulniers@google.com, mingo@redhat.com, catalin.marinas@arm.com, 
+	junichi.nomura@nec.com, nathan@kernel.org, ryabinin.a.a@gmail.com, 
+	dennis@kernel.org, bp@alien8.de, kevinloughlin@google.com, morbo@google.com, 
+	dan.j.williams@intel.com, julian.stecklina@cyberus-technology.de, 
+	peterz@infradead.org, kees@kernel.org, kasan-dev@googlegroups.com, 
+	x86@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matti,
+On Thu, Feb 6, 2025 at 8:21=E2=80=AFPM 'Christoph Lameter (Ampere)' via
+kasan-dev <kasan-dev@googlegroups.com> wrote:
+>
+> I cannot share details since this information has not been released to be
+> public yet. I hear that a whitepaper will be coming soon to explain this
+> feature. The AmpereOne processors have been released a couple of months
+> ago.
+>
+> I also see that KASAN_HW_TAGS exist but this means that the tags can only
+> be used with CONFIG_KASAN which is a kernel configuration for debug
+> purposes.
+>
+> What we are interested in is a *production* implementation with minimal
+> software overhead that will be the default on ARM64 if the appropriate
+> hardware is detected. That in turn will hopefully allow other software
+> instrumentation that is currently used to keep small objects secure and i=
+n
+> turn creates overhead.
 
-kernel test robot noticed the following build warnings:
+Is there anything specific CONFIG_KASAN + CONFIG_KASAN_HW_TAGS do that
+is not good enough for a production environment?
 
-[auto build test WARNING on 5bc55a333a2f7316b58edc7573e8e893f7acb532]
+The last time I did some perf tests (a year+ ago on Pixel 8, I
+believe), the two expensive parts of CONFIG_KASAN_HW_TAGS were:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-ROHM-BD79124-ADC-GPO/20250205-214127
-base:   5bc55a333a2f7316b58edc7573e8e893f7acb532
-patch link:    https://lore.kernel.org/r/4781e1b1f074ca6c84ecc084b152885d08e826cc.1738761899.git.mazziesaccount%40gmail.com
-patch subject: [PATCH v2 3/5] iio: adc: Support ROHM BD79124 ADC
-config: i386-randconfig-004-20250207 (https://download.01.org/0day-ci/archive/20250207/202502070654.5T9Nk6dN-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250207/202502070654.5T9Nk6dN-lkp@intel.com/reproduce)
+1. Collecting stack traces. Thus, this can now be disabled via
+kernel.stacktrace=3Doff. And there's a tracking bug to add a
+production-grade implementation [1];
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502070654.5T9Nk6dN-lkp@intel.com/
+2. Assigning memory tags to large allocations, specifically page_alloc
+allocations with large orders  (AFAIR is was specifically assigning
+the tags, not checking them). Thus, this can now be controlled via
+kasan.page_alloc.sample(.order).
 
-All warnings (new ones prefixed by >>):
+There's definitely room for optimization and additional config options
+that cut down KASAN checks (for example, disabling tag checking of
+mempool allocations; although arguably, people might want to have this
+in a production environment.)
 
->> drivers/iio/adc/rohm-bd79124.c:1072:29: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1072 |                 return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
-         |                                           ^~~
-   drivers/iio/adc/rohm-bd79124.c:1057:9: note: initialize the variable 'ret' to silence this warning
-    1057 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+Otherwise, it's unclear to me what a new production-grade MTE
+implementation would do different compared to KASAN_HW_TAGS. But if
+there's something, we can just adjust KASAN_HW_TAGS instead.
 
-
-vim +/ret +1072 drivers/iio/adc/rohm-bd79124.c
-
-  1049	
-  1050	static int bd79124_probe(struct i2c_client *i2c)
-  1051	{
-  1052		struct bd79124_data *data;
-  1053		struct iio_dev *iio_dev;
-  1054		const struct iio_chan_spec *template;
-  1055		struct iio_chan_spec *cs;
-  1056		struct device *dev = &i2c->dev;
-  1057		int ret;
-  1058	
-  1059		iio_dev = devm_iio_device_alloc(dev, sizeof(*data));
-  1060		if (!iio_dev)
-  1061			return -ENOMEM;
-  1062	
-  1063		data = iio_priv(iio_dev);
-  1064		data->dev = dev;
-  1065		data->map = devm_regmap_init_i2c(i2c, &bd79124_regmap);
-  1066		if (IS_ERR(data->map))
-  1067			return dev_err_probe(dev, PTR_ERR(data->map),
-  1068					     "Failed to initialize Regmap\n");
-  1069	
-  1070		data->vmax = devm_regulator_get_enable_read_voltage(dev, "vdd");
-  1071		if (data->vmax < 0)
-> 1072			return dev_err_probe(dev, ret, "Failed to get the Vdd\n");
-  1073	
-  1074		ret = devm_regulator_get_enable(dev, "iovdd");
-  1075		if (ret < 0)
-  1076			return dev_err_probe(dev, ret, "Failed to enable I/O voltage\n");
-  1077	
-  1078		ret = devm_delayed_work_autocancel(dev, &data->alm_enable_work,
-  1079						   bd79124_alm_enable_worker);
-  1080		if (ret)
-  1081			return ret;
-  1082	
-  1083		if (i2c->irq) {
-  1084			template = &bd79124_chan_template;
-  1085		} else {
-  1086			template = &bd79124_chan_template_noirq;
-  1087			dev_dbg(dev, "No IRQ found, events disabled\n");
-  1088		}
-  1089		ret = devm_iio_adc_device_alloc_chaninfo(dev, template, &cs);
-  1090		if (ret < 0)
-  1091			return ret;
-  1092	
-  1093		iio_dev->channels = cs;
-  1094		iio_dev->num_channels = ret;
-  1095		iio_dev->info = &bd79124_info;
-  1096		iio_dev->name = "bd79124";
-  1097		iio_dev->modes = INDIO_DIRECT_MODE;
-  1098	
-  1099		data->gc = bd79124gpo_chip;
-  1100		data->gc.parent = dev;
-  1101	
-  1102		mutex_init(&data->mutex);
-  1103	
-  1104		ret = bd79124_hw_init(data);
-  1105		if (ret)
-  1106			return ret;
-  1107	
-  1108		ret = devm_gpiochip_add_data(data->dev, &data->gc, data);
-  1109		if (ret)
-  1110			return dev_err_probe(data->dev, ret, "gpio init Failed\n");
-  1111	
-  1112		if (i2c->irq > 0) {
-  1113			ret = devm_request_threaded_irq(data->dev, i2c->irq,
-  1114						bd79124_irq_handler,
-  1115						&bd79124_event_handler, IRQF_ONESHOT,
-  1116						"adc-thresh-alert", iio_dev);
-  1117			if (ret)
-  1118				return dev_err_probe(data->dev, ret,
-  1119						     "Failed to register IRQ\n");
-  1120		}
-  1121	
-  1122		return devm_iio_device_register(data->dev, iio_dev);
-  1123	}
-  1124	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D211785
