@@ -1,128 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03209239572;
-	Thu,  6 Feb 2025 17:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EA1192D9A;
+	Thu,  6 Feb 2025 17:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738862841; cv=none; b=lJxoNLuvIYaBCQwgQCagQSoiJU4ql9yEhV2m9qYyX2S7Zl/YBpn3Mtk1Ga235KpLb6XcA8v2oxvrF8RFz+UvV0Cx2+DGO/wTPW1M8KQloXMP4pM1WCv78xQSZtNPaB5z8Zcg40asLq2LnPmHn8OdHb6Lq+IULGW1HN1VIJDwQHk=
+	t=1738864438; cv=none; b=GrScEOfeFA5cReuxXDJS5wSUasLIPBDuooVAqY56RxGhsKgRunxP7RDot4oQ6af9+coGdzLK72vCI70DDEnf0cQlGdr3nT4UXNi54sZCl+Co9neiNQnCDY5/2/cRfM30XomxTtb+kYxt7M+P6CuCikTeZGdSq2eLIgRKKTJ37hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738862841; c=relaxed/simple;
-	bh=pPmLZssZVb0h1amjrYDb6Gwl7U84SRos3SRqFBYvoCo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C0y0j8QgijPVDDz5q6YOawjctygh/QNNUS2gl0bIV6iB4UF4rcU9sVvOVdUED3algNEm5dzkkMoIAN5CyiiIe5z+u9up6NNrXwPw+vg9QGTaCOl1NxChgQs9EFNKIl/f9xCD1l7nj6R+i0DsWI2DBqkVIiD3Q/MiyU2/g5m9zik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYBURifi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738864438; c=relaxed/simple;
+	bh=/XyzWKrIcjCUdK0TUsQ85fpOZFIWJPQ730jigla+1xk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Fpj8kfdy+UocTWaKPsDVTDIY0+cCD9VQT1Tf7uIdeW7qj4z3yyyT6pdLufSesu+l7UAJwgdMGch2lsUrBAfStw6um7i3LUPrGw0Nc30iU4AI+B4q2AK1rZPXP1u+UniYKOmal1bY1JVekMNO1gROwUDzUmdSMR583Yt9THI7cEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EO+mlmkZ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYBURifi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCF6C4CEDD;
-	Thu,  6 Feb 2025 17:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738862839;
-	bh=pPmLZssZVb0h1amjrYDb6Gwl7U84SRos3SRqFBYvoCo=;
-	h=From:Date:Subject:To:Cc:From;
-	b=bYBURifiYdmqDU+oTvDryxlGF6HdiUW+WvteWC1oxTFN+XGfdL1BNVaER58x8OtIE
-	 IdKrOpUoXHVeykjblCZ4ptC6a04lDIVjqsrj9c5rgGpj1bK6NXA0U48B+lFnoMObIE
-	 gYtgFeBqOog5L317/SLiPgBPKKtoESVsFBhkXYcuXNoky9w8UByRZ/8OYrrDiep3EV
-	 rsOfHBP2MyesRJroDTO5kPFpjUUbcWcgJB3B1P/o1hcvnu1j0WbBsPjCUsRnh47IDI
-	 aeTapHdfhAakZ39fwHXZ3BXCGThmljkoP7u8sr3XS+w6qzw4wzXor+jPiNTFNwYiPl
-	 IVNkCU6/AqYKg==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 06 Feb 2025 10:21:38 -0700
-Subject: [PATCH v3] arm64: Handle .ARM.attributes section in linker scripts
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EO+mlmkZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738864436; x=1770400436;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/XyzWKrIcjCUdK0TUsQ85fpOZFIWJPQ730jigla+1xk=;
+  b=EO+mlmkZ7ZhHV2NCVhM/0hGuNo73wOJifcEIO5NBU8Uglud8g19pRtwO
+   DbhCzFjFbCu8FD31ifaqnIuit2yhK2TNHRabIFPnw29+3jCQ3Nqegg0Lm
+   wtvdBNeXz5HaZu3GVXZxqdV5eT8dJmX1jS/z1+13uZhxylHwOECWQOT09
+   6f3nqQ2rdE3GNmS8PiPHk5743Dz/LUMozNznWT3SH5BORfn8fyA+ZNQmS
+   FBgg2ovqBE/LlA2btIK8Qg/22FtLZNwpS/BfEvWjYgbqPFvMSrwucjAmJ
+   SPPmPsLcIstL8sU4/HRkwc/tF1Kv5QbR2qW0DnjGDta/qrWGkjy+RlRz4
+   w==;
+X-CSE-ConnectionGUID: lGNhz5VbQNa/QTIa/MpMlA==
+X-CSE-MsgGUID: ZiQoERz8ShSiuzFUTlbhtQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39754178"
+X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
+   d="scan'208";a="39754178"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 09:53:55 -0800
+X-CSE-ConnectionGUID: RE7LTLtaT5G/syEzWSvk/g==
+X-CSE-MsgGUID: 5x6TtNKvRS+IO9xucUfCjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="111135663"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 06 Feb 2025 09:53:54 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tg64W-000xAB-0H;
+	Thu, 06 Feb 2025 17:53:52 +0000
+Date: Fri, 7 Feb 2025 01:53:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:x86/ibt 7/9] kernel/trace/bpf_trace.c:1043:6: error:
+ call to undeclared function 'is_endbr'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202502070111.MUfxOmQO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250206-arm64-handle-arm-attributes-in-linker-script-v3-1-d53d169913eb@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKHvpGcC/5WNyw6CMBBFf4V07Rj6QnTlfxgXBQadiIVMK9EQ/
- t1CYoxLl+fe5JxJBGTCIA7ZJBhHCtT7BHqTifrq/AWBmsRC5crmUmlwfC8MpKvpcAFwMTJVj4g
- ByENH/oYMoWYaIpTKISqrpXa1SMqBsaXnmjudE18pxJ5fa32Uy/oJmf9CowQJOyO1rYq61WZ/T
- KfHbtvzRSylUX3tKv/XrpK9KUqT73ettdb82Od5fgPktuqQRwEAAA==
-X-Change-ID: 20250123-arm64-handle-arm-attributes-in-linker-script-82aee25313ac
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2841; i=nathan@kernel.org;
- h=from:subject:message-id; bh=pPmLZssZVb0h1amjrYDb6Gwl7U84SRos3SRqFBYvoCo=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOlLPnxV+6A67+IFds/l3b5sU1/8niS54G3eHR6XVy03n
- H2kn4fJdZSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJKB1jZNhiENbys+tSl9w+
- rkVL94q4npbStW/y+bFusfHsh8rWLf8ZGVr7NlVukIz0WbhMdH7u8hsfLriuOKzteLeT/7rQas3
- FScwA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A recent LLVM commit [1] started generating an .ARM.attributes section
-similar to the one that exists for 32-bit, which results in orphan
-section warnings (or errors if CONFIG_WERROR is enabled) from the linker
-because it is not handled in the arm64 linker scripts.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/ibt
+head:   57750f0464beab3927ad570e0c1b5e78c91dd1b6
+commit: c5a15175c3560f7ec5cacfca9fd72655b7f55742 [7/9] x86/ibt: Clean up is_endbr()
+config: riscv-randconfig-002-20250206 (https://download.01.org/0day-ci/archive/20250207/202502070111.MUfxOmQO-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250207/202502070111.MUfxOmQO-lkp@intel.com/reproduce)
 
-  ld.lld: error: arch/arm64/kernel/vdso/vgettimeofday.o:(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: arch/arm64/kernel/vdso/vgetrandom.o:(.ARM.attributes) is being placed in '.ARM.attributes'
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502070111.MUfxOmQO-lkp@intel.com/
 
-  ld.lld: error: vmlinux.a(lib/vsprintf.o):(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: vmlinux.a(lib/win_minmax.o):(.ARM.attributes) is being placed in '.ARM.attributes'
-  ld.lld: error: vmlinux.a(lib/xarray.o):(.ARM.attributes) is being placed in '.ARM.attributes'
+All errors (new ones prefixed by >>):
 
-Discard the new sections in the necessary linker scripts to resolve the
-warnings, as the kernel and vDSO do not need to retain it, similar to
-the .note.gnu.property section.
+>> kernel/trace/bpf_trace.c:1043:6: error: call to undeclared function 'is_endbr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1043 |         if (is_endbr((void *)(fentry_ip - ENDBR_INSN_SIZE)))
+         |             ^
+>> kernel/trace/bpf_trace.c:1043:36: error: use of undeclared identifier 'ENDBR_INSN_SIZE'
+    1043 |         if (is_endbr((void *)(fentry_ip - ENDBR_INSN_SIZE)))
+         |                                           ^
+   kernel/trace/bpf_trace.c:1044:16: error: use of undeclared identifier 'ENDBR_INSN_SIZE'
+    1044 |                 fentry_ip -= ENDBR_INSN_SIZE;
+         |                              ^
+   3 errors generated.
 
-Cc: stable@vger.kernel.org
-Fixes: b3e5d80d0c48 ("arm64/build: Warn on orphan section placement")
-Link: https://github.com/llvm/llvm-project/commit/ee99c4d4845db66c4daa2373352133f4b237c942 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v3:
-- Update location of section discard in vDSO to align with
-  .note.gnu.property discard since the sectionss are similar in
-  nature (Will).
-- Link to v2: https://lore.kernel.org/r/20250204-arm64-handle-arm-attributes-in-linker-script-v2-1-d684097f5554@kernel.org
 
-Changes in v2:
-- Discard the section instead of adding it to the final artifacts to
-  mirror the .note.gnu.property section handling (Will).
-- Link to v1: https://lore.kernel.org/r/20250124-arm64-handle-arm-attributes-in-linker-script-v1-1-74135b6cf349@kernel.org
----
- arch/arm64/kernel/vdso/vdso.lds.S | 1 +
- arch/arm64/kernel/vmlinux.lds.S   | 1 +
- 2 files changed, 2 insertions(+)
+vim +/is_endbr +1043 kernel/trace/bpf_trace.c
 
-diff --git a/arch/arm64/kernel/vdso/vdso.lds.S b/arch/arm64/kernel/vdso/vdso.lds.S
-index 4ec32e86a8da..47ad6944f9f0 100644
---- a/arch/arm64/kernel/vdso/vdso.lds.S
-+++ b/arch/arm64/kernel/vdso/vdso.lds.S
-@@ -41,6 +41,7 @@ SECTIONS
- 	 */
- 	/DISCARD/	: {
- 		*(.note.GNU-stack .note.gnu.property)
-+		*(.ARM.attributes)
- 	}
- 	.note		: { *(.note.*) }		:text	:note
- 
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index f84c71f04d9e..e73326bd3ff7 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -162,6 +162,7 @@ SECTIONS
- 	/DISCARD/ : {
- 		*(.interp .dynamic)
- 		*(.dynsym .dynstr .hash .gnu.hash)
-+		*(.ARM.attributes)
- 	}
- 
- 	. = KIMAGE_VADDR;
+  1040	
+  1041	static inline unsigned long get_entry_ip(unsigned long fentry_ip)
+  1042	{
+> 1043		if (is_endbr((void *)(fentry_ip - ENDBR_INSN_SIZE)))
+  1044			fentry_ip -= ENDBR_INSN_SIZE;
+  1045	
+  1046		return fentry_ip;
+  1047	}
+  1048	
 
----
-base-commit: 1dd3393696efba1598aa7692939bba99d0cffae3
-change-id: 20250123-arm64-handle-arm-attributes-in-linker-script-82aee25313ac
-
-Best regards,
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
