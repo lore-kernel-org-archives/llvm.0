@@ -1,168 +1,197 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B882BD1B
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 01:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25BBE49;
+	Thu,  6 Feb 2025 01:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738803973; cv=none; b=e1EWEQhyTJwuXWhORdphLVtVvMI+Zdjnx/lHK2hmH8KQeOYkvn88LoP+syKiFNYPw0ujt602vpNBxIBiW5LpewtastwJhPsHQKba3cQy7TMoA/suRMkezy/hR1zie7I547+Z0fTb10AWnQaZ3ufzSypG/cb0TjmD3ehUKWiyg2c=
+	t=1738806012; cv=none; b=OJ0XfCuNbz+2oq48KB5OYu01tG7WuvtxJDaKl8tdLYSTGYoKurw74642tAgFnhymc6MPW5/5vHzRMiX+PkNfh3RxCW4O88OdfsgFwfoon2X3iDYMs/FIQAiKxlYXyw9d8BOb00jN1CMWamDcQIusw6GrwrA9byxTJ/PNBKtJrL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738803973; c=relaxed/simple;
-	bh=IXC13o6D8+SRcnZ4bUuI8mYmE2RIqCqJ9wgb+sl11jc=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=uYY93XVYN+w0utVmgCvpKCMBbyYl9nQ3TINRenlpHQJvDnEcObCPeVSdbS8blCd+qljzUhmeorG0xYRkhAhoB8PIVtjoQ03a/cjzp+PC8N4GYZgsZdCtGVfP34yIkabwOaReQNefkItgj5IWPjCZxysPREXa/c0VLYZd58YNE2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com; spf=pass smtp.mailfrom=jrtc27.com; dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b=nRoxZYr/; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrtc27.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jrtc27.com
+	s=arc-20240116; t=1738806012; c=relaxed/simple;
+	bh=W9pDPPAcog5toBT+xp8jBBC7LxadDyj4qTaMyXUs+RU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F8ayfUfokLqxKB3V2xwfwzN9MFz41rNfBGQu9H/rQjdYKd0j8xZbGTNhCsAkHMO5Djuy49i4Uu06dJ9SPT4gNJkyiLRUxWBwofaIr91MMIViiE/cOpmtY7Q9whi4tTQfIf9sG9Iiv7w0w8BWEbFPKUqRk1a5hWYcNa3io+xTB38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfMB2mE2; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jrtc27.com header.i=@jrtc27.com header.b="nRoxZYr/"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38a8b17d7a7so136400f8f.2
-        for <llvm@lists.linux.dev>; Wed, 05 Feb 2025 17:06:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1738803970; x=1739408770; darn=lists.linux.dev;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IXC13o6D8+SRcnZ4bUuI8mYmE2RIqCqJ9wgb+sl11jc=;
-        b=nRoxZYr/ayt8je+69E1BgkcFimm2H0wVZFbdr3Gz1sHl/q6wF+wsCKJvo6cDi/eauI
-         8Tsf5AgN3M3tfQAwzuPJCKc+UEmiNW8aRYXbDhviAEJyYesvK/20Pv+vLMIn3D5gDbUH
-         dg4AmqUou1feARMDM8E6khvckyJMx7zayKXuX/Pza1LPLwdtc91bwrLNQ7ALmtAF1wWf
-         24LH630EU3cTbF6cXsV5bHq4txuycozzNxsOqFwJ6ogKKLCp1xB3MCU0i5Q2lhF0oNYw
-         ZVibYh36C2v5m+MCrv0oMxlTod3Cmou1IKcahR+17yYkZNz13rwP45D/0Fly25SnRynQ
-         K6JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738803970; x=1739408770;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IXC13o6D8+SRcnZ4bUuI8mYmE2RIqCqJ9wgb+sl11jc=;
-        b=iHUj1fotZ/4KYDhzhBKbGZHqh0c1Qi3oqrZtz6hymGwSeFNq8atYHrBWjUf9khn6bm
-         cDezMIT/qzd6hd12dmlPMFNFwmdBXy3wx600aRVS2K6eaDrXBG7VhqGr+FpPVbj2PHf5
-         2BT96KLSLuKtjr8+SB1Wxy39VF3V+NarHwCc5ARjTpbYQWoaDMkRCabfjDdJgUmpaXZz
-         gofI9QLLqhSGPc45txEus64dugg+7az+LeQjD4AGbXN38vsYeO7LylWGzvzFTqETTzEF
-         W0IC++vpwGQn3OSZfSEEvNhwF27aTewXg1dJGK4LFe6llOTf/WaaFnItYux+z2Y8p2Wm
-         ty7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXhW7/HuLZIFN5sVVpmjbVcSW4jHt9EgnFRbLbr+JymXaZlavOkbmCTriORYJkvnCji2bdG@lists.linux.dev
-X-Gm-Message-State: AOJu0YyB9fVdpUbPaeQue79JdqNLOOZYse2NGXIGV5ICWhKGQYAHqxC4
-	Vel5f5Bs8ENC4oH17scFyImNkMeZO5YqjQLc25V3p08KlKQNbt5bzcdnuhIVHwk=
-X-Gm-Gg: ASbGncvufqMVl0Ei5toTMOtRmxU0nOu76H/jMYn63NKy7GAKPpRX3gPQbbJtH5+Curf
-	9eS/j/QGLMAhZOzhjeHyDrbqwNP/j02OUfwdPsbHCEHzvUwhvx6nmK1WrM3CMF/B73VqqZJgFST
-	jc4Bw/AAKSI2SgRRP0H7XzXDs/ZK+4ibEEu0w3VzNMead2lF7PKl32LMbEMuvr/0iEutnG6VjNS
-	IydROCpZ0oL625zDNVjpyKDDQv93lAK88um2Z/h0E3ikmJFqi05R1Drt5Juk3vih2Y5ZUPvMwV6
-	l+3+xTZNWYcKSkcmXUdlJn/1PJWp
-X-Google-Smtp-Source: AGHT+IEwac37+EXHhjn9+QPVtQMUBZtDhAuPXBew4a2Q2YL1bLmJ4OaTvYU/Tl6sFbBaC4yuKH/eUg==
-X-Received: by 2002:a05:6000:1f87:b0:386:3e48:f732 with SMTP id ffacd0b85a97d-38db4873819mr4226170f8f.16.1738803969824;
-        Wed, 05 Feb 2025 17:06:09 -0800 (PST)
-Received: from smtpclient.apple ([131.111.5.201])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde1dcc7sm246954f8f.88.2025.02.05.17.06.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Feb 2025 17:06:08 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfMB2mE2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738806011; x=1770342011;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=W9pDPPAcog5toBT+xp8jBBC7LxadDyj4qTaMyXUs+RU=;
+  b=nfMB2mE2+FLUw/uyis6XXdqeJkAcLEF9UNS0KfsDqqWHC3Ca5cHWGhKk
+   dBmUCRwZYTLppJUKfusIr+PfjQ0kV+3D4zMXGQan4JBQtw4RLw3IvvoJA
+   GwcXDr/rJOshBu16IuuLgsmmBgfOjEErQ4FWkwS7VhQxhxY3jW9WMHWIK
+   7qemhUSOF0A1d6irOfDC32VC6FICqMKCOMrb9o6dVCFjum6fUNb9rU49I
+   tt2LrQAPXlT5qCiZBkTjaLTH/0Z2mQZ8+iQmoLT4g+QJXlNAj9l346DJs
+   KJVowttfyhJNz0Xq0jEuQy5RMSxGR7Z9elW81Ua+hTx28+/NoEVzxcni2
+   g==;
+X-CSE-ConnectionGUID: FwNxXyzZR2iqcavjsUEFUg==
+X-CSE-MsgGUID: oaHbP5qFQyys6HJXacUmKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50015765"
+X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
+   d="scan'208";a="50015765"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 17:40:10 -0800
+X-CSE-ConnectionGUID: vNi0daFcRla4hQroCidfkg==
+X-CSE-MsgGUID: s8bWwbmXT5yxpWw8uSoU+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="141949807"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 05 Feb 2025 17:40:09 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfqsA-000wKn-20;
+	Thu, 06 Feb 2025 01:40:06 +0000
+Date: Thu, 6 Feb 2025 09:39:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boqun Feng <boqun.feng@gmail.com>
+Subject: [rcu:torture.2025.02.04a 1/10] kernel/rcu/rcutorture.c:1152:33:
+ error: call to undeclared function 'get_torture_init_jiffies'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202502060904.wYhRuUph-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
-Subject: Re: [PATCH 00/15] kasan: x86: arm64: risc-v: KASAN tag-based mode for
- x86
-From: Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org>
-Date: Thu, 6 Feb 2025 01:05:56 +0000
-Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
- luto@kernel.org,
- xin@zytor.com,
- kirill.shutemov@linux.intel.com,
- palmer@dabbelt.com,
- tj@kernel.org,
- andreyknvl@gmail.com,
- brgerst@gmail.com,
- ardb@kernel.org,
- dave.hansen@linux.intel.com,
- jgross@suse.com,
- will@kernel.org,
- akpm@linux-foundation.org,
- arnd@arndb.de,
- corbet@lwn.net,
- dvyukov@google.com,
- richard.weiyang@gmail.com,
- ytcoode@gmail.com,
- tglx@linutronix.de,
- hpa@zytor.com,
- seanjc@google.com,
- paul.walmsley@sifive.com,
- aou@eecs.berkeley.edu,
- justinstitt@google.com,
- jason.andryuk@amd.com,
- glider@google.com,
- ubizjak@gmail.com,
- jannh@google.com,
- bhe@redhat.com,
- vincenzo.frascino@arm.com,
- rafael.j.wysocki@intel.com,
- ndesaulniers@google.com,
- mingo@redhat.com,
- catalin.marinas@arm.com,
- junichi.nomura@nec.com,
- nathan@kernel.org,
- ryabinin.a.a@gmail.com,
- dennis@kernel.org,
- bp@alien8.de,
- kevinloughlin@google.com,
- morbo@google.com,
- dan.j.williams@intel.com,
- julian.stecklina@cyberus-technology.de,
- peterz@infradead.org,
- kees@kernel.org,
- kasan-dev@googlegroups.com,
- x86@kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org,
- linux-mm@kvack.org,
- llvm@lists.linux.dev,
- linux-doc@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <29A74A26-E922-4A4F-9B4A-8DB0336B99DF@jrtc27.com>
-References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
- <8bd9c793-aac6-a330-ea8f-3bde0230a20b@gentwo.org>
- <F974BA79-80D8-4414-9DFD-1EEF9395143C@jrtc27.com>
- <72837fcd-97a8-c213-0098-c8f308c3415d@gentwo.org>
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-X-Mailer: Apple Mail (2.3826.300.87.4.3)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5 Feb 2025, at 18:51, Christoph Lameter (Ampere) <cl@gentwo.org> =
-wrote:
->=20
-> On Tue, 4 Feb 2025, Jessica Clarke wrote:
->=20
->> It=E2=80=99s not =E2=80=9Cno performance penalty=E2=80=9D, there is a =
-cost to tracking the MTE
->> tags for checking. In asynchronous (or asymmetric) mode that=E2=80=99s =
-not too
->=20
->=20
-> On Ampere Processor hardware there is no penalty since the logic is =
-build
-> into the usual read/write paths. This is by design. There may be on =
-other
-> platforms that cannot do this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git torture.2025.02.04a
+head:   7b4389d6456ab5bca223c6cd4829724d984c8511
+commit: 65c7582d8315f7f0451eac635d803b2def726d44 [1/10] rcutorture: Add a test_boost_holdoff module parameter
+config: i386-buildonly-randconfig-004-20250206 (https://download.01.org/0day-ci/archive/20250206/202502060904.wYhRuUph-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250206/202502060904.wYhRuUph-lkp@intel.com/reproduce)
 
-You helpfully cut out all the explanation of where the performance
-penalty comes from. But if it=E2=80=99s as you say I can only assume =
-your
-design chooses to stall all stores until they have actually written, in
-which case you have a performance cost compared with hardware that
-omitted MTE or optimises for non-synchronous MTE. The literature on MTE
-agrees that it is not no penalty (but can be low penalty). I don=E2=80=99t=
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502060904.wYhRuUph-lkp@intel.com/
 
-really want to have some big debate here about the ins and outs of MTE,
-it=E2=80=99s not the place for it, but I will stand up and point out =
-that
-claiming MTE to be =E2=80=9Cno performance penalty=E2=80=9D is =
-misrepresentative of the
-truth
+All errors (new ones prefixed by >>):
 
-Jess
+>> kernel/rcu/rcutorture.c:1152:33: error: call to undeclared function 'get_torture_init_jiffies'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1152 |         unsigned long booststarttime = get_torture_init_jiffies() + test_boost_holdoff * HZ;
+         |                                        ^
+   1 error generated.
 
+
+vim +/get_torture_init_jiffies +1152 kernel/rcu/rcutorture.c
+
+  1145	
+  1146	static int rcu_torture_boost(void *arg)
+  1147	{
+  1148		unsigned long endtime;
+  1149		unsigned long gp_state;
+  1150		unsigned long gp_state_time;
+  1151		unsigned long oldstarttime;
+> 1152		unsigned long booststarttime = get_torture_init_jiffies() + test_boost_holdoff * HZ;
+  1153	
+  1154		if (test_boost_holdoff <= 0 || time_after(jiffies, booststarttime)) {
+  1155			VERBOSE_TOROUT_STRING("rcu_torture_boost started");
+  1156		} else {
+  1157			VERBOSE_TOROUT_STRING("rcu_torture_boost started holdoff period");
+  1158			while (time_before(jiffies, booststarttime)) {
+  1159				schedule_timeout_idle(HZ);
+  1160				if (kthread_should_stop())
+  1161					goto cleanup;
+  1162			}
+  1163			VERBOSE_TOROUT_STRING("rcu_torture_boost finished holdoff period");
+  1164		}
+  1165	
+  1166		/* Set real-time priority. */
+  1167		sched_set_fifo_low(current);
+  1168	
+  1169		/* Each pass through the following loop does one boost-test cycle. */
+  1170		do {
+  1171			bool failed = false; // Test failed already in this test interval
+  1172			bool gp_initiated = false;
+  1173	
+  1174			if (kthread_should_stop())
+  1175				goto checkwait;
+  1176	
+  1177			/* Wait for the next test interval. */
+  1178			oldstarttime = READ_ONCE(boost_starttime);
+  1179			while (time_before(jiffies, oldstarttime)) {
+  1180				schedule_timeout_interruptible(oldstarttime - jiffies);
+  1181				if (stutter_wait("rcu_torture_boost"))
+  1182					sched_set_fifo_low(current);
+  1183				if (torture_must_stop())
+  1184					goto checkwait;
+  1185			}
+  1186	
+  1187			// Do one boost-test interval.
+  1188			endtime = oldstarttime + test_boost_duration * HZ;
+  1189			while (time_before(jiffies, endtime)) {
+  1190				// Has current GP gone too long?
+  1191				if (gp_initiated && !failed && !cur_ops->poll_gp_state(gp_state))
+  1192					failed = rcu_torture_boost_failed(gp_state, &gp_state_time);
+  1193				// If we don't have a grace period in flight, start one.
+  1194				if (!gp_initiated || cur_ops->poll_gp_state(gp_state)) {
+  1195					gp_state = cur_ops->start_gp_poll();
+  1196					gp_initiated = true;
+  1197					gp_state_time = jiffies;
+  1198				}
+  1199				if (stutter_wait("rcu_torture_boost")) {
+  1200					sched_set_fifo_low(current);
+  1201					// If the grace period already ended,
+  1202					// we don't know when that happened, so
+  1203					// start over.
+  1204					if (cur_ops->poll_gp_state(gp_state))
+  1205						gp_initiated = false;
+  1206				}
+  1207				if (torture_must_stop())
+  1208					goto checkwait;
+  1209			}
+  1210	
+  1211			// In case the grace period extended beyond the end of the loop.
+  1212			if (gp_initiated && !failed && !cur_ops->poll_gp_state(gp_state))
+  1213				rcu_torture_boost_failed(gp_state, &gp_state_time);
+  1214	
+  1215			/*
+  1216			 * Set the start time of the next test interval.
+  1217			 * Yes, this is vulnerable to long delays, but such
+  1218			 * delays simply cause a false negative for the next
+  1219			 * interval.  Besides, we are running at RT priority,
+  1220			 * so delays should be relatively rare.
+  1221			 */
+  1222			while (oldstarttime == READ_ONCE(boost_starttime) && !kthread_should_stop()) {
+  1223				if (mutex_trylock(&boost_mutex)) {
+  1224					if (oldstarttime == boost_starttime) {
+  1225						WRITE_ONCE(boost_starttime,
+  1226							   jiffies + test_boost_interval * HZ);
+  1227						n_rcu_torture_boosts++;
+  1228					}
+  1229					mutex_unlock(&boost_mutex);
+  1230					break;
+  1231				}
+  1232				schedule_timeout_uninterruptible(HZ / 20);
+  1233			}
+  1234	
+  1235			/* Go do the stutter. */
+  1236	checkwait:	if (stutter_wait("rcu_torture_boost"))
+  1237				sched_set_fifo_low(current);
+  1238		} while (!torture_must_stop());
+  1239	
+  1240	cleanup:
+  1241		/* Clean up and exit. */
+  1242		while (!kthread_should_stop()) {
+  1243			torture_shutdown_absorb("rcu_torture_boost");
+  1244			schedule_timeout_uninterruptible(HZ / 20);
+  1245		}
+  1246		torture_kthread_stopping("rcu_torture_boost");
+  1247		return 0;
+  1248	}
+  1249	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
