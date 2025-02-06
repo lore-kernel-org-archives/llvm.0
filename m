@@ -1,149 +1,267 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BAF02B9B9
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 14:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738853565; cv=none; b=h437rb+UCH3zNGVjQqqg82KCdFPImk+3q9nuTx/LMaG5Ozou7PIHtvFceWKeBQ7LMEYMuAJiv9sOKi6BBP++XZrKuHeVDZc1kdaKPvHOhkVpfYEJ9Hp0zSoE1WvRg3Xb7e2xZuBkZdyG6/KEYzxMe8M//K+6g6HrJ3tXPmHM9L4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738853565; c=relaxed/simple;
-	bh=RVIIcMwhcrDBbl7D7USwHDBp+LPSX1ouMmwjzMyDV+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YddOup/pjqThqOerQ2KOIPPTYu/td3wpxdT+gSCVM3qNMjaR5Pk8S+yH/C17nzBUaI+eka0eUrn58uSuAOuUgDVYa+f8lS5CNiwrpGjBuqZUv34aVRszAL906q2EYTKP4mXovejo0D7jXv+udBbvua41/N9Ulf2KrQKwl4NdoBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HtEf3jYe; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B3723642A
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 14:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738853791; cv=fail; b=EpxRWwQFDsFAjTqYVhfsoQJ8cIeqOBr2mtkX/KDG+L+eekKifQasvUnZY4fzdcwWMWKAD6Q1owDv1yO2YYJYZmbVYLBuxnZqDuPus7KdODndfN432KF8vifLH+dOU8+I9TzhflhrcKtrB89HR0WweSrqlkqLrV6VMoHbsSr6g+I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738853791; c=relaxed/simple;
+	bh=/q+D3ari6B8/glSMpcmZdHRYJ1vdanvUofM2MNM7QY4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Adew6qKS288+F96z8ZQ/RsNjPHO502au4PO2JMwYwXXwk48Js94+wf7r59/RKIEX7tFsRMjGmZieZY5Q5HWPrJY0VLusj0Gw6ABjHV82qOXuNCIaCdyuz4FxodHP9pCzBaPeniZhrkIJYTU67AxfeF06SJ7US/OGj296/z6jGFE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUr6kDnA; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HtEf3jYe"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21f464b9a27so7247185ad.1
-        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 06:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738853562; x=1739458362; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfNoZ5gnbHp02m3QKMK2UDVXbHKjqtLdZhpqGhFuIXk=;
-        b=HtEf3jYeZaDAaWb/ivSr1OxrzUOf0qDN5zdhi1eFtSocYBFVAYwOgE2oef/noN1lcV
-         ypCW6FVqS08JLek7wDWT+ojApf1y8JG53Jdp6GZlBfftPosDcZhYoWzbwCfol5WGJkxd
-         QU6A9uCKhEFRM2L7GFXibDXhIRnueRXrrfXNoXzDB8GZb+8Ls78qo8X2LwbFpdhuIXP+
-         0DfYyz4sxjRXGi4ZxykqoHe6w58GPvFFMElTWqJn46fbeBQMbyCisKcELzv3FARV6g9D
-         4NqrXLIzgoM499lCjzxFVBK7JgCmC9jjeBxgSPYLfzgYU40ePs+v5VXY7VYuxg8YetDc
-         HRAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738853562; x=1739458362;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GfNoZ5gnbHp02m3QKMK2UDVXbHKjqtLdZhpqGhFuIXk=;
-        b=HkixzMtgyQ57ey6LT2KiaHip0BEK5Q7GxlaolJkrB/iJpOHoHu29ZNcBbGC8aJL0Cv
-         Zxkm1LeNQ8I6RzWd5Z91P+q40cpZ68p3nj4aiVVoNEmiFt+S4tzpsy9h/vEAXQ/Fcx3f
-         aAvwJ2vg50H0WD2OtFuElFd9ufDq1HHKqQNPcsungzDNgQV/4w73Eg01jIn6rGaq+2cL
-         9/ZDYrrDJLAV9nn+2QQROvl/H/u7s3pKy8vMIuJM4ngCNZGcYN4KyJobkfTSSYhsr8q4
-         LSK7UD6MRyEteb73XKPKpL3UhA4vQmOyDTUGxp3Ang0xXDbDapAoE/4NCrT2W0uV4Coy
-         1I4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWlDhdRWzPzHI4O7iD/NPeLtbOPNePjA3KxGLrg7YQEPqTlKOiBFrV1D/6UV5E0L/hHJ6es@lists.linux.dev
-X-Gm-Message-State: AOJu0YzeaZbkWXxDcNI9hOuhfZsxC+SaNgLe4lxr08KjT2GiiBaywe9z
-	8bj1Qg0b/q3p7tcuU054yrOZcDrpLZMXzbQlIJ4lOrqqYIngFyoXvuUXd/7mNanWftcXfNz2x0O
-	zDZ13Men12Uc35gmUTXiFWAIAY3aA8u5ZExzr9w==
-X-Gm-Gg: ASbGncv7KGVX6DrqXZp/k670TD4M8q7fCDd4hW3CB8TR3qlVGrwv+amR/hYuUtrnG0A
-	Go5OoFO3kx1AscUo0bZ+7ryOGOcPh1oJKWUiGBEA3Ixsm5y89nFuc+ckk4Gk7hvLhwHqlbXXixg
-	==
-X-Google-Smtp-Source: AGHT+IGTcP3GFjrMhTL+UMwNcSS5K4X5G6jWKfgMajmN+VSIFnfNzaJrKEw0rWBzVUwvCyUvqMAN8zeamtgpLyhkozU=
-X-Received: by 2002:a05:6a00:10cb:b0:724:f86e:e3d9 with SMTP id
- d2e1a72fcca58-7303511e4fcmr12528960b3a.14.1738853561092; Thu, 06 Feb 2025
- 06:52:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUr6kDnA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738853790; x=1770389790;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=/q+D3ari6B8/glSMpcmZdHRYJ1vdanvUofM2MNM7QY4=;
+  b=HUr6kDnAlcUsqpWs4Mds3HI7gRMatrFIUuI9FzCF/sozMtu1xVhu+POf
+   dYsjyVNKE5KX5ysydfzywg8LYHsbvjtAa+FaN3T6a+htrXsrnsylp3cxg
+   hO9deaK+3dSyaw432fMB6x1s7df0W4x2OsfeotvLQ5Ap/v9J/A6ltEtbu
+   XvpdLX/Yu5oRaOs0PUn0f5Op3F6xKmomJfB8DwfWY8+EXlePuw2RqmSGW
+   mguNHCfPef9e/R0AREJl6zFRuz27QVQ8bR+sWLSx/V+b4AtQ2peYbu1Mh
+   i9CFinNclrQjwoJZjWhCOF4okIkepl3kD/hhq544heK42yt9dCGSTMZDw
+   w==;
+X-CSE-ConnectionGUID: tkK6P4tvRWCCQQpeT04qyA==
+X-CSE-MsgGUID: i7iSsdhbTuqrbFLR1VHYXg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39484576"
+X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
+   d="scan'208";a="39484576"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 06:56:29 -0800
+X-CSE-ConnectionGUID: EZLxRTQqTU2dYLkavfw2tg==
+X-CSE-MsgGUID: l8HU75U3QnGbh2dxeepn3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="148451520"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Feb 2025 06:56:29 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Thu, 6 Feb 2025 06:56:27 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Thu, 6 Feb 2025 06:56:27 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.46) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Thu, 6 Feb 2025 06:56:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vDjNGM7QDseZ4SM7F1L5uqfvHyknrgUcaICTQUzsKwEwfgUA965N+zNJeG/ntprzEsO8QGWJeMuG7QWriCL+cskvb6J0wJISO1llenUPZh4aoy/9xAgmkt5NSI0Cif5ReXMBFTfspW4qI6QCezayr9iO/VI7fUP7mDS+N3nSLr6bqJsZ3406YtS56aCg3GOwvYktKBgCEVD5jsFMBFt0am0lArFspzZGMA6+NO+GsKhwbXnOf6leh4Z809G6CIf9GmdZ+Yx0/LsFr+fjeaQvx6CfYqoQbrY2XJPY9yi7OqkZp45gFqdv4Kn6H+KH/LbdwLjFz/dz8OxKf3ApHygLgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oFy9kzSSuDAMgbxF4ev3hG9MnS730buw2PO7kmGfays=;
+ b=L5ejg9+knghDr47P124vEWyv9QJFpQTCHSwfq7APMVDNH5YOvivyTeyYQn84XgpWZCaKytAOqNUB470pO+Vchwzn68v4pw1o8PLfNVpM3WK7LLRTeImpMWWMTqg9cn1oKgeGc83VZyDcIZMl+9oK+4TexxzUUuXOWXoXFtAME09l6Uh/N+sgv5Q42rTKW5/FcBb7Uocct+SPl3Lfjxhqulix8E45Mj6a4WagLe2XnTtbZ4f0urv5dGZvIr1Ku2xU4UmkyEB3HT1Kmr/LSpBbkeMkTCE85W47gQtXjThpsPkTfHFTUuBZXNIZsro+IR0NYCV9IO0fnT9Xz7jSJQLPQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6239.namprd11.prod.outlook.com (2603:10b6:8:a7::20) by
+ DS0PR11MB7879.namprd11.prod.outlook.com (2603:10b6:8:f7::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8422.11; Thu, 6 Feb 2025 14:55:52 +0000
+Received: from DM4PR11MB6239.namprd11.prod.outlook.com
+ ([fe80::244e:154d:1b0b:5eb5]) by DM4PR11MB6239.namprd11.prod.outlook.com
+ ([fe80::244e:154d:1b0b:5eb5%4]) with mapi id 15.20.8398.021; Thu, 6 Feb 2025
+ 14:55:52 +0000
+Date: Thu, 6 Feb 2025 15:55:13 +0100
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+CC: <luto@kernel.org>, <xin@zytor.com>, <kirill.shutemov@linux.intel.com>,
+	<palmer@dabbelt.com>, <tj@kernel.org>, <brgerst@gmail.com>,
+	<ardb@kernel.org>, <dave.hansen@linux.intel.com>, <jgross@suse.com>,
+	<will@kernel.org>, <akpm@linux-foundation.org>, <arnd@arndb.de>,
+	<corbet@lwn.net>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
+	<ytcoode@gmail.com>, <tglx@linutronix.de>, <hpa@zytor.com>,
+	<seanjc@google.com>, <paul.walmsley@sifive.com>, <aou@eecs.berkeley.edu>,
+	<justinstitt@google.com>, <jason.andryuk@amd.com>, <glider@google.com>,
+	<ubizjak@gmail.com>, <jannh@google.com>, <bhe@redhat.com>,
+	<vincenzo.frascino@arm.com>, <rafael.j.wysocki@intel.com>,
+	<ndesaulniers@google.com>, <mingo@redhat.com>, <catalin.marinas@arm.com>,
+	<junichi.nomura@nec.com>, <nathan@kernel.org>, <ryabinin.a.a@gmail.com>,
+	<dennis@kernel.org>, <bp@alien8.de>, <kevinloughlin@google.com>,
+	<morbo@google.com>, <dan.j.williams@intel.com>,
+	<julian.stecklina@cyberus-technology.de>, <peterz@infradead.org>,
+	<cl@linux.com>, <kees@kernel.org>, <kasan-dev@googlegroups.com>,
+	<x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <llvm@lists.linux.dev>, <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH 02/15] kasan: Tag checking with dense tag-based mode
+Message-ID: <vc23342eu5igzyobkzro3izsrwfubxlh23kzvzxjdoc7hxr4ug@5aplefpwbhev>
+References: <cover.1738686764.git.maciej.wieczor-retman@intel.com>
+ <8f790bb7e166c1ea2e5003318149eb1d7aba3596.1738686764.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZf20PmUL5Ms7aoGq0CAdaXzcx0yrgSrmvgy89og_PwYMg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZf20PmUL5Ms7aoGq0CAdaXzcx0yrgSrmvgy89og_PwYMg@mail.gmail.com>
+X-ClientProxiedBy: DUZPR01CA0143.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4bd::8) To DM4PR11MB6239.namprd11.prod.outlook.com
+ (2603:10b6:8:a7::20)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <1599984364.127113.1738492219737@jenkins.jenkins> <20250204201522.GB3466315@ax162>
-In-Reply-To: <20250204201522.GB3466315@ax162>
-From: Christophe Lyon <christophe.lyon@linaro.org>
-Date: Thu, 6 Feb 2025 15:52:29 +0100
-X-Gm-Features: AWEUYZni34ZShlW0vrH5lvalSeh40mZBm1rTvlN-Mlgokk2EuCs5MjPvpv9M3xc
-Message-ID: <CAPS5khbyzNwWnBYBs_1jcaTfs9hT_57koKARMJCvi+kXHa3Eww@mail.gmail.com>
-Subject: Re: [Linaro-TCWG-CI] llvmorg-21-init-262-gcff0a460ae86: Failure on arm
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: linaro-toolchain@lists.linaro.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6239:EE_|DS0PR11MB7879:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9d6f8f41-2944-4bbd-faf3-08dd46be5a08
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?SkF0c2FGbFJ4cTNNNVdjMldEWTZORHIrMVNReUsrMWZvbGJqb2UrNG9kSk1K?=
+ =?utf-8?B?VEFoUmxyUSsvZnpsMU1PdzBHY0N4WjRGRU5UYlpBVWpOYnpGYXlvdHk3YW5J?=
+ =?utf-8?B?ak5BVVFPUTVpZ1VPRHNGWnpkcWg1cEx0dmx0SHluMlRCSENXUWxLbUViZXdl?=
+ =?utf-8?B?YzdxOFZodXl6S0U3czhYRmNZcE4wd2xlWHZ4RTgwanhaUm0rQzNuWTJQOWdM?=
+ =?utf-8?B?MUoxRGp0blhWaTYrOWkzRzFuNEJCbUJWOXdDcmtQYmJQM0k0N0xQRE8vWEkx?=
+ =?utf-8?B?UFlndXZmSEt0STY5UzZOek9majNyemJIZ3JKNHVwTkNsS3U2cXFoQXR1aVJI?=
+ =?utf-8?B?aFQxNHFOcXFldXJ4dFFPaXJyNTh2T3NXelRzdFVaK2MvdlZyekFQUnJtd1hW?=
+ =?utf-8?B?LytqMnNBbkxtQ1JVTkp4UElRb21LbEsreEVJVEtJWWw3KzIzN1dXRFp5ZnlG?=
+ =?utf-8?B?dnBxaGxsYkVjbHBuZ08rU1gvRU5Kek4rUzlxK3ZpcEUrWnNRQ1dPWWhWQjhQ?=
+ =?utf-8?B?eDJDdkllQ3l5YnF6ZmdCT1RZeFh5OW5BSXlrTnYxY29nTFdxZ2g4N3VQOHVV?=
+ =?utf-8?B?Nk5zcEZ5MmxZWVBYcWJ0Z0pxa2NGN1IvT1RPOVNHSmtuaDhrRzhRSUUrOU5o?=
+ =?utf-8?B?RDg3YVF5YTI1ZXNmR0JMdVc1NDNHT244a1VCcUdjMGNReG80eW1QMmwxVk00?=
+ =?utf-8?B?azVIakdyU05ycGpqSkxKclJ6bWwyOXdHYm4wNFhQS01JMm0xY1NtQTJhaStM?=
+ =?utf-8?B?U0JGU2ViU2IyYWZsYmI5bDlVN290WVRscFRpSXJackVkQmhpSFpSSTQxZ3JS?=
+ =?utf-8?B?elowd1ErZGlCaUdUalpRZk9jaFZRem91UlhaWlBNZWJuM0ptMXZvd3pGbjNi?=
+ =?utf-8?B?Y2NvTE5PRXhYMTFLdGgwUEg1U3k1MEk4SEZ6c0k3UDdFTUNTb0pXWUpXTmEw?=
+ =?utf-8?B?UUxHd0tnelVwQ21kdGRaUEtxZmNOWHZOcGc0UEJycWFoemZMaVRWRm1Uay9C?=
+ =?utf-8?B?ellUdnd6VUlZUlRKRVppb1lkY1h2K3JmSjZXUEttMjJyNTgxcCtLRjJpdE1q?=
+ =?utf-8?B?M2ZTeWRFNkl2Ky9VWVhQczFlTFZ0MDFvVmF5eFdLMEVKcjBZWUtNVUZmanpj?=
+ =?utf-8?B?bkxGalNzZEdnWmRxRXlCYmRuTHN2eG9JeTF5RWRtS2xoeGhzZTVCREpIaXJV?=
+ =?utf-8?B?NGNpWmI4a2xUQWtLaTNNcUpScjFUMGV2U1VqaW9jU2xGSTlQQTJaSFNBUC9Q?=
+ =?utf-8?B?NHdwWDF4SjJxN2ZMR2haM2hiVnV6TTU5K01nYldHKzFuUWdFOVNEeHNPc3lp?=
+ =?utf-8?B?MnptR3NLbjhKdUZCczQ0d2FBc3RGbGhjM0xDWk5ZM2JFbzRzRDFHbXlaSnBv?=
+ =?utf-8?B?ZkVjK0Z3aFAvQWxxMVRLcEIzbnZzbThGK1lsYkhLSVE0RnRzVGx1THdHWFky?=
+ =?utf-8?B?a3gxNFZaQ1hrN1VLOTh0WnhtU1JvZHo1UXkwNkt4SEJHT3ZuNWRVS2JjOTU5?=
+ =?utf-8?B?ZWhMQTRYb1ZWWmw1am1qQWw0R1duZnFBVEVSNFI5VU9maXg1SXMrUnE3cm1a?=
+ =?utf-8?B?Vk80d3k0MS93MXFmeCtZZWN4aCtPU1M1VS9TU0gwTUFQa2pUeWlMYUR1YzYw?=
+ =?utf-8?B?a0U3TkQwaXJZL1VMSHNZWWVrdWl2a2RicFgxekxpTG5NTFhleUZPNzJVVDZQ?=
+ =?utf-8?B?R1hBS0toZHJ6Q0tEWGczNmZMQUhraUNUaGtTVDh2d2pPS3JYQUM0ZEZVMFVE?=
+ =?utf-8?B?Z0RvS2kxWVFIYUlkZCt0QzNwdDBBYUFUMDZFQlkwR1ZqS1R2bHZCbmVESStk?=
+ =?utf-8?B?R2k5UkxKVXJtaURzT0o3WXE3Z1ZwazhERzc5aEN6YjQvcytnd21DOGdJcGlx?=
+ =?utf-8?Q?qd2+fINmLtaT3?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6239.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1RiODZ1cUNMalErOVZVTVRFeVI0UXVlRXBaa05lTWw4b2tMRldOYVgxRU5W?=
+ =?utf-8?B?UzZCbUhFQXNUZkgvVkdpTzRVamVpeWZXcnRWcVY5UmJDVXp3VjBIQ3cxVUp1?=
+ =?utf-8?B?NUJ3TTc2UFBOVkpEbW85azlsSm1ZL09PUUZQVVRyV1ZZcm95WHFBUy9CNnNs?=
+ =?utf-8?B?Z0Zpd0xzeDFGY2xrclRpR1RwVk93cUovZk1sMVdBeW5oSXdCTWtSaXgxYUlC?=
+ =?utf-8?B?bkltdTh6YUo5b1JReUhpZmV1VmtGNUlGai9HU3h1WFFmNHh6RW8rZDBSSWZS?=
+ =?utf-8?B?UU80YnRJcWFHUjV6MlpWMzc4NzJmMC9WV1ZEQzRWMVFCR29JOVBMQ2xhZkJN?=
+ =?utf-8?B?cFlWUjk1M2JKMms1Ymd1dzIzODBoZW94VE90YlE0d0ppbCtYakc3dE5aL0JL?=
+ =?utf-8?B?dXFyd0ZZWENDQitmSVZCdFFUM1JsZC9iejBwTThSU1l5WW5IbVpEV2k5dk82?=
+ =?utf-8?B?WEtnMWJ5UU96ZXA5OWZGdjN0NDBiZEdEWGw4ck5zMlVqd3FpekJEY0ZvdHkv?=
+ =?utf-8?B?VXl4VzZxSzdweFFOYWpqRFhNdnJFbFloelJkZWRBaHFMVEI5TUZ3Sjcza1Vj?=
+ =?utf-8?B?ZVZQU0dsY3lvWTRkVVlkMXIwZ3hLMkxta25PM2tYTHlMV0NpTkcycytkUXBa?=
+ =?utf-8?B?N3g5Lzkvc1NpU2FGNUZGU2RjWDFBLzdVT0tXK0tRRjA2ZHJSS2R6b2JWMTFm?=
+ =?utf-8?B?R3FHYWYyKzVQUGxsZ0NhVnZYNUFwZnZ1K3kydTlvdFJneXk3ZkdidXg1b0VW?=
+ =?utf-8?B?S1JIaWhxVFh2ak1SS2JaaXhnTlphK2RhRzVnZUQxMElPRDdsbnJ2cFM3VUgr?=
+ =?utf-8?B?U041Z3JZNGxVOXRlREhOV1lOQjRGenp5WWNBSElsMjBaS2FIUktVaG02L3Fi?=
+ =?utf-8?B?VzFOVUxTK1pRTWZiV0cvNTM4bzlleEczai8zNlV1U2FYTWZQdUtVdm4zd2I4?=
+ =?utf-8?B?bHlxK0JxK25zMXRsaGZsYjZhUmN2c3R2OXI2d2RsT09PQmxubWZ6eTNSNEpD?=
+ =?utf-8?B?V2lKWmFwVENld0tPS1NXRjBHMGRWSndDOTh5bkQzTGZRY3UreDBNRFJZR3E0?=
+ =?utf-8?B?a25yRUQ2K0RBMWdCalZjOFpWazhyNEk1WllQQ0RPc3JOWDYyc3ZvYlFLcFRn?=
+ =?utf-8?B?dmxiN2I4c1dLTWIzTm11dS96allOQkV0RFlTUjJnMDVkR21FT2hZa2xxTG9I?=
+ =?utf-8?B?c3RqZnBxZEhtMTR6c1hjZXVKdG5GZ3ZuU0JGRnJFaDhQY3FZYnkyZW83MXg4?=
+ =?utf-8?B?eVM5eHpEN2RtR1RZRW1ibG1pRjJuWEF2bG51dEtnK3dsSnM5WDQ4ZkJZL0ZE?=
+ =?utf-8?B?Z1c1UktmWWRqZ3YydU5DQjVyVUVDOEc4MWswc3dNTk14M2l6b3NKUW9XNDk3?=
+ =?utf-8?B?VnJRK3ptNE9EU0tYc2s2RFJnQU5uU1psdm1XUlllRmJDMVhpUWRaa3gxUzhX?=
+ =?utf-8?B?NGpRL2pSV1R4M28vNENIT29BOWxmTXhyT0ppSlErczZjZ0NoSWlCdEFTcnJ2?=
+ =?utf-8?B?ZzRqTjZZME1nVDhoUGZ5Zmk2TGp1RTdOTXB0UVhKZ05vT3V0TGpacFBsMVAv?=
+ =?utf-8?B?U2hKQlE3di9aVTFGaitKcWlvUy9FSDdFM0ZHL0NyWUZva2ZtYWxjOWtpTG9S?=
+ =?utf-8?B?cjZaczgvSkd4RnNVVmlid2RVdXNMbnN2T0ExVnI4cWUxb0tQSE5QRVEwR29Q?=
+ =?utf-8?B?R2hncFZHY0JLNytFQVRKUFhSQmYzNVlhS1lZc3QvdE0xMUw3UlIzSjFKVXRx?=
+ =?utf-8?B?cVFiczc1RktkVzNqUFNNaTNnV1lydFVKeWROSmdWbVA0WC9OV2dwR2twUmhx?=
+ =?utf-8?B?VDA5ZlBpMThOTlhxM1FWRUFVbklZUnRzam8zV3FhTTBMNVhCaW1EN01zMDZX?=
+ =?utf-8?B?T0xnRHZwRlc3REVDNnBiOWtUOE1YbEJvNVVZUnZmc1A3SHo2WVcxWmRaY204?=
+ =?utf-8?B?d204ZTNuZkZITzhweWRKNzRjbGxYMG5HSVJGLzVEdHM1VHJmVituOHRTaTd4?=
+ =?utf-8?B?YUg3b2xYY2tyQVZ3dkdXcnZtNU1WWURodmJWTVR0VTBUZEhCSVlXU2U3Vjkr?=
+ =?utf-8?B?RFZNRlVFdHp0VnNXNnArV1gyTEV6MCtHMzJ2VFU0Y3ZNVWY5eGc1cDNDangx?=
+ =?utf-8?B?cGJ4cE15ZllBSGJkenlSaXpKS2hTbmV6NldnbmYzRVdFU00vSnE1KzJpNHFW?=
+ =?utf-8?Q?eIyPOpdywAr587FNJNU7jQU=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d6f8f41-2944-4bbd-faf3-08dd46be5a08
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6239.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2025 14:55:52.6905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xrM04ii2yLSRsf3xdQ7NOMQRjs/+T/HVmBXBDusIyUiaHXtwg046NQCbzv6LIyw4w8wDl5LfgRNnntLpa7FhQdgrYHnw99YKYxFU6OrH29E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7879
+X-OriginatorOrg: intel.com
 
-Thanks for your message, indeed the CI status is back to its previous value.
-
-Cheers,
-
-Christophe
-
-On Tue, 4 Feb 2025 at 21:15, Nathan Chancellor <nathan@kernel.org> wrote:
+On 2025-02-06 at 00:45:01 +0100, Andrey Konovalov wrote:
+>On Tue, Feb 4, 2025 at 6:35 PM Maciej Wieczor-Retman
+><maciej.wieczor-retman@intel.com> wrote:
+>>
+>> In KASAN's tag-based mode (arm64) when a memory access occurs, the tag
+>> stored in the top 8 bits of the pointer is compared with tags saved in
+>> the region of the shadow memory that maps to memory the pointer points
+>> to. If any of the tags in the shadow memory region do not match the one
+>> stored in the pointer an error report is generated.
+>>
+>> With the introduction of the dense mode, tags won't necessarily occupy
+>> whole bytes of shadow memory if the previously allocated memory wasn't
+>> aligned to 32 bytes - which is the coverage of one shadow byte.
+>>
+>> Add an alternative implementation of kasan_check_range() that performs
+>> special checks on first and last bytes of shadow memory ranges if the
+>> originally allocated memory wasn't aligned to 32 bytes.
+>>
+>> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>> ---
+>>  include/linux/kasan.h     | 47 +++++++++++++++-------
+>>  mm/kasan/Makefile         |  3 ++
+>>  mm/kasan/dense.c          | 83 +++++++++++++++++++++++++++++++++++++++
+>>  mm/kasan/kasan.h          |  2 +-
+>>  mm/kasan/report.c         |  2 +-
+>>  mm/kasan/report_sw_tags.c | 12 ++----
+>>  mm/kasan/sw_tags.c        |  8 ++++
+>>  7 files changed, 133 insertions(+), 24 deletions(-)
+>>  create mode 100644 mm/kasan/dense.c
+>>
+>> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
+>> index ea0f5acd875b..5a3e9bec21c2 100644
+>> --- a/include/linux/kasan.h
+>> +++ b/include/linux/kasan.h
+>> @@ -33,6 +33,20 @@ typedef unsigned int __bitwise kasan_vmalloc_flags_t;
+>>
+>>  #include <linux/pgtable.h>
+>>
+>> +#ifndef kasan_mem_to_shadow
+>> +static inline void *kasan_mem_to_shadow(const void *addr)
+>> +{
+>> +       void *scaled;
+>> +
+>> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC))
+>> +               scaled = (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT);
+>> +       else
+>> +               scaled = (void *)((long)addr >> KASAN_SHADOW_SCALE_SHIFT);
+>> +
+>> +       return KASAN_SHADOW_OFFSET + scaled;
+>> +}
+>> +#endif
 >
-> On Sun, Feb 02, 2025 at 10:30:18AM +0000, ci_notify@linaro.org wrote:
-> > Dear contributor,
-> >
-> > Our automatic CI has detected problems related to your patch(es). Please find some details below.
-> >
-> > In tcwg_kernel/llvm-master-arm-stable-allyesconfig, after:
-> >   | commit llvmorg-21-init-262-gcff0a460ae86
-> >   | Author: Bill Wendling <morbo@google.com>
-> >   | Date:   Thu Jan 30 15:36:13 2025 -0800
-> >   |
-> >   |     [Clang][counted_by] Refactor __builtin_dynamic_object_size on FAMs (#122198)
-> >   |
-> >   |     Refactoring of how __builtin_dynamic_object_size() is calculated for
-> >   |     flexible array members (in preparation for adding support for the
-> >   |     'counted_by' attribute on pointers in structs).
-> >   | ... 86 lines of the commit log omitted.
-> >
-> > Produces Failure:
-> >   | Results changed to
-> >   | # reset_artifacts:
-> >   | -10
-> >   | # build_abe binutils:
-> >   | -9
-> >   | # build_kernel_llvm:
-> >   | -5
-> >   | # build_abe qemu:
-> >   | -2
-> >   | # linux_n_obj:
-> >   | 22473
-> >   |
-> >   | From
-> >   | # reset_artifacts:
-> >   | -10
-> >   | # build_abe binutils:
-> >   | -9
-> >   | # build_kernel_llvm:
-> >   | -5
-> >   | # build_abe qemu:
-> >   | -2
-> >   | # linux_n_obj:
-> >   | 22474
-> >
-> > Used configuration :
-> >  tcwg_kernel/llvm-master-arm-stable-allyesconfig
-> >
-> > We track this bug report under https://linaro.atlassian.net/browse/LLVM-1541. Please let us know if you have a fix.
-> >
-> > If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-> >
-> > -----------------8<--------------------------8<--------------------------8<--------------------------
-> >
-> > The information below contains the details of the failures, and the ways to reproduce a debug environment:
-> >
-> >
-> >
-> > Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/233/artifact/artifacts
-> > Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-arm-stable-allyesconfig-build/232/artifact/artifacts
-> >
-> > Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/cff0a460ae864505bc2a064c269ebe548aa35949/tcwg_kernel/llvm-master-arm-stable-allyesconfig/reproduction_instructions.txt
-> >
-> > Full commit : https://github.com/llvm/llvm-project/commit/cff0a460ae864505bc2a064c269ebe548aa35949
->
-> Thanks, I think Bill fixed this with
-> https://github.com/llvm/llvm-project/commit/2eb44aa0a94a8d4230c1c9a0c306af16bfc92925
->
-> Cheers,
-> Nathan
-> _______________________________________________
-> linaro-toolchain mailing list -- linaro-toolchain@lists.linaro.org
-> To unsubscribe send an email to linaro-toolchain-leave@lists.linaro.org
+>Any reason this is moved up here?
+
+I think it was necessary for something I added, removed and then didn't notice
+it's no longer needed. I'll move it back.
+
+-- 
+Kind regards
+Maciej Wieczór-Retman
