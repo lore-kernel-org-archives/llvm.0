@@ -1,102 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF381A0BFE
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 19:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EE71AAA32
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 19:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738869183; cv=none; b=dPVMNYzbUc9ydERiusbJY7YzsCpNuxvBitMfyoVAoSwV0OOqkG5PTijdD8N2ogyU1rsyw99UpX2yxwUAQh1qZliXGqOl62/k+k1SZ8+W/cOXGUMM71RQiFFJmRpJWtElonIKdep+AUSCbeMIwKCipBYmNhltDhNxTvmsyfsIH/4=
+	t=1738871822; cv=none; b=lqLUwsZ8n9DnSbw8qD2Klw7p4JIQeAF/jFBLu5fh+Qj8FKKN8IPkx3JQVmLh+zhU/Ux3eGoQXK0dhOSqQAiWV36HCrT2nTNd/hJf4CvEfAfE0yI/kyThbm2tMUr3DUJBMigPQYHqcCDdLYMwVJUtsj86VhVe+DJMfaXjoEmJYLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738869183; c=relaxed/simple;
-	bh=hhRBRUdqB9PgcJ8rttKlgxiZynWfr8f5RE3RGCNNA6w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mx9RNrvJNG+ktQsNWhN9YaqJnyFCQ5V0QFMWD3ZPnZ3J89Yi1W7tTp6JtlxMgLK+x9s8eO8PxS0E7H6kFRL3xCMxZkD8JQItlIKPeHsJ2G8mGxLnHEkVJrwXUKcCBTzaXWMjUNfrw99Xk/shsTjZOWxIDuqjL2bMACnnzLjyX64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-CSE-ConnectionGUID: iVKdSVNkTWOOL16HTS6XDA==
-X-CSE-MsgGUID: 8g1VtNIjRcOhg96pjfam7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39189149"
-X-IronPort-AV: E=Sophos;i="6.13,265,1732608000"; 
-   d="scan'208";a="39189149"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 11:13:02 -0800
-X-CSE-ConnectionGUID: 0Ysy79jQQiyrMYzoIz0tog==
-X-CSE-MsgGUID: UFpXcEGvS6um270/TAk51A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148519631"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 11:12:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1tg7J0-00000008pGD-24HP;
-	Thu, 06 Feb 2025 21:12:54 +0200
-Date: Thu, 6 Feb 2025 21:12:54 +0200
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
+	s=arc-20240116; t=1738871822; c=relaxed/simple;
+	bh=m29euKP0tRbm1pfzPENkzHxEPSHo+gfSNXCTL4qfmug=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=raoKFYInlZ4sIjf9hATrPxQnBUSiS0hD4RZTamHdyEG6lBVMbIl7y4r1pJevZ+H2KczFGbns+RwkylgkeMPh0Hds6GtdZBNJNz3zDFzgSaaoPMyfVWDClAj4++rCwOFK7SYyS37vr8Mlzywk++gKIAF51rami2BOPtIq+S1O20Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJhCl9zI; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJhCl9zI"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-436a39e4891so9241375e9.1
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 11:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738871819; x=1739476619; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1BcIyHBsPlzNpYJRzgarV1TA18Vy0KuhGFQwaCUNHPs=;
+        b=FJhCl9zIcTRAWPpC7xh6M0TGaAL/lccI1hK+kjydRMFl4bDScs8sZeUEzKIoKeBm7X
+         IXYoNNL9OvXAid5/bL1DUq7RsqaV8mLLl7FDyTmE3tAlhyR9Z5YSahPz8nMsEymEwfVK
+         26R8WELnKAmdE19blk91ArwYiP57PjRwXYKiSdoOHabl5VsE8K4udi2GJ3QOlqijQdVW
+         Xp6bjmokz9OWOvnm5gWICEYpUb2XBn/bJILvb9bPlrEN6eLg+36sYhjqPfjUGL1LFwLJ
+         ZLWlet9u24J3L8Mq7r5ebVBJBN/Ln4+eRb5SbNAUNxOMDnGJe0KOPBVY8r5oWg/bLWb6
+         Cviw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738871819; x=1739476619;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1BcIyHBsPlzNpYJRzgarV1TA18Vy0KuhGFQwaCUNHPs=;
+        b=xEXAiLwU8FbpJrMjRd0/xGyAp54OJzlIGRiBs92s3cPGQC0S2OP45sidGVX1o17bJz
+         TPKbknhd19c4BO0YOxJq/cBZBBAkOWEiYc1co7OfZVJ37zk8DK+Abt+vOGUve73gOrrL
+         ma3EMGlkJvoKXR+zMnxI0m6H5Fknz0rLqcGtxxcPDvBVIXvuf2LG2GCrpifXran/NXXA
+         C+mEsW5mS+b+zpZ//zexWuv41TqZfDv52Iep1Kb/VaNqZA6A8doVZltYoTb/3B/NAFDd
+         1P9vVOUeAMX7EMnGEpYxHoAkuy46TlaVe3VFLNpNPvZ9jU0A+/fXhFOEPh/MWdLGRyNy
+         QpZw==
+X-Forwarded-Encrypted: i=1; AJvYcCWeDbxYc5Yq+9EC6WAkOUQ8ytwRXWxngJiTzTA3Lq26SxgxL46fDmsL6kMXil+KC8Tv26gN@lists.linux.dev
+X-Gm-Message-State: AOJu0YwjM8vNWnZNGXF1EDNZJEMB7lL+HN6W0M//gJBX8eMhRhlECkQv
+	ynDGkavjseyMEBDgmfjJIL+f+hqA9wpibCDx+c5hyYE0BV3QwNLi
+X-Gm-Gg: ASbGncsUY8RhyYxI1sk4+aFpEVdrotlFmd9n2MVzq9U65c1JSHbjG0jP8A3jCOBCeNz
+	jn8X2nWw1om8haII81aZStYIVVPecQcpL2Pe7DZZr02Y8yvzyr44cKV+JfCrcs10CgNvsFJC/r0
+	wz1Oo/fD1l/PmDXARklqxhNVs7pHSbQoNnZnC/0CZffqNWS3OIW3wlfnHK8e5JoPGRCMyPY+52J
+	0/OG6oJ1DrLeXYsEAtJ2s2h78Oi9cOkM8nRK3nvBaHK8ijTWlfLfVfNie8JLaIin6FDjhKdZ7/L
+	7Y//vmfdUSLu2hoPMD26a7KSQE/8UCfHfXf1u5kmp5vv8ajR7zNC0g==
+X-Google-Smtp-Source: AGHT+IH+OL30IFfRMNsPtlHNYkTxJSj4lsGxvGMTQ+15ZtUvzy7gINcPStM0hCceknYWifHXCEqJGw==
+X-Received: by 2002:a05:6000:4009:b0:385:fb2c:6021 with SMTP id ffacd0b85a97d-38dc933393amr186251f8f.39.1738871819474;
+        Thu, 06 Feb 2025 11:56:59 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde0fe37sm2561146f8f.69.2025.02.06.11.56.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 11:56:59 -0800 (PST)
+Date: Thu, 6 Feb 2025 19:56:58 +0000
+From: David Laight <david.laight.linux@gmail.com>
 To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Philipp Reisner <philipp.reisner@linbit.com>,
-	Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] string.h: Use ARRAY_SIZE() for
- memtostr*()/strtomem*()
-Message-ID: <Z6UJtt2QNNAjSE_w@smile.fi.intel.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, Kent Overstreet
+ <kent.overstreet@linux.dev>, Andy Shevchenko <andy@kernel.org>, Luc Van
+ Oostenryck <luc.vanoostenryck@gmail.com>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Philipp
+ Reisner <philipp.reisner@linbit.com>, Miguel Ojeda <ojeda@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] compiler.h: Introduce __must_be_char_array()
+Message-ID: <20250206195658.79231973@pumpkin>
+In-Reply-To: <20250206181133.3450635-2-kees@kernel.org>
 References: <20250206175216.work.225-kees@kernel.org>
- <CAHp75Vf=84tWvv57Kj5A5bLenQSkC5yDHTHy-u0iK1_U87nvBw@mail.gmail.com>
- <CANiq72kGUOgP60SaEwiBcgsDJnjdvJZ1VJtyf3a_+sQJjiffng@mail.gmail.com>
- <CAHp75Veo-C3A+XVr1RuFumoULWNOugN+CFE65d1T5o+TZSmw-g@mail.gmail.com>
- <202502061050.EC48F506B1@keescook>
+	<20250206181133.3450635-2-kees@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202502061050.EC48F506B1@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 06, 2025 at 10:52:18AM -0800, Kees Cook wrote:
-> On Thu, Feb 06, 2025 at 08:45:41PM +0200, Andy Shevchenko wrote:
-> > On Thu, Feb 6, 2025 at 8:44 PM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
-> > > On Thu, Feb 6, 2025 at 7:42 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > >
-> > > > What's the minimum Clang version we build kernel with? 12?
-> > >
-> > > 13.0.1 for most architectures according to `scripts/min-tool-version.sh`.
-> > 
-> > Okay, does it mean 13 has no such a bug?
+On Thu,  6 Feb 2025 10:11:29 -0800
+Kees Cook <kees@kernel.org> wrote:
+
+> In preparation for adding stricter type checking to the str/mem*()
+> helpers, provide a way to check that a variable is a character array
+> via __must_be_char_array().
 > 
-> It probably did, but Clang 13 didn't support compile-time error messages
-> (added in 14). Regardless, this fixes it there and makes the API more
-> robust.
-> 
-> > Otherwise the commit message and other comments might be clearer...
-> 
-> How should I rephrase things? I mention the bug and when it was fixed
-> in patch 3:
-> 
->   ...
->   benefit of working around a bug in Clang (fixed[1] in 15+) that got
->   ...
+...
+> +#define __is_char_array(a)	(__is_array(a) && sizeof((a)[0]) == 1)
+> +#define __must_be_char_array(a)	__BUILD_BUG_ON_ZERO_MSG(!__is_char_array(a), \
+> +							"must be byte array")
 
-Ah, the version is mentioned only in cover letter. So, the patch's commit
-message seems good to me.
+If you are only checking the size, perhaps __is_byte_array() would
+be a better name.
+(You've even used 'byte' in the error message.)
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+	David
