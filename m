@@ -1,82 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FE31E5B8A;
-	Thu,  6 Feb 2025 21:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFC41F3FEB
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 21:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738877305; cv=none; b=ZTU10g2VsdbqG6k5JQyHwjabftlluaKFJRG3+YWCd02myK0pr8Wdbn9YvY/QqetIHbrl4UU8IO6Ii2QAYcVKewIZeJXXdh23Sudf7kJ/vg4Q7OD1PtZqgCdkpxIVfpxfBHESSNDQC62rDGleu7p/8rtBMyWfM8nrFYGWo5W7+3k=
+	t=1738877381; cv=none; b=Cfva0BKcXokXEty8SX4pA1zsLNVU6YPU1zv5JS5czDGqB0m3lfebo1u9f4dUNMRzsleckK1UzT+gFhvHPi/YsNInPwwoLnXQUM9Hx+yAcLRgWhcyF4alv0jHIUsKUyFHRj0F0f+ppG5s7CCtJ0S/7DYSUWn8Nwrku4rqDL1Xvbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738877305; c=relaxed/simple;
-	bh=uVh8uGRAZBQ0vpXQbrTzd5Jj4gN9gwG+MNzgNH/Rtx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MTGP4dI4qMgugxEZwz65k/7wbW+XaTBPi0b+ROf/9IZNRWjEaRgPGQb2qLFFSvVu95hPW8x+OsjvtWCfw8yjeBytth8q2z960hCB1DgFRWWT4xaBnPNOesiLl32fumsYX7zeyv8hi29zoRckB2Md1NWaQ1nsgIqEz5KHlKxuY2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZgVGfvm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738877381; c=relaxed/simple;
+	bh=V+agB2RgEaJE6GABRMSM1kt8oPczg2s4klAFFVYvIO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dba8T0qFH+tDm/JCU8MTIxOipmrH5YsUgRtzRbuKwx87YGJhBDQ5PJAAZwtv1FF+lDfMWCODVOI3P+zJMfM4hoUlt7FrxbZVSumerAiz5OSh7VhG0BHS6K1lQ76Ms9gwD+rIGlmOMYAkB9+NOLkqaa6jmIzAcMRM02CvEngCqdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=yUhEgFbx; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZgVGfvm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB53EC4CEDD;
-	Thu,  6 Feb 2025 21:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738877304;
-	bh=uVh8uGRAZBQ0vpXQbrTzd5Jj4gN9gwG+MNzgNH/Rtx4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pZgVGfvmkCwTzjnrIGnGSpyqE0NGdENwsrMBvIHer49PNBzjSHHOw44M65YDfroEb
-	 cgpDTc8Mc69rbRP/u6WC0ccQaYFbRUkjQqcZVdai5JDuOfKt4yGEHX1+AjJDBYRt8c
-	 Rpg3bemhkVcKCMgd4o5CeZM51RWcUdOQeqm8F0ZbxjiI8EtaoEHYVC4QJ11H41GZ1Z
-	 8SMIQGUJh3ledOuS5CjYe76hjpy0nhP8gkdviCNtAiqnn5KS1wgQj1gsZE9DaJDRJ4
-	 zHLKqwAgLbMHtcQPlw8RbfkUxldKQVEzXH8eWjaxM4o0NGuI44y1/MVASU8CsOIx4o
-	 M6oKXxMFq7ZvA==
-Date: Thu, 6 Feb 2025 13:28:24 -0800
-From: Kees Cook <kees@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Suren Baghdasaryan <surenb@google.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Andy Shevchenko <andy@kernel.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Philipp Reisner <philipp.reisner@linbit.com>,
-	Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/3] compiler.h: Move C string helpers into C-only kernel
- section
-Message-ID: <202502061327.C82D5D8B0@keescook>
-References: <20250206175216.work.225-kees@kernel.org>
- <20250206181133.3450635-1-kees@kernel.org>
- <CANiq72nmAKa4rHsk0s1iqY77T-0MEyA8UJv1y=w9vFQ79FBxSw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="yUhEgFbx"
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4Ypqxb3yCRzlgTwF;
+	Thu,  6 Feb 2025 21:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1738877367; x=1741469368; bh=ygRwFLCUciivthCdQYJVLmlK
+	5fpOtVZDy4dVAV/W3mE=; b=yUhEgFbxzsS+oxc9l6BoSmJ8G72/YtxdS8rXiQg/
+	fi1Ee/BF9gtkmoU//eiyffo5NnvZPRfYsIS12uvt3MsvcH7o5i3AhGEvdznPwqEB
+	ybbD0NcivhuFBcgACdN981oThG2ZrbU+50GqWb5/fqdG8YM50Vy2NY5LMYbZY75s
+	qRukSRU0zjIZSj8uPoCFXjq7LtnaS3wHbEWAJ9DyqLJrzPV0VMCwzuaTScE9jxq1
+	xJO8/li++bH5ssw8vuYocpKDi8dlegssBKlz7hX2PKg2SDBmAd/JvwlGytu1IFKy
+	jAGPlEjN10yccRwH1a1ekeRB47cDSrqNBFl7AVed1lBHcA==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id NqM4EdqVb7bb; Thu,  6 Feb 2025 21:29:27 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YpqxB2wn3zlgTw4;
+	Thu,  6 Feb 2025 21:29:17 +0000 (UTC)
+Message-ID: <4ce8f5f2-4196-43e7-88a2-0b5fa2af37fb@acm.org>
+Date: Thu, 6 Feb 2025 13:29:17 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72nmAKa4rHsk0s1iqY77T-0MEyA8UJv1y=w9vFQ79FBxSw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 07/24] cleanup: Basic compatibility with capability
+ analysis
+To: Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Bill Wendling <morbo@google.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+ Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20250206181711.1902989-1-elver@google.com>
+ <20250206181711.1902989-8-elver@google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250206181711.1902989-8-elver@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 06, 2025 at 09:07:05PM +0100, Miguel Ojeda wrote:
-> On Thu, Feb 6, 2025 at 7:11 PM Kees Cook <kees@kernel.org> wrote:
-> >
-> > The C kernel helpers for evaluating C Strings were placed outside of the
-> > assembly ifdef. Move them to the correct place so future changes won't
-> > confuse the assembler.
-> 
-> This moves it also into the kernel ifdef too -- I assume that is
-> intentional. (Perhaps mention ifndef instead of ifdef?)
+On 2/6/25 10:10 AM, Marco Elver wrote:
+> @@ -243,15 +243,18 @@ const volatile void * __must_check_fn(const volatile void *val)
+>   #define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)		\
+>   typedef _type class_##_name##_t;					\
+>   static inline void class_##_name##_destructor(_type *p)			\
+> +	__no_capability_analysis					\
+>   { _type _T = *p; _exit; }						\
+>   static inline _type class_##_name##_constructor(_init_args)		\
+> +	__no_capability_analysis					\
+>   { _type t = _init; return t; }
 
-Right, yeah. I guess I only mentioned that in the Subject. I'll clarify.
+guard() uses the constructor and destructor functions defined by
+DEFINE_GUARD(). The DEFINE_GUARD() implementation uses DEFINE_CLASS().
+Here is an example that I found in <linux/mutex.h>:
 
-> 
-> I checked that this is indeed a pure move, so:
-> 
-> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+DEFINE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
 
-Thanks!
+For this example, how is the compiler told that mutex _T is held around
+the code protected by guard()?
 
--Kees
+Thanks,
 
--- 
-Kees Cook
+Bart.
