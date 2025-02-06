@@ -1,55 +1,55 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD551DF755
-	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2909F1DFDAF
+	for <llvm@lists.linux.dev>; Thu,  6 Feb 2025 18:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738865885; cv=none; b=tHVEZLmPCE87fE0zS7auA92o2/5Ei5jNwF/RLWxLLh0mJfn/a0szfVoa2Xe4i2hs4TXUwWwLmPPD9zp9jeF9IVhPZNFMUeqstJ/NJaw4eESwF1lreNxZwbKLUUvBDPs4av4V9XJ1n6LMdwm55snK83hKjmVW6OAUFLccoQhvScc=
+	t=1738865887; cv=none; b=YHOQjGqnJ3NLO7TWW5tpM6W3IzXCqgZzlQF4Cxvcx0yZZRHN7pmOUdFVjKJN+rZ36BmNqOyBzpv54CvQlCPhonEWGbnp5XneksRwe78s3ewQ2/cSDcqYsD98w8XUvPwATu9YoSGqLBPjrbGiDLVzaUUOurjhP0dQl/uQSl/Jhxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738865885; c=relaxed/simple;
-	bh=OUyhDVr77oUg9Ew94dbfOaYtUgHMDOjvOzaZtS/8oZ4=;
+	s=arc-20240116; t=1738865887; c=relaxed/simple;
+	bh=nbrPwXyZS1EvTzB5y+SypJlT/s4PiDMg7VB+pOJqZ2M=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=t1R6bfy6YnJZhNpS47vwsc3wo89rLM2w13aLD8dI/lx57OgHbHHLXIBAJS00N0U8AKNJTkjiz1wQ0MpKh29YZsSphwEZRJGwmCRff8PoJ9cGvJqVyemBrcpMxSF91VWyYrq2GtriaXZH7DcQJf60BHkFKsJ1myeLdQRTn7cBzL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0hcj8l/T; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=LjccAsaa/a4WuW+9vL6chujZP/P7i2dfqQnfgFzRO0vVZh4iMZ3DARoaeJpfwoPLRKm8UjdgcSxX/gF1OiT29rouuimrPaarQC24oOulncVJ8xkOQv0YBQXSR6At2W6IcY4/MEPBD3pZZKJpg91KrYip8H7TaBUrPQ/dC86GcUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UyJ4zOX5; arc=none smtp.client-ip=209.85.218.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0hcj8l/T"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43646b453bcso6967715e9.3
-        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:18:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UyJ4zOX5"
+Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-aaf901a0ef9so137776566b.0
+        for <llvm@lists.linux.dev>; Thu, 06 Feb 2025 10:18:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738865881; x=1739470681; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1738865883; x=1739470683; darn=lists.linux.dev;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VsoCl0Fwo1Ic1mnwHNM6zvZdMp3PVmxgZxLwt6H7/D4=;
-        b=0hcj8l/TOaR1EMaKNPXgp9YdbAIYtqzDTOttid9xHzHslu2vxtB/JgxgWGs26Lxyy+
-         fIKang+GDGs2b3mU9AB0mudlU/KdSD9VqTHgwFP0TLfJNTr+BFmW6Bjl0ByY/NfQ6pLt
-         KSMwdA+GPjfF0Z+h/u2Ho8wRDQdCuUKSz1wCv/1S99bTQ27mcqNwa+Pejiy3jedjPP8g
-         lcwpRpRatjFh5Z9D0ZUdgovL6ghgak6iwJ66fkMi4xg1mzmvzsCJjMIfcb6COiOMaKvP
-         aNKWEmrrdf+Ac264lAwWPr8JCd+jaQON1K4QVws3D5zGvwIc2eCD54Y9jlywGWHbsykF
-         hlGA==
+        bh=2DbQd0Feo/QZz3Rhlb0Ii9wR2JgNHixpKT0msEk4JbI=;
+        b=UyJ4zOX5TljiE2529e29j45fPK2eP6O8GzdpZTzZrpsWxDzxhfWR3SpTc21r2v1j8d
+         H2NaftF2WZuYcuX6iDQvjM/+c8OipCUA5qUkNycqrYxDM/LnLWJG9hxIc82vL2owwIYz
+         rNwE27FcTYH7MzrzU2tMu7+G8EBXQtsVBeujwuxJMUTVlAbuPd/BQbKLPOtOKxcftOKM
+         /4YTxM8jvSlS3UUHKMjuHdaVF2A6FKWjOx22tSRyuk2KZyr7ox9WeJQzf1xTZko5uN24
+         XkRIN2Seu7/834WOz94hVqIeV+lXY5pN7dxw9EcaAOqUjR2QvOVGovAYXk4enzyQdm82
+         +79w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738865881; x=1739470681;
+        d=1e100.net; s=20230601; t=1738865883; x=1739470683;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VsoCl0Fwo1Ic1mnwHNM6zvZdMp3PVmxgZxLwt6H7/D4=;
-        b=fi4CpYOGMljKC6KGMgXDqf0RnxcX47RhsoOLG2o0qZXPAbJOwH3AZSMaKKxYlKCoSS
-         zyTKVlskAKWVviAdDVwbc0y248rj1/hS7PwE3eOLKSbeaIKjB0g5OSckpM1ECUcRqfFk
-         YNe2rOXkRuE34MKLc+mRkV9XFJo06XYyboZo3NnQuaDtjGQo0T9400YtOMp3Yhd3Jh2z
-         pMzOm8RWaL1D5cPZm9x2rJRTR10TyAyRHghwPHDGpGF2s9PoRQrgol+EUl2sPsmiswwF
-         tovY0dHHBXDH3BE5rl/8DSr4I9T8MzeMSLDJXcmTZEh3KvlHXkhBjfPwICutDQy6CN3o
-         KxRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbxhJwfboQ4h4ZqbU7zufsfvzBWEuvl0Xz2WBw0kBNRzoIjlPJcJ5mgOotpAcCm7l0IpS+@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx8rAhgLSQYVMQ/7F9c2dVINjOhIVW6Cbu1HBAKXT4wZ+1rojWs
-	m7K6kIdG9msaj4gNtVzsvqBe7WFcHA+WXlvDDz8uLnk0Qvd54QR4vNuNsxhZFVGRC7+pDc3egA=
+        bh=2DbQd0Feo/QZz3Rhlb0Ii9wR2JgNHixpKT0msEk4JbI=;
+        b=vXLLNKL3tWpnHwSYAbDOzlB+nt89CwqteZIOA384v1AXDISHJNJ3VfTYBCl+ZWF76/
+         D07h6PlPxO/MS4SOaNuRgO4z9EW9RwnYZQoo8FyxV5WsyTn6yToVnEKWha3EpqKbybdm
+         ocndVMSlpTGsOxK0tvb7xied8aLZIMpB4w6YTSU3+hUsLPevNIuDrqhCWpmWjZH4Wx9n
+         kRPKtejFOXLw5SKhr+8jkTaXn5K5JgbuXPQww8vKOYHNjU7HttSi5K2IpAZ2YuApwRc6
+         5D6/YG6Q72qCNhb9HtGkmiJXegatxNGt0YtsoqNdUIkpqe+MgL40KqXQIS44dPyRYT0L
+         0Fsw==
+X-Forwarded-Encrypted: i=1; AJvYcCULmLyDwCsqSmQX+yWqxW+ouMNw+RaXBxhPSPHeKtySzWR22cRWW+Sbbr6DXpi6Et9brPhC@lists.linux.dev
+X-Gm-Message-State: AOJu0YybztNC++h+oP6Gx9rlu7VvRp9ZyBTEeGrQD9dzXe7IwShUQ8ic
+	RsAlHFgP/Vl+JD0OZvyRtVrNydkKh0kMEfmCsMGmM65vfENskdmb4lVlt1dbdFYWRayL1Kk0Ew=
 	=
-X-Google-Smtp-Source: AGHT+IHiTmn6vfthg2vhJ36+4kRebwXf2RJ94SpIllvtOjA4FgWz+fAElpnxs8wxYNVNWceG+v5BwvdraA==
-X-Received: from wmbeq14.prod.google.com ([2002:a05:600c:848e:b0:434:e9e2:2991])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4e15:b0:434:ff9d:a370
- with SMTP id 5b1f17b1804b1-439248c34e9mr5139685e9.0.1738865881193; Thu, 06
- Feb 2025 10:18:01 -0800 (PST)
-Date: Thu,  6 Feb 2025 19:10:00 +0100
+X-Google-Smtp-Source: AGHT+IEpKrf/iQkrY6KOXq/iYZBQV1l1pAnmjhSh7YEqml+QLzZmS4/pcVjkplICVk/aelHvFs7D7YrXFw==
+X-Received: from edbes17.prod.google.com ([2002:a05:6402:3811:b0:5d8:7c8:cde8])
+ (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:7251:b0:aa6:6885:e2f0
+ with SMTP id a640c23a62f3a-ab75e35de7emr916219966b.46.1738865883628; Thu, 06
+ Feb 2025 10:18:03 -0800 (PST)
+Date: Thu,  6 Feb 2025 19:10:01 +0100
 In-Reply-To: <20250206181711.1902989-1-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250206181711.1902989-1-elver@google.com>
 X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
-Message-ID: <20250206181711.1902989-7-elver@google.com>
-Subject: [PATCH RFC 06/24] checkpatch: Warn about capability_unsafe() without comment
+Message-ID: <20250206181711.1902989-8-elver@google.com>
+Subject: [PATCH RFC 07/24] cleanup: Basic compatibility with capability analysis
 From: Marco Elver <elver@google.com>
 To: elver@google.com
 Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
@@ -79,33 +79,113 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.
 	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Warn about applications of capability_unsafe() without a comment, to
-encourage documenting the reasoning behind why it was deemed safe.
+Due to the scoped cleanup helpers used for lock guards wrapping
+acquire/release around their own constructors/destructors that store
+pointers to the passed locks in a separate struct, we currently cannot
+accurately annotate *destructors* which lock was released. While it's
+possible to annotate the constructor to say which lock was acquired,
+that alone would result in false positives claiming the lock was not
+released on function return.
+
+Instead, to avoid false positives, we can claim that the constructor
+"asserts" that the taken lock is held. This will ensure we can still
+benefit from the analysis where scoped guards are used to protect access
+to guarded variables, while avoiding false positives. The only downside
+are false negatives where we might accidentally lock the same lock
+again:
+
+	raw_spin_lock(&my_lock);
+	...
+	guard(raw_spinlock)(&my_lock);  // no warning
+
+Arguably, lockdep will immediately catch issues like this.
+
+While Clang's analysis supports scoped guards in C++ [1], there's no way
+to apply this to C right now. Better support for Linux's scoped guard
+design could be added in future if deemed critical.
+
+[1] https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#scoped-capability
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- scripts/checkpatch.pl | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ include/linux/cleanup.h | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 7b28ad331742..c28efdb1d404 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -6693,6 +6693,14 @@ sub process {
- 			}
- 		}
+diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+index ec00e3f7af2b..93a166549add 100644
+--- a/include/linux/cleanup.h
++++ b/include/linux/cleanup.h
+@@ -223,7 +223,7 @@ const volatile void * __must_check_fn(const volatile void *val)
+  *	@exit is an expression using '_T' -- similar to FREE above.
+  *	@init is an expression in @init_args resulting in @type
+  *
+- * EXTEND_CLASS(name, ext, init, init_args...):
++ * EXTEND_CLASS(name, ext, ctor_attrs, init, init_args...):
+  *	extends class @name to @name@ext with the new constructor
+  *
+  * CLASS(name, var)(args...):
+@@ -243,15 +243,18 @@ const volatile void * __must_check_fn(const volatile void *val)
+ #define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)		\
+ typedef _type class_##_name##_t;					\
+ static inline void class_##_name##_destructor(_type *p)			\
++	__no_capability_analysis					\
+ { _type _T = *p; _exit; }						\
+ static inline _type class_##_name##_constructor(_init_args)		\
++	__no_capability_analysis					\
+ { _type t = _init; return t; }
  
-+# check for capability_unsafe without a comment.
-+		if ($line =~ /\bcapability_unsafe\b/) {
-+			if (!ctx_has_comment($first_line, $linenr)) {
-+				WARN("CAPABILITY_UNSAFE",
-+				     "capability_unsafe without comment\n" . $herecurr);
-+			}
-+		}
-+
- # check of hardware specific defines
- 		if ($line =~ m@^.\s*\#\s*if.*\b(__i386__|__powerpc64__|__sun__|__s390x__)\b@ && $realfile !~ m@include/asm-@) {
- 			CHK("ARCH_DEFINES",
+-#define EXTEND_CLASS(_name, ext, _init, _init_args...)			\
++#define EXTEND_CLASS(_name, ext, ctor_attrs, _init, _init_args...)		\
+ typedef class_##_name##_t class_##_name##ext##_t;			\
+ static inline void class_##_name##ext##_destructor(class_##_name##_t *p)\
+ { class_##_name##_destructor(p); }					\
+ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
++	__no_capability_analysis ctor_attrs					\
+ { class_##_name##_t t = _init; return t; }
+ 
+ #define CLASS(_name, var)						\
+@@ -299,7 +302,7 @@ static __maybe_unused const bool class_##_name##_is_conditional = _is_cond
+ 
+ #define DEFINE_GUARD_COND(_name, _ext, _condlock) \
+ 	__DEFINE_CLASS_IS_CONDITIONAL(_name##_ext, true); \
+-	EXTEND_CLASS(_name, _ext, \
++	EXTEND_CLASS(_name, _ext,, \
+ 		     ({ void *_t = _T; if (_T && !(_condlock)) _t = NULL; _t; }), \
+ 		     class_##_name##_t _T) \
+ 	static inline void * class_##_name##_ext##_lock_ptr(class_##_name##_t *_T) \
+@@ -371,6 +374,7 @@ typedef struct {							\
+ } class_##_name##_t;							\
+ 									\
+ static inline void class_##_name##_destructor(class_##_name##_t *_T)	\
++	__no_capability_analysis					\
+ {									\
+ 	if (_T->lock) { _unlock; }					\
+ }									\
+@@ -383,6 +387,7 @@ static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)	\
+ 
+ #define __DEFINE_LOCK_GUARD_1(_name, _type, _lock)			\
+ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
++	__no_capability_analysis __asserts_cap(l)			\
+ {									\
+ 	class_##_name##_t _t = { .lock = l }, *_T = &_t;		\
+ 	_lock;								\
+@@ -391,6 +396,7 @@ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
+ 
+ #define __DEFINE_LOCK_GUARD_0(_name, _lock)				\
+ static inline class_##_name##_t class_##_name##_constructor(void)	\
++	__no_capability_analysis					\
+ {									\
+ 	class_##_name##_t _t = { .lock = (void*)1 },			\
+ 			 *_T __maybe_unused = &_t;			\
+@@ -410,7 +416,7 @@ __DEFINE_LOCK_GUARD_0(_name, _lock)
+ 
+ #define DEFINE_LOCK_GUARD_1_COND(_name, _ext, _condlock)		\
+ 	__DEFINE_CLASS_IS_CONDITIONAL(_name##_ext, true);		\
+-	EXTEND_CLASS(_name, _ext,					\
++	EXTEND_CLASS(_name, _ext, __asserts_cap(l),			\
+ 		     ({ class_##_name##_t _t = { .lock = l }, *_T = &_t;\
+ 		        if (_T->lock && !(_condlock)) _T->lock = NULL;	\
+ 			_t; }),						\
 -- 
 2.48.1.502.g6dc24dfdaf-goog
 
