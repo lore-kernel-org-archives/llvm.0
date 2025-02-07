@@ -1,75 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E5A2417ED;
-	Fri,  7 Feb 2025 11:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67212417ED;
+	Fri,  7 Feb 2025 11:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738928266; cv=none; b=V1+YLM7EBZqcRp3gL8gb929Se/eVC4C60vghAk+qT3mw0nYuAVcKXnkH2iESZrZGGSSwykPilC1SLXFu0Hm29sabCUWbdziIIGTfG9+TbnUHslIH3Z2x5xBx3726G1wO4VdL58bRE2CJaams0TzZA6JnVHWftuO5pwo+XOdl1J8=
+	t=1738928463; cv=none; b=bNCCMwe1A72NwymtWQbe11shwXJom0/lWs4w2n5KU6EeATZBEWmlngNW4zgDjdCyNk591MxZpUt+MAADF7eqv74X/cue+bTxt45koaKdAUEyTs7aFnqdkT6zHnK03iqS5+HOPUeSjx6Lq+ppNSXUk4wTl4bEj0u4PHywRL2601I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738928266; c=relaxed/simple;
-	bh=PW0sMWesSWW0COshS2HtpPEqlkHX2KN+bsrSyyccYLY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OaQvwO4VoZjRBUxhwPJThHaJ7gh5XGIznmKQ6jTYaowG1x1gMYWgcUmgGFDv8MccgaS1vqujtjG+Z8IF0wOlPKyE+AZLEbFfqingVjZSPFP8vXgaoQ0QXqFqptT6M6aOmJit7rqI2av+zoI+RdQWo3MwhsAzroLppQ3KztzUSgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVl4Krz3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738928463; c=relaxed/simple;
+	bh=Kr3VE9NUyZO8hS9QqWqW3tBkPoYkI+NxTJxvWVkvBkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=At1e8l77Um540pNmXO/N7Cmqouy3khTM+ruvgy8iCGnWXpX/MNmAFw2SeMzK0FO6uF7O5qYh4hVQ3IjtKG1PPZmmKp8I+ovCdXeQmpkukspqxnFD9vy9FX5Ra0a44It/6RITWcAIpkGFU8DPS0/Ilsfz2eiwKpcCyAO/2B2abAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+3Ktxd6; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVl4Krz3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB11CC4CED1;
-	Fri,  7 Feb 2025 11:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738928265;
-	bh=PW0sMWesSWW0COshS2HtpPEqlkHX2KN+bsrSyyccYLY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gVl4Krz3+XnL1SeqcqHb81BW0B/ih8XsjD3jG5Bh2NMdzG/6Zo4fxNBSduiSnyFLr
-	 tYtE/ub84yX7LBFyPK9XXHYPMJxNXYOxzRwtMXTG1Td9h7Q41BNWWUY7O2YGmMqd22
-	 jKmrEENZbMwjj/ouxfl15EbqSFa0x+URrW8mkFi+s1R+I4yLD9iRIjqYPFBMyGooSz
-	 GMVc6nuUiu6BcjTx/q3hTh5D5tO21MtgfrdxGW3YJLa6Pe+3Y8/nergtaL13ePLxz4
-	 RwROxzhp5cXAIBXnLv4g4m9ao/giO4Roy2LVr6CqgB2dgPktNN2l1m7xYsgq+ksv0T
-	 w1styqH4xol8Q==
-From: Will Deacon <will@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v3] arm64: Handle .ARM.attributes section in linker scripts
-Date: Fri,  7 Feb 2025 11:37:39 +0000
-Message-Id: <173892221767.1467001.15470830254553080217.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20250206-arm64-handle-arm-attributes-in-linker-script-v3-1-d53d169913eb@kernel.org>
-References: <20250206-arm64-handle-arm-attributes-in-linker-script-v3-1-d53d169913eb@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+3Ktxd6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738928462; x=1770464462;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kr3VE9NUyZO8hS9QqWqW3tBkPoYkI+NxTJxvWVkvBkA=;
+  b=E+3Ktxd6ld7bk0PZqL1XlsaV/l1FDW/wJDBjvjip+lY7m4mjNZ4TQL8B
+   Cytb2XuwFlUqkMrPS35M9H8fngyL5cNNew2EonMHjeCzfBtsmtqz56kwe
+   JFakJ5Nl2OH4aK/Fz4lfz0iC6w+LWnw5PtHMdL3xZOPn00V3w0yYqoj7z
+   rauFCMQ3UdWUcmpf51GcJKG4XsxX16z4tDZCrdI8h3yiFDodBCM15EXxS
+   d5M61J02J+jbenrBJssgW3cbrF8GgOHsbYO6AkUkpaSs63918KQrYpd5V
+   T7S/4U85c7PJJ9jEFd3J6CPGrcpoD6Xr6wSkhSpkiHk+/WVmjRQZL5Zss
+   A==;
+X-CSE-ConnectionGUID: dsohCYJ0Ru6Z7em0kg7Wow==
+X-CSE-MsgGUID: c74SEQUURNGwW9T/4Gtecg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50204710"
+X-IronPort-AV: E=Sophos;i="6.13,266,1732608000"; 
+   d="scan'208";a="50204710"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 03:41:01 -0800
+X-CSE-ConnectionGUID: KPH5yCU9QtuhzEinvrTVsw==
+X-CSE-MsgGUID: LxkwO1UyTTKjfONVxwkKqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,266,1732608000"; 
+   d="scan'208";a="111290324"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 07 Feb 2025 03:40:56 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgMj6-000yF9-36;
+	Fri, 07 Feb 2025 11:40:52 +0000
+Date: Fri, 7 Feb 2025 19:40:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suman Ghosh <sumang@marvell.com>, horms@kernel.org,
+	sgoutham@marvell.com, gakula@marvell.com, sbhatta@marvell.com,
+	hkelam@marvell.com, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lcherian@marvell.com,
+	jerinj@marvell.com, john.fastabend@gmail.com, bbhushan2@marvell.com,
+	hawk@kernel.org, andrew+netdev@lunn.ch, ast@kernel.org,
+	daniel@iogearbox.net, bpf@vger.kernel.org, larysa.zaremba@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Suman Ghosh <sumang@marvell.com>
+Subject: Re: [net-next PATCH v5 6/6] octeontx2-pf: AF_XDP zero copy transmit
+ support
+Message-ID: <202502071925.3T93J9MM-lkp@intel.com>
+References: <20250206085034.1978172-7-sumang@marvell.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250206085034.1978172-7-sumang@marvell.com>
 
-On Thu, 06 Feb 2025 10:21:38 -0700, Nathan Chancellor wrote:
-> A recent LLVM commit [1] started generating an .ARM.attributes section
-> similar to the one that exists for 32-bit, which results in orphan
-> section warnings (or errors if CONFIG_WERROR is enabled) from the linker
-> because it is not handled in the arm64 linker scripts.
-> 
->   ld.lld: error: arch/arm64/kernel/vdso/vgettimeofday.o:(.ARM.attributes) is being placed in '.ARM.attributes'
->   ld.lld: error: arch/arm64/kernel/vdso/vgetrandom.o:(.ARM.attributes) is being placed in '.ARM.attributes'
-> 
-> [...]
+Hi Suman,
 
-Applied to arm64 (for-next/fixes), thanks!
+kernel test robot noticed the following build warnings:
 
-[1/1] arm64: Handle .ARM.attributes section in linker scripts
-      https://git.kernel.org/arm64/c/ca0f4fe7cf71
+[auto build test WARNING on net-next/main]
 
-Cheers,
+url:    https://github.com/intel-lab-lkp/linux/commits/Suman-Ghosh/octeontx2-pf-use-xdp_return_frame-to-free-xdp-buffers/20250206-165634
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250206085034.1978172-7-sumang%40marvell.com
+patch subject: [net-next PATCH v5 6/6] octeontx2-pf: AF_XDP zero copy transmit support
+config: x86_64-buildonly-randconfig-006-20250207 (https://download.01.org/0day-ci/archive/20250207/202502071925.3T93J9MM-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250207/202502071925.3T93J9MM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502071925.3T93J9MM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c:112:6: warning: variable 'iova' set but not used [-Wunused-but-set-variable]
+     112 |         u64 iova;
+         |             ^
+   1 warning generated.
+
+
+vim +/iova +112 drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+
+   104	
+   105	static void otx2_xdp_snd_pkt_handler(struct otx2_nic *pfvf,
+   106					     struct otx2_snd_queue *sq,
+   107					     struct nix_cqe_tx_s *cqe,
+   108					     int *xsk_frames)
+   109	{
+   110		struct nix_send_comp_s *snd_comp = &cqe->comp;
+   111		struct sg_list *sg;
+ > 112		u64 iova;
+   113	
+   114		sg = &sq->sg[snd_comp->sqe_id];
+   115	
+   116		if (sg->flags & OTX2_AF_XDP_FRAME) {
+   117			(*xsk_frames)++;
+   118			return;
+   119		}
+   120	
+   121		iova = sg->dma_addr[0];
+   122		if (sg->flags & OTX2_XDP_REDIRECT)
+   123			otx2_dma_unmap_page(pfvf, sg->dma_addr[0], sg->size[0], DMA_TO_DEVICE);
+   124		xdp_return_frame((struct xdp_frame *)sg->skb);
+   125		sg->skb = (u64)NULL;
+   126	}
+   127	
+
 -- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
