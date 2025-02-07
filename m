@@ -1,110 +1,89 @@
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843401A8F97
-	for <llvm@lists.linux.dev>; Fri,  7 Feb 2025 20:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF74188CB1;
+	Fri,  7 Feb 2025 21:34:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738961931; cv=none; b=GgBL1Q3XNYsLcyxjyztf+dJONMxtcc83Lyf3soB9wcWqLSl8R8PYZ0QyRPNkGfoka0nfOHWXvYNwIeUq7FWdGCJhD+Glm6fF4xD2upAM9M1KGANuRKDfACELgy7+lWG+QLQr4BTf31MW83Pfgk6bznAHGrbsgRn2cqhKTWQ1FlA=
+	t=1738964085; cv=none; b=JaifAsnpZQ0VJ0jEF5khnFDT6oqL9m89QjmV5zoamd7/4KMI42+f2uQ5g8mxpwD4LuzDoXSR88P16ZeBoQDECD5HFgFp7W7QeUBxnuDuAES5x8lPzDX2jgj+tbdT6AhSVQsMNLmxb345f0IUZi40Jf+4b/PzaAJILsjbTo8oeOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738961931; c=relaxed/simple;
-	bh=xAwZ9HQ5MAYCQ2LR1z5gYPvNqDl0kPb5mILIXPxKDY0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fiAkGWJ+ImmNxUP7U2ryNc7yhW6AioRUlma9W5lx21TafWtlg42PhuMhXsbMN9irBDU7lLndx1DI+gaMYCiMe3ERcvNgI//iwstt/AO1PQKPH/kl+bWbP+yTUlVugH4HR5GrjXNOLPnwr4vGhAIJ7DVGiKWOUSPs2IBJMwg1pSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=VacKsLnk; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1738964085; c=relaxed/simple;
+	bh=1vu6IK/TqU5ipJPjTf+My4zQafmF71UcieC3YgeztUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pllcVvsFYKyvmKAKbr6YuQeiPu6oekvywxlwtAA3Xo3WzT/q3653uocsSct1S1TmnXJ79spBNCtTVuH7cNY0JPLR7GisDFk0y3Kq6eYYXe34k3jeHLZJLDljVkun7FIx/ilpvtf5me0ZSvRFAvLusIdDTA47Q8Ev6m6sotyMgEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kup/n0FH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="VacKsLnk"
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YqRCP5bPRzlgTwQ;
-	Fri,  7 Feb 2025 20:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1738961910; x=1741553911; bh=cPoTgIZpKmlByO7NU1gC7bDa
-	ucVwG90zqII2j1CUOIQ=; b=VacKsLnkTdDYtPmt5J4MPD4Qx4KqDnMmmqgENTJ6
-	EtGKhhNCL3FbJzNKd+ETkPPQM7+k0i3yX2iW8q/3iMGik+SUc/EL6VtGWa/NeKJN
-	Xf+/DVOiqp671Tk9LAbh+uq9jSBWZPDCH6WEM2Pa99LrTCfC/C87dWCgPe+7K9Xk
-	fMbRKCIgv980B/wIrp69eB1ri2/70yj+HAHygqGUrxfkh47z6ndhXJmkhf+Izy1r
-	tAkHcBQg1sSGNalB0ZQLoJflY/+OnefFs9gkD6Te4zEZ5jQ7crrhLu+66NEMH6Yj
-	Xsf+d717IbvZq+tYBbHv0evOn2tmB661eFAH2wyxXERWAw==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id Wva0VBNH7R1P; Fri,  7 Feb 2025 20:58:30 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YqRC05LwRzlgTwF;
-	Fri,  7 Feb 2025 20:58:20 +0000 (UTC)
-Message-ID: <38bde2a3-762d-49ed-a2a6-ac3bd698bedc@acm.org>
-Date: Fri, 7 Feb 2025 12:58:20 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kup/n0FH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2ADFC4CEE2;
+	Fri,  7 Feb 2025 21:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738964084;
+	bh=1vu6IK/TqU5ipJPjTf+My4zQafmF71UcieC3YgeztUE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kup/n0FH4N1HCPxeEfcBSE0Hk6Ym/590YyJipMTt7WA6I9iN0Ih7ts7RNdllhdhLD
+	 p8c/goMpaEOLUoP2ofmKh5w1h/MPKj/0eOceXwdjgJAry23wYGKSMEvkm0jhZDeFzL
+	 xwer1m0ggV43k+XfOyIxmNzjbc8q6M0VH9hNFof8yW4ymcFSLxsUXy5iFBsBFiGFh+
+	 SY7KN82mQ49+c+ASX39MoLx1h/73tK7BbxwGgM1Lw+lkbRo7IcuBOTyIklNcaS5h5Y
+	 9UdgESfA397ZP3EYTHCbuURmPry1Oca8boPJFBIoBSBwCTxw/DUIYdWmD2WotE7b1i
+	 xDX580XLalEdw==
+Date: Fri, 7 Feb 2025 14:34:39 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev
+Subject: Re: [PATCH] gen_compile_commands.py: remove code for '\#' replacement
+Message-ID: <20250207213439.GA661404@ax162>
+References: <20250205171811.3471289-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 11/24] locking/mutex: Support Clang's capability
- analysis
-To: Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
- Alexander Potapenko <glider@google.com>, Bill Wendling <morbo@google.com>,
- Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
- Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
- Josh Triplett <josh@joshtriplett.org>, Justin Stitt
- <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>,
- Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
- Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org,
- linux-crypto@vger.kernel.org
-References: <20250206181711.1902989-1-elver@google.com>
- <20250206181711.1902989-12-elver@google.com>
- <20250207083119.GV7145@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250207083119.GV7145@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250205171811.3471289-1-masahiroy@kernel.org>
 
-On 2/7/25 12:31 AM, Peter Zijlstra wrote:
-> Can we please fix up all the existing __cond_lock() code too?
+On Thu, Feb 06, 2025 at 02:18:02AM +0900, Masahiro Yamada wrote:
+> Since commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd files for
+> future Make"), '#' in the build command is replaced with $(pound) rather
+> than '\#'.
+> 
+> Calling .replace(r'\#', '#') is only necessary when this tool is used
+> to parse .*.cmd files generated by Linux 4.16 or earlier, which is
+> unlikely happen.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-It would be great to get rid of __cond_lock().
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-In the description of commit 4a557a5d1a61 ("sparse: introduce
-conditional lock acquire function attribute") I found the following
-URL: 
-https://lore.kernel.org/all/CAHk-=wjZfO9hGqJ2_hGQG3U_XzSh9_XaXze=HgPdvJbgrvASfA@mail.gmail.com/
-
-That URL points at an e-mail from Linus Torvalds with a patch for sparse
-that implements support for __cond_acquires(). It seems to me that the
-sparse patch has never been applied to the sparse code base (the git URL
-for sparse is available at https://sparse.docs.kernel.org/en/latest/).
-Additionally, the most recent commit to the sparse code base is from
-more than a year ago (see also 
-https://git.kernel.org/pub/scm/devel/sparse/sparse.git/).
-
-In other words, switching from __cond_lock() to __cond_acquires()
-probably will make sparse report more "context imbalance" warnings.
-
-If this is a concern to anyone, please speak up.
-
-Thanks,
-
-Bart.
-
+> ---
+> 
+>  scripts/clang-tools/gen_compile_commands.py | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index e4fb686dfaa9..96e6e46ad1a7 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -167,10 +167,10 @@ def process_line(root_directory, command_prefix, file_path):
+>              root_directory or file_directory.
+>      """
+>      # The .cmd files are intended to be included directly by Make, so they
+> -    # escape the pound sign '#', either as '\#' or '$(pound)' (depending on the
+> -    # kernel version). The compile_commands.json file is not interepreted
+> -    # by Make, so this code replaces the escaped version with '#'.
+> -    prefix = command_prefix.replace(r'\#', '#').replace('$(pound)', '#')
+> +    # escape the pound sign '#' as '$(pound)'. The compile_commands.json file
+> +    # is not interepreted by Make, so this code replaces the escaped version
+> +    # with '#'.
+> +    prefix = command_prefix.replace('$(pound)', '#')
+>  
+>      # Return the canonical path, eliminating any symbolic links encountered in the path.
+>      abs_path = os.path.realpath(os.path.join(root_directory, file_path))
+> -- 
+> 2.43.0
+> 
