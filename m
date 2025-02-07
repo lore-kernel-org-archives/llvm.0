@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EDD23C8AA;
-	Fri,  7 Feb 2025 21:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F9C23C8C7;
+	Fri,  7 Feb 2025 22:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738965498; cv=none; b=rF4yAHkepTkzwV2iuelcBudCnAZFpzVQU9XOqj7QoUbzQ0ZryUm6/RYJV+QomnONkPYvXnLvYz/WKHj61dvqcM4sn40xymy4UdBcH0afE4RdxkPw3Qi+WY3EUUZIBEihC81rBmLLs5rJ+JR/mLx/iqRlDj4CkstYYyVRLpvGB24=
+	t=1738968623; cv=none; b=F3mkNFCheguve9lFBp+JDC+MLn5DVl3wsrTh/gmvSiLkI03DRzaZZviDeXAKplHELwSnQLqIdmS93CEXGGXqXoTq8UFbF7KAM8s7wSzke5zELm1ng8wus78jqtjg+swhLuAVsBk9+ohF1mnSFJJnbBx8Ku0RE8bOOq83/pUTssQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738965498; c=relaxed/simple;
-	bh=+0UJecPvaNHVEd/VrjUdDCAloPxRUR0ZBN+xsawcj+I=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=i3LWlHxYjH4nWItN0JP5jYVao1p+b4LfTQByYrDSlmW1LPSSsGeIOZFVMzBYVOM+vwSMYRsFD/uPLmUFA2O+lDWmyKUDQgGcdw7rS+gOYaesZAmHD0TkhWL0e+wjGyjQQvSivGxBE2Jag4k+mKnvOY/jnjB/Kpuhfut1noU3dr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQsd/0eg; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1738968623; c=relaxed/simple;
+	bh=Rywow2VJHbUjqGlzct/KBtLKpCyad14t3+Sp4fnvnng=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PnQ7LjqCjiX+YpXKsjFsZ895p78pcs43ceqYngQhtSrqAfI60FL70xDSzcoe808RsbNMN4zVSI2PcKXAk65wAfQc4ZGIpSStRxeFpasjOABYTs2kp6Srzhzy+MdxEIWoZnU86UInByuUjVxW7g2Z5agwrwiRZAJYU+17FeNAo8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kJLb6/uB; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQsd/0eg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kJLb6/uB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738965496; x=1770501496;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=+0UJecPvaNHVEd/VrjUdDCAloPxRUR0ZBN+xsawcj+I=;
-  b=XQsd/0egSISNYDBpKvWBCpKg6IzRN6Py8OASKPXCPhVlTt8HwXxHRRJP
-   DDnbA+av/cmOqNTDzBUh8ZP+Nb1dlw6a4jnNH5Nby4S5jbsHOmFav0zn/
-   Hq0OkkQcpAfjybvXc8kM3LzLRuKo0HFPPVydvCLFU67JEjnhcFrA335jf
-   JsD4KcL0g3WWUh3pf4eRGAQxLhefdc7Bd0pHpPvTotfCfBIarRfRtDPZ4
-   jHxLC2JkdIp3Hjz+QaQIIfAIvAHHLQ1wg5SJVoWpTWb1+n1ry0IA7Napr
-   V9FEFmisei1zLYG10Uwe4sRtbDt+DIyb4GyVTpLxAMtWXde875XQqvWSN
+  t=1738968621; x=1770504621;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Rywow2VJHbUjqGlzct/KBtLKpCyad14t3+Sp4fnvnng=;
+  b=kJLb6/uBzIr1BkudAYQ99sbbkwTzT9IXr4kHlfQC3A4gwGMA/b0mWKav
+   Vz1JmorUgkOBOH2OEKdHyZWqo2dMadsDnQW/66/ahl+zKBAPQmKLMmPdi
+   pReq6QabsJ5ARIL5IUCsQ0FvRsxqjmNzh4QtxgCjQQPT8bHJG1J9ItTkF
+   jAC539YgNh1rWvustSsO6X7XCHKc7tqTzkLzOVviX/v/uWeAZ4i2v3oUh
+   TMf8J9Wl3iuHFPETHZs+LO51fh3d9/Uh0cdUEje4KPTNhuTlZ8QbY7zC5
+   vtkTPyiLEwyzdkMAZwvvd7mGzmEgDV/4oPjlDGvzDWffRuElXhx1xPbvg
    w==;
-X-CSE-ConnectionGUID: JHnlOJ4gSH2KoUdieYfbeg==
-X-CSE-MsgGUID: RHu5kPBtQU28fQYeo/vc4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="39311849"
+X-CSE-ConnectionGUID: lUDO6/4OSAe4f3JyS0ppAA==
+X-CSE-MsgGUID: lGYXehirTwOMczoCn23MkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="49862104"
 X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
-   d="scan'208";a="39311849"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 13:58:15 -0800
-X-CSE-ConnectionGUID: OOj/hpgSROGJuQ2E8NJ1rg==
-X-CSE-MsgGUID: 9P3m7rBoQYC7C2J+GTpTPQ==
+   d="scan'208";a="49862104"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 14:50:20 -0800
+X-CSE-ConnectionGUID: Fzk086L5SAW0dWNr78r0dQ==
+X-CSE-MsgGUID: gjTR0XvlRAqjOjFK6x4m3A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
-   d="scan'208";a="111584871"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116251474"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 07 Feb 2025 13:58:14 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 07 Feb 2025 14:50:18 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgWMV-000z69-24;
-	Fri, 07 Feb 2025 21:58:11 +0000
-Date: Sat, 8 Feb 2025 05:57:54 +0800
+	id 1tgXAu-000z93-2c;
+	Fri, 07 Feb 2025 22:50:16 +0000
+Date: Sat, 8 Feb 2025 06:49:53 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:615:42: warning: arithmetic
- between different enumeration types ('enum amdgpu_ras_block' and 'enum
- amdgpu_ras_mca_block')
-Message-ID: <202502080537.uHN24DQs-lkp@intel.com>
+To: Andrea Gelmini <andrea.gelmini@gelma.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [koverstreet-bcachefs:pr/739 1/1]
+ fs/bcachefs/btree_key_cache.c:149:7: error: use of undeclared identifier
+ 'PF_MEMALLOC_NORECLAIM'
+Message-ID: <202502080600.dIbMsRzU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,108 +63,115 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: linux-kernel@vger.kernel.org
-TO: John Clements <john.clements@amd.com>
-CC: Alex Deucher <alexander.deucher@amd.com>
-CC: Hawking Zhang <Hawking.Zhang@amd.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   bb066fe812d6fb3a9d01c073d9f1e2fd5a63403b
-commit: 640ae42efb828be69a9ee6ac88fb3d5a3e678ddf drm/amdgpu: Updated RAS infrastructure
-date:   3 years, 5 months ago
-config: x86_64-randconfig-161-20241229 (https://download.01.org/0day-ci/archive/20250208/202502080537.uHN24DQs-lkp@intel.com/config)
+tree:   https://github.com/koverstreet/bcachefs pr/739
+head:   8fd3bb46913c536490fe0c180ce57dc1c0d630ba
+commit: 8fd3bb46913c536490fe0c180ce57dc1c0d630ba [1/1] Fix typos
+config: i386-buildonly-randconfig-005-20250208 (https://download.01.org/0day-ci/archive/20250208/202502080600.dIbMsRzU-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502080537.uHN24DQs-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502080600.dIbMsRzU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502080537.uHN24DQs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502080600.dIbMsRzU-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:29:
-   In file included from include/linux/syscalls.h:87:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:1600:
-   include/linux/vmstat.h:436:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     436 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     437 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:443:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     443 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     444 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:450:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     450 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:455:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     455 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     456 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:464:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     464 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     465 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:615:42: warning: arithmetic between different enumeration types ('enum amdgpu_ras_block' and 'enum amdgpu_ras_mca_block') [-Wenum-enum-conversion]
-     615 |                 for (i = 0; i < AMDGPU_RAS_BLOCK_COUNT + AMDGPU_RAS_MCA_BLOCK_COUNT; i++) {
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:858:6: warning: no previous prototype for function 'amdgpu_ras_mca_query_error_status' [-Wmissing-prototypes]
-     858 | void amdgpu_ras_mca_query_error_status(struct amdgpu_device *adev,
-         |      ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:858:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     858 | void amdgpu_ras_mca_query_error_status(struct amdgpu_device *adev,
-         | ^
-         | static 
-   7 warnings generated.
+>> fs/bcachefs/btree_key_cache.c:149:7: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
+     149 |         ck = allocate_dropping_locks(trans, ret,
+         |              ^
+   fs/bcachefs/btree_iter.h:900:37: note: expanded from macro 'allocate_dropping_locks'
+     900 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                            ^
+>> fs/bcachefs/btree_key_cache.c:149:7: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
+   fs/bcachefs/btree_iter.h:900:59: note: expanded from macro 'allocate_dropping_locks'
+     900 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                                                  ^
+   fs/bcachefs/btree_key_cache.c:245:26: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
+     245 |                 struct bkey_i *new_k = allocate_dropping_locks(trans, ret,
+         |                                        ^
+   fs/bcachefs/btree_iter.h:900:37: note: expanded from macro 'allocate_dropping_locks'
+     900 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                            ^
+   fs/bcachefs/btree_key_cache.c:245:26: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
+   fs/bcachefs/btree_iter.h:900:59: note: expanded from macro 'allocate_dropping_locks'
+     900 |         typeof(_do) _p = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                                                  ^
+   4 errors generated.
+--
+>> fs/bcachefs/btree_cache.c:834:24: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'; did you mean 'KMALLOC_RECLAIM'?
+     834 |         if (memalloc_flags_do(PF_MEMALLOC_NORECLAIM,
+         |                               ^~~~~~~~~~~~~~~~~~~~~
+         |                               KMALLOC_RECLAIM
+   fs/bcachefs/btree_iter.h:882:46: note: expanded from macro 'memalloc_flags_do'
+     882 |         unsigned _saved_flags = memalloc_flags_save(_flags);                    \
+         |                                                     ^
+   include/linux/slab.h:609:2: note: 'KMALLOC_RECLAIM' declared here
+     609 |         KMALLOC_RECLAIM,
+         |         ^
+   1 error generated.
+--
+>> fs/bcachefs/ec.c:950:9: error: use of undeclared identifier 'PF_MEMALLOC_NORECLAIM'
+     950 |         return allocate_dropping_locks_errcode(trans,
+         |                ^
+   fs/bcachefs/btree_iter.h:890:31: note: expanded from macro 'allocate_dropping_locks_errcode'
+     890 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                      ^
+>> fs/bcachefs/ec.c:950:9: error: use of undeclared identifier 'PF_MEMALLOC_NOWARN'
+   fs/bcachefs/btree_iter.h:890:53: note: expanded from macro 'allocate_dropping_locks_errcode'
+     890 |         int _ret = memalloc_flags_do(PF_MEMALLOC_NORECLAIM|PF_MEMALLOC_NOWARN, _do);\
+         |                                                            ^
+   2 errors generated.
 
 
-vim +615 drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c
+vim +/PF_MEMALLOC_NORECLAIM +149 fs/bcachefs/btree_key_cache.c
 
-   588	
-   589	/* return an obj equal to head, or the first when head is NULL */
-   590	struct ras_manager *amdgpu_ras_find_obj(struct amdgpu_device *adev,
-   591			struct ras_common_if *head)
-   592	{
-   593		struct amdgpu_ras *con = amdgpu_ras_get_context(adev);
-   594		struct ras_manager *obj;
-   595		int i;
-   596	
-   597		if (!adev->ras_enabled || !con)
-   598			return NULL;
-   599	
-   600		if (head) {
-   601			if (head->block >= AMDGPU_RAS_BLOCK_COUNT)
-   602				return NULL;
-   603	
-   604			if (head->block == AMDGPU_RAS_BLOCK__MCA) {
-   605				if (head->sub_block_index >= AMDGPU_RAS_MCA_BLOCK__LAST)
-   606					return NULL;
-   607	
-   608				obj = &con->objs[AMDGPU_RAS_BLOCK__LAST + head->sub_block_index];
-   609			} else
-   610				obj = &con->objs[head->block];
-   611	
-   612			if (alive_obj(obj))
-   613				return obj;
-   614		} else {
- > 615			for (i = 0; i < AMDGPU_RAS_BLOCK_COUNT + AMDGPU_RAS_MCA_BLOCK_COUNT; i++) {
-   616				obj = &con->objs[i];
-   617				if (alive_obj(obj))
-   618					return obj;
-   619			}
-   620		}
-   621	
-   622		return NULL;
-   623	}
-   624	/* obj end */
-   625	
+d2cb6b219d3728 Kent Overstreet 2024-06-08  134  
+2ca88e5ad9b296 Kent Overstreet 2019-03-07  135  static struct bkey_cached *
+d2cb6b219d3728 Kent Overstreet 2024-06-08  136  bkey_cached_alloc(struct btree_trans *trans, struct btree_path *path, unsigned key_u64s)
+2ca88e5ad9b296 Kent Overstreet 2019-03-07  137  {
+5f1929f1f077d3 Kent Overstreet 2024-06-13  138  	struct bch_fs *c = trans->c;
+5f1929f1f077d3 Kent Overstreet 2024-06-13  139  	struct btree_key_cache *bc = &c->btree_key_cache;
+3d21d48e898a2e Kent Overstreet 2022-09-03  140  	bool pcpu_readers = btree_uses_pcpu_readers(path->btree_id);
+6c36318cc702f0 Kent Overstreet 2023-01-07  141  	int ret;
+8f7f566f5774d3 Kent Overstreet 2022-06-17  142  
+5f1929f1f077d3 Kent Overstreet 2024-06-13  143  	struct bkey_cached *ck = container_of_or_null(
+5f1929f1f077d3 Kent Overstreet 2024-06-13  144  				rcu_pending_dequeue(&bc->pending[pcpu_readers]),
+5f1929f1f077d3 Kent Overstreet 2024-06-13  145  				struct bkey_cached, rcu);
+5f1929f1f077d3 Kent Overstreet 2024-06-13  146  	if (ck)
+5f1929f1f077d3 Kent Overstreet 2024-06-13  147  		goto lock;
+5f1929f1f077d3 Kent Overstreet 2024-06-13  148  
+5f1929f1f077d3 Kent Overstreet 2024-06-13 @149  	ck = allocate_dropping_locks(trans, ret,
+8fd3bb46913c53 Andrea Gelmini  2024-12-22  150  				     __bkey_cached_alloc(key_u64s));
+6c36318cc702f0 Kent Overstreet 2023-01-07  151  	if (ret) {
+d2cb6b219d3728 Kent Overstreet 2024-06-08  152  		if (ck)
+d2cb6b219d3728 Kent Overstreet 2024-06-08  153  			kfree(ck->k);
+6c36318cc702f0 Kent Overstreet 2023-01-07  154  		kmem_cache_free(bch2_key_cache, ck);
+6c36318cc702f0 Kent Overstreet 2023-01-07  155  		return ERR_PTR(ret);
+6c36318cc702f0 Kent Overstreet 2023-01-07  156  	}
+6c36318cc702f0 Kent Overstreet 2023-01-07  157  
+5f1929f1f077d3 Kent Overstreet 2024-06-13  158  	if (ck) {
+0d2234a79e877b Kent Overstreet 2023-05-20  159  		bch2_btree_lock_init(&ck->c, pcpu_readers ? SIX_LOCK_INIT_PCPU : 0);
+4e6defd106b69c Kent Overstreet 2022-08-31  160  		ck->c.cached = true;
+5f1929f1f077d3 Kent Overstreet 2024-06-13  161  		goto lock;
+5f1929f1f077d3 Kent Overstreet 2024-06-13  162  	}
+5f1929f1f077d3 Kent Overstreet 2024-06-13  163  
+5f1929f1f077d3 Kent Overstreet 2024-06-13  164  	ck = container_of_or_null(rcu_pending_dequeue_from_all(&bc->pending[pcpu_readers]),
+5f1929f1f077d3 Kent Overstreet 2024-06-13  165  				  struct bkey_cached, rcu);
+5f1929f1f077d3 Kent Overstreet 2024-06-13  166  	if (ck)
+5f1929f1f077d3 Kent Overstreet 2024-06-13  167  		goto lock;
+5f1929f1f077d3 Kent Overstreet 2024-06-13  168  lock:
+5f1929f1f077d3 Kent Overstreet 2024-06-13  169  	six_lock_intent(&ck->c.lock, NULL, NULL);
+5f1929f1f077d3 Kent Overstreet 2024-06-13  170  	six_lock_write(&ck->c.lock, NULL, NULL);
+125907203cc902 Kent Overstreet 2020-11-19  171  	return ck;
+125907203cc902 Kent Overstreet 2020-11-19  172  }
+2ca88e5ad9b296 Kent Overstreet 2019-03-07  173  
+
+:::::: The code at line 149 was first introduced by commit
+:::::: 5f1929f1f077d3997ab8cd4a8136aad304b0e9df bcachefs: key cache can now allocate from pending
+
+:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
