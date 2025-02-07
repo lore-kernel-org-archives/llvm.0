@@ -1,140 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A8719992C;
-	Fri,  7 Feb 2025 20:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843401A8F97
+	for <llvm@lists.linux.dev>; Fri,  7 Feb 2025 20:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738959909; cv=none; b=B9L2+2Z0idjqeRbZI0W+3bijUCHDRASZBqUDBdZVEGCCFK2n2bBSE4TTdybx9AJIQv9QuHRbiZWt5uibr7QTpETBvFGfiJPSrkVTzfR1dOM1u/HVL5xkLJmcp8g0gthH6JHuLLkz+K2H+hHkWI9J4hWqrkDYK1HidDi7GS7du1Q=
+	t=1738961931; cv=none; b=GgBL1Q3XNYsLcyxjyztf+dJONMxtcc83Lyf3soB9wcWqLSl8R8PYZ0QyRPNkGfoka0nfOHWXvYNwIeUq7FWdGCJhD+Glm6fF4xD2upAM9M1KGANuRKDfACELgy7+lWG+QLQr4BTf31MW83Pfgk6bznAHGrbsgRn2cqhKTWQ1FlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738959909; c=relaxed/simple;
-	bh=KAppddcGy75M1GijtWeVnHspaf0hv7YTbaO7eU7CW+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFz8RvFD4nE9GG+1qxDRFDXN1PVRjddbSBNI6mCf6dJ5C1fj0LIW99Umke3lUWF2gjpJXFEur1RMjFH+/08FjfKRmVEKuQ08QgJVxDuFAHvZVCzaUwaelZKsbDrCLCDi9sQU6mHw8GqHZd+jRb9SxCZvz9leWvT7yHL4oXRs8fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kSF3MG1O; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738961931; c=relaxed/simple;
+	bh=xAwZ9HQ5MAYCQ2LR1z5gYPvNqDl0kPb5mILIXPxKDY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fiAkGWJ+ImmNxUP7U2ryNc7yhW6AioRUlma9W5lx21TafWtlg42PhuMhXsbMN9irBDU7lLndx1DI+gaMYCiMe3ERcvNgI//iwstt/AO1PQKPH/kl+bWbP+yTUlVugH4HR5GrjXNOLPnwr4vGhAIJ7DVGiKWOUSPs2IBJMwg1pSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=VacKsLnk; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kSF3MG1O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738959908; x=1770495908;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KAppddcGy75M1GijtWeVnHspaf0hv7YTbaO7eU7CW+A=;
-  b=kSF3MG1OlXU4ZC9g2nzwujJQsHOUEnCoR/Ht/k/p2/oIzLhu3LU0kySU
-   dWCgYAr2BLkGtyDTREKANpbbYkzGrXKcuaaBZWUTxbLDe4C1UhSVVNS1y
-   tphGQdAW9F7hYEsOi+TaLypr1mXSt74NCSldrZ09EOFWQ9ZiIdWBjPk1F
-   gfJu7i3zy6NsD8OfZ8a/aNeoGewqXYSPQ7OA3KeZm6lR32UYVK1/nXcqW
-   /7XVtwtg2hOm1S6rh+KUH5KLzD4G+KHDhYSw8eov5t6hPjHJ21bgFUhgz
-   DO0twCUFM0j+4Um/APiuu3SaVr/O+twjy1UPkwktyD7OMgTgy9/unn59Q
-   Q==;
-X-CSE-ConnectionGUID: jcw6Q3nYQPW/kB1yJe6XVg==
-X-CSE-MsgGUID: fkHUYsQ4SRWajKqN5x7Y8w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="27219097"
-X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
-   d="scan'208";a="27219097"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 12:25:07 -0800
-X-CSE-ConnectionGUID: d18eyhYiScW1fPYwWK7LnQ==
-X-CSE-MsgGUID: 1551tkwPTYCfUn66SQBp4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
-   d="scan'208";a="111392184"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 07 Feb 2025 12:25:04 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgUuL-000z07-2H;
-	Fri, 07 Feb 2025 20:25:01 +0000
-Date: Sat, 8 Feb 2025 04:24:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Dipen Patel <dipenp@nvidia.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	timestamp@lists.linux.dev,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2] gpiolib: don't build HTE code with CONFIG_HTE disabled
-Message-ID: <202502080425.N7HVOOJr-lkp@intel.com>
-References: <20250207083146.17872-1-brgl@bgdev.pl>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="VacKsLnk"
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4YqRCP5bPRzlgTwQ;
+	Fri,  7 Feb 2025 20:58:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1738961910; x=1741553911; bh=cPoTgIZpKmlByO7NU1gC7bDa
+	ucVwG90zqII2j1CUOIQ=; b=VacKsLnkTdDYtPmt5J4MPD4Qx4KqDnMmmqgENTJ6
+	EtGKhhNCL3FbJzNKd+ETkPPQM7+k0i3yX2iW8q/3iMGik+SUc/EL6VtGWa/NeKJN
+	Xf+/DVOiqp671Tk9LAbh+uq9jSBWZPDCH6WEM2Pa99LrTCfC/C87dWCgPe+7K9Xk
+	fMbRKCIgv980B/wIrp69eB1ri2/70yj+HAHygqGUrxfkh47z6ndhXJmkhf+Izy1r
+	tAkHcBQg1sSGNalB0ZQLoJflY/+OnefFs9gkD6Te4zEZ5jQ7crrhLu+66NEMH6Yj
+	Xsf+d717IbvZq+tYBbHv0evOn2tmB661eFAH2wyxXERWAw==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id Wva0VBNH7R1P; Fri,  7 Feb 2025 20:58:30 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4YqRC05LwRzlgTwF;
+	Fri,  7 Feb 2025 20:58:20 +0000 (UTC)
+Message-ID: <38bde2a3-762d-49ed-a2a6-ac3bd698bedc@acm.org>
+Date: Fri, 7 Feb 2025 12:58:20 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207083146.17872-1-brgl@bgdev.pl>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 11/24] locking/mutex: Support Clang's capability
+ analysis
+To: Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Bill Wendling <morbo@google.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+ Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>,
+ Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, rcu@vger.kernel.org,
+ linux-crypto@vger.kernel.org
+References: <20250206181711.1902989-1-elver@google.com>
+ <20250206181711.1902989-12-elver@google.com>
+ <20250207083119.GV7145@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250207083119.GV7145@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Bartosz,
+On 2/7/25 12:31 AM, Peter Zijlstra wrote:
+> Can we please fix up all the existing __cond_lock() code too?
 
-kernel test robot noticed the following build errors:
+It would be great to get rid of __cond_lock().
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.14-rc1 next-20250207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+In the description of commit 4a557a5d1a61 ("sparse: introduce
+conditional lock acquire function attribute") I found the following
+URL: 
+https://lore.kernel.org/all/CAHk-=wjZfO9hGqJ2_hGQG3U_XzSh9_XaXze=HgPdvJbgrvASfA@mail.gmail.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/gpiolib-don-t-build-HTE-code-with-CONFIG_HTE-disabled/20250207-163408
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20250207083146.17872-1-brgl%40bgdev.pl
-patch subject: [PATCH v2] gpiolib: don't build HTE code with CONFIG_HTE disabled
-config: i386-buildonly-randconfig-002-20250208 (https://download.01.org/0day-ci/archive/20250208/202502080425.N7HVOOJr-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502080425.N7HVOOJr-lkp@intel.com/reproduce)
+That URL points at an e-mail from Linus Torvalds with a patch for sparse
+that implements support for __cond_acquires(). It seems to me that the
+sparse patch has never been applied to the sparse code base (the git URL
+for sparse is available at https://sparse.docs.kernel.org/en/latest/).
+Additionally, the most recent commit to the sparse code base is from
+more than a year ago (see also 
+https://git.kernel.org/pub/scm/devel/sparse/sparse.git/).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502080425.N7HVOOJr-lkp@intel.com/
+In other words, switching from __cond_lock() to __cond_acquires()
+probably will make sparse report more "context imbalance" warnings.
 
-All errors (new ones prefixed by >>):
+If this is a concern to anyone, please speak up.
 
-   In file included from drivers/power/supply/max8903_charger.c:9:
-   include/linux/gpio/consumer.h:557:3: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     557 |                 WARN_ON(desc);
-         |                 ^
->> include/linux/gpio/consumer.h:559:10: error: use of undeclared identifier 'ENOSYS'
-     559 |         return -ENOSYS;
-         |                 ^
-   include/linux/gpio/consumer.h:565:3: error: call to undeclared function 'WARN_ON'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     565 |                 WARN_ON(desc);
-         |                 ^
-   include/linux/gpio/consumer.h:567:10: error: use of undeclared identifier 'ENOSYS'
-     567 |         return -ENOSYS;
-         |                 ^
-   4 errors generated.
+Thanks,
 
+Bart.
 
-vim +/ENOSYS +559 include/linux/gpio/consumer.h
-
-   548	
-   549	#if IS_ENABLED(CONFIG_GPIOLIB) && IS_ENABLED(CONFIG_HTE)
-   550	int gpiod_enable_hw_timestamp_ns(struct gpio_desc *desc, unsigned long flags);
-   551	int gpiod_disable_hw_timestamp_ns(struct gpio_desc *desc, unsigned long flags);
-   552	#else
-   553	static inline int gpiod_enable_hw_timestamp_ns(struct gpio_desc *desc,
-   554						       unsigned long flags)
-   555	{
-   556		if (!IS_ENABLED(CONFIG_GPIOLIB))
-   557			WARN_ON(desc);
-   558	
- > 559		return -ENOSYS;
-   560	}
-   561	static inline int gpiod_disable_hw_timestamp_ns(struct gpio_desc *desc,
-   562							unsigned long flags)
-   563	{
-   564		if (!IS_ENABLED(CONFIG_GPIOLIB))
-   565			WARN_ON(desc);
-   566	
-   567		return -ENOSYS;
-   568	}
-   569	#endif /* CONFIG_GPIOLIB && CONFIG_HTE */
-   570	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
