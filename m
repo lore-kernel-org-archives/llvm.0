@@ -1,71 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51BC1F37C6;
-	Fri,  7 Feb 2025 13:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA941F1509
+	for <llvm@lists.linux.dev>; Fri,  7 Feb 2025 13:59:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738935858; cv=none; b=rUJxD+W0B8vQX/JTaFbojPgGgVyQO1tDnWZudtobK6GCc83A1WwMaXgefYmVPzNcdO/hsznGrgRG97VX6LezjPVLQS/XcN6+9UoAMWtDDhgDiaqJsZTT8E0c/4qWs2Gd8sCZhPYHfBX1Yz7eLp0aq4IdYOuIYVjfaSaFYAMe5nU=
+	t=1738936754; cv=none; b=VNxBCod2vDSHsoG5vlKXAc7r3dRyb5dP0I9e0mAngIOziq2gx0XDLcwdyQfmvmzBGTcFG+tO4yOdNWpUuQT+yW99Xx1QGYlq7ZWSQ/X4yPdGRNGbryKXBXpq6lbEpSCP1fSCv4F3lkzSu9ZQ/HX0FeQE0ypQbMxiRFPogWQrZNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738935858; c=relaxed/simple;
-	bh=yvDb/9al0b5cbGYGz+egPFvQ2z5zm9IAuwXMbV2aY9g=;
+	s=arc-20240116; t=1738936754; c=relaxed/simple;
+	bh=0l8kweRthgYGr7UBlp1dQcOEiAVowRzgn/fvw39kwak=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qIlUWfezn4rQZNmigwQ3AOWPVR4HgCJCi8wgPTpxxLmtJTJqOGX/gEbRS5TByIQt3wh+B7e2tHMYkFJEeSdRn+VnM1pcZ6tngyBkJoEefuaUjdr6c5G/tS3QFtkSbXsc4D1aOFM9DaQos3obf0r4n6zLF5neju6QBgpnWwzmUzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UJcrWYj8; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=B5Nh5H0EvSStUMnx4pmscN4clCrootcDR3VKR+pKEK4Sja/4ZyLcjMa51EGo91woz55607RcR0MYFQ/8zSJGGiGTcYQgQ1CwlU4KlML1QIvviCYeIQ5yrmlT1If5kGat1IDIaODH9UWUMVBlmC3FYPKVeHWR3l4lGdnN1UeQj/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dp1t04UJ; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJcrWYj8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738935856; x=1770471856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yvDb/9al0b5cbGYGz+egPFvQ2z5zm9IAuwXMbV2aY9g=;
-  b=UJcrWYj8vxwHNBuwzgZYTu4L3Gr4BSKf/1Tje0gr+JbAW655GQPLKk6A
-   ZIoZZ+q9WBlkNn7CULRyzZKdSbSWimV8jQ/AxbSVGamcWzO5UqHuc/S12
-   GTt/UuSimA5N+cGjxLo/9lJurXQv+vtCKqQ37/QIYruOceGxk5NuIbwWn
-   YNcj+gQYnHT2Htf1bki//aRd9giraY8q3WQE29lJtVxNwgjj2vWYFE4Dj
-   HP/iMhWXflyix+2Y+nWZf1naWby1IUzgIFUqGAYTZPuNH69bEcenZgvth
-   lsERRQBWqgx37XCBohXJr+zFzPZvlkFC9avTCZT4gW7SH3fnPcSEvLj2T
-   w==;
-X-CSE-ConnectionGUID: Q8Q49vHoTI6TMiVs20kESA==
-X-CSE-MsgGUID: aICPCe2eRCWYkwRIs0dU0w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="39448797"
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="39448797"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 05:44:15 -0800
-X-CSE-ConnectionGUID: YD3vx1NJSq2zirfoHgButQ==
-X-CSE-MsgGUID: ndUXSvlTQgKqyCDXne74cw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="116533405"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 07 Feb 2025 05:44:10 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgOeN-000yPD-1L;
-	Fri, 07 Feb 2025 13:44:07 +0000
-Date: Fri, 7 Feb 2025 21:43:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Peter Zijlstra <peterz@infradead.org>,
-	Will Deacon <will@kernel.org>, Waiman Long <llong@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Barret Rhoden <brho@google.com>, Josh Don <joshdon@google.com>,
-	Dohyun Kim <dohyunkim@google.com>,
-	linux-arm-kernel@lists.infradead.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v2 22/26] bpf: Introduce rqspinlock kfuncs
-Message-ID: <202502072155.DbOeX8Le-lkp@intel.com>
-References: <20250206105435.2159977-23-memxor@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dp1t04UJ"
+Date: Fri, 7 Feb 2025 08:58:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738936744;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oH61fgoorFlv6J6tutTmJBpTb7/hGMeEYiEOFwLSzq0=;
+	b=dp1t04UJay0KUgcxxmbjZ/1v44d1PCMZxanYmUV2FiMyhwYw94fCXzK683+T3r+ZkffIw8
+	4HYsJPnYJRdvakJ01ddjqVCjPj6KKsgwHly2FXKMIkuFM1QZsf5ph1i0l4zqMq4NUZwD0R
+	uFboieL8sYwXG3tuOYARGiV6hwwEj20=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Kees Cook <kees@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, 
+	Andy Shevchenko <andy@kernel.org>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Philipp Reisner <philipp.reisner@linbit.com>, Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/3] compiler.h: Introduce __must_be_char_array()
+Message-ID: <b3quyvbfszsimhotsooftcssesjc7zi5hci3o4oasz4bnktfzn@l5qpvyt4rj6n>
+References: <20250206175216.work.225-kees@kernel.org>
+ <20250206181133.3450635-2-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,107 +47,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250206105435.2159977-23-memxor@gmail.com>
+In-Reply-To: <20250206181133.3450635-2-kees@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Kumar,
+On Thu, Feb 06, 2025 at 10:11:29AM -0800, Kees Cook wrote:
+> In preparation for adding stricter type checking to the str/mem*()
+> helpers, provide a way to check that a variable is a character array
+> via __must_be_char_array().
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>  include/linux/compiler.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index 7af999a131cb..a577fe0b1f8a 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -221,7 +221,13 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  #endif /* __CHECKER__ */
+>  
+>  /* &a[0] degrades to a pointer: a different type from an array */
+> -#define __must_be_array(a)	__BUILD_BUG_ON_ZERO_MSG(__same_type((a), &(a)[0]), "must be array")
+> +#define __is_array(a)		(!__same_type((a), &(a)[0]))
+> +#define __must_be_array(a)	__BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
+> +							"must be array")
+> +
+> +#define __is_char_array(a)	(__is_array(a) && sizeof((a)[0]) == 1)
+> +#define __must_be_char_array(a)	__BUILD_BUG_ON_ZERO_MSG(!__is_char_array(a), \
+> +							"must be byte array")
+>  
+>  /* Require C Strings (i.e. NUL-terminated) lack the "nonstring" attribute. */
+>  #define __must_be_cstr(p) \
+> -- 
+> 2.34.1
+> 
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 0abff462d802a352c87b7f5e71b442b09bf9cfff]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/locking-Move-MCS-struct-definition-to-public-header/20250206-190258
-base:   0abff462d802a352c87b7f5e71b442b09bf9cfff
-patch link:    https://lore.kernel.org/r/20250206105435.2159977-23-memxor%40gmail.com
-patch subject: [PATCH bpf-next v2 22/26] bpf: Introduce rqspinlock kfuncs
-config: x86_64-buildonly-randconfig-004-20250207 (https://download.01.org/0day-ci/archive/20250207/202502072155.DbOeX8Le-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250207/202502072155.DbOeX8Le-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502072155.DbOeX8Le-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/timerfd.c:26:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:33:
-   In file included from arch/x86/include/asm/rqspinlock.h:27:
->> include/asm-generic/rqspinlock.h:40:12: error: conflicting types for 'resilient_tas_spin_lock'
-      40 | extern int resilient_tas_spin_lock(rqspinlock_t *lock, u64 timeout);
-         |            ^
-   arch/x86/include/asm/rqspinlock.h:17:12: note: previous declaration is here
-      17 | extern int resilient_tas_spin_lock(struct qspinlock *lock, u64 timeout);
-         |            ^
-   1 error generated.
---
-   In file included from fs/splice.c:27:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from fs/splice.c:31:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:33:
-   In file included from arch/x86/include/asm/rqspinlock.h:27:
->> include/asm-generic/rqspinlock.h:40:12: error: conflicting types for 'resilient_tas_spin_lock'
-      40 | extern int resilient_tas_spin_lock(rqspinlock_t *lock, u64 timeout);
-         |            ^
-   arch/x86/include/asm/rqspinlock.h:17:12: note: previous declaration is here
-      17 | extern int resilient_tas_spin_lock(struct qspinlock *lock, u64 timeout);
-         |            ^
-   2 warnings and 1 error generated.
---
-   In file included from fs/aio.c:20:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:33:
-   In file included from arch/x86/include/asm/rqspinlock.h:27:
->> include/asm-generic/rqspinlock.h:40:12: error: conflicting types for 'resilient_tas_spin_lock'
-      40 | extern int resilient_tas_spin_lock(rqspinlock_t *lock, u64 timeout);
-         |            ^
-   arch/x86/include/asm/rqspinlock.h:17:12: note: previous declaration is here
-      17 | extern int resilient_tas_spin_lock(struct qspinlock *lock, u64 timeout);
-         |            ^
-   In file included from fs/aio.c:29:
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     159 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-     137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
-     160 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-     137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-         |                     ^ ~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
-
-
-vim +/resilient_tas_spin_lock +40 include/asm-generic/rqspinlock.h
-
-c34e46edef2a89 Kumar Kartikeya Dwivedi 2025-02-06  39  
-7a9d3b27f7bf9c Kumar Kartikeya Dwivedi 2025-02-06 @40  extern int resilient_tas_spin_lock(rqspinlock_t *lock, u64 timeout);
-7a9d3b27f7bf9c Kumar Kartikeya Dwivedi 2025-02-06  41  #ifdef CONFIG_QUEUED_SPINLOCKS
-6516ce00a1482f Kumar Kartikeya Dwivedi 2025-02-06  42  extern int resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val, u64 timeout);
-7a9d3b27f7bf9c Kumar Kartikeya Dwivedi 2025-02-06  43  #endif
-6516ce00a1482f Kumar Kartikeya Dwivedi 2025-02-06  44  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Why not just use a combination of ARRAY_SIZE() and a function call
+(to verify that it's a character array) for the typechecking?
