@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC93C1B4121;
-	Sat,  8 Feb 2025 10:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D941A5BB9;
+	Sat,  8 Feb 2025 11:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739011305; cv=none; b=UXPLsIpsA6z/HPgQURKOC8sQjvMuYXxQmp/lRS1rSBf63BAQFQut+bi2d5zeoY8iaH/g+hVc4hv+orchNGfDNrZeQjiPyaUPjS7D/svAUXzX81PDDxztEtMxm/vgohiJM8ecjpC4wnoglpKV2n0g7wQoFQGqA318zb+AhRNe5CE=
+	t=1739014068; cv=none; b=DAZXY99zzJaRHEXBfdbKrgZDaxziShd4zgCPhRAg9r55STLlIjSB6lKqz0/9K7eQqOXDaWSYAepgd/hlmJ+k9TpAE8lpop+MZniPa6yL+WYSurufRIfG6/3Vra0rloeAka+hpO6dbXDrpVnybvZ45/hQYujMKawfhUB89koya4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739011305; c=relaxed/simple;
-	bh=MWG+6WKuPs6vj1SH93Cdkkga8aIS5/n3tbVO+NuMbIk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KGo8T7RklESgu9cYY6IIEyCQPpi7cOl9PCF2BYLOinVQW+9oyjodHyRqRVR7r/UprswR0LFXJLP0guxamfVyhUv/+CmwY0/w2KG7tY6Pq+5Hd6241oXVdwsfy/OUi57DFNze/4PQ2GoglpZg/xmbfh8joCG2NtkBdHoFxNuQv2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I1rPeHMO; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1739014068; c=relaxed/simple;
+	bh=wXhqC+6F+tOU+/QtVSYZ9LSc71CI3x138xfxhyZVr64=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=f/n3ysVGOI22a7OxhK0DgLN2AZI9UGsq7VM3A6iX13xS0+Lz2kYExe/kOgwQp3+nG+opMTNtrPKc8cPa/Jf8UzYL6N2HIrSeAOhTZeS2iA6cUfKgf0PPFNyz9iihU5UwbSeuXqxmwLBiZvT4VPT1+UEFSDQZGTOpvxVeWDBAlTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TEpYJq9S; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I1rPeHMO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TEpYJq9S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739011304; x=1770547304;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MWG+6WKuPs6vj1SH93Cdkkga8aIS5/n3tbVO+NuMbIk=;
-  b=I1rPeHMOgSCdgC7U++V9J+TJcIFNUOJuG2Jnr6rTZlswymIvHCthfQsb
-   hhkUdwF9ulv9Rqe4W3VwCwvmQ1wf2WRYS2eRGl0zmdSu+CRwW3VxX9p5C
-   kHnjpSss6w4SRdMAuOK+TXqvxFhigNmajq/03ZTMaCM8qtho3BVTv84UY
-   yODYvaLCyxmtyFz6MyCvuvzoBhqpCSq0Ccc3cIHY+C7qvaUUBCosHW8K7
-   jJEa7+4JmikMQBDUhr8Bqx30Aplu2iwuj+lyeqJ9ywBQhY9cuVDvFSET6
-   DGQ+ddL54cuYYEJXV2z3DTapzVKktTRXtux6Wk6dB4rTkbBR3BA1Q+MX5
+  t=1739014066; x=1770550066;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wXhqC+6F+tOU+/QtVSYZ9LSc71CI3x138xfxhyZVr64=;
+  b=TEpYJq9SYiq+h2MRJa2f4iJqi3ZxyBTAsdT7VVczOT7tWKDfAZO2W2yK
+   6r29Qfb2oKaQZSzDFKT9xt0EomRO3GX6UebxGR7sjNsYZf5TqnAoqzU4l
+   MN7/BhlevfbMFnZR2A/ZfcizeKP8+IX1HlbsyFUb8SOtgwovhCmIJWnh+
+   JodVxvZHefj7rufAwzlgReNsg9E8vB0hJBosCLKioqKcnHQj6VGoWsEsj
+   6AtcQO4Q3VCy9vhbrNK81w4owEAWVC/0v53n0NZhmQQABVraVtiz2SKQT
+   qbL2mUxzc1oHpppevaobQeVtEKvcX344TMnDZJTuGl+ADnmPS1j+p0CTy
    w==;
-X-CSE-ConnectionGUID: Urf2M1+hRua1bFIrvpMeOw==
-X-CSE-MsgGUID: W3PLJZMSRH+FD36GsPZgPw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="43570983"
+X-CSE-ConnectionGUID: GKEQJiHZS5a1pZIv54d+mQ==
+X-CSE-MsgGUID: 4AUNsiNUR5aXaGj3oPgMIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="42495768"
 X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
-   d="scan'208";a="43570983"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 02:41:43 -0800
-X-CSE-ConnectionGUID: xNCE5HYdSH2fX+RnJcWXRQ==
-X-CSE-MsgGUID: rwzju1O6RKalfAEbK8WziA==
+   d="scan'208";a="42495768"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 03:27:46 -0800
+X-CSE-ConnectionGUID: R2WiNbAbRNG6YQD55/nXjw==
+X-CSE-MsgGUID: LyigwvD8TlWL+NgNyEXSrg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="116697290"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="142633286"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 08 Feb 2025 02:41:40 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 08 Feb 2025 03:27:45 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgiHJ-000zrX-2T;
-	Sat, 08 Feb 2025 10:41:37 +0000
-Date: Sat, 8 Feb 2025 18:40:50 +0800
+	id 1tgizu-000zuF-21;
+	Sat, 08 Feb 2025 11:27:42 +0000
+Date: Sat, 8 Feb 2025 19:26:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	netdev@vger.kernel.org
+To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-	pabeni@redhat.com, Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next 5/7] icmp: reflect tos through ip cookie rather
- than updating inet_sk
-Message-ID: <202502081845.hsTDUryC-lkp@intel.com>
-References: <20250206193521.2285488-6-willemdebruijn.kernel@gmail.com>
+	Paul Moore <paul@paul-moore.com>
+Subject: [linuxsecuritymodule:next 2/2] include/linux/security.h:2379:12:
+ warning: no previous prototype for function 'security_uring_allowed'
+Message-ID: <202502081912.TeokpAAe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,105 +62,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250206193521.2285488-6-willemdebruijn.kernel@gmail.com>
 
-Hi Willem,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Willem-de-Bruijn/tcp-only-initialize-sockcm-tsflags-field/20250207-033912
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250206193521.2285488-6-willemdebruijn.kernel%40gmail.com
-patch subject: [PATCH net-next 5/7] icmp: reflect tos through ip cookie rather than updating inet_sk
-config: x86_64-buildonly-randconfig-002-20250207 (https://download.01.org/0day-ci/archive/20250208/202502081845.hsTDUryC-lkp@intel.com/config)
+tree:   https://github.com/LinuxSecurityModule/kernel next
+head:   c6ad9fdbd44b78f51fa50138247694774ab99e97
+commit: c6ad9fdbd44b78f51fa50138247694774ab99e97 [2/2] io_uring,lsm,selinux: add LSM hooks for io_uring_setup()
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250208/202502081912.TeokpAAe-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081845.hsTDUryC-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081912.TeokpAAe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502081845.hsTDUryC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502081912.TeokpAAe-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> net/ipv4/icmp.c:408:20: warning: variable 'inet' set but not used [-Wunused-but-set-variable]
-     408 |         struct inet_sock *inet;
-         |                           ^
+   In file included from arch/x86/kernel/apic/apic.c:18:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:2379:12: warning: no previous prototype for function 'security_uring_allowed' [-Wmissing-prototypes]
+    2379 | extern int security_uring_allowed(void)
+         |            ^
+   include/linux/security.h:2379:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2379 | extern int security_uring_allowed(void)
+         |        ^
+   arch/x86/kernel/apic/apic.c:1889:20: warning: unused function '__x2apic_enable' [-Wunused-function]
+    1889 | static inline void __x2apic_enable(void) { }
+         |                    ^~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from arch/x86/kernel/apic/vector.c:18:
+   In file included from arch/x86/include/asm/traps.h:9:
+   In file included from arch/x86/include/asm/idtentry.h:11:
+   In file included from include/linux/entry-common.h:7:
+   In file included from include/linux/syscalls.h:94:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   In file included from include/linux/perf_event.h:62:
+>> include/linux/security.h:2379:12: warning: no previous prototype for function 'security_uring_allowed' [-Wmissing-prototypes]
+    2379 | extern int security_uring_allowed(void)
+         |            ^
+   include/linux/security.h:2379:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2379 | extern int security_uring_allowed(void)
+         |        ^
    1 warning generated.
 
 
-vim +/inet +408 net/ipv4/icmp.c
+vim +/security_uring_allowed +2379 include/linux/security.h
 
-^1da177e4c3f41 Linus Torvalds         2005-04-16  395  
-^1da177e4c3f41 Linus Torvalds         2005-04-16  396  /*
-^1da177e4c3f41 Linus Torvalds         2005-04-16  397   *	Driving logic for building and sending ICMP messages.
-^1da177e4c3f41 Linus Torvalds         2005-04-16  398   */
-^1da177e4c3f41 Linus Torvalds         2005-04-16  399  
-^1da177e4c3f41 Linus Torvalds         2005-04-16  400  static void icmp_reply(struct icmp_bxm *icmp_param, struct sk_buff *skb)
-^1da177e4c3f41 Linus Torvalds         2005-04-16  401  {
-^1da177e4c3f41 Linus Torvalds         2005-04-16  402  	struct ipcm_cookie ipc;
-511c3f92ad5b6d Eric Dumazet           2009-06-02  403  	struct rtable *rt = skb_rtable(skb);
-d8d1f30b95a635 Changli Gao            2010-06-10  404  	struct net *net = dev_net(rt->dst.dev);
-8c2bd38b95f75f Eric Dumazet           2024-08-29  405  	bool apply_ratelimit = false;
-77968b78242ee2 David S. Miller        2011-05-08  406  	struct flowi4 fl4;
-fdc0bde90a689b Denis V. Lunev         2008-08-23  407  	struct sock *sk;
-fdc0bde90a689b Denis V. Lunev         2008-08-23 @408  	struct inet_sock *inet;
-35ebf65e851c6d David S. Miller        2012-06-28  409  	__be32 daddr, saddr;
-e110861f86094c Lorenzo Colitti        2014-05-13  410  	u32 mark = IP4_REPLY_MARK(net, skb->mark);
-c0303efeab7391 Jesper Dangaard Brouer 2017-01-09  411  	int type = icmp_param->data.icmph.type;
-c0303efeab7391 Jesper Dangaard Brouer 2017-01-09  412  	int code = icmp_param->data.icmph.code;
-^1da177e4c3f41 Linus Torvalds         2005-04-16  413  
-91ed1e666a4ea2 Paolo Abeni            2017-08-03  414  	if (ip_options_echo(net, &icmp_param->replyopts.opt.opt, skb))
-f00c401b9b5f0a Horms                  2006-02-02  415  		return;
-^1da177e4c3f41 Linus Torvalds         2005-04-16  416  
-8c2bd38b95f75f Eric Dumazet           2024-08-29  417  	/* Needed by both icmpv4_global_allow and icmp_xmit_lock */
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  418  	local_bh_disable();
-^1da177e4c3f41 Linus Torvalds         2005-04-16  419  
-8c2bd38b95f75f Eric Dumazet           2024-08-29  420  	/* is global icmp_msgs_per_sec exhausted ? */
-8c2bd38b95f75f Eric Dumazet           2024-08-29  421  	if (!icmpv4_global_allow(net, type, code, &apply_ratelimit))
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  422  		goto out_bh_enable;
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  423  
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  424  	sk = icmp_xmit_lock(net);
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  425  	if (!sk)
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  426  		goto out_bh_enable;
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  427  	inet = inet_sk(sk);
-c0303efeab7391 Jesper Dangaard Brouer 2017-01-09  428  
-^1da177e4c3f41 Linus Torvalds         2005-04-16  429  	icmp_param->data.icmph.checksum = 0;
-^1da177e4c3f41 Linus Torvalds         2005-04-16  430  
-351782067b6be8 Willem de Bruijn       2018-07-06  431  	ipcm_init(&ipc);
-bbd17d3104f5a7 Willem de Bruijn       2025-02-06  432  	ipc.tos = ip_hdr(skb)->tos;
-0da7536fb47f51 Willem de Bruijn       2020-07-01  433  	ipc.sockc.mark = mark;
-9f6abb5f175bdb David S. Miller        2011-05-09  434  	daddr = ipc.addr = ip_hdr(skb)->saddr;
-35ebf65e851c6d David S. Miller        2012-06-28  435  	saddr = fib_compute_spec_dst(skb);
-aa6615814533c6 Francesco Fusco        2013-09-24  436  
-f6d8bd051c391c Eric Dumazet           2011-04-21  437  	if (icmp_param->replyopts.opt.opt.optlen) {
-f6d8bd051c391c Eric Dumazet           2011-04-21  438  		ipc.opt = &icmp_param->replyopts.opt;
-f6d8bd051c391c Eric Dumazet           2011-04-21  439  		if (ipc.opt->opt.srr)
-f6d8bd051c391c Eric Dumazet           2011-04-21  440  			daddr = icmp_param->replyopts.opt.opt.faddr;
-^1da177e4c3f41 Linus Torvalds         2005-04-16  441  	}
-77968b78242ee2 David S. Miller        2011-05-08  442  	memset(&fl4, 0, sizeof(fl4));
-77968b78242ee2 David S. Miller        2011-05-08  443  	fl4.daddr = daddr;
-35ebf65e851c6d David S. Miller        2012-06-28  444  	fl4.saddr = saddr;
-e110861f86094c Lorenzo Colitti        2014-05-13  445  	fl4.flowi4_mark = mark;
-e2d118a1cb5e60 Lorenzo Colitti        2016-11-04  446  	fl4.flowi4_uid = sock_net_uid(net, NULL);
-0ed373390c5c18 Guillaume Nault        2024-10-22  447  	fl4.flowi4_tos = inet_dscp_to_dsfield(ip4h_dscp(ip_hdr(skb)));
-77968b78242ee2 David S. Miller        2011-05-08  448  	fl4.flowi4_proto = IPPROTO_ICMP;
-385add906b6155 David Ahern            2015-09-29  449  	fl4.flowi4_oif = l3mdev_master_ifindex(skb->dev);
-3df98d79215ace Paul Moore             2020-09-27  450  	security_skb_classify_flow(skb, flowi4_to_flowi_common(&fl4));
-9d6ec938019c6b David S. Miller        2011-03-12  451  	rt = ip_route_output_key(net, &fl4);
-b23dd4fe42b455 David S. Miller        2011-03-02  452  	if (IS_ERR(rt))
-^1da177e4c3f41 Linus Torvalds         2005-04-16  453  		goto out_unlock;
-8c2bd38b95f75f Eric Dumazet           2024-08-29  454  	if (icmpv4_xrlim_allow(net, rt, &fl4, type, code, apply_ratelimit))
-a15c89c703d434 Eric Dumazet           2022-01-24  455  		icmp_push_reply(sk, icmp_param, &fl4, &ipc, &rt);
-^1da177e4c3f41 Linus Torvalds         2005-04-16  456  	ip_rt_put(rt);
-^1da177e4c3f41 Linus Torvalds         2005-04-16  457  out_unlock:
-405666db84b984 Denis V. Lunev         2008-02-29  458  	icmp_xmit_unlock(sk);
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  459  out_bh_enable:
-7ba91ecb16824f Jesper Dangaard Brouer 2017-01-09  460  	local_bh_enable();
-^1da177e4c3f41 Linus Torvalds         2005-04-16  461  }
-^1da177e4c3f41 Linus Torvalds         2005-04-16  462  
+  2359	
+  2360	#ifdef CONFIG_IO_URING
+  2361	#ifdef CONFIG_SECURITY
+  2362	extern int security_uring_override_creds(const struct cred *new);
+  2363	extern int security_uring_sqpoll(void);
+  2364	extern int security_uring_cmd(struct io_uring_cmd *ioucmd);
+  2365	extern int security_uring_allowed(void);
+  2366	#else
+  2367	static inline int security_uring_override_creds(const struct cred *new)
+  2368	{
+  2369		return 0;
+  2370	}
+  2371	static inline int security_uring_sqpoll(void)
+  2372	{
+  2373		return 0;
+  2374	}
+  2375	static inline int security_uring_cmd(struct io_uring_cmd *ioucmd)
+  2376	{
+  2377		return 0;
+  2378	}
+> 2379	extern int security_uring_allowed(void)
+  2380	{
+  2381		return 0;
+  2382	}
+  2383	#endif /* CONFIG_SECURITY */
+  2384	#endif /* CONFIG_IO_URING */
+  2385	
 
 -- 
 0-DAY CI Kernel Test Service
