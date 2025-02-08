@@ -1,125 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F570522F
-	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 02:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E631148304
+	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 03:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738981102; cv=none; b=jnAnL68V5DOTtnYKwzzF+oPo51Fl7aRUAa5/Ih11/G88b4TfOPJN9JkpCtqgOlXGS51CVR3P3hc4ed0IKjH5BtMZkegSaKo1oVjD1X5VQrYZ+8p+9LdAdnjFmgHVVkl3yJTZbUSh4I5E3dI3hUwpEEHtGbFgU4hMhEWjW8sKveo=
+	t=1738984292; cv=none; b=WitSgFn+XCAePdoSbvj2LQVSSW1BDTIzNiSIoEFiIOeO1lZfwL+mi8F9+aJHwmvx4e3nbpv+a3+kMbTbgtzYeCiFgPR8/uC8aErPePGIlBFcqH597Hy5Js8viHpNxZs1JEhW0Yqiju0uIk1PY7PJlSGoVaAAmmFQjj5n1w03rD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738981102; c=relaxed/simple;
-	bh=GyKun2jCx4bFpm2ztZa6ChkmElK9wbJagO4KMfSPEQs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LekWVEe2JNwWY5avJF9zAkhjV4hRPVfBZ/It2KRhyzS5PdCdBVVTONPCu7gjlAeHe1ZmHOmrjPcbc9oHDRB1o3JQ+kpMmm53arRFWpD4gEEldYZGJ6ZD1vy+eYI0wvD0NZWWfsQ72N7Oava1G8yhPNKrLV5AE4zt6kuQMo6pgiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Buo7VuA+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738984292; c=relaxed/simple;
+	bh=U7MePNbHBbsF0Tf3gXtTbtsNY1F9QWPQTgFfeDFWaZo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UKPTiZhsjGwFCYD+SAqhsw6FuVlX3Z+IN58nEX4l+Ik/1Ad31u8G+5RY9BFGzi8LCNwtSelfj4ZYqMdewvQFO3jnpa3gH//76NYk861NowesZms3u6wc7QbIx9q9LybWy2JqV9YsjPYWa/gl68sS/xh2fVjV4ARztlTw4QwXPzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RcNf3Isw; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Buo7VuA+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7973C4CED1;
-	Sat,  8 Feb 2025 02:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738981101;
-	bh=GyKun2jCx4bFpm2ztZa6ChkmElK9wbJagO4KMfSPEQs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Buo7VuA+wqlpwL/QHEGsFqasbaOomFpM/tgqsG0+mp2qoZiE9PXRTZH+rIvl8Dltf
-	 n695V9OX1QvmTokZ0eWZ07C5rEfLl67PdaYLoxnrH0TgCb3SnS0/3107QP/R0f29DB
-	 7A3rJ9YwcKACfEyAoh4cqt2SIsB8Pta8FrOuT0/DXjW/A+3yl3LDvfQJa4tduCOVmn
-	 F2ZL9+ozzwnQHfBFncMmu9toCIjaI8jcfT/wSVDbdhzm2H7+UnxxFY8VU+K2vQXt1S
-	 +f2a+L1CpIriu6icJA43ItUw6qPkPvsnRYNI+5Dghk7uOU4DUBHOhh3vgJ8aXZ70gm
-	 OsgqKPb6nIuyA==
-Date: Fri, 7 Feb 2025 19:18:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bart Van Assche <bvanassche@acm.org>, linux-mm@kvack.org,
-	Ivan Shapovalov <intelfx@intelfx.name>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	David Laight <david.laight@aculab.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	David Rientjes <rientjes@google.com>,
-	David Hildenbrand <david@redhat.com>,
-	Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-	Joel Granados <joel.granados@kernel.org>,
-	Sourav Panda <souravpanda@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm: Fix clang W=1 compiler warnings
-Message-ID: <20250208021816.GA3305705@ax162>
-References: <20250131191231.1370466-1-bvanassche@acm.org>
- <20250207164926.6daeac77@kernel.org>
- <CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com>
- <20250207173813.5081ba76@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RcNf3Isw"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aaee2c5ee6eso449587166b.1
+        for <llvm@lists.linux.dev>; Fri, 07 Feb 2025 19:11:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1738984288; x=1739589088; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOVpMJcaokY85KzmVoacEr/X/dlAvwuwsIku8cwRQIA=;
+        b=RcNf3IswSE5mpzK/10nfvI6xEI2W8TWyuR2KZLUrj0WONLmVvy0Rp9mPwQT2pwE+H+
+         za4XVvBVpO4qlKx3VuH8vhp7HDzxntppdyXBd+S+rqsjbGKqeKBC2MYLf4MtjT2y3nVm
+         Y7C/I6KOmpveFfXYaVpj5E0xZNUS6CHy3QdpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738984288; x=1739589088;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FOVpMJcaokY85KzmVoacEr/X/dlAvwuwsIku8cwRQIA=;
+        b=S5D+9z6kE94RHDfNfYXxE5FE3uMoj+WmVVYWivKbumDZ0/v6XMT0m0UiACKKRCevcm
+         6c3RR7DcATw695TlZNn0xU52ObyzuLQhT68i1ZwBfbK0l4PgzUkwpp7BUSgGrVR0m6gR
+         7NMXiKGuL9pjnBi8NmeXzIt9HkdiK2L5F+VWgUTqUtiup/zoyp+zCumJV6dviA0dQyi1
+         v4nPcNaDGSBaAWJbsfIN6l0R9CErAMRLon+CIetqZteiZJuVky8aYKpguk4CNVe1/Lz2
+         h0PKASwjHG+kBWQuibn/SGy8RAjpTSWyXhD5s+lYMEGwHrLZrtVdioIQJC4hkzdaOQ2e
+         bCzA==
+X-Forwarded-Encrypted: i=1; AJvYcCXlryOczmNdUUgc0oyuE98O6kiOXCCZ2CtroRAf3uEwJvr6iicWI7wyWvPp1JeT+6kREN0w@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNeRBI2tQTuqYS07Nk2g63rsAkwsbstUNhHo0edgMtlYQ4ZDA9
+	v8rVj7QVKJC/yqgQw/HbM2M53Ac8kLAFknlxm+fWZWoFJ3lczCYceSFI3lVc9PO1y+stK9ctC+W
+	6U/E=
+X-Gm-Gg: ASbGncuBrovlZ2EoiuNPxhFeyqqa4Cu7naBC9/JbRcFVUmrYzcENpcTkpoDwOHhizN5
+	lWhVEXxJJUiiuu6OzZmu6aD/++oqf2Oczkw8+3wBWHnCa/HUCFf3iFc59ZtMtE9ll5r7r8tqM4s
+	7aBhMA821ca1dzugxK9D6PSgq5nNfi9TGXacfbYY5GrLTTRNwuXjflfK+7r51HuyTEwWr+KTc6Z
+	MXgvf2OPHE11lWMx/wcHxUQsHllrqeC9eqvCD8dzirwRebz6IAUT8J7knyOe2iegbisc5ctuJjX
+	V6oqehqLjq87+O3UJTQ//NbYDQpTOI0JWncDf8n9L2xuhx2qPP6NPCenBk3/jdx8mg==
+X-Google-Smtp-Source: AGHT+IFBitXqoEAPFWhxTiPoHTNIZI36YPabtOG+PZVsdNrO9eSl4EQJgdC9CiF3p7L7viCJihgHMQ==
+X-Received: by 2002:a17:907:6ea5:b0:ab7:9bf0:592 with SMTP id a640c23a62f3a-ab79bf006ecmr188324066b.13.1738984288071;
+        Fri, 07 Feb 2025 19:11:28 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7736464c8sm378445166b.166.2025.02.07.19.11.24
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Feb 2025 19:11:25 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5de4d3bbc76so1960670a12.3
+        for <llvm@lists.linux.dev>; Fri, 07 Feb 2025 19:11:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWFou18VFuC+giApiYoyuASAYUrrKoYU/C//3SRZ7tKIVa2t1S12iFW3QGqgISb9wmAFUqt@lists.linux.dev
+X-Received: by 2002:a05:6402:5290:b0:5cf:e9d6:cc8a with SMTP id
+ 4fb4d7f45d1cf-5de4507350emr5770026a12.20.1738984284318; Fri, 07 Feb 2025
+ 19:11:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250131191231.1370466-1-bvanassche@acm.org> <20250207164926.6daeac77@kernel.org>
+ <CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com> <20250207173813.5081ba76@kernel.org>
 In-Reply-To: <20250207173813.5081ba76@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 7 Feb 2025 19:11:08 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjMux0w49bTdSbC3DOoc9FRctDrRvaqFUS4KFTmkbtKWg@mail.gmail.com>
+X-Gm-Features: AWEUYZlJV8s382PdRaDNGK_s-_jZj-Ua17NllqtZGBqSsW7wCeFl2fZwSDs96W8
+Message-ID: <CAHk-=wjMux0w49bTdSbC3DOoc9FRctDrRvaqFUS4KFTmkbtKWg@mail.gmail.com>
+Subject: Re: [PATCH] mm: Fix clang W=1 compiler warnings
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Bart Van Assche <bvanassche@acm.org>, linux-mm@kvack.org, 
+	Ivan Shapovalov <intelfx@intelfx.name>, Vlastimil Babka <vbabka@suse.cz>, 
+	David Laight <david.laight@aculab.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, David Rientjes <rientjes@google.com>, 
+	David Hildenbrand <david@redhat.com>, Kaiyang Zhao <kaiyang2@cs.cmu.edu>, 
+	Joel Granados <joel.granados@kernel.org>, Sourav Panda <souravpanda@google.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 07, 2025 at 05:38:13PM -0800, Jakub Kicinski wrote:
-> On Fri, 7 Feb 2025 17:01:00 -0800 Linus Torvalds wrote:
-> > On Fri, 7 Feb 2025 at 16:49, Jakub Kicinski <kuba@kernel.org> wrote:
-> > > Could we possibly please still consider taking this in for 6.14? :(
-> > > Since the warning comes from vmstat.h pretty much every object file
-> > > generates this warning. clang 19 is getting more widely used now,
-> > > its making it hard to see new warnings.  
-> > 
-> > So:
-> > 
-> >  - I build the kernel with clang, but I don't have clang-19, so it's
-> > kind of pointless sending patches that DO NOT EVEN EXPLAIN WHAT THE
-> > WARNINGS ARE.
-> > 
-> >  - and even if you explain *WHAT* the warnings are, please also
-> > explain *WHY* they are valid and should be cared about.
-> > 
-> > Because honestly, W=1 is literally meant for "warnings that aren't
-> > necessarily valid". That's why they aren't on by default.
-> > 
-> > So no, I'm certainly not applying unexplained random patches that
-> > don't bother to explain the what or the why. Not for 6.14, not ever.
-> 
-> I thought I'd ask.. :) FWIW this for every single object:
-> 
->   CC      net/core/request_sock.o
-> In file included from ../net/core/request_sock.c:14:
-> In file included from ../include/linux/tcp.h:17:
-> In file included from ../include/linux/skbuff.h:17:
-> In file included from ../include/linux/bvec.h:10:
-> In file included from ../include/linux/highmem.h:8:
-> In file included from ../include/linux/cacheflush.h:5:
-> In file included from ../arch/x86/include/asm/cacheflush.h:5:
-> In file included from ../include/linux/mm.h:2224:
+On Fri, 7 Feb 2025 at 17:38, Jakub Kicinski <kuba@kernel.org> wrote:
+>
 > ../include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->   505 |                            item];
->       |                            ~~~~
-> ../include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->   512 |                            NR_VM_NUMA_EVENT_ITEMS +
->       |                            ~~~~~~~~~~~~~~~~~~~~~~
-> ../include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->   524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->       |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->   525 |                            NR_VM_NUMA_EVENT_ITEMS +
->       |                            ~~~~~~~~~~~~~~~~~~~~~~
-> 3 warnings generated.
-> 
-> > Fix the patch. Explain the problem. And possibly just disable the warning.
-> 
-> That'd be great. Nathan, would that be okay with you?
 
-FWIW, I sent a patch to move this warning to W=2 in October and pinged
-it in December:
+Ok.
 
-https://lore.kernel.org/20241017-disable-two-clang-enum-warnings-v2-1-163ac04346ae@kernel.org/
+So my gut feel is that this warning is simply bogus. We have
+situations where we very intentionally use enumerations instead of a
+list of #define constants.
 
-'b4 shazam' tells me that it is still applicable on Linus's tree so
-maybe he can just apply it directly?
+That NR_VM_ZONE_STAT_ITEMS case really *does* look like it's a great
+example of how code that doesn't care about the actual numbers, and
+just wants the compiler to generate a sequence for us is supposed to
+look.
 
-Cheers,
-Nathan
+Because sometimes we do enums just because it's a nice way to get
+automatically incrementing values when we don't care exactly what the
+values are.
+
+And sometimes we do it for actual namespace reasons - see for example
+commit 1a251f52cfdc ("minmax: make generic MIN() and MAX() macros
+available everywhere") where in order to avoid clashes with the
+"MIN()" macro, I made a couple of drivers that had a 'MIN' value (much
+too generic a name, but it was what it was) use an enum instead.
+
+See
+
+   git show 1a251f52cfdc drivers/hwmon/adt7475.c
+
+for details.
+
+Now, at least in that case I don't think there was any arithmetic with
+those values, so clang-19 wouldn't complain about it either, but I
+mention that commit as a case of "it's actually very valid to use an
+enum for actual real honest-to-goodness integer value enumeration".
+
+Which really makes me feel like the new clang warning is seriously misguided.
+
+In sparse I actually wanted to have integer types that don't silently
+cast to other integer types. So sparse knows the concept of "bitwise"
+and "nocast" attributes.  The "nocast" thing doesn't work well in
+practice, but "bitwise" was a huge success and is how a lot of our
+endianness problems were solved.
+
+So the *concept* of an enum - or any other integer type - that "stays
+in the type" is good, but I think it's a major mistake to think they
+have to do so without any sane escape, and to only limit it to enums.
+
+That said, we may not have *many* of those enum cases in the kernel
+(and we do tend to have a history of using long series of '#define'
+sequences to do these constants), so maybe the warning is acceptable
+if it's a case of "this is literally the *only* one in the kernel".
+
+But not having clang-19, I can't see if this is a case of "this is so
+rare that let's just avoid it", or "this is the case that causes the
+most noise for every file build, but there are lots of other cases of
+this".
+
+                  Linus
