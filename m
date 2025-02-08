@@ -1,101 +1,163 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB9B157E6B
-	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 04:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B381957FF;
+	Sat,  8 Feb 2025 04:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738988682; cv=none; b=ryvqbsM9jqWotLl+tf/slhbDVvM+oWes6uo/uNndIK6yuox+nGL7avSDm6yFsiKICLxVAHCU6ddrgl8EXg/OFQGHxo5SMB/dAGK0C8tBINaIkXR5JuB532z5QYHWIklbY16mcC/GfI9yULEe3TIEvyzw9+b41zg885ILX8GXVdw=
+	t=1738989904; cv=none; b=Rzhgzvljq6IbPNLKDCrAUEUijKsMoit0YatSvKIUdHj6HFLkdq7H0DCVmI5IT3VKk0tapyZvuqd86+7DqVgu2YtfKxoiT5j2vl5dynME4bIbLrjJitNkGlvLE8z3Rcc5K73Z+ycRXq4cE98z2uq2Rh7LyFNHmSQRgWAKMz0kXUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738988682; c=relaxed/simple;
-	bh=Prc/mMWgyeTcpEW7eOH68JnK4CoYPdFhpm0TEWAwGug=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sOA/0T84bqsqH1FiDez8uFU8tCKFoRnICYF+BK6mooe/HyzjKQFQTUme7PucbY3wlgU0Tu2i/rtG867P8YkZNjpn1NXItE57qFH1Bkv8H8u3LkIItgfOTFoXqlacK0+iHa6LHGb0nTfu0McXy75I2socbpeXXnprn4VpWnUNhZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=SLQT312H; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1738989904; c=relaxed/simple;
+	bh=GvYQaLiDW/yeR5mK5o7wYWIt7Bg9kP22YSV3dyDsULc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hYQqJM9FKS2IwFwN0JlrgehZzcLspdESLTm7bXBrVU0Yx4SzkD3+IOpPaCTRKxc8efZFNlwqb7NPI+33L9xhCQ4GYdVJgaV9z7KneOjbQ1Ke7hBLNKIhN3IHbsfN3EgxEoNIkAs/pLtc9E+ihR5qz7UqGMIpc/XbqrElZcX8m/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R0BBnFO3; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="SLQT312H"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ab7917fc0c2so180056966b.0
-        for <llvm@lists.linux.dev>; Fri, 07 Feb 2025 20:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1738988678; x=1739593478; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ad+y9v5V1d8/uo/UX8PH+Kn2Gj8SzZ1YpnFWhtJCbhc=;
-        b=SLQT312HtbBRtmOD2SQCqj64ihHW5eNUE7dhFb/kTaJ7ypfN8chwp/z9pgXfvXFrj0
-         pI+y0UTdibHrURwvBNy/FRet59WyJg+jEUe/Sve6GoOCLE1fc9bWUeD8PgVn1+AG8uYB
-         izwfXpS817ANSZbJ1eR643kFLqa+NBTosWAek=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738988678; x=1739593478;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ad+y9v5V1d8/uo/UX8PH+Kn2Gj8SzZ1YpnFWhtJCbhc=;
-        b=NrwTcTN9kX95wcTz97UUrtNezgUvKfCP2+kWLPTl5xsbQOXBP9rLJPzru6CaJx0RuB
-         LiWlpPtb0bLO6mouMvjcM46zusX422Azn5L6Yi39U6jtAKR4fPoYsrmwivCTIKB+/1BH
-         axXL/7syi2H5qfm4SVD2rBXhCPDZkSf+dC++wNiS+/MkxDcXGuyLRA2jgQFni2pgUBOD
-         wvgsBIxrKEs7LwzEWbV8F8W1w9aN6nU2NLr3ZwGpQoPEpX7auJ5zFCrM2GXnVTMeQauG
-         AnahohWoc2HpXI8ZIVZ4X+MZvv7pL7uce1EDyf81kO6yy6dIwROtOmPAVtjoppWort0h
-         OWZA==
-X-Forwarded-Encrypted: i=1; AJvYcCX3qmTVeultycHnPJ8QG88gAohLMcCE34bGdR9aqdw6GzPruCUJYF5mghccyg+8agKUCQnQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz7yY9O32zdT7juig15CIm5KOL2cHJLiV7dLC81Oo6SwCfz97Oj
-	0PglztwOj27EC6lHPQ5ms2tHOXJIMQEj8FIWK6L1GJS2cIlIaMRJTVTSQ2GLtzr+tWtmBOGi3vD
-	OtHhytA==
-X-Gm-Gg: ASbGnctm6UF/213zkdoUXyfDcZMAV/0EhhVok92HBkY/EqV107Y6dAzQUG5Pdu7Buag
-	6BgzWDgMBUXfLojypeSyqSUVKdGCmFpWDhisJ8Mweb0wc4OGh2450b2op7xbD1VtQP+vQNeyAiy
-	zfyGrwbcZE6/c8QS6C7RC7b4oCxzXvCaLcBEzc+LL0D4hYiNyTDDXwCEuj4dbRwak49MIHclceA
-	6Vin6UPKs+EhhOwPkHgbaTmW9LPfa2NatHo7hRdm5XidUx84etVeOH8fVu5AuQET4zUjJAxi++e
-	/KsvhxJq11qcnYhNoSFegHArUxTcuDmwKiFdKBvIaaWpYwS77gLOvqwfu5iLnmN51Q==
-X-Google-Smtp-Source: AGHT+IH5U64TFE/7+6a5yCptftMGD8FH7i5zcX22h6t2LxbnX3GA01ssuchNM9NHCUanPzpreXhraQ==
-X-Received: by 2002:a17:907:6ea5:b0:ab7:9be8:3c6b with SMTP id a640c23a62f3a-ab79be83c9emr200875266b.25.1738988678111;
-        Fri, 07 Feb 2025 20:24:38 -0800 (PST)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab772f486f4sm385985866b.8.2025.02.07.20.24.35
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Feb 2025 20:24:36 -0800 (PST)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso5421990a12.3
-        for <llvm@lists.linux.dev>; Fri, 07 Feb 2025 20:24:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUqR/GGmy2XC57k1Vx1Ls/gxpVEKipCkbEzz39EvNWqgw9JDcLjdIynZgvOl2Px18O8TORM@lists.linux.dev
-X-Received: by 2002:a05:6402:2084:b0:5dc:7fbe:7310 with SMTP id
- 4fb4d7f45d1cf-5de45040046mr6535014a12.6.1738988675108; Fri, 07 Feb 2025
- 20:24:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R0BBnFO3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738989903; x=1770525903;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GvYQaLiDW/yeR5mK5o7wYWIt7Bg9kP22YSV3dyDsULc=;
+  b=R0BBnFO31gkngFldh+5i8pifuJQVPhrSjh6iQa+4DR+D448RSmjsfw6h
+   8tQCsFgrbrQr0uvZcJQBd+7RYQQMdiNqZegoPt/PVGaZXB03iqFfVwcpB
+   tS+RECjzu9AfJaOOogKgoPUw335XMs49h3xy3T7Wu8l5MLNftkctCbyCF
+   HqNY3qZHesV7g7tLBoEWS0z0RpzAqGQ8RxKBLGT0AWdb/rOP9pg3Tvp2f
+   +8yLArTiiuUoLMa6PO0QAhaOxL2BAYkUArsQ8WWW1z9KCdyltGS9bENpG
+   1GjX2wRHfpFJQEV6U/4fsl0GxE5EgM0lO3RrrYLIDz54h9z+MshCpHVFN
+   Q==;
+X-CSE-ConnectionGUID: w5/CwkjgQwKJ96dU+sML5Q==
+X-CSE-MsgGUID: C8VaJXXOQxKWFCGEW4DtwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="43401129"
+X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
+   d="scan'208";a="43401129"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 20:45:02 -0800
+X-CSE-ConnectionGUID: WgkKndJ3Qt+uoB/ZP1d8IA==
+X-CSE-MsgGUID: ZlKvYrhsSNuso87MzZFjeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="116646881"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 07 Feb 2025 20:45:00 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgci9-000zXH-34;
+	Sat, 08 Feb 2025 04:44:57 +0000
+Date: Sat, 8 Feb 2025 12:44:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lingbo Kong <quic_lingbok@quicinc.com>, ath12k@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, quic_lingbok@quicinc.com
+Subject: Re: [PATCH] wifi: ath12k: report station mode per-chain signal
+ strength
+Message-ID: <202502081250.6rZZ2s6H-lkp@intel.com>
+References: <20250207071003.162576-1-quic_lingbok@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250131191231.1370466-1-bvanassche@acm.org> <20250207164926.6daeac77@kernel.org>
- <CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com>
- <20250207173813.5081ba76@kernel.org> <CAHk-=wjMux0w49bTdSbC3DOoc9FRctDrRvaqFUS4KFTmkbtKWg@mail.gmail.com>
- <20250208033351.GB3305705@ax162> <CAHk-=whe1UZUGKbtaaRV7CfS=sGtB2ouYAriryZ6bscE+5AFhA@mail.gmail.com>
-In-Reply-To: <CAHk-=whe1UZUGKbtaaRV7CfS=sGtB2ouYAriryZ6bscE+5AFhA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 7 Feb 2025 20:24:18 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiSuP=s4vzdT3TLjDfcj4XJDDvOO1bDj2Zd2EJNc6o=KQ@mail.gmail.com>
-X-Gm-Features: AWEUYZmBXCnRT87O6jbnri8feGtRx2XTsrR5K-8yZHT40XPhPB-7L-dHaOcsbzw
-Message-ID: <CAHk-=wiSuP=s4vzdT3TLjDfcj4XJDDvOO1bDj2Zd2EJNc6o=KQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: Fix clang W=1 compiler warnings
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Bart Van Assche <bvanassche@acm.org>, linux-mm@kvack.org, 
-	Ivan Shapovalov <intelfx@intelfx.name>, Vlastimil Babka <vbabka@suse.cz>, 
-	David Laight <david.laight@aculab.com>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	David Rientjes <rientjes@google.com>, David Hildenbrand <david@redhat.com>, 
-	Kaiyang Zhao <kaiyang2@cs.cmu.edu>, Joel Granados <joel.granados@kernel.org>, 
-	Sourav Panda <souravpanda@google.com>, Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250207071003.162576-1-quic_lingbok@quicinc.com>
 
-On Fri, 7 Feb 2025 at 19:49, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I will take your patch to move it to W=2.
+Hi Lingbo,
 
-Ok, applied and pushed out as commit 8f6629c004b1 ("kbuild: Move
--Wenum-enum-conversion to W=2").
+kernel test robot noticed the following build warnings:
 
-Jakub, hopefully this fixes your situation,
+[auto build test WARNING on d132a72d768bae74d10e6539fcf6522dfdbd1115]
 
-                Linus
+url:    https://github.com/intel-lab-lkp/linux/commits/Lingbo-Kong/wifi-ath12k-report-station-mode-per-chain-signal-strength/20250207-151239
+base:   d132a72d768bae74d10e6539fcf6522dfdbd1115
+patch link:    https://lore.kernel.org/r/20250207071003.162576-1-quic_lingbok%40quicinc.com
+patch subject: [PATCH] wifi: ath12k: report station mode per-chain signal strength
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250208/202502081250.6rZZ2s6H-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081250.6rZZ2s6H-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502081250.6rZZ2s6H-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/wireless/ath/ath12k/wmi.c:6:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/ath/ath12k/wmi.c:7550:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    7550 |         default:
+         |         ^
+   drivers/net/wireless/ath/ath12k/wmi.c:7550:2: note: insert 'break;' to avoid fall-through
+    7550 |         default:
+         |         ^
+         |         break; 
+   4 warnings generated.
+
+
+vim +7550 drivers/net/wireless/ath/ath12k/wmi.c
+
+1715fcabad1648 Lingbo Kong 2025-02-07  7520  
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7521  static int ath12k_wmi_tlv_fw_stats_parse(struct ath12k_base *ab,
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7522  					 u16 tag, u16 len,
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7523  					 const void *ptr, void *data)
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7524  {
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7525  	struct wmi_tlv_fw_stats_parse *parse = data;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7526  	int ret = 0;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7527  
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7528  	switch (tag) {
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7529  	case WMI_TAG_STATS_EVENT:
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7530  		parse->ev = ptr;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7531  		break;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7532  	case WMI_TAG_ARRAY_BYTE:
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7533  		ret = ath12k_wmi_tlv_fw_stats_data_parse(ab, parse, ptr, len);
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7534  		break;
+1715fcabad1648 Lingbo Kong 2025-02-07  7535  	case WMI_TAG_PER_CHAIN_RSSI_STATS:
+1715fcabad1648 Lingbo Kong 2025-02-07  7536  		parse->rssi = ptr;
+1715fcabad1648 Lingbo Kong 2025-02-07  7537  		if (le32_to_cpu(parse->ev->stats_id) & WMI_REQUEST_RSSI_PER_CHAIN_STAT)
+1715fcabad1648 Lingbo Kong 2025-02-07  7538  			parse->rssi_num = le32_to_cpu(parse->rssi->num_per_chain_rssi);
+1715fcabad1648 Lingbo Kong 2025-02-07  7539  		break;
+1715fcabad1648 Lingbo Kong 2025-02-07  7540  	case WMI_TAG_ARRAY_STRUCT:
+1715fcabad1648 Lingbo Kong 2025-02-07  7541  		if (parse->rssi_num && !parse->chain_rssi_done) {
+1715fcabad1648 Lingbo Kong 2025-02-07  7542  			ret = ath12k_wmi_tlv_iter(ab, ptr, len,
+1715fcabad1648 Lingbo Kong 2025-02-07  7543  						  ath12k_wmi_tlv_rssi_chain_parse,
+1715fcabad1648 Lingbo Kong 2025-02-07  7544  						  parse);
+1715fcabad1648 Lingbo Kong 2025-02-07  7545  			if (ret)
+1715fcabad1648 Lingbo Kong 2025-02-07  7546  				return ret;
+1715fcabad1648 Lingbo Kong 2025-02-07  7547  
+1715fcabad1648 Lingbo Kong 2025-02-07  7548  			parse->chain_rssi_done = true;
+1715fcabad1648 Lingbo Kong 2025-02-07  7549  		}
+79e7b04b5388c1 Lingbo Kong 2025-01-15 @7550  	default:
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7551  		break;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7552  	}
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7553  	return ret;
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7554  }
+79e7b04b5388c1 Lingbo Kong 2025-01-15  7555  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
