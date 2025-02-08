@@ -1,158 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A71DDC1;
-	Sat,  8 Feb 2025 01:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BAC84A2B
+	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 01:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738977343; cv=none; b=VCAbHa7qhT5B+2GdLptevuQYrIAjxm8v+FjFNJDd8yJOlgguwOyc5HGeHiBPlBi9JWrOJ9rkRRSdsCElNAohsp1xpQP6tjW3r0QIw71rpAj6ct6t0jGNA8Vaa6QxRsRLKAjmuU3yn02VfRrsdml1YxuMERihjjinmTlykQ/qVFo=
+	t=1738978695; cv=none; b=Fq2w8bs/T9rvhPDT4qdKmOJ/8EEpVp9DgcR5VPMiMG5nxHKv4tTndga7GON3eAhHsSxw9tOd4MoxdLfXJ4RvXbC2kPGkXERqnT5f2fcDD6O8dxFsAdES784EZLF1gBl7WgKE1jWvr2z6smucD7tousqzCjy34fYWSQUPnuFB/SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738977343; c=relaxed/simple;
-	bh=ZzbCngDiS4HH+GTtGTmyk7NcY5EF+xBYG0rU5hbY08k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QY8WS49DGHJQK+/rnmjxclTV1dcIJywJ1De6ckyKNmmq6Q2hLCZbivzRUt7y0Yeh6LEjayNuG8shcTVFIBOVwdaIAiuxPZp7a8ypN5eqUuVHRUMZakRGvojvVUpIvn0cUrsFAQtjR9/aOseRaMzGLfRtjSFMm/FK22vCecD8jMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCp/f648; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1738978695; c=relaxed/simple;
+	bh=9l26VWfyG6FsKW9zKg4RNpZKAegl42nCqtAfIqEGxIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yae3iny+jhmHlin7pyrdXj3ZO4+IXHVeSo6MPff/o+wDQxc+6uqH27wnpPowIYYJV/Qp/dLOp4GSD2C8ZuYu63VmiRVxaa5BXczvDrJbuLPVJ+LpfBIUO9CRMaM9IgTsuGU8fiF1rum31gW36QWAyTPyiHDmAXPCnw4Aa9xO/XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlzZCPDR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCp/f648"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738977341; x=1770513341;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZzbCngDiS4HH+GTtGTmyk7NcY5EF+xBYG0rU5hbY08k=;
-  b=oCp/f648dSCxj8EVW2z+uyW74XeRyHYAoXnjNvlKBFUj9IDOe8ZKOBjT
-   JF7GP0UvQvF/l++/j+vxkFVl3hQ692CrxMPiP4asna8vsWOa5kbqQJ2e9
-   m2YlYU3B9hmKoIHaBvYRjB6GkjJ/u01Y9p+01xYeqWsmwFZN3LxdnWE5V
-   mbM2AyDT2t0es94VOZ6pRTQwWqILtOoJ3HvDWueyLMhQK2hLLvtLRoCoG
-   /fgn5QwY6fRgVPFVShNNpK1qgeD/sEXzsgAx/P9vxiXNubn23AkRgUBvo
-   ciNE1FTm9blk7q13bZUsr8NwJjk86Mu9DdfskiMJ4N2O4cF/J+qZ2xvRS
-   w==;
-X-CSE-ConnectionGUID: /vwytOFVQaKmhoE5H7XA2A==
-X-CSE-MsgGUID: Ns8cRk1QSk25De8BqMgvug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="38830154"
-X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
-   d="scan'208";a="38830154"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 17:15:40 -0800
-X-CSE-ConnectionGUID: rgofqlFeRjmfGANYwyAk5g==
-X-CSE-MsgGUID: hpPhOs+4QNOq33o13yWsHA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116885389"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 07 Feb 2025 17:15:39 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgZRY-000zLF-1h;
-	Sat, 08 Feb 2025 01:15:36 +0000
-Date: Sat, 8 Feb 2025 09:14:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:arm64/kvm/fpsimd-fixes 11/11] arch/arm64/kvm/fpsimd.c:141:16:
- warning: variable 'old_vl' set but not used
-Message-ID: <202502080941.kKctv9BR-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlzZCPDR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78F7C4CED1;
+	Sat,  8 Feb 2025 01:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738978695;
+	bh=9l26VWfyG6FsKW9zKg4RNpZKAegl42nCqtAfIqEGxIY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZlzZCPDR6frw7KJxzRCPiADB+gLu2f8e3ztrgjFvQnYIndS/LlGF9AI78X3QfSREH
+	 Ry23qgzZBd6wAsEP7fl7sV4Nf5j/gTjCCF5FXPV5bdeRLqmr89VoChyeNMX6Xi6593
+	 DaW3Idb1pAe3HpMWxyLyRq7eeHuOavfMIwxerVCFWg9gXN4BI25nChPJRZSAcLK4Cr
+	 Idx+OoaKGmjRS3kQsPxz2gfKwBTDP58QOPwHILs9JPFn16CVZpDCzMj23QPas/ftB0
+	 9ojBD+jl9ZpGnVls51lRexFxpC/IcAkY7uCFmZTSeKLoGg2eX/TQOOKs30yu/MK7Gz
+	 fXN68Kr5C4N7w==
+Date: Fri, 7 Feb 2025 17:38:13 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Bart Van Assche
+ <bvanassche@acm.org>, linux-mm@kvack.org, Ivan Shapovalov
+ <intelfx@intelfx.name>, Vlastimil Babka <vbabka@suse.cz>, David Laight
+ <david.laight@aculab.com>, Nathan Chancellor <nathan@kernel.org>, Pasha
+ Tatashin <pasha.tatashin@soleen.com>, David Rientjes <rientjes@google.com>,
+ David Hildenbrand <david@redhat.com>, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+ Joel Granados <joel.granados@kernel.org>, Sourav Panda
+ <souravpanda@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] mm: Fix clang W=1 compiler warnings
+Message-ID: <20250207173813.5081ba76@kernel.org>
+In-Reply-To: <CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com>
+References: <20250131191231.1370466-1-bvanassche@acm.org>
+	<20250207164926.6daeac77@kernel.org>
+	<CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/kvm/fpsimd-fixes
-head:   874ec7cd4fdbab02ffc8297b012721f9c74f7954
-commit: 874ec7cd4fdbab02ffc8297b012721f9c74f7954 [11/11] HACK: Check the host's VL isn't artifically constrained
-config: arm64-randconfig-004-20250208 (https://download.01.org/0day-ci/archive/20250208/202502080941.kKctv9BR-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502080941.kKctv9BR-lkp@intel.com/reproduce)
+On Fri, 7 Feb 2025 17:01:00 -0800 Linus Torvalds wrote:
+> On Fri, 7 Feb 2025 at 16:49, Jakub Kicinski <kuba@kernel.org> wrote:
+> > Could we possibly please still consider taking this in for 6.14? :(
+> > Since the warning comes from vmstat.h pretty much every object file
+> > generates this warning. clang 19 is getting more widely used now,
+> > its making it hard to see new warnings.  
+> 
+> So:
+> 
+>  - I build the kernel with clang, but I don't have clang-19, so it's
+> kind of pointless sending patches that DO NOT EVEN EXPLAIN WHAT THE
+> WARNINGS ARE.
+> 
+>  - and even if you explain *WHAT* the warnings are, please also
+> explain *WHY* they are valid and should be cared about.
+> 
+> Because honestly, W=1 is literally meant for "warnings that aren't
+> necessarily valid". That's why they aren't on by default.
+> 
+> So no, I'm certainly not applying unexplained random patches that
+> don't bother to explain the what or the why. Not for 6.14, not ever.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502080941.kKctv9BR-lkp@intel.com/
+I thought I'd ask.. :) FWIW this for every single object:
 
-All warnings (new ones prefixed by >>):
+  CC      net/core/request_sock.o
+In file included from ../net/core/request_sock.c:14:
+In file included from ../include/linux/tcp.h:17:
+In file included from ../include/linux/skbuff.h:17:
+In file included from ../include/linux/bvec.h:10:
+In file included from ../include/linux/highmem.h:8:
+In file included from ../include/linux/cacheflush.h:5:
+In file included from ../arch/x86/include/asm/cacheflush.h:5:
+In file included from ../include/linux/mm.h:2224:
+../include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+  504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+      |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+  505 |                            item];
+      |                            ~~~~
+../include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+  511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+      |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+  512 |                            NR_VM_NUMA_EVENT_ITEMS +
+      |                            ~~~~~~~~~~~~~~~~~~~~~~
+../include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+  524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+      |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+  525 |                            NR_VM_NUMA_EVENT_ITEMS +
+      |                            ~~~~~~~~~~~~~~~~~~~~~~
+3 warnings generated.
 
->> arch/arm64/kvm/fpsimd.c:141:16: warning: variable 'old_vl' set but not used [-Wunused-but-set-variable]
-                   unsigned int old_vl, new_vl, max_vl;
-                                ^
-   1 warning generated.
+> Fix the patch. Explain the problem. And possibly just disable the warning.
 
-
-vim +/old_vl +141 arch/arm64/kvm/fpsimd.c
-
-    88	
-    89	/*
-    90	 * Called just after exiting the guest. If the guest FPSIMD state
-    91	 * was loaded, update the host's context tracking data mark the CPU
-    92	 * FPSIMD regs as dirty and belonging to vcpu so that they will be
-    93	 * written back if the kernel clobbers them due to kernel-mode NEON
-    94	 * before re-entry into the guest.
-    95	 */
-    96	void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
-    97	{
-    98		struct cpu_fp_state fp_state;
-    99	
-   100		WARN_ON_ONCE(!irqs_disabled());
-   101	
-   102		if (guest_owns_fp_regs()) {
-   103			if (system_supports_sve()) {
-   104				unsigned int active_vl = sve_get_vl();
-   105				unsigned int guest_max_vl = vcpu->arch.sve_max_vl;
-   106	
-   107				WARN_ONCE(active_vl != guest_max_vl,
-   108					  "Active VL (%u) is not guest max VL (%u)\n",
-   109					  active_vl, guest_max_vl);
-   110			}
-   111	
-   112			/*
-   113			 * Currently we do not support SME guests so SVCR is
-   114			 * always 0 and we just need a variable to point to.
-   115			 */
-   116			fp_state.st = &vcpu->arch.ctxt.fp_regs;
-   117			fp_state.sve_state = vcpu->arch.sve_state;
-   118			fp_state.sve_vl = vcpu->arch.sve_max_vl;
-   119			fp_state.sme_state = NULL;
-   120			fp_state.svcr = &__vcpu_sys_reg(vcpu, SVCR);
-   121			fp_state.fpmr = &__vcpu_sys_reg(vcpu, FPMR);
-   122			fp_state.fp_type = &vcpu->arch.fp_type;
-   123	
-   124			if (vcpu_has_sve(vcpu))
-   125				fp_state.to_save = FP_STATE_SVE;
-   126			else
-   127				fp_state.to_save = FP_STATE_FPSIMD;
-   128	
-   129			fpsimd_bind_state_to_cpu(&fp_state);
-   130	
-   131			clear_thread_flag(TIF_FOREIGN_FPSTATE);
-   132		}
-   133	
-   134		/*
-   135		 * HACK: test that the hsot can use its maximum VL, regardless of the
-   136		 * guest configuration.
-   137		 *
-   138		 * This relies on NOT being in streaming mode.
-   139		 */
-   140		if (system_supports_sve()) {
- > 141			unsigned int old_vl, new_vl, max_vl;
-   142	
-   143			old_vl = sve_get_vl();
-   144	
-   145			max_vl = sve_max_vl();
-   146			sve_cond_update_zcr_vq(sve_vq_from_vl(max_vl) - 1, SYS_ZCR_EL1);
-   147			new_vl = sve_get_vl();
-   148	
-   149			WARN_ONCE(new_vl != max_vl, "Unable to set max VL (%u), got %u\n",
-   150				  max_vl, new_vl);
-   151	
-   152			sve_cond_update_zcr_vq(sve_vq_from_vl(old_vl) - 1, SYS_ZCR_EL1);
-   153		}
-   154	}
-   155	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That'd be great. Nathan, would that be okay with you?
