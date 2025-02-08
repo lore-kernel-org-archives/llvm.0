@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF1C1F3B97;
-	Sat,  8 Feb 2025 17:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2C8241127;
+	Sat,  8 Feb 2025 17:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739034637; cv=none; b=o2EyYM2IJZrZ9HWjyffftELRy0MhVd0aYq5CIzGj34tVaPF/AhavVrW5M5aEz6utk6a2v3OBo7o8zUqomz9IEsCHYRtU2M+64GnvJt5h8GV+uPXigqt19CIhHMVnzTvCLw6k6aVBKz41ww0nm40jUrz2A74860wfHmOeaYUoAvA=
+	t=1739037222; cv=none; b=dZju7zlykmjEmvv3eRI2sm5ZVtUZuclnIqgpHbyeVbYxu4gA/fLbGQIBq8+4Uwgy1gKwIIxYUV8gAPm21heEuiV5pxqta++wznO5oi15kIPmwmc0rASCzdVY+GzgYIw0morXhNf3gEa+8YWRm02eZ23MFsOBAUZLlEgJn24RpZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739034637; c=relaxed/simple;
-	bh=bkfIF4AQ4n0bpyCeGoHYqeCHse3Cf7s+TMyVifTUq1w=;
+	s=arc-20240116; t=1739037222; c=relaxed/simple;
+	bh=RRtGHFGmLrqisfL3QQ1oJD+cnbzCmTqQ2HO1OS897G4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RjfvXsDwpajttfFcU/mh9a5OKeUllB+z9Icz51OScVG1rXcrAKa37pnCT0n0n45XQYfUSRaxvMVOujDuxxgt9gDn3Xln8E7v9h6AUZVtcy7opKEQUKKul+eRfTnt1Ngo9gNLeMnLR3RmRmyfKHn+QfUfNtw1UbmXaBzUmHHh1G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DfFppRVf; arc=none smtp.client-ip=192.198.163.10
+	 Content-Disposition; b=pyBcTJVV8Xt/8+wSl4MqrDGpym5qOO1GdSrB33iZ49HNeOodz4fBPzwDKxDJwLs+J4HgcXUvLG5grFf0kdrKGwzUeKjUqNYuaYkkhXzhqcDXk0IX0oE7HoslT7SDbbTtEU5RW4bMcRNUKsc2HcVArpJbGJvuGcBBv/0nmk3kY2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d1KE8rka; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DfFppRVf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d1KE8rka"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739034636; x=1770570636;
+  t=1739037221; x=1770573221;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bkfIF4AQ4n0bpyCeGoHYqeCHse3Cf7s+TMyVifTUq1w=;
-  b=DfFppRVfjzK3tKEsMdke2wCkNsB9vdHU5+iC6rki3CuPjQYIA8mMRCa/
-   Rkw132ZvhoM+nGG9ukeRbuyisouTNdqxlzlREvLZdzIwqjDQgoAz/LTTv
-   yYGnC+3lJDG+vJjtrVVmkgzn2ble/mFdS0ntzq+ni1HwdiGcSt6fEdyW9
-   ucb/YAFOgje5Cr5XeYMFUfYEA0Gqk5ifscNqn2APViKgNLfdfo7EApm+K
-   dCqRLG2V8OezVyyDOEeqqBhDnvYc0Omin22thM/eJFLtAAGsnh3zWGHFM
-   BuTaGrqsWXd6vNLTnIv28iJ5OebEQwiZIKjHMApUvz+wods42wE6DZQeQ
-   A==;
-X-CSE-ConnectionGUID: H3lQAW40SdyYQmVno1FLGw==
-X-CSE-MsgGUID: sdNVOewbQQKei0CqOrqpOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="51090614"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="51090614"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 09:10:33 -0800
-X-CSE-ConnectionGUID: lce/3GB4QSeTn9TXRVG22Q==
-X-CSE-MsgGUID: oCSzy4enSVydCE1YFlQi8A==
+  bh=RRtGHFGmLrqisfL3QQ1oJD+cnbzCmTqQ2HO1OS897G4=;
+  b=d1KE8rkaDcyXWISRDB1k4TGlqiLTQsDe0g0gf+nTtTh81Q+uaQKPBOaZ
+   Rcs44E65Xwq7e2JLE5r8Phj1ykkg40cEiSuPtXzq0l+ulxAvu90BLQiYO
+   p8YqS1BNX4DI4gCjgdsLyBYuUBEmRXwUpddTSMGPI+kAyGnW4zu2T2tRO
+   iq+UACUU61FMFVtZwap/VCGPyDDHvLzSErkAMq9Fw8+hUeT9GlzzAeqV6
+   CIXyE5w2e3aoagdcSVgOLVAy6FMluBLjvZlw153I+Ym5B1vem9uRDZM4A
+   k1bCe2p1VSGGwucggcpIJL5oerizDtZalNg/X9gpeU3VkqWSxBiGp3LMB
+   Q==;
+X-CSE-ConnectionGUID: QuSxWuK+R5uUXnpxigyvDg==
+X-CSE-MsgGUID: HZhcoVO4TCyo7HoMj04XxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="43584793"
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="43584793"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 09:53:39 -0800
+X-CSE-ConnectionGUID: EVHWD9QmShmHJ5J6U2olQQ==
+X-CSE-MsgGUID: H23x5btnSQ2sdXYSV+u/9Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148998675"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="116747501"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 08 Feb 2025 09:10:31 -0800
+  by orviesa003.jf.intel.com with ESMTP; 08 Feb 2025 09:53:37 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgoLc-0010Ox-2f;
-	Sat, 08 Feb 2025 17:10:28 +0000
-Date: Sun, 9 Feb 2025 01:10:13 +0800
+	id 1tgp1K-0010Rv-21;
+	Sat, 08 Feb 2025 17:53:34 +0000
+Date: Sun, 9 Feb 2025 01:53:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Stefan Binding <sbinding@opensource.cirrus.com>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Subject: [broonie-sound:for-next 6/13] sound/soc/codecs/cs35l41.c:1166:10:
- error: call to undeclared function 'acpi_device_hid'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202502090100.SbXmGFqs-lkp@intel.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:sched/urgent 2/2] kernel/sched/fair.c:3785:11: error: no member
+ named 'nr_queued' in 'struct cfs_rq'
+Message-ID: <202502090144.H79PM2fQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,69 +63,60 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-head:   f3a0dfda57f208c90c8c73f3bee2e8390f585b1f
-commit: 1d44a30ae3f9195cb4eb7d81bb9ced2776232094 [6/13] ASoC: cs35l41: Fallback to using HID for system_name if no SUB is available
-config: arm64-randconfig-001-20250208 (https://download.01.org/0day-ci/archive/20250209/202502090100.SbXmGFqs-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090100.SbXmGFqs-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
+head:   55294004b122c997591d9de8446f5a4c60402805
+commit: 55294004b122c997591d9de8446f5a4c60402805 [2/2] sched/fair: Adhere to place_entity() constraints
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250209/202502090144.H79PM2fQ-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090144.H79PM2fQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502090100.SbXmGFqs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502090144.H79PM2fQ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/cs35l41.c:1166:10: error: call to undeclared function 'acpi_device_hid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1166 |                         hid = acpi_device_hid(adev);
-         |                               ^
-   sound/soc/codecs/cs35l41.c:1166:10: note: did you mean 'acpi_device_handle'?
-   include/linux/acpi.h:857:27: note: 'acpi_device_handle' declared here
-     857 | static inline acpi_handle acpi_device_handle(struct acpi_device *adev)
-         |                           ^
->> sound/soc/codecs/cs35l41.c:1166:8: error: incompatible integer to pointer conversion assigning to 'const char *' from 'int' [-Wint-conversion]
-    1166 |                         hid = acpi_device_hid(adev);
-         |                             ^ ~~~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/fair.c:3785:11: error: no member named 'nr_queued' in 'struct cfs_rq'
+    3785 |                 cfs_rq->nr_queued--;
+         |                 ~~~~~~  ^
+   kernel/sched/fair.c:3816:11: error: no member named 'nr_queued' in 'struct cfs_rq'
+    3816 |                 cfs_rq->nr_queued++;
+         |                 ~~~~~~  ^
    2 errors generated.
 
 
-vim +/acpi_device_hid +1166 sound/soc/codecs/cs35l41.c
+vim +3785 kernel/sched/fair.c
 
-  1150	
-  1151	static int cs35l41_acpi_get_name(struct cs35l41_private *cs35l41)
-  1152	{
-  1153		struct acpi_device *adev = ACPI_COMPANION(cs35l41->dev);
-  1154		acpi_handle handle = acpi_device_handle(adev);
-  1155		const char *hid;
-  1156		const char *sub;
-  1157	
-  1158		/* If there is no acpi_device, there is no ACPI for this system, return 0 */
-  1159		if (!adev)
-  1160			return 0;
-  1161	
-  1162		sub = acpi_get_subsystem_id(handle);
-  1163		if (IS_ERR(sub)) {
-  1164			/* If no _SUB, fallback to _HID, otherwise fail */
-  1165			if (PTR_ERR(sub) == -ENODATA) {
-> 1166				hid = acpi_device_hid(adev);
-  1167				/* If dummy hid, return 0 and fallback to legacy firmware path */
-  1168				if (!strcmp(hid, "device"))
-  1169					return 0;
-  1170				sub = kstrdup(hid, GFP_KERNEL);
-  1171				if (!sub)
-  1172					sub = ERR_PTR(-ENOMEM);
-  1173	
-  1174			} else
-  1175				return PTR_ERR(sub);
-  1176		}
-  1177	
-  1178		cs35l41->dsp.system_name = sub;
-  1179		dev_dbg(cs35l41->dev, "Subsystem ID: %s\n", cs35l41->dsp.system_name);
-  1180	
-  1181		return 0;
-  1182	}
-  1183	
+  3773	
+  3774	static void reweight_entity(struct cfs_rq *cfs_rq, struct sched_entity *se,
+  3775				    unsigned long weight)
+  3776	{
+  3777		bool curr = cfs_rq->curr == se;
+  3778	
+  3779		if (se->on_rq) {
+  3780			/* commit outstanding execution time */
+  3781			update_curr(cfs_rq);
+  3782			update_entity_lag(cfs_rq, se);
+  3783			se->deadline -= se->vruntime;
+  3784			se->rel_deadline = 1;
+> 3785			cfs_rq->nr_queued--;
+  3786			if (!curr)
+  3787				__dequeue_entity(cfs_rq, se);
+  3788			update_load_sub(&cfs_rq->load, se->load.weight);
+  3789		}
+  3790		dequeue_load_avg(cfs_rq, se);
+  3791	
+  3792		/*
+  3793		 * Because we keep se->vlag = V - v_i, while: lag_i = w_i*(V - v_i),
+  3794		 * we need to scale se->vlag when w_i changes.
+  3795		 */
+  3796		se->vlag = div_s64(se->vlag * se->load.weight, weight);
+  3797		if (se->rel_deadline)
+  3798			se->deadline = div_s64(se->deadline * se->load.weight, weight);
+  3799	
+  3800		update_load_set(&se->load, weight);
+  3801	
 
 -- 
 0-DAY CI Kernel Test Service
