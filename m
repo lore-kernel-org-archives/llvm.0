@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353C11E4A9;
-	Sat,  8 Feb 2025 12:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E952451F7;
+	Sat,  8 Feb 2025 12:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739017916; cv=none; b=J08uufwwOqjxL76rcmHMGnYNtlA2+tqdvPvmPiSFWNlWgEiFGlFBd/A7WVvRyOfsodTKooPnAioNfo91B3s0orwCtDvcgduxCYdc+gpJuUQ0fh+XstGEmwmBxpHUDxoZX2svARh4D2OpqUExoKIZD6u7HTPUufTnOQLh7IZzfxM=
+	t=1739018577; cv=none; b=pX15iiqeF99cZfavadxTYBIQtVbWF5B9fSPbSH/wGRpYBf6sHRxWD41P/XuAS+uHYDXohtGA6EOM635mmy4W9vBD/hxek4yZYO0lrDjZqhBZ9gVM9jNx9b9LOCdIHsJqs+InST17Iz5nbg7AhMuzsA5lSm0QNkZzZaj3NTzUwJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739017916; c=relaxed/simple;
-	bh=h/qzg3EI7NJZ+l8m7U67Kuca6fap48fMnktRAp+O9Wg=;
+	s=arc-20240116; t=1739018577; c=relaxed/simple;
+	bh=0JOanlffrHxL11DBrwDZqyBL8bfRjXV+wVBfDGSZhns=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UQDFiltKBVbyOzMpSWGo/to+zTg9kaGLTcXZa5TMTL3y9i6bx6Gm3vVd0AcVaNko480OSxBH4wRweMipSKRcsHu6SbAJBtFw6H//aUxNxoBjVxpOhT/cM5rKqHQPR+/d9HUp3TuADLqIvo7lu5ZEK4t44EAcGbbyoCZRmP9wjsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFPj+kF+; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=FMVEe6wTpW4ZMP4JbKh7iWG4zxre8/VNhQzExeLTF1ygx4R1pMzM+jirBVrYSZ9FKyg1cwfnFyisdwsnhsAjYWp6AsLV9MZWXthuAD1xhLnGkNa0Ak8HovWrp1XrhrJUcxtyLnC2JnyXn/sKJX2cVgm7SlmDk5X1/VwVlsmcp6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AVd8dkBm; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFPj+kF+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AVd8dkBm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739017914; x=1770553914;
+  t=1739018575; x=1770554575;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h/qzg3EI7NJZ+l8m7U67Kuca6fap48fMnktRAp+O9Wg=;
-  b=FFPj+kF+oA/XY+jTOxKjizwYvgk0kJ4C7FI8PVqh2LGS0vQFNa/TTnea
-   YKr7z2lVoMcw3S2dKRrO701FR7DuWvqTE5ZMajkHWrP2sCGGNIDNH083g
-   y9cc07IL9M1M6DaENPc4x0TWSIbXxYGjNnn5KTD5k6XHajWevEN210CIc
-   xuZBq9mB27uiDX6hSC3ySYSuAJKM7ivDQcnfa5DGeGrN6tXtJ52B16wUb
-   fVyu8mSu95W1B4btq4ko+p9dbPdo4+oAR3kOgHfpbyfmH7CpQ1OiebKpL
-   jl9SGIGninFbuqZo6AH1BLfdEdQObx6X3VTDUKqCVISqY3JWlZRY6Oe/4
+  bh=0JOanlffrHxL11DBrwDZqyBL8bfRjXV+wVBfDGSZhns=;
+  b=AVd8dkBmPXYjEv3pfqhcKJz6iLmtzUkm5+MBO2xziB8gQbUPeUTiqm1c
+   uxB3p4NSFnJtud6jP48Z7aJximVb9Hgal7oofI3ETQp7ZgSKkHOL8fU6G
+   FAE9KilZc+MPSp8R/6dEg6/1LLKtBqMea7EruG7VKOwKCJ1Fq9GASwtdk
+   z02VtAb/yeqvgJc0yK85YvXKJoqMI3InGqKP5jbv5Dl++/bpaWkiztG+Z
+   6U+4JJxAsn+zwePtettDJJ/Pj4baigThhwlVWYleuQJX4bcmpFCY8cNlO
+   VnvzUMrdO8AycjPCDb2a9hp5B+RsoKCwgQByMs1CJr0R/srF3zOTfV75W
    Q==;
-X-CSE-ConnectionGUID: 7BU2ju3pTdqbEIwB3K2uCQ==
-X-CSE-MsgGUID: 7bSQ8wPdQj+mgXz1zHGPRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="38851357"
+X-CSE-ConnectionGUID: BeetOwvVQbic0ZIrT9+T1A==
+X-CSE-MsgGUID: 3NakqlcfT9CeX3RppNZq0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62128318"
 X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="38851357"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:31:53 -0800
-X-CSE-ConnectionGUID: eE6ArFqhQQGAfGdrAKP1dQ==
-X-CSE-MsgGUID: k3dlALNKQSag6Vn9YA1+lw==
+   d="scan'208";a="62128318"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:42:54 -0800
+X-CSE-ConnectionGUID: bJUtIRX/QkSU0On74E3ttA==
+X-CSE-MsgGUID: Gk21xIAKQuW2LWgawWyypw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="111716389"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116368379"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 08 Feb 2025 04:31:53 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 08 Feb 2025 04:42:53 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgjzx-000zxf-2X;
-	Sat, 08 Feb 2025 12:31:49 +0000
-Date: Sat, 8 Feb 2025 20:31:48 +0800
+	id 1tgkAd-000zyP-14;
+	Sat, 08 Feb 2025 12:42:51 +0000
+Date: Sat, 8 Feb 2025 20:42:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dmitry Vyukov <dvyukov@google.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dvyukov:dvyukov-rseq-pkey 3/3] kernel/rseq.c:406:2: error: use of
- undeclared identifier 'pkey_reg_t'
-Message-ID: <202502082027.9ojuhmXl-lkp@intel.com>
+Subject: [koverstreet-bcachefs:bcachefs-testing 79/81]
+ fs/bcachefs/alloc_background.c:2199:13: warning: stack frame size (1048)
+ exceeds limit (1024) in 'bch2_do_invalidates_work'
+Message-ID: <202502082057.iwBVivQN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,117 +63,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/dvyukov/linux dvyukov-rseq-pkey
-head:   b991732d23294a961eed6a4a2758c16f0430de9c
-commit: b991732d23294a961eed6a4a2758c16f0430de9c [3/3] rseq: Make rseq work with protection keys
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20250208/202502082027.9ojuhmXl-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082027.9ojuhmXl-lkp@intel.com/reproduce)
+tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
+head:   48a8a8bcdc41b32b39f53a42f72ed2ddde60baaa
+commit: ac96afa3e911b7bc8b8c2c5648076542db97d4f8 [79/81] bcachefs: Invalidate cached data by backpointers
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250208/202502082057.iwBVivQN-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082057.iwBVivQN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502082027.9ojuhmXl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082057.iwBVivQN-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/rseq.c:406:2: error: use of undeclared identifier 'pkey_reg_t'
-     406 |         pkey_reg_t saved;
-         |         ^
-   kernel/rseq.c:426:3: error: call to undeclared function 'write_pkey_reg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     426 |                 write_pkey_reg(saved);
-         |                 ^
->> kernel/rseq.c:426:18: error: use of undeclared identifier 'saved'
-     426 |                 write_pkey_reg(saved);
-         |                                ^
-   kernel/rseq.c:455:3: error: use of undeclared identifier 'saved'
-     455 |                 saved = switch_to_permissive_pkey_reg();
-         |                 ^
-   kernel/rseq.c:455:11: error: call to undeclared function 'switch_to_permissive_pkey_reg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     455 |                 saved = switch_to_permissive_pkey_reg();
-         |                         ^
-   kernel/rseq.c:458:18: error: use of undeclared identifier 'saved'
-     458 |                 write_pkey_reg(saved);
-         |                                ^
-   6 errors generated.
+>> fs/bcachefs/alloc_background.c:2199:13: warning: stack frame size (1048) exceeds limit (1024) in 'bch2_do_invalidates_work' [-Wframe-larger-than]
+    2199 | static void bch2_do_invalidates_work(struct work_struct *work)
+         |             ^
+   1 warning generated.
 
 
-vim +/pkey_reg_t +406 kernel/rseq.c
+vim +/bch2_do_invalidates_work +2199 fs/bcachefs/alloc_background.c
 
-   390	
-   391	/*
-   392	 * This resume handler must always be executed between any of:
-   393	 * - preemption,
-   394	 * - signal delivery,
-   395	 * and return to user-space.
-   396	 *
-   397	 * This is how we can ensure that the entire rseq critical section
-   398	 * will issue the commit instruction only if executed atomically with
-   399	 * respect to other threads scheduled on the same CPU, and with respect
-   400	 * to signal handlers.
-   401	 */
-   402	void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
-   403	{
-   404		struct task_struct *t = current;
-   405		int ret, sig;
- > 406		pkey_reg_t saved;
-   407		bool switched_pkey_reg = false;
-   408	
-   409		if (unlikely(t->flags & PF_EXITING))
-   410			return;
-   411	
-   412	retry:
-   413		/*
-   414		 * regs is NULL if and only if the caller is in a syscall path.  Skip
-   415		 * fixup and leave rseq_cs as is so that rseq_sycall() will detect and
-   416		 * kill a misbehaving userspace on debug kernels.
-   417		 */
-   418		if (regs) {
-   419			ret = rseq_ip_fixup(regs);
-   420			if (unlikely(ret < 0))
-   421				goto error;
-   422		}
-   423		if (unlikely(rseq_update_cpu_node_id(t)))
-   424			goto error;
-   425		if (switched_pkey_reg)
- > 426			write_pkey_reg(saved);
-   427		return;
-   428	
-   429	error:
-   430		/*
-   431		 * If the application registers rseq, and ever switches to another
-   432		 * pkey protection (such that the rseq becomes inaccessible), then
-   433		 * any context switch will cause failure here attemping to read/write
-   434		 * struct rseq and/or rseq_cs. Since context switches are
-   435		 * asynchronous and are outside of the application control
-   436		 * (not part of the restricted code scope), we temporarily switch
-   437		 * to premissive pkey register to read/write rseq/rseq_cs,
-   438		 * similarly to signal delivery.
-   439		 *
-   440		 * We don't bother to check if the failure really happened due to
-   441		 * pkeys or not, since it does not matter (performance-wise and
-   442		 * otherwise).
-   443		 *
-   444		 * If the restricted code installs rseq_cs in inaccessible to it
-   445		 * due to pkeys page, we still let this function read the rseq_cs.
-   446		 * It's unclear what benefits the resticted code gets by doing this
-   447		 * (it probably already hijacked control flow at this point), and
-   448		 * presumably any sane sandbox should prohibit restricted code
-   449		 * from accessing struct rseq, and this is still better than
-   450		 * terminating the app unconditionally (it always has a choice
-   451		 * of not using rseq and pkeys together).
-   452		 */
-   453		if (!switched_pkey_reg) {
-   454			switched_pkey_reg = true;
-   455			saved = switch_to_permissive_pkey_reg();
-   456			goto retry;
-   457		} else {
-   458			write_pkey_reg(saved);
-   459		}
-   460		sig = ksig ? ksig->sig : 0;
-   461		force_sigsegv(sig);
-   462	}
-   463	
+2e9940d4a19507 Kent Overstreet 2024-06-17  2198  
+caece7fe3f1199 Kent Overstreet 2022-02-10 @2199  static void bch2_do_invalidates_work(struct work_struct *work)
+caece7fe3f1199 Kent Overstreet 2022-02-10  2200  {
+64ee1431cc7d11 Kent Overstreet 2024-06-23  2201  	struct bch_dev *ca = container_of(work, struct bch_dev, invalidate_work);
+64ee1431cc7d11 Kent Overstreet 2024-06-23  2202  	struct bch_fs *c = ca->fs;
+6bd68ec266ad71 Kent Overstreet 2023-09-12  2203  	struct btree_trans *trans = bch2_trans_get(c);
+caece7fe3f1199 Kent Overstreet 2022-02-10  2204  	int ret = 0;
+caece7fe3f1199 Kent Overstreet 2022-02-10  2205  
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2206  	struct bkey_buf last_flushed;
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2207  	bch2_bkey_buf_init(&last_flushed);
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2208  	bkey_init(&last_flushed.k->k);
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2209  
+cb13f471390ce6 Kent Overstreet 2023-11-02  2210  	ret = bch2_btree_write_buffer_tryflush(trans);
+1b30ed5fd87828 Kent Overstreet 2023-02-06  2211  	if (ret)
+1b30ed5fd87828 Kent Overstreet 2023-02-06  2212  		goto err;
+1b30ed5fd87828 Kent Overstreet 2023-02-06  2213  
+822835ffeae411 Kent Overstreet 2022-04-01  2214  	s64 nr_to_invalidate =
+822835ffeae411 Kent Overstreet 2022-04-01  2215  		should_invalidate_buckets(ca, bch2_dev_usage_read(ca));
+2e9940d4a19507 Kent Overstreet 2024-06-17  2216  	struct btree_iter iter;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2217  	bool wrapped = false;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2218  
+2e9940d4a19507 Kent Overstreet 2024-06-17  2219  	bch2_trans_iter_init(trans, &iter, BTREE_ID_lru,
+2e9940d4a19507 Kent Overstreet 2024-06-17  2220  			     lru_pos(ca->dev_idx, 0,
+2e9940d4a19507 Kent Overstreet 2024-06-17  2221  				     ((bch2_current_io_time(c, READ) + U32_MAX) &
+2e9940d4a19507 Kent Overstreet 2024-06-17  2222  				      LRU_TIME_MAX)), 0);
+2e9940d4a19507 Kent Overstreet 2024-06-17  2223  
+2e9940d4a19507 Kent Overstreet 2024-06-17  2224  	while (true) {
+2e9940d4a19507 Kent Overstreet 2024-06-17  2225  		bch2_trans_begin(trans);
+822835ffeae411 Kent Overstreet 2022-04-01  2226  
+2e9940d4a19507 Kent Overstreet 2024-06-17  2227  		struct bkey_s_c k = next_lru_key(trans, &iter, ca, &wrapped);
+2e9940d4a19507 Kent Overstreet 2024-06-17  2228  		ret = bkey_err(k);
+2e9940d4a19507 Kent Overstreet 2024-06-17  2229  		if (ret)
+7ee4be9c621e4c Kent Overstreet 2024-10-15  2230  			goto restart_err;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2231  		if (!k.k)
+2e9940d4a19507 Kent Overstreet 2024-06-17  2232  			break;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2233  
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2234  		ret = invalidate_one_bucket(trans, ca, &iter, k, &last_flushed, &nr_to_invalidate);
+7ee4be9c621e4c Kent Overstreet 2024-10-15  2235  restart_err:
+7ee4be9c621e4c Kent Overstreet 2024-10-15  2236  		if (bch2_err_matches(ret, BCH_ERR_transaction_restart))
+7ee4be9c621e4c Kent Overstreet 2024-10-15  2237  			continue;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2238  		if (ret)
+2e9940d4a19507 Kent Overstreet 2024-06-17  2239  			break;
+2e9940d4a19507 Kent Overstreet 2024-06-17  2240  
+2e9940d4a19507 Kent Overstreet 2024-06-17  2241  		bch2_btree_iter_advance(&iter);
+2e9940d4a19507 Kent Overstreet 2024-06-17  2242  	}
+2e9940d4a19507 Kent Overstreet 2024-06-17  2243  	bch2_trans_iter_exit(trans, &iter);
+1b30ed5fd87828 Kent Overstreet 2023-02-06  2244  err:
+6bd68ec266ad71 Kent Overstreet 2023-09-12  2245  	bch2_trans_put(trans);
+64ee1431cc7d11 Kent Overstreet 2024-06-23  2246  	percpu_ref_put(&ca->io_ref);
+ac96afa3e911b7 Kent Overstreet 2025-02-07  2247  	bch2_bkey_buf_exit(&last_flushed, c);
+5a6e43af1e5341 Kent Overstreet 2024-09-04  2248  	bch2_write_ref_put(c, BCH_WRITE_REF_invalidate);
+caece7fe3f1199 Kent Overstreet 2022-02-10  2249  }
+caece7fe3f1199 Kent Overstreet 2022-02-10  2250  
+
+:::::: The code at line 2199 was first introduced by commit
+:::::: caece7fe3f1199f0da42b4537434166f99f0c11f bcachefs: New bucket invalidate path
+
+:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
+:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
 
 -- 
 0-DAY CI Kernel Test Service
