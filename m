@@ -1,59 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E952451F7;
-	Sat,  8 Feb 2025 12:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A461E2475D7;
+	Sat,  8 Feb 2025 12:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739018577; cv=none; b=pX15iiqeF99cZfavadxTYBIQtVbWF5B9fSPbSH/wGRpYBf6sHRxWD41P/XuAS+uHYDXohtGA6EOM635mmy4W9vBD/hxek4yZYO0lrDjZqhBZ9gVM9jNx9b9LOCdIHsJqs+InST17Iz5nbg7AhMuzsA5lSm0QNkZzZaj3NTzUwJY=
+	t=1739018581; cv=none; b=X/+ziSahqwgpeo1xgKy4WywtLpc1/kBxkmfI1+HwkygS4eFqafIrlE3JCu6G5/IOX5mSDZtMdPyFYzBrAi/TIoRXaMO53RsFMZ6Y41u6ZWK2ODHbnJVo+drxNqOO/o/zaHSRFnTuD0Mdv2a631Qf8EvEJ5PD0MKybnRtlhNYYLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739018577; c=relaxed/simple;
-	bh=0JOanlffrHxL11DBrwDZqyBL8bfRjXV+wVBfDGSZhns=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FMVEe6wTpW4ZMP4JbKh7iWG4zxre8/VNhQzExeLTF1ygx4R1pMzM+jirBVrYSZ9FKyg1cwfnFyisdwsnhsAjYWp6AsLV9MZWXthuAD1xhLnGkNa0Ak8HovWrp1XrhrJUcxtyLnC2JnyXn/sKJX2cVgm7SlmDk5X1/VwVlsmcp6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AVd8dkBm; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1739018581; c=relaxed/simple;
+	bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ejZ4/2hHTcqWCbn04aghFCanNFPvz3nJGz7H/dlEj5rPExDaICvsqKwebO2hE1pOkBtGE+si727vqAYvIlAGhzUq0gS1unINZP2KCFSq5Z3eMnbhTosl8EvuK2JsnqGxHNdsqtmCs2MC/Rb1z2rYXIw2GO56I6o35vU7x4MX/Lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YrYl1pvu; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AVd8dkBm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YrYl1pvu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739018575; x=1770554575;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0JOanlffrHxL11DBrwDZqyBL8bfRjXV+wVBfDGSZhns=;
-  b=AVd8dkBmPXYjEv3pfqhcKJz6iLmtzUkm5+MBO2xziB8gQbUPeUTiqm1c
-   uxB3p4NSFnJtud6jP48Z7aJximVb9Hgal7oofI3ETQp7ZgSKkHOL8fU6G
-   FAE9KilZc+MPSp8R/6dEg6/1LLKtBqMea7EruG7VKOwKCJ1Fq9GASwtdk
-   z02VtAb/yeqvgJc0yK85YvXKJoqMI3InGqKP5jbv5Dl++/bpaWkiztG+Z
-   6U+4JJxAsn+zwePtettDJJ/Pj4baigThhwlVWYleuQJX4bcmpFCY8cNlO
-   VnvzUMrdO8AycjPCDb2a9hp5B+RsoKCwgQByMs1CJr0R/srF3zOTfV75W
-   Q==;
-X-CSE-ConnectionGUID: BeetOwvVQbic0ZIrT9+T1A==
-X-CSE-MsgGUID: 3NakqlcfT9CeX3RppNZq0w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62128318"
+  t=1739018580; x=1770554580;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
+  b=YrYl1pvu6AhDEnMnaljyC9+43TXwvVSamA3h73KATIU54HNi1QY9uNkI
+   4LeyqAfb6NvCWzNLk013FV949ZxBsJMX9IGbLKrybMF20RziveYZUPdrW
+   cjfsaNcbabbM9UzUzuCBS/QNNtbuh4kz9flXOsG9VILaXfizuO5s27/2g
+   P8+zhgLpT9nYQUDXk2uq8GHvfBYCEgbTy9HfoQueN5AKufdCj7QZJbu+x
+   OgS9VNlZ8mXcgQWNUOY/wmk71fn4Ki8Vsqe1ThIUtLJGVmaX6I7hIjr/a
+   4KD7tt/PoL0ZYQAKzxhWWYd56qLGQQpI99Yktwb/R5cr5Gn5EyNiECX/J
+   A==;
+X-CSE-ConnectionGUID: TwQowPzAQUmVogVaWRFo8Q==
+X-CSE-MsgGUID: IwfsGajKR/26qd9g1Ye7MQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62128324"
 X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="62128318"
+   d="scan'208";a="62128324"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:42:54 -0800
-X-CSE-ConnectionGUID: bJUtIRX/QkSU0On74E3ttA==
-X-CSE-MsgGUID: Gk21xIAKQuW2LWgawWyypw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:42:55 -0800
+X-CSE-ConnectionGUID: l3YTQ+M0RiSMtzD13TC+sQ==
+X-CSE-MsgGUID: OZ9hKCmnSWOjjnRpgIVSZA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116368379"
+   d="scan'208";a="116368381"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
   by fmviesa005.fm.intel.com with ESMTP; 08 Feb 2025 04:42:53 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgkAd-000zyP-14;
+	id 1tgkAd-000zyN-0y;
 	Sat, 08 Feb 2025 12:42:51 +0000
 Date: Sat, 8 Feb 2025 20:42:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 79/81]
- fs/bcachefs/alloc_background.c:2199:13: warning: stack frame size (1048)
- exceeds limit (1024) in 'bch2_do_invalidates_work'
-Message-ID: <202502082057.iwBVivQN-lkp@intel.com>
+To: Jill Donahue <jilliandonahue58@gmail.com>, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jill Donahue <jilliandonahue58@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
+Message-ID: <202502082022.ILQXjseT-lkp@intel.com>
+References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,88 +64,97 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   48a8a8bcdc41b32b39f53a42f72ed2ddde60baaa
-commit: ac96afa3e911b7bc8b8c2c5648076542db97d4f8 [79/81] bcachefs: Invalidate cached data by backpointers
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250208/202502082057.iwBVivQN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082057.iwBVivQN-lkp@intel.com/reproduce)
+Hi Jill,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.14-rc1 next-20250207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jill-Donahue/f_midi_complete-to-call-tasklet_hi_schedule/20250208-043845
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250207203441.945196-1-jilliandonahue58%40gmail.com
+patch subject: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
+config: arm-randconfig-002-20250208 (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502082057.iwBVivQN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082022.ILQXjseT-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/bcachefs/alloc_background.c:2199:13: warning: stack frame size (1048) exceeds limit (1024) in 'bch2_do_invalidates_work' [-Wframe-larger-than]
-    2199 | static void bch2_do_invalidates_work(struct work_struct *work)
-         |             ^
-   1 warning generated.
+>> drivers/usb/gadget/function/f_midi.c:286:31: error: no member named 'tasklet' in 'struct f_midi'
+     286 |                         tasklet_hi_schedule(&midi->tasklet);
+         |                                              ~~~~  ^
+   1 error generated.
 
 
-vim +/bch2_do_invalidates_work +2199 fs/bcachefs/alloc_background.c
+vim +286 drivers/usb/gadget/function/f_midi.c
 
-2e9940d4a19507 Kent Overstreet 2024-06-17  2198  
-caece7fe3f1199 Kent Overstreet 2022-02-10 @2199  static void bch2_do_invalidates_work(struct work_struct *work)
-caece7fe3f1199 Kent Overstreet 2022-02-10  2200  {
-64ee1431cc7d11 Kent Overstreet 2024-06-23  2201  	struct bch_dev *ca = container_of(work, struct bch_dev, invalidate_work);
-64ee1431cc7d11 Kent Overstreet 2024-06-23  2202  	struct bch_fs *c = ca->fs;
-6bd68ec266ad71 Kent Overstreet 2023-09-12  2203  	struct btree_trans *trans = bch2_trans_get(c);
-caece7fe3f1199 Kent Overstreet 2022-02-10  2204  	int ret = 0;
-caece7fe3f1199 Kent Overstreet 2022-02-10  2205  
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2206  	struct bkey_buf last_flushed;
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2207  	bch2_bkey_buf_init(&last_flushed);
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2208  	bkey_init(&last_flushed.k->k);
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2209  
-cb13f471390ce6 Kent Overstreet 2023-11-02  2210  	ret = bch2_btree_write_buffer_tryflush(trans);
-1b30ed5fd87828 Kent Overstreet 2023-02-06  2211  	if (ret)
-1b30ed5fd87828 Kent Overstreet 2023-02-06  2212  		goto err;
-1b30ed5fd87828 Kent Overstreet 2023-02-06  2213  
-822835ffeae411 Kent Overstreet 2022-04-01  2214  	s64 nr_to_invalidate =
-822835ffeae411 Kent Overstreet 2022-04-01  2215  		should_invalidate_buckets(ca, bch2_dev_usage_read(ca));
-2e9940d4a19507 Kent Overstreet 2024-06-17  2216  	struct btree_iter iter;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2217  	bool wrapped = false;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2218  
-2e9940d4a19507 Kent Overstreet 2024-06-17  2219  	bch2_trans_iter_init(trans, &iter, BTREE_ID_lru,
-2e9940d4a19507 Kent Overstreet 2024-06-17  2220  			     lru_pos(ca->dev_idx, 0,
-2e9940d4a19507 Kent Overstreet 2024-06-17  2221  				     ((bch2_current_io_time(c, READ) + U32_MAX) &
-2e9940d4a19507 Kent Overstreet 2024-06-17  2222  				      LRU_TIME_MAX)), 0);
-2e9940d4a19507 Kent Overstreet 2024-06-17  2223  
-2e9940d4a19507 Kent Overstreet 2024-06-17  2224  	while (true) {
-2e9940d4a19507 Kent Overstreet 2024-06-17  2225  		bch2_trans_begin(trans);
-822835ffeae411 Kent Overstreet 2022-04-01  2226  
-2e9940d4a19507 Kent Overstreet 2024-06-17  2227  		struct bkey_s_c k = next_lru_key(trans, &iter, ca, &wrapped);
-2e9940d4a19507 Kent Overstreet 2024-06-17  2228  		ret = bkey_err(k);
-2e9940d4a19507 Kent Overstreet 2024-06-17  2229  		if (ret)
-7ee4be9c621e4c Kent Overstreet 2024-10-15  2230  			goto restart_err;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2231  		if (!k.k)
-2e9940d4a19507 Kent Overstreet 2024-06-17  2232  			break;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2233  
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2234  		ret = invalidate_one_bucket(trans, ca, &iter, k, &last_flushed, &nr_to_invalidate);
-7ee4be9c621e4c Kent Overstreet 2024-10-15  2235  restart_err:
-7ee4be9c621e4c Kent Overstreet 2024-10-15  2236  		if (bch2_err_matches(ret, BCH_ERR_transaction_restart))
-7ee4be9c621e4c Kent Overstreet 2024-10-15  2237  			continue;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2238  		if (ret)
-2e9940d4a19507 Kent Overstreet 2024-06-17  2239  			break;
-2e9940d4a19507 Kent Overstreet 2024-06-17  2240  
-2e9940d4a19507 Kent Overstreet 2024-06-17  2241  		bch2_btree_iter_advance(&iter);
-2e9940d4a19507 Kent Overstreet 2024-06-17  2242  	}
-2e9940d4a19507 Kent Overstreet 2024-06-17  2243  	bch2_trans_iter_exit(trans, &iter);
-1b30ed5fd87828 Kent Overstreet 2023-02-06  2244  err:
-6bd68ec266ad71 Kent Overstreet 2023-09-12  2245  	bch2_trans_put(trans);
-64ee1431cc7d11 Kent Overstreet 2024-06-23  2246  	percpu_ref_put(&ca->io_ref);
-ac96afa3e911b7 Kent Overstreet 2025-02-07  2247  	bch2_bkey_buf_exit(&last_flushed, c);
-5a6e43af1e5341 Kent Overstreet 2024-09-04  2248  	bch2_write_ref_put(c, BCH_WRITE_REF_invalidate);
-caece7fe3f1199 Kent Overstreet 2022-02-10  2249  }
-caece7fe3f1199 Kent Overstreet 2022-02-10  2250  
-
-:::::: The code at line 2199 was first introduced by commit
-:::::: caece7fe3f1199f0da42b4537434166f99f0c11f bcachefs: New bucket invalidate path
-
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+   269	
+   270	static void
+   271	f_midi_complete(struct usb_ep *ep, struct usb_request *req)
+   272	{
+   273		struct f_midi *midi = ep->driver_data;
+   274		struct usb_composite_dev *cdev = midi->func.config->cdev;
+   275		int status = req->status;
+   276	
+   277		switch (status) {
+   278		case 0:			 /* normal completion */
+   279			if (ep == midi->out_ep) {
+   280				/* We received stuff. req is queued again, below */
+   281				f_midi_handle_out_data(ep, req);
+   282			} else if (ep == midi->in_ep) {
+   283				/* Our transmit completed. See if there's more to go.
+   284				 * f_midi_transmit eats req, don't queue it again. */
+   285				req->length = 0;
+ > 286				tasklet_hi_schedule(&midi->tasklet);
+   287				return;
+   288			}
+   289			break;
+   290	
+   291		/* this endpoint is normally active while we're configured */
+   292		case -ECONNABORTED:	/* hardware forced ep reset */
+   293		case -ECONNRESET:	/* request dequeued */
+   294		case -ESHUTDOWN:	/* disconnect from host */
+   295			VDBG(cdev, "%s gone (%d), %d/%d\n", ep->name, status,
+   296					req->actual, req->length);
+   297			if (ep == midi->out_ep) {
+   298				f_midi_handle_out_data(ep, req);
+   299				/* We don't need to free IN requests because it's handled
+   300				 * by the midi->in_req_fifo. */
+   301				free_ep_req(ep, req);
+   302			}
+   303			return;
+   304	
+   305		case -EOVERFLOW:	/* buffer overrun on read means that
+   306					 * we didn't provide a big enough buffer.
+   307					 */
+   308		default:
+   309			DBG(cdev, "%s complete --> %d, %d/%d\n", ep->name,
+   310					status, req->actual, req->length);
+   311			break;
+   312		case -EREMOTEIO:	/* short read */
+   313			break;
+   314		}
+   315	
+   316		status = usb_ep_queue(ep, req, GFP_ATOMIC);
+   317		if (status) {
+   318			ERROR(cdev, "kill %s:  resubmit %d bytes --> %d\n",
+   319					ep->name, req->length, status);
+   320			usb_ep_set_halt(ep);
+   321			/* FIXME recover later ... somehow */
+   322		}
+   323	}
+   324	
 
 -- 
 0-DAY CI Kernel Test Service
