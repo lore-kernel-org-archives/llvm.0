@@ -1,105 +1,134 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771A01AC42B
-	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 13:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250111ACEBE;
+	Sat,  8 Feb 2025 15:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739021555; cv=none; b=Oe5f99UijciEAckYOEweQheKE10rasWnvS8Qf8oTSgx3CrixPAh+VYmu4FiJ8jPb/QQBp/Xj3fIxW1w0DYbwhsVwb17uv7w2rSsVrHJNHm4P24/WcXd7co/mbSC+QhlPPv5yN1NZoyF6DrinwtSUf7U0BMDyq7QgBJXw2JUp0FA=
+	t=1739028801; cv=none; b=ckCvQm8JhbldUDrqtQpcf/pkm88Qbt9NPiibIURGQIakZTcl1J6wJ7ztpe0dp22VQ03mty+T249U7QS2sfqh9T41XbDRodiwI/NUlCz7KytyFC9kw3JBEZ/0OGnPBx/0Ambnl4aZrOX2YQAx0Qbx/PUGYwsLo0+6o2w2F0yPlRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739021555; c=relaxed/simple;
-	bh=hp/QlQLnszYTXmXShP+TaYAd6/NZl+NFs1iWbFohFHI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ym41/NHq29fiokjfdTwzMoP+40JrrL1raVt77SuGVx3E1MC7eimz9xNxJ6iPFfgKnLIPajiEUOcGvP9tu0b2vxo/K5o/HUiJMWMLkkQxFQ8Qq9sw56MALotIS87gk9Uo6LJLtuZSYcSU+MhUX+iKJ5wcFVAgtv5hw9F0ndKZfmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=nedYq9wv; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1739028801; c=relaxed/simple;
+	bh=4MfKlmgKA16abJaUXilG0XVt+qrQnkw/jnRZF3C8eKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ucFacAGz+25OfMqhcZjZXduBA4qAjNqunTMf7TWZSxvkGr5PQMkzQFsHp3cJQ26jIHWIzKcZWOJMMtA4iPKERk/wZaJhjOBBex1YSI3tTzr6AAhsHqEVNxWHonG+4C6Jb+mhDfNWnQJIBx38NAaQZthwibcZz8ETP7YraKYp1pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gx6cjQGX; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="nedYq9wv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1739021543;
-	bh=hp/QlQLnszYTXmXShP+TaYAd6/NZl+NFs1iWbFohFHI=;
-	h=From:Subject:Date:To:Cc:From;
-	b=nedYq9wvVjyXvYbGtNTq7IykiSjVwjwDQR3DCmWdVFJPHBrplMPO924UOU9qCjehx
-	 h6m+0fdWzgtZ09f37oIEJyYbnCulq+ZFiEBlAYpLhdRhVYDiyo9a9gmZrBckOOnFUs
-	 weP98sx/U4I6g84JmXbIiW+RUbnfmPCRw3J826ys=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/2] rust: two small improvements for kunit
-Date: Sat, 08 Feb 2025 14:31:13 +0100
-Message-Id: <20250208-rust-kunit-v1-0-94a026be6d72@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gx6cjQGX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739028800; x=1770564800;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4MfKlmgKA16abJaUXilG0XVt+qrQnkw/jnRZF3C8eKc=;
+  b=gx6cjQGXVt9KNr8eZ5xUIDNHA8ItDTlo87fwaxc7gEAWyoV616K2EZN+
+   rmAbvKUgkxsZnPhQJk9d8ihztoEVufRXWvlxJ6uhJPFcU4QcpKXci/hB3
+   DJqxQVT+VmnLWQnfDNVZvaE7IIVafcFL3KqtiCPBXQ1hr79EdYBbY9lEO
+   EglRYRVRyn0+Csq7Rryj/SeemnMhCFXuGueb78YLctVU4z0cFMYoR2NYQ
+   kluTnMyFjwWle5R9RI6mw3u9qXjKFdXZe9z9HTr5wPNIcJBZwzAxh2w+t
+   Paqd/JYgk8Pmh5hmSxVLMnhiIpP5ppnEo/NCAN8bNxgfD7HFbz63yLveD
+   Q==;
+X-CSE-ConnectionGUID: LDsjYEwNTW+RupZ052YUzw==
+X-CSE-MsgGUID: +MXiqOzUSTO1WXF2buX48w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="39565339"
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="39565339"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 07:33:19 -0800
+X-CSE-ConnectionGUID: F79XaquyTfmgwlWFQzGcEg==
+X-CSE-MsgGUID: ZJmfoK3cRaiIBCKdfEjLMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="111618617"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Feb 2025 07:33:13 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgmpS-0010C7-2e;
+	Sat, 08 Feb 2025 15:33:10 +0000
+Date: Sat, 8 Feb 2025 23:32:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, davem@davemloft.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	linux-arm-kernel@lists.infradead.org,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	=?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Oleksij Rempel <o.rempel@pengutronix.de>,
+	=?iso-8859-1?Q?Nicol=F2?= Veronese <nicveronese@gmail.com>,
+	Simon Horman <horms@kernel.org>, mwojtas@chromium.org,
+	Antoine Tenart <atenart@kernel.org>, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Romain Gantois <romain.gantois@bootlin.com>
+Subject: Re: [PATCH net-next 06/13] net: phy: Intrduce generic SFP handling
+ for PHY drivers
+Message-ID: <202502082328.PaOrs2Uu-lkp@intel.com>
+References: <20250207223634.600218-7-maxime.chevallier@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAKFcp2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDIwML3aLS4hLd7NK8zBLdlBRjU4NUw0QTM+NkJaCGgqLUtMwKsGHRsbW
- 1AFKw9mBcAAAA
-X-Change-ID: 20250208-rust-kunit-dd350e1a463c
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739021542; l=1659;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=hp/QlQLnszYTXmXShP+TaYAd6/NZl+NFs1iWbFohFHI=;
- b=IgP8Mee3WFJPHH1HUqpdpDmGN6N60+iuY2FCyO62LHiCtEiHnFshVBTKBYNxlsYs+eiIliakf
- lQ9v0s83iHGA1hc6Ot4GAkcNkK7AX8Ed6AX1VO8wZSM0MFGQQpiY53m
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250207223634.600218-7-maxime.chevallier@bootlin.com>
 
-Two quality of live improvements for running kunit tests for rust/.
-While today there are only the doctests, more are coming [0].
+Hi Maxime,
 
-	$ ./tools/testing/kunit/kunit.py run --kunitconfig rust/ 
-	[14:25:48] Configuring KUnit Kernel ...
-	[14:25:48] Building KUnit Kernel ...
-	Populating config with:
-	$ make ARCH=um O=.kunit olddefconfig
-	Building with:
-	$ make all compile_commands.json ARCH=um O=.kunit --jobs=16
-	[14:25:53] Starting KUnit Kernel (1/1)...
-	[14:25:53] ============================================================
-	Running tests with:
-	$ .kunit/linux kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
-	[14:25:53] =========== rust_doctests_kernel (135 subtests) ============
-	[14:25:53] [PASSED] rust_doctest_kernel_alloc_kbox_rs_0
+kernel test robot noticed the following build warnings:
 
-	...
+[auto build test WARNING on net-next/main]
 
-	[14:25:53] [PASSED] rust_doctest_kernel_workqueue_rs_3
-	[14:25:53] ============== [PASSED] rust_doctests_kernel ===============
-	[14:25:53] ============================================================
-	[14:25:53] Testing complete. Ran 135 tests: passed: 135
-	[14:25:53] Elapsed time: 5.431s total, 0.001s configuring, 5.314s building, 0.086s running
+url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-ethtool-Introduce-ETHTOOL_LINK_MEDIUM_-values/20250208-064223
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250207223634.600218-7-maxime.chevallier%40bootlin.com
+patch subject: [PATCH net-next 06/13] net: phy: Intrduce generic SFP handling for PHY drivers
+config: i386-buildonly-randconfig-004-20250208 (https://download.01.org/0day-ci/archive/20250208/202502082328.PaOrs2Uu-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082328.PaOrs2Uu-lkp@intel.com/reproduce)
 
-[0] https://lore.kernel.org/rust-for-linux/20241213081035.2069066-1-davidgow@google.com/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082328.PaOrs2Uu-lkp@intel.com/
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Thomas Weißschuh (2):
-      rust: pass correct target to bindgen on Usermode Linux
-      rust: add kunitconfig
+All warnings (new ones prefixed by >>):
 
- rust/.kunitconfig | 3 +++
- rust/Makefile     | 1 +
- 2 files changed, 4 insertions(+)
----
-base-commit: beeb78d46249cab8b2b8359a2ce8fa5376b5ad2d
-change-id: 20250208-rust-kunit-dd350e1a463c
+>> drivers/net/phy/phy_device.c:3682: warning: Function parameter or struct member 'phydev' not described in 'phy_get_sfp_port'
 
-Best regards,
+
+vim +3682 drivers/net/phy/phy_device.c
+
+  3677	
+  3678	/**
+  3679	 * phy_get_sfp_port() - Returns the first valid SFP port of a PHY
+  3680	 */
+  3681	struct phy_port *phy_get_sfp_port(struct phy_device *phydev)
+> 3682	{
+  3683		struct phy_port *port;
+  3684		list_for_each_entry(port, &phydev->ports, head)
+  3685			if (port->active && port->is_serdes)
+  3686				return port;
+  3687	
+  3688		return NULL;
+  3689	}
+  3690	EXPORT_SYMBOL_GPL(phy_get_sfp_port);
+  3691	
+
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
