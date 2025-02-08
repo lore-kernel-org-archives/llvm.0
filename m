@@ -1,155 +1,305 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2AA24111A;
-	Sat,  8 Feb 2025 18:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DEC194C8B
+	for <llvm@lists.linux.dev>; Sat,  8 Feb 2025 19:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739039869; cv=none; b=coNEDsynzz2L0/b46Ikk/d9EPVgim+97IenEUej6/TCLk9YLz7WNqk+GAWbeVVUfcqhCcGhf/OZU1266R5D5U0KHHJLXAKoZh3OfVcIuQIi5VuTsrtpPn9spGSL9hAx5fD6yJ0zXtkXVoRcNxRoWQ0INf4Vkdj6UeS4+cWaTpAA=
+	t=1739042815; cv=none; b=CjbS9+GYfSLVN0rEBwrH+EM9f77ZnlA1rNMMRhHJ7Ga4j6HsG6ZR+q9vNQXXNK1Rq3H5p6fy8IBYWxiypUEDEGGn5m5qjM7kvN04YZMKLgUyr7tWqxrklLr9Iw5O7XCer15RduLKC2aVQE+3h2W+Ijf9J3xc0QvzZRfcK0Nxkek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739039869; c=relaxed/simple;
-	bh=OiPh1lu4rx22B7KSumWl+7P7nOfgNMfxfiVWxLMUgfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rIofEOo5r0ip5+uaxvXZjoRkX+ACsD3b7bSXUvnqe6AEEMTwX5ChxNXb+JLvUGrCkZKLGpjp8yO+gxFs5nboZ4vNBHTMoy8yXLHuJiuwKFApe5jUoOZvd2yMxb/4pLVhjIVkY4CdN/dFDN0eteIjEb5iMQ8V8zx7pGQZ5/4nSLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JMeK9eeu; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739042815; c=relaxed/simple;
+	bh=FgRiLoUeYS/P2a34Mzi77DK32Q9dPe2je058z8o/H5Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EiDentDnm5Jiys6iaB7n4LpKZkBEhKwRv1bXtocIaFU36d474tSdxovwGWhIP8UU4fH4+QFvowoT0AfPQjVfLpiRBEW9q16Ak68VGZdm1eP6c1Wunsa4OMoTLWe13Sjkd1UlvwIijhD7OAgEnAHBuSZjoDjCzAZokVdWKrxXIMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLGs75b6; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JMeK9eeu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739039868; x=1770575868;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OiPh1lu4rx22B7KSumWl+7P7nOfgNMfxfiVWxLMUgfo=;
-  b=JMeK9eeuM0uTs6p5f+k/iLBWybKeqGegd1vl5E218jcC4fgbvWjaPEw3
-   6qQUy0pKutlkmqEC8fmILIYYe9J9vQP6RUB/c7in4AbNXprkEsBC3UkI4
-   gSbNgU5A51yUq1iKfnRqApeZVAuUl5dwRurrEMF8amZlhvIwNIwZ8lv4R
-   AvCgtYC4oWDpmgnySGZFu1+0qK6/ev8wYW4J78w3uwaDaFkfZa/SSooEA
-   OYw+Jh3s3QIWcKFOXnsFRVlMmwwY07Rn80yIZZ38g8pHdAyii8qfoN0uc
-   IIAvLfQrGShYCfZ/WNu9k9UIKJGsMJKlil/mNCrLvj2dApvfmjn0BtXMr
-   w==;
-X-CSE-ConnectionGUID: Gk1+uL4aQmySNXGfSIAQzw==
-X-CSE-MsgGUID: SetzGgOMQDOgc9P+UeWnqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="39555632"
-X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="39555632"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 10:37:47 -0800
-X-CSE-ConnectionGUID: ZUCm+zcCTCSDgP0A12ya5Q==
-X-CSE-MsgGUID: hRILAmttT0GVWW/cfCbPkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="112441264"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 08 Feb 2025 10:37:43 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgpi0-0010V9-2U;
-	Sat, 08 Feb 2025 18:37:40 +0000
-Date: Sun, 9 Feb 2025 02:36:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH] blackhole_dev: convert self-test to KUnit
-Message-ID: <202502090223.qCYMBjWT-lkp@intel.com>
-References: <20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLGs75b6"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7be8f28172dso171462385a.3
+        for <llvm@lists.linux.dev>; Sat, 08 Feb 2025 11:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739042812; x=1739647612; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ErecbTkBa9sio41ZFgWnV9foB5CsuNaP3L4bJYj5st4=;
+        b=HLGs75b6AU9V+B71cT4zK5/GhIg/uhR0WfhLuLfL1DRiVOYEffluDcPGxltBsXu1qL
+         +yTzrrlsbvPJo0jpq3uVCQeGAd8PYMb1ba9AS/B55X8iEoSRl53HywkRW2Lf0gkFQxZR
+         NplCTm7jPteCKtpSZovScfDuf2mZk2PGcUHlplHXRveCZahZTgWH4Y3728H9sDkLqFKC
+         PQNDE0G8L3Pa7MgsoZhdp7FToNujlhoaB7r4tEergnKB9ptgBGVAWhgSiT0+6PNx+zJq
+         IPIxXxGqMedxi114Kkh3tgYIxyxl3mEOP1JzEkkv+Blr/Q2eLZ8F7Q1FGD7sreanDvTg
+         kh0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739042812; x=1739647612;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ErecbTkBa9sio41ZFgWnV9foB5CsuNaP3L4bJYj5st4=;
+        b=ATsHsd33qf+zpoRmfsnYgeMiTxA64lJRnYLA9+3zxgG3FsSTJJOegVtB69H057E/Sp
+         FWA1XsVhDbJuK+cI5sC6CFoha29dSMKxwanTsoyAIqeVKoYUrW5iBPSG+gvxrYg5H/is
+         sA1x5Abb+xD4yP7/1MyYtW3tVtmhpZ/keOF+RK1wAitnM8G02MY9crajdAWDLBDcOzZe
+         aW/WYKcFz4C+iNaA6m3Nhs2HxMhSG0bvGzSKHcvm92xLCeftENLFb8l6timBcd+y8sPW
+         518Au6LmvdjlKlPxVtrjk0mPYQ7xLaLaZC5fTWYYk6JLAPItx5ee5fC4ZuoW5fxdHBOd
+         M26w==
+X-Forwarded-Encrypted: i=1; AJvYcCU0IB/APyXBKfXzWIXu9CFxaFwBVTjGgEpN/TvMgnplSEo5bGUUCijtGSLT6ZFjDRFFxcfg@lists.linux.dev
+X-Gm-Message-State: AOJu0YynYcilsDSxP7OKo+FH67fnqxN4NxKT5A9zA4riHmgs7Tot3Wux
+	4SPEi5KgbKh0C6ydD2lNk7iA4xz+YDY1xeJakkyrYrWZEr5Ql/FJ
+X-Gm-Gg: ASbGnctx0VtIr0wlliF1I8OQDShdC990gBKccoGkcn6G+7HBnvDb1IcANfngsUALIP/
+	8kaWUmzhinc6tws2nLWn3MOkkY76RjfENErBYoXAxc6wkrIglaZWaIgDaQvBQaFNPymFfmu/znm
+	CLvVnYmzz/aGGEVTzzj6oy7u19uKG4RJBL0FpUG87dfnUAQCoUdnZYHMV9EWKFc67xSDK2XOMsL
+	scqaVVLmx30aFaWCbEwpt1fhu0OUVT2aud2HoIUtIpggbxmaVBmRjJEtT4slBPXKIBGBlKBSpbt
+	FG20Ftt0+qKXP4Aiq0XeH1uVmlphqkdma0FP+zbndZIQuKY=
+X-Google-Smtp-Source: AGHT+IE7KI6OrHjZVszKf5uuDQy13QYH7ConCPPve/CxaiTLiaoDIoMyAZDafHop59v2SQ4fN/BVkg==
+X-Received: by 2002:a05:620a:2844:b0:7b6:79c8:d036 with SMTP id af79cd13be357-7c047ba5549mr1004098285a.3.1739042811923;
+        Sat, 08 Feb 2025 11:26:51 -0800 (PST)
+Received: from 1.0.0.127.in-addr.arpa ([2600:4041:5be7:7c00:c58e:ed03:1b60:c56d])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c041dec31dsm334474385a.1.2025.02.08.11.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Feb 2025 11:26:50 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Sat, 08 Feb 2025 14:26:43 -0500
+Subject: [PATCH v2] blackhole_dev: convert self-test to KUnit
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAPKvp2cC/42NQQ7CIBBFr9LM2jGAaURX3sN0gXRoJ23BQCWah
+ ruLPYH5q/cX722QKDIluDYbRMqcOPgK6tCAHY0fCLmvDEqoVihxxsds7DSGmXrKOL08r2iDzxR
+ XvJhWGVknTgqq4BnJ8XuX37vKI6c1xM/eyvL3/qXNEiVqcqK30jmt5W1YDM9HGxboSilfqpTon
+ sQAAAA=
+X-Change-ID: 20250207-blackholedev-kunit-convert-9a52a1a1a032
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+ Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-Hi Tamir,
+Convert this very simple smoke test to a KUnit test.
 
-kernel test robot noticed the following build warnings:
+Add a missing `htons` call that was spotted[0] by kernel test robot
+<lkp@intel.com> after initial conversion to KUnit.
 
-[auto build test WARNING on 2014c95afecee3e76ca4a56956a936e23283f05b]
+Link: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@intel.com/ [0]
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+I tested this using:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/blackhole_dev-convert-self-test-to-KUnit/20250208-074037
-base:   2014c95afecee3e76ca4a56956a936e23283f05b
-patch link:    https://lore.kernel.org/r/20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881%40gmail.com
-patch subject: [PATCH] blackhole_dev: convert self-test to KUnit
-config: i386-randconfig-062-20250208 (https://download.01.org/0day-ci/archive/20250209/202502090223.qCYMBjWT-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090223.qCYMBjWT-lkp@intel.com/reproduce)
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 --kconfig_add CONFIG_NET=y blackholedev
+---
+Changes in v2:
+- Add missing `htons` call. (kernel test robot <lkp@intel.com>)
+- Link to v1: https://lore.kernel.org/r/20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com
+---
+ lib/Kconfig.debug                                  | 20 ++++-----
+ lib/Makefile                                       |  2 +-
+ ...{test_blackhole_dev.c => blackhole_dev_kunit.c} | 47 ++++++++--------------
+ tools/testing/selftests/net/Makefile               |  2 +-
+ tools/testing/selftests/net/test_blackhole_dev.sh  | 11 -----
+ 5 files changed, 29 insertions(+), 53 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@intel.com/
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1af972a92d06..238321830993 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2557,15 +2557,6 @@ config TEST_BPF
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_BLACKHOLE_DEV
+-	tristate "Test blackhole netdev functionality"
+-	depends on m && NET
+-	help
+-	  This builds the "test_blackhole_dev" module that validates the
+-	  data path through this blackhole netdev.
+-
+-	  If unsure, say N.
+-
+ config FIND_BIT_BENCHMARK
+ 	tristate "Test find_bit functions"
+ 	help
+@@ -2888,6 +2879,17 @@ config USERCOPY_KUNIT_TEST
+ 	  on the copy_to/from_user infrastructure, making sure basic
+ 	  user/kernel boundary testing is working.
+ 
++config BLACKHOLE_DEV_KUNIT_TEST
++	tristate "Test blackhole netdev functionality" if !KUNIT_ALL_TESTS
++	depends on NET
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the "blackhole_dev_kunit" module that validates the
++	  data path through this blackhole netdev.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index d5cfc7afbbb8..19ff6993c2bc 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -102,7 +102,6 @@ obj-$(CONFIG_TEST_RUNTIME) += tests/
+ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+ obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+-obj-$(CONFIG_TEST_BLACKHOLE_DEV) += test_blackhole_dev.o
+ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
+ obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
+ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+@@ -393,6 +392,7 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
+ obj-$(CONFIG_CRC_KUNIT_TEST) += crc_kunit.o
+ obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
+ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
++obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) += blackhole_dev_kunit.o
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/test_blackhole_dev.c b/lib/blackhole_dev_kunit.c
+similarity index 68%
+rename from lib/test_blackhole_dev.c
+rename to lib/blackhole_dev_kunit.c
+index ec290ac2a0d9..06834ab35f43 100644
+--- a/lib/test_blackhole_dev.c
++++ b/lib/blackhole_dev_kunit.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * This module tests the blackhole_dev that is created during the
++ * This tests the blackhole_dev that is created during the
+  * net subsystem initialization. The test this module performs is
+  * by injecting an skb into the stack with skb->dev as the
+  * blackhole_dev and expects kernel to behave in a sane manner
+@@ -9,9 +9,8 @@
+  * Copyright (c) 2018, Mahesh Bandewar <maheshb@google.com>
+  */
+ 
+-#include <linux/init.h>
++#include <kunit/test.h>
+ #include <linux/module.h>
+-#include <linux/printk.h>
+ #include <linux/skbuff.h>
+ #include <linux/netdevice.h>
+ #include <linux/udp.h>
+@@ -25,17 +24,15 @@
+ 
+ #define UDP_PORT 1234
+ 
+-static int __init test_blackholedev_init(void)
++static void test_blackholedev(struct kunit *test)
+ {
+ 	struct ipv6hdr *ip6h;
+ 	struct sk_buff *skb;
+ 	struct udphdr *uh;
+ 	int data_len;
+-	int ret;
+ 
+ 	skb = alloc_skb(SKB_SIZE, GFP_KERNEL);
+-	if (!skb)
+-		return -ENOMEM;
++	KUNIT_ASSERT_NOT_NULL(test, skb);
+ 
+ 	/* Reserve head-room for the headers */
+ 	skb_reserve(skb, HEAD_SIZE);
+@@ -55,7 +52,7 @@ static int __init test_blackholedev_init(void)
+ 	ip6h = (struct ipv6hdr *)skb_push(skb, sizeof(struct ipv6hdr));
+ 	skb_set_network_header(skb, 0);
+ 	ip6h->hop_limit = 32;
+-	ip6h->payload_len = data_len + sizeof(struct udphdr);
++	ip6h->payload_len = htons(data_len + sizeof(struct udphdr));
+ 	ip6h->nexthdr = IPPROTO_UDP;
+ 	ip6h->saddr = in6addr_loopback;
+ 	ip6h->daddr = in6addr_loopback;
+@@ -68,32 +65,20 @@ static int __init test_blackholedev_init(void)
+ 	skb->dev = blackhole_netdev;
+ 
+ 	/* Now attempt to send the packet */
+-	ret = dev_queue_xmit(skb);
+-
+-	switch (ret) {
+-	case NET_XMIT_SUCCESS:
+-		pr_warn("dev_queue_xmit() returned NET_XMIT_SUCCESS\n");
+-		break;
+-	case NET_XMIT_DROP:
+-		pr_warn("dev_queue_xmit() returned NET_XMIT_DROP\n");
+-		break;
+-	case NET_XMIT_CN:
+-		pr_warn("dev_queue_xmit() returned NET_XMIT_CN\n");
+-		break;
+-	default:
+-		pr_err("dev_queue_xmit() returned UNKNOWN(%d)\n", ret);
+-	}
+-
+-	return 0;
++	KUNIT_EXPECT_EQ(test, dev_queue_xmit(skb), NET_XMIT_SUCCESS);
+ }
+ 
+-static void __exit test_blackholedev_exit(void)
+-{
+-	pr_warn("test_blackholedev module terminating.\n");
+-}
++static struct kunit_case blackholedev_cases[] = {
++	KUNIT_CASE(test_blackholedev),
++	{},
++};
++
++static struct kunit_suite blackholedev_suite = {
++	.name = "blackholedev",
++	.test_cases = blackholedev_cases,
++};
+ 
+-module_init(test_blackholedev_init);
+-module_exit(test_blackholedev_exit);
++kunit_test_suite(blackholedev_suite);
+ 
+ MODULE_AUTHOR("Mahesh Bandewar <maheshb@google.com>");
+ MODULE_DESCRIPTION("module test of the blackhole_dev");
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 73ee88d6b043..afa4bcdc5833 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -7,7 +7,7 @@ CFLAGS += -I../../../../usr/include/ $(KHDR_INCLUDES)
+ CFLAGS += -I../
+ 
+ TEST_PROGS := run_netsocktests run_afpackettests test_bpf.sh netdevice.sh \
+-	      rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
++	      rtnetlink.sh xfrm_policy.sh
+ TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_defrag.sh
+ TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
+ TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
+diff --git a/tools/testing/selftests/net/test_blackhole_dev.sh b/tools/testing/selftests/net/test_blackhole_dev.sh
+deleted file mode 100755
+index 3119b80e711f..000000000000
+--- a/tools/testing/selftests/net/test_blackhole_dev.sh
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-# Runs blackhole-dev test using blackhole-dev kernel module
+-
+-if /sbin/modprobe -q test_blackhole_dev ; then
+-	/sbin/modprobe -q -r test_blackhole_dev;
+-	echo "test_blackhole_dev: ok";
+-else
+-	echo "test_blackhole_dev: [FAIL]";
+-	exit 1;
+-fi
 
-sparse warnings: (new ones prefixed by >>)
->> lib/blackhole_dev_kunit.c:55:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] payload_len @@     got unsigned int @@
-   lib/blackhole_dev_kunit.c:55:27: sparse:     expected restricted __be16 [usertype] payload_len
-   lib/blackhole_dev_kunit.c:55:27: sparse:     got unsigned int
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250207-blackholedev-kunit-convert-9a52a1a1a032
 
-vim +55 lib/blackhole_dev_kunit.c
-
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  26  
-a644885645ce86 lib/blackhole_dev_kunit.c Tamir Duberstein 2025-02-07  27  static void test_blackholedev(struct kunit *test)
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  28  {
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  29  	struct ipv6hdr *ip6h;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  30  	struct sk_buff *skb;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  31  	struct udphdr *uh;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  32  	int data_len;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  33  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  34  	skb = alloc_skb(SKB_SIZE, GFP_KERNEL);
-a644885645ce86 lib/blackhole_dev_kunit.c Tamir Duberstein 2025-02-07  35  	KUNIT_ASSERT_NOT_NULL(test, skb);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  36  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  37  	/* Reserve head-room for the headers */
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  38  	skb_reserve(skb, HEAD_SIZE);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  39  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  40  	/* Add data to the skb */
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  41  	data_len = SKB_SIZE - (HEAD_SIZE + TAIL_SIZE);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  42  	memset(__skb_put(skb, data_len), 0xf, data_len);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  43  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  44  	/* Add protocol data */
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  45  	/* (Transport) UDP */
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  46  	uh = (struct udphdr *)skb_push(skb, sizeof(struct udphdr));
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  47  	skb_set_transport_header(skb, 0);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  48  	uh->source = uh->dest = htons(UDP_PORT);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  49  	uh->len = htons(data_len);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  50  	uh->check = 0;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  51  	/* (Network) IPv6 */
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  52  	ip6h = (struct ipv6hdr *)skb_push(skb, sizeof(struct ipv6hdr));
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  53  	skb_set_network_header(skb, 0);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  54  	ip6h->hop_limit = 32;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01 @55  	ip6h->payload_len = data_len + sizeof(struct udphdr);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  56  	ip6h->nexthdr = IPPROTO_UDP;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  57  	ip6h->saddr = in6addr_loopback;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  58  	ip6h->daddr = in6addr_loopback;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  59  	/* Ether */
-843a8851e89e2e lib/test_blackhole_dev.c  Breno Leitao     2024-02-02  60  	skb_push(skb, sizeof(struct ethhdr));
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  61  	skb_set_mac_header(skb, 0);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  62  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  63  	skb->protocol = htons(ETH_P_IPV6);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  64  	skb->pkt_type = PACKET_HOST;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  65  	skb->dev = blackhole_netdev;
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  66  
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  67  	/* Now attempt to send the packet */
-a644885645ce86 lib/blackhole_dev_kunit.c Tamir Duberstein 2025-02-07  68  	KUNIT_EXPECT_EQ(test, dev_queue_xmit(skb), NET_XMIT_SUCCESS);
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  69  }
-509e56b37cc32c lib/test_blackhole_dev.c  Mahesh Bandewar  2019-07-01  70  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tamir Duberstein <tamird@gmail.com>
+
