@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A0E22DFE5;
-	Sat,  8 Feb 2025 16:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D199022DFE5;
+	Sat,  8 Feb 2025 16:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739032047; cv=none; b=iNcvnagAkhLkhsish/IGGiVe7mTRI58m59jO3sW6ysFlW95OBuF8ZVgrmW/qvvUaAmzQu6idaqNU7L4h+aFslvPhUMeXxau+5oOACwX80sXmkxbl4jLv8k6XP8/4wEjmQOH/eE0Cdo3U2UmuYoafuOoOGzxd+p+/8yGsthDAu4Q=
+	t=1739032049; cv=none; b=Sr+3gS58BnPFDmb5ajlkdymxihIWZ5Eh9/eD2ddeZXyMeAI1+oQmqV28415iMTrVeudWCXY0DYz84Od99dP0GqEUixJO6HwnUEKP1fz4ZUIzEAYHvg8xIzspn8sftBnL3upwLRr7kz/nqGdK8xvBEVe5aeBIIt8Tr9GsVffOvVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739032047; c=relaxed/simple;
-	bh=C8hztGbGottthtxFYJuS2HOP21X4ieKOjpwQU9skmfs=;
+	s=arc-20240116; t=1739032049; c=relaxed/simple;
+	bh=KBpgtQSp3QDzHOeIRxUev1T7WAZQkiUIz/zQq6o8N4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XV2CWOfYCT4V5Rk2P1+kKU2P5EkXWhZLPcvSapT1Os6PHxfo2LhPazHgdYGtvxetzEZEc4f+4tRxencWOh53715mFPGTYPi1bzAP1UZSfvlA0JNl7j4JX5rywvw36Uc8rqy1KoDDmjdOXsKGKXH6kyPna+OG2tyjWXDIkUQcM8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=axQGG9gl; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=eP5fpkx+qAJdlte7oPXa9dtwR+tPGlvPyhvndnNsBV6X69/bRPbHTD+mGcP3KszaV7Ht42fm/+j49XQ+g+l5SntArr3yTUpLQAQvDM5sBA5hWXk5bZ1kRwJIv0MzlighKbN0EOq9slqGi1LKUwV/iUPf3aZ3whpQY5Lo4phiN1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aY0K0x9F; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="axQGG9gl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aY0K0x9F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739032045; x=1770568045;
+  t=1739032048; x=1770568048;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=C8hztGbGottthtxFYJuS2HOP21X4ieKOjpwQU9skmfs=;
-  b=axQGG9gl3lysg03ouZ/d2dx5okAaL/dlkUI3wjzrDQC3CPL5luFa/ZEE
-   m9rMdjop3dcXl/A/ooRX4JI1oijUzHvBQYWXP+iSZUExiHuwpI7srFOQB
-   brAr0D/TD177BG8TJsONK8uqQVohz0YetqeVpCiIlREx5PwYCxy1aukjC
-   oGaj0Qt8Abn/PScj8Hc0oHt6dkxl7ALc1kXOnW9e0ZuPkfVazhQuJ0BBv
-   ITYJqL3QqfACuSlvumhCvdAfCGms8vElOMXWRX7uAEI/e/HJzNddFUekA
-   WIZloBBXk3FzjD2gV4/uZrrJ7wLf/kASti1M86j7GpRy2e/DUv2IYT45I
-   g==;
-X-CSE-ConnectionGUID: mgn3jyGATMeieXG+onFoEg==
-X-CSE-MsgGUID: 0l5m+3oXQcyXLDC+RJzYGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62136687"
+  bh=KBpgtQSp3QDzHOeIRxUev1T7WAZQkiUIz/zQq6o8N4Q=;
+  b=aY0K0x9FNpA3Lr5TQPuIsjCrMkTj8SKXYDux7w3mAePV0fWNhmh04UJv
+   fuXbSiCaN06D750dPelF4H8noBMeFnBABTdRSqBr2Vy/HGEiez8cLGP2k
+   f40HzxfBJ6e0BpiGT3AWw9BNrC5R214/U6NU/mAc43ZOLlNM+c8dEgJz7
+   /jpUZnh6YwqCvvp4y/vPBWqX7cMW9Qe23GBpCBXGTz+VWV4ABPV5BeKAo
+   /6ITicQlqzIHQaKqBFZj9aVfsnCnuDfj1A6VTBLE8AiJLi4jbG+N7ClAa
+   k6CyJm0CEa+fOPL6sfAJtJ4gBRA9nZGG4tYRewTVN63tLRWrJy9vQfNKT
+   w==;
+X-CSE-ConnectionGUID: zSkEPM83QTCT1y0eaJm+FA==
+X-CSE-MsgGUID: CgKwvTWqQbqqdR81DvcqEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="49898095"
 X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="62136687"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 08:27:25 -0800
-X-CSE-ConnectionGUID: Tk9qTRhaR0WELmQSc9S0Rw==
-X-CSE-MsgGUID: F7mz4GCGSjy3Zc3F/fOi0Q==
+   d="scan'208";a="49898095"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 08:27:27 -0800
+X-CSE-ConnectionGUID: PkU26892TG6nlvbPTbz4fw==
+X-CSE-MsgGUID: sHqAQLdmQaym2sXLhJDMqw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="111628198"
+   d="scan'208";a="117003985"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 08 Feb 2025 08:27:24 -0800
+  by orviesa005.jf.intel.com with ESMTP; 08 Feb 2025 08:27:24 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgnft-0010Kp-1m;
+	id 1tgnft-0010Kn-1j;
 	Sat, 08 Feb 2025 16:27:21 +0000
-Date: Sun, 9 Feb 2025 00:26:38 +0800
+Date: Sun, 9 Feb 2025 00:26:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tvrtko Ursulin <tvrtko.ursulin@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 2/5] drm/scheduler: Add scheduler unit testing
- infrastructure and some basic tests
-Message-ID: <202502090019.4tBBMkwC-lkp@intel.com>
-References: <20250207143337.60154-3-tvrtko.ursulin@igalia.com>
+To: Liang Jie <buaajxlj@163.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Michal Luczaj <mhal@rbox.co>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Liang Jie <liangjie@lixiang.com>
+Subject: Re: [PATCH net-next v2] af_unix: Refine UNIX pathname sockets
+ autobind identifier length
+Message-ID: <202502090056.Rl1rtpr5-lkp@intel.com>
+References: <20250206054451.4070941-1-buaajxlj@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,48 +68,96 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250207143337.60154-3-tvrtko.ursulin@igalia.com>
+In-Reply-To: <20250206054451.4070941-1-buaajxlj@163.com>
 
-Hi Tvrtko,
+Hi Liang,
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm-exynos/exynos-drm-next]
-[also build test ERROR on linus/master v6.14-rc1 next-20250207]
-[cannot apply to drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tvrtko-Ursulin/drm-Move-some-options-to-separate-new-Kconfig-debug/20250207-223734
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20250207143337.60154-3-tvrtko.ursulin%40igalia.com
-patch subject: [RFC 2/5] drm/scheduler: Add scheduler unit testing infrastructure and some basic tests
-config: i386-buildonly-randconfig-005-20250208 (https://download.01.org/0day-ci/archive/20250209/202502090019.4tBBMkwC-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090019.4tBBMkwC-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-Jie/af_unix-Refine-UNIX-pathname-sockets-autobind-identifier-length/20250206-134846
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250206054451.4070941-1-buaajxlj%40163.com
+patch subject: [PATCH net-next v2] af_unix: Refine UNIX pathname sockets autobind identifier length
+config: hexagon-randconfig-001-20250207 (https://download.01.org/0day-ci/archive/20250209/202502090056.Rl1rtpr5-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502090056.Rl1rtpr5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502090019.4tBBMkwC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502090056.Rl1rtpr5-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/scheduler/tests/drm_mock_scheduler.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/scheduler/tests/drm_mock_scheduler.o
-ERROR: modpost: missing MODULE_LICENSE() in drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "drm_mock_new_scheduler" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
->> ERROR: modpost: "drm_mock_scheduler_fini" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
->> ERROR: modpost: "drm_mock_new_sched_entity" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
->> ERROR: modpost: "drm_mock_new_sched_job" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
->> ERROR: modpost: "drm_mock_sched_advance" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
->> ERROR: modpost: "drm_mock_sched_entity_free" [drivers/gpu/drm/scheduler/tests/drm_sched_tests_basic.ko] undefined!
+>> net/unix/af_unix.c:1222:2: warning: 'snprintf' will always be truncated; specified size is 5, but format string expands to at least 6 [-Wformat-truncation]
+    1222 |         snprintf(addr->name->sun_path + 1, 5, "%05x", ordernum);
+         |         ^
+   1 warning generated.
+
+
+vim +/snprintf +1222 net/unix/af_unix.c
+
+  1190	
+  1191	static int unix_autobind(struct sock *sk)
+  1192	{
+  1193		struct unix_sock *u = unix_sk(sk);
+  1194		unsigned int new_hash, old_hash;
+  1195		struct net *net = sock_net(sk);
+  1196		struct unix_address *addr;
+  1197		u32 lastnum, ordernum;
+  1198		int err;
+  1199	
+  1200		err = mutex_lock_interruptible(&u->bindlock);
+  1201		if (err)
+  1202			return err;
+  1203	
+  1204		if (u->addr)
+  1205			goto out;
+  1206	
+  1207		err = -ENOMEM;
+  1208		addr = kzalloc(sizeof(*addr) + offsetof(struct sockaddr_un, sun_path) +
+  1209				UNIX_AUTOBIND_LEN, GFP_KERNEL);
+  1210		if (!addr)
+  1211			goto out;
+  1212	
+  1213		addr->len = offsetof(struct sockaddr_un, sun_path) + UNIX_AUTOBIND_LEN;
+  1214		addr->name->sun_family = AF_UNIX;
+  1215		refcount_set(&addr->refcnt, 1);
+  1216	
+  1217		old_hash = sk->sk_hash;
+  1218		ordernum = get_random_u32();
+  1219		lastnum = ordernum & 0xFFFFF;
+  1220	retry:
+  1221		ordernum = (ordernum + 1) & 0xFFFFF;
+> 1222		snprintf(addr->name->sun_path + 1, 5, "%05x", ordernum);
+  1223	
+  1224		new_hash = unix_abstract_hash(addr->name, addr->len, sk->sk_type);
+  1225		unix_table_double_lock(net, old_hash, new_hash);
+  1226	
+  1227		if (__unix_find_socket_byname(net, addr->name, addr->len, new_hash)) {
+  1228			unix_table_double_unlock(net, old_hash, new_hash);
+  1229	
+  1230			/* __unix_find_socket_byname() may take long time if many names
+  1231			 * are already in use.
+  1232			 */
+  1233			cond_resched();
+  1234	
+  1235			if (ordernum == lastnum) {
+  1236				/* Give up if all names seems to be in use. */
+  1237				err = -ENOSPC;
+  1238				unix_release_addr(addr);
+  1239				goto out;
+  1240			}
+  1241	
+  1242			goto retry;
+  1243		}
+  1244	
+  1245		__unix_set_addr_hash(net, sk, addr, new_hash);
+  1246		unix_table_double_unlock(net, old_hash, new_hash);
+  1247		err = 0;
+  1248	
 
 -- 
 0-DAY CI Kernel Test Service
