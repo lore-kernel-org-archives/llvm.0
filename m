@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D941A5BB9;
-	Sat,  8 Feb 2025 11:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353C11E4A9;
+	Sat,  8 Feb 2025 12:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739014068; cv=none; b=DAZXY99zzJaRHEXBfdbKrgZDaxziShd4zgCPhRAg9r55STLlIjSB6lKqz0/9K7eQqOXDaWSYAepgd/hlmJ+k9TpAE8lpop+MZniPa6yL+WYSurufRIfG6/3Vra0rloeAka+hpO6dbXDrpVnybvZ45/hQYujMKawfhUB89koya4U=
+	t=1739017916; cv=none; b=J08uufwwOqjxL76rcmHMGnYNtlA2+tqdvPvmPiSFWNlWgEiFGlFBd/A7WVvRyOfsodTKooPnAioNfo91B3s0orwCtDvcgduxCYdc+gpJuUQ0fh+XstGEmwmBxpHUDxoZX2svARh4D2OpqUExoKIZD6u7HTPUufTnOQLh7IZzfxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739014068; c=relaxed/simple;
-	bh=wXhqC+6F+tOU+/QtVSYZ9LSc71CI3x138xfxhyZVr64=;
+	s=arc-20240116; t=1739017916; c=relaxed/simple;
+	bh=h/qzg3EI7NJZ+l8m7U67Kuca6fap48fMnktRAp+O9Wg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=f/n3ysVGOI22a7OxhK0DgLN2AZI9UGsq7VM3A6iX13xS0+Lz2kYExe/kOgwQp3+nG+opMTNtrPKc8cPa/Jf8UzYL6N2HIrSeAOhTZeS2iA6cUfKgf0PPFNyz9iihU5UwbSeuXqxmwLBiZvT4VPT1+UEFSDQZGTOpvxVeWDBAlTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TEpYJq9S; arc=none smtp.client-ip=192.198.163.13
+	 Content-Disposition; b=UQDFiltKBVbyOzMpSWGo/to+zTg9kaGLTcXZa5TMTL3y9i6bx6Gm3vVd0AcVaNko480OSxBH4wRweMipSKRcsHu6SbAJBtFw6H//aUxNxoBjVxpOhT/cM5rKqHQPR+/d9HUp3TuADLqIvo7lu5ZEK4t44EAcGbbyoCZRmP9wjsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFPj+kF+; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TEpYJq9S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFPj+kF+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739014066; x=1770550066;
+  t=1739017914; x=1770553914;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wXhqC+6F+tOU+/QtVSYZ9LSc71CI3x138xfxhyZVr64=;
-  b=TEpYJq9SYiq+h2MRJa2f4iJqi3ZxyBTAsdT7VVczOT7tWKDfAZO2W2yK
-   6r29Qfb2oKaQZSzDFKT9xt0EomRO3GX6UebxGR7sjNsYZf5TqnAoqzU4l
-   MN7/BhlevfbMFnZR2A/ZfcizeKP8+IX1HlbsyFUb8SOtgwovhCmIJWnh+
-   JodVxvZHefj7rufAwzlgReNsg9E8vB0hJBosCLKioqKcnHQj6VGoWsEsj
-   6AtcQO4Q3VCy9vhbrNK81w4owEAWVC/0v53n0NZhmQQABVraVtiz2SKQT
-   qbL2mUxzc1oHpppevaobQeVtEKvcX344TMnDZJTuGl+ADnmPS1j+p0CTy
-   w==;
-X-CSE-ConnectionGUID: GKEQJiHZS5a1pZIv54d+mQ==
-X-CSE-MsgGUID: 4AUNsiNUR5aXaGj3oPgMIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="42495768"
-X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
-   d="scan'208";a="42495768"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 03:27:46 -0800
-X-CSE-ConnectionGUID: R2WiNbAbRNG6YQD55/nXjw==
-X-CSE-MsgGUID: LyigwvD8TlWL+NgNyEXSrg==
+  bh=h/qzg3EI7NJZ+l8m7U67Kuca6fap48fMnktRAp+O9Wg=;
+  b=FFPj+kF+oA/XY+jTOxKjizwYvgk0kJ4C7FI8PVqh2LGS0vQFNa/TTnea
+   YKr7z2lVoMcw3S2dKRrO701FR7DuWvqTE5ZMajkHWrP2sCGGNIDNH083g
+   y9cc07IL9M1M6DaENPc4x0TWSIbXxYGjNnn5KTD5k6XHajWevEN210CIc
+   xuZBq9mB27uiDX6hSC3ySYSuAJKM7ivDQcnfa5DGeGrN6tXtJ52B16wUb
+   fVyu8mSu95W1B4btq4ko+p9dbPdo4+oAR3kOgHfpbyfmH7CpQ1OiebKpL
+   jl9SGIGninFbuqZo6AH1BLfdEdQObx6X3VTDUKqCVISqY3JWlZRY6Oe/4
+   Q==;
+X-CSE-ConnectionGUID: 7BU2ju3pTdqbEIwB3K2uCQ==
+X-CSE-MsgGUID: 7bSQ8wPdQj+mgXz1zHGPRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="38851357"
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="38851357"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:31:53 -0800
+X-CSE-ConnectionGUID: eE6ArFqhQQGAfGdrAKP1dQ==
+X-CSE-MsgGUID: k3dlALNKQSag6Vn9YA1+lw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="142633286"
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="111716389"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 08 Feb 2025 03:27:45 -0800
+  by orviesa006.jf.intel.com with ESMTP; 08 Feb 2025 04:31:53 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgizu-000zuF-21;
-	Sat, 08 Feb 2025 11:27:42 +0000
-Date: Sat, 8 Feb 2025 19:26:58 +0800
+	id 1tgjzx-000zxf-2X;
+	Sat, 08 Feb 2025 12:31:49 +0000
+Date: Sat, 8 Feb 2025 20:31:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paul Moore <paul@paul-moore.com>
-Subject: [linuxsecuritymodule:next 2/2] include/linux/security.h:2379:12:
- warning: no previous prototype for function 'security_uring_allowed'
-Message-ID: <202502081912.TeokpAAe-lkp@intel.com>
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dvyukov:dvyukov-rseq-pkey 3/3] kernel/rseq.c:406:2: error: use of
+ undeclared identifier 'pkey_reg_t'
+Message-ID: <202502082027.9ojuhmXl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,79 +62,117 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/LinuxSecurityModule/kernel next
-head:   c6ad9fdbd44b78f51fa50138247694774ab99e97
-commit: c6ad9fdbd44b78f51fa50138247694774ab99e97 [2/2] io_uring,lsm,selinux: add LSM hooks for io_uring_setup()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250208/202502081912.TeokpAAe-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081912.TeokpAAe-lkp@intel.com/reproduce)
+tree:   https://github.com/dvyukov/linux dvyukov-rseq-pkey
+head:   b991732d23294a961eed6a4a2758c16f0430de9c
+commit: b991732d23294a961eed6a4a2758c16f0430de9c [3/3] rseq: Make rseq work with protection keys
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20250208/202502082027.9ojuhmXl-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082027.9ojuhmXl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502081912.TeokpAAe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082027.9ojuhmXl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/apic/apic.c:18:
-   In file included from include/linux/perf_event.h:62:
->> include/linux/security.h:2379:12: warning: no previous prototype for function 'security_uring_allowed' [-Wmissing-prototypes]
-    2379 | extern int security_uring_allowed(void)
-         |            ^
-   include/linux/security.h:2379:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2379 | extern int security_uring_allowed(void)
-         |        ^
-   arch/x86/kernel/apic/apic.c:1889:20: warning: unused function '__x2apic_enable' [-Wunused-function]
-    1889 | static inline void __x2apic_enable(void) { }
-         |                    ^~~~~~~~~~~~~~~
-   2 warnings generated.
---
-   In file included from arch/x86/kernel/apic/vector.c:18:
-   In file included from arch/x86/include/asm/traps.h:9:
-   In file included from arch/x86/include/asm/idtentry.h:11:
-   In file included from include/linux/entry-common.h:7:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:10:
-   In file included from include/linux/perf_event.h:62:
->> include/linux/security.h:2379:12: warning: no previous prototype for function 'security_uring_allowed' [-Wmissing-prototypes]
-    2379 | extern int security_uring_allowed(void)
-         |            ^
-   include/linux/security.h:2379:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    2379 | extern int security_uring_allowed(void)
-         |        ^
-   1 warning generated.
+>> kernel/rseq.c:406:2: error: use of undeclared identifier 'pkey_reg_t'
+     406 |         pkey_reg_t saved;
+         |         ^
+   kernel/rseq.c:426:3: error: call to undeclared function 'write_pkey_reg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     426 |                 write_pkey_reg(saved);
+         |                 ^
+>> kernel/rseq.c:426:18: error: use of undeclared identifier 'saved'
+     426 |                 write_pkey_reg(saved);
+         |                                ^
+   kernel/rseq.c:455:3: error: use of undeclared identifier 'saved'
+     455 |                 saved = switch_to_permissive_pkey_reg();
+         |                 ^
+   kernel/rseq.c:455:11: error: call to undeclared function 'switch_to_permissive_pkey_reg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     455 |                 saved = switch_to_permissive_pkey_reg();
+         |                         ^
+   kernel/rseq.c:458:18: error: use of undeclared identifier 'saved'
+     458 |                 write_pkey_reg(saved);
+         |                                ^
+   6 errors generated.
 
 
-vim +/security_uring_allowed +2379 include/linux/security.h
+vim +/pkey_reg_t +406 kernel/rseq.c
 
-  2359	
-  2360	#ifdef CONFIG_IO_URING
-  2361	#ifdef CONFIG_SECURITY
-  2362	extern int security_uring_override_creds(const struct cred *new);
-  2363	extern int security_uring_sqpoll(void);
-  2364	extern int security_uring_cmd(struct io_uring_cmd *ioucmd);
-  2365	extern int security_uring_allowed(void);
-  2366	#else
-  2367	static inline int security_uring_override_creds(const struct cred *new)
-  2368	{
-  2369		return 0;
-  2370	}
-  2371	static inline int security_uring_sqpoll(void)
-  2372	{
-  2373		return 0;
-  2374	}
-  2375	static inline int security_uring_cmd(struct io_uring_cmd *ioucmd)
-  2376	{
-  2377		return 0;
-  2378	}
-> 2379	extern int security_uring_allowed(void)
-  2380	{
-  2381		return 0;
-  2382	}
-  2383	#endif /* CONFIG_SECURITY */
-  2384	#endif /* CONFIG_IO_URING */
-  2385	
+   390	
+   391	/*
+   392	 * This resume handler must always be executed between any of:
+   393	 * - preemption,
+   394	 * - signal delivery,
+   395	 * and return to user-space.
+   396	 *
+   397	 * This is how we can ensure that the entire rseq critical section
+   398	 * will issue the commit instruction only if executed atomically with
+   399	 * respect to other threads scheduled on the same CPU, and with respect
+   400	 * to signal handlers.
+   401	 */
+   402	void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
+   403	{
+   404		struct task_struct *t = current;
+   405		int ret, sig;
+ > 406		pkey_reg_t saved;
+   407		bool switched_pkey_reg = false;
+   408	
+   409		if (unlikely(t->flags & PF_EXITING))
+   410			return;
+   411	
+   412	retry:
+   413		/*
+   414		 * regs is NULL if and only if the caller is in a syscall path.  Skip
+   415		 * fixup and leave rseq_cs as is so that rseq_sycall() will detect and
+   416		 * kill a misbehaving userspace on debug kernels.
+   417		 */
+   418		if (regs) {
+   419			ret = rseq_ip_fixup(regs);
+   420			if (unlikely(ret < 0))
+   421				goto error;
+   422		}
+   423		if (unlikely(rseq_update_cpu_node_id(t)))
+   424			goto error;
+   425		if (switched_pkey_reg)
+ > 426			write_pkey_reg(saved);
+   427		return;
+   428	
+   429	error:
+   430		/*
+   431		 * If the application registers rseq, and ever switches to another
+   432		 * pkey protection (such that the rseq becomes inaccessible), then
+   433		 * any context switch will cause failure here attemping to read/write
+   434		 * struct rseq and/or rseq_cs. Since context switches are
+   435		 * asynchronous and are outside of the application control
+   436		 * (not part of the restricted code scope), we temporarily switch
+   437		 * to premissive pkey register to read/write rseq/rseq_cs,
+   438		 * similarly to signal delivery.
+   439		 *
+   440		 * We don't bother to check if the failure really happened due to
+   441		 * pkeys or not, since it does not matter (performance-wise and
+   442		 * otherwise).
+   443		 *
+   444		 * If the restricted code installs rseq_cs in inaccessible to it
+   445		 * due to pkeys page, we still let this function read the rseq_cs.
+   446		 * It's unclear what benefits the resticted code gets by doing this
+   447		 * (it probably already hijacked control flow at this point), and
+   448		 * presumably any sane sandbox should prohibit restricted code
+   449		 * from accessing struct rseq, and this is still better than
+   450		 * terminating the app unconditionally (it always has a choice
+   451		 * of not using rseq and pkeys together).
+   452		 */
+   453		if (!switched_pkey_reg) {
+   454			switched_pkey_reg = true;
+   455			saved = switch_to_permissive_pkey_reg();
+   456			goto retry;
+   457		} else {
+   458			write_pkey_reg(saved);
+   459		}
+   460		sig = ksig ? ksig->sig : 0;
+   461		force_sigsegv(sig);
+   462	}
+   463	
 
 -- 
 0-DAY CI Kernel Test Service
