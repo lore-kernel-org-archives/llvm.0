@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4BE4C79;
-	Sun,  9 Feb 2025 07:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F6E143888;
+	Sun,  9 Feb 2025 08:56:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739085797; cv=none; b=qFElFgp6LppPF7B6BBQTFEcOE0SC1Eq924NMZA133OmYcfDqAnhLQnjWBoRhp+oyrZoRX3/CAYoDnVLq8ZLoPv+t6gVuTgNvF10bb9pdrFtZJUuzLA2T5qP2a/347ywI4LwzX/BL5ET0j5o7MHVaE/nHtjTehtUmvIZitUBL5Sk=
+	t=1739091383; cv=none; b=jn5ycevmJISfcR8BPNgWii1cUamrLKFxEN96sIyizkTMIZ0SaJyCOwnHbXET0FENeZRNMPDERfvxXzzcm+yiN+NFhsILQinPMnAJS+i+lpV00Rl/SNxwzwb4sgeP9gxOa3Z4TWMomFllQ/Jk/DA27ZIfhY295HeEGLfafudFx+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739085797; c=relaxed/simple;
-	bh=5GqIc+1kCxkhd7PHGBP5vf6u6aXir0IC/lpMivcNzjE=;
+	s=arc-20240116; t=1739091383; c=relaxed/simple;
+	bh=sVHpJ+0fKTU9C02dksHnxm9yM5GvjtKn9AUd9XsmOC4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qj7ZXmQuboAnoInI4TE6W76+8ozYBqumEiqy6nONLBrywB5lKeGp0opcIDfpEYa7WyossIjykSl56KckTx5JivTVfHGzH+nybl5Yuu6MGc9dezwV0ZDF4em7A8p72CwDxyvkv8dugIv6/Dka3ihDNnFhL7WiZD9xZLC3cO+g0kM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LuAd+8nT; arc=none smtp.client-ip=198.175.65.15
+	 Content-Disposition; b=S+GliZK8h3UP3UmRnHLXJ4WzewhA4AfIY59IphPgH8DRjJDlPnAMOq3iWVENoVLqQghU3ad2Dmy3e63XPK1sNsTGOe8y2XKZPs8t2K0xv6z0YHxpqbvxvyJv6W6V6lx6wwl10Sr6khETi+pigWXTMPyXmGzJT0VwLtKZc52xJdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FuXk1oHa; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LuAd+8nT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FuXk1oHa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739085795; x=1770621795;
+  t=1739091382; x=1770627382;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5GqIc+1kCxkhd7PHGBP5vf6u6aXir0IC/lpMivcNzjE=;
-  b=LuAd+8nT4QQa8QhP8aShnASIZiap74VFRxoGmPpUIg4rLw3VsvMiwp1z
-   oKiTJz7y6gMo0IDFpZItQ1BbbuQjdcdOm7zIVPJtbY6j+vgKw4YkP/AE9
-   JpxMIqkM4+XA1v27jHHGNXE0Q9A0EVKKgC5MGlhz+h9cE7mj4dDRd8ybv
-   /Y7R2wbF+RIeOi1tsZZSLzGZYfGfdunhRfQTMPl9bs3NpNmE38zny3jUA
-   5i3sZOkzhm+52a6R2kktjmMWP3Uf2xqwcVLYzzoKzYUGxj6twr5/5Nr5a
-   1tXhcH7Xp0aEt4T793eu7Hd5kd5U/IJUOSKhUtIogW/5zlOlpGp4N4Vvn
+  bh=sVHpJ+0fKTU9C02dksHnxm9yM5GvjtKn9AUd9XsmOC4=;
+  b=FuXk1oHa+u/AbB5H3tcvzNISuKiTegW4YcN2TI9XfWzNsBLxJSTmRklz
+   tS0GIz15xJEnpo69ZdTVVV0YD6EroSFXI1c8P6nXZm//yUf7+HnMp/jWR
+   VqamhbAN9LbzWq0JoLQjsH6wxvaA5JmP4HPlpfM6Ru58Hi+8zyAPTNTa4
+   MStVCn/HBeiA6v5OuKiSNqecmNo1cufieWzUApqeHZzVMyGHoUsS4obh5
+   VqQTWxbi/MKCPPuNJLcE+ZVQ7seqVwFhfcCobLRYb6qwJUYF2aT3S94EL
+   swncr0K6OYEE8OVgrebfIMrWARDOs4xqf6W4X38lfsBQIzEhNGF0UMeMu
    g==;
-X-CSE-ConnectionGUID: WnqYMvnQQIWlGvWWYrjf7A==
-X-CSE-MsgGUID: 4swB4KgcTF+nZb00omhKsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="43345762"
-X-IronPort-AV: E=Sophos;i="6.13,271,1732608000"; 
-   d="scan'208";a="43345762"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 23:23:14 -0800
-X-CSE-ConnectionGUID: mkRfQn5lRKSOaj/45geYcw==
-X-CSE-MsgGUID: qhG2bFFvT8CbNdrGgGMsnw==
+X-CSE-ConnectionGUID: z0RKP7+uR+6ZgnsB6L7sng==
+X-CSE-MsgGUID: rHzqd4AxRauRngRn0ht8uA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="43451056"
+X-IronPort-AV: E=Sophos;i="6.13,272,1732608000"; 
+   d="scan'208";a="43451056"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2025 00:56:22 -0800
+X-CSE-ConnectionGUID: Fv3V/s/iQ9++GkyvdHVK5w==
+X-CSE-MsgGUID: VJBWZ+EXRxKcD4ZlGDT3OA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117104206"
+X-IronPort-AV: E=Sophos;i="6.13,272,1732608000"; 
+   d="scan'208";a="116920341"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Feb 2025 23:23:13 -0800
+  by orviesa004.jf.intel.com with ESMTP; 09 Feb 2025 00:56:20 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1th1en-0011Cn-3D;
-	Sun, 09 Feb 2025 07:23:09 +0000
-Date: Sun, 9 Feb 2025 15:22:24 +0800
+	id 1th36v-0011Gx-1x;
+	Sun, 09 Feb 2025 08:56:17 +0000
+Date: Sun, 9 Feb 2025 16:55:26 +0800
 From: kernel test robot <lkp@intel.com>
 To: Sunil V L <sunilvl@ventanamicro.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Anup Patel <anup@brainfault.org>
-Subject: [avpatel:riscv_unaligned_test_skip_v1 28/77]
- drivers/mailbox/riscv-sbi-mpxy-mbox.c:1005:36: warning: unused variable
- 'mpxy_mbox_acpi_match'
-Message-ID: <202502091536.UuAYP9pL-lkp@intel.com>
+Subject: [avpatel:riscv_unaligned_test_skip_v1 29/77]
+ drivers/irqchip/irq-riscv-rpmi-sysmsi.c:295:36: warning: unused variable
+ 'acpi_rpmi_sysmsi_match'
+Message-ID: <202502091617.AqDyIhLZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,20 +66,23 @@ Content-Disposition: inline
 
 tree:   https://github.com/avpatel/linux.git riscv_unaligned_test_skip_v1
 head:   aa50b53026d20b9d37c6d17a3cf2f42e65a2a636
-commit: 13851aef320d7e43e85b08933a00593dd1322653 [28/77] mailbox/riscv-sbi-mpxy: Add ACPI support
-config: riscv-randconfig-001-20250209 (https://download.01.org/0day-ci/archive/20250209/202502091536.UuAYP9pL-lkp@intel.com/config)
+commit: c2fda1370f05b732e7717a9f9181498303a58b7d [29/77] irqchip/riscv-rpmi-sysmsi: Add ACPI support
+config: riscv-randconfig-001-20250209 (https://download.01.org/0day-ci/archive/20250209/202502091617.AqDyIhLZ-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502091536.UuAYP9pL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502091617.AqDyIhLZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502091536.UuAYP9pL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502091617.AqDyIhLZ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -89,8 +92,11 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
      104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
          |                                          ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -100,8 +106,11 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
      105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
          |                                          ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -111,8 +120,11 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
      106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
          |                                          ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -122,8 +134,11 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
      118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
          |                                            ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -133,8 +148,11 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
      119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
          |                                            ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
@@ -144,29 +162,32 @@ All warnings (new ones prefixed by >>):
    arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
      120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
          |                                            ~~~~~~~~~~ ^
-   In file included from drivers/mailbox/riscv-sbi-mpxy-mbox.c:20:
-   In file included from include/linux/msi.h:24:
+   In file included from drivers/irqchip/irq-riscv-rpmi-sysmsi.c:10:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
    In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/riscv/include/asm/io.h:136:
    include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
     1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
          |                                                   ~~~~~~~~~~ ^
->> drivers/mailbox/riscv-sbi-mpxy-mbox.c:1005:36: warning: unused variable 'mpxy_mbox_acpi_match' [-Wunused-const-variable]
-    1005 | static const struct acpi_device_id mpxy_mbox_acpi_match[] = {
-         |                                    ^~~~~~~~~~~~~~~~~~~~
+>> drivers/irqchip/irq-riscv-rpmi-sysmsi.c:295:36: warning: unused variable 'acpi_rpmi_sysmsi_match' [-Wunused-const-variable]
+     295 | static const struct acpi_device_id acpi_rpmi_sysmsi_match[] = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~
    8 warnings generated.
 
 
-vim +/mpxy_mbox_acpi_match +1005 drivers/mailbox/riscv-sbi-mpxy-mbox.c
+vim +/acpi_rpmi_sysmsi_match +295 drivers/irqchip/irq-riscv-rpmi-sysmsi.c
 
-  1004	
-> 1005	static const struct acpi_device_id mpxy_mbox_acpi_match[] = {
-  1006		{ "RSCV0005" },
-  1007		{}
-  1008	};
-  1009	MODULE_DEVICE_TABLE(acpi, mpxy_mbox_acpi_match);
-  1010	
+   294	
+ > 295	static const struct acpi_device_id acpi_rpmi_sysmsi_match[] = {
+   296		{ "RSCV0006" },
+   297		{}
+   298	};
+   299	MODULE_DEVICE_TABLE(acpi, acpi_rpmi_sysmsi_match);
+   300	
 
 -- 
 0-DAY CI Kernel Test Service
