@@ -1,70 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5FE314B965;
-	Sun,  9 Feb 2025 10:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847C118A959;
+	Sun,  9 Feb 2025 10:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739096255; cv=none; b=TkaEHiVJDlgbocfryXDSp2GNc8eCAFtlwX9qbAD3kLuGauv/efzqNGfLYmQ/Ptw/3o7LV2FJvhuHXNq0LdeSkmUkzmExZvy6AKkvLPIECrLf9Hq1Hyiad2If5cepzgySSoHxL2HTL2ZAyPVC84hrFXBGMEkHYJrf8Ke7OLCoCZU=
+	t=1739096515; cv=none; b=o+rML6kvNpcWEX7fEBXOpAKDXHaCTHPAeLg4MPypJieDs8JYSh5oR8JTWyJIZ/y6DFKVOlk9rA9PrzTzymfU4D0j6tbPAQ1AAja1TbAKQs9xlXbX/mxhxrWnOkzo+AzgF49lFqy1CCcVmbfN4K31dAabs4gTCKhqtiMEDzHJ2lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739096255; c=relaxed/simple;
-	bh=Ec5owhxuVyqV6l/NuwWt6tySFHCPrsPZ2HH6kFOtAcQ=;
+	s=arc-20240116; t=1739096515; c=relaxed/simple;
+	bh=HFODCAK5J3CmMA8T4m3nmSUMLuYP2U76HwsFYdoujtY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ij415yqmBXLs+ArjTXi103jUNGV1zDtjQHQzMh6yYTCUxPVfGV2el+gK4vMlyoxC6rym/XLkM2qIamUGyHRzer2Rrrii4KGiDbV/s8Fbar2jwCR4ktIGv3Xmbx7qeI9DYXnTvDsDoUAh2VbTrakvx2BbscUxjgUmxmWdfQhMkJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ds5LFIYF; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kx0zXIevL8dfrKI6Hx2+UG87GFXEa5ScufyzCt5XGjqJl7rDpW60Ml438Si9Q2USD+AdDUwQ2EKg5kWnGimZRHfwMT9MWPel2/6UJCjO4uhuPSBVMKoaku/ILCN74atkeBowDrf4h5HEpNrsMxGiLi1wXmqq5ufm92/GqnlTxVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=qOfGhcn0; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ds5LFIYF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739096253; x=1770632253;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ec5owhxuVyqV6l/NuwWt6tySFHCPrsPZ2HH6kFOtAcQ=;
-  b=Ds5LFIYFNa2x8j81YAyh4jCFficUq2EFpFSArcYJ5o3Sur4N/CsqlOOk
-   /pG/PEti8+lTdKPzMGoTfhKA9O1nTGR5ArkWATQsMAtOrG7ZqWHx4qlDw
-   W6zRL/iBF3xmZphgzeTuAVps/P9FX65/wS52I/sTw/TU4w5pfKGPe6m15
-   9+iS7/WOMfdp/51LEPLMCYvCFYPtoUXm8NvJOqodhdVNfxvT5Ey1NmZsY
-   QofOA37DKh/bcLdzvCSinjFLkDgiFMqoGWIzgNtNsTsHvxRu7WBghqMGB
-   QuR8/hz8lWculCpaKJoJzkrq8WUlpmkzqYJ2/FZASSUu1e2OwN4I1AJMq
-   A==;
-X-CSE-ConnectionGUID: /arM9Y/9Re6nAVTDNpSfmQ==
-X-CSE-MsgGUID: lCtDB1EQSOGpEuRBQtGb2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="42531860"
-X-IronPort-AV: E=Sophos;i="6.13,272,1732608000"; 
-   d="scan'208";a="42531860"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2025 02:17:33 -0800
-X-CSE-ConnectionGUID: tAlE1hgASmaH/sPwSXJjeA==
-X-CSE-MsgGUID: kZk4YyznQK2YAC5F+sIwUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,272,1732608000"; 
-   d="scan'208";a="112557968"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 09 Feb 2025 02:17:29 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1th4NS-0011KR-2i;
-	Sun, 09 Feb 2025 10:17:26 +0000
-Date: Sun, 9 Feb 2025 18:17:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, horms@kernel.org,
-	kuba@kernel.org, Joe Damato <jdamato@fastly.com>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	David Wei <dw@davidwei.uk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v5 2/3] netdev-genl: Add an XSK attribute to
- queues
-Message-ID: <202502091844.PyraqTPE-lkp@intel.com>
-References: <20250208041248.111118-3-jdamato@fastly.com>
+	dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="qOfGhcn0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=KJuTJH/ACV/uO7e4LopHlJMSumdRQXrjCU1mNibRGz0=; b=qOfGhcn0jnZ1fbhZ776AGCNQqu
+	X9pR0LPZi9wVXCfV7wsCHZuDpgZSC/BaM1ssor2Ifpbf0L/LBQo1b3yLhp6TrK+o5amYvBHcPkmSw
+	9XTcuOaVip+qLhVXEDCZZudYwe2MbbqqlKRUiBWR56IuAiVBCA3ZoLh99IZ0GAyIMhlzoqEbWzurp
+	bDVRQaUqUFq5urs9uwf/N9RAVQJ2zxE/vcU01DYXURufwdH6FSI0qU4yW1L+z4wulrkKAprnHkIJn
+	M274ZUvy3+NML78AZ2UOG63ov38coP38xeyee7GUhKljkhDP5p2vy6BIp9joffgAGY/uVh7gXpMxO
+	NHVr0S6g==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1th4EU-00GIje-1C;
+	Sun, 09 Feb 2025 18:21:32 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 09 Feb 2025 18:21:31 +0800
+Date: Sun, 9 Feb 2025 18:21:31 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, upstream@airoha.com
+Subject: Re: [PATCH v11 0/3] crypto: Add EIP-93 crypto engine support
+Message-ID: <Z6iBq9kwMIie2AbL@gondor.apana.org.au>
+References: <20250114123935.18346-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,121 +60,119 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250208041248.111118-3-jdamato@fastly.com>
+In-Reply-To: <20250114123935.18346-1-ansuelsmth@gmail.com>
 
-Hi Joe,
+On Tue, Jan 14, 2025 at 01:36:33PM +0100, Christian Marangi wrote:
+> This small series add support for the Inside Secure EIP-93.
+> This is a predecessor of the current supported EIP197. It doesn't
+> require a firmware but instead it's embedded in the SoC.
+> 
+> First patch extend guard for spinlock_bh.
+> 
+> The other actually implement Documentation and Driver.
+> 
+> The Driver pass all the normal selft test for the supported
+> algo and also pass the EXTRA test with fuzz_iterations set to 10000.
+> 
+> Changes v11:
+> - Drop any mtk variable reference and use eip93 instead
+> - Mute smatch warning for context unbalance by using scoped_guard instead
+>   of guard cleanup API
+> Changes v10:
+> - Use CRYPTO_ALG_ASYNC for eip93_hmac_setkey
+> Changes v9:
+> - Rework hash code to alloc DMA only when needed
+> - Rework hash code to only alloc needed blocks and use
+>   local struct in req for everything else
+> - Rework hash code to use GFP_ATOMIC
+> - Simplify hash update function
+> - Generalize hmac key set function
+> Changes v8:
+> - Rework export and update to not sleep on exporting state
+>   (consume pending packet in update and return -EINPROGRESS)
+> Changes v7:
+> - Fix copypaste error in __eip93_hash_init
+> - Rework import/export to actually export the partial hash
+>   (we actually unmap DMA on export)
+> - Rename no_finalize variable to better partial_hash
+> - Rename 3rd commit title and drop Mediatek from title.
+> - Add Cover Letter
+> - Add Reviewed-by to DT commit
+> (cumulative changes from old series that had changelog in each patch)
+> Changes v6:
+> - Add SoC specific compatible
+> - Add now supported entry for compatible with no user
+> Changes v5:
+> - Add Ack tag to guard patch
+> - Comment out compatible with no current user
+> - Fix smatch warning (reported by Dan Carpenter)
+> Changes v4:
+> - Out of RFC
+> - Add missing bitfield.h
+> - Drop useless header
+> Changes v3:
+> - Mute warning from Clang about C23
+> - Fix not inizialized err
+> - Drop unused variable
+> - Add SoC compatible with generic one
+> Changes v2:
+> - Rename all variables from mtk to eip93
+> - Move to inside-secure directory
+> - Check DMA map errors
+> - Use guard API for spinlock
+> - Minor improvements to code
+> - Add guard patch
+> - Change to better compatible
+> - Add description for EIP93 models
+> 
+> Christian Marangi (3):
+>   spinlock: extend guard with spinlock_bh variants
+>   dt-bindings: crypto: Add Inside Secure SafeXcel EIP-93 crypto engine
+>   crypto: Add Inside Secure SafeXcel EIP-93 crypto engine support
+> 
+>  .../crypto/inside-secure,safexcel-eip93.yaml  |  67 ++
+>  MAINTAINERS                                   |   7 +
+>  drivers/crypto/Kconfig                        |   1 +
+>  drivers/crypto/Makefile                       |   1 +
+>  drivers/crypto/inside-secure/eip93/Kconfig    |  20 +
+>  drivers/crypto/inside-secure/eip93/Makefile   |   5 +
+>  .../crypto/inside-secure/eip93/eip93-aead.c   | 711 ++++++++++++++
+>  .../crypto/inside-secure/eip93/eip93-aead.h   |  38 +
+>  .../crypto/inside-secure/eip93/eip93-aes.h    |  16 +
+>  .../crypto/inside-secure/eip93/eip93-cipher.c | 413 +++++++++
+>  .../crypto/inside-secure/eip93/eip93-cipher.h |  60 ++
+>  .../crypto/inside-secure/eip93/eip93-common.c | 809 ++++++++++++++++
+>  .../crypto/inside-secure/eip93/eip93-common.h |  24 +
+>  .../crypto/inside-secure/eip93/eip93-des.h    |  16 +
+>  .../crypto/inside-secure/eip93/eip93-hash.c   | 866 ++++++++++++++++++
+>  .../crypto/inside-secure/eip93/eip93-hash.h   |  82 ++
+>  .../crypto/inside-secure/eip93/eip93-main.c   | 501 ++++++++++
+>  .../crypto/inside-secure/eip93/eip93-main.h   | 151 +++
+>  .../crypto/inside-secure/eip93/eip93-regs.h   | 335 +++++++
+>  include/linux/spinlock.h                      |  13 +
+>  20 files changed, 4136 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+>  create mode 100644 drivers/crypto/inside-secure/eip93/Kconfig
+>  create mode 100644 drivers/crypto/inside-secure/eip93/Makefile
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.c
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aead.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-aes.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.c
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-cipher.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.c
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-common.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-des.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.c
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-hash.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.c
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-main.h
+>  create mode 100644 drivers/crypto/inside-secure/eip93/eip93-regs.h
+> 
+> -- 
+> 2.45.2
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 233a2b1480a0bdf6b40d4debf58a07084e9921ff]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Joe-Damato/netlink-Add-nla_put_empty_nest-helper/20250208-121856
-base:   233a2b1480a0bdf6b40d4debf58a07084e9921ff
-patch link:    https://lore.kernel.org/r/20250208041248.111118-3-jdamato%40fastly.com
-patch subject: [PATCH net-next v5 2/3] netdev-genl: Add an XSK attribute to queues
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250209/202502091844.PyraqTPE-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250209/202502091844.PyraqTPE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502091844.PyraqTPE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from net/core/netdev-genl.c:3:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> net/core/netdev-genl.c:404:12: error: no member named 'pool' in 'struct netdev_rx_queue'
-     404 |                 if (rxq->pool)
-         |                     ~~~  ^
->> net/core/netdev-genl.c:414:12: error: no member named 'pool' in 'struct netdev_queue'
-     414 |                 if (txq->pool)
-         |                     ~~~  ^
-   3 warnings and 2 errors generated.
-
-
-vim +404 net/core/netdev-genl.c
-
-   374	
-   375	static int
-   376	netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
-   377				 u32 q_idx, u32 q_type, const struct genl_info *info)
-   378	{
-   379		struct pp_memory_provider_params *params;
-   380		struct netdev_rx_queue *rxq;
-   381		struct netdev_queue *txq;
-   382		void *hdr;
-   383	
-   384		hdr = genlmsg_iput(rsp, info);
-   385		if (!hdr)
-   386			return -EMSGSIZE;
-   387	
-   388		if (nla_put_u32(rsp, NETDEV_A_QUEUE_ID, q_idx) ||
-   389		    nla_put_u32(rsp, NETDEV_A_QUEUE_TYPE, q_type) ||
-   390		    nla_put_u32(rsp, NETDEV_A_QUEUE_IFINDEX, netdev->ifindex))
-   391			goto nla_put_failure;
-   392	
-   393		switch (q_type) {
-   394		case NETDEV_QUEUE_TYPE_RX:
-   395			rxq = __netif_get_rx_queue(netdev, q_idx);
-   396			if (nla_put_napi_id(rsp, rxq->napi))
-   397				goto nla_put_failure;
-   398	
-   399			params = &rxq->mp_params;
-   400			if (params->mp_ops &&
-   401			    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
-   402				goto nla_put_failure;
-   403	
- > 404			if (rxq->pool)
-   405				if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
-   406					goto nla_put_failure;
-   407	
-   408			break;
-   409		case NETDEV_QUEUE_TYPE_TX:
-   410			txq = netdev_get_tx_queue(netdev, q_idx);
-   411			if (nla_put_napi_id(rsp, txq->napi))
-   412				goto nla_put_failure;
-   413	
- > 414			if (txq->pool)
-   415				if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
-   416					goto nla_put_failure;
-   417	
-   418			break;
-   419		}
-   420	
-   421		genlmsg_end(rsp, hdr);
-   422	
-   423		return 0;
-   424	
-   425	nla_put_failure:
-   426		genlmsg_cancel(rsp, hdr);
-   427		return -EMSGSIZE;
-   428	}
-   429	
-
+All applied.  Thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
