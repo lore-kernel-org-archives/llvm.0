@@ -1,135 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF0B1C07D9
-	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 08:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263BC14A639;
+	Mon, 10 Feb 2025 09:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739176155; cv=none; b=nN6OV76z3x+C0o43jNBLBFkzD5tDJWeiAO9YDgGmBcGjyi4OCGB/MR5EgZy8Pn8JItdaU+kUSw9ZL5k31aHxhueGrgEeSSJ1vjwDL62z2f/VCHF9Q9NFAaaJI338+rgNbuKFvu+OyAl9/MxkiVoK+3JehdwEpa3M3Zz9diJLpYY=
+	t=1739179293; cv=none; b=pZKz/7oemqwCtw8POGmM5wuoweGqTyuf39ysXmiEAdvw8YGXjMsjfYGSm/hO0Md3hH0TLXwY2z+lXxHi3hLc0jBQXDLABZZQpJQAKparLe30WSl3L0rmCauBEivAxB+Mx3WsAbPwgrLKJ8pQyR2iRIGsaTj6a4MjUSbNWTCNAtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739176155; c=relaxed/simple;
-	bh=Q+C47iHABvz7FDBn1KsCFupIPvArzEJWHSb5t8fFFN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rVillGsQFVIg2+PQtfeAs3MDsPTTKk2qmb3GeVU/KEcHqscyMQrKZBeONaxc/1zBLSPZnUMURRRQXPMPko/IUVbul064BKSKd4bsIARtIrs64bNbfoRxbZ6hWzrUMjwxwL/2HwP/bGXfDL2NOqnbdHBLMX5Ul9hZf4RwzbrYQTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OHDdi1HK; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1739179293; c=relaxed/simple;
+	bh=vBG2TnCFp07FXDNxi+pNodmf7UR3oHXHYl3Z5N+P8q4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HtGK6UWnsq+zXBIPUYCVfuUwF5Yz3KHWXRuDnqe6B3uQOCkya7FblQ84+i69s4ONHMxDw1neLqSdPaTFHDTp0igEVzDJXw4S2SNu1+WGpeC/Ym+1QgNduFXNGDfo4zMt2eeFR2btD/bmDndyFDb9vVhJKOLAZkg2mhmJgFAVy7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8pLXoFa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OHDdi1HK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739176153; x=1770712153;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Q+C47iHABvz7FDBn1KsCFupIPvArzEJWHSb5t8fFFN8=;
-  b=OHDdi1HKWe0n6V+ZosBTBnnpLlc7ur7pn3C4XBlZ3k7QDeAXDdge3aRF
-   /D8osjiIpeaRIiVoroN1kY3V1RQIWhB+LfpCmCwvNjecTs+8YCmSkbpXR
-   Z3ufEuWgVuFEBbl8FZhRksMPwePpYptGd+5L8a7T561AZzQMZURWvc70G
-   DHtpT1FLk0VDVAan1lKOxfRuQi8y4WE/QAhDAaQSoGsRfbRtPgxkoE3iJ
-   tMFOluog/yv4d5Jow132Bw48/DZeG1SfS3UMqDNsKYsc0CZodZ5/v2RHg
-   WX1bvztNjvSawUfgu0+GsDjD8U6CgM8sZWU/D1XGeEbjiX1cBIeKlLYqx
-   Q==;
-X-CSE-ConnectionGUID: x+jr2YxyT6OEIF/e6DcMGQ==
-X-CSE-MsgGUID: G9EH4Ia/RiyZ9Bv7yCbXTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="39874093"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="39874093"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 00:29:13 -0800
-X-CSE-ConnectionGUID: cHHSoSbeTWifkxjRJthI9g==
-X-CSE-MsgGUID: c1WxhSUYQiSu+Kb5EFyzSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="112071288"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa006.jf.intel.com with ESMTP; 10 Feb 2025 00:29:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C86F010F; Mon, 10 Feb 2025 10:29:08 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [rfc, PATCH v1 1/1] hrtimers: Refactor hrtimer_clock_to_base_table initialisation
-Date: Mon, 10 Feb 2025 10:26:02 +0200
-Message-ID: <20250210082907.4059064-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.45.1.3035.g276e886db78b
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8pLXoFa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 890AAC4CED1;
+	Mon, 10 Feb 2025 09:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739179292;
+	bh=vBG2TnCFp07FXDNxi+pNodmf7UR3oHXHYl3Z5N+P8q4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=S8pLXoFaEcX/xnssNk5tIf4vioqZJx+XLNBGcu5HVwDsLTG+4+lf83MbnLNUvJwDl
+	 2H6+7girgSa3KVdfRS+756qt4748hnYytjRlGV7H2R8Gj3sK0iL9V7gz82H4nkZz9K
+	 GZeQXGT5qbM0ZQRZXH0n0hMViLhv+Z1FBBbilNjEQIdq1dOrF30IPjZQCiSCQ0D4ym
+	 C2NO3Yksq0sGYNb+zS4g0ZSZqBkV/6W21GFmg70/DyqJKvbxenpIYg4Qansb0fbGTW
+	 n3tQ+IrSVyQDsHmYzK+DkqqoWp54MBII1nR9Fg3RlL0Xs67mx6n3vP1v0apysJ6ykF
+	 Fqb2dlHUVDFgA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1thPyr-002TTI-Qu;
+	Mon, 10 Feb 2025 09:21:30 +0000
+Date: Mon, 10 Feb 2025 09:21:29 +0000
+Message-ID: <868qqetasm.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To:  Quentin Perret <qperret@google.com>, kernel test robot <lkp@intel.com>
+Cc:	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.cs.columbia.edu,
+	Oliver Upton <oliver.upton@linux.dev>
+Subject: Re: [kvmarm:fixes 18/18] arch/arm64/kvm/hyp/nvhe/mem_protect.c:1086:9: warning: variable 'ret' is uninitialized when used here
+In-Reply-To: <202502100911.8c9DbtKD-lkp@intel.com>
+References: <202502100911.8c9DbtKD-lkp@intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: qperret@google.com, lkp@intel.com, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, oliver.upton@linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Clang complains about overlapped initialisers in the
-hrtimer_clock_to_base_table definition. With `make W=1` and
-CONFIG_WERROR=y (which is default nowadays) this breaks
-the build:
+On Mon, 10 Feb 2025 01:39:04 +0000,
+kernel test robot <lkp@intel.com> wrote:
+>=20
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git=
+ fixes
+> head:   eabc7aaef7a553b64bf6e631ce04526af6c8d104
+> commit: eabc7aaef7a553b64bf6e631ce04526af6c8d104 [18/18] KVM: arm64: Simp=
+lify np-guest hypercalls
+> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250=
+210/202502100911.8c9DbtKD-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b=
+5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250210/202502100911.8c9DbtKD-lkp@intel.com/reproduce)
+>=20
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502100911.8c9DbtKD-lkp=
+@intel.com/
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+> >> arch/arm64/kvm/hyp/nvhe/mem_protect.c:1086:9: warning: variable 'ret' =
+is uninitialized when used here [-Wuninitialized]
+>     1086 |         return ret;
+>          |                ^~~
+>    arch/arm64/kvm/hyp/nvhe/mem_protect.c:1076:9: note: initialize the var=
+iable 'ret' to silence this warning
+>     1076 |         int ret;
+>          |                ^
+>          |                 =3D 0
+>    1 warning generated.
 
-  CC      kernel/time/hrtimer.o
-kernel/time/hrtimer.c:124:21: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
-  124 |         [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
+Nice catch. I wish the compiler would warn for these by default...
 
-kernel/time/hrtimer.c:122:27: note: previous initialization is here
-  122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
+Quentin, are you happy with the following patch that I can stash on
+top of the current set of fixes?
 
-(and similar for CLOCK_MONOTONIC, CLOCK_BOOTTIME, and CLOCK_TAI).
+	M.
 
-Refactor hrtimer_clock_to_base_table initialisation to make
-the compiler happy.
+=46rom 5da62486aeda7d7d11107db8ed4e6421e3a2a364 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Mon, 10 Feb 2025 09:17:58 +0000
+Subject: [PATCH] KVM: arm64: Fix __pkvm_host_mkyoung_guest() return value
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Don't use an uninitialised stack variable, and just return 0
+on the non-error path.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202502100911.8c9DbtKD-lkp@int=
+el.com/
+Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-TBH, I don't like much this solution as it diminishes the point of that
-override to be there in the first place. I haven't found better alternatives
-as they may be too intrusive. Another one might be to remove this table,
-but in such case the replacement might add latency to some cases (although
-I haven't checked the generated code for, for example, switch-case approach).
-In any case this is an rfc, I would be glad if somebody fixes this in a better
-way.
+diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvh=
+e/mem_protect.c
+index 4c2f6a6a2efe1..19c3c631708ce 100644
+--- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
++++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+@@ -1073,7 +1073,6 @@ int __pkvm_host_mkyoung_guest(u64 gfn, struct pkvm_hy=
+p_vcpu *vcpu)
+ {
+ 	struct pkvm_hyp_vm *vm =3D pkvm_hyp_vcpu_to_hyp_vm(vcpu);
+ 	u64 ipa =3D hyp_pfn_to_phys(gfn);
+-	int ret;
+=20
+ 	if (pkvm_hyp_vm_is_protected(vm))
+ 		return -EPERM;
+@@ -1083,5 +1082,5 @@ int __pkvm_host_mkyoung_guest(u64 gfn, struct pkvm_hy=
+p_vcpu *vcpu)
+ 	kvm_pgtable_stage2_mkyoung(&vm->pgt, ipa, 0);
+ 	guest_unlock_component(vm);
+=20
+-	return ret;
++	return 0;
+ }
+--=20
+2.39.2
 
- kernel/time/hrtimer.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index deb1aa32814e..8ec6ff36b9ad 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -118,13 +118,21 @@ DEFINE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases) =
- };
- 
- static const int hrtimer_clock_to_base_table[MAX_CLOCKS] = {
--	/* Make sure we catch unsupported clockids */
--	[0 ... MAX_CLOCKS - 1]	= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_REALTIME]			= HRTIMER_BASE_REALTIME,
-+	[CLOCK_MONOTONIC]			= HRTIMER_BASE_MONOTONIC,
-+	[CLOCK_PROCESS_CPUTIME_ID]		= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_THREAD_CPUTIME_ID]		= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_MONOTONIC_RAW]			= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_REALTIME_COARSE]			= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_MONOTONIC_COARSE]		= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_BOOTTIME]			= HRTIMER_BASE_BOOTTIME,
-+	[CLOCK_REALTIME_ALARM]			= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_BOOTTIME_ALARM]			= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_SGI_CYCLE]			= HRTIMER_MAX_CLOCK_BASES,
-+	[CLOCK_TAI]				= HRTIMER_BASE_TAI,
- 
--	[CLOCK_REALTIME]	= HRTIMER_BASE_REALTIME,
--	[CLOCK_MONOTONIC]	= HRTIMER_BASE_MONOTONIC,
--	[CLOCK_BOOTTIME]	= HRTIMER_BASE_BOOTTIME,
--	[CLOCK_TAI]		= HRTIMER_BASE_TAI,
-+	/* Make sure we catch unsupported clockids */
-+	[CLOCK_TAI + 1 ... MAX_CLOCKS - 1]	= HRTIMER_MAX_CLOCK_BASES,
- };
- 
- static inline bool hrtimer_base_is_online(struct hrtimer_cpu_base *base)
--- 
-2.45.1.3035.g276e886db78b
-
+--=20
+Without deviation from the norm, progress is not possible.
