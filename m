@@ -1,68 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 008.lax.mailroute.net (008.lax.mailroute.net [199.89.1.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEFE25B668
-	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 18:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3A625E456
+	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 18:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739212386; cv=none; b=ffj+0IpQHxaMCVTveA3xr+l/ZFyblkpUUTp82sF5PD8bqAh2IorRti4hYh9Eg4Yx30sosZzmF1umwUJfNWmJJcdtoqG2Y38sCFy82f6z+tONPD02zuYeeO+zxgMpBdlZXLmWGaPzNCc2G7owqQBU/vnDiEnXj+u7/Hu7qnBu0Pc=
+	t=1739213651; cv=none; b=Co4tBqMR0NfxBACCKsq57kO6/dFArRDU5DX+yR978ezSXKRiSbLFb0z+05cUXVyg8Mdcs8y+e4fu29yRHi+Lta8R7LkoGPMmOCsVxZx1fFBzkpF/lPLuI+rh94cJE2uemDH3nINzrGXLAyeXUqDBuD2Mc58Z/Ycfapbi0sOnh64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739212386; c=relaxed/simple;
-	bh=HWtRt2BbPxkx6dYsnwANWY0bVemXsHeP7E6++7kc5R0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HsEmziSePqFmfb0h4M3gpJJIdXTnPl+6f12wAdMee060Veckubq8prV8HKxqI0e6WMD2VQe+ozvjILAXq+Ajcqm+OJ8+3tGEjCcMP1LQBb5wzVrJmVsGn+Mvbo1Sts3Vv9TwzSA34mzwi2J1vuTvs/dApkB5j1h5UmCwYoR6knY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfS3ykvq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739213651; c=relaxed/simple;
+	bh=lJHeH8odNzMc5QUg2xelDHy7ljydmPauDEjgewx7TQQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lPc3Do0fL6l8If1PMmZP5tX374sDhT4Cq434rZGvyp9Tys1734Vyk4Wio3OMXKz12eW2RvK7lqM99Di8GyMVP1q5cvfn1o8tXTChERCmO6qd3dCJ1srRh9UY5X+4nmkWQWOyaN7Qazr+C9DYJpoNaejzDlCRkGpgn56jbp6CDKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=3K5ArPU6; arc=none smtp.client-ip=199.89.1.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfS3ykvq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB44AC4CED1;
-	Mon, 10 Feb 2025 18:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739212385;
-	bh=HWtRt2BbPxkx6dYsnwANWY0bVemXsHeP7E6++7kc5R0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mfS3ykvqcHf8y4ZZzZLfFsdzkX7nz/a6Oirsx/6PNPLg+wZMoFVXUftSKFX20gCtZ
-	 /KdQNGF40uZHRN9Kb5Tdqrclhl/PryQ3pOBaGUC/tRTaivm3Qp99oILPUbeaUIk1jS
-	 UC+lMLrFIn9BHGyhN45kX0IlOafdAUkIa96hRKB6+jFffEb7kZGSFEzIUGQT8maDlV
-	 JjwPteKHXI46K3Q63ZPA9wCIuyblJdCLFbi5+6z3y4Ryuzew4Ix1AZN1x11fZ6heCs
-	 6b/cw/5/AkFwsokbHIBJnYRWS1zR+5hO0dc837QOcAyxNucq3hsLlR6BjM55+LBKGD
-	 YM23UWjLcN5SA==
-Date: Mon, 10 Feb 2025 10:33:03 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Bart Van Assche <bvanassche@acm.org>,
- linux-mm@kvack.org, Ivan Shapovalov <intelfx@intelfx.name>, Vlastimil Babka
- <vbabka@suse.cz>, David Laight <david.laight@aculab.com>, Pasha Tatashin
- <pasha.tatashin@soleen.com>, David Rientjes <rientjes@google.com>, David
- Hildenbrand <david@redhat.com>, Kaiyang Zhao <kaiyang2@cs.cmu.edu>, Joel
- Granados <joel.granados@kernel.org>, Sourav Panda <souravpanda@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH] mm: Fix clang W=1 compiler warnings
-Message-ID: <20250210103303.6ab646d0@kernel.org>
-In-Reply-To: <CAHk-=wiSuP=s4vzdT3TLjDfcj4XJDDvOO1bDj2Zd2EJNc6o=KQ@mail.gmail.com>
-References: <20250131191231.1370466-1-bvanassche@acm.org>
-	<20250207164926.6daeac77@kernel.org>
-	<CAHk-=wiCJow8C+_fJvZ77taCf0oN0_X7NOR-BaECT2jV0Q-F9g@mail.gmail.com>
-	<20250207173813.5081ba76@kernel.org>
-	<CAHk-=wjMux0w49bTdSbC3DOoc9FRctDrRvaqFUS4KFTmkbtKWg@mail.gmail.com>
-	<20250208033351.GB3305705@ax162>
-	<CAHk-=whe1UZUGKbtaaRV7CfS=sGtB2ouYAriryZ6bscE+5AFhA@mail.gmail.com>
-	<CAHk-=wiSuP=s4vzdT3TLjDfcj4XJDDvOO1bDj2Zd2EJNc6o=KQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="3K5ArPU6"
+Received: from localhost (localhost [127.0.0.1])
+	by 008.lax.mailroute.net (Postfix) with ESMTP id 4YsDJK2K8fz6ClGym;
+	Mon, 10 Feb 2025 18:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1739213632; x=1741805633; bh=lb5MvhpLjR41b3jztycQhMa7
+	6fKACTOTpukAQOD291M=; b=3K5ArPU6dDNNRL2Vq2M9akFR9G2JqA0Oo/cTNdAr
+	yQ/vA189YFxHth4ETLBCbwcr3SE98mlT4UTKWylTaRvp7v3DJkf4wXJMEEEHgWQd
+	zVv837zB4W4x6QFIsSeGKfbJW81oN5Mwy24wMBVR//4dya6CM/YLP8i5gqGpCT9V
+	3zanmo+jPITMKHjlUH38wkIm5Dqp5qg0Y8gAIP8BSpci8qXMM6ulkaDkO3KKLqfV
+	1K9LMy+HTHS0ASAiaRYDCPUy3HxENuji6rnHjQzPqq8wtsedXxPsOlFC9HmoKnVn
+	uTU2r5dqSqz0s+i8zUfFDOtEYZs78KqKmXW/2ziCJgRwDA==
+X-Virus-Scanned: by MailRoute
+Received: from 008.lax.mailroute.net ([127.0.0.1])
+ by localhost (008.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id UXKEr8zbt9QF; Mon, 10 Feb 2025 18:53:52 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 008.lax.mailroute.net (Postfix) with ESMTPSA id 4YsDHs5q4tz6Cnk8y;
+	Mon, 10 Feb 2025 18:53:45 +0000 (UTC)
+Message-ID: <f5eda818-6119-4b8f-992f-33bc9c184a64@acm.org>
+Date: Mon, 10 Feb 2025 10:53:44 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 08/24] lockdep: Annotate lockdep assertions for
+ capability analysis
+To: Marco Elver <elver@google.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Bill Wendling <morbo@google.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+ Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
+References: <20250206181711.1902989-1-elver@google.com>
+ <20250206181711.1902989-9-elver@google.com>
+ <e276263f-2bc5-450e-9a35-e805ad8f277b@acm.org>
+ <CANpmjNMfxcpyAY=jCKSBj-Hud-Z6OhdssAXWcPaqDNyjXy0rPQ@mail.gmail.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CANpmjNMfxcpyAY=jCKSBj-Hud-Z6OhdssAXWcPaqDNyjXy0rPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 7 Feb 2025 20:24:18 -0800 Linus Torvalds wrote:
-> > I will take your patch to move it to W=2.  
-> 
-> Ok, applied and pushed out as commit 8f6629c004b1 ("kbuild: Move
-> -Wenum-enum-conversion to W=2").
-> 
-> Jakub, hopefully this fixes your situation,
 
-Much appreciated, thank you!
+On 2/10/25 10:23 AM, Marco Elver wrote:
+> If you try to write code where you access a guarded_by variable, but
+> the lock is held not in all paths we can write it like this:
+> 
+> struct bar {
+>    spinlock_t lock;
+>    bool a; // true if lock held
+>    int counter __var_guarded_by(&lock);
+> };
+> void foo(struct bar *d)
+> {
+>     ...
+>     if (d->a) {
+>       lockdep_assert_held(&d->lock);
+>       d->counter++;
+>     } else {
+>       // lock not held!
+>     }
+>    ...
+> }
+> 
+> Without lockdep_assert_held() you get false positives, and there's no
+> other good way to express this if you do not want to always call foo()
+> with the lock held.
+> 
+> It essentially forces addition of lockdep checks where the static
+> analysis can't quite prove what you've done is right. This is
+> desirable over adding no-analysis attributes and not checking anything
+> at all.
+
+In the above I see that two different options have been mentioned for
+code that includes conditional lockdep_assert_held() calls:
+- Either include __assert_cap() in the lockdep_assert_held() definition.
+- Or annotate the entire function with __no_thread_safety_analysis.
+
+I think there is a third possibility: add an explicit __assert_cap() 
+call under the lockdep_assert_held() call. With this approach the
+thread-safety analysis remains enabled for the annotated function and
+the compiler will complain if neither __must_hold() nor __assert_cap()
+has been used.
+
+I prefer the third option since conditional lockdep_assert_held() calls
+are relatively rare in the kernel. If I counted correctly, there are
+about 40 times more unconditional lockdep_assert_held() calls than
+conditional lockdep_assert_held() calls.
+
+Bart.
+
