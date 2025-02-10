@@ -1,258 +1,313 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C7D23CEF8
-	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 15:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739202806; cv=fail; b=CvTczYfADioJ5jKeG3ogmDaPlA/3nsqCFaqaFHGSCCNDjUtlZX2brJxWhWJesf89hh4wiM+EGHH1vt1s1mLEfAHa6RhNRnfXOTHrgz6J18yH7urCFYSqJ1INA9dMrY5SieHTOTyQlFII91sEkvROVHgBsDjSeT6Hzk63gLTHiLs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739202806; c=relaxed/simple;
-	bh=7GjCY92tD81HsKvp5xqh1ceeyIHpcNj0zSSYTSn9qHg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ci4yhxQx/AGWlorIDuUgdPkiKwKyGkX3RvHlyoF52lD08HHUSBFvVKASOa1nYZ3fkVcxytt7q/2lo8YbS/LL6j2ZOoCOs3tqAvzxCaqHzoiEwkNIdxLfFuMmtq6SCBPOFCmG2jeyOvG2TiC/mSOPoYiZaKtFT0eHFCr+qb3qAuQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9SxgqkU; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7FB23645A
+	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 15:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739203140; cv=none; b=G5dRRz3IQ1Zic3cjGtNoNkYGu/eRbQNxe2BmglEsqBgRIkW+Va6nMjNojYDVQYtINDNMPnviPwPOcdptn++SJ5FpG0LYWBIbo8GWHCA3UyrlhM0bmeNesNYIIb3Y3Gmv+45qHg5QT04k8I0AVxOv66wpkUTjP9TdgL168ooxr9M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739203140; c=relaxed/simple;
+	bh=7EBG2tbET6wKJo1NNIhON2+Zer6a0bhl92q4Vm0qXA4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D51iVQAGBFvgwRbScVtGgL1pBHO43Y2zMRShwfv+GmqHc/x8coZzdwI/dL0XuPxsmfyAOfjH7qWnJSWs53CpFvoN/RVvzZDwAwsRRCZ0/GNcR0qDUDGV7w7M9s0hZ3NORUcg6GX4B85VK/JxjBF4bmyFaY4L+RO8kwcek1npCis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iHuiM3GX; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9SxgqkU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739202805; x=1770738805;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=7GjCY92tD81HsKvp5xqh1ceeyIHpcNj0zSSYTSn9qHg=;
-  b=M9SxgqkUsQyMYxD6aM/TvTteAjK8MLHpxLqSPRirG4gsdxyHd0DU6XAM
-   fQPJL7KzpVmwJ4cymikDqY+s0NwY2OPB2MWpuksniJGrX/oMTC8lPfdUM
-   54hVOdGe0zHwcD+P5S698etaOZF6uYvKPn40AvK6DgjchrK9BbHszEM4F
-   k8hrmuVS/zEYWKm/+F/UCARoPiy6HpRH6+qG5k7FPGrLf+BW67teXg1rz
-   6ZdgAUqFw/9e6i4T5WlraJviK/9uX9YxTKY/OsZCNr5GJoc9u9Y4lY7R5
-   0NuIby4BFgz+n5JLRlMDyStu0YhriWI7nBqpOIiFCVRHZJWVv5DaWZ0yx
-   w==;
-X-CSE-ConnectionGUID: yJjV00f6SvKxSGLFrc+tFg==
-X-CSE-MsgGUID: ToABfZn6T5+H4dFPCLwP7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39026440"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="39026440"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 07:53:24 -0800
-X-CSE-ConnectionGUID: Km589XdZRxGodlVWM/9ZTA==
-X-CSE-MsgGUID: 46uHB0KURmSoa/YitPwKcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="112175324"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 10 Feb 2025 07:53:24 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Mon, 10 Feb 2025 07:53:23 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Mon, 10 Feb 2025 07:53:23 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.49) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Mon, 10 Feb 2025 07:53:22 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vFjBDOv16c7VHAF1Y2B5biuJd4hkWq5W89gErVZpN9PKai+o6YJJJX8h87qUtNNetMlVOwcn/1HtN28+/O25D5fPlbX6lcxHw2jIqIsgC90NysrJagSuYr4/6p65dRJwJypMo0jotnRuHdem+pfxz1fCm8jFFGkzT0FOG4eYkGWj9Ku9p3j1HIMRqC37emXux8UCNj1L4W3r4B4SFXcNA38IQnvpHa0J/aLU2BKBxBFfrwrtXiQ6wp22dbP+1cdM/O2n61a8/wcqFmFMmDzp56p4QuuhdEHo55NTXfrK6ggKiJ1+qxqa8ypAKmyaAta+01xknpm/ChGGqtoM9S4iiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZIz9FcmO/SFsHvB3pBxp+3AATYuNEN+9YY0u6lUa0Cc=;
- b=d8Idt+WBi5AEGqv5sgkUm/h9FddfXrx8K31TkT/1wGTBu15uBFAMZ7fuXT9+pdCzJsy03WwkkUWhjWbsG+gA/riBToQ0eR9cAE4ONkNffaHcq0A4SjmieE7DSP7u3Xt2r5KQZyXOPzXwivxmpCLY0Nj68Y3w5rBQQPlwqgjKTyHGgsXkFT0Atu1HELe62crHupQuBnJy3JFd+qDcNyWizciKg35ADI/x1ni/MrVaIhoNul/DLLQi8Ol8ZUc6sbMfu5S8wHBy+P7nP3GOk2DyGZgzaQkOb8QMTPbGRLvsFENHJz4Bsmhc5a+nwuNdlZgZq8ogRnTvPBV7TWW0etlQLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by BL1PR11MB5223.namprd11.prod.outlook.com (2603:10b6:208:31a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.19; Mon, 10 Feb
- 2025 15:53:20 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4%4]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
- 15:53:20 +0000
-Date: Mon, 10 Feb 2025 16:52:51 +0100
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-CC: Samuel Holland <samuel.holland@sifive.com>, Palmer Dabbelt
-	<palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>, Andrey Ryabinin
-	<ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, "Dmitry
- Vyukov" <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	<kasan-dev@googlegroups.com>, <llvm@lists.linux.dev>, Catalin Marinas
-	<catalin.marinas@arm.com>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon
-	<will@kernel.org>, Evgenii Stepanov <eugenis@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow
- computation
-Message-ID: <zjuvfdbl7q76ahdxk3lrgaznk7vjj43f5ftzfgrnca6dqtcd5x@5qj24womzgyq>
-References: <20241022015913.3524425-1-samuel.holland@sifive.com>
- <20241022015913.3524425-2-samuel.holland@sifive.com>
- <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
- <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
-X-ClientProxiedBy: DB8PR03CA0009.eurprd03.prod.outlook.com
- (2603:10a6:10:be::22) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHuiM3GX"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-3076262bfc6so49114531fa.3
+        for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 07:58:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739203136; x=1739807936; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
+        b=iHuiM3GXOfXi2RH/V/NltQ2oyfvJ+UNtC3E/K7UmbFbC8mChvAYrA3We+Hv253xUDY
+         4KGYPgpdFZJuzsmkBWu+nmsah2hXxjyJxdMJ3MWxLqZnPb9/2Z0TmP68vQGF05Nq1oS2
+         ZZJ9bxjLUWVFxXmYw3mzDBPMO8SXkGU+545Sg3ql5dGj4GgAMIvzG5eJ7qjTKienSbdo
+         QAOhpiayb6Lb1PIfGPVwP2zIiQZnex4bUXhkLvbnWzdD573pYYulN/EwxNNrnSt4FL9Z
+         2EFP76c2tMIh2tK+AcdNdS2rUcBWiT/kqu86C1KSGlbgyBdaxZTJJ2HwsoqwoKwi0INq
+         kLUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739203136; x=1739807936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
+        b=Nu+ZcWEWfvM6OJS3felX/8zNaxYmB58smBy1ZVSLHhauOxc0l2WLQsDMmVcvicAS6F
+         URI+v1k7LMX1XJmlCjLnjdaPIKFK4PxeKF4w5KbBIMSVxMNZZMJP/QScD3RdvjjiuCc1
+         QysYh6uXqxxjp2U5PwFbKwbEGtq7RFR7C0zDmCnnJ1faGJmUVCKNV3CnXwjjNZYB0DGy
+         lN672OD/kNhrygsNooL55X01QemTV1XhXa5diZY2Y2Ih56lb8IajH9rjNI2Ns1bjXrS0
+         HEYBWbMjQx0cDCPEwSe8MsSJYLmMizA+fUlP41CtPzhQSqDAPfpNlZ7fFvJu1q0KTsth
+         rKNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUVGxsa7nXAtbke4JaCL73Yy4XJmQRggl+8tlPk4fkXmKOtckUhcS+msFOCUD9sKXWqr5L@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx2FaFlX2B9+KGQvFheZgXmWXo8rULxMPYQzkonLxAacSduyiHv
+	VNZE6ViR6IG54AlGVpUYZFnmpC989YR79maINT17qVptB13FJJr34/EpMiEIVnHekidIhVjxDCC
+	efqonTSWvTex+9rkMjFnXoQkcu9c=
+X-Gm-Gg: ASbGncsaODSXI3Prv0wmA3L/lJB6W5/KixdduuLte4O1mzoZ1ytcol2Ix2NMmaF7F28
+	MX8HLY8DFqyDivcv+23WaYlIbeY7X4LYbGtHIM0O8AfClThSYP+8qBypqM0iT0kiZNF7rY4JlXg
+	8wmUZFtkSsymh3
+X-Google-Smtp-Source: AGHT+IGkqQH/E+Pgi9Ncy1DZY26oSYyDtgavDMNfwuH1XfljRJcaQYH2iTSlbf1cM2cPI7piPE6eDaDQ/T6kMAyVk/Y=
+X-Received: by 2002:a2e:be1e:0:b0:300:42ad:f284 with SMTP id
+ 38308e7fff4ca-307e57bed2dmr45655851fa.7.1739203136163; Mon, 10 Feb 2025
+ 07:58:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|BL1PR11MB5223:EE_
-X-MS-Office365-Filtering-Correlation-Id: fcfe3632-e491-4881-c9f0-08dd49eb0ada
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?Y2RCbUFCbm5qUVZlOEZGQVJmN2RVQmJLT1A2YUpSNUpBdmt5ejJhMmF1cFZZ?=
- =?utf-8?B?cTN4R0s3NkN1dGo3cnpCYmtNeFdDQzNnMTBldXA0RlY4K3hMYlRQc3RGT3Zt?=
- =?utf-8?B?cFFvYTllRXIxRHFXSnkrS2hWbFZ1TGJOMXdGRXZyT3ZLYmI0ZXh0a0M1MjRS?=
- =?utf-8?B?SW5zbVZ5Z0paRktUdjZuQWYxR3o2MXA0OTVOd3NRYkJrQUR1Tk8yNjdvd0R5?=
- =?utf-8?B?TkZIM3B3eXVpRks0V082TWtSUmRVeUhEbVhnUTVORkRrR3YyYjBiYzY3ZXUv?=
- =?utf-8?B?THJVMkVnQjJNdXMxaVYvOXVvMTh3OW5BOEIwTGhmY0RZWGdRNFM5d2piR0k2?=
- =?utf-8?B?MXo4ZGlCYUJoQUoyNTFmRDVFM3krT09kQTU2QTY2Zld0Uy9uNUVuRnBGWGFs?=
- =?utf-8?B?Um9MUHpnR1pZKzMzWkJIZFBLdmFVU1Y2STc1M2QyQnRGSUsrdmthZmxCWjZD?=
- =?utf-8?B?QTJoekJOK2lQaDNJcVJFSVZhL0RTQ0RXSllUSUVMRktSOWRySDNSQUdjNkdV?=
- =?utf-8?B?bUlZWEJ5bVF4TzdvMlg0RkRVRDh4UmxIUCtnUVM4Y1IwQmNyaHRZNWdwZXpl?=
- =?utf-8?B?ei9VMlEwNFBYZ3pmSHczME1tOCtBdnZVTkxSbHZzalFDSHROSTJ2V2JCUG5C?=
- =?utf-8?B?M3NtdzlnWXlLTVlVQ2JjNk05MEVHalVzaEFnV2pwWk9NbHN4Sm41V0xoczFI?=
- =?utf-8?B?MDVXREI2dlJuZGdqL3YzWVVydk5HNFYwOGs3dFZGN2pFOTZUbnlxOTdScXhj?=
- =?utf-8?B?amg5NlltSi9VOU9vY2F3aTZWSXg1TVZON1dlVFkrbUdTcTZQem53WS9WS3R3?=
- =?utf-8?B?TklFTkYzeXAyM3NwMXVpYXgzaUFuckU3TlV4SndlSTlvVy9iLzI0amsrMnJk?=
- =?utf-8?B?WUhpeEFQbDNpMlprb0pvbnZuQng0L1M4c1RRN0VFVjMyVU8vTTF0QlRmQUNG?=
- =?utf-8?B?ZkptTWU4SkhjYm9LSXhlcnNKdGpBS0FiU3V3VGMxSnJ1Z044djZORGxTTVFE?=
- =?utf-8?B?WS9RV2I3QjROWlhmSTNQNGtqMFBSTDlSNVZ2SzhZQ0sxQXh3T1RFOWZGNTRq?=
- =?utf-8?B?OEFrSlJvUVdPTHpHbW1HWVA0ckk3dTN3V3I5SGVrREk5cVNVMktwQmMzSG5M?=
- =?utf-8?B?dGl5U2IxeHNYTVkxeGpmSS8wSG9tTC8yZE4wWDZpWTZ2ZGFBRVB1QVYvTFlp?=
- =?utf-8?B?UHN1eWVwTnlzdU1jaXZuVmEyaW5ueFlzVllxdUF3alRCa0pOR2U0ejNwZU1W?=
- =?utf-8?B?b0hVQ1FpNVEyQUhIdDF0Tm4yYXdpTTRxcWYybHVvSytHUHMzRG5EaCs1TExY?=
- =?utf-8?B?VHU0VWNuSkNYaDMzSTZxSVBBSGt2bm11VEpyM1k5SFJrVTQ5WjhGWVlCYUFa?=
- =?utf-8?B?Zy9kYVFSdVpENHNYbEFwQVVMc0w2V0JXOFBZdjJySXhHMlZ0OGUvUm5Ic0ZG?=
- =?utf-8?B?YXUyY216a2RVenJwcWV3R01QdjVZN0FBaTl5L09haXBuZTlXNXQrU1dpNVg4?=
- =?utf-8?B?c3pVSjE3TkN3WHVWcDJ2akpjRE81QlZ3TFRCZ3FnYldsMDNpTDFvUlROZW5h?=
- =?utf-8?B?N04zMnFDWkIzNGNTaVk3aEhkNU1OZXJ2Q0F1QUVxOGtGeWtrMzF3U0NWenAy?=
- =?utf-8?B?LzZPMVlydW91NWpMVHRmUG9aYmNOZGg2UTlDL2p1Q2IrS1FCNXd5c0EwWXp0?=
- =?utf-8?B?RnJLcmFlMzAreXVQb3p1dzZRNVlpWHUybjNsRytCbmpyMDY1eE5mcktKdXRK?=
- =?utf-8?B?Y2VtQWpaNTB2TUpFbzBTaThqZklSUkNKK1dGUUFTT2txSHhTZVpka2Y2TTRq?=
- =?utf-8?B?YnYrRDBwNXc1a0RUMVZlVGJyY21sZnFaNzgvUWhWbHV6Wm1XSURtQUxiVElj?=
- =?utf-8?Q?AsUi2QsxJZfEw?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0UyRHhzTjgrM2Zza280Vk5oakNsNmljbDNQNDRJQy94U0xUOVVGRHd1MXFu?=
- =?utf-8?B?dnYwQnpRK1JIOE1hNkFTVExXdFE1VzJjZUhPeUtsbWxac1dnS1g3MFJXaW1k?=
- =?utf-8?B?OTFYK20vLzlYbFVBOTVGby9VZkp2RXVVOG9nancrT3Fib1lOY2sySGJodndM?=
- =?utf-8?B?aFJCYUhUWjJHckhqdEdGdWE3M1lRNnRWSU1rK3R6ZHE0WlB6b0ZsN0NiK3lE?=
- =?utf-8?B?MzNSZDVCWU5lUW9SdkpUMllSTFdvZFh1S3JwZmVFWS81bXZtTGpNRVF0WHVk?=
- =?utf-8?B?ZlJQclJveU0yNjhGK0dPUUF0Z0lad3VNZEtRVWo1WGJENGg0SXNWYUVpRmpZ?=
- =?utf-8?B?bk5jbnVmS2V6S3dqZC9rdkVxYXREN3lTL2xKT3Blb0tOVnRGeDRWTWZ0YTR6?=
- =?utf-8?B?Zk01NEQzNlBmT3A4NGtZZTN4MWNoUGI3UXovTHdUYTB5UjFOaytuT3BuRmNw?=
- =?utf-8?B?NkcyKzVRamVyaHVBcGVtQUZXRmVud1FrZCthdmhVZVJkUGx3VytkNjdKeDlM?=
- =?utf-8?B?NzlqMUx4Z3VlLzFQWFZPMUloNXVKZlNsTUZLODZQUkhDYjBaUkxmc2xOYjdF?=
- =?utf-8?B?RE1zdGN5Vk9aZStnS3pSamV2TEdsU3ZrcUN0WVlraUtiSzBjMU9vemxhc0tC?=
- =?utf-8?B?V0VsUWJ3aVdOZUhsQ09jOGF5MmVJT3JCbmE5TzFiTzlJcnZlM1dnakpmVUdZ?=
- =?utf-8?B?MmxwM1NBZXVTUDhtWHo0dml3U0kyUnBXekJ1ZldrSHZpY2JZczlUWmVybmdY?=
- =?utf-8?B?aW5CNVhFTTRidWZxMjBnU0tjNXRCL1BNTmViNkpyMmFSQXdoZ28wcFhHMEFS?=
- =?utf-8?B?VlB6OGpGN2R6VE9LSDJ4bTlvdGtQc3hxL3pCMi82MkJ4SzlkRy9uSStuV1RU?=
- =?utf-8?B?ekp3bU9WSitHV05NNytEam9ZQWpEdHFFMmNPNEIrTmtCVjg0c2wwSnUzQldJ?=
- =?utf-8?B?MlFhRk1TVTBwem1Bb3RZZWdhM09NYTJScGVMSEtua2I1WlYrcjJZWmJ5UmtN?=
- =?utf-8?B?RUVvcUhyd0ZBRmpkclpQYXhnSFJFOVFnT3dmNlhnOUgzTFl1cVZRUTNBK1A2?=
- =?utf-8?B?L3Zncy9QbHp6RjY2eC9vNUx2THIzdjk3RkNtQ09jT2ZWdTlKUTVlWTNDdlh6?=
- =?utf-8?B?NTZSdDNOZjJkVXZRYUY3K0RpaFdHZ2VRRTZVeGlUWU9mekRLUVZwTjlibHFI?=
- =?utf-8?B?UFU1U0JNYlBMUUZsSkZPVVhaRjhWc25VNUFDeXNnTTFTR0hrUXJvL3pwU2pK?=
- =?utf-8?B?c1p5VEF6N21jWldTY2w2b3IzN3AyVCtPWFhSL0V4UzFWdWZQUkdkS2piTXoy?=
- =?utf-8?B?VXJ2eHBUTGFRWXdHMm9ESUVYcXdJdjNIVnFYUG11MGNnSWp0bzhGYjlwTnM3?=
- =?utf-8?B?NWwycWJXSVB2YlJoUzZWVkpIczFQMXE5WUcxTW1iMlFoRlRMWXpCSThJczJz?=
- =?utf-8?B?UVg0THNuUW1qQTl6aHVTTlpIeFptajJIdnpiK0IwNVZhRFQzcjEwSVhlekhx?=
- =?utf-8?B?Z3lDbkgxYzl6UHdhQ3F4N253a2FDQ29jK1ZMa1VJcVYwNGRKTlpGQXhKN1B4?=
- =?utf-8?B?eE1QUEdjQ1BmTHlDcFZJdW1laXNPdjRoNVhHWUNub3RSUTEwN21CZEVoTldr?=
- =?utf-8?B?RjlZVnhPZUZYVFhoY3RZQXJNd0ZBcVhQYlA0cXhJSThsL0JHL2ZGQ1llNGFI?=
- =?utf-8?B?NkdtU2FwS0RNNzRONU1VZ2ExNkV4WHpMS25acXpXNnBJbXJXdUdwczdZSUFR?=
- =?utf-8?B?TnZuaEFlUXg3Q2MzZnZHODhSODBOS0lYMVI5ZzUrbmxQWHdicHlFamthdzZt?=
- =?utf-8?B?L3AzVXlrZVJCYW5XRWRKSkFTdXRMYjdiM2dlMUw0OCtQS2FVS3VXZmxacVNi?=
- =?utf-8?B?N3lWQkpQVitSQzViK1pXL3hpL1ZjZWg3b2tzNzduSXc3cVFieE1yYTY1bTZH?=
- =?utf-8?B?NWVOaER0YzQ3RzRHcklRY2pZNWFZY3JUZUtxMkFtN0p4Y2w3RVZTM0R0RUVZ?=
- =?utf-8?B?QmtkeldjbmwxcStMZjNFTlB3YnZEYVloWEJsMHBwL3BUUTd2Sk9iMDlVem9q?=
- =?utf-8?B?UmFWWHVlSzZJQyt4K041WGVLUWUveUYrZTd1N1NIY1V3a1hnclVvYkJFSDRP?=
- =?utf-8?B?Z0pINHdoNXh3bzFzUzdybytJb09sVzM1SEZybkllQjE0N0YvTlJmQURNRmxL?=
- =?utf-8?Q?7OhDBqZZuXzI0+uCYRonflA=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcfe3632-e491-4881-c9f0-08dd49eb0ada
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 15:53:20.6859
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bWUga8BA5V0rj8EumqnSf1Jj56iY598xehR7S/SbqrSVcIQR0JOK0jAcJh8anzUfgga4pkHNSEdm25NxLBvrV0EVC2iJ+8QAUIjrv/VJvQc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5223
-X-OriginatorOrg: intel.com
+References: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+In-Reply-To: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 10 Feb 2025 10:58:19 -0500
+X-Gm-Features: AWEUYZlql4JL5QMxP8vmE8jTowIauEkfV0cUWeYdpuMMeJ7DErdRhKXRycQGMg4
+Message-ID: <CAJ-ks9nRmR-w6xAyWkVt-NH9pO+Ec_ehE9rJU+6LQBCYsgWd0w@mail.gmail.com>
+Subject: Re: [PATCH v2] blackhole_dev: convert self-test to KUnit
+To: Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	David Gow <davidgow@google.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-02-10 at 16:22:41 +0100, Maciej Wieczor-Retman wrote:
->On 2024-10-23 at 20:41:57 +0200, Andrey Konovalov wrote:
->>On Tue, Oct 22, 2024 at 3:59 AM Samuel Holland
->><samuel.holland@sifive.com> wrote:
->...
->>> +        * Software Tag-Based KASAN, the displacement is signed, so
->>> +        * KASAN_SHADOW_OFFSET is the center of the range.
->>>          */
->>> -       if (addr < KASAN_SHADOW_OFFSET)
->>> -               return;
->>> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
->>> +               if (addr < KASAN_SHADOW_OFFSET ||
->>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size)
->>> +                       return;
->>> +       } else {
->>> +               if (addr < KASAN_SHADOW_OFFSET - max_shadow_size / 2 ||
->>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size / 2)
->>> +                       return;
->>
->>Hm, I might be wrong, but I think this check does not work.
->>
->>Let's say we have non-canonical address 0x4242424242424242 and number
->>of VA bits is 48.
->>
->>Then:
->>
->>KASAN_SHADOW_OFFSET == 0xffff800000000000
->>kasan_mem_to_shadow(0x4242424242424242) == 0x0423a42424242424
->>max_shadow_size == 0x1000000000000000
->>KASAN_SHADOW_OFFSET - max_shadow_size / 2 == 0xf7ff800000000000
->>KASAN_SHADOW_OFFSET + max_shadow_size / 2 == 0x07ff800000000000 (overflows)
->>
->>0x0423a42424242424 is < than 0xf7ff800000000000, so the function will
->>wrongly return.
+On Sat, Feb 8, 2025 at 2:26=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
+wrote:
 >
->As I understand this check aims to figure out if the address landed in shadow
->space and if it didn't we can return.
+> Convert this very simple smoke test to a KUnit test.
 >
->Can't this above snippet be a simple:
+> Add a missing `htons` call that was spotted[0] by kernel test robot
+> <lkp@intel.com> after initial conversion to KUnit.
 >
->	if (!addr_in_shadow(addr))
->		return;
+> Link: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@int=
+el.com/ [0]
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> ---
+> I tested this using:
 >
->?
+> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=3D1 -=
+-kconfig_add CONFIG_NET=3Dy blackholedev
+> ---
+> Changes in v2:
+> - Add missing `htons` call. (kernel test robot <lkp@intel.com>)
+> - Link to v1: https://lore.kernel.org/r/20250207-blackholedev-kunit-conve=
+rt-v1-1-8ef0dc1ff881@gmail.com
+> ---
+>  lib/Kconfig.debug                                  | 20 ++++-----
+>  lib/Makefile                                       |  2 +-
+>  ...{test_blackhole_dev.c =3D> blackhole_dev_kunit.c} | 47 ++++++++------=
+--------
+>  tools/testing/selftests/net/Makefile               |  2 +-
+>  tools/testing/selftests/net/test_blackhole_dev.sh  | 11 -----
+>  5 files changed, 29 insertions(+), 53 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 1af972a92d06..238321830993 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2557,15 +2557,6 @@ config TEST_BPF
+>
+>           If unsure, say N.
+>
+> -config TEST_BLACKHOLE_DEV
+> -       tristate "Test blackhole netdev functionality"
+> -       depends on m && NET
+> -       help
+> -         This builds the "test_blackhole_dev" module that validates the
+> -         data path through this blackhole netdev.
+> -
+> -         If unsure, say N.
+> -
+>  config FIND_BIT_BENCHMARK
+>         tristate "Test find_bit functions"
+>         help
+> @@ -2888,6 +2879,17 @@ config USERCOPY_KUNIT_TEST
+>           on the copy_to/from_user infrastructure, making sure basic
+>           user/kernel boundary testing is working.
+>
+> +config BLACKHOLE_DEV_KUNIT_TEST
+> +       tristate "Test blackhole netdev functionality" if !KUNIT_ALL_TEST=
+S
+> +       depends on NET
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds the "blackhole_dev_kunit" module that validates the
+> +         data path through this blackhole netdev.
+> +
+> +         If unsure, say N.
+> +
+>  config TEST_UDELAY
+>         tristate "udelay test driver"
+>         help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index d5cfc7afbbb8..19ff6993c2bc 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -102,7 +102,6 @@ obj-$(CONFIG_TEST_RUNTIME) +=3D tests/
+>  obj-$(CONFIG_TEST_DEBUG_VIRTUAL) +=3D test_debug_virtual.o
+>  obj-$(CONFIG_TEST_MEMCAT_P) +=3D test_memcat_p.o
+>  obj-$(CONFIG_TEST_OBJAGG) +=3D test_objagg.o
+> -obj-$(CONFIG_TEST_BLACKHOLE_DEV) +=3D test_blackhole_dev.o
+>  obj-$(CONFIG_TEST_MEMINIT) +=3D test_meminit.o
+>  obj-$(CONFIG_TEST_LOCKUP) +=3D test_lockup.o
+>  obj-$(CONFIG_TEST_HMM) +=3D test_hmm.o
+> @@ -393,6 +392,7 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) +=3D fortify_kunit.o
+>  obj-$(CONFIG_CRC_KUNIT_TEST) +=3D crc_kunit.o
+>  obj-$(CONFIG_SIPHASH_KUNIT_TEST) +=3D siphash_kunit.o
+>  obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kunit.o
+> +obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) +=3D blackhole_dev_kunit.o
+>
+>  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
+>
+> diff --git a/lib/test_blackhole_dev.c b/lib/blackhole_dev_kunit.c
+> similarity index 68%
+> rename from lib/test_blackhole_dev.c
+> rename to lib/blackhole_dev_kunit.c
+> index ec290ac2a0d9..06834ab35f43 100644
+> --- a/lib/test_blackhole_dev.c
+> +++ b/lib/blackhole_dev_kunit.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * This module tests the blackhole_dev that is created during the
+> + * This tests the blackhole_dev that is created during the
+>   * net subsystem initialization. The test this module performs is
+>   * by injecting an skb into the stack with skb->dev as the
+>   * blackhole_dev and expects kernel to behave in a sane manner
+> @@ -9,9 +9,8 @@
+>   * Copyright (c) 2018, Mahesh Bandewar <maheshb@google.com>
+>   */
+>
+> -#include <linux/init.h>
+> +#include <kunit/test.h>
+>  #include <linux/module.h>
+> -#include <linux/printk.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/netdevice.h>
+>  #include <linux/udp.h>
+> @@ -25,17 +24,15 @@
+>
+>  #define UDP_PORT 1234
+>
+> -static int __init test_blackholedev_init(void)
+> +static void test_blackholedev(struct kunit *test)
+>  {
+>         struct ipv6hdr *ip6h;
+>         struct sk_buff *skb;
+>         struct udphdr *uh;
+>         int data_len;
+> -       int ret;
+>
+>         skb =3D alloc_skb(SKB_SIZE, GFP_KERNEL);
+> -       if (!skb)
+> -               return -ENOMEM;
+> +       KUNIT_ASSERT_NOT_NULL(test, skb);
+>
+>         /* Reserve head-room for the headers */
+>         skb_reserve(skb, HEAD_SIZE);
+> @@ -55,7 +52,7 @@ static int __init test_blackholedev_init(void)
+>         ip6h =3D (struct ipv6hdr *)skb_push(skb, sizeof(struct ipv6hdr));
+>         skb_set_network_header(skb, 0);
+>         ip6h->hop_limit =3D 32;
+> -       ip6h->payload_len =3D data_len + sizeof(struct udphdr);
+> +       ip6h->payload_len =3D htons(data_len + sizeof(struct udphdr));
+>         ip6h->nexthdr =3D IPPROTO_UDP;
+>         ip6h->saddr =3D in6addr_loopback;
+>         ip6h->daddr =3D in6addr_loopback;
+> @@ -68,32 +65,20 @@ static int __init test_blackholedev_init(void)
+>         skb->dev =3D blackhole_netdev;
+>
+>         /* Now attempt to send the packet */
+> -       ret =3D dev_queue_xmit(skb);
+> -
+> -       switch (ret) {
+> -       case NET_XMIT_SUCCESS:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_SUCCESS\n");
+> -               break;
+> -       case NET_XMIT_DROP:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_DROP\n");
+> -               break;
+> -       case NET_XMIT_CN:
+> -               pr_warn("dev_queue_xmit() returned NET_XMIT_CN\n");
+> -               break;
+> -       default:
+> -               pr_err("dev_queue_xmit() returned UNKNOWN(%d)\n", ret);
+> -       }
+> -
+> -       return 0;
+> +       KUNIT_EXPECT_EQ(test, dev_queue_xmit(skb), NET_XMIT_SUCCESS);
+>  }
+>
+> -static void __exit test_blackholedev_exit(void)
+> -{
+> -       pr_warn("test_blackholedev module terminating.\n");
+> -}
+> +static struct kunit_case blackholedev_cases[] =3D {
+> +       KUNIT_CASE(test_blackholedev),
+> +       {},
+> +};
+> +
+> +static struct kunit_suite blackholedev_suite =3D {
+> +       .name =3D "blackholedev",
+> +       .test_cases =3D blackholedev_cases,
+> +};
+>
+> -module_init(test_blackholedev_init);
+> -module_exit(test_blackholedev_exit);
+> +kunit_test_suite(blackholedev_suite);
+>
+>  MODULE_AUTHOR("Mahesh Bandewar <maheshb@google.com>");
+>  MODULE_DESCRIPTION("module test of the blackhole_dev");
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
+ts/net/Makefile
+> index 73ee88d6b043..afa4bcdc5833 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -7,7 +7,7 @@ CFLAGS +=3D -I../../../../usr/include/ $(KHDR_INCLUDES)
+>  CFLAGS +=3D -I../
+>
+>  TEST_PROGS :=3D run_netsocktests run_afpackettests test_bpf.sh netdevice=
+.sh \
+> -             rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
+> +             rtnetlink.sh xfrm_policy.sh
+>  TEST_PROGS +=3D fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_de=
+frag.sh
+>  TEST_PROGS +=3D udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_=
+snd.sh
+>  TEST_PROGS +=3D udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reusep=
+ort_addr_any.sh
+> diff --git a/tools/testing/selftests/net/test_blackhole_dev.sh b/tools/te=
+sting/selftests/net/test_blackhole_dev.sh
+> deleted file mode 100755
+> index 3119b80e711f..000000000000
+> --- a/tools/testing/selftests/net/test_blackhole_dev.sh
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -# Runs blackhole-dev test using blackhole-dev kernel module
+> -
+> -if /sbin/modprobe -q test_blackhole_dev ; then
+> -       /sbin/modprobe -q -r test_blackhole_dev;
+> -       echo "test_blackhole_dev: ok";
+> -else
+> -       echo "test_blackhole_dev: [FAIL]";
+> -       exit 1;
+> -fi
+>
+> ---
+> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+> change-id: 20250207-blackholedev-kunit-convert-9a52a1a1a032
+>
+> Best regards,
+> --
+> Tamir Duberstein <tamird@gmail.com>
 
-Sorry, I think this wouldn't work. The tag also needs to be reset. Does this
-perhaps work for this problem?
-
-	if (!addr_in_shadow(kasan_reset_tag((void *)addr)))
-		return;
-
->
->-- 
->Kind regards
->Maciej Wieczór-Retman
-
--- 
-Kind regards
-Maciej Wieczór-Retman
+Adding David.
