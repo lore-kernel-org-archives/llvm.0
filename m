@@ -1,313 +1,772 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7FB23645A
-	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 15:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4C6244196
+	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 15:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739203140; cv=none; b=G5dRRz3IQ1Zic3cjGtNoNkYGu/eRbQNxe2BmglEsqBgRIkW+Va6nMjNojYDVQYtINDNMPnviPwPOcdptn++SJ5FpG0LYWBIbo8GWHCA3UyrlhM0bmeNesNYIIb3Y3Gmv+45qHg5QT04k8I0AVxOv66wpkUTjP9TdgL168ooxr9M=
+	t=1739203162; cv=none; b=e30AsDtJ/Q0aQnW3H4UNSXCa4vqJptEq5dz0yEIAyN0MddiC7YdqKoJ+0iuDhj32HOD65YdvKF6E2MlCI/G6gH8pxsT/Io1EbUpGymxuJW2D0W9B9ipP5B01i+yvymNm4c8D9ZBrA6yeo5dghEGAt5NSg5nrpRU4bBBEotKs4fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739203140; c=relaxed/simple;
-	bh=7EBG2tbET6wKJo1NNIhON2+Zer6a0bhl92q4Vm0qXA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D51iVQAGBFvgwRbScVtGgL1pBHO43Y2zMRShwfv+GmqHc/x8coZzdwI/dL0XuPxsmfyAOfjH7qWnJSWs53CpFvoN/RVvzZDwAwsRRCZ0/GNcR0qDUDGV7w7M9s0hZ3NORUcg6GX4B85VK/JxjBF4bmyFaY4L+RO8kwcek1npCis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iHuiM3GX; arc=none smtp.client-ip=209.85.208.182
+	s=arc-20240116; t=1739203162; c=relaxed/simple;
+	bh=yLyvAuyXh25VE7eka4iWVG9OmfECMKl8nCUieykIFlA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=E8IyvKoIayZxPGXpo7Pw6KWV8qv99c1DlFA/KC/jT5yljDCRv7+NLbhv4E2Nl8cjfduL7NEvX7uV7koRJl4sduNxIXgeEB6AtGTozA46DvN20fEegSW1vwWd4Cht/qY6YzhQTgJoeX/KjLysndEXSTUUGDaCcFZstYmNoGfOT1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gr46I761; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHuiM3GX"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-3076262bfc6so49114531fa.3
-        for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 07:58:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gr46I761"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7bcf33f698dso416601985a.2
+        for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 07:59:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739203136; x=1739807936; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
-        b=iHuiM3GXOfXi2RH/V/NltQ2oyfvJ+UNtC3E/K7UmbFbC8mChvAYrA3We+Hv253xUDY
-         4KGYPgpdFZJuzsmkBWu+nmsah2hXxjyJxdMJ3MWxLqZnPb9/2Z0TmP68vQGF05Nq1oS2
-         ZZJ9bxjLUWVFxXmYw3mzDBPMO8SXkGU+545Sg3ql5dGj4GgAMIvzG5eJ7qjTKienSbdo
-         QAOhpiayb6Lb1PIfGPVwP2zIiQZnex4bUXhkLvbnWzdD573pYYulN/EwxNNrnSt4FL9Z
-         2EFP76c2tMIh2tK+AcdNdS2rUcBWiT/kqu86C1KSGlbgyBdaxZTJJ2HwsoqwoKwi0INq
-         kLUg==
+        d=gmail.com; s=20230601; t=1739203159; x=1739807959; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6XdbqsKECb/QW9CdvNEgKkofwrG3vJgPiPaRkRoP6g=;
+        b=Gr46I761rGPWbjkXGIzffqVqfzavVnMygrsAvNSkEMc2olbp/goKHZCIFUZ1ElRxSh
+         4FoZ4TdBUIxM+r3NBQgjz2RFte15X5F2AA5svzLOHT7JQVyRFC6FU3HxlS0BfjfHMYiU
+         236hXV4g3EZlr7i90M7VBxwjJWaVe1kP+TvbV70VVz39MbcpUCzZOdgSfvhnpHi4rndW
+         Tb4kGEBLcAmuN8r17Rz/eB9IvHnpf9nP69lD7+Yny95M3oUe7jn/OUM2eS545XIFqNiY
+         YbeV7aFevHsKCieJKjpymp3N2IDX60+FX44YZIHTuy+S3zanhCmLt9RW8GPl6zv36eL8
+         goWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739203136; x=1739807936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zrWLyzw/v9toMpV/2WaUI0bKtb0fFU80Ird81ZrYzdM=;
-        b=Nu+ZcWEWfvM6OJS3felX/8zNaxYmB58smBy1ZVSLHhauOxc0l2WLQsDMmVcvicAS6F
-         URI+v1k7LMX1XJmlCjLnjdaPIKFK4PxeKF4w5KbBIMSVxMNZZMJP/QScD3RdvjjiuCc1
-         QysYh6uXqxxjp2U5PwFbKwbEGtq7RFR7C0zDmCnnJ1faGJmUVCKNV3CnXwjjNZYB0DGy
-         lN672OD/kNhrygsNooL55X01QemTV1XhXa5diZY2Y2Ih56lb8IajH9rjNI2Ns1bjXrS0
-         HEYBWbMjQx0cDCPEwSe8MsSJYLmMizA+fUlP41CtPzhQSqDAPfpNlZ7fFvJu1q0KTsth
-         rKNw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUVGxsa7nXAtbke4JaCL73Yy4XJmQRggl+8tlPk4fkXmKOtckUhcS+msFOCUD9sKXWqr5L@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx2FaFlX2B9+KGQvFheZgXmWXo8rULxMPYQzkonLxAacSduyiHv
-	VNZE6ViR6IG54AlGVpUYZFnmpC989YR79maINT17qVptB13FJJr34/EpMiEIVnHekidIhVjxDCC
-	efqonTSWvTex+9rkMjFnXoQkcu9c=
-X-Gm-Gg: ASbGncsaODSXI3Prv0wmA3L/lJB6W5/KixdduuLte4O1mzoZ1ytcol2Ix2NMmaF7F28
-	MX8HLY8DFqyDivcv+23WaYlIbeY7X4LYbGtHIM0O8AfClThSYP+8qBypqM0iT0kiZNF7rY4JlXg
-	8wmUZFtkSsymh3
-X-Google-Smtp-Source: AGHT+IGkqQH/E+Pgi9Ncy1DZY26oSYyDtgavDMNfwuH1XfljRJcaQYH2iTSlbf1cM2cPI7piPE6eDaDQ/T6kMAyVk/Y=
-X-Received: by 2002:a2e:be1e:0:b0:300:42ad:f284 with SMTP id
- 38308e7fff4ca-307e57bed2dmr45655851fa.7.1739203136163; Mon, 10 Feb 2025
- 07:58:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739203159; x=1739807959;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S6XdbqsKECb/QW9CdvNEgKkofwrG3vJgPiPaRkRoP6g=;
+        b=h0aKGfGrqsQvmdokMcF4BupSepoC3kDLBC9fer5ObuKqJ898WudAvXzcu5RNBvnp+T
+         9aLrJsDakGHKyagssjdUyiSqDFHBmHiuvOVX6pj5qlPvlQZynm0htZYeRRP0zQJu4yLf
+         5UX1zvwRyDpy/ZyptpeatTiyjwyOu6Ntp78Wzpc4QTAOloB5JCyoPnv3gHjJc1PQKMnU
+         PnXZkKiJ6hTzwcH6wnDBsxJbtFttx6tqIDb3Lb7lqB8/0Vyzc+OLu1AFaDe4/32WKo54
+         8mnNpqUEuFmDFKnxbKhhG6YHlq47Obn3Oj5FoWTmBPLdCxHhiB+DyPOUzW2bGXfF6jm4
+         oQrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWXB43dBzvi2MBVwKZYW813oj71OImALMybOGCRPi/7kvvR1lFg6oHqdCNSRjFXTPJBwwQY@lists.linux.dev
+X-Gm-Message-State: AOJu0YyU0fR7JbRQfios149W1sQ6hWaUWATnmzxREVumC5bBXFOKPqAx
+	O2xaee3nxP/b2uhiTMy/t9Gv3r1IzsXsij4du1eAgI1zV+XM0Uyl
+X-Gm-Gg: ASbGnct9j5eaTIKSC0vNASKVtex1nkSksfh22Tgf71C65FJhke22A11cgTq8z8JFidP
+	4XLt+m+Mcz5X07qnI0OuKCzZRVSjFplkzQT5dyWiwkDkWPVMkkBQnN54v9BhCW2etajkbhuLnvd
+	P1zQBMjij7P3sHimHGyoCiVvUzQrm7YVL3w+DdSKUNQu87kd0b4uTWAF59JzbY7t6V4F01s65Vh
+	u8+5V+hX/PsZTGOPab8e4yW/LwK3yAA7/WIsG9JrTCXVBahETN+TTXWUmsoBLKk5qMKoYllq2aK
+	P/UYv+7qfQes7bmL+bakTCtINMhl44dvWOcrhKd4POrHjGeafMhNHAam6qWpFVJ+pCgXX5H6wP7
+	Dpq0HZCES0kXJv2lfFHstDAaT
+X-Google-Smtp-Source: AGHT+IGOiU9C4sgd1ZVAQtMQ0ngsSJNT9RZCUok5P+bwMk+E44n0pLy60g/OpTPPF38RryyUXQO+oQ==
+X-Received: by 2002:a05:620a:bcb:b0:7be:39e7:a025 with SMTP id af79cd13be357-7c047c3885dmr1943585685a.26.1739203158863;
+        Mon, 10 Feb 2025 07:59:18 -0800 (PST)
+Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa ([2620:10d:c091:600::1:cc94])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c0615b0725sm88917685a.41.2025.02.10.07.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 07:59:17 -0800 (PST)
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Mon, 10 Feb 2025 10:59:12 -0500
+Subject: [PATCH] ww_mutex: convert self-test to KUnit
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
-In-Reply-To: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 10 Feb 2025 10:58:19 -0500
-X-Gm-Features: AWEUYZlql4JL5QMxP8vmE8jTowIauEkfV0cUWeYdpuMMeJ7DErdRhKXRycQGMg4
-Message-ID: <CAJ-ks9nRmR-w6xAyWkVt-NH9pO+Ec_ehE9rJU+6LQBCYsgWd0w@mail.gmail.com>
-Subject: Re: [PATCH v2] blackhole_dev: convert self-test to KUnit
-To: Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	David Gow <davidgow@google.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAE8iqmcC/x3MSQqAMAxA0atI1gZqcMKriEjVqEGs0tYBxLtbX
+ L7F/w84tsIOqugBy6c42UxAEkfQz9pMjDIEAynKFKkSr6tdD883LocRj/1mTrYei6RMSRc675g
+ gxLvlUe5/XDfv+wHUmJCCaAAAAA==
+X-Change-ID: 20250208-ww_mutex-kunit-convert-71842a7a6be2
+To: David Gow <davidgow@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ llvm@lists.linux.dev, Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-On Sat, Feb 8, 2025 at 2:26=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
-wrote:
->
-> Convert this very simple smoke test to a KUnit test.
->
-> Add a missing `htons` call that was spotted[0] by kernel test robot
-> <lkp@intel.com> after initial conversion to KUnit.
->
-> Link: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@int=
-el.com/ [0]
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
-> I tested this using:
->
-> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=3D1 -=
--kconfig_add CONFIG_NET=3Dy blackholedev
-> ---
-> Changes in v2:
-> - Add missing `htons` call. (kernel test robot <lkp@intel.com>)
-> - Link to v1: https://lore.kernel.org/r/20250207-blackholedev-kunit-conve=
-rt-v1-1-8ef0dc1ff881@gmail.com
-> ---
->  lib/Kconfig.debug                                  | 20 ++++-----
->  lib/Makefile                                       |  2 +-
->  ...{test_blackhole_dev.c =3D> blackhole_dev_kunit.c} | 47 ++++++++------=
---------
->  tools/testing/selftests/net/Makefile               |  2 +-
->  tools/testing/selftests/net/test_blackhole_dev.sh  | 11 -----
->  5 files changed, 29 insertions(+), 53 deletions(-)
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 1af972a92d06..238321830993 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2557,15 +2557,6 @@ config TEST_BPF
->
->           If unsure, say N.
->
-> -config TEST_BLACKHOLE_DEV
-> -       tristate "Test blackhole netdev functionality"
-> -       depends on m && NET
-> -       help
-> -         This builds the "test_blackhole_dev" module that validates the
-> -         data path through this blackhole netdev.
-> -
-> -         If unsure, say N.
-> -
->  config FIND_BIT_BENCHMARK
->         tristate "Test find_bit functions"
->         help
-> @@ -2888,6 +2879,17 @@ config USERCOPY_KUNIT_TEST
->           on the copy_to/from_user infrastructure, making sure basic
->           user/kernel boundary testing is working.
->
-> +config BLACKHOLE_DEV_KUNIT_TEST
-> +       tristate "Test blackhole netdev functionality" if !KUNIT_ALL_TEST=
-S
-> +       depends on NET
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds the "blackhole_dev_kunit" module that validates the
-> +         data path through this blackhole netdev.
-> +
-> +         If unsure, say N.
-> +
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index d5cfc7afbbb8..19ff6993c2bc 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -102,7 +102,6 @@ obj-$(CONFIG_TEST_RUNTIME) +=3D tests/
->  obj-$(CONFIG_TEST_DEBUG_VIRTUAL) +=3D test_debug_virtual.o
->  obj-$(CONFIG_TEST_MEMCAT_P) +=3D test_memcat_p.o
->  obj-$(CONFIG_TEST_OBJAGG) +=3D test_objagg.o
-> -obj-$(CONFIG_TEST_BLACKHOLE_DEV) +=3D test_blackhole_dev.o
->  obj-$(CONFIG_TEST_MEMINIT) +=3D test_meminit.o
->  obj-$(CONFIG_TEST_LOCKUP) +=3D test_lockup.o
->  obj-$(CONFIG_TEST_HMM) +=3D test_hmm.o
-> @@ -393,6 +392,7 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) +=3D fortify_kunit.o
->  obj-$(CONFIG_CRC_KUNIT_TEST) +=3D crc_kunit.o
->  obj-$(CONFIG_SIPHASH_KUNIT_TEST) +=3D siphash_kunit.o
->  obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kunit.o
-> +obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) +=3D blackhole_dev_kunit.o
->
->  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
->
-> diff --git a/lib/test_blackhole_dev.c b/lib/blackhole_dev_kunit.c
-> similarity index 68%
-> rename from lib/test_blackhole_dev.c
-> rename to lib/blackhole_dev_kunit.c
-> index ec290ac2a0d9..06834ab35f43 100644
-> --- a/lib/test_blackhole_dev.c
-> +++ b/lib/blackhole_dev_kunit.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * This module tests the blackhole_dev that is created during the
-> + * This tests the blackhole_dev that is created during the
->   * net subsystem initialization. The test this module performs is
->   * by injecting an skb into the stack with skb->dev as the
->   * blackhole_dev and expects kernel to behave in a sane manner
-> @@ -9,9 +9,8 @@
->   * Copyright (c) 2018, Mahesh Bandewar <maheshb@google.com>
->   */
->
-> -#include <linux/init.h>
-> +#include <kunit/test.h>
->  #include <linux/module.h>
-> -#include <linux/printk.h>
->  #include <linux/skbuff.h>
->  #include <linux/netdevice.h>
->  #include <linux/udp.h>
-> @@ -25,17 +24,15 @@
->
->  #define UDP_PORT 1234
->
-> -static int __init test_blackholedev_init(void)
-> +static void test_blackholedev(struct kunit *test)
->  {
->         struct ipv6hdr *ip6h;
->         struct sk_buff *skb;
->         struct udphdr *uh;
->         int data_len;
-> -       int ret;
->
->         skb =3D alloc_skb(SKB_SIZE, GFP_KERNEL);
-> -       if (!skb)
-> -               return -ENOMEM;
-> +       KUNIT_ASSERT_NOT_NULL(test, skb);
->
->         /* Reserve head-room for the headers */
->         skb_reserve(skb, HEAD_SIZE);
-> @@ -55,7 +52,7 @@ static int __init test_blackholedev_init(void)
->         ip6h =3D (struct ipv6hdr *)skb_push(skb, sizeof(struct ipv6hdr));
->         skb_set_network_header(skb, 0);
->         ip6h->hop_limit =3D 32;
-> -       ip6h->payload_len =3D data_len + sizeof(struct udphdr);
-> +       ip6h->payload_len =3D htons(data_len + sizeof(struct udphdr));
->         ip6h->nexthdr =3D IPPROTO_UDP;
->         ip6h->saddr =3D in6addr_loopback;
->         ip6h->daddr =3D in6addr_loopback;
-> @@ -68,32 +65,20 @@ static int __init test_blackholedev_init(void)
->         skb->dev =3D blackhole_netdev;
->
->         /* Now attempt to send the packet */
-> -       ret =3D dev_queue_xmit(skb);
-> -
-> -       switch (ret) {
-> -       case NET_XMIT_SUCCESS:
-> -               pr_warn("dev_queue_xmit() returned NET_XMIT_SUCCESS\n");
-> -               break;
-> -       case NET_XMIT_DROP:
-> -               pr_warn("dev_queue_xmit() returned NET_XMIT_DROP\n");
-> -               break;
-> -       case NET_XMIT_CN:
-> -               pr_warn("dev_queue_xmit() returned NET_XMIT_CN\n");
-> -               break;
-> -       default:
-> -               pr_err("dev_queue_xmit() returned UNKNOWN(%d)\n", ret);
-> -       }
-> -
-> -       return 0;
-> +       KUNIT_EXPECT_EQ(test, dev_queue_xmit(skb), NET_XMIT_SUCCESS);
->  }
->
-> -static void __exit test_blackholedev_exit(void)
-> -{
-> -       pr_warn("test_blackholedev module terminating.\n");
-> -}
-> +static struct kunit_case blackholedev_cases[] =3D {
-> +       KUNIT_CASE(test_blackholedev),
-> +       {},
-> +};
-> +
-> +static struct kunit_suite blackholedev_suite =3D {
-> +       .name =3D "blackholedev",
-> +       .test_cases =3D blackholedev_cases,
-> +};
->
-> -module_init(test_blackholedev_init);
-> -module_exit(test_blackholedev_exit);
-> +kunit_test_suite(blackholedev_suite);
->
->  MODULE_AUTHOR("Mahesh Bandewar <maheshb@google.com>");
->  MODULE_DESCRIPTION("module test of the blackhole_dev");
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
-ts/net/Makefile
-> index 73ee88d6b043..afa4bcdc5833 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -7,7 +7,7 @@ CFLAGS +=3D -I../../../../usr/include/ $(KHDR_INCLUDES)
->  CFLAGS +=3D -I../
->
->  TEST_PROGS :=3D run_netsocktests run_afpackettests test_bpf.sh netdevice=
-.sh \
-> -             rtnetlink.sh xfrm_policy.sh test_blackhole_dev.sh
-> +             rtnetlink.sh xfrm_policy.sh
->  TEST_PROGS +=3D fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_de=
-frag.sh
->  TEST_PROGS +=3D udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_=
-snd.sh
->  TEST_PROGS +=3D udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reusep=
-ort_addr_any.sh
-> diff --git a/tools/testing/selftests/net/test_blackhole_dev.sh b/tools/te=
-sting/selftests/net/test_blackhole_dev.sh
-> deleted file mode 100755
-> index 3119b80e711f..000000000000
-> --- a/tools/testing/selftests/net/test_blackhole_dev.sh
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -# Runs blackhole-dev test using blackhole-dev kernel module
-> -
-> -if /sbin/modprobe -q test_blackhole_dev ; then
-> -       /sbin/modprobe -q -r test_blackhole_dev;
-> -       echo "test_blackhole_dev: ok";
-> -else
-> -       echo "test_blackhole_dev: [FAIL]";
-> -       exit 1;
-> -fi
->
-> ---
-> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20250207-blackholedev-kunit-convert-9a52a1a1a032
->
-> Best regards,
-> --
-> Tamir Duberstein <tamird@gmail.com>
+Convert this unit test to a KUnit test.
 
-Adding David.
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+I tested this using:
+$ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 ww_mutex
+
+On success:
+; [12:48:16] ================== ww_mutex (5 subtests) ===================
+; [12:48:16] ======================= test_mutex  ========================
+; [12:48:16] [PASSED] flags=0
+; [12:48:16] [PASSED] flags=1
+; [12:48:16] [PASSED] flags=2
+; [12:48:16] [PASSED] flags=3
+; [12:48:16] [PASSED] flags=4
+; [12:48:17] [PASSED] flags=5
+; [12:48:17] [PASSED] flags=6
+; [12:48:17] [PASSED] flags=7
+; [12:48:17] =================== [PASSED] test_mutex ====================
+; [12:48:17] ========================= test_aa  =========================
+; [12:48:17] [PASSED] lock
+; [12:48:17] [PASSED] trylock
+; [12:48:17] ===================== [PASSED] test_aa =====================
+; [12:48:17] ======================== test_abba  ========================
+; [12:48:17] [PASSED] trylock=0,resolve=0
+; [12:48:17] [PASSED] trylock=1,resolve=1
+; [12:48:17] [PASSED] trylock=0,resolve=0
+; [12:48:17] [PASSED] trylock=1,resolve=1
+; [12:48:17] ==================== [PASSED] test_abba ====================
+; [12:48:17] ======================= test_cycle  ========================
+; [12:48:17] [PASSED] nthreads=2
+; [12:48:17] =================== [PASSED] test_cycle ====================
+; [12:48:21] ========================= stress  ==========================
+; [12:48:21] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=1
+; [12:48:23] [PASSED] nlocks=16,nthreads_per_cpu=2,flags=2
+; [12:48:23] [PASSED] nlocks=2046,nthreads_per_cpu=3,flags=7
+; [12:48:23] ===================== [PASSED] stress ======================
+; [12:48:23] ==================== [PASSED] ww_mutex =====================
+; [12:48:23] ============================================================
+; [12:48:23] Testing complete. Ran 18 tests: passed: 18
+
+On failure:
+---
+ kernel/locking/Makefile                            |   3 +-
+ .../locking/{test-ww_mutex.c => ww_mutex_kunit.c}  | 311 ++++++++++-----------
+ lib/Kconfig.debug                                  |  12 +-
+ tools/testing/selftests/locking/ww_mutex.sh        |  19 --
+ 4 files changed, 163 insertions(+), 182 deletions(-)
+
+diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+index 0db4093d17b8..26af3e88fffa 100644
+--- a/kernel/locking/Makefile
++++ b/kernel/locking/Makefile
+@@ -30,5 +30,6 @@ obj-$(CONFIG_DEBUG_SPINLOCK) += spinlock.o
+ obj-$(CONFIG_DEBUG_SPINLOCK) += spinlock_debug.o
+ obj-$(CONFIG_QUEUED_RWLOCKS) += qrwlock.o
+ obj-$(CONFIG_LOCK_TORTURE_TEST) += locktorture.o
+-obj-$(CONFIG_WW_MUTEX_SELFTEST) += test-ww_mutex.o
+ obj-$(CONFIG_LOCK_EVENT_COUNTS) += lock_events.o
++
++obj-$(CONFIG_WW_MUTEX_KUNIT_TEST) += ww_mutex_kunit.o
+diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/ww_mutex_kunit.c
+similarity index 67%
+rename from kernel/locking/test-ww_mutex.c
+rename to kernel/locking/ww_mutex_kunit.c
+index bcb1b9fea588..ba89a4a702f9 100644
+--- a/kernel/locking/test-ww_mutex.c
++++ b/kernel/locking/ww_mutex_kunit.c
+@@ -3,10 +3,10 @@
+  * Module-based API test facility for ww_mutexes
+  */
+ 
+-#include <linux/kernel.h>
+-
++#include <kunit/test.h>
+ #include <linux/completion.h>
+ #include <linux/delay.h>
++#include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+ #include <linux/prandom.h>
+@@ -54,12 +54,39 @@ static void test_mutex_work(struct work_struct *work)
+ 	ww_mutex_unlock(&mtx->mutex);
+ }
+ 
+-static int __test_mutex(unsigned int flags)
++static const unsigned int *gen_range(
++	unsigned int *storage,
++	const unsigned int min,
++	const unsigned int max,
++	const int *prev)
++{
++	if (prev != NULL) {
++		if (*prev >= max)
++			return NULL;
++		*storage = *prev + 1;
++	} else {
++		*storage = min;
++	}
++	return storage;
++}
++
++static const void *test_mutex_gen_params(const void *prev, char *desc)
++{
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0, __TEST_MTX_LAST - 1, prev);
++
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "flags=%x", *next);
++	return next;
++}
++
++static void test_mutex(struct kunit *test)
+ {
+ #define TIMEOUT (HZ / 16)
++	const unsigned int *param = test->param_value;
++	const unsigned int flags = *param;
+ 	struct test_mutex mtx;
+ 	struct ww_acquire_ctx ctx;
+-	int ret;
+ 
+ 	ww_mutex_init(&mtx.mutex, &ww_class);
+ 	if (flags & TEST_MTX_CTX)
+@@ -79,53 +106,42 @@ static int __test_mutex(unsigned int flags)
+ 	if (flags & TEST_MTX_SPIN) {
+ 		unsigned long timeout = jiffies + TIMEOUT;
+ 
+-		ret = 0;
+ 		do {
+ 			if (completion_done(&mtx.done)) {
+-				ret = -EINVAL;
++				KUNIT_FAIL(test, "mutual exclusion failure");
+ 				break;
+ 			}
+ 			cond_resched();
+ 		} while (time_before(jiffies, timeout));
+ 	} else {
+-		ret = wait_for_completion_timeout(&mtx.done, TIMEOUT);
++		KUNIT_EXPECT_EQ(test, wait_for_completion_timeout(&mtx.done, TIMEOUT), 0);
+ 	}
+ 	ww_mutex_unlock(&mtx.mutex);
+ 	if (flags & TEST_MTX_CTX)
+ 		ww_acquire_fini(&ctx);
+ 
+-	if (ret) {
+-		pr_err("%s(flags=%x): mutual exclusion failure\n",
+-		       __func__, flags);
+-		ret = -EINVAL;
+-	}
+-
+ 	flush_work(&mtx.work);
+ 	destroy_work_on_stack(&mtx.work);
+-	return ret;
+ #undef TIMEOUT
+ }
+ 
+-static int test_mutex(void)
++static const void *test_aa_gen_params(const void *prev, char *desc)
+ {
+-	int ret;
+-	int i;
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0, 1, prev);
+ 
+-	for (i = 0; i < __TEST_MTX_LAST; i++) {
+-		ret = __test_mutex(i);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return 0;
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, *next ? "trylock" : "lock");
++	return next;
+ }
+ 
+-static int test_aa(bool trylock)
++static void test_aa(struct kunit *test)
+ {
++	const unsigned int *param = test->param_value;
++	const bool trylock = *param;
+ 	struct ww_mutex mutex;
+ 	struct ww_acquire_ctx ctx;
+ 	int ret;
+-	const char *from = trylock ? "trylock" : "lock";
+ 
+ 	ww_mutex_init(&mutex, &ww_class);
+ 	ww_acquire_init(&ctx, &ww_class);
+@@ -133,46 +149,42 @@ static int test_aa(bool trylock)
+ 	if (!trylock) {
+ 		ret = ww_mutex_lock(&mutex, &ctx);
+ 		if (ret) {
+-			pr_err("%s: initial lock failed!\n", __func__);
++			KUNIT_FAIL(test, "initial lock failed, ret=%d", ret);
+ 			goto out;
+ 		}
+ 	} else {
+ 		ret = !ww_mutex_trylock(&mutex, &ctx);
+ 		if (ret) {
+-			pr_err("%s: initial trylock failed!\n", __func__);
++			KUNIT_FAIL(test, "initial trylock failed, ret=%d", ret);
+ 			goto out;
+ 		}
+ 	}
+ 
+-	if (ww_mutex_trylock(&mutex, NULL))  {
+-		pr_err("%s: trylocked itself without context from %s!\n", __func__, from);
++	ret = ww_mutex_trylock(&mutex, NULL);
++	if (ret)  {
++		KUNIT_FAIL(test, "trylocked itself without context, ret=%d", ret);
+ 		ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	if (ww_mutex_trylock(&mutex, &ctx))  {
+-		pr_err("%s: trylocked itself with context from %s!\n", __func__, from);
++	ret = ww_mutex_trylock(&mutex, &ctx);
++	if (ret) {
++		KUNIT_FAIL(test, "trylocked itself with context, ret=%d", ret);
+ 		ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+ 	ret = ww_mutex_lock(&mutex, &ctx);
+ 	if (ret != -EALREADY) {
+-		pr_err("%s: missed deadlock for recursing, ret=%d from %s\n",
+-		       __func__, ret, from);
++		KUNIT_FAIL(test, "missed deadlock for recursing, ret=%d", ret);
+ 		if (!ret)
+ 			ww_mutex_unlock(&mutex);
+-		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+ 	ww_mutex_unlock(&mutex);
+-	ret = 0;
+ out:
+ 	ww_acquire_fini(&ctx);
+-	return ret;
+ }
+ 
+ struct test_abba {
+@@ -217,11 +229,28 @@ static void test_abba_work(struct work_struct *work)
+ 	abba->result = err;
+ }
+ 
+-static int test_abba(bool trylock, bool resolve)
++static const void *test_abba_gen_params(const void *prev, char *desc)
+ {
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 0b00, 0b11, prev);
++
++	if (next != NULL) {
++		const bool trylock = *next & 0b01 >> 0;
++		const bool resolve = *next & 0b10 >> 1;
++
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "trylock=%d,resolve=%d", trylock, resolve);
++	}
++	return next;
++}
++
++static void test_abba(struct kunit *test)
++{
++	const unsigned int *param = test->param_value;
++	const bool trylock = *param & 0b01 >> 0;
++	const bool resolve = *param & 0b10 >> 1;
+ 	struct test_abba abba;
+ 	struct ww_acquire_ctx ctx;
+-	int err, ret;
++	int err;
+ 
+ 	ww_mutex_init(&abba.a_mutex, &ww_class);
+ 	ww_mutex_init(&abba.b_mutex, &ww_class);
+@@ -259,21 +288,17 @@ static int test_abba(bool trylock, bool resolve)
+ 	flush_work(&abba.work);
+ 	destroy_work_on_stack(&abba.work);
+ 
+-	ret = 0;
+ 	if (resolve) {
+ 		if (err || abba.result) {
+-			pr_err("%s: failed to resolve ABBA deadlock, A err=%d, B err=%d\n",
+-			       __func__, err, abba.result);
+-			ret = -EINVAL;
++			KUNIT_FAIL(test, "failed to resolve ABBA deadlock, A err=%d, B err=%d",
++				   err, abba.result);
+ 		}
+ 	} else {
+ 		if (err != -EDEADLK && abba.result != -EDEADLK) {
+-			pr_err("%s: missed ABBA deadlock, A err=%d, B err=%d\n",
+-			       __func__, err, abba.result);
+-			ret = -EINVAL;
++			KUNIT_FAIL(test, "missed ABBA deadlock, A err=%d, B err=%d",
++				   err, abba.result);
+ 		}
+ 	}
+-	return ret;
+ }
+ 
+ struct test_cycle {
+@@ -314,15 +339,25 @@ static void test_cycle_work(struct work_struct *work)
+ 	cycle->result = err ?: erra;
+ }
+ 
+-static int __test_cycle(unsigned int nthreads)
++static const void *test_cycle_gen_params(const void *prev, char *desc)
+ {
++	static unsigned int storage;
++	const unsigned int *next = gen_range(&storage, 2, num_online_cpus(), prev);
++
++	if (next != NULL)
++		snprintf(desc, KUNIT_PARAM_DESC_SIZE, "nthreads=%d", *next);
++	return next;
++}
++
++static void test_cycle(struct kunit *test)
++{
++	const unsigned int *param = test->param_value;
++	const unsigned int nthreads = *param;
+ 	struct test_cycle *cycles;
+ 	unsigned int n, last = nthreads - 1;
+-	int ret;
+ 
+-	cycles = kmalloc_array(nthreads, sizeof(*cycles), GFP_KERNEL);
+-	if (!cycles)
+-		return -ENOMEM;
++	cycles = kunit_kmalloc_array(test, nthreads, sizeof(*cycles), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, cycles);
+ 
+ 	for (n = 0; n < nthreads; n++) {
+ 		struct test_cycle *cycle = &cycles[n];
+@@ -348,41 +383,24 @@ static int __test_cycle(unsigned int nthreads)
+ 
+ 	flush_workqueue(wq);
+ 
+-	ret = 0;
+ 	for (n = 0; n < nthreads; n++) {
+ 		struct test_cycle *cycle = &cycles[n];
+ 
+ 		if (!cycle->result)
+ 			continue;
+ 
+-		pr_err("cyclic deadlock not resolved, ret[%d/%d] = %d\n",
+-		       n, nthreads, cycle->result);
+-		ret = -EINVAL;
++		KUNIT_FAIL(test, "cyclic deadlock not resolved, ret[%d/%d] = %d",
++			   n, nthreads, cycle->result);
+ 		break;
+ 	}
+ 
+ 	for (n = 0; n < nthreads; n++)
+ 		ww_mutex_destroy(&cycles[n].a_mutex);
+-	kfree(cycles);
+-	return ret;
+-}
+-
+-static int test_cycle(unsigned int ncpus)
+-{
+-	unsigned int n;
+-	int ret;
+-
+-	for (n = 2; n <= ncpus + 1; n++) {
+-		ret = __test_cycle(n);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	return 0;
+ }
+ 
+ struct stress {
+ 	struct work_struct work;
++	struct kunit *test;
+ 	struct ww_mutex *locks;
+ 	unsigned long timeout;
+ 	int nlocks;
+@@ -401,12 +419,12 @@ static inline u32 prandom_u32_below(u32 ceil)
+ 	return ret;
+ }
+ 
+-static int *get_random_order(int count)
++static int *get_random_order(struct kunit *test, int count)
+ {
+ 	int *order;
+ 	int n, r;
+ 
+-	order = kmalloc_array(count, sizeof(*order), GFP_KERNEL);
++	order = kunit_kmalloc_array(test, count, sizeof(*order), GFP_KERNEL);
+ 	if (!order)
+ 		return order;
+ 
+@@ -435,7 +453,7 @@ static void stress_inorder_work(struct work_struct *work)
+ 	struct ww_acquire_ctx ctx;
+ 	int *order;
+ 
+-	order = get_random_order(nlocks);
++	order = get_random_order(stress->test, nlocks);
+ 	if (!order)
+ 		return;
+ 
+@@ -472,13 +490,10 @@ static void stress_inorder_work(struct work_struct *work)
+ 
+ 		ww_acquire_fini(&ctx);
+ 		if (err) {
+-			pr_err_once("stress (%s) failed with %d\n",
+-				    __func__, err);
++			KUNIT_FAIL(stress->test, "lock[%d] failed, err=%d", n, err);
+ 			break;
+ 		}
+ 	} while (!time_after(jiffies, stress->timeout));
+-
+-	kfree(order);
+ }
+ 
+ struct reorder_lock {
+@@ -495,19 +510,16 @@ static void stress_reorder_work(struct work_struct *work)
+ 	int *order;
+ 	int n, err;
+ 
+-	order = get_random_order(stress->nlocks);
+-	if (!order)
+-		return;
++	order = get_random_order(stress->test, stress->nlocks);
++	KUNIT_ASSERT_NOT_NULL(stress->test, order);
+ 
+ 	for (n = 0; n < stress->nlocks; n++) {
+-		ll = kmalloc(sizeof(*ll), GFP_KERNEL);
+-		if (!ll)
+-			goto out;
++		ll = kunit_kmalloc(stress->test, sizeof(*ll), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_NULL(stress->test, ll);
+ 
+ 		ll->lock = &stress->locks[order[n]];
+ 		list_add(&ll->link, &locks);
+ 	}
+-	kfree(order);
+ 	order = NULL;
+ 
+ 	do {
+@@ -523,8 +535,7 @@ static void stress_reorder_work(struct work_struct *work)
+ 				ww_mutex_unlock(ln->lock);
+ 
+ 			if (err != -EDEADLK) {
+-				pr_err_once("stress (%s) failed with %d\n",
+-					    __func__, err);
++				KUNIT_FAIL(stress->test, "lock failed, err=%d", err);
+ 				break;
+ 			}
+ 
+@@ -538,11 +549,6 @@ static void stress_reorder_work(struct work_struct *work)
+ 
+ 		ww_acquire_fini(&ctx);
+ 	} while (!time_after(jiffies, stress->timeout));
+-
+-out:
+-	list_for_each_entry_safe(ll, ln, &locks, link)
+-		kfree(ll);
+-	kfree(order);
+ }
+ 
+ static void stress_one_work(struct work_struct *work)
+@@ -558,8 +564,7 @@ static void stress_one_work(struct work_struct *work)
+ 			dummy_load(stress);
+ 			ww_mutex_unlock(lock);
+ 		} else {
+-			pr_err_once("stress (%s) failed with %d\n",
+-				    __func__, err);
++			KUNIT_FAIL(stress->test, "lock failed, err=%d", err);
+ 			break;
+ 		}
+ 	} while (!time_after(jiffies, stress->timeout));
+@@ -570,22 +575,41 @@ static void stress_one_work(struct work_struct *work)
+ #define STRESS_ONE BIT(2)
+ #define STRESS_ALL (STRESS_INORDER | STRESS_REORDER | STRESS_ONE)
+ 
+-static int stress(int nlocks, int nthreads, unsigned int flags)
++struct stress_case {
++	int nlocks;
++	int nthreads_per_cpu;
++	unsigned int flags;
++};
++
++static const struct stress_case stress_cases[] = {
++	{ 16, 2, STRESS_INORDER },
++	{ 16, 2, STRESS_REORDER },
++	{ 2046, hweight32(STRESS_ALL), STRESS_ALL },
++};
++
++static void stress_case_to_desc(const struct stress_case *param, char *desc)
+ {
++	snprintf(desc, KUNIT_PARAM_DESC_SIZE, "nlocks=%d,nthreads_per_cpu=%d,flags=%x",
++		 param->nlocks, param->nthreads_per_cpu, param->flags);
++}
++
++KUNIT_ARRAY_PARAM(stress_cases, stress_cases, stress_case_to_desc);
++
++static void stress(struct kunit *test)
++{
++	const struct stress_case *param = test->param_value;
++	const int nlocks = param->nlocks;
++	int nthreads = param->nthreads_per_cpu * num_online_cpus();
++	const unsigned int flags = param->flags;
+ 	struct ww_mutex *locks;
+ 	struct stress *stress_array;
+ 	int n, count;
+ 
+-	locks = kmalloc_array(nlocks, sizeof(*locks), GFP_KERNEL);
+-	if (!locks)
+-		return -ENOMEM;
++	locks = kunit_kmalloc_array(test, nlocks, sizeof(*locks), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, locks);
+ 
+-	stress_array = kmalloc_array(nthreads, sizeof(*stress_array),
+-				     GFP_KERNEL);
+-	if (!stress_array) {
+-		kfree(locks);
+-		return -ENOMEM;
+-	}
++	stress_array = kunit_kmalloc_array(test, nthreads, sizeof(*stress_array), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, stress_array);
+ 
+ 	for (n = 0; n < nlocks; n++)
+ 		ww_mutex_init(&locks[n], &ww_class);
+@@ -617,6 +641,7 @@ static int stress(int nlocks, int nthreads, unsigned int flags)
+ 		stress = &stress_array[count++];
+ 
+ 		INIT_WORK(&stress->work, fn);
++		stress->test = test;
+ 		stress->locks = locks;
+ 		stress->nlocks = nlocks;
+ 		stress->timeout = jiffies + 2*HZ;
+@@ -629,70 +654,42 @@ static int stress(int nlocks, int nthreads, unsigned int flags)
+ 
+ 	for (n = 0; n < nlocks; n++)
+ 		ww_mutex_destroy(&locks[n]);
+-	kfree(stress_array);
+-	kfree(locks);
+-
+-	return 0;
+ }
+ 
+-static int __init test_ww_mutex_init(void)
++static int ww_mutex_suite_init(struct kunit_suite *suite)
+ {
+-	int ncpus = num_online_cpus();
+-	int ret, i;
+-
+-	printk(KERN_INFO "Beginning ww mutex selftests\n");
+-
+-	prandom_seed_state(&rng, get_random_u64());
+-
+ 	wq = alloc_workqueue("test-ww_mutex", WQ_UNBOUND, 0);
+ 	if (!wq)
+ 		return -ENOMEM;
+ 
+-	ret = test_mutex();
+-	if (ret)
+-		return ret;
+-
+-	ret = test_aa(false);
+-	if (ret)
+-		return ret;
+-
+-	ret = test_aa(true);
+-	if (ret)
+-		return ret;
+-
+-	for (i = 0; i < 4; i++) {
+-		ret = test_abba(i & 1, i & 2);
+-		if (ret)
+-			return ret;
+-	}
+-
+-	ret = test_cycle(ncpus);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(16, 2*ncpus, STRESS_INORDER);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(16, 2*ncpus, STRESS_REORDER);
+-	if (ret)
+-		return ret;
+-
+-	ret = stress(2046, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
+-	if (ret)
+-		return ret;
++	prandom_seed_state(&rng, get_random_u64());
+ 
+-	printk(KERN_INFO "All ww mutex selftests passed\n");
+ 	return 0;
+ }
+ 
+-static void __exit test_ww_mutex_exit(void)
++static void ww_mutex_suite_exit(struct kunit_suite *suite)
+ {
+-	destroy_workqueue(wq);
++	if (wq)
++		destroy_workqueue(wq);
+ }
+ 
+-module_init(test_ww_mutex_init);
+-module_exit(test_ww_mutex_exit);
++static struct kunit_case ww_mutex_cases[] = {
++	KUNIT_CASE_PARAM(test_mutex, test_mutex_gen_params),
++	KUNIT_CASE_PARAM(test_aa, test_aa_gen_params),
++	KUNIT_CASE_PARAM(test_abba, test_abba_gen_params),
++	KUNIT_CASE_PARAM(test_cycle, test_cycle_gen_params),
++	KUNIT_CASE_PARAM_ATTR(stress, stress_cases_gen_params, {.speed = KUNIT_SPEED_SLOW}),
++	{},
++};
++
++static struct kunit_suite ww_mutex_suite = {
++	.name = "ww_mutex",
++	.suite_init = ww_mutex_suite_init,
++	.suite_exit = ww_mutex_suite_exit,
++	.test_cases = ww_mutex_cases,
++};
++
++kunit_test_suite(ww_mutex_suite);
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Intel Corporation");
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1af972a92d06..a7edcbdc1428 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1586,16 +1586,18 @@ config LOCK_TORTURE_TEST
+ 	  Say M if you want these torture tests to build as a module.
+ 	  Say N if you are unsure.
+ 
+-config WW_MUTEX_SELFTEST
+-	tristate "Wait/wound mutex selftests"
++config WW_MUTEX_KUNIT_TEST
++	tristate "KUnit test for wait/wound mutex" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
+ 	help
+-	  This option provides a kernel module that runs tests on the
+-	  on the struct ww_mutex locking API.
++	  This option provides a KUnit test that exercises the struct
++	  ww_mutex locking API.
+ 
+ 	  It is recommended to enable DEBUG_WW_MUTEX_SLOWPATH in conjunction
+ 	  with this test harness.
+ 
+-	  Say M if you want these self tests to build as a module.
++	  Say M if you want these tests to build as a module.
+ 	  Say N if you are unsure.
+ 
+ config SCF_TORTURE_TEST
+diff --git a/tools/testing/selftests/locking/ww_mutex.sh b/tools/testing/selftests/locking/ww_mutex.sh
+deleted file mode 100755
+index 91e4ac7566af..000000000000
+--- a/tools/testing/selftests/locking/ww_mutex.sh
++++ /dev/null
+@@ -1,19 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+-# Runs API tests for struct ww_mutex (Wait/Wound mutexes)
+-if ! /sbin/modprobe -q -n test-ww_mutex; then
+-	echo "ww_mutex: module test-ww_mutex is not found [SKIP]"
+-	exit $ksft_skip
+-fi
+-
+-if /sbin/modprobe -q test-ww_mutex; then
+-       /sbin/modprobe -q -r test-ww_mutex
+-       echo "locking/ww_mutex: ok"
+-else
+-       echo "locking/ww_mutex: [FAIL]"
+-       exit 1
+-fi
+
+---
+base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+change-id: 20250208-ww_mutex-kunit-convert-71842a7a6be2
+
+Best regards,
+-- 
+Tamir Duberstein <tamird@gmail.com>
+
