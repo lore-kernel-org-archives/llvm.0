@@ -1,169 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AEB2566D3;
-	Mon, 10 Feb 2025 17:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFF325B672
+	for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 18:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739209255; cv=none; b=pV33Dq5LexMZZcZ/vlzxPBIhZkK5ombgy1lBew0KXA31DcE9QXlwwomIo68QztI+joLnZwQk5BVHV/RU95mSKYTlw5ScE0LtA2HV73hv2An/7EMqdSiGZmXTOj8lVRwpNkiHP9AEp3vqtFOZZlXz+94juT8NvzadL0wwPtJpvxc=
+	t=1739210810; cv=none; b=kUQGWfyjRFp3ae/ivaXLDPTJPIX/qNQzVME6AMWVredrbP+D1MN7t9QMdABgmLN8K0KaDcMuCN+UjrifSZD1T4qN7iGC0/DSqFawWf7nIQPNfjDU/lB6EZzbISPn2ptUGaJeAs23KUAZqqippvcr81oAjqa8G3j1v13PdcIDVQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739209255; c=relaxed/simple;
-	bh=Czx2ZN+CNV69HTBXtqBdziAmQDS9Uz5v9f4Kjae0P2Y=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N63mbcksRXBQYjzYstL9o03vycYHYK7plfJWAw30S9OZihDN03uUw2fxXsPHBaDXlozL659f1ldCw3WgpH89IBEM/XGdAlL/h+kkpYUDe2tZ53MCQCTwxYwHuA2c0X+Z9xOCoUrEkddlvmTXOZA9rvLD0bXS2ZV4+KytIw/CrOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g52Fkkuu; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739210810; c=relaxed/simple;
+	bh=zWHQ/xQzS0SVky8j3UXIWdJ6YcNh5e0HYTnqYtA1fh4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jkVFcYTpVN3ll2qpeEer5jag0iGfIqEWD8poZCk0JzYoZe9fr9DWFq30dOU2yMsBai1nlgeE4BLPex9Q0Wio27WDpWFEoQQ1wgh4vlW410Yu8zuNa6KxBt0x2X5gyPjrM/M4jQRNg6Hx+ukfdQaxE7aRwIPu/KmijQpuK1xwYQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UpdNTFMM; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g52Fkkuu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739209253; x=1770745253;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Czx2ZN+CNV69HTBXtqBdziAmQDS9Uz5v9f4Kjae0P2Y=;
-  b=g52Fkkuu84lMOou2Q8/YnU3EvZu8r+ZVvqgzaZ7bfyQt/vIP1XusfKaD
-   t6sKI9xUrtOearhR9Aqq91+Jd0gsSmPzmKsap1VEeOtrzZaJuPe47mJ3E
-   OXZOYf9Fb+fDVgFBkUnjrk0ydRwpqh6BQW9SLrHTuZRFOfNI97kJ1ny2j
-   gJipueVFWEtsxXH+MgnD8YFioZAZn5zvkPvNtNmMiZrAjNv8sJRgvV0BK
-   iMRgUwrYXrpkeVjE8FUIsSMEA5ZWBxDSX4gmOgJevun6lYmACpxSOhHaa
-   HwTPJmLlJMLky36WBGoHAE3G1DoB58db8wGFlInMha9K2050xRhJMYuws
-   w==;
-X-CSE-ConnectionGUID: rTmM382dR3CPKwAkfE4RkQ==
-X-CSE-MsgGUID: wCIi/zQtT8WVYMBexw1qJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39950600"
-X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
-   d="scan'208";a="39950600"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 09:40:52 -0800
-X-CSE-ConnectionGUID: S/nu/nfQRaaXJz/u6btLJA==
-X-CSE-MsgGUID: swoCu7DnQw2eDZtI4/gc7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149441067"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 10 Feb 2025 09:40:52 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1thXm5-00138H-11;
-	Mon, 10 Feb 2025 17:40:49 +0000
-Date: Tue, 11 Feb 2025 01:40:35 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/devlink/devl_internal.h:21:19: warning: arithmetic between
- different enumeration types ('enum devlink_reload_limit' and 'enum
- devlink_reload_action')
-Message-ID: <202502110106.4DHWwEvB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UpdNTFMM"
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3d146357fb2so1445ab.1
+        for <llvm@lists.linux.dev>; Mon, 10 Feb 2025 10:06:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739210806; x=1739815606; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SLOx8uZKOqbSMHNZbZfwBaDXMWD7wne+WuTTmhB+k4g=;
+        b=UpdNTFMM16AxdIN2R6M74PMPNOjOR2MphQ41PNvusmON+FeXCB5WTL/dmv+YBZymA/
+         TLjTYNKa0VHE1Cg3TBPDsmkaWhUTKg6DJew5dHb2/zdldBJS6YS4Rj7VsxTfGBUW+dYc
+         iEjnrlsIZdl+jxKQkdvUBWcI8D8rj+CjtoJL4/+MPpZvS/S0duKDTTm3pbP3Kj/X0MbA
+         50mSs/6FYQoPv10V7lHxXmdhmZwst8ILQvNpsxk4ovofM+Bzv8hJ2AOp999+oPkxbUop
+         1flizRZdxlRHLZQfX8yk/69QJC/l/ix3PDeqGg73viFZwsFPXai0t1tAw9ANb9VvUcne
+         48NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739210806; x=1739815606;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SLOx8uZKOqbSMHNZbZfwBaDXMWD7wne+WuTTmhB+k4g=;
+        b=RBDrPVzt4s8AMEZLvBxD689e9bcY2lDooK/BOwj1BdIjc4DwyzaiZ1SRWsiLPuh3Yr
+         SX9GTzSwAZIqG8Ooi2StAVzbO1STjLbTZUjJeTHIx7OiLY5LZo8zD+K0Q62aJTTwHddq
+         XcrB1wfa3DwZdwjwUxX5MFhWe2dWzbhQYw0WjVJPdJq1IMZ1VTSzk82aJICVE9XwBenR
+         14ezECnMqqmWaVJk2Tdr9gD6eCSGNcjBgkvo3lpGJdzczR3N+oh8Q5qBAq0q99FcdCbQ
+         EuU3ww+pYNq892rTupQyAciOKwFNCmS3Cp8GOUuRhu4dvnQ3iGiDqjXIxPP1xBbYqIVz
+         ViAg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZXBFRIsFDCHJjKgY3kGfICjJovtN/avjmzxch7Zk3BvbRlKpsxcvD7WkntS3C3OlNqjlm@lists.linux.dev
+X-Gm-Message-State: AOJu0YwpA0ldO4iZx7FgVys8rK7Fq3EVoZ+Qy2jG+mgkcxqz9ZNdp5AL
+	aHXNFAd/Ex7aj/Qtv/rNPKoD/okZynbn5GJGCny0x+0jbRIJcOY4NsfxI3iQtBwjj3yXPxG0gWT
+	UgcJIUMPv6T1Ag93LaJ3lz+rca5VT75dH2OZY
+X-Gm-Gg: ASbGnctCZ1zYhZuXev5Y9E2dwgKCA46uJEXdu/vItZQbkfdSPXx/CBxMm/xcQyhP7so
+	/YEMnFPLexyljNlWfHcpkBt6sUgsWDln8QJrItICUzP+Kyb6m//kFjpPZims4H5Mg0AHz+Xe/9c
+	g6Q5C8pVg2B2JSPil7zfxA+wau
+X-Google-Smtp-Source: AGHT+IFQyFzL4toKjST54JeKC5iEPw/FRNhzC05ypK58dUkv8jG9yKJ7k/Rc5cXiBrhxLzre2Y5FkHw43ZhurdlnnSM=
+X-Received: by 2002:a05:6e02:2198:b0:3cf:fbc9:5c10 with SMTP id
+ e9e14a558f8ab-3d14cde2865mr7402415ab.26.1739210806086; Mon, 10 Feb 2025
+ 10:06:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250122062332.577009-1-irogers@google.com> <Z5K712McgLXkN6aR@google.com>
+ <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 10 Feb 2025 10:06:34 -0800
+X-Gm-Features: AWEUYZmqaHEjcEf5hPT16AA9v5ALYmeBI5HqSnlIc7uBGpS_AVyNMa9dTNcQdl0
+Message-ID: <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
+To: Namhyung Kim <namhyung@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org, 
+	Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Jakub Kicinski <kuba@kernel.org>
-CC: Jacob Keller <jacob.e.keller@intel.com>
-CC: Jiri Pirko <jiri@nvidia.com>
+On Thu, Jan 23, 2025 at 3:36=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+> On Thu, Jan 23, 2025 at 1:59=E2=80=AFPM Namhyung Kim <namhyung@kernel.org=
+> wrote:
+> > I like changes up to this in general.  Let me take a look at the
+> > patches.
 
-Hi Jakub,
+So it would be nice to make progress with this series given some level
+of happiness, I don't see any actions currently on the patch series as
+is. If I may be so bold as to recap the issues that have come up:
 
-FYI, the error/warning still remains.
+1) Andi Kleen mentions that dlopen is inferior to linking against
+libraries and those libraries aren't a memory overhead if unused.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a64dcfb451e254085a7daee5fe51bf22959d52d3
-commit: 687125b5799cd5120437fa455cfccbe8537916ff devlink: split out core code
-date:   2 years, 1 month ago
-config: arm-randconfig-004-20250120 (https://download.01.org/0day-ci/archive/20250211/202502110106.4DHWwEvB-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502110106.4DHWwEvB-lkp@intel.com/reproduce)
+I agree but pointed-out the data center use case means that saving
+size on binaries can be important to some (me). We've also been trying
+to reduce perf's dependencies for distributions as perf dragging in
+say the whole of libLLVM can be annoying for making minimal
+distributions that contain perf. Perhaps somebody (Arnaldo?) more
+involved with distributions can confirm or deny the distribution
+problem, I'm hoping it is self-evident.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502110106.4DHWwEvB-lkp@intel.com/
+2) Namhyung Kim was uncomfortable with the code defining
+types/constants that were in header files as the two may drift over
+time
 
-All warnings (new ones prefixed by >>):
+I agree but in the same way as a function name is an ABI for dlysym,
+the types/constants are too. Yes a header file may change, but in
+doing so the ABI has changed and so it would be an incompatible change
+and everything would be broken. We'd need to fix the code for this,
+say as we did when libbpf moved to version 1.0, but using a header
+file would only weakly guard against this problem. The problem with
+including the header files is that then the build either breaks
+without the header or we need to support a no linking against a
+library and not using dlopen case. I suspect a lot of distributions
+wouldn't understand the build subtlety in this, the necessary build
+options and things installed, and we'd end up not using things like
+libLLVM even when it is known to be a large performance win. I also
+hope one day we can move from parsing text out of forked commands, as
+it is slower and more brittle, to just directly using libraries.
+Making dlopen the fallback (probably with a warning on failure) seems
+like the right direction for this except we won't get it if we need to
+drag in extra dependency header files for the build to succeed (well
+we could have a no library or dlopen option, but then we'd probably
+find distributions packaging this and things like perf annotate
+getting broken as they don't even know how to dlopen a library).
 
-   In file included from net/devlink/leftover.c:10:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/leftover.c:34:
->> net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/leftover.c:4473:20: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-    4473 |                 stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-         |                            ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/leftover.c:4521:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-    4521 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
---
-   In file included from net/devlink/core.c:7:
-   In file included from include/net/genetlink.h:5:
-   In file included from include/linux/genetlink.h:5:
-   In file included from include/uapi/linux/genetlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/core.c:9:
->> net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
+3) Namhyung Kim (and I) also raises that the libcapstone patch can be
+smaller by dropping the print_capstone_detail support on x86
 
+Note, given the similarity between capstone and libLLVM for
+disassembly, it is curious that only capstone gives the extra detail.
 
-vim +21 net/devlink/devl_internal.h
+I agree. Given the capstone disassembly output will be compromised we
+should warn for this, probably in Makefile.config to avoid running
+afoul of -Werror. It isn't clear that having a warning is a good move
+given the handful of structs needed to support print_capstone_detail.
+I'd prefer to keep the structs so that we haven't got a warning that
+looks like it needs cleaning up.
 
-    16	
-    17	#define DEVLINK_RELOAD_STATS_ARRAY_SIZE \
-    18		(__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-    19	
-    20	struct devlink_dev_stats {
-  > 21		u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-    22		u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-    23	};
-    24	
+4) Namhyung Kim raised concerns over #if placement
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Namhyung raised that he'd prefer:
+```
+#if HAVE_LIBCAPSTONE_SUPPORT
+// lots of code
+#else
+// lots of code
+#endif
+```
+rather than the #ifs being inside or around individual functions. I
+raised that the large #ifs is a problem in the current code as you
+lose context when trying to understand a function. You may look at a
+function but not realize it isn't being used because of a #if 10s or
+100s of lines above. Namhyung raised that the large #ifs is closer to
+kernel style, I disagreed as I think kernel style is only doing this
+when it stubs out a bunch of API functions, not when more context
+would be useful. Hopefully as the person writing the patches the style
+choice I've made can be respected.
+
+5) Daniel Xu raised issues with the removal of libbfd for Rust
+support, as the code implies libbfd C++ demangling is a pre-requisite
+of legacy rust symbol demangling
+
+A separate patch was posted adding Rust v0 symbol demangling with no
+libbfd dependency:
+https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com/
+The legacy support should work with the non-libbfd demanglers as
+that's what we have today. We should really clean up Rust demangling
+and have tests. This is blocked on the Rust community responding to:
+https://github.com/rust-lang/rust/issues/60705
+
+Thanks,
+Ian
