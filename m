@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE6D1F3FD9;
-	Tue, 11 Feb 2025 01:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1676D1E47CA;
+	Tue, 11 Feb 2025 01:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739237501; cv=none; b=hKpPi/+uYg70YR2Ujybq+XUYzAOkJOFkjvLf7eIUg6/YBCOsys3na0O9xVN73auNsD82r1HtLkKYJtSPkPFiW09uGG8NTtdVp0Km/OcSL3yIB7ay/x+uSh2FUMbYC6seU3mOFRh6/DVXM57LC9Oz3Q6ebPDiYh8m2AiTghDQr2o=
+	t=1739237531; cv=none; b=MTQxU/UvPYqr/4bpkuC+2eSIzWmci6qqYvrnM4h3mXF4UgClQQzvWD2T3rnNwp3Y6Kwn3Ns9wj027G9MxSYD29M9FmfXgMbK77ie5iM4bIzvLZNS2ua4tRmoZyB6FBCxc+sQBRBPQyVqQdNtL0/gTLwxRLtD05yG1Jy1pM+eOic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739237501; c=relaxed/simple;
-	bh=tzInMHi9KMI970TSdYOun3wuGAiQ+onTovH56YsppvU=;
+	s=arc-20240116; t=1739237531; c=relaxed/simple;
+	bh=Qd9EbEfUc2rgwaM7dg9qaMFcZzG7+jMZAS0id98Xqnw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Tqt8jmxlro3w7XZL/wd6YJ5+xdG8zd/nfhZnnjiERjwz8X8pLo7KARMItAWJwddRIOn1wlrEALFR29i2DFPstSbuS4I6Hffr8E4Hq7biUU6kpqQCkYZsJvHNFtix90regiil7UR/4hcxTIhCbrSDedz24u0P/uDCjSlKN/YOkIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRIc5N5k; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=iS1/MfWbzCRMZA9TzDYKmbw3jnj1hVK4sTtXrseqBYDQlwn4vT4y5T+riEVCmAkW6s2VhXlNZxJbxXV4gjRA4BNHvgIeTcfZD/jgKK73QaNdrd2w8FZJ7qJF8pMVBs0VuAGUcMJ8RgGHwzIoCPXRvxuVo11BfZZ9AtkDnw/g3/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tte4dNf7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRIc5N5k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F82C4CED1;
-	Tue, 11 Feb 2025 01:31:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tte4dNf7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAE3C4CEE7;
+	Tue, 11 Feb 2025 01:32:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739237501;
-	bh=tzInMHi9KMI970TSdYOun3wuGAiQ+onTovH56YsppvU=;
+	s=k20201202; t=1739237530;
+	bh=Qd9EbEfUc2rgwaM7dg9qaMFcZzG7+jMZAS0id98Xqnw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cRIc5N5kf/rzzn3ctYsLizWbJDrTxsKIG8eCt0R0Al0pz7r8583jWNV46Cm7zsT/t
-	 MBT2pTUPrh3Qh91spzXKgQO/QjYx2jeKXt/DrivC1ZUKsYZOSqYHqDfZtRY8YRdty4
-	 3KdbwGELjyEt0RPkSlVt04D0xqs2wkw+a1cC+DuJhBHoqeczyic6VJSp2aO0RB7FjW
-	 QQUfXm9JkJXno5afcI62tWpFG6+SaF/UX1X87/IQxwIrm3PvaGpi/PhDBm3PG9Ksaz
-	 gwCfYyRDR9Wn4wwO89kbpz7nuRiPgt5uF0zY6O4YFXqC2ymoQz+J/PCGaPiWV2Jm5v
-	 cV/DsZPQksUJA==
+	b=tte4dNf7J0SpSqSBGvj5bhTVF7v0KJjt13O7DIAze5p9T2bc402c0MakW0YAXBoYj
+	 HKEv6lVJVmdJohf9pB3kOssB0lyCYZrVEaiWDQGomQ/oPmuCC2eUhCOHjF8MyYRFXP
+	 P9mxViBoEdSNGY3kgUVIF2DMWgLEJxNFPdEh6ayfPeCQM/Q/x93+3zQ64ZVVdvtuqS
+	 PQlYokkwMLlTcsNiFyUKB4aVldUI8H8TgkauQSbczKQcTEF97wlLU4c5CBPAgYIaSG
+	 gI2xcs4NpkSJnSzBG4g1txuESMb0eRpNtTiMP7LzFYp1I8HGk1zXc9qopu3H6R4NIE
+	 /Kj2b5ajwzPSA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	frederic@kernel.org,
 	nathan@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 03/15] hrtimers: Mark is_migration_base() with __always_inline
-Date: Mon, 10 Feb 2025 20:31:23 -0500
-Message-Id: <20250211013136.4098219-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 02/11] hrtimers: Mark is_migration_base() with __always_inline
+Date: Mon, 10 Feb 2025 20:31:57 -0500
+Message-Id: <20250211013206.4098522-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250211013136.4098219-1-sashal@kernel.org>
-References: <20250211013136.4098219-1-sashal@kernel.org>
+In-Reply-To: <20250211013206.4098522-1-sashal@kernel.org>
+References: <20250211013206.4098522-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.76
+X-stable-base: Linux 6.1.128
 Content-Transfer-Encoding: 8bit
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
@@ -78,7 +78,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index e99b1305e1a5f..d5d1b745506a9 100644
+index 8db65e2db14c7..9ef8732b30f8b 100644
 --- a/kernel/time/hrtimer.c
 +++ b/kernel/time/hrtimer.c
 @@ -145,11 +145,6 @@ static struct hrtimer_cpu_base migration_cpu_base = {
@@ -93,7 +93,7 @@ index e99b1305e1a5f..d5d1b745506a9 100644
  /*
   * We are using hashed locking: holding per_cpu(hrtimer_bases)[n].lock
   * means that all timers which are tied to this base via timer->base are
-@@ -275,11 +270,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
+@@ -274,11 +269,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
  
  #else /* CONFIG_SMP */
  
@@ -104,8 +104,8 @@ index e99b1305e1a5f..d5d1b745506a9 100644
 -
  static inline struct hrtimer_clock_base *
  lock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
- 	__acquires(&timer->base->cpu_base->lock)
-@@ -1381,6 +1371,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
+ {
+@@ -1378,6 +1368,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
  	}
  }
  
