@@ -1,132 +1,335 @@
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D301E3DD8;
-	Tue, 11 Feb 2025 09:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6DD1F4E5B;
+	Tue, 11 Feb 2025 10:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739265464; cv=none; b=ERo9iRbeu3kW2UNmTDD8omUFHfkB9ZRHieZzoLz1y7anFYqu7kS/zMvn5dWNrs0S3n2sjitw1aZrfrkP5+4jXDnvI2Nt1CX3do78NAtHsWUbfIubVDmPxjzJqh7LawX1JB1gb0eYZ7+CMnPLS+dLTtVicN6DJx3JICy3A4IbVHA=
+	t=1739270521; cv=none; b=P80c8yjJX8jo0jP7Dw2qscYtbPCTCQCEMmctI0I5z7mjEmZ1nWsC+u7uCZikjW590RhWl05Y9eTZAPqApVoo7Gk7p8Foui37A085NlhdM3K8PbBwPA4lLMByOfNiTvKp77uQmfEruP8MnjgE6G1vebJLpicGgzJXVhmCqipTAFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739265464; c=relaxed/simple;
-	bh=q1ph39zTYKj5k8jovBlZb0OmW0D/Cl5sBfBfHNGZ+Fs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sj2SKqN90VXUsvBQDvoqT6M/yy2K4pK+ydhrrB//S6ljnfhZ2FrEeBq8rlga0mHVhs+MlvxxsDBeU/Ks8hpEnTTtTp8qD8Gp1jGz51a9b312jEUtZLmHlD1MB+1XVRhXwBYERTl4G6xgwxkFLn65vDhdYXV+bgZNErWAiXgzmpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=T7xACDYR; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1739270521; c=relaxed/simple;
+	bh=1g0fWuCfXP4ozG4qrKwBzzQ+ga1nSiXJHNkqR36aCaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIkVp2y1aAh1DWJbq3goiurg2ZUIHk/H37QjpLqivcPu7/7XFrIY0UP3l/ECdpSPDlJC4BqOQmlIaC9AygMGjkUONqWXnkqw3uj9+8kqXwb2kZ1OjrdFXDFD58ie+jYqbUatkymxOOQl/xin6M98R0L/nreCVOtWjaD7zXSqkR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W7wEi/DR; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="T7xACDYR"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 27539433D9;
-	Tue, 11 Feb 2025 09:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1739265459;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T128NbBeShVjgHAQHFQBVXrcbz3LydX8l7wGrFI7ueM=;
-	b=T7xACDYRo4ZKNUXI1/0DERPK7oBUD4COOhQeQ03s6RH8EOyByC+6pjBEZ6OzrOskPxeFuS
-	bj1x1oMaVubfmt3p26TgQVuUpl2zcK0XoiUC456N7+IGvvckqpqJgCItd7YswXw26TdEOJ
-	M91jZud9cbdMfRKvKG0rkxCGpLdYdpRNO1gh9mW3iT33Ge4lrkju+oPKRM6FENGcYAigOS
-	AMmT/wHxfjhD2hbhK6CFJZvEZDF1S2DQtqSVDuLGIfB4sw7wuuj4cIXdgh7E5LPVHPgIIh
-	G5b8e1G431JQKCpx/CGPenErBzIhdyOHy2eojCn4jjfcomZSr06/ZsDQrE6S7g==
-Date: Tue, 11 Feb 2025 10:17:35 +0100
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: kernel test robot <lkp@intel.com>
-Cc: davem@davemloft.net, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski
- <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>,
- linux-arm-kernel@lists.infradead.org, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Herve Codina <herve.codina@bootlin.com>,
- Florian Fainelli <f.fainelli@gmail.com>, Heiner Kallweit
- <hkallweit1@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>, Marek
- =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>, Oleksij Rempel
- <o.rempel@pengutronix.de>, =?UTF-8?B?Tmljb2zDsg==?= Veronese
- <nicveronese@gmail.com>, Simon Horman <horms@kernel.org>,
- mwojtas@chromium.org, Antoine Tenart <atenart@kernel.org>,
- devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, Krzysztof
- Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Romain Gantois
- <romain.gantois@bootlin.com>, Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next 11/13] net: phy: Only rely on phy_port for
- PHY-driven SFP
-Message-ID: <20250211101735.0af025c4@fedora-1.home>
-In-Reply-To: <202502082347.tFufJ529-lkp@intel.com>
-References: <20250207223634.600218-12-maxime.chevallier@bootlin.com>
-	<202502082347.tFufJ529-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W7wEi/DR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739270519; x=1770806519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1g0fWuCfXP4ozG4qrKwBzzQ+ga1nSiXJHNkqR36aCaA=;
+  b=W7wEi/DRtzI5Hequ7FxXDj1KgvxzHoiKOA0VjMiSFtt2DfE+dxl8oapY
+   yyhLI406y9/mg9bHTSc0VbMf6Pl8xuI65AAm0qtr3pHjpGZqreaTqo2Pg
+   WV8iKdCdJ12eBnD+Q9kZl80S0YXgr22mpGL+YFgQvMkTgDUkERo6UzsQ8
+   6MUWUnhRadvC0HxRkuQNiuio05IcXJqnrEnmN17bfo62qEGZ1fD683/dw
+   qKG7rZhFndNWWuwvQrAFK87s/b5ntmsjCA7t7iYA9GeOOtxKwtuD5XSEA
+   bWxWyc8dZUK1FCluxWZGogHOh2EV0bCPeFWF32RYgAhmloOG/pkaudyz8
+   g==;
+X-CSE-ConnectionGUID: zphtByOjSgKGgj+AwNYoQg==
+X-CSE-MsgGUID: Yj0pMiyoQp+nofTMEX0Vow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="57292572"
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="57292572"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 02:41:55 -0800
+X-CSE-ConnectionGUID: OR7M8NQ/T/GWnNWBzrN5Ew==
+X-CSE-MsgGUID: 6xfvOQM4SFmcoWjYaxKYxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="112989075"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 11 Feb 2025 02:41:53 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1thniA-00142X-2q;
+	Tue, 11 Feb 2025 10:41:50 +0000
+Date: Tue, 11 Feb 2025 18:41:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+	linux-scsi@vger.kernel.org, dgilbert@interlog.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	martin.petersen@oracle.com, James.Bottomley@hansenpartnership.com,
+	jmeneghi@redhat.com,
+	Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>
+Subject: Re: [PATCH v1 2/7] scsi: scsi_debug: Add READ BLOCK LIMITS and
+ modify LOAD for tapes
+Message-ID: <202502111805.dXd61ARr-lkp@intel.com>
+References: <20250210191232.185207-3-Kai.Makisara@kolumbus.fi>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdeivdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeifeejgeevhffhhfefvdfhgefgudefkeefgeeivdeuveejueeljeekgfffieeihfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgnecukfhppedvrgdtudemtggsudelmeekugegtgemlehftddtmegstgdvudemkeekleelmeehgedttgemvgehlegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemkegugegtmeelfhdttdemsggtvddumeekkeelleemheegtdgtmegvheelvgdphhgvlhhopehfvgguohhrrgdquddrhhhomhgvpdhmrghilhhfrhhomhepmhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedvpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtr
- dhnvghtpdhrtghpthhtoheplhhlvhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgvqdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhmshhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250210191232.185207-3-Kai.Makisara@kolumbus.fi>
 
-Hi,
+Hi Kai,
 
-On Sun, 9 Feb 2025 00:04:55 +0800
-kernel test robot <lkp@intel.com> wrote:
+kernel test robot noticed the following build warnings:
 
-> Hi Maxime,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on net-next/main]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Chevallier/net-ethtool-Introduce-ETHTOOL_LINK_MEDIUM_-values/20250208-064223
-> base:   net-next/main
-> patch link:    https://lore.kernel.org/r/20250207223634.600218-12-maxime.chevallier%40bootlin.com
-> patch subject: [PATCH net-next 11/13] net: phy: Only rely on phy_port for PHY-driven SFP
-> config: i386-buildonly-randconfig-005-20250208 (https://download.01.org/0day-ci/archive/20250208/202502082347.tFufJ529-lkp@intel.com/config)
-> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082347.tFufJ529-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502082347.tFufJ529-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/net/phy/qcom/qca807x.c:698:12: error: use of undeclared identifier 'phy_sfp_attach'; did you mean 'phy_attach'?  
->      698 |         .attach = phy_sfp_attach,
->          |                   ^~~~~~~~~~~~~~
->          |                   phy_attach
->    include/linux/phy.h:1912:20: note: 'phy_attach' declared here
->     1912 | struct phy_device *phy_attach(struct net_device *dev, const char *bus_id,
->          |                    ^
-> >> drivers/net/phy/qcom/qca807x.c:699:12: error: use of undeclared identifier 'phy_sfp_detach'; did you mean 'phy_detach'?  
->      699 |         .detach = phy_sfp_detach,
->          |                   ^~~~~~~~~~~~~~
->          |                   phy_detach
->    include/linux/phy.h:1924:6: note: 'phy_detach' declared here
->     1924 | void phy_detach(struct phy_device *phydev);
->          |      ^
-> >> drivers/net/phy/qcom/qca807x.c:702:17: error: use of undeclared identifier 'phy_sfp_connect_phy'  
->      702 |         .connect_phy = phy_sfp_connect_phy,
->          |                        ^
-> >> drivers/net/phy/qcom/qca807x.c:703:20: error: use of undeclared identifier 'phy_sfp_disconnect_phy'  
->      703 |         .disconnect_phy = phy_sfp_disconnect_phy,
->          |                           ^
-> >> drivers/net/phy/qcom/qca807x.c:748:9: error: call to undeclared function 'phy_sfp_probe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
->      748 |                 ret = phy_sfp_probe(phydev, &qca807x_sfp_ops);
->          |                       ^
->    5 errors generated.
+[auto build test WARNING on jejb-scsi/for-next]
+[also build test WARNING on mkp-scsi/for-next linus/master v6.14-rc2 next-20250210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ah damned, I missed that qca807x now also supports SFP. I'll include a
-conversion fr that driver too in V2 (and add Robert in CC:)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kai-M-kisara/scsi-scsi_debug-First-fixes-for-tapes/20250211-031623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20250210191232.185207-3-Kai.Makisara%40kolumbus.fi
+patch subject: [PATCH v1 2/7] scsi: scsi_debug: Add READ BLOCK LIMITS and modify LOAD for tapes
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250211/202502111805.dXd61ARr-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502111805.dXd61ARr-lkp@intel.com/reproduce)
 
-Thanks,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502111805.dXd61ARr-lkp@intel.com/
 
-Maxime
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/scsi/scsi_debug.c:31:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/scsi/scsi_debug.c:2926:3: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+    2926 |                 len += resp_partition_m_pg(ap, pcontrol, target);
+         |                 ^~~
+   drivers/scsi/scsi_debug.c:2791:28: note: initialize the variable 'len' to silence this warning
+    2791 |         u32 alloc_len, offset, len;
+         |                                   ^
+         |                                    = 0
+   4 warnings generated.
+
+
+vim +/len +2926 drivers/scsi/scsi_debug.c
+
+  2785	
+  2786	static int resp_mode_sense(struct scsi_cmnd *scp,
+  2787				   struct sdebug_dev_info *devip)
+  2788	{
+  2789		int pcontrol, pcode, subpcode, bd_len;
+  2790		unsigned char dev_spec;
+  2791		u32 alloc_len, offset, len;
+  2792		int target_dev_id;
+  2793		int target = scp->device->id;
+  2794		unsigned char *ap;
+  2795		unsigned char *arr __free(kfree);
+  2796		unsigned char *cmd = scp->cmnd;
+  2797		bool dbd, llbaa, msense_6, is_disk, is_zbc, is_tape;
+  2798	
+  2799		arr = kzalloc(SDEBUG_MAX_MSENSE_SZ, GFP_ATOMIC);
+  2800		if (!arr)
+  2801			return -ENOMEM;
+  2802		dbd = !!(cmd[1] & 0x8);		/* disable block descriptors */
+  2803		pcontrol = (cmd[2] & 0xc0) >> 6;
+  2804		pcode = cmd[2] & 0x3f;
+  2805		subpcode = cmd[3];
+  2806		msense_6 = (MODE_SENSE == cmd[0]);
+  2807		llbaa = msense_6 ? false : !!(cmd[1] & 0x10);
+  2808		is_disk = (sdebug_ptype == TYPE_DISK);
+  2809		is_zbc = devip->zoned;
+  2810		is_tape = (sdebug_ptype == TYPE_TAPE);
+  2811		if ((is_disk || is_zbc || is_tape) && !dbd)
+  2812			bd_len = llbaa ? 16 : 8;
+  2813		else
+  2814			bd_len = 0;
+  2815		alloc_len = msense_6 ? cmd[4] : get_unaligned_be16(cmd + 7);
+  2816		if (0x3 == pcontrol) {  /* Saving values not supported */
+  2817			mk_sense_buffer(scp, ILLEGAL_REQUEST, SAVING_PARAMS_UNSUP, 0);
+  2818			return check_condition_result;
+  2819		}
+  2820		target_dev_id = ((devip->sdbg_host->shost->host_no + 1) * 2000) +
+  2821				(devip->target * 1000) - 3;
+  2822		/* for disks+zbc set DPOFUA bit and clear write protect (WP) bit */
+  2823		if (is_disk || is_zbc) {
+  2824			dev_spec = 0x10;	/* =0x90 if WP=1 implies read-only */
+  2825			if (sdebug_wp)
+  2826				dev_spec |= 0x80;
+  2827		} else
+  2828			dev_spec = 0x0;
+  2829		if (msense_6) {
+  2830			arr[2] = dev_spec;
+  2831			arr[3] = bd_len;
+  2832			offset = 4;
+  2833		} else {
+  2834			arr[3] = dev_spec;
+  2835			if (16 == bd_len)
+  2836				arr[4] = 0x1;	/* set LONGLBA bit */
+  2837			arr[7] = bd_len;	/* assume 255 or less */
+  2838			offset = 8;
+  2839		}
+  2840		ap = arr + offset;
+  2841		if ((bd_len > 0) && (!sdebug_capacity))
+  2842			sdebug_capacity = get_sdebug_capacity();
+  2843	
+  2844		if (8 == bd_len) {
+  2845			if (sdebug_capacity > 0xfffffffe)
+  2846				put_unaligned_be32(0xffffffff, ap + 0);
+  2847			else
+  2848				put_unaligned_be32(sdebug_capacity, ap + 0);
+  2849			if (is_tape) {
+  2850				ap[0] = devip->tape_density;
+  2851				put_unaligned_be16(devip->tape_blksize, ap + 6);
+  2852			} else
+  2853				put_unaligned_be16(sdebug_sector_size, ap + 6);
+  2854			offset += bd_len;
+  2855			ap = arr + offset;
+  2856		} else if (16 == bd_len) {
+  2857			if (is_tape) {
+  2858				mk_sense_invalid_fld(scp, SDEB_IN_DATA, 1, 4);
+  2859				return check_condition_result;
+  2860			}
+  2861			put_unaligned_be64((u64)sdebug_capacity, ap + 0);
+  2862			put_unaligned_be32(sdebug_sector_size, ap + 12);
+  2863			offset += bd_len;
+  2864			ap = arr + offset;
+  2865		}
+  2866		if (cmd[2] == 0)
+  2867			goto only_bd; /* Only block descriptor requested */
+  2868	
+  2869		/*
+  2870		 * N.B. If len>0 before resp_*_pg() call, then form of that call should be:
+  2871		 *        len += resp_*_pg(ap + len, pcontrol, target);
+  2872		 */
+  2873		switch (pcode) {
+  2874		case 0x1:	/* Read-Write error recovery page, direct access */
+  2875			if (subpcode > 0x0 && subpcode < 0xff)
+  2876				goto bad_subpcode;
+  2877			len = resp_err_recov_pg(ap, pcontrol, target);
+  2878			offset += len;
+  2879			break;
+  2880		case 0x2:	/* Disconnect-Reconnect page, all devices */
+  2881			if (subpcode > 0x0 && subpcode < 0xff)
+  2882				goto bad_subpcode;
+  2883			len = resp_disconnect_pg(ap, pcontrol, target);
+  2884			offset += len;
+  2885			break;
+  2886		case 0x3:       /* Format device page, direct access */
+  2887			if (subpcode > 0x0 && subpcode < 0xff)
+  2888				goto bad_subpcode;
+  2889			if (is_disk) {
+  2890				len = resp_format_pg(ap, pcontrol, target);
+  2891				offset += len;
+  2892			} else {
+  2893				goto bad_pcode;
+  2894			}
+  2895			break;
+  2896		case 0x8:	/* Caching page, direct access */
+  2897			if (subpcode > 0x0 && subpcode < 0xff)
+  2898				goto bad_subpcode;
+  2899			if (is_disk || is_zbc) {
+  2900				len = resp_caching_pg(ap, pcontrol, target);
+  2901				offset += len;
+  2902			} else {
+  2903				goto bad_pcode;
+  2904			}
+  2905			break;
+  2906		case 0xa:	/* Control Mode page, all devices */
+  2907			switch (subpcode) {
+  2908			case 0:
+  2909				len = resp_ctrl_m_pg(ap, pcontrol, target);
+  2910				break;
+  2911			case 0x05:
+  2912				len = resp_grouping_m_pg(ap, pcontrol, target);
+  2913				break;
+  2914			case 0xff:
+  2915				len = resp_ctrl_m_pg(ap, pcontrol, target);
+  2916				len += resp_grouping_m_pg(ap + len, pcontrol, target);
+  2917				break;
+  2918			default:
+  2919				goto bad_subpcode;
+  2920			}
+  2921			offset += len;
+  2922			break;
+  2923		case 0x11:	/* Partition Mode Page (tape) */
+  2924			if (!is_tape)
+  2925				goto bad_pcode;
+> 2926			len += resp_partition_m_pg(ap, pcontrol, target);
+  2927			offset += len;
+  2928			break;
+  2929		case 0x19:	/* if spc==1 then sas phy, control+discover */
+  2930			if (subpcode > 0x2 && subpcode < 0xff)
+  2931				goto bad_subpcode;
+  2932			len = 0;
+  2933			if ((0x0 == subpcode) || (0xff == subpcode))
+  2934				len += resp_sas_sf_m_pg(ap + len, pcontrol, target);
+  2935			if ((0x1 == subpcode) || (0xff == subpcode))
+  2936				len += resp_sas_pcd_m_spg(ap + len, pcontrol, target,
+  2937							  target_dev_id);
+  2938			if ((0x2 == subpcode) || (0xff == subpcode))
+  2939				len += resp_sas_sha_m_spg(ap + len, pcontrol);
+  2940			offset += len;
+  2941			break;
+  2942		case 0x1c:	/* Informational Exceptions Mode page, all devices */
+  2943			if (subpcode > 0x0 && subpcode < 0xff)
+  2944				goto bad_subpcode;
+  2945			len = resp_iec_m_pg(ap, pcontrol, target);
+  2946			offset += len;
+  2947			break;
+  2948		case 0x3f:	/* Read all Mode pages */
+  2949			if (subpcode > 0x0 && subpcode < 0xff)
+  2950				goto bad_subpcode;
+  2951			len = resp_err_recov_pg(ap, pcontrol, target);
+  2952			len += resp_disconnect_pg(ap + len, pcontrol, target);
+  2953			if (is_disk) {
+  2954				len += resp_format_pg(ap + len, pcontrol, target);
+  2955				len += resp_caching_pg(ap + len, pcontrol, target);
+  2956			} else if (is_zbc) {
+  2957				len += resp_caching_pg(ap + len, pcontrol, target);
+  2958			}
+  2959			len += resp_ctrl_m_pg(ap + len, pcontrol, target);
+  2960			if (0xff == subpcode)
+  2961				len += resp_grouping_m_pg(ap + len, pcontrol, target);
+  2962			len += resp_sas_sf_m_pg(ap + len, pcontrol, target);
+  2963			if (0xff == subpcode) {
+  2964				len += resp_sas_pcd_m_spg(ap + len, pcontrol, target,
+  2965							  target_dev_id);
+  2966				len += resp_sas_sha_m_spg(ap + len, pcontrol);
+  2967			}
+  2968			len += resp_iec_m_pg(ap + len, pcontrol, target);
+  2969			offset += len;
+  2970			break;
+  2971		default:
+  2972			goto bad_pcode;
+  2973		}
+  2974	only_bd:
+  2975		if (msense_6)
+  2976			arr[0] = offset - 1;
+  2977		else
+  2978			put_unaligned_be16((offset - 2), arr + 0);
+  2979		return fill_from_dev_buffer(scp, arr, min_t(u32, alloc_len, offset));
+  2980	
+  2981	bad_pcode:
+  2982		mk_sense_invalid_fld(scp, SDEB_IN_CDB, 2, 5);
+  2983		return check_condition_result;
+  2984	
+  2985	bad_subpcode:
+  2986		mk_sense_invalid_fld(scp, SDEB_IN_CDB, 3, -1);
+  2987		return check_condition_result;
+  2988	}
+  2989	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
