@@ -1,241 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2218B79C8;
-	Tue, 11 Feb 2025 00:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF5F1D416B;
+	Tue, 11 Feb 2025 01:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739232945; cv=none; b=H0Wg+dHG3ZcXaI4PSdosy7E7K/a+nI8BrsY8mbv8Ms0qJ82wUScgDZU4eNk8jseU8NiiJnmaIPDfV2gh6Zn+N1DKID1Jt6+AvAklHD52Fw30H4aSXQN3EpnegBdJnDqA7Eyvfo5lVR7kNN5lvCkA0tuREFFtE6sF7pd/BQsqV3Y=
+	t=1739237400; cv=none; b=t1mVWGmZnzQ3dcjpCYvAjFpB8tDx988fdb9ZhNPvNe/ohSiUdfsu6PiUamuVJHhi7TxK8svQ7lUVLL+f6sXK/5z0vXrqeE71Pw7Y8ZgKk4jV/BxBfJtWWhzcviVV/4D//Xev0HG6F+xbcRQYE8F8a4u0gx/fww3DixUjymq1M2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739232945; c=relaxed/simple;
-	bh=jP2/DBnUGN3BOpehz5g1+zoYGsD68CHwfFOqF/YpI0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U36rf4KRY29haGtitIxR1cYDGkiu+g1ae7Ey04SgXLqkvN4XnATsMsfULCvgKn8rupaiXueJKXAxsZS0S1EGWl9vTJLFTHrxPWIn4eKuk6rOm/++mHqaHrMnaq5ZtLBu8px768heg3o5RFMvaBPXJo9qR8K1/ShgnT3TSWrouNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDDpf1bh; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739237400; c=relaxed/simple;
+	bh=AeezfT8lrwzOuDGIXTXXUaRWb7l+luJYFvKgC6rGVaI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KXlqL9KtMvH0K1nOaL8t01VqtBf/4nkZ8HUfBOq0Z8XaBR/dfTChKz/YwPjAeau3yq6kIIvZSAS1fdf6NAP3XnBXzU1RyuVJczGF7eI03N3qKRJAyL2S91hUr5nqqIzZrTUIMSyMnbuh3PelCOerK24+fKpYecQ7EfJ4hLluk5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+hNQVW2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDDpf1bh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739232943; x=1770768943;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jP2/DBnUGN3BOpehz5g1+zoYGsD68CHwfFOqF/YpI0k=;
-  b=MDDpf1bhQcbQDID+rPyEHDLEQBOrO40GmbCwfCcttsFXfjD0/2P5Spzq
-   brsJPQS6koN2wr0n383ggKMVjEjOZP6mX+2Ts6YWfWDKm0+5WAN9b9WM8
-   xRypWZbPwzFW6C3dYfDx8anzK4b4VkIXfTjsU1DcyoFQmKnqe51iUScud
-   ycoBdMM2MVO9Ktf+4beNP0mmyMS6rcsDfnH0GEBL37SKyaP3pSS18OPwF
-   49lztJvWgW19eBV1aXWxjE3w4O2s1A1YPoHiFAHNbY08ki6OklfxZnxjH
-   Cwt8c2MG+3WW3VxcNaZBuP1uMc0a01lU9nRqpYSqTnOGCBmctklUQqYzp
-   w==;
-X-CSE-ConnectionGUID: eIbaZpFzRL2DGeZcswsqQA==
-X-CSE-MsgGUID: IgrU06WFT2S++K9fjTY2VA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="51230291"
-X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
-   d="scan'208";a="51230291"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 16:15:43 -0800
-X-CSE-ConnectionGUID: dV0J4/6SSNK4MqSB+EczmA==
-X-CSE-MsgGUID: emHhbxrrR46lcR3JjhJu8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
-   d="scan'208";a="112280225"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Feb 2025 16:15:41 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1thdwA-0013YZ-2r;
-	Tue, 11 Feb 2025 00:15:38 +0000
-Date: Tue, 11 Feb 2025 08:15:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tony Luck <tony.luck@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/4] ACPI/MRRM: Create /sys/devices/system/memory/rangeX
- ABI
-Message-ID: <202502110859.OJYEQrj1-lkp@intel.com>
-References: <20250210211223.6139-3-tony.luck@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+hNQVW2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DB4C4CEEA;
+	Tue, 11 Feb 2025 01:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739237400;
+	bh=AeezfT8lrwzOuDGIXTXXUaRWb7l+luJYFvKgC6rGVaI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=f+hNQVW2oq8o7PMhlLnT1Zo+1XJ7kGQwrg7JoyA50uLr7RfWyONCihoTm8W+8u/Ni
+	 eEOAUVEcroT+k9rrDP/VIDiV/nY+FAB3Vk63AoViVO6gvOS2Y1FNl3mWOXUAyOUvnw
+	 bcSJ9g6ZSpYJdlpSTQsl2HlQaOoX+qlaZqs0sdeunZqUdjH0npB3+wAepKg5QbJO9h
+	 w4sqsDy3YxbEWZd8UqJnysu+DGXs0JRMn0/evaMUc3ZZyKZaiREtBVnZ2uCfW8TGTl
+	 CXoJCjPU4VFmFHJVdFkoFw/2Y4GyhcJj9bQdiX8P+2yN3m7o83ObVzS/8WW8bK9cqR
+	 6zp+xk/po9xAg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sasha Levin <sashal@kernel.org>,
+	anna-maria@linutronix.de,
+	frederic@kernel.org,
+	nathan@kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.13 03/21] hrtimers: Mark is_migration_base() with __always_inline
+Date: Mon, 10 Feb 2025 20:29:36 -0500
+Message-Id: <20250211012954.4096433-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250211012954.4096433-1-sashal@kernel.org>
+References: <20250211012954.4096433-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210211223.6139-3-tony.luck@intel.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13.2
+Content-Transfer-Encoding: 8bit
 
-Hi Tony,
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit 27af31e44949fa85550176520ef7086a0d00fd7b ]
 
-[auto build test ERROR on a64dcfb451e254085a7daee5fe51bf22959d52d3]
+When is_migration_base() is unused, it prevents kernel builds
+with clang, `make W=1` and CONFIG_WERROR=y:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tony-Luck/ACPICA-Define-MRRM-ACPI-table/20250211-051427
-base:   a64dcfb451e254085a7daee5fe51bf22959d52d3
-patch link:    https://lore.kernel.org/r/20250210211223.6139-3-tony.luck%40intel.com
-patch subject: [PATCH 2/4] ACPI/MRRM: Create /sys/devices/system/memory/rangeX ABI
-config: i386-buildonly-randconfig-006-20250211 (https://download.01.org/0day-ci/archive/20250211/202502110859.OJYEQrj1-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502110859.OJYEQrj1-lkp@intel.com/reproduce)
+kernel/time/hrtimer.c:156:20: error: unused function 'is_migration_base' [-Werror,-Wunused-function]
+  156 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
+      |                    ^~~~~~~~~~~~~~~~~
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502110859.OJYEQrj1-lkp@intel.com/
+Fix this by marking it with __always_inline.
 
-All errors (new ones prefixed by >>):
+[ tglx: Use __always_inline instead of __maybe_unused and move it into the
+  	usage sites conditional ]
 
-   In file included from mm/page_ext.c:6:
->> include/linux/memory.h:196:55: error: use of undeclared identifier 'EONENT'
-     196 | static inline int mrrm_max_mem_region(void) { return -EONENT; }
-         |                                                       ^
-   1 error generated.
---
-   In file included from mm/slab_common.c:12:
->> include/linux/memory.h:196:55: error: use of undeclared identifier 'EONENT'
-     196 | static inline int mrrm_max_mem_region(void) { return -EONENT; }
-         |                                                       ^
-   In file included from mm/slab_common.c:34:
-   In file included from mm/internal.h:13:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   2 warnings and 1 error generated.
---
-   In file included from mm/mm_init.c:13:
->> include/linux/memory.h:196:55: error: use of undeclared identifier 'EONENT'
-     196 | static inline int mrrm_max_mem_region(void) { return -EONENT; }
-         |                                                       ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from mm/mm_init.c:16:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
---
-   In file included from mm/migrate.c:22:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from mm/migrate.c:43:
->> include/linux/memory.h:196:55: error: use of undeclared identifier 'EONENT'
-     196 | static inline int mrrm_max_mem_region(void) { return -EONENT; }
-         |                                                       ^
-   2 warnings and 1 error generated.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/all/20250116160745.243358-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ kernel/time/hrtimer.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-
-vim +/EONENT +196 include/linux/memory.h
-
-   191	
-   192	#ifdef CONFIG_ACPI_MRRM
-   193	int mrrm_max_mem_region(void);
-   194	int memory_subsys_device_register(struct device *dev);
-   195	#else
- > 196	static inline int mrrm_max_mem_region(void) { return -EONENT; }
-   197	static inline int memory_subsys_device_register(struct device *dev) { return -EINVAL; }
-   198	#define memory_subsys_device_register memory_subsys_device_register
-   199	#endif
-   200	
-
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index 030426c8c944e..f0ba273d217a5 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -145,11 +145,6 @@ static struct hrtimer_cpu_base migration_cpu_base = {
+ 
+ #define migration_base	migration_cpu_base.clock_base[0]
+ 
+-static inline bool is_migration_base(struct hrtimer_clock_base *base)
+-{
+-	return base == &migration_base;
+-}
+-
+ /*
+  * We are using hashed locking: holding per_cpu(hrtimer_bases)[n].lock
+  * means that all timers which are tied to this base via timer->base are
+@@ -275,11 +270,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
+ 
+ #else /* CONFIG_SMP */
+ 
+-static inline bool is_migration_base(struct hrtimer_clock_base *base)
+-{
+-	return false;
+-}
+-
+ static inline struct hrtimer_clock_base *
+ lock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
+ 	__acquires(&timer->base->cpu_base->lock)
+@@ -1371,6 +1361,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
+ 	}
+ }
+ 
++#ifdef CONFIG_SMP
++static __always_inline bool is_migration_base(struct hrtimer_clock_base *base)
++{
++	return base == &migration_base;
++}
++#else
++static __always_inline bool is_migration_base(struct hrtimer_clock_base *base)
++{
++	return false;
++}
++#endif
++
+ /*
+  * This function is called on PREEMPT_RT kernels when the fast path
+  * deletion of a timer failed because the timer callback function was
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
