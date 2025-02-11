@@ -1,65 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8703C26BD98;
-	Tue, 11 Feb 2025 06:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB1C26BD8B;
+	Tue, 11 Feb 2025 06:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739253630; cv=none; b=BSKrUwhSHXZwnK97HxGkYu/1L6g9fKXbmOlC5jPsGdBSpIqOfwNkwM9S6utba+XCfayEkZZOEjyQ0esDtvcSjEn2J1DLAoaY9HD4zXxeuBkVgPO2a2khieS7gCOtcBaR1IVMM6oMgpx0g7/upqYP8i4Cd2JXxs5cEboE0/Fl+jA=
+	t=1739254775; cv=none; b=Qj+Xv55rpUsXgrlmMot8+Z4ZqUJtRSub0Rqp/LbvOB+yQ7EImAc/p0FEaZl/fWTg1cbUMcX4lIA8Z35FYNksgRyeqhfgWwQC0V3PBYj30UbX9TjaTU85Bh7Pj6KOXnl4I11nmH7fzAPJoFTKKRGhBrOP6dRz9j9h6/vTH6/TA38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739253630; c=relaxed/simple;
-	bh=JdWtLw17C1nfm7u7ea4jJC5huVL703xGqMB9SVBoneg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fdwNrVCi4+VMUwAdDXkvYAY4bcXrChZWCEzbwLVvZTezedfEUCqcVtYvY9s9BbDCBj8aQuDV15Dy+oCnLMjHcJu1IaRhCXFXwAzkV0Tnjh2qRdL9rU9Zg6J6lY+fCXvNF+j6xnj0JPCEhAR0bOwlWYSxwXKBJu0PgqPMEBf8snc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=K/Or0PwF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739254775; c=relaxed/simple;
+	bh=9gUKRbIH8PW7un4AbT4YS+PykDeaoCnYPWliu3YmUt4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gUIlZq765QtH23qTrgI7ks8tZ4kE7hZBPcET7YXFynFlEgN1BcZVSG1WYZ0Wk0PxprRw76pfBs48ph+isZk4VlmmPYm/eQfhLjKJJJ++soohK7i8uldS8xRmBybAPdSxKdb79ImOG8FSSZAAW9RmX83RT9NutDcx6EAEIzB3g7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TImFix7B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="K/Or0PwF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF91C4CEDD;
-	Tue, 11 Feb 2025 06:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739253630;
-	bh=JdWtLw17C1nfm7u7ea4jJC5huVL703xGqMB9SVBoneg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K/Or0PwFSgLjja7MNpaGtl8IpC58RRoEAU+vqeZbQqHflZo7dtiNMpY7nNT3RrmCE
-	 66ILcpcQ30QE7KcZB3IH1Beiw40OLVrDJqOi1B+G6XTeE0pVQSfgqjN7SJ2CEtfDqj
-	 fxOf0v/HxaL5uYEtZ9O2pEWQJg478BY0JTTRT2ZU=
-Date: Tue, 11 Feb 2025 06:59:26 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jillian Donahue <jilliandonahue58@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
-Message-ID: <2025021148-expectant-rendering-1019@gregkh>
-References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
- <202502082022.ILQXjseT-lkp@intel.com>
- <CAArt=LhOBqH-qZVkdBsh13Csvv1GrDBqakfPGjpFt0TF8KBYsg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TImFix7B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CACCC4CEDD;
+	Tue, 11 Feb 2025 06:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739254774;
+	bh=9gUKRbIH8PW7un4AbT4YS+PykDeaoCnYPWliu3YmUt4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TImFix7B7nuVRUHCPpzaAxs6MfItH/mdJHmyl2+Cw3KmsJy7IBTGnrgMDmTfWMPFw
+	 8a3BjgdWSUwRFoSooUum4L+BfpifJyOxWBotIJNbKvpdgcdBFqG59UrQemNfsqjxYY
+	 jMdk6iihzNFqf9e3GxakkOkwb/rEsPfi7O4N7pgDYahde+8rpvchAHvV04onrklxsR
+	 PPVY5KHbN7hKtXZPKsjosgJe2+Kmju4/XJd7UkcdOK/Etmtqi8lXNHNczYI6jCTOnd
+	 uqnehqkQUrtjyl5rCvfVqSv9YMqB2lk1NOJpW1u+vRtQgFR9EaYU1QQ+veOF48WQnE
+	 SfKwqnTh778Fw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1thjcK-00000008Y6S-1mT1;
+	Tue, 11 Feb 2025 07:19:32 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	workflows@vger.kernel.org
+Subject: [PATCH 0/4] Raise the bar with regards to Python and Sphinx requirements
+Date: Tue, 11 Feb 2025 07:19:00 +0100
+Message-ID: <cover.1739254187.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAArt=LhOBqH-qZVkdBsh13Csvv1GrDBqakfPGjpFt0TF8KBYsg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-On Mon, Feb 10, 2025 at 10:18:13AM -0700, Jillian Donahue wrote:
-> Ah yea, this error happens because in this commit:
-> https://github.com/torvalds/linux/commit/8653d71ce3763aedcf3d2331f59beda3fecd79e4
-> the tasklets are replaced with works. Should I request the patch to be
-> in v5.10 or should I update the fix to use
-> queue_work(system_highpri_wq, &midi->work) ?
-> 
-> > >> drivers/usb/gadget/function/f_midi.c:286:31: error: no member named 'tasklet' in 'struct f_midi'
-> >      286 |                         tasklet_hi_schedule(&midi->tasklet);
-> >          |                                              ~~~~  ^
-> >    1 error generated.
+This series  increases the minimal requirements for Sphinx and Python, and
+drop some backward-compatible code from Sphinx extension.
 
-Always submit your changes based on the latest kernel tree (ideally the
-latest development tree).  Any older kernel backports can happen after
-they end up in a release.
+Looking at Sphinx release dates:
 
-thanks,
+	Release 2.4.0 (released Feb 09, 2020)
+	Release 2.4.4 (released Mar 05, 2020) (current minimal requirement)
+	Release 3.4.0 (released Dec 20, 2020)
+	Release 3.4.3 (released Jan 08, 2021)
 
-greg k-h
+	(https://www.sphinx-doc.org/en/master/changes/index.html)
+
+And Python release dates, we have:
+
+	Python	Release date 
+	3.5	2015-09-13    (current minimal requirement)
+	3.6	2016-12-23
+	3.7 	2018-06-27
+	3.8 	2019-10-14
+	3.9 	2020-10-05
+	3.10	2021-10-04
+
+	(according with https://en.wikipedia.org/w/index.php?title=History_of_Python)
+
+The new minimal requirements are now compatible with the toolset available on Jan, 2021,
+e.g.:
+	- Sphinx 3.4.3;
+	- Python 3.9
+
+The new Sphinx minimal requirement allows dropping all backward-compatible code
+we have at kernel-doc and at Sphinx extensions.
+
+The new Python minimal requirement also matches the current required level for
+almost  all scripts (*).
+
+Those matches a 4-years old toolchain, which sounds a reasonable period
+of time, as Python/Sphinx aren't required for the Kernel build.
+
+(*) Except for a couple scripts inside tools that require python 3.10:
+
+    $ vermin -v $(git ls-files '*.py')|grep 3.10
+    !2, 3.10     tools/net/sunrpc/xdrgen/generators/__init__.py
+    !2, 3.10     tools/net/sunrpc/xdrgen/generators/program.py
+    !2, 3.10     tools/net/sunrpc/xdrgen/subcmds/source.py
+    !2, 3.10     tools/net/sunrpc/xdrgen/xdr_ast.py
+    !2, 3.10     tools/perf/scripts/python/mem-phys-addr.py
+    !2, 3.10     tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
+
+Such scripts aren't required for Kernel builds, so it should be OK to set minimal
+python version to 3.9.
+
+Mauro Carvalho Chehab (4):
+  docs: changes: update Sphinx minimal version to 3.4.3
+  docs: changes: update Python minimal version
+  docs: extensions: don't use utf-8 syntax for descriptions
+  scripts/kernel-doc: drop Sphinx version check
+
+ Documentation/conf.py                       |   2 +-
+ Documentation/process/changes.rst           |   4 +-
+ Documentation/sphinx/cdomain.py             |   7 +-
+ Documentation/sphinx/kernel_abi.py          |   6 +-
+ Documentation/sphinx/kernel_feat.py         |   4 +-
+ Documentation/sphinx/kernel_include.py      |   4 +-
+ Documentation/sphinx/kerneldoc.py           |   5 -
+ Documentation/sphinx/kfigure.py             |  10 +-
+ Documentation/sphinx/load_config.py         |   2 +-
+ Documentation/sphinx/maintainers_include.py |   4 +-
+ Documentation/sphinx/rstFlatTable.py        |  10 +-
+ scripts/kernel-doc                          | 129 +++-----------------
+ 12 files changed, 41 insertions(+), 146 deletions(-)
+
+-- 
+2.48.1
+
+
