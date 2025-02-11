@@ -1,165 +1,295 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3685B20CCF4;
-	Tue, 11 Feb 2025 13:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739279355; cv=none; b=oItdChkWPhvBUvxrsIhXaOk7V6JnnO5u8m+gFtrhuj5s8L5YZqOP2750gxWO8i7UxHp3XScL8p46tL1rQ9rIGv3CTdR+Jm1woqSM2sk6SH7f6GrPpX9Jn327Gya8/YUVhezT3Sr4GFaIqxg+Xj0807vCvSeU2M5UHF0vvIMnknU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739279355; c=relaxed/simple;
-	bh=SpwN0atZjdGK5aNI+errgydQvLs+glRdcJp6jxMa1cI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MzBFCwu3EcyPKmuBCf3HaR942S2VWx7jD66TuHbU/AcfVq7GijFKFiQpBAX+ejFBUt1wd30kPoRsELnBf/J4zwyBvkE0MTPu6wsBqydA15d4jEPMibQyAPergINMxpfhkIKGKBp/mK++3A9yWVIOKLE9FVFESztzwJQWgS3tZQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=meeBNEtM; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DE82236EB
+	for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 13:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739281379; cv=fail; b=S1Fhp1dD1YbLfpqJjzdJUvuLRHrYX7L3fqrISfgpjPJJHhrFmg4qT5yEMGW2tPPkqd8xdVQJ4Ac2KgrIEFGNKDv0pgV2KSVbwcxQ2UbAl0xpzO/SebXlOdwhtIed8PK+NIpPMvgniBjNZDDrTmzitzbTDD3J9Hdzp5xudLv7fNA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739281379; c=relaxed/simple;
+	bh=pZT88gMtNeMWlwN7KFX6vNYTmtaPDWIa7cExXiJf0kU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ZSL1YLXrdEf/3B7e/pgvqfOF0t+jpc9urNj7W5RYxQR5ppBCKRuqNbUi2FLedxqeui7c/IvbUEJCR3bq6dSk9w6KXIx2tQpJ32G6DCHN8MstZHPDFESSuU13FJLrq8arOdyC+9e7/VaQo1RxqVi/+y8l87KFyp3+pD1nINSiWS8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kp0+WJYX; arc=fail smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="meeBNEtM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kp0+WJYX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739279354; x=1770815354;
+  t=1739281377; x=1770817377;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SpwN0atZjdGK5aNI+errgydQvLs+glRdcJp6jxMa1cI=;
-  b=meeBNEtME4ZyIBuoh/YUkOOQzDt1kcp8oX20I/9HdamKLTp9+GCisOv/
-   L4DTNuHYN4qkV90y+1VVx0v4mvmtdv/J0w3iBnQgxJtGJevri2eZ/m91S
-   UPCYglreVe7phDHL8M++SpdemPiJeaVNI4GagMTwQstxR4uexPN2PHeCS
-   7HWgfDavFI8KTRBRCygDT/jlfVGcZXX9HxlWaqLKkn0bTjPaP7N1Bqwf0
-   EV0jN8WWxlmtYAYsPvcujtFCwFboldZVEeG0LnGRWTVbYXt9qVHJ5BMh9
-   Ef5lANDk7zkflgkpUDmmTFLeKVmSJSxmjBvTORqrJnuMEkY57ghnuJQLU
-   w==;
-X-CSE-ConnectionGUID: aJyG0Er6RKiwzYbHjiyO6A==
-X-CSE-MsgGUID: 7X+xKcLaQ0Ojl3p2ouD4zA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39779733"
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=pZT88gMtNeMWlwN7KFX6vNYTmtaPDWIa7cExXiJf0kU=;
+  b=Kp0+WJYXyjGzPXHesmWA922O/dd7og5F+lua03gTyX6B+UmXqruJnxX/
+   N36w0a5uVx6IzKH4Vu9wlfK9YF8ybOxyO/wE1RuZKEZgv7MiDQhvl/o3m
+   V2B3BCQ/EbB/SxqmxPJn2EjfYDEOdbBdhTz1ICYNP6zM5rTAl9nUsoAF7
+   A3G2121YXZpd35rNe04m9W9jgAV8AuynUnC4nMVooLIFbq+Ybm5pWXPu1
+   t9RX4DOOwO8NhMpLvNIW1I8zJ6CbQdza5a2cDkzd2FzOSYKVEW65fkc7W
+   f03ycLd8PVdsY1KGFp665cosgJIdwj9hhaUIQJlMn5iQ6fk8jNsR4ul8b
+   g==;
+X-CSE-ConnectionGUID: 6Yklr1hTQoyyBhfBNgi2HQ==
+X-CSE-MsgGUID: QSMGORVqSN2/QW8Ji7LsEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39135856"
 X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="39779733"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 05:09:13 -0800
-X-CSE-ConnectionGUID: 3ODHPMa9S6GGtf5RTHGgxA==
-X-CSE-MsgGUID: C+XaJ1XjRCSNCIbMvmNoVg==
+   d="scan'208";a="39135856"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 05:42:24 -0800
+X-CSE-ConnectionGUID: y1JTG44/RFqyHYKBiFABEQ==
+X-CSE-MsgGUID: 7XU8g3hlTH+g/rf4eIn78Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="112355924"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 11 Feb 2025 05:09:10 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1thq0i-0014Bv-00;
-	Tue, 11 Feb 2025 13:09:08 +0000
-Date: Tue, 11 Feb 2025 21:08:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
-	linux-scsi@vger.kernel.org, dgilbert@interlog.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.petersen@oracle.com, James.Bottomley@hansenpartnership.com,
-	jmeneghi@redhat.com,
-	Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>
-Subject: Re: [PATCH v1 3/7] scsi: scsi_debug: Add write support with block
- lengths and 4 bytes of data
-Message-ID: <202502112016.6zs2FpD6-lkp@intel.com>
-References: <20250210191232.185207-4-Kai.Makisara@kolumbus.fi>
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="112482693"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Feb 2025 05:42:23 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 11 Feb 2025 05:42:23 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Tue, 11 Feb 2025 05:42:23 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 11 Feb 2025 05:42:23 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gQGjIidsh74HR1VQtQui3TNLWdJJiN8xPn7TBabdRSaMsqWqqwELRYqCj/XZkOcAZ98700ikYh9TSwnURpYhuMc7EHPPgQ/XubV8CFwqx7QzvZ/4whVCFRM7exZbmWS7SNrfUAfwU4+NwJ6ehm+MscFwGnYvy8GKzu+EMeC96W0Cc9qZte/EREqS6mDSCPJlYgkN5LwEwyuElSGGlxS5BJE8m2xPsiIXT3UX30HB42qL2l6Q0j4UFPUrIOe6u2+pVe3DVQUBZ4zmSeEyDDIiakCtmTOIhuZwJH4ZyyDnk1V7ppoumBfxb4I2/1EpGV6QGV3OPQN6KdKOWiNVrN7c1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=906hJVJvloG5PggyPyN+1kX5lKyJvKtsMmkFuhee76s=;
+ b=UTUd7FK3sfoIYegMc18Ehayrlam0jUjt7S6hG5xmPe3O10s/YyD9SqMJrEDRaHh4mpQEnLj50pYq/TS7P6pc/B1ElFJpDACkvNsKU1KdUcmw2wi9IY9AD9MzPv+p7Xx3l41HbfLvB1TaIPa3vJhei6izr1N9aOcYTA1D9zPC0AjbAP441s5pZQvEKIp1wj4U28BQYrFkMPZ285F1ezbU3SPEMyCaPOolyRXzjIvGOFzlKLtHolaXqRS63Ab2eci0VyLmzSg+G8f8AXhylvGet0N7Nh67KbNv7doYuQCUEaAbGXCfnsovBwLIL+J/ekRvluPea+GdmT6Po56R6N2Dzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by PH8PR11MB8014.namprd11.prod.outlook.com (2603:10b6:510:23a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Tue, 11 Feb
+ 2025 13:42:20 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4%4]) with mapi id 15.20.8422.015; Tue, 11 Feb 2025
+ 13:42:20 +0000
+Date: Tue, 11 Feb 2025 14:42:14 +0100
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+CC: Samuel Holland <samuel.holland@sifive.com>, Palmer Dabbelt
+	<palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>, Andrey Ryabinin
+	<ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, "Dmitry
+ Vyukov" <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	<kasan-dev@googlegroups.com>, <llvm@lists.linux.dev>, Catalin Marinas
+	<catalin.marinas@arm.com>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon
+	<will@kernel.org>, Evgenii Stepanov <eugenis@google.com>, Andrew Morton
+	<akpm@linux-foundation.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow
+ computation
+Message-ID: <4tuj7f3ttmm7xxkom3cm6xjnmd742twbaoieggnzwtmkif7l2l@hgilk7qn5te5>
+References: <20241022015913.3524425-1-samuel.holland@sifive.com>
+ <20241022015913.3524425-2-samuel.holland@sifive.com>
+ <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
+ <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
+ <zjuvfdbl7q76ahdxk3lrgaznk7vjj43f5ftzfgrnca6dqtcd5x@5qj24womzgyq>
+ <CA+fCnZfySpeRy0FCFidLdUUeqp97eBdjAqQyYPpz1WxYwcsW9A@mail.gmail.com>
+ <lrlnvcxofcnsm5rou3iwbawyfwtz6mx4gn6eflpm4srhjj37kb@pwsozjgdyxfu>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <lrlnvcxofcnsm5rou3iwbawyfwtz6mx4gn6eflpm4srhjj37kb@pwsozjgdyxfu>
+X-ClientProxiedBy: DB8PR06CA0013.eurprd06.prod.outlook.com
+ (2603:10a6:10:100::26) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210191232.185207-4-Kai.Makisara@kolumbus.fi>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|PH8PR11MB8014:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e02cf78-028b-4d53-84c0-08dd4aa1e85a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?cnprRmgzaGJhK1BJM2RMOXJKb1ZhN3BGWEZEbTlrdmE1R091RzRiMzRwNlRV?=
+ =?utf-8?B?YWJ1UjBZbVhxUGhXcFZvYjdGVnlKRnJtcTBuOXFBcnNNYk9JNWFuQ05teUU3?=
+ =?utf-8?B?bmJ2RGpJTFZsQjdsOXdRQUc1WlZ2YVZTQ2NPTGVIbFRXUU9rVW1kV3AyMEZR?=
+ =?utf-8?B?a3VKZEI2b0plNlQwZllVL1BmTy95TnpxSmd1djcxWEc5TGRhaTNod09ib21L?=
+ =?utf-8?B?OHArSkZNRWcyY1UzUmhqTGhnejJ4b2JjRTNMV2QzaUNTYWhPUWx6YVNpN2NK?=
+ =?utf-8?B?TDZRY3hqOWZCODZZeEpkOGYxajJxeHYrWmMrT0FxZUJxQTRUSWwwTjFnRVlJ?=
+ =?utf-8?B?Wk5vM25vZlFJRjZJVVQ1bjlyREl2aWlGSy93WEZmbDBsMTJUSzBkcHNiYnVq?=
+ =?utf-8?B?QWNhdjRSRkNrY0E5cC9WMDl3bzg3NHRMaXVVa1pod2RsMS9GQzV2TGs1T2tl?=
+ =?utf-8?B?UDVSN1dBeHNaYzlqN0xKVS92eGhSNytlQUROUFNwMlN6bXZQaFAxdWFqN05o?=
+ =?utf-8?B?Vm8wVXBJU0JLQmdBTWh3NDRYR081OFVIdDNoMGZHOHFKcWhmQUZZRDdrWEJF?=
+ =?utf-8?B?emRHOEZJMTdjUEhHQ2paWW56WHZpbGVHaVA2UXdNczRJaktxOXRlL3lEeDEv?=
+ =?utf-8?B?eGI0cUl3TU42Rjl2UzJIZndHMlZ4bEM2cWY0K3VmZ0txUzdGOWZCTGFTYmRo?=
+ =?utf-8?B?NFF5TmxhWlJtV2FqMmJ1YlRLUzZJeHJobHFhM1VsenV1WFdDTFJNZE5yNFhv?=
+ =?utf-8?B?dktPdDI2Y1RscTRCTU1KSHB4SnVzVEVyMWRBaFZwN1lIUFBoT0VEUUc3NWJr?=
+ =?utf-8?B?Z3ZHODZHOUEzZEpFUlNkMFM5cElsa0RXNTVndDU1dFI2OGJCWC8xQ2h3WTF1?=
+ =?utf-8?B?VE0yMXY0ekdyQUhyU2YzaUJEVDFyUjNFdW1MTDhkOEppS2w5SjBEbUlJQmxa?=
+ =?utf-8?B?NUhpV00yeUFGQ2hPUVFPOHExU3lEaWZVMlJPVHg2WkxoWForUlhSWHQrZEwr?=
+ =?utf-8?B?WWdUNFF6VFhBcmM4b2I3a2taTmJGblRFYlpDTkRYcVZNUkErUkc3MzU4TWlX?=
+ =?utf-8?B?SzJkZHhyTm1iWWMyTytWYWtyRnRrQTlTQ3R3U2U1cGxrbnpSRzFrOS9nczhJ?=
+ =?utf-8?B?UXBkZy9Zcnc4TzdVaUVBMytCclJiZFZMeDFsemhGT01rWXgwUktqcXMyZ3Uv?=
+ =?utf-8?B?R1BENFhKQzREdk9hWmlvcitwVERZdEJ0Z0xVTy9tRHRkV3E2VXN4UmFucERu?=
+ =?utf-8?B?bFpPL2Z2QldQYVArclJmVXlmT2NYbGZqYlFKbVpTWnE1T3I4WW5TZWM5R01w?=
+ =?utf-8?B?eGVSQm1xa24rQlRuRWhNKzBVUVVXNGpZdVZwaWY1N1FaRVF1S1ZPQVp1cGRU?=
+ =?utf-8?B?RDZUc2laUW1mSVgvcS9FNUNTeFZKVEpWQnVJQlhZY0JPdlo4RVVXcEkrSTR5?=
+ =?utf-8?B?TDJxNVphN0VyNmtLdzVTMXp2eEhaaW9rVlRhUlRDMVgzdWQ2TnR1VXdMdTRH?=
+ =?utf-8?B?di8yd1BtWURQdXpHSWw0M0dheS9NZVFiVEt2UmVIVHZMWktoTFZFYzFwbFc1?=
+ =?utf-8?B?aDR1ZFp0VDd1cWgySnd3WGxPZ2JqNEtuN2JYaUwxQk0wcndsRlBXeUNIaUVE?=
+ =?utf-8?B?TDZOOXpya2o0MFFGeXVWakZnSXJ3MVcwaUVHRGRHZ210OWxkNXdua2N3SG9I?=
+ =?utf-8?B?eW1rbEpIaDhQWTEzczNkWlZ5VjhCVUUvWFJuLzQ5UncySy9TeHBHTVFCem5q?=
+ =?utf-8?B?YXlJZVdZTFMzWThvTjA4UUNzWHdzWjlFbm81eGI2ei8zbHVBTTNqTnYxQWh2?=
+ =?utf-8?B?d2ZtSnB6U3l4dTArS1E2TGU3cVQ2WVBDcDROWXNtZlB5S1pqRWsrbk5YNzFl?=
+ =?utf-8?Q?7zBkrTa5ORO9/?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXA2MXNVT0pUSzQwTy85eE4venJzcFpyNG1NYzgzcE91RlBtbzZYUXRnOWwy?=
+ =?utf-8?B?QW9XL3N4Q0NZd0lNUml4VlFmYlptMEw3Mm9uR1RZc25ONkxjSG5IbUsvVzQr?=
+ =?utf-8?B?QUxaUlVYak5rQzFLc2pHZnByWnhUdk5YNDk3VkhnSTBHT3ZTUndMWXd5aGVR?=
+ =?utf-8?B?cnRPeFVaTFhTbjBZRy8yaTF1U3g2QjhqZ1pWbmNCTm5hYVcxdlVvc2NYbmZT?=
+ =?utf-8?B?RzNNS284QS9kUzh1WGQ3V2pQbFlOYVQ1dm1uOEVFZXpCMTRia1hKb0t3ZS9r?=
+ =?utf-8?B?cDZTS09VTW85ZEx2NkEyWW9JS0EzRFVyNDlSQkhMc0l6TEExTlRuT3pneU80?=
+ =?utf-8?B?VENERVJEUVgxWk04MVVKV0RoV210TnFYckRWejdJbXlJeTh2UkZ0YzRyRVBh?=
+ =?utf-8?B?SmE5V0lpZVBMUHpFeS9pQk9mWEZ5V2JYUW9IbFRFa2xvZTRmWXJrczJsMmNB?=
+ =?utf-8?B?c3cxMi9uRmkyNVo0NFFZSmljUkNJRG1ZNjhUSGp2VkFFZ1dvQno5SVE0RE9X?=
+ =?utf-8?B?ajlxMHRJWnRLbUcvT1ErMlEwYU9KbHRsc1ppVXZmV0h1UWNha2pIcHVsbURY?=
+ =?utf-8?B?ODJwa0NicEZ3V1lDNmNNbzh6K25SeFlmWE8wSzJqS2pOLzhmSGp6Z0tOL2ow?=
+ =?utf-8?B?NmcxT0xGRnZ4N3VvZ3JLMkdpUkFLSTRlR0k3N0NBVWVjNC92RjdRRzNzbnk1?=
+ =?utf-8?B?TGNNbmpweHVMKzdFRHhBU2ZaSVR4RzZKSlVaald5TmljdGFyTmtaaTRrNitE?=
+ =?utf-8?B?bEpGaWlzU2U0QVF4VnhQZFdkRDFpbnRlN2xlMzNiUHhHY2t5RmdxbmJhbElj?=
+ =?utf-8?B?a2Jwb1VhOXkwNmw0dnRvT2tMU3B5OVg1UWUxUnY3U3hmQzB1TldzeVFWN003?=
+ =?utf-8?B?d0ltL2R4UjlJUWRWcnVWMW0vU2FBdC9sbTlpcWxnYS9IS3pNellCajR4NmpE?=
+ =?utf-8?B?MEVQTU8yZmIwNzBxQTBVcnNnVmJHc2ZEdVpXNnlUTGgySGkrRzQyOTExMWo4?=
+ =?utf-8?B?eU56QVIwQmUwdzl2ZGZhVTR1UjNPck5jQWJja0RBaXpIZjkrcTVLY1FTVjZT?=
+ =?utf-8?B?elE4YWMrcHdBSm5IUjFGbGhlc3l6WTVLU2hXT3FMVmtJRVQ5NzFBdHZpalhH?=
+ =?utf-8?B?bjNuTFFmczJzVW1kY2RHVGFHMWd4aU5VOGdnK0xua2FYTmRsWkdBZTNCbG03?=
+ =?utf-8?B?VFV5REFqTDNqakhDamd6WU1UcGpwa2hodWtDeE12QzY3dEN3STJkTExBRnp1?=
+ =?utf-8?B?cnBEK1A1eUZJL1ZyU3NvVFVkMkhiYVpWT3hKMnZzVE5OYXpncnE0UFB3d0lk?=
+ =?utf-8?B?U2h0aW5QSjBJbjB6em5INzZQUXM0TUZIb0NiMk40OEp3OFpHNTN1ckJXMG5B?=
+ =?utf-8?B?WkpHNUFtM2QyUkp2ak1lQ0F0ck1rNVlPYWVsTERVR1hnUmZpaWJKU2tEK0tH?=
+ =?utf-8?B?Si94QmVpUWVrZXdTQXlhWkpEaDh6UTNKeXhoaFJyYmtuUWVZQ21pd0NsREFE?=
+ =?utf-8?B?YzlSLzRJelpJdkZVQmV0eHV1VFRKQlpFblVDUndsaGp4U056Mm55cHhEeTdt?=
+ =?utf-8?B?RDVoaG9PbTFpUlZLZ2RJTTFrRGdGUjEyVzBFQmRJT1FJaVR0VXBGWjZxcXZ0?=
+ =?utf-8?B?VTRuUXM3d1dSZlBpL3FsT0NvSTdqUlNkQWdXc0VXbldsN2lCbGRSaURVdUIz?=
+ =?utf-8?B?eVMzWWllTUxwWUE2T0o4bk9LR3JEM3lLTnV6UjlNMi9HQWI0M0hCSit0eFMx?=
+ =?utf-8?B?cnVVU1BBNFdzUWVWb2IxMTc5bEtGNFFOQjE2bE9OdEM0OG1yTmxpSUhmWDFn?=
+ =?utf-8?B?Vm9oNkNHOHVBRGJVV2dZdGp0ZzhURTRKM21mMUw4VkNJVjlwZVBGZmFhUFY5?=
+ =?utf-8?B?UEMxNjk0UmlGdWZnQWl4Zks1ZUNNd0QwQlpjTFpZbzF0S3VBUFNyZEJKN1dD?=
+ =?utf-8?B?cVB0WUpwYUpvN0hSRFZOUWpYa2FQVEFYR2pCMjY4RjVUNW5SNWJoSXVFRHdx?=
+ =?utf-8?B?ekplZkx0VEVheHZVVjJXSlUrUDM3Qko4eWFVejZOekhRWVZvalF0V3phcmov?=
+ =?utf-8?B?UTZHVlJRRlN2UVF4ZlVpbG9TL21jaGJnNktSMmN4RzlRemdDTzFVdEtsNzRO?=
+ =?utf-8?B?SnJxTU5iQVFod2pKZXV2WWlDVmFGOFNkaHhoN0lGYndiSGZiVGVuT0d0dlN6?=
+ =?utf-8?Q?vwvWC22WKFKnOHCspNmlmIQ=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e02cf78-028b-4d53-84c0-08dd4aa1e85a
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2025 13:42:20.6621
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GFn763YXEb8pEL3FH6EkneP1Jm9jF0JS+XzpigozPaBMPGbtIsKKpaIU5cReun4Rr608HpVQ/ezbN0JezMx11AxKagbfEWHwxmR0ZD0wF0M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8014
+X-OriginatorOrg: intel.com
 
-Hi Kai,
+On 2025-02-11 at 09:58:22 +0100, Maciej Wieczor-Retman wrote:
+>On 2025-02-10 at 23:57:10 +0100, Andrey Konovalov wrote:
+>>On Mon, Feb 10, 2025 at 4:53 PM Maciej Wieczor-Retman
+>><maciej.wieczor-retman@intel.com> wrote:
+>>>
+>>> On 2025-02-10 at 16:22:41 +0100, Maciej Wieczor-Retman wrote:
+>>> >On 2024-10-23 at 20:41:57 +0200, Andrey Konovalov wrote:
+>>> >>On Tue, Oct 22, 2024 at 3:59 AM Samuel Holland
+>>> >><samuel.holland@sifive.com> wrote:
+>>> >...
+>>> >>> +        * Software Tag-Based KASAN, the displacement is signed, so
+>>> >>> +        * KASAN_SHADOW_OFFSET is the center of the range.
+>>> >>>          */
+>>> >>> -       if (addr < KASAN_SHADOW_OFFSET)
+>>> >>> -               return;
+>>> >>> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
+>>> >>> +               if (addr < KASAN_SHADOW_OFFSET ||
+>>> >>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size)
+>>> >>> +                       return;
+>>> >>> +       } else {
+>>> >>> +               if (addr < KASAN_SHADOW_OFFSET - max_shadow_size / 2 ||
+>>> >>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size / 2)
+>>> >>> +                       return;
+>>> >>
+>>> >>Hm, I might be wrong, but I think this check does not work.
+>>> >>
+>>> >>Let's say we have non-canonical address 0x4242424242424242 and number
+>>> >>of VA bits is 48.
+>>> >>
+>>> >>Then:
+>>> >>
+>>> >>KASAN_SHADOW_OFFSET == 0xffff800000000000
+>>> >>kasan_mem_to_shadow(0x4242424242424242) == 0x0423a42424242424
+>>> >>max_shadow_size == 0x1000000000000000
+>>> >>KASAN_SHADOW_OFFSET - max_shadow_size / 2 == 0xf7ff800000000000
+>>> >>KASAN_SHADOW_OFFSET + max_shadow_size / 2 == 0x07ff800000000000 (overflows)
+>>> >>
+>>> >>0x0423a42424242424 is < than 0xf7ff800000000000, so the function will
+>>> >>wrongly return.
+>>> >
+>>> >As I understand this check aims to figure out if the address landed in shadow
+>>> >space and if it didn't we can return.
+>>> >
+>>> >Can't this above snippet be a simple:
+>>> >
+>>> >       if (!addr_in_shadow(addr))
+>>> >               return;
+>>> >
+>>> >?
+>>>
+>>> Sorry, I think this wouldn't work. The tag also needs to be reset. Does this
+>>> perhaps work for this problem?
+>>>
+>>>         if (!addr_in_shadow(kasan_reset_tag((void *)addr)))
+>>>                 return;
+>>
+>>This wouldn't work as well.
+>>
+>>addr_in_shadow() checks whether an address belongs to the proper
+>>shadow memory area. That area is the result of the memory-to-shadow
+>>mapping applied to the range of proper kernel addresses.
+>>
+>>However, what we want to check in this function is whether the given
+>>address can be the result of the memory-to-shadow mapping for some
+>>memory address, including userspace addresses, non-canonical
+>>addresses, etc. So essentially we need to check whether the given
+>>address belongs to the area that is the result of the memory-to-shadow
+>>mapping applied to the whole address space, not only to proper kernel
+>>addresses.k
+>
+>Ah, okay, I get it. Would the old version
+>
+>       if (addr < KASAN_SHADOW_OFFSET)
+>               return;
+>
+>work if the *addr* had kasan_reset_tag() around it? That would sort of re-unsign
+>the address only for the purpose of the if().
+>
+>Also I was thinking about it because x86 even with address masking enabled keeps
+>bit 63 set, so all kernel addresses will be negative in the signed
+>kasan_mem_to_shadow(). That's great for simplifying the KASAN_SHADOW_OFFSET but
+>it differs from the TBI and risc-v ideas where half of addresses are negative,
+>hald positive. So the temporary re-unsigning could maybe make it simpler for x86
+>and avoid adding separate cases or alternative kasan_non_canonical_hook()
+>implementation.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v6.14-rc2 next-20250210]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kai-M-kisara/scsi-scsi_debug-First-fixes-for-tapes/20250211-031623
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20250210191232.185207-4-Kai.Makisara%40kolumbus.fi
-patch subject: [PATCH v1 3/7] scsi: scsi_debug: Add write support with block lengths and 4 bytes of data
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20250211/202502112016.6zs2FpD6-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502112016.6zs2FpD6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502112016.6zs2FpD6-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/scsi/scsi_debug.c:31:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/scsi/scsi_debug.c:2985:3: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-    2985 |                 len += resp_partition_m_pg(ap, pcontrol, target);
-         |                 ^~~
-   drivers/scsi/scsi_debug.c:2850:28: note: initialize the variable 'len' to silence this warning
-    2850 |         u32 alloc_len, offset, len;
-         |                                   ^
-         |                                    = 0
->> drivers/scsi/scsi_debug.c:3378:10: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-    3378 |         for ( ; i < TAPE_MAX_PARTITIONS; i++)
-         |                 ^
-   drivers/scsi/scsi_debug.c:3367:7: note: initialize the variable 'i' to silence this warning
-    3367 |         int i;
-         |              ^
-         |               = 0
-   5 warnings generated.
-
-
-vim +/i +3378 drivers/scsi/scsi_debug.c
-
-  3363	
-  3364	static int partition_tape(struct sdebug_dev_info *devip, int nbr_partitions,
-  3365				int part_0_size, int part_1_size)
-  3366	{
-  3367		int i;
-  3368	
-  3369		if (part_0_size + part_1_size > TAPE_UNITS)
-  3370			return -1;
-  3371		devip->tape_eop[0] = part_0_size;
-  3372		devip->tape_blocks[0]->fl_size = TAPE_BLOCK_EOD_FLAG;
-  3373		devip->tape_eop[1] = part_1_size;
-  3374		devip->tape_blocks[1] = devip->tape_blocks[0] +
-  3375				devip->tape_eop[0];
-  3376		devip->tape_blocks[1]->fl_size = TAPE_BLOCK_EOD_FLAG;
-  3377	
-> 3378		for ( ; i < TAPE_MAX_PARTITIONS; i++)
-  3379			devip->tape_location[i] = 0;
-  3380	
-  3381		devip->tape_nbr_partitions = nbr_partitions;
-  3382		devip->tape_partition = 0;
-  3383	
-  3384		partition_pg[3] = nbr_partitions - 1;
-  3385		put_unaligned_be16(devip->tape_eop[0], partition_pg + 8);
-  3386		put_unaligned_be16(devip->tape_eop[1], partition_pg + 10);
-  3387	
-  3388		return nbr_partitions;
-  3389	}
-  3390	
+Oh, nevermind, I see that this is more complicated than that. Sorry for the
+spam, I'll do some better calculations what is mapped where when doing
+kasan_mem_to_shadow() and maybe then I'll figure this out.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kind regards
+Maciej Wieczór-Retman
