@@ -1,113 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C63253328;
-	Tue, 11 Feb 2025 15:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E6D2505B3
+	for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 15:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739287770; cv=none; b=sVzjZPSc3G4R5KCQKoIYKVO0vGXBJqiuRml7YCyWAHGKXpyo4o+1Xr8aDyhjC0WdHkU5A1XYXnrggy5t+Asdq31gA1wnWw5WLIiqoq3YEJWilEwtTVp++US5ysJheDI+fitXVlnl/KJfuOm4l/w+tdTh59Hd5s41EaMOWTLuE5Q=
+	t=1739287991; cv=none; b=fBCG2AxSY+mCaP5CGsYNz96N9bK0tM8ozmrUkMxJiF/FOi9xtM835pyiYC2qxnvA5M+XyvlQXcVhwtwsRtTmyT+NALHo6BE/RlPm/InZmmizyVNj09/7b6VGyfwOdTzh2LtzJ0JPmk6d1fTgjudhCNGY+JqZlyVfiJrUHKCuNp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739287770; c=relaxed/simple;
-	bh=PNWNqJTookf2zJdQY5NjQf0sRFZT3J703U3R1x7akG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CVqgwDE9XjyMiMGgQlwpLmoOdWeXKZ0/YGObtwXSf3aLTqoyPMUeqxxjnB57LI2brhSxfMlxlF+CzrF1oUs8DQe229HewOugq9C8Sd0VpVQ52K8Ddr84uwHTkZ5ze0HnAEtejHo7iSdwmaPVHnaI46rih7UIMKmpvwSOrIyFT6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LpgseeJc; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739287991; c=relaxed/simple;
+	bh=YNGkFnlzlwRtOdRnAVLsZY3LGyByKbmeHBrMNsgvNSM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b8hXMRXQtprYQg8mmf2sJghtww7C1YS17plmlj8gmc3FTD2CKHStTM66l4bdjXQVM5fBqMqn8k4X/0yUWXsi9ZfyT7GCyF8dqvfxnV8FEyz2BPFnPxTiFnSo/tLuJydAirQeL/2iHrVCLIipOoyLvFl5PJOTp5DAquFNf4ndjLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haDDgoyK; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LpgseeJc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739287769; x=1770823769;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PNWNqJTookf2zJdQY5NjQf0sRFZT3J703U3R1x7akG8=;
-  b=LpgseeJcmF8DV+uUN3+X/QQDKOfic+OOYTfBgUlWHqwTtzCk+JOVDWQA
-   +x7gfMpq+aQ7BdPyT35kKVs1IdIXatz+ZrJe6Qt8ofLGDiW3RGbYVR+Iv
-   8Qzbni2JxZ1A3JG7z4aKbQxUPN0o2lhU+Pts3LIrG+rKlCTnY+h2++kcR
-   IPPud043hGGTjPQd7HSRQGa0p6uAic9fDkZxyz8NqqF3ZduXRj8OAx9/H
-   QUMa5D75aZtu+yXpMHAUtqGPTplYAN5nj01mj8yiPQVStHcaVAnGEGGeW
-   3LHNDfR6/BCYZRvu5aVErxeNJ+couaERfdbNgNdYHxpiY01JA6hNLz4o9
-   g==;
-X-CSE-ConnectionGUID: j7KfjFnBTsGkdblNjkIKVA==
-X-CSE-MsgGUID: 9gBlXOWiQIqyW1u7eH5BoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="39774228"
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="39774228"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 07:29:28 -0800
-X-CSE-ConnectionGUID: XBQET5EgS8i8G2g4EeJYiw==
-X-CSE-MsgGUID: 3UwGCSJoRsGqlX2ylzGogQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="143398363"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 11 Feb 2025 07:29:26 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1thsCR-0014MF-2z;
-	Tue, 11 Feb 2025 15:29:23 +0000
-Date: Tue, 11 Feb 2025 23:29:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, Saeed Mahameed <saeed@kernel.org>
-Subject: Re: [PATCH net-next 09/11] net: dummy: add dummy shaper API
-Message-ID: <202502112354.4t60yYpw-lkp@intel.com>
-References: <20250210192043.439074-10-sdf@fomichev.me>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haDDgoyK"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-308dfea77e4so35867881fa.1
+        for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 07:33:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739287988; x=1739892788; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YNGkFnlzlwRtOdRnAVLsZY3LGyByKbmeHBrMNsgvNSM=;
+        b=haDDgoyK55A9+jt40Z2iiI3IXHj2Ifbh+WgQryXuGsysapHdYrtQc8U9g0rrdZZKyh
+         0J5CEU/WRV6HiLb5Lu6Dmd0iBvXxH+UCgfniK3nPKn01lQtZWTH2nddBlsET6H8WS03U
+         TPc3GdhYVY72rxyfGIAU1flXUhrB2q7pVL5MVVEXAXT/2Ze49Qj/jitnZtqx1UxBgK3h
+         u/eUCZrfRQW/q1UQmE/TrP6gAnACCo9pU9ohNQpKm4LcQwY8oNQq7l6uElFoJSEqLtuP
+         QMUv8ofhzABnpeJOWwSGX3Ce8An9pdfaNFM/vHTLJRKkB7UR8iTK/OQf23RD8BcOz08T
+         HvgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739287988; x=1739892788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YNGkFnlzlwRtOdRnAVLsZY3LGyByKbmeHBrMNsgvNSM=;
+        b=qLI9V5thWOhs8eCplYQrtgWv6SHJTIhk07Sn/78vkVonJiY5Be3ogAwX+D20P+vpdL
+         dLHXfYbWK/mFMH7MiMTpLJG07gMYyJoYJ2iUNaSYQ+T0BDD/mxZb6yIKZKUlQSJp1f/V
+         Jj9gi16Y8qKqYSOuv5QZ5pMwPdY95EVvsS+PwxSHbdb75f7Ih0X6P320S+3Cil6BhlRo
+         Ji90USisd3JO6GrKVYDw1gDaR3Ex/Hw1rdZ/g8x1/Zkl0lfz0fY4y1FhtBgzA+/U15cQ
+         0OmS/OtfqrLeqy4nWGETDrLb2kZSsfr7Apy5b4dvjBHjtrC8+YVJ8jy0Ds6wHn3mUr7J
+         VueA==
+X-Forwarded-Encrypted: i=1; AJvYcCXnmCa8t+cz2QgmV5VHacDxtbAZga3bBybNfLybNM6VemRiH6iTrQD6yqKI2L+6ymyvnyvR@lists.linux.dev
+X-Gm-Message-State: AOJu0YwK+hNEYffiQsuIAv8EGKZ24vB6aZxKRfzX2AlEzzs0q9nynR1P
+	4TCu5WPLHayVUgeytqlJNudrT4Hw+iW9DNiNm67xPN8W1Zvwga5LTM7+EuASu32rTEKzxFstq39
+	Z7WovCWQbLK31W0YrmmJr7nMk0p8=
+X-Gm-Gg: ASbGnct8wWTf7PiB5oBtcfwmp3zR+qIMWVYwBSZMCKepgdsUHUqHvoz/ZUf82IZx1Qk
+	FibAHHCaukRoJv9r8qgAUvoDCzGkMFDHTFdzLkbc1DUEmcU3a++UJkhqjrZeTdPnjLJ1S79N0vr
+	FGND3cHVXJddHH
+X-Google-Smtp-Source: AGHT+IEJIadN2vcB3Csnlfq1Mk6E54+R37oXLjSd4XLWNMgXv60YKkYbgT6YQjGh9tMenLxjvbqCI+Hb1rXcI8wrbGM=
+X-Received: by 2002:a2e:a80e:0:b0:308:eabd:297b with SMTP id
+ 38308e7fff4ca-308f910bd38mr13409571fa.4.1739287988170; Tue, 11 Feb 2025
+ 07:33:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210192043.439074-10-sdf@fomichev.me>
+References: <20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com> <20250211144744.GA1615191@kernel.org>
+In-Reply-To: <20250211144744.GA1615191@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Tue, 11 Feb 2025 10:32:31 -0500
+X-Gm-Features: AWEUYZkWF6fllMbg1VhwNw-lz_6L-I85jBsAu5kQqPz4yDcgkWQy-hEBswDaQoU
+Message-ID: <CAJ-ks9mpqHc_m1VCiBkjgONjJGUVJRWqKUQziA1STfOvUFTqjQ@mail.gmail.com>
+Subject: Re: [PATCH] blackhole_dev: convert self-test to KUnit
+To: Simon Horman <horms@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, 
+	Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stanislav,
+On Tue, Feb 11, 2025 at 9:47=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
+te:
+>
+> On Fri, Feb 07, 2025 at 06:38:41PM -0500, Tamir Duberstein wrote:
+> > Convert this very simple smoke test to a KUnit test.
+>
+> Hi Tamir,
+>
+> I think some text explaining why this change is being made is
+> warranted here.
 
-kernel test robot noticed the following build errors:
+Hi Simon, I think that would be stating KUnit's raison d'etre? I
+followed Kees' lead as seen in
+https://lore.kernel.org/all/20240612195921.2685842-2-kees@kernel.org/.
 
-[auto build test ERROR on net-next/main]
+In this case we saw the benefit right away: kernel test robot
+immediately spotted and reported a bug which I fixed in v2:
+https://lore.kernel.org/all/20250208-blackholedev-kunit-convert-v2-1-182db9=
+bd56ec@gmail.com/.
+Weirdly this message is absent from lore, but should be in your inbox
+(and my reply to it *is* present on lore).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/net-hold-netdev-instance-lock-during-ndo_open-ndo_stop/20250211-032336
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250210192043.439074-10-sdf%40fomichev.me
-patch subject: [PATCH net-next 09/11] net: dummy: add dummy shaper API
-config: i386-randconfig-001-20250211 (https://download.01.org/0day-ci/archive/20250211/202502112354.4t60yYpw-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502112354.4t60yYpw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502112354.4t60yYpw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/dummy.c:129:3: error: field designator 'net_shaper_ops' does not refer to any field in type 'const struct net_device_ops'
-     129 |         .net_shaper_ops         = &dummy_shaper_ops,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +129 drivers/net/dummy.c
-
-   120	
-   121	static const struct net_device_ops dummy_netdev_ops = {
-   122		.ndo_init		= dummy_dev_init,
-   123		.ndo_start_xmit		= dummy_xmit,
-   124		.ndo_validate_addr	= eth_validate_addr,
-   125		.ndo_set_rx_mode	= set_multicast_list,
-   126		.ndo_set_mac_address	= eth_mac_addr,
-   127		.ndo_get_stats64	= dummy_get_stats64,
-   128		.ndo_change_carrier	= dummy_change_carrier,
- > 129		.net_shaper_ops		= &dummy_shaper_ops,
-   130	};
-   131	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >
+> > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> > ---
+> > I tested this using:
+> >
+> > $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=3D1=
+ --kconfig_add CONFIG_NET=3Dy blackholedev
+>
+> ...
