@@ -1,71 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C5F1F2367;
-	Tue, 11 Feb 2025 14:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5693422DFAB
+	for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 14:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739285270; cv=none; b=B74irqo25kHibFRK/mhPuRz2zQII+IFTcl1LTbXpOdDjYLnU3RHZxQ9waP0iCg+DfjZRIx8QIYhJ4+vt1cFp6IBqmyjIlZi6l9CgFXjDNekB5pEXXjPmvZ0d0DtPumDHJy76LXlK1N503WTiPG1yyG6Fo7bpn9hN2IyeD3Fu+c4=
+	t=1739285849; cv=none; b=OwRdoKEIUhWCLSfWB7NFf/CvRzsvfoNg0njJ6JdKSFe3DhTE3nb+rlN+VbzGwzAxrXgCS8Hnf2gnkS2o4zuIhvQ0MEXhnnTgmJDifGXbzsHGo+SdDSQDOB/Ec6F0TxwTcKvAqZHruW2PovZFlE+qhye7R8xNmINk/NUkwOQc4WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739285270; c=relaxed/simple;
-	bh=7FXmIfHKI0A24C9ZdNlzK1EB/0enzRYaBWrf7AXQ7cI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sW2Bf+OV0FI+rHPHajN0qc4oRG0ZFB+ZtVs0OSZ64gvLCVpp5upB1ZH1RpfSoQr3k8z/zcJizXHkK+FldgzAAvMmAVX3gJJah8MFFr0RM6oRgCFGiM441oD/Vr5Avr2Ow7jtosx9Kv00cJAYSHB++mo/7kuqagvGt3bfFDwx+WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rZA1exyO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739285849; c=relaxed/simple;
+	bh=1Za0Dc2wPfHEPu0+2ss5VpvWqBA/O+UGmGxOvF1hwwk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qST/3GRTwpTm0o50eshVEpGMYzOhLyZWghfyH8VyfQ46OM25bRb1x9Zr3LmKoGtydhgxtAGXNhiGLqDD30fYy0cLpZWtmJTQGnfeOAPn/1RJUjMwKUp7/TWXJ4H8oSe1Qo6eGIDuIqd3DVc2PbvveALOhE07ULMZlpMxLAdJleE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IvqXzJJr; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rZA1exyO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F54C4CEE5;
-	Tue, 11 Feb 2025 14:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739285270;
-	bh=7FXmIfHKI0A24C9ZdNlzK1EB/0enzRYaBWrf7AXQ7cI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rZA1exyObdvvQijM1159sv1Zp6pLGVO6ohzPFABo5GuL4S/yCFo9zu1eVpvYuH/uM
-	 t4xiXC2pL6FCRHRdL213SVgavYtWf7j1WiOGvML047g/nvaHGyQaIf5iDqt9eXGEOt
-	 3wmHvrAgn3WYDU+ygtgb8cxCzOGSXMly8DUraBWt608Fv8CfDnzEjxCU30rhoIUG0m
-	 R847A0XTDUrCtFOun7azHzlkRvdmJ4my0S0sA/T7mBFJ0dKkOmkJ94JEuxtDsyNlhJ
-	 suvvJoMIYcD740BIopH9hjDz2xObrCEMPKhmpGL8/V2AwxvsSN2bM9iwAzPYQcEpTf
-	 woVU+fKYZ8tGQ==
-Date: Tue, 11 Feb 2025 14:47:44 +0000
-From: Simon Horman <horms@kernel.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IvqXzJJr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739285847; x=1770821847;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1Za0Dc2wPfHEPu0+2ss5VpvWqBA/O+UGmGxOvF1hwwk=;
+  b=IvqXzJJr4BtDXQsJ2Hblj3rT7Anj0mZDKNKXsZfoii414IeDB2rifyca
+   JhiKEdVwojbBoaQapWIxJBRod9fAezKbyqq+0Eywq9vxyQMeMl4AMrPOO
+   VuFcdIY7nXhnYugmhxweEhGZbqnlLZsbMzs7rGr1rpyCvJwRZRx/wrG5s
+   D+gEf+4297OJ4sPLiU29b+dzatYtZD7VErHi+8aPbztZvwV4KG5TRJNK2
+   9a6d5UL/Gn/3VNkVMTxKSxiR4nu7lw3duLi6PG7j6ixKHOZ/BTCCN4p66
+   Wcm9opjPj5+tSAS+jV1j5D6DmljyXsWO30uzQoWMyA+hIp2IB6yHSaVqH
+   A==;
+X-CSE-ConnectionGUID: //GY1J48RnKhrO3RYDdkqg==
+X-CSE-MsgGUID: V1FkyO50Q4S6Y72qhUHjPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="62376401"
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="62376401"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 06:57:27 -0800
+X-CSE-ConnectionGUID: XFXVXSAHSReKXuy5+41t7g==
+X-CSE-MsgGUID: 9RHXEF7DRLOURLhHV++MnA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="112504925"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Feb 2025 06:57:23 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 0374911E; Tue, 11 Feb 2025 16:57:21 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] blackhole_dev: convert self-test to KUnit
-Message-ID: <20250211144744.GA1615191@kernel.org>
-References: <20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com>
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] x86/pat: Guard within_inclusive() with ifdeffery
+Date: Tue, 11 Feb 2025 16:57:21 +0200
+Message-ID: <20250211145721.1620552-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.45.1.3035.g276e886db78b
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207-blackholedev-kunit-convert-v1-1-8ef0dc1ff881@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 07, 2025 at 06:38:41PM -0500, Tamir Duberstein wrote:
-> Convert this very simple smoke test to a KUnit test.
+The within_inclusive() in some cases, when CONFIG_X86_64=n, may be not used.
+This, in particular, prevents kernel builds with clang, `make W=1`
+and CONFIG_WERROR=y:
 
-Hi Tamir,
+arch/x86/mm/pat/set_memory.c:215:1: error: unused function 'within_inclusive' [-Werror,-Wunused-function]
 
-I think some text explaining why this change is being made is
-warranted here.
+Fix this by guarding the definitions with the respective ifdeffery.
 
-> 
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
-> I tested this using:
-> 
-> $ tools/testing/kunit/kunit.py run --arch arm64 --make_options LLVM=1 --kconfig_add CONFIG_NET=y blackholedev
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
 
-...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/x86/mm/pat/set_memory.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index ef4514d64c05..89c297b68c84 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -211,14 +211,14 @@ within(unsigned long addr, unsigned long start, unsigned long end)
+ 	return addr >= start && addr < end;
+ }
+ 
++#ifdef CONFIG_X86_64
++
+ static inline int
+ within_inclusive(unsigned long addr, unsigned long start, unsigned long end)
+ {
+ 	return addr >= start && addr <= end;
+ }
+ 
+-#ifdef CONFIG_X86_64
+-
+ /*
+  * The kernel image is mapped into two places in the virtual address space
+  * (addresses without KASLR, of course):
+-- 
+2.45.1.3035.g276e886db78b
+
