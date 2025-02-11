@@ -1,189 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B445B1E9B00;
-	Tue, 11 Feb 2025 06:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8156E1D54C2;
+	Tue, 11 Feb 2025 06:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739254777; cv=none; b=SIfMmRWgZmd7kAdEsXzeqynrpIhtYoyNszPG0+wfr/srfZr9UV29UDbMJdt2jJb8ovIVIcy21oscFz4p/+qqzuBy9iAwMVpPpUVo5OncRLeWCEvhip7RCACQOj2cHFGs0T52iKxo90GfayBuf4vzbzv0N3HSO0zG7YV7ZrJRLVo=
+	t=1739255314; cv=none; b=a+dxJPtIfgJhbvyIsNSSLbKLYgwQb1UTO5s2NndtznqTJUq3IxECLa4BP7kkL+69jYS+MHiYNu+Huk5XVB6PHna9ZSId8UtZo+epXKcbe/FIcuPtiFvBMXjytHEihFQ+uSAl1VsJes5qMw3jVkkj5QSMoxHW+TS1yRHzTbAvPWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739254777; c=relaxed/simple;
-	bh=T9NTAO1QRuFZX33xgmpknoyP3QWfqh1E9HVIBAeBXR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KdlqcFxYMR+anBihJ7j3gfQ7Kw4KR9ieAGe27SSTNEJO0KezK788ytRU24VN9tngCX1w2Q1iBdbEnSl5ClLoLlEky20q4Der9Ni45nMSTmGrFQi5u0E/anO2OImE2SrBoYv+b9+ffNP5iZGwQk7VCGoR1NxKaKFDkim+v6wPWNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DdQPTYrR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739255314; c=relaxed/simple;
+	bh=Vi3lGBXEhmoQzEyU+5dzG33UvVcHa1ftzEK7IGthpzo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VwBJ366vHTfZaCDUXDnGEw7SlO/hC/3POhw9lujV0c16ANExLDO5d361lVHptS6+r6QF4i+SecvhpdDJR4wtkxOA+WwLNuXYlPqASGtZGd/mFAVOFsmOy7CUuSa57EYTldXolwLPUX2f4inKjMeqXG7slvA0+ZoSk/x9IxhOdbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1Z2ikvrw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DdQPTYrR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38726C4CEE7;
-	Tue, 11 Feb 2025 06:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739254777;
-	bh=T9NTAO1QRuFZX33xgmpknoyP3QWfqh1E9HVIBAeBXR8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DdQPTYrR84kN7ksxe3PxP9pR7cF8RAgLe5OLQOpiTJvai6jcgfWeRV+F9Dp9+SA6Z
-	 eZGhM8I+57bK8+vhqXPCHL7du6TTaj8FGiCnM27eoNjorsHLgp2jtVUnddpdmOZ9a9
-	 JdKPUIq4ZER7OFQi4wQzAFrtBcqDXiphzzl+5vuhJkkfSiOuDWSqN5cObJdMBs8EMk
-	 Dxqeb7+Imtacz6y2/gIYgT9Q9CkTtvgqUfzNKAsxlVoI3J1TB8DqKw/u5Qr6fZyMnl
-	 XYRPXXgtSSWXxt9f5EaDW2Dz3NpVbGBk3HCo1TX+c4s6YCmMwNh33D+l1vf4FIGt/r
-	 Q/G++N2+YAyeQ==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1thjcN-00000008Y6a-1D6m;
-	Tue, 11 Feb 2025 07:19:35 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <mchehab+huawei@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	workflows@vger.kernel.org
-Subject: [PATCH 2/4] docs: changes: update Python minimal version
-Date: Tue, 11 Feb 2025 07:19:02 +0100
-Message-ID: <34dda7a5a75f30380d95d8e85a8813be98dc72fe.1739254187.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1739254187.git.mchehab+huawei@kernel.org>
-References: <cover.1739254187.git.mchehab+huawei@kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1Z2ikvrw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BE4C4CEDD;
+	Tue, 11 Feb 2025 06:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739255314;
+	bh=Vi3lGBXEhmoQzEyU+5dzG33UvVcHa1ftzEK7IGthpzo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1Z2ikvrw7YUYBNUkp4Lj4Q9etGh7f/7BSJDQUzNnYKlE8chnhTl6L1WeaTambTQlk
+	 QVY73jj7nHzMtTXRgWJDqvRoEmPUvHuJtT83cFHHPzAvXgM8BxknQ8V4DAPROARruA
+	 hr9Jicn/LIPPM3SajdgcEDHVeZ73L5/6nymSXZfk=
+Date: Tue, 11 Feb 2025 07:27:31 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, stable@vger.kernel.org,
+	John Rowley <lkml@johnrowley.me>
+Subject: Re: [PATCH v3] ACPI: platform-profile: Fix CFI violation when
+ accessing sysfs files
+Message-ID: <2025021105-simply-stubbed-1744@gregkh>
+References: <20250210-acpi-platform_profile-fix-cfi-violation-v3-1-ed9e9901c33a@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250210-acpi-platform_profile-fix-cfi-violation-v3-1-ed9e9901c33a@kernel.org>
 
-The current minimal version doesn't match what we have currently
-at the Kernel:
+On Mon, Feb 10, 2025 at 09:28:25PM -0500, Nathan Chancellor wrote:
+> When an attribute group is created with sysfs_create_group(), the
+> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+> and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
+> respectively. These functions use container_of() to get the respective
+> callback from the passed attribute, meaning that these callbacks need to
+> be the same type as the callbacks in 'struct kobj_attribute'.
+> 
+> However, the platform_profile sysfs functions have the type of the
+> ->show() and ->store() callbacks in 'struct device_attribute', which
+> results a CFI violation when accessing platform_profile or
+> platform_profile_choices under /sys/firmware/acpi because the types do
+> not match:
+> 
+>   CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choices_show+0x0/0x140; expected type: 0x7a69590c)
+> 
+> There is no functional issue from the type mismatch because the layout
+> of 'struct kobj_attribute' and 'struct device_attribute' are the same,
+> so the container_of() cast does not break anything aside from CFI.
+> 
+> Change the type of platform_profile_choices_show() and
+> platform_profile_{show,store}() to match the callbacks in
+> 'struct kobj_attribute' and update the attribute variables to match,
+> which resolves the CFI violation.
 
-	$ vermin -v  $(git ls-files *.py)
-	...
-	Minimum required versions: 3.10
-	Incompatible versions:     2
+Nice catch.
 
-Those are the Python scripts requiring versions higher than current minimal (3.5):
+> Cc: stable@vger.kernel.org
+> Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
+> Reported-by: John Rowley <lkml@johnrowley.me>
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
+> Tested-by: John Rowley <lkml@johnrowley.me>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Changes in v3:
+> - Rebase on 6.14-rc1, which includes updates to the driver to address
+>   Greg's previous concerns but this change is still needed for the
+>   legacy sysfs interface. v2 can be used for the stable backport.
+> - Link to v2: https://lore.kernel.org/r/20241118-acpi-platform_profile-fix-cfi-violation-v2-1-62ff952804de@kernel.org
 
-        !2, 3.10     tools/net/sunrpc/xdrgen/generators/__init__.py
-        !2, 3.10     tools/net/sunrpc/xdrgen/generators/program.py
-        !2, 3.10     tools/net/sunrpc/xdrgen/subcmds/source.py
-        !2, 3.10     tools/net/sunrpc/xdrgen/xdr_ast.py
-        !2, 3.10     tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-        !2, 3.9      tools/testing/selftests/net/rds/test.py
-        !2, 3.9      tools/net/ynl/ethtool.py
-        !2, 3.9      tools/net/ynl/cli.py
-        !2, 3.9      scripts/checktransupdate.py
-        !2, 3.8      tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-        !2, 3.8      tools/testing/selftests/hid/tests/base.py
-        !2, 3.7      tools/testing/selftests/turbostat/smi_aperf_mperf.py
-        !2, 3.7      tools/testing/selftests/turbostat/defcolumns.py
-        !2, 3.7      tools/testing/selftests/turbostat/added_perf_counters.py
-        !2, 3.7      tools/testing/selftests/hid/tests/conftest.py
-        !2, 3.7      tools/testing/kunit/qemu_config.py
-        !2, 3.7      tools/testing/kunit/kunit_tool_test.py
-        !2, 3.7      tools/testing/kunit/kunit.py
-        !2, 3.7      tools/testing/kunit/kunit_parser.py
-        !2, 3.7      tools/testing/kunit/kunit_kernel.py
-        !2, 3.7      tools/testing/kunit/kunit_json.py
-        !2, 3.7      tools/testing/kunit/kunit_config.py
-        !2, 3.7      tools/perf/scripts/python/gecko.py
-        !2, 3.7      scripts/rust_is_available_test.py
-        !2, 3.7      scripts/bpf_doc.py
-        !2, 3.6      tools/writeback/wb_monitor.py
-        !2, 3.6      tools/workqueue/wq_monitor.py
-        !2, 3.6      tools/workqueue/wq_dump.py
-        !2, 3.6      tools/usb/p9_fwd.py
-        !2, 3.6      tools/tracing/rtla/sample/timerlat_load.py
-        !2, 3.6      tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-        !2, 3.6      tools/testing/selftests/net/nl_netdev.py
-        !2, 3.6      tools/testing/selftests/net/lib/py/ynl.py
-        !2, 3.6      tools/testing/selftests/net/lib/py/utils.py
-        !2, 3.6      tools/testing/selftests/net/lib/py/nsim.py
-        !2, 3.6      tools/testing/selftests/net/lib/py/netns.py
-        !2, 3.6      tools/testing/selftests/net/lib/py/ksft.py
-        !2, 3.6      tools/testing/selftests/kselftest/ksft.py
-        !2, 3.6      tools/testing/selftests/hid/tests/test_tablet.py
-        !2, 3.6      tools/testing/selftests/hid/tests/test_sony.py
-        !2, 3.6      tools/testing/selftests/hid/tests/test_multitouch.py
-        !2, 3.6      tools/testing/selftests/hid/tests/test_mouse.py
-        !2, 3.6      tools/testing/selftests/hid/tests/base_gamepad.py
-        !2, 3.6      tools/testing/selftests/hid/tests/base_device.py
-        !2, 3.6      tools/testing/selftests/drivers/net/stats.py
-        !2, 3.6      tools/testing/selftests/drivers/net/shaper.py
-        !2, 3.6      tools/testing/selftests/drivers/net/queues.py
-        !2, 3.6      tools/testing/selftests/drivers/net/ping.py
-        !2, 3.6      tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-        !2, 3.6      tools/testing/selftests/drivers/net/lib/py/load.py
-        !2, 3.6      tools/testing/selftests/drivers/net/lib/py/__init__.py
-        !2, 3.6      tools/testing/selftests/drivers/net/lib/py/env.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/rss_ctx.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_performance.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_link_layer.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/devmem.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-        !2, 3.6      tools/testing/selftests/drivers/net/hw/csum.py
-        !2, 3.6      tools/testing/selftests/devices/probe/test_discoverable_devices.py
-        !2, 3.6      tools/testing/selftests/bpf/test_bpftool_synctypes.py
-        !2, 3.6      tools/testing/selftests/bpf/generate_udp_fragments.py
-        !2, 3.6      tools/testing/kunit/run_checks.py
-        !2, 3.6      tools/testing/kunit/kunit_printer.py
-        !2, 3.6      tools/sched_ext/scx_show_state.py
-        !2, 3.6      tools/perf/tests/shell/lib/perf_metric_validation.py
-        !2, 3.6      tools/perf/tests/shell/lib/perf_json_output_lint.py
-        !2, 3.6      tools/perf/scripts/python/parallel-perf.py
-        !2, 3.6      tools/perf/scripts/python/flamegraph.py
-        !2, 3.6      tools/perf/scripts/python/arm-cs-trace-disasm.py
-        !2, 3.6      tools/perf/pmu-events/models.py
-        !2, 3.6      tools/perf/pmu-events/metric_test.py
-        !2, 3.6      tools/perf/pmu-events/metric.py
-        !2, 3.6      tools/perf/pmu-events/jevents.py
-        !2, 3.6      tools/net/ynl/ynl-gen-rst.py
-        !2, 3.6      tools/net/ynl/ynl-gen-c.py
-        !2, 3.6      tools/net/ynl/lib/ynl.py
-        !2, 3.6      tools/net/ynl/lib/nlspec.py
-        !2, 3.6      tools/crypto/tcrypt/tcrypt_speed_compare.py
-        !2, 3.6      tools/cgroup/iocost_monitor.py
-        !2, 3.6      tools/cgroup/iocost_coef_gen.py
-        !2, 3.6      scripts/make_fit.py
-        !2, 3.6      scripts/macro_checker.py
-        !2, 3.6      scripts/get_abi.py
-        !2, 3.6      scripts/generate_rust_analyzer.py
-        !2, 3.6      scripts/gdb/linux/timerlist.py
-        !2, 3.6      scripts/gdb/linux/pgtable.py
-        !2, 3.6      scripts/clang-tools/run-clang-tools.py
-        !2, 3.6      Documentation/sphinx/automarkup.py
+I'll never find that, so be prepared for a "FAILED" email when this hits
+Linus's tree :)
 
-Even if we exclude tools/net/sunrpc/xdrgen/, the minimal version is
-Python 3.9.
-
-Update process/changes to reflect the current minimal version required to
-run Python scripts outside tools.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/process/changes.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 66015c768cfc..d564362773b5 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -62,7 +62,7 @@ Sphinx\ [#f1]_         3.4.3            sphinx-build --version
- GNU tar                1.28             tar --version
- gtags (optional)       6.6.5            gtags --version
- mkimage (optional)     2017.01          mkimage --version
--Python (optional)      3.5.x            python3 --version
-+Python (optional)      3.9.x            python3 --version
- GNU AWK (optional)     5.1.0            gawk --version
- ====================== ===============  ========================================
- 
--- 
-2.48.1
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
