@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9912638B2;
-	Tue, 11 Feb 2025 01:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A5F26AEE4;
+	Tue, 11 Feb 2025 01:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739237572; cv=none; b=a2bYgFnJc4IMz8KvBOpJd1xMOsM0oc00fnMGqrROhA7+wI5jqu5gaPjjk7OEbZ3EjV8Ste3FVDc6uUa8LkXu0TvFIb+JYKgLlZL+R0VJCskMGfKiFaV0gpgARkyMW6iWTAw0NQV1NCZf8nNxBzhXpr27GkhVlairBMECjlQkOI8=
+	t=1739237589; cv=none; b=EN4Sii+SCKOS2vX+b+Yns1nvrOyYNrbGFeX4Ubvzjd4lbWR3ekmelkAF3MVSoG3rwh5qGO4+LdVYBBC0AS1duE0xr/deUr/fe8uCts9qxrndc0FXh+7pPLgp574+/x8eLkK3RFPiXodMvg+IhGTYdRMgGPiZWFXDVmCjH5J0G9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739237572; c=relaxed/simple;
-	bh=cLtRJnDZFOfI/+RVHSMPiXwMeY16TknHn0hFWvnDLjI=;
+	s=arc-20240116; t=1739237589; c=relaxed/simple;
+	bh=oLpeTShy+L4zJ6dosfVi03wh3FpU4+0LgWQ9gE6LZbc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nLxGKESVMaPyCTDA//cvsjKNTYmH9+uNz4X8Bi14GOaSOaIzsD8iIL2eyA/DgsQ1KvlohRg5DJArvDL72kc0tc5YNixqhrHZ6KqqFhIrHLS8Ynd7ShDZp3i+BCuf4N371M3/5vsSz7WSwLFhHkRix4ByjKo2fk86aq1WAAeoBDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HuXggJYH; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=mdFEKLc5+ow8tQk3XjF7GpdezNfDRd6R7Sv1ahrxFkGAApRBv2htJWOaey+gpKrpI9sySD+Pn7HaVsVKmIysbczitgJ/E1tYFZfQx6CU9g1XT7B9USYbXtYxY+vRg+n1aXJCelD5H6iJgrTrwxb6oNNhVoHA8jhdHG+IW/+zjKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEWHAEng; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HuXggJYH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30C4C4CEDF;
-	Tue, 11 Feb 2025 01:32:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEWHAEng"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31956C4CED1;
+	Tue, 11 Feb 2025 01:33:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739237572;
-	bh=cLtRJnDZFOfI/+RVHSMPiXwMeY16TknHn0hFWvnDLjI=;
+	s=k20201202; t=1739237589;
+	bh=oLpeTShy+L4zJ6dosfVi03wh3FpU4+0LgWQ9gE6LZbc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HuXggJYHnmGgIQjrHXgjzpKNgXHBM5ZlCmy7uyd61ck9BJWWKWycb2hsJwKU7VotE
-	 b9Mfn4hIfQRC4h9EGDY3Rw1wvh0QD6cnYy5w7piUyuj2wSL/71RFHfVw2Z9DofrsdR
-	 vAYpYAZbUJxikOQneYbry2H2lBqptJIEh4x9maeSvN3Jqzktmr0BK8iHEARO/4jWrI
-	 ERxPgVBSepadDERcQKi7wE2D+qAQcTQiMa3HBNB/snLN9UEKrYLL9FXVi0Eu1G6GHG
-	 KGj1LraNZm+DosEyQ31zPlcIsUV6VfnwVckNmKtg8p2WWG5bql++fGmkDAY9oPuo0z
-	 OLQ7LkII9tRMQ==
+	b=KEWHAEngRpMmwyuNh0buO+aHEbhh8wTEI7Bzrb+QTZ9Gh1+XYaH3ciXMCuMGY1zjI
+	 Fp2TcqGgFFj6pSyivs5BVUXHxu0X7dPvtlLrEeYV/7KzOa8JwvFj92wUK2N4X+P7oE
+	 I4XAWcWWrMA3XKi/BUgqyz5aCPNH1kzDDHSDmPPRsUboyQmAg6TFEuBf/U6D3n/bb1
+	 fE+HH10QQYPn7aEJ33xp/zrEvT4KmsJQQrI97GgxdfH2KZ5GX8a8Abr1nb0F2YxKb9
+	 utSBFNAZjgJny8fTeMkos3jcjSiQ8LYM1Ja9nVcn6ghSXS0MBSzSniXrd9uQ6K+3vr
+	 aJAPXFAqPEGsA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -36,12 +36,12 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	frederic@kernel.org,
 	nathan@kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 2/8] hrtimers: Mark is_migration_base() with __always_inline
-Date: Mon, 10 Feb 2025 20:32:42 -0500
-Message-Id: <20250211013248.4098848-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/6] hrtimers: Mark is_migration_base() with __always_inline
+Date: Mon, 10 Feb 2025 20:33:01 -0500
+Message-Id: <20250211013305.4099014-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250211013248.4098848-1-sashal@kernel.org>
-References: <20250211013248.4098848-1-sashal@kernel.org>
+In-Reply-To: <20250211013305.4099014-1-sashal@kernel.org>
+References: <20250211013305.4099014-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.234
+X-stable-base: Linux 5.4.290
 Content-Transfer-Encoding: 8bit
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 12 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 7f9f2fc183fe3..c202488695c46 100644
+index 539bc80787eeb..69713fa32437b 100644
 --- a/kernel/time/hrtimer.c
 +++ b/kernel/time/hrtimer.c
-@@ -144,11 +144,6 @@ static struct hrtimer_cpu_base migration_cpu_base = {
+@@ -140,11 +140,6 @@ static struct hrtimer_cpu_base migration_cpu_base = {
  
  #define migration_base	migration_cpu_base.clock_base[0]
  
@@ -93,7 +93,7 @@ index 7f9f2fc183fe3..c202488695c46 100644
  /*
   * We are using hashed locking: holding per_cpu(hrtimer_bases)[n].lock
   * means that all timers which are tied to this base via timer->base are
-@@ -273,11 +268,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
+@@ -269,11 +264,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
  
  #else /* CONFIG_SMP */
  
@@ -105,7 +105,7 @@ index 7f9f2fc183fe3..c202488695c46 100644
  static inline struct hrtimer_clock_base *
  lock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
  {
-@@ -1275,6 +1265,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
+@@ -1276,6 +1266,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
  	}
  }
  
