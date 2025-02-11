@@ -1,129 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A5F26AEE4;
-	Tue, 11 Feb 2025 01:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9206979C0;
+	Tue, 11 Feb 2025 02:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739237589; cv=none; b=EN4Sii+SCKOS2vX+b+Yns1nvrOyYNrbGFeX4Ubvzjd4lbWR3ekmelkAF3MVSoG3rwh5qGO4+LdVYBBC0AS1duE0xr/deUr/fe8uCts9qxrndc0FXh+7pPLgp574+/x8eLkK3RFPiXodMvg+IhGTYdRMgGPiZWFXDVmCjH5J0G9g=
+	t=1739240913; cv=none; b=ih+22JbmXOC7ZfA+rXYd/udR9oqEtuVtf0XD8u+Hi+Q8FR3FxktiAvd1nVt9j1QIkeBIf+4CSSRyWWVkRULvT/Gy2Ej5RwRWRDTILD3XlhJgFSlGw+Hz+k2SoyPFix+HmroaD3pobykC4BpKM2IQjXFRASBw4cpWj7Ysu4r/Qrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739237589; c=relaxed/simple;
-	bh=oLpeTShy+L4zJ6dosfVi03wh3FpU4+0LgWQ9gE6LZbc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mdFEKLc5+ow8tQk3XjF7GpdezNfDRd6R7Sv1ahrxFkGAApRBv2htJWOaey+gpKrpI9sySD+Pn7HaVsVKmIysbczitgJ/E1tYFZfQx6CU9g1XT7B9USYbXtYxY+vRg+n1aXJCelD5H6iJgrTrwxb6oNNhVoHA8jhdHG+IW/+zjKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEWHAEng; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739240913; c=relaxed/simple;
+	bh=iTjzNwKewvmLzaCQagxyKDVXUVMNYwcrtDjaQM3gppg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oadewpRKDv2+fJbqSz57KDRlYShFebx0/RFOCobinXTvZ9Y0oDEFCvaPn2NZkXC/Gkf2dLjNxhmoo1BGux5jRl3W6GtehK3JrniNklDp7tbJDu4mpkILicDmAxK5HZt7pEV+LksczzxFB6LJLDN46dPt7zfJjBJ3mKhm7hsQN9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKr82Q/c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEWHAEng"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31956C4CED1;
-	Tue, 11 Feb 2025 01:33:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKr82Q/c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBF4C4CED1;
+	Tue, 11 Feb 2025 02:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739237589;
-	bh=oLpeTShy+L4zJ6dosfVi03wh3FpU4+0LgWQ9gE6LZbc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KEWHAEngRpMmwyuNh0buO+aHEbhh8wTEI7Bzrb+QTZ9Gh1+XYaH3ciXMCuMGY1zjI
-	 Fp2TcqGgFFj6pSyivs5BVUXHxu0X7dPvtlLrEeYV/7KzOa8JwvFj92wUK2N4X+P7oE
-	 I4XAWcWWrMA3XKi/BUgqyz5aCPNH1kzDDHSDmPPRsUboyQmAg6TFEuBf/U6D3n/bb1
-	 fE+HH10QQYPn7aEJ33xp/zrEvT4KmsJQQrI97GgxdfH2KZ5GX8a8Abr1nb0F2YxKb9
-	 utSBFNAZjgJny8fTeMkos3jcjSiQ8LYM1Ja9nVcn6ghSXS0MBSzSniXrd9uQ6K+3vr
-	 aJAPXFAqPEGsA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Sasha Levin <sashal@kernel.org>,
-	anna-maria@linutronix.de,
-	frederic@kernel.org,
-	nathan@kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 2/6] hrtimers: Mark is_migration_base() with __always_inline
-Date: Mon, 10 Feb 2025 20:33:01 -0500
-Message-Id: <20250211013305.4099014-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250211013305.4099014-1-sashal@kernel.org>
-References: <20250211013305.4099014-1-sashal@kernel.org>
+	s=k20201202; t=1739240913;
+	bh=iTjzNwKewvmLzaCQagxyKDVXUVMNYwcrtDjaQM3gppg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=VKr82Q/cLYkXPxs7/4SjA1T8sL4Ut5cgGO4Ap2nTh4Loc2/gy9nfuE6kgpOewbs4R
+	 Kg/OsoATbwL4RY4CDNS/jSygTBaRdFcJHnSJIymjmvfB/OtHDUwncs/m521Niaus0+
+	 +00oCrVbU6fiZeML4YhrrEHcdToCcNONbdjVtmM462N+Sl486sceXJjyv9AXg9/nxQ
+	 +pZvsz4a1Kp2MiuVBDjCm2TsvjBONKkn+PUpe83VWfF+dgmDF62dByBnn6YL/1Wuau
+	 c5PbEXhfCjSKPptvUrUXvzen3goP/Em5mZo025yU4hPFBKdXnZkfZPomX1Nyyefqmm
+	 CGuRsZdn5zozQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 10 Feb 2025 21:28:25 -0500
+Subject: [PATCH v3] ACPI: platform-profile: Fix CFI violation when
+ accessing sysfs files
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.290
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250210-acpi-platform_profile-fix-cfi-violation-v3-1-ed9e9901c33a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMi1qmcC/5WNQQ6CMBBFr2K6dgwtBYor72GMQTqFiUibljQaw
+ t0tLEzc6fLN/Lw3s4CeMLDjbmYeIwWyY4J8v2Nt34wdAunETGRCZorX0LSOwA3NZKx/XJ23hgY
+ EQ09oDUEkm17JARpFpaoiv+nCsGRzHtNoK50viXsKk/WvLRz5ev2/ETlwkFWdl4VWUpnydEc/4
+ nCwvmNrJIqPmHOufheLJC6FMXUhVCY1fomXZXkDGloBgTgBAAA=
+X-Change-ID: 20240819-acpi-platform_profile-fix-cfi-violation-de278753bd5f
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>, 
+ Mark Pearson <mpearson-lenovo@squebb.ca>, 
+ Mario Limonciello <mario.limonciello@amd.com>, Kees Cook <kees@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ stable@vger.kernel.org, John Rowley <lkml@johnrowley.me>, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5348; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=iTjzNwKewvmLzaCQagxyKDVXUVMNYwcrtDjaQM3gppg=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOmrtp5blaIVvLV1SeXyV/Y8noURHTvfFfz83GHJ3nX74
+ qyHzyZM6ShlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATmejKyNDoO7P1ok4wQ9Il
+ PQOPk0pqqxTUPZ5Z7D13q5GhcDOvqxHDP+s/fybdeKM8YxuTuMHFScKS5sdc5QycZjq8b18sV3N
+ JihkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+When an attribute group is created with sysfs_create_group(), the
+->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
+respectively. These functions use container_of() to get the respective
+callback from the passed attribute, meaning that these callbacks need to
+be the same type as the callbacks in 'struct kobj_attribute'.
 
-[ Upstream commit 27af31e44949fa85550176520ef7086a0d00fd7b ]
+However, the platform_profile sysfs functions have the type of the
+->show() and ->store() callbacks in 'struct device_attribute', which
+results a CFI violation when accessing platform_profile or
+platform_profile_choices under /sys/firmware/acpi because the types do
+not match:
 
-When is_migration_base() is unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+  CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choices_show+0x0/0x140; expected type: 0x7a69590c)
 
-kernel/time/hrtimer.c:156:20: error: unused function 'is_migration_base' [-Werror,-Wunused-function]
-  156 | static inline bool is_migration_base(struct hrtimer_clock_base *base)
-      |                    ^~~~~~~~~~~~~~~~~
+There is no functional issue from the type mismatch because the layout
+of 'struct kobj_attribute' and 'struct device_attribute' are the same,
+so the container_of() cast does not break anything aside from CFI.
 
-Fix this by marking it with __always_inline.
+Change the type of platform_profile_choices_show() and
+platform_profile_{show,store}() to match the callbacks in
+'struct kobj_attribute' and update the attribute variables to match,
+which resolves the CFI violation.
 
-[ tglx: Use __always_inline instead of __maybe_unused and move it into the
-  	usage sites conditional ]
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/all/20250116160745.243358-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
+Reported-by: John Rowley <lkml@johnrowley.me>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
+Tested-by: John Rowley <lkml@johnrowley.me>
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- kernel/time/hrtimer.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+Changes in v3:
+- Rebase on 6.14-rc1, which includes updates to the driver to address
+  Greg's previous concerns but this change is still needed for the
+  legacy sysfs interface. v2 can be used for the stable backport.
+- Link to v2: https://lore.kernel.org/r/20241118-acpi-platform_profile-fix-cfi-violation-v2-1-62ff952804de@kernel.org
 
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 539bc80787eeb..69713fa32437b 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -140,11 +140,6 @@ static struct hrtimer_cpu_base migration_cpu_base = {
+Changes in v2:
+- Rebase on linux-pm/acpi
+- Pick up Sami's reviewed-by tag
+- Adjust wording around why there is no functional issue from the
+  mismatched types
+- Link to v1: https://lore.kernel.org/r/20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org
+---
+ drivers/acpi/platform_profile.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
+index fc92e43d0fe9..1b6317f759f9 100644
+--- a/drivers/acpi/platform_profile.c
++++ b/drivers/acpi/platform_profile.c
+@@ -260,14 +260,14 @@ static int _aggregate_choices(struct device *dev, void *data)
  
- #define migration_base	migration_cpu_base.clock_base[0]
- 
--static inline bool is_migration_base(struct hrtimer_clock_base *base)
--{
--	return base == &migration_base;
--}
--
- /*
-  * We are using hashed locking: holding per_cpu(hrtimer_bases)[n].lock
-  * means that all timers which are tied to this base via timer->base are
-@@ -269,11 +264,6 @@ switch_hrtimer_base(struct hrtimer *timer, struct hrtimer_clock_base *base,
- 
- #else /* CONFIG_SMP */
- 
--static inline bool is_migration_base(struct hrtimer_clock_base *base)
--{
--	return false;
--}
--
- static inline struct hrtimer_clock_base *
- lock_hrtimer_base(const struct hrtimer *timer, unsigned long *flags)
+ /**
+  * platform_profile_choices_show - Show the available profile choices for legacy sysfs interface
+- * @dev: The device
++ * @kobj: The kobject
+  * @attr: The attribute
+  * @buf: The buffer to write to
+  *
+  * Return: The number of bytes written
+  */
+-static ssize_t platform_profile_choices_show(struct device *dev,
+-					     struct device_attribute *attr,
++static ssize_t platform_profile_choices_show(struct kobject *kobj,
++					     struct kobj_attribute *attr,
+ 					     char *buf)
  {
-@@ -1276,6 +1266,18 @@ static void hrtimer_sync_wait_running(struct hrtimer_cpu_base *cpu_base,
- 	}
+ 	unsigned long aggregate[BITS_TO_LONGS(PLATFORM_PROFILE_LAST)];
+@@ -333,14 +333,14 @@ static int _store_and_notify(struct device *dev, void *data)
+ 
+ /**
+  * platform_profile_show - Show the current profile for legacy sysfs interface
+- * @dev: The device
++ * @kobj: The kobject
+  * @attr: The attribute
+  * @buf: The buffer to write to
+  *
+  * Return: The number of bytes written
+  */
+-static ssize_t platform_profile_show(struct device *dev,
+-				     struct device_attribute *attr,
++static ssize_t platform_profile_show(struct kobject *kobj,
++				     struct kobj_attribute *attr,
+ 				     char *buf)
+ {
+ 	enum platform_profile_option profile = PLATFORM_PROFILE_LAST;
+@@ -362,15 +362,15 @@ static ssize_t platform_profile_show(struct device *dev,
+ 
+ /**
+  * platform_profile_store - Set the profile for legacy sysfs interface
+- * @dev: The device
++ * @kobj: The kobject
+  * @attr: The attribute
+  * @buf: The buffer to read from
+  * @count: The number of bytes to read
+  *
+  * Return: The number of bytes read
+  */
+-static ssize_t platform_profile_store(struct device *dev,
+-				      struct device_attribute *attr,
++static ssize_t platform_profile_store(struct kobject *kobj,
++				      struct kobj_attribute *attr,
+ 				      const char *buf, size_t count)
+ {
+ 	unsigned long choices[BITS_TO_LONGS(PLATFORM_PROFILE_LAST)];
+@@ -401,12 +401,12 @@ static ssize_t platform_profile_store(struct device *dev,
+ 	return count;
  }
  
-+#ifdef CONFIG_SMP
-+static __always_inline bool is_migration_base(struct hrtimer_clock_base *base)
-+{
-+	return base == &migration_base;
-+}
-+#else
-+static __always_inline bool is_migration_base(struct hrtimer_clock_base *base)
-+{
-+	return false;
-+}
-+#endif
-+
- /*
-  * This function is called on PREEMPT_RT kernels when the fast path
-  * deletion of a timer failed because the timer callback function was
+-static DEVICE_ATTR_RO(platform_profile_choices);
+-static DEVICE_ATTR_RW(platform_profile);
++static struct kobj_attribute attr_platform_profile_choices = __ATTR_RO(platform_profile_choices);
++static struct kobj_attribute attr_platform_profile = __ATTR_RW(platform_profile);
+ 
+ static struct attribute *platform_profile_attrs[] = {
+-	&dev_attr_platform_profile_choices.attr,
+-	&dev_attr_platform_profile.attr,
++	&attr_platform_profile_choices.attr,
++	&attr_platform_profile.attr,
+ 	NULL
+ };
+ 
+
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20240819-acpi-platform_profile-fix-cfi-violation-de278753bd5f
+
+Best regards,
 -- 
-2.39.5
+Nathan Chancellor <nathan@kernel.org>
 
