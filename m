@@ -1,295 +1,148 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DE82236EB
-	for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 13:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739281379; cv=fail; b=S1Fhp1dD1YbLfpqJjzdJUvuLRHrYX7L3fqrISfgpjPJJHhrFmg4qT5yEMGW2tPPkqd8xdVQJ4Ac2KgrIEFGNKDv0pgV2KSVbwcxQ2UbAl0xpzO/SebXlOdwhtIed8PK+NIpPMvgniBjNZDDrTmzitzbTDD3J9Hdzp5xudLv7fNA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739281379; c=relaxed/simple;
-	bh=pZT88gMtNeMWlwN7KFX6vNYTmtaPDWIa7cExXiJf0kU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ZSL1YLXrdEf/3B7e/pgvqfOF0t+jpc9urNj7W5RYxQR5ppBCKRuqNbUi2FLedxqeui7c/IvbUEJCR3bq6dSk9w6KXIx2tQpJ32G6DCHN8MstZHPDFESSuU13FJLrq8arOdyC+9e7/VaQo1RxqVi/+y8l87KFyp3+pD1nINSiWS8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kp0+WJYX; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBE424C671
+	for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 13:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739282160; cv=none; b=Hsfrf/fRi6jpTxtMjyVba8TMccrd+/S3+zrDxeglcb6X7Rp6A11Uv+RQgWihOqWUylU60ndh4j4mOLnR8H5e0rT4eypcQ3ykz8HSloLqBaEBqOHbHDNF8w/PpABlDlAypKNfy8zUn7jRegSg/xg0Pd0j5FZPF9XHeBRqI5xz7IA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739282160; c=relaxed/simple;
+	bh=tvddLOD38SbA+nE14izQGPNoMlGp5ZWiCv7xIdyaTR8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YWOQLg/iLXJgNC5YUQqjkve/CYANu2D45nHqoDhvk4uXfFEXZ2TCgzXsTNrrTvVhj91rLMBLKZ7DaN8IPjhA5tMoALEanzbhcHJNvbFubxTI1k0F1Gz6w/iOMz3vDwCevJcmmscxDE33LQs3CXSZUMQWX0ec1vRh04b+D48e04Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oGTVU2QP; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kp0+WJYX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739281377; x=1770817377;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=pZT88gMtNeMWlwN7KFX6vNYTmtaPDWIa7cExXiJf0kU=;
-  b=Kp0+WJYXyjGzPXHesmWA922O/dd7og5F+lua03gTyX6B+UmXqruJnxX/
-   N36w0a5uVx6IzKH4Vu9wlfK9YF8ybOxyO/wE1RuZKEZgv7MiDQhvl/o3m
-   V2B3BCQ/EbB/SxqmxPJn2EjfYDEOdbBdhTz1ICYNP6zM5rTAl9nUsoAF7
-   A3G2121YXZpd35rNe04m9W9jgAV8AuynUnC4nMVooLIFbq+Ybm5pWXPu1
-   t9RX4DOOwO8NhMpLvNIW1I8zJ6CbQdza5a2cDkzd2FzOSYKVEW65fkc7W
-   f03ycLd8PVdsY1KGFp665cosgJIdwj9hhaUIQJlMn5iQ6fk8jNsR4ul8b
-   g==;
-X-CSE-ConnectionGUID: 6Yklr1hTQoyyBhfBNgi2HQ==
-X-CSE-MsgGUID: QSMGORVqSN2/QW8Ji7LsEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39135856"
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="39135856"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 05:42:24 -0800
-X-CSE-ConnectionGUID: y1JTG44/RFqyHYKBiFABEQ==
-X-CSE-MsgGUID: 7XU8g3hlTH+g/rf4eIn78Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="112482693"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Feb 2025 05:42:23 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Tue, 11 Feb 2025 05:42:23 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Tue, 11 Feb 2025 05:42:23 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Tue, 11 Feb 2025 05:42:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gQGjIidsh74HR1VQtQui3TNLWdJJiN8xPn7TBabdRSaMsqWqqwELRYqCj/XZkOcAZ98700ikYh9TSwnURpYhuMc7EHPPgQ/XubV8CFwqx7QzvZ/4whVCFRM7exZbmWS7SNrfUAfwU4+NwJ6ehm+MscFwGnYvy8GKzu+EMeC96W0Cc9qZte/EREqS6mDSCPJlYgkN5LwEwyuElSGGlxS5BJE8m2xPsiIXT3UX30HB42qL2l6Q0j4UFPUrIOe6u2+pVe3DVQUBZ4zmSeEyDDIiakCtmTOIhuZwJH4ZyyDnk1V7ppoumBfxb4I2/1EpGV6QGV3OPQN6KdKOWiNVrN7c1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=906hJVJvloG5PggyPyN+1kX5lKyJvKtsMmkFuhee76s=;
- b=UTUd7FK3sfoIYegMc18Ehayrlam0jUjt7S6hG5xmPe3O10s/YyD9SqMJrEDRaHh4mpQEnLj50pYq/TS7P6pc/B1ElFJpDACkvNsKU1KdUcmw2wi9IY9AD9MzPv+p7Xx3l41HbfLvB1TaIPa3vJhei6izr1N9aOcYTA1D9zPC0AjbAP441s5pZQvEKIp1wj4U28BQYrFkMPZ285F1ezbU3SPEMyCaPOolyRXzjIvGOFzlKLtHolaXqRS63Ab2eci0VyLmzSg+G8f8AXhylvGet0N7Nh67KbNv7doYuQCUEaAbGXCfnsovBwLIL+J/ekRvluPea+GdmT6Po56R6N2Dzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by PH8PR11MB8014.namprd11.prod.outlook.com (2603:10b6:510:23a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Tue, 11 Feb
- 2025 13:42:20 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::a137:ffd0:97a3:1db4%4]) with mapi id 15.20.8422.015; Tue, 11 Feb 2025
- 13:42:20 +0000
-Date: Tue, 11 Feb 2025 14:42:14 +0100
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-CC: Samuel Holland <samuel.holland@sifive.com>, Palmer Dabbelt
-	<palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>, Andrey Ryabinin
-	<ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, "Dmitry
- Vyukov" <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	<kasan-dev@googlegroups.com>, <llvm@lists.linux.dev>, Catalin Marinas
-	<catalin.marinas@arm.com>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon
-	<will@kernel.org>, Evgenii Stepanov <eugenis@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow
- computation
-Message-ID: <4tuj7f3ttmm7xxkom3cm6xjnmd742twbaoieggnzwtmkif7l2l@hgilk7qn5te5>
-References: <20241022015913.3524425-1-samuel.holland@sifive.com>
- <20241022015913.3524425-2-samuel.holland@sifive.com>
- <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
- <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
- <zjuvfdbl7q76ahdxk3lrgaznk7vjj43f5ftzfgrnca6dqtcd5x@5qj24womzgyq>
- <CA+fCnZfySpeRy0FCFidLdUUeqp97eBdjAqQyYPpz1WxYwcsW9A@mail.gmail.com>
- <lrlnvcxofcnsm5rou3iwbawyfwtz6mx4gn6eflpm4srhjj37kb@pwsozjgdyxfu>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <lrlnvcxofcnsm5rou3iwbawyfwtz6mx4gn6eflpm4srhjj37kb@pwsozjgdyxfu>
-X-ClientProxiedBy: DB8PR06CA0013.eurprd06.prod.outlook.com
- (2603:10a6:10:100::26) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oGTVU2QP"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2f9bac7699aso8162324a91.1
+        for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 05:55:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739282157; x=1739886957; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AhF+JZnbICstMQ4SyijmaSYDsITfNwFybUAYOWyiZXU=;
+        b=oGTVU2QPmHXmb5QoT3AuEOyze3Za4DYfqcYrbsE1udgTnfYd3H83BVwsCv/C4GFoqL
+         zQktqm8L7Sg9BHDOsq3Ez8DJ/3dztvFYrmK4N9T30TBRbM4/36jsrCAg9+nmh4/jRDK1
+         lfcDcwpQwu6wf3Ni5sw3KKSEp4pqdUHm1t2ZL7OxEPTZHMrTblr3FdDAV6KkpTR5QK4S
+         mQHP/JGSXwqCK8suKYCpuk+BVcaSTheQA3d1vE+7lbUz7DYoYfcZ+IXgC6ej7lFiJUkP
+         yEv3azp4dz6X5ZJvme5WLznp2iqrYVffVeIV1sC5/fBEur/E7Ba8RMJAdMSZpKgI9Nfz
+         RmVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739282157; x=1739886957;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AhF+JZnbICstMQ4SyijmaSYDsITfNwFybUAYOWyiZXU=;
+        b=GWMYxlAx/iwwWsqlEsFa7QdSKZn0bFucJPgqUWZTEeAhmmBdBBRGHEIW3anpghWUmS
+         bUV4bX5wk0e6ZFf6NhKNZvK0xfJBAOl90IF6ofqH4QahK118SqU2VTmncyWKXK9ls903
+         c3t6WqFAT+LtdRTupBFR79kqUtLKrn3oUSX6g3CLk9fTTbUWs1cD2naXP+vwh+7/HSIP
+         eqx7AXu4n/A0CLrDvad45M10G9GE7Jdj+1B9XACfenhqq4igEO5d/xUpIyiQZdO3tYNS
+         X4fXZOIXDrzSPG4TGXTb9Y5ZEpbPGIVbeX05sfuug/KoasRIqY7crVjbiitFKqlPIdey
+         PfHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFBYEiaAiehIrgtDapmHCAD0i6/i692PYIcKhEWfA/xECWWiyHKorZ2qN1w0leS5KHQG7i@lists.linux.dev
+X-Gm-Message-State: AOJu0YxKSsrH5ElujKZ6aoZOnAv/3Z7q1Q8dFHA6C6gnTN6UGm01Oj06
+	jbNcRJK2lQOEOah3OC+x1d+i2KXdWgDXkcJwuXPNslQtvB8iXdoLleOt/YuHe5Bws10FYs+pdqs
+	6zsIovFgGjO486nCpu0bpzDub3nK57UDOVsZW
+X-Gm-Gg: ASbGncuVnMGQgSf/UUFM3wHfxE/27zqT2ulQPWgJYLDEXRf/l+tnCNKbQyrtN/dVBd3
+	3zPo/hwHPnAF9SlBjEzH5xCmH8OxvOHr1LCKJs8WggcHBIJHrvQl0eLrVjR88QyUpyeTjI9yitE
+	Ksz50ilAB6LeHtnxVnBQqSuUAi/Hc=
+X-Google-Smtp-Source: AGHT+IGroUNVHpMBAUy/bObZea2jE/snBP4iAn1fJ0F8Y+yGqofcGPH5OOKF/rW4Qwm5mzGvQOH1DLn2V2e6J52emRE=
+X-Received: by 2002:a17:90b:1d45:b0:2ea:5e0c:2847 with SMTP id
+ 98e67ed59e1d1-2fa9ee17fb8mr4391611a91.22.1739282157250; Tue, 11 Feb 2025
+ 05:55:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|PH8PR11MB8014:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e02cf78-028b-4d53-84c0-08dd4aa1e85a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?cnprRmgzaGJhK1BJM2RMOXJKb1ZhN3BGWEZEbTlrdmE1R091RzRiMzRwNlRV?=
- =?utf-8?B?YWJ1UjBZbVhxUGhXcFZvYjdGVnlKRnJtcTBuOXFBcnNNYk9JNWFuQ05teUU3?=
- =?utf-8?B?bmJ2RGpJTFZsQjdsOXdRQUc1WlZ2YVZTQ2NPTGVIbFRXUU9rVW1kV3AyMEZR?=
- =?utf-8?B?a3VKZEI2b0plNlQwZllVL1BmTy95TnpxSmd1djcxWEc5TGRhaTNod09ib21L?=
- =?utf-8?B?OHArSkZNRWcyY1UzUmhqTGhnejJ4b2JjRTNMV2QzaUNTYWhPUWx6YVNpN2NK?=
- =?utf-8?B?TDZRY3hqOWZCODZZeEpkOGYxajJxeHYrWmMrT0FxZUJxQTRUSWwwTjFnRVlJ?=
- =?utf-8?B?Wk5vM25vZlFJRjZJVVQ1bjlyREl2aWlGSy93WEZmbDBsMTJUSzBkcHNiYnVq?=
- =?utf-8?B?QWNhdjRSRkNrY0E5cC9WMDl3bzg3NHRMaXVVa1pod2RsMS9GQzV2TGs1T2tl?=
- =?utf-8?B?UDVSN1dBeHNaYzlqN0xKVS92eGhSNytlQUROUFNwMlN6bXZQaFAxdWFqN05o?=
- =?utf-8?B?Vm8wVXBJU0JLQmdBTWh3NDRYR081OFVIdDNoMGZHOHFKcWhmQUZZRDdrWEJF?=
- =?utf-8?B?emRHOEZJMTdjUEhHQ2paWW56WHZpbGVHaVA2UXdNczRJaktxOXRlL3lEeDEv?=
- =?utf-8?B?eGI0cUl3TU42Rjl2UzJIZndHMlZ4bEM2cWY0K3VmZ0txUzdGOWZCTGFTYmRo?=
- =?utf-8?B?NFF5TmxhWlJtV2FqMmJ1YlRLUzZJeHJobHFhM1VsenV1WFdDTFJNZE5yNFhv?=
- =?utf-8?B?dktPdDI2Y1RscTRCTU1KSHB4SnVzVEVyMWRBaFZwN1lIUFBoT0VEUUc3NWJr?=
- =?utf-8?B?Z3ZHODZHOUEzZEpFUlNkMFM5cElsa0RXNTVndDU1dFI2OGJCWC8xQ2h3WTF1?=
- =?utf-8?B?VE0yMXY0ekdyQUhyU2YzaUJEVDFyUjNFdW1MTDhkOEppS2w5SjBEbUlJQmxa?=
- =?utf-8?B?NUhpV00yeUFGQ2hPUVFPOHExU3lEaWZVMlJPVHg2WkxoWForUlhSWHQrZEwr?=
- =?utf-8?B?WWdUNFF6VFhBcmM4b2I3a2taTmJGblRFYlpDTkRYcVZNUkErUkc3MzU4TWlX?=
- =?utf-8?B?SzJkZHhyTm1iWWMyTytWYWtyRnRrQTlTQ3R3U2U1cGxrbnpSRzFrOS9nczhJ?=
- =?utf-8?B?UXBkZy9Zcnc4TzdVaUVBMytCclJiZFZMeDFsemhGT01rWXgwUktqcXMyZ3Uv?=
- =?utf-8?B?R1BENFhKQzREdk9hWmlvcitwVERZdEJ0Z0xVTy9tRHRkV3E2VXN4UmFucERu?=
- =?utf-8?B?bFpPL2Z2QldQYVArclJmVXlmT2NYbGZqYlFKbVpTWnE1T3I4WW5TZWM5R01w?=
- =?utf-8?B?eGVSQm1xa24rQlRuRWhNKzBVUVVXNGpZdVZwaWY1N1FaRVF1S1ZPQVp1cGRU?=
- =?utf-8?B?RDZUc2laUW1mSVgvcS9FNUNTeFZKVEpWQnVJQlhZY0JPdlo4RVVXcEkrSTR5?=
- =?utf-8?B?TDJxNVphN0VyNmtLdzVTMXp2eEhaaW9rVlRhUlRDMVgzdWQ2TnR1VXdMdTRH?=
- =?utf-8?B?di8yd1BtWURQdXpHSWw0M0dheS9NZVFiVEt2UmVIVHZMWktoTFZFYzFwbFc1?=
- =?utf-8?B?aDR1ZFp0VDd1cWgySnd3WGxPZ2JqNEtuN2JYaUwxQk0wcndsRlBXeUNIaUVE?=
- =?utf-8?B?TDZOOXpya2o0MFFGeXVWakZnSXJ3MVcwaUVHRGRHZ210OWxkNXdua2N3SG9I?=
- =?utf-8?B?eW1rbEpIaDhQWTEzczNkWlZ5VjhCVUUvWFJuLzQ5UncySy9TeHBHTVFCem5q?=
- =?utf-8?B?YXlJZVdZTFMzWThvTjA4UUNzWHdzWjlFbm81eGI2ei8zbHVBTTNqTnYxQWh2?=
- =?utf-8?B?d2ZtSnB6U3l4dTArS1E2TGU3cVQ2WVBDcDROWXNtZlB5S1pqRWsrbk5YNzFl?=
- =?utf-8?Q?7zBkrTa5ORO9/?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXA2MXNVT0pUSzQwTy85eE4venJzcFpyNG1NYzgzcE91RlBtbzZYUXRnOWwy?=
- =?utf-8?B?QW9XL3N4Q0NZd0lNUml4VlFmYlptMEw3Mm9uR1RZc25ONkxjSG5IbUsvVzQr?=
- =?utf-8?B?QUxaUlVYak5rQzFLc2pHZnByWnhUdk5YNDk3VkhnSTBHT3ZTUndMWXd5aGVR?=
- =?utf-8?B?cnRPeFVaTFhTbjBZRy8yaTF1U3g2QjhqZ1pWbmNCTm5hYVcxdlVvc2NYbmZT?=
- =?utf-8?B?RzNNS284QS9kUzh1WGQ3V2pQbFlOYVQ1dm1uOEVFZXpCMTRia1hKb0t3ZS9r?=
- =?utf-8?B?cDZTS09VTW85ZEx2NkEyWW9JS0EzRFVyNDlSQkhMc0l6TEExTlRuT3pneU80?=
- =?utf-8?B?VENERVJEUVgxWk04MVVKV0RoV210TnFYckRWejdJbXlJeTh2UkZ0YzRyRVBh?=
- =?utf-8?B?SmE5V0lpZVBMUHpFeS9pQk9mWEZ5V2JYUW9IbFRFa2xvZTRmWXJrczJsMmNB?=
- =?utf-8?B?c3cxMi9uRmkyNVo0NFFZSmljUkNJRG1ZNjhUSGp2VkFFZ1dvQno5SVE0RE9X?=
- =?utf-8?B?ajlxMHRJWnRLbUcvT1ErMlEwYU9KbHRsc1ppVXZmV0h1UWNha2pIcHVsbURY?=
- =?utf-8?B?ODJwa0NicEZ3V1lDNmNNbzh6K25SeFlmWE8wSzJqS2pOLzhmSGp6Z0tOL2ow?=
- =?utf-8?B?NmcxT0xGRnZ4N3VvZ3JLMkdpUkFLSTRlR0k3N0NBVWVjNC92RjdRRzNzbnk1?=
- =?utf-8?B?TGNNbmpweHVMKzdFRHhBU2ZaSVR4RzZKSlVaald5TmljdGFyTmtaaTRrNitE?=
- =?utf-8?B?bEpGaWlzU2U0QVF4VnhQZFdkRDFpbnRlN2xlMzNiUHhHY2t5RmdxbmJhbElj?=
- =?utf-8?B?a2Jwb1VhOXkwNmw0dnRvT2tMU3B5OVg1UWUxUnY3U3hmQzB1TldzeVFWN003?=
- =?utf-8?B?d0ltL2R4UjlJUWRWcnVWMW0vU2FBdC9sbTlpcWxnYS9IS3pNellCajR4NmpE?=
- =?utf-8?B?MEVQTU8yZmIwNzBxQTBVcnNnVmJHc2ZEdVpXNnlUTGgySGkrRzQyOTExMWo4?=
- =?utf-8?B?eU56QVIwQmUwdzl2ZGZhVTR1UjNPck5jQWJja0RBaXpIZjkrcTVLY1FTVjZT?=
- =?utf-8?B?elE4YWMrcHdBSm5IUjFGbGhlc3l6WTVLU2hXT3FMVmtJRVQ5NzFBdHZpalhH?=
- =?utf-8?B?bjNuTFFmczJzVW1kY2RHVGFHMWd4aU5VOGdnK0xua2FYTmRsWkdBZTNCbG03?=
- =?utf-8?B?VFV5REFqTDNqakhDamd6WU1UcGpwa2hodWtDeE12QzY3dEN3STJkTExBRnp1?=
- =?utf-8?B?cnBEK1A1eUZJL1ZyU3NvVFVkMkhiYVpWT3hKMnZzVE5OYXpncnE0UFB3d0lk?=
- =?utf-8?B?U2h0aW5QSjBJbjB6em5INzZQUXM0TUZIb0NiMk40OEp3OFpHNTN1ckJXMG5B?=
- =?utf-8?B?WkpHNUFtM2QyUkp2ak1lQ0F0ck1rNVlPYWVsTERVR1hnUmZpaWJKU2tEK0tH?=
- =?utf-8?B?Si94QmVpUWVrZXdTQXlhWkpEaDh6UTNKeXhoaFJyYmtuUWVZQ21pd0NsREFE?=
- =?utf-8?B?YzlSLzRJelpJdkZVQmV0eHV1VFRKQlpFblVDUndsaGp4U056Mm55cHhEeTdt?=
- =?utf-8?B?RDVoaG9PbTFpUlZLZ2RJTTFrRGdGUjEyVzBFQmRJT1FJaVR0VXBGWjZxcXZ0?=
- =?utf-8?B?VTRuUXM3d1dSZlBpL3FsT0NvSTdqUlNkQWdXc0VXbldsN2lCbGRSaURVdUIz?=
- =?utf-8?B?eVMzWWllTUxwWUE2T0o4bk9LR3JEM3lLTnV6UjlNMi9HQWI0M0hCSit0eFMx?=
- =?utf-8?B?cnVVU1BBNFdzUWVWb2IxMTc5bEtGNFFOQjE2bE9OdEM0OG1yTmxpSUhmWDFn?=
- =?utf-8?B?Vm9oNkNHOHVBRGJVV2dZdGp0ZzhURTRKM21mMUw4VkNJVjlwZVBGZmFhUFY5?=
- =?utf-8?B?UEMxNjk0UmlGdWZnQWl4Zks1ZUNNd0QwQlpjTFpZbzF0S3VBUFNyZEJKN1dD?=
- =?utf-8?B?cVB0WUpwYUpvN0hSRFZOUWpYa2FQVEFYR2pCMjY4RjVUNW5SNWJoSXVFRHdx?=
- =?utf-8?B?ekplZkx0VEVheHZVVjJXSlUrUDM3Qko4eWFVejZOekhRWVZvalF0V3phcmov?=
- =?utf-8?B?UTZHVlJRRlN2UVF4ZlVpbG9TL21jaGJnNktSMmN4RzlRemdDTzFVdEtsNzRO?=
- =?utf-8?B?SnJxTU5iQVFod2pKZXV2WWlDVmFGOFNkaHhoN0lGYndiSGZiVGVuT0d0dlN6?=
- =?utf-8?Q?vwvWC22WKFKnOHCspNmlmIQ=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e02cf78-028b-4d53-84c0-08dd4aa1e85a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2025 13:42:20.6621
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GFn763YXEb8pEL3FH6EkneP1Jm9jF0JS+XzpigozPaBMPGbtIsKKpaIU5cReun4Rr608HpVQ/ezbN0JezMx11AxKagbfEWHwxmR0ZD0wF0M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8014
-X-OriginatorOrg: intel.com
+References: <20250206181711.1902989-1-elver@google.com> <20250206181711.1902989-9-elver@google.com>
+ <e276263f-2bc5-450e-9a35-e805ad8f277b@acm.org> <CANpmjNMfxcpyAY=jCKSBj-Hud-Z6OhdssAXWcPaqDNyjXy0rPQ@mail.gmail.com>
+ <f5eda818-6119-4b8f-992f-33bc9c184a64@acm.org>
+In-Reply-To: <f5eda818-6119-4b8f-992f-33bc9c184a64@acm.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 11 Feb 2025 14:55:20 +0100
+X-Gm-Features: AWEUYZkwbHjIdQKR2hqck9okMpxl0TDfWkkc2sBGpPLWquXQ8_lyXjiGcdcjlSE
+Message-ID: <CANpmjNPxyWey6v1tj6TwtN6Pe8Ze=wrfFFjuJFzCQTd4XM8xQA@mail.gmail.com>
+Subject: Re: [PATCH RFC 08/24] lockdep: Annotate lockdep assertions for
+ capability analysis
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
+	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@kernel.org>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025-02-11 at 09:58:22 +0100, Maciej Wieczor-Retman wrote:
->On 2025-02-10 at 23:57:10 +0100, Andrey Konovalov wrote:
->>On Mon, Feb 10, 2025 at 4:53 PM Maciej Wieczor-Retman
->><maciej.wieczor-retman@intel.com> wrote:
->>>
->>> On 2025-02-10 at 16:22:41 +0100, Maciej Wieczor-Retman wrote:
->>> >On 2024-10-23 at 20:41:57 +0200, Andrey Konovalov wrote:
->>> >>On Tue, Oct 22, 2024 at 3:59 AM Samuel Holland
->>> >><samuel.holland@sifive.com> wrote:
->>> >...
->>> >>> +        * Software Tag-Based KASAN, the displacement is signed, so
->>> >>> +        * KASAN_SHADOW_OFFSET is the center of the range.
->>> >>>          */
->>> >>> -       if (addr < KASAN_SHADOW_OFFSET)
->>> >>> -               return;
->>> >>> +       if (IS_ENABLED(CONFIG_KASAN_GENERIC)) {
->>> >>> +               if (addr < KASAN_SHADOW_OFFSET ||
->>> >>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size)
->>> >>> +                       return;
->>> >>> +       } else {
->>> >>> +               if (addr < KASAN_SHADOW_OFFSET - max_shadow_size / 2 ||
->>> >>> +                   addr >= KASAN_SHADOW_OFFSET + max_shadow_size / 2)
->>> >>> +                       return;
->>> >>
->>> >>Hm, I might be wrong, but I think this check does not work.
->>> >>
->>> >>Let's say we have non-canonical address 0x4242424242424242 and number
->>> >>of VA bits is 48.
->>> >>
->>> >>Then:
->>> >>
->>> >>KASAN_SHADOW_OFFSET == 0xffff800000000000
->>> >>kasan_mem_to_shadow(0x4242424242424242) == 0x0423a42424242424
->>> >>max_shadow_size == 0x1000000000000000
->>> >>KASAN_SHADOW_OFFSET - max_shadow_size / 2 == 0xf7ff800000000000
->>> >>KASAN_SHADOW_OFFSET + max_shadow_size / 2 == 0x07ff800000000000 (overflows)
->>> >>
->>> >>0x0423a42424242424 is < than 0xf7ff800000000000, so the function will
->>> >>wrongly return.
->>> >
->>> >As I understand this check aims to figure out if the address landed in shadow
->>> >space and if it didn't we can return.
->>> >
->>> >Can't this above snippet be a simple:
->>> >
->>> >       if (!addr_in_shadow(addr))
->>> >               return;
->>> >
->>> >?
->>>
->>> Sorry, I think this wouldn't work. The tag also needs to be reset. Does this
->>> perhaps work for this problem?
->>>
->>>         if (!addr_in_shadow(kasan_reset_tag((void *)addr)))
->>>                 return;
->>
->>This wouldn't work as well.
->>
->>addr_in_shadow() checks whether an address belongs to the proper
->>shadow memory area. That area is the result of the memory-to-shadow
->>mapping applied to the range of proper kernel addresses.
->>
->>However, what we want to check in this function is whether the given
->>address can be the result of the memory-to-shadow mapping for some
->>memory address, including userspace addresses, non-canonical
->>addresses, etc. So essentially we need to check whether the given
->>address belongs to the area that is the result of the memory-to-shadow
->>mapping applied to the whole address space, not only to proper kernel
->>addresses.k
+On Mon, 10 Feb 2025 at 19:54, Bart Van Assche <bvanassche@acm.org> wrote:
 >
->Ah, okay, I get it. Would the old version
 >
->       if (addr < KASAN_SHADOW_OFFSET)
->               return;
+> On 2/10/25 10:23 AM, Marco Elver wrote:
+> > If you try to write code where you access a guarded_by variable, but
+> > the lock is held not in all paths we can write it like this:
+> >
+> > struct bar {
+> >    spinlock_t lock;
+> >    bool a; // true if lock held
+> >    int counter __var_guarded_by(&lock);
+> > };
+> > void foo(struct bar *d)
+> > {
+> >     ...
+> >     if (d->a) {
+> >       lockdep_assert_held(&d->lock);
+> >       d->counter++;
+> >     } else {
+> >       // lock not held!
+> >     }
+> >    ...
+> > }
+> >
+> > Without lockdep_assert_held() you get false positives, and there's no
+> > other good way to express this if you do not want to always call foo()
+> > with the lock held.
+> >
+> > It essentially forces addition of lockdep checks where the static
+> > analysis can't quite prove what you've done is right. This is
+> > desirable over adding no-analysis attributes and not checking anything
+> > at all.
 >
->work if the *addr* had kasan_reset_tag() around it? That would sort of re-unsign
->the address only for the purpose of the if().
+> In the above I see that two different options have been mentioned for
+> code that includes conditional lockdep_assert_held() calls:
+> - Either include __assert_cap() in the lockdep_assert_held() definition.
+> - Or annotate the entire function with __no_thread_safety_analysis.
 >
->Also I was thinking about it because x86 even with address masking enabled keeps
->bit 63 set, so all kernel addresses will be negative in the signed
->kasan_mem_to_shadow(). That's great for simplifying the KASAN_SHADOW_OFFSET but
->it differs from the TBI and risc-v ideas where half of addresses are negative,
->hald positive. So the temporary re-unsigning could maybe make it simpler for x86
->and avoid adding separate cases or alternative kasan_non_canonical_hook()
->implementation.
+> I think there is a third possibility: add an explicit __assert_cap()
+> call under the lockdep_assert_held() call. With this approach the
+> thread-safety analysis remains enabled for the annotated function and
+> the compiler will complain if neither __must_hold() nor __assert_cap()
+> has been used.
 
-Oh, nevermind, I see that this is more complicated than that. Sorry for the
-spam, I'll do some better calculations what is mapped where when doing
-kasan_mem_to_shadow() and maybe then I'll figure this out.
+That's just adding more clutter. Being able to leverage existing
+lockdep_assert to avoid false positives (at potential cost of few
+false negatives) is a decent trade-off. Sure, having maximum checking
+guarantees would be nice, but there's a balance we have to strike vs.
+ergonomics, usability, and pointless clutter.
 
--- 
-Kind regards
-Maciej Wieczór-Retman
+Can we initially try to avoid clutter as much as possible? Then, if
+you feel coverage is not good enough, make the analysis stricter by
+e.g. removing the implicit assert from lockdep_assert in later patches
+and see how it goes.
+
+I'm basing my judgement here on experience having worked on other
+analysis in the kernel, and the biggest request from maintainers has
+always been to "avoid useless clutter and false positives at all
+cost", often at the cost of increased potential for false negatives
+but avoiding false positives and reducing annotations (I can dig out
+discussions we had for KMSAN if you do not believe me...).
