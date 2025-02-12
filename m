@@ -1,142 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D101367;
-	Wed, 12 Feb 2025 00:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84D227181C;
+	Wed, 12 Feb 2025 00:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739319450; cv=none; b=rKdl2y10soKIrYSpzvqHyRG8NZ7oQ6YIvw3W1CB9+GWomQXLzGelFcxoeKxSND3ScWFKx0sQ6irkjIo1o7hiGKFwU+CekApjhwhcN4vzFO+Yb5thjvchdxvTy1BuXouCiB5DI/UBrpAZGHTvgkV5af5m5IkjXxHnJUm0FfmShhY=
+	t=1739320207; cv=none; b=rUN4rfjnXfcn9+QjkvYYWCpgNubppeY88m61hbFwBU/qbmm9ddgjfg8fJj9xR4ckQANJSvuzVMNX4mMdwXZm/E8sBCTRE3qIRFEeHdOviNkhhViqp7GKOx4rlKqZgSznMZBaA2iMCIlftndLVufvW7ylzgB83g6chuy2Yix3Xmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739319450; c=relaxed/simple;
-	bh=hUqmZTGnYgD1NoGU3VOagwR8MHJD7bgO3mfv/sg7IaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HrSoEFqWJzpG9yPLkuB8FKSID+Y5wv5umpzH1HwF5G4KBwrkQTEV7fm3TNo6iE3HY0RtoCPkTSGzcGEsYwWE2WT3jW32hS3XqvvhWQz5MTWjDBC8F7KnMyBR+Z/+MYN2jZOimOxIa4C5QW2txPwCR5hWAw5SnsPS0llTL1ET44k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AnTyJW/P; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739320207; c=relaxed/simple;
+	bh=dMzq6zSBRNR6RjeYLAiK6Rcfp8YuSbUOBigfnfCdrhk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lFYR/zg8vUIQCQZGo53bFtDb0zJpj6eRYc0SYWypGCduuKX/0CAhOzbgDuaIGlRYjd5aEcymwy7rkU/kibMDSKxP8XzFO0QjnwtmdIsn92Izp3lQFWfOuNn9+ycnHYDIv03J+IesOBXcVBej3QDQM741kdswZvJc4k34DpzcgSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P6RGxGFK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AnTyJW/P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739319448; x=1770855448;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hUqmZTGnYgD1NoGU3VOagwR8MHJD7bgO3mfv/sg7IaU=;
-  b=AnTyJW/PNCgphzu0PrUYbFR4xp+DbsacWEX2Hsb1K/afY9XfoIFWTJ0o
-   TkkuHs4i7zaqqdaaBSCPf06QXSKySDwqSFfEmWlaXGlJrmsWJUwpbk31d
-   NFyEEAkXmQIA5qVCfwlKkXuxAPCQJ9hdOyOkDrWjgGzoKmWXzBJfPw3tS
-   JSCDxowz8xSLv158mjj9I1xPic8rpQw5tZ7KPo7u7L94wDDcUY0le3t2E
-   aBMHnPgVtd/urjlkilYlP+9k41wZyWnkWRhUv0wS4xOgO1vNI8EmA1KDk
-   8a8fAIGmVL42v3idkTovCvmTAL3mGaqa4h6AC1xju2lnQmbNUyVzhpSye
-   A==;
-X-CSE-ConnectionGUID: XNekkSlHSOOSfc9altLBvA==
-X-CSE-MsgGUID: pHO+Qz+XQfCqCLwR3QLf5A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="57495850"
-X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
-   d="scan'208";a="57495850"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 16:17:25 -0800
-X-CSE-ConnectionGUID: 5K3SO2g7SnabmqNPB+UQAQ==
-X-CSE-MsgGUID: SYsFrxmwQRmTyhYzsnlrVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
-   d="scan'208";a="112488952"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Feb 2025 16:17:23 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ti0RN-0014s7-1L;
-	Wed, 12 Feb 2025 00:17:21 +0000
-Date: Wed, 12 Feb 2025 08:16:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gustavo Sousa <gustavo.sousa@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Subject: [linux-next:master 529/2407]
- drivers/gpu/drm/i915/display/intel_cmtg.c:96:17: error: arithmetic between
- different enumeration types ('enum transcoder' and 'enum
- intel_display_power_domain')
-Message-ID: <202502120809.XfmcqkBD-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P6RGxGFK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DB1C4CEDD;
+	Wed, 12 Feb 2025 00:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739320207;
+	bh=dMzq6zSBRNR6RjeYLAiK6Rcfp8YuSbUOBigfnfCdrhk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=P6RGxGFKAcbQzR7pSf3wzEzgfQBduIfLIIpb5tl+ETbS/iEChoXdta312ZUehbDWD
+	 NHrD91FTqoNLGfeUD4m1wAaFlQsKsymDItWGSGryPMdFn4xO7pofIgbzm0iYO0eilg
+	 IlJDPkgtRnN6QGLvAauhN+wCOuyPEcEKe8c2TfClOYXo+ibLZtv0PmH5ZJ29kNHuTU
+	 Zc8lbQ3nTRePKcQRLthkjsIhUSEmdQL42NhwABmfcL3idSPrwJh2AbjL/J32syS67d
+	 C5bE+rYSbqtJDTuDVrMZaz9qAzWew53vyK+s9FFBg9SiT+KvEQLepOfJwG+Bf7ITUA
+	 P/EIzS6x5YNeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33ECE380AA7A;
+	Wed, 12 Feb 2025 00:30:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] blackhole_dev: convert self-test to KUnit
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173932023585.48583.1865548185343075920.git-patchwork-notify@kernel.org>
+Date: Wed, 12 Feb 2025 00:30:35 +0000
+References: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+In-Reply-To: <20250208-blackholedev-kunit-convert-v2-1-182db9bd56ec@gmail.com>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: akpm@linux-foundation.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   df5d6180169ae06a2eac57e33b077ad6f6252440
-commit: f14d81b7102bdbf062f90b3910e986850f5f86c2 [529/2407] drm/i915/cmtg: Disable the CMTG
-config: x86_64-randconfig-005-20250212 (https://download.01.org/0day-ci/archive/20250212/202502120809.XfmcqkBD-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502120809.XfmcqkBD-lkp@intel.com/reproduce)
+Hello:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502120809.XfmcqkBD-lkp@intel.com/
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-All errors (new ones prefixed by >>):
+On Sat, 08 Feb 2025 14:26:43 -0500 you wrote:
+> Convert this very simple smoke test to a KUnit test.
+> 
+> Add a missing `htons` call that was spotted[0] by kernel test robot
+> <lkp@intel.com> after initial conversion to KUnit.
+> 
+> Link: https://lore.kernel.org/oe-kbuild-all/202502090223.qCYMBjWT-lkp@intel.com/ [0]
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> 
+> [...]
 
-   In file included from drivers/gpu/drm/i915/display/intel_cmtg.c:12:
-   In file included from ./gpu/drm/xe/compat-i915-headers/i915_drv.h:16:
-   In file included from ./gpu/drm/xe/compat-i915-headers/intel_runtime_pm.h:10:
-   In file included from gpu/drm/xe/xe_device_types.h:9:
-   In file included from include/linux/pci.h:1644:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/i915/display/intel_cmtg.c:96:17: error: arithmetic between different enumeration types ('enum transcoder' and 'enum intel_display_power_domain') [-Werror,-Wenum-enum-conversion]
-      96 |         power_domain = POWER_DOMAIN_TRANSCODER(trans);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_display_power.h:126:10: note: expanded from macro 'POWER_DOMAIN_TRANSCODER'
-     126 |          (tran) + POWER_DOMAIN_TRANSCODER_A)
-         |          ~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 errors generated.
+Here is the summary with links:
+  - [v2] blackhole_dev: convert self-test to KUnit
+    https://git.kernel.org/netdev/net-next/c/b341f6fd45ab
 
-
-vim +96 drivers/gpu/drm/i915/display/intel_cmtg.c
-
-    84	
-    85	static bool intel_cmtg_transcoder_is_secondary(struct intel_display *display,
-    86						       enum transcoder trans)
-    87	{
-    88		struct drm_i915_private *i915 = to_i915(display->drm);
-    89		enum intel_display_power_domain power_domain;
-    90		intel_wakeref_t wakeref;
-    91		u32 val = 0;
-    92	
-    93		if (!HAS_TRANSCODER(display, trans))
-    94			return false;
-    95	
-  > 96		power_domain = POWER_DOMAIN_TRANSCODER(trans);
-    97	
-    98		with_intel_display_power_if_enabled(i915, power_domain, wakeref)
-    99			val = intel_de_read(display, TRANS_DDI_FUNC_CTL2(display, trans));
-   100	
-   101		return val & CMTG_SECONDARY_MODE;
-   102	}
-   103	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
