@@ -1,177 +1,247 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E533D1D86DC;
-	Wed, 12 Feb 2025 08:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B391A2063D2
+	for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 09:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739350654; cv=none; b=taFpurGOOs6k7grg+lSoQTF221exZ2uKY1ZeaEakvVJOIDOPTAjrVYl6IRkswQ9aIIqPCSJozSZ+J5ULaiV0qBvWYf7rEWg2lLRnzl6OQwyt6lEQ1lwd7IxlwrT78gE/smVsiwmhwFaezKcIH+bdjQPlSwiGV0GJ8iPKQIzPKkM=
+	t=1739352359; cv=none; b=K/L50HTd6g8fLsr99mlNHKPpjctuA+tyROaF1m5/rdkt7WyCqU/3CqI+L5wPGKuoAZTSGLTtkMhvtW3kyh1NyPQ844XrLnzcfc0lOXyWvLTAMI1RFwcOx1aYKbhTk/LcBxcgmeR7ZPrtFA31IyW4Ir2ZJHQXB2oGUy9Cpp8VmsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739350654; c=relaxed/simple;
-	bh=60Ds3mmtincLmSyqyim7hfOXOE7jVraM/KBnfNf8KAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=F/Dvsf05o4ase2MUiiX7VyWX18UkhYkqmXxdV/tlcVejcTDgbOp7DU1k4ez8fUPudkK7Dg5+bt5yQPZG+o/E4TZjbd5B8P0KPT4UFnJlIs5saU+uYJR+/AqXfVURkL8vSKqCuymKB9FnVtTiFjp8PUeG3JsZF06Nxc06IIo6bF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QsDBI4Ma; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739352359; c=relaxed/simple;
+	bh=YMp66mEm2MIPYxiXuNpgvEYuBRqcxJgUaXt53ooWtwg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GPJ3AiVJIwzlrp92iBhikB4Xfs+fabLV+N7Y0FeAj1Nbfbwei8tiA2MzHXuDeIX6P3Nxn/7NsKvW+Ylohs7iXnNWKtClbQvTrVMLAkOMzPU0kmRkubGlYrDmez+2PMYI9Wf7F/3f9tQLHUDCA7zCb2d0nuYM0Jsm5NAxauc0WYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O2KAyWEE; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QsDBI4Ma"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739350653; x=1770886653;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=60Ds3mmtincLmSyqyim7hfOXOE7jVraM/KBnfNf8KAk=;
-  b=QsDBI4MaNapP3QNGTfEIlUReYCXDQEWbOKLzN/x0i6+GHtjeVA/O59Z+
-   7c6Yl6GnTpJfpUBu7jgUZF0kX0qt7A1L+BwazyIcbqZVfSgQxxiGrfJ+J
-   AUhza+cbi5qnKVR6z9kKkAO6YuwFZnrFuDeF+3sVMgD3iZpRVcl5RV6jz
-   MXDhQRsEcBiUNgdKAVts3itu502HAisDplg8aH+9yJoIBWH2lRQ/Ft81o
-   Umii3LhJnVEBNw2ppCwi1HMnkfZhi+xLZuvm4/WmzdyTiQ5tE+fmP7srE
-   MvkJXF3O+IQRizOpxNFmsX+4rMepKkWxpilY8Kz+mIMF5siI3NKkYvfxv
-   A==;
-X-CSE-ConnectionGUID: eVm05U1TT6Oy49fw9vlpqw==
-X-CSE-MsgGUID: xaN3IdNKQQqEt55RA3S50w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="50630737"
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="50630737"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 00:57:30 -0800
-X-CSE-ConnectionGUID: JrrdrIfZS12qDAqjuTHYcw==
-X-CSE-MsgGUID: CQtEw75oTCW8qStzpgfTww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="117778389"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 12 Feb 2025 00:57:29 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ti8Yg-0015PA-1K;
-	Wed, 12 Feb 2025 08:57:26 +0000
-Date: Wed, 12 Feb 2025 16:57:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alistair Popple <apopple@nvidia.com>
-Subject: [davidhildenbrand:device_exclusive 3/18]
- drivers/gpu/drm/nouveau/nouveau_svm.c:612:54: error: use of undeclared
- identifier 'folio'
-Message-ID: <202502121601.MBYPtaP8-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O2KAyWEE"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6e4554e1c26so7008886d6.0
+        for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 01:25:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739352356; x=1739957156; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YMp66mEm2MIPYxiXuNpgvEYuBRqcxJgUaXt53ooWtwg=;
+        b=O2KAyWEEJxhQa9P2vEvMWQrgdWkBTR8AloZ13iY5uj45QlHlCvODxxLO9GAguDCYKB
+         x6bYnvv0d5MRbjhV6uxj909eWNFJbuaKO409JyDkOQred5GFSGULIPPoSWCxbSpAF5OT
+         A0kjeymggJtYZTpaIhdLZ1vS1BFKLdR6X8Ptup/0zpyaTIz81gma+vwASbbUs4M7sXOQ
+         bCd3iy6tiiz3ChX76CN87UYz77RMpzIH3+o4OQD5ZKV26TXzO8CxlMh/zwplR8zOt5CN
+         F7OvWjgM8wjqXWWUNaPNGuby89f1LYV64XdUGJKNzqnTTzKRrQZu0hHBdYi/cGrrEA+U
+         qTnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739352356; x=1739957156;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YMp66mEm2MIPYxiXuNpgvEYuBRqcxJgUaXt53ooWtwg=;
+        b=L7VTlL2p7CdkwX/KpSkCyBzLxKUHJfCFaXpS/g8F5lHSENgvTc3yqRqz59xQcAIcFh
+         h7WAxVHeIIyfZG9YsZCXarVkk13gQZtnb9nmzaaCQcyvVuOOJqugvWBhsdhQZT8biJ29
+         8Nhftl9Dhn5viD4pt5NAJlZ1VMOmQR7uEZKwIxcplIfdEnG1FXLoDO3Zw3b63wKEN5Sf
+         WLNRzcxMpf0XRRv31sHV9PcQE9FLHO9La50eyCc1NxWpMTQOUh8tL90CWW3ahXwmWrZB
+         gXtksknPdfWWfggDwFYBPD1sIcNa2pZZB0KZGxWDF63PCsMmf1oapWmA1Z7VTFS8lVUl
+         XfQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVJfGZEGDNiuIiJadCec6jqqkPSpQMlZeIdcX5qXVQ2eNerd6/Rmd/lP9GANQYKZ9+QWofR@lists.linux.dev
+X-Gm-Message-State: AOJu0YzygJVRoLmhXJhFfqJoMx2RpQ5HkUOoyL42qT7VcCjwX2rUtLj3
+	C54BMTzmaAoUO6ImnbLKsBYTf+9Ap1k86g35h9AhZleSCWY0ofhS2Ksp2op0zz3rQw0B6zBSLHP
+	B2+y9dMxsO7+/XG45j31tSumTMWL6z4OpPV+b
+X-Gm-Gg: ASbGncvLHhbX7+MI3Q/UG6INAF9YuGr10pbVUDmGS2mYDjung6KwsMnJIkD06vtc8QO
+	o8GinIUEZRFU7riHak1I4XoXfdx61pO70iMnZVinp7UTGECXW1mRs8qm9KORMihHcRbnIRZrbDw
+	==
+X-Google-Smtp-Source: AGHT+IELM8KwZg9bPa6ApIbCrsuxGiv4sqNaeocApE+U5glfWR9qu3Scox2u1ntzGs9gZiEQj1tJDoc7YBA8OJymPQI=
+X-Received: by 2002:a05:6214:20eb:b0:6e4:4582:4760 with SMTP id
+ 6a1803df08f44-6e4680808f0mr96565326d6.21.1739352356421; Wed, 12 Feb 2025
+ 01:25:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
+ <Z6vRIZk7DsSNooFZ@boqun-archlinux> <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
+In-Reply-To: <CAJ-ks9=EfdCenpTjSdsaGhbUyJ99JYEL_nY0Y8RqzOxXKYWY5A@mail.gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Wed, 12 Feb 2025 17:25:44 +0800
+X-Gm-Features: AWEUYZkV2OS39zkWusmNz-gAmfnypsKurOAydIIqeSOxeLA_3B7gbiADav21Pbg
+Message-ID: <CABVgOS=jS6Sgbffrx18eHnO=0LnFsvgxO0_pnpD6HCgH646Ndw@mail.gmail.com>
+Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000005f446d062dee876f"
 
-tree:   https://github.com/davidhildenbrand/linux device_exclusive
-head:   d9a18663f22814d78aeace0bbe852e4f13923d83
-commit: 9910bc073e528fac18832a3046b6666ddc06859e [3/18] mm/rmap: convert make_device_exclusive_range() to make_device_exclusive()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250212/202502121601.MBYPtaP8-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502121601.MBYPtaP8-lkp@intel.com/reproduce)
+--0000000000005f446d062dee876f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502121601.MBYPtaP8-lkp@intel.com/
+On Wed, 12 Feb 2025 at 06:43, Tamir Duberstein <tamird@gmail.com> wrote:
+>
+> On Tue, Feb 11, 2025 at 5:38=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com>=
+ wrote:
+> >
+> > Hi Tamir,
+>
+> Hi Boqun, thanks for taking a look.
+>
+> > On Mon, Feb 10, 2025 at 10:59:12AM -0500, Tamir Duberstein wrote:
+> > > Convert this unit test to a KUnit test.
+> > >
+> >
+> > I would like to know the pros and cons between kunit tests and
+> > kselftests, maybe someone Cced can answer that? It'll be good to put
+> > these in the commit log as well.
+>
+> David Gow gave a pretty detailed answer in
+> https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2Ti53DQ=
+ADrW+sJg@mail.gmail.com/
+> for a similar patch.
 
-All errors (new ones prefixed by >>):
+That previous answer covers a lot, but while I think the advantages
+(better tooling, easy architecture emulation, etc) are covered, I'll
+add a few extra caveats specific to this test here.
 
-   In file included from drivers/gpu/drm/nouveau/nouveau_svm.c:22:
-   In file included from drivers/gpu/drm/nouveau/nouveau_svm.h:3:
-   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-   In file included from include/linux/pci.h:1660:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/nouveau/nouveau_svm.c:612:54: error: use of undeclared identifier 'folio'
-     612 |                 page = make_device_exclusive(mm, start, drm->dev, &folio);
-         |                                                                    ^
-   3 warnings and 1 error generated.
+KUnit is really better suited to "unit tests" rather than "stress
+tests", and does have some limits when tests span multiple threads
+(assertions cannot kill other threads, the test context is not
+automatically applied, etc).
 
+I don't think these would preclude you from using KUnit for ww_mutex
+testing -- and people have done multithreaded stress tests in KUnit in
+the past if they really want to, it's definitely a trade-off rather
+than a strict win, so it may make sense if as maintainers you are
+already familiar with or want to use KUnit, but definitely is up to
+you.
 
-vim +/folio +612 drivers/gpu/drm/nouveau/nouveau_svm.c
+> David, what do you think about enumerating these reasons in the KUnit
+> documentation? This is the 3rd of these patches that has received this
+> question. It'd be a shame to have every commit enumerate KUnit's
+> reasons for being.
 
-   584	
-   585	static int nouveau_atomic_range_fault(struct nouveau_svmm *svmm,
-   586				       struct nouveau_drm *drm,
-   587				       struct nouveau_pfnmap_args *args, u32 size,
-   588				       struct svm_notifier *notifier)
-   589	{
-   590		unsigned long timeout =
-   591			jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
-   592		struct mm_struct *mm = svmm->notifier.mm;
-   593		struct page *page;
-   594		unsigned long start = args->p.addr;
-   595		unsigned long notifier_seq;
-   596		int ret = 0;
-   597	
-   598		ret = mmu_interval_notifier_insert(&notifier->notifier, mm,
-   599						args->p.addr, args->p.size,
-   600						&nouveau_svm_mni_ops);
-   601		if (ret)
-   602			return ret;
-   603	
-   604		while (true) {
-   605			if (time_after(jiffies, timeout)) {
-   606				ret = -EBUSY;
-   607				goto out;
-   608			}
-   609	
-   610			notifier_seq = mmu_interval_read_begin(&notifier->notifier);
-   611			mmap_read_lock(mm);
- > 612			page = make_device_exclusive(mm, start, drm->dev, &folio);
-   613			mmap_read_unlock(mm);
-   614			if (IS_ERR(page)) {
-   615				ret = -EINVAL;
-   616				goto out;
-   617			}
-   618	
-   619			mutex_lock(&svmm->mutex);
-   620			if (!mmu_interval_read_retry(&notifier->notifier,
-   621						     notifier_seq))
-   622				break;
-   623			mutex_unlock(&svmm->mutex);
-   624		}
-   625	
-   626		/* Map the page on the GPU. */
-   627		args->p.page = 12;
-   628		args->p.size = PAGE_SIZE;
-   629		args->p.addr = start;
-   630		args->p.phys[0] = page_to_phys(page) |
-   631			NVIF_VMM_PFNMAP_V0_V |
-   632			NVIF_VMM_PFNMAP_V0_W |
-   633			NVIF_VMM_PFNMAP_V0_A |
-   634			NVIF_VMM_PFNMAP_V0_HOST;
-   635	
-   636		ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args, size, NULL);
-   637		mutex_unlock(&svmm->mutex);
-   638	
-   639		unlock_page(page);
-   640		put_page(page);
-   641	
-   642	out:
-   643		mmu_interval_notifier_remove(&notifier->notifier);
-   644		return ret;
-   645	}
-   646	
+We have some existing documentation as to when KUnit and kselftest are
+more appropriate as a part of the 'Kernel Testing Guide' in
+Documentation/testing-overview.rst (though it focuses on the
+underlying differences in goals, rather than 'look at all of these
+useful features'), as well as an overview of why KUnit is useful on
+the KUnit webpage at http://kunit.dev/ (though without the direct
+kselftest comparison).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+My hope was that porting tests from one framework to the other should
+be a rare, probably one-off occurrence, so the focus should be more on
+writing new tests, but clearly what we have is insufficient. And
+ideally some of the advantages of KUnit, particularly in the
+standardisation and tooling support, will continue to make their way
+to kselftest, so hopefully some of the advantages of KUnit will
+disappear.
+
+Nevertheless, I'll see if there's anything specific we want to add
+about test porting.
+
+Cheers,
+-- David
+
+--0000000000005f446d062dee876f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
+N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
+exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
++ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
+XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
+QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
+TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
+oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
+cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
+uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
+PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
+pjANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgLbzrIV77LyqdEK2YDK+XFSIuEB0U
+xeELQgoo7zrfnKUwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MjEyMDkyNTU2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAF0EDNR2bNy1fAs6oS/buG2srS7mlAv85Y+TJOVtx6ITTdwl
+6Vv6os+Nedt0qwX3a0Z4qXnrNkAUqvGEDM0RKoseqfKyscNTI5LbPUniJwnHatEEFG1rW8vd+moJ
+4jNBkHGXBDyMT2g6WWIpWnS0meJbqHHgyuS9O29AWt0Ww6UFg0KpH5tOsC3ko9ZSPh4Et2P1q1Ad
+i6twvruu3o77XadRIzgM1QhPOUtFyjc5/th0iA6cHDcLbUntCkO7gfdnQ3MT4PC4tq1JppWTFnrM
+qFwD/VJxR+tJOf5/0Yc5eDvPDDNq8EHn4oFcQKyglbQs5JF2Rk6A3TC+nASuXKtH0Jk=
+--0000000000005f446d062dee876f--
