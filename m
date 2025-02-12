@@ -1,68 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8C32046A1;
-	Wed, 12 Feb 2025 09:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2BB1FC102;
+	Wed, 12 Feb 2025 10:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739352519; cv=none; b=YjEv1pl7JqUZcQzjpcGbJi8Q13JrRnQKb9Xnk0EVEZuxELSZ8eoFep0lqkSBXMTjrDrhPvKUlDTZv20xgT5DU8mRH30udxGBT33aBZwOjPbwrX6Z42RTIdQHoDDJy7o/BVFDNIcyVR8opzPJ4o12PYvO7NdROKiyrX1UCC0g4+U=
+	t=1739354613; cv=none; b=RQWXyblGCtrIC9aoh35dl0QKd8AkRWltyp7XuRq0DIrN8g+Ea6SKdqI/u4IdqgzYE1FlI985jD72NZGr7XjWyCUqqJduuOBOwLO5KayL1c09Hsiqp3vHURJIeO+ZGeRlkrW5uPTsM8wAQM3+3rkye6jrRGSkKRIxHYEWUlI2l28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739352519; c=relaxed/simple;
-	bh=gJpIK2N1oWtH5ADm/MDAKA+A5d3VUR0XUHUg0+3+Iq8=;
+	s=arc-20240116; t=1739354613; c=relaxed/simple;
+	bh=/qZDTGoR1ovINC8frxvq7XHY227mD50j54dGAGwv5JQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cm/maOLWhiUrT8Z5G8EESgTAu4bv5fU78zSE95LiURn7AJ2uwnBncBIHoGcXjn1fuujpDDlXREWzR2LDDqgdD3vb7z+AgzmQQPM1sBSF6Qbn5C0q1jiVADBhMm4b6zQFx0vuzKNeZYR1SnYf+ZznYQkMtbQcZ0ZN+qQfd9YfGF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W1XYIkYk; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fcgs4+TOhc+DTCf6GI7SQNejEFllJ+93cyPBTOS7FC34zDgwUV9XUslXaUh/qbe9znos0RiBOcGQlfZ654dENvJz7gv6wBZrEGpte2BKZjwBAbTozzqHUYN1mQzPXV209T9FtpkT/S1CBsnTIvwzCmOnrxD32/75hAlhm1GCNtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcjbIRDq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W1XYIkYk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739352516; x=1770888516;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gJpIK2N1oWtH5ADm/MDAKA+A5d3VUR0XUHUg0+3+Iq8=;
-  b=W1XYIkYkfxMdyfDtmZQGJWgC3j7NFNh1NCQGZ8fUYNlwteZa5Ep4hu2v
-   2dM9Gr9rlPecVsFVDDrBlRiwjHX/TJot48djgiD82/+ahjjmUuEHEtRbk
-   8vCNaxzoCvr82a87gQpgbJ90sVcO/XpmEbb21f+JfgA6eRElHDahI7sdE
-   aKMQadgaFn7Uz73J7I6xqVnbTAfG2g95LGqawsftwx66aPMzUYWdOuHyw
-   XVsAo4hPTVR1sASdTePyDFSetkiJkXWsnaCIOW4E6AJqzrBruc5R57uHk
-   HzO/Tb6n2toWd/ltxjCTpMq69utZkL0fpj80ORsyWn0x1VKx1RnX9ouQI
-   A==;
-X-CSE-ConnectionGUID: heRrhIy+S0SPPQqJoJpHzw==
-X-CSE-MsgGUID: pxWCeev2SUm2vXSYSi7J+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="43925756"
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="43925756"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 01:28:36 -0800
-X-CSE-ConnectionGUID: uoFlp30lSuaGrdQz3fpcsg==
-X-CSE-MsgGUID: XLCudRqwS5uKdTV8jnwDsw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="112526808"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 12 Feb 2025 01:28:32 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ti92j-0015R1-2F;
-	Wed, 12 Feb 2025 09:28:29 +0000
-Date: Wed, 12 Feb 2025 17:27:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
-	acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, treding@nvidia.com,
-	jonathanh@nvidia.com, sashal@nvidia.com, vsethi@nvidia.com,
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, bbasu@nvidia.com,
-	sumitg@nvidia.com
-Subject: Re: [Patch 5/5] cpufreq: CPPC: Add cppc_cpufreq_epp instance for
- Autonomous mode
-Message-ID: <202502121734.xMnvqs6o-lkp@intel.com>
-References: <20250211103737.447704-6-sumitg@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcjbIRDq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAE8C4CEDF;
+	Wed, 12 Feb 2025 10:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739354612;
+	bh=/qZDTGoR1ovINC8frxvq7XHY227mD50j54dGAGwv5JQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=fcjbIRDq6wJTWjIrrVY8mZVjP/ynoZOGGCkLV7RZ3Va4RL4NvWednVgvnOhrO+Npd
+	 pHbREls6IzVLc7aIIAgRSUko66XwGbadZAna3x/NFajJshdnhd1g4lcecIe6ARaQes
+	 0cxYAcaJzEgNkvgSsn79/96zB2YmV9F28Qs2Xg94c4hxf/XW39xh2uvnbLn28JLx1I
+	 en+/waMwRrKziMvzRgMABkKF2DYPdc3UCiScEmeeVBmiNnPw1XSGv/7rYPnEOLlmgt
+	 1+ot9zWvfVbKFtU+OlLvOOBHhLz1e6ukpJVpRaR1/j+Xqe3e7+G1ppK1NSJmz61D6X
+	 XLfErqI42Ikxg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 12DBCCE0546; Wed, 12 Feb 2025 02:03:27 -0800 (PST)
+Date: Wed, 12 Feb 2025 02:03:27 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [paulmckrcu:dev 82/82] kernel/rcu/rcutorture.c:2453:110:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'int'
+Message-ID: <555c789d-5fe8-40d4-9b72-3490baa5c9b3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202502112058.rTKa7Z3A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,100 +46,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250211103737.447704-6-sumitg@nvidia.com>
+In-Reply-To: <202502112058.rTKa7Z3A-lkp@intel.com>
 
-Hi Sumit,
+On Tue, Feb 11, 2025 at 08:37:12PM +0800, kernel test robot wrote:
+> tree:   https://github.com/paulmckrcu/linux dev
+> head:   31c00ec5301cf02af354d57007bf0d79d5aef1c5
+> commit: 31c00ec5301cf02af354d57007bf0d79d5aef1c5 [82/82] rcutorture: Check for ->up_read() without matching ->down_read()
+> config: i386-buildonly-randconfig-006-20250211 (https://download.01.org/0day-ci/archive/20250211/202502112058.rTKa7Z3A-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502112058.rTKa7Z3A-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502112058.rTKa7Z3A-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from kernel/rcu/rcutorture.c:47:
+>    In file included from include/linux/oom.h:10:
+>    In file included from include/linux/mm.h:2223:
+>    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+> >> kernel/rcu/rcutorture.c:2453:110: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
+>     2453 |         WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
+>          |                                                                                                  ~~~                ^~~~~~~~~~~~~~~~~~~~~~~
+>          |                                                                                                  %d
 
-kernel test robot noticed the following build warnings:
+And %d breaks my build.  So this is presumably what %zu was intended
+to take care of.  So does the diff below fix this for you?  Either way,
+thank you for your testing!
 
-[auto build test WARNING on next-20250210]
-[cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge v6.14-rc2 v6.14-rc1 v6.13 linus/master v6.14-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+							Thanx, Paul
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/ACPI-CPPC-add-read-perf-ctrls-api-and-rename-few-existing/20250211-184154
-base:   next-20250210
-patch link:    https://lore.kernel.org/r/20250211103737.447704-6-sumitg%40nvidia.com
-patch subject: [Patch 5/5] cpufreq: CPPC: Add cppc_cpufreq_epp instance for Autonomous mode
-config: riscv-randconfig-001-20250212 (https://download.01.org/0day-ci/archive/20250212/202502121734.xMnvqs6o-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502121734.xMnvqs6o-lkp@intel.com/reproduce)
+------------------------------------------------------------------------
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502121734.xMnvqs6o-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cpufreq/cppc_cpufreq.c:780:68: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-     780 |         pr_debug("cpu%d, curr epp:%u, new epp:%u, curr mode:%u, new mode:%u\n",
-         |                                                                          ~^
-   include/linux/printk.h:631:30: note: expanded from macro 'pr_debug'
-     631 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                                     ^~~
-   drivers/cpufreq/cppc_cpufreq.c:11:37: note: expanded from macro 'pr_fmt'
-      11 | #define pr_fmt(fmt)     "CPPC Cpufreq:" fmt
-         |                                         ^~~
-   include/linux/printk.h:135:11: note: expanded from macro 'no_printk'
-     135 |                 _printk(fmt, ##__VA_ARGS__);            \
-         |                         ^~~
->> drivers/cpufreq/cppc_cpufreq.c:799:23: warning: unused variable 'cpu_data' [-Wunused-variable]
-     799 |         struct cppc_cpudata *cpu_data = policy->driver_data;
-         |                              ^~~~~~~~
-   drivers/cpufreq/cppc_cpufreq.c:1018:23: warning: unused variable 'cpu_data' [-Wunused-variable]
-    1018 |         struct cppc_cpudata *cpu_data;
-         |                              ^~~~~~~~
->> drivers/cpufreq/cppc_cpufreq.c:1019:11: warning: unused variable 'pref' [-Wunused-variable]
-    1019 |         int cpu, pref, ret = 0;
-         |                  ^~~~
-   4 warnings generated.
-
-
-vim +780 drivers/cpufreq/cppc_cpufreq.c
-
-   773	
-   774	static int cppc_cpufreq_epp_update_auto_mode(struct cpufreq_policy *policy, int auto_sel, u32 epp)
-   775	{
-   776		struct cppc_cpudata *cpu_data = policy->driver_data;
-   777		int ret, curr_epp;
-   778	
-   779		curr_epp = cpu_data->perf_ctrls.energy_perf;
- > 780		pr_debug("cpu%d, curr epp:%u, new epp:%u, curr mode:%u, new mode:%u\n",
-   781			 curr_epp, epp, cpu_data->perf_caps.auto_sel, auto_sel);
-   782	
-   783		/* set Performance preference as default */
-   784		cpu_data->perf_ctrls.energy_perf = epp;
-   785		ret = cppc_set_epp_perf(policy->cpu, &cpu_data->perf_ctrls, auto_sel);
-   786		if (ret < 0) {
-   787			pr_err("failed to set energy perf value (%d)\n", ret);
-   788			cpu_data->perf_ctrls.energy_perf = curr_epp;
-   789			return ret;
-   790		}
-   791		cpu_data->perf_caps.auto_sel = auto_sel;
-   792	
-   793		return ret;
-   794	}
-   795	
-   796	static int cppc_cpufreq_epp_update_perf(struct cpufreq_policy *policy, int auto_sel, u32 epp,
-   797						u32 highest_perf, u32 lowest_perf)
-   798	{
- > 799		struct cppc_cpudata *cpu_data = policy->driver_data;
-   800		int ret;
-   801	
-   802		ret = cppc_cpufreq_epp_update_perf_ctrls(policy, highest_perf, lowest_perf);
-   803		if (ret)
-   804			return ret;
-   805	
-   806		ret = cppc_cpufreq_epp_update_auto_mode(policy, auto_sel, epp);
-   807		if (ret)
-   808			return ret;
-   809	
-   810		return ret;
-   811	}
-   812	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index d62f1c787bd6..b4286136a052 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -2450,7 +2450,7 @@ static enum hrtimer_restart rcu_torture_updown_hrt(struct hrtimer *hrtp)
+ 
+ 	rtorsup = container_of(hrtp, struct rcu_torture_one_read_state_updown, rtorsu_hrt);
+ 	rcu_torture_one_read_end(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1);
+-	WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
++	WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
+ 	rtorsup->rtorsu_nups++;
+ 	smp_store_release(&rtorsup->rtorsu_inuse, false);
+ 	return HRTIMER_NORESTART;
+@@ -2498,7 +2498,12 @@ static void rcu_torture_updown_cleanup(void)
+ 		if (!smp_load_acquire(&rtorsup->rtorsu_inuse))
+ 			continue;
+ 		(void)hrtimer_cancel(&rtorsup->rtorsu_hrt);
+-		WARN_ON_ONCE(rtorsup->rtorsu_inuse);
++		if (WARN_ON_ONCE(rtorsup->rtorsu_inuse)) {
++			rcu_torture_one_read_end(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1);
++			WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
++			rtorsup->rtorsu_nups++;
++			smp_store_release(&rtorsup->rtorsu_inuse, false);
++		}
+ 
+ 	}
+ 	kfree(updownreaders);
+@@ -2521,7 +2526,7 @@ static void rcu_torture_updown_one(struct rcu_torture_one_read_state_updown *rto
+ 	if (!rcu_torture_one_read_start(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1)) {
+ 		cur_ops->up_read(rawidx);
+ 		rtorsup->rtorsu_nups++;
+-		WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
++		WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
+ 		schedule_timeout_idle(HZ);
+ 		return;
+ 	}
