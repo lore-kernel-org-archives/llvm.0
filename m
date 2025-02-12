@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D961EE013;
-	Wed, 12 Feb 2025 08:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E533D1D86DC;
+	Wed, 12 Feb 2025 08:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739348792; cv=none; b=l8oz9Y/rnL3k2jzAtlHZFi4uC2IT33MqIr8sauomolSCrCSeXMs+NEdB6GG0o0kWkj6jnlbyq8P4QafFT0lgWUZv2iv861Tp14K/2eKnrJR4oTgii+kyVP9A9DEdAnjat3ML4QYe8tJnEQmqpyWSAcR/JZStzDstqwPcVG7ogsg=
+	t=1739350654; cv=none; b=taFpurGOOs6k7grg+lSoQTF221exZ2uKY1ZeaEakvVJOIDOPTAjrVYl6IRkswQ9aIIqPCSJozSZ+J5ULaiV0qBvWYf7rEWg2lLRnzl6OQwyt6lEQ1lwd7IxlwrT78gE/smVsiwmhwFaezKcIH+bdjQPlSwiGV0GJ8iPKQIzPKkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739348792; c=relaxed/simple;
-	bh=SrzGn1c0JLdZuLtX1GIffHogC91jGV4Iua5E6KKiYOU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bRCbsT17P3dPeTwWPoLarUUpRMaEgg6nXHuZecR6OCHsZIX5uoLp6iHHnkdlCnxRAQV0QS0nC1z1QV0CA7nNVKAaTD4SxtYP3C/VJrLh2bbC3RMAv/Rnsptv1Ff1uHrU+qzmJtZXsdb1jHCVAUOC8+lPBQj6iBRQU8USSBI8cE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GDudayGq; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1739350654; c=relaxed/simple;
+	bh=60Ds3mmtincLmSyqyim7hfOXOE7jVraM/KBnfNf8KAk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F/Dvsf05o4ase2MUiiX7VyWX18UkhYkqmXxdV/tlcVejcTDgbOp7DU1k4ez8fUPudkK7Dg5+bt5yQPZG+o/E4TZjbd5B8P0KPT4UFnJlIs5saU+uYJR+/AqXfVURkL8vSKqCuymKB9FnVtTiFjp8PUeG3JsZF06Nxc06IIo6bF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QsDBI4Ma; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GDudayGq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QsDBI4Ma"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739348790; x=1770884790;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SrzGn1c0JLdZuLtX1GIffHogC91jGV4Iua5E6KKiYOU=;
-  b=GDudayGq5lwMiJKc8Oy46GYWCsGXv233PwOwk29rzc0PuxbWuLc6GneW
-   +iBLYJr50Y0JUpnaOHZ1lRLDw3ZYMZVlMhonc8bwDWGfRDF9LPHRgyeN9
-   EY4cQrEWwUqTN8rZfCYZYWfMNHXWezo2m6wvKuW/higaycQwa2G+utxis
-   3XVa0ST/7vORZ5rAGm582n0sOqEsb65opOI4wem59UZ+ThwWw6HWKzQmB
-   zb8iXEEzS5mnLgjyw3GltgA+3tw1uToV9ZM/ICPzA60JVMy7IM9EpY9pg
-   NiURfToYZ019vqAtUW6SywkRBJJh7vaTJ5s+vU5i1HR4jvJrBGJopGJ58
-   g==;
-X-CSE-ConnectionGUID: msS5KivDSWqFiY5dM/ugZQ==
-X-CSE-MsgGUID: OnrrcerYQMSOHBPlT4KZ3g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40114732"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="40114732"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 00:26:29 -0800
-X-CSE-ConnectionGUID: vvTe5n8/Sg2KTZj+YkbRtg==
-X-CSE-MsgGUID: KiP3q/SHSSi1wyxKZEnhVw==
+  t=1739350653; x=1770886653;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=60Ds3mmtincLmSyqyim7hfOXOE7jVraM/KBnfNf8KAk=;
+  b=QsDBI4MaNapP3QNGTfEIlUReYCXDQEWbOKLzN/x0i6+GHtjeVA/O59Z+
+   7c6Yl6GnTpJfpUBu7jgUZF0kX0qt7A1L+BwazyIcbqZVfSgQxxiGrfJ+J
+   AUhza+cbi5qnKVR6z9kKkAO6YuwFZnrFuDeF+3sVMgD3iZpRVcl5RV6jz
+   MXDhQRsEcBiUNgdKAVts3itu502HAisDplg8aH+9yJoIBWH2lRQ/Ft81o
+   Umii3LhJnVEBNw2ppCwi1HMnkfZhi+xLZuvm4/WmzdyTiQ5tE+fmP7srE
+   MvkJXF3O+IQRizOpxNFmsX+4rMepKkWxpilY8Kz+mIMF5siI3NKkYvfxv
+   A==;
+X-CSE-ConnectionGUID: eVm05U1TT6Oy49fw9vlpqw==
+X-CSE-MsgGUID: xaN3IdNKQQqEt55RA3S50w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="50630737"
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="50630737"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 00:57:30 -0800
+X-CSE-ConnectionGUID: JrrdrIfZS12qDAqjuTHYcw==
+X-CSE-MsgGUID: CQtEw75oTCW8qStzpgfTww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="112585409"
+   d="scan'208";a="117778389"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 12 Feb 2025 00:26:24 -0800
+  by orviesa004.jf.intel.com with ESMTP; 12 Feb 2025 00:57:29 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ti84c-0015N9-11;
-	Wed, 12 Feb 2025 08:26:22 +0000
-Date: Wed, 12 Feb 2025 16:25:30 +0800
+	id 1ti8Yg-0015PA-1K;
+	Wed, 12 Feb 2025 08:57:26 +0000
+Date: Wed, 12 Feb 2025 16:57:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, linux-pm@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
-	acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+To: David Hildenbrand <david@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-tegra@vger.kernel.org, treding@nvidia.com,
-	jonathanh@nvidia.com, sashal@nvidia.com, vsethi@nvidia.com,
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, bbasu@nvidia.com,
-	sumitg@nvidia.com
-Subject: Re: [Patch 1/5] ACPI: CPPC: add read perf ctrls api and rename few
- existing
-Message-ID: <202502121658.IcwbwB0y-lkp@intel.com>
-References: <20250211103737.447704-2-sumitg@nvidia.com>
+	Alistair Popple <apopple@nvidia.com>
+Subject: [davidhildenbrand:device_exclusive 3/18]
+ drivers/gpu/drm/nouveau/nouveau_svm.c:612:54: error: use of undeclared
+ identifier 'folio'
+Message-ID: <202502121601.MBYPtaP8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,165 +63,114 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250211103737.447704-2-sumitg@nvidia.com>
 
-Hi Sumit,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20250210]
-[also build test ERROR on linus/master v6.14-rc2]
-[cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge v6.14-rc2 v6.14-rc1 v6.13]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/ACPI-CPPC-add-read-perf-ctrls-api-and-rename-few-existing/20250211-184154
-base:   next-20250210
-patch link:    https://lore.kernel.org/r/20250211103737.447704-2-sumitg%40nvidia.com
-patch subject: [Patch 1/5] ACPI: CPPC: add read perf ctrls api and rename few existing
-config: x86_64-buildonly-randconfig-002-20250212 (https://download.01.org/0day-ci/archive/20250212/202502121658.IcwbwB0y-lkp@intel.com/config)
+tree:   https://github.com/davidhildenbrand/linux device_exclusive
+head:   d9a18663f22814d78aeace0bbe852e4f13923d83
+commit: 9910bc073e528fac18832a3046b6666ddc06859e [3/18] mm/rmap: convert make_device_exclusive_range() to make_device_exclusive()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250212/202502121601.MBYPtaP8-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502121658.IcwbwB0y-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502121601.MBYPtaP8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502121658.IcwbwB0y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502121601.MBYPtaP8-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/cpufreq/amd-pstate.c:395:10: error: call to undeclared function 'cppc_set_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     395 |                         ret = cppc_set_perf(cpu, &perf_ctrls);
-         |                               ^
-   drivers/cpufreq/amd-pstate.c:395:10: note: did you mean 'cppc_set_epp_perf'?
-   include/acpi/cppc_acpi.h:161:12: note: 'cppc_set_epp_perf' declared here
-     161 | extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
-         |            ^
-   drivers/cpufreq/amd-pstate.c:498:9: error: call to undeclared function 'cppc_set_perf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     498 |         return cppc_set_perf(cpudata->cpu, &perf_ctrls);
-         |                ^
-   2 errors generated.
---
->> drivers/acpi/cppc_acpi.c:1734:6: warning: variable 'energy_perf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1734 |         if (CPC_SUPPORTED(energy_perf_reg))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:129:28: note: expanded from macro 'CPC_SUPPORTED'
-     129 | #define CPC_SUPPORTED(cpc) ((cpc)->type == ACPI_TYPE_INTEGER ?          \
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                 !!(cpc)->cpc_entry.int_value :          \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1736:28: note: uninitialized use occurs here
-    1736 |         perf_ctrls->energy_perf = energy_perf;
-         |                                   ^~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1734:2: note: remove the 'if' if its condition is always true
-    1734 |         if (CPC_SUPPORTED(energy_perf_reg))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1735 |                 cpc_read(cpu, energy_perf_reg, &energy_perf);
-   drivers/acpi/cppc_acpi.c:1689:41: note: initialize the variable 'energy_perf' to silence this warning
-    1689 |         u64 max, min, desired_perf, energy_perf;
-         |                                                ^
-         |                                                 = 0
->> drivers/acpi/cppc_acpi.c:1730:6: warning: variable 'desired_perf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1730 |         if (CPC_SUPPORTED(desired_perf_reg))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:129:28: note: expanded from macro 'CPC_SUPPORTED'
-     129 | #define CPC_SUPPORTED(cpc) ((cpc)->type == ACPI_TYPE_INTEGER ?          \
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                 !!(cpc)->cpc_entry.int_value :          \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1732:29: note: uninitialized use occurs here
-    1732 |         perf_ctrls->desired_perf = desired_perf;
-         |                                    ^~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1730:2: note: remove the 'if' if its condition is always true
-    1730 |         if (CPC_SUPPORTED(desired_perf_reg))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1731 |                 cpc_read(cpu, desired_perf_reg, &desired_perf);
-   drivers/acpi/cppc_acpi.c:1689:28: note: initialize the variable 'desired_perf' to silence this warning
-    1689 |         u64 max, min, desired_perf, energy_perf;
-         |                                   ^
-         |                                    = 0
->> drivers/acpi/cppc_acpi.c:1726:6: warning: variable 'min' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1726 |         if (CPC_SUPPORTED(min_perf_reg))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:129:28: note: expanded from macro 'CPC_SUPPORTED'
-     129 | #define CPC_SUPPORTED(cpc) ((cpc)->type == ACPI_TYPE_INTEGER ?          \
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                 !!(cpc)->cpc_entry.int_value :          \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1728:25: note: uninitialized use occurs here
-    1728 |         perf_ctrls->min_perf = min;
-         |                                ^~~
-   drivers/acpi/cppc_acpi.c:1726:2: note: remove the 'if' if its condition is always true
-    1726 |         if (CPC_SUPPORTED(min_perf_reg))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1727 |                 cpc_read(cpu, min_perf_reg, &min);
-   drivers/acpi/cppc_acpi.c:1689:14: note: initialize the variable 'min' to silence this warning
-    1689 |         u64 max, min, desired_perf, energy_perf;
-         |                     ^
-         |                      = 0
->> drivers/acpi/cppc_acpi.c:1722:6: warning: variable 'max' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1722 |         if (CPC_SUPPORTED(max_perf_reg))
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:129:28: note: expanded from macro 'CPC_SUPPORTED'
-     129 | #define CPC_SUPPORTED(cpc) ((cpc)->type == ACPI_TYPE_INTEGER ?          \
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                 !!(cpc)->cpc_entry.int_value :          \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/cppc_acpi.c:1724:25: note: uninitialized use occurs here
-    1724 |         perf_ctrls->max_perf = max;
-         |                                ^~~
-   drivers/acpi/cppc_acpi.c:1722:2: note: remove the 'if' if its condition is always true
-    1722 |         if (CPC_SUPPORTED(max_perf_reg))
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1723 |                 cpc_read(cpu, max_perf_reg, &max);
-   drivers/acpi/cppc_acpi.c:1689:9: note: initialize the variable 'max' to silence this warning
-    1689 |         u64 max, min, desired_perf, energy_perf;
-         |                ^
-         |                 = 0
-   4 warnings generated.
---
->> drivers/acpi/cppc_acpi.c:1685: warning: expecting prototype for cppc_get_perf(). Prototype was for cppc_get_perf_ctrls() instead
+   In file included from drivers/gpu/drm/nouveau/nouveau_svm.c:22:
+   In file included from drivers/gpu/drm/nouveau/nouveau_svm.h:3:
+   In file included from drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+   In file included from include/linux/pci.h:1660:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/nouveau/nouveau_svm.c:612:54: error: use of undeclared identifier 'folio'
+     612 |                 page = make_device_exclusive(mm, start, drm->dev, &folio);
+         |                                                                    ^
+   3 warnings and 1 error generated.
 
 
-vim +/cppc_set_perf +395 drivers/cpufreq/amd-pstate.c
+vim +/folio +612 drivers/gpu/drm/nouveau/nouveau_svm.c
 
-ec437d71db77a1 Huang Rui         2021-12-24  377  
-7fb463aac84577 Dhananjay Ugwekar 2024-10-23  378  static int shmem_cppc_enable(bool enable)
-e059c184da47e9 Huang Rui         2021-12-24  379  {
-e059c184da47e9 Huang Rui         2021-12-24  380  	int cpu, ret = 0;
-ffa5096a7c3386 Perry Yuan        2023-01-31  381  	struct cppc_perf_ctrls perf_ctrls;
-e059c184da47e9 Huang Rui         2021-12-24  382  
-217e67784eab30 Wyes Karny        2023-05-30  383  	if (enable == cppc_enabled)
-217e67784eab30 Wyes Karny        2023-05-30  384  		return 0;
-217e67784eab30 Wyes Karny        2023-05-30  385  
-e059c184da47e9 Huang Rui         2021-12-24  386  	for_each_present_cpu(cpu) {
-e059c184da47e9 Huang Rui         2021-12-24  387  		ret = cppc_set_enable(cpu, enable);
-e059c184da47e9 Huang Rui         2021-12-24  388  		if (ret)
-e059c184da47e9 Huang Rui         2021-12-24  389  			return ret;
-ffa5096a7c3386 Perry Yuan        2023-01-31  390  
-ffa5096a7c3386 Perry Yuan        2023-01-31  391  		/* Enable autonomous mode for EPP */
-ffa5096a7c3386 Perry Yuan        2023-01-31  392  		if (cppc_state == AMD_PSTATE_ACTIVE) {
-ffa5096a7c3386 Perry Yuan        2023-01-31  393  			/* Set desired perf as zero to allow EPP firmware control */
-ffa5096a7c3386 Perry Yuan        2023-01-31  394  			perf_ctrls.desired_perf = 0;
-ffa5096a7c3386 Perry Yuan        2023-01-31 @395  			ret = cppc_set_perf(cpu, &perf_ctrls);
-ffa5096a7c3386 Perry Yuan        2023-01-31  396  			if (ret)
-ffa5096a7c3386 Perry Yuan        2023-01-31  397  				return ret;
-ffa5096a7c3386 Perry Yuan        2023-01-31  398  		}
-e059c184da47e9 Huang Rui         2021-12-24  399  	}
-e059c184da47e9 Huang Rui         2021-12-24  400  
-217e67784eab30 Wyes Karny        2023-05-30  401  	cppc_enabled = enable;
-e059c184da47e9 Huang Rui         2021-12-24  402  	return ret;
-e059c184da47e9 Huang Rui         2021-12-24  403  }
-e059c184da47e9 Huang Rui         2021-12-24  404  
+   584	
+   585	static int nouveau_atomic_range_fault(struct nouveau_svmm *svmm,
+   586				       struct nouveau_drm *drm,
+   587				       struct nouveau_pfnmap_args *args, u32 size,
+   588				       struct svm_notifier *notifier)
+   589	{
+   590		unsigned long timeout =
+   591			jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
+   592		struct mm_struct *mm = svmm->notifier.mm;
+   593		struct page *page;
+   594		unsigned long start = args->p.addr;
+   595		unsigned long notifier_seq;
+   596		int ret = 0;
+   597	
+   598		ret = mmu_interval_notifier_insert(&notifier->notifier, mm,
+   599						args->p.addr, args->p.size,
+   600						&nouveau_svm_mni_ops);
+   601		if (ret)
+   602			return ret;
+   603	
+   604		while (true) {
+   605			if (time_after(jiffies, timeout)) {
+   606				ret = -EBUSY;
+   607				goto out;
+   608			}
+   609	
+   610			notifier_seq = mmu_interval_read_begin(&notifier->notifier);
+   611			mmap_read_lock(mm);
+ > 612			page = make_device_exclusive(mm, start, drm->dev, &folio);
+   613			mmap_read_unlock(mm);
+   614			if (IS_ERR(page)) {
+   615				ret = -EINVAL;
+   616				goto out;
+   617			}
+   618	
+   619			mutex_lock(&svmm->mutex);
+   620			if (!mmu_interval_read_retry(&notifier->notifier,
+   621						     notifier_seq))
+   622				break;
+   623			mutex_unlock(&svmm->mutex);
+   624		}
+   625	
+   626		/* Map the page on the GPU. */
+   627		args->p.page = 12;
+   628		args->p.size = PAGE_SIZE;
+   629		args->p.addr = start;
+   630		args->p.phys[0] = page_to_phys(page) |
+   631			NVIF_VMM_PFNMAP_V0_V |
+   632			NVIF_VMM_PFNMAP_V0_W |
+   633			NVIF_VMM_PFNMAP_V0_A |
+   634			NVIF_VMM_PFNMAP_V0_HOST;
+   635	
+   636		ret = nvif_object_ioctl(&svmm->vmm->vmm.object, args, size, NULL);
+   637		mutex_unlock(&svmm->mutex);
+   638	
+   639		unlock_page(page);
+   640		put_page(page);
+   641	
+   642	out:
+   643		mmu_interval_notifier_remove(&notifier->notifier);
+   644		return ret;
+   645	}
+   646	
 
 -- 
 0-DAY CI Kernel Test Service
