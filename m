@@ -1,69 +1,59 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D54D101E6
-	for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 00:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF4B17993;
+	Wed, 12 Feb 2025 01:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739321785; cv=none; b=ntd1oyhgW4lBMctCuQ634SLO+BA3/WZ1ep4lFeT3yUEDzU4cyG/UZ0Hw5hUVoFoqnPaVC0lyor1UPhRf6jYihqeRJTcZ7FGiQhNmJsu5gZBqgV/S1cfGkM64tjybXHXY4dGBdbdvgCRMfIWB639HFesrYmmJ/Jn4m54ZCyCDWoo=
+	t=1739323234; cv=none; b=uuiyPrJLpNgIdP+X83tn6oZJ89wWgiz6752KpYIgnkrrKFYtOxvgTodpr79B3olXA7Wc4b1PVuCIQDMLDcGmjhX6CkyCyeW8W/Wyp/84DXZ8B2K4pw4sE8quDqwIt3OYEIUZSKhU0K2XxR+lrvicqBhJ2eEIjF20aKTNDCbHS+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739321785; c=relaxed/simple;
-	bh=e+BLwSgSHjy9yBuT4YO1wwabPYPHQNi+gOE3i7/aaBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZbSDYR3q50gSF/hYPx4Rdp3kTK/V/LjaxfwDTneeRp4sW5jalMyQRFwAS8DJmtEv1eHWfOw2RAAc6I2vHeNO8sPff6hIpcu5X69/l2g9ZLFg1kelS2xTPvjxtL/WTa6l1g2EYBNy1bQHcGIn3LkSJPdf9jSK4hCKvoyd38COWdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nhu1ENbj; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1739323234; c=relaxed/simple;
+	bh=Z98xk3C2YQwVk4dPClx8w0Sy0PLlv9Q8GUi9gv61H3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bSxe1kAiJCPKZwgDDA0CI406q8R/y8ZKPs5LBSh5iZbOt5wJweXo7+77lufIUosM4UydwB5vB+9WCQjHWYMlUZ5yWtYg6pVJshEGAZp485KCHVn4GRC8jLZOtdR874PcifYzHpW263tnf8XpYClpHnEugQvbW6sWTDiazG39qsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=arQIwJZi; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nhu1ENbj"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21f8c280472so33455ad.1
-        for <llvm@lists.linux.dev>; Tue, 11 Feb 2025 16:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739321783; x=1739926583; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ivh9AzheXIKHdwI+6JcoW6n5m0LCFzWHrb18akb3wpw=;
-        b=nhu1ENbjUfkbkpRLkQ4uAzdsFHU4WOJjXT3lMaNm6xqBTvgGQglib/RxeT/K3mvh8m
-         Ytv3LKRwYrndctYomeA+FYvbFTBr9exyxCKN6hqGQorIaKHXjz1svSuY9Ttl0Jp1na+l
-         DXy5dqwCFpLAGhcs5t5XndmJKumsWXphdzmP8taEMWLP4V4Kp1GtTimPKLLz8lEuTn+9
-         3cOW1C2sW57FHMh4NCvVV8XRvVOxz8jBY4Kk9eEx0W1X8AzNw4+xuYaBLOS1JTDXH4WG
-         QRuj6b7od4ZAfUK8hpZ+eMjjCX+yS3q8wL+iw9qm2jwtVanJDpZZP3bmaUOBfI5iQDxV
-         uLxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739321783; x=1739926583;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ivh9AzheXIKHdwI+6JcoW6n5m0LCFzWHrb18akb3wpw=;
-        b=L/k00qKDyE4eWV8OoPfRUA/1sB+YxwRtWJkNfkUlbjUy+zZOwXDCjEmDLUtAQWYvkB
-         k8JxjEzbzL+oTbbATkoM+RODNt6uYqJBcb5CvkvVQE14DBTjkoDOc6JFHH0HJw4wOycG
-         xgOZKjcSSPD3Sppwd+xYgoa4Nn8FVltDCvjEw3geyTH0HVYn5D0AYH3NtA7l1Qy29szt
-         4G5xmFPHpBZgFfpq1f+97kbcz3n3NNeCI4/uvaTFfzlvKYtssQP2kKoPeDicCC07Aygw
-         kEBVOqpI8XLuZkoX4R1J4zrGnDW9l0VRgmGU+YR8AfqMJWqTp/r1MOgDAwQPD+2KHN/u
-         BSnA==
-X-Gm-Message-State: AOJu0Yx+pF3iLxYMqhb8eMfHngBrJTuTfpTMnpuMcedOrbHe1UxeAs/z
-	Cu6pjby5PN6DPgYz+R6h7OhGAy8GQd7+Itvf4uAvwOw3NhURJ4IIjj4b8rqGuw==
-X-Gm-Gg: ASbGnctcGEFtdxhRKHWhazRU9bw+AxEEyAo+WZloUCIODWE+owoNnjKwRHklxFjlmxc
-	WnXBNq9UX4q7mIygKG8Tj6CrxphkFoIpJBTBLJRAyg0K4aXh9H4TGcPWC40q+2A4RhPI9OvL7aH
-	1kZhPUkbXmBpzM9xpb+GGgANKfFCG4vIU7wS6VL0O2cAjDkNgSlCK17N2EplLr5DB0kk/oxQpJu
-	l22nVOsV/9WW+st0FPRtv2z6GaALaXZV1Dslwg6d7tpMhJaOMTjISDhOHMtGWyP0jcMabyeq1Dt
-	9dpqznrxM8GYAn5OjkdBfumH7af4p8/WBsI61mIVeJs5ZsLZYgQOmRVAH6/eog==
-X-Google-Smtp-Source: AGHT+IE1AfJuJzaHf2oysXFlqioTFb+uK5152VMOgYK5OLbaKeSNVULBQuOJ5dxwdZzPVqNLcrYZHQ==
-X-Received: by 2002:a17:903:19e6:b0:216:2839:145 with SMTP id d9443c01a7336-220befcac4bmr648985ad.1.1739321782337;
-        Tue, 11 Feb 2025 16:56:22 -0800 (PST)
-Received: from google.com (154.164.227.35.bc.googleusercontent.com. [35.227.164.154])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fbf98d0765sm187583a91.20.2025.02.11.16.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 16:56:21 -0800 (PST)
-Date: Wed, 12 Feb 2025 00:56:17 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: error: gendwarfksyms: process_module: dwarf_get_units failed: no
- debugging information?
-Message-ID: <20250212005617.GA1701202@google.com>
-References: <202502120752.U3fOKScQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="arQIwJZi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739323233; x=1770859233;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Z98xk3C2YQwVk4dPClx8w0Sy0PLlv9Q8GUi9gv61H3A=;
+  b=arQIwJZiLIQ3YHICXgkkp8YaaqaBVP/rHtpBv6/MUau6vbo5e650je9H
+   g5Z4TXYqrGgWXpwm0tButHcJ5Dq3cPz0UltHDgaW9+w62myV7shcsXdZl
+   PnbyCiteHX3L9bz84fl3UiDm5g799Y3M9QIOdgH0z5cHcgPhiWWuWe1yR
+   m31zhsFLUgLeLmSOJpLuVnx/LwcVcnmZ2Zf83Idb5nuBiBeiM630EE/VY
+   pN5toHNHdrULXE04VnU38cS2shcd/h+EjgcnuJra0YidjDZoxMfCk9WMI
+   valOPyb4flNuGa7z9YnVUaqDCvt7Rt1Zv/cHOXIbz0M4Inj8VAOgD/E7c
+   g==;
+X-CSE-ConnectionGUID: 5U/YOYERQgiBtNWSnQuVEQ==
+X-CSE-MsgGUID: JxrLtE9YTfC8523GHxshMg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="57372377"
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="57372377"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 17:20:32 -0800
+X-CSE-ConnectionGUID: TbR4B7l9TXibYOCWvAcjXA==
+X-CSE-MsgGUID: Th3Rct0mQSWReV53OJzTdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="112428541"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 11 Feb 2025 17:20:30 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ti1QS-0014w2-1D;
+	Wed, 12 Feb 2025 01:20:28 +0000
+Date: Wed, 12 Feb 2025 09:19:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [rostedt-trace:pmem-on-reserve-mem-fail 6/10]
+ kernel/trace/trace.c:6027:38: error: incomplete definition of type 'struct
+ module'
+Message-ID: <202502120954.IwPOQJzd-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,74 +62,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202502120752.U3fOKScQ-lkp@intel.com>
 
-On Wed, Feb 12, 2025 at 07:55:45AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   09fbf3d502050282bf47ab3babe1d4ed54dd1fd8
-> commit: 9c3681f9b9fd12cdbc4a542df599f1837512f3d5 kbuild: Add gendwarfksyms as an alternative to genksyms
-> date:   5 weeks ago
-> config: s390-randconfig-002-20250212 (https://download.01.org/0day-ci/archive/20250212/202502120752.U3fOKScQ-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502120752.U3fOKScQ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502120752.U3fOKScQ-lkp@intel.com/
-> 
-> All error/warnings (new ones prefixed by >>):
-> 
-> >> error: gendwarfksyms: process_module: dwarf_get_units failed: no debugging information?
-> --
->    In file included from <stdin>:3:
->    In file included from arch/s390/include/asm/asm-prototypes.h:4:
-> >> include/linux/kvm_host.h:1908:24: warning: field 'desc' with variable sized type 'struct kvm_stats_desc' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
->     1908 |         struct kvm_stats_desc desc;
->          |                               ^
->    1 warning generated.
-> >> error: gendwarfksyms: process_module: dwarf_get_units failed: no debugging information?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git pmem-on-reserve-mem-fail
+head:   d877ee1b587be39c141df16a6f92efb0e90b30fd
+commit: 2619aa2c2e2767ba8b87e26deac031e4f44d49cc [6/10] tracing: Have persistent trace instances save module addresses
+config: x86_64-buildonly-randconfig-003-20250212 (https://download.01.org/0day-ci/archive/20250212/202502120954.IwPOQJzd-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502120954.IwPOQJzd-lkp@intel.com/reproduce)
 
-The issue appears to be that the files in arch/s390/purgatory are
-always built without debugging information, even though they include
-code that uses EXPORT_SYMBOL.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502120954.IwPOQJzd-lkp@intel.com/
 
-I suspect the correct solution here is to ignore the object files in
-this directory when calculating modversions. The quick patch below
-fixes the build issue for me. Masahiro, does this look reasonable to
-you?
+All errors (new ones prefixed by >>):
 
-Sami
+>> kernel/trace/trace.c:6027:38: error: incomplete definition of type 'struct module'
+    6027 |         entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
+         |                                          ~~~^
+   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
+     394 | struct module;
+         |        ^
+>> kernel/trace/trace.c:6027:44: error: use of undeclared identifier 'MOD_TEXT'
+    6027 |         entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
+         |                                                   ^
+   kernel/trace/trace.c:6028:30: error: incomplete definition of type 'struct module'
+    6028 |         strscpy(entry->mod_name, mod->name);
+         |                                  ~~~^
+   include/linux/string.h:114:55: note: expanded from macro 'strscpy'
+     114 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |                                                              ^~~
+   include/linux/string.h:80:21: note: expanded from macro '__strscpy0'
+      80 |         sized_strscpy(dst, src, sizeof(dst) + __must_be_array(dst) +    \
+         |                            ^~~
+   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
+     394 | struct module;
+         |        ^
+   3 errors generated.
 
 
-diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
-index bdcf2a3b6c41..bdcecc19441d 100644
---- a/arch/s390/purgatory/Makefile
-+++ b/arch/s390/purgatory/Makefile
-@@ -28,6 +28,8 @@ KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
- PURGATORY_LDFLAGS := -nostdlib -z nodefaultlib
- LDFLAGS_purgatory := -r $(PURGATORY_LDFLAGS) -T
- LDFLAGS_purgatory.chk := -e purgatory_start $(PURGATORY_LDFLAGS)
-+# Purgatory doesn't export symbols, so disable symbol versioning.
-+$(obj)/purgatory: skip_gendwarfksyms = 1
- $(obj)/purgatory: $(obj)/purgatory.lds $(PURGATORY_OBJS) FORCE
- 		$(call if_changed,ld)
- 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 993708d11874..cfb4b57ff617 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -309,11 +309,11 @@ getasmexports =								\
-      $(call getexportsymbols,EXPORT_SYMBOL(\1);) ; }
- 
- ifdef CONFIG_GENDWARFKSYMS
--cmd_gensymtypes_S =							\
-+cmd_gensymtypes_S = $(if $(skip_gendwarfksyms),,			\
- 	$(getasmexports) |						\
- 	$(CC) $(c_flags) -c -o $(@:.o=.gendwarfksyms.o) -xc -;		\
- 	$(call getexportsymbols,\1) |					\
--	$(gendwarfksyms) $(@:.o=.gendwarfksyms.o)
-+	$(gendwarfksyms) $(@:.o=.gendwarfksyms.o))
- else
- cmd_gensymtypes_S =							\
- 	$(getasmexports) |						\
+vim +6027 kernel/trace/trace.c
+
+  6007	
+  6008	static int save_mod(struct module *mod, void *data)
+  6009	{
+  6010		struct trace_array *tr = data;
+  6011		struct trace_scratch *tscratch;
+  6012		struct trace_mod_entry *entry;
+  6013		unsigned int size;
+  6014	
+  6015		tscratch = tr->scratch;
+  6016		if (!tscratch)
+  6017			return -1;
+  6018		size = tr->scratch_size;
+  6019	
+  6020		if (struct_size(tscratch, entries, tscratch->nr_entries + 1) > size)
+  6021			return -1;
+  6022	
+  6023		entry = &tscratch->entries[tscratch->nr_entries];
+  6024	
+  6025		tscratch->nr_entries++;
+  6026	
+> 6027		entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
+  6028		strscpy(entry->mod_name, mod->name);
+  6029	
+  6030		return 0;
+  6031	}
+  6032	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
