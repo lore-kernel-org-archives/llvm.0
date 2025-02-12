@@ -1,107 +1,137 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C5920C486
-	for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 15:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8E8211A3F
+	for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 16:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739374305; cv=none; b=NZOBTgfHXcfNLQ9Z2DyU9sjR6U49OBz8MzQVeecC0n27klEdFBSPPzaoIfCxye8i7BjV0CE8sD7TWHqi1yMynargPZMLpdilh+1D5wWjISYdgZJ8t1MwDxdI1wrZITQEUZrAiKDngEmUjyzKm1/T5UrL00WALrNuBlJjTZRG+A4=
+	t=1739377429; cv=none; b=RLEY26eMmHzldNNWTgYLjMkKSeudrmVMugtVPxwLUV9RSpTTA6PEiPhcMqfNxFJzYFf1v5r/GPuXbz9mHY3qBAbvZDSNJ9eX7fxXYiRk5bNwFo8JnwQ1dlmrMCDPbM5cS7qxjUSJY5jpulbdtxJCn1AikRVn/FVQw+TJM+ODrBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739374305; c=relaxed/simple;
-	bh=Kd+6DzKTiuHkjzGkdtLbyCkTyy0yaluQp17EPwunXIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHSBg/SxgVRd0SS8cAtckJf5jgUCTPXBrBPCuvisnXfqWelKTGm+yxAa1fDmhK8AybD0ri92sQN4IIJgvkXOCMUycqp1zMj8AS4zn3pMoFsYI5NmQAVK0d9/J3JIEgQUOWW6Jnyg7ntrf5HVc+yrc8x0kp5ZseadDGWNisWl8zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RYKgoQnp; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1739377429; c=relaxed/simple;
+	bh=XL39NdLk2V+axPm4CJnYFNcvDmWaUc/u1gUKMgoOE1g=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=JhkvARBJx8jh11sJZwNCXeFSFhrhFydXnDnMaLvcTKq9xH8hleDMDNOQ9A4PP0rydHPLKq7nUCcdpBOu9SkJ/VoeTD7N3cNtNH0grGbMC4HyMa3/vq/ejyU8onGTUiELj3bTFY9E/fT5uZKayZUSFgMvy2jM3e6muP2wU8+LsLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Y6DCvZ2n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GPCQA8P+; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RYKgoQnp"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab7483b9bf7so1015064566b.3
-        for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 07:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739374302; x=1739979102; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YSq+cHNnWSDiFyg3hiZUKEZKM5fOb5ovEsLt9hQ8kFA=;
-        b=RYKgoQnpE/q/BQlY54PW5GQNkkBdRkhisiUH99+x69gKY05sg2GblrumjfZgouHAiZ
-         LvXhWSY46+AhV3C4/zhGktfZ8ZEc3GwLA1ehXBfLDZ0cgT0B1pZEQ1OQoePqJ5fNkaNR
-         tlJ1g962lzPmWO171sU+hTpcf80ZWte622U5RuEeLCvYM9c2Uz4V2fOB7vZoUecMyQN0
-         gOnTaRaM8Zwn6JGa3lVSXC3z4MLcLoIa6+KDQ5sg4kein8BxTnE92dSk3HkVGqJqyoSi
-         n3VJ2bVwtpvvMy4pGXUXh1430wHSpeE/0956nGUdzPgsebZWJyXAufU5la+zlhSvgSC+
-         sI4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739374302; x=1739979102;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YSq+cHNnWSDiFyg3hiZUKEZKM5fOb5ovEsLt9hQ8kFA=;
-        b=ERBQ1/Eq9GAbKgaifzd4oH8JpcMhoYx+dSdDzI6iZplDQr2dXzl4dKUS6xBO6oEk3U
-         QQLA5gS0oKtuVpqjJCe652mYrihxkp1rz+XfoVJXdpwxq7xtzN6mhs7XuCDtCg5okeX9
-         a0YZemuWRppQHgDBr6bdUe/jougU4hJ0tFWZ11hDToiiGHtoCuFTxz+VDngBNzAhKgnu
-         gOn0/pMA6x2SsoMD2khaJKRVj7cL344mF0/fLFup2/ajQSKKrJzbJnlR8ByLFxAy/z5i
-         WJz0bzehQo+buG4vpfTmibMpxiBXBHfG8hIKPoKuTLhLI2VNvVcm8OQCOEvAntyWhV7l
-         lZWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUARHJzOawRCvFwpKNkcsR8vfKUjYLuboKk9JFB/Ms2/YiKjoHgkAqu+bXb+GpcHa8LqoLN@lists.linux.dev
-X-Gm-Message-State: AOJu0YyDe4qFiIW9ZePkjdvf/5N4RwFOMJ0Quy+i2kM+EU3kPer3nQKS
-	+rlql6DDUEAI9hLFKvcezDaRDoZptOw5rxT5Nzzc1P4b5T+HVLUFuRzf8kUQLCg=
-X-Gm-Gg: ASbGncvFZ8AIOJ3Cbjjh127nSFnDaCpoePiFp5dWzSy98/cSn50S9gptTeJJLB4qiC0
-	1q2lbRFw9zEtUjqCTVFOia3t2p7TIMGpWF/fTEc05WWwfnwkDinP3CKG2MvHLDqFLllGYIwz7h7
-	9AoC7v+bnQNWsjR4wmPYlwyF/o9bCIzoqad9TjQDhtQcdkUCUjUOgGnvAVP5WMysIKqyIUlRyQ2
-	AQaBfgo9Z8hvqiRyPYLfcv2STYngNVl0MUAR39mMYdN77oGsBu/X527GKedZSQphrosrUHcMngz
-	vBgJQkaVdaGNCchYTbAK
-X-Google-Smtp-Source: AGHT+IEL4lA8s78vp0Gg7MOmptz86X5Vg+sujBASU2RfYgzLtUU6Y26AXdNXUW7VE46t0p06RX/ymQ==
-X-Received: by 2002:a17:907:60d6:b0:ab7:c426:f33 with SMTP id a640c23a62f3a-ab7f34a8230mr346620066b.56.1739374302011;
-        Wed, 12 Feb 2025 07:31:42 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ab7b4aba036sm737804366b.45.2025.02.12.07.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 07:31:41 -0800 (PST)
-Date: Wed, 12 Feb 2025 18:31:38 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: oe-kbuild@lists.linux.dev, David Gow <davidgow@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, lkp@intel.com,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] ww_mutex: convert self-test to KUnit
-Message-ID: <30998382-ee63-4a4e-8287-cd21c649b849@stanley.mountain>
-References: <20250210-ww_mutex-kunit-convert-v1-1-972f0201f71e@gmail.com>
- <3dabe058-2308-4990-8e5d-0af1efd27431@stanley.mountain>
- <CAJ-ks9=mKzgLhJW0dV-L8eFtkW-xt8v3GM51V4QF5Ef_ENKLvA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Y6DCvZ2n";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GPCQA8P+"
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 1E50A25401D5;
+	Wed, 12 Feb 2025 11:23:46 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-10.internal (MEProxy); Wed, 12 Feb 2025 11:23:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1739377425;
+	 x=1739463825; bh=PcRqnxiZ/Ii1llbahddi+kZG8Q9fpkjlbE4tyq6Q1Ys=; b=
+	Y6DCvZ2nhGu+5MZ5+s48phkDJ/ZP227k27zDlKQxbOcLnGYGmjhcKTp3Nxdf+f3f
+	alb4CUKGn20aNG4YJKsb+v+4LUBgRuQBIy9/djWsyRHos6MWTtipay4DJeaTtA+S
+	U8ypTbwLJOKtHj22cNh3axLu7pDaf0Wiq+Vyw6ixOXjLPH4S2U8U6sBhEbiUU76m
+	7Noi+bqNzbdwCDD7wsEOIM83fayQepizZXKDOw22cEw4kTCsGxcEkRCLpbjN5yR4
+	SW31rc9ezhP+ofvklTmHBC5qp/xi5P/zzW2eFxhgxDFBmjkwKir2d7c44iJd8Zbb
+	k4Lq4zcfKoGNTEboDTUv/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739377425; x=
+	1739463825; bh=PcRqnxiZ/Ii1llbahddi+kZG8Q9fpkjlbE4tyq6Q1Ys=; b=G
+	PCQA8P+HQ56eRkcnk1Cr6A/LB2E8JEiNhNNyUEOg+b2F+wh40yesrXLUu5H3o/kH
+	Q49peTijyu7I8QJwuerVFY3Qr1kQAvFXNMcHaW7pE3T0LmC9FYGlVZc+ffbjjW/0
+	vmDAdfw69szL2SZfcH5F8gOo/CeXgQeS4FtKJhWz0RYa0bFkcuhZhYi0JAkmXMiG
+	T2yxEUudw4RI600MdnxYAQy9vxZDklDsbZiDUYRkNUbI5JkkPWlXe/3TLTZv7aEY
+	u10kS2dKnOSevXI6IMzdO1IFu0Y5BSKewJhU5CBD28tpl7j5hLRZNQ0DJr4XqSdi
+	pz6PC5n+1JTEp/lbnMGKw==
+X-ME-Sender: <xms:EcusZ8MfIEx1bjp714sFIiGR3oLL2JQNio2NT2WvBHhHIkHJPFQSeg>
+    <xme:EcusZy_U8O_n8O6OoURh9itSPpXC-EmCE7NK0RElMj5pyY9FMiESAFnYEtsjr2ejz
+    kASz5_kQtLhjVFLXZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeggeefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhguvghsrghulhhnihgvrhhsse
+    hgohhoghhlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnug
+    gvrhhsrdhrohigvghllheslhhinhgrrhhordhorhhgpdhrtghpthhtohepuggrnhdrtggr
+    rhhpvghnthgvrheslhhinhgrrhhordhorhhgpdhrtghpthhtohepnhgrrhgvshhhrdhkrg
+    hmsghojhhusehlihhnrghrohdrohhrghdprhgtphhtthhopehlkhhfthdqthhrihgrghgv
+    sehlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhopehllhhvmheslhhishhtsh
+    drlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:EcusZzTq4Ny0Qro4oel8QcTMbqAmnx1jwVwm4_x-_HNIwyMqTKj-kA>
+    <xmx:EcusZ0vcAWMqtYh2WD0JCY2JEXSl7M6XCQlwWBoAHB26dqBGt9XSXg>
+    <xmx:EcusZ0fyHS9Omlrd-9jYIcq9itqQuBFb3YUx6VNHVWSdAwauYskHxQ>
+    <xmx:EcusZ42OxmPtPcKy825z5oczyVoaB_f00tjTjkKMqHuMdKVdVssiBQ>
+    <xmx:EcusZ86lQjZm0OHjHG52CM870dGe8QQoJ1aHEzenOumraI7bhtmYwLS3>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 7658F1C20066; Wed, 12 Feb 2025 11:23:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ-ks9=mKzgLhJW0dV-L8eFtkW-xt8v3GM51V4QF5Ef_ENKLvA@mail.gmail.com>
+Date: Wed, 12 Feb 2025 17:23:25 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+ clang-built-linux <llvm@lists.linux.dev>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ "open list" <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc: "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Dan Carpenter" <dan.carpenter@linaro.org>,
+ "Anders Roxell" <anders.roxell@linaro.org>, shuah <shuah@kernel.org>
+Message-Id: <b7dc96e3-4d8a-4da8-adda-161f8ff815b1@app.fastmail.com>
+In-Reply-To: 
+ <CA+G9fYuw3XJ3NcYGHT=Jt9mQP_si49GQNEa6sSNLeqDm9A6+Cw@mail.gmail.com>
+References: 
+ <CA+G9fYuw3XJ3NcYGHT=Jt9mQP_si49GQNEa6sSNLeqDm9A6+Cw@mail.gmail.com>
+Subject: Re: selftest/vDSO: vdso_test_abi tests with gcc-13 and pass with clang-19
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, Feb 12, 2025 at 09:33:46AM -0500, Tamir Duberstein wrote:
-> >
-> 
-> As an aside, how can I compile with the warning settings used by
-> kernel test robot?
-> 
+On Wed, Feb 12, 2025, at 15:29, Naresh Kamboju wrote:
+> The kselftest-vDSO/vdso_test_abi test encounters failures when built
+> and executed using GCC-13 on armv7 architecture.
+> The issue has been observed on both TI X15 devices and QEMU-armv7.
+>
+> Interestingly, the same test passes without any issues when built using
+> Clang-19.This failure is specific to GCC-13. but test case should have
+> been failed on clang toolchain but it did not.
 
-This is a Smatch warning.
+To clarify: the failure depends on how the toolchain is built:
+for compilers using the default 32-bit time_t in glibc, ltp does
+not notice a problem, but using gcc it will run into a testcase
+bug because the vdso_test_abi.c file incorrectly mixes libc types
+and kernel types.
 
-https://github.com/error27/smatch
-https://github.com/error27/smatch/blob/master/Documentation/smatch.rst
+> The Clang toolchain likely defaults to the traditional 32-bit time_t on
+> 32-bit Debian Trixie (except x86), leading to an ABI issue similar to
+> older compilers. This is affecting compatibility.
+>
+> This is not a new regression,
+> this report generated on Linux next but also seen on Linux stable tree.
+>
+> Test name: kselftest-vDSO/vdso_test_abi
+> Fails: gcc-13
+> pass: clang-19
+>
+> Arnd Bergmann investigated and proposed a patch which fixes the problem.
 
-Run smatch/smatch_scripts/kchecker kernel/locking/ww_mutex_kunit.c
+The patch only makes changes ltp so it tests the old system calls
+correctly regardless of the toolchain settings.
 
-regards,
-dan carpenter
+Someone still needs to change LTP to include this change as well as
+add tests for the 64-bit time_t vdso functions.
 
+     Arnd
