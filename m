@@ -1,55 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D119255E42;
-	Wed, 12 Feb 2025 17:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA23D256C70;
+	Wed, 12 Feb 2025 17:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739381050; cv=none; b=nAMM3ObnTASY97W17Q1uF+SrEdAoWYYVHoEab0fxMAwOj12pssGpyGy2A6JAolhOomPlHHcm7gvHk0AYuS5x8nKLCL5DhW+YmkQOGmBXjaAkxewFeRvfrwIVuXddyKnc/nLS4Le4uLm3PgdhSdwH7xjoe3VdSSZ/sacuzlsJiO0=
+	t=1739382625; cv=none; b=gLRcqFUvSoJxdiH3/Lkr6KHAplnwckZ1auUhFDATofXDUCa1rAjVRhr0xJAGuSgxSqlVFCXWw7kZWlDUuOMwTw+98Eb4YzvUlcW9CVBVxiLI7Gj4fj5XiNYo00WCm1JFAAejkG68OUp7lI62E+zuzhSP0wclbofs+E9I6Tfto4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739381050; c=relaxed/simple;
-	bh=YfJPNeZAL/Gt0QVU16PpXHr2YpH3wLeO4NQhZ0LMyVg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=M96LkAR0+TVMRfX4zXS55jds5TAcegdxQS0QL4B9jD6wsHcCtVg5Yhesbd60T7Mvl6dIBFvdUdgyD+m6fihw3z8rne4w/B9H+nHycF6wxWaf/eve8+3LmAHL6VLCdqGvTLPJXBI8uiiYeYoU8kaWaHPj68tnwCAGW3T2MS9PpyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0avArbb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739382625; c=relaxed/simple;
+	bh=xZvmmxew4CnhVqjM32U7p1D3znh9FIGOmHRpkoJl+O0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oey58aCzr9Y2oOU6t5AVymnNRThDn2I3N1JkBv4zgk+jBoY+v/YHRKSYjbAJ1dovwYlvgND4G8h+dQJOt/B4kOtmz6WLsVq7ZTg7TxfOQndi7WBHmiVhWKt5YRIeiOCsCBkenCUPeGn1XQMa/SMV+kYf7bVkIIwhvsLLgzzshYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WWa+OM52; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0avArbb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 794C9C4CEDF;
-	Wed, 12 Feb 2025 17:24:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WWa+OM52"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323D4C4CEDF;
+	Wed, 12 Feb 2025 17:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739381049;
-	bh=YfJPNeZAL/Gt0QVU16PpXHr2YpH3wLeO4NQhZ0LMyVg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=I0avArbbteaS2Lwb7P9TWDjtAt1WkflFYawJO0qimlKC8G4kdj///hsGW5yiSQRCU
-	 JLf1tsZjXCO0DMEmNoLlfzfXvdz0ryY5DIYAdeHKJMVBZ8XkzqZ8ak65+usb/KcB8Z
-	 U3bKpmsMQnpkIHe6n2lRD+eL/loPeEO/0igptg2ztZe3KS7sDMTkzn7pO6XLjM9jhp
-	 mtlW8cX6Y5t5YwKRMstTW6Xtk7XROP6xoa7vv9vf5+TS+b7q8MUU+FAlZw3LwV4ZuQ
-	 1wytYUboWc5mKZQ0uyr14pMnQbRa3ruLu0smT1eqBnrBY39c9qdOZOyP7u/yucOLZz
-	 h/skKaujX0pFQ==
-Date: Wed, 12 Feb 2025 10:24:05 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc: conor@kernel.org, ojeda@kernel.org
-Subject: Prebuilt LLVM 20.1.0-rc2 uploaded
-Message-ID: <20250212172405.GA3066861@ax162>
+	s=k20201202; t=1739382625;
+	bh=xZvmmxew4CnhVqjM32U7p1D3znh9FIGOmHRpkoJl+O0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WWa+OM52DiG+6GoAzl1LIYXjxX/CLkKVjY6vHemgp0d4lV5GJxy/g8VgMFLYWzLyt
+	 eHRpejIBOXOXD5o35m7QidDjGM4BQrUAScmMDVilQJtP0YkRij6WEdgapWB9l72OMU
+	 nga9wS8mQLfiQqG3566va5z+TV3He/FKXMokoTf2kJNxW83jA44FLo2cHYyaioeyfL
+	 gkatAg9EYsf8SD8DBxkRGPF133MyNrvPvpvKPAfKt8rVffm2dVIcB8PNnTAPUFMSIz
+	 v3vVIzKwRLg+46JuJgANUHlIAKvUvqv+W4a4/qa5ZCmmRwd/cJRGt1k4ePNfQFZ/z7
+	 sj8uqZXxsxohA==
+Date: Wed, 12 Feb 2025 09:50:23 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] compiler.h: Specify correct attribute for
+ .rodata..c_jump_table
+Message-ID: <20250212175023.rsxsw7pno57gsxps@jpoimboe>
+References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20240924062710.1243-1-yangtiezhu@loongson.cn>
 
-Hi all,
+On Tue, Sep 24, 2024 at 02:27:10PM +0800, Tiezhu Yang wrote:
+> Currently, there is an assembler message when generating kernel/bpf/core.o
+> under CONFIG_OBJTOOL with LoongArch compiler toolchain:
+> 
+>   Warning: setting incorrect section attributes for .rodata..c_jump_table
+> 
+> This is because the section ".rodata..c_jump_table" should be readonly,
+> but there is a "W" (writable) part of the flags:
+> 
+>   $ readelf -S kernel/bpf/core.o | grep -A 1 "rodata..c"
+>   [34] .rodata..c_j[...] PROGBITS         0000000000000000  0000d2e0
+>        0000000000000800  0000000000000000  WA       0     0     8
+> 
+> There is no above issue on x86 due to the generated section flag is only
+> "A" (allocatable). In order to silence the warning on LoongArch, specify
+> the attribute like ".rodata..c_jump_table,\"a\",@progbits #" explicitly,
+> then the section attribute of ".rodata..c_jump_table" must be readonly
+> in the kernel/bpf/core.o file.
+> 
+> Before:
+> 
+>   $ objdump -h kernel/bpf/core.o | grep -A 1 "rodata..c"
+>    21 .rodata..c_jump_table 00000800  0000000000000000  0000000000000000  0000d2e0  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+> 
+> After:
+> 
+>   $ objdump -h kernel/bpf/core.o | grep -A 1 "rodata..c"
+>    21 .rodata..c_jump_table 00000800  0000000000000000  0000000000000000  0000d2e0  2**3
+>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+> 
+> By the way, AFAICT, maybe the root cause is related with the different
+> compiler behavior of various archs, so to some extent this change is a
+> workaround for LoongArch, and also there is no effect for x86 which is
+> the only port supported by objtool before LoongArch with this patch.
 
-I have built and uploaded LLVM 20.1.0-rc2 to
-https://mirrors.edge.kernel.org/pub/tools/llvm/.
+Right, this sounds like a bug in the GNU assembler.  It should default
+to the same section flags regardless of arch.
 
-If there are any issues found, please let us know via email or
-https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
-opportunity to get them fixed in main and backported before 20.1.0 final
-is released.
+> 
+> Cc: stable@vger.kernel.org # 6.9+
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  include/linux/compiler.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+> index ec55bcce4146..4d4e23b6e3e7 100644
+> --- a/include/linux/compiler.h
+> +++ b/include/linux/compiler.h
+> @@ -133,7 +133,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>  #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+>  
+>  /* Annotate a C jump table to allow objtool to follow the code flow */
+> -#define __annotate_jump_table __section(".rodata..c_jump_table")
+> +#define __annotate_jump_table __section(".rodata..c_jump_table,\"a\",@progbits #")
 
-Cheers,
-Nathan
+This caused a regression, this hack apparently doesn't work with Clang:
+
+  $ readelf -WS kernel/bpf/core.o | grep c_jump_table
+    [43] .rodata..c_jump_table,"a",@progbits # PROGBITS        0000000000000000 00d610 000800 00   A  0   0 16
+
+Notice the section name is literally:
+
+  .rodata..c_jump_table,"a",@progbits #
+
+-- 
+Josh
