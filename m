@@ -1,92 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4586023A9AE;
-	Thu, 13 Feb 2025 17:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6C3203719;
+	Thu, 13 Feb 2025 17:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739469345; cv=none; b=ix8q3YxsjA3CQ3grRnmnK3OIu5JC5diQV0lIoKkXuw8CCPG4vpeeiH5XRQ88iM35AfnyNXWMEMgueiolSfumFXinr6bbKR3KlHZ5p7s3GqvDsC9n6cPw3qaDvB70qfMiL+sFSdiL3qKOmLDwy1i2UMVp6gZYeZlNZ7kE8rm79w8=
+	t=1739469491; cv=none; b=MWSAwY4+MAm8OgJ5YmKRYkcrWtl70WvhIeaAlCN1rZvJBO8/uUBV9IeckD6eXxGoKPt12hWMCInS5P/jYZq61rrfKQsp2MKeOfTc3h7+cZD5X+zLdlsUu32xQGpoT93ODgUzLn0SUCv8ALLgafza86fgP5AArgLJVb1TK7vk2a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739469345; c=relaxed/simple;
-	bh=/PNpSbgiLWG9bLBWpPA4uVPKXUWGs7jN8qVFPTrfZTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ar1Hn/hqVCDEbZSfKs13fV2SKQ4UG4+dsj6k29Wksev8kpNmjWQuiUHSRvfCRZksaOpp1wVEsOjRClDr8T/7Zf+ddS64s7ykPlt9OhJTLUcEQNrbEx2S0hP1GHiL74izRfm/WDEc9r2M+qELZm23mgiScbia5ZfNVr3NN6gFxFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NByeFNW2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739469491; c=relaxed/simple;
+	bh=pTjnXaCkQBe1kTuxOtbflijiIwkKRuna0EHZiG09u8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=io36BBOe+xfHn9gqnaaUogSbyccD7XD/GVkHjIQCrKFziipQMUEFlYWMKYLtTyvepGGeVYfoYeFyX7Vies1qXT3BomUZ/5FnpVO4MB0YV3qL9/QIffuCVKm32fahj5ggT0uP2f/CIFBcI2ubFx9do0YE7Hc4y5tisE6DSnvkLPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KWJafUJA; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NByeFNW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B818C4CEE5;
-	Thu, 13 Feb 2025 17:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739469344;
-	bh=/PNpSbgiLWG9bLBWpPA4uVPKXUWGs7jN8qVFPTrfZTk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NByeFNW2HNKG+Or1s9nAySboW83Ggzz0b+NOyt3FmxlW23UICV1ytS5xRVjQzEeeg
-	 4iJNSm97SoPyNAqfp5g1tVZ65hAFPAlED3c3qWsS4JwMZVlZaZPWHQc9EGpClUrkbA
-	 m/KKbHaNX/khx5EIpDIOHfXYOVdk0Ge+R3ZgWuKN7qbe4To0dT57j+dLf/I7tdjfSx
-	 j1LTxDNehVvEnZ+G1qUDffvJuopixRbVWOwUFno1lKLsmEhdPclEUeJFauTXsJn46I
-	 ufcJp0CbcbIcVx3oN0eZhgAeXsoEHxgx5PuyBh+K7P//iB8HlrciSItjHlYy+yXj12
-	 FG5rYbSe8wVDg==
-Date: Thu, 13 Feb 2025 10:55:39 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] kbuild: userprogs: fix bitsize and target detection
- on clang
-Message-ID: <20250213175539.GB2756218@ax162>
-References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
- <20250213-kbuild-userprog-fixes-v1-1-f255fb477d98@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KWJafUJA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739469490; x=1771005490;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pTjnXaCkQBe1kTuxOtbflijiIwkKRuna0EHZiG09u8U=;
+  b=KWJafUJATlFw6x3we5mN1eCb63j/9Z3mXaNoiymMgwuYVPtDgvO1VvpA
+   namwn5uI/4pInCMhRkN+DUH5zEbQYqhBuFdDW+eZ34v/U0B3WZzwmL3lu
+   14C/JlH8I8pDIvhOHwaDNMPeS0qFdN4JjtY9oibX3EvqhWJI+v/YCfD/Q
+   Yr+pabVodakQsJQiB0Ig/GBJk5VKrP3SCdkqllD8eIwsLjJ5VhFCW6m9X
+   515xZWtD/crMGxSmXRXdgyPMQitNOkaPng3GTvGFDUdbNvu9TkAOXAbNA
+   xrHVUDyGvZV6HSMAZyRD3AD8aBD6/Zkx+vWm6c40yF+oKf9oOwH/oxVA9
+   Q==;
+X-CSE-ConnectionGUID: 9Zr3OWl5RVu6y81d/uKlJw==
+X-CSE-MsgGUID: 2PvjQybaSCCIyGjzgvxkkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="50403715"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="50403715"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 09:58:10 -0800
+X-CSE-ConnectionGUID: 4qEqk1NFRhmOic3KQJeF1A==
+X-CSE-MsgGUID: ucHdIhxJT5ai2XhG0mjBOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118417026"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 13 Feb 2025 09:58:08 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tidTS-0018XF-0S;
+	Thu, 13 Feb 2025 17:58:06 +0000
+Date: Fri, 14 Feb 2025 01:57:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [krzk-github:n/str-enable-disable 35/36]
+ drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c:188:35: warning: unused
+ variable 'wlfw_mem_seg_s_v01_ei'
+Message-ID: <202502140139.1APWnYEK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250213-kbuild-userprog-fixes-v1-1-f255fb477d98@linutronix.de>
 
-On Thu, Feb 13, 2025 at 03:55:17PM +0100, Thomas Weiﬂschuh wrote:
-> scripts/Makefile.clang was changed in the linked commit to move --target from
-> KBUILD_CFLAGS to KBUILD_CPPFLAGS, as that generally has a broader scope.
-> However that variable is not inspected by the userprogs logic,
-> breaking cross compilation on clang.
-> 
-> Use both variables to detect bitsize and target arguments for userprogs.
-> 
-> Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+tree:   https://github.com/krzk/linux n/str-enable-disable
+head:   6c9652f6b59a48e3ffc567fb41acbe262a9b0357
+commit: 021178bf9ed9bf280ce069f32ccd284d4a497e6a [35/36] wifi
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250214/202502140139.1APWnYEK-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250214/202502140139.1APWnYEK-lkp@intel.com/reproduce)
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502140139.1APWnYEK-lkp@intel.com/
 
-> ---
->  Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 9e0d63d9d94b90672f91929e5e148e5a0c346cb6..bb5737ce7f9e79f4023c9c1f578a49a951d1e239 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1120,8 +1120,8 @@ LDFLAGS_vmlinux += --orphan-handling=$(CONFIG_LD_ORPHAN_WARN_LEVEL)
->  endif
->  
->  # Align the bit size of userspace programs with the kernel
-> -KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
-> -KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
-> +KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
-> +KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
->  
->  # make the checker run with the right architecture
->  CHECKFLAGS += --arch=$(ARCH)
-> 
-> -- 
-> 2.48.1
-> 
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c:188:35: warning: unused variable 'wlfw_mem_seg_s_v01_ei' [-Wunused-const-variable]
+     188 | static const struct qmi_elem_info wlfw_mem_seg_s_v01_ei[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c:229:35: warning: unused variable 'wlfw_mem_seg_resp_s_v01_ei' [-Wunused-const-variable]
+     229 | static const struct qmi_elem_info wlfw_mem_seg_resp_s_v01_ei[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/wlfw_mem_seg_s_v01_ei +188 drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c
+
+bc17d4b90cdd3e Govind Singh 2018-10-11  187  
+11e1fcf2b494da Jeff Johnson 2022-09-14 @188  static const struct qmi_elem_info wlfw_mem_seg_s_v01_ei[] = {
+bc17d4b90cdd3e Govind Singh 2018-10-11  189  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  190  		.data_type      = QMI_UNSIGNED_4_BYTE,
+bc17d4b90cdd3e Govind Singh 2018-10-11  191  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  192  		.elem_size      = sizeof(u32),
+bc17d4b90cdd3e Govind Singh 2018-10-11  193  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  194  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  195  		.offset         = offsetof(struct wlfw_mem_seg_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  196  					   size),
+bc17d4b90cdd3e Govind Singh 2018-10-11  197  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  198  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  199  		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+bc17d4b90cdd3e Govind Singh 2018-10-11  200  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  201  		.elem_size      = sizeof(enum wlfw_mem_type_enum_v01),
+bc17d4b90cdd3e Govind Singh 2018-10-11  202  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  203  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  204  		.offset         = offsetof(struct wlfw_mem_seg_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  205  					   type),
+bc17d4b90cdd3e Govind Singh 2018-10-11  206  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  207  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  208  		.data_type      = QMI_DATA_LEN,
+bc17d4b90cdd3e Govind Singh 2018-10-11  209  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  210  		.elem_size      = sizeof(u8),
+bc17d4b90cdd3e Govind Singh 2018-10-11  211  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  212  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  213  		.offset         = offsetof(struct wlfw_mem_seg_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  214  					   mem_cfg_len),
+bc17d4b90cdd3e Govind Singh 2018-10-11  215  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  216  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  217  		.data_type      = QMI_STRUCT,
+bc17d4b90cdd3e Govind Singh 2018-10-11  218  		.elem_len       = QMI_WLFW_MAX_NUM_MEM_CFG_V01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  219  		.elem_size      = sizeof(struct wlfw_mem_cfg_s_v01),
+bc17d4b90cdd3e Govind Singh 2018-10-11  220  		.array_type       = VAR_LEN_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  221  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  222  		.offset         = offsetof(struct wlfw_mem_seg_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  223  					   mem_cfg),
+bc17d4b90cdd3e Govind Singh 2018-10-11  224  		.ei_array      = wlfw_mem_cfg_s_v01_ei,
+bc17d4b90cdd3e Govind Singh 2018-10-11  225  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  226  	{}
+bc17d4b90cdd3e Govind Singh 2018-10-11  227  };
+bc17d4b90cdd3e Govind Singh 2018-10-11  228  
+11e1fcf2b494da Jeff Johnson 2022-09-14 @229  static const struct qmi_elem_info wlfw_mem_seg_resp_s_v01_ei[] = {
+bc17d4b90cdd3e Govind Singh 2018-10-11  230  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  231  		.data_type      = QMI_UNSIGNED_8_BYTE,
+bc17d4b90cdd3e Govind Singh 2018-10-11  232  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  233  		.elem_size      = sizeof(u64),
+bc17d4b90cdd3e Govind Singh 2018-10-11  234  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  235  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  236  		.offset         = offsetof(struct wlfw_mem_seg_resp_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  237  					   addr),
+bc17d4b90cdd3e Govind Singh 2018-10-11  238  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  239  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  240  		.data_type      = QMI_UNSIGNED_4_BYTE,
+bc17d4b90cdd3e Govind Singh 2018-10-11  241  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  242  		.elem_size      = sizeof(u32),
+bc17d4b90cdd3e Govind Singh 2018-10-11  243  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  244  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  245  		.offset         = offsetof(struct wlfw_mem_seg_resp_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  246  					   size),
+bc17d4b90cdd3e Govind Singh 2018-10-11  247  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  248  	{
+bc17d4b90cdd3e Govind Singh 2018-10-11  249  		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+bc17d4b90cdd3e Govind Singh 2018-10-11  250  		.elem_len       = 1,
+bc17d4b90cdd3e Govind Singh 2018-10-11  251  		.elem_size      = sizeof(enum wlfw_mem_type_enum_v01),
+bc17d4b90cdd3e Govind Singh 2018-10-11  252  		.array_type     = NO_ARRAY,
+bc17d4b90cdd3e Govind Singh 2018-10-11  253  		.tlv_type       = 0,
+bc17d4b90cdd3e Govind Singh 2018-10-11  254  		.offset         = offsetof(struct wlfw_mem_seg_resp_s_v01,
+bc17d4b90cdd3e Govind Singh 2018-10-11  255  					   type),
+bc17d4b90cdd3e Govind Singh 2018-10-11  256  	},
+bc17d4b90cdd3e Govind Singh 2018-10-11  257  	{}
+bc17d4b90cdd3e Govind Singh 2018-10-11  258  };
+bc17d4b90cdd3e Govind Singh 2018-10-11  259  
+
+:::::: The code at line 188 was first introduced by commit
+:::::: 11e1fcf2b494da810d551553c46f739e36501adc wifi: ath10k: Make QMI message rules const
+
+:::::: TO: Jeff Johnson <quic_jjohnson@quicinc.com>
+:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
