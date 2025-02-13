@@ -1,232 +1,206 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFED2135CD;
-	Thu, 13 Feb 2025 10:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C111C84D4;
+	Thu, 13 Feb 2025 11:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739444305; cv=none; b=EFEUY33T4wUVeLPof5Ve9tMdCpj977RNlCOQcdxx16NL0dLaISfhQosu/4H/KshKzZn/5pGHOHw6eGJY6rFdKwtJ6dcJ8LivgzGoPrdXu6NY6lsZjz/DkI4y7193j9E7T9QUvWV0htFiDfNR2tuIZIj2tnMJ0zeVJIMA54dannQ=
+	t=1739446767; cv=none; b=bS3sIfqbZ/Jc4lhh2R7YjaYPjDmSdffuTr+HhKCkZBLhbI9hP3gwEaGfocZxLTQ16bBa9qaI4mB9YX0bsQljT1JPeJ+uzOt+mwkWMgKYy5hYijVhzYrnvu/yhb7CuXscE/nPxBzL8kyH9thKjxCvv5rBpWwX0Ex+rXrK95qiNnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739444305; c=relaxed/simple;
-	bh=pTt4Dk/mWDy0iReP/udyoCzdyuN4y/N0LeolOL9CKSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QmIBGfWKNy8t60ECkwCNvzBGJDEas2cqXg4bAKZFMPG2kZ1ULUzI4JACwJJWVNtNFg1RWBbNFoN1u+FYLT2YbVvDRlbWPWpXd6vPBbOaxgc+qCtS7wEQ/tqRqFClSPtg1lx4LhyxgT1E7f2tD9ULv2ktJx8zRTjwc+S5Eq7Nx54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j30VancN; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1739446767; c=relaxed/simple;
+	bh=9kiFxEHvsjkuDr/sgnEM2astjy91bVr0mJChjjQ6NfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QeYxt9HP4p0mndjjbgf17Kn3XvvHkIgd30j5vR39wo/cVbBfeqGLtF1KfkwYfBzWSEdgjaEQJGlgkUHxHb3g9t/J2rrZidp73oSVfdCaFYFPc40LY/eRpdWpNWnDM/w022dBmiyTn1B2XUpgWDVRJKsqkwvaclC36Ps4j6AWrpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SxTyhNUe; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j30VancN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SxTyhNUe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739444304; x=1770980304;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pTt4Dk/mWDy0iReP/udyoCzdyuN4y/N0LeolOL9CKSo=;
-  b=j30VancNgMMQOMCDRfluWbQhe2NYbPUNnpY4Nu2Ibx+yQCAdLUFKxvWM
-   ygbpivIf+VxOl63qysB1Kocz4LPsnJK93yZsj5X3F3ej7OSV8bprhHPXj
-   QV2o1/4a1K5qIxHkiwlqGqrNTTuNfkpzt+HTfl/JhafAfa8JUOPY61uOm
-   Z7L9wALx2CzBNLIXfEyjTYqXsb4m4tJTMuIliVXhXmuyy5rK60ukZu+iG
-   HnyIr0w8L0qP5J0HLyT4xISUes7JXD8AjuK3kH4P6HyAOkZqXaN94r6mf
-   Pr7bOgYMOOnN4wIhKjdFurFPCHBBudPFrieyMl30dTzKnosupFBwh1fEn
+  t=1739446764; x=1770982764;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9kiFxEHvsjkuDr/sgnEM2astjy91bVr0mJChjjQ6NfU=;
+  b=SxTyhNUeAWFjAr8jiIeheSAGj02nze6SMo2VA5l1y/ug9DZLCSe9qLGB
+   xWAAF3/+isB9iXSwohtdqZ1oa+GT9gkiqNHOVc3p91DkmnXfopO+CYxZ5
+   +DJYG8A7ruHX3zfR4nke93+T5Qm0PPwwC2I4mk0Sn2XzE+at7meHj1ig9
+   HUhShFd6RfgEUsnJ2cga0BEHJSZgHt0apKfZeWBeCugVMgciAgg21mD9v
+   wOTfbMIIKqw1l/50Apeagr5WjKrGLLarjusEURtETWRHpzzlAUb7EA6u/
+   Qv1NaiNERKLi+Sk11f10bmifSpku+LrtffggOEBzkTby/OjLzh9XIhKa5
    A==;
-X-CSE-ConnectionGUID: U0FsK74CS+Gua8lKPf2wXQ==
-X-CSE-MsgGUID: qh8Qt6auRKeyABo20Hkr5A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="57542065"
+X-CSE-ConnectionGUID: BY9MdFPXRSy9YyUSTb5jvw==
+X-CSE-MsgGUID: cKZF4RjwQs+ALyCkJ/1UTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="39374103"
 X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="57542065"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 02:58:23 -0800
-X-CSE-ConnectionGUID: zI83mEhvQIKfX2/42nUXVg==
-X-CSE-MsgGUID: ubMBOrkqR02OfjXgd6sv2A==
+   d="scan'208";a="39374103"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 03:39:23 -0800
+X-CSE-ConnectionGUID: PD3bawPcSNus3/dIkF79tA==
+X-CSE-MsgGUID: Abe1wDprThula4v/GDOR5A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="112942474"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="112986275"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2025 02:58:18 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 13 Feb 2025 03:39:23 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tiWvA-0016wl-0J;
-	Thu, 13 Feb 2025 10:58:16 +0000
-Date: Thu, 13 Feb 2025 18:57:25 +0800
+	id 1tiXYu-0016z1-1o;
+	Thu, 13 Feb 2025 11:39:20 +0000
+Date: Thu, 13 Feb 2025 19:39:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andrea Righi <arighi@nvidia.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Joel Fernandes <joel@joelfernandes.org>, Ian May <ianm@nvidia.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH 6/7] sched_ext: idle: Per-node idle cpumasks
-Message-ID: <202502131834.ni8ojoRO-lkp@intel.com>
-References: <20250212165006.490130-7-arighi@nvidia.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 68/69]
+ drivers/tty/serial/8250/8250_bcm2835aux.c:102:10: error: no member named
+ 'rs485_config' in 'struct uart_port'
+Message-ID: <202502131940.AoPsXI7B-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250212165006.490130-7-arighi@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Andrea,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20250212]
-[cannot apply to tip/sched/core akpm-mm/mm-everything tip/master linus/master tip/auto-latest v6.14-rc2 v6.14-rc1 v6.13 v6.14-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrea-Righi/mm-numa-Introduce-nearest_node_nodemask/20250213-014857
-base:   next-20250212
-patch link:    https://lore.kernel.org/r/20250212165006.490130-7-arighi%40nvidia.com
-patch subject: [PATCH 6/7] sched_ext: idle: Per-node idle cpumasks
-config: i386-buildonly-randconfig-005-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131834.ni8ojoRO-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131834.ni8ojoRO-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   18719ba870f2b5aac6c4ea327aacc3bec6bc98cc
+commit: a7e1e5ceadbf1e443ad44ccfc046afa234b09f77 [68/69] ops2
+config: hexagon-randconfig-002-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131940.AoPsXI7B-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131940.AoPsXI7B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502131834.ni8ojoRO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502131940.AoPsXI7B-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/sched/build_policy.c:63:
-   kernel/sched/ext.c:6014:31: warning: bitwise operation between different enumeration types ('enum scx_enq_flags' and 'enum scx_deq_flags') [-Wenum-enum-conversion]
-    6014 |         WRITE_ONCE(v, SCX_ENQ_WAKEUP | SCX_DEQ_SLEEP | SCX_KICK_PREEMPT |
-         |                       ~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~
-   include/asm-generic/rwonce.h:61:18: note: expanded from macro 'WRITE_ONCE'
-      61 |         __WRITE_ONCE(x, val);                                           \
-         |                         ^~~
-   include/asm-generic/rwonce.h:55:33: note: expanded from macro '__WRITE_ONCE'
-      55 |         *(volatile typeof(x) *)&(x) = (val);                            \
-         |                                        ^~~
-   In file included from kernel/sched/build_policy.c:64:
->> kernel/sched/ext_idle.c:136:9: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-     136 |         static DEFINE_PER_CPU(nodemask_t, per_cpu_unvisited);
-         |                ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-     115 |         DEFINE_PER_CPU_SECTION(type, name, "")
-         |         ^
-   include/linux/percpu-defs.h:93:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-      93 |         __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
-         |         ^
-   include/linux/percpu-defs.h:54:2: note: expanded from macro '__PCPU_DUMMY_ATTRS'
-      54 |         __section(".discard") __attribute__((unused))
-         |         ^
-   include/linux/compiler_attributes.h:321:56: note: expanded from macro '__section'
-     321 | #define __section(section)              __attribute__((__section__(section)))
-         |                                                        ^
-   In file included from kernel/sched/build_policy.c:64:
->> kernel/sched/ext_idle.c:136:9: error: non-extern declaration of '__pcpu_unique_per_cpu_unvisited' follows extern declaration
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-     115 |         DEFINE_PER_CPU_SECTION(type, name, "")
-         |         ^
-   include/linux/percpu-defs.h:93:26: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-      93 |         __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;                   \
-         |                                 ^
-   <scratch space>:82:1: note: expanded from here
-      82 | __pcpu_unique_per_cpu_unvisited
-         | ^
-   kernel/sched/ext_idle.c:136:9: note: previous declaration is here
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-     115 |         DEFINE_PER_CPU_SECTION(type, name, "")
-         |         ^
-   include/linux/percpu-defs.h:92:33: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-      92 |         extern __PCPU_DUMMY_ATTRS char __pcpu_unique_##name;            \
-         |                                        ^
-   <scratch space>:81:1: note: expanded from here
-      81 | __pcpu_unique_per_cpu_unvisited
-         | ^
-   In file included from kernel/sched/build_policy.c:64:
->> kernel/sched/ext_idle.c:136:9: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-     136 |         static DEFINE_PER_CPU(nodemask_t, per_cpu_unvisited);
-         |                ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-     115 |         DEFINE_PER_CPU_SECTION(type, name, "")
-         |         ^
-   include/linux/percpu-defs.h:95:2: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-      95 |         __PCPU_ATTRS(sec) __weak __typeof__(type) name
-         |         ^
-   include/linux/percpu-defs.h:50:26: note: expanded from macro '__PCPU_ATTRS'
-      50 |         __percpu __attribute__((section(PER_CPU_BASE_SECTION sec)))     \
-         |                                 ^
-   In file included from kernel/sched/build_policy.c:64:
->> kernel/sched/ext_idle.c:136:36: error: non-extern declaration of 'per_cpu_unvisited' follows extern declaration
-     136 |         static DEFINE_PER_CPU(nodemask_t, per_cpu_unvisited);
-         |                                           ^
-   kernel/sched/ext_idle.c:136:36: note: previous declaration is here
->> kernel/sched/ext_idle.c:136:9: error: weak declaration cannot have internal linkage
-     136 |         static DEFINE_PER_CPU(nodemask_t, per_cpu_unvisited);
-         |                ^
-   include/linux/percpu-defs.h:115:2: note: expanded from macro 'DEFINE_PER_CPU'
-     115 |         DEFINE_PER_CPU_SECTION(type, name, "")
-         |         ^
-   include/linux/percpu-defs.h:95:20: note: expanded from macro 'DEFINE_PER_CPU_SECTION'
-      95 |         __PCPU_ATTRS(sec) __weak __typeof__(type) name
-         |                           ^
-   include/linux/compiler_attributes.h:403:56: note: expanded from macro '__weak'
-     403 | #define __weak                          __attribute__((__weak__))
-         |                                                        ^
-   1 warning and 5 errors generated.
+>> drivers/tty/serial/8250/8250_bcm2835aux.c:102:10: error: no member named 'rs485_config' in 'struct uart_port'
+     102 |         up.port.rs485_config = serial8250_em485_config;
+         |         ~~~~~~~ ^
+   drivers/tty/serial/8250/8250_bcm2835aux.c:104:5: error: no member named 'rs485_start_tx' in 'struct uart_8250_port'
+     104 |         up.rs485_start_tx = bcm2835aux_rs485_start_tx;
+         |         ~~ ^
+   drivers/tty/serial/8250/8250_bcm2835aux.c:105:5: error: no member named 'rs485_stop_tx' in 'struct uart_8250_port'
+     105 |         up.rs485_stop_tx = bcm2835aux_rs485_stop_tx;
+         |         ~~ ^
+   3 errors generated.
+--
+>> drivers/tty/serial/8250/8250_ioc3.c:68:10: error: no member named 'serial_in' in 'struct uart_port'
+      68 |         up.port.serial_in = ioc3_serial_in;
+         |         ~~~~~~~ ^
+>> drivers/tty/serial/8250/8250_ioc3.c:69:10: error: no member named 'serial_out' in 'struct uart_port'
+      69 |         up.port.serial_out = ioc3_serial_out;
+         |         ~~~~~~~ ^
+   2 errors generated.
 
 
-vim +/__section__ +136 kernel/sched/ext_idle.c
+vim +102 drivers/tty/serial/8250/8250_bcm2835aux.c
 
-   133	
-   134	static s32 pick_idle_cpu_from_other_nodes(const struct cpumask *cpus_allowed, int node, u64 flags)
-   135	{
- > 136		static DEFINE_PER_CPU(nodemask_t, per_cpu_unvisited);
-   137		nodemask_t *unvisited = this_cpu_ptr(&per_cpu_unvisited);
-   138		s32 cpu = -EBUSY;
-   139	
-   140		preempt_disable();
-   141		unvisited = this_cpu_ptr(&per_cpu_unvisited);
-   142	
-   143		/*
-   144		 * Restrict the search to the online nodes, excluding the current
-   145		 * one.
-   146		 */
-   147		nodes_clear(*unvisited);
-   148		nodes_or(*unvisited, *unvisited, node_states[N_ONLINE]);
-   149		node_clear(node, *unvisited);
-   150	
-   151		/*
-   152		 * Traverse all nodes in order of increasing distance, starting
-   153		 * from @node.
-   154		 *
-   155		 * This loop is O(N^2), with N being the amount of NUMA nodes,
-   156		 * which might be quite expensive in large NUMA systems. However,
-   157		 * this complexity comes into play only when a scheduler enables
-   158		 * SCX_OPS_BUILTIN_IDLE_PER_NODE and it's requesting an idle CPU
-   159		 * without specifying a target NUMA node, so it shouldn't be a
-   160		 * bottleneck is most cases.
-   161		 *
-   162		 * As a future optimization we may want to cache the list of nodes
-   163		 * in a per-node array, instead of actually traversing them every
-   164		 * time.
-   165		 */
-   166		for_each_node_numadist(node, *unvisited) {
-   167			cpu = pick_idle_cpu_in_node(cpus_allowed, node, flags);
-   168			if (cpu >= 0)
-   169				break;
-   170		}
-   171		preempt_enable();
-   172	
-   173		return cpu;
-   174	}
-   175	
+f93bf758911476 Lukas Wunner        2020-02-28   82  
+bdc5f300958062 Martin Sperl        2016-01-17   83  static int bcm2835aux_serial_probe(struct platform_device *pdev)
+bdc5f300958062 Martin Sperl        2016-01-17   84  {
+eb687309136b9f Andy Shevchenko     2024-03-04   85  	const struct software_node *bcm2835_swnode;
+8c3cde5dd639af Lukas Wunner        2020-01-16   86  	struct uart_8250_port up = { };
+bdc5f300958062 Martin Sperl        2016-01-17   87  	struct bcm2835aux_data *data;
+bdc5f300958062 Martin Sperl        2016-01-17   88  	struct resource *res;
+fcc446c8aa6303 Adrien Thierry      2022-02-07   89  	unsigned int uartclk;
+bdc5f300958062 Martin Sperl        2016-01-17   90  	int ret;
+bdc5f300958062 Martin Sperl        2016-01-17   91  
+bdc5f300958062 Martin Sperl        2016-01-17   92  	/* allocate the custom structure */
+bdc5f300958062 Martin Sperl        2016-01-17   93  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+bdc5f300958062 Martin Sperl        2016-01-17   94  	if (!data)
+bdc5f300958062 Martin Sperl        2016-01-17   95  		return -ENOMEM;
+bdc5f300958062 Martin Sperl        2016-01-17   96  
+bdc5f300958062 Martin Sperl        2016-01-17   97  	/* initialize data */
+8c3cde5dd639af Lukas Wunner        2020-01-16   98  	up.capabilities = UART_CAP_FIFO | UART_CAP_MINI;
+8c3cde5dd639af Lukas Wunner        2020-01-16   99  	up.port.dev = &pdev->dev;
+8c3cde5dd639af Lukas Wunner        2020-01-16  100  	up.port.type = PORT_16550;
+eb687309136b9f Andy Shevchenko     2024-03-04  101  	up.port.flags = UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_SKIP_TEST | UPF_IOREMAP;
+f93bf758911476 Lukas Wunner        2020-02-28 @102  	up.port.rs485_config = serial8250_em485_config;
+0139da50dc53f0 Ilpo Järvinen       2022-07-04  103  	up.port.rs485_supported = serial8250_em485_supported;
+f93bf758911476 Lukas Wunner        2020-02-28  104  	up.rs485_start_tx = bcm2835aux_rs485_start_tx;
+f93bf758911476 Lukas Wunner        2020-02-28  105  	up.rs485_stop_tx = bcm2835aux_rs485_stop_tx;
+f93bf758911476 Lukas Wunner        2020-02-28  106  
+f93bf758911476 Lukas Wunner        2020-02-28  107  	/* initialize cached copy with power-on reset value */
+f93bf758911476 Lukas Wunner        2020-02-28  108  	data->cntl = BCM2835_AUX_UART_CNTL_RXEN | BCM2835_AUX_UART_CNTL_TXEN;
+f93bf758911476 Lukas Wunner        2020-02-28  109  
+f93bf758911476 Lukas Wunner        2020-02-28  110  	platform_set_drvdata(pdev, data);
+bdc5f300958062 Martin Sperl        2016-01-17  111  
+bdc5f300958062 Martin Sperl        2016-01-17  112  	/* get the clock - this also enables the HW */
+fcc446c8aa6303 Adrien Thierry      2022-02-07  113  	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
+83e571f054cd74 Stefan Wahren       2023-12-20  114  	if (IS_ERR(data->clk))
+83e571f054cd74 Stefan Wahren       2023-12-20  115  		return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
+bdc5f300958062 Martin Sperl        2016-01-17  116  
+bdc5f300958062 Martin Sperl        2016-01-17  117  	/* map the main registers */
+bdc5f300958062 Martin Sperl        2016-01-17  118  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+bdc5f300958062 Martin Sperl        2016-01-17  119  	if (!res) {
+bdc5f300958062 Martin Sperl        2016-01-17  120  		dev_err(&pdev->dev, "memory resource not found");
+bdc5f300958062 Martin Sperl        2016-01-17  121  		return -EINVAL;
+bdc5f300958062 Martin Sperl        2016-01-17  122  	}
+fcc446c8aa6303 Adrien Thierry      2022-02-07  123  
+eb687309136b9f Andy Shevchenko     2024-03-04  124  	up.port.mapbase = res->start;
+eb687309136b9f Andy Shevchenko     2024-03-04  125  	up.port.mapsize = resource_size(res);
+fcc446c8aa6303 Adrien Thierry      2022-02-07  126  
+eb687309136b9f Andy Shevchenko     2024-03-04  127  	bcm2835_swnode = device_get_match_data(&pdev->dev);
+eb687309136b9f Andy Shevchenko     2024-03-04  128  	if (bcm2835_swnode) {
+eb687309136b9f Andy Shevchenko     2024-03-04  129  		ret = device_add_software_node(&pdev->dev, bcm2835_swnode);
+eb687309136b9f Andy Shevchenko     2024-03-04  130  		if (ret)
+eb687309136b9f Andy Shevchenko     2024-03-04  131  			return ret;
+eb687309136b9f Andy Shevchenko     2024-03-04  132  	}
+fcc446c8aa6303 Adrien Thierry      2022-02-07  133  
+eb687309136b9f Andy Shevchenko     2024-03-04  134  	ret = uart_read_port_properties(&up.port);
+eb687309136b9f Andy Shevchenko     2024-03-04  135  	if (ret)
+eb687309136b9f Andy Shevchenko     2024-03-04  136  		goto rm_swnode;
+bdc5f300958062 Martin Sperl        2016-01-17  137  
+eb687309136b9f Andy Shevchenko     2024-03-04  138  	up.port.regshift = 2;
+eb687309136b9f Andy Shevchenko     2024-03-04  139  	up.port.fifosize = 8;
+bdc5f300958062 Martin Sperl        2016-01-17  140  
+bdc5f300958062 Martin Sperl        2016-01-17  141  	/* enable the clock as a last step */
+bdc5f300958062 Martin Sperl        2016-01-17  142  	ret = clk_prepare_enable(data->clk);
+bdc5f300958062 Martin Sperl        2016-01-17  143  	if (ret) {
+eb687309136b9f Andy Shevchenko     2024-03-04  144  		dev_err_probe(&pdev->dev, ret, "unable to enable uart clock\n");
+eb687309136b9f Andy Shevchenko     2024-03-04  145  		goto rm_swnode;
+bdc5f300958062 Martin Sperl        2016-01-17  146  	}
+bdc5f300958062 Martin Sperl        2016-01-17  147  
+fcc446c8aa6303 Adrien Thierry      2022-02-07  148  	uartclk = clk_get_rate(data->clk);
+eb687309136b9f Andy Shevchenko     2024-03-04  149  	if (uartclk)
+eb687309136b9f Andy Shevchenko     2024-03-04  150  		up.port.uartclk = uartclk;
+fcc446c8aa6303 Adrien Thierry      2022-02-07  151  
+bdc5f300958062 Martin Sperl        2016-01-17  152  	/* the HW-clock divider for bcm2835aux is 8,
+bdc5f300958062 Martin Sperl        2016-01-17  153  	 * but 8250 expects a divider of 16,
+bdc5f300958062 Martin Sperl        2016-01-17  154  	 * so we have to multiply the actual clock by 2
+bdc5f300958062 Martin Sperl        2016-01-17  155  	 * to get identical baudrates.
+bdc5f300958062 Martin Sperl        2016-01-17  156  	 */
+eb687309136b9f Andy Shevchenko     2024-03-04  157  	up.port.uartclk *= 2;
+bdc5f300958062 Martin Sperl        2016-01-17  158  
+bdc5f300958062 Martin Sperl        2016-01-17  159  	/* register the port */
+8c3cde5dd639af Lukas Wunner        2020-01-16  160  	ret = serial8250_register_8250_port(&up);
+bdc5f300958062 Martin Sperl        2016-01-17  161  	if (ret < 0) {
+ea43a60b15486b Krzysztof Kozlowski 2020-09-01  162  		dev_err_probe(&pdev->dev, ret, "unable to register 8250 port\n");
+bdc5f300958062 Martin Sperl        2016-01-17  163  		goto dis_clk;
+bdc5f300958062 Martin Sperl        2016-01-17  164  	}
+bdc5f300958062 Martin Sperl        2016-01-17  165  	data->line = ret;
+bdc5f300958062 Martin Sperl        2016-01-17  166  
+bdc5f300958062 Martin Sperl        2016-01-17  167  	return 0;
+bdc5f300958062 Martin Sperl        2016-01-17  168  
+bdc5f300958062 Martin Sperl        2016-01-17  169  dis_clk:
+bdc5f300958062 Martin Sperl        2016-01-17  170  	clk_disable_unprepare(data->clk);
+eb687309136b9f Andy Shevchenko     2024-03-04  171  rm_swnode:
+eb687309136b9f Andy Shevchenko     2024-03-04  172  	device_remove_software_node(&pdev->dev);
+bdc5f300958062 Martin Sperl        2016-01-17  173  	return ret;
+bdc5f300958062 Martin Sperl        2016-01-17  174  }
+bdc5f300958062 Martin Sperl        2016-01-17  175  
+
+:::::: The code at line 102 was first introduced by commit
+:::::: f93bf75891147602d55b90937628157cc13dbdb8 serial: 8250_bcm2835aux: Support rs485 software emulation
+
+:::::: TO: Lukas Wunner <lukas@wunner.de>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
