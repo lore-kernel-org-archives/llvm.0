@@ -1,110 +1,183 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF70626B087
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 15:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B2819B5A9;
+	Thu, 13 Feb 2025 15:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739461384; cv=none; b=qxdIpM+N1cts+vxOkk08DX8bd3isbC+gn+pPs+CbP0sJZaUxagh/sGC08tiNAHyMzKq6nWagF/+isUBmMpRZSFVGu9Pr3jXLCFIY0Bq0SHNDFj+BzIUaA6Wl6enDLi5xf2obH+EntcIB4ct3p+o6Z5iW4rFr7zQjM/NX7kS23x8=
+	t=1739461859; cv=none; b=adfUKWreiNmwwYj3vBlGW51Ov1z/A/9T6fbt0xzY+FaEz1uTl0S6N1KyTuqwjPC81/UY9IxaoVAOJHUdZidRVrFnEW07oU32vJsNhIEU61nWJB7YxMIfjFNq1qahs8IFBplPIA/HDeshSpAhiltBm01Nqr+Q1zhlvruTqJx6ntA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739461384; c=relaxed/simple;
-	bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rEFczMHcE2SvWd8XM00iwwC1pVrE+LX/FYWKYb19toLd/mvcD6G3ujookLX2jWL83ZmmWbCmFReJuVHc4KQ1t+1dbfAMN2PRWGn/v1zPHS5kiJfD/sv6l+Jcyx0GA5rlOjv/MmBFpJ+nOcNhlG0KZ6FWaUCpeMs300mhv6KIDl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUqEkAO0; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739461859; c=relaxed/simple;
+	bh=neBzSs/Q2VbuMGlj/vqVHIPSEiZRbs8T07e3BLP2xZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bawkNIB8LZnwmK9vDLTEfq5itCpsmxSMluhj3BgPRqzAJObil4OYtHZluR4YJne4XXWyWU/MyMyYF9chi4A+rQnLjzeioLNeoupkQCdV7wGlqF6lQfchF6jxDYcLM+lz4e3BWnoqaauw3xriofNe1WwGJtwAIey2UEhyaRbS/0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aUkVTRBX; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUqEkAO0"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-308f4436cb1so22172061fa.1
-        for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 07:43:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739461381; x=1740066181; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-        b=bUqEkAO0+jk5+Wx32IERotFcHmxJx7d4Eb8u4HwPIKLMepMAS3A2nZxmmHisMsWjq1
-         ye4oy0fCKWi2x0uGvQzh1ok9wECD+KI4x4dJXR18oYVFEiuetsLholD0XvWojK4Z9Lvq
-         jR1LhJjEsNOJ5x2fi+fHfARojzmO9aRzUdqYswwjdSKicekYIh+GABfahrHLzrIitovY
-         tVShKbQucYLDAInhrO7H4o9Y0NSVsYDNejvhHH0/HrQcw5wqp3Ri0msOYQ0l3vAWYXOm
-         95Qq7YswRen3cm2kD73Sj7oUeHEJUnW+gp7yNT/yqa0GR1AsiEU/qnfNak7j/f1f7Mxf
-         UBeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739461381; x=1740066181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
-        b=BSuz3Csfns/T4VUfOt2ivf9Kkm9CAjg7nk1IJkBaA9IohKzf9ZkvXUXr6AN6bNqk+p
-         6nTeV4FkstjZeneRqLB3lktepEkhp62Un3WRoEVwciAkmPlcqHbzqz1fjikGupURotak
-         7JEoJYcbu82rkXtGiDtdw0bRykMgIDtlPiXMX205XFROkPnONQT5Ngr/bDaVctAiX8uD
-         8EWE2ewQ5gYXZNM4EQ3RhxfIXmxNY7ml/pCDlA3JZQPk2yAUcbOYPYo0Rs+mcD2tdE2W
-         k2G2srz8VfedqUE9xoyZP4gtU07JhGt8Zt10hOZEB4k8RiIWRY7v/7CnpW5ei8K3jQ6n
-         z+hA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbo6gCrQsa1RGMmgmEE+OmS/ebzWg+YREpNh0QJVBT8RFD7tiDY+U3rZblLNm4vq2zOHYr@lists.linux.dev
-X-Gm-Message-State: AOJu0YyjmLbvH+jL9WRndf5IIkVIhkSLsuDTIck3mtpqc2Htd61lSRpy
-	LJgfz5LTSLtQDK5ySg68x5kXj8sTlkNSfqwmSGPL1Nlohj1yYnJchjqtXpIfYHkqPpBuP5Hag1K
-	FxoF0e/pX8kjD2rc690uqPyMEs6E=
-X-Gm-Gg: ASbGncvwAe03JnWUBCaFKsM/2ozFrCUN9l47w4LEGdq0s9NxMtRmWMkBWQCG2lJwjM/
-	Y63PEf6pXK1rlKctrrcnS+Wv2QzVJfo2qwf5Tp/ukKLaPcYmvNCASTya/RBZrhzs73OXQLgo8Yw
-	5nIuBPQukgPIM8
-X-Google-Smtp-Source: AGHT+IH1DgGXOv9U05OxLJT05mfmUcX32MdUYL+UbmMo6S6W1PrqB+heOS5OeNphPyVdKvsISm/TxAN5RBatuANrYoM=
-X-Received: by 2002:a2e:8887:0:b0:300:17a3:7af9 with SMTP id
- 38308e7fff4ca-3090f3bee24mr10560491fa.19.1739461380591; Thu, 13 Feb 2025
- 07:43:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aUkVTRBX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739461857; x=1770997857;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=neBzSs/Q2VbuMGlj/vqVHIPSEiZRbs8T07e3BLP2xZ4=;
+  b=aUkVTRBXwIm9GvX2jyhyP2ri6TnY4Rc893xRWkDx59yZksPJNczWbhBL
+   KkDWt7JRNlky6qBhL+9VUJc0PBXXZhki+BOSdUgNXIHER1tYH4AnbPOtM
+   kgleIaIkHFjT6Dr9grePzIC+H5ruIIi7TXN4F3d/6JsKRitgoiDnsv5Wg
+   5UzDIt2N4JOexq+wlKm15/b+LhHjFvhA10v5qEre9J1AYGhOz39FilnZk
+   dEh2+F2QjSQ4FZWpCL71Fj+IkItgeCOU7nGQsIFB1hSgdm6sVRP6e8Ru3
+   o/cXR8/DgXXANGAWuscfGa+Ve5Kp+Yw/RnX1TqZDqAhig9TZmqvzxac2B
+   Q==;
+X-CSE-ConnectionGUID: fwg+64MVT5eO4osdJo7URQ==
+X-CSE-MsgGUID: eB49kqeWRXenHAbzHuTVIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="44102485"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="44102485"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 07:50:55 -0800
+X-CSE-ConnectionGUID: 5cpCUjHoSEmxgOyVgSsmAQ==
+X-CSE-MsgGUID: dVQrsF+GQGKfrOH3sOfpjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="144032709"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 13 Feb 2025 07:50:54 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tibUJ-0018Np-2I;
+	Thu, 13 Feb 2025 15:50:51 +0000
+Date: Thu, 13 Feb 2025 23:50:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: zihan zhou <15645113830zzh@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [peterz-queue:sched/core 1/5] kernel/sched/fair.c:942:40: error:
+ invalid operands to binary expression ('int' and 'void')
+Message-ID: <202502132351.2AEevb2A-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com> <20250213115951.GF28068@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250213115951.GF28068@noisy.programming.kicks-ass.net>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 13 Feb 2025 10:42:24 -0500
-X-Gm-Features: AWEUYZnmsQRxlJial_Srfud0qxhtqGpvdrhg2T7ZQYxl10OhVwKIEsBPtxdK_Kw
-Message-ID: <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
-Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
-> > Convert this unit test to a KUnit test. This allows the test to benefit
-> > from the KUnit tooling. Note that care is taken to avoid test-ending
-> > assertions in worker threads, which is unsafe in KUnit (and wasn't done
-> > before this change either).
->
-> So this was something simple, and now I need to know how to operate this
-> kunit nonsense :-(
->
-> How is that an improvement?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+head:   f5e5644f37620a7177ec30bf771fe90926ed9e7a
+commit: a776cf5efa44410204ec367cd593ad56b9d3df5e [1/5] sched: Cancel the slice protection of the idle entity
+config: i386-buildonly-randconfig-003-20250213 (https://download.01.org/0day-ci/archive/20250213/202502132351.2AEevb2A-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502132351.2AEevb2A-lkp@intel.com/reproduce)
 
-Hi Peter,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502132351.2AEevb2A-lkp@intel.com/
 
-David enumerated some of the benefits of KUnit in another
-thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2=
-Ti53DQADrW+sJg@mail.gmail.com/.
+All errors (new ones prefixed by >>):
 
-My personal reason for preferring KUnit is that it's much easier to
-run from userspace; the tooling takes care of building, starting the
-VM, running the tests, and producing a human-friendly report.
-
-Anecdotally I've seen evidence that e.g. Intel's 0-day runs all KUnit
-tests but not all kselftests
-(e.g. https://lore.kernel.org/all/202502090223.qCYMBjWT-lkp@intel.com/).
+   kernel/sched/fair.c:897:11: warning: equality comparison result unused [-Wunused-comparison]
+     897 |         se->vlag == se->deadline;
+         |         ~~~~~~~~~^~~~~~~~~~~~~~~
+   kernel/sched/fair.c:897:11: note: use '=' to turn this equality comparison into an assignment
+     897 |         se->vlag == se->deadline;
+         |                  ^~
+         |                  =
+   kernel/sched/fair.c:902:2: error: statement requires expression of scalar type ('void' invalid)
+     902 |         if (protect_slice(se))
+         |         ^   ~~~~~~~~~~~~~~~~~
+>> kernel/sched/fair.c:942:40: error: invalid operands to binary expression ('int' and 'void')
+     942 |         if (sched_feat(RUN_TO_PARITY) && curr && protect_slice(curr))
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
+vim +942 kernel/sched/fair.c
 
-Tamir
+   905	
+   906	/*
+   907	 * Earliest Eligible Virtual Deadline First
+   908	 *
+   909	 * In order to provide latency guarantees for different request sizes
+   910	 * EEVDF selects the best runnable task from two criteria:
+   911	 *
+   912	 *  1) the task must be eligible (must be owed service)
+   913	 *
+   914	 *  2) from those tasks that meet 1), we select the one
+   915	 *     with the earliest virtual deadline.
+   916	 *
+   917	 * We can do this in O(log n) time due to an augmented RB-tree. The
+   918	 * tree keeps the entries sorted on deadline, but also functions as a
+   919	 * heap based on the vruntime by keeping:
+   920	 *
+   921	 *  se->min_vruntime = min(se->vruntime, se->{left,right}->min_vruntime)
+   922	 *
+   923	 * Which allows tree pruning through eligibility.
+   924	 */
+   925	static struct sched_entity *pick_eevdf(struct cfs_rq *cfs_rq)
+   926	{
+   927		struct rb_node *node = cfs_rq->tasks_timeline.rb_root.rb_node;
+   928		struct sched_entity *se = __pick_first_entity(cfs_rq);
+   929		struct sched_entity *curr = cfs_rq->curr;
+   930		struct sched_entity *best = NULL;
+   931	
+   932		/*
+   933		 * We can safely skip eligibility check if there is only one entity
+   934		 * in this cfs_rq, saving some cycles.
+   935		 */
+   936		if (cfs_rq->nr_queued == 1)
+   937			return curr && curr->on_rq ? curr : se;
+   938	
+   939		if (curr && (!curr->on_rq || !entity_eligible(cfs_rq, curr)))
+   940			curr = NULL;
+   941	
+ > 942		if (sched_feat(RUN_TO_PARITY) && curr && protect_slice(curr))
+   943			return curr;
+   944	
+   945		/* Pick the leftmost entity if it's eligible */
+   946		if (se && entity_eligible(cfs_rq, se)) {
+   947			best = se;
+   948			goto found;
+   949		}
+   950	
+   951		/* Heap search for the EEVD entity */
+   952		while (node) {
+   953			struct rb_node *left = node->rb_left;
+   954	
+   955			/*
+   956			 * Eligible entities in left subtree are always better
+   957			 * choices, since they have earlier deadlines.
+   958			 */
+   959			if (left && vruntime_eligible(cfs_rq,
+   960						__node_2_se(left)->min_vruntime)) {
+   961				node = left;
+   962				continue;
+   963			}
+   964	
+   965			se = __node_2_se(node);
+   966	
+   967			/*
+   968			 * The left subtree either is empty or has no eligible
+   969			 * entity, so check the current node since it is the one
+   970			 * with earliest deadline that might be eligible.
+   971			 */
+   972			if (entity_eligible(cfs_rq, se)) {
+   973				best = se;
+   974				break;
+   975			}
+   976	
+   977			node = node->rb_right;
+   978		}
+   979	found:
+   980		if (!best || (curr && entity_before(curr, best)))
+   981			best = curr;
+   982	
+   983		return best;
+   984	}
+   985	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
