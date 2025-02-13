@@ -1,126 +1,109 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B351A26619D
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 21:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10F128A2C1
+	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 21:32:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739481030; cv=none; b=STaz4DWaP76TE4mo6RjFPJX2GD5WatkpAMu+nue7DfCUPp9P7JcCjlfhIu5GDfivHGdlKXbdOD84H3VRTVn2yayGTHaGXSB+iTyMHrh8+vORvepdW4pGNT8nS08f41hqTagn7YMXGx+3Ih+uJXGpe2kpg4diFzkuJtyiYirW/bw=
+	t=1739482330; cv=none; b=lkqgHhIjPb5fimyT3vvmrmcoLneao1RZ91Xc+GVH8FKRzM95FpRixjT9uVXIn6j68VI5rcIzdM4ZHchB6DH3wLR771R5IZKhEN72qQjBDO6L1IvsPf/sbSarfFCLkE/PDrCjbaImhlTO8UH4V8TgN+qlEHvnADfnVzIM37AYmvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739481030; c=relaxed/simple;
-	bh=fbPB2g7+Pf/OZk+WU7lLUYgJUck4kov9uZUxiWM9e4k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OYTow6qQzv50Mn0vKtyUgMoV3zK+SivnwW9jVGoplOFO3bF423NYFIvyXQFCoe9Q+bs9ko/llX6k9A7BQi/9S7Fb/05ZYohET4NaeGHiZEMxrvxOtmaho1Fijd5V4fCPlHsVo/UDI1p8ATSA6LaOlK0EVVI6rxgcNPYm02y3t5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u/BZ0JPI; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1739482330; c=relaxed/simple;
+	bh=UNGl9Jm9bwixEiBn4TnwIPn+EdcCigbDRJRXwdL0CuY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TS+gRJ6A+YJ3QR5nmZjOt0GAMuGJ3LAL4+0DiCSBpJPre8JaT5Hivtj/tRFy07nyj4iBITuQp4NhSRiEJlfbAHKrQVqaOkJPcd7n/AU34//2JYEYqjLfPRqy6a9f+lo9ni2O/jYVJgj2CbSV3io/H6ghZU1nMaG4S2CSv5WYNgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aFj33727; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u/BZ0JPI"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5dec85c8bfcso500a12.1
-        for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 13:10:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739481027; x=1740085827; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3EIJlcz7W21awhaRwqJUO1L0hARhWCWmvV/tV0cCAM=;
-        b=u/BZ0JPIY4pBJuvRfnj64FBNpzWF+OOVZ+GkqvnDyeuWU4XpK+dqgkt+Q0jb1mdVWj
-         a5wmDb07joluv8g+chBPG20SezxpE19YrfVV5PjeavNmPs8UJHF7DVtDxuE32mIJWbKF
-         01AmRN/7eJG/ARltBkfjJE42qUg4Iya1c39kZyg0nBAuqS8sQxGgqYmeGSj0jKYMH5fX
-         1ES4VUr70n4ArRF7B4SKNY2zetQjtl4YlhxEz8pohfyUgOeZ5O0rV+u8xPOkkGTA/1eo
-         dw4jNZaNvs8aQI3gi6keT4sRQ9AI+w8Nuc6zXPUpypk9D5oMw0Z1DiAlJo5tsbvPq53M
-         X5lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739481027; x=1740085827;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e3EIJlcz7W21awhaRwqJUO1L0hARhWCWmvV/tV0cCAM=;
-        b=NzSmYYL9S/u7f25LT1ojfhz4vkapjLZmviZ6G2WqZqbBHLPGe5ehR5YYUHOAhJsxd7
-         18Is5PeH/EUgifQHqTFiN6Qdx6kx+pbSqI/MdZ+xUGP1nNFRHpszx7U+4WhafcUJySZn
-         MRfpx+ZqAHX/6gRC6RlP44q9Nv19cIaXx9Z6BgSW1QowkIj4SjRc4y6M9w5hOTqXdN68
-         BUS3+X1T+E3Schh9htcnqHVnqH4KKX6U62IiQAPcp0RPehUcl2hiota660D57bN1KJda
-         6mS5HwyIqveqX9NEjEmXGY7tAggLc3KLNQ/Vo6MDiyAhZGWDry86m1vbhoSgMDnagETj
-         pycw==
-X-Gm-Message-State: AOJu0Yx3gPoeSjir/zvS5VL7JOi/5HyPTb0uL0B8ZC2Q2rg06cPUW8d7
-	O49L3X8eZxqqmbajyizUTUTThMCqfNkmtOZvjnpAlsAtcS5d5idCgZS54VExQig5YQ8TuWum4NN
-	/IIkA3bwthLbocC9Br83enmeyk7Yz6djQib42
-X-Gm-Gg: ASbGncuSzyaur0QxFpR6PwPxJg2LviwDYw7KZpHztNrgjOBS6jiu+V3ynSVaiRHJSXz
-	duIQamH1JywNastqLO3XhHrOH+ZXWylxirHvQAmqPswXrTRZmDX3afHFgf/sBoHPfbIWN7Q==
-X-Google-Smtp-Source: AGHT+IE4EkwbKfc//9+1MZxgEsl4MWNzDPz8faVVQlldBTaEv0zhTQ1aUl8MsNRTyPEjtzoxXm+2TMxNKGca2MElpoE=
-X-Received: by 2002:aa7:d693:0:b0:5de:c2ed:768f with SMTP id
- 4fb4d7f45d1cf-5dedc9d3976mr22730a12.2.1739481026780; Thu, 13 Feb 2025
- 13:10:26 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aFj33727"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739482327;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/ox2op6tpyrdl1+JuEh+nVSUvOjp8aw+2iIsT5lDrXM=;
+	b=aFj33727CLXDEUMFnuu6Qx4Z0QnW0KNb9YMXFzWTMQwH2oUr3AOw0iGKth2Dh33cSaEDF0
+	qBdA/OYb3PcOkiRdJpGgubvZajfzyMS/QBRaQbPr0hyWAyZvPnoh2kFVaiTRwjs8rdXjlu
+	laYVqt8mzIBWkgUJ3noAp6Kr3Lw47Tw=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-691-ARH_ZkwKMXin-AQ-lGzaIQ-1; Thu,
+ 13 Feb 2025 16:32:06 -0500
+X-MC-Unique: ARH_ZkwKMXin-AQ-lGzaIQ-1
+X-Mimecast-MFC-AGG-ID: ARH_ZkwKMXin-AQ-lGzaIQ
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C7E619039C8
+	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 21:32:05 +0000 (UTC)
+Received: from [172.64.13.25] (unknown [10.30.32.164])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C54B5300018D;
+	Thu, 13 Feb 2025 21:32:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
+ upstream-mainline, 348f968b)
+Date: Thu, 13 Feb 2025 21:32:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202502120752.U3fOKScQ-lkp@intel.com> <20250212005617.GA1701202@google.com>
-In-Reply-To: <20250212005617.GA1701202@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 13 Feb 2025 13:09:49 -0800
-X-Gm-Features: AWEUYZliotNteXwj_bjDaPg1_ob8hdfyT5B8Vymq6VI9KK7vl8yMk6AcuNhrdfE
-Message-ID: <CABCJKufs3XXXGfNNocvtLfwh_6W8LLo7JR+SWMn2-MTXe3RMmQ@mail.gmail.com>
-Subject: Re: error: gendwarfksyms: process_module: dwarf_get_units failed: no
- debugging information?
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <22605.125021316320601234@us-mta-691.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: ckB3PTXjVCjSCp5mUI-PnGVwsAr1zLuDrj__ETi3LNY_1739482325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2025 at 4:56=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> On Wed, Feb 12, 2025 at 07:55:45AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> > head:   09fbf3d502050282bf47ab3babe1d4ed54dd1fd8
-> > commit: 9c3681f9b9fd12cdbc4a542df599f1837512f3d5 kbuild: Add gendwarfks=
-yms as an alternative to genksyms
-> > date:   5 weeks ago
-> > config: s390-randconfig-002-20250212 (https://download.01.org/0day-ci/a=
-rchive/20250212/202502120752.U3fOKScQ-lkp@intel.com/config)
-> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 60=
-09708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250212/202502120752.U3fOKScQ-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202502120752.U3fOKScQ-l=
-kp@intel.com/
-> >
-> > All error/warnings (new ones prefixed by >>):
-> >
-> > >> error: gendwarfksyms: process_module: dwarf_get_units failed: no deb=
-ugging information?
-> > --
-> >    In file included from <stdin>:3:
-> >    In file included from arch/s390/include/asm/asm-prototypes.h:4:
-> > >> include/linux/kvm_host.h:1908:24: warning: field 'desc' with variabl=
-e sized type 'struct kvm_stats_desc' not at the end of a struct or class is=
- a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-> >     1908 |         struct kvm_stats_desc desc;
-> >          |                               ^
-> >    1 warning generated.
-> > >> error: gendwarfksyms: process_module: dwarf_get_units failed: no deb=
-ugging information?
->
-> The issue appears to be that the files in arch/s390/purgatory are
-> always built without debugging information, even though they include
-> code that uses EXPORT_SYMBOL.
->
-> I suspect the correct solution here is to ignore the object files in
-> this directory when calculating modversions. The quick patch below
-> fixes the build issue for me. Masahiro, does this look reasonable to
-> you?
+Hi, we tested your kernel and here are the results:
 
-Ugh, we should just set __DISABLE_EXPORTS for all the object files,
-not only sha256.o. I'll send a patch.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Sami
+
+Kernel information:
+    Commit message: Merge tag 'net-6.14-rc3' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1670340408
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1670340408-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1670340408-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1670340408-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
