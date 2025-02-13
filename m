@@ -1,66 +1,71 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E847245025
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 18:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F64245AE5;
+	Thu, 13 Feb 2025 18:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739471968; cv=none; b=AlGFU/2s+EhnkSElmVC4jSdj/6K6l7mlKpuXqvPFIb0oSz1XYvVI6Qamzj86umwV3MfSupj2uXUNFYQyi04ZHGvxb4dwobBNaNjOiJwGDhC//ydhnTrZIgWm3pEnpOKLZfdlgLFfcuiSOcFh8uLzel0sFfaFUhqGc6jeszs1SBA=
+	t=1739472851; cv=none; b=dPdfwpDPGwxw2Zcp6lFDLTE/jJqq1U/bjn34Bh7qEgWuFfJp/5vrLHpD1mI3qIq+qmC0rEWYaVYQB2n+mOOj35VW/C5M0SSfIumzjz63M4cXiD9qwTpnybda/AY59d/YbxwxGMETTiTiXaXfck815qKekI2GS2LeXSnbthgENQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739471968; c=relaxed/simple;
-	bh=IL4JfZ8f/GmNV2oysYaN+vVvAghC4NR4d9vaXPutmxU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PIywRpEMbJRzitcKTQkZiSAKq5tQoUvUGDKzIOGUXxrCN9llrNsOwbZeKKQwJerNPObA/OO0goxxFxEQTXjDvBODfxj/b9I+DhhqqBprGfZyqnWnWfWAkm0984ngLg62WH97iXq4KzgiUfectLFSBEOy3A+QQnLvHviEbjZ7Z4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=Kztbnl7b; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1739472851; c=relaxed/simple;
+	bh=sw1QM8YNVs4tKquw8ExNDS9lGNe7mqqrDLLegMYkS2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZuDrXaSv/7By/d/lPkTZKkJtwQ2A+O56B1FWGtMj9sbocAcVh79KiuFain10ibO/3tr7Q2A5JTm9YV7SDzEXCAR7xQnHEDgLor8x1FHFNUKMw1NprfKfnqg789CQiMN2h1vNwm97ghKvckJ00jpH87eIL+6LzRCR3lUnvZcw25U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg+CZmr+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="Kztbnl7b"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2E41640411
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1739471966; bh=hWkxJ1YfLob73I7zxkcyS5NjQGuT1JLfL25ucCp224w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Kztbnl7bnXKKL9nmBXC8dduAeQpXAai0HXznNTtO0ezpnwdepmRaJTQNzAwyAG9Io
-	 UrPsV+FC/qluP3qW4UNtBd+sANT3CRFpjkgGYu2qpm53RY/Q2BoTQf68/CyHt8yRMB
-	 sUJWB2GJPb4RD/GwTPyxKlbk8OsehSmf+goCfe6ynqwY1rH6nKLy9BwubgH7dxfmx2
-	 Wg98MTfummjoZlzmoL+4OsjHeMkKOFKr2hE2z74llUpgCsITq6IKcTBT4VOjCu4Bdz
-	 XEbK8PFV/BTYVvFlmFKh9bqMO1WQdSdS00rFHrAyAeiLQMigmx9PGg3VKOSlZ9nNP0
-	 TnZWQ1aRMp7mw==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 2E41640411;
-	Thu, 13 Feb 2025 18:39:26 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Linux Doc Mailing
- List <linux-doc@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Mauro Carvalho Chehab
- <mchehab+huawei@kernel.org>, linux-kernel@vger.kernel.org, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Nick
- Desaulniers <ndesaulniers@google.com>, bpf@vger.kernel.org,
- llvm@lists.linux.dev, workflows@vger.kernel.org
-Subject: Re: [PATCH 0/4] Raise the bar with regards to Python and Sphinx
- requirements
-In-Reply-To: <cover.1739254187.git.mchehab+huawei@kernel.org>
-References: <cover.1739254187.git.mchehab+huawei@kernel.org>
-Date: Thu, 13 Feb 2025 11:39:25 -0700
-Message-ID: <871pw14rky.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg+CZmr+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6A0C4CED1;
+	Thu, 13 Feb 2025 18:54:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739472850;
+	bh=sw1QM8YNVs4tKquw8ExNDS9lGNe7mqqrDLLegMYkS2Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xg+CZmr+kXKcUJnO2R5sjJI5xdtczkUza1MbIPMJHJ4CJqxpamFczCqjZHiyc3SKB
+	 P2k2i6SefDTEmk9in2O7Lv+9owltMrZ1iBWsGSopk+uBCCYlz80Ctdhv9tqiTMdJsZ
+	 lY70RAfCsC/nef0Lby33mb+z26G4KMhaipsobmHt0tMFgpBGgdxpkCTZUPTvLRR+FU
+	 3hUTxkXYa0NnmHt8AElAGmBgBdLWDbN4H+84+8WcNY6wHleHgPIUIUwW+68mrUxPVo
+	 C8Dj2Dz0VZvpR2sglVNtqxhwuCC6pFzTSAAMi8LG4dp3KubBwjXnOBisL/6JwwkO0S
+	 iY2e9ApNK8ZoA==
+Date: Thu, 13 Feb 2025 10:54:08 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] compiler.h: Specify correct attribute for
+ .rodata..c_jump_table
+Message-ID: <20250213185408.m5aogf2trvhvi2td@jpoimboe>
+References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
+ <20250212175023.rsxsw7pno57gsxps@jpoimboe>
+ <b1e5e3ea-be4b-5dae-cc0d-34693429d060@loongson.cn>
+ <20250213023936.lzbpgou4eallaij3@jpoimboe>
+ <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On Thu, Feb 13, 2025 at 08:38:22PM +0800, Tiezhu Yang wrote:
+> Based on the above analysis, in order to avoid changing the behavior of
+> GNU assembler and silence the GNU assembler warning, is it possible to
+> rename ".rodata..c_jump_table" to ".c_jump_table"?
 
-> This series  increases the minimal requirements for Sphinx and Python, and
-> drop some backward-compatible code from Sphinx extension.
+Yeah, though for the final vmlinux link we'd still need it to end up in
+.rodata so it remains read-only at runtime.
 
-OK, I've gone ahead and applied this series - let's see who screams...
+So we'd basically just have to add it to the RO_DATA() macro in
+include/asm-generic/vmlinux.lds.h.
 
-Thanks,
+Does it still work if we call it ..rodata.c_jump_table or so?  Then we
+could just add "*(..rodata.*) to RO_DATA().  That would be somewhat less
+surprising, and would also create a standard way for other code to do
+the same thing by prefixing with "..rodata.".
 
-jon
+-- 
+Josh
