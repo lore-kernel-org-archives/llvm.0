@@ -1,64 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5137B209F25;
-	Thu, 13 Feb 2025 07:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84ABDBA2D;
+	Thu, 13 Feb 2025 07:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739432820; cv=none; b=PIacdX94ees4LWPccxRug0bUiZxpN66faRuJN9+RoX72LWF+dRZMphUINtn0vodgSrsvVlkTL67SRtFmY0AAzv/thJBHfj31uRCwTsvEUCn2b6pRG/vZWloIblt1CddJcVLL+swTa2JcMNjCDuaXwhYNDHCn2Pd615yzbuZsKZM=
+	t=1739433418; cv=none; b=Dkbh7hTiH3aQe7UDHJPejJHse7QLF5KBC8q9/A83LWk/3XxDKsNiSFbs0ZxoB2fpaFJiSF23mBBo2e/Gt4EwdLNG6CHootWJp69rer8XV/FhykAz6rdJwDQhJnN8YGcHPH9/Wc+zv6dYRyXHSF45e0ASRfcbIdimVlzbs0sh6No=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739432820; c=relaxed/simple;
-	bh=m7N01gpsrS64Ul0ZF1AXLBTZ2lTKOYhMJOH5bm/b/Gw=;
+	s=arc-20240116; t=1739433418; c=relaxed/simple;
+	bh=Fg8yHSzQlNvTJyPWVmiv06alu35wqhvGab8BUThHMSk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=njx3F3W749i4EHwD6PCD2nMEytAOoebYUllC6YWYWBEgntuhexhRj34BYqtJyKYrxMxWcRTJBaAyfnLekTpmvqimx/j3blIsJQX1zky7rLLTmC4UqeL0amTySLHM4vzLv83HnWf6S6CB4wrGmIw8SK/Wd1JTE6IDT+T2zoctWPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jEvnj/Km; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=JH29Piv1Uv6A+eIoKPwQXrYCGkvlOdY8+SBcYOWbXAfSJbDz1WOlggJiOW74R2+dQiqbdURQdJV5CAHQ03SkYszmY9o3l/tY7If5NZmjQGrnijKDmAAfXU5PJc75biNPqbGM3z4l1BFQ6xnmCWnFbxAN2SmBJOMSfjUmBLwMEXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/8d95Pv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jEvnj/Km"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739432819; x=1770968819;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m7N01gpsrS64Ul0ZF1AXLBTZ2lTKOYhMJOH5bm/b/Gw=;
-  b=jEvnj/KmTN71p2O7tzX2+RP7fPE+OPoQHi5be69Mkug3m3GqxsPXbgMW
-   DUa8iJvFxrITyrz9UzwKIbmWLfCspJIVChmeymrwZs7/Tn1NodEzmgxCV
-   vB+78Y7NCPy+35kgjbz3kz8NoTuFSm10WHFw9YifEvyNZeCyrpskq0Q9I
-   ZaFqzxnwciHUlmExG9ydNCE26MTs40VNAErjnL8L/sHQBWF6oU/Qkdoiw
-   ynuHAFGDDPNV2oRT1jA9iRpcsx2i5iw68aZDQyEynycmYabI0zJ7739RW
-   0Vwk5EdhOcQ8RoZMYyKEu7H3AADgHH/Jq2j3B3b8YDPP2ROpjjIx56g0m
-   g==;
-X-CSE-ConnectionGUID: N5SEiGhQQjiAZQlQn5WMjg==
-X-CSE-MsgGUID: lF4t0iaTQ361AKZ/TW7YCA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="43889589"
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="43889589"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 23:46:58 -0800
-X-CSE-ConnectionGUID: kIMk4oU5TYacoA6Out/RQA==
-X-CSE-MsgGUID: unga1muWThCDLOmV4wVp6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="113027361"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 12 Feb 2025 23:46:55 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tiTvw-0016k1-2o;
-	Thu, 13 Feb 2025 07:46:52 +0000
-Date: Thu, 13 Feb 2025 15:46:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Akhil R <akhilrajeev@nvidia.com>, herbert@gondor.apana.org.au,
-	davem@davemloft.net, thierry.reding@gmail.com, jonathanh@nvidia.com,
-	linux-crypto@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Akhil R <akhilrajeev@nvidia.com>
-Subject: Re: [PATCH v2 05/10] crypto: tegra: Transfer HASH init function to
- crypto engine
-Message-ID: <202502131554.aBNVn7S9-lkp@intel.com>
-References: <20250211171713.65770-6-akhilrajeev@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/8d95Pv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD39C4CEE8;
+	Thu, 13 Feb 2025 07:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739433417;
+	bh=Fg8yHSzQlNvTJyPWVmiv06alu35wqhvGab8BUThHMSk=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=d/8d95PvtmXQ3PFM3wIJloNjYu10tTfcn1EGDAkUSyCP6LHxkTEYkOq7jQBkYiRf3
+	 2fjS6Gc/wPlIgAqDiCsy6RpJskpaAVdQS8UovqtL4w7IGULqGRTYEioSWojsrIXetz
+	 k22+w0FARyYsCa+a3tgZ2l2OPvaIYoCYMHTQ35c1zlTRiWyOgCKccUIf63k0/bZmGi
+	 cdP/SiFSdtydH4sIRlk3zV0+D2LIwaEbmujZBlQ32WlzMamEJ3mDIt/Cx0tVWUX+i7
+	 OZ6tIBDBPviDZnVGq+beRkB1yht+kdCwzjrY+fnO/jz2M/bzG3PDbCUvwQhNQrK7fP
+	 yzi8JSlQStmAQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 97757CE0485; Wed, 12 Feb 2025 23:56:50 -0800 (PST)
+Date: Wed, 12 Feb 2025 23:56:50 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Oliver Sang <oliver.sang@intel.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [paulmckrcu:dev 82/82] kernel/rcu/rcutorture.c:2453:110:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'int'
+Message-ID: <87b7f793-afd5-44ca-98c4-7765af39a962@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202502112058.rTKa7Z3A-lkp@intel.com>
+ <555c789d-5fe8-40d4-9b72-3490baa5c9b3@paulmck-laptop>
+ <Z62IdAeMn71eHNqu@xsang-OptiPlex-9020>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,78 +49,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250211171713.65770-6-akhilrajeev@nvidia.com>
+In-Reply-To: <Z62IdAeMn71eHNqu@xsang-OptiPlex-9020>
 
-Hi Akhil,
+On Thu, Feb 13, 2025 at 01:51:48PM +0800, Oliver Sang wrote:
+> hi, Paul,
+> 
+> On Wed, Feb 12, 2025 at 02:03:27AM -0800, Paul E. McKenney wrote:
+> > On Tue, Feb 11, 2025 at 08:37:12PM +0800, kernel test robot wrote:
+> > > tree:   https://github.com/paulmckrcu/linux dev
+> > > head:   31c00ec5301cf02af354d57007bf0d79d5aef1c5
+> > > commit: 31c00ec5301cf02af354d57007bf0d79d5aef1c5 [82/82] rcutorture: Check for ->up_read() without matching ->down_read()
+> > > config: i386-buildonly-randconfig-006-20250211 (https://download.01.org/0day-ci/archive/20250211/202502112058.rTKa7Z3A-lkp@intel.com/config)
+> > > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502112058.rTKa7Z3A-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202502112058.rTKa7Z3A-lkp@intel.com/
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > >    In file included from kernel/rcu/rcutorture.c:47:
+> > >    In file included from include/linux/oom.h:10:
+> > >    In file included from include/linux/mm.h:2223:
+> > >    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+> > >      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+> > >          |                               ~~~~~~~~~~~ ^ ~~~
+> > > >> kernel/rcu/rcutorture.c:2453:110: warning: format specifies type 'unsigned long' but the argument has type 'int' [-Wformat]
+> > >     2453 |         WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
+> > >          |                                                                                                  ~~~                ^~~~~~~~~~~~~~~~~~~~~~~
+> > >          |                                                                                                  %d
+> > 
+> > And %d breaks my build.  So this is presumably what %zu was intended
+> > to take care of.  So does the diff below fix this for you?  Either way,
+> > thank you for your testing!
+> 
+> yes, diff below fix the new warning we reported. thanks
+> 
+> Tested-by: kernel test robot <oliver.sang@intel.com>
 
-kernel test robot noticed the following build warnings:
+Thank you very much, and I will apply this on my next rebase.
 
-[auto build test WARNING on herbert-crypto-2.6/master]
-[also build test WARNING on herbert-cryptodev-2.6/master linus/master v6.14-rc2 next-20250212]
-[cannot apply to tegra/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+							Thanx, Paul
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-R/crypto-tegra-Use-separate-buffer-for-setkey/20250212-012434
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git master
-patch link:    https://lore.kernel.org/r/20250211171713.65770-6-akhilrajeev%40nvidia.com
-patch subject: [PATCH v2 05/10] crypto: tegra: Transfer HASH init function to crypto engine
-config: i386-buildonly-randconfig-002-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131554.aBNVn7S9-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131554.aBNVn7S9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502131554.aBNVn7S9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/crypto/tegra/tegra-se-hash.c:8:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/crypto/tegra/tegra-se-hash.c:657:6: warning: unused variable 'ret' [-Wunused-variable]
-     657 |         int ret;
-         |             ^~~
-   2 warnings generated.
---
-   In file included from drivers/crypto/tegra/tegra-se-aes.c:8:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/crypto/tegra/tegra-se-aes.c:1788:6: warning: unused variable 'ret' [-Wunused-variable]
-    1788 |         int ret;
-         |             ^~~
-   2 warnings generated.
-
-
-vim +/ret +657 drivers/crypto/tegra/tegra-se-hash.c
-
-0880bb3b00c855 Akhil R     2024-04-03  651  
-0880bb3b00c855 Akhil R     2024-04-03  652  static int tegra_sha_digest(struct ahash_request *req)
-0880bb3b00c855 Akhil R     2024-04-03  653  {
-0880bb3b00c855 Akhil R     2024-04-03  654  	struct tegra_sha_reqctx *rctx = ahash_request_ctx(req);
-0880bb3b00c855 Akhil R     2024-04-03  655  	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-0880bb3b00c855 Akhil R     2024-04-03  656  	struct tegra_sha_ctx *ctx = crypto_ahash_ctx(tfm);
-15589bda468306 Chen Ridong 2024-11-11 @657  	int ret;
-0880bb3b00c855 Akhil R     2024-04-03  658  
-0880bb3b00c855 Akhil R     2024-04-03  659  	if (ctx->fallback)
-0880bb3b00c855 Akhil R     2024-04-03  660  		return tegra_sha_fallback_digest(req);
-0880bb3b00c855 Akhil R     2024-04-03  661  
-0c179ef38db723 Akhil R     2025-02-11  662  	rctx->task |= SHA_INIT | SHA_UPDATE | SHA_FINAL;
-0880bb3b00c855 Akhil R     2024-04-03  663  
-0880bb3b00c855 Akhil R     2024-04-03  664  	return crypto_transfer_hash_request_to_engine(ctx->se->engine, req);
-0880bb3b00c855 Akhil R     2024-04-03  665  }
-0880bb3b00c855 Akhil R     2024-04-03  666  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+> > index d62f1c787bd6..b4286136a052 100644
+> > --- a/kernel/rcu/rcutorture.c
+> > +++ b/kernel/rcu/rcutorture.c
+> > @@ -2450,7 +2450,7 @@ static enum hrtimer_restart rcu_torture_updown_hrt(struct hrtimer *hrtp)
+> >  
+> >  	rtorsup = container_of(hrtp, struct rcu_torture_one_read_state_updown, rtorsu_hrt);
+> >  	rcu_torture_one_read_end(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1);
+> > -	WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
+> > +	WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
+> >  	rtorsup->rtorsu_nups++;
+> >  	smp_store_release(&rtorsup->rtorsu_inuse, false);
+> >  	return HRTIMER_NORESTART;
+> > @@ -2498,7 +2498,12 @@ static void rcu_torture_updown_cleanup(void)
+> >  		if (!smp_load_acquire(&rtorsup->rtorsu_inuse))
+> >  			continue;
+> >  		(void)hrtimer_cancel(&rtorsup->rtorsu_hrt);
+> > -		WARN_ON_ONCE(rtorsup->rtorsu_inuse);
+> > +		if (WARN_ON_ONCE(rtorsup->rtorsu_inuse)) {
+> > +			rcu_torture_one_read_end(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1);
+> > +			WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
+> > +			rtorsup->rtorsu_nups++;
+> > +			smp_store_release(&rtorsup->rtorsu_inuse, false);
+> > +		}
+> >  
+> >  	}
+> >  	kfree(updownreaders);
+> > @@ -2521,7 +2526,7 @@ static void rcu_torture_updown_one(struct rcu_torture_one_read_state_updown *rto
+> >  	if (!rcu_torture_one_read_start(&rtorsup->rtorsu_rtors, &rtorsup->rtorsu_trs, -1)) {
+> >  		cur_ops->up_read(rawidx);
+> >  		rtorsup->rtorsu_nups++;
+> > -		WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%lu.\n", __func__, rtorsup - updownreaders);
+> > +		WARN_ONCE(rtorsup->rtorsu_nups >= rtorsup->rtorsu_ndowns, "%s: Up without matching down #%zu.\n", __func__, rtorsup - updownreaders);
+> >  		schedule_timeout_idle(HZ);
+> >  		return;
+> >  	}
