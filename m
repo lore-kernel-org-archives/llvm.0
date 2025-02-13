@@ -1,254 +1,252 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59EE921128A;
-	Thu, 13 Feb 2025 12:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6744F1F462A;
+	Thu, 13 Feb 2025 13:24:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739450311; cv=none; b=bUoZBbC8MzdI+79INZMsdXhO/QKFkpC9OPwvfCaLvOSgmkJGh2oBJlm1UfcdxOLZ4XJO3rGC2ssRW0wpuiEZBzMj1wWjjdJtXmDPv5YfmR6ezj2be13m6OiD6GWFiAbSPUSCiOypViSllfYbbVcSIMx32e3OVIWQHHhAuqBo550=
+	t=1739453080; cv=none; b=BdYE/z8X2/0HmlKfOkyIYCtsFuJ7oY7oJAnOnEIlaHPTK7coAtV9pAr8cbF6U/IvdsLv9Ak90HGk4I+T+UsuWD6KJokrKOXog7YE9qmf0X7EpZTUPaRsvzuqj44pub3B2Hdszq0xpFQArfekJx+4VDP+o3TE4MpnrsPHFzj5vQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739450311; c=relaxed/simple;
-	bh=o0LpgFDNpDUZNib8tQhCPESwGWjJy7YNbOMkCSYDmug=;
-	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=FWEEtuDt+C2uQKW+aH9HnDQ1DECoOxL9xoMyc9kW8MQawbf5QmSxzdut+4nUeu6b6JZ999KWrIUrSrnGaMWUv6CtB4z/e/RQTWeFnJplgBhRyGzNdhU1j20YPpzojIPlSJbrvamFcTmElh/A+RHQyJpludUMSzDCdzzn7sbQ7z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8CxdXDA561nHSh0AA--.5673S3;
-	Thu, 13 Feb 2025 20:38:24 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowMCx_ca+561nef0PAA--.63106S3;
-	Thu, 13 Feb 2025 20:38:22 +0800 (CST)
-Subject: Re: [PATCH] compiler.h: Specify correct attribute for
- .rodata..c_jump_table
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
- <20250212175023.rsxsw7pno57gsxps@jpoimboe>
- <b1e5e3ea-be4b-5dae-cc0d-34693429d060@loongson.cn>
- <20250213023936.lzbpgou4eallaij3@jpoimboe>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
- llvm@lists.linux.dev
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
-Date: Thu, 13 Feb 2025 20:38:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+	s=arc-20240116; t=1739453080; c=relaxed/simple;
+	bh=XP35AnA2T+WAfWlH155CjBEZAPtv6z1yE0FxKBjSd/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rOv1TIasSiVMuGqVCVMA2H6dQG/PrSqhspwmLAIk1U1gSbhwacftG4wfkKlem8qayiN3prDHeOPXtNdliwIAA+ZWCBJGiqfoy4mPF9f1ip/WNJZRHsIwVVuHdGr4/WhIh9F7YqyXzPG9DFzAFdLU1DG8aKb1ElODEftvJTvyiNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HHJ8jx8G; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HHJ8jx8G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739453078; x=1770989078;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XP35AnA2T+WAfWlH155CjBEZAPtv6z1yE0FxKBjSd/Q=;
+  b=HHJ8jx8GLJ90Z1RhY6K8TanVopLMbsAYYR1OodGdarThNJom2jm9uJF4
+   HGJGZoEZDKtmnWXSi+5DuMKe6v0AnP59U8RQOT+pXGqJDqJktkbGG/P3Y
+   t9y6EjxPkPEW+ti2rtGo6nJbuGHaKI4avHLieEw8h/gFwbEBYLAmVaCTV
+   l6wUUkce7kI2eYwgVx5dspAMIqvLfqaJn0vBl6mlkBm90OVnMZUf9D6b1
+   xUsQL2hkcPQmlT6v9BGstvvrfupo0Gp98yOqRr7mNYy/ynp/fw/Zzum2g
+   xwBxTy9DrHJM6xvypJuDJU1DDBBvuFQtB6VYZ61PJflY3y3IYw8GvvXA2
+   Q==;
+X-CSE-ConnectionGUID: cpXZw2xLS62HWL2a1rh20A==
+X-CSE-MsgGUID: jzBGUcSDSIq9aJmPJc44Uw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="40185330"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="40185330"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 05:24:38 -0800
+X-CSE-ConnectionGUID: uewYs/I3RhSPZkKw/8disg==
+X-CSE-MsgGUID: 3Xh4enoiSliKHRqYVEe59A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112978250"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2025 05:24:34 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tiZCi-00175r-0B;
+	Thu, 13 Feb 2025 13:24:32 +0000
+Date: Thu, 13 Feb 2025 21:24:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Vinod Koul <vkoul@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 6/7] dmaengine: sh: rz-dmac: Add RZ/V2H(P) support
+Message-ID: <202502132123.1ePmN98r-lkp@intel.com>
+References: <20250212221305.431716-7-fabrizio.castro.jz@renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20250213023936.lzbpgou4eallaij3@jpoimboe>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:qMiowMCx_ca+561nef0PAA--.63106S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Aw1rJFykZr1kWr1kWFWfJFc_yoWxZF17pr
-	yUKFyUKrs5AF15Ca1xKr1Ygr1UtrsrAFy8XF1UJr4UAw15WF1ktF1xtrsrtryDGrn5Xr1Y
-	y39rtw17KFWDAabCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
-	JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
-	v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
-	67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2
-	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFE__UUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250212221305.431716-7-fabrizio.castro.jz@renesas.com>
 
-On 02/13/2025 10:39 AM, Josh Poimboeuf wrote:
-> On Thu, Feb 13, 2025 at 10:20:40AM +0800, Tiezhu Yang wrote:
->> On 02/13/2025 01:50 AM, Josh Poimboeuf wrote:
->>>> @@ -133,7 +133,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
->>>>  #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
->>>>
->>>>  /* Annotate a C jump table to allow objtool to follow the code flow */
->>>> -#define __annotate_jump_table __section(".rodata..c_jump_table")
->>>> +#define __annotate_jump_table __section(".rodata..c_jump_table,\"a\",@progbits #")
->>>
->>> This caused a regression, this hack apparently doesn't work with Clang:
->>>
->>>   $ readelf -WS kernel/bpf/core.o | grep c_jump_table
->>>     [43] .rodata..c_jump_table,"a",@progbits # PROGBITS        0000000000000000 00d610 000800 00   A  0   0 16
->>>
->>> Notice the section name is literally:
->>>
->>>   .rodata..c_jump_table,"a",@progbits #
->>
->> Yes, I noticed this section name which contains the original name
->> ".rodata..c_jump_table" and the specified attribute compiled with
->> Clang, it should not contain the specified attribute.
->>
->> That is strange but seems no effect due to only compare the first
->> few letters of the section name in objtool.
->
-> It actually does have an effect -- objtool doesn't recognize the BPF C
-> jump table (see the use of C_JUMP_TABLE_SECTION in
-> tools/objtool/arch/x86/special.c), resulting in a bogus warning and
-> missing ORC.
->
-> I do have a workaround to use strstarts() instead of strcmp(), I'll be
-> posting that soon.
->
->> I will keep digging with the GNU and LLVM compiler developers.
+Hi Fabrizio,
 
-Specify the attribute like ".rodata..c_jump_table,\"a\",@progbits #"
-explicitly works for GNU toolchains, but this hack apparently doesn't
-work with Clang, the generated section name is wrong, resulting in a
-bogus warning and missing ORC for x86. This is because there is only
-one arg for section name in LLVM, even if the so called attribute is
-specified, it will be recognized as a whole for section name, so it
-is not proper to specify the readonly attribute for the section.
+kernel test robot noticed the following build warnings:
 
-In the top Makefile, there is "-fno-PIE" build flag. For x86, there
-is no "-fPIE" build flag in arch/x86/Makefile for 64 bit kernel. But
-for LoongArch, there is "-fPIE" build flag in arch/loongarch/Makefile
-to override "-fno-PIE" in top Makefile. After some test with GCC and
-Clang on x86 and LoongArch, it shows that the generated "W" (writable)
-section attribute of the section ".rodata..c_jump_table" is depent on
-the compiler option "-fPIE", and then lead to the assembler warning:
-"setting incorrect section attributes for .rodata..c_jump_table".
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on geert-renesas-drivers/renesas-clk robh/for-next linus/master v6.14-rc2 next-20250213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Note that when running the following steps, x86 and LoongArch have the
-same result. If compiled with GCC -fPIE, there is assembler warning for
-x86 and LoongArch; if compiled with Clang -fPIE, there is no assembler
-warning for x86 and LoongArch.
+url:    https://github.com/intel-lab-lkp/linux/commits/Fabrizio-Castro/clk-renesas-r9a09g057-Add-entries-for-the-DMACs/20250213-061714
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20250212221305.431716-7-fabrizio.castro.jz%40renesas.com
+patch subject: [PATCH v2 6/7] dmaengine: sh: rz-dmac: Add RZ/V2H(P) support
+config: powerpc64-randconfig-001-20250213 (https://download.01.org/0day-ci/archive/20250213/202502132123.1ePmN98r-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502132123.1ePmN98r-lkp@intel.com/reproduce)
 
-If just drop the prefix ".rodata" of the section name, that is to say,
-rename ".rodata..c_jump_table" to ".c_jump_table", there is no assembler
-warning for x86 and LoongArch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502132123.1ePmN98r-lkp@intel.com/
 
-Based on the above analysis, in order to avoid changing the behavior of
-GNU assembler and silence the GNU assembler warning, is it possible to
-rename ".rodata..c_jump_table" to ".c_jump_table"? Or should it do some
-changes for GNU assembler?
+All warnings (new ones prefixed by >>):
 
-https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=gas/config/obj-elf.c;hb=HEAD#l741
-               if (match_p->group_name == NULL)
-                 as_warn (_("setting incorrect section attributes for %s"),
-                          name);
+>> drivers/dma/sh/rz-dmac.c:979:15: warning: cast to smaller integer type 'enum rz_dmac_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     979 |         dmac->type = (enum rz_dmac_type)of_device_get_match_data(dmac->dev);
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
-(1) Here is the simple test code with the original section name:
 
-$ cat test.c
-#define __annotate_jump_table 
-__attribute__((__section__(".rodata..c_jump_table")))
+vim +979 drivers/dma/sh/rz-dmac.c
 
-int main()
-{
-	static const void * const jumptable[256] __annotate_jump_table = {
-		[0 ... 255] = &&default_label,
-	};
+   962	
+   963	static int rz_dmac_probe(struct platform_device *pdev)
+   964	{
+   965		const char *irqname = "error";
+   966		struct dma_device *engine;
+   967		struct rz_dmac *dmac;
+   968		int channel_num;
+   969		int ret;
+   970		int irq;
+   971		u8 i;
+   972	
+   973		dmac = devm_kzalloc(&pdev->dev, sizeof(*dmac), GFP_KERNEL);
+   974		if (!dmac)
+   975			return -ENOMEM;
+   976	
+   977		dmac->dev = &pdev->dev;
+   978		platform_set_drvdata(pdev, dmac);
+ > 979		dmac->type = (enum rz_dmac_type)of_device_get_match_data(dmac->dev);
+   980	
+   981		ret = rz_dmac_parse_of(&pdev->dev, dmac);
+   982		if (ret < 0)
+   983			return ret;
+   984	
+   985		dmac->channels = devm_kcalloc(&pdev->dev, dmac->n_channels,
+   986					      sizeof(*dmac->channels), GFP_KERNEL);
+   987		if (!dmac->channels)
+   988			return -ENOMEM;
+   989	
+   990		/* Request resources */
+   991		dmac->base = devm_platform_ioremap_resource(pdev, 0);
+   992		if (IS_ERR(dmac->base))
+   993			return PTR_ERR(dmac->base);
+   994	
+   995		if (dmac->type == RZ_DMAC_RZG2L) {
+   996			dmac->ext_base = devm_platform_ioremap_resource(pdev, 1);
+   997			if (IS_ERR(dmac->ext_base))
+   998				return PTR_ERR(dmac->ext_base);
+   999		} else {
+  1000			ret = rz_dmac_parse_of_icu(&pdev->dev, dmac);
+  1001			if (ret)
+  1002				return ret;
+  1003		}
+  1004	
+  1005		/* Register interrupt handler for error */
+  1006		irq = platform_get_irq_byname(pdev, irqname);
+  1007		if (irq < 0)
+  1008			return irq;
+  1009	
+  1010		ret = devm_request_irq(&pdev->dev, irq, rz_dmac_irq_handler, 0,
+  1011				       irqname, NULL);
+  1012		if (ret) {
+  1013			dev_err(&pdev->dev, "failed to request IRQ %u (%d)\n",
+  1014				irq, ret);
+  1015			return ret;
+  1016		}
+  1017	
+  1018		/* Initialize the channels. */
+  1019		INIT_LIST_HEAD(&dmac->engine.channels);
+  1020	
+  1021		dmac->rstc = devm_reset_control_array_get_optional_exclusive(&pdev->dev);
+  1022		if (IS_ERR(dmac->rstc))
+  1023			return dev_err_probe(&pdev->dev, PTR_ERR(dmac->rstc),
+  1024					     "failed to get resets\n");
+  1025	
+  1026		pm_runtime_enable(&pdev->dev);
+  1027		ret = pm_runtime_resume_and_get(&pdev->dev);
+  1028		if (ret < 0) {
+  1029			dev_err(&pdev->dev, "pm_runtime_resume_and_get failed\n");
+  1030			goto err_pm_disable;
+  1031		}
+  1032	
+  1033		ret = reset_control_deassert(dmac->rstc);
+  1034		if (ret)
+  1035			goto err_pm_runtime_put;
+  1036	
+  1037		for (i = 0; i < dmac->n_channels; i++) {
+  1038			ret = rz_dmac_chan_probe(dmac, &dmac->channels[i], i);
+  1039			if (ret < 0)
+  1040				goto err;
+  1041		}
+  1042	
+  1043		/* Register the DMAC as a DMA provider for DT. */
+  1044		ret = of_dma_controller_register(pdev->dev.of_node, rz_dmac_of_xlate,
+  1045						 NULL);
+  1046		if (ret < 0)
+  1047			goto err;
+  1048	
+  1049		/* Register the DMA engine device. */
+  1050		engine = &dmac->engine;
+  1051		dma_cap_set(DMA_SLAVE, engine->cap_mask);
+  1052		dma_cap_set(DMA_MEMCPY, engine->cap_mask);
+  1053		rz_dmac_writel(dmac, DCTRL_DEFAULT, CHANNEL_0_7_COMMON_BASE + DCTRL);
+  1054		rz_dmac_writel(dmac, DCTRL_DEFAULT, CHANNEL_8_15_COMMON_BASE + DCTRL);
+  1055	
+  1056		engine->dev = &pdev->dev;
+  1057	
+  1058		engine->device_alloc_chan_resources = rz_dmac_alloc_chan_resources;
+  1059		engine->device_free_chan_resources = rz_dmac_free_chan_resources;
+  1060		engine->device_tx_status = dma_cookie_status;
+  1061		engine->device_prep_slave_sg = rz_dmac_prep_slave_sg;
+  1062		engine->device_prep_dma_memcpy = rz_dmac_prep_dma_memcpy;
+  1063		engine->device_config = rz_dmac_config;
+  1064		engine->device_terminate_all = rz_dmac_terminate_all;
+  1065		engine->device_issue_pending = rz_dmac_issue_pending;
+  1066		engine->device_synchronize = rz_dmac_device_synchronize;
+  1067	
+  1068		engine->copy_align = DMAENGINE_ALIGN_1_BYTE;
+  1069		dma_set_max_seg_size(engine->dev, U32_MAX);
+  1070	
+  1071		ret = dma_async_device_register(engine);
+  1072		if (ret < 0) {
+  1073			dev_err(&pdev->dev, "unable to register\n");
+  1074			goto dma_register_err;
+  1075		}
+  1076		return 0;
+  1077	
+  1078	dma_register_err:
+  1079		of_dma_controller_free(pdev->dev.of_node);
+  1080	err:
+  1081		channel_num = i ? i - 1 : 0;
+  1082		for (i = 0; i < channel_num; i++) {
+  1083			struct rz_dmac_chan *channel = &dmac->channels[i];
+  1084	
+  1085			dma_free_coherent(&pdev->dev,
+  1086					  sizeof(struct rz_lmdesc) * DMAC_NR_LMDESC,
+  1087					  channel->lmdesc.base,
+  1088					  channel->lmdesc.base_dma);
+  1089		}
+  1090	
+  1091		reset_control_assert(dmac->rstc);
+  1092	err_pm_runtime_put:
+  1093		pm_runtime_put(&pdev->dev);
+  1094	err_pm_disable:
+  1095		pm_runtime_disable(&pdev->dev);
+  1096	
+  1097		return ret;
+  1098	}
+  1099	
 
-default_label:
-	return 0;
-}
-
-(2) Here is the build script:
-
-$ cat build.sh
-#!/bin/bash
-
-uname -m
-echo ""
-
-rm -f *gcc* *clang*
-
-echo "test with gcc fpie"
-gcc -fPIE -E test.c -o test_with_gcc_fpie.i
-gcc -fPIE -S test_with_gcc_fpie.i -o test_with_gcc_fpie.s
-gcc -fPIE -c test_with_gcc_fpie.s -o test_with_gcc_fpie.o
-readelf -S test_with_gcc_fpie.o | grep -A 1 "c_j" | head -2
-echo ""
-
-echo "test with gcc fnopie"
-gcc -fno-PIE -E test.c -o test_with_gcc_fnopie.i
-gcc -fno-PIE -S test_with_gcc_fnopie.i -o test_with_gcc_fnopie.s
-gcc -fno-PIE -c test_with_gcc_fnopie.s -o test_with_gcc_fnopie.o
-readelf -S test_with_gcc_fnopie.o | grep -A 1 "c_j" | head -2
-echo ""
-
-echo "test with clang fpie"
-clang -fPIE -E test.c -o test_with_clang_fpie.i
-clang -fPIE -S test_with_clang_fpie.i -o test_with_clang_fpie.s
-clang -fPIE -c test_with_clang_fpie.s -o test_with_clang_fpie.o
-readelf -S test_with_clang_fpie.o | grep -A 1 "c_j" | head -2
-echo ""
-
-echo "test with clang fnopie"
-clang -fno-PIE -E test.c -o test_with_clang_fnopie.i
-clang -fno-PIE -S test_with_clang_fnopie.i -o test_with_clang_fnopie.s
-clang -fno-PIE -c test_with_clang_fnopie.s -o test_with_clang_fnopie.o
-readelf -S test_with_clang_fnopie.o | grep -A 1 "c_j" | head -2
-
-(3) Here is the test result with the original section name:
-
-$ ./build.sh
-x86_64
-
-test with gcc fpie
-test_with_gcc_fpie.s: Assembler messages:
-test_with_gcc_fpie.s:3: Warning: setting incorrect section attributes 
-for .rodata..c_jump_table
-   [ 4] .rodata..c_j[...] PROGBITS         0000000000000000  00000060
-        0000000000000800  0000000000000000  WA       0     0     32
-
-test with gcc fnopie
-   [ 4] .rodata..c_j[...] PROGBITS         0000000000000000  00000060
-        0000000000000800  0000000000000000   A       0     0     32
-
-test with clang fpie
-   [ 3] .rodata..c_j[...] PROGBITS         0000000000000000  00000050
-        0000000000000800  0000000000000000  WA       0     0     16
-
-test with clang fnopie
-   [ 3] .rodata..c_j[...] PROGBITS         0000000000000000  00000050
-        0000000000000800  0000000000000000   A       0     0     16
-
-(4) Here is the simple test code with the modified section name:
-
-$ cat test.c
-#define __annotate_jump_table  __attribute__((__section__(".c_jump_table")))
-
-int main()
-{
-	static const void * const jumptable[256] __annotate_jump_table = {
-		[0 ... 255] = &&default_label,
-	};
-
-default_label:
-	return 0;
-}
-
-(5) Here is the test result with the modified section name:
-     (note that build.sh is not changed)
-
-$ ./build.sh
-x86_64
-
-test with gcc fpie
-   [ 4] .c_jump_table     PROGBITS         0000000000000000  00000060
-        0000000000000800  0000000000000000  WA       0     0     32
-
-test with gcc fnopie
-   [ 4] .c_jump_table     PROGBITS         0000000000000000  00000060
-        0000000000000800  0000000000000000   A       0     0     32
-
-test with clang fpie
-   [ 3] .c_jump_table     PROGBITS         0000000000000000  00000050
-        0000000000000800  0000000000000000  WA       0     0     16
-
-test with clang fnopie
-   [ 3] .c_jump_table     PROGBITS         0000000000000000  00000050
-        0000000000000800  0000000000000000   A       0     0     16
-
-Thanks,
-Tiezhu
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
