@@ -1,59 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9322063DA;
-	Thu, 13 Feb 2025 08:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCC420C461;
+	Thu, 13 Feb 2025 09:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739436730; cv=none; b=ebR9MhjbxGk1k9nYK1wBvjpjd9JuZ7ySRXKf6EYVkT1p9OMoxXiBXZy9GCp1wnXOfV8Qi1hqoVXrIM4WHHKFTO5nxE0cDKRMg3M2jslI1RJ5uBxpTisJ4kiDBDWO/6hj7aPMjLLVIC7s55D3nS6kG5px6ZbbC5fwqPP2TuqDyJE=
+	t=1739437394; cv=none; b=m6jOJkCseqZ59E7hh0xXv6XQRVzUan/ldHF/vCSsKNLu/F/zPzpZghcmYReJNYD+NAUk44nJJA8SKIj8x+HElVTfMymn7+faeUcZ5ZVvrX/fGyuZKFGKJstE1cr68c4Ud/dwOB9StSkhOSutvTGkk8qjiBFrbzmpWO6X8XPDrVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739436730; c=relaxed/simple;
-	bh=78XYhWlcpAj0M/0FsxIdSd3CZI0VvsSTmcoDPwXt6sI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jzRQwcoTlM1qkSoyWUwI953IHowLZAcDv/CU45TePrH6fzZlBzCF9vnIBI98iBq9SmuZDzNFOn+g/ihN0zM9dSqft+3JW6ZrZnL5Vy2mDbThE19nI24dFElEWWv3NzqoR4pMq1mn17VDemhAPa+1rhkNltqqWkXYC/Cb7MhN3WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=io/jdjIE; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1739437394; c=relaxed/simple;
+	bh=wyVqmKW6qzEXY/2+wreWQuYQKHFVrSv5qadbTzVZLSY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CcQ5Z7ZdSD4VeL016Xs+/uOcVDOhflzjVUF/NKR1gUS+A8xYviJ4/zxkvEI8C/wJVdamXmV7T0BEpDBrJGme7+aiI/cUhoFEtHQH88Zr9zeNn4zrtvpAV0AxL5Ht4I4eO7dUuPsgMD58XczX3F8y/0kB+vO2FX71TagCN9V1rR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BCbMS/HN; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="io/jdjIE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BCbMS/HN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739436728; x=1770972728;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=78XYhWlcpAj0M/0FsxIdSd3CZI0VvsSTmcoDPwXt6sI=;
-  b=io/jdjIEY3dx1pwJZvmV6C/2iL4f7rCxM3YV+KrJQKjk7Qby6Qn36vrC
-   35pZRLjuC9lAMl+LTcOSu7ZFwMZ6VrefqWn2hUmqKEreFhk2Hy7pRDvar
-   6pYyxoKbmM/4sWfV+3lp6THmwv3qEhoXZA6tlEd9AD3OCcgPiBT71q4SY
-   6t1AtBbhW1NV8QtdgIpHBRZdTHfsH9svdUsv6Em/oSU6E2sPUD4y+S3gJ
-   I5qtNeFDQGnA+9FxEhU2gEXYaDVCuXxYH8996KdWJaJOV/L56qvxyBLdU
-   nPOqLBBVQCK3lvN4gKoI5JOOAiDxFAcc+XRTAMsNFlPt32KiyJx8MJKY+
-   g==;
-X-CSE-ConnectionGUID: VxzRPhGiREaX/+qF14d4iQ==
-X-CSE-MsgGUID: eHJLibTmQwuocvwHd9JneQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="40389980"
+  t=1739437393; x=1770973393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wyVqmKW6qzEXY/2+wreWQuYQKHFVrSv5qadbTzVZLSY=;
+  b=BCbMS/HNHCJQBkE3pmbg8Tj7pqg15FpLV2xdcdye3JOKmfkUwJcHkRIc
+   nb6pk6itduYYf5Fsq1+HSFzVac46sqTFEk/mch4zkDPuxF4F6DkpSpSDk
+   XBGUzxTeG2nveGslG5I4l9OTxbh4I3d2i2TEIpl+E0txGauWr23v6jDW4
+   d4RgCZD7fui04zSvxMQztu+6rLf9Z7vRNFASJwM8RonTL/Mdw+KXfTqcH
+   nIL9YBTvWqtw/K4N4Kk9yNLDynu17vYAA4YeX+2qY5s/ldnetAWcR1+UC
+   zHtZj3SCdBbGDbDb+rvFHBK2zcEE8f7j0rd86APowFtSuYPdg2o/RpL2K
+   A==;
+X-CSE-ConnectionGUID: 6mzCqpC7SdGIBvB24wGmlA==
+X-CSE-MsgGUID: 8fKvRZ+cSISvKppahPw6Sg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="42964605"
 X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="40389980"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:52:07 -0800
-X-CSE-ConnectionGUID: c20MvgWKTkCns3a+ogZOVQ==
-X-CSE-MsgGUID: 4+FxrO23SSqmln86dUmvZg==
+   d="scan'208";a="42964605"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 01:03:11 -0800
+X-CSE-ConnectionGUID: xLD9b4BYSA2msdlFhvPgzA==
+X-CSE-MsgGUID: IVYzpRB/RkKRgnnvJ6SyEA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="112922715"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="112851152"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2025 00:52:06 -0800
+  by orviesa009.jf.intel.com with ESMTP; 13 Feb 2025 01:03:06 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tiUx1-0016pz-1k;
-	Thu, 13 Feb 2025 08:52:03 +0000
-Date: Thu, 13 Feb 2025 16:51:57 +0800
+	id 1tiV7g-0016qp-1x;
+	Thu, 13 Feb 2025 09:03:04 +0000
+Date: Thu, 13 Feb 2025 17:02:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Theodore Ts'o <tytso@mit.edu>
+To: Philipp Stanner <phasta@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Yinggang Gu <guyinggang@loongson.cn>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Philipp Stanner <pstanner@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-ext4@vger.kernel.org
-Subject: [tytso-ext4:test 14/15] fs/ext4/namei.c:1602:13: error: no member
- named 's_encoding_flags' in 'struct super_block'
-Message-ID: <202502131631.QY6jPFdz-lkp@intel.com>
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] stmmac: Replace deprecated PCI functions
+Message-ID: <202502131623.bMnlG9wy-lkp@intel.com>
+References: <20250212145831.101719-2-phasta@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,195 +75,151 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250212145831.101719-2-phasta@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git test
-head:   e5a9a1fce162be14c6f1ac325faac48b1a7dea9e
-commit: 9a66196d3bda397030358f6608d3d40a6db18f8f [14/15] ext4: introduce linear search for dentries
-config: riscv-randconfig-001-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131631.QY6jPFdz-lkp@intel.com/config)
+Hi Philipp,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.14-rc2 next-20250213]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Stanner/stmmac-Replace-deprecated-PCI-functions/20250212-230254
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250212145831.101719-2-phasta%40kernel.org
+patch subject: [PATCH] stmmac: Replace deprecated PCI functions
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250213/202502131623.bMnlG9wy-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131631.QY6jPFdz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131623.bMnlG9wy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502131631.QY6jPFdz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502131623.bMnlG9wy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/ext4/namei.c:1602:13: error: no member named 's_encoding_flags' in 'struct super_block'
-    1602 |                 else if (!sb_no_casefold_compat_fallback(dir->i_sb) &&
-         |                           ^                              ~~~~~~~~~
-   include/linux/fs.h:1268:7: note: expanded from macro 'sb_no_casefold_compat_fallback'
-    1268 |         (sb->s_encoding_flags & SB_ENC_NO_COMPAT_FALLBACK_FL)
-         |          ~~  ^
-   1 error generated.
+   In file included from drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c:13:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c:197:28: error: expected ';' after return statement
+     197 |                         return PTR_ERR(res.addr)
+         |                                                 ^
+         |                                                 ;
+   3 warnings and 1 error generated.
 
 
-vim +1602 fs/ext4/namei.c
+vim +197 drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
 
-  1537	
-  1538	/*
-  1539	 *	__ext4_find_entry()
-  1540	 *
-  1541	 * finds an entry in the specified directory with the wanted name. It
-  1542	 * returns the cache buffer in which the entry was found, and the entry
-  1543	 * itself (as a parameter - res_dir). It does NOT read the inode of the
-  1544	 * entry - you'll have to do that yourself if you want to.
-  1545	 *
-  1546	 * The returned buffer_head has ->b_count elevated.  The caller is expected
-  1547	 * to brelse() it when appropriate.
-  1548	 */
-  1549	static struct buffer_head *__ext4_find_entry(struct inode *dir,
-  1550						     struct ext4_filename *fname,
-  1551						     struct ext4_dir_entry_2 **res_dir,
-  1552						     int *inlined)
-  1553	{
-  1554		struct super_block *sb;
-  1555		struct buffer_head *bh_use[NAMEI_RA_SIZE];
-  1556		struct buffer_head *bh, *ret = NULL;
-  1557		ext4_lblk_t start, block;
-  1558		const u8 *name = fname->usr_fname->name;
-  1559		size_t ra_max = 0;	/* Number of bh's in the readahead
-  1560					   buffer, bh_use[] */
-  1561		size_t ra_ptr = 0;	/* Current index into readahead
-  1562					   buffer */
-  1563		ext4_lblk_t  nblocks;
-  1564		int i, namelen, retval;
-  1565	
-  1566		*res_dir = NULL;
-  1567		sb = dir->i_sb;
-  1568		namelen = fname->usr_fname->len;
-  1569		if (namelen > EXT4_NAME_LEN)
-  1570			return NULL;
-  1571	
-  1572		if (ext4_has_inline_data(dir)) {
-  1573			int has_inline_data = 1;
-  1574			ret = ext4_find_inline_entry(dir, fname, res_dir,
-  1575						     &has_inline_data);
-  1576			if (inlined)
-  1577				*inlined = has_inline_data;
-  1578			if (has_inline_data || IS_ERR(ret))
-  1579				goto cleanup_and_exit;
-  1580		}
-  1581	
-  1582		if ((namelen <= 2) && (name[0] == '.') &&
-  1583		    (name[1] == '.' || name[1] == '\0')) {
-  1584			/*
-  1585			 * "." or ".." will only be in the first block
-  1586			 * NFS may look up ".."; "." should be handled by the VFS
-  1587			 */
-  1588			block = start = 0;
-  1589			nblocks = 1;
-  1590			goto restart;
-  1591		}
-  1592		if (is_dx(dir)) {
-  1593			ret = ext4_dx_find_entry(dir, fname, res_dir);
-  1594			/*
-  1595			 * On success, or if the error was file not found,
-  1596			 * return.  Otherwise, fall back to doing a search the
-  1597			 * old fashioned way.
-  1598			 */
-  1599			if (IS_ERR(ret) && PTR_ERR(ret) == ERR_BAD_DX_DIR)
-  1600				dxtrace(printk(KERN_DEBUG "ext4_find_entry: dx failed, "
-  1601					       "falling back\n"));
-> 1602			else if (!sb_no_casefold_compat_fallback(dir->i_sb) &&
-  1603				 *res_dir == NULL && IS_CASEFOLDED(dir))
-  1604				dxtrace(printk(KERN_DEBUG "ext4_find_entry: casefold "
-  1605					       "failed, falling back\n"));
-  1606			else
-  1607				goto cleanup_and_exit;
-  1608			ret = NULL;
-  1609		}
-  1610		nblocks = dir->i_size >> EXT4_BLOCK_SIZE_BITS(sb);
-  1611		if (!nblocks) {
-  1612			ret = NULL;
-  1613			goto cleanup_and_exit;
-  1614		}
-  1615		start = EXT4_I(dir)->i_dir_start_lookup;
-  1616		if (start >= nblocks)
-  1617			start = 0;
-  1618		block = start;
-  1619	restart:
-  1620		do {
-  1621			/*
-  1622			 * We deal with the read-ahead logic here.
-  1623			 */
-  1624			cond_resched();
-  1625			if (ra_ptr >= ra_max) {
-  1626				/* Refill the readahead buffer */
-  1627				ra_ptr = 0;
-  1628				if (block < start)
-  1629					ra_max = start - block;
-  1630				else
-  1631					ra_max = nblocks - block;
-  1632				ra_max = min(ra_max, ARRAY_SIZE(bh_use));
-  1633				retval = ext4_bread_batch(dir, block, ra_max,
-  1634							  false /* wait */, bh_use);
-  1635				if (retval) {
-  1636					ret = ERR_PTR(retval);
-  1637					ra_max = 0;
-  1638					goto cleanup_and_exit;
-  1639				}
-  1640			}
-  1641			if ((bh = bh_use[ra_ptr++]) == NULL)
-  1642				goto next;
-  1643			wait_on_buffer(bh);
-  1644			if (!buffer_uptodate(bh)) {
-  1645				EXT4_ERROR_INODE_ERR(dir, EIO,
-  1646						     "reading directory lblock %lu",
-  1647						     (unsigned long) block);
-  1648				brelse(bh);
-  1649				ret = ERR_PTR(-EIO);
-  1650				goto cleanup_and_exit;
-  1651			}
-  1652			if (!buffer_verified(bh) &&
-  1653			    !is_dx_internal_node(dir, block,
-  1654						 (struct ext4_dir_entry *)bh->b_data) &&
-  1655			    !ext4_dirblock_csum_verify(dir, bh)) {
-  1656				EXT4_ERROR_INODE_ERR(dir, EFSBADCRC,
-  1657						     "checksumming directory "
-  1658						     "block %lu", (unsigned long)block);
-  1659				brelse(bh);
-  1660				ret = ERR_PTR(-EFSBADCRC);
-  1661				goto cleanup_and_exit;
-  1662			}
-  1663			set_buffer_verified(bh);
-  1664			i = search_dirblock(bh, dir, fname,
-  1665				    block << EXT4_BLOCK_SIZE_BITS(sb), res_dir);
-  1666			if (i == 1) {
-  1667				EXT4_I(dir)->i_dir_start_lookup = block;
-  1668				ret = bh;
-  1669				goto cleanup_and_exit;
-  1670			} else {
-  1671				brelse(bh);
-  1672				if (i < 0) {
-  1673					ret = ERR_PTR(i);
-  1674					goto cleanup_and_exit;
-  1675				}
-  1676			}
-  1677		next:
-  1678			if (++block >= nblocks)
-  1679				block = 0;
-  1680		} while (block != start);
-  1681	
-  1682		/*
-  1683		 * If the directory has grown while we were searching, then
-  1684		 * search the last part of the directory before giving up.
-  1685		 */
-  1686		block = nblocks;
-  1687		nblocks = dir->i_size >> EXT4_BLOCK_SIZE_BITS(sb);
-  1688		if (block < nblocks) {
-  1689			start = 0;
-  1690			goto restart;
-  1691		}
-  1692	
-  1693	cleanup_and_exit:
-  1694		/* Clean up the read-ahead blocks */
-  1695		for (; ra_ptr < ra_max; ra_ptr++)
-  1696			brelse(bh_use[ra_ptr]);
-  1697		return ret;
-  1698	}
-  1699	
+   140	
+   141	/**
+   142	 * stmmac_pci_probe
+   143	 *
+   144	 * @pdev: pci device pointer
+   145	 * @id: pointer to table of device id/id's.
+   146	 *
+   147	 * Description: This probing function gets called for all PCI devices which
+   148	 * match the ID table and are not "owned" by other driver yet. This function
+   149	 * gets passed a "struct pci_dev *" for each device whose entry in the ID table
+   150	 * matches the device. The probe functions returns zero when the driver choose
+   151	 * to take "ownership" of the device or an error code(-ve no) otherwise.
+   152	 */
+   153	static int stmmac_pci_probe(struct pci_dev *pdev,
+   154				    const struct pci_device_id *id)
+   155	{
+   156		struct stmmac_pci_info *info = (struct stmmac_pci_info *)id->driver_data;
+   157		struct plat_stmmacenet_data *plat;
+   158		struct stmmac_resources res = {};
+   159		int i;
+   160		int ret;
+   161	
+   162		plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
+   163		if (!plat)
+   164			return -ENOMEM;
+   165	
+   166		plat->mdio_bus_data = devm_kzalloc(&pdev->dev,
+   167						   sizeof(*plat->mdio_bus_data),
+   168						   GFP_KERNEL);
+   169		if (!plat->mdio_bus_data)
+   170			return -ENOMEM;
+   171	
+   172		plat->dma_cfg = devm_kzalloc(&pdev->dev, sizeof(*plat->dma_cfg),
+   173					     GFP_KERNEL);
+   174		if (!plat->dma_cfg)
+   175			return -ENOMEM;
+   176	
+   177		plat->safety_feat_cfg = devm_kzalloc(&pdev->dev,
+   178						     sizeof(*plat->safety_feat_cfg),
+   179						     GFP_KERNEL);
+   180		if (!plat->safety_feat_cfg)
+   181			return -ENOMEM;
+   182	
+   183		/* Enable pci device */
+   184		ret = pcim_enable_device(pdev);
+   185		if (ret) {
+   186			dev_err(&pdev->dev, "%s: ERROR: failed to enable device\n",
+   187				__func__);
+   188			return ret;
+   189		}
+   190	
+   191		/* The first BAR > 0 is the base IO addr of our device. */
+   192		for (i = 0; i < PCI_STD_NUM_BARS; i++) {
+   193			if (pci_resource_len(pdev, i) == 0)
+   194				continue;
+   195			res.addr = pcim_iomap_region(pdev, i, STMMAC_RESOURCE_NAME);
+   196			if (IS_ERR(res.addr))
+ > 197				return PTR_ERR(res.addr)
+   198			break;
+   199		}
+   200	
+   201		pci_set_master(pdev);
+   202	
+   203		ret = info->setup(pdev, plat);
+   204		if (ret)
+   205			return ret;
+   206	
+   207		res.wol_irq = pdev->irq;
+   208		res.irq = pdev->irq;
+   209	
+   210		plat->safety_feat_cfg->tsoee = 1;
+   211		plat->safety_feat_cfg->mrxpee = 1;
+   212		plat->safety_feat_cfg->mestee = 1;
+   213		plat->safety_feat_cfg->mrxee = 1;
+   214		plat->safety_feat_cfg->mtxee = 1;
+   215		plat->safety_feat_cfg->epsi = 1;
+   216		plat->safety_feat_cfg->edpp = 1;
+   217		plat->safety_feat_cfg->prtyen = 1;
+   218		plat->safety_feat_cfg->tmouten = 1;
+   219	
+   220		return stmmac_dvr_probe(&pdev->dev, plat, &res);
+   221	}
+   222	
 
 -- 
 0-DAY CI Kernel Test Service
