@@ -1,144 +1,145 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF7D137C2A
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 01:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1E314A60F;
+	Thu, 13 Feb 2025 02:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739410103; cv=none; b=KQEZJTerlT8jcsyClWrlG5sDmZ1P2YGcWU4vZxB8VWvWZMcAI0cyAOV7t2tNgDgx2RL5/7AsY8Hne1Oi9jNyymTiJ26nhtc1BArHHqPaUWpGkwm99b8RsE0tjdJNQUUTU/we4VEu45fVVhRd1LTCgOEdsLezRSIn0wIEtGledac=
+	t=1739413252; cv=none; b=nPI/7TFN1B8Iesa56d0YvinXbhSVnegzxoXP186e+istdIRPhbg2BtegCyoifxGRtEPWe+4QndSNf5RclW7QPQH1SvU0s0J74Sg6G6OKqh6rWmJPgu8C1Sbojp2XfSvY/A0pBHwf4FWkkgsAsUUh0OCByMGH5178T4va1IFKaPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739410103; c=relaxed/simple;
-	bh=FnnVExe7d6QVUJNp8Nm3NF0K0bg0bBBcU3T/4AzgGYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GRujwRSVtBRV4tswZiCnrUE+Zlh5t5gX/U35/lNG0fPBfJ0J3mNkhezKHUek084OLN/64blE8FY6efFnuUfBKZF/J6TKE3BV3ivgFFvFDbEQdk07QXwgwXsGs8EzerPHYMCuiAMjeOD4/XFiu4x4x1jdCfOcrBB50TSs+zn95dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kT1w2zww; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kT1w2zww"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38f26a82d1dso13149f8f.2
-        for <llvm@lists.linux.dev>; Wed, 12 Feb 2025 17:28:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739410100; x=1740014900; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FnnVExe7d6QVUJNp8Nm3NF0K0bg0bBBcU3T/4AzgGYI=;
-        b=kT1w2zwwGZCIjyS6lzx2gX+8UUrN1lPBr02K2KKvdVOirOoG3ibE/Y4Xoc3KBFsnrS
-         Q8M9hWD4jyncZmJjxzFv0t8qTVLuiIIQKSG+YqsKCsyV8sIkb0Zl0XPyY8h/kDbhN4hE
-         n1RI8KMqXG+2KRUQn0FtAygXe9qwSC7vBUWq8RQxghJt6X0Jvb6C2yOrUpzeWRCoKKNG
-         d/LkjDgRm+u9l+cOMKTwHckmnjMp2LflhEXHswLDcxHEQSdREsTFsvUpoj9jaJ0jejS6
-         7bh7VypSTMUcykFvSYbuWhnyGPvtB62vxdp/vPGKINxMqxcU+0ml4rrJcG/goNB68LoU
-         Nd7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739410100; x=1740014900;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FnnVExe7d6QVUJNp8Nm3NF0K0bg0bBBcU3T/4AzgGYI=;
-        b=rGkIOY7z6i4hQvOKRpnc78xlzrlihVy0bPiYh4J5TRkvPJPit+stzmT6pQw1JI43e5
-         Qeg+pQU0zW7dd49KqADpTIRl6OmeINP+NwglUJ+bVXvv4ClEl9TN0TQlS6yFXe+OYgBA
-         gFhBCrqOhg9HIV3+mGR3rldzAYJfKldVDwsdqYCvUDTzXqr6Uv9v21rO1HZ7fsEpNat6
-         6zSUlCFiJIPEwFs/mRvgqUibMX6heiNIrfN20z3MZanBKdJCE9qQVJwXLXKd9ja1b5V7
-         kgtHzJZ9kD3RXHoezqLgfjACiiFuwYiL1aiP2K0/F/snocG7+A8Xec7suEzdxzHIX0/G
-         HaDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAnclhNRDNl8LGsv3Iv/B6mL+7CnNxK3CXa8gNUXDwlHvjlQBVEo1bqgRSJtxDcvbWn0/s@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxb5fhczeoX1U7NXl4oWiA0V7advhL+Ay7lx5Dsx/n41AEpuHbg
-	35Mfigez6cvjF+6EqzUwBRqPpXi8+zn45dtVhn1pwsGlsmAWU8I13qd23hOKj9/1athmsFIcAiS
-	mTrUT4rCZoEHux6zQ2m2AuBDqmyg=
-X-Gm-Gg: ASbGncvAwttAeK/Oj23SKZ5TkEFJqHekemEXpHcrkfMALpwnfBWHQbfcgAbNlCbeJtL
-	sIPh9Fqj2GnI2+VRPCQWiwaZvtjQ9AOs/6TWSbjH69uRO9esdA3v9wP3mrAvHmOi7OapcwZLeJT
-	A=
-X-Google-Smtp-Source: AGHT+IEhltifMX701fYkEDmSU69qM9C3gXECNDsqw8PpPT3Yw5x0mc+ricaPHhG6ElqQmHswedH/T+PZOKbLltISlh4=
-X-Received: by 2002:a05:6000:144f:b0:38f:227e:6ff2 with SMTP id
- ffacd0b85a97d-38f244df054mr1302880f8f.14.1739410099435; Wed, 12 Feb 2025
- 17:28:19 -0800 (PST)
+	s=arc-20240116; t=1739413252; c=relaxed/simple;
+	bh=7yOfSs4iMJZzUnntYhUmEAQd0afxVo7w4k64T6PK0LA=;
+	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=HU3lHJid0oTyaLp8dR/oY7jeJByvf5PAOoa41gQ+XWapX42ofJ9Q3jRkPEv8JbxBa8bRicxLGcLASTTbIzoq0N+/Sr7J8Y7cTEx88b5FiqEoiPFwCZddMlZe74aEuDCtrweYcBg7tyeMtrVzKGk0gGNgj+G0m42dQkkSgUhYSoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8AxHHL+Vq1nNrtzAA--.4744S3;
+	Thu, 13 Feb 2025 10:20:46 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMCxPsf4Vq1nrhAPAA--.59606S3;
+	Thu, 13 Feb 2025 10:20:41 +0800 (CST)
+Subject: Re: [PATCH] compiler.h: Specify correct attribute for
+ .rodata..c_jump_table
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
+ <20250212175023.rsxsw7pno57gsxps@jpoimboe>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b1e5e3ea-be4b-5dae-cc0d-34693429d060@loongson.cn>
+Date: Thu, 13 Feb 2025 10:20:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20241022015913.3524425-1-samuel.holland@sifive.com>
- <20241022015913.3524425-2-samuel.holland@sifive.com> <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
- <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
- <zjuvfdbl7q76ahdxk3lrgaznk7vjj43f5ftzfgrnca6dqtcd5x@5qj24womzgyq>
- <CA+fCnZfySpeRy0FCFidLdUUeqp97eBdjAqQyYPpz1WxYwcsW9A@mail.gmail.com>
- <aqhm7lc57srsfuff3bceb3dcmsdyxksb7t6bgwbqi54ppevpoh@apolj3nteaz6> <CA+fCnZdjTkreTcoo+J8wMhwDuAFM4g33U5BFy0OPtE0UCvyJbQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZdjTkreTcoo+J8wMhwDuAFM4g33U5BFy0OPtE0UCvyJbQ@mail.gmail.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 13 Feb 2025 02:28:08 +0100
-X-Gm-Features: AWEUYZn2XkAKpo5fHBIg4DaefcDCWc7cwclFMrZ0d3cOTpLW86BXbO6cjB81ilc
-Message-ID: <CA+fCnZcoVdfXVN8VBFLx835cV0eGAT6Ewror2whLW761JnHjNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow computation
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: Samuel Holland <samuel.holland@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	linux-riscv@lists.infradead.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, kasan-dev@googlegroups.com, 
-	llvm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon <will@kernel.org>, 
-	Evgenii Stepanov <eugenis@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250212175023.rsxsw7pno57gsxps@jpoimboe>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowMCxPsf4Vq1nrhAPAA--.59606S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFykGFWrWF4fArWfGF47WrX_yoW5uw1fpr
+	WDCFyqgFs5Zr1Y9a12qw1akr17tw42yF18WrWDKryjyw15Xr1vgF1ktrsxKayDKr1UJw10
+	qw4Iqry5Ka4UZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUU
+	U
 
-On Thu, Feb 13, 2025 at 2:21=E2=80=AFAM Andrey Konovalov <andreyknvl@gmail.=
-com> wrote:
+On 02/13/2025 01:50 AM, Josh Poimboeuf wrote:
+> On Tue, Sep 24, 2024 at 02:27:10PM +0800, Tiezhu Yang wrote:
+>> Currently, there is an assembler message when generating kernel/bpf/core.o
+>> under CONFIG_OBJTOOL with LoongArch compiler toolchain:
+>>
+>>   Warning: setting incorrect section attributes for .rodata..c_jump_table
+>>
+>> This is because the section ".rodata..c_jump_table" should be readonly,
+>> but there is a "W" (writable) part of the flags:
+>>
+>>   $ readelf -S kernel/bpf/core.o | grep -A 1 "rodata..c"
+>>   [34] .rodata..c_j[...] PROGBITS         0000000000000000  0000d2e0
+>>        0000000000000800  0000000000000000  WA       0     0     8
+>>
+>> There is no above issue on x86 due to the generated section flag is only
+>> "A" (allocatable). In order to silence the warning on LoongArch, specify
+>> the attribute like ".rodata..c_jump_table,\"a\",@progbits #" explicitly,
+>> then the section attribute of ".rodata..c_jump_table" must be readonly
+>> in the kernel/bpf/core.o file.
+>>
+>> Before:
+>>
+>>   $ objdump -h kernel/bpf/core.o | grep -A 1 "rodata..c"
+>>    21 .rodata..c_jump_table 00000800  0000000000000000  0000000000000000  0000d2e0  2**3
+>>                   CONTENTS, ALLOC, LOAD, RELOC, DATA
+>>
+>> After:
+>>
+>>   $ objdump -h kernel/bpf/core.o | grep -A 1 "rodata..c"
+>>    21 .rodata..c_jump_table 00000800  0000000000000000  0000000000000000  0000d2e0  2**3
+>>                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA
+>>
+>> By the way, AFAICT, maybe the root cause is related with the different
+>> compiler behavior of various archs, so to some extent this change is a
+>> workaround for LoongArch, and also there is no effect for x86 which is
+>> the only port supported by objtool before LoongArch with this patch.
 >
-> On Tue, Feb 11, 2025 at 7:07=E2=80=AFPM Maciej Wieczor-Retman
-> <maciej.wieczor-retman@intel.com> wrote:
-> >
-> > I did some experiments with multiple addresses passed through
-> > kasan_mem_to_shadow(). And it seems like we can get almost any address =
-out when
-> > we consider any random bogus pointers.
-> >
-> > I used the KASAN_SHADOW_OFFSET from your example above. Userspace addre=
-sses seem
-> > to map to the range [KASAN_SHADOW_OFFSET - 0xffff8fffffffffff]. Then go=
-ing
-> > through non-canonical addresses until 0x0007ffffffffffff we reach the e=
-nd of
-> > kernel LA and we loop around. Then the addresses seem to go from 0 unti=
-l we
-> > again start reaching the kernel space and then it maps into the proper =
-shadow
-> > memory.
-> >
-> > It gave me the same results when using the previous version of
-> > kasan_mem_to_shadow() so I'm wondering whether I'm doing this experimen=
-t
-> > incorrectly or if there aren't any addresses we can rule out here?
->
-> By the definition of the shadow mapping, if we apply that mapping to
-> the whole 64-bit address space, the result will only contain 1/8th
-> (1/16th for SW/HW_TAGS) of that space.
->
-> For example, with the current upstream value of KASAN_SHADOW_OFFSET on
-> x86 and arm64, the value of the top 3 bits (4 for SW/HW_TAGS) of any
-> shadow address are always the same: KASAN_SHADOW_OFFSET's value is
-> such that the shadow address calculation never overflows. Addresses
-> that have a different value for those top 3 bits are the once we can
-> rule out.
+> Right, this sounds like a bug in the GNU assembler.  It should default
+> to the same section flags regardless of arch.
 
-Eh, scratch that, the 3rd bit from the top changes, as
-KASAN_SHADOW_OFFSET is not a that-well-aligned value, the overall size
-of the mapping holds.
+I agree with you.
 
-> The KASAN_SHADOW_OFFSET value from my example does rely on the
-> overflow (arguably, this makes things more confusing [1]). But still,
-> the possible values of shadow addresses should only cover 1/16th of
-> the address space.
 >
-> So whether the address belongs to that 1/8th (1/16th) of the address
-> space is what we want to check in kasan_non_canonical_hook().
+>>
+>> Cc: stable@vger.kernel.org # 6.9+
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  include/linux/compiler.h | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+>> index ec55bcce4146..4d4e23b6e3e7 100644
+>> --- a/include/linux/compiler.h
+>> +++ b/include/linux/compiler.h
+>> @@ -133,7 +133,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+>>  #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
+>>
+>>  /* Annotate a C jump table to allow objtool to follow the code flow */
+>> -#define __annotate_jump_table __section(".rodata..c_jump_table")
+>> +#define __annotate_jump_table __section(".rodata..c_jump_table,\"a\",@progbits #")
 >
-> The current upstream version of kasan_non_canonical_hook() actually
-> does a simplified check by only checking for the lower bound (e.g. for
-> x86, there's also an upper bound: KASAN_SHADOW_OFFSET +
-> (0xffffffffffffffff >> 3) =3D=3D 0xfffffbffffffffff), so we could improve
-> it.
+> This caused a regression, this hack apparently doesn't work with Clang:
 >
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D218043
+>   $ readelf -WS kernel/bpf/core.o | grep c_jump_table
+>     [43] .rodata..c_jump_table,"a",@progbits # PROGBITS        0000000000000000 00d610 000800 00   A  0   0 16
+>
+> Notice the section name is literally:
+>
+>   .rodata..c_jump_table,"a",@progbits #
+
+Yes, I noticed this section name which contains the original name
+".rodata..c_jump_table" and the specified attribute compiled with
+Clang, it should not contain the specified attribute.
+
+That is strange but seems no effect due to only compare the first
+few letters of the section name in objtool.
+
+I will keep digging with the GNU and LLVM compiler developers.
+
+Thanks,
+Tiezhu
+
