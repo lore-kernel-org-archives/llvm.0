@@ -1,71 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14F64245AE5;
-	Thu, 13 Feb 2025 18:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A4E24A06D;
+	Thu, 13 Feb 2025 19:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739472851; cv=none; b=dPdfwpDPGwxw2Zcp6lFDLTE/jJqq1U/bjn34Bh7qEgWuFfJp/5vrLHpD1mI3qIq+qmC0rEWYaVYQB2n+mOOj35VW/C5M0SSfIumzjz63M4cXiD9qwTpnybda/AY59d/YbxwxGMETTiTiXaXfck815qKekI2GS2LeXSnbthgENQo=
+	t=1739475144; cv=none; b=lMDkJYN2lGivvT8s+TPgQ/s3p0H7Mi36kd499lFlxTzQMy3+3Rdes85Jtpg/VHdPJoWoALgM/k2xWhGM6RebDWoUJxK/3GHLSD5bAmYP8tG9pJQaKA5HbnCxGqrojQT3DKMv6W+BdhH1S3y4oqhKR8BMZd7Ds3KifQH9tDNzAq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739472851; c=relaxed/simple;
-	bh=sw1QM8YNVs4tKquw8ExNDS9lGNe7mqqrDLLegMYkS2Q=;
+	s=arc-20240116; t=1739475144; c=relaxed/simple;
+	bh=Qj+F86dsqXkmAV7Wp0h+E2C2QouUJZ9pZ8c3ZCoW/Lo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZuDrXaSv/7By/d/lPkTZKkJtwQ2A+O56B1FWGtMj9sbocAcVh79KiuFain10ibO/3tr7Q2A5JTm9YV7SDzEXCAR7xQnHEDgLor8x1FHFNUKMw1NprfKfnqg789CQiMN2h1vNwm97ghKvckJ00jpH87eIL+6LzRCR3lUnvZcw25U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg+CZmr+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=pqe5QW/5/9OcVwZrgnvf2zFQcjuUL3TjQtpHdMGFFLw7G0h4btBifgG2AHao0BzdBpqfkkGOcsXhsEv2RyNzR74tRsmD5vaKFvrLTBTrHutrNhVF0PJ80a8kdIJbu2JxchlrJJhPNQ1fr4/aLKafp7vpEtIUYyh0yoyC68fALNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fTgtnaQA; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg+CZmr+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6A0C4CED1;
-	Thu, 13 Feb 2025 18:54:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739472850;
-	bh=sw1QM8YNVs4tKquw8ExNDS9lGNe7mqqrDLLegMYkS2Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xg+CZmr+kXKcUJnO2R5sjJI5xdtczkUza1MbIPMJHJ4CJqxpamFczCqjZHiyc3SKB
-	 P2k2i6SefDTEmk9in2O7Lv+9owltMrZ1iBWsGSopk+uBCCYlz80Ctdhv9tqiTMdJsZ
-	 lY70RAfCsC/nef0Lby33mb+z26G4KMhaipsobmHt0tMFgpBGgdxpkCTZUPTvLRR+FU
-	 3hUTxkXYa0NnmHt8AElAGmBgBdLWDbN4H+84+8WcNY6wHleHgPIUIUwW+68mrUxPVo
-	 C8Dj2Dz0VZvpR2sglVNtqxhwuCC6pFzTSAAMi8LG4dp3KubBwjXnOBisL/6JwwkO0S
-	 iY2e9ApNK8ZoA==
-Date: Thu, 13 Feb 2025 10:54:08 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] compiler.h: Specify correct attribute for
- .rodata..c_jump_table
-Message-ID: <20250213185408.m5aogf2trvhvi2td@jpoimboe>
-References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
- <20250212175023.rsxsw7pno57gsxps@jpoimboe>
- <b1e5e3ea-be4b-5dae-cc0d-34693429d060@loongson.cn>
- <20250213023936.lzbpgou4eallaij3@jpoimboe>
- <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fTgtnaQA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739475142; x=1771011142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qj+F86dsqXkmAV7Wp0h+E2C2QouUJZ9pZ8c3ZCoW/Lo=;
+  b=fTgtnaQA3wW5KwrQFWZ+3YlPgSqWMp6bYRVq87avJOoTMHTIz+iPzHr4
+   N8i+h5/osJD/TFTJ7b7nL5lecznn1z1S1M0HpYY+zeq7fcsG7WfMDFjJt
+   wldDuDLmOGTkyI9XYLD9d6UPNQtWDiBF2ptIUgKQlE3W7UDiomoGbsbQ+
+   9PqMWC8UkHAUE3gC5uNUbRIhGQBXyFsulPGcC00TUbGObvrdlQ4Mk5p5V
+   W3JVByypqAlZxzgXNV3If6FHUvF7cg+N/Khxyr6TbmHJXsxNeny3K9KzJ
+   P9a9OnQNFQrwpDiylDfEyuXsf6pz3jck9JrBc9LC1OPcHLNTsjBj2+HoD
+   A==;
+X-CSE-ConnectionGUID: 9307QLVYSZWx5WIa0zjdyA==
+X-CSE-MsgGUID: 1jGxiCbpRNygGxA3uO1xvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="44132344"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="44132344"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 11:32:22 -0800
+X-CSE-ConnectionGUID: Cm3tK4RqQkm+dkgYGdCBBw==
+X-CSE-MsgGUID: U7H7sMZsTgey4v5itG7VNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="113194614"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 13 Feb 2025 11:32:18 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tiewa-0018d9-0v;
+	Thu, 13 Feb 2025 19:32:16 +0000
+Date: Fri, 14 Feb 2025 03:32:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Cryolitia PukNgae <Cryolitia@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
+	Yao Zi <ziyao@disroot.org>,
+	Derek John Clark <derekjohn.clark@gmail.com>,
+	Marcin =?utf-8?Q?Str=C4=85gowski?= <marcin@stragowski.com>,
+	someone5678 <someone5678.dev@gmail.com>,
+	Justin Weiss <justin@justinweiss.com>
+Subject: Re: [PATCH v5 1/2] hwmon: add GPD devices sensor driver
+Message-ID: <202502140302.IkW9UALU-lkp@intel.com>
+References: <20250211-gpd_fan-v5-1-608f4255f0e1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
+In-Reply-To: <20250211-gpd_fan-v5-1-608f4255f0e1@gmail.com>
 
-On Thu, Feb 13, 2025 at 08:38:22PM +0800, Tiezhu Yang wrote:
-> Based on the above analysis, in order to avoid changing the behavior of
-> GNU assembler and silence the GNU assembler warning, is it possible to
-> rename ".rodata..c_jump_table" to ".c_jump_table"?
+Hi Cryolitia,
 
-Yeah, though for the final vmlinux link we'd still need it to end up in
-.rodata so it remains read-only at runtime.
+kernel test robot noticed the following build warnings:
 
-So we'd basically just have to add it to the RO_DATA() macro in
-include/asm-generic/vmlinux.lds.h.
+[auto build test WARNING on ffd294d346d185b70e28b1a28abe367bbfe53c04]
 
-Does it still work if we call it ..rodata.c_jump_table or so?  Then we
-could just add "*(..rodata.*) to RO_DATA().  That would be somewhat less
-surprising, and would also create a standard way for other code to do
-the same thing by prefixing with "..rodata.".
+url:    https://github.com/intel-lab-lkp/linux/commits/Cryolitia-PukNgae-via-B4-Relay/hwmon-add-GPD-devices-sensor-driver/20250211-150418
+base:   ffd294d346d185b70e28b1a28abe367bbfe53c04
+patch link:    https://lore.kernel.org/r/20250211-gpd_fan-v5-1-608f4255f0e1%40gmail.com
+patch subject: [PATCH v5 1/2] hwmon: add GPD devices sensor driver
+config: i386-randconfig-002-20250214 (https://download.01.org/0day-ci/archive/20250214/202502140302.IkW9UALU-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250214/202502140302.IkW9UALU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502140302.IkW9UALU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/gpd-fan.c:361:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     361 |                 const struct gpd_board_drvdata *drvdata = gpd_driver_priv.drvdata;
+         |                 ^
+   drivers/hwmon/gpd-fan.c:452:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     452 |                         int ret = gpd_read_pwm();
+         |                         ^
+   drivers/hwmon/gpd-fan.c:478:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     478 |                         u8 var = clamp_val(val, 0, 255);
+         |                         ^
+   3 warnings generated.
+
+
+vim +361 drivers/hwmon/gpd-fan.c
+
+   352	
+   353	static int gpd_win_mini_set_pwm_enable(enum FAN_PWM_ENABLE pwm_enable)
+   354	{
+   355		switch (pwm_enable) {
+   356		case DISABLE:
+   357			return gpd_generic_write_pwm(255);
+   358		case MANUAL:
+   359			return gpd_generic_write_pwm(gpd_driver_priv.pwm_value);
+   360		case AUTOMATIC:
+ > 361			const struct gpd_board_drvdata *drvdata = gpd_driver_priv.drvdata;
+   362	
+   363			return gpd_ecram_write(drvdata, drvdata->pwm_write, 0);
+   364		}
+   365		return 0;
+   366	}
+   367	
 
 -- 
-Josh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
