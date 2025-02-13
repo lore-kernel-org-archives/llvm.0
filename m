@@ -1,195 +1,256 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FC120AF88;
-	Thu, 13 Feb 2025 07:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9322063DA;
+	Thu, 13 Feb 2025 08:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739433540; cv=none; b=MEra1dSHZQ0R42sm7twpD/RJ/LZopxZzpyzlv9t5TUYLq2kYWqAT3l4kehMoksCj1/dRlh+MIx+kKPqUqM2MgRK4MhCY3qG9ssYkW4RGRFqtV1Isura0UGElMdJ8wkjQXFAGeXWwPRSnGhq9W2Zi+NCH0npQZrTKSNTeJqHdpbw=
+	t=1739436730; cv=none; b=ebR9MhjbxGk1k9nYK1wBvjpjd9JuZ7ySRXKf6EYVkT1p9OMoxXiBXZy9GCp1wnXOfV8Qi1hqoVXrIM4WHHKFTO5nxE0cDKRMg3M2jslI1RJ5uBxpTisJ4kiDBDWO/6hj7aPMjLLVIC7s55D3nS6kG5px6ZbbC5fwqPP2TuqDyJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739433540; c=relaxed/simple;
-	bh=I+sth1reHfZFBXlBN7YJSUncLn0p2r/o4Cevwp2y3ZE=;
+	s=arc-20240116; t=1739436730; c=relaxed/simple;
+	bh=78XYhWlcpAj0M/0FsxIdSd3CZI0VvsSTmcoDPwXt6sI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ip/bN9UHnq7I87lBG+oBrGS1oevFF8v/TJ5hSzec+h83PUBZqKCStCZuQ7nkyUhu4Aui1WNdYOT/bTvvQAw0FpITTwpP6tBYlnYiIwTvE+lJrDkvF+QkoPcxaL1okQOAzuw3VK1hGVo9jswP03uGSNiYFYBaFhz1RQ4gWOVXAOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KPnSaBEH; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=jzRQwcoTlM1qkSoyWUwI953IHowLZAcDv/CU45TePrH6fzZlBzCF9vnIBI98iBq9SmuZDzNFOn+g/ihN0zM9dSqft+3JW6ZrZnL5Vy2mDbThE19nI24dFElEWWv3NzqoR4pMq1mn17VDemhAPa+1rhkNltqqWkXYC/Cb7MhN3WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=io/jdjIE; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KPnSaBEH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="io/jdjIE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739433538; x=1770969538;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=I+sth1reHfZFBXlBN7YJSUncLn0p2r/o4Cevwp2y3ZE=;
-  b=KPnSaBEHqhHXWDQSq8/88dg9Cg0PV2xaEXoRCyqtbwBaw0AIKJ4WcoLe
-   g1EDHBeb/HXCxrtwlWNip686xqJ6LBHrdxaz3iuKPzQMSWJV5hVGDftTB
-   uoeHZlo9O/7y6PLfXUpRKT1qoyk7y5pMv5lsppRCy6iR94PuG2wayzbTf
-   WK3JpNxFUt3Bni2nA3To0MB/cCp9iMpj8oQOwIvy6VactWXynuiXz2xue
-   w0OoOh0Bhv6yaWDGvmfYPte30f+8gIs5Rll/dOo4Bg8BKAWPNybz0MGuj
-   vAHbIpGhj+AX1IDMhV9hW+hH361UHt+c8bEa1VAPiguNPW3104/N5LgFd
-   A==;
-X-CSE-ConnectionGUID: 9Tg6HTzKQ8CVGu6wyDfmtw==
-X-CSE-MsgGUID: /hQ6MUM5SwuqULTNo7gMIQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="39308948"
+  t=1739436728; x=1770972728;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=78XYhWlcpAj0M/0FsxIdSd3CZI0VvsSTmcoDPwXt6sI=;
+  b=io/jdjIEY3dx1pwJZvmV6C/2iL4f7rCxM3YV+KrJQKjk7Qby6Qn36vrC
+   35pZRLjuC9lAMl+LTcOSu7ZFwMZ6VrefqWn2hUmqKEreFhk2Hy7pRDvar
+   6pYyxoKbmM/4sWfV+3lp6THmwv3qEhoXZA6tlEd9AD3OCcgPiBT71q4SY
+   6t1AtBbhW1NV8QtdgIpHBRZdTHfsH9svdUsv6Em/oSU6E2sPUD4y+S3gJ
+   I5qtNeFDQGnA+9FxEhU2gEXYaDVCuXxYH8996KdWJaJOV/L56qvxyBLdU
+   nPOqLBBVQCK3lvN4gKoI5JOOAiDxFAcc+XRTAMsNFlPt32KiyJx8MJKY+
+   g==;
+X-CSE-ConnectionGUID: VxzRPhGiREaX/+qF14d4iQ==
+X-CSE-MsgGUID: eHJLibTmQwuocvwHd9JneQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="40389980"
 X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="39308948"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 23:58:58 -0800
-X-CSE-ConnectionGUID: flVfJTKPSma2f4xNK8v6HA==
-X-CSE-MsgGUID: LrC9xB7hRRCKq7WXhrcsGw==
+   d="scan'208";a="40389980"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:52:07 -0800
+X-CSE-ConnectionGUID: c20MvgWKTkCns3a+ogZOVQ==
+X-CSE-MsgGUID: 4+FxrO23SSqmln86dUmvZg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113964586"
+   d="scan'208";a="112922715"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 12 Feb 2025 23:58:56 -0800
+  by orviesa010.jf.intel.com with ESMTP; 13 Feb 2025 00:52:06 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tiU7a-0016kv-0W;
-	Thu, 13 Feb 2025 07:58:54 +0000
-Date: Thu, 13 Feb 2025 15:58:13 +0800
+	id 1tiUx1-0016pz-1k;
+	Thu, 13 Feb 2025 08:52:03 +0000
+Date: Thu, 13 Feb 2025 16:51:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jirislaby:devel 67/69]
- drivers/tty/serial/8250/8250_bcm2835aux.c:104:5: error: no member named
- 'rs485_start_tx' in 'struct uart_8250_port'
-Message-ID: <202502131546.S1bxj6Mo-lkp@intel.com>
+To: Theodore Ts'o <tytso@mit.edu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-ext4@vger.kernel.org
+Subject: [tytso-ext4:test 14/15] fs/ext4/namei.c:1602:13: error: no member
+ named 's_encoding_flags' in 'struct super_block'
+Message-ID: <202502131631.QY6jPFdz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
-head:   18719ba870f2b5aac6c4ea327aacc3bec6bc98cc
-commit: 7acd98b09e03f688e3a7f750f362c8b978bb9710 [67/69] 8250 ops
-config: hexagon-randconfig-002-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131546.S1bxj6Mo-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131546.S1bxj6Mo-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git test
+head:   e5a9a1fce162be14c6f1ac325faac48b1a7dea9e
+commit: 9a66196d3bda397030358f6608d3d40a6db18f8f [14/15] ext4: introduce linear search for dentries
+config: riscv-randconfig-001-20250213 (https://download.01.org/0day-ci/archive/20250213/202502131631.QY6jPFdz-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250213/202502131631.QY6jPFdz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502131546.S1bxj6Mo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502131631.QY6jPFdz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/tty/serial/8250/8250_bcm2835aux.c:104:5: error: no member named 'rs485_start_tx' in 'struct uart_8250_port'
-     104 |         up.rs485_start_tx = bcm2835aux_rs485_start_tx;
-         |         ~~ ^
->> drivers/tty/serial/8250/8250_bcm2835aux.c:105:5: error: no member named 'rs485_stop_tx' in 'struct uart_8250_port'
-     105 |         up.rs485_stop_tx = bcm2835aux_rs485_stop_tx;
-         |         ~~ ^
-   2 errors generated.
+>> fs/ext4/namei.c:1602:13: error: no member named 's_encoding_flags' in 'struct super_block'
+    1602 |                 else if (!sb_no_casefold_compat_fallback(dir->i_sb) &&
+         |                           ^                              ~~~~~~~~~
+   include/linux/fs.h:1268:7: note: expanded from macro 'sb_no_casefold_compat_fallback'
+    1268 |         (sb->s_encoding_flags & SB_ENC_NO_COMPAT_FALLBACK_FL)
+         |          ~~  ^
+   1 error generated.
 
 
-vim +104 drivers/tty/serial/8250/8250_bcm2835aux.c
+vim +1602 fs/ext4/namei.c
 
-f93bf758911476 Lukas Wunner        2020-02-28   82  
-bdc5f300958062 Martin Sperl        2016-01-17   83  static int bcm2835aux_serial_probe(struct platform_device *pdev)
-bdc5f300958062 Martin Sperl        2016-01-17   84  {
-eb687309136b9f Andy Shevchenko     2024-03-04   85  	const struct software_node *bcm2835_swnode;
-8c3cde5dd639af Lukas Wunner        2020-01-16   86  	struct uart_8250_port up = { };
-bdc5f300958062 Martin Sperl        2016-01-17   87  	struct bcm2835aux_data *data;
-bdc5f300958062 Martin Sperl        2016-01-17   88  	struct resource *res;
-fcc446c8aa6303 Adrien Thierry      2022-02-07   89  	unsigned int uartclk;
-bdc5f300958062 Martin Sperl        2016-01-17   90  	int ret;
-bdc5f300958062 Martin Sperl        2016-01-17   91  
-bdc5f300958062 Martin Sperl        2016-01-17   92  	/* allocate the custom structure */
-bdc5f300958062 Martin Sperl        2016-01-17   93  	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-bdc5f300958062 Martin Sperl        2016-01-17   94  	if (!data)
-bdc5f300958062 Martin Sperl        2016-01-17   95  		return -ENOMEM;
-bdc5f300958062 Martin Sperl        2016-01-17   96  
-bdc5f300958062 Martin Sperl        2016-01-17   97  	/* initialize data */
-8c3cde5dd639af Lukas Wunner        2020-01-16   98  	up.capabilities = UART_CAP_FIFO | UART_CAP_MINI;
-8c3cde5dd639af Lukas Wunner        2020-01-16   99  	up.port.dev = &pdev->dev;
-8c3cde5dd639af Lukas Wunner        2020-01-16  100  	up.port.type = PORT_16550;
-eb687309136b9f Andy Shevchenko     2024-03-04  101  	up.port.flags = UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_SKIP_TEST | UPF_IOREMAP;
-f93bf758911476 Lukas Wunner        2020-02-28  102  	up.port.rs485_config = serial8250_em485_config;
-0139da50dc53f0 Ilpo Järvinen       2022-07-04  103  	up.port.rs485_supported = serial8250_em485_supported;
-f93bf758911476 Lukas Wunner        2020-02-28 @104  	up.rs485_start_tx = bcm2835aux_rs485_start_tx;
-f93bf758911476 Lukas Wunner        2020-02-28 @105  	up.rs485_stop_tx = bcm2835aux_rs485_stop_tx;
-f93bf758911476 Lukas Wunner        2020-02-28  106  
-f93bf758911476 Lukas Wunner        2020-02-28  107  	/* initialize cached copy with power-on reset value */
-f93bf758911476 Lukas Wunner        2020-02-28  108  	data->cntl = BCM2835_AUX_UART_CNTL_RXEN | BCM2835_AUX_UART_CNTL_TXEN;
-f93bf758911476 Lukas Wunner        2020-02-28  109  
-f93bf758911476 Lukas Wunner        2020-02-28  110  	platform_set_drvdata(pdev, data);
-bdc5f300958062 Martin Sperl        2016-01-17  111  
-bdc5f300958062 Martin Sperl        2016-01-17  112  	/* get the clock - this also enables the HW */
-fcc446c8aa6303 Adrien Thierry      2022-02-07  113  	data->clk = devm_clk_get_optional(&pdev->dev, NULL);
-83e571f054cd74 Stefan Wahren       2023-12-20  114  	if (IS_ERR(data->clk))
-83e571f054cd74 Stefan Wahren       2023-12-20  115  		return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could not get clk\n");
-bdc5f300958062 Martin Sperl        2016-01-17  116  
-bdc5f300958062 Martin Sperl        2016-01-17  117  	/* map the main registers */
-bdc5f300958062 Martin Sperl        2016-01-17  118  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-bdc5f300958062 Martin Sperl        2016-01-17  119  	if (!res) {
-bdc5f300958062 Martin Sperl        2016-01-17  120  		dev_err(&pdev->dev, "memory resource not found");
-bdc5f300958062 Martin Sperl        2016-01-17  121  		return -EINVAL;
-bdc5f300958062 Martin Sperl        2016-01-17  122  	}
-fcc446c8aa6303 Adrien Thierry      2022-02-07  123  
-eb687309136b9f Andy Shevchenko     2024-03-04  124  	up.port.mapbase = res->start;
-eb687309136b9f Andy Shevchenko     2024-03-04  125  	up.port.mapsize = resource_size(res);
-fcc446c8aa6303 Adrien Thierry      2022-02-07  126  
-eb687309136b9f Andy Shevchenko     2024-03-04  127  	bcm2835_swnode = device_get_match_data(&pdev->dev);
-eb687309136b9f Andy Shevchenko     2024-03-04  128  	if (bcm2835_swnode) {
-eb687309136b9f Andy Shevchenko     2024-03-04  129  		ret = device_add_software_node(&pdev->dev, bcm2835_swnode);
-eb687309136b9f Andy Shevchenko     2024-03-04  130  		if (ret)
-eb687309136b9f Andy Shevchenko     2024-03-04  131  			return ret;
-eb687309136b9f Andy Shevchenko     2024-03-04  132  	}
-fcc446c8aa6303 Adrien Thierry      2022-02-07  133  
-eb687309136b9f Andy Shevchenko     2024-03-04  134  	ret = uart_read_port_properties(&up.port);
-eb687309136b9f Andy Shevchenko     2024-03-04  135  	if (ret)
-eb687309136b9f Andy Shevchenko     2024-03-04  136  		goto rm_swnode;
-bdc5f300958062 Martin Sperl        2016-01-17  137  
-eb687309136b9f Andy Shevchenko     2024-03-04  138  	up.port.regshift = 2;
-eb687309136b9f Andy Shevchenko     2024-03-04  139  	up.port.fifosize = 8;
-bdc5f300958062 Martin Sperl        2016-01-17  140  
-bdc5f300958062 Martin Sperl        2016-01-17  141  	/* enable the clock as a last step */
-bdc5f300958062 Martin Sperl        2016-01-17  142  	ret = clk_prepare_enable(data->clk);
-bdc5f300958062 Martin Sperl        2016-01-17  143  	if (ret) {
-eb687309136b9f Andy Shevchenko     2024-03-04  144  		dev_err_probe(&pdev->dev, ret, "unable to enable uart clock\n");
-eb687309136b9f Andy Shevchenko     2024-03-04  145  		goto rm_swnode;
-bdc5f300958062 Martin Sperl        2016-01-17  146  	}
-bdc5f300958062 Martin Sperl        2016-01-17  147  
-fcc446c8aa6303 Adrien Thierry      2022-02-07  148  	uartclk = clk_get_rate(data->clk);
-eb687309136b9f Andy Shevchenko     2024-03-04  149  	if (uartclk)
-eb687309136b9f Andy Shevchenko     2024-03-04  150  		up.port.uartclk = uartclk;
-fcc446c8aa6303 Adrien Thierry      2022-02-07  151  
-bdc5f300958062 Martin Sperl        2016-01-17  152  	/* the HW-clock divider for bcm2835aux is 8,
-bdc5f300958062 Martin Sperl        2016-01-17  153  	 * but 8250 expects a divider of 16,
-bdc5f300958062 Martin Sperl        2016-01-17  154  	 * so we have to multiply the actual clock by 2
-bdc5f300958062 Martin Sperl        2016-01-17  155  	 * to get identical baudrates.
-bdc5f300958062 Martin Sperl        2016-01-17  156  	 */
-eb687309136b9f Andy Shevchenko     2024-03-04  157  	up.port.uartclk *= 2;
-bdc5f300958062 Martin Sperl        2016-01-17  158  
-bdc5f300958062 Martin Sperl        2016-01-17  159  	/* register the port */
-8c3cde5dd639af Lukas Wunner        2020-01-16  160  	ret = serial8250_register_8250_port(&up);
-bdc5f300958062 Martin Sperl        2016-01-17  161  	if (ret < 0) {
-ea43a60b15486b Krzysztof Kozlowski 2020-09-01  162  		dev_err_probe(&pdev->dev, ret, "unable to register 8250 port\n");
-bdc5f300958062 Martin Sperl        2016-01-17  163  		goto dis_clk;
-bdc5f300958062 Martin Sperl        2016-01-17  164  	}
-bdc5f300958062 Martin Sperl        2016-01-17  165  	data->line = ret;
-bdc5f300958062 Martin Sperl        2016-01-17  166  
-bdc5f300958062 Martin Sperl        2016-01-17  167  	return 0;
-bdc5f300958062 Martin Sperl        2016-01-17  168  
-bdc5f300958062 Martin Sperl        2016-01-17  169  dis_clk:
-bdc5f300958062 Martin Sperl        2016-01-17  170  	clk_disable_unprepare(data->clk);
-eb687309136b9f Andy Shevchenko     2024-03-04  171  rm_swnode:
-eb687309136b9f Andy Shevchenko     2024-03-04  172  	device_remove_software_node(&pdev->dev);
-bdc5f300958062 Martin Sperl        2016-01-17  173  	return ret;
-bdc5f300958062 Martin Sperl        2016-01-17  174  }
-bdc5f300958062 Martin Sperl        2016-01-17  175  
-
-:::::: The code at line 104 was first introduced by commit
-:::::: f93bf75891147602d55b90937628157cc13dbdb8 serial: 8250_bcm2835aux: Support rs485 software emulation
-
-:::::: TO: Lukas Wunner <lukas@wunner.de>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  1537	
+  1538	/*
+  1539	 *	__ext4_find_entry()
+  1540	 *
+  1541	 * finds an entry in the specified directory with the wanted name. It
+  1542	 * returns the cache buffer in which the entry was found, and the entry
+  1543	 * itself (as a parameter - res_dir). It does NOT read the inode of the
+  1544	 * entry - you'll have to do that yourself if you want to.
+  1545	 *
+  1546	 * The returned buffer_head has ->b_count elevated.  The caller is expected
+  1547	 * to brelse() it when appropriate.
+  1548	 */
+  1549	static struct buffer_head *__ext4_find_entry(struct inode *dir,
+  1550						     struct ext4_filename *fname,
+  1551						     struct ext4_dir_entry_2 **res_dir,
+  1552						     int *inlined)
+  1553	{
+  1554		struct super_block *sb;
+  1555		struct buffer_head *bh_use[NAMEI_RA_SIZE];
+  1556		struct buffer_head *bh, *ret = NULL;
+  1557		ext4_lblk_t start, block;
+  1558		const u8 *name = fname->usr_fname->name;
+  1559		size_t ra_max = 0;	/* Number of bh's in the readahead
+  1560					   buffer, bh_use[] */
+  1561		size_t ra_ptr = 0;	/* Current index into readahead
+  1562					   buffer */
+  1563		ext4_lblk_t  nblocks;
+  1564		int i, namelen, retval;
+  1565	
+  1566		*res_dir = NULL;
+  1567		sb = dir->i_sb;
+  1568		namelen = fname->usr_fname->len;
+  1569		if (namelen > EXT4_NAME_LEN)
+  1570			return NULL;
+  1571	
+  1572		if (ext4_has_inline_data(dir)) {
+  1573			int has_inline_data = 1;
+  1574			ret = ext4_find_inline_entry(dir, fname, res_dir,
+  1575						     &has_inline_data);
+  1576			if (inlined)
+  1577				*inlined = has_inline_data;
+  1578			if (has_inline_data || IS_ERR(ret))
+  1579				goto cleanup_and_exit;
+  1580		}
+  1581	
+  1582		if ((namelen <= 2) && (name[0] == '.') &&
+  1583		    (name[1] == '.' || name[1] == '\0')) {
+  1584			/*
+  1585			 * "." or ".." will only be in the first block
+  1586			 * NFS may look up ".."; "." should be handled by the VFS
+  1587			 */
+  1588			block = start = 0;
+  1589			nblocks = 1;
+  1590			goto restart;
+  1591		}
+  1592		if (is_dx(dir)) {
+  1593			ret = ext4_dx_find_entry(dir, fname, res_dir);
+  1594			/*
+  1595			 * On success, or if the error was file not found,
+  1596			 * return.  Otherwise, fall back to doing a search the
+  1597			 * old fashioned way.
+  1598			 */
+  1599			if (IS_ERR(ret) && PTR_ERR(ret) == ERR_BAD_DX_DIR)
+  1600				dxtrace(printk(KERN_DEBUG "ext4_find_entry: dx failed, "
+  1601					       "falling back\n"));
+> 1602			else if (!sb_no_casefold_compat_fallback(dir->i_sb) &&
+  1603				 *res_dir == NULL && IS_CASEFOLDED(dir))
+  1604				dxtrace(printk(KERN_DEBUG "ext4_find_entry: casefold "
+  1605					       "failed, falling back\n"));
+  1606			else
+  1607				goto cleanup_and_exit;
+  1608			ret = NULL;
+  1609		}
+  1610		nblocks = dir->i_size >> EXT4_BLOCK_SIZE_BITS(sb);
+  1611		if (!nblocks) {
+  1612			ret = NULL;
+  1613			goto cleanup_and_exit;
+  1614		}
+  1615		start = EXT4_I(dir)->i_dir_start_lookup;
+  1616		if (start >= nblocks)
+  1617			start = 0;
+  1618		block = start;
+  1619	restart:
+  1620		do {
+  1621			/*
+  1622			 * We deal with the read-ahead logic here.
+  1623			 */
+  1624			cond_resched();
+  1625			if (ra_ptr >= ra_max) {
+  1626				/* Refill the readahead buffer */
+  1627				ra_ptr = 0;
+  1628				if (block < start)
+  1629					ra_max = start - block;
+  1630				else
+  1631					ra_max = nblocks - block;
+  1632				ra_max = min(ra_max, ARRAY_SIZE(bh_use));
+  1633				retval = ext4_bread_batch(dir, block, ra_max,
+  1634							  false /* wait */, bh_use);
+  1635				if (retval) {
+  1636					ret = ERR_PTR(retval);
+  1637					ra_max = 0;
+  1638					goto cleanup_and_exit;
+  1639				}
+  1640			}
+  1641			if ((bh = bh_use[ra_ptr++]) == NULL)
+  1642				goto next;
+  1643			wait_on_buffer(bh);
+  1644			if (!buffer_uptodate(bh)) {
+  1645				EXT4_ERROR_INODE_ERR(dir, EIO,
+  1646						     "reading directory lblock %lu",
+  1647						     (unsigned long) block);
+  1648				brelse(bh);
+  1649				ret = ERR_PTR(-EIO);
+  1650				goto cleanup_and_exit;
+  1651			}
+  1652			if (!buffer_verified(bh) &&
+  1653			    !is_dx_internal_node(dir, block,
+  1654						 (struct ext4_dir_entry *)bh->b_data) &&
+  1655			    !ext4_dirblock_csum_verify(dir, bh)) {
+  1656				EXT4_ERROR_INODE_ERR(dir, EFSBADCRC,
+  1657						     "checksumming directory "
+  1658						     "block %lu", (unsigned long)block);
+  1659				brelse(bh);
+  1660				ret = ERR_PTR(-EFSBADCRC);
+  1661				goto cleanup_and_exit;
+  1662			}
+  1663			set_buffer_verified(bh);
+  1664			i = search_dirblock(bh, dir, fname,
+  1665				    block << EXT4_BLOCK_SIZE_BITS(sb), res_dir);
+  1666			if (i == 1) {
+  1667				EXT4_I(dir)->i_dir_start_lookup = block;
+  1668				ret = bh;
+  1669				goto cleanup_and_exit;
+  1670			} else {
+  1671				brelse(bh);
+  1672				if (i < 0) {
+  1673					ret = ERR_PTR(i);
+  1674					goto cleanup_and_exit;
+  1675				}
+  1676			}
+  1677		next:
+  1678			if (++block >= nblocks)
+  1679				block = 0;
+  1680		} while (block != start);
+  1681	
+  1682		/*
+  1683		 * If the directory has grown while we were searching, then
+  1684		 * search the last part of the directory before giving up.
+  1685		 */
+  1686		block = nblocks;
+  1687		nblocks = dir->i_size >> EXT4_BLOCK_SIZE_BITS(sb);
+  1688		if (block < nblocks) {
+  1689			start = 0;
+  1690			goto restart;
+  1691		}
+  1692	
+  1693	cleanup_and_exit:
+  1694		/* Clean up the read-ahead blocks */
+  1695		for (; ra_ptr < ra_max; ra_ptr++)
+  1696			brelse(bh_use[ra_ptr]);
+  1697		return ret;
+  1698	}
+  1699	
 
 -- 
 0-DAY CI Kernel Test Service
