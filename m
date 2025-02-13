@@ -1,107 +1,110 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B801FFC79
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 14:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF70626B087
+	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 15:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739458537; cv=none; b=BwQKyKgJhQWGI0w+zX3hgs/xDe89pYw5wCIflNLhlCmernJuxsLxDybXxU4QsvLG3bAuKyD0Z791zmL2WMeXfgBCHdgK6sczc4XKIVdLyqTgCsOvX8XkTx3UNTAPI5LrmFOaIAs6sQo5uA0Yh8hb5NsKlXsBnf2/BsfoqDYI3TU=
+	t=1739461384; cv=none; b=qxdIpM+N1cts+vxOkk08DX8bd3isbC+gn+pPs+CbP0sJZaUxagh/sGC08tiNAHyMzKq6nWagF/+isUBmMpRZSFVGu9Pr3jXLCFIY0Bq0SHNDFj+BzIUaA6Wl6enDLi5xf2obH+EntcIB4ct3p+o6Z5iW4rFr7zQjM/NX7kS23x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739458537; c=relaxed/simple;
-	bh=VsJP2WA7ooxf6Q50q5cBWRfJTkxkoykLDjcBCjCSHrI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cQMVUCZcyDgfco9mAxfk/T6sQfLmlWyfTvLetRJx38Na/3ZRlxiY84Ond4+//I+pCPefTSZoGTZCNIR0UmzjDEsygh2nldO4/p0cmrRaPDlAnJ3UvHJOIjN/Lzfmd/qZZVDzgUNe65k7xn3WJQBrmeek3L4l2/Pcg4ZQBhNETHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2Y5db328; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=siXfTNw2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1739461384; c=relaxed/simple;
+	bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rEFczMHcE2SvWd8XM00iwwC1pVrE+LX/FYWKYb19toLd/mvcD6G3ujookLX2jWL83ZmmWbCmFReJuVHc4KQ1t+1dbfAMN2PRWGn/v1zPHS5kiJfD/sv6l+Jcyx0GA5rlOjv/MmBFpJ+nOcNhlG0KZ6FWaUCpeMs300mhv6KIDl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bUqEkAO0; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2Y5db328";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="siXfTNw2"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1739458534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U0Uz4M0nysayxZy8O+uDEBR3eTZPLx7yuVwYwNJRJKg=;
-	b=2Y5db328te54wyfew7h4HOb/N3hvFahLRa/HQxYQcn2qIWZk3Lnq6EZ8/wF9jNz+fCeWuo
-	0HKZCzi7w8BSY7jRDy5Kqmx6rq/0R4LRN14jTCwismiU/vsAVHzUDCw5a0xIsbacTmA4g8
-	BmY43HogkQ7hDQEY20pr3fO9VlXPyiAQANb3WIwDzpIh/cDg6rpDzfF9jh7PYpqqmZT0IW
-	sa+tIsilWygLkASpnSfQI+n6LE2WP6m4iXC03lPsqAz2PkZJY5Fvc/hwtWt6f/vOm6faZq
-	HvRd0WX2FGRArDD6TY29E9fkuiSywKsSf9tQUp7m44zhL+VHAjoSpUpfL8jC9g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1739458534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U0Uz4M0nysayxZy8O+uDEBR3eTZPLx7yuVwYwNJRJKg=;
-	b=siXfTNw2xSiOkdln54UCJxk/2Isv3RzFueCNsMvTaaXKOelkE8j18podtAhYikCkPREM6S
-	tS4OoxlyvbrQlzCw==
-Date: Thu, 13 Feb 2025 15:55:18 +0100
-Subject: [PATCH 2/2] kbuild: userprogs: use lld to link through clang
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bUqEkAO0"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-308f4436cb1so22172061fa.1
+        for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 07:43:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739461381; x=1740066181; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
+        b=bUqEkAO0+jk5+Wx32IERotFcHmxJx7d4Eb8u4HwPIKLMepMAS3A2nZxmmHisMsWjq1
+         ye4oy0fCKWi2x0uGvQzh1ok9wECD+KI4x4dJXR18oYVFEiuetsLholD0XvWojK4Z9Lvq
+         jR1LhJjEsNOJ5x2fi+fHfARojzmO9aRzUdqYswwjdSKicekYIh+GABfahrHLzrIitovY
+         tVShKbQucYLDAInhrO7H4o9Y0NSVsYDNejvhHH0/HrQcw5wqp3Ri0msOYQ0l3vAWYXOm
+         95Qq7YswRen3cm2kD73Sj7oUeHEJUnW+gp7yNT/yqa0GR1AsiEU/qnfNak7j/f1f7Mxf
+         UBeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739461381; x=1740066181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=icdXS8p68rQCTSX1pWN2XJTVSdUQQv7nxWrTiZumR+I=;
+        b=BSuz3Csfns/T4VUfOt2ivf9Kkm9CAjg7nk1IJkBaA9IohKzf9ZkvXUXr6AN6bNqk+p
+         6nTeV4FkstjZeneRqLB3lktepEkhp62Un3WRoEVwciAkmPlcqHbzqz1fjikGupURotak
+         7JEoJYcbu82rkXtGiDtdw0bRykMgIDtlPiXMX205XFROkPnONQT5Ngr/bDaVctAiX8uD
+         8EWE2ewQ5gYXZNM4EQ3RhxfIXmxNY7ml/pCDlA3JZQPk2yAUcbOYPYo0Rs+mcD2tdE2W
+         k2G2srz8VfedqUE9xoyZP4gtU07JhGt8Zt10hOZEB4k8RiIWRY7v/7CnpW5ei8K3jQ6n
+         z+hA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbo6gCrQsa1RGMmgmEE+OmS/ebzWg+YREpNh0QJVBT8RFD7tiDY+U3rZblLNm4vq2zOHYr@lists.linux.dev
+X-Gm-Message-State: AOJu0YyjmLbvH+jL9WRndf5IIkVIhkSLsuDTIck3mtpqc2Htd61lSRpy
+	LJgfz5LTSLtQDK5ySg68x5kXj8sTlkNSfqwmSGPL1Nlohj1yYnJchjqtXpIfYHkqPpBuP5Hag1K
+	FxoF0e/pX8kjD2rc690uqPyMEs6E=
+X-Gm-Gg: ASbGncvwAe03JnWUBCaFKsM/2ozFrCUN9l47w4LEGdq0s9NxMtRmWMkBWQCG2lJwjM/
+	Y63PEf6pXK1rlKctrrcnS+Wv2QzVJfo2qwf5Tp/ukKLaPcYmvNCASTya/RBZrhzs73OXQLgo8Yw
+	5nIuBPQukgPIM8
+X-Google-Smtp-Source: AGHT+IH1DgGXOv9U05OxLJT05mfmUcX32MdUYL+UbmMo6S6W1PrqB+heOS5OeNphPyVdKvsISm/TxAN5RBatuANrYoM=
+X-Received: by 2002:a2e:8887:0:b0:300:17a3:7af9 with SMTP id
+ 38308e7fff4ca-3090f3bee24mr10560491fa.19.1739461380591; Thu, 13 Feb 2025
+ 07:43:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250213-kbuild-userprog-fixes-v1-2-f255fb477d98@linutronix.de>
-References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
-In-Reply-To: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
-To: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- stable@vger.kernel.org
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739458532; l=1464;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=VsJP2WA7ooxf6Q50q5cBWRfJTkxkoykLDjcBCjCSHrI=;
- b=8OMIVLKzPjKBGa+nsuyZo48SgY/H7ox75L6z9V8p2CPGZuYfEbGXiibYamh8B6s+e9cikZVwq
- UOOjyGCL6v+DwjajMJZig3VnB/KagLzox2tccsCQfBkVnRBxL8VhKQQ
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com> <20250213115951.GF28068@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250213115951.GF28068@noisy.programming.kicks-ass.net>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 13 Feb 2025 10:42:24 -0500
+X-Gm-Features: AWEUYZnmsQRxlJial_Srfud0qxhtqGpvdrhg2T7ZQYxl10OhVwKIEsBPtxdK_Kw
+Message-ID: <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
+Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The userprog infrastructure links objects files through $(CC).
-Either explicitly by manually calling $(CC) on multiple object files or
-implicitly by directly compiling a source file to an executable.
-The documentation at Documentation/kbuild/llvm.rst indicates that ld.lld would
-be used for linking if LLVM=1 is specified.
-However clang instead will use either a globally installed cross linker from
-$PATH called ${target}-ld or fall back to the system linker, which probably
-does not support crosslinking.
-For the normal kernel build this is not an issue because the linker is always
-executed directly, without the compiler being involved.
+On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
+> > Convert this unit test to a KUnit test. This allows the test to benefit
+> > from the KUnit tooling. Note that care is taken to avoid test-ending
+> > assertions in worker threads, which is unsafe in KUnit (and wasn't done
+> > before this change either).
+>
+> So this was something simple, and now I need to know how to operate this
+> kunit nonsense :-(
+>
+> How is that an improvement?
 
-Fix this by passing -fuse-lld and let clang find its matching lld.
+Hi Peter,
 
-Fixes: 7f3a59db274c ("kbuild: add infrastructure to build userspace programs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- Makefile | 1 +
- 1 file changed, 1 insertion(+)
+David enumerated some of the benefits of KUnit in another
+thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmTY2T2=
+Ti53DQADrW+sJg@mail.gmail.com/.
 
-diff --git a/Makefile b/Makefile
-index bb5737ce7f9e79f4023c9c1f578a49a951d1e239..b4c208ae4041c1f4e32c2a158322422ce7353d06 100644
---- a/Makefile
-+++ b/Makefile
-@@ -510,6 +510,7 @@ OBJCOPY		= $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
- OBJDUMP		= $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
- READELF		= $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
- STRIP		= $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
-+KBUILD_USERLDFLAGS += -fuse-ld=lld
- else
- CC		= $(CROSS_COMPILE)gcc
- LD		= $(CROSS_COMPILE)ld
+My personal reason for preferring KUnit is that it's much easier to
+run from userspace; the tooling takes care of building, starting the
+VM, running the tests, and producing a human-friendly report.
 
--- 
-2.48.1
+Anecdotally I've seen evidence that e.g. Intel's 0-day runs all KUnit
+tests but not all kselftests
+(e.g. https://lore.kernel.org/all/202502090223.qCYMBjWT-lkp@intel.com/).
 
+
+
+Tamir
