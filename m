@@ -1,140 +1,145 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4470263F25
-	for <llvm@lists.linux.dev>; Fri, 14 Feb 2025 12:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E82188713
+	for <llvm@lists.linux.dev>; Fri, 14 Feb 2025 13:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739536707; cv=none; b=IATd+aEPCgsyjyyX7CVyBk2H8Te2SUWmLUruBsV0hPEEnDDDchi5Ny68py4PFtEEoXGY/G+KY4n5kkQH8mV+Iv4WKqNRGOOb4bYpaTb/XpsAYsT2RSj1EY+G+EYEe4b++aSjz8f85NLYcZdS/ZXxp7/a53X1UdSH2RQol7TT9zQ=
+	t=1739540672; cv=none; b=Hu0PgvwdQ4R9f2PcCs60oatSfMUOJ777nPYt/oyHx7t3wTKWJ0Vn5bpKiJxq+hfwZbyt2c8Z39/1iIECdG3vzWcT7P79pk9Sc2b8WmQxy23M641QziFhD7s+jdMzO2Ty/2NtmLR5VEyfpadhYmxN4ywkdNtfU9khWjYykF00+N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739536707; c=relaxed/simple;
-	bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XY+3sYE+r3EzjUuA2cYPF+jI20QNTvyy26+nJbWtAxThTPsMe33NgSKLj4tsumUwjkC1Ck7T1mIFt1910HNIxdzss9VvA4U8Xq0b+2UAD7i4qxSBs7uGnh6riHiIRnyeA4k/rmpPOSQ7UPak5TX9PCgIH2QlI6SGPGpZTmPIcx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H4Vz50rX; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739540672; c=relaxed/simple;
+	bh=3RYhKJF0Pcxuz6PmZ9Ku/CakibUNucj8a9d8k/flz+k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HaPE2/XJcWhUPCI/2DNc1EiH8RSuH5RvMFZlnOJpKZVhSCB5NMJD2h3ZB81kTUV9+zED4HjCYV2/4HMGHFAkDtit5yinQr3Bte/tGNQci/HvYmApJk3/1ZFh2hRuBC2b1CiHolbINzyLfFkbDtS5T+nXkAJapsVVU0P97v49NfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mbnUz+SR; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H4Vz50rX"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3076262bfc6so21300441fa.3
-        for <llvm@lists.linux.dev>; Fri, 14 Feb 2025 04:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739536704; x=1740141504; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
-        b=H4Vz50rXWhU0mp03hC4ktrioHDlj5cEWRhFYCbUE3RKklIe9HlOadIcqM+V2B4jrH8
-         5RnU/BdAYu+WfK3KMsqIVSBApj+k9ncXWe/x1gBq0OhaaKhRPcT+Tln9YlvRLWpis+uW
-         x3QrFs689h5ltqcewheQM8mCK6Eh744+DXx2rVur0rCAr/LDycJnuN7MEhstDMIkuHf8
-         4M25P55/J1+ZOI6u+NnT01m75EzkBLJyeCGPa1ToVykk08QkA9lMrnLUQvLZqQE3f0Us
-         hjj1Si+TKom5Lqq2tWs6RtQgQeNhhJ4LIBqtrA1L8cGzD4TyeV6EjKGiw9h1R3mGm1t3
-         b/Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739536704; x=1740141504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gSPu3zaINtQ2hE5QQA984vUerqIGwHUTIQ2qvK166l4=;
-        b=bv72hsnuuPImXOnyJTOpzO55xOiqY89R+FHLrvJD5aI9SCnrZSsKalhB+YETEVDbRn
-         pVlIDHGxzNhSCZEHf607SHGWesz+1rFHa1ZslFFfMOx45HLmUMTFED1QdhDG92SDu3D8
-         hI1/wcbKilwJ/TQ+daOuBOYK+qiMXsvwwTiopiAxS6DMQA1jxLkDdQcZqUFEcDBR1Y8L
-         PjaAwM6oNqFHGHXGBQfUsVe5ygO/dDpGnI+BA5iBM65XVJ+XSSAa+EMdI3iiizo5o/T6
-         ZfkD3WctpKWKtBxr4j9ZZcZBupO6Vkg8YUzRvy4cKnDPVaXXsf1MvK0lawN4Uep/k2oM
-         sOMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdtO2XMIvBpk42xcccyhWfcgaqiAxdGEZcO2yL1nHAbl2iYUcqvafmbSosX76NAgsU3JNF@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxg3owu15r9cvhr5VKF4Dz3i7ndL0o4D6/KvDZIPONXsRrkp1G3
-	psFYWh5sVOUso7LpgRLOBTXnNbPSoIzCq8XojsyiZGc9VStabJE3KE5y2knCH4J0oKx7D1fDVgI
-	JcXFjWPxrfXblXOkijn9RyHCA+Us=
-X-Gm-Gg: ASbGncshncCKMxbTHf8hmVWzZETOFjDcJvLKccfEbXcgkaP6YNbvR63J7XOcCffwM+d
-	AwS1ccAWCF+Q9HBlJYE4eSBF4bbzikACWa+HqLlI3NnpNHqrPeYjUi+rC9yF1SZKuZ5S6EeHOt0
-	kpJplgFYcgXiQrW3Qs5Bt/tvTkcMqtfr0=
-X-Google-Smtp-Source: AGHT+IHGTYfsLVh9BXq48a3Ayem0jia6+jW2kw2BEwO0RvsU7V2GFEsuZ34723RE7RdhTAMfDl91vlkNlX5oioY0wFA=
-X-Received: by 2002:a2e:be84:0:b0:300:25f6:9b3d with SMTP id
- 38308e7fff4ca-3090dca0d0cmr28127421fa.10.1739536703681; Fri, 14 Feb 2025
- 04:38:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mbnUz+SR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739540671; x=1771076671;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3RYhKJF0Pcxuz6PmZ9Ku/CakibUNucj8a9d8k/flz+k=;
+  b=mbnUz+SRDN/S9bqOrFqW9VeEquvMsf/SyX0ViNaOcGzLEfSvXBimP0nC
+   2vqdSnAQeK+ok+MQyZIfGHlNKdtwsjnoXkQeQhc/w2tTD1pEDQQwGc1DY
+   49u26/eFKBmyl+dxx9MTx30Fl+GCEZjfPfUL+NQA5IjiaryUVliQPJyyy
+   EjlloSmaD579PFL7gqjBs2e3Xl8dvOxEFWEtNMWnuMM2Dl8ofmaWJmWgs
+   5mqLhEtXsf88JZfpfplJ6b3ZBV8R+OhHVTdlEdBgURXqaNmMPURTJdoKq
+   ccJIzfgu6nLJ/zwWQ/m8yqoiTMopoTMjUvtyWBFpBqNakxBPMZGMX0UWZ
+   A==;
+X-CSE-ConnectionGUID: QH0bYRFzSiG3t6oVxIAQ3Q==
+X-CSE-MsgGUID: iIaHPjOIQ7egoSWZAMi4qQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="50932932"
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="50932932"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 05:44:30 -0800
+X-CSE-ConnectionGUID: 1NA1ghsyRSO2lTDuOrvutg==
+X-CSE-MsgGUID: Nf+kADmATGuhC/6MLlYvag==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="118395453"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa003.jf.intel.com with ESMTP; 14 Feb 2025 05:44:27 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id E740717A2; Fri, 14 Feb 2025 15:44:25 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] hrtimers: Replace hrtimer_clock_to_base_table approach with switch-case
+Date: Fri, 14 Feb 2025 15:43:33 +0200
+Message-ID: <20250214134424.3367619-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.45.1.3035.g276e886db78b
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
- <20250213115951.GF28068@noisy.programming.kicks-ass.net> <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
- <20250214094856.GD21726@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250214094856.GD21726@noisy.programming.kicks-ass.net>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 14 Feb 2025 07:37:47 -0500
-X-Gm-Features: AWEUYZk-wm4aTyenMdT75V7ZD2MsmSIdQL5n9jNliiKDXZ4mzVb7Lg0L8-G8dY0
-Message-ID: <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
-Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 14, 2025 at 4:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Thu, Feb 13, 2025 at 10:42:24AM -0500, Tamir Duberstein wrote:
-> > On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infradea=
-d.org> wrote:
-> > >
-> > > On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
-> > > > Convert this unit test to a KUnit test. This allows the test to ben=
-efit
-> > > > from the KUnit tooling. Note that care is taken to avoid test-endin=
-g
-> > > > assertions in worker threads, which is unsafe in KUnit (and wasn't =
-done
-> > > > before this change either).
-> > >
-> > > So this was something simple, and now I need to know how to operate t=
-his
-> > > kunit nonsense :-(
-> > >
-> > > How is that an improvement?
-> >
-> > Hi Peter,
-> >
-> > David enumerated some of the benefits of KUnit in another
-> > thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLxmT=
-Y2T2Ti53DQADrW+sJg@mail.gmail.com/.
-> >
-> > My personal reason for preferring KUnit is that it's much easier to
-> > run from userspace; the tooling takes care of building, starting the
-> > VM, running the tests, and producing a human-friendly report.
->
-> Wait what -- you have to run a VM just to use Kunit? That's a hard pass.
->
-> If I can't simply run it natively on my test box, its a no go. And it
-> using python also don't help, you shouldn't be needing that to load a
-> module.
+Clang (and GCC as well) complains about overlapped initialisers
+in the hrtimer_clock_to_base_table definition. With `make W=1`
+and CONFIG_WERROR=y (which is default nowadays) this breaks
+the build:
 
-The tooling I mention is all optional. You can still use modprobe to
-run the test as a module or at boot. In this case you'd set:
+  CC      kernel/time/hrtimer.o
+kernel/time/hrtimer.c:124:21: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+  124 |         [CLOCK_REALTIME]        = HRTIMER_BASE_REALTIME,
 
-CONFIG_KUNIT=3Dy
-CONFIG_WW_MUTEX_KUNIT_TEST=3Dm
+kernel/time/hrtimer.c:122:27: note: previous initialization is here
+  122 |         [0 ... MAX_CLOCKS - 1]  = HRTIMER_MAX_CLOCK_BASES,
 
-and then run the test via:
+(and similar for CLOCK_MONOTONIC, CLOCK_BOOTTIME, and CLOCK_TAI).
 
-```
-modprobe ww_mutex_kunit
-```
+Replace hrtimer_clock_to_base_table approach with switch-case to make
+the compiler happy.
 
-or to run at boot:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 
-CONFIG_KUNIT=3Dy
-CONFIG_WW_MUTEX_KUNIT_TEST=3Dy
+v2: dropped 'rfc', rewrote to use switch-case (Thomas)
 
-Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.h=
-tml#running-built-in-tests
-Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips.h=
-tml#running-tests-as-modules
+ kernel/time/hrtimer.c | 29 ++++++++++++-----------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
+
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index deb1aa32814e..453dc76c9348 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -117,16 +117,6 @@ DEFINE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases) =
+ 	.csd = CSD_INIT(retrigger_next_event, NULL)
+ };
+ 
+-static const int hrtimer_clock_to_base_table[MAX_CLOCKS] = {
+-	/* Make sure we catch unsupported clockids */
+-	[0 ... MAX_CLOCKS - 1]	= HRTIMER_MAX_CLOCK_BASES,
+-
+-	[CLOCK_REALTIME]	= HRTIMER_BASE_REALTIME,
+-	[CLOCK_MONOTONIC]	= HRTIMER_BASE_MONOTONIC,
+-	[CLOCK_BOOTTIME]	= HRTIMER_BASE_BOOTTIME,
+-	[CLOCK_TAI]		= HRTIMER_BASE_TAI,
+-};
+-
+ static inline bool hrtimer_base_is_online(struct hrtimer_cpu_base *base)
+ {
+ 	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
+@@ -1587,14 +1577,19 @@ u64 hrtimer_next_event_without(const struct hrtimer *exclude)
+ 
+ static inline int hrtimer_clockid_to_base(clockid_t clock_id)
+ {
+-	if (likely(clock_id < MAX_CLOCKS)) {
+-		int base = hrtimer_clock_to_base_table[clock_id];
+-
+-		if (likely(base != HRTIMER_MAX_CLOCK_BASES))
+-			return base;
++	switch (clock_id) {
++	case CLOCK_REALTIME:
++		return HRTIMER_BASE_REALTIME;
++	case CLOCK_MONOTONIC:
++		return HRTIMER_BASE_MONOTONIC;
++	case CLOCK_BOOTTIME:
++		return HRTIMER_BASE_BOOTTIME;
++	case CLOCK_TAI:
++		return HRTIMER_BASE_TAI;
++	default:
++		WARN(1, "Invalid clockid %d. Using MONOTONIC\n", clock_id);
++		return HRTIMER_BASE_MONOTONIC;
+ 	}
+-	WARN(1, "Invalid clockid %d. Using MONOTONIC\n", clock_id);
+-	return HRTIMER_BASE_MONOTONIC;
+ }
+ 
+ static enum hrtimer_restart hrtimer_dummy_timeout(struct hrtimer *unused)
+-- 
+2.45.1.3035.g276e886db78b
+
