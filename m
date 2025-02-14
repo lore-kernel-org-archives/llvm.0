@@ -1,109 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E908728A2BF
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 22:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8046F37160;
+	Fri, 14 Feb 2025 02:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739485989; cv=none; b=YS0FuMvMYHptkwJOVRk0/kXHwhTvSG4MKqiFPXP3gDuBp4YpjvWhz280TgY+ENVOF5FYERy12NA9eaDt6a77S2b8KbuaAYPBoH0G85bN1ye0S+Wk6bQNRa3zTrtQ6J0CrbpnZUaXUSkpIABpyYwzV6u6gLXaJoOkGntA6wbr/9U=
+	t=1739499796; cv=none; b=Znh16w3BRTDlKdpy5IFlT61qcmxgz42mE+sLq2eoUZagY4I2Uv3vipB/6ZbxbAA6sQMWnMadp2/1ueKpPAaC9IVpACJZTsyzvApcScoUBbQCKczSKLOU8fLUU44rN5up90Z0CSFoCggD4vpVClb8u7E5mQkGhHaK2XhT1ZNxZ4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739485989; c=relaxed/simple;
-	bh=jT+OrOQJPppm8Q/54VHsqyzrgwdUhZYzqjKucDJejBY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ARXsg4J+j+VPJ+K6cgYmr1upZMgHa3f46oW0lEfUhpmejN0dz7QOsD2MhTe5TTL4FAVW/ibOCFC/9UBVVFSwpfMlAlCdiLm1r68wqM4rlr/hahYojeFMcHJ06mJiOYPEqlR1GwcpzfAeqmKS5xBfvmap4SxAxbSP11H0/gDOPrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DkCP7Ye0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DkCP7Ye0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739485986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AfQOzXsSYFQF4cQigHXyj/xPwXxjIdNs7jEXhHeZC+8=;
-	b=DkCP7Ye0lr8VaDN8cUDF6W4WuiztnQZwz6alP2vWE25H4rHcUZAgHjOpUYcdV63KPICTcm
-	UBhH+hO7gELUksDhDfmVfpMfCeGficLyWJuXuG/C5SUvT2+4D6lQLYb8kzAf25pqOewHrT
-	9Fvo/anv1ZjZNyN1FJjguSqtur4XQI8=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-213-sGBA33FtOPisxSSlH1wGzw-1; Thu,
- 13 Feb 2025 17:33:05 -0500
-X-MC-Unique: sGBA33FtOPisxSSlH1wGzw-1
-X-Mimecast-MFC-AGG-ID: sGBA33FtOPisxSSlH1wGzw_1739485984
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3930F19373DC
-	for <llvm@lists.linux.dev>; Thu, 13 Feb 2025 22:33:04 +0000 (UTC)
-Received: from [172.64.13.25] (unknown [10.30.32.164])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D5239180035E;
-	Thu, 13 Feb 2025 22:33:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
- upstream-mainline, 68763b29)
-Date: Thu, 13 Feb 2025 22:33:03 -0000
-To: llvm@lists.linux.dev
+	s=arc-20240116; t=1739499796; c=relaxed/simple;
+	bh=K2sW+nCWLQQlXtFqt9fV432uBOm2kyFomu7ox24gfGc=;
+	h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=IFtjG4pp0hXgUF83OKzpUrtAkDmHe9grwA7sy6rnYx/zCfosK8C+sDc/ZKqcmfBXhWiOB6FpLL4/RYvzfQQa2YhFwaODBUVhSsLl2CaroOxmmLGQBEXiVyEberXThjU/ke3dgk5vOg/wKTemeHyhaHwiwoYch2jzXrxM8QFJhL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxrnINqa5nuPN0AA--.6626S3;
+	Fri, 14 Feb 2025 10:23:09 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowMDxH+UMqa5nFkIRAA--.2062S3;
+	Fri, 14 Feb 2025 10:23:08 +0800 (CST)
+Subject: Re: [PATCH] compiler.h: Specify correct attribute for
+ .rodata..c_jump_table
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+References: <20240924062710.1243-1-yangtiezhu@loongson.cn>
+ <20250212175023.rsxsw7pno57gsxps@jpoimboe>
+ <b1e5e3ea-be4b-5dae-cc0d-34693429d060@loongson.cn>
+ <20250213023936.lzbpgou4eallaij3@jpoimboe>
+ <045d7e22-672c-b9da-38d6-8897e854f262@loongson.cn>
+ <20250213185408.m5aogf2trvhvi2td@jpoimboe>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+ llvm@lists.linux.dev
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <439175dc-caf0-3d38-89ba-ade5a364c9bb@loongson.cn>
+Date: Fri, 14 Feb 2025 10:23:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <55167.125021317330500231@us-mta-213.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2jH5AE7_dogCRmf9G8mLDP5IH5ANnTw_IQpTgOyAMVc_1739485984
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250213185408.m5aogf2trvhvi2td@jpoimboe>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowMDxH+UMqa5nFkIRAA--.2062S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJF1xurWkWF1fAFy3GrWrCrX_yoWrCrWrpF
+	Wq9r97Krs0qFyfWw1xJ3WYkrW3X3y7Kr1UKryDt34UAr42qr1IgFs7CayUtFyvgwsxXFyI
+	qFs2gr4UGF4DZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUU
+	U
 
-Hi, we tested your kernel and here are the results:
+On 02/14/2025 02:54 AM, Josh Poimboeuf wrote:
+> On Thu, Feb 13, 2025 at 08:38:22PM +0800, Tiezhu Yang wrote:
+>> Based on the above analysis, in order to avoid changing the behavior of
+>> GNU assembler and silence the GNU assembler warning, is it possible to
+>> rename ".rodata..c_jump_table" to ".c_jump_table"?
+>
+> Yeah, though for the final vmlinux link we'd still need it to end up in
+> .rodata so it remains read-only at runtime.
+>
+> So we'd basically just have to add it to the RO_DATA() macro in
+> include/asm-generic/vmlinux.lds.h.
+>
+> Does it still work if we call it ..rodata.c_jump_table or so?  Then we
+> could just add "*(..rodata.*) to RO_DATA().  That would be somewhat less
+> surprising, and would also create a standard way for other code to do
+> the same thing by prefixing with "..rodata.".
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+"..rodata.c_jump_table" works well with GCC and Clang,
+there is no assembler warning for GCC and the section
+name is normal for Clang.
 
+I have a draft diff, I will do more test and send it
+as a formal patch once the other patches are landed
+because this patch depends on them.
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v6.14-rc2' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/broonie/spi
+The code looks something like this:
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1670414293
+-- >8 --
+diff --git a/include/asm-generic/vmlinux.lds.h 
+b/include/asm-generic/vmlinux.lds.h
+index 02a4adb4a999..0af80d6627fa 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -457,7 +457,7 @@ defined(CONFIG_AUTOFDO_CLANG) || 
+defined(CONFIG_PROPELLER_CLANG)
+         . = ALIGN((align));                                             \
+         .rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {           \
+                 __start_rodata = .;                                     \
+-               *(.rodata) *(.rodata.*)                                 \
++               *(.rodata) *(.rodata.*) *(..rodata.*)                   \
+                 SCHED_DATA                                              \
+                 RO_AFTER_INIT_DATA      /* Read only after init */      \
+                 . = ALIGN(8);                                           \
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 200fd3c5bc70..9b56788bf3f1 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -110,7 +110,8 @@ void ftrace_likely_update(struct ftrace_likely_data 
+*f, int val,
+  /* Unreachable code */
+  #ifdef CONFIG_OBJTOOL
+  /* Annotate a C jump table to allow objtool to follow the code flow */
+-#define __annotate_jump_table 
+__section(".rodata..c_jump_table,\"a\",@progbits #")
++#define __annotate_jump_table __section("..rodata.c_jump_table")
++#endif
+  #else /* !CONFIG_OBJTOOL */
+  #define __annotate_jump_table
+  #endif /* CONFIG_OBJTOOL */
+diff --git a/tools/objtool/arch/loongarch/special.c 
+b/tools/objtool/arch/loongarch/special.c
+index 27c6473608f3..d3e10ad3a9bf 100644
+--- a/tools/objtool/arch/loongarch/special.c
++++ b/tools/objtool/arch/loongarch/special.c
+@@ -131,7 +131,7 @@ static struct reloc 
+*find_reloc_of_rodata_c_jump_table(struct section *sec,
+                 if (reloc_offset(reloc) > offset)
+                         break;
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1670414293-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1670414293-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1670414293-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+-               if (!strncmp(reloc->sym->sec->name, 
+".rodata..c_jump_table", 21)) {
++               if (!strncmp(reloc->sym->sec->name, 
+"..rodata.c_jump_table", 21)) {
+                         *table_size = 0;
+                         return reloc;
+                 }
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 7174dcb7496e..a8b67b4c5726 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2482,12 +2482,13 @@ static void mark_rodata(struct objtool_file *file)
+          *
+          * - .rodata: can contain GCC switch tables
+          * - .rodata.<func>: same, if -fdata-sections is being used
+-        * - .rodata..c_jump_table: contains C annotated jump tables
++        * - ..rodata.c_jump_table: contains C annotated jump tables
+          *
+          * .rodata.str1.* sections are ignored; they don't contain jump 
+tables.
+          */
+         for_each_sec(file, sec) {
+-               if (!strncmp(sec->name, ".rodata", 7) &&
++               if ((!strncmp(sec->name, ".rodata", 7) ||
++                   !strncmp(sec->name, "..rodata", 8)) &&
+                     !strstr(sec->name, ".str1.")) {
+                         sec->rodata = true;
+                         found = true;
+diff --git a/tools/objtool/include/objtool/special.h 
+b/tools/objtool/include/objtool/special.h
+index e7ee7ffccefd..34acf4ae5fab 100644
+--- a/tools/objtool/include/objtool/special.h
++++ b/tools/objtool/include/objtool/special.h
+@@ -10,7 +10,7 @@
+  #include <objtool/check.h>
+  #include <objtool/elf.h>
 
+-#define C_JUMP_TABLE_SECTION ".rodata..c_jump_table"
++#define C_JUMP_TABLE_SECTION "..rodata.c_jump_table"
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  struct special_alt {
+         struct list_head list;
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Thanks,
+Tiezhu
 
