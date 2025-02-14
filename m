@@ -1,111 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02AB20B1EC;
-	Fri, 14 Feb 2025 07:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7A4215183
+	for <llvm@lists.linux.dev>; Fri, 14 Feb 2025 07:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739517518; cv=none; b=FdZiKql6SLF2yluy4Gq4eb/gE/TxYA3IquZaLhLf/LvL2f2M0cxCgZspVfc05PV9I5eonKQ3EEQTcr8dshnKe4rHzVOn3j2xym/fKAiAhMFty/u3YwjVs2E5g2atr6k5iRJ9L3/U4EHG5L6ZJ4WiU241y5AVBniQ4JE2JoE+D7k=
+	t=1739518828; cv=none; b=GEZqIWd1xabJZ1LrJb1tla7RFUE6tEXXuOGxluE708cP/1yX3Sk+ojUwc5qsPLmYbzivKN8gzJbct4fGJwWoMyX/lMgiY7mmouizysXD2EgX+8FlDa2+x5p6JnucfkxVZ9slN5Iw2kktE7iM3mMQMl0yqoySGJYZ09Go2L6mXc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739517518; c=relaxed/simple;
-	bh=g9TgpU+3p98K8Xcq75cS2vDjNwQGk3xjRv7DtiLhL5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CuU9uWZ3XHUiHvdvpqQbvhZuZjYRIgwgMIzPHsG7Noez03Y1CB2+N0vlfixmU8F8BAapNdT41wllTQfIyeJDLbjske/W2yKsCdZzyQ0axGTlygOV5XHYV+WPlidepVwz5XKD+hfIXx8MlNaY44/CGHBGjqijOIJ/voLw1+w1/u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n1jpj3AZ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739518828; c=relaxed/simple;
+	bh=Kho89Q2GcXrXWyyf+yKrrhy4+9qmfkZeHsKLMwF6ToY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QjZsMqILSdr54VJQ4/VqJvaDluao9ZYw9/WsI+9Ccue+nJI0t/T/lY7IaY0zB1Z4qhxL0qqJ5Lg2ovNbJAFlcIwbExG7l5vEqkVbztn6fDf9nr5NdohDUv/r0p4uzDmmT8rKGxxmKj1XdxZ+bx3Q8ppnRzQ4qRtovkMmqZd43mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JBxD5TMe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=338Ojyag; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n1jpj3AZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739517517; x=1771053517;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=g9TgpU+3p98K8Xcq75cS2vDjNwQGk3xjRv7DtiLhL5M=;
-  b=n1jpj3AZwcnXgjbWhlxjqs/6/Otd2HW5cVq7bRoQ0r+EfiO4vj3kPvkk
-   jAlf9RVL8emM82hSx28+DVLrli/thC6mPMGq1VDW0cxW36pk1JLN310lF
-   S3U7+0bkSMDtxW8LU41Rx7Srs3qHVHK1aHbvrMyb8+NLBQswsxRPlzAlg
-   MelB4c6NnsevNYTCrRHTx++6kHK/a9tYMlnKpIDAoFRfqqZ/HUrPXb1fp
-   oAWkwWOvFyFR4lbeEMqKfOWAajI6YV3hN6CSjEEozgzQQHYPlrQoVFPQl
-   vp0r+e0YB9iVetISQ7cIF8nakgUtM2A2cl/llN5oSY0F09JY23c1u9nND
-   g==;
-X-CSE-ConnectionGUID: MRBgnJrLS8GHoD1rUQEgtQ==
-X-CSE-MsgGUID: 6k+YZOeBRHKFBixmQuVeGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="27858094"
-X-IronPort-AV: E=Sophos;i="6.13,285,1732608000"; 
-   d="scan'208";a="27858094"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 23:18:34 -0800
-X-CSE-ConnectionGUID: Y7Zj4xT5SJS5ShIMc6GK5g==
-X-CSE-MsgGUID: CPD+ukFbSsKorQzNVfZAMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="150559919"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Feb 2025 23:18:32 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tipy2-0019Ct-0K;
-	Fri, 14 Feb 2025 07:18:30 +0000
-Date: Fri, 14 Feb 2025 15:17:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Li Ming <ming.li@zohomail.com>
-Subject: [djiang:cxl/fwctl 22/25] ./usr/include/fwctl/cxl.h:37:31: error:
- field has incomplete type 'struct cxl_mbox_set_feat_in'
-Message-ID: <202502141514.r9TX1jkS-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JBxD5TMe";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="338Ojyag"
+Date: Fri, 14 Feb 2025 08:40:22 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739518824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JJwIeTxjum9Pg60yFJa15f1Ms93wGpRdtIBEoabt09A=;
+	b=JBxD5TMe/dl3x399MEtFGPI9OKEFZ48+ukt08zkmcIsbj3ANQoEJhRox7f+bpSh1K2IDuU
+	tVUi5eU5/JFoddw6L7v3n2cX7iWQELXh9hWJ2iBrbzk/JP/FO+7Nz9jSmMEjFZFsMl+UU/
+	1JDy+abEymoxCWmuqvVCYDad14Jad3WKlGvHe8lggetY2qrNiqFcRs0iGcD8ne2MA9U1D7
+	cJAyf2bs8ggONGJfx5W72JPB+9vVngTkwIurVAeFeAnDJErH73wlu6O2mmexxbqgahkxxe
+	K0PPGJBXX/VanPtPMyNw93HTfsczzNksTNB+eYsKk8N70FY2ax3qjGBZYM5h5g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739518824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JJwIeTxjum9Pg60yFJa15f1Ms93wGpRdtIBEoabt09A=;
+	b=338OjyagNqW2+sgiXIY8UN5cIkU3OwXzUzliw7tTiCyJPqsvTdfqFBUDDKLgm5ijfi3Zbx
+	FjLrOoZSyds9muDQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] kbuild: userprogs: use lld to link through clang
+Message-ID: <20250214081034-a5fd06c6-9cb5-4efc-ad2b-69e6acfb08bd@linutronix.de>
+References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
+ <20250213-kbuild-userprog-fixes-v1-2-f255fb477d98@linutronix.de>
+ <20250213175437.GA2756218@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250213175437.GA2756218@ax162>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl/fwctl
-head:   368060188b78ad57197303bbffb78081837a7481
-commit: c9935e6f00834729baa8db86cf6c0b94549fda01 [22/25] cxl: Add support to handle user feature commands for set feature
-config: x86_64-buildonly-randconfig-001-20250214 (https://download.01.org/0day-ci/archive/20250214/202502141514.r9TX1jkS-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250214/202502141514.r9TX1jkS-lkp@intel.com/reproduce)
+On Thu, Feb 13, 2025 at 10:54:37AM -0700, Nathan Chancellor wrote:
+> Hi Thomas,
+> 
+> On Thu, Feb 13, 2025 at 03:55:18PM +0100, Thomas Weiﬂschuh wrote:
+> > The userprog infrastructure links objects files through $(CC).
+> > Either explicitly by manually calling $(CC) on multiple object files or
+> > implicitly by directly compiling a source file to an executable.
+> > The documentation at Documentation/kbuild/llvm.rst indicates that ld.lld would
+> > be used for linking if LLVM=1 is specified.
+> > However clang instead will use either a globally installed cross linker from
+> > $PATH called ${target}-ld or fall back to the system linker, which probably
+> > does not support crosslinking.
+> > For the normal kernel build this is not an issue because the linker is always
+> > executed directly, without the compiler being involved.
+> > 
+> > Fix this by passing -fuse-lld and let clang find its matching lld.
+> > 
+> > Fixes: 7f3a59db274c ("kbuild: add infrastructure to build userspace programs")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
+> First of all, thank you for catching and noticing this!
+> 
+> > ---
+> >  Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index bb5737ce7f9e79f4023c9c1f578a49a951d1e239..b4c208ae4041c1f4e32c2a158322422ce7353d06 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -510,6 +510,7 @@ OBJCOPY		= $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
+> >  OBJDUMP		= $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+> >  READELF		= $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+> >  STRIP		= $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+> > +KBUILD_USERLDFLAGS += -fuse-ld=lld
+> 
+> Now that our minimum supported version upstream is 13.0.1, I think we
+> can make this
+> 
+>   KBUILD_USERLDFLAGS += --ld-path=$(LD)
+> 
+> as it should respect the user's choice of linker a little bit more, such
+> as if they specific LLVM=<prefix>/bin/ or LLVM=-20. That reminds me that
+> I can clean up what I did in commit 4406b12214f6 ("powerpc/vdso: Link
+> with ld.lld when requested").
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502141514.r9TX1jkS-lkp@intel.com/
+That is much better, thanks!
+I looked for something like this but could't find it.
 
-All errors (new ones prefixed by >>):
+> Additionally, this would not fix someone using CC=clang and LD=ld.lld
+> (it is uncommon but still techincally supported) so could we use a check
+> like
+> 
+>   ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
+>   KBUILD_USERLDFLAGS += --ld-path=$(LD)
+>   endif
+> 
+> further down in Makefile to make it more robust?
 
-   In file included from <built-in>:1:
-   ./usr/include/fwctl/cxl.h:35:36: error: field has incomplete type 'struct cxl_mbox_get_sup_feats_in'
-      35 |                 struct cxl_mbox_get_sup_feats_in get_sup_feats_in;
-         |                                                  ^
-   ./usr/include/fwctl/cxl.h:13:8: note: forward declaration of 'struct cxl_mbox_get_sup_feats_in'
-      13 | struct cxl_mbox_get_sup_feats_in;
-         |        ^
-   ./usr/include/fwctl/cxl.h:36:31: error: field has incomplete type 'struct cxl_mbox_get_feat_in'
-      36 |                 struct cxl_mbox_get_feat_in get_feat_in;
-         |                                             ^
-   ./usr/include/fwctl/cxl.h:15:8: note: forward declaration of 'struct cxl_mbox_get_feat_in'
-      15 | struct cxl_mbox_get_feat_in;
-         |        ^
->> ./usr/include/fwctl/cxl.h:37:31: error: field has incomplete type 'struct cxl_mbox_set_feat_in'
-      37 |                 struct cxl_mbox_set_feat_in set_feat_in;
-         |                                             ^
-   ./usr/include/fwctl/cxl.h:16:8: note: forward declaration of 'struct cxl_mbox_set_feat_in'
-      16 | struct cxl_mbox_set_feat_in;
-         |        ^
-   ./usr/include/fwctl/cxl.h:54:37: error: field has incomplete type 'struct cxl_mbox_get_sup_feats_out'
-      54 |                 struct cxl_mbox_get_sup_feats_out get_feats_out;
-         |                                                   ^
-   ./usr/include/fwctl/cxl.h:14:8: note: forward declaration of 'struct cxl_mbox_get_sup_feats_out'
-      14 | struct cxl_mbox_get_sup_feats_out;
-         |        ^
-   4 errors generated.
+Ack.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> The stable backport may want to use cc-option like I did for the powerpc
+> vdso since there is a lower minimum supported version of LLVM there.
+
+Ack.
+
+
+FYI, in case you want to have a look:
+The kunit config for powerpc is currently broken on LLVM=1.
+
+$ ./tools/testing/kunit/kunit.py run --arch powerpc --make_options LLVM=1
+
+arch/powerpc/boot/wrapper manually inspects with CROSS_COMPILE, which does not
+exist when LLVM=1. Instead it falls back to the system objcopy, etc.
+
+> >  else
+> >  CC		= $(CROSS_COMPILE)gcc
+> >  LD		= $(CROSS_COMPILE)ld
