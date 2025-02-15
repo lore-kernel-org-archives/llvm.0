@@ -1,86 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BDF199249;
-	Sat, 15 Feb 2025 06:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9437F4C8E;
+	Sat, 15 Feb 2025 08:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739601437; cv=none; b=G9BYDRr3UKSj16R4BolHDidQ0b+Z2KqTkRyeGbVhKLryqAxz0Aka0EEtBU2cqZLdUUBP/hP9jQg2FzhyzzXEY0ehnyfeeFltGgxIFUqMVHN3mITQCE2rf1JZYFjp4BKSni0HaBlfeXiLJPvq2s3PJd0TEGJGefPuUtFpy+aovB8=
+	t=1739607020; cv=none; b=DWLWZ9wtbbTP7Pqpb7SKPcmn+wBp95XucMDfbQXjkMwJo/FAbJ3SOoL0oTiXRDcN3/xiEDO3VxWTGqg5728kd3nm2PsLpTjwPoliPnmDDkji2metgaPZ5fNiD6DtOSbNimUTwqxBqrgdM3Qg0g6CZD1RRbTOdo6ZNuDEX+ccQxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739601437; c=relaxed/simple;
-	bh=QBeIE5swiWYzIysYqxhRT9meAJBHaGJRHtFiEDHdxjE=;
+	s=arc-20240116; t=1739607020; c=relaxed/simple;
+	bh=8Z1xP31hwmqaAUASq29l4vz+9GKnK9tTM4TAZIAgEjQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IovEEr2hqgdvYIiKOulBB9lW9OKVkB7lA6o/iOpsVCKyUg0J+rQSjA/LV/gvAstjQy5vePjE5nMzmHrbxgCBFSZZF3S6yaMfiEPQT/Pjty1YbtpW+LRPpSAEk/sGNJA3Qr/2G/2oB1tv5gRpG9PPyrmh9r5DG5toXItVN5qPT7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A4Tf3V9M; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=ui03pSeLx3UGFzaSaOjhYJXDZLB7xhYXW8vH4RZID5q5DBHsl48v6qhjQ/mejcJ3vL51+9mh9GMN14/BCXLqwzrRSMmnLDNOItxAWbR5uBYSXESRwkT2fhnsz9U/ehBsGBml6o2ge3L1fsRSi+vcVIIlBi0AJFucbgO/7K7a1Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CaQJLhRL; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A4Tf3V9M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CaQJLhRL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739601435; x=1771137435;
+  t=1739607019; x=1771143019;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=QBeIE5swiWYzIysYqxhRT9meAJBHaGJRHtFiEDHdxjE=;
-  b=A4Tf3V9MRAKdCr3lBUrhVPVY0bkKqmme71FnyQH4+PuCj48+CJPtqmht
-   DKuolC7xd16zhRb/6rXFtubla5RI27U4CILRakaJVitF80bSkgpNUGDcL
-   TvOohRCzt/7Mb+h0m7MaF7IVA7Xj+WvGupgyEO68YERlLzSJQO+n4EWgE
-   U99rM32Wl8pWJJvJbcU+v5SkX7ZlYHsloQ7OffgyeNlhjCimqhgOW3y1J
-   2bBBMIeCi87ezVdaXtKntXdU5bkD8i5yWJzP8JtUx0xZuz9dyVbbC682X
-   NMRZO/Gqaz/N5CbDfxp/UWfvnDvbaOys7NIScy8fzaNFDf7NRYYi7zNxB
-   g==;
-X-CSE-ConnectionGUID: n4quh6DCT7iz7rRxM1capA==
-X-CSE-MsgGUID: 7wic24RCSEyfIHBcALtm6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="44286480"
+  bh=8Z1xP31hwmqaAUASq29l4vz+9GKnK9tTM4TAZIAgEjQ=;
+  b=CaQJLhRLwBMYUbFt8GQXz+aEdq+wzHxM485Ojc6D7HUqrJgjQO+ONHHA
+   X9XBRHyBnxRfNV5Z6opbttNtO4yLdrfPusW4JaBdXNTFLnLMynzvXrcEt
+   E+L/jA+xLHuOwsF6stIfnbFJfHioJjVQ17L+bJFCDgGT4f1uRQ8hEvYKh
+   qvJ0R6FlyM7+o+EOSX+rJb8fdSDbKP8jejIt4LIU3SVW7dqfeEHSXUqlS
+   Xtr/lYfdE1PBq2hSGZPpFRwzzvLvpRL4cxSaztmEDJHYCOW62yrEvqb8d
+   doSNC4PPvbsBseRy5k0ZUYIYiAsKZ0VkaknkMbSqD2BnRZRJ76QHxVRCW
+   w==;
+X-CSE-ConnectionGUID: JUc+u62pQpSLm8RF70ZYEA==
+X-CSE-MsgGUID: O5FfNw1wQduMKZGhDF2CBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40064502"
 X-IronPort-AV: E=Sophos;i="6.13,288,1732608000"; 
-   d="scan'208";a="44286480"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 22:37:15 -0800
-X-CSE-ConnectionGUID: hyiZc03lTzSsi1LeaQUbpw==
-X-CSE-MsgGUID: YKdP8ZFZT1WqPCpXGHRSfg==
+   d="scan'208";a="40064502"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 00:10:18 -0800
+X-CSE-ConnectionGUID: bewlr2URSS6r3bJaAzTbLA==
+X-CSE-MsgGUID: fd0/3d0CTemnZX0S3D0SMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113514707"
+   d="scan'208";a="150825252"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 14 Feb 2025 22:37:08 -0800
+  by orviesa001.jf.intel.com with ESMTP; 15 Feb 2025 00:10:15 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tjBnV-001AZ9-0a;
-	Sat, 15 Feb 2025 06:37:05 +0000
-Date: Sat, 15 Feb 2025 14:36:21 +0800
+	id 1tjDFd-001AcR-0H;
+	Sat, 15 Feb 2025 08:10:13 +0000
+Date: Sat, 15 Feb 2025 16:09:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anusha Srivatsa <asrivats@redhat.com>, Joel Stanley <joel@jms.id.au>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
-	Xinliang Liu <xinliang.liu@linaro.org>,
-	Tian Tao <tiantao6@hisilicon.com>,
-	Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Yongqin Liu <yongqin.liu@linaro.org>,
-	John Stultz <jstultz@google.com>,
-	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Marek Vasut <marex@denx.de>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	Yannick Fertre <yannick.fertre@foss.st.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 11/12] drm/vc4: move to devm_platform_ioremap_resource()
- usage
-Message-ID: <202502151415.DVoOTNdR-lkp@intel.com>
-References: <20250213-mem-cocci-v3-v1-11-93466d165349@redhat.com>
+To: NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] Change inode_operations.mkdir to return struct
+ dentry *
+Message-ID: <202502151519.0MA7hz8D-lkp@intel.com>
+References: <20250214052204.3105610-2-neilb@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,36 +68,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250213-mem-cocci-v3-v1-11-93466d165349@redhat.com>
+In-Reply-To: <20250214052204.3105610-2-neilb@suse.de>
 
-Hi Anusha,
+Hi NeilBrown,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 68763b29e0a6441f57f9ee652bbf8e7bc59183e5]
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on trondmy-nfs/linux-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus cifs/for-next xfs-linux/for-next linus/master v6.14-rc2 next-20250214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anusha-Srivatsa/drm-aspeed-move-to-devm_platform_ioremap_resource-usage/20250214-082448
-base:   68763b29e0a6441f57f9ee652bbf8e7bc59183e5
-patch link:    https://lore.kernel.org/r/20250213-mem-cocci-v3-v1-11-93466d165349%40redhat.com
-patch subject: [PATCH 11/12] drm/vc4: move to devm_platform_ioremap_resource() usage
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250215/202502151415.DVoOTNdR-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfs-change-mkdir-inode_operation-to-return-alternate-dentry-if-needed/20250214-141741
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250214052204.3105610-2-neilb%40suse.de
+patch subject: [PATCH 1/3] Change inode_operations.mkdir to return struct dentry *
+config: um-randconfig-001-20250215 (https://download.01.org/0day-ci/archive/20250215/202502151519.0MA7hz8D-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502151415.DVoOTNdR-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502151519.0MA7hz8D-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502151415.DVoOTNdR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502151519.0MA7hz8D-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/vc4/vc4_hdmi.c:38:
-   In file included from include/drm/drm_atomic_helper.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:35:
-   In file included from include/linux/interrupt.h:11:
+   In file included from fs/hostfs/hostfs_kern.c:13:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -134,13 +113,9 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from drivers/gpu/drm/vc4/vc4_hdmi.c:38:
-   In file included from include/drm/drm_atomic_helper.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:35:
-   In file included from include/linux/interrupt.h:11:
+   In file included from fs/hostfs/hostfs_kern.c:13:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -153,13 +128,9 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from drivers/gpu/drm/vc4/vc4_hdmi.c:38:
-   In file included from include/drm/drm_atomic_helper.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:35:
-   In file included from include/linux/interrupt.h:11:
+   In file included from fs/hostfs/hostfs_kern.c:13:
+   In file included from include/linux/pagemap.h:11:
+   In file included from include/linux/highmem.h:12:
    In file included from include/linux/hardirq.h:11:
    In file included from arch/um/include/asm/hardirq.h:5:
    In file included from include/asm-generic/hardirq.h:17:
@@ -193,155 +164,31 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      792 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/vc4/vc4_hdmi.c:2966:2: error: use of undeclared identifier 'res'; did you mean 'ret'?
-    2966 |         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hd");
-         |         ^~~
-         |         ret
-   drivers/gpu/drm/vc4/vc4_hdmi.c:2954:6: note: 'ret' declared here
-    2954 |         int ret;
-         |             ^
->> drivers/gpu/drm/vc4/vc4_hdmi.c:2966:6: error: incompatible pointer to integer conversion assigning to 'int' from 'struct resource *' [-Wint-conversion]
-    2966 |         res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hd");
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/vc4/vc4_hdmi.c:2967:7: error: use of undeclared identifier 'res'; did you mean 'ret'?
-    2967 |         if (!res)
-         |              ^~~
-         |              ret
-   drivers/gpu/drm/vc4/vc4_hdmi.c:2954:6: note: 'ret' declared here
-    2954 |         int ret;
-         |             ^
-   drivers/gpu/drm/vc4/vc4_hdmi.c:2970:40: error: use of undeclared identifier 'res'
-    2970 |         vc4_hdmi->hd_regs = devm_ioremap(dev, res->start, resource_size(res));
-         |                                               ^
-   drivers/gpu/drm/vc4/vc4_hdmi.c:2970:66: error: use of undeclared identifier 'res'
-    2970 |         vc4_hdmi->hd_regs = devm_ioremap(dev, res->start, resource_size(res));
-         |                                                                         ^
-   12 warnings and 5 errors generated.
+>> fs/hostfs/hostfs_kern.c:689:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dentry *' [-Wint-conversion]
+     689 |                 return -ENOMEM;
+         |                        ^~~~~~~
+   12 warnings and 1 error generated.
 
 
-vim +2966 drivers/gpu/drm/vc4/vc4_hdmi.c
+vim +689 fs/hostfs/hostfs_kern.c
 
-33c773eb62eaa1b Maxime Ripard   2020-09-03  2948  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  2949  static int vc5_hdmi_init_resources(struct drm_device *drm,
-a3dbb1c01657683 Maxime Ripard   2022-07-11  2950  				   struct vc4_hdmi *vc4_hdmi)
-8323989140f3e58 Maxime Ripard   2020-09-03  2951  {
-8323989140f3e58 Maxime Ripard   2020-09-03  2952  	struct platform_device *pdev = vc4_hdmi->pdev;
-8323989140f3e58 Maxime Ripard   2020-09-03  2953  	struct device *dev = &pdev->dev;
-25eb441d55d4795 Dave Stevenson  2022-06-13  2954  	int ret;
-8323989140f3e58 Maxime Ripard   2020-09-03  2955  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2956  	vc4_hdmi->hdmicore_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2957  									"hdmi");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2958  	if (!vc4_hdmi->hdmicore_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2959  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2960  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2961  	/* This is shared between both HDMI controllers. Cannot
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2962  	 * claim for both instances. Lets not convert to using
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2963  	 * devm_platform_ioremap_resource_byname() like
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2964  	 * the rest
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2965  	 */
-8323989140f3e58 Maxime Ripard   2020-09-03 @2966  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hd");
-8323989140f3e58 Maxime Ripard   2020-09-03  2967  	if (!res)
-8323989140f3e58 Maxime Ripard   2020-09-03  2968  		return -ENODEV;
-8323989140f3e58 Maxime Ripard   2020-09-03  2969  
-8323989140f3e58 Maxime Ripard   2020-09-03  2970  	vc4_hdmi->hd_regs = devm_ioremap(dev, res->start, resource_size(res));
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2971  	if (!vc4_hdmi->hd_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2972  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2973  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2974  	vc4_hdmi->cec_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2975  								   "cec");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2976  	if (!vc4_hdmi->cec_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2977  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2978  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2979  	vc4_hdmi->csc_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2980  								   "csc");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2981  	if (!vc4_hdmi->csc_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2982  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2983  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2984  	vc4_hdmi->dvp_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2985  								   "dvp");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2986  	if (!vc4_hdmi->dvp_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2987  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2988  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2989  	vc4_hdmi->phy_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2990  								   "phy");
-8323989140f3e58 Maxime Ripard   2020-09-03  2991  
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2992  	if (!vc4_hdmi->phy_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2993  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2994  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2995  	vc4_hdmi->ram_regs = devm_platform_ioremap_resource_byname(pdev,
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  2996  								   "packet");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2997  	if (!vc4_hdmi->ram_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  2998  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  2999  
-678cf9dc28dc14a Anusha Srivatsa 2025-02-13  3000  	vc4_hdmi->rm_regs = devm_platform_ioremap_resource_byname(pdev, "rm");
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  3001  	if (!vc4_hdmi->rm_regs)
-14929c5ae8b6dc4 Dan Carpenter   2020-09-10  3002  		return -ENOMEM;
-8323989140f3e58 Maxime Ripard   2020-09-03  3003  
-8323989140f3e58 Maxime Ripard   2020-09-03  3004  	vc4_hdmi->hsm_clock = devm_clk_get(dev, "hdmi");
-8323989140f3e58 Maxime Ripard   2020-09-03  3005  	if (IS_ERR(vc4_hdmi->hsm_clock)) {
-59ac702a932028f Stefan Wahren   2024-08-21  3006  		drm_err(drm, "Failed to get HDMI state machine clock\n");
-8323989140f3e58 Maxime Ripard   2020-09-03  3007  		return PTR_ERR(vc4_hdmi->hsm_clock);
-8323989140f3e58 Maxime Ripard   2020-09-03  3008  	}
-8323989140f3e58 Maxime Ripard   2020-09-03  3009  
-8323989140f3e58 Maxime Ripard   2020-09-03  3010  	vc4_hdmi->pixel_bvb_clock = devm_clk_get(dev, "bvb");
-8323989140f3e58 Maxime Ripard   2020-09-03  3011  	if (IS_ERR(vc4_hdmi->pixel_bvb_clock)) {
-59ac702a932028f Stefan Wahren   2024-08-21  3012  		drm_err(drm, "Failed to get pixel bvb clock\n");
-8323989140f3e58 Maxime Ripard   2020-09-03  3013  		return PTR_ERR(vc4_hdmi->pixel_bvb_clock);
-8323989140f3e58 Maxime Ripard   2020-09-03  3014  	}
-8323989140f3e58 Maxime Ripard   2020-09-03  3015  
-8323989140f3e58 Maxime Ripard   2020-09-03  3016  	vc4_hdmi->audio_clock = devm_clk_get(dev, "audio");
-8323989140f3e58 Maxime Ripard   2020-09-03  3017  	if (IS_ERR(vc4_hdmi->audio_clock)) {
-59ac702a932028f Stefan Wahren   2024-08-21  3018  		drm_err(drm, "Failed to get audio clock\n");
-8323989140f3e58 Maxime Ripard   2020-09-03  3019  		return PTR_ERR(vc4_hdmi->audio_clock);
-8323989140f3e58 Maxime Ripard   2020-09-03  3020  	}
-8323989140f3e58 Maxime Ripard   2020-09-03  3021  
-23b7eb5c12b3591 Maxime Ripard   2021-01-11  3022  	vc4_hdmi->cec_clock = devm_clk_get(dev, "cec");
-23b7eb5c12b3591 Maxime Ripard   2021-01-11  3023  	if (IS_ERR(vc4_hdmi->cec_clock)) {
-59ac702a932028f Stefan Wahren   2024-08-21  3024  		drm_err(drm, "Failed to get CEC clock\n");
-23b7eb5c12b3591 Maxime Ripard   2021-01-11  3025  		return PTR_ERR(vc4_hdmi->cec_clock);
-23b7eb5c12b3591 Maxime Ripard   2021-01-11  3026  	}
-23b7eb5c12b3591 Maxime Ripard   2021-01-11  3027  
-8323989140f3e58 Maxime Ripard   2020-09-03  3028  	vc4_hdmi->reset = devm_reset_control_get(dev, NULL);
-8323989140f3e58 Maxime Ripard   2020-09-03  3029  	if (IS_ERR(vc4_hdmi->reset)) {
-59ac702a932028f Stefan Wahren   2024-08-21  3030  		drm_err(drm, "Failed to get HDMI reset line\n");
-8323989140f3e58 Maxime Ripard   2020-09-03  3031  		return PTR_ERR(vc4_hdmi->reset);
-8323989140f3e58 Maxime Ripard   2020-09-03  3032  	}
-8323989140f3e58 Maxime Ripard   2020-09-03  3033  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3034  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->hdmi_regset, VC4_HDMI);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3035  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3036  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3037  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3038  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->hd_regset, VC4_HD);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3039  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3040  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3041  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3042  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->cec_regset, VC5_CEC);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3043  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3044  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3045  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3046  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->csc_regset, VC5_CSC);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3047  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3048  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3049  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3050  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->dvp_regset, VC5_DVP);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3051  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3052  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3053  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3054  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->phy_regset, VC5_PHY);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3055  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3056  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3057  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3058  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->ram_regset, VC5_RAM);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3059  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3060  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3061  
-a3dbb1c01657683 Maxime Ripard   2022-07-11  3062  	ret = vc4_hdmi_build_regset(drm, vc4_hdmi, &vc4_hdmi->rm_regset, VC5_RM);
-25eb441d55d4795 Dave Stevenson  2022-06-13  3063  	if (ret)
-25eb441d55d4795 Dave Stevenson  2022-06-13  3064  		return ret;
-25eb441d55d4795 Dave Stevenson  2022-06-13  3065  
-8323989140f3e58 Maxime Ripard   2020-09-03  3066  	return 0;
-c8b75bca92cbf06 Eric Anholt     2015-03-02  3067  }
-c8b75bca92cbf06 Eric Anholt     2015-03-02  3068  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  681  
+456289e0bd14ce NeilBrown         2025-02-14  682  static struct dentry *hostfs_mkdir(struct mnt_idmap *idmap, struct inode *ino,
+549c7297717c32 Christian Brauner 2021-01-21  683  				   struct dentry *dentry, umode_t mode)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  684  {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  685  	char *file;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  686  	int err;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  687  
+c5322220eb91b9 Al Viro           2010-06-06  688  	if ((file = dentry_name(dentry)) == NULL)
+f1adc05e773830 Jeff Dike         2007-05-08 @689  		return -ENOMEM;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  690  	err = do_mkdir(file, mode);
+e9193059b1b373 Al Viro           2010-06-06  691  	__putname(file);
+456289e0bd14ce NeilBrown         2025-02-14  692  	if (err)
+456289e0bd14ce NeilBrown         2025-02-14  693  		return ERR_PTR(err);
+456289e0bd14ce NeilBrown         2025-02-14  694  	else
+456289e0bd14ce NeilBrown         2025-02-14  695  		return dentry;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  696  }
+^1da177e4c3f41 Linus Torvalds    2005-04-16  697  
 
 -- 
 0-DAY CI Kernel Test Service
