@@ -1,148 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDA3155CB3;
-	Sat, 15 Feb 2025 16:44:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4211C7011
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 17:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739637852; cv=none; b=qGdXcfuWLQl/b2K26zspo6auJj8wiQWtlZOPg18kpC+VTe0/JWGaDThKz4WUgZGlZlOHM9VPYq4Hj9fuzM1i0qNoy92+W1cNe6OENCX3MQSEzkNhla9Tl7pP0sEETtiqkOahyFtgLMFcnQBBdi92ZcpWUh+npsuadeG1YDQxitw=
+	t=1739640189; cv=none; b=Gd8jqUkqN+7aZhkSHLBy4aNOHbX8d+AdfsNfQAoTVN8IZl0LPRLgoiho/sJPXx6QpkhqP+MSCXUlNSqfpamW9PsicNcXOauwrSLoBnuJ/eRrYxzgfLXm0zRgEdzTXeHxMUfVSDcHMIYSlkJCy9BUYv3uqsovqQCP5fHHC66Tncw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739637852; c=relaxed/simple;
-	bh=+l7+iy0DBJq4VnUr+KEYWt2/mvZ9DMngN/x4L6oUq8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XutnbIcKtXdRp1Pa7ycw8B/659sI20Ihl47jRKCWeiC3M2ZggtuGDeRjPrkF/wyhnkWH3vrxhPyW7HQhRyZcVW2MM0v5iD0odCF+5wv7H1D3YIEy5tTTcriPvb/6DvtVw4V6R+XYRd7A0wXxp1lNlCJ1Oqp7/1SX5l74vWDK0vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BiNsoSA+; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739640189; c=relaxed/simple;
+	bh=CfAjG1NavkGKxQ44+2+oMdRZIt4ulDt+ESw/aW8IGas=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CPmHPstU5/bR3icINzbVgaj55ltLm1mviIBuG3TcF0DffTfbnxXYx9sHEi65+lmLnEZ7p33tfBsrx35yN+MAfOlcAf8Vag4radEwAPNzDLcclX5XHKtG4ebLa0Y6tg/hS1lJZ1AFrRzWSmbnwPFl6f1AxWIDqoqSsyHCDyrw7ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E5qbLjO3; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BiNsoSA+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739637851; x=1771173851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+l7+iy0DBJq4VnUr+KEYWt2/mvZ9DMngN/x4L6oUq8Q=;
-  b=BiNsoSA+xSH/ARva9GcnOO+3d4g21yV7K4owl34av8l7D81b/a6MUuhe
-   2cG/0r4as4i1L1raqW/A5ywAedKgtA1HMYf015s9w1GdwpfJg0eAZLEjw
-   V5HF8e+DHaWUquYcIuu/RnUyZtz4oMtwflyMiG1ZV1XBqBlnFTSdBU+hA
-   r6beBE43CxM5tP5HN11ah15mdqK4ZGSHRifz5mE0m54icj9lKju5DSNpd
-   O6lDqfs1dSD9VT72ZYhYCoV4Xu6RTcdnSE20pBiB9thiCG/qKWVzcSceY
-   DFh4aIzvdga5CyxGnmei7Jli/RMYk4KIENCZmrlS/zv5WhoJCednHB4zY
-   A==;
-X-CSE-ConnectionGUID: /X8zEeqXSjeLyHxWDFs/pw==
-X-CSE-MsgGUID: gbH8wDktSw+AroaRL7CXLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="44021010"
-X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
-   d="scan'208";a="44021010"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 08:44:11 -0800
-X-CSE-ConnectionGUID: Mg/qGwZ0Tr+LNeAcUMqnkQ==
-X-CSE-MsgGUID: CoKoADpWQ4m5EG+HHRW34g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118352535"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Feb 2025 08:44:06 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tjLGu-001B0F-2d;
-	Sat, 15 Feb 2025 16:44:04 +0000
-Date: Sun, 16 Feb 2025 00:43:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Chris Li <chrisl@kernel.org>, Barry Song <v-songbaohua@oppo.com>,
-	Hugh Dickins <hughd@google.com>,
-	Yosry Ahmed <yosryahmed@google.com>,
-	"Huang, Ying" <ying.huang@linux.alibaba.com>,
-	Baoquan He <bhe@redhat.com>, Nhat Pham <nphamcs@gmail.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Kalesh Singh <kaleshsingh@google.com>, linux-kernel@vger.kernel.org,
-	Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH 7/7] mm, swap: simplify folio swap allocation
-Message-ID: <202502160013.l8ZYewQK-lkp@intel.com>
-References: <20250214175709.76029-8-ryncsn@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E5qbLjO3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739640186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NeoyVK4/88/iV/E0p9xDOLh5GzeAraP4gm66FkcinUM=;
+	b=E5qbLjO30loGZBp41eiG0I0uvRwG0Oem3+0sDsA3b8y61daJAndR+oNe1t3bqUeuL+q3/y
+	nvXIkRq6R0yrjXc4YggNqoXqqpF/n797iQ+qOsSq2vBAGtKIln2GBBbOFiBoXSbrdPVRN5
+	kX8QWMHq/8x0MEXu2x3259Ia56stIro=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-413-38pvEZONNqm6SmYYFZTsgg-1; Sat,
+ 15 Feb 2025 12:23:04 -0500
+X-MC-Unique: 38pvEZONNqm6SmYYFZTsgg-1
+X-Mimecast-MFC-AGG-ID: 38pvEZONNqm6SmYYFZTsgg_1739640183
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4040D18004A7
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 17:23:03 +0000 (UTC)
+Received: from [172.64.13.25] (unknown [10.30.32.164])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C58BF1800874;
+	Sat, 15 Feb 2025 17:23:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
+ upstream-mainline, 6452feaf)
+Date: Sat, 15 Feb 2025 17:23:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250214175709.76029-8-ryncsn@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <25017.125021512230400391@us-mta-413.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: SCGVX77yRxWPiTykp0zEczagJOKV6N1QGn12uuVVtIA_1739640183
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kairui,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-avoid-reclaiming-irrelevant-swap-cache/20250215-020239
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250214175709.76029-8-ryncsn%40gmail.com
-patch subject: [PATCH 7/7] mm, swap: simplify folio swap allocation
-config: x86_64-buildonly-randconfig-002-20250215 (https://download.01.org/0day-ci/archive/20250216/202502160013.l8ZYewQK-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502160013.l8ZYewQK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502160013.l8ZYewQK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2208:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
->> include/linux/swap.h:591:1: error: expected identifier or '('
-     591 | {
-         | ^
-   4 warnings and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=2496405435
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=2496405435
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=2496405435
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=2496405435
-   make: Target 'prepare' not remade because of errors.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +591 include/linux/swap.h
+Kernel information:
+    Commit message: Merge tag 'gpio-fixes-for-v6.14-rc3-take2' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/brgl/linux
 
-8334b96221ff0d Minchan Kim    2015-09-08  589  
-f8d9ff0d052908 Kairui Song    2025-02-15  590  static bool folio_alloc_swap(struct folio *folio, gfp_t gfp_mask);
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @591  {
-f8d9ff0d052908 Kairui Song    2025-02-15  592  	return false;
-^1da177e4c3f41 Linus Torvalds 2005-04-16  593  }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  594  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1672770105
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1672770105-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1672770105-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1672770105-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
