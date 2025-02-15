@@ -1,65 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9437F4C8E;
-	Sat, 15 Feb 2025 08:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDA3155CB3;
+	Sat, 15 Feb 2025 16:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739607020; cv=none; b=DWLWZ9wtbbTP7Pqpb7SKPcmn+wBp95XucMDfbQXjkMwJo/FAbJ3SOoL0oTiXRDcN3/xiEDO3VxWTGqg5728kd3nm2PsLpTjwPoliPnmDDkji2metgaPZ5fNiD6DtOSbNimUTwqxBqrgdM3Qg0g6CZD1RRbTOdo6ZNuDEX+ccQxk=
+	t=1739637852; cv=none; b=qGdXcfuWLQl/b2K26zspo6auJj8wiQWtlZOPg18kpC+VTe0/JWGaDThKz4WUgZGlZlOHM9VPYq4Hj9fuzM1i0qNoy92+W1cNe6OENCX3MQSEzkNhla9Tl7pP0sEETtiqkOahyFtgLMFcnQBBdi92ZcpWUh+npsuadeG1YDQxitw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739607020; c=relaxed/simple;
-	bh=8Z1xP31hwmqaAUASq29l4vz+9GKnK9tTM4TAZIAgEjQ=;
+	s=arc-20240116; t=1739637852; c=relaxed/simple;
+	bh=+l7+iy0DBJq4VnUr+KEYWt2/mvZ9DMngN/x4L6oUq8Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ui03pSeLx3UGFzaSaOjhYJXDZLB7xhYXW8vH4RZID5q5DBHsl48v6qhjQ/mejcJ3vL51+9mh9GMN14/BCXLqwzrRSMmnLDNOItxAWbR5uBYSXESRwkT2fhnsz9U/ehBsGBml6o2ge3L1fsRSi+vcVIIlBi0AJFucbgO/7K7a1Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CaQJLhRL; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=XutnbIcKtXdRp1Pa7ycw8B/659sI20Ihl47jRKCWeiC3M2ZggtuGDeRjPrkF/wyhnkWH3vrxhPyW7HQhRyZcVW2MM0v5iD0odCF+5wv7H1D3YIEy5tTTcriPvb/6DvtVw4V6R+XYRd7A0wXxp1lNlCJ1Oqp7/1SX5l74vWDK0vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BiNsoSA+; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CaQJLhRL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BiNsoSA+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739607019; x=1771143019;
+  t=1739637851; x=1771173851;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=8Z1xP31hwmqaAUASq29l4vz+9GKnK9tTM4TAZIAgEjQ=;
-  b=CaQJLhRLwBMYUbFt8GQXz+aEdq+wzHxM485Ojc6D7HUqrJgjQO+ONHHA
-   X9XBRHyBnxRfNV5Z6opbttNtO4yLdrfPusW4JaBdXNTFLnLMynzvXrcEt
-   E+L/jA+xLHuOwsF6stIfnbFJfHioJjVQ17L+bJFCDgGT4f1uRQ8hEvYKh
-   qvJ0R6FlyM7+o+EOSX+rJb8fdSDbKP8jejIt4LIU3SVW7dqfeEHSXUqlS
-   Xtr/lYfdE1PBq2hSGZPpFRwzzvLvpRL4cxSaztmEDJHYCOW62yrEvqb8d
-   doSNC4PPvbsBseRy5k0ZUYIYiAsKZ0VkaknkMbSqD2BnRZRJ76QHxVRCW
-   w==;
-X-CSE-ConnectionGUID: JUc+u62pQpSLm8RF70ZYEA==
-X-CSE-MsgGUID: O5FfNw1wQduMKZGhDF2CBA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40064502"
-X-IronPort-AV: E=Sophos;i="6.13,288,1732608000"; 
-   d="scan'208";a="40064502"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 00:10:18 -0800
-X-CSE-ConnectionGUID: bewlr2URSS6r3bJaAzTbLA==
-X-CSE-MsgGUID: fd0/3d0CTemnZX0S3D0SMQ==
+  bh=+l7+iy0DBJq4VnUr+KEYWt2/mvZ9DMngN/x4L6oUq8Q=;
+  b=BiNsoSA+xSH/ARva9GcnOO+3d4g21yV7K4owl34av8l7D81b/a6MUuhe
+   2cG/0r4as4i1L1raqW/A5ywAedKgtA1HMYf015s9w1GdwpfJg0eAZLEjw
+   V5HF8e+DHaWUquYcIuu/RnUyZtz4oMtwflyMiG1ZV1XBqBlnFTSdBU+hA
+   r6beBE43CxM5tP5HN11ah15mdqK4ZGSHRifz5mE0m54icj9lKju5DSNpd
+   O6lDqfs1dSD9VT72ZYhYCoV4Xu6RTcdnSE20pBiB9thiCG/qKWVzcSceY
+   DFh4aIzvdga5CyxGnmei7Jli/RMYk4KIENCZmrlS/zv5WhoJCednHB4zY
+   A==;
+X-CSE-ConnectionGUID: /X8zEeqXSjeLyHxWDFs/pw==
+X-CSE-MsgGUID: gbH8wDktSw+AroaRL7CXLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="44021010"
+X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
+   d="scan'208";a="44021010"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 08:44:11 -0800
+X-CSE-ConnectionGUID: Mg/qGwZ0Tr+LNeAcUMqnkQ==
+X-CSE-MsgGUID: CoKoADpWQ4m5EG+HHRW34g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="150825252"
+   d="scan'208";a="118352535"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 15 Feb 2025 00:10:15 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 15 Feb 2025 08:44:06 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tjDFd-001AcR-0H;
-	Sat, 15 Feb 2025 08:10:13 +0000
-Date: Sat, 15 Feb 2025 16:09:31 +0800
+	id 1tjLGu-001B0F-2d;
+	Sat, 15 Feb 2025 16:44:04 +0000
+Date: Sun, 16 Feb 2025 00:43:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>
+To: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] Change inode_operations.mkdir to return struct
- dentry *
-Message-ID: <202502151519.0MA7hz8D-lkp@intel.com>
-References: <20250214052204.3105610-2-neilb@suse.de>
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Chris Li <chrisl@kernel.org>, Barry Song <v-songbaohua@oppo.com>,
+	Hugh Dickins <hughd@google.com>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	"Huang, Ying" <ying.huang@linux.alibaba.com>,
+	Baoquan He <bhe@redhat.com>, Nhat Pham <nphamcs@gmail.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Kalesh Singh <kaleshsingh@google.com>, linux-kernel@vger.kernel.org,
+	Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH 7/7] mm, swap: simplify folio swap allocation
+Message-ID: <202502160013.l8ZYewQK-lkp@intel.com>
+References: <20250214175709.76029-8-ryncsn@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,127 +72,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250214052204.3105610-2-neilb@suse.de>
+In-Reply-To: <20250214175709.76029-8-ryncsn@gmail.com>
 
-Hi NeilBrown,
+Hi Kairui,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on trondmy-nfs/linux-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus cifs/for-next xfs-linux/for-next linus/master v6.14-rc2 next-20250214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/nfs-change-mkdir-inode_operation-to-return-alternate-dentry-if-needed/20250214-141741
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250214052204.3105610-2-neilb%40suse.de
-patch subject: [PATCH 1/3] Change inode_operations.mkdir to return struct dentry *
-config: um-randconfig-001-20250215 (https://download.01.org/0day-ci/archive/20250215/202502151519.0MA7hz8D-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502151519.0MA7hz8D-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swap-avoid-reclaiming-irrelevant-swap-cache/20250215-020239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250214175709.76029-8-ryncsn%40gmail.com
+patch subject: [PATCH 7/7] mm, swap: simplify folio swap allocation
+config: x86_64-buildonly-randconfig-002-20250215 (https://download.01.org/0day-ci/archive/20250216/202502160013.l8ZYewQK-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502160013.l8ZYewQK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502151519.0MA7hz8D-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502160013.l8ZYewQK-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> fs/hostfs/hostfs_kern.c:689:10: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct dentry *' [-Wint-conversion]
-     689 |                 return -ENOMEM;
-         |                        ^~~~~~~
-   12 warnings and 1 error generated.
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2208:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+>> include/linux/swap.h:591:1: error: expected identifier or '('
+     591 | {
+         | ^
+   4 warnings and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=2496405435
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=2496405435
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=2496405435
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=2496405435
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +689 fs/hostfs/hostfs_kern.c
+vim +591 include/linux/swap.h
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  681  
-456289e0bd14ce NeilBrown         2025-02-14  682  static struct dentry *hostfs_mkdir(struct mnt_idmap *idmap, struct inode *ino,
-549c7297717c32 Christian Brauner 2021-01-21  683  				   struct dentry *dentry, umode_t mode)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  684  {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  685  	char *file;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  686  	int err;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  687  
-c5322220eb91b9 Al Viro           2010-06-06  688  	if ((file = dentry_name(dentry)) == NULL)
-f1adc05e773830 Jeff Dike         2007-05-08 @689  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  690  	err = do_mkdir(file, mode);
-e9193059b1b373 Al Viro           2010-06-06  691  	__putname(file);
-456289e0bd14ce NeilBrown         2025-02-14  692  	if (err)
-456289e0bd14ce NeilBrown         2025-02-14  693  		return ERR_PTR(err);
-456289e0bd14ce NeilBrown         2025-02-14  694  	else
-456289e0bd14ce NeilBrown         2025-02-14  695  		return dentry;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  696  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  697  
+8334b96221ff0d Minchan Kim    2015-09-08  589  
+f8d9ff0d052908 Kairui Song    2025-02-15  590  static bool folio_alloc_swap(struct folio *folio, gfp_t gfp_mask);
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @591  {
+f8d9ff0d052908 Kairui Song    2025-02-15  592  	return false;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  593  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  594  
 
 -- 
 0-DAY CI Kernel Test Service
