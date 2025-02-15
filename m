@@ -1,76 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5E1156F39;
-	Sat, 15 Feb 2025 04:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BA2144304;
+	Sat, 15 Feb 2025 04:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739592923; cv=none; b=Vz9W7eAxBs+3StpEV4Uk1Sw78XKEqxz/1Rtu9oWelRQJxtLlqhI+X69fGugyTF3ucuQ4e4JcbyNqFvF1ISA/J6dWRbiK+GdcrbRo/QpAhAkS5LseX4MRSp04WCW17o2qKmuhYOyyXpeTjedUZ/E/lNgZyTJLY5aA8ZZQUx2JPZg=
+	t=1739595183; cv=none; b=NEFKuJ+hcmyv0kDaFJJ/L3PPkxPWN6a8R20QCztdsixRh1f0g9mblYNmWHOLFfjYGQ7UWBhi8gBEtDr856FWqCSWixcoteiJ6FgwhqX0dliTbA/O2Uh3lISH7fLkMD1OxjOeoqins4liRuu4ZnJwanPsF4dsPL+bK36WiCORC1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739592923; c=relaxed/simple;
-	bh=e1gaUV3FYLUO6BIeTFTNkohw5dKtYwMx99wkGdyY0nU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gl7HXggRrd6E9P+OE8tYFpQt7eIMsdwtt7qgF6ESJnPm81GEYQQK1+UmuiXYtFO+zAVWcfdXQQN6UgpwlFtyT7N9E5Di3dI/wolSUOpMZj7oM+Nu79kahRLi3K4hp7TtpHKdgbrgnttAZmiBBTOOdtKHuCj8qLTRJcIeoD+B4uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uf639F+A; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739595183; c=relaxed/simple;
+	bh=P0Dn37McRvnTms2m38LeCL7CgUPMmxn+F1yqceNAn/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NEnf9DWF5Yzv0hGHIVeUl/MSIkPS/21C2V3IJPmxLqvAUbXHWmmcq0aox82EggpesNQmtZNi78QoHRQqiJmBfl9wDs6OE9K4Qlbb1uNHvxeDoJzxQvRHnvvsYVcx8Dxx4SuAGlGjGwOYHYUTl/MTYsrsUDrCDYameQZFDXi8zRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iC2OZ+nH; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uf639F+A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259FBC4CEE4;
-	Sat, 15 Feb 2025 04:15:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739592922;
-	bh=e1gaUV3FYLUO6BIeTFTNkohw5dKtYwMx99wkGdyY0nU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uf639F+AirtZYCPWDY5P0SggLOZopBOT1ROf+624WWDnFA56Fu7noZ8WR7ASuaQqp
-	 vwbXekOyT/HmeLEnW9mtmYxJOUqCIphbkr9f0yPkChUBrhguptmYjYwANA08mX1LqT
-	 JbB1vHPx9WW7yeERNGEfZpiEluy+lT7Q7eeh/jxZuF+xtmUK90L/ur9Nxmlbb69mSu
-	 CdiwkrJiWoCQ/x1FHy3+VvTXw67p98WjOgaLRzPibo58z321BOEDb+EfmV3QqrQWxG
-	 ChkTFnMGX2JSgHDxLHo2C3pECmVtH5/LZnloUT6nu+6GthggzAf7okY27ZuMJKbA5D
-	 LiHAKnp+xfTjQ==
-Date: Fri, 14 Feb 2025 21:15:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] kbuild: userprogs: use lld to link through clang
-Message-ID: <20250215041517.GA2645277@ax162>
-References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
- <20250213-kbuild-userprog-fixes-v1-2-f255fb477d98@linutronix.de>
- <20250213175437.GA2756218@ax162>
- <20250214081034-a5fd06c6-9cb5-4efc-ad2b-69e6acfb08bd@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iC2OZ+nH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739595182; x=1771131182;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P0Dn37McRvnTms2m38LeCL7CgUPMmxn+F1yqceNAn/8=;
+  b=iC2OZ+nHWEKmL1p2J6MPBlIPU8mfMr0TQM1esvF9YKfLQVqxS63nIBAD
+   BS0BX5NqIMMEw13++aEvszQq1/Z/3HqIfS/BvNTOJnkILjNwfJ0f3NMh1
+   ULvfkEiqu1cOXL03RnjMbn2YGd1yfs+jH/hr/cSL7lgi4m/d2RWnsI0sL
+   bHa1DovuchfLK56I70c/muTqIVEpfnP+EpRRYH6EH2RDKRJ8eja1i3SfI
+   8QN7zAXgOraTBGpXuch/a8frDmXuL51AZEMv3Ba4Y0innBejaHZXEsa9C
+   oGZjQ99U+VnC66bA8nUTbuGwX4LZU1jOe+cUVfC4nFTBw8hMeIZ7+RgRk
+   w==;
+X-CSE-ConnectionGUID: /IRxo5pYRly0/X0VxaafBQ==
+X-CSE-MsgGUID: DXym2bKPRu68LWMk9+9osw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40492585"
+X-IronPort-AV: E=Sophos;i="6.13,287,1732608000"; 
+   d="scan'208";a="40492585"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 20:53:00 -0800
+X-CSE-ConnectionGUID: UUOvsTbOQBylIW9GqFfing==
+X-CSE-MsgGUID: sNZRjVBjTOahOdG4k/X27w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118838189"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2025 20:52:58 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tjAAh-001AVv-1G;
+	Sat, 15 Feb 2025 04:52:55 +0000
+Date: Sat, 15 Feb 2025 12:51:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Subject: [tip:x86/cpu 3/5] ERROR: modpost: "acpi_processor_ffh_play_dead"
+ [drivers/acpi/processor.ko] undefined!
+Message-ID: <202502151207.FA9UO1iX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250214081034-a5fd06c6-9cb5-4efc-ad2b-69e6acfb08bd@linutronix.de>
 
-On Fri, Feb 14, 2025 at 08:40:22AM +0100, Thomas Weißschuh wrote:
-> FYI, in case you want to have a look:
-> The kunit config for powerpc is currently broken on LLVM=1.
-> 
-> $ ./tools/testing/kunit/kunit.py run --arch powerpc --make_options LLVM=1
-> 
-> arch/powerpc/boot/wrapper manually inspects with CROSS_COMPILE, which does not
-> exist when LLVM=1. Instead it falls back to the system objcopy, etc.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+head:   96040f7273e2bc0be1871ad9ed4da7b504da9410
+commit: 541ddf31e30022b8e6f44b3a943964e8f0989d15 [3/5] ACPI/processor_idle: Add FFH state handling
+config: x86_64-randconfig-077-20250214 (https://download.01.org/0day-ci/archive/20250215/202502151207.FA9UO1iX-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502151207.FA9UO1iX-lkp@intel.com/reproduce)
 
-Thanks for reminding me, it is a known papercut:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502151207.FA9UO1iX-lkp@intel.com/
 
-https://github.com/ClangBuiltLinux/linux/issues/1601
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-I have a WIP series but there are still some errors in the
-configurations that I test that I have not investigated.
+>> ERROR: modpost: "acpi_processor_ffh_play_dead" [drivers/acpi/processor.ko] undefined!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=b4/ppc-boot-llvm-1
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
