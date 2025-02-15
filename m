@@ -1,133 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA78A1F9A91;
-	Sat, 15 Feb 2025 19:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F3415696E
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 19:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739648128; cv=none; b=Tb7vS04yLoHk6jAQ3JGstEPe5I/NEipnWWhhEp7tfZBNPGfkXYCDz0G3NI5yXZJ3OhfA/PxHBmtwmq4yvuEELYcbOh7ytUy8lPCaONEedSoEJowKBfqyzdsam/Vk5eicClJ43MBQFjfoGZSb14QhjN64W94Nu7FjTMO5IZs3f/0=
+	t=1739649131; cv=none; b=cjkhtwIqvJkhRyqyI54+zDaZ93UDFHIPy02RSK57pmxze6Arq6YKek72zIcszFZaS/6Nz0Ts2Dw7O862g15kuFvPEKlOUO+G6srgNy9uvXdMJVdbUWe27GUgeqXpS59e7ZO7f6VxMO4bVwc8yJ8ajEAcgQmHhcUgK4aIE5vyKAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739648128; c=relaxed/simple;
-	bh=ikWYkDoin1yaKx3qdc9Z08RFLs1B9XJN0ceL+3+hyX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQqivpsEmtsal/01jOHIZ2g1kyH2RFafNn6swoPE6qNjWxy2k/tQwhJ9EmQ9wY2/cZcVhS2MLb9aLRAEhYBm0pCNE3TNFlWWcw+3mItFD6nU2ax/H7yDJP/p5tArMd520fiIryLLz4nuF9+9mGnpu4RZ1zVvpYhBX7npFcxjyTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbASNQqr; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739649131; c=relaxed/simple;
+	bh=JttUMJ0gzYoU6Xk1sJHSFHum4mkUZtGT2geGRGswDo0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eCe6KK4XcgbQ2qvBJ+AO9xD63geAlL9qneRg1P7YilIzSqtdfwzyU05mSbU7NUXdYTnfEpibvS8zfLj69AjDap/dkQs3xMXFlmjQzeJlafhPqs5UvP01OrcXgjZea+82Bhy/Fh+UhlXpiA4Iyg+CkI2NYN3MLZDEL6cHbAYAk2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bA2KBlL0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbASNQqr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739648127; x=1771184127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ikWYkDoin1yaKx3qdc9Z08RFLs1B9XJN0ceL+3+hyX4=;
-  b=kbASNQqrApk23tCrQpQsEiaCglf9Gs2r66qZq4IoFFSzBCRDsRueTOYW
-   GQace4MEY+cYK9ZCiJ1+hMdzzXtsDJe5h4uzaxQWZ4aP5AZZ2bvXdeWPw
-   P/PZrfzVwKsv5214x7H1+QBhO1G2ujoy0q/93wxYxE+p/fZdDLLgicTlD
-   o8XsDd6EbfwU5hIRQnApa8o89H+wcn0rjvJ9FpdYkbLS/CygGKYJe+96Z
-   RX2edhRdqqo+GeaWGT997Tl0PbfFokkVupgf4LxjHxY+d1awQekHdwHW4
-   62wZMCYuXon8VLqlDdzop7N2G3zbuvYvqWLOq7HAejygRwMnwgmbV3TOD
-   Q==;
-X-CSE-ConnectionGUID: 7SoFvMqkT/O1E/K5grYCsQ==
-X-CSE-MsgGUID: dieIqmjeTnCc1eStB28Chg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="51356939"
-X-IronPort-AV: E=Sophos;i="6.13,289,1732608000"; 
-   d="scan'208";a="51356939"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2025 11:35:27 -0800
-X-CSE-ConnectionGUID: ykA1mrAHR3eNTeriF7hLMA==
-X-CSE-MsgGUID: p5CXGFyMQL+UMtGLPwtkFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="136972271"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Feb 2025 11:35:23 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tjNwe-001B7N-2f;
-	Sat, 15 Feb 2025 19:35:20 +0000
-Date: Sun, 16 Feb 2025 03:34:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Esteban Blanc <eblanc@baylibre.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	Esteban Blanc <eblanc@baylibre.com>
-Subject: Re: [PATCH v4 3/6] iio: adc: ad4030: add averaging support
-Message-ID: <202502160351.NQfCUpV9-lkp@intel.com>
-References: <20250214-eblanc-ad4630_v1-v4-3-135dd66cab6a@baylibre.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bA2KBlL0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739649128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iAcv8S9LAD1fXEBK29EU3CcJ4NGa6u2iGqK4uAT+uCk=;
+	b=bA2KBlL01Un72viqXEycPkT7uXTdq2HrVDokXQxs1MgpvGOxAVlcbenVb0oxOayBS9q3Qt
+	Qv0KlKfCJx2dd5w+aHq0cm/2py0K9QO49NrJbf+yDt3L4NnIBYGOBpFls3PutsKLbqdFAf
+	MR/QdPTwOT+afNTa8XfIaIn2L2EujqU=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-BgidKZ2uOZWJpe9jca_H5w-1; Sat,
+ 15 Feb 2025 14:52:06 -0500
+X-MC-Unique: BgidKZ2uOZWJpe9jca_H5w-1
+X-Mimecast-MFC-AGG-ID: BgidKZ2uOZWJpe9jca_H5w_1739649126
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B1BF318EB2C6
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 19:52:05 +0000 (UTC)
+Received: from [172.64.13.25] (unknown [10.30.32.164])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 219FB191D7C8;
+	Sat, 15 Feb 2025 19:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
+ upstream-mainline, 49665900)
+Date: Sat, 15 Feb 2025 19:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250214-eblanc-ad4630_v1-v4-3-135dd66cab6a@baylibre.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <93461.125021514520601365@us-mta-481.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NWnL9xa6st4qM2iIQ-_5DbEDPj0jJ9FXmLh71KlwBmc_1739649126
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Esteban,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on a64dcfb451e254085a7daee5fe51bf22959d52d3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Esteban-Blanc/dt-bindings-iio-adc-add-ADI-ad4030-ad4630-and-ad4632/20250214-202727
-base:   a64dcfb451e254085a7daee5fe51bf22959d52d3
-patch link:    https://lore.kernel.org/r/20250214-eblanc-ad4630_v1-v4-3-135dd66cab6a%40baylibre.com
-patch subject: [PATCH v4 3/6] iio: adc: ad4030: add averaging support
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250216/202502160351.NQfCUpV9-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502160351.NQfCUpV9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502160351.NQfCUpV9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/adc/ad4030.c:375:13: error: assigning to 'struct iio_scan_type *' from 'const struct iio_scan_type *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     375 |                 scan_type = iio_get_current_scan_type(indio_dev,
-         |                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     376 |                                                       st->chip->channels);
-         |                                                       ~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +375 drivers/iio/adc/ad4030.c
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.14-rc3' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/wsa/linux
 
-   365	
-   366	static int ad4030_get_chan_scale(struct iio_dev *indio_dev,
-   367					 struct iio_chan_spec const *chan,
-   368					 int *val,
-   369					 int *val2)
-   370	{
-   371		struct ad4030_state *st = iio_priv(indio_dev);
-   372		struct iio_scan_type *scan_type;
-   373	
-   374		if (chan->differential) {
- > 375			scan_type = iio_get_current_scan_type(indio_dev,
-   376							      st->chip->channels);
-   377			*val = (st->vref_uv * 2) / MILLI;
-   378			*val2 = scan_type->realbits;
-   379			return IIO_VAL_FRACTIONAL_LOG2;
-   380		}
-   381	
-   382		*val = st->vref_uv / MILLI;
-   383		*val2 = chan->scan_type.realbits;
-   384		return IIO_VAL_FRACTIONAL_LOG2;
-   385	}
-   386	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1672836941
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1672836941-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1672836941-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1672836941-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
