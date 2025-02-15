@@ -1,95 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A811FCF47;
-	Fri, 14 Feb 2025 22:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5E1156F39;
+	Sat, 15 Feb 2025 04:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739573011; cv=none; b=G+IruXNS6evy50Vh54DbV4MyJ+JjiPoj+8QwIFzaAEs5zV/odS3cimLTU5L5rG+v+kh1Gycd/o/PvjOUiFhxY+aws0bH+s4pYKLRQR1mgz/i6pE+plfbKf53RGaZFGC1Cd146x1sYCat3TWNJF7LCI2+EKpenVpJid26ZBf76sY=
+	t=1739592923; cv=none; b=Vz9W7eAxBs+3StpEV4Uk1Sw78XKEqxz/1Rtu9oWelRQJxtLlqhI+X69fGugyTF3ucuQ4e4JcbyNqFvF1ISA/J6dWRbiK+GdcrbRo/QpAhAkS5LseX4MRSp04WCW17o2qKmuhYOyyXpeTjedUZ/E/lNgZyTJLY5aA8ZZQUx2JPZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739573011; c=relaxed/simple;
-	bh=j4leWUwUUI6z+xPyf91YeQQwCQmtFoGzjCOXiinbHI0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RTVpQPNohxIXeK7qRWz9Nd437BHgBHMpuIYfj+gs3pgrTu67mj9jh6k0KAXWtP3bYLm1tz7zPeg3oOVbsG8Xhh+oOtPpq4siQcVGXW3SG+LG2YaiYdnuH8gS0bmYnzr1GYglEGTS8q+Ft+Nk40K36yiFUbiUSfMMsoFpbMNbjYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chMmCTnn; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739592923; c=relaxed/simple;
+	bh=e1gaUV3FYLUO6BIeTFTNkohw5dKtYwMx99wkGdyY0nU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gl7HXggRrd6E9P+OE8tYFpQt7eIMsdwtt7qgF6ESJnPm81GEYQQK1+UmuiXYtFO+zAVWcfdXQQN6UgpwlFtyT7N9E5Di3dI/wolSUOpMZj7oM+Nu79kahRLi3K4hp7TtpHKdgbrgnttAZmiBBTOOdtKHuCj8qLTRJcIeoD+B4uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uf639F+A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chMmCTnn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739573008; x=1771109008;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=j4leWUwUUI6z+xPyf91YeQQwCQmtFoGzjCOXiinbHI0=;
-  b=chMmCTnnlq1ZndFa7wKE04P6eiBsnU4YMYCYEdfV5B0n5Vwz1HIbLWWh
-   3njrp5KrYTn2KO09I2hEn8Wb+7oSF9ace0Rsg0dycS+n5b8n8M7Ep31IR
-   IofYwKeAXH9FekkZ477tpyLaBDRQEPq/zuokQ2VdxbQ2KCVAnvI1kmr/g
-   czdE6LpGKBpiBR6G8s9Spv3FfLSVCYi7oJWJ0Eh90Q+nuifJraoMsvlQt
-   Hl1lBD6GaJILExUfXMoo37+wOcqnZYIPMbXbYwPmh8DNBDTaU4rR0wfpj
-   7Xippk4zPLdif8wG+0AF6FMSCCuvvPFsIHDczMYhkUosVQPqoCaOeQndq
-   g==;
-X-CSE-ConnectionGUID: vXzWDhLCTJmxA8Un5vu+vw==
-X-CSE-MsgGUID: HQMqrTTaS42bHE3QX/5Nwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40476352"
-X-IronPort-AV: E=Sophos;i="6.13,287,1732608000"; 
-   d="scan'208";a="40476352"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 14:43:27 -0800
-X-CSE-ConnectionGUID: 2iK8Xjg9RLa0Sky8gwf8kg==
-X-CSE-MsgGUID: ceQjlkXBRx+6YcfvvRJZLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114065853"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 14 Feb 2025 14:43:25 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tj4P5-001AFT-01;
-	Fri, 14 Feb 2025 22:43:23 +0000
-Date: Sat, 15 Feb 2025 06:42:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: ERROR: modpost: "kmsan_handle_dma" [drivers/virtio/virtio_ring.ko]
- undefined!
-Message-ID: <202502150634.qjxwSeJR-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uf639F+A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259FBC4CEE4;
+	Sat, 15 Feb 2025 04:15:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739592922;
+	bh=e1gaUV3FYLUO6BIeTFTNkohw5dKtYwMx99wkGdyY0nU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uf639F+AirtZYCPWDY5P0SggLOZopBOT1ROf+624WWDnFA56Fu7noZ8WR7ASuaQqp
+	 vwbXekOyT/HmeLEnW9mtmYxJOUqCIphbkr9f0yPkChUBrhguptmYjYwANA08mX1LqT
+	 JbB1vHPx9WW7yeERNGEfZpiEluy+lT7Q7eeh/jxZuF+xtmUK90L/ur9Nxmlbb69mSu
+	 CdiwkrJiWoCQ/x1FHy3+VvTXw67p98WjOgaLRzPibo58z321BOEDb+EfmV3QqrQWxG
+	 ChkTFnMGX2JSgHDxLHo2C3pECmVtH5/LZnloUT6nu+6GthggzAf7okY27ZuMJKbA5D
+	 LiHAKnp+xfTjQ==
+Date: Fri, 14 Feb 2025 21:15:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] kbuild: userprogs: use lld to link through clang
+Message-ID: <20250215041517.GA2645277@ax162>
+References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de>
+ <20250213-kbuild-userprog-fixes-v1-2-f255fb477d98@linutronix.de>
+ <20250213175437.GA2756218@ax162>
+ <20250214081034-a5fd06c6-9cb5-4efc-ad2b-69e6acfb08bd@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250214081034-a5fd06c6-9cb5-4efc-ad2b-69e6acfb08bd@linutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   04f41cbf03ec7221ab0b179e336f4c805ee55520
-commit: 35772d627b55cc7fb4f33bae57c564a25b3121a9 sched: Enable PREEMPT_DYNAMIC for PREEMPT_RT
-date:   3 months ago
-config: x86_64-buildonly-randconfig-005-20250215 (https://download.01.org/0day-ci/archive/20250215/202502150634.qjxwSeJR-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502150634.qjxwSeJR-lkp@intel.com/reproduce)
+On Fri, Feb 14, 2025 at 08:40:22AM +0100, Thomas Weißschuh wrote:
+> FYI, in case you want to have a look:
+> The kunit config for powerpc is currently broken on LLVM=1.
+> 
+> $ ./tools/testing/kunit/kunit.py run --arch powerpc --make_options LLVM=1
+> 
+> arch/powerpc/boot/wrapper manually inspects with CROSS_COMPILE, which does not
+> exist when LLVM=1. Instead it falls back to the system objcopy, etc.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502150634.qjxwSeJR-lkp@intel.com/
+Thanks for reminding me, it is a known papercut:
 
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
+https://github.com/ClangBuiltLinux/linux/issues/1601
 
-In file included from arch/x86/kvm/cpuid.c:13:
-In file included from include/linux/kvm_host.h:16:
-In file included from include/linux/mm.h:2213:
-include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-|                               ~~~~~~~~~~~ ^ ~~~
-1 warning generated.
->> arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x2428: undefined stack state
---
->> ERROR: modpost: "kmsan_handle_dma" [drivers/virtio/virtio_ring.ko] undefined!
+I have a WIP series but there are still some errors in the
+configurations that I test that I have not investigated.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/log/?h=b4/ppc-boot-llvm-1
+
+Cheers,
+Nathan
