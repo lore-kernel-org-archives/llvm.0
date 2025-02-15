@@ -1,109 +1,101 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F3415696E
-	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 19:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C8C23A9
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 22:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739649131; cv=none; b=cjkhtwIqvJkhRyqyI54+zDaZ93UDFHIPy02RSK57pmxze6Arq6YKek72zIcszFZaS/6Nz0Ts2Dw7O862g15kuFvPEKlOUO+G6srgNy9uvXdMJVdbUWe27GUgeqXpS59e7ZO7f6VxMO4bVwc8yJ8ajEAcgQmHhcUgK4aIE5vyKAY=
+	t=1739658692; cv=none; b=rWdGrGog+2330eQiivBKhQiwUZfBhcpQBObSOLd4AidpEqT9mchh3KOA9rep3mVWLlJ+GNMdWL4ErgkaUMbvSloXNlgFzXHKwwilysPkBlyDCaAk9nNoRRrDjL+2vSsnbdK6XvCnhDXScfBXdmHj17Xvtth/KhglhwRPGRNsJX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739649131; c=relaxed/simple;
-	bh=JttUMJ0gzYoU6Xk1sJHSFHum4mkUZtGT2geGRGswDo0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=eCe6KK4XcgbQ2qvBJ+AO9xD63geAlL9qneRg1P7YilIzSqtdfwzyU05mSbU7NUXdYTnfEpibvS8zfLj69AjDap/dkQs3xMXFlmjQzeJlafhPqs5UvP01OrcXgjZea+82Bhy/Fh+UhlXpiA4Iyg+CkI2NYN3MLZDEL6cHbAYAk2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bA2KBlL0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1739658692; c=relaxed/simple;
+	bh=zbhIo0xDzOZCTqwo4a9BF95ysjJWi4vttC5VSmsk5TM=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cQbRYZ1mVYq1tpEcRZkM8RLwy76KUwLrdDy6ZpIJU+blAjVAsGHqh5D+mBPCNAvNrN31BvojMHlffp8mRWF/VfeEHuH2rz+e7rnN2/4lD83RwuHNDjYVFsR6cR1+C9pU9ZAYiHNeUglYXCDvqaZPyoQLeI4nlxhN+woIBiDQQxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=EstX1456; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bA2KBlL0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739649128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iAcv8S9LAD1fXEBK29EU3CcJ4NGa6u2iGqK4uAT+uCk=;
-	b=bA2KBlL01Un72viqXEycPkT7uXTdq2HrVDokXQxs1MgpvGOxAVlcbenVb0oxOayBS9q3Qt
-	Qv0KlKfCJx2dd5w+aHq0cm/2py0K9QO49NrJbf+yDt3L4NnIBYGOBpFls3PutsKLbqdFAf
-	MR/QdPTwOT+afNTa8XfIaIn2L2EujqU=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-481-BgidKZ2uOZWJpe9jca_H5w-1; Sat,
- 15 Feb 2025 14:52:06 -0500
-X-MC-Unique: BgidKZ2uOZWJpe9jca_H5w-1
-X-Mimecast-MFC-AGG-ID: BgidKZ2uOZWJpe9jca_H5w_1739649126
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B1BF318EB2C6
-	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 19:52:05 +0000 (UTC)
-Received: from [172.64.13.25] (unknown [10.30.32.164])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 219FB191D7C8;
-	Sat, 15 Feb 2025 19:52:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
- upstream-mainline, 49665900)
-Date: Sat, 15 Feb 2025 19:52:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="EstX1456"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=gx6ah36rjngmvit33r3cdufykm.protonmail; t=1739658688; x=1739917888;
+	bh=ZQRmFVQtyeskggtP6Qj6Zx0oQ2+VkautJ0NT3svSj+w=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
+	 List-Unsubscribe:List-Unsubscribe-Post;
+	b=EstX1456v6ehayDBu5AiNB8e4s3g9JpDn0+HTTWoi/sNE+k4W6NYnSrqAIEIbQUj+
+	 TAhFfsf7UWy9bwrLVIrpa1s8+zndxWmymCrjoTSpxZj7jm0jiS2DeVsXnKiSBl2fda
+	 ID/aZhXWrRBfVwoct3APjYo3JllV/41GjAhS+5UZwmD/awLZ0x9cTndT6zhFAjBV8k
+	 Lzanjj3ELN9tza3l6s0ICz1GKArnDwhGhXDuZ97oSxaGF+Duo1pr54muA2gsNvhCcB
+	 EtX8aczLjMQqArNAryD+UYW8+W4DdM92MdMPTqc3Eahkh97NKQYxSJWk1t8tO3vuft
+	 RXjLF8/wx40dg==
+Date: Sat, 15 Feb 2025 22:31:20 +0000
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Wedson Almeida Filho <wedsonaf@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] rust: fix clippy::too-long-first-doc-paragraph
+Message-ID: <20250215223106.2346285-1-benno.lossin@proton.me>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: a3ae3af5ebe8b7d59018f5f505a45767c59e37ab
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <93461.125021514520601365@us-mta-481.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: NWnL9xa6st4qM2iIQ-_5DbEDPj0jJ9FXmLh71KlwBmc_1739649126
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+When running `make LLVM=3D1 CLIPPY=3D1` on my machine, I get this error:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+    error: first doc comment paragraph is too long
+      --> rust/kernel/driver.rs:13:1
+       |
+    13 | / /// The [`RegistrationOps`] trait serves as generic interface fo=
+r subsystems (e.g., PCI, Platform,
+    14 | | /// Amba, etc.) to provide the corresponding subsystem specific =
+implementation to register /
+    15 | | /// unregister a driver of the particular type (`RegType`).
+    16 | | ///
+    17 | | /// For instance, the PCI subsystem would set `RegType` to `bind=
+ings::pci_driver` and call
+       | |_
+       |
+       =3D help: for further information visit https://rust-lang.github.io/=
+rust-clippy/master/index.html#too_long_first_doc_paragraph
+       =3D note: `-D clippy::too-long-first-doc-paragraph` implied by `-D w=
+arnings`
+       =3D help: to override `-D warnings` add `#[allow(clippy::too_long_fi=
+rst_doc_paragraph)]`
 
+Thus add a short one-line description.
 
-Kernel information:
-    Commit message: Merge tag 'i2c-for-6.14-rc3' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/wsa/linux
+Fixes: ea7e18289f44 ("rust: implement generic driver registration")
+Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+---
+The error also occurs in v6.14-rc1, so it must have slipped through our
+testing, which I find a bit strange. Also nobody reported it for rc1, so
+maybe this is only something that I encountered?
+---
+ rust/kernel/driver.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1672836941
+diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+index 2a16d5e64e6c..65c9c1776556 100644
+--- a/rust/kernel/driver.rs
++++ b/rust/kernel/driver.rs
+@@ -10,6 +10,8 @@
+ use core::pin::Pin;
+ use macros::{pin_data, pinned_drop};
+=20
++/// Generic interface for subsystem driver registrations.
++///
+ /// The [`RegistrationOps`] trait serves as generic interface for subsyste=
+ms (e.g., PCI, Platform,
+ /// Amba, etc.) to provide the corresponding subsystem specific implementa=
+tion to register /
+ /// unregister a driver of the particular type (`RegType`).
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1672836941-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1672836941-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1672836941-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+--=20
+2.46.0
 
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
