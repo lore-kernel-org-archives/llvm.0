@@ -1,109 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4211C7011
-	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 17:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25ACB1DC9BB
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 18:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739640189; cv=none; b=Gd8jqUkqN+7aZhkSHLBy4aNOHbX8d+AdfsNfQAoTVN8IZl0LPRLgoiho/sJPXx6QpkhqP+MSCXUlNSqfpamW9PsicNcXOauwrSLoBnuJ/eRrYxzgfLXm0zRgEdzTXeHxMUfVSDcHMIYSlkJCy9BUYv3uqsovqQCP5fHHC66Tncw=
+	t=1739643072; cv=none; b=fTyIqsqMW4eVZWY1TR2UFSD9X5BsqsS7rf1fESiMw+R4ZXW5cL6YvdJ7GEp8C2jk1iUdWHOojYFaPdn5m7JP4xg1lWoJleOgBTOzbnsEGLbmSGawybP7Kq1GUMkln2dZDfFGLq8RPqHfZHhQsZZ2pi+HKxEvUt5kLOyw4i3C4WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739640189; c=relaxed/simple;
-	bh=CfAjG1NavkGKxQ44+2+oMdRZIt4ulDt+ESw/aW8IGas=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CPmHPstU5/bR3icINzbVgaj55ltLm1mviIBuG3TcF0DffTfbnxXYx9sHEi65+lmLnEZ7p33tfBsrx35yN+MAfOlcAf8Vag4radEwAPNzDLcclX5XHKtG4ebLa0Y6tg/hS1lJZ1AFrRzWSmbnwPFl6f1AxWIDqoqSsyHCDyrw7ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E5qbLjO3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1739643072; c=relaxed/simple;
+	bh=VwiucCmRsHj4WIjXs8qnCxLiQoA41Y/9GZf5q6IhOkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TgLrVHbavgZB/TObITpCXQrtETXeGaLp26Lm76C29V4q0NX8F+7pmBFKNSfBdjAFFn7GZ39gdQSmKGzxi1KuFyqvCuYkV/a/pHlLUpphLnDGjcV/4Uw65Y8ERm9vRmTphDpJzt5DOWasWb9y0NCgMQaXWELDnWYAxodEQ1SMBOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3SeTT7x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E5qbLjO3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739640186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NeoyVK4/88/iV/E0p9xDOLh5GzeAraP4gm66FkcinUM=;
-	b=E5qbLjO30loGZBp41eiG0I0uvRwG0Oem3+0sDsA3b8y61daJAndR+oNe1t3bqUeuL+q3/y
-	nvXIkRq6R0yrjXc4YggNqoXqqpF/n797iQ+qOsSq2vBAGtKIln2GBBbOFiBoXSbrdPVRN5
-	kX8QWMHq/8x0MEXu2x3259Ia56stIro=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-413-38pvEZONNqm6SmYYFZTsgg-1; Sat,
- 15 Feb 2025 12:23:04 -0500
-X-MC-Unique: 38pvEZONNqm6SmYYFZTsgg-1
-X-Mimecast-MFC-AGG-ID: 38pvEZONNqm6SmYYFZTsgg_1739640183
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4040D18004A7
-	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 17:23:03 +0000 (UTC)
-Received: from [172.64.13.25] (unknown [10.30.32.164])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C58BF1800874;
-	Sat, 15 Feb 2025 17:23:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc2,
- upstream-mainline, 6452feaf)
-Date: Sat, 15 Feb 2025 17:23:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3SeTT7x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D12EC4AF09
+	for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 18:11:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739643071;
+	bh=VwiucCmRsHj4WIjXs8qnCxLiQoA41Y/9GZf5q6IhOkU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=d3SeTT7xsLBcmBCCbwEsTYMmsO5H+B9aU62Ry9WxlkZtPxRVfQWZaLjQtzEBNRK/8
+	 mWmcI/oBs8lsGujeTaP2Il5h2m2Hu8wR6hfwXZ8UKeMwUlcU2fB0bpIYs8jwmydQS0
+	 1rA2/FU3x4P+7Doi9WzLpR4PDhOuwy9yNdhshAz/9l8pairy/eDMgsfqp9sah/P6IZ
+	 H+bUl6D2PWzC2qHVYiMYcv+afzoOhgwbR0PW5QD1kOLOp1lcW8HO2XHD6TaKpY7O5x
+	 WGKxrJ0ZVjQimrRHXEeNRMsm1q96WnyFSXJ1r2WVvZXgPkOQ5VF1mA+WjFC687vatg
+	 sMjIVh956VbNQ==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-545284eac3bso1935120e87.0
+        for <llvm@lists.linux.dev>; Sat, 15 Feb 2025 10:11:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXcuVJ9XXFbF9frYt1D2BlfFvmz+m/swE50NEnszeljCf450/t8BfLPTQprKWhyP1jcGq/H@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx5MWDHqb9svpmEI590A/Q3I7YFU7J/JaBAc8axTn7Ait83l5W5
+	qR6+jM8XAJ/X+ShEnXwrYBTh1BJky21T/e/ij7CAb+L8OpCfEyzgih40y9dJZ+VZ49sPC+jxf5z
+	sCqLbwP0aTpNwX6nmUs/hgLkuTEs=
+X-Google-Smtp-Source: AGHT+IE0rwwrkKgLzFfRhD+QZGgoJPXVzhh3qODeXXehVd6GVBdQBZy6zuaKggs25GRFT4iSWYp/JPldBTE6dAjsCs8=
+X-Received: by 2002:a05:6512:6ce:b0:540:3561:969d with SMTP id
+ 2adb3069b0e04-5452fe8f8b0mr1371699e87.49.1739643070214; Sat, 15 Feb 2025
+ 10:11:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <25017.125021512230400391@us-mta-413.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: SCGVX77yRxWPiTykp0zEczagJOKV6N1QGn12uuVVtIA_1739640183
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de> <20250213-kbuild-userprog-fixes-v1-1-f255fb477d98@linutronix.de>
+In-Reply-To: <20250213-kbuild-userprog-fixes-v1-1-f255fb477d98@linutronix.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 16 Feb 2025 03:10:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQPO82Qp_161yGgsRL4hA1XdeoCX6ZgLutmivKorUuLxw@mail.gmail.com>
+X-Gm-Features: AWEUYZnbXcOx5HSwO35f-2mNBGhl_Ad3is1i1PF1BQf2JE6Cr9dN8_ACRThMo2w
+Message-ID: <CAK7LNAQPO82Qp_161yGgsRL4hA1XdeoCX6ZgLutmivKorUuLxw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kbuild: userprogs: fix bitsize and target detection
+ on clang
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Thu, Feb 13, 2025 at 11:55=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> scripts/Makefile.clang was changed in the linked commit to move --target =
+from
+> KBUILD_CFLAGS to KBUILD_CPPFLAGS, as that generally has a broader scope.
+> However that variable is not inspected by the userprogs logic,
+> breaking cross compilation on clang.
+>
+> Use both variables to detect bitsize and target arguments for userprogs.
+>
+> Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> ---
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'gpio-fixes-for-v6.14-rc3-take2' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/brgl/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1672770105
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1672770105-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1672770105-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1672770105-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+Applied to linux-kbuild/fixes.
+Thanks!
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Best Regards
+Masahiro Yamada
