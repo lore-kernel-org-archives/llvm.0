@@ -1,145 +1,125 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2233113FD72
-	for <llvm@lists.linux.dev>; Sun, 16 Feb 2025 12:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223C218F2C3;
+	Sun, 16 Feb 2025 12:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739708285; cv=none; b=jImhMoSF/jCyvyGZ6G3URdSY1HX7svBszemqtrH1P7Vf5UncishcSH4iJpfBah1c5QG4MIS2lM02kQbs9JmnA3Uf3z0O2Ned3uXj9eX0xLqQlpNWt90bOI7RXNcg/iIp1Awjy43c/LB266Cad2p3z/gxH+qKyg8CEQR7OI0g8hY=
+	t=1739708780; cv=none; b=tOPchrRBwOd1GSdTi78oTOxE2/dXR2KHuWx5fqxgReQv2KT4Udb6RzBujH93nmT2DCHBauSiTfWWyG65lpoklKBkVts2Cfmi9c04fBJRLsd8FnnrnRPshFMAHqwQ0Lo0JbI39sxKCXX5XbHPpbOCDIeRhcDtivcXJff7lQq50Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739708285; c=relaxed/simple;
-	bh=wvY2DcCPZ25/Vt0hvWxQl7zoSVOoK8EChyJ1dvXABMU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LZnVrCPDPBjGvgiDrbM6ddh8TSOebBzU0zTw/BrrnugzpDPDKMrfCuoTGKZgtS+OmEazZq86zPqMjHmjxQJ7D9F0AXHlRXH7wWMlbcsVszjQvybjNE6NXxVzXgveAY4qyYXjw4T0XVw71YjtsPs/jRwhk6yXpl96SWTgJtJWgZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=LpVGCd9n; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1739708780; c=relaxed/simple;
+	bh=a3CJYuvGwxaWxHj3kLfKsCfB3J9gYgLLPyJTIR6fEPE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=beKlLr1ukjuOjFVgAQ5ZToA9fasl47PJfV5bYBmrJX0LlC7sPh6c3hYwiPaHs+1C1WrDmMFRNvRGNyo5in3gaTTiEyfYZ5habQZNR2MH50mg4Z+sEZeACt1NQOy7FZKZtZvxCHH9hjdwuz7OGKhx5dpP9i/gRVym67ZO7C8KrZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kFgfzJ3K; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="LpVGCd9n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=dlnwgd7xtrdr7p5gw3bsenad6a.protonmail; t=1739708274; x=1739967474;
-	bh=rG/s99JWc6anEYh4vsWNfFJpXnVNfqyCI+3kc8cpkA0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=LpVGCd9nFeikKgMb6I4ajHqRnZpr6LBDQlLTOg500PZrPmh94pNUFPoQ5soRN5dZD
-	 Oy/i//usgAEkVMYsyxfX2Pp3i068CThVSFyfX47L6YdPpPXvlWEPhxlbGRXgnnA+DG
-	 LVIbtHOwjpc+GFUoZYhOAZmPDydCJt2vUAfUTV+dW5fBaaU8I8O5nptE+nDwzTmlnC
-	 6pKX3MjpVB2ZFmI8nHL+BovpsCVkfVyyaimYAj7SrD9iSfJyou6sZRQAj52jJzj9G8
-	 yNa4NfoY5YO/CUyNHpOaKujUtSuq5v4V1S1Jy51l0Y5iv4qLZMhfR2t/jKE0ZXqv4g
-	 wTwWMDJoWy6Fw==
-Date: Sun, 16 Feb 2025 12:17:49 +0000
-To: Charalampos Mitrodimas <charmitro@posteo.net>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rust: fix clippy::too-long-first-doc-paragraph
-Message-ID: <10690211-eb3b-4b95-8d9d-35c62930d924@proton.me>
-In-Reply-To: <m21pvy927w.fsf@posteo.net>
-References: <20250215223106.2346285-1-benno.lossin@proton.me> <m21pvy927w.fsf@posteo.net>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: a04d14d4d8c45140406d799145d620c701914e55
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kFgfzJ3K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739708778; x=1771244778;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=a3CJYuvGwxaWxHj3kLfKsCfB3J9gYgLLPyJTIR6fEPE=;
+  b=kFgfzJ3KmeF2wmZRohmObimsR/RdCTjovyddcPKb/LsDEBxAViLoTBFS
+   r7t4J+SZuDe6lyLaF2hdWAZDIDtff1HmNUygzs5cE404LHfF/rc1BCHAE
+   w5NqMRA3BdOARkzBV3tTKe6v8KQWndon4mAzjMrYI8M5N+sdrUsHEc/V/
+   ZRxo5Fbbit+AyjF45VQN0r7RGTJQ9eVXpw1l3orlK0zSVFMvsIyT7+VqL
+   WJ0+T18vTgP7NMJNyZXjMw41pC5tzcAlD/LMLmdx3EsVuqM5NIvefa7iA
+   8RySxShMRkFKlWZcMlsLIHqHsZemruVYoZ4oa6e1MCkPPCjsyeardD6I+
+   g==;
+X-CSE-ConnectionGUID: E1yCmdd8TOSzcrCt193fOg==
+X-CSE-MsgGUID: kOai4oCcRqCTXrggV1NMyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="51028893"
+X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
+   d="scan'208";a="51028893"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 04:26:17 -0800
+X-CSE-ConnectionGUID: WEKAKqXXQg6tTKJWKU+iOQ==
+X-CSE-MsgGUID: /BbAP6oIRYm7p7WX/ePNgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="144796361"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 04:26:17 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+	by linux.intel.com (Postfix) with ESMTP id 6958F20B5713;
+	Sun, 16 Feb 2025 04:26:15 -0800 (PST)
+Message-ID: <de5bf4f116779efde315782a15146fdc77a4a044.camel@linux.intel.com>
+Subject: Re: [tip:x86/cpu 3/5] ERROR: modpost:
+ "acpi_processor_ffh_play_dead" [drivers/acpi/processor.ko] undefined!
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To: kernel test robot <lkp@intel.com>, Dave Hansen
+ <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Date: Sun, 16 Feb 2025 14:26:14 +0200
+In-Reply-To: <202502151207.FA9UO1iX-lkp@intel.com>
+References: <202502151207.FA9UO1iX-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On 16.02.25 01:12, Charalampos Mitrodimas wrote:
-> Benno Lossin <benno.lossin@proton.me> writes:
+On Sat, 2025-02-15 at 12:51 +0800, kernel test robot wrote:
+> tree:=C2=A0=C2=A0 https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip=
+.git=C2=A0x86/cpu
+> head:=C2=A0=C2=A0 96040f7273e2bc0be1871ad9ed4da7b504da9410
+> commit: 541ddf31e30022b8e6f44b3a943964e8f0989d15 [3/5] ACPI/processor_idl=
+e: Add FFH state handling
+> config: x86_64-randconfig-077-20250214 (https://download.01.org/0day-ci/a=
+rchive/20250215/202502151207.FA9UO1iX-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project=C2=
+=A0ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20250215/202502151207.FA9UO1iX-lkp@intel.com/reproduce)
 >=20
->> When running `make LLVM=3D1 CLIPPY=3D1` on my machine, I get this error:
->>
->>     error: first doc comment paragraph is too long
->>       --> rust/kernel/driver.rs:13:1
->>        |
->>     13 | / /// The [`RegistrationOps`] trait serves as generic interface=
- for subsystems (e.g., PCI, Platform,
->>     14 | | /// Amba, etc.) to provide the corresponding subsystem specif=
-ic implementation to register /
->>     15 | | /// unregister a driver of the particular type (`RegType`).
->>     16 | | ///
->>     17 | | /// For instance, the PCI subsystem would set `RegType` to `b=
-indings::pci_driver` and call
->>        | |_
->>        |
->>        =3D help: for further information visit https://rust-lang.github.=
-io/rust-clippy/master/index.html#too_long_first_doc_paragraph
->>        =3D note: `-D clippy::too-long-first-doc-paragraph` implied by `-=
-D warnings`
->>        =3D help: to override `-D warnings` add `#[allow(clippy::too_long=
-_first_doc_paragraph)]`
->>
->> Thus add a short one-line description.
->>
->> Fixes: ea7e18289f44 ("rust: implement generic driver registration")
->> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
->> ---
->> The error also occurs in v6.14-rc1, so it must have slipped through our
->> testing, which I find a bit strange. Also nobody reported it for rc1, so
->> maybe this is only something that I encountered?
->> ---
->>  rust/kernel/driver.rs | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
->> index 2a16d5e64e6c..65c9c1776556 100644
->> --- a/rust/kernel/driver.rs
->> +++ b/rust/kernel/driver.rs
->> @@ -10,6 +10,8 @@
->>  use core::pin::Pin;
->>  use macros::{pin_data, pinned_drop};
->>
->> +/// Generic interface for subsystem driver registrations.
->> +///
->>  /// The [`RegistrationOps`] trait serves as generic interface for subsy=
-stems (e.g., PCI, Platform,
->>  /// Amba, etc.) to provide the corresponding subsystem specific impleme=
-ntation to register /
->>  /// unregister a driver of the particular type (`RegType`).
->>
->> base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202502151207.FA9UO1iX-lkp=
+@intel.com/
 >=20
-> Hi,
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
 >=20
-> I cannot reproduce this as-is, but adding
-> "-Wclippy::too_long_first_doc_paragraph" to the "rust_common_flags" in
-> the Makefile reproduces it. Maybe try adding it there in your patch?
+> > > ERROR: modpost: "acpi_processor_ffh_play_dead" [drivers/acpi/processo=
+r.ko] undefined!
 
-I have done some more digging and bisected my Rust version. It turns out
-I was on a rather old nightly from last September. I also don't get the
-error on a newer compiler version. My bisection identified that the
-error last occurs in nightly 2024-10-18, so from 2024-10-19 onwards it
-compiles without the error.
-So probably `-Wclippy::all` implied the `too_long_first_doc_paragraph`
-lint in that version. That is probably because of [1]. It changes the
-lint from style to nursery.
+Oh, this is the 'CONFIG_ACPI_PROCESSOR=3Dm' case. The function export is mi=
+ssing. Sorry for this.
 
-[1]: https://github.com/rust-lang/rust-clippy/pull/13551
+The below patch fixes the issue. Could you please fold it into the followin=
+g commit?
 
-So we don't need this patch, as it seems this never hit stable. However,
-there is already a patch fixing what this lint reports: 2f390cc58943
-("rust: provide proper code documentation titles").
+	541ddf31e300 ACPI/processor_idle: Add FFH state handling
 
-I think it's a good lint, so maybe we should turn it on?
+I am not sure about the rules of the tip tree in cases like this, please di=
+rect me on
+how to handle the delivery of the fix.
 
----
-Cheers,
-Benno
+Thanks!
 
->=20
-> diff --git a/Makefile b/Makefile
-> index 89628e354..e1b14fb68 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -486,6 +486,7 @@ export rust_common_flags :=3D --edition=3D2021 \
->  =09=09=09    -Wclippy::undocumented_unsafe_blocks \
->  =09=09=09    -Wclippy::unnecessary_safety_comment \
->  =09=09=09    -Wclippy::unnecessary_safety_doc \
-> +=09=09=09    -Wclippy::too_long_first_doc_paragraph \
->  =09=09=09    -Wrustdoc::missing_crate_level_docs \
->  =09=09=09    -Wrustdoc::unescaped_backticks
->=20
+
+index 5bdb65516969..86c87c01d23d 100644
+--- a/arch/x86/kernel/acpi/cstate.c
++++ b/arch/x86/kernel/acpi/cstate.c
+@@ -214,6 +214,7 @@ void acpi_processor_ffh_play_dead(struct acpi_processor=
+_cx *cx)
+        percpu_entry =3D per_cpu_ptr(cpu_cstate_entry, cpu);
+        mwait_play_dead(percpu_entry->states[cx->index].eax);
+ }
++EXPORT_SYMBOL_GPL(acpi_processor_ffh_play_dead);
+=20
+ void __cpuidle acpi_processor_ffh_cstate_enter(struct acpi_processor_cx *c=
+x)
+ {
+
+
 
