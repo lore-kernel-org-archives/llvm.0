@@ -1,108 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6EB188735
-	for <llvm@lists.linux.dev>; Sun, 16 Feb 2025 23:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BE51A3140;
+	Sun, 16 Feb 2025 23:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739747529; cv=none; b=Ws2p1wLFcujPQgpl/ZC9ccau01+W2+dXjITfimMTAafBZlzaVUGV7NZ8UNCIphbbHNOP2k+XScsYsDf1JGgUl0ZNj7d8+el20sAzetkxqfwrqcZwyLfy/Q31QQP68tfWw+KcvL87HSy6RC864gjs0Jh2P48DDiSIHM2pobopZsM=
+	t=1739747530; cv=none; b=M4pYABzk11m6j+7MkCSrvVj1XS8TOGgmS+f4fXvILGWZ3NgLQqSuYT0L20ny+P/ZHpQdA7bzst0iGg3A4D/+CP07W01Raq1gu5IX/LTQlycyn79tMGy0mQ/9ZIPQYgcQSmoCHhRLamikWZli8atzEh7tVA21GMfWFivHsTE/C/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739747529; c=relaxed/simple;
-	bh=ezp+UsSIn4S6ToYGqgjd9eN0vWkwiClKtQC36nLe1/I=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DPn7qKeyP3o6BmF95ftxd8+02wqWMIBLHCgTbbSmkkpYFomOZu16KXym6TzxgrISbgO4VDlUkQQ2xmpuz3Qy88fgbt+7zUzitAakJpRq8Qt7/CHjFwYsB371qi5EMWCTIzKsp95lKtsR5gXDi6X5SZe8/t1GEX8QDKezU2uTjjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UmE3LGJL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1739747530; c=relaxed/simple;
+	bh=+QVne+TK1t6nx+RR2yWQzh945FHeway6Ld1w4mFEZLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lg1eaAsNJQy6gA3/LJPR/2VRRWAlMiq/eKfiSZQ4EaaBWnnD9KLdDMEjV0XtHTc8CFWShiogh0bu5hE1LfjA7ZpSsOVhlDzN88qT8RV0BlQDtPf9yrkYz43FpThpdb5H3UN063pw0/rz6Rm8bnRJxqRR0JYbJpxLgyugxudkCmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c+NU9ZMq; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UmE3LGJL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739747526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8cgaUKnIHov/sLprQu/Ob5DxpKfU8sobdDuLPu5dEDg=;
-	b=UmE3LGJLWseGZPFFEtVKYZAc3l6EC+lWBW61U/0mjZN/URsdjcoZhabMmcz36Lqu97Qyv3
-	ioy8n3te24oJsJg++nDb+N8I4wulPxJBfM9QHgV7kwpcshMj0o4cdxs889Aclval3qNdEG
-	u2sGNS8hQ3UM4qMftD80q/a7IrQAfrg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-yQQ77DLFNnudDji0tELCaA-1; Sun,
- 16 Feb 2025 18:12:04 -0500
-X-MC-Unique: yQQ77DLFNnudDji0tELCaA-1
-X-Mimecast-MFC-AGG-ID: yQQ77DLFNnudDji0tELCaA_1739747524
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C8E181979057
-	for <llvm@lists.linux.dev>; Sun, 16 Feb 2025 23:12:03 +0000 (UTC)
-Received: from [172.64.13.25] (unknown [10.30.32.164])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 55D0B1800358;
-	Sun, 16 Feb 2025 23:12:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc3,
- upstream-mainline, 0ad2507d)
-Date: Sun, 16 Feb 2025 23:12:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c+NU9ZMq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739747529; x=1771283529;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+QVne+TK1t6nx+RR2yWQzh945FHeway6Ld1w4mFEZLY=;
+  b=c+NU9ZMqLpa1yRxOcFssCcwg5wKKDW6V/lv9eCjY/jVCZaG+RcwqUEzb
+   n7ZpPmpFszTb3k/47wLd12bU0cZ0L8zpunWHs6LmuaIw14ysLmBjYaLfe
+   pDxbCyGyfqBN1UC2yRdaWaXgEYwfvnW4sasGZniW/UTp5sexZzkk0IiG5
+   ud6FzcVWIfI/lj1uDK13NHMKgANgDzn6OO//UIdySEyDknZVQ7qNmqCz9
+   8Ha4A/bG6whXHDRz6iSA1kURubbBitXclHYhPy5i6ZpgpjtUTr8sf5Fh1
+   35sZ4VyPZ208GtH6s6fAVkxOjCT4GjvYgLBGfUBEiQ3nBKAjNbucHqGi7
+   g==;
+X-CSE-ConnectionGUID: NBSthkejReSX9AmKtCDBaw==
+X-CSE-MsgGUID: j+34M0I2T5+6xnybjaxFvw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11347"; a="62893540"
+X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
+   d="scan'208";a="62893540"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 15:12:08 -0800
+X-CSE-ConnectionGUID: MA+AfvqvT0yrOJQ2MD9oQA==
+X-CSE-MsgGUID: O34E/vwJSF6uHeBlmr/8fA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
+   d="scan'208";a="114474097"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 16 Feb 2025 15:12:06 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tjnnv-001CMU-2m;
+	Sun, 16 Feb 2025 23:12:03 +0000
+Date: Mon, 17 Feb 2025 07:11:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Craviee <dcraviee@internships.antmicro.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Gabriel Somlo <gsomlo@gmail.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [litex-hub:litex-rebase 10/15]
+ drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function
+ pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *,
+ size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char
+ *, unsigned long)') with an express...
+Message-ID: <202502170711.tNK4CFp1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <70857.125021618120401365@us-mta-573.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: c_zG-NRtuGPzvvbTq_pyMrLYVRuEjPBLHbBvFZFgNds_1739747524
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/litex-hub/linux litex-rebase
+head:   bfdc7246bec114e599ddb68ba442ce88172537ed
+commit: 7cbcc8cd508400e5b564e23a122126a13096c2f7 [10/15] LiteX: driver for SPI Flash (mtd) device
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250217/202502170711.tNK4CFp1-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250217/202502170711.tNK4CFp1-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502170711.tNK4CFp1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/mtd/spi-nor/litex-spiflash.c:23:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *, size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') with an expression of type 'ssize_t (struct spi_nor *, u8, const u8 *, size_t)' (aka 'long (struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') [-Wincompatible-function-pointer-types]
+     305 |         .write_reg = spi_flash_nor_write_reg,
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Linux 6.14-rc3
+vim +305 drivers/mtd/spi-nor/litex-spiflash.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1673602585
+   300	
+   301	static const struct spi_nor_controller_ops litex_spi_controller_ops = {
+   302		.read = spi_flash_nor_read,
+   303		.write = spi_flash_nor_write,
+   304		.read_reg = spi_flash_nor_read_reg,
+ > 305		.write_reg = spi_flash_nor_write_reg,
+   306		.erase = spi_flash_nor_erase,
+   307	};
+   308	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1673602585-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1673602585-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1673602585-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
