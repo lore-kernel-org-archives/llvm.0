@@ -1,104 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8A018D64B;
-	Sun, 16 Feb 2025 11:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2233113FD72
+	for <llvm@lists.linux.dev>; Sun, 16 Feb 2025 12:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739706186; cv=none; b=qqhZP8BrGa2HyY3k4xg2JJat+X9M0+ICixq0Ki+tF/EMWZuvR7oIwMmpXX9B1r9HOk3CiubJUA6n3qD7uy6vtNc+6+rvmvMFHtoMqgm5lzKr2Swe/a0PzW01qfUOmvojX1YVwPvJeP+UZ+6pDhlVpSahl8h/7NvS6MtCe67+U0A=
+	t=1739708285; cv=none; b=jImhMoSF/jCyvyGZ6G3URdSY1HX7svBszemqtrH1P7Vf5UncishcSH4iJpfBah1c5QG4MIS2lM02kQbs9JmnA3Uf3z0O2Ned3uXj9eX0xLqQlpNWt90bOI7RXNcg/iIp1Awjy43c/LB266Cad2p3z/gxH+qKyg8CEQR7OI0g8hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739706186; c=relaxed/simple;
-	bh=zk3b78TcMLcpEwC8P2M9C644oKojIcpaSL0LfWDMapI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XM6uAC+M/iACxJJXNnB3MyyPy/Iny5rLksODw/8CLPvJdd0+XLOzLG2kuPnly5mi5xQ9y0Ly2FsRycHEVmjNiRR1ANVC81ALA84/Mpl5k0XPdrE/yGyxtA2AkhPHC1+BEn590/fEhmpwdTmVj3FQ3gF6xV4PU2IeImEf6KU8Jl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NQf6R7As; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739708285; c=relaxed/simple;
+	bh=wvY2DcCPZ25/Vt0hvWxQl7zoSVOoK8EChyJ1dvXABMU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LZnVrCPDPBjGvgiDrbM6ddh8TSOebBzU0zTw/BrrnugzpDPDKMrfCuoTGKZgtS+OmEazZq86zPqMjHmjxQJ7D9F0AXHlRXH7wWMlbcsVszjQvybjNE6NXxVzXgveAY4qyYXjw4T0XVw71YjtsPs/jRwhk6yXpl96SWTgJtJWgZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=LpVGCd9n; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NQf6R7As"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739706184; x=1771242184;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zk3b78TcMLcpEwC8P2M9C644oKojIcpaSL0LfWDMapI=;
-  b=NQf6R7Asf+jb06mtRCwxvz/Jny4K4d3VekD9Bm5b2LyLgrFZ2dwP1y30
-   mNCNLYjHuomMVtmbyE67YMOOtah3bOLRGWiuP59v9tCVkpyGOj4tDx9Ze
-   qMf9NeGK0OSXmaCnKZdaABb33nfzcAatT6OQrm9yg9maQtxG29DKyPejl
-   f+yb5S1ahhZZ6QOjqeE4PBksCpd6gV7STnfh30n6cLEdubhtjUE0usxJX
-   h/KSKE67ogfvlqmdd8UV0Hr9uvozmJbUgK80NSJo6A32VvTpMv4DmzXoF
-   7y5anc0uTBCuqF9ncUfb/uZztg33Dg/iA3uyRensP0d3y5xT+DvO6g1kA
-   w==;
-X-CSE-ConnectionGUID: ew89/ZUKQJ2oEqCiyV3lIQ==
-X-CSE-MsgGUID: +tgIuJ5gTxmvbaORQUUo1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11346"; a="65757809"
-X-IronPort-AV: E=Sophos;i="6.13,290,1732608000"; 
-   d="scan'208";a="65757809"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 03:43:04 -0800
-X-CSE-ConnectionGUID: xgIKFAEbTtelWEauRC7EFA==
-X-CSE-MsgGUID: OaQC6mnYRAijcOQ0btNEnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
-   d="scan'208";a="113829798"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 16 Feb 2025 03:43:01 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tjd35-001Bt5-0m;
-	Sun, 16 Feb 2025 11:42:59 +0000
-Date: Sun, 16 Feb 2025 19:42:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eric Biggers <ebiggers@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Megha Dey <megha.dey@linux.intel.com>,
-	Tim Chen <tim.c.chen@linux.intel.com>
-Subject: Re: [v2 PATCH 09/11] crypto: hash - Add sync hash interface
-Message-ID: <202502161953.REiC4YpV-lkp@intel.com>
-References: <d6e10dbf172f0b7c791f5406d55e8f1c74492d57.1739674648.git.herbert@gondor.apana.org.au>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="LpVGCd9n"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=dlnwgd7xtrdr7p5gw3bsenad6a.protonmail; t=1739708274; x=1739967474;
+	bh=rG/s99JWc6anEYh4vsWNfFJpXnVNfqyCI+3kc8cpkA0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=LpVGCd9nFeikKgMb6I4ajHqRnZpr6LBDQlLTOg500PZrPmh94pNUFPoQ5soRN5dZD
+	 Oy/i//usgAEkVMYsyxfX2Pp3i068CThVSFyfX47L6YdPpPXvlWEPhxlbGRXgnnA+DG
+	 LVIbtHOwjpc+GFUoZYhOAZmPDydCJt2vUAfUTV+dW5fBaaU8I8O5nptE+nDwzTmlnC
+	 6pKX3MjpVB2ZFmI8nHL+BovpsCVkfVyyaimYAj7SrD9iSfJyou6sZRQAj52jJzj9G8
+	 yNa4NfoY5YO/CUyNHpOaKujUtSuq5v4V1S1Jy51l0Y5iv4qLZMhfR2t/jKE0ZXqv4g
+	 wTwWMDJoWy6Fw==
+Date: Sun, 16 Feb 2025 12:17:49 +0000
+To: Charalampos Mitrodimas <charmitro@posteo.net>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] rust: fix clippy::too-long-first-doc-paragraph
+Message-ID: <10690211-eb3b-4b95-8d9d-35c62930d924@proton.me>
+In-Reply-To: <m21pvy927w.fsf@posteo.net>
+References: <20250215223106.2346285-1-benno.lossin@proton.me> <m21pvy927w.fsf@posteo.net>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: a04d14d4d8c45140406d799145d620c701914e55
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d6e10dbf172f0b7c791f5406d55e8f1c74492d57.1739674648.git.herbert@gondor.apana.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Herbert,
+On 16.02.25 01:12, Charalampos Mitrodimas wrote:
+> Benno Lossin <benno.lossin@proton.me> writes:
+>=20
+>> When running `make LLVM=3D1 CLIPPY=3D1` on my machine, I get this error:
+>>
+>>     error: first doc comment paragraph is too long
+>>       --> rust/kernel/driver.rs:13:1
+>>        |
+>>     13 | / /// The [`RegistrationOps`] trait serves as generic interface=
+ for subsystems (e.g., PCI, Platform,
+>>     14 | | /// Amba, etc.) to provide the corresponding subsystem specif=
+ic implementation to register /
+>>     15 | | /// unregister a driver of the particular type (`RegType`).
+>>     16 | | ///
+>>     17 | | /// For instance, the PCI subsystem would set `RegType` to `b=
+indings::pci_driver` and call
+>>        | |_
+>>        |
+>>        =3D help: for further information visit https://rust-lang.github.=
+io/rust-clippy/master/index.html#too_long_first_doc_paragraph
+>>        =3D note: `-D clippy::too-long-first-doc-paragraph` implied by `-=
+D warnings`
+>>        =3D help: to override `-D warnings` add `#[allow(clippy::too_long=
+_first_doc_paragraph)]`
+>>
+>> Thus add a short one-line description.
+>>
+>> Fixes: ea7e18289f44 ("rust: implement generic driver registration")
+>> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+>> ---
+>> The error also occurs in v6.14-rc1, so it must have slipped through our
+>> testing, which I find a bit strange. Also nobody reported it for rc1, so
+>> maybe this is only something that I encountered?
+>> ---
+>>  rust/kernel/driver.rs | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
+>> index 2a16d5e64e6c..65c9c1776556 100644
+>> --- a/rust/kernel/driver.rs
+>> +++ b/rust/kernel/driver.rs
+>> @@ -10,6 +10,8 @@
+>>  use core::pin::Pin;
+>>  use macros::{pin_data, pinned_drop};
+>>
+>> +/// Generic interface for subsystem driver registrations.
+>> +///
+>>  /// The [`RegistrationOps`] trait serves as generic interface for subsy=
+stems (e.g., PCI, Platform,
+>>  /// Amba, etc.) to provide the corresponding subsystem specific impleme=
+ntation to register /
+>>  /// unregister a driver of the particular type (`RegType`).
+>>
+>> base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+>=20
+> Hi,
+>=20
+> I cannot reproduce this as-is, but adding
+> "-Wclippy::too_long_first_doc_paragraph" to the "rust_common_flags" in
+> the Makefile reproduces it. Maybe try adding it there in your patch?
 
-kernel test robot noticed the following build warnings:
+I have done some more digging and bisected my Rust version. It turns out
+I was on a rather old nightly from last September. I also don't get the
+error on a newer compiler version. My bisection identified that the
+error last occurs in nightly 2024-10-18, so from 2024-10-19 onwards it
+compiles without the error.
+So probably `-Wclippy::all` implied the `too_long_first_doc_paragraph`
+lint in that version. That is probably because of [1]. It changes the
+lint from style to nursery.
 
-[auto build test WARNING on herbert-cryptodev-2.6/master]
-[cannot apply to herbert-crypto-2.6/master brauner-vfs/vfs.all linus/master v6.14-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1]: https://github.com/rust-lang/rust-clippy/pull/13551
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Herbert-Xu/crypto-ahash-Only-save-callback-and-data-in-ahash_save_req/20250216-150941
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/d6e10dbf172f0b7c791f5406d55e8f1c74492d57.1739674648.git.herbert%40gondor.apana.org.au
-patch subject: [v2 PATCH 09/11] crypto: hash - Add sync hash interface
-config: s390-randconfig-001-20250216 (https://download.01.org/0day-ci/archive/20250216/202502161953.REiC4YpV-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502161953.REiC4YpV-lkp@intel.com/reproduce)
+So we don't need this patch, as it seems this never hit stable. However,
+there is already a patch fixing what this lint reports: 2f390cc58943
+("rust: provide proper code documentation titles").
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502161953.REiC4YpV-lkp@intel.com/
+I think it's a good lint, so maybe we should turn it on?
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+---
+Cheers,
+Benno
 
-ERROR: modpost: vmlinux: 'crypto_shash_tfm_digest' exported twice. Previous export was in vmlinux
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
->> WARNING: modpost: EXPORT symbol "crypto_shash_tfm_digest" [vmlinux] version generation failed, symbol will not be versioned.
-Is "crypto_shash_tfm_digest" prototyped in <asm/asm-prototypes.h>?
+>=20
+> diff --git a/Makefile b/Makefile
+> index 89628e354..e1b14fb68 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -486,6 +486,7 @@ export rust_common_flags :=3D --edition=3D2021 \
+>  =09=09=09    -Wclippy::undocumented_unsafe_blocks \
+>  =09=09=09    -Wclippy::unnecessary_safety_comment \
+>  =09=09=09    -Wclippy::unnecessary_safety_doc \
+> +=09=09=09    -Wclippy::too_long_first_doc_paragraph \
+>  =09=09=09    -Wrustdoc::missing_crate_level_docs \
+>  =09=09=09    -Wrustdoc::unescaped_backticks
+>=20
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
