@@ -1,62 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9568778F45;
-	Sun, 16 Feb 2025 16:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55313199EAF;
+	Sun, 16 Feb 2025 16:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739723192; cv=none; b=lm968MhnMnEnzBkLLcASt5AX6p4HJnznsUiW1f8JafjCX7sRacoZJ/rSNTlVzsv35v8N+D8xXeJp6pwzxHTn/9CZhYUrRPfvrFZfvlNzQnxZLhKy2nnj3+Y3ztNEcK7trP1gvqpI0WmMw3uAaHj8etpAfpmVKti5HOpFxnXtwQ0=
+	t=1739723792; cv=none; b=b5A4YTZ0wdNogDOtpNN3TmASGkKT6ym4r8s2WqaGNrzpeVCsupHhYZudXhiQks/a7JEjmUUwPfoWIyE860OXY+7aw3XlLd+kKOicY8kdOVhO11KyxICC6++ERTB/9TDnrvA2C9IaEUFmroc187mmI1JEJEu1PtrSUhXFUB9OOZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739723192; c=relaxed/simple;
-	bh=pdXqxA4mn1LXn6gauTPZ9l945Lc3FsmLdchU+slJBRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SGO46M7bX9gV1vNiCw4GFqS32YEJQdvVqNbCbDoSYZlBhhDQquH8SIolbdZ4wUQlc/faQBpyMByftMwuBNjceZn6261lXM1FlM9NTFa88WdlODqvpVN93A7dTLajE/ZCThyOR+OUUbb2Fi7sLB36SJ3gdp4MWATvi6qbvINT00o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1C49KRH; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1739723792; c=relaxed/simple;
+	bh=TAQp3lYKe0zsk2AdrffIzcaR3k2Fdy2b/Ma99g3300E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Z7PDiyPvVaLNTSA0vr0GGQ3nk1ACNy6WOkJosD9zD3yt54EU7aMdJHH1yTgeAFQk7ye9qgXl4zn5fCGJP4lGdjq62Eb1GY8dGv3+60hwpQg/wBL8S2n70TOoRFzdq6zdwJuizbqhMJejMbfNCzKDUlrybRTCr+NRCpZF4jh7Ym8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FdsBJ2SX; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1C49KRH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FdsBJ2SX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739723191; x=1771259191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pdXqxA4mn1LXn6gauTPZ9l945Lc3FsmLdchU+slJBRE=;
-  b=T1C49KRH79MV+4IJNZWBGxDXq+oiVzgPnbiNBGDbj5Q3d7cIuC42Q8ZL
-   xKaw9ShnRTKaN14rlpIF4k+BGNg890JzQiQAmoZTITMjmZSvFSuh96ec4
-   INMoU70sj1GvGLFheOek7e6uagqLoDhVoVyjQdwZsS5C6/2nOkHHADPGd
-   jCMM66rKR2bOKCHaDGK/q41R/HIEoo98QRReah7YfMASz4j3mRBfPTk8w
-   eNFoj6O8DV3qk0CB5WeFZjY2VjfwAROjhKfA3ChM/33VvTtunYjPJ3tU1
-   UEVptjLULUJXZkZUXIICtpdaGvD2egIR+Wd0UV4UwtBH9eSGH41wvGZYe
+  t=1739723790; x=1771259790;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TAQp3lYKe0zsk2AdrffIzcaR3k2Fdy2b/Ma99g3300E=;
+  b=FdsBJ2SX123AV01Bmy3RX6Hn7HXA/+eaTcfGrh59ggpItilHZkVrSEzc
+   yTDiujnvFfZHl6Ot9fHxTGnYUYdkPaPEiBnbSmCwab7LNEFx75d9hg0YM
+   aNXz1ukIZXvNPe6e2RbncjRjF/vGzIilpEbWsJ32/laEUnZ5ZYdZ0lSWJ
+   Ec2iYMplQUGC3TdSeridfNIIoN3VQYk38B2kiU0TGzUKc9SwowLPN29Xw
+   gOwTpw1Y8JOyaMleFo/FMF5z/8tDt+FcRFel4QORbuFRBXb/pKfgXm5VT
+   TMkM6fqfGEvUIEdzU+pUK51mj3qGtQRHj1U3WxkwlCzO0TEXT76hsSc8B
    g==;
-X-CSE-ConnectionGUID: vvMh5mg6S76G19BkaumM4Q==
-X-CSE-MsgGUID: Z/RCGSg0QXSwlEdUuQ4FmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11347"; a="44066206"
+X-CSE-ConnectionGUID: 3dhL41ptTHappKzgXyU6kA==
+X-CSE-MsgGUID: VUEMEAYfQOKc2Jlk+0sNIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11347"; a="62883188"
 X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
-   d="scan'208";a="44066206"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 08:26:30 -0800
-X-CSE-ConnectionGUID: j2rYBsrySEGjBWBSY7L+pA==
-X-CSE-MsgGUID: WsMvpPg4QAeFT7xmrFOKBw==
+   d="scan'208";a="62883188"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 08:36:29 -0800
+X-CSE-ConnectionGUID: HQqmdKjqT8aRBc60Eh9/Yw==
+X-CSE-MsgGUID: 7s48cWsVRmuZzLgi+h9a+w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114398676"
+X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
+   d="scan'208";a="114112488"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 16 Feb 2025 08:26:28 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 16 Feb 2025 08:36:28 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tjhTN-001C4N-1B;
-	Sun, 16 Feb 2025 16:26:25 +0000
-Date: Mon, 17 Feb 2025 00:25:44 +0800
+	id 1tjhd4-001C4v-1B;
+	Sun, 16 Feb 2025 16:36:26 +0000
+Date: Mon, 17 Feb 2025 00:35:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Koichiro Den <koichiro.den@canonical.com>, linux-gpio@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, brgl@bgdev.pl,
-	geert+renesas@glider.be, linus.walleij@linaro.org,
-	maciej.borzecki@canonical.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/13] gpio: virtuser: convert to use gpio-pseudo
- utilities
-Message-ID: <202502170056.DR6nbxpY-lkp@intel.com>
-References: <20250216125816.14430-6-koichiro.den@canonical.com>
+To: Yunsheng Lin <yunshenglin0825@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linyunsheng:page_bulk_alloc_opt 1/1] fs/xfs/xfs_buf.c:382:57:
+ error: use of undeclared identifier 'refill'
+Message-ID: <202502170011.yexpDjyi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,84 +61,105 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250216125816.14430-6-koichiro.den@canonical.com>
 
-Hi Koichiro,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.14-rc2 next-20250214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Koichiro-Den/gpio-aggregator-reorder-functions-to-prepare-for-configfs-introduction/20250216-210413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20250216125816.14430-6-koichiro.den%40canonical.com
-patch subject: [PATCH v3 05/13] gpio: virtuser: convert to use gpio-pseudo utilities
-config: i386-buildonly-randconfig-003-20250216 (https://download.01.org/0day-ci/archive/20250217/202502170056.DR6nbxpY-lkp@intel.com/config)
+tree:   https://github.com/gestionlin/linux.git page_bulk_alloc_opt
+head:   a4f123e5e9347f8f9302bcc6b0a05c8a5a9ff4b8
+commit: a4f123e5e9347f8f9302bcc6b0a05c8a5a9ff4b8 [1/1] mm: alloc_pages_bulk: remove assumption of populating only NULL elements
+config: s390-randconfig-001-20250216 (https://download.01.org/0day-ci/archive/20250217/202502170011.yexpDjyi-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250217/202502170056.DR6nbxpY-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250217/202502170011.yexpDjyi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502170056.DR6nbxpY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502170011.yexpDjyi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpio/gpio-pseudo.c:62:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      62 |                 kfree(common->name);
+>> fs/xfs/xfs_buf.c:382:57: error: use of undeclared identifier 'refill'
+     382 |                 alloc = alloc_pages_bulk(gfp_mask, bp->b_page_count - refill,
+         |                                                                       ^
+   fs/xfs/xfs_buf.c:383:21: error: use of undeclared identifier 'refill'
+     383 |                                          bp->b_pages + refill);
+         |                                                        ^
+>> fs/xfs/xfs_buf.c:382:57: error: use of undeclared identifier 'refill'
+     382 |                 alloc = alloc_pages_bulk(gfp_mask, bp->b_page_count - refill,
+         |                                                                       ^
+   fs/xfs/xfs_buf.c:383:21: error: use of undeclared identifier 'refill'
+     383 |                                          bp->b_pages + refill);
+         |                                                        ^
+>> fs/xfs/xfs_buf.c:382:57: error: use of undeclared identifier 'refill'
+     382 |                 alloc = alloc_pages_bulk(gfp_mask, bp->b_page_count - refill,
+         |                                                                       ^
+   fs/xfs/xfs_buf.c:383:21: error: use of undeclared identifier 'refill'
+     383 |                                          bp->b_pages + refill);
+         |                                                        ^
+   fs/xfs/xfs_buf.c:384:3: error: use of undeclared identifier 'refill'
+     384 |                 refill += alloc;
          |                 ^
-   drivers/gpio/gpio-pseudo.c:71:3: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      71 |                 kfree(common->name);
-         |                 ^
-   drivers/gpio/gpio-pseudo.c:83:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      83 |         kfree(common->name);
-         |         ^
-   3 errors generated.
+   7 errors generated.
 
 
-vim +/kfree +62 drivers/gpio/gpio-pseudo.c
+vim +/refill +382 fs/xfs/xfs_buf.c
 
-ef524a2229b717 Koichiro Den 2025-02-16  43  
-ef524a2229b717 Koichiro Den 2025-02-16  44  int pseudo_gpio_register(struct pseudo_gpio_common *common,
-ef524a2229b717 Koichiro Den 2025-02-16  45  			 struct platform_device_info *pdevinfo)
-ef524a2229b717 Koichiro Den 2025-02-16  46  {
-ef524a2229b717 Koichiro Den 2025-02-16  47  	struct platform_device *pdev;
-ef524a2229b717 Koichiro Den 2025-02-16  48  	char *name;
-ef524a2229b717 Koichiro Den 2025-02-16  49  
-ef524a2229b717 Koichiro Den 2025-02-16  50  	name = kasprintf(GFP_KERNEL, "%s.%u", pdevinfo->name, pdevinfo->id);
-ef524a2229b717 Koichiro Den 2025-02-16  51  	if (!name)
-ef524a2229b717 Koichiro Den 2025-02-16  52  		return -ENOMEM;
-ef524a2229b717 Koichiro Den 2025-02-16  53  
-ef524a2229b717 Koichiro Den 2025-02-16  54  	common->driver_bound = false;
-ef524a2229b717 Koichiro Den 2025-02-16  55  	common->name = name;
-ef524a2229b717 Koichiro Den 2025-02-16  56  	reinit_completion(&common->probe_completion);
-ef524a2229b717 Koichiro Den 2025-02-16  57  	bus_register_notifier(&platform_bus_type, &common->bus_notifier);
-ef524a2229b717 Koichiro Den 2025-02-16  58  
-ef524a2229b717 Koichiro Den 2025-02-16  59  	pdev = platform_device_register_full(pdevinfo);
-ef524a2229b717 Koichiro Den 2025-02-16  60  	if (IS_ERR(pdev)) {
-ef524a2229b717 Koichiro Den 2025-02-16  61  		bus_unregister_notifier(&platform_bus_type, &common->bus_notifier);
-ef524a2229b717 Koichiro Den 2025-02-16 @62  		kfree(common->name);
-ef524a2229b717 Koichiro Den 2025-02-16  63  		return PTR_ERR(pdev);
-ef524a2229b717 Koichiro Den 2025-02-16  64  	}
-ef524a2229b717 Koichiro Den 2025-02-16  65  
-ef524a2229b717 Koichiro Den 2025-02-16  66  	wait_for_completion(&common->probe_completion);
-ef524a2229b717 Koichiro Den 2025-02-16  67  	bus_unregister_notifier(&platform_bus_type, &common->bus_notifier);
-ef524a2229b717 Koichiro Den 2025-02-16  68  
-ef524a2229b717 Koichiro Den 2025-02-16  69  	if (!common->driver_bound) {
-ef524a2229b717 Koichiro Den 2025-02-16  70  		platform_device_unregister(pdev);
-ef524a2229b717 Koichiro Den 2025-02-16  71  		kfree(common->name);
-ef524a2229b717 Koichiro Den 2025-02-16  72  		return -ENXIO;
-ef524a2229b717 Koichiro Den 2025-02-16  73  	}
-ef524a2229b717 Koichiro Den 2025-02-16  74  
-ef524a2229b717 Koichiro Den 2025-02-16  75  	common->pdev = pdev;
-ef524a2229b717 Koichiro Den 2025-02-16  76  	return 0;
-ef524a2229b717 Koichiro Den 2025-02-16  77  }
-ef524a2229b717 Koichiro Den 2025-02-16  78  EXPORT_SYMBOL_GPL(pseudo_gpio_register);
-ef524a2229b717 Koichiro Den 2025-02-16  79  
+   346	
+   347	static int
+   348	xfs_buf_alloc_pages(
+   349		struct xfs_buf	*bp,
+   350		xfs_buf_flags_t	flags)
+   351	{
+   352		gfp_t		gfp_mask = GFP_KERNEL | __GFP_NOLOCKDEP | __GFP_NOWARN;
+   353		long		filled = 0;
+   354	
+   355		if (flags & XBF_READ_AHEAD)
+   356			gfp_mask |= __GFP_NORETRY;
+   357	
+   358		/* Make sure that we have a page list */
+   359		bp->b_page_count = DIV_ROUND_UP(BBTOB(bp->b_length), PAGE_SIZE);
+   360		if (bp->b_page_count <= XB_PAGES) {
+   361			bp->b_pages = bp->b_page_array;
+   362		} else {
+   363			bp->b_pages = kzalloc(sizeof(struct page *) * bp->b_page_count,
+   364						gfp_mask);
+   365			if (!bp->b_pages)
+   366				return -ENOMEM;
+   367		}
+   368		bp->b_flags |= _XBF_PAGES;
+   369	
+   370		/* Assure zeroed buffer for non-read cases. */
+   371		if (!(flags & XBF_READ))
+   372			gfp_mask |= __GFP_ZERO;
+   373	
+   374		/*
+   375		 * Bulk filling of pages can take multiple calls. Not filling the entire
+   376		 * array is not an allocation failure, so don't back off if we get at
+   377		 * least one extra page.
+   378		 */
+   379		for (;;) {
+   380			long	alloc;
+   381	
+ > 382			alloc = alloc_pages_bulk(gfp_mask, bp->b_page_count - refill,
+   383						 bp->b_pages + refill);
+   384			refill += alloc;
+   385			if (filled == bp->b_page_count) {
+   386				XFS_STATS_INC(bp->b_mount, xb_page_found);
+   387				break;
+   388			}
+   389	
+   390			if (alloc)
+   391				continue;
+   392	
+   393			if (flags & XBF_READ_AHEAD) {
+   394				xfs_buf_free_pages(bp);
+   395				return -ENOMEM;
+   396			}
+   397	
+   398			XFS_STATS_INC(bp->b_mount, xb_page_retries);
+   399			memalloc_retry_wait(gfp_mask);
+   400		}
+   401		return 0;
+   402	}
+   403	
 
 -- 
 0-DAY CI Kernel Test Service
