@@ -1,113 +1,117 @@
-Received: from mail-10629.protonmail.ch (mail-10629.protonmail.ch [79.135.106.29])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744F918DB12
-	for <llvm@lists.linux.dev>; Sun, 16 Feb 2025 13:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7064F192D77;
+	Sun, 16 Feb 2025 14:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739712637; cv=none; b=h1CS+NjIoHgk6Ljx8LdSsfJsxjCmvkxPKN5iU4lCu8HFChIL5btQe5klSwXYUEn0yaIJXmGOIALb9AfF2tpVYaeJLQ4sSv0BNAjI9LHmkL6pKnB2FkNV7Z/vq0ABaR2KbZge3w890YZAVjQtGKCY6ntQKIAk1ll0YY/dERk2yqs=
+	t=1739714902; cv=none; b=cQ9/6cw3nV7y+howft1zUcFOQuCFv9DUwdpAycKaZoxS+bYVeMeN6DBoTsyxcSr1addSnnFR19iYBK0rfNC0UwdfwmpES+nEaaOedovUVHZ7XruBOiLueZjXQGvMT3zQCpnAKnxFlZKlapxGhZszOOzkixSL8OxScnF29NXaHTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739712637; c=relaxed/simple;
-	bh=M3Fgli14JlCJs5eqzyoYg+4kju/5yYUjMV00kDWAkH4=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rnG+xrtMQmeAcuUYSLEvJ4ePMUSNzU7tapQ7PGQmVN1ilxQZsbuhM1tYDGGKU9+eSJ+vuJr1algGUUhuD0OAzzua47TKqgbFLZMNUXq83ggXBNvRAcwvXUf5bLxTW9w8f0Tryz5RQ3EYGGdgf7Ffzz4z8VYyZK4zVBtSOusVOGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=WGPMJf1e; arc=none smtp.client-ip=79.135.106.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1739714902; c=relaxed/simple;
+	bh=9U1SbcyuKT/9AM4ZIsNUKKd0YmfxcKqCMRSD3rg+DIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dp2mx+cHoANBCoV88X/crP7Fb4FfXpgE3utvfYzA7baGCGZLCL1TjzrJDa8AtIjOe3fB34FQYZNkqjq0qD+ZON+2ppE1rQCUlGt6FyljvQtTQbCRnAHF8te5eZKEF4mEg1qND0AqfFz5PCmjzA2c9xNZP5wpSMc2+mlKxm2oBXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OJ/h9ajV; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="WGPMJf1e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=acymz7xonff2xkvpqhdhftspy4.protonmail; t=1739712626; x=1739971826;
-	bh=M3Fgli14JlCJs5eqzyoYg+4kju/5yYUjMV00kDWAkH4=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=WGPMJf1eXCkYn2nNaPX9Myvgbf0hX1tWuvQ6qQx3SnlN1f6A3GVaYJj/XC/YNPtQb
-	 2tJuCs/BZfNC7lCs9lEl4zQK6Az9yxtwD95C4ODpiB0enJnHZRbwcLO1NKER3tThjw
-	 zkWQH5ZjT+ijoUF+xrzJgI1i8i5eZS2hZaAGXHLZ3bbhZOruFiKm0LorHWoWkB7+I/
-	 vE0OER/iGREZ8s/2U3RpMOHAhAe+MZCp5ckjr5r5nvndl772BC1aGit2r4bMgJWPz0
-	 zSNLbq0LBvcnZC9zVl2piUrqm2UiRPu+izNjjggFgEmoXTiixvjuxHV9x6BzVORE77
-	 Ekrif1D2gn6PQ==
-Date: Sun, 16 Feb 2025 13:30:21 +0000
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Charalampos Mitrodimas <charmitro@posteo.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rust: fix clippy::too-long-first-doc-paragraph
-Message-ID: <10c0a50e-14de-4da3-a592-dc65753cec1b@proton.me>
-In-Reply-To: <CANiq72myMWv87Me2C6Nmse-p=4YL=J+ZTEHe2hu7AhbpfZhgyw@mail.gmail.com>
-References: <20250215223106.2346285-1-benno.lossin@proton.me> <m21pvy927w.fsf@posteo.net> <10690211-eb3b-4b95-8d9d-35c62930d924@proton.me> <CANiq72myMWv87Me2C6Nmse-p=4YL=J+ZTEHe2hu7AhbpfZhgyw@mail.gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: c4662db2bf6c4829825f058e06453e0b1f3576c3
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OJ/h9ajV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739714900; x=1771250900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9U1SbcyuKT/9AM4ZIsNUKKd0YmfxcKqCMRSD3rg+DIw=;
+  b=OJ/h9ajV2GP5+4aR5Iey7CBymwjDSp7ic/1n/2jhBSdo9Yj2l0kfXYWJ
+   Enjl0GEvQpfpKn3aFb5eGfYi9IFaq5UYcFxoRRlKV14gMfzK3y9rpZLcb
+   mq+S3Bdr71cYfsSZY+A3+9yThHgyu0eHAFf0m9N9FmbeWQCEOeUb/jLWk
+   i70VRxc6ZIV7OJKvnypn06D87/6VXoAwlBVJs0yDOsSXCPsD1oTsNNzYW
+   vFf8UinM3Rymv1af7R0Oez+n+6cbGl+C8eT9pFsqNV9InyYqv3DVvzrf+
+   WEalmJf3q4TEt5bmGCRS6szcdEUKtIfZpF8vExl872W8RwYAn1REDQ67M
+   g==;
+X-CSE-ConnectionGUID: yFzWyPS5QMee9XJfUudcoQ==
+X-CSE-MsgGUID: 5T8oEyvaSlqHniy12KQiHg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="51833087"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="51833087"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2025 06:08:15 -0800
+X-CSE-ConnectionGUID: uYJZrgzzToiNFy2Zb7mKrw==
+X-CSE-MsgGUID: a36bBDl1TWiQzrU1giFDwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,291,1732608000"; 
+   d="scan'208";a="113766256"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 16 Feb 2025 06:08:14 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tjfJc-001Byd-0W;
+	Sun, 16 Feb 2025 14:08:12 +0000
+Date: Sun, 16 Feb 2025 22:08:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dvyukov:dvyukov-rseq-pkey 1/3] arch/x86/kernel/process.c:270:2:
+ error: call to undeclared function 'pkru_write_default'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202502162255.fYDLueTx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 16.02.25 13:40, Miguel Ojeda wrote:
-> On Sun, Feb 16, 2025 at 1:18=E2=80=AFPM Benno Lossin <benno.lossin@proton=
-.me> wrote:
->>
->> I have done some more digging and bisected my Rust version. It turns out
->> I was on a rather old nightly from last September. I also don't get the
->> error on a newer compiler version. My bisection identified that the
->> error last occurs in nightly 2024-10-18, so from 2024-10-19 onwards it
->> compiles without the error.
->=20
-> Thanks Benno, that is very useful and saved me some work.
+tree:   https://github.com/dvyukov/linux dvyukov-rseq-pkey
+head:   1063b1cd65e97d1ec20c1e016f8d4414d1c40df8
+commit: 963efc053e92eb50c830ad41445a77e8607b5d98 [1/3] pkeys: add API to switch to permissive pkey register
+config: i386-buildonly-randconfig-003-20250216 (https://download.01.org/0day-ci/archive/20250216/202502162255.fYDLueTx-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250216/202502162255.fYDLueTx-lkp@intel.com/reproduce)
 
-My pleasure :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502162255.fYDLueTx-lkp@intel.com/
 
->> So probably `-Wclippy::all` implied the `too_long_first_doc_paragraph`
->> lint in that version. That is probably because of [1]. It changes the
->> lint from style to nursery.
->>
->> [1]: https://github.com/rust-lang/rust-clippy/pull/13551
->=20
-> Yeah, sometimes that happens when working regularly with nightly over tim=
-e.
->=20
-> There is an upside, trying to look at it positively, which is that it
-> gives us something to look into from time to time (i.e. the new lint)
-> and give feedback, and sometimes we can clean it up anyway, even if
-> the lint is broken and we cannot enable it just yet :)
+All errors (new ones prefixed by >>):
 
-Yeah that is true.
+>> arch/x86/kernel/process.c:270:2: error: call to undeclared function 'pkru_write_default'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     270 |         pkru_write_default();
+         |         ^
+   1 error generated.
+--
+>> arch/x86/kernel/fpu/core.c:706:2: error: call to undeclared function 'pkru_write_default'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     706 |         pkru_write_default();
+         |         ^
+   1 error generated.
+--
+>> arch/x86/kernel/cpu/common.c:534:2: error: call to undeclared function 'pkru_write_default'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     534 |         pkru_write_default();
+         |         ^
+   1 error generated.
 
->> So we don't need this patch, as it seems this never hit stable. However,
->> there is already a patch fixing what this lint reports: 2f390cc58943
->> ("rust: provide proper code documentation titles").
->>
->> I think it's a good lint, so maybe we should turn it on?
->=20
-> Agreed, we should -- it is something we tell people from time to time
-> to fix in review, so hopefully it will make patches better before the
-> review phase.
->=20
-> ...well, assuming it works well enough, given it was moved to nursery,
-> e.g. in the linked Zulip thread in your link above they point to
-> https://github.com/rust-lang/rust-clippy/issues/13315 and
 
-I don't think that this one is bad. Of course it would be nice if only
-the rendered form would be considered, but there might also be people
-reading it directly in the code, so it could actually be a good idea to
-also keep the raw text short.
-In the case of long links, one can easily work around it by just not
-using an inline link. (so having [text with link] and then after the
-paragraph `[text with link]: link`.)
+vim +/pkru_write_default +270 arch/x86/kernel/process.c
 
-> https://github.com/rust-lang/rust-clippy/issues/13538, which we may or
-> may not care about.
+2fff071d28b54f Thomas Gleixner 2019-11-11  263  
+33344368cb08f8 Andy Lutomirski 2021-06-23  264  static void pkru_flush_thread(void)
+33344368cb08f8 Andy Lutomirski 2021-06-23  265  {
+33344368cb08f8 Andy Lutomirski 2021-06-23  266  	/*
+33344368cb08f8 Andy Lutomirski 2021-06-23  267  	 * If PKRU is enabled the default PKRU value has to be loaded into
+33344368cb08f8 Andy Lutomirski 2021-06-23  268  	 * the hardware right here (similar to context switch).
+33344368cb08f8 Andy Lutomirski 2021-06-23  269  	 */
+33344368cb08f8 Andy Lutomirski 2021-06-23 @270  	pkru_write_default();
+33344368cb08f8 Andy Lutomirski 2021-06-23  271  }
+33344368cb08f8 Andy Lutomirski 2021-06-23  272  
 
-This one just seems like a nice-to-have, but not a deal breaker.
+:::::: The code at line 270 was first introduced by commit
+:::::: 33344368cb08f8d6bf55a32aa052318d3a69ea84 x86/fpu: Clean up the fpu__clear() variants
 
-IMO we can enable the lint (since the instance fixed in this patch is
-the only error I get with that lint) and just see how it behaves.
+:::::: TO: Andy Lutomirski <luto@kernel.org>
+:::::: CC: Borislav Petkov <bp@suse.de>
 
----
-Cheers,
-Benno
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
