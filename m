@@ -1,75 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D860B218E85;
-	Mon, 17 Feb 2025 10:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888DB42A8B;
+	Mon, 17 Feb 2025 15:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739789793; cv=none; b=suKAmKMay0Xe/sHiJc6SUBCqaRB1XZDjV3jr9eWTJ8ILvUG9RyBUcNJjjXPtjof5E5DrYaOWsG5vZ+a6s7q/zDZWRwZBq8xa/DgU4XIAjkrm11C3IXO+20poc4Q7ynMYYaeb1KiiwY29mHb2n8YSC4BTH1NAoEZW0SaOuX/PxMg=
+	t=1739807662; cv=none; b=WdgvhB6xAtMebwgnEkgUBcUrtdmcXwbOdL0mjhQLXybk6qb+2Qcf8tKtNwXpJBCUDHD5MEZogZhnvbQrGqBtpvHAqXZdn8SUUeFUnS7Zs24tBF0HIZeMmKTOOuQFZYUQhW9Hy4A+C0yV3CSQdHh6bjmi2mSTuAgDrk5ebqsqRVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739789793; c=relaxed/simple;
-	bh=hDLOgY+mA75Ymn1iBk9Z4iLCk4JLS5jTuILN+eQ4yqo=;
+	s=arc-20240116; t=1739807662; c=relaxed/simple;
+	bh=bSBxzJR5oQVEYh+Oi1Iol3dXL0QO1mYzcXgPt7al01U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AnBcdsx4947SEF57nUvPVZHmMBxC3G8IRXzAf10J3XDa2b5GSnA6iSvPu3QhD8xTWpBW+rc/V6hnmBABCwmJss6c5SDh19oCXOA5DIBfjusNQ+JjHlH/JRB/t0Pv28pZfSPGM8ijJXBWGJbSJwSDbKbWKTgWLVLRTL6pG0HIVxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lTnPBV0I; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=RDfhDdgHIYVytpHWeHJ7fLXHmYvcCbvuO/3Agf6sSfPaayzmmyx20DHAKc2TtbuUTWP3FR+fCqwVG20iuG4nxEs8reC3ZE3Xd2yQL6DL/EYdBw9flWEpYZlxbCiDbxva2eR002pF+hGZdPxnOSo7w7y2iZzMyEXbFS+9/hSWP3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J+goY4Qb; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTnPBV0I"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739789792; x=1771325792;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hDLOgY+mA75Ymn1iBk9Z4iLCk4JLS5jTuILN+eQ4yqo=;
-  b=lTnPBV0IU4esVwvCGq4KRZo+9bXio1nrGTEUv4NX6IZDNQhT5Py21+RG
-   YNHAKJbkSQzp5e9xDCehLqnw31RCIOBkLsW1u46nO27yj8S1tK+PjOlNC
-   U7qgblQJSDzvL2aOYeZ4A9fbC/nugJGpZ9CsILCBLeceUlFvq3aIc1Bk5
-   R/jeAvgo/zZMZZkYNFK7uwOQCGO/kjht2j+9sKxGUF6rsqvhIRahlJs6b
-   qdZN9bE5kUhTvp//zPh0rDFQWx2oEVX2il+d9aGOWnhecsDVM6fZat/jW
-   nRmM1GDvR/DiW1nbjxA9SIPVQ2vP5qKzC/k3HzDa8nT9AiBrzZhIs6r+9
-   g==;
-X-CSE-ConnectionGUID: yT3sAxwERq2A+HBSDHmphw==
-X-CSE-MsgGUID: 3EIxJ3RSRtSs0+KlDEJ+Zw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11347"; a="39695322"
-X-IronPort-AV: E=Sophos;i="6.13,292,1732608000"; 
-   d="scan'208";a="39695322"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 02:56:31 -0800
-X-CSE-ConnectionGUID: Y7CuIuy7RWWBpOkgyg8jpA==
-X-CSE-MsgGUID: aFmpx/LzTN6y0ale2QzYlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119012041"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Feb 2025 02:56:23 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tjynV-001D0p-0I;
-	Mon, 17 Feb 2025 10:56:21 +0000
-Date: Mon, 17 Feb 2025 18:55:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jeff Johnson <jjohnson@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, mhi@lists.linux.dev,
-	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
-	quic_jjohnson@quicinc.com, quic_pyarlaga@quicinc.com,
-	quic_vbadigan@quicinc.com, quic_vpernami@quicinc.com,
-	quic_mrana@quicinc.com,
-	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-Subject: Re: [PATCH 6/8] bus: mhi: host: Add support for Bandwidth scale
-Message-ID: <202502171823.5VC7a1E6-lkp@intel.com>
-References: <20250217-mhi_bw_up-v1-6-9bad1e42bdb1@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J+goY4Qb"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c0a4b030f2so56707285a.0;
+        Mon, 17 Feb 2025 07:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739807659; x=1740412459; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WDO5YZx4Fy+u/C4ZXeJopGsEViBSAueZJDksbUtV69k=;
+        b=J+goY4Qb/1VDGL8hz8HrcjgR21CLcQWQip76k+hrX4N39JBTAUrnZ53+OY0uAFXZyX
+         6UJFYQtKp0FSDIQEFXhVqmbDWr7prdoO0t8sD+LIG8Fp0Z7djsBTNcYTH6NWzdjo9DfF
+         G+qMLeXk5uPYwAhyThCLvMwJ+HPsi+acKaFKP4HJtQ+E9eFGlITFwqKDw7R1cxJYhmJY
+         gJYUo50z1VATr8kJdaOOYC6wd4qolukIbmCxubFVDelxro+3f8qO5HaE7wypAHoqJmnR
+         sFohW+/48vLUSdYSxXvhK9Ug/Zbikf17/g7YevvM8mOlTE3CLqyf6DhuvE4Ts8D8Izly
+         O33Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739807659; x=1740412459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WDO5YZx4Fy+u/C4ZXeJopGsEViBSAueZJDksbUtV69k=;
+        b=w7ccBfUkvfan/sVW7rZ9QHtwmql7DpfsFOkV6vHCs82J9DhvYzAbRxz24EJ141Id6p
+         H4Xzj6jjKjAbffMcV7la1mDWSVT8pyxp6OT+jzDwQ4z8dEQ4ylEIKK6YD52nl80NDkQt
+         wH2TBRDEUs4VWjI8LeKhq26ds2ikcdLIokFK3tmwCAm342BBAepoOen8hgkYIVz1NsqO
+         In/zuootS9xZP8yUm4+5ssToerTRrsnS9oFrPKJ1dznZ4q4JMyBIZ78aZ7FFZ/1DJZDh
+         wS9hVHxRbis3vQSE3lfCK4zixrUCub6JIaiDiixNZriq6lej/yflTtuE/DD3ZRxJvcho
+         674Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX0/Lf29Eqfzfm8Ou0I41m7/3J0b4WeFoa3+py7J/c0QZlf3fStW+c5hPxbjaL/Bqntri85XVfMt8BDYy589g==@lists.linux.dev, AJvYcCXxBing2ag1BPB2MwqxaqbcIaSEJbpOcC0FC8sUGXVrhsbJRE5QYFQSIoXUdP3MS6kba4S+@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx9y7aPvFJPQDPf40ihhWzif4tCkgYGWpnR2sS1xEUsFQrfnNVL
+	+Jc5WHHjbfMbWHTDTTOuKiRQTCPAS4KGtQmBDYi6Xv7V9MlOMjEf
+X-Gm-Gg: ASbGncv5G+5/3NCRGIouHFj3xHFB2APGNIp9nS2As48E5e9S2inu2YmTGFGmR5u8JWX
+	YLTcFaBAimuQlJktD/Ngf9yfkoQp8lGNkI1oOsH6zNw1Bc7+bwQ5jaxBM4Id/BtC7MxReD6IWkd
+	sjbnQggUCQRMdhPym78YvXnI1hRNBj7xb2d9DyNKBj/M0uzgbKvHcHCyweGzJT6/TbkmSxoMNur
+	wPRa1blefcHpL62+9y43MYEhBYPDNO5NML92viZjCu77OabSq3GrEvcU19dMQNqGBlH9Wzpfryz
+	z9lrnouWzus1R74UkC+7TARcbrxk17o4sY6QWa99rOIy+YQUqXc=
+X-Google-Smtp-Source: AGHT+IHqd28XIIuG5Er3mwFxc82h+BgBiuGtf4OTGFuqH4TGKTz37i6U1sgk+++M+71Yq2YGnIW5aw==
+X-Received: by 2002:a05:620a:a48e:b0:7c0:a3bd:a78a with SMTP id af79cd13be357-7c0a3bda8f8mr207927185a.41.1739807659263;
+        Mon, 17 Feb 2025 07:54:19 -0800 (PST)
+Received: from glsmbp.wifi.local.cmu.edu (cmu-device2.nat.cmu.net. [128.2.149.252])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65dcf946asm53454326d6.125.2025.02.17.07.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Feb 2025 07:54:18 -0800 (PST)
+Date: Mon, 17 Feb 2025 10:54:17 -0500
+From: "Gabriel L. Somlo" <gsomlo@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Daniel Craviee <dcraviee@internships.antmicro.com>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [litex-hub:litex-rebase 10/15]
+ drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function
+ pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *,
+ size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char
+ *, unsigned long)') with an express...
+Message-ID: <Z7NbqdrXvBr6EIyg@glsmbp.wifi.local.cmu.edu>
+References: <202502170711.tNK4CFp1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,200 +77,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250217-mhi_bw_up-v1-6-9bad1e42bdb1@oss.qualcomm.com>
+In-Reply-To: <202502170711.tNK4CFp1-lkp@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 
-Hi Krishna,
+Thanks for the heads-up!
 
-kernel test robot noticed the following build warnings:
+On Mon, Feb 17, 2025 at 07:11:56AM +0800, kernel test robot wrote:
+> tree:   https://github.com/litex-hub/linux litex-rebase
+> head:   bfdc7246bec114e599ddb68ba442ce88172537ed
+> commit: 7cbcc8cd508400e5b564e23a122126a13096c2f7 [10/15] LiteX: driver for SPI Flash (mtd) device
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250217/202502170711.tNK4CFp1-lkp@intel.com/config)
+> compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250217/202502170711.tNK4CFp1-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502170711.tNK4CFp1-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/mtd/spi-nor/litex-spiflash.c:23:
+>    In file included from include/linux/module.h:19:
+>    In file included from include/linux/elf.h:6:
+>    In file included from arch/s390/include/asm/elf.h:181:
+>    In file included from arch/s390/include/asm/mmu_context.h:11:
+>    In file included from arch/s390/include/asm/pgalloc.h:18:
+>    In file included from include/linux/mm.h:2224:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+> >> drivers/mtd/spi-nor/litex-spiflash.c:305:15: error: incompatible function pointer types initializing 'int (*)(struct spi_nor *, u8, const u8 *, size_t)' (aka 'int (*)(struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') with an expression of type 'ssize_t (struct spi_nor *, u8, const u8 *, size_t)' (aka 'long (struct spi_nor *, unsigned char, const unsigned char *, unsigned long)') [-Wincompatible-function-pointer-types]
+>      305 |         .write_reg = spi_flash_nor_write_reg,
+>          |                      ^~~~~~~~~~~~~~~~~~~~~~~
+>    3 warnings and 1 error generated.
+> 
+> 
+> vim +305 drivers/mtd/spi-nor/litex-spiflash.c
+> 
+>    300	
+>    301	static const struct spi_nor_controller_ops litex_spi_controller_ops = {
+>    302		.read = spi_flash_nor_read,
+>    303		.write = spi_flash_nor_write,
+>    304		.read_reg = spi_flash_nor_read_reg,
+>  > 305		.write_reg = spi_flash_nor_write_reg,
+>    306		.erase = spi_flash_nor_erase,
+>    307	};
+>    308	
 
-[auto build test WARNING on 0ad2507d5d93f39619fc42372c347d6006b64319]
+Fixed by s/ssize_t/int/ in the definition of spi_flash_nor_write_reg():
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Chaitanya-Chundru/PCI-update-current-bus-speed-as-part-of-pci_bus_add_devices/20250217-144050
-base:   0ad2507d5d93f39619fc42372c347d6006b64319
-patch link:    https://lore.kernel.org/r/20250217-mhi_bw_up-v1-6-9bad1e42bdb1%40oss.qualcomm.com
-patch subject: [PATCH 6/8] bus: mhi: host: Add support for Bandwidth scale
-config: x86_64-buildonly-randconfig-006-20250217 (https://download.01.org/0day-ci/archive/20250217/202502171823.5VC7a1E6-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250217/202502171823.5VC7a1E6-lkp@intel.com/reproduce)
+-static ssize_t spi_flash_nor_write_reg(struct spi_nor *nor, u8 opcode,
++static int spi_flash_nor_write_reg(struct spi_nor *nor, u8 opcode,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502171823.5VC7a1E6-lkp@intel.com/
+I will squash that change on top of the existing driver in a few days.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/bus/mhi/host/init.c:682:6: warning: variable 'doorbell' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     682 |         if (mhi_cntrl->get_misc_doorbell)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/mhi/host/init.c:685:6: note: uninitialized use occurs here
-     685 |         if (doorbell > 0) {
-         |             ^~~~~~~~
-   drivers/bus/mhi/host/init.c:682:2: note: remove the 'if' if its condition is always true
-     682 |         if (mhi_cntrl->get_misc_doorbell)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     683 |                 doorbell = mhi_cntrl->get_misc_doorbell(mhi_cntrl, MHI_ER_BW_SCALE);
-   drivers/bus/mhi/host/init.c:548:22: note: initialize the variable 'doorbell' to silence this warning
-     548 |         int i, ret, doorbell;
-         |                             ^
-         |                              = 0
-   1 warning generated.
-
-
-vim +682 drivers/bus/mhi/host/init.c
-
-   544	
-   545	int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
-   546	{
-   547		u32 val;
-   548		int i, ret, doorbell;
-   549		struct mhi_chan *mhi_chan;
-   550		struct mhi_event *mhi_event;
-   551		void __iomem *base = mhi_cntrl->regs;
-   552		struct device *dev = &mhi_cntrl->mhi_dev->dev;
-   553		struct {
-   554			u32 offset;
-   555			u32 val;
-   556		} reg_info[] = {
-   557			{
-   558				CCABAP_HIGHER,
-   559				upper_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
-   560			},
-   561			{
-   562				CCABAP_LOWER,
-   563				lower_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
-   564			},
-   565			{
-   566				ECABAP_HIGHER,
-   567				upper_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
-   568			},
-   569			{
-   570				ECABAP_LOWER,
-   571				lower_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
-   572			},
-   573			{
-   574				CRCBAP_HIGHER,
-   575				upper_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
-   576			},
-   577			{
-   578				CRCBAP_LOWER,
-   579				lower_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
-   580			},
-   581			{
-   582				MHICTRLBASE_HIGHER,
-   583				upper_32_bits(mhi_cntrl->iova_start),
-   584			},
-   585			{
-   586				MHICTRLBASE_LOWER,
-   587				lower_32_bits(mhi_cntrl->iova_start),
-   588			},
-   589			{
-   590				MHIDATABASE_HIGHER,
-   591				upper_32_bits(mhi_cntrl->iova_start),
-   592			},
-   593			{
-   594				MHIDATABASE_LOWER,
-   595				lower_32_bits(mhi_cntrl->iova_start),
-   596			},
-   597			{
-   598				MHICTRLLIMIT_HIGHER,
-   599				upper_32_bits(mhi_cntrl->iova_stop),
-   600			},
-   601			{
-   602				MHICTRLLIMIT_LOWER,
-   603				lower_32_bits(mhi_cntrl->iova_stop),
-   604			},
-   605			{
-   606				MHIDATALIMIT_HIGHER,
-   607				upper_32_bits(mhi_cntrl->iova_stop),
-   608			},
-   609			{
-   610				MHIDATALIMIT_LOWER,
-   611				lower_32_bits(mhi_cntrl->iova_stop),
-   612			},
-   613			{0, 0}
-   614		};
-   615	
-   616		dev_dbg(dev, "Initializing MHI registers\n");
-   617	
-   618		/* Read channel db offset */
-   619		ret = mhi_get_channel_doorbell_offset(mhi_cntrl, &val);
-   620		if (ret)
-   621			return ret;
-   622	
-   623		if (val >= mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB)) {
-   624			dev_err(dev, "CHDB offset: 0x%x is out of range: 0x%zx\n",
-   625				val, mhi_cntrl->reg_len - (8 * MHI_DEV_WAKE_DB));
-   626			return -ERANGE;
-   627		}
-   628	
-   629		/* Setup wake db */
-   630		mhi_cntrl->wake_db = base + val + (8 * MHI_DEV_WAKE_DB);
-   631		mhi_cntrl->wake_set = false;
-   632	
-   633		/* Setup channel db address for each channel in tre_ring */
-   634		mhi_chan = mhi_cntrl->mhi_chan;
-   635		for (i = 0; i < mhi_cntrl->max_chan; i++, val += 8, mhi_chan++)
-   636			mhi_chan->tre_ring.db_addr = base + val;
-   637	
-   638		/* Read event ring db offset */
-   639		ret = mhi_read_reg(mhi_cntrl, base, ERDBOFF, &val);
-   640		if (ret) {
-   641			dev_err(dev, "Unable to read ERDBOFF register\n");
-   642			return -EIO;
-   643		}
-   644	
-   645		if (val >= mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings)) {
-   646			dev_err(dev, "ERDB offset: 0x%x is out of range: 0x%zx\n",
-   647				val, mhi_cntrl->reg_len - (8 * mhi_cntrl->total_ev_rings));
-   648			return -ERANGE;
-   649		}
-   650	
-   651		/* Setup event db address for each ev_ring */
-   652		mhi_event = mhi_cntrl->mhi_event;
-   653		for (i = 0; i < mhi_cntrl->total_ev_rings; i++, val += 8, mhi_event++) {
-   654			if (mhi_event->offload_ev)
-   655				continue;
-   656	
-   657			mhi_event->ring.db_addr = base + val;
-   658		}
-   659	
-   660		/* Setup DB register for primary CMD rings */
-   661		mhi_cntrl->mhi_cmd[PRIMARY_CMD_RING].ring.db_addr = base + CRDB_LOWER;
-   662	
-   663		/* Write to MMIO registers */
-   664		for (i = 0; reg_info[i].offset; i++)
-   665			mhi_write_reg(mhi_cntrl, base, reg_info[i].offset,
-   666				      reg_info[i].val);
-   667	
-   668		ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NER_MASK,
-   669					  mhi_cntrl->total_ev_rings);
-   670		if (ret) {
-   671			dev_err(dev, "Unable to write MHICFG register\n");
-   672			return ret;
-   673		}
-   674	
-   675		ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NHWER_MASK,
-   676					  mhi_cntrl->hw_ev_rings);
-   677		if (ret) {
-   678			dev_err(dev, "Unable to write MHICFG register\n");
-   679			return ret;
-   680		}
-   681	
- > 682		if (mhi_cntrl->get_misc_doorbell)
-   683			doorbell = mhi_cntrl->get_misc_doorbell(mhi_cntrl, MHI_ER_BW_SCALE);
-   684	
-   685		if (doorbell > 0) {
-   686			ret = mhi_init_bw_scale(mhi_cntrl, doorbell);
-   687			if (!ret)
-   688				mhi_cntrl->bw_scale_db = base + val + (8 * doorbell);
-   689			else
-   690				dev_warn(dev, "BW scale setup failure\n");
-   691		}
-   692		return 0;
-   693	}
-   694	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+--Gabriel
