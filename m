@@ -1,172 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCA91A4F21;
-	Mon, 17 Feb 2025 22:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD7E1922E1
+	for <llvm@lists.linux.dev>; Mon, 17 Feb 2025 23:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739831682; cv=none; b=CE1F+YlEFSi5H8ta8zhQhzITkUlR3z6N8jlAg9h4VsAC+FrTps1LrxuKGUHD0oWAWMQ5IW5NoiCFIoY3c25bHr/nt4y7fQ2/W8NFmi6hCEOcEDy0ackM2bmxLDXwc3sERqxqz92sAgfLO4zC5XR+hfvIZwWX/IkE1qDdgQ806Qs=
+	t=1739834601; cv=none; b=ELLXtWIyRkQEhA0yxnmv6xZAKiE+cr/GINmywK/cewjQ2m2xvpnjBmFwuGskmaSgVMNB3cxQRCYnZjX+HDZFsA8mn6FNfjpJ+K/hu+vPNy505Y1PaV7QwzGvhzf1fDPmWiLqoBHX88AZvuEAUryz5gYZvRPWdoF/ALwWw2UqfoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739831682; c=relaxed/simple;
-	bh=V55d7Soaz7wVA9gFfrWsS0z9hYsXDi79Lx/oTQA1EUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jZkUjOm6fHKvaU89749wW+5hET2wq0PKTmpbo/PYK6Avd/CBswAsm/humz1yLP3EmJwyPj4Lv4zWuE8DhLA72XZ0u5oH56bkSmPZBivFVWPj3DbgcQ2JMK7AmbNEmJayD5pbxsIDHMfRsyKYAs4uWM515VRhvw39F43Bwfa+/gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R2i37QBN; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R2i37QBN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739831679; x=1771367679;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V55d7Soaz7wVA9gFfrWsS0z9hYsXDi79Lx/oTQA1EUo=;
-  b=R2i37QBN9sPKsWA3EN5u92S9mZoqeNbwNyW+hefiQ/A5cN3KU79UhOnw
-   r/gMnCtIQ/EQYdZXFBSctPDzhcgs8NHZ9+lFFGqEdZ37VhdpKzRjbGY7r
-   Eu8F1AkHRIETVit8fq0uopriy5cRTZkBcYTafHE21r6zJphc2nMexmGJl
-   Vv5HSgyqV+s/ukdVZAZy4wpGsldGKdcdb3YEFxJcLA2ynZLy16JJq1r45
-   jzOK6vVxyIW/0J7jzsjh2PGjGqN1DYIu/tkBvaMQOx6849jy5h1aB9VYY
-   WIH4tzMHozHacmrMqhNXMjpji55MI4M5DmQkmRZ+c7ss1Um3yZEiKQAi3
-   Q==;
-X-CSE-ConnectionGUID: J2VoBJ7zTSqtih+EGAsNUw==
-X-CSE-MsgGUID: Ia2ubtQkQJiXvXTrNbV1VA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28116136"
-X-IronPort-AV: E=Sophos;i="6.13,294,1732608000"; 
-   d="scan'208";a="28116136"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 14:34:38 -0800
-X-CSE-ConnectionGUID: 2F81YKVjQLqTaiSq4rmsiA==
-X-CSE-MsgGUID: XFPj9ecaSKWINdsn38/JEA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119151365"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Feb 2025 14:34:36 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tk9hB-001DeR-3D;
-	Mon, 17 Feb 2025 22:34:33 +0000
-Date: Tue, 18 Feb 2025 06:33:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Wetzel <Alexander@wetzel-home.de>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Alexander Wetzel <alexander@wetzel-home.de>
-Subject: Re: [PATCH v2 05/10] wifi: mac80211: Stop using legacy TX path
-Message-ID: <202502180650.CWCCOFGJ-lkp@intel.com>
-References: <20250217081721.45110-6-Alexander@wetzel-home.de>
+	s=arc-20240116; t=1739834601; c=relaxed/simple;
+	bh=ohyx9wFz5bUQOgsQJ/OchrFfpmMIXOcu8vqb+spn4xo=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=iFIO6DzPclXCtL2B2noFQQztQvodxFAbPYAGZBnaEWEgIgkU7+PxGYJsyOZoFDrlPvUMrwjxpPHitfkwgAuNLlOhV4AtLqreUQsOzLzFI3pE3ctx7UuQidCNnqMrnTZfBbBWpazxRjKfpoL09oDlsR3VccU85rUi5EtgvZVN8Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 737F692009C; Tue, 18 Feb 2025 00:23:11 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 6D6CC92009B;
+	Mon, 17 Feb 2025 23:23:11 +0000 (GMT)
+Date: Mon, 17 Feb 2025 23:23:11 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
+In-Reply-To: <3080562c-7cfd-4f66-9f62-9a99552d283f@t-8ch.de>
+Message-ID: <alpine.DEB.2.21.2502172208570.65342@angie.orcam.me.uk>
+References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net> <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk> <3080562c-7cfd-4f66-9f62-9a99552d283f@t-8ch.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250217081721.45110-6-Alexander@wetzel-home.de>
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Alexander,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+> thanks for your feedback!
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main ath/ath-next linus/master v6.14-rc3 next-20250217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ You're welcome.  Sadly little MIPS-fu seems still available nowadays and 
+for me it's often too easy to miss MIPS-related topics in the mailing list 
+flood.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Wetzel/wifi-mac80211-move-rate-control-setup/20250217-162046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20250217081721.45110-6-Alexander%40wetzel-home.de
-patch subject: [PATCH v2 05/10] wifi: mac80211: Stop using legacy TX path
-config: x86_64-buildonly-randconfig-003-20250218 (https://download.01.org/0day-ci/archive/20250218/202502180650.CWCCOFGJ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502180650.CWCCOFGJ-lkp@intel.com/reproduce)
+> >  Why is this code breaking stack alignment just to have to fix it up two 
+> > instructions down the line?  Or is it that the incoming $sp is not aligned 
+> > in the first place (in which case we're having a deeper problem).
+> 
+> nolibc itself does not assume that $sp is aligned.
+> Maybe Willy can explain the historical background.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502180650.CWCCOFGJ-lkp@intel.com/
+ I'm all ears.
 
-All warnings (new ones prefixed by >>):
+> The System V ABI MIPS supplement [0] says the following:
+> 
+> The registers listed below have the specified contents at process entry:
+> 	...
+> 
+> 	$sp The stack pointer holds the address of the bottom of the stack, which
+> 	must be doubleword (8 byte) aligned.
+> 	...
+> 
+> However "process entry" is main(), while this code is running before main.
 
-   In file included from net/mac80211/tx.c:15:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> net/mac80211/tx.c:4607:29: warning: variable 'hdr' is uninitialized when used here [-Wuninitialized]
-    4607 |                 sta = sta_info_get(sdata, hdr->addr1);
-         |                                           ^~~
-   net/mac80211/tx.c:4579:27: note: initialize the variable 'hdr' to silence this warning
-    4579 |         struct ieee80211_hdr *hdr;
-         |                                  ^
-         |                                   = NULL
-   4 warnings generated.
+ Umm, no, process entry definitely is not main(); if you refer to the 
+somewhat obsolete and inaccurate MIPS psABI, then please note that the 
+paragraph right above your quote says:
 
+$2	A non-zero value specifies a function pointer the application 
+	should register with atexit(BA_OS).  If $2 contains zero, no 
+	action is required.
 
-vim +/hdr +4607 net/mac80211/tx.c
+and one immediately below it says:
 
-e2ebc74d7e3d716 Johannes Berg    2007-07-27  4572  
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4573  static void ieee80211_tx_pending_skb(struct ieee80211_local *local,
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4574  				     struct sk_buff *skb)
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4575  {
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4576  	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4577  	struct ieee80211_sub_if_data *sdata;
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4578  	struct sta_info *sta;
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4579  	struct ieee80211_hdr *hdr;
-55de908ab292c03 Johannes Berg    2012-07-26  4580  	struct ieee80211_chanctx_conf *chanctx_conf;
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4581  
-5061b0c2b9066de Johannes Berg    2009-07-14  4582  	sdata = vif_to_sdata(info->control.vif);
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4583  
-cc20ff2c6b5d3e2 Felix Fietkau    2020-09-08  4584  	if (info->control.flags & IEEE80211_TX_INTCFL_NEED_TXPROCESSING) {
-eef25a6679adb3c Johannes Berg    2022-06-01  4585  		/* update band only for non-MLD */
-f1871abd27641c0 Ilan Peer        2023-06-08  4586  		if (!ieee80211_vif_is_mld(&sdata->vif)) {
-eef25a6679adb3c Johannes Berg    2022-06-01  4587  			chanctx_conf =
-eef25a6679adb3c Johannes Berg    2022-06-01  4588  				rcu_dereference(sdata->vif.bss_conf.chanctx_conf);
-55de908ab292c03 Johannes Berg    2012-07-26  4589  			if (unlikely(!chanctx_conf)) {
-55de908ab292c03 Johannes Berg    2012-07-26  4590  				dev_kfree_skb(skb);
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4591  				return;
-55de908ab292c03 Johannes Berg    2012-07-26  4592  			}
-73c4e195e6396ee Johannes Berg    2014-11-09  4593  			info->band = chanctx_conf->def.chan->band;
-eef25a6679adb3c Johannes Berg    2022-06-01  4594  		}
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4595  		ieee80211_tx(sdata, NULL, skb);
-cc20ff2c6b5d3e2 Felix Fietkau    2020-09-08  4596  	} else if (info->flags & IEEE80211_TX_CTL_HW_80211_ENCAP) {
-50ff477a8639fa1 John Crispin     2019-11-25  4597  		if (ieee80211_lookup_ra_sta(sdata, skb, &sta)) {
-50ff477a8639fa1 John Crispin     2019-11-25  4598  			dev_kfree_skb(skb);
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4599  			return;
-50ff477a8639fa1 John Crispin     2019-11-25  4600  		}
-50ff477a8639fa1 John Crispin     2019-11-25  4601  
-50ff477a8639fa1 John Crispin     2019-11-25  4602  		if (IS_ERR(sta) || (sta && !sta->uploaded))
-50ff477a8639fa1 John Crispin     2019-11-25  4603  			sta = NULL;
-50ff477a8639fa1 John Crispin     2019-11-25  4604  
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4605  		ieee80211_queue_skb(local, sdata, sta, skb);
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4606  	} else {
-abe60632f311d51 Johannes Berg    2009-11-25 @4607  		sta = sta_info_get(sdata, hdr->addr1);
-e8f495b5a04f5a6 Alexander Wetzel 2025-02-17  4608  		ieee80211_tx(sdata, sta, skb);
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4609  	}
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4610  }
-cd8ffc800ce18e5 Johannes Berg    2009-03-23  4611  
+$31	The return address register is set to zero so that programs that 
+	search backward through stack frames (stack backtracing) recognize 
+	the last stack frame, that is, a stack frame with a zero in the 
+        saved $31 slot.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+and there is more on the initial process stack earlier on, including the 
+location of the auxiliary vector.  All it making it clear it's not main() 
+this specification refers to, but the entry point from the OS kernel (then 
+of course you're aware already it's o32 it talks about; n64/n32 requires 
+16 bytes, but then again we only have secondary references[1][2], in this 
+case for SGI IRIX).
+
+> The kernel always aligns the stack to a multiple of 16 bytes.
+> See the usage of STACK_ROUND() in fs/binfmt_elf.c.
+> 
+> So I guess we could remove the manual alignment.
+> (At least for alignments of 16 bytes and less)
+
+ I think they all need to go then, but then stack pointer adjustments have 
+to be made in multiples of the alignment required by the psABI of course.
+
+> > > +
+> > > +		/* ABI requires current function address in $t9 */
+> > > +#if defined(_ABIO32) || defined(_ABIN32)
+> > > +		"lui $t9, %hi(_start_c)\n"
+> > >  		"ori $t9, %lo(_start_c)\n"
+> > > +#else
+> > > +		"lui  $t9, %highest(_start_c)\n"
+> > > +		"ori  $t9, %higher(_start_c)\n"
+> > > +		"dsll $t9, 0x10\n"
+> > > +		"ori  $t9, %hi(_start_c)\n"
+> > > +		"dsll $t9, 0x10\n"
+> > > +		"ori  $t9, %lo(_start_c)\n"
+> > 
+> >  This could be optimised using a temporary (e.g. $at, but I guess any will 
+> > do as I gather we don't have any ABI abnormalities here).
+> 
+> clang rejects manual usage of $at without ".set noat".
+> So $t0 is simpler.
+
+ It's always `.set at' that's required to use $at by hand; it's been so 
+long before clang was even thought of.  Or you could use LA and DLA macros 
+for o32/n32 and n64 respectively for the assembler to do all this stuff 
+for you in the default `.set reorder' mode (assuming that clang is not 
+completely broken here).
+
+> > > +#endif
+> > > +
+> > >  		"jalr $t9\n"             /* transfer to c runtime
+> > > */
+> > >  		" nop\n"                 /* delayed slot
+> > 
+> >  On an unrelated matter JALR above ought to be JAL (or otherwise there's 
+> > no point in using the .cprestore pseudo-op).  And I fail to see why this 
+> > code has to be "noreorder" (except for the .cpload piece, of course), it's 
+> > just asking for troubles.
+> 
+> Thanks for the hints.
+> 
+> Without "noreorder", is the manually addition of the delayed slot "nop"
+> still necessary?
+
+ It's not.  It's for the `.set noreorder' mode only, to fill the branch 
+delay slot by hand.  Otherwise it'll become just a useless instruction 
+following the call sequence and executed after return.
+
+> These points also apply to the existing O32 implementation, right?
+
+ Correct.  Sadly it's the first time I see this code.
+
+ Overall I find it a bit of a chimera: it uses `.set noreorder' and 
+explicit relocations on one hand, and then high-level assembly `.cpload' 
+and `.cprestore' pseudo-ops on the other, effectively mixing the two 
+styles of assembly.
+
+ The pseudo-ops come from times when using assembly macros was the norm 
+and are there to support that coding model where macros rely on these 
+pseudo-ops, and before the use of explicit relocations became the norm at 
+least for GCC.  In the absence of assembly macros you can write code 
+expansions for these pseudo-ops by hand, just as what GCC does nowadays 
+(in the `-mexplicit-relocs' mode, which is usually the default).
+
+ But due to architecture variations it's very hard to write handcoded 
+assembly in the `.set noreorder' mode: you need to take care of all the 
+data dependencies that appear due to the lack of interlocking between 
+pipeline stages, which results in code that either works correctly 
+everywhere, but is suboptimal for newer architecture revisions, or code 
+that works better with newer architecture revisions, but is actually 
+broken with earlier ones.
+
+ About the only typical case where you do want to use `.set noreorder' is 
+to schedule a branch delay slot by hand due to a data anti-dependency 
+between the two instructions.  Patchable/self-modifying code is a less 
+frequent case.  And I had literally one case in my entire career where I 
+wanted to actually jump to a branch delay slot instruction (it's still 
+there in arch/mips/include/asm/div64.h, in do_div64_32(); see label #2).
+
+ Also it appears no code in this function actually relies on $gp having 
+been set up, so perhaps this stuff can just be discarded in the first 
+place?
+
+References:
+
+[1] "MIPSpro 64-Bit Porting and Transition Guide", 
+    <https://irix7.com/techpubs/007-2391-006.pdf>
+
+[2] "MIPSpro N32 ABI Handbook", 
+    <https://irix7.com/techpubs/007-2816-004.pdf>
+
+  Maciej
