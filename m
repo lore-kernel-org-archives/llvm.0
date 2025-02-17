@@ -1,126 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887A7137C35;
-	Mon, 17 Feb 2025 18:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367CC188587
+	for <llvm@lists.linux.dev>; Mon, 17 Feb 2025 19:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739818502; cv=none; b=ShlZHA9ts49MLk0EPXOodHjieWpTou4v2Z8l2WDKv32e5K5aEKGLKwcu0aYD9Aob8eXTWnR12CZS4zV696GkEZg84wQlStzNMYXfb1pvQhUzU4zt5Yr4bfNZf+zcG0cjOqExaSdCPW+0QGerm+r8Fx7dMNdH2HQt+y6m7qqSldQ=
+	t=1739818825; cv=none; b=o/ns6MCuB1mGdVyqM8pPojAdNqzhDRfXAPODMG2tJAnPphLTEYt4KFVXpcLjp5vLNTWT4NGmGSJYHOYiLKJQBio+fOsSFCCRljEqgSajgdXnd/nt6FlDNkVjnRcSUPYfCglLjjRnoGnlfHkp+dVatXU0Y+RZoycZK4YDXiuQvfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739818502; c=relaxed/simple;
-	bh=Tqbh4I2DxBUjZqDu585rxe+RDN/kxswkQgYyawvMlPE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kA0vrAonkOl1tF7t4lbkVFAnIW8YWxj21BjW+KFF6AF+NUaN0dcA9uDGJ+kmWnJdcoPLnbyMBKDNeeu0ANmY7g6XetCVvEzCG4V9wv7HOAPtjm4TUYmH+zdd2Se/zpaTR6iSlSMZUdMM9Dgm9z8la2orI6dS2App8li6XvB+WaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TS/SMsuD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739818825; c=relaxed/simple;
+	bh=FbEfh1V/TCyzyVBnzOPjw0bmm27Qjtw3b9033vGjqT8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QvsjoBii4QWb4rYSTmZb4fkyD91x0Ax1p6YFJyU5/y1s7MdHh/Cco9hJ3KStiDqCmc3VMvqRPkuJQUjiD+nxc9iXjhY/qvHyQGNjB3PGEKVFGFkucfgVIbFKMh8v+c6F/zNBdy2XNMLi2L9/kfE8bOO1cnOmXyRoyFEe/2pXiJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ekaj97j7; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TS/SMsuD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A4FC4CED1;
-	Mon, 17 Feb 2025 18:54:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739818502;
-	bh=Tqbh4I2DxBUjZqDu585rxe+RDN/kxswkQgYyawvMlPE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TS/SMsuDJRBUEMsQKkbR5RQBT44JpwsqHZjtu4QGib/fqIClvQUKgDdtBKAUgaypl
-	 ZLHeEiiyk+rU/TAveQVNFxusS9sqKvjuKGgQ0S9PWKY9zi3Cbdl8rpt2XWGsY712zb
-	 pf/6BTpMKWS2I2dZYbajKoxxAZAdseDSDGufeahc86wUd5mIMHNeXapm6bWipArYce
-	 2JAeyDhRnX0/Md+eSiIEnSQ1GHD6vrH0JOgKbKbif9rfi7PIuwQNjK0B7uv962tEdb
-	 PsZ5k74Gzo1eQAPi4tD585cY0hAIr8FQfqRSnwETHEIso4SpWuadNijK2j8f++iT97
-	 AroJ1X0Yos1/w==
-Date: Mon, 17 Feb 2025 10:54:56 -0800
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: userprogs: use correct lld when linking
- through clang
-Message-ID: <20250217185456.GA435791@ax162>
-References: <20250217-kbuild-userprog-fixes-v2-1-4da179778be0@linutronix.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ekaj97j7"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4398e839cd4so3521085e9.0
+        for <llvm@lists.linux.dev>; Mon, 17 Feb 2025 11:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739818822; x=1740423622; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FbEfh1V/TCyzyVBnzOPjw0bmm27Qjtw3b9033vGjqT8=;
+        b=Ekaj97j7tnEWW7ugR80cGOahvVVCRHTBpAQ8Ixf66kfP3+EWhsMydeBS0YM8+5yTno
+         5InVnU8hNepdSbgxQVs3ZkYWyHpaLB6ROWUPZ+hYQJrx9PUaxDBba4jEdP92wkdKcocQ
+         zfTaXAyPQUAeK3J9zd6dHvjlXOKAJmGpySHc3HpkxHVGVjn/MgVikLcH7ouMStBxV7jZ
+         BBRFHf2Ci8/x7GrmFq15BPPvgELVKx/6bMRvtcO2rVuAf/xTDBqr0zVw2/8jfujUBH0k
+         uZwrS92Uro29jKWjAh4X+76EUbnWAJR1MtGYGwvDA4Ze4US2iI98lY22z5/N7QAUo2AN
+         uz1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739818822; x=1740423622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FbEfh1V/TCyzyVBnzOPjw0bmm27Qjtw3b9033vGjqT8=;
+        b=WL79CzEzC6irrO8ALhZUpLtb31hycegW38Kn+6TBbmoDmryjhf9L9oL8IpC91i7I+z
+         2Bmux4GeyQq4sY0fyPbUQtYW7yWa9SXe1AER9NNZKnQsoMPA9i5qNuJXIwpOKXyfz5bE
+         RhNcw1o6S54ZwyM2hJr1fmmkRA2ENN5E7l74qrS4jVxKhBdSJru99DdLjZ3ljygaL66a
+         RyCjQH5gkluI7ygVZOIK5ZG5wgWWZC88gRdATZF+zDtkAKpYnXJIoUr1Lkvkw962eevb
+         QaJoTmt9TS258P8OXHuqEbNY6DA5pmQ4N5E1FWy5tUz6TlASOA4kDYr1lhyTDtCh+cKv
+         2lHg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3EuynaOwZ65pxi+5mmNW/sZQlVKbSxrCBrjKFg4MO2f2porX9TusRtJST9Cf6Z/OuxEZi@lists.linux.dev
+X-Gm-Message-State: AOJu0YwvqCInXtVB4Pbhkuismp+HRKDAsraudWGWtsghpXUeVK8I8cJJ
+	rqpbdLN/zVXrt3kRlHLsQigQfKOBxZ/ZudaPQxJxU7bxUoawScrZiFO1X18nCnKIFYoNxaYGUuG
+	D52l/HeStuTgFxhRziqwiSKzaeEE=
+X-Gm-Gg: ASbGncvhskmlb9hoDpOADVRF1HhYA5/Fqv8UYlMWwG5B8eVhJ9QGE/ZqtbyOH3etueb
+	iLnr5OfNIhowKsF+cdYe9EBK81YxDNmRTboqMIPrclRO3dgJAvYzEq5eHEZFaYgdC9atjW88eeP
+	A=
+X-Google-Smtp-Source: AGHT+IHcNajZe0ENO6NqqO6ktnv6S1yT2v8yKjsxjfUHFFdU9DGQ1lgEBrKS4eB3xN2pkGDfNvSOKZpFCcjlLy+KwRc=
+X-Received: by 2002:a5d:6d81:0:b0:38f:2c10:da1e with SMTP id
+ ffacd0b85a97d-38f33c288cfmr8157628f8f.27.1739818822023; Mon, 17 Feb 2025
+ 11:00:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250217-kbuild-userprog-fixes-v2-1-4da179778be0@linutronix.de>
+References: <CA+fCnZeBEe3VWm=VfYvG-f4eh2jAFP-p4Xn4SLEeFCGTudVuEw@mail.gmail.com>
+ <e7t5yzfw3dq5stp5xjy5yclcx6ikne4vwz7d6w2ukfw2b7gr6t@oomoynf3b2jl>
+ <zjuvfdbl7q76ahdxk3lrgaznk7vjj43f5ftzfgrnca6dqtcd5x@5qj24womzgyq>
+ <CA+fCnZfySpeRy0FCFidLdUUeqp97eBdjAqQyYPpz1WxYwcsW9A@mail.gmail.com>
+ <aqhm7lc57srsfuff3bceb3dcmsdyxksb7t6bgwbqi54ppevpoh@apolj3nteaz6>
+ <CA+fCnZdjTkreTcoo+J8wMhwDuAFM4g33U5BFy0OPtE0UCvyJbQ@mail.gmail.com>
+ <CA+fCnZcoVdfXVN8VBFLx835cV0eGAT6Ewror2whLW761JnHjNQ@mail.gmail.com>
+ <sjownmnyf4ygi5rtbedan6oauzvyk2d7xcummo5rykiryrpcrt@kasomz5imkkm>
+ <tuwambkzk6ca5mpni7ev5hvr47dkbk6ru3vikplx67hyvqj2sw@rugqv7vhikxb>
+ <CA+fCnZcHnWr0++8omB5ju8E3uSK+s+JOFZ3=UqgtVEcBzrm2Lg@mail.gmail.com> <kmibbbrtlwds6td64hloau7pf3smqth4wff33soebvujohsvli@kni5dtvpwsxf>
+In-Reply-To: <kmibbbrtlwds6td64hloau7pf3smqth4wff33soebvujohsvli@kni5dtvpwsxf>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Mon, 17 Feb 2025 20:00:10 +0100
+X-Gm-Features: AWEUYZlRIhjmXsKyPCZOszIx8_jhLBbTZLCGYgAeVzNSeJCRFZ5-FeRBt2Jwp0w
+Message-ID: <CA+fCnZfBsQd=nJVu7QOX09w6uR5LK1Gc5UqiHS8aCxzhDJsssA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: Samuel Holland <samuel.holland@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	linux-riscv@lists.infradead.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, kasan-dev@googlegroups.com, 
+	llvm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Will Deacon <will@kernel.org>, 
+	Evgenii Stepanov <eugenis@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 17, 2025 at 08:27:54AM +0100, Thomas Weiﬂschuh wrote:
-> The userprog infrastructure links objects files through $(CC).
-> Either explicitly by manually calling $(CC) on multiple object files or
-> implicitly by directly compiling a source file to an executable.
-> The documentation at Documentation/kbuild/llvm.rst indicates that ld.lld
-> would be used for linking if LLVM=1 is specified.
-> However clang instead will use either a globally installed cross linker
-> from $PATH called ${target}-ld or fall back to the system linker, which
-> probably does not support crosslinking.
-> For the normal kernel build this is not an issue because the linker is
-> always executed directly, without the compiler being involved.
-> 
-> Explicitly pass --ld-path to clang so $(LD) is respected.
-> As clang 13.0.1 is required to build the kernel, this option is available.
-> 
-> Fixes: 7f3a59db274c ("kbuild: add infrastructure to build userspace programs")
-> Cc: stable@vger.kernel.org # needs wrapping in $(cc-option) for < 6.9
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+On Mon, Feb 17, 2025 at 7:38=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
+>
+> >I'm a bit lost with these calculations at this point. Please send the
+> >full patch, including the new values for KASAN_SHADOW_OFFSET (do I
+> >understand correctly that you want to change them?). It'll be easier
+> >to look at the code.
+>
+> Sorry, this thread became a little bit confusing. No, I think the
+> KASAN_SHADOW_OFFSET values are fine. I just wanted to embrace the idea of
+> overflow for the purpose of the check in kasan_non_canonical_hook().
+>
+> But I'll put down my train of thought about the overflow + calculations i=
+n the
+> patch message.
+>
+> >
+> >Feel free to send this patch separately from the rest of the series,
+> >so that we can finalize it first.
+>
+> I have the x86 tag-based series basically ready (just need to re-read it)=
+ so I
+> think I can send it as whole with this patch and 3 others from this serie=
+s.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
-> Reproducer, using nolibc to avoid libc requirements for cross building:
-> 
-> $ tail -2 init/Makefile
-> userprogs-always-y += test-llvm
-> test-llvm-userccflags += -nostdlib -nolibc -static -isystem usr/ -include $(srctree)/tools/include/nolibc/nolibc.h
-> 
-> $ cat init/test-llvm.c
-> int main(void)
-> {
-> 	return 0;
-> }
-> 
-> $ make ARCH=arm64 LLVM=1 allnoconfig headers_install init/
-> 
-> Validate that init/test-llvm builds and has the correct binary format.
-> ---
-> Changes in v2:
-> - Use --ld-path instead of -fuse-ld
-> - Drop already applied patch
-> - Link to v1: https://lore.kernel.org/r/20250213-kbuild-userprog-fixes-v1-0-f255fb477d98@linutronix.de
-> ---
->  Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 96407c1d6be167b04ed5883e455686918c7a75ee..b41c164533d781d010ff8b2522e523164dc375d0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1123,6 +1123,11 @@ endif
->  KBUILD_USERCFLAGS  += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
->  KBUILD_USERLDFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
->  
-> +# userspace programs are linked via the compiler, use the correct linker
-> +ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_LD_IS_LLD),yy)
-> +KBUILD_USERLDFLAGS += --ld-path=$(LD)
-> +endif
-> +
->  # make the checker run with the right architecture
->  CHECKFLAGS += --arch=$(ARCH)
->  
-> 
-> ---
-> base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
-> change-id: 20250213-kbuild-userprog-fixes-4f07b62ae818
-> 
-> Best regards,
-> -- 
-> Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> 
-> 
+Sounds good!
