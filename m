@@ -1,139 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE19238D43;
-	Mon, 17 Feb 2025 21:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB6A226545
+	for <llvm@lists.linux.dev>; Mon, 17 Feb 2025 21:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739827293; cv=none; b=atcalOoZbY7cWblsa4xzCs4r8cmjwj/e/wn6fgWsRzIg/orV8V1G1jpAurPD53XFXSQxDppiKt9Vzj8Xhxs//k7rttHyqKpHnEBC6IwDOM4ioBKUQczza+foH3jL9OIOyitKa8ZCDQWqHLrUS3CWwSwL8xsrI1o39kGVjs3oF+A=
+	t=1739827598; cv=none; b=hl0RmPWMYNs0+YMZzAIVpw1iuCUFKRPuvoTyi905hRw+eDE9PA16zfb7t+1IzOpt+PjUsnJpBrMqYYQAUyYzO02kYutrosH1LPKs+bUEb/a8pKi0OtLqQdRdMGXe2ftrm1qybK2qJjn4D/IhgGC1r0cXT8g37FtmCgZhbtU3Nko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739827293; c=relaxed/simple;
-	bh=7IPwT0IAzTzwzZjpYrRYdZYYYLn8nOK29TWzvmiuHeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ye9ybtXfj5hRHD3ma5aUqh08QcjJzLNQDfzPrNaCFTtnPQVS9gmua82Fcf2SpP18tPO7IgJqoKCt4Di9thleID/RACXdvkW/UBbGrXpbNsoQNqSPN4SjeIXroCWBzOcPrHMD0DlOHLCqX9zY3s5HSkVzuohu4tiiQoygmH3PISQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E2KIPoOH; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739827598; c=relaxed/simple;
+	bh=NgF5paxrgLRrg9NYUhM6TowTgot513H1RwgVrlHOVbQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yic7AxUdTiETgUugswQ54FIIP6Dx7HilD6gN9aj2gjsbgJDd0yUZ34cPaxqVugEpNOhk83douBqlRu6MR8iqyRW6xeIWZulW0smeSwe4SgIJQcucd0hBOSjmXf8d+ef3gkNIPTbSr7YG3sN2kNtnoYd8UxYyjEpTXF58N+SONdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=rQ7v/zQe; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E2KIPoOH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739827291; x=1771363291;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7IPwT0IAzTzwzZjpYrRYdZYYYLn8nOK29TWzvmiuHeM=;
-  b=E2KIPoOHoKJSyrwHrgFQ5A2un1Yg+7Oepvz93PmDjdwVsiKaRQ/HwZxd
-   SD/Eo9fnijStJRs5OtTDLYG0oZLbWS/Ewg3K7yD3GNbFKeONE3GY5Eu3J
-   98F9elaDEqgj9beHvA9qgZDmIXfSVs/3eT+w48P2C03SyT9j3Bss3HBXH
-   bW4Z1J7wL7tU9vmLvGbCt6LLsFfaJ3YhfRDrD+jnPX31QVrv7Xh+mo02D
-   uirW2N3feRoXRoJoLTU7lYk7mNLhn6cvYHWd4sBOb3fS2scgwd3JUCFVD
-   L7yNStGU7YMbrCEvRvYN5AzMVUaDNz+IwWL2+dJwIWSwzy5eENtymXst2
-   w==;
-X-CSE-ConnectionGUID: 9xUHH3IdRlqmN24l1QY/Yw==
-X-CSE-MsgGUID: eQ93WMTgTeq+dO6cv5R52w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="51499260"
-X-IronPort-AV: E=Sophos;i="6.13,293,1732608000"; 
-   d="scan'208";a="51499260"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 13:21:31 -0800
-X-CSE-ConnectionGUID: zMFV9v+tT0Cu0kGpya0TFQ==
-X-CSE-MsgGUID: zdcikAioRdygFDR+slDF4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="114086231"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 17 Feb 2025 13:21:29 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tk8YQ-001Dbv-3D;
-	Mon, 17 Feb 2025 21:21:26 +0000
-Date: Tue, 18 Feb 2025 05:20:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jens Axboe <axboe@kernel.dk>
-Subject: [axboe-block:for-6.15/io_uring-rx-zc 15/41]
- arch/powerpc/boot/decompress.c:132:8: error: call to undeclared function
- '__decompress'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202502180531.T3unwJIs-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="rQ7v/zQe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1739827594;
+	bh=NgF5paxrgLRrg9NYUhM6TowTgot513H1RwgVrlHOVbQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rQ7v/zQeYJxeocL7W2DbevTBCOSNTFJFXnNEAlBjI97ii+by4uG1mtx7Jvlf1SRLJ
+	 5xZNNgDTi7kmVHT2wpV191QhLOHvkXK0nWDruXUT5IxiJQ0Byjp2Qq/ELAqMRtVbUv
+	 Tso21ZNPT6gNsRTmZIbUclHA1EWXUkMO1ApmmAuA=
+Date: Mon, 17 Feb 2025 22:26:33 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Shuah Khan <shuah@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
+Message-ID: <9a3f5971-38ff-4d2f-991d-1d0740380d37@t-8ch.de>
+References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
+ <20250216094938.GB2192@1wt.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250216094938.GB2192@1wt.eu>
 
-Hi Pavel,
+On 2025-02-16 10:49:38+0100, Willy Tarreau wrote:
+> On Wed, Feb 12, 2025 at 07:49:53PM +0100, Thomas Weißschuh wrote:
+> > +#if defined(_ABIO32)
+> > +
+> >  #define _NOLIBC_SYSCALL_CLOBBERLIST \
+> >  	"memory", "cc", "at", "v1", "hi", "lo", \
+> >  	"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"
+> > +#define _NOLIBC_SYSCALL_STACK_RESERVE "addiu $sp, $sp, -32\n"
+> > +#define _NOLIBC_SYSCALL_STACK_UNRESERVE "addiu $sp, $sp, 32\n"
+> > +
+> > +#elif defined(_ABIN32) || defined(_ABI64)
+> > +
+> > +/* binutils, GCC and clang disagree about register aliases, use numbers instead. */
+> 
+> Is this often encountered despite this ? I guess it can cause portability
+> issues :-/
 
-First bad commit (maybe != root cause):
+No idea. It's the first time I saw something like this.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.15/io_uring-rx-zc
-head:   71082faa2c648a2adc1167b37565e195a8df1bc7
-commit: e150e70fce425e1cdfc227974893cad9fb90a0d3 [15/41] io_uring/kbuf: open code __io_put_kbuf()
-config: powerpc64-randconfig-003-20250218 (https://download.01.org/0day-ci/archive/20250218/202502180531.T3unwJIs-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502180531.T3unwJIs-lkp@intel.com/reproduce)
+> > +#if defined(_ABIO32)
+> > +
+> >  #define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
+> >  ({                                                                            \
+> >  	register long _num __asm__ ("v0") = (num);                            \
+> (...)
+> > @@ -178,6 +201,50 @@
+> >  	_arg4 ? -_num : _num;                                                 \
+> >  })
+> >  
+> > +#else
+> > +
+> 
+> Here you should indicate which ABI is covered by this #else, because one
+> has to go up to previous definitions to figure it's _ABIN32 and _ABI64.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502180531.T3unwJIs-lkp@intel.com/
+Ack.
 
-All errors (new ones prefixed by >>):
+> > +#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
+> > +({                                                                            \
+> > +	register long _num __asm__ ("v0") = (num);                            \
+> > +	register long _arg1 __asm__ ("$4") = (long)(arg1);                    \
+> > +	register long _arg2 __asm__ ("$5") = (long)(arg2);                    \
+> > +	register long _arg3 __asm__ ("$6") = (long)(arg3);                    \
+> > +	register long _arg4 __asm__ ("$7") = (long)(arg4);                    \
+> > +	register long _arg5 __asm__ ("$8") = (long)(arg5);                    \
+> (...)
+> > @@ -190,13 +257,33 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
+> >  		"1:\n"
+> >  		".cpload $ra\n"
+> >  		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
+> > +
+> > +#if defined(_ABIO32)
+> >  		"addiu $sp, $sp, -4\n"   /* space for .cprestore to store $gp              */
+> >  		".cprestore 0\n"
+> >  		"li    $t0, -8\n"
+> >  		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
+> >  		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
+> > -		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
+> > +#else
+> 
+> So same here. I think you should do it for all #else since you're generally
+> grouping 2 ABIs vs one between a #if and a #else and it's not trivial to
+> figure what a #else covers, like below.
 
->> arch/powerpc/boot/decompress.c:132:8: error: call to undeclared function '__decompress'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     132 |         ret = __decompress(inbuf, input_size, NULL, flush, outbuf,
-         |               ^
-   1 error generated.
+Ack.
 
+> > +		"daddiu $sp, $sp, -8\n"  /* space for .cprestore to store $gp              */
+> > +		".cpsetup $ra, 0, 1b\n"
+> > +		"li    $t0, -16\n"
+> > +		"and   $sp, $sp, $t0\n"  /* $sp must be 16-byte aligned                    */
+> > +#endif
+> > +
+> > +		/* ABI requires current function address in $t9 */
+> > +#if defined(_ABIO32) || defined(_ABIN32)
+> > +		"lui $t9, %hi(_start_c)\n"
+> >  		"ori $t9, %lo(_start_c)\n"
+> > +#else
+> 
+> This one indeed covers only _ABI64
 
-vim +/__decompress +132 arch/powerpc/boot/decompress.c
+(That is intentional)
 
-1b7898ee276b39 Oliver O'Halloran 2016-09-22   97  
-1b7898ee276b39 Oliver O'Halloran 2016-09-22   98  /**
-1b7898ee276b39 Oliver O'Halloran 2016-09-22   99   * partial_decompress - decompresses part or all of a compressed buffer
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  100   * @inbuf:       input buffer
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  101   * @input_size:  length of the input buffer
-930a77c3ad79c3 Zhang Jianhua     2021-05-10  102   * @outbuf:      output buffer
-930a77c3ad79c3 Zhang Jianhua     2021-05-10  103   * @output_size: length of the output buffer
-6efc2f1a64ef62 Yang Li           2024-04-08  104   * @_skip:       number of output bytes to ignore
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  105   *
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  106   * This function takes compressed data from inbuf, decompresses and write it to
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  107   * outbuf. Once output_size bytes are written to the output buffer, or the
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  108   * stream is exhausted the function will return the number of bytes that were
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  109   * decompressed. Otherwise it will return whatever error code the decompressor
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  110   * reported (NB: This is specific to each decompressor type).
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  111   *
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  112   * The skip functionality is mainly there so the program and discover
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  113   * the size of the compressed image so that it can ask firmware (if present)
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  114   * for an appropriately sized buffer.
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  115   */
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  116  long partial_decompress(void *inbuf, unsigned long input_size,
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  117  	void *outbuf, unsigned long output_size, unsigned long _skip)
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  118  {
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  119  	int ret;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  120  
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  121  	/*
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  122  	 * The skipped bytes needs to be included in the size of data we want
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  123  	 * to decompress.
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  124  	 */
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  125  	output_size += _skip;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  126  
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  127  	decompressed_bytes = 0;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  128  	output_buffer = outbuf;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  129  	limit = output_size;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  130  	skip = _skip;
-1b7898ee276b39 Oliver O'Halloran 2016-09-22  131  
-1b7898ee276b39 Oliver O'Halloran 2016-09-22 @132  	ret = __decompress(inbuf, input_size, NULL, flush, outbuf,
+> > +		"lui  $t9, %highest(_start_c)\n"
+> > +		"ori  $t9, %higher(_start_c)\n"
+> > +		"dsll $t9, 0x10\n"
+> > +		"ori  $t9, %hi(_start_c)\n"
+> > +		"dsll $t9, 0x10\n"
+> > +		"ori  $t9, %lo(_start_c)\n"
+> > +#endif
+> 
+> With the tiny details above, this looks fine. It's great that syscall
+> numbers didn't change so that you can cover an extra arch with only a
+> few ifdefs. I have not tested but I guess you did :-) So that's OK for
+> me:
 
-:::::: The code at line 132 was first introduced by commit
-:::::: 1b7898ee276b39e54d870dc4ef3374f663d0b426 powerpc/boot: Use the pre-boot decompression API
+The syscall numbers are different, but the UAPI headers also detect the
+ABI in use and select the correct numbers.
 
-:::::: TO: Oliver O'Halloran <oohall@gmail.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+> Acked-by: Willy Tarreau <w@1wt.eu>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
