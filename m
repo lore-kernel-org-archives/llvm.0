@@ -1,54 +1,44 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FD022DF8D;
-	Tue, 18 Feb 2025 09:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1AD18E743
+	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 09:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739870056; cv=none; b=RiZVj5lRMd8kv0dl3Qu7SA4k/jP3R/vW2Ym/jBz90rNiuDS7LxokHamyGQVYFE86uiMp6FPrSU9cFUGE6kPFJw3bTCHMsiv3JmSCqQIqqH4WV5kxLhXwtnJ07GcuNd1mZHcKAAWdctSb3g5QoDQvTkA6J4HmMB6zKoHPEkMPq9M=
+	t=1739872586; cv=none; b=Ei6vNP2FEIyX2TQv6lAHeSSVGrZ21aHb35xEtyMzn+NpKYloD+Ml/li4gIT6NAzvC8/S72ecfB+yPGTulCY44eFgTE27kWCkmVbbXamDoX5eYE7scSHi7YZxxUDnnRdyN+pnZdWqPc6Ci+/naH48IHxJ8Pjmnyr4AaKXp0744Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739870056; c=relaxed/simple;
-	bh=lYEEJ11WKQ1RuT6GwkjTPXTRlBbW23RX47OY/QzK5u8=;
+	s=arc-20240116; t=1739872586; c=relaxed/simple;
+	bh=qdz6v5u9AENOho3Z4k20JoDNSJyrhwjpfVmj3CQVAIA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VpREssgY3YCtrBhBplYuqyrZPrYUns78wJU6XH7QGPhkiuCSO2zVsWnAmekPWlqEA1z0EpaOgSPwdpxcteboj/I+SkLU5orbVWXZpzpaWsJCWq/MdVu41zNOa6Bzco8HqGPdt4+Hi08/YT8go3fIOFKluybA5qPksyZ3QaIKEPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=df2vx1Jk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jhw1uHf2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=BRdF4z+YOLsjjmCeRiuMtXrGNxvzS+CxpRFNYKWDMsou6Nd0mNQg33syEogAsT2+8BqMQLJRw2wutQbHzk5bql5riQ/i3xbU/IOR4uL+rlC+3Q0EaFWnaXDH98g4x5CGiYx0H2AfzrKilQQ8Wu3ihA5PlNoGVMXcg4vs29vSrKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wHffhBkH; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="df2vx1Jk";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jhw1uHf2"
-Date: Tue, 18 Feb 2025 10:14:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1739870053;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YejFzVVvTbx480WIGNfaPb/xj9++hESGctXXz431OO8=;
-	b=df2vx1JkD4DEQPrt/BPuCV077kmd75tiRcFvMzE875wych5ZkiYvfUnB77HbsiVkMnOqdI
-	W95svi4Km54nuUdd0hlyMGE9SyV3Nj9857rz+BwQa65QzYZEyMvhbZtB794tRYM/iPQg/i
-	8qVq1IZpvGrjauUgwIxOa3HAYd2CsldbiufQb8MDUwGAcKV3w0nNBbVkJoU9CQdO8KzWCS
-	CQ0MyFRk+G7Ol0P38gm0TM47tCyVVaBJpASDgBt2il6VOJ3nitxvGIuyB0K4EUOC+S6nap
-	oWh7v4coIpp08Nr96FH86ik7dcdKDQr3/A0CGo3GV8m+vNXdR5UK1lcBv+hT9A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1739870053;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YejFzVVvTbx480WIGNfaPb/xj9++hESGctXXz431OO8=;
-	b=jhw1uHf2SjZc1BZRWONmncC870CHsJ+CyLTWwsRXBC3L9hGrUyLK7u5rmLvZMcp5rS6sPS
-	qsLRkvzg49YagtAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: kasan-dev@googlegroups.com, linux-mm@kvack.org
-Cc: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	kernel test robot <lkp@intel.com>,
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] dma: kmsan: Export kmsan_handle_dma() for modules.
-Message-ID: <20250218091411.MMS3wBN9@linutronix.de>
-References: <202502150634.qjxwSeJR-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wHffhBkH"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1739872580; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=N8XCSr1gSHReK69ZBra+oD3DdxbDjt85CctNSIF9ow4=;
+	b=wHffhBkHFGzDwhM6C52VCsQLygaAyV4QQ7sPdsWDIt/9WyZU7MD/AUyORUhdEaVum6i3l8wjT8Wpo5pCYYFlQz7Awj+428Bxa6u3vwQXvM2mi/g83LhANWsXUcfNU101V1F4leMzy0NQEdu2MJs+VlMThVfrKCJAimf9OBvYgRI=
+Received: from U-V2QX163P-2032.local(mailfrom:fengwei_yin@linux.alibaba.com fp:SMTPD_---0WPlRUKM_1739872578 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 18 Feb 2025 17:56:19 +0800
+Date: Tue, 18 Feb 2025 17:56:17 +0800
+From: YinFengwei <fengwei_yin@linux.alibaba.com>
+To: Changbin Du <changbin.du@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
+Subject: Re: [RESEND PATCH v6 0/8] perf: Support searching local debugging
+ vdso or specify vdso path in cmdline
+Message-ID: <lytsbawzokllz3nh36at3bi6322sk5br3vrqp5lr75eiwdqqj3@ozmbwylc5gdg>
+References: <20240816105811.1812897-1-changbin.du@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,33 +47,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202502150634.qjxwSeJR-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240816105811.1812897-1-changbin.du@huawei.com>
 
-kmsan_handle_dma() is used by virtio_ring() which can be built as a
-module. kmsan_handle_dma() needs to be exported otherwise building the
-virtio_ring fails.
+Hi Changbin,
 
-Export kmsan_handle_dma for modules.
+On Fri, Aug 16, 2024 at 06:58:03PM +0800, Changbin Du wrote:
+> The vdso dumped from process memory (in buildid-cache) lacks debugging
+> info. To annotate vdso symbols with source lines we need a debugging
+> version.
+> 
+> For x86, we can find them from your local build as
+> 'arch/x86/entry/vdso/vdso{32,64}.so.dbg'. Or they may resides in
+> '/lib/modules/<version>/vdso/vdso{32,64}.so' on Ubuntu. But notice that the
+> builid has to match.
+> 
+> If user doesn't specify the path, perf will search them internally as long
+> as vmlinux when recording samples. The searched debugging vdso will add to
+> buildid cache as ~/.debug/[vdso]/debug.
+> 
+> Below samples are captured on my local build kernel. perf succesfully
+> find debugging version vdso and we can annotate with source without
+> specifying vdso path.
+> 
+> $ sudo perf record -a
+> $ sudo perf report --objdump=llvm-objdump
+> 
+> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+> Percent│       movq    -48(%rbp),%rsi
+>        │       testq   %rax,%rax
+>        │     ;               return vread_hvclock();
+>        │       movq    %rax,%rdx
+>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>        │     ↑ js      eb
+>        │     ↑ jmp     74
+>        │     ;               ts->tv_sec = vdso_ts->sec;
+>   0.02 │147:   leaq    2(%rbx),%rax
+>        │       shlq    $4, %rax
+>        │       addq    %r10,%rax
+>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>   9.38 │152:   movl    (%r10),%ecx
+> 
+> When doing cross platform analysis, we need to specify the vdso path manually if
+> we are interested in its symbols, because they are not installed on local
+> machine. At most two vdso can be given. Also you can pack your buildid cache with
+> perf-archive if the debugging vdso can be found on the sampled machine.
+> 
+> $ sudo perf report --objdump=llvm-objdump \
+>       --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+With latest upstream kernel, I still can't annotate symbols in vdso.
+With your patch and this --vdso command, it works great on x86 and arm64
+platform. So
+   Tested-by: Yin Fengwei <fengwei_yin@linux.alibaba.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202502150634.qjxwSeJR-lkp@intel.com/
-Fixes: 7ade4f10779cb ("dma: kmsan: unpoison DMA mappings")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- mm/kmsan/hooks.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index 3ea50f09311fd..3df45c25c1f62 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -357,6 +357,7 @@ void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
- 		size -= to_go;
- 	}
- }
-+EXPORT_SYMBOL_GPL(kmsan_handle_dma);
- 
- void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
- 			 enum dma_data_direction dir)
--- 
-2.47.2
+Regards
+Yin, Fengwei
+
+> 
+> I also improved perf-buildid-cache command to recognize vdso when adding files,
+> then place it at correct place.
+> 
+> $ sudo perf buildid-cache --add /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
+
