@@ -1,187 +1,84 @@
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD7E1922E1
-	for <llvm@lists.linux.dev>; Mon, 17 Feb 2025 23:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFFF79E1;
+	Tue, 18 Feb 2025 00:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739834601; cv=none; b=ELLXtWIyRkQEhA0yxnmv6xZAKiE+cr/GINmywK/cewjQ2m2xvpnjBmFwuGskmaSgVMNB3cxQRCYnZjX+HDZFsA8mn6FNfjpJ+K/hu+vPNy505Y1PaV7QwzGvhzf1fDPmWiLqoBHX88AZvuEAUryz5gYZvRPWdoF/ALwWw2UqfoM=
+	t=1739839016; cv=none; b=mL6WdFV+3CDGPvhSOepfmUIQswsGUUxmdrYaZVYoydUF6eN1Cuu4rh6yHGb3/M18gmMo8fBkDbiTWONRyOaO3czIId+DmUN7VYl+3iT5o69RPUMDowBC6FiFeOaUY9gyykiCnc/xWOAWlGC4qeSrgIbasY1XVfelHCjYygCgURQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739834601; c=relaxed/simple;
-	bh=ohyx9wFz5bUQOgsQJ/OchrFfpmMIXOcu8vqb+spn4xo=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=iFIO6DzPclXCtL2B2noFQQztQvodxFAbPYAGZBnaEWEgIgkU7+PxGYJsyOZoFDrlPvUMrwjxpPHitfkwgAuNLlOhV4AtLqreUQsOzLzFI3pE3ctx7UuQidCNnqMrnTZfBbBWpazxRjKfpoL09oDlsR3VccU85rUi5EtgvZVN8Ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 737F692009C; Tue, 18 Feb 2025 00:23:11 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 6D6CC92009B;
-	Mon, 17 Feb 2025 23:23:11 +0000 (GMT)
-Date: Mon, 17 Feb 2025 23:23:11 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-mips@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
-In-Reply-To: <3080562c-7cfd-4f66-9f62-9a99552d283f@t-8ch.de>
-Message-ID: <alpine.DEB.2.21.2502172208570.65342@angie.orcam.me.uk>
-References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net> <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk> <3080562c-7cfd-4f66-9f62-9a99552d283f@t-8ch.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1739839016; c=relaxed/simple;
+	bh=ed7gJMoc14ksYAGv2CHJDR2c884AJd5/WFnNACNTC5c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gqaN6OE/fFN3kupRHXMCE545jVDOHztSbya0csrvNTDcHZMS6S2x/PE5rF+C5RkfW7mUeKF3zsMsP7iT5wBP7kdVXY8cZbDjniah5pVzwPsibh/SvQZvpus6HDj/AJcUX8sHdbvCc7uwTA1k/18Vyy18EVddnwqqhKsOqLsE/Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=naHa8UhQ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="naHa8UhQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739839014; x=1771375014;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ed7gJMoc14ksYAGv2CHJDR2c884AJd5/WFnNACNTC5c=;
+  b=naHa8UhQoWZTm8XvpOZrlUxMJCTsiffz/kZFBOg0YSMFH18l5+IlBi6l
+   z1PgJessYSU9rXKT1QT7Mz1M904FjNEU8h1+oi7nGgiJ9M11O2tl/IHFC
+   SA+eLSzLHlqjvqlMgmihP8DXmyTw54gr1vpSEPwzUmPOxFJT1wavGX00N
+   RnWZqTamFFHeul2K2wTwNWx+q4Nmf2Soy7rInP1Qas0zljlquyf5HxVjv
+   uIj9E6XXjK1ehULZOeVCuaHz72BKQ8zm+vCyNRf4d0lp8/luxpRjuV00M
+   1fPuokiQ20kE/np14Hj9lkhr+Mc7IUfR1Jrhcy6erTqUwH5C/NonoFhNU
+   g==;
+X-CSE-ConnectionGUID: ADNOypeNQSSbyomLbQnMZA==
+X-CSE-MsgGUID: jQlYJ/3dTt2LHVgVuPMCUg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="57925318"
+X-IronPort-AV: E=Sophos;i="6.13,294,1732608000"; 
+   d="scan'208";a="57925318"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 16:36:53 -0800
+X-CSE-ConnectionGUID: P6DV/xevTB2TVmpTMdoD6Q==
+X-CSE-MsgGUID: 2AgFVpSOQPqdrWlflKexMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,294,1732608000"; 
+   d="scan'208";a="114221992"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 17 Feb 2025 16:36:52 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tkBbV-001DjE-1d;
+	Tue, 18 Feb 2025 00:36:49 +0000
+Date: Tue, 18 Feb 2025 08:36:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Madhavan Srinivasan <maddy@linux.ibm.com>
+Subject: [linuxppc:merge-test 4/12] arch/powerpc/kernel/btext.o: warning:
+ objtool: btext_map+0x14: unannotated intra-function call
+Message-ID: <202502180818.XnFdv8I8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Thomas,
+tree:   https://github.com/linuxppc/linux merge-test
+head:   542660f0783c3796c7ada3cb62211a3d2ac5e0ed
+commit: a727152a90f22d2410b708c56d4152a500c99730 [4/12] powerpc/static_call: Implement inline static calls
+config: powerpc-randconfig-003-20250218 (https://download.01.org/0day-ci/archive/20250218/202502180818.XnFdv8I8-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502180818.XnFdv8I8-lkp@intel.com/reproduce)
 
-> thanks for your feedback!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502180818.XnFdv8I8-lkp@intel.com/
 
- You're welcome.  Sadly little MIPS-fu seems still available nowadays and 
-for me it's often too easy to miss MIPS-related topics in the mailing list 
-flood.
+All warnings (new ones prefixed by >>):
 
-> >  Why is this code breaking stack alignment just to have to fix it up two 
-> > instructions down the line?  Or is it that the incoming $sp is not aligned 
-> > in the first place (in which case we're having a deeper problem).
-> 
-> nolibc itself does not assume that $sp is aligned.
-> Maybe Willy can explain the historical background.
+>> arch/powerpc/kernel/btext.o: warning: objtool: btext_map+0x14: unannotated intra-function call
 
- I'm all ears.
-
-> The System V ABI MIPS supplement [0] says the following:
-> 
-> The registers listed below have the specified contents at process entry:
-> 	...
-> 
-> 	$sp The stack pointer holds the address of the bottom of the stack, which
-> 	must be doubleword (8 byte) aligned.
-> 	...
-> 
-> However "process entry" is main(), while this code is running before main.
-
- Umm, no, process entry definitely is not main(); if you refer to the 
-somewhat obsolete and inaccurate MIPS psABI, then please note that the 
-paragraph right above your quote says:
-
-$2	A non-zero value specifies a function pointer the application 
-	should register with atexit(BA_OS).  If $2 contains zero, no 
-	action is required.
-
-and one immediately below it says:
-
-$31	The return address register is set to zero so that programs that 
-	search backward through stack frames (stack backtracing) recognize 
-	the last stack frame, that is, a stack frame with a zero in the 
-        saved $31 slot.
-
-and there is more on the initial process stack earlier on, including the 
-location of the auxiliary vector.  All it making it clear it's not main() 
-this specification refers to, but the entry point from the OS kernel (then 
-of course you're aware already it's o32 it talks about; n64/n32 requires 
-16 bytes, but then again we only have secondary references[1][2], in this 
-case for SGI IRIX).
-
-> The kernel always aligns the stack to a multiple of 16 bytes.
-> See the usage of STACK_ROUND() in fs/binfmt_elf.c.
-> 
-> So I guess we could remove the manual alignment.
-> (At least for alignments of 16 bytes and less)
-
- I think they all need to go then, but then stack pointer adjustments have 
-to be made in multiples of the alignment required by the psABI of course.
-
-> > > +
-> > > +		/* ABI requires current function address in $t9 */
-> > > +#if defined(_ABIO32) || defined(_ABIN32)
-> > > +		"lui $t9, %hi(_start_c)\n"
-> > >  		"ori $t9, %lo(_start_c)\n"
-> > > +#else
-> > > +		"lui  $t9, %highest(_start_c)\n"
-> > > +		"ori  $t9, %higher(_start_c)\n"
-> > > +		"dsll $t9, 0x10\n"
-> > > +		"ori  $t9, %hi(_start_c)\n"
-> > > +		"dsll $t9, 0x10\n"
-> > > +		"ori  $t9, %lo(_start_c)\n"
-> > 
-> >  This could be optimised using a temporary (e.g. $at, but I guess any will 
-> > do as I gather we don't have any ABI abnormalities here).
-> 
-> clang rejects manual usage of $at without ".set noat".
-> So $t0 is simpler.
-
- It's always `.set at' that's required to use $at by hand; it's been so 
-long before clang was even thought of.  Or you could use LA and DLA macros 
-for o32/n32 and n64 respectively for the assembler to do all this stuff 
-for you in the default `.set reorder' mode (assuming that clang is not 
-completely broken here).
-
-> > > +#endif
-> > > +
-> > >  		"jalr $t9\n"             /* transfer to c runtime
-> > > */
-> > >  		" nop\n"                 /* delayed slot
-> > 
-> >  On an unrelated matter JALR above ought to be JAL (or otherwise there's 
-> > no point in using the .cprestore pseudo-op).  And I fail to see why this 
-> > code has to be "noreorder" (except for the .cpload piece, of course), it's 
-> > just asking for troubles.
-> 
-> Thanks for the hints.
-> 
-> Without "noreorder", is the manually addition of the delayed slot "nop"
-> still necessary?
-
- It's not.  It's for the `.set noreorder' mode only, to fill the branch 
-delay slot by hand.  Otherwise it'll become just a useless instruction 
-following the call sequence and executed after return.
-
-> These points also apply to the existing O32 implementation, right?
-
- Correct.  Sadly it's the first time I see this code.
-
- Overall I find it a bit of a chimera: it uses `.set noreorder' and 
-explicit relocations on one hand, and then high-level assembly `.cpload' 
-and `.cprestore' pseudo-ops on the other, effectively mixing the two 
-styles of assembly.
-
- The pseudo-ops come from times when using assembly macros was the norm 
-and are there to support that coding model where macros rely on these 
-pseudo-ops, and before the use of explicit relocations became the norm at 
-least for GCC.  In the absence of assembly macros you can write code 
-expansions for these pseudo-ops by hand, just as what GCC does nowadays 
-(in the `-mexplicit-relocs' mode, which is usually the default).
-
- But due to architecture variations it's very hard to write handcoded 
-assembly in the `.set noreorder' mode: you need to take care of all the 
-data dependencies that appear due to the lack of interlocking between 
-pipeline stages, which results in code that either works correctly 
-everywhere, but is suboptimal for newer architecture revisions, or code 
-that works better with newer architecture revisions, but is actually 
-broken with earlier ones.
-
- About the only typical case where you do want to use `.set noreorder' is 
-to schedule a branch delay slot by hand due to a data anti-dependency 
-between the two instructions.  Patchable/self-modifying code is a less 
-frequent case.  And I had literally one case in my entire career where I 
-wanted to actually jump to a branch delay slot instruction (it's still 
-there in arch/mips/include/asm/div64.h, in do_div64_32(); see label #2).
-
- Also it appears no code in this function actually relies on $gp having 
-been set up, so perhaps this stuff can just be discarded in the first 
-place?
-
-References:
-
-[1] "MIPSpro 64-Bit Porting and Transition Guide", 
-    <https://irix7.com/techpubs/007-2391-006.pdf>
-
-[2] "MIPSpro N32 ABI Handbook", 
-    <https://irix7.com/techpubs/007-2816-004.pdf>
-
-  Maciej
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
