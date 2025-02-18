@@ -1,215 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37631B85D1
-	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FD022DF8D;
+	Tue, 18 Feb 2025 09:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866848; cv=none; b=K8BjZ8WaeM8bNr/iXYeI9MmHEGa8u0FfyeMZXlrtzlsuVptYP+4ETGxOutH2hpYXts0Ph1fKFeDfSVh2XRMk+kPxTkyerIbQv1dzHLS7JioCOuIZDamyZ8vxvisNkE5I48k5XfveW7NzusKYCFJaipBT0840Ymar31+WqdJ4CpE=
+	t=1739870056; cv=none; b=RiZVj5lRMd8kv0dl3Qu7SA4k/jP3R/vW2Ym/jBz90rNiuDS7LxokHamyGQVYFE86uiMp6FPrSU9cFUGE6kPFJw3bTCHMsiv3JmSCqQIqqH4WV5kxLhXwtnJ07GcuNd1mZHcKAAWdctSb3g5QoDQvTkA6J4HmMB6zKoHPEkMPq9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866848; c=relaxed/simple;
-	bh=AlEyxh75+r5QiPqcPtjpo+/HVa79C4HAQUROM4qi8Mc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aZ49P8OErsjKl4AoazfsZasYIGXu6s5UZ8hWJLsGBnXWccclddRgT2+HtTPBxyrPxNuATjYRQNvckc5fViNmKmtLF7llg15vEGAucLRu48kYoz/mvDQ6nCitnjt8hPcoDU42tSv8CaOz+0tQnxJ97l82qfYTg/crrHWydfq0a34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eRkaE6I5; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739870056; c=relaxed/simple;
+	bh=lYEEJ11WKQ1RuT6GwkjTPXTRlBbW23RX47OY/QzK5u8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VpREssgY3YCtrBhBplYuqyrZPrYUns78wJU6XH7QGPhkiuCSO2zVsWnAmekPWlqEA1z0EpaOgSPwdpxcteboj/I+SkLU5orbVWXZpzpaWsJCWq/MdVu41zNOa6Bzco8HqGPdt4+Hi08/YT8go3fIOFKluybA5qPksyZ3QaIKEPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=df2vx1Jk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jhw1uHf2; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eRkaE6I5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739866847; x=1771402847;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AlEyxh75+r5QiPqcPtjpo+/HVa79C4HAQUROM4qi8Mc=;
-  b=eRkaE6I5/2OliVANuvq01HFglALM2FhrNQ293lcR7gJ4NbSeLzVEhuMn
-   82aKqjn8ZsNt+uLQnW29ziafBkiXDTK//a3VgDYPvzxqMPMby8Jo7Q9oT
-   DAqmXGuiJDzR9EaWwhQI2QJpQsL2vZkxAqZ/92Ki4pIALqyBy5zO7Gbmh
-   HT0gBBsNAR+spUYqkvIcRabM2y7jeUPeF+94FhG0+hH6P0mCOmeuAex9q
-   PNF+eXZ1SnsWxxsiFjhz2X4XE7b349ziiYdNAMxSdrm1zOhh0rcZwKRpM
-   6i/xMSNPS+jggGZbU9+w36XSvc3Idw75nDp/oFHFR+y7X1afUJz7fQVV5
-   g==;
-X-CSE-ConnectionGUID: 0xeXm3JwRjCWija34/uD+A==
-X-CSE-MsgGUID: UUjNxMAATkinXUxxRfTCyw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150607"
-X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="28150607"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:20:46 -0800
-X-CSE-ConnectionGUID: WmLxTe3CRhiKO8fnH2NB1g==
-X-CSE-MsgGUID: lzXfGprHTkiUTI4Yyjdk7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119248085"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.49])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:20:25 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: kees@kernel.org,
-	julian.stecklina@cyberus-technology.de,
-	kevinloughlin@google.com,
-	peterz@infradead.org,
-	tglx@linutronix.de,
-	justinstitt@google.com,
-	catalin.marinas@arm.com,
-	wangkefeng.wang@huawei.com,
-	bhe@redhat.com,
-	ryabinin.a.a@gmail.com,
-	kirill.shutemov@linux.intel.com,
-	will@kernel.org,
-	ardb@kernel.org,
-	jason.andryuk@amd.com,
-	dave.hansen@linux.intel.com,
-	pasha.tatashin@soleen.com,
-	ndesaulniers@google.com,
-	guoweikang.kernel@gmail.com,
-	dwmw@amazon.co.uk,
-	mark.rutland@arm.com,
-	broonie@kernel.org,
-	apopple@nvidia.com,
-	bp@alien8.de,
-	rppt@kernel.org,
-	kaleshsingh@google.com,
-	richard.weiyang@gmail.com,
-	luto@kernel.org,
-	glider@google.com,
-	pankaj.gupta@amd.com,
-	andreyknvl@gmail.com,
-	pawan.kumar.gupta@linux.intel.com,
-	kuan-ying.lee@canonical.com,
-	tony.luck@intel.com,
-	tj@kernel.org,
-	jgross@suse.com,
-	dvyukov@google.com,
-	baohua@kernel.org,
-	samuel.holland@sifive.com,
-	dennis@kernel.org,
-	akpm@linux-foundation.org,
-	thomas.weissschuh@linutronix.de,
-	surenb@google.com,
-	kbingham@kernel.org,
-	ankita@nvidia.com,
-	nathan@kernel.org,
-	maciej.wieczor-retman@intel.com,
-	ziy@nvidia.com,
-	xin@zytor.com,
-	rafael.j.wysocki@intel.com,
-	andriy.shevchenko@linux.intel.com,
-	cl@linux.com,
-	jhubbard@nvidia.com,
-	hpa@zytor.com,
-	scott@os.amperecomputing.com,
-	david@redhat.com,
-	jan.kiszka@siemens.com,
-	vincenzo.frascino@arm.com,
-	corbet@lwn.net,
-	maz@kernel.org,
-	mingo@redhat.com,
-	arnd@arndb.de,
-	ytcoode@gmail.com,
-	xur@google.com,
-	morbo@google.com,
-	thiago.bauermann@linaro.org
-Cc: linux-doc@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org
-Subject: [PATCH v2 14/14] x86: Make software tag-based kasan available
-Date: Tue, 18 Feb 2025 09:15:30 +0100
-Message-ID: <d266338a0eae1f673802e41d7230c4c92c3532b3.1739866028.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
-References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="df2vx1Jk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jhw1uHf2"
+Date: Tue, 18 Feb 2025 10:14:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739870053;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YejFzVVvTbx480WIGNfaPb/xj9++hESGctXXz431OO8=;
+	b=df2vx1JkD4DEQPrt/BPuCV077kmd75tiRcFvMzE875wych5ZkiYvfUnB77HbsiVkMnOqdI
+	W95svi4Km54nuUdd0hlyMGE9SyV3Nj9857rz+BwQa65QzYZEyMvhbZtB794tRYM/iPQg/i
+	8qVq1IZpvGrjauUgwIxOa3HAYd2CsldbiufQb8MDUwGAcKV3w0nNBbVkJoU9CQdO8KzWCS
+	CQ0MyFRk+G7Ol0P38gm0TM47tCyVVaBJpASDgBt2il6VOJ3nitxvGIuyB0K4EUOC+S6nap
+	oWh7v4coIpp08Nr96FH86ik7dcdKDQr3/A0CGo3GV8m+vNXdR5UK1lcBv+hT9A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739870053;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YejFzVVvTbx480WIGNfaPb/xj9++hESGctXXz431OO8=;
+	b=jhw1uHf2SjZc1BZRWONmncC870CHsJ+CyLTWwsRXBC3L9hGrUyLK7u5rmLvZMcp5rS6sPS
+	qsLRkvzg49YagtAQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: kasan-dev@googlegroups.com, linux-mm@kvack.org
+Cc: Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	kernel test robot <lkp@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] dma: kmsan: Export kmsan_handle_dma() for modules.
+Message-ID: <20250218091411.MMS3wBN9@linutronix.de>
+References: <202502150634.qjxwSeJR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202502150634.qjxwSeJR-lkp@intel.com>
 
-Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignore
-(TBI) that allows the software tag-based mode on arm64 platform.
+kmsan_handle_dma() is used by virtio_ring() which can be built as a
+module. kmsan_handle_dma() needs to be exported otherwise building the
+virtio_ring fails.
 
-Set scale macro based on KASAN mode: in software tag-based mode 32 bytes
-of memory map to one shadow byte and 16 in generic mode.
+Export kmsan_handle_dma for modules.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202502150634.qjxwSeJR-lkp@intel.com/
+Fixes: 7ade4f10779cb ("dma: kmsan: unpoison DMA mappings")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
-Changelog v2:
-- Remove KASAN dense code.
+ mm/kmsan/hooks.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- arch/x86/Kconfig                | 6 ++++++
- arch/x86/boot/compressed/misc.h | 1 +
- arch/x86/include/asm/kasan.h    | 2 +-
- arch/x86/kernel/setup.c         | 2 ++
- 4 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f4ef64bf824a..dc48eb5b664f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -195,6 +195,7 @@ config X86
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN			if X86_64
- 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
-+	select HAVE_ARCH_KASAN_SW_TAGS		if ADDRESS_MASKING
- 	select HAVE_ARCH_KFENCE
- 	select HAVE_ARCH_KMSAN			if X86_64
- 	select HAVE_ARCH_KGDB
-@@ -402,6 +403,11 @@ config KASAN_SHADOW_OFFSET
- 	hex
- 	default 0xdffffc0000000000 if KASAN_GENERIC
+diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
+index 3ea50f09311fd..3df45c25c1f62 100644
+--- a/mm/kmsan/hooks.c
++++ b/mm/kmsan/hooks.c
+@@ -357,6 +357,7 @@ void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
+ 		size -= to_go;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(kmsan_handle_dma);
  
-+config KASAN_SHADOW_SCALE_SHIFT
-+	int
-+	default 4 if KASAN_SW_TAGS
-+	default 3
-+
- config HAVE_INTEL_TXT
- 	def_bool y
- 	depends on INTEL_IOMMU && ACPI
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index dd8d1a85f671..f6a87e9ad200 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -13,6 +13,7 @@
- #undef CONFIG_PARAVIRT_SPINLOCKS
- #undef CONFIG_KASAN
- #undef CONFIG_KASAN_GENERIC
-+#undef CONFIG_KASAN_SW_TAGS
- 
- #define __NO_FORTIFY
- 
-diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-index 4bfd3641af84..cfc31e4a2f70 100644
---- a/arch/x86/include/asm/kasan.h
-+++ b/arch/x86/include/asm/kasan.h
-@@ -6,7 +6,7 @@
- #include <linux/kasan-tags.h>
- #include <linux/types.h>
- 
--#define KASAN_SHADOW_SCALE_SHIFT 3
-+#define KASAN_SHADOW_SCALE_SHIFT CONFIG_KASAN_SHADOW_SCALE_SHIFT
- 
- /*
-  * Compiler uses shadow offset assuming that addresses start
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index cebee310e200..768990c573ea 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1124,6 +1124,8 @@ void __init setup_arch(char **cmdline_p)
- 
- 	kasan_init();
- 
-+	kasan_init_sw_tags();
-+
- 	/*
- 	 * Sync back kernel address range.
- 	 *
+ void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
+ 			 enum dma_data_direction dir)
 -- 
-2.47.1
-
+2.47.2
