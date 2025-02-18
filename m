@@ -1,59 +1,76 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFFF79E1;
-	Tue, 18 Feb 2025 00:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4126579E1;
+	Tue, 18 Feb 2025 00:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739839016; cv=none; b=mL6WdFV+3CDGPvhSOepfmUIQswsGUUxmdrYaZVYoydUF6eN1Cuu4rh6yHGb3/M18gmMo8fBkDbiTWONRyOaO3czIId+DmUN7VYl+3iT5o69RPUMDowBC6FiFeOaUY9gyykiCnc/xWOAWlGC4qeSrgIbasY1XVfelHCjYygCgURQ=
+	t=1739839020; cv=none; b=q8VLKALtbt+e9MJu2uYNmz3ZevqktmsZ53Y/NqaE+PfqoUDkSUCEKtnOLzlR1ap9gICDxzT48USmek/neTdiNtHTNcbwtBlSKQ0H9tnQuRbTJu1mTQXbP0pO/8gTsClQ69Ms7JLyK4kP6Uo/Z3LTY9QTh0nbE6+LqwWj2xwQisQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739839016; c=relaxed/simple;
-	bh=ed7gJMoc14ksYAGv2CHJDR2c884AJd5/WFnNACNTC5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gqaN6OE/fFN3kupRHXMCE545jVDOHztSbya0csrvNTDcHZMS6S2x/PE5rF+C5RkfW7mUeKF3zsMsP7iT5wBP7kdVXY8cZbDjniah5pVzwPsibh/SvQZvpus6HDj/AJcUX8sHdbvCc7uwTA1k/18Vyy18EVddnwqqhKsOqLsE/Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=naHa8UhQ; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1739839020; c=relaxed/simple;
+	bh=Ny5YdOPUC/jjkTovynaC4bFLGUWHmOsAUX5YovP2erk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VkG8FaZgxrzZlQpnRPTvJERKc8Hpj1WQbsQKB9mW68KiGZWw1wV0Xc9uw6G32FTzyheERTm8BbTjr92kPaSavVQlUQKfUjjxKGoNsQEcFjg4NacOvYRFslDF1dQpEsh6GvHtEdq7l+vcGr0T3LMTaTQ+ZfhzGma//ao1gtxy7zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hHwoitdL; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="naHa8UhQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hHwoitdL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739839014; x=1771375014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ed7gJMoc14ksYAGv2CHJDR2c884AJd5/WFnNACNTC5c=;
-  b=naHa8UhQoWZTm8XvpOZrlUxMJCTsiffz/kZFBOg0YSMFH18l5+IlBi6l
-   z1PgJessYSU9rXKT1QT7Mz1M904FjNEU8h1+oi7nGgiJ9M11O2tl/IHFC
-   SA+eLSzLHlqjvqlMgmihP8DXmyTw54gr1vpSEPwzUmPOxFJT1wavGX00N
-   RnWZqTamFFHeul2K2wTwNWx+q4Nmf2Soy7rInP1Qas0zljlquyf5HxVjv
-   uIj9E6XXjK1ehULZOeVCuaHz72BKQ8zm+vCyNRf4d0lp8/luxpRjuV00M
-   1fPuokiQ20kE/np14Hj9lkhr+Mc7IUfR1Jrhcy6erTqUwH5C/NonoFhNU
-   g==;
-X-CSE-ConnectionGUID: ADNOypeNQSSbyomLbQnMZA==
-X-CSE-MsgGUID: jQlYJ/3dTt2LHVgVuPMCUg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="57925318"
+  t=1739839019; x=1771375019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ny5YdOPUC/jjkTovynaC4bFLGUWHmOsAUX5YovP2erk=;
+  b=hHwoitdLevZ313bwTRw0ay/sHRJk1lCopmw8SEQ22337HgbVko9iQZ6+
+   /lwTmbIQcQ+c9zfjwbAhcDq7b/zT/fObBH8eHxA9lbXRdAAWL8XuC5hAP
+   CElBdsHPocofLnzIJp0kLKGq85gjUB4HacIFpyoPIFDkt8S++PPHyocKb
+   RCV7zclluivwQonxKy0gC5ROrLmfX+QRbwrrTU+Mh0TdJ5f66NAgFg44e
+   P6TlzSz1Ioj6H1A3zkeJxi0cKRcyGkU0tofj1Rf3onDl4kve01fTwlDYL
+   /m5s3t3MasAq2vBKV3n9ZAzHefdd04z/ThtGnMPjV9iZFTSbEJDQaRdQC
+   A==;
+X-CSE-ConnectionGUID: ak05g4tARRuXF5I3sQwzKw==
+X-CSE-MsgGUID: Hf1J/GtqQAmSqO7Vck/zew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="57925325"
 X-IronPort-AV: E=Sophos;i="6.13,294,1732608000"; 
-   d="scan'208";a="57925318"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 16:36:53 -0800
-X-CSE-ConnectionGUID: P6DV/xevTB2TVmpTMdoD6Q==
-X-CSE-MsgGUID: 2AgFVpSOQPqdrWlflKexMg==
+   d="scan'208";a="57925325"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 16:36:58 -0800
+X-CSE-ConnectionGUID: eMXxnhFWSZqSzMmcCwBiMQ==
+X-CSE-MsgGUID: 8/qY5GQfQM+imgwsKRbQew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,294,1732608000"; 
-   d="scan'208";a="114221992"
+   d="scan'208";a="114107634"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Feb 2025 16:36:52 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 17 Feb 2025 16:36:52 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkBbV-001DjE-1d;
+	id 1tkBbV-001Dj9-1S;
 	Tue, 18 Feb 2025 00:36:49 +0000
-Date: Tue, 18 Feb 2025 08:36:42 +0800
+Date: Tue, 18 Feb 2025 08:36:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Jingoo Han <jingoohan1@gmail.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jeff Johnson <jjohnson@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: [linuxppc:merge-test 4/12] arch/powerpc/kernel/btext.o: warning:
- objtool: btext_map+0x14: unannotated intra-function call
-Message-ID: <202502180818.XnFdv8I8-lkp@intel.com>
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, mhi@lists.linux.dev,
+	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+	quic_jjohnson@quicinc.com, quic_pyarlaga@quicinc.com,
+	quic_vbadigan@quicinc.com, quic_vpernami@quicinc.com,
+	quic_mrana@quicinc.com,
+	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Subject: Re: [PATCH 4/8] PCI: dwc: qcom: Update ICC & OPP votes based upon
+ the requested speed
+Message-ID: <202502180859.1y6qqeIk-lkp@intel.com>
+References: <20250217-mhi_bw_up-v1-4-9bad1e42bdb1@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,22 +79,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250217-mhi_bw_up-v1-4-9bad1e42bdb1@oss.qualcomm.com>
 
-tree:   https://github.com/linuxppc/linux merge-test
-head:   542660f0783c3796c7ada3cb62211a3d2ac5e0ed
-commit: a727152a90f22d2410b708c56d4152a500c99730 [4/12] powerpc/static_call: Implement inline static calls
-config: powerpc-randconfig-003-20250218 (https://download.01.org/0day-ci/archive/20250218/202502180818.XnFdv8I8-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502180818.XnFdv8I8-lkp@intel.com/reproduce)
+Hi Krishna,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 0ad2507d5d93f39619fc42372c347d6006b64319]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Chaitanya-Chundru/PCI-update-current-bus-speed-as-part-of-pci_bus_add_devices/20250217-144050
+base:   0ad2507d5d93f39619fc42372c347d6006b64319
+patch link:    https://lore.kernel.org/r/20250217-mhi_bw_up-v1-4-9bad1e42bdb1%40oss.qualcomm.com
+patch subject: [PATCH 4/8] PCI: dwc: qcom: Update ICC & OPP votes based upon the requested speed
+config: powerpc64-randconfig-002-20250218 (https://download.01.org/0day-ci/archive/20250218/202502180859.1y6qqeIk-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502180859.1y6qqeIk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502180818.XnFdv8I8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502180859.1y6qqeIk-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/powerpc/kernel/btext.o: warning: objtool: btext_map+0x14: unannotated intra-function call
+>> drivers/pci/controller/dwc/pcie-qcom.c:1319:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (!IS_ERR(opp)) {
+                       ^~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1328:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1319:3: note: remove the 'if' if its condition is always true
+                   if (!IS_ERR(opp)) {
+                   ^~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1311:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           } else if (pcie->use_pm_opp) {
+                      ^~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1328:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1311:9: note: remove the 'if' if its condition is always true
+           } else if (pcie->use_pm_opp) {
+                  ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-qcom.c:1302:9: note: initialize the variable 'ret' to silence this warning
+           int ret, freq_mbps;
+                  ^
+                   = 0
+   2 warnings generated.
+
+
+vim +1319 drivers/pci/controller/dwc/pcie-qcom.c
+
+  1296	
+  1297	static int qcom_pcie_set_icc_opp(struct qcom_pcie *pcie, int speed, int width)
+  1298	{
+  1299		struct dw_pcie *pci = pcie->pci;
+  1300		unsigned long freq_kbps;
+  1301		struct dev_pm_opp *opp;
+  1302		int ret, freq_mbps;
+  1303	
+  1304		if (pcie->icc_mem) {
+  1305			ret = icc_set_bw(pcie->icc_mem, 0,
+  1306					 width * QCOM_PCIE_LINK_SPEED_TO_BW(speed));
+  1307			if (ret) {
+  1308				dev_err(pci->dev, "Failed to set bandwidth for PCIe-MEM interconnect path: %d\n",
+  1309					ret);
+  1310			}
+  1311		} else if (pcie->use_pm_opp) {
+  1312			freq_mbps = pcie_dev_speed_mbps(pcie_link_speed[speed]);
+  1313			if (freq_mbps < 0)
+  1314				return -EINVAL;
+  1315	
+  1316			freq_kbps = freq_mbps * KILO;
+  1317			opp = dev_pm_opp_find_freq_exact(pci->dev, freq_kbps * width,
+  1318							 true);
+> 1319			if (!IS_ERR(opp)) {
+  1320				ret = dev_pm_opp_set_opp(pci->dev, opp);
+  1321				if (ret)
+  1322					dev_err(pci->dev, "Failed to set OPP for freq (%lu): %d\n",
+  1323						freq_kbps * width, ret);
+  1324				dev_pm_opp_put(opp);
+  1325			}
+  1326		}
+  1327	
+  1328		return ret;
+  1329	}
+  1330	
 
 -- 
 0-DAY CI Kernel Test Service
