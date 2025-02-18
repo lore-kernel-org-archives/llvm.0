@@ -1,60 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB572862AD;
-	Tue, 18 Feb 2025 21:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E141A8F6D;
+	Tue, 18 Feb 2025 23:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739914967; cv=none; b=BWs97Vr7NdCMReHtSCo/GF42eR8dw5zx9/KjtNsTl8zvOscjYe5Ej7FxIJJ+NnQwUUouczIdsbslFZN5qWzwANW9QxJmUS0W1EMoMQqGa7wxAdaLp3FhgP4E2M0EfTeyiRZS8g5MqiWuwU/vUhr20sW2TkMpXBG8kAkO+Ln1qJU=
+	t=1739920590; cv=none; b=bQzBxhHLk+h05U1ala8/To9OYJxyC+zCOrXuvDcLpHnyCBwwHtqpxmYgN7PFH4I9U3iO8goamThQBK66nbHDk2EBU1RqLq1qLlL9+qB5GLhneFsPOw3+T33tTdqhBNK1UzGQ7D4DrKtXMZtPgGrrFrxMcwJzuQslrsU50LS3kqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739914967; c=relaxed/simple;
-	bh=49i9DiL384YGpF/Wcr9Fo32Df9PMmU00eMiy4kAMXR8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Fv4m7ke96a3+vgaMViQboRDmIr3MQ1YWNw23Zd2rzPuzvUkIUGVmYXgSZQQcizNiBXflaxlgHdEdKpi5BOFnqjuxQzF3VDA7sKcJkcRFuS5olfXInmDhq6xKd435D4TNcpy3yQm1ghBimkjRzNqk0UJqA/0ijCpT+ENtG4z9u34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d/agESr4; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1739920590; c=relaxed/simple;
+	bh=71NOAhlA1zRx6LOJehloexvb8Dr2yZK3ZKDG/fCQnK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TUVVemDCYJSj6HKlRJDQqOXvamK/L4JjsmeCAciY61HH9WsLVQiZVuuqzfmrxPEofdYYzdZK15TCmewRC6582ERPPTzbrPnKBIv2v6PUUsR4OHwNQV5DpmPduwfQphq3hs0ryuTqoif4z4qldpsSkIFaB92Wjs4QB6jLuzh7+SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YCwqqIQv; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d/agESr4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YCwqqIQv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739914966; x=1771450966;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=49i9DiL384YGpF/Wcr9Fo32Df9PMmU00eMiy4kAMXR8=;
-  b=d/agESr4/4pdVvoyHxn6HCo4Muf9+WEb5VDt79T5mYhpa75XB1xASwHU
-   vSUhc33gpoa014En0IXgM1CVLK/Nc074vWCzuwxZL2jSmrAl5e/+x8tRo
-   X2hPqlDucGDaCt0sDKNNSLYEoqdDIYPtVOPxk3T6GfyYBxHMcNTxAGdvp
-   Iz+wDDz9+It4UT8C2rAMkS+d8258rdn4Z4EpF6eBlXlytx+oVOvVmVwxe
-   RbOckM+imnCb2xnr2bPBHdRHfkbD487x5zWHMjBvCfm/sCR3X0DHF1Pm9
-   M2tyLZbMmp8EobGoKRJuK+FtE3MBiC/bnbD0vTAtWu29IVhkE0b4GAmFG
-   g==;
-X-CSE-ConnectionGUID: Ys0mFngLTOe3Ay49ZGSTWg==
-X-CSE-MsgGUID: iS01eR4gQ0GEj2umKcVo2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40841597"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="40841597"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 13:42:44 -0800
-X-CSE-ConnectionGUID: Ovh+6ZByRySTbF8R+nKeBQ==
-X-CSE-MsgGUID: 9AGFUNBaT6qvZfkPSINy+Q==
-X-ExtLoop1: 1
+  t=1739920588; x=1771456588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=71NOAhlA1zRx6LOJehloexvb8Dr2yZK3ZKDG/fCQnK8=;
+  b=YCwqqIQvqWYf0hURb136Jh/jQhkPjhN2R0ZaBYXmaPNe1abNE9FFKZyQ
+   W6wVTmp3qGouHC5MflzHkoTkGZZfErSRMdRgw8pTWsquybenxYz8cJGhp
+   f/mybbXJAWmtAbfrJDFieG4J7a4RL5826d9i0CIP5xnSjDuiWMRLBsUwc
+   4ugPV45eh2k3rFxSG82CzJp5rz5gXI8uDWif0gI5u3FJXy542WC4qoN0M
+   ExF3FUvh5+g/UheBP/eMLEHm44jqRNJp+VARpu/qw+I/ivGNCvv2UqO+x
+   2ekPQlmq321cGvejme2VBflt1I530Se7OI1+sVlX8LKN+U0sI5037Q2gJ
+   Q==;
+X-CSE-ConnectionGUID: 0V+0y87eQ/CRNxwyHorzPg==
+X-CSE-MsgGUID: 3Qsc10sBRZ22haoscGdEwA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="51624053"
 X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="119630353"
+   d="scan'208";a="51624053"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 15:16:28 -0800
+X-CSE-ConnectionGUID: J2RfxhNgTjGOZ+AaJZpasA==
+X-CSE-MsgGUID: KvOPBGGWT0q5JaJFQ+I7sg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119193650"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 18 Feb 2025 13:42:41 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 18 Feb 2025 15:16:21 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkVMU-0000uR-23;
-	Tue, 18 Feb 2025 21:42:38 +0000
-Date: Wed, 19 Feb 2025 05:42:31 +0800
+	id 1tkWp8-0000xP-1Z;
+	Tue, 18 Feb 2025 23:16:18 +0000
+Date: Wed, 19 Feb 2025 07:15:42 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mel Gorman <mgorman@suse.de>
+To: Fred Treven <ftreven@opensource.cirrus.com>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Simon Trimmer <simont@opensource.cirrus.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	James Ogletree <jogletre@opensource.cirrus.com>,
+	Ben Bright <ben.bright@cirrus.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Jeff LaBundy <jeff@labundy.com>, Heiko Stuebner <heiko@sntech.de>,
+	Karel Balej <balejk@matfyz.cz>,
+	Igor Prusov <ivprusov@salutedevices.com>,
+	Jack Yu <jack.yu@realtek.com>,
+	Weidong Wang <wangweidong.a@awinic.com>,
+	Binbin Zhou <zhoubinbin@loongson.cn>,
+	Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
+	Paul Handrigan <paulha@opensource.cirrus.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nuno Sa <nuno.sa@analog.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kees Cook <kees@kernel.org>
-Subject: [linux-next:master 2706/4377]
- drivers/input/touchscreen/fsl-imx25-tcq.c:148:8: warning: shift count is
- negative
-Message-ID: <202502190532.CkyUG9Ua-lkp@intel.com>
+	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH RESEND 5/7] mfd: cs40l26: Add support for CS40L26 core
+ driver
+Message-ID: <202502190628.g4aG7l2q-lkp@intel.com>
+References: <20250204231835.2000457-6-ftreven@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,249 +88,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250204231835.2000457-6-ftreven@opensource.cirrus.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   e5d3fd687aac5eceb1721fa92b9f49afcf4c3717
-commit: fe348e05890776897acb931eb39987fcef0f6f65 [2706/4377] mm: security: Check early if HARDENED_USERCOPY is enabled
-config: powerpc-randconfig-001-20250219 (https://download.01.org/0day-ci/archive/20250219/202502190532.CkyUG9Ua-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190532.CkyUG9Ua-lkp@intel.com/reproduce)
+Hi Fred,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on broonie-sound/for-next dtor-input/next dtor-input/for-linus linus/master v6.14-rc3 next-20250218]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Fred-Treven/firmware-cs_dsp-Fix-error-checking-in-wseq_write/20250217-181206
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250204231835.2000457-6-ftreven%40opensource.cirrus.com
+patch subject: [PATCH RESEND 5/7] mfd: cs40l26: Add support for CS40L26 core driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250219/202502190628.g4aG7l2q-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190628.g4aG7l2q-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502190532.CkyUG9Ua-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502190628.g4aG7l2q-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-                                        ^      ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:163:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigandnsets, _sig_andn)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
-                   r->sig[3] = op(a3, b3);                                 \
-                   ^      ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_BINOP(sigandnsets, _sig_andn)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:141:3: note: expanded from macro '_SIG_SET_BINOP'
-                   r->sig[2] = op(a2, b2);                                 \
-                   ^      ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_OP(signotset, _sig_not)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:27: note: expanded from macro '_SIG_SET_OP'
-           case 4: set->sig[3] = op(set->sig[3]);                          \
-                                    ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-   #define _sig_not(x)     (~(x))
-                              ^
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_OP(signotset, _sig_not)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
-           case 4: set->sig[3] = op(set->sig[3]);                          \
-                   ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_OP(signotset, _sig_not)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
-                   set->sig[2] = op(set->sig[2]);                          \
-                                    ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-   #define _sig_not(x)     (~(x))
-                              ^
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/input/touchscreen/fsl-imx25-tcq.c:12:
-   In file included from include/linux/input.h:20:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
-   _SIG_SET_OP(signotset, _sig_not)
-   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
-                   set->sig[2] = op(set->sig[2]);                          \
-                   ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
->> drivers/input/touchscreen/fsl-imx25-tcq.c:148:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(0, MX25_CFG_PRECHARGE) |
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   drivers/input/touchscreen/fsl-imx25-tcq.c:149:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(1, MX25_CFG_TOUCH_DETECT) |
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   drivers/input/touchscreen/fsl-imx25-tcq.c:150:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(2, MX25_CFG_X_MEASUREMENT) |
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   drivers/input/touchscreen/fsl-imx25-tcq.c:151:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(3, MX25_CFG_Y_MEASUREMENT) |
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   drivers/input/touchscreen/fsl-imx25-tcq.c:152:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(4, MX25_CFG_PRECHARGE) |
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   drivers/input/touchscreen/fsl-imx25-tcq.c:153:8: warning: shift count is negative [-Wshift-count-negative]
-                        MX25_ADCQ_ITEM(5, MX25_CFG_TOUCH_DETECT));
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:54:3: note: expanded from macro 'MX25_ADCQ_ITEM'
-                   _MX25_ADCQ_ITEM((item) - 8, (x)) : _MX25_ADCQ_ITEM((item), (x)))
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mfd/imx25-tsadc.h:52:39: note: expanded from macro '_MX25_ADCQ_ITEM'
-   #define _MX25_ADCQ_ITEM(item, x)        ((x) << ((item) * 4))
-                                                ^  ~~~~~~~~~~~~
-   34 warnings and 13 errors generated.
---
-   In file included from kernel/printk/printk_ringbuffer.c:4:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:12:
-   In file included from arch/powerpc/include/asm/ptrace.h:342:
-   In file included from include/linux/thread_info.h:221:
-   In file included from include/linux/jump_label.h:257:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/powerpc/include/asm/atomic.h:11:
-   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
-   include/asm-generic/cmpxchg-local.h:26:2: error: call to undeclared function 'raw_local_irq_save'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_local_irq_save(flags);
-           ^
-   include/asm-generic/cmpxchg-local.h:47:2: error: call to undeclared function 'raw_local_irq_restore'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_local_irq_restore(flags);
-           ^
->> include/asm-generic/cmpxchg-local.h:26:21: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
-           raw_local_irq_save(flags);
-                              ^~~~~
-   include/asm-generic/cmpxchg-local.h:18:21: note: initialize the variable 'flags' to silence this warning
-           unsigned long flags, prev;
-                              ^
-                               = 0
-   include/asm-generic/cmpxchg-local.h:60:2: error: call to undeclared function 'raw_local_irq_save'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_local_irq_save(flags);
-           ^
-   include/asm-generic/cmpxchg-local.h:64:2: error: call to undeclared function 'raw_local_irq_restore'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           raw_local_irq_restore(flags);
-           ^
-   include/asm-generic/cmpxchg-local.h:60:21: warning: variable 'flags' is uninitialized when used here [-Wuninitialized]
-           raw_local_irq_save(flags);
-                              ^~~~~
-   include/asm-generic/cmpxchg-local.h:58:21: note: initialize the variable 'flags' to silence this warning
-           unsigned long flags;
-                              ^
-                               = 0
-   2 warnings and 4 errors generated.
+   In file included from drivers/mfd/cs40l26-core.c:12:
+   In file included from include/linux/mfd/core.h:13:
+   In file included from include/linux/platform_device.h:13:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mfd/cs40l26-core.c:1173:3: error: cannot jump from this goto statement to its label
+    1173 |                 goto err_fw_rls;
+         |                 ^
+   drivers/mfd/cs40l26-core.c:1176:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1176 |         guard(mutex)(&cs40l26->lock);
+         |         ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+     309 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:42:1: note: expanded from here
+      42 | __UNIQUE_ID_guard697
+         | ^
+   3 warnings and 1 error generated.
 
 
-vim +148 drivers/input/touchscreen/fsl-imx25-tcq.c
+vim +1173 drivers/mfd/cs40l26-core.c
 
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  140  
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  141  static int imx25_setup_queue_4wire(struct mx25_tcq_priv *priv,
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  142  				   unsigned settling_cnt, int *items)
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  143  {
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  144  	imx25_setup_queue_cfgs(priv, settling_cnt);
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  145  
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  146  	/* Setup the conversion queue */
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  147  	regmap_write(priv->regs, MX25_ADCQ_ITEM_7_0,
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14 @148  		     MX25_ADCQ_ITEM(0, MX25_CFG_PRECHARGE) |
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  149  		     MX25_ADCQ_ITEM(1, MX25_CFG_TOUCH_DETECT) |
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  150  		     MX25_ADCQ_ITEM(2, MX25_CFG_X_MEASUREMENT) |
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  151  		     MX25_ADCQ_ITEM(3, MX25_CFG_Y_MEASUREMENT) |
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  152  		     MX25_ADCQ_ITEM(4, MX25_CFG_PRECHARGE) |
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  153  		     MX25_ADCQ_ITEM(5, MX25_CFG_TOUCH_DETECT));
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  154  
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  155  	/*
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  156  	 * We measure X/Y with 'sample_count' number of samples and execute a
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  157  	 * touch detection twice, with 1 sample each
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  158  	 */
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  159  	priv->expected_samples = priv->sample_count * 2 + 2;
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  160  	*items = 6;
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  161  
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  162  	return 0;
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  163  }
-4f7ed234f2a5dcc Markus Schneider-Pargmann 2015-12-14  164  
-
-:::::: The code at line 148 was first introduced by commit
-:::::: 4f7ed234f2a5dcc26fc56a6e8324d34bbc9afe23 Input: touchscreen: Add imx25 TCQ driver
-
-:::::: TO: Markus Pargmann <mpa@pengutronix.de>
-:::::: CC: Lee Jones <lee.jones@linaro.org>
+  1165	
+  1166	static void cs40l26_dsp_start(struct cs40l26 *cs40l26)
+  1167	{
+  1168		int i, ret;
+  1169	
+  1170		ret = cs40l26_dsp_pre_config(cs40l26);
+  1171		if (ret) {
+  1172			dev_err(cs40l26->dev, "DSP Pre Config. Failed: %d\n", ret);
+> 1173			goto err_fw_rls;
+  1174		}
+  1175	
+  1176		guard(mutex)(&cs40l26->lock);
+  1177	
+  1178		ret = cs_dsp_power_up_multiple(&cs40l26->dsp, cs40l26->wmfw, "cs40l26.wmfw", cs40l26_coeffs,
+  1179					       CS40L26_NUM_COEFF_FILES, "cs40l26");
+  1180		if (ret) {
+  1181			dev_err(cs40l26->dev, "Failed to Power Up DSP\n");
+  1182			goto err_fw_rls;
+  1183		}
+  1184	
+  1185		if (cs40l26->dsp.fw_id != CS40L26_FW_ID) {
+  1186			dev_err(cs40l26->dev, "Invalid firmware ID: 0x%X\n", cs40l26->dsp.fw_id);
+  1187			goto err_fw_rls;
+  1188		}
+  1189	
+  1190		if (cs40l26->dsp.fw_id_version < cs40l26->variant->info->fw_min_rev) {
+  1191			dev_err(cs40l26->dev, "Invalid firmware revision: 0x%X\n",
+  1192				cs40l26->dsp.fw_id_version);
+  1193			goto err_fw_rls;
+  1194		}
+  1195	
+  1196		ret = cs_dsp_run(&cs40l26->dsp);
+  1197		if (ret)
+  1198			dev_err(cs40l26->dev, "DSP Failed to run: %d\n", ret);
+  1199	
+  1200	err_fw_rls:
+  1201		for (i = 0; i < CS40L26_NUM_COEFF_FILES; i++)
+  1202			release_firmware(cs40l26_coeffs[i].coeff_firmware);
+  1203	
+  1204		release_firmware(cs40l26->wmfw);
+  1205	}
+  1206	
 
 -- 
 0-DAY CI Kernel Test Service
