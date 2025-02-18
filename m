@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D3B22E407
-	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4D322FF24
+	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866611; cv=none; b=pKIjBh0elEWIUP4N0C2wVCDcEwGlyeimnR39lTe3axFmKMLpBrop+DSwV6p/bHjnE/dS0+TgqBzKgg5KuZ4PBr3VK3kvixw0oEKtfYs90Br28HDd/l3UfxUV439+buICPNW0iRAO7Cgbdd2Z67ryroNDcQs08ftkch71n2ad4WA=
+	t=1739866631; cv=none; b=jam8e7+P9/BSDsmW3FQWENmeCoyhXSngEIOCUUeqdaEtnEHdPmWkagQVQDGaKBJb5zU11pI3p7HffksIvGYBPLCIquIKYnKWYOLt5frNgbnGGvNc334Eg1hTKZCOl4spkneTCoBPI4oU9nD2MZPL0yOdsESfXn+EZNlscUmasdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866611; c=relaxed/simple;
-	bh=o6OuX/IUpTkc++lHSC1ghvLKQzFvuT/g3IidU8BLRI0=;
+	s=arc-20240116; t=1739866631; c=relaxed/simple;
+	bh=bXO9RjmvEI/gGPfc1eFRDuxO1uk/Wq+sbi65zILen0w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LG3AJJFGj8stULzMt2u6258bAS3nSJlUm/iwpEqbFbTnfs2yp4iyjx6mgQgKJ9fToX5OOlFkwWOmxRt/ExLbFs4IF8cNCRjNv2c+FeTPN/iQVTTokQU3zlu2qNfFIWAAVKNerLjXm81JpCBCFivDbCks+A3ALlmTfSPmLlpb+LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IHT0uC2G; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=hbMMZiuawELSFj8iefPNn+BcbXpnlpRsEnKKqb0KYFB+UjmhVNNGl6+GV44JQygXrxlyHuOITxvnTIPHBPTqyAyIGB3UO0tvocw1c/XcRn7Qw2Vs/QY9TIO8M9eP4g9jRV4sM6bReaLuICF/GSZIJRq6fuuc5zznwLdAgcx0GEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NbUJNHgj; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IHT0uC2G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NbUJNHgj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739866610; x=1771402610;
+  t=1739866630; x=1771402630;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=o6OuX/IUpTkc++lHSC1ghvLKQzFvuT/g3IidU8BLRI0=;
-  b=IHT0uC2GkgJfPSugFmVEgcGMvlhPxcpZetEz3BCvwymRY1jM6nGa5jdw
-   I7buLZx3lRxRKNQr4MQ5rMMbMXLqQuqtLUZSUku4wBcwsSwHA3cxNmcYw
-   8L49nvHPSPXkyZ7v+YPEFOqaikuRnqb27uotJx4UpPg7pL9G2YdjBEs9w
-   CjOzzGJymjA9cPisd5liPu8NyDuXouaO5Su9XAOEsK0o3tzulPdXdybf6
-   CTiYyFWF6oQxVMxVIMCmOZHjjmzEuMMYUZH1H5p6vP4RQ14rjneuDXINx
-   nG0tVHUCy+0135lZ0vpHTjm6z/6F27NSbFxd9grc7STLx1cx4yGsy5LON
-   g==;
-X-CSE-ConnectionGUID: HpmG1iU1Q3Wr2+qQcyaS6g==
-X-CSE-MsgGUID: DUN5t+uQT8W8r58BQRBeZQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150021"
+  bh=bXO9RjmvEI/gGPfc1eFRDuxO1uk/Wq+sbi65zILen0w=;
+  b=NbUJNHgjOKfoXCYFrDqnwF1iHbIRIIV9bCDsPeFc2OoXUoxyhYCt/NU7
+   HdW3qR+lVRqGSD+ufgZAlJbxWLrmgo1UIw8B9F98zrQQtlkyyo9f3dLOz
+   KJuTCEdNzZ+fETOzNhXDVEwX3++WTURRyLTXi1F7lPXjfRXyaFdhe5qZd
+   F5o78S7oYrOt1xQeRUfHCamC3ebCc7WKhu5POJF+2/c3E51U+kdbFzkrc
+   /sIm+nt9JpU9S1YiVBkiLdfN5YvDjHaIHGgDGIzuf2EGDWdSuE5lTm6Z7
+   wMVMd8kyBwOQk5yn5f5I4nvqNsL2IVWCKH0GpvNo9ddBfKHKJtSb4xsA6
+   w==;
+X-CSE-ConnectionGUID: 4jmrjWQST9SiDB9yH8IR5w==
+X-CSE-MsgGUID: DHxFnFO4RV+n+lOXSuDBOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150088"
 X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="28150021"
+   d="scan'208";a="28150088"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:16:49 -0800
-X-CSE-ConnectionGUID: M5Fwk1/OT62LIgJLo5m/Ew==
-X-CSE-MsgGUID: 5TZpocIhS3iT+cIhiLsT0g==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:17:09 -0800
+X-CSE-ConnectionGUID: +HOO78zjQVWglPzSMQGDaA==
+X-CSE-MsgGUID: iC+fl3UpTo2a4V5pAf6vOA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119247387"
+   d="scan'208";a="119247460"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.49])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:16:28 -0800
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:16:49 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: kees@kernel.org,
 	julian.stecklina@cyberus-technology.de,
@@ -116,9 +116,9 @@ Cc: linux-doc@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-arm-kernel@lists.infradead.org,
 	x86@kernel.org
-Subject: [PATCH v2 02/14] kasan: sw_tags: Check kasan_flag_enabled at runtime
-Date: Tue, 18 Feb 2025 09:15:18 +0100
-Message-ID: <b1a6cd99e98bf85adc9bdf063f359c136c1a5e78.1739866028.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v2 03/14] kasan: sw_tags: Support outline stack tag generation
+Date: Tue, 18 Feb 2025 09:15:19 +0100
+Message-ID: <20f64170c0b59cb5185cfe02c4bc833073a2ebe6.1739866028.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
@@ -132,119 +132,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Samuel Holland <samuel.holland@sifive.com>
 
-On RISC-V, the ISA extension required to dereference tagged pointers is
-optional, and the interface to enable pointer masking requires firmware
-support. Therefore, we must detect at runtime if sw_tags is usable on a
-given machine. Reuse the logic from hw_tags to dynamically enable KASAN.
+This allows stack tagging to be disabled at runtime by tagging all
+stack objects with the match-all tag. This is necessary on RISC-V,
+where a kernel with KASAN_SW_TAGS enabled is expected to boot on
+hardware without pointer masking support.
 
-This commit makes no functional change to the KASAN_HW_TAGS code path.
-
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- include/linux/kasan-enabled.h | 15 +++++----------
- mm/kasan/hw_tags.c            | 10 ----------
- mm/kasan/tags.c               | 10 ++++++++++
- 3 files changed, 15 insertions(+), 20 deletions(-)
+ mm/kasan/kasan.h   | 2 ++
+ mm/kasan/sw_tags.c | 9 +++++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/include/linux/kasan-enabled.h b/include/linux/kasan-enabled.h
-index 6f612d69ea0c..648bda9495b7 100644
---- a/include/linux/kasan-enabled.h
-+++ b/include/linux/kasan-enabled.h
-@@ -4,7 +4,7 @@
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index 129178be5e64..2fb26f74dff9 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -636,6 +636,8 @@ void *__asan_memset(void *addr, int c, ssize_t len);
+ void *__asan_memmove(void *dest, const void *src, ssize_t len);
+ void *__asan_memcpy(void *dest, const void *src, ssize_t len);
  
- #include <linux/static_key.h>
- 
--#ifdef CONFIG_KASAN_HW_TAGS
-+#if defined(CONFIG_KASAN_SW_TAGS) || defined(CONFIG_KASAN_HW_TAGS)
- 
- DECLARE_STATIC_KEY_FALSE(kasan_flag_enabled);
- 
-@@ -13,23 +13,18 @@ static __always_inline bool kasan_enabled(void)
- 	return static_branch_likely(&kasan_flag_enabled);
++u8 __hwasan_generate_tag(void);
++
+ void __hwasan_load1_noabort(void *);
+ void __hwasan_store1_noabort(void *);
+ void __hwasan_load2_noabort(void *);
+diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
+index b9382b5b6a37..94465a8a3640 100644
+--- a/mm/kasan/sw_tags.c
++++ b/mm/kasan/sw_tags.c
+@@ -71,6 +71,15 @@ u8 kasan_random_tag(void)
+ 	return (u8)(state % (KASAN_TAG_MAX + 1));
  }
  
--static inline bool kasan_hw_tags_enabled(void)
--{
--	return kasan_enabled();
--}
--
--#else /* CONFIG_KASAN_HW_TAGS */
-+#else /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
- 
- static inline bool kasan_enabled(void)
++u8 __hwasan_generate_tag(void)
++{
++	if (!kasan_enabled())
++		return KASAN_TAG_KERNEL;
++
++	return kasan_random_tag();
++}
++EXPORT_SYMBOL(__hwasan_generate_tag);
++
+ bool kasan_check_range(const void *addr, size_t size, bool write,
+ 			unsigned long ret_ip)
  {
- 	return IS_ENABLED(CONFIG_KASAN);
- }
- 
-+#endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
-+
- static inline bool kasan_hw_tags_enabled(void)
- {
--	return false;
-+	return IS_ENABLED(CONFIG_KASAN_HW_TAGS) && kasan_enabled();
- }
- 
--#endif /* CONFIG_KASAN_HW_TAGS */
--
- #endif /* LINUX_KASAN_ENABLED_H */
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 9a6927394b54..7f82af13b6a6 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -45,13 +45,6 @@ static enum kasan_arg kasan_arg __ro_after_init;
- static enum kasan_arg_mode kasan_arg_mode __ro_after_init;
- static enum kasan_arg_vmalloc kasan_arg_vmalloc __initdata;
- 
--/*
-- * Whether KASAN is enabled at all.
-- * The value remains false until KASAN is initialized by kasan_init_hw_tags().
-- */
--DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
--EXPORT_SYMBOL(kasan_flag_enabled);
--
- /*
-  * Whether the selected mode is synchronous, asynchronous, or asymmetric.
-  * Defaults to KASAN_MODE_SYNC.
-@@ -259,9 +252,6 @@ void __init kasan_init_hw_tags(void)
- 
- 	kasan_init_tags();
- 
--	/* KASAN is now initialized, enable it. */
--	static_branch_enable(&kasan_flag_enabled);
--
- 	pr_info("KernelAddressSanitizer initialized (hw-tags, mode=%s, vmalloc=%s, stacktrace=%s)\n",
- 		kasan_mode_info(),
- 		str_on_off(kasan_vmalloc_enabled()),
-diff --git a/mm/kasan/tags.c b/mm/kasan/tags.c
-index d65d48b85f90..c111d98961ed 100644
---- a/mm/kasan/tags.c
-+++ b/mm/kasan/tags.c
-@@ -32,6 +32,13 @@ enum kasan_arg_stacktrace {
- 
- static enum kasan_arg_stacktrace kasan_arg_stacktrace __initdata;
- 
-+/*
-+ * Whether KASAN is enabled at all.
-+ * The value remains false until KASAN is initialized by kasan_init_tags().
-+ */
-+DEFINE_STATIC_KEY_FALSE(kasan_flag_enabled);
-+EXPORT_SYMBOL(kasan_flag_enabled);
-+
- /* Whether to collect alloc/free stack traces. */
- DEFINE_STATIC_KEY_TRUE(kasan_flag_stacktrace);
- 
-@@ -92,6 +99,9 @@ void __init kasan_init_tags(void)
- 		if (WARN_ON(!stack_ring.entries))
- 			static_branch_disable(&kasan_flag_stacktrace);
- 	}
-+
-+	/* KASAN is now initialized, enable it. */
-+	static_branch_enable(&kasan_flag_enabled);
- }
- 
- static void save_stack_info(struct kmem_cache *cache, void *object,
 -- 
 2.47.1
 
