@@ -1,84 +1,207 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4F226B2BE;
-	Tue, 18 Feb 2025 16:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738CF26A1C7;
+	Tue, 18 Feb 2025 18:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739897246; cv=none; b=RS8gT24vopwCXoSTR9yBJmTEWwoLEaBWLH8p5FqylgwYHWhDTMtUOXNHwuoZZVZONzPp7PiMwO2nS+lBRm4xTmEn/iUfntQwPgYMgE5Ul9MQGNP8NYU6lx+CXIVCyLZOl2rKRCY2oDUoV1B1XPRY6rRntYJFUc9Mjt8XCYThy4Y=
+	t=1739901660; cv=none; b=ADn+glDKvoQ1Su26kQ/8rfGl75zUfS55AGFVkGA2f1m08VpAZdk7QpqpH6JCBvo3LEoaiS3omdadwb7y0XlFiqySqHgUIYE6LsIpIkPaVS1n62+0fyMqHLLrKCyubKwhGsvkuZZhniqxN2SntNe4Ag75E5t6i2e77kSvtADv5Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739897246; c=relaxed/simple;
-	bh=oVD0aPVJ0JUxzWxJf3CwW8yIcPV/QlQ3knpGNTg2Fho=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ExKH8vOOStYYgK7jtQD2YGAp1atPcAoV4mQD4aDYJ8wYRHBeE5XYhX4UiJ9NY4oIeVzkuWuCiOk8GjDlrGB1c8ii9FpA5p4TE15PJ54HEEbf7V0SBpZdtpRLqj1T0q1TTx5j/Sasqq16YM90BBubvBXX4wPERsxM80MLu2IAxxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E792AC4CEE2;
-	Tue, 18 Feb 2025 16:47:25 +0000 (UTC)
-Date: Tue, 18 Feb 2025 08:47:24 -0800
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: ERROR: modpost: "kmsan_handle_dma"
- [drivers/virtio/virtio_ring.ko] undefined!
-Message-ID: <20250218164724.uxcwotv3wgc5y3id@jpoimboe>
-References: <202502150634.qjxwSeJR-lkp@intel.com>
- <20250218114857.oBuLvPYs@linutronix.de>
- <20250218132855.GE40464@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1739901660; c=relaxed/simple;
+	bh=X5cIzxfZwo4klvtzNw2WXQrEgsOXMYEji5/AX5ITIWQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I3AipNVLqk1fnWuWSumvUHg53KzLXho/EvMCKVUCfToZwgb9HFuy5qT2nDHEd0AcWjH3TY8XJvx49Jd0442Xsf+TS8AOKjoOE3CKCLvlHoMualfrZbddFTo4W62YjCC0dk0jabWKE7UPNQvn4swNAoj4Uy4xXzoOMvCD+4XbJ/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9OShoef; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9OShoef"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB29AC4CEEC;
+	Tue, 18 Feb 2025 18:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739901659;
+	bh=X5cIzxfZwo4klvtzNw2WXQrEgsOXMYEji5/AX5ITIWQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Z9OShoeff0MEWqdSawqu7BUaDxShRZlaCP/Hjtxnu+8WTPjbAp6gl5UrOBbgPOEpT
+	 9Vkd5F0SFCi+4Hs0flC1y0wZ0FOQysaIOlnFRZCu9pux4KMdyCyR6Ce1O28U48AqUR
+	 Wy2GGFB6jlXli7TL0zGbqwpXETSAeNjZ57eyvjHWNnZ6x262KFCtyigZL90xCQZgXj
+	 KKH7YqaZevr1eWXOssA3iXQXHeu1MNQA1sR8xMFhOsQ6VP8FTdbtFRAwpsKzvPbIWN
+	 ejmgsK+QR7mg21KqheprBt9F1nxuIvfC9etUV79k5NLeBkpxGMiF1mzKDNv/OvqaWk
+	 aT/tYr2UuU5+Q==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5f88b61399dso10479eaf.1;
+        Tue, 18 Feb 2025 10:00:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW/isGI0ef6mDiPlkYMTWSJdRq5Qk+jxB0+85biR5rQOxH54LiVD6kagraqefKWz/x7OopYy/vKhQ==@lists.linux.dev, AJvYcCWGEXD5U5gtLJrtPImiHS0D1fRPexX3OaBOEQOI0P1K6TEW70gT+VB2a3yDayivV9sQItp7@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz/GlVDStge+fhGI6TrjTczF1ZG058FyDY5Suh38Cvkkl2Ceg9k
+	N911E+m6GAfwr0LcZRPPQbvW6ryeeAi1xLIT4Uz9GI83I8gbl01mTmqaSon1lripDZvGz5knGB9
+	TAShAyqWlV6WzsP1dxCWuVViLbEs=
+X-Google-Smtp-Source: AGHT+IETDgAQnHmB1ym4OH/7fYtrH92mUURjm4lU0AE1WtC++HdD+kU9yToWvnK1uP0KyAPNH389H1MMc1SiyZKwJrE=
+X-Received: by 2002:a05:6808:360c:b0:3f3:d367:52fa with SMTP id
+ 5614622812f47-3f40ef62f11mr422255b6e.18.1739901658915; Tue, 18 Feb 2025
+ 10:00:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250218132855.GE40464@noisy.programming.kicks-ass.net>
+References: <20250210-acpi-platform_profile-fix-cfi-violation-v3-1-ed9e9901c33a@kernel.org>
+In-Reply-To: <20250210-acpi-platform_profile-fix-cfi-violation-v3-1-ed9e9901c33a@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 18 Feb 2025 19:00:47 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hkJPWGv8PaPixC8vsr26vBBdGAL60X9iWwKVji098XRQ@mail.gmail.com>
+X-Gm-Features: AWEUYZnLPIAbvPd7TRilaLcKa1PtFaiC5w37sc-4vTEe472uPGyGX93-jh3odew
+Message-ID: <CAJZ5v0hkJPWGv8PaPixC8vsr26vBBdGAL60X9iWwKVji098XRQ@mail.gmail.com>
+Subject: Re: [PATCH v3] ACPI: platform-profile: Fix CFI violation when
+ accessing sysfs files
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Hans de Goede <hdegoede@redhat.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Kees Cook <kees@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+	stable@vger.kernel.org, John Rowley <lkml@johnrowley.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 02:28:55PM +0100, Peter Zijlstra wrote:
-> On Tue, Feb 18, 2025 at 12:48:57PM +0100, Sebastian Andrzej Siewior wrote:
-> > On 2025-02-15 06:42:36 [+0800], kernel test robot wrote:
-> > > >> arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x2428: undefined stack state
-> > 
-> 
-> > From the assembly it seems to make sense:
-> > |   110ae:       49 89 e0                mov    %rsp,%r8
-> > stash for later
-> > |   110b1:       48 85 db                test   %rbx,%rbx
-> > |   110b4:       c7 00 00 00 00 00       movl   $0x0,(%rax)
-> > |   110ba:       45 89 7e 14             mov    %r15d,0x14(%r14)
-> > |   110be:       0f 85 40 01 00 00       jne    11204 <do_cpuid_func+0x22f4>
-> > …
-> > |   11204:       44 8b 74 24 38          mov    0x38(%rsp),%r14d
-> > |   11209:       44 89 f7                mov    %r14d,%edi
-> > |   1120c:       4d 89 c7                mov    %r8,%r15
-> > 
-> > mov rsp to r15
-> 
-> This, objtool doesn't track this one. It only does:
-> 
->  mov %rsp, reg
-> 
->  mov reg, %rsp
-> 
-> I'm not entirely sure how painful it would be to teach objtool about
-> this case. Horrible code it is :/
-> 
-> > restore rsp. I just don't see how rsp is destroyed but this could be
-> > related to paravirt's xxl clobbing in__cpuid().
-> > 
-> > I miss 1120c in my output. I don't understand how it jumps from 110ae to
-> > 1124b. It misses the assignments in between but this might not be goal
-> > here…
+On Tue, Feb 11, 2025 at 3:28=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> When an attribute group is created with sysfs_create_group(), the
+> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
+> and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
+> respectively. These functions use container_of() to get the respective
+> callback from the passed attribute, meaning that these callbacks need to
+> be the same type as the callbacks in 'struct kobj_attribute'.
+>
+> However, the platform_profile sysfs functions have the type of the
+> ->show() and ->store() callbacks in 'struct device_attribute', which
+> results a CFI violation when accessing platform_profile or
+> platform_profile_choices under /sys/firmware/acpi because the types do
+> not match:
+>
+>   CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choic=
+es_show+0x0/0x140; expected type: 0x7a69590c)
+>
+> There is no functional issue from the type mismatch because the layout
+> of 'struct kobj_attribute' and 'struct device_attribute' are the same,
+> so the container_of() cast does not break anything aside from CFI.
+>
+> Change the type of platform_profile_choices_show() and
+> platform_profile_{show,store}() to match the callbacks in
+> 'struct kobj_attribute' and update the attribute variables to match,
+> which resolves the CFI violation.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
+> Reported-by: John Rowley <lkml@johnrowley.me>
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
+> Tested-by: John Rowley <lkml@johnrowley.me>
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> Changes in v3:
+> - Rebase on 6.14-rc1, which includes updates to the driver to address
+>   Greg's previous concerns but this change is still needed for the
+>   legacy sysfs interface. v2 can be used for the stable backport.
+> - Link to v2: https://lore.kernel.org/r/20241118-acpi-platform_profile-fi=
+x-cfi-violation-v2-1-62ff952804de@kernel.org
+>
+> Changes in v2:
+> - Rebase on linux-pm/acpi
+> - Pick up Sami's reviewed-by tag
+> - Adjust wording around why there is no functional issue from the
+>   mismatched types
+> - Link to v1: https://lore.kernel.org/r/20240819-acpi-platform_profile-fi=
+x-cfi-violation-v1-1-479365d848f6@kernel.org
+> ---
+>  drivers/acpi/platform_profile.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_prof=
+ile.c
+> index fc92e43d0fe9..1b6317f759f9 100644
+> --- a/drivers/acpi/platform_profile.c
+> +++ b/drivers/acpi/platform_profile.c
+> @@ -260,14 +260,14 @@ static int _aggregate_choices(struct device *dev, v=
+oid *data)
+>
+>  /**
+>   * platform_profile_choices_show - Show the available profile choices fo=
+r legacy sysfs interface
+> - * @dev: The device
+> + * @kobj: The kobject
+>   * @attr: The attribute
+>   * @buf: The buffer to write to
+>   *
+>   * Return: The number of bytes written
+>   */
+> -static ssize_t platform_profile_choices_show(struct device *dev,
+> -                                            struct device_attribute *att=
+r,
+> +static ssize_t platform_profile_choices_show(struct kobject *kobj,
+> +                                            struct kobj_attribute *attr,
+>                                              char *buf)
+>  {
+>         unsigned long aggregate[BITS_TO_LONGS(PLATFORM_PROFILE_LAST)];
+> @@ -333,14 +333,14 @@ static int _store_and_notify(struct device *dev, vo=
+id *data)
+>
+>  /**
+>   * platform_profile_show - Show the current profile for legacy sysfs int=
+erface
+> - * @dev: The device
+> + * @kobj: The kobject
+>   * @attr: The attribute
+>   * @buf: The buffer to write to
+>   *
+>   * Return: The number of bytes written
+>   */
+> -static ssize_t platform_profile_show(struct device *dev,
+> -                                    struct device_attribute *attr,
+> +static ssize_t platform_profile_show(struct kobject *kobj,
+> +                                    struct kobj_attribute *attr,
+>                                      char *buf)
+>  {
+>         enum platform_profile_option profile =3D PLATFORM_PROFILE_LAST;
+> @@ -362,15 +362,15 @@ static ssize_t platform_profile_show(struct device =
+*dev,
+>
+>  /**
+>   * platform_profile_store - Set the profile for legacy sysfs interface
+> - * @dev: The device
+> + * @kobj: The kobject
+>   * @attr: The attribute
+>   * @buf: The buffer to read from
+>   * @count: The number of bytes to read
+>   *
+>   * Return: The number of bytes read
+>   */
+> -static ssize_t platform_profile_store(struct device *dev,
+> -                                     struct device_attribute *attr,
+> +static ssize_t platform_profile_store(struct kobject *kobj,
+> +                                     struct kobj_attribute *attr,
+>                                       const char *buf, size_t count)
+>  {
+>         unsigned long choices[BITS_TO_LONGS(PLATFORM_PROFILE_LAST)];
+> @@ -401,12 +401,12 @@ static ssize_t platform_profile_store(struct device=
+ *dev,
+>         return count;
+>  }
+>
+> -static DEVICE_ATTR_RO(platform_profile_choices);
+> -static DEVICE_ATTR_RW(platform_profile);
+> +static struct kobj_attribute attr_platform_profile_choices =3D __ATTR_RO=
+(platform_profile_choices);
+> +static struct kobj_attribute attr_platform_profile =3D __ATTR_RW(platfor=
+m_profile);
+>
+>  static struct attribute *platform_profile_attrs[] =3D {
+> -       &dev_attr_platform_profile_choices.attr,
+> -       &dev_attr_platform_profile.attr,
+> +       &attr_platform_profile_choices.attr,
+> +       &attr_platform_profile.attr,
+>         NULL
+>  };
+>
+>
+> ---
 
-FYI, you can add OBJTOOL_ARGS="--backtrace" or OBJTOOL_VERBOSE=1 to the
-cmdline to see how objtool got there.  On my build there were some
-ALTERNATIVE()s involved which makes it trickier to follow.
-
-There's definitely some weirdness going on, I'm also seeing the .s not
-match the .o.  Maybe it's the __msan_*() stuff.  Still looking...
-
--- 
-Josh
+Applied as 6.15 material with some edits in the changelog, thanks!
