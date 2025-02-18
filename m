@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4D322FF24
-	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0BB70814
+	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866631; cv=none; b=jam8e7+P9/BSDsmW3FQWENmeCoyhXSngEIOCUUeqdaEtnEHdPmWkagQVQDGaKBJb5zU11pI3p7HffksIvGYBPLCIquIKYnKWYOLt5frNgbnGGvNc334Eg1hTKZCOl4spkneTCoBPI4oU9nD2MZPL0yOdsESfXn+EZNlscUmasdk=
+	t=1739866650; cv=none; b=qYOdOTo3sx/M0cs/SJ783rfCb5jrTCvKGHSNOqDI1VXrWVTO36dZQrVND8FELsrtlKOOFkmbrWJ20DnTprViXSdkz6EyYTEqavhPXDE1IB4BtWIw/aIYGQdw3TbQVWLb74RyX6z/7lIyL3oAz6h8/4LV7BWqLYiHkqIHYQA8hLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866631; c=relaxed/simple;
-	bh=bXO9RjmvEI/gGPfc1eFRDuxO1uk/Wq+sbi65zILen0w=;
+	s=arc-20240116; t=1739866650; c=relaxed/simple;
+	bh=vZnoVBHv0l9iKflwNJuydsONrEphO2Y6vfEcHPCjENE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hbMMZiuawELSFj8iefPNn+BcbXpnlpRsEnKKqb0KYFB+UjmhVNNGl6+GV44JQygXrxlyHuOITxvnTIPHBPTqyAyIGB3UO0tvocw1c/XcRn7Qw2Vs/QY9TIO8M9eP4g9jRV4sM6bReaLuICF/GSZIJRq6fuuc5zznwLdAgcx0GEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NbUJNHgj; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=nyglDqgyMJ2sdyWZHoZWWWKXgsoonMWaRAsitMbRcKrxiuG4398ET8Y/dzHfL4JmYsq2oXkB7Gnob2MRX2Fdja1xq9gMVM4xkGCududvSljLi2F1n9BX36UTL70+U2oe8O+OtCXP/oo92CHDGHiufrn6BqVTnjF8PhoCJQHgY/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BFI7yhzP; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NbUJNHgj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BFI7yhzP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739866630; x=1771402630;
+  t=1739866649; x=1771402649;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bXO9RjmvEI/gGPfc1eFRDuxO1uk/Wq+sbi65zILen0w=;
-  b=NbUJNHgjOKfoXCYFrDqnwF1iHbIRIIV9bCDsPeFc2OoXUoxyhYCt/NU7
-   HdW3qR+lVRqGSD+ufgZAlJbxWLrmgo1UIw8B9F98zrQQtlkyyo9f3dLOz
-   KJuTCEdNzZ+fETOzNhXDVEwX3++WTURRyLTXi1F7lPXjfRXyaFdhe5qZd
-   F5o78S7oYrOt1xQeRUfHCamC3ebCc7WKhu5POJF+2/c3E51U+kdbFzkrc
-   /sIm+nt9JpU9S1YiVBkiLdfN5YvDjHaIHGgDGIzuf2EGDWdSuE5lTm6Z7
-   wMVMd8kyBwOQk5yn5f5I4nvqNsL2IVWCKH0GpvNo9ddBfKHKJtSb4xsA6
-   w==;
-X-CSE-ConnectionGUID: 4jmrjWQST9SiDB9yH8IR5w==
-X-CSE-MsgGUID: DHxFnFO4RV+n+lOXSuDBOQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150088"
+  bh=vZnoVBHv0l9iKflwNJuydsONrEphO2Y6vfEcHPCjENE=;
+  b=BFI7yhzP+26mLZb+zDJKHuNC6Kyow0cFnZND3DJLmLM9qXkWe5pYtLXz
+   kNNkpuGJY7d8q/IU0d235xbjUt5Jxz9HLIv+LpJ3J98zR1MFpIxTlqQGK
+   UC4ArAz0mC4HfbzKuFfI50llv3umB5WfZA9nWDc3Txc5pw7TzLO7DjMui
+   QBNeeY7sr3OmyH0X/Ckh8wskdP3QThx5z9CsMpHbxKnKkAhjMEkgIvrka
+   coky6wOOI1+YuwLVVd/+n0GiRckVg793Cc5MhR6KZW8Q9mLn/XVsAP/B0
+   svhwlAsoz3rPptnLoG/04ImAm+WDTUxdhmzouEQjr3LSZ83/q3soTcLPL
+   A==;
+X-CSE-ConnectionGUID: oFleOg8JS2WCc+TJ0235Ug==
+X-CSE-MsgGUID: 5DtByim9S1WVYnWoplZD/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150153"
 X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="28150088"
+   d="scan'208";a="28150153"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:17:09 -0800
-X-CSE-ConnectionGUID: +HOO78zjQVWglPzSMQGDaA==
-X-CSE-MsgGUID: iC+fl3UpTo2a4V5pAf6vOA==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:17:28 -0800
+X-CSE-ConnectionGUID: xKQi23p7SyujmVCTf7U/Zg==
+X-CSE-MsgGUID: 9P48bDiJSRi9kqQCnYaSFA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119247460"
+   d="scan'208";a="119247544"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.49])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:16:49 -0800
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:17:10 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: kees@kernel.org,
 	julian.stecklina@cyberus-technology.de,
@@ -116,9 +116,9 @@ Cc: linux-doc@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-arm-kernel@lists.infradead.org,
 	x86@kernel.org
-Subject: [PATCH v2 03/14] kasan: sw_tags: Support outline stack tag generation
-Date: Tue, 18 Feb 2025 09:15:19 +0100
-Message-ID: <20f64170c0b59cb5185cfe02c4bc833073a2ebe6.1739866028.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v2 04/14] kasan: sw_tags: Support tag widths less than 8 bits
+Date: Tue, 18 Feb 2025 09:15:20 +0100
+Message-ID: <09962dd580a56e308d98b7bd5829dc57928bcc40.1739866028.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
@@ -132,52 +132,77 @@ Content-Transfer-Encoding: 8bit
 
 From: Samuel Holland <samuel.holland@sifive.com>
 
-This allows stack tagging to be disabled at runtime by tagging all
-stack objects with the match-all tag. This is necessary on RISC-V,
-where a kernel with KASAN_SW_TAGS enabled is expected to boot on
-hardware without pointer masking support.
+Allow architectures to override KASAN_TAG_KERNEL in asm/kasan.h. This
+is needed on RISC-V, which supports 57-bit virtual addresses and 7-bit
+pointer tags. For consistency, move the arm64 MTE definition of
+KASAN_TAG_MIN to asm/kasan.h, since it is also architecture-dependent;
+RISC-V's equivalent extension is expected to support 7-bit hardware
+memory tags.
 
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- mm/kasan/kasan.h   | 2 ++
- mm/kasan/sw_tags.c | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ arch/arm64/include/asm/kasan.h   |  6 ++++--
+ arch/arm64/include/asm/uaccess.h |  1 +
+ include/linux/kasan-tags.h       | 13 ++++++++-----
+ 3 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index 129178be5e64..2fb26f74dff9 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -636,6 +636,8 @@ void *__asan_memset(void *addr, int c, ssize_t len);
- void *__asan_memmove(void *dest, const void *src, ssize_t len);
- void *__asan_memcpy(void *dest, const void *src, ssize_t len);
+diff --git a/arch/arm64/include/asm/kasan.h b/arch/arm64/include/asm/kasan.h
+index e1b57c13f8a4..4ab419df8b93 100644
+--- a/arch/arm64/include/asm/kasan.h
++++ b/arch/arm64/include/asm/kasan.h
+@@ -6,8 +6,10 @@
  
-+u8 __hwasan_generate_tag(void);
+ #include <linux/linkage.h>
+ #include <asm/memory.h>
+-#include <asm/mte-kasan.h>
+-#include <asm/pgtable-types.h>
 +
- void __hwasan_load1_noabort(void *);
- void __hwasan_store1_noabort(void *);
- void __hwasan_load2_noabort(void *);
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index b9382b5b6a37..94465a8a3640 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -71,6 +71,15 @@ u8 kasan_random_tag(void)
- 	return (u8)(state % (KASAN_TAG_MAX + 1));
- }
++#ifdef CONFIG_KASAN_HW_TAGS
++#define KASAN_TAG_MIN			0xF0 /* minimum value for random tags */
++#endif
  
-+u8 __hwasan_generate_tag(void)
-+{
-+	if (!kasan_enabled())
-+		return KASAN_TAG_KERNEL;
+ #define arch_kasan_set_tag(addr, tag)	__tag_set(addr, tag)
+ #define arch_kasan_reset_tag(addr)	__tag_reset(addr)
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 5b91803201ef..f890dadc7b4e 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -22,6 +22,7 @@
+ #include <asm/cpufeature.h>
+ #include <asm/mmu.h>
+ #include <asm/mte.h>
++#include <asm/mte-kasan.h>
+ #include <asm/ptrace.h>
+ #include <asm/memory.h>
+ #include <asm/extable.h>
+diff --git a/include/linux/kasan-tags.h b/include/linux/kasan-tags.h
+index 4f85f562512c..e07c896f95d3 100644
+--- a/include/linux/kasan-tags.h
++++ b/include/linux/kasan-tags.h
+@@ -2,13 +2,16 @@
+ #ifndef _LINUX_KASAN_TAGS_H
+ #define _LINUX_KASAN_TAGS_H
+ 
++#include <asm/kasan.h>
 +
-+	return kasan_random_tag();
-+}
-+EXPORT_SYMBOL(__hwasan_generate_tag);
++#ifndef KASAN_TAG_KERNEL
+ #define KASAN_TAG_KERNEL	0xFF /* native kernel pointers tag */
+-#define KASAN_TAG_INVALID	0xFE /* inaccessible memory tag */
+-#define KASAN_TAG_MAX		0xFD /* maximum value for random tags */
++#endif
 +
- bool kasan_check_range(const void *addr, size_t size, bool write,
- 			unsigned long ret_ip)
- {
++#define KASAN_TAG_INVALID	(KASAN_TAG_KERNEL - 1) /* inaccessible memory tag */
++#define KASAN_TAG_MAX		(KASAN_TAG_KERNEL - 2) /* maximum value for random tags */
+ 
+-#ifdef CONFIG_KASAN_HW_TAGS
+-#define KASAN_TAG_MIN		0xF0 /* minimum value for random tags */
+-#else
++#ifndef KASAN_TAG_MIN
+ #define KASAN_TAG_MIN		0x00 /* minimum value for random tags */
+ #endif
+ 
 -- 
 2.47.1
 
