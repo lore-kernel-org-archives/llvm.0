@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A495222D4D4
-	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739F6207644
+	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 08:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866752; cv=none; b=jtnMhbo+d6C0hxaB2+VcFs/ahCq3vO3/V56a8n6dEzpCjtR5aE9IbFSLQlSKbQjjZW8YymOHcffZxzox3x/cRqDFaYRLslnOBzb1v35TnaTnbjOB1AvYyz8jrpMLOHKguRkQhaEDwIXZp+xkXNzgJPJHuUUlB3e0ryitNm672uc=
+	t=1739866769; cv=none; b=scfwoNKYu+JcnfdUFyS8FEWdMabcVdj4V5ZtJieF791gl68kyrE7l2b3k5tAikV/DDaEvsggjUCJE9sO95/DwCLdOnkozrjE0So3djjsG5oudPsHy58PYfEr/7oopMmgi/TA9+dTLX/YZhnESXv5oTKhtjxGcFWWzZjj3ugMj1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866752; c=relaxed/simple;
-	bh=PewXt3mq2ZzovNzL7I8Fp3xpOP5/pryHgDbcA5gr/7A=;
+	s=arc-20240116; t=1739866769; c=relaxed/simple;
+	bh=8ws+/8lspNy+rR5tjQn0/4EjYnvKhOpPRaAw0LffmfQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fJBPIOaR+46lsfPXl8WlJRdgH0cYErY3qCrKDMChjDmSzHSylyl6IxhTmEEPskHS4zrPHIOIhJdVKU4tIr68DuwLMsvWEpMF9rrX6vAyt1yPCcHXBHIRWvBtY669iMRsSl/htW6bEAioE6JCabU+vKtjSeIAHOmOsu5NwTUznHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WYWDdk2s; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=M5459gdIFpjn4Rtr+MA7xL0H5pfnLPnvLdLvD43Y7gf/Q+YuPU4g7Y6mxqEXb3RTNjfglDc/iEE4rVYVioX6pBdZC9ctARHhHLRP0z17H87MBwkp0qPOETxjYf9BmmwaEiH67mX8H0JjmAWHnBXtavO1hfCorYD2xoOwAyx5GjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D+6NaU6P; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WYWDdk2s"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D+6NaU6P"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739866751; x=1771402751;
+  t=1739866769; x=1771402769;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PewXt3mq2ZzovNzL7I8Fp3xpOP5/pryHgDbcA5gr/7A=;
-  b=WYWDdk2sq0Zkah+klCQ6URNeHyL9wfbQbd0mwKHLz63kn/PRgV28Qwld
-   y8uYjzwq+RxL0HEJsq/zdvrEU9zVNWS2NmGq+S5wj5jf0HoylROx5nv4M
-   BKkf8PfW+tSy0yhpvOOal/mx7VAJuh0zH6HIV2LOH14GK+ApLGlBhoSG8
-   pkCLQGDTkS3Ghs82XS9NVCjL5oi/GXYqJCQcSyt3hWPI3aJQl8VPC3vce
-   3fCdY1EmzJv0u4kGJH0jnC0Y2D6cO0egtGnwA0rh2Hq+F73kvsw2T8Ce6
-   /r1eKMNfNPwC5ec0+5/akTUWCJFEkyBJaagyd76k5Pycjyj4AInpm1GoF
+  bh=8ws+/8lspNy+rR5tjQn0/4EjYnvKhOpPRaAw0LffmfQ=;
+  b=D+6NaU6PkN5axv6chDOXlZJWghFBDFnZUWH6HKSfzPEpnQnzBje5uJJF
+   w/SDvhm8wM7KkGXGrFmp1xDYWAtYja7dW5UKbxoXhttYZUAOqny3F/SZ3
+   GMDF0LCuOiHxWMJAh42RDEAzmXgTQ5swLC9i71PU7qwscBpbcO0efK0e8
+   ELT/Bg2K3iHvOTI3XiHFJQCQYLBezBfbvTtN/7XWbO3C1f02D/dMpGj7e
+   cskJmUcul/XkBKV5lGqsii9iCVosijAMs0NiN+eDFE6xVkDo2+dLzUcrQ
+   gc4sXN6bNVHy6YiddHTvoL2/VLybpcVuljvTqSk7KWSbfuEh2pw60R2j+
    w==;
-X-CSE-ConnectionGUID: q2gS3/OHSHql+sX7kh9/Aw==
-X-CSE-MsgGUID: TzpH2nWQRc6a5dWjegfNzg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150358"
+X-CSE-ConnectionGUID: VRs864KvQoe7n/d1bZCA4A==
+X-CSE-MsgGUID: zOafkqqPRMi3HZst1xYO0g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="28150427"
 X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="28150358"
+   d="scan'208";a="28150427"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:19:09 -0800
-X-CSE-ConnectionGUID: TjE0RLKdQ9KhXqTyx5cbfw==
-X-CSE-MsgGUID: sZVzDBj6QnqZ2EAIVQa3TA==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:19:28 -0800
+X-CSE-ConnectionGUID: 46KsSX6nShmB+6L3gB4eDg==
+X-CSE-MsgGUID: zDFh8fMPSzOB5kwIyeazag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="119247808"
+   d="scan'208";a="119247888"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.245.49])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:18:48 -0800
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 00:19:09 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: kees@kernel.org,
 	julian.stecklina@cyberus-technology.de,
@@ -116,9 +116,9 @@ Cc: linux-doc@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-arm-kernel@lists.infradead.org,
 	x86@kernel.org
-Subject: [PATCH v2 09/14] mm: Pcpu chunk address tag reset
-Date: Tue, 18 Feb 2025 09:15:25 +0100
-Message-ID: <383482f87ad4f68690021e0cc75df8143b6babe2.1739866028.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v2 10/14] x86: KASAN raw shadow memory PTE init
+Date: Tue, 18 Feb 2025 09:15:26 +0100
+Message-ID: <738373d32089fbf84a8c5d6f32ade1bf28d14020.1739866028.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
@@ -130,48 +130,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The problem presented here is related to NUMA systems and tag-based
-KASAN mode. Getting to it can be explained in the following points:
+In KASAN's generic mode the default value in shadow memory is zero.
+During initialization of shadow memory pages they are allocated and
+zeroed.
 
-	1. A new chunk is created with pcpu_create_chunk() and
-	   vm_structs are allocated. On systems with one NUMA node only
-	   one is allocated, but with more NUMA nodes at least a second
-	   one will be allocated too.
+In KASAN's tag-based mode the default tag for the arm64 architecture is
+0xFE which corresponds to any memory that should not be accessed. On x86
+(where tags are 4-bit wide instead of 8-bit wide) that tag is 0xE so
+during the initializations all the bytes in shadow memory pages should
+be filled with 0xE or 0xEE if two tags should be packed in one shadow
+byte.
 
-	2. chunk->base_addr is assigned the modified value of
-	   vms[0]->addr and thus inherits the tag of this allocated
-	   structure.
-
-	3. In pcpu_alloc() for each possible cpu pcpu_chunk_addr() is
-	   executed which calculates per cpu pointers that correspond to
-	   the vms structure addresses. The calculations are based on
-	   adding an offset from a table to chunk->base_addr.
-
-Here the problem presents itself since for addresses based on vms[1] and
-up, the tag will be different than the ones based on vms[0] (base_addr).
-The tag mismatch happens and an error is reported.
-
-Reset the base_addr tag, since it will disable tag checks for pointers
-derived arithmetically from base_addr that would inherit its tag.
+Use memblock_alloc_try_nid_raw() instead of memblock_alloc_try_nid() to
+avoid zeroing out the memory so it can be set with the KASAN invalid
+tag.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
- mm/percpu-vm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changelog v2:
+- Remove dense mode references, use memset() instead of kasan_poison().
 
-diff --git a/mm/percpu-vm.c b/mm/percpu-vm.c
-index cd69caf6aa8d..e13750d804f7 100644
---- a/mm/percpu-vm.c
-+++ b/mm/percpu-vm.c
-@@ -347,7 +347,7 @@ static struct pcpu_chunk *pcpu_create_chunk(gfp_t gfp)
- 	}
+ arch/x86/mm/kasan_init_64.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
+index 9dddf19a5571..299a2144dac4 100644
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -35,6 +35,18 @@ static __init void *early_alloc(size_t size, int nid, bool should_panic)
+ 	return ptr;
+ }
  
- 	chunk->data = vms;
--	chunk->base_addr = vms[0]->addr - pcpu_group_offsets[0];
-+	chunk->base_addr = kasan_reset_tag(vms[0]->addr) - pcpu_group_offsets[0];
++static __init void *early_raw_alloc(size_t size, int nid, bool should_panic)
++{
++	void *ptr = memblock_alloc_try_nid_raw(size, size,
++			__pa(MAX_DMA_ADDRESS), MEMBLOCK_ALLOC_ACCESSIBLE, nid);
++
++	if (!ptr && should_panic)
++		panic("%pS: Failed to allocate page, nid=%d from=%lx\n",
++		      (void *)_RET_IP_, nid, __pa(MAX_DMA_ADDRESS));
++
++	return ptr;
++}
++
+ static void __init kasan_populate_pmd(pmd_t *pmd, unsigned long addr,
+ 				      unsigned long end, int nid)
+ {
+@@ -64,8 +76,9 @@ static void __init kasan_populate_pmd(pmd_t *pmd, unsigned long addr,
+ 		if (!pte_none(*pte))
+ 			continue;
  
- 	pcpu_stats_chunk_alloc();
- 	trace_percpu_create_chunk(chunk->base_addr);
+-		p = early_alloc(PAGE_SIZE, nid, true);
+-		entry = pfn_pte(PFN_DOWN(__pa(p)), PAGE_KERNEL);
++		p = early_raw_alloc(PAGE_SIZE, nid, true);
++		memset(p, PAGE_SIZE, KASAN_SHADOW_INIT);
++		entry = pfn_pte(PFN_DOWN(__pa_nodebug(p)), PAGE_KERNEL);
+ 		set_pte_at(&init_mm, addr, pte, entry);
+ 	} while (pte++, addr += PAGE_SIZE, addr != end);
+ }
+@@ -437,7 +450,7 @@ void __init kasan_init(void)
+ 	 * it may contain some garbage. Now we can clear and write protect it,
+ 	 * since after the TLB flush no one should write to it.
+ 	 */
+-	memset(kasan_early_shadow_page, 0, PAGE_SIZE);
++	memset(kasan_early_shadow_page, KASAN_SHADOW_INIT, PAGE_SIZE);
+ 	for (i = 0; i < PTRS_PER_PTE; i++) {
+ 		pte_t pte;
+ 		pgprot_t prot;
 -- 
 2.47.1
 
