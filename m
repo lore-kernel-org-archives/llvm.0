@@ -1,85 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E141A8F6D;
-	Tue, 18 Feb 2025 23:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF761DDC15;
+	Tue, 18 Feb 2025 23:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739920590; cv=none; b=bQzBxhHLk+h05U1ala8/To9OYJxyC+zCOrXuvDcLpHnyCBwwHtqpxmYgN7PFH4I9U3iO8goamThQBK66nbHDk2EBU1RqLq1qLlL9+qB5GLhneFsPOw3+T33tTdqhBNK1UzGQ7D4DrKtXMZtPgGrrFrxMcwJzuQslrsU50LS3kqg=
+	t=1739921185; cv=none; b=tV4SJTUHFabp7KwK3jsi6XpeRGEVMknzhCk2GLzIJyw+KKjljSmkhkUV97y/YsvD2pYIVx9y+8Ng+U1OZCwz8PbICEVTwmkUAwB1SbqBV7xXNVLCvR/c1lUkpY9pKjdxxiZlwLwdHipqA4RvgyFdEzkgClLvQj1uEAk51bh/1lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739920590; c=relaxed/simple;
-	bh=71NOAhlA1zRx6LOJehloexvb8Dr2yZK3ZKDG/fCQnK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUVVemDCYJSj6HKlRJDQqOXvamK/L4JjsmeCAciY61HH9WsLVQiZVuuqzfmrxPEofdYYzdZK15TCmewRC6582ERPPTzbrPnKBIv2v6PUUsR4OHwNQV5DpmPduwfQphq3hs0ryuTqoif4z4qldpsSkIFaB92Wjs4QB6jLuzh7+SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YCwqqIQv; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1739921185; c=relaxed/simple;
+	bh=iLG6kC1Z9W/gapcOdtJ0vxY6R8pgoFt0XvgKEGvT8rc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DKKcchxiDwLtr4fJxnW5+MyuBfzVlznsLRlR7f4oJernl5CRAZKdrr0Kgvd1QKOz9Xy51kRvqTZjKGr1tfNuLY/+v/br3ublexyB9etRAhcQx3dmEdiOLLXXo99nYsaXIQ7GS3R/w805hzpsY3KdFBCAUidNPwruUbFw5LlPcac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cT866n2l; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YCwqqIQv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cT866n2l"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739920588; x=1771456588;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=71NOAhlA1zRx6LOJehloexvb8Dr2yZK3ZKDG/fCQnK8=;
-  b=YCwqqIQvqWYf0hURb136Jh/jQhkPjhN2R0ZaBYXmaPNe1abNE9FFKZyQ
-   W6wVTmp3qGouHC5MflzHkoTkGZZfErSRMdRgw8pTWsquybenxYz8cJGhp
-   f/mybbXJAWmtAbfrJDFieG4J7a4RL5826d9i0CIP5xnSjDuiWMRLBsUwc
-   4ugPV45eh2k3rFxSG82CzJp5rz5gXI8uDWif0gI5u3FJXy542WC4qoN0M
-   ExF3FUvh5+g/UheBP/eMLEHm44jqRNJp+VARpu/qw+I/ivGNCvv2UqO+x
-   2ekPQlmq321cGvejme2VBflt1I530Se7OI1+sVlX8LKN+U0sI5037Q2gJ
-   Q==;
-X-CSE-ConnectionGUID: 0V+0y87eQ/CRNxwyHorzPg==
-X-CSE-MsgGUID: 3Qsc10sBRZ22haoscGdEwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="51624053"
+  t=1739921184; x=1771457184;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iLG6kC1Z9W/gapcOdtJ0vxY6R8pgoFt0XvgKEGvT8rc=;
+  b=cT866n2lCqRjBejqe0qT0S+5TbNKsdbJpYok3lWnqjfxSajuX8N5SKU6
+   3Yeti/8s/4ysrO+9VK7MwxnxgMZ+o70U/hHjEU5aRBSjbrK89LP4DzBOc
+   3lo1/wfpwyc352uzmYedOJsroNdRAKPbbtAzuJ5fsu+XN0c4fq99GEEvS
+   K6KJz84A8BzApAXG04e2v2Ub3qSCHiVX4ukHssZbrLpe3WJQczofxl+TQ
+   QX8uawxHvFcUGRfZKjTyRkP1AkvxV9l23kb8Q6wJKkiqOW0lMSSBeuBzV
+   Px5HzCipUP/2swkc8FcTKSo47aNC8360Pe3U9ja42g/hElelgwv+bc6Ps
+   g==;
+X-CSE-ConnectionGUID: +/L3443TTm+epmMawn5fjQ==
+X-CSE-MsgGUID: v7u9GOWAQDa+2oelyJAtwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="44289435"
 X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="51624053"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 15:16:28 -0800
-X-CSE-ConnectionGUID: J2RfxhNgTjGOZ+AaJZpasA==
-X-CSE-MsgGUID: KvOPBGGWT0q5JaJFQ+I7sg==
+   d="scan'208";a="44289435"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 15:26:23 -0800
+X-CSE-ConnectionGUID: OPSB3nNpTBmEGVD7G0ZaJw==
+X-CSE-MsgGUID: CpoKXM8bTTGQSy/bxVqqhg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119193650"
+X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
+   d="scan'208";a="115062519"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 18 Feb 2025 15:16:21 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 18 Feb 2025 15:26:21 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkWp8-0000xP-1Z;
-	Tue, 18 Feb 2025 23:16:18 +0000
-Date: Wed, 19 Feb 2025 07:15:42 +0800
+	id 1tkWyp-0000xr-0b;
+	Tue, 18 Feb 2025 23:26:19 +0000
+Date: Wed, 19 Feb 2025 07:26:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Fred Treven <ftreven@opensource.cirrus.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Simon Trimmer <simont@opensource.cirrus.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	James Ogletree <jogletre@opensource.cirrus.com>,
-	Ben Bright <ben.bright@cirrus.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Jeff LaBundy <jeff@labundy.com>, Heiko Stuebner <heiko@sntech.de>,
-	Karel Balej <balejk@matfyz.cz>,
-	Igor Prusov <ivprusov@salutedevices.com>,
-	Jack Yu <jack.yu@realtek.com>,
-	Weidong Wang <wangweidong.a@awinic.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-	Paul Handrigan <paulha@opensource.cirrus.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nuno Sa <nuno.sa@analog.com>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH RESEND 5/7] mfd: cs40l26: Add support for CS40L26 core
- driver
-Message-ID: <202502190628.g4aG7l2q-lkp@intel.com>
-References: <20250204231835.2000457-6-ftreven@opensource.cirrus.com>
+	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:hotplug 1/2] drivers/pci/hotplug/shpchp_core.c:330:2: error:
+ call to undeclared function 'dbg'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202502190711.BtNyZppZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,128 +63,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250204231835.2000457-6-ftreven@opensource.cirrus.com>
 
-Hi Fred,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on broonie-sound/for-next dtor-input/next dtor-input/for-linus linus/master v6.14-rc3 next-20250218]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fred-Treven/firmware-cs_dsp-Fix-error-checking-in-wseq_write/20250217-181206
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250204231835.2000457-6-ftreven%40opensource.cirrus.com
-patch subject: [PATCH RESEND 5/7] mfd: cs40l26: Add support for CS40L26 core driver
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250219/202502190628.g4aG7l2q-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git hotplug
+head:   42e8331215cfd096f86b8605822a0fe8b0a2e2bb
+commit: bf8863c9be49b92db646b78fecd445e59a4c1e9f [1/2] PCI: shpchp: Remove unused logging wrappers
+config: i386-buildonly-randconfig-004-20250219 (https://download.01.org/0day-ci/archive/20250219/202502190711.BtNyZppZ-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190628.g4aG7l2q-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190711.BtNyZppZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502190628.g4aG7l2q-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502190711.BtNyZppZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/mfd/cs40l26-core.c:12:
-   In file included from include/linux/mfd/core.h:13:
-   In file included from include/linux/platform_device.h:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/cs40l26-core.c:1173:3: error: cannot jump from this goto statement to its label
-    1173 |                 goto err_fw_rls;
-         |                 ^
-   drivers/mfd/cs40l26-core.c:1176:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1176 |         guard(mutex)(&cs40l26->lock);
+>> drivers/pci/hotplug/shpchp_core.c:330:2: error: call to undeclared function 'dbg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     330 |         dbg("%s: pci_register_driver = %d\n", __func__, retval);
          |         ^
-   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
-     309 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-         |                             ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-      84 | #define __PASTE(a,b) ___PASTE(a,b)
-         |                      ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-      83 | #define ___PASTE(a,b) a##b
-         |                       ^
-   <scratch space>:42:1: note: expanded from here
-      42 | __UNIQUE_ID_guard697
-         | ^
-   3 warnings and 1 error generated.
+>> drivers/pci/hotplug/shpchp_core.c:331:2: error: call to undeclared function 'info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     331 |         info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+         |         ^
+   drivers/pci/hotplug/shpchp_core.c:338:2: error: call to undeclared function 'dbg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     338 |         dbg("unload_shpchpd()\n");
+         |         ^
+   drivers/pci/hotplug/shpchp_core.c:340:2: error: call to undeclared function 'info'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     340 |         info(DRIVER_DESC " version: " DRIVER_VERSION " unloaded\n");
+         |         ^
+   4 errors generated.
+--
+>> drivers/pci/hotplug/shpchp_hpc.c:678:2: error: call to undeclared function 'dbg'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     678 |         dbg("Current bus speed = %d\n", bus_speed);
+         |         ^
+   1 error generated.
 
 
-vim +1173 drivers/mfd/cs40l26-core.c
+vim +/dbg +330 drivers/pci/hotplug/shpchp_core.c
 
-  1165	
-  1166	static void cs40l26_dsp_start(struct cs40l26 *cs40l26)
-  1167	{
-  1168		int i, ret;
-  1169	
-  1170		ret = cs40l26_dsp_pre_config(cs40l26);
-  1171		if (ret) {
-  1172			dev_err(cs40l26->dev, "DSP Pre Config. Failed: %d\n", ret);
-> 1173			goto err_fw_rls;
-  1174		}
-  1175	
-  1176		guard(mutex)(&cs40l26->lock);
-  1177	
-  1178		ret = cs_dsp_power_up_multiple(&cs40l26->dsp, cs40l26->wmfw, "cs40l26.wmfw", cs40l26_coeffs,
-  1179					       CS40L26_NUM_COEFF_FILES, "cs40l26");
-  1180		if (ret) {
-  1181			dev_err(cs40l26->dev, "Failed to Power Up DSP\n");
-  1182			goto err_fw_rls;
-  1183		}
-  1184	
-  1185		if (cs40l26->dsp.fw_id != CS40L26_FW_ID) {
-  1186			dev_err(cs40l26->dev, "Invalid firmware ID: 0x%X\n", cs40l26->dsp.fw_id);
-  1187			goto err_fw_rls;
-  1188		}
-  1189	
-  1190		if (cs40l26->dsp.fw_id_version < cs40l26->variant->info->fw_min_rev) {
-  1191			dev_err(cs40l26->dev, "Invalid firmware revision: 0x%X\n",
-  1192				cs40l26->dsp.fw_id_version);
-  1193			goto err_fw_rls;
-  1194		}
-  1195	
-  1196		ret = cs_dsp_run(&cs40l26->dsp);
-  1197		if (ret)
-  1198			dev_err(cs40l26->dev, "DSP Failed to run: %d\n", ret);
-  1199	
-  1200	err_fw_rls:
-  1201		for (i = 0; i < CS40L26_NUM_COEFF_FILES; i++)
-  1202			release_firmware(cs40l26_coeffs[i].coeff_firmware);
-  1203	
-  1204		release_firmware(cs40l26->wmfw);
-  1205	}
-  1206	
+^1da177e4c3f41 Linus Torvalds  2005-04-16  324  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  325  static int __init shpcd_init(void)
+^1da177e4c3f41 Linus Torvalds  2005-04-16  326  {
+f652e7d2916fe2 Bjorn Helgaas   2013-01-11  327  	int retval;
+e24dcbef93dbbf Tejun Heo       2010-10-18  328  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  329  	retval = pci_register_driver(&shpc_driver);
+66bef8c059015b Harvey Harrison 2008-03-03 @330  	dbg("%s: pci_register_driver = %d\n", __func__, retval);
+^1da177e4c3f41 Linus Torvalds  2005-04-16 @331  	info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+f652e7d2916fe2 Bjorn Helgaas   2013-01-11  332  
+^1da177e4c3f41 Linus Torvalds  2005-04-16  333  	return retval;
+^1da177e4c3f41 Linus Torvalds  2005-04-16  334  }
+^1da177e4c3f41 Linus Torvalds  2005-04-16  335  
+
+:::::: The code at line 330 was first introduced by commit
+:::::: 66bef8c059015ba2b36bb5759080336feb01e680 PCI: replace remaining __FUNCTION__ occurrences
+
+:::::: TO: Harvey Harrison <harvey.harrison@gmail.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
 
 -- 
 0-DAY CI Kernel Test Service
