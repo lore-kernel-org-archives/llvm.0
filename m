@@ -1,59 +1,34 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5280157E6B;
-	Tue, 18 Feb 2025 04:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 447861A3140
+	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 04:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739852531; cv=none; b=YoqKs4KaMJLAW5WMQptjq2qnkFER7tDIOSZkMWc1HwbPplLx+gpYBDG3SeZ3AhO6frtjfuG6/0nQDpZAFfMFvk8yW0vSdZSa6/foWiIYW5f4/A15XExmnt009jsHNhd5KScX5PhPNjLdYX0rCR/85SBdSXdgs/KPB+qKTYS3RLY=
+	t=1739854394; cv=none; b=PJvSD18ehDC48DwT6BHTduRTddGNzig+0qK3F04jqLm60cQsrR6vguiD6QeXpG8Qoz8+bR+/9TpXIjCS6fhmwKf8oqmerX0wNZeym67iMNOzukwhU8QbRYz86NMHbQ1axDxp4oT8NH+d9CWf4ZpR+/WN/6V5J0jc7pf1rB7h7Y4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739852531; c=relaxed/simple;
-	bh=igVAjiwiM6Tz4MxWCFM0c8aQuuxWX2ujicuNDd3oNqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rono2sV/oPdyp+rasXSDyjvATL23Vkvhupm2Al1v7+jzn1gEQkpj34kGcU7IcIfBDF8qRLXtkCXmhwGBuevKwWsW9dNIqnV1FTp5OeOoONIarsQwmV1kj/Ela4kRlJ8bGt28Juzv4ESqzuShzcGpe1dgT64dTRpwBJ71ATwq6vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hL+xZLYP; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hL+xZLYP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739852529; x=1771388529;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=igVAjiwiM6Tz4MxWCFM0c8aQuuxWX2ujicuNDd3oNqw=;
-  b=hL+xZLYPhfyflQZCcWAqb3fEpRjYtfpglQi49ANcSbudAdbJYsLWY4EX
-   az0o2e+aSeynJ1MFmBPXVQhXG8YOvhvU0P1K5dBg3tbbpOBw8ErOG35Ju
-   4kcYL3rbDYwLyaJj1AlaamVcCLt4EBi5tYWWdMAvyVSr69TfgQ0IsMB7M
-   P43aJdGQcOK+pU4ZHXU8zIUm0uvXse2cmUWnfxr3TlVbNk/sR1/9//cxh
-   eTGN7suWPqWos2Fw757XSRPlr6v7b5REsFMu7ZbmuzKDQ+tIrACHHKOnQ
-   MUqdb/1uuJ4G39tfPiB9UVdFI+xynh4DIvazhtWdyPw2UmOmhnJzPlSnk
-   A==;
-X-CSE-ConnectionGUID: 67fa1MYzQzW8/P0/vy5WYQ==
-X-CSE-MsgGUID: iXUYKc+jTZWY6IybEop2OQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="51968165"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="51968165"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2025 20:22:08 -0800
-X-CSE-ConnectionGUID: JvrYgqWpSJOCES3VIJ91qQ==
-X-CSE-MsgGUID: 6tV0DhJ4SJaGnPwUAb13eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118410053"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Feb 2025 20:22:07 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tkF7U-00009l-37;
-	Tue, 18 Feb 2025 04:22:04 +0000
-Date: Tue, 18 Feb 2025 12:21:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 101/106]
- fs/bcachefs/fsck.c:1990:37: warning: format specifies type 'unsigned int'
- but the argument has type 'u64' (aka 'unsigned long long')
-Message-ID: <202502181232.RE3GLEYJ-lkp@intel.com>
+	s=arc-20240116; t=1739854394; c=relaxed/simple;
+	bh=d85r5XVFsMQ03YgLNpDb+lOD+FFPsn41+mUyCC6e9Ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kldBy8GO63nFiKcWK6jt1l2199fBOrQm4avQgfSkPrSvFzPvrlxaQM0H5uQZjrnnhPYh3Cy76mmA4ftZKSxspwYz2Ed2ai1Q0/FkhYe/ZR8YdHy0yfB+xum4flL9nNHIkmzkNZUmoJjr+cE6iUPO/jur+dqh0HGupdZYsfhLHWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 51I4qqbw008526;
+	Tue, 18 Feb 2025 05:52:52 +0100
+Date: Tue, 18 Feb 2025 05:52:52 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
+Message-ID: <20250218045252.GA8134@1wt.eu>
+References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
+ <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk>
+ <3080562c-7cfd-4f66-9f62-9a99552d283f@t-8ch.de>
+ <alpine.DEB.2.21.2502172208570.65342@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,69 +37,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2502172208570.65342@angie.orcam.me.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   c0a15f588bcc855c5e30e6c8cfe2ec207e13acf2
-commit: 30f640edcaf4398d30d758f6dc888258d7916042 [101/106] fixup! bcachefs: Fix fsck directory i_size checking
-config: riscv-randconfig-002-20250218 (https://download.01.org/0day-ci/archive/20250218/202502181232.RE3GLEYJ-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250218/202502181232.RE3GLEYJ-lkp@intel.com/reproduce)
+Mi Maciej,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502181232.RE3GLEYJ-lkp@intel.com/
+On Mon, Feb 17, 2025 at 11:23:11PM +0000, Maciej W. Rozycki wrote:
+> > >  Why is this code breaking stack alignment just to have to fix it up two 
+> > > instructions down the line?  Or is it that the incoming $sp is not aligned 
+> > > in the first place (in which case we're having a deeper problem).
+> > 
+> > nolibc itself does not assume that $sp is aligned.
+> > Maybe Willy can explain the historical background.
+> 
+>  I'm all ears.
 
-All warnings (new ones prefixed by >>):
+I had a look, that's interesting. Actually this started in the very
+early i386 code in nolibc, where we already use the stack in the entry
+code, and simply fix it up before calling main. Then we pursued this
+with x86_64 (which also uses the stack and needs to fix it up), then
+arm (where we use and fix the stack), then the MIPS entry code was
+simply written based on the same construct while it does not use the
+stack thus does indeed not need to be fixed. Here are the links, it
+predates kernel inclusion:
 
->> fs/bcachefs/fsck.c:1990:37: warning: format specifies type 'unsigned int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-    1989 |                                 "directory %llu:%u with wrong i_size: got %u, should be %llu",
-         |                                                                           ~~
-         |                                                                           %llu
-    1990 |                                 w->last_pos.inode, i->snapshot, i->inode.bi_size, i->i_size)) {
-         |                                                                 ^~~~~~~~~~~~~~~~
-   fs/bcachefs/error.h:143:66: note: expanded from macro 'fsck_err_on'
-     143 |         __fsck_err_on(cond, c, FSCK_CAN_FIX|FSCK_CAN_IGNORE, _err_type, __VA_ARGS__)
-         |                                                                         ^~~~~~~~~~~
-   fs/bcachefs/error.h:130:53: note: expanded from macro '__fsck_err_on'
-     130 |         (unlikely(cond) ? __fsck_err(c, _flags, _err_type, __VA_ARGS__) : false);\
-         |                                                            ^~~~~~~~~~~
-   fs/bcachefs/error.h:117:54: note: expanded from macro '__fsck_err'
-     117 | #define __fsck_err(...)         fsck_err_wrap(bch2_fsck_err(__VA_ARGS__))
-         |                                                             ^~~~~~~~~~~
-   fs/bcachefs/error.h:101:38: note: expanded from macro 'bch2_fsck_err'
-     101 |                         _flags, BCH_FSCK_ERR_##_err_type, __VA_ARGS__)
-         |                                                           ^~~~~~~~~~~
-   fs/bcachefs/error.h:107:13: note: expanded from macro 'fsck_err_wrap'
-     107 |         int _ret = _do;                                                 \
-         |                    ^~~
-   1 warning generated.
+    arm: https://github.com/wtarreau/nolibc/commit/af968b1
+   mips: https://github.com/wtarreau/nolibc/commit/e04cd25
 
+Thus we can shave 4 more bytes from the MIPS entry code ;-)
 
-vim +1990 fs/bcachefs/fsck.c
+> > > > +#endif
+> > > > +
+> > > >  		"jalr $t9\n"             /* transfer to c runtime
+> > > > */
+> > > >  		" nop\n"                 /* delayed slot
+> > > 
+> > >  On an unrelated matter JALR above ought to be JAL (or otherwise there's 
+> > > no point in using the .cprestore pseudo-op).  And I fail to see why this 
+> > > code has to be "noreorder" (except for the .cpload piece, of course), it's 
+> > > just asking for troubles.
+> > 
+> > Thanks for the hints.
+> > 
+> > Without "noreorder", is the manually addition of the delayed slot "nop"
+> > still necessary?
+> 
+>  It's not.  It's for the `.set noreorder' mode only, to fill the branch 
+> delay slot by hand.  Otherwise it'll become just a useless instruction 
+> following the call sequence and executed after return.
 
-  1980	
-  1981	static int check_dir_i_size_notnested(struct btree_trans *trans, struct inode_walker *w)
-  1982	{
-  1983		struct bch_fs *c = trans->c;
-  1984		int ret = 0;
-  1985	
-  1986		darray_for_each(w->inodes, i)
-  1987			if (fsck_err_on(i->inode.bi_size != i->i_size,
-  1988					trans, inode_dir_wrong_nlink,
-  1989					"directory %llu:%u with wrong i_size: got %u, should be %llu",
-> 1990					w->last_pos.inode, i->snapshot, i->inode.bi_size, i->i_size)) {
-  1991				i->inode.bi_size = i->i_size;
-  1992				ret = bch2_fsck_write_inode(trans, &i->inode);
-  1993				if (ret)
-  1994					break;
-  1995			}
-  1996	fsck_err:
-  1997		bch_err_fn(c, ret);
-  1998		return ret;
-  1999	}
-  2000	
+Similarly I had ".set noreorder" and the nop in the initial code from 2017.
+I remember that it took me a long while to get that init code to work on
+my MIPS boxes, and it's extremely likely that I found the noreorder trick
+long after I placed the nop and did not remove it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > These points also apply to the existing O32 implementation, right?
+> 
+>  Correct.  Sadly it's the first time I see this code.
+> 
+>  Overall I find it a bit of a chimera: it uses `.set noreorder' and 
+> explicit relocations on one hand, and then high-level assembly `.cpload' 
+> and `.cprestore' pseudo-ops on the other, effectively mixing the two 
+> styles of assembly.
+> 
+>  The pseudo-ops come from times when using assembly macros was the norm 
+> and are there to support that coding model where macros rely on these 
+> pseudo-ops, and before the use of explicit relocations became the norm at 
+> least for GCC.  In the absence of assembly macros you can write code 
+> expansions for these pseudo-ops by hand, just as what GCC does nowadays 
+> (in the `-mexplicit-relocs' mode, which is usually the default).
+> 
+>  But due to architecture variations it's very hard to write handcoded 
+> assembly in the `.set noreorder' mode: you need to take care of all the 
+> data dependencies that appear due to the lack of interlocking between 
+> pipeline stages, which results in code that either works correctly 
+> everywhere, but is suboptimal for newer architecture revisions, or code 
+> that works better with newer architecture revisions, but is actually 
+> broken with earlier ones.
+> 
+>  About the only typical case where you do want to use `.set noreorder' is 
+> to schedule a branch delay slot by hand due to a data anti-dependency 
+> between the two instructions.  Patchable/self-modifying code is a less 
+> frequent case.  And I had literally one case in my entire career where I 
+> wanted to actually jump to a branch delay slot instruction (it's still 
+> there in arch/mips/include/asm/div64.h, in do_div64_32(); see label #2).
+> 
+>  Also it appears no code in this function actually relies on $gp having 
+> been set up, so perhaps this stuff can just be discarded in the first 
+> place?
+
+All of this is very helpful. For example we did face an issue with
+noreorder here, that required to then add ".set push" then ".set pop"
+as it was polluting the rest of the code:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=184177c3d6e0
+
+But I'm pretty sure that I didn't invent this ".set noreorder" and if I
+had found how to get rid of it, I'd happily done it. Like often with such
+code, it was produced by trial and error, and it's very possible that one
+solution was added to cover the problem caused by another one, and was
+not optimal. For me by then, the code was considered OK enough when my
+preinit program would work fine on all my machines (mostly mips-24Kc and
+mips-1004Kc that I daily have access to).
+
+In any case that's something that's easy to try again if we want to clean
+that up to normalize it.
+
+Thanks!
+Willy
