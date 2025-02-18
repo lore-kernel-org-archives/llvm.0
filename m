@@ -1,92 +1,155 @@
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E4E23C8BF
-	for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 11:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C6B239083;
+	Tue, 18 Feb 2025 11:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877294; cv=none; b=T7FGD3lHIEFqajsiSm6u5tbhDQnD/CKC15gGO5ne3W4IUnT7FBvlZ/DPnPlSZWuaBOwK9tPtLhTVHLGY0mLm1sTCrDpstJQ3F12a1TSBv+9O/9Kx+2RqbYLb7iLIGxsEu9eQscshOfav1qBipNO0b3kRx6J5NDscsKMZ9dNcN0s=
+	t=1739879342; cv=none; b=RbAONAHopZSphRDlbgfpkNRvmRbYOXCv1fFasmqqFGw/4o1cJ3OaTx2QPKGi5NyYyI1E/P0L7J1ZdxyrsIBakqQPrZhcHGmKPSlOYcJha7gSvCtjSX03XRqE0kPBIagb6S7cjUOc4wNt5k39BjrNzE0T0Rg8zrbMDS2KFXg8XGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877294; c=relaxed/simple;
-	bh=e4ePEsIFIVWnVVp7x965KwnUxkPN33NpLp6ekCRE8KY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XpJOXcgdCjsLUkDniGN9af2KljAFY6r5EhsKb/TJlvNHvfgqv7YM5L+7Vr1nZ2VWICMK8d1zE1sYfKhgo/O/iiIfdRSYQTxiPn57Rtr9RFnJ4pTgULycR/AFWf0a3HXaY7zif+AmVHESXozxgeRVxDGycJzarmrqZtia9D6xxI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ty/X8o7K; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1739879342; c=relaxed/simple;
+	bh=/Agu9UZpwMOMJa/3V+RSlri5QH5zzp8ZBK1cBmLTLoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SffHmeAuu0nqBhfHkdH+hG9XxSZQBXPYCeFyiZyec2FdzqITYM/4/I43mDx9j4aHzHZoXLoSKdwHEUKJIC2eWOob82mEb5zMJUC6agvomygrgsPVAeQno41JvZwIYT5Py7NXKVE4fnz1BNb8eSPYxYwR6sdykfCtv/eYBr324Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NBaxtDmt; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=P/+tbWof; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ty/X8o7K"
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6e6698667c7so46772186d6.2
-        for <llvm@lists.linux.dev>; Tue, 18 Feb 2025 03:14:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739877291; x=1740482091; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e4ePEsIFIVWnVVp7x965KwnUxkPN33NpLp6ekCRE8KY=;
-        b=Ty/X8o7KECFl6zLUz6vUwjkhNcz1EQl3VJBMWQqK0xa1POcaKIpQE8d7UISJY0SwdQ
-         XbRq4uJzKhwC01Z6gTbGqhJcaV8u0BpqIvaiuPuyzE8ljjNWOiK/OeXCgrdjemeYNa3Z
-         +MQ37wpEZbrIGBxHencP4c4Mi5cB4DUqTGpweo8K6lyAFuOAj1S62JMZveT8+ptNlAyV
-         QOjpdo7O+x6Q6aqrXOKtoyWLTJPxOC5M7Gta94UHpZjDlqoew/7gKYQQ+SQ0GdGEhe9D
-         DaZTGRJKgxr3aclxr68IRdW9lrEXqgj0jqcI8f74Cag153mm8K9ZK8NmagUhcSv0pq91
-         X3rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739877291; x=1740482091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e4ePEsIFIVWnVVp7x965KwnUxkPN33NpLp6ekCRE8KY=;
-        b=AaFu4ClVz42q3MoIvJkLxod6Kcl5SMwgCawkuVPgfztE5XRQO44lUqpD/KVzC66zJ2
-         MhUSdpEsO+R4xuDvYZ1Qlx4KGuFdrpIe1+MSvM9YS9aEpLd6vTh3nIJmikpIdWHg5Y0S
-         3/JL6+qpFWe4611zWyR6BY/IqyKcbAVNdoWAeWhaaCfdcNbt7iKRfhXVAeo4UYe5ba0b
-         3uj80mVvHxDi2iBNqIZ23ffqBLZxWE2rstFmMGVqjAQ0OwO9jC+q81QULKea3ACFYpQ9
-         BpOB0bkY+JVgtxrIPK+/JuNi0p6u79mtvenvKCPp8uXN+AnOZMI1+eD5U/gb/11VKbH0
-         9BjA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7nx7LUTDwKFSYyI00ETaNR82RZc5bbXDyLC9hxcboXAYJs22m+Qw64C42IosKQkGbJ+Hb@lists.linux.dev
-X-Gm-Message-State: AOJu0YxFbP1xkCp6Ia2HlcQ/bTWeYaeh2sbA9Gghnw7dcWU0y+jkPjBF
-	wzToiwtb6DNZc7xfLA044m7AxYgM+YLe+grd113IvhzbcHttjw1W5nkYdLCqquWt9sQ13TRP5I7
-	m2NhiTVQjEE7O4vfdNvMz5RKD9Y5X0ODa1slN
-X-Gm-Gg: ASbGncumbTWHFQ4rLJxfkXtG2PWC6peTjufSVEtImGaX5RIErS2SSs2CLpCK7j2RUWW
-	NcbNrWu4rQ9AedJcFldVob0HYGnFT6QR8t/ejRB0dat7kWuI1kzNLEUcOv7HknLiRLE1RQJ9Fb0
-	hwuC1BfLb9TroBP+Bj0TjY+4mc8hg=
-X-Google-Smtp-Source: AGHT+IF4V0cacABaV3DRhzrTYfPUh4lhH6DNQ3GhjP7RKVEodS0vVCqDlAESE8r3X5h1S9bFpKdk0ERPYFpqO2C0aao=
-X-Received: by 2002:a05:6214:29cb:b0:6df:9771:978e with SMTP id
- 6a1803df08f44-6e66cd063b0mr215315016d6.34.1739877291222; Tue, 18 Feb 2025
- 03:14:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NBaxtDmt";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="P/+tbWof"
+Date: Tue, 18 Feb 2025 12:48:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739879338;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qIaFQ7eiwfJAitD6oNiQEj86aF61YiHuAPe8K1OOpj8=;
+	b=NBaxtDmtb+spYi6lePNzYrF6Jffsk/v4UWZ3qOJcnDYl5OJl/O8keUrE62Jp4jp0v327rk
+	ieWoz/ZDAdkOAZhz4xsc7YIN5R4ZdT7EKsLoSvjOTz9wpWnTE9TQzBDjewGA1+cUzPC7Bc
+	eqCDmlGt8W5xkDAb0kA3itdQsgTGm3Ra3/p+cO4Npy5QC+W498mM+/CA0NxAmGEQyEOs0h
+	wlrKXnXqSSecuesNBeHaaW474Mm7Qd0Iej59FNUFTSW4M59WdNeiTaf3xpUEjtSu61JhBZ
+	4a8V+2TtEeGA18gYFcGw/FjBYXG5l5oDJH4JD68Lk350oQa3Z1UsimEGRjyFuw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739879338;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qIaFQ7eiwfJAitD6oNiQEj86aF61YiHuAPe8K1OOpj8=;
+	b=P/+tbWof/LxaNkv2NFJl6hxfQ1PcNdd8y1G2WSzIqMn5b2ku4tAPmIei7KDchpHB7LHQJU
+	cUdcqu863Tqc+LAg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: kernel test robot <lkp@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: ERROR: modpost: "kmsan_handle_dma"
+ [drivers/virtio/virtio_ring.ko] undefined!
+Message-ID: <20250218114857.oBuLvPYs@linutronix.de>
+References: <202502150634.qjxwSeJR-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202502150634.qjxwSeJR-lkp@intel.com> <20250218091411.MMS3wBN9@linutronix.de>
-In-Reply-To: <20250218091411.MMS3wBN9@linutronix.de>
-From: Alexander Potapenko <glider@google.com>
-Date: Tue, 18 Feb 2025 12:14:14 +0100
-X-Gm-Features: AWEUYZkW-ELgmmWvEUCGBMqnFptxrYx8irjbyp0U6Ob-IrK0R7M-ystRnmQpahU
-Message-ID: <CAG_fn=WzE5d4W1YheYN3SPYmVR5=r74zhV-Zhao5xu-Fqi461g@mail.gmail.com>
-Subject: Re: [PATCH] dma: kmsan: Export kmsan_handle_dma() for modules.
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, kernel test robot <lkp@intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <202502150634.qjxwSeJR-lkp@intel.com>
 
-On Tue, Feb 18, 2025 at 10:14=E2=80=AFAM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> kmsan_handle_dma() is used by virtio_ring() which can be built as a
-> module. kmsan_handle_dma() needs to be exported otherwise building the
-> virtio_ring fails.
->
-> Export kmsan_handle_dma for modules.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202502150634.qjxwSeJR-lkp@i=
-ntel.com/
-> Fixes: 7ade4f10779cb ("dma: kmsan: unpoison DMA mappings")
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Reviewed-by: Alexander Potapenko <glider@google.com>
+On 2025-02-15 06:42:36 [+0800], kernel test robot wrote:
+> >> arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x2428: undefine=
+d stack state
+
+I have been staring at this and have no idea what to do. I get here:
+| arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x21e1: undefined s=
+tack state
+
+The assembly at this spot looks as from the .o:
+|   110e4:       e8 00 00 00 00          call   110e9 <do_cpuid_func+0x21d9>
+|                        110e5: R_X86_64_PLT32   __msan_metadata_ptr_for_lo=
+ad_4-0x4
+|   110e9:       44 8b 38                mov    (%rax),%r15d
+|   110ec:       48 85 db                test   %rbx,%rbx
+|   110ef:       8b 1a                   mov    (%rdx),%ebx
+|   110f1:       4c 8b 64 24 18          mov    0x18(%rsp),%r12
+^^^ do_cpuid_func+0x21e1
+
+|   110f6:       0f 85 72 01 00 00       jne    1126e <do_cpuid_func+0x235e>
+|   110fc:       41 83 e7 fe             and    $0xfffffffe,%r15d
+|   11100:       48 89 ef                mov    %rbp,%rdi
+|   11103:       e8 00 00 00 00          call   11108 <do_cpuid_func+0x21f8>
+|                        11104: R_X86_64_PLT32   __msan_metadata_ptr_for_st=
+ore_4-0x4
+
+I've been looking at .s file but this does not realy match the .o. The
+registers are different, the offsets, too.
+Anyway.
+
+Looking at the opcodes it was processing "recently":
+base: 4, offset 1109d Dest: 0 Src: 5 lea    0x10(%r14),%rax
+base: 4, offset 110a1 Dest: 1 Src: 0 mov    %rax,0x20(%rsp)
+base: 4, offset 110ae Dest: 0 Src: 0 mov    %rsp,%r8
+base: 4, offset 1124b Dest: 0 Src: 1 mov    0x20(%rsp),%rsi
+base: 4, offset 11253 Dest: 0 Src: 1 mov    0x8(%rsp),%rcx
+base: 4, offset 11258 Dest: 0 Src: 0 mov    %r15,%rsp
+-> set UNDEF
+base: -1, offset 110f1 -> mov    0x18(%rsp),%r12
+arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x21e1: undefined sta=
+ck state 110f1
+
+=46rom the assembly it seems to make sense:
+|   110ae:       49 89 e0                mov    %rsp,%r8
+stash for later
+|   110b1:       48 85 db                test   %rbx,%rbx
+|   110b4:       c7 00 00 00 00 00       movl   $0x0,(%rax)
+|   110ba:       45 89 7e 14             mov    %r15d,0x14(%r14)
+|   110be:       0f 85 40 01 00 00       jne    11204 <do_cpuid_func+0x22f4>
+=E2=80=A6
+|   11204:       44 8b 74 24 38          mov    0x38(%rsp),%r14d
+|   11209:       44 89 f7                mov    %r14d,%edi
+|   1120c:       4d 89 c7                mov    %r8,%r15
+
+mov rsp to r15
+
+|   1120f:       e8 00 00 00 00          call   11214 <do_cpuid_func+0x2304>
+|                        11210: R_X86_64_PLT32   __msan_chain_origin-0x4
+|   11214:       89 c7                   mov    %eax,%edi
+|   11216:       e8 00 00 00 00          call   1121b <do_cpuid_func+0x230b>
+|                        11217: R_X86_64_PLT32   __msan_warning-0x4
+|   1121b:       44 89 f7                mov    %r14d,%edi
+|   1121e:       e8 00 00 00 00          call   11223 <do_cpuid_func+0x2313>
+|                        1121f: R_X86_64_PLT32   __msan_chain_origin-0x4
+|   11223:       89 c7                   mov    %eax,%edi
+|   11225:       e8 00 00 00 00          call   1122a <do_cpuid_func+0x231a>
+|                        11226: R_X86_64_PLT32   __msan_warning-0x4
+|   1122a:       44 89 f7                mov    %r14d,%edi
+|   1122d:       e8 00 00 00 00          call   11232 <do_cpuid_func+0x2322>
+|                        1122e: R_X86_64_PLT32   __msan_chain_origin-0x4
+|   11232:       89 c7                   mov    %eax,%edi
+|   11234:       e8 00 00 00 00          call   11239 <do_cpuid_func+0x2329>
+|                        11235: R_X86_64_PLT32   __msan_warning-0x4
+|   11239:       44 89 f7                mov    %r14d,%edi
+|   1123c:       e8 00 00 00 00          call   11241 <do_cpuid_func+0x2331>
+|                        1123d: R_X86_64_PLT32   __msan_chain_origin-0x4
+|   11241:       89 c7                   mov    %eax,%edi
+|   11243:       e8 00 00 00 00          call   11248 <do_cpuid_func+0x2338>
+|                        11244: R_X86_64_PLT32   __msan_warning-0x4
+|   11248:       4c 89 ef                mov    %r13,%rdi
+|   1124b:       48 8b 74 24 20          mov    0x20(%rsp),%rsi
+|   11250:       4c 89 e2                mov    %r12,%rdx
+|   11253:       48 8b 4c 24 08          mov    0x8(%rsp),%rcx
+|   11258:       4c 89 fc                mov    %r15,%rsp
+
+restore rsp. I just don't see how rsp is destroyed but this could be
+related to paravirt's xxl clobbing in__cpuid().
+
+I miss 1120c in my output. I don't understand how it jumps from 110ae to
+1124b. It misses the assignments in between but this might not be goal
+here=E2=80=A6
+
+gcc does not cause objtool to produce the warning but then gcc does
+shuffle rsp as much as llvm does.
+
+Sebastian
