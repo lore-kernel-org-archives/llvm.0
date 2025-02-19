@@ -1,72 +1,54 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from resqmta-h2p-567038.sys.comcast.net (resqmta-h2p-567038.sys.comcast.net [96.102.200.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E87B1FDE0E
-	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 16:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802121B0408
+	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 17:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.102.200.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739982119; cv=none; b=O1NQbx7mHkYdfDn1qXHrYaU4e4utdhlNyZJloz1aNuNz7nCSUsk7WUclQJ6Ld/6rrjprNUZzNMsF2tODg38vbGw2pvK8PxP0KguqwPE/jpBwHLLpnEcg+DeSFnzU/DkNmGj4PiuYJCDL6rx4ip8QanhCHwxX8wah6tx74hcn4ak=
+	t=1739986325; cv=none; b=WfS3pbBeu5QFzRfDtGG9pmTecHhHt2XATzBCysv3DMundUc3/qYL8p4QiZGlhLeaYDam3EOUWLMBzk6TygU0pOOfo9Ji7xYfD38TRVPEi22NTqlqgqXUPAvQ98J3j6p//V4G8GYQmwz+eqlaR7Gs2Mn6R1xSaag1n2aLIfE0to4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739982119; c=relaxed/simple;
-	bh=NC55d8UKmYSyTtYh7FciGxWwAStqqPsErmpYqmhgHxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q6O7eXVp8P4r+1rhGkztOChXaXUKvLU8Q8oPQfYYvFouvhuEYounY6BXorcOM1EvP9F4BRiJLyX7+Le2BrnpbWydpYu8rnKbdldyFPldhYxhmnRb5o4PEZoQ7ALYQTkyiaz5jkQmjbnFCA3kBuMfg1Zn8LoXpQSrt1/l8ZB6HWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DLTpdiiQ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1739986325; c=relaxed/simple;
+	bh=QPcSlc0LiyhqRnBHUiR6DpyUQpaxrjck9VKaibmMjOU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MBaGxXsq9NTzAg6mYWV3iiYu/AF87jyasG6iB+AuhOuTIfUK5y7YHkZ9t8JJ91Hxhz4xcLLMTrnmmQqBYh7O7gwNTPKqburDnDhEEXaA6kpl0D781KqqqJHzFtdQRQfKpUc9hFfK2FzjwUnbV7KQIxYP47jkMXEx9v3Z26k8qFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=comcast.net; spf=pass smtp.mailfrom=comcast.net; dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b=FVHAS2bl; arc=none smtp.client-ip=96.102.200.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=comcast.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=comcast.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DLTpdiiQ"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51JFv3cq022138;
-	Wed, 19 Feb 2025 16:21:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=sI0uUTF74a9oWRxqSrmo4ISZh1Osp1/CDwnWs/YQ0
-	zM=; b=DLTpdiiQpwwp3xjUKSlN677fA0avcR0Qs5hD+YYfcGKOAwyXjHygGYHxj
-	sIFv9O8nB4e+QBgIImwQFkYNMxfwCKcV6sHy0mtok7PpCgu3LPuaNj8H4UnKKtw6
-	yhTcTGMv72LmnVMwaBn+ABwOGL7q5g10H1wxwQOkNUe27H7P00wHGVUXxMVM6RTI
-	F3Shu8qV9cElhml5KmAz+7K8TWf1lGBeoQlCivqSvdjizr/+7e4CftyL2h8G9oBH
-	xn9TiIt2RREOtkOVn/afN3S5xFs32Jn6O3KtKhhEZVU6c8UPYrfUju4RwHKQGfr9
-	xMUxWzJdD4w/tNTo0+8vGRNnkcJ5w==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44wahjtsj1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 16:21:48 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51JG3ltR006774;
-	Wed, 19 Feb 2025 16:21:47 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44wahjtshx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 16:21:47 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51JE8Go4009721;
-	Wed, 19 Feb 2025 16:21:46 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03y50fc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 16:21:46 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51JGLh2l46203154
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Feb 2025 16:21:43 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3176520043;
-	Wed, 19 Feb 2025 16:21:43 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 46C8B20040;
-	Wed, 19 Feb 2025 16:21:40 +0000 (GMT)
-Received: from li-2fa77bcc-2701-11b2-a85c-cd621c23b6bd.ibm.com (unknown [9.39.30.196])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 19 Feb 2025 16:21:40 +0000 (GMT)
-From: Sathvika Vasireddy <sv@linux.ibm.com>
-To: jpoimboe@kernel.org, peterz@infradead.org, christophe.leroy@csgroup.eu,
-        npiggin@gmail.com, maddy@linux.ibm.com
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, sv@linux.ibm.com
-Subject: [RFC PATCH] objtool: Skip unannotated intra-function call warning for bl+mflr pattern
-Date: Wed, 19 Feb 2025 21:50:14 +0530
-Message-ID: <20250219162014.10334-1-sv@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
+	dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b="FVHAS2bl"
+Received: from resomta-h2p-555357.sys.comcast.net ([96.102.179.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 256/256 bits)
+	(Client did not present a certificate)
+	by resqmta-h2p-567038.sys.comcast.net with ESMTPS
+	id kjEbttYe4Wicpknt1tpUSu; Wed, 19 Feb 2025 17:29:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
+	s=20190202a; t=1739986167;
+	bh=NblRiKsXcO5CBT4PJbFI990yoHCBghohSU4zRzM3oU0=;
+	h=Received:Received:From:To:Subject:Date:Message-ID:MIME-Version:
+	 Xfinity-Spam-Result;
+	b=FVHAS2bls05kAgRcnlYciHbNYPpD/uhVmT9dfXO4p80W3cd69TbG9aTt+FuHjAfwh
+	 euJObVRMEw+NQPuHg2+uDFQCFvQny39FLdiAQoSse45SfyL3hB7hDt47d43s/7UfZM
+	 0VuMyYIBkFogP44WcmBUqDlidFAeX6SH7RdYbKYVQ0E5waZXS3yr35+RLZ3YkH7Pdc
+	 hjPfDgkCKUdVO3CQI6wKs+jwWHQ7CBXibXMXJ2f+BqRz8Dale2J/V3E94GSmCviTaE
+	 vjbHnc3ZGS5eFuMhWgLlpmZI74xJf/RFMOYrebDjDA8vBQIUWfLEmIxbq3655rnqfd
+	 bfC5NX3soAf3A==
+Received: from jack-livingood.hsd1.ca.comcast.net
+ ([IPv6:2601:647:4d81:b870::5d17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 256/256 bits)
+	(Client did not present a certificate)
+	by resomta-h2p-555357.sys.comcast.net with ESMTPSA
+	id knsltKeG1gUTFknsstPzl2; Wed, 19 Feb 2025 17:29:21 +0000
+From: jack Livingood <jacklivingood@comcast.net>
+To: llvm@lists.linux.dev
+Cc: oe-kbuild-all@lists.linux.dev,
+	yung-chuan.liao@linux.intel.com,
+	o-takashi@sakamocchi.jp,
+	tiwai@suse.de,
+	jack Livingood <jacklivingood@comcast.net>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] sound:firewire:fixed spelling error
+Date: Wed, 19 Feb 2025 09:28:17 -0800
+Message-ID: <20250219172817.50172-1-jacklivingood@comcast.net>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,63 +56,33 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -0nfzOLk-iSmRiDMV3cAGQnVUQrMFrCG
-X-Proofpoint-ORIG-GUID: lsAzIwV9z7swoBTplC0ojbBe2RyPnvvE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-19_07,2025-02-19_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- spamscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=944
- lowpriorityscore=0 impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502190124
+X-CMAE-Envelope: MS4xfMiccxxfr+qZXBpeZzpJH6M47BiP0/FFde6KME1jItbSlnTZy76XKGbLgbUBWscfcGOwCP8e/+5LfhXkhCQNHOHBbh7fmdhhEEhKAQuNRgfnTEKIWOv4
+ QajGS81ZhE9sPLw7fiHPHvXpctXQEN/dcWLJUuNCGI3ObawDY/WPv8HnzrgRTr182ry5Q4R2ULW3WcofR5c0rNTJYLj/jrvHjXzUa1KklPqdYW45trxfAboD
+ JsTZyUBbnx8zchsAi9bu0AJ0m8KkZynzU5rxBv27uc+ACdXjAmVyHMeFcLGvjUQURGH6foJJy3gRhRQEz8NAVoQrSzkkO46HLPuy7N1c4psncsYsIdkz1pgc
+ zihqLQ3770znn1kRFVhcojLk6uXNxsiBEtr7lRwPeFsZ4Yf/tMB6BpEKHVY7l20UuKs7SCzTwYMkwhwHKSrHJjRylf2v1jcywrzxh0MFS6X4C+V7hpY=
 
-Architectures like PowerPC use a pattern where the compiler generates a
-branch-and-link (bl) instruction that targets the very next instruction,
-followed by loading the link register (mflr) later. This pattern appears
-in the code like:
-
- bl .+4
- li r5,0
- mflr r30
-
-Objtool currently warns about this as an "unannotated intra-function
-call" because find_call_destination() fails to find any symbol at the
-target offset. Add a check to skip the warning when a branch targets
-the immediate next instruction in the same function.
+fixed a spelling error.
 
 Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202502180818.XnFdv8I8-lkp@intel.com/
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202502191455.cX0HILg0-lkp@intel.com/
+Signed-off-by: Jack Livingood <jacklivingood@comcast.net>
 ---
- tools/objtool/check.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ sound/firewire/isight.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 753dbc4f8198..3f7cf2c917b5 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1613,6 +1613,7 @@ static struct symbol *find_call_destination(struct section *sec, unsigned long o
-  */
- static int add_call_destinations(struct objtool_file *file)
- {
-+	struct instruction *next_insn;
- 	struct instruction *insn;
- 	unsigned long dest_off;
- 	struct symbol *dest;
-@@ -1625,6 +1626,11 @@ static int add_call_destinations(struct objtool_file *file)
- 		reloc = insn_reloc(file, insn);
- 		if (!reloc) {
- 			dest_off = arch_jump_destination(insn);
-+
-+			next_insn = next_insn_same_func(file, insn);
-+			if (next_insn && dest_off == next_insn->offset)
-+				continue;
-+
- 			dest = find_call_destination(insn->sec, dest_off);
+diff --git a/sound/firewire/isight.c b/sound/firewire/isight.c
+index e9617fc0a532..bf1e3f293c75 100644
+--- a/sound/firewire/isight.c
++++ b/sound/firewire/isight.c
+@@ -643,7 +643,7 @@ static int isight_probe(struct fw_unit *unit,
+ 		 "Apple iSight (GUID %08x%08x) at %s, S%d",
+ 		 fw_dev->config_rom[3], fw_dev->config_rom[4],
+ 		 dev_name(&unit->device), 100 << fw_dev->max_speed);
+-	strspy(card->mixername, "iSight");
++	strscpy(card->mixername, "iSight");
  
- 			add_call_dest(file, insn, dest, false);
+ 	err = isight_create_pcm(isight);
+ 	if (err < 0)
 -- 
-2.39.3
+2.48.1
 
