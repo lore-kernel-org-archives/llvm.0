@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D921DE8A8;
-	Wed, 19 Feb 2025 17:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7AF1494DF;
+	Wed, 19 Feb 2025 18:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739987968; cv=none; b=CM0QGpQOcv+fLlCqIpORSIORCgF7w3FS5mKzorWEJz4Uk9tP+Ixh/XRm9gBb4mmbWR+KoL5+H/151BPXPM8i4ESiY2XldR5vliHCgZ/FR4/4WUgcAzlSJN1UhgPLb8gu49xw9alDFystTs1M9WvUw3tkzDu3Rqh6ya08y9YrxYw=
+	t=1739989208; cv=none; b=o2AVwN2HxyKBYSkaet/YsRqPWdc/jKaGwRCCID0a3DEBTBwJJCC1USZqnFtFUKxEJJnFBODKcEgYw8PeCpfyjH8/AIpUI2+ALnrQGqVcUvK44/G0QAg8OGQ3yggXfyeVD81ykbn46KsIJVt5J3ysYCil1e2rkq772cn3kfwZ6wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739987968; c=relaxed/simple;
-	bh=dZRPlTg8UwRQsvICOzZrnxpjLEsnFkHU87BP1KT3JfA=;
+	s=arc-20240116; t=1739989208; c=relaxed/simple;
+	bh=3kziXbn//yaADzUrX0EyZDBLqNCTmgKRMDgdUCk/Cm4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LSUZ3nTeOPkExK2fCW/QmxPHLGRdGtdYW3hjJHeHwUqeQw3pd8BVcm2b0t/K5UM4E5fIR0mN9MKnFBzZrT9/pF8DLJCSEhpV4NyUt83h885joEisol/QEYRl4uTjNNCVvQQ1OQ+75J4p4r5cqkwKZDKmrQOBmm5g/5lc+Qt3h8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fs89mG5z; arc=none smtp.client-ip=198.175.65.14
+	 Content-Disposition; b=SOHmBYNiku9oL+Fr14uRBY+hpTVpNRogohHkvzzT+cg7VRevJlhKZ0Cfy4czz4ubjWvHY15+A/YQ08rdSvTYAHl1qLhBLDt16XbomyEJJeevel6gCQVpYXYJhQKbdpaZFTI2ZeLMmY6Z1se6xLo4WS9uTHloPVVo3uKgkOH5RaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nTH/gYI/; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fs89mG5z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nTH/gYI/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739987967; x=1771523967;
+  t=1739989207; x=1771525207;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dZRPlTg8UwRQsvICOzZrnxpjLEsnFkHU87BP1KT3JfA=;
-  b=Fs89mG5zJ+tMWt/tN36P581+eU+MIqHzIqPuC/imSO6UynwnRuFrtcwX
-   mqaK6yAD55DAku9pGFxUPrNpKFpRLjkANRd5GSP7y03K5189ly/EOlDja
-   sH79WXTgYAW6SymB0Ybi9Al+y7i02QYY8mTFxEQQGvFBjb3IWh5oEyiog
-   5irFyJrArTP/Zd9TmujfrQY/cL75rOsuDgoD0Cbas9rIMXCwiGlWGK1oC
-   3OaSL1dtot68WRbxPAjie9V2S/3VVGXZfNvq8Qs+ifz8x3X14db3+Nb5N
-   PTv25CYygjcVjpHxG16GJ1rrsCCiF8f2+AWOkzgDCeKNoSW8iCZrBiDat
-   Q==;
-X-CSE-ConnectionGUID: zPVfjeCkR6+F4HT/a0ySNQ==
-X-CSE-MsgGUID: p++PNxokQYev+/2vctcIOQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="44508069"
+  bh=3kziXbn//yaADzUrX0EyZDBLqNCTmgKRMDgdUCk/Cm4=;
+  b=nTH/gYI/ME+XOLZ4bZV5rkq4cbWYcHMJVJjwx7bourt7jlIjAKUltvzk
+   m7yVC4OL7i425RSJ19Ti6HF1Ksd992OZ1+NtiD24omQIXlEK3bJmNd7F/
+   hu7MT8Tf0t+1sl1jCpUQdnkXTPcWwNbNzwRsLb753HT+fTXk6F2IG9eKc
+   0cDTmPvLhN4acIQkMQJVruIKd0ooYHoerlkUCvQQx9xw9zn6tKNn4Hz1F
+   4PmLUeztweONR8igbpdr9FYJm8N9oYtHtK7khXCrnwH1/aG86LKtN5XRM
+   i5GsKEkPUViQOocqaYZBXO8DlzKoaofBgjgJ+Ggjw9hCH4eTiQIP+djln
+   w==;
+X-CSE-ConnectionGUID: POOhvhKTQpqPsHAn6vGTYg==
+X-CSE-MsgGUID: M2GrgsJsQDWFKWed4oNp7w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="51380863"
 X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="44508069"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 09:59:25 -0800
-X-CSE-ConnectionGUID: bMFkRCDDQl+JuIoQya6e0A==
-X-CSE-MsgGUID: 6lzyRyhlQ5KfUfVG4K+gNw==
+   d="scan'208";a="51380863"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 10:20:06 -0800
+X-CSE-ConnectionGUID: UoPXK1CkTeO3RJVlM4kjXg==
+X-CSE-MsgGUID: 7B61ae8aQAWjyeC9zznHvQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119992342"
+X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
+   d="scan'208";a="114983613"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 19 Feb 2025 09:37:51 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 19 Feb 2025 09:49:12 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tko12-0003FZ-0k;
-	Wed, 19 Feb 2025 17:37:44 +0000
-Date: Thu, 20 Feb 2025 01:37:35 +0800
+	id 1tkoBr-0003GL-30;
+	Wed, 19 Feb 2025 17:48:57 +0000
+Date: Thu, 20 Feb 2025 01:48:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: drivers/i2c/i2c-core-base.c:1420:12: warning: stack frame size
- (1040) exceeds limit (1024) in 'i2c_do_add_adapter'
-Message-ID: <202502200154.kBYwSZGe-lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:x86/fineibt-bhi 16/17]
+ arch/x86/kernel/alternative.c:1620:26: error: expected ';' after asm
+ statement
+Message-ID: <202502200149.7Lh2AOUr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,45 +63,92 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6537cfb395f352782918d8ee7b7f10ba2cc3cbf2
-commit: 3bfa08fe9ec8dd79e183c88e1275be74191e7bc8 Revert "i2c: Replace list-based mechanism for handling auto-detected clients"
-date:   2 weeks ago
-config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20250220/202502200154.kBYwSZGe-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200154.kBYwSZGe-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/fineibt-bhi
+head:   fc37d12eb49df491173cf99055fce6108a2a99a3
+commit: 5095a689d0f306c9ce4c9ff5d905626f0fa557ed [16/17] x86/ibt: Implement FineIBT-BHI mitigation
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250220/202502200149.7Lh2AOUr-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200149.7Lh2AOUr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502200154.kBYwSZGe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502200149.7Lh2AOUr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/i2c/i2c-core-base.c:1420:12: warning: stack frame size (1040) exceeds limit (1024) in 'i2c_do_add_adapter' [-Wframe-larger-than]
-    1420 | static int i2c_do_add_adapter(struct i2c_driver *driver,
-         |            ^
-   1 warning generated.
+   In file included from arch/x86/kernel/alternative.c:6:
+   In file included from include/linux/perf_event.h:18:
+   In file included from include/uapi/linux/bpf_perf_event.h:11:
+   In file included from ./arch/x86/include/generated/uapi/asm/bpf_perf_event.h:1:
+   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/x86/kernel/alternative.c:1620:26: error: expected ';' after asm statement
+    1620 |         OPTIMIZER_HIDE_VAR(addr)
+         |                                 ^
+         |                                 ;
+   3 warnings and 1 error generated.
 
 
-vim +/i2c_do_add_adapter +1420 drivers/i2c/i2c-core-base.c
+vim +1620 arch/x86/kernel/alternative.c
 
-9c1600eda42e52 drivers/i2c/i2c-core.c David Brownell 2007-05-01  1419  
-69b0089a6750a0 drivers/i2c/i2c-core.c Jean Delvare   2009-12-06 @1420  static int i2c_do_add_adapter(struct i2c_driver *driver,
-69b0089a6750a0 drivers/i2c/i2c-core.c Jean Delvare   2009-12-06  1421  			      struct i2c_adapter *adap)
-026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1422  {
-4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1423  	/* Detect supported devices on that bus, and instantiate them */
-4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1424  	i2c_detect(adap, driver);
-4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1425  
-026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1426  	return 0;
-026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1427  }
-026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1428  
-
-:::::: The code at line 1420 was first introduced by commit
-:::::: 69b0089a6750a0435570df3ba8456c77b352af55 i2c: Refactor for_each callbacks
-
-:::::: TO: Jean Delvare <khali@linux-fr.org>
-:::::: CC: Jean Delvare <khali@linux-fr.org>
+  1590	
+  1591	/*
+  1592	 * regs->ip points to one of the UD2 in __bhi_args[].
+  1593	 */
+  1594	static bool decode_fineibt_bhi(int ud_type, struct pt_regs *regs,
+  1595				       unsigned long *target, u32 *type)
+  1596	{
+  1597		unsigned long addr;
+  1598		u32 hash;
+  1599	
+  1600		/*
+  1601		 * Fetch the return address from the stack, this points to the
+  1602		 * FineIBT preamble. Since the CALL instruction is in the 5 last
+  1603		 * bytes of the preamble, the return address is in fact the target
+  1604		 * address.
+  1605		 */
+  1606		__get_kernel_nofault(&addr, regs->sp, unsigned long, Efault);
+  1607		*target = addr;
+  1608	
+  1609		addr -= fineibt_preamble_size;
+  1610		__get_kernel_nofault(&hash, addr + fineibt_preamble_hash, u32, Efault);
+  1611		*type = (u32)regs->r10 + hash;
+  1612	
+  1613		/*
+  1614		 * Non-fatal CFI cannot continue with the BHI stub, as it would
+  1615		 * clobber the argument registers, relocate the instruction stream to
+  1616		 * __bhi_args[0] to avoid this.
+  1617		 */
+  1618		addr = regs->ip & 0x1F;
+  1619		addr += (unsigned long)&__bhi_args[0];
+> 1620		OPTIMIZER_HIDE_VAR(addr)
+  1621		addr += LEN_UD2;
+  1622		regs->ip = addr;
+  1623	
+  1624		return true;
+  1625	
+  1626	Efault:
+  1627		return false;
+  1628	}
+  1629	
 
 -- 
 0-DAY CI Kernel Test Service
