@@ -1,66 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C61619AD89;
-	Wed, 19 Feb 2025 04:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7FD2AE95;
+	Wed, 19 Feb 2025 06:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739940758; cv=none; b=JIeM54XYD6uHv6HZfvm9QsYw5taaKkrxlCXGmSExNg4MuhQF6YA/gZb6U49XWtvwEGV6OngzMJly7z6YoUIsN8vNfHTmZILpMjBuO1U6vI3mjlOYmFy2WXHrO+5AaoDfA/YFyqnwEWBZ9bWXkQ7GDb9rFw3Zqv78E1CT8jTAlwc=
+	t=1739947796; cv=none; b=ipDdH3IiKIcVS193TZQd6TgZJe/8WdoeKUyHr4JMKpMXMzKZsSy/b8Inx4Sd22i6yIIUcdaTPF5pDTRPHUchstblVlBZX1p55XxPri30mZMVlSOtj8DU4zz3TmgRtNtzuOodk5tUSs5nOTQZgZ/g2+7T433Br9HykfBicfzq+70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739940758; c=relaxed/simple;
-	bh=CqJ6DkASQPJEC9ewBqvxq88kqMSk27cnnMTjXeKRPDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qJPTfZSXCvrRFA1nicdYdW+0cPtjGEyLcvL8e/I3jTVEpReok1e6ylqRLaRsE4046CrGFWcd6qWyqq8gjnUduJPfa5h147NoplQKvRo8NPEBG/ev3fDv0kqYWo4vAIzMPr/uDeWSVuzvVCR94mx4CnwcY479u2AupDB7Bbb0hqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g8frQxmV; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1739947796; c=relaxed/simple;
+	bh=7Krk71qge0LEXwn6sNemb0UiQ/gW3FDKvxGULGwUycA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=konORxL0GkCfIU6ma8twDrgq0uyAAs69nsyqpIXSMU7T/aEWtQYJvlnKs1+rubiSkBqcozWl7s0WCUcw4wILpwTJrP3hOZKe4kBCfGchROvOVDtJqkzxyYgzFY05Grn9PEaz9QGcvM8j1XHhwQleYxl/n7/PCPtWjJcEr7WjYxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NW5eklWg; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8frQxmV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NW5eklWg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739940756; x=1771476756;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CqJ6DkASQPJEC9ewBqvxq88kqMSk27cnnMTjXeKRPDc=;
-  b=g8frQxmVIS0emUrpT9RKj/DTk/+F7LuBmjIrSRs+vSJzuWxNK2g/71tY
-   0v7irETel3Pvvj0Q8Fmzf08gAfcgNRAKtwnj2PVfYzN0/5EIpPHRIk7Nm
-   vn3s1MmWROBYkLuTzGU0Z6V4wxknS7HiV2QUJGiZKFVjQWJJZdx5ee/O4
-   mnAtLEGJsmNKuBj3bnoN1l4d1JeC3xcul+FqgnQmlOWbdwZ6emX84GN2U
-   n/CZe5Y7WU5WniSDWkTmBQM/ae6Nbz9U6uffTh2s/zAn8xUWX/vVmHa62
-   T8Q7igD8enzj5XboLzCWq9xhbANYDDY6Fk20rdpCT5Sulg1QRYldj+kOM
-   w==;
-X-CSE-ConnectionGUID: 4/l2ol4TToKJiLLfyAPHgw==
-X-CSE-MsgGUID: 3zXaInlcTF64XMLEioLEOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="44420799"
+  t=1739947795; x=1771483795;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7Krk71qge0LEXwn6sNemb0UiQ/gW3FDKvxGULGwUycA=;
+  b=NW5eklWg8IiLKZYdOodxi/I3LPv556k+k2qtr0Ir85AVtwiKjxSeVo51
+   D2OT0VZjvMRVa8ev6ns0SwHbF37EqLrbXvPijgqLf0ZzyRWpRa98Pddcp
+   DTJJRPoEIuC5v+1Smn47CHgWqfCzmTosVBqkGij984LJWrVPHvHjo/awb
+   8+kgKZsB6SYQf8OlP6IC75MUUlNqT0mJV18L+rGF2kxYHwFM7KMmayRTp
+   RuOgHTnBMFEC24AD+W8sVw4j9R3g237TimPuIyP47JFBdo8k1/+7KpQ2K
+   I+tg9fDxjRngshKsdgW9XHtLeX02UcQG2oSEF5VqKeMWDpMtnle89XWeL
+   Q==;
+X-CSE-ConnectionGUID: o9t21f9qTny+N8d+CvsmGw==
+X-CSE-MsgGUID: EkvFPHJJTk2nX8SnYevIrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="40930093"
 X-IronPort-AV: E=Sophos;i="6.13,298,1732608000"; 
-   d="scan'208";a="44420799"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 20:52:35 -0800
-X-CSE-ConnectionGUID: /Nas89t0TGGoDTHvDacfhw==
-X-CSE-MsgGUID: d4uI7X/cQ1uJw9H4hbMHuA==
+   d="scan'208";a="40930093"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 22:49:54 -0800
+X-CSE-ConnectionGUID: kl0lAx/dSzaRu65qWmVkMQ==
+X-CSE-MsgGUID: /O96zr7eRpSdjpCHByKB3Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,298,1732608000"; 
-   d="scan'208";a="114456632"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119826062"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 18 Feb 2025 20:52:31 -0800
+  by orviesa005.jf.intel.com with ESMTP; 18 Feb 2025 22:49:51 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkc4J-0001Fb-11;
-	Wed, 19 Feb 2025 04:52:24 +0000
-Date: Wed, 19 Feb 2025 12:52:02 +0800
+	id 1tkdu1-0001KF-1i;
+	Wed, 19 Feb 2025 06:49:49 +0000
+Date: Wed, 19 Feb 2025 14:49:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aman Kumar Pandey <aman.kumarpandey@nxp.com>,
-	linux-kernel@vger.kernel.org, linux-i3c@lists.infradead.org,
-	alexandre.belloni@bootlin.com, krzk+dt@kernel.org, robh@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org
+To: Jack Livingood <jacklivingood@comcast.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	vikash.bansal@nxp.com, priyanka.jain@nxp.com,
-	shashank.rebbapragada@nxp.com, Frank.Li@nxp.com,
-	Aman Kumar Pandey <aman.kumarpandey@nxp.com>
-Subject: Re: [PATCH 2/2] drivers: i3c: Add driver for NXP P3H2x4x i3c-hub
- device
-Message-ID: <202502191226.OQpregx1-lkp@intel.com>
-References: <20250212132227.1348374-2-aman.kumarpandey@nxp.com>
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	Takashi Iwai <tiwai@suse.de>
+Subject: [thesofproject:topic/sof-dev-rebase 4/76]
+ sound/firewire/isight.c:647:2: error: call to undeclared function 'strspy';
+ ISO C99 and later do not support implicit function declarations
+Message-ID: <202502191455.cX0HILg0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,35 +65,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250212132227.1348374-2-aman.kumarpandey@nxp.com>
 
-Hi Aman,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.14-rc3 next-20250218]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Aman-Kumar-Pandey/drivers-i3c-Add-driver-for-NXP-P3H2x4x-i3c-hub-device/20250212-213659
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250212132227.1348374-2-aman.kumarpandey%40nxp.com
-patch subject: [PATCH 2/2] drivers: i3c: Add driver for NXP P3H2x4x i3c-hub device
-config: i386-randconfig-006-20250219 (https://download.01.org/0day-ci/archive/20250219/202502191226.OQpregx1-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502191226.OQpregx1-lkp@intel.com/reproduce)
+tree:   https://github.com/thesofproject/linux topic/sof-dev-rebase
+head:   5ca0718708095df0cc5a98ff9197021467737b3c
+commit: 959fde874df9675d3cf934569ac9c0ea36cec285 [4/76] ALSA: firewire: isight: changed strcpy to strscpy
+config: powerpc-randconfig-001-20250219 (https://download.01.org/0day-ci/archive/20250219/202502191455.cX0HILg0-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502191455.cX0HILg0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502191226.OQpregx1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502191455.cX0HILg0-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/bpf/preload/bpf_preload.o
->> ERROR: modpost: "i2c_slave_event" [drivers/i3c/p3h2x4x/p3h2x4x_i3c_hub.ko] undefined!
+>> sound/firewire/isight.c:647:2: error: call to undeclared function 'strspy'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           strspy(card->mixername, "iSight");
+           ^
+   1 error generated.
+
+
+vim +/strspy +647 sound/firewire/isight.c
+
+   612	
+   613	static int isight_probe(struct fw_unit *unit,
+   614				const struct ieee1394_device_id *id)
+   615	{
+   616		struct fw_device *fw_dev = fw_parent_device(unit);
+   617		struct snd_card *card;
+   618		struct isight *isight;
+   619		int err;
+   620	
+   621		err = snd_card_new(&unit->device, -1, NULL, THIS_MODULE,
+   622				   sizeof(*isight), &card);
+   623		if (err < 0)
+   624			return err;
+   625	
+   626		isight = card->private_data;
+   627		isight->card = card;
+   628		mutex_init(&isight->mutex);
+   629		isight->unit = fw_unit_get(unit);
+   630		isight->device = fw_dev;
+   631		isight->audio_base = get_unit_base(unit);
+   632		if (!isight->audio_base) {
+   633			dev_err(&unit->device, "audio unit base not found\n");
+   634			err = -ENXIO;
+   635			goto error;
+   636		}
+   637		fw_iso_resources_init(&isight->resources, unit);
+   638	
+   639		card->private_free = isight_card_free;
+   640	
+   641		strscpy(card->driver, "iSight");
+   642		strscpy(card->shortname, "Apple iSight");
+   643		snprintf(card->longname, sizeof(card->longname),
+   644			 "Apple iSight (GUID %08x%08x) at %s, S%d",
+   645			 fw_dev->config_rom[3], fw_dev->config_rom[4],
+   646			 dev_name(&unit->device), 100 << fw_dev->max_speed);
+ > 647		strspy(card->mixername, "iSight");
+   648	
+   649		err = isight_create_pcm(isight);
+   650		if (err < 0)
+   651			goto error;
+   652	
+   653		err = isight_create_mixer(isight);
+   654		if (err < 0)
+   655			goto error;
+   656	
+   657		err = snd_card_register(card);
+   658		if (err < 0)
+   659			goto error;
+   660	
+   661		dev_set_drvdata(&unit->device, isight);
+   662	
+   663		return 0;
+   664	error:
+   665		snd_card_free(card);
+   666	
+   667		mutex_destroy(&isight->mutex);
+   668		fw_unit_put(isight->unit);
+   669	
+   670		return err;
+   671	}
+   672	
 
 -- 
 0-DAY CI Kernel Test Service
