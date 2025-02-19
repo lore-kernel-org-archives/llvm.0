@@ -1,59 +1,44 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7AF1494DF;
-	Wed, 19 Feb 2025 18:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C1E1ADC86;
+	Wed, 19 Feb 2025 19:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739989208; cv=none; b=o2AVwN2HxyKBYSkaet/YsRqPWdc/jKaGwRCCID0a3DEBTBwJJCC1USZqnFtFUKxEJJnFBODKcEgYw8PeCpfyjH8/AIpUI2+ALnrQGqVcUvK44/G0QAg8OGQ3yggXfyeVD81ykbn46KsIJVt5J3ysYCil1e2rkq772cn3kfwZ6wU=
+	t=1739995194; cv=none; b=O/Sas2Daq3kXBXH2JgswKUDfWckqwLwkTdD12I3pwBfiFj8aTWzlZEK3cinQLMx+v4QNN2lqfsygOikXGFhh7Hr6JLV1ILO4Orm32is7aIUhymrMOiQ8L5wOGz5v/RzlCbdQ2DValfjJR/7hxpNTT8cQqt9fvbvKiuXCAkbsrMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739989208; c=relaxed/simple;
-	bh=3kziXbn//yaADzUrX0EyZDBLqNCTmgKRMDgdUCk/Cm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SOHmBYNiku9oL+Fr14uRBY+hpTVpNRogohHkvzzT+cg7VRevJlhKZ0Cfy4czz4ubjWvHY15+A/YQ08rdSvTYAHl1qLhBLDt16XbomyEJJeevel6gCQVpYXYJhQKbdpaZFTI2ZeLMmY6Z1se6xLo4WS9uTHloPVVo3uKgkOH5RaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nTH/gYI/; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739995194; c=relaxed/simple;
+	bh=PwPcZQF/rIBsEMFgDA+9vFHYmp1V9SB2sbkUVVp7/C0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sITzWWyl8rRUU2UTK4wtuZp225tyn8HBBf2jG1tGWpbHjuq7WeHmbnK0edlhrrXqym1gBo5mfMtiPSMroknkezh1YnpWKiq4q3Hd3qesAA4FSdvQuOCwQZMlfKlp5EGpcQlsNV8oDs0/yMEF4OvU3XDqAZIUBFT3D54vrwOhglU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBTNa/sg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nTH/gYI/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739989207; x=1771525207;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3kziXbn//yaADzUrX0EyZDBLqNCTmgKRMDgdUCk/Cm4=;
-  b=nTH/gYI/ME+XOLZ4bZV5rkq4cbWYcHMJVJjwx7bourt7jlIjAKUltvzk
-   m7yVC4OL7i425RSJ19Ti6HF1Ksd992OZ1+NtiD24omQIXlEK3bJmNd7F/
-   hu7MT8Tf0t+1sl1jCpUQdnkXTPcWwNbNzwRsLb753HT+fTXk6F2IG9eKc
-   0cDTmPvLhN4acIQkMQJVruIKd0ooYHoerlkUCvQQx9xw9zn6tKNn4Hz1F
-   4PmLUeztweONR8igbpdr9FYJm8N9oYtHtK7khXCrnwH1/aG86LKtN5XRM
-   i5GsKEkPUViQOocqaYZBXO8DlzKoaofBgjgJ+Ggjw9hCH4eTiQIP+djln
-   w==;
-X-CSE-ConnectionGUID: POOhvhKTQpqPsHAn6vGTYg==
-X-CSE-MsgGUID: M2GrgsJsQDWFKWed4oNp7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="51380863"
-X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="51380863"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 10:20:06 -0800
-X-CSE-ConnectionGUID: UoPXK1CkTeO3RJVlM4kjXg==
-X-CSE-MsgGUID: 7B61ae8aQAWjyeC9zznHvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="114983613"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Feb 2025 09:49:12 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tkoBr-0003GL-30;
-	Wed, 19 Feb 2025 17:48:57 +0000
-Date: Thu, 20 Feb 2025 01:48:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/fineibt-bhi 16/17]
- arch/x86/kernel/alternative.c:1620:26: error: expected ';' after asm
- statement
-Message-ID: <202502200149.7Lh2AOUr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBTNa/sg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671A8C4CED1;
+	Wed, 19 Feb 2025 19:59:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739995193;
+	bh=PwPcZQF/rIBsEMFgDA+9vFHYmp1V9SB2sbkUVVp7/C0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SBTNa/sgXYM6YjrU9USwMpRibd7GG/3zqHtVNXGdWWDYJG2kxzcj8WmV+UvfDKzY5
+	 ZbotGmI6oxay4yta3j5WhR1dkUvryntxT4peWzYwYiPfnk7ytggJHCvHJAo2ZtYEuN
+	 5W4skWIhbZ4BrVrnzJdgvjo0A/ofj7CUMaXfdU+vNwtFSQlI6mzlNixt/t59ukuXRt
+	 XXk3j/8dMdVhYIbDKdzS3/ITWVdq5Noau1BOtvR7Ok29cCpdjezKUSFFHq0JjcRpVp
+	 CZlyt8lVvnxZtxMwbgX0PICdFlCm8r7Us0Ut/OqAQS3Wge+y8c0Fy++tGvR+a+Up7j
+	 qMxcKTnWXVl6w==
+Date: Wed, 19 Feb 2025 12:59:48 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Brian Gerst <brgerst@gmail.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>,
+	Uros Bizjak <ubizjak@gmail.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 07/15] x86/stackprotector/64: Convert to normal percpu
+ variable
+Message-ID: <20250219195948.GA3075960@ax162>
+References: <20250123190747.745588-1-brgerst@gmail.com>
+ <20250123190747.745588-8-brgerst@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,94 +47,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250123190747.745588-8-brgerst@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/fineibt-bhi
-head:   fc37d12eb49df491173cf99055fce6108a2a99a3
-commit: 5095a689d0f306c9ce4c9ff5d905626f0fa557ed [16/17] x86/ibt: Implement FineIBT-BHI mitigation
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250220/202502200149.7Lh2AOUr-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200149.7Lh2AOUr-lkp@intel.com/reproduce)
+On Thu, Jan 23, 2025 at 02:07:39PM -0500, Brian Gerst wrote:
+> Older versions of GCC fixed the location of the stack protector canary
+> at %gs:40.  This constraint forced the percpu section to be linked at
+> absolute address 0 so that the canary could be the first data object in
+> the percpu section.  Supporting the zero-based percpu section requires
+> additional code to handle relocations for RIP-relative references to
+> percpu data, extra complexity to kallsyms, and workarounds for linker
+> bugs due to the use of absolute symbols.
+> 
+> GCC 8.1 supports redefining where the canary is located, allowng it to
+> become a normal percpu variable instead of at a fixed location.  This
+> removes the contraint that the percpu section must be zero-based.
+> 
+> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+> Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
+...
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index 5b773b34768d..88a1705366f9 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -140,14 +140,7 @@ ifeq ($(CONFIG_X86_32),y)
+>          # temporary until string.h is fixed
+>          KBUILD_CFLAGS += -ffreestanding
+>  
+> -    ifeq ($(CONFIG_STACKPROTECTOR),y)
+> -        ifeq ($(CONFIG_SMP),y)
+> -            KBUILD_CFLAGS += -mstack-protector-guard-reg=fs \
+> -                             -mstack-protector-guard-symbol=__ref_stack_chk_guard
+> -        else
+> -            KBUILD_CFLAGS += -mstack-protector-guard=global
+> -        endif
+> -    endif
+> +        percpu_seg := fs
+>  else
+>          BITS := 64
+>          UTS_MACHINE := x86_64
+> @@ -197,6 +190,17 @@ else
+>          KBUILD_CFLAGS += -mcmodel=kernel
+>          KBUILD_RUSTFLAGS += -Cno-redzone=y
+>          KBUILD_RUSTFLAGS += -Ccode-model=kernel
+> +
+> +        percpu_seg := gs
+> +endif
+> +
+> +ifeq ($(CONFIG_STACKPROTECTOR),y)
+> +    ifeq ($(CONFIG_SMP),y)
+> +	KBUILD_CFLAGS += -mstack-protector-guard-reg=$(percpu_seg)
+> +	KBUILD_CFLAGS += -mstack-protector-guard-symbol=__ref_stack_chk_guard
+> +    else
+> +	KBUILD_CFLAGS += -mstack-protector-guard=global
+> +    endif
+>  endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502200149.7Lh2AOUr-lkp@intel.com/
+-mstack-protector-guard-symbol was only added in clang-15, so it looks
+like min-tool-version.sh will need an adjustment like GCC did, should I
+send a patch?
 
-All errors (new ones prefixed by >>):
+https://github.com/llvm/llvm-project/commit/efbaad1c4a526e91b034e56386e98a9268cd87b2
 
-   In file included from arch/x86/kernel/alternative.c:6:
-   In file included from include/linux/perf_event.h:18:
-   In file included from include/uapi/linux/bpf_perf_event.h:11:
-   In file included from ./arch/x86/include/generated/uapi/asm/bpf_perf_event.h:1:
-   In file included from include/uapi/asm-generic/bpf_perf_event.h:4:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/x86/kernel/alternative.c:1620:26: error: expected ';' after asm statement
-    1620 |         OPTIMIZER_HIDE_VAR(addr)
-         |                                 ^
-         |                                 ;
-   3 warnings and 1 error generated.
-
-
-vim +1620 arch/x86/kernel/alternative.c
-
-  1590	
-  1591	/*
-  1592	 * regs->ip points to one of the UD2 in __bhi_args[].
-  1593	 */
-  1594	static bool decode_fineibt_bhi(int ud_type, struct pt_regs *regs,
-  1595				       unsigned long *target, u32 *type)
-  1596	{
-  1597		unsigned long addr;
-  1598		u32 hash;
-  1599	
-  1600		/*
-  1601		 * Fetch the return address from the stack, this points to the
-  1602		 * FineIBT preamble. Since the CALL instruction is in the 5 last
-  1603		 * bytes of the preamble, the return address is in fact the target
-  1604		 * address.
-  1605		 */
-  1606		__get_kernel_nofault(&addr, regs->sp, unsigned long, Efault);
-  1607		*target = addr;
-  1608	
-  1609		addr -= fineibt_preamble_size;
-  1610		__get_kernel_nofault(&hash, addr + fineibt_preamble_hash, u32, Efault);
-  1611		*type = (u32)regs->r10 + hash;
-  1612	
-  1613		/*
-  1614		 * Non-fatal CFI cannot continue with the BHI stub, as it would
-  1615		 * clobber the argument registers, relocate the instruction stream to
-  1616		 * __bhi_args[0] to avoid this.
-  1617		 */
-  1618		addr = regs->ip & 0x1F;
-  1619		addr += (unsigned long)&__bhi_args[0];
-> 1620		OPTIMIZER_HIDE_VAR(addr)
-  1621		addr += LEN_UD2;
-  1622		regs->ip = addr;
-  1623	
-  1624		return true;
-  1625	
-  1626	Efault:
-  1627		return false;
-  1628	}
-  1629	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 06c4e410ecab..787868183b84 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -26,7 +26,7 @@ gcc)
+ 	fi
+ 	;;
+ llvm)
+-	if [ "$SRCARCH" = s390 ]; then
++	if [ "$SRCARCH" = s390 -o "$SRCARCH" = x86 ]; then
+ 		echo 15.0.0
+ 	elif [ "$SRCARCH" = loongarch ]; then
+ 		echo 18.0.0
