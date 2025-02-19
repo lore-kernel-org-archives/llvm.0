@@ -1,112 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73E5180A80;
-	Wed, 19 Feb 2025 00:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0A2208CA;
+	Wed, 19 Feb 2025 01:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739926198; cv=none; b=hu+YWNJ1SFE8Eqj3jT6tkGTtLFg07YPI5klliuuM49uidi0vYIAR3+7aLV0dpgGi3fC2MUo7iGhOrlMiGEYpsPf5Uer+Vrgwqxqj7Djh0KW8Cf+SVej39m3V9kQhQnwrZp+TEAH8wZ9f68idPyRyMjesUDG1ww0j3TI6qJbiG2o=
+	t=1739927857; cv=none; b=njFxVgRTXpGTEWEJTPAb3dxC5Fw88Slx1hVt4/lnybjMKWdKalTRWv6G0Ob1FGGyZqR0754dEtJmgkF9WSrKLFZwYQfZL3HtEfmqR3zmMqsqsNSmS9KpZp5j9Efca5lCBbtNHJy0MTGrfej1sykkqRaZwIOynouC5JAvNP9cdJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739926198; c=relaxed/simple;
-	bh=dumTvUndBSryUUDTLTujFZVtVAOLspRBJFBD7RWq3lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mZckWUwlUEnlIMByQZhfm5igTmHa3KHxJeOWXXF/yROYll35ENQScFjbmtW4J7yb1Ph3At5E4GA8+E1w2Sk/CBfAeQ2RIiYuufO2W52Kp+WwcRoH7K0HjrJSRYKomgkS8hi3yRSqEZG41+uspOuhFhnhXtqLrB/r7QEeYT19EWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K3ly70/L; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K3ly70/L"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739926196; x=1771462196;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dumTvUndBSryUUDTLTujFZVtVAOLspRBJFBD7RWq3lo=;
-  b=K3ly70/LbWwdE6m1uzzZbTBO3Fa1o9ovg5F/6eEbdwkkzViB1khxyy61
-   y43hbLPn5tamEMBiDknqtgPEq0N57HFAFnRywiL7zReFBthJ/7aQa2jRQ
-   DKQ/IzwKDpBIQkS6k+jpqZZ6R00TW4ou6MSmpyUh1b6Na5EKYAJbn5xxz
-   Onmn39toLPEnkFtn/xbRpAfkcGktOs9/En6463LCGC7OgWh00x1X5P/lN
-   oSkbX8xR+xksD/TOKKCL5CSqAVwjgXD3cTTX1cnVgf2FKG7MqArL9dnZl
-   N70hkY6jcli0R4RBWwZc97D7pCfUnpb9UjulXhmQgUgaiW8bTEZ3usCtF
-   Q==;
-X-CSE-ConnectionGUID: m7fxhMH5SBy5VV0sm90Ekw==
-X-CSE-MsgGUID: v3K7MILtSPC3Awrib0TykA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="52052225"
-X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="52052225"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 16:49:56 -0800
-X-CSE-ConnectionGUID: OHctPmUKSpmGPClLPr5O/w==
-X-CSE-MsgGUID: mOWMx+9+S2OXrK5WruD0pw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="115078694"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 18 Feb 2025 16:49:54 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tkYHe-00012K-22;
-	Wed, 19 Feb 2025 00:49:51 +0000
-Date: Wed, 19 Feb 2025 08:49:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [rafael-pm:pm-sleep-testing 5/6] include/linux/device.h:1030:20:
- error: no member named 'smart_suspend' in 'struct dev_pm_info'
-Message-ID: <202502190811.rtTycxxZ-lkp@intel.com>
+	s=arc-20240116; t=1739927857; c=relaxed/simple;
+	bh=aR/2VqVfOeqn48qHKxBJmPg0zx7e1qwGT596CwOzOeU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=REAPUZRcUZ/FffdlqyvprK07ju0AvgPcY1tciKeeQN4zaPs7fLL1WvKP98v0TBml8ASRIVfO5gsD0sD4kyxpLBYKtcsK6AV4sJU3q29iQcXgFOIkFvvl0lfFlED7n/IpuT3yMF7fiY+4ViNnuSRu/HGlPDSftlNR4WifEuwkot4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AECAC4CEE2;
+	Wed, 19 Feb 2025 01:17:36 +0000 (UTC)
+Date: Tue, 18 Feb 2025 17:17:34 -0800
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: ERROR: modpost: "kmsan_handle_dma"
+ [drivers/virtio/virtio_ring.ko] undefined!
+Message-ID: <20250219011734.ig2sgadr7jmf7k7e@jpoimboe>
+References: <202502150634.qjxwSeJR-lkp@intel.com>
+ <20250218114857.oBuLvPYs@linutronix.de>
+ <20250218132855.GE40464@noisy.programming.kicks-ass.net>
+ <20250218164724.uxcwotv3wgc5y3id@jpoimboe>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250218164724.uxcwotv3wgc5y3id@jpoimboe>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-sleep-testing
-head:   e0d95f1b2b755e2cd05b11dcddabb6cab24a041b
-commit: d7aa9525f39c3c2f5520db30b40edb9c8f13774e [5/6] PM: sleep: Use DPM_FLAG_SMART_SUSPEND conditionally
-config: i386-buildonly-randconfig-004-20250219 (https://download.01.org/0day-ci/archive/20250219/202502190811.rtTycxxZ-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190811.rtTycxxZ-lkp@intel.com/reproduce)
+On Tue, Feb 18, 2025 at 08:47:26AM -0800, Josh Poimboeuf wrote:
+> On Tue, Feb 18, 2025 at 02:28:55PM +0100, Peter Zijlstra wrote:
+> > On Tue, Feb 18, 2025 at 12:48:57PM +0100, Sebastian Andrzej Siewior wrote:
+> > > On 2025-02-15 06:42:36 [+0800], kernel test robot wrote:
+> > > > >> arch/x86/kvm/cpuid.o: warning: objtool: do_cpuid_func+0x2428: undefined stack state
+> > > 
+> > 
+> > > From the assembly it seems to make sense:
+> > > |   110ae:       49 89 e0                mov    %rsp,%r8
+> > > stash for later
+> > > |   110b1:       48 85 db                test   %rbx,%rbx
+> > > |   110b4:       c7 00 00 00 00 00       movl   $0x0,(%rax)
+> > > |   110ba:       45 89 7e 14             mov    %r15d,0x14(%r14)
+> > > |   110be:       0f 85 40 01 00 00       jne    11204 <do_cpuid_func+0x22f4>
+> > > …
+> > > |   11204:       44 8b 74 24 38          mov    0x38(%rsp),%r14d
+> > > |   11209:       44 89 f7                mov    %r14d,%edi
+> > > |   1120c:       4d 89 c7                mov    %r8,%r15
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502190811.rtTycxxZ-lkp@intel.com/
+[ Adding Masahiro for #1 ]
 
-All errors (new ones prefixed by >>):
+1)
 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:23:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:11:
->> include/linux/device.h:1030:20: error: no member named 'smart_suspend' in 'struct dev_pm_info'
-    1030 |         return dev->power.smart_suspend;
-         |                ~~~~~~~~~~ ^
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=654645659
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=654645659
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=654645659
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=654645659
-   make: Target 'prepare' not remade because of errors.
+Masahiro, one problem we've seen is that "make LLVM=1
+arch/x86/kvm/cpuid.s" doesn't match the final compiled .o binary.  Is it
+a problem with cmd_cc_s_c?  The original .config is here:
 
+  https://lore.kernel.org/202502150634.qjxwSeJR-lkp@intel.com
 
-vim +1030 include/linux/device.h
+If I manually run the original gcc command with -S, cpuid.s looks right.
 
-  1027	
-  1028	static inline bool dev_pm_smart_suspend(struct device *dev)
-  1029	{
-> 1030		return dev->power.smart_suspend;
-  1031	}
-  1032	
+2)
+
+Peter, Sebastian, the objtool warning is caused by Clang interpreting
+ASM_CALL_CONSTRAINT a little too literally.  It's stashing the stack
+pointer and restoring it later to comply with the "+r" rsp constraint.
+Which makes perfect sense, but is also 100% unexpected.
+
+I "fixed" it with the below, but it's not a proper fix as
+ASM_CALL_CONSTRAINT is still needed for CONFIG_UNWINDER_FRAME_POINTER.
+
+So I think the options are:
+
+  - Make objtool smarter
+
+  - Improve ASM_CALL_CONSTRAINT somehow.  /me wonders if "memory"
+    clobber has the same effect?
+
+  - Drop support for x86-64 frame pointers altogether, along with
+    ASM_CALL_CONSTRAINT.  Is there any reason to keep frame pointers
+    around anymore for 64 bit?  AFAICT objtool is 100% mandatory for all
+    configs, and ORC has proven to be solid.
+
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index fea56b04f436..7414f0c7cc0e 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -394,7 +394,7 @@ int paravirt_disable_iospace(void);
+ 		PVOP_TEST_NULL(op);					\
+ 		asm volatile(ALTERNATIVE(PARAVIRT_CALL, ALT_CALL_INSTR,	\
+ 				ALT_CALL_ALWAYS)			\
+-			     : call_clbr, ASM_CALL_CONSTRAINT		\
++			     : call_clbr				\
+ 			     : paravirt_ptr(op),			\
+ 			       ##__VA_ARGS__				\
+ 			     : "memory", "cc" extra_clbr);		\
+@@ -409,7 +409,7 @@ int paravirt_disable_iospace(void);
+ 		asm volatile(ALTERNATIVE_2(PARAVIRT_CALL,		\
+ 				 ALT_CALL_INSTR, ALT_CALL_ALWAYS,	\
+ 				 alt, cond)				\
+-			     : call_clbr, ASM_CALL_CONSTRAINT		\
++			     : call_clbr				\
+ 			     : paravirt_ptr(op),			\
+ 			       ##__VA_ARGS__				\
+ 			     : "memory", "cc" extra_clbr);		\
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Josh
