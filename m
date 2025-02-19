@@ -1,192 +1,130 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25971DC05F
-	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 23:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C7225E476;
+	Wed, 19 Feb 2025 23:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740007900; cv=none; b=HZ96WAnqnLaggPiSmOD25aCfyHw81j7StH6tg8sbnAH6p6OKeegVVz+irIx6Z0H2813nnOEbC+j9cQxe3tg99avuXf+EbP8qEj/gvjOEsoruRj8Vgk0PGh0CfRuKCEu2JCWkd6Mr4ZlFUhbaCnwwI+MZW7I3X90po70O/ujtjjk=
+	t=1740009130; cv=none; b=WlfVunBzyKyBfH41zV1ABl6JNH5+HJut4tdQjddFYMoupxZOcifEZxddzj359gF9f7Fk2pyZXkQhIgQPK3e79a647TN5mfk/xU183kguO+PlVaPG/bSFFL72Yx4PvtaMQkuvgmTss7kh0UUrwrVcfQjz2w3harihtlG/8Kini4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740007900; c=relaxed/simple;
-	bh=kZFF/UGapITVALZqnqj0yQm4FGUA/GNIjxqdzKNT9gE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pHg/4+Wb3WI5viPliE+JdHMHzTu1iyQ6bTC++JbEuj9lUP6G6ax8rywB7OUNhz2G0k0svTliMzKPhGfGQBHKQEdVaVko9Idw7hajrhEpIqh59ZsHQe5k9gXofqm+QJr71ceNkSTaOdxQFgC8a6NGt/ctOx/68qXikxeCcEWCzrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NXh2orrY; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740009130; c=relaxed/simple;
+	bh=fC6muqlChDrljBG2bGaCmMbBFb3Lrun3fzk8vu7AYLA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ktJlIUNV/19QKguQ7Hh7cPTvNdEk/zvcZdf0g56bWVjQtBNuSn5hQ5j+cquqbI3SMlvldfJW8kSAvNvXLqE6BHvhte9wsWF8osKK7WRm4N3phFa0LkblcW3Zb1JFWR1PqBqNZ57X9Cys2R4s4lpMph0ACJ1XX6NP+p0Wu6TezrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrO2KsAB; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NXh2orrY"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38f26a82d1dso169106f8f.2
-        for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 15:31:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740007897; x=1740612697; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HmA3kpoVqZacttI/kLsBWuEw55LbtbyDIck2OB1DMsE=;
-        b=NXh2orrYHBSUMpJwFRrqmrP6wCpatAAr2WnSu8KGgR7+Yp9l6QXbmIAT9M8Dw0lM45
-         RO/fYwj/uQZWeIqPEIAJ3F7VOxSVYIDCUAx4ofNRP6tvU9nb+mj8dtskD8eQQa6kANu9
-         tzoB/mY+u8/A3JMPhX2O1hq26YhBAPPVum9YFOfK5uxrrbEzoe5vWa/Wn+rdosgMo6SP
-         bgNk4Fl9pY2yUjHLo4dhkzWFbASRXHtqKTVXo6F17XFE+9Mj6FRkpxmzjUvYqjUGaGHK
-         Q8UDF6Qx+mwDN02nMoI0W/8WZWB8R/4M4fyvEl+XUXHK6nN2y4d9X91/r9mjmqAfj75v
-         YQ5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740007897; x=1740612697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HmA3kpoVqZacttI/kLsBWuEw55LbtbyDIck2OB1DMsE=;
-        b=CLa5ySJnL4LMeVu7r5FFKwU4ourcx7qy3wkMDlFJZC/24ec/VV0y/IwQcUS+NR8NmE
-         jBk0WpqOw1QYH6eq5oag0grdXtcOHB6cqMpYgzTWPzDVLge9qb8PGro06q81AxDEb3Ud
-         mEXdXTznmyZ09o+np+5U626EL/6eCKQHlaOpFxZNb5titYDHdv/ssZ80tvWjnbxeEcye
-         i1G7/xwAck6aJcsRqWO4wfqOeEG9Iu85zh5jmr2xHnjDQ3GW2H7B/lJpjWsovEI1s2yM
-         hLrUtSUJM6Mc6TNnDd5hIZBA34Qm1s41duldGtyDqHr71Z4p+O3EdT31uIUuSKz+RMsC
-         hCfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW93vLSWGf1y5JcQ7vHrYtGHMqoHJtHxRPgb6N3JIYbGlB/rYjm5bJ14Yo2TtPFDHvnY+29@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywr+ktimg4pEOw/rCp6pKV7uBULPGVV0A4rWZpg9Cc+RfikIySJ
-	vv3Bf51JAHz1gS7qXOj5qB+l+d/1sh022LRYr/yLwCArTY2SvJvawd6+y0suGczdDsjrmuwlkD/
-	D1IDHLt+drL0SU4XJrxswbVA80BQ=
-X-Gm-Gg: ASbGncuAwp58vlmzkCmGoTGhJHxhGJP8+jaMm1tQcj4IO71ExfGRyvBKjDV1NVwvIXn
-	SOxLPRAeZgiIB1t97WkrwZfRGX7XNgnihTF9queswGTAK5uZGKCLsgN9cjwz3uUJaZhskN3Jqej
-	A=
-X-Google-Smtp-Source: AGHT+IHZfSzvxjzwwqUfoRfSbt1O6bww8e/f91PrR75G5joTfFDT2SujsALHP/CGMVLShEI4KvhD5J4ptOHfp9wh9iE=
-X-Received: by 2002:a05:6000:1fa7:b0:38f:4cb4:b822 with SMTP id
- ffacd0b85a97d-38f4cb4ce41mr9832739f8f.26.1740007897194; Wed, 19 Feb 2025
- 15:31:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrO2KsAB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740009129; x=1771545129;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fC6muqlChDrljBG2bGaCmMbBFb3Lrun3fzk8vu7AYLA=;
+  b=nrO2KsAB8MhUlqZMSNHsxPoG+tMkFCfdRdqSPyXo/BmlOXFHutA1QjhM
+   75yc6ZOykBcHhq5QfqQ1ib/8hhAKSPdBDAP8TS4c/grAJJqFOSvB/jq+8
+   18/nHEOrNf7wEDY34hrH6sUouaGshXtj9WPJY4jTaJ2bONX6tmfl1TO2I
+   rwooDDHZswIr1jjaaeo8Zm30jvNgvdwhAYzdybJxqXmTfZMjRwoUAS0Fv
+   /RTvl+db7/s5Yj937VFS2yFJjs4mkfUbWR3sNfIswA39kVT40YwdYgU6E
+   uWtdQC1X1GoppuBfZhEF4xVAcZfFmapjbOH4PGB0ZP7sqT+8s/UzFL2nE
+   w==;
+X-CSE-ConnectionGUID: XL2/O01AQ2aFAhLTlfN+1Q==
+X-CSE-MsgGUID: odI9uJahQZ+VLDJOfer+Uw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="44688522"
+X-IronPort-AV: E=Sophos;i="6.13,300,1732608000"; 
+   d="scan'208";a="44688522"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 15:52:08 -0800
+X-CSE-ConnectionGUID: ooLzz0LaSPGEFPY9ENumrA==
+X-CSE-MsgGUID: NYD5DsV1TIOSvYVpYayIhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,300,1732608000"; 
+   d="scan'208";a="115065139"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 19 Feb 2025 15:52:04 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tktrF-0003d5-26;
+	Wed, 19 Feb 2025 23:52:01 +0000
+Date: Thu, 20 Feb 2025 07:51:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
+	Daniel Thompson <danielt@kernel.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] mfd: lm3533: convert to use OF
+Message-ID: <202502200718.H8t6Uv7b-lkp@intel.com>
+References: <20250218132702.114669-3-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1739866028.git.maciej.wieczor-retman@intel.com> <d266338a0eae1f673802e41d7230c4c92c3532b3.1739866028.git.maciej.wieczor-retman@intel.com>
-In-Reply-To: <d266338a0eae1f673802e41d7230c4c92c3532b3.1739866028.git.maciej.wieczor-retman@intel.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 20 Feb 2025 00:31:26 +0100
-X-Gm-Features: AWEUYZnqbVnkwo7RUnRvKpv13p7_X9As-mP0O1dDctMW1ycjuPipkHqXbxnM_MQ
-Message-ID: <CA+fCnZezPtE+xaZpsf3B5MwhpfdQV+5b4EgAa9PX0FR1+iawfA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/14] x86: Make software tag-based kasan available
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
-	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
-	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
-	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
-	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
-	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
-	ndesaulniers@google.com, guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, 
-	mark.rutland@arm.com, broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, 
-	rppt@kernel.org, kaleshsingh@google.com, richard.weiyang@gmail.com, 
-	luto@kernel.org, glider@google.com, pankaj.gupta@amd.com, 
-	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
-	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
-	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
-	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
-	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
-	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
-	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
-	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
-	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
-	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
-	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, 
-	linux-arm-kernel@lists.infradead.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250218132702.114669-3-clamor95@gmail.com>
 
-On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM Maciej Wieczor-Retman
-<maciej.wieczor-retman@intel.com> wrote:
->
-> Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-> ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignore
-> (TBI) that allows the software tag-based mode on arm64 platform.
->
-> Set scale macro based on KASAN mode: in software tag-based mode 32 bytes
-> of memory map to one shadow byte and 16 in generic mode.
+Hi Svyatoslav,
 
-These should be 16 and 8.
+kernel test robot noticed the following build errors:
 
->
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
-> Changelog v2:
-> - Remove KASAN dense code.
->
->  arch/x86/Kconfig                | 6 ++++++
->  arch/x86/boot/compressed/misc.h | 1 +
->  arch/x86/include/asm/kasan.h    | 2 +-
->  arch/x86/kernel/setup.c         | 2 ++
->  4 files changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f4ef64bf824a..dc48eb5b664f 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -195,6 +195,7 @@ config X86
->         select HAVE_ARCH_JUMP_LABEL_RELATIVE
->         select HAVE_ARCH_KASAN                  if X86_64
->         select HAVE_ARCH_KASAN_VMALLOC          if X86_64
-> +       select HAVE_ARCH_KASAN_SW_TAGS          if ADDRESS_MASKING
->         select HAVE_ARCH_KFENCE
->         select HAVE_ARCH_KMSAN                  if X86_64
->         select HAVE_ARCH_KGDB
-> @@ -402,6 +403,11 @@ config KASAN_SHADOW_OFFSET
->         hex
->         default 0xdffffc0000000000 if KASAN_GENERIC
->
-> +config KASAN_SHADOW_SCALE_SHIFT
-> +       int
-> +       default 4 if KASAN_SW_TAGS
-> +       default 3
+[auto build test ERROR on lee-mfd/for-mfd-next]
+[also build test ERROR on lee-leds/for-leds-next robh/for-next linus/master v6.14-rc3 next-20250219]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-What's the purpose of this config option? I think we can just change
-the value of the KASAN_SHADOW_SCALE_SHIFT define when KASAN_SW_TAGS is
-enabled.
+url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-mfd-Document-TI-LM3533-MFD/20250218-212857
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20250218132702.114669-3-clamor95%40gmail.com
+patch subject: [PATCH v2 2/2] mfd: lm3533: convert to use OF
+config: arm-randconfig-002-20250219 (https://download.01.org/0day-ci/archive/20250220/202502200718.H8t6Uv7b-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200718.H8t6Uv7b-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502200718.H8t6Uv7b-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/video/backlight/lm3533_bl.c:417:25: error: use of undeclared identifier 'lm3533_match_table'; did you mean 'lm3533_bl_match_table'?
+     417 | MODULE_DEVICE_TABLE(of, lm3533_match_table);
+         |                         ^~~~~~~~~~~~~~~~~~
+         |                         lm3533_bl_match_table
+   include/linux/module.h:250:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
+     250 | extern typeof(name) __mod_device_table__##type##__##name                \
+         |               ^
+   drivers/video/backlight/lm3533_bl.c:413:34: note: 'lm3533_bl_match_table' declared here
+     413 | static const struct of_device_id lm3533_bl_match_table[] = {
+         |                                  ^
+   1 error generated.
 
 
-> +
->  config HAVE_INTEL_TXT
->         def_bool y
->         depends on INTEL_IOMMU && ACPI
-> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/m=
-isc.h
-> index dd8d1a85f671..f6a87e9ad200 100644
-> --- a/arch/x86/boot/compressed/misc.h
-> +++ b/arch/x86/boot/compressed/misc.h
-> @@ -13,6 +13,7 @@
->  #undef CONFIG_PARAVIRT_SPINLOCKS
->  #undef CONFIG_KASAN
->  #undef CONFIG_KASAN_GENERIC
-> +#undef CONFIG_KASAN_SW_TAGS
->
->  #define __NO_FORTIFY
->
-> diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-> index 4bfd3641af84..cfc31e4a2f70 100644
-> --- a/arch/x86/include/asm/kasan.h
-> +++ b/arch/x86/include/asm/kasan.h
-> @@ -6,7 +6,7 @@
->  #include <linux/kasan-tags.h>
->  #include <linux/types.h>
->
-> -#define KASAN_SHADOW_SCALE_SHIFT 3
-> +#define KASAN_SHADOW_SCALE_SHIFT CONFIG_KASAN_SHADOW_SCALE_SHIFT
->
->  /*
->   * Compiler uses shadow offset assuming that addresses start
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index cebee310e200..768990c573ea 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -1124,6 +1124,8 @@ void __init setup_arch(char **cmdline_p)
->
->         kasan_init();
->
-> +       kasan_init_sw_tags();
-> +
->         /*
->          * Sync back kernel address range.
->          *
-> --
-> 2.47.1
->
+vim +417 drivers/video/backlight/lm3533_bl.c
+
+   412	
+   413	static const struct of_device_id lm3533_bl_match_table[] = {
+   414		{ .compatible = "ti,lm3533-backlight" },
+   415		{ },
+   416	};
+ > 417	MODULE_DEVICE_TABLE(of, lm3533_match_table);
+   418	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
