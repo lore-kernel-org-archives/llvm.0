@@ -1,71 +1,71 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321D25E462
-	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 23:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBD91B87EB
+	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 23:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740007848; cv=none; b=TFkZVGXIP8Lcy232oHwJqTcjTMmQ9mEmLbw8RtPMnTn6QxH8z5u6v17dsYWFg18PXtjG/1wiZ4vlXmMJfArewDe19e2zGPEOwKydTOUBdr3SuwMGINR/+PfI/16ZPh/tECZIp6aAmq1SNJyRFwEvdvMv9I7n+bU3lic9EM4GXPg=
+	t=1740007863; cv=none; b=UUPEU6sLkIpdTsZjyvIk82fSEYRVNiXhS53D4iNgy+jJ+Vgiwkm/pqqV+kOtFHbAqHrvNYVQjsbABUxlZ0ttT+jEFOMk7lPN6EnZ3A1qJ0lWLMxw6yrwREC/cHrdzs+rss0EFly2616+cjyXQwUnXVYC1mpbXhkbNb3ugDD4KhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740007848; c=relaxed/simple;
-	bh=tcH227GyjKJ5hX9Pf/elTGU/np5lpy2A5toqwS89S8E=;
+	s=arc-20240116; t=1740007863; c=relaxed/simple;
+	bh=7BrzSMiKS+jH9/fqTN3DBF4ouoSiL1xdrGmLjC1j7lM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C7INmG3bezhdls5+vs4DXHK8+1yyOjIYW3szu0Wmdkv4Sp2LZWa7CM/HuDHoPN2tj5Uz4gKehTFXuuY5pLotoNEWyCwGDqzHCqVFcWKz8BcSTWg6W4H3kDvX6M524T5c+T2G7QFlEnpcAr3yHJo3HVLnz47QPKVvmk6w7fiaCPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gn8Z4aV7; arc=none smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=tPLWNS93gCDD+lwTLVfcD4zs/Vaqg6ErXh6yqM/u7x/SEPXyUWDP04OCOgg/LxTUMFSJlAE2EutsFXS8SJvH0Un351oJigz5udoIgpRXcu9/bAPIHBPLMaGAVtRLFPU8dW/s/dbi2U6/hvQvmSau+ftkorjsAG5Fs2DgRMBUGGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=crM5ZTwz; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gn8Z4aV7"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38f3ac22948so173544f8f.0
-        for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 15:30:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="crM5ZTwz"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-439a4dec9d5so551155e9.0
+        for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 15:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740007845; x=1740612645; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1740007860; x=1740612660; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iyvyq2lJRxuQLrIeQSGTnuwykD7l8YgAhKyJ7T0zXzs=;
-        b=gn8Z4aV7Qx+4TgmXCG+9BpmUOghVAlQSW8jWGr7QQdh74ImUUdJX6siAu6XPFqNXLn
-         E4oY/25bA6aviD8G730GuC106Agwlyn3oM47GBLLVq3Q59OLZTrDQU6Vl+/Tm3mnlhLB
-         j6gv2+CA6aW0lvccZF454iFncx4uQkORK4pPakIKtKps3QW4chRGCg+GB1+X5lLqk9T2
-         kZyikLB4KDLg5evDfKtFJcTALKklm4bpAC38KFicYjHODJepfTCTN0TxH2H4XEJmzraI
-         hK3vRjykDZgoZ11wm6AQnXKduXk1Y0BS+te3ZcN6k8AKaMcgepZcKdLs6eIt3vXZoqbZ
-         asfQ==
+        bh=4dUybulOhS0kE/3bK++ET9eEzpvtsmycFrLhnO/LKN0=;
+        b=crM5ZTwzhiZTgjkEmECLmnDmBHGdzQZL5acHNq/V7JOaFMgieUwjXmGav5tHRpyUEU
+         PBntzCH4L/B7JfHD3htDGZs5ABw+fofxi7+Y8jGSvt21zctm2n8X6YqzdgSGTg4hDZNI
+         uKwBo3cRljCq8ZAi+tYzH5pG4UBhw0dV/dEaHDdXse9SSxglsnA9dhg34iLsd1uElcBk
+         2wiHnrXqSC9qIWX+rueJGyn0/MowRyK5Rdmb7r1Juq/ABuOkdoFu0JgHAptsKGqrlAk8
+         PdIUHPPWE5LK2wu3SUX2muv+Nx0dQGKhCvWUenABghhQsyE/LwtSW+Z5zr3ksdhjtZp4
+         whpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740007845; x=1740612645;
+        d=1e100.net; s=20230601; t=1740007860; x=1740612660;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iyvyq2lJRxuQLrIeQSGTnuwykD7l8YgAhKyJ7T0zXzs=;
-        b=gph5yGcbQy5IepO6KzeJcThGHL0zGd6i36kimqcxDhtCSZGrVmstJO6QC9g2mjpl9N
-         iOUjomauGSxZA0tZ3vkNGeGMoMZtbBxiuN1PVMgQBKLyI2XTVSwPynVPWp0uUbBAu/Lq
-         ZQzitq/YbEoxbX36FoBpKC0WVGST+tee5VqVQ6dZrohXFZ4hc4IlpymublOyavALWN1f
-         j+abHeU79+ECSXCkmezBxyjjqmVdTRfKeOX7gbuXTGP475kjviGjTlFZ4d0IEK1PLkro
-         +mw2x9KDZB+WHCQRXJeG1MwLPLj3q1xnKEebOndvH0VASbxBDPUSdVdJ2eFBC03pjKPy
-         M1Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/gXokUdlsfSlD2lD0oZd5IlsUTxnsoMrQU1LZanya0IZuKHJxeoQCmQz9WIoWv4bGpK1u@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBZMlIqRp8OR81wwGwvI4rMvk8+4UmMGTKfVhNM2f9lXlhTSPR
-	ZidhA90ryrnUkxVsawO8oFj9EG0LklgetYve0owQdfcruejtb4PuCg3sa5CpmaDMHSxEOHniOv7
-	kE1Ymp+dwKjRs60teqXqbelKkpKQ=
-X-Gm-Gg: ASbGncsDXvpYyZcpZXxtu0uEBph+qOuMLgLT1/5JitqynAr0DNMVQb5ChUJj3ol5yZw
-	3sAPYdeP4OaIyUtupaJV+bACFELODklpOtmzTpQhyMz68LOUltA/hnybxlLNkXkfFk5PBevd6uk
-	E=
-X-Google-Smtp-Source: AGHT+IGseMQ09wMlftf0S31IcDCmvH/2XCIbgKJZ4vMRGW1oprX1xhCTfYNu+V/QxrTLfB/+OtK8LLpcPdlzuT7FUW8=
-X-Received: by 2002:a5d:64e6:0:b0:38d:e092:3ced with SMTP id
- ffacd0b85a97d-38f33f1193cmr15640895f8f.7.1740007845049; Wed, 19 Feb 2025
- 15:30:45 -0800 (PST)
+        bh=4dUybulOhS0kE/3bK++ET9eEzpvtsmycFrLhnO/LKN0=;
+        b=Sw2WAy0XoEzlhyvmoa1aRvOS+d/SisAFH9687uUiFgRm9rh88Q6yyzMSR4lULQWTsY
+         boWPlKetzUHjPIXTDvzhVWnHezZASHnSa/KJE2vjf30Y+u0Nj9w8FH3OkUTibPcRwK0n
+         iao4/CkTDgz8iOaFywhTXRT2B+mcCLFz6tCRKfWss6XeCfLuH2IukBpI84xPlUHhITq2
+         6xUHQOVTMvPLjEx/AlQ45bYWAdlTS+n1AnHve0XjNOBsOzK0hcHr0n/HgfiV7Cbj7Ozb
+         WvraKOT/ZqIBMnCa/Iu2xlJlpTY3kOOL7AFu2WkHCo/7xJnhAuKXVj9dlE8Rc81qLeis
+         oQpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhBBi7x9KuBnzrQnzTkZGgr9Y6z3e7jhybn5DinUqQX11GB+cDSHItiAojUC6s2m4Dwo+X@lists.linux.dev
+X-Gm-Message-State: AOJu0YwFmcmFiFU9MvjEXjtgUUMTjpXlSOs1XtspvWi+RQVwG0zP5mds
+	avRVhN2UegLSbDICs7itrg1JfACUPOyIsiHZTZje78jzCjUQt4V+dFDNYkI8xbpZMOU2uiMdN8+
+	UiY/Of4+pA6UtvmhnD0yr0KQt/IE=
+X-Gm-Gg: ASbGnctLfAOp6lJIn6n8yFrLruAl0yL8WlLfNSE3VCycep7JQE603W3chCtCod8qESu
+	WY/8uK3yBv4q/4I/xu8eZO0f1Y+USTWAemjMIMmNljEKxCvdQEnljDiqFvo9yRLikX0MtcBuus8
+	k=
+X-Google-Smtp-Source: AGHT+IG1BHmj8hJr/EIeAG45G5dk1X7q0NRly/wfy8NOAsFrU4xoOf+BepllUdF4Fr5/tdIMeI62DxfMSontKQGQR5s=
+X-Received: by 2002:a05:600c:46ce:b0:439:a255:b2ed with SMTP id
+ 5b1f17b1804b1-439a255b574mr11307125e9.9.1740007860050; Wed, 19 Feb 2025
+ 15:31:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1739866028.git.maciej.wieczor-retman@intel.com> <7099fb189737db12ab5ace5794080458d7a14638.1739866028.git.maciej.wieczor-retman@intel.com>
-In-Reply-To: <7099fb189737db12ab5ace5794080458d7a14638.1739866028.git.maciej.wieczor-retman@intel.com>
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com> <7492f65cd21a898e2f2608fb51642b7b0c05ef21.1739866028.git.maciej.wieczor-retman@intel.com>
+In-Reply-To: <7492f65cd21a898e2f2608fb51642b7b0c05ef21.1739866028.git.maciej.wieczor-retman@intel.com>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 20 Feb 2025 00:30:34 +0100
-X-Gm-Features: AWEUYZn8UfE_qbgWwdI_ZYXhFInJYUvvOaq2gnq6N0Mq2Y5hHq0QKSqyoBFpmX4
-Message-ID: <CA+fCnZf16dzSjOLSeWXMaJLUR-b9x9_CY0JunaRaet_O_XNcsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 06/14] x86: Add arch specific kasan functions
+Date: Thu, 20 Feb 2025 00:30:48 +0100
+X-Gm-Features: AWEUYZl1gRQjDF8bP12LoQKOk6SUSp8U6yzsjJnNm_UbyNhEUb3N5bt4_wbtQpk
+Message-ID: <CA+fCnZdidM3Sj_ftw6pmtzw-tjy0LLD+2aqtzSewQTOUXMs2hw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/14] x86: Minimal SLAB alignment
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
 	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
@@ -94,94 +94,40 @@ Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 18, 2025 at 9:18=E2=80=AFAM Maciej Wieczor-Retman
+On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM Maciej Wieczor-Retman
 <maciej.wieczor-retman@intel.com> wrote:
 >
-> KASAN's software tag-based mode needs multiple macros/functions to
-> handle tag and pointer interactions - mainly to set and retrieve tags
-> from the top bits of a pointer.
->
-> Mimic functions currently used by arm64 but change the tag's position to
-> bits [60:57] in the pointer.
+> Adjust x86 minimal SLAB alignment to match KASAN granularity size. In
+> tag-based mode the size changes to 16 bytes so the value needs to be 4.
+
+This 4 should be 16.
+
 >
 > Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 > ---
->  arch/x86/include/asm/kasan.h | 32 ++++++++++++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
+>  arch/x86/include/asm/kasan.h | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.h
-> index de75306b932e..8829337a75fa 100644
+> index 8829337a75fa..a75f0748a4b6 100644
 > --- a/arch/x86/include/asm/kasan.h
 > +++ b/arch/x86/include/asm/kasan.h
-> @@ -3,6 +3,8 @@
->  #define _ASM_X86_KASAN_H
+> @@ -36,6 +36,8 @@
 >
->  #include <linux/const.h>
-> +#include <linux/kasan-tags.h>
-> +#include <linux/types.h>
->  #define KASAN_SHADOW_OFFSET _AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
->  #define KASAN_SHADOW_SCALE_SHIFT 3
+>  #ifdef CONFIG_KASAN_SW_TAGS
 >
-> @@ -24,8 +26,33 @@
->                                                   KASAN_SHADOW_SCALE_SHIF=
-T)))
->
->  #ifndef __ASSEMBLY__
-> +#include <linux/bitops.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +
-> +#define arch_kasan_set_tag(addr, tag)  __tag_set(addr, tag)
+> +#define ARCH_SLAB_MINALIGN (1ULL << KASAN_SHADOW_SCALE_SHIFT)
 
-But __tag_set is defined below. I think these need to be reordered.
+I believe ARCH_SLAB_MINALIGN needs to be defined in
+include/asm/cache.h: at least other architectures have it there.
 
-> +#define arch_kasan_reset_tag(addr)     __tag_reset(addr)
-> +#define arch_kasan_get_tag(addr)       __tag_get(addr)
+
 > +
-> +#ifdef CONFIG_KASAN_SW_TAGS
-> +
-> +#define __tag_shifted(tag)             FIELD_PREP(GENMASK_ULL(60, 57), t=
+>  #define __tag_shifted(tag)             FIELD_PREP(GENMASK_ULL(60, 57), t=
 ag)
-> +#define __tag_reset(addr)              (sign_extend64((u64)(addr), 56))
-> +#define __tag_get(addr)                        ((u8)FIELD_GET(GENMASK_UL=
+>  #define __tag_reset(addr)              (sign_extend64((u64)(addr), 56))
+>  #define __tag_get(addr)                        ((u8)FIELD_GET(GENMASK_UL=
 L(60, 57), (u64)addr))
-> +#else
-> +#define __tag_shifted(tag)             0UL
-> +#define __tag_reset(addr)              (addr)
-> +#define __tag_get(addr)                        0
-> +#endif /* CONFIG_KASAN_SW_TAGS */
->
->  #ifdef CONFIG_KASAN
-> +
-> +static inline const void *__tag_set(const void *addr, u8 tag)
-
-A bit weird that __tag_set is defined under CONFIG_KASAN:
-CONFIG_KASAN_SW_TAGS (or no condition, like on arm64) would make more
-sense.
-
-
-> +{
-> +       u64 __addr =3D (u64)addr & ~__tag_shifted(KASAN_TAG_KERNEL);
-> +       return (const void *)(__addr | __tag_shifted(tag));
-> +}
-> +
->  void __init kasan_early_init(void);
->  void __init kasan_init(void);
->  void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int n=
-id);
-> @@ -34,8 +61,9 @@ static inline void kasan_early_init(void) { }
->  static inline void kasan_init(void) { }
->  static inline void kasan_populate_shadow_for_vaddr(void *va, size_t size=
-,
->                                                    int nid) { }
-> -#endif
->
-> -#endif
-> +#endif /* CONFIG_KASAN */
-> +
-> +#endif /* __ASSEMBLY__ */
->
->  #endif
 > --
 > 2.47.1
 >
