@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4676613E41A;
-	Wed, 19 Feb 2025 03:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5880316D9AF;
+	Wed, 19 Feb 2025 04:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739934379; cv=none; b=MHy1hjLWqpVzyGW+guch0xEJLe6JAUM2rr8eh7VtsZE/0x0monj5jzkYRkJMAc0Li9lW95LoumXAq7fQsgAd6pdSq+RUYijEukofafLxBM5jThJCbEHScsweDecUlXevXY5lkWD5ShynYbGHaNDFOJ9VPCl5rqkazbT2SL/Uhy4=
+	t=1739938289; cv=none; b=c4FUE70dgDISVe2uemBkAKNCELcUhBVFBWp3WmlHY+DdakTTVNxpd6jxLdOgx974w0l+KPEJi3lzQe/6VkUu7GLiJWBsWo40939jXopfyPGPbWIMxjp0gI430EsBESCAImbYvZqP2GM9AP8CFBPAjUDhZ9GXEysr5Gk/ZUYNwMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739934379; c=relaxed/simple;
-	bh=/VC6d/FurEbvICWPsw4rqsXuMgMvqwURwmuZ8kn81C4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=B9e8VVMyPAU+SYl6vxvgtmUZVPR/Ky0x1HgyUj/gKoFcmCVqOTq/uXox/vTLGmQFYKdsmjOTYWk8PdjeWQRkXDdHax3uxVZf3tiNCusSHFg60/vPuacCsxZQdEz/IfXm/tVfJH5uVvGT8+ROT79w1yeSd+K7N6mGkOBwBlnTqcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VozDNN15; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1739938289; c=relaxed/simple;
+	bh=z5AEhteH8O7m04V8h0aPoUu9kAVGTMsHkB5jW+Ep0dc=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Zn9I1iEJYZorb/BJVfIkj9OSYKrVO9H/83kA5clo2d2WzUdbVaVlrX4XW4D/BFJrR1BrMoWwG3ktrOx8Yo2hzSddKw6JiVsYY0bFuUF4HBDBBsXaP00HmwG7bSeIdLOvfH868LijFgltMi9C7IBa1idYhcV32BpigPG1snEkaZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Osp7rOfY; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VozDNN15"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Osp7rOfY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739934378; x=1771470378;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/VC6d/FurEbvICWPsw4rqsXuMgMvqwURwmuZ8kn81C4=;
-  b=VozDNN15VEOPDHUy3iMUqwd9CCaqtl406e/GBSMBU2Db/yC/UNOXu2Hv
-   N4PSLf++jjTeWjV8jkVBFcEeI7zJeYUFiCmq6ueLKwOOWet+MYi2SbEG2
-   3Y5y4CMYs4+SA44JFRtgEBeykcISbjRZV57zB+fyujjjGtCoG6TOHUyuf
-   rpMbRgqhhVEeQEOB0Cledl6B6z7cP0SS1PzrnvUGSEZp0pmVHOaga7w/v
-   NH3WYKCSZvUpP3J8jcJC3eJPCzXx4bMYR/Ax/6bdePIAzm9L6vjDuHvRM
-   XZ0pEXaS7JDVI5RDOy+bfl7Urd9bZmfe20tGoCN+YeyWZ6iVFzdqw8hJ+
-   Q==;
-X-CSE-ConnectionGUID: Q14o0qPIR2mruhUkGTRlpg==
-X-CSE-MsgGUID: OGnWTqgGR8Oguj5/uNq2Rg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40864884"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="40864884"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 19:06:15 -0800
-X-CSE-ConnectionGUID: sbbPW/PqTrSfldnaVI22Qg==
-X-CSE-MsgGUID: Zm9r219UQ5yblq35FNifOw==
-X-ExtLoop1: 1
+  t=1739938289; x=1771474289;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=z5AEhteH8O7m04V8h0aPoUu9kAVGTMsHkB5jW+Ep0dc=;
+  b=Osp7rOfYJ1hPP/RBHW0dUnEZH4JYC3h46TdyeI6OSxAK94j+6TjVm+gh
+   JMeUPY9/StcTcIhGpnagI8Zfu1Yhgo223snHPxjfaf5W3slapeXrmejP3
+   iow9Doutgsls02d80Z0GxXtANje1MotuevpaeuUqUlJRicPMqio89hSz6
+   ejUyJIaRi8RTbRA0GpR+vNV4/NITSuKCl6EN7pgtf1id0xw1SZZZdr62I
+   F1dXsgJe/Smr6Imbowy+ef7oj/a9o9IoySFjkeRVTzW0Ebh5pPoZdPyAJ
+   0Ke9/1KmAlyzHBLHxQqAJ16EmQizQDZmwqbnOcmZEyvvC+ohpMigJYbAC
+   A==;
+X-CSE-ConnectionGUID: lSSL8YdkQS6E0swvA+LauQ==
+X-CSE-MsgGUID: dRsASjvASnuyhdG/K5OZlQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="58061947"
 X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="119565480"
+   d="scan'208";a="58061947"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 20:11:28 -0800
+X-CSE-ConnectionGUID: 2uHxbJIJTZawcF0Bc6zZ4w==
+X-CSE-MsgGUID: CUqG8o89Sxi3MUn0xFwPrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="114448835"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 18 Feb 2025 19:06:13 -0800
+  by orviesa010.jf.intel.com with ESMTP; 18 Feb 2025 20:11:27 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkaPa-0001Af-2w;
-	Wed, 19 Feb 2025 03:06:10 +0000
-Date: Wed, 19 Feb 2025 11:05:52 +0800
+	id 1tkbQV-0001E1-2y;
+	Wed, 19 Feb 2025 04:11:15 +0000
+Date: Wed, 19 Feb 2025 12:07:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:x86/fineibt-bhi 16/17] ld.lld: error: undefined
- symbol: cfi_bhi
-Message-ID: <202502191013.OXGHIkug-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: kernel/bpf/helpers.c:685:39: warning: bitwise operation between
+ different enumeration types ('enum bpf_return_type' and 'enum
+ bpf_type_flag')
+Message-ID: <202502191132.ElRmNRIr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,23 +62,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/fineibt-bhi
-head:   fc37d12eb49df491173cf99055fce6108a2a99a3
-commit: 5095a689d0f306c9ce4c9ff5d905626f0fa557ed [16/17] x86/ibt: Implement FineIBT-BHI mitigation
-config: x86_64-buildonly-randconfig-002-20250219 (https://download.01.org/0day-ci/archive/20250219/202502191013.OXGHIkug-lkp@intel.com/config)
+CC: linux-kernel@vger.kernel.org
+TO: Hao Luo <haoluo@google.com>
+CC: Alexei Starovoitov <ast@kernel.org>
+
+Hi Hao,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6537cfb395f352782918d8ee7b7f10ba2cc3cbf2
+commit: 3c4807322660d4290ac9062c034aed6b87243861 bpf: Replace RET_XXX_OR_NULL with RET_XXX | PTR_MAYBE_NULL
+date:   3 years, 2 months ago
+config: arm-randconfig-004-20250120 (https://download.01.org/0day-ci/archive/20250219/202502191132.ElRmNRIr-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502191013.OXGHIkug-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502191132.ElRmNRIr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502191013.OXGHIkug-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502191132.ElRmNRIr-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: cfi_bhi
-   >>> referenced by alternative.c:1002 (arch/x86/kernel/alternative.c:1002)
-   >>>               arch/x86/kernel/alternative.o:(cfi_get_func_arity) in archive vmlinux.a
+   In file included from kernel/bpf/helpers.c:4:
+   In file included from include/linux/bpf.h:20:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:1721:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/bpf/helpers.c:685:39: warning: bitwise operation between different enumeration types ('enum bpf_return_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     685 |         .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID | PTR_MAYBE_NULL,
+         |                           ~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +685 kernel/bpf/helpers.c
+
+   681	
+   682	const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
+   683		.func		= bpf_per_cpu_ptr,
+   684		.gpl_only	= false,
+ > 685		.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID | PTR_MAYBE_NULL,
+   686		.arg1_type	= ARG_PTR_TO_PERCPU_BTF_ID,
+   687		.arg2_type	= ARG_ANYTHING,
+   688	};
+   689	
 
 -- 
 0-DAY CI Kernel Test Service
