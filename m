@@ -1,88 +1,108 @@
-Received: from resqmta-h2p-567038.sys.comcast.net (resqmta-h2p-567038.sys.comcast.net [96.102.200.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802121B0408
-	for <llvm@lists.linux.dev>; Wed, 19 Feb 2025 17:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.102.200.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D921DE8A8;
+	Wed, 19 Feb 2025 17:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739986325; cv=none; b=WfS3pbBeu5QFzRfDtGG9pmTecHhHt2XATzBCysv3DMundUc3/qYL8p4QiZGlhLeaYDam3EOUWLMBzk6TygU0pOOfo9Ji7xYfD38TRVPEi22NTqlqgqXUPAvQ98J3j6p//V4G8GYQmwz+eqlaR7Gs2Mn6R1xSaag1n2aLIfE0to4=
+	t=1739987968; cv=none; b=CM0QGpQOcv+fLlCqIpORSIORCgF7w3FS5mKzorWEJz4Uk9tP+Ixh/XRm9gBb4mmbWR+KoL5+H/151BPXPM8i4ESiY2XldR5vliHCgZ/FR4/4WUgcAzlSJN1UhgPLb8gu49xw9alDFystTs1M9WvUw3tkzDu3Rqh6ya08y9YrxYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739986325; c=relaxed/simple;
-	bh=QPcSlc0LiyhqRnBHUiR6DpyUQpaxrjck9VKaibmMjOU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MBaGxXsq9NTzAg6mYWV3iiYu/AF87jyasG6iB+AuhOuTIfUK5y7YHkZ9t8JJ91Hxhz4xcLLMTrnmmQqBYh7O7gwNTPKqburDnDhEEXaA6kpl0D781KqqqJHzFtdQRQfKpUc9hFfK2FzjwUnbV7KQIxYP47jkMXEx9v3Z26k8qFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=comcast.net; spf=pass smtp.mailfrom=comcast.net; dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b=FVHAS2bl; arc=none smtp.client-ip=96.102.200.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=comcast.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=comcast.net
+	s=arc-20240116; t=1739987968; c=relaxed/simple;
+	bh=dZRPlTg8UwRQsvICOzZrnxpjLEsnFkHU87BP1KT3JfA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LSUZ3nTeOPkExK2fCW/QmxPHLGRdGtdYW3hjJHeHwUqeQw3pd8BVcm2b0t/K5UM4E5fIR0mN9MKnFBzZrT9/pF8DLJCSEhpV4NyUt83h885joEisol/QEYRl4uTjNNCVvQQ1OQ+75J4p4r5cqkwKZDKmrQOBmm5g/5lc+Qt3h8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fs89mG5z; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b="FVHAS2bl"
-Received: from resomta-h2p-555357.sys.comcast.net ([96.102.179.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 256/256 bits)
-	(Client did not present a certificate)
-	by resqmta-h2p-567038.sys.comcast.net with ESMTPS
-	id kjEbttYe4Wicpknt1tpUSu; Wed, 19 Feb 2025 17:29:27 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
-	s=20190202a; t=1739986167;
-	bh=NblRiKsXcO5CBT4PJbFI990yoHCBghohSU4zRzM3oU0=;
-	h=Received:Received:From:To:Subject:Date:Message-ID:MIME-Version:
-	 Xfinity-Spam-Result;
-	b=FVHAS2bls05kAgRcnlYciHbNYPpD/uhVmT9dfXO4p80W3cd69TbG9aTt+FuHjAfwh
-	 euJObVRMEw+NQPuHg2+uDFQCFvQny39FLdiAQoSse45SfyL3hB7hDt47d43s/7UfZM
-	 0VuMyYIBkFogP44WcmBUqDlidFAeX6SH7RdYbKYVQ0E5waZXS3yr35+RLZ3YkH7Pdc
-	 hjPfDgkCKUdVO3CQI6wKs+jwWHQ7CBXibXMXJ2f+BqRz8Dale2J/V3E94GSmCviTaE
-	 vjbHnc3ZGS5eFuMhWgLlpmZI74xJf/RFMOYrebDjDA8vBQIUWfLEmIxbq3655rnqfd
-	 bfC5NX3soAf3A==
-Received: from jack-livingood.hsd1.ca.comcast.net
- ([IPv6:2601:647:4d81:b870::5d17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 256/256 bits)
-	(Client did not present a certificate)
-	by resomta-h2p-555357.sys.comcast.net with ESMTPSA
-	id knsltKeG1gUTFknsstPzl2; Wed, 19 Feb 2025 17:29:21 +0000
-From: jack Livingood <jacklivingood@comcast.net>
-To: llvm@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev,
-	yung-chuan.liao@linux.intel.com,
-	o-takashi@sakamocchi.jp,
-	tiwai@suse.de,
-	jack Livingood <jacklivingood@comcast.net>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] sound:firewire:fixed spelling error
-Date: Wed, 19 Feb 2025 09:28:17 -0800
-Message-ID: <20250219172817.50172-1-jacklivingood@comcast.net>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fs89mG5z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739987967; x=1771523967;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dZRPlTg8UwRQsvICOzZrnxpjLEsnFkHU87BP1KT3JfA=;
+  b=Fs89mG5zJ+tMWt/tN36P581+eU+MIqHzIqPuC/imSO6UynwnRuFrtcwX
+   mqaK6yAD55DAku9pGFxUPrNpKFpRLjkANRd5GSP7y03K5189ly/EOlDja
+   sH79WXTgYAW6SymB0Ybi9Al+y7i02QYY8mTFxEQQGvFBjb3IWh5oEyiog
+   5irFyJrArTP/Zd9TmujfrQY/cL75rOsuDgoD0Cbas9rIMXCwiGlWGK1oC
+   3OaSL1dtot68WRbxPAjie9V2S/3VVGXZfNvq8Qs+ifz8x3X14db3+Nb5N
+   PTv25CYygjcVjpHxG16GJ1rrsCCiF8f2+AWOkzgDCeKNoSW8iCZrBiDat
+   Q==;
+X-CSE-ConnectionGUID: zPVfjeCkR6+F4HT/a0ySNQ==
+X-CSE-MsgGUID: p++PNxokQYev+/2vctcIOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="44508069"
+X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
+   d="scan'208";a="44508069"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 09:59:25 -0800
+X-CSE-ConnectionGUID: bMFkRCDDQl+JuIoQya6e0A==
+X-CSE-MsgGUID: 6lzyRyhlQ5KfUfVG4K+gNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119992342"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 19 Feb 2025 09:37:51 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tko12-0003FZ-0k;
+	Wed, 19 Feb 2025 17:37:44 +0000
+Date: Thu, 20 Feb 2025 01:37:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wolfram Sang <wsa-dev@sang-engineering.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/i2c/i2c-core-base.c:1420:12: warning: stack frame size
+ (1040) exceeds limit (1024) in 'i2c_do_add_adapter'
+Message-ID: <202502200154.kBYwSZGe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfMiccxxfr+qZXBpeZzpJH6M47BiP0/FFde6KME1jItbSlnTZy76XKGbLgbUBWscfcGOwCP8e/+5LfhXkhCQNHOHBbh7fmdhhEEhKAQuNRgfnTEKIWOv4
- QajGS81ZhE9sPLw7fiHPHvXpctXQEN/dcWLJUuNCGI3ObawDY/WPv8HnzrgRTr182ry5Q4R2ULW3WcofR5c0rNTJYLj/jrvHjXzUa1KklPqdYW45trxfAboD
- JsTZyUBbnx8zchsAi9bu0AJ0m8KkZynzU5rxBv27uc+ACdXjAmVyHMeFcLGvjUQURGH6foJJy3gRhRQEz8NAVoQrSzkkO46HLPuy7N1c4psncsYsIdkz1pgc
- zihqLQ3770znn1kRFVhcojLk6uXNxsiBEtr7lRwPeFsZ4Yf/tMB6BpEKHVY7l20UuKs7SCzTwYMkwhwHKSrHJjRylf2v1jcywrzxh0MFS6X4C+V7hpY=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-fixed a spelling error.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6537cfb395f352782918d8ee7b7f10ba2cc3cbf2
+commit: 3bfa08fe9ec8dd79e183c88e1275be74191e7bc8 Revert "i2c: Replace list-based mechanism for handling auto-detected clients"
+date:   2 weeks ago
+config: mips-eyeq6_defconfig (https://download.01.org/0day-ci/archive/20250220/202502200154.kBYwSZGe-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200154.kBYwSZGe-lkp@intel.com/reproduce)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202502191455.cX0HILg0-lkp@intel.com/
-Signed-off-by: Jack Livingood <jacklivingood@comcast.net>
----
- sound/firewire/isight.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502200154.kBYwSZGe-lkp@intel.com/
 
-diff --git a/sound/firewire/isight.c b/sound/firewire/isight.c
-index e9617fc0a532..bf1e3f293c75 100644
---- a/sound/firewire/isight.c
-+++ b/sound/firewire/isight.c
-@@ -643,7 +643,7 @@ static int isight_probe(struct fw_unit *unit,
- 		 "Apple iSight (GUID %08x%08x) at %s, S%d",
- 		 fw_dev->config_rom[3], fw_dev->config_rom[4],
- 		 dev_name(&unit->device), 100 << fw_dev->max_speed);
--	strspy(card->mixername, "iSight");
-+	strscpy(card->mixername, "iSight");
- 
- 	err = isight_create_pcm(isight);
- 	if (err < 0)
+All warnings (new ones prefixed by >>):
+
+>> drivers/i2c/i2c-core-base.c:1420:12: warning: stack frame size (1040) exceeds limit (1024) in 'i2c_do_add_adapter' [-Wframe-larger-than]
+    1420 | static int i2c_do_add_adapter(struct i2c_driver *driver,
+         |            ^
+   1 warning generated.
+
+
+vim +/i2c_do_add_adapter +1420 drivers/i2c/i2c-core-base.c
+
+9c1600eda42e52 drivers/i2c/i2c-core.c David Brownell 2007-05-01  1419  
+69b0089a6750a0 drivers/i2c/i2c-core.c Jean Delvare   2009-12-06 @1420  static int i2c_do_add_adapter(struct i2c_driver *driver,
+69b0089a6750a0 drivers/i2c/i2c-core.c Jean Delvare   2009-12-06  1421  			      struct i2c_adapter *adap)
+026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1422  {
+4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1423  	/* Detect supported devices on that bus, and instantiate them */
+4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1424  	i2c_detect(adap, driver);
+4735c98f8447ac drivers/i2c/i2c-core.c Jean Delvare   2008-07-14  1425  
+026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1426  	return 0;
+026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1427  }
+026526f5afcd42 drivers/i2c/i2c-core.c Jean Delvare   2008-01-27  1428  
+
+:::::: The code at line 1420 was first introduced by commit
+:::::: 69b0089a6750a0435570df3ba8456c77b352af55 i2c: Refactor for_each callbacks
+
+:::::: TO: Jean Delvare <khali@linux-fr.org>
+:::::: CC: Jean Delvare <khali@linux-fr.org>
+
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
