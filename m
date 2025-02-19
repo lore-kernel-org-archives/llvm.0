@@ -1,62 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5AF22097;
-	Wed, 19 Feb 2025 01:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3064F17CA12;
+	Wed, 19 Feb 2025 02:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739928061; cv=none; b=LlLg4MoUfeWzL/4w70LILxZk00s1TQHsGwl+e1iiGjfPS7BmnQpKlFleD7ybHEw9nbXMdL8j8h0WXO2GaV6ICH6JqzGXJj+rS8BiQxrW9A3X6+y5xzkdzwX9AaVECJSr5qB6G64as1kTZbjMPdY4I99Q5MiI1bfN9SM3udn7dPM=
+	t=1739932493; cv=none; b=sVnXPFOD1ZCDKX4AdByFq2CVHJDVgXMNEUKb861M2YlcERWRZqczaqMLwOyfuz9atTlYepg1P+te3w/1ibTmhNlzHSZT2jtfcTP3UuUz7IykLOV/civ759Jjh2mvmgIqofMa3dFbq1Y8ikkl21MibOrga5OA3h7pUOlR5Z7mpMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739928061; c=relaxed/simple;
-	bh=bmGa4eWhcR5L/dcLtERr3EI/+tCNKeqmsPcoVSPYgqo=;
+	s=arc-20240116; t=1739932493; c=relaxed/simple;
+	bh=NAAHiS42bhd4NtLIVDGcTF2I5VSPzSVITVY8K37nrYU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YryhYZTqdggWWu/1/tcqpFEJjFtvxUq2iwyVjl/6LGzv4xLcpeKpeEWA4ceB5K7IYeaMqNUQE5ghD1WT0Kxl0uWYpjSQqTvflRWIKdog6uPisU0fs/ZI4wLERsj+yJ0q6cX46ePJln7f6U44k9gQgV7ebOb8mpVKxdfDPA+2cto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HtRveGUe; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=tTjzSeBBlsbaW0mQkux8K7kRxI4HR34j6YkoNB6jDwHrYQdTi1bilsxupHdXARFHA5mz7E1LH6KZYcfHaMHKoSfMGwSBx8+EeVyz1Bd8xrg/wWdqTLi4h3xemudpTsw4XlPMr+Drf5y19RDDezAJstpSgLoLe04JxQviqmLA6as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i8pgR8PC; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HtRveGUe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i8pgR8PC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739928059; x=1771464059;
+  t=1739932491; x=1771468491;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bmGa4eWhcR5L/dcLtERr3EI/+tCNKeqmsPcoVSPYgqo=;
-  b=HtRveGUeFH19MNEtYGdGWlecAJX5h4rD90YP9f14CUDget/U5yBMEKAu
-   MxjSX09LAYG0JDUN3sRAYk2tnFtoAp/UPCt/BD2aKrqN+SpT/26eIZ02J
-   e5Vwp5ammT01HcG98eZtDH99CxayO2xEjsnJPO1OTU5bG+owjJ+hLs0R9
-   RRyaX0ADq4x7WoobPwvp/HzWxPTnlTE+atuaYVZ+2PmUZlpinPSK/+SQ6
-   ePOqE0VhDuqXedVwctNcJJWT36R85bLTGPzswp8JYtwF+ivi7kzcLIkKG
-   LRk08G8KkpzNY7mbic89uLrBGTIIVIi4VDzwfdYyLICRE+1nEX5QlV6RF
-   w==;
-X-CSE-ConnectionGUID: 0xJ/iCWIT6qvz1NENqrobA==
-X-CSE-MsgGUID: CzxJqgB4S5GUKsG+ANtyBw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="40664951"
+  bh=NAAHiS42bhd4NtLIVDGcTF2I5VSPzSVITVY8K37nrYU=;
+  b=i8pgR8PCsMm6pxdBAuoNyHy5aSK3I379J/z4lYmjg3RTBY1FUV4ORGRH
+   xNwZrjwcyWSBFo0SOP3GHnfo8u4vpxKuJ+cvixxZ4zbboXU9XD5Ev/gyX
+   +V/BlZhqdkGfSHkLI5lxzlAn9BxUhspzuL+TiFNg+9+7Yzsshiwt76tRh
+   x+GrgJI+jxDg6s2ZmUlKt7iXOrwOEhQ350TFz2jVFDiGZ/QtzPwGhJuOj
+   oyLUSKTNOvEdDucoQGL7wyZ1tN5xnF7oTExbskzRB/ltW+coSiGoUl/zn
+   o5wBEUxfztE3V5xzF4UXhEIdCvF2mOOhyS+I+Ax+VEpNhNG2zsu/W7a1S
+   Q==;
+X-CSE-ConnectionGUID: hPRQRpykTGeb5UP9Ozo2hQ==
+X-CSE-MsgGUID: 9wJZL+WHTN+F1c0ZqMh7aw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="63128688"
 X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="40664951"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 17:20:59 -0800
-X-CSE-ConnectionGUID: 996Lsse9T463d1aJofebNg==
-X-CSE-MsgGUID: JeTMi8TOSAWz1KALl72DPw==
+   d="scan'208";a="63128688"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 18:34:51 -0800
+X-CSE-ConnectionGUID: bBYqrZ1NTLO+pH3kJYy73w==
+X-CSE-MsgGUID: pcV7ZefcTISew4qh/vsibQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,296,1732608000"; 
-   d="scan'208";a="114304361"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118711751"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 18 Feb 2025 17:20:57 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 18 Feb 2025 18:34:48 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tkYlj-00013i-0g;
-	Wed, 19 Feb 2025 01:20:55 +0000
-Date: Wed, 19 Feb 2025 09:20:30 +0800
+	id 1tkZvA-00019I-1a;
+	Wed, 19 Feb 2025 02:34:45 +0000
+Date: Wed, 19 Feb 2025 10:34:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: Vignesh C <quic_vignc@quicinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Yury Norov <yury.norov@gmail.com>
-Subject: lib/test_bitmap.c:1269:2: error: call to '__compiletime_assert_135'
- declared with 'error' attribute: BUILD_BUG_ON failed:
- !__builtin_constant_p(res)
-Message-ID: <202502190910.LTEnPYuL-lkp@intel.com>
+	Jeff Johnson <jjohnson@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+	ath12k@lists.infradead.org,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Rameshkumar Sundaram <rameshkumar.sundaram@oss.qualcomm.com>,
+	Raj Kumar Bhagat <quic_rajkbhag@quicinc.com>
+Subject: [ath:ath12k-split-phy 61/81]
+ drivers/net/wireless/ath/ath12k/mac.c:4778:15: warning: variable 'ar' is
+ uninitialized when used here
+Message-ID: <202502191045.TBgxxg1V-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,121 +68,156 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Alexander,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6537cfb395f352782918d8ee7b7f10ba2cc3cbf2
-commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
-date:   11 months ago
-config: um-randconfig-002-20250219 (https://download.01.org/0day-ci/archive/20250219/202502190910.LTEnPYuL-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ath/ath.git ath12k-split-phy
+head:   c836072ed719073e205d0d8d16b766940e240e68
+commit: f430fff8339fb95a85489c1363c3ac7ab0d0f536 [61/81] wifi: ath12k: Split scan request for split band device
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250219/202502191045.TBgxxg1V-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 910be4ff90d7d07bd4518ea03b85c0974672bf9c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502190910.LTEnPYuL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250219/202502191045.TBgxxg1V-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502190910.LTEnPYuL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502191045.TBgxxg1V-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> lib/test_bitmap.c:1269:2: error: call to '__compiletime_assert_135' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
-    1269 |         BUILD_BUG_ON(!__builtin_constant_p(res));
-         |         ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:460:2: note: expanded from macro 'compiletime_assert'
-     460 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
-     448 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
-     441 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:252:1: note: expanded from here
-     252 | __compiletime_assert_135
-         | ^
-   1 error generated.
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/wireless/ath/ath12k/mac.c:4778:15: warning: variable 'ar' is uninitialized when used here [-Wuninitialized]
+    4778 |                 ath12k_warn(ar->ab, "unable to select device for scan\n");
+         |                             ^~
+   drivers/net/wireless/ath/ath12k/debug.h:36:50: note: expanded from macro 'ath12k_warn'
+      36 | #define ath12k_warn(ab, fmt, ...) __ath12k_warn((ab)->dev, fmt, ##__VA_ARGS__)
+         |                                                  ^~
+   drivers/net/wireless/ath/ath12k/mac.c:4768:19: note: initialize the variable 'ar' to silence this warning
+    4768 |         struct ath12k *ar, *prev_ar;
+         |                          ^
+         |                           = NULL
+   13 warnings generated.
 
 
-vim +1269 lib/test_bitmap.c
+vim +/ar +4778 drivers/net/wireless/ath/ath12k/mac.c
 
-291f93ca339f5b5 Barry Song        2021-08-06  1227  
-2356d198d2b4dde Yury Norov        2023-07-17  1228  /*
-2356d198d2b4dde Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
-2356d198d2b4dde Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
-2356d198d2b4dde Yury Norov        2023-07-17  1231   */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1233  {
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1238  	int res;
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1239  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1240  	/*
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1246  	 */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1247  
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1252  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1256  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1261  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1266  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
-dc34d5036692c61 Alexander Lobakin 2022-06-24 @1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1271  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1276  
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1280  
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1284  
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
-7adaf37f7f104a7 Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1289  }
-dc34d5036692c61 Alexander Lobakin 2022-06-24  1290  
-
-:::::: The code at line 1269 was first introduced by commit
-:::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
-
-:::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
-:::::: CC: Yury Norov <yury.norov@gmail.com>
+  4763	
+  4764	static int ath12k_mac_op_hw_scan(struct ieee80211_hw *hw,
+  4765					 struct ieee80211_vif *vif,
+  4766					 struct ieee80211_scan_request *hw_req)
+  4767	{
+  4768		struct ath12k *ar, *prev_ar;
+  4769		int i, from_index, to_index;
+  4770	
+  4771		lockdep_assert_wiphy(hw->wiphy);
+  4772		/* Since the targeted scan device could depend on the frequency
+  4773		 * requested in the hw_req, select the corresponding radio
+  4774		 */
+  4775		prev_ar = ath12k_mac_select_scan_device(hw, vif,
+  4776							hw_req->req.channels[0]->center_freq);
+  4777		if (!prev_ar) {
+> 4778			ath12k_warn(ar->ab, "unable to select device for scan\n");
+  4779			return -EINVAL;
+  4780		}
+  4781	
+  4782		/* NOTE: There could be 5G low/high channels as mac80211 sees
+  4783		 * it as an single band. In that case split the hw request and
+  4784		 * perform multiple scans
+  4785		 */
+  4786		from_index = 0;
+  4787		for (i = 1; i < hw_req->req.n_channels; i++) {
+  4788			ar = ath12k_mac_select_scan_device(hw, vif,
+  4789							   hw_req->req.channels[i]->center_freq);
+  4790			if (!ar) {
+  4791				ath12k_warn(ar->ab, "unable to select device for scan\n");
+  4792				return -EINVAL;
+  4793			}
+  4794			if (prev_ar == ar)
+  4795				continue;
+  4796	
+  4797			to_index = i;
+  4798			ath12k_mac_initiate_hw_scan(hw, vif, hw_req, prev_ar,
+  4799						    from_index, to_index);
+  4800			from_index = to_index;
+  4801			prev_ar = ar;
+  4802		}
+  4803		return ath12k_mac_initiate_hw_scan(hw, vif, hw_req, prev_ar, from_index, i);
+  4804	}
+  4805	
 
 -- 
 0-DAY CI Kernel Test Service
