@@ -1,67 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2241FCF6B;
-	Thu, 20 Feb 2025 15:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7329B1EEA37;
+	Thu, 20 Feb 2025 16:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740065132; cv=none; b=HRFlv16KXcpc81cvhZ49CDA2OqRJu+ZmMkiMNunHlz7YzEKoguIznv6uOAJ2XmRS8HJlVpa4Sar+i/K7FwqofOjx/V9QRLeTX16ZBpCqHc0nYQ+NXDxBrb6BXJDXaqaTpRw7Jk0qKH94xfQq7qa0TEw6WrrnHq3flHk3aGk+MDk=
+	t=1740067696; cv=none; b=mnxaxqC+YRcz6tYSGrf+KPD0m2Q/DR/qDmuhO3VGcWO6R0ijUGIq84XHwnC++SBc6ctW2zXNChLe54Xjd5Fo505N54h2Qt7fctDja3WikgOO88I7arGjEkQ8modufqOUS9oHjkcMgJz3qQiiHCv/hkXxoga4dPYDQ4ovus7NqqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740065132; c=relaxed/simple;
-	bh=f2klmEUwgqFbY44FQoL/3EzI0jobsONaTotywytBXU8=;
+	s=arc-20240116; t=1740067696; c=relaxed/simple;
+	bh=5UKuSJfQdQ3wxkz3CXu365iXRHx0PfplKe3AL6w5Cms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K7tbnV31szSawIz+evn2hG6rdM/t8hKRl8jmF6qfx5LyiW94QYbA8J5smmgiBN+THtxJA5SLmUwmUBzCpNh52ewRP1cLW42J/lm7mJthndyhyFBuo/hHAvkKYI/quuokVgr8oHPePlAfS/1cbvJsRSiq4mnpbyjrJ47cQQMy9+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: E4wqLcdHTnSKcck9DJ1BoA==
-X-CSE-MsgGUID: h2JD6SzARm2Lx74DMlrIDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="40705301"
+	 Content-Type:Content-Disposition:In-Reply-To; b=h5Ilaia9IZTabTi7gz6vCeabIsv52ePoH+OvNRbNsul2PEsXS/TcwppQoAnTIxPifB/g5aV4nlmgSDfbhSzdQ93za6yg7TglHEqaFmHPioFU7PEA3rKUg8z6hoV8VdRUyrZJCjY38NEV5bjzgf9r4raACOcjCrBi+ZkzWf6sLwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R2H11IkQ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R2H11IkQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740067695; x=1771603695;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5UKuSJfQdQ3wxkz3CXu365iXRHx0PfplKe3AL6w5Cms=;
+  b=R2H11IkQHZ8OIDz+GePSZq7iLEXJ6p1DsjvTbbwXScEfgpK7WwBURaUM
+   zN1HlFZNsydSU4OHQU6CL4QJ++uv0/bwQGEXa25qLpqWPrtwQ/yHgNdtT
+   E1bQzkskP3I4BH0CKAJXBQhXy0Y7Ee5buEHPvjCgsm2nwO69h67MLUHD2
+   L2Gkt2mGleJZcn0xUXa5I33yIfyYDFiKTWQfwAHrXczAxwMbufYpKc5hq
+   Q7nUB7+xyc/2KtyTfsjCk/5RTECNvnxUAFDeRBfPCOfaF/zryj4HRhsR5
+   GZVFa80k3MBB+aSJp+Wzf/b/qbfOd6TinWg9hHJov/cXMk4KAGMKQ2lwc
+   Q==;
+X-CSE-ConnectionGUID: TftigUVqR8ykG0uAOS5SzA==
+X-CSE-MsgGUID: j6EpGS4mTFKBTweDYsXMnQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="41111086"
 X-IronPort-AV: E=Sophos;i="6.13,302,1732608000"; 
-   d="scan'208";a="40705301"
+   d="scan'208";a="41111086"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 07:25:30 -0800
-X-CSE-ConnectionGUID: qmtVSK5cSNy+QcnRA6L5zQ==
-X-CSE-MsgGUID: +upU1mqiQfig88j8PogIog==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 08:08:10 -0800
+X-CSE-ConnectionGUID: XpRPYF38T1i0MknHmzmydw==
+X-CSE-MsgGUID: nmfcKGLnQPKtGGWmAwquGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,302,1732608000"; 
-   d="scan'208";a="145924174"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 07:25:25 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy@kernel.org>)
-	id 1tl8QT-0000000DNH5-3Gm6;
-	Thu, 20 Feb 2025 17:25:21 +0200
-Date: Thu, 20 Feb 2025 17:25:21 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Ricardo Ribalda <ribalda@chromium.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Tiffany Lin <tiffany.lin@mediatek.com>,
-	Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-	Yunfei Dong <yunfei.dong@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-staging@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/3] media: cx231xx: Convert enum into a define
-Message-ID: <Z7dJYemMR-mgZXG6@smile.fi.intel.com>
-References: <20241202-fix-llvm9-v1-0-2a50f5acfd0b@chromium.org>
- <20241202-fix-llvm9-v1-1-2a50f5acfd0b@chromium.org>
- <20241203093114.0ca49c01@foz.lan>
- <c896221c-5ff2-4a2b-b431-7c7f805b4f68@xs4all.nl>
- <Z7c252IKhXdysjAi@smile.fi.intel.com>
- <55389b80-9f0e-4423-8e92-c486de058720@xs4all.nl>
+   d="scan'208";a="145937707"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 20 Feb 2025 08:08:05 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tl95l-0004Tv-20;
+	Thu, 20 Feb 2025 16:08:01 +0000
+Date: Fri, 21 Feb 2025 00:07:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	Nuno Sa <nuno.sa@analog.com>, David Lechner <dlechner@baylibre.com>,
+	Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v3 6/9] iio: adc: rzg2l_adc: Use adc-helpers
+Message-ID: <202502202332.jrEGhoBM-lkp@intel.com>
+References: <25c5d22f6f0cbd1355eee2e9d9103c3ee71cebdc.1739967040.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,32 +78,33 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55389b80-9f0e-4423-8e92-c486de058720@xs4all.nl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <25c5d22f6f0cbd1355eee2e9d9103c3ee71cebdc.1739967040.git.mazziesaccount@gmail.com>
 
-On Thu, Feb 20, 2025 at 04:12:38PM +0100, Hans Verkuil wrote:
-> On 2/20/25 15:06, Andy Shevchenko wrote:
-> > On Thu, Feb 20, 2025 at 02:55:42PM +0100, Hans Verkuil wrote:
-> >> On 12/3/24 09:31, Mauro Carvalho Chehab wrote:
+Hi Matti,
 
-...
+kernel test robot noticed the following build errors:
 
-> >> ORing enums is really not a good idea: you would normally never do that, and
-> > 
-> > I think you missed a keyword "different", so "ORing different enums ..."
-> > which I totally agree on, but the same enum values are fine.
-> 
-> While the compiler might be happy with that, I think ORing enums regardless
-> is weird. It's not what enums are for.
+[auto build test ERROR on 5bc55a333a2f7316b58edc7573e8e893f7acb532]
 
-I disagree. It's totally normal to have "mixed" enums where we have ranges of
-sequential values mixed with bit flags. Cross-enum bit operations (and what
-this patch is about) should be prohibited, indeed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/dt-bindings-ROHM-BD79124-ADC-GPO/20250219-203748
+base:   5bc55a333a2f7316b58edc7573e8e893f7acb532
+patch link:    https://lore.kernel.org/r/25c5d22f6f0cbd1355eee2e9d9103c3ee71cebdc.1739967040.git.mazziesaccount%40gmail.com
+patch subject: [PATCH v3 6/9] iio: adc: rzg2l_adc: Use adc-helpers
+config: i386-buildonly-randconfig-005-20250220 (https://download.01.org/0day-ci/archive/20250220/202502202332.jrEGhoBM-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502202332.jrEGhoBM-lkp@intel.com/reproduce)
 
-> >> the compiler warning is IMHO appropriate.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502202332.jrEGhoBM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: devm_iio_adc_device_alloc_chaninfo
+   >>> referenced by rzg2l_adc.c:324 (drivers/iio/adc/rzg2l_adc.c:324)
+   >>>               drivers/iio/adc/rzg2l_adc.o:(rzg2l_adc_probe) in archive vmlinux.a
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
