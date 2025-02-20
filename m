@@ -1,120 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8180713DBB1;
-	Thu, 20 Feb 2025 17:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641EC1DED7C;
+	Thu, 20 Feb 2025 19:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740071850; cv=none; b=NdEcohu97mCdl5N922n0575G8BQnfaI/0jZNE4JNlzh20a3JGbshRDilVayOf1yBJBWJh4soNmMjfcgjnH+0s1dhvXCLzwYsmCiRf/HLtjFRH7AiEDXgy+un2qOkn95tTMqahvlY43VogH0X+sjUcbkHPKOlMsVDh6KN31Cnw/k=
+	t=1740081584; cv=none; b=GM8J3Ubu39Vg1QikmcYJwdAWjtQy6CJYqdu1mDGsU0SGNavREo3kSSD8+gtVguQwz+1JGAxKvaDDyLUP52ZkBDadrgPiHDSHRGXX/GweJfetmgO91NiJ1SoHkHH5MX1ts/HEwUZgQvsV1xJS8mJN2qVTkOhubKkCO/mIH2adPKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740071850; c=relaxed/simple;
-	bh=7CGSKMHde5rIbG0LCV4dYgFBgSrYGZsf7bUx73BQ6NI=;
+	s=arc-20240116; t=1740081584; c=relaxed/simple;
+	bh=vbTftWsandQc7OcCjdvC6lWo4bRP8tGg5iJy8RM0ZFw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QBXkDXDxwgpM+zZruhhl6AfiZ+itzlc6LnQ+zeCsUKT0QJQz3Dg0OaEmgFCattV4+FHDJn3L81KsuU+dHxxIEMBEjX46liUi1usnObI+WQEsyFWmZSUQaOI+M+KbTkdiEyTQ9nVFSCuwmpq3qHnZg5rnEZkIQekaXnwjLHU8Btk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3zpVf0k; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=WU+Fv1kYSJ8QFiNLqa4zGE9FdTGd3sGItJId6iBHWAuDtBSLThSd4Ab16+oapeyiBzZm95XeF6rKZ+0UeK07Z4zyXSz2WqbAf345bmpzzOyVX03n9Id4GwMb7Kwhu1hqgKILQBLw8PllJgaW2tuvAeWj0RVBN3ZMEhkAd1pCSHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXsvJpQR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3zpVf0k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740071849; x=1771607849;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7CGSKMHde5rIbG0LCV4dYgFBgSrYGZsf7bUx73BQ6NI=;
-  b=J3zpVf0kJcsZZznA7P6ESfAlpPnLqM/DfePCYU6HJtJd87N1AN3XUOkj
-   VyNIlM4VEstKCJ+4G8cR1dNdjX0NR287DmSDAmt6ZS4aodXCppTKIK8MQ
-   tEBDbHfRM6LYbXz6R2IGIjuLd/4LGfgpDPpmHZhYiTbbFJTCkbYibSUS3
-   VM32qn2jYW9kcHcg9boyiew4m0mTtf464sJI+zAdgx1GMOnU3j2H0EIGT
-   ndI0FgLdBg+GY65SEJL5X6UkhNtDeW/mVT+qcr1CGMcjyPi0NfqxYusW5
-   WAMid9UPSEfrwrqjm3XLDRnIIjZwtV834lbFFvzsfcBEIYsrVN3hM+rYZ
-   Q==;
-X-CSE-ConnectionGUID: H5edvSTRQImi5Z3sEgoTaw==
-X-CSE-MsgGUID: FUtD1WhaQGq3SYGqNOPSmw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="66227617"
-X-IronPort-AV: E=Sophos;i="6.13,302,1732608000"; 
-   d="scan'208";a="66227617"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 09:17:26 -0800
-X-CSE-ConnectionGUID: G3FJM02tRbOugVssdF5ZIg==
-X-CSE-MsgGUID: niWiQBFIQH6uYj+yoBl1JA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116001418"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 20 Feb 2025 09:17:24 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tlAAr-0004Zj-2i;
-	Thu, 20 Feb 2025 17:17:21 +0000
-Date: Fri, 21 Feb 2025 01:16:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jun Yan <jerrysteve1101@gmail.com>, jic23@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jun Yan <jerrysteve1101@gmail.com>
-Subject: Re: [PATCH 1/2] iio: gyro: bmg160_spi: add of_match_table
-Message-ID: <202502210125.5IaR1YAL-lkp@intel.com>
-References: <20250219150254.24664-2-jerrysteve1101@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXsvJpQR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8405DC4CED1;
+	Thu, 20 Feb 2025 19:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740081582;
+	bh=vbTftWsandQc7OcCjdvC6lWo4bRP8tGg5iJy8RM0ZFw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GXsvJpQRWYxUzYNPalhxtohdI0AQWCuZrKMRe+zMsiOQU1NqkxGyTjkAJg7dgfF0j
+	 H+NxkGor/y1JBg3WjGrp1BlXUk+j2axZX5spQg2SacrxeCOx6g7Sz90Trll76DUK83
+	 Azeuwk2Kljsz8E83cxHVQ2j6Hf6vwB2mOnD1bnwGd9/tuA5laaLroqHqgMJY73pqFi
+	 8mawiI6SMrl2dxX3DZ8eHPROef9AsHe3Ch9aOeT2/7dDdVTfZSzB12xjP6vTwKTxA+
+	 67aCzncwDRT2ts/DRekiofNn/2sEZp18FuRR8tHxR0fgFwWkk7RJH9fo9hY8IYKLts
+	 RrQBHHjtAc8Fg==
+Date: Thu, 20 Feb 2025 11:59:40 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Sathvika Vasireddy <sv@linux.ibm.com>
+Cc: peterz@infradead.org, christophe.leroy@csgroup.eu, npiggin@gmail.com,
+	maddy@linux.ibm.com, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call
+ warning for bl+mflr pattern
+Message-ID: <20250220195940.ely2l2fpsozd2tuv@jpoimboe>
+References: <20250219162014.10334-1-sv@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250219150254.24664-2-jerrysteve1101@gmail.com>
+In-Reply-To: <20250219162014.10334-1-sv@linux.ibm.com>
 
-Hi Jun,
+On Wed, Feb 19, 2025 at 09:50:14PM +0530, Sathvika Vasireddy wrote:
+> Architectures like PowerPC use a pattern where the compiler generates a
+> branch-and-link (bl) instruction that targets the very next instruction,
+> followed by loading the link register (mflr) later. This pattern appears
+> in the code like:
+> 
+>  bl .+4
+>  li r5,0
+>  mflr r30
 
-kernel test robot noticed the following build errors:
+If I understand correctly, this is basically a fake call which is used
+to get the value of the program counter?
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.14-rc3 next-20250220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Objtool currently warns about this as an "unannotated intra-function
+> call" because find_call_destination() fails to find any symbol at the
+> target offset. Add a check to skip the warning when a branch targets
+> the immediate next instruction in the same function.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202502180818.XnFdv8I8-lkp@intel.com/
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jun-Yan/iio-gyro-bmg160_spi-add-of_match_table/20250219-231024
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20250219150254.24664-2-jerrysteve1101%40gmail.com
-patch subject: [PATCH 1/2] iio: gyro: bmg160_spi: add of_match_table
-config: i386-buildonly-randconfig-005-20250220 (https://download.01.org/0day-ci/archive/20250221/202502210125.5IaR1YAL-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250221/202502210125.5IaR1YAL-lkp@intel.com/reproduce)
+This should have a Fixes tag as well.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502210125.5IaR1YAL-lkp@intel.com/
+>  static int add_call_destinations(struct objtool_file *file)
+>  {
+> +	struct instruction *next_insn;
+>  	struct instruction *insn;
+>  	unsigned long dest_off;
+>  	struct symbol *dest;
+> @@ -1625,6 +1626,11 @@ static int add_call_destinations(struct objtool_file *file)
+>  		reloc = insn_reloc(file, insn);
+>  		if (!reloc) {
+>  			dest_off = arch_jump_destination(insn);
+> +
+> +			next_insn = next_insn_same_func(file, insn);
+> +			if (next_insn && dest_off == next_insn->offset)
+> +				continue;
+> +
 
-All errors (new ones prefixed by >>):
-
->> drivers/iio/gyro/bmg160_spi.c:57:3: error: member reference base type 'const struct of_device_id[4]' is not a structure or union
-      56 |                 .of_match_table = bmg160_of_match
-         |                                   ~~~~~~~~~~~~~~~
-      57 |                 .pm     = &bmg160_pm_ops,
-         |                 ^~~
-   1 error generated.
-
-
-vim +57 drivers/iio/gyro/bmg160_spi.c
-
-c266686477490d Jun Yan                   2025-02-19  52  
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  53  static struct spi_driver bmg160_spi_driver = {
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  54  	.driver = {
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  55  		.name	= "bmg160_spi",
-c266686477490d Jun Yan                   2025-02-19  56  		.of_match_table = bmg160_of_match
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19 @57  		.pm	= &bmg160_pm_ops,
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  58  	},
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  59  	.probe		= bmg160_spi_probe,
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  60  	.remove		= bmg160_spi_remove,
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  61  	.id_table	= bmg160_spi_id,
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  62  };
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  63  module_spi_driver(bmg160_spi_driver);
-b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  64  
+This won't work on x86, where an intra-function call is converted to a
+stack-modifying JUMP.  So this should probably be checked in an
+arch-specific function.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Josh
