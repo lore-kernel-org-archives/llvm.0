@@ -1,203 +1,120 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1AFDF58
-	for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 16:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8180713DBB1;
+	Thu, 20 Feb 2025 17:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740069148; cv=none; b=nFb4qkewb9rHl1PXW2lXVS4zCX/ESp+tv8fXjAqJWEuFldPfIlKHmsRYdIzbf1PoPdNfbeXA9qo695n783Uc0F8H6hx/WVI/mppw65HYBNtg1vNNZoO5rl7PNjq/sLcZIUcvYBvqjSLjwWKroCq4HHdUqJtIQmWzIQYc0/1squ0=
+	t=1740071850; cv=none; b=NdEcohu97mCdl5N922n0575G8BQnfaI/0jZNE4JNlzh20a3JGbshRDilVayOf1yBJBWJh4soNmMjfcgjnH+0s1dhvXCLzwYsmCiRf/HLtjFRH7AiEDXgy+un2qOkn95tTMqahvlY43VogH0X+sjUcbkHPKOlMsVDh6KN31Cnw/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740069148; c=relaxed/simple;
-	bh=/xxoPVQV9rAqO9i3BY7Z44Jp9+qGzPSNQzg74YT7fO8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i/SwZK+Rd6dgCxTSouBEaRjAsb2tH7qZDG0kXgDHoXwk5JGTKTWRnocgDaqMHADM8u5+xk93B5E8Gp1YlxH5O71ixmqvb1BB+1rG29to1lTfOV0MAIxQ3RSqBO9e3L2afULWV8G08Nlcbzfl0V9MdGPGtah5bsFWqwCvxanonvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OkozMCCL; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740071850; c=relaxed/simple;
+	bh=7CGSKMHde5rIbG0LCV4dYgFBgSrYGZsf7bUx73BQ6NI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QBXkDXDxwgpM+zZruhhl6AfiZ+itzlc6LnQ+zeCsUKT0QJQz3Dg0OaEmgFCattV4+FHDJn3L81KsuU+dHxxIEMBEjX46liUi1usnObI+WQEsyFWmZSUQaOI+M+KbTkdiEyTQ9nVFSCuwmpq3qHnZg5rnEZkIQekaXnwjLHU8Btk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3zpVf0k; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OkozMCCL"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38f2b7ce2f3so918966f8f.0
-        for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 08:32:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740069145; x=1740673945; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djJ6cJLCBX31nVMQXMRyTslZq1heGpJZhHxgGn2SThg=;
-        b=OkozMCCLWHa8Mmsy00Ns8T2wRzDHu7ad3Zz4zB3yUkwie+zvlaAi2mxI41MZKwMHQi
-         2t7tkFCqaKEhVNsFZxkaC5ycad6R+v13HPhVK74tk0HpjxZAVtA+OImltzICY5ApFCBl
-         OHyOb7j1KQgOHpkRhpmEwrpSbJJ0ikmFQ2udHCpwzxrQTtf6uNIjtQ1NrmVx9MHyU3aE
-         kPrrqi7plsD+CI5avf9fvCaNVDGStvLaHA3u75qTd8BOezx2C56IYk1v4ASGCyCe4820
-         7RXP8QDjw+8P+HXvKPqTGbdVKMHQQww2BfgDCyiVKvZlhZXziiB4PA1VY0cCw8BA8nbX
-         LHig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740069145; x=1740673945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=djJ6cJLCBX31nVMQXMRyTslZq1heGpJZhHxgGn2SThg=;
-        b=dUuVF2hxYzbLUgNYlhM7XRm/w3+VudXbdrYaHYqHv8RPWUYVKfY8Vd9Q1fDf/jRJoP
-         M/eswXuwY4Ik2AE1WyrWTKFIlNAcBxzBcPY9BmcppkFroV9Si4IT8MDUqoiAYt8G8m0P
-         ABGmlJ3h6Dkpio+QHNWEKa3TFjB/bJpPP80IIINfC9g2HUMg16ukfWt4Z1glJITjAb7x
-         ajg+e2B9QOfQyY/dbi+iqYfi6jLLchWNpa31RTmOMljISzquq9Ar+KMsmntw+YUOBczW
-         20yD6H6M6ATJtWULTgepcQi97WRJRrSHe92lZkQwxBdouMPi33RGXMxzAuW7VhB6Gv11
-         I4jg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrE8DMgfTEHKj0XGhaTtFucOuI095EKkHcTgeMwWXdX3GQSK17z36shBnZFqOElpcnacNt@lists.linux.dev
-X-Gm-Message-State: AOJu0YxQW+8K9GcImp5OYGPcXdNPDbRv0DUsuIv8LZG6LH+vehaEuyjK
-	1ccDmcDqX+YhOIOtxdQOND8D+TYC6JtnGRQxTF4kIsoDVzM6igjcVf4dQCq5/ia5mH8Jmk4a10V
-	xI1obiIfYWRyGRiPItIhA1LsmfMM=
-X-Gm-Gg: ASbGncvHGq8o2RwNClymbU2+FarUsZVhp2JVdqx/DEJJGJs+a4Tys5zkzlq69E+Aptw
-	P5FtIMyyJ+IqgpSTKY6sD5X6uyNpbSqw8QLQLk1X4YIJTCl3MXzgO/Vgj7+VvoDRZ3hdfJd0pcq
-	Y=
-X-Google-Smtp-Source: AGHT+IE+fb/qSiQgDRutZeDBlmq5JYRBHFh6IjwYk9fKzL4B9g9ZxsaVzW96bSH5p8ymUhr7jbVsfdyuK+pmPd2y9mA=
-X-Received: by 2002:a05:6000:10c:b0:38f:2111:f5ac with SMTP id
- ffacd0b85a97d-38f33f51088mr18279347f8f.31.1740069144731; Thu, 20 Feb 2025
- 08:32:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3zpVf0k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740071849; x=1771607849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7CGSKMHde5rIbG0LCV4dYgFBgSrYGZsf7bUx73BQ6NI=;
+  b=J3zpVf0kJcsZZznA7P6ESfAlpPnLqM/DfePCYU6HJtJd87N1AN3XUOkj
+   VyNIlM4VEstKCJ+4G8cR1dNdjX0NR287DmSDAmt6ZS4aodXCppTKIK8MQ
+   tEBDbHfRM6LYbXz6R2IGIjuLd/4LGfgpDPpmHZhYiTbbFJTCkbYibSUS3
+   VM32qn2jYW9kcHcg9boyiew4m0mTtf464sJI+zAdgx1GMOnU3j2H0EIGT
+   ndI0FgLdBg+GY65SEJL5X6UkhNtDeW/mVT+qcr1CGMcjyPi0NfqxYusW5
+   WAMid9UPSEfrwrqjm3XLDRnIIjZwtV834lbFFvzsfcBEIYsrVN3hM+rYZ
+   Q==;
+X-CSE-ConnectionGUID: H5edvSTRQImi5Z3sEgoTaw==
+X-CSE-MsgGUID: FUtD1WhaQGq3SYGqNOPSmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="66227617"
+X-IronPort-AV: E=Sophos;i="6.13,302,1732608000"; 
+   d="scan'208";a="66227617"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 09:17:26 -0800
+X-CSE-ConnectionGUID: G3FJM02tRbOugVssdF5ZIg==
+X-CSE-MsgGUID: niWiQBFIQH6uYj+yoBl1JA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116001418"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 20 Feb 2025 09:17:24 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tlAAr-0004Zj-2i;
+	Thu, 20 Feb 2025 17:17:21 +0000
+Date: Fri, 21 Feb 2025 01:16:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jun Yan <jerrysteve1101@gmail.com>, jic23@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jun Yan <jerrysteve1101@gmail.com>
+Subject: Re: [PATCH 1/2] iio: gyro: bmg160_spi: add of_match_table
+Message-ID: <202502210125.5IaR1YAL-lkp@intel.com>
+References: <20250219150254.24664-2-jerrysteve1101@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
- <d266338a0eae1f673802e41d7230c4c92c3532b3.1739866028.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZezPtE+xaZpsf3B5MwhpfdQV+5b4EgAa9PX0FR1+iawfA@mail.gmail.com>
-In-Reply-To: <CA+fCnZezPtE+xaZpsf3B5MwhpfdQV+5b4EgAa9PX0FR1+iawfA@mail.gmail.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Thu, 20 Feb 2025 17:32:12 +0100
-X-Gm-Features: AWEUYZlJk8i1PGeryrJoWL6O3cLwlGsfEZG1iYKTI3r7jC586Nd1JaZw47VvF2U
-Message-ID: <CA+fCnZfHAEP08xwUM5TXAihtFzrVG_kJMVXBD1U2Z1BoqkM1gA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/14] x86: Make software tag-based kasan available
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
-	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
-	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
-	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
-	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
-	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
-	ndesaulniers@google.com, guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, 
-	mark.rutland@arm.com, broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, 
-	rppt@kernel.org, kaleshsingh@google.com, richard.weiyang@gmail.com, 
-	luto@kernel.org, glider@google.com, pankaj.gupta@amd.com, 
-	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
-	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
-	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
-	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
-	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
-	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
-	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
-	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
-	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
-	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
-	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, 
-	linux-arm-kernel@lists.infradead.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250219150254.24664-2-jerrysteve1101@gmail.com>
 
-On Thu, Feb 20, 2025 at 12:31=E2=80=AFAM Andrey Konovalov <andreyknvl@gmail=
-.com> wrote:
->
-> On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM Maciej Wieczor-Retman
-> <maciej.wieczor-retman@intel.com> wrote:
-> >
-> > Make CONFIG_KASAN_SW_TAGS available for x86 machines if they have
-> > ADDRESS_MASKING enabled (LAM) as that works similarly to Top-Byte Ignor=
-e
-> > (TBI) that allows the software tag-based mode on arm64 platform.
-> >
-> > Set scale macro based on KASAN mode: in software tag-based mode 32 byte=
-s
-> > of memory map to one shadow byte and 16 in generic mode.
->
-> These should be 16 and 8.
->
-> >
-> > Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> > ---
-> > Changelog v2:
-> > - Remove KASAN dense code.
-> >
-> >  arch/x86/Kconfig                | 6 ++++++
-> >  arch/x86/boot/compressed/misc.h | 1 +
-> >  arch/x86/include/asm/kasan.h    | 2 +-
-> >  arch/x86/kernel/setup.c         | 2 ++
-> >  4 files changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index f4ef64bf824a..dc48eb5b664f 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -195,6 +195,7 @@ config X86
-> >         select HAVE_ARCH_JUMP_LABEL_RELATIVE
-> >         select HAVE_ARCH_KASAN                  if X86_64
-> >         select HAVE_ARCH_KASAN_VMALLOC          if X86_64
-> > +       select HAVE_ARCH_KASAN_SW_TAGS          if ADDRESS_MASKING
-> >         select HAVE_ARCH_KFENCE
-> >         select HAVE_ARCH_KMSAN                  if X86_64
-> >         select HAVE_ARCH_KGDB
-> > @@ -402,6 +403,11 @@ config KASAN_SHADOW_OFFSET
-> >         hex
-> >         default 0xdffffc0000000000 if KASAN_GENERIC
-> >
-> > +config KASAN_SHADOW_SCALE_SHIFT
-> > +       int
-> > +       default 4 if KASAN_SW_TAGS
-> > +       default 3
->
-> What's the purpose of this config option? I think we can just change
-> the value of the KASAN_SHADOW_SCALE_SHIFT define when KASAN_SW_TAGS is
-> enabled.
->
->
-> > +
-> >  config HAVE_INTEL_TXT
-> >         def_bool y
-> >         depends on INTEL_IOMMU && ACPI
-> > diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed=
-/misc.h
-> > index dd8d1a85f671..f6a87e9ad200 100644
-> > --- a/arch/x86/boot/compressed/misc.h
-> > +++ b/arch/x86/boot/compressed/misc.h
-> > @@ -13,6 +13,7 @@
-> >  #undef CONFIG_PARAVIRT_SPINLOCKS
-> >  #undef CONFIG_KASAN
-> >  #undef CONFIG_KASAN_GENERIC
-> > +#undef CONFIG_KASAN_SW_TAGS
-> >
-> >  #define __NO_FORTIFY
-> >
-> > diff --git a/arch/x86/include/asm/kasan.h b/arch/x86/include/asm/kasan.=
-h
-> > index 4bfd3641af84..cfc31e4a2f70 100644
-> > --- a/arch/x86/include/asm/kasan.h
-> > +++ b/arch/x86/include/asm/kasan.h
-> > @@ -6,7 +6,7 @@
-> >  #include <linux/kasan-tags.h>
-> >  #include <linux/types.h>
-> >
-> > -#define KASAN_SHADOW_SCALE_SHIFT 3
-> > +#define KASAN_SHADOW_SCALE_SHIFT CONFIG_KASAN_SHADOW_SCALE_SHIFT
-> >
-> >  /*
-> >   * Compiler uses shadow offset assuming that addresses start
-> > diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> > index cebee310e200..768990c573ea 100644
-> > --- a/arch/x86/kernel/setup.c
-> > +++ b/arch/x86/kernel/setup.c
-> > @@ -1124,6 +1124,8 @@ void __init setup_arch(char **cmdline_p)
-> >
-> >         kasan_init();
-> >
-> > +       kasan_init_sw_tags();
-> > +
-> >         /*
-> >          * Sync back kernel address range.
-> >          *
-> > --
-> > 2.47.1
-> >
+Hi Jun,
 
-Also please update the descriptions of all related options in lib/Kconfig.k=
-asan.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.14-rc3 next-20250220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jun-Yan/iio-gyro-bmg160_spi-add-of_match_table/20250219-231024
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250219150254.24664-2-jerrysteve1101%40gmail.com
+patch subject: [PATCH 1/2] iio: gyro: bmg160_spi: add of_match_table
+config: i386-buildonly-randconfig-005-20250220 (https://download.01.org/0day-ci/archive/20250221/202502210125.5IaR1YAL-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250221/202502210125.5IaR1YAL-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502210125.5IaR1YAL-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/iio/gyro/bmg160_spi.c:57:3: error: member reference base type 'const struct of_device_id[4]' is not a structure or union
+      56 |                 .of_match_table = bmg160_of_match
+         |                                   ~~~~~~~~~~~~~~~
+      57 |                 .pm     = &bmg160_pm_ops,
+         |                 ^~~
+   1 error generated.
+
+
+vim +57 drivers/iio/gyro/bmg160_spi.c
+
+c266686477490d Jun Yan                   2025-02-19  52  
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  53  static struct spi_driver bmg160_spi_driver = {
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  54  	.driver = {
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  55  		.name	= "bmg160_spi",
+c266686477490d Jun Yan                   2025-02-19  56  		.of_match_table = bmg160_of_match
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19 @57  		.pm	= &bmg160_pm_ops,
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  58  	},
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  59  	.probe		= bmg160_spi_probe,
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  60  	.remove		= bmg160_spi_remove,
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  61  	.id_table	= bmg160_spi_id,
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  62  };
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  63  module_spi_driver(bmg160_spi_driver);
+b1d125cc623639 Markus Schneider-Pargmann 2015-08-19  64  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
