@@ -1,71 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C7225E476;
-	Wed, 19 Feb 2025 23:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1FF2F852;
+	Thu, 20 Feb 2025 00:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740009130; cv=none; b=WlfVunBzyKyBfH41zV1ABl6JNH5+HJut4tdQjddFYMoupxZOcifEZxddzj359gF9f7Fk2pyZXkQhIgQPK3e79a647TN5mfk/xU183kguO+PlVaPG/bSFFL72Yx4PvtaMQkuvgmTss7kh0UUrwrVcfQjz2w3harihtlG/8Kini4Y=
+	t=1740012263; cv=none; b=XLmFijGsusDFNCBpQuM1yvBPhMdoYHFjMHt/1cctF4WuZ6HvGlFXD7hy4vKdmRCkYFHPrRlniCv02Yo3Rvd1+9Czx90ojXd9o0HSydHIliKRxUp9VYwpeW1se9agCWWiAcZe/DKZpmUb+APBgjIltgF/OQkJLsVnoCggxhr5meM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740009130; c=relaxed/simple;
-	bh=fC6muqlChDrljBG2bGaCmMbBFb3Lrun3fzk8vu7AYLA=;
+	s=arc-20240116; t=1740012263; c=relaxed/simple;
+	bh=hC7w/ueXz1ar21mfEcIIPDDMtbUij9k8b7g/Dp7FSu8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ktJlIUNV/19QKguQ7Hh7cPTvNdEk/zvcZdf0g56bWVjQtBNuSn5hQ5j+cquqbI3SMlvldfJW8kSAvNvXLqE6BHvhte9wsWF8osKK7WRm4N3phFa0LkblcW3Zb1JFWR1PqBqNZ57X9Cys2R4s4lpMph0ACJ1XX6NP+p0Wu6TezrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrO2KsAB; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=HY2AY6s1MkOIquVj+nbVw+PtMUcF8sHVE5psHjCz7vRSmxKc0ro2rgRDOaFIMJh4kWfqS59VaTt3xuII2k/f65zkzwj70KYnLlWLJ1y3fD6v6YcrqQs3izCUk/0t61nRjD+kehxlzkWKxzpgTyJ7xQ85uTptlIiaC0cPfbl8O7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aF+ooXwc; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrO2KsAB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aF+ooXwc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740009129; x=1771545129;
+  t=1740012262; x=1771548262;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fC6muqlChDrljBG2bGaCmMbBFb3Lrun3fzk8vu7AYLA=;
-  b=nrO2KsAB8MhUlqZMSNHsxPoG+tMkFCfdRdqSPyXo/BmlOXFHutA1QjhM
-   75yc6ZOykBcHhq5QfqQ1ib/8hhAKSPdBDAP8TS4c/grAJJqFOSvB/jq+8
-   18/nHEOrNf7wEDY34hrH6sUouaGshXtj9WPJY4jTaJ2bONX6tmfl1TO2I
-   rwooDDHZswIr1jjaaeo8Zm30jvNgvdwhAYzdybJxqXmTfZMjRwoUAS0Fv
-   /RTvl+db7/s5Yj937VFS2yFJjs4mkfUbWR3sNfIswA39kVT40YwdYgU6E
-   uWtdQC1X1GoppuBfZhEF4xVAcZfFmapjbOH4PGB0ZP7sqT+8s/UzFL2nE
-   w==;
-X-CSE-ConnectionGUID: XL2/O01AQ2aFAhLTlfN+1Q==
-X-CSE-MsgGUID: odI9uJahQZ+VLDJOfer+Uw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="44688522"
+  bh=hC7w/ueXz1ar21mfEcIIPDDMtbUij9k8b7g/Dp7FSu8=;
+  b=aF+ooXwcnu4RvczHU4cUNs4ThW5DG1fTygCm5LGJpNpa6j6Wy8n1FclV
+   2V3xJpKA4B8VYAqcNVaV3n3pH1L5XnfAfVjs5YbRyQ1RH1nYpCgcY9u+U
+   CjaiBAp4qUiHzxLWSJOf9HjaZR1S+yk31OWrlN1Ll6DK5CUchuvI3cTBy
+   wzfQiD3H/XE+plW8GhxYViJ8hbdqwLSLC9i4fl3n6wjvx5BPXNvse4eaT
+   qTw6zikB22LFvx3HU/vkcRE8wk8JzmQe1M2jvK5KmvKI2Gk4F7Zgbi3E/
+   CCmKZSsny98sode3JD6qBUp3ZOoOGW5yc//GRtdlrqeo4Q4M+HrXdhrXJ
+   g==;
+X-CSE-ConnectionGUID: jfP8e9gPRS+dxezXiZd5Pg==
+X-CSE-MsgGUID: viFTacSaQjW7eyzAcRRvpQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="43604683"
 X-IronPort-AV: E=Sophos;i="6.13,300,1732608000"; 
-   d="scan'208";a="44688522"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 15:52:08 -0800
-X-CSE-ConnectionGUID: ooLzz0LaSPGEFPY9ENumrA==
-X-CSE-MsgGUID: NYD5DsV1TIOSvYVpYayIhg==
+   d="scan'208";a="43604683"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 16:44:21 -0800
+X-CSE-ConnectionGUID: JNzdxpTERAmFE7vg+W2FRg==
+X-CSE-MsgGUID: rqA02sHPTu2v1yaslifJmA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,300,1732608000"; 
-   d="scan'208";a="115065139"
+   d="scan'208";a="119866693"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Feb 2025 15:52:04 -0800
+  by orviesa004.jf.intel.com with ESMTP; 19 Feb 2025 16:44:20 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tktrF-0003d5-26;
-	Wed, 19 Feb 2025 23:52:01 +0000
-Date: Thu, 20 Feb 2025 07:51:05 +0800
+	id 1tkufp-0003h9-1o;
+	Thu, 20 Feb 2025 00:44:17 +0000
+Date: Thu, 20 Feb 2025 08:43:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Pavel Machek <pavel@ucw.cz>,
-	Daniel Thompson <danielt@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-leds@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mfd: lm3533: convert to use OF
-Message-ID: <202502200718.H8t6Uv7b-lkp@intel.com>
-References: <20250218132702.114669-3-clamor95@gmail.com>
+To: Nemesa Garg <nemesa.garg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v8 5/6] drm/i915/display: Add registers and compute the
+ strength
+Message-ID: <202502200838.vQNIR4Ee-lkp@intel.com>
+References: <20250219115359.2320992-6-nemesa.garg@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,56 +63,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250218132702.114669-3-clamor95@gmail.com>
+In-Reply-To: <20250219115359.2320992-6-nemesa.garg@intel.com>
 
-Hi Svyatoslav,
+Hi Nemesa,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on lee-mfd/for-mfd-next]
-[also build test ERROR on lee-leds/for-leds-next robh/for-next linus/master v6.14-rc3 next-20250219]
-[cannot apply to lee-mfd/for-mfd-fixes]
+[auto build test WARNING on next-20250219]
+[cannot apply to drm-xe/drm-xe-next drm-exynos/exynos-drm-next linus/master v6.14-rc3 v6.14-rc2 v6.14-rc1 v6.14-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindings-mfd-Document-TI-LM3533-MFD/20250218-212857
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20250218132702.114669-3-clamor95%40gmail.com
-patch subject: [PATCH v2 2/2] mfd: lm3533: convert to use OF
-config: arm-randconfig-002-20250219 (https://download.01.org/0day-ci/archive/20250220/202502200718.H8t6Uv7b-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200718.H8t6Uv7b-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nemesa-Garg/drm-Introduce-sharpness-strength-property/20250219-200229
+base:   next-20250219
+patch link:    https://lore.kernel.org/r/20250219115359.2320992-6-nemesa.garg%40intel.com
+patch subject: [PATCH v8 5/6] drm/i915/display: Add registers and compute the strength
+config: i386-buildonly-randconfig-004-20250219 (https://download.01.org/0day-ci/archive/20250220/202502200838.vQNIR4Ee-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502200838.vQNIR4Ee-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502200718.H8t6Uv7b-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502200838.vQNIR4Ee-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/video/backlight/lm3533_bl.c:417:25: error: use of undeclared identifier 'lm3533_match_table'; did you mean 'lm3533_bl_match_table'?
-     417 | MODULE_DEVICE_TABLE(of, lm3533_match_table);
-         |                         ^~~~~~~~~~~~~~~~~~
-         |                         lm3533_bl_match_table
-   include/linux/module.h:250:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     250 | extern typeof(name) __mod_device_table__##type##__##name                \
-         |               ^
-   drivers/video/backlight/lm3533_bl.c:413:34: note: 'lm3533_bl_match_table' declared here
-     413 | static const struct of_device_id lm3533_bl_match_table[] = {
-         |                                  ^
-   1 error generated.
+   In file included from drivers/gpu/drm/i915/display/intel_casf.c:9:
+   In file included from drivers/gpu/drm/i915/display/intel_de.h:10:
+   In file included from drivers/gpu/drm/i915/display/intel_display_core.h:16:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2287:
+   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/i915/display/intel_casf.c:97:19: warning: result of comparison of constant 2073600 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+      97 |         if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
+         |             ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_casf.c:99:24: warning: result of comparison of constant 8294400 with expression of type 'u16' (aka 'unsigned short') is always true [-Wtautological-constant-out-of-range-compare]
+      99 |         else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
+         |                  ~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_casf.c:111:73: error: no member named 'strength' in 'struct intel_casf'
+     111 |         sharpness_ctl = FILTER_EN | FILTER_STRENGTH(crtc_state->hw.casf_params.strength);
+         |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/gpu/drm/i915/display/intel_casf_regs.h:23:69: note: expanded from macro 'FILTER_STRENGTH'
+      23 | #define   FILTER_STRENGTH(x)            REG_FIELD_PREP(FILTER_STRENGTH_MASK, (x))
+         |                                                                               ^
+   drivers/gpu/drm/i915/i915_reg_defs.h:99:28: note: expanded from macro 'REG_FIELD_PREP'
+      99 |         ((u32)((((typeof(__mask))(__val) << __bf_shf(__mask)) & (__mask)) +     \
+         |                                   ^~~~~
+   drivers/gpu/drm/i915/display/intel_casf.c:111:73: error: no member named 'strength' in 'struct intel_casf'
+     111 |         sharpness_ctl = FILTER_EN | FILTER_STRENGTH(crtc_state->hw.casf_params.strength);
+         |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/gpu/drm/i915/display/intel_casf_regs.h:23:69: note: expanded from macro 'FILTER_STRENGTH'
+      23 | #define   FILTER_STRENGTH(x)            REG_FIELD_PREP(FILTER_STRENGTH_MASK, (x))
+         |                                                                               ^
+   drivers/gpu/drm/i915/i915_reg_defs.h:103:64: note: expanded from macro 'REG_FIELD_PREP'
+     103 |                BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0))))
+         |                                                                       ^~~~~
+   include/linux/compiler.h:328:48: note: expanded from macro '__is_constexpr'
+     328 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
+         |                                                       ^
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+   drivers/gpu/drm/i915/display/intel_casf.c:111:73: error: no member named 'strength' in 'struct intel_casf'
+     111 |         sharpness_ctl = FILTER_EN | FILTER_STRENGTH(crtc_state->hw.casf_params.strength);
+         |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/gpu/drm/i915/display/intel_casf_regs.h:23:69: note: expanded from macro 'FILTER_STRENGTH'
+      23 | #define   FILTER_STRENGTH(x)            REG_FIELD_PREP(FILTER_STRENGTH_MASK, (x))
+         |                                                                               ^
+   drivers/gpu/drm/i915/i915_reg_defs.h:103:108: note: expanded from macro 'REG_FIELD_PREP'
+     103 |                BUILD_BUG_ON_ZERO(__builtin_choose_expr(__is_constexpr(__val), (~((__mask) >> __bf_shf(__mask)) & (__val)), 0))))
+         |                                                                                                                   ^~~~~
+   include/linux/build_bug.h:16:62: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+      16 | #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+         |                                                              ^
+   drivers/gpu/drm/i915/display/intel_casf.c:196:30: error: no member named 'strength' in 'struct intel_casf'
+     196 |                 crtc_state->hw.casf_params.strength = 0;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/gpu/drm/i915/display/intel_casf.c:214:29: error: no member named 'strength' in 'struct intel_casf'
+     214 |         crtc_state->hw.casf_params.strength =
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   3 warnings and 5 errors generated.
 
 
-vim +417 drivers/video/backlight/lm3533_bl.c
+vim +97 drivers/gpu/drm/i915/display/intel_casf.c
 
-   412	
-   413	static const struct of_device_id lm3533_bl_match_table[] = {
-   414		{ .compatible = "ti,lm3533-backlight" },
-   415		{ },
-   416	};
- > 417	MODULE_DEVICE_TABLE(of, lm3533_match_table);
-   418	
+    91	
+    92	static void intel_casf_size_compute(struct intel_crtc_state *crtc_state)
+    93	{
+    94		const struct drm_display_mode *mode = &crtc_state->hw.adjusted_mode;
+    95		u16 total_pixels = mode->hdisplay * mode->vdisplay;
+    96	
+  > 97		if (total_pixels <= MAX_PIXELS_FOR_3_TAP_FILTER)
+    98			crtc_state->hw.casf_params.win_size = 0;
+    99		else if (total_pixels <= MAX_PIXELS_FOR_5_TAP_FILTER)
+   100			crtc_state->hw.casf_params.win_size = 1;
+   101		else
+   102			crtc_state->hw.casf_params.win_size = 2;
+   103	}
+   104	
 
 -- 
 0-DAY CI Kernel Test Service
