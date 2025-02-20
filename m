@@ -1,121 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548BF1EC01E
-	for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 09:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292D61F1909
+	for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 12:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740043432; cv=none; b=mnMdXjUuuTIuZyjqn/wi0QjV8CC4GXK3pbH4hfC2HZMaZGjeoib1QOfPVhLvn2F7tGGk+h/AYuDfYb+bUL4iTF5+EDWGe6E+C9ZJFdyBmo0Tng/GcuiUkc9weYRieR+nMtPgHI9t06lRvnxFKN7/f7HnXckYwdz+b2n/jFt7Acc=
+	t=1740053921; cv=none; b=k2VtgWIOOUUNYI5MHzOPJ48zFPvP1xVFtVDTvRlmzkNuvGyvGODE1Xl7fGuaO5ivOcPmiSxT0tHRggbaP85QZXZyAFbA1tjEcTOqJClGQV4bRrfoQJjZKL0AdiduhE0K/uitoQ1mb1C2jf7bbHdCDHkQ9KgQwHXPgW3KvxL1p30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740043432; c=relaxed/simple;
-	bh=h+6SU1758Xm6bhSjW+4gwk334IJ9TK8GodX4KZSMA74=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NJwwoW8jqZ9BDd7uI8ZCniLz7HXiGGkCI+oM4pFpwuC0Rc/eMvpIIbS26ebdqGbBXwbBv8pg0Fw2xiEjR/B9LODdj9/myMNQh4b8fSxBHuvGBI5LxDWKVbKabqQsDlJmwI7qv4++fXWa1bRO9yCbWHEFOEqvM/I9hYwN4eogqkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpY7ULhs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740053921; c=relaxed/simple;
+	bh=spsmHAL8TTu5Mi/c2bc2SaKszpuTpGgLjTLec3n2DLc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=msZOjNMPh3lMOsuyIA/l2s+ABHXs0eDbC+ePNQbHVYP2PNIkrjI8NUClAV+sNS3VA1nIiqWrY0xAZ3qCp2rGMtFl23AxmOH/7ha8wj6AdV9+nnfD/Pv8xn2LY7hIxYI4vFSEd9mCeLwqMq8kIN3TP/Y01ychYDKL8MV6R/+nZSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=K+UIOMIm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ccz0z+l5; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpY7ULhs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B9AC4CEDD
-	for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 09:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740043431;
-	bh=h+6SU1758Xm6bhSjW+4gwk334IJ9TK8GodX4KZSMA74=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YpY7ULhscqimxbzR+THQ5lSOyZ1511lHYKtSUEWa5eQqRzEUcU71IS3rsh6YIPXoA
-	 vCbsLdmztnDqVGYRwhgM+zhlLwZdEpjkFv9KCGIAAqmkmiS8ibvRCbDskwDGcGNXku
-	 f5nd6gG7zFd3Ni+QNWbJiDkwfcidtSyc/iVgbCtGuDcYRJwOmoOFvEOa3eAHFjgNro
-	 9loXMGMkTfnEZWX4TsN52kZ1/DYKD4flSXbTC/8vXO3MPpM8CyFxA2c62+zrY8ll/u
-	 x6REBdQWygPeFp+/8rT+KLjvCt3gPkGjPiHyZZMAqAynuvq7glwXr3ir9mMjL1BYvT
-	 3t+JTmQg1pRdA==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-543d8badc30so891580e87.0
-        for <llvm@lists.linux.dev>; Thu, 20 Feb 2025 01:23:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWab5026aJ3NwIbFWRrFz50GTvLOEnp54FkJ7MPKbaOE3eUuQ44NguwkV0ezyk1MHyrbhzy@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw8kXJUxBgc06v8VuwkYY/FuxfZd9ZldQDfoA4UcZb0TISNP5KP
-	ybq9ZC6LXeMvs2V3tI7LELK0lxBPtI+UbzTqZa+LR3+2clZzj05KyKxY+dOPzZXjW6PdCHKAfaB
-	fJzlXyc2ULO2wXDxD7ZltlVW/IOk=
-X-Google-Smtp-Source: AGHT+IHqRt4eH4js/eG3ZfyiiJyegi/p4VsZC59PyvNITsYHx6un3wVpuZYtDTy4Q8xRFS/1bw71SJ8fMFBlpFsQUAI=
-X-Received: by 2002:a05:6512:3992:b0:545:d7d:ac53 with SMTP id
- 2adb3069b0e04-5452fe86db1mr8784368e87.34.1740043430003; Thu, 20 Feb 2025
- 01:23:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="K+UIOMIm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ccz0z+l5"
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2D780114019D;
+	Thu, 20 Feb 2025 07:18:38 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Thu, 20 Feb 2025 07:18:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740053918;
+	 x=1740140318; bh=IhPaoNu38Tu0uvZG6/scQD1YbIIjuL3trPnifXE0rh0=; b=
+	K+UIOMIm/1NrxU/sByEI24chw6FvuCM4HQdEfmar5TNDWELWbTH1BBcty42hxVyB
+	5iPvDN2NcNIBvvRbWBoP9o51O10QiRdkIpII6905G9FQwnCm2TEdGdGE5w6gPrkQ
+	GJH2lRbpKqBB9VCBJH36mEWSMyp9uK3Y9z/PevnQEsH1pfPs123nz+7G6Ew1+Si+
+	+W2tNqf9z5j0JXIyFH6H6bzcnVYDb4TPIUIVxAqX6VI6taHk+ZmOCoExA7gHIMEi
+	Uif/gam2+aw3BiRar/xkDEPOAU8G8HloQ4Ut1p+iZei/BS82KmE8w/b8oHpGgofm
+	IRIMJy+fxw9jxquSsgtrOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1740053918; x=
+	1740140318; bh=IhPaoNu38Tu0uvZG6/scQD1YbIIjuL3trPnifXE0rh0=; b=c
+	cz0z+l5i+yyc9kiXxY9Cx2zpnYi2lD2khkh3Ign4vUQpKFyJp1g2t36zdxJ39MYF
+	n0HZpXi0OGDAH2Wyat3KfIDAKwMQo7/CU65TQiU2s1xF9df5mptuqCfZ81epkf11
+	7hR2tC66kgiY9gJnG+UMHBsDvGbV0Xydc5PEmRc6cf9kRTvKRG6LjLx0Gj6C4uIy
+	DSlDtvuevAIOQFMxtW7dtEgQMg/LhVbga4kfWUJd/aRQiJqHdNwjehP8xNSt8cPU
+	K/dupRB06hYTUBQr/eHvLPl901ttlti4qVt+jDbCd0AYZyW9NNupOUSRTgeUIm1F
+	e5PF5kEkAzx2mDJ0HVM/w==
+X-ME-Sender: <xms:nR23Z_tBvZRvooBxYF5tC-EBs-JNzcooeRyiVBn6ZkHEEGXW74RQ1g>
+    <xme:nR23Zwe2NiMdXyWPRFHAiFRkyo_lE0gJsGQD4VEqemTv15uh_Muu4CNgZoK8ysvot
+    1r330J1C_9u-51TYVM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeijeduudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeehgffgieevkedvjeekleeklefgheefgfekgefh
+    udduhffgtedtvdfhteeijeeffeenucffohhmrghinheplhhinhhugihtvhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopehsvggsrghsthhirghnrdhfrhhitghkvgestgholhhlrggsohhrrgdrtgho
+    mhdprhgtphhtthhopehmtghhvghhrggssehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhlvhhmsehlihhsthhs
+    rdhlihhnuhigrdguvghvpdhrtghpthhtohepnhhitgholhgrshesnhguuhhfrhgvshhnvg
+    drtggrpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehhvhgvrhhkuhhilhesgihsgegrlhhlrdhnlh
+X-ME-Proxy: <xmx:nR23Zywjqv2bVrys51u62IdCIy2LFbP0_EcF5QjeSdm10ouCnMiWLg>
+    <xmx:nR23Z-PtfbYaiPJih8ph6iHRft89diXqMfqlA50iwAi9VNZ0sQ-lSw>
+    <xmx:nR23Z___3zpYUhWeW-ZSDkkhDREonQmKxHybYAgvlUsBtyPUQhnj_A>
+    <xmx:nR23Z-W1WfM-mIbljksMpsAXKYkDiDCNyIto9aWNPlRTuYi_l_K5ng>
+    <xmx:nh23Z_wbu--orGk3gMoFP2V_LqK4-N9mnBsKFIP7dfiFnzwyxJLNqEcA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B62222220072; Thu, 20 Feb 2025 07:18:37 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250123190747.745588-1-brgerst@gmail.com> <20250123190747.745588-8-brgerst@gmail.com>
- <20250219195948.GA3075960@ax162>
-In-Reply-To: <20250219195948.GA3075960@ax162>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 20 Feb 2025 10:23:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFAwnBi0EjRJaB-MpqPCmV+tYRN7Dw_PUJuxxrnaEnoKg@mail.gmail.com>
-X-Gm-Features: AWEUYZlk2aXlYmiuKHscKrCxaSiNUZxu8-o6V_PCHRaxQcl-rmOgjuju9l_VDUg
-Message-ID: <CAMj1kXFAwnBi0EjRJaB-MpqPCmV+tYRN7Dw_PUJuxxrnaEnoKg@mail.gmail.com>
-Subject: Re: [PATCH v6 07/15] x86/stackprotector/64: Convert to normal percpu variable
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	Ingo Molnar <mingo@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Borislav Petkov <bp@alien8.de>, Uros Bizjak <ubizjak@gmail.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 20 Feb 2025 13:18:16 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Hans Verkuil" <hverkuil@xs4all.nl>,
+ "Sebastian Fricke" <sebastian.fricke@collabora.com>
+Cc: linux-media@vger.kernel.org, "Nicolas Dufresne" <nicolas@ndufresne.ca>,
+ "Mauro Carvalho Chehab" <mchehab@kernel.org>, llvm@lists.linux.dev,
+ "Nathan Chancellor" <nathan@kernel.org>
+Message-Id: <88a2bdaa-17e4-4465-877b-1e010733dd0b@app.fastmail.com>
+In-Reply-To: <2108d667-243b-4d0f-bf78-5a90e9a8efb1@xs4all.nl>
+References: <20241213151415.7opofgiz25lpmn5m@basti-XPS-13-9310>
+ <88b4fb25-64a2-462d-b40e-eae675ea83f3@xs4all.nl>
+ <2108d667-243b-4d0f-bf78-5a90e9a8efb1@xs4all.nl>
+Subject: Re: [GIT PULL FOR 6.13] FIXES: Vcodec fixes
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, 19 Feb 2025 at 20:59, Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, Feb 20, 2025, at 12:01, Hans Verkuil wrote:
+> On 20/02/2025 11:15, Hans Verkuil wrote:
+>> Hi Sebastian, Arnd,
+>> 
+>> While cleaning up patchwork I stumbled on this PR.
+>> 
+>> The odd thing is that the second patch (noinline) is committed, but not the first (avoid warning).
+>> 
+>> Is it still needed? I'm not sure what happened here.
+>> 
+>> The patch is still marked as 'New' in patchwork:
+>> 
+>> https://patchwork.linuxtv.org/project/linux-media/patch/20241018152127.3958436-1-arnd@kernel.org/
 >
-> On Thu, Jan 23, 2025 at 02:07:39PM -0500, Brian Gerst wrote:
-> > Older versions of GCC fixed the location of the stack protector canary
-> > at %gs:40.  This constraint forced the percpu section to be linked at
-> > absolute address 0 so that the canary could be the first data object in
-> > the percpu section.  Supporting the zero-based percpu section requires
-> > additional code to handle relocations for RIP-relative references to
-> > percpu data, extra complexity to kallsyms, and workarounds for linker
-> > bugs due to the use of absolute symbols.
-> >
-> > GCC 8.1 supports redefining where the canary is located, allowng it to
-> > become a normal percpu variable instead of at a fixed location.  This
-> > removes the contraint that the percpu section must be zero-based.
-> >
-> > Signed-off-by: Brian Gerst <brgerst@gmail.com>
-> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> > Reviewed-by: Uros Bizjak <ubizjak@gmail.com>
-> ...
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 5b773b34768d..88a1705366f9 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -140,14 +140,7 @@ ifeq ($(CONFIG_X86_32),y)
-> >          # temporary until string.h is fixed
-> >          KBUILD_CFLAGS += -ffreestanding
-> >
-> > -    ifeq ($(CONFIG_STACKPROTECTOR),y)
-> > -        ifeq ($(CONFIG_SMP),y)
-> > -            KBUILD_CFLAGS += -mstack-protector-guard-reg=fs \
-> > -                             -mstack-protector-guard-symbol=__ref_stack_chk_guard
-> > -        else
-> > -            KBUILD_CFLAGS += -mstack-protector-guard=global
-> > -        endif
-> > -    endif
-> > +        percpu_seg := fs
-> >  else
-> >          BITS := 64
-> >          UTS_MACHINE := x86_64
-> > @@ -197,6 +190,17 @@ else
-> >          KBUILD_CFLAGS += -mcmodel=kernel
-> >          KBUILD_RUSTFLAGS += -Cno-redzone=y
-> >          KBUILD_RUSTFLAGS += -Ccode-model=kernel
-> > +
-> > +        percpu_seg := gs
-> > +endif
-> > +
-> > +ifeq ($(CONFIG_STACKPROTECTOR),y)
-> > +    ifeq ($(CONFIG_SMP),y)
-> > +     KBUILD_CFLAGS += -mstack-protector-guard-reg=$(percpu_seg)
-> > +     KBUILD_CFLAGS += -mstack-protector-guard-symbol=__ref_stack_chk_guard
-> > +    else
-> > +     KBUILD_CFLAGS += -mstack-protector-guard=global
-> > +    endif
-> >  endif
->
-> -mstack-protector-guard-symbol was only added in clang-15, so it looks
-> like min-tool-version.sh will need an adjustment like GCC did, should I
-> send a patch?
->
+> Apparently this just got lost somehow. I'll delegate this patch to me 
+> and queue it up
+> for v6.15. I don't think this needs to go to v6.14 since I understand 
+> it just kills
+> a warning.
 
-Yes, please.
+Thanks!
+
+I checked my local tree again, and this is indeed the last patch
+I have pending that addresses any -Wenum-compare-conditional
+warning.
+
+We have recently moved -Wenum-enum-conversion from W=1 to W=2,
+ideally we can move -Wenum-compare-conditional from W=1 to default
+once this patch is in.
+
+It's probably also a good time for me to switch my daily
+testing over from gcc to clang and see if any other
+-Wenum-compare-conditional warnings have come up.
+
+    Arnd
