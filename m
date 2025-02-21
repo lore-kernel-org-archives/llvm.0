@@ -1,146 +1,83 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BF71D7E2F
-	for <llvm@lists.linux.dev>; Fri, 21 Feb 2025 20:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96EA36AF5;
+	Fri, 21 Feb 2025 21:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740170196; cv=none; b=T6AeAAosywdPJqQ1vQa3T2OqS4wmh7UyBzcfT4HZF6oCaqCGHpRM23U4cqHHpirQ4FCJ6b5fWiYtOhgAcK6xRCc7GmmqzhqDaEDrgyhgUd5PjfL1vKglS6+f1uLuxFSvkXxreaMIZqC2usH4+XyS2fIXUUkern88dVhtS/sY4tQ=
+	t=1740172823; cv=none; b=WRJCJSGuSFKCnW/tDjoofa7wOb1524WgpEqK8IzDhtVocfK05BSdIDLaPyNxEpa7oSxW/OF1pNbgvJuYTebLAu/KIVJt0nNJ74Giue4RQqD5gAm7CxZ3bW9HJjvnBEb7CnfSX1uUZDTnZD/eyu0pikWJBmJ2IlJUpX5EoVByH2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740170196; c=relaxed/simple;
-	bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lZxk8PYTKP60fKqCpnXOY/4Gysy5j1KLjVMQI7bJ4Y+F995CYeF3zBYuLl+SXiVVKie6Ot5sEXPV2SsfaRoNpanYqK6nJ2jxMwrlascAc/pV18yhieb2LAllUkdEHUgcHOduwDYQ9bRQAEf6NvBiJfJVqUgekM6q9g3/gClYKyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRMFnliK; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740172823; c=relaxed/simple;
+	bh=6l55Esk/JWE2IUcizxGDLKnAS3+Yrm1sg9i0T8NQvr8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tLdI5vxaRFHI0w0xtADVF8z3tRR8e4s3hYEWnQA00cgsGw1h3+tmUGjUzUB09blu2JHwh9JN6j7rpbMULPKBcL4DrvTZ4h24rmLn0zL2wrQW5htBgg4xwvA4QRkPoAp4z6ezi1gIM4lylXjFEDwPT/SiYQTrWIbQQKlfzrAdiIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myxI1sMM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRMFnliK"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-abb75200275so400136266b.3
-        for <llvm@lists.linux.dev>; Fri, 21 Feb 2025 12:36:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740170193; x=1740774993; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
-        b=FRMFnliKVsL0LOP/tgpujPW6rof3qYiTXArNWPpispjYFICb4h7cteE8nboqRvfTEl
-         SAWLhGAWOzV0mO1Do3CuVb2F9xKzP+7EkWIHrlgzD3whPnYiNTVdTKA/xztlFwyMduBG
-         2aBn8JGxCM/WZ6da+/vLFfNa0BDjnvB/f44fgh7DsFVzYTLufdaDiz0sE5YugfdKjY44
-         b0PWWw9LLEzizyjwyUH3OVfOuEDP0RcavPM2XBH6GNSjText/Ow0BbWa4mZ9o1MDy1U+
-         7ufPpf+CVA918wv+E5TPGa/ekIqBZhTZ/ua749eLKrh78FJDwX4rWLxWQqnDAu4eUHd+
-         jBuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740170193; x=1740774993;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
-        b=MxWUpslwaPXXFG/GfOyBHkrsTWMEN5dukfeWJ6Q1QxlIJ+8vkVk4VWI+w32UDJHmk9
-         Uty+dednNDv2KQMO84wXuZf/iYX0iINHrFsHqZU5tWF6BzU+EAdWJ12WqQz+msGD0EJj
-         SSpAcXpQmumVMGkg6MoaXGu4Es5TjZWPDnU22ppJ/ApxabRjF2se+tRC7VZHOB8Us+Vo
-         4W79Mqg3e7hNY5xTupvje1dP5aUGg+W4ZAwgWeguU+hybpX2MDsyTAb+qD0bQw5X0cJG
-         DQG+aoFmx5TKxj6jLKQH6gJu/xlBYMgxxN7uin/hgney/2LPAvW8nefkvYdqitt2BIXM
-         NLVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvnuE3cJaTTArozDLYMpRcgfPPEXGEdxHNBsS27HA1fVvgShnzy/oqBS37MLfgTmDWSSc1@lists.linux.dev
-X-Gm-Message-State: AOJu0YyB/mRpCWdLID78CVG0D0yAI/d5Wism45NF6qFzzPsAGdWZKdhx
-	Uu2x2W1K2EshUxIX9yKWoB7s2awMWUHStVOqqoHnRoYk2hf6fwSl+GfRlL8e+mtEA93i2wXfLlg
-	SXN87z+90mzdDTQiuH0bHzq083bY=
-X-Gm-Gg: ASbGnct3M2HWkPHCo09K4MMQKtiZy16/0xkkD61OcpjOWxr2n1DZZp8HPsPw6Tl3zLa
-	uNKTr1grQ7UmhL1ClFd1xNnZXwYdTksyYj9TnxmaAVqMLKxBZXNcv7KHVYyXjYYAN8ydXIC/Y8/
-	zT3w7ym3Sjfksb3E4a1R7W28kPfLXVNR9lYkOY9SzjeA==
-X-Google-Smtp-Source: AGHT+IETtMfsp+oxVVvJtgbE795zNbuHaeWF8ofCjtDM153d6TyT0rI+Niqk7EWeS2I9xBqTyLh7p3er1/ZJuxxHIcQ=
-X-Received: by 2002:a17:907:1c07:b0:aa6:7a81:3077 with SMTP id
- a640c23a62f3a-abc09e394a1mr453579866b.54.1740170193331; Fri, 21 Feb 2025
- 12:36:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myxI1sMM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875E1C4CED6;
+	Fri, 21 Feb 2025 21:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740172823;
+	bh=6l55Esk/JWE2IUcizxGDLKnAS3+Yrm1sg9i0T8NQvr8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=myxI1sMM0EiOgr3wESX8YGwYtbNN24nEpiPL27pYjFDQGWVoz6DuNGEsxL+plJx1j
+	 s1V6KFu+uitYesiCKdLo/pq8RDM6NZ7ZC7InthU2ZVnT6GLUkJSgXfcOjKUHEHPnW2
+	 0nqTJ17cKyVBOZzOe+VIxA4Jc4DBbICJWt3StibNg/zLqB5siyJVm78XpivsNyeVZ8
+	 JlaGMuJJ07OX1iNX6OCaehydPD5o2SD8HN0a/OKe6HTAKm/NxeLBfO1F40bZb8JKPR
+	 uzoAW/VFEaj9ff0vcwOzo/ZFN4NU7/3oBIi6XGVVnqqvkeDxIvprKu4tCB3sx/67pm
+	 FiUPDnQ6qMjQg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] kbuild: hdrcheck: fix cross build with clang
+Date: Fri, 21 Feb 2025 22:20:07 +0100
+Message-Id: <20250221212017.809382-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
- <20250213115951.GF28068@noisy.programming.kicks-ass.net> <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
- <20250214094856.GD21726@noisy.programming.kicks-ass.net> <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Fri, 21 Feb 2025 15:35:57 -0500
-X-Gm-Features: AWEUYZmTNrzRMQDfcvC1uKAS9y2OW_n7SKmU92RpVTg0NimjM8ab7XRa3qA78u8
-Message-ID: <CAJ-ks9=BjaQJh0L3K2ywPFhP4XBxZiY9mqJzu1TsmpiH-AG9uA@mail.gmail.com>
-Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 14, 2025 at 7:37=E2=80=AFAM Tamir Duberstein <tamird@gmail.com>=
- wrote:
->
-> On Fri, Feb 14, 2025 at 4:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
-org> wrote:
-> >
-> > On Thu, Feb 13, 2025 at 10:42:24AM -0500, Tamir Duberstein wrote:
-> > > On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infrad=
-ead.org> wrote:
-> > > >
-> > > > On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
-> > > > > Convert this unit test to a KUnit test. This allows the test to b=
-enefit
-> > > > > from the KUnit tooling. Note that care is taken to avoid test-end=
-ing
-> > > > > assertions in worker threads, which is unsafe in KUnit (and wasn'=
-t done
-> > > > > before this change either).
-> > > >
-> > > > So this was something simple, and now I need to know how to operate=
- this
-> > > > kunit nonsense :-(
-> > > >
-> > > > How is that an improvement?
-> > >
-> > > Hi Peter,
-> > >
-> > > David enumerated some of the benefits of KUnit in another
-> > > thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLx=
-mTY2T2Ti53DQADrW+sJg@mail.gmail.com/.
-> > >
-> > > My personal reason for preferring KUnit is that it's much easier to
-> > > run from userspace; the tooling takes care of building, starting the
-> > > VM, running the tests, and producing a human-friendly report.
-> >
-> > Wait what -- you have to run a VM just to use Kunit? That's a hard pass=
-.
-> >
-> > If I can't simply run it natively on my test box, its a no go. And it
-> > using python also don't help, you shouldn't be needing that to load a
-> > module.
->
-> The tooling I mention is all optional. You can still use modprobe to
-> run the test as a module or at boot. In this case you'd set:
->
-> CONFIG_KUNIT=3Dy
-> CONFIG_WW_MUTEX_KUNIT_TEST=3Dm
->
-> and then run the test via:
->
-> ```
-> modprobe ww_mutex_kunit
-> ```
->
-> or to run at boot:
->
-> CONFIG_KUNIT=3Dy
-> CONFIG_WW_MUTEX_KUNIT_TEST=3Dy
->
-> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
-.html#running-built-in-tests
-> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
-.html#running-tests-as-modules
+From: Arnd Bergmann <arnd@arndb.de>
 
-Gentle ping. Peter, does the above address your concerns?
+The headercheck tries to call clang with a mix of compiler arguments
+that don't include the target architecture. When building e.g. x86
+headers on arm64, this produces a warning like
+
+   clang: warning: unknown platform, assuming -mfloat-abi=soft
+
+Add in the CLANG_FLAGS, which contain the target, in order to make it
+build properly.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ usr/include/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 58a9cbe4eba4..99f9e904adcd 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+ 
+ # In theory, we do not care -m32 or -m64 for header compile tests.
+ # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+-UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
++UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS) $(CLANG_FLAGS))
+ 
+ # USERCFLAGS might contain sysroot location for CC.
+ UAPI_CFLAGS += $(USERCFLAGS)
+-- 
+2.39.5
+
