@@ -1,62 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50875253325;
-	Fri, 21 Feb 2025 18:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A080B253325;
+	Fri, 21 Feb 2025 18:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740161091; cv=none; b=rxroS4FmmdbdBPLYCitZi4j1+gphVzK76xtkYsJUYK+qZkkfn30lDMmbkXe3sAPcOZYgZ5QtDlzGtWduOG7O/Wu/yCUTHPw/ESAvk+f0SgxCVuV1vPH+Y+VIdEu8D2sxpyKSqBbPNheaQ170FKX8EmD5cubIXoBTJABOHLvG3uw=
+	t=1740161287; cv=none; b=olBvQVR5Amn4dR/DzfHBmh++24QU1KCnHMaTOSsUJcslq2ILLTCKjVWoD7y5UnYmyWe7NW46Mn5tUJEGUy1orJzchPSDUCS9l+gDjUEQ/gqR73N/Hc6hIXT3HLHnGrBYXxiJP6i4ZSQXsxwH6qtGiN6IrMDZeeqFfzjK7Aaaaq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740161091; c=relaxed/simple;
-	bh=Dqe6ezB/l37t1OLYwqziI0j2CB0OvPyc0+Jv7bBI2zw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=buB1Q8sSBtBzLDftYFXJ9SvNo43sQ/ylphR2Vf2P2bmdea4AmkEUWlClnYw8wVQ07p+Zo5FchdjqD1BdnCjfDojbBLLpdAgElFCPjzvPDLU0HBpUszYoaXS8RhMobF8R/2e6a13k6rOBV+tI/7VV3lHjOrT7Y4LqX6+6qU5b9YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ro64fLPr; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740161287; c=relaxed/simple;
+	bh=Y/T/PdrZXuNEmM28jb0cjrrGJIUltIkZp2ReGmK4x2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CFZdgDaQ0tLO8BeIrCYiXvd3FHCuYTS5/yRF0rvR+ba4ujFznrdM/smFcRk9k10mASefE5HbaGMG7F5b1gyeF58fEQbsoiM/LSxlX8iIXTGq0u2c5cOpFdx9cgMffdHbeprwHQ9RttCOzQCRbmk4JkyXbRxghqPb9Qfhm7KzNjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9H5tiM+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ro64fLPr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740161089; x=1771697089;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Dqe6ezB/l37t1OLYwqziI0j2CB0OvPyc0+Jv7bBI2zw=;
-  b=Ro64fLPreWVK9vbDoDmcmp6esbYjd6/5Q+Db7A/wStIUeORY17Zaa4Pw
-   4PG3hUXE09d/zuY0vcTauf8HMUQXHJbbl0X5npU7UpCKfLF5OKg7i2hJF
-   mjr9hnjtkxySPB+28WzsTUBGs/3jjj3Lpnq7dC5MC10BTd3izc+1pgri1
-   0JhPxK3aXYfDp8FXKy/PchodX6Pw7GOiOGLRUerkyA0lD0/Nnlk3olLm3
-   El7Ki6UYDr1yzsAQ2YmW58l4aYXmie+/N33HTQZnXP8oufRyihi6MflBk
-   aKxzl0iQbOJotm+g29be3SbZPzNCGpncvKjAQnQlGTZy9OTmkiTrBVSGb
-   w==;
-X-CSE-ConnectionGUID: FtSfQXmSTNqQyKw+NJkCIQ==
-X-CSE-MsgGUID: F9VjeHRpQemPtzTL5esIhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11352"; a="41253094"
-X-IronPort-AV: E=Sophos;i="6.13,305,1732608000"; 
-   d="scan'208";a="41253094"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 10:04:49 -0800
-X-CSE-ConnectionGUID: /8fU6gKcTyCyH4Z3oZzw1Q==
-X-CSE-MsgGUID: 2F/BwHLGSnewf3wLY366gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,305,1732608000"; 
-   d="scan'208";a="120415940"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 21 Feb 2025 10:04:47 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tlXOG-0005rL-1g;
-	Fri, 21 Feb 2025 18:04:44 +0000
-Date: Sat, 22 Feb 2025 02:04:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jack Livingood <jacklivingood@comcast.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-	Takashi Iwai <tiwai@suse.de>
-Subject: [thesofproject:topic/sof-dev 7769/7771]
- sound/firewire/isight.c:647:2: error: call to undeclared function 'strspy';
- ISO C99 and later do not support implicit function declarations
-Message-ID: <202502220137.fyFohYSo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9H5tiM+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2044C4CEE8;
+	Fri, 21 Feb 2025 18:08:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740161287;
+	bh=Y/T/PdrZXuNEmM28jb0cjrrGJIUltIkZp2ReGmK4x2s=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=e9H5tiM+fJIWbO6m5RlayMr8jnFSf4eV8gurRAmsvHkdSxsRjYPmbGLfRRDhRnQMf
+	 NY/acCPXS2FSbQYcO+3hPtVlohM8MQUv3eIv8TaPypTSYrcsSzlJUauwxnkhUvbNtE
+	 ZpfOSYcsBjKNM1se9fVYgMrY8TtjO5daXzzt0qUC27nN/v2yYMeJhXj6EhEi/EBTlS
+	 8FRJMSNGMhCgK3gTnX0eEGzWsn/jC5ARgOIRqFltWknWYmylq5Q2v0xbw+63/eLvmm
+	 AxMy8EHrppvSfo2z35qLk3eMRgd6sPUFJUOneeFGP4Ol9LI+tY9QllWxPwiJwHBxEk
+	 6UPGpnBPI+EjQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 94967CE059C; Fri, 21 Feb 2025 10:08:06 -0800 (PST)
+Date: Fri, 21 Feb 2025 10:08:06 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Marco Elver <elver@google.com>
+Cc: Alexander Potapenko <glider@google.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH RFC 15/24] rcu: Support Clang's capability analysis
+Message-ID: <aa50d616-fdbb-4c68-86ff-82bb57aaa26a@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20250206181711.1902989-1-elver@google.com>
+ <20250206181711.1902989-16-elver@google.com>
+ <a1483cb1-13a5-4d6e-87b0-fda5f66b0817@paulmck-laptop>
+ <CANpmjNOPiZ=h69V207AfcvWOB=Q+6QWzBKoKk1qTPVdfKsDQDw@mail.gmail.com>
+ <3f255ebb-80ca-4073-9d15-fa814d0d7528@paulmck-laptop>
+ <CANpmjNNHTg+uLOe-LaT-5OFP+bHaNxnKUskXqVricTbAppm-Dw@mail.gmail.com>
+ <772d8ec7-e743-4ea8-8d62-6acd80bdbc20@paulmck-laptop>
+ <Z7izasDAOC_Vtaeh@elver.google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,111 +75,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Z7izasDAOC_Vtaeh@elver.google.com>
 
-tree:   https://github.com/thesofproject/linux topic/sof-dev
-head:   05477f184fc6188b402a7ccaf6702c479eb169f4
-commit: d63fe2848faae2c75ebd805565799a69654b8c1c [7769/7771] ALSA: firewire: isight: changed strcpy to strscpy
-config: powerpc64-randconfig-001-20250221 (https://download.01.org/0day-ci/archive/20250222/202502220137.fyFohYSo-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 204dcafec0ecf0db81d420d2de57b02ada6b09ec)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502220137.fyFohYSo-lkp@intel.com/reproduce)
+On Fri, Feb 21, 2025 at 06:10:02PM +0100, Marco Elver wrote:
+> On Thu, Feb 20, 2025 at 05:26PM -0800, Paul E. McKenney wrote:
+> [...]
+> > > That's what I've tried with this patch (rcu_read_lock_bh() also
+> > > acquires "RCU", on top of "RCU_BH"). I need to add a re-entrancy test,
+> > > and make sure it doesn't complain about that. At a later stage we
+> > > might also want to add more general "BH" and "IRQ" capabilities to
+> > > denote they're disabled when held, but that'd overcomplicate the first
+> > > version of this series.
+> > 
+> > Fair enough!  Then would it work to just do "RCU" now, and ad the "BH"
+> > and "IRQ" when those capabilities are added?
+> 
+> I tried if this kind of re-entrant locking works - a test like this:
+> 
+>  | --- a/lib/test_capability-analysis.c
+>  | +++ b/lib/test_capability-analysis.c
+>  | @@ -370,6 +370,15 @@ static void __used test_rcu_guarded_reader(struct test_rcu_data *d)
+>  |  	rcu_read_unlock_sched();
+>  |  }
+>  |  
+>  | +static void __used test_rcu_reentrancy(struct test_rcu_data *d)
+>  | +{
+>  | +	rcu_read_lock();
+>  | +	rcu_read_lock_bh();
+>  | +	(void)rcu_dereference(d->data);
+>  | +	rcu_read_unlock_bh();
+>  | +	rcu_read_unlock();
+>  | +}
+> 
+> 
+>  | $ make lib/test_capability-analysis.o
+>  |   DESCEND objtool
+>  |   CC      arch/x86/kernel/asm-offsets.s
+>  |   INSTALL libsubcmd_headers
+>  |   CALL    scripts/checksyscalls.sh
+>  |   CC      lib/test_capability-analysis.o
+>  | lib/test_capability-analysis.c:376:2: error: acquiring __capability_RCU 'RCU' that is already held [-Werror,-Wthread-safety-analysis]
+>  |   376 |         rcu_read_lock_bh();
+>  |       |         ^
+>  | lib/test_capability-analysis.c:375:2: note: __capability_RCU acquired here
+>  |   375 |         rcu_read_lock();
+>  |       |         ^
+>  | lib/test_capability-analysis.c:379:2: error: releasing __capability_RCU 'RCU' that was not held [-Werror,-Wthread-safety-analysis]
+>  |   379 |         rcu_read_unlock();
+>  |       |         ^
+>  | lib/test_capability-analysis.c:378:2: note: __capability_RCU released here
+>  |   378 |         rcu_read_unlock_bh();
+>  |       |         ^
+>  | 2 errors generated.
+>  | make[3]: *** [scripts/Makefile.build:207: lib/test_capability-analysis.o] Error 1
+>  | make[2]: *** [scripts/Makefile.build:465: lib] Error 2
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502220137.fyFohYSo-lkp@intel.com/
+I was hoping!  Ah well...  ;-)
 
-All errors (new ones prefixed by >>):
+> ... unfortunately even for shared locks, the compiler does not like
+> re-entrancy yet. It's not yet supported, and to fix that I'd have to go
+> and implement that in Clang first before coming back to this.
 
-   In file included from sound/firewire/isight.c:11:
-   In file included from include/linux/firewire.h:7:
-   In file included from include/linux/dma-mapping.h:8:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/firewire/isight.c:647:2: error: call to undeclared function 'strspy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     647 |         strspy(card->mixername, "iSight");
-         |         ^
-   3 warnings and 1 error generated.
+This would be needed for some types of reader-writer locks, and also for
+reference counting, so here is hoping that such support is forthcoming
+sooner rather than later.
 
+> I see 2 options for now:
+> 
+>   a. Accepting the limitation that doing a rcu_read_lock() (and
+>      variants) while the RCU read lock is already held in the same function
+>      will result in a false positive warning (like above). Cases like that
+>      will need to disable the analysis for that piece of code.
+> 
+>   b. Make the compiler not warn about unbalanced rcu_read_lock/unlock(),
+>      but instead just help enforce a rcu_read_lock() was issued somewhere
+>      in the function before an RCU-guarded access.
+> 
+> Option (b) is obviously weaker than (a), but avoids the false positives
+> while accepting more false negatives.
+> 
+> For all the code that I have already tested this on I observed no false
+> positives, so I'd go with (a), but I'm also fine with the weaker
+> checking for now until the compiler gains re-entrancy support.
+> 
+> Preferences?
 
-vim +/strspy +647 sound/firewire/isight.c
+Whichever one provides the best checking without false positives.
+Which sounds to me like (a) unless and until false positives crop up,
+in which case (b).  Which looks to be where you were going anyway.  ;-)
 
-   612	
-   613	static int isight_probe(struct fw_unit *unit,
-   614				const struct ieee1394_device_id *id)
-   615	{
-   616		struct fw_device *fw_dev = fw_parent_device(unit);
-   617		struct snd_card *card;
-   618		struct isight *isight;
-   619		int err;
-   620	
-   621		err = snd_card_new(&unit->device, -1, NULL, THIS_MODULE,
-   622				   sizeof(*isight), &card);
-   623		if (err < 0)
-   624			return err;
-   625	
-   626		isight = card->private_data;
-   627		isight->card = card;
-   628		mutex_init(&isight->mutex);
-   629		isight->unit = fw_unit_get(unit);
-   630		isight->device = fw_dev;
-   631		isight->audio_base = get_unit_base(unit);
-   632		if (!isight->audio_base) {
-   633			dev_err(&unit->device, "audio unit base not found\n");
-   634			err = -ENXIO;
-   635			goto error;
-   636		}
-   637		fw_iso_resources_init(&isight->resources, unit);
-   638	
-   639		card->private_free = isight_card_free;
-   640	
-   641		strscpy(card->driver, "iSight");
-   642		strscpy(card->shortname, "Apple iSight");
-   643		snprintf(card->longname, sizeof(card->longname),
-   644			 "Apple iSight (GUID %08x%08x) at %s, S%d",
-   645			 fw_dev->config_rom[3], fw_dev->config_rom[4],
-   646			 dev_name(&unit->device), 100 << fw_dev->max_speed);
- > 647		strspy(card->mixername, "iSight");
-   648	
-   649		err = isight_create_pcm(isight);
-   650		if (err < 0)
-   651			goto error;
-   652	
-   653		err = isight_create_mixer(isight);
-   654		if (err < 0)
-   655			goto error;
-   656	
-   657		err = snd_card_register(card);
-   658		if (err < 0)
-   659			goto error;
-   660	
-   661		dev_set_drvdata(&unit->device, isight);
-   662	
-   663		return 0;
-   664	error:
-   665		snd_card_free(card);
-   666	
-   667		mutex_destroy(&isight->mutex);
-   668		fw_unit_put(isight->unit);
-   669	
-   670		return err;
-   671	}
-   672	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+							Thanx, Paul
