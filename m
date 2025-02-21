@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587481FBC81;
-	Fri, 21 Feb 2025 04:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854FB1D89E4;
+	Fri, 21 Feb 2025 04:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740111974; cv=none; b=Nr5BnZ9X6WdWDV0VMp+kZYFeB46RUxBnQQMH0/giwqCs9zjQEHke84iVP55dmo2IwV0deMOxq9aRvxQECxMt9zbyAsYzn192yYZmz5aBb/A9ipfolQQjhwQIU1tK0o1V+P3ov3KWuu+GZk9m5s1ZizQlkoYrKlFX7s/oVp2Z5B4=
+	t=1740112574; cv=none; b=Lv8IzRY5CwnZmPFkKMO2bM2fUtNGW4rz92C3i9dXv9He44tNTvttLeY7CCGrlS7Ug+yCVPbWMzzN17H8j2M+39EDKIK6BSmjG7apRthQAjbtOXyxVYCihik+JXc5uSErB1jLx+3WfATFW6r1Ew26GJ57Pfro+Sf9kIi7vobwF60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740111974; c=relaxed/simple;
-	bh=zNEC+y4nS2ZhhT0ooPJM1fhXtuC6ecBxWZVuBGXt8jY=;
+	s=arc-20240116; t=1740112574; c=relaxed/simple;
+	bh=EZay6xnveTGa3mB/vfVwn0m9PhN8lyFM4GTXbByCzT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cIP9SuoVh7R8dEaMKKkur2ipM/u6gMjYAUOZ9GMNrSLIStQsvuoDh6Ep5yqz6iN9GR5BLX4ufgUCLM8SctghGWCSvkrnrrdJkHbxafTQ+NygeoOYUErD56KIjMs+coEbuk0HLEukjSXijxdzL14j/IrHycTGTk4LPvuWJmLYFkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWvIIkDq; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=X3nc4UL95FzmTEO6vf3aDjadaryq1eSbHXJu9mIL+7txlGUMhf7/72Nj13qDF3Wcg0BIuBBC07bEbWVZE9ykRgQ0MhMep8wwLReX1pM79g+MdjG7AfEBEftzHAbjTTwZ2VAf3UsBY31PtO9Y7xYGiq0rfodaU+XjBxnmVozqXNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LKQKOVZ/; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWvIIkDq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LKQKOVZ/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740111972; x=1771647972;
+  t=1740112572; x=1771648572;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zNEC+y4nS2ZhhT0ooPJM1fhXtuC6ecBxWZVuBGXt8jY=;
-  b=FWvIIkDqWDkPn0Nz6gpzwnW039m7xGuXhyVXsF1nXtA73LCQw8a0MzRA
-   x3Xilwo8lxz20K3XJjyf1825tHq6yXfwALXXCZsvg1cRjDgO4wqwgUMuQ
-   POy6sO4V9tIBBjIYyVafBOQ2Si/Rp8gnzPQw46J61y3uK0MpREduRJBIH
-   8KwBEKnZQARLcC350n6IFTsdUHukH9GobFjB79MdLBMnUEgwTNF/vNHx6
-   obK5Cqgjug75WpNgOgfFh2Fm+sv47oyzful89O1+LysG6nnT2R8LCr6SN
-   cF8NBvCptkqM6VARTDM/gFtMtjWrISFAXdhA9F8/5x86J4rZiS36ytDn2
-   g==;
-X-CSE-ConnectionGUID: WGy9JGHwTgeapd7NwaR+ZA==
-X-CSE-MsgGUID: SqXJUwuGS16FSycwr6Ym4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="41182292"
+  bh=EZay6xnveTGa3mB/vfVwn0m9PhN8lyFM4GTXbByCzT4=;
+  b=LKQKOVZ/gStkUkYixzoGNymmD7wY/CdhHCBFtel+WJ6A07MmL3aG05oM
+   SCol/+mF1H76jlKehYLMZajPVmuXYyzrpLjjsNUqbRfJQPOBQ76a4iwgh
+   a39ZHz3Xc29Y2HaNV41Zr1N6/7vka3uaFJIDtWZVxvg4VuXg3wfgOcuKi
+   bOjmnn4ZXeArwIIjH0WAC7xh2vu3syWtWW4MUGMjvgikgzTjkiiihYnd6
+   zIWgPLJkjlEf1x/ZZ+krk1ilQMJBtK4nn5DaNlpqzROwv8cXqelbm0ELv
+   rgZJovyNNZgKjb2ioth1HrJUi8PDeoyvHrB1QrgA4HOt/Q2mDjwildRq8
+   A==;
+X-CSE-ConnectionGUID: Zl7l2/6ZQ+GiYZLVgVkt5A==
+X-CSE-MsgGUID: dsepOGxkRL6e6CDqBIob+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="40636100"
 X-IronPort-AV: E=Sophos;i="6.13,303,1732608000"; 
-   d="scan'208";a="41182292"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 20:26:09 -0800
-X-CSE-ConnectionGUID: q94/JwoLQCKRFCnCLMWkPg==
-X-CSE-MsgGUID: zyrS+hL+Sny+d0WlNAmm7Q==
+   d="scan'208";a="40636100"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 20:36:12 -0800
+X-CSE-ConnectionGUID: 15O3XsNGQyS5U+dafqk+EA==
+X-CSE-MsgGUID: Z9haWoZmTnaHF70a9qpCGw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,303,1732608000"; 
-   d="scan'208";a="115452537"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="115758422"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 20 Feb 2025 20:26:07 -0800
+  by orviesa007.jf.intel.com with ESMTP; 20 Feb 2025 20:36:11 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tlKc1-00056m-1b;
-	Fri, 21 Feb 2025 04:26:05 +0000
-Date: Fri, 21 Feb 2025 12:25:34 +0800
+	id 1tlKlj-00057L-0u;
+	Fri, 21 Feb 2025 04:36:07 +0000
+Date: Fri, 21 Feb 2025 12:36:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: John Daley <johndale@cisco.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jakub Kicinski <kuba@kernel.org>,
-	Nelson Escobar <neescoba@cisco.com>,
-	Satish Kharat <satishkh@cisco.com>
-Subject: [linux-next:master 1515/5164] ERROR: modpost: "page_pool_create"
- [drivers/net/ethernet/cisco/enic/enic.ko] undefined!
-Message-ID: <202502211253.3XRosM9I-lkp@intel.com>
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 42/43] include/linux/acpi.h:1133:49:
+ warning: declaration of 'struct acpi_s2idle_dev_ops' will not be visible
+ outside of this function
+Message-ID: <202502211223.IKdRg7rk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,24 +65,73 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   50a0c754714aa3ea0b0e62f3765eb666a1579f24
-commit: d24cb52b2d8abc89739694ac0be7f0bc2da58e37 [1515/5164] enic: Use the Page Pool API for RX
-config: i386-buildonly-randconfig-006-20250221 (https://download.01.org/0day-ci/archive/20250221/202502211253.3XRosM9I-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   2c6f7196fd5d56b357e1f68d7be5866963aeea6f
+commit: b748ba3ac26ac7c6f5ff7dc55d27583ce6ab4506 [42/43] ACPI: Add missing prototype for non CONFIG_SUSPEND/CONFIG_X86 case
+config: x86_64-buildonly-randconfig-002-20250221 (https://download.01.org/0day-ci/archive/20250221/202502211223.IKdRg7rk-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250221/202502211253.3XRosM9I-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250221/202502211223.IKdRg7rk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502211253.3XRosM9I-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502211223.IKdRg7rk-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
->> ERROR: modpost: "page_pool_create" [drivers/net/ethernet/cisco/enic/enic.ko] undefined!
->> ERROR: modpost: "page_pool_alloc_netmems" [drivers/net/ethernet/cisco/enic/enic.ko] undefined!
->> ERROR: modpost: "page_pool_alloc_frag_netmem" [drivers/net/ethernet/cisco/enic/enic.ko] undefined!
+   In file included from drivers/platform/x86/intel/int1092/intel_sar.c:6:
+>> include/linux/acpi.h:1133:49: warning: declaration of 'struct acpi_s2idle_dev_ops' will not be visible outside of this function [-Wvisibility]
+    1133 | static inline int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+         |                                                 ^
+   include/linux/acpi.h:1137:52: warning: declaration of 'struct acpi_s2idle_dev_ops' will not be visible outside of this function [-Wvisibility]
+    1137 | static inline void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+         |                                                    ^
+   2 warnings generated.
+
+
+vim +1133 include/linux/acpi.h
+
+  1105	
+  1106	#ifdef CONFIG_ACPI
+  1107	void acpi_os_set_prepare_sleep(int (*func)(u8 sleep_state,
+  1108				       u32 pm1a_ctrl,  u32 pm1b_ctrl));
+  1109	
+  1110	acpi_status acpi_os_prepare_sleep(u8 sleep_state,
+  1111					  u32 pm1a_control, u32 pm1b_control);
+  1112	
+  1113	void acpi_os_set_prepare_extended_sleep(int (*func)(u8 sleep_state,
+  1114					        u32 val_a,  u32 val_b));
+  1115	
+  1116	acpi_status acpi_os_prepare_extended_sleep(u8 sleep_state,
+  1117						   u32 val_a, u32 val_b);
+  1118	#if defined(CONFIG_SUSPEND) && defined(CONFIG_X86)
+  1119	struct acpi_s2idle_dev_ops {
+  1120		struct list_head list_node;
+  1121		void (*prepare)(void);
+  1122		void (*check)(void);
+  1123		void (*restore)(void);
+  1124	};
+  1125	int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+  1126	void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+  1127	int acpi_get_lps0_constraint(struct acpi_device *adev);
+  1128	#else /* CONFIG_SUSPEND && CONFIG_X86 */
+  1129	static inline int acpi_get_lps0_constraint(struct device *dev)
+  1130	{
+  1131		return ACPI_STATE_UNKNOWN;
+  1132	}
+> 1133	static inline int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+  1134	{
+  1135		return -ENODEV;
+  1136	}
+  1137	static inline void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+  1138	{
+  1139	}
+  1140	#endif /* CONFIG_SUSPEND && CONFIG_X86 */
+  1141	void arch_reserve_mem_area(acpi_physical_address addr, size_t size);
+  1142	#else
+  1143	#define acpi_os_set_prepare_sleep(func, pm1a_ctrl, pm1b_ctrl) do { } while (0)
+  1144	#endif
+  1145	
 
 -- 
 0-DAY CI Kernel Test Service
