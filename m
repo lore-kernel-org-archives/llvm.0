@@ -1,177 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FAB2AE74;
-	Fri, 21 Feb 2025 20:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BF71D7E2F
+	for <llvm@lists.linux.dev>; Fri, 21 Feb 2025 20:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740168943; cv=none; b=uFXy5bOsLMrlpYWxGdNwePdb2OtsrfZSgXsFtqj4aOWXQ0UB8D1sGppmxlXe6Te7vsyRdDK00apZ3+NXLfv+LnWzz/HRUtroYfK+R+S0uIKjT1WBZD5a8TJvzArkDelYLw12JS8hCBariV9d+spVAxUAuQPsLrplbTbeGh0dw2s=
+	t=1740170196; cv=none; b=T6AeAAosywdPJqQ1vQa3T2OqS4wmh7UyBzcfT4HZF6oCaqCGHpRM23U4cqHHpirQ4FCJ6b5fWiYtOhgAcK6xRCc7GmmqzhqDaEDrgyhgUd5PjfL1vKglS6+f1uLuxFSvkXxreaMIZqC2usH4+XyS2fIXUUkern88dVhtS/sY4tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740168943; c=relaxed/simple;
-	bh=jqnFF+WFFXdW89+9fbLNDFScUC4mQYBXnE5q30DOZZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hdSAkryPDMVK7cf00Nr6vn0pUP7sati0aTHTwll4Xk5Ib4eOoyQ6RClWWUkTLR6SFAiOzSKKwWQyIt59EieD7dEsXsyEWG2qb5pgSXHFkKffjF0RgEgmspwlk7KF43M4z0MZzU4ei/T+6BMPsSSD6BK28PAslGsGtbBOWMMbm4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JxJf/Vaa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740170196; c=relaxed/simple;
+	bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lZxk8PYTKP60fKqCpnXOY/4Gysy5j1KLjVMQI7bJ4Y+F995CYeF3zBYuLl+SXiVVKie6Ot5sEXPV2SsfaRoNpanYqK6nJ2jxMwrlascAc/pV18yhieb2LAllUkdEHUgcHOduwDYQ9bRQAEf6NvBiJfJVqUgekM6q9g3/gClYKyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRMFnliK; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxJf/Vaa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD97C4CED6;
-	Fri, 21 Feb 2025 20:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740168942;
-	bh=jqnFF+WFFXdW89+9fbLNDFScUC4mQYBXnE5q30DOZZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JxJf/Vaa3Lx5zXYIyjZJztjQ2mX/MQPb3ufDsbcHsmE/ap/oUw3BtC5N7ZmZyStwV
-	 ItNOLEF5499EzpywDbzAf4aGvVSgu2axmmS+SGl4xqpQqeZ69ioAc/oOJA+TsTS1mU
-	 KzyCQH3JYCsGkZRvzQAmEYTxt2ocLfhLLXVJPTHmCtCYwltsySF0oSvUavqJXGCplE
-	 kZvl76VjDhHIF3IRjnpZzH9Wu/9pP/7DMpyaJifXJVuACoOlAxXN0v0kaoVkI1RH9Y
-	 rT0OOt0q+z54D4W4vuLRKcsZsR2YT8N6qn/YtbPn+i2ffdKhTv76Vw0ZFraMho+XMf
-	 yhzCrCep7M8Fg==
-Date: Fri, 21 Feb 2025 12:15:40 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
-	iovisor-dev <iovisor-dev@lists.iovisor.org>, gost.dev@samsung.com
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-Message-ID: <Z7je7Kryipdq6AV4@bombadil.infradead.org>
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
- <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
- <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
- <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRMFnliK"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-abb75200275so400136266b.3
+        for <llvm@lists.linux.dev>; Fri, 21 Feb 2025 12:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740170193; x=1740774993; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+        b=FRMFnliKVsL0LOP/tgpujPW6rof3qYiTXArNWPpispjYFICb4h7cteE8nboqRvfTEl
+         SAWLhGAWOzV0mO1Do3CuVb2F9xKzP+7EkWIHrlgzD3whPnYiNTVdTKA/xztlFwyMduBG
+         2aBn8JGxCM/WZ6da+/vLFfNa0BDjnvB/f44fgh7DsFVzYTLufdaDiz0sE5YugfdKjY44
+         b0PWWw9LLEzizyjwyUH3OVfOuEDP0RcavPM2XBH6GNSjText/Ow0BbWa4mZ9o1MDy1U+
+         7ufPpf+CVA918wv+E5TPGa/ekIqBZhTZ/ua749eLKrh78FJDwX4rWLxWQqnDAu4eUHd+
+         jBuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740170193; x=1740774993;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IWMvonBG+KnGNLyuoaKqjMosPNOq8YfwaQsVw0V4EEI=;
+        b=MxWUpslwaPXXFG/GfOyBHkrsTWMEN5dukfeWJ6Q1QxlIJ+8vkVk4VWI+w32UDJHmk9
+         Uty+dednNDv2KQMO84wXuZf/iYX0iINHrFsHqZU5tWF6BzU+EAdWJ12WqQz+msGD0EJj
+         SSpAcXpQmumVMGkg6MoaXGu4Es5TjZWPDnU22ppJ/ApxabRjF2se+tRC7VZHOB8Us+Vo
+         4W79Mqg3e7hNY5xTupvje1dP5aUGg+W4ZAwgWeguU+hybpX2MDsyTAb+qD0bQw5X0cJG
+         DQG+aoFmx5TKxj6jLKQH6gJu/xlBYMgxxN7uin/hgney/2LPAvW8nefkvYdqitt2BIXM
+         NLVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvnuE3cJaTTArozDLYMpRcgfPPEXGEdxHNBsS27HA1fVvgShnzy/oqBS37MLfgTmDWSSc1@lists.linux.dev
+X-Gm-Message-State: AOJu0YyB/mRpCWdLID78CVG0D0yAI/d5Wism45NF6qFzzPsAGdWZKdhx
+	Uu2x2W1K2EshUxIX9yKWoB7s2awMWUHStVOqqoHnRoYk2hf6fwSl+GfRlL8e+mtEA93i2wXfLlg
+	SXN87z+90mzdDTQiuH0bHzq083bY=
+X-Gm-Gg: ASbGnct3M2HWkPHCo09K4MMQKtiZy16/0xkkD61OcpjOWxr2n1DZZp8HPsPw6Tl3zLa
+	uNKTr1grQ7UmhL1ClFd1xNnZXwYdTksyYj9TnxmaAVqMLKxBZXNcv7KHVYyXjYYAN8ydXIC/Y8/
+	zT3w7ym3Sjfksb3E4a1R7W28kPfLXVNR9lYkOY9SzjeA==
+X-Google-Smtp-Source: AGHT+IETtMfsp+oxVVvJtgbE795zNbuHaeWF8ofCjtDM153d6TyT0rI+Niqk7EWeS2I9xBqTyLh7p3er1/ZJuxxHIcQ=
+X-Received: by 2002:a17:907:1c07:b0:aa6:7a81:3077 with SMTP id
+ a640c23a62f3a-abc09e394a1mr453579866b.54.1740170193331; Fri, 21 Feb 2025
+ 12:36:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
+References: <20250213-ww_mutex-kunit-convert-v2-1-4a60be9d5aae@gmail.com>
+ <20250213115951.GF28068@noisy.programming.kicks-ass.net> <CAJ-ks9mzYWSvVD=PCvCBohXg77BdFODq4ePMNstkL+70tkU5RA@mail.gmail.com>
+ <20250214094856.GD21726@noisy.programming.kicks-ass.net> <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
+In-Reply-To: <CAJ-ks9kG6g8v7ADJkpuwekg_87iDVq-hPcYR+Oobrrjb-a8hfg@mail.gmail.com>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 21 Feb 2025 15:35:57 -0500
+X-Gm-Features: AWEUYZmTNrzRMQDfcvC1uKAS9y2OW_n7SKmU92RpVTg0NimjM8ab7XRa3qA78u8
+Message-ID: <CAJ-ks9=BjaQJh0L3K2ywPFhP4XBxZiY9mqJzu1TsmpiH-AG9uA@mail.gmail.com>
+Subject: Re: [PATCH v2] ww_mutex: convert self-test to KUnit
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: David Gow <davidgow@google.com>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 02:17:48PM -0600, Lucas De Marchi wrote:
-> On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
-> > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
-> > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+On Fri, Feb 14, 2025 at 7:37=E2=80=AFAM Tamir Duberstein <tamird@gmail.com>=
+ wrote:
+>
+> On Fri, Feb 14, 2025 at 4:48=E2=80=AFAM Peter Zijlstra <peterz@infradead.=
+org> wrote:
+> >
+> > On Thu, Feb 13, 2025 at 10:42:24AM -0500, Tamir Duberstein wrote:
+> > > On Thu, Feb 13, 2025 at 6:59=E2=80=AFAM Peter Zijlstra <peterz@infrad=
+ead.org> wrote:
 > > > >
-> > > > Add support for a module error injection tool. The tool
-> > > > can inject errors in the annotated module kernel functions
-> > > > such as complete_formation(), do_init_module() and
-> > > > module_enable_rodata_after_init(). Module name and module function are
-> > > > required parameters to have control over the error injection.
+> > > > On Thu, Feb 13, 2025 at 06:40:20AM -0500, Tamir Duberstein wrote:
+> > > > > Convert this unit test to a KUnit test. This allows the test to b=
+enefit
+> > > > > from the KUnit tooling. Note that care is taken to avoid test-end=
+ing
+> > > > > assertions in worker threads, which is unsafe in KUnit (and wasn'=
+t done
+> > > > > before this change either).
 > > > >
-> > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
-> > > > brd module:
+> > > > So this was something simple, and now I need to know how to operate=
+ this
+> > > > kunit nonsense :-(
 > > > >
-> > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
-> > > > --error=-22 --trace
-> > > > Monitoring module error injection... Hit Ctrl-C to end.
-> > > > MODULE     ERROR FUNCTION
-> > > > brd        -22   module_enable_rodata_after_init()
-> > > >
-> > > > Kernel messages:
-> > > > [   89.463690] brd: module loaded
-> > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
-> > > > ro_after_init data might still be writable
-> > > >
-> > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > > > ---
-> > > >  tools/bpf/Makefile            |  13 ++-
-> > > >  tools/bpf/moderr/.gitignore   |   2 +
-> > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
-> > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
-> > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
-> > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
-> > > >  6 files changed, 510 insertions(+), 3 deletions(-)
-> > > 
-> > > The tool looks useful, but we don't add tools to the kernel repo.
-> > > It has to stay out of tree.
-> > 
-> > For selftests we do add random tools.
-> > 
-> > > The value of error injection is not clear to me.
-> > 
-> > It is of great value, since it deals with corner cases which are
-> > otherwise hard to reproduce in places which a real error can be
-> > catostrophic.
-> > 
-> > > Other places in the kernel use it to test paths in the kernel
-> > > that are difficult to do otherwise.
-> > 
-> > Right.
-> > 
-> > > These 3 functions don't seem to be in this category.
-> > 
-> > That's the key here we should focus on. The problem is when a maintainer
-> > *does* agree that adding an error injection entry is useful for testing,
-> > and we have a developer willing to do the work to help test / validate
-> > it. In this case, this error case is rare but we do want to strive to
-> > test this as we ramp up and extend our modules selftests.
-> > 
-> > Then there is the aspect of how to mitigate how instrusive code changes
-> > to allow error injection are. In 2021 we evaluated the prospect of error
-> > injection in-kernel long ago for other areas like the block layer for
-> > add_disk() failures [0] but the minimal interface to enable this from
-> > userspace with debugfs was considered just too intrusive.
-> > 
-> > This effort tried to evaluate what this could look like with eBPF to
-> > mitigate the required in-kernel code, and I believe the light weight
-> > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
-> > suffices to my taste.
-> > 
-> > So, perhaps the tools aspect can just go in:
-> > 
-> > tools/testing/selftests/module/
-> 
-> but why would it be module-specific?
+> > > > How is that an improvement?
+> > >
+> > > Hi Peter,
+> > >
+> > > David enumerated some of the benefits of KUnit in another
+> > > thread: https://lore.kernel.org/all/CABVgOS=3DKZrM2dWyp1HzVS0zh7vquLx=
+mTY2T2Ti53DQADrW+sJg@mail.gmail.com/.
+> > >
+> > > My personal reason for preferring KUnit is that it's much easier to
+> > > run from userspace; the tooling takes care of building, starting the
+> > > VM, running the tests, and producing a human-friendly report.
+> >
+> > Wait what -- you have to run a VM just to use Kunit? That's a hard pass=
+.
+> >
+> > If I can't simply run it natively on my test box, its a no go. And it
+> > using python also don't help, you shouldn't be needing that to load a
+> > module.
+>
+> The tooling I mention is all optional. You can still use modprobe to
+> run the test as a module or at boot. In this case you'd set:
+>
+> CONFIG_KUNIT=3Dy
+> CONFIG_WW_MUTEX_KUNIT_TEST=3Dm
+>
+> and then run the test via:
+>
+> ```
+> modprobe ww_mutex_kunit
+> ```
+>
+> or to run at boot:
+>
+> CONFIG_KUNIT=3Dy
+> CONFIG_WW_MUTEX_KUNIT_TEST=3Dy
+>
+> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
+.html#running-built-in-tests
+> Link: https://www.kernel.org/doc/html/latest/dev-tools/kunit/running_tips=
+.html#running-tests-as-modules
 
-Gotta start somewhere.
-
-> Based on its current implementation
-> and discussion about inject.py it seems to be generic enough to be
-> useful to test any function annotated with ALLOW_ERROR_INJECTION().
-> 
-> As xe driver maintainer, it may be interesting to use such a tool:
-> 
-> 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
-> 
-> How does this approach compare to writing the function name on debugfs
-> (the current approach in xe's testsuite)?
-> 
-> 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
-> 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
-> 
-> If you decide to have the tool to live somewhere else, then kmod repo
-> could be a candidate.
-
-Would we install this upon install target?
-
-Danny can decide on this :)
-
-> Although I think having it in kernel tree is
-> simpler maintenance-wise.
-
-I think we have at least two users upstream who can make use of it. If
-we end up going through tools/testing/selftests/module/ first, can't
-you make use of it later?
-
-  Luis
+Gentle ping. Peter, does the above address your concerns?
