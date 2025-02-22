@@ -1,58 +1,58 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6401B78F32
-	for <llvm@lists.linux.dev>; Sat, 22 Feb 2025 15:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E561411EB
+	for <llvm@lists.linux.dev>; Sat, 22 Feb 2025 15:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740236809; cv=none; b=ga1Nkv85Nxn7uY8CI4sJHBFhmx2fc3B1cu+DAxOurrBr7FDSXVEmB6pUEo3uFTfuxJ3Qu9bQGRQOCnyqwG1C/Eoof5ml0vIVeeR0sdR8iNgtky5hkjGASREAvLKBfwha3lhbfACuMPD0fg0zHxpQUN0yZ8h226+iV10duxA1+4k=
+	t=1740236856; cv=none; b=EpDlC1yzOhzgZ+xi1t1hO2pN2rKl7UL+FNjVZy7suRCqBGE1dZFeLjwgUtV4Pm6bYVJZcMz1w9X4N3pI7C5Gg7oMco15cmRvmWvJlD/Ffn7T+IJ226JF+UAKJdduutKkgQJyaOUHy8hvAUVIuSbysD6hVWS9R09MzC9GkhwxMWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740236809; c=relaxed/simple;
-	bh=eSFmtCqKXwiBd5cPElHZFwNs8nFGgz73jeZp/oGxJMY=;
+	s=arc-20240116; t=1740236856; c=relaxed/simple;
+	bh=70pD9gnFNEV46q1yL+XWGZJhvCSgCKDZIGACepg3f1I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bBywgVRNmVRvGBuVLrYlW2Xx5cnvuLA9eP09vy9elfkklg0KEz7ehfX1tfu+BlhmXfg0B/M39IzVPqKVVt+tWEL686hNRWo/p4DKLL8C1mernMozKXz8wBsnMmcouQKCncxOK6RbrYuxaZYiQzN2iEej5HlCNTJdrsryliOklxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Or3LNwjM; arc=none smtp.client-ip=209.85.128.50
+	 To:Cc:Content-Type; b=Eo0UeM5EX/ZOGuTW8SFyebj18v+OAROWrqVP7i3/B1RgOVplZSeNWvucG180+BkQdVpgbyW7JBMsjwtfDr0mIObbx7aAxbhl1voD9qYneuTY0TAywsxWHI7k1Ddfybug9N7a9iTJz1j2G5vyekY7uFuMJpXcnKavn3YaCECpkdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dpy8U3bh; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Or3LNwjM"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-439846bc7eeso19071035e9.3
-        for <llvm@lists.linux.dev>; Sat, 22 Feb 2025 07:06:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dpy8U3bh"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e67ce516efso25072746d6.3
+        for <llvm@lists.linux.dev>; Sat, 22 Feb 2025 07:07:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740236805; x=1740841605; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1740236854; x=1740841654; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q6IG2omqZBIGpvuNs0TcKEamdR0fZsdINqF9gR0Bnm8=;
-        b=Or3LNwjMbuG6mIzDneL+ziug52PKEJmXaGpjgN9CAn4xsSG7auJhYbC1YnONPDIIzC
-         JZ0xAPeuNidE7d1uO4AbBCNTB+FlXCtxhCjllIHaYPO3FkWK0aXl6cJYdycMNCEnFYmP
-         Nqgd4C/hMtbfwuDEEpz13hF6QJz/Ns3A3H3Xy52zfq02LLLScq3pznvM+sdcwECXOZYk
-         9/GVrrf9Nj5Bn8rgKehHjqcaBkLdaX6jxagWDNGhnaW3mJkFOlbbWc19+pHpOr9VugNE
-         7vns5HJ9IRfBqx3QIjVNQVlgGV3hss7HfG/5VWGBPLaGTKQOheEFjPAqoWkZ0ieOqe+L
-         ueHg==
+        bh=70pD9gnFNEV46q1yL+XWGZJhvCSgCKDZIGACepg3f1I=;
+        b=Dpy8U3bhBnnjdb6nn4MqfI8XGScR3oMbfKDqHjwdavsjx69gOSJuqJ90IWX78aMDgT
+         W1RSKKxMY8FTeVYWTxxE8kvsp4aAuX1hFk2uigqXsuCNQxlZRs+0dI9p/ybcqRthb1LF
+         TFE0rNb1YX8o6BRT5EiiRFV8ApvN7R90icWkvdMAmYFFel2XHllQmyDBZgRn95eOlpqI
+         ccwBuRn8AzIs5UpmKsXU+hcnWRHXNOeGJmG1Md/eP4n8BbYfzBBPP7b2rzRdxrVaNMEB
+         OA3JLmiNggGNddaD3MXqVLkWd+l56w4L31qRbFiIsoR0RRMB84tAmeLz8DM6lvFp1gWT
+         9+mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740236805; x=1740841605;
+        d=1e100.net; s=20230601; t=1740236854; x=1740841654;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q6IG2omqZBIGpvuNs0TcKEamdR0fZsdINqF9gR0Bnm8=;
-        b=NR3Uv6oO/afdzAh8VHxcJ5uvs2os96oHkrkmGltmKQb0pyRAYBdvcv2a2E7+h4woYa
-         jbKsogusq+/JIuhsfBUq6HJxdqqL4c38EfO+5Axhq79c6SoqcM/AMRxfo6qzW/wVnbDc
-         j8n4UJrW9mMJD6TzsmFHYFL4iJwnIcpPm0ISEt+DddvNUo/cve6WNFawZuTHDOqzp9hU
-         O5djgP6z6Lbv7pHlt46KjRcfAdBOMMe3YP51NGrr10ZyDatuVZbDotOyhV+x5PjxejsI
-         pPLjd0Topff3u+p/sKNmhyI5pTh5GDlCVhMHqMVYjA+wzbHtThfqELiPygyGIwDADB5L
-         4qsg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrGjThvVveslU9tCtuujllMYhYMV9Gp91QXleQP+CzG4v0OpYkVueeFFLHdRbHDBKDHraj@lists.linux.dev
-X-Gm-Message-State: AOJu0YxSHDHdyb7o2Ztd4C5ykuk20AspvzzIKx2O12pcw63RQKR3cpkx
-	LC71Q/4SOYW1cMkLozhZBwUXNOf1V0aDPDpV5zwm9VMP5E8dA4kxKaxOND6ZV9mPiFC9F2WwgqP
-	0VRtzfPoagHxqA706rUea5K81y/E=
-X-Gm-Gg: ASbGncteCBffMyo3RSOntmg6G452GJ6Rb4hmLa2u9IHsCFBAhjRTz9FzRJpbutgf+cU
-	vMCFv/MWBour7LREV3Rrw+PAuilxKMpTqFzAus8EOXr07Q7CElosxGZZK1BINJ3ZtntptFwlwRq
-	LZ/F4/RRXg5g==
-X-Google-Smtp-Source: AGHT+IFhBor5hXQC6yXs5rQbDEYWqY637k84AiaOxakK1n2TCAdD18dj1iMeYWx6NSuEDyn2ixcmbQJTjD6rrfjw4gQ=
-X-Received: by 2002:a5d:6d85:0:b0:38f:3d74:9af with SMTP id
- ffacd0b85a97d-38f6f0d0806mr6580744f8f.45.1740236805307; Sat, 22 Feb 2025
- 07:06:45 -0800 (PST)
+        bh=70pD9gnFNEV46q1yL+XWGZJhvCSgCKDZIGACepg3f1I=;
+        b=VMBYFzNegJTMPvrg4GsYTSkAen91HMbNwIVBUXI46zkeLC1XKBCHoADz4MMYeGHnm4
+         mCOq85qdrYHajigljBnKOldyAXN02okegAz5w97Z3QzPdM4eZyTsRWRs7KYdBddSpTpJ
+         fgNbzlyC87vBe2AyE1Zk6GvMqUGdZUvxqdqCXB8RGLyU0Zt5uXVL0CZ+b9kXhM9N6y22
+         9tH52axfxke+OmB9LV3jqaq+KQtTvMNLgGe38+LMYbraCn7IfishilErgAIJ5IwBp02x
+         0vniWYWSsvuw7HpR/xr3NQuSJ9hjwrTPEZx2DaPLvVRBTNkHf2bYUvJPrcdbii4RMrEI
+         OQQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUX/xJsrkN54R3bdCkpHMQGDXmzkgQAfZB8dAmTDJJ6CkIGsVHegEQuMy+3zZDsdq8KEf5o@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzxp1j9orKl8dE6NpNU7wp+z+07gafwp7DeP7E8kXuDjmUR7/LK
+	B+J09iYWMH2ysxpfpsW/5lXlugYY3d6rOcbNpwGa7oQbIikYSXUmx61Cd84JNiHvWaEKXnysROz
+	6+cvfi0owLvh0c+0XUQKvOkX6N9c=
+X-Gm-Gg: ASbGncv0hBT5f8knLaetTjABGdBHlyNZk/Qvvhs44O8oPujRnsYX4pmGt6WNz2PUY2t
+	rhlb8qUVazDHQnVLYm61iTXRX+ydPDV/KbSPcZTp9L1r3Vcu9HuYYT/5gR6NolFYRsUITtHeoJx
+	3uw1SC3v+WpA==
+X-Google-Smtp-Source: AGHT+IGzaUBBYsZPN6nwYD9SKzKfluRv9+knK4LuyyydKSabCwcaxgNi9q2iHeK7D9X3awEI3Ddvi+fItxaGI+EwcEo=
+X-Received: by 2002:a05:6214:daa:b0:6e6:5cad:5ce6 with SMTP id
+ 6a1803df08f44-6e6ae7c9f82mr95965996d6.9.1740236853223; Sat, 22 Feb 2025
+ 07:07:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,14 +60,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
- <d266338a0eae1f673802e41d7230c4c92c3532b3.1739866028.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZezPtE+xaZpsf3B5MwhpfdQV+5b4EgAa9PX0FR1+iawfA@mail.gmail.com> <afc4db6mt3uuimj4lokfeglhqc22u5ckgvunqtiwecjan5vjj2@lvphketnxhhr>
-In-Reply-To: <afc4db6mt3uuimj4lokfeglhqc22u5ckgvunqtiwecjan5vjj2@lvphketnxhhr>
+ <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com> <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
+In-Reply-To: <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Sat, 22 Feb 2025 16:06:34 +0100
-X-Gm-Features: AWEUYZkJMUGTJnf0tyUt8lWwOa_mEt-qqEj8jwlDkAHHUkPqAhs2iK4gMtYGacQ
-Message-ID: <CA+fCnZdhvzUs6NWxCz+PcxBf=tz5xcsHOraKT5+y+vNJb2b-Lg@mail.gmail.com>
-Subject: Re: [PATCH v2 14/14] x86: Make software tag-based kasan available
+Date: Sat, 22 Feb 2025 16:07:20 +0100
+X-Gm-Features: AWEUYZlkmxeF6xgXCl21B3APEThb1gNkBITR5DJujsdnWalnykrR9HY2cVqQu30
+Message-ID: <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
 	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
@@ -96,43 +96,67 @@ Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 21, 2025 at 3:45=E2=80=AFPM Maciej Wieczor-Retman
+On Fri, Feb 21, 2025 at 4:11=E2=80=AFPM Maciej Wieczor-Retman
 <maciej.wieczor-retman@intel.com> wrote:
 >
-> >What's the purpose of this config option? I think we can just change
-> >the value of the KASAN_SHADOW_SCALE_SHIFT define when KASAN_SW_TAGS is
-> >enabled.
+> On 2025-02-20 at 00:31:08 +0100, Andrey Konovalov wrote:
+> >On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM Maciej Wieczor-Retman
+> ><maciej.wieczor-retman@intel.com> wrote:
+> >>
+> >> On x86, generic KASAN is setup in a way that needs a single
+> >> KASAN_SHADOW_OFFSET value for both 4 and 5 level paging. It's required
+> >> to facilitate boot time switching and it's a compiler ABI so it can't =
+be
+> >> changed during runtime.
+> >>
+> >> Software tag-based mode doesn't tie shadow start and end to any linear
+> >> addresses as part of the compiler ABI so it can be changed during
+> >> runtime.
+> >
+> >KASAN_SHADOW_OFFSET is passed to the compiler via
+> >hwasan-mapping-offset, see scripts/Makefile.kasan (for the INLINE
+> >mode). So while we can change its value, it has to be known at compile
+> >time. So I don't think using a runtime constant would work.
 >
-> Well, I was aiming at later adding the "default 5 if KASAN_SW_TAGS_DENSE"=
-, and
-> this way it would look much cleaner than the:
+> I don't know about arm64, but this doesn't seem to work right now on x86.
+
+You mean it _does_ seem to work? Or otherwise if runtime constant
+doesn't work on x86, then we shouldn't use it?
+
+> I
+> think I recall that hwasan-mapping-offset isn't implemented on the x86 LL=
+VM or
+> something like that? I'm sure I saw some note about it a while ago on the
+> internet but I couldn't find it today.
+
+In LLVM sources, ShadowBase gets calculated [1] based on
+Mapping.Offset [2], which is in turn taken [3] from
+hwasan-mapping-offset [4]. And then ShadowBase is used to calculate
+[5] the shadow memory address.
+
+All of this happens in the common code, so this should affect both x86
+and arm64.
+
+[1] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L1305
+[2] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L761
+[3] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L1863
+[4] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L171
+[5] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L899
+
 >
-> if KASAN_SW_TAGS
->         if KASAN_SW_TAGS_DENSE
->                 KASAN_SHADOW_SCALE_SHIFT =3D 5
->         else
->                 KASAN_SHADOW_SCALE_SHIFT =3D 4
-> else
->         KASAN_SHADOW_SCALE_SHIFT =3D 3
+> Anyway if KASAN_SHADOW_OFFSET is not set at compile time it defaults to n=
+othing
+> and just doesn't get passed into kasan-params a few lines below. I assume=
+ that
+> result seems a little too makeshift for runtime const to make sense here?
 
-I think this is fine. It's still better than adding a non-configurable
-config option.
+Sorry, I don't understand this question.
 
-> But now that I think of it, it should be possible to overwrite the
-> KASAN_SHADOW_SCALE_SHIFT from non-arch code if dense mode is enabled.
-
-This should also work. Especially since the dense mode will probably
-work for arm64 as well.
-
-But let's keep this series self-contained.
-
-> That's a topic for the next series but I'd imagine all architectures woul=
-d
-> normally use the 16 memory bytes / shadow byte and if they'd care for the=
- dense
-> mode they'd go for 32 memory bytes / shadow byte. Or do you think that's =
-a
-> faulty assumption?
-
-Probably, but for sure I don't know, not that many architectures that
-care about memory tagging yet :)
+If hwasan-mapping-offset is not set properly, then in the inline
+instrumentation mode, the compiler won't generate the right
+instructions to calculate the shadow memory address.
