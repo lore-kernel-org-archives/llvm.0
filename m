@@ -1,188 +1,195 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756BD1D7E42;
-	Sat, 22 Feb 2025 21:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122C878F4E;
+	Sat, 22 Feb 2025 21:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740259118; cv=none; b=PDTQ+yTqa90sDzkhIIAfw/uoO5P9yexdh/Oq7H46F5oWUs5hN1HYNHydzNhwpqPdfPuIFqRjLi7DIvSNelfxlwRWYW9Y6g8qpEeMKICTQ2J8j9yD59VIYKlfiLSWpnvZXgaYfVuXCKbo2cVhVbGrziAWJyufO1sQ+mur67GAY6A=
+	t=1740259766; cv=none; b=nZLZeadS71pV6AEp7+XX946dpIkTWaebJJzhqPRfUuSXJk3QkfLag8rssResIVcB5gyK4oO6WSqK+jHFmzZ7SunlA7Xolg2hafL1nQ04v4cFbamzaVhg9G69rGpuyjvRGeRzPHqGgy1EhzGTcycZQ2jukuxPCB66pJvPnIDeJ4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740259118; c=relaxed/simple;
-	bh=0Br3t29Hv9ubwtRHxRhjaO15RSiTznt5AZe+Aq5R+u4=;
+	s=arc-20240116; t=1740259766; c=relaxed/simple;
+	bh=TllmLDgpVZV8wSTC1mL6JVYDxhCEWNP7L7AL2Er9Ad0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fv/rGzxrmRpOpXoGkmnjm+HOPRNw22pG3stUZ1IiP45trrqWDHQKdl/cNNLGn9fwgcSqCIecwHC8fMLiztTCGKEHdcYBdaDVihJKH5tkDiga+KWgtg6nmkYHbkypfZzJ0cU1ESL/nuYlkQ5AXXYs7s0+vFatTuKJOp+foIHzOIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dVsvJ7mg; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1Bli1bdtLj0kC1zrKYPUXntc3yhPA3V4UJRiKE4W2XrYOAXAGOay021cPpFNGngLLFYJTV2w6jBpZ3G6qaHKWtyEtn2AFTbzI+GAfa0trRocUFMLXnX4n4K2v4DKEiF2omMn6eeKGFp+M6ufnaltKvJRRBVv0wYaHdtluzfZvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jan/Xnq3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dVsvJ7mg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740259116; x=1771795116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0Br3t29Hv9ubwtRHxRhjaO15RSiTznt5AZe+Aq5R+u4=;
-  b=dVsvJ7mgsH0TvoFRxg83FRUF1uJolAL9y54GJk9UPl5Ss1e6uSO9sQL0
-   hBYVBgBBoIWFytVkYBgFZmoTgwAGW7z6wmiRLpo06BqnZTou/3UbkkYH0
-   fQngG6mEZLs9ZE00C9QrJ1WTDrAzqqzM+mYNDFHL0BziNUVpvTV7uamAv
-   Zb6mi/Jp7d2AI81p8OMw1+xdgaAZE599jGjvNC5eXb/6c6QLYw/YeE++X
-   K4W99nTSTMLuq3DMDyBizTrVhzF5lfDQXthNnM3ZvQMzoOGGR2IaxmyR2
-   bUlHFphEnkM5a2i7A9TO/6aEi9VfdE/PWRTRBXzaGlARWcragiudcZtUo
-   Q==;
-X-CSE-ConnectionGUID: HQ7tKJ9HSDm1EqhH13EM8w==
-X-CSE-MsgGUID: 3YiHMVSZRE20V53SLlmPCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11353"; a="66426582"
-X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="66426582"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 13:18:35 -0800
-X-CSE-ConnectionGUID: q5B4lbyqTw21w/P2w1jLvg==
-X-CSE-MsgGUID: l+j3r8o0RGSpMekfHE/INA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="146528692"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 22 Feb 2025 13:18:33 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tlwtL-0006v1-00;
-	Sat, 22 Feb 2025 21:18:31 +0000
-Date: Sun, 23 Feb 2025 05:18:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 22/22] [DEBUG] sched/fair: Debug pick_eevdf()
- returning NULL!
-Message-ID: <202502230452.TjpiO8JM-lkp@intel.com>
-References: <20250220093257.9380-23-kprateek.nayak@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jan/Xnq3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CCBC4CED1;
+	Sat, 22 Feb 2025 21:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740259765;
+	bh=TllmLDgpVZV8wSTC1mL6JVYDxhCEWNP7L7AL2Er9Ad0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Jan/Xnq3CwBQY9BWH8PIIPcBxphq40Ypfi9YsXB/s4j8LhmevzWv5X6iTIn1ICviq
+	 zkNrdwrCB2v17wJq1rC9hYldSoR85BrwShhdJA00CtmgGNPkWbksKg0dpFbj2+tsYj
+	 i9trkB1jdvWH6r21lSnJj2Pb/bvBNTjmkVfg6B4JfITNb6VnZGocMnsSF0huDr73ne
+	 EzAck27i1nq3AndfDfcXdHdXb0qE0GwI5xcgf7Izh5+PEdb8iMoDY3H7zQ/1bNGGGQ
+	 VMbPo1eU4v2Z3d7q2JFS7BVDd4Dktm9V7C3zq9tYIZ25+ZNEs8KyxnSh/httd/GKa2
+	 2kRNMs3vHJgDA==
+Date: Sat, 22 Feb 2025 22:29:22 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
+	gost.dev@samsung.com
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+Message-ID: <vo4aommlbguz7kll5svvgbodykxx7chywhf2wz5bbz4mibvver@cxrceuzt3dzw>
+References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
+ <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
+ <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250220093257.9380-23-kprateek.nayak@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
 
-Hi Prateek,
+On Wed, Feb 19, 2025 at 02:17:48PM +0100, Lucas De Marchi wrote:
+> On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
+> > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
+> > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+> > > >
+> > > > Add support for a module error injection tool. The tool
+> > > > can inject errors in the annotated module kernel functions
+> > > > such as complete_formation(), do_init_module() and
+> > > > module_enable_rodata_after_init(). Module name and module function are
+> > > > required parameters to have control over the error injection.
+> > > >
+> > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > > > brd module:
+> > > >
+> > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
+> > > > --error=-22 --trace
+> > > > Monitoring module error injection... Hit Ctrl-C to end.
+> > > > MODULE     ERROR FUNCTION
+> > > > brd        -22   module_enable_rodata_after_init()
+> > > >
+> > > > Kernel messages:
+> > > > [   89.463690] brd: module loaded
+> > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
+> > > > ro_after_init data might still be writable
+> > > >
+> > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > > > ---
+> > > >  tools/bpf/Makefile            |  13 ++-
+> > > >  tools/bpf/moderr/.gitignore   |   2 +
+> > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> > > >  6 files changed, 510 insertions(+), 3 deletions(-)
+> > > 
+> > > The tool looks useful, but we don't add tools to the kernel repo.
+> > > It has to stay out of tree.
+> > 
+> > For selftests we do add random tools.
+> > 
+> > > The value of error injection is not clear to me.
+> > 
+> > It is of great value, since it deals with corner cases which are
+> > otherwise hard to reproduce in places which a real error can be
+> > catostrophic.
+> > 
+> > > Other places in the kernel use it to test paths in the kernel
+> > > that are difficult to do otherwise.
+> > 
+> > Right.
+> > 
+> > > These 3 functions don't seem to be in this category.
+> > 
+> > That's the key here we should focus on. The problem is when a maintainer
+> > *does* agree that adding an error injection entry is useful for testing,
+> > and we have a developer willing to do the work to help test / validate
+> > it. In this case, this error case is rare but we do want to strive to
+> > test this as we ramp up and extend our modules selftests.
+> > 
+> > Then there is the aspect of how to mitigate how instrusive code changes
+> > to allow error injection are. In 2021 we evaluated the prospect of error
+> > injection in-kernel long ago for other areas like the block layer for
+> > add_disk() failures [0] but the minimal interface to enable this from
+> > userspace with debugfs was considered just too intrusive.
+> > 
+> > This effort tried to evaluate what this could look like with eBPF to
+> > mitigate the required in-kernel code, and I believe the light weight
+> > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
+> > suffices to my taste.
+> > 
+> > So, perhaps the tools aspect can just go in:
+> > 
+> > tools/testing/selftests/module/
+> 
+> but why would it be module-specific? Based on its current implementation
+> and discussion about inject.py it seems to be generic enough to be
+> useful to test any function annotated with ALLOW_ERROR_INJECTION().
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Right, but inject.py is based on the old/deprecated Python eBPF/BCC
+infrastructure (although I think it's still a working and maintained tool based
+on commit history). However, as I noted in the cover letter, I think it would be
+useful to port it to use libbpf instead.
 
-[auto build test ERROR on d34e798094ca7be935b629a42f8b237d4d5b7f1d]
+> 
+> As xe driver maintainer, it may be interesting to use such a tool:
+> 
+> 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
 
-url:    https://github.com/intel-lab-lkp/linux/commits/K-Prateek-Nayak/kernel-entry-common-Move-syscall_enter_from_user_mode_work-out-of-header/20250220-174233
-base:   d34e798094ca7be935b629a42f8b237d4d5b7f1d
-patch link:    https://lore.kernel.org/r/20250220093257.9380-23-kprateek.nayak%40amd.com
-patch subject: [RFC PATCH 22/22] [DEBUG] sched/fair: Debug pick_eevdf() returning NULL!
-config: arm-randconfig-002-20250221 (https://download.01.org/0day-ci/archive/20250223/202502230452.TjpiO8JM-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502230452.TjpiO8JM-lkp@intel.com/reproduce)
+I was wondering if users of ALLOW_ERROR_INJECTION() still depend on inject.py
+tool, or other tools were used. Or perhaps all are using debugfs?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502230452.TjpiO8JM-lkp@intel.com/
+> 
+> How does this approach compare to writing the function name on debugfs
+> (the current approach in xe's testsuite)?
+> 
+> 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
+> 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
 
-All errors (new ones prefixed by >>):
+IMHO and looking at the references above, looks "simpler" to handle these cases
+in eBPF. Specially because the error injection logic does not have to live along
+with the code but in a separate tool. Link from Luis [0] (also [1]) is a good
+example of when debugfs may be seen a bit too intrusive and how eBPF may resolve
+the problems maintainers have.
 
->> kernel/sched/fair.c:5618:98: error: no member named 'kernel_cs_count' in 'struct sched_entity'
-    5618 |         pr_warn("CPU%d: se kcs: kernel_cs_count(%d) min_kcs_vruntime(%lld) pick_entity(%d)\n", cpu, se->kernel_cs_count, se->min.kcs_vruntime, pick_entity(cfs_rq, se, h_throttled));
-         |                                                                                                     ~~  ^
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                            ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
->> kernel/sched/fair.c:5624:166: error: no member named 'throttled' in 'struct cfs_rq'
-    5624 |         pr_warn("CPU%d: cfs_rq: throttled?(%d) cfs_rq->throttled(%d) h_nr_queued(%d) h_nr_runnable(%d) nr_queued(%d) gse->kernel_cs_count(%d)\n", cpu, h_throttled, cfs_rq->throttled, cfs_rq->h_nr_queued, cfs_rq->h_nr_runnable, cfs_rq->nr_queued, (se)? se->kernel_cs_count: -1);
-         |                                                                                                                                                                     ~~~~~~  ^
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                            ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   kernel/sched/fair.c:5624:250: error: no member named 'kernel_cs_count' in 'struct sched_entity'
-    5624 |         pr_warn("CPU%d: cfs_rq: throttled?(%d) cfs_rq->throttled(%d) h_nr_queued(%d) h_nr_runnable(%d) nr_queued(%d) gse->kernel_cs_count(%d)\n", cpu, h_throttled, cfs_rq->throttled, cfs_rq->h_nr_queued, cfs_rq->h_nr_runnable, cfs_rq->nr_queued, (se)? se->kernel_cs_count: -1);
-         |                                                                                                                                                                                                                                                             ~~  ^
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                            ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
->> kernel/sched/fair.c:5625:166: error: no member named 'avg_kcs_vruntime' in 'struct cfs_rq'; did you mean 'avg_vruntime'?
-    5625 |         pr_warn("CPU%d: cfs_rq EEVDF: avg_vruntime(%lld) avg_load(%lld) avg_kcs_vruntime(%lld) avg_kcs_load(%lld) \n", cpu, cfs_rq->avg_vruntime, cfs_rq->avg_load, cfs_rq->avg_kcs_vruntime, cfs_rq->avg_kcs_load);
-         |                                                                                                                                                                             ^~~~~~~~~~~~~~~~
-         |                                                                                                                                                                             avg_vruntime
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ^
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                            ^
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^
-   kernel/sched/sched.h:658:8: note: 'avg_vruntime' declared here
-     658 |         s64                     avg_vruntime;
-         |                                 ^
->> kernel/sched/fair.c:5625:192: error: no member named 'avg_kcs_load' in 'struct cfs_rq'; did you mean 'avg_load'?
-    5625 |         pr_warn("CPU%d: cfs_rq EEVDF: avg_vruntime(%lld) avg_load(%lld) avg_kcs_vruntime(%lld) avg_kcs_load(%lld) \n", cpu, cfs_rq->avg_vruntime, cfs_rq->avg_load, cfs_rq->avg_kcs_vruntime, cfs_rq->avg_kcs_load);
-         |                                                                                                                                                                                                       ^~~~~~~~~~~~
-         |                                                                                                                                                                                                       avg_load
-   include/linux/printk.h:554:37: note: expanded from macro 'pr_warn'
-     554 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ^
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                            ^
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^
-   kernel/sched/sched.h:659:8: note: 'avg_load' declared here
-     659 |         u64                     avg_load;
-         |                                 ^
-   5 errors generated.
+[1] https://lore.kernel.org/all/20210512064629.13899-1-mcgrof@kernel.org/
 
+In summary, a function annotated with the error injection tag can modify
+its return value in eBPF code by using the bpf_override_return() helper. The
+logic for deciding when to inject the error is likely similar to the current
+implementation in debugfs. This can be seen in patch 2, file tools/bpf/
+moderr/moderr.bpf.c where error is injected based on module name and target
+function.
 
-vim +5618 kernel/sched/fair.c
+> 
+> If you decide to have the tool to live somewhere else, then kmod repo
+> could be a candidate. Although I think having it in kernel tree is
 
-  5612	
-  5613	static void debug_print_se(int cpu, struct sched_entity *se, bool h_throttled)
-  5614	{
-  5615		struct cfs_rq *cfs_rq = cfs_rq_of(se);
-  5616	
-  5617		pr_warn("CPU%d: se: load(%lu) vruntime(%lld) entity_key(%lld) deadline(%lld) min_vruntime(%lld) on_rq(%d)\n", cpu, scale_load_down(se->load.weight), se->vruntime, entity_key(cfs_rq, se), se->deadline, se->min.vruntime, se->on_rq);
-> 5618		pr_warn("CPU%d: se kcs: kernel_cs_count(%d) min_kcs_vruntime(%lld) pick_entity(%d)\n", cpu, se->kernel_cs_count, se->min.kcs_vruntime, pick_entity(cfs_rq, se, h_throttled));
-  5619	}
-  5620	
-  5621	static void debug_print_cfs_rq(int cpu, struct cfs_rq *cfs_rq, struct sched_entity *se, bool h_throttled)
-  5622	{
-  5623		pr_warn("CPU%d: ----- cfs_rq ----\n", cpu);
-> 5624		pr_warn("CPU%d: cfs_rq: throttled?(%d) cfs_rq->throttled(%d) h_nr_queued(%d) h_nr_runnable(%d) nr_queued(%d) gse->kernel_cs_count(%d)\n", cpu, h_throttled, cfs_rq->throttled, cfs_rq->h_nr_queued, cfs_rq->h_nr_runnable, cfs_rq->nr_queued, (se)? se->kernel_cs_count: -1);
-> 5625		pr_warn("CPU%d: cfs_rq EEVDF: avg_vruntime(%lld) avg_load(%lld) avg_kcs_vruntime(%lld) avg_kcs_load(%lld) \n", cpu, cfs_rq->avg_vruntime, cfs_rq->avg_load, cfs_rq->avg_kcs_vruntime, cfs_rq->avg_kcs_load);
-  5626	
-  5627		if (cfs_rq->curr) {
-  5628			pr_warn("CPU%d: ----- cfs_rq->curr ----\n", cpu);
-  5629			debug_print_se(cpu, cfs_rq->curr, h_throttled);
-  5630		}
-  5631		pr_warn("CPU%d: ----- cfs_rq done ----\n", cpu);
-  5632	}
-  5633	
+Thanks Lucas.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> simpler maintenance-wise.
+
+I agree with you that having the tool (or maybe tools if we decide to split) in
+tree it may be easier and may be a way to showcase its usage more effectively.
+
+> 
+> Lucas De Marchi
+> 
+> > 
+> > [0] https://www.spinics.net/lists/linux-block/msg68159.html
+> > 
+> >  Luis
