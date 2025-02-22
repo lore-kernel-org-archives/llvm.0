@@ -1,74 +1,107 @@
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA144202C3D;
-	Sat, 22 Feb 2025 10:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BDCBA53;
+	Sat, 22 Feb 2025 14:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740220000; cv=none; b=Hvz1pTDs0FtUcTYeGjtDAOmUqfgMmrZDFpfIKKwB9j83oh83SurnXdiMPs1jM4wSX9fSs1R2PlTnOMeM/CqXJbm6TrjQdPnorMqs4aThK11ppwmUQvgtbdhN69IQrUe+Bjsf1hJ1+kerIGVNleWcL4GR/liPR0zB34opcKlxMYY=
+	t=1740232958; cv=none; b=kqgnTL7pQqGab157CM0+3Urc3/2nsJuvqmf+z1AipF+ZqDTc1SyecYbs0G60aMj+y4xxUhXQzWVjgJP6kORDORkdOHWS8FLza8ZsSnaRcy9J8SmLqqpaGpnCtYfLmluWBKVGIg6SWT/vZKDIpq2on2GmZJkdnJVhmd7HoioG59Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740220000; c=relaxed/simple;
-	bh=j5WzgqN4kOuCrsD8hHzHoKIHNrX5mXdR54X+4uHZzHU=;
+	s=arc-20240116; t=1740232958; c=relaxed/simple;
+	bh=cqLdn3pSfdlFMz8BT1qTRt7U9h2eoJo3ZzvxPRvlrbM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X3wBZw20zfPXcsM6l8WleDM8L9V5CcQEsvX063LIEawEa1VZbDCroGGyI1etcdWwS/yV8cWUp5b2MYjj89Dp6xLDNeGYn3TGF9b8aPG2XHmb5J3OlPOPoZdIpXPftddb9mFo8yUXQW2adKTlTsSuyDicMGuNQ4njToLKWjBg7TE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 51MAQQUb014866;
-	Sat, 22 Feb 2025 11:26:26 +0100
-Date: Sat, 22 Feb 2025 11:26:26 +0100
-From: Willy Tarreau <w@1wt.eu>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 00/16] selftests: vDSO: parse_vdso: Make compatible with
- nolibc
-Message-ID: <20250222102626.GB13708@1wt.eu>
-References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
- <cd1147a8-25ba-47d2-a59a-0a686469a808@csgroup.eu>
- <20250203143640-70c59c53-af45-40cb-9a52-6395b3fdd263@linutronix.de>
- <937c99b3-3837-4510-be65-4eca3b280ce2@csgroup.eu>
- <20250203165859-8af1246b-6dd8-468a-8e05-68c7b0cad304@linutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=szhHB71bEZnWqzPtFlxnBG4nP8WqxasGGzkuAAqkSQh1LM1UMRKikMmhIUgqZ28hMMaFmNkr2qcqhtShaq7wBKMdN/xEi2/gyEj42uCoLgig9eE83DIwQn5Eg+Kdo+Kv7VTRUT5WmJ0LmLQnwbVWExSsKjKHEhnqMD2WuTAws2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lDZX9tX5; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lDZX9tX5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740232956; x=1771768956;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cqLdn3pSfdlFMz8BT1qTRt7U9h2eoJo3ZzvxPRvlrbM=;
+  b=lDZX9tX5zfmMqGpj/R7pIsQhJwH4Ip4s8kKPLR2mWHiG1BBHmlCaTQvz
+   +u9fejGnaVlMuQo+R1upRbVyoEffacI+vcPVAa6KfaaGfDrobOkG8wSM/
+   2snjOHDpJGHIax8Kug3ZKGgH4uZ5SjETNUZfmGgONAD5a7GjbBtO5p076
+   VR5KE3mJHwE5pc5xzfn4bBbkh1MOPUhDcjXrQuCjD+frWclbBjBRQURR1
+   UxPkoZfy1zrfBs92syMZVlO2YHHb9L+pIbRnfN0nTbHh4PnEtmmBxu5Mf
+   Y3zZ00LtJgylEFWkEj1lnkPwaBzryIt+1sSURSPW3MiZ4JXDCf2xKUEqa
+   w==;
+X-CSE-ConnectionGUID: ICiGh+eQRva7T+9wq5FEwg==
+X-CSE-MsgGUID: p6o/8Mn7SlGe1+E/7r0ssg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41247811"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41247811"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 06:02:35 -0800
+X-CSE-ConnectionGUID: YpbMq6JwSYqlDX5v5TKBPw==
+X-CSE-MsgGUID: 5foC5zoJSDSp20UImXrUdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
+   d="scan'208";a="120722829"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 22 Feb 2025 06:02:32 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tlq5N-0006d5-2d;
+	Sat, 22 Feb 2025 14:02:29 +0000
+Date: Sat, 22 Feb 2025 22:01:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Eggers <ceggers@arri.de>,
+	Russell King <linux@armlinux.org.uk>,
+	Yuntao Liu <liuyuntao12@huawei.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, ceggers@gmx.de,
+	Christian Eggers <ceggers@arri.de>, stable@vger.kernel.org
+Subject: Re: [PATCH] ARM: add KEEP() keyword to ARM_VECTORS
+Message-ID: <202502222158.UhwuvDZv-lkp@intel.com>
+References: <20250221125520.14035-1-ceggers@arri.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203165859-8af1246b-6dd8-468a-8e05-68c7b0cad304@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20250221125520.14035-1-ceggers@arri.de>
 
-On Mon, Feb 03, 2025 at 05:14:37PM +0100, Thomas Weißschuh wrote:
-> On Mon, Feb 03, 2025 at 04:43:22PM +0100, Christophe Leroy wrote:
-> <snip>
-> 
-> > Do you have any plan to get it work with nolibc for all test programs in
-> > selftests/vDSO, not only the standalone x86 test ?
-> 
-> Not directly as next step. I am focussing on some other work which will
-> integrate (vDSO) selftests with nolibc slightly differently.
-> However if you have interest in converting the tests now, that would be
-> great and will also be useful for my future changes.
-> The current issues I see:
-> * Missing architecture support in nolibc (should be fairly easy to implement)
-> * Missing kselftest_harness.h support in nolibc (I'm working on that)
-> * Maybe some users want to stick with their regular libc
->   (Nothing should prevent that, but the mechanism may need some discussion)
+Hi Christian,
 
-BTW, I wanted to thank you for this work. Originally when I started with
-nolibc, I thought the vdso was out of reach due to the many missing
-definitions. Turns out you were braver than me ;-)
+kernel test robot noticed the following build errors:
 
-Cheers,
-Willy
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v6.14-rc3 next-20250221]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Eggers/ARM-add-KEEP-keyword-to-ARM_VECTORS/20250221-205720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20250221125520.14035-1-ceggers%40arri.de
+patch subject: [PATCH] ARM: add KEEP() keyword to ARM_VECTORS
+config: arm-randconfig-003-20250222 (https://download.01.org/0day-ci/archive/20250222/202502222158.UhwuvDZv-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502222158.UhwuvDZv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502222158.UhwuvDZv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: ./arch/arm/kernel/vmlinux.lds:33: ( expected, but got }
+   >>>  __vectors_lma = .; OVERLAY 0xffff0000 : AT(__vectors_lma) { .vectors { KEEP(*(.vectors)) } .vectors.bhb.loop8 { KEEP(*(.vectors.bhb.loop8)) } .vectors.bhb.bpiall { KEEP(*(.vectors.bhb.bpiall)) } } __vectors_start = LOADADDR(.vectors); __vectors_end = LOADADDR(.vectors) + SIZEOF(.vectors); __vectors_bhb_loop8_start = LOADADDR(.vectors.bhb.loop8); __vectors_bhb_loop8_end = LOADADDR(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.loop8); __vectors_bhb_bpiall_start = LOADADDR(.vectors.bhb.bpiall); __vectors_bhb_bpiall_end = LOADADDR(.vectors.bhb.bpiall) + SIZEOF(.vectors.bhb.bpiall); . = __vectors_lma + SIZEOF(.vectors) + SIZEOF(.vectors.bhb.loop8) + SIZEOF(.vectors.bhb.bpiall); __stubs_lma = .; .stubs ADDR(.vectors) + 0x1000 : AT(__stubs_lma) { *(.stubs) } __stubs_start = LOADADDR(.stubs); __stubs_end = LOADADDR(.stubs) + SIZEOF(.stubs); . = __stubs_lma + SIZEOF(.stubs); PROVIDE(vector_fiq_offset = vector_fiq - ADDR(.vectors));
+   >>>                                                                                           ^
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
