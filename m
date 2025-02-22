@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3DA433A8;
-	Sat, 22 Feb 2025 18:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9501FF5F7;
+	Sat, 22 Feb 2025 20:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740248575; cv=none; b=ctX7KqDEwkWmpZwJxtpZtuCCUVeCyItmOyLkHlL4KInmYtqnoK8iuYpFgF7TtPgAJLVMkk9BlF1SjgJdNeL0TxvI6GBSSiHzXVZpjZozH5KdA3hTvbMhDXSqEsXBpnA03P+6bazYS4PP9vKjkLGxPxbkRCrpbvHO8AtSch8A0uI=
+	t=1740256686; cv=none; b=Dc5pXg7VAKNIV79eR7gF4+oYD+R0mY4//2FcEQj+n/23Pn+IsV10rmN5fEPFK5+0aBr8F+MWpWBfo0b8iWwp7A3tYLRs6bi9MSnWdLGTPVPy04kK/gRR2vJU2ZRsUIhVs4a8GTw1lJojxl3YDLKQ3DigogizC89RyMIbSJ+Lz5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740248575; c=relaxed/simple;
-	bh=YL7qmVDc8oOw9cMkrUiIEd1Shy3LpdM6/qMB5kfEIbY=;
+	s=arc-20240116; t=1740256686; c=relaxed/simple;
+	bh=i85/8McLD0RJCzZEMxPrHkTP6cvHCCCkAYpEgk8lX/s=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qM1fh8vWu9BI+7S0XatywM9WB/NCQBsCXKWPVjkLf4wSPKDSk3MEa4q9YsXObZuungUHV6Zy19D3vhUFAKdaBFKybCkcjxEbUeoAfhBRSbeJCjbMhPCRAkAQihrXKqqxwcRmA2UIHCO+HIb5vx1MtsmbQKHFI4jAwdInQngHYeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IgD1POJC; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=RGUUblQ6BEqw7XeLFHaxCZQCGwrxUKgBMjX4fcQcaQJRIr6SLJ8jWNEwsWyaUQE7yxuxEnRFLLRy8i+BTw4MeGJgUvz1rTjxUyTcpViPyl0x3c24ooEvWf7BRHFPoWOIkmwOXqkVQC0pT6vW8W2PTJ7DZnxu1rqfUE38YeCA2uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R++Vtnw2; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IgD1POJC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R++Vtnw2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740248573; x=1771784573;
+  t=1740256683; x=1771792683;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YL7qmVDc8oOw9cMkrUiIEd1Shy3LpdM6/qMB5kfEIbY=;
-  b=IgD1POJCs7EdeXXn/tZgQmvr0pnHltTSJ5krI/r5aUE4Evad8nqK6bEZ
-   TfSFWKaw6NkwZaD2qbgibdpUSGBfbk3bv2C8URoiFHhey10qrAUcJkSaq
-   hgeheUvLu0p3XGaSBE7myeevie4bzPpkq0GDOvRz2fJ0L8vkDB7mT5xuH
-   WFFnYO+fU44gkx27yA+8+oVOgD5rUEFWBISE9ZNoAXU3zHfODQAbTGHfi
-   QLL/m9EjQAhEtcvT9Gc9YgjWzAn3/DavSooDNmC92/Ng5hbogngINReM3
-   ZqUgsYX7jp4Tn2yoEiAo+oaS99Oy3WNN0GllNLUsbL+o8afJ6do//mH6t
+  bh=i85/8McLD0RJCzZEMxPrHkTP6cvHCCCkAYpEgk8lX/s=;
+  b=R++Vtnw2sLKhbTNBE+YCC0IbSgLeXYvcqCvi3U2NXXzjb1A7DxM5ff4K
+   5NuSVXKi6zcy4+R+nEK+bVQf6Yims6FM4jtyy0fe2i8miKzw0wg0umOn8
+   w5Mvycfq+GV2ZcYRqOd3MVR65Jp4R2KLaJdiQM3TNT6bg+TQjOhBlELfw
+   fIPcXnct5E1HjNStUGrNpU3s/AjvmrVSQIvZcoT82bC0DFHLgrNMkWmtW
+   LVsM+UKTO4vEeZvQoCuhkzRNCy3OpfvF/UnvC0PYY1XX+PlZaN0KE2S0d
+   lyimJFuo3BxuWuqSEbdAsIlcWiNTMF7BUWAAAg79XooJD5BVNg73L7rx0
    Q==;
-X-CSE-ConnectionGUID: HlDCi8dBRqmMEHGi+TAXaA==
-X-CSE-MsgGUID: wSfMFX1bQ4ySng1VWsX25g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11353"; a="63521068"
+X-CSE-ConnectionGUID: 8P0/S7kPQpK0Kp7J3gHIiQ==
+X-CSE-MsgGUID: eDFaWJdpRciGswHaCj+d8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11353"; a="40969938"
 X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="63521068"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 10:22:53 -0800
-X-CSE-ConnectionGUID: uNENAsG1T1qXaZ6/Ae2ssA==
-X-CSE-MsgGUID: 6S5PpyFjTCi+Crep5V9o6w==
+   d="scan'208";a="40969938"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 12:38:02 -0800
+X-CSE-ConnectionGUID: 1oekai+8TeqFEAv8PwZUYQ==
+X-CSE-MsgGUID: ymD4n10OQ3+B9KmT1VgBGw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="116177417"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116169240"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 22 Feb 2025 10:22:50 -0800
+  by orviesa007.jf.intel.com with ESMTP; 22 Feb 2025 12:38:02 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tlu9I-0006nt-1T;
-	Sat, 22 Feb 2025 18:22:48 +0000
-Date: Sun, 23 Feb 2025 02:22:13 +0800
+	id 1tlwG6-0006tX-2q;
+	Sat, 22 Feb 2025 20:37:58 +0000
+Date: Sun, 23 Feb 2025 04:37:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 111/118] fs/bcachefs/super-io.c:387:13:
- error: non-object type 'unsigned int (struct block_device *)' is not
- assignable
-Message-ID: <202502230249.UT2nbUp0-lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:timers/posix 10/19] kernel/time/posix-timers.c:423:2:
+ error: use of undeclared identifier 'new_timer_id'; did you mean
+ 'new_timer'?
+Message-ID: <202502230451.My1HuTvU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,128 +63,184 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   770fdbafa7d34c4232ef6ca0f27dd3433aadcb87
-commit: 8b55cc03f1048217138fa910d53a4e1439c0351b [111/118] bcachefs: bs > ps support
-config: hexagon-randconfig-001-20250222 (https://download.01.org/0day-ci/archive/20250223/202502230249.UT2nbUp0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502230249.UT2nbUp0-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers/posix
+head:   9d4caab4067bd0c9023b7e98205b0747dece9f66
+commit: ee35cb454088487035734ec7320ec5974a69651e [10/19] posix-timers: Rework the timer valid mechanism
+config: s390-randconfig-002-20250223 (https://download.01.org/0day-ci/archive/20250223/202502230451.My1HuTvU-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502230451.My1HuTvU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502230249.UT2nbUp0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502230451.My1HuTvU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/bcachefs/super-io.c:387:13: error: non-object type 'unsigned int (struct block_device *)' is not assignable
-     387 |         block_size = le16_to_cpu(sb->block_size);
-         |         ~~~~~~~~~~ ^
-   1 error generated.
+   kernel/time/posix-timers.c:105:21: error: incompatible pointer types initializing 'struct list_head *' with an expression of type 'struct hlist_head *' [-Werror,-Wincompatible-pointer-types]
+                   struct list_head *head = &posix_timers_hashtable[hash(sig, id)];
+                                     ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/posix-timers.c:110:32: error: incompatible pointer types passing 'struct list_head *' to parameter of type 'struct hlist_head *' [-Werror,-Wincompatible-pointer-types]
+                           hashed = posix_timer_hashed(head, sig, id);
+                                                       ^~~~
+   kernel/time/posix-timers.c:69:51: note: passing argument to parameter 'head' here
+   static bool posix_timer_hashed(struct hlist_head *head, struct signal_struct *sig, timer_t id)
+                                                     ^
+   kernel/time/posix-timers.c:123:27: error: incompatible pointer types passing 'struct list_head *' to parameter of type 'struct hlist_head *' [-Werror,-Wincompatible-pointer-types]
+                   if (!posix_timer_hashed(head, sig, id)) {
+                                           ^~~~
+   kernel/time/posix-timers.c:69:51: note: passing argument to parameter 'head' here
+   static bool posix_timer_hashed(struct hlist_head *head, struct signal_struct *sig, timer_t id)
+                                                     ^
+   kernel/time/posix-timers.c:132:39: error: incompatible pointer types passing 'struct list_head *' to parameter of type 'struct hlist_head *' [-Werror,-Wincompatible-pointer-types]
+                           hlist_add_head_rcu(&timer->t_hash, head);
+                                                              ^~~~
+   include/linux/rculist.h:634:25: note: passing argument to parameter 'h' here
+                                           struct hlist_head *h)
+                                                              ^
+>> kernel/time/posix-timers.c:423:2: error: use of undeclared identifier 'new_timer_id'; did you mean 'new_timer'?
+           new_timer_id = posix_timer_add(new_timer);
+           ^~~~~~~~~~~~
+           new_timer
+   kernel/time/posix-timers.c:405:19: note: 'new_timer' declared here
+           struct k_itimer *new_timer;
+                            ^
+>> kernel/time/posix-timers.c:423:15: error: incompatible integer to pointer conversion assigning to 'struct k_itimer *' from 'int' [-Wint-conversion]
+           new_timer_id = posix_timer_add(new_timer);
+                        ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/posix-timers.c:424:6: error: use of undeclared identifier 'new_timer_id'; did you mean 'new_timer'?
+           if (new_timer_id < 0) {
+               ^~~~~~~~~~~~
+               new_timer
+   kernel/time/posix-timers.c:405:19: note: 'new_timer' declared here
+           struct k_itimer *new_timer;
+                            ^
+   kernel/time/posix-timers.c:426:10: error: use of undeclared identifier 'new_timer_id'; did you mean 'new_timer'?
+                   return new_timer_id;
+                          ^~~~~~~~~~~~
+                          new_timer
+   kernel/time/posix-timers.c:405:19: note: 'new_timer' declared here
+           struct k_itimer *new_timer;
+                            ^
+>> kernel/time/posix-timers.c:426:10: error: incompatible pointer to integer conversion returning 'struct k_itimer *' from a function with result type 'int' [-Wint-conversion]
+                   return new_timer_id;
+                          ^~~~~~~~~~~~
+   kernel/time/posix-timers.c:460:60: error: use of undeclared identifier 'new_timer_id'; did you mean 'new_timer'?
+           if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
+                                                                     ^~~~~~~~~~~~
+                                                                     new_timer
+   kernel/time/posix-timers.c:405:19: note: 'new_timer' declared here
+           struct k_itimer *new_timer;
+                            ^
+   kernel/time/posix-timers.c:460:38: error: use of undeclared identifier 'new_timer_id'; did you mean 'new_timer'?
+           if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
+                                               ^~~~~~~~~~~~
+                                               new_timer
+   kernel/time/posix-timers.c:405:19: note: 'new_timer' declared here
+           struct k_itimer *new_timer;
+                            ^
+   11 errors generated.
 
 
-vim +387 fs/bcachefs/super-io.c
+vim +423 kernel/time/posix-timers.c
 
-a02a0121b3de81 Kent Overstreet 2023-06-28  362  
-a5c3e265d3b61a Kent Overstreet 2024-05-08  363  static int bch2_sb_validate(struct bch_sb_handle *disk_sb,
-a5c3e265d3b61a Kent Overstreet 2024-05-08  364  			    enum bch_validate_flags flags, struct printbuf *out)
-a02a0121b3de81 Kent Overstreet 2023-06-28  365  {
-a02a0121b3de81 Kent Overstreet 2023-06-28  366  	struct bch_sb *sb = disk_sb->sb;
-9af26120f06e03 Hunter Shaffer  2023-09-25  367  	struct bch_sb_field_members_v1 *mi;
-a02a0121b3de81 Kent Overstreet 2023-06-28  368  	enum bch_opt_id opt_id;
-a02a0121b3de81 Kent Overstreet 2023-06-28  369  	int ret;
-a02a0121b3de81 Kent Overstreet 2023-06-28  370  
-a02a0121b3de81 Kent Overstreet 2023-06-28  371  	ret = bch2_sb_compatible(sb, out);
-a02a0121b3de81 Kent Overstreet 2023-06-28  372  	if (ret)
-a02a0121b3de81 Kent Overstreet 2023-06-28  373  		return ret;
-a02a0121b3de81 Kent Overstreet 2023-06-28  374  
-c258f28ebab6be Kent Overstreet 2018-11-12  375  	if (sb->features[1] ||
-efe68e1d65c008 Kent Overstreet 2022-01-03  376  	    (le64_to_cpu(sb->features[0]) & (~0ULL << BCH_FEATURE_NR))) {
-401ec4db630802 Kent Overstreet 2023-02-03  377  		prt_printf(out, "Filesystem has incompatible features");
-78c0b75c34209c Kent Overstreet 2022-11-19  378  		return -BCH_ERR_invalid_sb_features;
-efe68e1d65c008 Kent Overstreet 2022-01-03  379  	}
-c258f28ebab6be Kent Overstreet 2018-11-12  380  
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  381  	if (BCH_VERSION_MAJOR(le16_to_cpu(sb->version)) > BCH_VERSION_MAJOR(bcachefs_metadata_version_current) ||
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  382  	    BCH_SB_VERSION_INCOMPAT(sb) > bcachefs_metadata_version_current) {
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  383  		prt_printf(out, "Filesystem has incompatible version");
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  384  		return -BCH_ERR_invalid_sb_features;
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  385  	}
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  386  
-1c6fdbd8f2465d Kent Overstreet 2017-03-16 @387  	block_size = le16_to_cpu(sb->block_size);
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  388  
-efe68e1d65c008 Kent Overstreet 2022-01-03  389  	if (bch2_is_zero(sb->user_uuid.b, sizeof(sb->user_uuid))) {
-401ec4db630802 Kent Overstreet 2023-02-03  390  		prt_printf(out, "Bad user UUID (got zeroes)");
-78c0b75c34209c Kent Overstreet 2022-11-19  391  		return -BCH_ERR_invalid_sb_uuid;
-efe68e1d65c008 Kent Overstreet 2022-01-03  392  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  393  
-efe68e1d65c008 Kent Overstreet 2022-01-03  394  	if (bch2_is_zero(sb->uuid.b, sizeof(sb->uuid))) {
-6bf3766b5211dd Colin Ian King  2023-09-12  395  		prt_printf(out, "Bad internal UUID (got zeroes)");
-78c0b75c34209c Kent Overstreet 2022-11-19  396  		return -BCH_ERR_invalid_sb_uuid;
-efe68e1d65c008 Kent Overstreet 2022-01-03  397  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  398  
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  399  	if (!sb->nr_devices ||
-efe68e1d65c008 Kent Overstreet 2022-01-03  400  	    sb->nr_devices > BCH_SB_MEMBERS_MAX) {
-401ec4db630802 Kent Overstreet 2023-02-03  401  		prt_printf(out, "Bad number of member devices %u (max %u)",
-efe68e1d65c008 Kent Overstreet 2022-01-03  402  		       sb->nr_devices, BCH_SB_MEMBERS_MAX);
-78c0b75c34209c Kent Overstreet 2022-11-19  403  		return -BCH_ERR_invalid_sb_too_many_members;
-efe68e1d65c008 Kent Overstreet 2022-01-03  404  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  405  
-efe68e1d65c008 Kent Overstreet 2022-01-03  406  	if (sb->dev_idx >= sb->nr_devices) {
-401ec4db630802 Kent Overstreet 2023-02-03  407  		prt_printf(out, "Bad dev_idx (got %u, nr_devices %u)",
-efe68e1d65c008 Kent Overstreet 2022-01-03  408  		       sb->dev_idx, sb->nr_devices);
-78c0b75c34209c Kent Overstreet 2022-11-19  409  		return -BCH_ERR_invalid_sb_dev_idx;
-efe68e1d65c008 Kent Overstreet 2022-01-03  410  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  411  
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  412  	if (!sb->time_precision ||
-efe68e1d65c008 Kent Overstreet 2022-01-03  413  	    le32_to_cpu(sb->time_precision) > NSEC_PER_SEC) {
-401ec4db630802 Kent Overstreet 2023-02-03  414  		prt_printf(out, "Invalid time precision: %u (min 1, max %lu)",
-efe68e1d65c008 Kent Overstreet 2022-01-03  415  		       le32_to_cpu(sb->time_precision), NSEC_PER_SEC);
-78c0b75c34209c Kent Overstreet 2022-11-19  416  		return -BCH_ERR_invalid_sb_time_precision;
-efe68e1d65c008 Kent Overstreet 2022-01-03  417  	}
-1c6fdbd8f2465d Kent Overstreet 2017-03-16  418  
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  419  	/* old versions didn't know to downgrade this field */
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  420  	if (BCH_SB_VERSION_INCOMPAT_ALLOWED(sb) > le16_to_cpu(sb->version))
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  421  		SET_BCH_SB_VERSION_INCOMPAT_ALLOWED(sb, le16_to_cpu(sb->version));
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  422  
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  423  	if (BCH_SB_VERSION_INCOMPAT(sb) > BCH_SB_VERSION_INCOMPAT_ALLOWED(sb)) {
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  424  		prt_printf(out, "Invalid version_incompat ");
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  425  		bch2_version_to_text(out, BCH_SB_VERSION_INCOMPAT(sb));
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  426  		prt_str(out, " > incompat_allowed ");
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  427  		bch2_version_to_text(out, BCH_SB_VERSION_INCOMPAT_ALLOWED(sb));
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  428  		if (flags & BCH_VALIDATE_write)
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  429  			return -BCH_ERR_invalid_sb_version;
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  430  		else
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  431  			SET_BCH_SB_VERSION_INCOMPAT_ALLOWED(sb, BCH_SB_VERSION_INCOMPAT(sb));
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  432  	}
-a36d8f0e0e3d42 Kent Overstreet 2024-11-11  433  
-a5c3e265d3b61a Kent Overstreet 2024-05-08  434  	if (!flags) {
-b8559f1a212a70 Kent Overstreet 2022-03-21  435  		/*
-b8559f1a212a70 Kent Overstreet 2022-03-21  436  		 * Been seeing a bug where these are getting inexplicably
-a02a0121b3de81 Kent Overstreet 2023-06-28  437  		 * zeroed, so we're now validating them, but we have to be
-b8559f1a212a70 Kent Overstreet 2022-03-21  438  		 * careful not to preven people's filesystems from mounting:
-b8559f1a212a70 Kent Overstreet 2022-03-21  439  		 */
-b8559f1a212a70 Kent Overstreet 2022-03-21  440  		if (!BCH_SB_JOURNAL_FLUSH_DELAY(sb))
-b8559f1a212a70 Kent Overstreet 2022-03-21  441  			SET_BCH_SB_JOURNAL_FLUSH_DELAY(sb, 1000);
-b8559f1a212a70 Kent Overstreet 2022-03-21  442  		if (!BCH_SB_JOURNAL_RECLAIM_DELAY(sb))
-b8559f1a212a70 Kent Overstreet 2022-03-21  443  			SET_BCH_SB_JOURNAL_RECLAIM_DELAY(sb, 1000);
-813e0cecd1473d Kent Overstreet 2023-07-15  444  
-813e0cecd1473d Kent Overstreet 2023-07-15  445  		if (!BCH_SB_VERSION_UPGRADE_COMPLETE(sb))
-813e0cecd1473d Kent Overstreet 2023-07-15  446  			SET_BCH_SB_VERSION_UPGRADE_COMPLETE(sb, le16_to_cpu(sb->version));
-cecf72798b25fc Kent Overstreet 2024-08-07  447  
-cecf72798b25fc Kent Overstreet 2024-08-07  448  		if (le16_to_cpu(sb->version) <= bcachefs_metadata_version_disk_accounting_v2 &&
-cecf72798b25fc Kent Overstreet 2024-08-07  449  		    !BCH_SB_ALLOCATOR_STUCK_TIMEOUT(sb))
-cecf72798b25fc Kent Overstreet 2024-08-07  450  			SET_BCH_SB_ALLOCATOR_STUCK_TIMEOUT(sb, 30);
-c7652f253a6d59 Kent Overstreet 2024-07-31  451  
-c7652f253a6d59 Kent Overstreet 2024-07-31  452  		if (le16_to_cpu(sb->version) <= bcachefs_metadata_version_disk_accounting_v2)
-c7652f253a6d59 Kent Overstreet 2024-07-31  453  			SET_BCH_SB_PROMOTE_WHOLE_EXTENTS(sb, true);
-b8559f1a212a70 Kent Overstreet 2022-03-21  454  	}
-b8559f1a212a70 Kent Overstreet 2022-03-21  455  
+838394fbf98997 kernel/posix-timers.c      Thomas Gleixner   2011-02-01  399  
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  400  /* Create a POSIX.1b interval timer. */
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  401  static int do_timer_create(clockid_t which_clock, struct sigevent *event,
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  402  			   timer_t __user *created_timer_id)
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  403  {
+d3ba5a9a345b12 kernel/time/posix-timers.c Christoph Hellwig 2017-05-26  404  	const struct k_clock *kc = clockid_to_kclock(which_clock);
+2cd499e38ec241 kernel/posix-timers.c      Oleg Nesterov     2008-09-22  405  	struct k_itimer *new_timer;
+ee35cb45408848 kernel/time/posix-timers.c Thomas Gleixner   2025-02-18  406  	int error;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  407  
+838394fbf98997 kernel/posix-timers.c      Thomas Gleixner   2011-02-01  408  	if (!kc)
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  409  		return -EINVAL;
+838394fbf98997 kernel/posix-timers.c      Thomas Gleixner   2011-02-01  410  	if (!kc->timer_create)
+838394fbf98997 kernel/posix-timers.c      Thomas Gleixner   2011-02-01  411  		return -EOPNOTSUPP;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  412  
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  413  	new_timer = alloc_posix_timer();
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  414  	if (unlikely(!new_timer))
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  415  		return -EAGAIN;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  416  
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  417  	spin_lock_init(&new_timer->it_lock);
+ae88967d71f1b4 kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  418  
+ae88967d71f1b4 kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  419  	/*
+ae88967d71f1b4 kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  420  	 * Add the timer to the hash table. The timer is not yet valid
+e577c6d8698192 kernel/time/posix-timers.c Eric Dumazet      2025-02-19  421  	 * after insertion, but has a unique ID allocated.
+ae88967d71f1b4 kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  422  	 */
+5ed67f05f66c41 kernel/posix-timers.c      Pavel Emelyanov   2013-03-11 @423  	new_timer_id = posix_timer_add(new_timer);
+5ed67f05f66c41 kernel/posix-timers.c      Pavel Emelyanov   2013-03-11  424  	if (new_timer_id < 0) {
+5d916a0988eed5 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  425  		posixtimer_free_timer(new_timer);
+8cc96ca2c75f6d kernel/time/posix-timers.c Thomas Gleixner   2023-04-25 @426  		return new_timer_id;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  427  	}
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  428  
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  429  	new_timer->it_clock = which_clock;
+d97bb75ddd2f38 kernel/time/posix-timers.c Thomas Gleixner   2017-05-30  430  	new_timer->kclock = kc;
+78c9c4dfbf8c04 kernel/time/posix-timers.c Thomas Gleixner   2018-06-26  431  	new_timer->it_overrun = -1LL;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  432  
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  433  	if (event) {
+36b2f046000b35 kernel/posix-timers.c      Oleg Nesterov     2008-09-22  434  		rcu_read_lock();
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  435  		new_timer->it_pid = get_pid(good_sigevent(event));
+36b2f046000b35 kernel/posix-timers.c      Oleg Nesterov     2008-09-22  436  		rcu_read_unlock();
+899921025b406a kernel/posix-timers.c      Oleg Nesterov     2008-12-01  437  		if (!new_timer->it_pid) {
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  438  			error = -EINVAL;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  439  			goto out;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  440  		}
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  441  		new_timer->it_sigev_notify     = event->sigev_notify;
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  442  		new_timer->sigq.info.si_signo = event->sigev_signo;
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  443  		new_timer->sigq.info.si_value = event->sigev_value;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  444  	} else {
+2482097c6c0f01 kernel/time/posix-timers.c Al Viro           2017-06-07  445  		new_timer->it_sigev_notify     = SIGEV_SIGNAL;
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  446  		new_timer->sigq.info.si_signo = SIGALRM;
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  447  		memset(&new_timer->sigq.info.si_value, 0, sizeof(sigval_t));
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  448  		new_timer->sigq.info.si_value.sival_int = new_timer->it_id;
+899921025b406a kernel/posix-timers.c      Oleg Nesterov     2008-12-01  449  		new_timer->it_pid = get_pid(task_tgid(current));
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  450  	}
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  451  
+ef1c5bcd6daa67 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  452  	if (new_timer->it_sigev_notify & SIGEV_THREAD_ID)
+ef1c5bcd6daa67 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  453  		new_timer->it_pid_type = PIDTYPE_PID;
+ef1c5bcd6daa67 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  454  	else
+ef1c5bcd6daa67 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  455  		new_timer->it_pid_type = PIDTYPE_TGID;
+ef1c5bcd6daa67 kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  456  
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  457  	new_timer->sigq.info.si_tid = new_timer->it_id;
+6017a158beb13b kernel/time/posix-timers.c Thomas Gleixner   2024-11-05  458  	new_timer->sigq.info.si_code = SI_TIMER;
+717835d94d3e3d kernel/posix-timers.c      Oleg Nesterov     2008-09-22  459  
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  460  	if (copy_to_user(created_timer_id, &new_timer_id, sizeof (new_timer_id))) {
+2b08de0073a569 kernel/posix-timers.c      Andrey Vagin      2010-07-20  461  		error = -EFAULT;
+2b08de0073a569 kernel/posix-timers.c      Andrey Vagin      2010-07-20  462  		goto out;
+2b08de0073a569 kernel/posix-timers.c      Andrey Vagin      2010-07-20  463  	}
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  464  	/*
+ee35cb45408848 kernel/time/posix-timers.c Thomas Gleixner   2025-02-18  465  	 * After successful copy out, the timer ID is visible to user space
+ee35cb45408848 kernel/time/posix-timers.c Thomas Gleixner   2025-02-18  466  	 * now but not yet valid because new_timer::it_valid is still false.
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  467  	 *
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  468  	 * Complete the initialization with the clock specific create
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  469  	 * callback.
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  470  	 */
+838394fbf98997 kernel/posix-timers.c      Thomas Gleixner   2011-02-01  471  	error = kc->timer_create(new_timer);
+45e0fffc8a7778 kernel/posix-timers.c      Andrey Vagin      2010-05-24  472  	if (error)
+45e0fffc8a7778 kernel/posix-timers.c      Andrey Vagin      2010-05-24  473  		goto out;
+45e0fffc8a7778 kernel/posix-timers.c      Andrey Vagin      2010-05-24  474  
+36b2f046000b35 kernel/posix-timers.c      Oleg Nesterov     2008-09-22  475  	spin_lock_irq(&current->sighand->siglock);
+ee35cb45408848 kernel/time/posix-timers.c Thomas Gleixner   2025-02-18  476  	/* Set the valid marker so it's visible for syscall operations. */
+ee35cb45408848 kernel/time/posix-timers.c Thomas Gleixner   2025-02-18  477  	WRITE_ONCE(new_timer->it_valid, true);
+52dea0a15cc888 kernel/time/posix-timers.c Thomas Gleixner   2024-06-10  478  	hlist_add_head(&new_timer->list, &current->signal->posix_timers);
+36b2f046000b35 kernel/posix-timers.c      Oleg Nesterov     2008-09-22  479  	spin_unlock_irq(&current->sighand->siglock);
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  480  	/*
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  481  	 * After unlocking sighand::siglock @new_timer is subject to
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  482  	 * concurrent removal and cannot be touched anymore
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  483  	 */
+52f090b164b59c kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  484  	return 0;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  485  out:
+8cc96ca2c75f6d kernel/time/posix-timers.c Thomas Gleixner   2023-04-25  486  	posix_timer_unhash_and_free(new_timer);
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  487  	return error;
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  488  }
+^1da177e4c3f41 kernel/posix-timers.c      Linus Torvalds    2005-04-16  489  
 
-:::::: The code at line 387 was first introduced by commit
-:::::: 1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a bcachefs: Initial commit
+:::::: The code at line 423 was first introduced by commit
+:::::: 5ed67f05f66c41e39880a6d61358438a25f9fee5 posix timers: Allocate timer id per process (v2)
 
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+:::::: TO: Pavel Emelyanov <xemul@parallels.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
