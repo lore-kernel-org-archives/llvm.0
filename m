@@ -1,168 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239C67494;
-	Sat, 22 Feb 2025 08:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AD4205E2F;
+	Sat, 22 Feb 2025 10:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740211239; cv=none; b=olcJJSpasTU7i/gRQt0OQq9v/o8qss34iQnNTn+wPAeYkTl6qKnDtQmaQ0qSrg04CFKJ9OTMUJ634QpO9d660co+4JhFZ6zxOZtkiLBAyvGH8P/hBR3379xH5Jke6VDUDdxFaonca8d/Z2peB/f7YRQrm0P/mzqJTxsH38cox/k=
+	t=1740219885; cv=none; b=GTDTbL9aDbQn7mH12V07XOcC9hV/g1evVeGmRCdS6MX0mepOOpixcjD0SoQPYB2mlKddfKLkHcNZMZ1EDPPIUwiejndV4eHE/N7UJ5IbXLaICS7v+bpBlWWsiRyv/S7XwoeOGYC9GjLQfy2iZf6oX4bwtMZ227VjHI0ninLT1fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740211239; c=relaxed/simple;
-	bh=VDIgSMNF/GuTbpRvpV0HFWzpA8QC7+IdUuqcvSlzDGU=;
+	s=arc-20240116; t=1740219885; c=relaxed/simple;
+	bh=q002xTAonhKK9lzADPJJAP3eRqDllXsdNS3CGjJMB8w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ftzY3BUeMdzNe9zgFreJrz9YHIHl7mQlp9/h5JX0hO+imYCyI/QumIYXqhHdndoMqfZ4HTTukh2xh3TBGJOMr+ncQvflG87gQOELJu38GcdeJApxmSjq6qOvwNJax9pPl2cC9b5ET6SBQiRp9BWLR102I3FdGk/7B2pqPFH6H0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hpNb06f4; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hpNb06f4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740211236; x=1771747236;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VDIgSMNF/GuTbpRvpV0HFWzpA8QC7+IdUuqcvSlzDGU=;
-  b=hpNb06f4ljCti5fEsyr+05CiKziAwEgphigh/JjhXRvv9NQpOA0iEvHW
-   KKUyXa1d8fpo/pMPIL5dMFCSThKbAF43GnykGa6L5vOV0Qjp38a/sGYBW
-   EIRU5Bi/ziR4was2ty3SAAWwBzDgKPIxcX73DzA41GxOBpFGAQ6NDMt+8
-   SwNxL4Qqm5Z2fEn+LvxRFKQV4hAdKkcjw8Np8c9ADFixf1TxxNSNJ2RpD
-   s25qzjGripo8f3QNmcNHsZDAir/SOK0vYX+7Djh1ASO5VcQj6EQwKevs9
-   9NOe65Ddm2n5CbBdBj0m9RegUj2vf48rsYIYVvsT6/ictLxzLebdjCIeX
-   w==;
-X-CSE-ConnectionGUID: saEjwC29RE6RkQAbSQ8d9w==
-X-CSE-MsgGUID: TKOOzGHPRRe+H5m20pno5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41234928"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41234928"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 00:00:35 -0800
-X-CSE-ConnectionGUID: lwzyr+XTQNukRQe8y9bwMQ==
-X-CSE-MsgGUID: l38OadvYQ0G0LES2hVGxTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,307,1732608000"; 
-   d="scan'208";a="138803309"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 22 Feb 2025 00:00:32 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tlkR3-0006ON-31;
-	Sat, 22 Feb 2025 08:00:29 +0000
-Date: Sat, 22 Feb 2025 15:59:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanley Chu <stanley.chuys@gmail.com>, frank.li@nxp.com,
-	miquel.raynal@bootlin.com, alexandre.belloni@bootlin.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-i3c@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	tomer.maimon@nuvoton.com, kwliu@nuvoton.com, yschu@nuvoton.com
-Subject: Re: [PATCH v3 2/4] i3c: master: svc: Add support for Nuvoton npcm845
- i3c
-Message-ID: <202502221511.0BCyUyEU-lkp@intel.com>
-References: <20250221063528.1810007-3-yschu@nuvoton.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dPcW0C5RfLQ5dolDx3Zl5fBUfIlJoRzV56X6GI5azQMyN+wWRZpGc1qM6R/7XNLa0TVh9EfqddmWPyk4/P6hb2fadOVTGU3uSyv5IK/Z5kMgYeeQ1BQQS1Qq39L4EMqZ276g9eQTSScbwg6iPbRTqzX5kNUg8r43UZNfQ4o/hBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 51MAOQHv014812;
+	Sat, 22 Feb 2025 11:24:26 +0100
+Date: Sat, 22 Feb 2025 11:24:26 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 13/16] selftests: vDSO: parse_vdso: Make compatible with
+ nolibc
+Message-ID: <20250222102426.GA13708@1wt.eu>
+References: <20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de>
+ <20250203-parse_vdso-nolibc-v1-13-9cb6268d77be@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250221063528.1810007-3-yschu@nuvoton.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250203-parse_vdso-nolibc-v1-13-9cb6268d77be@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Stanley,
+On Mon, Feb 03, 2025 at 10:05:14AM +0100, Thomas Weißschuh wrote:
+> nolibc does not provide this header, instead its definitions are
+> available unconditionally.
 
-kernel test robot noticed the following build warnings:
+Please think about reminding which one you're talking about so that a
+simple "git log" shows what header you're talking about (limits.h)
+without requiring to also see the patch itself.
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.14-rc3 next-20250221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BTW, I think that limits.h is common enough that we could probably
+provide it as well with nolibc to ease porting (and the current patch
+is a good example of this). Maybe it could simply start by including
+stdint.h to provide the various limits we rely on. I remember that in
+the early days of nolibc-test we had to exclude it as well for nolibc.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chu/dt-bindings-i3c-silvaco-Add-npcm845-compatible-string/20250221-143909
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250221063528.1810007-3-yschu%40nuvoton.com
-patch subject: [PATCH v3 2/4] i3c: master: svc: Add support for Nuvoton npcm845 i3c
-config: arm-randconfig-003-20250222 (https://download.01.org/0day-ci/archive/20250222/202502221511.0BCyUyEU-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502221511.0BCyUyEU-lkp@intel.com/reproduce)
+What do you think? The less we need to patch programs to insert #ifndef
+NOLIBC, the better.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502221511.0BCyUyEU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i3c/master/svc-i3c-master.c:240: warning: Function parameter or struct member 'drvdata' not described in 'svc_i3c_master'
-
-
-vim +240 drivers/i3c/master/svc-i3c-master.c
-
-28c82e7b13d49b1 Stanley Chu   2025-02-21  180  
-dd3c52846d5954a Miquel Raynal 2021-01-21  181  /**
-dd3c52846d5954a Miquel Raynal 2021-01-21  182   * struct svc_i3c_master - Silvaco I3C Master structure
-dd3c52846d5954a Miquel Raynal 2021-01-21  183   * @base: I3C master controller
-dd3c52846d5954a Miquel Raynal 2021-01-21  184   * @dev: Corresponding device
-dd3c52846d5954a Miquel Raynal 2021-01-21  185   * @regs: Memory mapping
-5496eac6ad7428f Miquel Raynal 2023-08-17  186   * @saved_regs: Volatile values for PM operations
-dd3c52846d5954a Miquel Raynal 2021-01-21  187   * @free_slots: Bit array of available slots
-dd3c52846d5954a Miquel Raynal 2021-01-21  188   * @addrs: Array containing the dynamic addresses of each attached device
-dd3c52846d5954a Miquel Raynal 2021-01-21  189   * @descs: Array of descriptors, one per attached device
-dd3c52846d5954a Miquel Raynal 2021-01-21  190   * @hj_work: Hot-join work
-dd3c52846d5954a Miquel Raynal 2021-01-21  191   * @ibi_work: IBI work
-dd3c52846d5954a Miquel Raynal 2021-01-21  192   * @irq: Main interrupt
-dd3c52846d5954a Miquel Raynal 2021-01-21  193   * @pclk: System clock
-dd3c52846d5954a Miquel Raynal 2021-01-21  194   * @fclk: Fast clock (bus)
-dd3c52846d5954a Miquel Raynal 2021-01-21  195   * @sclk: Slow clock (other events)
-dd3c52846d5954a Miquel Raynal 2021-01-21  196   * @xferqueue: Transfer queue structure
-dd3c52846d5954a Miquel Raynal 2021-01-21  197   * @xferqueue.list: List member
-dd3c52846d5954a Miquel Raynal 2021-01-21  198   * @xferqueue.cur: Current ongoing transfer
-dd3c52846d5954a Miquel Raynal 2021-01-21  199   * @xferqueue.lock: Queue lock
-dd3c52846d5954a Miquel Raynal 2021-01-21  200   * @ibi: IBI structure
-dd3c52846d5954a Miquel Raynal 2021-01-21  201   * @ibi.num_slots: Number of slots available in @ibi.slots
-dd3c52846d5954a Miquel Raynal 2021-01-21  202   * @ibi.slots: Available IBI slots
-dd3c52846d5954a Miquel Raynal 2021-01-21  203   * @ibi.tbq_slot: To be queued IBI slot
-dd3c52846d5954a Miquel Raynal 2021-01-21  204   * @ibi.lock: IBI lock
-6bf3fc268183816 Frank Li      2023-10-23  205   * @lock: Transfer lock, protect between IBI work thread and callbacks from master
-05b26c31a4859af Frank Li      2023-12-01  206   * @enabled_events: Bit masks for enable events (IBI, HotJoin).
-20ade67bb1645f5 Carlos Song   2024-09-10  207   * @mctrl_config: Configuration value in SVC_I3C_MCTRL for setting speed back.
-dd3c52846d5954a Miquel Raynal 2021-01-21  208   */
-dd3c52846d5954a Miquel Raynal 2021-01-21  209  struct svc_i3c_master {
-dd3c52846d5954a Miquel Raynal 2021-01-21  210  	struct i3c_master_controller base;
-dd3c52846d5954a Miquel Raynal 2021-01-21  211  	struct device *dev;
-dd3c52846d5954a Miquel Raynal 2021-01-21  212  	void __iomem *regs;
-1c5ee2a77b1bacd Clark Wang    2023-05-17  213  	struct svc_i3c_regs_save saved_regs;
-dd3c52846d5954a Miquel Raynal 2021-01-21  214  	u32 free_slots;
-dd3c52846d5954a Miquel Raynal 2021-01-21  215  	u8 addrs[SVC_I3C_MAX_DEVS];
-dd3c52846d5954a Miquel Raynal 2021-01-21  216  	struct i3c_dev_desc *descs[SVC_I3C_MAX_DEVS];
-dd3c52846d5954a Miquel Raynal 2021-01-21  217  	struct work_struct hj_work;
-dd3c52846d5954a Miquel Raynal 2021-01-21  218  	struct work_struct ibi_work;
-dd3c52846d5954a Miquel Raynal 2021-01-21  219  	int irq;
-dd3c52846d5954a Miquel Raynal 2021-01-21  220  	struct clk *pclk;
-dd3c52846d5954a Miquel Raynal 2021-01-21  221  	struct clk *fclk;
-dd3c52846d5954a Miquel Raynal 2021-01-21  222  	struct clk *sclk;
-dd3c52846d5954a Miquel Raynal 2021-01-21  223  	struct {
-dd3c52846d5954a Miquel Raynal 2021-01-21  224  		struct list_head list;
-dd3c52846d5954a Miquel Raynal 2021-01-21  225  		struct svc_i3c_xfer *cur;
-dd3c52846d5954a Miquel Raynal 2021-01-21  226  		/* Prevent races between transfers */
-dd3c52846d5954a Miquel Raynal 2021-01-21  227  		spinlock_t lock;
-dd3c52846d5954a Miquel Raynal 2021-01-21  228  	} xferqueue;
-dd3c52846d5954a Miquel Raynal 2021-01-21  229  	struct {
-dd3c52846d5954a Miquel Raynal 2021-01-21  230  		unsigned int num_slots;
-dd3c52846d5954a Miquel Raynal 2021-01-21  231  		struct i3c_dev_desc **slots;
-dd3c52846d5954a Miquel Raynal 2021-01-21  232  		struct i3c_ibi_slot *tbq_slot;
-dd3c52846d5954a Miquel Raynal 2021-01-21  233  		/* Prevent races within IBI handlers */
-dd3c52846d5954a Miquel Raynal 2021-01-21  234  		spinlock_t lock;
-dd3c52846d5954a Miquel Raynal 2021-01-21  235  	} ibi;
-6bf3fc268183816 Frank Li      2023-10-23  236  	struct mutex lock;
-28c82e7b13d49b1 Stanley Chu   2025-02-21  237  	const struct svc_i3c_drvdata *drvdata;
-25bc99be5fe5385 Frank Li      2024-11-01  238  	u32 enabled_events;
-20ade67bb1645f5 Carlos Song   2024-09-10  239  	u32 mctrl_config;
-dd3c52846d5954a Miquel Raynal 2021-01-21 @240  };
-dd3c52846d5954a Miquel Raynal 2021-01-21  241  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Willy
