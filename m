@@ -1,70 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2061F03C1;
-	Sat, 22 Feb 2025 07:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239C67494;
+	Sat, 22 Feb 2025 08:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740208102; cv=none; b=bpztZ/z7pfNa0a82So/0MPjNmxWd+kn6M0SaPc9HgAA/6KYN6PR4L9fDAD/PHGdFoRIPLrRc15IyJpVjEvV7AW7bp/yn1gN81rWjXvJwe0VLo/i4d/uO0RNqsvtXKWdQelzp8XB18Zi+Kudhtu6AEwKz5Smy1wF5ICekvbFnw0o=
+	t=1740211239; cv=none; b=olcJJSpasTU7i/gRQt0OQq9v/o8qss34iQnNTn+wPAeYkTl6qKnDtQmaQ0qSrg04CFKJ9OTMUJ634QpO9d660co+4JhFZ6zxOZtkiLBAyvGH8P/hBR3379xH5Jke6VDUDdxFaonca8d/Z2peB/f7YRQrm0P/mzqJTxsH38cox/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740208102; c=relaxed/simple;
-	bh=fsY5t112Q8WM/mdH96kIkcjOJgGQNS0f/svA6RtETtk=;
+	s=arc-20240116; t=1740211239; c=relaxed/simple;
+	bh=VDIgSMNF/GuTbpRvpV0HFWzpA8QC7+IdUuqcvSlzDGU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FpY39MNVkRaU9lpcWrYC1cvthIJ6TG7vJx2co6aWS27bAAPUGFmqR3+PiEXgg7Z4Xao3hz813qCMyURZla5dMExZgMLJfAr0Z1HoLb7BItxcx0eKjfhj/PpBqVivIHjqDf2msJoTyH5+aDc5Kx4qDgrQfgL5JpPkNZPZdDwHpsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SqwunMRA; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=ftzY3BUeMdzNe9zgFreJrz9YHIHl7mQlp9/h5JX0hO+imYCyI/QumIYXqhHdndoMqfZ4HTTukh2xh3TBGJOMr+ncQvflG87gQOELJu38GcdeJApxmSjq6qOvwNJax9pPl2cC9b5ET6SBQiRp9BWLR102I3FdGk/7B2pqPFH6H0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hpNb06f4; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SqwunMRA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hpNb06f4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740208101; x=1771744101;
+  t=1740211236; x=1771747236;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fsY5t112Q8WM/mdH96kIkcjOJgGQNS0f/svA6RtETtk=;
-  b=SqwunMRAQM6s901/4UrngrC+CIJxFiwUoW8Tx9xLz9DbeKRNNxL4Ejb5
-   GAsvuuuCR4IA2HvS25bhy6YD8W9SOP0vvh0WGt3300rqx2jkPafe4aDrw
-   ifMzOTlXUizxUBi+Zz3HzVIviUFx7iDC91yNE0IAB+IvhfYjdQGE9J6rl
-   /fwj4HPJJQI6RlDDeeW8xFWOT5My+3F24eNhiCJwvmTeSFNO1G+f5uowr
-   LhDxfo+tUCYf7fWMbCZteigrs0BXt+zWTJl32kOqZCEElu0e+PtETz0eE
-   s7w87LCw343jzN6oG10W4TQ3/ecD311Xq83PmzbiZBt8hX+3CMHJxQOai
+  bh=VDIgSMNF/GuTbpRvpV0HFWzpA8QC7+IdUuqcvSlzDGU=;
+  b=hpNb06f4ljCti5fEsyr+05CiKziAwEgphigh/JjhXRvv9NQpOA0iEvHW
+   KKUyXa1d8fpo/pMPIL5dMFCSThKbAF43GnykGa6L5vOV0Qjp38a/sGYBW
+   EIRU5Bi/ziR4was2ty3SAAWwBzDgKPIxcX73DzA41GxOBpFGAQ6NDMt+8
+   SwNxL4Qqm5Z2fEn+LvxRFKQV4hAdKkcjw8Np8c9ADFixf1TxxNSNJ2RpD
+   s25qzjGripo8f3QNmcNHsZDAir/SOK0vYX+7Djh1ASO5VcQj6EQwKevs9
+   9NOe65Ddm2n5CbBdBj0m9RegUj2vf48rsYIYVvsT6/ictLxzLebdjCIeX
    w==;
-X-CSE-ConnectionGUID: fOU41fMGSMKNym0mrFH/4A==
-X-CSE-MsgGUID: QPvc8VZiRNeIQBYnxqfLwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11352"; a="66400785"
-X-IronPort-AV: E=Sophos;i="6.13,307,1732608000"; 
-   d="scan'208";a="66400785"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 23:08:20 -0800
-X-CSE-ConnectionGUID: ac7/Se+NRD+BbfAHzKfzKA==
-X-CSE-MsgGUID: gfp972L3RJKUyasanhGhfw==
+X-CSE-ConnectionGUID: saEjwC29RE6RkQAbSQ8d9w==
+X-CSE-MsgGUID: TKOOzGHPRRe+H5m20pno5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41234928"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41234928"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 00:00:35 -0800
+X-CSE-ConnectionGUID: lwzyr+XTQNukRQe8y9bwMQ==
+X-CSE-MsgGUID: l38OadvYQ0G0LES2hVGxTA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,307,1732608000"; 
-   d="scan'208";a="115763826"
+   d="scan'208";a="138803309"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Feb 2025 23:08:16 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 22 Feb 2025 00:00:32 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tljcR-0006Mh-12;
-	Sat, 22 Feb 2025 07:08:12 +0000
-Date: Sat, 22 Feb 2025 15:08:04 +0800
+	id 1tlkR3-0006ON-31;
+	Sat, 22 Feb 2025 08:00:29 +0000
+Date: Sat, 22 Feb 2025 15:59:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Srirangan Madhavan <smadhavan@nvidia.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>
+To: Stanley Chu <stanley.chuys@gmail.com>, frank.li@nxp.com,
+	miquel.raynal@bootlin.com, alexandre.belloni@bootlin.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	linux-i3c@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Zhi Wang <zhiw@nvidia.com>, Vishal Aslot <vaslot@nvidia.com>,
-	Shanker Donthineni <sdonthineni@nvidia.com>,
-	linux-cxl@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-	linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] cxl: add support for cxl reset
-Message-ID: <202502221438.j0UgOryU-lkp@intel.com>
-References: <20250221043906.1593189-3-smadhavan@nvidia.com>
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	tomer.maimon@nuvoton.com, kwliu@nuvoton.com, yschu@nuvoton.com
+Subject: Re: [PATCH v3 2/4] i3c: master: svc: Add support for Nuvoton npcm845
+ i3c
+Message-ID: <202502221511.0BCyUyEU-lkp@intel.com>
+References: <20250221063528.1810007-3-yschu@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,83 +68,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250221043906.1593189-3-smadhavan@nvidia.com>
+In-Reply-To: <20250221063528.1810007-3-yschu@nuvoton.com>
 
-Hi Srirangan,
+Hi Stanley,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on next-20250220]
-[cannot apply to pci/next pci/for-linus linus/master v6.14-rc3 v6.14-rc2 v6.14-rc1 v6.14-rc3]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.14-rc3 next-20250221]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Srirangan-Madhavan/cxl-de-duplicate-cxl-DVSEC-reg-defines/20250221-124043
-base:   next-20250220
-patch link:    https://lore.kernel.org/r/20250221043906.1593189-3-smadhavan%40nvidia.com
-patch subject: [PATCH v2 2/2] cxl: add support for cxl reset
-config: arm64-randconfig-003-20250222 (https://download.01.org/0day-ci/archive/20250222/202502221438.j0UgOryU-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502221438.j0UgOryU-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chu/dt-bindings-i3c-silvaco-Add-npcm845-compatible-string/20250221-143909
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250221063528.1810007-3-yschu%40nuvoton.com
+patch subject: [PATCH v3 2/4] i3c: master: svc: Add support for Nuvoton npcm845 i3c
+config: arm-randconfig-003-20250222 (https://download.01.org/0day-ci/archive/20250222/202502221511.0BCyUyEU-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502221511.0BCyUyEU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502221438.j0UgOryU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502221511.0BCyUyEU-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pci/pci.c:5258:10: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
-    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci.c:5258:10: note: place parentheses around the '==' expression to silence this warning
-    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
-         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci.c:5258:10: note: place parentheses around the & expression to evaluate it first
-    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
-         |             ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> drivers/i3c/master/svc-i3c-master.c:240: warning: Function parameter or struct member 'drvdata' not described in 'svc_i3c_master'
 
 
-vim +5258 drivers/pci/pci.c
+vim +240 drivers/i3c/master/svc-i3c-master.c
 
-  5235	
-  5236	/**
-  5237	 * cxl_reset - initiate a cxl reset
-  5238	 * @dev: device to reset
-  5239	 * @probe: if true, return 0 if device can be reset this way
-  5240	 *
-  5241	 * Initiate a cxl reset on @dev.
-  5242	 */
-  5243	static int cxl_reset(struct pci_dev *dev, bool probe)
-  5244	{
-  5245		u16 dvsec, reg;
-  5246		int rc;
-  5247	
-  5248		dvsec = pci_find_dvsec_capability(dev, PCI_VENDOR_ID_CXL,
-  5249						  CXL_DVSEC_PCIE_DEVICE);
-  5250		if (!dvsec)
-  5251			return -ENOTTY;
-  5252	
-  5253		/* Check if CXL Reset is supported. */
-  5254		rc = pci_read_config_word(dev, dvsec + CXL_DVSEC_CAP_OFFSET, &reg);
-  5255		if (rc)
-  5256			return -ENOTTY;
-  5257	
-> 5258		if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
-  5259			return -ENOTTY;
-  5260	
-  5261		if (probe)
-  5262			return 0;
-  5263	
-  5264		rc = cxl_reset_prepare(dev, dvsec);
-  5265		if (rc)
-  5266			return rc;
-  5267	
-  5268		return cxl_reset_init(dev, dvsec);
-  5269	}
-  5270	
+28c82e7b13d49b1 Stanley Chu   2025-02-21  180  
+dd3c52846d5954a Miquel Raynal 2021-01-21  181  /**
+dd3c52846d5954a Miquel Raynal 2021-01-21  182   * struct svc_i3c_master - Silvaco I3C Master structure
+dd3c52846d5954a Miquel Raynal 2021-01-21  183   * @base: I3C master controller
+dd3c52846d5954a Miquel Raynal 2021-01-21  184   * @dev: Corresponding device
+dd3c52846d5954a Miquel Raynal 2021-01-21  185   * @regs: Memory mapping
+5496eac6ad7428f Miquel Raynal 2023-08-17  186   * @saved_regs: Volatile values for PM operations
+dd3c52846d5954a Miquel Raynal 2021-01-21  187   * @free_slots: Bit array of available slots
+dd3c52846d5954a Miquel Raynal 2021-01-21  188   * @addrs: Array containing the dynamic addresses of each attached device
+dd3c52846d5954a Miquel Raynal 2021-01-21  189   * @descs: Array of descriptors, one per attached device
+dd3c52846d5954a Miquel Raynal 2021-01-21  190   * @hj_work: Hot-join work
+dd3c52846d5954a Miquel Raynal 2021-01-21  191   * @ibi_work: IBI work
+dd3c52846d5954a Miquel Raynal 2021-01-21  192   * @irq: Main interrupt
+dd3c52846d5954a Miquel Raynal 2021-01-21  193   * @pclk: System clock
+dd3c52846d5954a Miquel Raynal 2021-01-21  194   * @fclk: Fast clock (bus)
+dd3c52846d5954a Miquel Raynal 2021-01-21  195   * @sclk: Slow clock (other events)
+dd3c52846d5954a Miquel Raynal 2021-01-21  196   * @xferqueue: Transfer queue structure
+dd3c52846d5954a Miquel Raynal 2021-01-21  197   * @xferqueue.list: List member
+dd3c52846d5954a Miquel Raynal 2021-01-21  198   * @xferqueue.cur: Current ongoing transfer
+dd3c52846d5954a Miquel Raynal 2021-01-21  199   * @xferqueue.lock: Queue lock
+dd3c52846d5954a Miquel Raynal 2021-01-21  200   * @ibi: IBI structure
+dd3c52846d5954a Miquel Raynal 2021-01-21  201   * @ibi.num_slots: Number of slots available in @ibi.slots
+dd3c52846d5954a Miquel Raynal 2021-01-21  202   * @ibi.slots: Available IBI slots
+dd3c52846d5954a Miquel Raynal 2021-01-21  203   * @ibi.tbq_slot: To be queued IBI slot
+dd3c52846d5954a Miquel Raynal 2021-01-21  204   * @ibi.lock: IBI lock
+6bf3fc268183816 Frank Li      2023-10-23  205   * @lock: Transfer lock, protect between IBI work thread and callbacks from master
+05b26c31a4859af Frank Li      2023-12-01  206   * @enabled_events: Bit masks for enable events (IBI, HotJoin).
+20ade67bb1645f5 Carlos Song   2024-09-10  207   * @mctrl_config: Configuration value in SVC_I3C_MCTRL for setting speed back.
+dd3c52846d5954a Miquel Raynal 2021-01-21  208   */
+dd3c52846d5954a Miquel Raynal 2021-01-21  209  struct svc_i3c_master {
+dd3c52846d5954a Miquel Raynal 2021-01-21  210  	struct i3c_master_controller base;
+dd3c52846d5954a Miquel Raynal 2021-01-21  211  	struct device *dev;
+dd3c52846d5954a Miquel Raynal 2021-01-21  212  	void __iomem *regs;
+1c5ee2a77b1bacd Clark Wang    2023-05-17  213  	struct svc_i3c_regs_save saved_regs;
+dd3c52846d5954a Miquel Raynal 2021-01-21  214  	u32 free_slots;
+dd3c52846d5954a Miquel Raynal 2021-01-21  215  	u8 addrs[SVC_I3C_MAX_DEVS];
+dd3c52846d5954a Miquel Raynal 2021-01-21  216  	struct i3c_dev_desc *descs[SVC_I3C_MAX_DEVS];
+dd3c52846d5954a Miquel Raynal 2021-01-21  217  	struct work_struct hj_work;
+dd3c52846d5954a Miquel Raynal 2021-01-21  218  	struct work_struct ibi_work;
+dd3c52846d5954a Miquel Raynal 2021-01-21  219  	int irq;
+dd3c52846d5954a Miquel Raynal 2021-01-21  220  	struct clk *pclk;
+dd3c52846d5954a Miquel Raynal 2021-01-21  221  	struct clk *fclk;
+dd3c52846d5954a Miquel Raynal 2021-01-21  222  	struct clk *sclk;
+dd3c52846d5954a Miquel Raynal 2021-01-21  223  	struct {
+dd3c52846d5954a Miquel Raynal 2021-01-21  224  		struct list_head list;
+dd3c52846d5954a Miquel Raynal 2021-01-21  225  		struct svc_i3c_xfer *cur;
+dd3c52846d5954a Miquel Raynal 2021-01-21  226  		/* Prevent races between transfers */
+dd3c52846d5954a Miquel Raynal 2021-01-21  227  		spinlock_t lock;
+dd3c52846d5954a Miquel Raynal 2021-01-21  228  	} xferqueue;
+dd3c52846d5954a Miquel Raynal 2021-01-21  229  	struct {
+dd3c52846d5954a Miquel Raynal 2021-01-21  230  		unsigned int num_slots;
+dd3c52846d5954a Miquel Raynal 2021-01-21  231  		struct i3c_dev_desc **slots;
+dd3c52846d5954a Miquel Raynal 2021-01-21  232  		struct i3c_ibi_slot *tbq_slot;
+dd3c52846d5954a Miquel Raynal 2021-01-21  233  		/* Prevent races within IBI handlers */
+dd3c52846d5954a Miquel Raynal 2021-01-21  234  		spinlock_t lock;
+dd3c52846d5954a Miquel Raynal 2021-01-21  235  	} ibi;
+6bf3fc268183816 Frank Li      2023-10-23  236  	struct mutex lock;
+28c82e7b13d49b1 Stanley Chu   2025-02-21  237  	const struct svc_i3c_drvdata *drvdata;
+25bc99be5fe5385 Frank Li      2024-11-01  238  	u32 enabled_events;
+20ade67bb1645f5 Carlos Song   2024-09-10  239  	u32 mctrl_config;
+dd3c52846d5954a Miquel Raynal 2021-01-21 @240  };
+dd3c52846d5954a Miquel Raynal 2021-01-21  241  
 
 -- 
 0-DAY CI Kernel Test Service
