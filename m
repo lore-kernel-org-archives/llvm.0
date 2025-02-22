@@ -1,59 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AEF38F83;
-	Sat, 22 Feb 2025 05:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2061F03C1;
+	Sat, 22 Feb 2025 07:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740201334; cv=none; b=G/hNjjgg8P7TT3MMRhimx8QybrbRAhpelQCbkkgTvhWBrfb3xSKO+MNWo+G/MkRLnd+Y3GBTAKErRBMAn3a5euV59rwZl9VnMVe9x0S9IDLZsqjyzy2FE04HN97LrUGljV/9/x8KqFTlL4gc2URvyDiko/hhN6LDjilpnMTAiwg=
+	t=1740208102; cv=none; b=bpztZ/z7pfNa0a82So/0MPjNmxWd+kn6M0SaPc9HgAA/6KYN6PR4L9fDAD/PHGdFoRIPLrRc15IyJpVjEvV7AW7bp/yn1gN81rWjXvJwe0VLo/i4d/uO0RNqsvtXKWdQelzp8XB18Zi+Kudhtu6AEwKz5Smy1wF5ICekvbFnw0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740201334; c=relaxed/simple;
-	bh=FJ3zVMJeoIN044fqK+n90glzBQSH5L52/z6vP49YSQ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ugto856yHNPSPD7LxdzDgxUkudn9/NU+liFVclR0Y/mVNfmklK156rOfcRpOJPGo0diJb9GU3h2PvH5DQImmdT/HZa2zRGqIJtEAjsGVse732zOz0ZAZCUNkOANVaW2AUjSrM1GrOzRZEJM+X42FylZKgY5hG2yJfBS95h41wps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IqxqCP0G; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1740208102; c=relaxed/simple;
+	bh=fsY5t112Q8WM/mdH96kIkcjOJgGQNS0f/svA6RtETtk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FpY39MNVkRaU9lpcWrYC1cvthIJ6TG7vJx2co6aWS27bAAPUGFmqR3+PiEXgg7Z4Xao3hz813qCMyURZla5dMExZgMLJfAr0Z1HoLb7BItxcx0eKjfhj/PpBqVivIHjqDf2msJoTyH5+aDc5Kx4qDgrQfgL5JpPkNZPZdDwHpsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SqwunMRA; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IqxqCP0G"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SqwunMRA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740201332; x=1771737332;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FJ3zVMJeoIN044fqK+n90glzBQSH5L52/z6vP49YSQ4=;
-  b=IqxqCP0GvlJ8o1/IKa2SnRjrjXU6Zd+N3POHSv+WxdlCx/WHiqxXEUzf
-   BhIGxPIZVf4wd7xSqfGxmmp25Y8K0oyWJVnggSqIrzuDAnHyJxx8PyLmu
-   1UXiZ6uYwxWlAqx0fU3taneOSXuRZUkL3WZ97D/eq3Ha6AFGVpZGJihos
-   ZgtfnFh5dt9WohrR0NVyX49/57pjFHWUeFKg5DxaQpRqfVHV0/oqEgxnC
-   WlnqCEsf/gCC4ui33wBZmUR46dbq0+Hg9lCCDLrk5lC7sozO/SmW2Kx/v
-   HS9LXpGmmrhV+pQtC5O0Vg7WvFwYL/Kvi5rnB/XYIBWFp+zPGoB1Illb9
+  t=1740208101; x=1771744101;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fsY5t112Q8WM/mdH96kIkcjOJgGQNS0f/svA6RtETtk=;
+  b=SqwunMRAQM6s901/4UrngrC+CIJxFiwUoW8Tx9xLz9DbeKRNNxL4Ejb5
+   GAsvuuuCR4IA2HvS25bhy6YD8W9SOP0vvh0WGt3300rqx2jkPafe4aDrw
+   ifMzOTlXUizxUBi+Zz3HzVIviUFx7iDC91yNE0IAB+IvhfYjdQGE9J6rl
+   /fwj4HPJJQI6RlDDeeW8xFWOT5My+3F24eNhiCJwvmTeSFNO1G+f5uowr
+   LhDxfo+tUCYf7fWMbCZteigrs0BXt+zWTJl32kOqZCEElu0e+PtETz0eE
+   s7w87LCw343jzN6oG10W4TQ3/ecD311Xq83PmzbiZBt8hX+3CMHJxQOai
    w==;
-X-CSE-ConnectionGUID: ib3fvnRySVimxwXRSYocpg==
-X-CSE-MsgGUID: 8ewyDNm0RhW3GfdB3OEFYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11352"; a="40900699"
-X-IronPort-AV: E=Sophos;i="6.13,306,1732608000"; 
-   d="scan'208";a="40900699"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 21:15:31 -0800
-X-CSE-ConnectionGUID: FfwNEWmrSXOUMf+rENoRqQ==
-X-CSE-MsgGUID: c3pJCj0jTCqTUVmTGhAf9w==
+X-CSE-ConnectionGUID: fOU41fMGSMKNym0mrFH/4A==
+X-CSE-MsgGUID: QPvc8VZiRNeIQBYnxqfLwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11352"; a="66400785"
+X-IronPort-AV: E=Sophos;i="6.13,307,1732608000"; 
+   d="scan'208";a="66400785"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 23:08:20 -0800
+X-CSE-ConnectionGUID: ac7/Se+NRD+BbfAHzKfzKA==
+X-CSE-MsgGUID: gfp972L3RJKUyasanhGhfw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,306,1732608000"; 
-   d="scan'208";a="120529176"
+X-IronPort-AV: E=Sophos;i="6.13,307,1732608000"; 
+   d="scan'208";a="115763826"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 21 Feb 2025 21:15:29 -0800
+  by fmviesa008.fm.intel.com with ESMTP; 21 Feb 2025 23:08:16 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tlhrD-0006Jv-0I;
-	Sat, 22 Feb 2025 05:15:21 +0000
-Date: Sat, 22 Feb 2025 13:14:56 +0800
+	id 1tljcR-0006Mh-12;
+	Sat, 22 Feb 2025 07:08:12 +0000
+Date: Sat, 22 Feb 2025 15:08:04 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ambarus:b4/acpm-debugfs 3/4]
- drivers/firmware/samsung/exynos-acpm.h:7:9: warning: '__EXYNOS_ACPM_H__' is
- used as a header guard here, followed by #define of a different macro
-Message-ID: <202502221308.l4i4pSeO-lkp@intel.com>
+To: Srirangan Madhavan <smadhavan@nvidia.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Zhi Wang <zhiw@nvidia.com>, Vishal Aslot <vaslot@nvidia.com>,
+	Shanker Donthineni <sdonthineni@nvidia.com>,
+	linux-cxl@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+	linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] cxl: add support for cxl reset
+Message-ID: <202502221438.j0UgOryU-lkp@intel.com>
+References: <20250221043906.1593189-3-smadhavan@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,61 +73,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250221043906.1593189-3-smadhavan@nvidia.com>
 
-tree:   https://github.com/ambarus/linux-0day b4/acpm-debugfs
-head:   bafe7f9a113167725d05a697c67c199f0be52748
-commit: 9dd49cfd36484439b89892286b5d0ed7af69e0bd [3/4] firmware: exynos-acpm: move common structures to exynos-acpm.h
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250222/202502221308.l4i4pSeO-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502221308.l4i4pSeO-lkp@intel.com/reproduce)
+Hi Srirangan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20250220]
+[cannot apply to pci/next pci/for-linus linus/master v6.14-rc3 v6.14-rc2 v6.14-rc1 v6.14-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Srirangan-Madhavan/cxl-de-duplicate-cxl-DVSEC-reg-defines/20250221-124043
+base:   next-20250220
+patch link:    https://lore.kernel.org/r/20250221043906.1593189-3-smadhavan%40nvidia.com
+patch subject: [PATCH v2 2/2] cxl: add support for cxl reset
+config: arm64-randconfig-003-20250222 (https://download.01.org/0day-ci/archive/20250222/202502221438.j0UgOryU-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502221438.j0UgOryU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502221308.l4i4pSeO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502221438.j0UgOryU-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/firmware/samsung/exynos-acpm.c:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/firmware/samsung/exynos-acpm.c:29:
->> drivers/firmware/samsung/exynos-acpm.h:7:9: warning: '__EXYNOS_ACPM_H__' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
-       7 | #ifndef __EXYNOS_ACPM_H__
-         |         ^~~~~~~~~~~~~~~~~
-   drivers/firmware/samsung/exynos-acpm.h:8:9: note: '__EXYNOS_ACPM_H_' is defined here; did you mean '__EXYNOS_ACPM_H__'?
-       8 | #define __EXYNOS_ACPM_H_
-         |         ^~~~~~~~~~~~~~~~
-         |         __EXYNOS_ACPM_H__
-   4 warnings generated.
+>> drivers/pci/pci.c:5258:10: warning: & has lower precedence than ==; == will be evaluated first [-Wparentheses]
+    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/pci.c:5258:10: note: place parentheses around the '==' expression to silence this warning
+    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
+         |                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pci/pci.c:5258:10: note: place parentheses around the & expression to evaluate it first
+    5258 |         if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
+         |             ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +/__EXYNOS_ACPM_H__ +7 drivers/firmware/samsung/exynos-acpm.h
+vim +5258 drivers/pci/pci.c
 
-   > 7	#ifndef __EXYNOS_ACPM_H__
-     8	#define __EXYNOS_ACPM_H_
-     9	
+  5235	
+  5236	/**
+  5237	 * cxl_reset - initiate a cxl reset
+  5238	 * @dev: device to reset
+  5239	 * @probe: if true, return 0 if device can be reset this way
+  5240	 *
+  5241	 * Initiate a cxl reset on @dev.
+  5242	 */
+  5243	static int cxl_reset(struct pci_dev *dev, bool probe)
+  5244	{
+  5245		u16 dvsec, reg;
+  5246		int rc;
+  5247	
+  5248		dvsec = pci_find_dvsec_capability(dev, PCI_VENDOR_ID_CXL,
+  5249						  CXL_DVSEC_PCIE_DEVICE);
+  5250		if (!dvsec)
+  5251			return -ENOTTY;
+  5252	
+  5253		/* Check if CXL Reset is supported. */
+  5254		rc = pci_read_config_word(dev, dvsec + CXL_DVSEC_CAP_OFFSET, &reg);
+  5255		if (rc)
+  5256			return -ENOTTY;
+  5257	
+> 5258		if (reg & CXL_DVSEC_CXL_RST_CAPABLE == 0)
+  5259			return -ENOTTY;
+  5260	
+  5261		if (probe)
+  5262			return 0;
+  5263	
+  5264		rc = cxl_reset_prepare(dev, dvsec);
+  5265		if (rc)
+  5266			return rc;
+  5267	
+  5268		return cxl_reset_init(dev, dvsec);
+  5269	}
+  5270	
 
 -- 
 0-DAY CI Kernel Test Service
