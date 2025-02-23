@@ -1,106 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D5012E7F;
-	Sun, 23 Feb 2025 05:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDC713AA38
+	for <llvm@lists.linux.dev>; Sun, 23 Feb 2025 06:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740288473; cv=none; b=W3mz4hjw7RYLCIviusQ8tdKf820Kxz71d03g6OxAL8KeEBAw+uXl1/uR7zwsAqVbL3I72egdw+qeH4jy0XvL6rO+N6dev6s8Clzyg8buQdZLhkZBejlAJ6mr8irMHBPYmvlUFtjIl9rPOcDnYmmTAt0LrpOumM++hzpGNXwl3g4=
+	t=1740291788; cv=none; b=L5OUq2ipiHwqla/Bwy9FgZTUMWG9wIqyLfpEjp9w3r+HpMYVzRqXEJdtkZEVDMKE/pyaCAkbkjId1QQhUS3asGkZ5MXQI3a42e3U+A6cWkmXHbAHoBl2TbS3uIH6LeH8s9FcVzvcFFC1X2gEQiJYoM2R8qvmvAfFU7oK2AjoSzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740288473; c=relaxed/simple;
-	bh=ZoFMidOYBshnEsnzIKH5pW7glP8uk+guezRItblF2Ys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hxnt+5JzGqYnUzPJgsBx2DUIjx574MsL8ekJrjIcqUagsEm7lBM1C899RakQP6c6BCM3ACiMCClfgYQQyF/WvP5LPvQhZfTeg42nbPKzsm5LCIqWO4xtFIc5FsstUIooTx1yLhkbi3zsTPZ7qC8q6VbFWR4EN7kMfyVQZWTz93U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EmaKKQTD; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740291788; c=relaxed/simple;
+	bh=uoSLggIWuqG9CbRX9RrywSPUhQSqc2f8wir4v/v1T7U=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BI5iSHoEAbNw+KHQL6NvCP1R+VoSYfDTEa85J9eHV1xb8dQq+1TeZhk3ZfPgdd3TdMO8MVB2eZHAyzkmXES8Fs4vGLEPiyN308m+focxWNbDUfoJ1IAB0ND1Wpg4S1CqGWTlWqKOLqAkCS0OvrmWzs8eP42aQTQTwcj0AbX0GhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OLUiFmzm; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EmaKKQTD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740288470; x=1771824470;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZoFMidOYBshnEsnzIKH5pW7glP8uk+guezRItblF2Ys=;
-  b=EmaKKQTDP7TVqARWgE9p0Z+O5lSUSfmco2NMQ/lE+X3WJCntZNM55aY+
-   RxSqkJBEnQsUfh60zmCfAIrSH/FYoVY8an2makRcyo2mcW9DoLTM7cSkQ
-   I5uNug9tZl4COMRq9c+EAFnu6NOExzqvJBnSBgWoip8HJW97L20WbVxdc
-   SOee5/cD1FDHGMO09wAVU+H18l1kPxNcyf7ofWTx1JVF7RtaiUp+K8Odo
-   4jG7LVyIlsER8heAZDv9evNvr182s3Jz2BBzP2WVhXW4lPJMrLXsOXmve
-   erLJU4HEpsDi++OrT7jlXKWDwD4kfa1EZ3KSFdCdKPOPJB+L/Fsftg4rC
-   w==;
-X-CSE-ConnectionGUID: 3YpTL49SQVyAcvPBq721aw==
-X-CSE-MsgGUID: 0HcKlWWwR+mq/q7lUZ9Zhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52494655"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="52494655"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 21:27:49 -0800
-X-CSE-ConnectionGUID: MDi6dxZtSu61rtEuamNdDw==
-X-CSE-MsgGUID: 5Ce2PjiPSwG7ocpbQD3+mw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="116261630"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 22 Feb 2025 21:27:45 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tm4Wl-00079L-0b;
-	Sun, 23 Feb 2025 05:27:43 +0000
-Date: Sun, 23 Feb 2025 13:26:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yongbang Shi <shiyongbang@huawei.com>, xinliang.liu@linaro.org,
-	tiantao6@hisilicon.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	daniel@ffwll.ch, kong.kongxinwei@hisilicon.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	liangjian010@huawei.com, chenjianmin@huawei.com,
-	lidongming5@huawei.com, shiyongbang@huawei.com, libaihan@huawei.com,
-	shenjian15@huawei.com, shaojijie@huawei.com,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 drm-dp 7/8] drm/hisilicon/hibmc: Enable this hot plug
- detect of irq feature
-Message-ID: <202502231304.BCzV4Y8D-lkp@intel.com>
-References: <20250222025102.1519798-8-shiyongbang@huawei.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OLUiFmzm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740291785;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vpnHK87IBM4qi2BgO6TqUxw5at2yrhFhmG9XWI9TPyA=;
+	b=OLUiFmzmIcQj/c3eZjWKapBt3kx1T83KRVpvHi2h642WTsYlHE/wpPngHBXK/Lr9/OUOR6
+	1+bViI9gv0T6mV4WTLY25dOcOf4wm9jjPdv2rfd16Q5GGZJm0Lsxtzx1CbwMN7Y2mkSPc/
+	JrtT4hxxsE+b13hp5OWR2rdJLTSrVwE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-224-qW01kMUIM_i2R6kDBIeHog-1; Sun,
+ 23 Feb 2025 01:23:03 -0500
+X-MC-Unique: qW01kMUIM_i2R6kDBIeHog-1
+X-Mimecast-MFC-AGG-ID: qW01kMUIM_i2R6kDBIeHog_1740291782
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4B6391800877
+	for <llvm@lists.linux.dev>; Sun, 23 Feb 2025 06:23:02 +0000 (UTC)
+Received: from [172.64.3.45] (unknown [10.30.32.189])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CB2C519412A3;
+	Sun, 23 Feb 2025 06:23:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc3,
+ upstream-mainline, 27102b38)
+Date: Sun, 23 Feb 2025 06:23:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250222025102.1519798-8-shiyongbang@huawei.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <24427.125022301230300397@us-mta-224.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: C0ci0Tg8gWDotmrFgzT-K-UWz0rWIkEpno4w1f64dIc_1740291782
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yongbang,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.14-rc3 next-20250221]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yongbang-Shi/drm-hisilicon-hibmc-Restructuring-the-header-dp_reg-h/20250222-110052
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250222025102.1519798-8-shiyongbang%40huawei.com
-patch subject: [PATCH v3 drm-dp 7/8] drm/hisilicon/hibmc: Enable this hot plug detect of irq feature
-config: arm64-randconfig-004-20250223 (https://download.01.org/0day-ci/archive/20250223/202502231304.BCzV4Y8D-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 204dcafec0ecf0db81d420d2de57b02ada6b09ec)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502231304.BCzV4Y8D-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'v6.14-rc3-smb3-client-fix-part2' of git://gi=
+t.samba.org/sfrench/cifs-2.6
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502231304.BCzV4Y8D-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1684349961
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1684349961-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1684349961-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1684349961-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
->> ERROR: modpost: "drm_client_init" [drivers/gpu/drm/hisilicon/hibmc/hibmc-drm.ko] undefined!
->> ERROR: modpost: "drm_client_register" [drivers/gpu/drm/hisilicon/hibmc/hibmc-drm.ko] undefined!
->> ERROR: modpost: "drm_client_release" [drivers/gpu/drm/hisilicon/hibmc/hibmc-drm.ko] undefined!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
