@@ -1,59 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5025670825;
-	Sun, 23 Feb 2025 16:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2981474A9;
+	Sun, 23 Feb 2025 23:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740328210; cv=none; b=DJcVjt0GoEKDH7vuH8YFTf2pOakobJIK5Uswaix8ywIRrLAidPtvvAtEuI7ymYOvhQV47NglRfHs1+R263F2AYtve/D1TKW2lsw4KsjOIoJ9C42DdFTBuEUxHhAPtWv+cB78vZMkVAwCEO2vCl0vRP21Rm57J5Y6HPJ5JZIxUUI=
+	t=1740353994; cv=none; b=mzSlEBV/xRYaKgplUVtT5ZChJEAaNlMaJEtxmgxyB2M1NtmOoI0a5ngdwQ5hv5aUFKtmom4MOPx1l3seGJvuUYJ9fNWUuseFJ0tRBKHoBKGGXHprnTlYnqkEUfiEIXVxhCt6TJIjclRzMeTveEKpsQZot6TRusxA7/ojnJfzw7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740328210; c=relaxed/simple;
-	bh=+Y/0FhJQcQb7H79QrG1GfWT+QyqFxJ6L8wblssNi1cI=;
+	s=arc-20240116; t=1740353994; c=relaxed/simple;
+	bh=hzCL0wIUvmBcBhuuc3gsWODoNAycfhMCTUXDCPb41Wo=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aR0CTHL7vbvD1hM4cbhhBTbI6grkst01Ht20DMqcRcTJRWtKke4E2QaHSyG81Vk+WD/aARlNHe94jy4b/QUteQwnKUv2AB+KbWS9pXWum0dRhWuu3skaWtnSpDpMmbsvudk6HmKGUEsXWI9ZpiKeujcmYZRi2pJkVF9roFC2WkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I+jTLU7c; arc=none smtp.client-ip=192.198.163.8
+	 Content-Disposition; b=f0B+8rZVtgU8Hub2UJNSyqDwoyMFaFuOpuVgglc8tG4lQtC4O2P2jbdwFOdpmdv5QB3AerII47xo/0RmQxIS8+ZMxyg8qnhsXFWIkacImUUpzqCxcVYjPrm6OqYvmxyxDdqgJCm11/Ul1uvlr4KXUj+hI2ZfNlOnxC2obkjZh4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jb5yWmsM; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I+jTLU7c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jb5yWmsM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740328208; x=1771864208;
+  t=1740353992; x=1771889992;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Y/0FhJQcQb7H79QrG1GfWT+QyqFxJ6L8wblssNi1cI=;
-  b=I+jTLU7cDy5Di/BdXYoQNHBkTCI4vKiepISTV3iTGB2yPWlv/I2U/TVx
-   UR60wrvoNMitDVNCbP4bLseAFhOG+E2J5MFFc/tXkUR5179nP/6phDO7q
-   P7SK8eMfoi5gaSnReTR+CLCS0uBgvM6JN4zTqaZxvyJHGWT3dsfs4NpP0
-   upCKJ+uBLrW8DANl4U/gGmeDtmtmBcaWr7UEusHE+pj/txBMBE9t1gYuQ
-   n4G/wRjwvV/nRN/sDDu48F7ezunTweOFyXZT8F9o7NtMUsQxwbXwl5DEX
-   P5QhXqxk3z7pAH6PNoMcjJGkAu89fEAFX0vU76J1sU05NQ29uj6LX/x+j
-   Q==;
-X-CSE-ConnectionGUID: G3eecT+YQwm3gyzf53JFMQ==
-X-CSE-MsgGUID: Sko3dXdsRZutLYXa1JqM0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="58635947"
+  bh=hzCL0wIUvmBcBhuuc3gsWODoNAycfhMCTUXDCPb41Wo=;
+  b=jb5yWmsMPdn8iYWxbLzaafI1N3HhfpCHimxexdlKBHKOK0cpSfUvq6xb
+   EfGWGGQDX3MoVxSWdqlZWpwiry0YKhGmSeNiCuT8HEuyUi1UXdYERbOIp
+   JR8/AAK54fSykYuwLPdfzrllqCIZ+qN0NqBP+9TvsjMA9dhgCkN4E87s1
+   UjsKTBl5p+hOoAlEC5jvOBvNYHeRQmPU3xb0AGlWoVSsQdG0edRI1TLtv
+   KwVzm38h+FhS26EbMtWDMP7u+vgL742JMpooaK4oDoC1M7lFzBjB0O8wM
+   t2grjMhzCCD9Y8Atw5BE7O2DMl6lnQ/rpb0TFZjM1VZNG1KWwX3hVZa5r
+   A==;
+X-CSE-ConnectionGUID: 9dDba23uQC+De4fkX78RkQ==
+X-CSE-MsgGUID: 552ic8FtSNWhc2OM6Vy+9Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="58517709"
 X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="58635947"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2025 08:30:06 -0800
-X-CSE-ConnectionGUID: 7bfAfqnHR/+G+ed+wATm2Q==
-X-CSE-MsgGUID: 5LDLmZwnSuiuRwPyQDwy+w==
-X-Ironport-Invalid-End-Of-Message: True
+   d="scan'208";a="58517709"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2025 15:39:51 -0800
+X-CSE-ConnectionGUID: BPnuqFCAQseOTp6NxUr3xQ==
+X-CSE-MsgGUID: CpAuFQekSleKlr7kNt142A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="116496834"
+   d="scan'208";a="115876309"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 23 Feb 2025 08:30:04 -0800
+  by orviesa006.jf.intel.com with ESMTP; 23 Feb 2025 15:39:49 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tmEri-0007S9-2E;
-	Sun, 23 Feb 2025 16:30:02 +0000
-Date: Mon, 24 Feb 2025 00:29:17 +0800
+	id 1tmLZb-0007fV-0j;
+	Sun, 23 Feb 2025 23:39:47 +0000
+Date: Mon, 24 Feb 2025 07:39:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linyunsheng:page_bulk_alloc_opt_v2 1/1]
- fs/btrfs/extent_io.c:631:37: error: use of undeclared identifier 'pages'
-Message-ID: <202502240053.pJMTGvUm-lkp@intel.com>
+To: Zhiming Hu <zhiming.hu@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Isaku Yamahata <isaku.yamahata@intel.com>
+Subject: [kvm:kvm-coco-queue 30/121] arch/x86/include/asm/tdx.h:183:12:
+ error: unused function 'tdx_get_nr_guest_keyids'
+Message-ID: <202502240742.C79LoViU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,108 +65,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/gestionlin/linux.git page_bulk_alloc_opt_v2
-head:   10c5db9fc7b189b222074598ce5bc9c1d8cd0ea8
-commit: 10c5db9fc7b189b222074598ce5bc9c1d8cd0ea8 [1/1] mm: alloc_pages_bulk: remove assumption of populating only NULL elements
-config: x86_64-buildonly-randconfig-001-20250223 (https://download.01.org/0day-ci/archive/20250224/202502240053.pJMTGvUm-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
+head:   ff2046f9bcd0883c72158404a1466eb96781ccca
+commit: 5c017bb4d89f65807c56d652443b53e7765b8b35 [30/121] KVM: TDX: Register TDX host key IDs to cgroup misc controller
+config: x86_64-randconfig-004-20250224 (https://download.01.org/0day-ci/archive/20250224/202502240742.C79LoViU-lkp@intel.com/config)
 compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250224/202502240053.pJMTGvUm-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250224/202502240742.C79LoViU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502240053.pJMTGvUm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502240742.C79LoViU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/btrfs/extent_io.c:5:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/btrfs/extent_io.c:631:37: error: use of undeclared identifier 'pages'
-     631 |         for (allocated = 0, ret = 0; ret < pages; ret++) {
-         |                                            ^
->> fs/btrfs/extent_io.c:633:4: error: use of undeclared identifier 'rqstp'
-     633 |                         rqstp->rq_pages[allocated] = rqstp->rq_pages[ret];
-         |                         ^
-   fs/btrfs/extent_io.c:633:33: error: use of undeclared identifier 'rqstp'
-     633 |                         rqstp->rq_pages[allocated] = rqstp->rq_pages[ret];
-         |                                                      ^
-   fs/btrfs/extent_io.c:635:5: error: use of undeclared identifier 'rqstp'
-     635 |                                 rqstp->rq_pages[ret] = NULL;
-         |                                 ^
-   3 warnings and 4 errors generated.
+   In file included from <built-in>:4:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_utils.h:6:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/../../i915/i915_utils.h:37:
+   In file included from arch/x86/include/asm/hypervisor.h:37:
+   In file included from arch/x86/include/asm/kvm_para.h:10:
+>> arch/x86/include/asm/tdx.h:183:12: error: unused function 'tdx_get_nr_guest_keyids' [-Werror,-Wunused-function]
+     183 | static u32 tdx_get_nr_guest_keyids(void) { return 0; }
+         |            ^~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
 
 
-vim +/pages +631 fs/btrfs/extent_io.c
+vim +/tdx_get_nr_guest_keyids +183 arch/x86/include/asm/tdx.h
 
-   609	
-   610	/*
-   611	 * Populate every free slot in a provided array with pages, using GFP_NOFS.
-   612	 *
-   613	 * @nr_pages:   number of pages to allocate
-   614	 * @page_array: the array to fill with pages; any existing non-null entries in
-   615	 *		the array will be skipped
-   616	 * @nofail:	whether using __GFP_NOFAIL flag
-   617	 *
-   618	 * Return: 0        if all pages were able to be allocated;
-   619	 *         -ENOMEM  otherwise, the partially allocated pages would be freed and
-   620	 *                  the array slots zeroed
-   621	 */
-   622	int btrfs_alloc_page_array(unsigned int nr_pages, struct page **page_array,
-   623				   bool nofail)
-   624	{
-   625		const gfp_t gfp = nofail ? (GFP_NOFS | __GFP_NOFAIL) : GFP_NOFS;
-   626		unsigned int allocated, ret;
-   627	
-   628		/* Defragment page_array so pages can be bulk allocated into remaining
-   629		 * NULL elements sequentially.
-   630		 */
- > 631		for (allocated = 0, ret = 0; ret < pages; ret++) {
-   632			if (page_array[ret]) {
- > 633				rqstp->rq_pages[allocated] = rqstp->rq_pages[ret];
-   634				if (ret != allocated)
-   635					rqstp->rq_pages[ret] = NULL;
-   636	
-   637				allocated++;
-   638			}
-   639		}
-   640	
-   641		while (allocated < nr_pages) {
-   642			ret = alloc_pages_bulk(gfp, nr_pages - allocated,
-   643					       page_array + allocated);
-   644			allocated += ret;
-   645			if (unlikely(!ret)) {
-   646				/* No progress, fail and do cleanup. */
-   647				for (int i = 0; i < allocated; i++) {
-   648					__free_page(page_array[i]);
-   649					page_array[i] = NULL;
-   650				}
-   651				return -ENOMEM;
-   652			}
-   653		}
-   654		return 0;
-   655	}
-   656	
+   162	
+   163	u64 tdh_mng_addcx(struct tdx_td *td, struct page *tdcs_page);
+   164	u64 tdh_vp_addcx(struct tdx_vp *vp, struct page *tdcx_page);
+   165	u64 tdh_mng_key_config(struct tdx_td *td);
+   166	u64 tdh_mng_create(struct tdx_td *td, u16 hkid);
+   167	u64 tdh_vp_create(struct tdx_td *td, struct tdx_vp *vp);
+   168	u64 tdh_mng_rd(struct tdx_td *td, u64 field, u64 *data);
+   169	u64 tdh_vp_flush(struct tdx_vp *vp);
+   170	u64 tdh_mng_vpflushdone(struct tdx_td *td);
+   171	u64 tdh_mng_key_freeid(struct tdx_td *td);
+   172	u64 tdh_mng_init(struct tdx_td *td, u64 td_params, u64 *extended_err);
+   173	u64 tdh_vp_init(struct tdx_vp *vp, u64 initial_rcx, u32 x2apicid);
+   174	u64 tdh_vp_rd(struct tdx_vp *vp, u64 field, u64 *data);
+   175	u64 tdh_vp_wr(struct tdx_vp *vp, u64 field, u64 data, u64 mask);
+   176	u64 tdh_phymem_page_reclaim(struct page *page, u64 *tdx_pt, u64 *tdx_owner, u64 *tdx_size);
+   177	u64 tdh_phymem_cache_wb(bool resume);
+   178	u64 tdh_phymem_page_wbinvd_tdr(struct tdx_td *td);
+   179	#else
+   180	static inline void tdx_init(void) { }
+   181	static inline int tdx_cpu_enable(void) { return -ENODEV; }
+   182	static inline int tdx_enable(void)  { return -ENODEV; }
+ > 183	static u32 tdx_get_nr_guest_keyids(void) { return 0; }
+   184	static inline const char *tdx_dump_mce_info(struct mce *m) { return NULL; }
+   185	static inline const struct tdx_sys_info *tdx_get_sysinfo(void) { return NULL; }
+   186	#endif	/* CONFIG_INTEL_TDX_HOST */
+   187	
 
 -- 
 0-DAY CI Kernel Test Service
