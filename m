@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68A86AAD;
-	Sun, 23 Feb 2025 00:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DC31862A;
+	Sun, 23 Feb 2025 02:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740270841; cv=none; b=soGjeBmAh+YPeb8a9AylZ4AgXb8cBcPnqAZNn7IxeSFu7CgA/hO2gwunzn77XG+/iIQFsUJ9bjfFLdzTVdyLNdW9Y+KE+oCP2WkoOkhnH/N4oTpyDvymDK2ZT1DC4MwqLsvDSGQud7/EnipWrHY3elB/IKxzvntkIrC+JE96fAI=
+	t=1740277710; cv=none; b=IF7dr5lLY9oGXfcyQlY+e2wFSQ2Vt+lG0bPZrM2E4ntk/hDQxzMSaKDZ1EimoA40oFRSp1lAsmUFsIX26diX5qQL4xrDMTYtulh46AM/9EObnTJ1TTM5ClviTPxnomhnP8hx4fqUJbb14IW5jcMUle/xv59n4TA5grXYT5pdcXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740270841; c=relaxed/simple;
-	bh=fkgNxA+xtUXoDFWrU0XngDn3bdYGJ+CGOF7vd2iQS38=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HyAh3FKHYCd5+LvoRWjicunpx9mSFXrEzwgkUV3R+6DaAUcv4AlFgXw6BXCRFxxFbOz7dU24JNBP0/wQQORpz2QaQFfRilkux9KQnPbhSxI3bceNqFGNf3Z56FuVsQbWKXSpglTi8mudpPGh33AUQ8aD5cuNTaKCut3okZyBATE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fv1WAObI; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1740277710; c=relaxed/simple;
+	bh=u6oSsqRbLvRGRbt/R4ec7n7Himb8x7z/KiYZxAR9YTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lby11mSMCI33BB1P+lLbtoVZ2V7N4iu7OsA0jHDZcKLF0SrWXw3O5IZQa5Dq6BIpQtUPx+6Igk5VhqqPvfS07bKHuIc3fdTyu7Bo+zewpfYD/JDrZxvw9hHBYjzY0yrjOz8ACYFsx3M3pHyHjPm6RQQ38RFvPPmj1nX1rXWTIUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=afreXd7T; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fv1WAObI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="afreXd7T"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740270839; x=1771806839;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fkgNxA+xtUXoDFWrU0XngDn3bdYGJ+CGOF7vd2iQS38=;
-  b=Fv1WAObIaufXOBvrfol09fi0IV98H4c5awqBWLuvGcai/8AXpbyxjzCD
-   SVCimSqDnuCPgZBlTyILlSZvFdYN0i/yYTmgwXJGDD86RWNvTK1IAt2As
-   YXKSD0lgDmh3j6ePgsee5qbGo4mwybvx3FH6esa1gKrdFEBqAU92ZK/Ux
-   JB6bjEsTQkD+cks0zKcSqPBIABvmXFJaU09S0X3o+8aHKRyzOU0J+WToD
-   Y1YEytbZQdOYfmvw64cO3XuLz3zjxeaUvMm+hJA57bksRqJA1tcWfiI8k
-   rZvV8/pEIscpXQO8YDgzKoD+qcF83juy3IFWhjgvSBLXJ664hKjx/+iN8
-   A==;
-X-CSE-ConnectionGUID: sUBQlmlgTJSZLAsISFfDCA==
-X-CSE-MsgGUID: 1UO4OdtgTKCEH3sKfYe+1Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11353"; a="44840055"
-X-IronPort-AV: E=Sophos;i="6.13,308,1732608000"; 
-   d="scan'208";a="44840055"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 16:33:58 -0800
-X-CSE-ConnectionGUID: aPXwhaqBQvGjh42vYKygBQ==
-X-CSE-MsgGUID: WbadgvcBT32lt76hb/zgvw==
+  t=1740277709; x=1771813709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u6oSsqRbLvRGRbt/R4ec7n7Himb8x7z/KiYZxAR9YTM=;
+  b=afreXd7TdRiQZRmXL++yq6qF2M9L64vwjdomM2CAj+626Hzq/8s8ekHn
+   RQAjYWgJ41mKgyUhcYpG2iLGCdaNcEbZrlype6PRhXXH7CclX1SFwmt1z
+   4bPskOlLfz9NMIwguhZoBj0zIJ38vigNetVOrs1lir6lgmYPeDmzjwInH
+   +fZt6kCgi0yCWD+/Lq0smlewZb6ofnmhxxUT5YrgejnOZ0HwzQfdz5tW5
+   0To8kq5+eEzRMJIV7pnh6DaETCqWzVPGdazoPozereHbdg98LJQSne8wb
+   u2YdJyGEjspiZx3Lm6dls+YXvPb/s28cADs7T87YCMFO1ZGYsc4IEZfiN
+   g==;
+X-CSE-ConnectionGUID: Opcfjp1ZT8edS5xK6WOAcw==
+X-CSE-MsgGUID: Z/jl5rCJQSOlwADIydwUrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52490047"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="52490047"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 18:28:26 -0800
+X-CSE-ConnectionGUID: AfV/qSZVTwCJVa6AY56LJQ==
+X-CSE-MsgGUID: fT7Eu9vBTOKc4WWQjtWDpA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116200579"
+   d="scan'208";a="119842392"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 22 Feb 2025 16:33:57 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 22 Feb 2025 18:28:25 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tlzwQ-00070l-2T;
-	Sun, 23 Feb 2025 00:33:54 +0000
-Date: Sun, 23 Feb 2025 08:33:30 +0800
+	id 1tm1jB-000747-2j;
+	Sun, 23 Feb 2025 02:28:21 +0000
+Date: Sun, 23 Feb 2025 10:27:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suman Ghosh <sumang@marvell.com>
+To: Sarika Sharma <quic_sarishar@quicinc.com>, ath12k@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [linux-next:master 4116/5524]
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:3217:1: warning: unused
- label 'err_free_zc_bmap'
-Message-ID: <202502230842.RQVRAr2h-lkp@intel.com>
+	linux-wireless@vger.kernel.org, johannes@sipsolutions.net,
+	Sarika Sharma <quic_sarishar@quicinc.com>
+Subject: Re: [PATCH v2 3/5] wifi: ath12k: add EHT support for TX rate
+Message-ID: <202502231023.vzEGxJWz-lkp@intel.com>
+References: <20250213173206.1665731-4-quic_sarishar@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,117 +64,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250213173206.1665731-4-quic_sarishar@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d4b0fd87ff0d4338b259dc79b2b3c6f7e70e8afa
-commit: efabce29015189cb5cd8066cf29eb1d754de6c3c [4116/5524] octeontx2-pf: AF_XDP zero copy receive support
-config: powerpc64-randconfig-002-20250223 (https://download.01.org/0day-ci/archive/20250223/202502230842.RQVRAr2h-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 204dcafec0ecf0db81d420d2de57b02ada6b09ec)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502230842.RQVRAr2h-lkp@intel.com/reproduce)
+Hi Sarika,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 704a2d7237043317ed1b0f8a08203e9ddde70097]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-correct-RX-stats-packet-increment-for-multi-link/20250214-014020
+base:   704a2d7237043317ed1b0f8a08203e9ddde70097
+patch link:    https://lore.kernel.org/r/20250213173206.1665731-4-quic_sarishar%40quicinc.com
+patch subject: [PATCH v2 3/5] wifi: ath12k: add EHT support for TX rate
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250223/202502231023.vzEGxJWz-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250223/202502231023.vzEGxJWz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502230842.RQVRAr2h-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502231023.vzEGxJWz-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:9:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/powerpc/include/asm/io.h:24:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:3217:1: warning: unused label 'err_free_zc_bmap' [-Wunused-label]
-    3217 | err_free_zc_bmap:
-         | ^~~~~~~~~~~~~~~~~
-   3 warnings generated.
---
-   In file included from drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c:8:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c:740:1: warning: unused label 'err_free_zc_bmap' [-Wunused-label]
-     740 | err_free_zc_bmap:
-         | ^~~~~~~~~~~~~~~~~
-   3 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
+>> drivers/net/wireless/ath/ath12k/dp_rx.c:1488:26: error: call to undeclared function 'ath12k_eht_gi_to_nl80211_eht_gi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   arsta->txrate.eht_gi = ath12k_eht_gi_to_nl80211_eht_gi(sgi);
+                                          ^
+   drivers/net/wireless/ath/ath12k/dp_rx.c:1364:24: warning: variable 'sta' set but not used [-Wunused-but-set-variable]
+           struct ieee80211_sta *sta;
+                                 ^
+   1 warning and 1 error generated.
 
 
-vim +/err_free_zc_bmap +3217 drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+vim +/ath12k_eht_gi_to_nl80211_eht_gi +1488 drivers/net/wireless/ath/ath12k/dp_rx.c
 
-  3212	
-  3213		otx2_qos_init(pf, qos_txqs);
-  3214	
-  3215		return 0;
-  3216	
-> 3217	err_free_zc_bmap:
-  3218		bitmap_free(pf->af_xdp_zc_qidx);
-  3219	err_sriov_cleannup:
-  3220		otx2_sriov_vfcfg_cleanup(pf);
-  3221	err_pf_sriov_init:
-  3222		otx2_shutdown_tc(pf);
-  3223	err_mcam_flow_del:
-  3224		otx2_mcam_flow_del(pf);
-  3225	err_unreg_netdev:
-  3226		unregister_netdev(netdev);
-  3227	err_ipsec_clean:
-  3228		cn10k_ipsec_clean(pf);
-  3229	err_mcs_free:
-  3230		cn10k_mcs_free(pf);
-  3231	err_del_mcam_entries:
-  3232		otx2_mcam_flow_del(pf);
-  3233	err_ptp_destroy:
-  3234		otx2_ptp_destroy(pf);
-  3235	err_detach_rsrc:
-  3236		if (pf->hw.lmt_info)
-  3237			free_percpu(pf->hw.lmt_info);
-  3238		if (test_bit(CN10K_LMTST, &pf->hw.cap_flag))
-  3239			qmem_free(pf->dev, pf->dync_lmt);
-  3240		otx2_detach_resources(&pf->mbox);
-  3241		otx2_disable_mbox_intr(pf);
-  3242		otx2_pfaf_mbox_destroy(pf);
-  3243		pci_free_irq_vectors(hw->pdev);
-  3244	err_free_netdev:
-  3245		pci_set_drvdata(pdev, NULL);
-  3246		free_netdev(netdev);
-  3247	err_release_regions:
-  3248		pci_release_regions(pdev);
-  3249		return err;
-  3250	}
-  3251	
+  1357	
+  1358	static void
+  1359	ath12k_update_per_peer_tx_stats(struct ath12k *ar,
+  1360					struct htt_ppdu_stats *ppdu_stats, u8 user)
+  1361	{
+  1362		struct ath12k_base *ab = ar->ab;
+  1363		struct ath12k_peer *peer;
+  1364		struct ieee80211_sta *sta;
+  1365		struct ath12k_link_sta *arsta;
+  1366		struct htt_ppdu_stats_user_rate *user_rate;
+  1367		struct ath12k_per_peer_tx_stats *peer_stats = &ar->peer_tx_stats;
+  1368		struct htt_ppdu_user_stats *usr_stats = &ppdu_stats->user_stats[user];
+  1369		struct htt_ppdu_stats_common *common = &ppdu_stats->common;
+  1370		int ret;
+  1371		u8 flags, mcs, nss, bw, sgi, dcm, rate_idx = 0;
+  1372		u32 v, succ_bytes = 0;
+  1373		u16 tones, rate = 0, succ_pkts = 0;
+  1374		u32 tx_duration = 0;
+  1375		u8 tid = HTT_PPDU_STATS_NON_QOS_TID;
+  1376		bool is_ampdu = false;
+  1377	
+  1378		if (!(usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_RATE)))
+  1379			return;
+  1380	
+  1381		if (usr_stats->tlv_flags & BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_COMMON))
+  1382			is_ampdu =
+  1383				HTT_USR_CMPLTN_IS_AMPDU(usr_stats->cmpltn_cmn.flags);
+  1384	
+  1385		if (usr_stats->tlv_flags &
+  1386		    BIT(HTT_PPDU_STATS_TAG_USR_COMPLTN_ACK_BA_STATUS)) {
+  1387			succ_bytes = le32_to_cpu(usr_stats->ack_ba.success_bytes);
+  1388			succ_pkts = le32_get_bits(usr_stats->ack_ba.info,
+  1389						  HTT_PPDU_STATS_ACK_BA_INFO_NUM_MSDU_M);
+  1390			tid = le32_get_bits(usr_stats->ack_ba.info,
+  1391					    HTT_PPDU_STATS_ACK_BA_INFO_TID_NUM);
+  1392		}
+  1393	
+  1394		if (common->fes_duration_us)
+  1395			tx_duration = le32_to_cpu(common->fes_duration_us);
+  1396	
+  1397		user_rate = &usr_stats->rate;
+  1398		flags = HTT_USR_RATE_PREAMBLE(user_rate->rate_flags);
+  1399		bw = HTT_USR_RATE_BW(user_rate->rate_flags) - 2;
+  1400		nss = HTT_USR_RATE_NSS(user_rate->rate_flags) + 1;
+  1401		mcs = HTT_USR_RATE_MCS(user_rate->rate_flags);
+  1402		sgi = HTT_USR_RATE_GI(user_rate->rate_flags);
+  1403		dcm = HTT_USR_RATE_DCM(user_rate->rate_flags);
+  1404	
+  1405		/* Note: If host configured fixed rates and in some other special
+  1406		 * cases, the broadcast/management frames are sent in different rates.
+  1407		 * Firmware rate's control to be skipped for this?
+  1408		 */
+  1409	
+  1410		if (flags == WMI_RATE_PREAMBLE_HE && mcs > ATH12K_HE_MCS_MAX) {
+  1411			ath12k_warn(ab, "Invalid HE mcs %d peer stats",  mcs);
+  1412			return;
+  1413		}
+  1414	
+  1415		if (flags == WMI_RATE_PREAMBLE_VHT && mcs > ATH12K_VHT_MCS_MAX) {
+  1416			ath12k_warn(ab, "Invalid VHT mcs %d peer stats",  mcs);
+  1417			return;
+  1418		}
+  1419	
+  1420		if (flags == WMI_RATE_PREAMBLE_HT && (mcs > ATH12K_HT_MCS_MAX || nss < 1)) {
+  1421			ath12k_warn(ab, "Invalid HT mcs %d nss %d peer stats",
+  1422				    mcs, nss);
+  1423			return;
+  1424		}
+  1425	
+  1426		if (flags == WMI_RATE_PREAMBLE_CCK || flags == WMI_RATE_PREAMBLE_OFDM) {
+  1427			ret = ath12k_mac_hw_ratecode_to_legacy_rate(mcs,
+  1428								    flags,
+  1429								    &rate_idx,
+  1430								    &rate);
+  1431			if (ret < 0)
+  1432				return;
+  1433		}
+  1434	
+  1435		rcu_read_lock();
+  1436		spin_lock_bh(&ab->base_lock);
+  1437		peer = ath12k_peer_find_by_id(ab, usr_stats->peer_id);
+  1438	
+  1439		if (!peer || !peer->sta) {
+  1440			spin_unlock_bh(&ab->base_lock);
+  1441			rcu_read_unlock();
+  1442			return;
+  1443		}
+  1444	
+  1445		sta = peer->sta;
+  1446		arsta = ath12k_peer_get_link_sta(ab, peer);
+  1447		if (!arsta) {
+  1448			spin_unlock_bh(&ab->base_lock);
+  1449			rcu_read_unlock();
+  1450			return;
+  1451		}
+  1452	
+  1453		memset(&arsta->txrate, 0, sizeof(arsta->txrate));
+  1454	
+  1455		switch (flags) {
+  1456		case WMI_RATE_PREAMBLE_OFDM:
+  1457			arsta->txrate.legacy = rate;
+  1458			break;
+  1459		case WMI_RATE_PREAMBLE_CCK:
+  1460			arsta->txrate.legacy = rate;
+  1461			break;
+  1462		case WMI_RATE_PREAMBLE_HT:
+  1463			arsta->txrate.mcs = mcs + 8 * (nss - 1);
+  1464			arsta->txrate.flags = RATE_INFO_FLAGS_MCS;
+  1465			if (sgi)
+  1466				arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
+  1467			break;
+  1468		case WMI_RATE_PREAMBLE_VHT:
+  1469			arsta->txrate.mcs = mcs;
+  1470			arsta->txrate.flags = RATE_INFO_FLAGS_VHT_MCS;
+  1471			if (sgi)
+  1472				arsta->txrate.flags |= RATE_INFO_FLAGS_SHORT_GI;
+  1473			break;
+  1474		case WMI_RATE_PREAMBLE_HE:
+  1475			arsta->txrate.mcs = mcs;
+  1476			arsta->txrate.flags = RATE_INFO_FLAGS_HE_MCS;
+  1477			arsta->txrate.he_dcm = dcm;
+  1478			arsta->txrate.he_gi = ath12k_he_gi_to_nl80211_he_gi(sgi);
+  1479			tones = le16_to_cpu(user_rate->ru_end) -
+  1480				le16_to_cpu(user_rate->ru_start) + 1;
+  1481			v = ath12k_he_ru_tones_to_nl80211_he_ru_alloc(tones);
+  1482			arsta->txrate.he_ru_alloc = v;
+  1483			break;
+  1484		case WMI_RATE_PREAMBLE_EHT:
+  1485			arsta->txrate.mcs = mcs;
+  1486			arsta->txrate.flags = RATE_INFO_FLAGS_EHT_MCS;
+  1487			arsta->txrate.he_dcm = dcm;
+> 1488			arsta->txrate.eht_gi = ath12k_eht_gi_to_nl80211_eht_gi(sgi);
+  1489			tones = le16_to_cpu(user_rate->ru_end) -
+  1490				le16_to_cpu(user_rate->ru_start) + 1;
+  1491			v = ath12k_mac_eht_ru_tones_to_nl80211_eht_ru_alloc(tones);
+  1492			arsta->txrate.eht_ru_alloc = v;
+  1493			break;
+  1494		}
+  1495	
+  1496		arsta->txrate.nss = nss;
+  1497		arsta->txrate.bw = ath12k_mac_bw_to_mac80211_bw(bw);
+  1498		arsta->tx_duration += tx_duration;
+  1499		memcpy(&arsta->last_txrate, &arsta->txrate, sizeof(struct rate_info));
+  1500	
+  1501		/* PPDU stats reported for mgmt packet doesn't have valid tx bytes.
+  1502		 * So skip peer stats update for mgmt packets.
+  1503		 */
+  1504		if (tid < HTT_PPDU_STATS_NON_QOS_TID) {
+  1505			memset(peer_stats, 0, sizeof(*peer_stats));
+  1506			peer_stats->succ_pkts = succ_pkts;
+  1507			peer_stats->succ_bytes = succ_bytes;
+  1508			peer_stats->is_ampdu = is_ampdu;
+  1509			peer_stats->duration = tx_duration;
+  1510			peer_stats->ba_fails =
+  1511				HTT_USR_CMPLTN_LONG_RETRY(usr_stats->cmpltn_cmn.flags) +
+  1512				HTT_USR_CMPLTN_SHORT_RETRY(usr_stats->cmpltn_cmn.flags);
+  1513		}
+  1514	
+  1515		spin_unlock_bh(&ab->base_lock);
+  1516		rcu_read_unlock();
+  1517	}
+  1518	
 
 -- 
 0-DAY CI Kernel Test Service
