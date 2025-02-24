@@ -1,168 +1,164 @@
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8231386B4
-	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 14:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740407237; cv=fail; b=PJ2MmpieTX3aGbPwXf9VCfth6tnPl9hlQ5dLcYHUd6CaA0Bzmc/wjV7tH+ZQ+lNNLrMqHp0MIpg5JkGmaqCClfG3DETmzBmBW5agO6RyAk5d9f0nwugjdw5sTHnZasuCzQKM2Xw7vknfzP2TKF4Noaa02T6tU9HVFb5FXe5/CrE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740407237; c=relaxed/simple;
-	bh=80gMgBel8CaZD5CXP4coDOMrJdWm02c80UUxXSKK5V4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rv7SDVcmNrJJz4ZtpGJQNAQVty1/65cNUGwgpafQrGsOLyiqR5EQ+n0anRmV2/YH7i9HXof5s8ZqwECkenVvhN26+xwp4U+vhvI8QcVJZPpszak7weGSLqaiYTP6AHogoM73ddTsG6wcxqOh8cP7vHThn0AKT2SesVJ6kkG7zhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KdlWrHlJ; arc=fail smtp.client-ip=40.107.101.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB6618BC26
+	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 14:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740407797; cv=none; b=Vn4DOFY4N/SBo0vpi4k2SOoYfkZHRKzCl6ZlXciZPB+dNakLqWn3Nhttlbt1YejExjp2xiuOCnbr8Bsk9FAtGHnxm/Tmh22KP2UhtFcL8evR3CZnDOnPnSbqkrK+aeXXk2hompRcRlX+s+opJzw9kM4b4lLGJPruGPJVogHcvTU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740407797; c=relaxed/simple;
+	bh=UwSwiJGZwSq+WhG8DJIpzDOvAXg+3MQPfE526y5E6XU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pQ4TzSuyQ8JVJJAx/dEQ2oj5gUX0BlkFXIDV+A3Nj2b5sQk/eizEbMQsQbpeK6fZEAtbgaaLP/fhqYIkMKG9cMp48IS+WADnDWNHNa+AWR8rqkjIQ0sv5ShiNJ1CxNxlDuOIE24om+kNMEe0svo51/+YUMffILTQZkvvC47uz80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EMIRKBHh; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KdlWrHlJ"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=K+V3O8Ylrx656ozL6Kzi/ZgAbyiWMvddO71W1g3EAajjyCkV5ElwIVZceEafAgluAGgbvDeSpA0nYCVzTg/GWze6XHF1nep9yqY7rK0aDMa5INBL4Zltuprm67LPy0A4EW8ZyDeRCrDbbXORRlEfbVFtm934wZlJPasNBQ31y47lSwNFHY01nJeF6vF7O4cNWKfjifsAmSM8PWM4VxhATvjRmlaIW9K4b6LdAHOSCR1teQjqbnkKpRm5j2P80J9Uxy0sgz5sibHzCV6kgm5EVvMY1jxDC/5KETW2Egn9kYrtUSE0wKFP+VYZxOuiOS0VC2pOxBG2nCdz+a8zXTXJoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hbD6IiDfT5798lvhocUGwXP0nLzJikwYDvOR1QokIdk=;
- b=XQoqqCS17nq6b+/hEyIG4wm1PR+HJIHNl4sIP4eVHvUXPWOFeXA323IVfXmjn6V6H+QdmkK8TNE7iMVS3JsuIkkHkXGl46HB4SxK8FeU3j6CRBXTBLRHaLBNb/ceX21pqAins6bNJhfUXCeH+TxgsNU0nTmuKpJKm2+tKi94gluVx0aMFGZZ+9c8nyf/UPP0BVHThY79Ope1FjurH0OWCB5puiqsCrDKQ99WrpPGxxZUxSID8A1WmyBychIlRsPB43Y7ONsl4Gbwr1EiPjDa2V1OM+BA7cGpelTCFFdHOb65+Sh7L9brGnwnH8F8OaSBpK0KBFzTeJbAfzEypnFAXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hbD6IiDfT5798lvhocUGwXP0nLzJikwYDvOR1QokIdk=;
- b=KdlWrHlJSUjpmbVvfHoIXxUja518o6xgkpntQrFlmz62ysRgNMkiYw+362VqroFlgv8sDL3M6JfIdhuqxpV9NDAGqKTyGSehaGT2jIWx12qTxgbTuld67tT7SQP3N35tu4/tzRWF8N8RrIzIlweDm3+UD3d2h4aShEXQHbWgJAP2f6rytXWW8ljPBJN5bZff9XjbS1iERxHuKVHOw0e+eDn+BdXlGjrvgsqUAu92YtpTZDHbvQ/mOAFjBH9C7DhIj21co2wFLe2AIB/BQnHZWK9QzTr08pmXZ8IC07kLW0BsvnG+B0t93TjJ9U1jHVE8X2nXzVtLVId0otZKasYqSw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- IA1PR12MB7638.namprd12.prod.outlook.com (2603:10b6:208:426::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8466.19; Mon, 24 Feb 2025 14:27:12 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.8466.016; Mon, 24 Feb 2025
- 14:27:12 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Frank van der Linden <fvdl@google.com>, David Hildenbrand <david@redhat.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/2] mm, cma: use literal printf format string
-Date: Mon, 24 Feb 2025 09:27:11 -0500
-X-Mailer: MailMate (2.0r6222)
-Message-ID: <DC24FCA1-FEF1-4819-A898-D0704DC963A2@nvidia.com>
-In-Reply-To: <20250224141120.1240534-2-arnd@kernel.org>
-References: <20250224141120.1240534-1-arnd@kernel.org>
- <20250224141120.1240534-2-arnd@kernel.org>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MN0PR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:208:52f::12) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EMIRKBHh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740407793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=4a5Pge3ndAsxD91Ok8sjj4Yec0ykdk1cuFOtuh9yTlo=;
+	b=EMIRKBHh9cX7g3Z83KehxvJJ0KWEAbUKVrQmZmq1A0l00Z35bAOu1iS0U29bkMAN+DpEVp
+	LR2HnBIVZ8aYSsAXidCu7DIZ3UUi/BXEqBKn1YXpgfW3IELsch9BDgr7lRzm59lROBDWNp
+	I55vde4GWWkKP1Cnq+uIPnK9mTxArJk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-575-GELxwQ9APPqcn7xgjc480Q-1; Mon, 24 Feb 2025 09:36:31 -0500
+X-MC-Unique: GELxwQ9APPqcn7xgjc480Q-1
+X-Mimecast-MFC-AGG-ID: GELxwQ9APPqcn7xgjc480Q_1740407791
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4399d2a1331so22047455e9.1
+        for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 06:36:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740407791; x=1741012591;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4a5Pge3ndAsxD91Ok8sjj4Yec0ykdk1cuFOtuh9yTlo=;
+        b=ZMs4pbcfagx1vmXnhF6zB81O09Y55coy/jU3Puhr0FSum00CYK5Pp30DzqCjDXufoT
+         YuNH2rFmNsEuxGHdfZAlKESZoomSJNRBOpi4hVlGLuSpVhPrprRPkHQX8a6jIIsBSOcz
+         uSjHyx3eBoAQAQcn40xFbBhajshWq5g3KnWI3fSG/GPtK9FliIrJo1i4NriYcugMWf/A
+         ahciQptdItTaunNA5xxx4vNH2WtI/KF3CqYlyirgRunqLdiJEVUmMhgYwR4d17lDTGvO
+         9S8rPkY8+6cy5i+7jlfzg7XLE93XxxZuBzM2frqLCAbOatkEimnKzv2nTa+H7tDoy+7/
+         epjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjObxY5lK6K+BZmMa7cfwN+AmSYlLxhzSNfEYcK/Fe1STyoNzdOHdWpsa2vusYI/Nw+V2I@lists.linux.dev
+X-Gm-Message-State: AOJu0YyzZcWvbkK17R2lg4t0Dg50Mld5CYU7tQZepQOQhnNomHst8Cxc
+	k1pUJ1d892jLvB15EfoDWpN6y8Ueum1mtJkMT4UOT2lBu5Ufn5aQibbm00pRrSfrERjlwNhoCXb
+	0Amw7BNSX5OxJytVmRlOowUdfialsm7eLX4njij3P76wjcvP2o+o=
+X-Gm-Gg: ASbGncs5X9uKXIRUJrWrKggZfxD3QGVd9LKGS5kOHe24cKO4mTJBspCql82a1Lnto8F
+	BeVbxUfiPK2JJFcb9yjZfI4d6TpMHoMjVhZj8qRIRz54lBk1WUJJXwzWiBgAecV4Lmtmk+j3RXt
+	O6MO2N6/vD3l177rf5bcixI4GVgSiw7wZpqX5ax8VLZBdkWE1O+94IbbxZ73eOPvg7VTDwl8MB6
+	a3XMZPIVjnsw497jzLz8rbTPgrArLOTSsOYdXeknI3wDYiq35uuQth7UcPon9lh4diijbX52VX+
+	qK7R1iiyXjj4zNAtY5yaiWNlRBpUAyY/ogiAWSUEGYOKEt3cnqC+UD2VLhYcuL3VrMvINWDt+Q/
+	P+KrSShzQPRjb3ANXCIph3GCTZq2/R0I+bWRpApdwS4Q=
+X-Received: by 2002:a05:600c:1516:b0:439:5d00:e78f with SMTP id 5b1f17b1804b1-439a30d4c32mr143818725e9.11.1740407790784;
+        Mon, 24 Feb 2025 06:36:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFFGG4lEeSm6p0yFnCA/IQwyI272VMVV6NVwF1/1IUIoV6j97s6TFEZmg7Y5rX4hBQYsI/alA==
+X-Received: by 2002:a05:600c:1516:b0:439:5d00:e78f with SMTP id 5b1f17b1804b1-439a30d4c32mr143818535e9.11.1740407790398;
+        Mon, 24 Feb 2025 06:36:30 -0800 (PST)
+Received: from ?IPV6:2003:cb:c735:1900:ac8b:7ae5:991f:54fc? (p200300cbc7351900ac8b7ae5991f54fc.dip0.t-ipconnect.de. [2003:cb:c735:1900:ac8b:7ae5:991f:54fc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439b0372124sm107073455e9.39.2025.02.24.06.36.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2025 06:36:29 -0800 (PST)
+Message-ID: <d90ca138-7506-4d1c-b144-08b6099ee63c@redhat.com>
+Date: Mon, 24 Feb 2025 15:36:28 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|IA1PR12MB7638:EE_
-X-MS-Office365-Filtering-Correlation-Id: 81b63ecd-104a-457f-1b74-08dd54df5440
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sjgQ+eH1DLFJsP1LBL0CilEeYXHFBbblqxVYEKZouO2ij9J5wrNhf/d4YQcm?=
- =?us-ascii?Q?IWl5+04GbFCq1nfAKMnsFNw4OwYJ4c81aQfJ7JGiyK4opdCFca960lg3NOh6?=
- =?us-ascii?Q?16Y6A86GQOZv+J3ek76pmtKeWCju7qMfL8+ED/wTSikF0bSXqwSc10DSxiPW?=
- =?us-ascii?Q?x3GvNmjEPH8OWrO9REvFNT9T9EKOfmyKwjGsXV2SoP/kAxMR2F0YmJ6N8jix?=
- =?us-ascii?Q?cbQJyyUxRygbeJ3ZrLjh6SBeFKd3QZlXpkTrGp07YIw9W6KUWrl4ZSXkGTIc?=
- =?us-ascii?Q?hXA6xbYkFF4rAuu55pECi9dTdShBjnr3fh6gW/I2HIfl8u9An4bBk6/2Nmr2?=
- =?us-ascii?Q?aGBhwDfM21GSSNMY+ZoOWICpqM8ewnyR1iAppc1+7t1vSYDEI/NP6k91oPAB?=
- =?us-ascii?Q?Q2DIdwIcX0dik4YVr6MHydqSio/UDkpbXXhyNcKRALK5JEMJRCg8ON7FhVQ+?=
- =?us-ascii?Q?o9j/Itmbw9CGy699oPssuwshcdVvyLMSicRrJKNesuVhjiTHw1w1ur1i3q8f?=
- =?us-ascii?Q?iDjuDrIcHPC/r0iKUZqvHiZi3dxfjuzWwQJ54HCa4dAHAm2bL/5mOaS3E00u?=
- =?us-ascii?Q?ULiKp4dTy09wtgQ3tawaAqKdLNTkGrunsnTtLTTYPyQt2SxRGmliZyl/4M8G?=
- =?us-ascii?Q?SG7iS2dO9CNAlDsv75hWgilzAwifnR5od9yvXAE1lFzZu5/t0bhdQ/1Ueuxx?=
- =?us-ascii?Q?5aq4w//xBRCyDCyjzfXly4c0wOEhQR0VuBrx6il2QXLhk/YWZbYTe5OGcnbv?=
- =?us-ascii?Q?O7bPXXMQCW0hzf5dHhSlyYv6zBjwte3McrAbf5nLQCeR0yNYDuiUGDAgOGk9?=
- =?us-ascii?Q?ZUbjxxRYRvR6K5woYcEu1k3vkjqRV2igei++QW3UkvIysOPeP6+EGiw0hD8u?=
- =?us-ascii?Q?3Vh27EXgLzD7SQ+pjom1npxsLfk/Cnx0NzDZug7C8c5u/i9rvAALExIVCugR?=
- =?us-ascii?Q?Y6gs7v3VsF3b2iIP4953NIm5eAWsWenWQg7pdSwoK6MprCxryK32/jaNQoSK?=
- =?us-ascii?Q?9XaljwlgaF0/gd2tOaTy2VuKSiaNxLa6/4NNdOSv1jtVEbL3OyOnhcMvieCy?=
- =?us-ascii?Q?I3Aezj3bo2pkBwlY5i59h5zggkPVkLMKWiNCKAgaDUZeFtAXfNcieca6rydY?=
- =?us-ascii?Q?O1eUMOqDDRxxVdCkVTs35idC2blUL/s3DToxMigNJdqhH/8Yxbx5Zmm5muuH?=
- =?us-ascii?Q?8MLfCAZ8asBPfGKu+5aK9kfZjCdnEytSMC6W1B/LROUWvnhOc2CrcPGzkXl5?=
- =?us-ascii?Q?0TOR6Qwr9XE0vTaUGRlCyfmchwp1TN043YdX+6xQwQfxkUXhIu/gkLz4r1yd?=
- =?us-ascii?Q?+ihRl7vdOhfqaKqMA4bd0+vef+OOeGFgH2Irx+bANbcxifs9DjY7vyglIxTe?=
- =?us-ascii?Q?u7SXWGo0u73dIx/0GvLRr5F1kXqS?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Jjx5SxU5e28mm/aa0QTAAN/W0C5NRftYRKJ+V2Oktd6PZEZsYgqRII6J5gQp?=
- =?us-ascii?Q?rqFfh0BcQ+JFTcp9+coEt/Qyq1WO1skuADu0nX1BusKfkAmKNTh36jK+1wnV?=
- =?us-ascii?Q?TtgaA6z6y1P74vKlkcYXQW+arPpm+jVfgEfhTL/xdX9PlnThoC9UQhZMeW+e?=
- =?us-ascii?Q?VSGhao9/Vy/Gmnaq1BZYfGXQEDxtNGbqBUcL4Q79PqLhRJ+RGhS47Er2a4pl?=
- =?us-ascii?Q?WU1FrIW+XIGiQIdTKQs6hDkWQAcgEKwgQhFwV2iUAY5YN9r2UJAx1OWAt0eF?=
- =?us-ascii?Q?dnR5n+SrBjE4O8VIFZz+VG5U1nrUoIcGsaA3IW8kYm31au899wz85kHiIWQy?=
- =?us-ascii?Q?kjxVrz6+ni2M3vATZrETM13uhIPEhmnSzpCaayqgXAK2AHJqpYY1fGIQzziA?=
- =?us-ascii?Q?gJMYR18w95o9RRNZCU+A/kA4C8Sq7QurwHhKahRZyb4HEOo1YHw0plQkcvSg?=
- =?us-ascii?Q?0wDnGWQbTdIJ5/Gqu3EmisQek/JyZF+bwEi7v0MJej1IoLcuUItosMZcEd/N?=
- =?us-ascii?Q?10fEfV1f/hUjGTyx9dudVPPS8SKP2GNPR+RlQ5unjr6qwOGlzvGrGfx3Yijk?=
- =?us-ascii?Q?+/zh9zJOBjw39THjEC+nJH5+VAQ9TFGwEP+MEZnCkPSB1LUIOX8JPaXXnNiS?=
- =?us-ascii?Q?CgDxnSR5YnjCcY8aqRhKH0dMoVuuhoRvW4H4XvlbnhxhwmCx06MM7gFX8zuu?=
- =?us-ascii?Q?TMymKzDlrYIOtGabLl/4WkPwrg9U+dXujJY+W9MC8+HktTHp2ATbYNOEB6lX?=
- =?us-ascii?Q?HzApkPhFPGsGDcw+xT38ySDZIGdOacrm5o61cNbdGT/QdmljtTnmsXFSQbZX?=
- =?us-ascii?Q?cITcrCwnN80uWU3SFzceX1A+JD0rJ4mNuO/AVgxcex2/rrqnSSCW/jB77peW?=
- =?us-ascii?Q?4TbWFdFepxBFyYnpWNsRgrpTP+yvOdfKqcw3xa+8U1/47QuGlUnYit0AB+7e?=
- =?us-ascii?Q?dppHCz6RSlECC3IEeTY7cYLPFWaFQaKpJeuOk13/mQapLMgEZ6TUbbbXllV5?=
- =?us-ascii?Q?qI3p0z5iDbXB+xKAj9yXuwxMKnEmoSaT+sM+mFtQblVhLqkZ8UeyDUCZtr/+?=
- =?us-ascii?Q?jOAwtHPebYmReawKjwa627ijBUAU9Fmsn5E6o0RsNGRdOsMQvw24dCi+o8Z2?=
- =?us-ascii?Q?NVa6XGbGT4276NX/AWmw+d02Q6rdt0FerSHPpCGamevmnNAv7Cnkdz9Z8SwY?=
- =?us-ascii?Q?ZK/Oxqm5SSrWXr4cd/zQqrlqKWB70WoDqAApsRRiM/vDlzORUasMcebAp76u?=
- =?us-ascii?Q?NwP21GUSJgWpndVvZqbya0cr5ygp0nCmZK8CblG6W8DT35WFD27JHYEPCLHz?=
- =?us-ascii?Q?cCRuarGZhj5cjtRSPjXrn03I+2CmmcDoe3LIEbBnTSTHEXd4fv42SL9cdvkf?=
- =?us-ascii?Q?4G7ATAgTP6DeDoY5At+s4IWRL6Gqr+VMzMvyYXpfqTiEtrOWoAFBlJ6e3Gbf?=
- =?us-ascii?Q?Tfsl8oSWcELOBBe1bqqRjCZ4ujlMCD+RXEtAjw7ig6PQgrCJm0jWPzCp7qZR?=
- =?us-ascii?Q?Set6hCcmbFyXPZcg0i5nLcbl8MzIabwJxy8j15fJ5c4iMklMcYq8DAXFFY+X?=
- =?us-ascii?Q?mAWjI2ePF5twu1ZgzdPZkqXJhBaAGj1vOWWmU0NF?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81b63ecd-104a-457f-1b74-08dd54df5440
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 14:27:12.5411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SxifNOG6QNNwluMn1WsfJeV/no747s3O7rNSyLj+NrKYW5Y5jViiuMwUoV5hxPFC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7638
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm, cma: fix 32-bit warning
+To: Arnd Bergmann <arnd@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>,
+ Frank van der Linden <fvdl@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20250224141120.1240534-1-arnd@kernel.org>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250224141120.1240534-1-arnd@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: HnxITpNVIpHk1yuQK5btWC83AWDto_0g7Cswp_wi1qU_1740407791
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 24 Feb 2025, at 9:07, Arnd Bergmann wrote:
-
+On 24.02.25 15:07, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
->
-> Using a variable string as a printf format can be a security issue
-> that clang warns about when extra warnings are enabled:
->
-> mm/cma.c:239:37: error: format string is not a string literal (potentia=
-lly insecure) [-Werror,-Wformat-security]
->   239 |                 snprintf(cma->name, CMA_MAX_NAME, name);
->       |                                                   ^~~~
->
-> This one does not appear to be a security issue since the string is
-> not user controlled, but it's better to avoid the warning.
-> Use "%s" as the format instead and just pass the name as the argument.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  mm/cma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-LGTM. Reviewed-by: Zi Yan <ziy@nvidia.com>
+> 
+> clang warns about certain always-true conditions, like this one on 32-bit
+> builds:
+> 
+> mm/cma.c:420:13: error: result of comparison of constant 4294967296 with expression of type 'phys_addr_t' (aka 'unsigned int') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
+>    420 |                 if (start < SZ_4G)
+>        |                     ~~~~~ ^ ~~~~~
+> 
 
-Best Regards,
-Yan, Zi
+Hm, so in this case the whole loop is unnecessary.
+
+In any case
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+
+-- 
+Cheers,
+
+David / dhildenb
+
