@@ -1,73 +1,73 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AB6618BC26
-	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 14:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2A1155308
+	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 14:37:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740407797; cv=none; b=Vn4DOFY4N/SBo0vpi4k2SOoYfkZHRKzCl6ZlXciZPB+dNakLqWn3Nhttlbt1YejExjp2xiuOCnbr8Bsk9FAtGHnxm/Tmh22KP2UhtFcL8evR3CZnDOnPnSbqkrK+aeXXk2hompRcRlX+s+opJzw9kM4b4lLGJPruGPJVogHcvTU=
+	t=1740407842; cv=none; b=uXjWx0jhpwWUT4WnK5eUrbM7TqmI+lrEga+hwBW/ctmWQOp8cp4IFc4kpILXhGI8Smh09ufG4Oqi+ZG18nYEp60A1xCfXnut/pmJLs9TIxp3aDMfhgYM9lb244nGBr990/T3Jb2Z4YsQo/aDrlpk3Wug6vub2PeAaMnOuH54WvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740407797; c=relaxed/simple;
-	bh=UwSwiJGZwSq+WhG8DJIpzDOvAXg+3MQPfE526y5E6XU=;
+	s=arc-20240116; t=1740407842; c=relaxed/simple;
+	bh=jlphq0Jof3bRTJ7MBXqVmTTElhEpnSobrv7W4kpBGJI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pQ4TzSuyQ8JVJJAx/dEQ2oj5gUX0BlkFXIDV+A3Nj2b5sQk/eizEbMQsQbpeK6fZEAtbgaaLP/fhqYIkMKG9cMp48IS+WADnDWNHNa+AWR8rqkjIQ0sv5ShiNJ1CxNxlDuOIE24om+kNMEe0svo51/+YUMffILTQZkvvC47uz80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EMIRKBHh; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=Usm698aFKDas23B4ELgPEdbfhYKe5lgIapF+9tKMKa2e1HXJJgEWMOjCIW/shGtBUimPWxDVfEasKe20F9AJ2sBQxlmeBGj6AlY6xUF6phbc4RR5scQ143rNDf71QOB6tHA0yu9omyLgsIPIBM46j81Dw1BWB1jpZT5vJbphJco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OStW1OMz; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EMIRKBHh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OStW1OMz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740407793;
+	s=mimecast20190719; t=1740407839;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=4a5Pge3ndAsxD91Ok8sjj4Yec0ykdk1cuFOtuh9yTlo=;
-	b=EMIRKBHh9cX7g3Z83KehxvJJ0KWEAbUKVrQmZmq1A0l00Z35bAOu1iS0U29bkMAN+DpEVp
-	LR2HnBIVZ8aYSsAXidCu7DIZ3UUi/BXEqBKn1YXpgfW3IELsch9BDgr7lRzm59lROBDWNp
-	I55vde4GWWkKP1Cnq+uIPnK9mTxArJk=
+	bh=8cBqLVMO9KyDdhAhicbfLxQ0QgptAxHHChSiZfSWUp8=;
+	b=OStW1OMz+r+OrkXiLp7mXZneyJgAQMze10czdTbNIwvMtSJT+XvEDENzTMFzHO8oYNOn3L
+	iokJ5O7E/JpAv1v8kD0NMkJEHj8dmEFftDguYl714GnKFcK/PxvllZ5t/W01V1N9RKvdmc
+	ZU0iny9okgX2XuDWsHg/cXLorNDLj7E=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-575-GELxwQ9APPqcn7xgjc480Q-1; Mon, 24 Feb 2025 09:36:31 -0500
-X-MC-Unique: GELxwQ9APPqcn7xgjc480Q-1
-X-Mimecast-MFC-AGG-ID: GELxwQ9APPqcn7xgjc480Q_1740407791
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4399d2a1331so22047455e9.1
-        for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 06:36:31 -0800 (PST)
+ us-mta-307-eWUBkFhDP2SQp03eZqU1jA-1; Mon, 24 Feb 2025 09:37:18 -0500
+X-MC-Unique: eWUBkFhDP2SQp03eZqU1jA-1
+X-Mimecast-MFC-AGG-ID: eWUBkFhDP2SQp03eZqU1jA_1740407837
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4393e8738b3so31879245e9.0
+        for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 06:37:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740407791; x=1741012591;
+        d=1e100.net; s=20230601; t=1740407837; x=1741012637;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4a5Pge3ndAsxD91Ok8sjj4Yec0ykdk1cuFOtuh9yTlo=;
-        b=ZMs4pbcfagx1vmXnhF6zB81O09Y55coy/jU3Puhr0FSum00CYK5Pp30DzqCjDXufoT
-         YuNH2rFmNsEuxGHdfZAlKESZoomSJNRBOpi4hVlGLuSpVhPrprRPkHQX8a6jIIsBSOcz
-         uSjHyx3eBoAQAQcn40xFbBhajshWq5g3KnWI3fSG/GPtK9FliIrJo1i4NriYcugMWf/A
-         ahciQptdItTaunNA5xxx4vNH2WtI/KF3CqYlyirgRunqLdiJEVUmMhgYwR4d17lDTGvO
-         9S8rPkY8+6cy5i+7jlfzg7XLE93XxxZuBzM2frqLCAbOatkEimnKzv2nTa+H7tDoy+7/
-         epjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjObxY5lK6K+BZmMa7cfwN+AmSYlLxhzSNfEYcK/Fe1STyoNzdOHdWpsa2vusYI/Nw+V2I@lists.linux.dev
-X-Gm-Message-State: AOJu0YyzZcWvbkK17R2lg4t0Dg50Mld5CYU7tQZepQOQhnNomHst8Cxc
-	k1pUJ1d892jLvB15EfoDWpN6y8Ueum1mtJkMT4UOT2lBu5Ufn5aQibbm00pRrSfrERjlwNhoCXb
-	0Amw7BNSX5OxJytVmRlOowUdfialsm7eLX4njij3P76wjcvP2o+o=
-X-Gm-Gg: ASbGncs5X9uKXIRUJrWrKggZfxD3QGVd9LKGS5kOHe24cKO4mTJBspCql82a1Lnto8F
-	BeVbxUfiPK2JJFcb9yjZfI4d6TpMHoMjVhZj8qRIRz54lBk1WUJJXwzWiBgAecV4Lmtmk+j3RXt
-	O6MO2N6/vD3l177rf5bcixI4GVgSiw7wZpqX5ax8VLZBdkWE1O+94IbbxZ73eOPvg7VTDwl8MB6
-	a3XMZPIVjnsw497jzLz8rbTPgrArLOTSsOYdXeknI3wDYiq35uuQth7UcPon9lh4diijbX52VX+
-	qK7R1iiyXjj4zNAtY5yaiWNlRBpUAyY/ogiAWSUEGYOKEt3cnqC+UD2VLhYcuL3VrMvINWDt+Q/
-	P+KrSShzQPRjb3ANXCIph3GCTZq2/R0I+bWRpApdwS4Q=
-X-Received: by 2002:a05:600c:1516:b0:439:5d00:e78f with SMTP id 5b1f17b1804b1-439a30d4c32mr143818725e9.11.1740407790784;
-        Mon, 24 Feb 2025 06:36:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFFGG4lEeSm6p0yFnCA/IQwyI272VMVV6NVwF1/1IUIoV6j97s6TFEZmg7Y5rX4hBQYsI/alA==
-X-Received: by 2002:a05:600c:1516:b0:439:5d00:e78f with SMTP id 5b1f17b1804b1-439a30d4c32mr143818535e9.11.1740407790398;
-        Mon, 24 Feb 2025 06:36:30 -0800 (PST)
+        bh=8cBqLVMO9KyDdhAhicbfLxQ0QgptAxHHChSiZfSWUp8=;
+        b=hd1C0S4a5J30fL1QeoUv+dbdGzYYLc7iqbK0EENZRhUh9WldxMPJLgm0GnvhwLI1KG
+         kpA04TgjpoJsjFcbXLPZTEwLdlB6rOkRRICMxYjKHemJDmy/wUMkFiC7te/qyUFWANZv
+         ugg8ItqKFlhy7K45pAYucljV1WX5xEX5ZaFryJYj5PQFERaqQFK/wcvWfmMYc69mNH7C
+         P9ngNTYEVor7rgX2LyoyjYCKhk2opEmFMPYyzwl/430nwC+7zRy6oXeHkQr770HFs5HF
+         4RJzXC90I+adwdFgZq9wrw8OvQVOgz3geaQtZlegjczFu7ZFPX0AYlec0z9vDoi01Umq
+         qC/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUULpi9qhFbpNHB7svByLe17Tqu88lljeu7qUv5XPQJ5+bRDQDKavO31y+t8sxX7pZLSvkE@lists.linux.dev
+X-Gm-Message-State: AOJu0YwCx1JwZWEbUl1PeoHxSYCwja+xY1SqNlAojl03jDvGtVW4YWWu
+	NaX3FRBrU5rS6XKNNvLUndMszt6c2YklfyCwPmr5KkzmbS4ggs6REAV0XnlariPtM0GjkR+WCG7
+	Su3W7RCfrFtgWLbK0fMUdeNW1ie55TC1v2nntwUzyHpwRt6DkpEg=
+X-Gm-Gg: ASbGncuDKRHLHjdBJSEcDVlVD/WT90OvDqyaDWJDagQZTEiJa2vhR6rNIStgQb5rlCe
+	rM37Y4eFDGZKeyhqtCzcSb//eceIi9dKM2DLxQoqF4kb04tK6jnC71gcy7Mj9XKYP4JBIiOZ4Px
+	7s1Bge+XYe/YFETLSL4+fE5zIVcMG3yjrDJarBHAi07vPB0ARS5Vt6u5yyDnZexF1jayfZEwzC7
+	d7CiBHsXGerfMy8jan0Drw9WWWu17b4G26Hk8y6L0jgv0sj4kP89sBW4xoKTjiB5swzAZeigt1n
+	HBf2EPuhLMXI0my+fqkx8oag6Y0LqKIiU28OvFO6OREMt1ihJxJ5uzRBp9wztgP/j3IUwR0PyDf
+	hzbeVcaknwbbtWQea+MQ0W7nSVOHsoJhlYDacqNa9Zyc=
+X-Received: by 2002:a05:600c:4f02:b0:439:689b:99eb with SMTP id 5b1f17b1804b1-439ae1e6668mr111032565e9.7.1740407837353;
+        Mon, 24 Feb 2025 06:37:17 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFsgWIR7iUmkg5e2QIW4/Xk5GM1LXoMIZsAwAYVXVELaDEwSw/hfMUlejuAwccBjLpngSd3iw==
+X-Received: by 2002:a05:600c:4f02:b0:439:689b:99eb with SMTP id 5b1f17b1804b1-439ae1e6668mr111032365e9.7.1740407837022;
+        Mon, 24 Feb 2025 06:37:17 -0800 (PST)
 Received: from ?IPV6:2003:cb:c735:1900:ac8b:7ae5:991f:54fc? (p200300cbc7351900ac8b7ae5991f54fc.dip0.t-ipconnect.de. [2003:cb:c735:1900:ac8b:7ae5:991f:54fc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439b0372124sm107073455e9.39.2025.02.24.06.36.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439b030c615sm108844235e9.32.2025.02.24.06.37.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2025 06:36:29 -0800 (PST)
-Message-ID: <d90ca138-7506-4d1c-b144-08b6099ee63c@redhat.com>
-Date: Mon, 24 Feb 2025 15:36:28 +0100
+        Mon, 24 Feb 2025 06:37:15 -0800 (PST)
+Message-ID: <697ca5a0-174f-441e-a27e-6a1652235a87@redhat.com>
+Date: Mon, 24 Feb 2025 15:37:13 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,16 +75,16 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm, cma: fix 32-bit warning
+Subject: Re: [PATCH 2/2] mm, cma: use literal printf format string
 To: Arnd Bergmann <arnd@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>,
- Frank van der Linden <fvdl@google.com>
+ <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
+ Frank van der Linden <fvdl@google.com>, Zi Yan <ziy@nvidia.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 References: <20250224141120.1240534-1-arnd@kernel.org>
+ <20250224141120.1240534-2-arnd@kernel.org>
 From: David Hildenbrand <david@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -131,9 +131,9 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250224141120.1240534-1-arnd@kernel.org>
+In-Reply-To: <20250224141120.1240534-2-arnd@kernel.org>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: HnxITpNVIpHk1yuQK5btWC83AWDto_0g7Cswp_wi1qU_1740407791
+X-Mimecast-MFC-PROC-ID: awHsIH75PGU6zsXztqGVQcu5Vj3kp1KC_O6jor1Rark_1740407837
 X-Mimecast-Originator: redhat.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
@@ -142,20 +142,37 @@ Content-Transfer-Encoding: 7bit
 On 24.02.25 15:07, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> clang warns about certain always-true conditions, like this one on 32-bit
-> builds:
+> Using a variable string as a printf format can be a security issue
+> that clang warns about when extra warnings are enabled:
 > 
-> mm/cma.c:420:13: error: result of comparison of constant 4294967296 with expression of type 'phys_addr_t' (aka 'unsigned int') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
->    420 |                 if (start < SZ_4G)
->        |                     ~~~~~ ^ ~~~~~
+> mm/cma.c:239:37: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+>    239 |                 snprintf(cma->name, CMA_MAX_NAME, name);
+>        |                                                   ^~~~
 > 
-
-Hm, so in this case the whole loop is unnecessary.
-
-In any case
+> This one does not appear to be a security issue since the string is
+> not user controlled, but it's better to avoid the warning.
+> Use "%s" as the format instead and just pass the name as the argument.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   mm/cma.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/cma.c b/mm/cma.c
+> index ef0206c0f16d..09322b8284bd 100644
+> --- a/mm/cma.c
+> +++ b/mm/cma.c
+> @@ -236,7 +236,7 @@ static int __init cma_new_area(const char *name, phys_addr_t size,
+>   	cma_area_count++;
+>   
+>   	if (name)
+> -		snprintf(cma->name, CMA_MAX_NAME, name);
+> +		snprintf(cma->name, CMA_MAX_NAME, "%s", name);
+>   	else
+>   		snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_count);
+>   
 
 Acked-by: David Hildenbrand <david@redhat.com>
-
 
 -- 
 Cheers,
