@@ -1,115 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5ED61519A5
-	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 14:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB5E74BE1
+	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 15:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740408253; cv=fail; b=Wz+OVX0rME/qzTbXvTX7cCqHvV8fFlByirJuCYszJuzcMWXN3FnkNWNwawF551tGx3jDwrJJeUD6rTE59Q1enhC5KTfjLZZw8ROzhuzfGQTrGzzsXfbqcfwHHAqcU6wbywJj0QkmjNVtOoC+SffYPPiybmGGr+Fq+pKLgTvAJUQ=
+	t=1740409533; cv=fail; b=pLETuDGZ/AbRaNZi+2Hkhbr0Qc6LR7cs2lRvzdiRsWVJYG0FFriITut8S9Cj8t4b5+oKnfABv+A6pjoOHWHVqj+vHF69zui1G6sFuEpxzaYf9jteJNlkqeK+fhWA5soA5vlLrMz+g3zZNQul2ytHimOJb79NL8PWOecb9JRG5f0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740408253; c=relaxed/simple;
-	bh=vJaJyTdY3K+3uLuNFe81T7fxhK4lfxCBgUC3kQUZGBA=;
+	s=arc-20240116; t=1740409533; c=relaxed/simple;
+	bh=z8VtMlk6QBkcndmx4AxlczUinV8K5Rrm4T7hBjhY8RA=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ZqMMZpK1LkJ3UGVUzjBPwkvlpYICs3qPW+4Dr48bWpnoKLCpTfq9CB5yFdgmItzSpxdG4AGk55WDSKDt1pLXzbfL3UptEJVlZ7RM8qZMd/Vpbo9R86Vuo4qNhroSDqssdNcCH9IY8BYhsqefEjle8TNGqys5lRiHKxe8DlgxZPA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7N+8/6x; arc=fail smtp.client-ip=192.198.163.12
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Knj6TqnUrKp97i8JvBNsyQi081hRAOvhRl5HVMUnAm0qcK/BfziY21r5BjUtMRLGXs74j4nc49K3y931nFOBm9Ld2npDp7vYivZZOwjGUeSwSEO2wauGDPUwaNaQCTbNmNrQAskWFinKUyQj5JJcCkRYfnEZ7fQvQdugEVqg7ws=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jNK1qGwk; arc=fail smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7N+8/6x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jNK1qGwk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740408251; x=1771944251;
+  t=1740409531; x=1771945531;
   h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=vJaJyTdY3K+3uLuNFe81T7fxhK4lfxCBgUC3kQUZGBA=;
-  b=e7N+8/6xePUgnP+r5yHYjguenzNdghZiEB7fOVAEinyqBUXnsPkBKHPi
-   lP6S7JBlB+WS/7l9ahz8fG+dNyoQAloRXpJFhuKiLwUjWOM4lwhh8YqiT
-   7EX4KQuuMyWnqvqCpdobVfR4hwUYem84qOGYOQA/Pp8W/cXyN04ascfzE
-   UJHBZfKaPIGhAc3XuWrfUXnO+Y2a62WXvF/9+Of8GHuUZffzVFTO7YnDP
-   +mxeXKXtoz0lxM5hhdItfxRcG68+miy7j85K7rtyZnhW3Mk/Xqo/Kp2R6
-   WjeAbOTmXvXbwMm1hMRtgt9U3iFBcs7JZOxvmKyf82cMmaS/zGLOfPLgl
-   A==;
-X-CSE-ConnectionGUID: 64+9llejTFab/GYMZyWkJA==
-X-CSE-MsgGUID: YzSm9dRTTpOxBVwfBkIcmw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="45072081"
+   in-reply-to:mime-version;
+  bh=z8VtMlk6QBkcndmx4AxlczUinV8K5Rrm4T7hBjhY8RA=;
+  b=jNK1qGwkBRvHhxmS/g4BYyq4d4JBCBylw1IgwvQ3RgOrqd/GVzUlk0xL
+   udRPoJOAsV96+whxzx1Jb21YHzr4sOZQofe3TVhN6xNyP/01jawIscXNK
+   rikMGatXgcoE/u20oTxwKGdDtq2TY/5vpvwCz0UUX+AzIkPYaTRW/tXIs
+   ByW6gIVywxLfYcO57zCRnZxVRKRX57PHmS1IBq5Rdv4lNk+jkJnETsaPz
+   10NkC921DhcCDJPuh57L+3TmJq1emt4QzA3eVMk80hcwoLgMO13shYPzh
+   sQorFVhz+zNVF/9a1PKmEPf282O3qxv2X8CWStxGsa3neUtpe0ssGbrIC
+   g==;
+X-CSE-ConnectionGUID: py4BOVa8QnmgtYNwimQWCg==
+X-CSE-MsgGUID: A3nVJk8YTxmAec13j8EC1Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="51795809"
 X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="45072081"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 06:44:11 -0800
-X-CSE-ConnectionGUID: 5EJZ5YUvSY2cYrkgkRp8Tw==
-X-CSE-MsgGUID: pSLwCKNgR5K1opP3DDjCtw==
+   d="scan'208";a="51795809"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 07:05:31 -0800
+X-CSE-ConnectionGUID: Aoa+FoeCQqy0694mV17nNw==
+X-CSE-MsgGUID: cjL7zxXcRrm+4ddo5B7Zjg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="121171356"
+   d="scan'208";a="121044970"
 Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Feb 2025 06:44:10 -0800
+  by orviesa004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Feb 2025 07:05:30 -0800
 Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
  ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Mon, 24 Feb 2025 06:44:09 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ 15.1.2507.44; Mon, 24 Feb 2025 07:05:29 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
  ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Mon, 24 Feb 2025 06:44:09 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.46) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.2.1544.14 via Frontend Transport; Mon, 24 Feb 2025 07:05:29 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Mon, 24 Feb 2025 06:44:07 -0800
+ 15.1.2507.44; Mon, 24 Feb 2025 07:05:29 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vN3cH12qcy1m6NS97EylSfXrT6mS42jd8Y7DpxI/xDkbtelBU7ffJcowDo7U4o53cL4F4eUA5q5qvqO78OCuNpLiY0wQz5J30joaD1tTrqbSam0Ky0DK9xzDtcOe4VVkk/BmxaS3qgCzN2TimI32IEu7/Q8EbLQMKpC7m6kjtQPEwbNjd3NC66K5IRFRXwSHW//3bFU59/OfzAn56PoTFjy0CblZlZgkdYzA3IvDHwFCtp0kDvlMA4Vx9BZM5geoKSfrujG5Y9bv1CK1CO4BWsoDeu6wylo1YsToFgxIzEgOnngMOYHqEUx3qPT8KhKj/m079FggNTUqsKicWXErFg==
+ b=KtvN6etiit11kx12MpECJ0sy/2YMQCNdScE6vYLUO+4VCd5ys7icAa6nzugOxyOlvAbaDWjYKmDLnEG7mPawvkqNRpc3ZcFcwbgfK15InVBXgffcwwaRTh7qlxExYqkav4dclVHaS8iVvygQevJK02B6sqJdiiygpOFQe1HtBkRBWxHg2aNHcQyyOLyQxfQPHmwLm0Lw6CzyrkVfK5cTJIkt6c5jwKEZDaVjBX1JGpv4HKUFIhlRfGTbvhqabyaonb8QbtUf2kcwHBlth2tqM1QP8F3punrkpI34pJmWvhTvq1TZCyXhMMGaCTqfUdJUWRSc/BXCz18zG/ccd8kkIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eiB7csBYqiY+vNDqPYtaYmSKQVMVt/hn85ACZN5Qsr4=;
- b=nPGnrP40mncd4U2VU3MCdGEO71S7NHjt1/aQpIle31N6Fgl4foz9U26V+qJYYsLrQBKuk4a3dGlCrkeOf3sXgz4PpkZT8BSvr5jHZT8j5qbAyt6rCuikROLrC1OldxCLSoJ9BkDF9hYaMtfh+3Db3MQCkhWOHFPTSlWWBIah6uQ701ThUHOmT/akNE7NKpOfAQ5ph5cKNJAIFVZwfm+r4gBMoQdihKvhdH2z74JkrsseqmmHOrCIJ/NcphVOl/32A+lNQbIJ8XKVXsAo4iB2n1Hylw5YkXXu4URIpAjGHhPTzpiWhWKswkUsBATEW7sgh94KN5HgHK7w8W/VgjGO1Q==
+ bh=lpbuee7b1Ei0FZxcT5hzkaJTSmszR89rqyQRyEAXn6g=;
+ b=MfhmrKqWDEmpYN4BiZwbF2RGHIGqY7/umFQu11bXEkgXJUdTKlEeRbkgL903ZjrTDjMITHe0FI36PI/4mKpfPuN29r5pwBWnos7ASuMlqsgUQVJcBRxZBG6cADT51hmGmfEfhHrPja9RXro4z1ADMJGxkyiL/XWC7z/TK6pMGHpUevjoISAWJSvOlmXYjNLmI1lnC9aIAriaf8HGLm6h+coXSPyBSN70/M/W29WskPFWd8GxE2+907JzG6Jehmv/1dInZy50O7VH6OW+aLPKgtNKVF8UDtxXqmjBiMqJHYpZu/qzsm6K3Cv1lzOqYbHzLz0ZYJWl9KoXRJOtDrR5Ng==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by PH7PR11MB8454.namprd11.prod.outlook.com (2603:10b6:510:30c::5) with
+ by CYXPR11MB8756.namprd11.prod.outlook.com (2603:10b6:930:d6::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.18; Mon, 24 Feb
- 2025 14:43:51 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.20; Mon, 24 Feb
+ 2025 15:05:22 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::7141:316f:77a0:9c44%3]) with mapi id 15.20.8466.016; Mon, 24 Feb 2025
- 14:43:51 +0000
-Date: Mon, 24 Feb 2025 08:43:45 -0600
+ 15:05:22 +0000
+Date: Mon, 24 Feb 2025 09:05:18 -0600
 From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Daniel Gomez <da.gomez@kernel.org>
-CC: Luis Chamberlain <mcgrof@kernel.org>, Alexei Starovoitov
-	<alexei.starovoitov@gmail.com>, Daniel Gomez <da.gomez@samsung.com>, "Petr
- Pavlu" <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
-	"Alexei Starovoitov" <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
-	<jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, <linux-modules@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, clang-built-linux
-	<llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>,
-	<gost.dev@samsung.com>
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-Message-ID: <ccofyygi4rerybdmecqswldykihtabx6yco7ztylqnbmw4a5qw@ye7zoq7mcol2>
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
- <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
- <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
- <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
- <Z7je7Kryipdq6AV4@bombadil.infradead.org>
- <4xh2oviqumypm4r7jch25af5jtesof7wnejqybncuopayq6yiq@skayuieidaq7>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+To: <da.gomez@kernel.org>
+CC: Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, "Nick
+ Desaulniers" <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+	<morbo@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Justin Stitt
+	<justinstitt@google.com>, <intel-xe@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Klaus Jensen <k.jensen@samsung.com>, Tamir Duberstein
+	<tamird@gmail.com>, Theodore Ts'o <tytso@mit.edu>, <gost.dev@samsung.com>,
+	Barry Song <baohua@kernel.org>, Daniel Gomez <da.gomez@samsung.com>
+Subject: Re: [PATCH RESEND v3] drm/xe: xe_gen_wa_oob: replace
+ program_invocation_short_name
+Message-ID: <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
+References: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4xh2oviqumypm4r7jch25af5jtesof7wnejqybncuopayq6yiq@skayuieidaq7>
-X-ClientProxiedBy: MW4PR03CA0148.namprd03.prod.outlook.com
- (2603:10b6:303:8c::33) To CY5PR11MB6139.namprd11.prod.outlook.com
+In-Reply-To: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com>
+X-ClientProxiedBy: MW3PR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::27) To CY5PR11MB6139.namprd11.prod.outlook.com
  (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -118,213 +106,136 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|PH7PR11MB8454:EE_
-X-MS-Office365-Filtering-Correlation-Id: e15b3131-044d-4a92-18a2-08dd54e1a794
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|CYXPR11MB8756:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37a538e4-65ab-4bde-c72c-08dd54e4a945
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?OVVmM09uL1dXQnRkZnNxZmhYQ2xnTGp6c3luWThvUHlYN0E0a1NRMFp5aXZ0?=
- =?utf-8?B?Nm1FRS9kQTNzbGJuREVsRFVGWGhmQTBNWHBUUU9TQWVQVjlkc3l0UlBiMkZH?=
- =?utf-8?B?bjc0bHhTWkdmbUs2VDFqRWg3T2FpNEVmWGNzVnNEK2JlMHU0UkRRU2l4ZmJ6?=
- =?utf-8?B?MitnV3JqTU5BU3hCWWllOGtrL2NQWGtEWFF2ZEpqKzdpMXNrd3VPZWRXWXcv?=
- =?utf-8?B?TzB3RC9aOVVDTXJOTHk0bUhNV0hHSEszS2w3ZmUwZmhLQ2dEVVhLRUFTV0Yy?=
- =?utf-8?B?bWdyWjhqOG9IbFYvZjVzU1Y2RVF0VzVSdW1tZ0M0Q3dCUGN5NnNFSzNScnlR?=
- =?utf-8?B?ekhvQksyWUg3N2FGRlEyZXkyQzRSK1BTRm1TMm52Z1pPaGhPVjlhbURQRjZp?=
- =?utf-8?B?K3lraDFoK1RhNVpIcFZVNXFIODFKaVlJeTFVWlptMjBsTjNHU1Z6UWYzY2tu?=
- =?utf-8?B?WW1LWXplaXpzM0Y3OVVEa1dQY28zVG1pNS9PZ21aSW5Ody84aWRBeHFiMmpr?=
- =?utf-8?B?clErdHRqTURoMmUwUjE0Q283emFTZGN2L3QyLzNKSUdFajRJWGRIOXNmdE1l?=
- =?utf-8?B?Z2FLSTJpMjZDeHV1TmtZVU9OOFQrN3dSN2RnZFF0cnljMnVMKzlsc1ZMTGtN?=
- =?utf-8?B?VFErVWg4MEIzckJwQkY4TE40SWc1VEZ0SmdLQmMrNFVnZDg0QmZNaHBISHNW?=
- =?utf-8?B?bjJpS1gzeUk5N1E5M1U4clhJZWllWWtVenVmSFFpaENNTnpBZVlNdnppL0w4?=
- =?utf-8?B?UzZ3b2RRWnUxOUJwVVpnb2QvWHRnNUJuM2N2RkhubEtuOUpwcndnTTVVck0w?=
- =?utf-8?B?QnRoZGUvdGZDemdPN2VDTmQ0M1ArSURWOEl4MkdFUjlqRDEvTllSM3I4b0Ru?=
- =?utf-8?B?aUJSc0xHLzU1dFdnZGNrVTNuemJFcStrT1pHL0VXQ2l5bEdaRFYxYnZSMFZH?=
- =?utf-8?B?QXZVN3daeEFNbHhiRXZHMFVKRzhJTWtpMmRMOUlEUlptblhqa0xYUUFkRjho?=
- =?utf-8?B?bXJLU3NvTXZtN3VVelBEWmVFTUV0U0hCL1VtMDZHTyt2cEhWUFBNbmZuUmlo?=
- =?utf-8?B?bXdkR0gwZ0dVbUNkVHN0ZjBvdWhUeDdqZ3hyOXRtQWtvMHhWeU11MWZmQlhl?=
- =?utf-8?B?OUlPUGFiZ3ZqRVF1UjgxTzhmaS94b24yekRWT1lBY1ZYQVlOeW5tdkE2TGFY?=
- =?utf-8?B?dzdZNXE4eXBzNlBYOWZVSXhiZktLQVNEUlhWb3FqUUI1YnhNY3hvVkhOaldJ?=
- =?utf-8?B?ODZvY3RnYTJBZkIxQ1BWeDNnenE4WVptUkpDcStsbWdwVWVnQTFJcTRmV1Z2?=
- =?utf-8?B?OGo4K3BEU3FoaXM1UkxtSm42dFgxSTNJa24rckFsTmptbTVmYkZsbmRqWm9N?=
- =?utf-8?B?L3oyeEc2NzJDVUJNQWhpUDI0bWpOdWtPRjVmUE1qTTV4NURqb3hIVEcxTlBm?=
- =?utf-8?B?eTVrWXkyWDNRdzJhNW05b2daYmlBcDMrbHRSMHhmRlJaS0JjRUltZC8xelhM?=
- =?utf-8?B?czk3a2F1UXRxbWk1MXhCQ2hnakp2bkhaZk9TRnZsU3ZJMHFWNTIzSWhDSzdq?=
- =?utf-8?B?c0tiWjJaYjIzMnZhRXl3TFZ5eWFPLzJvdUhucGhDMjZrNkxWNWJCb25ML3VG?=
- =?utf-8?B?R05VczFoK2ZKeEFDYWxGd1IvR1Q0MGh4a1VQWm9ZRUNCNlVidVVDanRVM0o5?=
- =?utf-8?B?Zm1GUE9KbXRmMGtDeXNYVDBoWTRUTHY0emlPZTlWVEx1Sk5sNVR6ODFuQlNG?=
- =?utf-8?B?UmhXajBIUGN5VzhuUFE1WXlINzlyZmhkZjRrejA1ZVZBYStlUGlYYTNYcjlD?=
- =?utf-8?B?bXJZMUVFUGxuNUh5YS9Gdz09?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?87Gtw3DbsI3puUgQlak/SqRInHzYnla/IF9WLEUsriwwli6N2f2zTI6Ln6ZT?=
+ =?us-ascii?Q?0sNv6Y2JShHrbeCN7V3IEqnLAzpoyCPKEa/LJtSdewd2DhtEBNpiwLkJsF7X?=
+ =?us-ascii?Q?437oeEdS7GmKocgkriH+Uo58I4ofi8tfAjVvz+ZCficnVwjRmFF/DzZGcByN?=
+ =?us-ascii?Q?2rjB/Osxu7pymeQTqvZAWoMCvMgACGgNGo1/6BkLrTHEK9gD0oYvFOxl09ny?=
+ =?us-ascii?Q?qXDfD02akC97UnXeQpY011lz/I54+xpz67eWPHlqG4RK3aL+pUNlRgfhH5F6?=
+ =?us-ascii?Q?JuC0fFO/bACxOYPTCxIKp9ROEayS/j/Z4qZptJRIXZEZV6bcCOrOAFJlsAIq?=
+ =?us-ascii?Q?4gU3UbzvpnDdKtxzJYSkAPLTCtyilYicUJ+/ChGIHrYA7jD8ksKh0hPD6LkN?=
+ =?us-ascii?Q?CE1bIaZCkdQsSzoJjGGHP+rmBOyY47YKIkrl/eE2FyGSmhDAuWdOZ6+IrgQ3?=
+ =?us-ascii?Q?fs68IEG9dXDts91ynazfTdA+KN1yHz567WZGtsvMiH6Tz4btNSPeq29niluC?=
+ =?us-ascii?Q?uW+wAMomLl1ziGmlYIkIboF/6mfJZHGbjL42thYyS1mxScWofd3MJwmG9fRw?=
+ =?us-ascii?Q?0zlIld60/FhhEK614kEDbsLiAPf1q2TCYVsRFe890AQAiC0v3fuvlp4wckin?=
+ =?us-ascii?Q?o+R/mlSpqrvJOlF2NKyhqZkcVb3zOr2y5Hp/daPN7IjQ/rMPMUue4qOtXIrS?=
+ =?us-ascii?Q?v2ZjLtAIe7woK/yXp92QpZ19PpELNAOg4J/y/v9Ds6N2KGmuNN9biLYEiZMi?=
+ =?us-ascii?Q?Dv10cpfizOh3YIE3qtvdPN3nkO8EhZzW1GKDYODoqDckK4Vt66zIwQRcm8D8?=
+ =?us-ascii?Q?T1Bw0pBCzLPzfY/U/Xo++v1XPh52FkpRLOrf8r5tUN9b/F1NOkOh3bqXmtdO?=
+ =?us-ascii?Q?KpoKI9V11ocDsfRIaQ8ZYz1fkrLjizmoRSm42pE5xTjEr54nPZELY68CH/g6?=
+ =?us-ascii?Q?I5q5JXQWMsVR0xq3STiSmfqQAdQmLmDT7CrvFGVGe2tdgpRN980OQSgleyb6?=
+ =?us-ascii?Q?wYnQoHneLaHcP+T0HNZcYFuLApOKc1APkxV7ZeFgXCHK1QfZUsTAKqiiUZYe?=
+ =?us-ascii?Q?+Uf9yjqxrDymMsUZ6dxtdrJrsed6C4PT8aMGQ44hTUObiSVURflVhiBMfuHm?=
+ =?us-ascii?Q?JtNO9gQoZpCUDNfV6Uz0zP6XuYNzM9D4UhfUmT0YcRf80OsGQqTNDnV933b3?=
+ =?us-ascii?Q?lJR6M9dUbfvwTWZI5bmSpIRT6iJJtcoPzIacWMmcHrLYkvaKPV5WZdUOTJYF?=
+ =?us-ascii?Q?R1T9Um00Y/w4a2ACszFYXkpm6JWzHuHI9eW97nmFjr1daJFewlTfZHGouHVi?=
+ =?us-ascii?Q?ZJpIZDAdD2X/Pet5AqDXTlbmFzfdVWbUC8y9U+NWQk9/pTITVJeySiqp2Puk?=
+ =?us-ascii?Q?VvVkRHTWKqiXMu6E27D9duSUuXZ37UzdA9SFdvNTgMa/TY1I/g=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGdPeEMvV2pCYWFaZUFGclhiMXVFdzZwRDNwVWxWRG5BNWRwZER2ZWRCSjNz?=
- =?utf-8?B?aG12azZJcEMyd1JXTTJFN0g4N1NHeDNKUjFRdlJnK1IyYWhmbTNUL0h6REEy?=
- =?utf-8?B?MkEyQXFJa2VaRjN0UWR5WG1TQVdUTG1yeHRBd2IwS1ZIZFBjajdwL09qdFJo?=
- =?utf-8?B?WGVlSnB1MWx5QStBYzdUNitSaitrTFNrOUdRT0JRWmVCT3lYcVovMitYcWtL?=
- =?utf-8?B?eDN0SlJ5bEZzSUlBY0s5dXZJaWNyT0FsbGc3L3hTTk4vZ3pUYm5sUW9jdEQw?=
- =?utf-8?B?bkNCVEEwRTJoTm9FWEtjZmdFd05SZHpHMDNaWGxlMXFLOGxjMkh4eWNQVVpR?=
- =?utf-8?B?b1ViOW9lVkUrVGtaak9MY3VsN250MVMrZlpYK1VnMlpBVVRNTFdRMFFPckVs?=
- =?utf-8?B?QU10T1lRZnc5YzIraG52VmlhM1h1N0M2TmYwRm1LZHNweHR1b2NtUGJrUmlw?=
- =?utf-8?B?R1dDUmJFTjNpaU5MSmRVL3B3T3p0eHNJRlovNS9ZcjlLQ0NzZnRERCtJN1dE?=
- =?utf-8?B?ZlhYcjJVcjM3WmdRbmM2eHE1QllvaC9QRlZIclZnVWNqNiszb1JucmN5Uk54?=
- =?utf-8?B?QkEvVU1MMHJhcEprRVJLWnZvd3htci9HUDYxT2x5ZEprR1JoNmN4WnNKSjFM?=
- =?utf-8?B?YWwrdndhNTVQZWtoWHZka29qQ1p0WFBrK2RVZEZ5T3o3VkMvSGdXbkNpRmNk?=
- =?utf-8?B?alRqOXQ1M2lzdWk1M29Ubm05RUplYzFTZTZyaDFFcmNFOVB6NUVIUHlsTVFE?=
- =?utf-8?B?Z1VBMzJLK0VBRTR4dGpUNTd3Wm16UkRQb1BJcEV2dWV2VXBTdEVEaXZ5aFRW?=
- =?utf-8?B?ZkRWTG9XS3U2MGxuTTJKaU1tNy9PQzVLNWk3VTZVV0N5UVAzTGtoWmlLa0FF?=
- =?utf-8?B?QUh3eDA1aWVPLzdwMWk5WUNGSWxqTU8wQWExSldzUDJRWHZiZ21wRksyLzEv?=
- =?utf-8?B?ait1cHhwYmx0bXFRVTI0L2w0eFpzaWNCOXAxazFMMkphUWtSY1U5UzRDaHNl?=
- =?utf-8?B?NU9xNzhpOTAvS2JZVEtpRzM0bjNVSm9hYnlFendzSnI0dFhZakx6MHZFUmtX?=
- =?utf-8?B?NDRsUXV2dndMbVV5eTl1TlZ1VzlIZWpTU01iNlZyZ1dheVVCb0RiZzFvN0R5?=
- =?utf-8?B?NmJKUGV5VEF1em8rN29FWllOMFJRSHVRekRsV2JRT2I1bXhMR0o2Tmdna3RS?=
- =?utf-8?B?SG53dlVZdWgvZmlYak5GeW5JUGJqaW5XZ1VVL3ZRckJWd3hoWER5S2F1Sm8x?=
- =?utf-8?B?aDYyK1JhYWlXNVpDUkFSMisrMHV4OFBTN1lzMjd0MzV0MTY5VkJhdjdJb1lt?=
- =?utf-8?B?dUZkWE9nTUJwWGxZeU1NTCtuaTcwU3Q2dThVNGt3eUpCOG9TeWhpUGxkZGFV?=
- =?utf-8?B?THdOMVlmYkdaYitFSXpvdkVRK2MzWmQ4dVAzZFZYRmU0LzcyTXpKR1VXY3dM?=
- =?utf-8?B?MGFBS3kraWdCeStXRGU3T1pPUll2emEvaTgvZmNFNVZoZGZ5UnJuUGM2OFdY?=
- =?utf-8?B?eittV1NxQ1B0RnpWdUlUSmJ5cEFFdDczOUQ2blRNcTdIeG8rampwYVNYeHhV?=
- =?utf-8?B?OEFxZkdJZlF0MlFGWjJXMDVaNGhzMTJzZ0VjbGg1czRWeTN4QUgxdlFtQktW?=
- =?utf-8?B?THdxMVlmY0FxYnFPY3QwT1cwQVZoOTF1b3pEVTlpN29XcmZHcE5hd3hqZmFO?=
- =?utf-8?B?NnlKcXRFS2VIUFVyQUdPL1dmTER6MExSRFp1aWx0Um1kSXVDV0Nqd2FGWnZI?=
- =?utf-8?B?R1ZFYVBzR2VJdkluMGtmM2JkNEFzblg5Sklpc2RFYzlsUlJPS2JvVHpNR09v?=
- =?utf-8?B?QXFjNHl4eWg2ZnVKb2tZcFhpTDQrUDRmUkxZNHFpWk8zRFhTYnhlc2JLTWFD?=
- =?utf-8?B?ZlhkeC9rSERiTHA3VnlVd0FTTDllRzd2MVNLQVltRE1ISVNvSUNjT0kwS1hW?=
- =?utf-8?B?ekxGWXplNm02SGdDU2VMVko2WU9Oc2pwalYrUCsrdGNLYlNyVkx0NWJmZk9i?=
- =?utf-8?B?SEYxZkhGZWcwWXZpdS9JQWFUeHIxQlkvZUN2RVdQSlVENVpyMkp2Nk5HNmRm?=
- =?utf-8?B?d2lxbUVqOGVmR3VlMThwOVRrTUNxd3JPRzNoZVlIMDJaNFRvNDJYSnJjYUts?=
- =?utf-8?B?Z293VEhNYXdpYmtiKzNsZDY3UklicjdVS2J4WXd4YzJBTyt0NVd0UFJiQUNC?=
- =?utf-8?B?emc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e15b3131-044d-4a92-18a2-08dd54e1a794
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RuznmS5J5DCDEadHcHSt6mGuBl9JvQ7VPGjShRybwvcPd4tlh3f14fxT03bj?=
+ =?us-ascii?Q?T06flZItl8rFChtZsGM0ceQuqTBMp2/i9GoXWjK3U5sNTJE5CLfuReYGy0fp?=
+ =?us-ascii?Q?JxU0h+wnF3fUDJD8+XKHxVz0uFh9ZlF0GSUfxMmvSed5rQLh7XbDK32bbhSn?=
+ =?us-ascii?Q?JK14aXWTKXHMCAZXM7vOmigf1am/HDEIEBYeVCYJ5pOIi+tN2PIOgpUXk4hH?=
+ =?us-ascii?Q?/NWF6hSoNHLrkPPMb9cO4ZpXqqGJsRpkXDPorSquWb7rpIPi4tmfIsk1T/jc?=
+ =?us-ascii?Q?4KOUEr92ag7VoL1+yL6b20GDA8rRhD9CQcbYU+8zJw+ksqO4rMy7NYLlbpFs?=
+ =?us-ascii?Q?gphWLl88FEvpHCL3IKIQo5DGToRYSEjnuA5dBlwpnQB6pERgPfyFjYD0wQA7?=
+ =?us-ascii?Q?34v4aqoXzefEoXJ8ZGuUtTGGdRK9dYuD7VNVPX0r1iRpv5qNzfTnehiKxtRW?=
+ =?us-ascii?Q?L9ZGqo+3DcN1HsSsDFp/B1u+ZKmUWadtutqQvZ/ucezLHb+njqCIN9g3rcZI?=
+ =?us-ascii?Q?MImVcAs4fJeIwzFE1FW21h0F2w4vA7xdDtfM9gOAyfnd4NuUVvpeRTsl7zYB?=
+ =?us-ascii?Q?Wi96rBdMvlPZgSXCcBoPFtfsZXJmN2xTzkCBcnevLlxLsF3LzsdQQgEE1AVr?=
+ =?us-ascii?Q?J591+ogPuwy0BAf9NjUmoBhH35PPWUtX7TouD2neEFsjkzgcX3XkH/K9qufU?=
+ =?us-ascii?Q?9xvE+xkopfP+MWWVK1ywCDjNH8dV5RQtHZPOG/mFV7VSZ7KC/spxUJPiSpua?=
+ =?us-ascii?Q?TdyC4OIXHgxOoQk45w1KNsmoEPlozJD5MN4Lr8EpvqrVSoWLhk4w2DMEnV+6?=
+ =?us-ascii?Q?08gfOaQ1IUApXidkLQQVXOzPzhSRkRrFOxDc4Ye44UUkLA4J/hdsyz2A+srr?=
+ =?us-ascii?Q?DyllRnMGtbb4Oe2RCabknD4W7wUF2ZEVmkoqGv+B9i71AyEV8eoDxOc40T2/?=
+ =?us-ascii?Q?XyEXORnTMc1Z53w8yqZM9UYZuk7yOPYOVEbCE8cgGFGHCoJOxtPsIr00zRxE?=
+ =?us-ascii?Q?X3U45nPYcVBeN+pHTpxwxrfE0kxqhntdUFsvPQhF7DbWdQzmsQMoA2ueBIzE?=
+ =?us-ascii?Q?YNOK1XnDjQU6hfGgNHcGQIB2jHL9WJ/F9al90X1OzKhpIvFPQC63oBGDIjLW?=
+ =?us-ascii?Q?5/JSa/k9WYGs4tB00iRTYqpbgZr36ByYprVqJuRoLjieR3p85IlUJmYchyUP?=
+ =?us-ascii?Q?vaUqy14+Tz9a866+HoJ5LYa+/ELA2a/8Er+kyfDtnn9jsX/Gtjb1L4tA+XqO?=
+ =?us-ascii?Q?clcbopx/VJt7Uo/KFC5mKyXtbuLq2PujMjIViH54U2EctEUU1rK0CA29ez1f?=
+ =?us-ascii?Q?EDW6sgehPKsidE9leCEoBPpS4tUg7+sEVGv5OlFVf5JyASeSrXMsPy81qrbR?=
+ =?us-ascii?Q?54VWdbJ+w2IvqbqJxGtoN4imSCsWOKlFkSBJHmWw/GoXwdGJPt5E58Vb2WYD?=
+ =?us-ascii?Q?Y4PISb24kj7u+RHLMuqwRvbQNJF/JpHeOIrui2QWY/5L9Dsptn+XZrKyggte?=
+ =?us-ascii?Q?Fhaonizq2RxIxSm1DiB6y74YYYelMK+kPA6jIIDVMcOjTZzUdP0Ezfbb2E1V?=
+ =?us-ascii?Q?6NBwWmdvV/5VUjzKX54fI29mxjUJEbZmIkHdw2Hr/CMaOY94gSP3RnDb+jDz?=
+ =?us-ascii?Q?og=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37a538e4-65ab-4bde-c72c-08dd54e4a945
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 14:43:51.5481
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 15:05:22.7616
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W9D4lXvVXMEiwfrvdiIeAXctEYV+AN8dfAz7v3Dd59IQFFF3iunPC1OxvjrfKr9ukrKxS5gK8Y3vjTR4DlxmqtFeage/gWx/Tny3YUVccNs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8454
+X-MS-Exchange-CrossTenant-UserPrincipalName: ssWsjkvkt/7OMbkEsVHcsoOdrwJaT/Sdc6IcijPlXYz7tIqm87Z2qhFLYTbxPtu9h82pZr65SNxaBBhQUjBdRW4wWOBRnL8aLacc8BTCpMI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR11MB8756
 X-OriginatorOrg: intel.com
 
-On Sat, Feb 22, 2025 at 10:35:07PM +0100, Daniel Gomez wrote:
->On Fri, Feb 21, 2025 at 12:15:40PM +0100, Luis Chamberlain wrote:
->> On Wed, Feb 19, 2025 at 02:17:48PM -0600, Lucas De Marchi wrote:
->> > On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
->> > > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
->> > > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
->> > > > >
->> > > > > Add support for a module error injection tool. The tool
->> > > > > can inject errors in the annotated module kernel functions
->> > > > > such as complete_formation(), do_init_module() and
->> > > > > module_enable_rodata_after_init(). Module name and module function are
->> > > > > required parameters to have control over the error injection.
->> > > > >
->> > > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
->> > > > > brd module:
->> > > > >
->> > > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
->> > > > > --error=-22 --trace
->> > > > > Monitoring module error injection... Hit Ctrl-C to end.
->> > > > > MODULE     ERROR FUNCTION
->> > > > > brd        -22   module_enable_rodata_after_init()
->> > > > >
->> > > > > Kernel messages:
->> > > > > [   89.463690] brd: module loaded
->> > > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
->> > > > > ro_after_init data might still be writable
->> > > > >
->> > > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
->> > > > > ---
->> > > > >  tools/bpf/Makefile            |  13 ++-
->> > > > >  tools/bpf/moderr/.gitignore   |   2 +
->> > > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
->> > > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
->> > > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
->> > > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
->> > > > >  6 files changed, 510 insertions(+), 3 deletions(-)
->> > > >
->> > > > The tool looks useful, but we don't add tools to the kernel repo.
->> > > > It has to stay out of tree.
->> > >
->> > > For selftests we do add random tools.
->> > >
->> > > > The value of error injection is not clear to me.
->> > >
->> > > It is of great value, since it deals with corner cases which are
->> > > otherwise hard to reproduce in places which a real error can be
->> > > catostrophic.
->> > >
->> > > > Other places in the kernel use it to test paths in the kernel
->> > > > that are difficult to do otherwise.
->> > >
->> > > Right.
->> > >
->> > > > These 3 functions don't seem to be in this category.
->> > >
->> > > That's the key here we should focus on. The problem is when a maintainer
->> > > *does* agree that adding an error injection entry is useful for testing,
->> > > and we have a developer willing to do the work to help test / validate
->> > > it. In this case, this error case is rare but we do want to strive to
->> > > test this as we ramp up and extend our modules selftests.
->> > >
->> > > Then there is the aspect of how to mitigate how instrusive code changes
->> > > to allow error injection are. In 2021 we evaluated the prospect of error
->> > > injection in-kernel long ago for other areas like the block layer for
->> > > add_disk() failures [0] but the minimal interface to enable this from
->> > > userspace with debugfs was considered just too intrusive.
->> > >
->> > > This effort tried to evaluate what this could look like with eBPF to
->> > > mitigate the required in-kernel code, and I believe the light weight
->> > > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
->> > > suffices to my taste.
->> > >
->> > > So, perhaps the tools aspect can just go in:
->> > >
->> > > tools/testing/selftests/module/
->> >
->> > but why would it be module-specific?
->>
->> Gotta start somewhere.
->>
->> > Based on its current implementation
->> > and discussion about inject.py it seems to be generic enough to be
->> > useful to test any function annotated with ALLOW_ERROR_INJECTION().
->> >
->> > As xe driver maintainer, it may be interesting to use such a tool:
->> >
->> > 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
->> >
->> > How does this approach compare to writing the function name on debugfs
->> > (the current approach in xe's testsuite)?
->> >
->> > 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
->> > 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
->> >
->> > If you decide to have the tool to live somewhere else, then kmod repo
->> > could be a candidate.
->>
->> Would we install this upon install target?
->>
->> Danny can decide on this :)
->>
->> > Although I think having it in kernel tree is
->> > simpler maintenance-wise.
->>
->> I think we have at least two users upstream who can make use of it. If
->> we end up going through tools/testing/selftests/module/ first, can't
->> you make use of it later?
+On Mon, Feb 24, 2025 at 07:23:13AM +0100, da.gomez@kernel.org wrote:
+>From: Daniel Gomez <da.gomez@samsung.com>
 >
->What are the features in debugfs required to be useful for xe that we can
->port to an eBPF version? I see from the link provided the use of probability,
->interval, times and space but these are configured to allways trigger the error.
->Is that right?
+>program_invocation_short_name() may not be available in other systems.
+>Instead, replace it with the argv[0] to pass the executable name.
+>
+>Fixes build error when program_invocation_short_name is not available:
+>
+>drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
+>undeclared identifier 'program_invocation_short_name'    34 |
+>program_invocation_short_name);       |                 ^ 1 error
+>generated.
+>
+>Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+>Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+>---
+>This last patch allows for building the Linux kernel allyesconfig target
+>for arm64 in macOS hosts with Clang/LLVM.
+>
+>Summary of previous feedback and work:
+>
+>Other Makefile targets, such as defconfig, can already be built
+>successfully if the necessary headers are provided and the Linux kernel
+>build system is configured appropriately. To facilitate this process,
+>the Bee Headers [1] project was created not only to serve as reference
+>but also to document [2] the process and supply the missing headers.
+>
+>To get started:
+>
+>1. Setup:
+>	diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+>
+>	brew install coreutils findutils gnu-sed gnu-tar grep llvm make \
+>	pkg-config
+>	brew tap bee-headers/bee-headers
+>	brew install bee-headers/bee-headers/bee-headers
+>
+>2. Build:
+>	source bee-init
+>	
+>	make LLVM=1 defconfig
+>	make LLVM=1 -j$(nproc)
+>
+>[1] Project: https://github.com/bee-headers
+>[2] Documentation:
+>https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
+>
+>The changelog below has been refined to focus only on feedback related
+>to the xe driver. Version 3 was submitted some time ago, and although
+>some errors occurred in CI, they appear to be unrelated to the changes.
 
-I don't think we use them... we just set them to "always trigger" and
-then create the conditions for that to happen.  But my question still
-remains:  what is the benefit of using the bpf approach over writing
-these files?
+Is this the approach taken for other similar issues you had? Note that
+argv[0] and program_invocation_short_name are not the same thing. For
+this particular binary I don't really care and if it's the approach
+taken in other places, I'm ok using it.
+
+I was expecting you'd take the acks and merge it all through a single
+tree since you received push back on the need to build the kernel in
+macOS.  Is this the only thing missing and you'd want it to go through
+drm?
 
 Lucas De Marchi
-
->
->>
->>   Luis
