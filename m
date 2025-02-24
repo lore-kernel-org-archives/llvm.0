@@ -1,129 +1,67 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C9E257AC1
-	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 10:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE7C23370F;
+	Mon, 24 Feb 2025 12:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740394209; cv=none; b=lK/rvfKsaqPGTdo1oJDWf7wnfgK8Ne/PrchSmX/113uLwHRgZDPde9ZiVs3UM8Rsd922K/QYmTvNvco5aZD+8oD+/1ft7+QiEUEzsQwSngkOrESBIh7c3esjJS1QtNTlvnSAwSH8ZEzRTAOg7orAvLqWAJlaVjDZI6h3hBuGsio=
+	t=1740400542; cv=none; b=gTkeNogojv0Qqpm2pKkfV6s2CSwIK1vUAqblLEKJrC9O+U0LNFgBCzaIzgK6Lz9gih1lYjNW3bRqspnKhrhEhxhvif52+0lHzICkHLejA9a5svxh3G/JstY0jwG229I76atoY8VHeJXvq+1RT743vv5tC5Y7YFfyr6U0O3iMTiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740394209; c=relaxed/simple;
-	bh=+5dgnycedFYjCfpv9nlh2kaRz6IOGUBOWQxH0GhJKPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H/4nXcAqMTK2aLB3QDi5w1aP4dUb8OUF6elkngWzcbhFj8yZNvWuYWpymzzPnMyJUn+hhf2ulAtT4Dq8HO7As7QZICgH4AHEyiJB8R6OuWNFj8hiyvKNrcWbUg/QGtsUt5XRTLsm/+NWS9lRmmypZ3KLJjydimrTfpPsfToxw7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Z1cbK3Xnhz9sVQ;
-	Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id rAyZKr75BxfC; Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z1cbK2FxHz9sVN;
-	Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 39B398B765;
-	Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id sYvQOoZx4V4Q; Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-Received: from [10.25.207.138] (unknown [10.25.207.138])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 0A1BF8B763;
-	Mon, 24 Feb 2025 11:36:13 +0100 (CET)
-Message-ID: <055e567d-771c-4031-952c-1bcdbf921c90@csgroup.eu>
-Date: Mon, 24 Feb 2025 11:36:12 +0100
+	s=arc-20240116; t=1740400542; c=relaxed/simple;
+	bh=s/KOZT8FuLlCPeUB5JVASVwIWTkII3PCu9vNrjIh9SI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YpIrCi2quXmoyl7Vua4Ndn5PkzLEsqxiceBeg54qn3AGprD9AxV398Gpne/F2RdIsxMhCgxk/u9D1W0lb3xCXXtSeK6v6Ig4FPPrY6F7HN9pd8qrmB7KDC03OjC/G1R4gIhXQewNzsuSNqtlWu9V00sE1hattEHGmQgGwHnNN7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CiPkSzWk; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CiPkSzWk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=KjNIYWV63wd2ETJVPJjYoHVaRj09KcDEXGN6j/BKYZs=; b=CiPkSzWklbhO7mPKl1Jriapzi/
+	h9ZxgOOaJCqDCX7rY6o0B7nUEflSjApS0qhasUcWF4BOkhJEwhaYfuv99XToeUmJQw2+kR6W5WrhW
+	OwHnhVNyz53GmSNgcjiXOMIlxaXMZ0jwdb4zAwnzMZ4zeug+JEniisIxMNgEmiqKuCkxUOCf72gjQ
+	oTHbKpc43qi+xEsISsUdjmrcR0JdWeEOh3E9X9GVJYKXcwRew5f16ANwoYvi3KnMMjz5NxnyR5eZs
+	Kaqfcp2voEqtm9ZcyMIA26TvS5hyeuZL36CiNSnC/JxZQm22QlYAxSDZQwcmduj7p2AXViJBxosAl
+	/Ur+1niw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tmXgO-00000003Bsx-0elI;
+	Mon, 24 Feb 2025 12:35:36 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B45A4300164; Mon, 24 Feb 2025 13:35:34 +0100 (CET)
+Date: Mon, 24 Feb 2025 13:35:34 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sathvika Vasireddy <sv@linux.ibm.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, christophe.leroy@csgroup.eu,
+	npiggin@gmail.com, maddy@linux.ibm.com,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call
+ warning for bl+mflr pattern
+Message-ID: <20250224123534.GB17456@noisy.programming.kicks-ass.net>
+References: <20250219162014.10334-1-sv@linux.ibm.com>
+ <20250220195940.ely2l2fpsozd2tuv@jpoimboe>
+ <4bea75bc-d3f6-4972-b644-f9b5a4e8bb77@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call warning
- for bl+mflr pattern
-To: Sathvika Vasireddy <sv@linux.ibm.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com,
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev
-References: <20250219162014.10334-1-sv@linux.ibm.com>
- <20250220195940.ely2l2fpsozd2tuv@jpoimboe>
- <4bea75bc-d3f6-4972-b644-f9b5a4e8bb77@linux.ibm.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <4bea75bc-d3f6-4972-b644-f9b5a4e8bb77@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Fri, Feb 21, 2025 at 02:20:41PM +0530, Sathvika Vasireddy wrote:
 
+> Also, just out of curiosity, how does x86 do it? Does it not use a branch to
+> next instruction approach?
 
-Le 21/02/2025 à 09:50, Sathvika Vasireddy a écrit :
-> [Vous ne recevez pas souvent de courriers de sv@linux.ibm.com. Découvrez 
-> pourquoi ceci est important à https://aka.ms/ 
-> LearnAboutSenderIdentification ]
-> 
-> Hi Josh, Thanks for the review.
-> 
-> On 2/21/25 1:29 AM, Josh Poimboeuf wrote:
->> On Wed, Feb 19, 2025 at 09:50:14PM +0530, Sathvika Vasireddy wrote:
->>> Architectures like PowerPC use a pattern where the compiler generates a
->>> branch-and-link (bl) instruction that targets the very next instruction,
->>> followed by loading the link register (mflr) later. This pattern appears
->>> in the code like:
->>>
->>>   bl .+4
->>>   li r5,0
->>>   mflr r30
->> If I understand correctly, this is basically a fake call which is used
->> to get the value of the program counter?
-> 
-> Yes, that's correct.
-> 
-> Also, just out of curiosity, how does x86 do it? Does it not use a
-> branch to next instruction approach?
-> 
->>> Objtool currently warns about this as an "unannotated intra-function
->>> call" because find_call_destination() fails to find any symbol at the
->>> target offset. Add a check to skip the warning when a branch targets
->>> the immediate next instruction in the same function.
->>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Closes: https://eur01.safelinks.protection.outlook.com/? 
->>> url=https%3A%2F%2Flore.kernel.org%2Foe-kbuild- 
->>> all%2F202502180818.XnFdv8I8- 
->>> lkp%40intel.com%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7Cdce2affdaed147a6058008dd5254d85e%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638757246560427230%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=dhUS9PNZKUpz%2Bc1hePG1tuTIWbiKqS46uoAJOvU76sU%3D&reserved=0
->>> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
->> This should have a Fixes tag as well.
-> Thanks for catching that. I'll add the Fixes tag.
->>
->>>   static int add_call_destinations(struct objtool_file *file)
->>>   {
->>> +    struct instruction *next_insn;
->>>      struct instruction *insn;
->>>      unsigned long dest_off;
->>>      struct symbol *dest;
->>> @@ -1625,6 +1626,11 @@ static int add_call_destinations(struct 
->>> objtool_file *file)
->>>              reloc = insn_reloc(file, insn);
->>>              if (!reloc) {
->>>                      dest_off = arch_jump_destination(insn);
->>> +
->>> +                    next_insn = next_insn_same_func(file, insn);
->>> +                    if (next_insn && dest_off == next_insn->offset)
->>> +                            continue;
->>> +
->> This won't work on x86, where an intra-function call is converted to a
->> stack-modifying JUMP.  So this should probably be checked in an
->> arch-specific function.
-> 
-> Thanks for letting me know, I'll introduce arch_skip_call_warning() to
-> handle architecture specific cases in the next patch I send.
+x86_64 can use LEA like:
 
-Not sure what you want to do here.
+  #define _THIS_IP_ ({ unsigned long __here; asm ("lea 0(%%rip), %0" : "=r" (__here)); __here; })
 
-See my other response, I think it should just be handled as an 
-INSN_OTHER by arch_decode_instruction()
-
-Christophe
+32bit needs to call a function, read the stack value and return.
