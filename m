@@ -1,121 +1,87 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208B4264A90
-	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 17:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537E1146A6F;
+	Mon, 24 Feb 2025 17:09:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740416551; cv=none; b=jdp3FT0wBDvi8E9wWM7Scu9+oykCPh5Ppn5ZOk3eyLXj9nPvpMoha5dyYGngTVlyNLaXlveHwLFj/v8QS1wgF68Bl2lkEdkcXPis+klsuwqHYJxUXcHg8KfRtCpG2VYRnwBS+iwU4qd5w7mIgvaLXM520LcCxqPitDRUTbo2ztM=
+	t=1740416967; cv=none; b=j7AbAgWf36oqCFRLNYb00s7l1hZSq5xk68iGXI4LDgk/DDs44jvbY9etLYmshzNBfSa0jR43P3r38gttut5M3j5hRyNP4wBsxZIAxYlBGCygGCMj62aQuUjG3MWqrRdU1coHW1rRptz/nbMl8V9Hxu4qNsbN4yRYJN48ynevEWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740416551; c=relaxed/simple;
-	bh=YIKvgyamnQgmpSYwaI32gGdN6nJzCowQ2WNOrwnPjRQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gwAMdBI3EWJ1rKjABEcoogArMa4IEW6+YXUfddYUbWEwC8whfSrepWs5TljLasDGuJ2e0FamV2XQHINlpLLLddMtN3jTT+o1lTuvI41TOQDIyesQWp5gr4nloABJBlq0YvmdlSrFqUpB/7JzeVj/t8DIMZXK46y1FL7t9CZtElI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UzPVkjzx; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1740416967; c=relaxed/simple;
+	bh=PqlySbYyMKDngQANnkO11zBqIw/Fq8qCXFRHMY8ig+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aRiy96HZ26RZREKVv+HWVZZNwY9RyMmD+jU6NixKLCiijQQ4a2TMRUXhikdLtoze88OQO5G6I6myh0sb88Hr+BbGdp8SAjhsGU4Us260rQCuCOynJ5lsFzHTPPjHhhneJ+blgJc4bA6uABATOlHG+92KbnJzQcD27cHKp/q5KsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyXMT7+O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UzPVkjzx"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-471fa3b19bcso467601cf.0
-        for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 09:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740416549; x=1741021349; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VR9fYD4ulxXrS8gZJjWrfuiZTIdun+GiiSoBV4GR/Fw=;
-        b=UzPVkjzxZjStR7/0WBSRdbdTUO+pjRiCG202e9ekH2CRkTvAB73A+eXFgXZnrs6grH
-         DLkHx54EHxgkWOpx+j0ycHchhuWEw25q3yZbnrLFPZXcBktXfsk0tLatQT3ccx8gyHIl
-         2I/pv4ERxMp6amWWWFG0L/raYuKkJM2+Il4DzZl8ABR0jpHc//WbwV9mGhc76ovQZ854
-         tNo8qW3ThpVNykIXl4Ftwj5+pq0elvR3S6atAddxyo35HMyu+bQHSdxVux3dgzn+oMak
-         3Bq4debcgGx1RhLeLdFPhZ9Ea3k3g5mr9Rt+qOxhGDBl+YRTluAzC3I5LXsfEI9Zypvl
-         9VMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740416549; x=1741021349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VR9fYD4ulxXrS8gZJjWrfuiZTIdun+GiiSoBV4GR/Fw=;
-        b=N5AkssfOsKdJc7wBolJVY4U8k+FoL0qcDGK8wwadpM2RcrvEhCozyoCSvFGXBmwpUy
-         l7UQeg7C0RCrwOA1K2kbpXvp2WYUziV8zDtjZmVxMSK2uYtMi76Pk9jmnKNG+08arLfQ
-         g1jF4/lInMJxRDARDQn6yeBSTmAIn0A4dkw3GXx+fix9cfHcBdN32p0odFVf52m/xynl
-         hKLUYlLcrSsQ8BbzLv1AiiigFnbHDAGeHZdx4Ly5hnZeN2mcMlzjZjt0PLU6bI6HgXpv
-         XyWVpW2XRAiIydBVkLFBqJXecHpsBUwH6nUKpUzN8S526ojdJVtvcAIczdUWRMgY6y4v
-         bPPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHlFaCnJqLyQMsJ70v0H3uxFmu2eK3GLwNXf0FjS58vG7EeR6R0oIgZqoMAIWWbDGWx6tb@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz72epXhbisHR8cbHVmxWrkOLd+SS+ENfQIb4/J1fSMxAQY6Ahm
-	rp+6AIbzReaMJEnpE+EEVyd80QpJG9Gdb1F49k+wXSzdrLW/3OeXCfyYIh1mXhDXn4OqKSAl56y
-	cP8Az2hybzeAZmYx0p5qfbGpqhHnety6KzUc4
-X-Gm-Gg: ASbGncvC/tvCMy0WGL0Or3VZHdnbQLpEZsUq/NINoD7sh5j7opEopi8n4+uX+WdmTNL
-	Y2vxYmKaDIvh+ziSnGbLPhEiP/GMSy0FH090yH2S2hjDsR1B9C2Zkgd0k3T44W+vgY287GzDz3b
-	2zUqOf
-X-Google-Smtp-Source: AGHT+IFVV/QSW2PsYP3VXHqjBpcE4L3RaCpSXY45J/dLEVmzaKzSZI2xSnS/YRNsQjCr3RqPRormupPSqzbPXf0Zgso=
-X-Received: by 2002:ac8:5781:0:b0:471:9ece:b13b with SMTP id
- d75a77b69052e-47376e5ae3amr68601cf.1.1740416548614; Mon, 24 Feb 2025 09:02:28
- -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyXMT7+O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA959C4CED6;
+	Mon, 24 Feb 2025 17:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740416966;
+	bh=PqlySbYyMKDngQANnkO11zBqIw/Fq8qCXFRHMY8ig+8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GyXMT7+OT6qMFl5b6FWqiPBbEYF8PAyw9i3xJ2wsDXbIuty60UPWvwIxLQpCElzci
+	 E7vnNKA0sz7wd3fe5LUMJ8vLhc8z+T/CAbpI7V21AyIQVDi3qPgxzlAtw0VLG11y69
+	 cgWLC7ZjymdwTn9//eVlNi6ecSWQ3dq9Nr6MFnEQvNRAOiGwH95LV1W5UqBalAvMaF
+	 Y6hn+kOqSsA9wkKINnGZX18446mp2xMz8Ri/kzGk0I1SndQOrXIS1rt7OtwLHEUnwS
+	 njj4ngcCD+ZzHOmc5D5bT7fuKkOpo7HJTb77G02N7dglqJ6CVJZfpSn1nJgwoT0RO8
+	 X9w6mQVcxfi0w==
+Date: Mon, 24 Feb 2025 09:09:22 -0800
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@kernel.org,
+	peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call
+ warning for bl+mflr pattern
+Message-ID: <20250224170922.GA585841@ax162>
+References: <20250219162014.10334-1-sv@linux.ibm.com>
+ <3223ec0e-c445-4bbf-ae72-276688e40908@csgroup.eu>
+ <d5ada017-1ba2-4a89-8a58-4555f09f9d97@csgroup.eu>
+ <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250224141120.1240534-1-arnd@kernel.org> <20250224141120.1240534-2-arnd@kernel.org>
-In-Reply-To: <20250224141120.1240534-2-arnd@kernel.org>
-From: Frank van der Linden <fvdl@google.com>
-Date: Mon, 24 Feb 2025 09:02:17 -0800
-X-Gm-Features: AQ5f1JqyvF0cZUse3UCnnuocLyu1h_TE-Jmz-aTlK_6A7bNBbcPQf-el1-E8RJg
-Message-ID: <CAPTztWauUVnA+ZRytPadKv7oHaRb1xmf_MneiiNXrD1j_1N9xw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] mm, cma: use literal printf format string
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	David Hildenbrand <david@redhat.com>, Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
 
-On Mon, Feb 24, 2025 at 6:11=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Using a variable string as a printf format can be a security issue
-> that clang warns about when extra warnings are enabled:
->
-> mm/cma.c:239:37: error: format string is not a string literal (potentiall=
-y insecure) [-Werror,-Wformat-security]
->   239 |                 snprintf(cma->name, CMA_MAX_NAME, name);
->       |                                                   ^~~~
->
-> This one does not appear to be a security issue since the string is
-> not user controlled, but it's better to avoid the warning.
-> Use "%s" as the format instead and just pass the name as the argument.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  mm/cma.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/cma.c b/mm/cma.c
-> index ef0206c0f16d..09322b8284bd 100644
-> --- a/mm/cma.c
-> +++ b/mm/cma.c
-> @@ -236,7 +236,7 @@ static int __init cma_new_area(const char *name, phys=
-_addr_t size,
->         cma_area_count++;
->
->         if (name)
-> -               snprintf(cma->name, CMA_MAX_NAME, name);
-> +               snprintf(cma->name, CMA_MAX_NAME, "%s", name);
->         else
->                 snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_co=
-unt);
->
-> --
-> 2.39.5
->
+On Mon, Feb 24, 2025 at 02:19:14PM +0100, Christophe Leroy wrote:
+> Well, this problem already exists on clang 18 it seems:
+> 
+> 00000004 <btext_map>:
+>    4:   7c 08 02 a6     mflr    r0
+>    8:   94 21 ff e0     stwu    r1,-32(r1)
+>    c:   93 c1 00 18     stw     r30,24(r1)
+>   10:   90 01 00 24     stw     r0,36(r1)
+>   14:   93 a1 00 14     stw     r29,20(r1)
+>   18:   48 00 00 05     bl      1c <btext_map+0x18>
+>   1c:   38 a0 00 00     li      r5,0
+>   20:   7f c8 02 a6     mflr    r30
+> 
+> While GCC generates:
+> 
+> 00000418 <btext_map>:
+>  418:   94 21 ff e0     stwu    r1,-32(r1)
+>  41c:   7c 08 02 a6     mflr    r0
+>  420:   42 9f 00 05     bcl     20,4*cr7+so,424 <btext_map+0xc>
+>  424:   39 20 00 00     li      r9,0
+>  428:   93 c1 00 18     stw     r30,24(r1)
+>  42c:   7f c8 02 a6     mflr    r30
+> 
+> So lets make the kernel tolerate it allthough it should be fixed on clang at
+> the end.
+> 
+> I can't find any related issue in the clang issues database
+> (https://github.com/llvm/llvm-project/issues), should we open one ?
 
-Yes, thanks - not sure why I didn't use "%s" there.
+Yes please, especially if you happen to have a simplified reproducer
+(but no worries if not). I can make sure it gets labeled for the PowerPC
+backend folks to take a look at.
 
-Reviewed-by: Frank van der Linden <fvdl@google.com>
+Cheers,
+Nathan
