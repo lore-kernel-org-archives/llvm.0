@@ -1,161 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F3028DB3;
-	Mon, 24 Feb 2025 06:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6D823F43C
+	for <llvm@lists.linux.dev>; Mon, 24 Feb 2025 08:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740378225; cv=none; b=Qrf3FxLB4C969SDEdLYpk74MYNbEixfXRk2SBv30BDSS8+jWvfAKWS1rLdpBifru0v75GjU2mTOVv28YEPxo2fzCQAgt3nTFyVbXFzGch+iO4DFFjM7AwacLcXvXcgyyfpPn3BXoYk2yOdUgI1U2253WnVCa4ZMxTpF4so5eRGA=
+	t=1740387005; cv=none; b=GMF9JWvP+K/wHzwh4qQbap9JWxOeDpQZz2Th74y2e9SwUkJ6/fipjOT5KrtdLGpLMbfpRlrVZzVMhEjMNf9h+AucQ9ncxhVR8ORtE1wmVABSXVYOJPlF03CLyAQr7QjRiYDdb7tVCplN2iSKqja/7p2MGr8rmV7QWmYhrU3h0Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740378225; c=relaxed/simple;
-	bh=cuyUHzmNRrlRengPj2KWGGE7uP665a9dsZbLx/j8reQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HgIrfS7BxkXsvAxFO4TAgwjBNt12wwMsZOMPjckVT59H4sULHwZSwZdC4mpU0hvHwhhLNcVKMoQu4PRXgB/mdbVlvWPt/uOJ/lT8VWutgwdmk6dH6AEXhBxmmXskwS/kYu3+dPF9JCiTVCu+dYnVkCyvLzT8rhctzNNBevL6xEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vhy8n0Pg; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vhy8n0Pg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CC4C4CED6;
-	Mon, 24 Feb 2025 06:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740378225;
-	bh=cuyUHzmNRrlRengPj2KWGGE7uP665a9dsZbLx/j8reQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Vhy8n0PgndAb1R2oxQLvdFy/gSk/u/G05X+Ht7jPi9KZLU1q2VKDhaPF6YRHW1cvs
-	 8FFdyRk58kF36XiE0PSpIabDL0/NuYmFz4PClvpqmlNj9OPZ7mi0MeJ+VnRlbh7wL2
-	 jrWLr8+fwSlfnzVipwbxgEBd9cDz6dJHDUlfwgTUcaXqyeWT8BXlFLH2pg9o5SnSo5
-	 uw5zBGLrXOD9mhCiacoOXOOaCiYxHwlhDdbvEyfhUYlW30M0ATRFXJE12TshRm/tvz
-	 aaT0gxAWtQAqHdWokPmdL2x7g4XtxbeSXJ9SBHUC0sb+RrvcxjQgr7fBH9nwufTajV
-	 mq9PpSUHj44EA==
-From: da.gomez@kernel.org
-Date: Mon, 24 Feb 2025 07:23:13 +0100
-Subject: [PATCH RESEND v3] drm/xe: xe_gen_wa_oob: replace
- program_invocation_short_name
+	s=arc-20240116; t=1740387005; c=relaxed/simple;
+	bh=NTQBoA/Re9LOQf6S9eC4YE+8T4L/xXTbEfMQqi0vkuM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ktZ6NYsSPf0Z/x8+pXDL3VX1niFjQd7NHqbH1jf4AWUMyOQdePr9bBotDLFjc2gAkdmL8M0G5QY+PI/tGgAzv0a1NYI/J1PLFScqD71zyxF9Aww/+h0bNwdTXxCI1I1KKnqSoBNzUuRrArR2AGOdLz2efSCARwwgeIWYVOoTYcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Z1X7D3xsVz9sSY;
+	Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id FlCaqB87YQCz; Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z1X7D2md3z9sSX;
+	Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A4978B765;
+	Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id SnYPeEpOAy8h; Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+Received: from [10.25.207.138] (unknown [10.25.207.138])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 23FFD8B763;
+	Mon, 24 Feb 2025 08:15:04 +0100 (CET)
+Message-ID: <3223ec0e-c445-4bbf-ae72-276688e40908@csgroup.eu>
+Date: Mon, 24 Feb 2025 08:15:04 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com>
-X-B4-Tracking: v=1; b=H4sIAFAQvGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
- vPSU3UzU4B8JSMDI1MDIyMT3dzE5Pxi3aTSzJwU3eLSgoL8ohLdilTdNAND82QLE0ND4yQzJaD
- mgqLUtMwKsMHRSkGuwa5+LkqxtbUAW9q+nXAAAAA=
-X-Change-ID: 20250224-macos-build-support-xe-f017c84113b6
-To: Lucas De Marchi <lucas.demarchi@intel.com>, 
- =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
- Justin Stitt <justinstitt@google.com>
-Cc: intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Klaus Jensen <k.jensen@samsung.com>, Tamir Duberstein <tamird@gmail.com>, 
- Theodore Ts'o <tytso@mit.edu>, gost.dev@samsung.com, 
- Barry Song <baohua@kernel.org>, Daniel Gomez <da.gomez@samsung.com>
-X-Mailer: b4 0.14.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call warning
+ for bl+mflr pattern
+To: Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@kernel.org,
+ peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com
+Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ llvm@lists.linux.dev
+References: <20250219162014.10334-1-sv@linux.ibm.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20250219162014.10334-1-sv@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Daniel Gomez <da.gomez@samsung.com>
 
-program_invocation_short_name() may not be available in other systems.
-Instead, replace it with the argv[0] to pass the executable name.
 
-Fixes build error when program_invocation_short_name is not available:
+Le 19/02/2025 à 17:20, Sathvika Vasireddy a écrit :
+> Architectures like PowerPC use a pattern where the compiler generates a
+> branch-and-link (bl) instruction that targets the very next instruction,
+> followed by loading the link register (mflr) later. This pattern appears
+> in the code like:
+> 
+>   bl .+4
+>   li r5,0
+>   mflr r30
 
-drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
-undeclared identifier 'program_invocation_short_name'    34 |
-program_invocation_short_name);       |                 ^ 1 error
-generated.
+What compiler do you use ? Is it a very old version of GCC ?
 
-Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
----
-This last patch allows for building the Linux kernel allyesconfig target
-for arm64 in macOS hosts with Clang/LLVM.
+That sequence is not correct and should never be used by modern 
+compilers. It should be bcl 20,31,+4 instead.
 
-Summary of previous feedback and work:
+All such hand writen sequences have been removed from kernel assembly, 
+see commit c974809a26a1 ("powerpc/vdso: Avoid link stack corruption in 
+__get_datapage()") for details
 
-Other Makefile targets, such as defconfig, can already be built
-successfully if the necessary headers are provided and the Linux kernel
-build system is configured appropriately. To facilitate this process,
-the Bee Headers [1] project was created not only to serve as reference
-but also to document [2] the process and supply the missing headers.
 
-To get started:
+> 
+> Objtool currently warns about this as an "unannotated intra-function
+> call" because find_call_destination() fails to find any symbol at the
+> target offset. Add a check to skip the warning when a branch targets
+> the immediate next instruction in the same function.
 
-1. Setup:
-	diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+I think this should be done in arch_decode_instruction(), just set 
+insn->type to INSN_OTHER when you see bl .+4
 
-	brew install coreutils findutils gnu-sed gnu-tar grep llvm make \
-	pkg-config
-	brew tap bee-headers/bee-headers
-	brew install bee-headers/bee-headers/bee-headers
+Something like:
 
-2. Build:
-	source bee-init
-	
-	make LLVM=1 defconfig
-	make LLVM=1 -j$(nproc)
+diff --git a/tools/objtool/arch/powerpc/decode.c 
+b/tools/objtool/arch/powerpc/decode.c
+index 53b55690f320..ca264c97ee8d 100644
+--- a/tools/objtool/arch/powerpc/decode.c
++++ b/tools/objtool/arch/powerpc/decode.c
+@@ -55,7 +55,9 @@ int arch_decode_instruction(struct objtool_file *file, 
+const struct section *sec
 
-[1] Project: https://github.com/bee-headers
-[2] Documentation:
-https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
+  	switch (opcode) {
+  	case 18: /* b[l][a] */
+-		if ((ins & 3) == 1) /* bl */
++		if (ins == 0x48000005)	/* bl .+4 */
++			typ = INSN_OTHER;
++		else if ((ins & 3) == 1) /* bl */
+  			typ = INSN_CALL;
 
-The changelog below has been refined to focus only on feedback related
-to the xe driver. Version 3 was submitted some time ago, and although
-some errors occurred in CI, they appear to be unrelated to the changes.
----
-Changes in v3 (RESEND):
-- Update cover letter and To/Cc list.
-- Rebase patch onto next-20250221.
-- Link to v3: https://lore.kernel.org/all/20240925-macos-build-support-v3-1-233dda880e60@samsung.com/
-Changes in v3:
-- Update drm/xe patch to replace program_invocation_short_name with
-argv[0] instead of using getprogname + ifdef as suggested by Masahiro.
-- Link to v2: https://lore.kernel.org/r/20240906-macos-build-support-v2-0-06beff418848@samsung.com
+  		imm = ins & 0x3fffffc;
 
-Changes in v2:
-- Adapt xe_gen_wa_oob to solve getprogname()/
-program_invocation_short_name in runtime. as suggested by Lucas De
-Marchi.
-- Link to v1: https://lore.kernel.org/r/20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com
----
- drivers/gpu/drm/xe/xe_gen_wa_oob.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-index 904cf47925aa1d5bc37983af83232d5e4697c49e..ed9183599e31cc9d76da3f22c9fb3884384a49bc 100644
---- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-+++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-@@ -28,10 +28,10 @@
- 	"\n" \
- 	"#endif\n"
- 
--static void print_usage(FILE *f)
-+static void print_usage(FILE *f, const char *progname)
- {
- 	fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
--		program_invocation_short_name);
-+		progname);
- }
- 
- static void print_parse_error(const char *err_msg, const char *line,
-@@ -144,7 +144,7 @@ int main(int argc, const char *argv[])
- 
- 	if (argc < 3) {
- 		fprintf(stderr, "ERROR: wrong arguments\n");
--		print_usage(stderr);
-+		print_usage(stderr, argv[0]);
- 		return 1;
- 	}
- 
 
----
-base-commit: d4b0fd87ff0d4338b259dc79b2b3c6f7e70e8afa
-change-id: 20250224-macos-build-support-xe-f017c84113b6
-
-Best regards,
--- 
-Daniel Gomez <da.gomez@samsung.com>
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202502180818.XnFdv8I8-lkp@intel.com/
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+> ---
+>   tools/objtool/check.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 753dbc4f8198..3f7cf2c917b5 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -1613,6 +1613,7 @@ static struct symbol *find_call_destination(struct section *sec, unsigned long o
+>    */
+>   static int add_call_destinations(struct objtool_file *file)
+>   {
+> +       struct instruction *next_insn;
+>          struct instruction *insn;
+>          unsigned long dest_off;
+>          struct symbol *dest;
+> @@ -1625,6 +1626,11 @@ static int add_call_destinations(struct objtool_file *file)
+>                  reloc = insn_reloc(file, insn);
+>                  if (!reloc) {
+>                          dest_off = arch_jump_destination(insn);
+> +
+> +                       next_insn = next_insn_same_func(file, insn);
+> +                       if (next_insn && dest_off == next_insn->offset)
+> +                               continue;
+> +
+>                          dest = find_call_destination(insn->sec, dest_off);
+> 
+>                          add_call_dest(file, insn, dest, false);
+> --
+> 2.39.3
+> 
 
