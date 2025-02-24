@@ -1,61 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2981474A9;
-	Sun, 23 Feb 2025 23:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC878F5E;
+	Mon, 24 Feb 2025 00:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740353994; cv=none; b=mzSlEBV/xRYaKgplUVtT5ZChJEAaNlMaJEtxmgxyB2M1NtmOoI0a5ngdwQ5hv5aUFKtmom4MOPx1l3seGJvuUYJ9fNWUuseFJ0tRBKHoBKGGXHprnTlYnqkEUfiEIXVxhCt6TJIjclRzMeTveEKpsQZot6TRusxA7/ojnJfzw7A=
+	t=1740358449; cv=none; b=CH2/x4E5DciZKVSsIUSF4hJv8rNhqUncAEaLxIFhtXpBChuUO1NcmOJ3L0k9cpM8O8u5mLH9tr+rztrQH7vTrPPhMdu4qZajMzuUsd3PniNlO+B+rfdyE7KyWfDUrI571h7G2SeK8DdIhCMP0OEsu8AQwSPjdB4aTw/dppMJs5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740353994; c=relaxed/simple;
-	bh=hzCL0wIUvmBcBhuuc3gsWODoNAycfhMCTUXDCPb41Wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=f0B+8rZVtgU8Hub2UJNSyqDwoyMFaFuOpuVgglc8tG4lQtC4O2P2jbdwFOdpmdv5QB3AerII47xo/0RmQxIS8+ZMxyg8qnhsXFWIkacImUUpzqCxcVYjPrm6OqYvmxyxDdqgJCm11/Ul1uvlr4KXUj+hI2ZfNlOnxC2obkjZh4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jb5yWmsM; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740358449; c=relaxed/simple;
+	bh=CNirDmsVDT1LLQ2KIbgV1Ns5LAgnpftSLIJlpMFNMfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oHyNarQX72TEnHcWB6u+3KZ8wOxffHBOL29/y7LBBILMMr0mIRZTp+UIhBEBS5dZKIRdInYbFoJG9e+JzRl6B6+XB3A/+Ls/FEwIZxmQqoQ/NioucjrRTszYpk9nF1I3VIBDNjhhggS4enoJ6Zb4GUfwZFIZIjfL1T3S1EJt+Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=ccKUvWnC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WZAk0XfH; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jb5yWmsM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740353992; x=1771889992;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hzCL0wIUvmBcBhuuc3gsWODoNAycfhMCTUXDCPb41Wo=;
-  b=jb5yWmsMPdn8iYWxbLzaafI1N3HhfpCHimxexdlKBHKOK0cpSfUvq6xb
-   EfGWGGQDX3MoVxSWdqlZWpwiry0YKhGmSeNiCuT8HEuyUi1UXdYERbOIp
-   JR8/AAK54fSykYuwLPdfzrllqCIZ+qN0NqBP+9TvsjMA9dhgCkN4E87s1
-   UjsKTBl5p+hOoAlEC5jvOBvNYHeRQmPU3xb0AGlWoVSsQdG0edRI1TLtv
-   KwVzm38h+FhS26EbMtWDMP7u+vgL742JMpooaK4oDoC1M7lFzBjB0O8wM
-   t2grjMhzCCD9Y8Atw5BE7O2DMl6lnQ/rpb0TFZjM1VZNG1KWwX3hVZa5r
-   A==;
-X-CSE-ConnectionGUID: 9dDba23uQC+De4fkX78RkQ==
-X-CSE-MsgGUID: 552ic8FtSNWhc2OM6Vy+9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="58517709"
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="58517709"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2025 15:39:51 -0800
-X-CSE-ConnectionGUID: BPnuqFCAQseOTp6NxUr3xQ==
-X-CSE-MsgGUID: CpAuFQekSleKlr7kNt142A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="115876309"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 23 Feb 2025 15:39:49 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tmLZb-0007fV-0j;
-	Sun, 23 Feb 2025 23:39:47 +0000
-Date: Mon, 24 Feb 2025 07:39:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhiming Hu <zhiming.hu@intel.com>
+	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="ccKUvWnC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WZAk0XfH"
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 6DA32254011D;
+	Sun, 23 Feb 2025 19:54:04 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Sun, 23 Feb 2025 19:54:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1740358444; x=
+	1740444844; bh=t/Eb+wcf7EZ+UThL8O/D+kbB1rl2eRNVJ73UFN6E/Yw=; b=c
+	cKUvWnClrwAkgd+lW1OmlDKi8ks8ZzZIPleLp2hT1ZfaoCQKmIbTTztoShL5j+aK
+	5QIsLzUNIlCGhrJv4XG6LD4ogPSYohUSrW+3Fa7POM1qosPusVLD0trUkGmUB6j2
+	cbWgCYZdIY5vBiEctIGBETmTS2PNxehmPYecWoldvGz48YAjN2fQrOFH0F1zlF33
+	NJDcqqYsN4jQVNTWpB/0QEHUHRh8LeecBt8oUm1YM93EUbp3qL/pyDwVYoxE3Ato
+	tJF9C1ZbIJmV956w6pQBzr8yLUv5dv9eaGJRU22RgtpTlSeoaIe2lUAFP0x/LwNk
+	eX55YSQKKJQNK0wyLq8Ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1740358444; x=1740444844; bh=t/Eb+wcf7EZ+UThL8O/D+kbB1rl2eRNVJ73
+	UFN6E/Yw=; b=WZAk0XfHOrss8OU5SHkDLcFwcNnG9eAVyotI2Wm/uzQPmQlDLpf
+	zT1lbJKEvsn6EpdR+iStWJ72oKSsRDPdG/SGn5JeZFNqz6JyzTsWP9uDPJjfVAhl
+	wIVMY9WqvcHEQGSuQzcaaF6oqOosqhsxrZ8MW/liy18Od2pDBOYnTgCMjh2Gezd7
+	O8HSxFof/JjSgEw9oFytF4qN0m+y5n3u5Dkm/1A6qeFQg7OkK8OtEmgQky365cf1
+	FT2nF5cGtLLyJ2SKs/PLcNm8eARZKS5hCgnc1ZpASBhRMwfckVtc8EjF0uWqabs+
+	pZYdmhLtDGdbFwe6m62PehyU19c04Y95a8Q==
+X-ME-Sender: <xms:K8O7Zyfc9HFMbbE-Vg7_BfQHbRtt-yP7b1iaNdLLZ6jKUAFsfLIKgg>
+    <xme:K8O7Z8Pi9pBCs9lULb7yI_4c2qWdNMdSPt1cHHgZ1O1koiVP6dupoWEQaR_nShE6b
+    N1I49-o0GafmLPOlC8>
+X-ME-Received: <xmr:K8O7ZzgX_qVIbnCBjoD3GykcNbEfJ4aDXCw1OzfSgGVCAcbv9HjFmakr_5dFA1uFxLKnk3_KwNLtogQc6-fUumPxn-bqvg81rg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejjeefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
+    necuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhise
+    hsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeevieelhfdukeffheek
+    ffduudevvdefudelleefgeeileejheejuedvgefhteevvdenucffohhmrghinhepkhgvrh
+    hnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjphdpnhgspghrtghpth
+    htohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgrtghklhhivhhinhhg
+    ohhougestghomhgtrghsthdrnhgvthdprhgtphhtthhopehllhhvmheslhhishhtshdrlh
+    hinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsthhs
+    rdhlihhnuhigrdguvghvpdhrtghpthhtohephihunhhgqdgthhhurghnrdhlihgroheslh
+    hinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehtihifrghisehsuhhsvgdruggv
+    pdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:K8O7Z_-ejzKIWH4_SvLBdH4YUHvAWcITT3CRT5QLVIiGbW9rf1aMnw>
+    <xmx:K8O7Z-uQV4EN_jiUoeZBLnqEB1tCkjjvoyp5hxBmDT3I3Dr4jPquLQ>
+    <xmx:K8O7Z2FyBqKgj3GM5GiPkCdC34hhB0ABw0-aRbV2xuV3xJ-uB62JQQ>
+    <xmx:K8O7Z9Nqi8k2jriPlhHW8uOwQsW6KoN8yk0zn0Tu6CjpuJeQBKaLIA>
+    <xmx:LMO7ZyiZ_eXgTLJuB-4zNt0HEqtq_7zEtiWPr_oV0CWS5y_1BY3DYcEM>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 23 Feb 2025 19:54:01 -0500 (EST)
+Date: Mon, 24 Feb 2025 09:53:58 +0900
+From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To: jack Livingood <jacklivingood@comcast.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Subject: [kvm:kvm-coco-queue 30/121] arch/x86/include/asm/tdx.h:183:12:
- error: unused function 'tdx_get_nr_guest_keyids'
-Message-ID: <202502240742.C79LoViU-lkp@intel.com>
+	yung-chuan.liao@linux.intel.com, tiwai@suse.de,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] sound:firewire:fixed spelling error
+Message-ID: <20250224005358.GA6489@workstation.local>
+References: <20250219172817.50172-1-jacklivingood@comcast.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,67 +89,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250219172817.50172-1-jacklivingood@comcast.net>
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
-head:   ff2046f9bcd0883c72158404a1466eb96781ccca
-commit: 5c017bb4d89f65807c56d652443b53e7765b8b35 [30/121] KVM: TDX: Register TDX host key IDs to cgroup misc controller
-config: x86_64-randconfig-004-20250224 (https://download.01.org/0day-ci/archive/20250224/202502240742.C79LoViU-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250224/202502240742.C79LoViU-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502240742.C79LoViU-lkp@intel.com/
+On Wed, Feb 19, 2025 at 09:28:17AM -0800, jack Livingood wrote:
+> fixed a spelling error.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202502191455.cX0HILg0-lkp@intel.com/
+> Signed-off-by: Jack Livingood <jacklivingood@comcast.net>
+> ---
+>  sound/firewire/isight.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
+The issued patch does not exist in linux-next branch of sound.git[1]. The
+report to which you address is for Sound Open Firmware project[2].
 
-   In file included from <built-in>:4:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_utils.h:6:
-   In file included from drivers/gpu/drm/xe/compat-i915-headers/../../i915/i915_utils.h:37:
-   In file included from arch/x86/include/asm/hypervisor.h:37:
-   In file included from arch/x86/include/asm/kvm_para.h:10:
->> arch/x86/include/asm/tdx.h:183:12: error: unused function 'tdx_get_nr_guest_keyids' [-Werror,-Wunused-function]
-     183 | static u32 tdx_get_nr_guest_keyids(void) { return 0; }
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
+I think it better to re-post the revised-version of patch to replace the
+usage of 'strcpy()' with 'strscpy()'[3].
 
 
-vim +/tdx_get_nr_guest_keyids +183 arch/x86/include/asm/tdx.h
+[1] I guess that the maintainer realized the build error when applying
+the patch after my review.
+[2] https://lore.kernel.org/oe-kbuild-all/202502220137.fyFohYSo-lkp@intel.com/
+[3] https://lore.kernel.org/linux-sound/20250205192258.358362-1-jacklivingood@comcast.net/
 
-   162	
-   163	u64 tdh_mng_addcx(struct tdx_td *td, struct page *tdcs_page);
-   164	u64 tdh_vp_addcx(struct tdx_vp *vp, struct page *tdcx_page);
-   165	u64 tdh_mng_key_config(struct tdx_td *td);
-   166	u64 tdh_mng_create(struct tdx_td *td, u16 hkid);
-   167	u64 tdh_vp_create(struct tdx_td *td, struct tdx_vp *vp);
-   168	u64 tdh_mng_rd(struct tdx_td *td, u64 field, u64 *data);
-   169	u64 tdh_vp_flush(struct tdx_vp *vp);
-   170	u64 tdh_mng_vpflushdone(struct tdx_td *td);
-   171	u64 tdh_mng_key_freeid(struct tdx_td *td);
-   172	u64 tdh_mng_init(struct tdx_td *td, u64 td_params, u64 *extended_err);
-   173	u64 tdh_vp_init(struct tdx_vp *vp, u64 initial_rcx, u32 x2apicid);
-   174	u64 tdh_vp_rd(struct tdx_vp *vp, u64 field, u64 *data);
-   175	u64 tdh_vp_wr(struct tdx_vp *vp, u64 field, u64 data, u64 mask);
-   176	u64 tdh_phymem_page_reclaim(struct page *page, u64 *tdx_pt, u64 *tdx_owner, u64 *tdx_size);
-   177	u64 tdh_phymem_cache_wb(bool resume);
-   178	u64 tdh_phymem_page_wbinvd_tdr(struct tdx_td *td);
-   179	#else
-   180	static inline void tdx_init(void) { }
-   181	static inline int tdx_cpu_enable(void) { return -ENODEV; }
-   182	static inline int tdx_enable(void)  { return -ENODEV; }
- > 183	static u32 tdx_get_nr_guest_keyids(void) { return 0; }
-   184	static inline const char *tdx_dump_mce_info(struct mce *m) { return NULL; }
-   185	static inline const struct tdx_sys_info *tdx_get_sysinfo(void) { return NULL; }
-   186	#endif	/* CONFIG_INTEL_TDX_HOST */
-   187	
+Thanks
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Takashi Sakamoto
