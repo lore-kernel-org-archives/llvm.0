@@ -1,45 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537E1146A6F;
-	Mon, 24 Feb 2025 17:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9C22627E6;
+	Mon, 24 Feb 2025 17:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740416967; cv=none; b=j7AbAgWf36oqCFRLNYb00s7l1hZSq5xk68iGXI4LDgk/DDs44jvbY9etLYmshzNBfSa0jR43P3r38gttut5M3j5hRyNP4wBsxZIAxYlBGCygGCMj62aQuUjG3MWqrRdU1coHW1rRptz/nbMl8V9Hxu4qNsbN4yRYJN48ynevEWM=
+	t=1740417903; cv=none; b=Hiiiu6h994U0pW90uyjWMc/M6NsH08xAMS+safkAdAyJW07CQHNTvGxKY3I7DtLicxLLtGSQdcW1PbhXrbRNGWA0/khvxoVUjLSL/HDW88Zt0+mi4ItqCO03PL6pZlw73fjkntNuM2uc9Nr/+HyNXm/equpxuCiQs1lhJQwYwYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740416967; c=relaxed/simple;
-	bh=PqlySbYyMKDngQANnkO11zBqIw/Fq8qCXFRHMY8ig+8=;
+	s=arc-20240116; t=1740417903; c=relaxed/simple;
+	bh=v7il4LMEfA/42fmG0eoKZPNhHXPInWhqNxLmpPkVLss=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRiy96HZ26RZREKVv+HWVZZNwY9RyMmD+jU6NixKLCiijQQ4a2TMRUXhikdLtoze88OQO5G6I6myh0sb88Hr+BbGdp8SAjhsGU4Us260rQCuCOynJ5lsFzHTPPjHhhneJ+blgJc4bA6uABATOlHG+92KbnJzQcD27cHKp/q5KsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GyXMT7+O; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pk1i0h2vDXHgX2ur/DgBKXUwFCAl30wjd5T/+1J5NV0w56sBi2jbqsTni6Cu3WPtALTgifcjUt9nCkHrXmH3tBWSbNoCpO6GwlDLWkcyD8YuPKrqcwG+YaG+xJk7HjNzhVJhs5k4gwPJjQ0c9GQURT7W4Vpf8+UDE2+vtj4oHo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tj+om4Em; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GyXMT7+O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA959C4CED6;
-	Mon, 24 Feb 2025 17:09:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tj+om4Em"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA59C4CEE7;
+	Mon, 24 Feb 2025 17:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740416966;
-	bh=PqlySbYyMKDngQANnkO11zBqIw/Fq8qCXFRHMY8ig+8=;
+	s=k20201202; t=1740417902;
+	bh=v7il4LMEfA/42fmG0eoKZPNhHXPInWhqNxLmpPkVLss=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GyXMT7+OT6qMFl5b6FWqiPBbEYF8PAyw9i3xJ2wsDXbIuty60UPWvwIxLQpCElzci
-	 E7vnNKA0sz7wd3fe5LUMJ8vLhc8z+T/CAbpI7V21AyIQVDi3qPgxzlAtw0VLG11y69
-	 cgWLC7ZjymdwTn9//eVlNi6ecSWQ3dq9Nr6MFnEQvNRAOiGwH95LV1W5UqBalAvMaF
-	 Y6hn+kOqSsA9wkKINnGZX18446mp2xMz8Ri/kzGk0I1SndQOrXIS1rt7OtwLHEUnwS
-	 njj4ngcCD+ZzHOmc5D5bT7fuKkOpo7HJTb77G02N7dglqJ6CVJZfpSn1nJgwoT0RO8
-	 X9w6mQVcxfi0w==
-Date: Mon, 24 Feb 2025 09:09:22 -0800
+	b=tj+om4Ema2bIlx+SJW0NlMw5C7FhJFgtS0g45tVXX1FdFyu8VMJOri6XZHgeipFqt
+	 Dvw44JbGyJ/wGcfsZKmEoD6RMvUAWfcz1hazyF1olgMRoghkHYyoNpIPPevD7rejrj
+	 8hbD1FamKUx6OmHdFaLcfG3vg4Bka0gjrnMnVlAsuMNc5SZoMgTionp6y7IRL1HOgT
+	 9jhoVVEjRxbtkJYD3BltQcIQjGzRGoFdR5xTCrxgU3tMVdBUK4G12tjraLGsZTL55w
+	 AJ7NS6CH+zL+sLkkzw0AmR/h8/gPhYj6f/LZEyp/O/7f3aMF+47SS9B2VDYu7KGFtC
+	 mgkO/Jy/H5dUw==
+Date: Mon, 24 Feb 2025 09:24:56 -0800
 From: Nathan Chancellor <nathan@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@kernel.org,
-	peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call
- warning for bl+mflr pattern
-Message-ID: <20250224170922.GA585841@ax162>
-References: <20250219162014.10334-1-sv@linux.ibm.com>
- <3223ec0e-c445-4bbf-ae72-276688e40908@csgroup.eu>
- <d5ada017-1ba2-4a89-8a58-4555f09f9d97@csgroup.eu>
- <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
+Subject: Re: [PATCH] [v2] kbuild: hdrcheck: fix cross build with clang
+Message-ID: <20250224172456.GB585841@ax162>
+References: <20250224141242.1370280-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,40 +48,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
+In-Reply-To: <20250224141242.1370280-1-arnd@kernel.org>
 
-On Mon, Feb 24, 2025 at 02:19:14PM +0100, Christophe Leroy wrote:
-> Well, this problem already exists on clang 18 it seems:
+On Mon, Feb 24, 2025 at 03:12:36PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> 00000004 <btext_map>:
->    4:   7c 08 02 a6     mflr    r0
->    8:   94 21 ff e0     stwu    r1,-32(r1)
->    c:   93 c1 00 18     stw     r30,24(r1)
->   10:   90 01 00 24     stw     r0,36(r1)
->   14:   93 a1 00 14     stw     r29,20(r1)
->   18:   48 00 00 05     bl      1c <btext_map+0x18>
->   1c:   38 a0 00 00     li      r5,0
->   20:   7f c8 02 a6     mflr    r30
+> The headercheck tries to call clang with a mix of compiler arguments
+> that don't include the target architecture. When building e.g. x86
+> headers on arm64, this produces a warning like
 > 
-> While GCC generates:
+>    clang: warning: unknown platform, assuming -mfloat-abi=soft
 > 
-> 00000418 <btext_map>:
->  418:   94 21 ff e0     stwu    r1,-32(r1)
->  41c:   7c 08 02 a6     mflr    r0
->  420:   42 9f 00 05     bcl     20,4*cr7+so,424 <btext_map+0xc>
->  424:   39 20 00 00     li      r9,0
->  428:   93 c1 00 18     stw     r30,24(r1)
->  42c:   7f c8 02 a6     mflr    r30
-> 
-> So lets make the kernel tolerate it allthough it should be fixed on clang at
-> the end.
-> 
-> I can't find any related issue in the clang issues database
-> (https://github.com/llvm/llvm-project/issues), should we open one ?
+> Add in the CLANG_FLAGS, which contain the target, in order to make it
 
-Yes please, especially if you happen to have a simplified reproducer
-(but no worries if not). I can make sure it gets labeled for the PowerPC
-backend folks to take a look at.
+Small nit, this should probably be KBUILD_CPPFLAGS now.
 
-Cheers,
-Nathan
+> build properly.
+> 
+> See also 1b71c2fb04e7 ("kbuild: userprogs: fix bitsize and target
+> > detection on clang").
+
+Extra '>' I think?
+
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+Perhaps this wants the same Fixes tag as the above referenced patch
+since I think that is the one that broke this?
+
+Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
+
+> ---
+> v2: use same approach as the other patch.
+> ---
+>  usr/include/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/usr/include/Makefile b/usr/include/Makefile
+> index 58a9cbe4eba4..b9a2640b4bb7 100644
+> --- a/usr/include/Makefile
+> +++ b/usr/include/Makefile
+> @@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+>  
+>  # In theory, we do not care -m32 or -m64 for header compile tests.
+>  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+> -UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
+> +UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
+>  
+>  # USERCFLAGS might contain sysroot location for CC.
+>  UAPI_CFLAGS += $(USERCFLAGS)
+> -- 
+> 2.39.5
+> 
