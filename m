@@ -1,50 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C06155756;
-	Mon, 24 Feb 2025 14:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A08078F2D;
+	Mon, 24 Feb 2025 14:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740406306; cv=none; b=Kicv04Js6Y8bIVAb/dNrc5xVLw4+3wQUXbR+ao0Ab/OudHhXZtFv0ZBAV5ha6WAf3gKQ9NhHRdUJGb2Mhk15INyfRWv4H7NKeVQAp5bmy6j8v1VTkktc6zqtQK2qgWuksusWSMEmACKlM6ckEU09nbirZZE+eRdLBmxM40LEYbw=
+	t=1740406374; cv=none; b=KQ6nmbO27Ju9f7VABKHz5IiGAU174LVqJfqIDE89nILx8drxns7ZMBoVlvph/sfXZ4q4q2azr9/VtRciLUIji7Q7V8zBTJADOiQGOzfIHRiIM7WJyXl08axZD2Gtfg8L+0/H5+IOOCa7juA1VBlpoVvIY2VJbGv7ztKrixCYJeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740406306; c=relaxed/simple;
-	bh=P+1IoKn7bZFna+Dvhn79iyuL/7QRo0aRpzyot3u6GY0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dO/oNS/3us8NCT7f1xDsGh8W2gPyKeaKJByr6QJXz1NNGyNjR8bAqMXRiHpfw4Y/9Ch9YC06QxrkH4f5Y7KD6wQz8AJ+ekN00KxmY6PWtHmmhcinfCQJhQF8tDADcQJOAQ4R6uZYBwMWSDtv0qOLg5rpF1ZEgyYJcjRiFbd/5RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pP8fuQDN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740406374; c=relaxed/simple;
+	bh=DQI0FPqEAzs0OmtX8J0j8F1iGrNSEj1m4zXL+t3oxBU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NKOczRE0tviN7MOscQ2ttkDdSUZ4fichHUfhyHD2r30fC5s4bb/lH95ZVG+bIXTsXKUr01WsiOFvEsxE/vBT8MF3SaUR3DcJVmI4PAi+u6CIuB9/TSoJbKwTyn3ayKaEd01u3szLyQTzfC2P1+cygoVEdmcWpLFzwZiZeRBLhWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qLUpXRo+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pP8fuQDN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA9BC4CEEA;
-	Mon, 24 Feb 2025 14:11:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qLUpXRo+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE72C4CEE6;
+	Mon, 24 Feb 2025 14:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740406305;
-	bh=P+1IoKn7bZFna+Dvhn79iyuL/7QRo0aRpzyot3u6GY0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pP8fuQDNB6qo4ZApjtvIMekhCQWKdasRAz6o4PmCHpMKk77semF4l01rB60J8L+PA
-	 gfX5Sjbfaxm0fxN185wvji8xUFMXdO82x79T/Zymi/gMXk+GEnuL36E/f3SXucicd/
-	 7DRAHddWWINUkGHn51BTAzazfoKQeYOrXNg24foCXAK59Xddey5u5YcPbLjhuuC2wd
-	 TTId/UcA52x8RxOObRoMdQQ8z4DxczZgjO5sBqbp5/wv4PhDSeTlTQGKuf/FfZKpRK
-	 fxBbIswIpZI1NHJXFNncWvfseTOCfWEn2Ng1NvEU0SteU7uKr35Kizqjw6jJJLono1
-	 gypPYWuz/H4JA==
+	s=k20201202; t=1740406373;
+	bh=DQI0FPqEAzs0OmtX8J0j8F1iGrNSEj1m4zXL+t3oxBU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qLUpXRo+0ZxxvTKMDbTKLX7BkhXPpICzdUEq0/R6JeI8U5sYyt47gJrzoVmsnZrAo
+	 hfngLiiP+OZXmyAzaeK2TJGm1O3aSgycO7V/Gjk5zbwhWY3j41s4+zNK8ms65ytGn+
+	 xfrcOYoPOV7byUDR05I7odk1zjnk+7Wh2WE0/PTZUJh5w+N0EX4Rwi9dtIh5SFr428
+	 OfPKDIyCpXhZHFyq4LoHlyHIt79t7olLirnr6gRDulWCFdUN5LB2cFppvBED4ZetLU
+	 TxywINsT2QaLWoGAsULwhZe7XGAnqRYWaO8ZlLt2TaiYFYXCANbVSVSzdrUQzo7BI8
+	 B1eWmGvQfcjqQ==
 From: Arnd Bergmann <arnd@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
+To: Masahiro Yamada <masahiroy@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Frank van der Linden <fvdl@google.com>,
-	David Hildenbrand <david@redhat.com>,
-	Zi Yan <ziy@nvidia.com>,
-	linux-mm@kvack.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH 2/2] mm, cma: use literal printf format string
-Date: Mon, 24 Feb 2025 15:07:36 +0100
-Message-Id: <20250224141120.1240534-2-arnd@kernel.org>
+Subject: [PATCH] [v2] kbuild: hdrcheck: fix cross build with clang
+Date: Mon, 24 Feb 2025 15:12:36 +0100
+Message-Id: <20250224141242.1370280-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250224141120.1240534-1-arnd@kernel.org>
-References: <20250224141120.1240534-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,35 +51,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Using a variable string as a printf format can be a security issue
-that clang warns about when extra warnings are enabled:
+The headercheck tries to call clang with a mix of compiler arguments
+that don't include the target architecture. When building e.g. x86
+headers on arm64, this produces a warning like
 
-mm/cma.c:239:37: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-  239 |                 snprintf(cma->name, CMA_MAX_NAME, name);
-      |                                                   ^~~~
+   clang: warning: unknown platform, assuming -mfloat-abi=soft
 
-This one does not appear to be a security issue since the string is
-not user controlled, but it's better to avoid the warning.
-Use "%s" as the format instead and just pass the name as the argument.
+Add in the CLANG_FLAGS, which contain the target, in order to make it
+build properly.
+
+See also 1b71c2fb04e7 ("kbuild: userprogs: fix bitsize and target
+> detection on clang").
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/cma.c | 2 +-
+v2: use same approach as the other patch.
+---
+ usr/include/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/cma.c b/mm/cma.c
-index ef0206c0f16d..09322b8284bd 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -236,7 +236,7 @@ static int __init cma_new_area(const char *name, phys_addr_t size,
- 	cma_area_count++;
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 58a9cbe4eba4..b9a2640b4bb7 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
  
- 	if (name)
--		snprintf(cma->name, CMA_MAX_NAME, name);
-+		snprintf(cma->name, CMA_MAX_NAME, "%s", name);
- 	else
- 		snprintf(cma->name, CMA_MAX_NAME,  "cma%d\n", cma_area_count);
+ # In theory, we do not care -m32 or -m64 for header compile tests.
+ # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+-UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
++UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
  
+ # USERCFLAGS might contain sysroot location for CC.
+ UAPI_CFLAGS += $(USERCFLAGS)
 -- 
 2.39.5
 
