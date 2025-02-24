@@ -1,120 +1,97 @@
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC878F5E;
-	Mon, 24 Feb 2025 00:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F22412B94;
+	Mon, 24 Feb 2025 04:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740358449; cv=none; b=CH2/x4E5DciZKVSsIUSF4hJv8rNhqUncAEaLxIFhtXpBChuUO1NcmOJ3L0k9cpM8O8u5mLH9tr+rztrQH7vTrPPhMdu4qZajMzuUsd3PniNlO+B+rfdyE7KyWfDUrI571h7G2SeK8DdIhCMP0OEsu8AQwSPjdB4aTw/dppMJs5s=
+	t=1740372548; cv=none; b=dI/qZR2LB46QyjSNXwFiIOiH7z6KKq29py5yUP9X/akvwMca0Is1fVCMdI26+d8qM9/8h1iw+GXim0o6ih0+V3o9POzS6DQ9GzMM2391IVZ4QqQn18Mp1vwHl+Wan+jPt67Km+nCjyMTdHKeawedRWe2anRf6537xHCO90NuF4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740358449; c=relaxed/simple;
-	bh=CNirDmsVDT1LLQ2KIbgV1Ns5LAgnpftSLIJlpMFNMfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oHyNarQX72TEnHcWB6u+3KZ8wOxffHBOL29/y7LBBILMMr0mIRZTp+UIhBEBS5dZKIRdInYbFoJG9e+JzRl6B6+XB3A/+Ls/FEwIZxmQqoQ/NioucjrRTszYpk9nF1I3VIBDNjhhggS4enoJ6Zb4GUfwZFIZIjfL1T3S1EJt+Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=ccKUvWnC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WZAk0XfH; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+	s=arc-20240116; t=1740372548; c=relaxed/simple;
+	bh=+tSJ/CV4ag5BPKgIT4cToWUp7lkZ5lgsFJpGIxZN57M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OVKvGDK1aiyBR8u6BxbwgdEptJCzlFyhZ0YKHulWRpVb0dcipUJNnSuUlqJ6Kry+VnWikYNKcuqi/FOuRaRBTecMgjqXWMbRzseic5RLrs7qbGjLBXM0v0CDlW8kF4kUMX0xv+SpHgnrK8mZCnvXq4TC9Sq+PLdlns6rC5RLw7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u43xayBR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="ccKUvWnC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WZAk0XfH"
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 6DA32254011D;
-	Sun, 23 Feb 2025 19:54:04 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Sun, 23 Feb 2025 19:54:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1740358444; x=
-	1740444844; bh=t/Eb+wcf7EZ+UThL8O/D+kbB1rl2eRNVJ73UFN6E/Yw=; b=c
-	cKUvWnClrwAkgd+lW1OmlDKi8ks8ZzZIPleLp2hT1ZfaoCQKmIbTTztoShL5j+aK
-	5QIsLzUNIlCGhrJv4XG6LD4ogPSYohUSrW+3Fa7POM1qosPusVLD0trUkGmUB6j2
-	cbWgCYZdIY5vBiEctIGBETmTS2PNxehmPYecWoldvGz48YAjN2fQrOFH0F1zlF33
-	NJDcqqYsN4jQVNTWpB/0QEHUHRh8LeecBt8oUm1YM93EUbp3qL/pyDwVYoxE3Ato
-	tJF9C1ZbIJmV956w6pQBzr8yLUv5dv9eaGJRU22RgtpTlSeoaIe2lUAFP0x/LwNk
-	eX55YSQKKJQNK0wyLq8Ag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1740358444; x=1740444844; bh=t/Eb+wcf7EZ+UThL8O/D+kbB1rl2eRNVJ73
-	UFN6E/Yw=; b=WZAk0XfHOrss8OU5SHkDLcFwcNnG9eAVyotI2Wm/uzQPmQlDLpf
-	zT1lbJKEvsn6EpdR+iStWJ72oKSsRDPdG/SGn5JeZFNqz6JyzTsWP9uDPJjfVAhl
-	wIVMY9WqvcHEQGSuQzcaaF6oqOosqhsxrZ8MW/liy18Od2pDBOYnTgCMjh2Gezd7
-	O8HSxFof/JjSgEw9oFytF4qN0m+y5n3u5Dkm/1A6qeFQg7OkK8OtEmgQky365cf1
-	FT2nF5cGtLLyJ2SKs/PLcNm8eARZKS5hCgnc1ZpASBhRMwfckVtc8EjF0uWqabs+
-	pZYdmhLtDGdbFwe6m62PehyU19c04Y95a8Q==
-X-ME-Sender: <xms:K8O7Zyfc9HFMbbE-Vg7_BfQHbRtt-yP7b1iaNdLLZ6jKUAFsfLIKgg>
-    <xme:K8O7Z8Pi9pBCs9lULb7yI_4c2qWdNMdSPt1cHHgZ1O1koiVP6dupoWEQaR_nShE6b
-    N1I49-o0GafmLPOlC8>
-X-ME-Received: <xmr:K8O7ZzgX_qVIbnCBjoD3GykcNbEfJ4aDXCw1OzfSgGVCAcbv9HjFmakr_5dFA1uFxLKnk3_KwNLtogQc6-fUumPxn-bqvg81rg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejjeefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhise
-    hsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeevieelhfdukeffheek
-    ffduudevvdefudelleefgeeileejheejuedvgefhteevvdenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjphdpnhgspghrtghpth
-    htohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgrtghklhhivhhinhhg
-    ohhougestghomhgtrghsthdrnhgvthdprhgtphhtthhopehllhhvmheslhhishhtshdrlh
-    hinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsthhs
-    rdhlihhnuhigrdguvghvpdhrtghpthhtohephihunhhgqdgthhhurghnrdhlihgroheslh
-    hinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehtihifrghisehsuhhsvgdruggv
-    pdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomh
-X-ME-Proxy: <xmx:K8O7Z_-ejzKIWH4_SvLBdH4YUHvAWcITT3CRT5QLVIiGbW9rf1aMnw>
-    <xmx:K8O7Z-uQV4EN_jiUoeZBLnqEB1tCkjjvoyp5hxBmDT3I3Dr4jPquLQ>
-    <xmx:K8O7Z2FyBqKgj3GM5GiPkCdC34hhB0ABw0-aRbV2xuV3xJ-uB62JQQ>
-    <xmx:K8O7Z9Nqi8k2jriPlhHW8uOwQsW6KoN8yk0zn0Tu6CjpuJeQBKaLIA>
-    <xmx:LMO7ZyiZ_eXgTLJuB-4zNt0HEqtq_7zEtiWPr_oV0CWS5y_1BY3DYcEM>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 23 Feb 2025 19:54:01 -0500 (EST)
-Date: Mon, 24 Feb 2025 09:53:58 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: jack Livingood <jacklivingood@comcast.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	yung-chuan.liao@linux.intel.com, tiwai@suse.de,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] sound:firewire:fixed spelling error
-Message-ID: <20250224005358.GA6489@workstation.local>
-References: <20250219172817.50172-1-jacklivingood@comcast.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u43xayBR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCF8C4CEED;
+	Mon, 24 Feb 2025 04:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740372547;
+	bh=+tSJ/CV4ag5BPKgIT4cToWUp7lkZ5lgsFJpGIxZN57M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u43xayBRuDT1amaEhIlS+UCRwX8Mam6i+p5yVxHpcFuutIHvkMqeZ7lTbM6Z6Y5D7
+	 D2L5lSGNzHwiYGAP/i9yUyERel+AheT0lbqq6QgUZPC5G9/oUgLUCHqiw4Q9Y1iB/N
+	 bR+oWtDZGyCMFDb4xv49jx0RLLKQxUZUXhmJLR6QL5vtHNMJWKRduGVHU/ALeEK23l
+	 Bb3cofOCUx3ljHx0Qt2WyWY3E5QE2wBsnr/mf6Zwo+ShJCiRKTzcTWi1DLhc355I8O
+	 X/WQScK41usyfP+ai1Ch4TeKZ94aty2mp9rmk/ZqTL9D+ZN2EmGZ3VyUyhs7HCevdF
+	 Yn0ElJ4srIHIQ==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so778918866b.3;
+        Sun, 23 Feb 2025 20:49:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUrC+LIh6HjLyrnu/hn25yizLYszAkKU6nvxwXl0Y1LsubwcLpVu2+RPVq4kia13BLnYznI/y16+QQm@lists.linux.dev, AJvYcCWlnR0mdz0k0ZKHuQN5qSZZLdkcdaWcevgwl6+kzTLIyohwFjxQUaULxgjuQKdufSanCGds@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxv6wrCmFBAEI3utWlprqnokL+HfYyDLI6gsRA7Tj+WW1amaef+
+	Ziu+HsttuOtk6gJxMqDYSvUlDw7WCSE3cr2IfvwjNcrbR6HNQxcWt2P3JEi+aLF7m7EOC5HLyD4
+	+sv3wJEWpmCF02Geb3WHsRGHqzZk=
+X-Google-Smtp-Source: AGHT+IEKW5vIXjTzOHrompLOAPwklgOd0a+ZAbqn71KeUOAndWapGBnmaG5irOdKpG3m5J7DZWq2c8pb6BBiBzlLQ8U=
+X-Received: by 2002:a17:906:c0c:b0:abc:ad5:eee1 with SMTP id
+ a640c23a62f3a-abc0ad5f0a6mr1104615966b.3.1740372545953; Sun, 23 Feb 2025
+ 20:49:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250219172817.50172-1-jacklivingood@comcast.net>
+References: <20250114132856.19463-1-yangtiezhu@loongson.cn>
+In-Reply-To: <20250114132856.19463-1-yangtiezhu@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 24 Feb 2025 12:48:59 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4giTorYbo4uL_KNL1MmHWfWKX8EnhKdC_Yz0_sX17PvA@mail.gmail.com>
+X-Gm-Features: AWEUYZmN-OTr9hSy8TtD6Pr3OSYtzFaOXORrLZ6CEn7dpUO4IxI5WYWdY8z04ys
+Message-ID: <CAAhV-H4giTorYbo4uL_KNL1MmHWfWKX8EnhKdC_Yz0_sX17PvA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] drm/amd/display: Stop control flow if the divisior
+ is zero
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Xinhui Pan <Xinhui.Pan@amd.com>, Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
+	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, loongarch@lists.linux.dev, 
+	amd-gfx@lists.freedesktop.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Tue, Jan 14, 2025 at 9:29=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> As far as I can tell, with the current existing macro definitions, there
+> is no better way to do the minimal and proper changes to stop the control
+> flow if the divisior is zero.
+>
+> In order to keep the current ability for the aim of debugging and avoid
+> printing the warning message twice, it is better to only use ASSERT_BUG()
+> and SPL_ASSERT_BUG() directly after doing the following two steps:
+>
+> (1) Add ASSERT_BUG() macro definition
+> (2) Add SPL_ASSERT_BUG() macro definition
+>
+> This version is based on 6.13-rc7, tested on x86 and LoongArch.
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-On Wed, Feb 19, 2025 at 09:28:17AM -0800, jack Livingood wrote:
-> fixed a spelling error.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202502191455.cX0HILg0-lkp@intel.com/
-> Signed-off-by: Jack Livingood <jacklivingood@comcast.net>
-> ---
->  sound/firewire/isight.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-The issued patch does not exist in linux-next branch of sound.git[1]. The
-report to which you address is for Sound Open Firmware project[2].
-
-I think it better to re-post the revised-version of patch to replace the
-usage of 'strcpy()' with 'strscpy()'[3].
-
-
-[1] I guess that the maintainer realized the build error when applying
-the patch after my review.
-[2] https://lore.kernel.org/oe-kbuild-all/202502220137.fyFohYSo-lkp@intel.com/
-[3] https://lore.kernel.org/linux-sound/20250205192258.358362-1-jacklivingood@comcast.net/
-
-Thanks
-
-Takashi Sakamoto
+>
+> Tiezhu Yang (3):
+>   drm/amd/display: Add ASSERT_BUG() macro definition
+>   drm/amd/display: Add SPL_ASSERT_BUG() macro definition
+>   drm/amd/display: Harden callers of division functions
+>
+>  drivers/gpu/drm/amd/display/dc/basics/fixpt31_32.c  |  2 +-
+>  drivers/gpu/drm/amd/display/dc/os_types.h           |  7 +++++++
+>  drivers/gpu/drm/amd/display/dc/spl/spl_debug.h      | 11 +++++++++++
+>  drivers/gpu/drm/amd/display/dc/spl/spl_fixpt31_32.c |  2 +-
+>  4 files changed, 20 insertions(+), 2 deletions(-)
+>
+> --
+> 2.42.0
+>
+>
