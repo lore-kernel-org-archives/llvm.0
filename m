@@ -1,91 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1832144BF;
-	Tue, 25 Feb 2025 10:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D55257420;
+	Tue, 25 Feb 2025 13:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740477642; cv=none; b=J7hGS3WWKGSV7y+yQNbYMWdHaRC7PsVMygjs0fERYFBiPwb0cjdQLg40DVkm2D+w14/FmYW9c3Or7+LXVKfeBxgpRuNrjUFCoImBnHPFgjKjbgSyxltZZr2oVN9cQtm/FLLjzyNFx5OeWlukyloxrIwNhgsQfLQKx+peDRj0jYg=
+	t=1740491450; cv=none; b=mFFadRsUOXTXrvph8YUHGTY9cOEqBc45ZMwjnmxrGgngApH9MWNyztkYMXHIHbocDNmjmFTHSgL/lFqoPTcnTFEMRutJmlaP3z6oFFLKjsxkiBUOrOdd6T0VOuLVfFKnWyj8q5sQ+qhbU2HMHobcaTwMRgSjxR50LcHQCg0Hh6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740477642; c=relaxed/simple;
-	bh=EJ6vWPnC77dmHQ122+ULTLzJINIW/YADLEaC8xWgSdU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=anfKquX6OevGXsv6kX6Pmtb7kyME4Mic1jyUtTNRuQyxwTIJ63dggmz1nKwXuZcXHDU9MG/ACycKMvT2y/sdqymrt1VaDAuUKe+1OdPmzWlyf/pbWdMx5pYl/eJCr3I/O845A+bvoG/fkVdiZ+kZbPTBlGAD6C3VfOUxEiP+vTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/EX3EdZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740491450; c=relaxed/simple;
+	bh=EplWSkN/CDrXcgxOnexw9cGdfCrzPg/MFWJVSrpfllY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F40K9I2JjYpF4MYaMJj6BrdUvS+2KH/dNbocf4UR4pSmeiSWN20SD5cv4BEeT3/l6s5g0lR15o0Li9jTyxiBGsn0YPm8uhykwGjBxkCyZQUSSSXwxi3FYMCWVzOP72GdN0fGf3/COc3/bnsZAeevLKOyH1xNwEwxlBl7bwdufCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SLHNyll8; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/EX3EdZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09937C4CEDD;
-	Tue, 25 Feb 2025 10:00:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740477642;
-	bh=EJ6vWPnC77dmHQ122+ULTLzJINIW/YADLEaC8xWgSdU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=s/EX3EdZcCQwj+vOkoAQGUfKYstjdbERK+kapSdyZawDWna2/5gYNVG3LYrmWn0wh
-	 XZZwQRVd7YoYnyt6uYviJYE7tQTivy7x2BGKz93PdUBtD6/lk0TKCI1PLIcDzdw9jj
-	 VxVpW2t8Fspeh55tPT1fQ9an9AodsMWZUvFCifRDmldmg8OFGnKdWxUbBhEsUOmEEM
-	 krjW+0lnhqQNXsuCYi2FKQ3drzegl7JrTMVPUyBi7PxAs40PbnaRhwYsIrmgK4pEF6
-	 fHuPvvHAULVqqYIQD5/fPVtONczn+CNjV0UXLcG/mFQOcqW1Eq+TNrBAhM+hdvM0kv
-	 Cesf+tCODHeJQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] [v3] kbuild: hdrcheck: fix cross build with clang
-Date: Tue, 25 Feb 2025 11:00:31 +0100
-Message-Id: <20250225100037.2709624-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SLHNyll8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740491449; x=1772027449;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EplWSkN/CDrXcgxOnexw9cGdfCrzPg/MFWJVSrpfllY=;
+  b=SLHNyll8BvYxTWhzDlIk4AcBNIMQLPCfdLJ622Sg2DZXLI6mKB7Kw18G
+   E8r8ym+ngTchYZRhQqMiJ22K8nvGKliAKsBwWrEMhYPcRhEGWSlZlC3EZ
+   YJ23kYfm1FKbLjlIBZ17jMFig+HcYM1B5HZw9S5bJYhkYA6aZ9IsR+lZO
+   iv5u2jBgYre9zvnG3SqcRZsyTdjZpz0oze2VXs/2cqgG/QBq3lRP9Cku8
+   8Yc8zvvm98Oau0vGRX1/es4vNjkEptT1CbC7XeCjSNLeavLho7Mf1yFpv
+   B7ucCH3Y0OS+A96ION9HJxq9uWTJd4+1dEx6l92YtkvUUoTidAhKHdiW8
+   A==;
+X-CSE-ConnectionGUID: 723lEH8pThyKUI4iTcuM1g==
+X-CSE-MsgGUID: Wy6laBZRSfC6cp89P8eGjA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="41423080"
+X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
+   d="scan'208";a="41423080"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 05:50:48 -0800
+X-CSE-ConnectionGUID: q6kABqEKQK2YYjvk8VobBg==
+X-CSE-MsgGUID: yKvXQIimSPK8Uop0r/xREw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
+   d="scan'208";a="116585647"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 25 Feb 2025 05:50:47 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tmvKe-000AJb-36;
+	Tue, 25 Feb 2025 13:50:44 +0000
+Date: Tue, 25 Feb 2025 21:50:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 5789/6192]
+ arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi:1212.7-1220.4: Warning
+ (graph_child_address): /soc/syscon@1c01d000/port: graph node has single
+ child node 'endpoint@0', #address-cells/#size-cells are not necessary
+Message-ID: <202502252142.FtImoMPk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: Arnd Bergmann <arnd@arndb.de>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0226d0ce98a477937ed295fb7df4cc30b46fc304
+commit: be06e25e3cf6056efb53a8c8cfd1aa1a1cc8fdc7 [5789/6192] arm64: dts: mediatek: mt8390-genio-common: Add Display on DSI0
+config: arm64-randconfig-001-20250225 (https://download.01.org/0day-ci/archive/20250225/202502252142.FtImoMPk-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250225/202502252142.FtImoMPk-lkp@intel.com/reproduce)
 
-The headercheck tries to call clang with a mix of compiler arguments
-that don't include the target architecture. When building e.g. x86
-headers on arm64, this produces a warning like
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502252142.FtImoMPk-lkp@intel.com/
 
-   clang: warning: unknown platform, assuming -mfloat-abi=soft
+dtcheck warnings: (new ones prefixed by >>)
+>> arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi:1212.7-1220.4: Warning (graph_child_address): /soc/syscon@1c01d000/port: graph node has single child node 'endpoint@0', #address-cells/#size-cells are not necessary
 
-Add in the KBUILD_CPPFLAGS, which contain the target, in order to make it
-build properly.
+vim +1212 arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
 
-See also 1b71c2fb04e7 ("kbuild: userprogs: fix bitsize and target
-detection on clang").
+  1210	
+  1211	&vdosys0 {
+> 1212		port {
+  1213			#address-cells = <1>;
+  1214			#size-cells = <0>;
+  1215	
+  1216			vdosys0_ep_main: endpoint@0 {
+  1217				reg = <0>;
+  1218				remote-endpoint = <&ovl0_in>;
+  1219			};
+  1220		};
+  1221	};
+  1222	
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: use same approach as the other patch.
-v3: fix changelog text
----
- usr/include/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 58a9cbe4eba4..b9a2640b4bb7 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
- 
- # In theory, we do not care -m32 or -m64 for header compile tests.
- # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
--UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
-+UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
- 
- # USERCFLAGS might contain sysroot location for CC.
- UAPI_CFLAGS += $(USERCFLAGS)
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
