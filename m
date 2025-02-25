@@ -1,58 +1,58 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343A319CD0B
-	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 21:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350E1A4E98
+	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 21:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740519492; cv=none; b=di37bt0tOXgI3PrB6tsRIlmukAX9T4rtC0pKyr1fF0pz61QVBWdl1x+bl4LZw9qvt5U+z+hjvLC52ElPjat0Lkjcyf3VcOWWDl/lghwPQ427FDW9XaochRLjhaO2p9FovnsAXpN4bPU0DU4UmM4wNLW8saGzP+a/TsOXns7mFQ8=
+	t=1740519501; cv=none; b=ukvU276c3qCTFGkZWZTv5mSj8rSqstOAelpOMdyKjzOEQ5tgf1Xr3AmttjktfqbMYvnIKitB/kj8A77Uw7Q5FH7PYuv/x/Tfry9HLjJI3FSD/EIdFE4rnKgqyvcJk7H8cB4ypRhyIfLmKgGP8UG0EyWc9CvMptbD30+wdXGjsMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740519492; c=relaxed/simple;
-	bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
+	s=arc-20240116; t=1740519501; c=relaxed/simple;
+	bh=fXFKcm0lZuF5OG0aApeKuQOf3+mW6bFB0yCFPCGgwEk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CfZR625+7yT0XZwyOUV/hyRzMVyEaSQTqpMj/z74Fo1Kq81b+O+MIhqNP7jbPmrmEFkHFvsrBY3jyUbSjrlRfLKlkR+/IxcdQyqhqlbtx0/8pHMQS1jo/P7JaGl15iI4nb3C8/Lsh9QltN4xX4ZigeAF4pqUnc498/OgnWkxAIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMd8rT9q; arc=none smtp.client-ip=209.85.221.53
+	 To:Cc:Content-Type; b=CbIZBxiqU6j+Iw0YYPlQQt6MaIYLLk46RYIpG3GzSTkbCaJB8prd66d2KS/PY9EcIa0pj/l+bDqxFE3aatDWQbM8xGcRVup4TaOH03Yb87tXQwMSzUTvRb1wKOZQvILg0zW4mMa1mXS3G/T0pdsAzcxdaEWenoQcIib4V1Qd3VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/ODOTiT; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMd8rT9q"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38f3486062eso5126374f8f.0
-        for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 13:38:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/ODOTiT"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-439946a49e1so39176685e9.0
+        for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 13:38:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740519489; x=1741124289; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1740519498; x=1741124298; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
-        b=FMd8rT9q5TAHd1YgGHhv2VXejXkBeqO9PZGM4eOm/+830xFRAFVoZGzePwusVLK4Mf
-         ApU6cyrm6S5+W0R8DJTXeaQF+aCZk0jtyVWKsCCuBDevUS6+bfUlvKHqdZ69Feh8mOlP
-         EPUS5tH8yAyWxnCkS4hQChIMx4oRl4PyMvjbdPSSGNiuZw8mYcWadxwgKswSp5WpmCb0
-         kQ0b+dRGjlMEcutdhSVD+uoSl9moWw5gVHe/iYNNrr3lzTklUi3+DQn55yl+sJlzQ4fx
-         IX9roUwC2sjik8Qpz2BpCk1zK/3nxNIwq9U1VQUW6q01X3slhVuAfmNp/RCrPXtG0VAr
-         Z2Iw==
+        bh=fXFKcm0lZuF5OG0aApeKuQOf3+mW6bFB0yCFPCGgwEk=;
+        b=a/ODOTiT+gIsI4vDK9XYfsawCNWdtK6oJjozh2StTONWu1u5jyFodTVcviWowtHk70
+         9lC7jo5A/2eRRwQ3nTNJbRNYnQQTMMRcwWbKcDb71JV192f0VSlW044E/yT1PgI13zdv
+         r8BsSB/Mo5ffMWT67ysZJAYghIXF+6di1tjDhEwIJtkHFLed+OFVOsOX++apYw8m2kJ6
+         EWEdsiP5dpytUzzzz/dYiUcgK7vviFemM4XVpORp8pRziG706QvR7ClIrQx23w5vwvX6
+         MpNF0KnEJ54jKy+EMB+B2THVuYiphsW8378E9wszVmmBa/8LVo1rsKjsfm/f/8nb2/k3
+         P4dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740519489; x=1741124289;
+        d=1e100.net; s=20230601; t=1740519498; x=1741124298;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
-        b=QwkuNQWvJ8PGy5/DA5qaAMdUkt2H57EUB+oNYC0iQ7jM4LPpRZMbYK0TfX4snQAVXv
-         neyHhqbnK3pCOHsVsGaGM6WffjSU+Albtwj7JfxrYV5XvFM3ZjDq4KI79OnjJtgCFeNC
-         VWTMjGLkPMjs9/B6doDDtqNwrcPIHUe8v7lasT+QVc0qALRQoVfR+VJYikHU4TwKEZ9r
-         XsBot+HSkxAn53MziKN18jpGfz9bRYMysBhbHtlIaJHE2nzcCj7KX6rCORwXOZgAeWEZ
-         coBqIoRrLPMic5M5ltq+MZGu82ViabzfZzLdmTUjags04fqFDsKasss5M1Wd3NqxkW63
-         7z6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQA8Lms4rF5Ar8dNJMrc0hd75gpZRSbwcIVqUZXXztlNNOOXfFGh1ZaFT03eml0ccIW4Na@lists.linux.dev
-X-Gm-Message-State: AOJu0YyCgQA3wNMJKE7wEcTCwFl6GjwVupf5tJQrfGxOX9e+D78jM8Sk
-	hcRgLn6xiZMBbvADWsJjeRdG8flNvuxEBFgMQrbSXtCAF7HpcvGoQ2hjA4/anIZ+GPS8io7P7/P
-	ocRpW87WESJT6H+KOMqUHF+o0vE4=
-X-Gm-Gg: ASbGncsY+nn28oSmCRtDAQxJJ6Ua/cgBrzxgv9iUD5Y2fSmMiAgRJKh19PZ2qyYU31a
-	fjQTlIKF12WC6hw8xWmYCkKwZSltu/0AEx0l+yIKdEFJn+Wl5f5yPS9hX5vQLQVnQHxPqhepvub
-	jNHDsYz5Ol
-X-Google-Smtp-Source: AGHT+IGzBmIP4aWCt5zFr/sHd8kjuZRvXKRM0LrcV6ko0BFjnKWL3knShVuZ19Ay8ztNZBUEIkHfc1Iw5Vfb6Xxj3AE=
-X-Received: by 2002:a05:6000:c2:b0:38f:2401:a6a6 with SMTP id
- ffacd0b85a97d-390d4f3cb3cmr437434f8f.12.1740519489416; Tue, 25 Feb 2025
- 13:38:09 -0800 (PST)
+        bh=fXFKcm0lZuF5OG0aApeKuQOf3+mW6bFB0yCFPCGgwEk=;
+        b=qO7g7GGCaBDh88TCUXb5UIp/GOo7+QBht27kuoKnSG2Q3DSURndqPoiogEfYI1xWdU
+         8yiEUCs6iRnQj6SBc9PuPeE7gpg25+W1jFt9oLe9f7zXOChkYHIVmXiiIQ0OIhuIEmYt
+         qfVgTh1DyYMFi1jh1/KopKq+s0keakehR1zZOLaFeQMvg0itOdhBycm5QN420k23ElEV
+         4XHNSPASfgjkgvc2C+AENnxDvCfWpXh0oJIUz+ezd2vD8xnn89K2NvWIsu+EC7QKT/px
+         gm6oI2qVeL2fKT6NLDW+xCj/1l9X84L6OPoZntUr2v+/UhrheK3y5HOtiHkKwUFLUFel
+         npnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXaRW4LuU68/je4/cu3zbqpwS1vUOXrP1rM6mSAMciUhciMfFNqU//ctuXa8++cA2cIlqiu@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxypi7jlOTebIib4MHpdZHyrNcYpvavE1jpR9zHiuUgYzm6S47b
+	HcejN5W0/zlibsDimhNGZf4YZqPC0NPWhgxYigTiWeSvbU+0zJJR9IhTRDZQylMm33dkhVDvfKX
+	WpHQFXtpDBiPx5//+WB5vGZSk4zI=
+X-Gm-Gg: ASbGnctNA6CwwAzVZOg02bpzGHqcfbQzFIuOAhNo+ykztHKFw+vicFl+xQ14b5NvfTR
+	wLOlEqHKwUhvyPlGCrckMMDCIGorFZ21jSy/2ZyVVvX0nA2PqpezFUszdhC4jU4ihwqNO+GmPHx
+	pKvyeJk8DJ
+X-Google-Smtp-Source: AGHT+IGh8E+lTwkx8iX124FdlLJw2Xy9DPydEazX+qcbmRtx4fMlCbmv7VFo9hwZNeA+xmoTq7Gl/a44OapVymXi8YM=
+X-Received: by 2002:adf:f003:0:b0:388:da10:ff13 with SMTP id
+ ffacd0b85a97d-390d4f3c491mr589082f8f.21.1740519497503; Tue, 25 Feb 2025
+ 13:38:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,14 +63,16 @@ References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
  <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
  <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
  <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
- <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com> <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
-In-Reply-To: <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
+ <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
+ <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
+ <gisttijkccu6pynsdhvv3lpyxx7bxpvqbni43ybsa5axujr7qj@7feqy5fy2kgt> <6wdzi5lszeaycdfjjowrbsnniks35zhatavknktskslwop5fne@uv5wzotu4ri4>
+In-Reply-To: <6wdzi5lszeaycdfjjowrbsnniks35zhatavknktskslwop5fne@uv5wzotu4ri4>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Tue, 25 Feb 2025 22:37:58 +0100
-X-Gm-Features: AWEUYZnS8GVd3ERRXhXkc6hjvKnRC5lEIY-bHuz7PF3TjilwVr_-TxB6baR4YG8
-Message-ID: <CA+fCnZfb_cF1gbASZsi6Th_zDwXqu4KMtRUDxbsyfnyCfyUGfQ@mail.gmail.com>
+Date: Tue, 25 Feb 2025 22:38:06 +0100
+X-Gm-Features: AWEUYZlodhwAbgPi0Dk16h7YK7x4HrrqY-JVxMx5ByQmdcv8cbnJsNVhi4etBIM
+Message-ID: <CA+fCnZeEm+-RzqEXp1FqYJ5Gsm+mUZh5k3nq=92ZuTiqwsaWvA@mail.gmail.com>
 Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, Vitaly Buka <vitalybuka@google.com>
 Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
 	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
 	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
@@ -98,20 +100,53 @@ Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 25, 2025 at 6:21=E2=80=AFPM Maciej Wieczor-Retman
+On Tue, Feb 25, 2025 at 9:13=E2=80=AFPM Maciej Wieczor-Retman
 <maciej.wieczor-retman@intel.com> wrote:
 >
-> >> I wanted to have the shadow memory boundries aligned properly, to not =
-waste page
-> >> table entries, so the memory map is more straight forward. This patch =
-helps with
-> >> that, I don't think it would have worked without it.
+> >>Thanks for letting me know about the tag resets, that should make chang=
+ing the
+> >>check in kasan_non_canonical_hook() easier.
 > >
-> >Ok, I see - let's add this info into the commit message then.
+> >Ah, but the [0xff00000000000000, 0xffffffffffffffff] won't be true for x=
+86
+> >right? Here the tag reset function only resets bits 60:57. So I presume
+> >[0x3e00000000000000, 0xffffffffffffffff] would be the range?
 >
-> Sure, but if you like the 0xffeffc0000000000 offset I'll just drop this p=
-art.
+> Sorry, brain freeze, I meant [0x1e00000000000000, 0xffffffffffffffff]
 
-Sure, assuming it works, I like this address :) But to be fair, I like
-any fixed address better than using a runtime const, just to avoid the
-complexity.
++Vitaly, who implemented [1]
+
+Ah, so when the compiler calculates the shadow memory address on x86,
+it does | 0x7E (=3D=3D 0x3F << 1) [2] for when CompileKernel =3D=3D true,
+because LAM uses bits [62:57], I see.
+
+What value can bit 63 and take for _valid kernel_ pointers (on which
+KASAN is intended to operate)? If it is always 1, we could arguably
+change the compiler to do | 0xFE for CompileKernel. Which would leave
+us with only one region to check: [0xfe00000000000000,
+0xffffffffffffffff]. But I don't know whether changing the compiler
+makes sense: it technically does as instructed by the LAM spec.
+(Vitaly, any thoughts? For context: we are discussing how to check
+whether a pointer can be a result of a memory-to-shadow mapping
+applied to a potentially invalid pointer in kernel HWASAN.)
+
+With the way the compiler works right now, for the perfectly precise
+check, I think we need to check 2 ranges: [0xfe00000000000000,
+0xffffffffffffffff] for when bit 63 is set (of a potentially-invalid
+pointer to which memory-to-shadow mapping is to be applied) and
+[0x7e00000000000000, 0x7fffffffffffffff] for when bit 63 is reset. Bit
+56 ranges through [0, 1] in both cases.
+
+However, in these patches, you use only bits [60:57]. The compiler is
+not aware of this, so it still sets bits [62:57], and we end up with
+the same two ranges. But in the KASAN code, you only set bits [60:57],
+and thus we can end up with 8 potential ranges (2 possible values for
+each of the top 3 bits), which gets complicated. So checking only one
+range that covers all of them seems to be reasonable for simplicity
+even though not entirely precise. And yes, [0x1e00000000000000,
+0xffffffffffffffff] looks like the what we need.
+
+[1] https://github.com/llvm/llvm-project/commit/cb6099ba43b9262a317083858a2=
+9fd31af7efa5c
+[2] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Tran=
+sforms/Instrumentation/HWAddressSanitizer.cpp#L1259
