@@ -1,58 +1,58 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6520718DB1B
-	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 21:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343A319CD0B
+	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 21:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740519472; cv=none; b=ixylH14JYWCM4Z+RafvrAvQO9eQY0LZwdAFVwotdPvKIswy+nOSqbm5mYUkdD81BuilcAAap+5spID4ah9oyuotQ4Q5cZixJnUc/Hi2qA5a2k/O56jHN2XnX3BUiiwGpFPZGV/xrk6ZDp53dcP8pi4a5d9ZxDD0+Ps1SBMHiUfo=
+	t=1740519492; cv=none; b=di37bt0tOXgI3PrB6tsRIlmukAX9T4rtC0pKyr1fF0pz61QVBWdl1x+bl4LZw9qvt5U+z+hjvLC52ElPjat0Lkjcyf3VcOWWDl/lghwPQ427FDW9XaochRLjhaO2p9FovnsAXpN4bPU0DU4UmM4wNLW8saGzP+a/TsOXns7mFQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740519472; c=relaxed/simple;
-	bh=NMGyldH7G/zx0ROFy4tu+R4sBPI1pjzg+05ivupOIcE=;
+	s=arc-20240116; t=1740519492; c=relaxed/simple;
+	bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UuhqF+FDdGmkVUjgcoXzUym4j9kqOrlPBNgaUMBq4XTI2RqdDkg6E3X6vB3yeEJLgSgj3uB6iaH8QYA13kioMjQszZGxedpa49ijEAsSPjhTxRbSNIc1cWqe9CFBmYj19zQZ4xzNiN3U1Uptok5pYtcUE8fYG4o3DMFMOfQhsWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RHRV+/La; arc=none smtp.client-ip=209.85.221.45
+	 To:Cc:Content-Type; b=CfZR625+7yT0XZwyOUV/hyRzMVyEaSQTqpMj/z74Fo1Kq81b+O+MIhqNP7jbPmrmEFkHFvsrBY3jyUbSjrlRfLKlkR+/IxcdQyqhqlbtx0/8pHMQS1jo/P7JaGl15iI4nb3C8/Lsh9QltN4xX4ZigeAF4pqUnc498/OgnWkxAIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMd8rT9q; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHRV+/La"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38f488f3161so3373891f8f.3
-        for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 13:37:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMd8rT9q"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38f3486062eso5126374f8f.0
+        for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 13:38:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740519469; x=1741124269; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1740519489; x=1741124289; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9QCyp1JUlv9qVfn+zUKpBjTnHTrPkzYz/kl8dlHJcy0=;
-        b=RHRV+/La+lqrSIZVd0RirmMAnoi4MbK8F7hiJhPV44/ZDQAQ+nXfp0LLmodqJDTQR+
-         gonsYeEIj9eW1px1aSlLzNsG6StSS+/iUNnZHkE3F0vWUhWEFoRNNL+Wi4vf7FwHvmk7
-         acZMQcMKbACYzgHnuIyag4+8cyZIsq/jBg9nh+jtk6FjUPZfZEwhH/hgTem/POBOOcYv
-         GvP21si2WSyDYq0r0XtKy7RSMDdBbPJArTOnrqgRTnIRodK5Uu27jLfkXXHM9xDaaJK4
-         yK3OZmsVJjdwZuc5Yfy0b3m03I/NbR3BGn8YBqZnw8B+KRAftPU1hAoCGWT3yynqpRxj
-         nmdw==
+        bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
+        b=FMd8rT9q5TAHd1YgGHhv2VXejXkBeqO9PZGM4eOm/+830xFRAFVoZGzePwusVLK4Mf
+         ApU6cyrm6S5+W0R8DJTXeaQF+aCZk0jtyVWKsCCuBDevUS6+bfUlvKHqdZ69Feh8mOlP
+         EPUS5tH8yAyWxnCkS4hQChIMx4oRl4PyMvjbdPSSGNiuZw8mYcWadxwgKswSp5WpmCb0
+         kQ0b+dRGjlMEcutdhSVD+uoSl9moWw5gVHe/iYNNrr3lzTklUi3+DQn55yl+sJlzQ4fx
+         IX9roUwC2sjik8Qpz2BpCk1zK/3nxNIwq9U1VQUW6q01X3slhVuAfmNp/RCrPXtG0VAr
+         Z2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740519469; x=1741124269;
+        d=1e100.net; s=20230601; t=1740519489; x=1741124289;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9QCyp1JUlv9qVfn+zUKpBjTnHTrPkzYz/kl8dlHJcy0=;
-        b=m7HeemIpCJQseMj4CjbSlil70B5O2LHNpYiCcJ3p7SIdAGLxj4X99UrkVvWwc6lHyX
-         SO3pCf3mJil2OnAkN7olIh9y6PmQz9RnOqQW3I0yQw5hd3opnlvSvxQJOO2lH3K0GRAr
-         BxFwBBQzM/LW9gLO/lSYspBiE4PhpHCR0cSzgfQhJ4Ozf6h4WuGdy7o4xCHvTUPER5Pu
-         lugKU0K5qWasD5FeA4jRgRNFNv5Xzp1OS/gosT2v/XMst9V3I2j26qdrNBPp0D0+QrsV
-         el2nhHA/So7zYrrXqpVEMeSI2vxL8k/gZKQIRGS07Rqq2GVshDK7YjlVp5GwL+0fUOLy
-         hPww==
-X-Forwarded-Encrypted: i=1; AJvYcCVwvR7w20HAI2HiaSdVV8yXr7SYSAmo0VqfHNJyH2PjARgCHE28uSDS+lb+UbrDlDinBjn6@lists.linux.dev
-X-Gm-Message-State: AOJu0YybRYmQVyA09WfuS6LG51we1xyPVR8npAnZLbqiH4SRDc06Ku+5
-	xXOjL2y1V6Ff3FZ3NfBtZmfK/nkHUJrksiZySI597W7PKBBdaoP/BtaVIui5yXP/DjwKgAxmvMp
-	2GYkVSsch7DETcDfr0FEqZV+D/3o=
-X-Gm-Gg: ASbGncu+1GKPmMzC3Du/44O1LjPniE10HS+5zlUzU8Epkt83u8DNivwZRjy2OGPno+B
-	lvkspoMuQWUSErxD7LpK/b7daRgIIEYR1yLQj8ukPUwV/Dsf0xLN5oT8FXGjXnkfOucdMbdAqZN
-	+eDzJfKG84
-X-Google-Smtp-Source: AGHT+IH6S2mULqjQWrRVzKEgduMFAsvTkEdFQj+0CWyfGyaXp1XuShoVeKk5ny9pZxUEWkF4gZEny+EdppWtMZZUjmk=
-X-Received: by 2002:a5d:588d:0:b0:390:d5f1:de9f with SMTP id
- ffacd0b85a97d-390d5f1e3dcmr106316f8f.18.1740519468347; Tue, 25 Feb 2025
- 13:37:48 -0800 (PST)
+        bh=aE8YFaAaS3yuOPewtHTX+TYTLUQYvdlxC6/LkkaX3Es=;
+        b=QwkuNQWvJ8PGy5/DA5qaAMdUkt2H57EUB+oNYC0iQ7jM4LPpRZMbYK0TfX4snQAVXv
+         neyHhqbnK3pCOHsVsGaGM6WffjSU+Albtwj7JfxrYV5XvFM3ZjDq4KI79OnjJtgCFeNC
+         VWTMjGLkPMjs9/B6doDDtqNwrcPIHUe8v7lasT+QVc0qALRQoVfR+VJYikHU4TwKEZ9r
+         XsBot+HSkxAn53MziKN18jpGfz9bRYMysBhbHtlIaJHE2nzcCj7KX6rCORwXOZgAeWEZ
+         coBqIoRrLPMic5M5ltq+MZGu82ViabzfZzLdmTUjags04fqFDsKasss5M1Wd3NqxkW63
+         7z6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUQA8Lms4rF5Ar8dNJMrc0hd75gpZRSbwcIVqUZXXztlNNOOXfFGh1ZaFT03eml0ccIW4Na@lists.linux.dev
+X-Gm-Message-State: AOJu0YyCgQA3wNMJKE7wEcTCwFl6GjwVupf5tJQrfGxOX9e+D78jM8Sk
+	hcRgLn6xiZMBbvADWsJjeRdG8flNvuxEBFgMQrbSXtCAF7HpcvGoQ2hjA4/anIZ+GPS8io7P7/P
+	ocRpW87WESJT6H+KOMqUHF+o0vE4=
+X-Gm-Gg: ASbGncsY+nn28oSmCRtDAQxJJ6Ua/cgBrzxgv9iUD5Y2fSmMiAgRJKh19PZ2qyYU31a
+	fjQTlIKF12WC6hw8xWmYCkKwZSltu/0AEx0l+yIKdEFJn+Wl5f5yPS9hX5vQLQVnQHxPqhepvub
+	jNHDsYz5Ol
+X-Google-Smtp-Source: AGHT+IGzBmIP4aWCt5zFr/sHd8kjuZRvXKRM0LrcV6ko0BFjnKWL3knShVuZ19Ay8ztNZBUEIkHfc1Iw5Vfb6Xxj3AE=
+X-Received: by 2002:a05:6000:c2:b0:38f:2401:a6a6 with SMTP id
+ ffacd0b85a97d-390d4f3cb3cmr437434f8f.12.1740519489416; Tue, 25 Feb 2025
+ 13:38:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,16 +60,16 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
- <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com>
- <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
- <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com> <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
-In-Reply-To: <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+ <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
+ <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
+ <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com> <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
+In-Reply-To: <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
 From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Tue, 25 Feb 2025 22:37:37 +0100
-X-Gm-Features: AWEUYZnhs_dCGf3N8iOL4s8huRdd6HbG8f2NLaDJFhsXr34i64LAvkBz9QgjSAQ
-Message-ID: <CA+fCnZcsg13eoaDJpueZ=erWjosgLDeTrjXVaifA305qAFEYDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
+Date: Tue, 25 Feb 2025 22:37:58 +0100
+X-Gm-Features: AWEUYZnS8GVd3ERRXhXkc6hjvKnRC5lEIY-bHuz7PF3TjilwVr_-TxB6baR4YG8
+Message-ID: <CA+fCnZfb_cF1gbASZsi6Th_zDwXqu4KMtRUDxbsyfnyCfyUGfQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
 To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
 	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
@@ -77,20 +77,20 @@ Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de,
 	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
 	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
 	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
-	ndesaulniers@google.com, guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, 
-	mark.rutland@arm.com, broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, 
-	rppt@kernel.org, kaleshsingh@google.com, richard.weiyang@gmail.com, 
-	luto@kernel.org, glider@google.com, pankaj.gupta@amd.com, 
-	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
-	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
-	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
-	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
-	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
-	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
-	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
-	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
-	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
-	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, mark.rutland@arm.com, 
+	broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, rppt@kernel.org, 
+	kaleshsingh@google.com, richard.weiyang@gmail.com, luto@kernel.org, 
+	glider@google.com, pankaj.gupta@amd.com, pawan.kumar.gupta@linux.intel.com, 
+	kuan-ying.lee@canonical.com, tony.luck@intel.com, tj@kernel.org, 
+	jgross@suse.com, dvyukov@google.com, baohua@kernel.org, 
+	samuel.holland@sifive.com, dennis@kernel.org, akpm@linux-foundation.org, 
+	thomas.weissschuh@linutronix.de, surenb@google.com, kbingham@kernel.org, 
+	ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, xin@zytor.com, 
+	rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, cl@linux.com, 
+	jhubbard@nvidia.com, hpa@zytor.com, scott@os.amperecomputing.com, 
+	david@redhat.com, jan.kiszka@siemens.com, vincenzo.frascino@arm.com, 
+	corbet@lwn.net, maz@kernel.org, mingo@redhat.com, arnd@arndb.de, 
+	ytcoode@gmail.com, xur@google.com, morbo@google.com, 
 	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
 	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
 	llvm@lists.linux.dev, linux-mm@kvack.org, 
@@ -98,80 +98,20 @@ Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 25, 2025 at 6:16=E2=80=AFPM Maciej Wieczor-Retman
+On Tue, Feb 25, 2025 at 6:21=E2=80=AFPM Maciej Wieczor-Retman
 <maciej.wieczor-retman@intel.com> wrote:
 >
-> I mean in my tests, with setting offset in runtime, everything works corr=
-ectly
-> in inline mode. Even though hwasan-mapping-offset ends up empty and doesn=
-'t end
-> up in CFLAGS_KASAN. I assume this means that the inline mode is pretty mu=
-ch the
-> same as outline mode with the runtime offset setting?
+> >> I wanted to have the shadow memory boundries aligned properly, to not =
+waste page
+> >> table entries, so the memory map is more straight forward. This patch =
+helps with
+> >> that, I don't think it would have worked without it.
+> >
+> >Ok, I see - let's add this info into the commit message then.
 >
-> I also tested if hwasan-mapping-offset does anything if I passed random v=
-alues
-> to it by hardcoding them in the makefile and still everything seemed to w=
-ork
-> just fine. Therefore I assumed that this option doesn't have any effect o=
-n x86.
+> Sure, but if you like the 0xffeffc0000000000 offset I'll just drop this p=
+art.
 
-Hm that's weird. I wonder if inline instrumentation somehow gets auto-disab=
-led.
-
-> Hmm indeed it does. Then I'm not sure why I didn't crash when I started p=
-utting
-> in random variables. I'll dive into assembly and see what's up in there.
-
-Please do, I'm curious what's going on there.
-
-> But anyway I have an idea how to setup the x86 offset for tag-based mode =
-so it
-> works for both paging modes. I did some testing and value
->         0xffeffc0000000000
-> seems to work fine and has at least some of the benefits I was hoping for=
- when
-> doing the runtime_const thing. It works in both paging modes because in 5=
- levels
-> it's just a little bit below the 0xffe0000000000000 that I was thinking a=
-bout
-> first and in 4 levels, because of LAM, it becomes 0xfffffc0000000000 (bec=
-ause in
-> 4 level paging bits 62:48 are masked from address translation. So it's th=
-e same
-> as the end of generic mode shadow memory space.
->
-> The alignment doesn't fit the shadow memory size so it's not optimal but =
-I'm not
-> sure it can be if we want to have the inline mode and python scripts work=
-ing at
-> the same time. At the very least I think the KASAN_SHADOW_END won't colli=
-de with
-> other things in the tab-based mode in 5 level paging mode, so no extra st=
-eps are
-> needed (arch/x86/mm/kasan_init_64.c in kasan_init()).
-
-What do you mean by "The alignment doesn't fit the shadow memory size"?
-
-> Do you see any problems with this offset for x86 tag-based mode?
-
-I don't, but I think someone who understands the x86 memory layout
-better needs to look at this.
-
-> Btw I think kasan_check_range() can be optimized on x86 if we use
-> addr_has_metadata() that doesn't use KASAN_SHADOW_START. Getting rid of i=
-t from
-> the implementation will remove pgtable_l5_enabled() which is pretty slow =
-so
-> kasan_check_range() which is called a lot would probably work much faster=
-.
-> Do you see any way in which addr_has_metadata() will make sense but won't=
- use
-> KASAN_SHADOW_START? Every one of my ideas ends up using pgtable_l5_enable=
-d()
-> because the metadata can have 6 or 15 bits depending on paging level.
-
-What if we turn pgtable_l5_enabled() into using a read-only static key
-(DEFINE_STATIC_KEY_FALSE_RO) instead of a bool variable? Or if that is
-not acceptable, we could cache its value in a KASAN-specific static
-key.
+Sure, assuming it works, I like this address :) But to be fair, I like
+any fixed address better than using a runtime const, just to avoid the
+complexity.
