@@ -1,99 +1,91 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994791E5B85
-	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 07:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1832144BF;
+	Tue, 25 Feb 2025 10:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740469806; cv=none; b=t8NIA35wfqICTXfs3H+A5h+cqlEBme7kwMv5OKe4AFpFbKUFpySMrb27CQ0R0bgburVYvQwtrf63BaMQEiYpE2JSVq4FmWsae1mP6m/SHj0Go5QryRxWUt62HHEXZm3TdYXiCEGQDG/qKfh8hj9Ozr0ntU3GFmPO/fJIEel/97k=
+	t=1740477642; cv=none; b=J7hGS3WWKGSV7y+yQNbYMWdHaRC7PsVMygjs0fERYFBiPwb0cjdQLg40DVkm2D+w14/FmYW9c3Or7+LXVKfeBxgpRuNrjUFCoImBnHPFgjKjbgSyxltZZr2oVN9cQtm/FLLjzyNFx5OeWlukyloxrIwNhgsQfLQKx+peDRj0jYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740469806; c=relaxed/simple;
-	bh=09ibOkxEH89zpgu/YOvZXAOdkjAqyD57M71vN9DlDIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uBRDtJFoP2hwUpw7zMfT3mH4Cl2ZAYSPy8YWjWs5LY+NC2eRp9+nMT4F6/pATAJEzx5VNzVckmnrIsd+z/148DXXLyXqSBHIHhoysgveMMlTNGNW9Mts2uKRBmifK2lXVf6BTQ7E05pzeqhEyyg9IPdYpOdSKfg2oe8JWUOlAMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Z28XW5p6Cz9sSH;
-	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id LNoX8tsTPzIV; Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z28XW50Xsz9sS8;
-	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 98D598B780;
-	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id D597ggcl3448; Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 283828B77C;
-	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
-Message-ID: <7d23db63-6909-48e2-8262-fb000aa714a5@csgroup.eu>
-Date: Tue, 25 Feb 2025 08:35:38 +0100
+	s=arc-20240116; t=1740477642; c=relaxed/simple;
+	bh=EJ6vWPnC77dmHQ122+ULTLzJINIW/YADLEaC8xWgSdU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=anfKquX6OevGXsv6kX6Pmtb7kyME4Mic1jyUtTNRuQyxwTIJ63dggmz1nKwXuZcXHDU9MG/ACycKMvT2y/sdqymrt1VaDAuUKe+1OdPmzWlyf/pbWdMx5pYl/eJCr3I/O845A+bvoG/fkVdiZ+kZbPTBlGAD6C3VfOUxEiP+vTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/EX3EdZ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/EX3EdZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09937C4CEDD;
+	Tue, 25 Feb 2025 10:00:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740477642;
+	bh=EJ6vWPnC77dmHQ122+ULTLzJINIW/YADLEaC8xWgSdU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=s/EX3EdZcCQwj+vOkoAQGUfKYstjdbERK+kapSdyZawDWna2/5gYNVG3LYrmWn0wh
+	 XZZwQRVd7YoYnyt6uYviJYE7tQTivy7x2BGKz93PdUBtD6/lk0TKCI1PLIcDzdw9jj
+	 VxVpW2t8Fspeh55tPT1fQ9an9AodsMWZUvFCifRDmldmg8OFGnKdWxUbBhEsUOmEEM
+	 krjW+0lnhqQNXsuCYi2FKQ3drzegl7JrTMVPUyBi7PxAs40PbnaRhwYsIrmgK4pEF6
+	 fHuPvvHAULVqqYIQD5/fPVtONczn+CNjV0UXLcG/mFQOcqW1Eq+TNrBAhM+hdvM0kv
+	 Cesf+tCODHeJQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] [v3] kbuild: hdrcheck: fix cross build with clang
+Date: Tue, 25 Feb 2025 11:00:31 +0100
+Message-Id: <20250225100037.2709624-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call warning
- for bl+mflr pattern
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@kernel.org,
- peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com,
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev
-References: <20250219162014.10334-1-sv@linux.ibm.com>
- <3223ec0e-c445-4bbf-ae72-276688e40908@csgroup.eu>
- <d5ada017-1ba2-4a89-8a58-4555f09f9d97@csgroup.eu>
- <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
- <20250224170922.GA585841@ax162>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250224170922.GA585841@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+From: Arnd Bergmann <arnd@arndb.de>
 
+The headercheck tries to call clang with a mix of compiler arguments
+that don't include the target architecture. When building e.g. x86
+headers on arm64, this produces a warning like
 
-Le 24/02/2025 à 18:09, Nathan Chancellor a écrit :
-> On Mon, Feb 24, 2025 at 02:19:14PM +0100, Christophe Leroy wrote:
->> Well, this problem already exists on clang 18 it seems:
->>
->> 00000004 <btext_map>:
->>     4:   7c 08 02 a6     mflr    r0
->>     8:   94 21 ff e0     stwu    r1,-32(r1)
->>     c:   93 c1 00 18     stw     r30,24(r1)
->>    10:   90 01 00 24     stw     r0,36(r1)
->>    14:   93 a1 00 14     stw     r29,20(r1)
->>    18:   48 00 00 05     bl      1c <btext_map+0x18>
->>    1c:   38 a0 00 00     li      r5,0
->>    20:   7f c8 02 a6     mflr    r30
->>
->> While GCC generates:
->>
->> 00000418 <btext_map>:
->>   418:   94 21 ff e0     stwu    r1,-32(r1)
->>   41c:   7c 08 02 a6     mflr    r0
->>   420:   42 9f 00 05     bcl     20,4*cr7+so,424 <btext_map+0xc>
->>   424:   39 20 00 00     li      r9,0
->>   428:   93 c1 00 18     stw     r30,24(r1)
->>   42c:   7f c8 02 a6     mflr    r30
->>
->> So lets make the kernel tolerate it allthough it should be fixed on clang at
->> the end.
->>
->> I can't find any related issue in the clang issues database
->> (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fissues&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3c10d37fecd94c692acb08dd54f5ff51%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638760137702082512%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=qOjbONjWUuXFKUNb42yEPXgXmvU6x%2BuwbGSg2Ep6WRk%3D&reserved=0), should we open one ?
-> 
-> Yes please, especially if you happen to have a simplified reproducer
-> (but no worries if not). I can make sure it gets labeled for the PowerPC
-> backend folks to take a look at.
-> 
+   clang: warning: unknown platform, assuming -mfloat-abi=soft
 
-Done, see https://github.com/llvm/llvm-project/issues/128644
+Add in the KBUILD_CPPFLAGS, which contain the target, in order to make it
+build properly.
+
+See also 1b71c2fb04e7 ("kbuild: userprogs: fix bitsize and target
+detection on clang").
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Fixes: feb843a469fb ("kbuild: add $(CLANG_FLAGS) to KBUILD_CPPFLAGS")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: use same approach as the other patch.
+v3: fix changelog text
+---
+ usr/include/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 58a9cbe4eba4..b9a2640b4bb7 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -10,7 +10,7 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
+ 
+ # In theory, we do not care -m32 or -m64 for header compile tests.
+ # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
+-UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CFLAGS))
++UAPI_CFLAGS += $(filter -m32 -m64 --target=%, $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS))
+ 
+ # USERCFLAGS might contain sysroot location for CC.
+ UAPI_CFLAGS += $(USERCFLAGS)
+-- 
+2.39.5
+
