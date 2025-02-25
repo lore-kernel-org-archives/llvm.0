@@ -1,82 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4518199EB0
-	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 17:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C5C21ABC6
+	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 17:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740503779; cv=fail; b=kXDMh6wga4Z0/VhhOIG/NrtdiawNTrjT3vPMd1AOKCA+45H/m3Vjca4wsdDo+oi76rz6qAXXSOkN4kBY79+BanuQyj0DMoRQttJGy0NpbEe+N45yk2d3JzlLjzWQuIEofj1zcMGu2LurO27m8dcGIorwYy1OJXVYZOr6Lo+e3+4=
+	t=1740504054; cv=fail; b=KFM0Pw1Fi2HAXDeiQt/mo2UJHfUGFe7Uor/uBy5zcIMlzRvKIt2VWkqvZ72kuka0ex8Kwgc/gU0ha4fHmTNDVHxqeAnvCbFqdasQYVdY0wb+F+MTxs17pXLDHtbnavYlQeDLe/6+51YXt0Bixx5qcrRO86W2RnpBGsSs5pnMRPo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740503779; c=relaxed/simple;
-	bh=WMMijnMVt61XHKjdhQYKyzAuaVYz1yR3writiBLvum0=;
+	s=arc-20240116; t=1740504054; c=relaxed/simple;
+	bh=zVU+CVh7piZ16jAYzN0dNc5E4Y4V7w7AeoHFT6R72mk=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ukCZIvmrpGCTQBVBhJVa5q3t8GQNKMQgE+chBnyk5NE194IAjJS/BWwhNGw+WjH4sW8dNKfzpmGMAxOa9cP1c/SIkOUc+CRy77XSMO/ryq5/4y61AaOiLQRad5WHlrfDsjatG3mMIyJz1FX4U6Ve+/0uxlgb+aEXCs0z8DVQxFs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mb8KY84c; arc=fail smtp.client-ip=198.175.65.13
+	 Content-Disposition:In-Reply-To:MIME-Version; b=thRcw7IPLXBGMKEwEnEhScURpwitDfEwmIKifJR+/w+1r946uByNupflt1USqk+V7zPvkgCt9ZCR9BaQvRlL+V9y+YNHyzE2lKdNBIWrtqpnOlKxIbKWLL2wdCEuBrF6/WfSeTdGdLwIocfe1P9qUvsD9Ai+7TvUswSynL5n0HA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFTkzKX8; arc=fail smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mb8KY84c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFTkzKX8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740503778; x=1772039778;
+  t=1740504053; x=1772040053;
   h=date:from:to:cc:subject:message-id:references:
    content-transfer-encoding:in-reply-to:mime-version;
-  bh=WMMijnMVt61XHKjdhQYKyzAuaVYz1yR3writiBLvum0=;
-  b=mb8KY84cxpBfAeaP4pfWrcwGYDgRIvey4tg1PdT2xz184QPziGRhwmTe
-   oOO82hKYVuCCVCTiW/QJvkEJv6aHx39232wBDlo/5b/ST/AmoJY8oPM1P
-   cYFUZurg0r4rnlV0HsR/bpvxJZ6sX/5mnHCCOFbyyvG3ldtchA1jGDcFR
-   HmyUA2LD9mV3YMvSNZaxfZo9Z4FeJNjOB0qhaNFJkCWMHoCbqbpjzGGiS
-   T33izRTglg4i5Iz3qiX0FhkoRDIw0snm1bg4p/IPvpPfSrHFnVU+iXrwe
-   52Rh6/y3KCebogV67LOa80Seq8Y+E01U1OmDchrxFMOYy22fbkoFfDxy2
+  bh=zVU+CVh7piZ16jAYzN0dNc5E4Y4V7w7AeoHFT6R72mk=;
+  b=WFTkzKX8GhvK0/Iob8jMOxTvDZjZjLGYy6vSA6GjegD2KVZPCZDTiG3G
+   i0kBtdIjVF3242Rv0L7sm8I7eqOX5EP7j62O5ZPylU0EEMWKV8euAo0vN
+   WYyw+jbJxE7C5KVCRmyJBDmIEUmkKNvzNrrS8gxqcGqBkytOX2ELHlr2j
+   9vC9A7+q3xuwPMVR+XY70LWjBHvi6WfMC8GxX9qpKJUYMM1UDo/vHc8TM
+   PEIDLnD8P5ii3Eqo1UKrSOgz3xwE+VTwICHOMJdJlJ2a6ik6KbbMyWkws
+   NlwgzQ/JNoQZRaco62BhrbuEMEL2w3gp1JDfiMGbKMJzaNcmlMv6tIMMA
    g==;
-X-CSE-ConnectionGUID: mWs2texQRYS64kWQH4vIjw==
-X-CSE-MsgGUID: MGFPtY2OR2SieAaBiKjfrw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="52320070"
+X-CSE-ConnectionGUID: 0f4pkweSTkOtEzt4X9XC3g==
+X-CSE-MsgGUID: C7VLUEo0QXSUjU/srTjj4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="58743422"
 X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
-   d="scan'208";a="52320070"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 09:16:16 -0800
-X-CSE-ConnectionGUID: tTIGqqffRcePwPwKqO4qaA==
-X-CSE-MsgGUID: oB9N0/5HR6uBNw0a3Cja6A==
+   d="scan'208";a="58743422"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 09:20:44 -0800
+X-CSE-ConnectionGUID: CiLY/ECrSCWQcxz1khAMoQ==
+X-CSE-MsgGUID: XeqWG7b2TMOsghRHpWtf4Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
-   d="scan'208";a="121061741"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 09:16:13 -0800
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="120561981"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 25 Feb 2025 09:20:38 -0800
 Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Tue, 25 Feb 2025 09:16:12 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 25 Feb 2025 09:20:32 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
  ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14 via Frontend Transport; Tue, 25 Feb 2025 09:16:12 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.2.1544.14 via Frontend Transport; Tue, 25 Feb 2025 09:20:32 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Tue, 25 Feb 2025 09:16:12 -0800
+ 15.1.2507.44; Tue, 25 Feb 2025 09:20:29 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gsxUZsvyRe2IrfKP78ZnESso2J3sxNmsM537jQlaoW5/H6E35gp1kih6JSA9VwT5n9k1qMBz7A4Z6+x/3oJs2+a4gzygvNX0+k/S/do4wGsOkxFCAeBUyv6GbWmjyWdYgzzJEuKjP1IxS4vE4ymAB4FAzKqkbXk4PxmrqbB0hVkW1SuBmtUgDGLRy1DacPc3RZvicmzGOH4w0/6hRdHV5JfmjttyPlLoLbH440wVeMjMZi7fPW+8nBBIU2zlldZMtyLkS1yNWBnCf8uZv+Jlq+9F3zHIH3txrrx0488njvltazd6NrRT1VSf4AfZzmGIj+dbG9oCvxUZeJSMhgZzwA==
+ b=i87VsXYvDW5jbNbxOIC8xS4SlE0mdXcXaFBiYQcPMMgb4rlGxHxegnVlwhfDTBkrNF86mipOuds3el78k1sXfOXhjbF5RF1uFu9kpMYZKnTYlr7krbjf7Q1z1O6jlOvhmiK9scZ10HdkmalITd83ge0K7WWfzCkZBa0+UjizyFFhiQWcv5M0D7Kkj8iO1lGn6+G1lg9ReIFkUrkHlGbOVe0uOAa0awrGumsKAXfRb6Y0YwjaGad1xnBZSUP7I2oX3YQb1toajrqvILQnAYaWnPb1/8+un7f0Ul0IuKXtvTsB7f2Z/6oID7AaEBEqmm092Cf5cPKgxI0PDXURRrqaiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CYdQUc4W3E0jEX9rH4QwVN0saR32zGHdq6c2NCUWUVQ=;
- b=ZxT3ssY5/Zt7fnhyNqlAhXihH9srASt0x9yXtYrxuxK816yV1IkdImuEtdtLKcFwfQCI3bEIoZQPimyuxQq2qhQCujI2rx7OMpVQoloBLuBb73vWtO2ffThrwT42OIgJOGoQFpB31wzb4nihSYksKsCrIM8RMBiNYbEpQGyLZWJ++yUREZiTf065I7qkpKLnYen0iAfRSjfVi/9gAZJ2nh+IgKt+EpfMOe5L+zSoH3LGxLohgkzkO07eaBXSTI/vPdxNVmUut02AiRF65ncwcwPzMOCrL0ntPGWfAr9vTOyGrjB/MiEPyH+JpG95CLogYMAOYOb8gmzXV7uXkn3pYQ==
+ bh=1/cpoIsYVvxpIH7OKvm3BOMOiT0hT9QBOTbltxVXxI4=;
+ b=DEgxyAl4+qTdfOJanLuQOkYrobCEILRvDz76Vs/9J/1HxVgMRloTCQj3DF4q/lX4y3Q48Q3+aO3yseQfLxc68FZ9Y2IxFtKqrKrIkHKU7ruBqnqMeDG0lEV8M36nUf333mEKpIQGkwKZzM0YjIzk2X1O7Q2qkoOECE8B0uZahsQIP+vGFDYuMgeKi5LVJggCJZpMhIn5s+JfTW4F1q/GhJH7ZItfIs7vdFbHFHelVy12VbobPh9kdHGSpFzQKcdYzbONG8gDPnM0qij2noTzDJhcmuViXa2YGnaRLVP3IDfIoMBnn8p7qi3vvjHcKBJs5uh2+PrDYpQVCOicqNW65w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by BL4PR11MB8872.namprd11.prod.outlook.com (2603:10b6:208:5a8::16) with
+ by IA1PR11MB8864.namprd11.prod.outlook.com (2603:10b6:208:597::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.20; Tue, 25 Feb
- 2025 17:16:08 +0000
+ 2025 17:20:21 +0000
 Received: from MN0PR11MB6231.namprd11.prod.outlook.com
  ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
  ([fe80::a137:ffd0:97a3:1db4%4]) with mapi id 15.20.8466.016; Tue, 25 Feb 2025
- 17:16:08 +0000
-Date: Tue, 25 Feb 2025 18:15:27 +0100
+ 17:20:21 +0000
+Date: Tue, 25 Feb 2025 18:20:08 +0100
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: Andrey Konovalov <andreyknvl@gmail.com>
 CC: <kees@kernel.org>, <julian.stecklina@cyberus-technology.de>,
@@ -85,11 +85,11 @@ CC: <kees@kernel.org>, <julian.stecklina@cyberus-technology.de>,
 	<wangkefeng.wang@huawei.com>, <bhe@redhat.com>, <ryabinin.a.a@gmail.com>,
 	<kirill.shutemov@linux.intel.com>, <will@kernel.org>, <ardb@kernel.org>,
 	<jason.andryuk@amd.com>, <dave.hansen@linux.intel.com>,
-	<pasha.tatashin@soleen.com>, <ndesaulniers@google.com>,
-	<guoweikang.kernel@gmail.com>, <dwmw@amazon.co.uk>, <mark.rutland@arm.com>,
-	<broonie@kernel.org>, <apopple@nvidia.com>, <bp@alien8.de>,
-	<rppt@kernel.org>, <kaleshsingh@google.com>, <richard.weiyang@gmail.com>,
-	<luto@kernel.org>, <glider@google.com>, <pankaj.gupta@amd.com>,
+	<pasha.tatashin@soleen.com>, <guoweikang.kernel@gmail.com>,
+	<dwmw@amazon.co.uk>, <mark.rutland@arm.com>, <broonie@kernel.org>,
+	<apopple@nvidia.com>, <bp@alien8.de>, <rppt@kernel.org>,
+	<kaleshsingh@google.com>, <richard.weiyang@gmail.com>, <luto@kernel.org>,
+	<glider@google.com>, <pankaj.gupta@amd.com>,
 	<pawan.kumar.gupta@linux.intel.com>, <kuan-ying.lee@canonical.com>,
 	<tony.luck@intel.com>, <tj@kernel.org>, <jgross@suse.com>,
 	<dvyukov@google.com>, <baohua@kernel.org>, <samuel.holland@sifive.com>,
@@ -105,19 +105,20 @@ CC: <kees@kernel.org>, <julian.stecklina@cyberus-technology.de>,
 	<linux-doc@vger.kernel.org>, <kasan-dev@googlegroups.com>,
 	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, <linux-mm@kvack.org>,
 	<linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>
-Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
-Message-ID: <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow
+ computation
+Message-ID: <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
 References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
- <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com>
- <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
- <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com>
+ <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
+ <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
+ <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com>
-X-ClientProxiedBy: DU7P250CA0017.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:10:54f::20) To MN0PR11MB6231.namprd11.prod.outlook.com
+In-Reply-To: <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
+X-ClientProxiedBy: DUZPR01CA0027.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:46b::14) To MN0PR11MB6231.namprd11.prod.outlook.com
  (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -126,197 +127,142 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|BL4PR11MB8872:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9c4d76a-5c14-4c0f-7574-08dd55c01832
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|IA1PR11MB8864:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c6b65d1-d4f3-40dd-c950-08dd55c0ae8c
 X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?bEVPL08vYUU2ZHQzTHY4WDVJMlV0NEZMcHkyV1NsNWNJSXhNdzZ0aEFOTldN?=
- =?utf-8?B?YjVrVjdyUjl5QnZMVXdDOTNpTVFFQ0orSjBZSzExZkVIT2ZCa2VJdnFweWtL?=
- =?utf-8?B?VTJRb3VyK2FjR2JncXhHRFEzS1pKaFNSMFd6ckxzRDA3bmw1eFYwZDVnQUc5?=
- =?utf-8?B?VVFtQmhpakNndzZXcEFIdzRlaWsrODU5YTdvVWM4TWpGTU1mQVRXZUt0ZmlK?=
- =?utf-8?B?YnNNVkV5TVJHN1creDIxMnRDZnZTM0NiQ1Z5Y09IMnZPQ05EZzB3TWRCbHVl?=
- =?utf-8?B?dTBlRlZGR3RMWDNVdUVRMDEzOUY1a1YrQ0NIK0RxQzRTQ05ReE5vNFpvQ05z?=
- =?utf-8?B?NzhWT1VxZkE4bE1qZVlOMDl5cEtQcTBXejhWK1FFS1VBTU14S3hpT04zUW1r?=
- =?utf-8?B?TDZDcEZRVEpSMDVndDFHMTR3YkNOUmFHaGpvMjVBdXV2VVFRZ2g2eWw1bEFo?=
- =?utf-8?B?R0NWaGlKay9XTEV6ek9MeHZPOFpKcThnVmlTR25PSmJYZFQ5ZlRHTDAvZHlk?=
- =?utf-8?B?bFYxMjBWVWNhbk1uNkJaNDhDR2IrQnFwK2IwZ0NKVENiZDJFQW4yQWFTS3ZU?=
- =?utf-8?B?RzZNZ2xldlJMQmFUMXd3SlF6Q0ZiOGZ4c1NmMEJJeGVTZEV0S1RNU1J5aFll?=
- =?utf-8?B?bkREUy9lUGFlWTdmVzJqYlUxU3k4UFdwQy8wUUR0OWxObjRpN2tUc0dUclll?=
- =?utf-8?B?QVhoWS9UYzJvZ1ViQ0Y0T0dYYlpEaWJreTRmS1pUbnhGbWt0eHVDb1NtNlkr?=
- =?utf-8?B?YWg4ejZQb0NJWGJLSUJmTi8vV1hRVGpTNjgwS3BybnkzbHNabldHL3AyZjNH?=
- =?utf-8?B?UUFUeVVyYUFkdkVmVmQwWXR0WTl0QWlmSXdCR1FVWGNNaTlQNVdSZkhmR2c2?=
- =?utf-8?B?Ry9ZWGFLOFVyTkZlRUlneFY0ZlpaMGtFVGpWQ0ViYVZyUkVtMlljeWZ6K29h?=
- =?utf-8?B?Z1ZCejd5d2JvbkhWTkdKaXlJUWdDQlNnWnFDam81RHBRQzdqSUdocHRGVDNB?=
- =?utf-8?B?MjlrSURBaFJXWXRwSGxWWG9UT2RrU1Z3K09yTWNTVlNOQ3ZSenJuOVFTUkdl?=
- =?utf-8?B?UC9mT2wzdG96WUdnMXZicVFaOTVabEM5SEJzMU1uYURsNlB5QWJmTVBzNDBw?=
- =?utf-8?B?ajB1eU1nMGtSSGYySkl0V05QTmpRemVZL202aFhhNUpMMTZGY3VkZFJMVXpo?=
- =?utf-8?B?QlBub3dreStzL1UzNG9qemMvaWpqakdEZUFqNDJkQ0UwN1FtOHRnMmdUNTUv?=
- =?utf-8?B?T2txMy90R2VOVWY5eHNaRHNDRm1DQ0R2S3Z5TFlDL0Zsbk4ySDVQN2ErdXkz?=
- =?utf-8?B?bkhmUVZYSStuMklNbTN0cDhFanpNOC9ENTk4OExjeldiTjA5YlZZaFBVbHJN?=
- =?utf-8?B?T1JNM0tWQlZ3Mk9kRXFLTkdlQmxyMVBhbDVqV1VnL05VM1N6ckRUZ0w2OTdK?=
- =?utf-8?B?WndCNGoyNTVpb0g2czMrRlNWcStCYktMWE5lc1JGWFppRE1TS25mRUM3ZTRU?=
- =?utf-8?B?VGdEUjJBdWxBM0twNmdqQmJvdGxRbmdEVktKYmFmWWZZZWtGYkVKc1o1YlBD?=
- =?utf-8?B?YXNPMjhlNkYvVnVEQS9EYlErOW9FVVFNY1FjcDBmd0RQcTNOVkZHQzJ3b3Zi?=
- =?utf-8?B?N3UrSGpYZ3FSS3RKeG5HaVhjTkw1amRiN1lvNzlRaDgzdzNNL3B3cWxvYTRY?=
- =?utf-8?B?S2FYWHVUWVRJaUlqSktVcERNRWRhUi9talVRdTNSa0x1R2pHNnExOC9oNHJj?=
- =?utf-8?B?SW8zQ1hZb3J4a2xiSmJTYW5DQXYvcWdaOUZoQTdMdlU3N3hUQ2JHcEhFSnZK?=
- =?utf-8?B?VlhBMHkrcTVhN2tNNldTdz09?=
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?Y016VWZOclU1MkNxcG9waGVRM1Z5VVY5eFZRc2lCZjFwZDEzbXRTdFF1U0NG?=
+ =?utf-8?B?YlpieklHVk1RKzY2ZlNvK2JmMkNGTDhraGZSZitZdEhQQVRRNDExdEN4Wnho?=
+ =?utf-8?B?ZGNHTmRzc01CaEo2ZHd5Q2RhVmFmWUhZYlVsME1MbnhvOVlrYVk5YkcrK0VO?=
+ =?utf-8?B?OG9FZkM4M01KNDZiekY1UkNjVDVUZ0h3aDJzSnpVT0pJUnRNNkRJYjZGNXZi?=
+ =?utf-8?B?eTJjZ0VyUklxcHRvb3hvS1dFdXBpdkRvWlcrRGFLMU1zQ1NoYkJGUWUwclQ5?=
+ =?utf-8?B?OG5FVUZwaXpYMDErKzlMVEhubXBTRHQ3TFFETlhrRmRHL0ZGU1VxemY0c2pl?=
+ =?utf-8?B?S3BuaTRVSmllMEtnMFhNODh6WFRVcG9WMFk5Nlcrc1M4a2hQQ1p6VlRqcmNN?=
+ =?utf-8?B?Yzk3d0ZYY3AwaEFaNDBvUzNHMWFPc3RUS3A4SVBuUTNtNkR5K2VHUWw3UFA2?=
+ =?utf-8?B?eUtOMlVBZTNiRWw2YkNlcEQ5Yy9XcVNGNWZHaHdueWw0QkxubE9odm1Ybm1L?=
+ =?utf-8?B?MXZmd1ZqTmkwMkExeWhnWmJWNVR6NzhkMUlGU0NENHFOQ3g4dGhtd1I1eHJN?=
+ =?utf-8?B?QjFha0JZR3lqSVdVSThZY0IzM0N6amVhcTg3TlBYSDdtWUdsazFpM1ZJSXA2?=
+ =?utf-8?B?K0M3d2VKYVk4YTlLS2pqakhyMWE3OWFqR29tV240c2NKd2ZiYXFCT3FwTTlZ?=
+ =?utf-8?B?Qk1GeUJxeDZjTTRXVWozR2hobGloS1pnVUdFMlRnbVh0WTd1Sm9BL0wxbHB5?=
+ =?utf-8?B?eWtxZnprZHpDRkhRTi9naG9mZjRTaXg4NnZtY0lqSmZ4b203RlExYmpRWXJh?=
+ =?utf-8?B?azIzOWRlSFliSE9UUUJIOFAzS2xQanFwL2c4N3V5QjY4YkhiZGNSS1B5QmY0?=
+ =?utf-8?B?bmFZWjdLeEpFa2dMV2R2QmJjNzdjUWZEa1M1N0Vaa2tGYnpBRnZSZnRzeHQw?=
+ =?utf-8?B?cmFZY1d2cWx0S2dYcmcvdWZrOHJHUTZKWGp6RmQ1SmNuOFk3UEkvRHJyWmwr?=
+ =?utf-8?B?RkpGT2pNd28wZ0pCZmkyQkRYNy8xRDdJZG9HL1RQZnRucjBGNEVpUWxVckNY?=
+ =?utf-8?B?UWlmcWh5Z0tDMmkyVTNEbWF4cVA3R1dGNGIyaWZxQlVxdGVkS1lFMC9tRVla?=
+ =?utf-8?B?L0s3Vy9CdzBZR21wZHlUYkp0V3liYUdDdGdDOHRCMjR6bjMyWFBHVWh4VG9B?=
+ =?utf-8?B?UXRVRGhlY240UmsvMzFrVFZNRG1aZzkvRnZZUDIvMlhLNVlhcUFhMnp5YVZJ?=
+ =?utf-8?B?empMcTdpN1d3cHJGeGxKcWJCVFp3L2F3b2NETFdJc0E5WHppSE5pR3d4MzYv?=
+ =?utf-8?B?QmdaZ1VhMzV6TWlCdTRsUWMzemp5MUV4cDVxT0tBbHpHWnBQdWFZU09JWTFZ?=
+ =?utf-8?B?SXRWVVA2blJxTERrdlhHWmxqdTVhazdndStrZGtXWU5FanNFVVh2YkJqMDBs?=
+ =?utf-8?B?bkZFVFl3Rk5KU0w0LzZ6VzhNZ1MzTmY1TUVuQ202cXQ3S25wTEVwbkw2TWtV?=
+ =?utf-8?B?UnpjZGdzV1BTR2dDVHB1RXdqdDlnaTk4NmpXbEprc0dEV0tYbGExV0Q5WWxC?=
+ =?utf-8?B?aDJTT1hQV29sdjlaZUF3ZGFseFh4NUZhSWZ0aGtGOXNUTmloeFVMakNTT3JW?=
+ =?utf-8?B?alkxYkdVU3ZNQXFvUzFoRWhnWUNTVlZkaTN1ZTQzSWxCa1hXdGdTWjU0QXd0?=
+ =?utf-8?B?Q1psbG5YRXlGUGRiS1NVVSs0N1RYdmZPbFRYeVZISFpCUEVQUHJnei9kZjVl?=
+ =?utf-8?B?UFQzeUlkNUQ0Q3lGS2wyNEFyN1M3dVlKeVM0NDV5MUlFbVVqU21ldFBvWnhN?=
+ =?utf-8?B?b21CVWNUNzdXcWZGZ1hxQT09?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGpkdTRaS1FoT0RrWHpjZFNsanJxbU9IOHprZm5vR3RGcXd4R1RtRXBVQmlp?=
- =?utf-8?B?VFMzYUZJcXIrK3owN3lWN3pGbkRiVU5jRWdibmY5dDMydWF4Q1NEdXFPQWpF?=
- =?utf-8?B?d2ZlYVYxWVFxOUZkMVZrdGYrUHNCNU9Damlad0JLT0hKYjJuVXNONUxsaWw0?=
- =?utf-8?B?amU0SGkvZzc5eGpxNnJheUo3RjdjLytNK2JPVVM3OFROZk4zZ1NjRFNMUU82?=
- =?utf-8?B?bmREYVMvOWlHOEZyNnZTaG9hV1phUUtNRWk5dnJLSUc2N2wvUFN2N2xqUWtL?=
- =?utf-8?B?dlhlb3UyTnZaRHZzK21hUExta2N5RFp6WTl6MzNveGVmSlE2RHNnTzArVGxh?=
- =?utf-8?B?N3RHazdWeHRRRVVRQkY1azYrMzNuTDlSNVFyY1FxRjZzVWhlNkJsRmxJK1RP?=
- =?utf-8?B?SVkwOVdNMzRBTW41KzBPSm96QVNPUUE3eFRMUHExeTZlYUhBWVJxSmtqNS9G?=
- =?utf-8?B?UVh2Vkc4eDdsY1hkMUJ0Yno4VTFWWGZaVG5WbmtWUHROSDV6U2lSNHIyMFY0?=
- =?utf-8?B?MHdnZ3VEaGo4b3ZRcjJ0QnBNQ1llbWNINEVhWk9UdytBQXpzditjMEcrcjNp?=
- =?utf-8?B?WXd6OGEzM3EyZXdFZEhLZ1VodjdTNFRsMlpneDJMNUFUY0VLVGxNZ0xiSTJ4?=
- =?utf-8?B?MXB0TVJBaDl2YXJPVXc2VUVFTEpUY055SHVmNjRYNS9FaldDZHF4eHlqRnBj?=
- =?utf-8?B?YTE5dmQxc3BuekxsNWFycFlaOHNlckJ5ZVZWck1wNmU5UDNhaWpWZVF5Vmo1?=
- =?utf-8?B?b2tiV0c4Wk5XcXh4ZHRDajJGTlU0SUZaZGNCamRnaDdidUp1dUVGaytXeWdX?=
- =?utf-8?B?RUk0WnlFdC90cjNIcENzKzkyRjZETEw0dXRvbmxnaXB1QlRUVi95TFE4Qitl?=
- =?utf-8?B?cU5WRi9KVE5rUDVUdzlmVGNpZiszblZpd1JyajVUTFNWbnloekZuR1Z3YWx1?=
- =?utf-8?B?L0cySDBsdUNzSHMxRnNXdkdPRGJLMnRteGpuVXBtcHIyUEhoaUdCYWc3Ynlq?=
- =?utf-8?B?YXZTT2hhVzlFZzdtSjd0QVB3Z3pkK0FocHQ5Q2ZiRUNya01LTzdPOWZvQWhw?=
- =?utf-8?B?b2pzQUtqMXlLZXBiRkl5MndEcWpOTmVaVEMvY1VLRlFVOUlseEpRTXNrNmlZ?=
- =?utf-8?B?RngxK0JjTmlnWGxtTWhMQ3g4cnpvVUxCUThGRHM1UzJWRTgxbkx4djhMU0Nn?=
- =?utf-8?B?aU9nR0NDckkwMEcxeWRlTW1wRG5QeGpoYlZ6SEVaekpLaGV1R203Uk1BYUNs?=
- =?utf-8?B?bHRIVXRoR3pEb2hqdWFoU3dkNzNoMEFKTGNhWVBKQ0l4WTFiL2duWnM1amlm?=
- =?utf-8?B?UnIzRlJtcGk2Zm5XbW0xN29UNTNwSVlZSXdRb2lCODlZVnowYmk4bUxGSm15?=
- =?utf-8?B?TTVZdUd2U0F6L0k4NVNRRmczbExsVmNUMXRoeXNNcEIzd1ZpMDQyV0VhOUFK?=
- =?utf-8?B?M1dHYkNtSllhVlE2ZVA3NWppYkxMWmZvS05FLzZpa09xY001aWkrYnozZnUx?=
- =?utf-8?B?STFHZVZtaG9uaUlqL2xWU29iUXV3WmkvbkxYbXBYUHBNWmRFNkZqZmd6Q1ND?=
- =?utf-8?B?T204UlhVUUNUbTduamJEN3FnZEZPdmZBRW9xUGtOV0RObFQ2T3FndUpVVDZL?=
- =?utf-8?B?QTdCNUpLZ003TWhxandZWlJaQU1ZNWUyTDNzd1VMbDRZbFlTNVVJbHpoWitO?=
- =?utf-8?B?OFZ1dTVZbFp0MW5yZFdQT1lEUlJVc2NzNUNSd3gvZUFwTHRWYldmM2s2NHVv?=
- =?utf-8?B?a2lMdDcrMzVIdHYvd3h4WVltTXVtU1FkMWJqVW5HQzlsZnMzb0pKVTBVTVZi?=
- =?utf-8?B?Rm5jY01XTWtMMDJaOVlZdEFoS20yUk9jTnFBUVFML2NMOXZDS1kxZTJ5MHUr?=
- =?utf-8?B?N1NNaUUvaTVYZ3dOdCtEb256ZHU0eUpKWk9iQkowUWlWWDhwcytTanVoZ00v?=
- =?utf-8?B?VUVMS1J5MEo1bUFMRzdLZW5kRG15NHFlZU9iZytnYzIyTk1pSEhvSzlLVFF4?=
- =?utf-8?B?SGpnRFFtQmtWbVdvQ3N4aUZEVnY1K05odmZ3RDhDYVh2MmhQOVJ4TzlKS0pI?=
- =?utf-8?B?QmsrVUw4Tnk5UHFBdktKa0pMeVBUQXJrT2tYUUg3Q1FNOE9HYWlhekFJUFBZ?=
- =?utf-8?B?Qk9rMitXRFZzbzJuUG5PUmdkTi9KSVp5Ty9OUW1XaEdVNVcyUGhaTmg1eHNH?=
- =?utf-8?Q?DMxSdeGGFi9u5aTi3WZl6rg=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9c4d76a-5c14-4c0f-7574-08dd55c01832
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TTNENHROVlArSmh5WVR6Sm9pa2hWRmRpVjhHN1UvcVNaRG5LRWEvdnNKdlRu?=
+ =?utf-8?B?WFlsZEJCdEJTNzBpNnRJWDNhQStvZDVaNnFJVE0zbnBMWnBmb1h1ZzFYanlE?=
+ =?utf-8?B?TjE4YlEzM1RCcG9SY0s1OGdKSGxKZmJ6YWpvb01aSzVZa0xmcG1MTnFVTisx?=
+ =?utf-8?B?ekV0LzBKc2RZd2gvLzZ0UjU4enNOM1FQaS9sZW5nZDIvUm9ITTczWXAyelp0?=
+ =?utf-8?B?OFMzL2NLOHBIejJ1VHo4cFJPazM1bE55MTAwMmtQVkFYNHNIbVFmRWluQVZv?=
+ =?utf-8?B?VTVETnlWQVlDRndjZnZKZHJwb2J2dFB2VmlRMXZRY21mQWdMcklkNGpBMFJB?=
+ =?utf-8?B?N2w1ZE5reVZvZ2MvMG1iWVNrMzV0WjVoNlB4WWZrTzZsZlpVdXNGMVZLdDFX?=
+ =?utf-8?B?QktvZEdEQXhwUWVpM1k2d01hL2hyL21ZVFhmZU9mWHZpU3N3UlVjdzBoRkE2?=
+ =?utf-8?B?UU1EVUVseFJOOURtWENtclN4dEhzTk1wdHVIOXJlSTFQc3dVSFVhY3RHc1Bm?=
+ =?utf-8?B?OVFodjRhcjNrZ3UwYSt6aE05YXZ3MXNqaWd1Y29tbENIQlpMQ0lxZ1dHemxp?=
+ =?utf-8?B?Q0c3RFByTXVmUmdRSzhPdmxzbXhaaHJtcXVrUzZid0xrd1ZPcy9nRkozSFFP?=
+ =?utf-8?B?K1Z4Q21ETnZJOThvT0w2SUZpS3Q1QUhiQk95U2E5S2tqa3FXbUhJbXBQSWlO?=
+ =?utf-8?B?amlDUDJocW4ydUhmWWwwMGlITHI2M3BRS3FEczBKZituSFRRcTZkYmFYN1VF?=
+ =?utf-8?B?cm9EV29Va1FzUWpSVitHa0pZTlRjeDFvNGZXTWYyWEcxRzZvZ3JMOXhweDdm?=
+ =?utf-8?B?Rm5QMFNlbU5SMjNaYk56OUZiYnFHaHJldjF0OGRaZUxFVDY5VjZWRThkakd1?=
+ =?utf-8?B?N0FTMFJXUllZRlltVUVXNUFiYTJLYTVQaXhYLy9OUVFXekppL3hvRGxYV0Rx?=
+ =?utf-8?B?ZXF5OHBBRC9wNjhrSjRLWUM2bnpxUW4yeFJ3dEZ1Q3E0RHZabS9xUmh2QnJV?=
+ =?utf-8?B?OUhVS3JObU9sMjVsSHBybElXMng3ajUwZm9tZ3gxZlJLNHNyU05WRFVXenE5?=
+ =?utf-8?B?RWwrbUVscDZyY2VraXYrZmtRajJIZlIrVGE3OUZST3krb1FhbVVDczgwblhn?=
+ =?utf-8?B?U2pHT2s5RGw5M1c1ZUwwMWY5THUzZHBJUWwvL0pVcWtCVmhwdDdDVHJ4RG9p?=
+ =?utf-8?B?WHdMSFYvc2tpeW1BQXNBS1JKTXo0WFlrSEgxbFhDTUdnNUtxek5jNUpRZnVK?=
+ =?utf-8?B?eklYdGdPSFNaK2U5RlNRVHpuZzFpNTRBZHp0SVZHblFpbzhyNXhpd2FtWFlW?=
+ =?utf-8?B?c1VKRnlhNnhQWHU5dUdpN0hjUnRXU0Uvb2ZZd2dOMkRxS2lOZ2szekJseEFp?=
+ =?utf-8?B?TU9EMnQvSklGbForVElQTUVHMXhMZGZWc3dLdDNOdFF3WldMczBaOEVBMkRo?=
+ =?utf-8?B?UXhYN253eXBSV0RyRXNmWDFhcVYvS0NXYUhzb24ranRHOGt1dTRuUlNXMTNj?=
+ =?utf-8?B?ZGhaSzhuc3paeTdQYWtzcnMxNU1uZFlQS1pXUjB6ZW1LZk43bGdLKzdyNWh3?=
+ =?utf-8?B?MVVhbVIyRmllL1IxSVFsOE9iN2lWOXZ3cUhWK2NzYy83NjltNGUzaVM4enN5?=
+ =?utf-8?B?NGNkUWNsOHBRaEcwTDE1YnZhdEcvZGx0ZVhqZi9pN1diaGRYVTUyZ1BmS21F?=
+ =?utf-8?B?SE90NGxhUmVLV0FOKzJtTDJ3a3ZkLytjcDRDMnUzR3pJeWR0cDJsUEw5bmZT?=
+ =?utf-8?B?MW1LWS9Wem1OMStUQ1k4Z1hNM0hrUnI1QjE2TGZXMWlMU2NRV0NhcnhiU2l2?=
+ =?utf-8?B?Q1h2Nk5JZUxGaE0wbnh5N2plYTg2U1FONWJFY0t5dXM4Q29DT2ZpSDhBa2pq?=
+ =?utf-8?B?YVFXZ0NOenpBMzZaYTJPN1VnVE1UTUJheDViV0hKT3VDRENGdWpRd3c4cmgr?=
+ =?utf-8?B?VysxOGNBQk5FRmF2QTRDTTg3cFRQVHd2ZlZKSm9LbW55OGo1WlBMR2NEVXB2?=
+ =?utf-8?B?bzBQS2p2aXdUQXRIM0xDRVoydDU0VlpXbFBBWFpMbXRFZEhLNHUxbzhrQ1g4?=
+ =?utf-8?B?SXUrODBhUlhWSkxocjFXRjB6VkhlUklSZ2JEMXgzVEpzVnhaMXl1dHhJc29s?=
+ =?utf-8?B?VnFjTXM2Mlg0OEtVaTRlTHhNdHFnU2tic1luTEloOGg0SC9oTFRZaU9VcEtK?=
+ =?utf-8?Q?RM4ZnlJ/A33qrKZUiFveDoY=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c6b65d1-d4f3-40dd-c950-08dd55c0ae8c
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 17:16:08.7572
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 17:20:20.9133
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mix8vEUzIPdUGC3yg7NIM8ULeej/GCcj1Gxtd3wEjOLGT6PBVD/i9aH9gHgvSHdjws9Wi0WrGSuvqMjSKmqnEB8rHVVlkkeXjLZMg1wH4ts=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL4PR11MB8872
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8ToOK6jPuWPolHuBPb4Np2/2g6XGwJFJuKdCT+kd8argyyRW7ES65O9vuke2cD0eAWzhzTf0YAvKTYL4rQC/nXQGUEVaV8QV2+pqnVWl5m0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8864
 X-OriginatorOrg: intel.com
 
-On 2025-02-22 at 16:07:20 +0100, Andrey Konovalov wrote:
->On Fri, Feb 21, 2025 at 4:11 PM Maciej Wieczor-Retman
+On 2025-02-22 at 16:06:02 +0100, Andrey Konovalov wrote:
+>On Fri, Feb 21, 2025 at 2:12 PM Maciej Wieczor-Retman
 ><maciej.wieczor-retman@intel.com> wrote:
 >>
->> On 2025-02-20 at 00:31:08 +0100, Andrey Konovalov wrote:
->> >On Tue, Feb 18, 2025 at 9:20 AM Maciej Wieczor-Retman
->> ><maciej.wieczor-retman@intel.com> wrote:
->> >>
->> >> On x86, generic KASAN is setup in a way that needs a single
->> >> KASAN_SHADOW_OFFSET value for both 4 and 5 level paging. It's required
->> >> to facilitate boot time switching and it's a compiler ABI so it can't be
->> >> changed during runtime.
->> >>
->> >> Software tag-based mode doesn't tie shadow start and end to any linear
->> >> addresses as part of the compiler ABI so it can be changed during
->> >> runtime.
->> >
->> >KASAN_SHADOW_OFFSET is passed to the compiler via
->> >hwasan-mapping-offset, see scripts/Makefile.kasan (for the INLINE
->> >mode). So while we can change its value, it has to be known at compile
->> >time. So I don't think using a runtime constant would work.
+>> >Is there any reason we need this change for x86 SW_TAGS besides the
+>> >optimization benefits?
 >>
->> I don't know about arm64, but this doesn't seem to work right now on x86.
+>> I wanted to have the shadow memory boundries aligned properly, to not waste page
+>> table entries, so the memory map is more straight forward. This patch helps with
+>> that, I don't think it would have worked without it.
 >
->You mean it _does_ seem to work? Or otherwise if runtime constant
->doesn't work on x86, then we shouldn't use it?
+>Ok, I see - let's add this info into the commit message then.
 
-I mean in my tests, with setting offset in runtime, everything works correctly
-in inline mode. Even though hwasan-mapping-offset ends up empty and doesn't end
-up in CFLAGS_KASAN. I assume this means that the inline mode is pretty much the
-same as outline mode with the runtime offset setting?
-
-I also tested if hwasan-mapping-offset does anything if I passed random values
-to it by hardcoding them in the makefile and still everything seemed to work
-just fine. Therefore I assumed that this option doesn't have any effect on x86.
+Sure, but if you like the 0xffeffc0000000000 offset I'll just drop this part.
 
 >
->> I
->> think I recall that hwasan-mapping-offset isn't implemented on the x86 LLVM or
->> something like that? I'm sure I saw some note about it a while ago on the
->> internet but I couldn't find it today.
->
->In LLVM sources, ShadowBase gets calculated [1] based on
->Mapping.Offset [2], which is in turn taken [3] from
->hwasan-mapping-offset [4]. And then ShadowBase is used to calculate
->[5] the shadow memory address.
->
->All of this happens in the common code, so this should affect both x86
->and arm64.
->
->[1] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L1305
->[2] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L761
->[3] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L1863
->[4] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L171
->[5] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L899
-
-Hmm indeed it does. Then I'm not sure why I didn't crash when I started putting
-in random variables. I'll dive into assembly and see what's up in there.
-
->
+>> >However, I just realized that this check is not entirely precise. When
+>> >doing the memory-to-shadow mapping, the memory address always has its
+>> >top byte set to 0xff: both the inlined compiler code and the outline
+>> >KASAN code do this
 >>
->> Anyway if KASAN_SHADOW_OFFSET is not set at compile time it defaults to nothing
->> and just doesn't get passed into kasan-params a few lines below. I assume that
->> result seems a little too makeshift for runtime const to make sense here?
+>> Do you mean that non-canonical addresses passed to kasan_mem_to_shadow() will
+>> map to the same space that the canonical version would map to?
 >
->Sorry, I don't understand this question.
+>No, but non-canonical address are never passed to
+>kasan_mem_to_shadow(): KASAN always resets the tag before calling this
+>function.
 >
->If hwasan-mapping-offset is not set properly, then in the inline
->instrumentation mode, the compiler won't generate the right
->instructions to calculate the shadow memory address.
+>> What does that? Does the compiler do something more than is in
+>> kasan_mem_to_shadow() when instrumenting functions?
+>
+>Same for the compiler, it always untags the pointer first [1].
+>
+>[1] https://github.com/llvm/llvm-project/blob/llvmorg-20-init/llvm/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L922
+>
+>> >                   Thus, the possible values a shadow address can
+>> >take are the result of the memory-to-shadow mapping applied to
+>> >[0xff00000000000000, 0xffffffffffffffff], not to the whole address
+>> >space. So we can make this check more precise.
+>>
+>> In case my question above didn't lead to this: what happens to the rest of the
+>> values if they get plugged into kasan_mem_to_shadow()?
+>
+>We will get some invalid addresses. But this should never happen in
+>the first place.
 
-I meant that if we end up with "hwasan-mapping-offset=" because
-$(KASAN_SHADOW_OFFSET) didn't return anything, then
-$(call check-args, cc-param, $(kasan_params)) drops hwasan-mapping-offset and
-doesn't pass it to CFLAGS_KASAN. So I guess then it isn't an issue for the
-compiler and inline mode is essentially outline mode.
-
-But anyway I have an idea how to setup the x86 offset for tag-based mode so it
-works for both paging modes. I did some testing and value
-	0xffeffc0000000000
-seems to work fine and has at least some of the benefits I was hoping for when
-doing the runtime_const thing. It works in both paging modes because in 5 levels
-it's just a little bit below the 0xffe0000000000000 that I was thinking about
-first and in 4 levels, because of LAM, it becomes 0xfffffc0000000000 (because in
-4 level paging bits 62:48 are masked from address translation. So it's the same
-as the end of generic mode shadow memory space.
-
-The alignment doesn't fit the shadow memory size so it's not optimal but I'm not
-sure it can be if we want to have the inline mode and python scripts working at
-the same time. At the very least I think the KASAN_SHADOW_END won't collide with
-other things in the tab-based mode in 5 level paging mode, so no extra steps are
-needed (arch/x86/mm/kasan_init_64.c in kasan_init()).
-
-Do you see any problems with this offset for x86 tag-based mode?
-
-
-Btw I think kasan_check_range() can be optimized on x86 if we use
-addr_has_metadata() that doesn't use KASAN_SHADOW_START. Getting rid of it from
-the implementation will remove pgtable_l5_enabled() which is pretty slow so
-kasan_check_range() which is called a lot would probably work much faster.
-Do you see any way in which addr_has_metadata() will make sense but won't use
-KASAN_SHADOW_START? Every one of my ideas ends up using pgtable_l5_enabled()
-because the metadata can have 6 or 15 bits depending on paging level.
+Thanks for letting me know about the tag resets, that should make changing the
+check in kasan_non_canonical_hook() easier.
 
 -- 
 Kind regards
