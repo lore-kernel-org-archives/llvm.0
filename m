@@ -1,167 +1,177 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B921922DD;
-	Tue, 25 Feb 2025 21:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6520718DB1B
+	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 21:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740518882; cv=none; b=ffT67XarWy6zuGZF+frz8W7Ts++b9LkM8SGIxoxK0biD6UaNAYv+REzfpRy47cvSV8rd2abIqlj2Ie5z7K7uqsB2tkDEtdhsUXGd63EnAtS1kXYWbMy9xOpzI/N0Rvih/HZKm6ByvIgSs+NxmEI8rJnKEzlwj4/31b/IS9IXxqk=
+	t=1740519472; cv=none; b=ixylH14JYWCM4Z+RafvrAvQO9eQY0LZwdAFVwotdPvKIswy+nOSqbm5mYUkdD81BuilcAAap+5spID4ah9oyuotQ4Q5cZixJnUc/Hi2qA5a2k/O56jHN2XnX3BUiiwGpFPZGV/xrk6ZDp53dcP8pi4a5d9ZxDD0+Ps1SBMHiUfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740518882; c=relaxed/simple;
-	bh=mHtexZIWhP733gfukHNRKtZLR0AZlEi0tEpTlNqDts4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mbyG+sV7mOb2VqtqwqcX6JPv3/wQJ4sdXSwOuKmbuwvzMsmxNzwkmaBQqvBz+xO2IGmu45lAZMyRD8WpnPbQlT+G8VjGP+CTPANzsiwZWIruh5OMglCc4Ni96My4PZd9t8nRwr5clYXynEHvJ48WB9LImGcoIpflq7mxCaGfRyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+ZbVft9; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740519472; c=relaxed/simple;
+	bh=NMGyldH7G/zx0ROFy4tu+R4sBPI1pjzg+05ivupOIcE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UuhqF+FDdGmkVUjgcoXzUym4j9kqOrlPBNgaUMBq4XTI2RqdDkg6E3X6vB3yeEJLgSgj3uB6iaH8QYA13kioMjQszZGxedpa49ijEAsSPjhTxRbSNIc1cWqe9CFBmYj19zQZ4xzNiN3U1Uptok5pYtcUE8fYG4o3DMFMOfQhsWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RHRV+/La; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+ZbVft9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740518879; x=1772054879;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mHtexZIWhP733gfukHNRKtZLR0AZlEi0tEpTlNqDts4=;
-  b=i+ZbVft9zqHPko+bpIJRJD1mpr/bRwdAfi3eUb47SByGmFMMGU4vVbxH
-   S0nxMF0eAkNnPFb4jdZ9yITjsttuXI/n4N2+wOTGroi5FZ6P0e9hOSvJf
-   aHu/wKFNmt3DI8V6BmKeCtHaSwxG/NcT4uqQsqXKpS7inlH/B6758+WIf
-   kbUiyGd5D5JkibDwjEcIcXn8jw7zC3z43MC/AqMeIv8WjjxB2/qyhq0vT
-   98k5a6m8Iw6BgAiuCXHxukn1THEZAT+fPkCYMFwE0N5LBJuiaf9JKuLYK
-   gMkkj/w7gPvl6snqkLjiInTEG+ryU0pXrzHSKqKcuTbqlXGQkhBN0hkHh
-   g==;
-X-CSE-ConnectionGUID: SZAH+HgnQ926TF7jsEgSJw==
-X-CSE-MsgGUID: 3OcLu4t4Sd+nEQarTvi6Qg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41550870"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41550870"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 13:27:59 -0800
-X-CSE-ConnectionGUID: N/qjuDE/TmiVQqv3PlIh3g==
-X-CSE-MsgGUID: eumm2o4SQX6+T6sIxiXnUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121756092"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 25 Feb 2025 13:27:57 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tn2Su-000An9-11;
-	Tue, 25 Feb 2025 21:27:46 +0000
-Date: Wed, 26 Feb 2025 05:25:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-	Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH ipsec-next] xfrm: remove hash table alloc/free helpers
-Message-ID: <202502260536.BzRJ7jGr-lkp@intel.com>
-References: <20250224171055.15951-1-fw@strlen.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHRV+/La"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38f488f3161so3373891f8f.3
+        for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 13:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740519469; x=1741124269; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9QCyp1JUlv9qVfn+zUKpBjTnHTrPkzYz/kl8dlHJcy0=;
+        b=RHRV+/La+lqrSIZVd0RirmMAnoi4MbK8F7hiJhPV44/ZDQAQ+nXfp0LLmodqJDTQR+
+         gonsYeEIj9eW1px1aSlLzNsG6StSS+/iUNnZHkE3F0vWUhWEFoRNNL+Wi4vf7FwHvmk7
+         acZMQcMKbACYzgHnuIyag4+8cyZIsq/jBg9nh+jtk6FjUPZfZEwhH/hgTem/POBOOcYv
+         GvP21si2WSyDYq0r0XtKy7RSMDdBbPJArTOnrqgRTnIRodK5Uu27jLfkXXHM9xDaaJK4
+         yK3OZmsVJjdwZuc5Yfy0b3m03I/NbR3BGn8YBqZnw8B+KRAftPU1hAoCGWT3yynqpRxj
+         nmdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740519469; x=1741124269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9QCyp1JUlv9qVfn+zUKpBjTnHTrPkzYz/kl8dlHJcy0=;
+        b=m7HeemIpCJQseMj4CjbSlil70B5O2LHNpYiCcJ3p7SIdAGLxj4X99UrkVvWwc6lHyX
+         SO3pCf3mJil2OnAkN7olIh9y6PmQz9RnOqQW3I0yQw5hd3opnlvSvxQJOO2lH3K0GRAr
+         BxFwBBQzM/LW9gLO/lSYspBiE4PhpHCR0cSzgfQhJ4Ozf6h4WuGdy7o4xCHvTUPER5Pu
+         lugKU0K5qWasD5FeA4jRgRNFNv5Xzp1OS/gosT2v/XMst9V3I2j26qdrNBPp0D0+QrsV
+         el2nhHA/So7zYrrXqpVEMeSI2vxL8k/gZKQIRGS07Rqq2GVshDK7YjlVp5GwL+0fUOLy
+         hPww==
+X-Forwarded-Encrypted: i=1; AJvYcCVwvR7w20HAI2HiaSdVV8yXr7SYSAmo0VqfHNJyH2PjARgCHE28uSDS+lb+UbrDlDinBjn6@lists.linux.dev
+X-Gm-Message-State: AOJu0YybRYmQVyA09WfuS6LG51we1xyPVR8npAnZLbqiH4SRDc06Ku+5
+	xXOjL2y1V6Ff3FZ3NfBtZmfK/nkHUJrksiZySI597W7PKBBdaoP/BtaVIui5yXP/DjwKgAxmvMp
+	2GYkVSsch7DETcDfr0FEqZV+D/3o=
+X-Gm-Gg: ASbGncu+1GKPmMzC3Du/44O1LjPniE10HS+5zlUzU8Epkt83u8DNivwZRjy2OGPno+B
+	lvkspoMuQWUSErxD7LpK/b7daRgIIEYR1yLQj8ukPUwV/Dsf0xLN5oT8FXGjXnkfOucdMbdAqZN
+	+eDzJfKG84
+X-Google-Smtp-Source: AGHT+IH6S2mULqjQWrRVzKEgduMFAsvTkEdFQj+0CWyfGyaXp1XuShoVeKk5ny9pZxUEWkF4gZEny+EdppWtMZZUjmk=
+X-Received: by 2002:a5d:588d:0:b0:390:d5f1:de9f with SMTP id
+ ffacd0b85a97d-390d5f1e3dcmr106316f8f.18.1740519468347; Tue, 25 Feb 2025
+ 13:37:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224171055.15951-1-fw@strlen.de>
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+ <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com>
+ <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
+ <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com> <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+In-Reply-To: <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 25 Feb 2025 22:37:37 +0100
+X-Gm-Features: AWEUYZnhs_dCGf3N8iOL4s8huRdd6HbG8f2NLaDJFhsXr34i64LAvkBz9QgjSAQ
+Message-ID: <CA+fCnZcsg13eoaDJpueZ=erWjosgLDeTrjXVaifA305qAFEYDQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
+	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
+	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
+	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
+	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
+	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
+	ndesaulniers@google.com, guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, 
+	mark.rutland@arm.com, broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, 
+	rppt@kernel.org, kaleshsingh@google.com, richard.weiyang@gmail.com, 
+	luto@kernel.org, glider@google.com, pankaj.gupta@amd.com, 
+	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
+	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
+	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
+	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
+	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
+	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
+	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
+	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
+	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
+	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Florian,
+On Tue, Feb 25, 2025 at 6:16=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
+>
+> I mean in my tests, with setting offset in runtime, everything works corr=
+ectly
+> in inline mode. Even though hwasan-mapping-offset ends up empty and doesn=
+'t end
+> up in CFLAGS_KASAN. I assume this means that the inline mode is pretty mu=
+ch the
+> same as outline mode with the runtime offset setting?
+>
+> I also tested if hwasan-mapping-offset does anything if I passed random v=
+alues
+> to it by hardcoding them in the makefile and still everything seemed to w=
+ork
+> just fine. Therefore I assumed that this option doesn't have any effect o=
+n x86.
 
-kernel test robot noticed the following build warnings:
+Hm that's weird. I wonder if inline instrumentation somehow gets auto-disab=
+led.
 
-[auto build test WARNING on klassert-ipsec-next/master]
-[also build test WARNING on klassert-ipsec/master net/main net-next/main linus/master v6.14-rc4 next-20250225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Hmm indeed it does. Then I'm not sure why I didn't crash when I started p=
+utting
+> in random variables. I'll dive into assembly and see what's up in there.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/xfrm-remove-hash-table-alloc-free-helpers/20250225-011758
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec-next.git master
-patch link:    https://lore.kernel.org/r/20250224171055.15951-1-fw%40strlen.de
-patch subject: [PATCH ipsec-next] xfrm: remove hash table alloc/free helpers
-config: x86_64-buildonly-randconfig-004-20250226 (https://download.01.org/0day-ci/archive/20250226/202502260536.BzRJ7jGr-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250226/202502260536.BzRJ7jGr-lkp@intel.com/reproduce)
+Please do, I'm curious what's going on there.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502260536.BzRJ7jGr-lkp@intel.com/
+> But anyway I have an idea how to setup the x86 offset for tag-based mode =
+so it
+> works for both paging modes. I did some testing and value
+>         0xffeffc0000000000
+> seems to work fine and has at least some of the benefits I was hoping for=
+ when
+> doing the runtime_const thing. It works in both paging modes because in 5=
+ levels
+> it's just a little bit below the 0xffe0000000000000 that I was thinking a=
+bout
+> first and in 4 levels, because of LAM, it becomes 0xfffffc0000000000 (bec=
+ause in
+> 4 level paging bits 62:48 are masked from address translation. So it's th=
+e same
+> as the end of generic mode shadow memory space.
+>
+> The alignment doesn't fit the shadow memory size so it's not optimal but =
+I'm not
+> sure it can be if we want to have the inline mode and python scripts work=
+ing at
+> the same time. At the very least I think the KASAN_SHADOW_END won't colli=
+de with
+> other things in the tab-based mode in 5 level paging mode, so no extra st=
+eps are
+> needed (arch/x86/mm/kasan_init_64.c in kasan_init()).
 
-All warnings (new ones prefixed by >>):
+What do you mean by "The alignment doesn't fit the shadow memory size"?
 
->> net/xfrm/xfrm_state.c:165:26: warning: variable 'ohashmask' set but not used [-Wunused-but-set-variable]
-     165 |         unsigned int nhashmask, ohashmask;
-         |                                 ^
-   1 warning generated.
+> Do you see any problems with this offset for x86 tag-based mode?
 
+I don't, but I think someone who understands the x86 memory layout
+better needs to look at this.
 
-vim +/ohashmask +165 net/xfrm/xfrm_state.c
+> Btw I think kasan_check_range() can be optimized on x86 if we use
+> addr_has_metadata() that doesn't use KASAN_SHADOW_START. Getting rid of i=
+t from
+> the implementation will remove pgtable_l5_enabled() which is pretty slow =
+so
+> kasan_check_range() which is called a lot would probably work much faster=
+.
+> Do you see any way in which addr_has_metadata() will make sense but won't=
+ use
+> KASAN_SHADOW_START? Every one of my ideas ends up using pgtable_l5_enable=
+d()
+> because the metadata can have 6 or 15 bits depending on paging level.
 
-f034b5d4efdfe0 David S. Miller  2006-08-24  160  
-63082733858502 Alexey Dobriyan  2008-11-25  161  static void xfrm_hash_resize(struct work_struct *work)
-f034b5d4efdfe0 David S. Miller  2006-08-24  162  {
-63082733858502 Alexey Dobriyan  2008-11-25  163  	struct net *net = container_of(work, struct net, xfrm.state_hash_work);
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  164  	struct hlist_head *ndst, *nsrc, *nspi, *nseq, *odst, *osrc, *ospi, *oseq;
-f034b5d4efdfe0 David S. Miller  2006-08-24 @165  	unsigned int nhashmask, ohashmask;
-ef6562fb0dcb1a Florian Westphal 2025-02-24  166  	unsigned long nsize;
-f034b5d4efdfe0 David S. Miller  2006-08-24  167  	int i;
-f034b5d4efdfe0 David S. Miller  2006-08-24  168  
-63082733858502 Alexey Dobriyan  2008-11-25  169  	nsize = xfrm_hash_new_size(net->xfrm.state_hmask);
-44e36b42a8378b David S. Miller  2006-08-24  170  	ndst = xfrm_hash_alloc(nsize);
-f034b5d4efdfe0 David S. Miller  2006-08-24  171  	if (!ndst)
-0244790c8ad240 Ying Xue         2014-08-29  172  		return;
-44e36b42a8378b David S. Miller  2006-08-24  173  	nsrc = xfrm_hash_alloc(nsize);
-f034b5d4efdfe0 David S. Miller  2006-08-24  174  	if (!nsrc) {
-ef6562fb0dcb1a Florian Westphal 2025-02-24  175  		xfrm_hash_free(ndst);
-0244790c8ad240 Ying Xue         2014-08-29  176  		return;
-f034b5d4efdfe0 David S. Miller  2006-08-24  177  	}
-44e36b42a8378b David S. Miller  2006-08-24  178  	nspi = xfrm_hash_alloc(nsize);
-f034b5d4efdfe0 David S. Miller  2006-08-24  179  	if (!nspi) {
-ef6562fb0dcb1a Florian Westphal 2025-02-24  180  		xfrm_hash_free(ndst);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  181  		xfrm_hash_free(nsrc);
-0244790c8ad240 Ying Xue         2014-08-29  182  		return;
-f034b5d4efdfe0 David S. Miller  2006-08-24  183  	}
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  184  	nseq = xfrm_hash_alloc(nsize);
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  185  	if (!nseq) {
-ef6562fb0dcb1a Florian Westphal 2025-02-24  186  		xfrm_hash_free(ndst);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  187  		xfrm_hash_free(nsrc);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  188  		xfrm_hash_free(nspi);
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  189  		return;
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  190  	}
-f034b5d4efdfe0 David S. Miller  2006-08-24  191  
-283bc9f35bbbcb Fan Du           2013-11-07  192  	spin_lock_bh(&net->xfrm.xfrm_state_lock);
-e88add19f68191 Ahmed S. Darwish 2021-03-16  193  	write_seqcount_begin(&net->xfrm.xfrm_state_hash_generation);
-f034b5d4efdfe0 David S. Miller  2006-08-24  194  
-f034b5d4efdfe0 David S. Miller  2006-08-24  195  	nhashmask = (nsize / sizeof(struct hlist_head)) - 1U;
-c8406998b80183 Florian Westphal 2016-08-09  196  	odst = xfrm_state_deref_prot(net->xfrm.state_bydst, net);
-63082733858502 Alexey Dobriyan  2008-11-25  197  	for (i = net->xfrm.state_hmask; i >= 0; i--)
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  198  		xfrm_hash_transfer(odst + i, ndst, nsrc, nspi, nseq, nhashmask);
-f034b5d4efdfe0 David S. Miller  2006-08-24  199  
-c8406998b80183 Florian Westphal 2016-08-09  200  	osrc = xfrm_state_deref_prot(net->xfrm.state_bysrc, net);
-c8406998b80183 Florian Westphal 2016-08-09  201  	ospi = xfrm_state_deref_prot(net->xfrm.state_byspi, net);
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  202  	oseq = xfrm_state_deref_prot(net->xfrm.state_byseq, net);
-63082733858502 Alexey Dobriyan  2008-11-25  203  	ohashmask = net->xfrm.state_hmask;
-f034b5d4efdfe0 David S. Miller  2006-08-24  204  
-c8406998b80183 Florian Westphal 2016-08-09  205  	rcu_assign_pointer(net->xfrm.state_bydst, ndst);
-c8406998b80183 Florian Westphal 2016-08-09  206  	rcu_assign_pointer(net->xfrm.state_bysrc, nsrc);
-c8406998b80183 Florian Westphal 2016-08-09  207  	rcu_assign_pointer(net->xfrm.state_byspi, nspi);
-fe9f1d8779cb47 Sabrina Dubroca  2021-04-25  208  	rcu_assign_pointer(net->xfrm.state_byseq, nseq);
-63082733858502 Alexey Dobriyan  2008-11-25  209  	net->xfrm.state_hmask = nhashmask;
-f034b5d4efdfe0 David S. Miller  2006-08-24  210  
-e88add19f68191 Ahmed S. Darwish 2021-03-16  211  	write_seqcount_end(&net->xfrm.xfrm_state_hash_generation);
-283bc9f35bbbcb Fan Du           2013-11-07  212  	spin_unlock_bh(&net->xfrm.xfrm_state_lock);
-f034b5d4efdfe0 David S. Miller  2006-08-24  213  
-df7274eb70b7c8 Florian Westphal 2016-08-09  214  	synchronize_rcu();
-df7274eb70b7c8 Florian Westphal 2016-08-09  215  
-ef6562fb0dcb1a Florian Westphal 2025-02-24  216  	xfrm_hash_free(odst);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  217  	xfrm_hash_free(osrc);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  218  	xfrm_hash_free(ospi);
-ef6562fb0dcb1a Florian Westphal 2025-02-24  219  	xfrm_hash_free(oseq);
-f034b5d4efdfe0 David S. Miller  2006-08-24  220  }
-f034b5d4efdfe0 David S. Miller  2006-08-24  221  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+What if we turn pgtable_l5_enabled() into using a read-only static key
+(DEFINE_STATIC_KEY_FALSE_RO) instead of a bool variable? Or if that is
+not acceptable, we could cache its value in a KASAN-specific static
+key.
