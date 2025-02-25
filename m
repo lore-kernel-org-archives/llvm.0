@@ -1,182 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB79236D;
-	Tue, 25 Feb 2025 05:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994791E5B85
+	for <llvm@lists.linux.dev>; Tue, 25 Feb 2025 07:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740459793; cv=none; b=OKbWg1oS9SMw+eIt0ipDDiECuIbXQ2fmGx/AL0i6o0FM39w6B3YqB4odijHhW4l7c8zl7FfdsP9nf8BNQLFwdV+zhOj+E7iZIO+3Ym7RkwXmxvnC2WoFXf6K4qn/B0zErEF11CFcewUAZW5SOSMwCycNoZ6botgNWt+djxWgh1Q=
+	t=1740469806; cv=none; b=t8NIA35wfqICTXfs3H+A5h+cqlEBme7kwMv5OKe4AFpFbKUFpySMrb27CQ0R0bgburVYvQwtrf63BaMQEiYpE2JSVq4FmWsae1mP6m/SHj0Go5QryRxWUt62HHEXZm3TdYXiCEGQDG/qKfh8hj9Ozr0ntU3GFmPO/fJIEel/97k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740459793; c=relaxed/simple;
-	bh=T/PHvP7RJ3qeFxngOY7GDIvGVwQCrFvEwnEAWxQp65k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k3u5NoVbrZl9KlUAD8s7dTIFENBBBOzXil2awWLkIQ1lwGFgS/DFWuXMbBk+FOARFJhPSvxI1NnjsVyss92aOZVxOjQZYMfxvEgrHaOKXiq2yEm2GTpaQdTQdA6HAK+1O1KJDabiuUE72LIvjG5xKTlx8tBJQBkrw52B7kZPTEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BX5K0CYu; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BX5K0CYu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740459791; x=1771995791;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T/PHvP7RJ3qeFxngOY7GDIvGVwQCrFvEwnEAWxQp65k=;
-  b=BX5K0CYueCPyUXvckaKpfneVdb19fCf69gYFK9a2sN6V4kEuhSdxDrZN
-   AGBh0WFj+Tv2esUYGLeCMqMVrs1v9kOE3Wlo3rDYXIXQ9XU0+6i35saXQ
-   kEwpkgR/ub8OqrgeHHYZweP+3Jn69Kww3Skaxmr0/6EuzakrdDSRnbE3B
-   dwna96tzpQrqADNkGtSIKa8p3PocveAj9SHF+gKsZacw8Nrmz9kA+iEgp
-   N1/br9pSXkn5w1WPfJKPimIkSs2hpoKUUrIvsI59cljZ2MQeONEPQLXbB
-   m8FggH5l3ivJAjMkjjkUEqpxNoo5pBDkUX5i5jRqdE6aXc3G8fi9Jzb3c
-   A==;
-X-CSE-ConnectionGUID: vV7QJSsqSwWKCVwMcwTNzQ==
-X-CSE-MsgGUID: qYk+LLiZTg6xO1RdUoP05g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="58791624"
-X-IronPort-AV: E=Sophos;i="6.13,313,1732608000"; 
-   d="scan'208";a="58791624"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 21:03:10 -0800
-X-CSE-ConnectionGUID: FTtwx+E9R/S3kATFv4pcnQ==
-X-CSE-MsgGUID: 7R5/+2ZHSn2fa9x4WY1E3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,313,1732608000"; 
-   d="scan'208";a="120899348"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Feb 2025 21:03:08 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tmn5e-0009lj-37;
-	Tue, 25 Feb 2025 05:02:49 +0000
-Date: Tue, 25 Feb 2025 13:02:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: alison.schofield@intel.com, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cxl@vger.kernel.org
-Subject: Re: [PATCH] cxl/region: Allow 6 & 12 way regions on 3-way HB
- interleaves
-Message-ID: <202502251245.NLuc888W-lkp@intel.com>
-References: <20250224235817.2259508-1-alison.schofield@intel.com>
+	s=arc-20240116; t=1740469806; c=relaxed/simple;
+	bh=09ibOkxEH89zpgu/YOvZXAOdkjAqyD57M71vN9DlDIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uBRDtJFoP2hwUpw7zMfT3mH4Cl2ZAYSPy8YWjWs5LY+NC2eRp9+nMT4F6/pATAJEzx5VNzVckmnrIsd+z/148DXXLyXqSBHIHhoysgveMMlTNGNW9Mts2uKRBmifK2lXVf6BTQ7E05pzeqhEyyg9IPdYpOdSKfg2oe8JWUOlAMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Z28XW5p6Cz9sSH;
+	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id LNoX8tsTPzIV; Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z28XW50Xsz9sS8;
+	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 98D598B780;
+	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id D597ggcl3448; Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 283828B77C;
+	Tue, 25 Feb 2025 08:35:39 +0100 (CET)
+Message-ID: <7d23db63-6909-48e2-8262-fb000aa714a5@csgroup.eu>
+Date: Tue, 25 Feb 2025 08:35:38 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224235817.2259508-1-alison.schofield@intel.com>
-
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 2bb67004903cfd35710750654669a77e7223fcd1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/alison-schofield-intel-com/cxl-region-Allow-6-12-way-regions-on-3-way-HB-interleaves/20250225-080107
-base:   2bb67004903cfd35710750654669a77e7223fcd1
-patch link:    https://lore.kernel.org/r/20250224235817.2259508-1-alison.schofield%40intel.com
-patch subject: [PATCH] cxl/region: Allow 6 & 12 way regions on 3-way HB interleaves
-config: riscv-randconfig-001-20250225 (https://download.01.org/0day-ci/archive/20250225/202502251245.NLuc888W-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250225/202502251245.NLuc888W-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502251245.NLuc888W-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/cxl/core/region.c:1852: warning: Function parameter or struct member 'multiple' not described in 'cxl_calc_interleave_pos'
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH] objtool: Skip unannotated intra-function call warning
+ for bl+mflr pattern
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Sathvika Vasireddy <sv@linux.ibm.com>, jpoimboe@kernel.org,
+ peterz@infradead.org, npiggin@gmail.com, maddy@linux.ibm.com,
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ llvm@lists.linux.dev
+References: <20250219162014.10334-1-sv@linux.ibm.com>
+ <3223ec0e-c445-4bbf-ae72-276688e40908@csgroup.eu>
+ <d5ada017-1ba2-4a89-8a58-4555f09f9d97@csgroup.eu>
+ <8f4ec6d4-2646-4a87-b3a1-edfaecff2a01@csgroup.eu>
+ <20250224170922.GA585841@ax162>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20250224170922.GA585841@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +1852 drivers/cxl/core/region.c
 
-a3e00c964fb9439 Alison Schofield 2023-10-27  1834  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1835  /**
-a3e00c964fb9439 Alison Schofield 2023-10-27  1836   * cxl_calc_interleave_pos() - calculate an endpoint position in a region
-a3e00c964fb9439 Alison Schofield 2023-10-27  1837   * @cxled: endpoint decoder member of given region
-a3e00c964fb9439 Alison Schofield 2023-10-27  1838   *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1839   * The endpoint position is calculated by traversing the topology from
-a3e00c964fb9439 Alison Schofield 2023-10-27  1840   * the endpoint to the root decoder and iteratively applying this
-a3e00c964fb9439 Alison Schofield 2023-10-27  1841   * calculation:
-a3e00c964fb9439 Alison Schofield 2023-10-27  1842   *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1843   *    position = position * parent_ways + parent_pos;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1844   *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1845   * ...where @position is inferred from switch and root decoder target lists.
-a3e00c964fb9439 Alison Schofield 2023-10-27  1846   *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1847   * Return: position >= 0 on success
-a3e00c964fb9439 Alison Schofield 2023-10-27  1848   *	   -ENXIO on failure
-a3e00c964fb9439 Alison Schofield 2023-10-27  1849   */
-22639743643957e Alison Schofield 2025-02-24  1850  static int cxl_calc_interleave_pos(struct cxl_endpoint_decoder *cxled,
-22639743643957e Alison Schofield 2025-02-24  1851  				   int multiple)
-a3e00c964fb9439 Alison Schofield 2023-10-27 @1852  {
-a3e00c964fb9439 Alison Schofield 2023-10-27  1853  	struct cxl_port *iter, *port = cxled_to_port(cxled);
-a3e00c964fb9439 Alison Schofield 2023-10-27  1854  	struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
-a3e00c964fb9439 Alison Schofield 2023-10-27  1855  	struct range *range = &cxled->cxld.hpa_range;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1856  	int parent_ways = 0, parent_pos = 0, pos = 0;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1857  	int rc;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1858  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1859  	/*
-a3e00c964fb9439 Alison Schofield 2023-10-27  1860  	 * Example: the expected interleave order of the 4-way region shown
-a3e00c964fb9439 Alison Schofield 2023-10-27  1861  	 * below is: mem0, mem2, mem1, mem3
-a3e00c964fb9439 Alison Schofield 2023-10-27  1862  	 *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1863  	 *		  root_port
-a3e00c964fb9439 Alison Schofield 2023-10-27  1864  	 *                 /      \
-a3e00c964fb9439 Alison Schofield 2023-10-27  1865  	 *      host_bridge_0    host_bridge_1
-a3e00c964fb9439 Alison Schofield 2023-10-27  1866  	 *        |    |           |    |
-a3e00c964fb9439 Alison Schofield 2023-10-27  1867  	 *       mem0 mem1        mem2 mem3
-a3e00c964fb9439 Alison Schofield 2023-10-27  1868  	 *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1869  	 * In the example the calculator will iterate twice. The first iteration
-a3e00c964fb9439 Alison Schofield 2023-10-27  1870  	 * uses the mem position in the host-bridge and the ways of the host-
-a3e00c964fb9439 Alison Schofield 2023-10-27  1871  	 * bridge to generate the first, or local, position. The second
-a3e00c964fb9439 Alison Schofield 2023-10-27  1872  	 * iteration uses the host-bridge position in the root_port and the ways
-a3e00c964fb9439 Alison Schofield 2023-10-27  1873  	 * of the root_port to refine the position.
-a3e00c964fb9439 Alison Schofield 2023-10-27  1874  	 *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1875  	 * A trace of the calculation per endpoint looks like this:
-a3e00c964fb9439 Alison Schofield 2023-10-27  1876  	 * mem0: pos = 0 * 2 + 0    mem2: pos = 0 * 2 + 0
-a3e00c964fb9439 Alison Schofield 2023-10-27  1877  	 *       pos = 0 * 2 + 0          pos = 0 * 2 + 1
-a3e00c964fb9439 Alison Schofield 2023-10-27  1878  	 *       pos: 0                   pos: 1
-a3e00c964fb9439 Alison Schofield 2023-10-27  1879  	 *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1880  	 * mem1: pos = 0 * 2 + 1    mem3: pos = 0 * 2 + 1
-a3e00c964fb9439 Alison Schofield 2023-10-27  1881  	 *       pos = 1 * 2 + 0          pos = 1 * 2 + 1
-a3e00c964fb9439 Alison Schofield 2023-10-27  1882  	 *       pos: 2                   pos = 3
-a3e00c964fb9439 Alison Schofield 2023-10-27  1883  	 *
-a3e00c964fb9439 Alison Schofield 2023-10-27  1884  	 * Note that while this example is simple, the method applies to more
-a3e00c964fb9439 Alison Schofield 2023-10-27  1885  	 * complex topologies, including those with switches.
-a3e00c964fb9439 Alison Schofield 2023-10-27  1886  	 */
-a3e00c964fb9439 Alison Schofield 2023-10-27  1887  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1888  	/* Iterate from endpoint to root_port refining the position */
-a3e00c964fb9439 Alison Schofield 2023-10-27  1889  	for (iter = port; iter; iter = next_port(iter)) {
-a3e00c964fb9439 Alison Schofield 2023-10-27  1890  		if (is_cxl_root(iter))
-a3e00c964fb9439 Alison Schofield 2023-10-27  1891  			break;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1892  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1893  		rc = find_pos_and_ways(iter, range, &parent_pos, &parent_ways);
-a3e00c964fb9439 Alison Schofield 2023-10-27  1894  		if (rc)
-a3e00c964fb9439 Alison Schofield 2023-10-27  1895  			return rc;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1896  
-22639743643957e Alison Schofield 2025-02-24  1897  		if (multiple > 1 && is_cxl_root(next_port(iter))) {
-22639743643957e Alison Schofield 2025-02-24  1898  			pos = pos + multiple * parent_pos;
-22639743643957e Alison Schofield 2025-02-24  1899  			break;
-22639743643957e Alison Schofield 2025-02-24  1900  		}
-22639743643957e Alison Schofield 2025-02-24  1901  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1902  		pos = pos * parent_ways + parent_pos;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1903  	}
-a3e00c964fb9439 Alison Schofield 2023-10-27  1904  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1905  	dev_dbg(&cxlmd->dev,
-a3e00c964fb9439 Alison Schofield 2023-10-27  1906  		"decoder:%s parent:%s port:%s range:%#llx-%#llx pos:%d\n",
-a3e00c964fb9439 Alison Schofield 2023-10-27  1907  		dev_name(&cxled->cxld.dev), dev_name(cxlmd->dev.parent),
-a3e00c964fb9439 Alison Schofield 2023-10-27  1908  		dev_name(&port->dev), range->start, range->end, pos);
-a3e00c964fb9439 Alison Schofield 2023-10-27  1909  
-a3e00c964fb9439 Alison Schofield 2023-10-27  1910  	return pos;
-a3e00c964fb9439 Alison Schofield 2023-10-27  1911  }
-a3e00c964fb9439 Alison Schofield 2023-10-27  1912  
+Le 24/02/2025 à 18:09, Nathan Chancellor a écrit :
+> On Mon, Feb 24, 2025 at 02:19:14PM +0100, Christophe Leroy wrote:
+>> Well, this problem already exists on clang 18 it seems:
+>>
+>> 00000004 <btext_map>:
+>>     4:   7c 08 02 a6     mflr    r0
+>>     8:   94 21 ff e0     stwu    r1,-32(r1)
+>>     c:   93 c1 00 18     stw     r30,24(r1)
+>>    10:   90 01 00 24     stw     r0,36(r1)
+>>    14:   93 a1 00 14     stw     r29,20(r1)
+>>    18:   48 00 00 05     bl      1c <btext_map+0x18>
+>>    1c:   38 a0 00 00     li      r5,0
+>>    20:   7f c8 02 a6     mflr    r30
+>>
+>> While GCC generates:
+>>
+>> 00000418 <btext_map>:
+>>   418:   94 21 ff e0     stwu    r1,-32(r1)
+>>   41c:   7c 08 02 a6     mflr    r0
+>>   420:   42 9f 00 05     bcl     20,4*cr7+so,424 <btext_map+0xc>
+>>   424:   39 20 00 00     li      r9,0
+>>   428:   93 c1 00 18     stw     r30,24(r1)
+>>   42c:   7f c8 02 a6     mflr    r30
+>>
+>> So lets make the kernel tolerate it allthough it should be fixed on clang at
+>> the end.
+>>
+>> I can't find any related issue in the clang issues database
+>> (https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fissues&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3c10d37fecd94c692acb08dd54f5ff51%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638760137702082512%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=qOjbONjWUuXFKUNb42yEPXgXmvU6x%2BuwbGSg2Ep6WRk%3D&reserved=0), should we open one ?
+> 
+> Yes please, especially if you happen to have a simplified reproducer
+> (but no worries if not). I can make sure it gets labeled for the PowerPC
+> backend folks to take a look at.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Done, see https://github.com/llvm/llvm-project/issues/128644
