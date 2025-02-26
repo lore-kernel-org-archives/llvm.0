@@ -1,95 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0000746426;
-	Wed, 26 Feb 2025 08:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C9319EED7;
+	Wed, 26 Feb 2025 09:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740558209; cv=none; b=alh70Me89YsUNDqNOwDC3MyP0doHDZKv4NmIm6tjoOGNQZjnzirOkyy7UNSk6YYI3Wc+M3obKtxX6i9n7LROk51Wz2Hm9JAtp0ehcR6lbqUxu39+qe8ZWZvN5jAU3gnycFP8xwyexpRuxB8CDBJDp8nrx8DlT59yOVua+nyhIWA=
+	t=1740563277; cv=none; b=csdMBwBu0+VG8dGSNgG7UtkK5eKSa95m7qkb82wRuM7TcEXjb6w5Kr2tNWD0FP7yWJSYr2rSf6cFdasBHKpo0JbSV2lFYzfexkrG4haAVU/2cI+HUrSW2446A87zlwc+oWo5g9Qhiacz6Ln0BgVqKeXn/bnvPyrXvNspGE5/mK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740558209; c=relaxed/simple;
-	bh=S88eGtK7YJQAfqBg/oeH1gGqR1u+4gInkzJEGHDIRJc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Heh1KZMx1C9lx0oCiUOAsVz649ZG72Pm1MApPpEZLSkE5vmhJWSadhoXAblug/HovuG50rINnImOGxibau9Z0Z31M1SpnLzXqB760yvQlq5krfoRF5ODTQfYy/f7/5oWK/wENYQkvvVc0Ma7U8Ki3q8rF/PqG8PfJSPZ0vt+6z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bkFDUxgG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740563277; c=relaxed/simple;
+	bh=6puDstHpwfkJlpKn7JlWAejjNwhdFTiriKarCCat0OM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iq0UFe0Uti2FTc8Dd9lN6pgY1Sl+26LtKXIGUzMpJmEzljngsu+jVWQN9IAoCF3iFB/au2b3MgICrvovIFl/AyEhI9WwwgDYn2iMpeiuDQAvFXf4HH1RngP1GeOK9ruweN44bU/F1/ZFfW1cwRDAgI8XGLvhnt+dXYhYMtdARzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BTLH6I+j; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bkFDUxgG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0168C4CED6;
-	Wed, 26 Feb 2025 08:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740558208;
-	bh=S88eGtK7YJQAfqBg/oeH1gGqR1u+4gInkzJEGHDIRJc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bkFDUxgGc+NrDSYqceFZEAA2/uz5VSXXYivgojqrGCd0GV6Mn8E6ppMUA3RTQ5lLQ
-	 wMVWcCscJCzpSdSiRuPShEZJgBL0fPYKvItVuosvAx9v2yYcEIGWHeCwqEPLpdpYbp
-	 KkMXYocXmU/yiwNukYqXr6zuygTV3nbQcm1cdvRXBJAeINx+Ql9k+53mi9yKxAPYiw
-	 xhPsPBufrN1H8W8wLm49rH1o9PaQLxdZplpq6J8I8difis7S7eOGo6294VcNuTidh8
-	 qlE1VSTdFfK8zy7JOKC8T7TtuS+1/owLYllajK1K3yEtnKmkKVzQBIwRTMWJDfR6v+
-	 ZKNbS3LfIkOZg==
-From: Christian Brauner <brauner@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jan Kara <jack@suse.cz>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	"Seth Forshee (DigitalOcean)" <sforshee@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] fs: namespace: fix uninitialized variable use
-Date: Wed, 26 Feb 2025 09:23:11 +0100
-Message-ID: <20250226-wohlgefallen-kennwort-f82a7c042ab6@brauner>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250226081201.1876195-1-arnd@kernel.org>
-References: <20250226081201.1876195-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTLH6I+j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740563276; x=1772099276;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6puDstHpwfkJlpKn7JlWAejjNwhdFTiriKarCCat0OM=;
+  b=BTLH6I+j1SWWoqf8JaPDUKYyi8fNBFoxnqTBzPEK76T34SyRz97uWm77
+   CNcFBus+fPIzvUW8m7A4G8KWzJG9HinzGOSm73Ey7Ehx+qsBUvPMCbeEI
+   l3PmXkYykiYokxCJZ4UFaeaGdcriHrLEGvQzAhhAQkmU8jHxKkPfWqVL2
+   8IsZYxKsLIEJfoA601bpW3fVTQ+odfO4yAmaiZPAb3rMHCWWkzndVRWT0
+   SY+uWC4zidghJuivxCS/YNNPdbqtHDfYn3M3SQ6hK088qS26fxLaiF+/L
+   UW7HsFz2lCbyxl7C0PraywO2G/O4/bohbvzz+YL/o4m+9+Ee2EtJEV4BU
+   Q==;
+X-CSE-ConnectionGUID: 2+togFUoTAmOupwBhzd3Zw==
+X-CSE-MsgGUID: M8fSftWQRPiyHnOtusJ+nw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="41316460"
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="41316460"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 01:47:55 -0800
+X-CSE-ConnectionGUID: HDXTdmQmT/yZBGzrEPF6YA==
+X-CSE-MsgGUID: KIrQSNBUQZqVOR7L/8LASg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
+   d="scan'208";a="139881667"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 26 Feb 2025 01:47:53 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnE18-000BUH-3B;
+	Wed, 26 Feb 2025 09:47:50 +0000
+Date: Wed, 26 Feb 2025 17:46:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luiz Capitulino <luizcap@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 5933/6583] include/linux/page_ext.h:131:20:
+ error: call to undeclared function 'page_to_section'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202502261733.Ma0eUGKJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1688; i=brauner@kernel.org; h=from:subject:message-id; bh=S88eGtK7YJQAfqBg/oeH1gGqR1u+4gInkzJEGHDIRJc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTvO1/BeuS43PlK5+1t0oavUiVVb89s2xJ1a9bjtY9cJ 9WeXaGo01HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRRitGhrthm3ILNfkq3DXl Wy5GCq8OrU/9uPPPaaOdXmfFLsrY/WL4n1N4f7V5Qv19297PAtbiu4uXpAj9/746eZlF2cKpe1c o8QIA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 26 Feb 2025 09:11:54 +0100, Arnd Bergmann wrote:
-> clang correctly notices that the 'uflags' variable initialization
-> only happens in some cases:
-> 
-> fs/namespace.c:4622:6: error: variable 'uflags' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->  4622 |         if (flags & MOVE_MOUNT_F_EMPTY_PATH)    uflags = AT_EMPTY_PATH;
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> fs/namespace.c:4623:48: note: uninitialized use occurs here
->  4623 |         from_name = getname_maybe_null(from_pathname, uflags);
->       |                                                       ^~~~~~
-> fs/namespace.c:4622:2: note: remove the 'if' if its condition is always true
->  4622 |         if (flags & MOVE_MOUNT_F_EMPTY_PATH)    uflags = AT_EMPTY_PATH;
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> [...]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   8433c776e1eb1371f5cd40b5fd3a61f9c7b7f3ad
+commit: a2d6e9c1a867bb9f13943cb8483e2ab85b630bcd [5933/6583] mm: page_ext: add an iteration API for page extensions
+config: i386-buildonly-randconfig-004-20250226 (https://download.01.org/0day-ci/archive/20250226/202502261733.Ma0eUGKJ-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250226/202502261733.Ma0eUGKJ-lkp@intel.com/reproduce)
 
-Applied to the vfs-6.15.mount.namespace branch of the vfs/vfs.git tree.
-Patches in the vfs-6.15.mount.namespace branch should appear in linux-next soon.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502261733.Ma0eUGKJ-lkp@intel.com/
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+All errors (new ones prefixed by >>):
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:8:
+   In file included from include/linux/pgalloc_tag.h:12:
+>> include/linux/page_ext.h:131:20: error: call to undeclared function 'page_to_section'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     131 |         iter->start_pfn = page_to_pfn(page);
+         |                           ^
+   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
+      64 | #define page_to_pfn __page_to_pfn
+         |                     ^
+   include/asm-generic/memory_model.h:47:14: note: expanded from macro '__page_to_pfn'
+      47 |         int __sec = page_to_section(__pg);                      \
+         |                     ^
+   include/linux/page_ext.h:131:20: note: did you mean '__nr_to_section'?
+   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
+      64 | #define page_to_pfn __page_to_pfn
+         |                     ^
+   include/asm-generic/memory_model.h:47:14: note: expanded from macro '__page_to_pfn'
+      47 |         int __sec = page_to_section(__pg);                      \
+         |                     ^
+   include/linux/mmzone.h:1907:35: note: '__nr_to_section' declared here
+    1907 | static inline struct mem_section *__nr_to_section(unsigned long nr)
+         |                                   ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+>> include/linux/mm.h:1965:29: error: static declaration of 'page_to_section' follows non-static declaration
+    1965 | static inline unsigned long page_to_section(const struct page *page)
+         |                             ^
+   include/linux/page_ext.h:131:20: note: previous implicit declaration is here
+     131 |         iter->start_pfn = page_to_pfn(page);
+         |                           ^
+   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
+      64 | #define page_to_pfn __page_to_pfn
+         |                     ^
+   include/asm-generic/memory_model.h:47:14: note: expanded from macro '__page_to_pfn'
+      47 |         int __sec = page_to_section(__pg);                      \
+         |                     ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2302:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   1 warning and 2 errors generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=1287424088
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=1287424088
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=1287424088
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=1287424088
+   make: Target 'prepare' not remade because of errors.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.15.mount.namespace
+vim +/page_to_section +131 include/linux/page_ext.h
 
-[1/1] fs: namespace: fix uninitialized variable use
-      https://git.kernel.org/vfs/vfs/c/980512134163
+   118	
+   119	/**
+   120	 * page_ext_iter_begin() - Prepare for iterating through page extensions.
+   121	 * @iter: page extension iterator.
+   122	 * @page: The page we're interested in.
+   123	 *
+   124	 * Must be called with RCU read lock taken.
+   125	 *
+   126	 * Return: NULL if no page_ext exists for this page.
+   127	 */
+   128	static inline struct page_ext *page_ext_iter_begin(struct page_ext_iter *iter, struct page *page)
+   129	{
+   130		iter->index = 0;
+ > 131		iter->start_pfn = page_to_pfn(page);
+   132		iter->page_ext = lookup_page_ext(page);
+   133	
+   134		return iter->page_ext;
+   135	}
+   136	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
