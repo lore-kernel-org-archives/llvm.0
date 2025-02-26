@@ -1,159 +1,137 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FA2275612
-	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 21:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554F32253FD;
+	Wed, 26 Feb 2025 21:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740604744; cv=none; b=dRFr1s9n9216AiXYQFRrTM2UxundsXGjFuFUCGErW0mw4ZYeHULg/QD9m5YRVhVWCPk2FRENeEx4h+l3Ln/x2UVpMvWxbxUo0jVCobzt92LazD8CP36tme1Qc5NjxIThKOSgkUhfcr46fNAUDrCFIgC3xCv59WBJir6sUYtzDOI=
+	t=1740606779; cv=none; b=R4rBdEzzBl6LdOk/aRNQj0zfibbIJL12HxIhyiuCmGyhsYyZV1GzPaUrGyWrM30gb3mcICZRiwiCZifvNW2WI3QGVUIJTIW1iGPOzu9NjvBjMvm3Bn5QHbbEN4NXxdXvEyVJ4YbvEGuER6Td5bYTOdgNQSOCj/h4voTo435WxTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740604744; c=relaxed/simple;
-	bh=ETF+TZfWOwr2E7TzI3GDXoo/fBu+FHHrLxMs/U5ICQc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i+BShk18DeNvW08/wv6Ddwne8wFqN8YjuPQei7Y7PHgC74qYe6BdOTSNcCy9aUamRv6ll0g87wFT/6zIMVA+B9lTb8VxP9koUes/CnvKHcTj+8Wxg7NYeH5rSVD+dGZs9UUxssy45+9cssvZuBjQOlnoyrNSsOs9Zkvb4RBrxEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=HKHJVnXQ; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1740606779; c=relaxed/simple;
+	bh=JUT3zXqdGD0U5jRAHGBbaOS9hgU64Ou8OTEs0P+uy0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nm2PVxH+0Xey7OeKVi+8nYTbgthsP6akyxQVhvlSG7BnlMpoI+pRSv6Elr+ueSMVjemKhbokZkkUVcKFLmzM6JjddSGvO6m7u7AGUusjvbcgGOUnkOnxllv0zs4OnOUDZbJ8eVDogwALZsKkmimj4YulkBwsxLM/zcJewxvEaXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePmugUiX; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="HKHJVnXQ"
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-8553e7d9459so7829139f.2
-        for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 13:19:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1740604741; x=1741209541; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZbQT0VE61svKMbdd+Gr8k060Ven1mqK+4ryvXWXDro=;
-        b=HKHJVnXQ/2rIG4BT7GTP0tncA2Q+S3XAjEbAqfW0xh6n8yn6C41ioYspoGi6bFC6Cs
-         zEPDC4CuIrnZ/u00D60Kfy2xD5Z3PmWHzsFl7QLSum4Gud1J8JWH/b/JPIVgMvS9HKUG
-         8XCgljBwcXHo3euKcoCXfJKlVYMUACAeg3w0w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740604741; x=1741209541;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZbQT0VE61svKMbdd+Gr8k060Ven1mqK+4ryvXWXDro=;
-        b=LJ+nnD8LiJzJ4FKAIJJnZw60Buyr8iOiniInSb0UH+mMpAF1YIefdWrzhpPvD81EcT
-         NztFwNiofKyHxxNO9cv7qNzMgFahimZBkwJU9T9p/2Ij8dNowo2YXi7RaVZhfGy5QKAv
-         IrjJNnl4OoqqcnAGMMHTO9Tkap/k3D49eikga0OItkDK7lRYvmWxV+0+5cQSg7wsm08t
-         yTxeW3TCGanVq2HlG1ttkH9FxWdRPFHjkwFQPuEesdXbdYrnSPXSsrQ2euf/Hh2uzg9q
-         OaEkPgOsM19hWHRZGFIEEyMIKBS9zl0MXV9uZgVJ3TlCqCGs7FYuNubde7CSogLaWW4L
-         lzpw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxsikjOSyYKd8o5NJKKX2hGUcSr8GYZRebRzPIutfxhfr1LMypJjyIbKgolZ4AA5J+oHqr@lists.linux.dev
-X-Gm-Message-State: AOJu0YwHyHaYxPzevbAfWnQEtwgrhtRuX0NYDihgsEcPNCp1HlnqSQw9
-	de6lhh6IHno0UoRcgVefoLkQ1OadssxcNp25uQXyFZ8PTMhkYbIn8s2di2gA04k=
-X-Gm-Gg: ASbGncuNpfLQ4XPCZlBMgPGddzcJXUR6M33DwoM7J60xHExHzu2RJnAhX2Me1punroQ
-	VFGYcjTmtGs4fPDXvb+Xds90Y9c7s8r+OGcClSEB7iG0Ri6PGWpmEmQvh3p0SQQkKwfLN+S9CSJ
-	5iI02E8nUSrhCn07ecz+HP42b5EAux3kDbYK7MrPt/5ViwfUAR3wVweNEHVovdtHyTFQZN6Zb4N
-	0CtNf7FT4Grun7j6TthGNKJCAdHSoDP4MPd80kXyWgkIh9q4rm0aP8pFnyv4Xn7GFeJn/V1gF8i
-	/QrRXJL050PK7yeZjE+4OVs2pdEFZvYbMzsp
-X-Google-Smtp-Source: AGHT+IHg/BsbrgiJltrFchrlWBr0v+eZMH3MictkWOtFDu7d/SE6nIbG1gWpAIgUIS6K/fYcfLTKKQ==
-X-Received: by 2002:a05:6602:13d4:b0:855:9c88:7894 with SMTP id ca18e2360f4ac-857c18025c7mr464165939f.11.1740604740789;
-        Wed, 26 Feb 2025 13:19:00 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f061c550a7sm33193173.48.2025.02.26.13.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 13:19:00 -0800 (PST)
-Message-ID: <51fc3603-bad8-4ff7-9e72-88858812e3cc@linuxfoundation.org>
-Date: Wed, 26 Feb 2025 14:18:59 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePmugUiX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740606777; x=1772142777;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JUT3zXqdGD0U5jRAHGBbaOS9hgU64Ou8OTEs0P+uy0U=;
+  b=ePmugUiXWVLUq1vxFfS7Gl+m9Cp1EZpUckObDo8rPrMRl6ogPXghpa+w
+   C/VjmKMVSnPNi7rB4oIX7go62wj654/wcpwzpe/dKjEkANsVSHbMtLG0p
+   t7Un/rw33H4pOdWkWA2fAO8IJTruK5UBq+2EvRgJkl67TmJ8lrF1qC5J8
+   a4lf/q526xxIJWfjDuIKolttof7iv3Tc8j1gY00v2v20wqDw6+1v4g4Hn
+   tcFMqUnp+7gS3oGIaxtoWgfs5ucOZpucGLrrvddeeLhTiamZbtzhjuDJK
+   ccBsZJvqQyTnjyVxcUrihOgLO8dNH+MkmuhfeCOxdbM5G+6LzkxdUaQws
+   g==;
+X-CSE-ConnectionGUID: E3GZvlKvSDizshIDZg/jEg==
+X-CSE-MsgGUID: hgxsvkElQ8mPm/Uk+3bK2Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="44303309"
+X-IronPort-AV: E=Sophos;i="6.13,318,1732608000"; 
+   d="scan'208";a="44303309"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 13:52:57 -0800
+X-CSE-ConnectionGUID: x9qUV9ZBRc6T/qxLWYWu1w==
+X-CSE-MsgGUID: FriKRESQRsKmoH45cFozpg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,318,1732608000"; 
+   d="scan'208";a="147650534"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 26 Feb 2025 13:52:56 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnPKn-000CVK-0W;
+	Wed, 26 Feb 2025 21:52:53 +0000
+Date: Thu, 27 Feb 2025 05:52:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Juri Lelli <juri.lelli@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlelli:upstream/deadline/domains-suspend 2/4]
+ kernel/sched/rt.c:2913:14: error: use of undeclared identifier
+ 'sched_domains_mutex'
+Message-ID: <202502270513.eQknwYIs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/16] selftests: vDSO: parse_vdso: Make compatible
- with nolibc
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Willy Tarreau <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2/26/25 04:44, Thomas Weißschuh wrote:
-> For testing the functionality of the vDSO, it is necessary to build
-> userspace programs for multiple different architectures.
-> It is additional work to acquire matching userspace cross-compilers with
-> full C libraries and then building root images out of those.
-> The kernel tree already contains nolibc, a small, header-only C library.
-> By using it, it is possible to build userspace programs without any
-> additional dependencies.
-> For example the kernel.org crosstools or multi-target clang can be used
-> to build test programs for a multitude of architectures.
-> While nolibc is very limited, it is enough for many selftests.
-> With some minor adjustments it is possible to make parse_vdso.c
-> compatible with nolibc.
-> As an example, vdso_standalone_test_x86 is now built from the same C
-> code as the regular vdso_test_gettimeofday, while still being completely
-> standalone.
-> Also drop the dependency of parse_vdso.c on the elf.h header from libc and only
-> use the one from the kernel's UAPI.
-> 
-> While this series is useful on its own now, it will also integrate with the
-> kunit UAPI framework currently under development:
-> https://lore.kernel.org/lkml/20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de/
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
-> Changes in v2:
-> - Provide a limits.h header in nolibc
-> - Pick up Reviewed-by tags from Kees
-> - Link to v1: https://lore.kernel.org/r/20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de
-> 
-> ---
-> Thomas Weißschuh (16):
->        MAINTAINERS: Add vDSO selftests
->        elf, uapi: Add definition for STN_UNDEF
->        elf, uapi: Add definition for DT_GNU_HASH
->        elf, uapi: Add definitions for VER_FLG_BASE and VER_FLG_WEAK
->        elf, uapi: Add type ElfXX_Versym
->        elf, uapi: Add types ElfXX_Verdef and ElfXX_Veraux
->        tools/include: Add uapi/linux/elf.h
->        selftests: Add headers target
->        tools/nolibc: add limits.h shim header
->        selftests: vDSO: vdso_standalone_test_x86: Use vdso_init_form_sysinfo_ehdr
->        selftests: vDSO: parse_vdso: Drop vdso_init_from_auxv()
->        selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers
->        selftests: vDSO: parse_vdso: Test __SIZEOF_LONG__ instead of ULONG_MAX
->        selftests: vDSO: vdso_test_gettimeofday: Clean up includes
->        selftests: vDSO: vdso_test_gettimeofday: Make compatible with nolibc
->        selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc
-> 
->   MAINTAINERS                                        |   1 +
->   include/uapi/linux/elf.h                           |  38 ++
->   tools/include/nolibc/Makefile                      |   1 +
->   tools/include/nolibc/limits.h                      |   7 +
->   tools/include/uapi/linux/elf.h                     | 524 +++++++++++++++++++++
->   tools/testing/selftests/lib.mk                     |   5 +-
->   tools/testing/selftests/vDSO/Makefile              |  11 +-
->   tools/testing/selftests/vDSO/parse_vdso.c          |  19 +-
->   tools/testing/selftests/vDSO/parse_vdso.h          |   1 -
->   .../selftests/vDSO/vdso_standalone_test_x86.c      | 143 +-----
->   .../selftests/vDSO/vdso_test_gettimeofday.c        |   4 +-
->   11 files changed, 590 insertions(+), 164 deletions(-)
-> ---
-> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20241017-parse_vdso-nolibc-e069baa7ff48
-> 
-> Best regards,
+tree:   https://github.com/jlelli/linux.git upstream/deadline/domains-suspend
+head:   78c2e4083eeedc3526f07bedfca514eefbe45e38
+commit: dfdff94e7f88b77e61e6cf8ec6aeea320fa12e7e [2/4] sched/deadline: Generalize unique visiting of root domains
+config: x86_64-buildonly-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250227/202502270513.eQknwYIs-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270513.eQknwYIs-lkp@intel.com/reproduce)
 
-Here is my Ack for this series to go through vDSO or x86 tree
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502270513.eQknwYIs-lkp@intel.com/
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+All errors (new ones prefixed by >>):
 
-thanks,
--- Shuah
+   In file included from kernel/sched/build_policy.c:52:
+>> kernel/sched/rt.c:2913:14: error: use of undeclared identifier 'sched_domains_mutex'
+    2913 |         mutex_lock(&sched_domains_mutex);
+         |                     ^
+   kernel/sched/rt.c:2940:16: error: use of undeclared identifier 'sched_domains_mutex'
+    2940 |         mutex_unlock(&sched_domains_mutex);
+         |                       ^
+   2 errors generated.
+
+
+vim +/sched_domains_mutex +2913 kernel/sched/rt.c
+
+  2904	
+  2905	static int sched_rt_handler(const struct ctl_table *table, int write, void *buffer,
+  2906			size_t *lenp, loff_t *ppos)
+  2907	{
+  2908		int old_period, old_runtime;
+  2909		static DEFINE_MUTEX(mutex);
+  2910		int ret;
+  2911	
+  2912		mutex_lock(&mutex);
+> 2913		mutex_lock(&sched_domains_mutex);
+  2914		old_period = sysctl_sched_rt_period;
+  2915		old_runtime = sysctl_sched_rt_runtime;
+  2916	
+  2917		ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+  2918	
+  2919		if (!ret && write) {
+  2920			ret = sched_rt_global_validate();
+  2921			if (ret)
+  2922				goto undo;
+  2923	
+  2924			ret = sched_dl_global_validate();
+  2925			if (ret)
+  2926				goto undo;
+  2927	
+  2928			ret = sched_rt_global_constraints();
+  2929			if (ret)
+  2930				goto undo;
+  2931	
+  2932			sched_rt_do_global();
+  2933			sched_dl_do_global();
+  2934		}
+  2935		if (0) {
+  2936	undo:
+  2937			sysctl_sched_rt_period = old_period;
+  2938			sysctl_sched_rt_runtime = old_runtime;
+  2939		}
+  2940		mutex_unlock(&sched_domains_mutex);
+  2941		mutex_unlock(&mutex);
+  2942	
+  2943		return ret;
+  2944	}
+  2945	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
