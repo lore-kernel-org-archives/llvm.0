@@ -1,278 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7095F236A70;
-	Wed, 26 Feb 2025 19:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2848624A062
+	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 19:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740596909; cv=none; b=PfScT0QQvMVRjIHCZzFtXkOObXIU0vfjmXVkRUnPgutmv5gr0xAC4tiCZjL4WBtW5zy9+9yKuj0gb3usj3yGi6xBzFL/bXk76IwlTT3OUZRDPc6TNmjiQ0yP3gbZ7haseZqPG+A6BtLXwa4Ph1dvUS4CktLnVzbIxx+LjTLk7ow=
+	t=1740599090; cv=none; b=L2PrPXzm5c7xrPRqz37eZC7yQ4q1y6xThRmvt3VVewgEJCuZyj9R91KMjWAi93lmkq/ybwujVJ/35ASM6o/fUfXB5IomeBL6AyeinCx8R+Y7hArlBxRfAmJbFDA4g90teRBlgwORkzcUNx1CA0Crox9mlgTZdVNWfPHOIPsdB0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740596909; c=relaxed/simple;
-	bh=Co4c9pWDt+v4eqGeNst1wVe4Wg3aJ7XoE0K0jU8NNAQ=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p9TX0zBsX6kPXNGciGxHb9ehR28lh0EEiTe28XQXwa0QoWMv0B8yv1yaaTmKsThPQ5iFxP/K1bdCoRoftR2YsA4T0wpxbPL6LunZ2Nxlh41N4vH/uTF4j0GZVpsjv7q27M3OI5LjhxBgVKM3ZuPFLqVFxTUjTOwFlvpJmOXFvgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=InLsR5dq; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740599090; c=relaxed/simple;
+	bh=0ALXJzO2ZhXP82Zb99HSpRWAbbmI+C+3+0buhND8ud8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MJ2DFEpOAYh9xTZy6/rJGLUjU36KhB2HFkHHySKrEvYhjltTgpEE5qgxxD1zqtXx1ZnOJlXgw2YNNMaFcSv9NDVUPaDVNCncuPvmhKLzkuRBGoRuCYfbn3Fb0rrBwfXDZA7NDEIUxJVv47zNDDCHHbJF4szZvPfsBpWNttXZYy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jjthyr77; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="InLsR5dq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740596907; x=1772132907;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Co4c9pWDt+v4eqGeNst1wVe4Wg3aJ7XoE0K0jU8NNAQ=;
-  b=InLsR5dqz9g+EkGqfx8QrXtlAy7o55rf2NkttzJA1byZmDOnqGG6/qM+
-   uFwdXu0yy/H9o476mZlMuqH8jGGIK6rm6+Opz3RfYZlUJsr8V+JmauiS/
-   0RsAV1ToiRnh3MHlLl/mZ50ytc9uXe1eJQKgqCDpoBDBsxfniFEN1tFXl
-   ybTS7H04SX+FV3AN1CqaI9t6wFTlxBGbkL8d123+ib+jmBpaAlzJZRwjK
-   7w5O39TT9C5JC7geFpxHlNA08I1gNMHCWo1tfKs9HjPNeKLCaAPnwUeZo
-   TyEq8ST6W/My0DZn+1mu7IubKZ4MBuFFQ3BZoZf/bgKpDopOILmDs3iGo
-   w==;
-X-CSE-ConnectionGUID: VCexmewjScqxelLncARa1A==
-X-CSE-MsgGUID: tt35y37jTxie323VBKyWEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="29062595"
-X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
-   d="scan'208";a="29062595"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 11:08:27 -0800
-X-CSE-ConnectionGUID: 8/h662g3T7aUuZWAa+kMcA==
-X-CSE-MsgGUID: cuCnST8YS3OwTrLl9/CxwA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="122053785"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 26 Feb 2025 11:08:26 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnMlU-000CHa-2d;
-	Wed, 26 Feb 2025 19:08:18 +0000
-Date: Thu, 27 Feb 2025 03:07:31 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: drivers/net/ethernet/pensando/ionic/ionic_lif.c:846:34: warning:
- bitwise operation between different enumeration types ('enum
- ionic_q_feature' and 'enum ionic_txq_feature')
-Message-ID: <202502270336.Jl5gbloE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jjthyr77"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-390d98ae34dso70393f8f.3
+        for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 11:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740599087; x=1741203887; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0ALXJzO2ZhXP82Zb99HSpRWAbbmI+C+3+0buhND8ud8=;
+        b=Jjthyr77texP7AJgOVvuLICHgUjiy+vwX5sA/GqJAMHL9VoXW+/457B8jFRZpYUwfj
+         aIQtNIN+zVVV3HS+uz1FfdD8rcc9HC0EoV9xlDgvKDfVVTML1f5flhFaFLXDu5pa9eoN
+         fUyVIIb7T0mN86GigwAl/SP9yDDPujT+st8l2FORe6eSecGNSc8kmkoGHDI72aCz7YUT
+         LBF6IU08cYCFZfJdbBYBvHl7kDZ8/QHLzrH6kwFKHT8k0ELs/tn96C8Z0bqo/ca+LIkJ
+         nU326O23iv5r+s/85foFd5gmBk/PTocGOuNxuVZ3TY5bwQiyM9OJ/zdRwHWHShhJ2New
+         Oycg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740599087; x=1741203887;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0ALXJzO2ZhXP82Zb99HSpRWAbbmI+C+3+0buhND8ud8=;
+        b=w45+22P5Tu+jngfM4XLgmGzKwMDyzqScFOKHbeE/ynpbPLS369WD4rsJ1GS8wXUMMj
+         0BuyLX+QLZptOyCvKVh2kKV0eq2Ush6nu90ABWQZbSo9AMTOTs3n3Mpsk/CYNW0040An
+         NatWZQpuN+xG9WieXwHuGPPQD9DSZWsCHeAEH9l6s120Quj8xyTLJUchoz0SIGzNsNIV
+         k2KfycUuV3mIBdFBinHf7cHcvti0npW+LiR3UAd2+asFdtYGLM5/yBOsfZ0yaQI/yF2T
+         /GabnL4rmrsqTULpNxlJflEsufhklbk3q9kYzmNyNs7Vx75zM9iVhPA2cqumvejx4XRq
+         l6Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxAScnm906/bkm/EW5AygKT0d440pD9TxUfbB5b0v9F09wVsD15P3SW7Sh8z80uZHj+03o@lists.linux.dev
+X-Gm-Message-State: AOJu0YyMfjXv95LnWASeI/p3e/cZuMyf/RE7lmK0IHCf1fUraNJqiUpv
+	49VxRRns2RgbtbC/tdErP8vINytPvFyqLTaDuOiKs3Ywr51qCnEshpQ4KzxdwvH3p0Vc0IpU1cb
+	CQYeEfE8KMg70g879sqeAPXajd/Q=
+X-Gm-Gg: ASbGnctmEYKDr/5nKpBz1Bws+/jN7QShVH09CANr1XIQ0zoRclsDmhWqabrTDN8gse5
+	K7hAT4NHm/U2eFiRYlbigOkh7kzB/yUJDywGh12pnusAQoDnCMiHhGkTc+kSb7qZ1wXTLjecgMK
+	0N4RlsxTgmVQ==
+X-Google-Smtp-Source: AGHT+IHilSXiABFjyw+TG/xRCYQ7cyaP2Rc5n1xYVBGwvzFT0zNXCjxGLoWyBMyb5UlgopzX0CdEgRn+K7Y4/n90qsI=
+X-Received: by 2002:a05:6000:1848:b0:38d:d5af:29af with SMTP id
+ ffacd0b85a97d-390d4fa3e25mr3522475f8f.49.1740599087190; Wed, 26 Feb 2025
+ 11:44:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+ <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
+ <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
+ <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
+ <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
+ <gisttijkccu6pynsdhvv3lpyxx7bxpvqbni43ybsa5axujr7qj@7feqy5fy2kgt>
+ <6wdzi5lszeaycdfjjowrbsnniks35zhatavknktskslwop5fne@uv5wzotu4ri4>
+ <CA+fCnZeEm+-RzqEXp1FqYJ5Gsm+mUZh5k3nq=92ZuTiqwsaWvA@mail.gmail.com> <qnxlqbc4cs7izjilisbjlrup4zyntjyucvfa4s6eegn72wfbkd@czthvwkdvo3v>
+In-Reply-To: <qnxlqbc4cs7izjilisbjlrup4zyntjyucvfa4s6eegn72wfbkd@czthvwkdvo3v>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Wed, 26 Feb 2025 20:44:35 +0100
+X-Gm-Features: AQ5f1JrdMqMC3b0HBepr7R3zwbWYmhOcf6RK7JusOEJWTmRQO7QPte-5YIs-RgA
+Message-ID: <CA+fCnZdUFO0+G9HHy4oaQfEx8sm3D_ZfxdkH3y2ZojjYqTN74Q@mail.gmail.com>
+Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: Vitaly Buka <vitalybuka@google.com>, kees@kernel.org, 
+	julian.stecklina@cyberus-technology.de, kevinloughlin@google.com, 
+	peterz@infradead.org, tglx@linutronix.de, justinstitt@google.com, 
+	catalin.marinas@arm.com, wangkefeng.wang@huawei.com, bhe@redhat.com, 
+	ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, will@kernel.org, 
+	ardb@kernel.org, jason.andryuk@amd.com, dave.hansen@linux.intel.com, 
+	pasha.tatashin@soleen.com, guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, 
+	mark.rutland@arm.com, broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, 
+	rppt@kernel.org, kaleshsingh@google.com, richard.weiyang@gmail.com, 
+	luto@kernel.org, glider@google.com, pankaj.gupta@amd.com, 
+	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
+	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
+	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
+	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
+	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
+	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
+	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
+	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
+	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
+	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CC: linux-kernel@vger.kernel.org
-TO: Shannon Nelson <snelson@pensando.io>
-CC: Allen Hubbe <allenbh@pensando.io>
+On Wed, Feb 26, 2025 at 5:43=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
+>
+> >What value can bit 63 and take for _valid kernel_ pointers (on which
+> >KASAN is intended to operate)? If it is always 1, we could arguably
+> >change the compiler to do | 0xFE for CompileKernel. Which would leave
+> >us with only one region to check: [0xfe00000000000000,
+> >0xffffffffffffffff]. But I don't know whether changing the compiler
+> >makes sense: it technically does as instructed by the LAM spec.
+> >(Vitaly, any thoughts? For context: we are discussing how to check
+> >whether a pointer can be a result of a memory-to-shadow mapping
+> >applied to a potentially invalid pointer in kernel HWASAN.)
+>
+> With LAM, valid pointers need to have bits 63 and 56 equal for 5 level pa=
+ging
+> and bits 63 and 47 equal for 4 level paging. Both set for kernel addresse=
+s and
+> both clear for user addresses.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ac9c34d1e45a4c25174ced4fc0cfc33ff3ed08c7
-commit: f0790bcd36063f2850301982f167128139a51f62 ionic: set up hw timestamp queues
-date:   3 years, 11 months ago
-config: x86_64-buildonly-randconfig-004-20241224 (https://download.01.org/0day-ci/archive/20250227/202502270336.Jl5gbloE-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270336.Jl5gbloE-lkp@intel.com/reproduce)
+Ah, OK. Then I guess we could even change to compiler to do | 0xFF,
+same as arm. But I don't know if this makes sense.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502270336.Jl5gbloE-lkp@intel.com/
+> >With the way the compiler works right now, for the perfectly precise
+> >check, I think we need to check 2 ranges: [0xfe00000000000000,
+> >0xffffffffffffffff] for when bit 63 is set (of a potentially-invalid
+> >pointer to which memory-to-shadow mapping is to be applied) and
+> >[0x7e00000000000000, 0x7fffffffffffffff] for when bit 63 is reset. Bit
+> >56 ranges through [0, 1] in both cases.
+> >
+> >However, in these patches, you use only bits [60:57]. The compiler is
+> >not aware of this, so it still sets bits [62:57], and we end up with
+> >the same two ranges. But in the KASAN code, you only set bits [60:57],
+> >and thus we can end up with 8 potential ranges (2 possible values for
+> >each of the top 3 bits), which gets complicated. So checking only one
+> >range that covers all of them seems to be reasonable for simplicity
+> >even though not entirely precise. And yes, [0x1e00000000000000,
+> >0xffffffffffffffff] looks like the what we need.
+>
+> Aren't the 2 ranges you mentioned in the previous paragraph still valid, =
+no
+> matter what bits the __tag_set() function uses? I mean bits 62:57 are sti=
+ll
+> reset by the compiler so bits 62:61 still won't matter. For example addre=
+sses
+> 0x1e00000000000000 and 0x3e00000000000000 will resolve to the same thing =
+after
+> the compiler is done with them right?
 
-All warnings (new ones prefixed by >>):
+Ah, yes, you're right, it's the same 2 ranges.
 
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_lif.c:4:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/uapi/linux/ethtool.h:19:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:14:
-   In file included from include/linux/mm.h:1557:
-   include/linux/vmstat.h:423:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     423 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     424 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:430:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     430 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     431 |                            NR_VM_NUMA_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:437:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     437 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:442:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     442 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     443 |                            NR_VM_NUMA_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_lif.c:15:
-   In file included from drivers/net/ethernet/pensando/ionic/ionic.h:11:
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_devlink.h:7:
-   include/net/devlink.h:28:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      28 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/devlink.h:25:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      25 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/devlink.h:29:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      29 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/devlink.h:25:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      25 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:846:34: warning: bitwise operation between different enumeration types ('enum ionic_q_feature' and 'enum ionic_txq_feature') [-Wenum-enum-conversion]
-     846 |         features = IONIC_Q_F_2X_CQ_DESC | IONIC_TXQ_F_HWSTAMP;
-         |                    ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/pensando/ionic/ionic_lif.c:916:34: warning: bitwise operation between different enumeration types ('enum ionic_q_feature' and 'enum ionic_rxq_feature') [-Wenum-enum-conversion]
-     916 |         features = IONIC_Q_F_2X_CQ_DESC | IONIC_RXQ_F_HWSTAMP;
-         |                    ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_lif.c:976:46: warning: bitwise operation between different enumeration types ('enum ionic_q_feature' and 'enum ionic_rxq_feature') [-Wenum-enum-conversion]
-     976 |                 qparam.rxq_features = IONIC_Q_F_2X_CQ_DESC | IONIC_RXQ_F_HWSTAMP;
-         |                                       ~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
-   9 warnings generated.
-
-
-vim +846 drivers/net/ethernet/pensando/ionic/ionic_lif.c
-
-   832	
-   833	int ionic_lif_create_hwstamp_txq(struct ionic_lif *lif)
-   834	{
-   835		unsigned int num_desc, desc_sz, comp_sz, sg_desc_sz;
-   836		unsigned int txq_i, flags;
-   837		struct ionic_qcq *txq;
-   838		u64 features;
-   839		int err;
-   840	
-   841		mutex_lock(&lif->queue_lock);
-   842	
-   843		if (lif->hwstamp_txq)
-   844			goto out;
-   845	
- > 846		features = IONIC_Q_F_2X_CQ_DESC | IONIC_TXQ_F_HWSTAMP;
-   847	
-   848		num_desc = IONIC_MIN_TXRX_DESC;
-   849		desc_sz = sizeof(struct ionic_txq_desc);
-   850		comp_sz = 2 * sizeof(struct ionic_txq_comp);
-   851	
-   852		if (lif->qtype_info[IONIC_QTYPE_TXQ].version >= 1 &&
-   853		    lif->qtype_info[IONIC_QTYPE_TXQ].sg_desc_sz == sizeof(struct ionic_txq_sg_desc_v1))
-   854			sg_desc_sz = sizeof(struct ionic_txq_sg_desc_v1);
-   855		else
-   856			sg_desc_sz = sizeof(struct ionic_txq_sg_desc);
-   857	
-   858		txq_i = lif->ionic->ntxqs_per_lif;
-   859		flags = IONIC_QCQ_F_TX_STATS | IONIC_QCQ_F_SG;
-   860	
-   861		err = ionic_qcq_alloc(lif, IONIC_QTYPE_TXQ, txq_i, "hwstamp_tx", flags,
-   862				      num_desc, desc_sz, comp_sz, sg_desc_sz,
-   863				      lif->kern_pid, &txq);
-   864		if (err)
-   865			goto err_qcq_alloc;
-   866	
-   867		txq->q.features = features;
-   868	
-   869		ionic_link_qcq_interrupts(lif->adminqcq, txq);
-   870		ionic_debugfs_add_qcq(lif, txq);
-   871	
-   872		lif->hwstamp_txq = txq;
-   873	
-   874		if (netif_running(lif->netdev)) {
-   875			err = ionic_lif_txq_init(lif, txq);
-   876			if (err)
-   877				goto err_qcq_init;
-   878	
-   879			if (test_bit(IONIC_LIF_F_UP, lif->state)) {
-   880				err = ionic_qcq_enable(txq);
-   881				if (err)
-   882					goto err_qcq_enable;
-   883			}
-   884		}
-   885	
-   886	out:
-   887		mutex_unlock(&lif->queue_lock);
-   888	
-   889		return 0;
-   890	
-   891	err_qcq_enable:
-   892		ionic_lif_qcq_deinit(lif, txq);
-   893	err_qcq_init:
-   894		lif->hwstamp_txq = NULL;
-   895		ionic_debugfs_del_qcq(txq);
-   896		ionic_qcq_free(lif, txq);
-   897		devm_kfree(lif->ionic->dev, txq);
-   898	err_qcq_alloc:
-   899		mutex_unlock(&lif->queue_lock);
-   900		return err;
-   901	}
-   902	
-   903	int ionic_lif_create_hwstamp_rxq(struct ionic_lif *lif)
-   904	{
-   905		unsigned int num_desc, desc_sz, comp_sz, sg_desc_sz;
-   906		unsigned int rxq_i, flags;
-   907		struct ionic_qcq *rxq;
-   908		u64 features;
-   909		int err;
-   910	
-   911		mutex_lock(&lif->queue_lock);
-   912	
-   913		if (lif->hwstamp_rxq)
-   914			goto out;
-   915	
- > 916		features = IONIC_Q_F_2X_CQ_DESC | IONIC_RXQ_F_HWSTAMP;
-   917	
-   918		num_desc = IONIC_MIN_TXRX_DESC;
-   919		desc_sz = sizeof(struct ionic_rxq_desc);
-   920		comp_sz = 2 * sizeof(struct ionic_rxq_comp);
-   921		sg_desc_sz = sizeof(struct ionic_rxq_sg_desc);
-   922	
-   923		rxq_i = lif->ionic->nrxqs_per_lif;
-   924		flags = IONIC_QCQ_F_RX_STATS | IONIC_QCQ_F_SG;
-   925	
-   926		err = ionic_qcq_alloc(lif, IONIC_QTYPE_RXQ, rxq_i, "hwstamp_rx", flags,
-   927				      num_desc, desc_sz, comp_sz, sg_desc_sz,
-   928				      lif->kern_pid, &rxq);
-   929		if (err)
-   930			goto err_qcq_alloc;
-   931	
-   932		rxq->q.features = features;
-   933	
-   934		ionic_link_qcq_interrupts(lif->adminqcq, rxq);
-   935		ionic_debugfs_add_qcq(lif, rxq);
-   936	
-   937		lif->hwstamp_rxq = rxq;
-   938	
-   939		if (netif_running(lif->netdev)) {
-   940			err = ionic_lif_rxq_init(lif, rxq);
-   941			if (err)
-   942				goto err_qcq_init;
-   943	
-   944			if (test_bit(IONIC_LIF_F_UP, lif->state)) {
-   945				ionic_rx_fill(&rxq->q);
-   946				err = ionic_qcq_enable(rxq);
-   947				if (err)
-   948					goto err_qcq_enable;
-   949			}
-   950		}
-   951	
-   952	out:
-   953		mutex_unlock(&lif->queue_lock);
-   954	
-   955		return 0;
-   956	
-   957	err_qcq_enable:
-   958		ionic_lif_qcq_deinit(lif, rxq);
-   959	err_qcq_init:
-   960		lif->hwstamp_rxq = NULL;
-   961		ionic_debugfs_del_qcq(rxq);
-   962		ionic_qcq_free(lif, rxq);
-   963		devm_kfree(lif->ionic->dev, rxq);
-   964	err_qcq_alloc:
-   965		mutex_unlock(&lif->queue_lock);
-   966		return err;
-   967	}
-   968	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I was thinking about the outline instrumentation mode, where the
+shadow address would be calculated based on resetting only bits
+[60:57]. But then there we have a addr_has_metadata() check in
+kasan_check_range(), so KASAN should not try to deference a bad shadow
+address and thus should not reach kasan_non_canonical_hook() anyway.
