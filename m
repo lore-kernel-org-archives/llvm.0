@@ -1,137 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554F32253FD;
-	Wed, 26 Feb 2025 21:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127FF25E81A
+	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 22:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740606779; cv=none; b=R4rBdEzzBl6LdOk/aRNQj0zfibbIJL12HxIhyiuCmGyhsYyZV1GzPaUrGyWrM30gb3mcICZRiwiCZifvNW2WI3QGVUIJTIW1iGPOzu9NjvBjMvm3Bn5QHbbEN4NXxdXvEyVJ4YbvEGuER6Td5bYTOdgNQSOCj/h4voTo435WxTU=
+	t=1740610332; cv=none; b=KSOw4IyWwerKsWBKv6W2X5PMrY8icLhr/V8L1gLXIP+TA3JsTzxCrnA9yhtCRe1pFDAPa2tmAr48YM3F2P9BGAsZLlvlxaxpWsj5fi0bWkTWJDxv4YT9fd/c9wjLdrIUqdzT/Qti7ju8jPVyHmWREQjFzWvJbi7A5BFBz57eyyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740606779; c=relaxed/simple;
-	bh=JUT3zXqdGD0U5jRAHGBbaOS9hgU64Ou8OTEs0P+uy0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nm2PVxH+0Xey7OeKVi+8nYTbgthsP6akyxQVhvlSG7BnlMpoI+pRSv6Elr+ueSMVjemKhbokZkkUVcKFLmzM6JjddSGvO6m7u7AGUusjvbcgGOUnkOnxllv0zs4OnOUDZbJ8eVDogwALZsKkmimj4YulkBwsxLM/zcJewxvEaXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ePmugUiX; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740610332; c=relaxed/simple;
+	bh=YdNyKLxglUWW+Rw8B4PKO9cVO5EYZAwVD6RlgmkeNHo=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ASVDL08SfwczedPxQ4IDHipw8RIkN63WjyaHDXmTuOMIfmUN3WxY8kIAjHIo5bFQfIUYGZf9JHtj2reWUkCl/3qjsf0jcLugWHVAXATglZ8iucybfLSaM0e49W+X97L0SeY8Mxc3MXm5CdHua8pQ0Ns535vjMKm+Lh/prT7pPgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iSK2/Q/C; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ePmugUiX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740606777; x=1772142777;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JUT3zXqdGD0U5jRAHGBbaOS9hgU64Ou8OTEs0P+uy0U=;
-  b=ePmugUiXWVLUq1vxFfS7Gl+m9Cp1EZpUckObDo8rPrMRl6ogPXghpa+w
-   C/VjmKMVSnPNi7rB4oIX7go62wj654/wcpwzpe/dKjEkANsVSHbMtLG0p
-   t7Un/rw33H4pOdWkWA2fAO8IJTruK5UBq+2EvRgJkl67TmJ8lrF1qC5J8
-   a4lf/q526xxIJWfjDuIKolttof7iv3Tc8j1gY00v2v20wqDw6+1v4g4Hn
-   tcFMqUnp+7gS3oGIaxtoWgfs5ucOZpucGLrrvddeeLhTiamZbtzhjuDJK
-   ccBsZJvqQyTnjyVxcUrihOgLO8dNH+MkmuhfeCOxdbM5G+6LzkxdUaQws
-   g==;
-X-CSE-ConnectionGUID: E3GZvlKvSDizshIDZg/jEg==
-X-CSE-MsgGUID: hgxsvkElQ8mPm/Uk+3bK2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="44303309"
-X-IronPort-AV: E=Sophos;i="6.13,318,1732608000"; 
-   d="scan'208";a="44303309"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 13:52:57 -0800
-X-CSE-ConnectionGUID: x9qUV9ZBRc6T/qxLWYWu1w==
-X-CSE-MsgGUID: FriKRESQRsKmoH45cFozpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,318,1732608000"; 
-   d="scan'208";a="147650534"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 26 Feb 2025 13:52:56 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnPKn-000CVK-0W;
-	Wed, 26 Feb 2025 21:52:53 +0000
-Date: Thu, 27 Feb 2025 05:52:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Juri Lelli <juri.lelli@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlelli:upstream/deadline/domains-suspend 2/4]
- kernel/sched/rt.c:2913:14: error: use of undeclared identifier
- 'sched_domains_mutex'
-Message-ID: <202502270513.eQknwYIs-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iSK2/Q/C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740610329;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+fVV/ZMjsg20eK/wa5rg19e0yAz/zRtF53o9f4qr2E4=;
+	b=iSK2/Q/Cll5Iv8JilOIa8a5GfGg9JV98VmrqrliPuFMVWrqxaj5STbnDjD9vsO6Biny2QN
+	0RTO7PdhDlJocAr148tq+tcklKfFzw8A228WrLYXJ+uBCl2SIJquwibJzPT6XI5iUWok5A
+	PysW5AdaRmidwtTXJv3BYlE1vmxAIA8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-153-UCkQd1eEP8SxDT3gK9Tifg-1; Wed,
+ 26 Feb 2025 17:52:06 -0500
+X-MC-Unique: UCkQd1eEP8SxDT3gK9Tifg-1
+X-Mimecast-MFC-AGG-ID: UCkQd1eEP8SxDT3gK9Tifg_1740610325
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1708418EB2CB
+	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 22:52:05 +0000 (UTC)
+Received: from [172.64.13.23] (unknown [10.30.32.164])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9B982180087F;
+	Wed, 26 Feb 2025 22:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
+ upstream-mainline, 5394eea1)
+Date: Wed, 26 Feb 2025 22:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <21964.125022617520600877@us-mta-153.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: deWABTP9VlpOYTmOWT-r8et9jYBYrxNd06yLMlKySGY_1740610325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/jlelli/linux.git upstream/deadline/domains-suspend
-head:   78c2e4083eeedc3526f07bedfca514eefbe45e38
-commit: dfdff94e7f88b77e61e6cf8ec6aeea320fa12e7e [2/4] sched/deadline: Generalize unique visiting of root domains
-config: x86_64-buildonly-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250227/202502270513.eQknwYIs-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270513.eQknwYIs-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502270513.eQknwYIs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_policy.c:52:
->> kernel/sched/rt.c:2913:14: error: use of undeclared identifier 'sched_domains_mutex'
-    2913 |         mutex_lock(&sched_domains_mutex);
-         |                     ^
-   kernel/sched/rt.c:2940:16: error: use of undeclared identifier 'sched_domains_mutex'
-    2940 |         mutex_unlock(&sched_domains_mutex);
-         |                       ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/sched_domains_mutex +2913 kernel/sched/rt.c
+Kernel information:
+    Commit message: Merge tag 'nfs-for-6.14-2' of git://git.linux-nfs.org/p=
+rojects/anna/linux-nfs
 
-  2904	
-  2905	static int sched_rt_handler(const struct ctl_table *table, int write, void *buffer,
-  2906			size_t *lenp, loff_t *ppos)
-  2907	{
-  2908		int old_period, old_runtime;
-  2909		static DEFINE_MUTEX(mutex);
-  2910		int ret;
-  2911	
-  2912		mutex_lock(&mutex);
-> 2913		mutex_lock(&sched_domains_mutex);
-  2914		old_period = sysctl_sched_rt_period;
-  2915		old_runtime = sysctl_sched_rt_runtime;
-  2916	
-  2917		ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
-  2918	
-  2919		if (!ret && write) {
-  2920			ret = sched_rt_global_validate();
-  2921			if (ret)
-  2922				goto undo;
-  2923	
-  2924			ret = sched_dl_global_validate();
-  2925			if (ret)
-  2926				goto undo;
-  2927	
-  2928			ret = sched_rt_global_constraints();
-  2929			if (ret)
-  2930				goto undo;
-  2931	
-  2932			sched_rt_do_global();
-  2933			sched_dl_do_global();
-  2934		}
-  2935		if (0) {
-  2936	undo:
-  2937			sysctl_sched_rt_period = old_period;
-  2938			sysctl_sched_rt_runtime = old_runtime;
-  2939		}
-  2940		mutex_unlock(&sched_domains_mutex);
-  2941		mutex_unlock(&mutex);
-  2942	
-  2943		return ret;
-  2944	}
-  2945	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1690478577
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1690478577-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1690478577-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1690478577-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
