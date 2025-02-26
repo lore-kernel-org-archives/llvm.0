@@ -1,204 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063EF238171;
-	Wed, 26 Feb 2025 10:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CAB62153FA
+	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 11:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740566386; cv=none; b=oCATS75Iyk7JHv+A5TefxXyB35vGbfKOfzI9H6Nv2xyZT5zXjJNb3G3DWbkFZ6fcuqTRjD+cNcvD5buBQRJWVe5UGBEYxtb3Erwx/D7aHm2UgGu6JFfq0Y8ro6XteyeadigNMNcsQxPlgZIfUBX6l3FF14lcQQUw17aPj88gBrU=
+	t=1740570312; cv=none; b=SD6WMvdTell9P6EI8q0gUuOaapBUBxjepVfwTTZ0NmWrhid0xRez24PKJ/UN+9Wiw805W/TtEpaMwPsIkSo1s3En9KsqZnZ8mJPOHnXJ9hiT1TKJm11e9g1dEGBIdAAdmpYruP4K24DHzk2MazEY46kztyZ3VFcMW+SyzYrZX6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740566386; c=relaxed/simple;
-	bh=RAX1lf/k7K2QzqoTBqzkqGn/wJltUPtaz/+WENvkBv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ammhX/ekWrhG8ND4DyuoJqOBWtQ+CKk5zJlgvBOwtgR5F539A9ONrmNxAjXg7x4/7EIZfY/QfwnqfwvoCjM3Aomoo3DDRqRUqbkm44x044UWh60RwdDkiZlyH9OUfX/g6d0GwFXxhxZ8MT/w5IPgL4vOMJdrWvKfhKzpE3xHorg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lY1ufnRi; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740570312; c=relaxed/simple;
+	bh=DsKFmSVUXHIq2lUncqo1DiHx1M4YqIuFyrpISSxzmuQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ht1nu7+/61ioQDHLKDgnXAmy2W+uTr8LTzlzHtExH7o2pRvERrKsvwOnDZUHpd7x9Tes5Lmilxz03zpGpfF8ExqkloLYekDs0synM2lf1QR4kuPn6tBV1Qm/z9576//f9Zfk7RiZ0eTTXXGclxlg5BjyRk+ODAaNYqR+cM8Ydmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zmdofZKq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=M2Wms+X9; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lY1ufnRi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740566385; x=1772102385;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RAX1lf/k7K2QzqoTBqzkqGn/wJltUPtaz/+WENvkBv0=;
-  b=lY1ufnRix3rNiuI2RFH4l6x93Kqpw5NmkzC5RRPNHfS80hdsuGPJqvN2
-   lqyk9OFql1X9kaiwDLXMvIQ32DXimFX7plqNmcXRnUM01YBS59iPg0Z3N
-   tiX3CMQ9s6VMCeXddRaAEYafqqVa7xcQzMFqiiG7qMVrngvu1HN/ADkGn
-   1AMgGS378bhh2xysiBS7QNhXW712udUEEqX5whNyazzNV9rKuRnQL+irk
-   iF0qodX2+KuqMRiA/B1Mhy2QB2s783mkhHFyjg26AC9/KD4ME5f5ZCj+z
-   8wHS6UMSuoshFU/H16um0F7LcsULMD3mDtUmXLue8OoMuRQFGtveo1HXn
-   g==;
-X-CSE-ConnectionGUID: V4PoCAypRNiXRai3xAN8hg==
-X-CSE-MsgGUID: ev6n65DDT9yZIfsGDl9wag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="58825408"
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="58825408"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 02:39:44 -0800
-X-CSE-ConnectionGUID: cL9qR6PVSYOp+pxh+N9XUQ==
-X-CSE-MsgGUID: bxcVVPFuQQmLtxH/rN2nYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="153837936"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 26 Feb 2025 02:39:43 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnEpH-000BYn-2k;
-	Wed, 26 Feb 2025 10:39:39 +0000
-Date: Wed, 26 Feb 2025 18:39:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: parkeryang <Parker.Yang@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [linux-next:master 6161/6583]
- sound/soc/mediatek/mt8188/mt8188-dai-dmic.c:311:4: warning: variable 'msk'
- is uninitialized when used here
-Message-ID: <202502261854.7caMptGv-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zmdofZKq";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="M2Wms+X9"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1740570309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hPrRbYetXyN7EKcl5LmJ1P46VSZ9vvX2TwbzkjWRBsw=;
+	b=zmdofZKqnF5afZoMtDDABs/s8ck4H0d6qXMrb2VK48v//E15sLebMbpam6otSiOOptNd8Z
+	ovNq4+QRhb5j3MFlhrHsWX/qsPxsTPZC/zfJBOp3mMjcP5Nd4V5Vq+ZbswtF+MD2kFvVuh
+	FqdQiGPuIYcFzg8t+ZVmL7j6YNIZ2hqNeB5BwJIMdxO1dSPic4Fu8esBFt1eff5LSx7rKI
+	Dco0Y/41bvQw1pyKb8lUEn9k6eazDhsn8BUoDPuIOeRNpvH5Ndsy0NTAbBTX4anxNJ8Fqr
+	E5Dekbt2jlXZkS4HxA91OOiwzHR7zL3hUPN+twMSV16Py/V3s7SVfmYgHcl0MQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1740570309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hPrRbYetXyN7EKcl5LmJ1P46VSZ9vvX2TwbzkjWRBsw=;
+	b=M2Wms+X9MOl6/Gm7t1HEt3gxuX6NPlE1lbWyIQHmxqAKMwc98nEfFAUlvRgXOrUE9W00nM
+	XBIj/4dU+P52F6CQ==
+Subject: [PATCH v2 00/16] selftests: vDSO: parse_vdso: Make compatible with
+ nolibc
+Date: Wed, 26 Feb 2025 12:44:39 +0100
+Message-Id: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKf+vmcC/3WNywrCMBQFf6VkbSSJtWld+R9SJI8be0GSktRQK
+ f130y5Fl3Ng5iwkQURI5FItJELGhMEXEIeKmEH5B1C0hYlgouaMSzqqmOCebQrUhydqQ4E1nVZ
+ KOle3pHhjBIfz3rz1hQdMU4jv/SLzbd1qZ8YF+1HLnDKqnQWuu1rVhl+f6F9TDB7no4XtYLcFO
+ /2zO6Mb0bRWSg1fdr+u6wcLOFkP9AAAAA==
+X-Change-ID: 20241017-parse_vdso-nolibc-e069baa7ff48
+To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Willy Tarreau <w@1wt.eu>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ llvm@lists.linux.dev, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=3393;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=DsKFmSVUXHIq2lUncqo1DiHx1M4YqIuFyrpISSxzmuQ=;
+ b=TC6HO3n1Fyr0Lj0hLMyg0/ixUTpUZ+35yMdWTwE8xXub343tQnGH7Rach2zk0DD5JzUBeKJ2W
+ Jg6/cXXIKiDDMcUHTLoJNg25mjaT6VJ1Pl6t+TJOGHoDMKCRhY1cRzM
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   8433c776e1eb1371f5cd40b5fd3a61f9c7b7f3ad
-commit: c1e42ec04197ac013d049dde40d9c72cf543b5f6 [6161/6583] ASoC: mediatek: mt8188: Add support for DMIC
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250226/202502261854.7caMptGv-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250226/202502261854.7caMptGv-lkp@intel.com/reproduce)
+For testing the functionality of the vDSO, it is necessary to build
+userspace programs for multiple different architectures.
+It is additional work to acquire matching userspace cross-compilers with
+full C libraries and then building root images out of those.
+The kernel tree already contains nolibc, a small, header-only C library.
+By using it, it is possible to build userspace programs without any
+additional dependencies.
+For example the kernel.org crosstools or multi-target clang can be used
+to build test programs for a multitude of architectures.
+While nolibc is very limited, it is enough for many selftests.
+With some minor adjustments it is possible to make parse_vdso.c
+compatible with nolibc.
+As an example, vdso_standalone_test_x86 is now built from the same C
+code as the regular vdso_test_gettimeofday, while still being completely
+standalone.
+Also drop the dependency of parse_vdso.c on the elf.h header from libc and only
+use the one from the kernel's UAPI.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502261854.7caMptGv-lkp@intel.com/
+While this series is useful on its own now, it will also integrate with the
+kunit UAPI framework currently under development:
+https://lore.kernel.org/lkml/20250217-kunit-kselftests-v1-0-42b4524c3b0a@linutronix.de/
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Provide a limits.h header in nolibc
+- Pick up Reviewed-by tags from Kees
+- Link to v1: https://lore.kernel.org/r/20250203-parse_vdso-nolibc-v1-0-9cb6268d77be@linutronix.de
 
->> sound/soc/mediatek/mt8188/mt8188-dai-dmic.c:311:4: warning: variable 'msk' is uninitialized when used here [-Wuninitialized]
-     311 |                         msk |= PWR2_TOP_CON1_DMIC_FIFO_SOFT_RST_EN(i);
-         |                         ^~~
-   sound/soc/mediatek/mt8188/mt8188-dai-dmic.c:295:18: note: initialize the variable 'msk' to silence this warning
-     295 |         unsigned int msk;
-         |                         ^
-         |                          = 0
-   1 warning generated.
+---
+Thomas Weißschuh (16):
+      MAINTAINERS: Add vDSO selftests
+      elf, uapi: Add definition for STN_UNDEF
+      elf, uapi: Add definition for DT_GNU_HASH
+      elf, uapi: Add definitions for VER_FLG_BASE and VER_FLG_WEAK
+      elf, uapi: Add type ElfXX_Versym
+      elf, uapi: Add types ElfXX_Verdef and ElfXX_Veraux
+      tools/include: Add uapi/linux/elf.h
+      selftests: Add headers target
+      tools/nolibc: add limits.h shim header
+      selftests: vDSO: vdso_standalone_test_x86: Use vdso_init_form_sysinfo_ehdr
+      selftests: vDSO: parse_vdso: Drop vdso_init_from_auxv()
+      selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers
+      selftests: vDSO: parse_vdso: Test __SIZEOF_LONG__ instead of ULONG_MAX
+      selftests: vDSO: vdso_test_gettimeofday: Clean up includes
+      selftests: vDSO: vdso_test_gettimeofday: Make compatible with nolibc
+      selftests: vDSO: vdso_standalone_test_x86: Switch to nolibc
 
+ MAINTAINERS                                        |   1 +
+ include/uapi/linux/elf.h                           |  38 ++
+ tools/include/nolibc/Makefile                      |   1 +
+ tools/include/nolibc/limits.h                      |   7 +
+ tools/include/uapi/linux/elf.h                     | 524 +++++++++++++++++++++
+ tools/testing/selftests/lib.mk                     |   5 +-
+ tools/testing/selftests/vDSO/Makefile              |  11 +-
+ tools/testing/selftests/vDSO/parse_vdso.c          |  19 +-
+ tools/testing/selftests/vDSO/parse_vdso.h          |   1 -
+ .../selftests/vDSO/vdso_standalone_test_x86.c      | 143 +-----
+ .../selftests/vDSO/vdso_test_gettimeofday.c        |   4 +-
+ 11 files changed, 590 insertions(+), 164 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20241017-parse_vdso-nolibc-e069baa7ff48
 
-vim +/msk +311 sound/soc/mediatek/mt8188/mt8188-dai-dmic.c
-
-   284	
-   285	static int mtk_dmic_event(struct snd_soc_dapm_widget *w,
-   286				  struct snd_kcontrol *kcontrol,
-   287				  int event)
-   288	{
-   289		struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-   290		struct mtk_base_afe *afe = snd_soc_component_get_drvdata(cmpnt);
-   291		struct mt8188_afe_private *afe_priv = afe->platform_priv;
-   292		struct mtk_dai_dmic_priv *dmic_priv = afe_priv->dai_priv[MT8188_AFE_IO_DMIC_IN];
-   293		const struct mtk_dai_dmic_ctrl_reg *reg = NULL;
-   294		unsigned int channels = dmic_priv->channels;
-   295		unsigned int msk;
-   296		u8 dmic_num;
-   297		int i;
-   298	
-   299		dev_dbg(afe->dev, "%s(), name %s, event 0x%x\n",
-   300			__func__, w->name, event);
-   301	
-   302		if (!channels)
-   303			return -EINVAL;
-   304	
-   305		dmic_num = mtk_dmic_channels_to_dmic_number(channels);
-   306	
-   307		switch (event) {
-   308		case SND_SOC_DAPM_PRE_PMU:
-   309			/* request fifo soft rst */
-   310			for (i = dmic_num; i >= DMIC0; i--)
- > 311				msk |= PWR2_TOP_CON1_DMIC_FIFO_SOFT_RST_EN(i);
-   312	
-   313			regmap_set_bits(afe->regmap, PWR2_TOP_CON1, msk);
-   314	
-   315			msk = AFE_DMIC_UL_SRC_CON0_UL_MODE_3P25M_CH1_CTL |
-   316			      AFE_DMIC_UL_SRC_CON0_UL_MODE_3P25M_CH2_CTL |
-   317			      AFE_DMIC_UL_SRC_CON0_UL_SDM_3_LEVEL_CTL |
-   318			      AFE_DMIC_UL_SRC_CON0_UL_IIR_ON_TMP_CTL;
-   319	
-   320			for (i = dmic_num; i >= DMIC0; i--) {
-   321				reg = get_dmic_ctrl_reg(i);
-   322				if (reg)
-   323					regmap_set_bits(afe->regmap, reg->con0, msk);
-   324			}
-   325			break;
-   326		case SND_SOC_DAPM_POST_PMU:
-   327			msk = AFE_DMIC_UL_SRC_CON0_UL_SRC_ON_TMP_CTL;
-   328	
-   329			for (i = dmic_num; i >= DMIC0; i--) {
-   330				reg = get_dmic_ctrl_reg(i);
-   331				if (reg)
-   332					regmap_set_bits(afe->regmap, reg->con0, msk);
-   333			}
-   334	
-   335			if (dmic_priv->hires_required) {
-   336				mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES1]);
-   337				mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES2]);
-   338				mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES3]);
-   339				mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES4]);
-   340			}
-   341	
-   342			mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC1]);
-   343			mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC2]);
-   344			mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC3]);
-   345			mt8188_afe_enable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC4]);
-   346	
-   347			/* release fifo soft rst */
-   348			msk = 0;
-   349			for (i = dmic_num; i >= DMIC0; i--)
-   350				msk |= PWR2_TOP_CON1_DMIC_FIFO_SOFT_RST_EN(i);
-   351	
-   352			regmap_clear_bits(afe->regmap, PWR2_TOP_CON1, msk);
-   353			break;
-   354		case SND_SOC_DAPM_PRE_PMD:
-   355			msk = AFE_DMIC_UL_SRC_CON0_UL_MODE_3P25M_CH1_CTL |
-   356			      AFE_DMIC_UL_SRC_CON0_UL_MODE_3P25M_CH2_CTL |
-   357			      AFE_DMIC_UL_SRC_CON0_UL_SRC_ON_TMP_CTL |
-   358			      AFE_DMIC_UL_SRC_CON0_UL_IIR_ON_TMP_CTL |
-   359			      AFE_DMIC_UL_SRC_CON0_UL_SDM_3_LEVEL_CTL;
-   360	
-   361			for (i = dmic_num; i >= DMIC0; i--) {
-   362				reg = get_dmic_ctrl_reg(i);
-   363				if (reg)
-   364					regmap_set_bits(afe->regmap, reg->con0, msk);
-   365			}
-   366			break;
-   367		case SND_SOC_DAPM_POST_PMD:
-   368			/* should delayed 1/fs(smallest is 8k) = 125us before afe off */
-   369			usleep_range(125, 126);
-   370	
-   371			mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC1]);
-   372			mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC2]);
-   373			mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC3]);
-   374			mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_AFE_DMIC4]);
-   375	
-   376			if (dmic_priv->hires_required) {
-   377				mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES1]);
-   378				mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES2]);
-   379				mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES3]);
-   380				mt8188_afe_disable_clk(afe, afe_priv->clk[MT8188_CLK_AUD_DMIC_HIRES4]);
-   381			}
-   382			break;
-   383		default:
-   384			break;
-   385		}
-   386	
-   387		return 0;
-   388	}
-   389	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
