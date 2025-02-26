@@ -1,176 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190E61898FB;
-	Wed, 26 Feb 2025 07:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FA01898FB;
+	Wed, 26 Feb 2025 08:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740556152; cv=none; b=F0tMa5bGx2oJ7NiGC0sQ/fyRzehZT2hkfGi0iw3WxiN8wSOXpwuAzeAFaJQPOWbo5ciuLqVRKX6FrwX8K7vTeKl/AMjBysa4Hn6UqcVDR8wONrUuysY1cc+GG+Z9ZMxaw830p1NZnA+po2oNSWQ6HSnK9fn5K91JyM1dSVrN/es=
+	t=1740557527; cv=none; b=LhmvQOkWWKGj7pPwIOshaGC0tdT0L/LEH5ytWU6CiX8cG/dgXvNMTrhTqsoNXxln9Q9r2ZX3oQMl7lqDavrd6fCtsWj6qn5N52XuL3IrjE6x0M0mEm6q3v/n2rge/KW9R2gCBxhF/MU5iepQtDEVrZsUL0CRIXGrcHyW3bdYDA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740556152; c=relaxed/simple;
-	bh=5cQoD7Xj2iZryYy9aBsI41+A76x5ySkRxVxY7EVlfSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rxjtwl8mXmmHmNhfcZx9feg7658k2vOw8lxCoHg1gTjiISTMQI8Pqoq0jN9BcMKBaQiyFS9atGIywLyz6zymNEi8kkIuimsdrNTjrY1gk7WH9DP5O8XL/Kk4IJucC8ohzxz4FjwWiECfikYM216mFLNzbqUgc72mN7Ol8oPk4d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nK4oVuip; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740557527; c=relaxed/simple;
+	bh=AxvPnSdYWK3XwRXQOtiDzG+BiQbJeg5wLpvJO6mak7Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a6cXSHLZhBGBbV6slPBUVJHr+KtuCvI+25/qk38QAmdlDJ5k5Bkf83RKHtgwK3Qs/sw1hFo4/adkhGdLFPs5IARa/W3qxOdcsjFQSTkJeQSqXfQcyDN9sLaGkm2Rc940tmlsgc0v0pUpPfEqr/WomM5m96s5vcLW8HvBVRplOBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDs9w/9V; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nK4oVuip"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740556150; x=1772092150;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5cQoD7Xj2iZryYy9aBsI41+A76x5ySkRxVxY7EVlfSg=;
-  b=nK4oVuip5fceu+OnFwN5/JemBpr5MKtkTmarAcroJM7fTYZAiQbMcN9N
-   26nTzWPO5Z/wkmE1wkQvTlEo9eA/cDISFJzuub4O2ydnzEY9eNkAq6/0Z
-   uOlJ03NeWVi0bASpbDsV3uYKUGh8vQOnxzzup/JrbTyjeDt+HA5OBxN+W
-   6rvTwOHKfnvhCLRjg25nyLjHdzYD6Ap0/CrUARsey9FD2eiXMQvTW4vza
-   vX+qeOt1+ZGMDJRBC1mE+Mki27TtXW/7GFr03lMr+YDFYkj+Qicxk1bkC
-   s26SK1Q5XmW9Tcojg98q9/XFy+rHYbibYKJYJogh2CL2j5RK+WtyuHJ3W
-   g==;
-X-CSE-ConnectionGUID: s+NdFlxCQ0euriHGSnbt4g==
-X-CSE-MsgGUID: R6mq5x8tQZGWCwN/fYisTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="41409417"
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="41409417"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 23:49:10 -0800
-X-CSE-ConnectionGUID: u+gjdte4TX6KTFW7j+dreQ==
-X-CSE-MsgGUID: +w6L6/fDSk6zN8+RpOOcmQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="116418536"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 25 Feb 2025 23:49:09 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnCAD-000BLz-31;
-	Wed, 26 Feb 2025 07:49:05 +0000
-Date: Wed, 26 Feb 2025 15:48:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 122/123]
- fs/bcachefs/extents_format.h:219:10: error: width of bit-field 'flags' (76
- bits) exceeds the width of its type (64 bits)
-Message-ID: <202502261546.ZokeMDs6-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDs9w/9V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1381FC4CED6;
+	Wed, 26 Feb 2025 08:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740557527;
+	bh=AxvPnSdYWK3XwRXQOtiDzG+BiQbJeg5wLpvJO6mak7Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DDs9w/9V2cNTGLDJxbuwB/5RZTwn4Jbdvd4lfNCcA1aaJRxAGgXlGI2y/6M/F1ku3
+	 /Kvulz5sP8CxKaF5+v3YHXBt9mqRI/9SesmbNg/3NE8OYo5jR5M0X3zBe069S9/O6w
+	 LtHVZgdX9Vmnoxs/BrFjXQJdYA27fyUZw6mw/aZSLiV221VYNAQn4vwpsA+bOd2PHn
+	 sJg3qen5p61BBnV2sxuaR/j5Yn5/Ky34lWxE3xFKCbPAPO0jCNtwIwG7+6ktS9qJPd
+	 AyA3GCtu0Qv6VWtFsYtnctOrEk0yR0OmjjAXbjhD7Gax+/u2o25ZmuWnvlA3ZJz7vC
+	 MvFG0YHYtQVPg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Jan Kara <jack@suse.cz>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Miklos Szeredi <mszeredi@redhat.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	"Seth Forshee (DigitalOcean)" <sforshee@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] fs: namespace: fix uninitialized variable use
+Date: Wed, 26 Feb 2025 09:11:54 +0100
+Message-Id: <20250226081201.1876195-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   8de504fc059b751ae0cc0fd600f2d5e28ccb8dc5
-commit: 82af8187566114f55114f1b878562de031e0b9b4 [122/123] bcachefs: bcachefs_metadata_version_extent_flags
-config: s390-randconfig-002-20250226 (https://download.01.org/0day-ci/archive/20250226/202502261546.ZokeMDs6-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250226/202502261546.ZokeMDs6-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502261546.ZokeMDs6-lkp@intel.com/
+clang correctly notices that the 'uflags' variable initialization
+only happens in some cases:
 
-All errors (new ones prefixed by >>):
+fs/namespace.c:4622:6: error: variable 'uflags' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+ 4622 |         if (flags & MOVE_MOUNT_F_EMPTY_PATH)    uflags = AT_EMPTY_PATH;
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fs/namespace.c:4623:48: note: uninitialized use occurs here
+ 4623 |         from_name = getname_maybe_null(from_pathname, uflags);
+      |                                                       ^~~~~~
+fs/namespace.c:4622:2: note: remove the 'if' if its condition is always true
+ 4622 |         if (flags & MOVE_MOUNT_F_EMPTY_PATH)    uflags = AT_EMPTY_PATH;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   In file included from fs/bcachefs/btree_locking.c:3:
-   In file included from fs/bcachefs/bcachefs.h:208:
-   In file included from fs/bcachefs/bcachefs_format.h:502:
->> fs/bcachefs/extents_format.h:219:10: error: width of bit-field 'flags' (76 bits) exceeds the width of its type (64 bits)
-           __u64                   flags:76
-                                   ^
->> fs/bcachefs/extents_format.h:219:18: error: expected ';' at end of declaration list
-           __u64                   flags:76
-                                           ^
-                                           ;
-   2 errors generated.
---
-   In file included from fs/bcachefs/io_write.c:7:
-   In file included from fs/bcachefs/bcachefs.h:208:
-   In file included from fs/bcachefs/bcachefs_format.h:502:
->> fs/bcachefs/extents_format.h:219:10: error: width of bit-field 'flags' (76 bits) exceeds the width of its type (64 bits)
-           __u64                   flags:76
-                                   ^
->> fs/bcachefs/extents_format.h:219:18: error: expected ';' at end of declaration list
-           __u64                   flags:76
-                                           ^
-                                           ;
->> fs/bcachefs/io_write.c:1180:2: error: statement requires expression of scalar type ('void' invalid)
-           extent_for_each_ptr_decode(e, p, entry) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:396:2: note: expanded from macro 'extent_for_each_ptr_decode'
-           __bkey_for_each_ptr_decode((_e).k, (_e).v->start,               \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:350:2: note: expanded from macro '__bkey_for_each_ptr_decode'
-           for ((_ptr).crc = bch2_extent_crc_unpack(_k, NULL),             \
-           ^
-   3 errors generated.
---
-   In file included from fs/bcachefs/move.c:3:
-   In file included from fs/bcachefs/bcachefs.h:208:
-   In file included from fs/bcachefs/bcachefs_format.h:502:
->> fs/bcachefs/extents_format.h:219:10: error: width of bit-field 'flags' (76 bits) exceeds the width of its type (64 bits)
-           __u64                   flags:76
-                                   ^
->> fs/bcachefs/extents_format.h:219:18: error: expected ';' at end of declaration list
-           __u64                   flags:76
-                                           ^
-                                           ;
-   fs/bcachefs/move.c:715:11: warning: variable 'sectors_moved' set but not used [-Wunused-but-set-variable]
-           unsigned sectors_moved = 0;
-                    ^
-   1 warning and 2 errors generated.
---
-   In file included from fs/bcachefs/data_update.c:3:
-   In file included from fs/bcachefs/bcachefs.h:208:
-   In file included from fs/bcachefs/bcachefs_format.h:502:
->> fs/bcachefs/extents_format.h:219:10: error: width of bit-field 'flags' (76 bits) exceeds the width of its type (64 bits)
-           __u64                   flags:76
-                                   ^
->> fs/bcachefs/extents_format.h:219:18: error: expected ';' at end of declaration list
-           __u64                   flags:76
-                                           ^
-                                           ;
->> fs/bcachefs/data_update.c:281:3: error: statement requires expression of scalar type ('void' invalid)
-                   extent_for_each_ptr_decode(extent_i_to_s(new), p, entry)
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:396:2: note: expanded from macro 'extent_for_each_ptr_decode'
-           __bkey_for_each_ptr_decode((_e).k, (_e).v->start,               \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:350:2: note: expanded from macro '__bkey_for_each_ptr_decode'
-           for ((_ptr).crc = bch2_extent_crc_unpack(_k, NULL),             \
-           ^
-   fs/bcachefs/data_update.c:306:3: error: statement requires expression of scalar type ('void' invalid)
-                   extent_for_each_ptr_decode(extent_i_to_s(new), p, entry)
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:396:2: note: expanded from macro 'extent_for_each_ptr_decode'
-           __bkey_for_each_ptr_decode((_e).k, (_e).v->start,               \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/extents.h:350:2: note: expanded from macro '__bkey_for_each_ptr_decode'
-           for ((_ptr).crc = bch2_extent_crc_unpack(_k, NULL),             \
-           ^
-   4 errors generated.
+Fixes: b1e9423d65e3 ("fs: support getname_maybe_null() in move_mount()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ fs/namespace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-vim +/flags +219 fs/bcachefs/extents_format.h
-
-   213	
-   214	struct bch_extent_flags {
-   215	#if defined(__LITTLE_ENDIAN_BITFIELD)
-   216		__u64			type:7,
-   217					flags:57;
-   218	#elif defined (__BIG_ENDIAN_BITFIELD)
- > 219		__u64			flags:76
-   220					type:7;
-   221	#endif
-   222	};
-   223	
-
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 663bacefddfa..7a531e03cb3c 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4619,6 +4619,7 @@ SYSCALL_DEFINE5(move_mount,
+ 	lflags = 0;
+ 	if (flags & MOVE_MOUNT_F_SYMLINKS)	lflags |= LOOKUP_FOLLOW;
+ 	if (flags & MOVE_MOUNT_F_AUTOMOUNTS)	lflags |= LOOKUP_AUTOMOUNT;
++	uflags = 0;
+ 	if (flags & MOVE_MOUNT_F_EMPTY_PATH)	uflags = AT_EMPTY_PATH;
+ 	from_name = getname_maybe_null(from_pathname, uflags);
+ 	if (IS_ERR(from_name))
+@@ -4627,6 +4628,7 @@ SYSCALL_DEFINE5(move_mount,
+ 	lflags = 0;
+ 	if (flags & MOVE_MOUNT_T_SYMLINKS)	lflags |= LOOKUP_FOLLOW;
+ 	if (flags & MOVE_MOUNT_T_AUTOMOUNTS)	lflags |= LOOKUP_AUTOMOUNT;
++	uflags = 0;
+ 	if (flags & MOVE_MOUNT_T_EMPTY_PATH)	uflags = AT_EMPTY_PATH;
+ 	to_name = getname_maybe_null(to_pathname, uflags);
+ 	if (IS_ERR(to_name))
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
