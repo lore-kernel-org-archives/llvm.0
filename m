@@ -1,296 +1,311 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9133021D3D1
-	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 11:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570322; cv=none; b=JNBGFCHetVyawIDWFmdAq+iEIngo4UTPJrtC7nrreHmpctPvyDobgtvrW25ehfVrwUcDlLwWzaFA8DQYH4GZxTLSXVS5wIAHmY0wAAYttyvoWtQy1mROzcK9NQPV9KDq/Wby2sRSpIpACwejbt7ZWJh4m2dZ9gWeak95u3RNNdE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740570322; c=relaxed/simple;
-	bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TgELIx/CMMo5hMS3dDlj04FgifQ/vTDEr0LXq2W86lyYvBwaB4UqQMjpMsBM92OcUmZmwYGyxU9bOxwAN2pMnFcqCOvDlgPauMGxC2SEj6WkeQkZ3Om0EfFRQBLfbwU8SIvIqVlns4rj9jJN/VEg/OwVfXptEXjXbGaS+nhcjO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z6TjlHH7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ePCBpQFu; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16860215F65
+	for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 11:53:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740570828; cv=fail; b=VGCu2whNSVUM9UgtvfwTuzia2oSAKrJpdCTXd06+MOi/hSEs3gSoW4YB3I9amweLYiBc3SagS8ErNcSJ7K652VMZ+ud5Gst/mg7fwIJkbwp7p2cVkks+oz5WbFT+p2D2aKD8jei54kVPO7CCd7cEdDt5+qBhHpAfitH6mCrCgEQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740570828; c=relaxed/simple;
+	bh=3Y/kG+ir+Ci6po2nsQyHK0moSPFd3HDZ4ni7fGq0ZEs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=jchPmQ3H10YJXyOXv1zhT5WRdqlYYVkSFBQEV15YbaFu1aMhiBVNwiKrzslKMvTkTPdfHZ7Ji3Kg1TUhJpljZ/9wq5eHCqtRRxdPECt8Y/nGL1THGM2DDXApBZfHcgWA+gm97jHe7+0tt14Ho0KzOPQO1DCU/+v0KBFRn37cUwg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWvQr4j5; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z6TjlHH7";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ePCBpQFu"
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740570317;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=z6TjlHH7lZ1yvQACxkUBSeF88geX2gmw7RWZCacGxPr2sRQOR9rrnYqWUY8hg1sWEgqnLM
-	D3tbw/zZMz6ie8DGHfNUyq8GFRiFH2ALQvYNLpGLMuvlakqTKhV9Kiu3fNaQl6c7VDaRVL
-	NHhNP9O22Oo6plwiFdL1nG2CyNh8eujBpWz8Ti6PYhqzfgX22sEwG509BRwlzMIIOTkEp1
-	VpwbmusJgrDdfnKs3sjBL5n8LT74fPdiiBfrHS3eM7gpA2D3f+1oXZkZZUJ137fDmdrKQQ
-	VJZX47UsmqjfqWviEw/5yC+UNKH1hV08C+unPYqErAcy6ghWAfq5sFh9jeAckA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740570317;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wWWpuwHkmHsBX34pcGl1jvCG52qLLh0La3Bmm84Eboo=;
-	b=ePCBpQFuVCPI7kKo7xL4IbbzOFHnb8yVFbLk6N8t7glHUWZvEjGry5gD2Zxl912j4b+cRu
-	LZajh+Tgk+HGkmCg==
-Date: Wed, 26 Feb 2025 12:44:55 +0100
-Subject: [PATCH v2 16/16] selftests: vDSO: vdso_standalone_test_x86: Switch
- to nolibc
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWvQr4j5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740570827; x=1772106827;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=3Y/kG+ir+Ci6po2nsQyHK0moSPFd3HDZ4ni7fGq0ZEs=;
+  b=dWvQr4j5mlm9lp5OP4UuTQwlWg8IfxOBmrRClsHt9C3KmkMhNJP5OWMG
+   hFnz0jBgEPnLkKdbc/3vfSR1HXwsUItZNKfwcvBYIPQX79IQEb3sDkftA
+   Wwmft4pwwg787lNV2nos6kNw9ozTNqHgbpmq4Wia0xBMi4+ML5y8/VLn7
+   fvTip3XGQvsp8lfOv4owu8rJKNIBmKklmUCixlKgZApuFtpSIGs9O32dq
+   lLhATxZrYZhcoYaEN27k9KTENbCsb2DdWZBKyH9MmWF066olhvStzE/co
+   dP0s7WBzvfP8g73wfTgLcKRvKU7QFhT5JOsdMhZ8khPKn8xFV3Qm6WBkQ
+   w==;
+X-CSE-ConnectionGUID: k7iVQytfRSSWdHBkMP7Zog==
+X-CSE-MsgGUID: DwUhTM1ZS56jIZ3DXkVufw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="58946661"
+X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
+   d="scan'208";a="58946661"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 03:53:46 -0800
+X-CSE-ConnectionGUID: JV0dyDJqTtOtICKOVLhkLQ==
+X-CSE-MsgGUID: Sqb2XMdSTGyOWRZ6JswYmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,317,1732608000"; 
+   d="scan'208";a="116492901"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Feb 2025 03:53:45 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Wed, 26 Feb 2025 03:53:44 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Wed, 26 Feb 2025 03:53:44 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.45) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Wed, 26 Feb 2025 03:53:43 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QbDDK+XkH1R9b+SF5db/FH6Zo5zEhQVdRWf05tmTBoeKLbN1acR8b8oCabY8HbMOIOEBYJryxKnR+flboz9TMFCXf1iIAd0aoHFK8C2akBgrXMULK1RuyImzOOXNGoJC/AMLIMF9ZkQlu0unLijcZyL3AvnKktSobKPINM22BL/CyLAOEl++3h+dzJdX+bnHmAugOFMs8DM01rPS0zE8CATZRpJ1cOzIHnDO0YhHxPdoNIJAY6AaqKroiWSxn5OBJ6Yflzcovmcjnu5V0VITlhdKaeJFKJ+/tl7I5ea9DHsMxLa+rAiVHyy70OQokMzskupMcalbb5nqgoSDZNBkJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c2tMdKQ9QONiiRKOvsiAHyE1lz0jk6878oFS8pM3ByQ=;
+ b=O7j+USJlIFjtV7RJ5KcdMKkzkzBkCAWs+QqhHeryX/m+MS6nilyTOb4lEKosSyqIO3/q52JBCsN+5amaK0rFW/X7u9sn8jtl87EKAtxDX4Lu4gO6vHqgmmydVGlPCWmxsWdRYVcEJuo3ynp0yN3n0pbs8yLtr8/9GZKEdEy5O9DCmCYW1W8cePQibUuknZMLQ5tUQ339z00gycjql6GfwsZddmM52umJX31TKZsFSjxrxMIYx/viJ9dB5yxgXi1Mgc7wuV1sR8mgNvvIcXF669ks6ixHzP9LCAWACCBIMhYR4rbv5nCAkjcOjERvzWJDvZNW7+c0O3Y5rmFoOWBbxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by SJ0PR11MB6741.namprd11.prod.outlook.com (2603:10b6:a03:47a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.19; Wed, 26 Feb
+ 2025 11:53:14 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4%4]) with mapi id 15.20.8489.018; Wed, 26 Feb 2025
+ 11:53:14 +0000
+Date: Wed, 26 Feb 2025 12:52:38 +0100
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+CC: <kees@kernel.org>, <julian.stecklina@cyberus-technology.de>,
+	<kevinloughlin@google.com>, <peterz@infradead.org>, <tglx@linutronix.de>,
+	<justinstitt@google.com>, <catalin.marinas@arm.com>,
+	<wangkefeng.wang@huawei.com>, <bhe@redhat.com>, <ryabinin.a.a@gmail.com>,
+	<kirill.shutemov@linux.intel.com>, <will@kernel.org>, <ardb@kernel.org>,
+	<jason.andryuk@amd.com>, <dave.hansen@linux.intel.com>,
+	<pasha.tatashin@soleen.com>, <ndesaulniers@google.com>,
+	<guoweikang.kernel@gmail.com>, <dwmw@amazon.co.uk>, <mark.rutland@arm.com>,
+	<broonie@kernel.org>, <apopple@nvidia.com>, <bp@alien8.de>,
+	<rppt@kernel.org>, <kaleshsingh@google.com>, <richard.weiyang@gmail.com>,
+	<luto@kernel.org>, <glider@google.com>, <pankaj.gupta@amd.com>,
+	<pawan.kumar.gupta@linux.intel.com>, <kuan-ying.lee@canonical.com>,
+	<tony.luck@intel.com>, <tj@kernel.org>, <jgross@suse.com>,
+	<dvyukov@google.com>, <baohua@kernel.org>, <samuel.holland@sifive.com>,
+	<dennis@kernel.org>, <akpm@linux-foundation.org>,
+	<thomas.weissschuh@linutronix.de>, <surenb@google.com>,
+	<kbingham@kernel.org>, <ankita@nvidia.com>, <nathan@kernel.org>,
+	<ziy@nvidia.com>, <xin@zytor.com>, <rafael.j.wysocki@intel.com>,
+	<andriy.shevchenko@linux.intel.com>, <cl@linux.com>, <jhubbard@nvidia.com>,
+	<hpa@zytor.com>, <scott@os.amperecomputing.com>, <david@redhat.com>,
+	<jan.kiszka@siemens.com>, <vincenzo.frascino@arm.com>, <corbet@lwn.net>,
+	<maz@kernel.org>, <mingo@redhat.com>, <arnd@arndb.de>, <ytcoode@gmail.com>,
+	<xur@google.com>, <morbo@google.com>, <thiago.bauermann@linaro.org>,
+	<linux-doc@vger.kernel.org>, <kasan-dev@googlegroups.com>,
+	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, <linux-mm@kvack.org>,
+	<linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>
+Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
+Message-ID: <ffr673gcremzfvcmjnt5qigfjfkrgchipgungjgnzqnf6kc7y6@n4kdu7nxoaw4>
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+ <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com>
+ <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
+ <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com>
+ <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+ <CA+fCnZcsg13eoaDJpueZ=erWjosgLDeTrjXVaifA305qAFEYDQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+fCnZcsg13eoaDJpueZ=erWjosgLDeTrjXVaifA305qAFEYDQ@mail.gmail.com>
+X-ClientProxiedBy: DU7P189CA0016.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:10:552::28) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-parse_vdso-nolibc-v2-16-28e14e031ed8@linutronix.de>
-References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
-In-Reply-To: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
-To: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Willy Tarreau <w@1wt.eu>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740570307; l=6263;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=io6sXt7iIEpqclAN5udDVtDQPsKQqT7YCXVo80AmeIk=;
- b=LBCJCe4ZoZWPxpmu3JiBTXNTaWR/a26u8+zfxnXFmkY3xUt3L/WSfzQvQDgSBu0Y5AlJ+I4T+
- hL+sYcuyFjJARyrS90i7lBiKwPlq5W3oxf7p6fDI2dkgmGiNCpmBHP6
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|SJ0PR11MB6741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a6dc528-2ca6-4570-5f73-08dd565c2662
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?ZzMwenhObjFDU1NKMGtLS3dFWE9oSVVEWENBOHRWUE5obHNMakxpL2ZGOG95?=
+ =?utf-8?B?RU9DSXpUYzRBQXJrUzRaQWpRMXB0ZWJ2ME51RUkrbmFuZURYRnNNUEFsd0hT?=
+ =?utf-8?B?dVBTR2lMRFNmTXp5QnBCRDdYeU4vNTJlc1h6NmFaNG5hRHM0aitOS1JjLzc3?=
+ =?utf-8?B?NzZYMlRRbmpXVHNnSWllOWt1eHBucDRLRVNiTEErMGVrdmVUQ1VHMU82NThq?=
+ =?utf-8?B?TzdpSDhjVFJyOUdIdVpBd1hYNVRjdmhJc3orN3JNdFFrdTByYlExbWJpWXRW?=
+ =?utf-8?B?bk00L0RZN0dHVENsTW1vU3hIN2JZc01nZ0cwSnlpT1NpdFRBZWppdnhFMGhm?=
+ =?utf-8?B?NndDeEJLYVJVTGhFMmsvTXA4S2JvK2RrcHp4VnJFTHZCMnprU2lsOUZSb0xq?=
+ =?utf-8?B?eUp2STA5SUJCZ0tSK2s0WEYraUZ6SUhueXhodzBIeVg4aDJBVG9EbEJaZ3Ji?=
+ =?utf-8?B?aGx0ck9mTWZUWGNtM3JHZFlFMmphTHNJY3lUSktVVmEwNTVLMWhzeDFJTysz?=
+ =?utf-8?B?V0UrRitQdXJuSzRnQ0RYU2NHZ2lsVHNCTkd5a2ZXTjZkMWxKQjBtN3J1RWlm?=
+ =?utf-8?B?bGlPLy9lTUZ6T0tEZDV5d1JNWkFvNUdsMVNUb1l5OGU0UjF5RkpGZW5CbUxn?=
+ =?utf-8?B?RkdUZW5qQzcxU3pUaHVEaE5QSXdGMk9DZTVQVDhKbnlMRkx4TWZ4OWdvTnR1?=
+ =?utf-8?B?cUs0QlQ3SGVTTDhycERHZ1hsc2lvWXkvSTRJOW1GWWpxSFI4enFRckl2UkFL?=
+ =?utf-8?B?bCtmWjd0SE5aaVNpR3ZvUVhra2NXZ1ZYd3F3L3pyUHYzdnBDbnhyVmJWT1NX?=
+ =?utf-8?B?M3BkWC9mMFg5TkpUdVJjTnFKNkc0Q1UxSFRkc2Y5b1ZhVFNsN0lDV1BrQzgv?=
+ =?utf-8?B?T0tKYitobzBUTk4vUkRPSDFIT29MV2FrTDlYS0dER3hyaE16TWthUzJSdnZj?=
+ =?utf-8?B?UUx5eEw4ZjRRdEI2Z0tCT3ZPMytyR1RhaG1BZmhhN3Vobzl2OXZoODVmYlVq?=
+ =?utf-8?B?SVV3TDhvdFkrRjd3Wms0eG5QU0NtV1B6a005NEwvNmpQRDNsTDU4WmM2eGdC?=
+ =?utf-8?B?UHdMem5NTUMxL3hZRXUyQlRYNEJzVWgzbUNRUVNMN2MyOWc4T0JuTUFsK2tu?=
+ =?utf-8?B?b3JSbG1UVTQrWXI4M1IyOWlDUWVUcEFnOGgwcWk4TEFPYWk0VjJhQVFKUitY?=
+ =?utf-8?B?WE5QbGcwZVZiT05IOFNySWsxOWFoM3VwTlpZUk4yNTJsSW9KVWdIaFpESDhq?=
+ =?utf-8?B?T3ZVc1NkbDhnVjF2bkJqa21uTTBPUytxYUFDS0xBcVRsckVaQXk0OExGeVdi?=
+ =?utf-8?B?aEYrMjJjTUlIcWlUOFd0MStZZTh3Vzh3cHcvMzUxUmRXR2NBKzdnRG1FT0Jx?=
+ =?utf-8?B?TVpCa0MycFhNMGMvMTIvY1J1UTJNd05PS1BlU094djNlcEFOM1haOVR0c2hS?=
+ =?utf-8?B?NmlQUmRWRkdWait3dUc2Nkp4STJONmE2emVWYktKcnFNamdEeVk1ZTlub25G?=
+ =?utf-8?B?RHpsN2NjK0w3T3BCeEEzcU5VNmx5YitSMENraGMyRWltaURPNnhwUHNXckV1?=
+ =?utf-8?B?VGtUUmlNNE50UmNQMnlOT1JHM1lPNGxMQVA2NWRGZFBhUEdBeHV3TUdkTU9Q?=
+ =?utf-8?B?b056QnhqWWVnR2F3QVd3ZDFzaGlobmlZRUxZVFoxSTU3UFBuRkFzY2pyankv?=
+ =?utf-8?B?OC8xNGJZTDNQb2hWN2MwazkxRy8wMitUQ3AxZlluSi9wWlVPakpRMC9Lb1Jy?=
+ =?utf-8?B?dklDTDBXUWQ3eEtpeTYrbkZZYnFGbndXY1FiODRQdXM4SFBYeXQ5ejk0SUtG?=
+ =?utf-8?B?YzJRY2JYQWpHWHM4ajJhYXRaZ05SaHFrY3ozdTRRZDc5bjh6M2psVEhCZkVy?=
+ =?utf-8?Q?v0BNMvuw1vC+E?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXdBVGovbEJKZ1YyQTViR25DRmRpYUlpT1JtU3dWa0VFMUZBNlkvazdrTks0?=
+ =?utf-8?B?dzYvTGU1dndnemZ6UmxmRFVGcFFYbE15dTAyTGVhMVRNcjRTNDlhMnYzU3Ru?=
+ =?utf-8?B?SElDTkczV21hR2FvVkhhZ1JXUXRlMDVvOFNtVEFYeWVXUDArWSsvNkRFcG1V?=
+ =?utf-8?B?WVV3T1l1QlVYYnhRSmxDK3l6NGs0aG1iZXJNdEk1S1p3am91TVdhLzFMVWQ5?=
+ =?utf-8?B?L3lSY3RRcG95dW1sd0t1K3JlOGpyQWU1czFaVzNwU0tZU3dEbFdrTkg5aGY2?=
+ =?utf-8?B?d0FhSUdUc05MY0tGT2FGMjg0ODJrQjA2WTBLWkFwdmFQcXRrSjBlclg2aGNT?=
+ =?utf-8?B?amo0cENyMlNnRVNjUzRZQjdFMHFpRHlEcEd2SE00YlBiZU9Ra3FFYUZZekp1?=
+ =?utf-8?B?MkZGdVQ5QkhXRk9tT0xwZTdxZXBuTDNoTUtZc294WkpSR2tOWjNDRlVXOFNX?=
+ =?utf-8?B?elAxdWRlNzhYNytlazVxeWpuODFvSzF5ZmN3YWFVMzhuMUlVZkJVblQ4VlVa?=
+ =?utf-8?B?MkdETHNIb2ZacUZaZjJ2SUpnc0t4UlR4QzlMM0o2U0tNRExuWEtwa2dkOWZV?=
+ =?utf-8?B?RFRPdHZndUV4T1h4ODI3T3JCQXZRK3lobVZUZytrVHdMMm5IUXJ1ekhINjRY?=
+ =?utf-8?B?YUF2Q0UvZEt1K1FSTStzbmhCLzlqeFdPaTFaVTlXVURPMlhaQ0JaQWpKM0ZV?=
+ =?utf-8?B?Qkl3bi83dkRvNEdEVkNxYWNrRmxnZUVLd0gvelpZOXpSVm9hb1F0RXZvbnQ2?=
+ =?utf-8?B?UVRKdndxKzZ5RmVNcEhrQjV3MUJaT2pBVFdkWjRZVXUyd21hZXZkTUJ5Z29O?=
+ =?utf-8?B?SnhUS1I3SmZSRU5PdjdLOG9zQkVCejNsWTNBdmlOZzRrYkR1MzBkOHBVMVYw?=
+ =?utf-8?B?QTQ4S3RxT1VqUUdMTWd6MUlIbWc2NnVhYlBYUjY4Vy9WTGF6L1ppTEtIc1VL?=
+ =?utf-8?B?U1docVQwQ0NQeE01Z0pqYzIwWGcxMDNScE5EU2VxZXFESUNKTTNJVEp0amhK?=
+ =?utf-8?B?RTIyTVNzRWVOVS9iSThjODdzZVlGNm1UMjVFWisvdnh3TkE0RitRY3U3dFBD?=
+ =?utf-8?B?ZExzcjVpWm5QbU11TzZ0bGJ0ZEd4a3lBWi9DckVKbWxSU01kbUJCKzBiZkR1?=
+ =?utf-8?B?SlBFcW9hRFhYUUIxWEhPbG5MTUFsOVg5b3R0ZzJhc0ZudndGZnUvSVFMT0dn?=
+ =?utf-8?B?WjNyNlhRejJrZndSbGJTUC90WkVieVZxZFVPQ1lVUWMxKytONGpRZUxJR3ZP?=
+ =?utf-8?B?NEFWTkhZb09OVmQ3eFJ2eVZyczNhQjdrUnhraDhIQ1gxQ2t1d0FsdjFIc3Nw?=
+ =?utf-8?B?UERtc2tBSnRJU1M4QXlnejhMME8yaWs5ZVN2YW9QSTg0emJ3eDdESHJ6b2lD?=
+ =?utf-8?B?TjNBMGY2d0JFZzFOUUNrRjRzSTZVVTh3Y0x5UDRTU0pTNkJieXFtdnU4RkF6?=
+ =?utf-8?B?UWNXa1RCWTFZc2JWeVpjNGFlN1hna3lqTC9YQktJa1Uxdm5CQnB2dzBzT21a?=
+ =?utf-8?B?ME85TldBVS9Ec3VtdEJ3OEN0U2lya2JFTmUrOVA3M1gvUGptdEJBWTZCSCt5?=
+ =?utf-8?B?Q3A1V3dCK2FJOGZxbS9NU1U3YSt6enk1WEVadWZpN1dyblc4QWdGWjkyRGZP?=
+ =?utf-8?B?ZktzUHpjVHNpRHJvMG05cEowL2lNUnhtVWdacDJGVDVXY0c2aTV3bHNIem41?=
+ =?utf-8?B?bTIzZ0JzWXYwcVdMdVdnaEJOZ2l5SGdDL0ZRSzE2SElPVkp1MTFzemsvZm5Y?=
+ =?utf-8?B?T3NzZHQ1UUE3Wmc5ZzZpOEFucjZBRjVpNzFUZzFoWS9jcktHSDNrVXVaVVNV?=
+ =?utf-8?B?ODBDRmJBbUQzSjRTZVhBV3BUSTdRa1dNSCtkUEtlQVc3RUJjUDlLd2syWDEv?=
+ =?utf-8?B?S2hlR3hHZU5YQVYwR1QraHJnTng5eFFLNlZuQWlNRENjZFhTOVJITi9kbjJR?=
+ =?utf-8?B?SFhQU0VjbHpRSDFHSGZGMUROc3NaSENuV0tkcnBBS3lIbEVkNnhsaHk2RzZr?=
+ =?utf-8?B?RW1VeWhvd2xNZk9QcEJtWWNTcmpoV29hUnBzODBNUVM5MG54aWJtUHhqODZp?=
+ =?utf-8?B?NEdta1B1WEJEeXdZVXZteWZwVkRHUVIvWC80d2V0aHlLN0g2Rmg0aXVzc3RS?=
+ =?utf-8?B?czN5YkdLRnNQOURlNVN6VnVnUkhETHg5MHc0ektlc3F5RTliMWtTa0syR090?=
+ =?utf-8?Q?UbH/TTlfUfpckBBahXJaF8g=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a6dc528-2ca6-4570-5f73-08dd565c2662
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2025 11:53:13.9923
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uU/OV7CtoiGcNJBNAIvH2vLAR8zYTMzn0VNuqoKnImVf/UmY3d8Gb+BYhVJPNlICwiBMYbfpGJFeQpZgsOGS4BbtP5u2c+9TSy77U6ZT4JA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB6741
+X-OriginatorOrg: intel.com
 
-vdso_standalone_test_x86 provides its own ASM syscall wrappers and
-_start() implementation. The in-tree nolibc library already provides
-this functionality for multiple architectures. By making use of nolibc,
-the standalone testcase can be built from the exact same codebase as the
-non-standalone version.
+On 2025-02-25 at 22:37:37 +0100, Andrey Konovalov wrote:
+>On Tue, Feb 25, 2025 at 6:16 PM Maciej Wieczor-Retman
+><maciej.wieczor-retman@intel.com> wrote:
+>>
+>> I mean in my tests, with setting offset in runtime, everything works correctly
+>> in inline mode. Even though hwasan-mapping-offset ends up empty and doesn't end
+>> up in CFLAGS_KASAN. I assume this means that the inline mode is pretty much the
+>> same as outline mode with the runtime offset setting?
+>>
+>> I also tested if hwasan-mapping-offset does anything if I passed random values
+>> to it by hardcoding them in the makefile and still everything seemed to work
+>> just fine. Therefore I assumed that this option doesn't have any effect on x86.
+>
+>Hm that's weird. I wonder if inline instrumentation somehow gets auto-disabled.
+>
+>> Hmm indeed it does. Then I'm not sure why I didn't crash when I started putting
+>> in random variables. I'll dive into assembly and see what's up in there.
+>
+>Please do, I'm curious what's going on there.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- tools/testing/selftests/vDSO/Makefile              |   8 +-
- .../selftests/vDSO/vdso_standalone_test_x86.c      | 168 +--------------------
- 2 files changed, 7 insertions(+), 169 deletions(-)
+I think I figured it out.
 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index bc8ca186fb877dc11740c37f1e07e45e84c2ae92..12a0614b9fd4983deffe5d6a7cfa06ba8d92a516 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -22,13 +22,17 @@ include ../lib.mk
- 
- CFLAGS += $(TOOLS_INCLUDES)
- 
-+CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tables \
-+		 -fno-stack-protector -include $(top_srcdir)/tools/include/nolibc/nolibc.h \
-+		 -I$(top_srcdir)/tools/include/nolibc/ $(KHDR_INCLUDES)
-+
- $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
- $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
- $(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
- 
--$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
--$(OUTPUT)/vdso_standalone_test_x86: CFLAGS +=-nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-+$(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c | headers
-+$(OUTPUT)/vdso_standalone_test_x86: CFLAGS:=$(CFLAGS_NOLIBC) $(CFLAGS)
- 
- $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
- $(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-deleted file mode 100644
-index 500608f89c66b5747e3d845ebc54e4c3a35b6ccd..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ /dev/null
-@@ -1,167 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * vdso_test.c: Sample code to test parse_vdso.c on x86
-- * Copyright (c) 2011-2014 Andy Lutomirski
-- *
-- * You can amuse yourself by compiling with:
-- * gcc -std=gnu99 -nostdlib
-- *     -Os -fno-asynchronous-unwind-tables -flto -lgcc_s
-- *      vdso_standalone_test_x86.c parse_vdso.c
-- * to generate a small binary.  On x86_64, you can omit -lgcc_s
-- * if you want the binary to be completely standalone.
-- */
--
--#include <sys/syscall.h>
--#include <sys/time.h>
--#include <unistd.h>
--#include <stdint.h>
--#include <linux/auxvec.h>
--
--#include "parse_vdso.h"
--
--/* We need some libc functions... */
--int strcmp(const char *a, const char *b)
--{
--	/* This implementation is buggy: it never returns -1. */
--	while (*a || *b) {
--		if (*a != *b)
--			return 1;
--		if (*a == 0 || *b == 0)
--			return 1;
--		a++;
--		b++;
--	}
--
--	return 0;
--}
--
--/*
-- * The clang build needs this, although gcc does not.
-- * Stolen from lib/string.c.
-- */
--void *memcpy(void *dest, const void *src, size_t count)
--{
--	char *tmp = dest;
--	const char *s = src;
--
--	while (count--)
--		*tmp++ = *s++;
--	return dest;
--}
--
--/* ...and two syscalls.  This is x86-specific. */
--static inline long x86_syscall3(long nr, long a0, long a1, long a2)
--{
--	long ret;
--#ifdef __x86_64__
--	asm volatile ("syscall" : "=a" (ret) : "a" (nr),
--		      "D" (a0), "S" (a1), "d" (a2) :
--		      "cc", "memory", "rcx",
--		      "r8", "r9", "r10", "r11" );
--#else
--	asm volatile ("int $0x80" : "=a" (ret) : "a" (nr),
--		      "b" (a0), "c" (a1), "d" (a2) :
--		      "cc", "memory" );
--#endif
--	return ret;
--}
--
--static inline long linux_write(int fd, const void *data, size_t len)
--{
--	return x86_syscall3(__NR_write, fd, (long)data, (long)len);
--}
--
--static inline void linux_exit(int code)
--{
--	x86_syscall3(__NR_exit, code, 0, 0);
--}
--
--void to_base10(char *lastdig, time_t n)
--{
--	while (n) {
--		*lastdig = (n % 10) + '0';
--		n /= 10;
--		lastdig--;
--	}
--}
--
--unsigned long getauxval(const unsigned long *auxv, unsigned long type)
--{
--	unsigned long ret;
--
--	if (!auxv)
--		return 0;
--
--	while (1) {
--		if (!auxv[0] && !auxv[1]) {
--			ret = 0;
--			break;
--		}
--
--		if (auxv[0] == type) {
--			ret = auxv[1];
--			break;
--		}
--
--		auxv += 2;
--	}
--
--	return ret;
--}
--
--void c_main(void **stack)
--{
--	/* Parse the stack */
--	long argc = (long)*stack;
--	stack += argc + 2;
--
--	/* Now we're pointing at the environment.  Skip it. */
--	while(*stack)
--		stack++;
--	stack++;
--
--	/* Now we're pointing at auxv.  Initialize the vDSO parser. */
--	vdso_init_from_sysinfo_ehdr(getauxval((unsigned long *)stack, AT_SYSINFO_EHDR));
--
--	/* Find gettimeofday. */
--	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym("LINUX_2.6", "__vdso_gettimeofday");
--
--	if (!gtod)
--		linux_exit(1);
--
--	struct timeval tv;
--	long ret = gtod(&tv, 0);
--
--	if (ret == 0) {
--		char buf[] = "The time is                     .000000\n";
--		to_base10(buf + 31, tv.tv_sec);
--		to_base10(buf + 38, tv.tv_usec);
--		linux_write(1, buf, sizeof(buf) - 1);
--	} else {
--		linux_exit(ret);
--	}
--
--	linux_exit(0);
--}
--
--/*
-- * This is the real entry point.  It passes the initial stack into
-- * the C entry point.
-- */
--asm (
--	".text\n"
--	".global _start\n"
--	".type _start,@function\n"
--	"_start:\n\t"
--#ifdef __x86_64__
--	"mov %rsp,%rdi\n\t"
--	"and $-16,%rsp\n\t"
--	"sub $8,%rsp\n\t"
--	"jmp c_main"
--#else
--	"push %esp\n\t"
--	"call c_main\n\t"
--	"int $3"
--#endif
--	);
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-new file mode 120000
-index 0000000000000000000000000000000000000000..4d3d96f1e440c965474681a6f35375a60b3921be
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -0,0 +1 @@
-+vdso_test_gettimeofday.c
-\ No newline at end of file
+After adding
+	kasan_params += hwasan-instrument-with-calls=0
+to Makefile.kasan just under
+	kasan_params += hwasan-mapping-offset=$(KASAN_SHADOW_OFFSET)
+inline works properly in x86. I looked into assembly and before there were just
+calls to __hwasan_load/store. After adding the the
+hwasan-instrument-with-calls=0 I can see no calls and the KASAN offset is now
+inlined, plus all functions that were previously instrumented now have the
+kasan_check_range inlined in them.
+
+My LLVM investigation lead me to
+	bool shouldInstrumentWithCalls(const Triple &TargetTriple) {
+	  return optOr(ClInstrumentWithCalls, TargetTriple.getArch() == Triple::x86_64);
+	}
+which I assume defaults to "1" on x86? So even with inline mode it doesn't care
+and still does an outline version.
+
+I checked how arm64 reacts to adding the hwasan-instrument-with-calls=0 by cross
+compiling and I don't see any differences in output assembly.
+
+>
+>> But anyway I have an idea how to setup the x86 offset for tag-based mode so it
+>> works for both paging modes. I did some testing and value
+>>         0xffeffc0000000000
+>> seems to work fine and has at least some of the benefits I was hoping for when
+>> doing the runtime_const thing. It works in both paging modes because in 5 levels
+>> it's just a little bit below the 0xffe0000000000000 that I was thinking about
+>> first and in 4 levels, because of LAM, it becomes 0xfffffc0000000000 (because in
+>> 4 level paging bits 62:48 are masked from address translation. So it's the same
+>> as the end of generic mode shadow memory space.
+>>
+>> The alignment doesn't fit the shadow memory size so it's not optimal but I'm not
+>> sure it can be if we want to have the inline mode and python scripts working at
+>> the same time. At the very least I think the KASAN_SHADOW_END won't collide with
+>> other things in the tab-based mode in 5 level paging mode, so no extra steps are
+>> needed (arch/x86/mm/kasan_init_64.c in kasan_init()).
+>
+>What do you mean by "The alignment doesn't fit the shadow memory size"?
+
+Maybe that's the wrong way to put it. I meant that KASAN_SHADOW_END and
+KASAN_SHADOW_END aren't aligned to the size of shadow memory.
+
+>
+>> Do you see any problems with this offset for x86 tag-based mode?
+>
+>I don't, but I think someone who understands the x86 memory layout
+>better needs to look at this.
+>
+>> Btw I think kasan_check_range() can be optimized on x86 if we use
+>> addr_has_metadata() that doesn't use KASAN_SHADOW_START. Getting rid of it from
+>> the implementation will remove pgtable_l5_enabled() which is pretty slow so
+>> kasan_check_range() which is called a lot would probably work much faster.
+>> Do you see any way in which addr_has_metadata() will make sense but won't use
+>> KASAN_SHADOW_START? Every one of my ideas ends up using pgtable_l5_enabled()
+>> because the metadata can have 6 or 15 bits depending on paging level.
+>
+>What if we turn pgtable_l5_enabled() into using a read-only static key
+>(DEFINE_STATIC_KEY_FALSE_RO) instead of a bool variable? Or if that is
+>not acceptable, we could cache its value in a KASAN-specific static
+>key.
+
+I think this was a false alarm, sorry. I asked Kirill about turning
+pgtable_l5_enabled() into a runtime_const value but it turns out it's already
+patched by alternative code during boot. I just saw a bunch more stuff there
+because I was looking at the assembly output and the code isn't patched there
+yet.
 
 -- 
-2.48.1
-
+Kind regards
+Maciej Wieczór-Retman
