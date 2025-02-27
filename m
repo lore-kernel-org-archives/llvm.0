@@ -1,173 +1,212 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F144D225A31;
-	Thu, 27 Feb 2025 19:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE9C26FA7B;
+	Thu, 27 Feb 2025 20:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740685895; cv=none; b=N/8FZvUyl7TyyqfR2TOQpTgrrNB2/QYPi3OWeNsryTpIdgQtfey+4ZLk80xX744UZsCforfKXjVZeBW33G2laKDmp9XadYLV+0tYktcuwJNxORqnj66M2ST3iU0kheAWWI+W3jVYzEUgs4aQAZ3bGTrFI7Px7iLRSGtVdkxMdyo=
+	t=1740686949; cv=none; b=f/QMeIiSW5MxqzQXtERIFTpGSE+BJLCvwpW2Vsv6Q3VhAgAi0SQ55O9T9mE1dnXjpzFGs72SCr+umpmRmuDYG6NcuP2wLU7IyXqJxqc9UWVExG5gISbTMU4xg6a+9V/SqLPrj7RYe4g51ixxDt1KeFZKi50MXTDwfhbIoQ1cBfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740685895; c=relaxed/simple;
-	bh=EIbSUrM/Ujz1F3JimGdI96usqoFo8t4yf/dEL8vd+xk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ch5cHNGdSwYuIzz4c4kMa5n+NqtJSjIfBGzN5t8jItOJuL9F561y806HpmkXYsDvYl4oMQ4EZriVZz8+3R1V+IZethTVkK9WoTwlUwlvhjRN8E+DFUOlNy/mi9MPoLcGSHXdNnKItu1onUAeEL6oRObcaCrlTeSNXZjMCj7yYzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iPTUGS1B; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740686949; c=relaxed/simple;
+	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YpQZxBS1F6sdr4r+PxXmfzrmKnjX0C8tlNIGJIoUUsCp+BHyDP6z6Q/04pW8xfGH5kuEZ+8xqRPkTTNJ70GyLZutCqvhNBaJibH1Z4zEQSfTRXtfcYStiBqQCNz3TxMX7IAWkqsWynfYOhr3JKDQmXlgPhA9UBrnfYBAgYi0fQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnHlJzwu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iPTUGS1B"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740685895; x=1772221895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EIbSUrM/Ujz1F3JimGdI96usqoFo8t4yf/dEL8vd+xk=;
-  b=iPTUGS1BRdEspshs028jBNv5yv/YAsjmYUOi1L+x3ChB45MMVoUtsmRT
-   TGoBXyF2wsBqLuxbiE4u9Os2B1EGSCgWkshzJWiANf8F4EB1m6f817fnw
-   Ba7hk2o7iHMD/g3vMXRvt9MMHobB0p7B28yEXlGXtn/ndFBhrBkQ9m56r
-   UlARyTBoOhWQnQlAm803ThQqMfDjcmMDBQ9Jek3grWcFFULH+pSGPbPg3
-   0FDCuNp+9QreDn9W7dZjYmkKwzdA1Eungb8PafVECid/EVORCZqsilYAa
-   EiyG7n84sUGxnapCLCeONSwiQhHeeQ86BnTye6p0NdxioOv8CcK3sSQM9
-   Q==;
-X-CSE-ConnectionGUID: /n04wkJnTX+oQYLKcUp/Vw==
-X-CSE-MsgGUID: rZy/f4WKRuis+NTgejlFoA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="52584915"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="52584915"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 11:51:34 -0800
-X-CSE-ConnectionGUID: Zrhe8OtdQKee0BQsxRg1pA==
-X-CSE-MsgGUID: FIZQc2wET9uoV0D4HJo0Zg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="147945234"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 27 Feb 2025 11:51:32 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnjur-000Dxy-19;
-	Thu, 27 Feb 2025 19:51:29 +0000
-Date: Fri, 28 Feb 2025 03:50:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rengarajan S <rengarajan.s@microchip.com>, unglinuxdriver@microchip.com,
-	broonie@kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rengarajan.s@microchip.com
-Subject: Re: [PATCH v1 for-next] spi: mchp-pci1xxxx: Updated memcpy
- implementation for x64 and bcm2711 processors
-Message-ID: <202502280356.AulpRaPU-lkp@intel.com>
-References: <20250224125153.13728-1-rengarajan.s@microchip.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnHlJzwu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A482C4CEE4;
+	Thu, 27 Feb 2025 20:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740686949;
+	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YnHlJzwuNAhrmOtUQIOONlXKaDukIwGkh5SrT+AZR/hmITYF8E+hdIpjGMviggUAj
+	 drRRRPU+0AG9uF7+Y4DAsDNah8z1NEGiynbb4H7ZmAMNCtqMAPnrEG0/FOhod04EkA
+	 U4ma/Mnk6WCTXvtBPcsBSlNVHumJohdP7s+1dB7bS3+4Ek6MDDTe+rDOOTWJOBoHw7
+	 88UWXpeCccf5vEyjP4aC80SfJnsy4m7ljKWtpGIkinhTaVHGH1AKbnN9aIZYuM++b4
+	 snIDmnGQv2ZxWJoUBIBmwAuOY6ko8JXBsH0MG2WGHgZeI3Q2ACG+RqLz0uhhZvCWq4
+	 NJ3Oif7ZQ51KA==
+Message-ID: <d1fc8fea-5a2c-4b38-949c-8063cb76fadf@kernel.org>
+Date: Thu, 27 Feb 2025 14:09:08 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224125153.13728-1-rengarajan.s@microchip.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a
+ union
+To: kernel test robot <lkp@intel.com>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+ "(open list:X86 ARCHITECTURE (32-BIT AND 64-BIT))"
+ <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250226074934.1667721-5-superm1@kernel.org>
+ <202502272001.nafS0qXq-lkp@intel.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <202502272001.nafS0qXq-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Rengarajan,
+On 2/27/2025 06:59, kernel test robot wrote:
+> Hi Mario,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on amd-pstate/bleeding-edge]
+> [cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next linus/master v6.14-rc4 next-20250227]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/cpufreq-amd-pstate-Invalidate-cppc_req_cached-during-suspend/20250226-155545
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+> patch link:    https://lore.kernel.org/r/20250226074934.1667721-5-superm1%40kernel.org
+> patch subject: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a union
+> config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502272001.nafS0qXq-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     In file included from drivers/cpufreq/amd-pstate.c:51:
+>     In file included from drivers/cpufreq/amd-pstate-trace.h:15:
+>     In file included from include/linux/trace_events.h:6:
+>     In file included from include/linux/ring_buffer.h:5:
+>     In file included from include/linux/mm.h:2224:
+>     include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>       504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>       505 |                            item];
+>           |                            ~~~~
+>     include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>       511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>       512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>           |                            ~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/cpufreq/amd-pstate.c:914:41: warning: variable 'nominal_freq' is uninitialized when used here [-Wuninitialized]
+>       914 |                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
+>           |                                                       ^~~~~~~~~~~~
+>     drivers/cpufreq/amd-pstate.c:902:38: note: initialize the variable 'nominal_freq' to silence this warning
+>       902 |         u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
+>           |                                             ^
+>           |                                              = 0
+>     3 warnings generated.
+> 
+> 
+> vim +/nominal_freq +914 drivers/cpufreq/amd-pstate.c
+> 
+>     891	
+>     892	/*
+>     893	 * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
+>     894	 *			 for the @cpudata object.
+>     895	 *
+>     896	 * Requires: all perf members of @cpudata to be initialized.
+>     897	 *
+>     898	 * Returns 0 on success, non-zero value on failure.
+>     899	 */
+>     900	static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
+>     901	{
+>     902		u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
+>     903		struct cppc_perf_caps cppc_perf;
+>     904		union perf_cached perf;
+>     905		int ret;
+>     906	
+>     907		ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>     908		if (ret)
+>     909			return ret;
+>     910		perf = READ_ONCE(cpudata->perf);
+>     911	
+>     912		if (quirks && quirks->lowest_freq) {
+>     913			min_freq = quirks->lowest_freq;
+>   > 914			perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
+>     915			WRITE_ONCE(cpudata->perf, perf);
+>     916		} else
+>     917			min_freq = cppc_perf.lowest_freq;
+>     918	
+>     919		if (quirks && quirks->nominal_freq)
+>     920			nominal_freq = quirks->nominal_freq;
+>     921		else
+>     922			nominal_freq = cppc_perf.nominal_freq;
+>     923	
+>     924		min_freq *= 1000;
+>     925		nominal_freq *= 1000;
+>     926	
+>     927		WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
+>     928	
+>     929		max_freq = perf_to_freq(perf, nominal_freq, perf.highest_perf);
+>     930		lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
+>     931		WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
+>     932	
+>     933		/**
+>     934		 * Below values need to be initialized correctly, otherwise driver will fail to load
+>     935		 * max_freq is calculated according to (nominal_freq * highest_perf)/nominal_perf
+>     936		 * lowest_nonlinear_freq is a value between [min_freq, nominal_freq]
+>     937		 * Check _CPC in ACPI table objects if any values are incorrect
+>     938		 */
+>     939		if (min_freq <= 0 || max_freq <= 0 || nominal_freq <= 0 || min_freq > max_freq) {
+>     940			pr_err("min_freq(%d) or max_freq(%d) or nominal_freq(%d) value is incorrect\n",
+>     941				min_freq, max_freq, nominal_freq);
+>     942			return -EINVAL;
+>     943		}
+>     944	
+>     945		if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
+>     946			pr_err("lowest_nonlinear_freq(%d) value is out of range [min_freq(%d), nominal_freq(%d)]\n",
+>     947				lowest_nonlinear_freq, min_freq, nominal_freq);
+>     948			return -EINVAL;
+>     949		}
+>     950	
+>     951		return 0;
+>     952	}
+>     953	
+> 
 
-kernel test robot noticed the following build errors:
+The series is getting close (I think just one more patch needing review).
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on linus/master v6.14-rc4 next-20250227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So if no other feedback for the series needing other fixes I will squash 
+this in to fix this issue when the series is merged.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rengarajan-S/spi-mchp-pci1xxxx-Updated-memcpy-implementation-for-x64-and-bcm2711-processors/20250224-205745
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20250224125153.13728-1-rengarajan.s%40microchip.com
-patch subject: [PATCH v1 for-next] spi: mchp-pci1xxxx: Updated memcpy implementation for x64 and bcm2711 processors
-config: arm-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280356.AulpRaPU-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280356.AulpRaPU-lkp@intel.com/reproduce)
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index bd8bcda4e6eb0..034ee40681b4c 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -915,6 +915,12 @@ static int amd_pstate_init_freq(struct amd_cpudata 
+*cpudata)
+                 return ret;
+         perf = READ_ONCE(cpudata->perf);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280356.AulpRaPU-lkp@intel.com/
++       if (quirks && quirks->nominal_freq)
++               nominal_freq = quirks->nominal_freq;
++       else
++               nominal_freq = cppc_perf.nominal_freq;
++       nominal_freq *= 1000;
++
+         if (quirks && quirks->lowest_freq) {
+                 min_freq = quirks->lowest_freq;
+                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, 
+min_freq);
+@@ -922,13 +928,7 @@ static int amd_pstate_init_freq(struct amd_cpudata 
+*cpudata)
+         } else
+                 min_freq = cppc_perf.lowest_freq;
 
-All errors (new ones prefixed by >>):
+-       if (quirks && quirks->nominal_freq)
+-               nominal_freq = quirks->nominal_freq;
+-       else
+-               nominal_freq = cppc_perf.nominal_freq;
+-
+         min_freq *= 1000;
+-       nominal_freq *= 1000;
 
->> drivers/spi/spi-pci1xxxx.c:417:4: error: call to undeclared function '__raw_writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     417 |                         __raw_writeq(*(u64 *)from, to);
-         |                         ^
->> drivers/spi/spi-pci1xxxx.c:448:17: error: call to undeclared function '__raw_readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     448 |                         *(u64 *)to = __raw_readq(from);
-         |                                      ^
-   2 errors generated.
+         WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
 
-
-vim +/__raw_writeq +417 drivers/spi/spi-pci1xxxx.c
-
-   410	
-   411	static void pci1xxxx_spi_write_to_io(void __iomem *to, const void *from,
-   412					     size_t count, size_t size)
-   413	{
-   414		while (count) {
-   415			if (size == 8 && (IS_ALIGNED((unsigned long)to, 8)) &&
-   416			    count >= 8) {
- > 417				__raw_writeq(*(u64 *)from, to);
-   418				from += 8;
-   419				to += 8;
-   420				count -= 8;
-   421			} else if (size >= 4 && (IS_ALIGNED((unsigned long)to, 4)) &&
-   422				   count >= 4) {
-   423				__raw_writel(*(u32 *)from, to);
-   424				from += 4;
-   425				to += 4;
-   426				count -= 4;
-   427			} else if (size >= 2 && (IS_ALIGNED((unsigned long)to, 2)) &&
-   428				   count >= 2) {
-   429				__raw_writew(*(u16 *)from, to);
-   430				from += 2;
-   431				to += 2;
-   432				count -= 2;
-   433			} else {
-   434				__raw_writeb(*(u8 *)from, to);
-   435				from += 1;
-   436				to += 1;
-   437				count -= 1;
-   438			}
-   439		}
-   440	}
-   441	
-   442	static void pci1xxxx_spi_read_from_io(void *to, const void __iomem *from,
-   443					      size_t count, size_t size)
-   444	{
-   445		while (count) {
-   446			if (size == 8 && (IS_ALIGNED((unsigned long)from, 8)) &&
-   447			    count >= 8) {
- > 448				*(u64 *)to = __raw_readq(from);
-   449				from += 8;
-   450				to += 8;
-   451				count -= 8;
-   452			} else if (size >= 4 && (IS_ALIGNED((unsigned long)from, 4)) &&
-   453				   count >= 4) {
-   454				*(u32 *)to = __raw_readl(from);
-   455				from += 4;
-   456				to += 4;
-   457				count -= 4;
-   458			} else if (size >= 2 && (IS_ALIGNED((unsigned long)from, 2)) &&
-   459				   count >= 2) {
-   460				*(u16 *)to = __raw_readw(from);
-   461				from += 2;
-   462				to += 2;
-   463				count -= 2;
-   464			} else {
-   465				*(u8 *)to = __raw_readb(from);
-   466				from += 1;
-   467				to += 1;
-   468				count -= 1;
-   469			}
-   470		}
-   471	}
-   472	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
