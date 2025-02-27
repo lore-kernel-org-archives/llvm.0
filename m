@@ -1,61 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C711662EF;
-	Thu, 27 Feb 2025 14:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB42343C6;
+	Thu, 27 Feb 2025 14:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740665964; cv=none; b=mPjqNjHadCtJG5sjq6R9ZxJQoZuSxRlHlYlXmTLJpmenR1QpPR4bYotHS9Op6Nvel8M8xaT8nEWx33CH9xUO4TdshLv/5LyJPzk3BZt5fNlQAgXiQqUgjGJtb/RDHGYaCnWv2bKYP6d48vOcrXlbeE567S4AcdWq93Y6KJOwFgw=
+	t=1740665966; cv=none; b=Q+O3z/Z0Y7nCUpOKAxkKXPr7ND+8BrHxbO3ZXspMwkgVSXxtNjCxJfsFiQbe4uMS4UgFVU6t8V5i0TLDegNPIRbwBPoA0aiHBv9uXobmigEXbezlfzwlWYFhxt5NLgLVFaI/dualOa8aLidjudCSzyCKfiXl4dXpEPDpIa1ZWu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740665964; c=relaxed/simple;
-	bh=Sjuc5haFTHrW3rg3fDV9aylKQ863wlMVOJaIXTFhh5k=;
+	s=arc-20240116; t=1740665966; c=relaxed/simple;
+	bh=TYgMdkpmXdiunpeA5m4Ocp06XU1GCSE6nejOB63Id88=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XrczteuvHucsvSHWlHJ2UVO383YenMDhSmSf6isz2ywXXk/tJzohapd7qgop6T5lejOJJ+RuDtymq0q9A/bB5qevagN7xBlF0GhfTObr1MsCBM1Lz806/JQTMzigD8BxPjwUAMgKZHaPt1fcx55yQdMnEFcKatqAvO4rFiuYhf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DLKfvJDc; arc=none smtp.client-ip=192.198.163.11
+	 Content-Disposition; b=mc9zAXs6c5E1++ASVuAyhxFAFVyaFOA2BGAVOIIPHlZsfZdwHO0eodGCWPaeKjMBKkzA7F1/HK35NILnWb58rcwfF6OEycpkzvRHPW595klMdvarIAwxAjjL7kdbfwlwEjDjKzQK4hGa4IiN6QYSPmUa50PLWLWbf4pzln3B0tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eMPC0PeM; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DLKfvJDc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eMPC0PeM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740665962; x=1772201962;
+  t=1740665964; x=1772201964;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Sjuc5haFTHrW3rg3fDV9aylKQ863wlMVOJaIXTFhh5k=;
-  b=DLKfvJDc9HzcLo2dLcQxwb+RG/cYA+4bDVDBMs6Ho9BQFoTlfwDdG+1j
-   F/RrVSINBkqs+bfe9w1SVPLDDFVx3a9zsvnE9uGN2+SyhybzwxJyxaFOs
-   0jmUU9AJqykZ6fSLfFVbaULgUfL8D9qhk18GtxuH3B7XrAItZPifS9iBQ
-   bly257Jd8oGc6sHJj+oRej8R2wcB/qIIA3ZvfzUH6X2dhyIKUZ77G8bZ8
-   tbRibQHM+mIHhCBhQVcz/GdTZfvs6u0Gyz1xmqdQvdfz+ajB0F6wDofCm
-   i9QBIAfYuTWA7+DBrmhZxHKZki9B420EDeKrdyOEwTTDZDwrDa7j/vFS2
+  bh=TYgMdkpmXdiunpeA5m4Ocp06XU1GCSE6nejOB63Id88=;
+  b=eMPC0PeMz+XBsA6vcBY1B1juLKwDbvqsIiphd9gBug+59C9plF4tdeHt
+   Cm/T9gZjXh4KBVnxVxOfX/i4KzW8eA530E0fk1v6cUL2a3DT1LECiDs4p
+   8in2ovp/w9EaB/a5laJEEyC3vtium2EzmY91G9/fF2stFPWat+Ey+YV2t
+   xL3UyctANoEgWI1T+JfZkLWmqXAMZhwMzD4b3i0s7i8B7ZtHAw+qFGPcd
+   hbbA9r6zK9Hmwz8YzwbotNPSPFHuHL3MYgp5SFrIZNAQTTy9BwD5WSqk7
+   WOn/ZmKzM1CLvZDDxwN7ajXFabouXgD6r8B/d/psWQHZxlHmh77VsJvEz
    A==;
-X-CSE-ConnectionGUID: u7H9+64FTRWfgjOuEXgqOA==
-X-CSE-MsgGUID: /6eaXlGkQJqqGUJq9H3aUA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="52196524"
+X-CSE-ConnectionGUID: EyXrzEoQT8upXcBOpDoyig==
+X-CSE-MsgGUID: QikYw+o8S46LGNgKHPmkDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="52196530"
 X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="52196524"
+   d="scan'208";a="52196530"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
   by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 06:19:22 -0800
-X-CSE-ConnectionGUID: KSU65rk2RhKNfzzkBHeaIA==
-X-CSE-MsgGUID: JDw3eqBDSgiuFHVXRXhBFg==
+X-CSE-ConnectionGUID: 4vgTw4j/SWaNL+Hl82QupQ==
+X-CSE-MsgGUID: p/QvSjdQQnSDENyGf2crAQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="122158471"
+   d="scan'208";a="122158475"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Feb 2025 06:19:20 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 27 Feb 2025 06:19:21 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tnej6-000DTc-1F;
-	Thu, 27 Feb 2025 14:19:00 +0000
-Date: Thu, 27 Feb 2025 22:18:39 +0800
+	id 1tnejN-000DTg-2f;
+	Thu, 27 Feb 2025 14:19:18 +0000
+Date: Thu, 27 Feb 2025 22:18:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zheyun Shen <szy0127@sjtu.edu.cn>
+To: Lukasz Luba <l.luba@partner.samsung.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Christopherson <seanjc@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>
-Subject: [sean-jc:svm/sev_cache_opts 7/8] arch/x86/include/asm/smp.h:175:15:
- error: type specifier missing, defaults to 'int'; ISO C99 and later do not
- support implicit int
-Message-ID: <202502272237.Jjp49UKY-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>
+Subject: drivers/devfreq/event/exynos-ppmu.c:529:21: warning: cast to smaller
+ integer type 'enum exynos_ppmu_type' from 'const void *'
+Message-ID: <202502272210.guXvXlHo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,56 +65,134 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/sean-jc/linux svm/sev_cache_opts
-head:   0abca5ad72cf2bc8ebbb6b93be9a5c768f463d48
-commit: 3c2b47771dc542fbdb237bd5218112905717dfae [7/8] x86, lib: Add wbinvd and wbnoinvd helpers to target multiple CPUs
-config: i386-randconfig-012-20250227 (https://download.01.org/0day-ci/archive/20250227/202502272237.Jjp49UKY-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272237.Jjp49UKY-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd83757f6e686a2188997cb58b5975f744bb7786
+commit: 0ae9c3213c2ca34f7e7ebad1436267778d37ba9f PM / devfreq: exynos-events: change matching code during probe
+date:   6 years ago
+config: x86_64-buildonly-randconfig-006-20250127 (https://download.01.org/0day-ci/archive/20250227/202502272210.guXvXlHo-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272210.guXvXlHo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502272237.Jjp49UKY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502272210.guXvXlHo-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from drivers/devfreq/event/exynos-ppmu.c:19:
    In file included from include/linux/suspend.h:5:
    In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:12:
-   In file included from arch/x86/include/asm/uaccess.h:17:
-   In file included from arch/x86/include/asm/tlbflush.h:12:
->> arch/x86/include/asm/smp.h:175:15: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     175 | static inline wbnoinvd_on_many_cpus(struct cpumask *cpus)
-         | ~~~~~~~~~~~~~ ^
-         | int
-   1 error generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=3738855156
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=3738855156
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=3738855156
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=3738855156
-   make: Target 'prepare' not remade because of errors.
+   In file included from include/linux/memcontrol.h:20:
+   include/linux/mm.h:162:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     162 |         case 72:
+         |         ^
+   include/linux/mm.h:162:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     162 |         case 72:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   include/linux/mm.h:162:2: note: insert 'break;' to avoid fall-through
+     162 |         case 72:
+         |         ^
+         |         break; 
+   include/linux/mm.h:164:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     164 |         case 64:
+         |         ^
+   include/linux/mm.h:164:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     164 |         case 64:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   include/linux/mm.h:164:2: note: insert 'break;' to avoid fall-through
+     164 |         case 64:
+         |         ^
+         |         break; 
+   include/linux/mm.h:166:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     166 |         case 56:
+         |         ^
+   include/linux/mm.h:166:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     166 |         case 56:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   include/linux/mm.h:166:2: note: insert 'break;' to avoid fall-through
+     166 |         case 56:
+         |         ^
+         |         break; 
+>> drivers/devfreq/event/exynos-ppmu.c:529:21: warning: cast to smaller integer type 'enum exynos_ppmu_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     529 |                 info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
 
 
-vim +/int +175 arch/x86/include/asm/smp.h
+vim +529 drivers/devfreq/event/exynos-ppmu.c
 
-   174	
- > 175	static inline wbnoinvd_on_many_cpus(struct cpumask *cpus)
-   176	{
-   177		wbnoinvd();
-   178	}
-   179	
+   504	
+   505	static int of_get_devfreq_events(struct device_node *np,
+   506					 struct exynos_ppmu *info)
+   507	{
+   508		struct devfreq_event_desc *desc;
+   509		struct device *dev = info->dev;
+   510		struct device_node *events_np, *node;
+   511		int i, j, count;
+   512		const struct of_device_id *of_id;
+   513	
+   514		events_np = of_get_child_by_name(np, "events");
+   515		if (!events_np) {
+   516			dev_err(dev,
+   517				"failed to get child node of devfreq-event devices\n");
+   518			return -EINVAL;
+   519		}
+   520	
+   521		count = of_get_child_count(events_np);
+   522		desc = devm_kcalloc(dev, count, sizeof(*desc), GFP_KERNEL);
+   523		if (!desc)
+   524			return -ENOMEM;
+   525		info->num_events = count;
+   526	
+   527		of_id = of_match_device(exynos_ppmu_id_match, dev);
+   528		if (of_id)
+ > 529			info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+   530		else
+   531			return -EINVAL;
+   532	
+   533		j = 0;
+   534		for_each_child_of_node(events_np, node) {
+   535			for (i = 0; i < ARRAY_SIZE(ppmu_events); i++) {
+   536				if (!ppmu_events[i].name)
+   537					continue;
+   538	
+   539				if (of_node_name_eq(node, ppmu_events[i].name))
+   540					break;
+   541			}
+   542	
+   543			if (i == ARRAY_SIZE(ppmu_events)) {
+   544				dev_warn(dev,
+   545					"don't know how to configure events : %pOFn\n",
+   546					node);
+   547				continue;
+   548			}
+   549	
+   550			switch (info->ppmu_type) {
+   551			case EXYNOS_TYPE_PPMU:
+   552				desc[j].ops = &exynos_ppmu_ops;
+   553				break;
+   554			case EXYNOS_TYPE_PPMU_V2:
+   555				desc[j].ops = &exynos_ppmu_v2_ops;
+   556				break;
+   557			}
+   558	
+   559			desc[j].driver_data = info;
+   560	
+   561			of_property_read_string(node, "event-name", &desc[j].name);
+   562	
+   563			j++;
+   564		}
+   565		info->desc = desc;
+   566	
+   567		of_node_put(events_np);
+   568	
+   569		return 0;
+   570	}
+   571	
 
 -- 
 0-DAY CI Kernel Test Service
