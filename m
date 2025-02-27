@@ -1,103 +1,149 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15A71E833A;
-	Thu, 27 Feb 2025 10:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BFB1DC997
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 10:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740650780; cv=none; b=VIO+flqEqPy9DXkJFe+ukK8Bihl6717dK+nVkMl5O0sSmTarVHroiKrpwGs3YeAhjD4jzTBeraWNri35LdH3CVgvWGH8HAp4Gx3J8QapCOfJAnzYPl1XM76iTzmc5beM7jqz4NJdpnmSF6rKKZy+HdCJ7IFS7PpkzabJWeLG1AA=
+	t=1740653616; cv=none; b=rkWvXoD6Rz2gvAMVSblk6Dlqv3r6Q4NPJoqghh0ehxrE4y1Ikxyx/5fJSixo/wr8HfHYIRZwweXitH54ToXvzo6kipfpgvGRqQ/3cs5sk/opy9j+N6MgNx5MF05RPKUIOOFmEt8QXlT1QiK0sH4NRpVAwJu1aJznH/faT7K1/X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740650780; c=relaxed/simple;
-	bh=pEP+vhbhTTs4L+MB01lcliTsLO1SSLw/IdC11pBqmGM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=If0kN3gNJMq2KNEVFckEX/og+PANNImeSTs88P4EcEOTbHEs1VWxtv98u3nUXLfQ8nIUmVszgt68JI8y3U7Z/J8yK0z8oiIwFLfM7DLMojuyqRbrQuvn/OSQAbWdNBDUortfaxOsZSHa6TkCDr0C9Bh6uff4oSIAoBUWLInK4vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7POdo74; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740653616; c=relaxed/simple;
+	bh=xMvaPdRrcmL6BJCVKZgOG4AoFPDlvs5iEvJIZcGu+rU=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=caoCgg/li2BX4JMMUvVQG5LgqnuDl+pW6+iQRkegD/u/aMUImhEhv12IojsDrq5Ept8Y0b/4UbVWL8sF9/6FR3sObhxRnLn9Wmnjjniq6uXXu8txmj7b3INeOayFLHGPklkI9QpETXS5QP68eWKznozhIATm6hN5kD8XcXGDTdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iGSJl3Gp; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7POdo74"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abb7a6ee2deso110102166b.0;
-        Thu, 27 Feb 2025 02:06:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740650777; x=1741255577; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y5mvrEbwu4TOisLOydnd4/CSlfw2DVpwzEYHRajJrJE=;
-        b=c7POdo74yjmXhkxAZXxg3REZRZp4STF8WJO9CyMGthVd/iZ6fwW4hg710WlmXf6chC
-         gnvCYTCkYLPPwpEGGGXbb+KaV5jrs0JLy15CezuUf3bYxyOROkhkMTf6GW9o/xYtBk+a
-         MI2JvQc0rAf+Uef/CE0nZDhaHMX4cnMkUmtLlT7qRWTRe98pSDQGF6dvE8Cn0h/dpHJr
-         MXQluYJp6T/0SEL7GAbYES/m+hz9X7y3xWCHbnFz+M2s/r4LTFvgfqGRsn5hmRLXUlHr
-         aJUuKkL/I7etNHZ2KN/dcOHxCX4PDURIu+77pxWuk3cOMh+I3vNEwp5FD+P8pL5z5WwA
-         Fncg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740650777; x=1741255577;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5mvrEbwu4TOisLOydnd4/CSlfw2DVpwzEYHRajJrJE=;
-        b=xFRUhyVqFG82I9Fdo2mrHTWm6bH6QUt4fYhTNB8PMbi0qctAsbzybs8MWa/KMqJgUw
-         35RvrtIkpreW15YsDrWiuQN0v8AyaMchXU4ShqtKseOEbVZLHfxMrjhdcKsLWihgGRI6
-         u6bKEaGUBOQ+hA3lY5zkrpVUuWf49zfCdLSOTbhQJhhd56E5FrsnTwna7Ij209eChATn
-         vKKSzG0JPtwKiUTKIzdC8iQjEK+tBC6oMXlj7uJkPrUSRbRh71lCRKFyQuBCiP/vMCAf
-         Y9XI1ciDtEK0O28acBkXDUv8MBl6xbjd+mh3of2WRqgEb+8fvwk/Xjsy0c9CU2RH3wOC
-         dObg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyZVH6z1XsO/n966tjQ/FO+GaYXIaSUsSUxazcfJwDMLX1LSn3CBVZo7XaN9U9c6mRlCR8sYoj8SeVYwHE@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx53vYkPIUsxQYWN/VJ0zsBFkKeyRReMWTGMsSum4nyN6i/NPYq
-	HbymwBm25CVIZcjNEM0BzP94BRZj2vgFYlpbPLfOVKE92jeKsktsiBNX8w==
-X-Gm-Gg: ASbGnctt/wZZrVXs+KYdL5Ekq8EdWVb7UqoWq2XLGv7+LLK0amWJP0fFzflRlaraG0a
-	ATwLwaGeK3czXw6OPBXiTY6KbuVVeUNL31uNS2SsRrcMSZK+kOkLp7tqNrPlW+oVpamlTfFlneD
-	cDBi4LwsOiPhgRsOhQBvgW+v/ujpu8fvcVE8J05BdfxOTGN3QfvksKPAs412o2agA0fmKIXlL0G
-	7doI1XDK7+YKgn8peDcOYAqCmfBNZ9CUhK9cf1odz76p7VShc/6niNgVZ6D6Z3P+DXMj7NUkAMv
-	0gub+GRxC0Wn/PElW49WgUs8t6WEO7UmjyKCvyts0ABLcdu+1YXAVSunQSk=
-X-Google-Smtp-Source: AGHT+IGgKopderXuTIKklUyo7qkm1wHvlawkRYBo5ORJ/9cId56FxoxDQ0r23w1fGtBvZj+xtfHziw==
-X-Received: by 2002:a17:906:6185:b0:aa6:832b:8d76 with SMTP id a640c23a62f3a-abeeecf50f0mr885964066b.12.1740650776746;
-        Thu, 27 Feb 2025 02:06:16 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:4215])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0dc240sm98204766b.59.2025.02.27.02.06.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2025 02:06:16 -0800 (PST)
-Message-ID: <5f2ede96-183a-4dc7-94b5-d4ec00d38c08@gmail.com>
-Date: Thu, 27 Feb 2025 10:07:13 +0000
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iGSJl3Gp"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 51RAqjb62113557
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Thu, 27 Feb 2025 02:52:45 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 51RAqjb62113557
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1740653566;
+	bh=iYupelTJBZZSq7J8xhubWxdcLgejcAwSGpM6xMwz/24=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=iGSJl3GpZfFHJfjC+qMd2hf6ogdMv31YGNOE9B41XjmDAgij9l907e6ct3SkC87Co
+	 K6OMb2OvJ9QloQe6swe+6fArWUCi7LLTg7Wo27N5JutC1yrYbtqZarM5Grp1eoFl/J
+	 GwzRD8nzaHtZQpvj/O6dMjaWv86Gf9T9MZFKvs7+utHTMyMnadrNxUpgInZcO51gXD
+	 yKYSUIcFhcwQ7e+M27Dx8jl4o21Uh/7qh95lGx4ObnXUBpyhIqzLnHXqXf7PoecYuk
+	 iiEURvK109zM5c5nViWCvUOQ+3+lJ+h0fvkz6w06EIn5Evwcp/0XM3vpWaYwPfsfK/
+	 9XWDNckbNowrg==
+Date: Thu, 27 Feb 2025 02:52:44 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Eric Biggers <ebiggers@kernel.org>, Bill Wendling <morbo@google.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Justin Stitt <justinstitt@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20250227062859.GA2506@sol.localdomain>
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com> <20250227062859.GA2506@sol.localdomain>
+Message-ID: <68F134A3-5371-4E74-9942-2BC66984C18A@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [axboe-block:for-6.15/io_uring 55/56] io_uring/net.c:719:6:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is true
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jens Axboe <axboe@kernel.dk>
-References: <202502270853.xYltEB97-lkp@intel.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <202502270853.xYltEB97-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2/27/25 00:12, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.15/io_uring
-> head:   7eb5bb749ed945ead6a089e18e1d1da74523ac9a
-> commit: 68525267875757520752ff1abbda0af58fc172b9 [55/56] io_uring/net: unify *mshot_prep calls with compat
-> config: um-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502270853.xYltEB97-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270853.xYltEB97-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502270853.xYltEB97-lkp@intel.com/
+On February 26, 2025 10:28:59 PM PST, Eric Biggers <ebiggers@kernel=2Eorg> =
+wrote:
+>On Wed, Feb 26, 2025 at 10:12:47PM -0800, Bill Wendling wrote:
+>> For both gcc and clang, crc32 builtins generate better code than the
+>> inline asm=2E GCC improves, removing unneeded "mov" instructions=2E Cla=
+ng
+>> does the same and unrolls the loops=2E GCC has no changes on i386, but
+>> Clang's code generation is vastly improved, due to Clang's "rm"
+>> constraint issue=2E
+>>=20
+>> The number of cycles improved by ~0=2E1% for GCC and ~1% for Clang, whi=
+ch
+>> is expected because of the "rm" issue=2E However, Clang's performance i=
+s
+>> better than GCC's by ~1=2E5%, most likely due to loop unrolling=2E
+>>=20
+>> Link: https://github=2Ecom/llvm/llvm-project/issues/20571#issuecomment-=
+2649330009
+>> Cc: Thomas Gleixner <tglx@linutronix=2Ede>
+>> Cc: Ingo Molnar <mingo@redhat=2Ecom>
+>> Cc: Borislav Petkov <bp@alien8=2Ede>
+>> Cc: Dave Hansen <dave=2Ehansen@linux=2Eintel=2Ecom>
+>> Cc: x86@kernel=2Eorg
+>> Cc: "H=2E Peter Anvin" <hpa@zytor=2Ecom>
+>> Cc: Eric Biggers <ebiggers@kernel=2Eorg>
+>> Cc: Ard Biesheuvel <ardb@kernel=2Eorg>
+>> Cc: Nathan Chancellor <nathan@kernel=2Eorg>
+>> Cc: Nick Desaulniers <nick=2Edesaulniers+lkml@gmail=2Ecom>
+>> Cc: Justin Stitt <justinstitt@google=2Ecom>
+>> Cc: linux-kernel@vger=2Ekernel=2Eorg
+>> Cc: linux-crypto@vger=2Ekernel=2Eorg
+>> Cc: llvm@lists=2Elinux=2Edev
+>> Signed-off-by: Bill Wendling <morbo@google=2Ecom>
+>> ---
+>>  arch/x86/Makefile         | 3 +++
+>>  arch/x86/lib/crc32-glue=2Ec | 8 ++++----
+>>  2 files changed, 7 insertions(+), 4 deletions(-)
+>
+>Thanks!  A couple concerns, though:
+>
+>> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+>> index 5b773b34768d=2E=2E241436da1473 100644
+>> --- a/arch/x86/Makefile
+>> +++ b/arch/x86/Makefile
+>> @@ -114,6 +114,9 @@ else
+>>  KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
+>>  endif
+>>=20
+>> +# Enables the use of CRC32 builtins=2E
+>> +KBUILD_CFLAGS +=3D -mcrc32
+>
+>Doesn't this technically allow the compiler to insert CRC32 instructions
+>anywhere in arch/x86/ without the needed runtime CPU feature check?  Norm=
+ally
+>when using intrinsics it's necessary to limit the scope of the feature
+>enablement to match the runtime CPU feature check that is done, e=2Eg=2E =
+by using
+>the target function attribute=2E
+>
+>> diff --git a/arch/x86/lib/crc32-glue=2Ec b/arch/x86/lib/crc32-glue=2Ec
+>> index 2dd18a886ded=2E=2Efdb94bff25f4 100644
+>> --- a/arch/x86/lib/crc32-glue=2Ec
+>> +++ b/arch/x86/lib/crc32-glue=2Ec
+>> @@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+>>  EXPORT_SYMBOL(crc32_le_arch);
+>>=20
+>>  #ifdef CONFIG_X86_64
+>> -#define CRC32_INST "crc32q %1, %q0"
+>> +#define CRC32_INST __builtin_ia32_crc32di
+>>  #else
+>> -#define CRC32_INST "crc32l %1, %0"
+>> +#define CRC32_INST __builtin_ia32_crc32si
+>>  #endif
+>
+>Do both gcc and clang consider these builtins to be a stable API, or do t=
+hey
+>only guarantee the stability of _mm_crc32_*() from immintrin=2Eh?  At lea=
+st for
+>the rest of the SSE and AVX stuff, I thought that only the immintrin=2Eh =
+functions
+>are actually considered stable=2E
+>
+>- Eric
 
-Not a real problem, it's just the compiler (understandably) can't
-derive that the block is only empty IFF io_is_compat() is a
-constant false.
-
-We can initialise the var and let the compiler optimise it to
-silence the warning.
-
--- 
-Pavel Begunkov
+There is that=2E=2E=2E also are there compiler versions that we support th=
+at do not have -mcrc32 support?=20
 
