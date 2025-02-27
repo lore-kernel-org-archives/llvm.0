@@ -1,212 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE9C26FA7B;
-	Thu, 27 Feb 2025 20:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077A81C07E6;
+	Thu, 27 Feb 2025 20:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740686949; cv=none; b=f/QMeIiSW5MxqzQXtERIFTpGSE+BJLCvwpW2Vsv6Q3VhAgAi0SQ55O9T9mE1dnXjpzFGs72SCr+umpmRmuDYG6NcuP2wLU7IyXqJxqc9UWVExG5gISbTMU4xg6a+9V/SqLPrj7RYe4g51ixxDt1KeFZKi50MXTDwfhbIoQ1cBfk=
+	t=1740687840; cv=none; b=Ke3tqLOYQSNGl0WF1GMNAuffG3P8txWJSHkPWoO3djqGAAGjA3que/U7FXU5ZhxP6Ejn0HTj9dNLMS7ynae1yQIvoI5tk3VzSnzd2+F/kkc3LZjZudv9fnhimYM2Vi0trGO3B2jHNhYCYfpuI3/kh3SSQTYZdA/FO6XNwjkQ+h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740686949; c=relaxed/simple;
-	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YpQZxBS1F6sdr4r+PxXmfzrmKnjX0C8tlNIGJIoUUsCp+BHyDP6z6Q/04pW8xfGH5kuEZ+8xqRPkTTNJ70GyLZutCqvhNBaJibH1Z4zEQSfTRXtfcYStiBqQCNz3TxMX7IAWkqsWynfYOhr3JKDQmXlgPhA9UBrnfYBAgYi0fQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnHlJzwu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740687840; c=relaxed/simple;
+	bh=087oTqi7W/0v4LMaQVYrNt/Vn/vLmPYte2/gxXwYs7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K8sPTaGQIKVA6V/s147YaSXY1D043BkTxWVlhLrFnytQl7uXFtaO8hA+1PK9x5vudMay/kba6ljYl1aN2ecVZywBagEO+JNekaVudUnF0W0WWxsPq5xRsF5WTlTzLNxe0jATE+3TGqssE70nIDgX3skyMhFCkAthkCDxKPqtBco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fxqR8xdz; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnHlJzwu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A482C4CEE4;
-	Thu, 27 Feb 2025 20:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740686949;
-	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YnHlJzwuNAhrmOtUQIOONlXKaDukIwGkh5SrT+AZR/hmITYF8E+hdIpjGMviggUAj
-	 drRRRPU+0AG9uF7+Y4DAsDNah8z1NEGiynbb4H7ZmAMNCtqMAPnrEG0/FOhod04EkA
-	 U4ma/Mnk6WCTXvtBPcsBSlNVHumJohdP7s+1dB7bS3+4Ek6MDDTe+rDOOTWJOBoHw7
-	 88UWXpeCccf5vEyjP4aC80SfJnsy4m7ljKWtpGIkinhTaVHGH1AKbnN9aIZYuM++b4
-	 snIDmnGQv2ZxWJoUBIBmwAuOY6ko8JXBsH0MG2WGHgZeI3Q2ACG+RqLz0uhhZvCWq4
-	 NJ3Oif7ZQ51KA==
-Message-ID: <d1fc8fea-5a2c-4b38-949c-8063cb76fadf@kernel.org>
-Date: Thu, 27 Feb 2025 14:09:08 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fxqR8xdz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740687839; x=1772223839;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=087oTqi7W/0v4LMaQVYrNt/Vn/vLmPYte2/gxXwYs7M=;
+  b=fxqR8xdzkWROSEDflB/PhDsHRjn3s5ZkE8qGJ9NooWZRK5fxxvuryq5Z
+   bOwXoZyrFlCPPbZEAoY1pDFKHi41n/sCdlBk2Sf7m/a4lJKPMNz/IUB6H
+   u4c9TZC9Zb9XqCtmd3Gr9BEqGlxFqw4DMPYuyRWMsk+XuDvMrHALc6GHe
+   GBgFlkE7C1cu0GZDOHag68RbztzUqJ4+yfX4hiQTkMrwZlEIvkluiinVU
+   T3YjAsXlFkFuZfRa4s0OmwqWs+MxSfQCElSWksBt3v4yW1/iEngBvmzPW
+   FhIs7OkknQmf5p9Qx0L+FVo4a8B4YUKZrhC4riU8E1aH9Yy6gpgr4cLcx
+   g==;
+X-CSE-ConnectionGUID: RyR1bGqaTNG4lx0NNghn7g==
+X-CSE-MsgGUID: DZQGnqH9TvifWDi8OXtCZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="59136983"
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="59136983"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 12:23:58 -0800
+X-CSE-ConnectionGUID: YYk+nKDITXqOX//VMMIa2A==
+X-CSE-MsgGUID: g4hpkXe2Rc2ezkQwBiZMsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118056318"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 27 Feb 2025 12:23:55 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnkQC-000Dzi-1g;
+	Thu, 27 Feb 2025 20:23:52 +0000
+Date: Fri, 28 Feb 2025 04:23:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sam Winchenbach <sam.winchenbach@framepointer.org>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
+	Michael.Hennerich@analog.com, antoniu.miclaus@analog.com,
+	jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, sam.winchenbach@framepointer.org
+Subject: Re: [PATCH v4 1/2] iio: filter: admv8818: fix range calculation
+Message-ID: <202502280434.DHtcsf7x-lkp@intel.com>
+References: <20250225134612.577022-1-sam.winchenbach@framepointer.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a
- union
-To: kernel test robot <lkp@intel.com>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "(open list:X86 ARCHITECTURE (32-BIT AND 64-BIT))"
- <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250226074934.1667721-5-superm1@kernel.org>
- <202502272001.nafS0qXq-lkp@intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <202502272001.nafS0qXq-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225134612.577022-1-sam.winchenbach@framepointer.org>
 
-On 2/27/2025 06:59, kernel test robot wrote:
-> Hi Mario,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on amd-pstate/bleeding-edge]
-> [cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next linus/master v6.14-rc4 next-20250227]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/cpufreq-amd-pstate-Invalidate-cppc_req_cached-during-suspend/20250226-155545
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-> patch link:    https://lore.kernel.org/r/20250226074934.1667721-5-superm1%40kernel.org
-> patch subject: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a union
-> config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502272001.nafS0qXq-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->     In file included from drivers/cpufreq/amd-pstate.c:51:
->     In file included from drivers/cpufreq/amd-pstate-trace.h:15:
->     In file included from include/linux/trace_events.h:6:
->     In file included from include/linux/ring_buffer.h:5:
->     In file included from include/linux/mm.h:2224:
->     include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->       504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->       505 |                            item];
->           |                            ~~~~
->     include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->       511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->       512 |                            NR_VM_NUMA_EVENT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/cpufreq/amd-pstate.c:914:41: warning: variable 'nominal_freq' is uninitialized when used here [-Wuninitialized]
->       914 |                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
->           |                                                       ^~~~~~~~~~~~
->     drivers/cpufreq/amd-pstate.c:902:38: note: initialize the variable 'nominal_freq' to silence this warning
->       902 |         u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
->           |                                             ^
->           |                                              = 0
->     3 warnings generated.
-> 
-> 
-> vim +/nominal_freq +914 drivers/cpufreq/amd-pstate.c
-> 
->     891	
->     892	/*
->     893	 * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
->     894	 *			 for the @cpudata object.
->     895	 *
->     896	 * Requires: all perf members of @cpudata to be initialized.
->     897	 *
->     898	 * Returns 0 on success, non-zero value on failure.
->     899	 */
->     900	static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->     901	{
->     902		u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
->     903		struct cppc_perf_caps cppc_perf;
->     904		union perf_cached perf;
->     905		int ret;
->     906	
->     907		ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
->     908		if (ret)
->     909			return ret;
->     910		perf = READ_ONCE(cpudata->perf);
->     911	
->     912		if (quirks && quirks->lowest_freq) {
->     913			min_freq = quirks->lowest_freq;
->   > 914			perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
->     915			WRITE_ONCE(cpudata->perf, perf);
->     916		} else
->     917			min_freq = cppc_perf.lowest_freq;
->     918	
->     919		if (quirks && quirks->nominal_freq)
->     920			nominal_freq = quirks->nominal_freq;
->     921		else
->     922			nominal_freq = cppc_perf.nominal_freq;
->     923	
->     924		min_freq *= 1000;
->     925		nominal_freq *= 1000;
->     926	
->     927		WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
->     928	
->     929		max_freq = perf_to_freq(perf, nominal_freq, perf.highest_perf);
->     930		lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
->     931		WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
->     932	
->     933		/**
->     934		 * Below values need to be initialized correctly, otherwise driver will fail to load
->     935		 * max_freq is calculated according to (nominal_freq * highest_perf)/nominal_perf
->     936		 * lowest_nonlinear_freq is a value between [min_freq, nominal_freq]
->     937		 * Check _CPC in ACPI table objects if any values are incorrect
->     938		 */
->     939		if (min_freq <= 0 || max_freq <= 0 || nominal_freq <= 0 || min_freq > max_freq) {
->     940			pr_err("min_freq(%d) or max_freq(%d) or nominal_freq(%d) value is incorrect\n",
->     941				min_freq, max_freq, nominal_freq);
->     942			return -EINVAL;
->     943		}
->     944	
->     945		if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
->     946			pr_err("lowest_nonlinear_freq(%d) value is out of range [min_freq(%d), nominal_freq(%d)]\n",
->     947				lowest_nonlinear_freq, min_freq, nominal_freq);
->     948			return -EINVAL;
->     949		}
->     950	
->     951		return 0;
->     952	}
->     953	
-> 
+Hi Sam,
 
-The series is getting close (I think just one more patch needing review).
+kernel test robot noticed the following build errors:
 
-So if no other feedback for the series needing other fixes I will squash 
-this in to fix this issue when the series is merged.
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on linus/master v6.14-rc4 next-20250227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index bd8bcda4e6eb0..034ee40681b4c 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -915,6 +915,12 @@ static int amd_pstate_init_freq(struct amd_cpudata 
-*cpudata)
-                 return ret;
-         perf = READ_ONCE(cpudata->perf);
+url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Winchenbach/dt-bindings-iio-filter-Add-lpf-hpf-freq-margins/20250225-215003
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20250225134612.577022-1-sam.winchenbach%40framepointer.org
+patch subject: [PATCH v4 1/2] iio: filter: admv8818: fix range calculation
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502280434.DHtcsf7x-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 204dcafec0ecf0db81d420d2de57b02ada6b09ec)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280434.DHtcsf7x-lkp@intel.com/reproduce)
 
-+       if (quirks && quirks->nominal_freq)
-+               nominal_freq = quirks->nominal_freq;
-+       else
-+               nominal_freq = cppc_perf.nominal_freq;
-+       nominal_freq *= 1000;
-+
-         if (quirks && quirks->lowest_freq) {
-                 min_freq = quirks->lowest_freq;
-                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, 
-min_freq);
-@@ -922,13 +928,7 @@ static int amd_pstate_init_freq(struct amd_cpudata 
-*cpudata)
-         } else
-                 min_freq = cppc_perf.lowest_freq;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280434.DHtcsf7x-lkp@intel.com/
 
--       if (quirks && quirks->nominal_freq)
--               nominal_freq = quirks->nominal_freq;
--       else
--               nominal_freq = cppc_perf.nominal_freq;
--
-         min_freq *= 1000;
--       nominal_freq *= 1000;
+All errors (new ones prefixed by >>):
 
-         WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
+   In file included from drivers/iio/filter/admv8818.c:17:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/iio/filter/admv8818.c:17:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/iio/filter/admv8818.c:17:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/iio/filter/admv8818.c:304:34: error: use of undeclared identifier 'lfp_corner_target'; did you mean 'lpf_corner_target'?
+     304 |         ret = __admv8818_lpf_select(st, lfp_corner_target);
+         |                                         ^~~~~~~~~~~~~~~~~
+         |                                         lpf_corner_target
+   drivers/iio/filter/admv8818.c:283:25: note: 'lpf_corner_target' declared here
+     283 |         u64 hpf_corner_target, lpf_corner_target;
+         |                                ^
+   12 warnings and 1 error generated.
 
+
+vim +304 drivers/iio/filter/admv8818.c
+
+   279	
+   280	static int admv8818_rfin_band_select(struct admv8818_state *st)
+   281	{
+   282		int ret;
+   283		u64 hpf_corner_target, lpf_corner_target;
+   284	
+   285		st->cf_hz = clk_get_rate(st->clkin);
+   286	
+   287		// Check for underflow
+   288		if (st->cf_hz > st->hpf_margin_hz)
+   289			hpf_corner_target = st->cf_hz - st->hpf_margin_hz;
+   290		else
+   291			hpf_corner_target = 0;
+   292	
+   293		// Check for overflow
+   294		lpf_corner_target = st->cf_hz + st->lpf_margin_hz;
+   295		if (lpf_corner_target < st->cf_hz)
+   296			lpf_corner_target = U64_MAX;
+   297	
+   298		mutex_lock(&st->lock);
+   299	
+   300		ret = __admv8818_hpf_select(st, hpf_corner_target);
+   301		if (ret)
+   302			goto exit;
+   303	
+ > 304		ret = __admv8818_lpf_select(st, lfp_corner_target);
+   305	exit:
+   306		mutex_unlock(&st->lock);
+   307		return ret;
+   308	}
+   309	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
