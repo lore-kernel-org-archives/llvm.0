@@ -1,58 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC47145A05;
-	Thu, 27 Feb 2025 01:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B4B60DCF;
+	Thu, 27 Feb 2025 02:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740620083; cv=none; b=djcqb7jf6kOIntIAhhBQiF/eeHpObAIvn7NwBhIjP/pxbjbnLu6YOANhkvEZ4g7t0iCEcQ21vBLaKlutjUdrLLlB1hwVeYg9yNUKqz+sHDNVi0Dqln9Tfh9fqcoIxhkNy3kNoktSPG3ZxvQUFehiLwOs6BjIc/b+P811hMs/QRo=
+	t=1740623828; cv=none; b=F4kFIyfbcz/aCuOZKD+OHFF7T+rMndB29u43iy4rCcLpN1Knf2GQuqoqCOv7gL3U/VRKKA3/kknYtAm2NkHkrmDfne+lHhR6QQ4FxduUs1w6+goeI9lr9f7j5QWuU9tlEORY8vwl/+1d/2QckwW5w8eFYVVi3/cbaVyIoAmeUlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740620083; c=relaxed/simple;
-	bh=3odKXDCT/AK0GrDy/VWYqyS5P1dlm6J4H6J17/oG1aI=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RhDNABb0PumIpkKqXPKs6E5Z7c3wToNQlBKT8uiJ+cB+Xr+VJjNTQEWWhT5PP3d1/cSsOx0pCjojcB/GT4w8wcOBjNTIc5sQLDZRGpQtGkp6C0q6VjofqY4gsdp6FuMk2h97UH+WMUl1gbbThxcC+Qz3V0h7PauPvKgkYkbVWDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqnsyb4P; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1740623828; c=relaxed/simple;
+	bh=WHMi6LGNT8va9hoBVA6YvjNYhXhJ3jYhOqYG7oiKxbI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K3/4+R3BmE0SOvYfiRQG0AMqWATg/Zz7a5MEVO7kvHMoVR2Rbd2POZC13FYkTzG+6G5Pi18QizitU0QBSeWPfe4iYdXpKUITPDhMRxEGevSCuY3p4JhMEtX0tM+uookmwTTvldxeH1nM9zKXMwmPE615iKyl6mLigBh9qoCkVZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z2FdZlqS; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqnsyb4P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z2FdZlqS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740620081; x=1772156081;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=3odKXDCT/AK0GrDy/VWYqyS5P1dlm6J4H6J17/oG1aI=;
-  b=lqnsyb4PacMjAxZH4aRlTknjuCGIct7sqzIq5XfeCMjJgRsIC7lRcL76
-   VKO24ji6+77U0wSPmsbZ6o+/bSMmQE34nnf3ztTD5yeojzzU3YkbXwCsM
-   Xkk3xiQFmf14O9RipniFIdfhdKbvnoczc4Rim0t3QbkXfSIavN9P2h8P8
-   2pNqWv0c2jgwT0C1OACuk2RPBbtiW+FfulXpnG3OE/9G4WwdrrgsypkXj
-   kNo1AgbqdysXcEGSszxzX2GaWqlXwDz3Ds0uMCntvwBYwlS3sUypHLlsI
-   qSa3y89WDjTGL0Tg5sW6Imz1FWb/uLqas43qqQ8B6AKlLFnTpyE2QZSsv
-   Q==;
-X-CSE-ConnectionGUID: 5uobYWV7RTqJyE3hMIbjxw==
-X-CSE-MsgGUID: 6qRTW5lzRvOv7DeWtAINjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41377393"
-X-IronPort-AV: E=Sophos;i="6.13,318,1732608000"; 
-   d="scan'208";a="41377393"
+  t=1740623826; x=1772159826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WHMi6LGNT8va9hoBVA6YvjNYhXhJ3jYhOqYG7oiKxbI=;
+  b=Z2FdZlqSXYECltuD+TbvPKVPSIjZ7hxLnrODHWFPv53wJE5wui+0gc3y
+   Dhmpn6FR+T7jcF8fTQW7MGTBDgGq/97CihEP+PMqo0CIH6KSInrZan0Nh
+   mcFibNdRKIiFD3NPm9TWKJGapLto1up75Aug0V7VtKDOAn1KI3fPQFjHO
+   AEgMAnXcrEmbaNq0LjpMOTZz6uMdc7GtEiLdimWIfH0IU+THFX2pA7NlH
+   4OjgRopfVB5jJZ1vC0TEUqWWzXfouByH3TLwhs5+EgTW3iJmuxYlDYyRH
+   9CWBJBVnUXKYrRwpK5xCuSOj6kV/o/4j/vptQetaSSm7iN8D7ZBUDhlkV
+   w==;
+X-CSE-ConnectionGUID: qE6xuoXAR8KSWindV3tmVg==
+X-CSE-MsgGUID: zHvUjZSxQbyZAlHbVEyjuw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="63966075"
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="63966075"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 17:34:40 -0800
-X-CSE-ConnectionGUID: 6CuLgtVTQ72Ug4InhIE9RQ==
-X-CSE-MsgGUID: Aune66aeTzSJvzIuzSPyvQ==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 18:37:05 -0800
+X-CSE-ConnectionGUID: cAPCEPPdRvWuJkuM7CVX1w==
+X-CSE-MsgGUID: Dntb8cdETPWhN0cz1LQHJQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117793697"
+   d="scan'208";a="117806392"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 26 Feb 2025 17:34:39 -0800
+  by orviesa008.jf.intel.com with ESMTP; 26 Feb 2025 18:37:03 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tnSnM-000ChA-1u;
-	Thu, 27 Feb 2025 01:34:36 +0000
-Date: Thu, 27 Feb 2025 09:34:33 +0800
+	id 1tnTlk-000CkE-16;
+	Thu, 27 Feb 2025 02:37:00 +0000
+Date: Thu, 27 Feb 2025 10:36:46 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: net/devlink/dev.c:248:20: warning: arithmetic between different
- enumeration types ('enum devlink_reload_limit' and 'enum
- devlink_reload_action')
-Message-ID: <202502270907.G5zzEHgz-lkp@intel.com>
+To: Jonathan Cavitt <jonathan.cavitt@intel.com>,
+	intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	saurabhg.gupta@intel.com, alex.zuo@intel.com,
+	jonathan.cavitt@intel.com, joonas.lahtinen@linux.intel.com,
+	matthew.brost@intel.com, jianxun.zhang@intel.com,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 6/6] drm/xe/xe_vm: Implement xe_vm_get_property_ioctl
+Message-ID: <202502271029.67aYhWm6-lkp@intel.com>
+References: <20250226225557.133076-7-jonathan.cavitt@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,88 +67,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250226225557.133076-7-jonathan.cavitt@intel.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Moshe Shemesh <moshe@nvidia.com>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Jiri Pirko <jiri@nvidia.com>
+Hi Jonathan,
 
-Hi Moshe,
+kernel test robot noticed the following build errors:
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+[auto build test ERROR on drm-xe/drm-xe-next]
+[also build test ERROR on next-20250226]
+[cannot apply to linus/master v6.14-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f4ce1f3318ad4bc12463698696ebc36b145a6aa3
-commit: c6ed7d6ef929a4502cc89c90a3c57e8814f4fcc9 devlink: Move devlink dev reload code to dev
-date:   2 years, 1 month ago
-config: arm-randconfig-004-20250120 (https://download.01.org/0day-ci/archive/20250227/202502270907.G5zzEHgz-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270907.G5zzEHgz-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cavitt/drm-xe-xe_gt_pagefault-Migrate-lookup_vma-to-xe_vm-h/20250227-070008
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20250226225557.133076-7-jonathan.cavitt%40intel.com
+patch subject: [PATCH 6/6] drm/xe/xe_vm: Implement xe_vm_get_property_ioctl
+config: s390-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271029.67aYhWm6-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271029.67aYhWm6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502270907.G5zzEHgz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502271029.67aYhWm6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from net/devlink/dev.c:7:
-   In file included from include/net/genetlink.h:5:
-   In file included from include/linux/genetlink.h:5:
-   In file included from include/uapi/linux/genetlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:1856:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from net/devlink/dev.c:9:
-   net/devlink/devl_internal.h:21:19: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      21 |         u32 reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:22:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-      22 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/devlink/dev.c:248:20: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-     248 |                 stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-         |                            ~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/dev.c:349:26: warning: arithmetic between different enumeration types ('enum devlink_reload_limit' and 'enum devlink_reload_action') [-Wenum-enum-conversion]
-     349 |         u32 remote_reload_stats[DEVLINK_RELOAD_STATS_ARRAY_SIZE];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/devlink/devl_internal.h:18:30: note: expanded from macro 'DEVLINK_RELOAD_STATS_ARRAY_SIZE'
-      18 |         (__DEVLINK_RELOAD_LIMIT_MAX * __DEVLINK_RELOAD_ACTION_MAX)
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
+>> drivers/gpu/drm/xe/xe_vm.c:3288:2: error: use of undeclared identifier 'vma'; did you mean 'vm'?
+    3288 |         vma = lookup_vma(vm, pf->page_addr);
+         |         ^~~
+         |         vm
+   drivers/gpu/drm/xe/xe_vm.c:3283:56: note: 'vm' declared here
+    3283 | xe_pagefault_access_type_to_address_type(struct xe_vm *vm, struct xe_pagefault *pf)
+         |                                                        ^
+>> drivers/gpu/drm/xe/xe_vm.c:3288:8: error: call to undeclared function 'lookup_vma'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3288 |         vma = lookup_vma(vm, pf->page_addr);
+         |               ^
+>> drivers/gpu/drm/xe/xe_vm.c:3288:6: error: incompatible integer to pointer conversion assigning to 'struct xe_vm *' from 'int' [-Wint-conversion]
+    3288 |         vma = lookup_vma(vm, pf->page_addr);
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_vm.c:3289:7: error: use of undeclared identifier 'vma'; did you mean 'vm'?
+    3289 |         if (!vma)
+         |              ^~~
+         |              vm
+   drivers/gpu/drm/xe/xe_vm.c:3283:56: note: 'vm' declared here
+    3283 | xe_pagefault_access_type_to_address_type(struct xe_vm *vm, struct xe_pagefault *pf)
+         |                                                        ^
+   drivers/gpu/drm/xe/xe_vm.c:3291:23: error: use of undeclared identifier 'vma'; did you mean 'vm'?
+    3291 |         if (xe_vma_read_only(vma) && pf->access_type != XE_PAGEFAULT_ACCESS_TYPE_READ)
+         |                              ^~~
+         |                              vm
+   drivers/gpu/drm/xe/xe_vm.c:3283:56: note: 'vm' declared here
+    3283 | xe_pagefault_access_type_to_address_type(struct xe_vm *vm, struct xe_pagefault *pf)
+         |                                                        ^
+   5 errors generated.
 
 
-vim +248 net/devlink/dev.c
+vim +3288 drivers/gpu/drm/xe/xe_vm.c
 
-   238	
-   239	static void
-   240	__devlink_reload_stats_update(struct devlink *devlink, u32 *reload_stats,
-   241				      enum devlink_reload_limit limit, u32 actions_performed)
-   242	{
-   243		unsigned long actions = actions_performed;
-   244		int stat_idx;
-   245		int action;
-   246	
-   247		for_each_set_bit(action, &actions, __DEVLINK_RELOAD_ACTION_MAX) {
- > 248			stat_idx = limit * __DEVLINK_RELOAD_ACTION_MAX + action;
-   249			reload_stats[stat_idx]++;
-   250		}
-   251		devlink_notify(devlink, DEVLINK_CMD_NEW);
-   252	}
-   253	
+  3281	
+  3282	static enum drm_xe_fault_address_type
+  3283	xe_pagefault_access_type_to_address_type(struct xe_vm *vm, struct xe_pagefault *pf)
+  3284	{
+  3285		if (!pf)
+  3286			return 0;
+  3287	
+> 3288		vma = lookup_vma(vm, pf->page_addr);
+  3289		if (!vma)
+  3290			return DRM_XE_FAULT_ADDRESS_TYPE_NONE_EXT;
+  3291		if (xe_vma_read_only(vma) && pf->access_type != XE_PAGEFAULT_ACCESS_TYPE_READ)
+  3292			return DRM_XE_FAULT_ADDRESS_TYPE_WRITE_INVALID_EXT;
+  3293		return 0;
+  3294	}
+  3295	
 
 -- 
 0-DAY CI Kernel Test Service
