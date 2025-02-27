@@ -1,112 +1,101 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377C02309AE
-	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 13:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BC822FF44;
+	Thu, 27 Feb 2025 14:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663601; cv=none; b=iWe7lTGWgxxBSQs5Hqgbs7r0oc3zELncnSoIHc+GHiVsBqC1KvP0XEgKW1Of1luQiUe6NzlmUJGPBUDR4MYeu+drnzPTnGvdbFY6rn8+JATKa9kJdQwbQGh+LH9RSeXqCO8bXUGpdzY+SGiekep878IFKqXL3JKdvbLqyeInq0c=
+	t=1740665809; cv=none; b=Fp17dlJvntD9BBttcOlYn/L1CNmAUnE//VxsRxPed9C1aNDuuaAk7tBMMVsY7zfMOgfBQCFXC9PAyirCeF7UN2eHXepbSZxL8077X1lrRITcTg83StcDmZvmMMOxtdoDwsRNTVOByDtmAuY3nOMy429V1ew1uU7ac9n74E3kuK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663601; c=relaxed/simple;
-	bh=2cSgpAMzuRDyg/OP6JlvBhgcN9wqw2ZkQw1H+nq1MIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WFXrWO4qmZXfFXdJmRtoPG0HfmskUasnMpTkw1ZJvqtS9oGiGzRJCTaoZFGnv37xtFSTOkWDZZpr7NamTp6QneK7U6GciCgrxx2Q3eJH/zBK2eLLTHNA3BO66MOm7CXAjYpPeiCi7FMX9dMolW6KCNYZEZ6nykRDp5wfDZXxM9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbBpFwqM; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740665809; c=relaxed/simple;
+	bh=NSlGgDaQ6OTrGCsU4w8SbDFK25aIamxIlg7Tnk5mVsU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fE1rTJiVJjFrsGzKk/NXeG4qHaRWgNRSnRmVFQCqYzbD4BQ8d7LGgYe89wB1o6P2S3gxoqajSUzqP7OcmIGv4W3S/adezr3vbHPHcay+126lejysfbj/J75YNCLEBRTrPsybAJgrU1FWAfIuMb5sH0h1YzR4SxjY56K+VO0cWIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K8efGPCj; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbBpFwqM"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-307c13298eeso12196441fa.0
-        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 05:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740663598; x=1741268398; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X0QqIj+Xj2KKd5yOn9wT3FKv7ilH/QlR+xG09MXlqr0=;
-        b=gbBpFwqMFZ9VagA8IbQxcu6kgqfhR34hFhbZ97BEPVJk1Vwy1kFzY2Q6EpgMIwuVP7
-         htreaD+iU8yaU5bYuQVIGIA9FQ18B50tV+26rwzggxRfrwPYHLrff8YkimayKvYajlCw
-         teCaDBiSVVSHe18uC7wfWoSgIijSoQg1kH02ljaqP8bxxM0qg4ypRn7DWC1EtiqUKtvy
-         pFkdrOcwIomD00mJfvRBVNlDSeqlur/WKKZy0JFGKCx8oAPmwTJrJ2dWo/uE5oosq/+d
-         vBkgxc63YhlIY4rvtCvUlLFXfNxZeRTIdGW+vUoZ0obTnhscWeR05Rq7uivEWD687L6v
-         zZcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740663598; x=1741268398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X0QqIj+Xj2KKd5yOn9wT3FKv7ilH/QlR+xG09MXlqr0=;
-        b=h0nfs4iNjd1/dTGqEuj50kriq5+WpAfsHIUw/TmGsPeoG1OnlDVQjKtiIGqDObw4EB
-         vKBiZGP3rjaOSVQx2XaIzj4Xych4NAhc53pF+8Hh7yyOwTG1eZa1h4C+nyluRiV4w57J
-         VMgcevTR9NRHtJlpMWlo0zryRPqWev6p3DkyWqwMVN60cP2YIApzI/pD61tiz5yzunFq
-         qXEre65g/VV/nD1+U8VJaq1affUEyt9hl+DEwtm12yZC5SRtLSVvgvHnW4oWhgmOBBKm
-         aMep3mNmOt+SXSio8a8omJ4pyb2cf+kaSj4jmFl+KbXCpswmIQRT4XwMxGU2ajQEs9ux
-         NxWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUWoE5ZhiHHCLccyKEcBcItUwfyIPLyqAUD+4eDuXJnoZ4G54Zb1QljKzbeZgZJS8ug2jt7@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx8WwPWc9quH2jW+yPOQhTdQH1PpuGFU4jKGvKr3Q/F2f6Y8qYu
-	nvbd/8DiOKXvI42tMmxJuRlBfmC13dy2X6Exh4iahTwecicJ77Ca94zOCQbXkBtzHYNAz0rSyj2
-	PbqEt+wVVZN7MlfzotXmuOFqANoY=
-X-Gm-Gg: ASbGncswXxu9yKp7P4YbqIzFf+HIaVrta2dd/hgPUMHp0uHmSG3bYlBYNEEOGLa5tfB
-	rdOXNlBb3Y7UaDZxZY6Zkzk9r1ywEthWLXPZgmCNgeJ8Rrb3HCvGvckQt9GTAiqNmZdAmKk4MPG
-	9g/yBFdUTbMJpY2Dy7DwI0o3AH3d+E0EC7sMLE+whG
-X-Google-Smtp-Source: AGHT+IFv8UCQLBFW+HmySTIopoV3gqxaBg5wvtyqxsA9/SWPF9AXdxTyZjDvJBXPJMy/X/nEAbqTXjvKUANVm2PlmXw=
-X-Received: by 2002:a05:651c:50e:b0:308:e54d:61aa with SMTP id
- 38308e7fff4ca-30b8464a2bamr20649531fa.2.1740663598018; Thu, 27 Feb 2025
- 05:39:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K8efGPCj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740665808; x=1772201808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NSlGgDaQ6OTrGCsU4w8SbDFK25aIamxIlg7Tnk5mVsU=;
+  b=K8efGPCjZpTwWrGkzn4UVS1BK4wJVHuItYPpeElWkfojiXwdpHTv7GCJ
+   eHDJ0pzX9YqoNU449qjhMbl7lEwUsOx9QxsK9s5e3pSiKGMxBewpgCPc1
+   QmTEO7HpKxUOuy/KydwErQFj7ewUI8ZbuGoYQsZgB5XuvtjTgskULHzL9
+   J3IsCvsxetYNW+TP7FcnameocQrDt/wj/BNuL480MiWfAbQUwVLmiMpwI
+   bHLJ/Vkuqa4W/CSdGlpSXYBt8/md8wiJJtZpUFSY7HXCmx7SA03xFFAZg
+   r9psidS4hJgK8/6eflrL153nY+IGVo29cEr5Vdl0N+Q3Azh3ji8lWtY+M
+   w==;
+X-CSE-ConnectionGUID: Jab76QjISfCXEfPG4nNK1Q==
+X-CSE-MsgGUID: lSnHk1RiQDaTh+xcXMqWfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="40794900"
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="40794900"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 06:16:47 -0800
+X-CSE-ConnectionGUID: tuuZ2fsPQG6JM1/5Dk3Efg==
+X-CSE-MsgGUID: zKSUO7C1R86uTKVnbJAegA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="121980714"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 27 Feb 2025 06:16:44 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnegq-000DT4-2n;
+	Thu, 27 Feb 2025 14:16:40 +0000
+Date: Thu, 27 Feb 2025 22:16:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ingo Molnar <mingo@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>,
+	Uros Bizjak <ubizjak@gmail.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Brian Gerst <brgerst@gmail.com>
+Subject: Re: [PATCH v2 01/11] percpu: Introduce percpu hot section
+Message-ID: <202502272142.2EFoWquv-lkp@intel.com>
+References: <20250226180531.1242429-2-brgerst@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com> <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
-In-Reply-To: <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Thu, 27 Feb 2025 08:39:21 -0500
-X-Gm-Features: AQ5f1JrvujnQrNdPwimNUvnOfF-Py3f8kwIyufq_KgAHEzKnySZFBMMWJGb3ArY
-Message-ID: <CAJ-ks9=gaxW2191c+K0E0MgjsQWLYoKxJZLxGb6RMbPRVHc4tQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3] drm/xe: xe_gen_wa_oob: replace program_invocation_short_name
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: da.gomez@kernel.org, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Justin Stitt <justinstitt@google.com>, 
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Klaus Jensen <k.jensen@samsung.com>, "Theodore Ts'o" <tytso@mit.edu>, gost.dev@samsung.com, 
-	Barry Song <baohua@kernel.org>, Daniel Gomez <da.gomez@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250226180531.1242429-2-brgerst@gmail.com>
 
-Hi Lucas, chiming in here since I also care about building on macOS.
+Hi Brian,
 
-On Mon, Feb 24, 2025 at 10:05=E2=80=AFAM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
->
-> Is this the approach taken for other similar issues you had? Note that
-> argv[0] and program_invocation_short_name are not the same thing. For
-> this particular binary I don't really care and if it's the approach
-> taken in other places, I'm ok using it.
+kernel test robot noticed the following build errors:
 
-Believe it or not, this is the only place that
-program_invocation_short_name has ever been used in the kernel. There
-have been numerous instances of:
+[auto build test ERROR on 79165720f31868d9a9f7e5a50a09d5fe510d1822]
 
-#define _GNU_SOURCE /* for program_invocation_short_name */
+url:    https://github.com/intel-lab-lkp/linux/commits/Brian-Gerst/percpu-Introduce-percpu-hot-section/20250227-021212
+base:   79165720f31868d9a9f7e5a50a09d5fe510d1822
+patch link:    https://lore.kernel.org/r/20250226180531.1242429-2-brgerst%40gmail.com
+patch subject: [PATCH v2 01/11] percpu: Introduce percpu hot section
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20250227/202502272142.2EFoWquv-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272142.2EFoWquv-lkp@intel.com/reproduce)
 
-but never any actual callers (that I could find in the git history)
-other than this one.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502272142.2EFoWquv-lkp@intel.com/
 
-> I was expecting you'd take the acks and merge it all through a single
-> tree since you received push back on the need to build the kernel in
-> macOS.  Is this the only thing missing and you'd want it to go through
-> drm?
+All errors (new ones prefixed by >>):
 
-I believe the other patches have been applied or dropped. When I last
-tested building allmodconfig this was the only issue I ran into (macOS
-arm64), so I asked Daniel for this resend.
+>> s390x-linux-ld: cannot find CACLE_HOT_DATA: No such file or directory
 
-Cheers.
-Tamir
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
