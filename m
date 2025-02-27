@@ -1,149 +1,170 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BFB1DC997
-	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 10:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C30822F15F
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 12:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740653616; cv=none; b=rkWvXoD6Rz2gvAMVSblk6Dlqv3r6Q4NPJoqghh0ehxrE4y1Ikxyx/5fJSixo/wr8HfHYIRZwweXitH54ToXvzo6kipfpgvGRqQ/3cs5sk/opy9j+N6MgNx5MF05RPKUIOOFmEt8QXlT1QiK0sH4NRpVAwJu1aJznH/faT7K1/X8=
+	t=1740658664; cv=none; b=BI4bpXJKLj8E3m36SCzFtkAXzpRhTFTPkc+t/b4CZCoaC5JW7Yohi8jtNffHKJYRoxkuuMekmu1mxfUHgE7NulgOt7GuOzNJh9HmQcbOg3G0OS5xl1Xpq0wfhN6QbVC2bJpE8bhCvzxHkwaUqK32tA8dC2bC5l6xWb4HvzKo3EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740653616; c=relaxed/simple;
-	bh=xMvaPdRrcmL6BJCVKZgOG4AoFPDlvs5iEvJIZcGu+rU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=caoCgg/li2BX4JMMUvVQG5LgqnuDl+pW6+iQRkegD/u/aMUImhEhv12IojsDrq5Ept8Y0b/4UbVWL8sF9/6FR3sObhxRnLn9Wmnjjniq6uXXu8txmj7b3INeOayFLHGPklkI9QpETXS5QP68eWKznozhIATm6hN5kD8XcXGDTdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iGSJl3Gp; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1740658664; c=relaxed/simple;
+	bh=t2NEDTueBdrSzpgnFv04f30wmQJOXvi/XawvOOxHn+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eE46Q7gJ7aiYlXbR5sPs6cqxd8GFW3YyVzETu+I9Is1duUH1cIcTz3tSK6lW1i3bvMEF5xQpmQqEjrcg4RmcPVZDAckeOYsc/z1ARxlWwuzIkR8CewhsIXhFponwFTZeMj6VmDnQdHJ/pMsa2mwyVt7I1AINbNOU3HzHQlFoGNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LKrt13Yd; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iGSJl3Gp"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 51RAqjb62113557
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 27 Feb 2025 02:52:45 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 51RAqjb62113557
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1740653566;
-	bh=iYupelTJBZZSq7J8xhubWxdcLgejcAwSGpM6xMwz/24=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=iGSJl3GpZfFHJfjC+qMd2hf6ogdMv31YGNOE9B41XjmDAgij9l907e6ct3SkC87Co
-	 K6OMb2OvJ9QloQe6swe+6fArWUCi7LLTg7Wo27N5JutC1yrYbtqZarM5Grp1eoFl/J
-	 GwzRD8nzaHtZQpvj/O6dMjaWv86Gf9T9MZFKvs7+utHTMyMnadrNxUpgInZcO51gXD
-	 yKYSUIcFhcwQ7e+M27Dx8jl4o21Uh/7qh95lGx4ObnXUBpyhIqzLnHXqXf7PoecYuk
-	 iiEURvK109zM5c5nViWCvUOQ+3+lJ+h0fvkz6w06EIn5Evwcp/0XM3vpWaYwPfsfK/
-	 9XWDNckbNowrg==
-Date: Thu, 27 Feb 2025 02:52:44 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Eric Biggers <ebiggers@kernel.org>, Bill Wendling <morbo@google.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Justin Stitt <justinstitt@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20250227062859.GA2506@sol.localdomain>
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com> <20250227062859.GA2506@sol.localdomain>
-Message-ID: <68F134A3-5371-4E74-9942-2BC66984C18A@zytor.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LKrt13Yd"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aaecf50578eso165254866b.2
+        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 04:17:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740658661; x=1741263461; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aRXThQoOhwcNnfMppD5vGBwZ9FKwKkKrXbvSv/+frAI=;
+        b=LKrt13Ydz8TQMz9kXJARk9Qdyyau+5XUVw0itv6ocmUV5Yw1zFGDtl+0NGaWpxJDrq
+         QX1xzyKZG7X7AK+D+huLuX3mZiybW7a0OAe8g3+aLE4RE2dO2WU3/2Er8fzUofVHcwy5
+         4P2kOLcnA5E8w97k07T07PrekOGERzoXPKygbVq9V39qF2H6/dKDG0vWbqhaDKaqx9F4
+         LOBdqzR3da8VhKb/4xv51T9eJnn6WskHLI6bKj3367f3plVJ0dAnv434xFYRD2RKwpXm
+         oxNcta7vK7HqPDBO2MnbPUMpTSmop5LzyZ3Vska/xu/75UsFJIMUjqDOwWhO4Z68iO3i
+         13vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740658661; x=1741263461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aRXThQoOhwcNnfMppD5vGBwZ9FKwKkKrXbvSv/+frAI=;
+        b=A0J8L/6pqkwbj1AZ0DK90sQTwsg9b2mNXHZHJ1q3xYjTywxfSl7Q1/DFzcw/xlcb10
+         E4idsShZ8VgAnUSdlIs3j/zytNSIxOWbDZ9S5WoajdWrkz1H8OfIWzXHISM6s96rNs3E
+         0Rus7ec94xmAcBrtq+ntaeo9Ao1bHK9LwnGRg/8vpECQkreILnoH8IyNmSbo+cp3e3vO
+         NPmjfpEpxkPIUd7hnuSg+d/kOcczpi+1oKtAXZ0PnmmvY6dYcr9O8E09okdzg7eWXUr/
+         glaWWvRQrMHFPtxR/VZWDtcEddZSED42CBeTtO27K3pGVxaIEFcMnUCFL+xbEIS6dBmW
+         Jtaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVr6ATf3t1aVsfZbR1QpigPswaicn8e+egnhnDr95q9MuRu+BRmquHdhXqhG+mlbR3TZi0M@lists.linux.dev
+X-Gm-Message-State: AOJu0YywScDpGIt5DqLSOfCePX0v0Ckl1eaVL3H1Dt+6yZC3Bx+1FAeL
+	tJubnsSVwQRj/MGhO0/zO5gdii9BgcInzVNrvK+0aPD/SNec8G6eBdLwyZrX4G3svvn+w66r7nH
+	qw4h/Wf85NFo7QbgNz16m4e7TrUJfhLMLPdg=
+X-Gm-Gg: ASbGnctdoGAlyL4hUHASk8SPqOMGyOTAXc95sEqNBpl6ILr2HzGX58F0t3Y18qKhUwJ
+	N1eLwknakLHigSe2FlesaVTJXPV6bcz1tlZpuY+ARP1MC2LLU7jhqnh3aRvsdFp4JgUNMDgo3Fv
+	wGpYWo
+X-Google-Smtp-Source: AGHT+IHRc8urmMJEzZbReC8M5BOsivBbw5OeEiAmZaCJJN/28VM+niwg7HDoTK9wNm4K4ubtXD5ztJ3KeACr16PHRt8=
+X-Received: by 2002:a17:906:308e:b0:ab6:511d:8908 with SMTP id
+ a640c23a62f3a-abc0de19516mr2303876566b.40.1740658660615; Thu, 27 Feb 2025
+ 04:17:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+ <20250227062859.GA2506@sol.localdomain> <68F134A3-5371-4E74-9942-2BC66984C18A@zytor.com>
+In-Reply-To: <68F134A3-5371-4E74-9942-2BC66984C18A@zytor.com>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 27 Feb 2025 04:17:24 -0800
+X-Gm-Features: AQ5f1JqSG0FexJpU0L8y0F9hIyeax1Uhs_LQEGtbtQBFiT71P2KI1fCoyo9pC64
+Message-ID: <CAGG=3QX2WX5U-uNp3VWSbQCN9fPVAirOBn5KcaWn8m-87RhWfg@mail.gmail.com>
+Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On February 26, 2025 10:28:59 PM PST, Eric Biggers <ebiggers@kernel=2Eorg> =
+On Thu, Feb 27, 2025 at 2:53=E2=80=AFAM H. Peter Anvin <hpa@zytor.com> wrot=
+e:
+> On February 26, 2025 10:28:59 PM PST, Eric Biggers <ebiggers@kernel.org> =
 wrote:
->On Wed, Feb 26, 2025 at 10:12:47PM -0800, Bill Wendling wrote:
->> For both gcc and clang, crc32 builtins generate better code than the
->> inline asm=2E GCC improves, removing unneeded "mov" instructions=2E Cla=
-ng
->> does the same and unrolls the loops=2E GCC has no changes on i386, but
->> Clang's code generation is vastly improved, due to Clang's "rm"
->> constraint issue=2E
->>=20
->> The number of cycles improved by ~0=2E1% for GCC and ~1% for Clang, whi=
-ch
->> is expected because of the "rm" issue=2E However, Clang's performance i=
-s
->> better than GCC's by ~1=2E5%, most likely due to loop unrolling=2E
->>=20
->> Link: https://github=2Ecom/llvm/llvm-project/issues/20571#issuecomment-=
-2649330009
->> Cc: Thomas Gleixner <tglx@linutronix=2Ede>
->> Cc: Ingo Molnar <mingo@redhat=2Ecom>
->> Cc: Borislav Petkov <bp@alien8=2Ede>
->> Cc: Dave Hansen <dave=2Ehansen@linux=2Eintel=2Ecom>
->> Cc: x86@kernel=2Eorg
->> Cc: "H=2E Peter Anvin" <hpa@zytor=2Ecom>
->> Cc: Eric Biggers <ebiggers@kernel=2Eorg>
->> Cc: Ard Biesheuvel <ardb@kernel=2Eorg>
->> Cc: Nathan Chancellor <nathan@kernel=2Eorg>
->> Cc: Nick Desaulniers <nick=2Edesaulniers+lkml@gmail=2Ecom>
->> Cc: Justin Stitt <justinstitt@google=2Ecom>
->> Cc: linux-kernel@vger=2Ekernel=2Eorg
->> Cc: linux-crypto@vger=2Ekernel=2Eorg
->> Cc: llvm@lists=2Elinux=2Edev
->> Signed-off-by: Bill Wendling <morbo@google=2Ecom>
->> ---
->>  arch/x86/Makefile         | 3 +++
->>  arch/x86/lib/crc32-glue=2Ec | 8 ++++----
->>  2 files changed, 7 insertions(+), 4 deletions(-)
+> >On Wed, Feb 26, 2025 at 10:12:47PM -0800, Bill Wendling wrote:
+> >> For both gcc and clang, crc32 builtins generate better code than the
+> >> inline asm. GCC improves, removing unneeded "mov" instructions. Clang
+> >> does the same and unrolls the loops. GCC has no changes on i386, but
+> >> Clang's code generation is vastly improved, due to Clang's "rm"
+> >> constraint issue.
+> >>
+> >> The number of cycles improved by ~0.1% for GCC and ~1% for Clang, whic=
+h
+> >> is expected because of the "rm" issue. However, Clang's performance is
+> >> better than GCC's by ~1.5%, most likely due to loop unrolling.
+> >>
+> >> Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment-2=
+649330009
+> >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> Cc: Ingo Molnar <mingo@redhat.com>
+> >> Cc: Borislav Petkov <bp@alien8.de>
+> >> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> >> Cc: x86@kernel.org
+> >> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> >> Cc: Eric Biggers <ebiggers@kernel.org>
+> >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> >> Cc: Nathan Chancellor <nathan@kernel.org>
+> >> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> >> Cc: Justin Stitt <justinstitt@google.com>
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Cc: linux-crypto@vger.kernel.org
+> >> Cc: llvm@lists.linux.dev
+> >> Signed-off-by: Bill Wendling <morbo@google.com>
+> >> ---
+> >>  arch/x86/Makefile         | 3 +++
+> >>  arch/x86/lib/crc32-glue.c | 8 ++++----
+> >>  2 files changed, 7 insertions(+), 4 deletions(-)
+> >
+> >Thanks!  A couple concerns, though:
+> >
+> >> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> >> index 5b773b34768d..241436da1473 100644
+> >> --- a/arch/x86/Makefile
+> >> +++ b/arch/x86/Makefile
+> >> @@ -114,6 +114,9 @@ else
+> >>  KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
+> >>  endif
+> >>
+> >> +# Enables the use of CRC32 builtins.
+> >> +KBUILD_CFLAGS +=3D -mcrc32
+> >
+> >Doesn't this technically allow the compiler to insert CRC32 instructions
+> >anywhere in arch/x86/ without the needed runtime CPU feature check?  Nor=
+mally
+> >when using intrinsics it's necessary to limit the scope of the feature
+> >enablement to match the runtime CPU feature check that is done, e.g. by =
+using
+> >the target function attribute.
+> >
+> >> diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+> >> index 2dd18a886ded..fdb94bff25f4 100644
+> >> --- a/arch/x86/lib/crc32-glue.c
+> >> +++ b/arch/x86/lib/crc32-glue.c
+> >> @@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+> >>  EXPORT_SYMBOL(crc32_le_arch);
+> >>
+> >>  #ifdef CONFIG_X86_64
+> >> -#define CRC32_INST "crc32q %1, %q0"
+> >> +#define CRC32_INST __builtin_ia32_crc32di
+> >>  #else
+> >> -#define CRC32_INST "crc32l %1, %0"
+> >> +#define CRC32_INST __builtin_ia32_crc32si
+> >>  #endif
+> >
+> >Do both gcc and clang consider these builtins to be a stable API, or do =
+they
+> >only guarantee the stability of _mm_crc32_*() from immintrin.h?  At leas=
+t for
+> >the rest of the SSE and AVX stuff, I thought that only the immintrin.h f=
+unctions
+> >are actually considered stable.
+> >
+> >- Eric
 >
->Thanks!  A couple concerns, though:
+> There is that... also are there compiler versions that we support that do=
+ not have -mcrc32 support?
 >
->> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
->> index 5b773b34768d=2E=2E241436da1473 100644
->> --- a/arch/x86/Makefile
->> +++ b/arch/x86/Makefile
->> @@ -114,6 +114,9 @@ else
->>  KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
->>  endif
->>=20
->> +# Enables the use of CRC32 builtins=2E
->> +KBUILD_CFLAGS +=3D -mcrc32
->
->Doesn't this technically allow the compiler to insert CRC32 instructions
->anywhere in arch/x86/ without the needed runtime CPU feature check?  Norm=
-ally
->when using intrinsics it's necessary to limit the scope of the feature
->enablement to match the runtime CPU feature check that is done, e=2Eg=2E =
-by using
->the target function attribute=2E
->
->> diff --git a/arch/x86/lib/crc32-glue=2Ec b/arch/x86/lib/crc32-glue=2Ec
->> index 2dd18a886ded=2E=2Efdb94bff25f4 100644
->> --- a/arch/x86/lib/crc32-glue=2Ec
->> +++ b/arch/x86/lib/crc32-glue=2Ec
->> @@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
->>  EXPORT_SYMBOL(crc32_le_arch);
->>=20
->>  #ifdef CONFIG_X86_64
->> -#define CRC32_INST "crc32q %1, %q0"
->> +#define CRC32_INST __builtin_ia32_crc32di
->>  #else
->> -#define CRC32_INST "crc32l %1, %0"
->> +#define CRC32_INST __builtin_ia32_crc32si
->>  #endif
->
->Do both gcc and clang consider these builtins to be a stable API, or do t=
-hey
->only guarantee the stability of _mm_crc32_*() from immintrin=2Eh?  At lea=
-st for
->the rest of the SSE and AVX stuff, I thought that only the immintrin=2Eh =
-functions
->are actually considered stable=2E
->
->- Eric
+Checking GCC 5.1.0 and Clang 13.0.1, it seems that both support '-mcrc32'.
 
-There is that=2E=2E=2E also are there compiler versions that we support th=
-at do not have -mcrc32 support?=20
-
+-bw
