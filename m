@@ -1,234 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0BF276D15;
-	Thu, 27 Feb 2025 23:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC831AA1E4
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 23:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740699305; cv=none; b=UlcOuwEjOrR/1jPbxrDg8Xv59Be3kJtrdsD5ksOWmx4veFJaZGOBtnQRfwvb4X5afFnl4Ihg/RQ23Gf28vVjeAtOzrmMPMTwhJnZayEdNT0Jo2uQVtyE+AN/tVHvAvqfNpGyEjtlBoFFIEuKFRx9zOTfyozJCLWI7e9CLmBZ1rk=
+	t=1740700043; cv=none; b=UnvL21lKKBJbnBfRZQzviwfOxwtDT6OXerPdPZmly9Hm0Cv47SHF5zP8XgyjDLdOg4CZJdEHxWYj+KqeNyFK9gStuky84tJCDqMcuLDZXHLHFhIRZ+tKtFz9DDgnN3nq3yNWnZP23QmPI3VrRyom/pPEYeRFmVV4lFBsGCWggdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740699305; c=relaxed/simple;
-	bh=bkqOxOWQQQCLGRepn5os0rxwFT8Ja2Tsk0+nPgxMF3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ep5qHKZ59tt8kD2YBCZKbfjNXEH8c/vwZfPUWEantWYnVk8irzX1PQsviOMkcDle+KHutmYQtoqBI6z43Q1gJtBlmlsOJtkzLIiW+SSFe//w6OfYpRe2qw+bV5rFovyZsjRPF7xvmZSJ4PElYzRpbNyE1HXZ4EOtj3UBHZ6DOtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OVxnFCrQ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740700043; c=relaxed/simple;
+	bh=y8bFEfkPSHsETto+lXOWDrnpTD/mU3xtm2RfzaD5RB8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=om8gAV6gtLMuvMFuv0MGgduOsBwYotXl8FoH8YOL4Tf7O4fhmZyux73lz/t+ZIIlyxYIbd8/wAlh+sgacyio8ut8GkMvCBWJ85C4befVPZG19C761EFd44F4HQi3LIZIAfs4E/KLmrCiA+VEWoqhd/Uj1pdNkx/b5FiT4o06cPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3S4Hfuu7; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OVxnFCrQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740699303; x=1772235303;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bkqOxOWQQQCLGRepn5os0rxwFT8Ja2Tsk0+nPgxMF3k=;
-  b=OVxnFCrQi5VuGZdkGCfVWiXvhNtab/f9aoizkV3migDpg+6W80C9cFEv
-   lIfmPizXCSxhfRlxZrvX84Xv2pOTipP3jA1wulhrNeKnqVtfMslQW3ipN
-   bgTXnDNljGwv37G8vp+WrsZmePuE43jor5cgnQZmchmmZGFvxluf5v+5C
-   RZTB+5IkQsGa+LHsJNeXIaMTHjdd7W6HMJildbJJTYxP9X6HmubTe4vps
-   PuyN+FsT7d6pKibyaHwfRsryl3C9Jq+wQ/Udfeog3H0KSUL2rHaeW4Qq/
-   8GssrL8dYb/CFdhXHSuH6/cWuKZT/C4CZosJta4ULDVaayNzjM/asXZe0
-   w==;
-X-CSE-ConnectionGUID: v67GvRwZRy+FOLDf83NNog==
-X-CSE-MsgGUID: 3lYH+ED5RIupxE00Nb9sMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41317912"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="41317912"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 15:35:02 -0800
-X-CSE-ConnectionGUID: LZ4CqSA+TDGa2Oiwl5QCwQ==
-X-CSE-MsgGUID: 2bABavt/QpyPKQ46ixT8Eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="117356118"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Feb 2025 15:34:59 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnnP6-000EB8-1f;
-	Thu, 27 Feb 2025 23:34:56 +0000
-Date: Fri, 28 Feb 2025 07:34:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alisa-Dariana Roman <alisadariana@gmail.com>,
-	Alisa-Dariana Roman <alisa.roman@analog.com>,
-	"Rob Herring (Arm)" <robh@kernel.org>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Ramona Gradinariu <ramona.bolboaca13@gmail.com>,
-	David Lechner <dlechner@baylibre.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH v5 2/3] iio: adc: ad7191: add AD7191
-Message-ID: <202502280702.31rbuGw8-lkp@intel.com>
-References: <20250226115451.249361-3-alisa.roman@analog.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3S4Hfuu7"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abbac134a19so225745666b.0
+        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 15:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740700040; x=1741304840; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+t0diRhztFZloXArsjx7wwxhw/+bIqUM4lylOOEWlhE=;
+        b=3S4Hfuu7ekRxdbCGBV4GvX/bvCvz3keLLSAJ/HVef+rXXp9gkCIcBlowFZCJ5jZUKl
+         EPcdJgaqQRZCmVGPsdAIvXuwBtkk21GatQW9jL9d1kCZWpg47oSSJ81mmI+fOQ0eIfPj
+         bjpIRB8ZQJL2zxEgT8wXw7OBqF72gFG94G7N9yoKwt+O4W0WMByoubaLW530A0ClzbWs
+         bnJH06apjobsmlIgB60cqNSPqa+oYAyXiVLrIghPV7j1ELkBI2yN0c6gqBD55H3iZ9o1
+         gJd7x104DRdLncqVHK9xVvY27CslyUIraVyrgV/iQ1MttgbrlKyFtDWY+Sziv9s855Rf
+         QuLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740700040; x=1741304840;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+t0diRhztFZloXArsjx7wwxhw/+bIqUM4lylOOEWlhE=;
+        b=p4kIcZ1PWvdHYdHjh9gDxfQQzMK8xVKT73v95J3/WVGVVSRhIqLiS7onyEkNumBWyg
+         6Bhlrw/xMNSn0cfTfuckkDxlvUu104qf3oud2HfIVRvzpYnmCEzx2FBPIAhzvnoGZZC3
+         ojTC7bLEYUBcENUqNeYYoGD7NVaaOQcPH84lMcwm+81STAurBJ285tBaXsgz+ZtXtI+0
+         2uihCNDHKrdIfcnVnPMqOvrh1KE7CXwfCIWtMMfTCAQdYlYR+HYFTqlC9fgJmwNZG03X
+         fTIBDRr2yamebGxFmMMTxFK/yKRU12MRSo/K0452lH3fP8SsvI09NkIYRESzY86IADYL
+         PQKg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnN46jYOYvguiHzIvNG7Bz7J4VINiXUd+Ub9WUc3H89+51WbiIXAmshW+rcu6I6/dOixF+@lists.linux.dev
+X-Gm-Message-State: AOJu0YwR8pefBa4dIZ3qEBNR/e0FW5+BWUzRMo90heqprsTc6EQV0iw7
+	Otwd9qZ55hBQgfHpe9YjLAWO+DBkw7aK3aR+CsVcwSZX8Atx7lH9NHl6xuL/0wwNAETFZin7Cdk
+	aVcEgMmSdomsBT/H3NcIG7GmzjIUWJJhdFbQ=
+X-Gm-Gg: ASbGncs/TGw+wW+w07mxoS+RHXeMLGSO3bqjl6uSqe5muArsBKkzxuZU83pM4f7p6YU
+	3Z9vsdjmJHehI041q+9ISG2T4Qs1ULFmTQihpBC0BTUVSdN/3Yt8zLaAdt4RD/2AZNmhYnBAl0N
+	UcHg5M
+X-Google-Smtp-Source: AGHT+IGuKXYtAhCotjTCT0GtqrXge6XGZ8jW26Y5V5fFuX9t84HBMBXel9WEY29yiRQ8JOtdqfCxqrlzGYWozPOxXYY=
+X-Received: by 2002:a17:907:6d16:b0:ab7:6c4a:6a74 with SMTP id
+ a640c23a62f3a-abf25fb8399mr115706566b.16.1740700039593; Thu, 27 Feb 2025
+ 15:47:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226115451.249361-3-alisa.roman@analog.com>
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+In-Reply-To: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 27 Feb 2025 15:47:03 -0800
+X-Gm-Features: AQ5f1JqJZ47vCyOpVPb_PrJMfpw4X_Wnn4CHu0aPxPJVyWw8-IV6me3jBQW-y8E
+Message-ID: <CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com>
+Subject: [PATCH v2] x86/crc32: use builtins to improve code generation
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alisa-Dariana,
+For both gcc and clang, crc32 builtins generate better code than the
+inline asm. GCC improves, removing unneeded "mov" instructions. Clang
+does the same and unrolls the loops. GCC has no changes on i386, but
+Clang's code generation is vastly improved, due to Clang's "rm"
+constraint issue.
 
-kernel test robot noticed the following build warnings:
+The number of cycles improved by ~0.1% for GCC and ~1% for Clang, which
+is expected because of the "rm" issue. However, Clang's performance is
+better than GCC's by ~1.5%, most likely due to loop unrolling.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on robh/for-next linus/master v6.14-rc4 next-20250227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment-2649330009
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+v2 - Limited range of '-mcrc32' usage to single file.
+   - Use a function instead of macros.
+---
+ arch/x86/lib/Makefile     |  2 ++
+ arch/x86/lib/crc32-glue.c | 15 ++++++++-------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alisa-Dariana-Roman/dt-bindings-iio-adc-add-AD7191/20250226-195853
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20250226115451.249361-3-alisa.roman%40analog.com
-patch subject: [PATCH v5 2/3] iio: adc: ad7191: add AD7191
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502280702.31rbuGw8-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280702.31rbuGw8-lkp@intel.com/reproduce)
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index 8a59c61624c2..1251f611ce3d 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -14,6 +14,8 @@ ifdef CONFIG_KCSAN
+ CFLAGS_REMOVE_delay.o = $(CC_FLAGS_FTRACE)
+ endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280702.31rbuGw8-lkp@intel.com/
++CFLAGS_crc32-glue.o := -mcrc32
++
+ inat_tables_script = $(srctree)/arch/x86/tools/gen-insn-attr-x86.awk
+ inat_tables_maps = $(srctree)/arch/x86/lib/x86-opcode-map.txt
+ quiet_cmd_inat_tables = GEN     $@
+diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+index 2dd18a886ded..fc70462ae2c1 100644
+--- a/arch/x86/lib/crc32-glue.c
++++ b/arch/x86/lib/crc32-glue.c
+@@ -47,11 +47,12 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+ }
+ EXPORT_SYMBOL(crc32_le_arch);
 
-All warnings (new ones prefixed by >>):
+-#ifdef CONFIG_X86_64
+-#define CRC32_INST "crc32q %1, %q0"
+-#else
+-#define CRC32_INST "crc32l %1, %0"
+-#endif
++static unsigned long crc32_ul(u32 crc, unsigned long p)
++{
++       if (IS_ENABLED(CONFIG_X86_64))
++               return __builtin_ia32_crc32di(crc, p);
++       return __builtin_ia32_crc32si(crc, p);
++}
 
->> drivers/iio/adc/ad7191.c:217:15: warning: variable 'pga_index' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-     217 |                 for (i = 0; i < ARRAY_SIZE(gain); i++) {
-         |                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7191.c:224:35: note: uninitialized use occurs here
-     224 |                 st->scale_avail = &scale_buffer[pga_index];
-         |                                                 ^~~~~~~~~
-   drivers/iio/adc/ad7191.c:217:15: note: remove the condition if it is always true
-     217 |                 for (i = 0; i < ARRAY_SIZE(gain); i++) {
-         |                             ^~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7191.c:160:48: note: initialize the variable 'pga_index' to silence this warning
-     160 |         int odr_value, odr_index, pga_value, pga_index, i, ret;
-         |                                                       ^
-         |                                                        = 0
->> drivers/iio/adc/ad7191.c:179:15: warning: variable 'odr_index' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-     179 |                 for (i = 0; i < ARRAY_SIZE(samp_freq); i++) {
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7191.c:186:36: note: uninitialized use occurs here
-     186 |                 st->samp_freq_avail = &samp_freq[odr_index];
-         |                                                  ^~~~~~~~~
-   drivers/iio/adc/ad7191.c:179:15: note: remove the condition if it is always true
-     179 |                 for (i = 0; i < ARRAY_SIZE(samp_freq); i++) {
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/ad7191.c:160:26: note: initialize the variable 'odr_index' to silence this warning
-     160 |         int odr_value, odr_index, pga_value, pga_index, i, ret;
-         |                                 ^
-         |                                  = 0
-   drivers/iio/adc/ad7191.c:553:18: error: expected ';' after top level declarator
-     553 | MODULE_IMPORT_NS(IIO_AD_SIGMA_DELTA);
-         |                  ^
-   2 warnings and 1 error generated.
+ /*
+  * Use carryless multiply version of crc32c when buffer size is >= 512 to
+@@ -78,10 +79,10 @@ u32 crc32c_le_arch(u32 crc, const u8 *p, size_t len)
 
+        for (num_longs = len / sizeof(unsigned long);
+             num_longs != 0; num_longs--, p += sizeof(unsigned long))
+-               asm(CRC32_INST : "+r" (crc) : "rm" (*(unsigned long *)p));
++               crc = crc32_ul(crc,  *(unsigned long *)p);
 
-vim +217 drivers/iio/adc/ad7191.c
+        for (len %= sizeof(unsigned long); len; len--, p++)
+-               asm("crc32b %1, %0" : "+r" (crc) : "rm" (*p));
++               crc = __builtin_ia32_crc32qi(crc, *p);
 
-   150	
-   151	static int ad7191_config_setup(struct iio_dev *indio_dev)
-   152	{
-   153		struct ad7191_state *st = iio_priv(indio_dev);
-   154		struct device *dev = &st->sd.spi->dev;
-   155		/* Sampling frequencies in Hz, see Table 5 */
-   156		static const u32 samp_freq[4] = { 120, 60, 50, 10 };
-   157		/* Gain options, see Table 7 */
-   158		const u32 gain[4] = { 1, 8, 64, 128 };
-   159		static u32 scale_buffer[4][2];
-   160		int odr_value, odr_index, pga_value, pga_index, i, ret;
-   161		u64 scale_uv;
-   162	
-   163		st->samp_freq_index = 0;
-   164		st->scale_index = 0;
-   165	
-   166		ret = device_property_read_u32(dev, "adi,odr-value", &odr_value);
-   167		if (ret && ret != -EINVAL)
-   168			return dev_err_probe(dev, ret, "Failed to get odr value.\n");
-   169	
-   170		if (ret == -EINVAL) {
-   171			st->odr_gpios = devm_gpiod_get_array(dev, "odr", GPIOD_OUT_LOW);
-   172			if (IS_ERR(st->odr_gpios))
-   173				return dev_err_probe(dev, PTR_ERR(st->odr_gpios),
-   174						     "Failed to get odr gpios.\n");
-   175	
-   176			st->samp_freq_avail = samp_freq;
-   177			st->samp_freq_avail_size = ARRAY_SIZE(samp_freq);
-   178		} else {
- > 179			for (i = 0; i < ARRAY_SIZE(samp_freq); i++) {
-   180				if (odr_value != samp_freq[i])
-   181					continue;
-   182				odr_index = i;
-   183				break;
-   184			}
-   185	
-   186			st->samp_freq_avail = &samp_freq[odr_index];
-   187			st->samp_freq_avail_size = 1;
-   188	
-   189			st->odr_gpios = NULL;
-   190		}
-   191	
-   192		mutex_lock(&st->lock);
-   193	
-   194		for (i = 0; i < ARRAY_SIZE(scale_buffer); i++) {
-   195			scale_uv = ((u64)st->int_vref_mv * NANO) >>
-   196				(indio_dev->channels[0].scan_type.realbits - 1);
-   197			do_div(scale_uv, gain[i]);
-   198			scale_buffer[i][1] = do_div(scale_uv, NANO);
-   199			scale_buffer[i][0] = scale_uv;
-   200		}
-   201	
-   202		mutex_unlock(&st->lock);
-   203	
-   204		ret = device_property_read_u32(dev, "adi,pga-value", &pga_value);
-   205		if (ret && ret != -EINVAL)
-   206			return dev_err_probe(dev, ret, "Failed to get pga value.\n");
-   207	
-   208		if (ret == -EINVAL) {
-   209			st->pga_gpios = devm_gpiod_get_array(dev, "pga", GPIOD_OUT_LOW);
-   210			if (IS_ERR(st->pga_gpios))
-   211				return dev_err_probe(dev, PTR_ERR(st->pga_gpios),
-   212						     "Failed to get pga gpios.\n");
-   213	
-   214			st->scale_avail = scale_buffer;
-   215			st->scale_avail_size = ARRAY_SIZE(scale_buffer);
-   216		} else {
- > 217			for (i = 0; i < ARRAY_SIZE(gain); i++) {
-   218				if (pga_value != gain[i])
-   219					continue;
-   220				pga_index = i;
-   221				break;
-   222			}
-   223	
-   224			st->scale_avail = &scale_buffer[pga_index];
-   225			st->scale_avail_size = 1;
-   226	
-   227			st->pga_gpios = NULL;
-   228		}
-   229	
-   230		st->temp_gpio = devm_gpiod_get(dev, "temp", GPIOD_OUT_LOW);
-   231		if (IS_ERR(st->temp_gpio))
-   232			return dev_err_probe(dev, PTR_ERR(st->temp_gpio),
-   233					     "Failed to get temp gpio.\n");
-   234	
-   235		st->chan_gpio = devm_gpiod_get(dev, "chan", GPIOD_OUT_LOW);
-   236		if (IS_ERR(st->chan_gpio))
-   237			return dev_err_probe(dev, PTR_ERR(st->chan_gpio),
-   238					     "Failed to get chan gpio.\n");
-   239	
-   240		return 0;
-   241	}
-   242	
-
+        return crc;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1.711.g2feabab25a-goog
