@@ -1,204 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A419DF52;
-	Thu, 27 Feb 2025 20:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B081AF0C9
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 20:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740688559; cv=none; b=X5D3Or98u6s3ytTOdzPwpvT49vi8Q+S3zYhSEeuR6xC7vu8vMhU4Zg0rmritOKrwrYhZ+b04TgdI1P49blE23pFcyTtIO7GqE77cHwCiY5R7d3lD31+iKaIh89wHeUHihijmE6Sr1MgwRMRer+XToPQuHdPhHg5E9yApAHFH788=
+	t=1740689786; cv=none; b=RfEVxQDOkKRntxrbOLQuBPJPTDsyo5NyNSy27qpUse+HgoR5dw7dbglqbYB9y42PmAsRDIFS1j/Zk6NpuQSruNmYvjpqkJS3JXzRxXNI95mCtQ/Dayz2DRlh2ZDnioCxYW5jSQlJYzKdKROlA8Fe27kdTXGcuwDlO3rKUUJosaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740688559; c=relaxed/simple;
-	bh=1o8FUjTpqzS3RuMIIr9FQiThUDBOQLgA+FoYpmyXXuE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TX+7yIWhDMNRMyDVBdXMhn77Xi1HitREL/O5IZe6wtHrcUuA+l9N5pWck2nJAPE3MCXZMsjhlkhWrLT7nSk19ZuqLpjufWSLUtd7SVpmqmrh7i5lCdsfQyspTQUtRYwRhrbLhLUWTlcy8nJ+IRGvOg9YazEfPepkGx3ruTuZFAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HdryyWgP; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740689786; c=relaxed/simple;
+	bh=jBzl2J3X4B4GartkmlPP24UWJcRsK01w6K+luSD1Gj0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mbX95Uo0LKGuxdk6IGg09vi+j3LCs3306tJyG5lq02gtQ/0VXiGJ94K0ktuYQNsvNANrCBhbrK1M5Lf5THTxG216dX9xamTyt09jFvntOlQ4uYWE/ilPxMSAO8dY+Fww33nbJ0WNi2ITu29rQ7L6f+9Ra5K6vT7admeej/AXjeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ApTMA2gF; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HdryyWgP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740688558; x=1772224558;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1o8FUjTpqzS3RuMIIr9FQiThUDBOQLgA+FoYpmyXXuE=;
-  b=HdryyWgPn2Bz6zjncXX4Nl9YAPYor7NrK1yr3plQ20joGJTLT5XIFoSm
-   B3FEy2xE4NaoygHHHoOY1L+j64EbPn2YW6BTzPd2hrZp5DyrBfZ2u0k5H
-   tFIGkaX0WMAfZGtp2W/gZaadBqkKgi+XYmBtH84bXpA/8O8D0vnS8xDki
-   DjQ4t6MtuzHIXx2z/mtkVqfahzBd2GSrqvJa3FcnUNHb5zd5bZWRtOvvU
-   YmU8YXr2Z16oeekkQJ8AL3r1Xpc1YoNXaZQE2lw1uwBucnbPM2YkvPzgh
-   PCd6/HBOF3ZH/gPMYOry1bPanrGl8Jo3jlExs+ItePyyRL17hnElUGJcl
-   A==;
-X-CSE-ConnectionGUID: Xta3mnVDSAusvmjwWcwB3w==
-X-CSE-MsgGUID: tdyU+OqbRfu2iyOvzk6j/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41731564"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="41731564"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 12:35:57 -0800
-X-CSE-ConnectionGUID: XQPMG+fJQAKGNWCTBsRP4g==
-X-CSE-MsgGUID: mr5FrbYvRBWoipHItYN7jQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="117632670"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 27 Feb 2025 12:35:55 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnkbp-000E0E-1h;
-	Thu, 27 Feb 2025 20:35:53 +0000
-Date: Fri, 28 Feb 2025 04:35:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 39/39] fs/ceph/rdwr.c:644:22: error: use of
- undeclared identifier 'ceph_invalidate_folio'; did you mean
- 'netfs_invalidate_folio'?
-Message-ID: <202502280438.gFEs9blr-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ApTMA2gF"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aaeec07b705so200911166b.2
+        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 12:56:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740689782; x=1741294582; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aNfLsJ5M5Y46Pe7a1sd55cuuZyArFmPaDQMk3VExmOc=;
+        b=ApTMA2gFOs2otCwTN4TsuvhpI5mXb0dcSh31zrAjHQUm3Ik53V19FfO2UfJ8hglUnF
+         WLJzbhhfRzkdVQVma4C2xGv7F3Cs0xA/NtzFH61/IMxX/2b7Wz4LZdSNKRIe3h03P3Hq
+         2h+8lfklfxeExIxIImJONnzFOs3AZzTi5oJaU5Jl836F4a74GqJGACn20SXuxPme0Fu4
+         4dAbshHFWVtz8B/EBFQdA7l39J6n9af82IpFVUIP1hY42mJSvhRx6HXdxaKGOqkomPvd
+         Wo0P18fiMvgR6Uv+YjLKwot1c2+CB5qU51jb5UXSpnK69A1Q4sXDaVqSbmDTy4S+6uni
+         Y1qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740689782; x=1741294582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aNfLsJ5M5Y46Pe7a1sd55cuuZyArFmPaDQMk3VExmOc=;
+        b=LJtbYRtUXSDhD5tF+7Gm5RLZn8q3U3UvFJ7ccuh2ftCGLzt8eG8kiJIsJzq9fi7KWc
+         8iOjYfREroi6LEeKL8cOOt/UQRTTGVT0GCMDFxXEPcFQQHRKulLI2K0VE9z/BHgMfTl3
+         GGndYCmlUUj2KoeBb83hDyL6CkI45VCSnFn5iNQWRbzNionrleXdQKCDc5EqgIncm9x4
+         vbTExeiomA+Xp8Q8bTSH8jQEp+uupQEdXcAZjxMsIt06kmas0+rv+xhkj+KIsx+j9GTo
+         vblcxvnMFm/IOcpJHvRrxOePF/WWhkZwvaC2vDEN+S9MRenYde87vBDL9C3aBhORnVZi
+         vL5A==
+X-Forwarded-Encrypted: i=1; AJvYcCULN7u2W63LUoX8SsRZabfl5tfavSIupmZbnQlzyIMhaZyqAuZpm4Vb2QiW/t+bKQsPmhRT@lists.linux.dev
+X-Gm-Message-State: AOJu0YybnZp0OnD+4o7T96+4vXD5fP/VExY/cQCemW91eBnIkpDR9aHw
+	o+RrEO4fEuROCTB+EWhB3ai/lrGhMGAaLrMRE4UJfjV8tatkS6ewCFpLvb4yhwF2HaJbzpj3QyP
+	DJe9/XVLzLd918lKyJfsqoth/LXi5uocRbxM=
+X-Gm-Gg: ASbGncspwNCsfUzdvEaEgreKqhLiahCSVw1t/EboF3fC2hm57YMYG4jOc1MXptuieU/
+	2TcgSUB5zNa9ZLGBlbn3LFwwBNdgstBEtkHGpF98J2iBGoFWVKkj8bf+BlXSqlWlfrtWw2wfOe/
+	9Y7LT4
+X-Google-Smtp-Source: AGHT+IHk5c57x/1P/u8YmnoLziTvu7e5VlZk0I6I5E3FRkSAuORsqywFgx8cMDueTEhgLiA7uQm4XpQbmgxjR0DQ3f4=
+X-Received: by 2002:a17:906:d542:b0:abb:e7b0:5442 with SMTP id
+ a640c23a62f3a-abf2656040dmr96674466b.26.1740689781707; Thu, 27 Feb 2025
+ 12:56:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+ <20250227062859.GA2506@sol.localdomain> <68F134A3-5371-4E74-9942-2BC66984C18A@zytor.com>
+ <CAGG=3QX2WX5U-uNp3VWSbQCN9fPVAirOBn5KcaWn8m-87RhWfg@mail.gmail.com>
+In-Reply-To: <CAGG=3QX2WX5U-uNp3VWSbQCN9fPVAirOBn5KcaWn8m-87RhWfg@mail.gmail.com>
+From: Bill Wendling <morbo@google.com>
+Date: Thu, 27 Feb 2025 12:56:05 -0800
+X-Gm-Features: AQ5f1JoI25GyQvAEVKfSMmNTlt_ej9Rh4DM5IVbp89PFTHlpQT8k9zCeJA-W2l4
+Message-ID: <CAGG=3QW4jo9RKtVxD2b3ZBjPhnAUYeUf_GPVh13e7gZkLFtuUQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
-head:   7ae75822a29ea06bba2be34563c5c915bfa0e79b
-commit: 7ae75822a29ea06bba2be34563c5c915bfa0e79b [39/39] ceph: Use netfslib
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502280438.gFEs9blr-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280438.gFEs9blr-lkp@intel.com/reproduce)
+On Thu, Feb 27, 2025 at 4:17=E2=80=AFAM Bill Wendling <morbo@google.com> wr=
+ote:
+> On Thu, Feb 27, 2025 at 2:53=E2=80=AFAM H. Peter Anvin <hpa@zytor.com> wr=
+ote:
+> > On February 26, 2025 10:28:59 PM PST, Eric Biggers <ebiggers@kernel.org=
+> wrote:
+> > >On Wed, Feb 26, 2025 at 10:12:47PM -0800, Bill Wendling wrote:
+> > >> For both gcc and clang, crc32 builtins generate better code than the
+> > >> inline asm. GCC improves, removing unneeded "mov" instructions. Clan=
+g
+> > >> does the same and unrolls the loops. GCC has no changes on i386, but
+> > >> Clang's code generation is vastly improved, due to Clang's "rm"
+> > >> constraint issue.
+> > >>
+> > >> The number of cycles improved by ~0.1% for GCC and ~1% for Clang, wh=
+ich
+> > >> is expected because of the "rm" issue. However, Clang's performance =
+is
+> > >> better than GCC's by ~1.5%, most likely due to loop unrolling.
+> > >>
+> > >> Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment=
+-2649330009
+> > >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> > >> Cc: Ingo Molnar <mingo@redhat.com>
+> > >> Cc: Borislav Petkov <bp@alien8.de>
+> > >> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > >> Cc: x86@kernel.org
+> > >> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > >> Cc: Eric Biggers <ebiggers@kernel.org>
+> > >> Cc: Ard Biesheuvel <ardb@kernel.org>
+> > >> Cc: Nathan Chancellor <nathan@kernel.org>
+> > >> Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> > >> Cc: Justin Stitt <justinstitt@google.com>
+> > >> Cc: linux-kernel@vger.kernel.org
+> > >> Cc: linux-crypto@vger.kernel.org
+> > >> Cc: llvm@lists.linux.dev
+> > >> Signed-off-by: Bill Wendling <morbo@google.com>
+> > >> ---
+> > >>  arch/x86/Makefile         | 3 +++
+> > >>  arch/x86/lib/crc32-glue.c | 8 ++++----
+> > >>  2 files changed, 7 insertions(+), 4 deletions(-)
+> > >
+> > >Thanks!  A couple concerns, though:
+> > >
+> > >> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> > >> index 5b773b34768d..241436da1473 100644
+> > >> --- a/arch/x86/Makefile
+> > >> +++ b/arch/x86/Makefile
+> > >> @@ -114,6 +114,9 @@ else
+> > >>  KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
+> > >>  endif
+> > >>
+> > >> +# Enables the use of CRC32 builtins.
+> > >> +KBUILD_CFLAGS +=3D -mcrc32
+> > >
+> > >Doesn't this technically allow the compiler to insert CRC32 instructio=
+ns
+> > >anywhere in arch/x86/ without the needed runtime CPU feature check?  N=
+ormally
+> > >when using intrinsics it's necessary to limit the scope of the feature
+> > >enablement to match the runtime CPU feature check that is done, e.g. b=
+y using
+> > >the target function attribute.
+> > >
+> > >> diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+> > >> index 2dd18a886ded..fdb94bff25f4 100644
+> > >> --- a/arch/x86/lib/crc32-glue.c
+> > >> +++ b/arch/x86/lib/crc32-glue.c
+> > >> @@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len=
+)
+> > >>  EXPORT_SYMBOL(crc32_le_arch);
+> > >>
+> > >>  #ifdef CONFIG_X86_64
+> > >> -#define CRC32_INST "crc32q %1, %q0"
+> > >> +#define CRC32_INST __builtin_ia32_crc32di
+> > >>  #else
+> > >> -#define CRC32_INST "crc32l %1, %0"
+> > >> +#define CRC32_INST __builtin_ia32_crc32si
+> > >>  #endif
+> > >
+> > >Do both gcc and clang consider these builtins to be a stable API, or d=
+o they
+> > >only guarantee the stability of _mm_crc32_*() from immintrin.h?  At le=
+ast for
+> > >the rest of the SSE and AVX stuff, I thought that only the immintrin.h=
+ functions
+> > >are actually considered stable.
+> > >
+> > >- Eric
+> >
+> > There is that... also are there compiler versions that we support that =
+do not have -mcrc32 support?
+> >
+> Checking GCC 5.1.0 and Clang 13.0.1, it seems that both support '-mcrc32'=
+.
+>
+I just checked and GCC 5.1.0 doesn't appear to be able to compile the
+kernel anymore, at least not with "defconfig". It doesn't have
+retpoline support for one and then can't compile lib/zstd:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280438.gFEs9blr-lkp@intel.com/
+lib/zstd/decompress/zstd_decompress_block.c: In function
+=E2=80=98ZSTD_decompressSequences_default=E2=80=99:
+lib/zstd/decompress/zstd_decompress_block.c:1539:1: error: inlining
+failed in call to always_inline =E2=80=98ZSTD_decompressSequences_body=E2=
+=80=99:
+optimization level attribute mismatch
+ ZSTD_decompressSequences_body(ZSTD_DCtx* dctx,
+ ^
+lib/zstd/decompress/zstd_decompress_block.c:1633:12: error: called from her=
+e
+     return ZSTD_decompressSequences_body(dctx, dst, maxDstSize,
+seqStart, seqSize, nbSeq, isLongOffset, frame);
+            ^
 
-All errors (new ones prefixed by >>):
+GCC 6.1.0 gets further, but also doesn't have retpoline support. Maybe
+the minimal version should be changed?
 
-   In file included from fs/ceph/rdwr.c:39:
-   In file included from include/linux/backing-dev.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/ceph/rdwr.c:644:22: error: use of undeclared identifier 'ceph_invalidate_folio'; did you mean 'netfs_invalidate_folio'?
-     644 |         .invalidate_folio = ceph_invalidate_folio,
-         |                             ^~~~~~~~~~~~~~~~~~~~~
-         |                             netfs_invalidate_folio
-   include/linux/netfs.h:475:6: note: 'netfs_invalidate_folio' declared here
-     475 | void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length);
-         |      ^
->> fs/ceph/rdwr.c:847:14: error: call to undeclared function 'ceph_direct_read_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     847 |                         written = ceph_direct_read_write(iocb, &data, snapc,
-         |                                   ^
-   fs/ceph/rdwr.c:847:14: note: did you mean 'ceph_prepare_write'?
-   fs/ceph/rdwr.c:211:13: note: 'ceph_prepare_write' declared here
-     211 | static void ceph_prepare_write(struct netfs_io_subrequest *subreq)
-         |             ^
->> fs/ceph/rdwr.c:850:14: error: call to undeclared function 'ceph_sync_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     850 |                         written = ceph_sync_write(iocb, &data, pos, snapc);
-         |                                   ^
-   fs/ceph/rdwr.c:850:14: note: did you mean 'ceph_issue_write'?
-   fs/ceph/rdwr.c:144:13: note: 'ceph_issue_write' declared here
-     144 | static void ceph_issue_write(struct netfs_io_subrequest *subreq)
-         |             ^
-   3 warnings and 3 errors generated.
---
-   In file included from fs/ceph/crypto.c:10:
-   In file included from include/linux/xattr.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/ceph/crypto.c:643:35: error: use of undeclared identifier 'op'
-     643 |         struct ceph_sparse_extent *map = op->extent.sparse_ext;
-         |                                          ^
->> fs/ceph/crypto.c:644:42: error: use of undeclared identifier 'inode'
-     644 |         struct ceph_inode_info *ci = ceph_inode(inode);
-         |                                                 ^
-   fs/ceph/crypto.c:646:16: error: use of undeclared identifier 'op'
-     646 |         u32 ext_cnt = op->extent.sparse_ext_cnt;
-         |                       ^
->> fs/ceph/crypto.c:657:28: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'size_t *' (aka 'unsigned long *') [-Werror,-Wincompatible-pointer-types]
-     657 |                                       &objno, &objoff, &xlen);
-         |                                                        ^~~~~
-   include/linux/ceph/striper.h:13:41: note: passing argument to parameter 'xlen' here
-      13 |                                    u64 *objno, u64 *objoff, size_t *xlen);
-         |                                                                     ^
->> fs/ceph/crypto.c:670:45: error: use of undeclared identifier 'page'
-     670 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
-         |                                                           ^
-   fs/ceph/crypto.c:670:37: error: use of undeclared identifier 'inode'
-     670 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
-         |                                                   ^
->> fs/ceph/crypto.c:671:8: error: use of undeclared identifier 'off'
-     671 |                                                  off + pgsoff, ext->len);
-         |                                                  ^
-   fs/ceph/crypto.c:639:5: warning: no previous prototype for function 'ceph_decrypt_block' [-Wmissing-prototypes]
-     639 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
-         |     ^
-   fs/ceph/crypto.c:639:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     639 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
-         | ^
-         | static 
-   fs/ceph/crypto.c:685:5: warning: no previous prototype for function 'ceph_encrypt_block' [-Wmissing-prototypes]
-     685 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
-         |     ^
-   fs/ceph/crypto.c:685:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     685 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
-         | ^
-         | static 
-   5 warnings and 7 errors generated.
+Anyway, GCC 5.1.0 doesn't support
+__attribute__((__target__("crc32"))), so I'd have to use the flag. I
+know I can conditionally add the flag with:
 
+CFLAGS_crc32-glue.o :=3D -mcrc32
 
-vim +644 fs/ceph/rdwr.c
+But like I said, the file is compiled twice (why?), but only once with
+the arch/x86/lib/Makefile. If anyone has any suggestions on how to
+solve this, please let me know.
 
-   638	
-   639	const struct address_space_operations ceph_aops = {
-   640		.read_folio	= netfs_read_folio,
-   641		.readahead	= netfs_readahead,
-   642		.writepages	= ceph_writepages,
-   643		.dirty_folio	= netfs_dirty_folio,
- > 644		.invalidate_folio = ceph_invalidate_folio,
-   645		.release_folio	= netfs_release_folio,
-   646		.direct_IO	= noop_direct_IO,
-   647		.migrate_folio	= filemap_migrate_folio,
-   648	};
-   649	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-bw
