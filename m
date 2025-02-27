@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 077A81C07E6;
-	Thu, 27 Feb 2025 20:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A419DF52;
+	Thu, 27 Feb 2025 20:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740687840; cv=none; b=Ke3tqLOYQSNGl0WF1GMNAuffG3P8txWJSHkPWoO3djqGAAGjA3que/U7FXU5ZhxP6Ejn0HTj9dNLMS7ynae1yQIvoI5tk3VzSnzd2+F/kkc3LZjZudv9fnhimYM2Vi0trGO3B2jHNhYCYfpuI3/kh3SSQTYZdA/FO6XNwjkQ+h0=
+	t=1740688559; cv=none; b=X5D3Or98u6s3ytTOdzPwpvT49vi8Q+S3zYhSEeuR6xC7vu8vMhU4Zg0rmritOKrwrYhZ+b04TgdI1P49blE23pFcyTtIO7GqE77cHwCiY5R7d3lD31+iKaIh89wHeUHihijmE6Sr1MgwRMRer+XToPQuHdPhHg5E9yApAHFH788=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740687840; c=relaxed/simple;
-	bh=087oTqi7W/0v4LMaQVYrNt/Vn/vLmPYte2/gxXwYs7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K8sPTaGQIKVA6V/s147YaSXY1D043BkTxWVlhLrFnytQl7uXFtaO8hA+1PK9x5vudMay/kba6ljYl1aN2ecVZywBagEO+JNekaVudUnF0W0WWxsPq5xRsF5WTlTzLNxe0jATE+3TGqssE70nIDgX3skyMhFCkAthkCDxKPqtBco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fxqR8xdz; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1740688559; c=relaxed/simple;
+	bh=1o8FUjTpqzS3RuMIIr9FQiThUDBOQLgA+FoYpmyXXuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TX+7yIWhDMNRMyDVBdXMhn77Xi1HitREL/O5IZe6wtHrcUuA+l9N5pWck2nJAPE3MCXZMsjhlkhWrLT7nSk19ZuqLpjufWSLUtd7SVpmqmrh7i5lCdsfQyspTQUtRYwRhrbLhLUWTlcy8nJ+IRGvOg9YazEfPepkGx3ruTuZFAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HdryyWgP; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fxqR8xdz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HdryyWgP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740687839; x=1772223839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=087oTqi7W/0v4LMaQVYrNt/Vn/vLmPYte2/gxXwYs7M=;
-  b=fxqR8xdzkWROSEDflB/PhDsHRjn3s5ZkE8qGJ9NooWZRK5fxxvuryq5Z
-   bOwXoZyrFlCPPbZEAoY1pDFKHi41n/sCdlBk2Sf7m/a4lJKPMNz/IUB6H
-   u4c9TZC9Zb9XqCtmd3Gr9BEqGlxFqw4DMPYuyRWMsk+XuDvMrHALc6GHe
-   GBgFlkE7C1cu0GZDOHag68RbztzUqJ4+yfX4hiQTkMrwZlEIvkluiinVU
-   T3YjAsXlFkFuZfRa4s0OmwqWs+MxSfQCElSWksBt3v4yW1/iEngBvmzPW
-   FhIs7OkknQmf5p9Qx0L+FVo4a8B4YUKZrhC4riU8E1aH9Yy6gpgr4cLcx
-   g==;
-X-CSE-ConnectionGUID: RyR1bGqaTNG4lx0NNghn7g==
-X-CSE-MsgGUID: DZQGnqH9TvifWDi8OXtCZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="59136983"
+  t=1740688558; x=1772224558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1o8FUjTpqzS3RuMIIr9FQiThUDBOQLgA+FoYpmyXXuE=;
+  b=HdryyWgPn2Bz6zjncXX4Nl9YAPYor7NrK1yr3plQ20joGJTLT5XIFoSm
+   B3FEy2xE4NaoygHHHoOY1L+j64EbPn2YW6BTzPd2hrZp5DyrBfZ2u0k5H
+   tFIGkaX0WMAfZGtp2W/gZaadBqkKgi+XYmBtH84bXpA/8O8D0vnS8xDki
+   DjQ4t6MtuzHIXx2z/mtkVqfahzBd2GSrqvJa3FcnUNHb5zd5bZWRtOvvU
+   YmU8YXr2Z16oeekkQJ8AL3r1Xpc1YoNXaZQE2lw1uwBucnbPM2YkvPzgh
+   PCd6/HBOF3ZH/gPMYOry1bPanrGl8Jo3jlExs+ItePyyRL17hnElUGJcl
+   A==;
+X-CSE-ConnectionGUID: Xta3mnVDSAusvmjwWcwB3w==
+X-CSE-MsgGUID: tdyU+OqbRfu2iyOvzk6j/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41731564"
 X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="59136983"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 12:23:58 -0800
-X-CSE-ConnectionGUID: YYk+nKDITXqOX//VMMIa2A==
-X-CSE-MsgGUID: g4hpkXe2Rc2ezkQwBiZMsQ==
+   d="scan'208";a="41731564"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 12:35:57 -0800
+X-CSE-ConnectionGUID: XQPMG+fJQAKGNWCTBsRP4g==
+X-CSE-MsgGUID: mr5FrbYvRBWoipHItYN7jQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118056318"
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="117632670"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 27 Feb 2025 12:23:55 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 27 Feb 2025 12:35:55 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tnkQC-000Dzi-1g;
-	Thu, 27 Feb 2025 20:23:52 +0000
-Date: Fri, 28 Feb 2025 04:23:44 +0800
+	id 1tnkbp-000E0E-1h;
+	Thu, 27 Feb 2025 20:35:53 +0000
+Date: Fri, 28 Feb 2025 04:35:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sam Winchenbach <sam.winchenbach@framepointer.org>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
-	Michael.Hennerich@analog.com, antoniu.miclaus@analog.com,
-	jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, sam.winchenbach@framepointer.org
-Subject: Re: [PATCH v4 1/2] iio: filter: admv8818: fix range calculation
-Message-ID: <202502280434.DHtcsf7x-lkp@intel.com>
-References: <20250225134612.577022-1-sam.winchenbach@framepointer.org>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 39/39] fs/ceph/rdwr.c:644:22: error: use of
+ undeclared identifier 'ceph_invalidate_folio'; did you mean
+ 'netfs_invalidate_folio'?
+Message-ID: <202502280438.gFEs9blr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,133 +62,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250225134612.577022-1-sam.winchenbach@framepointer.org>
 
-Hi Sam,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.14-rc4 next-20250227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Winchenbach/dt-bindings-iio-filter-Add-lpf-hpf-freq-margins/20250225-215003
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20250225134612.577022-1-sam.winchenbach%40framepointer.org
-patch subject: [PATCH v4 1/2] iio: filter: admv8818: fix range calculation
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502280434.DHtcsf7x-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 204dcafec0ecf0db81d420d2de57b02ada6b09ec)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280434.DHtcsf7x-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   7ae75822a29ea06bba2be34563c5c915bfa0e79b
+commit: 7ae75822a29ea06bba2be34563c5c915bfa0e79b [39/39] ceph: Use netfslib
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502280438.gFEs9blr-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280438.gFEs9blr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280434.DHtcsf7x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280438.gFEs9blr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/iio/filter/admv8818.c:17:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+   In file included from fs/ceph/rdwr.c:39:
+   In file included from include/linux/backing-dev.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ceph/rdwr.c:644:22: error: use of undeclared identifier 'ceph_invalidate_folio'; did you mean 'netfs_invalidate_folio'?
+     644 |         .invalidate_folio = ceph_invalidate_folio,
+         |                             ^~~~~~~~~~~~~~~~~~~~~
+         |                             netfs_invalidate_folio
+   include/linux/netfs.h:475:6: note: 'netfs_invalidate_folio' declared here
+     475 | void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length);
+         |      ^
+>> fs/ceph/rdwr.c:847:14: error: call to undeclared function 'ceph_direct_read_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     847 |                         written = ceph_direct_read_write(iocb, &data, snapc,
+         |                                   ^
+   fs/ceph/rdwr.c:847:14: note: did you mean 'ceph_prepare_write'?
+   fs/ceph/rdwr.c:211:13: note: 'ceph_prepare_write' declared here
+     211 | static void ceph_prepare_write(struct netfs_io_subrequest *subreq)
+         |             ^
+>> fs/ceph/rdwr.c:850:14: error: call to undeclared function 'ceph_sync_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     850 |                         written = ceph_sync_write(iocb, &data, pos, snapc);
+         |                                   ^
+   fs/ceph/rdwr.c:850:14: note: did you mean 'ceph_issue_write'?
+   fs/ceph/rdwr.c:144:13: note: 'ceph_issue_write' declared here
+     144 | static void ceph_issue_write(struct netfs_io_subrequest *subreq)
+         |             ^
+   3 warnings and 3 errors generated.
+--
+   In file included from fs/ceph/crypto.c:10:
+   In file included from include/linux/xattr.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> fs/ceph/crypto.c:643:35: error: use of undeclared identifier 'op'
+     643 |         struct ceph_sparse_extent *map = op->extent.sparse_ext;
+         |                                          ^
+>> fs/ceph/crypto.c:644:42: error: use of undeclared identifier 'inode'
+     644 |         struct ceph_inode_info *ci = ceph_inode(inode);
+         |                                                 ^
+   fs/ceph/crypto.c:646:16: error: use of undeclared identifier 'op'
+     646 |         u32 ext_cnt = op->extent.sparse_ext_cnt;
+         |                       ^
+>> fs/ceph/crypto.c:657:28: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'size_t *' (aka 'unsigned long *') [-Werror,-Wincompatible-pointer-types]
+     657 |                                       &objno, &objoff, &xlen);
+         |                                                        ^~~~~
+   include/linux/ceph/striper.h:13:41: note: passing argument to parameter 'xlen' here
+      13 |                                    u64 *objno, u64 *objoff, size_t *xlen);
+         |                                                                     ^
+>> fs/ceph/crypto.c:670:45: error: use of undeclared identifier 'page'
+     670 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
+         |                                                           ^
+   fs/ceph/crypto.c:670:37: error: use of undeclared identifier 'inode'
+     670 |                 fret = ceph_fscrypt_decrypt_pages(inode, &page[pgidx],
          |                                                   ^
-   In file included from drivers/iio/filter/admv8818.c:17:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/iio/filter/admv8818.c:17:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/iio/filter/admv8818.c:304:34: error: use of undeclared identifier 'lfp_corner_target'; did you mean 'lpf_corner_target'?
-     304 |         ret = __admv8818_lpf_select(st, lfp_corner_target);
-         |                                         ^~~~~~~~~~~~~~~~~
-         |                                         lpf_corner_target
-   drivers/iio/filter/admv8818.c:283:25: note: 'lpf_corner_target' declared here
-     283 |         u64 hpf_corner_target, lpf_corner_target;
-         |                                ^
-   12 warnings and 1 error generated.
+>> fs/ceph/crypto.c:671:8: error: use of undeclared identifier 'off'
+     671 |                                                  off + pgsoff, ext->len);
+         |                                                  ^
+   fs/ceph/crypto.c:639:5: warning: no previous prototype for function 'ceph_decrypt_block' [-Wmissing-prototypes]
+     639 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
+         |     ^
+   fs/ceph/crypto.c:639:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     639 | int ceph_decrypt_block(struct netfs_io_request *rreq, loff_t pos, size_t len,
+         | ^
+         | static 
+   fs/ceph/crypto.c:685:5: warning: no previous prototype for function 'ceph_encrypt_block' [-Wmissing-prototypes]
+     685 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
+         |     ^
+   fs/ceph/crypto.c:685:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     685 | int ceph_encrypt_block(struct netfs_io_request *wreq, loff_t pos, size_t len,
+         | ^
+         | static 
+   5 warnings and 7 errors generated.
 
 
-vim +304 drivers/iio/filter/admv8818.c
+vim +644 fs/ceph/rdwr.c
 
-   279	
-   280	static int admv8818_rfin_band_select(struct admv8818_state *st)
-   281	{
-   282		int ret;
-   283		u64 hpf_corner_target, lpf_corner_target;
-   284	
-   285		st->cf_hz = clk_get_rate(st->clkin);
-   286	
-   287		// Check for underflow
-   288		if (st->cf_hz > st->hpf_margin_hz)
-   289			hpf_corner_target = st->cf_hz - st->hpf_margin_hz;
-   290		else
-   291			hpf_corner_target = 0;
-   292	
-   293		// Check for overflow
-   294		lpf_corner_target = st->cf_hz + st->lpf_margin_hz;
-   295		if (lpf_corner_target < st->cf_hz)
-   296			lpf_corner_target = U64_MAX;
-   297	
-   298		mutex_lock(&st->lock);
-   299	
-   300		ret = __admv8818_hpf_select(st, hpf_corner_target);
-   301		if (ret)
-   302			goto exit;
-   303	
- > 304		ret = __admv8818_lpf_select(st, lfp_corner_target);
-   305	exit:
-   306		mutex_unlock(&st->lock);
-   307		return ret;
-   308	}
-   309	
+   638	
+   639	const struct address_space_operations ceph_aops = {
+   640		.read_folio	= netfs_read_folio,
+   641		.readahead	= netfs_readahead,
+   642		.writepages	= ceph_writepages,
+   643		.dirty_folio	= netfs_dirty_folio,
+ > 644		.invalidate_folio = ceph_invalidate_folio,
+   645		.release_folio	= netfs_release_folio,
+   646		.direct_IO	= noop_direct_IO,
+   647		.migrate_folio	= filemap_migrate_folio,
+   648	};
+   649	
 
 -- 
 0-DAY CI Kernel Test Service
