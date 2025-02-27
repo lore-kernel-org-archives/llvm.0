@@ -1,59 +1,69 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2A01A841B;
-	Thu, 27 Feb 2025 16:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D90A1B6D12;
+	Thu, 27 Feb 2025 16:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740673983; cv=none; b=VC/4jn5PlbKND6qOmJB6SIWxMG7zGoy7NHwLJimPcYGIKWAzS7AiXv0QqvHSfOuoJP7Rw2ZVwB8W5zG07yM68cNfQDjSIV5VHltcOtuKjyJ6mVArnEgj+LpFvcOqSGu5uc+zzJOBUhmOEnYzaNiOJ/ehQyZNYaKHWI523Usp3MI=
+	t=1740673987; cv=none; b=VFV4MpX5hEH+N9aSktGfciPaDH5qra6HPjyhI9CQTd8jHr94lS7nISWz8P7KDYLsHkiCifyFRvVysOaV2h9/2rSQWnpWd9f2AnTuzMQ01OZm8bsdGAgPXzeJQYXLYUbSRgaWIsXHhpPrcDLo0xofYHbJTx6ATPh/347NmZzDyvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740673983; c=relaxed/simple;
-	bh=PxRMUeFEamREPmtQZc3fxutf2JnTd8UN84HgX0/6asw=;
+	s=arc-20240116; t=1740673987; c=relaxed/simple;
+	bh=BD4f1tzirgqPmQ5M6W5JBi3601o80CXVHLpgb/NNKms=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oVdBEw2G+mq81idUExGThuxESa7+l+tib2NPCahxFdWFe8K1Jhor4T9Ywp66puyECRHUksbLfxrUw7ro8oDU+oZbEhjpSsCvur+//dZe35iFNlYQpu/+elnqA3+J5oJPNIIU95DQS/wr6+SCb3kyIXNOaHbDYPQ672hETpaJnxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VTZEPKmo; arc=none smtp.client-ip=192.198.163.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hvexu96sJ5h0lU+ZkAd2UzBi4GTpR2w8GuPqLla/1p20jdKTzK6Rd/Kscng3fsKhw0ap6SOQ4AgaPfJVLFMrSNoDN3IHqjNK8CZ91hxPyyuI7Y0h6lzSxZPwqnc9btW6Ip1ZLKlLMN3GrE8SGpfXKVivHxdl9ZcaviB2x15vPaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iLcsGKrX; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VTZEPKmo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iLcsGKrX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740673982; x=1772209982;
+  t=1740673986; x=1772209986;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PxRMUeFEamREPmtQZc3fxutf2JnTd8UN84HgX0/6asw=;
-  b=VTZEPKmohrqovlHcRZNtx8/sTcUIBQwmfJOn73xT7no1IHOp7i8ubi8a
-   3uxqOS9Js5+hShGpmFfZANsZJa2o5/9hsKVlOuyDhMEgD518Hzb1kcyo3
-   Uwkzo8M9TsgaAoXPXcA2s6d7xhC89tqNrqhY4r110FzlVL8oy7a8pD8G2
-   c+wBM9wvyHLtbil3umqBB3cK5Xof9FChj0sIVCpPnyhEON03w07xK83gt
-   ld5knG1wDfCyB9KsGGpKl/w9bS7JdsoSz+S6HwjVyGfoCOhYO6yj0W3OM
-   /uT/ygO+r4mnWbu5NI0U6juZQ7IyhGkdsVQqrMgx7yn8FyarPSLJFQWSg
-   A==;
-X-CSE-ConnectionGUID: bHVndROHRpaSjBcKgC/1YA==
-X-CSE-MsgGUID: oHQazHRGQxijnPmMZSFKcw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52985955"
+  bh=BD4f1tzirgqPmQ5M6W5JBi3601o80CXVHLpgb/NNKms=;
+  b=iLcsGKrXspp6+KiNjBPJztHgsl6eupNwioCUdqnNWFaP687yC2KpY5rx
+   D6GiBMyPDBUymFiiCAlRiHSFx8hF+1CKMETXY+WUNG+RxU7kVMKHBaO2H
+   TTolUGJZuR6BI5aDQTnqUSjyfTM0uHZYbAPlc21KrxPRnaaeeNMhtSsm+
+   7JuA8LJxc+WO7gzselP7mqnSb1nyNcKxbNMihNsEupjbqUZ/k3YAlK6iC
+   dCMFaLtzISuxDJqjt/MguqJ3b8CFn9qaHF7YFKZP99EVhnHU7tRjNfMBz
+   okdTcuwasbTUWlFv9nZZcyFs1anKy4/tW50eLmNOugC3Bcm7b8LnbTJv4
+   w==;
+X-CSE-ConnectionGUID: aGp9KJs7QKKu2GF/lw01eQ==
+X-CSE-MsgGUID: nzpDKZwHTq+vO43N5gGKoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52985975"
 X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="52985955"
+   d="scan'208";a="52985975"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 08:33:01 -0800
-X-CSE-ConnectionGUID: P9PzRs9xQmGfB9QwTupwow==
-X-CSE-MsgGUID: vC1SwDCjTRm0YBeAWIdMZQ==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 08:33:06 -0800
+X-CSE-ConnectionGUID: MWXNu6UFS3qVgsk7wMMXFQ==
+X-CSE-MsgGUID: Ykyo5a2lRQ6WUsTSyMn8Jw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="140303905"
+   d="scan'208";a="140304005"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
   by fmviesa002.fm.intel.com with ESMTP; 27 Feb 2025 08:33:00 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tngoj-000Dhq-2K;
+	id 1tngoj-000Dhm-2B;
 	Thu, 27 Feb 2025 16:32:57 +0000
-Date: Fri, 28 Feb 2025 00:32:35 +0800
+Date: Fri, 28 Feb 2025 00:32:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 4/4] ftrace: Add arguments to function tracer
-Message-ID: <202502280024.KCZLllFN-lkp@intel.com>
-References: <20250225222654.069143074@goodmis.org>
+To: Menglong Dong <menglong8.dong@gmail.com>, rostedt@goodmis.org,
+	mark.rutland@arm.com, alexei.starovoitov@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org,
+	mhiramat@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	hpa@zytor.com, mathieu.desnoyers@efficios.com, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	dongml2@chinatelecom.cn, akpm@linux-foundation.org, rppt@kernel.org,
+	graf@amazon.com, dan.j.williams@intel.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2] add function metadata support
+Message-ID: <202502280004.QmU2zIb5-lkp@intel.com>
+References: <20250226121537.752241-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,78 +72,63 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250225222654.069143074@goodmis.org>
+In-Reply-To: <20250226121537.752241-1-dongml2@chinatelecom.cn>
 
-Hi Steven,
+Hi Menglong,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.14-rc4 next-20250227]
-[cannot apply to trace/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on bpf-next/master]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ftrace-Add-print_function_args/20250226-063252
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250225222654.069143074%40goodmis.org
-patch subject: [PATCH v3 4/4] ftrace: Add arguments to function tracer
-config: i386-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280024.KCZLllFN-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/add-function-metadata-support/20250226-202312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20250226121537.752241-1-dongml2%40chinatelecom.cn
+patch subject: [PATCH bpf-next v2] add function metadata support
+config: x86_64-randconfig-r112-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280004.QmU2zIb5-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280024.KCZLllFN-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280004.QmU2zIb5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280024.KCZLllFN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280004.QmU2zIb5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+sparse warnings: (new ones prefixed by >>)
+   kernel/trace/kfunc_md.c:12:23: sparse: sparse: symbol 'kfunc_mds' redeclared with different type (different address spaces):
+   kernel/trace/kfunc_md.c:12:23: sparse:    struct kfunc_md [noderef] __rcu *[addressable] [toplevel] kfunc_mds
+   kernel/trace/kfunc_md.c: note: in included file:
+   include/linux/kfunc_md.h:16:24: sparse: note: previously declared as:
+   include/linux/kfunc_md.h:16:24: sparse:    struct kfunc_md *extern [addressable] [toplevel] kfunc_mds
+>> kernel/trace/kfunc_md.c:186:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct kfunc_md *md @@     got struct kfunc_md [noderef] __rcu * @@
+   kernel/trace/kfunc_md.c:186:20: sparse:     expected struct kfunc_md *md
+   kernel/trace/kfunc_md.c:186:20: sparse:     got struct kfunc_md [noderef] __rcu *
 
->> kernel/trace/trace_output.c:1121:19: error: use of undeclared identifier 'FTRACE_REGS_MAX_ARGS'
-    1121 |         if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long))
-         |                          ^
-   1 error generated.
---
->> kernel/trace/trace.c:2888:10: error: use of undeclared identifier 'FTRACE_REGS_MAX_ARGS'
-    2888 |         size += FTRACE_REGS_MAX_ARGS * !!fregs * sizeof(long);
-         |                 ^
-   kernel/trace/trace.c:2899:23: error: use of undeclared identifier 'FTRACE_REGS_MAX_ARGS'
-    2899 |                 for (int i = 0; i < FTRACE_REGS_MAX_ARGS; i++)
-         |                                     ^
->> kernel/trace/trace.c:2900:21: error: call to undeclared function 'ftrace_regs_get_argument'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2900 |                         entry->args[i] = ftrace_regs_get_argument(fregs, i);
-         |                                          ^
-   3 errors generated.
+vim +186 kernel/trace/kfunc_md.c
 
-
-vim +/FTRACE_REGS_MAX_ARGS +1121 kernel/trace/trace_output.c
-
-  1108	
-  1109	/* TRACE_FN */
-  1110	static enum print_line_t trace_fn_trace(struct trace_iterator *iter, int flags,
-  1111						struct trace_event *event)
-  1112	{
-  1113		struct ftrace_entry *field;
-  1114		struct trace_seq *s = &iter->seq;
-  1115		unsigned long *args;
-  1116		int args_size;
-  1117	
-  1118		trace_assign_type(field, iter->ent);
-  1119	
-  1120		args_size = iter->ent_size - offsetof(struct ftrace_entry, args);
-> 1121		if (args_size >= FTRACE_REGS_MAX_ARGS * sizeof(long))
-  1122			args = field->args;
-  1123		else
-  1124			args = NULL;
-  1125	
-  1126		print_fn_trace(s, field->ip, field->parent_ip, iter->tr->text_delta,
-  1127			       args, flags);
-  1128		trace_seq_putc(s, '\n');
-  1129	
-  1130		return trace_handle_return(s);
-  1131	}
-  1132	
+   169	
+   170	/* Get a exist metadata by the function address, and NULL will be returned
+   171	 * if not exist.
+   172	 *
+   173	 * NOTE: rcu lock should be held during reading the metadata, and
+   174	 * kfunc_md_lock should be held if writing happens.
+   175	 */
+   176	struct kfunc_md *kfunc_md_find(void *ip)
+   177	{
+   178		struct kfunc_md *md;
+   179		u32 index;
+   180	
+   181		if (kfunc_md_arch_exist(ip)) {
+   182			index = kfunc_md_get_index(ip);
+   183			if (WARN_ON_ONCE(index >= kfunc_md_count))
+   184				return NULL;
+   185	
+ > 186			md = &kfunc_mds[index];
+   187			return md;
+   188		}
+   189		return NULL;
+   190	}
+   191	EXPORT_SYMBOL_GPL(kfunc_md_find);
+   192	
 
 -- 
 0-DAY CI Kernel Test Service
