@@ -1,236 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEEE1F585C;
-	Thu, 27 Feb 2025 05:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDB4217668
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 06:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740633993; cv=none; b=ohN/S5B/eS1/xwlzh1xpAqn5OY7hM2foxmMYQ2DrVgi7+iyDtxJPHssf55DNsqwFiTlJ6awsQ0hbCrXey1zFNhI1OkS8zFgi0cH+O4GP/c/7TLwB0ZneJS9NOH1QzRr1JHguBEkaZHJ/XcNEcJk1KbsAsxXjnMunMaXEnXNdvL4=
+	t=1740636788; cv=none; b=Pqkui9D3F+hopFZMMe7UF3c03Fmd4OlS6xk0+0IFiLZgUzFXl4snUse2fZgKbY+TcSsU1tBDaYPtAsC3ltApuVzHjWTj/OQCAk0FRsFvx4E31PgaxBhFEtkP0ssS2EMDDtzYmbIGO0UTkhluvko1gsfsX/2JdZljbZliztFlW84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740633993; c=relaxed/simple;
-	bh=QsLOmOWrH2QCKP0gkojxfG4ZAlKdqpTNrpKXybsyags=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qPI0ZHkceke2qVnGpzH5tmCDBH/FmO8qQylS90x4kWZ8Qm7/KaZh92m1YbsqHm3LVp3J5oB/yFy+VkrxmM0X39bRRU1gBKdQu3QtA1e2z1tyVPRjD7YiEeMnciVvuuCMzyv03VDbLO6pKO6gi6CTSzMm+jayK7ET7vCU0ByZf1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CiNBxKT5; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740636788; c=relaxed/simple;
+	bh=9J81SQoYHsfHuQNlO6dXXiKaclPkwFctCUcS7bQFdZ4=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=dEhAigUB8XutLruciYPHHQukRRgkAs00PXl1bCA7KQ6xsMy5hgMqhSs5sClB8bEtRwEjL1FcGT46jvN34FZ/77DMMaGEmhU341YX66oX4oox0wwr1lz9FE3aLs9nWX7H0ZvDQ2jsjTsVowSiwY021z0VSoX+nSyJLZBC86rnzw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vhgItv0V; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CiNBxKT5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740633991; x=1772169991;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QsLOmOWrH2QCKP0gkojxfG4ZAlKdqpTNrpKXybsyags=;
-  b=CiNBxKT5wqYPrKOqTvkJgU0asbGgjueLbjhI7y00snQzpifdPPFWZ9xq
-   EM1HWaAQGd6fxsAgzToM9SFxxfkRs9JUaRLqPA2M1zLSvEGTZcMPkuDzm
-   qgwmGn+daOzNtpjuX6ftNLRbdNR1wKoL2gSZ3TL4j+iYIaIDfieNkrHQx
-   PU0FwcHstnbS6iPA32XkpwefsE3aqHaaB2Mtt5LjqBTltNTdCmuKGgYqK
-   qBuulnN3B9liRsEiQZVOQvz9rTrcCuJAvALv1xMxF/uajlOa2bKAP2G7M
-   PZw2dODmsTAZMCuv3GtZgPClKATSUPkx0lbn36Keh6a0TVpJluZWOxqmZ
-   w==;
-X-CSE-ConnectionGUID: KIz0TXaIS720IFkIYmn14Q==
-X-CSE-MsgGUID: pMQT2746RQ25i474FK3kBA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41639217"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="41639217"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 21:26:30 -0800
-X-CSE-ConnectionGUID: 8YA5gkAtSqucOs2B0u928A==
-X-CSE-MsgGUID: 9wyp9ikvRE+TXckO1c0Wuw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="117409621"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 26 Feb 2025 21:26:28 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnWPh-000Ct8-0F;
-	Thu, 27 Feb 2025 05:26:25 +0000
-Date: Thu, 27 Feb 2025 13:25:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: zhongjinji@honor.com, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, yuzhao@google.com,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	rientjes@google.com, vbabka@suse.cz, zhongjinji@honor.com,
-	yipengxiang@honor.com, liulu.liu@honor.com, feng.han@honor.com
-Subject: Re: [PATCH] mm/page_alloc: make the maximum number of highatomic
- pageblocks resizable
-Message-ID: <202502271250.KUfFnxnl-lkp@intel.com>
-References: <20250226024126.3718-1-zhongjinji@honor.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vhgItv0V"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-abb7a6ee2deso77887366b.0
+        for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 22:13:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740636784; x=1741241584; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CuxSuk4eRgxWynJJEawNIcvcHNqZ5bgfZDjnTmQkJOo=;
+        b=vhgItv0VRsS2u2Yb5UPk7i8ViVqnfJohW8IrT1UAf6cT6TuVcskcgCrlCAk8zdLwLq
+         F6xpM9LUH64UtE+acxeVpAFz2liojaF0t4NjXwQ3YcZFCOfNYWwpUGqJuvLd0MO3tcUG
+         hxoPu/tpqHdPiMy2Vkjg8/CAkQCLOI9IH0+T366zXD4pDXijEOmU320Rq8RMrrfeRoGC
+         BV3FsAUrbeBlSRPHhBVm5BdKkjONaY8aJVPADmsLv/oagNBCp/53eMOAY/IcodPEEaGH
+         Arn4finq7juc/ASlK8b4jNZSvkiSmQIQZEshlP7genH9LkOpplPyb0p7/LvJx+A7G2Am
+         T0oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740636784; x=1741241584;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CuxSuk4eRgxWynJJEawNIcvcHNqZ5bgfZDjnTmQkJOo=;
+        b=FRQXTN7g0C7XbUAcFlU5b70Fo9XCNE3LmVxA1ujq3xyJmv760MxEEUfVvFqW9lN1aS
+         jNlu0VnuPNiyHnf7WLGH4QM+FYwnpto6/VfGWzmYuC44ZK/9Pl/dscF1d5Qz4h5sQ69c
+         Mc5ai/BsvntX89wWI+wKmqfmJuVg1CHv4zHoqHha55icWd3Np5yW/uLKNElqVWFBIudt
+         5T76BW//gtHh6MyFARACK1DEo7/k/03kYZPV4+L0jKR5boB0ykMaR4pzLhmOIEw1TwiP
+         zWbuRbUOC5aNBHN72nddQ3qJ/JDlrAz7y4x3CEMkca+/TObCScBszurbW59IyVrD1Onz
+         B6Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCURRNuEag8MXUAkZUIziOv2/R1I46KGVrKRbQeVBLQ4wVK0qhNv9gMudDB/9dttTZhkuRgS@lists.linux.dev
+X-Gm-Message-State: AOJu0YyQMZeYYfUejQO7pj/B8tFiN3zsiWGmUVhew1tbxNQ5IAa7HRro
+	6RKr708j496sXpgDfanM8dzIQ6LYnq60Um3JL2XxG2AcK8p5/KyD4eCd8/CvTcS4ItR2Op0rJzL
+	w2k1XfWmKVC5UK5ibj34UxY7XS2K4+EY4vFI=
+X-Gm-Gg: ASbGncsyVWtRUyqmoKH6xgdszdX6M7zPkmTci5RGJjO9T21/Rv8WCm84f+iMstxi4Rg
+	qgEzkj1IshLvnupdMrsRJYCwDo19mhhWubOJyRAyhWcZTwOFWL+fI3V8e6M+FovOhL4QcdRZG9Q
+	485rkZ
+X-Google-Smtp-Source: AGHT+IEgJXsQWOrOPhuyDiqYa5ObWU7mCLEWr74aJZ2+hsjWBPxMvycAsBVKLy9JZ2u4XFnZXPgBLyMLQe3dM8dy6ys=
+X-Received: by 2002:a17:906:3105:b0:ab7:f2da:8122 with SMTP id
+ a640c23a62f3a-abeeecfd662mr707407366b.3.1740636784177; Wed, 26 Feb 2025
+ 22:13:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226024126.3718-1-zhongjinji@honor.com>
+From: Bill Wendling <morbo@google.com>
+Date: Wed, 26 Feb 2025 22:12:47 -0800
+X-Gm-Features: AQ5f1Jovhh9LtaEfZAB9uuTkphZJ0I-qXJT238fUHcidB3rX9MNwIcr8OFeNbcQ
+Message-ID: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+Subject: [PATCH] x86/crc32: use builtins to improve code generation
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Eric Biggers <ebiggers@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+For both gcc and clang, crc32 builtins generate better code than the
+inline asm. GCC improves, removing unneeded "mov" instructions. Clang
+does the same and unrolls the loops. GCC has no changes on i386, but
+Clang's code generation is vastly improved, due to Clang's "rm"
+constraint issue.
 
-kernel test robot noticed the following build errors:
+The number of cycles improved by ~0.1% for GCC and ~1% for Clang, which
+is expected because of the "rm" issue. However, Clang's performance is
+better than GCC's by ~1.5%, most likely due to loop unrolling.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment-2649330009
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+ arch/x86/Makefile         | 3 +++
+ arch/x86/lib/crc32-glue.c | 8 ++++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhongjinji-honor-com/mm-page_alloc-make-the-maximum-number-of-highatomic-pageblocks-resizable/20250226-121712
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250226024126.3718-1-zhongjinji%40honor.com
-patch subject: [PATCH] mm/page_alloc: make the maximum number of highatomic pageblocks resizable
-config: x86_64-buildonly-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271250.KUfFnxnl-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271250.KUfFnxnl-lkp@intel.com/reproduce)
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 5b773b34768d..241436da1473 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -114,6 +114,9 @@ else
+ KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
+ endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502271250.KUfFnxnl-lkp@intel.com/
++# Enables the use of CRC32 builtins.
++KBUILD_CFLAGS += -mcrc32
++
+ ifeq ($(CONFIG_X86_32),y)
+         BITS := 32
+         UTS_MACHINE := i386
+diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+index 2dd18a886ded..fdb94bff25f4 100644
+--- a/arch/x86/lib/crc32-glue.c
++++ b/arch/x86/lib/crc32-glue.c
+@@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+ EXPORT_SYMBOL(crc32_le_arch);
 
-All errors (new ones prefixed by >>):
+ #ifdef CONFIG_X86_64
+-#define CRC32_INST "crc32q %1, %q0"
++#define CRC32_INST __builtin_ia32_crc32di
+ #else
+-#define CRC32_INST "crc32l %1, %0"
++#define CRC32_INST __builtin_ia32_crc32si
+ #endif
 
-   In file included from mm/page_alloc.c:19:
-   In file included from include/linux/mm.h:2302:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/page_alloc.c:44:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   mm/page_alloc.c:2854:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    2854 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
-     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   mm/page_alloc.c:2971:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    2971 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
-     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   mm/page_alloc.c:4743:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-    4743 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
-     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
-         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
->> mm/page_alloc.c:6262:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6262 |                 .procname       = "highatomic_reserve_ratio",
-         |                 ^
-   mm/page_alloc.c:6263:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6263 |                 .data           = &highatomic_reserve_ratio,
-         |                 ^
-   mm/page_alloc.c:6264:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6264 |                 .maxlen         = sizeof(highatomic_reserve_ratio),
-         |                 ^
-   mm/page_alloc.c:6265:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6265 |                 .mode           = 0644,
-         |                 ^
-   mm/page_alloc.c:6266:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6266 |                 .proc_handler   = proc_dointvec_minmax,
-         |                 ^
-   mm/page_alloc.c:6267:3: error: field designator cannot initialize a non-struct, non-union type 'const struct ctl_table[]'
-    6267 |                 .extra1         = SYSCTL_ZERO,
-         |                 ^
->> mm/page_alloc.c:6268:3: error: expected ';' at end of declaration
-    6268 |         },
-         |          ^
-         |          ;
->> mm/page_alloc.c:6269:2: error: expected identifier or '('
-    6269 |         {
-         |         ^
->> mm/page_alloc.c:6303:1: error: extraneous closing brace ('}')
-    6303 | };
-         | ^
-   6 warnings and 9 errors generated.
+ /*
+@@ -78,10 +78,10 @@ u32 crc32c_le_arch(u32 crc, const u8 *p, size_t len)
 
+        for (num_longs = len / sizeof(unsigned long);
+             num_longs != 0; num_longs--, p += sizeof(unsigned long))
+-               asm(CRC32_INST : "+r" (crc) : "rm" (*(unsigned long *)p));
++               crc = CRC32_INST(crc,  *(unsigned long *)p);
 
-vim +6262 mm/page_alloc.c
+        for (len %= sizeof(unsigned long); len; len--, p++)
+-               asm("crc32b %1, %0" : "+r" (crc) : "rm" (*p));
++               crc = __builtin_ia32_crc32qi(crc, *p);
 
-  6227	
-  6228	static const struct ctl_table page_alloc_sysctl_table[] = {
-  6229		{
-  6230			.procname	= "min_free_kbytes",
-  6231			.data		= &min_free_kbytes,
-  6232			.maxlen		= sizeof(min_free_kbytes),
-  6233			.mode		= 0644,
-  6234			.proc_handler	= min_free_kbytes_sysctl_handler,
-  6235			.extra1		= SYSCTL_ZERO,
-  6236		},
-  6237		{
-  6238			.procname	= "watermark_boost_factor",
-  6239			.data		= &watermark_boost_factor,
-  6240			.maxlen		= sizeof(watermark_boost_factor),
-  6241			.mode		= 0644,
-  6242			.proc_handler	= proc_dointvec_minmax,
-  6243			.extra1		= SYSCTL_ZERO,
-  6244		},
-  6245		{
-  6246			.procname	= "watermark_scale_factor",
-  6247			.data		= &watermark_scale_factor,
-  6248			.maxlen		= sizeof(watermark_scale_factor),
-  6249			.mode		= 0644,
-  6250			.proc_handler	= watermark_scale_factor_sysctl_handler,
-  6251			.extra1		= SYSCTL_ONE,
-  6252			.extra2		= SYSCTL_THREE_THOUSAND,
-  6253		},
-  6254		{
-  6255			.procname	= "percpu_pagelist_high_fraction",
-  6256			.data		= &percpu_pagelist_high_fraction,
-  6257			.maxlen		= sizeof(percpu_pagelist_high_fraction),
-  6258			.mode		= 0644,
-  6259			.proc_handler	= percpu_pagelist_high_fraction_sysctl_handler,
-  6260			.extra1		= SYSCTL_ZERO,
-  6261		},
-> 6262			.procname	= "highatomic_reserve_ratio",
-  6263			.data		= &highatomic_reserve_ratio,
-  6264			.maxlen		= sizeof(highatomic_reserve_ratio),
-  6265			.mode		= 0644,
-  6266			.proc_handler	= proc_dointvec_minmax,
-  6267			.extra1		= SYSCTL_ZERO,
-> 6268		},
-> 6269		{
-  6270			.procname	= "lowmem_reserve_ratio",
-  6271			.data		= &sysctl_lowmem_reserve_ratio,
-  6272			.maxlen		= sizeof(sysctl_lowmem_reserve_ratio),
-  6273			.mode		= 0644,
-  6274			.proc_handler	= lowmem_reserve_ratio_sysctl_handler,
-  6275		},
-  6276	#ifdef CONFIG_NUMA
-  6277		{
-  6278			.procname	= "numa_zonelist_order",
-  6279			.data		= &numa_zonelist_order,
-  6280			.maxlen		= NUMA_ZONELIST_ORDER_LEN,
-  6281			.mode		= 0644,
-  6282			.proc_handler	= numa_zonelist_order_handler,
-  6283		},
-  6284		{
-  6285			.procname	= "min_unmapped_ratio",
-  6286			.data		= &sysctl_min_unmapped_ratio,
-  6287			.maxlen		= sizeof(sysctl_min_unmapped_ratio),
-  6288			.mode		= 0644,
-  6289			.proc_handler	= sysctl_min_unmapped_ratio_sysctl_handler,
-  6290			.extra1		= SYSCTL_ZERO,
-  6291			.extra2		= SYSCTL_ONE_HUNDRED,
-  6292		},
-  6293		{
-  6294			.procname	= "min_slab_ratio",
-  6295			.data		= &sysctl_min_slab_ratio,
-  6296			.maxlen		= sizeof(sysctl_min_slab_ratio),
-  6297			.mode		= 0644,
-  6298			.proc_handler	= sysctl_min_slab_ratio_sysctl_handler,
-  6299			.extra1		= SYSCTL_ZERO,
-  6300			.extra2		= SYSCTL_ONE_HUNDRED,
-  6301		},
-  6302	#endif
-> 6303	};
-  6304	
-
+        return crc;
+ }
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1.711.g2feabab25a-goog
