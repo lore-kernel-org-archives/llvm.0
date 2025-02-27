@@ -1,194 +1,149 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF412206B2
-	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 07:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B8322068A;
+	Thu, 27 Feb 2025 07:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740640123; cv=none; b=A/WVBAPwiHbLO4swFnlkKwtbq2tk6Uq04DDqWR1v+g8EoofWQH3dWJoDF0GPwRIyaa08/0effu8tqRuR9vecwdd1j/PTT1Oq4xjVFZNd9QyD9hTXmjMuJAmLGrF2MRm9IyB1u6BrYMoCWyAzo1MLxOhf8SOOzlog3sLcWjOGnXs=
+	t=1740640349; cv=none; b=lRchN/1Wz1h6MMDTLIYrN5OK/vxO1nW30GfNTXVfh7GSCo4aWRFLBS3fXO9SSxFB3IirdVflt0nZN+36ZdENqf8F+jh4lxnBWK19jwVztROsJmVJUDYlo8Kqunuh2Pxc5EJgcrs0zWdVdBkyZn15GsueHM5PFfyh3OLFWz6TyIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740640123; c=relaxed/simple;
-	bh=rg8B6FDBMz6yz+xYk4oSNWCWQ+8wOLsYZLdg29RHBE8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GBg18Y4NeAkA56sIU1foidm7vdbDjcNlHqHZAtrxZx7KNeCOKz6OPgeXOwQRTvKGyaxNb0iTpin+zydoBysrtMW7iXp1mCCm+4/EMG5QxQzXklujvFpY/A+wAtkYV+cZSr7T3T6HKSRwymvrrUQqTgqQMaxoyMs1GQi6yL2Gjdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3SSV5XrE; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1740640349; c=relaxed/simple;
+	bh=EHkwOsTi98TGffo/fQE6AQx6mmSwXjwpLNRKCm7qY9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NOmVg5FH2C9DyX/Gn7AOnwA16m0gSb267RZz7Dy5r2BbfJ0P6VBtS6xThBV2kBAOtIa19eMHhYnIWWz12e9wSOQc3LZ8voT7kv3mZZAcEe5s0olIynEb8IqnAMu15EkB0/o6hKay1aaWoHC5lvg0u71W1c4slMaMXR5H2jN3I9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1QGVuce; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3SSV5XrE"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2feae68f835so117217a91.2
-        for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 23:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740640121; x=1741244921; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TKhkrI6oIv5W5cLDtWVWvtUq/hOpICpzcugG77LEdi8=;
-        b=3SSV5XrEmhYDk+HjyyHQ7CKW1WTFYu2ciUwuPv0+IfH8kTg+5iOyWP6riMUauAHyDN
-         QDS1MQ+6k1pA8WLqgYWLjPHP3IGQwto7yp++usi1OObBmM6eXCI6MwEbGshwcczYI4jR
-         QpXbKDrw5Cn7QsuV07Y49nw5Rh6LMjegs+vlny6/cUXsoP/Iw3xYLgjTCYu8dzVxp82R
-         JTpgZYOjegCJR9Um+xi8RL+I/VpbSctApJ1ZNyyEV/Kdcr7IhZMxapUbr+/lf8Zf6C98
-         AtbNnY1ZLCfPXAbsbpxRABdhbSz3PbFY9mAVdM9B133CU0ZUT06VF+xNUG7NRWNuCWd5
-         QeJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740640121; x=1741244921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TKhkrI6oIv5W5cLDtWVWvtUq/hOpICpzcugG77LEdi8=;
-        b=OBZWxMvH77A00uwHYDe/KyGUbPVJy7OmsZVjG81lht8EKnpuVYY2jhNtlqWhGAKdEC
-         BE7OYnEg2dno2gCWUBHGd9CEvFAGeLr/0d3Va5L9YW+X0j9fFSfap73NLWcbyEOXqWyI
-         WJSanzdserdFI4AE8ip5ly0WkYIyq5RFhSJ94bXO9uoD7z4PU9gwrzYnyA03R3WeIdIa
-         XNRd8Ia4winE3oOxSfRdcWNX3d3IUsLcQ5MPDBM4r0EVi6Sqc/u5k2R0b8zCcpaCkTbN
-         Cn0XuhKx+kC+6lMiMTYdaYCq8Anfl8RCZz9y2xoYH0ms/Xu6u3f4ZjWlmnG0H2zDsvT6
-         letQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXoxXCEUdY7A6t8Kz8zAzyNSGPoYg57wriafOQ236XMz7TqwrLEuURU8W4J+wUba3TyTL1m@lists.linux.dev
-X-Gm-Message-State: AOJu0YyFKfoXnMHA+x5bOoR+PX/jKb6oSx7FLTWZrGTpemhUMETx2PqJ
-	Rg3r1LSc+5gyV1q3AJc+W6JvIQN5ZwFnM0rU2tUXH+9WM4/GLPJCfHpDy2cnx8Cgs8Lj6z7SvQI
-	Hm7pU0SIdRDBM0g6EzK4OfCKSJR6O4wHq2z8=
-X-Gm-Gg: ASbGnctKbFN4n/cPsr9Lbpc3LCWPzWgq6OSGfA2DV+6bQf+rC36AT2vxiclVYMsxwr3
-	p6E3K2NiINhOcozG6RpP5ZivAAR11tmUFnYpUjec1+vG8aFa/8e0G2osSNKsbJemmiGp/Vi1cmX
-	xKWq4r
-X-Google-Smtp-Source: AGHT+IFvnuTUQDTO+4VmmSR1/1rup47G/HkdLkZFzWMjG5VYtOpMuG8VhVq3CAiDPdsw8oSQMUp+F3Nut4awmQxTzwE=
-X-Received: by 2002:a17:90b:570f:b0:2fe:ac01:8016 with SMTP id
- 98e67ed59e1d1-2feac01813cmr679744a91.34.1740640120783; Wed, 26 Feb 2025
- 23:08:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1QGVuce"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740640348; x=1772176348;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EHkwOsTi98TGffo/fQE6AQx6mmSwXjwpLNRKCm7qY9o=;
+  b=T1QGVucecsv+XCESVt9j2ml/LUQSZlDSI/eu1EvdVNwuCxfv3OdYVZ1u
+   Htghu8eYWQBkYL82EpBPPm7PMubyfAk/67XdmQhkYJQeX/CBqPJfkwGlJ
+   XylpwawSn//CpP+xxRNX/9bxUQdGj0YGhiEdmVpiLOYZw17sJFPMLcPzE
+   zSO/kwfOPsgTf2CzcifCw+GAJ4Rgosq/WP/rGjoLy5BVBCJN7ax82AY7u
+   oEuzb+8yJyhhRWgDCoTbm+RQt7Q1J0TU3t1IvkdCyF/tE9s26QftkTQ2K
+   qd1lAnXZYiODmhEskA3X/QpuiQTbCUv8OcmmglsmdwLejlBJoFMvUcBwj
+   w==;
+X-CSE-ConnectionGUID: rT8jOZzaRMmx1Z8WrWv9gQ==
+X-CSE-MsgGUID: cdIBSqPBSI+RYPF4bB3Cug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41648690"
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="41648690"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 23:12:27 -0800
+X-CSE-ConnectionGUID: ZEqPPcfkTWOPddNawts56Q==
+X-CSE-MsgGUID: V957D0BuTy2LAuHJLiqBDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
+   d="scan'208";a="121954904"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 26 Feb 2025 23:12:24 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnY4B-000D0b-1r;
+	Thu, 27 Feb 2025 07:12:20 +0000
+Date: Thu, 27 Feb 2025 15:11:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kiran K <kiran.k@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-bluetooth@vger.kernel.org,
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+	Vijay Satija <vijay.satija@intel.com>
+Subject: [bluetooth-next:master 28/29]
+ drivers/bluetooth/btintel_pcie.c:134:58: warning: shift count >= width of
+ type
+Message-ID: <202502271502.37Q8TE9Q-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
- <20250227062859.GA2506@sol.localdomain>
-In-Reply-To: <20250227062859.GA2506@sol.localdomain>
-From: Bill Wendling <morbo@google.com>
-Date: Wed, 26 Feb 2025 23:08:22 -0800
-X-Gm-Features: AQ5f1JrEBuahLVZ7GJL1oCz4jbIFAykPYy8gOB3rzQjuGstuIo1gE7lS5pS-AII
-Message-ID: <CAGG=3QVitM-AwqtYF0QjxpBV7Q8bqv59Os+jELFRUKMnRS9OGA@mail.gmail.com>
-Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Justin Stitt <justinstitt@google.com>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-crypto@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Feb 26, 2025 at 10:29=E2=80=AFPM Eric Biggers <ebiggers@kernel.org>=
- wrote:
->
-> On Wed, Feb 26, 2025 at 10:12:47PM -0800, Bill Wendling wrote:
-> > For both gcc and clang, crc32 builtins generate better code than the
-> > inline asm. GCC improves, removing unneeded "mov" instructions. Clang
-> > does the same and unrolls the loops. GCC has no changes on i386, but
-> > Clang's code generation is vastly improved, due to Clang's "rm"
-> > constraint issue.
-> >
-> > The number of cycles improved by ~0.1% for GCC and ~1% for Clang, which
-> > is expected because of the "rm" issue. However, Clang's performance is
-> > better than GCC's by ~1.5%, most likely due to loop unrolling.
-> >
-> > Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment-26=
-49330009
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> > Cc: Justin Stitt <justinstitt@google.com>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: linux-crypto@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Bill Wendling <morbo@google.com>
-> > ---
-> >  arch/x86/Makefile         | 3 +++
-> >  arch/x86/lib/crc32-glue.c | 8 ++++----
-> >  2 files changed, 7 insertions(+), 4 deletions(-)
->
-> Thanks!  A couple concerns, though:
->
-> > diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> > index 5b773b34768d..241436da1473 100644
-> > --- a/arch/x86/Makefile
-> > +++ b/arch/x86/Makefile
-> > @@ -114,6 +114,9 @@ else
-> >  KBUILD_CFLAGS +=3D $(call cc-option,-fcf-protection=3Dnone)
-> >  endif
-> >
-> > +# Enables the use of CRC32 builtins.
-> > +KBUILD_CFLAGS +=3D -mcrc32
->
-> Doesn't this technically allow the compiler to insert CRC32 instructions
-> anywhere in arch/x86/ without the needed runtime CPU feature check?  Norm=
-ally
-> when using intrinsics it's necessary to limit the scope of the feature
-> enablement to match the runtime CPU feature check that is done, e.g. by u=
-sing
-> the target function attribute.
->
-I'm not sure if CRC32 instructions will automatically be inserted when
-not explicitly called, especially since the other vector features are
-disabled. I wanted to limit enabling this flag for only crc32-glue.c,
-but my Makefile-fu failed me. The file appears to be compiled twice.
-But adding __attribute__((target("crc32"))) to the function would be
-much better.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+head:   978777bfa2d88998f2ffa2d3405ee20b7276890a
+commit: 3104ae5ad1b732140847f1f29534a448b6804d8e [28/29] Bluetooth: btintel_pcie: Setup buffers for firmware traces
+config: powerpc-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271502.37Q8TE9Q-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271502.37Q8TE9Q-lkp@intel.com/reproduce)
 
-> > diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
-> > index 2dd18a886ded..fdb94bff25f4 100644
-> > --- a/arch/x86/lib/crc32-glue.c
-> > +++ b/arch/x86/lib/crc32-glue.c
-> > @@ -48,9 +48,9 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
-> >  EXPORT_SYMBOL(crc32_le_arch);
-> >
-> >  #ifdef CONFIG_X86_64
-> > -#define CRC32_INST "crc32q %1, %q0"
-> > +#define CRC32_INST __builtin_ia32_crc32di
-> >  #else
-> > -#define CRC32_INST "crc32l %1, %0"
-> > +#define CRC32_INST __builtin_ia32_crc32si
-> >  #endif
->
-> Do both gcc and clang consider these builtins to be a stable API, or do t=
-hey
-> only guarantee the stability of _mm_crc32_*() from immintrin.h?  At least=
- for
-> the rest of the SSE and AVX stuff, I thought that only the immintrin.h fu=
-nctions
-> are actually considered stable.
->
-I don't know the answer for this. In general, once we (Clang) create a
-__builtin_* function it's not going away, because it will break anyone
-who uses them. (I assume the same is true for GCC.) There's a note in
-Documentation/arch/x86/x86_64/fsgs.rst in regards to using
-_{read,write}fsbase_u64() from immintrin.h (see below). I don't know
-if that's analogous to what I'm doing here, but maybe we should do
-something similar for crc32intr.h?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502271502.37Q8TE9Q-lkp@intel.com/
 
-FSGSBASE instructions compiler support
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+All warnings (new ones prefixed by >>):
 
-GCC version 4.6.4 and newer provide intrinsics for the FSGSBASE
-instructions. Clang 5 supports them as well.
-
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-  _readfsbase_u64()   Read the FS base register
-  _readfsbase_u64()   Read the GS base register
-  _writefsbase_u64()  Write the FS base register
-  _writegsbase_u64()  Write the GS base register
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-To utilize these intrinsics <immintrin.h> must be included in the source
-code and the compiler option -mfsgsbase has to be added.
+>> drivers/bluetooth/btintel_pcie.c:134:58: warning: shift count >= width of type [-Wshift-count-overflow]
+     134 |                 db_frag.bufs[i].buf_addr_msb = (u32)((buf->data_p_addr >> 32) & 0xffffffff);
+         |                                                                        ^  ~~
+   drivers/bluetooth/btintel_pcie.c:419:20: warning: unused function 'btintel_pcie_in_rom' [-Wunused-function]
+     419 | static inline bool btintel_pcie_in_rom(struct btintel_pcie_data *data)
+         |                    ^~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
 
--bw
+vim +134 drivers/bluetooth/btintel_pcie.c
+
+    90	
+    91	/* This function initializes the memory for DBGC buffers and formats the
+    92	 * DBGC fragment which consists header info and DBGC buffer's LSB, MSB and
+    93	 * size as the payload
+    94	 */
+    95	static int btintel_pcie_setup_dbgc(struct btintel_pcie_data *data)
+    96	{
+    97		struct btintel_pcie_dbgc_ctxt db_frag;
+    98		struct data_buf *buf;
+    99		int i;
+   100	
+   101		data->dbgc.count = BTINTEL_PCIE_DBGC_BUFFER_COUNT;
+   102		data->dbgc.bufs = devm_kcalloc(&data->pdev->dev, data->dbgc.count,
+   103					       sizeof(*buf), GFP_KERNEL);
+   104		if (!data->dbgc.bufs)
+   105			return -ENOMEM;
+   106	
+   107		data->dbgc.buf_v_addr = dmam_alloc_coherent(&data->pdev->dev,
+   108							    data->dbgc.count *
+   109							    BTINTEL_PCIE_DBGC_BUFFER_SIZE,
+   110							    &data->dbgc.buf_p_addr,
+   111							    GFP_KERNEL | __GFP_NOWARN);
+   112		if (!data->dbgc.buf_v_addr)
+   113			return -ENOMEM;
+   114	
+   115		data->dbgc.frag_v_addr = dmam_alloc_coherent(&data->pdev->dev,
+   116							     sizeof(struct btintel_pcie_dbgc_ctxt),
+   117							     &data->dbgc.frag_p_addr,
+   118							     GFP_KERNEL | __GFP_NOWARN);
+   119		if (!data->dbgc.frag_v_addr)
+   120			return -ENOMEM;
+   121	
+   122		data->dbgc.frag_size = sizeof(struct btintel_pcie_dbgc_ctxt);
+   123	
+   124		db_frag.magic_num = BTINTEL_PCIE_MAGIC_NUM;
+   125		db_frag.ver = BTINTEL_PCIE_DBGC_FRAG_VERSION;
+   126		db_frag.total_size = BTINTEL_PCIE_DBGC_FRAG_PAYLOAD_SIZE;
+   127		db_frag.num_buf = BTINTEL_PCIE_DBGC_FRAG_BUFFER_COUNT;
+   128	
+   129		for (i = 0; i < data->dbgc.count; i++) {
+   130			buf = &data->dbgc.bufs[i];
+   131			buf->data_p_addr = data->dbgc.buf_p_addr + i * BTINTEL_PCIE_DBGC_BUFFER_SIZE;
+   132			buf->data = data->dbgc.buf_v_addr + i * BTINTEL_PCIE_DBGC_BUFFER_SIZE;
+   133			db_frag.bufs[i].buf_addr_lsb = (u32)(buf->data_p_addr & 0xffffffff);
+ > 134			db_frag.bufs[i].buf_addr_msb = (u32)((buf->data_p_addr >> 32) & 0xffffffff);
+   135			db_frag.bufs[i].buf_size = BTINTEL_PCIE_DBGC_BUFFER_SIZE;
+   136		}
+   137	
+   138		memcpy(data->dbgc.frag_v_addr, &db_frag, sizeof(db_frag));
+   139		return 0;
+   140	}
+   141	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
