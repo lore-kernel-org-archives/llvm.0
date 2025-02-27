@@ -1,121 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-15.pe-b.jellyfish.systems (out-15.pe-b.jellyfish.systems [198.54.127.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DBA1A9B2A
-	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 21:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667711E51D;
+	Thu, 27 Feb 2025 21:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740690186; cv=none; b=gRdIR/AdjjBRyeDfj2ZC9kyu183kYX+63QNYpdz/A64tvfPNFCCdJYK9qm4kqbkI4HHOBpCak8ZAZ2i1s1PZTzYSrix2gRPaNCN2Du5lAmYPSw7WnUIqVzTTNmP3FI/cQvEhDHC8E3YOaqp2Lpe4YzVKdgoG4ZXFv9v31gwABSE=
+	t=1740691257; cv=none; b=VU8kftKsbeiRA1T5ehUnmTO2ctQPHyfofaxNusAaeCoJDnv1y1cRegHngN6owPddG8h0slMoGYN+jmQeWYTGheYWLUEQrz2Z3xMcyAYKRMOQQWovf8wZ6E1H+6H+9WiQooo6hrfEmzyLB5SOKSl9GPdG3xGGEgkNuWDkDaNr/Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740690186; c=relaxed/simple;
-	bh=3r4B5oXY/BH77JcRs+o7wfqEqeE4UQbUlNZHU1J1ejA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W8drGfQb5p7g/nELgpjO0uMWWlvKgt47+jx1ueVl/eHg63CM1ei8BLzgLqbXfqaFWo1Mx+bvwgXul6Ua91sLoThKQvwvbWS1A378KqC7dLe1se67KkvcMbdOaC8sQC6rtHayOnrbo2WVEPUcelObcplJi6cwVgs9SOXJWpktLkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kyclk4gH; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740691257; c=relaxed/simple;
+	bh=CHpD4CPGPUIyS+PYE6bP5+7Njrc+9jjZ0GXIxK4trAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cc4lXEOggwrv4Bk5kNpXsRgvy6PsLAAPzrqX7RlzAOVN5wQW1o6zJIv7Sr5ulRGpq0pNeBWYGLky1upi/1YG8gu327BC30QleCzTH1bsnXP6AsuZ9GePqMIH8jsNR15C0rHxcnxH4/jMM/pJJUje39WbgDxhIr16f+hxXh7Nqo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=framepointer.org; spf=pass smtp.mailfrom=framepointer.org; dkim=pass (2048-bit key) header.d=framepointer.org header.i=@framepointer.org header.b=PEcFMusR; arc=none smtp.client-ip=198.54.127.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=framepointer.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=framepointer.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kyclk4gH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740690185; x=1772226185;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3r4B5oXY/BH77JcRs+o7wfqEqeE4UQbUlNZHU1J1ejA=;
-  b=Kyclk4gHrHuoiFVBwIoCY0gL4dshLAAXRbdXq/MyHis710UHoiSgda8K
-   X1506q1E/W0dSbF1GUlIE+TcG6gZs1DuzdQARToRwuAUTFqnyYoQRogWo
-   1arCSrswItJ11ie5r5XmsC2OB6CuoLIoRk3nwlwOqgb0w65rUVLcudL+G
-   d25m3o0mFNlIJr31g5Nqiws1DMQRTieBg5M2ut7OrQzBUdR02fbyFtHGy
-   1k/91fVLtgi8Ld7EXOzltCZBgdmpS6G3iE+RrbpM9hOQqnmWavkupU1I2
-   dP+o4Z78ZB+/HDfU/l4b6pX6HNgtGW093HUt3u9jEoqQklp1nZKY61jkX
-   g==;
-X-CSE-ConnectionGUID: KJG5LS2+Q0iOAGGRXOavbQ==
-X-CSE-MsgGUID: q+m6gMrnTG2NpazS8m0dNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45518598"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="45518598"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 13:03:04 -0800
-X-CSE-ConnectionGUID: +u2IBbgaT/mS0s9qGAf+wQ==
-X-CSE-MsgGUID: BOhJFFZHRXqlhvzLKhBp0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="116940037"
-Received: from kcaccard-desk.amr.corp.intel.com (HELO [10.125.108.72]) ([10.125.108.72])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 13:03:03 -0800
-Message-ID: <60941700-89e9-44c4-9e28-be482268d327@intel.com>
-Date: Thu, 27 Feb 2025 13:03:15 -0800
+	dkim=pass (2048-bit key) header.d=framepointer.org header.i=@framepointer.org header.b="PEcFMusR"
+Received: from prod-lbout-phx.jellyfish.systems (new-01.privateemail.com [198.54.118.220])
+	by pe-b.jellyfish.systems (Postfix) with ESMTPA id 4Z3klf69lGzDqT2;
+	Thu, 27 Feb 2025 21:20:46 +0000 (UTC)
+Received: from MTA-15.privateemail.com (unknown [10.50.14.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by NEW-01.privateemail.com (Postfix) with ESMTPS id 4Z3klf5SD3z3hhVZ;
+	Thu, 27 Feb 2025 16:20:46 -0500 (EST)
+Received: from mta-15.privateemail.com (localhost [127.0.0.1])
+	by mta-15.privateemail.com (Postfix) with ESMTP id 4Z3klf43fVz3hhS0;
+	Thu, 27 Feb 2025 16:20:46 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=framepointer.org;
+	s=default; t=1740691246;
+	bh=CHpD4CPGPUIyS+PYE6bP5+7Njrc+9jjZ0GXIxK4trAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PEcFMusR7Av/fBAh0iIF2lhfbzHlHQtD3NkN/RlBSlUmYl90jbF9TvPVxFRswj7mA
+	 o1g5wawkWUU+Nbeb3b+Y55iM3yJguGuKZUwziHM7Cx3jnBxg4yh9E4fCYMyWRfpCf0
+	 hRkhS0j74yLX599z6rDhbUv40926SwowNtLBUJm5cVjxvHPPo+mwRUlMMhOqr22tXC
+	 jD90iIUmbzqSBg/8ITp9dbmkEAwLBOTYR+CrAfoAv8C1nuSei/R2MNrrv9Z7sR8EZ1
+	 4KN4/Awne+vKQKgtoMoUBPxIObgQVuM7Pjv7sGpTQHnMHH22cRsOetE8ObNoEtUuu0
+	 TBTfF4Ekjqrtw==
+Received: from 65YTFL3.secure.tethers.com (unknown [152.44.190.141])
+	by mta-15.privateemail.com (Postfix) with ESMTPA;
+	Thu, 27 Feb 2025 16:20:31 -0500 (EST)
+Date: Thu, 27 Feb 2025 16:20:32 -0500
+From: Sam Winchenbach <sam.winchenbach@framepointer.org>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
+	Michael.Hennerich@analog.com, antoniu.miclaus@analog.com,
+	jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] iio: filter: admv8818: fix range calculation
+Message-ID: <Z8DXIGxA5mJK0oPN@65YTFL3.secure.tethers.com>
+References: <20250225134612.577022-1-sam.winchenbach@framepointer.org>
+ <202502280434.DHtcsf7x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
-To: Bill Wendling <morbo@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Eric Biggers <ebiggers@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Justin Stitt <justinstitt@google.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-crypto@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
- <d20da175-2102-4ac0-bf91-0ab8f6b6b317@intel.com>
- <CAGG=3QX-msHuRffAtNCBoqYo=15Z--5RXbPbJ=Tzkb+C9zNSaw@mail.gmail.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <CAGG=3QX-msHuRffAtNCBoqYo=15Z--5RXbPbJ=Tzkb+C9zNSaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202502280434.DHtcsf7x-lkp@intel.com>
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-On 2/27/25 12:57, Bill Wendling wrote:
-> I vastly prefer the first way if made "static __always_inline".
+On Fri, Feb 28, 2025 at 04:23:44AM +0800, kernel test robot wrote:
+> Hi Sam,
+> 
+> kernel test robot noticed the following build errors:
+> 
+--- snip ---
+> >> drivers/iio/filter/admv8818.c:304:34: error: use of undeclared identifier 'lfp_corner_target'; did you mean 'lpf_corner_target'?
+>      304 |         ret = __admv8818_lpf_select(st, lfp_corner_target);
+>          |                                         ^~~~~~~~~~~~~~~~~
+>          |                                         lpf_corner_target
+>    drivers/iio/filter/admv8818.c:283:25: note: 'lpf_corner_target' declared here
+>      283 |         u64 hpf_corner_target, lpf_corner_target;
+>          |                                ^
+>    12 warnings and 1 error generated.
 
-'static', for sure. But I'd leave the explicit inlining out unless the
-compiler is actively being stupid.
+Well this is embarassing. I must have have had a fat-finger accident when
+inspecting the result of applying the patch to torvalds/master.
+
+I will fix this in v5 once we come to a concensus on the DTS changes.
+
+--- snip ---
+>    303	
+>  > 304		ret = __admv8818_lpf_select(st, lfp_corner_target);
+>    305	exit:
+>    306		mutex_unlock(&st->lock);
+>    307		return ret;
+>    308	}
+>    309	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
