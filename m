@@ -1,69 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172901E51EC;
-	Thu, 27 Feb 2025 17:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A142822B5B9;
+	Thu, 27 Feb 2025 18:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740678558; cv=none; b=QGaj5ucAGRtch3CA68hs/y+yhA6mqCxv4uxtaWn9ZpQUZJtiy+Kfh9w9/x2+tPp808McHzVN6pv93d1IA9g3XZACkGHTUWsbTadUjYQzQ+Y+KviyVYeykdieIq7fA0Q5v2R5C6F7XU+ywyeV2lp24O+S2LHBexTfe8qcf5BWlfk=
+	t=1740680684; cv=none; b=ayqN4/QT2XoeDX0FBnr/GVwl0ryz0Vv7YGHdMqD+O8xDLTwqc5RofvGjZ7kSSiCWc6n/qSV7IVRVf7vo+XknslxLwfVhDvTGuTrb7Qc51p/NF9LinQeNQnNtHYYhq7bzyT7jbYFTBWptHTMFLgKbB+WqGsp9PecKwhqftbv8pq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740678558; c=relaxed/simple;
-	bh=hbOcWRR965qL+r3t+KOoQIZ6pqo51J3oCtyYdu/MbP8=;
+	s=arc-20240116; t=1740680684; c=relaxed/simple;
+	bh=lPJfANm//PFLRscat0+SkC7KrFsy45HYSa3uyyWbfDA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fm/S2S+gpk9FDG8Q/qvhmLc6wRELUjZQNT6uySP69qUtLClVVEDwbkiAO1rKzBnxw2rP+4xT2UJiTozszqFlRdciM+UqQfrxYM1pDHXlbo/tVBC8ZPaLWP47lOBshktWrt9io//cu+Gb7PQn/ov+6k67Hy8NLVffS5ATDnc018U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eRC9CMEb; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5d/U53OAVKBomJOl83hd1L6izbn5p+pbjdOu3IUozYCUi91cGQw3xewXGZIQkG+iL30VmaDj4bpr/u3gaEj5oaVD9pjqlpwXdBXJT4tBW5/gdtG/TGtdQyvhTc0LS3NoRQMkCXmxBgVviuSZv7EF07kFv3Qr1uURtw2qvs/FfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fdoY6oZ6; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eRC9CMEb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fdoY6oZ6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740678556; x=1772214556;
+  t=1740680683; x=1772216683;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hbOcWRR965qL+r3t+KOoQIZ6pqo51J3oCtyYdu/MbP8=;
-  b=eRC9CMEbSw91m9MKdtFIALTXHdePzXEhMRanjuPXzLktTxSKsx0FQ/IG
-   0it4Neh5y9184DEnohQxRgyMOgrlM0pQVIQ2zXoFlv4CddpjaI7d592Qs
-   nAEiDKfu7yUWRHS9Xbw5pd5eYq2sCX5RDLn835kJYy7i0SnQDzefRbt4h
-   c3eyZdDACbMftHZKBFfGyYJkD3Gbdz96aH6OjUdOYSNH+QcNe5XWYqoiC
-   W4Exqf9xCbygpsY3PzpDCpNxsQjK5EVtX4ep3ZXrWMx3VSPMdyGJtDPa8
-   g7dzEit1XaGm3REFAc5jUhTTrEBvyHL5vqzlWIP6n+mwyhi5PBp9d/7k+
+  bh=lPJfANm//PFLRscat0+SkC7KrFsy45HYSa3uyyWbfDA=;
+  b=fdoY6oZ6A4jWxe6Hf1ljWrReJ4nV9Uapj4PgTHAroEmqQDb467cJRG++
+   sF7jBlKhA7rvSTb4GmA8SMCTruxFFoY7xQhMGB3Pp45kx8VNuVHrSnWu0
+   sN4AdNAv9n1aLTOlvslbnM0pV2cJ5OrkWXDI0zyI2j1R3sf0CRdBYmCmP
+   SNeeWNSbWMQD2i+JpQVM/IvYe1a9Mo9hE9MQ0XDH/dRWgX6Pt9SFP0KVO
+   uG1OhGT5sgAJzmH0iGfsQ/hsKnL4EkkJuOyPQlKBMgyYzMIxODLLLa27t
+   Yf1IpF0/6TCVMXaNamOsPIS79Nx/r2eebRH9XSmSahHUTYP9ViLwc8ZLo
    g==;
-X-CSE-ConnectionGUID: nC4Y5KQBQMG+nW/Wa9Dk4A==
-X-CSE-MsgGUID: Ect7u23aT1iKZFA2a/DkNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41503224"
+X-CSE-ConnectionGUID: kSvR9zBCSm63IGvGhlo9Kw==
+X-CSE-MsgGUID: V4/UFP7URKKtmxUP/Wnodg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41471301"
 X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="41503224"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 09:49:16 -0800
-X-CSE-ConnectionGUID: od8b3YkhQHOqc5lLH407AA==
-X-CSE-MsgGUID: qM2gFwLiQoGeQ9Pbh3oF7w==
+   d="scan'208";a="41471301"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 10:24:42 -0800
+X-CSE-ConnectionGUID: 76AqPYziQdmZa7k3I643vg==
+X-CSE-MsgGUID: HrQy19BfTQKcKQkm5RV84g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="117753696"
+   d="scan'208";a="117102575"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 27 Feb 2025 09:49:09 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 27 Feb 2025 10:24:42 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tni0R-000DnH-0q;
-	Thu, 27 Feb 2025 17:49:07 +0000
-Date: Fri, 28 Feb 2025 01:48:52 +0800
+	id 1tniYo-000Dqs-2U;
+	Thu, 27 Feb 2025 18:24:38 +0000
+Date: Fri, 28 Feb 2025 02:24:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <menglong8.dong@gmail.com>, rostedt@goodmis.org,
-	mark.rutland@arm.com, alexei.starovoitov@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org,
-	mhiramat@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, mathieu.desnoyers@efficios.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	dongml2@chinatelecom.cn, akpm@linux-foundation.org, rppt@kernel.org,
-	graf@amazon.com, dan.j.williams@intel.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2] add function metadata support
-Message-ID: <202502280123.BNaCYT2A-lkp@intel.com>
-References: <20250226121537.752241-1-dongml2@chinatelecom.cn>
+To: Haifeng Xu <haifeng.xu@shopee.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC] io_uring: fix the dead lock between io_uring and core dump
+Message-ID: <202502280245.WT5bW0xf-lkp@intel.com>
+References: <20250226113936.385747-1-haifeng.xu@shopee.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,139 +62,101 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250226121537.752241-1-dongml2@chinatelecom.cn>
+In-Reply-To: <20250226113936.385747-1-haifeng.xu@shopee.com>
 
-Hi Menglong,
+Hi Haifeng,
 
-kernel test robot noticed the following build warnings:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on brauner-vfs/vfs.all linus/master v6.14-rc4 next-20250227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/add-function-metadata-support/20250226-202312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250226121537.752241-1-dongml2%40chinatelecom.cn
-patch subject: [PATCH bpf-next v2] add function metadata support
-config: i386-randconfig-062-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280123.BNaCYT2A-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Haifeng-Xu/io_uring-fix-the-dead-lock-between-io_uring-and-core-dump/20250226-194045
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20250226113936.385747-1-haifeng.xu%40shopee.com
+patch subject: [RFC] io_uring: fix the dead lock between io_uring and core dump
+config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280245.WT5bW0xf-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280123.BNaCYT2A-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280245.WT5bW0xf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280123.BNaCYT2A-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280245.WT5bW0xf-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/trace/kfunc_md.c:12:23: sparse: sparse: symbol 'kfunc_mds' redeclared with different type (different address spaces):
-   kernel/trace/kfunc_md.c:12:23: sparse:    struct kfunc_md [noderef] __rcu *[addressable] [toplevel] kfunc_mds
-   kernel/trace/kfunc_md.c: note: in included file:
-   include/linux/kfunc_md.h:16:24: sparse: note: previously declared as:
-   include/linux/kfunc_md.h:16:24: sparse:    struct kfunc_md *extern [addressable] [toplevel] kfunc_mds
-   kernel/trace/kfunc_md.c:186:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct kfunc_md *md @@     got struct kfunc_md [noderef] __rcu * @@
-   kernel/trace/kfunc_md.c:186:20: sparse:     expected struct kfunc_md *md
-   kernel/trace/kfunc_md.c:186:20: sparse:     got struct kfunc_md [noderef] __rcu *
->> kernel/trace/kfunc_md.c:98:25: sparse: sparse: non size-preserving pointer to integer cast
+All errors (new ones prefixed by >>):
 
-vim +98 kernel/trace/kfunc_md.c
+   In file included from kernel/sched/core.c:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:6791:40: error: no member named 'io_uring' in 'struct task_struct'
+    6791 |         struct io_uring_task *io_uring = tsk->io_uring;
+         |                                          ~~~  ^
+   2 warnings and 1 error generated.
 
-    10	
-    11	static u32 kfunc_md_count = ENTRIES_PER_PAGE, kfunc_md_used;
-  > 12	struct kfunc_md __rcu *kfunc_mds;
-    13	EXPORT_SYMBOL_GPL(kfunc_mds);
-    14	
-    15	static DEFINE_MUTEX(kfunc_md_mutex);
-    16	
-    17	
-    18	void kfunc_md_unlock(void)
-    19	{
-    20		mutex_unlock(&kfunc_md_mutex);
-    21	}
-    22	EXPORT_SYMBOL_GPL(kfunc_md_unlock);
-    23	
-    24	void kfunc_md_lock(void)
-    25	{
-    26		mutex_lock(&kfunc_md_mutex);
-    27	}
-    28	EXPORT_SYMBOL_GPL(kfunc_md_lock);
-    29	
-    30	static u32 kfunc_md_get_index(void *ip)
-    31	{
-    32		return *(u32 *)(ip - KFUNC_MD_DATA_OFFSET);
-    33	}
-    34	
-    35	static void kfunc_md_init(struct kfunc_md *mds, u32 start, u32 end)
-    36	{
-    37		u32 i;
-    38	
-    39		for (i = start; i < end; i++)
-    40			mds[i].users = 0;
-    41	}
-    42	
-    43	static int kfunc_md_page_order(void)
-    44	{
-    45		return fls(DIV_ROUND_UP(kfunc_md_count, ENTRIES_PER_PAGE)) - 1;
-    46	}
-    47	
-    48	/* Get next usable function metadata. On success, return the usable
-    49	 * kfunc_md and store the index of it to *index. If no usable kfunc_md is
-    50	 * found in kfunc_mds, a larger array will be allocated.
-    51	 */
-    52	static struct kfunc_md *kfunc_md_get_next(u32 *index)
-    53	{
-    54		struct kfunc_md *new_mds, *mds;
-    55		u32 i, order;
-    56	
-    57		mds = rcu_dereference(kfunc_mds);
-    58		if (mds == NULL) {
-    59			order = kfunc_md_page_order();
-    60			new_mds = (void *)__get_free_pages(GFP_KERNEL, order);
-    61			if (!new_mds)
-    62				return NULL;
-    63			kfunc_md_init(new_mds, 0, kfunc_md_count);
-    64			/* The first time to initialize kfunc_mds, so it is not
-    65			 * used anywhere yet, and we can update it directly.
-    66			 */
-    67			rcu_assign_pointer(kfunc_mds, new_mds);
-    68			mds = new_mds;
-    69		}
-    70	
-    71		if (likely(kfunc_md_used < kfunc_md_count)) {
-    72			/* maybe we can manage the used function metadata entry
-    73			 * with a bit map ?
-    74			 */
-    75			for (i = 0; i < kfunc_md_count; i++) {
-    76				if (!mds[i].users) {
-    77					kfunc_md_used++;
-    78					*index = i;
-    79					mds[i].users++;
-    80					return mds + i;
-    81				}
-    82			}
-    83		}
-    84	
-    85		order = kfunc_md_page_order();
-    86		/* no available function metadata, so allocate a bigger function
-    87		 * metadata array.
-    88		 */
-    89		new_mds = (void *)__get_free_pages(GFP_KERNEL, order + 1);
-    90		if (!new_mds)
-    91			return NULL;
-    92	
-    93		memcpy(new_mds, mds, kfunc_md_count * sizeof(*new_mds));
-    94		kfunc_md_init(new_mds, kfunc_md_count, kfunc_md_count * 2);
-    95	
-    96		rcu_assign_pointer(kfunc_mds, new_mds);
-    97		synchronize_rcu();
-  > 98		free_pages((u64)mds, order);
-    99	
-   100		mds = new_mds + kfunc_md_count;
-   101		*index = kfunc_md_count;
-   102		kfunc_md_count <<= 1;
-   103		kfunc_md_used++;
-   104		mds->users++;
-   105	
-   106		return mds;
-   107	}
-   108	
+
+vim +6791 kernel/sched/core.c
+
+  6786	
+  6787	static inline void sched_submit_work(struct task_struct *tsk)
+  6788	{
+  6789		static DEFINE_WAIT_OVERRIDE_MAP(sched_map, LD_WAIT_CONFIG);
+  6790		unsigned int task_flags;
+> 6791		struct io_uring_task *io_uring = tsk->io_uring;
+  6792	
+  6793		/*
+  6794		 * Establish LD_WAIT_CONFIG context to ensure none of the code called
+  6795		 * will use a blocking primitive -- which would lead to recursion.
+  6796		 */
+  6797		lock_map_acquire_try(&sched_map);
+  6798	
+  6799		task_flags = tsk->flags;
+  6800		/*
+  6801		 * If a worker goes to sleep, notify and ask workqueue whether it
+  6802		 * wants to wake up a task to maintain concurrency.
+  6803		 */
+  6804		if (task_flags & PF_WQ_WORKER)
+  6805			wq_worker_sleeping(tsk);
+  6806		else if (task_flags & PF_IO_WORKER)
+  6807			io_wq_worker_sleeping(tsk);
+  6808		else if ((task_flags & PF_DUMPCORE) && io_uring) {
+  6809			struct io_wq *wq = io_uring->io_wq;
+  6810	
+  6811			io_wq_cancel_tw_create(wq);
+  6812		}
+  6813	
+  6814		/*
+  6815		 * spinlock and rwlock must not flush block requests.  This will
+  6816		 * deadlock if the callback attempts to acquire a lock which is
+  6817		 * already acquired.
+  6818		 */
+  6819		SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
+  6820	
+  6821		/*
+  6822		 * If we are going to sleep and we have plugged IO queued,
+  6823		 * make sure to submit it to avoid deadlocks.
+  6824		 */
+  6825		blk_flush_plug(tsk->plug, true);
+  6826	
+  6827		lock_map_release(&sched_map);
+  6828	}
+  6829	
 
 -- 
 0-DAY CI Kernel Test Service
