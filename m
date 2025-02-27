@@ -1,122 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379741862A;
-	Thu, 27 Feb 2025 06:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F6D2CCC0
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 07:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740637840; cv=none; b=iIT4vl1KxD1QI1kQGbYnp+O8Ox5S57xgjwNadC0hDEU1CfdLZqBHGg+KS4U5tDHPVd0Q6keKDv9LdH3onCuQ06ru2hCTOVv/cVvUq4Bo6n7GKWWS4/za3ewqw8xYcUAOv3AiWwqeUHFxVjXeJXUXAKVg6pdB/Lg+tXPc4PaNVc8=
+	t=1740639623; cv=none; b=kkKF0KwWUFHK4u+LSa+sylBEco+mUKYsBa45T1CAfUPkcXwCwRZgn2QidBF+aWDROCfqkn9fk9e8HTe+nn7aNxb/DWjSlEK9ljVt2utosHfY1VoWZY6r3vK0VSTk48qF/waqDy9cRz1Q7x23TFtd7FD/N4HSYMAaH2d5R/m7oZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740637840; c=relaxed/simple;
-	bh=cDXogVH7qIKQIn5aWp/tZGtaiEXuiVz5z4jfmzCT9t8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fF2nGk9bfE74ARUvNONxrw1jKjvkwVt787x3afxRqNb4ls7cC02Sz1xlggDpTtrbgen1YyT7OSqbPY++lTIPQ9ftOX1e1Y8UDhkGvrAR/JUvMKPekTOoT0F3TAEwA7fIfKQ9F0NTXtkDFNBbxyutm7zREEYHAeaNej8xVHjkHZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BLcK+e0G; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740639623; c=relaxed/simple;
+	bh=Ah0Ok8u2jvwbArCTA7l4DjY9WAjqP5uUmepnny/Z2kk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nXZrk5s05ztvt2L/s2/0sLiHrzi3IUphQPwP/izKvlA3Ut9dCBKazoOSLXxXDBROwEoGaEl3q7T+AzZCFF/lFj3d057wkv0fznpKYTotcBvbddCzelxnBYh2rj0mtJTvz5Puev30E2fbpSjLIPaWDCtdzg/Y/3v2jYfpO7oYk38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qGOtNyNf; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BLcK+e0G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740637839; x=1772173839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cDXogVH7qIKQIn5aWp/tZGtaiEXuiVz5z4jfmzCT9t8=;
-  b=BLcK+e0GbQtcytAr9YBPdYhXUwpnVdxZtlISZQVvlvzEjiiXNv1jL+4W
-   PlS2QSY5d77/q4ZmKVZqHkhm1+DpLzr2zgabFNQ878x1c69He3btGanLR
-   mKj9ShXYO1ZvcJScSpPmdOIdIjfd/dzE6VyUngRvtohhA7Qc16tkWz54R
-   80Luxh/8Afy91bl995iatc5b7AwSVaUVDG8Y5ZZ6JUTsTWgi8m8VP6A3E
-   2L7CwGy2Td1ykgl2R+RLtwSBVeYy7QDoAnVHO8HQ6HtLYlTVoozve62tC
-   PXO3oFX77NZjvrJUeLTWipJX8h6PUZQHSsuskTn81CeCkQ9AJn6V1XWe2
-   w==;
-X-CSE-ConnectionGUID: qPeese09SBmp3koi/ASSPg==
-X-CSE-MsgGUID: xs6MkPuIR66yATrhpQFbHA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="29116584"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="29116584"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 22:30:38 -0800
-X-CSE-ConnectionGUID: gI0PRdtTSVu6czkCzvpurA==
-X-CSE-MsgGUID: +Fof8z9QS42eu8Wf1ufG6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="116959206"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 26 Feb 2025 22:30:33 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnXP7-000Cxq-2t;
-	Thu, 27 Feb 2025 06:30:23 +0000
-Date: Thu, 27 Feb 2025 14:29:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>,
-	Arnd Bergmann <arnd@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Will Deacon <will@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Harald Freudenberger <freude@linux.ibm.com>,
-	Holger Dengler <dengler@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Eric Biggers <ebiggers@google.com>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>, linux-crypto@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH] crypto: lib/Kconfig - Select and hide arch options
-Message-ID: <202502271449.k2LZdEgF-lkp@intel.com>
-References: <Z76aUfPIbhPAsHbv@gondor.apana.org.au>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qGOtNyNf"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fea65dcc3cso747157a91.0
+        for <llvm@lists.linux.dev>; Wed, 26 Feb 2025 23:00:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740639622; x=1741244422; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3B7a9PKqDfPLxt+uZdMSLJc6wZgnR8JO787nsEWqq0U=;
+        b=qGOtNyNfVdK0Q9Eh3ymr9iiPTUZLujg1S+5aTHp53r9SflYVnzAnrP1yRKtYaJ9SSN
+         ttvoO2YH1SNkP5tmk3MclOVbzzsFdYX95508Htu6KLOpVjsxYpF1pvxpEzTPT7vsVn2/
+         wo26Yno2QfdpzTkuLu+69QGEceAzHr6sIidtRp3sSz9wriwEubhTbPoniD0k3Rnq51Ia
+         HsoIT9p2eGWSR+tNTwvR5IuDV05IHm+i1bmQH2u/2+lQFOdo65vQW+zFJpmVDcj689o/
+         j3GqXy/R7RQknbJb43BeK0pd6E3DsXWNxezFm5rapY3ccEtqzgxU0UloAjQlRVaxvTeP
+         uSeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740639622; x=1741244422;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3B7a9PKqDfPLxt+uZdMSLJc6wZgnR8JO787nsEWqq0U=;
+        b=PBipuqfiunbz5+2MfKUVQeaj4dHGfLdW8XyPElr5xdVqCdU9rqAvw+hPDnjd4qxGr9
+         KkSRz8UTmQX86wLoXHPbDJyZGutXAMsJD0nGXR5/jgjDTV5ZI3DI6vl7HHbUPQulcrCS
+         1vo0D6Upa2NvCEIpjEwtPsQ6WYTKTBmQdbaFnrucB5LHHox6AiPwMJ73/mUFtONlDiUM
+         J0lYhpa57yANbvUXKiTTqnICnTrXMNstZ8UyJMemOvW88egDdpLg5nH/y4jDkhQVV/ai
+         FHxOpWuKX039baQB2BZIo5QF7xXLAcl2e1pZWiXZzhXhGMJEgoF7HkbBacCGyBFfX9fH
+         UIaw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5pDp5494d5y2Iek5QskqVdlS1s8pxxUa0NuzPj35jhlaw1Cpp2AznK6SA2SjEHt+cH2YA@lists.linux.dev
+X-Gm-Message-State: AOJu0YzNtmDKOqmmtU+PgXsC/o1E5uhBxZ/4rH/f1xx1xRqPrlg0riXl
+	km6oASJT/VbHpROS+W77UDP5b+zGQ6r1j9rK5fs5IJ6JEgiEcf7LWfpIvFhepMLttO1y3/njlwp
+	tvaWUvhDmp1ojJ7qoKp06yKZf3u6eNWsI4jHb
+X-Gm-Gg: ASbGncuLAQxT5NRlBCmrvvMpRpFDaz4YvflUYb5DfurRCrAmDoMe6qWxRaj7HKy2oOW
+	uWlZBCf9+4LkdCU/0kLRxY+6hJs2h76m02ZmHqR6RwFFh70R7ZonDwZhMb3sdQTklBuVfdYhfxJ
+	CXT675Mgr//ZCBJlsk1FPQukAGQyJpEANbYeM4tA==
+X-Google-Smtp-Source: AGHT+IFfzszcK8xz3AbKXR7cq/ASZditUq/IPM5LeqCUO3BVtZeQjerGEcaCp84fg3Mzv4RyJIt8ZyiiSg5FyAUsE5M=
+X-Received: by 2002:a17:90b:5148:b0:2fa:17dd:6afa with SMTP id
+ 98e67ed59e1d1-2fce86cdeddmr44583103a91.17.1740639621455; Wed, 26 Feb 2025
+ 23:00:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z76aUfPIbhPAsHbv@gondor.apana.org.au>
+References: <20250206181711.1902989-1-elver@google.com>
+In-Reply-To: <20250206181711.1902989-1-elver@google.com>
+From: Marco Elver <elver@google.com>
+Date: Thu, 27 Feb 2025 08:00:00 +0100
+X-Gm-Features: AQ5f1JrZWnMR4OE-NBvXmFaojOYjcgWnnmEzRSN2Q8FKZWV0JX5T-ip-Qb4DfME
+Message-ID: <CANpmjNNxb8f4QNQE+3oprwfhbhZNkiN+JJMRAzMa8mHXFkksow@mail.gmail.com>
+Subject: Re: [PATCH RFC 00/24] Compiler-Based Capability- and Locking-Analysis
+To: elver@google.com
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Frederic Weisbecker <frederic@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@kernel.org>, 
+	Jann Horn <jannh@google.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Triplett <josh@joshtriplett.org>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, 
+	Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Herbert,
+On Thu, 6 Feb 2025 at 19:17, Marco Elver <elver@google.com> wrote:
+[...]
+> Capability analysis is a C language extension, which enables statically
+> checking that user-definable "capabilities" are acquired and released where
+> required. An obvious application is lock-safety checking for the kernel's
+> various synchronization primitives (each of which represents a "capability"),
+> and checking that locking rules are not violated.
+[...]
+> This series is also available at this Git tree:
 
-kernel test robot noticed the following build errors:
+   https://web.git.kernel.org/pub/scm/linux/kernel/git/melver/linux.git/log/?h=cap-analysis/dev
 
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[cannot apply to soc/for-next linus/master v6.14-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'm planning to send a v2 soon (Clang just gained
+-Wthread-safety-pointer which I wanted to have committed before).
+Preview at the above tree.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Herbert-Xu/crypto-lib-Kconfig-Select-and-hide-arch-options/20250226-125220
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/Z76aUfPIbhPAsHbv%40gondor.apana.org.au
-patch subject: [PATCH] crypto: lib/Kconfig - Select and hide arch options
-config: x86_64-buildonly-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271449.k2LZdEgF-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271449.k2LZdEgF-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502271449.k2LZdEgF-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "curve25519_generic" [arch/x86/crypto/curve25519-x86_64.ko] undefined!
->> ERROR: modpost: "curve25519_base_point" [arch/x86/crypto/curve25519-x86_64.ko] undefined!
->> ERROR: modpost: "curve25519_null_point" [arch/x86/crypto/curve25519-x86_64.ko] undefined!
->> ERROR: modpost: "curve25519_null_point" [lib/crypto/libcurve25519.ko] undefined!
->> ERROR: modpost: "curve25519_generic" [lib/crypto/libcurve25519.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+-- Marco
