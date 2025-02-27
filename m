@@ -1,192 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8416121ABBE;
-	Thu, 27 Feb 2025 13:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377C02309AE
+	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 13:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740661220; cv=none; b=iS1ed5igbPInhFVHFLCGtJ2y0jdJbG8AEH3oEViUd0iaRDIPwxEoBfmc994wsi0LRuiIuO4KCHO05grTlrRci/PU+qQxqxgEIUspFnuH2/1gMD0h7I5Pzp7IE1n4Wn/zQxkZ6Bd2nWvxm83urv1Ub2hiE3qtYvSOcgaa1ZhpRZ0=
+	t=1740663601; cv=none; b=iWe7lTGWgxxBSQs5Hqgbs7r0oc3zELncnSoIHc+GHiVsBqC1KvP0XEgKW1Of1luQiUe6NzlmUJGPBUDR4MYeu+drnzPTnGvdbFY6rn8+JATKa9kJdQwbQGh+LH9RSeXqCO8bXUGpdzY+SGiekep878IFKqXL3JKdvbLqyeInq0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740661220; c=relaxed/simple;
-	bh=2mFz4lpVNmQKP/Q1EhCFSSIbsnnObvCiZrlUAld3VxM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hkdxymx86+r1UDMLv2ZzCWCo+x7U0YPntSlmKQ3Qr99rTtaMOoGqjCP1E3PFsdw+QzjieGtKtUnCkYYdnVAII9ie2GWPTM6jpH47CMV4OOB2KTrpRT3iEwe3O9fFT0ZucmqtOEv7DwNYEhdOj9EjoWobkc61q76ZK9FfheLr1IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=agm56xQo; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740663601; c=relaxed/simple;
+	bh=2cSgpAMzuRDyg/OP6JlvBhgcN9wqw2ZkQw1H+nq1MIM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WFXrWO4qmZXfFXdJmRtoPG0HfmskUasnMpTkw1ZJvqtS9oGiGzRJCTaoZFGnv37xtFSTOkWDZZpr7NamTp6QneK7U6GciCgrxx2Q3eJH/zBK2eLLTHNA3BO66MOm7CXAjYpPeiCi7FMX9dMolW6KCNYZEZ6nykRDp5wfDZXxM9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbBpFwqM; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="agm56xQo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740661218; x=1772197218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2mFz4lpVNmQKP/Q1EhCFSSIbsnnObvCiZrlUAld3VxM=;
-  b=agm56xQoaNqM4Wlu/3Gr7ZktDBTyV9LZM6hXy+lH+O0bBStxjL+7JyNw
-   prevDDEhDXIHEe1YLvEOWPwJzIAEVqIzaQEhCyCuygq/VJfHPUxp04tlj
-   CgIBbDkcSDi/lwuXwSOTgo0dnnM1sOXp4xICpQqF4urmKX2oLHnQVafxg
-   S9uP8+LcokHXdyDN/TnSLEzt6ZBZ2Yi/hlSJgoq6S/7q8GacSjOwciWOK
-   jqpPcHOCEO4oHQv0FZRiPuLqNXKp3qWYcFd/d3+MAZXCYIQ0ZhMS3l4+m
-   K7D4AxM8ZD+PKeCr03JJXY7NKmY0AAUoZ0YXTyJy6RBXb9KFp51cDm1+i
-   Q==;
-X-CSE-ConnectionGUID: MmeEGpZSRCWOm+nzKtg4Ow==
-X-CSE-MsgGUID: zXKSn2AzTJ6lRJIRkLNFrQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45461988"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="45461988"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 05:00:17 -0800
-X-CSE-ConnectionGUID: T5Qu8YulQMOuVgbweWlyow==
-X-CSE-MsgGUID: do31TZN6TS2CfwKU86Q70g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116887772"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 27 Feb 2025 05:00:14 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tndUq-000DN4-02;
-	Thu, 27 Feb 2025 13:00:12 +0000
-Date: Thu, 27 Feb 2025 20:59:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <superm1@kernel.org>,
-	"Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	"(open list:X86 ARCHITECTURE (32-BIT AND 64-BIT))" <linux-kernel@vger.kernel.org>,
-	linux-pm@vger.kernel.org,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a
- union
-Message-ID: <202502272001.nafS0qXq-lkp@intel.com>
-References: <20250226074934.1667721-5-superm1@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbBpFwqM"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-307c13298eeso12196441fa.0
+        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 05:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740663598; x=1741268398; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X0QqIj+Xj2KKd5yOn9wT3FKv7ilH/QlR+xG09MXlqr0=;
+        b=gbBpFwqMFZ9VagA8IbQxcu6kgqfhR34hFhbZ97BEPVJk1Vwy1kFzY2Q6EpgMIwuVP7
+         htreaD+iU8yaU5bYuQVIGIA9FQ18B50tV+26rwzggxRfrwPYHLrff8YkimayKvYajlCw
+         teCaDBiSVVSHe18uC7wfWoSgIijSoQg1kH02ljaqP8bxxM0qg4ypRn7DWC1EtiqUKtvy
+         pFkdrOcwIomD00mJfvRBVNlDSeqlur/WKKZy0JFGKCx8oAPmwTJrJ2dWo/uE5oosq/+d
+         vBkgxc63YhlIY4rvtCvUlLFXfNxZeRTIdGW+vUoZ0obTnhscWeR05Rq7uivEWD687L6v
+         zZcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740663598; x=1741268398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0QqIj+Xj2KKd5yOn9wT3FKv7ilH/QlR+xG09MXlqr0=;
+        b=h0nfs4iNjd1/dTGqEuj50kriq5+WpAfsHIUw/TmGsPeoG1OnlDVQjKtiIGqDObw4EB
+         vKBiZGP3rjaOSVQx2XaIzj4Xych4NAhc53pF+8Hh7yyOwTG1eZa1h4C+nyluRiV4w57J
+         VMgcevTR9NRHtJlpMWlo0zryRPqWev6p3DkyWqwMVN60cP2YIApzI/pD61tiz5yzunFq
+         qXEre65g/VV/nD1+U8VJaq1affUEyt9hl+DEwtm12yZC5SRtLSVvgvHnW4oWhgmOBBKm
+         aMep3mNmOt+SXSio8a8omJ4pyb2cf+kaSj4jmFl+KbXCpswmIQRT4XwMxGU2ajQEs9ux
+         NxWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWoE5ZhiHHCLccyKEcBcItUwfyIPLyqAUD+4eDuXJnoZ4G54Zb1QljKzbeZgZJS8ug2jt7@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx8WwPWc9quH2jW+yPOQhTdQH1PpuGFU4jKGvKr3Q/F2f6Y8qYu
+	nvbd/8DiOKXvI42tMmxJuRlBfmC13dy2X6Exh4iahTwecicJ77Ca94zOCQbXkBtzHYNAz0rSyj2
+	PbqEt+wVVZN7MlfzotXmuOFqANoY=
+X-Gm-Gg: ASbGncswXxu9yKp7P4YbqIzFf+HIaVrta2dd/hgPUMHp0uHmSG3bYlBYNEEOGLa5tfB
+	rdOXNlBb3Y7UaDZxZY6Zkzk9r1ywEthWLXPZgmCNgeJ8Rrb3HCvGvckQt9GTAiqNmZdAmKk4MPG
+	9g/yBFdUTbMJpY2Dy7DwI0o3AH3d+E0EC7sMLE+whG
+X-Google-Smtp-Source: AGHT+IFv8UCQLBFW+HmySTIopoV3gqxaBg5wvtyqxsA9/SWPF9AXdxTyZjDvJBXPJMy/X/nEAbqTXjvKUANVm2PlmXw=
+X-Received: by 2002:a05:651c:50e:b0:308:e54d:61aa with SMTP id
+ 38308e7fff4ca-30b8464a2bamr20649531fa.2.1740663598018; Thu, 27 Feb 2025
+ 05:39:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226074934.1667721-5-superm1@kernel.org>
+References: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com> <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
+In-Reply-To: <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Thu, 27 Feb 2025 08:39:21 -0500
+X-Gm-Features: AQ5f1JrvujnQrNdPwimNUvnOfF-Py3f8kwIyufq_KgAHEzKnySZFBMMWJGb3ArY
+Message-ID: <CAJ-ks9=gaxW2191c+K0E0MgjsQWLYoKxJZLxGb6RMbPRVHc4tQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v3] drm/xe: xe_gen_wa_oob: replace program_invocation_short_name
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: da.gomez@kernel.org, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Justin Stitt <justinstitt@google.com>, 
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Klaus Jensen <k.jensen@samsung.com>, "Theodore Ts'o" <tytso@mit.edu>, gost.dev@samsung.com, 
+	Barry Song <baohua@kernel.org>, Daniel Gomez <da.gomez@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mario,
+Hi Lucas, chiming in here since I also care about building on macOS.
 
-kernel test robot noticed the following build warnings:
+On Mon, Feb 24, 2025 at 10:05=E2=80=AFAM Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+>
+> Is this the approach taken for other similar issues you had? Note that
+> argv[0] and program_invocation_short_name are not the same thing. For
+> this particular binary I don't really care and if it's the approach
+> taken in other places, I'm ok using it.
 
-[auto build test WARNING on amd-pstate/bleeding-edge]
-[cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next linus/master v6.14-rc4 next-20250227]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Believe it or not, this is the only place that
+program_invocation_short_name has ever been used in the kernel. There
+have been numerous instances of:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/cpufreq-amd-pstate-Invalidate-cppc_req_cached-during-suspend/20250226-155545
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-patch link:    https://lore.kernel.org/r/20250226074934.1667721-5-superm1%40kernel.org
-patch subject: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a union
-config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/reproduce)
+#define _GNU_SOURCE /* for program_invocation_short_name */
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502272001.nafS0qXq-lkp@intel.com/
+but never any actual callers (that I could find in the git history)
+other than this one.
 
-All warnings (new ones prefixed by >>):
+> I was expecting you'd take the acks and merge it all through a single
+> tree since you received push back on the need to build the kernel in
+> macOS.  Is this the only thing missing and you'd want it to go through
+> drm?
 
-   In file included from drivers/cpufreq/amd-pstate.c:51:
-   In file included from drivers/cpufreq/amd-pstate-trace.h:15:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cpufreq/amd-pstate.c:914:41: warning: variable 'nominal_freq' is uninitialized when used here [-Wuninitialized]
-     914 |                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
-         |                                                       ^~~~~~~~~~~~
-   drivers/cpufreq/amd-pstate.c:902:38: note: initialize the variable 'nominal_freq' to silence this warning
-     902 |         u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
-         |                                             ^
-         |                                              = 0
-   3 warnings generated.
+I believe the other patches have been applied or dropped. When I last
+tested building allmodconfig this was the only issue I ran into (macOS
+arm64), so I asked Daniel for this resend.
 
-
-vim +/nominal_freq +914 drivers/cpufreq/amd-pstate.c
-
-   891	
-   892	/*
-   893	 * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
-   894	 *			 for the @cpudata object.
-   895	 *
-   896	 * Requires: all perf members of @cpudata to be initialized.
-   897	 *
-   898	 * Returns 0 on success, non-zero value on failure.
-   899	 */
-   900	static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
-   901	{
-   902		u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
-   903		struct cppc_perf_caps cppc_perf;
-   904		union perf_cached perf;
-   905		int ret;
-   906	
-   907		ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-   908		if (ret)
-   909			return ret;
-   910		perf = READ_ONCE(cpudata->perf);
-   911	
-   912		if (quirks && quirks->lowest_freq) {
-   913			min_freq = quirks->lowest_freq;
- > 914			perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
-   915			WRITE_ONCE(cpudata->perf, perf);
-   916		} else
-   917			min_freq = cppc_perf.lowest_freq;
-   918	
-   919		if (quirks && quirks->nominal_freq)
-   920			nominal_freq = quirks->nominal_freq;
-   921		else
-   922			nominal_freq = cppc_perf.nominal_freq;
-   923	
-   924		min_freq *= 1000;
-   925		nominal_freq *= 1000;
-   926	
-   927		WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
-   928	
-   929		max_freq = perf_to_freq(perf, nominal_freq, perf.highest_perf);
-   930		lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
-   931		WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
-   932	
-   933		/**
-   934		 * Below values need to be initialized correctly, otherwise driver will fail to load
-   935		 * max_freq is calculated according to (nominal_freq * highest_perf)/nominal_perf
-   936		 * lowest_nonlinear_freq is a value between [min_freq, nominal_freq]
-   937		 * Check _CPC in ACPI table objects if any values are incorrect
-   938		 */
-   939		if (min_freq <= 0 || max_freq <= 0 || nominal_freq <= 0 || min_freq > max_freq) {
-   940			pr_err("min_freq(%d) or max_freq(%d) or nominal_freq(%d) value is incorrect\n",
-   941				min_freq, max_freq, nominal_freq);
-   942			return -EINVAL;
-   943		}
-   944	
-   945		if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
-   946			pr_err("lowest_nonlinear_freq(%d) value is out of range [min_freq(%d), nominal_freq(%d)]\n",
-   947				lowest_nonlinear_freq, min_freq, nominal_freq);
-   948			return -EINVAL;
-   949		}
-   950	
-   951		return 0;
-   952	}
-   953	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers.
+Tamir
