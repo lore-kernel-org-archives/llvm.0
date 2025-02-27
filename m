@@ -1,149 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B8322068A;
-	Thu, 27 Feb 2025 07:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15A71E833A;
+	Thu, 27 Feb 2025 10:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740640349; cv=none; b=lRchN/1Wz1h6MMDTLIYrN5OK/vxO1nW30GfNTXVfh7GSCo4aWRFLBS3fXO9SSxFB3IirdVflt0nZN+36ZdENqf8F+jh4lxnBWK19jwVztROsJmVJUDYlo8Kqunuh2Pxc5EJgcrs0zWdVdBkyZn15GsueHM5PFfyh3OLFWz6TyIA=
+	t=1740650780; cv=none; b=VIO+flqEqPy9DXkJFe+ukK8Bihl6717dK+nVkMl5O0sSmTarVHroiKrpwGs3YeAhjD4jzTBeraWNri35LdH3CVgvWGH8HAp4Gx3J8QapCOfJAnzYPl1XM76iTzmc5beM7jqz4NJdpnmSF6rKKZy+HdCJ7IFS7PpkzabJWeLG1AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740640349; c=relaxed/simple;
-	bh=EHkwOsTi98TGffo/fQE6AQx6mmSwXjwpLNRKCm7qY9o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NOmVg5FH2C9DyX/Gn7AOnwA16m0gSb267RZz7Dy5r2BbfJ0P6VBtS6xThBV2kBAOtIa19eMHhYnIWWz12e9wSOQc3LZ8voT7kv3mZZAcEe5s0olIynEb8IqnAMu15EkB0/o6hKay1aaWoHC5lvg0u71W1c4slMaMXR5H2jN3I9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T1QGVuce; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740650780; c=relaxed/simple;
+	bh=pEP+vhbhTTs4L+MB01lcliTsLO1SSLw/IdC11pBqmGM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=If0kN3gNJMq2KNEVFckEX/og+PANNImeSTs88P4EcEOTbHEs1VWxtv98u3nUXLfQ8nIUmVszgt68JI8y3U7Z/J8yK0z8oiIwFLfM7DLMojuyqRbrQuvn/OSQAbWdNBDUortfaxOsZSHa6TkCDr0C9Bh6uff4oSIAoBUWLInK4vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7POdo74; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T1QGVuce"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740640348; x=1772176348;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EHkwOsTi98TGffo/fQE6AQx6mmSwXjwpLNRKCm7qY9o=;
-  b=T1QGVucecsv+XCESVt9j2ml/LUQSZlDSI/eu1EvdVNwuCxfv3OdYVZ1u
-   Htghu8eYWQBkYL82EpBPPm7PMubyfAk/67XdmQhkYJQeX/CBqPJfkwGlJ
-   XylpwawSn//CpP+xxRNX/9bxUQdGj0YGhiEdmVpiLOYZw17sJFPMLcPzE
-   zSO/kwfOPsgTf2CzcifCw+GAJ4Rgosq/WP/rGjoLy5BVBCJN7ax82AY7u
-   oEuzb+8yJyhhRWgDCoTbm+RQt7Q1J0TU3t1IvkdCyF/tE9s26QftkTQ2K
-   qd1lAnXZYiODmhEskA3X/QpuiQTbCUv8OcmmglsmdwLejlBJoFMvUcBwj
-   w==;
-X-CSE-ConnectionGUID: rT8jOZzaRMmx1Z8WrWv9gQ==
-X-CSE-MsgGUID: cdIBSqPBSI+RYPF4bB3Cug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11357"; a="41648690"
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="41648690"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 23:12:27 -0800
-X-CSE-ConnectionGUID: ZEqPPcfkTWOPddNawts56Q==
-X-CSE-MsgGUID: V957D0BuTy2LAuHJLiqBDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,319,1732608000"; 
-   d="scan'208";a="121954904"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 26 Feb 2025 23:12:24 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnY4B-000D0b-1r;
-	Thu, 27 Feb 2025 07:12:20 +0000
-Date: Thu, 27 Feb 2025 15:11:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kiran K <kiran.k@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Vijay Satija <vijay.satija@intel.com>
-Subject: [bluetooth-next:master 28/29]
- drivers/bluetooth/btintel_pcie.c:134:58: warning: shift count >= width of
- type
-Message-ID: <202502271502.37Q8TE9Q-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7POdo74"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-abb7a6ee2deso110102166b.0;
+        Thu, 27 Feb 2025 02:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740650777; x=1741255577; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y5mvrEbwu4TOisLOydnd4/CSlfw2DVpwzEYHRajJrJE=;
+        b=c7POdo74yjmXhkxAZXxg3REZRZp4STF8WJO9CyMGthVd/iZ6fwW4hg710WlmXf6chC
+         gnvCYTCkYLPPwpEGGGXbb+KaV5jrs0JLy15CezuUf3bYxyOROkhkMTf6GW9o/xYtBk+a
+         MI2JvQc0rAf+Uef/CE0nZDhaHMX4cnMkUmtLlT7qRWTRe98pSDQGF6dvE8Cn0h/dpHJr
+         MXQluYJp6T/0SEL7GAbYES/m+hz9X7y3xWCHbnFz+M2s/r4LTFvgfqGRsn5hmRLXUlHr
+         aJUuKkL/I7etNHZ2KN/dcOHxCX4PDURIu+77pxWuk3cOMh+I3vNEwp5FD+P8pL5z5WwA
+         Fncg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740650777; x=1741255577;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5mvrEbwu4TOisLOydnd4/CSlfw2DVpwzEYHRajJrJE=;
+        b=xFRUhyVqFG82I9Fdo2mrHTWm6bH6QUt4fYhTNB8PMbi0qctAsbzybs8MWa/KMqJgUw
+         35RvrtIkpreW15YsDrWiuQN0v8AyaMchXU4ShqtKseOEbVZLHfxMrjhdcKsLWihgGRI6
+         u6bKEaGUBOQ+hA3lY5zkrpVUuWf49zfCdLSOTbhQJhhd56E5FrsnTwna7Ij209eChATn
+         vKKSzG0JPtwKiUTKIzdC8iQjEK+tBC6oMXlj7uJkPrUSRbRh71lCRKFyQuBCiP/vMCAf
+         Y9XI1ciDtEK0O28acBkXDUv8MBl6xbjd+mh3of2WRqgEb+8fvwk/Xjsy0c9CU2RH3wOC
+         dObg==
+X-Forwarded-Encrypted: i=1; AJvYcCXyZVH6z1XsO/n966tjQ/FO+GaYXIaSUsSUxazcfJwDMLX1LSn3CBVZo7XaN9U9c6mRlCR8sYoj8SeVYwHE@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx53vYkPIUsxQYWN/VJ0zsBFkKeyRReMWTGMsSum4nyN6i/NPYq
+	HbymwBm25CVIZcjNEM0BzP94BRZj2vgFYlpbPLfOVKE92jeKsktsiBNX8w==
+X-Gm-Gg: ASbGnctt/wZZrVXs+KYdL5Ekq8EdWVb7UqoWq2XLGv7+LLK0amWJP0fFzflRlaraG0a
+	ATwLwaGeK3czXw6OPBXiTY6KbuVVeUNL31uNS2SsRrcMSZK+kOkLp7tqNrPlW+oVpamlTfFlneD
+	cDBi4LwsOiPhgRsOhQBvgW+v/ujpu8fvcVE8J05BdfxOTGN3QfvksKPAs412o2agA0fmKIXlL0G
+	7doI1XDK7+YKgn8peDcOYAqCmfBNZ9CUhK9cf1odz76p7VShc/6niNgVZ6D6Z3P+DXMj7NUkAMv
+	0gub+GRxC0Wn/PElW49WgUs8t6WEO7UmjyKCvyts0ABLcdu+1YXAVSunQSk=
+X-Google-Smtp-Source: AGHT+IGgKopderXuTIKklUyo7qkm1wHvlawkRYBo5ORJ/9cId56FxoxDQ0r23w1fGtBvZj+xtfHziw==
+X-Received: by 2002:a17:906:6185:b0:aa6:832b:8d76 with SMTP id a640c23a62f3a-abeeecf50f0mr885964066b.12.1740650776746;
+        Thu, 27 Feb 2025 02:06:16 -0800 (PST)
+Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:4215])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0dc240sm98204766b.59.2025.02.27.02.06.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 02:06:16 -0800 (PST)
+Message-ID: <5f2ede96-183a-4dc7-94b5-d4ec00d38c08@gmail.com>
+Date: Thu, 27 Feb 2025 10:07:13 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [axboe-block:for-6.15/io_uring 55/56] io_uring/net.c:719:6:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is true
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Jens Axboe <axboe@kernel.dk>
+References: <202502270853.xYltEB97-lkp@intel.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <202502270853.xYltEB97-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-head:   978777bfa2d88998f2ffa2d3405ee20b7276890a
-commit: 3104ae5ad1b732140847f1f29534a448b6804d8e [28/29] Bluetooth: btintel_pcie: Setup buffers for firmware traces
-config: powerpc-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502271502.37Q8TE9Q-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502271502.37Q8TE9Q-lkp@intel.com/reproduce)
+On 2/27/25 00:12, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-6.15/io_uring
+> head:   7eb5bb749ed945ead6a089e18e1d1da74523ac9a
+> commit: 68525267875757520752ff1abbda0af58fc172b9 [55/56] io_uring/net: unify *mshot_prep calls with compat
+> config: um-randconfig-001-20250227 (https://download.01.org/0day-ci/archive/20250227/202502270853.xYltEB97-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502270853.xYltEB97-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502270853.xYltEB97-lkp@intel.com/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502271502.37Q8TE9Q-lkp@intel.com/
+Not a real problem, it's just the compiler (understandably) can't
+derive that the block is only empty IFF io_is_compat() is a
+constant false.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/bluetooth/btintel_pcie.c:134:58: warning: shift count >= width of type [-Wshift-count-overflow]
-     134 |                 db_frag.bufs[i].buf_addr_msb = (u32)((buf->data_p_addr >> 32) & 0xffffffff);
-         |                                                                        ^  ~~
-   drivers/bluetooth/btintel_pcie.c:419:20: warning: unused function 'btintel_pcie_in_rom' [-Wunused-function]
-     419 | static inline bool btintel_pcie_in_rom(struct btintel_pcie_data *data)
-         |                    ^~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +134 drivers/bluetooth/btintel_pcie.c
-
-    90	
-    91	/* This function initializes the memory for DBGC buffers and formats the
-    92	 * DBGC fragment which consists header info and DBGC buffer's LSB, MSB and
-    93	 * size as the payload
-    94	 */
-    95	static int btintel_pcie_setup_dbgc(struct btintel_pcie_data *data)
-    96	{
-    97		struct btintel_pcie_dbgc_ctxt db_frag;
-    98		struct data_buf *buf;
-    99		int i;
-   100	
-   101		data->dbgc.count = BTINTEL_PCIE_DBGC_BUFFER_COUNT;
-   102		data->dbgc.bufs = devm_kcalloc(&data->pdev->dev, data->dbgc.count,
-   103					       sizeof(*buf), GFP_KERNEL);
-   104		if (!data->dbgc.bufs)
-   105			return -ENOMEM;
-   106	
-   107		data->dbgc.buf_v_addr = dmam_alloc_coherent(&data->pdev->dev,
-   108							    data->dbgc.count *
-   109							    BTINTEL_PCIE_DBGC_BUFFER_SIZE,
-   110							    &data->dbgc.buf_p_addr,
-   111							    GFP_KERNEL | __GFP_NOWARN);
-   112		if (!data->dbgc.buf_v_addr)
-   113			return -ENOMEM;
-   114	
-   115		data->dbgc.frag_v_addr = dmam_alloc_coherent(&data->pdev->dev,
-   116							     sizeof(struct btintel_pcie_dbgc_ctxt),
-   117							     &data->dbgc.frag_p_addr,
-   118							     GFP_KERNEL | __GFP_NOWARN);
-   119		if (!data->dbgc.frag_v_addr)
-   120			return -ENOMEM;
-   121	
-   122		data->dbgc.frag_size = sizeof(struct btintel_pcie_dbgc_ctxt);
-   123	
-   124		db_frag.magic_num = BTINTEL_PCIE_MAGIC_NUM;
-   125		db_frag.ver = BTINTEL_PCIE_DBGC_FRAG_VERSION;
-   126		db_frag.total_size = BTINTEL_PCIE_DBGC_FRAG_PAYLOAD_SIZE;
-   127		db_frag.num_buf = BTINTEL_PCIE_DBGC_FRAG_BUFFER_COUNT;
-   128	
-   129		for (i = 0; i < data->dbgc.count; i++) {
-   130			buf = &data->dbgc.bufs[i];
-   131			buf->data_p_addr = data->dbgc.buf_p_addr + i * BTINTEL_PCIE_DBGC_BUFFER_SIZE;
-   132			buf->data = data->dbgc.buf_v_addr + i * BTINTEL_PCIE_DBGC_BUFFER_SIZE;
-   133			db_frag.bufs[i].buf_addr_lsb = (u32)(buf->data_p_addr & 0xffffffff);
- > 134			db_frag.bufs[i].buf_addr_msb = (u32)((buf->data_p_addr >> 32) & 0xffffffff);
-   135			db_frag.bufs[i].buf_size = BTINTEL_PCIE_DBGC_BUFFER_SIZE;
-   136		}
-   137	
-   138		memcpy(data->dbgc.frag_v_addr, &db_frag, sizeof(db_frag));
-   139		return 0;
-   140	}
-   141	
+We can initialise the var and let the compiler optimise it to
+silence the warning.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Pavel Begunkov
+
