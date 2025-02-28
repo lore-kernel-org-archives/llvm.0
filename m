@@ -1,122 +1,142 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4382702BF
-	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 18:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D001F872E
+	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 18:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740767290; cv=none; b=aGOUO5sHQ/E2U5H68BiQTCcuGwb20YDs3Ha87mrW0kMkFHDzt0tlskI0XNz/tL3ho6lp6bI3c1VPyvXnoqpOKtE3muE+9+QNa00d9IF5nafXbr219rLkzqMwNbWYpjfaoNnNfQNr8/CvpPs5mtv/lsTLeEUuJY959UMFYMFUJjc=
+	t=1740767651; cv=none; b=VEQ7TujwisDoHHQXrfnBWkK6YMdll6Qu945IZGC+MvUUGwpYDSrs02q3JUdQ4jBwxnAA7oyI84mnN+7mgPdxtyn2NiUo9xj7peJhWNz3MxyGqJ7/a/p7RGxoX6wXwYI2kkHrdR2wCjhm5HEji52yxPoxiXkB4jlugE1HpgUMHn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740767290; c=relaxed/simple;
-	bh=RfYd5Dgh4U3T5nzqDGGI2aUFj1w3UMgwy0swiuP8Yy8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9qKMCukhPseJ55Bdmp1RbOth3gjmn4D4UlzWVt68dm9tUDFn40CRfpdK4X8zO8Z1duSp15VdVA3NVuJ+WrBSI8NRjNPbGMWInFWkZZFZpuS/hfUPjwyIsMLGaT5lYtak9IxYlf/0Z1yeOXijt8FTSXbWqExlIGvIa307MPiKiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=y+TcNNOd; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
+	s=arc-20240116; t=1740767651; c=relaxed/simple;
+	bh=zmMSHW1/n0eE7803U1bdyTwE8d67sTx6gvu160RS2ds=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=IYSewXkYsFByS2S8rsTJdsSpNwGovBurudrhgOoBZ1kHo+TxZJfvIPkWyySp1ouVF1u4Pw8r6kOwJkKvOh1UTLosljtU50/iSj/BcACDk7xeSEtiaqSSQYqmHQHGslFxOQcg8WE+usUUoOC6aVPfT7l1J/tUTNn+Kg/rYB0+bVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c+gLKOqo; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="y+TcNNOd"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6e895f3365aso18543436d6.0
-        for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 10:28:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c+gLKOqo"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abf06950db5so371447066b.1
+        for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 10:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1740767286; x=1741372086; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D1HeI5Hj5FdgZC1kQ9hnOVpQk/bjqVhL1cfDe9mBVxU=;
-        b=y+TcNNOdB3VP00zhJbGGUXJMKjeedbCNFXIf0jmytIDM0Qq4r3rqrGJQFpJLyX6k/A
-         l/el4f+SE72hULBdQ5txKSbGWbb8+JNnF0Dfjlxa+KCwpcGmqhWWcaNvL3aG4ag2YSNe
-         2ouytV+IKgnp7fLtBHlW4UYOdbJsPnxWogYzkFgpBOQpHIUyCddT1N1ySYVEW7ExHjoC
-         3pJSFqGH0YxJvdRt/WVLr9KrAn2svBPbqhhZHlPsNTQMHUrrF11W9wR8MDPcluQ4zbq0
-         XnITVvRZBasQgYeF4U0Sgc4cxsxQAkO8O/hkdrQiLTCd9VWAQ1xn6FpGkBtt+yY0+4R6
-         ZF3w==
+        d=linaro.org; s=google; t=1740767647; x=1741372447; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fPFI258uk0NIgD4HDjVMSxToE5jIhBWSwtWcv9rWiMY=;
+        b=c+gLKOqoKknm+pInDQ9VLjbYuS1qM2zIMV94gUtq0LZ/Dcf55dmr+9uHjLXBgU2Iag
+         BuxMVMUj9LF/lXV/shNyCldmnTvmprzG1BlfD9qPQAbYOhjfe0WD9jEZK8oJpfoNdq8H
+         hD6bRE4bLzlGAW8O4Tu2lI8NEPE0fDiVUnGt9Hvj0y8cr+3PoO2bmwKmHVCoOilXW0xT
+         8SMsZ5CihKRzUahsnYxKNLOoiEDImDLKRlx+5XuQYpyxSLKJAZWe4BrFaMLCwZ4uqryk
+         KjYLaLhqL2MqvAGiQZ4ytEx5U2yA0gHkZ1uXKTW2lwoDaYBc+WtoQ/kIaTDZIvk7Q6Dl
+         Ui4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740767286; x=1741372086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1HeI5Hj5FdgZC1kQ9hnOVpQk/bjqVhL1cfDe9mBVxU=;
-        b=fn9TpHfdLB0Ngr4+L5ihjwH6zxuAjVHEj7gXHMeM2j24gt7Tii46AqZDSukx1hYndM
-         Q+Zko2BsAtyZZ8MMwyaKnT0nVi1LX+uJjFmpw7VFYIVvY1g6kL3bvpyobr2KtP5Qg/NG
-         oMU4OJLF8nj7VgmhUBpoU4FTaexvx+ftIUFKuZhvqNouBs1kAdf2K2icrbfv1whPgHIw
-         3J1XlWdgkSa1N7C2ynkfJshCuwT6qkbd+vAQfDROYLAx8Ik0Sr05F8LOumoDjPQGGP8L
-         UG/sSTVFL2Fvdl/WLeY67DYPIBbGdai+GFFIM4AI5gyL4Al0m2FUGEUI0T34qX+U5MNj
-         WAEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXicsuXIiFePpcNT3OTwPdt8hXX7Bm1J87GqihXoqk5LpyQa72wdGmUl+DuzHWCYQZzQ8mr@lists.linux.dev
-X-Gm-Message-State: AOJu0YwUeS/2CLF7FojgZv3Jv9Yn7lAB6hStkJEdijTwqHWWl0bmEBym
-	OxS0raESDDbusAzMhvDymk4a/WJPEjdys5xINhhhl16cBtM0TWoX0rmgSY6Vw54=
-X-Gm-Gg: ASbGnctgkN3V59289D9+xqvOQ4zaVHst0YTzwQq45PtPqkdSYJrb9xZPK4HNegABRUK
-	o+fOr4XpQz7niwj1C/6IiNi8mEinB7Bj+HxYheUWnZkKSE64X2jRxWIaJRgkFKfpTH5smLlgRFY
-	2FWJZ+IL5rBFBVX0901D22n/wr+Ly2At+eObazI2jdKxwIWSw3BNIW55IPPpo1hBZyUuP4kS6Uo
-	EYs2UBN10NK6dels03ab4RzC+ubszzVnwscFTx8aesuoiYUxf9lZULy5a9qH6Z1HNBtVT56+7Of
-	UC+m3xfhr5wcxF6DND8Is1zy
-X-Google-Smtp-Source: AGHT+IGs6srUxnr6AWXxdYbrfmwZOp03iNYHFv1+6TtdPkGxEDbRLb7+2Svam+kAW+1eMjMaYvZVrA==
-X-Received: by 2002:ad4:5ba3:0:b0:6e6:684f:7f6f with SMTP id 6a1803df08f44-6e8a0cd3ed4mr73143116d6.7.1740767286445;
-        Fri, 28 Feb 2025 10:28:06 -0800 (PST)
-Received: from localhost ([2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6e8976ccbacsm24682146d6.93.2025.02.28.10.28.05
+        d=1e100.net; s=20230601; t=1740767647; x=1741372447;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fPFI258uk0NIgD4HDjVMSxToE5jIhBWSwtWcv9rWiMY=;
+        b=W9w4TWfJYWvOFrZEareAwO9ftvQuJrnWnNe5yTCl5rRJyDywHCm+NkMYFXOWIIOB75
+         XNoShUPzXWQbnZxFjTymjbmHUqv6g4lvhppZ7DnOdOcZmIcCBoTq5aV1iNvRd+OItpc0
+         iDx0VBRUrv+9fxinPoNYfuVApX/445PiFFPSG3dazFyXro4Z6fhraEZN6KxKO4/kC3pS
+         cMB5Awo2J6lOfrQTATk5etj1b0kc89mJDgSfazCWjHV6n0V+xTSXbGFZCj+PXQ9LtUSu
+         LDX6jaesyYCArpIzJOLgKlEq3Fem9nPWosMkRzOVVvHNqeNPH4yz8TffJVE7VJC308/x
+         2rDw==
+X-Gm-Message-State: AOJu0YyTwEh3kjGK6h8b/3atfwKCz0JejVDz1BKRTVcUnxj47UXPSsuz
+	z0GoGdmq794Qr5tbpWp5z3g81yhAYgySRaIH46TOwqmOrnOWFRYjn7d1Zicr4gqO+XDS4eTKu3v
+	S
+X-Gm-Gg: ASbGncskW3oZuYWBP06QYr1t1jaIfadtOqZJoZUBetHhZWYgQOeP4P2oItWp9Kdmjg0
+	haahUckIef0gML9pn/qUTf/ubxWL5HFxRMlPLGQY8d8NmlEiJvpndM39x2fOnr9y9kgOLcm+eXW
+	AdsqwUioaW9KezaXkCTG6U1I7cWtqYKdAMDoj5e7i0J/S25pBSasA6NcYj0Ua06ZQ/AGKLkBsbE
+	hAxNbxCuvpMMplYdVXXO3a2zvztXqN7z+6lSbGSnYxKOVHixQIaLw5h31hCau1eEIBTxZM1R5Bm
+	lRwQ6qexTBpCnPekip9dn3ScxX1sUCuwP3isPtygfv2AmB4nx+8fPiG91H13ydzEVvGbF4VE7Q=
+	=
+X-Google-Smtp-Source: AGHT+IFG00A2v//0AhQVTI6dFYLbztL+OYTe1p2p4VXg53Y3S7DX7qpDMIk7WtCxWSfXnL40MTKCFw==
+X-Received: by 2002:a17:907:7e93:b0:abb:6f30:32c7 with SMTP id a640c23a62f3a-abf265a2a32mr522793066b.10.1740767647343;
+        Fri, 28 Feb 2025 10:34:07 -0800 (PST)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf17fa4a4asm286106766b.92.2025.02.28.10.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 10:28:05 -0800 (PST)
-Date: Fri, 28 Feb 2025 13:28:04 -0500
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Brendan Jackman <jackmanb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Oscar Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
- change
-Message-ID: <20250228182804.GB120597@cmpxchg.org>
-References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
- <202503010129.rJvGqZN1-lkp@intel.com>
+        Fri, 28 Feb 2025 10:34:06 -0800 (PST)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Fri, 28 Feb 2025 18:34:05 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <2037930697.153446.1740767646758@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] v6.14-rc1-10-gf120cf33d2325: Failure on aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202503010129.rJvGqZN1-lkp@intel.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_153445_1069364785.1740767645918"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote:
-> Hi Brendan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on d58172d128acbafa2295aa17cc96e28260da9a86]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/mm-page_alloc-Add-lockdep-assertion-for-pageblock-type-change/20250228-002107
-> base:   d58172d128acbafa2295aa17cc96e28260da9a86
-> patch link:    https://lore.kernel.org/r/20250227-pageblock-lockdep-v1-1-3701efb331bb%40google.com
-> patch subject: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type change
-> config: x86_64-buildonly-randconfig-002-20250228 (https://download.01.org/0day-ci/archive/20250301/202503010129.rJvGqZN1-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503010129.rJvGqZN1-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503010129.rJvGqZN1-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from mm/page_alloc.c:19:
->    In file included from include/linux/mm.h:2302:
->    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    In file included from mm/page_alloc.c:44:
->    include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->       47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
->          |                                    ~~~~~~~~~~~ ^ ~~~
->    include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->       49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
->          |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-> >> mm/page_alloc.c:421:3: error: call to undeclared function 'in_mem_hotplug'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      421 |                 in_mem_hotplug() ||
+------=_Part_153445_1069364785.1740767645918
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The patch is missing a dummy in_mem_hotplug() in the
-!CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>.
+Dear contributor,
+
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
+
+In tcwg_kernel/llvm-master-aarch64-next-allyesconfig, after:
+  | commit v6.14-rc1-10-gf120cf33d2325
+  | Author: Mario Limonciello <mario.limonciello@amd.com>
+  | Date:   Mon Feb 17 17:17:45 2025 -0600
+  | 
+  |     ASoC: SOF: amd: Use AMD_NODE
+  |     
+  |     All consumers of SMN in the kernel should be doing it through the
+  |     functions provided by AMD_NODE.
+  |     
+  | ... 8 lines of the commit log omitted.
+
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23685
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23759
+  | # linux build successful:
+  | all
+
+Used configuration :
+ tcwg_kernel/llvm-master-aarch64-next-allyesconfig
+
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1584. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
+
+
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/331/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/330/artifact/artifacts
+
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/f120cf33d2325fd95d063eccbff2e86ffc7f493a/tcwg_kernel/llvm-master-aarch64-next-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/f120cf33d2325fd95d063eccbff2e86ffc7f493a
+------=_Part_153445_1069364785.1740767645918--
