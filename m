@@ -1,214 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A12B257428;
-	Fri, 28 Feb 2025 09:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A0B2571B6
+	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 09:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740734840; cv=none; b=kXa6u4OHnbQ/pm30O/RXw35fDmJFjFvvZLifNn9PYx9/XSmvDKwXDnVDjDPJWP6DpLZc3Roq5xozOOAko9HXY9j5xPcisaLgu9HSqGZK29fCHudW/69eLNLEee3lM/32VIDzeTYM91Bcx+m+LWHeK9fc8da1LPY+1IuOVUcMOlU=
+	t=1740735607; cv=none; b=cTbAS3jf73F9P08tVVWEvTkxA66kaSIKe5JUuROO5lwQYuYHqa1Giir7OFYCk8HUte4bisWT6Z6y5Y7b+v75KkY4PMFCQx5UlfxnukK2GEqZ4I6NU4bGOsFEkE3rZ1j387nQC1Yr4qBX1gF70sZ5LqMLpox7Wo1WUsutSmfDti4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740734840; c=relaxed/simple;
-	bh=lz8ax6F0htmAbSQ5MPFNimyF74qU75QJLASs1fvZ70s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NcBEz471f388H5UNZ/ekAuV+XYfnAsyOz/fjzDuoQeUMXypR3uIzkDZ39b7iQLhvufKB+WkhoeZUb3RooAIe8Wr6qzMjrqugyNF2Y0ghnjDW0dzSGTu8DTv9ffYzj7PGeSfciHSPxjrrAliTl/lLN1+/MQDzL8h+KXoVia9JT7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GWWvpTC6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1740735607; c=relaxed/simple;
+	bh=jhz82RvVzyiQLMtJQTWrNZtw1IYfqIhWh8BJ5W61178=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZXoKG+f3xPqy8FZjaLZ+g2iuOeZQCvtkL5XMbUL1k5jeANvqGLuir/1VUFEU1S1FAheXMShbWA5OzrXu+cO/WQYMDdbp+opSZatOg22i6CHRbqV2uIpHjlBwtISUFas8BBfYsnvxI4DoCiS7Xbrj3QZDfoJ2b3221R9s5M0V5cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=BUHkVzx0; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GWWvpTC6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27921C4CED6;
-	Fri, 28 Feb 2025 09:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740734839;
-	bh=lz8ax6F0htmAbSQ5MPFNimyF74qU75QJLASs1fvZ70s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GWWvpTC6vMdZyaSwQiykIe3gqqQZidfdmEHVIYMReiu37txvRLr0LXPkZc+XwA+Wt
-	 lJla9ubjKAskk+ri3L9Y03xe3ZESzU/b9+PeUd1McaNPE1VKevdKv8xC4OumgqtJTt
-	 oR93Pt1qR4uYXrgnZn3JblY5r2KKTJrM4lVVyWEDOrJ2ngEBV6kCe1C2hEW5aFqhCD
-	 uBYekxvi7/ffFBmxHEDal9pvvnXaiaqnt23/Htd0BPks/JFtYN5KioFvHOUWJEFhnL
-	 u8nVdXsy12IhiqYmY6alEB7ZqEGDFSOfHyuCgqlGjAmt4FqdqpstyRmRFpW02XaZ9I
-	 AgaP0ex3AGuDw==
-Date: Fri, 28 Feb 2025 10:27:17 +0100
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
-	gost.dev@samsung.com
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-Message-ID: <3ehu3r4hlsf7cpptofz2y5aq2bazidq4buxbddqj6gzvzd3eh3@wzlnbvdsc6ty>
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
- <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
- <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
- <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
- <Z7je7Kryipdq6AV4@bombadil.infradead.org>
- <4xh2oviqumypm4r7jch25af5jtesof7wnejqybncuopayq6yiq@skayuieidaq7>
- <ccofyygi4rerybdmecqswldykihtabx6yco7ztylqnbmw4a5qw@ye7zoq7mcol2>
+	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="BUHkVzx0"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-220d132f16dso26973495ad.0
+        for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 01:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1740735604; x=1741340404; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qkbc9XEy6C+0jcTwS61uK3JCiWkcPjp4DERglnhfPgg=;
+        b=BUHkVzx0CIFDN2b8z2E2SKrZJEEnojWwRn6kX9Gfq48+flAb9GyLRjxh1IM64+9lfk
+         Hr6+upeqQinaFXjZvZQ+46EmwODm+SimPGMm5zTswiXKtd5w+XcI3zs7wChmU514kR73
+         SFIkE7XJrl0pTyFI6HIQcBuP4iHAHcfghtVRQFx7RrtLC5UekAv9vlCumCYofUHdol7D
+         U994vySMibFtt6ebcYZwsslq5Y6EHm2cA3vIvMmaTtajKKHM47CTLHdyZW4Z7q24Sd/F
+         AsQaiuhzBnVH/nyar2XeTWKngWQwRqB9Eg94g3bqwBXfwde53gkCowxbLpD/AYxlL1+y
+         wVwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740735604; x=1741340404;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Qkbc9XEy6C+0jcTwS61uK3JCiWkcPjp4DERglnhfPgg=;
+        b=Sn5fR5/NUmrekhAmBZebBw4r94DFwF1PvKtH10pYkfBo8LSfv/mFjoT7QEe1etf0er
+         uN/FF+UeGORaw6SF2Yf3hMXUoc4O2F3Jww1uXfgb9WCeRH8UpoFYGi1DZMl5IDPKH8EQ
+         7oCkv44lJpl1QLvviFE4B3XeYttN6+SjszE2hs6vshFXaG5QbPMKuM2+VBuo4id295Aj
+         YJ940jbsVKipJRpYYJOvnmglKDiD2gTv9tuZfskPHij1RVJPoe6FCgoEDmexuoN6BQsm
+         ezFoUnZC+dnPo/V6EVSABCvGHOhBOkjeI6RPrbr9lSCr50CVq4DpO0VMV/fcST7QDauN
+         sJ/Q==
+X-Gm-Message-State: AOJu0YweHuVK0LUIcath22y2F1nWSzd9XOSPwunXlE9+Mji8ZUJRZsCO
+	huPpwjnGXNxUncgseHeBE8aNeBX3vI0Bf64zK7cnTQ913srqxWxY4EnalgRDi70=
+X-Gm-Gg: ASbGncufG8e5lOKh0422mCdqeCW98OxIhzCQMFXsWpZkai/xRCvFktP3gCxArQWdrPL
+	hmThinI3wJpYyxN7CNGTfmDS4Sd1/p2agcx1Dqg2Ly4BsyJL6yZEpFAhmY6jepBNenZqkxD4/BG
+	9fwrFFbaAzvGPZznTdxFn2a1ggsMDQ+Tv9MmXK1WeyCZfO6d/zAYaH6712jsCWXX7kX3kpeYbYB
+	q9dKgZ7fLKgdU6nnuv/5Sq/i0iMg8iSkvTl4/eoF9d+j4GMYftZxGQNlSwIgu/ARyZdcbBjzgcH
+	8BygoTG8DuEeqI3B1mqbiwcQM/0+fvSLcd9IZQAMqEY3d3bKuxrlgoxMaILiN8kNre1S/VR/C+s
+	NJGmdV/DUew==
+X-Google-Smtp-Source: AGHT+IFRvcDz6r7R/xMUnjhtV5WGhBE599lKZUBAJlYVzrjEDsERuXhyjBPqQoU2LaxGFCl5e4C8HA==
+X-Received: by 2002:a17:902:f711:b0:221:7e36:b13e with SMTP id d9443c01a7336-22368fbe9fbmr48242245ad.12.1740735604436;
+        Fri, 28 Feb 2025 01:40:04 -0800 (PST)
+Received: from [10.54.24.77] (static-ip-148-99-134-202.rev.dyxnet.com. [202.134.99.148])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505336f9sm29370095ad.245.2025.02.28.01.40.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2025 01:40:03 -0800 (PST)
+Message-ID: <8c7ec350-9576-4291-915a-1224086e0922@shopee.com>
+Date: Fri, 28 Feb 2025 17:40:00 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ccofyygi4rerybdmecqswldykihtabx6yco7ztylqnbmw4a5qw@ye7zoq7mcol2>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] io_uring: fix the dead lock between io_uring and core dump
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <20250226113936.385747-1-haifeng.xu@shopee.com>
+ <202502280245.WT5bW0xf-lkp@intel.com>
+From: Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <202502280245.WT5bW0xf-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 24, 2025 at 08:43:45AM +0100, Lucas De Marchi wrote:
-> On Sat, Feb 22, 2025 at 10:35:07PM +0100, Daniel Gomez wrote:
-> > On Fri, Feb 21, 2025 at 12:15:40PM +0100, Luis Chamberlain wrote:
-> > > On Wed, Feb 19, 2025 at 02:17:48PM -0600, Lucas De Marchi wrote:
-> > > > On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
-> > > > > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
-> > > > > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
-> > > > > > >
-> > > > > > > Add support for a module error injection tool. The tool
-> > > > > > > can inject errors in the annotated module kernel functions
-> > > > > > > such as complete_formation(), do_init_module() and
-> > > > > > > module_enable_rodata_after_init(). Module name and module function are
-> > > > > > > required parameters to have control over the error injection.
-> > > > > > >
-> > > > > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
-> > > > > > > brd module:
-> > > > > > >
-> > > > > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
-> > > > > > > --error=-22 --trace
-> > > > > > > Monitoring module error injection... Hit Ctrl-C to end.
-> > > > > > > MODULE     ERROR FUNCTION
-> > > > > > > brd        -22   module_enable_rodata_after_init()
-> > > > > > >
-> > > > > > > Kernel messages:
-> > > > > > > [   89.463690] brd: module loaded
-> > > > > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
-> > > > > > > ro_after_init data might still be writable
-> > > > > > >
-> > > > > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > > > > > > ---
-> > > > > > >  tools/bpf/Makefile            |  13 ++-
-> > > > > > >  tools/bpf/moderr/.gitignore   |   2 +
-> > > > > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
-> > > > > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
-> > > > > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
-> > > > > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
-> > > > > > >  6 files changed, 510 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > The tool looks useful, but we don't add tools to the kernel repo.
-> > > > > > It has to stay out of tree.
-> > > > >
-> > > > > For selftests we do add random tools.
-> > > > >
-> > > > > > The value of error injection is not clear to me.
-> > > > >
-> > > > > It is of great value, since it deals with corner cases which are
-> > > > > otherwise hard to reproduce in places which a real error can be
-> > > > > catostrophic.
-> > > > >
-> > > > > > Other places in the kernel use it to test paths in the kernel
-> > > > > > that are difficult to do otherwise.
-> > > > >
-> > > > > Right.
-> > > > >
-> > > > > > These 3 functions don't seem to be in this category.
-> > > > >
-> > > > > That's the key here we should focus on. The problem is when a maintainer
-> > > > > *does* agree that adding an error injection entry is useful for testing,
-> > > > > and we have a developer willing to do the work to help test / validate
-> > > > > it. In this case, this error case is rare but we do want to strive to
-> > > > > test this as we ramp up and extend our modules selftests.
-> > > > >
-> > > > > Then there is the aspect of how to mitigate how instrusive code changes
-> > > > > to allow error injection are. In 2021 we evaluated the prospect of error
-> > > > > injection in-kernel long ago for other areas like the block layer for
-> > > > > add_disk() failures [0] but the minimal interface to enable this from
-> > > > > userspace with debugfs was considered just too intrusive.
-> > > > >
-> > > > > This effort tried to evaluate what this could look like with eBPF to
-> > > > > mitigate the required in-kernel code, and I believe the light weight
-> > > > > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
-> > > > > suffices to my taste.
-> > > > >
-> > > > > So, perhaps the tools aspect can just go in:
-> > > > >
-> > > > > tools/testing/selftests/module/
-> > > >
-> > > > but why would it be module-specific?
-> > > 
-> > > Gotta start somewhere.
-> > > 
-> > > > Based on its current implementation
-> > > > and discussion about inject.py it seems to be generic enough to be
-> > > > useful to test any function annotated with ALLOW_ERROR_INJECTION().
-> > > >
-> > > > As xe driver maintainer, it may be interesting to use such a tool:
-> > > >
-> > > > 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
-> > > >
-> > > > How does this approach compare to writing the function name on debugfs
-> > > > (the current approach in xe's testsuite)?
-> > > >
-> > > > 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
-> > > > 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
-> > > >
-> > > > If you decide to have the tool to live somewhere else, then kmod repo
-> > > > could be a candidate.
-> > > 
-> > > Would we install this upon install target?
-> > > 
-> > > Danny can decide on this :)
-> > > 
-> > > > Although I think having it in kernel tree is
-> > > > simpler maintenance-wise.
-> > > 
-> > > I think we have at least two users upstream who can make use of it. If
-> > > we end up going through tools/testing/selftests/module/ first, can't
-> > > you make use of it later?
-> > 
-> > What are the features in debugfs required to be useful for xe that we can
-> > port to an eBPF version? I see from the link provided the use of probability,
-> > interval, times and space but these are configured to allways trigger the error.
-> > Is that right?
+
+
+On 2025/2/28 02:24, kernel test robot wrote:
+> Hi Haifeng,
 > 
-> I don't think we use them... we just set them to "always trigger" and
-> then create the conditions for that to happen.  But my question still
-> remains:  what is the benefit of using the bpf approach over writing
-> these files?
-
-The code to trigger the error injection still needs to exist with both
-approaches. My understanding from debugfs and the comment from Luis earlier in
-the thread is that with eBPF you can mitigate how intrusive in-kernel code
-changes are to allow error injection. Luis added the example here [1] for
-debugfs.
-
-[1] https://lore.kernel.org/all/20210512064629.13899-9-mcgrof@kernel.org/
-
-To compare patch 8 in [1] with eBPF approach: the patch describes
-all the necessary changes required to allow error injection on the
-add_disk() path. With eBPF one would simply annotate the function(s) with
-ALLOW_ERROR_INJECTION(), e.g. device_add() and replace the return value
-in eBPF code with bpf_override_return() as implemented in moderr tool for
-module_enable_rdata_after_init() for example.
-
-New error injection users such modules or block/disk would benefit of the eBPF
-approach with having a more simpler in-kernel code for the same purpose. Current
-users of debugfs/errorinj would have to remove all the upstream intrusive error
-injection related code if they want to adopt the eBPF approach.
-
-Daniel
-
+> [This is a private test report for your RFC patch.]
+> kernel test robot noticed the following build errors:
 > 
-> Lucas De Marchi
+> [auto build test ERROR on tip/sched/core]
+> [also build test ERROR on brauner-vfs/vfs.all linus/master v6.14-rc4 next-20250227]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> > 
-> > > 
-> > >   Luis
+> url:    https://github.com/intel-lab-lkp/linux/commits/Haifeng-Xu/io_uring-fix-the-dead-lock-between-io_uring-and-core-dump/20250226-194045
+> base:   tip/sched/core
+> patch link:    https://lore.kernel.org/r/20250226113936.385747-1-haifeng.xu%40shopee.com
+> patch subject: [RFC] io_uring: fix the dead lock between io_uring and core dump
+> config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280245.WT5bW0xf-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280245.WT5bW0xf-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502280245.WT5bW0xf-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from kernel/sched/core.c:10:
+>    In file included from include/linux/highmem.h:8:
+>    In file included from include/linux/cacheflush.h:5:
+>    In file included from arch/x86/include/asm/cacheflush.h:5:
+>    In file included from include/linux/mm.h:2224:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>>> kernel/sched/core.c:6791:40: error: no member named 'io_uring' in 'struct task_struct'
+>     6791 |         struct io_uring_task *io_uring = tsk->io_uring;
+>          |                                          ~~~  ^
+>    2 warnings and 1 error generated.
+> 
+> 
+
+The CONFIG_IO_URING isn't enables, so 'io_uring' can't be found in 'struct task_struct'.
+I'll post a new version later.
+
+> vim +6791 kernel/sched/core.c
+> 
+>   6786	
+>   6787	static inline void sched_submit_work(struct task_struct *tsk)
+>   6788	{
+>   6789		static DEFINE_WAIT_OVERRIDE_MAP(sched_map, LD_WAIT_CONFIG);
+>   6790		unsigned int task_flags;
+>> 6791		struct io_uring_task *io_uring = tsk->io_uring;
+>   6792	
+>   6793		/*
+>   6794		 * Establish LD_WAIT_CONFIG context to ensure none of the code called
+>   6795		 * will use a blocking primitive -- which would lead to recursion.
+>   6796		 */
+>   6797		lock_map_acquire_try(&sched_map);
+>   6798	
+>   6799		task_flags = tsk->flags;
+>   6800		/*
+>   6801		 * If a worker goes to sleep, notify and ask workqueue whether it
+>   6802		 * wants to wake up a task to maintain concurrency.
+>   6803		 */
+>   6804		if (task_flags & PF_WQ_WORKER)
+>   6805			wq_worker_sleeping(tsk);
+>   6806		else if (task_flags & PF_IO_WORKER)
+>   6807			io_wq_worker_sleeping(tsk);
+>   6808		else if ((task_flags & PF_DUMPCORE) && io_uring) {
+>   6809			struct io_wq *wq = io_uring->io_wq;
+>   6810	
+>   6811			io_wq_cancel_tw_create(wq);
+>   6812		}
+>   6813	
+>   6814		/*
+>   6815		 * spinlock and rwlock must not flush block requests.  This will
+>   6816		 * deadlock if the callback attempts to acquire a lock which is
+>   6817		 * already acquired.
+>   6818		 */
+>   6819		SCHED_WARN_ON(current->__state & TASK_RTLOCK_WAIT);
+>   6820	
+>   6821		/*
+>   6822		 * If we are going to sleep and we have plugged IO queued,
+>   6823		 * make sure to submit it to avoid deadlocks.
+>   6824		 */
+>   6825		blk_flush_plug(tsk->plug, true);
+>   6826	
+>   6827		lock_map_release(&sched_map);
+>   6828	}
+>   6829	
+> 
+
