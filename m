@@ -1,109 +1,124 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BAD23DE
-	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 06:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403532505DE;
+	Fri, 28 Feb 2025 08:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740724389; cv=none; b=aTL6Yc0QJaRPDy69mYZnMD7O8Ds6P6mrThEkBIZAkw7SadKplvVPwo+jFNVp5KvSwSXIQOvCmGq8+AqkL++vdZGKrptMjxVOyu14lW/q7bvv0nugfIDQs262c3XNadr9oDSlu/h0dkC/td9C5jxtPMRBMjysBMjWOT0a3khE0y0=
+	t=1740732002; cv=none; b=DIieglaZtEyrH/f9EUuD+6+4Ue0AFymFScU6QiFP/Ej9V7evhqLwlw1vP//jfVMFJ2zPu24OwtSmdMPyqd12wgQHV7odtDyfH40YGCM8WtCiMXtRWKUeaugnJjXED8ulL5bFZT05yPOchPnDQwgQVsO7V7GiB6zzu8qGG75wC1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740724389; c=relaxed/simple;
-	bh=Wu4vA/1dYv25l4KnanYskSTfI50ne/5QlJ7A/LV3bT0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=IMKIbQatZmGJbvLoAZm8/X3bOQNajuLhks4AcYW0PH57STOvQbQCy291OqOH1TrNaZK0W89Wsjl/EfxVmVLZQNsXdFK6O8o0M3uLiHR2xj7DTnIuEx3ny7X+mlt9sKuSgy9HKjiqH60Ibd1SQtmYBZ3MB5gN1haw6M2uR2ngVVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dkS9Jfkd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1740732002; c=relaxed/simple;
+	bh=6nLlEJR+1HRqZHpNFMxHE62+fk85zp8gkyvfjgnlWPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+waubML0ek1ghRzppwEAqiSLb6j2M2mhhAXjJLNow1TVph6wnQ4l1wI05sXUTB4bfCAUsmrn+74ANWrudSw6M/90JrhUUrSvnfz0VXFmnq7JITxuEKDwpe/GPat+lmSfrfk0xy6ZhtrRGer09OtKtL87Lk7wk0IjaGADkBK38Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lVoZJbzN; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dkS9Jfkd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740724386;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=saPm/zbw6sBy7wUOyRjCQDv/9Ef+X3IALKu+xfLJa5w=;
-	b=dkS9JfkdFD1mKLFuYHq56yBpOSn9nei+XbSzASw6D1YRIcIpx/VkWoAAVREXYC7dXtOVFt
-	H5UMhTk1PC2wh0WC8Z6q1j/qH25cWzm8btxkGfbf9ed3j8MxuJJipH5QL/ucNgVBSvjM28
-	fKKgmVlvkTdY0AQFc/HU1AdVjc/74zg=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-574-JduAHZX7PWmf5T1i1P93iA-1; Fri,
- 28 Feb 2025 01:33:04 -0500
-X-MC-Unique: JduAHZX7PWmf5T1i1P93iA-1
-X-Mimecast-MFC-AGG-ID: JduAHZX7PWmf5T1i1P93iA_1740724383
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 588251800878
-	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 06:33:03 +0000 (UTC)
-Received: from [172.64.10.27] (unknown [10.30.34.106])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DF64B300019E;
-	Fri, 28 Feb 2025 06:33:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
- upstream-mainline, 76544811)
-Date: Fri, 28 Feb 2025 06:33:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lVoZJbzN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740732000; x=1772268000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6nLlEJR+1HRqZHpNFMxHE62+fk85zp8gkyvfjgnlWPs=;
+  b=lVoZJbzNos8hNXw2nKPuKxV4eiCsFWeYQPMFjBOGSreXKiDu1QEpbm76
+   cBRes40xFDt1Xr3u9dwRI4EUmqz8eZA/+UWxVFKhxpRnVN9MyYXwPKkzR
+   vGQM/7H5OxfZvK9FV6baWfC05PENUT2L3qU6k9CNTpOMH/IO6Y9BrHMw6
+   mebw62djrAADMBz2u5vyONYfWyW+fwXdhXM2Z4ho2ZvdE+odudhRX7JQE
+   aPf2LV/qQ2DKFXcLL2eaZh/z4AgN3wtZziJm8XbhVLjEpf717Efs7AxC3
+   VjVEOzCupPM7AXa+e/5Ew8xv3AKGJKFb1xmeBq0mEO2IjdrO4dMzPA5cx
+   g==;
+X-CSE-ConnectionGUID: N5gY39BaReCSvjLOky7Hiw==
+X-CSE-MsgGUID: ndDp9SdUSSG3sDPh/a5zfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41905672"
+X-IronPort-AV: E=Sophos;i="6.13,321,1732608000"; 
+   d="scan'208";a="41905672"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 00:39:59 -0800
+X-CSE-ConnectionGUID: Ng7e4B6tRsSRZ7rZzz/aZQ==
+X-CSE-MsgGUID: fgjmtdnfSxiJ/VZEuJieeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="122510082"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 28 Feb 2025 00:39:56 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnvu4-000Eck-0q;
+	Fri, 28 Feb 2025 08:39:36 +0000
+Date: Fri, 28 Feb 2025 16:38:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: zihan zhou <15645113830zzh@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, bsegall@google.com,
+	dietmar.eggemann@arm.com, juri.lelli@redhat.com,
+	linux-kernel@vger.kernel.org, mgorman@suse.de, mingo@redhat.com,
+	peterz@infradead.org, rostedt@goodmis.org,
+	vincent.guittot@linaro.org, vschneid@redhat.com
+Subject: Re: [PATCH V1 2/4] sched: Do predict load
+Message-ID: <202502281647.5vhdZuZE-lkp@intel.com>
+References: <20250221085051.32468-1-15645113830zzh@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <44794.125022801330400153@us-mta-574.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AAsp9_eIouXYkLmJe5W5osnfBGzWtUu09y8rTpW5xpA_1740724383
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250221085051.32468-1-15645113830zzh@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi zihan,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on akpm-mm/mm-nonmm-unstable brauner-vfs/vfs.all peterz-queue/sched/core linus/master v6.14-rc4 next-20250227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/zihan-zhou/sched-Add-kconfig-of-predict-load/20250221-165850
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20250221085051.32468-1-15645113830zzh%40gmail.com
+patch subject: [PATCH V1 2/4] sched: Do predict load
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502281647.5vhdZuZE-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281647.5vhdZuZE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502281647.5vhdZuZE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/sched/fair.c:4755:17: warning: variable 'load' is uninitialized when used here [-Wuninitialized]
+    4755 |         load = div_u64(load * weight, PREDICT_LOAD_MAX);
+         |                        ^~~~
+   kernel/sched/fair.c:4749:20: note: initialize the variable 'load' to silence this warning
+    4749 |         unsigned long load;
+         |                           ^
+         |                            = 0
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2025-02-28' of https://gitlab.free=
-desktop.org/drm/kernel
+vim +/load +4755 kernel/sched/fair.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1692792264
+  4746	
+  4747	static unsigned long restore_normalized_load(unsigned long normalized_load, unsigned long weight)
+  4748	{
+  4749		unsigned long load;
+  4750	
+  4751		//Prevent arithmetic overflow
+  4752		WARN_ON_ONCE(normalized_load > 4000000);
+  4753		if (weight == PREDICT_LOAD_MAX)
+  4754			return normalized_load;
+> 4755		load = div_u64(load * weight, PREDICT_LOAD_MAX);
+  4756		return load;
+  4757	}
+  4758	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1692792264-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1692792264-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1692792264-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
