@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AD917BA3;
-	Fri, 28 Feb 2025 03:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B82F819;
+	Fri, 28 Feb 2025 04:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740714928; cv=none; b=IR+8eBkn42ek1J49iI9pofrTkQdaUUnOi6ddFi7HPAf2KIgSw8A/eAVaqc32yDzzn/i1zKvlWVWDg7itLJb8hNp7ed+SMNiguQfkwS0z5JBllwVLfyyd9+RLKVBaJEiTxEaNuO+nbBKYyT+iKcHvLQW/Nueuu3PDJQId9UQER98=
+	t=1740717515; cv=none; b=sbytv6Jyyz+neNlOkYpUH80cI05MnQe1u2ikx63qU0JCTmT/aAlAVsfdWmyG1W/efD6B8VLymz5STbFfoIFJJoD6MM8psPSG69SUpRp0Ogmc6TGYYbPwBEiyhxqOu9Om7/yHqBOZTgcP4C3dT2lfK2eDfxk5+FdzF5aOoMxqPXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740714928; c=relaxed/simple;
-	bh=llyHHsG1VZ/VARbVGPtK+tEMngxC6yU3SXGG96JBmiY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=l9B1v3dOQaps+Oh3ix3ehWmtbPOIKB4NqQ75D6gee88Rgjq+wnzrjMYn25JMm2rT7Ofo1rshcZ0FhDr9S6jzKPus3yVRQyM1BnxRf8xd+mDn0G5w2Qmhp9xwr2qlWOiUxB64gbFTIixHpXEnIbxm80Lp5gqHzBNax2ySsUvnD+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hld6rpuT; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1740717515; c=relaxed/simple;
+	bh=F4h6uqLQf88ZF0CcTF2u793SdiYR3nlpxj5BCH2s6UE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1MsCFPQGNjHnTGecM2vCwLWXNv32bsTNqAh2wAt8Eh753xOMAp7s4+GG5CPlsefNkn+Bq+snWN6P5ueZ41yzpdpkd2e/7moQ6mCH7zkE+DgaC6ncbjY4PZfcJPgxRFoehd5VZl0mn3avFekXlNVbGkwKHzReTZoJiXUfkR1wQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bQ2x7Ang; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hld6rpuT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bQ2x7Ang"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740714927; x=1772250927;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=llyHHsG1VZ/VARbVGPtK+tEMngxC6yU3SXGG96JBmiY=;
-  b=Hld6rpuT1XMybqyoK5h1vcCPw0uWotuPZyNYzd/q43NB3O4J6l7pVqa+
-   4PIPSbuCCzsn4DDeWFw+Vtz/m4MOgMnCJwCVRBict0Od7WzrrJ4OK1yb6
-   sHY5cGQjE6Hs+V9HN48twdjispu/+cWQTrlUqVCRqSp56YwzXD7p1GSlV
-   nYITDa4mkBJuvpIiQsMbsJlz5r7qjQxL3M57FjjoUo8gCfeig3pCaOnRL
-   waYeZpHUzQVvPZ9th6Ed503DECXomA+wcthjHp4bfodbpj6G+40M3Kb6a
-   7MmwUiYEmhNnEt6qP8c8yx6j5DGnUwlR3Hf/xienBFef5sNprnQv/e9W0
-   Q==;
-X-CSE-ConnectionGUID: g5b6a5VHRX2EvMmSu6nmlQ==
-X-CSE-MsgGUID: SoNDG+DwS06r2jBjtfNcjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="53025399"
+  t=1740717513; x=1772253513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F4h6uqLQf88ZF0CcTF2u793SdiYR3nlpxj5BCH2s6UE=;
+  b=bQ2x7AngBe+MAd2XDZzA/iTKwO9MOE5/FdXqiWZbUpuRxvyWlKeaIceU
+   amb7a4QJgHBp87lJ86tvjwjmzBHnKxLOlUiKFls1FlScSMH5ZCnumGiiU
+   NZ0IpJ1dl3vWZnoNh52yBkIIV+JgIXkEXVtPey1KF/m19SLxYZG/l8H4/
+   TOgMOau5ibymMCilnAMkqfpoHhL6ZYHEA4D54DFEB6kvcBKXShlpdITkk
+   PJDQmvAB9hI1rThhBVP11pRli/9kthTMQoAyKTjpt8O9yIlZiP1gohGEi
+   ejXO/LrYG5Bu/vhLO8WFA6nI0ybBs6gD8FFNe4ceV4bvU7MrfoeR/9KeL
+   g==;
+X-CSE-ConnectionGUID: Tzvr2NheQMWvVuyepqQp4Q==
+X-CSE-MsgGUID: Ifo1UQxlQa2km3Q/2mY3cA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41484322"
 X-IronPort-AV: E=Sophos;i="6.13,321,1732608000"; 
-   d="scan'208";a="53025399"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 19:55:26 -0800
-X-CSE-ConnectionGUID: 4NoNO4c3SEmyMbGRjE5tBA==
-X-CSE-MsgGUID: /dilRKRnRySB1CLz6B2MBA==
+   d="scan'208";a="41484322"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 20:38:33 -0800
+X-CSE-ConnectionGUID: RTsMSm40QyyDs/YUauQc/g==
+X-CSE-MsgGUID: jOuaaF4oSF6qKGbvabxZDw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,321,1732608000"; 
-   d="scan'208";a="117252670"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="121354165"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 27 Feb 2025 19:55:24 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 27 Feb 2025 20:38:29 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tnrT8-000EOo-0X;
-	Fri, 28 Feb 2025 03:55:22 +0000
-Date: Fri, 28 Feb 2025 11:54:32 +0800
+	id 1tns8p-000EQ6-0I;
+	Fri, 28 Feb 2025 04:38:27 +0000
+Date: Fri, 28 Feb 2025 12:38:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 2690/5524] lib/tests/bitfield_kunit.c:119:13:
- warning: implicit conversion from 'unsigned long long' to 'unsigned int'
- changes value from 9223372036854775808 to 0
-Message-ID: <202502281153.TG2XK5SI-lkp@intel.com>
+To: Dongcheng Yan <dongcheng.yan@intel.com>, linux-media@vger.kernel.org,
+	sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+	hverkuil@xs4all.nl, ricardo.ribalda@gmail.com,
+	bingbu.cao@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
+	daxing.li@intel.com, dongcheng.yan@linux.intel.com,
+	ong.hock.yu@intel.com, balamurugan.c@intel.com, wei.a.fu@intel.com,
+	xiaohong.zou@intel.com
+Subject: Re: [PATCH v6] media: i2c: add lt6911uxe hdmi bridge driver
+Message-ID: <202502281242.hJEk5bLj-lkp@intel.com>
+References: <20250227061641.499763-1-dongcheng.yan@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,157 +69,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250227061641.499763-1-dongcheng.yan@intel.com>
 
-Hi Kees,
+Hi Dongcheng,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   be5c7bbb3a64baf884481a1ba0c2f8fb2f93f7c3
-commit: 0ef71a1dc3a5355f229e2869e97de94e8e7ec7d0 [2690/5524] Merge branch 'for-next/hardening' into for-next/kspp
-config: powerpc-randconfig-003-20250228 (https://download.01.org/0day-ci/archive/20250228/202502281153.TG2XK5SI-lkp@intel.com/config)
+[auto build test ERROR on a64dcfb451e254085a7daee5fe51bf22959d52d3]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dongcheng-Yan/media-i2c-add-lt6911uxe-hdmi-bridge-driver/20250227-141956
+base:   a64dcfb451e254085a7daee5fe51bf22959d52d3
+patch link:    https://lore.kernel.org/r/20250227061641.499763-1-dongcheng.yan%40intel.com
+patch subject: [PATCH v6] media: i2c: add lt6911uxe hdmi bridge driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502281242.hJEk5bLj-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281153.TG2XK5SI-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281242.hJEk5bLj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502281153.TG2XK5SI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502281242.hJEk5bLj-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from lib/tests/bitfield_kunit.c:8:
-   In file included from include/kunit/test.h:20:
-   In file included from include/linux/jump_label.h:257:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/powerpc/include/asm/atomic.h:11:
-   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
-   In file included from include/asm-generic/cmpxchg-local.h:6:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:12:
-   In file included from arch/powerpc/include/asm/ptrace.h:342:
-   include/linux/thread_info.h:225:26: error: expected parameter declarator
-     225 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HARDENED_USERCOPY_DEFAULT_ON,
-         |                          ^
-   ./include/generated/autoconf.h:1888:45: note: expanded from macro 'CONFIG_HARDENED_USERCOPY_DEFAULT_ON'
-    1888 | #define CONFIG_HARDENED_USERCOPY_DEFAULT_ON 1
-         |                                             ^
-   In file included from lib/tests/bitfield_kunit.c:8:
-   In file included from include/kunit/test.h:20:
-   In file included from include/linux/jump_label.h:257:
-   In file included from include/linux/atomic.h:7:
-   In file included from arch/powerpc/include/asm/atomic.h:11:
-   In file included from arch/powerpc/include/asm/cmpxchg.h:755:
-   In file included from include/asm-generic/cmpxchg-local.h:6:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/powerpc/include/asm/irqflags.h:12:
-   In file included from arch/powerpc/include/asm/hw_irq.h:12:
-   In file included from arch/powerpc/include/asm/ptrace.h:342:
-   include/linux/thread_info.h:225:26: error: expected ')'
-   ./include/generated/autoconf.h:1888:45: note: expanded from macro 'CONFIG_HARDENED_USERCOPY_DEFAULT_ON'
-    1888 | #define CONFIG_HARDENED_USERCOPY_DEFAULT_ON 1
-         |                                             ^
-   include/linux/thread_info.h:225:25: note: to match this '('
-     225 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HARDENED_USERCOPY_DEFAULT_ON,
-         |                         ^
-   include/linux/thread_info.h:225:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-     225 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HARDENED_USERCOPY_DEFAULT_ON,
-         | ^
-         | int
-   include/linux/thread_info.h:225:25: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-     225 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HARDENED_USERCOPY_DEFAULT_ON,
-         |                         ^
-     226 |                            validate_usercopy_range);
-         |                                                   
-         |                                                   void
-   include/linux/thread_info.h:232:6: error: call to undeclared function 'static_branch_maybe'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     232 |             static_branch_maybe(CONFIG_HARDENED_USERCOPY_DEFAULT_ON,
-         |             ^
-   include/linux/thread_info.h:233:6: error: use of undeclared identifier 'validate_usercopy_range'
-     233 |                                 &validate_usercopy_range)) {
-         |                                  ^
->> lib/tests/bitfield_kunit.c:119:13: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 9223372036854775808 to 0 [-Wconstant-conversion]
-     119 |         CHECK(u64, 0x8000000000000000ull);
-         |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-   lib/tests/bitfield_kunit.c:98:34: note: expanded from macro 'CHECK'
-      98 |                 for (v = 0; v < 1 << hweight32(mask); v++)              \
-         |                                      ~~~~~~~~~~^~~~~
-   include/asm-generic/bitops/const_hweight.h:28:89: note: expanded from macro 'hweight32'
-      28 | #define hweight32(w) (__builtin_constant_p(w) ? __const_hweight32(w) : __arch_hweight32(w))
-         |                                                                        ~~~~~~~~~~~~~~~~ ^
-   lib/tests/bitfield_kunit.c:120:13: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 9151314442816847872 to 0 [-Wconstant-conversion]
-     120 |         CHECK(u64, 0x7f00000000000000ull);
-         |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-   lib/tests/bitfield_kunit.c:98:34: note: expanded from macro 'CHECK'
-      98 |                 for (v = 0; v < 1 << hweight32(mask); v++)              \
-         |                                      ~~~~~~~~~~^~~~~
-   include/asm-generic/bitops/const_hweight.h:28:89: note: expanded from macro 'hweight32'
-      28 | #define hweight32(w) (__builtin_constant_p(w) ? __const_hweight32(w) : __arch_hweight32(w))
-         |                                                                        ~~~~~~~~~~~~~~~~ ^
-   lib/tests/bitfield_kunit.c:121:13: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 422212465065984 to 0 [-Wconstant-conversion]
-     121 |         CHECK(u64, 0x0001800000000000ull);
-         |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
-   lib/tests/bitfield_kunit.c:98:34: note: expanded from macro 'CHECK'
-      98 |                 for (v = 0; v < 1 << hweight32(mask); v++)              \
-         |                                      ~~~~~~~~~~^~~~~
-   include/asm-generic/bitops/const_hweight.h:28:89: note: expanded from macro 'hweight32'
-      28 | #define hweight32(w) (__builtin_constant_p(w) ? __const_hweight32(w) : __arch_hweight32(w))
-         |                                                                        ~~~~~~~~~~~~~~~~ ^
-   lib/tests/bitfield_kunit.c:125:13: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 8455716864 to 4160749568 [-Wconstant-conversion]
-     125 |         CHECK(u64, 0x0000001f8000000ull);
-         |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-   lib/tests/bitfield_kunit.c:98:34: note: expanded from macro 'CHECK'
-      98 |                 for (v = 0; v < 1 << hweight32(mask); v++)              \
-         |                                      ~~~~~~~~~~^~~~~
-   include/asm-generic/bitops/const_hweight.h:28:89: note: expanded from macro 'hweight32'
-      28 | #define hweight32(w) (__builtin_constant_p(w) ? __const_hweight32(w) : __arch_hweight32(w))
-         |                                                                        ~~~~~~~~~~~~~~~~ ^
-   4 warnings and 6 errors generated.
+>> drivers/media/i2c/lt6911uxe.c:46:2: error: initialization of non-aggregate type '__u32' (aka 'unsigned int') with a designated initializer list
+      46 |         V4L2_INIT_BT_TIMINGS(160, 3840,                 /* min/max width */
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      47 |                              120, 2160,                 /* min/max height */
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                              50000000, 594000000,       /* min/max pixelclock */
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      49 |                              V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                              V4L2_DV_BT_STD_CVT,
+         |                              ~~~~~~~~~~~~~~~~~~~
+      51 |                              V4L2_DV_BT_CAP_PROGRESSIVE |
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                              V4L2_DV_BT_CAP_CUSTOM |
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~
+      53 |                              V4L2_DV_BT_CAP_REDUCED_BLANKING)
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/v4l2-dv-timings.h:17:2: note: expanded from macro 'V4L2_INIT_BT_TIMINGS'
+      17 |         { .bt = { _width , ## args } }
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/lt6911uxe.c:426:7: error: no member named 'link_freq' in 'struct v4l2_mbus_config'
+     426 |         cfg->link_freq = lt6911uxe->cur_mode.link_freq;
+         |         ~~~  ^
+   2 errors generated.
 
 
-vim +119 lib/tests/bitfield_kunit.c
+vim +46 drivers/media/i2c/lt6911uxe.c
 
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20   94  
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20   95  #define CHECK(tp, mask) do {						\
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20   96  		u64 v;							\
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20   97  									\
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20   98  		for (v = 0; v < 1 << hweight32(mask); v++)		\
-d2585f5164c298 lib/bitfield_kunit.c Vitor Massaru Iha 2020-07-29   99  			KUNIT_ASSERT_FALSE(context,			\
-d2585f5164c298 lib/bitfield_kunit.c Vitor Massaru Iha 2020-07-29  100  				tp##_encode_bits(v, mask) != v << __ffs64(mask));\
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  101  	} while (0)
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  102  
-d2585f5164c298 lib/bitfield_kunit.c Vitor Massaru Iha 2020-07-29  103  static void __init test_bitfields_variables(struct kunit *context)
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  104  {
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  105  	CHECK(u8, 0x0f);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  106  	CHECK(u8, 0xf0);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  107  	CHECK(u8, 0x38);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  108  
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  109  	CHECK(u16, 0x0038);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  110  	CHECK(u16, 0x0380);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  111  	CHECK(u16, 0x3800);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  112  	CHECK(u16, 0x8000);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  113  
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  114  	CHECK(u32, 0x80000000);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  115  	CHECK(u32, 0x7f000000);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  116  	CHECK(u32, 0x07e00000);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  117  	CHECK(u32, 0x00018000);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  118  
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20 @119  	CHECK(u64, 0x8000000000000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  120  	CHECK(u64, 0x7f00000000000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  121  	CHECK(u64, 0x0001800000000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  122  	CHECK(u64, 0x0000000080000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  123  	CHECK(u64, 0x000000007f000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  124  	CHECK(u64, 0x0000000018000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  125  	CHECK(u64, 0x0000001f8000000ull);
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  126  }
-0e2dc70e3d0d50 lib/test_bitfield.c  Johannes Berg     2018-06-20  127  
-
-:::::: The code at line 119 was first introduced by commit
-:::::: 0e2dc70e3d0d503b0cc9c5f74db3eb6db52c9e22 bitfield: add tests
-
-:::::: TO: Johannes Berg <johannes@sipsolutions.net>
-:::::: CC: Kalle Valo <kvalo@codeaurora.org>
+    42	
+    43	static const struct v4l2_dv_timings_cap lt6911uxe_timings_cap_4kp30 = {
+    44		.type = V4L2_DV_BT_656_1120,
+    45		/* Pixel clock from REF_01 p. 20. Min/max height/width are unknown */
+  > 46		V4L2_INIT_BT_TIMINGS(160, 3840,			/* min/max width */
+    47				     120, 2160,			/* min/max height */
+    48				     50000000, 594000000,	/* min/max pixelclock */
+    49				     V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
+    50				     V4L2_DV_BT_STD_CVT,
+    51				     V4L2_DV_BT_CAP_PROGRESSIVE |
+    52				     V4L2_DV_BT_CAP_CUSTOM |
+    53				     V4L2_DV_BT_CAP_REDUCED_BLANKING)
+    54	};
+    55	
 
 -- 
 0-DAY CI Kernel Test Service
