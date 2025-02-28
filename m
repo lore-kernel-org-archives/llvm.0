@@ -1,276 +1,118 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE05250BF5
-	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 08:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D329B253F13;
+	Fri, 28 Feb 2025 08:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740732719; cv=none; b=EuGDpRGHmZnVJsfhNgFvPtCDVR5n4KT2fE/K7s8S1BrenmFH2/tHzodv3BM1mGYshOW3cgt3w+9kZlWh93mbRHLs/QQShn/e/GP9A6x75A7Fm9riOVszVWy35KySJ2fmJgYwNEImS5cyx9kRw1tz7VssYxgRlf7cnPzKIaQqbIg=
+	t=1740732959; cv=none; b=ZfZsfJS3zFenn1RePeOUcYNSfHWgt0colMTINXrOYMth70/xuqezFvaSWviOgWeiEHEQVIZWJnnOjiLgnMAsQGpgUqiBPyo1ouOKwe5o+CGcLEEUR2wz9P372dxzHb82wa+jywy5txFCAxqOCIwiGzPaF5RBLejWbQygELxSc9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740732719; c=relaxed/simple;
-	bh=w1nkcyVPYvi3ysyji3YioOLi0vdTNcSe4/LKECgEAAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Due+Cj7dPPB3slTOKnybWZz5rlO3x6/3cWxf/AK4P5WMonT8mi18L2OWW2GVY9LECTfMFI6m/SljG8Xbxs5+RFrGPzBm8fKf3UD7JYUcZ+W7MQF2bmJ3kKCpFTFfWzzcDmEaECfrb3hKUrHh5WgSuOO8jt8Hk+W9bQfwwKxjwMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nT+uT23o; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740732959; c=relaxed/simple;
+	bh=y/U8R/NI0d97IbZrAfpBI+n/RgNShiZ1WGVlLVetEEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jOK5EO31MihNMv0bF65GcvbeLK5DLWEMGpr2yZVtoGQ+OVOAIwYTwICPmcFrZMP+5AggFWwygtT5dFp3OqGnDMQhcvvBh51mgtjxLuCKXcF3QI146GGPTJ0d0tLPS1fsFdA1gjBC7a+YCCXvHGh2+HqlR9wGW7n9k69fKh/oC/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBf2vB95; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nT+uT23o"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-abbb12bea54so345166766b.0
-        for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 00:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740732714; x=1741337514; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fEUyB5EmHNCT4puS4PQuhKUh0TILreNeaPohAZsCzXk=;
-        b=nT+uT23ova/f+TRf8b9WGpf+eEZ0KeRJwfLIyHBjsWzZ9EoIh4KfndaW8RGXIZOzDc
-         vQe2mvXoH4zud3z9L1pbbDtlAcOzE0S00citZ5AozisvWrc1FENwJJSUSxVUq/Re5viG
-         Uyyl/dacLT17bYFrvqIT67OWe+sWIc5DAVlmtrPRzrkw6AbVxH3r9d7Y/6TySPCLLIyx
-         XB8pEiVCLoB4jkm2fWqOVr5uqecP09WxLkFYfCcXYnEbHgTX16qJ0B95z4tuz/fimAcn
-         BMcPQkTU1tJzKPYUrZ/Al80yyUjeYV0AFaXfkQFpGaCQNs/IU9Q82XaxU1lmjf8lVhxv
-         Mrug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740732714; x=1741337514;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fEUyB5EmHNCT4puS4PQuhKUh0TILreNeaPohAZsCzXk=;
-        b=mICLsXYyZMci9ZLWa8l/PE0P/dgpj//cVuQQ4h/9958ZRHgRjgozezzRraDs3ragA8
-         NipBHk+znwGF2Lf1ek7LfYbN3H+eu/3ixH8Fd055qam9FIn+0OBzsR8Muv3fnSCaIbnN
-         oEMfNtYnxzREtkIuMlaJtNxmbLiCLFigFjPunZSPIb0Uujwa2LtfoVD95IZvwXPdgsiT
-         XQzREJwMrzzJfeIW8vtibG+w7+Dgy9Dtn7jAR3Khmaz0yIvp0QLGFW6wSCC2d5Syi5nA
-         bPSbMKzSGo3KPcvhp3v77ArP5sWY2jsmjSCAjK3R8VWnjADisT+N/GcaiOsWlPX4dc42
-         mslg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMl6FX+lj3PAJrB6iUvigY7rQybDmXLKdI/qgWVT/HCqMGm3GOKIETJbVaqS/hHB5i/d5b@lists.linux.dev
-X-Gm-Message-State: AOJu0YzkZJPG8jfmbtIh6DtbsH5XDIrLV74D4stnnAu4OVF7qbBgpDcP
-	BeQRl9Y5m1hXG0vjajoGb5qyU79k6S1Sz2iRgu8oM2WP5FjfMQB0
-X-Gm-Gg: ASbGncuBv1Oo2qLMHmPt7UHBux/x4KgJemlif9YI97OSawKjrIS0SWSJRkpe1B55sBq
-	4tC70eZ94rPSjI2C3fw2y5Q3MNAqedYBNVqJWAkZYU9ocbijM8KbCg81VvfNHWsprWUJPol9YNh
-	76Q6flzS79QGgZv8gbkMzHk9GebsOpwncaegjYvgLoLpGhLxElGPlzvZIvtBlvT5SWVLroce0Qj
-	BjaRTPrTAqOrajcSS8v6erzMLGWCTRNAxkXl2YkzeKlxUqYK+CuMi0iLeMC8ASqXxIdz1bcjzbJ
-	U6n/67xj/6ETDQSkyAiQCfBL6IXtKl5V4AWX
-X-Google-Smtp-Source: AGHT+IHE75BPNmxqkumsfahz4rxW/WI+EewYpDWNQmoLci96OwuaE8twUPv7rhKoapoaVWJclJMkvA==
-X-Received: by 2002:a17:907:c29:b0:ab7:f2da:8126 with SMTP id a640c23a62f3a-abf25fa2bb1mr244795666b.11.1740732713983;
-        Fri, 28 Feb 2025 00:51:53 -0800 (PST)
-Received: from fedora.. ([193.77.86.199])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0dc5d5sm261091666b.63.2025.02.28.00.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 00:51:53 -0800 (PST)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH] x86/locking: Remove semicolon from "lock" prefix
-Date: Fri, 28 Feb 2025 09:51:15 +0100
-Message-ID: <20250228085149.2478245-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBf2vB95"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5087C4CED6;
+	Fri, 28 Feb 2025 08:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740732959;
+	bh=y/U8R/NI0d97IbZrAfpBI+n/RgNShiZ1WGVlLVetEEY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HBf2vB95qVdn4uCpncA6IMNyEnCFFNT3NTU+2Vn2efqGCs3/Ob4irZV2N4F7i4zcS
+	 8LJTkm8WxrAIc0NyAeve9MU9ATmDig1dABT3IF0dYEzWCVCm0WKMFngvFyKwPQDtqc
+	 oJWOJ8VYcV1p/2Kq7VZQ3TWILNnbpqARCr0REVUEimc5KYgUZWohgdPgGD+onHORxg
+	 66040lriCNKbfmY5okqm6T4RQuNo6KEYyRZgpsmdtNTT7vOV6WrQT5nXDS+oa+ij2S
+	 6Hv2pAtkn9xBAMfQQ3LnTYFl/2kM4Xz1TGujYxGdO//zPlNx99BAYjb3ZPtlXsTglM
+	 mPUiCijsX8+/A==
+Date: Fri, 28 Feb 2025 09:55:57 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Tamir Duberstein <tamird@gmail.com>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Justin Stitt <justinstitt@google.com>, intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Klaus Jensen <k.jensen@samsung.com>, 
+	Theodore Ts'o <tytso@mit.edu>, gost.dev@samsung.com, Barry Song <baohua@kernel.org>, 
+	Daniel Gomez <da.gomez@samsung.com>
+Subject: Re: [PATCH RESEND v3] drm/xe: xe_gen_wa_oob: replace
+ program_invocation_short_name
+Message-ID: <4ghuhfcasawko7ultvuou3dhfzvb4fm4kazdd6ld5aquwvpzyh@xg2tdw5zi37j>
+References: <20250224-macos-build-support-xe-v3-1-d2c9ed3a27cc@samsung.com>
+ <be5abg6u6wm62nhak7xrhtlkqxcekael6ztnkatwqxcil44x5y@p6yrbfingm4e>
+ <CAJ-ks9=gaxW2191c+K0E0MgjsQWLYoKxJZLxGb6RMbPRVHc4tQ@mail.gmail.com>
+ <fzigsonsdbtvo6aorgvzlh4mvbpvikbz6iwh6h5jx53e7zd7m4@munr3ea5nbme>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <fzigsonsdbtvo6aorgvzlh4mvbpvikbz6iwh6h5jx53e7zd7m4@munr3ea5nbme>
 
-Minimum version of binutils required to compile the kernel is 2.25.
-This version correctly handles the "lock" prefix, so it is possible
-to remove the semicolon, which was used to support ancient versions
-of GNU as.
+On Thu, Feb 27, 2025 at 01:09:55PM +0100, Lucas De Marchi wrote:
+> On Thu, Feb 27, 2025 at 08:39:21AM -0500, Tamir Duberstein wrote:
+> > Hi Lucas, chiming in here since I also care about building on macOS.
+> > 
+> > On Mon, Feb 24, 2025 at 10:05 AM Lucas De Marchi
+> > <lucas.demarchi@intel.com> wrote:
+> > > 
+> > > Is this the approach taken for other similar issues you had? Note that
+> > > argv[0] and program_invocation_short_name are not the same thing. For
+> > > this particular binary I don't really care and if it's the approach
+> > > taken in other places, I'm ok using it.
+> > 
+> > Believe it or not, this is the only place that
+> > program_invocation_short_name has ever been used in the kernel. There
+> > have been numerous instances of:
+> > 
+> > #define _GNU_SOURCE /* for program_invocation_short_name */
+> > 
+> > but never any actual callers (that I could find in the git history)
+> > other than this one.
+> > 
+> > > I was expecting you'd take the acks and merge it all through a single
+> > > tree since you received push back on the need to build the kernel in
+> > > macOS.  Is this the only thing missing and you'd want it to go through
+> > > drm?
 
-Due to the semicolon, the compiler considers "lock; insn" as two
-separate instructions. Removing the semicolon makes asm length
-calculations more accurate, consequently making scheduling and
-inlining decisions of the compiler more accurate.
+Yes, this is the only one missing.
 
-Removing the semicolon also enables assembler checks involving lock
-prefix. Trying to assemble e.g. "lock andl %eax, %ebx" results in:
+> > 
+> > I believe the other patches have been applied or dropped. When I last
+> > tested building allmodconfig this was the only issue I ran into (macOS
+> > arm64), so I asked Daniel for this resend.
 
-  Error: expecting lockable instruction after `lock'
+That is correct.
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
----
- arch/x86/include/asm/alternative.h |  2 +-
- arch/x86/include/asm/barrier.h     |  8 ++++----
- arch/x86/include/asm/cmpxchg.h     |  4 ++--
- arch/x86/include/asm/cmpxchg_32.h  |  4 ++--
- arch/x86/include/asm/edac.h        |  2 +-
- arch/x86/include/asm/sync_bitops.h | 12 ++++++------
- 6 files changed, 16 insertions(+), 16 deletions(-)
+In my opinion, the support for building the Linux kernel on macOS is primarily
+supported by LLVM/Clang and the Linux kernel build system. The merged patches
+were merely minor tweaks such this one (and refactors from Masahiro), intended
+to enable users to configure the build system on these platforms. Patches
+dropped led to the creation of the bee-headers project, which allows users
+customize their build setup, which seems to be a common practice when people
+requires to tweak the build environment.
 
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index 853fbcf68719..2b9547dc1f23 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -48,7 +48,7 @@
- 		".popsection\n"				\
- 		"671:"
- 
--#define LOCK_PREFIX LOCK_PREFIX_HERE "\n\tlock; "
-+#define LOCK_PREFIX LOCK_PREFIX_HERE "\n\tlock "
- 
- #else /* ! CONFIG_SMP */
- #define LOCK_PREFIX_HERE ""
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index 7b44b3c4cce1..db70832232d4 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -12,11 +12,11 @@
-  */
- 
- #ifdef CONFIG_X86_32
--#define mb() asm volatile(ALTERNATIVE("lock; addl $0,-4(%%esp)", "mfence", \
-+#define mb() asm volatile(ALTERNATIVE("lock addl $0,-4(%%esp)", "mfence", \
- 				      X86_FEATURE_XMM2) ::: "memory", "cc")
--#define rmb() asm volatile(ALTERNATIVE("lock; addl $0,-4(%%esp)", "lfence", \
-+#define rmb() asm volatile(ALTERNATIVE("lock addl $0,-4(%%esp)", "lfence", \
- 				       X86_FEATURE_XMM2) ::: "memory", "cc")
--#define wmb() asm volatile(ALTERNATIVE("lock; addl $0,-4(%%esp)", "sfence", \
-+#define wmb() asm volatile(ALTERNATIVE("lock addl $0,-4(%%esp)", "sfence", \
- 				       X86_FEATURE_XMM2) ::: "memory", "cc")
- #else
- #define __mb()	asm volatile("mfence":::"memory")
-@@ -50,7 +50,7 @@
- #define __dma_rmb()	barrier()
- #define __dma_wmb()	barrier()
- 
--#define __smp_mb()	asm volatile("lock; addl $0,-4(%%" _ASM_SP ")" ::: "memory", "cc")
-+#define __smp_mb()	asm volatile("lock addl $0,-4(%%" _ASM_SP ")" ::: "memory", "cc")
- 
- #define __smp_rmb()	dma_rmb()
- #define __smp_wmb()	barrier()
-diff --git a/arch/x86/include/asm/cmpxchg.h b/arch/x86/include/asm/cmpxchg.h
-index 5612648b0202..fd8afc1f5f6b 100644
---- a/arch/x86/include/asm/cmpxchg.h
-+++ b/arch/x86/include/asm/cmpxchg.h
-@@ -134,7 +134,7 @@ extern void __add_wrong_size(void)
- 	__raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
- 
- #define __sync_cmpxchg(ptr, old, new, size)				\
--	__raw_cmpxchg((ptr), (old), (new), (size), "lock; ")
-+	__raw_cmpxchg((ptr), (old), (new), (size), "lock ")
- 
- #define __cmpxchg_local(ptr, old, new, size)				\
- 	__raw_cmpxchg((ptr), (old), (new), (size), "")
-@@ -222,7 +222,7 @@ extern void __add_wrong_size(void)
- 	__raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
- 
- #define __sync_try_cmpxchg(ptr, pold, new, size)			\
--	__raw_try_cmpxchg((ptr), (pold), (new), (size), "lock; ")
-+	__raw_try_cmpxchg((ptr), (pold), (new), (size), "lock ")
- 
- #define __try_cmpxchg_local(ptr, pold, new, size)			\
- 	__raw_try_cmpxchg((ptr), (pold), (new), (size), "")
-diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-index 95b5f990ca88..8806c646d452 100644
---- a/arch/x86/include/asm/cmpxchg_32.h
-+++ b/arch/x86/include/asm/cmpxchg_32.h
-@@ -105,7 +105,7 @@ static __always_inline bool __try_cmpxchg64_local(volatile u64 *ptr, u64 *oldp,
- 
- static __always_inline u64 arch_cmpxchg64(volatile u64 *ptr, u64 old, u64 new)
- {
--	return __arch_cmpxchg64_emu(ptr, old, new, LOCK_PREFIX_HERE, "lock; ");
-+	return __arch_cmpxchg64_emu(ptr, old, new, LOCK_PREFIX_HERE, "lock ");
- }
- #define arch_cmpxchg64 arch_cmpxchg64
- 
-@@ -140,7 +140,7 @@ static __always_inline u64 arch_cmpxchg64_local(volatile u64 *ptr, u64 old, u64
- 
- static __always_inline bool arch_try_cmpxchg64(volatile u64 *ptr, u64 *oldp, u64 new)
- {
--	return __arch_try_cmpxchg64_emu(ptr, oldp, new, LOCK_PREFIX_HERE, "lock; ");
-+	return __arch_try_cmpxchg64_emu(ptr, oldp, new, LOCK_PREFIX_HERE, "lock ");
- }
- #define arch_try_cmpxchg64 arch_try_cmpxchg64
- 
-diff --git a/arch/x86/include/asm/edac.h b/arch/x86/include/asm/edac.h
-index 426fc53ff803..dfbd1ebb9f10 100644
---- a/arch/x86/include/asm/edac.h
-+++ b/arch/x86/include/asm/edac.h
-@@ -13,7 +13,7 @@ static inline void edac_atomic_scrub(void *va, u32 size)
- 	 * are interrupt, DMA and SMP safe.
- 	 */
- 	for (i = 0; i < size / 4; i++, virt_addr++)
--		asm volatile("lock; addl $0, %0"::"m" (*virt_addr));
-+		asm volatile("lock addl $0, %0"::"m" (*virt_addr));
- }
- 
- #endif /* _ASM_X86_EDAC_H */
-diff --git a/arch/x86/include/asm/sync_bitops.h b/arch/x86/include/asm/sync_bitops.h
-index 6d8d6bc183b7..cd21a0405ac5 100644
---- a/arch/x86/include/asm/sync_bitops.h
-+++ b/arch/x86/include/asm/sync_bitops.h
-@@ -31,7 +31,7 @@
-  */
- static inline void sync_set_bit(long nr, volatile unsigned long *addr)
- {
--	asm volatile("lock; " __ASM_SIZE(bts) " %1,%0"
-+	asm volatile("lock " __ASM_SIZE(bts) " %1,%0"
- 		     : "+m" (ADDR)
- 		     : "Ir" (nr)
- 		     : "memory");
-@@ -49,7 +49,7 @@ static inline void sync_set_bit(long nr, volatile unsigned long *addr)
-  */
- static inline void sync_clear_bit(long nr, volatile unsigned long *addr)
- {
--	asm volatile("lock; " __ASM_SIZE(btr) " %1,%0"
-+	asm volatile("lock " __ASM_SIZE(btr) " %1,%0"
- 		     : "+m" (ADDR)
- 		     : "Ir" (nr)
- 		     : "memory");
-@@ -66,7 +66,7 @@ static inline void sync_clear_bit(long nr, volatile unsigned long *addr)
-  */
- static inline void sync_change_bit(long nr, volatile unsigned long *addr)
- {
--	asm volatile("lock; " __ASM_SIZE(btc) " %1,%0"
-+	asm volatile("lock " __ASM_SIZE(btc) " %1,%0"
- 		     : "+m" (ADDR)
- 		     : "Ir" (nr)
- 		     : "memory");
-@@ -82,7 +82,7 @@ static inline void sync_change_bit(long nr, volatile unsigned long *addr)
-  */
- static inline bool sync_test_and_set_bit(long nr, volatile unsigned long *addr)
- {
--	return GEN_BINARY_RMWcc("lock; " __ASM_SIZE(bts), *addr, c, "Ir", nr);
-+	return GEN_BINARY_RMWcc("lock " __ASM_SIZE(bts), *addr, c, "Ir", nr);
- }
- 
- /**
-@@ -95,7 +95,7 @@ static inline bool sync_test_and_set_bit(long nr, volatile unsigned long *addr)
-  */
- static inline int sync_test_and_clear_bit(long nr, volatile unsigned long *addr)
- {
--	return GEN_BINARY_RMWcc("lock; " __ASM_SIZE(btr), *addr, c, "Ir", nr);
-+	return GEN_BINARY_RMWcc("lock " __ASM_SIZE(btr), *addr, c, "Ir", nr);
- }
- 
- /**
-@@ -108,7 +108,7 @@ static inline int sync_test_and_clear_bit(long nr, volatile unsigned long *addr)
-  */
- static inline int sync_test_and_change_bit(long nr, volatile unsigned long *addr)
- {
--	return GEN_BINARY_RMWcc("lock; " __ASM_SIZE(btc), *addr, c, "Ir", nr);
-+	return GEN_BINARY_RMWcc("lock " __ASM_SIZE(btc), *addr, c, "Ir", nr);
- }
- 
- #define sync_test_bit(nr, addr) test_bit(nr, addr)
--- 
-2.48.1
+> 
+> fair enough.  Pushed to drm-xe-next since nobody ever reads the
+> usage for this helper tool and it doesn't really matter if now it's ugly.
 
+Thanks!
+
+With this, we can now build arm64 in macOS defconfig, allyesconfig and
+allmodconfig targets even with Rust support!
+
+Daniel
+
+> 
+> Lucas De Marchi
+> 
+> > 
+> > Cheers.
+> > Tamir
