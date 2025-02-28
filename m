@@ -1,161 +1,177 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC831AA1E4
-	for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 23:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F8D1C01;
+	Fri, 28 Feb 2025 00:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740700043; cv=none; b=UnvL21lKKBJbnBfRZQzviwfOxwtDT6OXerPdPZmly9Hm0Cv47SHF5zP8XgyjDLdOg4CZJdEHxWYj+KqeNyFK9gStuky84tJCDqMcuLDZXHLHFhIRZ+tKtFz9DDgnN3nq3yNWnZP23QmPI3VrRyom/pPEYeRFmVV4lFBsGCWggdI=
+	t=1740703446; cv=none; b=r4ceSurpjahqJBaHirVwzKG1V3jHu0g5XK+2sZUxUekKLA2JvonB1KJ+5Yw3V4HArwdP6+ju8GHM2nFlYMhRGSn6PAUPE+mkEnVtWvVDUfGz2tVb+pjISlIZU6fe0CFdOvnBPZKdnhw/XNzOaKIb3apInQFVVNxzSKAaT8C0dOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740700043; c=relaxed/simple;
-	bh=y8bFEfkPSHsETto+lXOWDrnpTD/mU3xtm2RfzaD5RB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=om8gAV6gtLMuvMFuv0MGgduOsBwYotXl8FoH8YOL4Tf7O4fhmZyux73lz/t+ZIIlyxYIbd8/wAlh+sgacyio8ut8GkMvCBWJ85C4befVPZG19C761EFd44F4HQi3LIZIAfs4E/KLmrCiA+VEWoqhd/Uj1pdNkx/b5FiT4o06cPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3S4Hfuu7; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1740703446; c=relaxed/simple;
+	bh=eLeJvveqOt8R8zNm/BD89sPpR/xN6v9RWVXKbMNVdSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=keopDDFIMxI/0coiB1LxP4d17nUfc3uu23rdCCQUQRj5/y/ujOgD8lf6OIQSrscCZAIOni1T05HRVexK0lteNwNTGdy741hcEVgdPeozR2iPo6hk82y7A+lRAA1isBxKsjAkwCVSEMu40nmRIrh21IOeaqe16EtB8v2pfzLFfCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q1aXp4Su; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3S4Hfuu7"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abbac134a19so225745666b.0
-        for <llvm@lists.linux.dev>; Thu, 27 Feb 2025 15:47:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740700040; x=1741304840; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+t0diRhztFZloXArsjx7wwxhw/+bIqUM4lylOOEWlhE=;
-        b=3S4Hfuu7ekRxdbCGBV4GvX/bvCvz3keLLSAJ/HVef+rXXp9gkCIcBlowFZCJ5jZUKl
-         EPcdJgaqQRZCmVGPsdAIvXuwBtkk21GatQW9jL9d1kCZWpg47oSSJ81mmI+fOQ0eIfPj
-         bjpIRB8ZQJL2zxEgT8wXw7OBqF72gFG94G7N9yoKwt+O4W0WMByoubaLW530A0ClzbWs
-         bnJH06apjobsmlIgB60cqNSPqa+oYAyXiVLrIghPV7j1ELkBI2yN0c6gqBD55H3iZ9o1
-         gJd7x104DRdLncqVHK9xVvY27CslyUIraVyrgV/iQ1MttgbrlKyFtDWY+Sziv9s855Rf
-         QuLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740700040; x=1741304840;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+t0diRhztFZloXArsjx7wwxhw/+bIqUM4lylOOEWlhE=;
-        b=p4kIcZ1PWvdHYdHjh9gDxfQQzMK8xVKT73v95J3/WVGVVSRhIqLiS7onyEkNumBWyg
-         6Bhlrw/xMNSn0cfTfuckkDxlvUu104qf3oud2HfIVRvzpYnmCEzx2FBPIAhzvnoGZZC3
-         ojTC7bLEYUBcENUqNeYYoGD7NVaaOQcPH84lMcwm+81STAurBJ285tBaXsgz+ZtXtI+0
-         2uihCNDHKrdIfcnVnPMqOvrh1KE7CXwfCIWtMMfTCAQdYlYR+HYFTqlC9fgJmwNZG03X
-         fTIBDRr2yamebGxFmMMTxFK/yKRU12MRSo/K0452lH3fP8SsvI09NkIYRESzY86IADYL
-         PQKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWnN46jYOYvguiHzIvNG7Bz7J4VINiXUd+Ub9WUc3H89+51WbiIXAmshW+rcu6I6/dOixF+@lists.linux.dev
-X-Gm-Message-State: AOJu0YwR8pefBa4dIZ3qEBNR/e0FW5+BWUzRMo90heqprsTc6EQV0iw7
-	Otwd9qZ55hBQgfHpe9YjLAWO+DBkw7aK3aR+CsVcwSZX8Atx7lH9NHl6xuL/0wwNAETFZin7Cdk
-	aVcEgMmSdomsBT/H3NcIG7GmzjIUWJJhdFbQ=
-X-Gm-Gg: ASbGncs/TGw+wW+w07mxoS+RHXeMLGSO3bqjl6uSqe5muArsBKkzxuZU83pM4f7p6YU
-	3Z9vsdjmJHehI041q+9ISG2T4Qs1ULFmTQihpBC0BTUVSdN/3Yt8zLaAdt4RD/2AZNmhYnBAl0N
-	UcHg5M
-X-Google-Smtp-Source: AGHT+IGuKXYtAhCotjTCT0GtqrXge6XGZ8jW26Y5V5fFuX9t84HBMBXel9WEY29yiRQ8JOtdqfCxqrlzGYWozPOxXYY=
-X-Received: by 2002:a17:907:6d16:b0:ab7:6c4a:6a74 with SMTP id
- a640c23a62f3a-abf25fb8399mr115706566b.16.1740700039593; Thu, 27 Feb 2025
- 15:47:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q1aXp4Su"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740703445; x=1772239445;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eLeJvveqOt8R8zNm/BD89sPpR/xN6v9RWVXKbMNVdSw=;
+  b=Q1aXp4SuVPVe+2lljuaQMTlRP5jBe67Qj9Q2ASbTlUR2xkW7nLpuVDCE
+   FGyEw20bS95LRtJYFa6sozVPNFE9ZxcuPuZg5QDTJbRgDDVHSTtqJ2A25
+   B95HCQioBlADJH1IAlB3F9EnUYAX91SIomdHGvDjkoCuAfjSvQpbx24i0
+   GZh/3iM7SWE/xvDgfJBOYIHRq9gtBldNV36fxGC4bwtx6neqWd6If2OxS
+   oFrOZl/jsYzrnDevo9ydlz2M/PxKSsvW4oq9nTnTMtDi8SW6ymTDQotGL
+   50jvt51t4zmdxsdD9g6RlGysAEC0kbBdH8JgGEFgvGuGYyGTR1sRKVGPy
+   Q==;
+X-CSE-ConnectionGUID: 69x1rbwGQVSi1IfT0dWyAg==
+X-CSE-MsgGUID: Hcae4deNQBS/AqQO33UHvA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45402609"
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="45402609"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 16:43:52 -0800
+X-CSE-ConnectionGUID: byxxMEs1TTiX2LpHkc1grg==
+X-CSE-MsgGUID: jshEyU3CSAGftBCl95s7dA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
+   d="scan'208";a="122313669"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 27 Feb 2025 16:43:45 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnoTe-000EFG-2u;
+	Fri, 28 Feb 2025 00:43:42 +0000
+Date: Fri, 28 Feb 2025 08:43:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Menglong Dong <menglong8.dong@gmail.com>, rostedt@goodmis.org,
+	mark.rutland@arm.com, alexei.starovoitov@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org,
+	mhiramat@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+	hpa@zytor.com, mathieu.desnoyers@efficios.com, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	dongml2@chinatelecom.cn, akpm@linux-foundation.org, rppt@kernel.org,
+	graf@amazon.com, dan.j.williams@intel.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v2] add function metadata support
+Message-ID: <202502280842.nI3PwNwz-lkp@intel.com>
+References: <20250226121537.752241-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
-In-Reply-To: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Thu, 27 Feb 2025 15:47:03 -0800
-X-Gm-Features: AQ5f1JqJZ47vCyOpVPb_PrJMfpw4X_Wnn4CHu0aPxPJVyWw8-IV6me3jBQW-y8E
-Message-ID: <CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com>
-Subject: [PATCH v2] x86/crc32: use builtins to improve code generation
-To: Bill Wendling <morbo@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250226121537.752241-1-dongml2@chinatelecom.cn>
 
-For both gcc and clang, crc32 builtins generate better code than the
-inline asm. GCC improves, removing unneeded "mov" instructions. Clang
-does the same and unrolls the loops. GCC has no changes on i386, but
-Clang's code generation is vastly improved, due to Clang's "rm"
-constraint issue.
+Hi Menglong,
 
-The number of cycles improved by ~0.1% for GCC and ~1% for Clang, which
-is expected because of the "rm" issue. However, Clang's performance is
-better than GCC's by ~1.5%, most likely due to loop unrolling.
+kernel test robot noticed the following build warnings:
 
-Link: https://github.com/llvm/llvm-project/issues/20571#issuecomment-2649330009
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org
-Cc: llvm@lists.linux.dev
-Signed-off-by: Bill Wendling <morbo@google.com>
----
-v2 - Limited range of '-mcrc32' usage to single file.
-   - Use a function instead of macros.
----
- arch/x86/lib/Makefile     |  2 ++
- arch/x86/lib/crc32-glue.c | 15 ++++++++-------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+[auto build test WARNING on bpf-next/master]
 
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index 8a59c61624c2..1251f611ce3d 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -14,6 +14,8 @@ ifdef CONFIG_KCSAN
- CFLAGS_REMOVE_delay.o = $(CC_FLAGS_FTRACE)
- endif
+url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/add-function-metadata-support/20250226-202312
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20250226121537.752241-1-dongml2%40chinatelecom.cn
+patch subject: [PATCH bpf-next v2] add function metadata support
+config: i386-buildonly-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280842.nI3PwNwz-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280842.nI3PwNwz-lkp@intel.com/reproduce)
 
-+CFLAGS_crc32-glue.o := -mcrc32
-+
- inat_tables_script = $(srctree)/arch/x86/tools/gen-insn-attr-x86.awk
- inat_tables_maps = $(srctree)/arch/x86/lib/x86-opcode-map.txt
- quiet_cmd_inat_tables = GEN     $@
-diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
-index 2dd18a886ded..fc70462ae2c1 100644
---- a/arch/x86/lib/crc32-glue.c
-+++ b/arch/x86/lib/crc32-glue.c
-@@ -47,11 +47,12 @@ u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
- }
- EXPORT_SYMBOL(crc32_le_arch);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502280842.nI3PwNwz-lkp@intel.com/
 
--#ifdef CONFIG_X86_64
--#define CRC32_INST "crc32q %1, %q0"
--#else
--#define CRC32_INST "crc32l %1, %0"
--#endif
-+static unsigned long crc32_ul(u32 crc, unsigned long p)
-+{
-+       if (IS_ENABLED(CONFIG_X86_64))
-+               return __builtin_ia32_crc32di(crc, p);
-+       return __builtin_ia32_crc32si(crc, p);
-+}
+All warnings (new ones prefixed by >>):
 
- /*
-  * Use carryless multiply version of crc32c when buffer size is >= 512 to
-@@ -78,10 +79,10 @@ u32 crc32c_le_arch(u32 crc, const u8 *p, size_t len)
+   kernel/trace/kfunc_md.c: In function 'kfunc_md_get_next':
+>> kernel/trace/kfunc_md.c:98:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+      98 |         free_pages((u64)mds, order);
+         |                    ^
 
-        for (num_longs = len / sizeof(unsigned long);
-             num_longs != 0; num_longs--, p += sizeof(unsigned long))
--               asm(CRC32_INST : "+r" (crc) : "rm" (*(unsigned long *)p));
-+               crc = crc32_ul(crc,  *(unsigned long *)p);
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CALL_PADDING
+   Depends on [n]: CC_HAS_ENTRY_PADDING [=y] && OBJTOOL [=n]
+   Selected by [y]:
+   - FUNCTION_METADATA [=y]
 
-        for (len %= sizeof(unsigned long); len; len--, p++)
--               asm("crc32b %1, %0" : "+r" (crc) : "rm" (*p));
-+               crc = __builtin_ia32_crc32qi(crc, *p);
 
-        return crc;
- }
+vim +98 kernel/trace/kfunc_md.c
+
+    47	
+    48	/* Get next usable function metadata. On success, return the usable
+    49	 * kfunc_md and store the index of it to *index. If no usable kfunc_md is
+    50	 * found in kfunc_mds, a larger array will be allocated.
+    51	 */
+    52	static struct kfunc_md *kfunc_md_get_next(u32 *index)
+    53	{
+    54		struct kfunc_md *new_mds, *mds;
+    55		u32 i, order;
+    56	
+    57		mds = rcu_dereference(kfunc_mds);
+    58		if (mds == NULL) {
+    59			order = kfunc_md_page_order();
+    60			new_mds = (void *)__get_free_pages(GFP_KERNEL, order);
+    61			if (!new_mds)
+    62				return NULL;
+    63			kfunc_md_init(new_mds, 0, kfunc_md_count);
+    64			/* The first time to initialize kfunc_mds, so it is not
+    65			 * used anywhere yet, and we can update it directly.
+    66			 */
+    67			rcu_assign_pointer(kfunc_mds, new_mds);
+    68			mds = new_mds;
+    69		}
+    70	
+    71		if (likely(kfunc_md_used < kfunc_md_count)) {
+    72			/* maybe we can manage the used function metadata entry
+    73			 * with a bit map ?
+    74			 */
+    75			for (i = 0; i < kfunc_md_count; i++) {
+    76				if (!mds[i].users) {
+    77					kfunc_md_used++;
+    78					*index = i;
+    79					mds[i].users++;
+    80					return mds + i;
+    81				}
+    82			}
+    83		}
+    84	
+    85		order = kfunc_md_page_order();
+    86		/* no available function metadata, so allocate a bigger function
+    87		 * metadata array.
+    88		 */
+    89		new_mds = (void *)__get_free_pages(GFP_KERNEL, order + 1);
+    90		if (!new_mds)
+    91			return NULL;
+    92	
+    93		memcpy(new_mds, mds, kfunc_md_count * sizeof(*new_mds));
+    94		kfunc_md_init(new_mds, kfunc_md_count, kfunc_md_count * 2);
+    95	
+    96		rcu_assign_pointer(kfunc_mds, new_mds);
+    97		synchronize_rcu();
+  > 98		free_pages((u64)mds, order);
+    99	
+   100		mds = new_mds + kfunc_md_count;
+   101		*index = kfunc_md_count;
+   102		kfunc_md_count <<= 1;
+   103		kfunc_md_used++;
+   104		mds->users++;
+   105	
+   106		return mds;
+   107	}
+   108	
+
 -- 
-2.48.1.711.g2feabab25a-goog
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
