@@ -1,57 +1,63 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015C91FE451;
-	Fri, 28 Feb 2025 10:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A11D25F781;
+	Fri, 28 Feb 2025 11:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740738596; cv=none; b=mW3NBZA3s2OkuEHyRKpJ3Qqi16GUC/3PAP0dstML7jClOD2bio7ZkiS5zUrQMW7+Kc2PDugb4c738qC52Ezx4Ol8jSd736lnV3YrxAvm1IbqIsOVYPwlY3N41OkVnWj6Z+TQpqOAPDbW+MAiKyxc7Hqg9QAiW32/VSapDvfoSyQ=
+	t=1740743779; cv=none; b=Lt+a6q55t+tUN6ZX+bgDdA2BEemLXlU6LepfhVEigCfB2yXm6OS1r+W3vZmdwhbFDtVBoEygnh7J10Z/Uz/B7WlQhc2Pnyh2C13IlX23qdluDZK0btYYafXMpr5Cxz4UTs+L6aNTE6nkzmHZEsTrCqVkaeVAxcqz9MroIntmL1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740738596; c=relaxed/simple;
-	bh=Tziz2U7REJaUQT9szYJ+pjVyOgCIf3IwB5QcbGxgaWE=;
+	s=arc-20240116; t=1740743779; c=relaxed/simple;
+	bh=DU2MIOCInzlt7F0yK4hZYi3mDmHRqglMly/XxHRLOHM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n0YoTW/a6P68zFZgFpgrYrIsJtEtpazT0dfhLczSHfE9wwziQlVaaenJDsBhpXec9NuI4oTgrAkWfVAg0S7fUQ4cqn9AX3neZ34yzoYyAgQ9CcpIn00xf15sX2Lf9bNDDTYkxWFWHBiQ1lxkJqfXc/H8vnp/G9wo0fPJjmWDpKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A977MKLp; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=tHaRzj6DaRL1k+3oFZU+7PVJMZJjfMswtdsMfFpsKhQbN3TjY2oXqKJwtF64upBG3/Exsvd66avUUvXkDrbw2d2TEs7+1OqHmnIsXWtcnLRLEDwLudu04hQyBmOKMYgesTmpeUjHuajFOILV29ebaekLejcu7H8WyH7uLlwhCv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V2/n72HI; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A977MKLp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ht7ZbMwfV+utVkqPlmDB+z3+2vIA7uWpPnlzueknb74=; b=A977MKLp8As/l9zJTJHg41iGfQ
-	125R3PcMRlqReyzxem0p2D/9Y5E1pOHy+vt77I5lHaozgtYpfhRDt/YrYOUxZPFhDLGv67eMAqoYp
-	kmeGtsKh54ngtP8lV1LWjzKre3i6vOWW2tumWhnDzBIz49ogvT7L34BoJW/QT0nSH6h1RDDcbsNX4
-	+mNsqnEMerPGw/8NErqU28i5XWJmgTERh+Vu4Oqvi/7IPPbbih388NtU5ZC/Tg/d4y/vbePN0zz4c
-	TEvDofTVvCFK5/WqOTJk5gbzVJyRrHWpYrmDpJvGiL8Ejp6VRLmL+Ie4Edc7+wjxFSa2aKYwqTqz9
-	rqzWw3bg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tnxce-00000003x53-2kvA;
-	Fri, 28 Feb 2025 10:29:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 84C9E300780; Fri, 28 Feb 2025 11:29:35 +0100 (CET)
-Date: Fri, 28 Feb 2025 11:29:35 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
-	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	mathieu.desnoyers@efficios.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	dongml2@chinatelecom.cn, akpm@linux-foundation.org, rppt@kernel.org,
-	graf@amazon.com, dan.j.williams@intel.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2] add function metadata support
-Message-ID: <20250228102935.GM31462@noisy.programming.kicks-ass.net>
-References: <20250226121537.752241-1-dongml2@chinatelecom.cn>
- <20250227165302.GB5880@noisy.programming.kicks-ass.net>
- <CADxym3YCZ5dqXMFesNaAF_Z2EWWCj0bJyKQ+BnNw2c=g39CRFA@mail.gmail.com>
- <20250228102646.GW11590@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V2/n72HI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740743778; x=1772279778;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DU2MIOCInzlt7F0yK4hZYi3mDmHRqglMly/XxHRLOHM=;
+  b=V2/n72HIvmbOz00rWt5DudTf0kjCPM033mr8oFU2du28LbIiXYY87qYb
+   PrPQpkJbn1Bqok0197xgZoy2OM3II4rt1XZUgOipgzGlGPlj1S527TzZw
+   Fo+KIr2o/IicYxtnew4JLLXB5yPM6bWd0oZ9xfs2zE5M2CNuVYiMe89BD
+   UF8Ceo8vfIGrhtnUgDL22qvTSojIYxmDsb/vFENX1JDYai/E+WQj2yR/8
+   PGITryaihT7S7nMop3kNlFsBeYenTDoB/RqVmfAPLe0xblMdga0cot6u1
+   9S9mVYo920tLaijrVY7uBG3LZh01wsTBWjCPYX5n2BUvDBUFVrIWN6Ieb
+   A==;
+X-CSE-ConnectionGUID: pDjTlRRXRBC6zp2D2QsjWw==
+X-CSE-MsgGUID: f45xNe4FSRWHJ08LcbUehQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="59082606"
+X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
+   d="scan'208";a="59082606"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 03:56:17 -0800
+X-CSE-ConnectionGUID: jgKVaaQqQzWugKKqsbzRCQ==
+X-CSE-MsgGUID: bNPavz8jSr6zb9KSBDo6yw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
+   d="scan'208";a="117106196"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 28 Feb 2025 03:56:13 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tnyyR-000EpM-1p;
+	Fri, 28 Feb 2025 11:56:11 +0000
+Date: Fri, 28 Feb 2025 19:55:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Longfang Liu <liulongfang@huawei.com>, alex.williamson@redhat.com,
+	jgg@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+	jonathan.cameron@huawei.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linuxarm@openeuler.org, liulongfang@huawei.com
+Subject: Re: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
+Message-ID: <202502281952.Z9JQ8jcK-lkp@intel.com>
+References: <20250225062757.19692-2-liulongfang@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,59 +66,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250228102646.GW11590@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250225062757.19692-2-liulongfang@huawei.com>
 
-On Fri, Feb 28, 2025 at 11:26:46AM +0100, Peter Zijlstra wrote:
-> On Fri, Feb 28, 2025 at 05:53:07PM +0800, Menglong Dong wrote:
-> 
-> > I tested it a little by enabling CFI_CLANG and the extra 5-bytes
-> > padding. It works fine, as mostly CFI_CLANG use
-> > CONFIG_FUNCTION_PADDING_BYTES to find the tags. I'll
-> > do more testing on CFI_CLANG to make sure everything goes
-> > well.
-> 
-> I don't think you understand; please read:
-> 
-> arch/x86/kernel/alternative.c:__apply_fineibt() 
-> 
-> and all the code involved with patching FineIBT. I think you'll find it
-> very broken if you change anything here.
-> 
-> Can you post an actual function preamble from a kernel with
-> CONFIG_FINEIBT=y with your changes on?
-> 
-> Ex.
-> 
-> $ objdump -wdr build/kernel/futex/core.o
-> 
-> Disassembly of section .text:
-> 
-> 0000000000000000 <__cfi_futex_hash>:
->        0:       b9 93 0c f9 ad          mov    $0xadf90c93,%ecx
-> 
-> 0000000000000005 <.Ltmp0>:
->        5:       90                      nop
->        6:       90                      nop
->        7:       90                      nop
->        8:       90                      nop
->        9:       90                      nop
->        a:       90                      nop
->        b:       90                      nop
->        c:       90                      nop
->        d:       90                      nop
->        e:       90                      nop
->        f:       90                      nop
-> 
-> 0000000000000010 <futex_hash>:
->       10:       f3 0f 1e fa             endbr64
->       14:       e8 00 00 00 00          call   19 <futex_hash+0x9>      15: R_X86_64_PLT32      __fentry__-0x4
->       19:       8b 47 10                mov    0x10(%rdi),%eax
-> 
-> 
-> Any change to the layout here *WILL* break the FineIBT code.
-> 
-> 
-> If you want to test, make sure your build has FINEIBT=y and boot on an
-> Intel CPU that has CET-IBT (alderlake and later).
+Hi Longfang,
 
-Oh, wait, not true, tigerlake also has IBT.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on awilliam-vfio/next]
+[also build test ERROR on awilliam-vfio/for-linus linus/master v6.14-rc4 next-20250227]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Longfang-Liu/hisi_acc_vfio_pci-fix-XQE-dma-address-error/20250225-143347
+base:   https://github.com/awilliam/linux-vfio.git next
+patch link:    https://lore.kernel.org/r/20250225062757.19692-2-liulongfang%40huawei.com
+patch subject: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502281952.Z9JQ8jcK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:9:
+   In file included from include/linux/hisi_acc_qm.h:10:
+   In file included from include/linux/pci.h:1644:
+   In file included from include/linux/dmapool.h:14:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:448:23: error: use of undeclared identifier 'ACC_DRV_MAR'
+     448 |         vf_data->major_ver = ACC_DRV_MAR;
+         |                              ^
+>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:449:23: error: use of undeclared identifier 'ACC_DRV_MIN'
+     449 |         vf_data->minor_ver = ACC_DRV_MIN;
+         |                              ^
+   3 warnings and 2 errors generated.
+
+
+vim +/ACC_DRV_MAR +448 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+
+   438	
+   439	static int vf_qm_get_match_data(struct hisi_acc_vf_core_device *hisi_acc_vdev,
+   440					struct acc_vf_data *vf_data)
+   441	{
+   442		struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+   443		struct device *dev = &pf_qm->pdev->dev;
+   444		int vf_id = hisi_acc_vdev->vf_id;
+   445		int ret;
+   446	
+   447		vf_data->acc_magic = ACC_DEV_MAGIC_V2;
+ > 448		vf_data->major_ver = ACC_DRV_MAR;
+ > 449		vf_data->minor_ver = ACC_DRV_MIN;
+   450		/* Save device id */
+   451		vf_data->dev_id = hisi_acc_vdev->vf_dev->device;
+   452	
+   453		/* VF qp num save from PF */
+   454		ret = pf_qm_get_qp_num(pf_qm, vf_id, &vf_data->qp_base);
+   455		if (ret <= 0) {
+   456			dev_err(dev, "failed to get vft qp nums!\n");
+   457			return -EINVAL;
+   458		}
+   459	
+   460		vf_data->qp_num = ret;
+   461	
+   462		/* VF isolation state save from PF */
+   463		ret = qm_read_regs(pf_qm, QM_QUE_ISO_CFG_V, &vf_data->que_iso_cfg, 1);
+   464		if (ret) {
+   465			dev_err(dev, "failed to read QM_QUE_ISO_CFG_V!\n");
+   466			return ret;
+   467		}
+   468	
+   469		return 0;
+   470	}
+   471	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
