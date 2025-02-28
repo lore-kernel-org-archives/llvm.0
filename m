@@ -1,69 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F8D1C01;
-	Fri, 28 Feb 2025 00:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A88E125B2;
+	Fri, 28 Feb 2025 02:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740703446; cv=none; b=r4ceSurpjahqJBaHirVwzKG1V3jHu0g5XK+2sZUxUekKLA2JvonB1KJ+5Yw3V4HArwdP6+ju8GHM2nFlYMhRGSn6PAUPE+mkEnVtWvVDUfGz2tVb+pjISlIZU6fe0CFdOvnBPZKdnhw/XNzOaKIb3apInQFVVNxzSKAaT8C0dOM=
+	t=1740708538; cv=none; b=Q6l+ZhUS/YIT6B1DVLtD51pUwUvfy6ym0TcvlydRL8NZUC0Gu03Cq4KL1vDEOeZoIVtMiB0Jbj+j3Eeg3+WaEiOuoD5BLRlMinnSfNbn2VUne/dNmEXRW43EI1Tmt3qjT0gWJXRpoofjvut3vnnxdvtxth3AzqU/MQ8UGhHoLiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740703446; c=relaxed/simple;
-	bh=eLeJvveqOt8R8zNm/BD89sPpR/xN6v9RWVXKbMNVdSw=;
+	s=arc-20240116; t=1740708538; c=relaxed/simple;
+	bh=5pr8uhB5SExy3iDSiDu9M//1Qd4Bg7ELhoDwqC9I9t4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=keopDDFIMxI/0coiB1LxP4d17nUfc3uu23rdCCQUQRj5/y/ujOgD8lf6OIQSrscCZAIOni1T05HRVexK0lteNwNTGdy741hcEVgdPeozR2iPo6hk82y7A+lRAA1isBxKsjAkwCVSEMu40nmRIrh21IOeaqe16EtB8v2pfzLFfCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q1aXp4Su; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=pn2hpnZL2rOqh9EhPq/1t1f72wRPA7PLwMGvMkZq+k4/EZn1Z53r/MkNYHMi1/aqOIvi1bCi7EujY6hkea2xxVRzgItxaXDFPJRMrTG2jT4CCV7dRQnGqDx4cboBwTN2yM4YcIaYaq/eLWxSZVUjmduJqWLgexA11WL+8FgWZs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBZ7fC++; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q1aXp4Su"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740703445; x=1772239445;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eLeJvveqOt8R8zNm/BD89sPpR/xN6v9RWVXKbMNVdSw=;
-  b=Q1aXp4SuVPVe+2lljuaQMTlRP5jBe67Qj9Q2ASbTlUR2xkW7nLpuVDCE
-   FGyEw20bS95LRtJYFa6sozVPNFE9ZxcuPuZg5QDTJbRgDDVHSTtqJ2A25
-   B95HCQioBlADJH1IAlB3F9EnUYAX91SIomdHGvDjkoCuAfjSvQpbx24i0
-   GZh/3iM7SWE/xvDgfJBOYIHRq9gtBldNV36fxGC4bwtx6neqWd6If2OxS
-   oFrOZl/jsYzrnDevo9ydlz2M/PxKSsvW4oq9nTnTMtDi8SW6ymTDQotGL
-   50jvt51t4zmdxsdD9g6RlGysAEC0kbBdH8JgGEFgvGuGYyGTR1sRKVGPy
-   Q==;
-X-CSE-ConnectionGUID: 69x1rbwGQVSi1IfT0dWyAg==
-X-CSE-MsgGUID: Hcae4deNQBS/AqQO33UHvA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="45402609"
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="45402609"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 16:43:52 -0800
-X-CSE-ConnectionGUID: byxxMEs1TTiX2LpHkc1grg==
-X-CSE-MsgGUID: jshEyU3CSAGftBCl95s7dA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,320,1732608000"; 
-   d="scan'208";a="122313669"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Feb 2025 16:43:45 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnoTe-000EFG-2u;
-	Fri, 28 Feb 2025 00:43:42 +0000
-Date: Fri, 28 Feb 2025 08:43:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Menglong Dong <menglong8.dong@gmail.com>, rostedt@goodmis.org,
-	mark.rutland@arm.com, alexei.starovoitov@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, catalin.marinas@arm.com, will@kernel.org,
-	mhiramat@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, mathieu.desnoyers@efficios.com, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	dongml2@chinatelecom.cn, akpm@linux-foundation.org, rppt@kernel.org,
-	graf@amazon.com, dan.j.williams@intel.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2] add function metadata support
-Message-ID: <202502280842.nI3PwNwz-lkp@intel.com>
-References: <20250226121537.752241-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBZ7fC++"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F52CC4CEE9;
+	Fri, 28 Feb 2025 02:08:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740708537;
+	bh=5pr8uhB5SExy3iDSiDu9M//1Qd4Bg7ELhoDwqC9I9t4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dBZ7fC++U6uUckHrv/9YRCdMjwAi3rZPzwMkhwFTh4J42qa/ywvHDdKubIDBWArjk
+	 cycrsE/IGkX2tjEuSi0ew04SIVU7+lE1V8ztOZU9osSXFnoQnx6HsO7B9QlrKV/Vfp
+	 ioYuk6l9HCCstmqFJNaE1b+GjL1AhI4pKJ6UWNseFaEPawhgjnmCf6Rwhb4YS+wiQB
+	 Udp0OeYe5/V2DFKMtdIWEr6tFPdrFu7c4WDq9OBc9Xw9l/LF3F5gzKG858UvO1UD3b
+	 QR7y1A+t2SZkaF6L3FfsGFixAGm62Jr9ieRgi6jARcqYPNAijugKvYZzrl2vao88VX
+	 RK4VR5A+FF8kw==
+Date: Thu, 27 Feb 2025 18:08:55 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] x86/crc32: use builtins to improve code generation
+Message-ID: <20250228020855.GA5588@sol.localdomain>
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+ <20250227062859.GA2506@sol.localdomain>
+ <CAGG=3QVitM-AwqtYF0QjxpBV7Q8bqv59Os+jELFRUKMnRS9OGA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,106 +52,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250226121537.752241-1-dongml2@chinatelecom.cn>
+In-Reply-To: <CAGG=3QVitM-AwqtYF0QjxpBV7Q8bqv59Os+jELFRUKMnRS9OGA@mail.gmail.com>
 
-Hi Menglong,
+On Wed, Feb 26, 2025 at 11:08:22PM -0800, Bill Wendling wrote:
+> > Doesn't this technically allow the compiler to insert CRC32 instructions
+> > anywhere in arch/x86/ without the needed runtime CPU feature check?  Normally
+> > when using intrinsics it's necessary to limit the scope of the feature
+> > enablement to match the runtime CPU feature check that is done, e.g. by using
+> > the target function attribute.
+> >
+> I'm not sure if CRC32 instructions will automatically be inserted when
+> not explicitly called, especially since the other vector features are
+> disabled. I wanted to limit enabling this flag for only crc32-glue.c,
+> but my Makefile-fu failed me. The file appears to be compiled twice.
+> But adding __attribute__((target("crc32"))) to the function would be
+> much better.
 
-kernel test robot noticed the following build warnings:
+Technically, limiting it to crc32-glue.c still isn't enough, as much of the code
+in that file is executed before the crc32 instruction support is checked for.
 
-[auto build test WARNING on bpf-next/master]
+I also noticed that -mcrc32 support wasn't added to clang until clang 14, by
+https://github.com/llvm/llvm-project/commit/12fa608af44a80de8b655a8a984cd095908e7e80
+But according to https://docs.kernel.org/process/changes.html the minimum clang
+version to build Linux is 13.0.1.  So there's a missing check for support.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Menglong-Dong/add-function-metadata-support/20250226-202312
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20250226121537.752241-1-dongml2%40chinatelecom.cn
-patch subject: [PATCH bpf-next v2] add function metadata support
-config: i386-buildonly-randconfig-002-20250227 (https://download.01.org/0day-ci/archive/20250228/202502280842.nI3PwNwz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502280842.nI3PwNwz-lkp@intel.com/reproduce)
+> > Do both gcc and clang consider these builtins to be a stable API, or do they
+> > only guarantee the stability of _mm_crc32_*() from immintrin.h?  At least for
+> > the rest of the SSE and AVX stuff, I thought that only the immintrin.h functions
+> > are actually considered stable.
+> >
+> I don't know the answer for this. In general, once we (Clang) create a
+> __builtin_* function it's not going away, because it will break anyone
+> who uses them. (I assume the same is true for GCC.)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502280842.nI3PwNwz-lkp@intel.com/
+Here are examples of LLVM commits that removed x86 builtins:
 
-All warnings (new ones prefixed by >>):
+* https://github.com/llvm/llvm-project/commit/09857a4bd166ca62a9610629731dfbf8f62cd955
+* https://github.com/llvm/llvm-project/commit/9a14c369c422b244db78f1a9f947a891a75d912f
+* https://github.com/llvm/llvm-project/commit/ec6024d0811b3116e0a29481b01179d5081a3b92
+* https://github.com/llvm/llvm-project/commit/e4074432d5bf5c295f96eeed27c5b693f5b3bf16
+* https://github.com/llvm/llvm-project/commit/9fddc3fd00b3ad5df5a3988e5cc4708254976173
 
-   kernel/trace/kfunc_md.c: In function 'kfunc_md_get_next':
->> kernel/trace/kfunc_md.c:98:20: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-      98 |         free_pages((u64)mds, order);
-         |                    ^
+So no, they do not appear to be considered stable.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CALL_PADDING
-   Depends on [n]: CC_HAS_ENTRY_PADDING [=y] && OBJTOOL [=n]
-   Selected by [y]:
-   - FUNCTION_METADATA [=y]
+(The equivalents in immintrin.h are stable, but good luck including immintrin.h
+in the Linux kernel, since it depends on stdlib.h.)
 
+Of course, if we really wanted this we could go with "it works in practice"
+anyway.  But, given the small benefit of this patch vs. the potential risk I
+don't think we should bother with it, unless it's acked by the gcc and clang
+folks on the following points:
 
-vim +98 kernel/trace/kfunc_md.c
+* The crc32 builtins are stable.
 
-    47	
-    48	/* Get next usable function metadata. On success, return the usable
-    49	 * kfunc_md and store the index of it to *index. If no usable kfunc_md is
-    50	 * found in kfunc_mds, a larger array will be allocated.
-    51	 */
-    52	static struct kfunc_md *kfunc_md_get_next(u32 *index)
-    53	{
-    54		struct kfunc_md *new_mds, *mds;
-    55		u32 i, order;
-    56	
-    57		mds = rcu_dereference(kfunc_mds);
-    58		if (mds == NULL) {
-    59			order = kfunc_md_page_order();
-    60			new_mds = (void *)__get_free_pages(GFP_KERNEL, order);
-    61			if (!new_mds)
-    62				return NULL;
-    63			kfunc_md_init(new_mds, 0, kfunc_md_count);
-    64			/* The first time to initialize kfunc_mds, so it is not
-    65			 * used anywhere yet, and we can update it directly.
-    66			 */
-    67			rcu_assign_pointer(kfunc_mds, new_mds);
-    68			mds = new_mds;
-    69		}
-    70	
-    71		if (likely(kfunc_md_used < kfunc_md_count)) {
-    72			/* maybe we can manage the used function metadata entry
-    73			 * with a bit map ?
-    74			 */
-    75			for (i = 0; i < kfunc_md_count; i++) {
-    76				if (!mds[i].users) {
-    77					kfunc_md_used++;
-    78					*index = i;
-    79					mds[i].users++;
-    80					return mds + i;
-    81				}
-    82			}
-    83		}
-    84	
-    85		order = kfunc_md_page_order();
-    86		/* no available function metadata, so allocate a bigger function
-    87		 * metadata array.
-    88		 */
-    89		new_mds = (void *)__get_free_pages(GFP_KERNEL, order + 1);
-    90		if (!new_mds)
-    91			return NULL;
-    92	
-    93		memcpy(new_mds, mds, kfunc_md_count * sizeof(*new_mds));
-    94		kfunc_md_init(new_mds, kfunc_md_count, kfunc_md_count * 2);
-    95	
-    96		rcu_assign_pointer(kfunc_mds, new_mds);
-    97		synchronize_rcu();
-  > 98		free_pages((u64)mds, order);
-    99	
-   100		mds = new_mds + kfunc_md_count;
-   101		*index = kfunc_md_count;
-   102		kfunc_md_count <<= 1;
-   103		kfunc_md_used++;
-   104		mds->users++;
-   105	
-   106		return mds;
-   107	}
-   108	
+* gcc and clang will never generate crc32 instructions without explicitly using
+  the builtins.  (BTW, keep in mind this ongoing work:
+  https://gcc.gnu.org/wiki/cauldron2023talks?action=AttachFile&do=get&target=GCC+CRC+optimization.pdf)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Also note that crc32c_arch() already calls into the assembly code in
+arch/x86/lib/crc32c-3way.S to handle lengths >= 512 bytes, and for handling the
+tail data that assembly function already has a nice qword-at-a-time loop which
+is exactly what we are trying to generate here.  A more promising approach might
+be to reorganize things a bit so that we can reuse that assembly code.
+
+- Eric
