@@ -1,100 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BBF23315A;
-	Fri, 28 Feb 2025 12:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F28260394
+	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 12:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740745040; cv=none; b=pFzI6XoEgiunVfn+wkcXDBW7DmDddIoi92GojfXR9p1S7o6pxCeJ3K+JUYcK1+yPqXrhRkVdYkly3Tp8F6gn/J/O8DCEqmyb78SuFUUD2hy0p+XuQx/TcEgR72QquB/QMa+DVi1e857WoLn25D6yjCGZnam9gyriIsqu7yWmsac=
+	t=1740745378; cv=none; b=hHtldXFAdSqwaTbCNDDZE9at849PJqjBs9Hvr1SWkRa7tnOZy+034g9dnGEX4Pq65Suhm4SDrzBzph0pUvXEDkH5AN2xw54EHt+/MHGZx1WEveDNQC5t4rYWEkV7Yjdio3weYsFF8wU9n4HLD4gtEmclBAaqXBhC/6Bh2qmIzdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740745040; c=relaxed/simple;
-	bh=zzK47IiYIfeHUzu3F81reHUI2Wcm5zQFl5JTsnOkAxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ijkhzOO2/V++CzG6k+0qKmRihwY22T86Uces1nIfy0BsbzgZ1PefVhpBJy4toeYF4xnJLbbyC9MDngEzqcwMqezSZLCo+vuonbEvxRE8PaJx+FSfMbCXgs6JOGPZnKRtHDBOUQbqBDqLVn94/XcjCxj+MCNzxM/dF3rFdWz1Ieo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AYraIDoa; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AYraIDoa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740745038; x=1772281038;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zzK47IiYIfeHUzu3F81reHUI2Wcm5zQFl5JTsnOkAxg=;
-  b=AYraIDoar1bjXXEqU84p0vEhNxvbaBUSSqznj/kGx7bksrCKaTqudW8H
-   qCgEXlwKvOR4goAyNWFpIAHzTwi7ge+hfq68YHX0EMXaKdobZTYjUUvR+
-   5VEv8SRSDIdrsC/ENGNnSRd00B8iruLCRTl3u0lcr/yguh3+fWyl0Zwmr
-   EFoqF6o2zSL9sjXKyqHJM6dO3FzMiGeBtFOfWvxAaLihCDSrRcz+kXpY3
-   sbYbLvP6DVren+6er+B4H/UBqnlzECh7X8PWVGqlkM+qhLeW/1xjxJyKd
-   E0b175zY5IiXntP4YRbIhf1ED7oJ8Nls0+rWoZJu8kFWxsBMNTBO44Csf
-   A==;
-X-CSE-ConnectionGUID: 6R9/4zkySymOVQUyVUhBRg==
-X-CSE-MsgGUID: hiZnZjvuSMWXZ+pxz//O+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="53059753"
-X-IronPort-AV: E=Sophos;i="6.13,322,1732608000"; 
-   d="scan'208";a="53059753"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 04:17:16 -0800
-X-CSE-ConnectionGUID: UFHQDTKxSsGzkcfGl7CVrQ==
-X-CSE-MsgGUID: yU7cVurVS3S89Yq1v+Owlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118244153"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 28 Feb 2025 04:17:16 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnzIn-000EqU-19;
-	Fri, 28 Feb 2025 12:17:13 +0000
-Date: Fri, 28 Feb 2025 20:16:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:fixdep 1/1] /bin/sh: 3: tools/bpf/resolve_btfids/fixdep.o:
- Permission denied
-Message-ID: <202502282009.G0FviXvz-lkp@intel.com>
+	s=arc-20240116; t=1740745378; c=relaxed/simple;
+	bh=MHbTwnqBrBd0xBuGqPeLEKnnWa+OI56CGCm/aFKtFI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=StMgRzgxtYwlIIfdVyGeKH2goKCjXkcprelEDqT3Ttf+rKDuvAybdFbZBrHb02v4bfi+ATvNI2b+uVDvSL0vryx3Ht07aEQIIgWEMeWGzl+a9fVMsC3eGxyU5+7oO6ghn8ruyIaJ+VNGzEVjCgMAHQO3+7+k4fPVDa6CBpcDAsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72F071688;
+	Fri, 28 Feb 2025 04:23:09 -0800 (PST)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFCF33F6A8;
+	Fri, 28 Feb 2025 04:22:51 -0800 (PST)
+Message-ID: <fe2c2f1f-8d6e-4f0d-8a25-9fa180d9062c@arm.com>
+Date: Fri, 28 Feb 2025 12:22:50 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/16] MAINTAINERS: Add vDSO selftests
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
+ <20250226-parse_vdso-nolibc-v2-1-28e14e031ed8@linutronix.de>
+Content-Language: en-US
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <20250226-parse_vdso-nolibc-v2-1-28e14e031ed8@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git fixdep
-head:   5014e22336289a518e5bb2ecd2d28e61addb6184
-commit: 5014e22336289a518e5bb2ecd2d28e61addb6184 [1/1] tools build: Fix fixdep dependencies
-config: arm-randconfig-001-20250228 (https://download.01.org/0day-ci/archive/20250228/202502282009.G0FviXvz-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502282009.G0FviXvz-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502282009.G0FviXvz-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+On 26/02/2025 11:44, Thomas Weißschuh wrote:
+> These currently have no maintainer besides the default kselftest ones.
+> Add the general vDSO maintainers, too.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 896a307fa06545e2861abe46ea7029f9b4d3628e..959c8a86844eb1e5c6218e8fdbde6c3ebf68e25d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9777,6 +9777,7 @@ F:	include/asm-generic/vdso/vsyscall.h
+>  F:	include/vdso/
+>  F:	kernel/time/vsyscall.c
+>  F:	lib/vdso/
+> +F:	tools/testing/selftests/vDSO/
+>  
+>  GENWQE (IBM Generic Workqueue Card)
+>  M:	Frank Haverkamp <haver@linux.ibm.com>
+> 
 
->> /bin/sh: 3: tools/bpf/resolve_btfids/fixdep.o: Permission denied
-   make[5]: *** [Makefile:48: tools/bpf/resolve_btfids/fixdep-in.o] Error 126 shuffle=429577626
-   make[5]: Target 'tools/bpf/resolve_btfids/fixdep' not remade because of errors.
-   make[4]: *** [tools/build/Makefile.include:15: fixdep] Error 2 shuffle=429577626
->> /bin/sh: 3: tools/bpf/resolve_btfids/libbpf/staticobjs/fixdep.o: Permission denied
-   make[6]: *** [Makefile:48: tools/bpf/resolve_btfids/libbpf/staticobjs/fixdep-in.o] Error 126 shuffle=429577626
-   make[6]: Target 'tools/bpf/resolve_btfids/libbpf/staticobjs/fixdep' not remade because of errors.
-   make[5]: *** [Makefile:151: tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2 shuffle=429577626
-   make[5]: Target 'tools/bpf/resolve_btfids/libbpf/libbpf.a' not remade because of errors.
-   make[4]: *** [Makefile:61: tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2 shuffle=429577626
-   make[4]: Target 'all' not remade because of errors.
-   make[3]: *** [Makefile:76: bpf/resolve_btfids] Error 2 shuffle=429577626
-   make[2]: *** [Makefile:1433: tools/bpf/resolve_btfids] Error 2 shuffle=429577626
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=429577626
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=429577626
-   make: Target 'prepare' not remade because of errors.
+Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Vincenzo
+
