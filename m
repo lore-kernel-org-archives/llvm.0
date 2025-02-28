@@ -1,140 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B82F819;
-	Fri, 28 Feb 2025 04:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BAD23DE
+	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 06:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740717515; cv=none; b=sbytv6Jyyz+neNlOkYpUH80cI05MnQe1u2ikx63qU0JCTmT/aAlAVsfdWmyG1W/efD6B8VLymz5STbFfoIFJJoD6MM8psPSG69SUpRp0Ogmc6TGYYbPwBEiyhxqOu9Om7/yHqBOZTgcP4C3dT2lfK2eDfxk5+FdzF5aOoMxqPXs=
+	t=1740724389; cv=none; b=aTL6Yc0QJaRPDy69mYZnMD7O8Ds6P6mrThEkBIZAkw7SadKplvVPwo+jFNVp5KvSwSXIQOvCmGq8+AqkL++vdZGKrptMjxVOyu14lW/q7bvv0nugfIDQs262c3XNadr9oDSlu/h0dkC/td9C5jxtPMRBMjysBMjWOT0a3khE0y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740717515; c=relaxed/simple;
-	bh=F4h6uqLQf88ZF0CcTF2u793SdiYR3nlpxj5BCH2s6UE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B1MsCFPQGNjHnTGecM2vCwLWXNv32bsTNqAh2wAt8Eh753xOMAp7s4+GG5CPlsefNkn+Bq+snWN6P5ueZ41yzpdpkd2e/7moQ6mCH7zkE+DgaC6ncbjY4PZfcJPgxRFoehd5VZl0mn3avFekXlNVbGkwKHzReTZoJiXUfkR1wQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bQ2x7Ang; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740724389; c=relaxed/simple;
+	bh=Wu4vA/1dYv25l4KnanYskSTfI50ne/5QlJ7A/LV3bT0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=IMKIbQatZmGJbvLoAZm8/X3bOQNajuLhks4AcYW0PH57STOvQbQCy291OqOH1TrNaZK0W89Wsjl/EfxVmVLZQNsXdFK6O8o0M3uLiHR2xj7DTnIuEx3ny7X+mlt9sKuSgy9HKjiqH60Ibd1SQtmYBZ3MB5gN1haw6M2uR2ngVVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dkS9Jfkd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bQ2x7Ang"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740717513; x=1772253513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F4h6uqLQf88ZF0CcTF2u793SdiYR3nlpxj5BCH2s6UE=;
-  b=bQ2x7AngBe+MAd2XDZzA/iTKwO9MOE5/FdXqiWZbUpuRxvyWlKeaIceU
-   amb7a4QJgHBp87lJ86tvjwjmzBHnKxLOlUiKFls1FlScSMH5ZCnumGiiU
-   NZ0IpJ1dl3vWZnoNh52yBkIIV+JgIXkEXVtPey1KF/m19SLxYZG/l8H4/
-   TOgMOau5ibymMCilnAMkqfpoHhL6ZYHEA4D54DFEB6kvcBKXShlpdITkk
-   PJDQmvAB9hI1rThhBVP11pRli/9kthTMQoAyKTjpt8O9yIlZiP1gohGEi
-   ejXO/LrYG5Bu/vhLO8WFA6nI0ybBs6gD8FFNe4ceV4bvU7MrfoeR/9KeL
-   g==;
-X-CSE-ConnectionGUID: Tzvr2NheQMWvVuyepqQp4Q==
-X-CSE-MsgGUID: Ifo1UQxlQa2km3Q/2mY3cA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11358"; a="41484322"
-X-IronPort-AV: E=Sophos;i="6.13,321,1732608000"; 
-   d="scan'208";a="41484322"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 20:38:33 -0800
-X-CSE-ConnectionGUID: RTsMSm40QyyDs/YUauQc/g==
-X-CSE-MsgGUID: jOuaaF4oSF6qKGbvabxZDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121354165"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 27 Feb 2025 20:38:29 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tns8p-000EQ6-0I;
-	Fri, 28 Feb 2025 04:38:27 +0000
-Date: Fri, 28 Feb 2025 12:38:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dongcheng Yan <dongcheng.yan@intel.com>, linux-media@vger.kernel.org,
-	sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-	hverkuil@xs4all.nl, ricardo.ribalda@gmail.com,
-	bingbu.cao@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	tomi.valkeinen@ideasonboard.com, jacopo.mondi@ideasonboard.com,
-	daxing.li@intel.com, dongcheng.yan@linux.intel.com,
-	ong.hock.yu@intel.com, balamurugan.c@intel.com, wei.a.fu@intel.com,
-	xiaohong.zou@intel.com
-Subject: Re: [PATCH v6] media: i2c: add lt6911uxe hdmi bridge driver
-Message-ID: <202502281242.hJEk5bLj-lkp@intel.com>
-References: <20250227061641.499763-1-dongcheng.yan@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dkS9Jfkd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740724386;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=saPm/zbw6sBy7wUOyRjCQDv/9Ef+X3IALKu+xfLJa5w=;
+	b=dkS9JfkdFD1mKLFuYHq56yBpOSn9nei+XbSzASw6D1YRIcIpx/VkWoAAVREXYC7dXtOVFt
+	H5UMhTk1PC2wh0WC8Z6q1j/qH25cWzm8btxkGfbf9ed3j8MxuJJipH5QL/ucNgVBSvjM28
+	fKKgmVlvkTdY0AQFc/HU1AdVjc/74zg=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-574-JduAHZX7PWmf5T1i1P93iA-1; Fri,
+ 28 Feb 2025 01:33:04 -0500
+X-MC-Unique: JduAHZX7PWmf5T1i1P93iA-1
+X-Mimecast-MFC-AGG-ID: JduAHZX7PWmf5T1i1P93iA_1740724383
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 588251800878
+	for <llvm@lists.linux.dev>; Fri, 28 Feb 2025 06:33:03 +0000 (UTC)
+Received: from [172.64.10.27] (unknown [10.30.34.106])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DF64B300019E;
+	Fri, 28 Feb 2025 06:33:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
+ upstream-mainline, 76544811)
+Date: Fri, 28 Feb 2025 06:33:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250227061641.499763-1-dongcheng.yan@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <44794.125022801330400153@us-mta-574.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: AAsp9_eIouXYkLmJe5W5osnfBGzWtUu09y8rTpW5xpA_1740724383
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dongcheng,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on a64dcfb451e254085a7daee5fe51bf22959d52d3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dongcheng-Yan/media-i2c-add-lt6911uxe-hdmi-bridge-driver/20250227-141956
-base:   a64dcfb451e254085a7daee5fe51bf22959d52d3
-patch link:    https://lore.kernel.org/r/20250227061641.499763-1-dongcheng.yan%40intel.com
-patch subject: [PATCH v6] media: i2c: add lt6911uxe hdmi bridge driver
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250228/202502281242.hJEk5bLj-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281242.hJEk5bLj-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502281242.hJEk5bLj-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/i2c/lt6911uxe.c:46:2: error: initialization of non-aggregate type '__u32' (aka 'unsigned int') with a designated initializer list
-      46 |         V4L2_INIT_BT_TIMINGS(160, 3840,                 /* min/max width */
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      47 |                              120, 2160,                 /* min/max height */
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      48 |                              50000000, 594000000,       /* min/max pixelclock */
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      49 |                              V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      50 |                              V4L2_DV_BT_STD_CVT,
-         |                              ~~~~~~~~~~~~~~~~~~~
-      51 |                              V4L2_DV_BT_CAP_PROGRESSIVE |
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      52 |                              V4L2_DV_BT_CAP_CUSTOM |
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~
-      53 |                              V4L2_DV_BT_CAP_REDUCED_BLANKING)
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/v4l2-dv-timings.h:17:2: note: expanded from macro 'V4L2_INIT_BT_TIMINGS'
-      17 |         { .bt = { _width , ## args } }
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/i2c/lt6911uxe.c:426:7: error: no member named 'link_freq' in 'struct v4l2_mbus_config'
-     426 |         cfg->link_freq = lt6911uxe->cur_mode.link_freq;
-         |         ~~~  ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +46 drivers/media/i2c/lt6911uxe.c
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2025-02-28' of https://gitlab.free=
+desktop.org/drm/kernel
 
-    42	
-    43	static const struct v4l2_dv_timings_cap lt6911uxe_timings_cap_4kp30 = {
-    44		.type = V4L2_DV_BT_656_1120,
-    45		/* Pixel clock from REF_01 p. 20. Min/max height/width are unknown */
-  > 46		V4L2_INIT_BT_TIMINGS(160, 3840,			/* min/max width */
-    47				     120, 2160,			/* min/max height */
-    48				     50000000, 594000000,	/* min/max pixelclock */
-    49				     V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
-    50				     V4L2_DV_BT_STD_CVT,
-    51				     V4L2_DV_BT_CAP_PROGRESSIVE |
-    52				     V4L2_DV_BT_CAP_CUSTOM |
-    53				     V4L2_DV_BT_CAP_REDUCED_BLANKING)
-    54	};
-    55	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1692792264
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1692792264-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1692792264-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1692792264-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
