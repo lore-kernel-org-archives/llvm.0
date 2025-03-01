@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607C61ADC86;
-	Sat,  1 Mar 2025 23:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C93C1E51EB;
+	Sat,  1 Mar 2025 23:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740871421; cv=none; b=dNdoKwOmhptOF78gV7HGj+LeXwceGkpTiCUhVz3GmdP44TzrUzHh8mwgGY6fHXgrPic1hOL36xYdq2iO/EaVZ6F+uMnSOcpr3FpiY5+Oq9/OyaGSiFsgC4lJKXRzbuxLBtKJgox1hn4GgippyB2Cc+NwbU6GnTr34euWvIt7A0U=
+	t=1740872807; cv=none; b=BRZUzj6lOMVrtnR7Rg0OwILj6bZdcTb8F5ShnSyPcLMXzytPDf24YOcRPbwkO2lZAhvxPnxh8ZyLGw9EL/vHnQxst7xBGeavM/cvoKtHqCyJlw88n5+Qm+EVJNse8dsqRhZBX0NMtpKibVLz8nHMbs4KeBj9TGOiORFdy/3gTTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740871421; c=relaxed/simple;
-	bh=UyQgb+vzNU+0SZNfCmTAUHgtsZQ2K1rcC30RYOtUNKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tRN/tarEZ5BwCwJY8297r786lURRBhZ7fJ567a6hSNh7ERdiiFCbdCtq1K6/c7JVH7GhjNyoc5r1aes9TiEnjSxsGrm95Zj7MPEYU/euvR/0yl+NDoeRtWNiewaK7BXiYtl+dTS134gNDsv7M6a+tBvTkWmm+gF44+6OtkfriT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kK/Et4Ss; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1740872807; c=relaxed/simple;
+	bh=GO8/mVDF9FRG3bqnjIKRLOqWg1VBrOkzr/i5h5BP9UA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VQOaILFYb86KJbfuXvI/ib/ufsH81a5GaYIquDb91or72y5qupmErl0yeWz2kHQ393fExIjlTlNf/2RGlQ5+MIPxnKR7xQ0jB+BSWVwYpyxsyR/mj2wOvzcQ9A/+vKNq/5t4H2e9Y9BqcZvLNKQ2AQs8TJnYqC+Mm2Ojv9oLV5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ORiGV1xY; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kK/Et4Ss"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ORiGV1xY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740871419; x=1772407419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UyQgb+vzNU+0SZNfCmTAUHgtsZQ2K1rcC30RYOtUNKU=;
-  b=kK/Et4Ss767wO7PFEsBmsgaKOgTEveklJY/hIUlbddNxW0nF0OfNfbPX
-   Cina1jHOMg2HgZSAv5Bocgde/XPh2h1bPrw5oFEqCpsGoqE8Iu5K5CpHp
-   LpLTKTfpjtCJO2p2AEjIT5SCc+UIDuYdxjA/9qF3py2XCxTYQCizsfSP9
-   fbKjKr96JQllvEEjQ1U2piR1AP/mrvtowRlq59w+4aLKMKsbDFYKEBl+S
-   3zyiYRwhVbr+GEItgF+/3FiDI7fI5xZT97N+nr4y0+bjmW60VhonJyMtG
-   o4Am7dwJnZ7fOeh/Qeqp3AK1mVfB+vGyoPe9q3Jg8l5garMsVoTMgRpJm
-   g==;
-X-CSE-ConnectionGUID: PKLiULlaRNG3kprn7OrhYA==
-X-CSE-MsgGUID: R/yAbicuShSwz1r2L2BlRA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="59318489"
+  t=1740872804; x=1772408804;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GO8/mVDF9FRG3bqnjIKRLOqWg1VBrOkzr/i5h5BP9UA=;
+  b=ORiGV1xYzJarzBJC6xnlAJ5Q4QmOV7ErhxHat29NBzhEl14oIXDc9Hj5
+   8xiD452TSlEii46vEvBt3CwkkybwAJB1XCPzuQJk7wQUNgil98zq4D/ex
+   RtCm9f/L0Vn88o61r88mMqycYz5qLYqDsagZAEtt/LuTChYfnlPaT6Yzm
+   UbrSt6ZdYbMJDMewsfTbV/xlv6rMb0mD0AuskCSjX2c5NlFBD+ABE4QgZ
+   ae0EGPmQtpgc8SKzOio3dF77imFPLvCD8iBlgM9NX7QpnBcNV2FNOe/tl
+   ypWey5YxChgvLcF6DN2HluVxDkrZ8AUWMG1pcnF04KLQqhW6Ac4MnIfQN
+   A==;
+X-CSE-ConnectionGUID: Mxmt6nHaRdeEfDwdstzRVA==
+X-CSE-MsgGUID: IPl2xP+/TiWHaMH3I0hOYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41659048"
 X-IronPort-AV: E=Sophos;i="6.13,326,1732608000"; 
-   d="scan'208";a="59318489"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 15:23:37 -0800
-X-CSE-ConnectionGUID: OeXhvlmlTjyfZuukmC1FKA==
-X-CSE-MsgGUID: vAyTAKFUTSirOg0xc41NMA==
+   d="scan'208";a="41659048"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 15:46:44 -0800
+X-CSE-ConnectionGUID: 5/Lo6Cy6S/eDd/F77LQD6w==
+X-CSE-MsgGUID: XThP7gBJSomXhTA16dOTyA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118186861"
+X-IronPort-AV: E=Sophos;i="6.13,326,1732608000"; 
+   d="scan'208";a="118342487"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 01 Mar 2025 15:23:36 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 01 Mar 2025 15:46:43 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toWBB-000GpS-1i;
-	Sat, 01 Mar 2025 23:23:33 +0000
-Date: Sun, 2 Mar 2025 07:22:37 +0800
+	id 1toWXY-000Gqa-2E;
+	Sat, 01 Mar 2025 23:46:40 +0000
+Date: Sun, 2 Mar 2025 07:46:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: allison.henderson@oracle.com, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 5/6] net/rds: rds_tcp_accept_one ought to not discard
- messages
-Message-ID: <202503020739.xWWyG7zO-lkp@intel.com>
-References: <20250227042638.82553-6-allison.henderson@oracle.com>
+To: Johannes Berg <johannes.berg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: lib/test_bitmap.c:1269:2: error: call to '__compiletime_assert_315'
+ declared with 'error' attribute: BUILD_BUG_ON failed:
+ !__builtin_constant_p(res)
+Message-ID: <202503020721.LqaunSM9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,123 +63,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227042638.82553-6-allison.henderson@oracle.com>
 
-Hi,
+Hi Johannes,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on net/main]
-[also build test WARNING on net-next/main linus/master v6.14-rc4 next-20250228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/allison-henderson-oracle-com/net-rds-Avoid-queuing-superfluous-send-and-recv-work/20250227-123038
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250227042638.82553-6-allison.henderson%40oracle.com
-patch subject: [PATCH 5/6] net/rds: rds_tcp_accept_one ought to not discard messages
-config: riscv-randconfig-002-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020739.xWWyG7zO-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9d20040d71ede4c0e5fc6ae7aaa92788de1e713a
+commit: 53585f9ea40a9466ab9c1151f15984513eb542f7 um: enable UBSAN
+date:   8 months ago
+config: um-randconfig-002-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020721.LqaunSM9-lkp@intel.com/config)
 compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020739.xWWyG7zO-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020721.LqaunSM9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503020739.xWWyG7zO-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503020721.LqaunSM9-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/rds/tcp_listen.c:137:6: warning: variable 'inet' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (!new_sock) {
-               ^~~~~~~~~
-   net/rds/tcp_listen.c:179:19: note: uninitialized use occurs here
-                    my_addr, ntohs(inet->inet_sport),
-                                   ^~~~
-   include/linux/byteorder/generic.h:142:27: note: expanded from macro 'ntohs'
-   #define ntohs(x) ___ntohs(x)
-                             ^
-   include/linux/byteorder/generic.h:137:35: note: expanded from macro '___ntohs'
-   #define ___ntohs(x) __be16_to_cpu(x)
-                                     ^
-   include/uapi/linux/byteorder/little_endian.h:43:59: note: expanded from macro '__be16_to_cpu'
-   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:105:31: note: expanded from macro '__swab16'
-           (__u16)(__builtin_constant_p(x) ?       \
-                                        ^
-   net/rds/tcp_listen.c:137:2: note: remove the 'if' if its condition is always true
-           if (!new_sock) {
-           ^~~~~~~~~~~~~~~
-   net/rds/tcp_listen.c:115:24: note: initialize the variable 'inet' to silence this warning
-           struct inet_sock *inet;
-                                 ^
-                                  = NULL
-   1 warning generated.
+>> lib/test_bitmap.c:1269:2: error: call to '__compiletime_assert_315' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(res)
+           BUILD_BUG_ON(!__builtin_constant_p(res));
+           ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+           BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+           ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+   #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                       ^
+   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ^
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+                           prefix ## suffix();                             \
+                           ^
+   <scratch space>:206:1: note: expanded from here
+   __compiletime_assert_315
+   ^
+   1 error generated.
 
 
-vim +137 net/rds/tcp_listen.c
+vim +1269 lib/test_bitmap.c
 
-   108	
-   109	int rds_tcp_accept_one(struct rds_tcp_net *rtn)
-   110	{
-   111		struct socket *listen_sock = rtn->rds_tcp_listen_sock;
-   112		struct socket *new_sock = NULL;
-   113		struct rds_connection *conn;
-   114		int ret;
-   115		struct inet_sock *inet;
-   116		struct rds_tcp_connection *rs_tcp = NULL;
-   117		int conn_state;
-   118		struct rds_conn_path *cp;
-   119		struct in6_addr *my_addr, *peer_addr;
-   120		struct proto_accept_arg arg = {
-   121			.flags = O_NONBLOCK,
-   122			.kern = true,
-   123		};
-   124	#if !IS_ENABLED(CONFIG_IPV6)
-   125		struct in6_addr saddr, daddr;
-   126	#endif
-   127		int dev_if = 0;
-   128	
-   129		mutex_lock(&rtn->rds_tcp_accept_lock);
-   130	
-   131		if (!listen_sock)
-   132			return -ENETUNREACH;
-   133	
-   134		new_sock = rtn->rds_tcp_accepted_sock;
-   135		rtn->rds_tcp_accepted_sock = NULL;
-   136	
- > 137		if (!new_sock) {
-   138			ret = sock_create_lite(listen_sock->sk->sk_family,
-   139					       listen_sock->sk->sk_type,
-   140					       listen_sock->sk->sk_protocol,
-   141					       &new_sock);
-   142			if (ret)
-   143				goto out;
-   144	
-   145			ret = listen_sock->ops->accept(listen_sock, new_sock, &arg);
-   146			if (ret < 0)
-   147				goto out;
-   148	
-   149			/* sock_create_lite() does not get a hold on the owner module so we
-   150			 * need to do it here.  Note that sock_release() uses sock->ops to
-   151			 * determine if it needs to decrement the reference count.  So set
-   152			 * sock->ops after calling accept() in case that fails.  And there's
-   153			 * no need to do try_module_get() as the listener should have a hold
-   154			 * already.
-   155			 */
-   156			new_sock->ops = listen_sock->ops;
-   157			__module_get(new_sock->ops->owner);
-   158	
-   159			rds_tcp_keepalive(new_sock);
-   160			if (!rds_tcp_tune(new_sock)) {
-   161				ret = -EINVAL;
-   162				goto out;
-   163			}
-   164	
-   165			inet = inet_sk(new_sock->sk);
-   166		}
-   167	
+291f93ca339f5b Barry Song        2021-08-06  1227  
+2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
+2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
+2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
+2356d198d2b4dd Yury Norov        2023-07-17  1231   */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24 @1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
+
+:::::: The code at line 1269 was first introduced by commit
+:::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+
+:::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
+:::::: CC: Yury Norov <yury.norov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
