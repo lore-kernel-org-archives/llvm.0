@@ -1,94 +1,234 @@
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F336D1D90B3;
-	Sat,  1 Mar 2025 16:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC361DE2BF;
+	Sat,  1 Mar 2025 17:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740845762; cv=none; b=BJQ4Ezjx12xdv/HNiBiFjCzt6Zv2N5+lWY/QY69MRMXLsJVd2c5t+upAl3NenuipFDvBZ/9NdGQOuHWgBQZDQu811dSseWbRNQxdpSi1O1Doh9g4k5L8rUYs5LMSm9ZTx/N95k56uilCMKL3Xj+TljNo4gYRiA9lzV+qa1lNGjM=
+	t=1740851312; cv=none; b=a+mnnNFNPvUKc32TCXoNfE/r7AsP9xJbSY+MujJAFpeR1vXuF1z63oUvhpVM3XEdWcGY5ocIop7vcKLzd01tW3pnPeTZs9sq1F0lcx3S5+9L8Dzm71fkEjyKt472sbVOqo0q3xplEggZTKexFuiFKHGM/jLeJG09DhGBQECghKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740845762; c=relaxed/simple;
-	bh=60MHNXWMx76GDBQsFqvK/tov8tN6UhpUoBlyfNEAoRU=;
+	s=arc-20240116; t=1740851312; c=relaxed/simple;
+	bh=IMSIu8jvdDwIJAM4fLeDemvtPcKTwRRhp37hHpIn+X4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GpE/w0XyHPOZUJ0u4MtbGHlsGakGbHtYO95G8KEqkw5T7B0jHtLI2CfTGPjHgj3pqx/kTslarQcCenmLJB+Sh4GIPQfKTVlMBaU+HY2HrGTSg2DtO9X7QbS5vEYRF6xqeNxV4xBVFVHwa2oFYlDROW+xRJTScWQIjOLqFGUUO0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com; spf=pass smtp.mailfrom=ethancedwards.com; dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b=KqwC7HEA; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ethancedwards.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q4h5HYuTMxgDG4l9yeYoD2hNnO4o5OXay5FVCN3CrAhYOis274Ou/N1a6W4FV9XSxGWTBSez2yHbDkiCqpV4KEGL9hRxFSgDQ1vv080YNxjJseFrJasLWZi9yWD/XyMWVBYkGFxdJZ9LpJgbVBaMoJHVBKXIjsBJPUPENrLb1IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aItFFWsC; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b="KqwC7HEA"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4Z4qts6vDJz9sWm;
-	Sat,  1 Mar 2025 17:15:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ethancedwards.com;
-	s=MBO0001; t=1740845750;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ul8bZXenFHpg9BMoi4vIqA5nMxGKbbJQpmgRbcz2gwo=;
-	b=KqwC7HEAT8RbXUBixSyliTh0U//W3DZZEx+D2nVX8qesV/S/tnm8Hx0KJST4zoQCzSyvs+
-	JRm9AgdnWARLf8ujpDpLyJ5Wac9cJqNGvbQ+xaz8EVNZQ0rSHrIJfvmC3dWcjbnms7qnyT
-	cEq+l7n4lj+OYyCw43Orhvin0hU+i/j6Oi33T90EQw0M/Y8QWtETiQ2/WMklPYuPPN7wuM
-	Q/UOKHxIQAZ2XKL271Z/WWOCAmlbHBK9MTFTOMJWDAJBMAzGmofYzFdlHPtfxrGzZyp2My
-	UtutLfRv62NY6SQppih0vN73gmZHtLUg1nFC5vQF6LJGA2op72gpzWxBy1VAIg==
-Date: Sat, 1 Mar 2025 11:15:46 -0500
-From: Ethan Carter Edwards <ethan@ethancedwards.com>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Jakub Kicinski <kuba@kernel.org>, Dan Carpenter <error27@gmail.com>
-Subject: Re: [linux-next:master 2357/7423] drivers/bluetooth/hci_vhci.o:
- warning: objtool: .text: unexpected end of section
-Message-ID: <5jkf4f2bqmomecoxzzdyhdo2qg7dso2jihzwcox6zufnurrwtm@o5gqbsgmpldy>
-References: <202503011220.Y2e5vz4w-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aItFFWsC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740851310; x=1772387310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IMSIu8jvdDwIJAM4fLeDemvtPcKTwRRhp37hHpIn+X4=;
+  b=aItFFWsC2x64dQLdnGQi2xEwaRiaZbAbhVMhhINZb6mEZyZuzBhp17Pm
+   bQP+zTbSZUMPBC+D8zVRTeO3nsQ5yUnBsPdlJ3RswEW73uKxN7fAVQHJR
+   D5zLd6ywrPTn8Sp2kTEBF+iUIVnzRkQiqZFSgi3POyevW/txiTPPJ7h8Y
+   mrHQTsrPQYUlxnMRtgeB9H9cyKxF926Q2yObkJVS1MzchUeNRI5z5B/YC
+   h5UQDz8bP9Lmy8wuRrUi7BkohCYYjo2sYbMnNBbneKhbcZzQFAqyAQn4n
+   I1zrJseuAtF5Gv7RQZi8S4JBbf7CA+2kdvcJyxZ22qNjUltyezyWRuRnJ
+   w==;
+X-CSE-ConnectionGUID: qUMryIDKSKq/76OWDG4OcQ==
+X-CSE-MsgGUID: IocmzuTASbuA4c02suTGvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41650270"
+X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
+   d="scan'208";a="41650270"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 09:48:29 -0800
+X-CSE-ConnectionGUID: vgYcIYDcRt+mQdx99iLk9w==
+X-CSE-MsgGUID: L50jgmYYT9+XgO2hztfjcg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
+   d="scan'208";a="140844857"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 01 Mar 2025 09:48:24 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1toQwo-000GWE-0u;
+	Sat, 01 Mar 2025 17:48:22 +0000
+Date: Sun, 2 Mar 2025 01:47:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Hans Ulli Kroll <ulli.kroll@googlemail.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	=?iso-8859-1?Q?T=F3th_J=E1nos?= <gomba007@gmail.com>,
+	Dianlong Li <long17.cool@163.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-amlogic@lists.infradead.org,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Subject: Re: [PATCH 02/18] rtc: s5m: drop needless struct s5m_rtc_info::i2c
+ member
+Message-ID: <202503020150.LkqTktVQ-lkp@intel.com>
+References: <20250228-rtc-cleanups-v1-2-b44cec078481@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <202503011220.Y2e5vz4w-lkp@intel.com>
-X-Rspamd-Queue-Id: 4Z4qts6vDJz9sWm
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250228-rtc-cleanups-v1-2-b44cec078481@linaro.org>
 
-On 25/03/01 12:30PM, kernel test robot wrote:
-> Hi Ethan,
-> 
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-> 
+Hi André,
 
-Thanks for the email, kernel test bot. I'm not sure my patch would be
-the cause of this error, especially since my patch did not touch
-bluetooth at all. Only the ham radio driver. 
+kernel test robot noticed the following build warnings:
 
-I did find an email [0] from a year ago with the exact same error in
-the same file.
+[auto build test WARNING on 0226d0ce98a477937ed295fb7df4cc30b46fc304]
 
-Dan, what your thoughts?
+url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Draszik/rtc-max77686-drop-needless-struct-max77686_rtc_info-rtc-member/20250228-221320
+base:   0226d0ce98a477937ed295fb7df4cc30b46fc304
+patch link:    https://lore.kernel.org/r/20250228-rtc-cleanups-v1-2-b44cec078481%40linaro.org
+patch subject: [PATCH 02/18] rtc: s5m: drop needless struct s5m_rtc_info::i2c member
+config: arm-randconfig-004-20250301 (https://download.01.org/0day-ci/archive/20250302/202503020150.LkqTktVQ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020150.LkqTktVQ-lkp@intel.com/reproduce)
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   c0eb65494e59d9834af7cbad983629e9017b25a1
-> commit: 3b147be9ef08247bb74a801b4e95f9a626a27322 [2357/7423] hamradio: baycom: replace strcpy() with strscpy()
-> config: x86_64-buildonly-randconfig-006-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011220.Y2e5vz4w-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011220.Y2e5vz4w-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503011220.Y2e5vz4w-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/bluetooth/hci_vhci.o: warning: objtool: .text: unexpected end of section
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503020150.LkqTktVQ-lkp@intel.com/
 
-Thanks,
-Ethan
+All warnings (new ones prefixed by >>):
 
-[0]: https://lore.kernel.org/llvm/202401250927.1poZERd6-lkp@intel.com/
+   In file included from drivers/rtc/rtc-s5m.c:11:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2287:
+   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/rtc/rtc-s5m.c:678:46: warning: variable 'i2c' is uninitialized when used here [-Wuninitialized]
+     678 |         i2c = devm_i2c_new_dummy_device(&pdev->dev, i2c->adapter,
+         |                                                     ^~~
+   drivers/rtc/rtc-s5m.c:642:24: note: initialize the variable 'i2c' to silence this warning
+     642 |         struct i2c_client *i2c;
+         |                               ^
+         |                                = NULL
+   2 warnings generated.
+
+
+vim +/i2c +678 drivers/rtc/rtc-s5m.c
+
+   637	
+   638	static int s5m_rtc_probe(struct platform_device *pdev)
+   639	{
+   640		struct sec_pmic_dev *s5m87xx = dev_get_drvdata(pdev->dev.parent);
+   641		struct s5m_rtc_info *info;
+   642		struct i2c_client *i2c;
+   643		const struct regmap_config *regmap_cfg;
+   644		int ret, alarm_irq;
+   645	
+   646		info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
+   647		if (!info)
+   648			return -ENOMEM;
+   649	
+   650		switch (platform_get_device_id(pdev)->driver_data) {
+   651		case S2MPS15X:
+   652			regmap_cfg = &s2mps14_rtc_regmap_config;
+   653			info->regs = &s2mps15_rtc_regs;
+   654			alarm_irq = S2MPS14_IRQ_RTCA0;
+   655			break;
+   656		case S2MPS14X:
+   657			regmap_cfg = &s2mps14_rtc_regmap_config;
+   658			info->regs = &s2mps14_rtc_regs;
+   659			alarm_irq = S2MPS14_IRQ_RTCA0;
+   660			break;
+   661		case S2MPS13X:
+   662			regmap_cfg = &s2mps14_rtc_regmap_config;
+   663			info->regs = &s2mps13_rtc_regs;
+   664			alarm_irq = S2MPS14_IRQ_RTCA0;
+   665			break;
+   666		case S5M8767X:
+   667			regmap_cfg = &s5m_rtc_regmap_config;
+   668			info->regs = &s5m_rtc_regs;
+   669			alarm_irq = S5M8767_IRQ_RTCA1;
+   670			break;
+   671		default:
+   672			dev_err(&pdev->dev,
+   673					"Device type %lu is not supported by RTC driver\n",
+   674					platform_get_device_id(pdev)->driver_data);
+   675			return -ENODEV;
+   676		}
+   677	
+ > 678		i2c = devm_i2c_new_dummy_device(&pdev->dev, i2c->adapter,
+   679						RTC_I2C_ADDR);
+   680		if (IS_ERR(i2c)) {
+   681			dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
+   682			return PTR_ERR(i2c);
+   683		}
+   684	
+   685		info->regmap = devm_regmap_init_i2c(i2c, regmap_cfg);
+   686		if (IS_ERR(info->regmap)) {
+   687			ret = PTR_ERR(info->regmap);
+   688			dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
+   689					ret);
+   690			return ret;
+   691		}
+   692	
+   693		info->dev = &pdev->dev;
+   694		info->s5m87xx = s5m87xx;
+   695		info->device_type = platform_get_device_id(pdev)->driver_data;
+   696	
+   697		if (s5m87xx->irq_data) {
+   698			info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
+   699			if (info->irq <= 0) {
+   700				dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
+   701					alarm_irq);
+   702				return -EINVAL;
+   703			}
+   704		}
+   705	
+   706		platform_set_drvdata(pdev, info);
+   707	
+   708		ret = s5m8767_rtc_init_reg(info);
+   709		if (ret)
+   710			return ret;
+   711	
+   712		info->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+   713		if (IS_ERR(info->rtc_dev))
+   714			return PTR_ERR(info->rtc_dev);
+   715	
+   716		info->rtc_dev->ops = &s5m_rtc_ops;
+   717	
+   718		info->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_2000;
+   719		info->rtc_dev->range_max = RTC_TIMESTAMP_END_2099;
+   720	
+   721		if (!info->irq) {
+   722			clear_bit(RTC_FEATURE_ALARM, info->rtc_dev->features);
+   723		} else {
+   724			ret = devm_request_threaded_irq(&pdev->dev, info->irq, NULL,
+   725							s5m_rtc_alarm_irq, 0, "rtc-alarm0",
+   726							info);
+   727			if (ret < 0) {
+   728				dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
+   729					info->irq, ret);
+   730				return ret;
+   731			}
+   732			device_init_wakeup(&pdev->dev, true);
+   733		}
+   734	
+   735		return devm_rtc_register_device(info->rtc_dev);
+   736	}
+   737	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
