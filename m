@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABBC63A9;
-	Sat,  1 Mar 2025 01:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9FD1AF0D7;
+	Sat,  1 Mar 2025 03:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740792291; cv=none; b=mu+2QTFmu+B9z7IPUqihLivxKHTbn36wppjTLsk7pCNf1+4kpFkHPSKmU3skijyqWWUtqIZL83i9d0bcCxTWv+jqPtorF4zg57g1+VpbK87E6mUZLp/dW/JLDvLCnawcShofjhTSnLVuVxPdtG+Z76fCGShi6mrZkwYB9vWfmnM=
+	t=1740799769; cv=none; b=bCCUHKC7tsmAZbdwph9XUS7pgpbhmPDjcO50FKMfb1rC7MY0CyfkvBqIyld9HTP4r4epdbmFXQ5o0ft83795msM33zEJE3MRxDcZbw56QRaMEWZ524zgMTjP8c49d5OcBQgF7BEnDOoLGn9z+911iRrsgGkpL7TeADAiGGpyOfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740792291; c=relaxed/simple;
-	bh=5nOsIwHbbcbLoA3xmRhsRYuQAs3fWV0c4VOuHUGKw3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VExHNwyX8km5JTfx9gp0+eQMQlui5WIFo4IVa6xDiMnRv7BqKHHvCfg0ShRE9DY0AQwEvYhfaHUHaN+WGww/F79s0GzIKzl27PzReJnso1VqReAIf+JkLirPNmKc5XAFv28f/YbQIfJYYvtvojpk08SwJN6l9U375jsVdISB3BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CnfgnKyk; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1740799769; c=relaxed/simple;
+	bh=DqOASSh8br7LItQyn0/6NKg+f29Qj62NxoQjE0iAytI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T5pjsaKtM0x2yKEWViiipZcUNED29yTej8GI0YxK4UDehLjUz2xDmsJQ6lx3z3dtI1dLRZfe+YSqwR5CZ5P1SSyQECcp0zEq3h6rBp0QwpX6aaPTwkPsh/LM1b5KimMSIpbEonCEQRu1Hm9nSx1IjnTlAyXzm6kghC4v3sN98pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WYfJFO1v; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CnfgnKyk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WYfJFO1v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740792290; x=1772328290;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5nOsIwHbbcbLoA3xmRhsRYuQAs3fWV0c4VOuHUGKw3o=;
-  b=CnfgnKyk5JtaaGbvJ0+UYV2PC0RuhiVD8QfvMFN7IjS+JIMyJPsgNFCB
-   C48Qh/Lg5quWtir8BoxzQ5L74UhAf7XpNsr4KlwbViUqMdRUu/E28QgSb
-   dFwpczJwlIPKyjwoA48h3S0r563RxqFAny7p3CHnqPIqQ3tY49oOKWZ0n
-   nBKnFFDmYYcv5E+WqXKxYA71/ODlejl+ekeflz8u3etkup2ApsvsOfPiC
-   NdBbA2wzI7Akffw2TvXliKvSWXsORIHaKWz2qr76gvTFsntJNCIgMibpT
-   G8z1UMHXf6ML3x9bW6dtC+Bxzq2UmAysmxdFOacHSTc1xD8e81c4YOPuV
+  t=1740799767; x=1772335767;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DqOASSh8br7LItQyn0/6NKg+f29Qj62NxoQjE0iAytI=;
+  b=WYfJFO1vxyY7+aDTFbSeSC2v+ba4n1eeuL2vzfgGfnlD8oohLA3lB5fD
+   U1zyxv+xHOqYnhuahmCrlgrg4aq1XWSfWbIuMUdPG6tXlsIbwimLraEsA
+   abJyUWFCU/k+kaKy/NLqcwCBLkGPx8Upykc2STDp8AhqMn5EzNsW6kxYl
+   5Yf5VUe2GxmHBOir2vme3UqA08EZS7xwsE7B5vDpSsSX7Ys2KprDTOM/P
+   zeb7UOyKrl5VTYNXZ7mKBiFuObDTnAEMxBILvVMaqC1xfV80Lczfnp/AO
+   ctVmJ354LU5dSUTCXAZu9BiczHlZ+DCUefsQxbUf3wSvH/bWkT5/sC+y0
    Q==;
-X-CSE-ConnectionGUID: qFldSJV5TVivTYMi9ScT+g==
-X-CSE-MsgGUID: d42X/z3oSaap+nHuj83RMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="41619046"
+X-CSE-ConnectionGUID: AsX3NoE/SbS4H3K33VecyA==
+X-CSE-MsgGUID: zBRVvJ3VSc+n3Ad9oB7kew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45656405"
 X-IronPort-AV: E=Sophos;i="6.13,324,1732608000"; 
-   d="scan'208";a="41619046"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 17:24:49 -0800
-X-CSE-ConnectionGUID: x8x86C9qS+C/yhTEgObFDA==
-X-CSE-MsgGUID: 6mj10fIJQsKTP8yTF4UhHA==
+   d="scan'208";a="45656405"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 19:29:26 -0800
+X-CSE-ConnectionGUID: UUajc22uQNC46aHIlHDHMg==
+X-CSE-MsgGUID: thR1AKQuT8ump/k6QGQEUg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,324,1732608000"; 
-   d="scan'208";a="122097547"
+   d="scan'208";a="117287693"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 28 Feb 2025 17:24:47 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 28 Feb 2025 19:29:24 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toBau-000FiI-39;
-	Sat, 01 Mar 2025 01:24:44 +0000
-Date: Sat, 1 Mar 2025 09:24:24 +0800
+	id 1toDXR-000FoA-0S;
+	Sat, 01 Mar 2025 03:29:18 +0000
+Date: Sat, 1 Mar 2025 11:28:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Huang Ying <ying.huang@intel.com>
+To: Ville Syrjala <ville.syrjala@linux.intel.com>,
+	dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: kernel/resource.c:1838:43: warning: implicit conversion from
- 'unsigned long long' to 'resource_size_t' (aka 'unsigned int') changes value
- from 68719476735 to 4294967295
-Message-ID: <202503010926.R1fZJVo3-lkp@intel.com>
+	intel-gfx@lists.freedesktop.org,
+	Jani Nikula <jani.nikula@intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2 1/8] drm/client: Constify modes
+Message-ID: <202503011150.x8nK9fZM-lkp@intel.com>
+References: <20250228211454.8138-2-ville.syrjala@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,75 +66,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250228211454.8138-2-ville.syrjala@linux.intel.com>
 
-Hi Huang,
+Hi Ville,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5c44ddaf7df3a06391684dde65083a092e06052b
-commit: 99185c10d5d9214d0d0c8b7866660203e344ee3b resource, kunit: add test case for region_intersects()
-date:   6 months ago
-config: arm-randconfig-001-20241228 (https://download.01.org/0day-ci/archive/20250301/202503010926.R1fZJVo3-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503010926.R1fZJVo3-lkp@intel.com/reproduce)
+[auto build test ERROR on drm-exynos/exynos-drm-next]
+[also build test ERROR on linus/master v6.14-rc4 next-20250228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ville-Syrjala/drm-client-Constify-modes/20250301-051619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+patch link:    https://lore.kernel.org/r/20250228211454.8138-2-ville.syrjala%40linux.intel.com
+patch subject: [PATCH v2 1/8] drm/client: Constify modes
+config: hexagon-randconfig-001-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011150.x8nK9fZM-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011150.x8nK9fZM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503010926.R1fZJVo3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503011150.x8nK9fZM-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> kernel/resource.c:1838:43: warning: implicit conversion from 'unsigned long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                   end = min_t(resource_size_t, base->end, MAX_PHYS_ADDR);
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   kernel/resource.c:1827:52: note: expanded from macro 'MAX_PHYS_ADDR'
-   #define MAX_PHYS_ADDR           ((1ULL << MAX_PHYSMEM_BITS) - 1)
-                                                               ^
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-   #define min_t(type, x, y) __cmp_once(min, type, x, y)
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-           __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-           ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-                                  ~~    ^
-   kernel/resource.c:1855:45: warning: implicit conversion from 'unsigned long long' to 'resource_size_t' (aka 'unsigned int') changes value from 68719476735 to 4294967295 [-Wconstant-conversion]
-                   addr <= min_t(resource_size_t, base->end, MAX_PHYS_ADDR);
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   kernel/resource.c:1827:52: note: expanded from macro 'MAX_PHYS_ADDR'
-   #define MAX_PHYS_ADDR           ((1ULL << MAX_PHYSMEM_BITS) - 1)
-                                                               ^
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-   #define min_t(type, x, y) __cmp_once(min, type, x, y)
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-           __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-           ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-                                  ~~    ^
-   2 warnings generated.
+   In file included from drivers/gpu/drm/drm_client_modeset.c:1275:
+>> drivers/gpu/drm/tests/drm_client_modeset_test.c:108:7: error: assigning to 'struct drm_display_mode *' from 'const struct drm_display_mode *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     108 |         mode = drm_connector_pick_cmdline_mode(connector);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +1838 kernel/resource.c
+vim +108 drivers/gpu/drm/tests/drm_client_modeset_test.c
 
-  1831	
-  1832	static resource_size_t gfr_start(struct resource *base, resource_size_t size,
-  1833					 resource_size_t align, unsigned long flags)
-  1834	{
-  1835		if (flags & GFR_DESCENDING) {
-  1836			resource_size_t end;
-  1837	
-> 1838			end = min_t(resource_size_t, base->end, MAX_PHYS_ADDR);
-  1839			return end - size + 1;
-  1840		}
-  1841	
-  1842		return ALIGN(max(base->start, align), align);
-  1843	}
-  1844	
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   84  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   85  static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   86  {
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   87  	struct drm_client_modeset_test_priv *priv = test->priv;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   88  	struct drm_device *drm = priv->drm;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   89  	struct drm_connector *connector = &priv->connector;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   90  	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   91  	struct drm_display_mode *expected_mode, *mode;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   92  	const char *cmdline = "1920x1080@60";
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   93  	int ret;
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   94  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   95  	expected_mode = drm_mode_find_dmt(priv->drm, 1920, 1080, 60, false);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   96  	KUNIT_ASSERT_NOT_NULL(test, expected_mode);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   97  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   98  	KUNIT_ASSERT_TRUE(test,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14   99  			  drm_mode_parse_command_line_for_connector(cmdline,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  100  								    connector,
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  101  								    cmdline_mode));
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  102  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  103  	mutex_lock(&drm->mode_config.mutex);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  104  	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  105  	mutex_unlock(&drm->mode_config.mutex);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  106  	KUNIT_ASSERT_GT(test, ret, 0);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  107  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14 @108  	mode = drm_connector_pick_cmdline_mode(connector);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  109  	KUNIT_ASSERT_NOT_NULL(test, mode);
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  110  
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  111  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  112  }
+8fc0380f6ba7e9 Maxime Ripard 2022-11-14  113  
 
 -- 
 0-DAY CI Kernel Test Service
