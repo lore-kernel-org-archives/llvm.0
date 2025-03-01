@@ -1,77 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BEF1E0DE8;
-	Sat,  1 Mar 2025 18:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CE61DE3CA;
+	Sat,  1 Mar 2025 18:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740852496; cv=none; b=DViE6/F6Fbft47wRyuUbOky6Ile/TDG0z3LugBwAGtck4fOgVj/KaVVRas9DLN9DhqcWgMOIwKE+8SpG6nnZOkljjGnFVLMeoxAGga15SIqYtIGuvdFj2yfc1FidFzZXXm/OU/ZI/JPoL8JggVGIXHhJx42GxsanWnYMXvmG7pU=
+	t=1740854995; cv=none; b=st8nbkCxTbcHB/cx6IvSfnH4cHrXzQQ2mhD1pOTqbPPZRbsixbewmuiNn9lW7+N/eMpLS0R0thMtT9YJ2tNDB6grJKRdKhxrY2ukTfm31F8EaWJnFag6DJy1nHSEkGSXZZv5Fq6LVvoG7x6hY5AKQnz+N9RL/R+OylhQeuEnUi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740852496; c=relaxed/simple;
-	bh=PiX1wu8b+6I7R3c0MeOnoxbnQpJhEI+8sVFbihVVVZs=;
+	s=arc-20240116; t=1740854995; c=relaxed/simple;
+	bh=spCrMjTY6Hpbwf+1cmyrHlATFQqZasSJYz/+jT86L9s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FAPYRRyQ0XrqOwVY5FpwHXmNysXklC96L/m2U+RZcH/IbiMubTz5OzCWJt5Aa9h0MI5pe7TQ0yKl7hE12VE7+D6mD3Xv87eZxF85LbG/0Kjv2L4paGt6HyiKKrG6/BJlWe3Bqi7SR4hsotnIpk24yKi6cH3c26UHVny7BQXDSUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QwKemzkL; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=uRtp5xXN7kPShi7sU5mhDKp4SmozwgPds06Ro4F4pgaQqFIhm/0TzfTdoz1GfU3V1LTaIsZZ5TOr38QeHcWyc9VNminbZXKTcLpiR2cFcw5IbsxdnJE9vdy2MwQa/8Bs0bKa0AgtoE6oete4bAxPMuvqlR5FPtRUHEhv62pdnyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vflay9Bf; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QwKemzkL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vflay9Bf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740852495; x=1772388495;
+  t=1740854994; x=1772390994;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PiX1wu8b+6I7R3c0MeOnoxbnQpJhEI+8sVFbihVVVZs=;
-  b=QwKemzkL5hSTgZSq2j0V0w4OxBJlkb/1Jyrid2AlW5APQf+GtY7TFJvy
-   JOHO6Pmmz95moqwSdkQV/xIPqb3EMmmUwhEe2wKg4XItv3rpkYLz38mFS
-   uQBt15mdA8CG46dCdRcvwhzoKRz84FNrdIVPfEC00lL6vl6CBRIBUbOzz
-   B8U0TJAX9mr14dV7p0shfVtDCd2HQiUJeDtLsEdVPqrs+LY9x1C4FgdAr
-   k+OCD3tP+QjG3J7nznUkVolfUua0a+qcUXrAJl6xnh4WgQodmns7clz3D
-   o7hO0gYDEnlk2bAr6U7XJGUfe6Ove7WCgxEez8/F/gEy0mVCbmfZnjYdX
-   A==;
-X-CSE-ConnectionGUID: 726YIzLnR6udOSTHrbn4SA==
-X-CSE-MsgGUID: eSvzCD0gTw+iDkGdR/gOzg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="59179225"
+  bh=spCrMjTY6Hpbwf+1cmyrHlATFQqZasSJYz/+jT86L9s=;
+  b=Vflay9BfiXkUO7XpUKrriAHj92qFKQgf2OeRwWnL0q460n2NzW6CMerK
+   AfBUAUOPQ0lLNNQQy/f1HwQoOae9rHfdzKTpZnJ89SYm6GJ9cVaCHyqnV
+   /wK6ahGjTrkjN/2qv4W9915VltWI2sO8hYLBhdmQPOSyIyrpUbeEJBbDF
+   5ZXPD5lV7r5sskkOvq57fZoxvxNiR8oEfGmHGIuB+C5VDW80SzXUwB8VT
+   HmP684y+gQTzO/UmFMhdPUWQoYkVLEQpbnRYyitZ3y+ZJSnfNBTMo27+J
+   +OL02gmBWlzdAgVw+2pIyQsNtak8fFI1qr/dfdlAE1WGL64AAFzms9ZBb
+   w==;
+X-CSE-ConnectionGUID: vaWs/TLkS7e6boWC2pKLSw==
+X-CSE-MsgGUID: PokqtAfATnWgjG4rfVSOEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="45416187"
 X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
-   d="scan'208";a="59179225"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 10:08:14 -0800
-X-CSE-ConnectionGUID: 1XS6H88mTiK5hbuSJhngvA==
-X-CSE-MsgGUID: dbBruqprRpacg8LqLQgG9w==
+   d="scan'208";a="45416187"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 10:49:53 -0800
+X-CSE-ConnectionGUID: FIUMgNttTQCCdvZJ9MVmMg==
+X-CSE-MsgGUID: rsFOSBnNRnSmClZcvBfr/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
-   d="scan'208";a="117404407"
+   d="scan'208";a="122762858"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 01 Mar 2025 10:08:09 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 01 Mar 2025 10:49:50 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toRFu-000GXg-2a;
-	Sat, 01 Mar 2025 18:08:06 +0000
-Date: Sun, 2 Mar 2025 02:07:52 +0800
+	id 1toRuG-000GaE-16;
+	Sat, 01 Mar 2025 18:49:48 +0000
+Date: Sun, 2 Mar 2025 02:49:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aditya Garg <gargaditya08@live.com>, Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	"senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"apw@canonical.com" <apw@canonical.com>,
-	"joe@perches.com" <joe@perches.com>,
-	"dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
-	"lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>
+To: Robin Murphy <robin.murphy@arm.com>, vkoul@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Asahi Linux Mailing List <asahi@lists.linux.dev>
-Subject: Re: [PATCH v5] lib/vsprintf: Add support for generic FourCCs by
- extending %p4cc
-Message-ID: <202503020112.24wZ1Wcs-lkp@intel.com>
-References: <2C9622E6-A2DB-4681-A971-604C79F9955E@live.com>
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] dmaengine: Add Arm DMA-350 driver
+Message-ID: <202503020214.QiJLAEK2-lkp@intel.com>
+References: <55e084dd2b5720bdddf503ffac560d111032aa96.1740762136.git.robin.murphy@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -80,183 +64,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2C9622E6-A2DB-4681-A971-604C79F9955E@live.com>
+In-Reply-To: <55e084dd2b5720bdddf503ffac560d111032aa96.1740762136.git.robin.murphy@arm.com>
 
-Hi Aditya,
+Hi Robin,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on linus/master v6.14-rc4 next-20250228]
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on linus/master v6.14-rc4 next-20250228]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Garg/lib-vsprintf-Add-support-for-generic-FourCCs-by-extending-p4cc/20250301-003018
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/2C9622E6-A2DB-4681-A971-604C79F9955E%40live.com
-patch subject: [PATCH v5] lib/vsprintf: Add support for generic FourCCs by extending %p4cc
-config: arm-randconfig-004-20250301 (https://download.01.org/0day-ci/archive/20250302/202503020112.24wZ1Wcs-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/dt-bindings-dma-Add-Arm-DMA-350/20250301-012733
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/55e084dd2b5720bdddf503ffac560d111032aa96.1740762136.git.robin.murphy%40arm.com
+patch subject: [PATCH 2/2] dmaengine: Add Arm DMA-350 driver
+config: hexagon-randconfig-001-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020214.QiJLAEK2-lkp@intel.com/config)
 compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020112.24wZ1Wcs-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020214.QiJLAEK2-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503020112.24wZ1Wcs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503020214.QiJLAEK2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   lib/test_printf.c:802:17: warning: excess elements in scalar initializer [-Wexcess-initializers]
-     802 |                 { 0x41424344, "ABCD (0x41424344)", },
-         |                               ^~~~~~~~~~~~~~~~~~~
-   lib/test_printf.c:805:17: warning: excess elements in scalar initializer [-Wexcess-initializers]
-     805 |                 { 0x41424344, "DCBA (0x44434241)", },
-         |                               ^~~~~~~~~~~~~~~~~~~
-   lib/test_printf.c:808:30: warning: excess elements in scalar initializer [-Wexcess-initializers]
-     808 |                 { le32_to_cpu(0x41424344), "ABCD (0x41424344)", },
-         |                                            ^~~~~~~~~~~~~~~~~~~
-   lib/test_printf.c:811:30: warning: excess elements in scalar initializer [-Wexcess-initializers]
-     811 |                 { be32_to_cpu(0x41424344), "ABCD (0x41424344)", },
-         |                                            ^~~~~~~~~~~~~~~~~~~
->> lib/test_printf.c:815:30: error: subscripted value is not an array, pointer, or vector
-     815 |         fourcc_pointer_test(try_ch, ARRAY_SIZE(try_ch), "%p4ch");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:52: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                               ~~~~~^~
->> lib/test_printf.c:815:30: error: subscripted value is not an array, pointer, or vector
-     815 |         fourcc_pointer_test(try_ch, ARRAY_SIZE(try_ch), "%p4ch");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:59: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:202:53: note: expanded from macro '__must_be_array'
-     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-     203 |                                                         "must be array")
-         |                                                         ~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:201:47: note: expanded from macro '__is_array'
-     201 | #define __is_array(a)           (!__same_type((a), &(a)[0]))
-         |                                                        ^~
-   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/compiler.h:197:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
-     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-         |                                                                               ^
-   lib/test_printf.c:816:30: error: subscripted value is not an array, pointer, or vector
-     816 |         fourcc_pointer_test(try_cn, ARRAY_SIZE(try_cn), "%p4cn");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:52: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                               ~~~~~^~
-   lib/test_printf.c:816:30: error: subscripted value is not an array, pointer, or vector
-     816 |         fourcc_pointer_test(try_cn, ARRAY_SIZE(try_cn), "%p4cn");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:59: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:202:53: note: expanded from macro '__must_be_array'
-     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-     203 |                                                         "must be array")
-         |                                                         ~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:201:47: note: expanded from macro '__is_array'
-     201 | #define __is_array(a)           (!__same_type((a), &(a)[0]))
-         |                                                        ^~
-   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/compiler.h:197:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
-     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-         |                                                                               ^
-   lib/test_printf.c:817:30: error: subscripted value is not an array, pointer, or vector
-     817 |         fourcc_pointer_test(try_cl, ARRAY_SIZE(try_cl), "%p4cl");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:52: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                               ~~~~~^~
-   lib/test_printf.c:817:30: error: subscripted value is not an array, pointer, or vector
-     817 |         fourcc_pointer_test(try_cl, ARRAY_SIZE(try_cl), "%p4cl");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:59: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:202:53: note: expanded from macro '__must_be_array'
-     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-     203 |                                                         "must be array")
-         |                                                         ~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:201:47: note: expanded from macro '__is_array'
-     201 | #define __is_array(a)           (!__same_type((a), &(a)[0]))
-         |                                                        ^~
-   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/compiler.h:197:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
-     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-         |                                                                               ^
-   lib/test_printf.c:818:30: error: subscripted value is not an array, pointer, or vector
-     818 |         fourcc_pointer_test(try_cb, ARRAY_SIZE(try_cb), "%p4cb");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:52: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                               ~~~~~^~
-   lib/test_printf.c:818:30: error: subscripted value is not an array, pointer, or vector
-     818 |         fourcc_pointer_test(try_cb, ARRAY_SIZE(try_cb), "%p4cb");
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/array_size.h:11:59: note: expanded from macro 'ARRAY_SIZE'
-      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
-         |                                                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:202:53: note: expanded from macro '__must_be_array'
-     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-     203 |                                                         "must be array")
-         |                                                         ~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:201:47: note: expanded from macro '__is_array'
-     201 | #define __is_array(a)           (!__same_type((a), &(a)[0]))
-         |                                                        ^~
-   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
-     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                                                                          ^
-   include/linux/compiler.h:197:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
-     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-         |                                                                               ^
-   4 warnings and 8 errors generated.
+>> drivers/dma/arm-dma350.c:485:13: warning: logical not is only applied to the left hand side of this bitwise operator [-Wlogical-not-parentheses]
+     485 |         } else if (!ch_status & CH_STAT_INTR_DONE) {
+         |                    ^          ~
+   drivers/dma/arm-dma350.c:485:13: note: add parentheses after the '!' to evaluate the bitwise operator first
+     485 |         } else if (!ch_status & CH_STAT_INTR_DONE) {
+         |                    ^                             
+         |                     (                            )
+   drivers/dma/arm-dma350.c:485:13: note: add parentheses around left hand side expression to silence this warning
+     485 |         } else if (!ch_status & CH_STAT_INTR_DONE) {
+         |                    ^
+         |                    (         )
+   1 warning generated.
 
 
-vim +815 lib/test_printf.c
+vim +485 drivers/dma/arm-dma350.c
 
-   792	
-   793	static void __init fourcc_pointer(void)
-   794	{
-   795		static const struct fourcc_struct try_cc[] = {
-   796			{ 0x3231564e, "NV12 little-endian (0x3231564e)", },
-   797			{ 0xb231564e, "NV12 big-endian (0xb231564e)", },
-   798			{ 0x10111213, ".... little-endian (0x10111213)", },
-   799			{ 0x20303159, "Y10  little-endian (0x20303159)", },
-   800		};
-   801		static const struct fourcc_struct try_ch = {
-   802			{ 0x41424344, "ABCD (0x41424344)", },
-   803		};
-   804		static const struct fourcc_struct try_cn = {
-   805			{ 0x41424344, "DCBA (0x44434241)", },
-   806		};
-   807		static const struct fourcc_struct try_cl = {
-   808			{ le32_to_cpu(0x41424344), "ABCD (0x41424344)", },
-   809		};
-   810		static const struct fourcc_struct try_cb = {
-   811			{ be32_to_cpu(0x41424344), "ABCD (0x41424344)", },
-   812		};
-   813	
-   814		fourcc_pointer_test(try_cc, ARRAY_SIZE(try_cc), "%p4cc");
- > 815		fourcc_pointer_test(try_ch, ARRAY_SIZE(try_ch), "%p4ch");
-   816		fourcc_pointer_test(try_cn, ARRAY_SIZE(try_cn), "%p4cn");
-   817		fourcc_pointer_test(try_cl, ARRAY_SIZE(try_cl), "%p4cl");
-   818		fourcc_pointer_test(try_cb, ARRAY_SIZE(try_cb), "%p4cb");
-   819	}
-   820	
+   462	
+   463	static irqreturn_t d350_irq(int irq, void *data)
+   464	{
+   465		struct d350_chan *dch = data;
+   466		struct device *dev = dch->vc.chan.device->dev;
+   467		struct virt_dma_desc *vd = &dch->desc->vd;
+   468		u32 ch_status;
+   469	
+   470		ch_status = readl(dch->base + CH_STATUS);
+   471		if (!ch_status)
+   472			return IRQ_NONE;
+   473	
+   474		if (ch_status & CH_STAT_INTR_ERR) {
+   475			u32 errinfo = readl_relaxed(dch->base + CH_ERRINFO);
+   476	
+   477			if (errinfo & (CH_ERRINFO_AXIRDPOISERR | CH_ERRINFO_AXIRDRESPERR))
+   478				vd->tx_result.result = DMA_TRANS_READ_FAILED;
+   479			else if (errinfo & CH_ERRINFO_AXIWRRESPERR)
+   480				vd->tx_result.result = DMA_TRANS_WRITE_FAILED;
+   481			else
+   482				vd->tx_result.result = DMA_TRANS_ABORTED;
+   483	
+   484			vd->tx_result.residue = d350_get_residue(dch);
+ > 485		} else if (!ch_status & CH_STAT_INTR_DONE) {
+   486			dev_warn(dev, "Unexpected IRQ source? 0x%08x\n", ch_status);
+   487		}
+   488		writel_relaxed(ch_status, dch->base + CH_STATUS);
+   489	
+   490		spin_lock(&dch->vc.lock);
+   491		vchan_cookie_complete(vd);
+   492		if (ch_status & CH_STAT_INTR_DONE) {
+   493			dch->status = DMA_COMPLETE;
+   494			dch->residue = 0;
+   495			d350_start_next(dch);
+   496		} else {
+   497			dch->status = DMA_ERROR;
+   498			dch->residue = vd->tx_result.residue;
+   499		}
+   500		spin_unlock(&dch->vc.lock);
+   501	
+   502		return IRQ_HANDLED;
+   503	}
+   504	
 
 -- 
 0-DAY CI Kernel Test Service
