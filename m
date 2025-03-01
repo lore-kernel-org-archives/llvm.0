@@ -1,136 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4E2EC5;
-	Sat,  1 Mar 2025 05:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2C028E7
+	for <llvm@lists.linux.dev>; Sat,  1 Mar 2025 05:42:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740806637; cv=none; b=sz9LZ8hRGYVPOsJ/YgwQkHxO+c8jkLAx7D4N7WTKAEOLVBrsmVMV9LdcJFxUVun94EZU5zle08us6LYifU83ps2+fwoMqD/BF1p6vwaX75g1liEdJSUhMQgHcTfn/O9e6Rr3/EXiFXEdm34v+R0GkH0gkLAecx18JZM0n88yeaM=
+	t=1740807747; cv=none; b=OOFINb1oCnTDx3xoVzEazO2KY5HPlb6QMGMLWd2Wl8UefjRBXdGWcyqFWcrt1/hBqXVu/YyeP5jiqP5CldULMT4e6Mbnp2gTHbNFxGFasuwS8MqFsB1oSMLY4yKCVyxEIYFffETqCF8kq2r7pyWsFMCIX/r9AKHut4xED9T7OXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740806637; c=relaxed/simple;
-	bh=+LwrchugwxTX9sqQaRG/WOYGU+xtBV9uq0Yn99vVipU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MFRXQ1wUrLEXNnaQvkrJkyjnyiBQQ0Czv5APeuMtN892Za1vIBTfUcJFh6vDfcwWMJgMqNS8/Yr5DCpkr0XKXlKw6ipqvXVIIuzBqDe3aTF0HKyZg5uSGk0/RYpPMNGN3rn2ce0FjOP6bRh+JRYL9udxi5GYM+tjDY30A529Vcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqeFS55j; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740807747; c=relaxed/simple;
+	bh=1asPXkcb7f54vcgiik8iZOcCoqvZzkNtpYqcuOjxe30=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RMPDlcwp+dNOSAYzat+IwIKiyVmHiTPmVXV3D/8hZUL2T7afIlo5Us8WAshhTqMJpqUbMKEcmOqjkX1M6ksDhqZ3msrysv0IM8kzBfAlpLYb1ND90bnO7FptwTjgU3QJ2fzSyzM0Y7KtCwKlkafw5NEOjS4DpukHJGxMZRMGn50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HNH+VLuR; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqeFS55j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740806635; x=1772342635;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+LwrchugwxTX9sqQaRG/WOYGU+xtBV9uq0Yn99vVipU=;
-  b=dqeFS55jw7bndV4x8W+vuEh+drJqI3wmH9W95HhBv9RXAU46+eiUEpG6
-   T7z0SIZGJwRjuVh0EtkL+yTAqkNUzz9cXa7aGBJfRsIqFrfrZ/Xqeunuq
-   +uyi1Z3/qdMnZSlZKUtum+x40TEegkKGy74DO4Tc2aKfoIgsiIRdSIftF
-   Cyao6tVTrW8E5ebnH3FcXvgKWwWF9azRT34vcGvV4b4wLnDm2+lPtWZla
-   t2sYmdTtwDyU0yetqxdUbeiKS+dvwVDAMHAFvsKIIjePMirXbyh/F9/q8
-   qXiVcZdBdkMoYJzW8PHA2y2lGlzPXYmktPUmC7cet2Pcs95WDgOPh4PY5
-   g==;
-X-CSE-ConnectionGUID: WAXpUdusTuufmiDrk8M/ZQ==
-X-CSE-MsgGUID: lGpJfciVSh2gWnkmiSGNSg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="52729996"
-X-IronPort-AV: E=Sophos;i="6.13,324,1732608000"; 
-   d="scan'208";a="52729996"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 21:23:55 -0800
-X-CSE-ConnectionGUID: eBMjlKI7S6m8TkAWvMet1A==
-X-CSE-MsgGUID: WyQOW212TzilIXninxCs3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,324,1732608000"; 
-   d="scan'208";a="117275740"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 28 Feb 2025 21:23:54 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1toFKJ-000Fuk-1L;
-	Sat, 01 Mar 2025 05:23:51 +0000
-Date: Sat, 1 Mar 2025 13:22:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:futex/scope 17/18] kernel/futex/core.c:313:9: error:
- call to undeclared function '__futex_hash'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202503011307.3vzaK8rr-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HNH+VLuR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740807742;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NsC+GeztX4iJ+WtIO7Ma03sZPHNxUH8pB9ROb7w7aLw=;
+	b=HNH+VLuRuTGZcaTX03Jq+bxU9yE52wrLtB5OX3Rb7zoARI9GhntPYDzKvpc4ukd/trkzlN
+	8TLLhKc/9d2UT+usHmE50/EsqaV/8Pr11Nes3huXI7rsLkyIXoL4wGbtDdlP210HAgW8QD
+	27cLbvKngUE9nPKEdaC9jg8vD4TqzTg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-149-YLRmgbr8OlGKIfFZBtMixg-1; Sat,
+ 01 Mar 2025 00:42:09 -0500
+X-MC-Unique: YLRmgbr8OlGKIfFZBtMixg-1
+X-Mimecast-MFC-AGG-ID: YLRmgbr8OlGKIfFZBtMixg_1740807728
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7E81A1800374
+	for <llvm@lists.linux.dev>; Sat,  1 Mar 2025 05:42:08 +0000 (UTC)
+Received: from [172.64.10.27] (unknown [10.30.34.106])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DDE7F1800367;
+	Sat,  1 Mar 2025 05:42:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
+ upstream-mainline, 03d38806)
+Date: Sat, 01 Mar 2025 05:42:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <85911.125030100420900683@us-mta-149.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: TEYNxkATvvpac_GZaFKL5bF-4zozfISRDzaoqRX1LrU_1740807728
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git futex/scope
-head:   50063817f6e71b787d3ba96cca9d2fff7b3ea7ff
-commit: 07c5880a60a9773964daf0341bb41604efa8cf49 [17/18] futex: Untangle and naming
-config: s390-randconfig-001-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011307.3vzaK8rr-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011307.3vzaK8rr-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503011307.3vzaK8rr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/futex/core.c:313:9: error: call to undeclared function '__futex_hash'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           return __futex_hash(key, NULL);
-                  ^
-   kernel/futex/core.c:313:9: note: did you mean 'futex_hash'?
-   kernel/futex/core.c:311:27: note: 'futex_hash' declared here
-   struct futex_hash_bucket *futex_hash(union futex_key *key)
-                             ^
->> kernel/futex/core.c:313:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct futex_hash_bucket *' [-Wint-conversion]
-           return __futex_hash(key, NULL);
-                  ^~~~~~~~~~~~~~~~~~~~~~~
->> kernel/futex/core.c:327:1: error: static declaration of '__futex_hash' follows non-static declaration
-   __futex_hash(union futex_key *key, struct futex_private_hash *fph)
-   ^
-   kernel/futex/core.c:313:9: note: previous implicit declaration is here
-           return __futex_hash(key, NULL);
-                  ^
-   3 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/__futex_hash +313 kernel/futex/core.c
+Kernel information:
+    Commit message: Merge tag 'thermal-6.14-rc5' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/rafael/linux-pm
 
-   310	
-   311	struct futex_hash_bucket *futex_hash(union futex_key *key)
-   312	{
- > 313		return __futex_hash(key, NULL);
-   314	}
-   315	
-   316	#endif /* CONFIG_BASE_SMALL */
-   317	
-   318	/**
-   319	 * futex_hash - Return the hash bucket in the global hash
-   320	 * @key:	Pointer to the futex key for which the hash is calculated
-   321	 *
-   322	 * We hash on the keys returned from get_futex_key (see below) and return the
-   323	 * corresponding hash bucket in the global hash. If the FUTEX is private and
-   324	 * a local hash table is privated then this one is used.
-   325	 */
-   326	static struct futex_hash_bucket *
- > 327	__futex_hash(union futex_key *key, struct futex_private_hash *fph)
-   328	{
-   329		struct futex_hash_bucket *hb;
-   330		u32 hash;
-   331	
-   332		hb = __futex_hash_private(key, fph);
-   333		if (hb)
-   334			return hb;
-   335	
-   336		hash = jhash2((u32 *)key,
-   337			      offsetof(typeof(*key), both.offset) / 4,
-   338			      key->both.offset);
-   339		return &futex_queues[hash & futex_hashmask];
-   340	}
-   341	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1694397217
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1694397217-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1694397217-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1694397217-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
