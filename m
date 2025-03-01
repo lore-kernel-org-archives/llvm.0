@@ -1,61 +1,61 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A0A1C1F21;
-	Sat,  1 Mar 2025 10:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C317F1DE3D2;
+	Sat,  1 Mar 2025 11:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740824467; cv=none; b=EHTWbcCqMHXHJARKMRTfiavCOk5utoTjQ3RJ49TAhXtRcoY7XdbKxCMdfshN+iS/GzCIuppbaIUujB3thwq1qtsZJjIFQEI1Uh67SP54DonXKYcNMbRdAvK58uNESYiPJd2ihnznADwhrFUK6mw4HdrODsz2fgkC2ZfK8Hf7E0Y=
+	t=1740829369; cv=none; b=IX4PXpR1mcmihPKfdzsVMuYfy7RJY6pLBCIklCZqfOdHlk7fxJ2X8VwalcYy2DuPOFHiB+9cacgBCc5xpKK2vypJDsDIWoD64R3COG2AA8TQ7/XQjZ1gztJ+bdyTlamUulCJPmzkHc0WHMWJvm9sJcsP1kAUUM+9Cu2qkx5XUd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740824467; c=relaxed/simple;
-	bh=f4vsQnb7xfI/T//in/zcEdLND53XshptXfcJzwW+uY4=;
+	s=arc-20240116; t=1740829369; c=relaxed/simple;
+	bh=pdl/RZTv2T1vX9tzslQwxxDs8Xn0N+aU6EcFHnJHdO4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WTCCA2gNTvDR9h+21YF6XCawepzujTBGCMK8pRtNrDEXNRD13HiOysqA7IFuJxIuAs26pjFEpXVI8e7fS8mbD3zS3nWCluXBOLPLBmU0ybeV9e+3GqItYjO8RlKfEwCY8d1iOioqvsKc3yYoj3GTXyPRVRHZOT8TsvSPHE3tkXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NwZH+6vV; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=geprmDzsp1O4scmdm56XIKrpbbtFOh+UEIQuEe2CFKPSQvLLSOSm+hRbLc9kEE5R6MfCt6ArZp02Dqmp0bBTRjI2M2wh2ifc4pnA/EERzACEvFvcrDjtvVFNuLwZxNikCTmftGPaEq3IQ2cBU5/Mgg1Fg8gwb0hWb6vt3ueciXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cgn2hhu1; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NwZH+6vV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cgn2hhu1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740824466; x=1772360466;
+  t=1740829368; x=1772365368;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=f4vsQnb7xfI/T//in/zcEdLND53XshptXfcJzwW+uY4=;
-  b=NwZH+6vV4/6pxoeEDTY6LMFgkMBxhL8k/mwfjP39qf9GnS/0zyMiyRAv
-   Q3y91QKeuCv/SaGrZwofQdCb3v9UzV5gPvDjrjYQ+BP2N1QhBWSm0RWxz
-   KvuEzvnTi7r9tDquOJiLdBRG5y6jSLAlQOwHVUZ0a9ZtBfyBAFHIt8TVe
-   qG4lJGg0leU7YzBLDT6KFJnkmOFoJgdwnRtXBd1qDkQpyztGWHNC/m/3Y
-   aaYvSeowu7AFnTNxUQORR+Ao8nrUm0oV31QtVwh2XUqviGX9K6Wqna07M
-   WWQO52MPq4fQnSio1gQeOsWEQVYoI+YuPFg8P3A8YLjG3wzN7gSrBSGq/
-   w==;
-X-CSE-ConnectionGUID: kmw+25gIQyKuPDFjv8TpaA==
-X-CSE-MsgGUID: 2LPl3pdoQg2RCoeLxGTpTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45401300"
+  bh=pdl/RZTv2T1vX9tzslQwxxDs8Xn0N+aU6EcFHnJHdO4=;
+  b=cgn2hhu1Dp9JRzC4rlmVARIQTwYjM3ffrco0S2o/9DuSWWlHcJh7cdk5
+   kUikrW7+RezS+5P6QQPwWiKkxhKcJoy9WleAqfplW8UO4QuC5pURrCyqS
+   GEjyiNFOGWv4WC0H5lIZFHGTdVPHhcvsE+rwd07eettq0AG10YLa7o9N5
+   ndI5REyIJMCLQblM2UMyedC73EArPjcfz/sPD5un0e9fryxOZBM9SBJF0
+   2YrX2v5mC03640RWjsHxVP8/yFmMPZjomDu0BrRPSxJ8WUyBfDqz6P7rH
+   IyvLptGMZr4AI7W31ijt9vGviADPO9vGY8I0bAiN38l/Blq7Lb7ZvFzHm
+   A==;
+X-CSE-ConnectionGUID: 7RlkwXy7QFG26oQRY1BeyA==
+X-CSE-MsgGUID: hWTUfbeaSqGwLl9NRcSo2Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45403478"
 X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
-   d="scan'208";a="45401300"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 02:21:06 -0800
-X-CSE-ConnectionGUID: JF6/YzmsRpWggsYxB6oDyg==
-X-CSE-MsgGUID: gwDCNf17QFKe9WWK8XN0Qw==
+   d="scan'208";a="45403478"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 03:42:48 -0800
+X-CSE-ConnectionGUID: o8kHYd3nTyiE6XcvOUQ8/A==
+X-CSE-MsgGUID: FS7Yx1TGS72LbeL6GhHfUQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
-   d="scan'208";a="122557030"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="154739828"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 01 Mar 2025 02:21:04 -0800
+  by orviesa001.jf.intel.com with ESMTP; 01 Mar 2025 03:42:45 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toJxZ-000G8E-1c;
-	Sat, 01 Mar 2025 10:20:43 +0000
-Date: Sat, 1 Mar 2025 18:20:11 +0800
+	id 1toLEw-000GCY-2J;
+	Sat, 01 Mar 2025 11:42:42 +0000
+Date: Sat, 1 Mar 2025 19:42:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Julian Sun <sunjunchao2870@gmail.com>, linux-xfs@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, cem@kernel.org,
-	djwong@kernel.org, Julian Sun <sunjunchao2870@gmail.com>
-Subject: Re: [PATCH 1/2] xfs: remove unnecessary checks for __GFP_NOFAIL
- allocation.
-Message-ID: <202503011738.qvNVWziu-lkp@intel.com>
-References: <20250228082622.2638686-2-sunjunchao2870@gmail.com>
+To: xiaopeitux@foxmail.com, gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pei Xiao <xiaopei01@kylinos.cn>
+Subject: Re: [PATCH] driver core: Split devres APIs to device/devres.h
+Message-ID: <202503011920.E8wPk3yy-lkp@intel.com>
+References: <tencent_66CF9C91EB4A4417F70E9511649A57DEC906@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,102 +64,201 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250228082622.2638686-2-sunjunchao2870@gmail.com>
+In-Reply-To: <tencent_66CF9C91EB4A4417F70E9511649A57DEC906@qq.com>
 
-Hi Julian,
+Hi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on xfs-linux/for-next]
-[also build test WARNING on linus/master v6.14-rc4 next-20250228]
+[auto build test ERROR on next-20250227]
+[cannot apply to linus/master v6.14-rc4 v6.14-rc3 v6.14-rc2 v6.14-rc4]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Sun/xfs-remove-unnecessary-checks-for-__GFP_NOFAIL-allocation/20250228-162815
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-patch link:    https://lore.kernel.org/r/20250228082622.2638686-2-sunjunchao2870%40gmail.com
-patch subject: [PATCH 1/2] xfs: remove unnecessary checks for __GFP_NOFAIL allocation.
-config: i386-buildonly-randconfig-001-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011738.qvNVWziu-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011738.qvNVWziu-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/xiaopeitux-foxmail-com/driver-core-Split-devres-APIs-to-device-devres-h/20250228-172012
+base:   next-20250227
+patch link:    https://lore.kernel.org/r/tencent_66CF9C91EB4A4417F70E9511649A57DEC906%40qq.com
+patch subject: [PATCH] driver core: Split devres APIs to device/devres.h
+config: arm64-randconfig-004-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011920.E8wPk3yy-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011920.E8wPk3yy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503011738.qvNVWziu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503011920.E8wPk3yy-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> fs/xfs/xfs_mru_cache.c:359:1: warning: unused label 'exit' [-Wunused-label]
-     359 | exit:
-         | ^~~~~
-   1 warning generated.
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
+>> include/linux/device/devres.h:182:6: error: variable has incomplete type 'void'
+     182 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
+         |      ^
+   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
+      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
+         |                         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
+>> include/linux/device/devres.h:182:15: error: expected ';' after top level declarator
+     182 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
+         |               ^
+>> include/linux/device/devres.h:184:57: error: expected ')'
+     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
+         |                                                         ^
+   include/linux/device/devres.h:184:22: note: to match this '('
+     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
+         |                      ^
+>> include/linux/device/devres.h:184:48: error: 'void' must be the first and only parameter if specified
+     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
+         |                                                ^
+   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
+      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
+         |                         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
+>> include/linux/device/devres.h:186:25: warning: declaration of 'struct attribute_group' will not be visible outside of this function [-Wvisibility]
+     186 |                                        const struct attribute_group *grp);
+         |                                                     ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
+   In file included from include/linux/fs.h:34:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/arm64/include/asm/elf.h:141:
 
 
-vim +/exit +359 fs/xfs/xfs_mru_cache.c
+vim +/void +182 include/linux/device/devres.h
 
-2a82b8be8a8dac David Chinner     2007-07-11  307  
-2a82b8be8a8dac David Chinner     2007-07-11  308  /*
-2a82b8be8a8dac David Chinner     2007-07-11  309   * To initialise a struct xfs_mru_cache pointer, call xfs_mru_cache_create()
-2a82b8be8a8dac David Chinner     2007-07-11  310   * with the address of the pointer, a lifetime value in milliseconds, a group
-2a82b8be8a8dac David Chinner     2007-07-11  311   * count and a free function to use when deleting elements.  This function
-2a82b8be8a8dac David Chinner     2007-07-11  312   * returns 0 if the initialisation was successful.
-2a82b8be8a8dac David Chinner     2007-07-11  313   */
-2a82b8be8a8dac David Chinner     2007-07-11  314  int
-2a82b8be8a8dac David Chinner     2007-07-11  315  xfs_mru_cache_create(
-22328d712dd7fd Christoph Hellwig 2014-04-23  316  	struct xfs_mru_cache	**mrup,
-7fcd3efa1e9ebe Christoph Hellwig 2018-04-09  317  	void			*data,
-2a82b8be8a8dac David Chinner     2007-07-11  318  	unsigned int		lifetime_ms,
-2a82b8be8a8dac David Chinner     2007-07-11  319  	unsigned int		grp_count,
-2a82b8be8a8dac David Chinner     2007-07-11  320  	xfs_mru_cache_free_func_t free_func)
-2a82b8be8a8dac David Chinner     2007-07-11  321  {
-22328d712dd7fd Christoph Hellwig 2014-04-23  322  	struct xfs_mru_cache	*mru = NULL;
-2a82b8be8a8dac David Chinner     2007-07-11  323  	int			err = 0, grp;
-2a82b8be8a8dac David Chinner     2007-07-11  324  	unsigned int		grp_time;
-2a82b8be8a8dac David Chinner     2007-07-11  325  
-2a82b8be8a8dac David Chinner     2007-07-11  326  	if (mrup)
-2a82b8be8a8dac David Chinner     2007-07-11  327  		*mrup = NULL;
-2a82b8be8a8dac David Chinner     2007-07-11  328  
-2a82b8be8a8dac David Chinner     2007-07-11  329  	if (!mrup || !grp_count || !lifetime_ms || !free_func)
-2451337dd04390 Dave Chinner      2014-06-25  330  		return -EINVAL;
-2a82b8be8a8dac David Chinner     2007-07-11  331  
-2a82b8be8a8dac David Chinner     2007-07-11  332  	if (!(grp_time = msecs_to_jiffies(lifetime_ms) / grp_count))
-2451337dd04390 Dave Chinner      2014-06-25  333  		return -EINVAL;
-2a82b8be8a8dac David Chinner     2007-07-11  334  
-10634530f7ba94 Dave Chinner      2024-01-16  335  	mru = kzalloc(sizeof(*mru), GFP_KERNEL | __GFP_NOFAIL);
-2a82b8be8a8dac David Chinner     2007-07-11  336  
-2a82b8be8a8dac David Chinner     2007-07-11  337  	/* An extra list is needed to avoid reaping up to a grp_time early. */
-2a82b8be8a8dac David Chinner     2007-07-11  338  	mru->grp_count = grp_count + 1;
-10634530f7ba94 Dave Chinner      2024-01-16  339  	mru->lists = kzalloc(mru->grp_count * sizeof(*mru->lists),
-10634530f7ba94 Dave Chinner      2024-01-16  340  				GFP_KERNEL | __GFP_NOFAIL);
-2a82b8be8a8dac David Chinner     2007-07-11  341  
-2a82b8be8a8dac David Chinner     2007-07-11  342  	for (grp = 0; grp < mru->grp_count; grp++)
-2a82b8be8a8dac David Chinner     2007-07-11  343  		INIT_LIST_HEAD(mru->lists + grp);
-2a82b8be8a8dac David Chinner     2007-07-11  344  
-2a82b8be8a8dac David Chinner     2007-07-11  345  	/*
-2a82b8be8a8dac David Chinner     2007-07-11  346  	 * We use GFP_KERNEL radix tree preload and do inserts under a
-2a82b8be8a8dac David Chinner     2007-07-11  347  	 * spinlock so GFP_ATOMIC is appropriate for the radix tree itself.
-2a82b8be8a8dac David Chinner     2007-07-11  348  	 */
-2a82b8be8a8dac David Chinner     2007-07-11  349  	INIT_RADIX_TREE(&mru->store, GFP_ATOMIC);
-2a82b8be8a8dac David Chinner     2007-07-11  350  	INIT_LIST_HEAD(&mru->reap_list);
-007c61c68640ea Eric Sandeen      2007-10-11  351  	spin_lock_init(&mru->lock);
-2a82b8be8a8dac David Chinner     2007-07-11  352  	INIT_DELAYED_WORK(&mru->work, _xfs_mru_cache_reap);
-2a82b8be8a8dac David Chinner     2007-07-11  353  
-2a82b8be8a8dac David Chinner     2007-07-11  354  	mru->grp_time  = grp_time;
-2a82b8be8a8dac David Chinner     2007-07-11  355  	mru->free_func = free_func;
-7fcd3efa1e9ebe Christoph Hellwig 2018-04-09  356  	mru->data = data;
-2a82b8be8a8dac David Chinner     2007-07-11  357  	*mrup = mru;
-2a82b8be8a8dac David Chinner     2007-07-11  358  
-2a82b8be8a8dac David Chinner     2007-07-11 @359  exit:
-2a82b8be8a8dac David Chinner     2007-07-11  360  	if (err && mru && mru->lists)
-d4c75a1b40cd03 Dave Chinner      2024-01-16  361  		kfree(mru->lists);
-2a82b8be8a8dac David Chinner     2007-07-11  362  	if (err && mru)
-d4c75a1b40cd03 Dave Chinner      2024-01-16  363  		kfree(mru);
-2a82b8be8a8dac David Chinner     2007-07-11  364  
-2a82b8be8a8dac David Chinner     2007-07-11  365  	return err;
-2a82b8be8a8dac David Chinner     2007-07-11  366  }
-2a82b8be8a8dac David Chinner     2007-07-11  367  
+   148	
+   149	int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name);
+   150	#define devm_add_action(dev, action, data) \
+   151		__devm_add_action(dev, action, data, #action)
+   152	
+   153	static inline int __devm_add_action_or_reset(struct device *dev, void (*action)(void *),
+   154						     void *data, const char *name)
+   155	{
+   156		int ret;
+   157	
+   158		ret = __devm_add_action(dev, action, data, name);
+   159		if (ret)
+   160			action(data);
+   161	
+   162		return ret;
+   163	}
+   164	#define devm_add_action_or_reset(dev, action, data) \
+   165		__devm_add_action_or_reset(dev, action, data, #action)
+   166	
+   167	/**
+   168	 * devm_alloc_percpu - Resource-managed alloc_percpu
+   169	 * @dev: Device to allocate per-cpu memory for
+   170	 * @type: Type to allocate per-cpu memory for
+   171	 *
+   172	 * Managed alloc_percpu. Per-cpu memory allocated with this function is
+   173	 * automatically freed on driver detach.
+   174	 *
+   175	 * RETURNS:
+   176	 * Pointer to allocated memory on success, NULL on failure.
+   177	 */
+   178	#define devm_alloc_percpu(dev, type)      \
+   179		((typeof(type) __percpu *)__devm_alloc_percpu((dev), sizeof(type), \
+   180							      __alignof__(type)))
+   181	
+ > 182	void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
+   183					   size_t align);
+ > 184	void devm_free_percpu(struct device *dev, void __percpu *pdata);
+   185	int __must_check devm_device_add_group(struct device *dev,
+ > 186					       const struct attribute_group *grp);
 
 -- 
 0-DAY CI Kernel Test Service
