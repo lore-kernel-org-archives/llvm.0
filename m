@@ -1,59 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05465258;
-	Sat,  1 Mar 2025 06:34:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB821C1AD4;
+	Sat,  1 Mar 2025 09:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740810894; cv=none; b=E9w8WjYwMxCFO09ZU/IlAf8bVij1YNDR0UnuH+0ZebT7l71wc0Or0F2HpEVYYwL430hUOrbhRiGlJLnpYUxinnXaxuWr+45EWln5XiW8Tkgb0hdCkh1OUUDTSKEOYYe+x7P4szvcTvJ7FdLDCZM/rcRMAyLNkajuOxKQRoSwp+U=
+	t=1740820107; cv=none; b=UbXWS9t0laG9s5JAm9JDTaUzVdMvSNSFx0CvP0lTXo7ZLElWlNLnfahRZPQrTknnxCk3mJ6dscl+4nk+MUHuYbHAkZQcHwfiLY4iZVnZPx9HZzwciGuZeH6nPzfcLXWkPGEHzrvrECGS2E12Dhf2PuoEtRPM1hx6ngpsoIlQ5do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740810894; c=relaxed/simple;
-	bh=ggWQFAlWvAlywHK3byks9yXsIPatQkEqfbJ2nBJvt+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jyOaGcnDpFN+/AoXcrgqI/FON0SSfldF+YJ2y3K+/FNLGAuy6eIo9ysV7Czf8Vc7sLBToB/ZzsAb8z2dfFBZVuGAf2E91UNs0Cr7lmEGfs28DEsTUc8z4/9nYUtnYTEVsO0Ws4G3nO0cIea0sFVd+pvUW5cqLUoyLiy5B030NAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K356x7PA; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1740820107; c=relaxed/simple;
+	bh=bQUvH/LR1KxS95c+RJnGjDSETbksb7G0/CS5aZy0gsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wsx1lNBYinqUi17L9eS6aZiC6q6APBFha/U99VJD+QbpuDeGq8/v9FXMnIDHl1FU+8By/pzdoUKXVdZdUIyXa3djFDZXmg7Fis9xo/9woNaV9W5f6fi/MKV4rqW9244Ft00bNgmV1AFhGBdi5ZVq5G0oceFqoyAZr6ePda7j0dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eS66Wmqz; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K356x7PA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eS66Wmqz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740810892; x=1772346892;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ggWQFAlWvAlywHK3byks9yXsIPatQkEqfbJ2nBJvt+U=;
-  b=K356x7PAMs83MLdxEp+zOOUvw8WiMG2jlsCMHDh0of9wl+LB59iv7w92
-   h41v7JE7da23iZRef6IxZONJC5/HCCuGP1O2b9+upcDPdCnNV0DRdcAf9
-   489Qh9ToPOAXI2TxtT4a6+n3jPdqGtvZCGS5HPAV0wBJ6100NyxXEiCIa
-   pyPvwdhKWoC53Hu37fpXJxLIH9sngT/AXf6IcfnTBlGzWGganMx7SyHdZ
-   +DGO7ZZumwnOlZzdYtMjlO0Z5QaX79qUokyVYuKHUyCbYJyHLLtTcIWFj
-   cJfRaer/f0yL9E+OwMXAXmhjK7FED0NZ2VhdPtph1QzPSZBZDe8b6kuTl
+  t=1740820106; x=1772356106;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bQUvH/LR1KxS95c+RJnGjDSETbksb7G0/CS5aZy0gsA=;
+  b=eS66WmqzNQGui6u5SSmjvn/tGera2jVFrNENpiAUILwc+JVTBr+C7woa
+   ViojhBWaUltF3RAoSHW/SNxVN+694OvExiC8ayJ5eJ0+7DyD7uzHA/lyl
+   NFO+NHQnDh9QwwVT77818rsKQRqGD2K2CU1ZDic65gvLvJVhsEsuB4k7y
+   +En5No2sKJKV/gU6hfzpBs7vHi1I2/JLe4VlXvgJx739571qR5zPJsGSm
+   S9gzqks8yYCWgOf7kd8qaP8GjtkWx/7PWrsU2L5J+mjW5tV8k9y0LkN9O
+   0nes7JiWy0T6CCVhovyfmbGti/cmUQ7BmHyDV0+LiCggK/pKBwQUmWdPw
    A==;
-X-CSE-ConnectionGUID: IY/lPbrBRTCwpVx/woPuxg==
-X-CSE-MsgGUID: z1cMtdzoSQ26eueFZgUFJQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="52389730"
-X-IronPort-AV: E=Sophos;i="6.13,324,1732608000"; 
-   d="scan'208";a="52389730"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 22:34:52 -0800
-X-CSE-ConnectionGUID: xtMWUbVhRuSRtr3BSiG2wQ==
-X-CSE-MsgGUID: VhzhOyfPQ1ucp5OitlNuAw==
+X-CSE-ConnectionGUID: ssfTDbvZTi2fxyGZtdQn0A==
+X-CSE-MsgGUID: qcOJNxKrSnagIld59edgqg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="41596830"
+X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
+   d="scan'208";a="41596830"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 01:08:25 -0800
+X-CSE-ConnectionGUID: hUwnSczhT5aCxc0MFFZ1sQ==
+X-CSE-MsgGUID: 4nOe0TxbSYe4812Pe2RycA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="148440732"
+X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
+   d="scan'208";a="117564427"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Feb 2025 22:34:50 -0800
+  by orviesa006.jf.intel.com with ESMTP; 01 Mar 2025 01:08:22 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toGQr-000Fxg-1r;
-	Sat, 01 Mar 2025 06:34:44 +0000
-Date: Sat, 1 Mar 2025 14:34:02 +0800
+	id 1toIpX-000G4Q-2G;
+	Sat, 01 Mar 2025 09:08:19 +0000
+Date: Sat, 1 Mar 2025 17:07:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [peterz-queue:futex/scope 18/18] kernel/futex/core.c:1585:35: error:
- too many arguments to function call, expected single argument 'hash_slots',
- have 2 arguments
-Message-ID: <202503011437.VVwweskj-lkp@intel.com>
+To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] arm64: dts: exynos: add initial support for
+ Samsung Galaxy S22+
+Message-ID: <202503011651.Vto3vDw7-lkp@intel.com>
+References: <20250223123044.725493-4-ivo.ivanov.ivanov1@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,69 +69,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250223123044.725493-4-ivo.ivanov.ivanov1@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git futex/scope
-head:   50063817f6e71b787d3ba96cca9d2fff7b3ea7ff
-commit: 50063817f6e71b787d3ba96cca9d2fff7b3ea7ff [18/18] futex: Rework SET_SLOTS
-config: s390-randconfig-001-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011437.VVwweskj-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011437.VVwweskj-lkp@intel.com/reproduce)
+Hi Ivaylo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on robh/for-next krzk-dt/for-next pinctrl-samsung/for-next linus/master v6.14-rc4 next-20250228]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivaylo-Ivanov/dt-bindings-arm-samsung-document-g0s-board-binding/20250223-203243
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250223123044.725493-4-ivo.ivanov.ivanov1%40gmail.com
+patch subject: [PATCH v2 3/4] arm64: dts: exynos: add initial support for Samsung Galaxy S22+
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250301/202503011651.Vto3vDw7-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011651.Vto3vDw7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503011437.VVwweskj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503011651.Vto3vDw7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   kernel/futex/core.c:307:9: error: call to undeclared function '__futex_hash'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           return __futex_hash(key, NULL);
-                  ^
-   kernel/futex/core.c:307:9: note: did you mean 'futex_hash'?
-   kernel/futex/core.c:305:27: note: 'futex_hash' declared here
-   struct futex_hash_bucket *futex_hash(union futex_key *key)
-                             ^
-   kernel/futex/core.c:307:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct futex_hash_bucket *' [-Wint-conversion]
-           return __futex_hash(key, NULL);
-                  ^~~~~~~~~~~~~~~~~~~~~~~
-   kernel/futex/core.c:321:1: error: static declaration of '__futex_hash' follows non-static declaration
-   __futex_hash(union futex_key *key, struct futex_private_hash *fph)
-   ^
-   kernel/futex/core.c:307:9: note: previous implicit declaration is here
-           return __futex_hash(key, NULL);
-                  ^
->> kernel/futex/core.c:1585:35: error: too many arguments to function call, expected single argument 'hash_slots', have 2 arguments
-                   ret = futex_hash_allocate(arg3, true);
-                         ~~~~~~~~~~~~~~~~~~~       ^~~~
-   kernel/futex/core.c:1568:12: note: 'futex_hash_allocate' declared here
-   static int futex_hash_allocate(unsigned int hash_slots)
-              ^
-   4 errors generated.
+   In file included from arch/arm64/boot/dts/exynos/exynos2200-g0s.dts:9:
+>> arch/arm64/boot/dts/exynos/exynos2200.dtsi:8:10: fatal error: 'dt-bindings/clock/samsung,exynos2200-cmu.h' file not found
+       8 | #include <dt-bindings/clock/samsung,exynos2200-cmu.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/hash_slots +1585 kernel/futex/core.c
+vim +8 arch/arm64/boot/dts/exynos/exynos2200.dtsi
 
-  1578	
-  1579	int futex_hash_prctl(unsigned long arg2, unsigned long arg3)
-  1580	{
-  1581		int ret;
-  1582	
-  1583		switch (arg2) {
-  1584		case PR_FUTEX_HASH_SET_SLOTS:
-> 1585			ret = futex_hash_allocate(arg3, true);
-  1586			break;
-  1587	
-  1588		case PR_FUTEX_HASH_GET_SLOTS:
-  1589			ret = futex_hash_get_slots();
-  1590			break;
-  1591	
-  1592		default:
-  1593			ret = -EINVAL;
-  1594			break;
-  1595		}
-  1596		return ret;
-  1597	}
-  1598	
+b661f5fc96c5e9 Ivaylo Ivanov 2025-02-23  @8  #include <dt-bindings/clock/samsung,exynos2200-cmu.h>
+b661f5fc96c5e9 Ivaylo Ivanov 2025-02-23   9  #include <dt-bindings/interrupt-controller/arm-gic.h>
+b661f5fc96c5e9 Ivaylo Ivanov 2025-02-23  10  
 
 -- 
 0-DAY CI Kernel Test Service
