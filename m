@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C317F1DE3D2;
-	Sat,  1 Mar 2025 11:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4776F23F37D;
+	Sat,  1 Mar 2025 11:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740829369; cv=none; b=IX4PXpR1mcmihPKfdzsVMuYfy7RJY6pLBCIklCZqfOdHlk7fxJ2X8VwalcYy2DuPOFHiB+9cacgBCc5xpKK2vypJDsDIWoD64R3COG2AA8TQ7/XQjZ1gztJ+bdyTlamUulCJPmzkHc0WHMWJvm9sJcsP1kAUUM+9Cu2qkx5XUd4=
+	t=1740830151; cv=none; b=TrrhD8HkH2Kn+BFcu7zjgtOAyhr7A6GFpUlmW5Usf03d8NHvoQvtFDlJHEmRyEgNwkKsdpyMJbqZOTIt9Mj5PlEeHsmj0OPjk0qT6/F01lvZeyKoKGr7Df/JbILMj2tvqn6J3mtFyNz4hX1A9N4r+fj9uzwfBgPzjgvFHJIhx/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740829369; c=relaxed/simple;
-	bh=pdl/RZTv2T1vX9tzslQwxxDs8Xn0N+aU6EcFHnJHdO4=;
+	s=arc-20240116; t=1740830151; c=relaxed/simple;
+	bh=ugASlP9qOU9rQqvTiOCqSDChLhq67SiD+PXe4HJZYn0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=geprmDzsp1O4scmdm56XIKrpbbtFOh+UEIQuEe2CFKPSQvLLSOSm+hRbLc9kEE5R6MfCt6ArZp02Dqmp0bBTRjI2M2wh2ifc4pnA/EERzACEvFvcrDjtvVFNuLwZxNikCTmftGPaEq3IQ2cBU5/Mgg1Fg8gwb0hWb6vt3ueciXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cgn2hhu1; arc=none smtp.client-ip=198.175.65.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZWxdsxmwSeEtNWprHkNcPuwBpiqoaZ8c21rvh4EaKbL+5eBYf49fnjj1InHMPT+2sk7JQInwTQSHw43Ten1k0OzfXbB61Hxjf1IgsG0gHFxFDeoLAHfmx4T/0K63xMUB2NEq8tnKQNhwR/GK9wwDUSOXGupGs9VMgLbdGRcjLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YWyoolJl; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cgn2hhu1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YWyoolJl"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740829368; x=1772365368;
+  t=1740830148; x=1772366148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pdl/RZTv2T1vX9tzslQwxxDs8Xn0N+aU6EcFHnJHdO4=;
-  b=cgn2hhu1Dp9JRzC4rlmVARIQTwYjM3ffrco0S2o/9DuSWWlHcJh7cdk5
-   kUikrW7+RezS+5P6QQPwWiKkxhKcJoy9WleAqfplW8UO4QuC5pURrCyqS
-   GEjyiNFOGWv4WC0H5lIZFHGTdVPHhcvsE+rwd07eettq0AG10YLa7o9N5
-   ndI5REyIJMCLQblM2UMyedC73EArPjcfz/sPD5un0e9fryxOZBM9SBJF0
-   2YrX2v5mC03640RWjsHxVP8/yFmMPZjomDu0BrRPSxJ8WUyBfDqz6P7rH
-   IyvLptGMZr4AI7W31ijt9vGviADPO9vGY8I0bAiN38l/Blq7Lb7ZvFzHm
-   A==;
-X-CSE-ConnectionGUID: 7RlkwXy7QFG26oQRY1BeyA==
-X-CSE-MsgGUID: hWTUfbeaSqGwLl9NRcSo2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45403478"
+  bh=ugASlP9qOU9rQqvTiOCqSDChLhq67SiD+PXe4HJZYn0=;
+  b=YWyoolJl70sYtqGS2dMtExvrCFtU+CIwXoVleCqfA4n//RS7pViu50qJ
+   Kpzh2t3GgdUGhWk6J8dX6ZnFAb5kgpBZ8u8QWixBMPjVMHnzIwUYepzmo
+   rwJyhqpXOQbNnWroQw+RMZ2IerAjiSX2MIdBRpMz7eNqI9WN8sBFfmIBA
+   VpWJCRZfdy+kIccE/JZuyHB+fW52qt9xtQ7kMqWj1Q9iR26Ltb5p+1Zzj
+   GsxToU6zPJsZjY4B9vxVOwgXNrlkNEngLhTOKDdT8aVNj5Hqj2bEkh+ot
+   3v2tuIpEdvtYDieLRb/yIjaJ2cH/ZVLyhZqZ5QDlzjjH8KBjtXfg7on1Z
+   Q==;
+X-CSE-ConnectionGUID: mLPZAygyTXKyQSWUiGpnMA==
+X-CSE-MsgGUID: MWFx1IKDQM6QKDnpsYmp8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="41638436"
 X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
-   d="scan'208";a="45403478"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 03:42:48 -0800
-X-CSE-ConnectionGUID: o8kHYd3nTyiE6XcvOUQ8/A==
-X-CSE-MsgGUID: FS7Yx1TGS72LbeL6GhHfUQ==
+   d="scan'208";a="41638436"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 03:55:47 -0800
+X-CSE-ConnectionGUID: rheL/RsuQA6QcPkoh/4Nsw==
+X-CSE-MsgGUID: +Qgyi9SRSlmZNYFfahalCA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="154739828"
+X-IronPort-AV: E=Sophos;i="6.13,325,1732608000"; 
+   d="scan'208";a="122713075"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 01 Mar 2025 03:42:45 -0800
+  by fmviesa004.fm.intel.com with ESMTP; 01 Mar 2025 03:55:46 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toLEw-000GCY-2J;
-	Sat, 01 Mar 2025 11:42:42 +0000
-Date: Sat, 1 Mar 2025 19:42:31 +0800
+	id 1toLRX-000GD8-2b;
+	Sat, 01 Mar 2025 11:55:43 +0000
+Date: Sat, 1 Mar 2025 19:55:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: xiaopeitux@foxmail.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pei Xiao <xiaopei01@kylinos.cn>
-Subject: Re: [PATCH] driver core: Split devres APIs to device/devres.h
-Message-ID: <202503011920.E8wPk3yy-lkp@intel.com>
-References: <tencent_66CF9C91EB4A4417F70E9511649A57DEC906@qq.com>
+To: Julian Sun <sunjunchao2870@gmail.com>, linux-xfs@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, cem@kernel.org,
+	djwong@kernel.org, Julian Sun <sunjunchao2870@gmail.com>
+Subject: Re: [PATCH 2/2] xfs: refactor out xfs_buf_get_maps()
+Message-ID: <202503011909.oyoVnyss-lkp@intel.com>
+References: <20250228082622.2638686-3-sunjunchao2870@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,201 +63,103 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_66CF9C91EB4A4417F70E9511649A57DEC906@qq.com>
+In-Reply-To: <20250228082622.2638686-3-sunjunchao2870@gmail.com>
 
-Hi,
+Hi Julian,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on next-20250227]
-[cannot apply to linus/master v6.14-rc4 v6.14-rc3 v6.14-rc2 v6.14-rc4]
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on linus/master v6.14-rc4 next-20250228]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xiaopeitux-foxmail-com/driver-core-Split-devres-APIs-to-device-devres-h/20250228-172012
-base:   next-20250227
-patch link:    https://lore.kernel.org/r/tencent_66CF9C91EB4A4417F70E9511649A57DEC906%40qq.com
-patch subject: [PATCH] driver core: Split devres APIs to device/devres.h
-config: arm64-randconfig-004-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011920.E8wPk3yy-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011920.E8wPk3yy-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Sun/xfs-remove-unnecessary-checks-for-__GFP_NOFAIL-allocation/20250228-162815
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20250228082622.2638686-3-sunjunchao2870%40gmail.com
+patch subject: [PATCH 2/2] xfs: refactor out xfs_buf_get_maps()
+config: i386-buildonly-randconfig-001-20250301 (https://download.01.org/0day-ci/archive/20250301/202503011909.oyoVnyss-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503011909.oyoVnyss-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503011920.E8wPk3yy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503011909.oyoVnyss-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
->> include/linux/device/devres.h:182:6: error: variable has incomplete type 'void'
-     182 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
-         |      ^
-   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
-      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
-         |                         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
->> include/linux/device/devres.h:182:15: error: expected ';' after top level declarator
-     182 | void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
-         |               ^
->> include/linux/device/devres.h:184:57: error: expected ')'
-     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
-         |                                                         ^
-   include/linux/device/devres.h:184:22: note: to match this '('
-     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
-         |                      ^
->> include/linux/device/devres.h:184:48: error: 'void' must be the first and only parameter if specified
-     184 | void devm_free_percpu(struct device *dev, void __percpu *pdata);
-         |                                                ^
-   include/linux/compiler_types.h:60:19: note: expanded from macro '__percpu'
-      60 | # define __percpu       __percpu_qual BTF_TYPE_TAG(percpu)
-         |                         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:10:
->> include/linux/device/devres.h:186:25: warning: declaration of 'struct attribute_group' will not be visible outside of this function [-Wvisibility]
-     186 |                                        const struct attribute_group *grp);
-         |                                                     ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:34:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/iio/imu/st_lsm9ds0/st_lsm9ds0_i2c.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
+>> fs/xfs/xfs_buf.c:148:8: warning: unused variable 'error' [-Wunused-variable]
+     148 |         int                     error;
+         |                                 ^~~~~
+   1 warning generated.
 
 
-vim +/void +182 include/linux/device/devres.h
+vim +/error +148 fs/xfs/xfs_buf.c
 
-   148	
-   149	int __devm_add_action(struct device *dev, void (*action)(void *), void *data, const char *name);
-   150	#define devm_add_action(dev, action, data) \
-   151		__devm_add_action(dev, action, data, #action)
-   152	
-   153	static inline int __devm_add_action_or_reset(struct device *dev, void (*action)(void *),
-   154						     void *data, const char *name)
-   155	{
-   156		int ret;
-   157	
-   158		ret = __devm_add_action(dev, action, data, name);
-   159		if (ret)
-   160			action(data);
-   161	
-   162		return ret;
-   163	}
-   164	#define devm_add_action_or_reset(dev, action, data) \
-   165		__devm_add_action_or_reset(dev, action, data, #action)
-   166	
-   167	/**
-   168	 * devm_alloc_percpu - Resource-managed alloc_percpu
-   169	 * @dev: Device to allocate per-cpu memory for
-   170	 * @type: Type to allocate per-cpu memory for
-   171	 *
-   172	 * Managed alloc_percpu. Per-cpu memory allocated with this function is
-   173	 * automatically freed on driver detach.
-   174	 *
-   175	 * RETURNS:
-   176	 * Pointer to allocated memory on success, NULL on failure.
-   177	 */
-   178	#define devm_alloc_percpu(dev, type)      \
-   179		((typeof(type) __percpu *)__devm_alloc_percpu((dev), sizeof(type), \
-   180							      __alignof__(type)))
-   181	
- > 182	void __percpu *__devm_alloc_percpu(struct device *dev, size_t size,
-   183					   size_t align);
- > 184	void devm_free_percpu(struct device *dev, void __percpu *pdata);
-   185	int __must_check devm_device_add_group(struct device *dev,
- > 186					       const struct attribute_group *grp);
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  138  
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  139  static int
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  140  _xfs_buf_alloc(
+4347b9d7ad4223 fs/xfs/xfs_buf.c           Christoph Hellwig 2011-10-10  141  	struct xfs_buftarg	*target,
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  142  	struct xfs_buf_map	*map,
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  143  	int			nmaps,
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  144  	xfs_buf_flags_t		flags,
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  145  	struct xfs_buf		**bpp)
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  146  {
+4347b9d7ad4223 fs/xfs/xfs_buf.c           Christoph Hellwig 2011-10-10  147  	struct xfs_buf		*bp;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22 @148  	int			error;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  149  	int			i;
+4347b9d7ad4223 fs/xfs/xfs_buf.c           Christoph Hellwig 2011-10-10  150  
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  151  	*bpp = NULL;
+0b3a76e955ebe3 fs/xfs/xfs_buf.c           Dave Chinner      2024-01-16  152  	bp = kmem_cache_zalloc(xfs_buf_cache,
+0b3a76e955ebe3 fs/xfs/xfs_buf.c           Dave Chinner      2024-01-16  153  			GFP_KERNEL | __GFP_NOLOCKDEP | __GFP_NOFAIL);
+4347b9d7ad4223 fs/xfs/xfs_buf.c           Christoph Hellwig 2011-10-10  154  
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  155  	/*
+12bcb3f7d4371f fs/xfs/xfs_buf.c           Dave Chinner      2012-04-23  156  	 * We don't want certain flags to appear in b_flags unless they are
+12bcb3f7d4371f fs/xfs/xfs_buf.c           Dave Chinner      2012-04-23  157  	 * specifically set by later operations on the buffer.
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  158  	 */
+611c99468c7aa1 fs/xfs/xfs_buf.c           Dave Chinner      2012-04-23  159  	flags &= ~(XBF_UNMAPPED | XBF_TRYLOCK | XBF_ASYNC | XBF_READ_AHEAD);
+ce8e922c0e79c8 fs/xfs/linux-2.6/xfs_buf.c Nathan Scott      2006-01-11  160  
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  161  	/*
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  162  	 * A new buffer is held and locked by the owner.  This ensures that the
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  163  	 * buffer is owned by the caller and racing RCU lookups right after
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  164  	 * inserting into the hash table are safe (and will have to wait for
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  165  	 * the unlock to do anything non-trivial).
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  166  	 */
+ee10f6fcdb961e fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-16  167  	bp->b_hold = 1;
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  168  	sema_init(&bp->b_sema, 0); /* held, no waiters */
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  169  
+a9ab28b3d21aec fs/xfs/xfs_buf.c           Christoph Hellwig 2025-01-28  170  	spin_lock_init(&bp->b_lock);
+430cbeb86fdcbb fs/xfs/linux-2.6/xfs_buf.c Dave Chinner      2010-12-02  171  	atomic_set(&bp->b_lru_ref, 1);
+b4dd330b9e0c9c fs/xfs/linux-2.6/xfs_buf.c David Chinner     2008-08-13  172  	init_completion(&bp->b_iowait);
+430cbeb86fdcbb fs/xfs/linux-2.6/xfs_buf.c Dave Chinner      2010-12-02  173  	INIT_LIST_HEAD(&bp->b_lru);
+ce8e922c0e79c8 fs/xfs/linux-2.6/xfs_buf.c Nathan Scott      2006-01-11  174  	INIT_LIST_HEAD(&bp->b_list);
+643c8c05e75d97 fs/xfs/xfs_buf.c           Carlos Maiolino   2018-01-24  175  	INIT_LIST_HEAD(&bp->b_li_list);
+ce8e922c0e79c8 fs/xfs/linux-2.6/xfs_buf.c Nathan Scott      2006-01-11  176  	bp->b_target = target;
+dbd329f1e44ed4 fs/xfs/xfs_buf.c           Christoph Hellwig 2019-06-28  177  	bp->b_mount = target->bt_mount;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  178  	bp->b_flags = flags;
+de1cbee46269a3 fs/xfs/xfs_buf.c           Dave Chinner      2012-04-23  179  
+5c192f274c0024 fs/xfs/xfs_buf.c           Julian Sun        2025-02-28  180  	xfs_buf_get_maps(bp, nmaps);
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  181  
+4c7f65aea7b7fe fs/xfs/xfs_buf.c           Dave Chinner      2021-08-18  182  	bp->b_rhash_key = map[0].bm_bn;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  183  	bp->b_length = 0;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  184  	for (i = 0; i < nmaps; i++) {
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  185  		bp->b_maps[i].bm_bn = map[i].bm_bn;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  186  		bp->b_maps[i].bm_len = map[i].bm_len;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  187  		bp->b_length += map[i].bm_len;
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  188  	}
+3e85c868a69780 fs/xfs/xfs_buf.c           Dave Chinner      2012-06-22  189  
+ce8e922c0e79c8 fs/xfs/linux-2.6/xfs_buf.c Nathan Scott      2006-01-11  190  	atomic_set(&bp->b_pin_count, 0);
+ce8e922c0e79c8 fs/xfs/linux-2.6/xfs_buf.c Nathan Scott      2006-01-11  191  	init_waitqueue_head(&bp->b_waiters);
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  192  
+dbd329f1e44ed4 fs/xfs/xfs_buf.c           Christoph Hellwig 2019-06-28  193  	XFS_STATS_INC(bp->b_mount, xb_create);
+0b1b213fcf3a84 fs/xfs/linux-2.6/xfs_buf.c Christoph Hellwig 2009-12-14  194  	trace_xfs_buf_init(bp, _RET_IP_);
+4347b9d7ad4223 fs/xfs/xfs_buf.c           Christoph Hellwig 2011-10-10  195  
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  196  	*bpp = bp;
+32dff5e5d1b588 fs/xfs/xfs_buf.c           Darrick J. Wong   2020-01-23  197  	return 0;
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  198  }
+^1da177e4c3f41 fs/xfs/linux-2.6/xfs_buf.c Linus Torvalds    2005-04-16  199  
 
 -- 
 0-DAY CI Kernel Test Service
