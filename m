@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5581D20EB;
-	Sat,  1 Mar 2025 23:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607C61ADC86;
+	Sat,  1 Mar 2025 23:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740870074; cv=none; b=lrI1L0lqrWAjftATpqJ304hgNEXSkbsnIT1o5vVv9cJ5yZ8SFBJnN0dj0IzrewHeg51ea2PEZf/AfABjkE7JmewCCtPcp4CSTWeWkqLZKUqAvqJ7Fk3eR5MSZumYbyZhFftyOucr8UTlp7T+M7Y3k67ACnwcgsG9OjG5ryQx8HA=
+	t=1740871421; cv=none; b=dNdoKwOmhptOF78gV7HGj+LeXwceGkpTiCUhVz3GmdP44TzrUzHh8mwgGY6fHXgrPic1hOL36xYdq2iO/EaVZ6F+uMnSOcpr3FpiY5+Oq9/OyaGSiFsgC4lJKXRzbuxLBtKJgox1hn4GgippyB2Cc+NwbU6GnTr34euWvIt7A0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740870074; c=relaxed/simple;
-	bh=7w2CX1Ue6tyDuYsaxdofmnT+sluFZwvTVHk4Da0sm+I=;
+	s=arc-20240116; t=1740871421; c=relaxed/simple;
+	bh=UyQgb+vzNU+0SZNfCmTAUHgtsZQ2K1rcC30RYOtUNKU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PD1597ZkhKKCdZofPXD10/viDyIsLXVHxbX2UTo15cE7C8trVqR4rkdJDNFr0qJiLoPlJixAC2VKaQ15CcQahS3HM3adP3z4auXKELqopwUJuvlWpsOk0k+VDAfCwJYRwNvkH7AB0nqcoQ8V6I0ssEzYcVTWzvrneWSs8YfQDZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hbePXwdE; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=tRN/tarEZ5BwCwJY8297r786lURRBhZ7fJ567a6hSNh7ERdiiFCbdCtq1K6/c7JVH7GhjNyoc5r1aes9TiEnjSxsGrm95Zj7MPEYU/euvR/0yl+NDoeRtWNiewaK7BXiYtl+dTS134gNDsv7M6a+tBvTkWmm+gF44+6OtkfriT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kK/Et4Ss; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hbePXwdE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kK/Et4Ss"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740870073; x=1772406073;
+  t=1740871419; x=1772407419;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7w2CX1Ue6tyDuYsaxdofmnT+sluFZwvTVHk4Da0sm+I=;
-  b=hbePXwdEUVVVv4FycDCFaln6W9VzNu06sKpwjNNMt8KiXtSyG5FbJ9g6
-   m5KNQof9zWiLfd0NMKTAUWv4gpAG0UuSZDvgxJWGWxIXCDsEflRPLbcxD
-   8+MHwa9EUqei2X+qOQrlSZqRL2vV2oXsYRGnDcrXt0aTRT1SLZIaKFR4u
-   Ti2ezgkStFdRMHXrsvy0ebFFlJAVySG41MxO7OCCZTN+CiI9vSG48dwYs
-   N2LzD635+ebndMMCcfW8JibwGi8UkXdOq/NJiuvrFFp5p1GzFfd1sreHB
-   RT81nb8iYmoUV9/71zvRQOZquKLcxTjt4OLUjy7Ovof8xD9kv7oUqUkkO
+  bh=UyQgb+vzNU+0SZNfCmTAUHgtsZQ2K1rcC30RYOtUNKU=;
+  b=kK/Et4Ss767wO7PFEsBmsgaKOgTEveklJY/hIUlbddNxW0nF0OfNfbPX
+   Cina1jHOMg2HgZSAv5Bocgde/XPh2h1bPrw5oFEqCpsGoqE8Iu5K5CpHp
+   LpLTKTfpjtCJO2p2AEjIT5SCc+UIDuYdxjA/9qF3py2XCxTYQCizsfSP9
+   fbKjKr96JQllvEEjQ1U2piR1AP/mrvtowRlq59w+4aLKMKsbDFYKEBl+S
+   3zyiYRwhVbr+GEItgF+/3FiDI7fI5xZT97N+nr4y0+bjmW60VhonJyMtG
+   o4Am7dwJnZ7fOeh/Qeqp3AK1mVfB+vGyoPe9q3Jg8l5garMsVoTMgRpJm
    g==;
-X-CSE-ConnectionGUID: +vQ5g6q4TN2zFWaJ20EoLw==
-X-CSE-MsgGUID: EYhyfRlVSmqn+Z3rjrmK/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41895969"
+X-CSE-ConnectionGUID: PKLiULlaRNG3kprn7OrhYA==
+X-CSE-MsgGUID: R/yAbicuShSwz1r2L2BlRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="59318489"
 X-IronPort-AV: E=Sophos;i="6.13,326,1732608000"; 
-   d="scan'208";a="41895969"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 15:01:12 -0800
-X-CSE-ConnectionGUID: 3MvU6VudQkqtGj/otM+KYg==
-X-CSE-MsgGUID: 8qNv6xtxTou9EF4gBFQ4/A==
+   d="scan'208";a="59318489"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 15:23:37 -0800
+X-CSE-ConnectionGUID: OeXhvlmlTjyfZuukmC1FKA==
+X-CSE-MsgGUID: vAyTAKFUTSirOg0xc41NMA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121772219"
+   d="scan'208";a="118186861"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 01 Mar 2025 15:01:09 -0800
+  by orviesa007.jf.intel.com with ESMTP; 01 Mar 2025 15:23:36 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toVpP-000GnW-2y;
-	Sat, 01 Mar 2025 23:01:04 +0000
-Date: Sun, 2 Mar 2025 07:00:47 +0800
+	id 1toWBB-000GpS-1i;
+	Sat, 01 Mar 2025 23:23:33 +0000
+Date: Sun, 2 Mar 2025 07:22:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: inwardvessel <inwardvessel@gmail.com>, tj@kernel.org,
-	shakeel.butt@linux.dev, yosryahmed@google.com, mhocko@kernel.org,
-	hannes@cmpxchg.org, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	cgroups@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 3/4 v2] cgroup: separate rstat locks for subsystems
-Message-ID: <202503020616.SJVwhuOV-lkp@intel.com>
-References: <20250227215543.49928-4-inwardvessel@gmail.com>
+To: allison.henderson@oracle.com, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 5/6] net/rds: rds_tcp_accept_one ought to not discard
+ messages
+Message-ID: <202503020739.xWWyG7zO-lkp@intel.com>
+References: <20250227042638.82553-6-allison.henderson@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,88 +63,123 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250227215543.49928-4-inwardvessel@gmail.com>
+In-Reply-To: <20250227042638.82553-6-allison.henderson@oracle.com>
 
-Hi inwardvessel,
+Hi,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on bpf-next/net]
-[also build test ERROR on bpf-next/master bpf/master linus/master v6.14-rc4]
-[cannot apply to tj-cgroup/for-next next-20250228]
+[auto build test WARNING on net/main]
+[also build test WARNING on net-next/main linus/master v6.14-rc4 next-20250228]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/inwardvessel/cgroup-move-cgroup_rstat-from-cgroup-to-cgroup_subsys_state/20250228-055819
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20250227215543.49928-4-inwardvessel%40gmail.com
-patch subject: [PATCH 3/4 v2] cgroup: separate rstat locks for subsystems
-config: hexagon-randconfig-001-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020616.SJVwhuOV-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020616.SJVwhuOV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/allison-henderson-oracle-com/net-rds-Avoid-queuing-superfluous-send-and-recv-work/20250227-123038
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250227042638.82553-6-allison.henderson%40oracle.com
+patch subject: [PATCH 5/6] net/rds: rds_tcp_accept_one ought to not discard messages
+config: riscv-randconfig-002-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020739.xWWyG7zO-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020739.xWWyG7zO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503020616.SJVwhuOV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503020739.xWWyG7zO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> kernel/cgroup/rstat.c:339:2: error: member reference base type 'spinlock_t *' (aka 'struct spinlock *') is not a structure or union
-     339 |         lockdep_assert_held(&lock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:285:17: note: expanded from macro 'lockdep_assert_held'
-     285 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/lockdep.h:252:52: note: expanded from macro 'lockdep_is_held'
-     252 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^ ~~~~~~~
-   include/linux/lockdep.h:279:32: note: expanded from macro 'lockdep_assert'
-     279 |         do { WARN_ON(debug_locks && !(cond)); } while (0)
-         |              ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
-     123 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   1 error generated.
+>> net/rds/tcp_listen.c:137:6: warning: variable 'inet' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (!new_sock) {
+               ^~~~~~~~~
+   net/rds/tcp_listen.c:179:19: note: uninitialized use occurs here
+                    my_addr, ntohs(inet->inet_sport),
+                                   ^~~~
+   include/linux/byteorder/generic.h:142:27: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                             ^
+   include/linux/byteorder/generic.h:137:35: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                                     ^
+   include/uapi/linux/byteorder/little_endian.h:43:59: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:105:31: note: expanded from macro '__swab16'
+           (__u16)(__builtin_constant_p(x) ?       \
+                                        ^
+   net/rds/tcp_listen.c:137:2: note: remove the 'if' if its condition is always true
+           if (!new_sock) {
+           ^~~~~~~~~~~~~~~
+   net/rds/tcp_listen.c:115:24: note: initialize the variable 'inet' to silence this warning
+           struct inet_sock *inet;
+                                 ^
+                                  = NULL
+   1 warning generated.
 
 
-vim +339 kernel/cgroup/rstat.c
+vim +137 net/rds/tcp_listen.c
 
-   330	
-   331	/* see cgroup_rstat_flush() */
-   332	static void cgroup_rstat_flush_locked(struct cgroup_subsys_state *css,
-   333			spinlock_t *lock)
-   334		__releases(lock) __acquires(lock)
-   335	{
-   336		struct cgroup *cgrp = css->cgroup;
-   337		int cpu;
-   338	
- > 339		lockdep_assert_held(&lock);
-   340	
-   341		for_each_possible_cpu(cpu) {
-   342			struct cgroup_subsys_state *pos;
-   343	
-   344			pos = cgroup_rstat_updated_list(css, cpu);
-   345			for (; pos; pos = pos->rstat_flush_next) {
-   346				if (!pos->ss)
-   347					cgroup_base_stat_flush(pos->cgroup, cpu);
-   348				else
-   349					pos->ss->css_rstat_flush(pos, cpu);
-   350	
-   351				bpf_rstat_flush(pos->cgroup, cgroup_parent(pos->cgroup), cpu);
-   352			}
-   353	
-   354			/* play nice and yield if necessary */
-   355			if (need_resched() || spin_needbreak(lock)) {
-   356				__cgroup_rstat_unlock(lock, cgrp, cpu);
-   357				if (!cond_resched())
-   358					cpu_relax();
-   359				__cgroup_rstat_lock(lock, cgrp, cpu);
-   360			}
-   361		}
-   362	}
-   363	
+   108	
+   109	int rds_tcp_accept_one(struct rds_tcp_net *rtn)
+   110	{
+   111		struct socket *listen_sock = rtn->rds_tcp_listen_sock;
+   112		struct socket *new_sock = NULL;
+   113		struct rds_connection *conn;
+   114		int ret;
+   115		struct inet_sock *inet;
+   116		struct rds_tcp_connection *rs_tcp = NULL;
+   117		int conn_state;
+   118		struct rds_conn_path *cp;
+   119		struct in6_addr *my_addr, *peer_addr;
+   120		struct proto_accept_arg arg = {
+   121			.flags = O_NONBLOCK,
+   122			.kern = true,
+   123		};
+   124	#if !IS_ENABLED(CONFIG_IPV6)
+   125		struct in6_addr saddr, daddr;
+   126	#endif
+   127		int dev_if = 0;
+   128	
+   129		mutex_lock(&rtn->rds_tcp_accept_lock);
+   130	
+   131		if (!listen_sock)
+   132			return -ENETUNREACH;
+   133	
+   134		new_sock = rtn->rds_tcp_accepted_sock;
+   135		rtn->rds_tcp_accepted_sock = NULL;
+   136	
+ > 137		if (!new_sock) {
+   138			ret = sock_create_lite(listen_sock->sk->sk_family,
+   139					       listen_sock->sk->sk_type,
+   140					       listen_sock->sk->sk_protocol,
+   141					       &new_sock);
+   142			if (ret)
+   143				goto out;
+   144	
+   145			ret = listen_sock->ops->accept(listen_sock, new_sock, &arg);
+   146			if (ret < 0)
+   147				goto out;
+   148	
+   149			/* sock_create_lite() does not get a hold on the owner module so we
+   150			 * need to do it here.  Note that sock_release() uses sock->ops to
+   151			 * determine if it needs to decrement the reference count.  So set
+   152			 * sock->ops after calling accept() in case that fails.  And there's
+   153			 * no need to do try_module_get() as the listener should have a hold
+   154			 * already.
+   155			 */
+   156			new_sock->ops = listen_sock->ops;
+   157			__module_get(new_sock->ops->owner);
+   158	
+   159			rds_tcp_keepalive(new_sock);
+   160			if (!rds_tcp_tune(new_sock)) {
+   161				ret = -EINVAL;
+   162				goto out;
+   163			}
+   164	
+   165			inet = inet_sk(new_sock->sk);
+   166		}
+   167	
 
 -- 
 0-DAY CI Kernel Test Service
