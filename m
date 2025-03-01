@@ -1,71 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4684C1B4236;
-	Sat,  1 Mar 2025 19:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90DF15574E;
+	Sat,  1 Mar 2025 19:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740857631; cv=none; b=AN4hE3dI0Tluh62n7gL2Ut6vM2xg+roZyt01kAcMY4qcisS17OAH4RwKikl85SRHg2JVSCY4Fj6c6U+dwMxwdlaUXe1AthqDTHi6UAK/GaSqTSZlHEvbPz2DAgdlWyK36lYWfnNkGOUcyOukujrJeBPlCComJM5G7FxnrnOYrLE=
+	t=1740858354; cv=none; b=vBIwGiIUh7b6qsX5XFR3jjhDhgqaix2p4ZwpdCz5bpeh0H9nBPn35v33fQBXIA+j9nRqtCUznd4GyGKnLU5tiMRTIWukPS96EtwQAbYNK+z136/7hZ0txVCQsoJhe1hsMgfeissf/Tl6fq19R9nTZCx9LPM8ELUfTF1qOzp7i4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740857631; c=relaxed/simple;
-	bh=7+mfL4nxARIzg/D/ViQ6SzXLcJloibEqmI0+Ez6F/mQ=;
+	s=arc-20240116; t=1740858354; c=relaxed/simple;
+	bh=7RHZLlYISYOOa3uduTet2ow5tjmMF06rhNmws47c1BA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MH2U715LecTtwwYmad4DDHLscp4g6CHFJYXVcrl/VcaQwRYXOgWRjLHb1f+QuBs1ULUPfIUxOK/j2391fCnCsXPxyLMvHOUcKl1FQ2zz/6FTcmBOZRWsv+Ej0N6Kh0Ep9FgSSqVZo1X6FLpjjl3a7fdVzY471IbS0OQ14yjNwg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bmwCUBt6; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=aQ9iMIG2o51P6uDrp53aycg7RmuwWzW62mknoDSLVaBLnz7r36R/D0oqygaJjnSFJaT01LwVRew7oBQCgzzi9VFvlvPJTEfcCZfQHXilzm4jZtPkHlaWuj78wet+UBIRBwve9F6znEs7tpkC/rPxO6Bl8MbKkEDIsdsXBqhPzFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LD1Tu4N6; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bmwCUBt6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LD1Tu4N6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740857629; x=1772393629;
+  t=1740858353; x=1772394353;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7+mfL4nxARIzg/D/ViQ6SzXLcJloibEqmI0+Ez6F/mQ=;
-  b=bmwCUBt65tMlU36PEXbJlJz3807gCuRdEG2R7GLPAmQVGun/+zNhKlEx
-   whfBcHoqL1SKY99UQ6bqeAfl0ue+Mx+ZWBB8a3eaQXCqihH5TDxju//pd
-   E4ogFjP9GKzZhRaeUZipvOfisP7p+Z+DaKf3SRSmdvWbouHo59NzsiHc0
-   Av1ZITag/vfK88fNTHoqAOsFKKSWZiGvUsn6b6ysjMPEeuK0pjM3my72S
-   Bt4GFsFBBSOUh5L3HVmYheTyMLRP8yV4rkxZVMC6Qxmo/81IuJI1UlvXv
-   ZCMJEmCCg/PtkOAZ5XCTdEl4mr12LRC6CW5gURrCgdQOrtciIHFjFI9I4
+  bh=7RHZLlYISYOOa3uduTet2ow5tjmMF06rhNmws47c1BA=;
+  b=LD1Tu4N6P9GKcX+uwaRHoW2/FLc4MX7zs0thsEVBtMr9i69PuwP6zC8Z
+   SC1OjyGMe6RtXp6z73ZrUK3sNZbXY+DgE7LnUXu6lzx2e3lCBMRNuUqGi
+   mP4M9QeLKFqc4iLeAqDmfrcDzM/MJZzmDLTWsBCgsASyqBHgF9yyYcGdt
+   aLqX+b05OGgW0Hg+WWw6KSK5PEeRIsZ4+jqHQpEC0WSRtF10LRndSNHGP
+   S9wbnDeIjG1GOCfUFkEVjUXQFwwrmRU2//0RodovI18wcgktLCt7T9SDj
+   DAcebzo0iUBbKjAFuGjOuo0uFahq5O0+8sWTQdmpp/PARb8+nt9ulBeW1
    Q==;
-X-CSE-ConnectionGUID: h3f4qEXjQFqGBXy+VPCu8A==
-X-CSE-MsgGUID: JuEJeNB4Rqqzw+VwwzO5fA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41795450"
+X-CSE-ConnectionGUID: +6DQq+0oQ4qTmcGEKx4J5Q==
+X-CSE-MsgGUID: HOZaAvGYSGyfPhYrwqBIpQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41795678"
 X-IronPort-AV: E=Sophos;i="6.13,326,1732608000"; 
-   d="scan'208";a="41795450"
+   d="scan'208";a="41795678"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 11:33:49 -0800
-X-CSE-ConnectionGUID: qXHbsIC+TFKyonvg+JVwgQ==
-X-CSE-MsgGUID: FktDV3sVTmOk2XPuR4o6BQ==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 11:45:52 -0800
+X-CSE-ConnectionGUID: DPGE4HeRQOum/28skPyxlQ==
+X-CSE-MsgGUID: 0B5sZDrTRqCYBgUdNpzkhQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,326,1732608000"; 
-   d="scan'208";a="117414106"
+   d="scan'208";a="117415055"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 01 Mar 2025 11:33:45 -0800
+  by fmviesa006.fm.intel.com with ESMTP; 01 Mar 2025 11:45:48 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toSac-000Gbm-2W;
-	Sat, 01 Mar 2025 19:33:36 +0000
-Date: Sun, 2 Mar 2025 03:33:09 +0800
+	id 1toSmL-000GdC-0S;
+	Sat, 01 Mar 2025 19:45:41 +0000
+Date: Sun, 2 Mar 2025 03:44:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Aditya Garg <gargaditya08@live.com>,
-	"castet.matthieu@free.fr" <castet.matthieu@free.fr>,
-	"stf_xl@wp.pl" <stf_xl@wp.pl>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"b-liu@ti.com" <b-liu@ti.com>,
-	"johan@kernel.org" <johan@kernel.org>,
-	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-	"valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"i@zenithal.me" <i@zenithal.me>
+To: John Garry <john.g.garry@oracle.com>, brauner@kernel.org,
+	djwong@kernel.org, cem@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] usb: replace strcpy() with strscpy()
-Message-ID: <202503020319.Lj7EYfWc-lkp@intel.com>
-References: <DEF7EF73-12C4-4F30-BC14-DD829F0C6884@live.com>
+	linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ojaswin@linux.ibm.com,
+	ritesh.list@gmail.com, martin.petersen@oracle.com, tytso@mit.edu,
+	linux-ext4@vger.kernel.org, John Garry <john.g.garry@oracle.com>
+Subject: Re: [PATCH v3 08/12] xfs: Iomap SW-based atomic write support
+Message-ID: <202503020355.fr9QWxQJ-lkp@intel.com>
+References: <20250227180813.1553404-9-john.g.garry@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,89 +67,113 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DEF7EF73-12C4-4F30-BC14-DD829F0C6884@live.com>
+In-Reply-To: <20250227180813.1553404-9-john.g.garry@oracle.com>
 
-Hi Aditya,
+Hi John,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus johan-usb-serial/usb-next johan-usb-serial/usb-linus linus/master v6.14-rc4 next-20250228]
+[auto build test WARNING on xfs-linux/for-next]
+[also build test WARNING on tytso-ext4/dev linus/master v6.14-rc4]
+[cannot apply to brauner-vfs/vfs.all next-20250228]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aditya-Garg/usb-replace-strcpy-with-strscpy/20250228-230839
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/DEF7EF73-12C4-4F30-BC14-DD829F0C6884%40live.com
-patch subject: [PATCH] usb: replace strcpy() with strscpy()
-config: arm-qcom_defconfig (https://download.01.org/0day-ci/archive/20250302/202503020319.Lj7EYfWc-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020319.Lj7EYfWc-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Garry/xfs-Pass-flags-to-xfs_reflink_allocate_cow/20250228-021818
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20250227180813.1553404-9-john.g.garry%40oracle.com
+patch subject: [PATCH v3 08/12] xfs: Iomap SW-based atomic write support
+config: hexagon-randconfig-001-20250302 (https://download.01.org/0day-ci/archive/20250302/202503020355.fr9QWxQJ-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503020355.fr9QWxQJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503020319.Lj7EYfWc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503020355.fr9QWxQJ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/usb/gadget/configfs.c:132:2: error: static assertion failed due to requirement '!(!(!__builtin_types_compatible_p(char *, char *)))': must be array
-     132 |         strscpy(str, s);
-         |         ^~~~~~~~~~~~~~~
-   include/linux/string.h:114:2: note: expanded from macro 'strscpy'
-     114 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/string.h:80:40: note: expanded from macro '__strscpy0'
-      80 |         sized_strscpy(dst, src, sizeof(dst) + __must_be_array(dst) +    \
-         |                                               ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:202:28: note: expanded from macro '__must_be_array'
-     202 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(!__is_array(a), \
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     203 |                                                         "must be array")
-         |                                                         ~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:197:77: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
-     197 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
-         |                                                                             ^~~~
-   1 error generated.
+>> fs/xfs/xfs_iomap.c:1029:8: warning: variable 'iomap_flags' set but not used [-Wunused-but-set-variable]
+    1029 |         u16                     iomap_flags = 0;
+         |                                 ^
+   1 warning generated.
 
 
-vim +132 drivers/usb/gadget/configfs.c
+vim +/iomap_flags +1029 fs/xfs/xfs_iomap.c
 
-   112	
-   113	static int usb_string_copy(const char *s, char **s_copy)
-   114	{
-   115		int ret;
-   116		char *str;
-   117		char *copy = *s_copy;
-   118	
-   119		ret = strlen(s);
-   120		if (ret > USB_MAX_STRING_LEN)
-   121			return -EOVERFLOW;
-   122		if (ret < 1)
-   123			return -EINVAL;
-   124	
-   125		if (copy) {
-   126			str = copy;
-   127		} else {
-   128			str = kmalloc(USB_MAX_STRING_WITH_NULL_LEN, GFP_KERNEL);
-   129			if (!str)
-   130				return -ENOMEM;
-   131		}
- > 132		strscpy(str, s);
-   133		if (str[ret - 1] == '\n')
-   134			str[ret - 1] = '\0';
-   135		*s_copy = str;
-   136		return 0;
-   137	}
-   138	
+  1011	
+  1012	static int
+  1013	xfs_atomic_write_sw_iomap_begin(
+  1014		struct inode		*inode,
+  1015		loff_t			offset,
+  1016		loff_t			length,
+  1017		unsigned		flags,
+  1018		struct iomap		*iomap,
+  1019		struct iomap		*srcmap)
+  1020	{
+  1021		struct xfs_inode	*ip = XFS_I(inode);
+  1022		struct xfs_mount	*mp = ip->i_mount;
+  1023		struct xfs_bmbt_irec	imap, cmap;
+  1024		xfs_fileoff_t		offset_fsb = XFS_B_TO_FSBT(mp, offset);
+  1025		xfs_fileoff_t		end_fsb = xfs_iomap_end_fsb(mp, offset, length);
+  1026		int			nimaps = 1, error;
+  1027		unsigned int		reflink_flags;
+  1028		bool			shared = false;
+> 1029		u16			iomap_flags = 0;
+  1030		unsigned int		lockmode = XFS_ILOCK_EXCL;
+  1031		u64			seq;
+  1032	
+  1033		if (xfs_is_shutdown(mp))
+  1034			return -EIO;
+  1035	
+  1036		reflink_flags = XFS_REFLINK_CONVERT | XFS_REFLINK_ATOMIC_SW;
+  1037	
+  1038		/*
+  1039		 * Set IOMAP_F_DIRTY similar to xfs_atomic_write_iomap_begin()
+  1040		 */
+  1041		if (offset + length > i_size_read(inode))
+  1042			iomap_flags |= IOMAP_F_DIRTY;
+  1043	
+  1044		error = xfs_ilock_for_iomap(ip, flags, &lockmode);
+  1045		if (error)
+  1046			return error;
+  1047	
+  1048		error = xfs_bmapi_read(ip, offset_fsb, end_fsb - offset_fsb, &imap,
+  1049				&nimaps, 0);
+  1050		if (error)
+  1051			goto out_unlock;
+  1052	
+  1053		error = xfs_reflink_allocate_cow(ip, &imap, &cmap, &shared,
+  1054				&lockmode, reflink_flags);
+  1055		/*
+  1056		 * Don't check @shared. For atomic writes, we should error when
+  1057		 * we don't get a COW mapping
+  1058		 */
+  1059		if (error)
+  1060			goto out_unlock;
+  1061	
+  1062		end_fsb = imap.br_startoff + imap.br_blockcount;
+  1063	
+  1064		length = XFS_FSB_TO_B(mp, cmap.br_startoff + cmap.br_blockcount);
+  1065		trace_xfs_iomap_found(ip, offset, length - offset, XFS_COW_FORK, &cmap);
+  1066		if (imap.br_startblock != HOLESTARTBLOCK) {
+  1067			seq = xfs_iomap_inode_sequence(ip, 0);
+  1068			error = xfs_bmbt_to_iomap(ip, srcmap, &imap, flags, 0, seq);
+  1069			if (error)
+  1070				goto out_unlock;
+  1071		}
+  1072		seq = xfs_iomap_inode_sequence(ip, IOMAP_F_SHARED);
+  1073		xfs_iunlock(ip, lockmode);
+  1074		return xfs_bmbt_to_iomap(ip, iomap, &cmap, flags, IOMAP_F_SHARED, seq);
+  1075	
+  1076	out_unlock:
+  1077		if (lockmode)
+  1078			xfs_iunlock(ip, lockmode);
+  1079		return error;
+  1080	}
+  1081	
 
 -- 
 0-DAY CI Kernel Test Service
