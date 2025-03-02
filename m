@@ -1,109 +1,241 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13985F9D6
-	for <llvm@lists.linux.dev>; Sun,  2 Mar 2025 13:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B031E7C10;
+	Sun,  2 Mar 2025 15:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740923530; cv=none; b=AVEU58exFpscvYxP6CvLQr9FQZukIE9njujKM96JpDo3rOxy92aBr2bQM2iowg6QdhLrKBdxmzTMPxCTE2MDErCX5vtGEvpuDkWVjLeIbSnHtAVQtxoEoLWSfYib8l5MjB/c56npN42HrT5hEFa8x/cXnVoIYxYMZYbpuAhM1iY=
+	t=1740930202; cv=none; b=s/HKsvu+IZgiwNwGoX8PMU1wtF0Uho8GBrGBfSkNgaTqKNQLMOYwjV2Yk01r3ey0H2Aaihr+a78R3yqJmkKUqDBuRIlI1t3ZXqOKTLHrE5WFAibPAvtlzkPnNnez8dB5exKvXEtbbC5+cPMCWGeaf6ta8XaOB8fj7FbM+c/qKWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740923530; c=relaxed/simple;
-	bh=qWpDFwfXjwPTYjvheVkM38RUkg4lvsZuE8urd9EAJzk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UoDSFb//IElWYlqdbJQC3wzBsTYZpUYPag+5qUp/+jU9fhsvZYkCd34SlyUCRQr7/xF4rITYPH7WOsv0pHOmknmoX1sik3byJlQqS4E6XujAYPnj9S5IYV78dL0vA0X4vaGL/3MkzmHK+ZJHluqOVsQAugr8WdqbgC4maLSpkPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ix2XApz9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1740930202; c=relaxed/simple;
+	bh=9XbyGeWO1nJrQsLW+70EZoa3AEwvGwi4vSRwenMVI20=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=TCSEu+3pt83HQTp5R3jh++KE3juRZT3MuH1qlhnf0gxeEuF7Bh260dfCPSFibxE7yfY9IwgdmUBSyN1z6S+RrH63vzPNYaQffnGvLuDBBA+kVd31OjrcShZYqED8vYZHQMe584ZlEm6QXRaRKzXfv11kyf67k6ORmyeRg8C2Fz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IxzH9qgZ; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ix2XApz9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740923527;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/rQWER10ixQ33FvqtmzXHog2QO5lnetzX5WeVUHD/M8=;
-	b=ix2XApz9i8d0iansq4F7Nx1B+d/i1nHd6PSv85qcJlqHp1whFjyJpFwXb5vvmaYGmPcLCF
-	a356UyJJLxlYz5Enk57WCzd4Ow5pYifYSJYmV4fFUROXdc/jSvT3knkujQY7uAmu561S8k
-	dcnyMeYfKU5CxVT9c9T0Wig2/kVjwkc=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-265-_dI2RpOuMmih7kThw0jDQA-1; Sun,
- 02 Mar 2025 08:52:06 -0500
-X-MC-Unique: _dI2RpOuMmih7kThw0jDQA-1
-X-Mimecast-MFC-AGG-ID: _dI2RpOuMmih7kThw0jDQA_1740923526
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C88791800877
-	for <llvm@lists.linux.dev>; Sun,  2 Mar 2025 13:52:05 +0000 (UTC)
-Received: from [172.64.10.27] (unknown [10.30.34.106])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 572631956048;
-	Sun,  2 Mar 2025 13:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
- upstream-mainline, 1973160c)
-Date: Sun, 02 Mar 2025 13:52:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IxzH9qgZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740930200; x=1772466200;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=9XbyGeWO1nJrQsLW+70EZoa3AEwvGwi4vSRwenMVI20=;
+  b=IxzH9qgZHABR1502karywdY1mwwInu0stRn5gbBXjYztTv+Cgs5Zsa7y
+   hnGZYt8CQBY8zoDuDKqRrh4+Ev+jLDQviLoRhoFZv4uC/wDvxsG9JzolS
+   eNqQpuv582RE9km9OmAiMKzrYq+pzmW8CrjYWfP9NvT0ylj7i+6HD8E8/
+   Vxuw0ZmzimyXkrphPuyCgBteOGB/OjSoKFR4xOZMo7hHTzBc0cUXWx0jh
+   ClzdgUplIN+hhehlrfCqvXELttnv1g2waLvMuzjbbeWtkCD58HX0MGzKx
+   1D8tUy+ozXRkKWdRhAIrqyVFixAL7VYJVFs6iS6NBxyQcY6T1pZbMfaMO
+   A==;
+X-CSE-ConnectionGUID: KGwDPOTrRMi9P7myP7QGTA==
+X-CSE-MsgGUID: djQ1OaJCSRWsupss3BtHYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="41837100"
+X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
+   d="scan'208";a="41837100"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 07:43:20 -0800
+X-CSE-ConnectionGUID: SgqJld32SIOGXrEslmmRjw==
+X-CSE-MsgGUID: 8KHvNC9OR9SW0YQ2OOaClA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
+   d="scan'208";a="122747268"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 02 Mar 2025 07:43:18 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tolTI-000HQ6-1C;
+	Sun, 02 Mar 2025 15:43:16 +0000
+Date: Sun, 2 Mar 2025 23:42:48 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: fs/bcachefs/quota.c:130:15: warning: arithmetic between different
+ enumeration types ('enum quota_types' and 'enum quota_counters')
+Message-ID: <202503022349.eydi1bf1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <32112.125030208520600599@us-mta-265.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 5wqOE2P963tJ6AkR61U19jxBC_jLKdGSb9vKm1mXVMg_1740923526
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+TO: Kent Overstreet <kent.overstreet@linux.dev>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Hi Kent,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1973160c90d7886c523e52e1f56164e6a74f0474
+commit: 1c6fdbd8f2465ddfb73a01ec620cbf3d14044e1a bcachefs: Initial commit
+date:   1 year, 4 months ago
+config: x86_64-buildonly-randconfig-004-20241224 (https://download.01.org/0day-ci/archive/20250302/202503022349.eydi1bf1-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503022349.eydi1bf1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503022349.eydi1bf1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/bcachefs/quota.c:2:
+   In file included from fs/bcachefs/bcachefs.h:184:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2168:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   fs/bcachefs/quota.c:25:24: warning: variable 'dq' set but not used [-Wunused-but-set-variable]
+      25 |         struct bkey_s_c_quota dq;
+         |                               ^
+>> fs/bcachefs/quota.c:130:15: warning: arithmetic between different enumeration types ('enum quota_types' and 'enum quota_counters') [-Wenum-enum-conversion]
+     130 |         }               m[QTYP_NR * Q_COUNTERS];
+         |                           ~~~~~~~ ^ ~~~~~~~~~~
+   fs/bcachefs/quota.c:612:28: warning: variable 'q' set but not used [-Wunused-but-set-variable]
+     612 |         struct bch_memquota_type *q;
+         |                                   ^
+   7 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'gpio-fixes-for-v6.14-rc5' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/brgl/linux
+vim +130 fs/bcachefs/quota.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1695355329
+    22	
+    23	const char *bch2_quota_invalid(const struct bch_fs *c, struct bkey_s_c k)
+    24	{
+  > 25		struct bkey_s_c_quota dq;
+    26	
+    27		if (k.k->p.inode >= QTYP_NR)
+    28			return "invalid quota type";
+    29	
+    30		switch (k.k->type) {
+    31		case BCH_QUOTA: {
+    32			dq = bkey_s_c_to_quota(k);
+    33	
+    34			if (bkey_val_bytes(k.k) != sizeof(struct bch_quota))
+    35				return "incorrect value size";
+    36	
+    37			return NULL;
+    38		}
+    39		default:
+    40			return "invalid type";
+    41		}
+    42	}
+    43	
+    44	static const char * const bch2_quota_counters[] = {
+    45		"space",
+    46		"inodes",
+    47	};
+    48	
+    49	void bch2_quota_to_text(struct bch_fs *c, char *buf,
+    50				size_t size, struct bkey_s_c k)
+    51	{
+    52		char *out = buf, *end= buf + size;
+    53		struct bkey_s_c_quota dq;
+    54		unsigned i;
+    55	
+    56		switch (k.k->type) {
+    57		case BCH_QUOTA:
+    58			dq = bkey_s_c_to_quota(k);
+    59	
+    60			for (i = 0; i < Q_COUNTERS; i++)
+    61				out += scnprintf(out, end - out, "%s hardlimit %llu softlimit %llu",
+    62						 bch2_quota_counters[i],
+    63						 le64_to_cpu(dq.v->c[i].hardlimit),
+    64						 le64_to_cpu(dq.v->c[i].softlimit));
+    65			break;
+    66		}
+    67	}
+    68	
+    69	#ifdef CONFIG_BCACHEFS_QUOTA
+    70	
+    71	#include <linux/cred.h>
+    72	#include <linux/fs.h>
+    73	#include <linux/quota.h>
+    74	
+    75	static inline unsigned __next_qtype(unsigned i, unsigned qtypes)
+    76	{
+    77		qtypes >>= i;
+    78		return qtypes ? i + __ffs(qtypes) : QTYP_NR;
+    79	}
+    80	
+    81	#define for_each_set_qtype(_c, _i, _q, _qtypes)				\
+    82		for (_i = 0;							\
+    83		     (_i = __next_qtype(_i, _qtypes),				\
+    84		      _q = &(_c)->quotas[_i],					\
+    85		      _i < QTYP_NR);						\
+    86		     _i++)
+    87	
+    88	static bool ignore_hardlimit(struct bch_memquota_type *q)
+    89	{
+    90		if (capable(CAP_SYS_RESOURCE))
+    91			return true;
+    92	#if 0
+    93		struct mem_dqinfo *info = &sb_dqopt(dquot->dq_sb)->info[dquot->dq_id.type];
+    94	
+    95		return capable(CAP_SYS_RESOURCE) &&
+    96		       (info->dqi_format->qf_fmt_id != QFMT_VFS_OLD ||
+    97			!(info->dqi_flags & DQF_ROOT_SQUASH));
+    98	#endif
+    99		return false;
+   100	}
+   101	
+   102	enum quota_msg {
+   103		SOFTWARN,	/* Softlimit reached */
+   104		SOFTLONGWARN,	/* Grace time expired */
+   105		HARDWARN,	/* Hardlimit reached */
+   106	
+   107		HARDBELOW,	/* Usage got below inode hardlimit */
+   108		SOFTBELOW,	/* Usage got below inode softlimit */
+   109	};
+   110	
+   111	static int quota_nl[][Q_COUNTERS] = {
+   112		[HARDWARN][Q_SPC]	= QUOTA_NL_BHARDWARN,
+   113		[SOFTLONGWARN][Q_SPC]	= QUOTA_NL_BSOFTLONGWARN,
+   114		[SOFTWARN][Q_SPC]	= QUOTA_NL_BSOFTWARN,
+   115		[HARDBELOW][Q_SPC]	= QUOTA_NL_BHARDBELOW,
+   116		[SOFTBELOW][Q_SPC]	= QUOTA_NL_BSOFTBELOW,
+   117	
+   118		[HARDWARN][Q_INO]	= QUOTA_NL_IHARDWARN,
+   119		[SOFTLONGWARN][Q_INO]	= QUOTA_NL_ISOFTLONGWARN,
+   120		[SOFTWARN][Q_INO]	= QUOTA_NL_ISOFTWARN,
+   121		[HARDBELOW][Q_INO]	= QUOTA_NL_IHARDBELOW,
+   122		[SOFTBELOW][Q_INO]	= QUOTA_NL_ISOFTBELOW,
+   123	};
+   124	
+   125	struct quota_msgs {
+   126		u8		nr;
+   127		struct {
+   128			u8	qtype;
+   129			u8	msg;
+ > 130		}		m[QTYP_NR * Q_COUNTERS];
+   131	};
+   132	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1695355329-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1695355329-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1695355329-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
