@@ -1,109 +1,134 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC9C14900B
-	for <llvm@lists.linux.dev>; Sun,  2 Mar 2025 19:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810028821;
+	Sun,  2 Mar 2025 20:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740943931; cv=none; b=efg03822Qq1Gx2Re4jdPczKS6WGT7jE8k5/stvy6KWh6kRfio5t7Y+LO1ABvLc6jUSBihTEtcXLrRsF7g66SAVOTeuL0iQGwJ+7pigypV5sELQbZsWV0RJFRpsmjSNZv1m37b/p0HMXc3vpBBYFZff8uD69St6yX0yXKDgv4O8U=
+	t=1740946131; cv=none; b=E5Voso2pf6ET0vrmu9ZZ088LJ4526U7CIPAibNxXdTgAKp47r/BbHl97JkhwadZpyz1j329JWcwKF0V3AjnHu9s3O8XimXnbT4u0H/bbzt1YCWf3QKLOTUnwb9IWREgFoelSKnG2i2EqOJToSYAzzKCC5nb4N7jzfrDZ77lp2PM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740943931; c=relaxed/simple;
-	bh=79HxG3Cx7D6AU5hqUWBvfhaZIi6uba8zQQ915B28riA=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TykA/jXE6+3UB8JF/v0DCWxJ/fc5Z6E4rxDQIpSWwBuP5F6gB5TEqD1wCgibiOUqQ0EfK2thrpYPrOPQ0BKWzuXTsrFBZ0YXh0Ih7Zwp5dJWkMs4yy4YH8LAPmXZBzVYQU5rVWy/knurdPbJh1d/WDRqgPq1QcYl6bfSic2vrR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZYu/jM4z; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1740946131; c=relaxed/simple;
+	bh=EGYiKUZX68P/yMVbezzeHWHxiO9iBDf2WnhRJEMwp6k=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=k5wo1Qj5AkCXvUbFsw15uXNWuH0GGudyMngYSKUj7J17zqjQq8BIjPYd02Ii7u3g9iGcvKqSnYiBTYoQT8jvxLbOZg6vTGbIcvxgvSdkcS99K8zqfkBu8iJYXKsX5wPGFZPXrFddoYR1cdgUb8PZC2TflwX/MEkRILeMNQsZIPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bQlqj5iE; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZYu/jM4z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740943928;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/hvXVGdojSfHSzOeHeOs4rJLr1bxXFXQyiv0OPyWLa0=;
-	b=ZYu/jM4zyv8ft9JdmzfkcMuhnNdpICD48yB3U3iTIuC1qvone/S/5/ks/LBBJpf8DUk/qC
-	ANNT7g8951Vcd07A0OIOOVU1TRRTkrWriOUGCdhlxPKSiVtTSbreaW/yGXuh85NEefflK0
-	8Ed92S8rabA4lEJ1XFIYjzq1QRQGTUs=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-643-u6j-81aLPVObQlcKArIbAg-1; Sun,
- 02 Mar 2025 14:32:06 -0500
-X-MC-Unique: u6j-81aLPVObQlcKArIbAg-1
-X-Mimecast-MFC-AGG-ID: u6j-81aLPVObQlcKArIbAg_1740943926
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D2CAF1800871
-	for <llvm@lists.linux.dev>; Sun,  2 Mar 2025 19:32:05 +0000 (UTC)
-Received: from [172.64.10.27] (unknown [10.30.34.106])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4130D19560AB;
-	Sun,  2 Mar 2025 19:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc4,
- upstream-mainline, b91872c5)
-Date: Sun, 02 Mar 2025 19:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bQlqj5iE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740946129; x=1772482129;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=EGYiKUZX68P/yMVbezzeHWHxiO9iBDf2WnhRJEMwp6k=;
+  b=bQlqj5iEPhZ5TXvokVfA/kyaXFV4YGj6VLiweh6wsRV/uCUxtMm5eOjL
+   m8XpUWG3ReWdM8zVMR/rrYfdeViSe9pZhqVE8mAsuxuWY3Q+jn2+myN3U
+   CVrW2zvVo3uk5/dpWkEjgRmVqiF2QmCru0wiFvpi5GoQB9G/U/cfixMgQ
+   skZECVKO0tRqqylE6LXVASjbh0/C9RxwJtHQ51xTzoh7cfDrk9uR8nTEu
+   gSwIjJMBi3Q37vd11RqvUaLug5QBIfd5VeV+74LxGKz5l4+zFfXQinnAt
+   g1varvSrkZpMqgzWax9yR6RQPumR0Z8tsLDrrq5vu+OmS8LnIeqcK+jYd
+   Q==;
+X-CSE-ConnectionGUID: 0tdT09pRT9iv+BpsT6mM3A==
+X-CSE-MsgGUID: BvgAjDMcQLSgYqgDllpjHw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="45470091"
+X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
+   d="scan'208";a="45470091"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 12:08:49 -0800
+X-CSE-ConnectionGUID: mMrxAL+DQDCyLm5Dg6SHgQ==
+X-CSE-MsgGUID: Uhi52eJnShKS9h9SZic1zg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
+   d="scan'208";a="118015584"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 02 Mar 2025 12:08:47 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1topcD-000HZe-27;
+	Sun, 02 Mar 2025 20:08:45 +0000
+Date: Mon, 3 Mar 2025 04:07:18 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: kernel/bpf/task_iter.c:707:27: warning: bitwise operation between
+ different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag')
+Message-ID: <202503030451.6jE6GEqe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <49059.125030214320600339@us-mta-643.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: dlPlP2EcHK7Cpxj4wRk9TWcBjPuTt4h11nFxWhMvPHM_1740943926
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+CC: linux-kernel@vger.kernel.org
+TO: Chuyi Zhou <zhouchuyi@bytedance.com>
+CC: Martin KaFai Lau <martin.lau@kernel.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Hi Chuyi,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b91872c56940950a6a0852e499d249c3091d4284
+commit: 0de4f50de25af79c2a46db55d70cdbd8f985c6d1 bpf: Let verifier consider {task,cgroup} is trusted in bpf_iter_reg
+date:   1 year, 4 months ago
+config: x86_64-buildonly-randconfig-004-20241224 (https://download.01.org/0day-ci/archive/20250303/202503030451.6jE6GEqe-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503030451.6jE6GEqe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503030451.6jE6GEqe-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/bpf/task_iter.c:6:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2166:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/bpf/task_iter.c:707:27: warning: bitwise operation between different enumeration types ('enum bpf_reg_type' and 'enum bpf_type_flag') [-Wenum-enum-conversion]
+     707 |                   PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
+         |                   ~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   5 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'dmaengine-fix-6.14' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/vkoul/dmaengine
+vim +707 kernel/bpf/task_iter.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1695704441
+   699	
+   700	static struct bpf_iter_reg task_reg_info = {
+   701		.target			= "task",
+   702		.attach_target		= bpf_iter_attach_task,
+   703		.feature		= BPF_ITER_RESCHED,
+   704		.ctx_arg_info_size	= 1,
+   705		.ctx_arg_info		= {
+   706			{ offsetof(struct bpf_iter__task, task),
+ > 707			  PTR_TO_BTF_ID_OR_NULL | PTR_TRUSTED },
+   708		},
+   709		.seq_info		= &task_seq_info,
+   710		.fill_link_info		= bpf_iter_fill_link_info,
+   711		.show_fdinfo		= bpf_iter_task_show_fdinfo,
+   712	};
+   713	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1695704441-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1695704441-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1695704441-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
