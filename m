@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 876E81CAA7F;
-	Sun,  2 Mar 2025 06:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6CA1D5CF2;
+	Sun,  2 Mar 2025 11:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740896730; cv=none; b=pnKruohvujNU3b73126PgLdbweOhK0PuCFrDZrP/Y7428ELF4DWB0LCScqDb3FwqNmcN9Szb8yf2Lx8/BSjPaOADL92bnPrMJEDnGDRCUUAujeNDGTe5f9W3eOfrs9ZpERM3vQ90GhCFpmxwscBZlJbQwWQBr6Jqeh5SNuW4fjc=
+	t=1740914329; cv=none; b=BWqDKf2QUxJZoVSFVIzp9O6i2BgWwXe3i7V+LJjZtxbeBhU70HAteorPzCeT6elGeqwIWPrXHEDEYBQwDgDWuqjh+NXaWFVVr3/cyr4mMGyqqEcZ/HPBqM7vL0wT2DWOod7JXunDc3V5h/QgEJ7EmXzigYON4o6WtMWD3hkeVoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740896730; c=relaxed/simple;
-	bh=mhhVzqwnYuRELiyOy2GFAyYuwUCmZwpABiv+2apeI7k=;
+	s=arc-20240116; t=1740914329; c=relaxed/simple;
+	bh=MZzFYQuosliF1iyzElLVnlzpUwr2kwZXUyaXkHxYMig=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=n8PdIUFGKxTspe0A+26HyKG52SxrClIAEGsove5mMAFgEpsRwCK0fPpX6jIO5MKAN1OZYO6mKc9GvahGBTSBVQgAfNZNr7NUIF5oq+JCWu+GyLeY3p+wepRq70wxuhG+qLDiBBU+AEhjAQR+Uly+mttPWXDEC7+LJilG4pFVspg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X8m+cgN/; arc=none smtp.client-ip=192.198.163.8
+	 Content-Disposition; b=ii21qnoxnrXSmlmOjnOQq+YAHsS9sIT5SBtv5Ap/VxEmhPL0CklbjCgRB5nTcTVDhZ6lH5udVWtyCbRyls6ereumA4cDsSVfjY99CqspYBM2B1GiGqOZ/fCKcqk74kvFY99ijYV2OPAxpk/TBoLvpWIRhiGBNyAJEp7L2HSfT04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2euvqAU; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X8m+cgN/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2euvqAU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740896729; x=1772432729;
+  t=1740914327; x=1772450327;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mhhVzqwnYuRELiyOy2GFAyYuwUCmZwpABiv+2apeI7k=;
-  b=X8m+cgN/iyPUQQR6+TXyPwjTGSrndWE36OFK22mgo/7PspoQ/j8A+v35
-   G3FGbrANdVBJEQ3Ah/kUPbFZp2SAEIqKGs+xDkLRnX5Ey6xdNkI+enbJ7
-   wroNZcPwXfz0bGiWdOQjbClGQ600cAOfLOhxrzwSuNwLFkdYuTwrgWYZN
-   4NMWwJskZGftUdCrszdCX2Agm8Ur7YUXzU7DnG9DsKpkjXn/7Ao6BMhO/
-   kNHmURXqB3zULur/bvoUNkuETfPSxDDfLRu0rMbry3VBNXOFFNzYREKKm
-   iXkqZg6aZHaUEvqLwxfMWN+JzwZ4X1+FfFlG2u/XviGnETIb5PjKUvt8W
-   w==;
-X-CSE-ConnectionGUID: VoVHKEbwTGOSTpPBYcJn3A==
-X-CSE-MsgGUID: 1VkmAvf6Sm6WnUu/vhSsXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="59330180"
+  bh=MZzFYQuosliF1iyzElLVnlzpUwr2kwZXUyaXkHxYMig=;
+  b=X2euvqAUr9pTTafyGQeFVaCTaofJxOrViHXc70mOK24LnrflkpCH9KGO
+   TwjCS8l3KTGz7jjx7uKV5InAaVkAXxR8eylWXSA4Jwy+FPuoEBC+WqCoJ
+   VPwzNp9XjPc1W9TzY0QF9KouhLnKO9ZxET21iComKIhWKfo/LDVw13kpk
+   cCckX0ErTb8jSxsUT+aZmFT9uyWCi1LLA4qC1KZh4V+1sXeJ2GhEGkPqQ
+   WMIYMHB0WUcp46QEKa/W1u3mGfi4ejC21OENaajxr+vyaBc/M2PVehwKh
+   XDz1WU67wgm05GKK1hRL3Aj+p8rtNTUShJDVifu/dt6GEuQjd8g/YYGlm
+   Q==;
+X-CSE-ConnectionGUID: V26HBXrTTJqc9EquJYQgOw==
+X-CSE-MsgGUID: wVvJRJoxTwqZUHHPzDEO9A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="41496327"
 X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
-   d="scan'208";a="59330180"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 22:25:26 -0800
-X-CSE-ConnectionGUID: F2Ipzb8iS3yqwzTn2OdeSw==
-X-CSE-MsgGUID: b5LMBuvORbm/4blfCsz/rQ==
+   d="scan'208";a="41496327"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 03:18:46 -0800
+X-CSE-ConnectionGUID: Qx5FlSpeS5KsKDR155XR5Q==
+X-CSE-MsgGUID: IiidHD+rSGCyF81i/2LEUQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
-   d="scan'208";a="117489578"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118293338"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 01 Mar 2025 22:25:24 -0800
+  by orviesa007.jf.intel.com with ESMTP; 02 Mar 2025 03:18:44 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1toclN-000H7s-2I;
-	Sun, 02 Mar 2025 06:25:21 +0000
-Date: Sun, 2 Mar 2025 14:24:57 +0800
+	id 1tohL4-000HH8-2N;
+	Sun, 02 Mar 2025 11:18:35 +0000
+Date: Sun, 2 Mar 2025 19:18:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
+To: Saurabh Sengar <ssengar@linux.microsoft.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: [kvm:kvm-coco-queue 20/127] ERROR: modpost: "enable_tdx"
- [arch/x86/kvm/kvm-intel.ko] undefined!
-Message-ID: <202503021436.STomlZOE-lkp@intel.com>
+	linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
+	Michael Kelley <mikelley@microsoft.com>
+Subject: drivers/hv/channel.c:597: warning: Function parameter or struct
+ member 'size' not described in 'request_arr_init'
+Message-ID: <202503021934.wH1BERla-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,23 +64,62 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
-head:   9fe4541afcfad987d39790f0a40527af190bf0dd
-commit: a58e01fec9ad144302cd8dfc0b6524315cdb2883 [20/127] KVM: TDX: Add placeholders for TDX VM/vCPU structures
-config: x86_64-randconfig-077-20250302 (https://download.01.org/0day-ci/archive/20250302/202503021436.STomlZOE-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503021436.STomlZOE-lkp@intel.com/reproduce)
+Hi Saurabh,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ece144f151ac7bf8bb5b98f7d4aeeda7a2eed02a
+commit: f83705a51275ed29117d46e1d68e8b16dcb40507 Driver: VMBus: Add Devicetree support
+date:   1 year, 11 months ago
+config: x86_64-buildonly-randconfig-004-20241224 (https://download.01.org/0day-ci/archive/20250302/202503021934.wH1BERla-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250302/202503021934.wH1BERla-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503021436.STomlZOE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503021934.wH1BERla-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
->> ERROR: modpost: "enable_tdx" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_cleanup" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_bringup" [arch/x86/kvm/kvm-intel.ko] undefined!
+>> drivers/hv/channel.c:597: warning: Function parameter or struct member 'size' not described in 'request_arr_init'
+
+
+vim +597 drivers/hv/channel.c
+
+3e7ee4902fe6996 drivers/staging/hv/Channel.c Hank Janssen   2009-07-13  588  
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  589  /**
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  590   * request_arr_init - Allocates memory for the requestor array. Each slot
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  591   * keeps track of the next available slot in the array. Initially, each
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  592   * slot points to the next one (as in a Linked List). The last slot
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  593   * does not point to anything, so its value is U64_MAX by default.
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  594   * @size The size of the array
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  595   */
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  596  static u64 *request_arr_init(u32 size)
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09 @597  {
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  598  	int i;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  599  	u64 *req_arr;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  600  
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  601  	req_arr = kcalloc(size, sizeof(u64), GFP_KERNEL);
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  602  	if (!req_arr)
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  603  		return NULL;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  604  
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  605  	for (i = 0; i < size - 1; i++)
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  606  		req_arr[i] = i + 1;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  607  
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  608  	/* Last slot (no more available slots) */
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  609  	req_arr[i] = U64_MAX;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  610  
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  611  	return req_arr;
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  612  }
+e8b7db38449ac5b drivers/hv/channel.c         Andres Beltran 2020-11-09  613  
+
+:::::: The code at line 597 was first introduced by commit
+:::::: e8b7db38449ac5b950a3f00519171c4be3e226ff Drivers: hv: vmbus: Add vmbus_requestor data structure for VMBus hardening
+
+:::::: TO: Andres Beltran <lkmlabelt@gmail.com>
+:::::: CC: Wei Liu <wei.liu@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
