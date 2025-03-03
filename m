@@ -1,169 +1,246 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C0D238D2E;
-	Mon,  3 Mar 2025 23:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8772F9E6
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 23:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741043877; cv=none; b=V40LhqKFOC0pOQRhMUCrVR3+rIC/CysWsQiIhpeXnbkHg1huvyYT9Vu8xxnDzr+gSEkiVpbFw5fGCEX92D518maAUYtG26XQ9HD161pd0atAWuBBxJ19sFad9itV1rH6eqVvJ/uqzTOXs+qd1BcPtRzs2zenrmN3QwwP1qpTcts=
+	t=1741046309; cv=none; b=p/9Hz3lvXkv+kce7HxFu+2zNN17LSM2Uaor/0TrzAoM5l0I2ADW1kTWmyP/mJMlhaCaLq0mXWDMME4/8HVi2JgrgqxPjkD34velGkTU1mLOj0y3O0Fg+1AHZZONPFpQsQCBjm+rQQcfL12oQQ7QHQyYyT5k7+eua1WHC1QGf7vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741043877; c=relaxed/simple;
-	bh=SFd9xqY4gRWrEeaGvoL5BbS0dlM1B0xqzUuSgE6I/jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BgN9Hl3gxO+C9ImEhw6E6F/WbjXYUjldQ8r5cj3SzDxNulwdqSZDLuEBAqwZohSj6WUIkTonX/v81HgZdOiCryTVAuCAEEa8PqsSU8oECr0zzD2xwQM1g/BJeU9KoKPFKRcFswa/OP3nGomsiU2Mhk7AlstHEXQy0hks9y6uROQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jucf/9/P; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741046309; c=relaxed/simple;
+	bh=G0WznZWM4Ze3YYkf50OJ1yBN8kORHgALSZlxETzoA6o=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=Z1Jav7aRw5oD4MjLyXRzbQF1+52ri8GZD+C68ryrna8dK/aOxaHPXI8TDGhSaLuaoG0A+nSe54A8if1a2uCtCu+XMYBCN0d54/6gfhPNVE6pZ3kmBrYOdomYpgvjNQXdAdRhdy2ZJVvrE5mXON00qI46J/6LBXtfhhh0FIp3kwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=jV6E0PXc; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jucf/9/P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741043876; x=1772579876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SFd9xqY4gRWrEeaGvoL5BbS0dlM1B0xqzUuSgE6I/jU=;
-  b=Jucf/9/PDtqTOrha5QPHUWsBRNSj+R7AkUPnU39UXdJJ6iB28mrPLJBv
-   LW4SJ78ZWkuzWGD6/wxi0rwKr5f2Y7TZ8ejiSBMw59s20kf+n1grVi/gr
-   cI08Q5wmsGaftp7XviwQ0bpJChWBFP7DFxfI8OPiUwULUET2lwFViqcrT
-   UOJjKFFnxjr7nxlRUp1a7+G0iXOEYxnq9GYd7pE4qI+2IK9oBqbw9OnMw
-   RVAJedwUabKdp/aMgzVU+0TjMRNVksO3/oWWyZufZ+qOOMTeqtfQR5N/O
-   pbqAvySp14X0JuD0CIc4P2QBhvGvZAY29M9uQwjil2cOMyZzKrjMuTYmr
-   Q==;
-X-CSE-ConnectionGUID: HHtEc7fOQ8CFbC+12vYrDg==
-X-CSE-MsgGUID: zrDJ4mhGT5ay5CitroWKhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="41793235"
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="41793235"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 15:17:55 -0800
-X-CSE-ConnectionGUID: sEVzVHs+QoeNAc8uMv0Xmw==
-X-CSE-MsgGUID: WUITPo2qQcmI9dGrnWUvPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118717350"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 03 Mar 2025 15:17:53 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpF2k-000J1o-1t;
-	Mon, 03 Mar 2025 23:17:50 +0000
-Date: Tue, 4 Mar 2025 07:17:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] mm/mremap: thread state through move page table
- operation
-Message-ID: <202503040721.0r47FGNO-lkp@intel.com>
-References: <4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes@oracle.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="jV6E0PXc"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 523NvvJH1810687
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 3 Mar 2025 15:57:58 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 523NvvJH1810687
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1741046279;
+	bh=NjBSpK46k3R8QLwa4C4XpcqEVjguWPkN752XrSvL32I=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=jV6E0PXcpqNxOrGITT1TB0LCZeZg+I6n3gquNfcPZK9FRwwnws2Wtb9I3eU69aud7
+	 pysrlmA9y1+af/oyAFudnyBKYXZ62yzYezpMQpAAXFdTHk6u3RPI3M1bG8Pw1XLAwJ
+	 Rtj9ltRMDRBP6czYWYfVDfWpe5lQF2Ckr+69V8JnvGQB3nazQSwvl0wucuM6P9bDG+
+	 USh83St6BsXGZ1yfi8evTYQSJ90OaAytQb3i3kRcUIw4DlTWT44/vgYGbrhPB+8pGZ
+	 i3BTD46qlF0/fq01s/Xel6tB9FvLRahPdkQqitVMPFJPoITDQvRQViDtavM6nBVwR8
+	 I0QAYysRtSkrw==
+Date: Mon, 03 Mar 2025 15:57:57 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: David Laight <david.laight.linux@gmail.com>,
+        Bill Wendling <morbo@google.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Justin Stitt <justinstitt@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH v2] x86/crc32: use builtins to improve code generation
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20250303224216.30431b1d@pumpkin>
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com> <CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com> <20250303201509.32f6f062@pumpkin> <CAGG=3QV1iDn2r39v5eroO+kCvpbmJNtSeqJS+fpwb4vBG67z=w@mail.gmail.com> <20250303224216.30431b1d@pumpkin>
+Message-ID: <7BC89461-A060-462A-9B42-7C0138AA0307@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Lorenzo,
+On March 3, 2025 2:42:16 PM PST, David Laight <david=2Elaight=2Elinux@gmail=
+=2Ecom> wrote:
+>On Mon, 3 Mar 2025 12:27:21 -0800
+>Bill Wendling <morbo@google=2Ecom> wrote:
+>
+>> On Mon, Mar 3, 2025 at 12:15=E2=80=AFPM David Laight
+>> <david=2Elaight=2Elinux@gmail=2Ecom> wrote:
+>> > On Thu, 27 Feb 2025 15:47:03 -0800
+>> > Bill Wendling <morbo@google=2Ecom> wrote:
+>> > =20
+>> > > For both gcc and clang, crc32 builtins generate better code than th=
+e
+>> > > inline asm=2E GCC improves, removing unneeded "mov" instructions=2E=
+ Clang
+>> > > does the same and unrolls the loops=2E GCC has no changes on i386, =
+but
+>> > > Clang's code generation is vastly improved, due to Clang's "rm"
+>> > > constraint issue=2E
+>> > >
+>> > > The number of cycles improved by ~0=2E1% for GCC and ~1% for Clang,=
+ which
+>> > > is expected because of the "rm" issue=2E However, Clang's performan=
+ce is
+>> > > better than GCC's by ~1=2E5%, most likely due to loop unrolling=2E =
+=20
+>> >
+>> > How much does it unroll?
+>> > How much you need depends on the latency of the crc32 instruction=2E
+>> > The copy of Agner's tables I have gives it a latency of 3 on
+>> > pretty much everything=2E
+>> > If you can only do one chained crc instruction every three clocks
+>> > it is hard to see how unrolling the loop will help=2E
+>> > Intel cpu (since sandy bridge) will run a two clock loop=2E
+>> > With three clocks to play with it should be easy (even for a compiler=
+)
+>> > to generate a loop with no extra clock stalls=2E
+>> >
+>> > Clearly if Clang decides to copy arguments to the stack an extra time
+>> > that will kill things=2E But in this case you want the "m" constraint
+>> > to directly read from the buffer (with a (reg,reg,8) addressing mode)=
+=2E
+>> > =20
+>> Below is what Clang generates with the builtins=2E From what Eric said,
+>> this code is only run for sizes <=3D 512 bytes? So maybe it's not super
+>> important to micro-optimize this=2E I apologize, but my ability to
+>> measure clock loops for x86 code isn't great=2E (I'm sure I lack the
+>> requisite benchmarks, etc=2E)
+>
+>Jeepers - that is trashing the I-cache=2E
+>Not to mention all the conditional branches at the bottom=2E
+>Consider the basic loop:
+>1:	crc32q	(%rcx), %rbx
+>	addq	$8, %rcx
+>	cmp	%rcx, %rdx
+>	jne	1b
+>The crc32 has latency 3 so it must take at least 3 clocks=2E
+>Even naively the addq can be issued in the same clock as the crc32
+>and the cmp and jne in the following ones=2E
+>Since the jne is predicted taken, the addq can be assumed to execute
+>in the same clock as the jne=2E
+>(The cmp+jne might also get merged into a single u-op)
+>(I've done this with adc (for IP checksum), with two adc the loop takes
+>two clocks even with the extra memory reads=2E)
+>
+>So that loop is likely to run limited by the three clock latency of crc32=
+=2E
+>Even the memory reads will happen with all the crc32 just waiting for the
+>previous crc32 to finish=2E
+>You can take an instruction out of the loop:
+>1:	crc32q	(%rcx,%rdx), %rbx
+>	addq	$8, %rdx
+>	jne	1b
+>but that may not be necessary, and (IIRC) gcc doesn't like letting you
+>generate it=2E
+>
+>For buffers that aren't multiples of 8 bytes 'remember' that the crc of
+>a byte depends on how far it is from the end of the buffer, and that init=
+ial
+>zero bytes have no effect=2E
+>So (provided the buffer is 8+ bytes long) read the first 8 bytes, shift
+>right by the number of bytes needed to make the rest of the buffer a mult=
+iple
+>or 8 bytes (the same as reading from across the start of the buffer and m=
+asking
+>the low bytes) then treat exactly the same as a buffer that is a multiple
+>of 8 bytes long=2E
+>Don't worry about misaligned reads, you lose less than one clock per cach=
+e
+>line (that is with adc doing a read every clock)=2E
+>
+>Actually measuring the performance is hard=2E
+>You can use rdtsc because the clock speed will change when the cpu gets b=
+usy=2E
+>There is a 'performance counter' that is actual clocks=2E
+>While you can use the library functions to set it up, you need to just re=
+ad the
+>register - the library overhead it too big=2E
+>You also need the odd lfence=2E
+>Having done that, and provided the buffer is in the L1 d-cache you can me=
+asure
+>the loop time in clocks and compare against the expected value=2E
+>Once you've got 3 clocks per crc32 instruction it won't get any better,
+>which is why the 'fast' code for big buffers does crc of 3+ buffers secti=
+ons
+>in parallel=2E
+>
+>	David
+>
+>>=20
+>> -bw
+>>=20
+>> =2ELBB1_9:                                # =3D>This Inner Loop Header:=
+ Depth=3D1
+>>         movl    %ebx, %ebx
+>>         crc32q  (%rcx), %rbx
+>>         addq    $8, %rcx
+>>         incq    %rdi
+>>         cmpq    %rdi, %rsi
+>>         jne     =2ELBB1_9
+>> # %bb=2E10:
+>>         subq    %rdi, %rax
+>>         jmp     =2ELBB1_11
+>> =2ELBB1_7:
+>>         movq    %r14, %rcx
+>> =2ELBB1_11:
+>>         movq    %r15, %rsi
+>>         andq    $-8, %rsi
+>>         cmpq    $7, %rdx
+>>         jb      =2ELBB1_14
+>> # %bb=2E12:
+>>         xorl    %edx, %edx
+>> =2ELBB1_13:                               # =3D>This Inner Loop Header:=
+ Depth=3D1
+>>         movl    %ebx, %ebx
+>>         crc32q  (%rcx,%rdx,8), %rbx
+>>         crc32q  8(%rcx,%rdx,8), %rbx
+>>         crc32q  16(%rcx,%rdx,8), %rbx
+>>         crc32q  24(%rcx,%rdx,8), %rbx
+>>         crc32q  32(%rcx,%rdx,8), %rbx
+>>         crc32q  40(%rcx,%rdx,8), %rbx
+>>         crc32q  48(%rcx,%rdx,8), %rbx
+>>         crc32q  56(%rcx,%rdx,8), %rbx
+>>         addq    $8, %rdx
+>>         cmpq    %rdx, %rax
+>>         jne     =2ELBB1_13
+>> =2ELBB1_14:
+>>         addq    %rsi, %r14
+>> =2ELBB1_15:
+>>         andq    $7, %r15
+>>         je      =2ELBB1_23
+>> # %bb=2E16:
+>>         crc32b  (%r14), %ebx
+>>         cmpl    $1, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E17:
+>>         crc32b  1(%r14), %ebx
+>>         cmpl    $2, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E18:
+>>         crc32b  2(%r14), %ebx
+>>         cmpl    $3, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E19:
+>>         crc32b  3(%r14), %ebx
+>>         cmpl    $4, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E20:
+>>         crc32b  4(%r14), %ebx
+>>         cmpl    $5, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E21:
+>>         crc32b  5(%r14), %ebx
+>>         cmpl    $6, %r15d
+>>         je      =2ELBB1_23
+>> # %bb=2E22:
+>>         crc32b  6(%r14), %ebx
+>> =2ELBB1_23:
+>>         movl    %ebx, %eax
+>> =2ELBB1_24:
+>
+>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.14-rc5 next-20250303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mremap-correctly-handle-partial-mremap-of-VMA-starting-at-0/20250303-192101
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes%40oracle.com
-patch subject: [PATCH 7/7] mm/mremap: thread state through move page table operation
-config: x86_64-buildonly-randconfig-001-20250304 (https://download.01.org/0day-ci/archive/20250304/202503040721.0r47FGNO-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503040721.0r47FGNO-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503040721.0r47FGNO-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/mremap.c:11:
-   In file included from include/linux/mm.h:2302:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/mremap.c:12:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/mremap.c:581:43: error: too few arguments to function call, expected 5, have 3
-     581 |                         move_huge_pud(pmc, old_entry, new_entry);
-         |                         ~~~~~~~~~~~~~                          ^
-   mm/mremap.c:478:13: note: 'move_huge_pud' declared here
-     478 | static bool move_huge_pud(struct vm_area_struct *vma, unsigned long old_addr,
-         |             ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     479 |                           unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings and 1 error generated.
-
-
-vim +581 mm/mremap.c
-
-   552	
-   553	/*
-   554	 * Attempts to speedup the move by moving entry at the level corresponding to
-   555	 * pgt_entry. Returns true if the move was successful, else false.
-   556	 */
-   557	static bool move_pgt_entry(struct pagetable_move_control *pmc,
-   558				   enum pgt_entry entry, void *old_entry, void *new_entry)
-   559	{
-   560		bool moved = false;
-   561		bool need_rmap_locks = should_take_rmap_locks(pmc, entry);
-   562	
-   563		/* See comment in move_ptes() */
-   564		if (need_rmap_locks)
-   565			take_rmap_locks(pmc->old);
-   566	
-   567		switch (entry) {
-   568		case NORMAL_PMD:
-   569			moved = move_normal_pmd(pmc, old_entry, new_entry);
-   570			break;
-   571		case NORMAL_PUD:
-   572			moved = move_normal_pud(pmc, old_entry, new_entry);
-   573			break;
-   574		case HPAGE_PMD:
-   575			moved = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
-   576				move_huge_pmd(pmc->old, pmc->old_addr, pmc->new_addr, old_entry,
-   577					      new_entry);
-   578			break;
-   579		case HPAGE_PUD:
-   580			moved = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
- > 581				move_huge_pud(pmc, old_entry, new_entry);
-   582			break;
-   583	
-   584		default:
-   585			WARN_ON_ONCE(1);
-   586			break;
-   587		}
-   588	
-   589		if (need_rmap_locks)
-   590			drop_rmap_locks(pmc->old);
-   591	
-   592		return moved;
-   593	}
-   594	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The tail is *weird*=2E Wouldn't it be better to do a 4-2-1 stepdown?
