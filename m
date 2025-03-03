@@ -1,131 +1,179 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f195.google.com (mail-pl1-f195.google.com [209.85.214.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FB320F092
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 12:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F33212B17
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 13:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741003657; cv=none; b=H2KA3iRVNraSp6riAIfl6TQ8rqxggsvxGze20gMJ2+ikMyvLWdJrhshjF79w6+lK5kLn89/jUIm4qzqKlwvnQV3mzLDxu+AGZZWdc7vKAVsLz3vuH9KZuKM/Eq9B1hE3uI/Ougxl9wMyjUjsEcHo2nvgbZlRIr6FFlSH7sJLXm8=
+	t=1741008631; cv=none; b=uN6cBV1gLkWiN8E3Lku9SgFPTGbKBaU1ijSVktZWDM1r0K+NkPOILk9fPiBGzBWCY4hZsL5/734ovWQPsRHL21LH6i7ynr9idnvP7IMPkovbBUE2divG9LH3QzkUoQPM9krsRB7HNcMEZNHH8Yz/2VrkJXnH/aGu7AGO7MAWHZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741003657; c=relaxed/simple;
-	bh=uju7sIH5BGh5W5JTJZHooDHmsXtbGtIZ2zwKahZ89tE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aLH+IKM1DXNuEV+PyMhk/efcTza42ZJkPiAXW0TRkhDN5OE7tq2R8/VdvAxyI04Jo0ryc/mfpBwVQ0jzqVTTsj+GTUaZ+91MqwsWFLmkBZWh99kUtVczVcCvqDyi/v7x1PHeabgR0sAyx3jd1CAal4gL1aOuRXE2fTO9Q5luaJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TG+TXnjx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1741008631; c=relaxed/simple;
+	bh=bWdVzLVWRtavYw5+TVc3lHNfvzogIph6bEYfLtcnLfk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rLxlE0FKI0UZCVe4rSz/zBWC85ETV6C+cG92ObCN9i+A1lPPTh6nc6rxw7e1V2ptWKr6E79XUKCeUPCYfwkQrcC0A7pgjGGDpGD4G15Jy+tOSvBMylHLqJjPmelMFYpSplHx/YjS87XVGKYvBn4FDoZ3cqIh+l/DSlYKNtYkCU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPAkz2fZ; arc=none smtp.client-ip=209.85.214.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TG+TXnjx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741003653;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fw9/y9pO0Tgw7qMRxrC2z9OKO7bwRqJ7EcWxU9xvHxE=;
-	b=TG+TXnjxzzHEMgjapmsDMzczAnkMiwQHXrv19XeO9TPe8yBZAL//M99STrP7zt2nqBNKXv
-	FeVv9eF3PJu8bKegK4UGOlxrg8A21FNEXY0oFI7t+oKzC1gPk04bJoePYnmjWTKenaxCQl
-	I1b11mPDThTLFuWPH5L+c1/rEmL31lg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-hlIEcDp1MySYvH9NHIB82g-1; Mon, 03 Mar 2025 07:07:32 -0500
-X-MC-Unique: hlIEcDp1MySYvH9NHIB82g-1
-X-Mimecast-MFC-AGG-ID: hlIEcDp1MySYvH9NHIB82g_1741003651
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-390eb06d920so3014496f8f.3
-        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 04:07:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPAkz2fZ"
+Received: by mail-pl1-f195.google.com with SMTP id d9443c01a7336-22349dc31bcso75967215ad.3
+        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 05:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741008629; x=1741613429; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gNjkZXsFxPWFMyK2OgocbrFn2IS3HWHLODQTFVqVxX4=;
+        b=BPAkz2fZ0+530y9gSd4nbxiclHx6/+Ni8xZR1cTRUwPhfo6UNvD71Z192Fw9boob5z
+         QuPOUP+buwv1WYjL4B+GPficILfsB0zZNwifm+KiZ4XVWJnnxAH0u7oFZK5icR1Sh8o5
+         jDrTrcCPmhTHQOKcaVJiNWog+jkVnC9mt4c9E4i87TlKNtVDgjieau8vFdjIEgeCfTuT
+         agADkEq/pLaDjCoPpwpHz/slm5mzl4GEBA10W8XoVRt1UrgZqCRDWFSnRaeaArHcLz86
+         8zBjXXgA+bBKaTeAUy4UtL7IYNrRDu/Gx0n4bvfbTKOJwrl20H5NNSW8b6ApLJEneVtq
+         kIWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741003651; x=1741608451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fw9/y9pO0Tgw7qMRxrC2z9OKO7bwRqJ7EcWxU9xvHxE=;
-        b=PQ4dtfseFTwipSgAbkWHCnUWfv+9wB/ozsmLYxXofn86FU/r5lTxHDT1fN943wwIzI
-         vw8qAjUKqwvdnKje9mOJ/fPq6Dza8J+hLqxXrn/ALraujl0H/lzJYqeCFwM9VClLHirt
-         qmlb/xj/qcaPmUYpsc/W8FJYjj0co9WSciUiNIyTcQb2WMRgAPtjt4gRWo4D2FWCgEzv
-         4OdVbv8+BbWOI1zGT2ok3M4rCUFXysrZaVz6HF146btiAJ3GqLCwyBAAVm9sX0xklcYo
-         NJG2MkN5z1JX8iEtfJdnCOq5MPASExm+ntSgvABg4eFIankETr6gULbEOOo1rH4IAWUC
-         /deg==
-X-Forwarded-Encrypted: i=1; AJvYcCX1t8ta11BTruR3Qq+TuhMlmO5phZJeFmIkLoDzoKn1rIBbdqh2sd2tcDhyO+IY+MtydImG@lists.linux.dev
-X-Gm-Message-State: AOJu0YzlRYgwoDiOyW+5iJ4mN+R0SiuDsNNe1yNo2HGLc9BX+f1/l6Lp
-	U5rbrD8OWp+b915utj8RE0cOh9DVHIiymrBez5kVKZ+sob/SMYxo8vOPALGiC2mFyJQiHI5Wcj1
-	RlbJf/QKPqJrXQf61zmnivybb3peWX7d57r0r1R3STu4WBG99IViiOT+3dw4lHKDBpbiBZZKVOa
-	336yl1VSE+09kUhBxPk06PMdZIww==
-X-Gm-Gg: ASbGncsEsF4ZDbSKtSFyASTYn6Y2+DK9P0dxOhsvY0WlKhuYKhPo78uvxGCkfeo/GFP
-	d/3Rht2l2Rn/5Tka3FUNiy1mMM/aBGCU9nVhKHaE1KEGUDo2XknzdAQBssfTOWjm1BltE41IM
-X-Received: by 2002:a05:6000:1543:b0:390:ef45:1a37 with SMTP id ffacd0b85a97d-390ef451caemr10434828f8f.55.1741003650996;
-        Mon, 03 Mar 2025 04:07:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFQibAQBZKGLMDrS/FjVYTrJktgwlJ/8V2jDfRODdesJgHBiBswiP6BF/IeHZ/V6AALHag0O/R4QLX3SW+KpHI=
-X-Received: by 2002:a05:6000:1543:b0:390:ef45:1a37 with SMTP id
- ffacd0b85a97d-390ef451caemr10434799f8f.55.1741003650538; Mon, 03 Mar 2025
- 04:07:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741008629; x=1741613429;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gNjkZXsFxPWFMyK2OgocbrFn2IS3HWHLODQTFVqVxX4=;
+        b=rmHRfFpNsHcQKLOoUMPHoJMwX8U/samnSlmeIH2aI9We2wpGRps/ofNWVMyJSgsrN7
+         5O5YDF6vvl6F8sKssHo5lt2wlPJURjxPwt9Fpif67PctlOZiyzu2pW5BA+uexJ9rWwc1
+         H505Tfvk+w9NQRC/+KawP94ShxmTIESlbYrYcnxOO0A6PGTy2SuCPMC7xh9YAzhtT3Ip
+         5renK5HOw5vqVq818NCnw02Jec8GYAC+FV/habvv9FR8LCP+OrW+0vMGWoc+fSrKPWGb
+         CgaleAPKunVPBEmvRaQrsw2KR8cAtQfJSO2GamJCh0wVfdy97TFhGT7nB6CjbL7cF299
+         Ll5A==
+X-Forwarded-Encrypted: i=1; AJvYcCVVOTyMXgJi6Ee/o+bNY6uGZhTJ9KfoM2G9a0Co6kS/cv0LtQ3ZTdhu1ZkAYgFHtAPuIbe0@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy8Wq62tMabxU8YA9SW2vk5uZaMt4mLqr2sObo+y4w17k4wvwIQ
+	wEcNFPcZEDgHlL+7neIsusmngIwKWv8etmQHrC+xQIqrCMy5PaF+
+X-Gm-Gg: ASbGncvpZpqeij9UrmfGvdh7hVUe6nDZ1LKQeWVWPnHvgWsoWRHeaZ7R3EuPvy2bTct
+	cxSzQIfFkWVwUz5hHOyefCv3t1ztm67HvDLvn8hLaQhXW7R3l2B6epbPyi4C/0RPa6tgNNmGMRv
+	GKxMg1i6iX1GcgqTO9x7SC/LpeEljb1NihsfTwSL0DrGVef9WWkRvvVRjW6+W1cDlrQVJ/iBQUU
+	Wlu0WDEi08kFrtzZ0xDmpDRPEVONA4ws57WysQKmvjFzeGeF7Pzp0mDvASc+EQI0k9JBfwReZe/
+	8ICQF3zTdRjG3QLSB+6k4Ogk53tvKB4QdsuxF97avritW/oU4ymk/TBty4cAtA==
+X-Google-Smtp-Source: AGHT+IGzwQpz8i9IoNIFYRlZqYmQzdkErFQv2wnbEGpUy1JVrV1T6QdikCneYnb/qYuevmlNGOS4BA==
+X-Received: by 2002:a17:903:244d:b0:210:fce4:11ec with SMTP id d9443c01a7336-22368f6a5f1mr188695035ad.1.1741008628736;
+        Mon, 03 Mar 2025 05:30:28 -0800 (PST)
+Received: from localhost.localdomain ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505359b8sm77297035ad.253.2025.03.03.05.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 05:30:28 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: peterz@infradead.org,
+	rostedt@goodmis.org,
+	mark.rutland@arm.com,
+	alexei.starovoitov@gmail.com
+Cc: catalin.marinas@arm.com,
+	will@kernel.org,
+	mhiramat@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	jolsa@kernel.org,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	samitolvanen@google.com,
+	kees@kernel.org,
+	dongml2@chinatelecom.cn,
+	akpm@linux-foundation.org,
+	riel@surriel.com,
+	rppt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v4 0/4] per-function storage support
+Date: Mon,  3 Mar 2025 21:28:33 +0800
+Message-Id: <20250303132837.498938-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202503021436.STomlZOE-lkp@intel.com>
-In-Reply-To: <202503021436.STomlZOE-lkp@intel.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Mon, 3 Mar 2025 13:07:18 +0100
-X-Gm-Features: AQ5f1JoWiKKm2LeQHKrPeE63Zh1-iaGQM-Bm15TiuDzT9_6uJl3yL4GkD6PHv6U
-Message-ID: <CABgObfYnELV3FjMgZRASi4p6Hmp67yBLJngyLWbbp23czhHFFA@mail.gmail.com>
-Subject: Re: [kvm:kvm-coco-queue 20/127] ERROR: modpost: "enable_tdx"
- [arch/x86/kvm/kvm-intel.ko] undefined!
-To: kernel test robot <lkp@intel.com>
-Cc: Isaku Yamahata <isaku.yamahata@intel.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, kvm@vger.kernel.org, 
-	Farrah Chen <farrah.chen@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: lUc9_tWVLGIHs6Q0kbHbGsi4tG7A0sWlJllIVHowgXE_1741003651
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 2, 2025 at 7:25=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
-> head:   9fe4541afcfad987d39790f0a40527af190bf0dd
-> commit: a58e01fec9ad144302cd8dfc0b6524315cdb2883 [20/127] KVM: TDX: Add p=
-laceholders for TDX VM/vCPU structures
-> config: x86_64-randconfig-077-20250302 (https://download.01.org/0day-ci/a=
-rchive/20250302/202503021436.STomlZOE-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
-8029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250302/202503021436.STomlZOE-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503021436.STomlZOE-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
-> >> ERROR: modpost: "enable_tdx" [arch/x86/kvm/kvm-intel.ko] undefined!
-> ERROR: modpost: "tdx_cleanup" [arch/x86/kvm/kvm-intel.ko] undefined!
-> ERROR: modpost: "tdx_bringup" [arch/x86/kvm/kvm-intel.ko] undefined!
+For now, there isn't a way to set and get per-function metadata with
+a low overhead, which is not convenient for some situations. Take
+BPF trampoline for example, we need to create a trampoline for each
+kernel function, as we have to store some information of the function
+to the trampoline, such as BPF progs, function arg count, etc. The
+performance overhead and memory consumption can be higher to create
+these trampolines. With the supporting of per-function metadata storage,
+we can store these information to the metadata, and create a global BPF
+trampoline for all the kernel functions. In the global trampoline, we
+get the information that we need from the function metadata through the
+ip (function address) with almost no overhead.
 
-All these failures are solved the same way, just
+Another beneficiary can be ftrace. For now, all the kernel functions that
+are enabled by dynamic ftrace will be added to a filter hash if there are
+more than one callbacks. And hash lookup will happen when the traced
+functions are called, which has an impact on the performance, see
+__ftrace_ops_list_func() -> ftrace_ops_test(). With the per-function
+metadata supporting, we can store the information that if the callback is
+enabled on the kernel function to the metadata.
 
-diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-index fc013c8816f1..e8a3657d716e 100644
---- a/arch/x86/kvm/vmx/tdx.h
-+++ b/arch/x86/kvm/vmx/tdx.h
-@@ -2,7 +2,7 @@
- #ifndef __KVM_X86_VMX_TDX_H
- #define __KVM_X86_VMX_TDX_H
+In the 1st patch, we factor out FINEIBT_INSN_OFFSET and CFI_INSN_OFFSET to
+make fineibt works when the kernel function is 32-bytes aligned.
 
--#ifdef CONFIG_INTEL_TDX_HOST
-+#ifdef CONFIG_KVM_INTEL_TDX
- int tdx_bringup(void);
- void tdx_cleanup(void);
+In the 2nd patch, we implement the per-function metadata storage by
+storing the index of the metadata to the function padding space.
 
-Will apply to kvm-coco-queue.
+In the 3rd and 4th patch, we implement the per-function metadata storage
+for x86 and arm64. And in the feature, we can support more arch.
 
-Paolo
+Changes since V3:
+- rebase to the newest tip/x86/core, the fineibt has some updating
+
+Changes since V2:
+- split the patch into a series.
+- considering the effect to cfi and fineibt and introduce the 1st patch.
+
+Changes since V1:
+- add supporting for arm64
+- split out arch relevant code
+- refactor the commit log
+
+Menglong Dong (4):
+  x86/ibt: factor out cfi and fineibt offset
+  add per-function metadata storage support
+  x86: implement per-function metadata storage for x86
+  arm64: implement per-function metadata storage for arm64
+
+ arch/arm64/Kconfig              |  15 ++
+ arch/arm64/Makefile             |  23 ++-
+ arch/arm64/include/asm/ftrace.h |  34 +++++
+ arch/arm64/kernel/ftrace.c      |  13 +-
+ arch/x86/Kconfig                |  18 +++
+ arch/x86/include/asm/cfi.h      |  13 +-
+ arch/x86/include/asm/ftrace.h   |  54 ++++++++
+ arch/x86/kernel/alternative.c   |  18 ++-
+ arch/x86/net/bpf_jit_comp.c     |  22 +--
+ include/linux/kfunc_md.h        |  25 ++++
+ kernel/Makefile                 |   1 +
+ kernel/trace/Makefile           |   1 +
+ kernel/trace/kfunc_md.c         | 239 ++++++++++++++++++++++++++++++++
+ 13 files changed, 450 insertions(+), 26 deletions(-)
+ create mode 100644 include/linux/kfunc_md.h
+ create mode 100644 kernel/trace/kfunc_md.c
+
+-- 
+2.39.5
 
