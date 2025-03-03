@@ -1,248 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646191F8733;
-	Mon,  3 Mar 2025 11:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8491F30DE;
+	Mon,  3 Mar 2025 11:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000071; cv=none; b=IfMP1uQMO8anfR4Bozrl2uCr0RN6juidmkeVY9hm2iZSb3f+QMc6/u0Jse4Fci7qXzXNSOebxzMTvXjFjUKdQmX1uY1ypK8sfIUisNLVxa0TiFvocLvqDvywrptZi4LICzN9ENojQxmnaLWkuW4UJMfCqdQnG30C34ICCfVXdis=
+	t=1741000502; cv=none; b=QWU6ocSPi6l3mRxaA/6cP+NtIQfrQwiFY7PQVM8+8e+wha53ABW3di16iUj1rXzTJR64+hE+8AS8j55snBzbO3JXky1Lzq+2XVk1Sw0NL/hYN5tsFo/IXTRS+pksydb5GoVSlHtvpUISUIGI34yi63YY85ENUixqdxrlzuF8G1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000071; c=relaxed/simple;
-	bh=/QzomCTIFsL8+Zge4gSHgukORn6rUTkJqZQWdz6RUAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ofVWXQYq153Mi3ZrjRuoDXjznwdq31ZOmBbn5ZDn3JkFKYdbxu/RwdsvqJp+u5MvZuWKGYgJeYEfWCb+ffTjBPPBRu1sZK8zd055lyk0NZM/b0vV+ZPhekZDHl6lKY2VSUZDUGgA/v87g3Taxo8QWAS/0YcCiybD/S1gp3VpleU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=do/gsAo4; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="do/gsAo4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741000069; x=1772536069;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/QzomCTIFsL8+Zge4gSHgukORn6rUTkJqZQWdz6RUAM=;
-  b=do/gsAo47ThmKfqaqDN/r2/5wrRXerOY/oNQk7PTGp2HmEE2acgsiCKC
-   kCqNAucF0nnriCC292xRgiueYuxW0/Hh83UqCuLP1mrtslCWzWrjCY1ox
-   hbEBjjg/2SIYTh+LsiUSwH+D2qiuuNf45SkLyst1Z5LcgRGBaO6afJ4nn
-   xiIVmVEYW3KkeqoHSOvi5lIUEvKdomDs+Q2qGn4OL5dwVy+yX8QGFx2NI
-   RuwdDmiiRPdvI1mip087s1VEGjoBjRC+RiJY3mC8wiiU+LMuIcStB6IsX
-   9QtJT+92j3lr5WQc5Q5wIDpczceO4iHwGXujkk9jo6XxwiR94AqTuM6tV
-   g==;
-X-CSE-ConnectionGUID: xfEVRRxTQvah6NGPps56yQ==
-X-CSE-MsgGUID: qFk+uz5GTnqK3tfnnKyTaw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="42062417"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="42062417"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 03:07:49 -0800
-X-CSE-ConnectionGUID: 6k/F+HPPRtCI9ZSXx6xyUw==
-X-CSE-MsgGUID: gY5rBCG/Qlu3+iNtxoMw/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="141190252"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Mar 2025 03:07:43 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tp3e9-000IOB-07;
-	Mon, 03 Mar 2025 11:07:41 +0000
-Date: Mon, 3 Mar 2025 19:07:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	hannes@cmpxchg.org, yosry.ahmed@linux.dev, nphamcs@gmail.com,
-	chengming.zhou@linux.dev, usamaarif642@gmail.com,
-	ryan.roberts@arm.com, 21cnbao@gmail.com,
-	ying.huang@linux.alibaba.com, akpm@linux-foundation.org,
-	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
-	davem@davemloft.net, clabbe@baylibre.com, ardb@kernel.org,
-	ebiggers@google.com, surenb@google.com, kristen.c.accardi@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com,
-	kanchana.p.sridhar@intel.com
-Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
- chaining in zswap_store() of large folios.
-Message-ID: <202503031847.j1iReOtf-lkp@intel.com>
-References: <20250303084724.6490-15-kanchana.p.sridhar@intel.com>
+	s=arc-20240116; t=1741000502; c=relaxed/simple;
+	bh=TzWdC4VbbSXc7GXe6UPz5yxsG4/JL1T6TrtZwMCpPZg=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=gnMR7pOJUFUqOwv1FDs8moLI20XSfbAsKXppYk4dBsWfYZhxMmNzLohfX/hdngwy71pLEoUJ7Xd6lYJvRdY763TuLwnHSbwrtP4DJWQPVxnCNKXoQqKX6fKzPFAdjeXqN5juGJs+WNNtKBXWmHv72q50qeMMHNrWDGbDslZLRho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Z5x346Knyz9wDM;
+	Mon,  3 Mar 2025 19:11:44 +0800 (CST)
+Received: from kwepemg500006.china.huawei.com (unknown [7.202.181.43])
+	by mail.maildlp.com (Postfix) with ESMTPS id EBCF51402C8;
+	Mon,  3 Mar 2025 19:14:51 +0800 (CST)
+Received: from [10.67.121.110] (10.67.121.110) by
+ kwepemg500006.china.huawei.com (7.202.181.43) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 3 Mar 2025 19:14:51 +0800
+Subject: Re: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
+To: kernel test robot <lkp@intel.com>, <alex.williamson@redhat.com>,
+	<jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<jonathan.cameron@huawei.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@openeuler.org>
+References: <20250225062757.19692-2-liulongfang@huawei.com>
+ <202502281952.Z9JQ8jcK-lkp@intel.com>
+From: liulongfang <liulongfang@huawei.com>
+Message-ID: <b8478e63-206a-8273-f8a2-af05e17b1d39@huawei.com>
+Date: Mon, 3 Mar 2025 19:14:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250303084724.6490-15-kanchana.p.sridhar@intel.com>
+In-Reply-To: <202502281952.Z9JQ8jcK-lkp@intel.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemg500006.china.huawei.com (7.202.181.43)
 
-Hi Kanchana,
+On 2025/2/28 19:55, kernel test robot wrote:
+> Hi Longfang,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on awilliam-vfio/next]
+> [also build test ERROR on awilliam-vfio/for-linus linus/master v6.14-rc4 next-20250227]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Longfang-Liu/hisi_acc_vfio_pci-fix-XQE-dma-address-error/20250225-143347
+> base:   https://github.com/awilliam/linux-vfio.git next
+> patch link:    https://lore.kernel.org/r/20250225062757.19692-2-liulongfang%40huawei.com
+> patch subject: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502281952.Z9JQ8jcK-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:9:
+>    In file included from include/linux/hisi_acc_qm.h:10:
+>    In file included from include/linux/pci.h:1644:
+>    In file included from include/linux/dmapool.h:14:
+>    In file included from include/linux/scatterlist.h:8:
+>    In file included from include/linux/mm.h:2224:
+>    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      505 |                            item];
+>          |                            ~~~~
+>    include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      512 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+>      525 |                            NR_VM_NUMA_EVENT_ITEMS +
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~
+>>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:448:23: error: use of undeclared identifier 'ACC_DRV_MAR'
+>      448 |         vf_data->major_ver = ACC_DRV_MAR;
+>          |                              ^
+>>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:449:23: error: use of undeclared identifier 'ACC_DRV_MIN'
+>      449 |         vf_data->minor_ver = ACC_DRV_MIN;
+>          |                              ^
+>    3 warnings and 2 errors generated.
+> 
+> 
+> vim +/ACC_DRV_MAR +448 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> 
+>    438	
+>    439	static int vf_qm_get_match_data(struct hisi_acc_vf_core_device *hisi_acc_vdev,
+>    440					struct acc_vf_data *vf_data)
+>    441	{
+>    442		struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
+>    443		struct device *dev = &pf_qm->pdev->dev;
+>    444		int vf_id = hisi_acc_vdev->vf_id;
+>    445		int ret;
+>    446	
+>    447		vf_data->acc_magic = ACC_DEV_MAGIC_V2;
+>  > 448		vf_data->major_ver = ACC_DRV_MAR;
+>  > 449		vf_data->minor_ver = ACC_DRV_MIN;
+>    450		/* Save device id */
+>    451		vf_data->dev_id = hisi_acc_vdev->vf_dev->device;
+>    452	
+>    453		/* VF qp num save from PF */
+>    454		ret = pf_qm_get_qp_num(pf_qm, vf_id, &vf_data->qp_base);
+>    455		if (ret <= 0) {
+>    456			dev_err(dev, "failed to get vft qp nums!\n");
+>    457			return -EINVAL;
+>    458		}
+>    459	
+>    460		vf_data->qp_num = ret;
+>    461	
+>    462		/* VF isolation state save from PF */
+>    463		ret = qm_read_regs(pf_qm, QM_QUE_ISO_CFG_V, &vf_data->que_iso_cfg, 1);
+>    464		if (ret) {
+>    465			dev_err(dev, "failed to read QM_QUE_ISO_CFG_V!\n");
+>    466			return ret;
+>    467		}
+>    468	
+>    469		return 0;
+>    470	}
+>    471	
+> 
 
-kernel test robot noticed the following build errors:
+Thank you for your test, I will fix it in the next version.
 
-[auto build test ERROR on 5f089a9aa987ccf72df0c6955e168e865f280603]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kanchana-P-Sridhar/crypto-acomp-Add-synchronous-asynchronous-acomp-request-chaining/20250303-164927
-base:   5f089a9aa987ccf72df0c6955e168e865f280603
-patch link:    https://lore.kernel.org/r/20250303084724.6490-15-kanchana.p.sridhar%40intel.com
-patch subject: [PATCH v8 14/14] mm: zswap: Compress batching with request chaining in zswap_store() of large folios.
-config: s390-randconfig-001-20250303 (https://download.01.org/0day-ci/archive/20250303/202503031847.j1iReOtf-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031847.j1iReOtf-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503031847.j1iReOtf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/zswap.c:1166:4: error: call to undeclared function 'prefetchw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1166 |                         prefetchw(entries[j]);
-         |                         ^
-   1 error generated.
-
-
-vim +/prefetchw +1166 mm/zswap.c
-
-  1053	
-  1054	/*
-  1055	 * Unified code paths for compressors that do and do not support
-  1056	 * batching. This procedure will compress multiple @nr_pages in @folio,
-  1057	 * starting from @index.
-  1058	 * If @batching is set to true, it will create a request chain for
-  1059	 * compression batching. It is assumed that the caller has verified
-  1060	 * that the acomp_ctx->nr_reqs is at least @nr_pages.
-  1061	 * If @batching is set to false, it will process each page sequentially.
-  1062	 * In both cases, if all compressions were successful, it will proceed
-  1063	 * to store the compressed buffers in zpool.
-  1064	 */
-  1065	static bool zswap_batch_compress(struct folio *folio,
-  1066					 long index,
-  1067					 unsigned int nr_pages,
-  1068					 struct zswap_entry *entries[],
-  1069					 struct zswap_pool *pool,
-  1070					 struct crypto_acomp_ctx *acomp_ctx,
-  1071					 bool batching)
-  1072	{
-  1073		struct scatterlist inputs[ZSWAP_MAX_BATCH_SIZE];
-  1074		struct scatterlist outputs[ZSWAP_MAX_BATCH_SIZE];
-  1075		struct zpool *zpool = pool->zpool;
-  1076		int acomp_idx = 0, nr_to_store = 1;
-  1077		unsigned int i, j;
-  1078		int err = 0;
-  1079		gfp_t gfp;
-  1080	
-  1081		lockdep_assert_held(&acomp_ctx->mutex);
-  1082	
-  1083		gfp = __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
-  1084		if (zpool_malloc_support_movable(zpool))
-  1085			gfp |= __GFP_HIGHMEM | __GFP_MOVABLE;
-  1086	
-  1087		for (i = 0; i < nr_pages; ++i) {
-  1088			struct page *page = folio_page(folio, index + i);
-  1089	
-  1090			sg_init_table(&inputs[acomp_idx], 1);
-  1091			sg_set_page(&inputs[acomp_idx], page, PAGE_SIZE, 0);
-  1092	
-  1093			/*
-  1094			 * Each dst buffer should be of size (PAGE_SIZE * 2).
-  1095			 * Reflect same in sg_list.
-  1096			 */
-  1097			sg_init_one(&outputs[acomp_idx], acomp_ctx->buffers[acomp_idx], PAGE_SIZE * 2);
-  1098			acomp_request_set_params(acomp_ctx->reqs[acomp_idx], &inputs[acomp_idx],
-  1099						 &outputs[acomp_idx], PAGE_SIZE, PAGE_SIZE);
-  1100	
-  1101			if (batching) {
-  1102				/* Add the acomp request to the chain. */
-  1103				if (likely(i))
-  1104					acomp_request_chain(acomp_ctx->reqs[acomp_idx], acomp_ctx->reqs[0]);
-  1105				else
-  1106					acomp_reqchain_init(acomp_ctx->reqs[0], 0, crypto_req_done,
-  1107							    &acomp_ctx->wait);
-  1108	
-  1109				if (i == (nr_pages - 1)) {
-  1110					/* Process the request chain. */
-  1111					err = crypto_wait_req(crypto_acomp_compress(acomp_ctx->reqs[0]), &acomp_ctx->wait);
-  1112	
-  1113					/*
-  1114					 * Get the individual compress errors from request chaining.
-  1115					 */
-  1116					for (j = 0; j < nr_pages; ++j) {
-  1117						if (unlikely(acomp_request_err(acomp_ctx->reqs[j]))) {
-  1118							err = -EINVAL;
-  1119							if (acomp_request_err(acomp_ctx->reqs[j]) == -ENOSPC)
-  1120								zswap_reject_compress_poor++;
-  1121							else
-  1122								zswap_reject_compress_fail++;
-  1123						}
-  1124					}
-  1125					/*
-  1126					 * Request chaining cleanup:
-  1127					 *
-  1128					 * - Clear the CRYPTO_TFM_REQ_CHAIN bit on acomp_ctx->reqs[0].
-  1129					 * - Reset the acomp_ctx->wait to notify acomp_ctx->reqs[0].
-  1130					 */
-  1131					acomp_reqchain_clear(acomp_ctx->reqs[0], &acomp_ctx->wait);
-  1132					if (unlikely(err))
-  1133						return false;
-  1134					j = 0;
-  1135					nr_to_store = nr_pages;
-  1136					goto store_zpool;
-  1137				}
-  1138	
-  1139				++acomp_idx;
-  1140				continue;
-  1141			} else {
-  1142				err = crypto_wait_req(crypto_acomp_compress(acomp_ctx->reqs[0]), &acomp_ctx->wait);
-  1143	
-  1144				if (unlikely(err)) {
-  1145					if (err == -ENOSPC)
-  1146						zswap_reject_compress_poor++;
-  1147					else
-  1148						zswap_reject_compress_fail++;
-  1149					return false;
-  1150				}
-  1151				j = i;
-  1152				nr_to_store = 1;
-  1153			}
-  1154	
-  1155	store_zpool:
-  1156			/*
-  1157			 * All batch pages were successfully compressed.
-  1158			 * Store the pages in zpool.
-  1159			 */
-  1160			acomp_idx = -1;
-  1161			while (nr_to_store--) {
-  1162				unsigned long handle;
-  1163				char *buf;
-  1164	
-  1165				++acomp_idx;
-> 1166				prefetchw(entries[j]);
-  1167				err = zpool_malloc(zpool, acomp_ctx->reqs[acomp_idx]->dlen, gfp, &handle);
-  1168	
-  1169				if (unlikely(err)) {
-  1170					if (err == -ENOSPC)
-  1171						zswap_reject_compress_poor++;
-  1172					else
-  1173						zswap_reject_alloc_fail++;
-  1174	
-  1175					return false;
-  1176				}
-  1177	
-  1178				buf = zpool_map_handle(zpool, handle, ZPOOL_MM_WO);
-  1179				memcpy(buf, acomp_ctx->buffers[acomp_idx], acomp_ctx->reqs[acomp_idx]->dlen);
-  1180				zpool_unmap_handle(zpool, handle);
-  1181	
-  1182				entries[j]->handle = handle;
-  1183				entries[j]->length = acomp_ctx->reqs[acomp_idx]->dlen;
-  1184				++j;
-  1185			}
-  1186		}
-  1187	
-  1188		return true;
-  1189	}
-  1190	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks.
+Longfang.
