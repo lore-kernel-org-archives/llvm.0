@@ -1,150 +1,90 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8491F30DE;
-	Mon,  3 Mar 2025 11:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDBE1F4165;
+	Mon,  3 Mar 2025 11:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000502; cv=none; b=QWU6ocSPi6l3mRxaA/6cP+NtIQfrQwiFY7PQVM8+8e+wha53ABW3di16iUj1rXzTJR64+hE+8AS8j55snBzbO3JXky1Lzq+2XVk1Sw0NL/hYN5tsFo/IXTRS+pksydb5GoVSlHtvpUISUIGI34yi63YY85ENUixqdxrlzuF8G1U=
+	t=1741000729; cv=none; b=R7KfWDY8Sdi3JwsJvy3pu9t6j7OxUVutiLAN8BoJzNIlOIfAbLW3ZGTCezN0v32fGTapA/S+xUVdKCyEqSsc9oOiQd3Qw5pNd2A7xJSs7uXEvMBhij+GLtILJF7/PTGqcY3SBoogioHFo5FlNcZFzSsnELZWqEo8wXPVhXtuyTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000502; c=relaxed/simple;
-	bh=TzWdC4VbbSXc7GXe6UPz5yxsG4/JL1T6TrtZwMCpPZg=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=gnMR7pOJUFUqOwv1FDs8moLI20XSfbAsKXppYk4dBsWfYZhxMmNzLohfX/hdngwy71pLEoUJ7Xd6lYJvRdY763TuLwnHSbwrtP4DJWQPVxnCNKXoQqKX6fKzPFAdjeXqN5juGJs+WNNtKBXWmHv72q50qeMMHNrWDGbDslZLRho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Z5x346Knyz9wDM;
-	Mon,  3 Mar 2025 19:11:44 +0800 (CST)
-Received: from kwepemg500006.china.huawei.com (unknown [7.202.181.43])
-	by mail.maildlp.com (Postfix) with ESMTPS id EBCF51402C8;
-	Mon,  3 Mar 2025 19:14:51 +0800 (CST)
-Received: from [10.67.121.110] (10.67.121.110) by
- kwepemg500006.china.huawei.com (7.202.181.43) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 3 Mar 2025 19:14:51 +0800
-Subject: Re: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
-To: kernel test robot <lkp@intel.com>, <alex.williamson@redhat.com>,
-	<jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<jonathan.cameron@huawei.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@openeuler.org>
-References: <20250225062757.19692-2-liulongfang@huawei.com>
- <202502281952.Z9JQ8jcK-lkp@intel.com>
-From: liulongfang <liulongfang@huawei.com>
-Message-ID: <b8478e63-206a-8273-f8a2-af05e17b1d39@huawei.com>
-Date: Mon, 3 Mar 2025 19:14:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+	s=arc-20240116; t=1741000729; c=relaxed/simple;
+	bh=tX6xycVlm0hqQ9h8iORXLZHUyLwbVdP+cXKqAOJS+II=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=olpIAXtMqTvvvZisEb3lWUxoCcg87y5Yd0ixKJy8D7YP1hk00aRlMAdSTmquDUmBHtw2utFEo8UxTL871PQYLpRcwOcwDPZHVy8J/6FqeSjVr7Id4Vf8JYRKTthGDdjf472505r9hKaNmSpgHCZVhyjQbHIWRdLIH6CuGwB4Kdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nCDsjqce; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nCDsjqce"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741000728; x=1772536728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tX6xycVlm0hqQ9h8iORXLZHUyLwbVdP+cXKqAOJS+II=;
+  b=nCDsjqceOA3qkUiSJIVV8D7MpwSc+oP9tqrMOKTm3bMRONhriK4lfHLy
+   mgdxf498nwmHYaqK3gDp4E3fL25O9XHxNh3mV/mgdfKciBvpI8F+ec/SV
+   6LkFsfQ1T31YkOMUVyO1hlFn9PWObt0Sd1XNsiAeHJs5lZaInSay10YPM
+   2EtOlCkchP0BKDWlDqDe4hzs73rCKLJB7Mgrrl4dDnvxqDJDtvEALN124
+   Jh7SczYDAz55baEVp2RoEs2KdOJ8O9dlR6Yev/6RLPamVKocg0W3gCwEu
+   PIsk+hfHG3fydMVy45kG1AOLAsPYrbq3suN4wn3aEyIy5fKVXaoM0wBxb
+   Q==;
+X-CSE-ConnectionGUID: 8K3jH+aMRn2JskM3MUYafQ==
+X-CSE-MsgGUID: k9Umaj5VRKWXK/UXFses5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="45644557"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="45644557"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 03:18:47 -0800
+X-CSE-ConnectionGUID: S5aCuh0sQ0q2PF8VTniF7g==
+X-CSE-MsgGUID: 0oCy3AfKT9+VTH5NApmTuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="122978491"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa004.jf.intel.com with ESMTP; 03 Mar 2025 03:18:45 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id A550B125; Mon, 03 Mar 2025 13:18:42 +0200 (EET)
+Date: Mon, 3 Mar 2025 13:18:42 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Johannes Weiner <hannes@cmpxchg.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: kernel test robot <lkp@intel.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Oscar Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
+ change
+Message-ID: <Z8WQEpv7BNtDDoH3@black.fi.intel.com>
+References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
+ <202503010129.rJvGqZN1-lkp@intel.com>
+ <20250228182804.GB120597@cmpxchg.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <202502281952.Z9JQ8jcK-lkp@intel.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemg500006.china.huawei.com (7.202.181.43)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250228182804.GB120597@cmpxchg.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 2025/2/28 19:55, kernel test robot wrote:
-> Hi Longfang,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on awilliam-vfio/next]
-> [also build test ERROR on awilliam-vfio/for-linus linus/master v6.14-rc4 next-20250227]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Longfang-Liu/hisi_acc_vfio_pci-fix-XQE-dma-address-error/20250225-143347
-> base:   https://github.com/awilliam/linux-vfio.git next
-> patch link:    https://lore.kernel.org/r/20250225062757.19692-2-liulongfang%40huawei.com
-> patch subject: [PATCH v4 1/5] hisi_acc_vfio_pci: fix XQE dma address error
-> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250228/202502281952.Z9JQ8jcK-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502281952.Z9JQ8jcK-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:9:
->    In file included from include/linux/hisi_acc_qm.h:10:
->    In file included from include/linux/pci.h:1644:
->    In file included from include/linux/dmapool.h:14:
->    In file included from include/linux/scatterlist.h:8:
->    In file included from include/linux/mm.h:2224:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:448:23: error: use of undeclared identifier 'ACC_DRV_MAR'
->      448 |         vf_data->major_ver = ACC_DRV_MAR;
->          |                              ^
->>> drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c:449:23: error: use of undeclared identifier 'ACC_DRV_MIN'
->      449 |         vf_data->minor_ver = ACC_DRV_MIN;
->          |                              ^
->    3 warnings and 2 errors generated.
-> 
-> 
-> vim +/ACC_DRV_MAR +448 drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
-> 
->    438	
->    439	static int vf_qm_get_match_data(struct hisi_acc_vf_core_device *hisi_acc_vdev,
->    440					struct acc_vf_data *vf_data)
->    441	{
->    442		struct hisi_qm *pf_qm = hisi_acc_vdev->pf_qm;
->    443		struct device *dev = &pf_qm->pdev->dev;
->    444		int vf_id = hisi_acc_vdev->vf_id;
->    445		int ret;
->    446	
->    447		vf_data->acc_magic = ACC_DEV_MAGIC_V2;
->  > 448		vf_data->major_ver = ACC_DRV_MAR;
->  > 449		vf_data->minor_ver = ACC_DRV_MIN;
->    450		/* Save device id */
->    451		vf_data->dev_id = hisi_acc_vdev->vf_dev->device;
->    452	
->    453		/* VF qp num save from PF */
->    454		ret = pf_qm_get_qp_num(pf_qm, vf_id, &vf_data->qp_base);
->    455		if (ret <= 0) {
->    456			dev_err(dev, "failed to get vft qp nums!\n");
->    457			return -EINVAL;
->    458		}
->    459	
->    460		vf_data->qp_num = ret;
->    461	
->    462		/* VF isolation state save from PF */
->    463		ret = qm_read_regs(pf_qm, QM_QUE_ISO_CFG_V, &vf_data->que_iso_cfg, 1);
->    464		if (ret) {
->    465			dev_err(dev, "failed to read QM_QUE_ISO_CFG_V!\n");
->    466			return ret;
->    467		}
->    468	
->    469		return 0;
->    470	}
->    471	
-> 
+On Fri, Feb 28, 2025 at 01:28:04PM -0500, Johannes Weiner wrote:
+> On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote:
 
-Thank you for your test, I will fix it in the next version.
+> The patch is missing a dummy in_mem_hotplug() in the
+> !CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>.
 
-Thanks.
-Longfang.
++1, I just stumbled over and this is not fixed in today's Linux Next. I'm
+wondering how this was missed during merge into Linux Next. Stephen?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
