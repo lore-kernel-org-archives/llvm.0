@@ -1,112 +1,248 @@
-Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196291E376C
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 10:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646191F8733;
+	Mon,  3 Mar 2025 11:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740999198; cv=none; b=guDagPtZ21Ar7bDcEGL5KgRs8YPglUBnmdJWAClGuMaCjZo1ori/2R/PyQbdHUztUAi6NHd0RMgNhZFnokLmvppG0lPJ6dJGWB6pyVdxG4zsaPOP9TW2v7HY5cG8EPjMmScL6CqLrggToMMo1TNALkAOhJxPUvpB9+KTuMrdsIE=
+	t=1741000071; cv=none; b=IfMP1uQMO8anfR4Bozrl2uCr0RN6juidmkeVY9hm2iZSb3f+QMc6/u0Jse4Fci7qXzXNSOebxzMTvXjFjUKdQmX1uY1ypK8sfIUisNLVxa0TiFvocLvqDvywrptZi4LICzN9ENojQxmnaLWkuW4UJMfCqdQnG30C34ICCfVXdis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740999198; c=relaxed/simple;
-	bh=t/g0xd3Ux115LiKLycQFMagbToxXU2ApMLqVpDJxUaI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I8sJ1NooKgbzVdOxy3lmdPvPnjRBp0BD3eefm/UmuaZoF3kNG5Dn6Klz7+cADeTi77Bebo6Ue4la+t/9Fi4mwGVWOYSO2dme6dHLUWvaBmGpgMAdmkTRyBAeH2gZcCwulxjqhYTKhI/0f6xOME9g4ShnVLm+71SGID6wudWEqyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DPuJ5dh+; arc=none smtp.client-ip=209.85.128.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741000071; c=relaxed/simple;
+	bh=/QzomCTIFsL8+Zge4gSHgukORn6rUTkJqZQWdz6RUAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ofVWXQYq153Mi3ZrjRuoDXjznwdq31ZOmBbn5ZDn3JkFKYdbxu/RwdsvqJp+u5MvZuWKGYgJeYEfWCb+ffTjBPPBRu1sZK8zd055lyk0NZM/b0vV+ZPhekZDHl6lKY2VSUZDUGgA/v87g3Taxo8QWAS/0YcCiybD/S1gp3VpleU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=do/gsAo4; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DPuJ5dh+"
-Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-6f4bc408e49so37593297b3.1
-        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 02:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740999196; x=1741603996; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uqcchcl0H3MHX0plBBglpw5tZdbp+fJLEBNYpMMUwBs=;
-        b=DPuJ5dh+XPgY/cRksNPCih5DX4BIHJ09QqHO4AdiAkeJHvIzSSUeeenI+hbOGV83zi
-         c1IujAqHjRuhBRpQdjArQ+c1Q63Wy8X4HFx4rxkx84SN3BmT54zQDwjAzSXj0cqUBFqG
-         IOlKMCK0AWYFKxL6Z0Gq4P/jZSWqCt7Neuw6fPgXWqKc4F3//gtYT5EPqYikle4Mr18l
-         dW2POZ/m1qqoAWxshxRege4XhC34dFaXub5O2RLeQrHyiuhxBuhOKobAfELRtdvUbRmO
-         7s0h3pGwwE1qekGYzcy9I44guA8OFQu6tAR+NHr3t3RFGgpnPyjun9uQu5I2khpTwy5b
-         9ebQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740999196; x=1741603996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uqcchcl0H3MHX0plBBglpw5tZdbp+fJLEBNYpMMUwBs=;
-        b=aVyxT25dlCjgiX9mDRdSVaLcsj9iRgVwmLUtDDeb7R/iwibO3nJU53CAuMBcst4ScS
-         /EweLhUVi2zOWFvF8ZsjqDP0OOeYyb7HtMpVba/zn+SPEPLhm/0pgremfE/4hRflu8Yh
-         8Fuxm00BRo3un4B2X+He0i/JzFhnLje+ji3jK8zvsu0JkJeYRQONn6H/RmFD+y3ogpFJ
-         KF9mbSbc2dPu19ezM6Adsd4Xx0UGX2dsmTbs5TfbSb7w5iY+yYAm9ihsopHmK96kNKKK
-         Dpoo1rH1xPc94BifL5yznQ3mf4n9gb3qguJE8lT0wPpuARJ65U8w/rPr+GB+mu3dhRk1
-         KQEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW7xBh1AOBD57xGXC2VtqJceFpEt7iVHFv6ugMZ5AMHz682WtenQDyNp2kJOp/ZnMdzs06T@lists.linux.dev
-X-Gm-Message-State: AOJu0YzYbq4nduS4AclTs9Ue6fyZf9PysOuNi6/0++ZwAyKMyZVONrsp
-	+8G9OMuxQBl3V6PE42hFDxHDOftqgBCSNgp9TcXSAbFigjZ31/iXxlrsCIAbFhyv5wXVLspwmkH
-	Pp0HOiroEV+hPjAOf2PfOwLxljaI=
-X-Gm-Gg: ASbGncsiG/ep8f4yLk3+XQFjPo09zayLr7Rt344h4VYxlWr09PTVpaOH9NuUF7EWdFU
-	rfqwmYkVGNAe+xBDLx0tSQSchVzzBkm8lEWTiD4EyzXKVl7m5SqhXOCARc2L94xY5BjS85DxjNS
-	WyNWKRjrieyHjA6bsQl0ulq/7I4w==
-X-Google-Smtp-Source: AGHT+IGPFg7vyGunvepCrP71hctzW/wiFhK2mnTSkLrkuSsp6X2qPRH18XUJIiB5Y7juu2x6EocYr5DNocerNm2QyWM=
-X-Received: by 2002:a05:690c:4802:b0:6fd:2f47:f4f9 with SMTP id
- 00721157ae682-6fd4a0bad92mr160996667b3.9.1740999195914; Mon, 03 Mar 2025
- 02:53:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="do/gsAo4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741000069; x=1772536069;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/QzomCTIFsL8+Zge4gSHgukORn6rUTkJqZQWdz6RUAM=;
+  b=do/gsAo47ThmKfqaqDN/r2/5wrRXerOY/oNQk7PTGp2HmEE2acgsiCKC
+   kCqNAucF0nnriCC292xRgiueYuxW0/Hh83UqCuLP1mrtslCWzWrjCY1ox
+   hbEBjjg/2SIYTh+LsiUSwH+D2qiuuNf45SkLyst1Z5LcgRGBaO6afJ4nn
+   xiIVmVEYW3KkeqoHSOvi5lIUEvKdomDs+Q2qGn4OL5dwVy+yX8QGFx2NI
+   RuwdDmiiRPdvI1mip087s1VEGjoBjRC+RiJY3mC8wiiU+LMuIcStB6IsX
+   9QtJT+92j3lr5WQc5Q5wIDpczceO4iHwGXujkk9jo6XxwiR94AqTuM6tV
+   g==;
+X-CSE-ConnectionGUID: xfEVRRxTQvah6NGPps56yQ==
+X-CSE-MsgGUID: qFk+uz5GTnqK3tfnnKyTaw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="42062417"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="42062417"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 03:07:49 -0800
+X-CSE-ConnectionGUID: 6k/F+HPPRtCI9ZSXx6xyUw==
+X-CSE-MsgGUID: gY5rBCG/Qlu3+iNtxoMw/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="141190252"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Mar 2025 03:07:43 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tp3e9-000IOB-07;
+	Mon, 03 Mar 2025 11:07:41 +0000
+Date: Mon, 3 Mar 2025 19:07:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	hannes@cmpxchg.org, yosry.ahmed@linux.dev, nphamcs@gmail.com,
+	chengming.zhou@linux.dev, usamaarif642@gmail.com,
+	ryan.roberts@arm.com, 21cnbao@gmail.com,
+	ying.huang@linux.alibaba.com, akpm@linux-foundation.org,
+	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au,
+	davem@davemloft.net, clabbe@baylibre.com, ardb@kernel.org,
+	ebiggers@google.com, surenb@google.com, kristen.c.accardi@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com,
+	kanchana.p.sridhar@intel.com
+Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
+ chaining in zswap_store() of large folios.
+Message-ID: <202503031847.j1iReOtf-lkp@intel.com>
+References: <20250303084724.6490-15-kanchana.p.sridhar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
- <20250303065345.229298-2-dongml2@chinatelecom.cn> <20250303091811.GH5880@noisy.programming.kicks-ass.net>
-In-Reply-To: <20250303091811.GH5880@noisy.programming.kicks-ass.net>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Mon, 3 Mar 2025 18:51:41 +0800
-X-Gm-Features: AQ5f1JolBjCiOEE9gVLsf6wdPN2zmwGfmSm6JtRrhu885EwwD4hwEQ1WHKYNmyc
-Message-ID: <CADxym3as+KdeBMUigq4xq302g2U7UG-7Gm+vKiYGnSjHouq=bg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/4] x86/ibt: factor out cfi and fineibt offset
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com, 
-	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, davem@davemloft.net, 
-	dsahern@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, samitolvanen@google.com, 
-	kees@kernel.org, dongml2@chinatelecom.cn, akpm@linux-foundation.org, 
-	riel@surriel.com, rppt@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303084724.6490-15-kanchana.p.sridhar@intel.com>
 
-On Mon, Mar 3, 2025 at 5:18=E2=80=AFPM Peter Zijlstra <peterz@infradead.org=
-> wrote:
->
-> On Mon, Mar 03, 2025 at 02:53:42PM +0800, Menglong Dong wrote:
-> > index c71b575bf229..ad050d09cb2b 100644
-> > --- a/arch/x86/kernel/alternative.c
-> > +++ b/arch/x86/kernel/alternative.c
-> > @@ -908,7 +908,7 @@ void __init_or_module noinline apply_seal_endbr(s32=
- *start, s32 *end, struct mod
-> >
-> >               poison_endbr(addr, wr_addr, true);
-> >               if (IS_ENABLED(CONFIG_FINEIBT))
-> > -                     poison_cfi(addr - 16, wr_addr - 16);
-> > +                     poison_cfi(addr, wr_addr);
-> >       }
-> >  }
->
-> If you're touching this code, please use tip/x86/core or tip/master.
+Hi Kanchana,
 
-Thank you for reminding me that, I were using the linux-next, and
-I notice that you just did some optimization to the FINEIBT :/
+kernel test robot noticed the following build errors:
 
-I'll send a V4 later, based on the tip/x86/core.
+[auto build test ERROR on 5f089a9aa987ccf72df0c6955e168e865f280603]
 
-Thanks!
-Menglong Dong
+url:    https://github.com/intel-lab-lkp/linux/commits/Kanchana-P-Sridhar/crypto-acomp-Add-synchronous-asynchronous-acomp-request-chaining/20250303-164927
+base:   5f089a9aa987ccf72df0c6955e168e865f280603
+patch link:    https://lore.kernel.org/r/20250303084724.6490-15-kanchana.p.sridhar%40intel.com
+patch subject: [PATCH v8 14/14] mm: zswap: Compress batching with request chaining in zswap_store() of large folios.
+config: s390-randconfig-001-20250303 (https://download.01.org/0day-ci/archive/20250303/202503031847.j1iReOtf-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031847.j1iReOtf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503031847.j1iReOtf-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/zswap.c:1166:4: error: call to undeclared function 'prefetchw'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1166 |                         prefetchw(entries[j]);
+         |                         ^
+   1 error generated.
+
+
+vim +/prefetchw +1166 mm/zswap.c
+
+  1053	
+  1054	/*
+  1055	 * Unified code paths for compressors that do and do not support
+  1056	 * batching. This procedure will compress multiple @nr_pages in @folio,
+  1057	 * starting from @index.
+  1058	 * If @batching is set to true, it will create a request chain for
+  1059	 * compression batching. It is assumed that the caller has verified
+  1060	 * that the acomp_ctx->nr_reqs is at least @nr_pages.
+  1061	 * If @batching is set to false, it will process each page sequentially.
+  1062	 * In both cases, if all compressions were successful, it will proceed
+  1063	 * to store the compressed buffers in zpool.
+  1064	 */
+  1065	static bool zswap_batch_compress(struct folio *folio,
+  1066					 long index,
+  1067					 unsigned int nr_pages,
+  1068					 struct zswap_entry *entries[],
+  1069					 struct zswap_pool *pool,
+  1070					 struct crypto_acomp_ctx *acomp_ctx,
+  1071					 bool batching)
+  1072	{
+  1073		struct scatterlist inputs[ZSWAP_MAX_BATCH_SIZE];
+  1074		struct scatterlist outputs[ZSWAP_MAX_BATCH_SIZE];
+  1075		struct zpool *zpool = pool->zpool;
+  1076		int acomp_idx = 0, nr_to_store = 1;
+  1077		unsigned int i, j;
+  1078		int err = 0;
+  1079		gfp_t gfp;
+  1080	
+  1081		lockdep_assert_held(&acomp_ctx->mutex);
+  1082	
+  1083		gfp = __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
+  1084		if (zpool_malloc_support_movable(zpool))
+  1085			gfp |= __GFP_HIGHMEM | __GFP_MOVABLE;
+  1086	
+  1087		for (i = 0; i < nr_pages; ++i) {
+  1088			struct page *page = folio_page(folio, index + i);
+  1089	
+  1090			sg_init_table(&inputs[acomp_idx], 1);
+  1091			sg_set_page(&inputs[acomp_idx], page, PAGE_SIZE, 0);
+  1092	
+  1093			/*
+  1094			 * Each dst buffer should be of size (PAGE_SIZE * 2).
+  1095			 * Reflect same in sg_list.
+  1096			 */
+  1097			sg_init_one(&outputs[acomp_idx], acomp_ctx->buffers[acomp_idx], PAGE_SIZE * 2);
+  1098			acomp_request_set_params(acomp_ctx->reqs[acomp_idx], &inputs[acomp_idx],
+  1099						 &outputs[acomp_idx], PAGE_SIZE, PAGE_SIZE);
+  1100	
+  1101			if (batching) {
+  1102				/* Add the acomp request to the chain. */
+  1103				if (likely(i))
+  1104					acomp_request_chain(acomp_ctx->reqs[acomp_idx], acomp_ctx->reqs[0]);
+  1105				else
+  1106					acomp_reqchain_init(acomp_ctx->reqs[0], 0, crypto_req_done,
+  1107							    &acomp_ctx->wait);
+  1108	
+  1109				if (i == (nr_pages - 1)) {
+  1110					/* Process the request chain. */
+  1111					err = crypto_wait_req(crypto_acomp_compress(acomp_ctx->reqs[0]), &acomp_ctx->wait);
+  1112	
+  1113					/*
+  1114					 * Get the individual compress errors from request chaining.
+  1115					 */
+  1116					for (j = 0; j < nr_pages; ++j) {
+  1117						if (unlikely(acomp_request_err(acomp_ctx->reqs[j]))) {
+  1118							err = -EINVAL;
+  1119							if (acomp_request_err(acomp_ctx->reqs[j]) == -ENOSPC)
+  1120								zswap_reject_compress_poor++;
+  1121							else
+  1122								zswap_reject_compress_fail++;
+  1123						}
+  1124					}
+  1125					/*
+  1126					 * Request chaining cleanup:
+  1127					 *
+  1128					 * - Clear the CRYPTO_TFM_REQ_CHAIN bit on acomp_ctx->reqs[0].
+  1129					 * - Reset the acomp_ctx->wait to notify acomp_ctx->reqs[0].
+  1130					 */
+  1131					acomp_reqchain_clear(acomp_ctx->reqs[0], &acomp_ctx->wait);
+  1132					if (unlikely(err))
+  1133						return false;
+  1134					j = 0;
+  1135					nr_to_store = nr_pages;
+  1136					goto store_zpool;
+  1137				}
+  1138	
+  1139				++acomp_idx;
+  1140				continue;
+  1141			} else {
+  1142				err = crypto_wait_req(crypto_acomp_compress(acomp_ctx->reqs[0]), &acomp_ctx->wait);
+  1143	
+  1144				if (unlikely(err)) {
+  1145					if (err == -ENOSPC)
+  1146						zswap_reject_compress_poor++;
+  1147					else
+  1148						zswap_reject_compress_fail++;
+  1149					return false;
+  1150				}
+  1151				j = i;
+  1152				nr_to_store = 1;
+  1153			}
+  1154	
+  1155	store_zpool:
+  1156			/*
+  1157			 * All batch pages were successfully compressed.
+  1158			 * Store the pages in zpool.
+  1159			 */
+  1160			acomp_idx = -1;
+  1161			while (nr_to_store--) {
+  1162				unsigned long handle;
+  1163				char *buf;
+  1164	
+  1165				++acomp_idx;
+> 1166				prefetchw(entries[j]);
+  1167				err = zpool_malloc(zpool, acomp_ctx->reqs[acomp_idx]->dlen, gfp, &handle);
+  1168	
+  1169				if (unlikely(err)) {
+  1170					if (err == -ENOSPC)
+  1171						zswap_reject_compress_poor++;
+  1172					else
+  1173						zswap_reject_alloc_fail++;
+  1174	
+  1175					return false;
+  1176				}
+  1177	
+  1178				buf = zpool_map_handle(zpool, handle, ZPOOL_MM_WO);
+  1179				memcpy(buf, acomp_ctx->buffers[acomp_idx], acomp_ctx->reqs[acomp_idx]->dlen);
+  1180				zpool_unmap_handle(zpool, handle);
+  1181	
+  1182				entries[j]->handle = handle;
+  1183				entries[j]->length = acomp_ctx->reqs[acomp_idx]->dlen;
+  1184				++j;
+  1185			}
+  1186		}
+  1187	
+  1188		return true;
+  1189	}
+  1190	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
