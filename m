@@ -1,60 +1,47 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8722AD27;
-	Mon,  3 Mar 2025 09:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5941F12E7;
+	Mon,  3 Mar 2025 09:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740993523; cv=none; b=eM6oqolG4myHsKW/FXi3/iP9lDXlt9QViMzNoqiSX7sah4EZ+dZFxHqUAynLEcryPivLB3tmdGVhRWlhpe0qPIvWVqTnY/1GC6qS3JpVqxoZNqfFait5OcEAu9a+BgyhgUnpE167JKYuVffzjwrq56F4cc4CTJlCgqCJKZOV9V4=
+	t=1740993904; cv=none; b=Oei4ixUk4gyWY78cDP68Kz56AUkvguN2KTg1mOowp2G9vMsb8Q8Qd4r238cnho1qPWd7e6Ga1qNLmYvuWWAU63dGgoh86XVWsjOIKhsdXVME5sNfrNLgi8l4fBIUlVYdl/EDns1TCYfgZTWcxo4tQdzRR4LU0rFWminhnlm83d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740993523; c=relaxed/simple;
-	bh=Ve5w4wBza/LR9gEhfks2GNQsd1BGH+h8LS5mlA9F7SA=;
+	s=arc-20240116; t=1740993904; c=relaxed/simple;
+	bh=anrVdYlvp+vutF77M+oNBrnX/luGXvKRsTQJKbdwgXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqKXyGtJNRz1eN/m5toBrP+H0LG6UpZqMHxlmqZGtTkdnoTbBNBMxBjVD44tWPiySRUlwRX40x9OXoEWyalFGHZ5jfbF6HyGSpFsihysDBYn3WZrkerIcsxXopJ9qweGLJh/B8ni13v8TDbDCLh84uDWlLo58NmmJNyu2Bd6woE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=snAJ488r; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nod9g1i3kcKbUIzThnlVJ0cX39c5d2OXA1x5ErnvN/NADA7wsJRLqZLg9BiR+miGVheMv9wb2bYCQBQwR+QA0WOrFW6O1ugQdaQpXto5R3gBr070dqiLdMKHXcFuTxvJ2KIawUnqXJz0GhIo89wiA9hC8kM5Bf+MEKRqOo/WyK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p4SoJfID; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="snAJ488r"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p4SoJfID"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1eCtu+hvRhYstMo2vG0z14zLR3g9gohNHmA5ExvpV9Y=; b=snAJ488rsQoq3hN1Z4FaRaQlQH
-	9so+l3wlu5qJyjQKPK8rZIvWFrAiMCWsMVPirTbkAjAwy8KrNZ+PwvGMWz1dS6hh+eqcfMrNpEgYf
-	yynraGfpogGIpEsCt74e2Zy1LrJYqjIRw74qWxaCNR4BikDoF52TN5wAe+PgIeHRpZCjkdquHdAm0
-	mFMYGA1uwetI3N7IK/WIdZyNOmKr/fSFLOpHijzNTU+/3Z+CQKEh6ksGC9KIGKoHLh1JeC6QxOgHZ
-	YL4PwFqb7dsxlsoSUc1CwOwL0YwuDz+NV41FSuuZwjc9FynHG9JVe1DWed11QXALcV2Nh3pHslyBl
-	ifQrqumA==;
+	bh=vzlWwoYxaOsW2jKVbAk8xYIOxalJ85AZ7FYYDeZecek=; b=p4SoJfIDMgnfsHECQWncTbzWJf
+	tHz8k1bZxPYtEtUzeMhqdI++F75l0/DlIRW00IoIoCe08qrQA2lJr/qVAsuZumhuKHglIPwPCfPyh
+	CH+MFKGl57g4wZIF+IYhWj5aF9oGyFKNhcHxBTVvWvwlSb8gEuUnkgEd7xQSAnGyL4nF9AxuyX865
+	vU3vchbEmgWsMrlBRCt6mk205kA1+qOJ45m9yQSd6vMRv0AQC5dK1iLK4Gm5G/yWpDMp1VEQi66Wu
+	dqWuhkIdBuD+FJOKUxFcT+5r/7CE7JGUF8GoFbAG4GeuQREZdgTk4/gGotvwXl+W9ZGboQNb9w7uY
+	Q2vqDgeA==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tp1wB-0000000BOR4-35ew;
-	Mon, 03 Mar 2025 09:18:11 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tp22m-00000004Wrl-0mFb;
+	Mon, 03 Mar 2025 09:25:00 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5935F30049D; Mon,  3 Mar 2025 10:18:11 +0100 (CET)
-Date: Mon, 3 Mar 2025 10:18:11 +0100
+	id BE6B930049D; Mon,  3 Mar 2025 10:24:59 +0100 (CET)
+Date: Mon, 3 Mar 2025 10:24:59 +0100
 From: Peter Zijlstra <peterz@infradead.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
-	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-	jolsa@kernel.org, davem@davemloft.net, dsahern@kernel.org,
-	mathieu.desnoyers@efficios.com, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
-	akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v3 1/4] x86/ibt: factor out cfi and fineibt
- offset
-Message-ID: <20250303091811.GH5880@noisy.programming.kicks-ass.net>
-References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
- <20250303065345.229298-2-dongml2@chinatelecom.cn>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>
+Subject: Re: [tip:x86/core 16/17] vmlinux.o: warning: objtool: do_jit+0x276:
+ relocation to !ENDBR: .noinstr.text+0x6a60
+Message-ID: <20250303092459.GI5880@noisy.programming.kicks-ass.net>
+References: <202503030704.H9KFysNS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,19 +50,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303065345.229298-2-dongml2@chinatelecom.cn>
+In-Reply-To: <202503030704.H9KFysNS-lkp@intel.com>
 
-On Mon, Mar 03, 2025 at 02:53:42PM +0800, Menglong Dong wrote:
-> index c71b575bf229..ad050d09cb2b 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -908,7 +908,7 @@ void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct mod
->  
->  		poison_endbr(addr, wr_addr, true);
->  		if (IS_ENABLED(CONFIG_FINEIBT))
-> -			poison_cfi(addr - 16, wr_addr - 16);
-> +			poison_cfi(addr, wr_addr);
->  	}
->  }
+On Mon, Mar 03, 2025 at 07:47:57AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+> head:   dfebe7362f6f461d771cdb9ac2c5172a4721f064
+> commit: 0c92385dc05ee9637c04372ea95a11bbf6e010ff [16/17] x86/ibt: Implement FineIBT-BHI mitigation
+> config: x86_64-randconfig-071-20250303 (https://download.01.org/0day-ci/archive/20250303/202503030704.H9KFysNS-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503030704.H9KFysNS-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503030704.H9KFysNS-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
 
-If you're touching this code, please use tip/x86/core or tip/master.
+Thanks, below seems to cure it for me.
+
+---
+Subject: x86/ibt: Make cfi_bhi a constant for FINEIBT_BHI=n
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Mon Mar 3 10:21:47 CET 2025
+
+Robot yielded a .config that tripped:
+
+  vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
+
+This is the result of using __bhi_args[1] in unreachable code; make
+sure the compiler is able to determine this is unreachable and trigger
+DCE.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202503030704.H9KFysNS-lkp@intel.com/
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/cfi.h    |    5 +++++
+ arch/x86/kernel/alternative.c |    3 +++
+ 2 files changed, 8 insertions(+)
+
+--- a/arch/x86/include/asm/cfi.h
++++ b/arch/x86/include/asm/cfi.h
+@@ -100,7 +100,12 @@ enum cfi_mode {
+ };
+ 
+ extern enum cfi_mode cfi_mode;
++
++#ifdef CONFIG_FINEIBT_BHI
+ extern bool cfi_bhi;
++#else
++#define cfi_bhi (0)
++#endif
+ 
+ typedef u8 bhi_thunk[32];
+ extern bhi_thunk __bhi_args[];
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -936,7 +936,10 @@ void __init_or_module apply_seal_endbr(s
+ #endif
+ 
+ enum cfi_mode cfi_mode __ro_after_init = __CFI_DEFAULT;
++
++#ifdef CONFIG_FINEIBT_BHI
+ bool cfi_bhi __ro_after_init = false;
++#endif
+ 
+ #ifdef CONFIG_CFI_CLANG
+ struct bpf_insn;
