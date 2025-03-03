@@ -1,175 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94A8156237;
-	Mon,  3 Mar 2025 03:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604591D516A
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 06:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740971956; cv=none; b=SAQZny/ctNV9GNpr0cl+HXgCKxjA1NhharvvlR+IQJBmdGqkxMUjozvjh8sR53D9IwVPUBhiaAZbAAMKp3wmV9vcjGgxwwMgGx+lGRni1AfStdaweyJz9f8t4pZjImbreL9rISeZh77E7A8vNdGaQkX9lc93dGYnW3sc4aaKF7E=
+	t=1740981987; cv=none; b=PG2A67UnL2ClX3svszRFoUx7rJRjez7g5jQCBy8tsyb7zwSaHnh2p/69ZARCCMFdsrupsT8D39aWbG9hZafOqNkDJ5d9W1wAhY8h5SOmCjq3lG/3MoZ7Pe1znPhE1oDQeETvvd1lDBJN8imRN+1wPQKEaPzFs+24z1qCo5Pq74M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740971956; c=relaxed/simple;
-	bh=LpbJaumBcgre4NBn4OhRtfHLMsAu9iuCRYQuxGfvQF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rzdjnoj9ZcGl8gtT9gutwYvAjhl0IL8EeGG1o9SbkzARLAg9bB+I6CjamqOMIzPBJ0r4oNmQKnZO03Z4Gd1cH4pB+0wAJhU27Fwaa4EkN76nBvXFNmKerrBoySDQ4/Zsulmwo1uYEiWMFcyXZtDSp0WV1JrPaMc2nJ8Iowo9r1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JkQaCxBB; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740981987; c=relaxed/simple;
+	bh=/us0I5iveZd6LPpiy2t629pqANkvq1Lg5LO7gggkaTY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f+wTIh1RjVCn07gmfYJ7mmBb8N4Vv7sfd45348/Vb5QiIdag23Hp/gc9YsnJdT05bQp9Z4v8zE88/RcydAEzRV5rsYGNNieNfGq4FDys9IZCdTW2289OWA/VQMc/G+c+EUGU9/Tv0xAVezXzu/UunRYX54RFE0Aef4cdPJQAIEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aAYvj18k; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JkQaCxBB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740971954; x=1772507954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LpbJaumBcgre4NBn4OhRtfHLMsAu9iuCRYQuxGfvQF8=;
-  b=JkQaCxBBHYIVC45+g18FmZOdDnXEsgXy5pu0TwGjzw00jcU0vVLVvu1F
-   fui3IsdBWcOgxf985TT1kEdykPDGJQkckYqS8ux9hvo1RbmwgY6oFV5Ug
-   A9o7zVGfU7S3sBuTI82SrwD+hsarvFm6Mmh85P4IhloXNULa47UYvNmm1
-   R7XcqomMDfsuj9bW5nEapviiHHgqXKgfAONtLpZXzraYSTwb64w1gkbYR
-   QKwbzgsbr5XuSZyb5KeHHGrUcUlsUgzyu4oZ76c9EgjBH0uLv9p4LBfs1
-   xTkPks25p6ffmu8nVLQyU3AiZQeDyZNap+w6nlt6WhZ6IGPje5gYHLLzd
-   g==;
-X-CSE-ConnectionGUID: i2PPGNDESciMCllAQlBPOQ==
-X-CSE-MsgGUID: NOYno1H0Qo2NgHp1faMWgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="45761602"
-X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
-   d="scan'208";a="45761602"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 19:19:13 -0800
-X-CSE-ConnectionGUID: K6c59+FjQxiurRjuHKDVCw==
-X-CSE-MsgGUID: nL3hLtZISvanyYlJjmZreQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="122012073"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Mar 2025 19:19:11 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1towKi-000HsF-2X;
-	Mon, 03 Mar 2025 03:19:08 +0000
-Date: Mon, 3 Mar 2025 11:19:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ravi Kumar kairi <kumarkairiravi@gmail.com>,
-	parthiban.veerasooran@microchip.com, christian.gromm@microchip.com,
-	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Ravi Kumar Kairi <kumarkairiravi@gmail.com>
-Subject: Re: [PATCH] staging: most: Remove unused spinlock from most_video_dev
-Message-ID: <202503031028.7ZRlzYcI-lkp@intel.com>
-References: <20250221163444.57492-3-kumarkairiravi@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aAYvj18k"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 522KZxQP002167;
+	Mon, 3 Mar 2025 06:05:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=iDyZnbw6q3m26QApS
+	6v/kxgI2ZGZQYcS8SKc10ZKlnk=; b=aAYvj18ke2sGH3XXXYGkeB5yT0ifxSgOA
+	4iA8tlp0S6a/HoyxJeeOfwxajlv/8HmYwE0m5vewgn3Rfqxpz4fu/IWtvFSuFlyd
+	9t4rUPCzfz0jMd/TrcyFX48JdVb9vb2ay3RfX7LpsnAjiD5bfJaTE8HipjFA5RAz
+	U8baOlET56D1+yFDbC5aVtsFUJgFQgolWrRETFma4HM5nStW+h1534C3L1ZoV7uo
+	ZT8YJBTtHYqg9n0PhYsoDhirJEpoAadiN+zkr3Y0VeXmz2GTuH0Gk1k7zbFR12/K
+	99zdV+NKeLYZH4Ttx48CFZ+ve5VtdaLPPzzcQNqhTFXSYYR0T6k5g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 454xgp9mk0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 06:05:33 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52365WZX017056;
+	Mon, 3 Mar 2025 06:05:32 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 454xgp9mjx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 06:05:32 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5234DE5k013784;
+	Mon, 3 Mar 2025 06:05:31 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 454e2kdm93-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 06:05:31 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52365Tkk58130720
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 3 Mar 2025 06:05:29 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9AE4820040;
+	Mon,  3 Mar 2025 06:05:29 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 37D9C20043;
+	Mon,  3 Mar 2025 06:05:25 +0000 (GMT)
+Received: from li-80eaad4c-2afd-11b2-a85c-af8123d033e3.in.ibm.com (unknown [9.199.156.78])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  3 Mar 2025 06:05:24 +0000 (GMT)
+From: "Nysal Jan K.A." <nysal@linux.ibm.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, linuxppc-dev@lists.ozlabs.org,
+        "Nysal Jan K.A." <nysal@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH v2 RESEND] sched/membarrier: Fix redundant load of membarrier_state
+Date: Mon,  3 Mar 2025 11:34:50 +0530
+Message-ID: <20250303060457.531293-1-nysal@linux.ibm.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20241029055133.121418-1-nysal@linux.ibm.com>
+References: <20241029055133.121418-1-nysal@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250221163444.57492-3-kumarkairiravi@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UOAZLirGGRJNyCiUHQl3oF-vv_RPPjQN
+X-Proofpoint-ORIG-GUID: Rgov3vtjYDdJBNTDqz-k0DfKqnlP3zmS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_01,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503030040
 
-Hi Ravi,
+On architectures where ARCH_HAS_SYNC_CORE_BEFORE_USERMODE
+is not selected, sync_core_before_usermode() is a no-op.
+In membarrier_mm_sync_core_before_usermode() the compiler does not
+eliminate redundant branches and load of mm->membarrier_state
+for this case as the atomic_read() cannot be optimized away.
 
-kernel test robot noticed the following build errors:
+Here's a snippet of the code generated for finish_task_switch() on powerpc
+prior to this change:
 
-[auto build test ERROR on staging/staging-testing]
+1b786c:   ld      r26,2624(r30)   # mm = rq->prev_mm;
+.......
+1b78c8:   cmpdi   cr7,r26,0
+1b78cc:   beq     cr7,1b78e4 <finish_task_switch+0xd0>
+1b78d0:   ld      r9,2312(r13)    # current
+1b78d4:   ld      r9,1888(r9)     # current->mm
+1b78d8:   cmpd    cr7,r26,r9
+1b78dc:   beq     cr7,1b7a70 <finish_task_switch+0x25c>
+1b78e0:   hwsync
+1b78e4:   cmplwi  cr7,r27,128
+.......
+1b7a70:   lwz     r9,176(r26)     # atomic_read(&mm->membarrier_state)
+1b7a74:   b       1b78e0 <finish_task_switch+0xcc>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ravi-Kumar-kairi/staging-most-Remove-unused-spinlock-from-most_video_dev/20250222-004552
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250221163444.57492-3-kumarkairiravi%40gmail.com
-patch subject: [PATCH] staging: most: Remove unused spinlock from most_video_dev
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250303/202503031028.7ZRlzYcI-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031028.7ZRlzYcI-lkp@intel.com/reproduce)
+This was found while analyzing "perf c2c" reports on kernels prior
+to commit c1753fd02a00 ("mm: move mm_count into its own cache line")
+where mm_count was false sharing with membarrier_state.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503031028.7ZRlzYcI-lkp@intel.com/
+There is a minor improvement in the size of finish_task_switch().
+The following are results from bloat-o-meter for ppc64le:
 
-All errors (new ones prefixed by >>):
+GCC 7.5.0
+---------
+add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+Function                                     old     new   delta
+finish_task_switch                           884     852     -32
 
->> drivers/staging/most/video/video.c:130:23: error: no member named 'list_lock' in 'struct most_video_dev'
-     130 |         spin_lock_irq(&mdev->list_lock);
-         |                        ~~~~  ^
-   drivers/staging/most/video/video.c:134:26: error: no member named 'list_lock' in 'struct most_video_dev'
-     134 |                 spin_unlock_irq(&mdev->list_lock);
-         |                                  ~~~~  ^
-   drivers/staging/most/video/video.c:136:24: error: no member named 'list_lock' in 'struct most_video_dev'
-     136 |                 spin_lock_irq(&mdev->list_lock);
-         |                                ~~~~  ^
-   drivers/staging/most/video/video.c:138:25: error: no member named 'list_lock' in 'struct most_video_dev'
-     138 |         spin_unlock_irq(&mdev->list_lock);
-         |                          ~~~~  ^
-   drivers/staging/most/video/video.c:191:25: error: no member named 'list_lock' in 'struct most_video_dev'
-     191 |                         spin_lock_irq(&mdev->list_lock);
-         |                                        ~~~~  ^
-   drivers/staging/most/video/video.c:193:27: error: no member named 'list_lock' in 'struct most_video_dev'
-     193 |                         spin_unlock_irq(&mdev->list_lock);
-         |                                          ~~~~  ^
-   drivers/staging/most/video/video.c:392:27: error: no member named 'list_lock' in 'struct most_video_dev'
-     392 |         spin_lock_irqsave(&mdev->list_lock, flags);
-         |                            ~~~~  ^
-   include/linux/spinlock.h:381:39: note: expanded from macro 'spin_lock_irqsave'
-     381 |         raw_spin_lock_irqsave(spinlock_check(lock), flags);     \
-         |                                              ^~~~
-   include/linux/spinlock.h:244:34: note: expanded from macro 'raw_spin_lock_irqsave'
-     244 |                 flags = _raw_spin_lock_irqsave(lock);   \
-         |                                                ^~~~
-   drivers/staging/most/video/video.c:394:33: error: no member named 'list_lock' in 'struct most_video_dev'
-     394 |                 spin_unlock_irqrestore(&mdev->list_lock, flags);
-         |                                         ~~~~  ^
-   drivers/staging/most/video/video.c:399:32: error: no member named 'list_lock' in 'struct most_video_dev'
-     399 |         spin_unlock_irqrestore(&mdev->list_lock, flags);
-         |                                 ~~~~  ^
-   drivers/staging/most/video/video.c:477:24: error: no member named 'list_lock' in 'struct most_video_dev'
-     477 |         spin_lock_init(&mdev->list_lock);
-         |                         ~~~~  ^
-   include/linux/spinlock.h:335:38: note: expanded from macro 'spin_lock_init'
-     335 |         __raw_spin_lock_init(spinlock_check(lock),              \
-         |                                             ^~~~
-   10 errors generated.
+GCC 12.2.1
+----------
+add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-32 (-32)
+Function                                     old     new   delta
+finish_task_switch.isra                      852     820     -32
 
+LLVM 17.0.6
+-----------
+add/remove: 0/0 grow/shrink: 0/2 up/down: 0/-36 (-36)
+Function                                     old     new   delta
+rt_mutex_schedule                            120     104     -16
+finish_task_switch                           792     772     -20
 
-vim +130 drivers/staging/most/video/video.c
+Results on aarch64:
 
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  114  
-1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  115  static int comp_vdev_close(struct file *filp)
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  116  {
-1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  117  	struct comp_fh *fh = filp->private_data;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  118  	struct most_video_dev *mdev = fh->mdev;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  119  	struct mbo *mbo, *tmp;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  120  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  121  	/*
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  122  	 * We need to put MBOs back before we call most_stop_channel()
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  123  	 * to deallocate MBOs.
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  124  	 * From the other hand mostcore still calling rx_completion()
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  125  	 * to deliver MBOs until most_stop_channel() is called.
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  126  	 * Use mute to work around this issue.
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  127  	 * This must be implemented in core.
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  128  	 */
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  129  
-e494df039df0fc drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06 @130  	spin_lock_irq(&mdev->list_lock);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  131  	mdev->mute = true;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  132  	list_for_each_entry_safe(mbo, tmp, &mdev->pending_mbos, list) {
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  133  		list_del(&mbo->list);
-e494df039df0fc drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  134  		spin_unlock_irq(&mdev->list_lock);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  135  		most_put_mbo(mbo);
-e494df039df0fc drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  136  		spin_lock_irq(&mdev->list_lock);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  137  	}
-e494df039df0fc drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  138  	spin_unlock_irq(&mdev->list_lock);
-1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  139  	most_stop_channel(mdev->iface, mdev->ch_idx, &comp);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  140  	mdev->mute = false;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  141  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  142  	v4l2_fh_del(&fh->fh);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  143  	v4l2_fh_exit(&fh->fh);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  144  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  145  	atomic_dec(&mdev->access_ref);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  146  	kfree(fh);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  147  	return 0;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  148  }
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  149  
+GCC 14.1.1
+----------
+add/remove: 0/2 grow/shrink: 1/1 up/down: 4/-60 (-56)
+Function                                     old     new   delta
+get_nohz_timer_target                        352     356      +4
+e843419@0b02_0000d7e7_408                      8       -      -8
+e843419@01bb_000021d2_868                      8       -      -8
+finish_task_switch.isra                      592     548     -44
 
+Signed-off-by: Nysal Jan K.A. <nysal@linux.ibm.com>
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Michael Ellerman <mpe@ellerman.id.au>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+---
+V1 -> V2:
+- Add results for aarch64
+- Add a comment describing the changes
+---
+ include/linux/sched/mm.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 928a626725e6..b13474825130 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -531,6 +531,13 @@ enum {
+ 
+ static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct *mm)
+ {
++	/*
++	 * The atomic_read() below prevents CSE. The following should
++	 * help the compiler generate more efficient code on architectures
++	 * where sync_core_before_usermode() is a no-op.
++	 */
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE))
++		return;
+ 	if (current->mm != mm)
+ 		return;
+ 	if (likely(!(atomic_read(&mm->membarrier_state) &
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
