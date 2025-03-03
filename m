@@ -1,62 +1,62 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618BE21422D
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 13:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DBC212FBE
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 13:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741008655; cv=none; b=T2WtSFRExYC77RK++GlZaeiR7S0C24PifclNX+3qhK2Io/IInZ1l+pWJwXOkjzxNVXdJmpUxOdQYHDfo6M0opvhYVvlpTnRY5qDeN6wjEhvhFb6thaTV7su8tU6Miw7SoBAb4W7NN89A/k7GnYV4xTqeYg7hNC3eeRUjyYezlQU=
+	t=1741008662; cv=none; b=OGVmefsjSiN1ENbW7ROF24SLcSno9WqI6lGz+Uas5dtHy59j/5Nbl8pRkrhSk6Ozm7dqAPxmDsOiVC4aYmeZIr8LMIrV7zD7/6ruRvpNiYL8gNHZ+ali85lWYhR5ucvYl68nv+w7DLQ92GWZYfXg92OC7ct1v39YjE60e/Qk8dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741008655; c=relaxed/simple;
-	bh=0opDRmJgFcne9MVvIB9mWH4N0ry/ocl2wUXCnUeZZWU=;
+	s=arc-20240116; t=1741008662; c=relaxed/simple;
+	bh=8+jQ2LOFLvD8yNjmgsq7xpDv7f8F3syKUpRlLU8kRU0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=unuuv/WuzFJterWZ2+DY/X6rChPXNqFX/No/3wdqdXKMPGQmTEzXLonW0lJRsss0cxQFuS7S8oHIaXsUMeUX9a5GvWaES1mPrAQIROOId0WKsBKcAVscNuz9O3cB9L4eDRHP3WUPk1TxWg3zUroOCxabcpj3G/07lAQ7Sjl8vwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtnY5t0Q; arc=none smtp.client-ip=209.85.214.193
+	 MIME-Version; b=CFobIGKvsmG2kIsDo0m1WCyULLXTXsxPxL/A4pJoIJxlNdiQc+J8PKQ01krb73bJQth05n2u29QEyR33I/YGz4FXc/WyYwsohgXVOPzuH6B9PJe/pQbF/g5LiNzckjxhtfn+HR+es0ulCC63wxdWqIr06oFplTef55zq/UfV/pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bvMCUSR5; arc=none smtp.client-ip=209.85.214.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtnY5t0Q"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2234e5347e2so87558085ad.1
-        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 05:30:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bvMCUSR5"
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-22328dca22fso65779935ad.1
+        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 05:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741008653; x=1741613453; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1741008660; x=1741613460; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e0whn35vPm8J+vjBTbfA5u1AHwSTrw7swcARc6I++Hc=;
-        b=BtnY5t0QwyXVMiEWGUYJS/NNdIiRadY8KmHTi0h9Lf+JsECjD4w2soEGtH639NDUIP
-         MITv8/rFiJp9kSZ/xAjwsycz18bV4sMCU2bMHyJ11uJNxEc3+Pt0M2U3CxxdSp1cXM1w
-         Vx8AdZ9bL4RGXggiTZNprGq2zri/zIQKgwBs0zuC6Fo8Y/qlHcs6aXwGZS2Ti1hNs7wB
-         vMNTlStCc9z6uo1MD5K40W8dnJuwRl8ro/ytKmVxWXISMmRkfui7JhfqiHSxUFtnYACF
-         kTL/g2Luri3+bdlmGAlkG3P3XO6op3JsdTDE+5LoDhXBpXwytlB7LS0Cw0YvZnbsOwdp
-         bsDA==
+        bh=KvSQXTXm2WJtvrSSulKAAYVeipdazZIwWA04KeDmP3s=;
+        b=bvMCUSR5ONNXgd9I20smkwfEI9OlGaJ2ByK6+GNBe5HbhzF4H7n21O9HKuDsPBCR1j
+         q8Rct7vLHS4wcx/RCjmM4v+y1XR1vjkW18en7A0nJmMNvMzHbnJyUDeOdvwbcabwomtx
+         2tVUZHBiohg25QVDo+6yqUoTcneuB0OPhuBqsx87OXGPztxe26TKLE46qGvPF5hgTocc
+         L6V8kJ24zbEqGMvbJvEV/rtYaBpJV7vTJ0Ey98S/9YKDediugOFEXgCJY4NeYZJrz45u
+         zC7nRDhTPVaYuiHKJQEYWZjuIvKGnWxndRUA1Kgn0l7xLF4irL5tFer+WRpuDqpzQOG2
+         dCbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741008653; x=1741613453;
+        d=1e100.net; s=20230601; t=1741008660; x=1741613460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e0whn35vPm8J+vjBTbfA5u1AHwSTrw7swcARc6I++Hc=;
-        b=ZSErtwm4FiAEFQai/G/Mx3UohA+8vvHRCxE5W+9t4ENCxd9IhmCNIqfzjIg1eIqKpT
-         MNbUMUYW+FATMelRZ8/OdjWD8SoOHGGp3Co7Dp8CCogNlP1h1/Iyx3lR1Gf9VTpCldZ2
-         /g3uR/s+w2Lq+nZzV/2tEj5M+/lRypkvGtVpdVuWqHKpP4sKhvGJAVH79D5b/58kCmjD
-         VthSKJIXPrQ9Xt9V7emqr+0qVG86zrZgGJ2tucECGkYDBF4e8IRescjGjkES9I+ALZ/H
-         YEXw9niNvaTU69TtjXzraG1Y6HiQKuQmnVWWd1Xa0FNYme7kH0KbsY6iL6W76I0w6MoY
-         fFdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUs2bK6E97k+TCvV/+vLPma3a8zs0P4x2Yr0+m+sP8YjEBuznfegLyUNI7J2ZCvSvQ2krR8@lists.linux.dev
-X-Gm-Message-State: AOJu0YxfFP5QezCXKpbQWNBjd6ykvMyFja3URqZAaNKELTWH3d+oYXaX
-	VU0tj6uEVJfzqCP8Kp8HbovWVjHLA8pLFH7C748nxisSbnpJS43R
-X-Gm-Gg: ASbGncsQ9SXbUa/mrPbfalLClwjqTDIP2D8UlIa+UrJsWJ1pynAz2fSTcKujAWxiMNi
-	foeuDhChXK3WMBO8hs+phrzMFrhD/ZGXiTSMYUn8BCcITsuV2Rinrulkqc4pkR3VjCpalg0uSRN
-	fporkvGzwOGi6u0keJnlGe3O1GPej5tSSsdEnq2uCIyQkQ0g7FYF9Ik2pehBglQQcMAHsDMueFl
-	Iz2zSb0qmJ+XpfBY0CJ28q4B3nlQAdiWkc1vCPN2swzo2BvnNXxxhaQqZyKJgYz13EYswzL+429
-	Nk5blU8JHFa49ngjNrEOIKRI85W+ZMGuX5grTy7OM7LXNqQGIDUWhrm32iz4PQ==
-X-Google-Smtp-Source: AGHT+IECVEaRvzz7jFgM9Xs6Qsz7AN1fGJ1Lrd2ZRMORcgHaHlhwWOyshFl83O3butQP+uNtOa6yXg==
-X-Received: by 2002:a17:902:e5c5:b0:223:4bd6:3863 with SMTP id d9443c01a7336-22368f6a174mr217254605ad.10.1741008652539;
-        Mon, 03 Mar 2025 05:30:52 -0800 (PST)
+        bh=KvSQXTXm2WJtvrSSulKAAYVeipdazZIwWA04KeDmP3s=;
+        b=cy2yeB2dtxbein0YngqAQmx6nwkpa7Lz3KG1GC2wyU9qSGt2OObxk+ESVgYRf1jLZk
+         hGyFM5MRfhBfaFwfcYz2w9iSJ4wGyrF/yPp8lYuDRkg+Ux9aS4ydsvPwoofIvtL0vrDV
+         nPPo7KafucgjshZjcWvu0YKfwYmIsUA4MTvL/pjN52UVv0t4ORgaZEDTWiXOJHKEcOpX
+         iogLDo3QmtVCAVjW5p9aJdUWCWSSltoaVd5tQ9n6FhDgEdUgfoR4DeAKJiBHHXNunARB
+         9OzX12uER0pIg72UTYblVzA9e4rlZWAZdiHB5hVMFbs1FduFWJqN+e2VuxEHpUIaWESs
+         RnIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSAsUsG60P77NGxR1k9iMEcCUebnQTkRjLWjHxLe1qu2TbcPDFaMhgb15mKoMaZs0WWNnx@lists.linux.dev
+X-Gm-Message-State: AOJu0YxXnQN5JrwWOg3emoH2FFf2RRsJbQcdkuu9D/7J+dyb/N4SCGMl
+	sQiG0od0yJpiqeuClFgtv7RNL9QfyGcklUO/io1JsfHWRQUpw4Uy
+X-Gm-Gg: ASbGnct/JRDRWTp8OuCBp9B8Mr4ZG+siiBoKEHm2JCjwyi6sjOQFrNIrOEQFSTHKS3L
+	OAT98gW9d09LqeRELTftGdwwBBzIBo8fGG0dMGa4EuDdvguilLW6oej7fqREkQKot1kAkbFfaY9
+	8wXV5RkSkA6jMujjFVIkaFjVODUXQCufJ2asQbwwYJCtNq+SyxI18tTBqjiafvhrtGHGScWlFSb
+	bRz+pXNUDDS151mYJHP3A+/n3U3gn9fp2Kp4T74AZTh1aqyy2msv6AGM1G1zBt9zA7Tc/3X7qY5
+	/Lsdst9RkJGIC07Y0UD5W0QGkC9n2bPj0MDcUZpPp+YUFehvbEy+j6VDbprezg==
+X-Google-Smtp-Source: AGHT+IFrx9yunejrhIIBax0i6zoJK5cErggOeRBXOxeJLSAEu6Vgq/DyW9livSLEsya9w6YWkG4/Ug==
+X-Received: by 2002:a17:902:fc8d:b0:223:44dc:3f36 with SMTP id d9443c01a7336-2236925eef4mr220020495ad.43.1741008660442;
+        Mon, 03 Mar 2025 05:31:00 -0800 (PST)
 Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505359b8sm77297035ad.253.2025.03.03.05.30.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505359b8sm77297035ad.253.2025.03.03.05.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 05:30:52 -0800 (PST)
+        Mon, 03 Mar 2025 05:31:00 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: peterz@infradead.org,
@@ -100,9 +100,9 @@ Cc: catalin.marinas@arm.com,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v4 3/4] x86: implement per-function metadata storage for x86
-Date: Mon,  3 Mar 2025 21:28:36 +0800
-Message-Id: <20250303132837.498938-4-dongml2@chinatelecom.cn>
+Subject: [PATCH v4 4/4] arm64: implement per-function metadata storage for arm64
+Date: Mon,  3 Mar 2025 21:28:37 +0800
+Message-Id: <20250303132837.498938-5-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250303132837.498938-1-dongml2@chinatelecom.cn>
 References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
@@ -114,176 +114,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With CONFIG_CALL_PADDING enabled, there will be 16-bytes padding space
-before all the kernel functions. And some kernel features can use it,
-such as MITIGATION_CALL_DEPTH_TRACKING, CFI_CLANG, FINEIBT, etc.
+The per-function metadata storage is already used by ftrace if
+CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS is enabled, and it store the pointer
+of the callback directly to the function padding, which consume 8-bytes,
+in the commit
+baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
+So we can directly store the index to the function padding too, without
+a prepending. With CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS enabled, the
+function is 8-bytes aligned, and we will compile the kernel with extra
+8-bytes (2 NOPS) padding space. Otherwise, the function is 4-bytes
+aligned, and only extra 4-bytes (1 NOPS) is needed.
 
-In my research, MITIGATION_CALL_DEPTH_TRACKING will consume the tail
-9-bytes in the function padding, CFI_CLANG will consume the head 5-bytes,
-and FINEIBT will consume all the 16 bytes if it is enabled. So there will
-be no space for us if MITIGATION_CALL_DEPTH_TRACKING and CFI_CLANG are
-both enabled, or FINEIBT is enabled.
-
-In x86, we need 5-bytes to prepend a "mov %eax xxx" insn, which can hold
-a 4-bytes index. So we have following logic:
-
-1. use the head 5-bytes if CFI_CLANG is not enabled
-2. use the tail 5-bytes if MITIGATION_CALL_DEPTH_TRACKING and FINEIBT are
-   not enabled
-3. compile the kernel with FUNCTION_ALIGNMENT_32B otherwise
-
-In the third case, we make the kernel function 32 bytes aligned, and there
-will be 32 bytes padding before the functions. According to my testing,
-the text size didn't increase on this case, which is weird.
-
-With 16-bytes padding:
-
--rwxr-xr-x 1 401190688  x86-dev/vmlinux*
--rw-r--r-- 1    251068  x86-dev/vmlinux.a
--rw-r--r-- 1 851892992  x86-dev/vmlinux.o
--rw-r--r-- 1  12395008  x86-dev/arch/x86/boot/bzImage
-
-With 32-bytes padding:
-
--rwxr-xr-x 1 401318128 x86-dev/vmlinux*
--rw-r--r-- 1    251154 x86-dev/vmlinux.a
--rw-r--r-- 1 853636704 x86-dev/vmlinux.o
--rw-r--r-- 1  12509696 x86-dev/arch/x86/boot/bzImage
-
-The way I tested should be right, and this is a good news for us. On the
-third case, the layout of the padding space will be like this if fineibt
-is enabled:
-
-__cfi_func:
-	mov	--	5	-- cfi, not used anymore
-	nop
-	nop
-	nop
-	mov	--	5	-- function metadata
-	nop
-	nop
-	nop
-	fineibt	--	16	-- fineibt
-func:
-	nopw	--	4
-	......
-
-I tested the fineibt with "cfi=fineibt" cmdline, and it works well
-together with FUNCTION_METADATA enabled. And I also tested the
-performance of this function by setting metadata for all the kernel
-function, and it consumes 0.7s for 70k+ functions, not bad :/
-
-I can't find a machine that support IBT, so I didn't test the IBT. I'd
-appreciate it if someone can do this testing for me :/
+However, we have the same problem with Mark in the commit above: we can't
+use the function padding together with CFI_CLANG, which can make the clang
+compiles a wrong offset to the pre-function type hash. He said that he was
+working with others on this problem 2 years ago. Hi Mark, is there any
+progress on this problem?
 
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
-v3:
-- select FUNCTION_ALIGNMENT_32B on case3, instead of extra 5-bytes
----
- arch/x86/Kconfig              | 18 ++++++++++++
- arch/x86/include/asm/ftrace.h | 54 +++++++++++++++++++++++++++++++++++
- 2 files changed, 72 insertions(+)
+ arch/arm64/Kconfig              | 15 +++++++++++++++
+ arch/arm64/Makefile             | 23 ++++++++++++++++++++--
+ arch/arm64/include/asm/ftrace.h | 34 +++++++++++++++++++++++++++++++++
+ arch/arm64/kernel/ftrace.c      | 13 +++++++++++--
+ 4 files changed, 81 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 5c277261507e..b0614188c80b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2518,6 +2518,24 @@ config PREFIX_SYMBOLS
- 	def_bool y
- 	depends on CALL_PADDING && !CFI_CLANG
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 940343beb3d4..7ed80f5eb267 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1536,6 +1536,21 @@ config NODES_SHIFT
+ 	  Specify the maximum number of NUMA Nodes available on the target
+ 	  system.  Increases memory reserved to accommodate various tables.
  
 +config FUNCTION_METADATA
 +	bool "Per-function metadata storage support"
 +	default y
-+	depends on CC_HAS_ENTRY_PADDING && OBJTOOL
-+	select CALL_PADDING
-+	select FUNCTION_ALIGNMENT_32B if ((CFI_CLANG && CALL_THUNKS) || FINEIBT)
++	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE if !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
++	depends on !CFI_CLANG
 +	help
 +	  Support per-function metadata storage for kernel functions, and
 +	  get the metadata of the function by its address with almost no
 +	  overhead.
 +
-+	  The index of the metadata will be stored in the function padding
-+	  and consumes 5-bytes. FUNCTION_ALIGNMENT_32B will be selected if
-+	  "(CFI_CLANG && CALL_THUNKS) || FINEIBT" to make sure there is
-+	  enough available padding space for this function. However, it
-+	  seems that the text size almost don't change, compare with
-+	  FUNCTION_ALIGNMENT_16B.
++	  The index of the metadata will be stored in the function padding,
++	  which will consume 4-bytes. If FUNCTION_ALIGNMENT_8B is enabled,
++	  extra 8-bytes function padding will be reserved during compiling.
++	  Otherwise, only extra 4-bytes function padding is needed.
 +
- menuconfig CPU_MITIGATIONS
- 	bool "Mitigations for CPU vulnerabilities"
- 	default y
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index f2265246249a..700bb729e949 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -4,6 +4,28 @@
+ source "kernel/Kconfig.hz"
  
- #include <asm/ptrace.h>
+ config ARCH_SPARSEMEM_ENABLE
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 2b25d671365f..2df2b0f4dd90 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -144,12 +144,31 @@ endif
+ 
+ CHECKFLAGS	+= -D__aarch64__
+ 
++ifeq ($(CONFIG_FUNCTION_METADATA),y)
++  ifeq ($(CONFIG_FUNCTION_ALIGNMENT_8B),y)
++  __padding_nops := 2
++  else
++  __padding_nops := 1
++  endif
++else
++  __padding_nops := 0
++endif
++
+ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
++  __padding_nops  := $(shell echo $(__padding_nops) + 2 | bc)
+   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-  CC_FLAGS_FTRACE := -fpatchable-function-entry=4,2
++  CC_FLAGS_FTRACE := -fpatchable-function-entry=$(shell echo $(__padding_nops) + 2 | bc),$(__padding_nops)
+ else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
++  CC_FLAGS_FTRACE := -fpatchable-function-entry=$(shell echo $(__padding_nops) + 2 | bc),$(__padding_nops)
+   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+-  CC_FLAGS_FTRACE := -fpatchable-function-entry=2
++else ifeq ($(CONFIG_FUNCTION_METADATA),y)
++  CC_FLAGS_FTRACE += -fpatchable-function-entry=$(__padding_nops),$(__padding_nops)
++  ifneq ($(CONFIG_FUNCTION_TRACER),y)
++    KBUILD_CFLAGS += $(CC_FLAGS_FTRACE)
++    # some file need to remove this cflag when CONFIG_FUNCTION_TRACER
++    # is not enabled, so we need to export it here
++    export CC_FLAGS_FTRACE
++  endif
+ endif
+ 
+ ifeq ($(CONFIG_KASAN_SW_TAGS), y)
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index bfe3ce9df197..aa3eaa91bf82 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -24,6 +24,16 @@
+ #define FTRACE_PLT_IDX		0
+ #define NR_FTRACE_PLTS		1
  
 +#ifdef CONFIG_FUNCTION_METADATA
-+#if (defined(CONFIG_CFI_CLANG) && defined(CONFIG_CALL_THUNKS)) || (defined(CONFIG_FINEIBT))
-+  /* the CONFIG_FUNCTION_PADDING_BYTES is 32 in this case, use the
-+   * range: [align + 8, align + 13].
-+   */
-+  #define KFUNC_MD_INSN_OFFSET		(CONFIG_FUNCTION_PADDING_BYTES - 8)
-+  #define KFUNC_MD_DATA_OFFSET		(CONFIG_FUNCTION_PADDING_BYTES - 9)
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
++#define KFUNC_MD_DATA_OFFSET	(AARCH64_INSN_SIZE * 3)
 +#else
-+  #ifdef CONFIG_CFI_CLANG
-+    /* use the space that CALL_THUNKS suppose to use */
-+    #define KFUNC_MD_INSN_OFFSET	(5)
-+    #define KFUNC_MD_DATA_OFFSET	(4)
-+  #else
-+    /* use the space that CFI_CLANG suppose to use */
-+    #define KFUNC_MD_INSN_OFFSET	(CONFIG_FUNCTION_PADDING_BYTES)
-+    #define KFUNC_MD_DATA_OFFSET	(CONFIG_FUNCTION_PADDING_BYTES - 1)
-+  #endif
++#define KFUNC_MD_DATA_OFFSET	AARCH64_INSN_SIZE
++#endif
++#define KFUNC_MD_INSN_SIZE	AARCH64_INSN_SIZE
++#define KFUNC_MD_INSN_OFFSET	KFUNC_MD_DATA_OFFSET
 +#endif
 +
-+#define KFUNC_MD_INSN_SIZE		(5)
-+#endif
+ /*
+  * Currently, gcc tends to save the link register after the local variables
+  * on the stack. This causes the max stack tracer to report the function
+@@ -216,6 +226,30 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+ 	 */
+ 	return !strcmp(sym + 8, name);
+ }
 +
- #ifdef CONFIG_FUNCTION_TRACER
- #ifndef CC_USING_FENTRY
- # error Compiler does not support fentry?
-@@ -156,4 +178,36 @@ static inline bool arch_trace_is_compat_syscall(struct pt_regs *regs)
- #endif /* !COMPILE_OFFSETS */
- #endif /* !__ASSEMBLY__ */
- 
-+#if !defined(__ASSEMBLY__) && defined(CONFIG_FUNCTION_METADATA)
++#ifdef CONFIG_FUNCTION_METADATA
 +#include <asm/text-patching.h>
 +
 +static inline bool kfunc_md_arch_exist(void *ip)
 +{
-+	return *(u8 *)(ip - KFUNC_MD_INSN_OFFSET) == 0xB8;
++	return !aarch64_insn_is_nop(*(u32 *)(ip - KFUNC_MD_INSN_OFFSET));
 +}
 +
 +static inline void kfunc_md_arch_pretend(u8 *insn, u32 index)
 +{
-+	*insn = 0xB8;
-+	*(u32 *)(insn + 1) = index;
++	*(u32 *)insn = index;
 +}
 +
 +static inline void kfunc_md_arch_nops(u8 *insn)
 +{
-+	*(insn++) = BYTES_NOP1;
-+	*(insn++) = BYTES_NOP1;
-+	*(insn++) = BYTES_NOP1;
-+	*(insn++) = BYTES_NOP1;
-+	*(insn++) = BYTES_NOP1;
++	*(u32 *)insn = aarch64_insn_gen_nop();
 +}
 +
 +static inline int kfunc_md_arch_poke(void *ip, u8 *insn)
 +{
-+	text_poke(ip, insn, KFUNC_MD_INSN_SIZE);
-+	text_poke_sync();
-+	return 0;
++	return aarch64_insn_patch_text_nosync(ip, *(u32 *)insn);
 +}
-+
 +#endif
-+
- #endif /* _ASM_X86_FTRACE_H */
+ #endif /* ifndef __ASSEMBLY__ */
+ 
+ #ifndef __ASSEMBLY__
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index d7c0d023dfe5..4191ff0037f5 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -88,8 +88,10 @@ unsigned long ftrace_call_adjust(unsigned long addr)
+ 	 * to `BL <caller>`, which is at `addr + 4` bytes in either case.
+ 	 *
+ 	 */
+-	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
+-		return addr + AARCH64_INSN_SIZE;
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS)) {
++		addr += AARCH64_INSN_SIZE;
++		goto out;
++	}
+ 
+ 	/*
+ 	 * When using patchable-function-entry with pre-function NOPs, addr is
+@@ -139,6 +141,13 @@ unsigned long ftrace_call_adjust(unsigned long addr)
+ 
+ 	/* Skip the first NOP after function entry */
+ 	addr += AARCH64_INSN_SIZE;
++out:
++	if (IS_ENABLED(CONFIG_FUNCTION_METADATA)) {
++		if (IS_ENABLED(CONFIG_FUNCTION_ALIGNMENT_8B))
++			addr += 2 * AARCH64_INSN_SIZE;
++		else
++			addr += AARCH64_INSN_SIZE;
++	}
+ 
+ 	return addr;
+ }
 -- 
 2.39.5
 
