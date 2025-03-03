@@ -1,96 +1,90 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE6E2163B2;
-	Mon,  3 Mar 2025 18:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B531E285A;
+	Mon,  3 Mar 2025 18:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741026110; cv=none; b=W79Np+zzGBRBDv+/2IZslxEP1jpBG8yuy3trtg/h7cKEyuRMMCPfcZCdRSL3rgpRrgKyI/K1BuH157ZEZ5k4SdbL4bKLF1IQnsPQtV5LOHlY/xdVySkIlO9xYkUTXolxrSPx1HibK0k7WYy0OuBh72nHgKFSsbv5Q9rXFfC4ue4=
+	t=1741028274; cv=none; b=ReCbvYvApq4rdjoNwvQM83xBcYH078o/9U+4kMLsMJjWqzUje7R4YZra7j/KaaJjHedlSBam47SkUv/7BEiwqfj9Ec/0PZMPdqil5fsO+jbePwqnM0H8dN62pc0JuJ3yCGGsH+sBbRulLyuixmpDN5WSaENq2NpKpbvXALlC1Io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741026110; c=relaxed/simple;
-	bh=qQ9RbbHxETfyug0GfVaqoYXTPk0pB6Cyk1KbM4vwpnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VS1PcqRxgSaNTvmQ5j1lNoAMWVyytD3ivqKQVuH/GJbeUcl5DaWYsP1rVVdLFXIAPyIMGTfPBAf9Kx2BH6JG5EdRcXaDBHDdrKfWaqc00ap1mrn8xF+RxgTNE6AiOAUqEBjO799LWXATunG52jtgdD4blGqRapDloEOGtRLEsCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUxhCK9Z; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741028274; c=relaxed/simple;
+	bh=nz9b+KN8viu5jpXWs0v+jylV/As5vhmBBiGN/NrbvWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iEBe9nqMkEw1FjiywRXZMxzVopqYfklpVgtHqf7oq7519Cvq4bGvy+RQLU8xyQqISqzQpX9NXirkMVmuD1wGVem8DEJVPefRMUkreDvFNPEHZt3f7jAj63du4jX0mVhUCjwRgNtD/luHL6WUk7+WlPccqjlgEwpMJtAwtNldpWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lB4je+E4; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUxhCK9Z"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c3c4ff7d31so120893085a.1;
-        Mon, 03 Mar 2025 10:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741026107; x=1741630907; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HFzZWjcFqsfDxYl0mzTkCHRR3hGJXZp8cboZARo9iCA=;
-        b=WUxhCK9Z9YkzvSx+S5/obywZqUr340725+AvODiXIRlyGvDZt1rnpknccC3j/rA+/H
-         zqYmL1xiLObEKbVCutkAuTLhfwc3DSfRBCUo00fuYoNPUQhopo5UNfvwZq6TZwXY6N90
-         6JfAWZKKlxXd/4dehWQ1myT23LuseVA/+1CX3OeAib1ph9Z2G0AXyLJgIhMIEFsl4zmN
-         rNdf8bXknBj4xyJ/tEqKy9S/vnvBzzLtnJlakCk6LVt+iMrGAnPMnvWGc3O4haFIsTFP
-         iGTtNEZAeFIDTvYgNPydQIjAqadHhU7uAuCybQB3DOinLl4zNgFYlYLj3rWzAVp71Ddo
-         wbtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741026107; x=1741630907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HFzZWjcFqsfDxYl0mzTkCHRR3hGJXZp8cboZARo9iCA=;
-        b=J35r8hXzsehLsBMVaNo9rcslUNK2n7is6tfHB8ECqcvV5lR0jDO06N8ITVE0u/S2mc
-         CTbmkDgxTrUXDUH4ZxY0agGPKSFVI/4vCHbbLG3ui8nWkAYaAdVZ1Ysi6zesVNoXgCng
-         caaKaKKucmKKzTMlIl+pIPHyIbk8tqU/Ft5dHCcjf7nqkk9nGpAUSNkwr66yBAthLqA9
-         8lhfES4tcw/bc9FxZRNF0mg+uQ1kB+hfQIO3LdfzmQBChIbwmqxmzUI3hv7Mf7MzLUHx
-         m3RbmjYwZOpjkpmudouYOuwke5lP4GZPqjOP9KLfCbtoSaw6SvYTFyK2WNC0XpU0hp4H
-         ++Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCXkKe3MKdsknNumU88ujnoz8zVh1Wy8IFnq/6V2UldvjD4AQc2wPT39RYvymOqVT+XnCDhp@lists.linux.dev, AJvYcCXzTsrMjQ945LkrAppQ2ULaeQ5yHSrf2i38w3d0JGCHJAYmXnawvul3nnuv7jMxjjIB+Zibn3jzJSBlyLanTA==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz99wQJhmMFnIRSoxkBobxgc5qIUH9iA4OYJ9Khg4ekxGPMxBQz
-	IHpAGzJwCQRnTclPMhOc4BMldrrXAWp+Zrmo22NEQAyqR7OOtSUMH1pNyNORKzYgf37VlPNqpSf
-	keY63Kh7EUqSLIEzueDdvzi9Mzjw=
-X-Gm-Gg: ASbGncsIDGzOd7tlsHrr/wpcdqoK7uYU77tBtkyhl8cSNxqnQsnYsd+eIKDHoD9h24G
-	R5qvpr4aDETZfn8Geu5mZgUcBHu88Rn3D1GuU0FH2wVs/OTjPucsVP3ra55zPy/lOEXuy7DHf4Z
-	9h1UtkGQ5BhmTltn4P6hbmdZyN9if16OvnP8Ikjm+1Zdnvpgu8rOtv62Eg8Q==
-X-Google-Smtp-Source: AGHT+IFzLl7EDIrfRlNRztKKZxawCHfzjGSBK4vOyQk5OfXMs1Mp/lLcfpbA5RL1hdMg34E0AWitNb0abmx0uhun5qI=
-X-Received: by 2002:a05:6214:2462:b0:6e2:43d1:5fec with SMTP id
- 6a1803df08f44-6e8a0d6d85dmr208171246d6.33.1741026107393; Mon, 03 Mar 2025
- 10:21:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lB4je+E4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=UCGrrsnfzIXfRwPBNxtTjaF7Ywp+E+UDRp4J9GD91M0=; b=lB4je+E4i6PhlNF5eqqdT+yjXy
+	gX68ODfch4QEdak/34F4Hfad1+LNEMFFcIFiUNcWYgFcDTseBRdLJy4WHoOFwLhVGcnTOPTcsfn7Q
+	OIGILN+hCqO5rwrqCPzJiXuDHCk9aXDF9AQDPi2VK523RKBuBCHycJ/hnzP7/1bUHnyraoXSGfG0Y
+	o0Jv82IuiVkdX+V0X9bB+fqh1we2+uwphgDW+w++vfj4XIQUgxAmWCTTj8qWwq+Qa39BA1zZZO0sN
+	WcVjx3FiuEjuKX5V47d0kVd1rgB0tcKkbF3wTiXC3wyKV9IYeZ4qaDc72EY+T/GJifHZ2CoR7L9yx
+	nxBldq8Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tpAz7-00000004bTL-14Tm;
+	Mon, 03 Mar 2025 18:57:49 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8F5B430049D; Mon,  3 Mar 2025 19:57:48 +0100 (CET)
+Date: Mon, 3 Mar 2025 19:57:48 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org, Ingo Molnar <mingo@kernel.org>
+Subject: Re: [tip:x86/core 16/17] vmlinux.o: warning: objtool: do_jit+0x276:
+ relocation to !ENDBR: .noinstr.text+0x6a60
+Message-ID: <20250303185748.GC15322@noisy.programming.kicks-ass.net>
+References: <202503030704.H9KFysNS-lkp@intel.com>
+ <20250303092459.GI5880@noisy.programming.kicks-ass.net>
+ <202503030910.55EBC9A76@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250303084724.6490-15-kanchana.p.sridhar@intel.com> <202503031847.j1iReOtf-lkp@intel.com>
-In-Reply-To: <202503031847.j1iReOtf-lkp@intel.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Mon, 3 Mar 2025 10:21:35 -0800
-X-Gm-Features: AQ5f1Joteeu0OkDzJuqjMB5KRiGMoPyQGJnXPi01TtEkBA2B70o-aPls5I0oWA4
-Message-ID: <CAKEwX=MgV22UBNi-2dNBDgNM2DRfrngk_4gO7z9t-O0KrpdPUw@mail.gmail.com>
-Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
- chaining in zswap_store() of large folios.
-To: kernel test robot <lkp@intel.com>
-Cc: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, hannes@cmpxchg.org, yosry.ahmed@linux.dev, 
-	chengming.zhou@linux.dev, usamaarif642@gmail.com, ryan.roberts@arm.com, 
-	21cnbao@gmail.com, ying.huang@linux.alibaba.com, akpm@linux-foundation.org, 
-	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au, 
-	davem@davemloft.net, clabbe@baylibre.com, ardb@kernel.org, 
-	ebiggers@google.com, surenb@google.com, kristen.c.accardi@intel.com, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202503030910.55EBC9A76@keescook>
 
-On Mon, Mar 3, 2025 at 3:07=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Kanchana,
->
-> kernel test robot noticed the following build errors:
->
-> > 1166                          prefetchw(entries[j]);
-> --
+On Mon, Mar 03, 2025 at 09:11:54AM -0800, Kees Cook wrote:
+> On Mon, Mar 03, 2025 at 10:24:59AM +0100, Peter Zijlstra wrote:
 
-Why are we doing this anyway? Does it have a notable performance
-difference? At the very least, leave a comment explaining why we're
-prefetching this (although the build error suggests that we have to
-remove it anyway).
+> > > >> vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
+
+> Just for my own curiosity, how did you track this down? (The
+> relationship between cfi_bhi and do_jit is not immediately obvious to
+> me. Or rather, what was needing DCE?)
+
+If you build dfebe7362f6f461d771cdb9ac2c5172a4721f064 (tip/x86/core^2 so
+as to not have the fix) and build a FINEIBT=y kernel with clang-19 (so
+as not to have support for kcfi-ariry) then:
+
+$ ./scripts/objdump-func tmp-build/vmlinux.o do_jit
+...
+0267    6a2a7:  48 c1 e9 20             shr    $0x20,%rcx
+026b    6a2ab:  0f 85 16 39 00 00       jne    6dbc7 <do_jit+0x3b87>
+0271    6a2b1:  48 8b 44 24 20          mov    0x20(%rsp),%rax
+0276    6a2b6:  48 c7 c1 00 00 00 00    mov    $0x0,%rcx        6a2b9: R_X86_64_32S     __bhi_args+0x20
+027d    6a2bd:  c6 43 0b e8             movb   $0xe8,0xb(%rbx)
+0281    6a2c1:  48 83 c0 10             add    $0x10,%rax
+0285    6a2c5:  29 c1                   sub    %eax,%ecx
+0287    6a2c7:  89 4b 0c                mov    %ecx,0xc(%rbx)
+...
+
+
+So the reference is to __bhi_args[1], this is the result of
+emit_fineibt(.arity=1).
+
+Anyway, the point is that for FINEIBT_BHI=n the __bhi_args[]
+array is 'empty' and the +0x20 thing points into random.
+
+What needs DCE is the whole if (cfi_bhi) branch in emit_fineibt(),
+making that whole __bhi_args[] reference go away.
