@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDB2188CDB;
-	Mon,  3 Mar 2025 07:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8722AD27;
+	Mon,  3 Mar 2025 09:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740985967; cv=none; b=Ft/ZK3Q3DqlsYdTDdpV5V4P80zu+8DmrQZljl2tT5deSNrdCV6U6CHUTTv9TpAzhJqh9KZ1Wx0c1jLyDvDyxVbbjcY1KeCjT3TeFXp87XildisBR6M8PqPHnCBgkxrEL29R5F6+TbB5ZyX4oZfrWYbW3iosQhBJf37KFNV9+6pg=
+	t=1740993523; cv=none; b=eM6oqolG4myHsKW/FXi3/iP9lDXlt9QViMzNoqiSX7sah4EZ+dZFxHqUAynLEcryPivLB3tmdGVhRWlhpe0qPIvWVqTnY/1GC6qS3JpVqxoZNqfFait5OcEAu9a+BgyhgUnpE167JKYuVffzjwrq56F4cc4CTJlCgqCJKZOV9V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740985967; c=relaxed/simple;
-	bh=Bm40aZPKh+7xNA+sXqZ7uh5Cs/1UdisbSRks9+IkP4U=;
+	s=arc-20240116; t=1740993523; c=relaxed/simple;
+	bh=Ve5w4wBza/LR9gEhfks2GNQsd1BGH+h8LS5mlA9F7SA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QGHNdZLf+dQLcC38Vlm6UCVjI5L0purlKmt9BfbWstUglBb9+bfJfYnEXfPcVeBmifZ29+jjVwSiJJi4v8vnj/iEjAoktJgXVk8QQlUJw7Rk0xNJpbe980XyzSsKy9sHYjDS9UHpSjl9p+H+H6L9sQJp36Qdnu22OeNZSvibaQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mLWznx9Z; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=UqKXyGtJNRz1eN/m5toBrP+H0LG6UpZqMHxlmqZGtTkdnoTbBNBMxBjVD44tWPiySRUlwRX40x9OXoEWyalFGHZ5jfbF6HyGSpFsihysDBYn3WZrkerIcsxXopJ9qweGLJh/B8ni13v8TDbDCLh84uDWlLo58NmmJNyu2Bd6woE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=snAJ488r; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mLWznx9Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740985965; x=1772521965;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bm40aZPKh+7xNA+sXqZ7uh5Cs/1UdisbSRks9+IkP4U=;
-  b=mLWznx9ZFnk1ReyXCsXUOsL3/M38sP1C0dZr55Gfs3ZVjd6qLjPiH/TN
-   ZeGM2Y3f3nqJ9K2xRN0wIQ2H1YCM6MMsKdllc0EkiApFjbLEzH+OyD2fv
-   AAqNRfFGTSRjbOurLfVUR8TfFL2ThwaYk+I0eOKy1TIUTzj/TgCvDnu86
-   n2VpSdXe46TGU5LQGyLdKGXFvGcYKtCvDQ20n94iTEawW/ZbOn6uRaZO1
-   BViZWkILXs0yKVIlsMajwPd0D9zbfUM2+VNEiqsorFR5zgxE1xP52miPm
-   mDKU3iTFCUjwZhMckWGZl8zVHxvZ55PtILLtKDPreQdQyXOwClgrfv/+W
-   A==;
-X-CSE-ConnectionGUID: jH6DQMdTSVSH6ldjLZHvHQ==
-X-CSE-MsgGUID: Ubcf7ChEQEmTfeMinakgvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="59262032"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="59262032"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 23:12:45 -0800
-X-CSE-ConnectionGUID: eH7cdqHvTBCEWqu9TnH3Cw==
-X-CSE-MsgGUID: JnDxc/ChS9+imSM3RQ0Pmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118467223"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 02 Mar 2025 23:12:43 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tozyi-000I8v-2A;
-	Mon, 03 Mar 2025 07:12:40 +0000
-Date: Mon, 3 Mar 2025 15:12:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ravi Kumar kairi <kumarkairiravi@gmail.com>,
-	parthiban.veerasooran@microchip.com, christian.gromm@microchip.com,
-	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Ravi Kumar Kairi <kumarkairiravi@gmail.com>
-Subject: Re: [PATCH] staging: most: Remove unused mutex from most_video_dev
-Message-ID: <202503031448.eqB11EdG-lkp@intel.com>
-References: <20250221163444.57492-2-kumarkairiravi@gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="snAJ488r"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=1eCtu+hvRhYstMo2vG0z14zLR3g9gohNHmA5ExvpV9Y=; b=snAJ488rsQoq3hN1Z4FaRaQlQH
+	9so+l3wlu5qJyjQKPK8rZIvWFrAiMCWsMVPirTbkAjAwy8KrNZ+PwvGMWz1dS6hh+eqcfMrNpEgYf
+	yynraGfpogGIpEsCt74e2Zy1LrJYqjIRw74qWxaCNR4BikDoF52TN5wAe+PgIeHRpZCjkdquHdAm0
+	mFMYGA1uwetI3N7IK/WIdZyNOmKr/fSFLOpHijzNTU+/3Z+CQKEh6ksGC9KIGKoHLh1JeC6QxOgHZ
+	YL4PwFqb7dsxlsoSUc1CwOwL0YwuDz+NV41FSuuZwjc9FynHG9JVe1DWed11QXALcV2Nh3pHslyBl
+	ifQrqumA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tp1wB-0000000BOR4-35ew;
+	Mon, 03 Mar 2025 09:18:11 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5935F30049D; Mon,  3 Mar 2025 10:18:11 +0100 (CET)
+Date: Mon, 3 Mar 2025 10:18:11 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	jolsa@kernel.org, davem@davemloft.net, dsahern@kernel.org,
+	mathieu.desnoyers@efficios.com, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
+	akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 1/4] x86/ibt: factor out cfi and fineibt
+ offset
+Message-ID: <20250303091811.GH5880@noisy.programming.kicks-ass.net>
+References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+ <20250303065345.229298-2-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,75 +63,19 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250221163444.57492-2-kumarkairiravi@gmail.com>
+In-Reply-To: <20250303065345.229298-2-dongml2@chinatelecom.cn>
 
-Hi Ravi,
+On Mon, Mar 03, 2025 at 02:53:42PM +0800, Menglong Dong wrote:
+> index c71b575bf229..ad050d09cb2b 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -908,7 +908,7 @@ void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct mod
+>  
+>  		poison_endbr(addr, wr_addr, true);
+>  		if (IS_ENABLED(CONFIG_FINEIBT))
+> -			poison_cfi(addr - 16, wr_addr - 16);
+> +			poison_cfi(addr, wr_addr);
+>  	}
+>  }
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ravi-Kumar-kairi/staging-most-Remove-unused-mutex-from-most_video_dev/20250222-004322
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20250221163444.57492-2-kumarkairiravi%40gmail.com
-patch subject: [PATCH] staging: most: Remove unused mutex from most_video_dev
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250303/202503031448.eqB11EdG-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031448.eqB11EdG-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503031448.eqB11EdG-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/most/video/video.c:417:28: error: no member named 'lock' in 'struct most_video_dev'
-     417 |         mdev->vdev->lock = &mdev->lock;
-         |                             ~~~~  ^
-   drivers/staging/most/video/video.c:474:20: error: no member named 'lock' in 'struct most_video_dev'
-     474 |         mutex_init(&mdev->lock);
-         |                     ~~~~  ^
-   include/linux/mutex.h:64:16: note: expanded from macro 'mutex_init'
-      64 |         __mutex_init((mutex), #mutex, &__key);                          \
-         |                       ^~~~~
-   2 errors generated.
-
-
-vim +417 drivers/staging/most/video/video.c
-
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  402  
-1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  403  static int comp_register_videodev(struct most_video_dev *mdev)
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  404  {
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  405  	int ret;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  406  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  407  	init_waitqueue_head(&mdev->wait_data);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  408  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  409  	/* allocate and fill v4l2 video struct */
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  410  	mdev->vdev = video_device_alloc();
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  411  	if (!mdev->vdev)
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  412  		return -ENOMEM;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  413  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  414  	/* Fill the video capture device struct */
-1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  415  	*mdev->vdev = comp_videodev_template;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  416  	mdev->vdev->v4l2_dev = &mdev->v4l2_dev;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24 @417  	mdev->vdev->lock = &mdev->lock;
-323977d5d33a8d drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  418  	snprintf(mdev->vdev->name, sizeof(mdev->vdev->name), "MOST: %s",
-323977d5d33a8d drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  419  		 mdev->v4l2_dev.name);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  420  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  421  	/* Register the v4l2 device */
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  422  	video_set_drvdata(mdev->vdev, mdev);
-e653614ee1832c drivers/staging/most/video/video.c    Hans Verkuil    2020-02-03  423  	ret = video_register_device(mdev->vdev, VFL_TYPE_VIDEO, -1);
-b23e8e51e6dc40 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  424  	if (ret) {
-8f6f9ed15d679a drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  425  		v4l2_err(&mdev->v4l2_dev, "video_register_device failed (%d)\n",
-b23e8e51e6dc40 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  426  			 ret);
-eab231c0398a91 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  427  		video_device_release(mdev->vdev);
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  428  	}
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  429  
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  430  	return ret;
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  431  }
-3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  432  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you're touching this code, please use tip/x86/core or tip/master.
