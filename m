@@ -1,59 +1,61 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905C723024D;
-	Mon,  3 Mar 2025 16:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974741531C8;
+	Mon,  3 Mar 2025 17:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741020929; cv=none; b=KZiZUeMtt0+enw+0G9md+8pEF3wgS99boaqcmzd4eVcN3t33nePj9RssjU700/FJf10rCT5a/q6EJYkYL4jww7/64ZO5o8OTWh4L6qrqMYJwS8scc7NQg7E8/tf4v81P722A6KL7VF6RVNff+RDCVIBLD8WVNRtCkfNZi6L+MrI=
+	t=1741021805; cv=none; b=gcIpxcToNVpBZgFM42s7UeyPAc3qPWdxzhjleOH0nSggysdnoMv15YUa99XVB6SFffHc8ZcvWx6aJVRpIL8xjWsmewCsfU3CfkqnOyYKcSve/YlnfSOQ9XoVl8p910lWEccO2kRpOMmOd05k3vEvYD25gM/3dPzr8Ask5ULCI3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741020929; c=relaxed/simple;
-	bh=s8s99X4A9mICenge2Kot4pYIpEf6LooeZfPPPPswBWI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sBzbBQx0w8K8EZhEbNfwkA3PuC3UoPU4nz4TRHJvMJSLCueZRnsI3EP5lOXTq5YZlimRDXSo7Q4ylbxi3KTTd4hKoczUG/GhIUre7hg1IdKBYZToFaFDkJYivsVUPC8WI6pNo/SuycBbEH3SMcGq49gd/SN2DNmGsoHKHGQZLCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dpP3ry4w; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1741021805; c=relaxed/simple;
+	bh=a3ZobddhipgWojHTpxG17gQFRmXW4aCuZ7oTKhRfslU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MDu6KXVyX/SMx0KHQKBXzutFmgSmMF3fahfF+jXbCorCofvgYVal8dWycykDd4hBQNZr18H1G6nQsi+s6QbgPgg2Ua4nMODJ7gYaLi3CjLtdGqzSJQXWe/HXIKuJSmK9QEqg3TeXCzd34rH3FHeXdl48HmB2KyS4aLyleBpM61w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ODT2KNfw; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dpP3ry4w"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=meSp1W4kNHGyd+88qlhZAmQUNLTT11sQ5+3aYaCOj4Q=; b=dpP3ry4wKDt94DgihnFO+YYQXP
-	D4M9HLwKMcZ1dh8OJ465lh8hjlZIC4hPnM0yu+Bo48hJ25+geFXfhb2yh1JjsYv2G86e6y8Q9aA08
-	EjLGlZwFQIXS8MWxtg4rTznMRQuyEvPa+WNLe2pvD+BteV4xvApnMYQJAC79Lfq83FC8K1mS128bN
-	k9Syjw9M9tEsm1AZBCOn/Wwb3KXYOS3EzdY6uhs54+r5jAjfBJfy5gMkcPRofiRiBUAg2x+X/xWLJ
-	kVME0QXIFcySMe3OdN/xZXFu4nYKpWhju6aKjV+25lMMlQM+XB+vJn3aeblxRU6/Kea/FDiBN5mio
-	eEfj0fJA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tp94B-00000004aZY-0HlI;
-	Mon, 03 Mar 2025 16:54:55 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 38C6E3006C0; Mon,  3 Mar 2025 17:54:54 +0100 (CET)
-Date: Mon, 3 Mar 2025 17:54:54 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
-	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-	jolsa@kernel.org, davem@davemloft.net, dsahern@kernel.org,
-	mathieu.desnoyers@efficios.com, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
-	akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
-Message-ID: <20250303165454.GB11590@noisy.programming.kicks-ass.net>
-References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
- <20250303132837.498938-2-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ODT2KNfw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741021803; x=1772557803;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a3ZobddhipgWojHTpxG17gQFRmXW4aCuZ7oTKhRfslU=;
+  b=ODT2KNfweJvSazdCfrfSQ9TXAhzqhe9B/AejMCAsKIUb+L4Ua95dLckM
+   +FgVdONGI0ggTm00DUX7qWhL8Y+t2/Io8zoa6+iIdw6cB0Q4mhVrgJmsF
+   yx9viuVrzZw3C654yArU6/709Ie+NMwZ8Gv09UmeuEo7ZqzszYYr/IfgV
+   M7HeA4XGrh9r1J2kkMSkZ/zfr5CjxnJGUbaf4GeNbsAsCjbROSIDJdL9F
+   8xf3mHF9GPTcrrn3nw/5+xAWIdSIz0hnxg+BHmKrCqVKar0BPu4SvW0Y2
+   n8j748bcFSO3Kb6/BVkXJu2zhggs4uaPb3Tod2SiberYlJ+VYqSCje1hS
+   A==;
+X-CSE-ConnectionGUID: +pVaQItWSB+s9ujLjiiHNA==
+X-CSE-MsgGUID: H6qiRYUCQF+a6ydpUJOiJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="67278619"
+X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
+   d="scan'208";a="67278619"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 09:10:02 -0800
+X-CSE-ConnectionGUID: 3ajuHV0FRV6fRSfK+2AYzg==
+X-CSE-MsgGUID: apAQwzfQR8SYamVRB7lkTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
+   d="scan'208";a="118791181"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Mar 2025 09:10:01 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tp9Ik-000IkE-2q;
+	Mon, 03 Mar 2025 17:09:58 +0000
+Date: Tue, 4 Mar 2025 01:09:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rik van Riel <riel@surriel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Nadav Amit <nadav.amit@gmail.com>
+Subject: [bp:tip-x86-cpu-tlbi 15/18] arch/x86/mm/tlb.c:492:2: error: call to
+ undeclared function 'mm_clear_asid_transition'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202503040000.GtiWUsBm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,62 +64,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303132837.498938-2-dongml2@chinatelecom.cn>
 
-On Mon, Mar 03, 2025 at 09:28:34PM +0800, Menglong Dong wrote:
-> For now, the layout of cfi and fineibt is hard coded, and the padding is
-> fixed on 16 bytes.
-> 
-> Factor out FINEIBT_INSN_OFFSET and CFI_INSN_OFFSET. CFI_INSN_OFFSET is
-> the offset of cfi, which is the same as FUNCTION_ALIGNMENT when
-> CALL_PADDING is enabled. And FINEIBT_INSN_OFFSET is the offset where we
-> put the fineibt preamble on, which is 16 for now.
-> 
-> When the FUNCTION_ALIGNMENT is bigger than 16, we place the fineibt
-> preamble on the last 16 bytes of the padding for better performance, which
-> means the fineibt preamble don't use the space that cfi uses.
-> 
-> The FINEIBT_INSN_OFFSET is not used in fineibt_caller_start and
-> fineibt_paranoid_start, as it is always "0x10". Note that we need to
-> update the offset in fineibt_caller_start and fineibt_paranoid_start if
-> FINEIBT_INSN_OFFSET changes.
-> 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bp/bp.git tip-x86-cpu-tlbi
+head:   8dce44810022279f97780a5eadda766a6f4017a3
+commit: a05a1e35e67bfe03704633c51ca9b03e16fffd06 [15/18] x86/mm: Enable broadcast TLB invalidation for multi-threaded processes
+config: i386-buildonly-randconfig-003-20250303 (https://download.01.org/0day-ci/archive/20250304/202503040000.GtiWUsBm-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503040000.GtiWUsBm-lkp@intel.com/reproduce)
 
-I'm confused as to what exactly you mean.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503040000.GtiWUsBm-lkp@intel.com/
 
-Preamble will have __cfi symbol and some number of NOPs right before
-actual symbol like:
+All errors (new ones prefixed by >>):
 
-__cfi_foo:
-  mov $0x12345678, %reg
-  nop
-  nop
-  nop
-  ...
-foo:
+>> arch/x86/mm/tlb.c:492:2: error: call to undeclared function 'mm_clear_asid_transition'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     492 |         mm_clear_asid_transition(mm);
+         |         ^
+   arch/x86/mm/tlb.c:492:2: note: did you mean 'mm_in_asid_transition'?
+   arch/x86/include/asm/tlbflush.h:299:20: note: 'mm_in_asid_transition' declared here
+     299 | static inline bool mm_in_asid_transition(struct mm_struct *mm) { return false; }
+         |                    ^
+   1 error generated.
 
-FineIBT must be at foo-16, has nothing to do with performance. This 16
-can also be spelled: fineibt_preamble_size.
 
-The total size of the preamble is FUNCTION_PADDING_BYTES + CFI_CLANG*5.
+vim +/mm_clear_asid_transition +492 arch/x86/mm/tlb.c
 
-If you increase FUNCTION_PADDING_BYTES by another 5, which is what you
-want I think, then we'll have total preamble of 21 bytes; 5 bytes kCFI,
-16 bytes nop.
+   455	
+   456	static void finish_asid_transition(struct flush_tlb_info *info)
+   457	{
+   458		struct mm_struct *mm = info->mm;
+   459		int bc_asid = mm_global_asid(mm);
+   460		int cpu;
+   461	
+   462		if (!mm_in_asid_transition(mm))
+   463			return;
+   464	
+   465		for_each_cpu(cpu, mm_cpumask(mm)) {
+   466			/*
+   467			 * The remote CPU is context switching. Wait for that to
+   468			 * finish, to catch the unlikely case of it switching to
+   469			 * the target mm with an out of date ASID.
+   470			 */
+   471			while (READ_ONCE(per_cpu(cpu_tlbstate.loaded_mm, cpu)) == LOADED_MM_SWITCHING)
+   472				cpu_relax();
+   473	
+   474			if (READ_ONCE(per_cpu(cpu_tlbstate.loaded_mm, cpu)) != mm)
+   475				continue;
+   476	
+   477			/*
+   478			 * If at least one CPU is not using the global ASID yet,
+   479			 * send a TLB flush IPI. The IPI should cause stragglers
+   480			 * to transition soon.
+   481			 *
+   482			 * This can race with the CPU switching to another task;
+   483			 * that results in a (harmless) extra IPI.
+   484			 */
+   485			if (READ_ONCE(per_cpu(cpu_tlbstate.loaded_mm_asid, cpu)) != bc_asid) {
+   486				flush_tlb_multi(mm_cpumask(info->mm), info);
+   487				return;
+   488			}
+   489		}
+   490	
+   491		/* All the CPUs running this process are using the global ASID. */
+ > 492		mm_clear_asid_transition(mm);
+   493	}
+   494	
 
-Then kCFI expects hash to be at -20, while FineIBT must be at -16.
-
-This then means there is no unambiguous hole for you to stick your
-meta-data thing (whatever that is).
-
-There are two options: make meta data location depend on cfi_mode, or
-have __apply_fineibt() rewrite kCFI to also be at -16, so that you can
-have -21 for your 5 bytes.
-
-I think I prefer latter.
-
-In any case, I don't think we need *_INSN_OFFSET. At most we need
-PREAMBLE_SIZE.
-
-Hmm?
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
