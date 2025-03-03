@@ -1,105 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD80230BEB;
-	Mon,  3 Mar 2025 19:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEF01422DD
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 20:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741031333; cv=none; b=r3rGxN3RSEnAPKRGvL/JlECbt0YlueyMoxyx9vGpT1rCcSHNyX3sv7YAxm+5cJViUSkP7rwGSlAv105mRO0b04J1ZxJT01WrneD7k0U0Tu94lJL0mUIK8BTJ7hM/bXksro0Z5rGM/PZTY/LMPcK+4OTHT0tsZYDejF7bHBWwb7o=
+	t=1741032914; cv=none; b=ZlMjbfEGzNry/6Lw4hzhLRKeRCybEyW8JwGhpOfOOlcQ3/xGgiAtJ00BJ4/otwukwkXrdi90D7Y0echs9YOVpod2X/rmlDpMyi1VyyAT2T1N8eHQYw7QLr+JVcEcXi98RePegnQdECkL2OlOvkyBeiFWmznCIqVJmPrVFxNwvaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741031333; c=relaxed/simple;
-	bh=lBzLxz9LoAQhSV4qYBwW+SfQKCXYH6lsg4FbRLNjFV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=di87V0KUQGOV6y9XFPVZOvkLMahkIUbLpuw9NjpF8NagKugm+Kg4cvxasDCPDJvyQcAzNE/8ZUNchanMpD08J81Uh92LdrV2zhy1gdUBkm+Uxc+13MAYUKS8+wehGFd/axi7+n/YmQFDPTzqx0lUs56SPpm+HQ6wfCTIQuJDq2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X/EvZNex; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741032914; c=relaxed/simple;
+	bh=a7tjVGX/fWg7trjOFWAiSMlw93q/R3mkYEIjqIsDTq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l23kRd3yBbShUFBJmk3qRK11gE/teBPr/mztiN7YrXezGlBFANh4To8htxH9bGGVySsoO3yAueQwx677RMDZ4vt5ZNM5v/eDc9ce8TFNq+7N5l5u4uIj4jMpzL4ggjQYSneA+EgcEDf60WCyFXB9N97M6G+yH8qNvcxm/dQCvqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q7Q1aPVT; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/EvZNex"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741031331; x=1772567331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lBzLxz9LoAQhSV4qYBwW+SfQKCXYH6lsg4FbRLNjFV8=;
-  b=X/EvZNexwEYWSYVX+BU+pWcGo20q9FsbxjsrLKb6QIbVOvlCxIVTnxNX
-   u1W12iJHaMTTP7IZAITSXFqHp6PY8R0VpC2N35+f+5HvcA7I1yKHKHJG6
-   pk2eyBE2zXd4DDzSH3CBO2+Z/tu1L84ghZIMg+v5En9151xNT9A4771kU
-   dL4lEMlkM/u7j1k6+zHwlcZjC1N0MqJlKzJNkS8J5HX/x81q1D2UeeiT3
-   KbbaHUCQ3oXpjLEKG4DFHUBF5qrMe8JruftINYNdtkYzrVtYcbKxLGaA7
-   D5axlfHG0cHRwJ1HxgyJ0X5o+R08zVAGe2pAYjkuchScsWjWVanznNcFp
-   w==;
-X-CSE-ConnectionGUID: ZtzGIrdOTkyl5Ojhvg+jSQ==
-X-CSE-MsgGUID: g8JAhuh7Rx+dJa9LWjNwgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="53329440"
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="53329440"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 11:48:50 -0800
-X-CSE-ConnectionGUID: f0lih0fqSzWhfKMbfsMU2A==
-X-CSE-MsgGUID: QIYx0h9mR3CtXinwurqg0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="118135060"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Mar 2025 11:48:48 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpBmQ-000Isc-0p;
-	Mon, 03 Mar 2025 19:48:46 +0000
-Date: Tue, 4 Mar 2025 03:48:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nam Tran <trannamatk@gmail.com>, pavel@kernel.org, lee@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nam Tran <trannamatk@gmail.com>
-Subject: Re: [PATCH v2 2/2] leds: add new LED driver for TI LP5812
-Message-ID: <202503040306.gen0Ui0l-lkp@intel.com>
-References: <20250225170601.21334-3-trannamatk@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q7Q1aPVT"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-390f5f48eafso1374590f8f.0
+        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 12:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741032911; x=1741637711; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6HISwtThj2ckJiw/oP+EKb6mnu3LLOXUZTz/QPS9xm0=;
+        b=Q7Q1aPVTtdxbJstbY2ecS0yjYoeEMNiimYaD6d1bj4xjcl74VtPMC9AKT5UngpcT5K
+         pwsRDyjpu6eqebPJRl3I1PSSrqeZh0VRtga7oDg+wJkKndQDpKIgQ0X+xePLsTZZdvgz
+         JkEXcg+a/D/JQmiLFM1zdrB/b4mV/XZhmPtKqBU6cejODxry8tlVOG2Vf44F+yKDZS9B
+         C7Wb4f2yrI+DvhkllSYSn+UdwhYt1kRF+Gucjew+EgN+tNHfsXuj0L4FKIQS5/oPuem2
+         wFADYBX+zb+f4/lUkdxfU88WgE9Ptr5HpeuAATcjZMzDIq9RF2UBevV+4mSv4GpXQeWF
+         kKXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741032911; x=1741637711;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6HISwtThj2ckJiw/oP+EKb6mnu3LLOXUZTz/QPS9xm0=;
+        b=tW5tGJ4ye7jKWWvLvKXTUogQ8U6ea6foifzORTW9h5Q4/x4Fst0JjxQgPnM7Wd8jr+
+         D/78eBS5i+sX6jo1+h31f3WXlyFQtCpM2HdTRK5AP1KkIMa2tu2zalH7HyJFAUh/t51K
+         zXZbRwVeqBA9S+ytASrzzVv8s4egp7P24E1NKySMicdpEE9v8ljHK6RHv8GO3yoP5SGk
+         KRIvhhXzA0yEONYQ47Oi4FjAykjhS+zoEPSkDivrgBFcVxIsxYfZFprIGDe3UskSPEJL
+         f/mQkoOSM8M7l27f8aE6/WYoV74y2jTDhgR2y2DSrOBSASxZnBhqZeQOgseGX6ndnlEH
+         V1CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXuv0HQPFzCQZNOduRbLFY6+1zE2V60O6k2q2YrtzBoefuix5jusWcszNU+NSkQcU1Gsuze@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWK8rboSDcONKiFrPy24X+v+ZNuG5Lffrg/bpuZoubLhuoRtXw
+	kxWtUqcxXtqNm7ysQFPS+OO83289U8pCHJTDthNkGYv4GrlPqspx
+X-Gm-Gg: ASbGnctnJ0/JeRutsnro1I1sPP0R/YOrqJONHnNv991nav5BgLd6vmQYxe7YncY+VWo
+	lYkOoR1ECXW/fHEyZoL9OeV+pxW5AsP3CfGqJ8g4ZXbmJivGH6omF6aXnHPSHbnmD63vvawi75I
+	tTgcVybuNZpJh1rcrGzeG3q0MCByQg71I0wS6AF9X/ISqfDOQS9AwIX/3AYdU/fk1xBNyrV54Mi
+	DAo6p0FRg+roYs96fF0aKcqvAQo7joQ7+He4Am3K7cwvPxRJAaRBwinp6sgcagKI9/eXIYtNcFd
+	t7kyXJMsipPsApEoW03WHQAvLpvmOT0SgnGmuAIPY+Dq/7svGXkNqWrIcsEYz1zR0rNU50Lek4P
+	pe67oY0g=
+X-Google-Smtp-Source: AGHT+IEZcFcEwop42cS1sSfMsNTzvj2OjK7gTdBaNBV75eJDj3qnhXXQFC1+gCRjILig9VtED+gPKg==
+X-Received: by 2002:a05:6000:4188:b0:390:ea4b:e89 with SMTP id ffacd0b85a97d-390eca26303mr11107065f8f.48.1741032910822;
+        Mon, 03 Mar 2025 12:15:10 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bbbff18b3sm62631025e9.24.2025.03.03.12.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 12:15:10 -0800 (PST)
+Date: Mon, 3 Mar 2025 20:15:09 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Bill Wendling <morbo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H.
+ Peter Anvin" <hpa@zytor.com>, Eric Biggers <ebiggers@kernel.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt
+ <justinstitt@google.com>, LKML <linux-kernel@vger.kernel.org>,
+ linux-crypto@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH v2] x86/crc32: use builtins to improve code generation
+Message-ID: <20250303201509.32f6f062@pumpkin>
+In-Reply-To: <CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com>
+References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
+	<CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225170601.21334-3-trannamatk@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Nam,
+On Thu, 27 Feb 2025 15:47:03 -0800
+Bill Wendling <morbo@google.com> wrote:
 
-kernel test robot noticed the following build errors:
+> For both gcc and clang, crc32 builtins generate better code than the
+> inline asm. GCC improves, removing unneeded "mov" instructions. Clang
+> does the same and unrolls the loops. GCC has no changes on i386, but
+> Clang's code generation is vastly improved, due to Clang's "rm"
+> constraint issue.
+> 
+> The number of cycles improved by ~0.1% for GCC and ~1% for Clang, which
+> is expected because of the "rm" issue. However, Clang's performance is
+> better than GCC's by ~1.5%, most likely due to loop unrolling.
 
-[auto build test ERROR on lee-leds/for-leds-next]
-[also build test ERROR on robh/for-next linus/master v6.14-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+How much does it unroll?
+How much you need depends on the latency of the crc32 instruction.
+The copy of Agner's tables I have gives it a latency of 3 on
+pretty much everything.
+If you can only do one chained crc instruction every three clocks
+it is hard to see how unrolling the loop will help.
+Intel cpu (since sandy bridge) will run a two clock loop.
+With three clocks to play with it should be easy (even for a compiler)
+to generate a loop with no extra clock stalls.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Tran/dt-bindings-leds-Add-LP5812-LED-driver-bindings/20250226-011634
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20250225170601.21334-3-trannamatk%40gmail.com
-patch subject: [PATCH v2 2/2] leds: add new LED driver for TI LP5812
-config: x86_64-randconfig-006-20250303 (https://download.01.org/0day-ci/archive/20250304/202503040306.gen0Ui0l-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503040306.gen0Ui0l-lkp@intel.com/reproduce)
+Clearly if Clang decides to copy arguments to the stack an extra time
+that will kill things. But in this case you want the "m" constraint
+to directly read from the buffer (with a (reg,reg,8) addressing mode).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503040306.gen0Ui0l-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: i2c_register_driver
-   >>> referenced by leds-lp5812.c:2313 (drivers/leds/leds-lp5812.c:2313)
-   >>>               vmlinux.o:(lp5812_driver_init)
---
->> ld.lld: error: undefined symbol: i2c_del_driver
-   >>> referenced by leds-lp5812.c:2313 (drivers/leds/leds-lp5812.c:2313)
-   >>>               vmlinux.o:(lp5812_driver_exit)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	David
