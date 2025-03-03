@@ -1,105 +1,169 @@
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F7B1EEA2A;
-	Mon,  3 Mar 2025 23:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C0D238D2E;
+	Mon,  3 Mar 2025 23:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741043645; cv=none; b=o2q+ZMKj7bF/wu0b4SW7PXRMNxrnh4uxeLpXZWvCosI+rBgEbKCu3SV+jGr2x1rYjY0M7zL/QQn0cW7qj26OP5Wt/TvMJefQrdCMp9tYUdFk24sS8kw6qjdxGrMB7dWWAzHqZEXse0IHFcFtw/+o9SyReAjAENAZHRJyhxCFSn0=
+	t=1741043877; cv=none; b=V40LhqKFOC0pOQRhMUCrVR3+rIC/CysWsQiIhpeXnbkHg1huvyYT9Vu8xxnDzr+gSEkiVpbFw5fGCEX92D518maAUYtG26XQ9HD161pd0atAWuBBxJ19sFad9itV1rH6eqVvJ/uqzTOXs+qd1BcPtRzs2zenrmN3QwwP1qpTcts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741043645; c=relaxed/simple;
-	bh=ksQKGGa9kQgqkg5ODjySLSS1WpbS/XcqzJBdz1UwtRU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kBAaeqL7n+bWrsT9451JdfYyRrjKnJixPuVv2+fqrwGT3W5rStWbVFq6qamdL9dYN8MI6r+wIrPiZ4Rq34oTQg1qCxqv1ZCnXfT8ODJdZp0UXXuPkENAYHVjyWmG14enODRCTG+5H67rSj/uPOKnRHsez1jcZrxB+72IAP5LYGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qA7uTYMk; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+	s=arc-20240116; t=1741043877; c=relaxed/simple;
+	bh=SFd9xqY4gRWrEeaGvoL5BbS0dlM1B0xqzUuSgE6I/jU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BgN9Hl3gxO+C9ImEhw6E6F/WbjXYUjldQ8r5cj3SzDxNulwdqSZDLuEBAqwZohSj6WUIkTonX/v81HgZdOiCryTVAuCAEEa8PqsSU8oECr0zzD2xwQM1g/BJeU9KoKPFKRcFswa/OP3nGomsiU2Mhk7AlstHEXQy0hks9y6uROQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jucf/9/P; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qA7uTYMk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1741043640;
-	bh=c06IwIafGujtJ/Kas9O7TJpHAAgll/CuyLRgEjfHugs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qA7uTYMkLIPYFCo8o3p8HzFqNGRJGG1rFKmM49NfYb7DWkTXM8xBReM0JY9FaDWHM
-	 Dvm40Q6hRt2obXuQ4ROPplCnfmCnRudSrqqWm8AmGrLfdzWRYeyBcRsXGwYXmO0No9
-	 mQ3Dt5v5NlGcQb+JwMyjbFgbWPdfTSJyOKe3M8AVaIK5sJAbGjujzY3uIoOjNH2j4x
-	 JO8n0bWgcDeZhZzEM9okQjPCJIwbOmvvY5yzxVRYHUy0BSfY8ylbeEhPv5+RF9xzl9
-	 H8CeJ4dlxabFB4oRQ7UJYcQspw7rTFzAoT/uoxz20oBnHpcLYJKv6fkVLRgRoy+Ez0
-	 wneFlgpE7IZWg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Z6F4Q3RBzz4x3S;
-	Tue,  4 Mar 2025 10:13:58 +1100 (AEDT)
-Date: Tue, 4 Mar 2025 10:13:57 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, kernel test robot <lkp@intel.com>,
- Brendan Jackman <jackmanb@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, Oscar
- Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Linux Memory Management List
- <linux-mm@kvack.org>, Vlastimil Babka <vbabka@suse.cz>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
- change
-Message-ID: <20250304101357.66067dd3@canb.auug.org.au>
-In-Reply-To: <Z8WQEpv7BNtDDoH3@black.fi.intel.com>
-References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
-	<202503010129.rJvGqZN1-lkp@intel.com>
-	<20250228182804.GB120597@cmpxchg.org>
-	<Z8WQEpv7BNtDDoH3@black.fi.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jucf/9/P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741043876; x=1772579876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SFd9xqY4gRWrEeaGvoL5BbS0dlM1B0xqzUuSgE6I/jU=;
+  b=Jucf/9/PDtqTOrha5QPHUWsBRNSj+R7AkUPnU39UXdJJ6iB28mrPLJBv
+   LW4SJ78ZWkuzWGD6/wxi0rwKr5f2Y7TZ8ejiSBMw59s20kf+n1grVi/gr
+   cI08Q5wmsGaftp7XviwQ0bpJChWBFP7DFxfI8OPiUwULUET2lwFViqcrT
+   UOJjKFFnxjr7nxlRUp1a7+G0iXOEYxnq9GYd7pE4qI+2IK9oBqbw9OnMw
+   RVAJedwUabKdp/aMgzVU+0TjMRNVksO3/oWWyZufZ+qOOMTeqtfQR5N/O
+   pbqAvySp14X0JuD0CIc4P2QBhvGvZAY29M9uQwjil2cOMyZzKrjMuTYmr
+   Q==;
+X-CSE-ConnectionGUID: HHtEc7fOQ8CFbC+12vYrDg==
+X-CSE-MsgGUID: zrDJ4mhGT5ay5CitroWKhQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="41793235"
+X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
+   d="scan'208";a="41793235"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 15:17:55 -0800
+X-CSE-ConnectionGUID: sEVzVHs+QoeNAc8uMv0Xmw==
+X-CSE-MsgGUID: WUITPo2qQcmI9dGrnWUvPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118717350"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 03 Mar 2025 15:17:53 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpF2k-000J1o-1t;
+	Mon, 03 Mar 2025 23:17:50 +0000
+Date: Tue, 4 Mar 2025 07:17:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] mm/mremap: thread state through move page table
+ operation
+Message-ID: <202503040721.0r47FGNO-lkp@intel.com>
+References: <4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZeuLQSGosGcBcpXwHeZ1evo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes@oracle.com>
 
---Sig_/ZeuLQSGosGcBcpXwHeZ1evo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Lorenzo,
 
-Hi Andy,
+kernel test robot noticed the following build errors:
 
-On Mon, 3 Mar 2025 13:18:42 +0200 Andy Shevchenko <andriy.shevchenko@intel.=
-com> wrote:
->
-> On Fri, Feb 28, 2025 at 01:28:04PM -0500, Johannes Weiner wrote:
-> > On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote: =20
->=20
-> > The patch is missing a dummy in_mem_hotplug() in the
-> > !CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>. =20
->=20
-> +1, I just stumbled over and this is not fixed in today's Linux Next. I'm
-> wondering how this was missed during merge into Linux Next. Stephen?
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.14-rc5 next-20250303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I just get what people put in their trees.  There are no conflicts
-around this and none of my builds failed, so I didn't see the problem.
-Has someone sent a fix patch to Andrew?  If so, if you forward it to
-me, I will add it to linux-next today.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Stoakes/mm-mremap-correctly-handle-partial-mremap-of-VMA-starting-at-0/20250303-192101
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/4cc18ebfc0cb32e9e42d86503cef3265108343e4.1740911247.git.lorenzo.stoakes%40oracle.com
+patch subject: [PATCH 7/7] mm/mremap: thread state through move page table operation
+config: x86_64-buildonly-randconfig-001-20250304 (https://download.01.org/0day-ci/archive/20250304/202503040721.0r47FGNO-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503040721.0r47FGNO-lkp@intel.com/reproduce)
 
---=20
-Cheers,
-Stephen Rothwell
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503040721.0r47FGNO-lkp@intel.com/
 
---Sig_/ZeuLQSGosGcBcpXwHeZ1evo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   In file included from mm/mremap.c:11:
+   In file included from include/linux/mm.h:2302:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/mremap.c:12:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/mremap.c:581:43: error: too few arguments to function call, expected 5, have 3
+     581 |                         move_huge_pud(pmc, old_entry, new_entry);
+         |                         ~~~~~~~~~~~~~                          ^
+   mm/mremap.c:478:13: note: 'move_huge_pud' declared here
+     478 | static bool move_huge_pud(struct vm_area_struct *vma, unsigned long old_addr,
+         |             ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     479 |                           unsigned long new_addr, pud_t *old_pud, pud_t *new_pud)
+         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings and 1 error generated.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfGN7UACgkQAVBC80lX
-0Gx9MQf+MIPUXZ445QXq8nD8kEGdAATVDoiwm2KZJnqzIHW6/h7P81s60M1tl97F
-qyQWDc2auW3QKvim2HiMionWAZ8paCV7538ZeXtUOa0oiLffZYhUutci0QjLN9wh
-qgyxpW+tfdGolwstw/xSqaOh2SRyBe9FpqnBJ6JOKeGtVGfLBfWu3dNWs3ktHddr
-vZZKm6mI58JzkRbp70YvkWY9aSQGUFo3zx3GzhaIyPWg5QgvWH/IZl+JjtRMrQ+B
-smEDQHhBcvANUzEjbWJzkQrsEQYdhuvjx/Xe14XTibwC1aNPH79FrcIqtN54aC0V
-11+SnhPHeTwb4hUUzBZ6eypNlaNk8Q==
-=C4Si
------END PGP SIGNATURE-----
 
---Sig_/ZeuLQSGosGcBcpXwHeZ1evo--
+vim +581 mm/mremap.c
+
+   552	
+   553	/*
+   554	 * Attempts to speedup the move by moving entry at the level corresponding to
+   555	 * pgt_entry. Returns true if the move was successful, else false.
+   556	 */
+   557	static bool move_pgt_entry(struct pagetable_move_control *pmc,
+   558				   enum pgt_entry entry, void *old_entry, void *new_entry)
+   559	{
+   560		bool moved = false;
+   561		bool need_rmap_locks = should_take_rmap_locks(pmc, entry);
+   562	
+   563		/* See comment in move_ptes() */
+   564		if (need_rmap_locks)
+   565			take_rmap_locks(pmc->old);
+   566	
+   567		switch (entry) {
+   568		case NORMAL_PMD:
+   569			moved = move_normal_pmd(pmc, old_entry, new_entry);
+   570			break;
+   571		case NORMAL_PUD:
+   572			moved = move_normal_pud(pmc, old_entry, new_entry);
+   573			break;
+   574		case HPAGE_PMD:
+   575			moved = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
+   576				move_huge_pmd(pmc->old, pmc->old_addr, pmc->new_addr, old_entry,
+   577					      new_entry);
+   578			break;
+   579		case HPAGE_PUD:
+   580			moved = IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
+ > 581				move_huge_pud(pmc, old_entry, new_entry);
+   582			break;
+   583	
+   584		default:
+   585			WARN_ON_ONCE(1);
+   586			break;
+   587		}
+   588	
+   589		if (need_rmap_locks)
+   590			drop_rmap_locks(pmc->old);
+   591	
+   592		return moved;
+   593	}
+   594	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
