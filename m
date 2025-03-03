@@ -1,291 +1,140 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF31C1E9B27
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 06:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDB2188CDB;
+	Mon,  3 Mar 2025 07:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740984974; cv=none; b=S68YX6Ele4I1iM3E3yEmx7m87tk4VGB78gqaIWGMCrtedUn/ei8a+173eQJGXNnxtj/qzdhMCEwqI1+meUJCEuDy41u5CMOO/44nKFntXDrmItG/Hp5j6alXPZ3zoQPQV8vAbLr2E2kzwoewc8q8f/a3Dbj/nxU7nMDy9p0NGoE=
+	t=1740985967; cv=none; b=Ft/ZK3Q3DqlsYdTDdpV5V4P80zu+8DmrQZljl2tT5deSNrdCV6U6CHUTTv9TpAzhJqh9KZ1Wx0c1jLyDvDyxVbbjcY1KeCjT3TeFXp87XildisBR6M8PqPHnCBgkxrEL29R5F6+TbB5ZyX4oZfrWYbW3iosQhBJf37KFNV9+6pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740984974; c=relaxed/simple;
-	bh=8+jQ2LOFLvD8yNjmgsq7xpDv7f8F3syKUpRlLU8kRU0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UaGF/dp6E0CnuwBgoWwWk4zP9zTc0kx7hhdK/6HwOsddbXlPSR+MeT67Dmb82HcpT/nIH9vs8Px/bHqEKER5gA695r4/8IohtWG7+HN0+u62u6XF/2aPYoVWxy3wK26VmWhdfxLzlzhV8QgqsDR4M5xVYSkOI7+6tW2EMqoiZRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3CTnHUm; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740985967; c=relaxed/simple;
+	bh=Bm40aZPKh+7xNA+sXqZ7uh5Cs/1UdisbSRks9+IkP4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QGHNdZLf+dQLcC38Vlm6UCVjI5L0purlKmt9BfbWstUglBb9+bfJfYnEXfPcVeBmifZ29+jjVwSiJJi4v8vnj/iEjAoktJgXVk8QQlUJw7Rk0xNJpbe980XyzSsKy9sHYjDS9UHpSjl9p+H+H6L9sQJp36Qdnu22OeNZSvibaQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mLWznx9Z; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3CTnHUm"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2239aa5da08so15284645ad.3
-        for <llvm@lists.linux.dev>; Sun, 02 Mar 2025 22:56:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740984972; x=1741589772; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KvSQXTXm2WJtvrSSulKAAYVeipdazZIwWA04KeDmP3s=;
-        b=b3CTnHUmJ2n/psg8rTT08zvuVOmtJuPSvgPaetMl1CadQEKgNzQGnORjv7AMBcRfEc
-         CzI/UDqK2z9Kf10HEfEFwnw7g6k0lYnBCI69GkrQfiHDrvM0dh+FgdGzdoWKSibba/OQ
-         /+gtKg1u4UgXB2yjAXiFvoazKyBvt1S4nUlRFS/qJXq7B9wQVy5WLsJGk2+Slx8B7Xlz
-         1z4EQa4uXzRcpPNBVQH0TTThrNUneNOruocItwl6amlqAVpQY2huzzlWB0m9UT2fSiQv
-         fS7oB6yTmbAMrC2FyU3KquDT18vPFy27lNbO5mENa7HA+khXfMaPoAW/HtPcGBJBazmi
-         LdhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740984972; x=1741589772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KvSQXTXm2WJtvrSSulKAAYVeipdazZIwWA04KeDmP3s=;
-        b=nZZLqnJzGwo96pjZTxheL28MCBnM9e/4j+OJ0SEYmcQ9zOwA4aE4kKaf2bUK6o6w8Z
-         Egq+ZJmAZUT3j1d7T3OXHj2kk7FNSq7E2JjZ1RiNWI+ojTYvHd1qHE5gDv9R4TBPBpAA
-         TTCD82q9Aqp0SgGbL9Z7vDpTHZi7133C0xmiQEhqlhiFs5N051edOo4R/aC7ujSzhYL1
-         fLjYLKGtbdIT3xdn+vMecWkWZRlIxZ+lkMylMktyW96BhMlU8DqjBmX7YTItFs6eH9G6
-         8ufMuNL1n+G6AfbOl9I671QMievXRYZBx9nOdUWI/iqzSbNQJZ3Grkxrby5KCBwPjO5W
-         Z2lw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzYUM3iAv4Iov+oA7BymIrd3x839QN6s74x4gU+g6xEB44GAhZNhoB5JXiEQjVROrKwJ8h@lists.linux.dev
-X-Gm-Message-State: AOJu0YzxnjRYcrAveQ83ZLT31snM4a+AQ4/TRQTYOeicIR+yKF3AchRY
-	XHTN/FHXLM48qb8Qn5hfRBqvZM6KzW8dUESMOpKFT6L7nK9ibHMS
-X-Gm-Gg: ASbGncu3IZePXoH41JZhI9ebqIf7juvCE3BhbORqidJ1W06A1PHe1erx0++pqDJ2QgV
-	bS98ggHBAN0LNZoYUM8wrBHD+4rDFGqTomy3WqbUl/pqfjhEjTM9NrcJMfOcHzTwi6TQe36ApiX
-	lQxl60SnvaXi+5xxdm6km3W2HAgyMgfJD1LNHecam9h2JkB4C507MvDTIMwxobPjqDr8JKn9nmA
-	l7m/yZqmCHbiFVaxy5dSh8mc/QAzI2QHzoJ5fw4pnNI96wmeTWd9KFa/ITqfbyHwFg5e1fzjkTV
-	7h3ZAySYLWZbW86YoBgwa6twDppgwDt/BwJouL61Oh5w1/G9CNb7VLHEfiSkcQ==
-X-Google-Smtp-Source: AGHT+IHD7TOQHXPnvhY3fUJExGRRx5jR57Vtr+fKvMEWMLLg1ZWvH9nc0mv2BX9j9PlmWnQhBjDbsg==
-X-Received: by 2002:a17:903:3b83:b0:21f:6c3:aefb with SMTP id d9443c01a7336-2236920c418mr195671705ad.35.1740984972122;
-        Sun, 02 Mar 2025 22:56:12 -0800 (PST)
-Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fea6769ad2sm8139575a91.11.2025.03.02.22.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 22:56:11 -0800 (PST)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: peterz@infradead.org,
-	rostedt@goodmis.org,
-	mark.rutland@arm.com,
-	alexei.starovoitov@gmail.com
-Cc: catalin.marinas@arm.com,
-	will@kernel.org,
-	mhiramat@kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	jolsa@kernel.org,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	samitolvanen@google.com,
-	kees@kernel.org,
-	dongml2@chinatelecom.cn,
-	akpm@linux-foundation.org,
-	riel@surriel.com,
-	rppt@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v3 4/4] arm64: implement per-function metadata storage for arm64
-Date: Mon,  3 Mar 2025 14:53:45 +0800
-Message-Id: <20250303065345.229298-5-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250303065345.229298-1-dongml2@chinatelecom.cn>
-References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mLWznx9Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740985965; x=1772521965;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Bm40aZPKh+7xNA+sXqZ7uh5Cs/1UdisbSRks9+IkP4U=;
+  b=mLWznx9ZFnk1ReyXCsXUOsL3/M38sP1C0dZr55Gfs3ZVjd6qLjPiH/TN
+   ZeGM2Y3f3nqJ9K2xRN0wIQ2H1YCM6MMsKdllc0EkiApFjbLEzH+OyD2fv
+   AAqNRfFGTSRjbOurLfVUR8TfFL2ThwaYk+I0eOKy1TIUTzj/TgCvDnu86
+   n2VpSdXe46TGU5LQGyLdKGXFvGcYKtCvDQ20n94iTEawW/ZbOn6uRaZO1
+   BViZWkILXs0yKVIlsMajwPd0D9zbfUM2+VNEiqsorFR5zgxE1xP52miPm
+   mDKU3iTFCUjwZhMckWGZl8zVHxvZ55PtILLtKDPreQdQyXOwClgrfv/+W
+   A==;
+X-CSE-ConnectionGUID: jH6DQMdTSVSH6ldjLZHvHQ==
+X-CSE-MsgGUID: Ubcf7ChEQEmTfeMinakgvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="59262032"
+X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
+   d="scan'208";a="59262032"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 23:12:45 -0800
+X-CSE-ConnectionGUID: eH7cdqHvTBCEWqu9TnH3Cw==
+X-CSE-MsgGUID: JnDxc/ChS9+imSM3RQ0Pmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118467223"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 02 Mar 2025 23:12:43 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tozyi-000I8v-2A;
+	Mon, 03 Mar 2025 07:12:40 +0000
+Date: Mon, 3 Mar 2025 15:12:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ravi Kumar kairi <kumarkairiravi@gmail.com>,
+	parthiban.veerasooran@microchip.com, christian.gromm@microchip.com,
+	gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Ravi Kumar Kairi <kumarkairiravi@gmail.com>
+Subject: Re: [PATCH] staging: most: Remove unused mutex from most_video_dev
+Message-ID: <202503031448.eqB11EdG-lkp@intel.com>
+References: <20250221163444.57492-2-kumarkairiravi@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250221163444.57492-2-kumarkairiravi@gmail.com>
 
-The per-function metadata storage is already used by ftrace if
-CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS is enabled, and it store the pointer
-of the callback directly to the function padding, which consume 8-bytes,
-in the commit
-baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
-So we can directly store the index to the function padding too, without
-a prepending. With CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS enabled, the
-function is 8-bytes aligned, and we will compile the kernel with extra
-8-bytes (2 NOPS) padding space. Otherwise, the function is 4-bytes
-aligned, and only extra 4-bytes (1 NOPS) is needed.
+Hi Ravi,
 
-However, we have the same problem with Mark in the commit above: we can't
-use the function padding together with CFI_CLANG, which can make the clang
-compiles a wrong offset to the pre-function type hash. He said that he was
-working with others on this problem 2 years ago. Hi Mark, is there any
-progress on this problem?
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- arch/arm64/Kconfig              | 15 +++++++++++++++
- arch/arm64/Makefile             | 23 ++++++++++++++++++++--
- arch/arm64/include/asm/ftrace.h | 34 +++++++++++++++++++++++++++++++++
- arch/arm64/kernel/ftrace.c      | 13 +++++++++++--
- 4 files changed, 81 insertions(+), 4 deletions(-)
+[auto build test ERROR on staging/staging-testing]
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 940343beb3d4..7ed80f5eb267 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1536,6 +1536,21 @@ config NODES_SHIFT
- 	  Specify the maximum number of NUMA Nodes available on the target
- 	  system.  Increases memory reserved to accommodate various tables.
- 
-+config FUNCTION_METADATA
-+	bool "Per-function metadata storage support"
-+	default y
-+	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE if !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-+	depends on !CFI_CLANG
-+	help
-+	  Support per-function metadata storage for kernel functions, and
-+	  get the metadata of the function by its address with almost no
-+	  overhead.
-+
-+	  The index of the metadata will be stored in the function padding,
-+	  which will consume 4-bytes. If FUNCTION_ALIGNMENT_8B is enabled,
-+	  extra 8-bytes function padding will be reserved during compiling.
-+	  Otherwise, only extra 4-bytes function padding is needed.
-+
- source "kernel/Kconfig.hz"
- 
- config ARCH_SPARSEMEM_ENABLE
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 2b25d671365f..2df2b0f4dd90 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -144,12 +144,31 @@ endif
- 
- CHECKFLAGS	+= -D__aarch64__
- 
-+ifeq ($(CONFIG_FUNCTION_METADATA),y)
-+  ifeq ($(CONFIG_FUNCTION_ALIGNMENT_8B),y)
-+  __padding_nops := 2
-+  else
-+  __padding_nops := 1
-+  endif
-+else
-+  __padding_nops := 0
-+endif
-+
- ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
-+  __padding_nops  := $(shell echo $(__padding_nops) + 2 | bc)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
--  CC_FLAGS_FTRACE := -fpatchable-function-entry=4,2
-+  CC_FLAGS_FTRACE := -fpatchable-function-entry=$(shell echo $(__padding_nops) + 2 | bc),$(__padding_nops)
- else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-+  CC_FLAGS_FTRACE := -fpatchable-function-entry=$(shell echo $(__padding_nops) + 2 | bc),$(__padding_nops)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
--  CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-+else ifeq ($(CONFIG_FUNCTION_METADATA),y)
-+  CC_FLAGS_FTRACE += -fpatchable-function-entry=$(__padding_nops),$(__padding_nops)
-+  ifneq ($(CONFIG_FUNCTION_TRACER),y)
-+    KBUILD_CFLAGS += $(CC_FLAGS_FTRACE)
-+    # some file need to remove this cflag when CONFIG_FUNCTION_TRACER
-+    # is not enabled, so we need to export it here
-+    export CC_FLAGS_FTRACE
-+  endif
- endif
- 
- ifeq ($(CONFIG_KASAN_SW_TAGS), y)
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index bfe3ce9df197..aa3eaa91bf82 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -24,6 +24,16 @@
- #define FTRACE_PLT_IDX		0
- #define NR_FTRACE_PLTS		1
- 
-+#ifdef CONFIG_FUNCTION_METADATA
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS
-+#define KFUNC_MD_DATA_OFFSET	(AARCH64_INSN_SIZE * 3)
-+#else
-+#define KFUNC_MD_DATA_OFFSET	AARCH64_INSN_SIZE
-+#endif
-+#define KFUNC_MD_INSN_SIZE	AARCH64_INSN_SIZE
-+#define KFUNC_MD_INSN_OFFSET	KFUNC_MD_DATA_OFFSET
-+#endif
-+
- /*
-  * Currently, gcc tends to save the link register after the local variables
-  * on the stack. This causes the max stack tracer to report the function
-@@ -216,6 +226,30 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
- 	 */
- 	return !strcmp(sym + 8, name);
- }
-+
-+#ifdef CONFIG_FUNCTION_METADATA
-+#include <asm/text-patching.h>
-+
-+static inline bool kfunc_md_arch_exist(void *ip)
-+{
-+	return !aarch64_insn_is_nop(*(u32 *)(ip - KFUNC_MD_INSN_OFFSET));
-+}
-+
-+static inline void kfunc_md_arch_pretend(u8 *insn, u32 index)
-+{
-+	*(u32 *)insn = index;
-+}
-+
-+static inline void kfunc_md_arch_nops(u8 *insn)
-+{
-+	*(u32 *)insn = aarch64_insn_gen_nop();
-+}
-+
-+static inline int kfunc_md_arch_poke(void *ip, u8 *insn)
-+{
-+	return aarch64_insn_patch_text_nosync(ip, *(u32 *)insn);
-+}
-+#endif
- #endif /* ifndef __ASSEMBLY__ */
- 
- #ifndef __ASSEMBLY__
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index d7c0d023dfe5..4191ff0037f5 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -88,8 +88,10 @@ unsigned long ftrace_call_adjust(unsigned long addr)
- 	 * to `BL <caller>`, which is at `addr + 4` bytes in either case.
- 	 *
- 	 */
--	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
--		return addr + AARCH64_INSN_SIZE;
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS)) {
-+		addr += AARCH64_INSN_SIZE;
-+		goto out;
-+	}
- 
- 	/*
- 	 * When using patchable-function-entry with pre-function NOPs, addr is
-@@ -139,6 +141,13 @@ unsigned long ftrace_call_adjust(unsigned long addr)
- 
- 	/* Skip the first NOP after function entry */
- 	addr += AARCH64_INSN_SIZE;
-+out:
-+	if (IS_ENABLED(CONFIG_FUNCTION_METADATA)) {
-+		if (IS_ENABLED(CONFIG_FUNCTION_ALIGNMENT_8B))
-+			addr += 2 * AARCH64_INSN_SIZE;
-+		else
-+			addr += AARCH64_INSN_SIZE;
-+	}
- 
- 	return addr;
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Ravi-Kumar-kairi/staging-most-Remove-unused-mutex-from-most_video_dev/20250222-004322
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20250221163444.57492-2-kumarkairiravi%40gmail.com
+patch subject: [PATCH] staging: most: Remove unused mutex from most_video_dev
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250303/202503031448.eqB11EdG-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031448.eqB11EdG-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503031448.eqB11EdG-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/staging/most/video/video.c:417:28: error: no member named 'lock' in 'struct most_video_dev'
+     417 |         mdev->vdev->lock = &mdev->lock;
+         |                             ~~~~  ^
+   drivers/staging/most/video/video.c:474:20: error: no member named 'lock' in 'struct most_video_dev'
+     474 |         mutex_init(&mdev->lock);
+         |                     ~~~~  ^
+   include/linux/mutex.h:64:16: note: expanded from macro 'mutex_init'
+      64 |         __mutex_init((mutex), #mutex, &__key);                          \
+         |                       ^~~~~
+   2 errors generated.
+
+
+vim +417 drivers/staging/most/video/video.c
+
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  402  
+1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  403  static int comp_register_videodev(struct most_video_dev *mdev)
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  404  {
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  405  	int ret;
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  406  
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  407  	init_waitqueue_head(&mdev->wait_data);
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  408  
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  409  	/* allocate and fill v4l2 video struct */
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  410  	mdev->vdev = video_device_alloc();
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  411  	if (!mdev->vdev)
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  412  		return -ENOMEM;
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  413  
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  414  	/* Fill the video capture device struct */
+1b10a0316e2d5e drivers/staging/most/video/video.c    Christian Gromm 2017-11-21  415  	*mdev->vdev = comp_videodev_template;
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  416  	mdev->vdev->v4l2_dev = &mdev->v4l2_dev;
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24 @417  	mdev->vdev->lock = &mdev->lock;
+323977d5d33a8d drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  418  	snprintf(mdev->vdev->name, sizeof(mdev->vdev->name), "MOST: %s",
+323977d5d33a8d drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  419  		 mdev->v4l2_dev.name);
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  420  
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  421  	/* Register the v4l2 device */
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  422  	video_set_drvdata(mdev->vdev, mdev);
+e653614ee1832c drivers/staging/most/video/video.c    Hans Verkuil    2020-02-03  423  	ret = video_register_device(mdev->vdev, VFL_TYPE_VIDEO, -1);
+b23e8e51e6dc40 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  424  	if (ret) {
+8f6f9ed15d679a drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  425  		v4l2_err(&mdev->v4l2_dev, "video_register_device failed (%d)\n",
+b23e8e51e6dc40 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  426  			 ret);
+eab231c0398a91 drivers/staging/most/aim-v4l2/video.c Christian Gromm 2016-06-06  427  		video_device_release(mdev->vdev);
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  428  	}
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  429  
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  430  	return ret;
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  431  }
+3d31c0cb6c127b drivers/staging/most/aim-v4l2/video.c Christian Gromm 2015-07-24  432  
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
