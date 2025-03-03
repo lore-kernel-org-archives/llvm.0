@@ -1,72 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D401F0E2F;
-	Mon,  3 Mar 2025 09:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96402E630;
+	Mon,  3 Mar 2025 09:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740993993; cv=none; b=rEKeB/AiKVspI3cTgMU1HkYnART/ABbG/AimcmWm189FgyoAwj9Njc0e0cc1NGscKqTvWbgKu+SFHgw5dJs63FWdA79saXut+syG75kkNJGAV1IvTonOogPIz5Zy00diVU8XHvypV349gbFiVUChS1zX/C2Pqn9LGx8f+S20/Yc=
+	t=1740995042; cv=none; b=lX8UV8vKQNG7+3djQT8atIjwuF9zhB3Q6FysJHWmlw1XZs7ZgzWm4SruxelCTROgt9zJb2g5y49hazLDKz/udtPLNFRFLt5xza6AaxX/kDqgaHHd+qjbyXWRfnqq4uz/BaEdfqCZ8H6ju9pDVhmFxHWlRI/PKnz57sDMIUcxu1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740993993; c=relaxed/simple;
-	bh=vk3GR2qxbd+UjMs5iuCidCLWCIkNUIazUDHiqcGYXrE=;
+	s=arc-20240116; t=1740995042; c=relaxed/simple;
+	bh=1hCSFxQz82ukf4pKy8zODFP4fsvaa4QP7NWW1sjEYv0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FHYfL2jlBe0T92GH7/h9sHlaWgjxxqeQbQwuogIUMJKI1OIle9aZ0hbA9JMQXr49Z02K2dgPUXg4CJkLpsCVTvHf9Y1zTTJrqOJAswBw2MOlX7A6vUv/l0htAkV5g205vHFty32/BBsCjeMxSrKhktcX7cZ0hr7j7wzyFrHR6L0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zj0jkgIT; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=t27Djto6bOXD8s3CmKcAhLUhi1KfTgOMMj96EUICQtenpIL0gWg2q130QbkM5PrGRWlUAqO710vsEi1xNermVoNekxJSfmB3cSBfNt6/vsvSME5k8YKgUnIhvqPy/ts70n4lrRaAzAVIijkztQC32A84nRKcC4dzEBzJFkBx+P4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YgabHr7/; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zj0jkgIT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740993992; x=1772529992;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vk3GR2qxbd+UjMs5iuCidCLWCIkNUIazUDHiqcGYXrE=;
-  b=Zj0jkgIT/czTo9kWbwVbdiZgNa/RMY/xs1DsQiSwSELIrjG7nYYKTMC+
-   R7bBf04ts6UCPp2zBBM0/qfI3X8r/u+yHkzr+fSIjzR2eW1S6791pve3w
-   Lgkyz/TycWY1vCpV0riEfCDwjwMsNC0FVcBhX0svMSEGzSZ8e/DleBlb9
-   ybv55+GbU+C9oaGNqUAK3trOTHF3uqh7Q0Q7b5fRgncGaUGziPHuUVA/5
-   1hhIxi0igwHTaViUdIWQakE5+wFrBX7gkCTJQf4+oBq2GYdMDuNYf3WBA
-   am3Xf3KikQyjYZw4enoRWO9ou9UIy4lfNQaBTSvN46Wt1pJy7FtmVt10N
-   A==;
-X-CSE-ConnectionGUID: M12oMgJkSeeWgNb0/DqW0w==
-X-CSE-MsgGUID: 2i9cK6OGSDStosnoFUDEwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="42050729"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="42050729"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 01:26:31 -0800
-X-CSE-ConnectionGUID: 9Qhsu7kaRCmCZEmB2LbBPg==
-X-CSE-MsgGUID: jFvNESnWTQCmliu6M7VyPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="155126115"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 03 Mar 2025 01:26:27 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tp248-000IGl-1P;
-	Mon, 03 Mar 2025 09:26:24 +0000
-Date: Mon, 3 Mar 2025 17:25:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Tsai <danielsftsai@google.com>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YgabHr7/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BCxbXGJuOatYE31YJyZ7ETjf1diwgG9cuKGYi97GPs0=; b=YgabHr7/zzhdzSMKkpAUuVfOuS
+	9Y/teNhFo5DfjuTTY3yqaflkemntAFad+DOVuw/INUoLQ8Ud6aI33QLq1OJhxwoH0Q7jkZ9PhKqF3
+	OhE1R77QkusPkd2Wm7PG3CEejBEt70QecUicyW2Z7Lpfz79E6urqRtpBDVgdCBq2F5APGLQX6ZJpU
+	KNMFwA6H2FIpFnJBt9HQgr29XM4sV5GPJWcmS5RkdvnoYYv2OfOOFi2TPZfY1cKK+myuTieZm2idY
+	+v6BXxd+gxy97V014M0vq5BPK1xbRjossyTOZVGX1FO4JxUX5EAUwqy6YeWD7qPoy53xyQe7f5tZ8
+	SuqH3k/Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tp2L8-0000000BQ8x-2eEC;
+	Mon, 03 Mar 2025 09:43:58 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 3B6EC30049D; Mon,  3 Mar 2025 10:43:58 +0100 (CET)
+Date: Mon, 3 Mar 2025 10:43:58 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: kernel test robot <lkp@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-	Andrew Chant <achant@google.com>,
-	Brian Norris <briannorris@google.com>,
-	Sajid Dalvi <sdalvi@google.com>, Mark Cheng <markcheng@google.com>,
-	Ben Cheng <bccheng@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tsai Sung-Fu <danielsftsai@google.com>
-Subject: Re: [PATCH] PCI: dwc: Chain the set IRQ affinity request back to the
- parent
-Message-ID: <202503031726.KLKoMMZk-lkp@intel.com>
-References: <20250303070501.2740392-1-danielsftsai@google.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Ingo Molnar <mingo@kernel.org>, Kees Cook <kees@kernel.org>
+Subject: Re: [tip:x86/core 16/17] vmlinux.o: warning: objtool: do_jit+0x276:
+ relocation to !ENDBR: .noinstr.text+0x6a60
+Message-ID: <20250303094358.GK5880@noisy.programming.kicks-ass.net>
+References: <202503030704.H9KFysNS-lkp@intel.com>
+ <20250303092459.GI5880@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,108 +51,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303070501.2740392-1-danielsftsai@google.com>
+In-Reply-To: <20250303092459.GI5880@noisy.programming.kicks-ass.net>
 
-Hi Daniel,
+On Mon, Mar 03, 2025 at 10:24:59AM +0100, Peter Zijlstra wrote:
+> On Mon, Mar 03, 2025 at 07:47:57AM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+> > head:   dfebe7362f6f461d771cdb9ac2c5172a4721f064
+> > commit: 0c92385dc05ee9637c04372ea95a11bbf6e010ff [16/17] x86/ibt: Implement FineIBT-BHI mitigation
+> > config: x86_64-randconfig-071-20250303 (https://download.01.org/0day-ci/archive/20250303/202503030704.H9KFysNS-lkp@intel.com/config)
+> > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503030704.H9KFysNS-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202503030704.H9KFysNS-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
+> 
+> Thanks, below seems to cure it for me.
+> 
+> ---
+> Subject: x86/ibt: Make cfi_bhi a constant for FINEIBT_BHI=n
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Mon Mar 3 10:21:47 CET 2025
+> 
+> Robot yielded a .config that tripped:
+> 
+>   vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
+> 
+> This is the result of using __bhi_args[1] in unreachable code; make
+> sure the compiler is able to determine this is unreachable and trigger
+> DCE.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202503030704.H9KFysNS-lkp@intel.com/
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus mani-mhi/mhi-next linus/master v6.14-rc5 next-20250228]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Tsai/PCI-dwc-Chain-the-set-IRQ-affinity-request-back-to-the-parent/20250303-150704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20250303070501.2740392-1-danielsftsai%40google.com
-patch subject: [PATCH] PCI: dwc: Chain the set IRQ affinity request back to the parent
-config: x86_64-buildonly-randconfig-006-20250303 (https://download.01.org/0day-ci/archive/20250303/202503031726.KLKoMMZk-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503031726.KLKoMMZk-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503031726.KLKoMMZk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pcie-designware-host.c:223:45: error: no member named 'affinity' in 'struct irq_common_data'
-     223 |                 cpumask_copy(desc_parent->irq_common_data.affinity, mask);
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/pci/controller/dwc/pcie-designware-host.c:507:30: warning: shift count >= width of type [-Wshift-count-overflow]
-     507 |                 dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
-         |                                            ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
-      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 1 error generated.
-
-
-vim +223 drivers/pci/controller/dwc/pcie-designware-host.c
-
-   178	
-   179	static int dw_pci_msi_set_affinity(struct irq_data *d,
-   180					   const struct cpumask *mask, bool force)
-   181	{
-   182		struct dw_pcie_rp *pp = irq_data_get_irq_chip_data(d);
-   183		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-   184		int ret;
-   185		int virq_parent;
-   186		unsigned long hwirq = d->hwirq;
-   187		unsigned long flags, ctrl;
-   188		struct irq_desc *desc_parent;
-   189		const struct cpumask *effective_mask;
-   190		cpumask_var_t mask_result;
-   191	
-   192		ctrl = hwirq / MAX_MSI_IRQS_PER_CTRL;
-   193		if (!alloc_cpumask_var(&mask_result, GFP_ATOMIC))
-   194			return -ENOMEM;
-   195	
-   196		/*
-   197		 * Loop through all possible MSI vector to check if the
-   198		 * requested one is compatible with all of them
-   199		 */
-   200		raw_spin_lock_irqsave(&pp->lock, flags);
-   201		cpumask_copy(mask_result, mask);
-   202		ret = dw_pci_check_mask_compatibility(pp, ctrl, hwirq, mask_result);
-   203		if (ret) {
-   204			dev_dbg(pci->dev, "Incompatible mask, request %*pbl, irq num %u\n",
-   205				cpumask_pr_args(mask), d->irq);
-   206			goto unlock;
-   207		}
-   208	
-   209		dev_dbg(pci->dev, "Final mask, request %*pbl, irq num %u\n",
-   210			cpumask_pr_args(mask_result), d->irq);
-   211	
-   212		virq_parent = pp->msi_irq[ctrl];
-   213		desc_parent = irq_to_desc(virq_parent);
-   214		ret = desc_parent->irq_data.chip->irq_set_affinity(&desc_parent->irq_data,
-   215								   mask_result, force);
-   216	
-   217		if (ret < 0)
-   218			goto unlock;
-   219	
-   220		switch (ret) {
-   221		case IRQ_SET_MASK_OK:
-   222		case IRQ_SET_MASK_OK_DONE:
- > 223			cpumask_copy(desc_parent->irq_common_data.affinity, mask);
-   224			fallthrough;
-   225		case IRQ_SET_MASK_OK_NOCOPY:
-   226			break;
-   227		}
-   228	
-   229		effective_mask = irq_data_get_effective_affinity_mask(&desc_parent->irq_data);
-   230		dw_pci_update_effective_affinity(pp, ctrl, effective_mask, hwirq);
-   231	
-   232	unlock:
-   233		free_cpumask_var(mask_result);
-   234		raw_spin_unlock_irqrestore(&pp->lock, flags);
-   235		return ret < 0 ? ret : IRQ_SET_MASK_OK_NOCOPY;
-   236	}
-   237	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Durr, doesn't build with FINEIBT && FINEIBT_BHI=n, let me cure that.
