@@ -1,60 +1,62 @@
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63672EADC
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 06:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 130E51CAA4
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 06:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740984943; cv=none; b=pyNi9XZ2KzJgd083PY5GPimYjFC1NFbR9pNwQIkwK1x5HiXL4+x/LdIJvRtH1s4lJpwM2XlOGi18QNwKP8QxnMTPoLXh8ueoOLPSYpu86ObHXbtPONFKdsnLjgnjJRl3n7PS+0zgkLITj+M3XT5dEcrRnLjHPEauCRGIo3Ekkxk=
+	t=1740984951; cv=none; b=r/ryCLk9jf9mE4jwtXAMZFCPV5hwKymhq/Z/J2iNffrR9Ym+y9n5T7xbkAwYptvjRittsYQHG20zVUilRFrIZxflPNU1AHf08CyDSQiwqvVwFrcDhIzgSAcV5Uox/TVOKV/B6xcFC/c8PCVPc1sZ7+agdr2F2Knm3aG+RLwDWgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740984943; c=relaxed/simple;
-	bh=dG+GmQJ58+AjwIbzHzg+zHRT5V2GWAAOltkTkMVShO4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rC4px8pqVLWLqItEtasf3A9imUWfNTQknmrYcztobDDd/wkngVREGPiDaRgQKymaHkUKZh5jLm6kxMipXWi2hn6ukTGQio/cBmYRnw695Gy/028lJiiL8TD4U5SvbrQdCKQ5bwhqzWKMpIGZXLaZGnmASfc69adsyMeOoPHxwps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XAmLhMcv; arc=none smtp.client-ip=209.85.216.65
+	s=arc-20240116; t=1740984951; c=relaxed/simple;
+	bh=9vFV77ptSTYnHR9rUq3KbjSFw+gNvMMZmZ5zUhVxqcM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=K5ZhuCYFnlHNxmsA3cGDRM24bFf8prfBB5ujPX1zriUrWometQpbUtsVkwiY19H+VMRJXnedAfP9Yu43W6JkN6hcFnhr+2Lx4ID3ad821+qdlkofqwRcIa+xgF56pFa8L3dhb/jd3XOLk4fD9GUF223VkBsXUAZAipA3tQAeg/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bN2x5a50; arc=none smtp.client-ip=209.85.216.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XAmLhMcv"
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-2fa8ada6662so8505664a91.1
-        for <llvm@lists.linux.dev>; Sun, 02 Mar 2025 22:55:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bN2x5a50"
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-2fea78afde5so5195246a91.2
+        for <llvm@lists.linux.dev>; Sun, 02 Mar 2025 22:55:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740984942; x=1741589742; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRORuk1lZoTaQ72m0hDUrhIZjvt/8jV8y2hi7nR1rH4=;
-        b=XAmLhMcv/i48zD3vnfAhyo5T203wYjdOudlVWm+CBULgvBIW6tjEGadT//xI1h6t8T
-         x3OVKX06jaRyesePvvI2MlSuYm/BNELpV1hAzf2ajizMRp7Z7qVDn8Fhg6hVta7CM7sD
-         30zWuu3ibf08KYtGJJI5+CtAisJNF7XXlRacwY/B69G+mqtbbmKjgrkYL0O++CheHpPX
-         ClX3KIWB6i51vNGqNU47BnchmW2IRFakWh3s2B6IQyNsHdBQZnSslu5mOAPKzF7ErKiz
-         YWOW0WGnpT8Ksp3cqNkZlszy6yFcv5q1f9Cg5F6n8LOjucjEi1DIt+2YLHX3yFLyNabc
-         Z/0Q==
+        d=gmail.com; s=20230601; t=1740984949; x=1741589749; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nymZZudf34hrdxusEHfgJt6WkWUJ+6WT6FOvsBZVSeI=;
+        b=bN2x5a50sYxbH+khdOuNjtb/rgW66fTP5XlccFSuw6uzIRWya+GNBAxxw+8weWuVq5
+         Y0UwBdMA+tmfNhswF6//EWiGzT7wR9TehRnZpO6BvjKJruhfgDP2TsaGlPuZqAgtGLlL
+         SVsc9QbGHzixZ3XcKC8m6BH01s7TwCJHq49VEkVUKbvaknCihMtAZ9u9N3EpzmZYYx7M
+         L2Rd7BKK9dBV02NFzF6HRrMCJ3uKgaScBKWQ9H5dpUzX9hbH1T8SiDqsT++s+x2FwQw3
+         9Ip/MaXzkKDPuua2/0SGOpO5++KbOaoElvWl7adbxNsuyFRlt7wIV0ObWDCiH8PEaNrI
+         eo2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740984942; x=1741589742;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mRORuk1lZoTaQ72m0hDUrhIZjvt/8jV8y2hi7nR1rH4=;
-        b=d6LihIPMIotxhPSka7FlOkIrI4d8qLCc6LEd5Minqsv3bSoV4ltN7OgWo0vpG2K4ZX
-         btbSpsedXKiTx7lik9ZUb1LE41y+u8VaseBQuZjSvuz0pzAcyVrGspU/wMPL1iNuN0qo
-         A9iSFd/C+TFt9RUf71Gka61cST0GSX88P34y9q6HYiIFP+3FmH9UB8PRPqkOS9y02dp4
-         xUR3OH3zXjcKjxqKGmgR+GmKfR8Iuc79yu6Qzi7EXoAOBEG9tGCNpUHaJO4lobjowMM9
-         U6OKUEbqPrv+M7xY5ns6rdD1YgbGUCJRQGFmaN3c6DAGwhdQzbZtwhfPmiOsGpqBHLy+
-         t3jA==
-X-Forwarded-Encrypted: i=1; AJvYcCWMx0iFlF37teRSqru+vaWUuTpJuNNfz6B5htme3MzgTylO6LlKclOvmVhRa0Wzt6aDwIJk@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRf1MMxDoaKGJDT+ut4T9KxeZ+kCDveWnbxve1HJyk85kgaGla
-	1J0ewrJbmX1PKYgkzSYQuc27nIBoVIhJF6veJ9MGgZ/twzoVY7JL
-X-Gm-Gg: ASbGncsNJngO9aLjErRqWsnb1BP5E7oUC2zGgStrS+mqfn04QMS2XW34sgbiyp/CMtg
-	BitY2Mm379520btvWZLEL6yAdjhNc09OivZbFHhMRNn4uGymVjrKGv3N9c7PX0h7daNlQH4mx0D
-	MYwLYsAecqDl83/SUXz4RBVk9G1lD61rnwl4jS+L4gRRcYDrQwqbCxumZAijBifY26pAplr2bLu
-	MV6ntNz1aykUy3ltprnH62IEsu34Z3ILTTahZMxwz4oV4+aZjWLm/sj8aZd8YNdd1LtSFTX1bcT
-	zd+2Sd/m7+61XPmU0+h5I4NtApr9RSDwuPfyULmtk4hSk5JN7g329LeM26C76Q==
-X-Google-Smtp-Source: AGHT+IHkrQ6QYFMj0geZ0tfgbyR4QorZaQfQ/7JtrPSfKkhKbt8kMcBnshigR2/4fvzZe6e2RxKkcw==
-X-Received: by 2002:a17:90b:3ec9:b0:2fa:17dd:6afa with SMTP id 98e67ed59e1d1-2febab78721mr21988807a91.17.1740984941579;
-        Sun, 02 Mar 2025 22:55:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740984949; x=1741589749;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nymZZudf34hrdxusEHfgJt6WkWUJ+6WT6FOvsBZVSeI=;
+        b=UJ2516x3+dg0QIdPNxUhc+rRdRYdJoiXuKtT9N0V/jmn9qUlAXpV0d+FBCcCuu1yX7
+         vHb/eapa+Uapn/9qesa2nuVSayPZDsnirWmeSQdgVMlboJTBzDlLReXVBdfQpy/7lRgy
+         HJLYByDBbM+wB5vqMN3UCo9SxOaAoEgJHzjXaKE3Nt7hIOTM+yu8b80L24UMLiUCf5ZU
+         509jIAWMR4kwQ9Zgz7inM2C/9P5yLrdxFm8YoYarJXGVDLrS1lJ+cDuuCe4fj4B+6n3p
+         XcxUu9z9bDq5KTbVLyDfU2AD3DQHhNZbDu8wRWVXJbz2qPKlDGUKt7t9DMBXH7UKys61
+         Ksag==
+X-Forwarded-Encrypted: i=1; AJvYcCVqzgC31PmUVMhEWzWqu8zJ8lPzRbwr7vvU+IEFhPrxTrJjVROpSm6Pg7yZhEDYenweG0/S@lists.linux.dev
+X-Gm-Message-State: AOJu0YyWGjqa9yH4ly1Xt6iXw0MIEwzFQOpec7HiP8IMPLABvjAg5me9
+	Kef/1D4a6g7WvheTuRfi86a6ICxpmVIaXV6UKowYkCtf88Fxc/sd
+X-Gm-Gg: ASbGncsmSZX3TB+iN6ornTjkNUMp00ICa7ljuT9caItuQxSJCkPlE+thGOrnStfBX1U
+	xOP9eMP+S4byHyi3U09qug46tanDjFQk61/xUSStlKKQOZYYUXflDutWFyXfnflIn/KdLWkgYsR
+	csvpivKgWqsyKr4Fvu4cQ9py/il00KZj+dT1u26NbsL8rqNTIjxQ5BSVdEusM34pkoUJkXZf49e
+	wMT5CUz1ICjpIyZBpFNP/1aao5TrK8apBs2uAagkiovvGiMBSfN9aeJvTECQYgAbq4xWTEHmuBg
+	4HcLv0MwhG1J/EUJnogalYC6rVQVizrFiSb+o5CieuzSCrlsEhg04gk2sJajsQ==
+X-Google-Smtp-Source: AGHT+IGSoY6DTXHZdCGzW7B6A82lurvA8twdiEOcJq7108bwjigQWB9/CnfNiFNnV2PDUqTyIKthyQ==
+X-Received: by 2002:a17:90b:2f8d:b0:2ee:48bf:7dc3 with SMTP id 98e67ed59e1d1-2febab7862fmr19657613a91.15.1740984949306;
+        Sun, 02 Mar 2025 22:55:49 -0800 (PST)
 Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fea6769ad2sm8139575a91.11.2025.03.02.22.55.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fea6769ad2sm8139575a91.11.2025.03.02.22.55.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Mar 2025 22:55:41 -0800 (PST)
+        Sun, 02 Mar 2025 22:55:48 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: peterz@infradead.org,
@@ -98,10 +100,12 @@ Cc: catalin.marinas@arm.com,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v3 0/4] per-function storage support
-Date: Mon,  3 Mar 2025 14:53:41 +0800
-Message-Id: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v3 1/4] x86/ibt: factor out cfi and fineibt offset
+Date: Mon,  3 Mar 2025 14:53:42 +0800
+Message-Id: <20250303065345.229298-2-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -110,67 +114,202 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For now, there isn't a way to set and get per-function metadata with
-a low overhead, which is not convenient for some situations. Take
-BPF trampoline for example, we need to create a trampoline for each
-kernel function, as we have to store some information of the function
-to the trampoline, such as BPF progs, function arg count, etc. The
-performance overhead and memory consumption can be higher to create
-these trampolines. With the supporting of per-function metadata storage,
-we can store these information to the metadata, and create a global BPF
-trampoline for all the kernel functions. In the global trampoline, we
-get the information that we need from the function metadata through the
-ip (function address) with almost no overhead.
+For now, the layout of cfi and fineibt is hard coded, and the padding is
+fixed on 16 bytes.
 
-Another beneficiary can be ftrace. For now, all the kernel functions that
-are enabled by dynamic ftrace will be added to a filter hash if there are
-more than one callbacks. And hash lookup will happen when the traced
-functions are called, which has an impact on the performance, see
-__ftrace_ops_list_func() -> ftrace_ops_test(). With the per-function
-metadata supporting, we can store the information that if the callback is
-enabled on the kernel function to the metadata.
+Factor out FINEIBT_INSN_OFFSET and CFI_INSN_OFFSET. CFI_INSN_OFFSET is
+the offset of cfi, which is the same as FUNCTION_ALIGNMENT when
+CALL_PADDING is enabled. And FINEIBT_INSN_OFFSET is the offset where we
+put the fineibt preamble on, which is 16 for now.
 
-In the 1st patch, we factor out FINEIBT_INSN_OFFSET and CFI_INSN_OFFSET to
-make fineibt works on the kernel function is 32-bytes aligned.
+When the FUNCTION_ALIGNMENT is bigger than 16, we place the fineibt
+preamble on the last 16 bytes of the padding for better performance, which
+means the fineibt preamble don't use the space that cfi uses.
 
-In the 2nd patch, we implement the per-function metadata storage by
-storing the index of the metadata to the function padding space.
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+---
+ arch/x86/include/asm/cfi.h    | 12 ++++++++----
+ arch/x86/kernel/alternative.c | 27 ++++++++++++++++++++-------
+ arch/x86/net/bpf_jit_comp.c   | 22 +++++++++++-----------
+ 3 files changed, 39 insertions(+), 22 deletions(-)
 
-In the 3rd and 4th patch, we implement the per-function metadata storage
-for x86 and arm64. And in the feature, we can support more arch.
-
-Changes since V2:
-- split the patch into a series.
-- considering the effect to cfi and fineibt and introduce the 1st patch.
-
-Changes since V1:
-- add supporting for arm64
-- split out arch relevant code
-- refactor the commit log
-
-Menglong Dong (4):
-  x86/ibt: factor out cfi and fineibt offset
-  add per-function metadata storage support
-  x86: implement per-function metadata storage for x86
-  arm64: implement per-function metadata storage for arm64
-
- arch/arm64/Kconfig              |  15 ++
- arch/arm64/Makefile             |  23 ++-
- arch/arm64/include/asm/ftrace.h |  34 +++++
- arch/arm64/kernel/ftrace.c      |  13 +-
- arch/x86/Kconfig                |  16 +++
- arch/x86/include/asm/cfi.h      |  12 +-
- arch/x86/include/asm/ftrace.h   |  54 ++++++++
- arch/x86/kernel/alternative.c   |  27 +++-
- arch/x86/net/bpf_jit_comp.c     |  22 +--
- include/linux/kfunc_md.h        |  25 ++++
- kernel/Makefile                 |   1 +
- kernel/trace/Makefile           |   1 +
- kernel/trace/kfunc_md.c         | 239 ++++++++++++++++++++++++++++++++
- 13 files changed, 456 insertions(+), 26 deletions(-)
- create mode 100644 include/linux/kfunc_md.h
- create mode 100644 kernel/trace/kfunc_md.c
-
+diff --git a/arch/x86/include/asm/cfi.h b/arch/x86/include/asm/cfi.h
+index 31d19c815f99..ab51fa0ef6af 100644
+--- a/arch/x86/include/asm/cfi.h
++++ b/arch/x86/include/asm/cfi.h
+@@ -109,15 +109,19 @@ enum bug_trap_type handle_cfi_failure(struct pt_regs *regs);
+ extern u32 cfi_bpf_hash;
+ extern u32 cfi_bpf_subprog_hash;
+ 
++#ifdef CONFIG_CALL_PADDING
++#define FINEIBT_INSN_OFFSET	16
++#define CFI_INSN_OFFSET		CONFIG_FUNCTION_ALIGNMENT
++#else
++#define CFI_INSN_OFFSET		5
++#endif
++
+ static inline int cfi_get_offset(void)
+ {
+ 	switch (cfi_mode) {
+ 	case CFI_FINEIBT:
+-		return 16;
+ 	case CFI_KCFI:
+-		if (IS_ENABLED(CONFIG_CALL_PADDING))
+-			return 16;
+-		return 5;
++		return CFI_INSN_OFFSET;
+ 	default:
+ 		return 0;
+ 	}
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index c71b575bf229..ad050d09cb2b 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -908,7 +908,7 @@ void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct mod
+ 
+ 		poison_endbr(addr, wr_addr, true);
+ 		if (IS_ENABLED(CONFIG_FINEIBT))
+-			poison_cfi(addr - 16, wr_addr - 16);
++			poison_cfi(addr, wr_addr);
+ 	}
+ }
+ 
+@@ -974,12 +974,15 @@ u32 cfi_get_func_hash(void *func)
+ {
+ 	u32 hash;
+ 
+-	func -= cfi_get_offset();
+ 	switch (cfi_mode) {
++#ifdef CONFIG_FINEIBT
+ 	case CFI_FINEIBT:
++		func -= FINEIBT_INSN_OFFSET;
+ 		func += 7;
+ 		break;
++#endif
+ 	case CFI_KCFI:
++		func -= CFI_INSN_OFFSET;
+ 		func += 1;
+ 		break;
+ 	default:
+@@ -1068,7 +1071,7 @@ early_param("cfi", cfi_parse_cmdline);
+  *
+  * caller:					caller:
+  *	movl	$(-0x12345678),%r10d	 // 6	     movl   $0x12345678,%r10d	// 6
+- *	addl	$-15(%r11),%r10d	 // 4	     sub    $16,%r11		// 4
++ *	addl	$-15(%r11),%r10d	 // 4	     sub    $FINEIBT_INSN_OFFSET,%r11 // 4
+  *	je	1f			 // 2	     nop4			// 4
+  *	ud2				 // 2
+  * 1:	call	__x86_indirect_thunk_r11 // 5	     call   *%r11; nop2;	// 5
+@@ -1092,10 +1095,14 @@ extern u8 fineibt_preamble_end[];
+ #define fineibt_preamble_size (fineibt_preamble_end - fineibt_preamble_start)
+ #define fineibt_preamble_hash 7
+ 
++#define ___OFFSET_STR(x)	#x
++#define __OFFSET_STR(x)		___OFFSET_STR(x)
++#define OFFSET_STR		__OFFSET_STR(FINEIBT_INSN_OFFSET)
++
+ asm(	".pushsection .rodata			\n"
+ 	"fineibt_caller_start:			\n"
+ 	"	movl	$0x12345678, %r10d	\n"
+-	"	sub	$16, %r11		\n"
++	"	sub	$"OFFSET_STR", %r11	\n"
+ 	ASM_NOP4
+ 	"fineibt_caller_end:			\n"
+ 	".popsection				\n"
+@@ -1225,6 +1232,7 @@ static int cfi_rewrite_preamble(s32 *start, s32 *end, struct module *mod)
+ 			 addr, addr, 5, addr))
+ 			return -EINVAL;
+ 
++		wr_addr += (CFI_INSN_OFFSET - FINEIBT_INSN_OFFSET);
+ 		text_poke_early(wr_addr, fineibt_preamble_start, fineibt_preamble_size);
+ 		WARN_ON(*(u32 *)(wr_addr + fineibt_preamble_hash) != 0x12345678);
+ 		text_poke_early(wr_addr + fineibt_preamble_hash, &hash, 4);
+@@ -1241,7 +1249,8 @@ static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
+ 		void *addr = (void *)s + *s;
+ 		void *wr_addr = module_writable_address(mod, addr);
+ 
+-		poison_endbr(addr + 16, wr_addr + 16, false);
++		poison_endbr(addr + CFI_INSN_OFFSET, wr_addr + CFI_INSN_OFFSET,
++			     false);
+ 	}
+ }
+ 
+@@ -1347,12 +1356,12 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 		return;
+ 
+ 	case CFI_FINEIBT:
+-		/* place the FineIBT preamble at func()-16 */
++		/* place the FineIBT preamble at func()-FINEIBT_INSN_OFFSET */
+ 		ret = cfi_rewrite_preamble(start_cfi, end_cfi, mod);
+ 		if (ret)
+ 			goto err;
+ 
+-		/* rewrite the callers to target func()-16 */
++		/* rewrite the callers to target func()-FINEIBT_INSN_OFFSET */
+ 		ret = cfi_rewrite_callers(start_retpoline, end_retpoline, mod);
+ 		if (ret)
+ 			goto err;
+@@ -1381,6 +1390,8 @@ static void poison_cfi(void *addr, void *wr_addr)
+ {
+ 	switch (cfi_mode) {
+ 	case CFI_FINEIBT:
++		addr -= FINEIBT_INSN_OFFSET;
++		wr_addr -= FINEIBT_INSN_OFFSET;
+ 		/*
+ 		 * __cfi_\func:
+ 		 *	osp nopl (%rax)
+@@ -1394,6 +1405,8 @@ static void poison_cfi(void *addr, void *wr_addr)
+ 		break;
+ 
+ 	case CFI_KCFI:
++		addr -= CFI_INSN_OFFSET;
++		wr_addr -= CFI_INSN_OFFSET;
+ 		/*
+ 		 * __cfi_\func:
+ 		 *	movl	$0, %eax
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index a43fc5af973d..e0ddb0fd28e2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -414,6 +414,12 @@ static void emit_nops(u8 **pprog, int len)
+ static void emit_fineibt(u8 **pprog, u32 hash)
+ {
+ 	u8 *prog = *pprog;
++#ifdef CONFIG_CALL_PADDING
++	int i;
++
++	for (i = 0; i < CFI_INSN_OFFSET - 16; i++)
++		EMIT1(0x90);
++#endif
+ 
+ 	EMIT_ENDBR();
+ 	EMIT3_off32(0x41, 0x81, 0xea, hash);		/* subl $hash, %r10d	*/
+@@ -428,20 +434,14 @@ static void emit_fineibt(u8 **pprog, u32 hash)
+ static void emit_kcfi(u8 **pprog, u32 hash)
+ {
+ 	u8 *prog = *pprog;
++#ifdef CONFIG_CALL_PADDING
++	int i;
++#endif
+ 
+ 	EMIT1_off32(0xb8, hash);			/* movl $hash, %eax	*/
+ #ifdef CONFIG_CALL_PADDING
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
+-	EMIT1(0x90);
++	for (i = 0; i < CFI_INSN_OFFSET - 5; i++)
++		EMIT1(0x90);
+ #endif
+ 	EMIT_ENDBR();
+ 
 -- 
 2.39.5
 
