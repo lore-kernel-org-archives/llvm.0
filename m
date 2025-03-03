@@ -1,91 +1,252 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9626033F6;
-	Mon,  3 Mar 2025 19:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189C021B9CF
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 19:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741028993; cv=none; b=aewLHxbFl4GHWJYZGzov6U/Y7E2n4vNzq2UGdQs0bVqdApQ8o3bjG6f8+mqnWHTVa+KyIu5WW9ba2qQoIoqcu0+v77Ohi7OqB/ykWNWB7xstDLWJmkC6pX2hgeuVrZhytLmKQLGk3/cz9qPHNWgkESK2RAITwnwXKUCph4+cgOs=
+	t=1741029261; cv=none; b=FFx34Sgc9GNkJLQB3upHgFbgtlIZuWb1xKnnL0SvU8Nj6UAwuwibYcFqVefLTO0dWXzrzEp0fqX0RyP6+khkPGEQ5CbvVH6tLTRKADe8wfQaaOcJcAh8A3dJK3jZv8P+VBXQbXkGeLvdg4FO9ZEc+ZoJjXPtsmaz6OxENLk7mrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741028993; c=relaxed/simple;
-	bh=GRkTGlXTl9EsGkbV++PQV+IY4wEzGFdbTYXI3amD37Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxyueTBl0/r1lQAyEXSt4TwGDviKwslbPxYm+AsN7131Sb6QI1rej8v+o5ES0RO6Yr74mVxD6tBBo0H+LxPKsv27e19XKOmRs6fTKNHxDgoaP1mpPd+QK1y0p/KUGup0SJv2Akai7UTklEGMaEXGG+p7GRy8prrKqJ5uf/MLVsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHYR8bWA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741029261; c=relaxed/simple;
+	bh=jwFZkMKsnQuTQ4I15c4UmTEXrZv1BKnCiQfLq7G7akE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DCMgiENgGgHJm9pBuqOjrpibFDW113hwoM/6+IJlr6F8NswuYlCeQ0et7ye58ej6Hk/16F8FJQ4g63a/YeZYYU1fRsYXhIg0zLAvBHhypyetuzO0O5uq+8IDBFf7/N8xsSeUqA5csBBO9bU0e8zPiyJnfDNn4+8EDCu14KSZCYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=OGF2LUB8; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHYR8bWA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBF9C4CED6;
-	Mon,  3 Mar 2025 19:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741028993;
-	bh=GRkTGlXTl9EsGkbV++PQV+IY4wEzGFdbTYXI3amD37Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LHYR8bWAZC6eLKSKGjUIFCeSYu41CF6ijSSVCVrBbVcAkFUXrrBDvkiVmjD02ThS7
-	 taahy85hooUcalCU7bDTOnnwKEyERYxdiYYlPOWteD/lNpBPQpZvPP+62eQfZlLO7B
-	 XChINU6Mq8XGH0AYC62OF0NtA6frGRPph9mqOWEBC/F1OSOyBx84JhgVOjJqNyhx0W
-	 5FHC9VXAAIzzwdUdUTxnOpUB2zV9YOa2I+SBf/7Aau2hT6/EE/0f/gJY7n4HQxLYT8
-	 2wrDYsUrk2IwUwEtKE+tl0z7HUkvNR+MRXOZK+12f9c3lFcZP6u6MWQ7KepR3I+Opo
-	 e+2lOtZgf4rqQ==
-Date: Mon, 3 Mar 2025 11:09:50 -0800
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org, Ingo Molnar <mingo@kernel.org>
-Subject: Re: [tip:x86/core 16/17] vmlinux.o: warning: objtool: do_jit+0x276:
- relocation to !ENDBR: .noinstr.text+0x6a60
-Message-ID: <202503031109.2D9F1CD@keescook>
-References: <202503030704.H9KFysNS-lkp@intel.com>
- <20250303092459.GI5880@noisy.programming.kicks-ass.net>
- <202503030910.55EBC9A76@keescook>
- <20250303185748.GC15322@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="OGF2LUB8"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523Ehhqf026239;
+	Mon, 3 Mar 2025 11:13:49 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=n0Py2z32teqpooC3t0pLfnB
+	6+SCyXKVrEV463DKAe6I=; b=OGF2LUB8zaMXQHejaMrVwGm3+nesjuEHAwpaSl2
+	mwjsC5yRZLIr6MQ6HPfrZRNCIZr+l0ZASCI5Rre3EhModHf2MkekeHX3oG51T+s/
+	HcFdv4aItLwvKyzDOl9uQMKvGLRIZn49qf+2UuNTAjmFMpGpY8sAUmlNT4/lyFAU
+	LneR/sIFUBQl0gcF2v5dVKQyuPh/jAZA84rMn4yDt88l8SY48v8D4XegUrVkbckL
+	4rPJUmzHGzryJKPtzHSbA0/3FKwd9pZq5+Ip0jwGOv9n5jlf06Y13wr+mfEa/OGp
+	qJSLj5NcV2WRPhw5OLm6zJBLEmJtcyvQOwCAyFVg/QRxuLg==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4542muc74k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 11:13:48 -0800 (PST)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Mon, 3 Mar 2025 11:13:48 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Mon, 3 Mar 2025 11:13:48 -0800
+Received: from hyd1425.marvell.com (unknown [10.29.37.152])
+	by maili.marvell.com (Postfix) with ESMTP id 2A5B03F7062;
+	Mon,  3 Mar 2025 11:13:41 -0800 (PST)
+From: Sai Krishna <saikrishnag@marvell.com>
+To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <gakula@marvell.com>, <lcherian@marvell.com>, <jerinj@marvell.com>,
+        <hkelam@marvell.com>, <sbhatta@marvell.com>, <andrew+netdev@lunn.ch>,
+        <bbhushan2@marvell.com>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <morbo@google.com>,
+        <justinstitt@google.com>, <llvm@lists.linux.dev>
+CC: Sai Krishna <saikrishnag@marvell.com>, kernel test robot <lkp@intel.com>
+Subject: [net-next PATCH] octeontx2-af: fix build warnings flagged by clang, sparse ,kernel test robot
+Date: Tue, 4 Mar 2025 00:43:39 +0530
+Message-ID: <20250303191339.2679028-1-saikrishnag@marvell.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250303185748.GC15322@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: -QWUbfMFYpXDRYAB_pcsBQPvIBN4CZtQ
+X-Authority-Analysis: v=2.4 cv=H6Ihw/Yi c=1 sm=1 tr=0 ts=67c5ff6c cx=c_pps a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17 a=Vs1iUdzkB0EA:10 a=RpNjiQI2AAAA:8 a=QyXUC8HyAAAA:8 a=M5GUcnROAAAA:8 a=mOT8R8ziQExDnPD9evEA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-GUID: -QWUbfMFYpXDRYAB_pcsBQPvIBN4CZtQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_09,2025-03-03_03,2024-11-22_01
 
-On Mon, Mar 03, 2025 at 07:57:48PM +0100, Peter Zijlstra wrote:
-> On Mon, Mar 03, 2025 at 09:11:54AM -0800, Kees Cook wrote:
-> > On Mon, Mar 03, 2025 at 10:24:59AM +0100, Peter Zijlstra wrote:
-> 
-> > > > >> vmlinux.o: warning: objtool: do_jit+0x276: relocation to !ENDBR: .noinstr.text+0x6a60
-> 
-> > Just for my own curiosity, how did you track this down? (The
-> > relationship between cfi_bhi and do_jit is not immediately obvious to
-> > me. Or rather, what was needing DCE?)
-> 
-> If you build dfebe7362f6f461d771cdb9ac2c5172a4721f064 (tip/x86/core^2 so
-> as to not have the fix) and build a FINEIBT=y kernel with clang-19 (so
-> as not to have support for kcfi-ariry) then:
-> 
-> $ ./scripts/objdump-func tmp-build/vmlinux.o do_jit
-> ...
-> 0267    6a2a7:  48 c1 e9 20             shr    $0x20,%rcx
-> 026b    6a2ab:  0f 85 16 39 00 00       jne    6dbc7 <do_jit+0x3b87>
-> 0271    6a2b1:  48 8b 44 24 20          mov    0x20(%rsp),%rax
-> 0276    6a2b6:  48 c7 c1 00 00 00 00    mov    $0x0,%rcx        6a2b9: R_X86_64_32S     __bhi_args+0x20
-> 027d    6a2bd:  c6 43 0b e8             movb   $0xe8,0xb(%rbx)
-> 0281    6a2c1:  48 83 c0 10             add    $0x10,%rax
-> 0285    6a2c5:  29 c1                   sub    %eax,%ecx
-> 0287    6a2c7:  89 4b 0c                mov    %ecx,0xc(%rbx)
-> ...
-> 
-> 
-> So the reference is to __bhi_args[1], this is the result of
-> emit_fineibt(.arity=1).
-> 
-> Anyway, the point is that for FINEIBT_BHI=n the __bhi_args[]
-> array is 'empty' and the +0x20 thing points into random.
-> 
-> What needs DCE is the whole if (cfi_bhi) branch in emit_fineibt(),
-> making that whole __bhi_args[] reference go away.
+This cleanup patch avoids build warnings flagged by clang,
+sparse, kernel test robot.
 
-AH! Yes, that does stand out. :) Thanks!
+Warning reported by clang:
+drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2993:47:
+warning: arithmetic between different enumeration types
+('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e')
+[-Wenum-enum-conversion]
+ 2993 | return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT +
+RVU_PF_INT_VEC_CNT) &&
 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes:
+https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_o
+e-2Dkbuild-2Dall_202410221614.07o9QVjo-2Dlkp-40intel.com_&d=DwIBAg&c=n
+KjWec2b6R0mOyPaz7xtfQ&r=c3MsgrR-U-HFhmFd6R4MWRZG-8QeikJn5PkjqMTpBSg&m=
+3BTQZwLYQz62kiZ1f9l4NBS35e13zrdP_5Hx9-1k5Xt-PgWUMdRcW7G4m5xytsHn&s=OeX
+wAXPel9ALwlzw4B26ORCXJF_gbqT9Sk3-opDDfgA&e=
+Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+---
+ drivers/net/ethernet/marvell/octeontx2/af/common.h |  2 +-
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.c    | 14 ++++++++------
+ .../ethernet/marvell/octeontx2/nic/otx2_common.c   | 10 +++++-----
+ .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  9 ++++-----
+ 4 files changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/common.h b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+index 406c59100a35..8a08bebf08c2 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/common.h
+@@ -39,7 +39,7 @@ struct qmem {
+ 	void            *base;
+ 	dma_addr_t	iova;
+ 	int		alloc_sz;
+-	u16		entry_sz;
++	u32		entry_sz;
+ 	u8		align;
+ 	u32		qsize;
+ };
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+index cd0d7b7774f1..c850ea5d1960 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+@@ -591,7 +591,7 @@ static void rvu_check_min_msix_vec(struct rvu *rvu, int nvecs, int pf, int vf)
+ 
+ check_pf:
+ 	if (pf == 0)
+-		min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
++		min_vecs = (int)RVU_AF_INT_VEC_CNT + (int)RVU_PF_INT_VEC_CNT;
+ 	else
+ 		min_vecs = RVU_PF_INT_VEC_CNT;
+ 
+@@ -819,13 +819,14 @@ static int rvu_fwdata_init(struct rvu *rvu)
+ 		goto fail;
+ 
+ 	BUILD_BUG_ON(offsetof(struct rvu_fwdata, cgx_fw_data) > FWDATA_CGX_LMAC_OFFSET);
+-	rvu->fwdata = ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
++	rvu->fwdata = (__force struct rvu_fwdata *)
++		ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
+ 	if (!rvu->fwdata)
+ 		goto fail;
+ 	if (!is_rvu_fwdata_valid(rvu)) {
+ 		dev_err(rvu->dev,
+ 			"Mismatch in 'fwdata' struct btw kernel and firmware\n");
+-		iounmap(rvu->fwdata);
++		iounmap((void __iomem *)rvu->fwdata);
+ 		rvu->fwdata = NULL;
+ 		return -EINVAL;
+ 	}
+@@ -838,7 +839,7 @@ static int rvu_fwdata_init(struct rvu *rvu)
+ static void rvu_fwdata_exit(struct rvu *rvu)
+ {
+ 	if (rvu->fwdata)
+-		iounmap(rvu->fwdata);
++		iounmap((void __iomem *)rvu->fwdata);
+ }
+ 
+ static int rvu_setup_nix_hw_resource(struct rvu *rvu, int blkaddr)
+@@ -2384,7 +2385,8 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
+ 				bar4 = rvupf_read64(rvu, RVU_PF_VF_BAR4_ADDR);
+ 				bar4 += region * MBOX_SIZE;
+ 			}
+-			mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
++			mbox_addr[region] = (__force void *)
++				ioremap_wc(bar4, MBOX_SIZE);
+ 			if (!mbox_addr[region])
+ 				goto error;
+ 		}
+@@ -2407,7 +2409,7 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
+ 					  RVU_AF_PF_BAR4_ADDR);
+ 			bar4 += region * MBOX_SIZE;
+ 		}
+-		mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
++		mbox_addr[region] = (__force void *)ioremap_wc(bar4, MBOX_SIZE);
+ 		if (!mbox_addr[region])
+ 			goto error;
+ 	}
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index 2b49bfec7869..e0e592fd02f7 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -29,10 +29,10 @@ static void otx2_nix_rq_op_stats(struct queue_stats *stats,
+ 	u64 incr = (u64)qidx << 32;
+ 	u64 *ptr;
+ 
+-	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
++	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
+ 	stats->bytes = otx2_atomic64_add(incr, ptr);
+ 
+-	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
++	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
+ 	stats->pkts = otx2_atomic64_add(incr, ptr);
+ }
+ 
+@@ -42,10 +42,10 @@ static void otx2_nix_sq_op_stats(struct queue_stats *stats,
+ 	u64 incr = (u64)qidx << 32;
+ 	u64 *ptr;
+ 
+-	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
++	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
+ 	stats->bytes = otx2_atomic64_add(incr, ptr);
+ 
+-	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
++	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
+ 	stats->pkts = otx2_atomic64_add(incr, ptr);
+ }
+ 
+@@ -853,7 +853,7 @@ void otx2_sqb_flush(struct otx2_nic *pfvf)
+ 	struct otx2_snd_queue *sq;
+ 	u64 incr, *ptr, val;
+ 
+-	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
++	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
+ 	for (qidx = 0; qidx < otx2_get_total_tx_queues(pfvf); qidx++) {
+ 		sq = &pfvf->qset.sq[qidx];
+ 		if (!sq->sqb_ptrs)
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index e1dde93e8af8..6c23d64e81f8 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -595,8 +595,7 @@ static int otx2_pfvf_mbox_init(struct otx2_nic *pf, int numvfs)
+ 		base = pci_resource_start(pf->pdev, PCI_MBOX_BAR_NUM) +
+ 		       MBOX_SIZE;
+ 	else
+-		base = readq((void __iomem *)((u64)pf->reg_base +
+-					      RVU_PF_VF_BAR4_ADDR));
++		base = readq(pf->reg_base + RVU_PF_VF_BAR4_ADDR);
+ 
+ 	hwbase = ioremap_wc(base, MBOX_SIZE * pf->total_vfs);
+ 	if (!hwbase) {
+@@ -645,7 +644,7 @@ static void otx2_pfvf_mbox_destroy(struct otx2_nic *pf)
+ 	}
+ 
+ 	if (mbox->mbox.hwbase)
+-		iounmap(mbox->mbox.hwbase);
++		iounmap((void __iomem *)mbox->mbox.hwbase);
+ 
+ 	otx2_mbox_destroy(&mbox->mbox);
+ }
+@@ -1309,7 +1308,7 @@ static irqreturn_t otx2_q_intr_handler(int irq, void *data)
+ 
+ 	/* CQ */
+ 	for (qidx = 0; qidx < pf->qset.cq_cnt; qidx++) {
+-		ptr = otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
++		ptr = (__force u64 *)otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
+ 		val = otx2_atomic64_add((qidx << 44), ptr);
+ 
+ 		otx2_write64(pf, NIX_LF_CQ_OP_INT, (qidx << 44) |
+@@ -1348,7 +1347,7 @@ static irqreturn_t otx2_q_intr_handler(int irq, void *data)
+ 		 * these are fatal errors.
+ 		 */
+ 
+-		ptr = otx2_get_regaddr(pf, NIX_LF_SQ_OP_INT);
++		ptr = (__force u64 *)otx2_get_regaddr(pf, NIX_LF_SQ_OP_INT);
+ 		val = otx2_atomic64_add((qidx << 44), ptr);
+ 		otx2_write64(pf, NIX_LF_SQ_OP_INT, (qidx << 44) |
+ 			     (val & NIX_SQINT_BITS));
 -- 
-Kees Cook
+2.25.1
+
