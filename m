@@ -1,90 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDBE1F4165;
-	Mon,  3 Mar 2025 11:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C890D1EEA5F;
+	Mon,  3 Mar 2025 11:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000729; cv=none; b=R7KfWDY8Sdi3JwsJvy3pu9t6j7OxUVutiLAN8BoJzNIlOIfAbLW3ZGTCezN0v32fGTapA/S+xUVdKCyEqSsc9oOiQd3Qw5pNd2A7xJSs7uXEvMBhij+GLtILJF7/PTGqcY3SBoogioHFo5FlNcZFzSsnELZWqEo8wXPVhXtuyTc=
+	t=1741001110; cv=none; b=aKSlEvlHoes7mmsf4FdEt5D3OXzlcTeSaYvhwxCubXEMUAeIfJ1yqNZZKG+2Xf5BBfDLZHQSLU4nhod8Ia5si1iyFk4DfBvTAuz9ymTXOV3J4u4RoWlElW1gCtXMjn8JviIuE1Q0ijxY+tt2cogOt63NppqDS25OO9bv1tMJPG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000729; c=relaxed/simple;
-	bh=tX6xycVlm0hqQ9h8iORXLZHUyLwbVdP+cXKqAOJS+II=;
+	s=arc-20240116; t=1741001110; c=relaxed/simple;
+	bh=gHkoVUKKkI/RUOL3nlWslvI3CJujVU9I3eG0j1qBMvw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=olpIAXtMqTvvvZisEb3lWUxoCcg87y5Yd0ixKJy8D7YP1hk00aRlMAdSTmquDUmBHtw2utFEo8UxTL871PQYLpRcwOcwDPZHVy8J/6FqeSjVr7Id4Vf8JYRKTthGDdjf472505r9hKaNmSpgHCZVhyjQbHIWRdLIH6CuGwB4Kdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nCDsjqce; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cv7nzy8t5q6LCrCnnPDZTd47Q9kvjhVgOjBrsS64CykE4qUtKMOnpB+xHQHEsz+UZseB+DSBb02W4svMFWY8MSIBVHij8YXVluP0YCDwN24qZA3hgkorIVf9gQTkkJg4J9/g3lRBXdwjBYW6sfBEHtN5/aazTsWcs0K7gX8Y4WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A6svpFLx; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nCDsjqce"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741000728; x=1772536728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tX6xycVlm0hqQ9h8iORXLZHUyLwbVdP+cXKqAOJS+II=;
-  b=nCDsjqceOA3qkUiSJIVV8D7MpwSc+oP9tqrMOKTm3bMRONhriK4lfHLy
-   mgdxf498nwmHYaqK3gDp4E3fL25O9XHxNh3mV/mgdfKciBvpI8F+ec/SV
-   6LkFsfQ1T31YkOMUVyO1hlFn9PWObt0Sd1XNsiAeHJs5lZaInSay10YPM
-   2EtOlCkchP0BKDWlDqDe4hzs73rCKLJB7Mgrrl4dDnvxqDJDtvEALN124
-   Jh7SczYDAz55baEVp2RoEs2KdOJ8O9dlR6Yev/6RLPamVKocg0W3gCwEu
-   PIsk+hfHG3fydMVy45kG1AOLAsPYrbq3suN4wn3aEyIy5fKVXaoM0wBxb
-   Q==;
-X-CSE-ConnectionGUID: 8K3jH+aMRn2JskM3MUYafQ==
-X-CSE-MsgGUID: k9Umaj5VRKWXK/UXFses5A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="45644557"
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="45644557"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 03:18:47 -0800
-X-CSE-ConnectionGUID: S5aCuh0sQ0q2PF8VTniF7g==
-X-CSE-MsgGUID: 0oCy3AfKT9+VTH5NApmTuA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,329,1732608000"; 
-   d="scan'208";a="122978491"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 03 Mar 2025 03:18:45 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id A550B125; Mon, 03 Mar 2025 13:18:42 +0200 (EET)
-Date: Mon, 3 Mar 2025 13:18:42 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: kernel test robot <lkp@intel.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Oscar Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
- change
-Message-ID: <Z8WQEpv7BNtDDoH3@black.fi.intel.com>
-References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
- <202503010129.rJvGqZN1-lkp@intel.com>
- <20250228182804.GB120597@cmpxchg.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A6svpFLx"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=z6iQmFx3kUgte9Kb2AwgmkALnfbli8g8jvKzg5SWVmE=; b=A6svpFLx+pNLGKW0tQeTqsPM61
+	1sm+BtaqdI70N/rG9pstcBbdXlHScuTkqQnDqfdrYnfnmHc9BvSWs6YCfM9mtpWuVljrgeOdkC0Mf
+	b284F5lp92X7GTV3DQYSjf+23RGk+32PSJDejGnbDytInBeqTNlBuArnjtB1UYjD16srlrNS3TI5Z
+	ElkOaUwZxJiCGlzU8HJuBDVHNM8Aze3yU9ran6C78MVRLOpvw8aO5ZgS02CujS7InNxCFfYJ0nErI
+	5Ipj4oT8pK0hYd62nQyVqTc/QrCYNI2Wm7/8Mlz6f54WLv1e42wgVY6XMTmAKjaIYUKLdtnxSRnpL
+	Si5MMx6Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tp3uj-0000000BXXv-1WAU;
+	Mon, 03 Mar 2025 11:24:49 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B6C223002C7; Mon,  3 Mar 2025 12:24:48 +0100 (CET)
+Date: Mon, 3 Mar 2025 12:24:48 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	jolsa@kernel.org, davem@davemloft.net, dsahern@kernel.org,
+	mathieu.desnoyers@efficios.com, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
+	akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 1/4] x86/ibt: factor out cfi and fineibt
+ offset
+Message-ID: <20250303112448.GZ11590@noisy.programming.kicks-ass.net>
+References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+ <20250303065345.229298-2-dongml2@chinatelecom.cn>
+ <20250303091811.GH5880@noisy.programming.kicks-ass.net>
+ <CADxym3as+KdeBMUigq4xq302g2U7UG-7Gm+vKiYGnSjHouq=bg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250228182804.GB120597@cmpxchg.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADxym3as+KdeBMUigq4xq302g2U7UG-7Gm+vKiYGnSjHouq=bg@mail.gmail.com>
 
-On Fri, Feb 28, 2025 at 01:28:04PM -0500, Johannes Weiner wrote:
-> On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote:
+On Mon, Mar 03, 2025 at 06:51:41PM +0800, Menglong Dong wrote:
+> On Mon, Mar 3, 2025 at 5:18 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, Mar 03, 2025 at 02:53:42PM +0800, Menglong Dong wrote:
+> > > index c71b575bf229..ad050d09cb2b 100644
+> > > --- a/arch/x86/kernel/alternative.c
+> > > +++ b/arch/x86/kernel/alternative.c
+> > > @@ -908,7 +908,7 @@ void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct mod
+> > >
+> > >               poison_endbr(addr, wr_addr, true);
+> > >               if (IS_ENABLED(CONFIG_FINEIBT))
+> > > -                     poison_cfi(addr - 16, wr_addr - 16);
+> > > +                     poison_cfi(addr, wr_addr);
+> > >       }
+> > >  }
+> >
+> > If you're touching this code, please use tip/x86/core or tip/master.
+> 
+> Thank you for reminding me that, I were using the linux-next, and
 
-> The patch is missing a dummy in_mem_hotplug() in the
-> !CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>.
+That must've been an very old -next, because that wr_addr crap has been
+gone a while now.
 
-+1, I just stumbled over and this is not fixed in today's Linux Next. I'm
-wondering how this was missed during merge into Linux Next. Stephen?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Anyway, thanks for moving to a newer tree!
