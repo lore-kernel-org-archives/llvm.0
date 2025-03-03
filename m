@@ -1,113 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DF921323F;
-	Mon,  3 Mar 2025 15:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAE821578D;
+	Mon,  3 Mar 2025 16:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741014367; cv=none; b=OVkqe5lh7++fDTTX3j+EymnuEZz3fp80OMPFSRXIxTHRzOMy5l8XV6pSdMX4VB37Jzz11ArFbkpAdSM+5wUWxgqcURi1gfxUBgXQsxHoJJKgYBp3JHYA0vbs7Y1SqMdfOvNOoNlkA1CdhEsVbB7f9NvuIAdzP7i5PUePysmmXAI=
+	t=1741017912; cv=none; b=iu2tpEQ92HAxHwcF2eqDcTXoP7Ld7vI5u5XimKhGjMd+Zh2z+IZg4gpxm3IbtYNMemWiBr2kixzhIbCulg04QAxqy6FpiFrJF0vSs0ozlBk7fop1AsPoEN4S+E3R4pelPix0epSYue0YcFsPpIN9jrRuVkB0hnnuw8gw5X8ZrC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741014367; c=relaxed/simple;
-	bh=disuNk2jqDN9ewEpsE1y/bJZDemQDRRzm/NUW3oa98k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BUwFDLt5X4JT8Mdc3ueM9jh14GjPs+dA7bMrDfpz+4iLo6wgRFPfPYsQnZ0z+nppS8pU+6rplZinGNq9U7zfLdTHwQeqtOjlFvx/RL+bPGxrveT46iqaBK1sVW288cepIbzmKIuRSwK48u/UjDnLmg7OS+l2nsdkTy9SZnIMWFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N1N/zcAR; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N1N/zcAR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741014365; x=1772550365;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=disuNk2jqDN9ewEpsE1y/bJZDemQDRRzm/NUW3oa98k=;
-  b=N1N/zcARdEDk6p/3um/+tRFrD5DAzsJM1NM/iuD9lAndLYPCuopO11Bl
-   Sg7xoxi3Kqph1YIlSqNADrn+ovhyjol5Z3pE3E+kB0TPWo3hCdVt/ZFRO
-   HPA8hktMyup3WfEWzt9m+cJ1oFgyrWIydSPLvrbWTRVBWwJKgUBIPxGh/
-   L+L6v6MwAmFaWczRct1DKUJYDjsNNieBbfb6DyrHSyaSk01SoTOAWYTSg
-   cd0sluRgIfShf8GHSoE9qeHUSaee5q+tY8CzqMSETc93TVeFvGS1xpbU2
-   WkquFefALeK7DxKl3tzu1QfFLgDsXj4uoas4YAyXfIIyoz8sfaj4+i+t6
-   w==;
-X-CSE-ConnectionGUID: cvJQdCZeTJ2q7TI6Y8NLhQ==
-X-CSE-MsgGUID: cG4rknbqS/KvsAvaAny7Ng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="52530134"
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="52530134"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 07:06:04 -0800
-X-CSE-ConnectionGUID: 1/GrhkcFRDSDSEtYNt/n8A==
-X-CSE-MsgGUID: Hsr/re+LR2utUfDgB/YJWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="122176463"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 03 Mar 2025 07:06:03 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tp7Mm-000Id1-1y;
-	Mon, 03 Mar 2025 15:06:00 +0000
-Date: Mon, 3 Mar 2025 23:05:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-	linux-wireless@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-	linux-devel@silabs.com,
-	=?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>
-Subject: Re: [PATCH v2 2/5] wifi: wfx: declare support for WoWLAN
-Message-ID: <202503032232.o7HgZDMO-lkp@intel.com>
-References: <20250302144731.117409-3-jerome.pouiller@silabs.com>
+	s=arc-20240116; t=1741017912; c=relaxed/simple;
+	bh=jbJ2N2jSzuaiP65Mwcj5vtf0bSK0vEHTkqqcaJYFKVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JWiRbel0+wTwb55U9/ZT9pEYAqyDGIqG8u3h+oaDl1Mq8M2xIyQ7+d34KTVHtfzXOp7FJrmTeVLrq5WqKCcwcs6sx4dhE+uuvApc5HX14NlIjguQSlieaqsB2K5whHhy8wFqvVfU1igMUF+ZEc93XNQvroHk/UeathF+SxLW/mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA387C4CED6;
+	Mon,  3 Mar 2025 16:05:07 +0000 (UTC)
+Date: Mon, 3 Mar 2025 11:05:59 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: peterz@infradead.org, mark.rutland@arm.com,
+ alexei.starovoitov@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+ mhiramat@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, davem@davemloft.net,
+ dsahern@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, samitolvanen@google.com,
+ kees@kernel.org, dongml2@chinatelecom.cn, akpm@linux-foundation.org,
+ riel@surriel.com, rppt@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next v3 3/4] x86: implement per-function metadata
+ storage for x86
+Message-ID: <20250303110559.5a584602@gandalf.local.home>
+In-Reply-To: <20250303065345.229298-4-dongml2@chinatelecom.cn>
+References: <20250303065345.229298-1-dongml2@chinatelecom.cn>
+	<20250303065345.229298-4-dongml2@chinatelecom.cn>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250302144731.117409-3-jerome.pouiller@silabs.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Jérôme,
+On Mon,  3 Mar 2025 14:53:44 +0800
+Menglong Dong <menglong8.dong@gmail.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> In the third case, we make the kernel function 32 bytes aligned, and there
+> will be 32 bytes padding before the functions. According to my testing,
+> the text size didn't increase on this case, which is weird.
+> 
+> With 16-bytes padding:
+> 
+> -rwxr-xr-x 1 401190688  x86-dev/vmlinux*
+> -rw-r--r-- 1    251068  x86-dev/vmlinux.a
+> -rw-r--r-- 1 851892992  x86-dev/vmlinux.o
+> -rw-r--r-- 1  12395008  x86-dev/arch/x86/boot/bzImage
+> 
+> With 32-bytes padding:
+> 
+> -rwxr-xr-x 1 401318128 x86-dev/vmlinux*
+> -rw-r--r-- 1    251154 x86-dev/vmlinux.a
+> -rw-r--r-- 1 853636704 x86-dev/vmlinux.o
+> -rw-r--r-- 1  12509696 x86-dev/arch/x86/boot/bzImage
 
-[auto build test WARNING on wireless-next/main]
-[also build test WARNING on wireless/main linus/master v6.14-rc5 next-20250303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Use the "size" command to see the differences in sizes and not the file size.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/J-r-me-Pouiller/wifi-wfx-align-declarations-between-bus_spi-c-and-bus_sdio-c/20250302-231700
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/20250302144731.117409-3-jerome.pouiller%40silabs.com
-patch subject: [PATCH v2 2/5] wifi: wfx: declare support for WoWLAN
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250303/202503032232.o7HgZDMO-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250303/202503032232.o7HgZDMO-lkp@intel.com/reproduce)
+$ size vmlinux
+   text    data     bss     dec     hex filename
+36892658        9798658 16982016        63673332        3cb93f4 vmlinux
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503032232.o7HgZDMO-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/silabs/wfx/main.c:124:42: warning: unused variable 'wfx_wowlan_support' [-Wunused-const-variable]
-     124 | static const struct wiphy_wowlan_support wfx_wowlan_support = {
-         |                                          ^~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/wfx_wowlan_support +124 drivers/net/wireless/silabs/wfx/main.c
-
-   123	
- > 124	static const struct wiphy_wowlan_support wfx_wowlan_support = {
-   125		.flags = WIPHY_WOWLAN_ANY | WIPHY_WOWLAN_DISCONNECT,
-   126	};
-   127	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- Steve
