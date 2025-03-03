@@ -1,62 +1,62 @@
 Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B11313C816
-	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 13:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618BE21422D
+	for <llvm@lists.linux.dev>; Mon,  3 Mar 2025 13:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741008647; cv=none; b=oboeD/2YvjsK0rB+gF2r1TlktbXmBSxM8mQr6sEN5CZyl1mfk0Za9+GD9oPrYBxwDF4aicL5S0YNzEaNh24iER1I7Im0b78IEy5KvKoHguiqghDI/91F5c7K7QHYGYzJ/OEtf3wgghRG0GUQ9lGzemkFJcWeTQG3Y9Ki73VH8Yo=
+	t=1741008655; cv=none; b=T2WtSFRExYC77RK++GlZaeiR7S0C24PifclNX+3qhK2Io/IInZ1l+pWJwXOkjzxNVXdJmpUxOdQYHDfo6M0opvhYVvlpTnRY5qDeN6wjEhvhFb6thaTV7su8tU6Miw7SoBAb4W7NN89A/k7GnYV4xTqeYg7hNC3eeRUjyYezlQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741008647; c=relaxed/simple;
-	bh=/mOskEeuSOoI6Ik4GZTrnIyvVE91D9OQfL2ePFfqnyY=;
+	s=arc-20240116; t=1741008655; c=relaxed/simple;
+	bh=0opDRmJgFcne9MVvIB9mWH4N0ry/ocl2wUXCnUeZZWU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=A5zAkd5twkwqi+gpWK25a63kJbrbq1XDUp/qJV0rzcdFA1kmXX+wZmeyovdJoInYDyJX06JFrTvraqUclai4tIaczBaTPAKce1kRIzLH8mmd4j9o47ANiq95bACV1guHluiLU0o1Df19E+9MHzNVzQYDL7ssmX6J+MlsFhuLOQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjpY3AhC; arc=none smtp.client-ip=209.85.214.193
+	 MIME-Version; b=unuuv/WuzFJterWZ2+DY/X6rChPXNqFX/No/3wdqdXKMPGQmTEzXLonW0lJRsss0cxQFuS7S8oHIaXsUMeUX9a5GvWaES1mPrAQIROOId0WKsBKcAVscNuz9O3cB9L4eDRHP3WUPk1TxWg3zUroOCxabcpj3G/07lAQ7Sjl8vwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtnY5t0Q; arc=none smtp.client-ip=209.85.214.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjpY3AhC"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2234daaf269so52002805ad.3
-        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 05:30:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtnY5t0Q"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2234e5347e2so87558085ad.1
+        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 05:30:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741008645; x=1741613445; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1741008653; x=1741613453; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g+TPvgOYa0/i6hWJUb51m5UVXTU1tbJahC/+FJNQh8Y=;
-        b=jjpY3AhCFpVH3KHmwLUIA06zHRxZd0gYZityZy9rIv9AO/T8HUbvoJ3JJK+jodn43b
-         YV8yHH4LB8ZAcbePcDF68aTmb5xN+oV5vLFfBh345AQcNQuLmBuxjsOQo4oRAtZCYMe3
-         Rn2f4k3meBdIjUJtlqsHKoOCNQh2TOWT5P87X0qvNTGs4hMkxasnw0hM+QaXqgrnoC1S
-         A0joKmu3nnlYkQ93LrVOPSQpuE4b14qj0Gz3eO5VKalMa6CB32SQmoce4avxT+nsWrXs
-         ULFMBQOJymWt61oGbBImfOaBMkekMiUKg1MYUJlQnO9AntPv8feySPp+bDLgIO/6obvu
-         6iYg==
+        bh=e0whn35vPm8J+vjBTbfA5u1AHwSTrw7swcARc6I++Hc=;
+        b=BtnY5t0QwyXVMiEWGUYJS/NNdIiRadY8KmHTi0h9Lf+JsECjD4w2soEGtH639NDUIP
+         MITv8/rFiJp9kSZ/xAjwsycz18bV4sMCU2bMHyJ11uJNxEc3+Pt0M2U3CxxdSp1cXM1w
+         Vx8AdZ9bL4RGXggiTZNprGq2zri/zIQKgwBs0zuC6Fo8Y/qlHcs6aXwGZS2Ti1hNs7wB
+         vMNTlStCc9z6uo1MD5K40W8dnJuwRl8ro/ytKmVxWXISMmRkfui7JhfqiHSxUFtnYACF
+         kTL/g2Luri3+bdlmGAlkG3P3XO6op3JsdTDE+5LoDhXBpXwytlB7LS0Cw0YvZnbsOwdp
+         bsDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741008645; x=1741613445;
+        d=1e100.net; s=20230601; t=1741008653; x=1741613453;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g+TPvgOYa0/i6hWJUb51m5UVXTU1tbJahC/+FJNQh8Y=;
-        b=NcBv7N4k7lsnfzHLfu3awbOkVNCwoLE3JI7LxFDGRPUgCMf7hups/hwCaZPioHX6Zm
-         3Uq8YcPKk9ifKF4S3ikFMiQie4pwbGPRh/q5hfbHUz0ziasD6bKUxIdtUxVU/mszwQfQ
-         I4F0NT37pZs3BOVWgYscTT8qvKAJj90uJBIwUfkuYduDoCXibzteMrgpIbVA+elXQt5x
-         X7wNztH3Nr90+HxpPKu1swnSsXx/s+TxavEpOdSX7v/6QdlK7mplfGPJzsi/oO/XQlvB
-         5nR7D7a0NdgYNQ2uAJHjSFppaF/vi1/ukDanFV5f5Mb7nj2OAWCDGKcg//rxuQuCSH/0
-         gikA==
-X-Forwarded-Encrypted: i=1; AJvYcCXvANDpkbq1XiVCQ69jPVXLm4kNcMXHuDsvNi0jqHDn5pK+iou5XRBqk8qeSeoRwmxeMtRn@lists.linux.dev
-X-Gm-Message-State: AOJu0YxMBDB8gduUbRTIhQelSUn/BWyY13cbF+w05knMLOrg7so9eSCu
-	a/LJ+CT0DEsp9SnDOdQ1blOtV+Y/p7I4xUzPoxT2mZ1kk/pN910l
-X-Gm-Gg: ASbGnctNW1Mt/iGKWZifP0t8zWH5Zdgo5igqmgY8M+cPQVmDoDcC1mfxbgnvrS4OdPj
-	Sugku9NUReCa/ZGP0zSo04kpHPvGFk7hOblrBxVurUshKXXNGE57PlK2+hz037v2kCHRa9WoDgo
-	cvkjyXByzkMm1EykVpk670X/iVLNeEKIrahovfmPw1bCyp3zaS5drIxZvf2gHnQFtu7pxqmPJUY
-	QxtLFr6hqXT3xocB26fK76aXHCKcNuTQT9f+NdTODNmZLg35say7cQiKhSmcq787rJ5DD2rMMym
-	flNVZzwWJBMG/o+ovy1HOqnijGJoRxb4tWwkz+8HpkjRlLqdBZd8qJ4F0ET2Pw==
-X-Google-Smtp-Source: AGHT+IFlbT3UDNEQKtNvTWGWrAZWwF7WOjWCx8Sdq18QPhAIVe0wmrIF4oYZBBWwy52qUNo/JhCf0Q==
-X-Received: by 2002:a17:903:1790:b0:21f:71b4:d2aa with SMTP id d9443c01a7336-22368fa54b4mr247215185ad.5.1741008644544;
-        Mon, 03 Mar 2025 05:30:44 -0800 (PST)
+        bh=e0whn35vPm8J+vjBTbfA5u1AHwSTrw7swcARc6I++Hc=;
+        b=ZSErtwm4FiAEFQai/G/Mx3UohA+8vvHRCxE5W+9t4ENCxd9IhmCNIqfzjIg1eIqKpT
+         MNbUMUYW+FATMelRZ8/OdjWD8SoOHGGp3Co7Dp8CCogNlP1h1/Iyx3lR1Gf9VTpCldZ2
+         /g3uR/s+w2Lq+nZzV/2tEj5M+/lRypkvGtVpdVuWqHKpP4sKhvGJAVH79D5b/58kCmjD
+         VthSKJIXPrQ9Xt9V7emqr+0qVG86zrZgGJ2tucECGkYDBF4e8IRescjGjkES9I+ALZ/H
+         YEXw9niNvaTU69TtjXzraG1Y6HiQKuQmnVWWd1Xa0FNYme7kH0KbsY6iL6W76I0w6MoY
+         fFdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUs2bK6E97k+TCvV/+vLPma3a8zs0P4x2Yr0+m+sP8YjEBuznfegLyUNI7J2ZCvSvQ2krR8@lists.linux.dev
+X-Gm-Message-State: AOJu0YxfFP5QezCXKpbQWNBjd6ykvMyFja3URqZAaNKELTWH3d+oYXaX
+	VU0tj6uEVJfzqCP8Kp8HbovWVjHLA8pLFH7C748nxisSbnpJS43R
+X-Gm-Gg: ASbGncsQ9SXbUa/mrPbfalLClwjqTDIP2D8UlIa+UrJsWJ1pynAz2fSTcKujAWxiMNi
+	foeuDhChXK3WMBO8hs+phrzMFrhD/ZGXiTSMYUn8BCcITsuV2Rinrulkqc4pkR3VjCpalg0uSRN
+	fporkvGzwOGi6u0keJnlGe3O1GPej5tSSsdEnq2uCIyQkQ0g7FYF9Ik2pehBglQQcMAHsDMueFl
+	Iz2zSb0qmJ+XpfBY0CJ28q4B3nlQAdiWkc1vCPN2swzo2BvnNXxxhaQqZyKJgYz13EYswzL+429
+	Nk5blU8JHFa49ngjNrEOIKRI85W+ZMGuX5grTy7OM7LXNqQGIDUWhrm32iz4PQ==
+X-Google-Smtp-Source: AGHT+IECVEaRvzz7jFgM9Xs6Qsz7AN1fGJ1Lrd2ZRMORcgHaHlhwWOyshFl83O3butQP+uNtOa6yXg==
+X-Received: by 2002:a17:902:e5c5:b0:223:4bd6:3863 with SMTP id d9443c01a7336-22368f6a174mr217254605ad.10.1741008652539;
+        Mon, 03 Mar 2025 05:30:52 -0800 (PST)
 Received: from localhost.localdomain ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505359b8sm77297035ad.253.2025.03.03.05.30.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223505359b8sm77297035ad.253.2025.03.03.05.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 05:30:44 -0800 (PST)
+        Mon, 03 Mar 2025 05:30:52 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: peterz@infradead.org,
@@ -100,9 +100,9 @@ Cc: catalin.marinas@arm.com,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v4 2/4] add per-function metadata storage support
-Date: Mon,  3 Mar 2025 21:28:35 +0800
-Message-Id: <20250303132837.498938-3-dongml2@chinatelecom.cn>
+Subject: [PATCH v4 3/4] x86: implement per-function metadata storage for x86
+Date: Mon,  3 Mar 2025 21:28:36 +0800
+Message-Id: <20250303132837.498938-4-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250303132837.498938-1-dongml2@chinatelecom.cn>
 References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
@@ -114,358 +114,176 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For now, there isn't a way to set and get per-function metadata with
-a low overhead, which is not convenient for some situations. Take
-BPF trampoline for example, we need to create a trampoline for each
-kernel function, as we have to store some information of the function
-to the trampoline, such as BPF progs, function arg count, etc. The
-performance overhead and memory consumption can be higher to create
-these trampolines. With the supporting of per-function metadata storage,
-we can store these information to the metadata, and create a global BPF
-trampoline for all the kernel functions. In the global trampoline, we
-get the information that we need from the function metadata through the
-ip (function address) with almost no overhead.
+With CONFIG_CALL_PADDING enabled, there will be 16-bytes padding space
+before all the kernel functions. And some kernel features can use it,
+such as MITIGATION_CALL_DEPTH_TRACKING, CFI_CLANG, FINEIBT, etc.
 
-Another beneficiary can be ftrace. For now, all the kernel functions that
-are enabled by dynamic ftrace will be added to a filter hash if there are
-more than one callbacks. And hash lookup will happen when the traced
-functions are called, which has an impact on the performance, see
-__ftrace_ops_list_func() -> ftrace_ops_test(). With the per-function
-metadata supporting, we can store the information that if the callback is
-enabled on the kernel function to the metadata.
+In my research, MITIGATION_CALL_DEPTH_TRACKING will consume the tail
+9-bytes in the function padding, CFI_CLANG will consume the head 5-bytes,
+and FINEIBT will consume all the 16 bytes if it is enabled. So there will
+be no space for us if MITIGATION_CALL_DEPTH_TRACKING and CFI_CLANG are
+both enabled, or FINEIBT is enabled.
 
-Support per-function metadata storage in the function padding, and
-previous discussion can be found in [1]. Generally speaking, we have two
-way to implement this feature:
+In x86, we need 5-bytes to prepend a "mov %eax xxx" insn, which can hold
+a 4-bytes index. So we have following logic:
 
-1. Create a function metadata array, and prepend a insn which can hold
-the index of the function metadata in the array. And store the insn to
-the function padding.
+1. use the head 5-bytes if CFI_CLANG is not enabled
+2. use the tail 5-bytes if MITIGATION_CALL_DEPTH_TRACKING and FINEIBT are
+   not enabled
+3. compile the kernel with FUNCTION_ALIGNMENT_32B otherwise
 
-2. Allocate the function metadata with kmalloc(), and prepend a insn which
-hold the pointer of the metadata. And store the insn to the function
-padding.
+In the third case, we make the kernel function 32 bytes aligned, and there
+will be 32 bytes padding before the functions. According to my testing,
+the text size didn't increase on this case, which is weird.
 
-Compared with way 2, way 1 consume less space, but we need to do more work
-on the global function metadata array. And we implement this function in
-the way 1.
+With 16-bytes padding:
 
-Link: https://lore.kernel.org/bpf/CADxym3anLzM6cAkn_z71GDd_VeKiqqk1ts=xuiP7pr4PO6USPA@mail.gmail.com/ [1]
+-rwxr-xr-x 1 401190688  x86-dev/vmlinux*
+-rw-r--r-- 1    251068  x86-dev/vmlinux.a
+-rw-r--r-- 1 851892992  x86-dev/vmlinux.o
+-rw-r--r-- 1  12395008  x86-dev/arch/x86/boot/bzImage
+
+With 32-bytes padding:
+
+-rwxr-xr-x 1 401318128 x86-dev/vmlinux*
+-rw-r--r-- 1    251154 x86-dev/vmlinux.a
+-rw-r--r-- 1 853636704 x86-dev/vmlinux.o
+-rw-r--r-- 1  12509696 x86-dev/arch/x86/boot/bzImage
+
+The way I tested should be right, and this is a good news for us. On the
+third case, the layout of the padding space will be like this if fineibt
+is enabled:
+
+__cfi_func:
+	mov	--	5	-- cfi, not used anymore
+	nop
+	nop
+	nop
+	mov	--	5	-- function metadata
+	nop
+	nop
+	nop
+	fineibt	--	16	-- fineibt
+func:
+	nopw	--	4
+	......
+
+I tested the fineibt with "cfi=fineibt" cmdline, and it works well
+together with FUNCTION_METADATA enabled. And I also tested the
+performance of this function by setting metadata for all the kernel
+function, and it consumes 0.7s for 70k+ functions, not bad :/
+
+I can't find a machine that support IBT, so I didn't test the IBT. I'd
+appreciate it if someone can do this testing for me :/
+
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
-v2:
-- add supporting for arm64
-- split out arch relevant code
-- refactor the commit log
+v3:
+- select FUNCTION_ALIGNMENT_32B on case3, instead of extra 5-bytes
 ---
- include/linux/kfunc_md.h |  25 ++++
- kernel/Makefile          |   1 +
- kernel/trace/Makefile    |   1 +
- kernel/trace/kfunc_md.c  | 239 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 266 insertions(+)
- create mode 100644 include/linux/kfunc_md.h
- create mode 100644 kernel/trace/kfunc_md.c
+ arch/x86/Kconfig              | 18 ++++++++++++
+ arch/x86/include/asm/ftrace.h | 54 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
-diff --git a/include/linux/kfunc_md.h b/include/linux/kfunc_md.h
-new file mode 100644
-index 000000000000..df616f0fcb36
---- /dev/null
-+++ b/include/linux/kfunc_md.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_KFUNC_MD_H
-+#define _LINUX_KFUNC_MD_H
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 5c277261507e..b0614188c80b 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2518,6 +2518,24 @@ config PREFIX_SYMBOLS
+ 	def_bool y
+ 	depends on CALL_PADDING && !CFI_CLANG
+ 
++config FUNCTION_METADATA
++	bool "Per-function metadata storage support"
++	default y
++	depends on CC_HAS_ENTRY_PADDING && OBJTOOL
++	select CALL_PADDING
++	select FUNCTION_ALIGNMENT_32B if ((CFI_CLANG && CALL_THUNKS) || FINEIBT)
++	help
++	  Support per-function metadata storage for kernel functions, and
++	  get the metadata of the function by its address with almost no
++	  overhead.
 +
-+#include <linux/kernel.h>
++	  The index of the metadata will be stored in the function padding
++	  and consumes 5-bytes. FUNCTION_ALIGNMENT_32B will be selected if
++	  "(CFI_CLANG && CALL_THUNKS) || FINEIBT" to make sure there is
++	  enough available padding space for this function. However, it
++	  seems that the text size almost don't change, compare with
++	  FUNCTION_ALIGNMENT_16B.
 +
-+struct kfunc_md {
-+	int users;
-+	/* we can use this field later, make sure it is 8-bytes aligned
-+	 * for now.
-+	 */
-+	int pad0;
-+	void *func;
-+};
+ menuconfig CPU_MITIGATIONS
+ 	bool "Mitigations for CPU vulnerabilities"
+ 	default y
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index f2265246249a..700bb729e949 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -4,6 +4,28 @@
+ 
+ #include <asm/ptrace.h>
+ 
++#ifdef CONFIG_FUNCTION_METADATA
++#if (defined(CONFIG_CFI_CLANG) && defined(CONFIG_CALL_THUNKS)) || (defined(CONFIG_FINEIBT))
++  /* the CONFIG_FUNCTION_PADDING_BYTES is 32 in this case, use the
++   * range: [align + 8, align + 13].
++   */
++  #define KFUNC_MD_INSN_OFFSET		(CONFIG_FUNCTION_PADDING_BYTES - 8)
++  #define KFUNC_MD_DATA_OFFSET		(CONFIG_FUNCTION_PADDING_BYTES - 9)
++#else
++  #ifdef CONFIG_CFI_CLANG
++    /* use the space that CALL_THUNKS suppose to use */
++    #define KFUNC_MD_INSN_OFFSET	(5)
++    #define KFUNC_MD_DATA_OFFSET	(4)
++  #else
++    /* use the space that CFI_CLANG suppose to use */
++    #define KFUNC_MD_INSN_OFFSET	(CONFIG_FUNCTION_PADDING_BYTES)
++    #define KFUNC_MD_DATA_OFFSET	(CONFIG_FUNCTION_PADDING_BYTES - 1)
++  #endif
++#endif
 +
-+extern struct kfunc_md *kfunc_mds;
++#define KFUNC_MD_INSN_SIZE		(5)
++#endif
 +
-+struct kfunc_md *kfunc_md_find(void *ip);
-+struct kfunc_md *kfunc_md_get(void *ip);
-+void kfunc_md_put(struct kfunc_md *meta);
-+void kfunc_md_put_by_ip(void *ip);
-+void kfunc_md_lock(void);
-+void kfunc_md_unlock(void);
+ #ifdef CONFIG_FUNCTION_TRACER
+ #ifndef CC_USING_FENTRY
+ # error Compiler does not support fentry?
+@@ -156,4 +178,36 @@ static inline bool arch_trace_is_compat_syscall(struct pt_regs *regs)
+ #endif /* !COMPILE_OFFSETS */
+ #endif /* !__ASSEMBLY__ */
+ 
++#if !defined(__ASSEMBLY__) && defined(CONFIG_FUNCTION_METADATA)
++#include <asm/text-patching.h>
++
++static inline bool kfunc_md_arch_exist(void *ip)
++{
++	return *(u8 *)(ip - KFUNC_MD_INSN_OFFSET) == 0xB8;
++}
++
++static inline void kfunc_md_arch_pretend(u8 *insn, u32 index)
++{
++	*insn = 0xB8;
++	*(u32 *)(insn + 1) = index;
++}
++
++static inline void kfunc_md_arch_nops(u8 *insn)
++{
++	*(insn++) = BYTES_NOP1;
++	*(insn++) = BYTES_NOP1;
++	*(insn++) = BYTES_NOP1;
++	*(insn++) = BYTES_NOP1;
++	*(insn++) = BYTES_NOP1;
++}
++
++static inline int kfunc_md_arch_poke(void *ip, u8 *insn)
++{
++	text_poke(ip, insn, KFUNC_MD_INSN_SIZE);
++	text_poke_sync();
++	return 0;
++}
 +
 +#endif
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 87866b037fbe..7435674d5da3 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_TRACE_CLOCK) += trace/
- obj-$(CONFIG_RING_BUFFER) += trace/
- obj-$(CONFIG_TRACEPOINTS) += trace/
- obj-$(CONFIG_RETHOOK) += trace/
-+obj-$(CONFIG_FUNCTION_METADATA) += trace/
- obj-$(CONFIG_IRQ_WORK) += irq_work.o
- obj-$(CONFIG_CPU_PM) += cpu_pm.o
- obj-$(CONFIG_BPF) += bpf/
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index 057cd975d014..9780ee3f8d8d 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -106,6 +106,7 @@ obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
- obj-$(CONFIG_FPROBE) += fprobe.o
- obj-$(CONFIG_RETHOOK) += rethook.o
- obj-$(CONFIG_FPROBE_EVENTS) += trace_fprobe.o
-+obj-$(CONFIG_FUNCTION_METADATA) += kfunc_md.o
- 
- obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
- obj-$(CONFIG_RV) += rv/
-diff --git a/kernel/trace/kfunc_md.c b/kernel/trace/kfunc_md.c
-new file mode 100644
-index 000000000000..7ec25bcf778d
---- /dev/null
-+++ b/kernel/trace/kfunc_md.c
-@@ -0,0 +1,239 @@
-+// SPDX-License-Identifier: GPL-2.0
 +
-+#include <linux/slab.h>
-+#include <linux/memory.h>
-+#include <linux/rcupdate.h>
-+#include <linux/ftrace.h>
-+#include <linux/kfunc_md.h>
-+
-+#define ENTRIES_PER_PAGE (PAGE_SIZE / sizeof(struct kfunc_md))
-+
-+static u32 kfunc_md_count = ENTRIES_PER_PAGE, kfunc_md_used;
-+struct kfunc_md __rcu *kfunc_mds;
-+EXPORT_SYMBOL_GPL(kfunc_mds);
-+
-+static DEFINE_MUTEX(kfunc_md_mutex);
-+
-+
-+void kfunc_md_unlock(void)
-+{
-+	mutex_unlock(&kfunc_md_mutex);
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_unlock);
-+
-+void kfunc_md_lock(void)
-+{
-+	mutex_lock(&kfunc_md_mutex);
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_lock);
-+
-+static u32 kfunc_md_get_index(void *ip)
-+{
-+	return *(u32 *)(ip - KFUNC_MD_DATA_OFFSET);
-+}
-+
-+static void kfunc_md_init(struct kfunc_md *mds, u32 start, u32 end)
-+{
-+	u32 i;
-+
-+	for (i = start; i < end; i++)
-+		mds[i].users = 0;
-+}
-+
-+static int kfunc_md_page_order(void)
-+{
-+	return fls(DIV_ROUND_UP(kfunc_md_count, ENTRIES_PER_PAGE)) - 1;
-+}
-+
-+/* Get next usable function metadata. On success, return the usable
-+ * kfunc_md and store the index of it to *index. If no usable kfunc_md is
-+ * found in kfunc_mds, a larger array will be allocated.
-+ */
-+static struct kfunc_md *kfunc_md_get_next(u32 *index)
-+{
-+	struct kfunc_md *new_mds, *mds;
-+	u32 i, order;
-+
-+	mds = rcu_dereference(kfunc_mds);
-+	if (mds == NULL) {
-+		order = kfunc_md_page_order();
-+		new_mds = (void *)__get_free_pages(GFP_KERNEL, order);
-+		if (!new_mds)
-+			return NULL;
-+		kfunc_md_init(new_mds, 0, kfunc_md_count);
-+		/* The first time to initialize kfunc_mds, so it is not
-+		 * used anywhere yet, and we can update it directly.
-+		 */
-+		rcu_assign_pointer(kfunc_mds, new_mds);
-+		mds = new_mds;
-+	}
-+
-+	if (likely(kfunc_md_used < kfunc_md_count)) {
-+		/* maybe we can manage the used function metadata entry
-+		 * with a bit map ?
-+		 */
-+		for (i = 0; i < kfunc_md_count; i++) {
-+			if (!mds[i].users) {
-+				kfunc_md_used++;
-+				*index = i;
-+				mds[i].users++;
-+				return mds + i;
-+			}
-+		}
-+	}
-+
-+	order = kfunc_md_page_order();
-+	/* no available function metadata, so allocate a bigger function
-+	 * metadata array.
-+	 */
-+	new_mds = (void *)__get_free_pages(GFP_KERNEL, order + 1);
-+	if (!new_mds)
-+		return NULL;
-+
-+	memcpy(new_mds, mds, kfunc_md_count * sizeof(*new_mds));
-+	kfunc_md_init(new_mds, kfunc_md_count, kfunc_md_count * 2);
-+
-+	rcu_assign_pointer(kfunc_mds, new_mds);
-+	synchronize_rcu();
-+	free_pages((u64)mds, order);
-+
-+	mds = new_mds + kfunc_md_count;
-+	*index = kfunc_md_count;
-+	kfunc_md_count <<= 1;
-+	kfunc_md_used++;
-+	mds->users++;
-+
-+	return mds;
-+}
-+
-+static int kfunc_md_text_poke(void *ip, void *insn, void *nop)
-+{
-+	void *target;
-+	int ret = 0;
-+	u8 *prog;
-+
-+	target = ip - KFUNC_MD_INSN_OFFSET;
-+	mutex_lock(&text_mutex);
-+	if (insn) {
-+		if (!memcmp(target, insn, KFUNC_MD_INSN_SIZE))
-+			goto out;
-+
-+		if (memcmp(target, nop, KFUNC_MD_INSN_SIZE)) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+		prog = insn;
-+	} else {
-+		if (!memcmp(target, nop, KFUNC_MD_INSN_SIZE))
-+			goto out;
-+		prog = nop;
-+	}
-+
-+	ret = kfunc_md_arch_poke(target, prog);
-+out:
-+	mutex_unlock(&text_mutex);
-+	return ret;
-+}
-+
-+static bool __kfunc_md_put(struct kfunc_md *md)
-+{
-+	u8 nop_insn[KFUNC_MD_INSN_SIZE];
-+
-+	if (WARN_ON_ONCE(md->users <= 0))
-+		return false;
-+
-+	md->users--;
-+	if (md->users > 0)
-+		return false;
-+
-+	if (!kfunc_md_arch_exist(md->func))
-+		return false;
-+
-+	kfunc_md_arch_nops(nop_insn);
-+	/* release the metadata by recovering the function padding to NOPS */
-+	kfunc_md_text_poke(md->func, NULL, nop_insn);
-+	/* TODO: we need a way to shrink the array "kfunc_mds" */
-+	kfunc_md_used--;
-+
-+	return true;
-+}
-+
-+/* Decrease the reference of the md, release it if "md->users <= 0" */
-+void kfunc_md_put(struct kfunc_md *md)
-+{
-+	mutex_lock(&kfunc_md_mutex);
-+	__kfunc_md_put(md);
-+	mutex_unlock(&kfunc_md_mutex);
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_put);
-+
-+/* Get a exist metadata by the function address, and NULL will be returned
-+ * if not exist.
-+ *
-+ * NOTE: rcu lock should be held during reading the metadata, and
-+ * kfunc_md_lock should be held if writing happens.
-+ */
-+struct kfunc_md *kfunc_md_find(void *ip)
-+{
-+	struct kfunc_md *md;
-+	u32 index;
-+
-+	if (kfunc_md_arch_exist(ip)) {
-+		index = kfunc_md_get_index(ip);
-+		if (WARN_ON_ONCE(index >= kfunc_md_count))
-+			return NULL;
-+
-+		md = rcu_dereference(kfunc_mds) + index;
-+		return md;
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_find);
-+
-+void kfunc_md_put_by_ip(void *ip)
-+{
-+	struct kfunc_md *md;
-+
-+	mutex_lock(&kfunc_md_mutex);
-+	md = kfunc_md_find(ip);
-+	if (md)
-+		__kfunc_md_put(md);
-+	mutex_unlock(&kfunc_md_mutex);
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_put_by_ip);
-+
-+/* Get a exist metadata by the function address, and create one if not
-+ * exist. Reference of the metadata will increase 1.
-+ *
-+ * NOTE: always call this function with kfunc_md_lock held, and all
-+ * updating to metadata should also hold the kfunc_md_lock.
-+ */
-+struct kfunc_md *kfunc_md_get(void *ip)
-+{
-+	u8 nop_insn[KFUNC_MD_INSN_SIZE], insn[KFUNC_MD_INSN_SIZE];
-+	struct kfunc_md *md;
-+	u32 index;
-+
-+	md = kfunc_md_find(ip);
-+	if (md) {
-+		md->users++;
-+		return md;
-+	}
-+
-+	md = kfunc_md_get_next(&index);
-+	if (!md)
-+		return NULL;
-+
-+	kfunc_md_arch_pretend(insn, index);
-+	kfunc_md_arch_nops(nop_insn);
-+
-+	if (kfunc_md_text_poke(ip, insn, nop_insn)) {
-+		kfunc_md_used--;
-+		md->users = 0;
-+		return NULL;
-+	}
-+	md->func = ip;
-+
-+	return md;
-+}
-+EXPORT_SYMBOL_GPL(kfunc_md_get);
+ #endif /* _ASM_X86_FTRACE_H */
 -- 
 2.39.5
 
