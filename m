@@ -1,96 +1,96 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3C914A62B;
-	Mon,  3 Mar 2025 17:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE6E2163B2;
+	Mon,  3 Mar 2025 18:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741024354; cv=none; b=reCvM9zjtIfx8/FU3jx805nm7WbpbKlrf+eO2s7UyISpfK1jzn8Kd/hhGtIHgcqhwUpVehtay8Q49QJvbncHa3ZTeGtD0Zk+SyUPVSoY7/4XXD9id5ZCwtgV842IQBPTpOrC91HvCvTCyB09Z+C2gNOCV6jRY0UMVHhXnNCTpqY=
+	t=1741026110; cv=none; b=W79Np+zzGBRBDv+/2IZslxEP1jpBG8yuy3trtg/h7cKEyuRMMCPfcZCdRSL3rgpRrgKyI/K1BuH157ZEZ5k4SdbL4bKLF1IQnsPQtV5LOHlY/xdVySkIlO9xYkUTXolxrSPx1HibK0k7WYy0OuBh72nHgKFSsbv5Q9rXFfC4ue4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741024354; c=relaxed/simple;
-	bh=9F2LtWXXlSX30cTWgq26RNKeGiOlNMUkTPieGkfimyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=S7wTE6UQ/N0DxKpD5HPToIhfr19zWYbshsyKUjbDRQnUqc7Kh2r6b+46XJGgHHNcACGF08/YTzmOq1hoIOZZfxaZr/ahDKX/uFu1hhTbdyxDiyBAwW3BJ/KZU9jKMsbruI/s6kIFQp6DRBtsJtSQASX2N6Ki+co3GsWhHJKbpLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BvRp+RpF; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741026110; c=relaxed/simple;
+	bh=qQ9RbbHxETfyug0GfVaqoYXTPk0pB6Cyk1KbM4vwpnA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VS1PcqRxgSaNTvmQ5j1lNoAMWVyytD3ivqKQVuH/GJbeUcl5DaWYsP1rVVdLFXIAPyIMGTfPBAf9Kx2BH6JG5EdRcXaDBHDdrKfWaqc00ap1mrn8xF+RxgTNE6AiOAUqEBjO799LWXATunG52jtgdD4blGqRapDloEOGtRLEsCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUxhCK9Z; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BvRp+RpF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741024353; x=1772560353;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9F2LtWXXlSX30cTWgq26RNKeGiOlNMUkTPieGkfimyU=;
-  b=BvRp+RpFK2OgaltEr57ZpAt44hWd3oua1hhGM4Emuz7kHqx9eAaur7Hm
-   I/Vb0GCZtzCpbWro624XzQ80t04qUkKAUq1XvSoBZ7C4rFLByJNcgnaiZ
-   42FbKTKRE3BeLWPUIfF8CXDiF4YcXIo0+F1zQCoCo86h/5ZkKYvg572jK
-   IiUHEUqlQnSejLygijSkpT0tkOYMxwprJsqKEG9dHGGILZstL6riUfmEf
-   rMWw1V3wQ1x8bOVSACwtazXL42UhTe9iaRX30zJAAU+MW4R4FwD0WeT5B
-   MAFl3W679/usVBCI8gbtQWQd1Lfb8K3kYA3zn46sCyNESIBKA4tPaY73d
-   A==;
-X-CSE-ConnectionGUID: weHC1/ObSjiiRl86QL2JUQ==
-X-CSE-MsgGUID: 6HidtLnKRdW2fhTlxpwJ6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11362"; a="41157024"
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="41157024"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2025 09:52:32 -0800
-X-CSE-ConnectionGUID: hxRG7/4ISYCjYaArTqD1hQ==
-X-CSE-MsgGUID: dHtl9BCLTcGgrSKPYQh+cA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,330,1732608000"; 
-   d="scan'208";a="122736352"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Mar 2025 09:52:30 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tp9xr-000Imj-2h;
-	Mon, 03 Mar 2025 17:52:27 +0000
-Date: Tue, 4 Mar 2025 01:51:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Isaku Yamahata <isaku.yamahata@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Binbin Wu <binbin.wu@linux.intel.com>
-Subject: [kvm:kvm-coco-queue 113/127] ERROR: modpost: "tdx_interrupt_allowed"
- [arch/x86/kvm/kvm-intel.ko] undefined!
-Message-ID: <202503040123.42BYAY9p-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUxhCK9Z"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7c3c4ff7d31so120893085a.1;
+        Mon, 03 Mar 2025 10:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741026107; x=1741630907; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HFzZWjcFqsfDxYl0mzTkCHRR3hGJXZp8cboZARo9iCA=;
+        b=WUxhCK9Z9YkzvSx+S5/obywZqUr340725+AvODiXIRlyGvDZt1rnpknccC3j/rA+/H
+         zqYmL1xiLObEKbVCutkAuTLhfwc3DSfRBCUo00fuYoNPUQhopo5UNfvwZq6TZwXY6N90
+         6JfAWZKKlxXd/4dehWQ1myT23LuseVA/+1CX3OeAib1ph9Z2G0AXyLJgIhMIEFsl4zmN
+         rNdf8bXknBj4xyJ/tEqKy9S/vnvBzzLtnJlakCk6LVt+iMrGAnPMnvWGc3O4haFIsTFP
+         iGTtNEZAeFIDTvYgNPydQIjAqadHhU7uAuCybQB3DOinLl4zNgFYlYLj3rWzAVp71Ddo
+         wbtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741026107; x=1741630907;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HFzZWjcFqsfDxYl0mzTkCHRR3hGJXZp8cboZARo9iCA=;
+        b=J35r8hXzsehLsBMVaNo9rcslUNK2n7is6tfHB8ECqcvV5lR0jDO06N8ITVE0u/S2mc
+         CTbmkDgxTrUXDUH4ZxY0agGPKSFVI/4vCHbbLG3ui8nWkAYaAdVZ1Ysi6zesVNoXgCng
+         caaKaKKucmKKzTMlIl+pIPHyIbk8tqU/Ft5dHCcjf7nqkk9nGpAUSNkwr66yBAthLqA9
+         8lhfES4tcw/bc9FxZRNF0mg+uQ1kB+hfQIO3LdfzmQBChIbwmqxmzUI3hv7Mf7MzLUHx
+         m3RbmjYwZOpjkpmudouYOuwke5lP4GZPqjOP9KLfCbtoSaw6SvYTFyK2WNC0XpU0hp4H
+         ++Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCXkKe3MKdsknNumU88ujnoz8zVh1Wy8IFnq/6V2UldvjD4AQc2wPT39RYvymOqVT+XnCDhp@lists.linux.dev, AJvYcCXzTsrMjQ945LkrAppQ2ULaeQ5yHSrf2i38w3d0JGCHJAYmXnawvul3nnuv7jMxjjIB+Zibn3jzJSBlyLanTA==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz99wQJhmMFnIRSoxkBobxgc5qIUH9iA4OYJ9Khg4ekxGPMxBQz
+	IHpAGzJwCQRnTclPMhOc4BMldrrXAWp+Zrmo22NEQAyqR7OOtSUMH1pNyNORKzYgf37VlPNqpSf
+	keY63Kh7EUqSLIEzueDdvzi9Mzjw=
+X-Gm-Gg: ASbGncsIDGzOd7tlsHrr/wpcdqoK7uYU77tBtkyhl8cSNxqnQsnYsd+eIKDHoD9h24G
+	R5qvpr4aDETZfn8Geu5mZgUcBHu88Rn3D1GuU0FH2wVs/OTjPucsVP3ra55zPy/lOEXuy7DHf4Z
+	9h1UtkGQ5BhmTltn4P6hbmdZyN9if16OvnP8Ikjm+1Zdnvpgu8rOtv62Eg8Q==
+X-Google-Smtp-Source: AGHT+IFzLl7EDIrfRlNRztKKZxawCHfzjGSBK4vOyQk5OfXMs1Mp/lLcfpbA5RL1hdMg34E0AWitNb0abmx0uhun5qI=
+X-Received: by 2002:a05:6214:2462:b0:6e2:43d1:5fec with SMTP id
+ 6a1803df08f44-6e8a0d6d85dmr208171246d6.33.1741026107393; Mon, 03 Mar 2025
+ 10:21:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250303084724.6490-15-kanchana.p.sridhar@intel.com> <202503031847.j1iReOtf-lkp@intel.com>
+In-Reply-To: <202503031847.j1iReOtf-lkp@intel.com>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Mon, 3 Mar 2025 10:21:35 -0800
+X-Gm-Features: AQ5f1Joteeu0OkDzJuqjMB5KRiGMoPyQGJnXPi01TtEkBA2B70o-aPls5I0oWA4
+Message-ID: <CAKEwX=MgV22UBNi-2dNBDgNM2DRfrngk_4gO7z9t-O0KrpdPUw@mail.gmail.com>
+Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
+ chaining in zswap_store() of large folios.
+To: kernel test robot <lkp@intel.com>
+Cc: Kanchana P Sridhar <kanchana.p.sridhar@intel.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, hannes@cmpxchg.org, yosry.ahmed@linux.dev, 
+	chengming.zhou@linux.dev, usamaarif642@gmail.com, ryan.roberts@arm.com, 
+	21cnbao@gmail.com, ying.huang@linux.alibaba.com, akpm@linux-foundation.org, 
+	linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au, 
+	davem@davemloft.net, clabbe@baylibre.com, ardb@kernel.org, 
+	ebiggers@google.com, surenb@google.com, kristen.c.accardi@intel.com, 
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	wajdi.k.feghali@intel.com, vinodh.gopal@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git kvm-coco-queue
-head:   9fe4541afcfad987d39790f0a40527af190bf0dd
-commit: 322c70bc596a64cdc219c028c7d765ee82c811f9 [113/127] KVM: TDX: Handle TDX PV HLT hypercall
-config: x86_64-randconfig-077-20250302 (https://download.01.org/0day-ci/archive/20250304/202503040123.42BYAY9p-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503040123.42BYAY9p-lkp@intel.com/reproduce)
+On Mon, Mar 3, 2025 at 3:07=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Kanchana,
+>
+> kernel test robot noticed the following build errors:
+>
+> > 1166                          prefetchw(entries[j]);
+> --
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503040123.42BYAY9p-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "tdx_interrupt_allowed" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "enable_tdx" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_disable_virtualization_cpu" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_vm_init" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_vm_destroy" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_mmu_release_hkid" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_vcpu_create" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_vcpu_free" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_vcpu_reset" [arch/x86/kvm/kvm-intel.ko] undefined!
-ERROR: modpost: "tdx_prepare_switch_to_guest" [arch/x86/kvm/kvm-intel.ko] undefined!
-WARNING: modpost: suppressed 21 unresolved symbol warnings because there were too many)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Why are we doing this anyway? Does it have a notable performance
+difference? At the very least, leave a comment explaining why we're
+prefetching this (although the build error suggests that we have to
+remove it anyway).
