@@ -1,220 +1,104 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF3120A5F3
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 20:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBEB1E3DF4;
+	Tue,  4 Mar 2025 21:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741121578; cv=none; b=R6nsjeHtaIAstVXAuRoDVf+uKAM11ysRhvXm/q9HT+0h89A/fgz+p/X7OKVOsKiW2EtQ0a4BYbaPvWqMVshyLhytr5s9xrDHDxLiglsK/xH/tCrzGXjzG7cpIM+710SwSgZ6w7CPjU+Mfw8oi+Vs4WEn1mK8JfQLoT+UKRzH3yg=
+	t=1741123994; cv=none; b=jBaPsQA0+QwFg/UL3hJ4rwzyZfcedDfJgKZFXfdxzwlXjUnLX86+G8oWim15oYIv+oInkBmE3B0d648Y7mbGmvlO5naIxt4Gkp/ZE8xfXjqMn7pN+eamnGwYU8AR8IhzeD6n+sNfWjgn57/HmlzY6FQo2QiXxDfKuBTulYbb0RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741121578; c=relaxed/simple;
-	bh=8TGIq1q44b+qp3FLCmZL7K9wxstC6+u4YmdJY/0I/fY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tNyrRMNwfsiFsw6+mRKkcwFFJym0Dfo7eZgEYeAMkCT3KINbFdoTH3ro81lsbmmju6HyYNG1ypyyXH7Nl89uaTwGQNH5uTrSr3t3QI8QtHUkKggMDFUpMSr9AIeLHMuj2EaPFfIdfHr4QbdxTedbgvAP5N9UlYEumRAua70UDhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YE7B6HgY; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741123994; c=relaxed/simple;
+	bh=7W0cGEGfopwD6mibxiQVtjZTTbr9k+ZHhlaN50TgDzg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aJGM9uHsftZqZsNZY+z9ZaROY97i+Er6FRHz6d/TAbf9/TTezbWJpldDwXeYBgwWtNwdWT5+B76JPdYaEg1c13Ra0J4BH7lvJ+PSepL0izVg2CfnK20Xgs4qSa/8cEOGmHtS7PuQ0akzWYQZwgIBhqqrjXVJ+LKU2fO9APmpnWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MTTr2Atb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YE7B6HgY"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-439ac3216dcso41680055e9.1
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 12:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741121575; x=1741726375; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+Cr75GHycePdmToZOthHca+hof6tEcpP1zkSAQCixM=;
-        b=YE7B6HgYbukyEeH9K9dSs+ypL64cSj6SH25C896zMKh6/hotlzpfdhdbB3Fa+De1iS
-         CKHoqCnBL1vhIKuhWtSXmu8sUrt2eaFryb2J+HlNWVCsof+qsVwQm8s33SETiPr6Gt8L
-         f1VZzc8Tvc/vW3BMAIPFHSq9Vv10eJ4yI4EPGqxICwHbq64zHgxcx0xIJRIuZZSYkWOX
-         DgRBQTSHnNxvuWqyLOUG/8mEE1IS8CjonGiDe4kZUapGQdbLQZqNiXqnGSiLc9epJrWG
-         nSW6VKmCtDFEntDOBt0WRQ1qJELC2goxpHr2SbH3wdCrCSQmdjgYrVUygA+Ag3JvVtki
-         u0yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741121575; x=1741726375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V+Cr75GHycePdmToZOthHca+hof6tEcpP1zkSAQCixM=;
-        b=ICyURzMN1H5Q4apymvHZmSHAa43mBRz+TWKBWwvl/Mp6DQH9JARz0Bd+WYhPaxSp+c
-         4tVQmPTQ4SqPSSzU7FmE7gYDn2Fh/4nkaFVM5Xut7AvNuFiWvahqL2VMtvGYV7kn2gRr
-         bonB7QpaS0GN8Nv+wR4eaBy3DWMB4MxtRtRItOC0YnV/NPOyHsBGpAPXbT1fVVUxFwhL
-         u5k113ECkYoTUgv3Q9pe8/VRgH8mj8hFvm6osCC+wiX4EvNTe8Ko/53Z0KVQWlOlpfXW
-         RVm+eV2uPE173Se7YaqnQWMNwArj8Ma6khmZdJXLYa3BI2qYe91gCGVfSCY21vdrjv0V
-         9czA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOF8cD0GDvy4ItcqZRd8rFbURWrDb/aYquINtqUUwxnHumv+Y2DwIThzgYxsms4DI7rD4N@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw9xHYEZPgoQAFy7GdnEk/cQFUXGOG51Hi26L1lvDNQafjWAEBK
-	R19SlHn/rU+XJV8qAL+4j2mHsH2g3r6RwOpoc/XnfV60w22sEoI7
-X-Gm-Gg: ASbGncvBWrU1sD3jld19HN75ybhWpgodAUi3pA5p3pdQHdCgqgCgo3ePZSib5xz/zOh
-	bWF+EhK0LrmBxzB3PCVP0avQcfMP/807X4MG99kPa0BlKBR+KVY4RLa3/5bq9YC9vMoggwltaAd
-	XWMRIEII0cjTA+CZgzIynEJ9JRKDkfAHmNVfreWRWW2DEWECFS1tkCLTxlyYH3FpxoTR+kMOYv7
-	wXKQ/jz26uPcSyS+SeK6ygI/TDxmt67TPY8lh7bYzX7sRcnOPvcxMD8Tc6KFA9qhtg3JogvazNp
-	7fAiWGSp9Is8lkLedjMoePv3aVFCSkGhq5NQPqJAEctzNEE5UxRch2V/v+2cQCk+lK9Yr67hdYo
-	alB2mFoI=
-X-Google-Smtp-Source: AGHT+IG4gl9/y2mSBBQeEvhJ/k5Q2wNPs8UzTb/dxy71zQ14qKO+eanVQBwO22bXET0n7B3/dGWkVw==
-X-Received: by 2002:a05:600c:4f84:b0:439:a138:1d with SMTP id 5b1f17b1804b1-43bd29b8545mr1955695e9.22.1741121574529;
-        Tue, 04 Mar 2025 12:52:54 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43b736f990esm217040815e9.5.2025.03.04.12.52.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 12:52:53 -0800 (PST)
-Date: Tue, 4 Mar 2025 20:52:52 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Bill Wendling <morbo@google.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, "maintainer:X86 ARCHITECTURE (32-BIT AND
- 64-BIT)" <x86@kernel.org>, Eric Biggers <ebiggers@kernel.org>, Ard
- Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Justin Stitt
- <justinstitt@google.com>, LKML <linux-kernel@vger.kernel.org>,
- linux-crypto@vger.kernel.org, clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH v2] x86/crc32: use builtins to improve code generation
-Message-ID: <20250304205252.59a04955@pumpkin>
-In-Reply-To: <20250304043223.68ed310f@pumpkin>
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com>
-	<CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com>
-	<20250303201509.32f6f062@pumpkin>
-	<CAGG=3QV1iDn2r39v5eroO+kCvpbmJNtSeqJS+fpwb4vBG67z=w@mail.gmail.com>
-	<20250303224216.30431b1d@pumpkin>
-	<7BC89461-A060-462A-9B42-7C0138AA0307@zytor.com>
-	<CAGG=3QUnUQL2=YxN2ozwSba2A_x-S7sAEUP5oGhCWOzu4Q9SQA@mail.gmail.com>
-	<20250304043223.68ed310f@pumpkin>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MTTr2Atb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0ABFC4CEE5;
+	Tue,  4 Mar 2025 21:33:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741123993;
+	bh=7W0cGEGfopwD6mibxiQVtjZTTbr9k+ZHhlaN50TgDzg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MTTr2AtbWuvaAbUONgoKcbknK7saKPj3gCNnPwQfYjBPay+oLknLFUHOp+Ywha81h
+	 X4pgN9cJ6Jgw6/m1Pff51bZMeNsli06ySZgDVekHnu8FY2AvXi7BHbgZAp2xKobM2O
+	 ynmYWDLbOhvKZ7CgyR5NHQ6iLoyM1ywFvJAIM7p8BI8jaS5SS9wak28VoLsqN/4ktJ
+	 Cc/LnAtaa6SQEY1hwMeCGGVXv3Z1uUEttTYGKwDskrkAd0pANLn3tZhADJnjfYWt+t
+	 8zZaWTv7K51TAG2SV9fRUqnlFXHSTiZtrWdduYwcokh1hwTSOX3e4uvLy2Cby/Z45s
+	 LXAg5YQkeXosA==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: Bill Wendling <morbo@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>,
+	David Laight <david.laight.linux@gmail.com>,
+	linux-crypto@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] x86/crc32: optimize tail handling for crc32c short inputs
+Date: Tue,  4 Mar 2025 13:32:16 -0800
+Message-ID: <20250304213216.108925-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 4 Mar 2025 04:32:23 +0000
-David Laight <david.laight.linux@gmail.com> wrote:
+From: Eric Biggers <ebiggers@google.com>
 
-....
-> > For reference, GCC does much better with code gen, but only with the builtin:
-> > 
-> > .L39:
-> >         crc32q  (%rax), %rbx    # MEM[(long unsigned int *)p_40], tmp120
-> >         addq    $8, %rax        #, p
-> >         cmpq    %rcx, %rax      # _37, p
-> >         jne     .L39    #,  
-> 
-> That looks reasonable, if Clang's 8 unrolled crc32q is faster per byte
-> then you either need to unroll once (no point doing any more) or use
-> the loop that does negative offsets from the end.
+For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
+do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
+taking advantage of wider CRC instructions.  Note that crc32c-3way.S
+already uses this same optimization too.
 
-Thinking while properly awake the 1% difference isn't going to be a
-difference between the above and Clang's unrolled loop.
-Clang's loop will do 8 bytes every three clocks, if the above is slower
-it'll be doing 8 bytes in 4 clocks (ok, you can get 3.5 - but unlikely)
-which would be either 25% or 33% depending which way you measure it.
+crc_kunit shows an improvement of about 25% for len=127.
 
-...
-> I'll find the code loop I use - machine isn't powered on at the moment.
+Suggested-by: H. Peter Anvin <hpa@zytor.com>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
 
-#include <linux/perf_event.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
+This applies to
+https://web.git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
 
-static int pmc_id;
-static void init_pmc(void)
-{
-        static struct perf_event_attr perf_attr = {
-                .type = PERF_TYPE_HARDWARE,
-                .config = PERF_COUNT_HW_CPU_CYCLES,
-                .pinned = 1,
-        };
-        struct perf_event_mmap_page *pc;
+ arch/x86/lib/crc32-glue.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-        int perf_fd;
-        perf_fd = syscall(__NR_perf_event_open, &perf_attr, 0, -1, -1, 0);
-        if (perf_fd < 0) {
-                fprintf(stderr, "perf_event_open failed: errno %d\n", errno);
-                exit(1);
-        }
-        pc = mmap(NULL, 4096, PROT_READ, MAP_SHARED, perf_fd, 0);
-        if (pc == MAP_FAILED) {
-                fprintf(stderr, "perf_event mmap() failed: errno %d\n", errno);
-                exit(1);
-        }
-        pmc_id = pc->index - 1;
-}
-
-static inline unsigned int rdpmc(id)
-{
-        unsigned int low, high;
-
-// You need something to force the instruction pipeline to finish.
-// lfence might be enough.
-#ifndef NOFENCE
-        asm volatile("mfence");
-#endif
-        asm volatile("rdpmc" : "=a" (low), "=d" (high) : "c" (id));
-#ifndef NOFENCE
-        asm volatile("mfence");
-#endif
-
-        // return low bits, counter might to 32 or 40 bits wide.
-        return low;
-}
-
-The test code is then something like:
-#define PASSES 10
-        unsigned int ticks[PASSES];
-        unsigned int tick;
-        unsigned int i;
-
-        for (i = 0; i < PASSES; i++) {
-                tick = rdpmc(pmc_id);
-                test_fn(buf, len);
-                ticks[i] = rdpmc(pmc_id) - tick;
-        }
-
-        for (i = 0; i < PASSES; i++)
-                printf(" %5d", ticks[i]);
-
-Make sure the data is in the l1-cache (or that dominates).
-The values output for passes 2-10 are likely to be the same to within
-a clock or two.
-I probably tried to subtract an offset for an empty test_fn().
-But you can easily work out the 'clocks per loop iteration'
-(which is what you are trying to measure) by measuring two separate
-loop lengths.
-
-I did find that sometimes running the program gave slow results.
-But it is usually very consistent.
-Needs to be run as root.
-Clearly a hardware interrupt will generate a very big number.
-But they don't happen.
-
-The copy I found was used for measuring ip checksum algorithms.
-Seems to output:
-$ sudo ./ipcsum 
-                0     0   160   160   160   160   160   160   160   160   160   160  overhead
- 3637b4f0b942c3c4  682f   316    25    26    26    26    26    26    26    26    26  csum_partial
- 3637b4f0b942c3c4  682f   124    79    43    25    25    25    24    26    25    24  csum_partial_1
- 3637b4f0b942c3c4  682f   166    43    25    25    24    24    24    24    24    24  csum_new adc pair
- 3637b4f0b942c3c4  682f   115    21    21    21    21    21    21    21    21    21  adc_dec_2
- 3637b4f0b942c3c4  682f    97    34    31    23    24    24    24    24    24    23  adc_dec_4
- 3637b4f0b942c3c4  682f    39    33    34    21    21    21    21    21    21    21  adc_dec_8
- 3637b4f0b942c3c4  682f    81    52    49    52    49    26    25    27    25    26  adc_jcxz_2
- 3637b4f0b942c3c4  682f    62    46    24    24    24    24    24    24    24    24  adc_jcxz_4
- 3637b4f0b942c3c4  682f   224    40    21    21    23    23    23    23    23    23  adc_2_pair
- 3637b4f0b942c3c4  682f    42    36    37    22    22    22    22    22    22    22  adc_4_pair_old
- 3637b4f0b942c3c4  682f    42    37    34    41    23    23    23    23    23    23  adc_4_pair
- 3637b4f0b942c3c4  682f   122    19    20    19    18    19    18    19    18    19  adcx_adox
-        bef7a78a9  682f   104    51    30    30    30    30    30    30    30    30  add_c_16
-        bef7a78a9  682f   143    50    50    27    27    27    27    27    27    27  add_c_32
-        6ef7a78ae  682f   103    91    45    34    34    34    35    34    34    34  add_c_high
-
-I don't think the current one is in there - IIRC it is as fast as the adcx_adox one
-but more portable.
-
-
-	David
+diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+index 4b4721176799a..e3f93b17ac3f1 100644
+--- a/arch/x86/lib/crc32-glue.c
++++ b/arch/x86/lib/crc32-glue.c
+@@ -55,11 +55,19 @@ u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
  
+ 	for (num_longs = len / sizeof(unsigned long);
+ 	     num_longs != 0; num_longs--, p += sizeof(unsigned long))
+ 		asm(CRC32_INST : "+r" (crc) : ASM_INPUT_RM (*(unsigned long *)p));
+ 
+-	for (len %= sizeof(unsigned long); len; len--, p++)
++	if (sizeof(unsigned long) > 4 && (len & 4)) {
++		asm("crc32l %1, %0" : "+r" (crc) : ASM_INPUT_RM (*(u32 *)p));
++		p += 4;
++	}
++	if (len & 2) {
++		asm("crc32w %1, %0" : "+r" (crc) : ASM_INPUT_RM (*(u16 *)p));
++		p += 2;
++	}
++	if (len & 1)
+ 		asm("crc32b %1, %0" : "+r" (crc) : ASM_INPUT_RM (*p));
+ 
+ 	return crc;
+ }
+ EXPORT_SYMBOL(crc32c_arch);
 
+base-commit: 13f3d13d88b5dcba104a204fcbee61c75f8407d0
+-- 
+2.48.1
 
