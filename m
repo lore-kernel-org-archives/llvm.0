@@ -1,123 +1,138 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA171F4611
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 10:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9141FE44C;
+	Tue,  4 Mar 2025 10:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741083501; cv=none; b=i/lrMEVI6vVajT8iUXdK/v8SdXKt0F4J9UFyjF3gGAaazC1Emv3OoL2pPr6fKYweoTKIgSSZ/khjYYpaJAqypDQfVXNsEf/EKSxUcHik8K2cl4VCpCZnjv9swjt0k9Y9r7fVw/VxVFpTxPraESGv400Kggiat6NehDXgiah40Jk=
+	t=1741083942; cv=none; b=AkzDfvCWRzgUW2PYjGuKQZLzvBAqIlMT0Bi0OltWCLpOAO8rraX8n2k59D6GId7a2qhYemucwlg9+KV+pPZYn1Dafx5aQD9ZAC9X3jKAbh+T+/i1F4mNp7K+N8JB/rGdk9YOT0Pwo8XQuJ1qsAtoXN39xaSib0Qf6ZYBf3BdOxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741083501; c=relaxed/simple;
-	bh=Bfnzv1Cy+QaLm5BRN0VgsvZutnU9et4W4XCIe4/LVvQ=;
+	s=arc-20240116; t=1741083942; c=relaxed/simple;
+	bh=8ZkZU3FoF7zi+/hYRJkZ7DR17Usi6ykuq+2dOQLsQ9E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HE/52gMYb/+PO9RqDXuT0Fu6nPwfUD3P34/Be1zXrWasxfx5uMhirlTTVco6X/Zrs1yop9fdAdHmronpy2UaJmxC4E6SOZ7sNxhEoFcbZj/M3Mvbdew4+lL5/c3AUYaw/HyA00umSZTAHUY3kPY3Pl5CcqB17Pol43ZUdbwexSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ajKHvtec; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rKAihtGJk0oA6A34SGjlHZbjALU/IpjpbXwZU4c4FZic3PqBbcY0r+mVXA5hCph9XCTP3TlVF6PIShkLhJRAr4rnxpaDRiRJ3GTdm4EsmPM8YU+tJeaZB0LYEcgv8XzUQ0K5otYhp/1HQdJSbfrO2+IddvFK0OvQqGCECf7v7Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rX5gQber; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ajKHvtec"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-438d9c391fcso47165e9.0
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 02:18:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741083498; x=1741688298; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cHHGVIwYUugRFpPbUWW4QxwSvbgE0LZxVDWqc5K4qXA=;
-        b=ajKHvtecmxAE+txSy1J51hbQlVeVgG+IWkY9SCpbiLOpOZRB6kcGAyH4/4oDZslkaE
-         pGwqI3YybLgMd4iw7xk7iKohY06O8kYEWOkQzCEHe3Y7ETEVYm0JhsOcf0LNNsjDlNRG
-         hjZLVaHyp4zfIcNZT3C75p9p62VgghN1fxnope4XwZ/ui69RwXep8vgqIZBCJ6zT5llp
-         0tGAmhB/yW/5ky0wS1KTVmaabHksejejCASL96tzmOi9b7IFDQwWY1iSt8KdPiKnKqAo
-         /UrPvkfJs+wmCTAvrKLZ/SZ9khWWKp+bqyuyW6mRWKfABtXEHPWxNzZ6r8s/jbN0Lv9G
-         loNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741083498; x=1741688298;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cHHGVIwYUugRFpPbUWW4QxwSvbgE0LZxVDWqc5K4qXA=;
-        b=E/P4d8lo6bIHJkBp0EH4ByXEymi5exsj7+kkLF8Assa5JWAW+KKIqTycpFzQbw/gYB
-         LE0RpEllyEdkZikefHB9o7PldD5UDAwx1mrv9JAu0VtN0P2uVGm5vufWhacAjfAcmF8L
-         ZkJPQmqKySJFZnLYrmTPDGWoNIPzqKVKixGwtPYLQAL+5Mdxjp7dNZabSKhfp4xbssG9
-         wqBD4tJefXU9pMRxSWAQ3kZoqK59rwFWXczZE80C4RxYRf0hTNFs7SpFuFDv7fcs6NdC
-         Y2iiZ9G1uA1tUE7n9KwHDz+JdY2vlDu3f3XPfOtfR3ryCN48OCawKvQt56xqL+w+0NAr
-         U71g==
-X-Forwarded-Encrypted: i=1; AJvYcCVpw34uS3ZYGg7oiewfMrPtNpjgpuIdFfgXTq6x6Bhh4NNKM9iqRJ1thYnrOTqL3GBrQG+u@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx2Rly8uF76CVK1amZYV5WwA+4gIsSAlZY0bzOnM62EgdnmIGYI
-	933wBULQzWNZFy5pEa7eSVJ3fUKvTvkyRoArpSK9W8lw8Kjxaqm8g0N1vM44wg==
-X-Gm-Gg: ASbGncsdtClX7XNY9MJ3B8cT/YsmebJ3Trae5IR0YxIPIdx+SwTb0Kdphx09kQ73wfQ
-	Ef0c/jo9DbsTXxaqqL6+2FMEH6BWUifkDEUU41FodzHaW8YbtPQnnTmWP0xOSnWcgUnhofG1QyH
-	p9fjVyBS5xYgWdfz20SeZ+lBvlT58j4VSZezkH+saxawPIaiW2eOb4s1OqLf9cdoNXCiHQ/95bP
-	74CWIMnxuh7kECe7JMdDcV4/3xhSmg+KspxJGQ/+K0EhPpdWKTTy9P3uOFdUv/C+v7I95apCin7
-	k4oBloAA/NDVWBEaCJYiTIJMliyV4jyLhM7ph5U9CbW+B+5GlXcV+9Id3cFNPIjyLByTHnUl3sm
-	tfu1A
-X-Google-Smtp-Source: AGHT+IF1PXtKs5JYeKClxwK1lAzDe1Sy+Hic0+WUm5WKWP2ZPJezaTOmzVJ6ghefB6dnk3leGQIlaw==
-X-Received: by 2002:a05:600c:43d4:b0:439:9434:1b66 with SMTP id 5b1f17b1804b1-43bcbe262d7mr789425e9.1.1741083497923;
-        Tue, 04 Mar 2025 02:18:17 -0800 (PST)
-Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e47b7dcfsm17460567f8f.55.2025.03.04.02.18.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 02:18:17 -0800 (PST)
-Date: Tue, 4 Mar 2025 10:18:13 +0000
-From: Brendan Jackman <jackmanb@google.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	kernel test robot <lkp@intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Oscar Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
- change
-Message-ID: <Z8bTZVYd0fJLbgl7@google.com>
-References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
- <202503010129.rJvGqZN1-lkp@intel.com>
- <20250228182804.GB120597@cmpxchg.org>
- <Z8WQEpv7BNtDDoH3@black.fi.intel.com>
- <20250304101357.66067dd3@canb.auug.org.au>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rX5gQber"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A6FC4CEE5;
+	Tue,  4 Mar 2025 10:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741083941;
+	bh=8ZkZU3FoF7zi+/hYRJkZ7DR17Usi6ykuq+2dOQLsQ9E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rX5gQberdBnCGAgwLtoDbjzRfpjAZFQe3KlPLx5WiBReC5yfyunNCbknNPIRCQvSs
+	 6k/TOoJ4MrcVR9G5+HSerd3dnXkH4WwiD/LW36PtLfu282BVsPp+r6+4dCDz8+n2Fy
+	 k2TpXZCfFVyU5O/FPUMQ4RDJkSCAIVF4RPY0t149zeEx71SjFoHZfKWO2j+drCyx6X
+	 1/YBe29TcMupWbiyvSuPQneZ+8It/K/Maj7QnMI2ePBjdjHMtFhEX1r1dJ/DCgQSsu
+	 R3ftb3rTlyYejS2/tr5rqMsyCBkGWco+bBOVTOOkPNQotMMalSeHigCRHcuzxPdHyB
+	 gFs2yPCscSNoA==
+Date: Tue, 4 Mar 2025 11:25:36 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Kees Cook <kees@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
+Message-ID: <20250304102536.GB2529736@ax162>
+References: <20250303215240.work.379-kees@kernel.org>
+ <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250304101357.66067dd3@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
 
-On Tue, Mar 04, 2025 at 10:13:57AM +1100, Stephen Rothwell wrote:
-> Hi Andy,
-> 
-> On Mon, 3 Mar 2025 13:18:42 +0200 Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
-> >
-> > On Fri, Feb 28, 2025 at 01:28:04PM -0500, Johannes Weiner wrote:
-> > > On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote:  
+On Mon, Mar 03, 2025 at 11:29:58PM +0100, Thomas Weißschuh wrote:
+> On 2025-03-03 13:52:41-0800, Kees Cook wrote:
+> > The UM builds distinguish i386 from x86_64 via SUBARCH, but we don't
+> > support building i386 directly with Clang. To make SUBARCH work for
+> > i386 UM, we need to explicitly test for it.
 > > 
-> > > The patch is missing a dummy in_mem_hotplug() in the
-> > > !CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>.  
+> > This lets me run i386 KUnit tests with Clang:
 > > 
-> > +1, I just stumbled over and this is not fixed in today's Linux Next. I'm
-> > wondering how this was missed during merge into Linux Next. Stephen?
+> > $ ./tools/testing/kunit/kunit.py run \
+> > 	--make_options LLVM=1 \
+> > 	--make_options SUBARCH=i386
+> > ...
+> > 
+> > Fixes: c7500c1b53bf ("um: Allow builds with Clang")
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> > I could not find a cleaner way to do this without hardcoding a test
+> > for i386 UM. Does anyone see a more sane way to accomplish this? The
+> > comment above the CLANG_TARGET_FLAGS seems like it can't be done with
+> > UM's Makefile...
 > 
-> I just get what people put in their trees.  There are no conflicts
-> around this and none of my builds failed, so I didn't see the problem.
-> Has someone sent a fix patch to Andrew?  If so, if you forward it to
-> me, I will add it to linux-next today.
+> This seems to work for me:
+> 
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 2435efae67f5..8e349bf30fa8 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -12,6 +12,7 @@ CLANG_TARGET_FLAGS_riscv      := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390                := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_sparc       := sparc64-linux-gnu
+>  CLANG_TARGET_FLAGS_x86         := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_i386                := i386-linux-gnu
+>  CLANG_TARGET_FLAGS_um          := $(CLANG_TARGET_FLAGS_$(SUBARCH))
+>  CLANG_TARGET_FLAGS             := $(CLANG_TARGET_FLAGS_$(SRCARCH))
 
-Andrew has backed it out of mm-unstable now. There's a v2 [0] which
-still has runtime issues but AFAIK it's not in any tree yet.
+Yeah, I think I prefer this. As the comment at the top of this file
+notes, we normally want '-m32' and '-m64' to control the word size,
+which happens for regular x86 but not UML. Since UML is already weird
+here, I think going this route for simplicity rather than consistency is
+not that big of a deal. I would probably add a comment it is only there
+for ARCH=um SUBARCH=i386 though just so we do not accidentally remove
+it.
 
-[0] https://lore.kernel.org/linux-mm/20250303-pageblock-lockdep-v2-1-3fc0c37e9532@google.com/
+> This is also what exists in tools/testing/selftests/lib.mk.
+> Minus the missing CONFIG_FORTIFY_SOURCE on clang x86_32
+> and a failure of overflow.DEFINE_FLEX_test (clang 19.1.7).
 
-In case it helps calibrate expectations: I think this particular patch
-had been reviewed but in general some patches get into mm-unstable
-without any review being recorded at all. My understanding is that
-Andrew squints at it and goes "that looks like it will probably
-eventually get merged" and puts it in so that people get a view of
-likely upcoming changes.
+Does Kees's other patch resolve the second issue? It'll obviously fix
+the first :P
 
-So if an issue like this reaching linux-next is a big problem then I
-think the solution is not to merge mm-unstable. I'm not sure how
-high the bar is supposed to be for feeding into linux-next.
+https://lore.kernel.org/20250303214929.work.499-kees@kernel.org/
+
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Bill Wendling <morbo@google.com>
+> > Cc: Justin Stitt <justinstitt@google.com>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: Nicolas Schier <nicolas@fjasle.eu>
+> > Cc: llvm@lists.linux.dev
+> > Cc: linux-kbuild@vger.kernel.org
+> > ---
+> >  scripts/Makefile.clang | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 2435efae67f5..fa6f9a9be4ac 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -12,8 +12,12 @@ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
+> >  CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
+> >  CLANG_TARGET_FLAGS_sparc	:= sparc64-linux-gnu
+> >  CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
+> > +ifeq ($(SRCARCH):$(SUBARCH),um:i386)
+> > +CLANG_TARGET_FLAGS		:= i386-linux-gnu
+> > +else
+> >  CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
+> >  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> > +endif
+> >  
+> >  ifeq ($(CLANG_TARGET_FLAGS),)
+> >  $(error add '--target=' option to scripts/Makefile.clang)
+> > -- 
+> > 2.34.1
+> > 
+> 
