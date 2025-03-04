@@ -1,66 +1,66 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9468628D040
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DFB28D06F
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107936; cv=none; b=a1yzOBzvKrof6EgN/B2W/v7zy+7OSzEDPRuTCHjA/15w1OlKGyoJSwB3rSMhVoHDAH+OuUgazixtMepBUQxvjMtw/PPdP+JnhMGGxcmWq4DvNslfwc92mS4gdcNkyUh4xNAQ1X2MipXETsF88wOpfq0ziUY9swhqs0p/Kmqli7Y=
+	t=1741107938; cv=none; b=q0pD4M7mugVTPHJe+9KoW+CKk6ZJXJbhbLhYUUXVw0h0M/+Z8n8DbZEoQPP9qmTic2ilz4YjFsEDdrkwoTARvBaNdlrbBxAQqlvMHoRfCjdw/ucgYP0EqnU5rGW8KuSgg132opKgis+e2TopdAQNOmUtXZhGCYhR5TA+pyzdZEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107936; c=relaxed/simple;
-	bh=HyCZnj76UJVLp2TFtsvoqPrnKIyS4fiKrwZnWeOiCGk=;
+	s=arc-20240116; t=1741107938; c=relaxed/simple;
+	bh=ako7uKkoy0pcKOqw3JaomEgmXiZMMPwkguXI68dLj6c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZErpmp6sXXGr2CVTskhQckkuRWCsoQGuFeCt23DYmKbL1+6/Bc0/xIN3fvYW0hJG5fjjwQbGXzza3GjtMAnnxgzgyIEOD9HIHDTgN+G0eTwwp+N2s9rWPIfE+qadv1UeIFcCr9ePvivYqgISiBWAMyD9EiwZpfw4YWnbft0TJVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dD9TgG7V; arc=none smtp.client-ip=209.85.218.49
+	 In-Reply-To:To:Cc; b=piU4q9HhVuTUY/Cnmtu+ySsBNdFoRMq3lGalnIGn7HtA5ua4oWUSpV9Aotuwq9rITy8r4SOEHeLABfsG19zBKWus8ldgRv6/VZEQJ6wX9uZN7PojL3sV5sTSGJJGT5ijXMtdm+47yGfaABeg4z3x2USpStxniL63xCfJT+poRqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tZxClaDX; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dD9TgG7V"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ac202264f9cso95906566b.0
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tZxClaDX"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5dee07e51aaso10982785a12.3
+        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741107933; x=1741712733; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1741107934; x=1741712734; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VXesqtK3A8i6ZSMFwP8n6Z6kZDUFNsTogrZxF0Gh9Ac=;
-        b=dD9TgG7VsAumWnm4nKOIVt4SBEyZvofGuj5FYUUsFXN6P0Jpf1ahMDf1FX1lKP4XBE
-         AsMj+LfKXBhOtKmkh1n1oCRRCOgQMz9W3hcAfk69GIrRGB17sfWP7yA5jsaCeJDlh7Hr
-         rAs9RawcixH8je6xnlG/6XVIuAjtjB0Brv74Up09JccW0vlmZ4Z1Iwn/mpV0zJH+wp9L
-         8mx2/NfGbDf17mMmUprVgXXvFrfhgSiq5EMPxFYgoL/u/nR1ylnKV2VwwFwMdk6qdvmg
-         7zW7IFr5fVsQYjHq0S2mJIBAcQvXeNGH+ekoqchmM3L7SS1Lw4Ri4sydmqvqtih89Q5G
-         DQ/w==
+        bh=PnUvUu9cMY/Mxw4Q1sllPthcln3NtgGY7cjKJANyPvk=;
+        b=tZxClaDXMLwtqKxiOjl2HUOEprRsUTAT86CPdybnn9A8NblbkWCt3kt8OTO9TcjKvJ
+         YtfL4Hsdbm7/oSwYc653dD7fpftJz9LY5Scr0RuYOo0EHRG9mNT6CeYCyU9juaD9D0Js
+         kRwfWiK3vIPiF7mxfNpRxSevp1R19z6XjPMxf8ANQJOwp3gAmInfsLaUzkdiTl9FewX4
+         iBf8DodY5MQM9r2ZWfgLO3M1ckfH6VDfiW9yR96Ou07fyPATYslbAhe2rrhzzxfw2O8I
+         CZ+cMqziKCHwyK/80ONwXf4bZZeN3VqDNKji1WqzGo4m9oFFw1mrhQf4+3ffQq160gsn
+         xkXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741107933; x=1741712733;
+        d=1e100.net; s=20230601; t=1741107934; x=1741712734;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VXesqtK3A8i6ZSMFwP8n6Z6kZDUFNsTogrZxF0Gh9Ac=;
-        b=I+r6tAkXHoaEHC3gHnOfMLO2dOj9pVU7tlksPA5TaZS88gCJy8z9OnQczpqHVvPiB1
-         K48pv8RH0MXGI5UtFGdmS0YgvClzccKmx7uHIoStmBNyee4VUDIOBzbRUUwgqAriiJD7
-         vbC021aBuGlmVXRVvlAVPnqvcBd07NE3CM3M22gGnfCF5vjOgjTjCvpPL6lfNKxrjl6h
-         RwUbxp69HtXc8YPGXIFK0rSF6/gS1dHLdrsJ1ZaAN4+xgCfCJOl/vKv1ENXpuuuCf0uD
-         yXDwZMTyz5qfmonHZBkGlBIs7zJzRdIvaqyx0NJ6rYLswO8IPVTFPrpoJR9cXc2v84iG
-         snMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWtFXWozhZcPAG+DclJEpA52Glis/sHXfjUFf89tj7mVYw7FYNWcqmPotGwPQPIuRLAn509@lists.linux.dev
-X-Gm-Message-State: AOJu0YxPcFTovkf3xGwWs6/mmysJbgG5/ISGigP1DxMOQTR0TzTqD0hX
-	vU0ukJva+k0rLyzDGIfdjh6MmHrPzdPKSzC7Lpj6eNDzuXIVgHBPU5wy3BvSVMY=
-X-Gm-Gg: ASbGncvHY4rifXbFU7Cavv5SHTic4pZfdhZg3xvl7Gcf140EhJfH2CoqGa+TeF/PF5A
-	VFmu3biPWSIhtN/6fB8gSW9lID4T9r014TSGqUmR8MYDbyEC/w82zsv+cMfubrZyZnEqgpPyLo4
-	o0+1xnlGmxI8BSHs/TXWw33V58H5zTs/zlmOnF3fo4kk/P2Cmw8/hcxLm/VmUIdy2cSmiwqxYxb
-	GIWUMNsoGwfXcZHo5pcueeN+5Rk1lWMAIFqM/2xpoVjkMeJao3HPYixgAeWSyOj9qBr/N/J2c9D
-	yaBe5nMpODg4k8dwG9RGMFkJlO3m/I9bLvOBffK0d/w8VQ+dGMElhK44tyDsBKI6WVwmaw4/qLa
-	puocDIgkdP5Q8kRB6YJZF6TpE0Amv
-X-Google-Smtp-Source: AGHT+IHVbcY6l9+JTAHHIw3fmIWanoQo+sapqWdolutCogJsq5sGcHSbYPT4D1lGvFYrwfxZJsMGVg==
-X-Received: by 2002:a17:906:f5aa:b0:abf:59a3:df19 with SMTP id a640c23a62f3a-abf59a3fa56mr1580793966b.57.1741107932647;
-        Tue, 04 Mar 2025 09:05:32 -0800 (PST)
+        bh=PnUvUu9cMY/Mxw4Q1sllPthcln3NtgGY7cjKJANyPvk=;
+        b=dtYW5dbRk0JQUqQZEFPP+a1Ql+RgBOlIXyWNG5K3htw0SlLhxk6rwfy+pf72AVxOL/
+         PocY8KQjwO0b2f27Ivi6Noy8G/e6HhaVGPW+NHAZJ3o0VYVJpwwhlmz78hCemPr2XdPc
+         EP3AipTWI3yU9SrlOEaaRO1O6337uv25oSLYhAPO5wI0x+33EH1FhVveuVqI36XZNoAp
+         hki/YJ7MB1ZlztNWazP5DqLZchrKPFJ64HZTMgZXugHoFiWQxPnCzSNp0tb7jjyql5V2
+         BAIAFePcoluW/qbAtPy9L0AMTI4I/rWn+3KsgbOaNGCvS3C43dFp9W7WtE6QxWgRWLVK
+         YluA==
+X-Forwarded-Encrypted: i=1; AJvYcCXbT+LxXvcopxdqjQ2CArymknZ8mPuZWR/zd6H1xiMzOEp5qO84W+27rUZVa+6djVjmekqv@lists.linux.dev
+X-Gm-Message-State: AOJu0YyP8VHphl7XcBHwt8Pl4oz1phF+90+WACYzxpIeFXNrgZ6m0MQY
+	WKBmH3ZEd5EdMZwUUqA3v4PTHcOEg3k3eBAOl4kYe7jDVjEpFvlHqskwwJxESC8=
+X-Gm-Gg: ASbGnctuDfaFwN8p568ALD2+QZQiyXQPWz6Xpsi2pN8Yf4CpXkBTlNUqXYTC1DGgX9s
+	1/DNKsmZye8B40osBEFamZ1FAAmcvwMBYyRDUPkbT1dcejBXn100pZEa4nb2R2zd1hq40A4fB7g
+	Y/ohCYW2AmQTE6TME4OvOzz0vwTWTdk5u8yLEaqpCarBsDi+6aksheM+qIt69M0yluj587cUBuQ
+	qRfQzPkJ2B9VgznX2/UYh69b8Pz13+ZQ0+v7xoA7SKVLOJw7RyQtPbmVnNHb1aOkEkcxzf/AEMd
+	Bol15vWBqv8l9K45PlmfveeNPI1oLFS2k5WPw0dfCIv8dCrzrioil/PJk+tUgzS1IPELEO7Jr/1
+	Ztlrm+ANSWfmtoyZU0oo+6tgQhJlM
+X-Google-Smtp-Source: AGHT+IH7IWkH6sGgCqXOqo1X+qUMKDFtMNOejwKoQaGxlKvxwXw1Icl3WBZaF1ebexseFdyLVEv5Qg==
+X-Received: by 2002:a05:6402:847:b0:5e4:cd5c:50f6 with SMTP id 4fb4d7f45d1cf-5e4d6afaf1dmr21403911a12.18.1741107933866;
+        Tue, 04 Mar 2025 09:05:33 -0800 (PST)
 Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.32
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 09:05:32 -0800 (PST)
+        Tue, 04 Mar 2025 09:05:33 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 04 Mar 2025 17:05:30 +0000
-Subject: [PATCH v2 02/16] rtc: s5m: drop needless struct s5m_rtc_info::i2c
+Date: Tue, 04 Mar 2025 17:05:32 +0000
+Subject: [PATCH v2 04/16] rtc: ds2404: drop needless struct ds2404::rtc
  member
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-rtc-cleanups-v2-2-d4689a71668c@linaro.org>
+Message-Id: <20250304-rtc-cleanups-v2-4-d4689a71668c@linaro.org>
 References: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 In-Reply-To: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -90,68 +90,67 @@ Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-aspeed@lists.ozlabs.org, linux-amlogic@lists.infradead.org, 
  llvm@lists.linux.dev, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.2
 
-When this driver was converted to using the devres managed i2c device
-in commit 7db7ad0817fe ("rtc: s5m: use devm_i2c_new_dummy_device()"),
-struct s5m_rtc_info::i2c became essentially unused.
+The memory pointed to by the ::rtc member is managed via devres, and
+no code in this driver uses it past _probe().
 
 We can drop it from the structure and just use a local temporary
 variable, reducing runtime memory consumption by a few bytes.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
-
 ---
-v2:
-* fix arguments to devm_i2c_new_dummy_device() - too eager sed //, and
-  gcc didn't notice, only clang :-(
----
- drivers/rtc/rtc-s5m.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-ds2404.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index 36acca5b2639e272dd9baed06ea5582f635702b0..88aed27660348a05886f080a2848fcabbf9666d0 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -146,7 +146,6 @@ static const struct s5m_rtc_reg_config s2mps15_rtc_regs = {
+diff --git a/drivers/rtc/rtc-ds2404.c b/drivers/rtc/rtc-ds2404.c
+index 3231fd9f61da49bdaf00e46486fc34836094ee78..217694eca36c3432a8db3b874374e347eeb802d9 100644
+--- a/drivers/rtc/rtc-ds2404.c
++++ b/drivers/rtc/rtc-ds2404.c
+@@ -31,7 +31,6 @@ struct ds2404 {
+ 	struct gpio_desc *rst_gpiod;
+ 	struct gpio_desc *clk_gpiod;
+ 	struct gpio_desc *dq_gpiod;
+-	struct rtc_device *rtc;
+ };
  
- struct s5m_rtc_info {
- 	struct device *dev;
--	struct i2c_client *i2c;
- 	struct sec_pmic_dev *s5m87xx;
- 	struct regmap *regmap;
- 	struct rtc_device *rtc_dev;
-@@ -640,6 +639,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ static int ds2404_gpio_map(struct ds2404 *chip, struct platform_device *pdev)
+@@ -182,6 +181,7 @@ static const struct rtc_class_ops ds2404_rtc_ops = {
+ static int rtc_probe(struct platform_device *pdev)
  {
- 	struct sec_pmic_dev *s5m87xx = dev_get_drvdata(pdev->dev.parent);
- 	struct s5m_rtc_info *info;
-+	struct i2c_client *i2c;
- 	const struct regmap_config *regmap_cfg;
- 	int ret, alarm_irq;
+ 	struct ds2404 *chip;
++	struct rtc_device *rtc;
+ 	int retval = -EBUSY;
  
-@@ -675,14 +675,14 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
+ 	chip = devm_kzalloc(&pdev->dev, sizeof(struct ds2404), GFP_KERNEL);
+@@ -190,9 +190,9 @@ static int rtc_probe(struct platform_device *pdev)
  
--	info->i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
--					      RTC_I2C_ADDR);
--	if (IS_ERR(info->i2c)) {
-+	i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
-+					RTC_I2C_ADDR);
-+	if (IS_ERR(i2c)) {
- 		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
--		return PTR_ERR(info->i2c);
-+		return PTR_ERR(i2c);
- 	}
+ 	chip->dev = &pdev->dev;
  
--	info->regmap = devm_regmap_init_i2c(info->i2c, regmap_cfg);
-+	info->regmap = devm_regmap_init_i2c(i2c, regmap_cfg);
- 	if (IS_ERR(info->regmap)) {
- 		ret = PTR_ERR(info->regmap);
- 		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
+-	chip->rtc = devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(chip->rtc))
+-		return PTR_ERR(chip->rtc);
++	rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(rtc))
++		return PTR_ERR(rtc);
+ 
+ 	retval = ds2404_gpio_map(chip, pdev);
+ 	if (retval)
+@@ -200,10 +200,10 @@ static int rtc_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, chip);
+ 
+-	chip->rtc->ops = &ds2404_rtc_ops;
+-	chip->rtc->range_max = U32_MAX;
++	rtc->ops = &ds2404_rtc_ops;
++	rtc->range_max = U32_MAX;
+ 
+-	retval = devm_rtc_register_device(chip->rtc);
++	retval = devm_rtc_register_device(rtc);
+ 	if (retval)
+ 		return retval;
+ 
 
 -- 
 2.48.1.711.g2feabab25a-goog
