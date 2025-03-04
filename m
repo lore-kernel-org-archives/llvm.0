@@ -1,303 +1,227 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8952AE97
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 00:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B386273FD
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 01:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741049032; cv=none; b=n1L8y6HZQD+sW3mDiKUdwLlIHJDMMgZl6zZ9rVPZ4NSicObCVjGQs24Idc2/rLXWiGn7aE7ufZ3t5vFFeG/Vtg4Pqs02RVYPPK3qvYj2CIY1JsVoZ3rtu0ZL8Ng0nIdj4PmJialmKyKKzCT+nkqB6bA6p7jX+bUdy39YN5eUuvg=
+	t=1741050712; cv=none; b=iUZnxwJ2Mrh3NcVPYP3DrAHOyFky0wvwWxn7PZGZx5s5oppHIQJM7cR+n+eIBUTKRoS4RrKCU9ai4Q9soTkqWiBNenQr1jAqlfqQdy/0SLl8KvDVcpfyr4ZCBLo4NXp4Is3gDHMka0586Rdg5VchzW9C/p2nALG4uQwODxN0kfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741049032; c=relaxed/simple;
-	bh=xWRDIGEJAaSKJN5L6v+Gz8Kp0GE3AOC8Pmimy78MwWY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=tBBWOYe51Q4cwnaCryHHJpy/9nZtNdBS+PetKZD0/Y2ZpzRvNCjnbnuTGEVr4PtZ507pwh7jx/7Ck/vUSp9VhdBHlOahrs9h01/naPEQYPA+PeimxlOdOKQlI7XCUlMkmoVCsgTLQqZK8AKNfaytCaOIdAgj1HuYUNRPmJAIQVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=b4cihuk+; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1741050712; c=relaxed/simple;
+	bh=22ZUGvsm1MOkILYiYuUiikpT/81djVg4T133ITjQ2KI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aBeaqeFm87XvutRzjX20HJvWJnAToYsPjN+mHCMw8UbSzCcOmYVMNF/2mahsE0N5I+jDRFCXKsHL94ITlNKB1TxjZoWmnIK0wVkcosbp8w5a2J5lCNmgONoG33dkn9XxnQoUsCWkURQF0cSCnPdKZsTHPeha9L9GVrNOAxHBotM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BLweoJ1/; arc=none smtp.client-ip=209.85.128.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="b4cihuk+"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5240hUXv1830362
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 3 Mar 2025 16:43:30 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5240hUXv1830362
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1741049011;
-	bh=OSryckLw96E62f0iZRN2OBpC8ktnL4UPuvxIYyXqeks=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=b4cihuk+D1XE7MW3dGc9AT4cwhrm/tIzlFws9HV4KGf2UcgI7nzMNOpyRud6Vg/20
-	 IMT6Qh/xt3xgDT5tXTBF12LAqdGZqAXXDhR85BDaWhX2NvadNSsGNtk3FKps2rvNfi
-	 inPJNAWItdgmU++oeoHZZ4ii5D3dqZhQZ3aFZaT0+Awn9IecuNc1qRdEu76ln/VmaH
-	 1xlE54eyrQ036iCypwGvrc462lkdKYU2wdyFxDUQecEvc/tTVRxfHRvbmPXZnjdtTK
-	 4/muF4i98pGw6Gp2VQJYQs0SBGS/q+n8mKVttCU6lYr/Pg4LZJeA+1ZB/F5Vjs/zkS
-	 EZpFvBozoYAqQ==
-Date: Mon, 03 Mar 2025 16:43:30 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Bill Wendling <morbo@google.com>
-CC: David Laight <david.laight.linux@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Justin Stitt <justinstitt@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-crypto@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH v2] x86/crc32: use builtins to improve code generation
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAGG=3QUnUQL2=YxN2ozwSba2A_x-S7sAEUP5oGhCWOzu4Q9SQA@mail.gmail.com>
-References: <CAGG=3QVi27WRYVxmsk9+HLpJw9ZJrpfLjU8G4exuXm-vUA-KqQ@mail.gmail.com> <CAGG=3QVkd9Vb9a=pQ=KwhKzGJXaS+6Mk5K+JtBqamj15MzT9mQ@mail.gmail.com> <20250303201509.32f6f062@pumpkin> <CAGG=3QV1iDn2r39v5eroO+kCvpbmJNtSeqJS+fpwb4vBG67z=w@mail.gmail.com> <20250303224216.30431b1d@pumpkin> <7BC89461-A060-462A-9B42-7C0138AA0307@zytor.com> <CAGG=3QUnUQL2=YxN2ozwSba2A_x-S7sAEUP5oGhCWOzu4Q9SQA@mail.gmail.com>
-Message-ID: <D989BBB5-8DA9-424B-A22D-CC4405747083@zytor.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BLweoJ1/"
+Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-6fd65f1d262so18500077b3.0
+        for <llvm@lists.linux.dev>; Mon, 03 Mar 2025 17:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741050709; x=1741655509; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vluR2PPVFCeXo4Pv8qn9Rh/dHaN7yGoTkb474FlFpf8=;
+        b=BLweoJ1/Jewnl86mh1ROBHzGpbBalG+BZ42aEP8yuq/l95HhoPK3XTC9fLbMwByB7D
+         WwssHUWb8IdKSi/t7XoOUbAvpCJjr5Sj2HuS6KOx5Kn4ItGEIZJ4kUL8b1hZsLGsOBqd
+         oBiqM90ou2a1VWEag/XGhtJ/SXdyp5wQ/Dj7Dz/SkvghhfywZvh/4dC60mGEdtUmO1uY
+         bZzcHDu9Mm0MOLGByMbIHes99LZqhWn2bKjXZkJIb7L/6leDWd0iSBuKzOsCcqXxFHXl
+         aepeMrQRLIKfU5O4EhcMNbttbeXNYRBKzVn3MCzQhcpFzl/GRk3pE39fKq31azfrXE+S
+         vBAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741050709; x=1741655509;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vluR2PPVFCeXo4Pv8qn9Rh/dHaN7yGoTkb474FlFpf8=;
+        b=chXA3Dh+QvJwhCgEA8qn+ojXChMkEjChVtlx0yf6QBOQqNxDwLxVXf6qGhGAFzqvmQ
+         0aaoYqG2eP6tl+yfDXHAzc95gF8/IoOvt5o62XhW+4I2OM6kCC5rYDKbMMMiosTSbvtX
+         hLn/E6UKa4eBcBxJld9TRYxejLi6Ve1kikCQ12jCknhfkw9P37/SmMrY5Z4aMSTAt7Ki
+         m13MQu+G6ZTDacVbwBoza64uZMTfd91oZDucUijAFtZQZDtMauwEpwvUu2xhVrCP2pex
+         5cvsu96k5m111E7JKb7tyUNBZk0PBH1/KIs0pmKAFpSdpz0Mbi893ES/uzoj0fc4nCRU
+         Oylg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMb2L5qqFHbjOxPWXZL1REy9gMbDkiGJKY1jUna3DB7cAzraE1/MNapqlI5r8l+I8W9Fr9@lists.linux.dev
+X-Gm-Message-State: AOJu0YwJa/eskoZ0+meJtpCklieNmFXdq8gHRO5MQ1Jswf2zyyeMnQrd
+	y8UMP4O7O1qYgNc4f+OfEvHf1esKXOxbaoWhc9KezHjUrJ8A/b96/XwWIj0oPeDJ00+O4TxYGMl
+	/1p7GawRKqlFNghkgp0biMxebP/M=
+X-Gm-Gg: ASbGnctKaZvzJgvbvgHfw0mDQdTD1umUdxtvyeKi+/7X5t29KkxPjLPjC4IxexHw0cL
+	d1xNrrqBK3WV8S4XovgxTw99X2aDWE99kqmMvM2uCcR1acAMiQD1Le7ojcJE2p9jHse5+NODi3g
+	H1+/WLN+QAYWgOR4oCLDWdVP7HVg==
+X-Google-Smtp-Source: AGHT+IEqUJezS4KkYf0hWTwJ3JT9iuB+Kta0och/jWyl/2qKN2Gk9IsJypM5kJk2wrbNcnQ46yEh3gTwcTGIDUZLWQo=
+X-Received: by 2002:a05:690c:3808:b0:6f9:78c0:3a5f with SMTP id
+ 00721157ae682-6fd4a10ff41mr214699267b3.19.1741050709491; Mon, 03 Mar 2025
+ 17:11:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
+ <20250303132837.498938-2-dongml2@chinatelecom.cn> <20250303165454.GB11590@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250303165454.GB11590@noisy.programming.kicks-ass.net>
+From: Menglong Dong <menglong8.dong@gmail.com>
+Date: Tue, 4 Mar 2025 09:10:12 +0800
+X-Gm-Features: AQ5f1JpFMtKlVjq9NnfZ6GpKN1o8CsUv-3k7tk0XiqG3kcbonZw3mKyWyXRBiyA
+Message-ID: <CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com, 
+	catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, davem@davemloft.net, 
+	dsahern@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, samitolvanen@google.com, 
+	kees@kernel.org, dongml2@chinatelecom.cn, akpm@linux-foundation.org, 
+	riel@surriel.com, rppt@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On March 3, 2025 4:16:43 PM PST, Bill Wendling <morbo@google=2Ecom> wrote:
->On Mon, Mar 3, 2025 at 3:58=E2=80=AFPM H=2E Peter Anvin <hpa@zytor=2Ecom>=
- wrote:
->> On March 3, 2025 2:42:16 PM PST, David Laight <david=2Elaight=2Elinux@g=
-mail=2Ecom> wrote:
->> >On Mon, 3 Mar 2025 12:27:21 -0800
->> >Bill Wendling <morbo@google=2Ecom> wrote:
->> >
->> >> On Mon, Mar 3, 2025 at 12:15=E2=80=AFPM David Laight
->> >> <david=2Elaight=2Elinux@gmail=2Ecom> wrote:
->> >> > On Thu, 27 Feb 2025 15:47:03 -0800
->> >> > Bill Wendling <morbo@google=2Ecom> wrote:
->> >> >
->> >> > > For both gcc and clang, crc32 builtins generate better code than=
- the
->> >> > > inline asm=2E GCC improves, removing unneeded "mov" instructions=
-=2E Clang
->> >> > > does the same and unrolls the loops=2E GCC has no changes on i38=
-6, but
->> >> > > Clang's code generation is vastly improved, due to Clang's "rm"
->> >> > > constraint issue=2E
->> >> > >
->> >> > > The number of cycles improved by ~0=2E1% for GCC and ~1% for Cla=
-ng, which
->> >> > > is expected because of the "rm" issue=2E However, Clang's perfor=
-mance is
->> >> > > better than GCC's by ~1=2E5%, most likely due to loop unrolling=
-=2E
->> >> >
->> >> > How much does it unroll?
->> >> > How much you need depends on the latency of the crc32 instruction=
-=2E
->> >> > The copy of Agner's tables I have gives it a latency of 3 on
->> >> > pretty much everything=2E
->> >> > If you can only do one chained crc instruction every three clocks
->> >> > it is hard to see how unrolling the loop will help=2E
->> >> > Intel cpu (since sandy bridge) will run a two clock loop=2E
->> >> > With three clocks to play with it should be easy (even for a compi=
-ler)
->> >> > to generate a loop with no extra clock stalls=2E
->> >> >
->> >> > Clearly if Clang decides to copy arguments to the stack an extra t=
-ime
->> >> > that will kill things=2E But in this case you want the "m" constra=
-int
->> >> > to directly read from the buffer (with a (reg,reg,8) addressing mo=
-de)=2E
->> >> >
->> >> Below is what Clang generates with the builtins=2E From what Eric sa=
-id,
->> >> this code is only run for sizes <=3D 512 bytes? So maybe it's not su=
-per
->> >> important to micro-optimize this=2E I apologize, but my ability to
->> >> measure clock loops for x86 code isn't great=2E (I'm sure I lack the
->> >> requisite benchmarks, etc=2E)
->> >
->> >Jeepers - that is trashing the I-cache=2E
->> >Not to mention all the conditional branches at the bottom=2E
->> >Consider the basic loop:
->> >1:     crc32q  (%rcx), %rbx
->> >       addq    $8, %rcx
->> >       cmp     %rcx, %rdx
->> >       jne     1b
->> >The crc32 has latency 3 so it must take at least 3 clocks=2E
->> >Even naively the addq can be issued in the same clock as the crc32
->> >and the cmp and jne in the following ones=2E
->> >Since the jne is predicted taken, the addq can be assumed to execute
->> >in the same clock as the jne=2E
->> >(The cmp+jne might also get merged into a single u-op)
->> >(I've done this with adc (for IP checksum), with two adc the loop take=
+On Tue, Mar 4, 2025 at 12:55=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Mon, Mar 03, 2025 at 09:28:34PM +0800, Menglong Dong wrote:
+> > For now, the layout of cfi and fineibt is hard coded, and the padding i=
 s
->> >two clocks even with the extra memory reads=2E)
->> >
->> >So that loop is likely to run limited by the three clock latency of cr=
-c32=2E
->> >Even the memory reads will happen with all the crc32 just waiting for =
-the
->> >previous crc32 to finish=2E
->> >You can take an instruction out of the loop:
->> >1:     crc32q  (%rcx,%rdx), %rbx
->> >       addq    $8, %rdx
->> >       jne     1b
->> >but that may not be necessary, and (IIRC) gcc doesn't like letting you
->> >generate it=2E
->> >
->> >For buffers that aren't multiples of 8 bytes 'remember' that the crc o=
-f
->> >a byte depends on how far it is from the end of the buffer, and that i=
-nitial
->> >zero bytes have no effect=2E
->> >So (provided the buffer is 8+ bytes long) read the first 8 bytes, shif=
-t
->> >right by the number of bytes needed to make the rest of the buffer a m=
-ultiple
->> >or 8 bytes (the same as reading from across the start of the buffer an=
-d masking
->> >the low bytes) then treat exactly the same as a buffer that is a multi=
-ple
->> >of 8 bytes long=2E
->> >Don't worry about misaligned reads, you lose less than one clock per c=
-ache
->> >line (that is with adc doing a read every clock)=2E
->> >
->For reference, GCC does much better with code gen, but only with the buil=
-tin:
+> > fixed on 16 bytes.
+> >
+> > Factor out FINEIBT_INSN_OFFSET and CFI_INSN_OFFSET. CFI_INSN_OFFSET is
+> > the offset of cfi, which is the same as FUNCTION_ALIGNMENT when
+> > CALL_PADDING is enabled. And FINEIBT_INSN_OFFSET is the offset where we
+> > put the fineibt preamble on, which is 16 for now.
+> >
+> > When the FUNCTION_ALIGNMENT is bigger than 16, we place the fineibt
+> > preamble on the last 16 bytes of the padding for better performance, wh=
+ich
+> > means the fineibt preamble don't use the space that cfi uses.
+> >
+> > The FINEIBT_INSN_OFFSET is not used in fineibt_caller_start and
+> > fineibt_paranoid_start, as it is always "0x10". Note that we need to
+> > update the offset in fineibt_caller_start and fineibt_paranoid_start if
+> > FINEIBT_INSN_OFFSET changes.
+> >
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 >
->=2EL39:
->        crc32q  (%rax), %rbx    # MEM[(long unsigned int *)p_40], tmp120
->        addq    $8, %rax        #, p
->        cmpq    %rcx, %rax      # _37, p
->        jne     =2EL39    #,
->        leaq    (%rsi,%rdi,8), %rsi     #, p
->=2EL38:
->        andl    $7, %edx        #, len
->        je      =2EL41    #,
->        addq    %rsi, %rdx      # p, _11
->        movl    %ebx, %eax      # crc, <retval>
->        =2Ep2align 4
->=2EL40:
->        crc32b  (%rsi), %eax    # MEM[(const u8 *)p_45], <retval>
->        addq    $1, %rsi        #, p
->        cmpq    %rsi, %rdx      # p, _11
->        jne     =2EL40    #,
+> I'm confused as to what exactly you mean.
 >
->> >Actually measuring the performance is hard=2E
->> >You can use rdtsc because the clock speed will change when the cpu get=
-s busy=2E
->> >There is a 'performance counter' that is actual clocks=2E
->> >While you can use the library functions to set it up, you need to just=
- read the
->> >register - the library overhead it too big=2E
->> >You also need the odd lfence=2E
->> >Having done that, and provided the buffer is in the L1 d-cache you can=
- measure
->> >the loop time in clocks and compare against the expected value=2E
->> >Once you've got 3 clocks per crc32 instruction it won't get any better=
-,
->> >which is why the 'fast' code for big buffers does crc of 3+ buffers se=
-ctions
->> >in parallel=2E
->> >
->Thanks for the info! It'll help a lot the next time I need to delve
->deeply into performance=2E
+> Preamble will have __cfi symbol and some number of NOPs right before
+> actual symbol like:
 >
->I tried using rdtsc and another programmatic way of measuring timing=2E
->Also tried making the task have high priority, restricting to one CPU,
->etc=2E But the numbers weren't as consistent as I wanted them to be=2E Th=
-e
->times I reported were the based on the fastest times / clocks /
->whatever from several runs for each build=2E
+> __cfi_foo:
+>   mov $0x12345678, %reg
+>   nop
+>   nop
+>   nop
+>   ...
+> foo:
 >
->> >       David
->> >
->> >>
->> >> -bw
->> >>
->> >> =2ELBB1_9:                                # =3D>This Inner Loop Head=
-er: Depth=3D1
->> >>         movl    %ebx, %ebx
->> >>         crc32q  (%rcx), %rbx
->> >>         addq    $8, %rcx
->> >>         incq    %rdi
->> >>         cmpq    %rdi, %rsi
->> >>         jne     =2ELBB1_9
->> >> # %bb=2E10:
->> >>         subq    %rdi, %rax
->> >>         jmp     =2ELBB1_11
->> >> =2ELBB1_7:
->> >>         movq    %r14, %rcx
->> >> =2ELBB1_11:
->> >>         movq    %r15, %rsi
->> >>         andq    $-8, %rsi
->> >>         cmpq    $7, %rdx
->> >>         jb      =2ELBB1_14
->> >> # %bb=2E12:
->> >>         xorl    %edx, %edx
->> >> =2ELBB1_13:                               # =3D>This Inner Loop Head=
-er: Depth=3D1
->> >>         movl    %ebx, %ebx
->> >>         crc32q  (%rcx,%rdx,8), %rbx
->> >>         crc32q  8(%rcx,%rdx,8), %rbx
->> >>         crc32q  16(%rcx,%rdx,8), %rbx
->> >>         crc32q  24(%rcx,%rdx,8), %rbx
->> >>         crc32q  32(%rcx,%rdx,8), %rbx
->> >>         crc32q  40(%rcx,%rdx,8), %rbx
->> >>         crc32q  48(%rcx,%rdx,8), %rbx
->> >>         crc32q  56(%rcx,%rdx,8), %rbx
->> >>         addq    $8, %rdx
->> >>         cmpq    %rdx, %rax
->> >>         jne     =2ELBB1_13
->> >> =2ELBB1_14:
->> >>         addq    %rsi, %r14
->> >> =2ELBB1_15:
->> >>         andq    $7, %r15
->> >>         je      =2ELBB1_23
->> >> # %bb=2E16:
->> >>         crc32b  (%r14), %ebx
->> >>         cmpl    $1, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E17:
->> >>         crc32b  1(%r14), %ebx
->> >>         cmpl    $2, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E18:
->> >>         crc32b  2(%r14), %ebx
->> >>         cmpl    $3, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E19:
->> >>         crc32b  3(%r14), %ebx
->> >>         cmpl    $4, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E20:
->> >>         crc32b  4(%r14), %ebx
->> >>         cmpl    $5, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E21:
->> >>         crc32b  5(%r14), %ebx
->> >>         cmpl    $6, %r15d
->> >>         je      =2ELBB1_23
->> >> # %bb=2E22:
->> >>         crc32b  6(%r14), %ebx
->> >> =2ELBB1_23:
->> >>         movl    %ebx, %eax
->> >> =2ELBB1_24:
->> >
->> >
->>
->> The tail is *weird*=2E Wouldn't it be better to do a 4-2-1 stepdown?
+> FineIBT must be at foo-16, has nothing to do with performance. This 16
+> can also be spelled: fineibt_preamble_size.
 >
->Definitely on the weird side! I considered hard-coding something like
->that, but thought it might be a bit convoluted, though certainly less
->convoluted than what we generate now=2E A simple loop is probably all
->that's needed, because it should only need to be done at most seven
->times=2E
+> The total size of the preamble is FUNCTION_PADDING_BYTES + CFI_CLANG*5.
 >
->-bw
->
+> If you increase FUNCTION_PADDING_BYTES by another 5, which is what you
+> want I think, then we'll have total preamble of 21 bytes; 5 bytes kCFI,
+> 16 bytes nop.
 
-4-2-1 makes more sense probably (4 bytes, then 2 bytes, then 1 byte depend=
-ing on which bits are set=2E)
+Hello, sorry that I forgot to add something to the changelog. In fact,
+I don't add extra 5-bytes anymore, which you can see in the 3rd patch.
+
+The thing is that we can't add extra 5-bytes if CFI is enabled. Without
+CFI, we can make the padding space any value, such as 5-bytes, and
+the layout will be like this:
+
+__align:
+  nop
+  nop
+  nop
+  nop
+  nop
+foo: -- __align +5
+
+However, the CFI will always make the cfi insn 16-bytes aligned. When
+we set the FUNCTION_PADDING_BYTES to (11 + 5), the layout will be
+like this:
+
+__cfi_foo:
+  nop (11)
+  mov $0x12345678, %reg
+  nop (16)
+foo:
+
+and the padding space is 32-bytes actually. So, we can just select
+FUNCTION_ALIGNMENT_32B instead, which makes the padding
+space 32-bytes too, and have the following layout:
+
+__cfi_foo:
+  mov $0x12345678, %reg
+  nop (27)
+foo:
+
+And the layout will be like this if fineibt and function metadata is both
+used:
+
+__cfi_foo:
+        mov     --      5       -- cfi, not used anymore if fineibt is used
+        nop
+        nop
+        nop
+        mov     --      5       -- function metadata
+        nop
+        nop
+        nop
+        fineibt --      16      -- fineibt
+foo:
+        nopw    --      4
+        ......
+
+The things that I make in this commit is to make sure that
+the code in arch/x86/kernel/alternative.c can find the location
+of cfi hash and fineibt depends on the FUNCTION_ALIGNMENT.
+the offset of cfi and fineibt is different now, so we need to do
+some adjustment here.
+
+In the beginning, I thought to make the layout like this to ensure
+that the offset of cfi and fineibt the same:
+
+__cfi_foo:
+        fineibt  --   16  --  fineibt
+        mov    --    5    -- function metadata
+        nop(11)
+foo:
+        nopw    --      4
+        ......
+
+The adjustment will be easier in this mode. However, it may have
+impact on the performance. That way I say it doesn't impact the
+performance in this commit.
+
+Sorry that I didn't describe it clearly in the commit log, and I'll
+add the things above to the commit log too in the next version.
+
+Thanks!
+Menglong Dong
+
+>
+> Then kCFI expects hash to be at -20, while FineIBT must be at -16.
+>
+> This then means there is no unambiguous hole for you to stick your
+> meta-data thing (whatever that is).
+>
+> There are two options: make meta data location depend on cfi_mode, or
+> have __apply_fineibt() rewrite kCFI to also be at -16, so that you can
+> have -21 for your 5 bytes.
+>
+> I think I prefer latter.
+>
+> In any case, I don't think we need *_INSN_OFFSET. At most we need
+> PREAMBLE_SIZE.
+>
+> Hmm?
