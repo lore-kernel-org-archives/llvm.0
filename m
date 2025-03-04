@@ -1,197 +1,146 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7102BF139
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E78281520;
+	Tue,  4 Mar 2025 17:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107948; cv=none; b=otaEy2pn70LGPPOVcjJlF5PfwWqB7XW0IVKr5OO6/u8L7wQAdX9AU90bKt3LcaNAeLLwtRgMV4jeE4lDROBpgWr6QaAwOO2yuqpGWNeOtr7s1oTDa3cOo+fcZ1NfC9TNaUNJBNXIMIiOnI74rAlDAWZpz3N+VlPRMSlkxZoynW0=
+	t=1741108081; cv=none; b=JJ0M0wqEOF+kf/+sj4fpTOrhsflWm/YpTd7VatKcEhWwtpCswN7t9qsoN0pUtDMOIr8mNznv57zZYZpars+HLxcl6XyFleM/PK8AxIWmGSjgRGFSXuAFRxevjbSBMy3wpXjos5g/bNyAng4x9vdccLJWzj/+7pJjY3HaWt44lj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107948; c=relaxed/simple;
-	bh=1+UZb0QJk2ChT7YBKoTmCJG5wrAK+GA3H4NxSsqsqCU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j9AbA728qRJ7+4Ht9Pvyfmi2gglZg6F/TiqtRqa+pgNItBDgrOW7AwzZxqcNrs1AlsCTJe1zhozMMK5astFue705uv+Jsw8PCipMOl2giDA2YLo0T4e8NmPGhJ6ojA6kRrLjRahCFqhJogN/+O/QekgI84gYtXCjcpJlQitbjD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wv9tEAZL; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1741108081; c=relaxed/simple;
+	bh=ExQy865opXw6DJMm2Zy8thSEQ2//ZajmzZjhLDdgip8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lNIF2diNE7S7lAZrKhXy2KLBn8+z/VbnN5MS7mW/1cOSm+tt6Q0jblth+YsJpnDOQ7HVZUOLmHUfbzK9iPae6w27UXIVqt+dGG78zB/NQhfrlHuQxr0+wxvwPYwa/p+gaAzi0lBPnIFTqorIbS1YgWS2I0O4cWeY9cBRVm35UWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/S/n5mc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wv9tEAZL"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-abf48293ad0so587735066b.0
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741107942; x=1741712742; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dKiEbfv2wxdcP+dRwBnTiew8ux2INId3e+zLxFho3GE=;
-        b=Wv9tEAZLdSmM48KKhBcCfptHn9A4586gakacMHL9BS6e7UOIROhNWYhSVpGxyjAa7H
-         A6fyoV1LIm+fx53B2yfyqPMd2srgfXnno9C0lYezKb9T2iPoQ/1wLB9uDsoCKTF6v8dx
-         nOqOZ1XFLf7wVI+DRvr+kKoJRcjNeAvdUP+Dxnipe7NaGLsXt6N1ChMrnfQuyMuCDZlv
-         XSS+zurt1niCxpmROu9tgyoiXvLxaSeOyYbzidViwF2/5Vj859KRJEsM9CaKq5SBbttK
-         fb9CssaAMoHD5smawJZpGiSrhx3J1XCNAWaiZx1MMGLzyZY1PsJh0UO/pEH2lzrnJF74
-         z5AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741107942; x=1741712742;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dKiEbfv2wxdcP+dRwBnTiew8ux2INId3e+zLxFho3GE=;
-        b=SYUqF0T3Uy+njNjgTVYSy0qBnthk0u49CW8sg54596qejsHguv+DuYti8UUu32vomO
-         pgijf7YQ3k/xfyynSFG5thPVleILYbfysshaYxuCVLJodf8iLLi8u47r8GmXVI8vRDEe
-         8owAXhMkBL5JT97wvYG8XRFUee79q0Abp0mdNeR7korMnpaGZ16SgUGzYbPfmpK1g4ys
-         uSQ58GcEjjPYW6KHzcL9bmQn3jyJUshDFhp9ZCONR3UqGBN9SklkuJ0B8VTggxNpi5Im
-         +GvCZSiFJivY9Z9WL2gvBDmF5ee+P6Sv+lWHS9voCQ6qgKZpedyyZVuCqyPKQ23ftRry
-         FyiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSKjZqYAz77hFe8XFuBwyi9KHH2NY5RoIlmvm3Ztd7JTBLBxvh7+gmzWIR/Xp1enlkGw/2@lists.linux.dev
-X-Gm-Message-State: AOJu0YxzNW3O4mrdGZkO/DHrBITZ4csFnaITAl1FG6zWmosxjWajZhlD
-	qTICoH5CyK/GtdMLxGGPRT8hnma3QLkaFWmXz3B/D0t9lEb5onCuwd8I3YZYL+4=
-X-Gm-Gg: ASbGncvgHXjduvxFuA1HA4JYTEfiCOE7l7di3jvuvfoGaEYvoDYo1JQThjBqYkyEC5c
-	oocBO7xTHBOlgOZQ7dkUBw6ry5pBVhoxZLKroF0yGjOt8pUZgyGwJ3jhPPTWsjILzriscHWLSw7
-	D+ioYBFDxGCupaC0kP3tKlM4rNr4G2SRUeOUXCL4AxIIGuBoffSpwSraPSqxxsV8sN3x8rygCtv
-	oiRLQ6gc/1Z+tsm/HSNVWjQKGU4ftnZKkWPBbxayym/lfYjxHrK4Ako34S2Mvr276uEeQd1+qYY
-	6C/4sW937zJtP2xoTo7Ns3VIHTdNpDa5sNjZ60N7Z+AshxrGve/EoL7WSg5G9o+VP1/wFO8mAQ/
-	YDbbJ17oPhE0iDYZmCCLIhO3SOMRG
-X-Google-Smtp-Source: AGHT+IFbhvINfL30hs3YpvAxvNGhpuF08a7SPp+ErND7dZCCpi05AobDmHrT2jaUznfQQ+NeOSHQXw==
-X-Received: by 2002:a17:907:2d0d:b0:abf:777d:fb7a with SMTP id a640c23a62f3a-ac20da97c7dmr2947466b.46.1741107942351;
-        Tue, 04 Mar 2025 09:05:42 -0800 (PST)
-Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 09:05:41 -0800 (PST)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 04 Mar 2025 17:05:44 +0000
-Subject: [PATCH v2 16/16] rtc: s5m: convert to dev_err_probe() where
- appropriate
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/S/n5mc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E9FC4CEE7;
+	Tue,  4 Mar 2025 17:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741108080;
+	bh=ExQy865opXw6DJMm2Zy8thSEQ2//ZajmzZjhLDdgip8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U/S/n5mcWu/UBrYJ+TCBDohmSpkaKpp3W/oYgHiI/KuhAbI9KA2kv7BZLyzpMCfOt
+	 5Wq8oedYv0QjWahN3qmeV3zxSsUGOq2uOUp/yflUURVb/OTCKj8hW7Vxnp8gBESsjC
+	 pc2HyY1m7X1gZDrLSonteoxRMWPrg7RwvOkKcEJgi/fTEGOMeFqPe+AKHrnuCe2evj
+	 4+CGuNjEonQLrRuMQXHebM9/xLHR0V2qQ/ZRWoWxw6hWG9Q2EvGTPOkbjYC976JGta
+	 kmU7BYLOeu+jvgOx9uHuREM5azgdxWj5CcwgpT/+IY6xkW5/rRoQOEqIASs706Ky6i
+	 CHiKZp8kuCXww==
+Date: Tue, 4 Mar 2025 09:07:57 -0800
+From: Kees Cook <kees@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
+Message-ID: <202503040842.1177A1F15B@keescook>
+References: <20250303215240.work.379-kees@kernel.org>
+ <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
+ <20250304102536.GB2529736@ax162>
+ <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-rtc-cleanups-v2-16-d4689a71668c@linaro.org>
-References: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
-In-Reply-To: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
-To: Chanwoo Choi <cw00.choi@samsung.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
- Hans Ulli Kroll <ulli.kroll@googlemail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- =?utf-8?q?T=C3=B3th_J=C3=A1nos?= <gomba007@gmail.com>, 
- Dianlong Li <long17.cool@163.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-amlogic@lists.infradead.org, 
- llvm@lists.linux.dev, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
+In-Reply-To: <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
 
-dev_err_probe() exists to simplify code and harmonise error messages,
-there's no reason not to use it here.
+On Tue, Mar 04, 2025 at 03:51:19PM +0100, Thomas Weiﬂschuh wrote:
+> On 2025-03-04 11:25:36+0100, Nathan Chancellor wrote:
+> > On Mon, Mar 03, 2025 at 11:29:58PM +0100, Thomas Weiﬂschuh wrote:
+> > > On 2025-03-03 13:52:41-0800, Kees Cook wrote:
+> 
+> <snip>
+> 
+> > > This is also what exists in tools/testing/selftests/lib.mk.
+> > > Minus the missing CONFIG_FORTIFY_SOURCE on clang x86_32
+> > > and a failure of overflow.DEFINE_FLEX_test (clang 19.1.7).
+> > 
+> > Does Kees's other patch resolve the second issue? It'll obviously fix
+> > the first :P
+> > 
+> > https://lore.kernel.org/20250303214929.work.499-kees@kernel.org/
+> 
+> No, it doesn't.
+> 
+> Running tests with:
+> $ .kunit/linux kunit.filter_glob=overflow.DEFINE_FLEX_test kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
+> [15:48:30] =================== overflow (1 subtest) ===================
+> [15:48:30] # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
+> [15:48:30] Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
+> [15:48:30]     __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
+> [15:48:30]     expected_raw_size == 8 (0x8)
+> [15:48:30] [FAILED] DEFINE_FLEX_test
+> [15:48:30] # module: overflow_kunit
+> [15:48:30] ==================== [FAILED] overflow =====================
+> [15:48:30] ============================================================
+> [15:48:30] Testing complete. Ran 1 tests: failed: 1
+> [15:48:31] Elapsed time: 43.985s total, 0.001s configuring, 43.818s building, 0.133s running
+> 
+> If I force CONFIG_CC_HAS_COUNTED_BY=n then the test succeeds.
+> Clang 19.1.7 from the Arch Linux repos.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Andr√© Draszik <andre.draszik@linaro.org>
----
- drivers/rtc/rtc-s5m.c | 50 +++++++++++++++++++++-----------------------------
- 1 file changed, 21 insertions(+), 29 deletions(-)
+I wasn't seeing with Clang 20 from git:
+ClangBuiltLinux clang version 20.0.0git (git@github.com:llvm/llvm-project.git 72901fe19eb1e55d0ee1c380ab7a9f57d2f187c5)
 
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index 88aed27660348a05886f080a2848fcabbf9666d0..db5c9b641277213aa1371776c63e2eda3f223465 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -626,11 +626,10 @@ static int s5m8767_rtc_init_reg(struct s5m_rtc_info *info)
- 	}
- 
- 	info->rtc_24hr_mode = 1;
--	if (ret < 0) {
--		dev_err(info->dev, "%s: fail to write controlm reg(%d)\n",
--			__func__, ret);
--		return ret;
--	}
-+	if (ret < 0)
-+		return dev_err_probe(info->dev, ret,
-+				     "%s: fail to write controlm reg\n",
-+				     __func__);
- 
- 	return ret;
- }
-@@ -669,26 +668,21 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		alarm_irq = S5M8767_IRQ_RTCA1;
- 		break;
- 	default:
--		dev_err(&pdev->dev,
--				"Device type %lu is not supported by RTC driver\n",
--				platform_get_device_id(pdev)->driver_data);
--		return -ENODEV;
-+		return dev_err_probe(&pdev->dev, -ENODEV,
-+				     "Device type %lu is not supported by RTC driver\n",
-+				     platform_get_device_id(pdev)->driver_data);
- 	}
- 
- 	i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
- 					RTC_I2C_ADDR);
--	if (IS_ERR(i2c)) {
--		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
--		return PTR_ERR(i2c);
--	}
-+	if (IS_ERR(i2c))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(i2c),
-+				     "Failed to allocate I2C for RTC\n");
- 
- 	info->regmap = devm_regmap_init_i2c(i2c, regmap_cfg);
--	if (IS_ERR(info->regmap)) {
--		ret = PTR_ERR(info->regmap);
--		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
--				ret);
--		return ret;
--	}
-+	if (IS_ERR(info->regmap))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(info->regmap),
-+				     "Failed to allocate RTC register map\n");
- 
- 	info->dev = &pdev->dev;
- 	info->s5m87xx = s5m87xx;
-@@ -696,11 +690,10 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 
- 	if (s5m87xx->irq_data) {
- 		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
--		if (info->irq <= 0) {
--			dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
--				alarm_irq);
--			return -EINVAL;
--		}
-+		if (info->irq <= 0)
-+			return dev_err_probe(&pdev->dev, -EINVAL,
-+					     "Failed to get virtual IRQ %d\n",
-+					     alarm_irq);
- 	}
- 
- 	platform_set_drvdata(pdev, info);
-@@ -724,11 +717,10 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		ret = devm_request_threaded_irq(&pdev->dev, info->irq, NULL,
- 						s5m_rtc_alarm_irq, 0, "rtc-alarm0",
- 						info);
--		if (ret < 0) {
--			dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
--				info->irq, ret);
--			return ret;
--		}
-+		if (ret < 0)
-+			return dev_err_probe(&pdev->dev, ret,
-+					     "Failed to request alarm IRQ %d\n",
-+					     info->irq);
- 		device_init_wakeup(&pdev->dev, true);
- 	}
- 
+But I do see the error with ToT Clang:
+ClangBuiltLinux clang version 21.0.0git (git@github.com:llvm/llvm-project.git eee3db5421040cfc3eae6e92ed714650a6f741fa)
+
+Clang 17.1: (does not support counted_by)
+
+    # DEFINE_FLEX_test: missing counted_by
+    # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+    # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+
+Clang 19.1.1: (actually is _does_ support counted_by, but Linux disables it)
+
+    # DEFINE_FLEX_test: missing counted_by
+    # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+    # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+
+GCC 13.3:
+
+    # DEFINE_FLEX_test: missing counted_by
+    # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+    # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+
+Clang 21 (ToT):
+
+    # DEFINE_FLEX_test: has counted_by
+    # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+    # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
+
+GCC 15 (ToT):
+
+    # DEFINE_FLEX_test: has counted_by
+    # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+    # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+    # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
+
+It seems like the on-stack sizes with __bdos all agree now, regardless
+of the used compiler features. It is only the array size calculation
+that now gets masked by counted_by. (i.e. the stack size is overridden
+by the zero "count" for the array elements.)
+
+I'll send a fix for the test...
 
 -- 
-2.48.1.711.g2feabab25a-goog
-
+Kees Cook
