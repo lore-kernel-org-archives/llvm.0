@@ -1,68 +1,67 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE59228D0B1
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75B628629B
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107939; cv=none; b=u8BrOScSNGjXnZydjS6wuIfFnxoEqolz+cpAxR9H/NBjNo0yzLYzcBdzdvgUPBlxDX6KteRpJY4CtvbTshOJNK4KGqiimZaF8JpfqzQ+rEBiNRpI+5UMsIsYj2FhGRm3GKNISYTgFaGHKHjL4hVsGSeKVmt8UFhi3JXFsX5YFN8=
+	t=1741107940; cv=none; b=UEqPD6ENRl3PSHbEv0Xe8P04SgYXRmkio9KO9viDrhRYB25a46sT0YkGaU2DWsbzQ1xpPZ8OQa5BKaNzsFyrPLjpgf90yma7Yo/Sw5ohMhkxISlG+kGtVv4CsulZucR2OsDmI7nNXb16ZkIZd/t+iYt1S4k+eaRTeyfW+d2Mk+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107939; c=relaxed/simple;
-	bh=ivQXoPCDvr4W65W9v8GXK5+RniJhnQQTUBGH5MrKnmo=;
+	s=arc-20240116; t=1741107940; c=relaxed/simple;
+	bh=96lokglM16xoW0bhDeFwQgKQck5a27ZC3KAyN/gWBFc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HH9QKFBzM6C3ZxJPQmXRhUpXnbGC+PqzpLhKsM24FSWwOVGiLMwa948HexhIOO18BXB8uJX4cQq+rn7/XQiiCdTihFM5OWi0qYhpPuFzCSFv/hASURLnV3a1BC+iupUnTfDkMS6gHMa8et3yEkXLw897xCVfxNBTWjYTZz5vhTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ECVMDWqG; arc=none smtp.client-ip=209.85.208.47
+	 In-Reply-To:To:Cc; b=NVqn+Qcoa04coRk8LDAK35Fyzaoecky5ubXfs59NtV1K7g6jMXllBVWQpke+I0haOY1g6RJRLYt3jVKCL5AcvKzmbxN7xLMQ6H4JcOXppKXvyPC/0GER/NRWqNmojwQC5sKKsYJM5+gXF2ju+IyUF+i9xgJJGDPqPc0j8OcwWSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QFgoj+Ml; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ECVMDWqG"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5e4ebc78da5so8575592a12.2
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QFgoj+Ml"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac202264f9cso95917366b.0
+        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741107935; x=1741712735; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1741107936; x=1741712736; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MzZ6ILzSkM4BJ8jDBuhIko6B+Jnu0p3f7pMZfR82Jo4=;
-        b=ECVMDWqGcvGfs/CNjtkexsiryf6tp1pLrTejhy3QN+3eR0cHPFYiCFHIz9UK8OrRfx
-         qYoZmLDBaH6ftFmyUBZADMKHAcuEEcM6zFkEEGIxP2J8pDsHRrElpN1KBAmZBJotWVQO
-         xVrXTp5lcJlvbbKzGfEPhA6kvV4N4yV0rh8c7JNHpRGtSxv6d19In5jgdl9OkGIyJjFY
-         DwXGAYVlfGIX4ZMnAdoBo6SK4E9QyBnTdctbq5EkMThc8jSfIXdqYGHtY2A1Ot//Qni7
-         pGtoXHAmkXZoZeOqC1Di/H/2QbNDkW1lViR9P75E8OjRgKqCcyXF1BvMAmE4D/u+YaqZ
-         f/mw==
+        bh=IgG/ZB1ufhyJ5LLnH+TbRO+Ff9QR7sb5p8sH4cYGYcE=;
+        b=QFgoj+MlxbNbwYvuJqmv9vsqiKzDklSeDH7TefHcisZJDy9zp+ViKI/9DoyLZImQIm
+         b1/Wj8vvh9DH193f8jc4pshqT+T6Ss0NUoWiyjdP84LdYbLldvD7n7bIHxxEVUpbyzjK
+         cxjQoCekThkHh+2HTFXRL6369joyzOAH2Cp1MHmdtfuWf2JECq1VnvoY7omrVRgTvUf9
+         1NHtheKtiTB7UUPZzLfIBUk2P7kY5GG0ue+w3TwXtdaxstmpuBhl8XoE9OajG6UlmDsB
+         9uYFezfeQLexBxFhkDz0NJfDfaiypgRC2KeCeIlSYPKq8qs7WZ2x6tRshFRqZHiSWCOB
+         hSPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741107935; x=1741712735;
+        d=1e100.net; s=20230601; t=1741107936; x=1741712736;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MzZ6ILzSkM4BJ8jDBuhIko6B+Jnu0p3f7pMZfR82Jo4=;
-        b=FoJZzRJBlwKinuu7oCcA8s9/kOU6G1O4sMHbFv2m90Wj5gudqR6HqZZ4Q7VHeXz4/4
-         N6ZROy3UPKNqywHrTS61alP9XZO60igUGfy92X8awrr741nH2yfjo+v8gvr1ZpYp32YX
-         VRSavGhuoO305gPJeO5nYAszhvzMzdFU4keW98tenBW4+rmX2mnnIKq5RYiOC50zcllx
-         SOUpgPc65Wc5CR3ITnvjTyzics5z9UCTfx8KXaaiQu//ppG8cFsEgHEgVyvhrBBwdGvp
-         CcGCjb0c0NBg5hQHqYQCpKn0r9ghuqAXinLGY9GgEkM6mCRm0F1SWJYOpdtbY4ad9KoU
-         MVVA==
-X-Forwarded-Encrypted: i=1; AJvYcCXc4rHWoLKCsOp5aYf05r4Cv2S/00HzxgL3VEnRZu4W9mYKMregcnj08bweHyY1M+QdrCrr@lists.linux.dev
-X-Gm-Message-State: AOJu0YwmJE/w/y97h9wseuJSu5Zs5uAfqTEWDaLKeZ1ZXoCJShNZLJHW
-	+Ff07xu+ac83Kp9Rc/CS3BO0wP6jt7j+Alds9N4Ois9dJVqRncsjX1dwtT2vXH7/UaWOiUR9GyB
-	OldQ=
-X-Gm-Gg: ASbGncukyo5mmOjWKQGrFCiq6PLkvsM5RyiRLBh/UH1yJtJem+jl5RxZoLhkw6D5yHa
-	E+Au88QGn3E0Ja/WgHexa7f++kvtUHaA97HmU6be1OMv2KZVMr80FMWXyo5T/Ma6zIWvCk7xXAk
-	usi0krs6Dg1QQ9QxF1qsqaeKc7Qxt58uLa1HLwTZodhWz0dxJODyoyCPOvKcZ8KTJux1gSfGhQe
-	iJZMDCVAx0ch81sf+s1waSv63QNuMUbzo5BNzlmjqgDDjV7CaCECLRjalCfnxEaA5VaC2r/+ME6
-	H8WtUoME7CxP5ZWRZlXDZ5xqWb0szCAvBo/oT9nQBrXajt4rDMnk9lO+tQtgpEJeoEO5Yi1+ucy
-	u64uW4nx8VZ7spmBlGiyL2qulD+KO
-X-Google-Smtp-Source: AGHT+IFwDsDh5i25qijWXwIP4x1jml1OHqbOIRoS6nzVQBGxqFZ6SJJ2B5idZS+kqD7e/PzkpEaGBA==
-X-Received: by 2002:a17:907:9490:b0:ac1:cceb:d9b0 with SMTP id a640c23a62f3a-ac20d8bcf0bmr3896666b.16.1741107933256;
-        Tue, 04 Mar 2025 09:05:33 -0800 (PST)
+        bh=IgG/ZB1ufhyJ5LLnH+TbRO+Ff9QR7sb5p8sH4cYGYcE=;
+        b=JL56pwbRqlpfg7/NVSbjm7H+i9BWMC0n+coF0WO2HwX8c3Q6N00d46h6gUDp4P+pj5
+         4Vu0mjKP1ykn6X9sGfUW0DtKLtdfroCeXjtQF8QkO3+Jt6t1vACCpp9UTCxP4w91HPSA
+         yqgVc99lG36viJH1HfC83G9ADEtpnwLr+uNF0PF+VI+Tp0zi7wzbXah02jFEN6zKBU8M
+         cdHh1vaUxY0QCe25wcwHFlZhO6ilfbnvKvJuGKqNOXRNgj6Pz1mi2YBWEJ3mPLZ7Drm0
+         dofTEWBlyOrXjp+YN87L/KXoYY0VjlPxy36+SOTFWI3Di3TzFSLZmnX/y54pwV7Yg3tF
+         om7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUtJqvTzV+NHeSQ42rrJQRYeNDnWoGc8cXwsl4cplmVrPYZ+sSE4czu+GrFbpTuGb8C21f8@lists.linux.dev
+X-Gm-Message-State: AOJu0YxgxRAIUSvD/Axh/V6VESVsD1H9pcyyfGhqLlequMgrd8sgBVy4
+	9hGGPtP3NPRkbV7EVi2KFCcFS+GVx4XBNIPefIuqugFnqsVA3MlrV9vS7j+C3zg=
+X-Gm-Gg: ASbGnctjcwDRiUwxyiCodbhcz8FdkcRoQZB/B5we9aCKHs3gG3S4Eq7yqOnMJ53bipK
+	31msk4iELRhsl+jqsKbMBJfnVPlgL0+JfvA7SlaGyi04aQv6gb6u04q63gWJzhOEtTKCDQWCeTy
+	kJ3b1UhW55NUpMo4sFTJkt5bd4RfmT/yNi9pqqBkJHTidSisgaiFu+Crcv1u0IX4MCIoOrWdOK4
+	qKYJCfu8moJUeRgfnvjHODJMlYiq1PMocEgM9WRFf+NC+hkdxtsQxsbTCO/3GAhvdXDa7nLGZl1
+	TfvzblkILM1tQXNTRwZinQbO0xqx3tLzb4p14x+6G5zUWzwPWGR6w3ZnOG3wa5yi6jKRDssLlHZ
+	78wHJExkkgkU83eblhyk4SaEjX3B7
+X-Google-Smtp-Source: AGHT+IEZSM7e60umftuoTA+5yHKxOw5bEfyTXKI9tFiIm+4qyPCIhcf70tbw/wLp28VjnQQVfyBtmQ==
+X-Received: by 2002:a17:907:c2a:b0:abf:6b30:7a94 with SMTP id a640c23a62f3a-abf6b58f60cmr1276559166b.45.1741107935884;
+        Tue, 04 Mar 2025 09:05:35 -0800 (PST)
 Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.32
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 09:05:32 -0800 (PST)
+        Tue, 04 Mar 2025 09:05:35 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 04 Mar 2025 17:05:31 +0000
-Subject: [PATCH v2 03/16] rtc: aspeed: drop needless struct
- aspeed_rtc::rtc_dev member
+Date: Tue, 04 Mar 2025 17:05:35 +0000
+Subject: [PATCH v2 07/16] rtc: m48t86: drop needless struct
+ m48t86_rtc_info::rtc member
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-rtc-cleanups-v2-3-d4689a71668c@linaro.org>
+Message-Id: <20250304-rtc-cleanups-v2-7-d4689a71668c@linaro.org>
 References: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 In-Reply-To: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -94,62 +93,61 @@ Cc: linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.2
 
-The memory pointed to by the ::rtc_dev member is managed via devres,
-and no code in this driver uses it past _probe().
+The memory pointed to by the ::rtc member is managed via devres, and
+no code in this driver uses it past _probe().
 
 We can drop it from the structure and just use a local temporary
 variable, reducing runtime memory consumption by a few bytes.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/rtc/rtc-aspeed.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/rtc/rtc-m48t86.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/rtc/rtc-aspeed.c b/drivers/rtc/rtc-aspeed.c
-index 880b015eebaf796f68ed82c29998f345e1fd418b..0d0053b52f9b90a61725bf29435bfc8071977f9e 100644
---- a/drivers/rtc/rtc-aspeed.c
-+++ b/drivers/rtc/rtc-aspeed.c
-@@ -8,7 +8,6 @@
- #include <linux/io.h>
- 
- struct aspeed_rtc {
--	struct rtc_device *rtc_dev;
- 	void __iomem *base;
+diff --git a/drivers/rtc/rtc-m48t86.c b/drivers/rtc/rtc-m48t86.c
+index dd4a62e2d39c73b1c8c3f50a59fd4fffc0b45105..10cd054fe86f9e6be74eb282222b2751dd91cc7e 100644
+--- a/drivers/rtc/rtc-m48t86.c
++++ b/drivers/rtc/rtc-m48t86.c
+@@ -41,7 +41,6 @@
+ struct m48t86_rtc_info {
+ 	void __iomem *index_reg;
+ 	void __iomem *data_reg;
+-	struct rtc_device *rtc;
  };
  
-@@ -85,6 +84,7 @@ static const struct rtc_class_ops aspeed_rtc_ops = {
- static int aspeed_rtc_probe(struct platform_device *pdev)
+ static unsigned char m48t86_readb(struct device *dev, unsigned long addr)
+@@ -219,6 +218,7 @@ static bool m48t86_verify_chip(struct platform_device *pdev)
+ static int m48t86_rtc_probe(struct platform_device *pdev)
  {
- 	struct aspeed_rtc *rtc;
-+	struct rtc_device *rtc_dev;
+ 	struct m48t86_rtc_info *info;
++	struct rtc_device *rtc;
+ 	unsigned char reg;
+ 	int err;
+ 	struct nvmem_config m48t86_nvmem_cfg = {
+@@ -250,17 +250,17 @@ static int m48t86_rtc_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
  
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
- 	if (!rtc)
-@@ -94,17 +94,17 @@ static int aspeed_rtc_probe(struct platform_device *pdev)
- 	if (IS_ERR(rtc->base))
- 		return PTR_ERR(rtc->base);
+-	info->rtc = devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(info->rtc))
+-		return PTR_ERR(info->rtc);
++	rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(rtc))
++		return PTR_ERR(rtc);
  
--	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(rtc->rtc_dev))
--		return PTR_ERR(rtc->rtc_dev);
-+	rtc_dev = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(rtc_dev))
-+		return PTR_ERR(rtc_dev);
+-	info->rtc->ops = &m48t86_rtc_ops;
++	rtc->ops = &m48t86_rtc_ops;
  
- 	platform_set_drvdata(pdev, rtc);
+-	err = devm_rtc_register_device(info->rtc);
++	err = devm_rtc_register_device(rtc);
+ 	if (err)
+ 		return err;
  
--	rtc->rtc_dev->ops = &aspeed_rtc_ops;
--	rtc->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_1900;
--	rtc->rtc_dev->range_max = 38814989399LL; /* 3199-12-31 23:59:59 */
-+	rtc_dev->ops = &aspeed_rtc_ops;
-+	rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_1900;
-+	rtc_dev->range_max = 38814989399LL; /* 3199-12-31 23:59:59 */
+-	devm_rtc_nvmem_register(info->rtc, &m48t86_nvmem_cfg);
++	devm_rtc_nvmem_register(rtc, &m48t86_nvmem_cfg);
  
--	return devm_rtc_register_device(rtc->rtc_dev);
-+	return devm_rtc_register_device(rtc_dev);
- }
- 
- static const struct of_device_id aspeed_rtc_match[] = {
+ 	/* read battery status */
+ 	reg = m48t86_readb(&pdev->dev, M48T86_D);
 
 -- 
 2.48.1.711.g2feabab25a-goog
