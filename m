@@ -1,206 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E393ABA2D;
-	Tue,  4 Mar 2025 23:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E0E277021
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 23:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741132573; cv=none; b=Rm3M/r7hE82bXQJDXR6it+VX0imu7Q1vZbZfrc6SUMfBZ8iIrlC7mqXdAHniFwy9LuTG1it9mtf0m6te5RZeLwiVXzwingfZEoJGV8KBBXXHpn2/KW33uRM68JNysvjFbOfhKJv0fldipmQ+z15l3XJ+s0PoBeYgmTX6XRhlAIY=
+	t=1741132680; cv=none; b=UWoYPAF16lfnfwk0ivAobTJjyDh+s4wNK8XmhtxWND+FN+k50zvcMnzRyRMam60kP4UmdfH5qaSlB+A5f+Vpa9klHnHysVEn3LpYoXVjpzqjLV+a+KzUX1jI0VCq7Ykppb8vzib0e73pVlEtW97hlfdVwMVrT8gjhIJkOs5fUZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741132573; c=relaxed/simple;
-	bh=muDJG8whIoMqiQJ5GfOZ+KWXgtVcQh6PhNF7olCnVa4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EB8gt7QZ1pCo706HyfOckYaN39+41DUqjw+fDaE+iwCwgqfeqctXhYUygLP/0hJzzrXq6L8Ia1kZXcR8uhTzrZGs/yHz5Rgpr8EI54wOlzU96k4gqFH52pHiajwU0+IGRZuVk60It3RjocYRXqv4s6j9L/G1SuRJOueGOR42yAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VA1ovAlv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741132680; c=relaxed/simple;
+	bh=4McxKMF62VjEK3ut4lduNqPf3C1DP3PVLOXSXMdGbfk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R4S4IeY0W2OvcOoyqDrsmziaj0u9aIAsMmfQf/jpZmNswu5la2vL6s0r1PYC51VXDH1VvIw4TZJ1WwbvFq+IjpUXWkPifmbdV5lVShwxJEwsqx1kjsDWIYplvd8BspG+Z5Eub+woxZf2T7c1ou5g7D0ixnsQT0OzDDeKGgO6vTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=qqoYoMyB; arc=none smtp.client-ip=199.89.3.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VA1ovAlv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF9CC4CEE5;
-	Tue,  4 Mar 2025 23:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741132572;
-	bh=muDJG8whIoMqiQJ5GfOZ+KWXgtVcQh6PhNF7olCnVa4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VA1ovAlvnmYmf0qjJqlPtG/z76MWxXzAxNBM03e8cGG1YC8SJfahHPXFozqYs4KJ0
-	 WuXUezrkhXSLAPnn4qdKc87YFiXwNEBr/v20YvC8qkAiLrXQnRp/mvAFWgWYTH/tY3
-	 iIH59St+p0cy3PeIFjgrkoKdWNn6ZerMey2Y3wT48liS08UPeAuuVx7SgMYsAEcYm7
-	 hN6394xtRnOWp7OkONDcSFbu/7VcMgaQbOZ0PMRmAsa90ztUqavTYDtonkbY1o6ze/
-	 Cu0BWkYvpkVMmz8HjEpzjLV0R1duEp8yOv3fxsp27G+D2EOvHstDDhIJnwcrnWey1L
-	 5LTHmcyLNCIRQ==
-Date: Tue, 4 Mar 2025 15:56:09 -0800
-From: Kees Cook <kees@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>,
-	llvm@lists.linux.dev, Geert Uytterhoeven <geert+renesas@glider.be>,
-	David Gow <davidgow@google.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kunit/stackinit: Use fill byte different from Clang i386
- pattern
-Message-ID: <202503041554.EB11964@keescook>
-References: <20250304225606.work.030-kees@kernel.org>
- <db7mpp7nhhlnt6shpwkz4tkhftbedup7xq5zdgmn5lj23fcfq5@pulrtzlamrql>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="qqoYoMyB"
+Received: from localhost (localhost [127.0.0.1])
+	by 003.mia.mailroute.net (Postfix) with ESMTP id 4Z6t0h0vB0zlgrvY;
+	Tue,  4 Mar 2025 23:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1741132670; x=1743724671; bh=4McxKMF62VjEK3ut4lduNqPf
+	3C1DP3PVLOXSXMdGbfk=; b=qqoYoMyBHVEcDMNVTCouq3hF+nsCT48DBMIz5Baq
+	VCDAEXiCU9AbPaEls8Hm3Na6O6ym50iawu3rOkOFIgtdroAZiqUEi+vSrmZPizXK
+	gIxo7Hllokqnl2QlNNTtcxO7EltAFZKC1C4QpbdC+v2dPOgczJON3NvQTrjPiTEl
+	XCCJx1zRFBPhIaRCiFY0LHQO+N5+vr7nBL0nJZKDfhdueg1jeb7PERp3gNolegYO
+	DGMdm3Cgwnkyg+r+p1JHe2QHkoec+2x4IJIQ/S1nI76AbB3zqRgbr2wyE7rIqHki
+	bqF0RNrXbcGkIP6FH3aOi0npqneFCOAjnqNAcBhPQh1jbg==
+X-Virus-Scanned: by MailRoute
+Received: from 003.mia.mailroute.net ([127.0.0.1])
+ by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id KN14XilGcEh4; Tue,  4 Mar 2025 23:57:50 +0000 (UTC)
+Received: from [172.20.1.83] (unknown [192.80.0.138])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4Z6t010HfGzlgrvV;
+	Tue,  4 Mar 2025 23:57:19 +0000 (UTC)
+Message-ID: <3d18d4cf-65bd-4623-bc23-1a0ae350e29b@acm.org>
+Date: Tue, 4 Mar 2025 15:57:18 -0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db7mpp7nhhlnt6shpwkz4tkhftbedup7xq5zdgmn5lj23fcfq5@pulrtzlamrql>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 06/34] cleanup: Basic compatibility with capability
+ analysis
+To: Marco Elver <elver@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>,
+ Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, Ingo Molnar <mingo@kernel.org>,
+ Jann Horn <jannh@google.com>, Jiri Slaby <jirislaby@kernel.org>,
+ Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>,
+ Josh Triplett <josh@joshtriplett.org>, Justin Stitt
+ <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+ Kentaro Takeda <takedakn@nttdata.co.jp>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+ kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-serial@vger.kernel.org
+References: <20250304092417.2873893-1-elver@google.com>
+ <20250304092417.2873893-7-elver@google.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20250304092417.2873893-7-elver@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 04, 2025 at 03:13:20PM -0800, Justin Stitt wrote:
-> Hi,
-> 
-> On Tue, Mar 04, 2025 at 02:56:11PM -0800, Kees Cook wrote:
-> > The byte initialization values used with -ftrivial-auto-var-init=pattern
-> > (CONFIG_INIT_STACK_ALL_PATTERN=y) depends on the compiler, architecture,
-> > and byte position relative to struct member types. On i386 with Clang,
-> > this includes the 0xFF value, which means it looks like nothing changes
-> > between the leaf byte filling pass and the expected "stack wiping"
-> > pass of the stackinit test.
-> > 
-> > Use the byte fill value of 0x99 instead, fixing the test for i386 Clang
-> > builds.
-> > 
-> > Reported-by: ernsteiswuerfel
-> > Closes: https://github.com/ClangBuiltLinux/linux/issues/2071
-> > Fixes: 8c30d32b1a32 ("lib/test_stackinit: Handle Clang auto-initialization pattern")
-> > Signed-off-by: Kees Cook <kees@kernel.org>
-> > ---
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Bill Wendling <morbo@google.com>
-> > Cc: Justin Stitt <justinstitt@google.com>
-> > Cc: llvm@lists.linux.dev
-> > ---
-> >  lib/tests/stackinit_kunit.c | 30 ++++++++++++++++++++----------
-> 
-> Ah, couldn't find this file at first. Depends on [1].
-> 
-> >  1 file changed, 20 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/lib/tests/stackinit_kunit.c b/lib/tests/stackinit_kunit.c
-> > index 135322592faf..63aa78e6f5c1 100644
-> > --- a/lib/tests/stackinit_kunit.c
-> > +++ b/lib/tests/stackinit_kunit.c
-> > @@ -184,6 +184,15 @@ static bool stackinit_range_contains(char *haystack_start, size_t haystack_size,
-> >  #define INIT_UNION_assigned_copy(var_type)		\
-> >  	INIT_STRUCT_assigned_copy(var_type)
-> >  
-> > +/*
-> > + * The "did we actually fill the stack?" check value needs
-> > + * to be neither 0 nor any of the "pattern" bytes. The
-> > + * pattern bytes are compiler, architecture, and type based,
-> > + * so we have to pick a value that never appears for those
-> > + * combinations. Use 0x99 which is not 0xFF, 0xFE, nor 0xAA.
-> > + */
-> > +#define FILL_BYTE	0x99
-> > +
-> >  /*
-> >   * @name: unique string name for the test
-> >   * @var_type: type to be tested for zeroing initialization
-> > @@ -206,12 +215,12 @@ static noinline void test_ ## name (struct kunit *test)		\
-> >  	ZERO_CLONE_ ## which(zero);				\
-> >  	/* Clear entire check buffer for 0xFF overlap test. */	\
-> >  	memset(check_buf, 0x00, sizeof(check_buf));		\
-> > -	/* Fill stack with 0xFF. */				\
-> > +	/* Fill stack with FILL_BYTE. */			\
-> >  	ignored = leaf_ ##name((unsigned long)&ignored, 1,	\
-> >  				FETCH_ARG_ ## which(zero));	\
-> > -	/* Verify all bytes overwritten with 0xFF. */		\
-> > +	/* Verify all bytes overwritten with FILL_BYTE. */	\
-> >  	for (sum = 0, i = 0; i < target_size; i++)		\
-> > -		sum += (check_buf[i] != 0xFF);			\
-> > +		sum += (check_buf[i] != FILL_BYTE);		\
-> >  	/* Clear entire check buffer for later bit tests. */	\
-> >  	memset(check_buf, 0x00, sizeof(check_buf));		\
-> >  	/* Extract stack-defined variable contents. */		\
-> > @@ -222,7 +231,8 @@ static noinline void test_ ## name (struct kunit *test)		\
-> >  	 * possible between the two leaf function calls.	\
-> >  	 */							\
-> >  	KUNIT_ASSERT_EQ_MSG(test, sum, 0,			\
-> > -			    "leaf fill was not 0xFF!?\n");	\
-> > +			    "leaf fill was not 0x%02X!?\n",	\
-> > +			    FILL_BYTE);				\
-> 
->   	KUNIT_ASSERT_EQ_MSG(test, sum, 0,			\
->  -			    "leaf fill was not 0xFF!?\n");	\
->  +			    "leaf fill was not 0x%02X!??!?!?!?!?!?!?!\n",	\
->  +			    FILL_BYTE);				\
+On 3/4/25 1:21 AM, Marco Elver wrote:
+> Due to the scoped cleanup helpers used for lock guards wrapping
+> acquire/release around their own constructors/destructors that store
+> pointers to the passed locks in a separate struct, we currently cannot
+> accurately annotate *destructors* which lock was released. While it's
+> possible to annotate the constructor to say which lock was acquired,
+> that alone would result in false positives claiming the lock was not
+> released on function return.
 
-OMGWTFBBQ!!
+It may be worth mentioning that Clang's thread-safety analyzer not
+supporting alias analysis plays a role here. Anyway:
 
-> 
-> >  								\
-> >  	/* Validate that compiler lined up fill and target. */	\
-> >  	KUNIT_ASSERT_TRUE_MSG(test,				\
-> > @@ -234,9 +244,9 @@ static noinline void test_ ## name (struct kunit *test)		\
-> >  		(int)((ssize_t)(uintptr_t)fill_start -		\
-> >  		      (ssize_t)(uintptr_t)target_start));	\
-> >  								\
-> > -	/* Look for any bytes still 0xFF in check region. */	\
-> > +	/* Validate check region has no FILL_BYTE bytes. */	\
-> >  	for (sum = 0, i = 0; i < target_size; i++)		\
-> > -		sum += (check_buf[i] == 0xFF);			\
-> > +		sum += (check_buf[i] == FILL_BYTE);		\
-> >  								\
-> >  	if (sum != 0 && xfail)					\
-> >  		kunit_skip(test,				\
-> > @@ -271,12 +281,12 @@ static noinline int leaf_ ## name(unsigned long sp, bool fill,	\
-> >  	 * stack frame of SOME kind...				\
-> >  	 */							\
-> >  	memset(buf, (char)(sp & 0xff), sizeof(buf));		\
-> > -	/* Fill variable with 0xFF. */				\
-> > +	/* Fill variable with FILL_BYTE. */			\
-> >  	if (fill) {						\
-> >  		fill_start = &var;				\
-> >  		fill_size = sizeof(var);			\
-> >  		memset(fill_start,				\
-> > -		       (char)((sp & 0xff) | forced_mask),	\
-> > +		       FILL_BYTE & forced_mask,			\
-> >  		       fill_size);				\
-> >  	}							\
-> >  								\
-> > @@ -469,7 +479,7 @@ static int noinline __leaf_switch_none(int path, bool fill)
-> >  			fill_start = &var;
-> >  			fill_size = sizeof(var);
-> >  
-> > -			memset(fill_start, forced_mask | 0x55, fill_size);
-> > +			memset(fill_start, (forced_mask | 0x55) & FILL_BYTE, fill_size);
-> >  		}
-> >  		memcpy(check_buf, target_start, target_size);
-> >  		break;
-> > @@ -480,7 +490,7 @@ static int noinline __leaf_switch_none(int path, bool fill)
-> >  			fill_start = &var;
-> >  			fill_size = sizeof(var);
-> >  
-> > -			memset(fill_start, forced_mask | 0xaa, fill_size);
-> > +			memset(fill_start, (forced_mask | 0xaa) & FILL_BYTE, fill_size);
-> >  		}
-> >  		memcpy(check_buf, target_start, target_size);
-> >  		break;
-> > -- 
-> > 2.34.1
-> > 
-> >
-> 
-> I don't understand the stack init pattern tendencies enough to give a RB
-> but I looked at your patch and it seems to fully replace the fill test
-> values from 0xff to 0x99, so if 0x99 is OK then OK.
-
-Yeah, I had to go do some godbolting to remind myself what value were
-being used. :)
-
-Thanks for the double-check!
-
--Kees
-
-> 
-> [1]: https://lore.kernel.org/all/20250211003136.2860503-3-kees@kernel.org/
-> 
-> Justin
-
--- 
-Kees Cook
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
