@@ -1,84 +1,87 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8402620EF
-	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 14:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45FB27C171
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 14:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741099885; cv=none; b=Dk03XqbeYB4woZy9M9PfnnwnX4JIW7xL6bv0DQ1CpHfU/zd8QrFfvy+rv/24Y2hs5omxN9VTWx2LDHZeaJ7Vx7yySkQ1WG/WDUXs3JULYXBIUzWs3ONXMVYQMV0IoU9Q9NJSk7fyBbDghcqQ0xYfJ/VUcxzNyGeq37zjonxdPjw=
+	t=1741100077; cv=none; b=CwHGLHB0ssCanr+c6Xnbn45apUEPh85NJqAQQmgK6uTVMxBIZH8uwR1JXPpZ3XiVSMYck719DOfgiditTKATPZYGVU8mcXo6UCuT+b3G/VcYuvda84LAeO9w3/muL1kBWaoNaH75Vz95xzFFR6aKhYh6THNOWcNyOfN+lcUWUFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741099885; c=relaxed/simple;
-	bh=tXTdXRn7ghG5zVsDSwWDun4bx1MHi7MVxfjidCyX9Xo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QZAwHSfsi3VaF4VyLMYk1si+6eNg9gRj4LmG2jg28asmWcz4PJ+zjXfN0XEiQJxzRV7vNJjQZuGbf0TWIYox+ejJjk5Emo4fjSDl9cM5SerxiOFURg1x5rNc011H+oIJPhl3kVDD6bzkoDALseboacnqgYavhJe02L54xfgwdjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=M1SKXOHD; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1741100077; c=relaxed/simple;
+	bh=6sXLqOGwJPjjQ1mrwjcKafFgt74IfGmcKaUYu1Vea1Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=VjqTgYcPnqAwC0n0n+ZnNUH9trv28K/EDvig1zH/NK67DGuXr+2wdhn118RZ5kjhS/4k7nhyQTOtFuyuqujhLEFSe3703SzAksMxDye1V+DeSA71+Ojfejpze8l9v0vUCB97HkC+RESiSDJnrzWK/XQiALFLCKR4PMAg9hZH3+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=HsBac2XW; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="M1SKXOHD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1741099880;
-	bh=tXTdXRn7ghG5zVsDSwWDun4bx1MHi7MVxfjidCyX9Xo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M1SKXOHDTkwjPcy8GfnDAQyQhohNdVNcEZ9DBtCotWWkXdXMoHUYR6NfZu8K8PUMs
-	 GaSnx2p5moxNLsup++713v8M735cBfb53S3PMNLhru8nqT34Blr6ZiTBJk4x7g33ai
-	 0ixPxORspwjZNUg3h719R2CmiAOYIW9F9An7txNo=
-Date: Tue, 4 Mar 2025 15:51:19 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
-Message-ID: <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
-References: <20250303215240.work.379-kees@kernel.org>
- <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
- <20250304102536.GB2529736@ax162>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="HsBac2XW"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 524Eqsmu2303478
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 4 Mar 2025 06:52:55 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 524Eqsmu2303478
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1741099977;
+	bh=6sXLqOGwJPjjQ1mrwjcKafFgt74IfGmcKaUYu1Vea1Y=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=HsBac2XWWG8JTb5veE6LuaAtOLLvQu+vBFWgoKJItDg2FR2nOr9Ue8lryfQJFNb5X
+	 ojvI2P5MCIyrjDnZDpX41nGdlho2yRe4glo+hru+12GUQ7NBtdvcBedZZUsuJAWMmd
+	 N1yfFPWJ9WTY4SudzJVAuXk+ooFW+J2KOOkX3rNtdkndtmyJKXCfOOPoNoEFrEvYyS
+	 l+SyUMQ+mbWmrFpz4qKD1NBiUxnxzQF3eOYkhvJKEwllwoiSYqGIWHFHl+eS6oQqxV
+	 mHa7p//gFjY/UXuPZ99CFf8KpquSyK6rWISD0Qpt03vNg4h+TUDKnvTetXzksGMPfD
+	 /cUCOphcQnqWw==
+Date: Tue, 04 Mar 2025 06:52:53 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+        Menglong Dong <menglong8.dong@gmail.com>
+CC: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org,
+        davem@davemloft.net, dsahern@kernel.org,
+        mathieu.desnoyers@efficios.com, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
+        akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20250304094220.GC11590@noisy.programming.kicks-ass.net>
+References: <20250303132837.498938-1-dongml2@chinatelecom.cn> <20250303132837.498938-2-dongml2@chinatelecom.cn> <20250303165454.GB11590@noisy.programming.kicks-ass.net> <CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com> <20250304053853.GA7099@noisy.programming.kicks-ass.net> <20250304061635.GA29480@noisy.programming.kicks-ass.net> <CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com> <20250304094220.GC11590@noisy.programming.kicks-ass.net>
+Message-ID: <6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250304102536.GB2529736@ax162>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-03-04 11:25:36+0100, Nathan Chancellor wrote:
-> On Mon, Mar 03, 2025 at 11:29:58PM +0100, Thomas Weißschuh wrote:
-> > On 2025-03-03 13:52:41-0800, Kees Cook wrote:
+On March 4, 2025 1:42:20 AM PST, Peter Zijlstra <peterz@infradead=2Eorg> wr=
+ote:
+>On Tue, Mar 04, 2025 at 03:47:45PM +0800, Menglong Dong wrote:
+>> We don't have to select FUNCTION_ALIGNMENT_32B, so the
+>> worst case is to increase ~2=2E2%=2E
+>>=20
+>> What do you think?
+>
+>Well, since I don't understand what you need this for at all, I'm firmly
+>on the side of not doing this=2E
+>
+>What actual problem is being solved with this meta data nonsense? Why is
+>it worth blowing up our I$ footprint over=2E
+>
+>Also note, that if you're going to be explaining this, start from
+>scratch, as I have absolutely 0 clues about BPF and such=2E
 
-<snip>
-
-> > This is also what exists in tools/testing/selftests/lib.mk.
-> > Minus the missing CONFIG_FORTIFY_SOURCE on clang x86_32
-> > and a failure of overflow.DEFINE_FLEX_test (clang 19.1.7).
-> 
-> Does Kees's other patch resolve the second issue? It'll obviously fix
-> the first :P
-> 
-> https://lore.kernel.org/20250303214929.work.499-kees@kernel.org/
-
-No, it doesn't.
-
-Running tests with:
-$ .kunit/linux kunit.filter_glob=overflow.DEFINE_FLEX_test kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
-[15:48:30] =================== overflow (1 subtest) ===================
-[15:48:30] # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
-[15:48:30] Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
-[15:48:30]     __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
-[15:48:30]     expected_raw_size == 8 (0x8)
-[15:48:30] [FAILED] DEFINE_FLEX_test
-[15:48:30] # module: overflow_kunit
-[15:48:30] ==================== [FAILED] overflow =====================
-[15:48:30] ============================================================
-[15:48:30] Testing complete. Ran 1 tests: failed: 1
-[15:48:31] Elapsed time: 43.985s total, 0.001s configuring, 43.818s building, 0.133s running
-
-If I force CONFIG_CC_HAS_COUNTED_BY=n then the test succeeds.
-Clang 19.1.7 from the Arch Linux repos.
-
-<snip>
+I would appreciate such information as well=2E The idea seems dubious on t=
+he surface=2E
