@@ -1,76 +1,59 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9318D25333B;
-	Tue,  4 Mar 2025 14:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C95253F10;
+	Tue,  4 Mar 2025 14:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741098652; cv=none; b=J7V8ZHmPlGBs9XHiX9X7Q0Y21YmW/CAxEWGPy8QM2ErPHj+j1FY8n9idCKIXp5juZD6k6+TwQ1r38M2YaMnRvYww7dt3BL96favdJiJ/3dr4FsY1tMwA9jvCPl+QYrPsMT5FJqRXZRje0MYf3SaBYoPNjAzb0cFOcIJRkc0Sq4Q=
+	t=1741099376; cv=none; b=f9+JDg7D5ZRLP2wutfjab8yjb0u8Iw55Ks7SGvXFTTHeaRnPjpXXJaMPnW6lCjAFwGGcMqx9axL22s/B/B8DHjPeDm7OaKRdL6HAI5VbgW0xHyPMXtire4udFdzrDN9bSmJrI0Zahx01ph6mcEMVzXrZL5YKcmpFFm1zNkuP/00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741098652; c=relaxed/simple;
-	bh=9VvfiKn9vnthqkbug7Ck5fZJaYFPZHMHw0rvMhQVYiM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FwNwMnyaYAJJGIlqSKfwxFsf7AdYWSoXESAQ+h8vtOS6QjJCo4F9v0sNyBhk3T5rsfA6znhhTGqwvDKFwSXJ24igMQF58bCaVr97oJrJGQa8pxDrqoIRSL0E51CBkmiRe89jEc3w5wIn+ajQYTIhh8r/Yo88pyspTbMrHsb2tXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O6A3Q3iA; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1741099376; c=relaxed/simple;
+	bh=YSnhZsUjyUL6Mu+1UEaqCNP9DKkYnb+Vju3GpoI0nfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=M1pAiwK6FjV2U58ySEIJb7Pn9OfguEdLa2oer4GZtxKTzUBwaMLqDepvPgw0+77fHhktoyY8MXTJBVaEawerDedy4dxCYstugaCEnvCJ05sI7m1TCZdUHeYGAgPQppC10kDc4iWTLtDwyKhLMgFc7seFs3L5+kUjl+Uga9gcriU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbN+bzML; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O6A3Q3iA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9VvfiKn9vnthqkbug7Ck5fZJaYFPZHMHw0rvMhQVYiM=; b=O6A3Q3iA+uzXiB6Q0PMcUMDxQo
-	XV+JY16vUmBfQmM2B+uRgLmqShMA3uh6f8JFrnV+XiI7bR2TZgptt7gbyiuWUSQAvRx2p701xzj3d
-	kZ3++SZNDrzZNFhKzXnk8E8UxzGcTbP9HBoJjjlTThSUrLtUz6cPNxCnSW/e2VEJnUtvRXswD3nKe
-	NqJ9geRKxEURnQoRKQ82se5REGKKm/jP7sEhZpocyT93TcRZ9k64JTSpk/iNVbGnBPCkLsWQNRCIv
-	cz79tS8cXsg7goeZ8BZOfjYYeOnt5avSRu753nrk6ShXxKlRllZJxs/2Z2EUmvGXQptvg2i3DTdeV
-	za4evRtA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tpTHx-0000000037U-3a7E;
-	Tue, 04 Mar 2025 14:30:30 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 5D27A30049D; Tue,  4 Mar 2025 15:30:29 +0100 (CET)
-Date: Tue, 4 Mar 2025 15:30:29 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 08/34] locking/rwlock, spinlock: Support Clang's
- capability analysis
-Message-ID: <20250304143029.GG11590@noisy.programming.kicks-ass.net>
-References: <20250304092417.2873893-1-elver@google.com>
- <20250304092417.2873893-9-elver@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbN+bzML"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741099375; x=1772635375;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YSnhZsUjyUL6Mu+1UEaqCNP9DKkYnb+Vju3GpoI0nfo=;
+  b=kbN+bzMLkNnyDMGR0Y184LcCmvvFkgTOwV9G4qJWkNzBtQQqKC4V7182
+   e4tMvWrrZD2ccGaqYL/GXN+nnKnIQyjFG94XOrt6HZIRQWzTskVJGrOa0
+   N3uBTD/O2lsxAtTO9ZQ3m3AUBuPlV5FpTr6AGzxMhHvlahsTKW5OI+/0y
+   +rzl9spQ7z7pYobizwb7+9mf3aDNwRnuba4En3M5Io2sJgFXr6Ie/pyFd
+   7WkFWL5GEl9ogFK26nCZ4JyMumqn2gcXSzOSed+QBQLG8R/JId0Kj5GJZ
+   fPaApgOHN7fOZEmmEj3Xji6n1hcqFDD7zj2xNa8hTGIVmNKuQcbxhZUIn
+   Q==;
+X-CSE-ConnectionGUID: 8dk5RnxyR/qDCL89AHmldg==
+X-CSE-MsgGUID: drtFg3EjRVCz9kg6njY1UA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="44826573"
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="44826573"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 06:42:54 -0800
+X-CSE-ConnectionGUID: 89cKP9PuSiCO+csob+RIUQ==
+X-CSE-MsgGUID: SaND+0svTXu9hqHmmev+mw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="123001210"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 04 Mar 2025 06:42:53 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpTTv-000Ju2-06;
+	Tue, 04 Mar 2025 14:42:51 +0000
+Date: Tue, 4 Mar 2025 22:41:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:mm_init/mem_init/v0.1 2/13] arch/um/kernel/physmem.c:27:41:
+ warning: variable 'total_pages' set but not used
+Message-ID: <202503042228.XJgKY4mi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,12 +62,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304092417.2873893-9-elver@google.com>
 
-On Tue, Mar 04, 2025 at 10:21:07AM +0100, Marco Elver wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git mm_init/mem_init/v0.1
+head:   55eb95380e481029d5e7b8b442b0fdfbe79a9d3e
+commit: 6daa1f5d8ea5504c283f562a925f9b8b0d1602d2 [2/13] dev: arch, mm: set max_mapnr when allocating memory map
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20250304/202503042228.XJgKY4mi-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250304/202503042228.XJgKY4mi-lkp@intel.com/reproduce)
 
-> To avoid warnings in constructors, the initialization functions mark a
-> capability as acquired when initialized before guarded variables.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503042228.XJgKY4mi-lkp@intel.com/
 
-Right, took me a bit, but OMG that's a horrific hack :-)
+All warnings (new ones prefixed by >>):
 
+>> arch/um/kernel/physmem.c:27:41: warning: variable 'total_pages' set but not used [-Wunused-but-set-variable]
+      27 |         unsigned long phys_pages, iomem_pages, total_pages;
+         |                                                ^
+   1 warning generated.
+
+
+vim +/total_pages +27 arch/um/kernel/physmem.c
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  24  
+cd05cbed42b731 Tiwei Bie      2024-09-16  25  void __init mem_total_pages(unsigned long physmem, unsigned long iomem)
+^1da177e4c3f41 Linus Torvalds 2005-04-16  26  {
+cd05cbed42b731 Tiwei Bie      2024-09-16 @27  	unsigned long phys_pages, iomem_pages, total_pages;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  28  
+^1da177e4c3f41 Linus Torvalds 2005-04-16  29  	phys_pages  = physmem >> PAGE_SHIFT;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  30  	iomem_pages = iomem   >> PAGE_SHIFT;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  31  
+cd05cbed42b731 Tiwei Bie      2024-09-16  32  	total_pages = phys_pages + iomem_pages;
+^1da177e4c3f41 Linus Torvalds 2005-04-16  33  }
+^1da177e4c3f41 Linus Torvalds 2005-04-16  34  
+
+:::::: The code at line 27 was first introduced by commit
+:::::: cd05cbed42b73168b0772b83bc24769fea3871bf um: Remove highmem leftovers
+
+:::::: TO: Tiwei Bie <tiwei.btw@antgroup.com>
+:::::: CC: Johannes Berg <johannes.berg@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
