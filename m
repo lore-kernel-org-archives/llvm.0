@@ -1,66 +1,67 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D43A290BAE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272B0290BCC
 	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 17:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107945; cv=none; b=dfsq2/LATosi0QQ9obXanziT0SBJu0tEkTLHGmL8ANcIQO5eVsG6KJeRQLKrb/GWHnjkUi9p1yWmHi4AAtwcLAVVS+7fKcxJZMZCR+r6lXJLeysTeYycluawPoaY3lc7WU2RUJxYlJw7cqOKbzoQN3SWF6GT4XVW10oHxnenZCk=
+	t=1741107945; cv=none; b=XZjnL9jcF3d4JNZhsPZImJC1XD+ZIMxQH/6TEspYWm0vysQ1u7Ru2d/zd6mCnqjq0vpyrH7frVE6whd1pQQKY5rmmQ4Ba6kTuSSg6UkppTWInFRWb5hFmiQn3asgNszpwAehRcTcXAGr4XlN4ZykZi23vZEZUJ4qMJaYTggR0kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741107945; c=relaxed/simple;
-	bh=cZSNlyCPP2sZ0NzEjW15iAl44WPa7AMx/oJSQqQslPI=;
+	bh=M4Ze9HORH9tUnnjpPlWigivxQdkAcaAxYcFUsuXXVuQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jGuauloifUprCCCeYtykNGHnafzVD9YRszOMsJG+ZzZeRF+sm+MW3Di+h0WJLLGzC3D9Hf4qvyeIFyMDGqPvHAzD8mPA10hTZN2VRSI5flYxFmXD5B5pyROt9lKaTnwdK7fLREgST7LHzIYOKQ8p+RSyS7b+WsZK2PT3nLR/ZZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ifjg6AUp; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:To:Cc; b=mQc6ec6hI2IHCDhJAxl7shmifXqDygTF31E1oVZ4xpBu2KkQySmsXIrNeMfk8/tjZLKkky24Z+yZRSlttiR07b72eD33d2dZZ2IZzieAHcY7SPrXcaUeTvrDJAIrMnxjGkZbFLS95PH3BkVaq5CfESt1SxicM5vuDkIPtj0t7UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wA97kHWm; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ifjg6AUp"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abf57138cfaso615841666b.1
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wA97kHWm"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-abf4d756135so566780766b.1
         for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 09:05:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741107939; x=1741712739; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1741107940; x=1741712740; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IaB5zKXHk0fgCsI3Zx6BuQOTGpJ5CFC8NMnIRZG9Bxw=;
-        b=ifjg6AUpkJTIvk0TeofN4v6u8nazGI/MdqqsHsuvt4G9zvDG1HOifZaE6D8HgE3qCq
-         VAUEAjAqGJQJldVviObYHvnFQmtyVapZEI4mooYHhc1nxNBuo8aOHaLAn/JNVzBqKXYD
-         RWkibHzRDIAmgLfp+9ZDjA6pYBEUnYaaam2Ha4ykEMPEI3KzGtFliPbLGHoYNRSeEPg5
-         fB9R2ijcm9J/EhNQg8xUZRt7R6I6qsG3MGRZMFTmc5qUOhkzeVHie2ZDVsHkicr70GvQ
-         h7jDwHUtatJic29nJ1A60J4dAV+Vr8lDrmS/nqlKT32nz4F2Lf3aagN05rPUXE5lywN0
-         Wvxw==
+        bh=hsaGEw76ofDXd3Q1RIPfSv8CJUvwC0w+ueATTj/NegM=;
+        b=wA97kHWmSIB4N0UEzgfepQd8hd82R2Hp3LmNJ9/ZibX5FTYQnX1Q6r6ntHqKqE9K2J
+         2PiVv+p1VhjJu5UyR8A8Sc+JJyfC5nHKamvLH6ZywlezEdva22TckJJKROpe7v0PjYGo
+         yI/1xgq3I5alHevbo884Hb2UwnSd6nDXqoYQoKla+DhtWpiwoOclvQ75gFcyBM/c+EVR
+         RC+xt6FattymL1KSSar5T+p2mYEXW85dZv6nCTLKrDqhRRaJVkscGIJ/m0oZ+f5t++vt
+         XerAbvQcqdU+ZqPvO68ALaFmUfavj5Rbd0SsaaZgQr5pZ5MROjwwYmYj42PisF3y6F9i
+         yMqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741107939; x=1741712739;
+        d=1e100.net; s=20230601; t=1741107940; x=1741712740;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IaB5zKXHk0fgCsI3Zx6BuQOTGpJ5CFC8NMnIRZG9Bxw=;
-        b=r4vIujYwxyRH+7Vvv4Fs//N8KJmFpdt6MuAVwp7beKNu8blENh+AncC5zx+1PPYfsG
-         CdOfOagtKTgC4xdIUMLDeKoaEv2UGTOMsQZW5Qlao8koZnnqzMKJcgBIoIBk/CI6uOjw
-         UdWqpqTf2ZdHSl66A5FAiNXVAH6SInyEkCJVuRJSxOOWLVoLUcJjQlWUOTp3zW08pgkz
-         VisjBn+eRiA3coASsi01UBUOo6T2usX+23pRcnf7EH4K0YJM+ekC86aWkw35g3IJ2P+m
-         QB4KrSA8XUvytUXkJ/J+bGq2t7gqChvdlATMjQtkoVk6DLGYQw0A/DivzVkhVXhXtBYp
-         W3dg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKplmeOCoPwEzZ0gngcYOC5GUFdi+tNgASS0cuUWAqbpaaPUYmtsA/hKcRwoYMSxlESH+t@lists.linux.dev
-X-Gm-Message-State: AOJu0YxIOxWtOpqemi57829y32B/R9ROaXi3IljweM6edlODrnGliXYP
-	Ex07xKFFi9iSRCNTSIKW8dfNieQD+mfhcx5WsOZrZX5LB8j92cckffoy2JJ0Hjk=
-X-Gm-Gg: ASbGncvpQ0zurbGL9F8cGD3hb7AzcfFWrX1e9mVuxAec1dkCL8MDVMvPAGTbKokATqB
-	5zf8bvBG1qzBSdEH9Ybvi2Ck2GhbnRh7qIDrOLzbh//8btzoaYbRClDjgBjV5ZzNy2aC0sNAL3Z
-	6IntQ2Mv577VincdWHYnfOCWZO4Ao1snXZB/xDtwGOGggrB/OUbTEoRZDtPbKGrE2Je0CW8CA8z
-	RgGIBQfOS9eFLNO8xvlzr6G0o+8LZcfiSCG3qazSzNpWIBMv9ufAcHv+nHeoKvKm48JwkyP7NCW
-	1hpbN0aj+GuVJZXKb9+pgA91CmJsG8m8WW9qiT369m1OQ1gY8GrZD6A8+sm/BHJqJg9D4WXY1cs
-	GF3UF17CtIVcC2ZPCik6yEEVfje9S
-X-Google-Smtp-Source: AGHT+IEthaeTae6V+bsrtEeJOclicWZ8u/xfJHzWX8LHXk81mGbjX6FsBTkNnwrP87t1Gku2pvbmyw==
-X-Received: by 2002:a17:907:6ea5:b0:ac1:e1a7:44af with SMTP id a640c23a62f3a-ac1e1a747c4mr790541466b.49.1741107938652;
-        Tue, 04 Mar 2025 09:05:38 -0800 (PST)
+        bh=hsaGEw76ofDXd3Q1RIPfSv8CJUvwC0w+ueATTj/NegM=;
+        b=qxGKYCS2xsCD8A5DQHF6FE8r5lp9eY21m+SppKdXOTVawPtis8/DlOrCjUFBJ7rcwu
+         1GUpXUsEnY5d5y50Bay4mxpojtVDQm9Mqu7tbPp5FQVaWgr+6VRZ5xf6oKDEBRynXNKe
+         DPY/KV/A/G9vwnS8SDzA5GUw2rIJJviqYUhGUc80MXAeeDhkuSbwDfoLxp3t5HAacSWj
+         949zy0FpHbwmrVxNyquu2MeFEe5mhvN6rq3QdV1ZmowcEKDpO6XmmgZ/iC+zGrVD+3vk
+         L2NPSAM/0n8lSc/PZwsn4UcdMR9DSvypaoD4oxIEjvsZxpoMTrlTJMvf6MoY+m1uXoJt
+         9OOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWOcX0fbaxAmpm12lKjLBXy10vBAQBlvJkgTL1AEHv1WenMmxHB2i2PULW+3nlW3M+ozycv@lists.linux.dev
+X-Gm-Message-State: AOJu0Yza7SWdMYqLZpCC4op7dv5sfxRKMbARR2YVYlyPpEzVHNoOe6Q2
+	6dlSxBUyV+mCgxJE1AdsFUYGv31y1mrRl8eq3AwVE8IQC+N0LoYguz0WrgFssi4=
+X-Gm-Gg: ASbGncv76yUJd/bcoijUF6MPYWfPjEgkClvflluWGkIGJsIwcy2FNlwUh6BUU+O3okt
+	CqP2kg6ACv7jKVRaXM6pAn2HJlrbsauodWGZB4m2tZV1uKJ9oLRmokqQpODMpGyERmZ/cGyd3LY
+	hM+3r28cGk5oeotm8Zou2MclZHhCB0r8L0FUE6ogOf9n8M5K4YsqXyzZvimkF7zT0LXvclm6qjW
+	uW2rXRRBsjJxlqupZw4HVhdO8oCAW7jRkXliXiSpMrX1lrwsuWuM5O/rxHZM1jk9/PbbChFRFNV
+	63xAMC/i8bxOtmXbXphRerZKMkWcZo7eosq+/LV0mTXuYelyXAkiasKMoOqUdmwI3b2ECHwbME2
+	9ztNIx/9evF+Z+ZYGWgfz6krt7Df4
+X-Google-Smtp-Source: AGHT+IFl6TTi8U8Sph/F6W/xnjfer4H7R9+DXzK4OCCEVcy7pkMVR63rOrht0Su/bmOb+eKFGQTbhQ==
+X-Received: by 2002:a17:907:1c8b:b0:abf:38a:6498 with SMTP id a640c23a62f3a-ac20db16fb1mr2300366b.55.1741107940186;
+        Tue, 04 Mar 2025 09:05:40 -0800 (PST)
 Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.38
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf795ba15esm367589066b.131.2025.03.04.09.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 09:05:38 -0800 (PST)
+        Tue, 04 Mar 2025 09:05:39 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 04 Mar 2025 17:05:39 +0000
-Subject: [PATCH v2 11/16] rtc: rx8581: drop needless struct rx8581
+Date: Tue, 04 Mar 2025 17:05:41 +0000
+Subject: [PATCH v2 13/16] rtc: sd2405al: drop needless struct sd2405al::rtc
+ member
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-rtc-cleanups-v2-11-d4689a71668c@linaro.org>
+Message-Id: <20250304-rtc-cleanups-v2-13-d4689a71668c@linaro.org>
 References: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 In-Reply-To: <20250304-rtc-cleanups-v2-0-d4689a71668c@linaro.org>
 To: Chanwoo Choi <cw00.choi@samsung.com>, 
@@ -98,226 +99,57 @@ no code in this driver uses it past _probe().
 We can drop it from the structure and just use a local temporary
 variable, reducing runtime memory consumption by a few bytes.
 
-Since this now means that the structure has just one member only left,
-there  is no need anymore to allocate data for it and pass that around
-via the various callbacks, just to extract that one member.
-
-Instead, we can just pass that one member and avoid the extra memory
-allocation for the containing struct, reducing runtime memory
-consumption.
-
+Tested-by: Tóth János <gomba007@gmail.com>
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- drivers/rtc/rtc-rx8581.c | 85 ++++++++++++++++++++----------------------------
- 1 file changed, 36 insertions(+), 49 deletions(-)
+ drivers/rtc/rtc-sd2405al.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/rtc/rtc-rx8581.c b/drivers/rtc/rtc-rx8581.c
-index b18c12887bdc3705ea4cee9b8d75086a05b24e71..20c2dff01bae833ae4e100cc38cd5f030017be75 100644
---- a/drivers/rtc/rtc-rx8581.c
-+++ b/drivers/rtc/rtc-rx8581.c
-@@ -52,11 +52,6 @@
- #define RX8571_USER_RAM		0x10
- #define RX8571_NVRAM_SIZE	0x10
+diff --git a/drivers/rtc/rtc-sd2405al.c b/drivers/rtc/rtc-sd2405al.c
+index d2568c3e387659dfea598cd2ef6bddc5c076cbb9..00c3033e8079b5f10aaabcc7a1d3f19771263a02 100644
+--- a/drivers/rtc/rtc-sd2405al.c
++++ b/drivers/rtc/rtc-sd2405al.c
+@@ -42,7 +42,6 @@
  
--struct rx8581 {
--	struct regmap		*regmap;
+ struct sd2405al {
+ 	struct device		*dev;
 -	struct rtc_device	*rtc;
--};
--
- struct rx85x1_config {
- 	struct regmap_config regmap;
- 	unsigned int num_nvram;
-@@ -72,14 +67,14 @@ static int rx8581_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	unsigned char date[7];
- 	unsigned int data;
- 	int err;
--	struct rx8581 *rx8581 = i2c_get_clientdata(client);
-+	struct regmap *regmap = i2c_get_clientdata(client);
+ 	struct regmap		*regmap;
+ };
  
- 	/* First we ensure that the "update flag" is not set, we read the
- 	 * time and date then re-read the "update flag". If the update flag
- 	 * has been set, we know that the time has changed during the read so
- 	 * we repeat the whole process again.
- 	 */
--	err = regmap_read(rx8581->regmap, RX8581_REG_FLAG, &data);
-+	err = regmap_read(regmap, RX8581_REG_FLAG, &data);
- 	if (err < 0)
- 		return err;
- 
-@@ -92,20 +87,20 @@ static int rx8581_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	do {
- 		/* If update flag set, clear it */
- 		if (data & RX8581_FLAG_UF) {
--			err = regmap_write(rx8581->regmap, RX8581_REG_FLAG,
--					  data & ~RX8581_FLAG_UF);
-+			err = regmap_write(regmap, RX8581_REG_FLAG,
-+					   data & ~RX8581_FLAG_UF);
- 			if (err < 0)
- 				return err;
- 		}
- 
- 		/* Now read time and date */
--		err = regmap_bulk_read(rx8581->regmap, RX8581_REG_SC, date,
-+		err = regmap_bulk_read(regmap, RX8581_REG_SC, date,
- 				       sizeof(date));
- 		if (err < 0)
- 			return err;
- 
- 		/* Check flag register */
--		err = regmap_read(rx8581->regmap, RX8581_REG_FLAG, &data);
-+		err = regmap_read(regmap, RX8581_REG_FLAG, &data);
- 		if (err < 0)
- 			return err;
- 	} while (data & RX8581_FLAG_UF);
-@@ -137,7 +132,7 @@ static int rx8581_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	struct i2c_client *client = to_i2c_client(dev);
- 	int err;
- 	unsigned char buf[7];
--	struct rx8581 *rx8581 = i2c_get_clientdata(client);
-+	struct regmap *regmap = i2c_get_clientdata(client);
- 
- 	dev_dbg(dev, "%s: secs=%d, mins=%d, hours=%d, "
- 		"mday=%d, mon=%d, year=%d, wday=%d\n",
-@@ -160,25 +155,23 @@ static int rx8581_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[RX8581_REG_DW] = (0x1 << tm->tm_wday);
- 
- 	/* Stop the clock */
--	err = regmap_update_bits(rx8581->regmap, RX8581_REG_CTRL,
-+	err = regmap_update_bits(regmap, RX8581_REG_CTRL,
- 				 RX8581_CTRL_STOP, RX8581_CTRL_STOP);
- 	if (err < 0)
- 		return err;
- 
- 	/* write register's data */
--	err = regmap_bulk_write(rx8581->regmap, RX8581_REG_SC,
--				buf, sizeof(buf));
-+	err = regmap_bulk_write(regmap, RX8581_REG_SC, buf, sizeof(buf));
- 	if (err < 0)
- 		return err;
- 
- 	/* get VLF and clear it */
--	err = regmap_update_bits(rx8581->regmap, RX8581_REG_FLAG,
--				 RX8581_FLAG_VLF, 0);
-+	err = regmap_update_bits(regmap, RX8581_REG_FLAG, RX8581_FLAG_VLF, 0);
- 	if (err < 0)
- 		return err;
- 
- 	/* Restart the clock */
--	return regmap_update_bits(rx8581->regmap, RX8581_REG_CTRL,
-+	return regmap_update_bits(regmap, RX8581_REG_CTRL,
- 				 RX8581_CTRL_STOP, 0);
- }
- 
-@@ -190,29 +183,27 @@ static const struct rtc_class_ops rx8581_rtc_ops = {
- static int rx8571_nvram_read(void *priv, unsigned int offset, void *val,
- 			     size_t bytes)
+@@ -167,6 +166,7 @@ static const struct regmap_config sd2405al_regmap_conf = {
+ static int sd2405al_probe(struct i2c_client *client)
  {
--	struct rx8581 *rx8581 = priv;
-+	struct regmap *regmap = priv;
- 
--	return regmap_bulk_read(rx8581->regmap, RX8571_USER_RAM + offset,
--				val, bytes);
-+	return regmap_bulk_read(regmap, RX8571_USER_RAM + offset, val, bytes);
- }
- 
- static int rx8571_nvram_write(void *priv, unsigned int offset, void *val,
- 			      size_t bytes)
- {
--	struct rx8581 *rx8581 = priv;
-+	struct regmap *regmap = priv;
- 
--	return regmap_bulk_write(rx8581->regmap, RX8571_USER_RAM + offset,
--				 val, bytes);
-+	return regmap_bulk_write(regmap, RX8571_USER_RAM + offset, val, bytes);
- }
- 
- static int rx85x1_nvram_read(void *priv, unsigned int offset, void *val,
- 			     size_t bytes)
- {
--	struct rx8581 *rx8581 = priv;
-+	struct regmap *regmap = priv;
- 	unsigned int tmp_val;
+ 	struct sd2405al *sd2405al;
++	struct rtc_device *rtc;
  	int ret;
  
--	ret = regmap_read(rx8581->regmap, RX8581_REG_RAM, &tmp_val);
-+	ret = regmap_read(regmap, RX8581_REG_RAM, &tmp_val);
- 	(*(unsigned char *)val) = (unsigned char) tmp_val;
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+@@ -182,17 +182,17 @@ static int sd2405al_probe(struct i2c_client *client)
+ 	if (IS_ERR(sd2405al->regmap))
+ 		return PTR_ERR(sd2405al->regmap);
  
- 	return ret;
-@@ -221,12 +212,11 @@ static int rx85x1_nvram_read(void *priv, unsigned int offset, void *val,
- static int rx85x1_nvram_write(void *priv, unsigned int offset, void *val,
- 			      size_t bytes)
- {
--	struct rx8581 *rx8581 = priv;
-+	struct regmap *regmap = priv;
- 	unsigned char tmp_val;
- 
- 	tmp_val = *((unsigned char *)val);
--	return regmap_write(rx8581->regmap, RX8581_REG_RAM,
--				(unsigned int)tmp_val);
-+	return regmap_write(regmap, RX8581_REG_RAM, (unsigned int)tmp_val);
- }
- 
- static const struct rx85x1_config rx8581_config = {
-@@ -249,9 +239,10 @@ static const struct rx85x1_config rx8571_config = {
- 
- static int rx8581_probe(struct i2c_client *client)
- {
--	struct rx8581 *rx8581;
-+	struct regmap *regmap;
- 	const struct rx85x1_config *config = &rx8581_config;
- 	const void *data = of_device_get_match_data(&client->dev);
-+	struct rtc_device *rtc;
- 	static struct nvmem_config nvmem_cfg[] = {
- 		{
- 			.name = "rx85x1-",
-@@ -276,31 +267,27 @@ static int rx8581_probe(struct i2c_client *client)
- 	if (data)
- 		config = data;
- 
--	rx8581 = devm_kzalloc(&client->dev, sizeof(struct rx8581), GFP_KERNEL);
--	if (!rx8581)
--		return -ENOMEM;
--
--	i2c_set_clientdata(client, rx8581);
-+	regmap = devm_regmap_init_i2c(client, &config->regmap);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
- 
--	rx8581->regmap = devm_regmap_init_i2c(client, &config->regmap);
--	if (IS_ERR(rx8581->regmap))
--		return PTR_ERR(rx8581->regmap);
-+	i2c_set_clientdata(client, regmap);
- 
--	rx8581->rtc = devm_rtc_allocate_device(&client->dev);
--	if (IS_ERR(rx8581->rtc))
--		return PTR_ERR(rx8581->rtc);
+-	sd2405al->rtc = devm_rtc_allocate_device(&client->dev);
+-	if (IS_ERR(sd2405al->rtc))
+-		return PTR_ERR(sd2405al->rtc);
 +	rtc = devm_rtc_allocate_device(&client->dev);
 +	if (IS_ERR(rtc))
 +		return PTR_ERR(rtc);
  
--	rx8581->rtc->ops = &rx8581_rtc_ops;
--	rx8581->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
--	rx8581->rtc->range_max = RTC_TIMESTAMP_END_2099;
--	rx8581->rtc->start_secs = 0;
--	rx8581->rtc->set_start_time = true;
-+	rtc->ops = &rx8581_rtc_ops;
+-	sd2405al->rtc->ops = &sd2405al_rtc_ops;
+-	sd2405al->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+-	sd2405al->rtc->range_max = RTC_TIMESTAMP_END_2099;
++	rtc->ops = &sd2405al_rtc_ops;
 +	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
 +	rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	rtc->start_secs = 0;
-+	rtc->set_start_time = true;
  
--	ret = devm_rtc_register_device(rx8581->rtc);
+ 	dev_set_drvdata(&client->dev, sd2405al);
+ 
+-	ret = devm_rtc_register_device(sd2405al->rtc);
 +	ret = devm_rtc_register_device(rtc);
+ 	if (ret < 0)
+ 		return ret;
  
- 	for (i = 0; i < config->num_nvram; i++) {
--		nvmem_cfg[i].priv = rx8581;
--		devm_rtc_nvmem_register(rx8581->rtc, &nvmem_cfg[i]);
-+		nvmem_cfg[i].priv = regmap;
-+		devm_rtc_nvmem_register(rtc, &nvmem_cfg[i]);
- 	}
- 
- 	return ret;
 
 -- 
 2.48.1.711.g2feabab25a-goog
