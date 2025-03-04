@@ -1,98 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C61E204C1E;
-	Tue,  4 Mar 2025 16:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9813D2673BA;
+	Tue,  4 Mar 2025 17:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741105731; cv=none; b=Y4tGqEXUfvkdc0qqC6GPG2dmG9ukU0LFPpr+pkpQzv3loGicI22f85O1YVRWpKyAz3+ixsl9K0NIpsMe/+X8iImh66IoNG1QiLeA7GzDTv8RpPmqeaCMUhk99UniefJ7YuO4gVrfPZRo/BMsiWm/2lRw/ZBj8vDHFypBtepqEcc=
+	t=1741107929; cv=none; b=AB4kqQ1YwDqhHtNzX2LelsecdreeuPS7Ttob4OxnCof/eZkR90l5uMx3wJS09Y2YJOAxGh/RYTbxzEmRgIV0wnMfNOQXD/SyCiDur1G51q7uPOk0iPbcDizUSXv+KDO2+0qKgBWg5kdhwnIHUwq+vVKUL10TnlPdxUWGhGXJG7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741105731; c=relaxed/simple;
-	bh=lqDg7gYU+818e4TRIz2Zp6nENwnhnzNwXB/jM7gTjZE=;
+	s=arc-20240116; t=1741107929; c=relaxed/simple;
+	bh=RDpyLABRZvGWXNZLdr9VJTcE+G5tG2Zqtza2puZ8MEI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HmbRUiwMdBk7B/xPBhSIPDdO+Vsc0UqK8y3B41XI91k2PXoEo/JnbHfZCtoPjPXfnkdsvMNhzj42X9YpOeuH0aU6z6cXOwP54IZDFe6j51uxp55+A106k6Rm92WPgQBJE6nzjxq3bglFj4RJho0eqIofPytXZBgJ/02k3j9xImo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uNwTkCXL; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=HBgdJbhyB6J6OWrFmg3LW5uPROcgXwtaAjb+CjdbYjHOdVbCXlMRn9EaQUfVZwHyPEA6SX3AQT+f7M+bTztj6M79skRlzyw7kluV2OP7VHe6MN0IvR5neDKJzhzNVyvQ9Sw3qxe6V1mK0ueN4cTMFhEhZ15QLRCeCgocOYw16b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n6Q2+jzn; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uNwTkCXL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA79C4CEE5;
-	Tue,  4 Mar 2025 16:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741105730;
-	bh=lqDg7gYU+818e4TRIz2Zp6nENwnhnzNwXB/jM7gTjZE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uNwTkCXLfXwiuaqh7iLk5y3XWPiY1JXK/OGKUOGuMB80rvDgvmVcz0CuY7XoJB6gW
-	 WjWtX9m/ml3NqoloVaQK8+n+Y+rnSv/F7iatqbUF5SbkgsM8YO9nfjbIa2U4Mld4F8
-	 ywsGb9TiNP2p7RhvGv8Lsuq6whau+k08Bb7X7RFgxyQHJn8Fw/AYcCHACXC/K+YSY7
-	 1NaIqSQqbuf4vzxBxSJPNNDkvgL4MC+ihZqW6KBUl4y3y2cAYwAxTysBuBq6Efci+Y
-	 H0F02I4OUtdPlogRunR6CtdLYDnhjhiTdTDl5QmovnZY5CVl3AUqgB0X3LyHX36OuT
-	 qZx6pziRIq+PQ==
-Date: Tue, 4 Mar 2025 17:28:45 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] kbuild: clang: Support building UM with SUBARCH=i386
-Message-ID: <20250304162845.GA1479759@ax162>
-References: <20250304162124.it.785-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n6Q2+jzn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741107927; x=1772643927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RDpyLABRZvGWXNZLdr9VJTcE+G5tG2Zqtza2puZ8MEI=;
+  b=n6Q2+jznJI7XhSwNzkf2habzEB96mYpZZHGI+Greuma+a34JhaUqB6S5
+   ZTwK4SNp0e0QGik8p7aHMJ5421PmKdI4J0V6p4db6wTpigROLjEQgqM3X
+   GwpIS3fK2/xWfYwfB7gsXNkk57W/U+QHRc60PdWz+PBVjKzVm7n1Cemm1
+   LblklQEj5Vvarmeb9TmDnDnpANxoW/bmCKOx4L1QHeeiBgIy3fweqjhUh
+   ylIOe7OOJZVQ9jgrPGbARlNcnNNRTQsnaXjPj6w9rHRYSktoPeCKq982w
+   IFWovR5Eq9kEK62bhxTIsafPw7JuQWzWm/a/5a3qjT7+MVJAuWWNTWcpT
+   A==;
+X-CSE-ConnectionGUID: FTa1T6IzQKCvT6zc+CVTWA==
+X-CSE-MsgGUID: 9XmXnGwyT0ugkk6JfXLfFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="45965043"
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="45965043"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 09:05:07 -0800
+X-CSE-ConnectionGUID: jyAZbCC/Sly/1kVYr8jNGA==
+X-CSE-MsgGUID: kcxpvr4dQkCfZJE34vMP/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="118427663"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 04 Mar 2025 09:05:06 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpVhY-000K30-0G;
+	Tue, 04 Mar 2025 17:05:04 +0000
+Date: Wed, 5 Mar 2025 01:04:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH -tip 3/5] x86/irq/32: Add ASM_CALL_CONSTRAINT to inline
+ asm using CALL_NOSPEC
+Message-ID: <202503050046.Lv9cC1m9-lkp@intel.com>
+References: <20250303155446.112769-3-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250304162124.it.785-kees@kernel.org>
+In-Reply-To: <20250303155446.112769-3-ubizjak@gmail.com>
 
-On Tue, Mar 04, 2025 at 08:21:29AM -0800, Kees Cook wrote:
-> The UM builds distinguish i386 from x86_64 via SUBARCH, but we don't
-> support building i386 directly with Clang. To make SUBARCH work for
-> i386 UM, we need to explicitly test for it.
-> 
-> This lets me run i386 KUnit tests with Clang:
-> 
-> $ ./tools/testing/kunit/kunit.py run \
-> 	--make_options LLVM=1 \
-> 	--make_options SUBARCH=i386
-> ...
-> 
-> Fixes: c7500c1b53bf ("um: Allow builds with Clang")
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Hi Uros,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build errors:
 
-> ---
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Thomas Weiﬂschuh <linux@weissschuh.net>
-> Cc: Bill Wendling <morbo@google.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: llvm@lists.linux.dev
-> Cc: linux-kbuild@vger.kernel.org
-> ---
->  scripts/Makefile.clang | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 2435efae67f5..b67636b28c35 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -12,6 +12,8 @@ CLANG_TARGET_FLAGS_riscv	:= riscv64-linux-gnu
->  CLANG_TARGET_FLAGS_s390		:= s390x-linux-gnu
->  CLANG_TARGET_FLAGS_sparc	:= sparc64-linux-gnu
->  CLANG_TARGET_FLAGS_x86		:= x86_64-linux-gnu
-> +# This is only for i386 UM builds, which need the 32-bit target not -m32
-> +CLANG_TARGET_FLAGS_i386		:= i386-linux-gnu
->  CLANG_TARGET_FLAGS_um		:= $(CLANG_TARGET_FLAGS_$(SUBARCH))
->  CLANG_TARGET_FLAGS		:= $(CLANG_TARGET_FLAGS_$(SRCARCH))
->  
-> -- 
-> 2.34.1
-> 
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on tip/auto-latest linus/master v6.14-rc5 next-20250304]
+[cannot apply to tip/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/x86-irq-32-Add-missing-clobber-to-inline-asm/20250303-235755
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20250303155446.112769-3-ubizjak%40gmail.com
+patch subject: [PATCH -tip 3/5] x86/irq/32: Add ASM_CALL_CONSTRAINT to inline asm using CALL_NOSPEC
+config: i386-buildonly-randconfig-001-20250304 (https://download.01.org/0day-ci/archive/20250305/202503050046.Lv9cC1m9-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050046.Lv9cC1m9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503050046.Lv9cC1m9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/irq_32.c:62:10: error: expected ')'
+      62 |                        COMMA(ASM_CALL_CONSTRAINT)
+         |                        ^
+   arch/x86/kernel/irq_32.c:102:10: error: expected ')'
+     102 |                        COMMA(ASM_CALL_CONSTRAINT)
+         |                        ^
+   2 errors generated.
+
+
+vim +62 arch/x86/kernel/irq_32.c
+
+    54	
+    55	static void call_on_stack(void *func, void *stack)
+    56	{
+    57		asm volatile("xchgl %[sp], %%esp\n"
+    58			     CALL_NOSPEC
+    59			     "movl %[sp], %%esp"
+    60			     : [sp] "+b" (stack)
+    61			     : [thunk_target] "D" (func)
+  > 62			       COMMA(ASM_CALL_CONSTRAINT)
+    63			     : "memory", "cc", "edx", "ecx", "eax");
+    64	}
+    65	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
