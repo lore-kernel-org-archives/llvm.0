@@ -1,45 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635141FE44B;
-	Tue,  4 Mar 2025 10:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA171F4611
+	for <llvm@lists.linux.dev>; Tue,  4 Mar 2025 10:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741083291; cv=none; b=bZgv1Hbi994ZoFcsCHCHi3ZDK946Tzm3VonofEXjR2vsMl62cvqfZjWGmJ5Mp1aqQvljBXTcgbQPFUHraV0DN8hHpvfMKAcgOndQ9rvsL1ZjSdRYzE3X/EdSM+dGuBXqE4D6EjE6sOFT0hOR/JlriXb/T3QZAXfO5JO7nL4gqRo=
+	t=1741083501; cv=none; b=i/lrMEVI6vVajT8iUXdK/v8SdXKt0F4J9UFyjF3gGAaazC1Emv3OoL2pPr6fKYweoTKIgSSZ/khjYYpaJAqypDQfVXNsEf/EKSxUcHik8K2cl4VCpCZnjv9swjt0k9Y9r7fVw/VxVFpTxPraESGv400Kggiat6NehDXgiah40Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741083291; c=relaxed/simple;
-	bh=TjLOJqtB1F8hWRkkxRuwtt8t9SXz+Ki1Fz1mo89VUes=;
+	s=arc-20240116; t=1741083501; c=relaxed/simple;
+	bh=Bfnzv1Cy+QaLm5BRN0VgsvZutnU9et4W4XCIe4/LVvQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HUcYXqsk1aujR1Jq74jXvSzlnSIlyS3jaI3EJ2Npj7rMQEMqsiv32eDsLzy9BOPtD9GGCBW94zTg/ZojLA7q3vqhOFvN1I0nlC5y4dusfo1gdozohGn/DkdpTXsOXE0yp9fqAEsGWZnY6AF1NjK+8CaKHZSpHcmqsvk3HFHroC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p3m302a/; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=HE/52gMYb/+PO9RqDXuT0Fu6nPwfUD3P34/Be1zXrWasxfx5uMhirlTTVco6X/Zrs1yop9fdAdHmronpy2UaJmxC4E6SOZ7sNxhEoFcbZj/M3Mvbdew4+lL5/c3AUYaw/HyA00umSZTAHUY3kPY3Pl5CcqB17Pol43ZUdbwexSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ajKHvtec; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p3m302a/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682A1C4CEE5;
-	Tue,  4 Mar 2025 10:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741083290;
-	bh=TjLOJqtB1F8hWRkkxRuwtt8t9SXz+Ki1Fz1mo89VUes=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p3m302a/k0SfOsBi02IpT15HnKL9GkqTwtq4VDlznbcFLhhbO8qGT5stRieyuqFUU
-	 Esj2vlfXMImK2e8p+rT7XVIsld8Hd2GUg0KnZuZZDkfNxT6kCD24DlDwCP5Dpmj8LX
-	 yd8nEeKCEdhs8jkxw1jcMuQAXvPDxiUz5kKgB2tjLp/TZI5numzst116MB9d0vuED4
-	 qOqPFnysZefOCUrxGMpo1wLKlJCGiDgCS/xvXFbKH9jFUW1hRtNSBevBsZm8oY5Jhn
-	 LOrg73y4t72P2COBKf3cRfc1VAHGgpGYxWwHwF3SnswPnz0wu4pcyn8BfDlyecQRNC
-	 Ae7EcWqlzVDVA==
-Date: Tue, 4 Mar 2025 11:14:45 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] hardening: Enable i386 FORTIFY_SOURCE on Clang 16+
-Message-ID: <20250304101445.GA2529736@ax162>
-References: <20250303214929.work.499-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ajKHvtec"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-438d9c391fcso47165e9.0
+        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 02:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741083498; x=1741688298; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cHHGVIwYUugRFpPbUWW4QxwSvbgE0LZxVDWqc5K4qXA=;
+        b=ajKHvtecmxAE+txSy1J51hbQlVeVgG+IWkY9SCpbiLOpOZRB6kcGAyH4/4oDZslkaE
+         pGwqI3YybLgMd4iw7xk7iKohY06O8kYEWOkQzCEHe3Y7ETEVYm0JhsOcf0LNNsjDlNRG
+         hjZLVaHyp4zfIcNZT3C75p9p62VgghN1fxnope4XwZ/ui69RwXep8vgqIZBCJ6zT5llp
+         0tGAmhB/yW/5ky0wS1KTVmaabHksejejCASL96tzmOi9b7IFDQwWY1iSt8KdPiKnKqAo
+         /UrPvkfJs+wmCTAvrKLZ/SZ9khWWKp+bqyuyW6mRWKfABtXEHPWxNzZ6r8s/jbN0Lv9G
+         loNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741083498; x=1741688298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cHHGVIwYUugRFpPbUWW4QxwSvbgE0LZxVDWqc5K4qXA=;
+        b=E/P4d8lo6bIHJkBp0EH4ByXEymi5exsj7+kkLF8Assa5JWAW+KKIqTycpFzQbw/gYB
+         LE0RpEllyEdkZikefHB9o7PldD5UDAwx1mrv9JAu0VtN0P2uVGm5vufWhacAjfAcmF8L
+         ZkJPQmqKySJFZnLYrmTPDGWoNIPzqKVKixGwtPYLQAL+5Mdxjp7dNZabSKhfp4xbssG9
+         wqBD4tJefXU9pMRxSWAQ3kZoqK59rwFWXczZE80C4RxYRf0hTNFs7SpFuFDv7fcs6NdC
+         Y2iiZ9G1uA1tUE7n9KwHDz+JdY2vlDu3f3XPfOtfR3ryCN48OCawKvQt56xqL+w+0NAr
+         U71g==
+X-Forwarded-Encrypted: i=1; AJvYcCVpw34uS3ZYGg7oiewfMrPtNpjgpuIdFfgXTq6x6Bhh4NNKM9iqRJ1thYnrOTqL3GBrQG+u@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx2Rly8uF76CVK1amZYV5WwA+4gIsSAlZY0bzOnM62EgdnmIGYI
+	933wBULQzWNZFy5pEa7eSVJ3fUKvTvkyRoArpSK9W8lw8Kjxaqm8g0N1vM44wg==
+X-Gm-Gg: ASbGncsdtClX7XNY9MJ3B8cT/YsmebJ3Trae5IR0YxIPIdx+SwTb0Kdphx09kQ73wfQ
+	Ef0c/jo9DbsTXxaqqL6+2FMEH6BWUifkDEUU41FodzHaW8YbtPQnnTmWP0xOSnWcgUnhofG1QyH
+	p9fjVyBS5xYgWdfz20SeZ+lBvlT58j4VSZezkH+saxawPIaiW2eOb4s1OqLf9cdoNXCiHQ/95bP
+	74CWIMnxuh7kECe7JMdDcV4/3xhSmg+KspxJGQ/+K0EhPpdWKTTy9P3uOFdUv/C+v7I95apCin7
+	k4oBloAA/NDVWBEaCJYiTIJMliyV4jyLhM7ph5U9CbW+B+5GlXcV+9Id3cFNPIjyLByTHnUl3sm
+	tfu1A
+X-Google-Smtp-Source: AGHT+IF1PXtKs5JYeKClxwK1lAzDe1Sy+Hic0+WUm5WKWP2ZPJezaTOmzVJ6ghefB6dnk3leGQIlaw==
+X-Received: by 2002:a05:600c:43d4:b0:439:9434:1b66 with SMTP id 5b1f17b1804b1-43bcbe262d7mr789425e9.1.1741083497923;
+        Tue, 04 Mar 2025 02:18:17 -0800 (PST)
+Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e47b7dcfsm17460567f8f.55.2025.03.04.02.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 02:18:17 -0800 (PST)
+Date: Tue, 4 Mar 2025 10:18:13 +0000
+From: Brendan Jackman <jackmanb@google.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	kernel test robot <lkp@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Oscar Salvador <osalvador@suse.de>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/page_alloc: Add lockdep assertion for pageblock type
+ change
+Message-ID: <Z8bTZVYd0fJLbgl7@google.com>
+References: <20250227-pageblock-lockdep-v1-1-3701efb331bb@google.com>
+ <202503010129.rJvGqZN1-lkp@intel.com>
+ <20250228182804.GB120597@cmpxchg.org>
+ <Z8WQEpv7BNtDDoH3@black.fi.intel.com>
+ <20250304101357.66067dd3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,46 +85,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250303214929.work.499-kees@kernel.org>
+In-Reply-To: <20250304101357.66067dd3@canb.auug.org.au>
 
-On Mon, Mar 03, 2025 at 01:49:37PM -0800, Kees Cook wrote:
-> The i386 regparm bug exposed with FORTIFY_SOURCE with Clang was fixed
-> in Clang 16[1].
+On Tue, Mar 04, 2025 at 10:13:57AM +1100, Stephen Rothwell wrote:
+> Hi Andy,
 > 
-> Link: https://github.com/llvm/llvm-project/commit/c167c0a4dcdb998affb2756ce76903a12f7d8ca5 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-
-Yes, thank you for catching this!
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-I assume you'll take this?
-
-> ---
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Bill Wendling <morbo@google.com>
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: llvm@lists.linux.dev
-> Cc: linux-hardening@vger.kernel.org
-> ---
->  security/Kconfig.hardening | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Mon, 3 Mar 2025 13:18:42 +0200 Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+> >
+> > On Fri, Feb 28, 2025 at 01:28:04PM -0500, Johannes Weiner wrote:
+> > > On Sat, Mar 01, 2025 at 01:31:30AM +0800, kernel test robot wrote:  
+> > 
+> > > The patch is missing a dummy in_mem_hotplug() in the
+> > > !CONFIG_MEMORY_HOTPLUG section of <linux/memory_hotplug.h>.  
+> > 
+> > +1, I just stumbled over and this is not fixed in today's Linux Next. I'm
+> > wondering how this was missed during merge into Linux Next. Stephen?
 > 
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index 23ffb0d7c845..c17366ce8224 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -286,7 +286,7 @@ config FORTIFY_SOURCE
->  	bool "Harden common str/mem functions against buffer overflows"
->  	depends on ARCH_HAS_FORTIFY_SOURCE
->  	# https://github.com/llvm/llvm-project/issues/53645
-> -	depends on !CC_IS_CLANG || !X86_32
-> +	depends on !X86_32 || !CC_IS_CLANG || CLANG_VERSION >= 160000
->  	help
->  	  Detect overflows of buffers in common string and memory functions
->  	  where the compiler can determine and validate the buffer sizes.
-> -- 
-> 2.34.1
-> 
+> I just get what people put in their trees.  There are no conflicts
+> around this and none of my builds failed, so I didn't see the problem.
+> Has someone sent a fix patch to Andrew?  If so, if you forward it to
+> me, I will add it to linux-next today.
+
+Andrew has backed it out of mm-unstable now. There's a v2 [0] which
+still has runtime issues but AFAIK it's not in any tree yet.
+
+[0] https://lore.kernel.org/linux-mm/20250303-pageblock-lockdep-v2-1-3fc0c37e9532@google.com/
+
+In case it helps calibrate expectations: I think this particular patch
+had been reviewed but in general some patches get into mm-unstable
+without any review being recorded at all. My understanding is that
+Andrew squints at it and goes "that looks like it will probably
+eventually get merged" and puts it in so that people get a view of
+likely upcoming changes.
+
+So if an issue like this reaching linux-next is a big problem then I
+think the solution is not to merge mm-unstable. I'm not sure how
+high the bar is supposed to be for feeding into linux-next.
