@@ -1,47 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5905324CEE3;
-	Wed,  5 Mar 2025 19:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F29B1A23B1;
+	Wed,  5 Mar 2025 19:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741202171; cv=none; b=c5HtRBr7rC8Dn6owXdNybh+ikp4w/xOXKbFDgN9hqHJgCzs59IrTJVM3623ozsnGyKaRk/7jfzPdy3xYdvb4eZsYZ5ue4zxpN9Ijs/UCIghULLabkXEXHwShT5JQdR+0VYnipxiPiiaEyv1nDAEq8VV67Em+K38Vy7Eyiq/IqCc=
+	t=1741203025; cv=none; b=i9s2meYw5zK//bHV3PEH8jN+kE6q6Y/nJxoEuJVUstD6uM1DqAx1UpG+12Zi+x0roED9THSeocT63/84NxtlnLiq5ZbOAfAlOnXlIi9kXdWwKZVqk9/6ADN18v5RJ9pIwwr6mHmyD8GtKV9bUJGrX7lSJtZb8g2ib+cR1JCfgRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741202171; c=relaxed/simple;
-	bh=fubuqMlM2Oo+8Icg3TWKdYQa/lCj0hx58ocM+KyVbgk=;
+	s=arc-20240116; t=1741203025; c=relaxed/simple;
+	bh=cMmFBFf9szNiu9T5z9GzitqEPhArY0VccDYTOzDZWhs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GAILJq7RyW0w1OniMfdNwdAWRki3yDzrCdf8aBhBUXp+gNva3Qj8WWx7WSP131HAvRoAUplEBR+JmYUQeQ6X+P2lZeEnLVdV1vpOE96CIywOoXF4RYyM0rNKuDKkW1sFBxWExeUKeFvks3w/Q3S/gEelIOiIt9fh77a/a/gKu4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQ9Q1udn; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=hhDwivyXkrfJ5RxsyMGNkmcXhQIjWZ1dDsDExndultDsN7tstAuDyGlNMQ3oA7pKINDipC47XtegmBNpLEP1xIF7ng+rM4U9nrQe1bOjSL1Re7Eb4ERRVF4oqpDJILCI8zRXySwaxPEEdGaUw9UjiC61RI2g9Qtq5tGPw9rcTy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B3sL7kRy; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQ9Q1udn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E83C4CED1;
-	Wed,  5 Mar 2025 19:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741202170;
-	bh=fubuqMlM2Oo+8Icg3TWKdYQa/lCj0hx58ocM+KyVbgk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kQ9Q1udnJ68GCD1jFiiTzPgeSSS5VMfZveMn/1zpJQBDvv5yc70hyqvAsnij9q52k
-	 KOxrgKUB3LNd7KdtwOtwvRJ+EhMWg5K+9h1zKPnkUlQ3siibjMWiiMPuESXNt4CimP
-	 s+14lE1XgnOq06UG1O7u4a80DMc5NQFGLrW68tV+HAnA1erm7Pbh56IeslO7sUiaPU
-	 Btsjp5hQ9N4nBR2LcqHZk3jQ5KoTaeQJdDoejoRJVjWQW8o8r1mqTZ9OU0jJCZAD1v
-	 ZkW1F8mlax5weiwXLKout3xc0phW0pziQEYKzlXaZwJS4zOq758M9tWm/tprfN6MWO
-	 bvcPzpYqGSECA==
-Date: Wed, 5 Mar 2025 11:16:08 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/crc32: optimize tail handling for crc32c short inputs
-Message-ID: <20250305191608.GA19889@sol.localdomain>
-References: <20250304213216.108925-1-ebiggers@kernel.org>
- <20250305142653.751d9840@pumpkin>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3sL7kRy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741203023; x=1772739023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cMmFBFf9szNiu9T5z9GzitqEPhArY0VccDYTOzDZWhs=;
+  b=B3sL7kRyzzHqUHTp3hfBNCwiUCnY6km4dHjmU8ty7ZrMYQbZ/LQLWdjG
+   J2OeQ7p3hs6E9P86etR8KDN44UeqCYjzfaBWwLn8iS8xh84z/ESEbpFCp
+   sIAoI0E/wUExn53hzdLchN7Z7kka01xP7WnydQ4fa2CcNNBdcK8gPHlVY
+   zjSzXqzfPvJYgTw61KhF08q3YtTiSQwcsppUMPHO8E4sD4IkVAGA31MVi
+   2slMdx+uJKpn+oAPy/wwCdJbIvXOAgA7gCstO5aRuuv9jJs7tQq15Ud6k
+   noTmmydQPc3KUjPn4DoukSd4Rwsy0our0e9Yze+djykA/6PlQHWcaQDAg
+   A==;
+X-CSE-ConnectionGUID: EI+UEYkLS8WVGEZUSGXYsg==
+X-CSE-MsgGUID: vmPQj5GlTMm8faIZIOeYkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="44993787"
+X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
+   d="scan'208";a="44993787"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 11:30:22 -0800
+X-CSE-ConnectionGUID: BeliJiNDT4C9h8C2hibEbw==
+X-CSE-MsgGUID: H8ZQLCb4TaS3EMcRJ9pqtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="149718640"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 05 Mar 2025 11:30:19 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpuRd-000M5y-0U;
+	Wed, 05 Mar 2025 19:30:17 +0000
+Date: Thu, 6 Mar 2025 03:29:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uma Shankar <uma.shankar@intel.com>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ville.syrjala@linux.intel.com, harry.wentland@amd.com,
+	pekka.paalanen@haloniitty.fi, sebastian.wick@redhat.com,
+	jadahl@redhat.com, mwen@igalia.com, contact@emersion.fr,
+	naveen1.kumar@intel.com, dmitry.baryshkov@linaro.org
+Subject: Re: [v3 01/23] drm: color pipeline base work
+Message-ID: <202503060317.IL9ThPki-lkp@intel.com>
+References: <20250305132608.2379253-2-uma.shankar@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,93 +67,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250305142653.751d9840@pumpkin>
+In-Reply-To: <20250305132608.2379253-2-uma.shankar@intel.com>
 
-On Wed, Mar 05, 2025 at 02:26:53PM +0000, David Laight wrote:
-> On Tue,  4 Mar 2025 13:32:16 -0800
-> Eric Biggers <ebiggers@kernel.org> wrote:
-> 
-> > From: Eric Biggers <ebiggers@google.com>
-> > 
-> > For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
-> > do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
-> > taking advantage of wider CRC instructions.  Note that crc32c-3way.S
-> > already uses this same optimization too.
-> 
-> An alternative is to add extra zero bytes at the start of the buffer.
-> They don't affect the crc and just need the first 8 bytes shifted left.
-> 
-> I think any non-zero 'crc-in' just needs to be xor'ed over the first
-> 4 actual data bytes.
-> (It's over 40 years since I did the maths of CRC.)
-> 
-> You won't notice the misaligned accesses all down the buffer.
-> When I was testing different ipcsum code misaligned buffers
-> cost less than 1 clock per cache line.
-> I think that was even true for the versions that managed 12 bytes
-> per clock (including the one Linus committed).
-> 
-> 	David
+Hi Uma,
 
-Sure, but that only works when len >= sizeof(unsigned long).  Also, the initial
-CRC sometimes has to be divided between two unsigned longs.
+kernel test robot noticed the following build errors:
 
-The following implements this, and you can play around with it a bit if you
-want.  There may be a way to optimize it a bit more.
+[auto build test ERROR on next-20250305]
+[also build test ERROR on v6.14-rc5]
+[cannot apply to drm-exynos/exynos-drm-next linus/master v6.14-rc5 v6.14-rc4 v6.14-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-But I think you'll find it's a bit more complex than you thought.
+url:    https://github.com/intel-lab-lkp/linux/commits/Uma-Shankar/drm-color-pipeline-base-work/20250306-011827
+base:   next-20250305
+patch link:    https://lore.kernel.org/r/20250305132608.2379253-2-uma.shankar%40intel.com
+patch subject: [v3 01/23] drm: color pipeline base work
+config: x86_64-buildonly-randconfig-002-20250306 (https://download.01.org/0day-ci/archive/20250306/202503060317.IL9ThPki-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060317.IL9ThPki-lkp@intel.com/reproduce)
 
-I think I'd like to stay with the shorter and simpler 4-2-1 step-down.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503060317.IL9ThPki-lkp@intel.com/
 
-u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
-{
-	if (!static_branch_likely(&have_crc32))
-		return crc32c_base(crc, p, len);
+All errors (new ones prefixed by >>):
 
-	if (IS_ENABLED(CONFIG_X86_64) && len >= CRC32C_PCLMUL_BREAKEVEN &&
-	    static_branch_likely(&have_pclmulqdq) && crypto_simd_usable()) {
-		kernel_fpu_begin();
-		crc = crc32c_x86_3way(crc, p, len);
-		kernel_fpu_end();
-		return crc;
-	}
+   In file included from drivers/gpu/drm/vkms/tests/vkms_color_test.c:7:
+   In file included from drivers/gpu/drm/vkms/tests/../vkms_drv.h:10:
+   In file included from include/drm/drm_gem.h:42:
+   In file included from include/drm/drm_vma_manager.h:27:
+   In file included from include/linux/mm.h:2306:
+   include/linux/vmstat.h:493:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     493 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     494 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:513:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     513 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     514 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/vkms/tests/vkms_color_test.c:13:18: error: expected ';' after top level declarator
+      13 | MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+         |                  ^
+   4 warnings and 1 error generated.
 
-	if (len % sizeof(unsigned long) != 0) {
-		unsigned long msgpoly;
-		u32 orig_crc = crc;
 
-		if (len < sizeof(unsigned long)) {
-			if (sizeof(unsigned long) > 4 && (len & 4)) {
-				asm("crc32l %1, %0"
-				    : "+r" (crc) : ASM_INPUT_RM (*(u32 *)p));
-				p += 4;
-			}
-			if (len & 2) {
-				asm("crc32w %1, %0"
-				    : "+r" (crc) : ASM_INPUT_RM (*(u16 *)p));
-				p += 2;
-			}
-			if (len & 1)
-				asm("crc32b %1, %0"
-				    : "+r" (crc) : ASM_INPUT_RM (*p));
-			return crc;
-		}
-		msgpoly = (get_unaligned((unsigned long *)p) ^ orig_crc) <<
-			  (8 * (-len % sizeof(unsigned long)));
-		p += len % sizeof(unsigned long);
-		crc = 0;
-		asm(CRC32_INST : "+r" (crc) : "r" (msgpoly));
+vim +13 drivers/gpu/drm/vkms/tests/vkms_color_test.c
 
-		msgpoly = get_unaligned((unsigned long *)p) ^
-			  (orig_crc >> (8 * (len % sizeof(unsigned long))));
-		p += sizeof(unsigned long);
-		len -= (len % sizeof(unsigned long)) + sizeof(unsigned long);
-		asm(CRC32_INST : "+r" (crc) : "r" (msgpoly));
-	}
+    12	
+  > 13	MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
+    14	
 
-	for (len /= sizeof(unsigned long); len != 0;
-	     len--, p += sizeof(unsigned long))
-		asm(CRC32_INST : "+r" (crc) : ASM_INPUT_RM (*(unsigned long *)p));
-
-	return crc;
-}
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
