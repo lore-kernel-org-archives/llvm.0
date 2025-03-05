@@ -1,109 +1,145 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACFE24BC18
-	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 14:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FF7204C35;
+	Wed,  5 Mar 2025 14:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741184818; cv=none; b=OS3oL3bmJSg8DaVG+isZqBYn1CBVLAyPtSNkpXqGvJWDdtjHeKYdFmMfqtNqJsPidNMShCTW6IVUAeKQsgRhkkvD/fI9qMiORU4ItFwMlfj4mmZLLafFaOxDxrUgavAq1P5XIEi15+BAcYgI1ZeKsAJJqYwUhpR2DC0CWnqnqPM=
+	t=1741185960; cv=none; b=luAuxk4X6Kjx9PGfSVVyJSRIkzaJxA/nwv32iPz8C/9fVOwWe+rBgErhKe0T4KMHU5Dt2OjlG3iSsQVUSvIsHhUJ/NpJ+DHGKBrkdfKlnIG+T5HKrKaVxKp78nP0npSasUXCY7S3YQHf7itpTgDI7pMwPM6WIkiVuax+/budC84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741184818; c=relaxed/simple;
-	bh=eUK2lpiP1FoSgc9h1gORMk92bbuPc9yvLgGu1Z6Qwhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=awyAYf9eC5X0ofKwZOfpw2stFOKmLglGE0XteYt/vHuYr4Y8rafvHeNMKaoxKMU6sBNWZkk1Ku8q0kcO4muOZObn3igeNmvXGiIlP6FvYMlLzttCddwtJwOQNs0NqAEExaLXAcl5YVRa2jIVgXuVwUutYJlE/8xEt4j/UGsWPqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hw0PDDad; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741185960; c=relaxed/simple;
+	bh=IJITA4ytTmUFMzhJpi0Z7MN58Xcdm8gfOaBFwHxdNW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PCwni12AMGyiz5E8GVcO1LsCXtcPhgLlhvvttV8SZGoUbTbWg7v9Kx/hjrRyZ5WnznO1nj03p8Z5ExKLqIDYHPtqcsCEWe8Krjh0Z1ql6XoIpg7t1ZgJS4pRpiaeyib7QQgEUZiK4TZMKuL00UE0ZhsVeKtsR71Txp8LGQzxmwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FT3IPME9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hw0PDDad"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43690d4605dso44629035e9.0
-        for <llvm@lists.linux.dev>; Wed, 05 Mar 2025 06:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741184815; x=1741789615; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5w41DRiJ/9J1ZtMFKS35HZz81JTi9tqzjEpSgeekIgk=;
-        b=Hw0PDDadwtUmpognU3FqsAA67z3p0lEKvzCzcR+nknFX5j73lN9G60ztcG4hnjPeHa
-         KqY/x3Dwet0/A8O4gfoCSOTLANuDsK+Xz0z2CgxRM622IrI/TRVWOK3mE1UVQbQDfswm
-         COx2TBWrA79Pc0pVO8pbQFyQljLqReY5q88ADRBQm3Sg9crON9STo0T/JXrI+atrITsN
-         MdDo1WrHoHZdCC75EWr0edMVAhhb1qkIzzafbhnaArKFOp8GRamc0DmFcEdeqrmPWu2z
-         B+KdxeTQiwbIq4DO/51U8P0CicKRcsWJjouxD8YPUDrPwmf4v5kXf+goQXc3yA1O/Sp8
-         5FNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741184815; x=1741789615;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5w41DRiJ/9J1ZtMFKS35HZz81JTi9tqzjEpSgeekIgk=;
-        b=J3SQrF5yjlVYBSCGXuKQ3RUzUcAfOCOlt8+m1wSv6wlwAXDliQu1+jXs1Z04d21eoW
-         mQBfz2RNOd7rYrRCtdQhulEyg0lYqGhgBoD+Dw4LatatZ3GWHVIOZ5fLmID/ignVOUva
-         8Sf8UJNCvmeh27YAoCf6SgGfmIZiTxkstqiTkxaONE7Z4/t7hf6xvqEkA4nTapGyr3lC
-         hysfBlD26sWBgnbkBNRzojFlpO8LaH3R+C/oWbhyG0bgwW4nepvnS+HpCI2DbmWtIIdJ
-         UY/vA/WolRA2e31jNXOiKJDI3ElDtpWKGkNB9+i7cEruN1W/pqlwsKIhM3onV649aiM7
-         Wqww==
-X-Forwarded-Encrypted: i=1; AJvYcCXqSOEfi8eNm6fR3UQqe6ao8NwuE97m2xPa1VwaLzhfwA3pErOL+fTlcyZUN4coh4zx+iot@lists.linux.dev
-X-Gm-Message-State: AOJu0YxELE4+ov84CWmj4/5kbyEGPhOo+/k9OmvMcEeMgKogIXsxkm/+
-	b2nOayxvmrXMb/L7ZSdpUu05WRkC4uUPyJgnvMhyoYGBiUrTleJS
-X-Gm-Gg: ASbGncv1NAusoI0b1S+bHWuar/BtKbD/OYjB+VsjaBimk6R3RVqfAztz/xxCN1zgrFS
-	rwbCNo2d2c3rPHZNHahrWQ11wjzBNXuX1S2Kw7Tnwo5GoorBBFtkgZqciWgz2ZLBvQ6bmPjZUGL
-	B3+LZhbKKV1QbPydNE9MzTkCMETRcO8Gdq5jx74askF75Tr+lkQIKi0yhfmpcHbNcDpTiPoF7IB
-	JLuEudA5CKvLj+igY5qjT9mMMhRzw7MbIqtpirTl0cSL9m8J1nl73R/7WQpnaXmeKmyf7nowEDP
-	FB6ghgdSQldMN4On6LhMndEhEcLBGRyyaLbC5rljvVtZ04iWtj+zi9Wb/Yp9rQgD22CvPWaFFcn
-	s5Umt9e4=
-X-Google-Smtp-Source: AGHT+IF0B41RHaO5k5y1Clubg7F9JL3YEVmmZXW9Ppx3hJLmnuQaUQzgcDjx+6PEq+4SMBuJY10G4w==
-X-Received: by 2002:a05:6000:4007:b0:390:f45e:c84a with SMTP id ffacd0b85a97d-3911f7cb10fmr3522154f8f.48.1741184814990;
-        Wed, 05 Mar 2025 06:26:54 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e4848252sm21356612f8f.69.2025.03.05.06.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 06:26:54 -0800 (PST)
-Date: Wed, 5 Mar 2025 14:26:53 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel
- <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>,
- linux-crypto@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/crc32: optimize tail handling for crc32c short
- inputs
-Message-ID: <20250305142653.751d9840@pumpkin>
-In-Reply-To: <20250304213216.108925-1-ebiggers@kernel.org>
-References: <20250304213216.108925-1-ebiggers@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FT3IPME9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933EEC4CED1;
+	Wed,  5 Mar 2025 14:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741185960;
+	bh=IJITA4ytTmUFMzhJpi0Z7MN58Xcdm8gfOaBFwHxdNW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FT3IPME95VlP5ie8KtxCMaGhv9WI7HkAgfV5txTXgSUAmriapmls6XY88Bc6Uq/sD
+	 scdeXCE3d2n4As1YBHd89RRWC77MAo8l3T0nfGCDIxatUROgcdF58Dhkvwl1RXq9G7
+	 TmBB2FsZdA9RmziGtrzZ94Xi1GnIIu8Nkm7MtN/j2aBJ3m598Oow/b4Juv/dsH3q/t
+	 KVPHICTnHEFuWXQdnokU77/RHvyM4lEBeILVBEE/t82FMtoHuM9CJeSCjFu3UbtdNe
+	 4phE+5IAs10TfByEyJ6wDCa7r4k/BvQ7dF+VRhNh6OKKhyyajodAuWWNkQPIuy372O
+	 +F0IYyZO+GtGA==
+Date: Wed, 5 Mar 2025 15:45:54 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
+Message-ID: <20250305144554.GA3574115@ax162>
+References: <20250303215240.work.379-kees@kernel.org>
+ <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
+ <20250304102536.GB2529736@ax162>
+ <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
+ <202503040842.1177A1F15B@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202503040842.1177A1F15B@keescook>
 
-On Tue,  4 Mar 2025 13:32:16 -0800
-Eric Biggers <ebiggers@kernel.org> wrote:
-
-> From: Eric Biggers <ebiggers@google.com>
+On Tue, Mar 04, 2025 at 09:07:57AM -0800, Kees Cook wrote:
+> On Tue, Mar 04, 2025 at 03:51:19PM +0100, Thomas Weißschuh wrote:
+> > No, it doesn't.
+> > 
+> > Running tests with:
+> > $ .kunit/linux kunit.filter_glob=overflow.DEFINE_FLEX_test kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
+> > [15:48:30] =================== overflow (1 subtest) ===================
+> > [15:48:30] # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
+> > [15:48:30] Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
+> > [15:48:30]     __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
+> > [15:48:30]     expected_raw_size == 8 (0x8)
+> > [15:48:30] [FAILED] DEFINE_FLEX_test
+> > [15:48:30] # module: overflow_kunit
+> > [15:48:30] ==================== [FAILED] overflow =====================
+> > [15:48:30] ============================================================
+> > [15:48:30] Testing complete. Ran 1 tests: failed: 1
+> > [15:48:31] Elapsed time: 43.985s total, 0.001s configuring, 43.818s building, 0.133s running
+> > 
+> > If I force CONFIG_CC_HAS_COUNTED_BY=n then the test succeeds.
+> > Clang 19.1.7 from the Arch Linux repos.
 > 
-> For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
-> do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
-> taking advantage of wider CRC instructions.  Note that crc32c-3way.S
-> already uses this same optimization too.
+> I wasn't seeing with Clang 20 from git:
+> ClangBuiltLinux clang version 20.0.0git (git@github.com:llvm/llvm-project.git 72901fe19eb1e55d0ee1c380ab7a9f57d2f187c5)
+> 
+> But I do see the error with ToT Clang:
+> ClangBuiltLinux clang version 21.0.0git (git@github.com:llvm/llvm-project.git eee3db5421040cfc3eae6e92ed714650a6f741fa)
+> 
+> Clang 17.1: (does not support counted_by)
+> 
+>     # DEFINE_FLEX_test: missing counted_by
+>     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+>     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+> 
+> Clang 19.1.1: (actually is _does_ support counted_by, but Linux disables it)
+> 
+>     # DEFINE_FLEX_test: missing counted_by
+>     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+>     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+> 
+> GCC 13.3:
+> 
+>     # DEFINE_FLEX_test: missing counted_by
+>     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+>     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
+> 
+> Clang 21 (ToT):
+> 
+>     # DEFINE_FLEX_test: has counted_by
+>     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+>     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
+> 
+> GCC 15 (ToT):
+> 
+>     # DEFINE_FLEX_test: has counted_by
+>     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
+>     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
+>     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
+> 
+> It seems like the on-stack sizes with __bdos all agree now, regardless
+> of the used compiler features. It is only the array size calculation
+> that now gets masked by counted_by. (i.e. the stack size is overridden
+> by the zero "count" for the array elements.)
+> 
+> I'll send a fix for the test...
 
-An alternative is to add extra zero bytes at the start of the buffer.
-They don't affect the crc and just need the first 8 bytes shifted left.
+Just for my own understanding, is this because of the adjustment that
+Bill did to the __bdos() calculation in [1]? I think that tracks because
+the version of LLVM 20 that you have is pretty old and does not have
+that change. I know for a fact I tested the original change to the
+overflow KUnit test to adjust the expected calculation result and it
+passed but it was before that change as well. If I use a current version
+of LLVM 20, I see the failure. If I allow LLVM 18 to use __counted_by(),
+the test passes with it. Not that it truly matters but it does explain
+how we got to this point.
 
-I think any non-zero 'crc-in' just needs to be xor'ed over the first
-4 actual data bytes.
-(It's over 40 years since I did the maths of CRC.)
+[1]: https://github.com/llvm/llvm-project/commit/8c62bf54df76e37d0978f4901c6be6554e978b53
 
-You won't notice the misaligned accesses all down the buffer.
-When I was testing different ipcsum code misaligned buffers
-cost less than 1 clock per cache line.
-I think that was even true for the versions that managed 12 bytes
-per clock (including the one Linus committed).
-
-	David
+Cheers,
+Nathan
