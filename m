@@ -1,59 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AD4D2FF;
-	Wed,  5 Mar 2025 04:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAB719D8BE;
+	Wed,  5 Mar 2025 04:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741147402; cv=none; b=IsU/3GSEyXxwBwyUi5SWQi5b/ZSzlv3AuU7HVWzk+1Pbvs4+76ekaNxlh1if6IU/HB3Jc3BrYnL9tpVa885S/WdvA4tNr8wEBsmo+K6WnWhPrnj5V4HXzRRPw+Ah54KlRoW6aDLqElyWaRfTkyboyFlCY+e3cgQrjHaN36JdhWY=
+	t=1741147405; cv=none; b=r4cmryJb6Z2iP7OIqA17sF1IAi23285vtrynBLalckhUCqCC+lewG/N+7G0dYvhAkvown0vzoWlXdA2Yba7AjxVJ4Z4n8uytOuLDnG1bnvwlNOBt+OHeETNNsUbUnHabdkVF1eskgnoKlcvzk+vZL+zxE9iHM47cfBr7hJs9gaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741147402; c=relaxed/simple;
-	bh=xGZG0eIgNsWI19/PyMFH+d/vDmIOZE6wh7oYjPVqSBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HEoyUzZkz0djam55RMpveC9ll5Pr5JyxIVdN7k9yS4uHlP3E2HmiFbTvFEMwyD6dIK5Na0/rLuOJ0nU2Asi0UZ7WrioAMlVNks4KrideC4oK7mnSJB03mox/8ari0enaZKOAHngvo3nxzol6jasLkLFVjTViNxvL1c7yfcTAqvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IRXSo9Mt; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1741147405; c=relaxed/simple;
+	bh=1vjVpR0Duqy0Lecr/rAUEzsxejp3tyIVHjdCkjzCkkc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hs9MMd2RWqVUUuVRX5trHy2znRgW8IYvCmuBvYvn7hAPUFGvqkeoFk0KDWoTmDKhoWmBhLCWiWfHzWTnxU8x2tW7SihnNDdMoP5sv/n+xEWWFxw552Q/f0JvVJMnYT+B0lBLIn7WmKP7aFfxObYG464m8WA1mkA0xgsdiz9k8B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ad2jkUEJ; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IRXSo9Mt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ad2jkUEJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741147401; x=1772683401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xGZG0eIgNsWI19/PyMFH+d/vDmIOZE6wh7oYjPVqSBA=;
-  b=IRXSo9MtbvjVnzDFaaBDXu2Y/mtORaf7oJMPovd9ohB8khklgTl18MU6
-   mlhOjmcFlDrTNs2DtIaCj0D3lvtOOUngTx2zuOIqSB89oAWd9qvHDQnNO
-   AUSWVopdKf5Ta2pU0n/pSY3vr6YHfrnveZUaLDDRZFgmyiYmulN3VA3ri
-   bgTTdyYMV1GEPL9eTP1A35KXbhJKBxFt7JWa/2w5PiBZs/40moRNFfwgi
-   BgbGqrhswReA+KJLSXgEUePtD6LTP3VZpCuiHR2ANlBYSg0AQ97KtGN0c
-   q2R0TmICbmFqAJGVmjEzMQ8FA9UX3Tbyvotmno2j927/PtUWMCt10GBDW
+  t=1741147402; x=1772683402;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1vjVpR0Duqy0Lecr/rAUEzsxejp3tyIVHjdCkjzCkkc=;
+  b=ad2jkUEJAwO5doF79eTpXSjbqpHQQFVMRTc+lD/kwcTd1mh2V6a5wFyj
+   qm6NGult24zO/nL2BRbZ5AFzHLEZCIxfRrIwYXDzpP84YW5IBNIKFb7IM
+   sDJDCMAgQxXvWWbNuy+4LFAJnI4xpNN9w3h2S7X9KiDCNdn4EF2TvsEUM
+   vgouJ1PC1uNidDkHQUR95D+FtBwdMrb0cqFCbrAQYDdTVIVaIDhe8tWBV
+   +9fgADjnnE3N9zn8CHwKYJrZ1TyrncWBLAXU/wj56OJxQ+zdN0Uo8G/CX
+   W2nUPbanlsbQ4aCNkRr0K4h1fFdt8oO5+07yzK9goS+whCA1yGZhCvqco
    g==;
-X-CSE-ConnectionGUID: 6aGVVEPaQFWM1ECV9LTHOg==
-X-CSE-MsgGUID: Y9uqc9CaTfOysm5+lHIRCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="67462024"
+X-CSE-ConnectionGUID: zJSUPbNQSXyQql6hAN0seA==
+X-CSE-MsgGUID: 2uCkylOmQhSJST/EY3Kwjw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="67462028"
 X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="67462024"
+   d="scan'208";a="67462028"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 20:03:20 -0800
-X-CSE-ConnectionGUID: xST86eUXSKCAwU7ohArOMQ==
-X-CSE-MsgGUID: /FtWZoW/TMK9+b29Ps85Ew==
+X-CSE-ConnectionGUID: yErxLGxeQPGST5GAIEg4ig==
+X-CSE-MsgGUID: 4En7DRItRuKHa1100kF94w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="118573717"
+   d="scan'208";a="118573716"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
   by fmviesa007.fm.intel.com with ESMTP; 04 Mar 2025 20:03:18 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tpfyW-000KZe-2i;
+	id 1tpfyW-000KZi-2q;
 	Wed, 05 Mar 2025 04:03:16 +0000
-Date: Wed, 5 Mar 2025 12:02:59 +0800
+Date: Wed, 5 Mar 2025 12:02:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 3/8] ring-buffer: Add ring_buffer_meta_scratch()
-Message-ID: <202503051115.YJCV0nG8-lkp@intel.com>
-References: <20250304012548.100322331@goodmis.org>
+To: Philipp Stanner <phasta@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:devres 1/1] drivers/pci/iomap.c:43:24: warning: variable
+ 'start' is uninitialized when used here
+Message-ID: <202503051115.qGzJnRcf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,67 +62,116 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304012548.100322331@goodmis.org>
 
-Hi Steven,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.14-rc5]
-[cannot apply to trace/for-next next-20250304]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/ring-buffer-Use-kaslr-address-instead-of-text-delta/20250304-092821
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250304012548.100322331%40goodmis.org
-patch subject: [PATCH v3 3/8] ring-buffer: Add ring_buffer_meta_scratch()
-config: i386-buildonly-randconfig-002-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051115.YJCV0nG8-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git devres
+head:   20099eb129ac39666d7c89f5e52d99b5596e638b
+commit: 20099eb129ac39666d7c89f5e52d99b5596e638b [1/1] PCI: Check BAR index for validity
+config: i386-buildonly-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051115.qGzJnRcf-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051115.YJCV0nG8-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051115.qGzJnRcf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503051115.YJCV0nG8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503051115.qGzJnRcf-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/trace/ring_buffer.c:2546: warning: Function parameter or struct member 'scratch_size' not described in '__ring_buffer_alloc_range'
-   kernel/trace/ring_buffer.c:2560: warning: Function parameter or struct member 'kaslr_addr' not described in 'ring_buffer_last_boot_delta'
-   kernel/trace/ring_buffer.c:2560: warning: Excess function parameter 'text' description in 'ring_buffer_last_boot_delta'
-   kernel/trace/ring_buffer.c:2560: warning: Excess function parameter 'data' description in 'ring_buffer_last_boot_delta'
+>> drivers/pci/iomap.c:43:24: warning: variable 'start' is uninitialized when used here [-Wuninitialized]
+      43 |         if (len <= offset || !start)
+         |                               ^~~~~
+   drivers/pci/iomap.c:38:23: note: initialize the variable 'start' to silence this warning
+      38 |         resource_size_t start, len;
+         |                              ^
+         |                               = 0
+>> drivers/pci/iomap.c:43:6: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+      43 |         if (len <= offset || !start)
+         |             ^~~
+   drivers/pci/iomap.c:38:28: note: initialize the variable 'len' to silence this warning
+      38 |         resource_size_t start, len;
+         |                                   ^
+         |                                    = 0
+   drivers/pci/iomap.c:93:24: warning: variable 'start' is uninitialized when used here [-Wuninitialized]
+      93 |         if (len <= offset || !start)
+         |                               ^~~~~
+   drivers/pci/iomap.c:88:23: note: initialize the variable 'start' to silence this warning
+      88 |         resource_size_t start, len;
+         |                              ^
+         |                               = 0
+   drivers/pci/iomap.c:93:6: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
+      93 |         if (len <= offset || !start)
+         |             ^~~
+   drivers/pci/iomap.c:88:28: note: initialize the variable 'len' to silence this warning
+      88 |         resource_size_t start, len;
+         |                                   ^
+         |                                    = 0
+   4 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
 
 
-vim +2546 kernel/trace/ring_buffer.c
+vim +/start +43 drivers/pci/iomap.c
 
-7a8e76a3829f10 Steven Rostedt          2008-09-29  2526  
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2527) /**
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2528)  * __ring_buffer_alloc_range - allocate a new ring_buffer from existing memory
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2529)  * @size: the size in bytes per cpu that is needed.
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2530)  * @flags: attributes to set for the ring buffer.
-0b60a7fb60b7d7 Julia Lawall            2024-09-30  2531   * @order: sub-buffer order
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2532)  * @start: start of allocated range
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2533)  * @range_size: size of allocated range
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2534)  * @key: ring buffer reader_lock_key.
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2535)  *
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2536)  * Currently the only flag that is available is the RB_FL_OVERWRITE
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2537)  * flag. This flag means that the buffer will overwrite old data
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2538)  * when the buffer wraps. If this flag is not set, the buffer will
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2539)  * drop data when the tail hits the head.
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2540)  */
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2541) struct trace_buffer *__ring_buffer_alloc_range(unsigned long size, unsigned flags,
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2542) 					       int order, unsigned long start,
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2543) 					       unsigned long range_size,
-56953131fbcf4d Steven Rostedt          2025-03-03  2544  					       unsigned long scratch_size,
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2545) 					       struct lock_class_key *key)
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12 @2546) {
-56953131fbcf4d Steven Rostedt          2025-03-03  2547  	return alloc_buffer(size, flags, order, start, start + range_size,
-56953131fbcf4d Steven Rostedt          2025-03-03  2548  			    scratch_size, key);
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2549) }
-be68d63a139bd4 Steven Rostedt (Google  2024-06-12  2550) 
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  13  
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  14  /**
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  15   * pci_iomap_range - create a virtual mapping cookie for a PCI BAR
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  16   * @dev: PCI device that owns the BAR
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  17   * @bar: BAR number
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  18   * @offset: map memory at the given offset in BAR
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  19   * @maxlen: max length of the memory to map
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  20   *
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  21   * Using this function you will get a __iomem address to your device BAR.
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  22   * You can access it using ioread*() and iowrite*(). These functions hide
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  23   * the details if this is a MMIO or PIO address space and will just do what
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  24   * you expect from them in the correct way.
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  25   *
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  26   * @maxlen specifies the maximum length to map. If you want to get access to
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  27   * the complete BAR from offset to the end, pass %0 here.
+81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  28   *
+81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  29   * NOTE:
+81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  30   * This function is never managed, even if you initialized with
+81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  31   * pcim_enable_device().
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  32   * */
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  33  void __iomem *pci_iomap_range(struct pci_dev *dev,
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  34  			      int bar,
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  35  			      unsigned long offset,
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  36  			      unsigned long maxlen)
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  37  {
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  38  	resource_size_t start, len;
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  39  	unsigned long flags;
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  40  
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  41  	if (!pci_bar_index_is_valid(bar))
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  42  		return NULL;
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29 @43  	if (len <= offset || !start)
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  44  		return NULL;
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  45  
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  46  	start = pci_resource_start(dev, bar);
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  47  	len = pci_resource_len(dev, bar);
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  48  	flags = pci_resource_flags(dev, bar);
+20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  49  
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  50  	len -= offset;
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  51  	start += offset;
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  52  	if (maxlen && len > maxlen)
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  53  		len = maxlen;
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  54  	if (flags & IORESOURCE_IO)
+b923650b84068b lib/pci_iomap.c     Michael S. Tsirkin 2012-01-30  55  		return __pci_ioport_map(dev, start, len);
+92b19ff50e8f24 lib/pci_iomap.c     Dan Williams       2015-08-10  56  	if (flags & IORESOURCE_MEM)
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  57  		return ioremap(start, len);
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  58  	/* What? */
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  59  	return NULL;
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  60  }
+eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  61  EXPORT_SYMBOL(pci_iomap_range);
+66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  62  
+
+:::::: The code at line 43 was first introduced by commit
+:::::: eb29d8d2aad70636ea23810b4868693673d630d5 pci: add pci_iomap_range
+
+:::::: TO: Michael S. Tsirkin <mst@redhat.com>
+:::::: CC: Rusty Russell <rusty@rustcorp.com.au>
 
 -- 
 0-DAY CI Kernel Test Service
