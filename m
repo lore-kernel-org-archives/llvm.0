@@ -1,75 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A015F24FC1A;
-	Wed,  5 Mar 2025 16:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913B72D05E;
+	Wed,  5 Mar 2025 16:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741190429; cv=none; b=TwNU3BzDiBs1qljuwhpY2YIOke/QA2e6j+n+dxpMZJhgMdpF3Cnp/CUgcynBgI9vSo9/5q1H8zJmhcO0VZ/0cKFfXvGVQCCERZuXVVtzBXxeYrOwVh/sTt6V5rxV4Agdu6WrL9vHeGMuA/vyTQxahFuJt/Eb7OhSGH5BT3IdGl4=
+	t=1741191440; cv=none; b=Z31ylmkQQohV8NRB0swfnR/jvy9wwuaIQnwouhKBm9FNvJDNSoipxTEJnNeJFBL+NZl7U4SmUleI2agWJjA8h3fLagTuQFqsGdDvrwWRsK3k/vJSaS7jXJnKaDLV687r59MyZAv/C4N8m5RLpI78ZeRXiL3O8t2P9pYTgLG9Np8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741190429; c=relaxed/simple;
-	bh=+ejXxKQV90DW4dp+iOv5aIiKOpBAg3qGk/MHrDfxAI8=;
+	s=arc-20240116; t=1741191440; c=relaxed/simple;
+	bh=CbTXzzl88Ktw/wWR5/ra95x9JfLO3RWPe1jQjpC7yEY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GofkRVw6Ni3h1FZLKvG8PVZhKD4Z6uPE6TpIJuypUhXoDIkRi3BfK4sc5jsqqr5ot22NVQsK05b+VxdF6WOrLn7nkaZykWb1Ji9kzYw2JUT1BdxwynMlQ4XUTpXO/EhxP5TA15VmmhCBfqghBR57DFp6NQtizBgwp8dbeF8iIHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iG1YfyR0; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=p+fISIdtGv4MBTMmoQQtSBj359sgaTcg8Uy1vpeKrlAcx3Z9C9478UAw/pwmKZMHTV/oevWo5ivIv1L/4f09YaBmoDeo49BwD/VHrkzA52LscEgWHbUj7H7epfbtM6dFkT3f5jJJJDfwDExsi0QTX1w0L1aLkj8NOmhU4CQIkkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oK6Ax3Bf; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iG1YfyR0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741190428; x=1772726428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+ejXxKQV90DW4dp+iOv5aIiKOpBAg3qGk/MHrDfxAI8=;
-  b=iG1YfyR0ZkG04jTh7X3Apb8k/RTwcpNr1za+tnDKUGhotkRdUjt3kg/K
-   T4If8os8Af1sSoSIdkZ+KLm3h+0qR/ANorMSII+CI2x45tCIHlYp4oZxJ
-   /l4gU3oQyhDMMm+YCq2CwV6JRf2LbG2BKw9YYxkpqRJehEmNRi6DgXviM
-   p9isYMGKsD/PRg52/Tt6PTzJ0kheA1sm5UvKBPx38Fio0AM/bWvMyHw0N
-   hglGHHfir70S5zhWDds95FZWjPGfQAoK6Co9fp4irteJQwvb9CE1yQv0Y
-   LjkxqmL8++C5WjOO596jKoZjgZ4i7FZn09IoJz6rDw2CsfbmaYq4erobZ
-   A==;
-X-CSE-ConnectionGUID: t82770nQQdetbdcU84EYFg==
-X-CSE-MsgGUID: Fmtqb4OrS9+PDwE/SkL0yA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="59707250"
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="59707250"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 08:00:27 -0800
-X-CSE-ConnectionGUID: hjYKjvcmR5utfjW6V3Dwbg==
-X-CSE-MsgGUID: kLV+FyYORG66FQT1ByJXBA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118650255"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 05 Mar 2025 08:00:22 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tprAS-000LBm-0Y;
-	Wed, 05 Mar 2025 16:00:20 +0000
-Date: Thu, 6 Mar 2025 00:00:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryan Roberts <ryan.roberts@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oK6Ax3Bf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=3jN1+xJ/BcC8IjBdHqdwVy40EWJGNjtffvW7aUuKF40=; b=oK6Ax3BfZA/yGM1I2bGbwg/+7L
+	7DoHVzMrKWZSVWODvVnu043ZuRCUkEtnyWZpFpC9ACAfR5w0d+m50zvWUl0IxIViVKGMhwqUyBEPl
+	H8zJW/t82dDsAJSQpjC1XAfDGplcCxLlCL3rpV8UALi8s2vKi21L9ifSnbcdAitxEhO8qH2VRTrzL
+	6jfMXB/HmpmJg3yOELu0OyY7CYSE805iw7EHbUiPhQXIukDgKHf3dR7hNRUMB0HFx7Yd1mUBF39+N
+	EmksIGdewmK97ldh89ukpJ4Q9q/3Ajurv5egf3BVUsdALPYckRL5poS1YWW7/fvch9uPYQ3+j2A6D
+	mjFjZYug==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tprQT-00000000coL-1dqW;
+	Wed, 05 Mar 2025 16:16:53 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 79D7430031C; Wed,  5 Mar 2025 17:16:52 +0100 (CET)
+Date: Wed, 5 Mar 2025 17:16:52 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Marco Elver <elver@google.com>, "David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
 	Mark Rutland <mark.rutland@arm.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/11] arm64: hugetlb: Use set_ptes_anysz() and
- ptep_get_and_clear_anysz()
-Message-ID: <202503052315.vk7m958M-lkp@intel.com>
-References: <20250304150444.3788920-6-ryan.roberts@arm.com>
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 00/34] Compiler-Based Capability- and Locking-Analysis
+Message-ID: <20250305161652.GA18280@noisy.programming.kicks-ass.net>
+References: <20250304092417.2873893-1-elver@google.com>
+ <20250305112041.GA16878@noisy.programming.kicks-ass.net>
+ <76f8c8e1-5f32-4f31-a960-9285a15340e3@acm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -78,89 +79,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304150444.3788920-6-ryan.roberts@arm.com>
+In-Reply-To: <76f8c8e1-5f32-4f31-a960-9285a15340e3@acm.org>
 
-Hi Ryan,
+On Wed, Mar 05, 2025 at 07:27:32AM -0800, Bart Van Assche wrote:
+> On 3/5/25 3:20 AM, Peter Zijlstra wrote:
+> > diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> > index 248416ecd01c..d27607d9c2dc 100644
+> > --- a/include/linux/blkdev.h
+> > +++ b/include/linux/blkdev.h
+> > @@ -945,6 +945,7 @@ static inline unsigned int blk_boundary_sectors_left(sector_t offset,
+> >    */
+> >   static inline struct queue_limits
+> >   queue_limits_start_update(struct request_queue *q)
+> > +	__acquires(q->limits_lock)
+> >   {
+> >   	mutex_lock(&q->limits_lock);
+> >   	return q->limits;
+> > @@ -965,6 +966,7 @@ int blk_validate_limits(struct queue_limits *lim);
+> >    * starting update.
+> >    */
+> >   static inline void queue_limits_cancel_update(struct request_queue *q)
+> > +	__releases(q->limits_lock)
+> >   {
+> >   	mutex_unlock(&q->limits_lock);
+> >   }
+> 
+> The above is incomplete. Here is what I came up with myself:
 
-kernel test robot noticed the following build warnings:
+Oh, I'm sure. I simply fixed whatever was topmost in the compile output
+when trying to build kernel/sched/. After fixing these two, it stopped
+complaining about blkdev.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.14-rc5 next-20250305]
-[cannot apply to arm64/for-next/core akpm-mm/mm-everything arm-perf/for-next/perf]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I think it complains about these because they're inline, even though
+they're otherwise unused.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-hugetlb-Cleanup-huge_pte-size-discovery-mechanisms/20250304-230647
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250304150444.3788920-6-ryan.roberts%40arm.com
-patch subject: [PATCH v3 05/11] arm64: hugetlb: Use set_ptes_anysz() and ptep_get_and_clear_anysz()
-config: arm64-randconfig-003-20250305 (https://download.01.org/0day-ci/archive/20250305/202503052315.vk7m958M-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503052315.vk7m958M-lkp@intel.com/reproduce)
+> > diff --git a/include/linux/device.h b/include/linux/device.h
+> > index 80a5b3268986..283fb85d96c8 100644
+> > --- a/include/linux/device.h
+> > +++ b/include/linux/device.h
+> > @@ -1026,21 +1026,25 @@ static inline bool dev_pm_test_driver_flags(struct device *dev, u32 flags)
+> >   }
+> >   static inline void device_lock(struct device *dev)
+> > +	__acquires(dev->mutex)
+> >   {
+> >   	mutex_lock(&dev->mutex);
+> >   }
+> >   static inline int device_lock_interruptible(struct device *dev)
+> > +	__cond_acquires(0, dev->mutex)
+> >   {
+> >   	return mutex_lock_interruptible(&dev->mutex);
+> >   }
+> >   static inline int device_trylock(struct device *dev)
+> > +	__cond_acquires(true, dev->mutex)
+> >   {
+> >   	return mutex_trylock(&dev->mutex);
+> >   }
+> >   static inline void device_unlock(struct device *dev)
+> > +	__releases(dev->mutex)
+> >   {
+> >   	mutex_unlock(&dev->mutex);
+> >   }
+> 
+> I propose to annotate these functions with __no_capability_analysis as a
+> first step. Review of all callers of these functions in the entire
+> kernel tree learned me that annotating these functions results in a
+> significant number of false positives and not to the discovery of any
+> bugs. The false positives are triggered by conditional locking. An
+> example of code that triggers false positive thread-safety warnings:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503052315.vk7m958M-lkp@intel.com/
+Yeah, I've ran into this as well. The thing is entirely stupid when it
+sees a branch. This is really unfortunate. But I disagree, I would
+annotate those functions that have conditional locking with
+__no_capability_analysis, or possibly:
 
-All warnings (new ones prefixed by >>):
+#define __confused_by_conditionals __no_capability_analysis
 
-   In file included from arch/arm64/mm/hugetlbpage.c:12:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/mm/hugetlbpage.c:154:23: warning: parameter 'addr' set but not used [-Wunused-but-set-parameter]
-     154 |                              unsigned long addr,
-         |                                            ^
-   3 warnings generated.
+I'm also not quite sure how to annotate things like pte_lockptr().
 
 
-vim +/addr +154 arch/arm64/mm/hugetlbpage.c
+Anyway, this thing has some promise, however it is *really*, as in
+*really* *REALLY* simple. Anything remotely interesting, where you
+actually want the help, it falls over.
 
-bc5dfb4fd7bd471 Baolin Wang       2022-05-16  144  
-d8bdcff2876424d Steve Capper      2017-08-22  145  /*
-d8bdcff2876424d Steve Capper      2017-08-22  146   * Changing some bits of contiguous entries requires us to follow a
-d8bdcff2876424d Steve Capper      2017-08-22  147   * Break-Before-Make approach, breaking the whole contiguous set
-d8bdcff2876424d Steve Capper      2017-08-22  148   * before we can change any entries. See ARM DDI 0487A.k_iss10775,
-d8bdcff2876424d Steve Capper      2017-08-22  149   * "Misprogramming of the Contiguous bit", page D4-1762.
-d8bdcff2876424d Steve Capper      2017-08-22  150   *
-d8bdcff2876424d Steve Capper      2017-08-22  151   * This helper performs the break step.
-d8bdcff2876424d Steve Capper      2017-08-22  152   */
-fb396bb459c1fa3 Anshuman Khandual 2022-05-10  153  static pte_t get_clear_contig(struct mm_struct *mm,
-d8bdcff2876424d Steve Capper      2017-08-22 @154  			     unsigned long addr,
-d8bdcff2876424d Steve Capper      2017-08-22  155  			     pte_t *ptep,
-d8bdcff2876424d Steve Capper      2017-08-22  156  			     unsigned long pgsize,
-d8bdcff2876424d Steve Capper      2017-08-22  157  			     unsigned long ncontig)
-d8bdcff2876424d Steve Capper      2017-08-22  158  {
-49c87f7677746f3 Ryan Roberts      2025-02-26  159  	pte_t pte, tmp_pte;
-49c87f7677746f3 Ryan Roberts      2025-02-26  160  	bool present;
-49c87f7677746f3 Ryan Roberts      2025-02-26  161  
-66251d3eadf78e2 Ryan Roberts      2025-03-04  162  	pte = ptep_get_and_clear_anysz(mm, ptep, pgsize);
-49c87f7677746f3 Ryan Roberts      2025-02-26  163  	present = pte_present(pte);
-49c87f7677746f3 Ryan Roberts      2025-02-26  164  	while (--ncontig) {
-49c87f7677746f3 Ryan Roberts      2025-02-26  165  		ptep++;
-49c87f7677746f3 Ryan Roberts      2025-02-26  166  		addr += pgsize;
-66251d3eadf78e2 Ryan Roberts      2025-03-04  167  		tmp_pte = ptep_get_and_clear_anysz(mm, ptep, pgsize);
-49c87f7677746f3 Ryan Roberts      2025-02-26  168  		if (present) {
-49c87f7677746f3 Ryan Roberts      2025-02-26  169  			if (pte_dirty(tmp_pte))
-49c87f7677746f3 Ryan Roberts      2025-02-26  170  				pte = pte_mkdirty(pte);
-49c87f7677746f3 Ryan Roberts      2025-02-26  171  			if (pte_young(tmp_pte))
-49c87f7677746f3 Ryan Roberts      2025-02-26  172  				pte = pte_mkyoung(pte);
-d8bdcff2876424d Steve Capper      2017-08-22  173  		}
-49c87f7677746f3 Ryan Roberts      2025-02-26  174  	}
-49c87f7677746f3 Ryan Roberts      2025-02-26  175  	return pte;
-d8bdcff2876424d Steve Capper      2017-08-22  176  }
-d8bdcff2876424d Steve Capper      2017-08-22  177  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+But you gotta start somewhere I suppose. I think the thing that is
+important here is how receptive the clang folks are to working on this
+-- because it definitely needs work.
