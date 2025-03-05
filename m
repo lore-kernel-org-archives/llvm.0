@@ -1,183 +1,131 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329B642AAF
-	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 08:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003211F5826
+	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 08:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741163469; cv=none; b=gCtFInZcJV/L9KFWLl5MnhFRYIPx9VTKBhNGpbc3jh1f0ZmC72orW7ErbZPCwqQo2Tk8OE7ElUH3si6ZYs49+5TThG0Cw2zKr8gHI3g40qGGiVPOi5f+UMKg/DYR21mKs0PfR90nSl2aDFHUZw7l48QCpAqB7pFfITCrR/1Vw20=
+	t=1741163778; cv=none; b=CSZojejrZxKCMGIKcNSH0Bk8kzQDUcMs8yFx0LCp+xvDYmKHw7TUcTZB1FRNpwl4Bq8gK+oQYoYmyjY85P6Nx5DhGnq19gYFPtK1JKgeprme6XGvRojvDbh8H9l7tsdNxF8Yue9ZStiAhcwJZSiIJ2ZwBXWk393yiA6HF+OCWp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741163469; c=relaxed/simple;
-	bh=iX8irvHRcmV+psqnPxftJmyB2TWBumGfxW6KaDH4gjQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=K4/r5izyvoCewI4C94PTRatXmIt3T9EsixlINdD/Zxpid+5VlFgN2vjqwiHOZeySLE9yv2eiTTB0Rc2BbSF308P4H8eXXfTAeDr9UkIsfhtePzJWPPqCG08OISb1lgJFi+bQ1ucj+jinL5KRorie+/zrhuPTVSu80mzVyyhJnY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LeiaTm3O; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1741163778; c=relaxed/simple;
+	bh=tclfnaQ+78uJUqE4m2J8GwrNwDst3SKOWGjXQTac2LE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LW+Idvi8PDfdPIq0h0a630OvO7XRtu4CsIIW2i9OndEc+odnebFOya+zkNi9XmBt+MFYWpvYvqzy8q8dlQi0Kxl5YpBhI9cHrVFT0ZDRjZ90CT91D+AdrPcWT3LnZFEdwPx0dQPJmiYNQUuSKZSjH9V8xOlD07r5+Ef06shw9Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XlmyCMpE; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LeiaTm3O"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5258Tkoa3044543
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 5 Mar 2025 00:29:47 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5258Tkoa3044543
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1741163391;
-	bh=blf/TiOtbprpDLJNtfD3y4oyxoUcu4XFE3PfFSXAZMQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=LeiaTm3OcHAce14jA4D/ZHWqu+UtBIS5XG4gqHwgcoOzbl/wq6Da6xdHQoGGKCoxT
-	 T3qpHmrxIpG0bcDA6I70X/yc4/N2vxII+WdUGNdZqtRjvI+DwoW4wIIWyunlZACq+G
-	 9zquu1aXuKa6nsC3gKEAsy4i71ZUY+DTROhGW5AYNx4DreuQOIzGdPJNEiIRvbGpuV
-	 C+3uxcYgR6B4fnB9aO/wFsSNYbYXIadCnKQOFmN9g3/aC7I+zXDFaKe/7holtL9Fw4
-	 4+ZYAI0WXO0BHMrZZISHmKY8LvwpM+KHvgo+hRJpKGyYlaRf75sjCoxIsvE+fa85Cy
-	 VPWyvOwVfENvg==
-Date: Wed, 05 Mar 2025 00:29:45 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Menglong Dong <menglong8.dong@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org,
-        davem@davemloft.net, dsahern@kernel.org,
-        mathieu.desnoyers@efficios.com, nathan@kernel.org,
-        nick.desaulniers+lkml@gmail.com, morbo@google.com,
-        samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
-        akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
-References: <20250303132837.498938-1-dongml2@chinatelecom.cn> <20250303132837.498938-2-dongml2@chinatelecom.cn> <20250303165454.GB11590@noisy.programming.kicks-ass.net> <CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com> <20250304053853.GA7099@noisy.programming.kicks-ass.net> <20250304061635.GA29480@noisy.programming.kicks-ass.net> <CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com> <20250304094220.GC11590@noisy.programming.kicks-ass.net> <6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com> <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
-Message-ID: <694E52E0-C9E5-49D2-A677-09A5EE442590@zytor.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XlmyCMpE"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-390eb7c1024so3767522f8f.0
+        for <llvm@lists.linux.dev>; Wed, 05 Mar 2025 00:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741163774; x=1741768574; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZfQXwUL3Ydz7mR+cjRUeO/xqWRGS7uJqxxJMkaNfgT0=;
+        b=XlmyCMpEFHGlp+frRAqLzf50mllkuYd6ebJOqDNH/PM45J73fnL38dFHEtSdloefqr
+         /+vbcBdz1rs7NjcwGZHsceymv29T/rohkWnDAlHAQwvl/C0awwzUwrN2psN/+BQJozPM
+         n/QE/ac4AC7NW8o1eN51py56LK7gy2hsM3XVcJVbDmWpwPxDp9SufMKjrT/l34fXefjH
+         VUU4ormAxJZPubVcZQcxxyfh+v7psG2BrZ+d12aX/iIGLlZP1oHLiMimst+NS6LKCt05
+         ZIfh2VG6x6k3kkJ0A5wU8vMEfIlwcLoBLMgP2NJjJJNGmQWc/i7a3GnlpEVbTDmnM3eC
+         /mlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741163774; x=1741768574;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZfQXwUL3Ydz7mR+cjRUeO/xqWRGS7uJqxxJMkaNfgT0=;
+        b=SWH5fa22QoItUW4l+dhXLqtcFajwO/NsMSuLsrvJfVEMcy6247AqjAzv+N1lMAU/25
+         +vT/OeQ9JNyqCQ6A1MLPfznkKiZvk6233KJ3I+iQ8LspoCj92xL5Tcv/uurgV4mulR42
+         xZA3/rf7Ouhx9XAsrd2dYn6nJeg565YbNYhdFzT8+2wQwv6Fc9ushoUMgi75Re7qSH8D
+         otPxSUDL4TlgYargPUCifEyWrSouY1pf6k5d+IAGmFi/gtpoq613tIkOvIDPLpC3PYqM
+         O72zuVgujfnXoelRhfZ5NTTh9IEbAjGeYGWwnxTTatwjUppYEnD9+JnbO79hoaoXL4uG
+         91qA==
+X-Forwarded-Encrypted: i=1; AJvYcCVnLwc1fCnchhRi1pc4CoT3uJkXttiLkXeywr7aKGKkRJlDxDPhuwkhTEphhid0WhbYoW8w@lists.linux.dev
+X-Gm-Message-State: AOJu0YxttqjPlL2XVAMVbWb0Qt/Qth30NnBWGVypf+D6nPG8Z/i/cEut
+	/hEt0oVjYGmreQpUv3GGaY95A0c3RPXuEFWcSoh2kl/kp4qPQMUXJDDst+UthfE=
+X-Gm-Gg: ASbGnctfLr4Wzjb5avQipEWLYeFh40OLm1fmromXjylsLEPGn4W8V/IgLkSDDwNgYi4
+	xAMtEC7GhLXD92w8iD1BrnhEJACPQcnaM0AAW+Z9R43hHgHq2wTREJfplAXnxsYIK5eS/UWYPxP
+	Mp92NMcswHhFK1qu1LCFHfofbDR4k6D99FUybRdf3r+zen9yPDS9kmA3uRhXclp0hjXlTxJELpO
+	PqcSKYKNvu+UzCdse8ZDuZs652xxjNdpZ5QwNepJqakjR9k2ZINYcXTyNhSq/vqRrgaHT35CeYX
+	SGvf1cZRIx12qOS9ahj7D5+ChOTDFW3x8YRLZeCu9dUYIgHT4A==
+X-Google-Smtp-Source: AGHT+IG1TdRy5Kvu8p1cmT5U4TYJbrUoCcVGa1tX1dkQIqW9WiR2lgUQPgvjP/3zB9IzHIHCvQwYww==
+X-Received: by 2002:a05:6000:184c:b0:391:23de:b1b4 with SMTP id ffacd0b85a97d-39123deb51dmr497486f8f.45.1741163774150;
+        Wed, 05 Mar 2025 00:36:14 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-390e479608fsm20564933f8f.14.2025.03.05.00.36.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Mar 2025 00:36:13 -0800 (PST)
+Date: Wed, 5 Mar 2025 11:36:10 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Marco Elver <elver@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 01/34] compiler_types: Move lock checking attributes
+ to compiler-capability-analysis.h
+Message-ID: <f76a48fe-09da-41e0-be2e-e7f1b939b7e3@stanley.mountain>
+References: <20250304092417.2873893-1-elver@google.com>
+ <20250304092417.2873893-2-elver@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304092417.2873893-2-elver@google.com>
 
-On March 4, 2025 5:19:09 PM PST, Menglong Dong <menglong8=2Edong@gmail=2Eco=
-m> wrote:
->On Tue, Mar 4, 2025 at 10:53=E2=80=AFPM H=2E Peter Anvin <hpa@zytor=2Ecom=
-> wrote:
->>
->> On March 4, 2025 1:42:20 AM PST, Peter Zijlstra <peterz@infradead=2Eorg=
-> wrote:
->> >On Tue, Mar 04, 2025 at 03:47:45PM +0800, Menglong Dong wrote:
->> >> We don't have to select FUNCTION_ALIGNMENT_32B, so the
->> >> worst case is to increase ~2=2E2%=2E
->> >>
->> >> What do you think?
->> >
->> >Well, since I don't understand what you need this for at all, I'm firm=
-ly
->> >on the side of not doing this=2E
->> >
->> >What actual problem is being solved with this meta data nonsense? Why =
-is
->> >it worth blowing up our I$ footprint over=2E
->> >
->> >Also note, that if you're going to be explaining this, start from
->> >scratch, as I have absolutely 0 clues about BPF and such=2E
->>
->> I would appreciate such information as well=2E The idea seems dubious o=
-n the surface=2E
->
->Ok, let me explain it from the beginning=2E (My English is not good,
->but I'll try to describe it as clear as possible :/)
->
->Many BPF program types need to depend on the BPF trampoline,
->such as BPF_PROG_TYPE_TRACING, BPF_PROG_TYPE_EXT,
->BPF_PROG_TYPE_LSM, etc=2E BPF trampoline is a bridge between
->the kernel (or bpf) function and BPF program, and it acts just like the
->trampoline that ftrace uses=2E
->
->Generally speaking, it is used to hook a function, just like what ftrace
->do:
->
->foo:
->    endbr
->    nop5  -->  call trampoline_foo
->    xxxx
->
->In short, the trampoline_foo can be this:
->
->trampoline_foo:
->    prepare a array and store the args of foo to the array
->    call fentry_bpf1
->    call fentry_bpf2
->    =2E=2E=2E=2E=2E=2E
->    call foo+4 (origin call)
->    save the return value of foo
->    call fexit_bpf1 (this bpf can get the return value of foo)
->    call fexit_bpf2
->    =2E=2E=2E=2E=2E=2E=2E
->    return to the caller of foo
->
->We can see that the trampoline_foo can be only used for
->the function foo, as different kernel function can be attached
->different BPF programs, and have different argument count,
->etc=2E Therefore, we have to create 1000 BPF trampolines if
->we want to attach a BPF program to 1000 kernel functions=2E
->
->The creation of the BPF trampoline is expensive=2E According to
->my testing, It will spend more than 1 second to create 100 bpf
->trampoline=2E What's more, it consumes more memory=2E
->
->If we have the per-function metadata supporting, then we can
->create a global BPF trampoline, like this:
->
->trampoline_global:
->    prepare a array and store the args of foo to the array
->    get the metadata by the ip
->    call metadata=2Efentry_bpf1
->    call metadata=2Efentry_bpf2
->    =2E=2E=2E=2E
->    call foo+4 (origin call)
->    save the return value of foo
->    call metadata=2Efexit_bpf1 (this bpf can get the return value of foo)
->    call metadata=2Efexit_bpf2
->    =2E=2E=2E=2E=2E=2E=2E
->    return to the caller of foo
->
->(The metadata holds more information for the global trampoline than
->I described=2E)
->
->Then, we don't need to create a trampoline for every kernel function
->anymore=2E
->
->Another beneficiary can be ftrace=2E For now, all the kernel functions th=
-at
->are enabled by dynamic ftrace will be added to a filter hash if there are
->more than one callbacks=2E And hash lookup will happen when the traced
->functions are called, which has an impact on the performance, see
->__ftrace_ops_list_func() -> ftrace_ops_test()=2E With the per-function
->metadata supporting, we can store the information that if the callback is
->enabled on the kernel function to the metadata, which can make the perfor=
-mance
->much better=2E
->
->The per-function metadata storage is a basic function, and I think there
->may be other functions that can use it for better performance in the feat=
-ure
->too=2E
->
->(Hope that I'm describing it clearly :/)
->
->Thanks!
->Menglong Dong
->
+On Tue, Mar 04, 2025 at 10:21:00AM +0100, Marco Elver wrote:
+> +#ifndef _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
+> +#define _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
+> +
+> +#ifdef __CHECKER__
+> +
+> +/* Sparse context/lock checking support. */
+> +# define __must_hold(x)		__attribute__((context(x,1,1)))
+> +# define __acquires(x)		__attribute__((context(x,0,1)))
+> +# define __cond_acquires(x)	__attribute__((context(x,0,-1)))
+> +# define __releases(x)		__attribute__((context(x,1,0)))
+> +# define __acquire(x)		__context__(x,1)
+> +# define __release(x)		__context__(x,-1)
+> +# define __cond_lock(x, c)	((c) ? ({ __acquire(x); 1; }) : 0)
+> +
 
-This is way too cursory=2E For one thing, you need to start by explaining =
-why you are asking to put this *inline* with the code, which is something t=
-hat normally would be avoided at all cost=2E
+The other thing you might want to annotate is ww_mutex_destroy().
+
+I'm happy about the new __guarded_by annotation.
+
+regards,
+dan carpenter
+
