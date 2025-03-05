@@ -1,73 +1,104 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4701FAC5C;
-	Wed,  5 Mar 2025 09:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78A01FAC5C
+	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 09:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741165837; cv=none; b=cxDBdtd7Qi1A16OHqZ5RN6352VHfQRsu8xc+guYsccXE89yZB2iQ+HdTXW0I/yFk3GYi2zTfqWP2Mfn3bcbbftXwtq19cMh6r1Pmg8wwX6xBBNFmPNxMwirvHiep5Hvld3MmArzvIis8pR8FfQ6pK7+HEh50GPtBX10PkDqyIfI=
+	t=1741166037; cv=none; b=S9yM9SXResfSyYyqPj0VQ/4+OX99P+hGVPL3pXmZMVZiskqJLd4zfWN6ikmWxWFYS8h/dJW3QVHtRFYNHFczM/JzjhlrgdZPjlgGRk+CKC298rv31Vnz7Z23/xjkbchHMR8HICRHHusLv0IqpyFvpNc3/1gelmLQa8GewTWFOQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741165837; c=relaxed/simple;
-	bh=EQtCo8tSKqyjMrR3Zfzl4on3sNXGuhfoyEbPQqh//RA=;
+	s=arc-20240116; t=1741166037; c=relaxed/simple;
+	bh=EOEdPWIPXhYnJjUhm7qwGkUHilTR1xlGtYvOLl5TcvE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YEoogjXdC+UpKDGETxnF5BHHLW1vaLFJwYUy6xTJg3hAk+7k1sLCo1J91GZR+/Pp/RJNu+/dau1MWNCQT6zK2s80Rr68Ikz2GCTrepwBRHKCvmEZ2p77WUsnCEvKTMp+qpcXh67IIwfiHd9L4obmVq6kLDZfcBSPrilhG1L0BTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LOMJlFzM; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=TLl0fvgQw99Yst4n06yyuLmbR+kTzFSIAmAbcPl/wAe3FN39eKAYUI++wNvBjgx9/v8jw/ykERE1uxLg5ppYYpT9EZeGMzY7C4RZwufKzBz95dzgf9kKoTQBuIMXhrnuFONEnPTB0kK7lcH1dLUTvby+TAnRBJJ4W/jkWHlvG3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y3F8K9yA; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LOMJlFzM"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso10754286a12.3;
-        Wed, 05 Mar 2025 01:10:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y3F8K9yA"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-439ac3216dcso44311495e9.1
+        for <llvm@lists.linux.dev>; Wed, 05 Mar 2025 01:13:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741165834; x=1741770634; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1741166034; x=1741770834; darn=lists.linux.dev;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZhkzrvYS21LiP8zQmu1Wipl10MmV8PagJql4Vig2YQo=;
-        b=LOMJlFzMQbk7/9fWJ5HDsFnkN11atYye1WzE24/o9ja8Ap8pkwsYr0wdq6vjDPC27i
-         X06mfsIvGstjaG/+Ik5Kkh+ar5l09WAq4xobhiqbU7e8OVHTrsP1TfuIiA7Unuotgfji
-         AFwUe7uNpKaE+PxAcCOGiyXriWBkoaie3/EUxHrGNtIu94+4QB4Xfr9GT2pdVLTBbFn7
-         RB2DGSYE2cnet2d7g7xpdkuapKZa4GakBZKdPcqo93pMBSxiMXRoFcInSSL4Ljr8x9Dl
-         PF6DiVeAgAz1zbjzA8AnfRxnXmG4sYEV5QUsBqS+al1mx3dI5geuZDEr4ejgqUzcWrP4
-         sgtA==
+        bh=9cBjuy2PLDHX7EYpa/ALszjDhP6sn2qNCfw9I5BYuy8=;
+        b=Y3F8K9yAM/NmDISitapJhuu3THoIsLKAEpYA4bFzXJ5qhTYLRKM4aa56N73dB5Tnn7
+         LwLnjSApNZFEis/ILpuXmkINyxIYy2EaJxc3Tgf6ug8cDDHXMGLacqhCcm0EGTFIGL/S
+         0FxnglieKOtHhOiukC2+pHqFGiRNVdbsA0hhQwprSHN4qW5BsJ/g+Y2mWp5Bb8Uithwq
+         mbHl+ABGY70S3CDVrJ9+4D0X7muhDGQYj4/O2p/PyVI2PA0h35Q102pzJemPFLVVQkzm
+         BYEr85p1pC5BmA/mnECrKseKUIlnKoHXCUQO1rFwF7PGUYWlwg2VzAOWbYu+jSsSuVk6
+         IHZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741165834; x=1741770634;
+        d=1e100.net; s=20230601; t=1741166034; x=1741770834;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZhkzrvYS21LiP8zQmu1Wipl10MmV8PagJql4Vig2YQo=;
-        b=k6PFbYCQYRxX93qqm80o9yukQ3Lo4TexJVaG56SNqB762pjm17l+phsxJ9Q3n5CO5x
-         7LJJDjFqGl8xOysENFHlpxZUsPSV+FebxZDDK8EIkomk19B0M0zudaMIVuxOUeTRdvyR
-         73ML1GnDDKYAUn9cxn1gwg8ink3myPN2z1l4tuZi8Rnbs5louAwh4GhnqRTTIT0aHH2L
-         jIzhU32D6a5Gs2V4u7jMXtcqQiU2/KunB/AWrfkN/qEj+wDeSwfnn1VQhp3b7qYywsG3
-         DQJ+UsxPC9gugJbgaIunE/YNBwRp9yksnkbH24ti/r5u5lDN+w0cFjwoW4a6xTW7Z8vv
-         XmtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYgcmcZEHTRdFo8nXUPz1Bm7qX8ca8wz/EJQLZJHbZc5pavRm88UzAbHJ01sJjmtVAKuyKmcfadMXDu0af5Q==@lists.linux.dev, AJvYcCX6W3IAR0rlgAo+N23Qp/oVIFI77jpgk+fo8AS/clFPV76W4AyVrJXNCTdEKAjzgr0KCJT5@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywmh5y3AWRoO6WpBrLWCYERmxsRzCE8yW6caejHxgLp3nerwseX
-	45Xsk+WX+rPT/cem42FseU8Upiovf0ryiN9CzV2U6h1snBnhNDleByIaEUjl
-X-Gm-Gg: ASbGncvvDXZRx10Am3E0juj3mpQRaN3Rr1lyCshgfCu+IGkRYLK0XhtrizrBbH06yMg
-	m1D+KIbr78gGUnxUPvfYu5BrbJOlj9rU4cch5koZxrxMk+MJDySxDKyzkWZfPQNy5bFv/fiT0j1
-	adQcFTm+bTVBOOwvfC7qKx320eyLLLa9aXyKlfzdsoO4VJK+YBdZegB1hwD//Z/6zkbyChWmQoU
-	RrBgAL/bVV+2VupBns6Tf3T8uVAxrGdWA/TavSjNFggysoEXPaearSHK5SnXox8kQFgPvpKxSgq
-	bXuZPYmAxwAF/GdAvgHSNkNT5mvtVxegMYKlITN5tsyJ
-X-Google-Smtp-Source: AGHT+IGqCsXnkfC76bFXMbUjIXevmryzQgEal5+s3NWi2W3zDAzeb9s6R0Em48UhoyL87fptsSZghA==
-X-Received: by 2002:a05:6402:13ca:b0:5e4:b66f:880b with SMTP id 4fb4d7f45d1cf-5e59f36050emr2599867a12.6.1741165833326;
-        Wed, 05 Mar 2025 01:10:33 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c43a6ab7sm9344888a12.74.2025.03.05.01.10.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Mar 2025 01:10:32 -0800 (PST)
-Date: Wed, 5 Mar 2025 09:10:32 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	willy@infradead.org, michel@lespinasse.org, linux-mm@kvack.org
-Subject: Re: [PATCH 3/7] lib/rbtree: add random seed
-Message-ID: <20250305091032.fecpecvvxravtjyp@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20250304011952.29182-4-richard.weiyang@gmail.com>
- <202503051009.iTp8hlJy-lkp@intel.com>
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9cBjuy2PLDHX7EYpa/ALszjDhP6sn2qNCfw9I5BYuy8=;
+        b=Expb5PWwmjMqTmCqKBfr3tl8EcSTbAEdokCv3XhZh4WtGAlh0MYEStInh93zpwfbF5
+         AoACZb+79U0N8gAF1ytrOrGYPCzamzULOO5jwt7NQIF16MEfLKogdebdsDfKOFDxe3PB
+         ydMXo6k3+NiSkFcJ/5vvzebORSRxDFSwVTAG0oSbNreH3FXewlVVtETUUEL+8O+XMOgK
+         73NhDzc7AcnjXsj2bYll8WeyxS8En6zMcYRsmsvjOk+FpxxzLc+NGmGfDWJrKhw8mUVc
+         fbbZFshA8MCIH43i4ZFKRz9Q1kj2wD3oaxEXAxMKR1GYmZy9KGMqyqf+LUaiUjeSZsI6
+         hPEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPmPSx8CFi4SpbSLRymIq9UAPBhj53m8y5jRAdHNhJb/o1jCiu+Vsx6glGNHHV3dQZNZQo@lists.linux.dev
+X-Gm-Message-State: AOJu0YztbuaQAahIiHSOKf8kPZ6tGsxNnpRZfrkc7lzHlIweTpSZqM8l
+	FRSFdVLBccDmCxDTN1mMhJgraYAhJxGkZH7g0UbXZOzK5WnYi24Qu3p4ftGMZA==
+X-Gm-Gg: ASbGncup8UEbpIiYcRW3W7ErAri1F/9+I390/vyPndpszqu+h2ObofHmF0MBZTSMbD+
+	upUG87Y1MI2FGNzs3AExR/I3S9kZWoLqFC7ps9g13Tjb3RiQlXUdN5qkD6VAjZgR94/Y1Dz1TZ9
+	5EI4VoGiwdIlcc4cI66FNAxWiQnuTVnxZlnvnJzDIy0Vl6NEiAKA0JzCPBVg3RZMOeI50KzhefN
+	s74iuqW9AZTYzVgmyQw1Wrk/tjS8q1iGYw6RlwPIajsbwI2LFpKRGFRH95OJEKAbFfWfpas4hNQ
+	fWPDT3eO5U5fZkBl2Y46WjvUqWX+LuEmto3dbtUNAVIfsrc/I6BWmgJIx83MY9n4vNRAEGrAj5J
+	lS0MuVQ==
+X-Google-Smtp-Source: AGHT+IFF0lGPHBWULqd+AVLRPIhf489c6sXiFErCWBRvEttV2lhuAn1pCKQ/kfJiJNdoh7SFX/JFGw==
+X-Received: by 2002:a05:600c:190a:b0:43b:cbe2:ec0c with SMTP id 5b1f17b1804b1-43bd29c9377mr14815785e9.27.1741166033783;
+        Wed, 05 Mar 2025 01:13:53 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:2834:9:11d6:a25d:6219:d5fb])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd42c588dsm11275665e9.21.2025.03.05.01.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Mar 2025 01:13:52 -0800 (PST)
+Date: Wed, 5 Mar 2025 10:13:44 +0100
+From: Marco Elver <elver@google.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
+	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Kentaro Takeda <takedakn@nttdata.co.jp>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, rcu@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 01/34] compiler_types: Move lock checking attributes
+ to compiler-capability-analysis.h
+Message-ID: <Z8gVyLIU71Fg1QWK@elver.google.com>
+References: <20250304092417.2873893-1-elver@google.com>
+ <20250304092417.2873893-2-elver@google.com>
+ <f76a48fe-09da-41e0-be2e-e7f1b939b7e3@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,74 +107,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202503051009.iTp8hlJy-lkp@intel.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <f76a48fe-09da-41e0-be2e-e7f1b939b7e3@stanley.mountain>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
-On Wed, Mar 05, 2025 at 11:05:13AM +0800, kernel test robot wrote:
->Hi Wei,
->
->kernel test robot noticed the following build warnings:
->
->[auto build test WARNING on linus/master]
->[also build test WARNING on v6.14-rc5 next-20250304]
->[cannot apply to akpm-mm/mm-nonmm-unstable akpm-mm/mm-everything]
->[If your patch is applied to the wrong git tree, kindly drop us a note.
->And when submitting patch, we suggest to use '--base' as documented in
->https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
->url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Yang/lib-rbtree-enable-userland-test-suite-for-rbtree-related-data-structure/20250304-092345
->base:   linus/master
->patch link:    https://lore.kernel.org/r/20250304011952.29182-4-richard.weiyang%40gmail.com
->patch subject: [PATCH 3/7] lib/rbtree: add random seed
->config: i386-buildonly-randconfig-004-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051009.iTp8hlJy-lkp@intel.com/config)
->compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
->reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051009.iTp8hlJy-lkp@intel.com/reproduce)
->
->If you fix the issue in a separate patch/commit (i.e. not just a new version of
->the same patch/commit), kindly add following tags
->| Reported-by: kernel test robot <lkp@intel.com>
->| Closes: https://lore.kernel.org/oe-kbuild-all/202503051009.iTp8hlJy-lkp@intel.com/
->
->All warnings (new ones prefixed by >>):
->
->>> lib/rbtree_test.c:17:22: warning: implicit conversion from 'unsigned long long' to 'ulong' (aka 'unsigned long') changes value from 3141592653589793238 to 2721204694 [-Wconstant-conversion]
->      17 | __param(ulong, seed, 3141592653589793238ULL, "Random seed");
->         |                ~~~~  ^~~~~~~~~~~~~~~~~~~~~~
->   lib/rbtree_test.c:10:21: note: expanded from macro '__param'
->      10 |         static type name = init;                \
->         |                     ~~~~   ^~~~
->   1 warning generated.
->--
->>> lib/interval_tree_test.c:22:22: warning: implicit conversion from 'unsigned long long' to 'ulong' (aka 'unsigned long') changes value from 3141592653589793238 to 2721204694 [-Wconstant-conversion]
->      22 | __param(ulong, seed, 3141592653589793238ULL, "Random seed");
->         |                ~~~~  ^~~~~~~~~~~~~~~~~~~~~~
->   lib/interval_tree_test.c:10:21: note: expanded from macro '__param'
->      10 |         static type name = init;                \
->         |                     ~~~~   ^~~~
->   1 warning generated.
->
->
->vim +17 lib/rbtree_test.c
->
->     8	
->     9	#define __param(type, name, init, msg)		\
->    10		static type name = init;		\
->    11		module_param(name, type, 0444);		\
->    12		MODULE_PARM_DESC(name, msg);
->    13	
->    14	__param(int, nnodes, 100, "Number of nodes in the rb-tree");
->    15	__param(int, perf_loops, 1000, "Number of iterations modifying the rb-tree");
->    16	__param(int, check_loops, 100, "Number of iterations modifying and verifying the rb-tree");
->  > 17	__param(ulong, seed, 3141592653589793238ULL, "Random seed");
->    18	
+On Wed, Mar 05, 2025 at 11:36AM +0300, Dan Carpenter wrote:
+> On Tue, Mar 04, 2025 at 10:21:00AM +0100, Marco Elver wrote:
+> > +#ifndef _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
+> > +#define _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
+> > +
+> > +#ifdef __CHECKER__
+> > +
+> > +/* Sparse context/lock checking support. */
+> > +# define __must_hold(x)		__attribute__((context(x,1,1)))
+> > +# define __acquires(x)		__attribute__((context(x,0,1)))
+> > +# define __cond_acquires(x)	__attribute__((context(x,0,-1)))
+> > +# define __releases(x)		__attribute__((context(x,1,0)))
+> > +# define __acquire(x)		__context__(x,1)
+> > +# define __release(x)		__context__(x,-1)
+> > +# define __cond_lock(x, c)	((c) ? ({ __acquire(x); 1; }) : 0)
+> > +
+> 
+> The other thing you might want to annotate is ww_mutex_destroy().
 
-Thanks, will fix it.
+We can add an annotation to check the lock is not held:
 
->
->-- 
->0-DAY CI Kernel Test Service
->https://github.com/intel/lkp-tests/wiki
 
--- 
-Wei Yang
-Help you, Help me
+diff --git a/include/linux/ww_mutex.h b/include/linux/ww_mutex.h
+index 63978cb36a98..549d75aee76a 100644
+--- a/include/linux/ww_mutex.h
++++ b/include/linux/ww_mutex.h
+@@ -372,6 +372,7 @@ extern int __must_check ww_mutex_trylock(struct ww_mutex *lock,
+  * this function is called.
+  */
+ static inline void ww_mutex_destroy(struct ww_mutex *lock)
++	__must_not_hold(lock)
+ {
+ #ifndef CONFIG_PREEMPT_RT
+ 	mutex_destroy(&lock->base);
+diff --git a/lib/test_capability-analysis.c b/lib/test_capability-analysis.c
+index 13e7732c38a2..1a466b362373 100644
+--- a/lib/test_capability-analysis.c
++++ b/lib/test_capability-analysis.c
+@@ -516,6 +516,8 @@ static void __used test_ww_mutex_lock_noctx(struct test_ww_mutex_data *d)
+ 	ww_mutex_lock_slow(&d->mtx, NULL);
+ 	d->counter++;
+ 	ww_mutex_unlock(&d->mtx);
++
++	ww_mutex_destroy(&d->mtx);
+ }
+ 
+ static void __used test_ww_mutex_lock_ctx(struct test_ww_mutex_data *d)
+@@ -545,4 +547,6 @@ static void __used test_ww_mutex_lock_ctx(struct test_ww_mutex_data *d)
+ 
+ 	ww_acquire_done(&ctx);
+ 	ww_acquire_fini(&ctx);
++
++	ww_mutex_destroy(&d->mtx);
+ }
+
+
+Probably a fixup for the ww_mutex patch:
+https://lore.kernel.org/all/20250304092417.2873893-21-elver@google.com/
+Or extra patch depending on when/if Peter decides to take the series.
+
+> I'm happy about the new __guarded_by annotation.
+
+Thanks!
+
+-- Marco
