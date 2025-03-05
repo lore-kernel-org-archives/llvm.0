@@ -1,99 +1,183 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A351C7007
-	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 08:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329B642AAF
+	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 08:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741162596; cv=none; b=JyV+NeNaT+lyHNwDXYl0IvoZ9PDPBcZy11u56nX8h1r/L3r1o87dlzStl2iG2gps8hkfHslCI3aBrty+IbuBt1bXwUc3L32dsZRE2vbu7C5P1QgYTTcNqRGGHFYvROaIPeEi1JS0MlfTbz+KrJBpf0nzIsG7wpKfgO9VFsiU3d0=
+	t=1741163469; cv=none; b=gCtFInZcJV/L9KFWLl5MnhFRYIPx9VTKBhNGpbc3jh1f0ZmC72orW7ErbZPCwqQo2Tk8OE7ElUH3si6ZYs49+5TThG0Cw2zKr8gHI3g40qGGiVPOi5f+UMKg/DYR21mKs0PfR90nSl2aDFHUZw7l48QCpAqB7pFfITCrR/1Vw20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741162596; c=relaxed/simple;
-	bh=tcWSEMLkdnyh9aSLiaRBtq7lBNnDoTyyz9lHUiNPlc0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=nCmmyv/cdrgJ7zCw3oilCpxAWglw4vaObXRyvZ2KpOUttNwczrCQgQSmi6wbyq7bvtpN7zXd7ePEAiUJhLSjFOzJ3W2ozeQF3UvMTsf5uzKSLh2hn1j8XNHUcVpUtbEKT2tZ32LNFAFRyr7qKS++XnFFBpxi3bclRy5XsZYOIpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.corp-partner.google.com; spf=pass smtp.mailfrom=inventec.corp-partner.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0Q88xReL; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=inventec.corp-partner.google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inventec.corp-partner.google.com
+	s=arc-20240116; t=1741163469; c=relaxed/simple;
+	bh=iX8irvHRcmV+psqnPxftJmyB2TWBumGfxW6KaDH4gjQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=K4/r5izyvoCewI4C94PTRatXmIt3T9EsixlINdD/Zxpid+5VlFgN2vjqwiHOZeySLE9yv2eiTTB0Rc2BbSF308P4H8eXXfTAeDr9UkIsfhtePzJWPPqCG08OISb1lgJFi+bQ1ucj+jinL5KRorie+/zrhuPTVSu80mzVyyhJnY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LeiaTm3O; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0Q88xReL"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aaf900cc7fbso1184008166b.3
-        for <llvm@lists.linux.dev>; Wed, 05 Mar 2025 00:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741162592; x=1741767392; darn=lists.linux.dev;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jBluRc4AqYa9mwEBFMC/KLTpnRIQOHur+1Rtne5kToE=;
-        b=0Q88xReLMuydBTC7BdfbRE+xrULX+scFZYrDhSXTVLg24KVTqR1QJrk9tuzW9ljwfD
-         +IaqA/srLSIjNgu6L27NR8rMdfnJbpiLg4XiyXdT6GmZi72xDtxLvHbtYdcV1kErRi3L
-         VLmJoNWMdOXgmeOKOj5uGYYWvChVvyLU/JRp5c0hJhNpcelFFHKMAIhQSx7l0QPt4xya
-         mdFqXKM/uebcoF3lVuYATtkVeN9yE4+wIOv2Dk7u/BF7YjQTO7WbVTbS3Ejz0kRgczgU
-         3qI5e7KHD03eAqHcYGp1Oeqp292qbgcTpdbU+MWm/mFOalUSTUKu1U/HGwoYwf8DSxNQ
-         WQFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741162592; x=1741767392;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jBluRc4AqYa9mwEBFMC/KLTpnRIQOHur+1Rtne5kToE=;
-        b=eU/NsAlGF49v33bB4K8GgyBNexIGJ88qgK7N1a343NubNBVmzqeMeNVjAuaoiQ2qLX
-         tfwN+jWE98bi0f1bVxT30SlrTFgQwT0Qnh/55sHlr0cJH8cBX3ablhRX2Ju/wHEz4G5M
-         n9rBjCE+KTms2WYw/vUaMzXUVZ2GLXdMkJ2tWoo/RabMiXF6nFYbruIiXAp3tg4/gtdm
-         A+t/Sh8hwqY9Tdc8+Q8ys3VT8xQVfWf6BCOolg1SO6VN4pEqvK1fbTjAXV6okHIiBo+u
-         avnPrvRK5ifqfOleb0YpOW6M19nbNsBte0teOADgaEdGSO2RBcHTwB7vkvDJKhSD5dB0
-         IAzg==
-X-Gm-Message-State: AOJu0YwUHP6R9nVe4q5AlZD5Kkn7BlW/GCGyjY6g0XKynA+RTeMippqx
-	KUy4TbvDgv2BZXfixumMjwesn3HkTFtB7jvnY622PtmgtpSMZDPS+VZVEp+VrimRY5J7bGG1eGG
-	GiIwDx1pZ2CXEnucG+vmNlF4Z/xVaWD9z2StIWYo176o8d1WOB5M=
-X-Gm-Gg: ASbGncu3ChTkd3DzLLYhzeNGXL90ZBarR5Aw/vMZdr1TEByWVFoAiltTHJWHncADORa
-	LGD/a9WUOXT7YEWOZNx/D+4REXipu8GO+JAVhwSn4jxOExjapyCpvRUbOHR0ochnKbuQCl2bhvS
-	fG2zUSahv0WJ1GJy3xmjtKplcdAQ==
-X-Google-Smtp-Source: AGHT+IEIhI0imlmnmvEneoZB1CIsEriCFPuIQWHazM6Mp0DX2g8PZfAOrDM3QO+MompArNS2jl892RCCVscXRLKiSk0=
-X-Received: by 2002:a17:907:94c8:b0:abf:44bd:8326 with SMTP id
- a640c23a62f3a-ac20d8bce29mr206694166b.17.1741162592052; Wed, 05 Mar 2025
- 00:16:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LeiaTm3O"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5258Tkoa3044543
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 5 Mar 2025 00:29:47 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5258Tkoa3044543
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1741163391;
+	bh=blf/TiOtbprpDLJNtfD3y4oyxoUcu4XFE3PfFSXAZMQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=LeiaTm3OcHAce14jA4D/ZHWqu+UtBIS5XG4gqHwgcoOzbl/wq6Da6xdHQoGGKCoxT
+	 T3qpHmrxIpG0bcDA6I70X/yc4/N2vxII+WdUGNdZqtRjvI+DwoW4wIIWyunlZACq+G
+	 9zquu1aXuKa6nsC3gKEAsy4i71ZUY+DTROhGW5AYNx4DreuQOIzGdPJNEiIRvbGpuV
+	 C+3uxcYgR6B4fnB9aO/wFsSNYbYXIadCnKQOFmN9g3/aC7I+zXDFaKe/7holtL9Fw4
+	 4+ZYAI0WXO0BHMrZZISHmKY8LvwpM+KHvgo+hRJpKGyYlaRf75sjCoxIsvE+fa85Cy
+	 VPWyvOwVfENvg==
+Date: Wed, 05 Mar 2025 00:29:45 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Menglong Dong <menglong8.dong@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+CC: rostedt@goodmis.org, mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org,
+        davem@davemloft.net, dsahern@kernel.org,
+        mathieu.desnoyers@efficios.com, nathan@kernel.org,
+        nick.desaulniers+lkml@gmail.com, morbo@google.com,
+        samitolvanen@google.com, kees@kernel.org, dongml2@chinatelecom.cn,
+        akpm@linux-foundation.org, riel@surriel.com, rppt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
+References: <20250303132837.498938-1-dongml2@chinatelecom.cn> <20250303132837.498938-2-dongml2@chinatelecom.cn> <20250303165454.GB11590@noisy.programming.kicks-ass.net> <CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com> <20250304053853.GA7099@noisy.programming.kicks-ass.net> <20250304061635.GA29480@noisy.programming.kicks-ass.net> <CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com> <20250304094220.GC11590@noisy.programming.kicks-ass.net> <6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com> <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
+Message-ID: <694E52E0-C9E5-49D2-A677-09A5EE442590@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Kerry Kang <kang.kerry@inventec.corp-partner.google.com>
-Date: Wed, 5 Mar 2025 16:16:20 +0800
-X-Gm-Features: AQ5f1JrOJG-PHSW4n-sQZJypeRPbHykGGGirbiBu2VW4UdVYsGJR-MgJZ-byFWE
-Message-ID: <CALNGHDC=cCjTpfm6WDN_rdo2A9KBvHPX=0u52s6gTVgPt2xj7w@mail.gmail.com>
-Subject: [PATCH] mtd: spi-nor: Add Winbond w25q512jvdtr
-To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Similar to the other ones, different size. The "JV-DTR" suffix is in
-the datasheet, I haven't seen mentions of a different one.
+On March 4, 2025 5:19:09 PM PST, Menglong Dong <menglong8=2Edong@gmail=2Eco=
+m> wrote:
+>On Tue, Mar 4, 2025 at 10:53=E2=80=AFPM H=2E Peter Anvin <hpa@zytor=2Ecom=
+> wrote:
+>>
+>> On March 4, 2025 1:42:20 AM PST, Peter Zijlstra <peterz@infradead=2Eorg=
+> wrote:
+>> >On Tue, Mar 04, 2025 at 03:47:45PM +0800, Menglong Dong wrote:
+>> >> We don't have to select FUNCTION_ALIGNMENT_32B, so the
+>> >> worst case is to increase ~2=2E2%=2E
+>> >>
+>> >> What do you think?
+>> >
+>> >Well, since I don't understand what you need this for at all, I'm firm=
+ly
+>> >on the side of not doing this=2E
+>> >
+>> >What actual problem is being solved with this meta data nonsense? Why =
+is
+>> >it worth blowing up our I$ footprint over=2E
+>> >
+>> >Also note, that if you're going to be explaining this, start from
+>> >scratch, as I have absolutely 0 clues about BPF and such=2E
+>>
+>> I would appreciate such information as well=2E The idea seems dubious o=
+n the surface=2E
+>
+>Ok, let me explain it from the beginning=2E (My English is not good,
+>but I'll try to describe it as clear as possible :/)
+>
+>Many BPF program types need to depend on the BPF trampoline,
+>such as BPF_PROG_TYPE_TRACING, BPF_PROG_TYPE_EXT,
+>BPF_PROG_TYPE_LSM, etc=2E BPF trampoline is a bridge between
+>the kernel (or bpf) function and BPF program, and it acts just like the
+>trampoline that ftrace uses=2E
+>
+>Generally speaking, it is used to hook a function, just like what ftrace
+>do:
+>
+>foo:
+>    endbr
+>    nop5  -->  call trampoline_foo
+>    xxxx
+>
+>In short, the trampoline_foo can be this:
+>
+>trampoline_foo:
+>    prepare a array and store the args of foo to the array
+>    call fentry_bpf1
+>    call fentry_bpf2
+>    =2E=2E=2E=2E=2E=2E
+>    call foo+4 (origin call)
+>    save the return value of foo
+>    call fexit_bpf1 (this bpf can get the return value of foo)
+>    call fexit_bpf2
+>    =2E=2E=2E=2E=2E=2E=2E
+>    return to the caller of foo
+>
+>We can see that the trampoline_foo can be only used for
+>the function foo, as different kernel function can be attached
+>different BPF programs, and have different argument count,
+>etc=2E Therefore, we have to create 1000 BPF trampolines if
+>we want to attach a BPF program to 1000 kernel functions=2E
+>
+>The creation of the BPF trampoline is expensive=2E According to
+>my testing, It will spend more than 1 second to create 100 bpf
+>trampoline=2E What's more, it consumes more memory=2E
+>
+>If we have the per-function metadata supporting, then we can
+>create a global BPF trampoline, like this:
+>
+>trampoline_global:
+>    prepare a array and store the args of foo to the array
+>    get the metadata by the ip
+>    call metadata=2Efentry_bpf1
+>    call metadata=2Efentry_bpf2
+>    =2E=2E=2E=2E
+>    call foo+4 (origin call)
+>    save the return value of foo
+>    call metadata=2Efexit_bpf1 (this bpf can get the return value of foo)
+>    call metadata=2Efexit_bpf2
+>    =2E=2E=2E=2E=2E=2E=2E
+>    return to the caller of foo
+>
+>(The metadata holds more information for the global trampoline than
+>I described=2E)
+>
+>Then, we don't need to create a trampoline for every kernel function
+>anymore=2E
+>
+>Another beneficiary can be ftrace=2E For now, all the kernel functions th=
+at
+>are enabled by dynamic ftrace will be added to a filter hash if there are
+>more than one callbacks=2E And hash lookup will happen when the traced
+>functions are called, which has an impact on the performance, see
+>__ftrace_ops_list_func() -> ftrace_ops_test()=2E With the per-function
+>metadata supporting, we can store the information that if the callback is
+>enabled on the kernel function to the metadata, which can make the perfor=
+mance
+>much better=2E
+>
+>The per-function metadata storage is a basic function, and I think there
+>may be other functions that can use it for better performance in the feat=
+ure
+>too=2E
+>
+>(Hope that I'm describing it clearly :/)
+>
+>Thanks!
+>Menglong Dong
+>
 
-The datasheet indicates DUAL and QUAD are supported.
-
-https://www.winbond.com/resource-files/W25Q512JV%20DTR%20RevD%2006292020%20133.pdf
-
-Signed-off-by: Kang.Kerry <kang.kerry@inventec.corp-partner.google.com>
----
-
-This modification is add BIOS W25Q512JV-DTR chip to winbond list
-
----
- drivers/mtd/spi-nor/winbond.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index 8d0a00d69e12..6ce5f70bc11a 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -146,6 +146,11 @@ static const struct flash_info winbond_nor_parts[] = {
-  .name = "w25q512jvq",
-  .size = SZ_64M,
-  .no_sfdp_flags = SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ,
-+ }, {
-+ .id = SNOR_ID(0xef, 0x70, 0x20),
-+ .name = "w25q512jvdtr",
-+ .szie = SZ_64M,
-+ .no_sfdp_flags = SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ,
-  }, {
-  .id = SNOR_ID(0xef, 0x50, 0x12),
-  .name = "w25q20bw",
---
-2.43.0
+This is way too cursory=2E For one thing, you need to start by explaining =
+why you are asking to put this *inline* with the code, which is something t=
+hat normally would be avoided at all cost=2E
