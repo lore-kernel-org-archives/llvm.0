@@ -1,177 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C523D24C68D;
-	Wed,  5 Mar 2025 15:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99AA24DFE7;
+	Wed,  5 Mar 2025 15:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741186937; cv=none; b=k2axe5WcxUFpBtJE3EQhSF6En6hpELACud+TGAbJ2UBcsANYLsOZz2x6bu0UWHjWc2ltj6jGD5n9ZDC1vvBvNYaMvKmIxmuV30bgmxMZodEqUlgGJ9ZuoEsqJ5EAu+EpEzf9kwVuoO1FzVkDF7l4yz4U69baD/NUSCS5OP8nXck=
+	t=1741187335; cv=none; b=KbH++NGijC9uo16jDdrUHUjfBXavcskwyWm031J9Plw8r7R3wopJVOFUpbu819ZU6JWq/0HcMZsBB3RygLOkqSQ9P2iX+B9x/GnRgUDkEw4HRXXpJGJ/3lCSloXAlfs1gMBeLhOOPxZb2wtmPQ3qNaw7muhOkCD1qFRpbhcQl+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741186937; c=relaxed/simple;
-	bh=NssrDju0ex2mZCCZUgAf8PQB3BikrUlFJe7buTpCxxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XU8K0jqsN8Ow1O5R7Ae+uXvHr4i7FWU4OOs9e+BZx+Z666K9KnjqHLSBmFxPCs+ISqnRT381TRhBOJ/8qoZLxhwA29mm+/QaZy9qQ7Y6haAjYa7tJsl56amMx9g+jsldGqPD+2kHK7XxI1ARLbcbmkvuPd5aLa5lLkxYx9YuAVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08294C4CED1;
-	Wed,  5 Mar 2025 15:02:11 +0000 (UTC)
-Date: Wed, 5 Mar 2025 10:03:06 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- mark.rutland@arm.com, alexei.starovoitov@gmail.com,
- catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, davem@davemloft.net,
- dsahern@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, samitolvanen@google.com,
- kees@kernel.org, dongml2@chinatelecom.cn, akpm@linux-foundation.org,
- riel@surriel.com, rppt@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
-Message-ID: <20250305100306.4685333a@gandalf.local.home>
-In-Reply-To: <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
-References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
-	<20250303132837.498938-2-dongml2@chinatelecom.cn>
-	<20250303165454.GB11590@noisy.programming.kicks-ass.net>
-	<CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com>
-	<20250304053853.GA7099@noisy.programming.kicks-ass.net>
-	<20250304061635.GA29480@noisy.programming.kicks-ass.net>
-	<CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com>
-	<20250304094220.GC11590@noisy.programming.kicks-ass.net>
-	<6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com>
-	<CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741187335; c=relaxed/simple;
+	bh=e3oBTYdyUXsbOwDIkrX87IO9OyOkNlF6VSWAGvwLoCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJhU55Vfy6+j3al1kURF+zS7I/lF1bCGXRCrQbfak2BwCLI6Ekb2zDPgG8lzF3hTzFuDlJdbrjcAlnH39wnoZ/tV79fGAyPEmZlXyki5rSC150j3hQcfX5Ds2mbQAWPsDjYnGaC8oPy65aLrzVxoLBdE4Zn3r/NiYN9YaGYEFRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gzU8d31u; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gzU8d31u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741187334; x=1772723334;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e3oBTYdyUXsbOwDIkrX87IO9OyOkNlF6VSWAGvwLoCU=;
+  b=gzU8d31uRG1P1I1EkKxY0atxBlyneFkG6BH56nlJs2PRggLKWLoPbT36
+   PTpch0OuxfLmyKtsLQlXAGoTbptU6RwBj8fn9fmarwrCc2UMJmZBVJCHa
+   MzfiGaQCOiQ44IrX34XSFifwXlXCfs6BZ/ggoJMHacIldLrBydGlmLg7S
+   IO1KjK2Z8rf7jB/uXJy4Ab1qXgtgQZXlCdEGFaccf/zfb+y9a0Y8ytoQk
+   DFRPA9i5FVSPZPZXFHMEfaesjqhF18Ecqqc0InvtALelLoNzf3gTceeF2
+   rc4q4zWb+fTQsfNLm4CiG8lvMZgRh75QU2PfSYJrAc2JLyJU9Hrp9B6G9
+   Q==;
+X-CSE-ConnectionGUID: Jlpif+fHSd2fxXJzpLY+AA==
+X-CSE-MsgGUID: syWqOWLESLKEmQGXwRbu3g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42293620"
+X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
+   d="scan'208";a="42293620"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 07:08:53 -0800
+X-CSE-ConnectionGUID: Bhr/kYI6SFu0ljZczH300g==
+X-CSE-MsgGUID: yT8QzywsSYGjsQgMiXKFBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="149658320"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 05 Mar 2025 07:08:50 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpqMa-000L7m-1d;
+	Wed, 05 Mar 2025 15:08:48 +0000
+Date: Wed, 5 Mar 2025 23:08:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Seyediman Seyedarab <imandevel@gmail.com>, jack@suse.cz,
+	amir73il@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	Seyediman Seyedarab <ImanDevel@gmail.com>
+Subject: Re: [PATCH] inotify: disallow watches on unsupported filesystems
+Message-ID: <202503052203.vK0McbRm-lkp@intel.com>
+References: <20250304080044.7623-1-ImanDevel@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304080044.7623-1-ImanDevel@gmail.com>
 
-On Wed, 5 Mar 2025 09:19:09 +0800
-Menglong Dong <menglong8.dong@gmail.com> wrote:
+Hi Seyediman,
 
-> Ok, let me explain it from the beginning. (My English is not good,
-> but I'll try to describe it as clear as possible :/)
+kernel test robot noticed the following build errors:
 
-I always appreciate those who struggle with English having these
-conversations. Thank you for that, as I know I am horrible in speaking any
-other language. (I can get by in German, but even Germans tell me to switch
-back to English ;-)
+[auto build test ERROR on jack-fs/fsnotify]
+[also build test ERROR on linus/master v6.14-rc5 next-20250305]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> Many BPF program types need to depend on the BPF trampoline,
-> such as BPF_PROG_TYPE_TRACING, BPF_PROG_TYPE_EXT,
-> BPF_PROG_TYPE_LSM, etc. BPF trampoline is a bridge between
-> the kernel (or bpf) function and BPF program, and it acts just like the
-> trampoline that ftrace uses.
-> 
-> Generally speaking, it is used to hook a function, just like what ftrace
-> do:
-> 
-> foo:
->     endbr
->     nop5  -->  call trampoline_foo
->     xxxx
-> 
-> In short, the trampoline_foo can be this:
-> 
-> trampoline_foo:
->     prepare a array and store the args of foo to the array
->     call fentry_bpf1
->     call fentry_bpf2
->     ......
->     call foo+4 (origin call)
+url:    https://github.com/intel-lab-lkp/linux/commits/Seyediman-Seyedarab/inotify-disallow-watches-on-unsupported-filesystems/20250304-160213
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+patch link:    https://lore.kernel.org/r/20250304080044.7623-1-ImanDevel%40gmail.com
+patch subject: [PATCH] inotify: disallow watches on unsupported filesystems
+config: powerpc-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250305/202503052203.vK0McbRm-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503052203.vK0McbRm-lkp@intel.com/reproduce)
 
-Note, I brought up this issue when I first heard about how BPF does this.
-The calling of the original function from the trampoline. I said this will
-cause issues, and is only good for a few functions. Once you start doing
-this for 1000s of functions, it's going to be a nightmare.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503052203.vK0McbRm-lkp@intel.com/
 
-Looks like you are now in the nightmare phase.
+All errors (new ones prefixed by >>):
 
-My argument was once you have this case, you need to switch over to the
-kretprobe / function graph way of doing things, which is to have a shadow
-stack and hijack the return address. Yes, that has slightly more overhead,
-but it's better than having to add all theses hacks.
+>> fs/notify/inotify/inotify_user.c:702:33: error: use of undeclared identifier 'unwatchable_fs'; did you mean 'is_unwatchable_fs'?
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                                        ^~~~~~~~~~~~~~
+         |                                        is_unwatchable_fs
+   include/linux/array_size.h:11:33: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                 ^
+   fs/notify/inotify/inotify_user.c:700:20: note: 'is_unwatchable_fs' declared here
+     700 | static inline bool is_unwatchable_fs(struct inode *inode)
+         |                    ^
+>> fs/notify/inotify/inotify_user.c:702:33: error: use of undeclared identifier 'unwatchable_fs'; did you mean 'is_unwatchable_fs'?
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                                        ^~~~~~~~~~~~~~
+         |                                        is_unwatchable_fs
+   include/linux/array_size.h:11:48: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                ^
+   fs/notify/inotify/inotify_user.c:700:20: note: 'is_unwatchable_fs' declared here
+     700 | static inline bool is_unwatchable_fs(struct inode *inode)
+         |                    ^
+>> fs/notify/inotify/inotify_user.c:702:22: error: subscript of pointer to function type 'bool (struct inode *)' (aka '_Bool (struct inode *)')
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:47: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                               ^~~~~
+>> fs/notify/inotify/inotify_user.c:702:33: error: use of undeclared identifier 'unwatchable_fs'; did you mean 'is_unwatchable_fs'?
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                                        ^~~~~~~~~~~~~~
+         |                                        is_unwatchable_fs
+   include/linux/array_size.h:11:75: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                                           ^
+   include/linux/compiler.h:249:65: note: expanded from macro '__must_be_array'
+     249 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(__same_type((a), &(a)[0]), "must be array")
+         |                                                                      ^
+   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
+     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                               ^
+   include/linux/compiler.h:245:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
+     245 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                                               ^
+   fs/notify/inotify/inotify_user.c:700:20: note: 'is_unwatchable_fs' declared here
+     700 | static inline bool is_unwatchable_fs(struct inode *inode)
+         |                    ^
+>> fs/notify/inotify/inotify_user.c:702:33: error: use of undeclared identifier 'unwatchable_fs'; did you mean 'is_unwatchable_fs'?
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                                        ^~~~~~~~~~~~~~
+         |                                        is_unwatchable_fs
+   include/linux/array_size.h:11:75: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                                           ^
+   include/linux/compiler.h:249:71: note: expanded from macro '__must_be_array'
+     249 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(__same_type((a), &(a)[0]), "must be array")
+         |                                                                            ^
+   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
+     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/compiler.h:245:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
+     245 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                                               ^
+   fs/notify/inotify/inotify_user.c:700:20: note: 'is_unwatchable_fs' declared here
+     700 | static inline bool is_unwatchable_fs(struct inode *inode)
+         |                    ^
+>> fs/notify/inotify/inotify_user.c:702:22: error: subscript of pointer to function type 'bool (struct inode *)' (aka '_Bool (struct inode *)')
+     702 |         for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:59: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:249:70: note: expanded from macro '__must_be_array'
+     249 | #define __must_be_array(a)      __BUILD_BUG_ON_ZERO_MSG(__same_type((a), &(a)[0]), "must be array")
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:483:74: note: expanded from macro '__same_type'
+     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/compiler.h:245:79: note: expanded from macro '__BUILD_BUG_ON_ZERO_MSG'
+     245 | #define __BUILD_BUG_ON_ZERO_MSG(e, msg) ((int)sizeof(struct {_Static_assert(!(e), msg);}))
+         |                                                                               ^
+   fs/notify/inotify/inotify_user.c:703:31: error: use of undeclared identifier 'unwatchable_fs'; did you mean 'is_unwatchable_fs'?
+     703 |                 if (inode->i_sb->s_magic == unwatchable_fs[i])
+         |                                             ^~~~~~~~~~~~~~
+         |                                             is_unwatchable_fs
+   fs/notify/inotify/inotify_user.c:700:20: note: 'is_unwatchable_fs' declared here
+     700 | static inline bool is_unwatchable_fs(struct inode *inode)
+         |                    ^
+   fs/notify/inotify/inotify_user.c:703:31: error: subscript of pointer to function type 'bool (struct inode *)' (aka '_Bool (struct inode *)')
+     703 |                 if (inode->i_sb->s_magic == unwatchable_fs[i])
+         |                                             ^~~~~~~~~~~~~~
+   8 errors generated.
 
-And function graph has been updated so that it can do this for other users.
-fprobes uses it now, and bpf can too.
 
->     save the return value of foo
->     call fexit_bpf1 (this bpf can get the return value of foo)
->     call fexit_bpf2
->     .......
->     return to the caller of foo
-> 
-> We can see that the trampoline_foo can be only used for
-> the function foo, as different kernel function can be attached
-> different BPF programs, and have different argument count,
-> etc. Therefore, we have to create 1000 BPF trampolines if
-> we want to attach a BPF program to 1000 kernel functions.
-> 
-> The creation of the BPF trampoline is expensive. According to
-> my testing, It will spend more than 1 second to create 100 bpf
-> trampoline. What's more, it consumes more memory.
-> 
-> If we have the per-function metadata supporting, then we can
-> create a global BPF trampoline, like this:
-> 
-> trampoline_global:
->     prepare a array and store the args of foo to the array
->     get the metadata by the ip
->     call metadata.fentry_bpf1
->     call metadata.fentry_bpf2
->     ....
->     call foo+4 (origin call)
+vim +702 fs/notify/inotify/inotify_user.c
 
-So if this is a global trampoline, wouldn't this "call foo" need to be an
-indirect call? It can't be a direct call, otherwise you need a separate
-trampoline for that.
+   698	
+   699	
+   700	static inline bool is_unwatchable_fs(struct inode *inode)
+   701	{
+ > 702		for (int i = 0; i < ARRAY_SIZE(unwatchable_fs); i++)
+   703			if (inode->i_sb->s_magic == unwatchable_fs[i])
+   704				return true;
+   705		return false;
+   706	}
+   707	
 
-This means you need to mitigate for spectre here, and you just lost the
-performance gain from not using function graph.
-
-
->     save the return value of foo
->     call metadata.fexit_bpf1 (this bpf can get the return value of foo)
->     call metadata.fexit_bpf2
->     .......
->     return to the caller of foo
-> 
-> (The metadata holds more information for the global trampoline than
-> I described.)
-> 
-> Then, we don't need to create a trampoline for every kernel function
-> anymore.
-> 
-> Another beneficiary can be ftrace. For now, all the kernel functions that
-> are enabled by dynamic ftrace will be added to a filter hash if there are
-> more than one callbacks. And hash lookup will happen when the traced
-> functions are called, which has an impact on the performance, see
-> __ftrace_ops_list_func() -> ftrace_ops_test(). With the per-function
-> metadata supporting, we can store the information that if the callback is
-> enabled on the kernel function to the metadata, which can make the performance
-> much better.
-
-Let me say now that ftrace will not use this. Looks like too much work for
-little gain. The only time this impacts ftrace is when there's two
-different callbacks tracing the same function, and it only impacts that
-function. All other functions being traced still call the appropriate
-trampoline for the callback.
-
--- Steve
-
-> 
-> The per-function metadata storage is a basic function, and I think there
-> may be other functions that can use it for better performance in the feature
-> too.
-> 
-> (Hope that I'm describing it clearly :/)
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
