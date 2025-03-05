@@ -1,64 +1,37 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F29B1A23B1;
-	Wed,  5 Mar 2025 19:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3B0254B10;
+	Wed,  5 Mar 2025 20:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741203025; cv=none; b=i9s2meYw5zK//bHV3PEH8jN+kE6q6Y/nJxoEuJVUstD6uM1DqAx1UpG+12Zi+x0roED9THSeocT63/84NxtlnLiq5ZbOAfAlOnXlIi9kXdWwKZVqk9/6ADN18v5RJ9pIwwr6mHmyD8GtKV9bUJGrX7lSJtZb8g2ib+cR1JCfgRg=
+	t=1741206416; cv=none; b=tPNf8BaIhRnbHDmrS42n5nm/odSbryeNedMOVq9BYdAX5sPNNQTwq39WJUq+zglxN9o0fPikqFJqeUrbKlUzzQN2BpbIn9AQ5cbQAl8zOEo9b7PA+TNEUCrtTNLh6F226rVze9dl+as9QUuTGLH7k0S1ZTKtCIQrde7rAexEvto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741203025; c=relaxed/simple;
-	bh=cMmFBFf9szNiu9T5z9GzitqEPhArY0VccDYTOzDZWhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hhDwivyXkrfJ5RxsyMGNkmcXhQIjWZ1dDsDExndultDsN7tstAuDyGlNMQ3oA7pKINDipC47XtegmBNpLEP1xIF7ng+rM4U9nrQe1bOjSL1Re7Eb4ERRVF4oqpDJILCI8zRXySwaxPEEdGaUw9UjiC61RI2g9Qtq5tGPw9rcTy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B3sL7kRy; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741206416; c=relaxed/simple;
+	bh=JEFJDp2hZxLOrBDwuUNK7mVx/nx9Vm2rrb1sSMLKFsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CWeGiwQKJbmkXEh92D1MtD9jyB3wp+F4TVxeUg1m4CW+6+1m92nP60K+9UxCGdWBlFQVZ9Z79BWCTzw/tByvb1h0ZtabiWjwzwfsOFd6DcKOxCSMVbGkwWZSuhMYhOfY6pSWyLLanKXDvRX1ExiO/l2w9XP32hdZA5ZD7VeHKag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sKf3Mckm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3sL7kRy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741203023; x=1772739023;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cMmFBFf9szNiu9T5z9GzitqEPhArY0VccDYTOzDZWhs=;
-  b=B3sL7kRyzzHqUHTp3hfBNCwiUCnY6km4dHjmU8ty7ZrMYQbZ/LQLWdjG
-   J2OeQ7p3hs6E9P86etR8KDN44UeqCYjzfaBWwLn8iS8xh84z/ESEbpFCp
-   sIAoI0E/wUExn53hzdLchN7Z7kka01xP7WnydQ4fa2CcNNBdcK8gPHlVY
-   zjSzXqzfPvJYgTw61KhF08q3YtTiSQwcsppUMPHO8E4sD4IkVAGA31MVi
-   2slMdx+uJKpn+oAPy/wwCdJbIvXOAgA7gCstO5aRuuv9jJs7tQq15Ud6k
-   noTmmydQPc3KUjPn4DoukSd4Rwsy0our0e9Yze+djykA/6PlQHWcaQDAg
-   A==;
-X-CSE-ConnectionGUID: EI+UEYkLS8WVGEZUSGXYsg==
-X-CSE-MsgGUID: vmPQj5GlTMm8faIZIOeYkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="44993787"
-X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
-   d="scan'208";a="44993787"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 11:30:22 -0800
-X-CSE-ConnectionGUID: BeliJiNDT4C9h8C2hibEbw==
-X-CSE-MsgGUID: H8ZQLCb4TaS3EMcRJ9pqtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149718640"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Mar 2025 11:30:19 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpuRd-000M5y-0U;
-	Wed, 05 Mar 2025 19:30:17 +0000
-Date: Thu, 6 Mar 2025 03:29:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Uma Shankar <uma.shankar@intel.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ville.syrjala@linux.intel.com, harry.wentland@amd.com,
-	pekka.paalanen@haloniitty.fi, sebastian.wick@redhat.com,
-	jadahl@redhat.com, mwen@igalia.com, contact@emersion.fr,
-	naveen1.kumar@intel.com, dmitry.baryshkov@linaro.org
-Subject: Re: [v3 01/23] drm: color pipeline base work
-Message-ID: <202503060317.IL9ThPki-lkp@intel.com>
-References: <20250305132608.2379253-2-uma.shankar@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sKf3Mckm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0E2C4CEE0;
+	Wed,  5 Mar 2025 20:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741206416;
+	bh=JEFJDp2hZxLOrBDwuUNK7mVx/nx9Vm2rrb1sSMLKFsY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=sKf3Mckme/ViMkNIGclmOLzZ/SYtj5BLD+rozrDKVa+uTzogH5yfkoGzy4/PkWpI7
+	 WTy/axxCf45m6LrZ5Hzs3hIjdrfq4k/X2Pl3swqYRyXaoAN2d0j99cRqhJRvlqpbQN
+	 UJfqeYwUuYJbTxm3VDVD7qjvRlBMsf5QR0GSzD+NAAPkRHJEsVynvB60QYxkRs1dUI
+	 M+bj9rRI1knYqY9xNg5wA+bXeJI0wl+ks00f/du5QZfcrbgM4ABmnYHGcvKo0yBlTd
+	 dwvo4FotFbtcEV1I79uvzI6fa71uvFsD/bqS4un6+3IOF+vWe4MitY903XpENgHMmA
+	 NLRchPM49qw1A==
+Date: Wed, 5 Mar 2025 21:26:52 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 20.1.0 uploaded
+Message-ID: <20250305202652.GA2791050@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,69 +40,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250305132608.2379253-2-uma.shankar@intel.com>
 
-Hi Uma,
+Hi all,
 
-kernel test robot noticed the following build errors:
+I have built and uploaded LLVM 20.1.0 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-[auto build test ERROR on next-20250305]
-[also build test ERROR on v6.14-rc5]
-[cannot apply to drm-exynos/exynos-drm-next linus/master v6.14-rc5 v6.14-rc4 v6.14-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 20.x
+series is no longer supported.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Uma-Shankar/drm-color-pipeline-base-work/20250306-011827
-base:   next-20250305
-patch link:    https://lore.kernel.org/r/20250305132608.2379253-2-uma.shankar%40intel.com
-patch subject: [v3 01/23] drm: color pipeline base work
-config: x86_64-buildonly-randconfig-002-20250306 (https://download.01.org/0day-ci/archive/20250306/202503060317.IL9ThPki-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060317.IL9ThPki-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503060317.IL9ThPki-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/vkms/tests/vkms_color_test.c:7:
-   In file included from drivers/gpu/drm/vkms/tests/../vkms_drv.h:10:
-   In file included from include/drm/drm_gem.h:42:
-   In file included from include/drm/drm_vma_manager.h:27:
-   In file included from include/linux/mm.h:2306:
-   include/linux/vmstat.h:493:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     493 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     494 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:513:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     513 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     514 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/vkms/tests/vkms_color_test.c:13:18: error: expected ';' after top level declarator
-      13 | MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
-         |                  ^
-   4 warnings and 1 error generated.
-
-
-vim +13 drivers/gpu/drm/vkms/tests/vkms_color_test.c
-
-    12	
-  > 13	MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
-    14	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
