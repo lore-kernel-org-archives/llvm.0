@@ -1,153 +1,130 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F2C1DE3D1
-	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 06:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31DF1DC9B3;
+	Wed,  5 Mar 2025 07:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741156832; cv=none; b=tqZoqy1jaBdXbYtKpVxVIDPZ+qpXM4DYUnneTbxtsE05DRsnU7+hFJYXfJACgC5ks/DwEyy4v2AWn7nwSxFUWCjWLVNCYV2yZ//Yq94VzaRLLzBj3gz12DG0OBQy2WG9YE1i3TcDlOIKpE9eQElbMhY2p/XIZHljuVIwQ3S3BkY=
+	t=1741158931; cv=none; b=fQfuw7z5nVUd5QuX/RONEVJwz2/uH443pOFsy9E9eNm2jkTvAt04uMVwNmB2TUSpJKPL2melkO077vlm6i6j33QPU6nhxlbz+Z+IEbh4CDiWlRRN8aEkvYpWWAfc8blGpzp5UYvJreOUpRRyDF5lWo42YCVm4Fv8bNHNXhuzXiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741156832; c=relaxed/simple;
-	bh=TKspK+PQiovK0ncvCYHqeBeVbg+BWGTQ/pxSsKpUs3c=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=GCtSbtvM95Bm93Uyt6EVIBA87fpNEzeCGVuuwTAomSaLwsmzU8RA4sarMaynHrpI4Aa5zKpVgMJFkdKGcD3YP+JKqOtBtBdkNyf26+RLNstko+ylRMWAxnIlFnU3srOSRdM3i9KqC16IxYXz9ZNTccagkGBbR3MMTbfD1ba8GbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kEIphjsh; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1741158931; c=relaxed/simple;
+	bh=puHllwnlCwr9b/WA2+n6Zto6iL+U1L6Kqge2xukgvR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=npKDIQLYzkuGudLOgFaeZB1tnlbIZOh8xKEKxYCRomYSmywQ13DWNBv47AWJEieVt5+I9GqH3JodLq4dY6xxuNfTGfA5dF0baOEOSm3TyN15flNEoAj2p4OpAmzlXazy2lzc4wY807VrqtB8dE8z9Wb+LDqiJwLZpFhj7CW0J+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SaNGUz0D; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kEIphjsh"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5e4c0c12bccso11273050a12.1
-        for <llvm@lists.linux.dev>; Tue, 04 Mar 2025 22:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741156829; x=1741761629; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8RYCbGQKPMxhvqsEXifn8NHTo+P5XfS0B8YmG0doTDQ=;
-        b=kEIphjshesxgDnDuREIHVeMmyZXKsCRfn2WrnNwIhEYbFgIpt5poFBh0wFWp2WS7Kp
-         CpChUxw117tugpR6687zkubuS6UNvfCkzP+4HYTQmk5GkMJ50MsYOgERyaplm/bFWhji
-         JtgL8bJdy1t/JbYNhttScvHhM31GYAu4zPxEBkQd4XjXoulXsh7/xrQYkA93FgQxCh9v
-         4bDaRaeyAVkVF54gFf9x9sF4skTvt1+Rcw8MrWDRZBH8T8dxXJsn9cmlNlPRjRK5AktU
-         FNodwgjzPKXX1gVqmdxBN8RkXizDImUG/RmE2ZXGB3kWyfFevM/cw6rBlo+gKI/t1XaZ
-         pP0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741156829; x=1741761629;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8RYCbGQKPMxhvqsEXifn8NHTo+P5XfS0B8YmG0doTDQ=;
-        b=bhqQcwdN761JiZW3WY5yZWauC78oxQ0HthPTEyZ0aSW1BJrjiXIF5ABgjixBw8ItOo
-         xniqSe2n70p26li1HgTOfa1COksghoc7jIulJHRnXxnzfCmIIolJ0uDfpFPwlJoMFdRz
-         FkRjN4MacH1nJIouXXAjFOVoeX0I/rLnv/G3iwADMmD5rtEccwREgQjM3rGEKo/FAfiK
-         n2CfUpB8Vc1Ss/mFhnqZ+PgtBZq2UQ9haQfOT/UQC+t6MBFlVw6BHCbvkZeWQsmLyrgT
-         WZsx+PV/SGk/1LowwLwtQDBUZD9rAaoTNsKCr4Otnf2MDCX+Ma9h8iUY9NgFJoALfVOy
-         +0ZQ==
-X-Gm-Message-State: AOJu0YxUHE+YFdP/Azbg905wSH3Cm/35cFs0wLRooOsKAlvOH9vKjoH7
-	0VMrKDB8MqYqHOL39Ik/qS9eavjXaCL0EclAveH4nIlx9ysar0LdEJ4T/AeJVsNPE25FU2LGfTj
-	h
-X-Gm-Gg: ASbGnctrskLU5mGakLrbPfTke+zq9ulgqvygP+vKp8x5mqmUxDVcgzNrc6UBCmuhIhP
-	8VLEEg4JxVPBOppPNRXcM5DuyBlCFu02af3UcXrFCtKsKxU4JOb6IzFyqNzZ2yy7gEDOsJwhE7c
-	DxBjK4+JveLBaB4QXRdK3+hYeIptV/HsNpvwp6ELBk2SxNQk8n9xQlYaJndhBaP1qIDY1uWddMw
-	QSjcW3mlFxPLM2YtIopOAn/omfZys5ylsIKClq9551osYb3q1F/pxI3iL+1YSrodoARXNhs3vq3
-	NNo/IfcUhc4wQBLgRnKWnyN6em3eUGGV2UvT1vRrLQbyDpPAHMDr/0ER0x7iLRwFM4s9zkwyRck
-	zEty5EzWXZ525+ALa
-X-Google-Smtp-Source: AGHT+IFvW+c1N0lOrxZnS9cyoKWKJZLA0Bv7JkiQMEnPbkOkT6D2Nm8yvu12whlijkwdNh5IxFpMIg==
-X-Received: by 2002:a05:6402:90d:b0:5e0:60ed:f355 with SMTP id 4fb4d7f45d1cf-5e59f3eb5b9mr1674771a12.18.1741156828664;
-        Tue, 04 Mar 2025 22:40:28 -0800 (PST)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4cc6b2daasm8768165a12.25.2025.03.04.22.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 22:40:28 -0800 (PST)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Wed, 5 Mar 2025 06:40:26 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1491622737.157915.1741156828012@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.14-rc1-5-g568354b24c7dd: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SaNGUz0D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741158930; x=1772694930;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=puHllwnlCwr9b/WA2+n6Zto6iL+U1L6Kqge2xukgvR8=;
+  b=SaNGUz0DQP9XuOpQADKCaARxYLkma+xWUuuZ0oiPy9J1nU6PZQm8wWZI
+   1PtGUxIIQd2uYT3LTlvLIhBp4mg3BmGfJm+tfSjqnwGaVcoQ9sPV48fDV
+   g38+ese3XoP7rnFBdGLnIo6UMGxzCobccOCyFpCrfLxLWk1Jq7dxzkwZ0
+   DvRpNRo/yBP3ONGYermnUzjK8mHdVOuJjQZeyhBJNVDg0fZH864kiZgDg
+   7NdmtDlvNx7eI96DPmaUQh8MTChJUn4gtFdSrhP2GVTzDC8K9ehJHZPUs
+   Rvpk9ThQSsFNsiBfIGJMB8umZc1dhGpiT0LqI86AdeQGLuRSLV7zlN8TO
+   w==;
+X-CSE-ConnectionGUID: hu7JYblHRg25WfJIYQg8Rg==
+X-CSE-MsgGUID: wr5UCdbNRoSq2oyt8Seh4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="41966860"
+X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
+   d="scan'208";a="41966860"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 23:15:30 -0800
+X-CSE-ConnectionGUID: EQkMCLeOTbu33nM3BTW1FA==
+X-CSE-MsgGUID: xkou8oacREyo/CxfYX5YLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
+   d="scan'208";a="118328701"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 04 Mar 2025 23:15:28 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpiyU-000KhW-0A;
+	Wed, 05 Mar 2025 07:15:26 +0000
+Date: Wed, 5 Mar 2025 15:14:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:string-helper-2025-03-04 52/264]
+ arch/arm/mm/pmsa-v7.c:473:4: error: call to undeclared function
+ 'str_yes_no'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202503051517.tw7zpZN5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_157914_1715840493.1741156827118"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_157914_1715840493.1741156827118
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+tree:   https://github.com/morimoto/linux string-helper-2025-03-04
+head:   dc1f35422c705e8df42322c71936bd12213d0a46
+commit: 02c2077b2f4be41510bc150cc157d523b63020d4 [52/264] arm: mm: pmsa-v7: use string choices helper
+config: arm-randconfig-002-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051517.tw7zpZN5-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051517.tw7zpZN5-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503051517.tw7zpZN5-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please fi=
-nd some details below.
+All error/warnings (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-allmodconfig, after:
-  | commit v6.14-rc1-5-g568354b24c7dd
-  | Author: Kai M=C3=A4kisara <Kai.Makisara@kolumbus.fi>
-  | Date:   Thu Feb 13 11:26:34 2025 +0200
-  |=20
-  |     scsi: scsi_debug: Add compression mode page for tapes
-  |    =20
-  |     Add support for compression mode page. The compression status
-  |     is saved and returned. No UA is generated.
-  |    =20
-  | ... 5 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 26117
-  |=20
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 35986
-  | # linux build successful:
-  | all
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-159=
-1. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolc=
-hain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<=
---------------------------
-
-The information below contains the details of the failures, and the ways to=
- reproduce a debug environment:
+>> arch/arm/mm/pmsa-v7.c:473:4: error: call to undeclared function 'str_yes_no'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     473 |                         str_yes_no(mpu_iside_independent()),
+         |                         ^
+>> arch/arm/mm/pmsa-v7.c:473:4: warning: format specifies type 'char *' but the argument has type 'int' [-Wformat]
+     472 |                          "Region independence: %s, Used %d of %d regions\n",
+         |                                                ~~
+         |                                                %d
+     473 |                         str_yes_no(mpu_iside_independent()),
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:574:34: note: expanded from macro 'pr_info'
+     574 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                 ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:501:60: note: expanded from macro 'printk'
+     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
+     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
+vim +/str_yes_no +473 arch/arm/mm/pmsa-v7.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch6=
-4-next-allmodconfig-build/334/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch6=
-4-next-allmodconfig-build/333/artifact/artifacts
+   451	
+   452		/* RAM */
+   453		for (i = 0; i < ARRAY_SIZE(mem); i++) {
+   454			if (!mem[i].size)
+   455				continue;
+   456	
+   457			err |= mpu_setup_region(region++, mem[i].base, ilog2(mem[i].size),
+   458						PMSAv7_AP_PL1RW_PL0RW | PMSAv7_RGN_NORMAL,
+   459						mem[i].subreg, false);
+   460		}
+   461	
+   462		/* Vectors */
+   463	#ifndef CONFIG_CPU_V7M
+   464		err |= mpu_setup_region(region++, vectors_base, ilog2(2 * PAGE_SIZE),
+   465					PMSAv7_AP_PL1RW_PL0NA | PMSAv7_RGN_NORMAL,
+   466					0, false);
+   467	#endif
+   468		if (err) {
+   469			panic("MPU region initialization failure! %d", err);
+   470		} else {
+   471			pr_info("Using ARMv7 PMSA Compliant MPU. "
+   472				 "Region independence: %s, Used %d of %d regions\n",
+ > 473				str_yes_no(mpu_iside_independent()),
 
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci=
-/interesting-commits.git/plain/linux/sha1/568354b24c7ddef335e7c39a3fa8c5467=
-1187df5/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_inst=
-ructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit=
-/568354b24c7ddef335e7c39a3fa8c54671187df5
-------=_Part_157914_1715840493.1741156827118--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
