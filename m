@@ -1,145 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FF7204C35;
-	Wed,  5 Mar 2025 14:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C523D24C68D;
+	Wed,  5 Mar 2025 15:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741185960; cv=none; b=luAuxk4X6Kjx9PGfSVVyJSRIkzaJxA/nwv32iPz8C/9fVOwWe+rBgErhKe0T4KMHU5Dt2OjlG3iSsQVUSvIsHhUJ/NpJ+DHGKBrkdfKlnIG+T5HKrKaVxKp78nP0npSasUXCY7S3YQHf7itpTgDI7pMwPM6WIkiVuax+/budC84=
+	t=1741186937; cv=none; b=k2axe5WcxUFpBtJE3EQhSF6En6hpELACud+TGAbJ2UBcsANYLsOZz2x6bu0UWHjWc2ltj6jGD5n9ZDC1vvBvNYaMvKmIxmuV30bgmxMZodEqUlgGJ9ZuoEsqJ5EAu+EpEzf9kwVuoO1FzVkDF7l4yz4U69baD/NUSCS5OP8nXck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741185960; c=relaxed/simple;
-	bh=IJITA4ytTmUFMzhJpi0Z7MN58Xcdm8gfOaBFwHxdNW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCwni12AMGyiz5E8GVcO1LsCXtcPhgLlhvvttV8SZGoUbTbWg7v9Kx/hjrRyZ5WnznO1nj03p8Z5ExKLqIDYHPtqcsCEWe8Krjh0Z1ql6XoIpg7t1ZgJS4pRpiaeyib7QQgEUZiK4TZMKuL00UE0ZhsVeKtsR71Txp8LGQzxmwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FT3IPME9; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FT3IPME9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933EEC4CED1;
-	Wed,  5 Mar 2025 14:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741185960;
-	bh=IJITA4ytTmUFMzhJpi0Z7MN58Xcdm8gfOaBFwHxdNW0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FT3IPME95VlP5ie8KtxCMaGhv9WI7HkAgfV5txTXgSUAmriapmls6XY88Bc6Uq/sD
-	 scdeXCE3d2n4As1YBHd89RRWC77MAo8l3T0nfGCDIxatUROgcdF58Dhkvwl1RXq9G7
-	 TmBB2FsZdA9RmziGtrzZ94Xi1GnIIu8Nkm7MtN/j2aBJ3m598Oow/b4Juv/dsH3q/t
-	 KVPHICTnHEFuWXQdnokU77/RHvyM4lEBeILVBEE/t82FMtoHuM9CJeSCjFu3UbtdNe
-	 4phE+5IAs10TfByEyJ6wDCa7r4k/BvQ7dF+VRhNh6OKKhyyajodAuWWNkQPIuy372O
-	 +F0IYyZO+GtGA==
-Date: Wed, 5 Mar 2025 15:45:54 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
-Message-ID: <20250305144554.GA3574115@ax162>
-References: <20250303215240.work.379-kees@kernel.org>
- <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
- <20250304102536.GB2529736@ax162>
- <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
- <202503040842.1177A1F15B@keescook>
+	s=arc-20240116; t=1741186937; c=relaxed/simple;
+	bh=NssrDju0ex2mZCCZUgAf8PQB3BikrUlFJe7buTpCxxs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XU8K0jqsN8Ow1O5R7Ae+uXvHr4i7FWU4OOs9e+BZx+Z666K9KnjqHLSBmFxPCs+ISqnRT381TRhBOJ/8qoZLxhwA29mm+/QaZy9qQ7Y6haAjYa7tJsl56amMx9g+jsldGqPD+2kHK7XxI1ARLbcbmkvuPd5aLa5lLkxYx9YuAVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08294C4CED1;
+	Wed,  5 Mar 2025 15:02:11 +0000 (UTC)
+Date: Wed, 5 Mar 2025 10:03:06 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ mark.rutland@arm.com, alexei.starovoitov@gmail.com,
+ catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, jolsa@kernel.org, davem@davemloft.net,
+ dsahern@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, samitolvanen@google.com,
+ kees@kernel.org, dongml2@chinatelecom.cn, akpm@linux-foundation.org,
+ riel@surriel.com, rppt@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 1/4] x86/ibt: factor out cfi and fineibt offset
+Message-ID: <20250305100306.4685333a@gandalf.local.home>
+In-Reply-To: <CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
+References: <20250303132837.498938-1-dongml2@chinatelecom.cn>
+	<20250303132837.498938-2-dongml2@chinatelecom.cn>
+	<20250303165454.GB11590@noisy.programming.kicks-ass.net>
+	<CADxym3aVtKx_mh7aZyZfk27gEiA_TX6VSAvtK+YDNBtuk_HigA@mail.gmail.com>
+	<20250304053853.GA7099@noisy.programming.kicks-ass.net>
+	<20250304061635.GA29480@noisy.programming.kicks-ass.net>
+	<CADxym3bS_6jpGC3vLAAyD20GsR+QZofQw0_GgKT8nN3c-HqG-g@mail.gmail.com>
+	<20250304094220.GC11590@noisy.programming.kicks-ass.net>
+	<6F9EF5C3-4CAE-4C5E-B70E-F73462AC7CA0@zytor.com>
+	<CADxym3busXZKtX=+FY_xnYw7e1CKp5AiHSasZGjVJTdeCZao-g@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202503040842.1177A1F15B@keescook>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 04, 2025 at 09:07:57AM -0800, Kees Cook wrote:
-> On Tue, Mar 04, 2025 at 03:51:19PM +0100, Thomas Weißschuh wrote:
-> > No, it doesn't.
-> > 
-> > Running tests with:
-> > $ .kunit/linux kunit.filter_glob=overflow.DEFINE_FLEX_test kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
-> > [15:48:30] =================== overflow (1 subtest) ===================
-> > [15:48:30] # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
-> > [15:48:30] Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
-> > [15:48:30]     __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
-> > [15:48:30]     expected_raw_size == 8 (0x8)
-> > [15:48:30] [FAILED] DEFINE_FLEX_test
-> > [15:48:30] # module: overflow_kunit
-> > [15:48:30] ==================== [FAILED] overflow =====================
-> > [15:48:30] ============================================================
-> > [15:48:30] Testing complete. Ran 1 tests: failed: 1
-> > [15:48:31] Elapsed time: 43.985s total, 0.001s configuring, 43.818s building, 0.133s running
-> > 
-> > If I force CONFIG_CC_HAS_COUNTED_BY=n then the test succeeds.
-> > Clang 19.1.7 from the Arch Linux repos.
-> 
-> I wasn't seeing with Clang 20 from git:
-> ClangBuiltLinux clang version 20.0.0git (git@github.com:llvm/llvm-project.git 72901fe19eb1e55d0ee1c380ab7a9f57d2f187c5)
-> 
-> But I do see the error with ToT Clang:
-> ClangBuiltLinux clang version 21.0.0git (git@github.com:llvm/llvm-project.git eee3db5421040cfc3eae6e92ed714650a6f741fa)
-> 
-> Clang 17.1: (does not support counted_by)
-> 
->     # DEFINE_FLEX_test: missing counted_by
->     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
->     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> 
-> Clang 19.1.1: (actually is _does_ support counted_by, but Linux disables it)
-> 
->     # DEFINE_FLEX_test: missing counted_by
->     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
->     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> 
-> GCC 13.3:
-> 
->     # DEFINE_FLEX_test: missing counted_by
->     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
->     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> 
-> Clang 21 (ToT):
-> 
->     # DEFINE_FLEX_test: has counted_by
->     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
->     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
-> 
-> GCC 15 (ToT):
-> 
->     # DEFINE_FLEX_test: has counted_by
->     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
->     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
->     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
-> 
-> It seems like the on-stack sizes with __bdos all agree now, regardless
-> of the used compiler features. It is only the array size calculation
-> that now gets masked by counted_by. (i.e. the stack size is overridden
-> by the zero "count" for the array elements.)
-> 
-> I'll send a fix for the test...
+On Wed, 5 Mar 2025 09:19:09 +0800
+Menglong Dong <menglong8.dong@gmail.com> wrote:
 
-Just for my own understanding, is this because of the adjustment that
-Bill did to the __bdos() calculation in [1]? I think that tracks because
-the version of LLVM 20 that you have is pretty old and does not have
-that change. I know for a fact I tested the original change to the
-overflow KUnit test to adjust the expected calculation result and it
-passed but it was before that change as well. If I use a current version
-of LLVM 20, I see the failure. If I allow LLVM 18 to use __counted_by(),
-the test passes with it. Not that it truly matters but it does explain
-how we got to this point.
+> Ok, let me explain it from the beginning. (My English is not good,
+> but I'll try to describe it as clear as possible :/)
 
-[1]: https://github.com/llvm/llvm-project/commit/8c62bf54df76e37d0978f4901c6be6554e978b53
+I always appreciate those who struggle with English having these
+conversations. Thank you for that, as I know I am horrible in speaking any
+other language. (I can get by in German, but even Germans tell me to switch
+back to English ;-)
 
-Cheers,
-Nathan
+> 
+> Many BPF program types need to depend on the BPF trampoline,
+> such as BPF_PROG_TYPE_TRACING, BPF_PROG_TYPE_EXT,
+> BPF_PROG_TYPE_LSM, etc. BPF trampoline is a bridge between
+> the kernel (or bpf) function and BPF program, and it acts just like the
+> trampoline that ftrace uses.
+> 
+> Generally speaking, it is used to hook a function, just like what ftrace
+> do:
+> 
+> foo:
+>     endbr
+>     nop5  -->  call trampoline_foo
+>     xxxx
+> 
+> In short, the trampoline_foo can be this:
+> 
+> trampoline_foo:
+>     prepare a array and store the args of foo to the array
+>     call fentry_bpf1
+>     call fentry_bpf2
+>     ......
+>     call foo+4 (origin call)
+
+Note, I brought up this issue when I first heard about how BPF does this.
+The calling of the original function from the trampoline. I said this will
+cause issues, and is only good for a few functions. Once you start doing
+this for 1000s of functions, it's going to be a nightmare.
+
+Looks like you are now in the nightmare phase.
+
+My argument was once you have this case, you need to switch over to the
+kretprobe / function graph way of doing things, which is to have a shadow
+stack and hijack the return address. Yes, that has slightly more overhead,
+but it's better than having to add all theses hacks.
+
+And function graph has been updated so that it can do this for other users.
+fprobes uses it now, and bpf can too.
+
+>     save the return value of foo
+>     call fexit_bpf1 (this bpf can get the return value of foo)
+>     call fexit_bpf2
+>     .......
+>     return to the caller of foo
+> 
+> We can see that the trampoline_foo can be only used for
+> the function foo, as different kernel function can be attached
+> different BPF programs, and have different argument count,
+> etc. Therefore, we have to create 1000 BPF trampolines if
+> we want to attach a BPF program to 1000 kernel functions.
+> 
+> The creation of the BPF trampoline is expensive. According to
+> my testing, It will spend more than 1 second to create 100 bpf
+> trampoline. What's more, it consumes more memory.
+> 
+> If we have the per-function metadata supporting, then we can
+> create a global BPF trampoline, like this:
+> 
+> trampoline_global:
+>     prepare a array and store the args of foo to the array
+>     get the metadata by the ip
+>     call metadata.fentry_bpf1
+>     call metadata.fentry_bpf2
+>     ....
+>     call foo+4 (origin call)
+
+So if this is a global trampoline, wouldn't this "call foo" need to be an
+indirect call? It can't be a direct call, otherwise you need a separate
+trampoline for that.
+
+This means you need to mitigate for spectre here, and you just lost the
+performance gain from not using function graph.
+
+
+>     save the return value of foo
+>     call metadata.fexit_bpf1 (this bpf can get the return value of foo)
+>     call metadata.fexit_bpf2
+>     .......
+>     return to the caller of foo
+> 
+> (The metadata holds more information for the global trampoline than
+> I described.)
+> 
+> Then, we don't need to create a trampoline for every kernel function
+> anymore.
+> 
+> Another beneficiary can be ftrace. For now, all the kernel functions that
+> are enabled by dynamic ftrace will be added to a filter hash if there are
+> more than one callbacks. And hash lookup will happen when the traced
+> functions are called, which has an impact on the performance, see
+> __ftrace_ops_list_func() -> ftrace_ops_test(). With the per-function
+> metadata supporting, we can store the information that if the callback is
+> enabled on the kernel function to the metadata, which can make the performance
+> much better.
+
+Let me say now that ftrace will not use this. Looks like too much work for
+little gain. The only time this impacts ftrace is when there's two
+different callbacks tracing the same function, and it only impacts that
+function. All other functions being traced still call the appropriate
+trampoline for the callback.
+
+-- Steve
+
+> 
+> The per-function metadata storage is a basic function, and I think there
+> may be other functions that can use it for better performance in the feature
+> too.
+> 
+> (Hope that I'm describing it clearly :/)
+
