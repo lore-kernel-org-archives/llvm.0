@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE60719D897;
-	Wed,  5 Mar 2025 16:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03494252903;
+	Wed,  5 Mar 2025 19:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741193546; cv=none; b=J3tmBJuC2Dh99Ia0CcSIMr90QDgftKtnuTy9i1NEs1C5cRhBe0FrW4BSGUrLEm5PzBG5dQZncGfkuL4DKl0H/77SQ8Ds1D5Nth6Xm7ZuHUhBN/qaAYbjbrrMydjNwFP8Ue07Sxs7VjNID8LohDCJ8XlRqgIZMQcYpfegwS48iMA=
+	t=1741201802; cv=none; b=E00Kdkt2pmEygumyBH/sdQB4Mf7LneBwWAUYVGBSP3wLESRgp3viVM+MK5UVsmllPkSHPTUTtHsM39K8MrC1iS22DFfQp4KKU1f7wU0jycPPEaDvehcCjaKO9ET90FjjcdhOt8RFZjG0O7J8OtUv+pCecQiX/tBEMEjMwNEqJRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741193546; c=relaxed/simple;
-	bh=oNLRiyEoV4xCj83UWo/dahMiQbq+mZnndaBBd9xY8vs=;
+	s=arc-20240116; t=1741201802; c=relaxed/simple;
+	bh=VekNt6JrT6vFVon+D9gX3GKMMPt3To8/2oCXdhpGF+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fcPl72CvIsw4WD/wKbOMGlCrqlVeDwB/X7YQ1JcSWj7143Bud4YEI/cAvBcUo76pHhZMtyAHYDec3oDNbbYQMuScpau6n3+ERIZcMGd12nNMTy7F9Pg47EUaPN31pBxNMIujd29P3RRzOHlXHmFW8BeepOW+cl3gIdhdSlnqGzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZTHYZm7J; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=qpGNdL7unq38jJt8I5b6AeWsLNeJIIJIekvVIOUoVgYdGNRj5Ra/8LgkD0p3Bhn6yKcApPyk12uY1z+JvR3hRYRqeSXuAqRC1y1CJ2evhCpHZyoEdR267XumoZ4fEbKRa/K30D2BWxsU+AMuMzic0Sbhz5kQ6Wh5CfI9JXQNhyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BK4rGycB; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZTHYZm7J"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BK4rGycB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741193545; x=1772729545;
+  t=1741201800; x=1772737800;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oNLRiyEoV4xCj83UWo/dahMiQbq+mZnndaBBd9xY8vs=;
-  b=ZTHYZm7JivdnEjPCzgl5JmSZH9gjvDDmJ9IRg9Qo6iJgzQjPO4GtJtCN
-   XtG9T9dbK8kkX3B7b71fxv1ICalK0LntPpNo7q6FuhdI9YpJBBWCeebgF
-   0ovcoANCKKYgTudPINuiP6KwtX4d1PpzM4pYuUm+XEZV5a/ojIfFQW/bQ
-   EM9t+A93VYnkOvlmB6f1E58o3IqhEK9g3arUsuK+nVpLzGvlJwgcLp4Ih
-   OaDz5O/IX7eI2+Ps1zrCMVT+o2PRd/ULaGpW7VF/0wRU0w/LSwlmkb2so
-   4pH9Zo6Xm73Z8vlrR8pXaVpEqBkuzzrUpXVOaglV6RCzebUGSQsuvnMyj
-   A==;
-X-CSE-ConnectionGUID: oj++AUU/QLO7rbj2oGPELw==
-X-CSE-MsgGUID: FOZxwVTqRYGRU4N7/EDZTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="52812578"
-X-IronPort-AV: E=Sophos;i="6.14,223,1736841600"; 
-   d="scan'208";a="52812578"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 08:52:14 -0800
-X-CSE-ConnectionGUID: Plc3JRZMRO+T+qlp9sSgsw==
-X-CSE-MsgGUID: RK2WnX4WTa6bKnxRGbiL4w==
+  bh=VekNt6JrT6vFVon+D9gX3GKMMPt3To8/2oCXdhpGF+s=;
+  b=BK4rGycBu4m/32hYHzgH7RuCH9vLj5r/ei9SaKJhwkTA0HwDbd7mD3Z5
+   ms0zKyz7e4l/Jm+4uHPRbbOAnbo8d1aTHwVFuKk87fnOqUPrOamfAfofM
+   EWh2cdV+h65cHA/QWqYPCd+Y0ZHrZ4hT6xtrp2gUx44dFF6XRUsT5+/xZ
+   AiMACH8t4Qkpkb0hcWOk7PX24JH+7M262LvB+qvK8ibkwUaiRwEeAGjpw
+   WBTZbeQcuZ4W7VETsTdq7CTZCxjd2QnaP/gukBJsZ7XV84mp40Vl/R67n
+   YBaFzQTXuo1Cw0xzQtHmQAXdIJPwY3Xx+xMN1vxCiNB9MaiIU0PoKwVqs
+   Q==;
+X-CSE-ConnectionGUID: gPb9zZAuRvu25Qa6XBY22g==
+X-CSE-MsgGUID: lRZa8UG3QWeSx2d7bYJfKw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="64628581"
+X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
+   d="scan'208";a="64628581"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 11:09:59 -0800
+X-CSE-ConnectionGUID: jBAszFV4SUuDCf+dMaff9A==
+X-CSE-MsgGUID: nyaRXvvZTJ65++Dubmgtpw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149683033"
+X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
+   d="scan'208";a="142013996"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Mar 2025 08:52:11 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 05 Mar 2025 11:09:57 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tpryb-000LG6-0I;
-	Wed, 05 Mar 2025 16:52:09 +0000
-Date: Thu, 6 Mar 2025 00:51:18 +0800
+	id 1tpu7u-000M4s-1k;
+	Wed, 05 Mar 2025 19:09:54 +0000
+Date: Thu, 6 Mar 2025 03:09:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
-	kevin.tian@intel.com, robin.murphy@arm.com, joro@8bytes.org,
-	will@kernel.org
+To: Zack Rusin <zack.rusin@broadcom.com>, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] iommu: Sort out domain user data
-Message-ID: <202503060014.ddw19ThY-lkp@intel.com>
-References: <74a3bf91b52563faaf7ef7de065931e4df47e63f.1741034886.git.nicolinc@nvidia.com>
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	ian.forbes@broadcom.com, martin.krastev@broadcom.com,
+	maaz.mombasawala@broadcom.com, Zack Rusin <zack.rusin@broadcom.com>
+Subject: Re: [PATCH] drm/vmwgfx: Make sure the dirty tracker is released on
+ surfaces
+Message-ID: <202503060223.BrfYSoFw-lkp@intel.com>
+References: <20250304184942.2127704-1-zack.rusin@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,57 +66,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74a3bf91b52563faaf7ef7de065931e4df47e63f.1741034886.git.nicolinc@nvidia.com>
+In-Reply-To: <20250304184942.2127704-1-zack.rusin@broadcom.com>
 
-Hi Nicolin,
+Hi Zack,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 5e9f822c9c683ae884fa5e71df41d1647b2876c6]
+[auto build test ERROR on drm-exynos/exynos-drm-next]
+[also build test ERROR on linus/master v6.14-rc5 next-20250305]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommu-Sort-out-domain-user-data/20250304-045529
-base:   5e9f822c9c683ae884fa5e71df41d1647b2876c6
-patch link:    https://lore.kernel.org/r/74a3bf91b52563faaf7ef7de065931e4df47e63f.1741034886.git.nicolinc%40nvidia.com
-patch subject: [PATCH v3 1/3] iommu: Sort out domain user data
-config: powerpc-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250306/202503060014.ddw19ThY-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060014.ddw19ThY-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-vmwgfx-Make-sure-the-dirty-tracker-is-released-on-surfaces/20250305-025105
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
+patch link:    https://lore.kernel.org/r/20250304184942.2127704-1-zack.rusin%40broadcom.com
+patch subject: [PATCH] drm/vmwgfx: Make sure the dirty tracker is released on surfaces
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250306/202503060223.BrfYSoFw-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060223.BrfYSoFw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503060014.ddw19ThY-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503060223.BrfYSoFw-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iommu/iommu.c:2040:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
-    2040 |         }
-         |         ^
-   1 warning generated.
+>> drivers/gpu/drm/vmwgfx/vmwgfx_kms.c:1236:18: error: incomplete definition of type 'struct vmw_res_func'
+    1236 |                         surf->res.func->dirty_free(&surf->res);
+         |                         ~~~~~~~~~~~~~~^
+   drivers/gpu/drm/vmwgfx/vmwgfx_drv.h:120:8: note: forward declaration of 'struct vmw_res_func'
+     120 | struct vmw_res_func;
+         |        ^
+   1 error generated.
 
 
-vim +2040 drivers/iommu/iommu.c
+vim +1236 drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
 
-  2026	
-  2027	void iommu_domain_free(struct iommu_domain *domain)
-  2028	{
-  2029		switch (domain->cookie_type) {
-  2030		case IOMMU_COOKIE_DMA_IOVA:
-  2031			iommu_put_dma_cookie(domain);
-  2032			break;
-  2033		case IOMMU_COOKIE_DMA_MSI:
-  2034			iommu_put_msi_cookie(domain);
-  2035			break;
-  2036		case IOMMU_COOKIE_SVA:
-  2037			mmdrop(domain->mm);
-  2038			break;
-  2039		default:
-> 2040		}
-  2041		if (domain->ops->free)
-  2042			domain->ops->free(domain);
-  2043	}
-  2044	EXPORT_SYMBOL_GPL(iommu_domain_free);
-  2045	
+  1196	
+  1197	
+  1198	/**
+  1199	 * vmw_du_connector_destroy_state - destroy connector state
+  1200	 * @connector: DRM connector
+  1201	 * @state: state object to destroy
+  1202	 *
+  1203	 * Destroys the connector state (both common and vmw-specific) for the
+  1204	 * specified plane.
+  1205	 */
+  1206	void
+  1207	vmw_du_connector_destroy_state(struct drm_connector *connector,
+  1208				  struct drm_connector_state *state)
+  1209	{
+  1210		drm_atomic_helper_connector_destroy_state(connector, state);
+  1211	}
+  1212	/*
+  1213	 * Generic framebuffer code
+  1214	 */
+  1215	
+  1216	/*
+  1217	 * Surface framebuffer code
+  1218	 */
+  1219	
+  1220	static void vmw_framebuffer_surface_destroy(struct drm_framebuffer *framebuffer)
+  1221	{
+  1222		struct vmw_framebuffer_surface *vfbs =
+  1223			vmw_framebuffer_to_vfbs(framebuffer);
+  1224		struct vmw_bo *bo = vmw_user_object_buffer(&vfbs->uo);
+  1225		struct vmw_surface *surf = vmw_user_object_surface(&vfbs->uo);
+  1226	
+  1227		if (bo) {
+  1228			vmw_bo_dirty_release(bo);
+  1229			/*
+  1230			 * bo->dirty is reference counted so it being NULL
+  1231			 * means that the surface wasn't coherent to begin
+  1232			 * with and so we have to free the dirty tracker
+  1233			 * in the vmw_resource
+  1234			 */
+  1235			if (!bo->dirty && surf && surf->res.dirty)
+> 1236				surf->res.func->dirty_free(&surf->res);
+  1237		}
+  1238		drm_framebuffer_cleanup(framebuffer);
+  1239		vmw_user_object_unref(&vfbs->uo);
+  1240	
+  1241		kfree(vfbs);
+  1242	}
+  1243	
 
 -- 
 0-DAY CI Kernel Test Service
