@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAB719D8BE;
-	Wed,  5 Mar 2025 04:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E4319CC2E;
+	Wed,  5 Mar 2025 04:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741147405; cv=none; b=r4cmryJb6Z2iP7OIqA17sF1IAi23285vtrynBLalckhUCqCC+lewG/N+7G0dYvhAkvown0vzoWlXdA2Yba7AjxVJ4Z4n8uytOuLDnG1bnvwlNOBt+OHeETNNsUbUnHabdkVF1eskgnoKlcvzk+vZL+zxE9iHM47cfBr7hJs9gaQ=
+	t=1741148069; cv=none; b=GlCy7znOeljU+yL9fBEoBiOo514JwBgRe7TSPvzlA/0I4tiO7xsqmiPZpbfud0kxQdWeTOKJPbFaB7kFqBjX72PrwQjijMGV8AzOnr5YT3C1QsM9QfY1qZDoe762KvwqQ+sg19PErgzwlZrLq6K3xjinOQSJf83bhX9Zxe4sm0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741147405; c=relaxed/simple;
-	bh=1vjVpR0Duqy0Lecr/rAUEzsxejp3tyIVHjdCkjzCkkc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Hs9MMd2RWqVUUuVRX5trHy2znRgW8IYvCmuBvYvn7hAPUFGvqkeoFk0KDWoTmDKhoWmBhLCWiWfHzWTnxU8x2tW7SihnNDdMoP5sv/n+xEWWFxw552Q/f0JvVJMnYT+B0lBLIn7WmKP7aFfxObYG464m8WA1mkA0xgsdiz9k8B0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ad2jkUEJ; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1741148069; c=relaxed/simple;
+	bh=YVo5zjdnG3PFXPuBFidkC29jzE13TUWifC6rd23OT+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b9KvurrP4Vcdwa50C7ZKeuYBj3AXPe/K7puqPJeFmKtJ0ZgvIgRaWHcjNw44+hHu39pmbNyz58W8gs89PwC2uLegWO86NCOl7YMX/WOim7x9GzOlbg6saHg5j5bZQr20PZwLhkXgZNryr7XfKS3UbH/W2mFFD+M9djakbRPiv8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GeFDERPV; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ad2jkUEJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GeFDERPV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741147402; x=1772683402;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1vjVpR0Duqy0Lecr/rAUEzsxejp3tyIVHjdCkjzCkkc=;
-  b=ad2jkUEJAwO5doF79eTpXSjbqpHQQFVMRTc+lD/kwcTd1mh2V6a5wFyj
-   qm6NGult24zO/nL2BRbZ5AFzHLEZCIxfRrIwYXDzpP84YW5IBNIKFb7IM
-   sDJDCMAgQxXvWWbNuy+4LFAJnI4xpNN9w3h2S7X9KiDCNdn4EF2TvsEUM
-   vgouJ1PC1uNidDkHQUR95D+FtBwdMrb0cqFCbrAQYDdTVIVaIDhe8tWBV
-   +9fgADjnnE3N9zn8CHwKYJrZ1TyrncWBLAXU/wj56OJxQ+zdN0Uo8G/CX
-   W2nUPbanlsbQ4aCNkRr0K4h1fFdt8oO5+07yzK9goS+whCA1yGZhCvqco
-   g==;
-X-CSE-ConnectionGUID: zJSUPbNQSXyQql6hAN0seA==
-X-CSE-MsgGUID: 2uCkylOmQhSJST/EY3Kwjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="67462028"
+  t=1741148068; x=1772684068;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YVo5zjdnG3PFXPuBFidkC29jzE13TUWifC6rd23OT+Y=;
+  b=GeFDERPV6duu0tqvFkU7/0QaBK6hx1xlYk31QYGvwC3eH6Lrcm/AtGWI
+   GugTP8lWOnzcr80mbAJUhF7tCHnGrMPdvyd0GupGBuY0K27YPKZuQAGl9
+   cnK8gUhjsy8iohD+1XQQDWYGa9i857FJ0wN7Y0NeyydCYTzghrahHkFzz
+   Rj+454mlk63548fBw0U/A4IzOzk989JAAM6A2/BSxzN8Ftpu8ucyljcyw
+   hslettbPyTxHZqpl2Pw6kJxMF12Y4ZA0sldg9KuCtFhlIR5BeG8VaRE2y
+   IJg1NLSfEmSii2hl+MEyJiPt5H/EmuUVJV5H8nPBaMYSrVocV61A4XUhk
+   w==;
+X-CSE-ConnectionGUID: D4vhWeazQPuD3rLMAXi15Q==
+X-CSE-MsgGUID: EVVIbDGIRWSwBkAX+M1bGA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="41806649"
 X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="67462028"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 20:03:20 -0800
-X-CSE-ConnectionGUID: yErxLGxeQPGST5GAIEg4ig==
-X-CSE-MsgGUID: 4En7DRItRuKHa1100kF94w==
+   d="scan'208";a="41806649"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 20:14:21 -0800
+X-CSE-ConnectionGUID: o4dylf/JTzGmuMZ89OuATw==
+X-CSE-MsgGUID: r15n9EP3Sj6WdOA7m/L9Jw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,222,1736841600"; 
-   d="scan'208";a="118573716"
+   d="scan'208";a="149349837"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Mar 2025 20:03:18 -0800
+  by orviesa002.jf.intel.com with ESMTP; 04 Mar 2025 20:14:21 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tpfyW-000KZi-2q;
-	Wed, 05 Mar 2025 04:03:16 +0000
-Date: Wed, 5 Mar 2025 12:02:39 +0800
+	id 1tpg9B-000KZy-1h;
+	Wed, 05 Mar 2025 04:14:17 +0000
+Date: Wed, 5 Mar 2025 12:13:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Philipp Stanner <phasta@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: [pci:devres 1/1] drivers/pci/iomap.c:43:24: warning: variable
- 'start' is uninitialized when used here
-Message-ID: <202503051115.qGzJnRcf-lkp@intel.com>
+To: Tingmao Wang <m@maowtm.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 5/9] Define user structure for events and responses.
+Message-ID: <202503051149.MimDe0ds-lkp@intel.com>
+References: <cde6bbf0b52710b33170f2787fdcb11538e40813.1741047969.git.m@maowtm.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,116 +62,125 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cde6bbf0b52710b33170f2787fdcb11538e40813.1741047969.git.m@maowtm.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git devres
-head:   20099eb129ac39666d7c89f5e52d99b5596e638b
-commit: 20099eb129ac39666d7c89f5e52d99b5596e638b [1/1] PCI: Check BAR index for validity
-config: i386-buildonly-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051115.qGzJnRcf-lkp@intel.com/config)
+Hi Tingmao,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.14-rc5 next-20250304]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tingmao-Wang/Define-the-supervisor-and-event-structure/20250304-092354
+base:   linus/master
+patch link:    https://lore.kernel.org/r/cde6bbf0b52710b33170f2787fdcb11538e40813.1741047969.git.m%40maowtm.org
+patch subject: [RFC PATCH 5/9] Define user structure for events and responses.
+config: i386-buildonly-randconfig-003-20250305 (https://download.01.org/0day-ci/archive/20250305/202503051149.MimDe0ds-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051115.qGzJnRcf-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503051149.MimDe0ds-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503051115.qGzJnRcf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503051149.MimDe0ds-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/pci/iomap.c:43:24: warning: variable 'start' is uninitialized when used here [-Wuninitialized]
-      43 |         if (len <= offset || !start)
-         |                               ^~~~~
-   drivers/pci/iomap.c:38:23: note: initialize the variable 'start' to silence this warning
-      38 |         resource_size_t start, len;
-         |                              ^
-         |                               = 0
->> drivers/pci/iomap.c:43:6: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-      43 |         if (len <= offset || !start)
-         |             ^~~
-   drivers/pci/iomap.c:38:28: note: initialize the variable 'len' to silence this warning
-      38 |         resource_size_t start, len;
-         |                                   ^
-         |                                    = 0
-   drivers/pci/iomap.c:93:24: warning: variable 'start' is uninitialized when used here [-Wuninitialized]
-      93 |         if (len <= offset || !start)
-         |                               ^~~~~
-   drivers/pci/iomap.c:88:23: note: initialize the variable 'start' to silence this warning
-      88 |         resource_size_t start, len;
-         |                              ^
-         |                               = 0
-   drivers/pci/iomap.c:93:6: warning: variable 'len' is uninitialized when used here [-Wuninitialized]
-      93 |         if (len <= offset || !start)
-         |             ^~~
-   drivers/pci/iomap.c:88:28: note: initialize the variable 'len' to silence this warning
-      88 |         resource_size_t start, len;
-         |                                   ^
-         |                                    = 0
-   4 warnings generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
+>> security/landlock/syscalls.c:137:2: error: call to '__compiletime_assert_358' declared with 'error' attribute: BUILD_BUG_ON failed: __alignof__(typeof(*event)) != 8
+     137 |         BUILD_BUG_ON(__alignof__(typeof(*event)) != 8);
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:542:2: note: expanded from macro 'compiletime_assert'
+     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:530:2: note: expanded from macro '_compiletime_assert'
+     530 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:523:4: note: expanded from macro '__compiletime_assert'
+     523 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:137:1: note: expanded from here
+     137 | __compiletime_assert_358
+         | ^
+   1 error generated.
 
 
-vim +/start +43 drivers/pci/iomap.c
+vim +137 security/landlock/syscalls.c
 
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  13  
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  14  /**
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  15   * pci_iomap_range - create a virtual mapping cookie for a PCI BAR
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  16   * @dev: PCI device that owns the BAR
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  17   * @bar: BAR number
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  18   * @offset: map memory at the given offset in BAR
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  19   * @maxlen: max length of the memory to map
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  20   *
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  21   * Using this function you will get a __iomem address to your device BAR.
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  22   * You can access it using ioread*() and iowrite*(). These functions hide
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  23   * the details if this is a MMIO or PIO address space and will just do what
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  24   * you expect from them in the correct way.
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  25   *
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  26   * @maxlen specifies the maximum length to map. If you want to get access to
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  27   * the complete BAR from offset to the end, pass %0 here.
-81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  28   *
-81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  29   * NOTE:
-81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  30   * This function is never managed, even if you initialized with
-81fcf28e74a3ff drivers/pci/iomap.c Philipp Stanner    2024-06-13  31   * pcim_enable_device().
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  32   * */
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  33  void __iomem *pci_iomap_range(struct pci_dev *dev,
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  34  			      int bar,
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  35  			      unsigned long offset,
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  36  			      unsigned long maxlen)
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  37  {
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  38  	resource_size_t start, len;
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  39  	unsigned long flags;
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  40  
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  41  	if (!pci_bar_index_is_valid(bar))
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  42  		return NULL;
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29 @43  	if (len <= offset || !start)
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  44  		return NULL;
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  45  
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  46  	start = pci_resource_start(dev, bar);
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  47  	len = pci_resource_len(dev, bar);
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  48  	flags = pci_resource_flags(dev, bar);
-20099eb129ac39 drivers/pci/iomap.c Philipp Stanner    2025-03-04  49  
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  50  	len -= offset;
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  51  	start += offset;
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  52  	if (maxlen && len > maxlen)
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  53  		len = maxlen;
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  54  	if (flags & IORESOURCE_IO)
-b923650b84068b lib/pci_iomap.c     Michael S. Tsirkin 2012-01-30  55  		return __pci_ioport_map(dev, start, len);
-92b19ff50e8f24 lib/pci_iomap.c     Dan Williams       2015-08-10  56  	if (flags & IORESOURCE_MEM)
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  57  		return ioremap(start, len);
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  58  	/* What? */
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  59  	return NULL;
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  60  }
-eb29d8d2aad706 lib/pci_iomap.c     Michael S. Tsirkin 2013-05-29  61  EXPORT_SYMBOL(pci_iomap_range);
-66eab4df288aae lib/pci_iomap.c     Michael S. Tsirkin 2011-11-24  62  
-
-:::::: The code at line 43 was first introduced by commit
-:::::: eb29d8d2aad70636ea23810b4868693673d630d5 pci: add pci_iomap_range
-
-:::::: TO: Michael S. Tsirkin <mst@redhat.com>
-:::::: CC: Rusty Russell <rusty@rustcorp.com.au>
+    82	
+    83	/*
+    84	 * This function only contains arithmetic operations with constants, leading to
+    85	 * BUILD_BUG_ON().  The related code is evaluated and checked at build time,
+    86	 * but it is then ignored thanks to compiler optimizations.
+    87	 */
+    88	static void build_check_abi(void)
+    89	{
+    90		struct landlock_ruleset_attr ruleset_attr;
+    91		struct landlock_path_beneath_attr path_beneath_attr;
+    92		struct landlock_net_port_attr net_port_attr;
+    93		size_t ruleset_size, path_beneath_size, net_port_size;
+    94		struct landlock_supervise_event *event;
+    95		struct landlock_supervise_response response;
+    96		size_t supervise_evt_size, supervise_response_size;
+    97	
+    98		/*
+    99		 * For each user space ABI structures, first checks that there is no
+   100		 * hole in them, then checks that all architectures have the same
+   101		 * struct size.
+   102		 */
+   103		ruleset_size = sizeof(ruleset_attr.handled_access_fs);
+   104		ruleset_size += sizeof(ruleset_attr.handled_access_net);
+   105		ruleset_size += sizeof(ruleset_attr.scoped);
+   106		ruleset_size += sizeof(ruleset_attr.supervisor_fd);
+   107		ruleset_size += sizeof(ruleset_attr.pad);
+   108		BUILD_BUG_ON(sizeof(ruleset_attr) != ruleset_size);
+   109		BUILD_BUG_ON(sizeof(ruleset_attr) != 32);
+   110	
+   111		path_beneath_size = sizeof(path_beneath_attr.allowed_access);
+   112		path_beneath_size += sizeof(path_beneath_attr.parent_fd);
+   113		BUILD_BUG_ON(sizeof(path_beneath_attr) != path_beneath_size);
+   114		BUILD_BUG_ON(sizeof(path_beneath_attr) != 12);
+   115	
+   116		net_port_size = sizeof(net_port_attr.allowed_access);
+   117		net_port_size += sizeof(net_port_attr.port);
+   118		BUILD_BUG_ON(sizeof(net_port_attr) != net_port_size);
+   119		BUILD_BUG_ON(sizeof(net_port_attr) != 16);
+   120	
+   121		/* Check that anything before the destname does not have holes */
+   122		supervise_evt_size = sizeof(event->hdr.type);
+   123		supervise_evt_size += sizeof(event->hdr.length);
+   124		supervise_evt_size += sizeof(event->hdr.cookie);
+   125		BUILD_BUG_ON(offsetofend(typeof(*event), hdr) != 8);
+   126		supervise_evt_size += sizeof(event->access_request);
+   127		supervise_evt_size += sizeof(event->accessor);
+   128		supervise_evt_size += sizeof(event->fd1);
+   129		supervise_evt_size += sizeof(event->fd2);
+   130		BUILD_BUG_ON(offsetof(typeof(*event), destname) != supervise_evt_size);
+   131		BUILD_BUG_ON(offsetof(typeof(*event), destname) != 28);
+   132	
+   133		/*
+   134		 * Make sure this struct does not end up with stricter
+   135		 * alignment than 8
+   136		 */
+ > 137		BUILD_BUG_ON(__alignof__(typeof(*event)) != 8);
+   138	
+   139		supervise_response_size = sizeof(response.length);
+   140		supervise_response_size += sizeof(response.decision);
+   141		supervise_response_size += sizeof(response._reserved);
+   142		supervise_response_size += sizeof(response.cookie);
+   143		BUILD_BUG_ON(sizeof(response) != supervise_response_size);
+   144		BUILD_BUG_ON(sizeof(response) != 8);
+   145	}
+   146	
 
 -- 
 0-DAY CI Kernel Test Service
