@@ -1,248 +1,262 @@
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B212054FA
-	for <llvm@lists.linux.dev>; Wed,  5 Mar 2025 09:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCCD206F09;
+	Wed,  5 Mar 2025 10:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741168001; cv=none; b=SwSWlUNCDWV/o0f9zreDTzIv6uCXVF9pOhR9KgQFovwGe2pDT9KDGrxBqUyDmehUiPhUhjRmCek0sYkeUGpVv1pXx811gnuxVcrmMhOTFJmNic1G3B/BpBY1wuLFz1t96yhGjqM6hUrKfrjhgu0oUBmNl719MwYPiB5RFv3oiMg=
+	t=1741169220; cv=none; b=LuE8IquR/Wskt4WW1E0Klmh8oOpqIn3IWvZyfRBrrBxNskTUK6L2moQpkcUH6CtQiFexEwzqHSzVaiKQI6qL6newEjYb60CoT6miLew0mlUk9/d7EkN/isAxppPRZpkzp4ahm7YtFQahTs6sd3ewLWCIz2HVBSqPQKf9oshblvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741168001; c=relaxed/simple;
-	bh=FXfioV8CaRb4Kj7KM42BiGBBy9+db0YNett6CYn56Fs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=migP7+tY5HBXh526j+w73/wi9JGaVP+YpTjgmWQCMR3uCEJyv/x/bA9QnHPnT0lu8+5iNSqJEfSVw5VyOf3MtdLOseGO9kDqhNm3pYdrdZWb4NJjw9cgZ6Ohm01/Ls5LCzGJ5VW8X2uljkBXLTt5FHOYneg4JutX5EJwkgMagFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=jAP8dNVQ; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1741169220; c=relaxed/simple;
+	bh=A1BLHb/YOt1RlLLdoQ9snVOq23XX5GqhKF39BlDDcWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kxseHOdwNktY6hQcmkR0svKmUsZzmYR4EPoJgRpcPNX18jV+9PznffC3EENwF0laA7f3c7OCEM91Oo7BXElys2pVPMkpLa5ThTS3V8evTIOg5qPUkuwNdGmkttfc/FZL2WXvrnFXl774l1CuGQH6Uc0gtEBSWhCj+5KkdHOVO3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AbDPK0TA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="jAP8dNVQ"
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5253vexe028541;
-	Wed, 5 Mar 2025 01:46:33 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pfpt0220; bh=4XnuYIJ9q/vf3IyjBHXgo0K
-	gvgu4V7P4DYMXtFG23GI=; b=jAP8dNVQ8OE4R4LGlU1l9pue0RxBYMfNf1Svwu7
-	hCLb8aGBJDI+K7DHSqo/xqCFxNHMNDwSlvRvGcUG9NmJub0//rBb5fR+8B15PoRZ
-	YvL3Q0+wwuKoU5+ZpDvceVMbWz8gZreV0L0Wz5xQQKWhffCI4htOhJrCK01YGUYX
-	A/QxtyIkRdMDx1FwKn9qGTjXHnQkHJcbF1JCJHjJicilwhIFeLSrNxLW18fj0SR2
-	pRfyIMFMLAA1ua+VpZtvRhzQrRX5EoDxEEWRevz28zE54qH453RePHaRel8X5y/4
-	F83uhdNopvLNvnIo/tVIoaE5366QwrTp7ohfoE3lEJUXbzg==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 456f5tgk7x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Mar 2025 01:46:32 -0800 (PST)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 5 Mar 2025 01:46:31 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 5 Mar 2025 01:46:31 -0800
-Received: from hyd1425.marvell.com (unknown [10.29.37.152])
-	by maili.marvell.com (Postfix) with ESMTP id 2414B3F705C;
-	Wed,  5 Mar 2025 01:46:24 -0800 (PST)
-From: Sai Krishna <saikrishnag@marvell.com>
-To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <gakula@marvell.com>, <lcherian@marvell.com>, <jerinj@marvell.com>,
-        <hkelam@marvell.com>, <sbhatta@marvell.com>, <andrew+netdev@lunn.ch>,
-        <bbhushan2@marvell.com>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <morbo@google.com>,
-        <justinstitt@google.com>, <llvm@lists.linux.dev>
-CC: Sai Krishna <saikrishnag@marvell.com>, kernel test robot <lkp@intel.com>
-Subject: [net-next PATCH v2] octeontx2-af: fix build warnings flagged by clang, sparse ,kernel test robot
-Date: Wed, 5 Mar 2025 15:16:23 +0530
-Message-ID: <20250305094623.2819994-1-saikrishnag@marvell.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AbDPK0TA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46FA5C4CEE8;
+	Wed,  5 Mar 2025 10:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741169219;
+	bh=A1BLHb/YOt1RlLLdoQ9snVOq23XX5GqhKF39BlDDcWA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AbDPK0TAQsCRoTQuHF/7HONFoXGZYuV0GHA5QnmqioKFXOjXnCaD+eMUIESZgwGbO
+	 4vvGpbmK8hgE0IlSABvohIeXuGKu0Arh2PJ02/CPwJD4HVG6Zn8oTTrF7R9LsLFbBk
+	 ioPkRla9W6iyGBdNrSxduLlGdoRjZ2ur0upm5XcuF2ygWRGZViHJyEWw696Ho8WhB3
+	 3Ehf20kiNs+fo/57VRHxk9RJT9gXgcYEvgyWJP2wvpwPwrAhLzaZFtRvnwslgIwgz8
+	 dC5qA1PUKARiNDV+AUzbA6830k3/T3zrvGGItI2dg7LEKviYjzmnQwGBSyp7+wV1eU
+	 1ofStbuppZ3rw==
+Date: Wed, 5 Mar 2025 11:06:57 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-modules@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
+	gost.dev@samsung.com
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+Message-ID: <mghfn2piuln4oxg2zkmukjcjbt2hyieqsgfnckfzvjwrcbi4eh@vwh5nsvwajjq>
+References: <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
+ <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
+ <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
+ <Z7je7Kryipdq6AV4@bombadil.infradead.org>
+ <4xh2oviqumypm4r7jch25af5jtesof7wnejqybncuopayq6yiq@skayuieidaq7>
+ <ccofyygi4rerybdmecqswldykihtabx6yco7ztylqnbmw4a5qw@ye7zoq7mcol2>
+ <3ehu3r4hlsf7cpptofz2y5aq2bazidq4buxbddqj6gzvzd3eh3@wzlnbvdsc6ty>
+ <e6jybeg4y6q6zqyhqma7q4icw7jllieq5rwwi5pguy242wioyp@hkelxx7tnzlg>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 6jqXsFNlzlCDwlEM9sofaMbTmMtiDIKX
-X-Authority-Analysis: v=2.4 cv=JtULrN4C c=1 sm=1 tr=0 ts=67c81d78 cx=c_pps a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17 a=Vs1iUdzkB0EA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=M5GUcnROAAAA:8 a=mOT8R8ziQExDnPD9evEA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-ORIG-GUID: 6jqXsFNlzlCDwlEM9sofaMbTmMtiDIKX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-05_03,2025-03-05_01,2024-11-22_01
+In-Reply-To: <e6jybeg4y6q6zqyhqma7q4icw7jllieq5rwwi5pguy242wioyp@hkelxx7tnzlg>
 
-This cleanup patch avoids build warnings flagged by clang,
-sparse, kernel test robot.
+On Fri, Feb 28, 2025 at 12:48:38PM +0100, Lucas De Marchi wrote:
+> On Fri, Feb 28, 2025 at 10:27:17AM +0100, Daniel Gomez wrote:
+> > On Mon, Feb 24, 2025 at 08:43:45AM +0100, Lucas De Marchi wrote:
+> > > On Sat, Feb 22, 2025 at 10:35:07PM +0100, Daniel Gomez wrote:
+> > > > On Fri, Feb 21, 2025 at 12:15:40PM +0100, Luis Chamberlain wrote:
+> > > > > On Wed, Feb 19, 2025 at 02:17:48PM -0600, Lucas De Marchi wrote:
+> > > > > > On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
+> > > > > > > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
+> > > > > > > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+> > > > > > > > >
+> > > > > > > > > Add support for a module error injection tool. The tool
+> > > > > > > > > can inject errors in the annotated module kernel functions
+> > > > > > > > > such as complete_formation(), do_init_module() and
+> > > > > > > > > module_enable_rodata_after_init(). Module name and module function are
+> > > > > > > > > required parameters to have control over the error injection.
+> > > > > > > > >
+> > > > > > > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > > > > > > > > brd module:
+> > > > > > > > >
+> > > > > > > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
+> > > > > > > > > --error=-22 --trace
+> > > > > > > > > Monitoring module error injection... Hit Ctrl-C to end.
+> > > > > > > > > MODULE     ERROR FUNCTION
+> > > > > > > > > brd        -22   module_enable_rodata_after_init()
+> > > > > > > > >
+> > > > > > > > > Kernel messages:
+> > > > > > > > > [   89.463690] brd: module loaded
+> > > > > > > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
+> > > > > > > > > ro_after_init data might still be writable
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > > > > > > > > ---
+> > > > > > > > >  tools/bpf/Makefile            |  13 ++-
+> > > > > > > > >  tools/bpf/moderr/.gitignore   |   2 +
+> > > > > > > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> > > > > > > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> > > > > > > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
+> > > > > > > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> > > > > > > > >  6 files changed, 510 insertions(+), 3 deletions(-)
+> > > > > > > >
+> > > > > > > > The tool looks useful, but we don't add tools to the kernel repo.
+> > > > > > > > It has to stay out of tree.
+> > > > > > >
+> > > > > > > For selftests we do add random tools.
+> > > > > > >
+> > > > > > > > The value of error injection is not clear to me.
+> > > > > > >
+> > > > > > > It is of great value, since it deals with corner cases which are
+> > > > > > > otherwise hard to reproduce in places which a real error can be
+> > > > > > > catostrophic.
+> > > > > > >
+> > > > > > > > Other places in the kernel use it to test paths in the kernel
+> > > > > > > > that are difficult to do otherwise.
+> > > > > > >
+> > > > > > > Right.
+> > > > > > >
+> > > > > > > > These 3 functions don't seem to be in this category.
+> > > > > > >
+> > > > > > > That's the key here we should focus on. The problem is when a maintainer
+> > > > > > > *does* agree that adding an error injection entry is useful for testing,
+> > > > > > > and we have a developer willing to do the work to help test / validate
+> > > > > > > it. In this case, this error case is rare but we do want to strive to
+> > > > > > > test this as we ramp up and extend our modules selftests.
+> > > > > > >
+> > > > > > > Then there is the aspect of how to mitigate how instrusive code changes
+> > > > > > > to allow error injection are. In 2021 we evaluated the prospect of error
+> > > > > > > injection in-kernel long ago for other areas like the block layer for
+> > > > > > > add_disk() failures [0] but the minimal interface to enable this from
+> > > > > > > userspace with debugfs was considered just too intrusive.
+> > > > > > >
+> > > > > > > This effort tried to evaluate what this could look like with eBPF to
+> > > > > > > mitigate the required in-kernel code, and I believe the light weight
+> > > > > > > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
+> > > > > > > suffices to my taste.
+> > > > > > >
+> > > > > > > So, perhaps the tools aspect can just go in:
+> > > > > > >
+> > > > > > > tools/testing/selftests/module/
+> > > > > >
+> > > > > > but why would it be module-specific?
+> > > > >
+> > > > > Gotta start somewhere.
+> > > > >
+> > > > > > Based on its current implementation
+> > > > > > and discussion about inject.py it seems to be generic enough to be
+> > > > > > useful to test any function annotated with ALLOW_ERROR_INJECTION().
+> > > > > >
+> > > > > > As xe driver maintainer, it may be interesting to use such a tool:
+> > > > > >
+> > > > > > 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
+> > > > > >
+> > > > > > How does this approach compare to writing the function name on debugfs
+> > > > > > (the current approach in xe's testsuite)?
+> > > > > >
+> > > > > > 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
+> > > > > > 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
+> > > > > >
+> > > > > > If you decide to have the tool to live somewhere else, then kmod repo
+> > > > > > could be a candidate.
+> > > > >
+> > > > > Would we install this upon install target?
+> > > > >
+> > > > > Danny can decide on this :)
+> > > > >
+> > > > > > Although I think having it in kernel tree is
+> > > > > > simpler maintenance-wise.
+> > > > >
+> > > > > I think we have at least two users upstream who can make use of it. If
+> > > > > we end up going through tools/testing/selftests/module/ first, can't
+> > > > > you make use of it later?
+> > > >
+> > > > What are the features in debugfs required to be useful for xe that we can
+> > > > port to an eBPF version? I see from the link provided the use of probability,
+> > > > interval, times and space but these are configured to allways trigger the error.
+> > > > Is that right?
+> > > 
+> > > I don't think we use them... we just set them to "always trigger" and
+> > > then create the conditions for that to happen.  But my question still
+> > > remains:  what is the benefit of using the bpf approach over writing
+> > > these files?
+> > 
+> > The code to trigger the error injection still needs to exist with both
+> > approaches. My understanding from debugfs and the comment from Luis earlier in
+> > the thread is that with eBPF you can mitigate how intrusive in-kernel code
+> > changes are to allow error injection. Luis added the example here [1] for
+> > debugfs.
+> > 
+> > [1] https://lore.kernel.org/all/20210512064629.13899-9-mcgrof@kernel.org/
+> > 
+> > To compare patch 8 in [1] with eBPF approach: the patch describes
+> > all the necessary changes required to allow error injection on the
+> > add_disk() path. With eBPF one would simply annotate the function(s) with
+> > ALLOW_ERROR_INJECTION(), e.g. device_add() and replace the return value
+> > in eBPF code with bpf_override_return() as implemented in moderr tool for
+> > module_enable_rdata_after_init() for example.
+> 
+> but that is all that we need with the fail_function in debugfs too:
+> 
+> $ git grep ALLOW_ERROR_INJECTION -- drivers/gpu/drm/xe
+> drivers/gpu/drm/xe/xe_device.c:ALLOW_ERROR_INJECTION(xe_device_create, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_device.c:ALLOW_ERROR_INJECTION(wait_for_lmem_ready, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_exec_queue.c:ALLOW_ERROR_INJECTION(xe_exec_queue_create_bind, ERRNO);
+> drivers/gpu/drm/xe/xe_ggtt.c:ALLOW_ERROR_INJECTION(xe_ggtt_init_early, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_guc_ads.c:ALLOW_ERROR_INJECTION(xe_guc_ads_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_guc_ct.c:ALLOW_ERROR_INJECTION(xe_guc_ct_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_guc_log.c:ALLOW_ERROR_INJECTION(xe_guc_log_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_guc_relay.c:ALLOW_ERROR_INJECTION(xe_guc_relay_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_pci.c: * ALLOW_ERROR_INJECTION() is used to conditionally skip function execution
+> drivers/gpu/drm/xe/xe_pci.c: * ALLOW_ERROR_INJECTION() macro but this is acceptable because for those
+> drivers/gpu/drm/xe/xe_pm.c:ALLOW_ERROR_INJECTION(xe_pm_init_early, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_pt.c:ALLOW_ERROR_INJECTION(xe_pt_create, ERRNO);
+> drivers/gpu/drm/xe/xe_pt.c:ALLOW_ERROR_INJECTION(xe_pt_update_ops_prepare, ERRNO);
+> drivers/gpu/drm/xe/xe_pt.c:ALLOW_ERROR_INJECTION(xe_pt_update_ops_run, ERRNO);
+> drivers/gpu/drm/xe/xe_sriov.c:ALLOW_ERROR_INJECTION(xe_sriov_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_sync.c:ALLOW_ERROR_INJECTION(xe_sync_entry_parse, ERRNO);
+> drivers/gpu/drm/xe/xe_tile.c:ALLOW_ERROR_INJECTION(xe_tile_init_early, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_uc_fw.c:ALLOW_ERROR_INJECTION(xe_uc_fw_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_vm.c:ALLOW_ERROR_INJECTION(xe_vma_ops_alloc, ERRNO);
+> drivers/gpu/drm/xe/xe_vm.c:ALLOW_ERROR_INJECTION(xe_vm_create_scratch, ERRNO);
+> drivers/gpu/drm/xe/xe_vm.c:ALLOW_ERROR_INJECTION(vm_bind_ioctl_ops_create, ERRNO);
+> drivers/gpu/drm/xe/xe_vm.c:ALLOW_ERROR_INJECTION(vm_bind_ioctl_ops_execute, ERRNO);
+> drivers/gpu/drm/xe/xe_wa.c:ALLOW_ERROR_INJECTION(xe_wa_init, ERRNO); /* See xe_pci_probe() */
+> drivers/gpu/drm/xe/xe_wopcm.c:ALLOW_ERROR_INJECTION(xe_wopcm_init, ERRNO); /* See xe_pci_probe() */
+> 
+> That is different from the patch you are pointing to because that patch
+> is trying to add arbitrary/named error injection points throughout the
+> code. However via debugfs it's still possible to add error injection to
 
-Warning reported by clang:
-drivers/net/ethernet/marvell/octeontx2/af/rvu.c:2993:47:
-warning: arithmetic between different enumeration types
-('enum rvu_af_int_vec_e' and 'enum rvu_pf_int_vec_e')
-[-Wenum-enum-conversion]
- 2993 | return (pfvf->msix.max >= RVU_AF_INT_VEC_CNT +
-RVU_PF_INT_VEC_CNT) &&
+When reading the patch I assumed the block/failure-injection.c was needed for
+the knobs in sysfs/debugfs. But I see I was wrong and these are only needed for
+the arbitrary error injection points?
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes:
-https://lore.kernel.org/oe-kbuild-all/202410221614.07o9QVjo-lkp@intel.com/
-Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/common.h |  2 +-
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c    | 14 ++++++++------
- .../ethernet/marvell/octeontx2/nic/otx2_common.c   | 10 +++++-----
- .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  9 ++++-----
- 4 files changed, 18 insertions(+), 17 deletions(-)
+I see mm/fail_page_alloc.c has a similar approach with should_fail_alloc_page().
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/common.h b/drivers/net/ethernet/marvell/octeontx2/af/common.h
-index 406c59100a35..8a08bebf08c2 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/common.h
-@@ -39,7 +39,7 @@ struct qmem {
- 	void            *base;
- 	dma_addr_t	iova;
- 	int		alloc_sz;
--	u16		entry_sz;
-+	u32		entry_sz;
- 	u8		align;
- 	u32		qsize;
- };
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-index cd0d7b7774f1..c850ea5d1960 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-@@ -591,7 +591,7 @@ static void rvu_check_min_msix_vec(struct rvu *rvu, int nvecs, int pf, int vf)
- 
- check_pf:
- 	if (pf == 0)
--		min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
-+		min_vecs = (int)RVU_AF_INT_VEC_CNT + (int)RVU_PF_INT_VEC_CNT;
- 	else
- 		min_vecs = RVU_PF_INT_VEC_CNT;
- 
-@@ -819,13 +819,14 @@ static int rvu_fwdata_init(struct rvu *rvu)
- 		goto fail;
- 
- 	BUILD_BUG_ON(offsetof(struct rvu_fwdata, cgx_fw_data) > FWDATA_CGX_LMAC_OFFSET);
--	rvu->fwdata = ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
-+	rvu->fwdata = (__force struct rvu_fwdata *)
-+		ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
- 	if (!rvu->fwdata)
- 		goto fail;
- 	if (!is_rvu_fwdata_valid(rvu)) {
- 		dev_err(rvu->dev,
- 			"Mismatch in 'fwdata' struct btw kernel and firmware\n");
--		iounmap(rvu->fwdata);
-+		iounmap((void __iomem *)rvu->fwdata);
- 		rvu->fwdata = NULL;
- 		return -EINVAL;
- 	}
-@@ -838,7 +839,7 @@ static int rvu_fwdata_init(struct rvu *rvu)
- static void rvu_fwdata_exit(struct rvu *rvu)
- {
- 	if (rvu->fwdata)
--		iounmap(rvu->fwdata);
-+		iounmap((void __iomem *)rvu->fwdata);
- }
- 
- static int rvu_setup_nix_hw_resource(struct rvu *rvu, int blkaddr)
-@@ -2384,7 +2385,8 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
- 				bar4 = rvupf_read64(rvu, RVU_PF_VF_BAR4_ADDR);
- 				bar4 += region * MBOX_SIZE;
- 			}
--			mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-+			mbox_addr[region] = (__force void *)
-+				ioremap_wc(bar4, MBOX_SIZE);
- 			if (!mbox_addr[region])
- 				goto error;
- 		}
-@@ -2407,7 +2409,7 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
- 					  RVU_AF_PF_BAR4_ADDR);
- 			bar4 += region * MBOX_SIZE;
- 		}
--		mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-+		mbox_addr[region] = (__force void *)ioremap_wc(bar4, MBOX_SIZE);
- 		if (!mbox_addr[region])
- 			goto error;
- 	}
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 2b49bfec7869..e0e592fd02f7 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -29,10 +29,10 @@ static void otx2_nix_rq_op_stats(struct queue_stats *stats,
- 	u64 incr = (u64)qidx << 32;
- 	u64 *ptr;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
- 	stats->bytes = otx2_atomic64_add(incr, ptr);
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
- 	stats->pkts = otx2_atomic64_add(incr, ptr);
- }
- 
-@@ -42,10 +42,10 @@ static void otx2_nix_sq_op_stats(struct queue_stats *stats,
- 	u64 incr = (u64)qidx << 32;
- 	u64 *ptr;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
- 	stats->bytes = otx2_atomic64_add(incr, ptr);
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
- 	stats->pkts = otx2_atomic64_add(incr, ptr);
- }
- 
-@@ -853,7 +853,7 @@ void otx2_sqb_flush(struct otx2_nic *pfvf)
- 	struct otx2_snd_queue *sq;
- 	u64 incr, *ptr, val;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
- 	for (qidx = 0; qidx < otx2_get_total_tx_queues(pfvf); qidx++) {
- 		sq = &pfvf->qset.sq[qidx];
- 		if (!sq->sqb_ptrs)
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-index e1dde93e8af8..6c23d64e81f8 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-@@ -595,8 +595,7 @@ static int otx2_pfvf_mbox_init(struct otx2_nic *pf, int numvfs)
- 		base = pci_resource_start(pf->pdev, PCI_MBOX_BAR_NUM) +
- 		       MBOX_SIZE;
- 	else
--		base = readq((void __iomem *)((u64)pf->reg_base +
--					      RVU_PF_VF_BAR4_ADDR));
-+		base = readq(pf->reg_base + RVU_PF_VF_BAR4_ADDR);
- 
- 	hwbase = ioremap_wc(base, MBOX_SIZE * pf->total_vfs);
- 	if (!hwbase) {
-@@ -645,7 +644,7 @@ static void otx2_pfvf_mbox_destroy(struct otx2_nic *pf)
- 	}
- 
- 	if (mbox->mbox.hwbase)
--		iounmap(mbox->mbox.hwbase);
-+		iounmap((void __iomem *)mbox->mbox.hwbase);
- 
- 	otx2_mbox_destroy(&mbox->mbox);
- }
-@@ -1309,7 +1308,7 @@ static irqreturn_t otx2_q_intr_handler(int irq, void *data)
- 
- 	/* CQ */
- 	for (qidx = 0; qidx < pf->qset.cq_cnt; qidx++) {
--		ptr = otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
-+		ptr = (__force u64 *)otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
- 		val = otx2_atomic64_add((qidx << 44), ptr);
- 
- 		otx2_write64(pf, NIX_LF_CQ_OP_INT, (qidx << 44) |
-@@ -1348,7 +1347,7 @@ static irqreturn_t otx2_q_intr_handler(int irq, void *data)
- 		 * these are fatal errors.
- 		 */
- 
--		ptr = otx2_get_regaddr(pf, NIX_LF_SQ_OP_INT);
-+		ptr = (__force u64 *)otx2_get_regaddr(pf, NIX_LF_SQ_OP_INT);
- 		val = otx2_atomic64_add((qidx << 44), ptr);
- 		otx2_write64(pf, NIX_LF_SQ_OP_INT, (qidx << 44) |
- 			     (val & NIX_SQINT_BITS));
--- 
-2.25.1
+> the beginning of a function by annotating that function with
+> ALLOW_ERROR_INJECTION. If a function is annotated with that, then if you
+> do e.g.
+> 
+> 	echo xe_device_create > /sys/kernel/debug/fail_function/inject
+> 
+> it will cause that function to fail. There are some additional files to
+> control _when_ that function should fail, but I'm failing to see a clear
+> benefit. See this example in the docs:
 
+Can you clarify if _when_ (in debugfs) allows you to access function arguments
+of a given annotated function with ALLOW_ERROR_INJECTION()? It seems that might
+be the only part that can be moved out of the kernel and handled in eBPF. Other
+than that, I don't see either a benefit of using one approach over the other.
+
+> 
+> 	Documentation/fault-injection/fault-injection.rst:- Inject open_ctree error while btrfs mount::
+> 
+> Lucas De Marchi
+ 
