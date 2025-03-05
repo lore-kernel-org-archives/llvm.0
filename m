@@ -1,63 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03494252903;
-	Wed,  5 Mar 2025 19:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5905324CEE3;
+	Wed,  5 Mar 2025 19:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741201802; cv=none; b=E00Kdkt2pmEygumyBH/sdQB4Mf7LneBwWAUYVGBSP3wLESRgp3viVM+MK5UVsmllPkSHPTUTtHsM39K8MrC1iS22DFfQp4KKU1f7wU0jycPPEaDvehcCjaKO9ET90FjjcdhOt8RFZjG0O7J8OtUv+pCecQiX/tBEMEjMwNEqJRc=
+	t=1741202171; cv=none; b=c5HtRBr7rC8Dn6owXdNybh+ikp4w/xOXKbFDgN9hqHJgCzs59IrTJVM3623ozsnGyKaRk/7jfzPdy3xYdvb4eZsYZ5ue4zxpN9Ijs/UCIghULLabkXEXHwShT5JQdR+0VYnipxiPiiaEyv1nDAEq8VV67Em+K38Vy7Eyiq/IqCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741201802; c=relaxed/simple;
-	bh=VekNt6JrT6vFVon+D9gX3GKMMPt3To8/2oCXdhpGF+s=;
+	s=arc-20240116; t=1741202171; c=relaxed/simple;
+	bh=fubuqMlM2Oo+8Icg3TWKdYQa/lCj0hx58ocM+KyVbgk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qpGNdL7unq38jJt8I5b6AeWsLNeJIIJIekvVIOUoVgYdGNRj5Ra/8LgkD0p3Bhn6yKcApPyk12uY1z+JvR3hRYRqeSXuAqRC1y1CJ2evhCpHZyoEdR267XumoZ4fEbKRa/K30D2BWxsU+AMuMzic0Sbhz5kQ6Wh5CfI9JXQNhyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BK4rGycB; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GAILJq7RyW0w1OniMfdNwdAWRki3yDzrCdf8aBhBUXp+gNva3Qj8WWx7WSP131HAvRoAUplEBR+JmYUQeQ6X+P2lZeEnLVdV1vpOE96CIywOoXF4RYyM0rNKuDKkW1sFBxWExeUKeFvks3w/Q3S/gEelIOiIt9fh77a/a/gKu4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQ9Q1udn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BK4rGycB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741201800; x=1772737800;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VekNt6JrT6vFVon+D9gX3GKMMPt3To8/2oCXdhpGF+s=;
-  b=BK4rGycBu4m/32hYHzgH7RuCH9vLj5r/ei9SaKJhwkTA0HwDbd7mD3Z5
-   ms0zKyz7e4l/Jm+4uHPRbbOAnbo8d1aTHwVFuKk87fnOqUPrOamfAfofM
-   EWh2cdV+h65cHA/QWqYPCd+Y0ZHrZ4hT6xtrp2gUx44dFF6XRUsT5+/xZ
-   AiMACH8t4Qkpkb0hcWOk7PX24JH+7M262LvB+qvK8ibkwUaiRwEeAGjpw
-   WBTZbeQcuZ4W7VETsTdq7CTZCxjd2QnaP/gukBJsZ7XV84mp40Vl/R67n
-   YBaFzQTXuo1Cw0xzQtHmQAXdIJPwY3Xx+xMN1vxCiNB9MaiIU0PoKwVqs
-   Q==;
-X-CSE-ConnectionGUID: gPb9zZAuRvu25Qa6XBY22g==
-X-CSE-MsgGUID: lRZa8UG3QWeSx2d7bYJfKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="64628581"
-X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
-   d="scan'208";a="64628581"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 11:09:59 -0800
-X-CSE-ConnectionGUID: jBAszFV4SUuDCf+dMaff9A==
-X-CSE-MsgGUID: nyaRXvvZTJ65++Dubmgtpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
-   d="scan'208";a="142013996"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Mar 2025 11:09:57 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tpu7u-000M4s-1k;
-	Wed, 05 Mar 2025 19:09:54 +0000
-Date: Thu, 6 Mar 2025 03:09:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zack Rusin <zack.rusin@broadcom.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	ian.forbes@broadcom.com, martin.krastev@broadcom.com,
-	maaz.mombasawala@broadcom.com, Zack Rusin <zack.rusin@broadcom.com>
-Subject: Re: [PATCH] drm/vmwgfx: Make sure the dirty tracker is released on
- surfaces
-Message-ID: <202503060223.BrfYSoFw-lkp@intel.com>
-References: <20250304184942.2127704-1-zack.rusin@broadcom.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQ9Q1udn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E83C4CED1;
+	Wed,  5 Mar 2025 19:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741202170;
+	bh=fubuqMlM2Oo+8Icg3TWKdYQa/lCj0hx58ocM+KyVbgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kQ9Q1udnJ68GCD1jFiiTzPgeSSS5VMfZveMn/1zpJQBDvv5yc70hyqvAsnij9q52k
+	 KOxrgKUB3LNd7KdtwOtwvRJ+EhMWg5K+9h1zKPnkUlQ3siibjMWiiMPuESXNt4CimP
+	 s+14lE1XgnOq06UG1O7u4a80DMc5NQFGLrW68tV+HAnA1erm7Pbh56IeslO7sUiaPU
+	 Btsjp5hQ9N4nBR2LcqHZk3jQ5KoTaeQJdDoejoRJVjWQW8o8r1mqTZ9OU0jJCZAD1v
+	 ZkW1F8mlax5weiwXLKout3xc0phW0pziQEYKzlXaZwJS4zOq758M9tWm/tprfN6MWO
+	 bvcPzpYqGSECA==
+Date: Wed, 5 Mar 2025 11:16:08 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Justin Stitt <justinstitt@google.com>, linux-crypto@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/crc32: optimize tail handling for crc32c short inputs
+Message-ID: <20250305191608.GA19889@sol.localdomain>
+References: <20250304213216.108925-1-ebiggers@kernel.org>
+ <20250305142653.751d9840@pumpkin>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,93 +50,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304184942.2127704-1-zack.rusin@broadcom.com>
+In-Reply-To: <20250305142653.751d9840@pumpkin>
 
-Hi Zack,
+On Wed, Mar 05, 2025 at 02:26:53PM +0000, David Laight wrote:
+> On Tue,  4 Mar 2025 13:32:16 -0800
+> Eric Biggers <ebiggers@kernel.org> wrote:
+> 
+> > From: Eric Biggers <ebiggers@google.com>
+> > 
+> > For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
+> > do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
+> > taking advantage of wider CRC instructions.  Note that crc32c-3way.S
+> > already uses this same optimization too.
+> 
+> An alternative is to add extra zero bytes at the start of the buffer.
+> They don't affect the crc and just need the first 8 bytes shifted left.
+> 
+> I think any non-zero 'crc-in' just needs to be xor'ed over the first
+> 4 actual data bytes.
+> (It's over 40 years since I did the maths of CRC.)
+> 
+> You won't notice the misaligned accesses all down the buffer.
+> When I was testing different ipcsum code misaligned buffers
+> cost less than 1 clock per cache line.
+> I think that was even true for the versions that managed 12 bytes
+> per clock (including the one Linus committed).
+> 
+> 	David
 
-kernel test robot noticed the following build errors:
+Sure, but that only works when len >= sizeof(unsigned long).  Also, the initial
+CRC sometimes has to be divided between two unsigned longs.
 
-[auto build test ERROR on drm-exynos/exynos-drm-next]
-[also build test ERROR on linus/master v6.14-rc5 next-20250305]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The following implements this, and you can play around with it a bit if you
+want.  There may be a way to optimize it a bit more.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-vmwgfx-Make-sure-the-dirty-tracker-is-released-on-surfaces/20250305-025105
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20250304184942.2127704-1-zack.rusin%40broadcom.com
-patch subject: [PATCH] drm/vmwgfx: Make sure the dirty tracker is released on surfaces
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250306/202503060223.BrfYSoFw-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060223.BrfYSoFw-lkp@intel.com/reproduce)
+But I think you'll find it's a bit more complex than you thought.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503060223.BrfYSoFw-lkp@intel.com/
+I think I'd like to stay with the shorter and simpler 4-2-1 step-down.
 
-All errors (new ones prefixed by >>):
+u32 crc32c_arch(u32 crc, const u8 *p, size_t len)
+{
+	if (!static_branch_likely(&have_crc32))
+		return crc32c_base(crc, p, len);
 
->> drivers/gpu/drm/vmwgfx/vmwgfx_kms.c:1236:18: error: incomplete definition of type 'struct vmw_res_func'
-    1236 |                         surf->res.func->dirty_free(&surf->res);
-         |                         ~~~~~~~~~~~~~~^
-   drivers/gpu/drm/vmwgfx/vmwgfx_drv.h:120:8: note: forward declaration of 'struct vmw_res_func'
-     120 | struct vmw_res_func;
-         |        ^
-   1 error generated.
+	if (IS_ENABLED(CONFIG_X86_64) && len >= CRC32C_PCLMUL_BREAKEVEN &&
+	    static_branch_likely(&have_pclmulqdq) && crypto_simd_usable()) {
+		kernel_fpu_begin();
+		crc = crc32c_x86_3way(crc, p, len);
+		kernel_fpu_end();
+		return crc;
+	}
 
+	if (len % sizeof(unsigned long) != 0) {
+		unsigned long msgpoly;
+		u32 orig_crc = crc;
 
-vim +1236 drivers/gpu/drm/vmwgfx/vmwgfx_kms.c
+		if (len < sizeof(unsigned long)) {
+			if (sizeof(unsigned long) > 4 && (len & 4)) {
+				asm("crc32l %1, %0"
+				    : "+r" (crc) : ASM_INPUT_RM (*(u32 *)p));
+				p += 4;
+			}
+			if (len & 2) {
+				asm("crc32w %1, %0"
+				    : "+r" (crc) : ASM_INPUT_RM (*(u16 *)p));
+				p += 2;
+			}
+			if (len & 1)
+				asm("crc32b %1, %0"
+				    : "+r" (crc) : ASM_INPUT_RM (*p));
+			return crc;
+		}
+		msgpoly = (get_unaligned((unsigned long *)p) ^ orig_crc) <<
+			  (8 * (-len % sizeof(unsigned long)));
+		p += len % sizeof(unsigned long);
+		crc = 0;
+		asm(CRC32_INST : "+r" (crc) : "r" (msgpoly));
 
-  1196	
-  1197	
-  1198	/**
-  1199	 * vmw_du_connector_destroy_state - destroy connector state
-  1200	 * @connector: DRM connector
-  1201	 * @state: state object to destroy
-  1202	 *
-  1203	 * Destroys the connector state (both common and vmw-specific) for the
-  1204	 * specified plane.
-  1205	 */
-  1206	void
-  1207	vmw_du_connector_destroy_state(struct drm_connector *connector,
-  1208				  struct drm_connector_state *state)
-  1209	{
-  1210		drm_atomic_helper_connector_destroy_state(connector, state);
-  1211	}
-  1212	/*
-  1213	 * Generic framebuffer code
-  1214	 */
-  1215	
-  1216	/*
-  1217	 * Surface framebuffer code
-  1218	 */
-  1219	
-  1220	static void vmw_framebuffer_surface_destroy(struct drm_framebuffer *framebuffer)
-  1221	{
-  1222		struct vmw_framebuffer_surface *vfbs =
-  1223			vmw_framebuffer_to_vfbs(framebuffer);
-  1224		struct vmw_bo *bo = vmw_user_object_buffer(&vfbs->uo);
-  1225		struct vmw_surface *surf = vmw_user_object_surface(&vfbs->uo);
-  1226	
-  1227		if (bo) {
-  1228			vmw_bo_dirty_release(bo);
-  1229			/*
-  1230			 * bo->dirty is reference counted so it being NULL
-  1231			 * means that the surface wasn't coherent to begin
-  1232			 * with and so we have to free the dirty tracker
-  1233			 * in the vmw_resource
-  1234			 */
-  1235			if (!bo->dirty && surf && surf->res.dirty)
-> 1236				surf->res.func->dirty_free(&surf->res);
-  1237		}
-  1238		drm_framebuffer_cleanup(framebuffer);
-  1239		vmw_user_object_unref(&vfbs->uo);
-  1240	
-  1241		kfree(vfbs);
-  1242	}
-  1243	
+		msgpoly = get_unaligned((unsigned long *)p) ^
+			  (orig_crc >> (8 * (len % sizeof(unsigned long))));
+		p += sizeof(unsigned long);
+		len -= (len % sizeof(unsigned long)) + sizeof(unsigned long);
+		asm(CRC32_INST : "+r" (crc) : "r" (msgpoly));
+	}
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	for (len /= sizeof(unsigned long); len != 0;
+	     len--, p += sizeof(unsigned long))
+		asm(CRC32_INST : "+r" (crc) : ASM_INPUT_RM (*(unsigned long *)p));
+
+	return crc;
+}
