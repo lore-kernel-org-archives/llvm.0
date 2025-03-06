@@ -1,203 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F697E9;
-	Thu,  6 Mar 2025 05:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A832E1993A3
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 05:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741237720; cv=none; b=QsXYhkl5Gj7v7CVFCYjgbQ1M1LrTahX3Y783Ca9kMgbLDJvtQj0IEbNBRkplVg4qIAS2YUunioZSLtPPqgXuVDXPIzL4otAEMtXR2Sib7mJHTnOUxR29dJVEx9ejjMhD42kEcZNU1mW+W3XuJ6UuNW3AxIXcowwnHtwTr4WDRZo=
+	t=1741238268; cv=none; b=h1Fb5gwd8Oi3ZQgiY970wnjoMgy8Mnuy4aotnB9qLHebmL/TWkLKD/5TGzqbigToAuBaLwIW6zeDLCw1aPaZAkIOuEqf4RHeg7/eLOHtEMBifC/3+nmBfMpk4vJPEGf7L7KrnYKIlnXHFPXY8cG3aB4yQsfdSQOqC4R+BDw/j08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741237720; c=relaxed/simple;
-	bh=+viV11nQBG/pa4OYx4X5/r1x+AdDiOmvsrgtAtgFNcs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krSaI0swqTnSAzLm7+ntcZ9luZeplDWb9lJTe08fo6SG3maMt3aq8c29Ot3D5YrkD60D/uI84CUc1rBAJVs1MGKCxlgVQ3+DviKnu+t3RApkQ5KVHAQD3+AqynS/E4WaK40f5y6XY0KJ6KNw0nTrmQW5qBJH2SKOqpJG76i365k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKASTT9E; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741238268; c=relaxed/simple;
+	bh=WYFWuMsvQGQ7/YrFeFoyl61Xj9FhjYRgqlpD086BI+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=K0tdjwE3xWJ/7vYUJNLPH+fkUb3MKfhoPgDsn859CjfHicDyyoRVx60W826j2UhPm6yh1sOpvUYFkFkP7DgYazARXh7Fk9HV1OFe7O3zAGfJrw4DWXcUmHpY6/APoMGEFtemFsp1sh7xIrO4WQ5+vamwC77EpwAgYgy41rtTHZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYSkMmqX; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKASTT9E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741237719; x=1772773719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+viV11nQBG/pa4OYx4X5/r1x+AdDiOmvsrgtAtgFNcs=;
-  b=XKASTT9EAdxp1XFPKhgENYlaU4XQWwa0gQW6fw95RM+7ihGGlzIqcIwx
-   kTUmF9rpfScKdATXOZnuYb3Lc7clxZo+iG/gCe8KI+Xoyr7SOvSXCQVo3
-   kDWX+vSD+ieyqLdH9y/2lhS/QSznxdCFO+8CtiDyqissFfKmU8tiErn4M
-   4WnYuArd8O/ZdUqQYyCFG2c5hOGELdNFRNIVeTtV1UTPi9/4SFeQShFRs
-   gXoyWa89W+VowEVZtvlTABiGXzhxDLjXxrfGaqJTmZU07UW8ebCLC7/mL
-   vtefeAxaFgcd0J7j00ASaZoBeSb11Zo104puNpn92kiQjdwNsHPgcaIx4
-   w==;
-X-CSE-ConnectionGUID: t7nEFGTkTnqqxMtAUD6Nhg==
-X-CSE-MsgGUID: oGYR3/euRFWvBjs16JIaYQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="53216190"
-X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
-   d="scan'208";a="53216190"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 21:08:38 -0800
-X-CSE-ConnectionGUID: 3xZfakiyQbySmXPipKosRQ==
-X-CSE-MsgGUID: oTR3TydRSpSUiPDMcps1RA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119822472"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 05 Mar 2025 21:08:34 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tq3TD-000MYs-1d;
-	Thu, 06 Mar 2025 05:08:31 +0000
-Date: Thu, 6 Mar 2025 13:08:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryan Roberts <ryan.roberts@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/11] arm64/mm: Refactor __set_ptes() and
- __ptep_get_and_clear()
-Message-ID: <202503061237.QurSXHSC-lkp@intel.com>
-References: <20250304150444.3788920-5-ryan.roberts@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYSkMmqX"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-390e88caa4dso104953f8f.1
+        for <llvm@lists.linux.dev>; Wed, 05 Mar 2025 21:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741238265; x=1741843065; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/XTve7yZUkpJ6I7Ayk3GGXKo8U7zE5G1KYgy4s9AqZw=;
+        b=JYSkMmqXyYSdBVbLl4KZZPowuFoHkzhFmAUyWTEPmViCjTVblbga6nU3m4dsylhXwk
+         AhgCbl6e1RWlQ++lsh8hWun2zu0xWkX5PQGN3o1DMoZO6GY+Cuhx0Ow5Als46xZ23uUf
+         IAtKwRyfuNBWfVfTNzmK1wDmT5f896m6bAq4hRdqohdEW9C4PkZHi04OiPVqy43/s1hf
+         +GWIA7pO6rMAKLlXMGMb9uz1qp+mP8IqcmcrYuKeQ+IBquByuhs3dIsyAz+7GlxtvJXi
+         O7zl8wFeWfZ+aCW6MOibIp75nTc/wNANyQx7Lp/Go6OL8NilKRRwZcPEXY8oP9vyg+Xw
+         1vFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741238265; x=1741843065;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/XTve7yZUkpJ6I7Ayk3GGXKo8U7zE5G1KYgy4s9AqZw=;
+        b=mNs4mKfOM5ori42RPZRSJI98G4GfaAROdwrfN5gPHtkOR1e1OCvkecz8QrtaJRkJIz
+         8SHz9+pMVP+u84G+AXQMbiNX+Yx8qZoqw3dRWdMW5XkYQ9UP0ML9nCxsFsGzlC3YuxqA
+         aNq6vpTAdLgq33ZH3Na89v/K3xuPhKFY05h6hGfrrdvG0osmDv/ymWEezzSynF2ovWBn
+         QxHkxZXM8Dq19IjVy9nbpDnKtHggpbs3eVzXxxgT9YxEDwr7fJ4IZVzbQrfAr7VmqhfW
+         R6yTZjY2oYQ2kbvjg4hYYe67E3j+k/c2iiZyaqKSv7Enp7WGB91XL8b8YVsCkAns+SNe
+         v92A==
+X-Forwarded-Encrypted: i=1; AJvYcCV/sV/S8fyNqU0oR5EZilACmfI/L0T1eTdYX0+MfNmJ7w+DZklXrwSouEKgoYAZTCEXeYBK@lists.linux.dev
+X-Gm-Message-State: AOJu0YxURybPc7DTs/tC3q+8azQf7n+QSaN0LD2/es918/W2RuWxQH1x
+	egYxidNHaFYItP2g7Aw2SkXQgsvmQb31kwNXjpj3M1wI8I6XLWOR
+X-Gm-Gg: ASbGncvRxidTI9QKYR2ssEgF+el4vFPYEgFdGWoO/RepB4h5K91zSAkLMONOXyiCgSo
+	20Sw5FWQM32n9lHNKoaYJYl8DgNVsyJjJthkr/ztzXnntc8SuGT9QvXQsDVVLTJGsLRe3aorWaO
+	vtK30jeEKTLuwuwdrbFJ6+y7nzIjmIQOB2KlElR7DYIYnw6Ul4dp78tc+oypwQ/j04TD/to9mYA
+	Cvhlqfe379Mmea8osNBBwDaB9cQhWtzDrK9fsEzOQEywz4nJm4qGBefsHeYmM7RjXk8JGbpsTjR
+	cNEZ+I80Ur8uqTDj1ybxmOp0I1Kmxj0XkgjqZHYFGwVmt6v/E/BzOrdXIGB7fCfjV8qRqw1n0ug
+	F8KYLUeo=
+X-Google-Smtp-Source: AGHT+IHpz5lBCH2fwxlrTq59pWzTqiDyJY2lKmLmc1eX8A6erOeXEL+wiJGEzur2GcgaqjZkCdZM0g==
+X-Received: by 2002:a5d:5984:0:b0:391:1f9:c59a with SMTP id ffacd0b85a97d-3911f7c4cf6mr4482893f8f.46.1741238264481;
+        Wed, 05 Mar 2025 21:17:44 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bd4352eccsm37431535e9.27.2025.03.05.21.17.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Mar 2025 21:17:43 -0800 (PST)
+Date: Thu, 6 Mar 2025 05:17:40 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel
+ <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Justin Stitt <justinstitt@google.com>,
+ linux-crypto@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/crc32: optimize tail handling for crc32c short
+ inputs
+Message-ID: <20250306051740.6f454cac@pumpkin>
+In-Reply-To: <20250306025643.GA1592@sol.localdomain>
+References: <20250304213216.108925-1-ebiggers@kernel.org>
+	<20250305142653.751d9840@pumpkin>
+	<20250305191608.GA19889@sol.localdomain>
+	<20250305220739.1cb4b61e@pumpkin>
+	<20250306025643.GA1592@sol.localdomain>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304150444.3788920-5-ryan.roberts@arm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Ryan,
+On Wed, 5 Mar 2025 18:56:43 -0800
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> On Wed, Mar 05, 2025 at 10:07:39PM +0000, David Laight wrote:
+> > On Wed, 5 Mar 2025 11:16:08 -0800
+> > Eric Biggers <ebiggers@kernel.org> wrote:
+> >   
+> > > On Wed, Mar 05, 2025 at 02:26:53PM +0000, David Laight wrote:  
+> > > > On Tue,  4 Mar 2025 13:32:16 -0800
+> > > > Eric Biggers <ebiggers@kernel.org> wrote:
+> > > >     
+> > > > > From: Eric Biggers <ebiggers@google.com>
+> > > > > 
+> > > > > For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
+> > > > > do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
+> > > > > taking advantage of wider CRC instructions.  Note that crc32c-3way.S
+> > > > > already uses this same optimization too.    
+> > > > 
+> > > > An alternative is to add extra zero bytes at the start of the buffer.
+> > > > They don't affect the crc and just need the first 8 bytes shifted left.
+> > > > 
+> > > > I think any non-zero 'crc-in' just needs to be xor'ed over the first
+> > > > 4 actual data bytes.
+> > > > (It's over 40 years since I did the maths of CRC.)  
+> > ...  
+> > > > 	David    
+> > > 
+> > > Sure, but that only works when len >= sizeof(unsigned long).  Also, the initial
+> > > CRC sometimes has to be divided between two unsigned longs.  
+> > 
+> > Yes, I was thinking that might make it a bit more tricky.
+> > I need to find some spare time :-)
+> > 
+> > I wasn't taught anything about using non-carry multiplies either.
+> > And I can't remember the relevant 'number field' stuff either.
+> > But (with no-carry maths) I think you have:
+> > 	crc(n + 1) = (crc(n) + data(n)) * poly
+> > If data(n+1) and data(n+2) are zero (handled elsewhere) you have:
+> > 	crc(n + 3) = (((crc(n) + data(n)) * poly) * poly) * poly
+> > I think that because it is a field this is the same as
+> > 	crc(n + 3) = (crc(n) + data(n)) * (poly * poly * poly)
+> > which is just a different crc polynomial.
+> > If true your '3-way' cpu doesn't have to use big blocks.  
+> 
+> Well, to extend by some constant number of bits 'n', you can carryless-multiply
+> by the polynomial x^n, pre-reduced by the CRC's generator polynomial.  That's
+> basically how all the CRC implementations using carryless multiplication work.
+> Take a look at the x86 and riscv optimized code, for example -- especially my
+> new versions in the crc-next tree at
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next.
+> 
+> But x86 does not have a scalar carryless multiplication instruction, only vector
+> (PCLMULQDQ).  It does have a scalar CRC instruction, for crc32c *specifically*,
+> and that is what the code we're discussing is taking advantage of.  Given that
+> there is overhead associated with using kernel-mode FPU (i.e. vector), it makes
+> sense to do that, at least on short messages.
+> 
+> On longer messages a PCLMULQDQ-only implementation would work well, but so does
+> interleaving the crc32c scalar instruction on multiple chunks, which is what is
+> currently wired up in the kernel via crc32c-3way.S.  And yes, the chunks for
+> that do not *have* to be long, but you still need to use pclmulqdq instructions
+> to combine them
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.14-rc5 next-20250305]
-[cannot apply to arm64/for-next/core akpm-mm/mm-everything arm-perf/for-next/perf]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+You should be able to use lookup tables to jump over the other chunks
+(so processing a block of zero bytes).
+Possibly 8 lookup tables of 16 entries each for each nibble (512 bytes).
+Not nice for the d-cache though.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-hugetlb-Cleanup-huge_pte-size-discovery-mechanisms/20250304-230647
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250304150444.3788920-5-ryan.roberts%40arm.com
-patch subject: [PATCH v3 04/11] arm64/mm: Refactor __set_ptes() and __ptep_get_and_clear()
-config: arm64-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250306/202503061237.QurSXHSC-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503061237.QurSXHSC-lkp@intel.com/reproduce)
+> (unless you do a really slow bit-at-a-time carryless
+> multiplication), and you have to enter a kernel-mode FPU section to do that.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503061237.QurSXHSC-lkp@intel.com/
+That pseudo-code is probably completely wrong.
+I suspect that since it is 'just' doing 'data % poly' it relies on the fact that
+	327 % 7 == 3 * (100 % 7) + 27
+and reduces the length by one digit.
+(Where a 'digit' could be 64 bits)
+I need to look up pclmulqdq.
+Trying to do anything with the simd instructions makes my head hurt.
 
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/arm64/include/asm/io.h:12:
-   In file included from include/linux/pgtable.h:6:
->> arch/arm64/include/asm/pgtable.h:639:7: error: duplicate case value '536870912'
-           case PUD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
-   #define PUD_SIZE        (1UL << PUD_SHIFT)
-                           ^
-   arch/arm64/include/asm/pgtable.h:636:7: note: previous case defined here
-           case PMD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopmd.h:22:20: note: expanded from macro 'PMD_SIZE'
-   #define PMD_SIZE        (1UL << PMD_SHIFT)
-                           ^
-   In file included from arch/arm64/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/arm64/include/asm/hardirq.h:17:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/arm64/include/asm/io.h:12:
-   In file included from include/linux/pgtable.h:6:
-   arch/arm64/include/asm/pgtable.h:1303:7: error: duplicate case value '536870912'
-           case PUD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
-   #define PUD_SIZE        (1UL << PUD_SHIFT)
-                           ^
-   arch/arm64/include/asm/pgtable.h:1300:7: note: previous case defined here
-           case PMD_SIZE:
-                ^
-   include/asm-generic/pgtable-nopmd.h:22:20: note: expanded from macro 'PMD_SIZE'
-   #define PMD_SIZE        (1UL << PMD_SHIFT)
-                           ^
-   2 errors generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/arm64/kernel/asm-offsets.s] Error 1 shuffle=4064171735
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=4064171735
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=4064171735
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2 shuffle=4064171735
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/536870912 +639 arch/arm64/include/asm/pgtable.h
-
-   626	
-   627	static inline void set_ptes_anysz(struct mm_struct *mm, pte_t *ptep, pte_t pte,
-   628					  unsigned int nr, unsigned long pgsize)
-   629	{
-   630		unsigned long stride = pgsize >> PAGE_SHIFT;
-   631	
-   632		switch (pgsize) {
-   633		case PAGE_SIZE:
-   634			page_table_check_ptes_set(mm, ptep, pte, nr);
-   635			break;
-   636		case PMD_SIZE:
-   637			page_table_check_pmds_set(mm, (pmd_t *)ptep, pte_pmd(pte), nr);
-   638			break;
- > 639		case PUD_SIZE:
-   640			page_table_check_puds_set(mm, (pud_t *)ptep, pte_pud(pte), nr);
-   641			break;
-   642		default:
-   643			VM_WARN_ON(1);
-   644		}
-   645	
-   646		__sync_cache_and_tags(pte, nr * stride);
-   647	
-   648		for (;;) {
-   649			__check_safe_pte_update(mm, ptep, pte);
-   650			__set_pte(ptep, pte);
-   651			if (--nr == 0)
-   652				break;
-   653			ptep++;
-   654			pte = pte_advance_pfn(pte, stride);
-   655		}
-   656	}
-   657	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	David
