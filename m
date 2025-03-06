@@ -1,122 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E871A2567;
-	Thu,  6 Mar 2025 19:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3CE2777FD
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 19:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741289692; cv=none; b=lHO2YA6AZ2fuPqQsA7Lmmsh7h/6NwhbaunvMS3NE960TH2aE7SraV+liZ0bMBiq6AranHXYL52R81vN0NEqrMZDc+5tO5k8J4rh1DD1IHq+pfyy9lNkbcwdp+fVBGu2Z3K63M4QECnq65TJNZC07/KvpORK+YqqOCNwNpUk+D5g=
+	t=1741290801; cv=none; b=QbQf7eT8QCMIEti4N0NKNslc7Y53XAImJLr/qe8KK8kqxZ+48ldXES09WOXwBrWuw3VpYQYQqtxjzpuQLE0DZn50aLXC2xU7xj2CDeWwSxola3lwBthDyHaBBEDFx9pAWo/ZqGqgdlGnc3gAekt1lVgzZ2g+v0lLQ15jqFaszew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741289692; c=relaxed/simple;
-	bh=rGTjAwzPN3h7icAYCnpUh+MwWG/3h6W2BXTv9Gg40XY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=aBgA4k2k2Y1toKB17UZ9joieKtzmfb1+YBTuhCK5bTvzTcHe0i7/jYRngTMZZtscw3HwIqoKklC3s7BhaS7vDPapzYe+BqwBLFOT+3MtFacDAtaWVDf/ZyfBeJdQ8NBII31Eb5OPiaa0d4OHjn2Jq8Ikw8fq9DuBTjiZIAP4XTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWV9wZLt; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741290801; c=relaxed/simple;
+	bh=cx3242kLQNTAoAkSzC3tOs6e4oU2qnu4p6R61+qtAIs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Z9rfHxYzQfAB14ZX82j/xp6FJ779kKFuhIGLt4uFnyjlVZvCRqo81y1p+oMTfvCfYV8Nc9NREV+2EC2eHOta21AcJcUSfMFsJKIc13ot4n71hL0NKV18f59ZtbuSM3KfqR+4n3EB6JQ6JH4n+z6vFdofXXURFM9/B3JZ6POv/+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FjNOHAnY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWV9wZLt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741289691; x=1772825691;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rGTjAwzPN3h7icAYCnpUh+MwWG/3h6W2BXTv9Gg40XY=;
-  b=dWV9wZLt20rHOBszRTeW6998tyBowZEUhQ+3kAV93smT0RhPh9o1CYUX
-   aMc2S04rATBoCVhY5eGk4rH9HLSgSvcjxc7pXyMaPqBS6zx3rmsLqZumb
-   spiDcQa/D7Gtkmtnzq5w10e7FWU+wVOQUxMugNA7tAlNw/79pMZ2soSqu
-   FwAW+8F6zLUs+nl7TCW0bPpHdqcxipzNVJvYrvddS+JCNN732ca4LAI+5
-   4cb9fY60uMcHBZWzPuyoOIXu9VmW/phZRDCynq1K3gdnu2/VHUFIdU3cn
-   BqXrA0lylzyosblWcchZlI4gPlZI+HyVrsiQHBhCdvlXzD1w4XgvUR7Sq
-   Q==;
-X-CSE-ConnectionGUID: AvG6sRM9SgGWglPjL4VpGA==
-X-CSE-MsgGUID: sGygX43MStutXkhlYpVJCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42179374"
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="42179374"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 11:34:51 -0800
-X-CSE-ConnectionGUID: dk5nOdDySbKxeQQCm6MIFw==
-X-CSE-MsgGUID: Kt6sRJWCTUiQ1VAM6ZUdqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119629615"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 06 Mar 2025 11:34:49 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqGzV-000NWW-2K;
-	Thu, 06 Mar 2025 19:34:45 +0000
-Date: Fri, 7 Mar 2025 03:34:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeson Gao <jeson.gao@unisoc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Subject: [rafael-pm:bleeding-edge 103/108] drivers/powercap/dtpm_cpu.c:83:15:
- error: call to undeclared function 'sched_cpu_util'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202503070326.9hEUez42-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FjNOHAnY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741290798;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cXb1FF28c8V5Js50wZ6YijXIbx0Z22PlWaYraL8z0vw=;
+	b=FjNOHAnY6jtq/eiyQa8EkRHGH5jOXnTCe5/EibGnQpujEz8ma1yHncZ28eZQc7qQLrQNVu
+	/hnNpMmhAG0GIc7ZAQBRqq/JSpIBSNcUtbD6gwhJTyuWzYmKRY3aFMs7sGflwn58W7ELVd
+	MHtyyigR3MiHqOj9O0p43JZ6i1Nkh6g=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-172-ZIvwpMb_Pg2sYcQK_bQdeQ-1; Thu,
+ 06 Mar 2025 14:53:07 -0500
+X-MC-Unique: ZIvwpMb_Pg2sYcQK_bQdeQ-1
+X-Mimecast-MFC-AGG-ID: ZIvwpMb_Pg2sYcQK_bQdeQ_1741290786
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B75D9195606A
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 19:53:06 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 855151956095;
+	Thu,  6 Mar 2025 19:53:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, 7f0e9ee5)
+Date: Thu, 06 Mar 2025 19:53:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <23701.125030614530701233@us-mta-172.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: yM7CD_DdFx7OrhO9SCroLXoqM4t8tkDmGsZymiD7gM4_1741290786
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jeson,
+Hi, we tested your kernel and here are the results:
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   96791086aa226b85fe090573b9e3668ac53d5364
-commit: 9144584c375e73a4fef6bde3ce399ad43e011b37 [103/108] PM: EM: Rework the depends on for CONFIG_ENERGY_MODEL
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250307/202503070326.9hEUez42-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503070326.9hEUez42-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503070326.9hEUez42-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/powercap/dtpm_cpu.c:83:15: error: call to undeclared function 'sched_cpu_util'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      83 |                 sum_util += sched_cpu_util(cpu);
-         |                             ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/sched_cpu_util +83 drivers/powercap/dtpm_cpu.c
+Kernel information:
+    Commit message: Merge tag 'vfs-6.14-rc6.fixes' of gitolite.kernel.org:p=
+ub/scm/linux/kernel/git/vfs/vfs
 
-0e8f68d7f04856 Daniel Lezcano   2020-12-08  70  
-eb82bace893169 Daniel Lezcano   2021-03-12  71  static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-eb82bace893169 Daniel Lezcano   2021-03-12  72  {
-bb4479994945e9 Dietmar Eggemann 2022-06-21  73  	unsigned long max, sum_util = 0;
-eb82bace893169 Daniel Lezcano   2021-03-12  74  	int cpu;
-eb82bace893169 Daniel Lezcano   2021-03-12  75  
-eb82bace893169 Daniel Lezcano   2021-03-12  76  	/*
-eb82bace893169 Daniel Lezcano   2021-03-12  77  	 * The capacity is the same for all CPUs belonging to
-bb4479994945e9 Dietmar Eggemann 2022-06-21  78  	 * the same perf domain.
-eb82bace893169 Daniel Lezcano   2021-03-12  79  	 */
-bb4479994945e9 Dietmar Eggemann 2022-06-21  80  	max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
-eb82bace893169 Daniel Lezcano   2021-03-12  81  
-bb4479994945e9 Dietmar Eggemann 2022-06-21  82  	for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
-bb4479994945e9 Dietmar Eggemann 2022-06-21 @83  		sum_util += sched_cpu_util(cpu);
-bb4479994945e9 Dietmar Eggemann 2022-06-21  84  
-bb4479994945e9 Dietmar Eggemann 2022-06-21  85  	return (power * ((sum_util << 10) / max)) >> 10;
-eb82bace893169 Daniel Lezcano   2021-03-12  86  }
-eb82bace893169 Daniel Lezcano   2021-03-12  87  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703583716
 
-:::::: The code at line 83 was first introduced by commit
-:::::: bb4479994945e9170534389a7762eb56149320ac sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703583716-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1703583716-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703583716-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-:::::: TO: Dietmar Eggemann <dietmar.eggemann@arm.com>
-:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
