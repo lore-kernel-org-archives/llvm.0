@@ -1,109 +1,133 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52C626E969
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 19:13:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6CC7271832;
+	Thu,  6 Mar 2025 19:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741288401; cv=none; b=QRAKCF7qJnxxtWMoCJKiSIlzW+0PyXYZ0bxBHXdUIl6AmJaEEplcP5jD5JN3CmKsY5dzXfyOZp/yezLVVptKWnk0SNL2vW0G0FrTo1ya9fHx42vbyqpVaYb3yfnE9jjAGBFNloGME/QdzAOfC7xyJEF4V8T8cEjyWfSj7fT3eqk=
+	t=1741289090; cv=none; b=tYFNTBHppuh9fUNwPtNMcBkk6N9Y5rQpDhBdhK7L7Jp1KWOOfkuMl2Mbp+gTiwjxAMTYrOuz4+B8Pz/Tc/u61nME9gP8Yk0AKZ1WKNBzI4713wT6WjuA7XjM0WMhe1+PttHK3Uc0Yf8mako7ToEU1Zud/SehzP4eo+wkfBDZiys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741288401; c=relaxed/simple;
-	bh=IT7VeuTiGU9mQ6DN4kGk97AF92HXduRun1yPcOk97rE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=nPniQ1mrVq3THhM/FSFWuLEmA7CHw+VQnOtJ2tP61fRvLKNNBdyjc0PocOdXPhzJTfYLa6+hDyBC+5JPe/RaVwoFJpr2NZy7u9/aphIEuQxDSHOqfSg+PXL1fR6u7YDwOvLDwy53TPfp+z8WwD1GWThxr0x8HJSdTqocQequ1gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yq4Hk+kH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1741289090; c=relaxed/simple;
+	bh=WyeBC2LR1l+TKo5NG9bSyuQ7j7PqsB2XVToVYsZZcXE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mG+bPTcMzaJHJcijt+iqxNsfkh2DJkbHkFSkXxqOZ0iqTP8hWYMZlPvbbjhsK5SCafJQpjnNCfQ6Lb3dLn+zcvaou4NmylotJJIrMiVTba281seDtOe050MwfMHiS8sIte6KxT38MvrmKyCbfXzrdfqyIdXVoYXrUYePXZ6Tv+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hHKgaB+4; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yq4Hk+kH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741288398;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yttlfp9THQAPIeY7tCzGCtUC3kgMzmHEKBkfp+AfzMQ=;
-	b=Yq4Hk+kHpwjdmBc5MSQqCGdcSdWFZC2yN5OWlb2Luo3W/30k7gMQQy6SvV8DfL4PD8Rm/U
-	YYa2nRfKNwWtl5XdGDjQvfJbhvmtwC5/kq1iU8Y4Z1tQ8FjwkTbEvSRjF1nAv69qdhwZ+P
-	WLM5IvIoV5X5iYykvTtKDcUxLYH98YA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-152-VJkZcuyyObW03X29gnSwJg-1; Thu,
- 06 Mar 2025 14:13:07 -0500
-X-MC-Unique: VJkZcuyyObW03X29gnSwJg-1
-X-Mimecast-MFC-AGG-ID: VJkZcuyyObW03X29gnSwJg_1741288386
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 78E9A180AF53
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 19:13:06 +0000 (UTC)
-Received: from [172.64.10.8] (unknown [10.30.34.106])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BEBD4180AF7A;
-	Thu,  6 Mar 2025 19:13:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
- upstream-mainline, 848e0763)
-Date: Thu, 06 Mar 2025 19:13:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hHKgaB+4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741289089; x=1772825089;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WyeBC2LR1l+TKo5NG9bSyuQ7j7PqsB2XVToVYsZZcXE=;
+  b=hHKgaB+4YeGvW++NIehyA9PgUpoO9b5JUsNFs30IlKQW8vR1my096Z/J
+   pwsa8kXHlEVi9NXMjsCk3t9G6FCn9e9dtlGPyoNZU9BTj2404GMIpQH9l
+   UyjidF6ovMRDT/juTZQyGDZX9VzBYU3UgmaIv6+RGdj4Tc/RumUaMx8LR
+   qZdQqyIKjwV5i/tzPJcixLzpFIq1meBn5T3095b/QszjdYXxtrhMetGKM
+   bhBCib11HwS3CeSik+X2yngMuf4OtnBEAedWOgODTFFviiprxPd3Fx45d
+   5qj1TcSlpfCnF4iOhuxYE9KFoNsud94ZqraJsSbE8aDF7zb1q3+HWgUK8
+   g==;
+X-CSE-ConnectionGUID: imCm5V5GQsO4Jk8dfrOwJA==
+X-CSE-MsgGUID: wZIYc4MTQq6r+Q1uNptGzQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="46093313"
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="46093313"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 11:24:48 -0800
+X-CSE-ConnectionGUID: aikOEpP+TI2gX2Zoa3gW0A==
+X-CSE-MsgGUID: 5UkDgjoqRUS0hgWLcYRR2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="123713053"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 06 Mar 2025 11:24:47 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqGpo-000NVa-2a;
+	Thu, 06 Mar 2025 19:24:44 +0000
+Date: Fri, 7 Mar 2025 03:23:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH net-next 1/2] net: phylink: add functions to
+ block/unblock rx clock stop
+Message-ID: <202503070329.D6SVd1ez-lkp@intel.com>
+References: <E1tpt2t-005UNB-MC@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <95979.125030614130701129@us-mta-152.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Kr2Nbd1_Fm0QDXG95f1PHwdLGpppD_R7rkAmQdPl5Pk_1741288386
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1tpt2t-005UNB-MC@rmk-PC.armlinux.org.uk>
 
-Hi, we tested your kernel and here are the results:
+Hi Russell,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-phylink-add-functions-to-block-unblock-rx-clock-stop/20250306-060346
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/E1tpt2t-005UNB-MC%40rmk-PC.armlinux.org.uk
+patch subject: [PATCH net-next 1/2] net: phylink: add functions to block/unblock rx clock stop
+config: arm-exynos_defconfig (https://download.01.org/0day-ci/archive/20250307/202503070329.D6SVd1ez-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503070329.D6SVd1ez-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503070329.D6SVd1ez-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/phylink.c:2613:40: error: expected ';' after expression
+    2613 |             pl->config->eee_rx_clk_stop_enable)
+         |                                               ^
+         |                                               ;
+>> drivers/net/phy/phylink.c:2613:40: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+   drivers/net/phy/phylink.c:2611:2: note: previous statement is here
+    2611 |         if (pl->mac_rx_clk_stop_blocked++ == 0 &&
+         |         ^
+>> drivers/net/phy/phylink.c:2613:40: error: expected expression
+    2613 |             pl->config->eee_rx_clk_stop_enable)
+         |                                               ^
+>> drivers/net/phy/phylink.c:2613:18: warning: expression result unused [-Wunused-value]
+    2613 |             pl->config->eee_rx_clk_stop_enable)
+         |             ~~~~~~~~~~  ^~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'hid-for-linus-2025030501' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/hid/hid
+vim +2613 drivers/net/phy/phylink.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703543347
+  2595	
+  2596	
+  2597	void phylink_rx_clk_stop_block(struct phylink *pl)
+  2598	{
+  2599		ASSERT_RTNL();
+  2600	
+  2601		if (pl->mac_rx_clk_stop_blocked == U8_MAX) {
+  2602			phylink_warn(pl, "%s called too many times - ignoring\n",
+  2603				     __func__);
+  2604			dump_stack();
+  2605			return;
+  2606		}
+  2607	
+  2608		/* Disable PHY receive clock stop if this is the first time this
+  2609		 * function has been called and clock-stop was previously enabled.
+  2610		 */
+  2611		if (pl->mac_rx_clk_stop_blocked++ == 0 &&
+  2612		    pl->mac_supports_eee_ops && pl->phydev)
+> 2613		    pl->config->eee_rx_clk_stop_enable)
+  2614			phy_eee_rx_clock_stop(pl->phydev, false);
+  2615	}
+  2616	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703543347-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1703543347-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703543347-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
