@@ -1,148 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D133199E88;
-	Thu,  6 Mar 2025 06:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BC6A1362;
+	Thu,  6 Mar 2025 06:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741241571; cv=none; b=RoT+c+iLrG3L6rhTu4vjivPrqp/ts9P9qgtEHXw7p/AXviAo6GuwVQv0BstuqpbDuzN5c5rVo3wGCVP8yIYJR211w7grnwZPvic3Jb7WiwYzkXX3cfsVZubb3LUQgt1GZsAgilXM5nrkWfn7Q9ZmUTgxP0XkgbfiWlEr4OG54kQ=
+	t=1741242263; cv=none; b=WmLnXOoTlWBTtiErQfh3cvEuWMh7WqPaPe/fgM13mCgPjGKtNlrMAVqfpq7sAJex/+bCPDpOJHf0X26hrHPRFszp5F8+gg7sJ0hOqTweM2n7nNN4m76SnCWNPKk6WFEr2s1/kxJEODVgQChFLWpWxG/Deve3mxr0uuCSjv9LcsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741241571; c=relaxed/simple;
-	bh=4iDBRxTwji7W2TQy4yPD5QDaGlyxwd8lWIRxM9oQpQA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=osY5NEKDDEHtYwRxFWNv7AgODqa6mTCvqGgdEzN3VCu1mvlCO4jkZScu7e8UVHSW4gbLu19UomAoJMC1Ah8NTrKGnooYuQhZ7qevyWNHK2qjqUOrvt5EJ9pJGtM4Wd1FiY9hcHbnCt+eDQyAz6EENUFgzgos8dSV7EXTueJMuCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nebOxELY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741242263; c=relaxed/simple;
+	bh=VMqR5wSuecyxCUNcfNDXFVK7cRxAQR0NMycu8BrK/ec=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QdVkjp8BeUWWSHjbJwS5gKtvGi6wfFudkooWO/7dyqVETDQJLFp3HHQmggLmfX9IX7GoQIYpxn5reh9zLF5m0TfAh56oIyA7UYBt9Sff4hBl9CXkB+rP9RCvFPSt7PRyGXG15mm7Uf9rvH2I+Do9TsrwtOSeOErr9JFPp8+/EQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ga/4fCaQ; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nebOxELY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8AEFC4CEE4;
-	Thu,  6 Mar 2025 06:12:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741241571;
-	bh=4iDBRxTwji7W2TQy4yPD5QDaGlyxwd8lWIRxM9oQpQA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nebOxELYtScjRAAYyHTl3X/sJuEPF7zfO2N7x2Dd/YHYOSh9rLuy0PrXBW1ZJY++y
-	 249KaGGqJPRm1wE4mUHwVGrZK1jDlfFSUKHe54JcX2lR5lMd3QFwUCJjBnwLxxFdCR
-	 3r5wCG4r4dcXD3fXJb72WoSDKeDND3LkS/EhKcyvMSouv5iYn81VmSdvpLPgonKw1T
-	 YPnqfQBbY4kk5wsC69DQyg1w8XbDSyu2FppTuGvoNOhCXgoqwrjINnhOFv9ZL1C/NE
-	 Ka2dOWuANApqbiRpi9LgSOOMvJe1oUri3M9JaEAdqNbh9Pkoz7QTu+qf5HnbfaHdhW
-	 bNJHOstZKNS4A==
-Date: Wed, 5 Mar 2025 22:12:47 -0800
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, David Gow <davidgow@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kbuild: clang: Support building UM with SUBARCH=i386
-Message-ID: <202503052208.8CC5A355A7@keescook>
-References: <20250303215240.work.379-kees@kernel.org>
- <05a25510-ab44-4eb1-a878-71e84c8aff0d@t-8ch.de>
- <20250304102536.GB2529736@ax162>
- <e1a1531d-6968-4ae8-a3b5-5ea0547ec4b3@t-8ch.de>
- <202503040842.1177A1F15B@keescook>
- <20250305144554.GA3574115@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ga/4fCaQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741242262; x=1772778262;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VMqR5wSuecyxCUNcfNDXFVK7cRxAQR0NMycu8BrK/ec=;
+  b=ga/4fCaQJknXxMc2BPWUgbAUiwHt0qvhCWmy75Dcs6EdEfdppMjHOzWR
+   1i4GPpJ3AeX9RhQzn+6lesP8LEmES3RNTeVPsq32+A5kIiaiMAAKuYkft
+   ubiIR3CclavDgMD4WvSGt403mfqYvobTuMY4iuJuycZUnpBAmOwybs2UY
+   fRXPqU4FDbILbd6JnPnjN2wK0swfNXkyksQrZw+AhW6W3tqkZpBWGfloo
+   ALhtEEucNDMPRF+dSBto2IfFiuO2VnctB3Hk8XxNXJVy/HyxKkXy5KD21
+   +Rh/Yv6MewdYYYtU2siM4rzT2k3ezeTjWJayf6rbwCuPgC7V0D8Oyw3Aa
+   g==;
+X-CSE-ConnectionGUID: 4hZdKbhcR2KdOHR/zu/Wgw==
+X-CSE-MsgGUID: Ni5NWubfSTSRL8J19Rnftg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="29822331"
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="29822331"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 22:24:22 -0800
+X-CSE-ConnectionGUID: I+UmkSV7Rm2zsrG2X10UkQ==
+X-CSE-MsgGUID: 1jGBBUwKRoqYxmzbwnBonA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="118728627"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 05 Mar 2025 22:24:21 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tq4eY-000Mco-1y;
+	Thu, 06 Mar 2025 06:24:18 +0000
+Date: Thu, 6 Mar 2025 14:23:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:sched/scx-dlserver-boost 7/7] ld.lld: error: undefined
+ symbol: ext_server_init
+Message-ID: <202503061435.RrUQMfco-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250305144554.GA3574115@ax162>
 
-On Wed, Mar 05, 2025 at 03:45:54PM +0100, Nathan Chancellor wrote:
-> On Tue, Mar 04, 2025 at 09:07:57AM -0800, Kees Cook wrote:
-> > On Tue, Mar 04, 2025 at 03:51:19PM +0100, Thomas Weißschuh wrote:
-> > > No, it doesn't.
-> > > 
-> > > Running tests with:
-> > > $ .kunit/linux kunit.filter_glob=overflow.DEFINE_FLEX_test kunit.enable=1 mem=1G console=tty kunit_shutdown=halt
-> > > [15:48:30] =================== overflow (1 subtest) ===================
-> > > [15:48:30] # DEFINE_FLEX_test: EXPECTATION FAILED at lib/overflow_kunit.c:1200
-> > > [15:48:30] Expected __builtin_dynamic_object_size(two_but_zero, 0) == expected_raw_size, but
-> > > [15:48:30]     __builtin_dynamic_object_size(two_but_zero, 0) == 12 (0xc)
-> > > [15:48:30]     expected_raw_size == 8 (0x8)
-> > > [15:48:30] [FAILED] DEFINE_FLEX_test
-> > > [15:48:30] # module: overflow_kunit
-> > > [15:48:30] ==================== [FAILED] overflow =====================
-> > > [15:48:30] ============================================================
-> > > [15:48:30] Testing complete. Ran 1 tests: failed: 1
-> > > [15:48:31] Elapsed time: 43.985s total, 0.001s configuring, 43.818s building, 0.133s running
-> > > 
-> > > If I force CONFIG_CC_HAS_COUNTED_BY=n then the test succeeds.
-> > > Clang 19.1.7 from the Arch Linux repos.
-> > 
-> > I wasn't seeing with Clang 20 from git:
-> > ClangBuiltLinux clang version 20.0.0git (git@github.com:llvm/llvm-project.git 72901fe19eb1e55d0ee1c380ab7a9f57d2f187c5)
-> > 
-> > But I do see the error with ToT Clang:
-> > ClangBuiltLinux clang version 21.0.0git (git@github.com:llvm/llvm-project.git eee3db5421040cfc3eae6e92ed714650a6f741fa)
-> > 
-> > Clang 17.1: (does not support counted_by)
-> > 
-> >     # DEFINE_FLEX_test: missing counted_by
-> >     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
-> >     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> > 
-> > Clang 19.1.1: (actually is _does_ support counted_by, but Linux disables it)
-> > 
-> >     # DEFINE_FLEX_test: missing counted_by
-> >     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
-> >     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> > 
-> > GCC 13.3:
-> > 
-> >     # DEFINE_FLEX_test: missing counted_by
-> >     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
-> >     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 4
-> > 
-> > Clang 21 (ToT):
-> > 
-> >     # DEFINE_FLEX_test: has counted_by
-> >     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
-> >     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
-> > 
-> > GCC 15 (ToT):
-> > 
-> >     # DEFINE_FLEX_test: has counted_by
-> >     # DEFINE_FLEX_test: sizeof(two_but_zero): 8
-> >     # DEFINE_FLEX_test: __struct_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero): 12
-> >     # DEFINE_FLEX_test: __member_size(two_but_zero->array): 0
-> > 
-> > It seems like the on-stack sizes with __bdos all agree now, regardless
-> > of the used compiler features. It is only the array size calculation
-> > that now gets masked by counted_by. (i.e. the stack size is overridden
-> > by the zero "count" for the array elements.)
-> > 
-> > I'll send a fix for the test...
-> 
-> Just for my own understanding, is this because of the adjustment that
-> Bill did to the __bdos() calculation in [1]? I think that tracks because
-> the version of LLVM 20 that you have is pretty old and does not have
-> that change. I know for a fact I tested the original change to the
-> overflow KUnit test to adjust the expected calculation result and it
-> passed but it was before that change as well. If I use a current version
-> of LLVM 20, I see the failure. If I allow LLVM 18 to use __counted_by(),
-> the test passes with it. Not that it truly matters but it does explain
-> how we got to this point.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/scx-dlserver-boost
+head:   bac6d97ec2be6650f81c945564fcb76669ef4251
+commit: bac6d97ec2be6650f81c945564fcb76669ef4251 [7/7] Add a DL server for sched_ext tasks
+config: x86_64-buildonly-randconfig-004-20250306 (https://download.01.org/0day-ci/archive/20250306/202503061435.RrUQMfco-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503061435.RrUQMfco-lkp@intel.com/reproduce)
 
-Yes, totally! This is exactly how I got there too. Great; thank you for
-summarizing! :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503061435.RrUQMfco-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: ext_server_init
+   >>> referenced by core.c:8620 (kernel/sched/core.c:8620)
+   >>>               vmlinux.o:(sched_init)
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
