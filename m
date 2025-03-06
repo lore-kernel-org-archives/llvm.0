@@ -1,109 +1,154 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F7827004F
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 20:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0A02063EB
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 21:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741292591; cv=none; b=Km2xz8WfnTr4K19xshw26LcZ4rsr7osY6uFMioOaS51fyEc9cnkT9rpok+h0faFQK/3ScLoyO4H1HpYqoteq3AaJvC4sb9cuJ7+3y8dAyll0bkgTyqrRKL41z55rp6b04ozVCq8Imxh9cglg+tTUc2qg2lXXVbjjgGJlI4GorBg=
+	t=1741296066; cv=none; b=TihCip1qHItEZTNRxqPHv6wx+ZGBBNXIG7tDhbf3l5/EKX9slvhpJJjRQp46/UUOwc0C0wb3OTOWaHNvo0x/PHSgUjlptzvBJGQMMJ6ZMX6/fujVW4Xe9JqYzbFZtBK6Se4SXNqgaSVrqXzO7b1pYSXqnyF/0J/VrSqfEZ2cSok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741292591; c=relaxed/simple;
-	bh=XOGOVM/OX0bjPszHMSpwKkFXqiNl6yu9DM8M+LcqtWg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Em95U+AB9lEg5ptMfECHJMHlEECEaRptzPS8ufVveBLipophjdCVYUlHyVTwbclqfPqoiSRG7AHidrswSNf+rqcV6XUApOoJmb7epg/QW5ZWJmsuUr8DjToWH5/kF7BkmZFrg1k6YuXIkFiCvHQ1aS1sDXVzoxEfTD6yfxA3blo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FpqvUzoL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1741296066; c=relaxed/simple;
+	bh=QwtTDEYAnNwj0jO5A7hwwJCo0R5apTOt+3h+jokZPyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H6fcA67uYL/rou8IjFUFRnx2ZEV33pwh53l6zZHFTHEqUR+B8vVArL2EmLLc0Ihv8AqMzuzurjZrW6ovCQKp3sFUMsSc4OeGZAldyTXJggNUv9ypj/vhDeVIXevnvF7JbG4HaDERv5zo09aZgKmT2Hw+OyoumBMLnpoLkD2F48I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IdcUPmwH; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FpqvUzoL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741292588;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IdcUPmwH"
+Date: Thu, 6 Mar 2025 21:20:48 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741296062;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=QlblH4xEo26gj7Vuw7r/6numn1jJypDkAFsKLj1kxDc=;
-	b=FpqvUzoLIFDiFl3MQVdMdkNbDnYEROfZ72LuWk30aiLt4dWB7fWyiyTHWbqyazlaBiP6o4
-	vvaBh4qug/lsW2Gf+4MSMpr1+ikHxsyZzl+c4ZsKwDNYPjzXgPKyjPL8oaYFc6VAntkoMp
-	Js2eGAOPXVNInsVd/lnqwx8c+YqC0wY=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-77-4fbateXkOV6bnNMjVp_nXg-1; Thu,
- 06 Mar 2025 15:23:07 -0500
-X-MC-Unique: 4fbateXkOV6bnNMjVp_nXg-1
-X-Mimecast-MFC-AGG-ID: 4fbateXkOV6bnNMjVp_nXg_1741292586
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ADE101954B32
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 20:23:06 +0000 (UTC)
-Received: from [172.64.10.8] (unknown [10.30.34.106])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3AEF11828A83;
-	Thu,  6 Mar 2025 20:23:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
- upstream-mainline, 7f0e9ee5)
-Date: Thu, 06 Mar 2025 20:23:05 -0000
-To: llvm@lists.linux.dev
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lJvaHPzJT7/lU+BeSLL68xR7OTi5kIy1KlaEzXrMnR8=;
+	b=IdcUPmwHqIZR9E0XtWbE4Ood0ckZDEBhIMJN9pQ1RPRvqJ9vkaikVt6R4REfmrV5CKak3Z
+	d6K9DcBzTHIfov1zamF+8M0YK4qS6HctAZ7eV4dt9vJbrQub1DkU1npt7k/s9zLvRLp/zW
+	tIRMiRO+jYZ+ozeKFPuHCcBlsPs/Tzg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: "Sridhar, Kanchana P" <kanchana.p.sridhar@intel.com>
+Cc: Nhat Pham <nphamcs@gmail.com>, lkp <lkp@intel.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+	"chengming.zhou@linux.dev" <chengming.zhou@linux.dev>,
+	"usamaarif642@gmail.com" <usamaarif642@gmail.com>,
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>,
+	"21cnbao@gmail.com" <21cnbao@gmail.com>,
+	"ying.huang@linux.alibaba.com" <ying.huang@linux.alibaba.com>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"clabbe@baylibre.com" <clabbe@baylibre.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"ebiggers@google.com" <ebiggers@google.com>,
+	"surenb@google.com" <surenb@google.com>,
+	"Accardi, Kristen C" <kristen.c.accardi@intel.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"Feghali, Wajdi K" <wajdi.k.feghali@intel.com>,
+	"Gopal, Vinodh" <vinodh.gopal@intel.com>
+Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
+ chaining in zswap_store() of large folios.
+Message-ID: <Z8oRsGHmt2E4diKK@google.com>
+References: <20250303084724.6490-15-kanchana.p.sridhar@intel.com>
+ <202503031847.j1iReOtf-lkp@intel.com>
+ <CAKEwX=MgV22UBNi-2dNBDgNM2DRfrngk_4gO7z9t-O0KrpdPUw@mail.gmail.com>
+ <SA3PR11MB8120445C8DBDBB9945231B66C9C92@SA3PR11MB8120.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <81066.125030615230700527@us-mta-77.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AcuAgkXSze8CoZ8zqWsj-SuIIWgSCGJShoIYKpwaKfU_1741292586
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SA3PR11MB8120445C8DBDBB9945231B66C9C92@SA3PR11MB8120.namprd11.prod.outlook.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi, we tested your kernel and here are the results:
+On Mon, Mar 03, 2025 at 09:34:04PM +0000, Sridhar, Kanchana P wrote:
+> 
+> > -----Original Message-----
+> > From: Nhat Pham <nphamcs@gmail.com>
+> > Sent: Monday, March 3, 2025 10:22 AM
+> > To: lkp <lkp@intel.com>
+> > Cc: Sridhar, Kanchana P <kanchana.p.sridhar@intel.com>; linux-
+> > kernel@vger.kernel.org; linux-mm@kvack.org; hannes@cmpxchg.org;
+> > yosry.ahmed@linux.dev; chengming.zhou@linux.dev;
+> > usamaarif642@gmail.com; ryan.roberts@arm.com; 21cnbao@gmail.com;
+> > ying.huang@linux.alibaba.com; akpm@linux-foundation.org; linux-
+> > crypto@vger.kernel.org; herbert@gondor.apana.org.au;
+> > davem@davemloft.net; clabbe@baylibre.com; ardb@kernel.org;
+> > ebiggers@google.com; surenb@google.com; Accardi, Kristen C
+> > <kristen.c.accardi@intel.com>; llvm@lists.linux.dev; oe-kbuild-
+> > all@lists.linux.dev; Feghali, Wajdi K <wajdi.k.feghali@intel.com>; Gopal,
+> > Vinodh <vinodh.gopal@intel.com>
+> > Subject: Re: [PATCH v8 14/14] mm: zswap: Compress batching with request
+> > chaining in zswap_store() of large folios.
+> > 
+> > On Mon, Mar 3, 2025 at 3:07 AM kernel test robot <lkp@intel.com> wrote:
+> > >
+> > > Hi Kanchana,
+> > >
+> > > kernel test robot noticed the following build errors:
+> > >
+> > > > 1166                          prefetchw(entries[j]);
+> > > --
+> > 
+> > Why are we doing this anyway? Does it have a notable performance
+> > difference? At the very least, leave a comment explaining why we're
+> > prefetching this (although the build error suggests that we have to
+> > remove it anyway).
+> 
+> Hi Nhat,
+> 
+> Yes, it does. The use of prefetchw reduces sys time by ~1.5% because
+> it minimizes cache-miss latency by moving the zswap entry to the cache
+> before it is written to. 
+> 
+> This is data with kernel compilation test, v8 without prefetchw and v8 as-is:
+> 
+> --------------------------------------------------------------------------------
+>  Kernel compile       v8 without               v8      v8 without              v8
+>  allmodconfig          prefetchw                        prefetchw
+>  2M folios
+>  --------------------------------------------------------------------------------
+>  zswap compressor    deflate-iaa      deflate-iaa            zstd            zstd   
+>  --------------------------------------------------------------------------------
+>  real_sec                 732.89           735.63          768.53          758.21
+>  user_sec              15,708.37        15,699.84       15,702.64       15,678.73
+>  sys_sec                4,632.58         4,563.70        5,735.06        5,635.69
+>  --------------------------------------------------------------------------------
+>  Max_Res_Set_Size_KB   1,874,672        1,867,516       1,874,684       1,872,888
+>  --------------------------------------------------------------------------------
+>  memcg_high                    0                0               0               0
+>  memcg_swap_fail               0                0               0               0
+>  zswpout             114,742,930      112,836,725      92,904,961      89,596,085
+>  zswpin               41,184,897       39,983,793      31,018,149      29,163,932
+>  pswpout                     625            1,069             558           1,059
+>  pswpin                      599            1,056             540           1,051
+>  thp_swpout                    1                2               1               2
+>  thp_swpout_fallback      10,967           10,195           6,918           6,141
+>  pgmajfault           42,588,331       41,349,069      31,931,882      30,006,422
+>  ZSWPOUT-2048kB            7,661            8,710           6,799           7,480
+>  SWPOUT-2048kB                 1                2               1               2
+>  --------------------------------------------------------------------------------
+> 
+> 
+> Sure, I will add a comment, and also "#include <linux/prefetch.h>" in zswap.c
+> that will resolve the build error. This is similar to how these files handle prefetchw:
+> mm/vmscan.c, kernel/locking/qspinlock.c, include/asm-generic/xor.h, etc.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Please also explicitly mention that the prefetch and likely/unlikely
+annotations prevent regressions with software compression like zstd, and
+generally improve the performance with the batching code by ~1.5%.
 
-
-Kernel information:
-    Commit message: Merge tag 'vfs-6.14-rc6.fixes' of gitolite.kernel.org:p=
-ub/scm/linux/kernel/git/vfs/vfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703645248
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703645248-ppc64le-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1703645248-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703645248-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> 
+> Thanks,
+> Kanchana
+> 
