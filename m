@@ -1,74 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6358F25A625;
-	Thu,  6 Mar 2025 17:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513051FF7C4
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 17:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741281671; cv=none; b=IRufXvl143T/xdvboon3fq932u0YuG5hrJz/axuxB+fozhsW0ChUpL92Ediazs3bOqUA7IPxWKowytahrzjefwdRaufIyAvBg3qihkMZ2AP32aNLW/ijS/6LjgUMPdUmn7bvkYNquK9OYf1q4bLiDbF2yLLeN5D+QjMmi2OBnTY=
+	t=1741282401; cv=none; b=V2TEBQ4+qG6ZHbGkgKzh/viKa1EZ260WHUu45xH3T0tkQ/M26Gbr8xdfeJ1A1D3U1Wo7GDIOQspToS/VgC1Hboh9yO4vwpzsx4+JRO2eXXc3UjTX/07YHeZJS9XFcHxpeNOWcfrjEBA6sEAD60wE6mPtzgd/oA5O10VrIhQ7Xo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741281671; c=relaxed/simple;
-	bh=i0ekTf1M+bd5eEWZXf6YDhkPTOgl8mRGaDK1NwV/q3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bFJOAjdtr8QvUjeibYSlIYZwSdITFjLgDPphjid7GcX7GkfBtQUk9sbZSWV4La0ZKtoqlLzx/6aqi8VcQLZkDhlkI++DRLLrTX4FK9TH7KB2+/gn94E0bJC8qqJUDhTJfd0Gh7fO2RzBR/Kgpz34ItNVrzp6xnx6zvhtbl12IFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIKQ9I4j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741282401; c=relaxed/simple;
+	bh=MUe6wbg1EYAyuaBAVtfZbXFOHBTpqqF4HEqn8ZHWq0g=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Pb7GhMUEzXxPPVlJEVml1NMc8qzp0Xbn8pjW4h2eJck+7fEkEtheeKmEVjBlXjiy92cZH+N9Kml1RAvDqtGwH44vdfsHeJ+xy9X2OuuWr4QXTROVPsiW6ZrTvz9/Mx/WtXwb1U91f6CEUmBqdC+J1Uc9RHK/vW8F98RDHFK8DDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O5BHUOI9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIKQ9I4j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E6AC4CEE0;
-	Thu,  6 Mar 2025 17:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741281670;
-	bh=i0ekTf1M+bd5eEWZXf6YDhkPTOgl8mRGaDK1NwV/q3k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YIKQ9I4jsrv0V8I3AwahPaVjd78I/dtipLm9M/X896M9bAQUHeydbF+TOTlG5wvSu
-	 J5VFQVZ7rxvWyPPuoGIcCo/nd4e/71HF1ujYVQ1jup5u5Ys7zAns910Zn2Gntt7zp4
-	 kXDCkafdKoLa9GTgEytdANH6af4Ec3XKqZ9HsFFqu+8q0gxykgxqDCgfK7R7d/F2em
-	 rGcsxFcYxiJYbgw7iusBiFgf+3IMrjsNE3KbiAh573H6Qd/AXtL8wma33E6XKYlW2K
-	 fAaPTK9Tw1osO0WF19oKUWKnfhlVfMmPig9MBDNrBpDhGPD7Y0sMh0b5jsmAfO9NZJ
-	 Bo2VWbWgEbj5Q==
-Date: Thu, 6 Mar 2025 09:21:07 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Justin Stitt <justinstitt@google.com>,
-	David Laight <david.laight.linux@gmail.com>,
-	linux-crypto@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/crc32: optimize tail handling for crc32c short inputs
-Message-ID: <20250306172107.GA1796@sol.localdomain>
-References: <20250304213216.108925-1-ebiggers@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O5BHUOI9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741282396;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PYhWvsWnrLshO+uCczO0mLVBhlq3tltTfFR27ICVXak=;
+	b=O5BHUOI9eHic0LxqZM0pLMQkUOZQhE1/q/EWP23K63YWoj2YUQpueobUPVBoS5pCpyzYGW
+	ZCO8isv7Me05cUK3fmXrrYzrjix/0LWoivrsbpMnPs8ciqknCNB8J7yXUVcFrUWR/7l8MD
+	VVJfufs7bryqbIAXIMtL1a+P6r1egZM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-169-3QkRFaKKO0qanecQuNq-oQ-1; Thu,
+ 06 Mar 2025 12:33:15 -0500
+X-MC-Unique: 3QkRFaKKO0qanecQuNq-oQ-1
+X-Mimecast-MFC-AGG-ID: 3QkRFaKKO0qanecQuNq-oQ_1741282394
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DED918001F9
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 17:33:14 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4A6201801748;
+	Thu,  6 Mar 2025 17:33:14 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, 848e0763)
+Date: Thu, 06 Mar 2025 17:33:14 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304213216.108925-1-ebiggers@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <36503.125030612331500829@us-mta-169.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: J0vJY2A1xhjevwLaf7MCC164EsJoNkI8sI27_zyr-z4_1741282394
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 04, 2025 at 01:32:16PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> For handling the 0 <= len < sizeof(unsigned long) bytes left at the end,
-> do a 4-2-1 step-down instead of a byte-at-a-time loop.  This allows
-> taking advantage of wider CRC instructions.  Note that crc32c-3way.S
-> already uses this same optimization too.
-> 
-> crc_kunit shows an improvement of about 25% for len=127.
-> 
-> Suggested-by: H. Peter Anvin <hpa@zytor.com>
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
-> 
-> This applies to
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
+Hi, we tested your kernel and here are the results:
 
-Applied to
-https://web.git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-- Eric
+
+Kernel information:
+    Commit message: Merge tag 'hid-for-linus-2025030501' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/hid/hid
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703363503
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703363503-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1703363503-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703363503-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
