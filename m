@@ -1,38 +1,38 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43BEB667;
-	Thu,  6 Mar 2025 10:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F70201034;
+	Thu,  6 Mar 2025 10:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741255714; cv=none; b=Iztbkfz2bnwl4sH0tFaGicqZV5JE1nK+oJHx38i8mDMiucD6N1zssONqYykTfr+N+kD3RD93nryRy6ML/TiBiw2oGjUbr+VD/1NE2Z/4sCLJruUs5UzSzgo7Q0wnYmXNUHMpLIOZXAsRUv7f8L9s9Wp4sJikc/j3IOCijIDZCws=
+	t=1741257478; cv=none; b=IGSeCr/QR6MsOzgAMT7eJZsbRb1KsV2I3pA3o6ErgyEcJorI1vEJT8/7zofhSMPI4/JKJlumO+nWi4+SdZ5Qg3KjrpSURwKm8xqzO8297ZZTjhtQTLZdOoHkFyqjrl/ww6DtJc+5hPP1flaFA+fZCZvpoPyXLagN3/rKjH0O74U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741255714; c=relaxed/simple;
-	bh=IxCkkAjvG+R053X4H0uqNcfJERF8MJqKIwDQ1PiJznM=;
+	s=arc-20240116; t=1741257478; c=relaxed/simple;
+	bh=7HIs4qjivpKE7vMlWjjHFOX3pC/n+eLe8Vipbfz9yv0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0oDGZvN3svXsr4gkxjh/mz/2fG4zaOTemSSN+MYERzUykjZnmDsMtJEaCE+yWoovElbW0ojw8mPFHpJOS61YsQYYn2JIpRVf8sv37DFSSchwwaIn/dvRL+oYOL6Mv9wesJpGAsnZ6p3QQ9+S+bxV/AVHxN29cga8yZAoEvU/GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lEXbRA8g; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=J9Taji2546ahgzDB8h7n/NxzwWVEYOMddAup3ZswsUd6JRlm0dYs9BNmIhATG2/aOCCGExpPtJPafSLrjwtg9m11YOfaW/8bPmU1Qq7K694jW9AjzfpmNxJVMKgpnzlzrrdKFccCdkNo+3cdYI6F22LsMbDLH+IWwzlAnMfLPH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dIPgR1Eq; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lEXbRA8g"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dIPgR1Eq"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=TscUL2Nql+qiB27iCQtG1yDloUJogcmqg4VqOIdop4I=; b=lEXbRA8gk11tv6vmt5+okwastS
-	nEx0sY13rBNl6e0cws2+ca/PxI1eESe4rNFPgUwFqcg86LECtXoOBc9eRt6WYCS5kkOGBgpX2XFFM
-	UGC+x5ifF3w8COcudGyk73YTe9KmpXGHiMNhBkpLec+gpn+JlEvs5jZlMFxsaYTeSc7uV7dPggnKl
-	0jEm6OTWC4heYlYGfbog4tNCO6RMFtZVFs4ifT0DSVF0uN8UFAcz0xob87NpvaBIsF4LWOBHdywrG
-	jW4CZ3kwuXd7jQrSF+h/XKyn6vTpDq0XETWeW5AC5E+DlHvmRDuc3Ykd1oa0YOERLXeZzEYKD3l4+
-	3JVt2VOw==;
+	bh=+rM8Fc/SdPdxcqF0tewAZd1YPOdv2scNXe9FInCG27o=; b=dIPgR1Eq8DxaRo+9sAu0Wcn2QR
+	bA052HAplreTpOFECjegrdeVirhIu+pmmZR3pEt27XUvTIqh1qjrBDN/a6gG2n+RBuIJC6iK1fmhh
+	7Bdua5/EaVxaePQZNUXW/rWH5pXR7j1oMKfOCbYm+uWyaGdmvCn5OohOZdpT3rrrOrZAS7IQEo6eu
+	sHOF1NfpBm6LxHtO40+xvrOEbHcOByeCEMgy1soWrZO5Db4cbYzSBUm85+SyQmnDjpnUpz/fensdm
+	gQO0srhDCx+ODlog83W/5uWKEgEqaERgsEs89t3QheKoIXXSOQ/f6Rl9S4A/xJBABUdVKc6jDbl/x
+	YZ+k0Bvw==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tq89V-00000007DOT-1BQQ;
-	Thu, 06 Mar 2025 10:08:29 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tq8bw-000000011Pp-3ODa;
+	Thu, 06 Mar 2025 10:37:53 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 818EE30049D; Thu,  6 Mar 2025 11:08:28 +0100 (CET)
-Date: Thu, 6 Mar 2025 11:08:28 +0100
+	id 3A04230049D; Thu,  6 Mar 2025 11:37:52 +0100 (CET)
+Date: Thu, 6 Mar 2025 11:37:52 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: "Puchert, Aaron" <aaron.puchert@sap.com>
 Cc: Marco Elver <elver@google.com>, Aaron Ballman <aaron@aaronballman.com>,
@@ -42,7 +42,7 @@ Cc: Marco Elver <elver@google.com>, Aaron Ballman <aaron@aaronballman.com>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Boqun Feng <boqun.feng@gmail.com>
 Subject: Re: Thread Safety Analysis and the Linux kernel
-Message-ID: <20250306100828.GD16878@noisy.programming.kicks-ass.net>
+Message-ID: <20250306103752.GE16878@noisy.programming.kicks-ass.net>
 References: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
  <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod.outlook.com>
 Precedence: bulk
@@ -57,90 +57,180 @@ In-Reply-To: <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod
 
 On Wed, Mar 05, 2025 at 11:54:14PM +0000, Puchert, Aaron wrote:
 
-> > Peter Zijlstra's feedback:
-> > https://lore.kernel.org/all/20250305112041.GA16878@noisy.programming.kicks-ass.net/
-> > -- much of which led to the below requests. Peter also managed to
-> > crash Clang, but that's probably unrelated to -Wthread-safety
-> > directly: https://github.com/llvm/llvm-project/issues/129873
+> > 5. Better control-flow handling. Basic understanding of conditional
+> > locking, which is explicitly ruled out in:
+> > https://clang.llvm.org/docs/ThreadSafetyAnalysis.html#conditional-locks
+> > - however, if there's some way to even get basic support, would vastly
+> > improve things for the kernel.
 > 
-> Technically a parser issue and not in the analysis itself. But to my
-> knowledge expressions in attributes were originally introduced for the
-> analysis, so in some sense it is related.
-
-Right, so that construct came about trying to work around not being able
-to reference the return value.
-
-> > 3. Ability to refer to locks in returned reference/pointer. For example:
-> >     struct foo *ret_lock_struct(void) ACQUIRE(return->somelock);
-> >     struct foo *try_ret_lock_struct(void) TRY_ACQUIRE(1,
-> > return->somelock); // locked if non-NULL
-> > I expect this also requires basic alias analysis to work so that
-> > assigning the returned pointer to a function-local variable and then
-> > later use in an unlock function works as expected.
+> The paper goes into some detail why this is tricky with the current
+> design. We don't want to explore execution paths, because that
+> obviously results in a combinatorial explosion. The Clang static
+> analyzer deals with that by limiting exploration, but that makes it
+> fuzzy and of course slow. As a warning flag we're part of the compiler
+> itself, and the recommended practice is -Werror=thread-safety, so both
+> of these are highly problematic. We want the analysis to be
+> predictable and fast.
 > 
-> We had a discussion about this, maybe I can find it later. The idea
-> was to introduce a builtin for the return value. A rough outline:
-> * Introduce the builtin to the parser, say __builtin_return_value().
-> This shouldn't be hard.
-> * Add handling to Sema: we can only accept the builtin in attributes
-> on functions. The return type is the return type of the function.
-> * In the caller we might not need alias analysis: there are no
-> variables that alias. We already produce S-expressions for some return
-> values from functions, and then handle a DeclStmt with initializer. (I
-> introduced that for some C++ patterns in
-> https://reviews.llvm.org/D129755.)
-> * In the function itself we need to substitute the return expression
-> for the builtin before checking the exit set. (I assume this restricts
-> the possible attributes to acquire-type attributes.)
+> It would be interesting to see some patterns. One "trick" that I have
+> played with is to move the conditional locking into the capability
+> itself: it is then unconditionally acquired or released, but the
+> underlying mutex is only acquired or released based on some global
+> state or member. Something like this:
 > 
-> We can also discuss this in more detail if you want to pick it up. It
-> might be quite a bit of work, but it should fit nicely into the
-> existing framework.
+> struct __attribute__((capability("mutex"))) conditional_mutex
+> {
+> 	struct mutex mu;
+> 	bool active;
+> }
+> 
+> void acquire_conditional_mutex(struct conditional_mutex* cmu)
+> 	__attribute__((acquire_capability(cmu)))
+> {
+> 	if (cmu->active)
+> 		acquire_mutex(&cmu->mu);
+> }
+> 
+> However, I realize that might be a difficult proposal for the kernel community.
 
-Yes, as far as I can follow, that should work nicely.
+Version of this that came up were:
 
-The thing I tried to work around yesterday, making clang ICE, was
-something like this function:
+static __always_inline u32
+bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
+                          const void *ctx, bpf_prog_run_fn run_prog)
+{
+        const struct bpf_prog_array_item *item;
+        const struct bpf_prog *prog;
+        struct bpf_run_ctx *old_run_ctx;
+        struct bpf_trace_run_ctx run_ctx;
+        u32 ret = 1;
 
-struct rq *__task_rq_lock(struct task_struct *p)
+        might_fault();
+        RCU_LOCKDEP_WARN(!rcu_read_lock_trace_held(), "no rcu lock held");
+
+        if (unlikely(!array))
+                return ret;
+
+        migrate_disable();
+
+        run_ctx.is_uprobe = true;
+
+        old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+        item = &array->items[0];
+        while ((prog = READ_ONCE(item->prog))) {
+                if (!prog->sleepable)
+                        rcu_read_lock();
+
+                run_ctx.bpf_cookie = item->bpf_cookie;
+                ret &= run_prog(prog, ctx);
+                item++;
+
+                if (!prog->sleepable)
+                        rcu_read_unlock();
+        }
+        bpf_reset_run_ctx(old_run_ctx);
+        migrate_enable();
+        return ret;
+}
+
+and
+
+static void ath9k_hif_usb_firmware_fail(struct hif_device_usb *hif_dev)
+{
+        struct device *dev = &hif_dev->udev->dev;
+        struct device *parent = dev->parent;
+
+        complete_all(&hif_dev->fw_done);
+
+        if (parent)
+                device_lock(parent);
+
+        device_release_driver(dev);
+
+        if (parent)
+                device_unlock(parent);
+}
+
+And I think we can expect a fair amount of resistance from maintainers
+if we're going to go around rewriting their -- perfectly fine code,
+thank you very much -- to please a static analyzer :/
+
+> > Some of these are more complex than others, and any hints how we might
+> > go about this are appreciated. I'm happy to try and implement some of
+> > them, but if you find that you already know exactly how you'd like an
+> > implementation to look like, rough drafts that we can take over and
+> > polish would be very very helpful, too!
+> > 
+> > In general, the Linux kernel has some of the most complex
+> > synchronization patterns with numerous synchronization primitives.
+> > Getting this to work for a good chunk of the more complex
+> > synchronization code in the kernel will be quite the achievement if we
+> > get there. :-)
+> 
+> Examples are always welcome!
+
+One of the more common patterns that I've talked about with Marco is
+where modification requires two locks, while access requires either
+lock.
+
+The current __guarded_by() annotation cannot express this.
+
+One possible way would be to construct a fake / 0-size capability
+structure and have each of these locks acquire it in 'shared' mode (but
+then you run into the recursion thing) and have a special annotation
+that upgrades it to exclusive.
+
+struct phoney __attribute__((capability(phoney))) { } phoney;
+
+struct task_struct {
+	raw_spinlock_t	pi_lock;
+
+	cpumask_t	cpus_allowed __guarded_by(phoney);
+};
+
+void raw_spin_pi_lock(struct task_struct *p)
+	__acquires(p->pi_lock)
+	__acquires_shared(phoney);
+
+void raw_spin_rq_lock(struct rq *rq)
+	__acquires(rq->__lock)
+	__acquires_shared(phoney);
+
+static inline void upgrade_phoney(struct task_struct *p, struct rq *rq)
 	__must_hold(p->pi_lock)
-	__acquires(_Return->__lock)
-{
-	struct rq *rq;
+	__must_hold(rq->__lock)
+	__releases_shared(phoney)
+	__releases_shared(phoney)
+	__acquires(phoney)
+{ }
 
-	lockdep_assert_held(&p->pi_lock);
+So this doesn't work because the recursion thing, but it is also just
+plain horrible to have to do.
 
-	for (;;) {
-		rq = task_rq(p);
-		raw_spin_rq_lock(rq);
-		if (likely(rq == task_rq(p) && !task_on_rq_migrating(p)))
-			return rq;
+I would much rather write something like:
 
-		raw_spin_rq_unlock(rq);
+struct task_struct {
+	raw_spinlock_t pi_lock;
 
-		while (unlikely(task_on_rq_migrating(p)))
-			cpu_relax();
-	}
+	cpumask_t	cpus_allowed __guarded_by(pi_lock, rq->__lock);
 }
 
-Except for not having that _Return / __builtin_return_value() thing, I
-tried __acquires(task_rq(p)->__lock), and task_rq() expands into a pile
-of gunk that made it go *boom*.
+And now I realize this case is doubly annoying because (rq) isn't
+something that is in lexical scope at this point :-( These are the
+locking rules though, and it is vexing not being able to express things
+like this.
 
-Users would typically look like:
 
-try_to_wake_up(p, state)
-{
-	struct rq *rq;
+I should've taken another example; same thing, simpler setup:
 
-	scoped_guard (raw_spinlock_irqsave, &p->pi_lock) {
-		if (!ttwu_state_match(p, state))
-			break;
+struct perf_event_context {
+	struct mutex		mutex;
+	raw_spinlock_t		lock;
 
-		rq = __task_rq_lock(p);
-		// go enqueue task
-		raw_spin_rq_unlock(rq);
-	}
-}
+	struct list_head	event_list __guarded_by(mutex, lock);
+	int			nr_events  __guarded_by(mutex, lock);
+};
 
-Anyway, the whole 'find-and-lock' pattern is widely used.
+This would allow me to iterate the list holding either lock, but only
+modify the list while holding both.
+
