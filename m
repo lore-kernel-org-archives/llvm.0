@@ -1,154 +1,157 @@
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3E51531F2
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 14:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFBC4C8E;
+	Thu,  6 Mar 2025 14:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741269990; cv=none; b=YuIkths+H3osRdVSYQanefZSgjJarGbq7z8oXArv5qvgfpqh635icxYlty/BaOc40bLuNVqLjBVOEv4NEtoUOLhLrr3jzuMcDTeBc2rfLvazj06dVaVVvwVXcLCKJbQ1hI3gjVY5tYtQMHbQ9kPMXYRLyzqSUmEzN7KhnFxafLQ=
+	t=1741272486; cv=none; b=HFja16a/igqo9MpJ7XT7Eo39S9i454HwSbbVVcej2JXjIm12v6XJ5G+AKXp8Af6BX+ZmQxloPJ8+zmsptsiE3XGjRKX0+YYlfVpHGvHyC3G8KFVbVCYOffwOHGl1huDdhFR2VYd5Q4VyjMBLz5xvlSswU6oxi20xVba19hJXkoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741269990; c=relaxed/simple;
-	bh=8vWkfwZ9uoFTAqFoovaPX7Bjye6a8c5yTgefFSZ3pCo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k1u/F+SefrSO9wLNMyDvcRZwhrMWQ2WclNldNn1W9g+7t9H0KskX76nifpM/oNGvHbnj1sSNclHOpg7eIjwyHvTirr1CGneDVEJIrbkH0pOpPpB8MvS1x9pV2sX7dm0ZaPhECfxqfs6S9fR2tyNuUT5MaQWviY6KqQfplFSmXU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ke8bYnwo; arc=none smtp.client-ip=209.85.222.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1741272486; c=relaxed/simple;
+	bh=bla4hIb0IkIaS1NTrqHiiXPmlh5fLuqeLRBBeaE0n+8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GbG874Tj3W2yX2MT1kLIzNfJEkh7p5QTQTldSAS43xlA6JD9WwjrsuubEUhsbkXDfyfJz0SQlDVDaKaBw2dl2MSz2RDen5O9Ddy9hwAJ7NAQJ6lO5LES+8hFuhpPP2nsLyccvwUdn7PE1j5vupg6OOnEGy+uK0Ize0q3X7el8gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BVqOOTua; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ke8bYnwo"
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-86b7185d653so265376241.0
-        for <llvm@lists.linux.dev>; Thu, 06 Mar 2025 06:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741269987; x=1741874787; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hnDdSUGNxHZHOtmoWx7c7YzOTo1FiWV3Vqxq9lxjEQc=;
-        b=Ke8bYnwot+pFPhXYN/QWtuLqVD2FgJvMENNwkCor/vDlGNBRZjNaod6/zAIDMYCJQ3
-         RozjXXiP5xFUKQM2w81a0Y1RV8zEwAcrGWfgLC8ZSQYRUwNI1h+j1G4VasV8ceZbay20
-         NlKxY0kGcQuSXAEuZdBPTfYFp93yfMNVERt4A32aPlQR+TWXsEtmKkY2HFDi45s+V7hT
-         p9tuaTYCR4sp1ipE6MAlW++3pAIvV03UrqN7Co4etmxZCagtfpTZn7wfocWdrdlUhfru
-         FGH7b1Q/s92v1XWAIE2SW5dw6iLCdtg+kdTKz7xVj2oZgwBpWQN+ncFtRTo8twpfEJzv
-         gJ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741269987; x=1741874787;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hnDdSUGNxHZHOtmoWx7c7YzOTo1FiWV3Vqxq9lxjEQc=;
-        b=B+0dmy4y8Y7HQ4XpX0TyzRvYURzsELeWVtaMu7cF4D1VAUosgPmoV8awOXyE+sgmMs
-         xK0rHYlqTfH1yXoKiVkIphwbc+dDpaUPcswzJ+g8WegXey0zlnwpOG/aFEJZwLc1hlGb
-         040rczhu/S64cmH0tGDn7Y4auEfidevUMc1A+Oi9AZ9DmFPLVCuVdg7d/T42+6DeLRq0
-         V1/gcN10fYdzq7KcB+pI9Yho6QvMFFGw6xBVKXQqiJpEZzKjJm3tmZ825N6Y2fFi30th
-         W7u45kRVHdZU4C58OvB1Ame8GDuAyxEbDhneevArRWNJxuCjvfROWFkZvsyAJFXW8bf1
-         uoKg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZdWnXMm+qWWy5biGvcFaKKhItEPrhX5jENapUO+pY4Z93675odKp3/pm/LnmnLdR6NWOr@lists.linux.dev
-X-Gm-Message-State: AOJu0YzrqwWrUK64Z57C5qPj8nRAqe3M0Bcgj8BwnZTSuVBa1HfaZ1yY
-	/IYW2/B92dr3dImFaEQjXlOlIl1leVqGq0dVAeE0m+yDLrl2/t28PKLuoi8Rdh7rzDl0u7XtJGS
-	2bt0B8zPRN06LpJBcqzcLKd8OhifQVHHU1nMl6g==
-X-Gm-Gg: ASbGncsf6saSP1jAmUPR5po9/0WoJD27mSA1/bGC0ZBp1jF9yfsWUKZyu6cGvtTIzPD
-	kd0qkgG2bFgeOxTiscTluZOVm9PYAr/n6cWuP8MrxsszdQ+sGShHSP80i1bUcPVgL8PVmXoUe8B
-	PnASWyqvjmPNSxCk9WAgCJlxl+meJtF9lQGFliLumws7iBJbAijdXoIQH+5z8=
-X-Google-Smtp-Source: AGHT+IFYYVIMAXWvuGMo7KhLWndEUFvJgOqbF7iDEk1iAt4N1mORmaJKT3kVe35xC4vstbek2/qR99nsdifAiR58JMA=
-X-Received: by 2002:a05:6122:658d:b0:520:4539:4b4c with SMTP id
- 71dfb90a1353d-523c6289f5bmr4380467e0c.9.1741269986969; Thu, 06 Mar 2025
- 06:06:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BVqOOTua"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741272484; x=1772808484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bla4hIb0IkIaS1NTrqHiiXPmlh5fLuqeLRBBeaE0n+8=;
+  b=BVqOOTuaHTG1pbTEwEKDEotWRQ8ZoSS2AOXIEMbnvW5RUMbYip346gaM
+   XM/5xTE7oSAZ73RggYV+0t5SKzQK/THHm7WM/4aOvPCnSDJDUc7w0mfPi
+   wOOL+CiKbA4rYOyM63IqrIYvXDfxO7OtzOCHTNzWzo6sBmID8NrMIpEpC
+   Q14irORzhoF0vL0H3a9IL5rAS+1SI/4cL3My3HysHg5Ug7s43NTpCveDd
+   KWsaF67PP5M9hBB70Qd8OB+lk+Dhxd20vsmUn1WAciaYUroIlh7QfaV7O
+   GqN2ttFvuWya9MpOP75gAJqEaeGJ0VGRF+rwBIEV9/s/UGFHOSZ5q/VHU
+   A==;
+X-CSE-ConnectionGUID: 2fDBtJ9sQ9CYhHKSbu7Fgg==
+X-CSE-MsgGUID: wINkz8EtTxmAZQ5AvGaC5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="59830994"
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="59830994"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 06:48:04 -0800
+X-CSE-ConnectionGUID: o4CM4XnkTwKUZWqrou7E7A==
+X-CSE-MsgGUID: gJEqCfufS6On0GZn3XiLUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="119052400"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 06 Mar 2025 06:48:00 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqCVx-000NAs-1f;
+	Thu, 06 Mar 2025 14:47:57 +0000
+Date: Thu, 6 Mar 2025 22:47:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux <s32@nxp.com>, imx@lists.linux.dev,
+	Christophe Lizzi <clizzi@redhat.com>,
+	Alberto Ruiz <aruizrui@redhat.com>,
+	Enric Balletbo <eballetb@redhat.com>,
+	Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>,
+	Bogdan Hamciuc <bogdan.hamciuc@nxp.com>,
+	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+Subject: Re: [PATCH v8 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+Message-ID: <202503062204.QeQoZBYt-lkp@intel.com>
+References: <20250228081812.3115478-3-ciprianmarian.costea@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250305174500.327985489@linuxfoundation.org>
-In-Reply-To: <20250305174500.327985489@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 6 Mar 2025 19:36:15 +0530
-X-Gm-Features: AQ5f1Jrk2nyka3XPmEIXPsBdkX75IZVBh9HDyYyhUqxg9qoZ6sVv7JRLz0R3L_c
-Message-ID: <CA+G9fYufChZpBjB_WG6Qy-L8Gmj-zBbs+PyydaADcsrB42ec0Q@mail.gmail.com>
-Subject: Re: [PATCH 6.6 000/142] 6.6.81-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
-	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Borislav Petkov <bp@alien8.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	nik.borisov@suse.com, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250228081812.3115478-3-ciprianmarian.costea@oss.nxp.com>
 
-On Wed, 5 Mar 2025 at 23:28, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.6.81 release.
-> There are 142 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 07 Mar 2025 17:44:26 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.6.81-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.6.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Ciprian,
 
-Regressions on x86_64 and i386 the defconfig builds failed with clang-20
-and gcc-13 the stable-rc v6.6.78-437-g9f243f9dd268
+kernel test robot noticed the following build errors:
 
-First seen on the v6.6.78-437-g9f243f9dd268
- Good: v6.6.78
- Bad: v6.6.78-437-g9f243f9dd268
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on arm64/for-next/core krzk-dt/for-next linus/master v6.14-rc5 next-20250306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-* x86_64 and i386, build
-  - clang-20-defconfig
-  - clang-nightly-defconfig
-  - gcc-13-defconfig
-  - gcc-8-defconfig
+url:    https://github.com/intel-lab-lkp/linux/commits/Ciprian-Costea/dt-bindings-rtc-add-schema-for-NXP-S32G2-S32G3-SoCs/20250228-162229
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250228081812.3115478-3-ciprianmarian.costea%40oss.nxp.com
+patch subject: [PATCH v8 2/4] rtc: s32g: add NXP S32G2/S32G3 SoC support
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250306/202503062204.QeQoZBYt-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503062204.QeQoZBYt-lkp@intel.com/reproduce)
 
-Regression Analysis:
- - New regression? Yes
- - Reproducibility? Yes
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503062204.QeQoZBYt-lkp@intel.com/
 
-Build regression: x86_64 i386  microcode amd.c 'equiv_id' is used uninitialized
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All errors (new ones prefixed by >>):
 
-## Build log
-arch/x86/kernel/cpu/microcode/amd.c:820:6: error: variable 'equiv_id'
-is used uninitialized whenever 'if' condition is false
-[-Werror,-Wsometimes-uninitialized]
-  820 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/rtc/rtc-s32g.c:204:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     204 |         rtcc = FIELD_PREP(RTCC_CLKSEL_MASK, priv->clk_src_idx);
+         |                ^
+   1 error generated.
 
 
-## Source
-* Kernel version: 6.6.81-rc1
-* Git tree: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-* Git sha: 9f243f9dd2684b4b27f8be0cbed639052bc9b22e
-* Git describe: v6.6.78-437-g9f243f9dd268
-* Project details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.6.y/build/v6.6.78-437-g9f243f9dd268
+vim +/FIELD_PREP +204 drivers/rtc/rtc-s32g.c
 
-## Build
-* Build log: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.6.y/build/v6.6.78-437-g9f243f9dd268/testrun/27508291/suite/build/test/clang-20-lkftconfig/log
-* Build history:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.6.y/build/v6.6.78-437-g9f243f9dd268/testrun/27508300/suite/build/test/clang-20-lkftconfig/history/
-* Build details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.6.y/build/v6.6.78-437-g9f243f9dd268/testrun/27508291/suite/build/test/clang-20-lkftconfig/
-* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2tuO7pCGJaGnX0ygcbTOaEDzr9M/
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2tuO7pCGJaGnX0ygcbTOaEDzr9M/config
+   196	
+   197	static int rtc_clk_src_setup(struct rtc_priv *priv)
+   198	{
+   199		u32 rtcc;
+   200	
+   201		if (priv->rtc_data->reserved_clk_mask & (1 << priv->clk_src_idx))
+   202			return -EOPNOTSUPP;
+   203	
+ > 204		rtcc = FIELD_PREP(RTCC_CLKSEL_MASK, priv->clk_src_idx);
+   205	
+   206		switch (priv->rtc_data->clk_div) {
+   207		case DIV512_32:
+   208			rtcc |= RTCC_DIV512EN;
+   209			rtcc |= RTCC_DIV32EN;
+   210			break;
+   211		case DIV512:
+   212			rtcc |= RTCC_DIV512EN;
+   213			break;
+   214		case DIV32:
+   215			rtcc |= RTCC_DIV32EN;
+   216			break;
+   217		case DIV1:
+   218			break;
+   219		default:
+   220			return -EINVAL;
+   221		}
+   222	
+   223		rtcc |= RTCC_APIEN | RTCC_APIIE;
+   224		/*
+   225		 * Make sure the CNTEN is 0 before we configure
+   226		 * the clock source and dividers.
+   227		 */
+   228		s32g_rtc_disable(priv);
+   229		writel(rtcc, priv->rtc_base + RTCC_OFFSET);
+   230		s32g_rtc_enable(priv);
+   231	
+   232		return 0;
+   233	}
+   234	
 
-## Steps to reproduce
-- tuxmake --runtime podman --target-arch x86_64 --toolchain clang-20
---kconfig defconfig LLVM=1 LLVM_IAS=1
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
