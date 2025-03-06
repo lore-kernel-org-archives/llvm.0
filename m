@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513051FF7C4
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 17:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD7926E624
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 18:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741282401; cv=none; b=V2TEBQ4+qG6ZHbGkgKzh/viKa1EZ260WHUu45xH3T0tkQ/M26Gbr8xdfeJ1A1D3U1Wo7GDIOQspToS/VgC1Hboh9yO4vwpzsx4+JRO2eXXc3UjTX/07YHeZJS9XFcHxpeNOWcfrjEBA6sEAD60wE6mPtzgd/oA5O10VrIhQ7Xo4=
+	t=1741286535; cv=none; b=WHZoKpZtu9mCTMoTAY4PTB15RJ7N3GzwSHJus6bQ0pQkN6OaMKifxMudS3jPSaEQ2WD0vbgMQdH+lUlbUtjTxaFeD5i2VnmmGtiIdOwneG1ZNrm4MDo9+I9exk7hrze3vKb6b/GE+A5sKlFSFnrqk/JM7B6Vy6iFbGjjdxRLaN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741282401; c=relaxed/simple;
-	bh=MUe6wbg1EYAyuaBAVtfZbXFOHBTpqqF4HEqn8ZHWq0g=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Pb7GhMUEzXxPPVlJEVml1NMc8qzp0Xbn8pjW4h2eJck+7fEkEtheeKmEVjBlXjiy92cZH+N9Kml1RAvDqtGwH44vdfsHeJ+xy9X2OuuWr4QXTROVPsiW6ZrTvz9/Mx/WtXwb1U91f6CEUmBqdC+J1Uc9RHK/vW8F98RDHFK8DDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O5BHUOI9; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1741286535; c=relaxed/simple;
+	bh=slxzqpx1jnGrK/1wrlf5xS3CfMJkf42lhyzyGkRSXKM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cHbSpZKV8jtdDvM4oA0q2WQKW8pWQ24cfgCZRV0lLJHpA3EEezfRLaJifOPAdSX6+cl/TYc0G/KCh0GKI9ALHHHT7oXk0ueUrUPrf7Q4hQm6v9rtQLCUQcRnneKKmkKLq5YT/Ldm7nsC9j9O9YKeLh0DyGoeDzhMu9tEn3qV+S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aoJUWQfp; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O5BHUOI9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aoJUWQfp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741282396;
+	s=mimecast20190719; t=1741286532;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=PYhWvsWnrLshO+uCczO0mLVBhlq3tltTfFR27ICVXak=;
-	b=O5BHUOI9eHic0LxqZM0pLMQkUOZQhE1/q/EWP23K63YWoj2YUQpueobUPVBoS5pCpyzYGW
-	ZCO8isv7Me05cUK3fmXrrYzrjix/0LWoivrsbpMnPs8ciqknCNB8J7yXUVcFrUWR/7l8MD
-	VVJfufs7bryqbIAXIMtL1a+P6r1egZM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=P7N57FBkgxDQDoGrKQfDpj2ZG9tUmGLza/EX72KVzjo=;
+	b=aoJUWQfpj6K69IAp0WQ8W6VHAVmVc13lNJBBnbby8qpiLbRhWkK3floq/AgN9u2/8i7NBU
+	C6+uahh7G/CMCgRG733bvVp8f3qMPsVipgUD7mKRnhdBL8ox/ELmE4nkXw2Mg0c2XUAuK7
+	Ik2SjqoyWX/Jg5WUHx/FEBMfm4rVXd8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-169-3QkRFaKKO0qanecQuNq-oQ-1; Thu,
- 06 Mar 2025 12:33:15 -0500
-X-MC-Unique: 3QkRFaKKO0qanecQuNq-oQ-1
-X-Mimecast-MFC-AGG-ID: 3QkRFaKKO0qanecQuNq-oQ_1741282394
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-191-MDhJxUuVMwKOReqmX_DMfg-1; Thu,
+ 06 Mar 2025 13:42:11 -0500
+X-MC-Unique: MDhJxUuVMwKOReqmX_DMfg-1
+X-Mimecast-MFC-AGG-ID: MDhJxUuVMwKOReqmX_DMfg_1741286530
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DED918001F9
-	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 17:33:14 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 34A831956060
+	for <llvm@lists.linux.dev>; Thu,  6 Mar 2025 18:42:10 +0000 (UTC)
 Received: from [172.64.10.8] (unknown [10.30.34.106])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4A6201801748;
-	Thu,  6 Mar 2025 17:33:14 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DA1BF180174E;
+	Thu,  6 Mar 2025 18:42:09 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
  upstream-mainline, 848e0763)
-Date: Thu, 06 Mar 2025 17:33:14 -0000
+Date: Thu, 06 Mar 2025 18:42:09 -0000
 To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,9 +52,9 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <36503.125030612331500829@us-mta-169.us.mimecast.lan>
+Message-Id: <92258.125030613421100391@us-mta-191.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: J0vJY2A1xhjevwLaf7MCC164EsJoNkI8sI27_zyr-z4_1741282394
+X-Mimecast-MFC-PROC-ID: 35bAveRaQzbdrvctWVsDovXKhvw4S5eXZf0Bti1TDlE_1741286530
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
@@ -71,18 +71,18 @@ Kernel information:
 l.org/pub/scm/linux/kernel/git/hid/hid
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703363503
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703487748
 
 One or more kernel builds failed:
     Unrecognized or new issues:
          ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703363503-ppc64le-kernel
+t:1703487748-ppc64le-kernel
           x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1703363503-x86_64-kernel-debug
+ds/redhat:1703487748-x86_64-kernel-debug
     We also see the following known issues which are not related to your ch=
 anges:
           x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1703363503-x86_64-kernel
+t:1703487748-x86_64-kernel
                    Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
 rror: malformed line
                           https://github.com/Rust-for-Linux/linux/issues/11=
