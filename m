@@ -1,184 +1,146 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB20205AAF;
-	Thu,  6 Mar 2025 11:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DB020B1E3;
+	Thu,  6 Mar 2025 12:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741262069; cv=none; b=McdDS5KkGtDG3xLSI2g9FUWYUW5jSAq7poS0+OveIvpimhLbCZuPHYbOuzMpsHb8riX8F2IcWdiBzjeLtJew7T++jVqjLhDm+HMmASAXvRkkte3W0eEoz8AdiIhmHFoJ215y7o1hPDhMwSpnn8uQQWSnJ4byY6cvTTevUveYtPQ=
+	t=1741262521; cv=none; b=gIvbKF1j9sI5kY/vOYaGa8e7szjiBNnKzul6vuEUk98MPeUhYocKFZWKHR8agwUvmUXaOcCxJZI9ApMboeXrM5+TExjx0m3N0XVuTj70mXdMOvrGYRIO1rqxWzLaAi9ZDVYtjsHltYS2djceGkR5cJjMxwn7CI4UqzCShOWZxH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741262069; c=relaxed/simple;
-	bh=ka/cUnlF71xhYqkWXR1kGqvQc58sAUxaN7O7aD2DSVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IfedIcVPeATpbu6eBX2EcYf0KhBlubtIqUSTrK3urm+ps7yUuxHiHfPCRL8rs2hWNmfpbj0/XhrRQtGYJDCf+3upPYm1OsaSVMXj89Es3QnrfJ1VlU0bqpGox6FVBSvEmE/LkhLzASg2Au7/92NH3xV+sjlFk2zcNwfli5i73gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 271491007;
-	Thu,  6 Mar 2025 03:54:40 -0800 (PST)
-Received: from [10.1.37.172] (XHFQ2J9959.cambridge.arm.com [10.1.37.172])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADE103F673;
-	Thu,  6 Mar 2025 03:54:24 -0800 (PST)
-Message-ID: <169f2d13-8374-48b2-8af1-db412f283e5b@arm.com>
-Date: Thu, 6 Mar 2025 11:54:23 +0000
+	s=arc-20240116; t=1741262521; c=relaxed/simple;
+	bh=6A3cTKo7KUUfKHZVFVrWahz6zcmZpbwBwIgYHz5M58k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7Gemf74Q0Gqc3oWp3w8ZKGhP5gjocRcjoo+88Vba+yQeSUlzWw2YZims0eKo/0r8wNpB7sj9tIgnNceR1srp/O2QccDdQjIsuRYhVSgXUWFBpig0KrCuzUkA9eDBANQ+S3vNvdEdaLuxOpZRrilwmvHorra1ub6QssRv9jqxVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=joMNT/6t; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="joMNT/6t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741262520; x=1772798520;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6A3cTKo7KUUfKHZVFVrWahz6zcmZpbwBwIgYHz5M58k=;
+  b=joMNT/6tT7fJ06J2T5ATVI30e3Rl/i7bCo+4B/x5uGwuIf7gn9Ylztp7
+   2CFOLh4yaFYwEbo/l6Wmr7QgmX9Ge2bjGvORHxEshiZ2pgmHtuAsfaj5Y
+   89Wg1W8I+QgSAvkq2STAuigMUhceQ46Pw25aGINw/YjeO7pf1xVUBPbLs
+   /2lup/DtcwC4isS3us+tdo/XYrE0vQKdgt3ylNclUqw8J8GIYXiqMwLnP
+   59fNi684hjdcZxTHUOY9G3q0J8FEcq5ebCNV8fU0KVctQy9Cs9+aY5ll9
+   W4ZR+X9BgjoObcEg3NAhJN84LatN4ZekGH4UQJPMjA70BO4I57gdQl3xC
+   w==;
+X-CSE-ConnectionGUID: g16JnKFTTPuq12dhMoqhsA==
+X-CSE-MsgGUID: 1ZpRzmw/RaODIzZAnZaEow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="46037147"
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="46037147"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 04:01:59 -0800
+X-CSE-ConnectionGUID: yABDaJhISi6yvIheQYBCDw==
+X-CSE-MsgGUID: B1WXS+kLSvG1e+W49kQgEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="149785313"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 06 Mar 2025 04:01:58 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tq9vH-000N1M-1N;
+	Thu, 06 Mar 2025 12:01:55 +0000
+Date: Thu, 6 Mar 2025 20:01:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Melody Olvera <quic_molvera@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 6/9] phy: qcom: Add M31 based eUSB2 PHY driver
+Message-ID: <202503061951.9eCEo3hd-lkp@intel.com>
+References: <20250304-sm8750_usb_master-v2-6-a698a2e68e06@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/11] arm64/mm: Refactor __set_ptes() and
- __ptep_get_and_clear()
-Content-Language: en-GB
-To: kernel test robot <lkp@intel.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- David Hildenbrand <david@redhat.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Anshuman Khandual <anshuman.khandual@arm.com>,
- Alexandre Ghiti <alexghiti@rivosinc.com>,
- Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250304150444.3788920-5-ryan.roberts@arm.com>
- <202503061237.QurSXHSC-lkp@intel.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <202503061237.QurSXHSC-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304-sm8750_usb_master-v2-6-a698a2e68e06@quicinc.com>
 
-On 06/03/2025 05:08, kernel test robot wrote:
-> Hi Ryan,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v6.14-rc5 next-20250305]
-> [cannot apply to arm64/for-next/core akpm-mm/mm-everything arm-perf/for-next/perf]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/arm64-hugetlb-Cleanup-huge_pte-size-discovery-mechanisms/20250304-230647
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20250304150444.3788920-5-ryan.roberts%40arm.com
-> patch subject: [PATCH v3 04/11] arm64/mm: Refactor __set_ptes() and __ptep_get_and_clear()
-> config: arm64-randconfig-001-20250305 (https://download.01.org/0day-ci/archive/20250306/202503061237.QurSXHSC-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503061237.QurSXHSC-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503061237.QurSXHSC-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/arm64/kernel/asm-offsets.c:12:
->    In file included from include/linux/ftrace.h:10:
->    In file included from include/linux/trace_recursion.h:5:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/arm64/include/asm/hardirq.h:17:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/arm64/include/asm/io.h:12:
->    In file included from include/linux/pgtable.h:6:
->>> arch/arm64/include/asm/pgtable.h:639:7: error: duplicate case value '536870912'
->            case PUD_SIZE:
->                 ^
->    include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
->    #define PUD_SIZE        (1UL << PUD_SHIFT)
->                            ^
->    arch/arm64/include/asm/pgtable.h:636:7: note: previous case defined here
->            case PMD_SIZE:
->                 ^
->    include/asm-generic/pgtable-nopmd.h:22:20: note: expanded from macro 'PMD_SIZE'
->    #define PMD_SIZE        (1UL << PMD_SHIFT)
->                            ^
->    In file included from arch/arm64/kernel/asm-offsets.c:12:
->    In file included from include/linux/ftrace.h:10:
->    In file included from include/linux/trace_recursion.h:5:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from arch/arm64/include/asm/hardirq.h:17:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/arm64/include/asm/io.h:12:
->    In file included from include/linux/pgtable.h:6:
->    arch/arm64/include/asm/pgtable.h:1303:7: error: duplicate case value '536870912'
->            case PUD_SIZE:
->                 ^
->    include/asm-generic/pgtable-nopud.h:20:20: note: expanded from macro 'PUD_SIZE'
->    #define PUD_SIZE        (1UL << PUD_SHIFT)
->                            ^
->    arch/arm64/include/asm/pgtable.h:1300:7: note: previous case defined here
->            case PMD_SIZE:
->                 ^
->    include/asm-generic/pgtable-nopmd.h:22:20: note: expanded from macro 'PMD_SIZE'
->    #define PMD_SIZE        (1UL << PMD_SHIFT)
->                            ^
->    2 errors generated.
->    make[3]: *** [scripts/Makefile.build:102: arch/arm64/kernel/asm-offsets.s] Error 1 shuffle=4064171735
->    make[3]: Target 'prepare' not remade because of errors.
->    make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=4064171735
->    make[2]: Target 'prepare' not remade because of errors.
->    make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=4064171735
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:251: __sub-make] Error 2 shuffle=4064171735
->    make: Target 'prepare' not remade because of errors.
-> 
-> 
-> vim +/536870912 +639 arch/arm64/include/asm/pgtable.h
-> 
->    626	
->    627	static inline void set_ptes_anysz(struct mm_struct *mm, pte_t *ptep, pte_t pte,
->    628					  unsigned int nr, unsigned long pgsize)
->    629	{
->    630		unsigned long stride = pgsize >> PAGE_SHIFT;
->    631	
->    632		switch (pgsize) {
->    633		case PAGE_SIZE:
->    634			page_table_check_ptes_set(mm, ptep, pte, nr);
->    635			break;
->    636		case PMD_SIZE:
->    637			page_table_check_pmds_set(mm, (pmd_t *)ptep, pte_pmd(pte), nr);
->    638			break;
->  > 639		case PUD_SIZE:
->    640			page_table_check_puds_set(mm, (pud_t *)ptep, pte_pud(pte), nr);
->    641			break;
+Hi Melody,
 
-Looks like this needs to be wrapped in `#ifndef __PAGETABLE_PMD_FOLDED`. This
-failing config folds the PMD so PMD_SIZE and PUD_SIZE are the same.
+kernel test robot noticed the following build errors:
 
-Given there are now 2 kernel robot reports, I'll respin the series next week,
-giving time for any interim review comments.
+[auto build test ERROR on 20d5c66e1810e6e8805ec0d01373afb2dba9f51a]
 
-Thanks,
-Ryan
+url:    https://github.com/intel-lab-lkp/linux/commits/Melody-Olvera/dt-bindings-phy-qcom-sc8280xp-qmp-usb43dp-phy-Add-SM8750-to-QMP-PHY/20250305-060056
+base:   20d5c66e1810e6e8805ec0d01373afb2dba9f51a
+patch link:    https://lore.kernel.org/r/20250304-sm8750_usb_master-v2-6-a698a2e68e06%40quicinc.com
+patch subject: [PATCH v2 6/9] phy: qcom: Add M31 based eUSB2 PHY driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250306/202503061951.9eCEo3hd-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503061951.9eCEo3hd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503061951.9eCEo3hd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/phy/qualcomm/phy-qcom-m31-eusb2.c:180:10: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     180 |                                      FIELD_PREP(FSEL, data->fsel));
+         |                                      ^
+   1 error generated.
 
 
->    642		default:
->    643			VM_WARN_ON(1);
->    644		}
->    645	
->    646		__sync_cache_and_tags(pte, nr * stride);
->    647	
->    648		for (;;) {
->    649			__check_safe_pte_update(mm, ptep, pte);
->    650			__set_pte(ptep, pte);
->    651			if (--nr == 0)
->    652				break;
->    653			ptep++;
->    654			pte = pte_advance_pfn(pte, stride);
->    655		}
->    656	}
->    657	
-> 
+vim +/FIELD_PREP +180 drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
 
+   147	
+   148	static int m31eusb2_phy_init(struct phy *uphy)
+   149	{
+   150		struct m31eusb2_phy *phy = phy_get_drvdata(uphy);
+   151		const struct m31_eusb2_priv_data *data = phy->data;
+   152		int ret;
+   153	
+   154		ret = regulator_bulk_enable(ARRAY_SIZE(phy->vregs), phy->vregs);
+   155		if (ret) {
+   156			dev_err(&uphy->dev, "failed to enable regulator, %d\n", ret);
+   157			return ret;
+   158		}
+   159	
+   160		ret = phy_init(phy->repeater);
+   161		if (ret) {
+   162			dev_err(&uphy->dev, "repeater init failed. %d\n", ret);
+   163			goto disable_vreg;
+   164		}
+   165	
+   166		ret = clk_prepare_enable(phy->clk);
+   167		if (ret) {
+   168			dev_err(&uphy->dev, "failed to enable cfg ahb clock, %d\n", ret);
+   169			goto disable_repeater;
+   170		}
+   171	
+   172		/* Perform phy reset */
+   173		reset_control_assert(phy->reset);
+   174		udelay(5);
+   175		reset_control_deassert(phy->reset);
+   176	
+   177		m31eusb2_phy_write_sequence(phy, data->setup_seq, data->setup_seq_nregs);
+   178		msm_m31_eusb2_write_readback(phy->base,
+   179					     USB_PHY_HS_PHY_CTRL_COMMON0, FSEL,
+ > 180					     FIELD_PREP(FSEL, data->fsel));
+   181		m31eusb2_phy_write_sequence(phy, data->override_seq, data->override_seq_nregs);
+   182		m31eusb2_phy_write_sequence(phy, data->reset_seq, data->reset_seq_nregs);
+   183	
+   184		return 0;
+   185	
+   186	disable_repeater:
+   187		phy_exit(phy->repeater);
+   188	disable_vreg:
+   189		regulator_bulk_disable(ARRAY_SIZE(phy->vregs), phy->vregs);
+   190	
+   191		return 0;
+   192	}
+   193	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
