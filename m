@@ -1,115 +1,132 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D11F1A5BBB
-	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 12:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424CE192D7C;
+	Fri,  7 Mar 2025 12:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741348895; cv=none; b=IX0xqoyvjuhIZIZy1vNZgaNAfJ5TjKho9TKaFk2XIQ3xaEKGHJjfKzx7UQ4CNYsFuu+JP1PjwKGgSFaE8xLbRoVqfTWLs5+BpP6adP/QAbTu7m971XQ46JbJy30/FzFV8NI3q0L/IaX6F4YZDlUBGAoeEIjNi/UFN/krHTWprNc=
+	t=1741349209; cv=none; b=oCJAvP9SCGXZm2acmg96YQozeiQ5/yFKPocG9TkFT5afIG2cTNCejL0oO9dG1fTvtk93r7iVpnDmLNwcPy2e98LpPBMuRpdNpkTeA7bvIYDsNOOhLANcW8aAX/BLLvqIPbaz2Fk3gDYR8m51r6IM2xruW2CaLiSOM+SH9ADP7Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741348895; c=relaxed/simple;
-	bh=mmMr+xhjZvHBRBTTuxp8euc/tIBSneTQLPzMkDqRAak=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CgvMabb1RWN9p/C/70SCrZKW55tEXWTBSWcXvC3/ZbWZBHlaUvIGICMVMA2yAlSF7UfjOciHlYUuBuroialHsUzeqz19iSGYj1mtas57z2PY4nYkAK7k/RLzMxu0MhC07v1ckNna+aT5Bx7e8cxBVrWLWEhl3FX7bKRE7YpXigQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hftTNyTk; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1741349209; c=relaxed/simple;
+	bh=R+Iwzp9qpg8PA6mDWBxkIegdVy0O7yqrJ2qo9DFLk14=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=V2aYPCrAHytpjoc/eNzsJLmUBFL9uJqf64WHVGbz8PWABGydKjra8wEt0Spvofwcu5T3u+Qu7F7yxGg3SGOtTjbkEO5wFb2c5E+nYv3rne2hgczJjjSbKmbSoUZMV1G5aS0RTw+24jqU2aKAr1fUcTCCOI+Wp+v8j8qLSIg4iYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCjSDCKJ; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hftTNyTk"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ff6e91cff5so2316146a91.2
-        for <llvm@lists.linux.dev>; Fri, 07 Mar 2025 04:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741348893; x=1741953693; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mmMr+xhjZvHBRBTTuxp8euc/tIBSneTQLPzMkDqRAak=;
-        b=hftTNyTk5NpG2fLX3XZS6qregTpD41eXjKzo0AwHpCI0+lF91WTidX6wuNJshWuQwa
-         wFok0c7TISsi6R1LFMAkXJQwxvyvLFa3+CXLyszh9b83JxUFxo3Eb7yxi6z1h9SCrFkn
-         S7u2nbE+ePjSqi4LGQSK+7VXdCH8hrUCp3JJYbQzKypdJtJdARZotJAisVHRsgKfAC0O
-         a0dCmmtj8WobLOLjINwx/eHv6vYm5OvnRcmo10pOhmt+zGEoR1bXiw2L3yZ+Kng8ipFI
-         BO2KkRGK73QIzl9mb/+hCROb4rFyF38ApkrDBrrH9thVPmmC4WaBexTWkuv7+VUSyYTJ
-         Rbow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741348893; x=1741953693;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mmMr+xhjZvHBRBTTuxp8euc/tIBSneTQLPzMkDqRAak=;
-        b=Duob8FUJjoZOh5hedhz1azQYBTdjZYkE7vvDT+jXGKEMa4ojNN2EmVn5jkIB+thkp8
-         WhL3GP2cQFdpbuJIRO6qdqIJMZA0XEdFer01ZHXTCp1IgSBikrnALw2tHgFm6lbWmjom
-         niXUm+fEIEEGfn3a6N/Rl2Nz7J6TcCKMZKdC7Im/fVBtTSf6dIcckAr5JsbtR+DPYmTV
-         Al8wcHVatPZmvgnQ8rOFyZtaWwwjISyYdeHIB9SSSqmfV+PdaDUDtslqhEt1RtQmDe0R
-         3jrjxrWqi3C95EKuvtDsBR76qcKFxa8BvwmI7aNok9+9fiOxfgSDo0IH5c7fG6wIndlM
-         qI6A==
-X-Forwarded-Encrypted: i=1; AJvYcCULHtLDbcAG0c/Rasc3p37vp4yzC0h+q+oJWyCXCb1dSar9ojXCEilaL8gZhZA5wlLYmyum@lists.linux.dev
-X-Gm-Message-State: AOJu0YxGrurFgokPPcuXYiA0/eX7mvp5qmb4Y3WXT0b4+ws6rXccbJa4
-	kxEM6jdaqYwAe0gBXKv/TbeHqL/4nhlwWmV1q+I7TM63uqdag5Bg/al4/S53uL3iX4ffyurVoDE
-	12GevOjT2enSf9I9AcCETDEiEczZ2zwsQVdZh
-X-Gm-Gg: ASbGncur4r9kuVOkHG+u93h0NidU8z73rRmh09czq00/3t1KWu5PcZfrlegJRfbW/No
-	G/q1d+RtCSQ1LsJZogHRc0OmyPndZWAe99tdVYHT5qd0H5MZTVREHe0pnxALAkmq1qF//WsAZzn
-	N1Viqxdot64I9DXZzrZycLdstyUSjoE/qJgR32DmWhtgoR5zNwRxhsYbUXeA==
-X-Google-Smtp-Source: AGHT+IG9txxHucbW7sBnaoj04WCgd7gUefScwrXCqKnpH0wyhljY/819jbVPLV0H6lYWd/VVNBK+Sg7rG1HVQGtuo1M=
-X-Received: by 2002:a17:90b:2d82:b0:2ee:c2b5:97a0 with SMTP id
- 98e67ed59e1d1-2ff7cf0a651mr4971747a91.25.1741348893179; Fri, 07 Mar 2025
- 04:01:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCjSDCKJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741349206; x=1772885206;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R+Iwzp9qpg8PA6mDWBxkIegdVy0O7yqrJ2qo9DFLk14=;
+  b=PCjSDCKJ3cpuZe25FPx0HmDZIJQIqTkSfoe/rCStagmcgHy74QR6NxxL
+   kOjXO04Jv8He5MH6qh5aVdH2/FL5Op1Xvns+yABJgzMC4Gc+eVh3OxAvR
+   CmHm1LEvwdr+qrrfhmPnLvYAAMisWzKmJCQKkH5SCbCu4VMpbi9lOJJfu
+   pyhZkrgjdq9NnWCerKih2B9QRIvEq9dZzMiDlPp7pXvfgnOvZELhgoUIq
+   NultlKBOAGIo0cG9okUdVtneVWTKfBj6E2niY26wLHSO3xd9/m9TIOBcY
+   5kuK02hiJyyJZnXqjUtAErwsMQL1yJMTFlDMAHz6fpDfr2K87GiBCWY/9
+   A==;
+X-CSE-ConnectionGUID: yeGi9iccRg+AOCqleNi0FA==
+X-CSE-MsgGUID: dQ5qrGcZSTWMQxs8u5jDHw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42250758"
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="42250758"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:06:46 -0800
+X-CSE-ConnectionGUID: COAx3TavSom7TNW/ldO0Bw==
+X-CSE-MsgGUID: 9E1YBsozQ0u5XqqOLZoizw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
+   d="scan'208";a="119476457"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 07 Mar 2025 04:06:46 -0800
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqWTS-0000Qw-0n;
+	Fri, 07 Mar 2025 12:06:42 +0000
+Date: Fri, 7 Mar 2025 20:06:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:b4/arm-generic-entry-v6.14-rc1-cleanup-patch 33/33]
+ arch/arm/kernel/entry-common.S:200:2: error: invalid instruction, any one of
+ the following would fix this:
+Message-ID: <202503072001.bAYqc08h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
- <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod.outlook.com>
-In-Reply-To: <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod.outlook.com>
-From: Marco Elver <elver@google.com>
-Date: Fri, 7 Mar 2025 13:00:00 +0100
-X-Gm-Features: AQ5f1Jqdj8YjIPI5H5CFES_Tox6dmBl4VFy_4M-5upNJxAZPnVJrcUpdN6hDcqo
-Message-ID: <CANpmjNPGQ4_dHEDBxpg3R5325iztuKuo5FLnrpmpzvB+PwdmVQ@mail.gmail.com>
-Subject: Re: Thread Safety Analysis and the Linux kernel
-To: "Puchert, Aaron" <aaron.puchert@sap.com>
-Cc: Aaron Ballman <aaron@aaronballman.com>, 
-	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Bart Van Assche <bvanassche@acm.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Ilya Biryukov <ibiryukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 6 Mar 2025 at 01:09, Puchert, Aaron <aaron.puchert@sap.com> wrote:
-> From: Marco Elver <elver@google.com>
-> > Hi Aaron ^ 2,
-> >
-> > [+Cc a bunch of folks that were involved in discussions.]
-> >
-> > After sending v2 of the -Wthread-safety / Capability Analysis patches
-> > for the Linux kernel [1], a number of concrete improvements to
-> > -Wthread-safety will be required sooner or later. It is unclear if
-> > they are blockers to the Linux kernel's adoption because the feature
-> > is currently designed as "opt-in per subsystem", but it's clear the
-> > current state of things is not ideal.
-> >
-> > [1] https://lore.kernel.org/all/20250304092417.2873893-1-elver@google.c=
-om/
->
-> First of all, in addition to the documentation at https://clang.llvm.org/=
-docs/ThreadSafetyAnalysis.html that you're already aware of, I can also rec=
-ommend the paper by some of the original authors at https://static.googleus=
-ercontent.com/media/research.google.com/en/us/pubs/archive/42958.pdf.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/arm-generic-entry-v6.14-rc1-cleanup-patch
+head:   231c6ca98693dab095d461ce8d7bfdbf73b0f7e0
+commit: 231c6ca98693dab095d461ce8d7bfdbf73b0f7e0 [33/33] ARM: entry: Straighten syscall returns
+config: arm-randconfig-003-20250307 (https://download.01.org/0day-ci/archive/20250307/202503072001.bAYqc08h-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503072001.bAYqc08h-lkp@intel.com/reproduce)
 
-Thanks for your detailed responses!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503072001.bAYqc08h-lkp@intel.com/
 
-Besides the discussion in concurrent mail threads (pun intended), I
-just wanted to also mention the issue of who/when/how: after all is
-said and done, and we have narrowed down what is missing, the question
-is who can help implement things on the Clang side?
+All errors (new ones prefixed by >>):
 
-I will offer what I've done so far: try to dig in and see how far I
-get (like for -Wthread-safety-pointer), but it's going to be ~months
-this way. Someone more familiar with the Clang frontend and
-Wthread-safety might fare better.
+>> arch/arm/kernel/entry-common.S:200:2: error: invalid instruction, any one of the following would fix this:
+    b 9002
+    ^
+   arch/arm/kernel/entry-common.S:200:4: note: invalid operand for instruction
+    b 9002
+      ^
+   arch/arm/kernel/entry-common.S:200:2: note: instruction requires: thumb
+    b 9002
+    ^
 
-Any additional help and guidance will be much appreciated.
 
-Thanks,
--- Marco
+vim +200 arch/arm/kernel/entry-common.S
+
+   166	
+   167		/* saved_psr and saved_pc are now dead */
+   168	
+   169		uaccess_disable tbl
+   170		get_thread_info tsk
+   171		/* Save a per-task copy of SP for sigreturn */
+   172		str	sp, [tsk, #TI_SP_SYSCALL]
+   173	
+   174		adr	tbl, sys_call_table		@ load syscall table pointer
+   175	
+   176	#if defined(CONFIG_OABI_COMPAT)
+   177		/*
+   178		 * If the swi argument is zero, this is an EABI call and we do nothing.
+   179		 *
+   180		 * If this is an old ABI call, get the syscall number into scno and
+   181		 * get the old ABI syscall table address.
+   182		 */
+   183		bics	r10, r10, #0xff000000
+   184		strne	r10, [tsk, #TI_ABI_SYSCALL]
+   185		streq	scno, [tsk, #TI_ABI_SYSCALL]
+   186		eorne	scno, r10, #__NR_OABI_SYSCALL_BASE
+   187		ldrne	tbl, =sys_oabi_call_table
+   188	#elif !defined(CONFIG_AEABI)
+   189		bic	scno, scno, #0xff000000		@ mask off SWI op-code
+   190		str	scno, [tsk, #TI_ABI_SYSCALL]
+   191		eor	scno, scno, #__NR_SYSCALL_BASE	@ check OS number
+   192	#else
+   193		str	scno, [tsk, #TI_ABI_SYSCALL]
+   194	#endif
+   195		mov	r1, sp				@ put regs into r1
+   196		stmdb	sp!, {r4, r5}			@ push fifth and sixth args
+   197		mov	r0, tbl
+   198		mov	r2, scno			@ syscall number from r7
+   199		bl	invoke_syscall
+ > 200		b	9002
+   201	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
