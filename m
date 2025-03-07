@@ -1,179 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6910E18E750;
-	Fri,  7 Mar 2025 04:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575DFC2E0
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 04:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741321347; cv=none; b=i+qlIgw3rj3oq4a8wih50kKaIGVp4EpBMvTO9TWJLPKNs18ibXHxLtAC9ChmEUzeEjVMLburvWe3/vPRVLKVCusE68t1ns2haemT2UxWuGi1QW77H6DowdRX0sq87e5BVitXtIBB7xONoP37YkdJEECP46UPewN4Fr3dsvVdmxo=
+	t=1741321999; cv=none; b=S/Qr/bUL5gPnCorMUNgwhdQCuSOzQriTwxYqNCsWNiiwXEFI+O5N7Cy6G3xP0tRZpNJWn5XZBboyTgsXQeuA3gyjLBFjy7wc6VFJBlgAwXvLtHh3Hx5ZAsQDO/wOFtVH9SU2d/w23UGe5auAZ8Pyr8ziIIqrtZJYh6dxTp2ezBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741321347; c=relaxed/simple;
-	bh=mGsnUFU14gRE5OTvGZgN8fDv0j0aTIyMRktWQWR9oe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HAj805nsnd1m34ehRxqkVgTwPHHXtmLmBXvCYo7zCWaN3zZ6zH23qLoGZCdseeVnI/+XBhsnybB40tWE1K1rISjACaaJQJvP+h35R4zNNZqEPKZY5rHCZXrXixCzRqaaiW/rUd/ILx54lEPwe2KxoghzeQaVeRiEPo2OpBTLHLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mUD2x2CF; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741321999; c=relaxed/simple;
+	bh=SClZM9KnNR7w7ZupWqnA6CQDfjGw/VuseUImIO/TT5c=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=q0vWjjDzGK5YwBq8WdknFCBNYdFqZ4U3lKi5RKAnIn4CjXogyCiN6dwgoRvaFKeOqpWQ078uZ0LvjH8KrSNZ6t2sLTaf6zgHhVI8t8WxfOhT4UV7ZjptBqEjB5pAKNmrW1FTUglVS0fiiIcy42pTPvhSlLEb/oZmq8NnajQezQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bpgnxdr/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mUD2x2CF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741321344; x=1772857344;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mGsnUFU14gRE5OTvGZgN8fDv0j0aTIyMRktWQWR9oe4=;
-  b=mUD2x2CFYOWA94XHoyXY8OY+PQ2SW2kSStF6oBJFy2mruLDHKfhxfXZq
-   LDpg3QRryKYcY4oNX6vaylJbjSvIPIYon+L0Gy91YRNcmxl4os6HQkAge
-   /TfPB+JYz90xxNfsh5KQDO7kBWAiob9DR3i7AEEnBK/oMSqn1mAw0L9CU
-   BQfRDqpD7DWWtwbgiMxSERL93T/befLmm/dzQ7IBHvrG5lCD9pxZ9ZBU/
-   QeH3KL2nXkGoQQLMC02Nu3phb1Gm5IZ7MbYj/lB+XXt4VSjDGq1A11seJ
-   MjEMfThzTaj6FtFgHgfV1FzLdVW19QRlW3CJFYCwHgqJspg7OF57YkFt/
-   A==;
-X-CSE-ConnectionGUID: 0h+hQ0RUQWCHGEzP/V+cOA==
-X-CSE-MsgGUID: 6c2gU46uQyepf9NAmJbYLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67737584"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="67737584"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 20:22:24 -0800
-X-CSE-ConnectionGUID: zrRamg93SeuRWoipnKOWPA==
-X-CSE-MsgGUID: x3YwzdfsSa+lzOU0WSkzZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="119397843"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 06 Mar 2025 20:22:22 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqPE4-000ONm-13;
-	Fri, 07 Mar 2025 04:22:20 +0000
-Date: Fri, 7 Mar 2025 12:22:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herbert Xu <herbert@gondor.apana.org.au>,
-	Eric Biggers <ebiggers@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: Re: [v3 PATCH] crypto: scatterwalk - Add memcpy_sglist
-Message-ID: <202503071218.9J2sUblV-lkp@intel.com>
-References: <Z8kXhLb681E_FLzs@gondor.apana.org.au>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bpgnxdr/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741321994;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=en/KvRrpLbgr0DZnpjkdcMrCYbE4YQWHK0kmLpXX1cI=;
+	b=bpgnxdr/glXor/UgsLnoOv1aX9JWWRGuEGgl/CrqLQhs5nEcN0gzMPCAfuRzR/4iAK2UlV
+	G8C0PlCvuh/nCmU+38FUI8DG7m2IJWAXJcj4CaH56qg5o4eB4NNfzXL1KHLH+82vY9pdWt
+	Fp5t07tXZQSq9N2wE3jKUkSBF6OLKgI=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-202-MIEogqpDO_mjPHxvmPD0lQ-1; Thu,
+ 06 Mar 2025 23:33:09 -0500
+X-MC-Unique: MIEogqpDO_mjPHxvmPD0lQ-1
+X-Mimecast-MFC-AGG-ID: MIEogqpDO_mjPHxvmPD0lQ_1741321988
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3806F19560BB
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 04:33:08 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D3F0418001E9;
+	Fri,  7 Mar 2025 04:33:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, 28f587ad)
+Date: Fri, 07 Mar 2025 04:33:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z8kXhLb681E_FLzs@gondor.apana.org.au>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <32915.125030623330900373@us-mta-202.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: izywbTpKHp3n97EVRydp0uszjn083wit1J--qX70BPo_1741321988
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Herbert,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on herbert-cryptodev-2.6/master]
-[also build test ERROR on next-20250306]
-[cannot apply to linus/master v6.14-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herbert-Xu/crypto-scatterwalk-Add-memcpy_sglist/20250306-113457
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
-patch link:    https://lore.kernel.org/r/Z8kXhLb681E_FLzs%40gondor.apana.org.au
-patch subject: [v3 PATCH] crypto: scatterwalk - Add memcpy_sglist
-config: i386-buildonly-randconfig-002-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071218.9J2sUblV-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071218.9J2sUblV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071218.9J2sUblV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> crypto/scatterwalk.c:107:41: error: too few arguments to function call, expected 3, have 2
-     107 |                 slen = scatterwalk_next(&swalk, nbytes);
-         |                        ~~~~~~~~~~~~~~~~               ^
-   include/crypto/scatterwalk.h:129:21: note: 'scatterwalk_next' declared here
-     129 | static inline void *scatterwalk_next(struct scatter_walk *walk,
-         |                     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                      unsigned int total,
-         |                                      ~~~~~~~~~~~~~~~~~~~
-     131 |                                      unsigned int *nbytes_ret)
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~
-   crypto/scatterwalk.c:108:41: error: too few arguments to function call, expected 3, have 2
-     108 |                 dlen = scatterwalk_next(&dwalk, nbytes);
-         |                        ~~~~~~~~~~~~~~~~               ^
-   include/crypto/scatterwalk.h:129:21: note: 'scatterwalk_next' declared here
-     129 | static inline void *scatterwalk_next(struct scatter_walk *walk,
-         |                     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |                                      unsigned int total,
-         |                                      ~~~~~~~~~~~~~~~~~~~
-     131 |                                      unsigned int *nbytes_ret)
-         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~
->> crypto/scatterwalk.c:110:16: error: no member named 'addr' in 'struct scatter_walk'
-     110 |                 memcpy(dwalk.addr, swalk.addr, len);
-         |                        ~~~~~ ^
-   arch/x86/include/asm/string_32.h:150:42: note: expanded from macro 'memcpy'
-     150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
-         |                                          ^
-   crypto/scatterwalk.c:110:28: error: no member named 'addr' in 'struct scatter_walk'
-     110 |                 memcpy(dwalk.addr, swalk.addr, len);
-         |                                    ~~~~~ ^
-   arch/x86/include/asm/string_32.h:150:45: note: expanded from macro 'memcpy'
-     150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
-         |                                             ^
-   crypto/scatterwalk.c:111:35: error: too few arguments to function call, expected 3, have 2
-     111 |                 scatterwalk_done_dst(&dwalk, len);
-         |                 ~~~~~~~~~~~~~~~~~~~~            ^
-   include/crypto/scatterwalk.h:174:20: note: 'scatterwalk_done_dst' declared here
-     174 | static inline void scatterwalk_done_dst(struct scatter_walk *walk,
-         |                    ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     175 |                                         void *vaddr, unsigned int nbytes)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   crypto/scatterwalk.c:112:35: error: too few arguments to function call, expected 3, have 2
-     112 |                 scatterwalk_done_src(&swalk, len);
-         |                 ~~~~~~~~~~~~~~~~~~~~            ^
-   include/crypto/scatterwalk.h:158:20: note: 'scatterwalk_done_src' declared here
-     158 | static inline void scatterwalk_done_src(struct scatter_walk *walk,
-         |                    ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     159 |                                         const void *vaddr, unsigned int nbytes)
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +107 crypto/scatterwalk.c
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2025-03-07' of https://gitlab.free=
+desktop.org/drm/kernel
 
-    90	
-    91	void memcpy_sglist(struct scatterlist *dst, struct scatterlist *src,
-    92			   unsigned int nbytes)
-    93	{
-    94		struct scatter_walk swalk;
-    95		struct scatter_walk dwalk;
-    96	
-    97		if (unlikely(nbytes == 0)) /* in case sg == NULL */
-    98			return;
-    99	
-   100		scatterwalk_start(&swalk, src);
-   101		scatterwalk_start(&dwalk, dst);
-   102	
-   103		do {
-   104			unsigned int slen, dlen;
-   105			unsigned int len;
-   106	
- > 107			slen = scatterwalk_next(&swalk, nbytes);
-   108			dlen = scatterwalk_next(&dwalk, nbytes);
-   109			len = min(slen, dlen);
- > 110			memcpy(dwalk.addr, swalk.addr, len);
-   111			scatterwalk_done_dst(&dwalk, len);
-   112			scatterwalk_done_src(&swalk, len);
-   113			nbytes -= len;
-   114		} while (nbytes);
-   115	}
-   116	EXPORT_SYMBOL_GPL(memcpy_sglist);
-   117	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1704149207
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1704149207-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1704149207-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1704149207-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
