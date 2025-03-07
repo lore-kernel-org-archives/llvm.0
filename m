@@ -1,101 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64750190482;
-	Fri,  7 Mar 2025 04:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6910E18E750;
+	Fri,  7 Mar 2025 04:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741321158; cv=none; b=DsYvKDP+qOA8AaTk4VS4o77IKkQchB93R44sSx9pgZ6ERBAkZ/lpUaeBc1dGMNdeIQxLNW5uh+oqh7qgXhWGzUKTgrIep57q5zyJ5GwrNVB4XpZ5TOuf7jDUJv68yruIEIXAe3UEgV1KZ9+Aj25kEVCcUHp00Uf/SQbJwNhL0wg=
+	t=1741321347; cv=none; b=i+qlIgw3rj3oq4a8wih50kKaIGVp4EpBMvTO9TWJLPKNs18ibXHxLtAC9ChmEUzeEjVMLburvWe3/vPRVLKVCusE68t1ns2haemT2UxWuGi1QW77H6DowdRX0sq87e5BVitXtIBB7xONoP37YkdJEECP46UPewN4Fr3dsvVdmxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741321158; c=relaxed/simple;
-	bh=HdpOnS7Eic+UbYPCcALNkxTU2FKSqjORHtZap9XlbFA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I8ybzPFbnC58JTcrefAFUpivCKqQI0uSby2/xPa/x1rNvUKwgX4cUkiKTgAbwo2gpXu2Hlft8nAVH4JbniJOWLOlwZ7u1kSff7I7AVDBIfrZO2KTgxCnEPG9qRLhKCCZ1+gjZTiOPjTuXQNSxY+zE6vKGUUs10swhl0u+VHfets=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rpGqn/ZZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741321347; c=relaxed/simple;
+	bh=mGsnUFU14gRE5OTvGZgN8fDv0j0aTIyMRktWQWR9oe4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HAj805nsnd1m34ehRxqkVgTwPHHXtmLmBXvCYo7zCWaN3zZ6zH23qLoGZCdseeVnI/+XBhsnybB40tWE1K1rISjACaaJQJvP+h35R4zNNZqEPKZY5rHCZXrXixCzRqaaiW/rUd/ILx54lEPwe2KxoghzeQaVeRiEPo2OpBTLHLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mUD2x2CF; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rpGqn/ZZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA624C4CEE2;
-	Fri,  7 Mar 2025 04:19:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741321157;
-	bh=HdpOnS7Eic+UbYPCcALNkxTU2FKSqjORHtZap9XlbFA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rpGqn/ZZuVMd8802YF2u3CrReKTKLsliU+NXkgcbV+AGrn8xiN7OEu6SPojhjCHDT
-	 NNmk1S7H8fASwn4j1JJTfp7Ui5a9QnrmQ5b8q8kMRu4iH3QGPcG029YFGHUNi7XfUa
-	 tAO0jX8MF0Loo7tJGsIe+3p8jqwxjs2w+dQ/TFAAJ7ZGWDykFQ/22OBwyDHsEVlw6C
-	 BHjMCZZ44yPux6+9C4h8Q2PkhFxBa38udR+Zxg55a+eQ+b12uUpU0REpzu/SvKDaNw
-	 ufjU9+pXAFLjKMhCo1cH37EFESnTkXvg5YRAD2qClUtuLbaK1I0tFwD2slIidlEW28
-	 OPpMFoctyEMQQ==
-From: Kees Cook <kees@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Bill Wendling <morbo@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 0/3] ubsan/overflow: Enable pattern exclusions
-Date: Thu,  6 Mar 2025 20:19:08 -0800
-Message-Id: <20250307040948.work.791-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mUD2x2CF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741321344; x=1772857344;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mGsnUFU14gRE5OTvGZgN8fDv0j0aTIyMRktWQWR9oe4=;
+  b=mUD2x2CFYOWA94XHoyXY8OY+PQ2SW2kSStF6oBJFy2mruLDHKfhxfXZq
+   LDpg3QRryKYcY4oNX6vaylJbjSvIPIYon+L0Gy91YRNcmxl4os6HQkAge
+   /TfPB+JYz90xxNfsh5KQDO7kBWAiob9DR3i7AEEnBK/oMSqn1mAw0L9CU
+   BQfRDqpD7DWWtwbgiMxSERL93T/befLmm/dzQ7IBHvrG5lCD9pxZ9ZBU/
+   QeH3KL2nXkGoQQLMC02Nu3phb1Gm5IZ7MbYj/lB+XXt4VSjDGq1A11seJ
+   MjEMfThzTaj6FtFgHgfV1FzLdVW19QRlW3CJFYCwHgqJspg7OF57YkFt/
+   A==;
+X-CSE-ConnectionGUID: 0h+hQ0RUQWCHGEzP/V+cOA==
+X-CSE-MsgGUID: 6c2gU46uQyepf9NAmJbYLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="67737584"
+X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
+   d="scan'208";a="67737584"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 20:22:24 -0800
+X-CSE-ConnectionGUID: zrRamg93SeuRWoipnKOWPA==
+X-CSE-MsgGUID: x3YwzdfsSa+lzOU0WSkzZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
+   d="scan'208";a="119397843"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 06 Mar 2025 20:22:22 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqPE4-000ONm-13;
+	Fri, 07 Mar 2025 04:22:20 +0000
+Date: Fri, 7 Mar 2025 12:22:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>,
+	Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: Re: [v3 PATCH] crypto: scatterwalk - Add memcpy_sglist
+Message-ID: <202503071218.9J2sUblV-lkp@intel.com>
+References: <Z8kXhLb681E_FLzs@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1304; i=kees@kernel.org; h=from:subject:message-id; bh=HdpOnS7Eic+UbYPCcALNkxTU2FKSqjORHtZap9XlbFA=; b=owGbwMvMwCVmps19z/KJym7G02pJDOmnivc9WDdJnPdalex1RaudYX/mSYtfr5ZaxpWtqjyt9 5P6wfmiHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABNRTWJk2Ls3+nLnp+qNm3pd i7/l+q32Xp9lKsT2w+HqrwYGvp+pKxkZznY7Kx+w8zbRv2vpHFciXPDncomFpWdCpd20INdqyTU cAA==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z8kXhLb681E_FLzs@gondor.apana.org.au>
 
-Hi,
+Hi Herbert,
 
-This brings Linux's integer overflow mitigation integration up to the
-current set of features available in Clang for handling things sanely
-(i.e. pattern exclusions). While this isn't over yet, it puts all the
-infrastructure in place to continue keeping up to date with current
-Clang development. The next step is to add support for the coming
-canonical wrapping and non-wrapping types[1].
+kernel test robot noticed the following build errors:
 
--Kees
+[auto build test ERROR on herbert-cryptodev-2.6/master]
+[also build test ERROR on next-20250306]
+[cannot apply to linus/master v6.14-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[1] https://discourse.llvm.org/t/rfc-clang-canonical-wrapping-and-non-wrapping-types/84356
+url:    https://github.com/intel-lab-lkp/linux/commits/Herbert-Xu/crypto-scatterwalk-Add-memcpy_sglist/20250306-113457
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git master
+patch link:    https://lore.kernel.org/r/Z8kXhLb681E_FLzs%40gondor.apana.org.au
+patch subject: [v3 PATCH] crypto: scatterwalk - Add memcpy_sglist
+config: i386-buildonly-randconfig-002-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071218.9J2sUblV-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071218.9J2sUblV-lkp@intel.com/reproduce)
 
-Kees Cook (3):
-  ubsan/overflow: Rework integer overflow sanitizer option to turn on
-    everything
-  ubsan/overflow: Enable pattern exclusions
-  ubsan/overflow: Enable ignorelist parsing and add type filter
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503071218.9J2sUblV-lkp@intel.com/
 
- include/linux/compiler_types.h  |  2 +-
- kernel/configs/hardening.config |  2 +-
- lib/Kconfig.ubsan               | 25 +++++++++++++------------
- lib/test_ubsan.c                | 18 ++++++++++++++----
- lib/ubsan.c                     | 28 ++++++++++++++++++++++++++--
- lib/ubsan.h                     |  8 ++++++++
- scripts/Makefile.lib            |  4 ++--
- scripts/Makefile.ubsan          | 10 ++++++++--
- scripts/integer-wrap-ignore.scl |  3 +++
- 9 files changed, 76 insertions(+), 24 deletions(-)
- create mode 100644 scripts/integer-wrap-ignore.scl
+All errors (new ones prefixed by >>):
+
+>> crypto/scatterwalk.c:107:41: error: too few arguments to function call, expected 3, have 2
+     107 |                 slen = scatterwalk_next(&swalk, nbytes);
+         |                        ~~~~~~~~~~~~~~~~               ^
+   include/crypto/scatterwalk.h:129:21: note: 'scatterwalk_next' declared here
+     129 | static inline void *scatterwalk_next(struct scatter_walk *walk,
+         |                     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     130 |                                      unsigned int total,
+         |                                      ~~~~~~~~~~~~~~~~~~~
+     131 |                                      unsigned int *nbytes_ret)
+         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/scatterwalk.c:108:41: error: too few arguments to function call, expected 3, have 2
+     108 |                 dlen = scatterwalk_next(&dwalk, nbytes);
+         |                        ~~~~~~~~~~~~~~~~               ^
+   include/crypto/scatterwalk.h:129:21: note: 'scatterwalk_next' declared here
+     129 | static inline void *scatterwalk_next(struct scatter_walk *walk,
+         |                     ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     130 |                                      unsigned int total,
+         |                                      ~~~~~~~~~~~~~~~~~~~
+     131 |                                      unsigned int *nbytes_ret)
+         |                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+>> crypto/scatterwalk.c:110:16: error: no member named 'addr' in 'struct scatter_walk'
+     110 |                 memcpy(dwalk.addr, swalk.addr, len);
+         |                        ~~~~~ ^
+   arch/x86/include/asm/string_32.h:150:42: note: expanded from macro 'memcpy'
+     150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+         |                                          ^
+   crypto/scatterwalk.c:110:28: error: no member named 'addr' in 'struct scatter_walk'
+     110 |                 memcpy(dwalk.addr, swalk.addr, len);
+         |                                    ~~~~~ ^
+   arch/x86/include/asm/string_32.h:150:45: note: expanded from macro 'memcpy'
+     150 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+         |                                             ^
+   crypto/scatterwalk.c:111:35: error: too few arguments to function call, expected 3, have 2
+     111 |                 scatterwalk_done_dst(&dwalk, len);
+         |                 ~~~~~~~~~~~~~~~~~~~~            ^
+   include/crypto/scatterwalk.h:174:20: note: 'scatterwalk_done_dst' declared here
+     174 | static inline void scatterwalk_done_dst(struct scatter_walk *walk,
+         |                    ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     175 |                                         void *vaddr, unsigned int nbytes)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   crypto/scatterwalk.c:112:35: error: too few arguments to function call, expected 3, have 2
+     112 |                 scatterwalk_done_src(&swalk, len);
+         |                 ~~~~~~~~~~~~~~~~~~~~            ^
+   include/crypto/scatterwalk.h:158:20: note: 'scatterwalk_done_src' declared here
+     158 | static inline void scatterwalk_done_src(struct scatter_walk *walk,
+         |                    ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     159 |                                         const void *vaddr, unsigned int nbytes)
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   6 errors generated.
+
+
+vim +107 crypto/scatterwalk.c
+
+    90	
+    91	void memcpy_sglist(struct scatterlist *dst, struct scatterlist *src,
+    92			   unsigned int nbytes)
+    93	{
+    94		struct scatter_walk swalk;
+    95		struct scatter_walk dwalk;
+    96	
+    97		if (unlikely(nbytes == 0)) /* in case sg == NULL */
+    98			return;
+    99	
+   100		scatterwalk_start(&swalk, src);
+   101		scatterwalk_start(&dwalk, dst);
+   102	
+   103		do {
+   104			unsigned int slen, dlen;
+   105			unsigned int len;
+   106	
+ > 107			slen = scatterwalk_next(&swalk, nbytes);
+   108			dlen = scatterwalk_next(&dwalk, nbytes);
+   109			len = min(slen, dlen);
+ > 110			memcpy(dwalk.addr, swalk.addr, len);
+   111			scatterwalk_done_dst(&dwalk, len);
+   112			scatterwalk_done_src(&swalk, len);
+   113			nbytes -= len;
+   114		} while (nbytes);
+   115	}
+   116	EXPORT_SYMBOL_GPL(memcpy_sglist);
+   117	
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
