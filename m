@@ -1,53 +1,47 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E4B21ADD3;
-	Fri,  7 Mar 2025 14:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF1C21B8EC;
+	Fri,  7 Mar 2025 14:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741356795; cv=none; b=C3eZJ1Trt5e7q6ip+qtV8B17ibDyNGaqKmuwKVF7N+hJOcQJR3bclscFdLtYonWGEzxRpsKTMqVwC+lV6+Mo4aGtS+8QOf4muPluWUyIjikHjAc7V2aE6QVIff1u+geD1zE2RthTvSmTZjIRdbnvHWqvdbgO8yqy6HNepsMewRc=
+	t=1741357358; cv=none; b=Kwa92HJAnMlGeguv8HYO1O3yfIqcrClwwxRWS/6ujYrmY6qj4lUpvlEUwL+hd9UcvQW/m0OUu+1XU6zKUkKyU+nSAVwLuSppp7gDexbZTpiOJ8uq3E14B5Id6pvIi+g620EvLzuQcMt4z7qKI9KDBvKj/w0xpHuBpK8QLp67DWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741356795; c=relaxed/simple;
-	bh=0OfolKhnQ9CGbM1ZKOrJbufnAPUvYxn/8AH/mQnhjbE=;
+	s=arc-20240116; t=1741357358; c=relaxed/simple;
+	bh=t8WacfqO9bf4YHYgPU3DznP16OUNb9spi6ccczBLIP0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oOVbpGR6o9o7wn6u+YohmS7b4cM4BVLOXNldAVYHvlqyCMcCrt4G1WoYpIIDZdWmO0qu0+A65+MhVB8HP4E7UrDawkkIX58TDwzmKWRqYxSw2ZGT1m0IuLhGVBHr1vWPg9M0sknm51u6jehP2sxmu2iOvDj2XHn9K8dxcsUOYlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HakAKQKN; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=OkthfOWR9/BGZLoZHWnPHmwmV16atC7JWHw+FhK4Sgu9odmBfCCKyTr2ioNs5+BNuj5mJpG2s4Twsd3996AbWkyox83euLEK43JTqVlae3Iwbqz5Qx8Ed2tAF6DMr0l8KqX66jPZZM5Tgp8+GBpJzZQOpF/8NP4SEXvJsuiooSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1o4hU5yZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HakAKQKN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=JJBOeBuNXZqNZlmT/Xatt0OEQuX2yWSve8v1RoTr0Rw=; b=HakAKQKNSqlCktBAlshZ8eiSx2
-	BNura5PUG0bIaomzpw8Wn4JdY+EOVxkNF1gCqkBLZL6xRUuEEqDjTRN8ooQ375amlZGwYosLjzPAJ
-	4jjn3ZhuEulF6A+aVq2zIpc4tHSOD6hqoeKEOHK1QgZI0itTlimgR69bZI3bVPIHe7I4TdhWmX6BV
-	GWRx9t1Fx+5qu6c+L/WNgjaZ0H8+Q2I3SKtLaJRyYy2tVsmsBdQBldD1f09HE2A/1gBAwlAZxZ4wW
-	Gk/q9yrDNsaaEydM65u94XVjmigW4Hxhe3iQliHVspjj5ZnCh1EFpNPpTR6DSyoxSAXBoQ8z7jI2x
-	JL2qRJUw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tqYRq-00000001MI7-26Uc;
-	Fri, 07 Mar 2025 14:13:10 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A238830031C; Fri,  7 Mar 2025 15:13:09 +0100 (CET)
-Date: Fri, 7 Mar 2025 15:13:09 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Puchert, Aaron" <aaron.puchert@sap.com>
-Cc: Marco Elver <elver@google.com>, Aaron Ballman <aaron@aaronballman.com>,
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1o4hU5yZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB766C4CED1;
+	Fri,  7 Mar 2025 14:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1741357357;
+	bh=t8WacfqO9bf4YHYgPU3DznP16OUNb9spi6ccczBLIP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1o4hU5yZnXyAa1uHsko5DnzTUG9ARqdgdTDtjr30cAw1oqpxA4zQpm2qM2YeGaAJ3
+	 RiqM1S7N9SMSZFItZyEN/wF4FFFoNYOyasTS4XxONKZ14jrVRPDYHv/APQp8xnQKNm
+	 6TZkFT3zISMxE4UGw36wIrgYJ3qdGWAzWp2fV/Gs=
+Date: Fri, 7 Mar 2025 15:22:33 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "Puchert, Aaron" <aaron.puchert@sap.com>,
+	Marco Elver <elver@google.com>,
+	Aaron Ballman <aaron@aaronballman.com>,
 	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
 	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
 	Bart Van Assche <bvanassche@acm.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Boqun Feng <boqun.feng@gmail.com>
 Subject: Re: Thread Safety Analysis and the Linux kernel
-Message-ID: <20250307141309.GM16878@noisy.programming.kicks-ass.net>
+Message-ID: <2025030700-research-pueblo-87ef@gregkh>
 References: <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
  <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod.outlook.com>
- <20250306100828.GD16878@noisy.programming.kicks-ass.net>
- <DB7PR02MB36269DCE8C78D8E5DB7C7AC6E7CA2@DB7PR02MB3626.eurprd02.prod.outlook.com>
- <20250307075950.GH16878@noisy.programming.kicks-ass.net>
+ <20250306103752.GE16878@noisy.programming.kicks-ass.net>
+ <DB7PR02MB3626056525E95B643D87CBC4E7CA2@DB7PR02MB3626.eurprd02.prod.outlook.com>
+ <20250307085204.GJ16878@noisy.programming.kicks-ass.net>
+ <20250307125225.GP31462@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,61 +50,128 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250307075950.GH16878@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250307125225.GP31462@noisy.programming.kicks-ass.net>
 
-On Fri, Mar 07, 2025 at 08:59:50AM +0100, Peter Zijlstra wrote:
-> On Thu, Mar 06, 2025 at 10:18:32PM +0000, Puchert, Aaron wrote:
+On Fri, Mar 07, 2025 at 01:52:25PM +0100, Peter Zijlstra wrote:
+> On Fri, Mar 07, 2025 at 09:52:04AM +0100, Peter Zijlstra wrote:
 > 
-> > > Users would typically look like:
-> > > 
-> > > try_to_wake_up(p, state)
-> > > {
-> > >         struct rq *rq;
-> > > 
-> > >         scoped_guard (raw_spinlock_irqsave, &p->pi_lock) {
-> > >                 if (!ttwu_state_match(p, state))
-> > >                         break;
-> > > 
-> > >                 rq = __task_rq_lock(p);
-> > >                 // go enqueue task
-> > >                 raw_spin_rq_unlock(rq);
-> > >         }
-> > > }
+> > Yeah, so IIRC I once proposed a guard that takes a NULL pointer to mean
+> > not take the lock, but people had a bit of a fit.
 > > 
-> > Can the return value be used as an initializer by moving the
-> > declaration into the scoped_guard block? Or do you have a style guide
-> > that wants all declarations at the beginning of a block?
-> 
-> Yeah, we have a style guide that strongly suggests variables are
-> declared at the start. In fact, we used to have
-> -Wdeclaration-after-statement and only (finally) got rid of it in order
-> to allow for these scope guards.
-> 
-> > We track capabilities as symbolic expressions, so something like
-> > "rq->__lock" in this case. If there is an assignment to "rq", that
-> > changes the meaning of the symbolic expression. The object referred to
-> > by the expression is then no longer reachable. Currently we don't look
-> > at assignments at all when it comes to tracking capabilities. We don't
-> > even warn, it's simply documented as not being supported. We only look
-> > at initializers, as in alias analysis. Having a separate variable
-> > being initialized with the return value gives us a unique name for the
-> > return value, which is good when we're working with symbolic
-> > expressions.
+> > It would've allowed writing the thing like:
 > > 
-> > If there are cases where assignment is really needed, we can also
-> > check to which extent we can rewrite expressions or warn when the
-> > objects they point to become unreachable. (In the example that would
-> > be the case if someone assigned to "rq" again after the call to
-> > "__task_rq_lock ".)
+> > 	{
+> > 		guard(device)(parent);
+> > 		device_release_driver(dev);
+> > 	}
 > 
-> Right. I suspect we might need this if we want to minimize code churn.
+> So the below does compile... Greg, how revolted are you? :-)
 
-There is also a case where a guard wraps the pointer in a struct;
-because we need to carry extra state, like IRQ flags and the like, or
-because the lock doesn't have a native type (RCU).
+Eeek!  But why?
 
-In this case the constructor things will return this structure and we'll
-get a local copy on stack, a pointer to which will then be handed to the
-destructor thing.
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 5a1f05198114..7c95e7800b89 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -4796,33 +4796,30 @@ void device_shutdown(void)
+>  		spin_unlock(&devices_kset->list_lock);
+>  
+>  		/* hold lock to avoid race with probe/release */
+> -		if (parent)
+> -			device_lock(parent);
+> -		device_lock(dev);
+> -
+> -		/* Don't allow any more runtime suspends */
+> -		pm_runtime_get_noresume(dev);
+> -		pm_runtime_barrier(dev);
+> -
+> -		if (dev->class && dev->class->shutdown_pre) {
+> -			if (initcall_debug)
+> -				dev_info(dev, "shutdown_pre\n");
+> -			dev->class->shutdown_pre(dev);
+> -		}
+> -		if (dev->bus && dev->bus->shutdown) {
+> -			if (initcall_debug)
+> -				dev_info(dev, "shutdown\n");
+> -			dev->bus->shutdown(dev);
+> -		} else if (dev->driver && dev->driver->shutdown) {
+> -			if (initcall_debug)
+> -				dev_info(dev, "shutdown\n");
+> -			dev->driver->shutdown(dev);
+> +		{
+> +			guard(device_cond)(parent);
 
-It would be very nice if it could understand that pattern too.
+This is just so subtle it's scary.  I don't like that.
+
+> +			guard(device)(dev);
+
+This is fine, but really, why is this even needed?  None of the code you
+are indenting here breaks out of the loop early, so how/why is this even
+needed?
+
+> +
+> +			/* Don't allow any more runtime suspends */
+> +			pm_runtime_get_noresume(dev);
+> +			pm_runtime_barrier(dev);
+> +
+> +			if (dev->class && dev->class->shutdown_pre) {
+> +				if (initcall_debug)
+> +					dev_info(dev, "shutdown_pre\n");
+> +				dev->class->shutdown_pre(dev);
+> +			}
+> +			if (dev->bus && dev->bus->shutdown) {
+> +				if (initcall_debug)
+> +					dev_info(dev, "shutdown\n");
+> +				dev->bus->shutdown(dev);
+> +			} else if (dev->driver && dev->driver->shutdown) {
+> +				if (initcall_debug)
+> +					dev_info(dev, "shutdown\n");
+> +				dev->driver->shutdown(dev);
+> +			}
+>  		}
+>  
+> -		device_unlock(dev);
+> -		if (parent)
+> -			device_unlock(parent);
+> -
+
+So we save 3 lines?  Again, feels like total overkill.
+
+
+>  		put_device(dev);
+>  		put_device(parent);
+>  
+> diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+> index ec00e3f7af2b..bf72fec6f99b 100644
+> --- a/include/linux/cleanup.h
+> +++ b/include/linux/cleanup.h
+> @@ -300,7 +300,7 @@ static __maybe_unused const bool class_##_name##_is_conditional = _is_cond
+>  #define DEFINE_GUARD_COND(_name, _ext, _condlock) \
+>  	__DEFINE_CLASS_IS_CONDITIONAL(_name##_ext, true); \
+>  	EXTEND_CLASS(_name, _ext, \
+> -		     ({ void *_t = _T; if (_T && !(_condlock)) _t = NULL; _t; }), \
+> +		     ({ void *_t = (_condlock) ? _T : NULL; _t; }), \
+>  		     class_##_name##_t _T) \
+>  	static inline void * class_##_name##_ext##_lock_ptr(class_##_name##_t *_T) \
+>  	{ return class_##_name##_lock_ptr(_T); }
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 80a5b3268986..4e7ebbb7fb64 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -1046,6 +1046,7 @@ static inline void device_unlock(struct device *dev)
+>  }
+>  
+>  DEFINE_GUARD(device, struct device *, device_lock(_T), device_unlock(_T))
+> +DEFINE_GUARD_COND(device, _cond, (_T ? (device_lock(_T), true) : false))
+
+As I really don't want others to be calling this, worst case, just put
+it in the driver core C file.
+
+But again, ick ick ick, I worry this is going to be very subtle and
+cause problems over time.
+
+But very cool hack :)
+
+thanks,
+
+greg k-h
