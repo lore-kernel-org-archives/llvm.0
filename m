@@ -1,101 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4815D21930B
-	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 12:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8933221885D
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 13:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741352247; cv=none; b=URbBgBpfRV+N1tlDsrPvKQ7nbPjVI72rxeIh7/WQPJTi0rBLvRodPCRd42I4qDLnmjVL21z88H7lBMCLxQNBOkiqRMqVxnOqIYa8ubWMDolR+y7HOe9WvZFIYcM10u/BBYYBpXbuC0zr996hCKDBYwPw9vQV4yM16Zxb04ukO5o=
+	t=1741354333; cv=none; b=AAf0qqFNcQv+GulGZxmUCwRngvZw+BY1EUBzQldpKi1AGKt/J+nPPtg+FSEhgUQEMzWt6IrEbfFvdl9XVDCc0hUHetEkgc5czx8FsQF4V75MdJKElti4EWEHmlruBrks8Lel2IL19Wkj0bHrhIr6b/u+bPTdmC7mNDC++2So0+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741352247; c=relaxed/simple;
-	bh=dUQt3efYaBwnkNkbg8+vGSt7xM8wMCm8dXGlA0fxYL8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmgZnhe21Wq4V22ZipFcx95ZKU1jpI78K8QFjDuPH/dBf0duT0RrcaFudOs4XS/l7AAKMdp9veprXYUjKtrWTBjMbDf8Lb2RXOsPa2uPa8ez6ZNuO4wtOfagO8FnIu+awGyEJuDeZMVnCo5oDmtPve5KlRay7KlP0TpTzS3wiY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a68YjyEa; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1741354333; c=relaxed/simple;
+	bh=AxojdBUpY1p9+xloZE52McprxGSCk2+xilr9/Pn+9s8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CkIe7xKcTwNa+H7+ibrtF5iuzzrnnHzd5Coukg03Su1mybUzTKGcCtGj3IRov4Wwu17NzKshBwtkQIkMKUAdQOHMl8FrGC23P8B7nPcYxyjhFAVPi41OCjq3TqvK0PgYvzMBB2MUcTBK1UnHHS2S/r5Crn5KImsb3EA/U5AZpag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LgEtt4RV; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a68YjyEa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741352247; x=1772888247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dUQt3efYaBwnkNkbg8+vGSt7xM8wMCm8dXGlA0fxYL8=;
-  b=a68YjyEa+QfAtB+wrP9SMiBMFunadyR3ZYpnYbPJ8WIG22OLhvldfXTX
-   0zX2U2tiR6c6Ub69Ho6oYDqUmegP7zb1IhLf+nCQZBDgGg8qYt6YoyV/J
-   688Izk3XCo9n0OefQKHKeYqT/5UWNiKeNbNEX04qUC5l0Y22PEwZ0ugZq
-   7po+1tPLBwnMLxY7Uxnail/heDrEBH5/s1tjmFr+zMpC8KL3j/JsV8bbF
-   ZVUh7Yq1I/UP9+9/qD1IQ0DAeGRopxxURsLFEfqDI6eDGVdsMdUOhWC+x
-   mb7qLVLzciGZg8wwY1i6ymrnS6m2G6HfbO2FtLJ4APZGX6HqzrAnwNZ3P
-   w==;
-X-CSE-ConnectionGUID: MTJsAJE4Qf+caghXmfrRsA==
-X-CSE-MsgGUID: me70QAnPSmifHW6OznZxZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42629397"
-X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42629397"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:57:26 -0800
-X-CSE-ConnectionGUID: a43TkmSDROGckEG637lOdA==
-X-CSE-MsgGUID: 2SKO4zDjTfu+ExFab++YOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="123909172"
-Received: from mev-dev.igk.intel.com ([10.237.112.144])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:57:22 -0800
-Date: Fri, 7 Mar 2025 13:53:32 +0100
-From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next] net/mlx5: Avoid unnecessary use of comma
- operator
-Message-ID: <Z8rsQXAjtK+FN6iu@mev-dev.igk.intel.com>
-References: <20250307-mlx5-comma-v1-1-934deb6927bb@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LgEtt4RV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741354330;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LYcD6P/IsHRQVakakaYJKVrRNntNmuwyHanqqzFEu3w=;
+	b=LgEtt4RVhAFH+Ehz4CeC8mUkYjv7mHmyUw2nPcwlX1TNQW6NU16vhOLYaVBvOpHTypZku+
+	5VvtuiICkbOwzXROhJBr/sHg7oH05J454M9//iIY6OmuqMEdUPWMhbfWDBiicCURC6Svag
+	1sW+PghWp2saofJS7sfytAP9EbvIBZk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-57-vO48WGa4PJSYuU56XEqi1w-1; Fri,
+ 07 Mar 2025 08:32:09 -0500
+X-MC-Unique: vO48WGa4PJSYuU56XEqi1w-1
+X-Mimecast-MFC-AGG-ID: vO48WGa4PJSYuU56XEqi1w_1741354328
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 609001955BD2
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 13:32:08 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E2D1B1944F2E;
+	Fri,  7 Mar 2025 13:32:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, 00a7d398)
+Date: Fri, 07 Mar 2025 13:32:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250307-mlx5-comma-v1-1-934deb6927bb@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <31766.125030708320900539@us-mta-57.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: dykV6ELvb11QBTBpKDV1BZhdhvZLjgcHbpAt574WexE_1741354328
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 07, 2025 at 12:39:33PM +0000, Simon Horman wrote:
-> Although it does not seem to have any untoward side-effects,
-> the use of ';' to separate to assignments seems more appropriate than ','.
-> 
-> Flagged by clang-19 -Wcomma
-> 
-> No functional change intended.
-> Compile tested only.
-> 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
-> index c862dd28c466..e8cc91a9bd82 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
-> @@ -700,7 +700,7 @@ mlx5_chains_create_global_table(struct mlx5_fs_chains *chains)
->  		goto err_ignore;
->  	}
->  
-> -	chain = mlx5_chains_get_chain_range(chains),
-> +	chain = mlx5_chains_get_chain_range(chains);
->  	prio = mlx5_chains_get_prio_range(chains);
->  	level = mlx5_chains_get_level_range(chains);
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+
+
+Kernel information:
+    Commit message: fs/pipe: add simpler helpers for common cases
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1704841426
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1704841426-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1704841426-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1704841426-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
