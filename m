@@ -1,130 +1,173 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013030.outbound.protection.outlook.com [40.107.162.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CDD1607A4;
-	Fri,  7 Mar 2025 17:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741370200; cv=none; b=kkPb1So97l+QcIiU9HL0esP7oMO3ZrP93DNjzmk9cUe4L3H1FN2vjiLMjKtOKNhhYGNGynvDmKz3k59x6yhOLtVIxyozqo17WebCevqFx5CgfPvzvqrJv8qpp75R9gBjQoV/DaWfOTh/1NJ7+24NuIdxNXzQqam47icaoUwmxRw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741370200; c=relaxed/simple;
-	bh=v32ep8wQXLYDB9RMfVOjlCUuiFXNYEVja62Yb9wpOWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rvp9kBlA9dHfN5dCA0hJTZFoK/TlXqGNW1b7XZQMYtAL/LoIVkaPtF1QHF1nnRLHKizelYuc9xAQy1zfLeBQL+Duo1n48VsRDUyxLKpP65+R0x7wbZAuEvdHsTqgsEuM0oQVjZGqXV+GZPcGHEl4C6garN2QU1kaHTHXb4QaoZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nJwh1MwR; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AA4241672
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 17:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741370394; cv=fail; b=W9GY6vvDToiPHSzDrx+Qz3joCTsB0KAraCOGLYGwIH2yOjBkUInU/KAmW2vcJ5CgOdLi77sxOrQydlw9x0AOzwv6WnBo0DzIf/5pWVN7oG9QntTyyIWB3FbwAvh5TmgSMbjcdpNQ/Zoul3xXO/tXMdERTmxgAKkXPrFsEtDDXO0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741370394; c=relaxed/simple;
+	bh=Ake/euDB6aPuM+sqS9hVG2vlyFEVroC3wiRg0BrHxFY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=SBzSozUXy/0Q2l8beInHLnCzoQKo+bSx4jrc/bQT/KuM+2exTrQyzrDg2sLu0RcJe1ODCmd5E28Xv0O1DK+2404z/GhnDzpecbHsC4PZaXtWuPspU6iJ6+5qERbV1Ipaziax/1tfoXS8aYcBxq0hvIjKfN2bVmZZHQm93a+3exA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sap.com; spf=pass smtp.mailfrom=sap.com; dkim=pass (2048-bit key) header.d=sap.com header.i=@sap.com header.b=JVbjronM; arc=fail smtp.client-ip=40.107.162.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sap.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sap.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nJwh1MwR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741370198; x=1772906198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v32ep8wQXLYDB9RMfVOjlCUuiFXNYEVja62Yb9wpOWM=;
-  b=nJwh1MwRAHZ+liSnrpQlj5pEBgDqexMG/MYFxiqu5y3rnQkMW9L50ruf
-   5Shxog8wEOcaTfxR+7P0tifdLh2E228ZMD4EV5UAmYSFufXn7LtOalAot
-   QwXTb9WQzCkW3AQqe2xu5wXfuz5zmuaKuYuLCYUIvUGKAURoa3Iwtmexc
-   D3L3lyrWnnPlAl6XHB5dFNVMcvZY1xnCSAl0uqHJ5UflKbmx3JSlbPytw
-   mHyiY5wI/wpmdJl+Z3xAtlCqcUpHkRKtwxaBk7r4SFJK0NYs00fFGAhJN
-   6c16OMJp5iKeiw4berhO4+onbGSK1C47DW34V662ZbMkl/TIGdlpG6de1
-   Q==;
-X-CSE-ConnectionGUID: aoxc72rbQ+OZFZQGWcFkAw==
-X-CSE-MsgGUID: NIGJ7q8YSaWk0xtKWvpcsw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42628544"
-X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42628544"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 09:56:34 -0800
-X-CSE-ConnectionGUID: HH8jZ9sLTiKKfX9cT8D9lg==
-X-CSE-MsgGUID: hWYQM+BpTy+mwO1PB9jgmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="150335665"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Mar 2025 09:56:32 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqbvy-0000t5-1I;
-	Fri, 07 Mar 2025 17:56:30 +0000
-Date: Sat, 8 Mar 2025 01:56:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bharata B Rao <bharata@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 4/4] x86: ibs: Enable IBS profiling for memory
- accesses
-Message-ID: <202503080104.AHMWmR7w-lkp@intel.com>
-References: <20250306054532.221138-5-bharata@amd.com>
+	dkim=pass (2048-bit key) header.d=sap.com header.i=@sap.com header.b="JVbjronM"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=J/8s0pCwYKNcfo2OXJmZu9Cfu34lwbdd6VnErn67/I5MxmiYAtpQa2+6UVj7NxgvvPpaARlk1QpSYbWSL8fm/+NM7cz5rtYP13bY+S1SgLEzf2XpYTiE9szO8a4vVtYdKFD5aKofAOpyl0g2NhNLS0LnELulwhj7X9HxbURCf6cS6JLXSlDlrZA5EEjBzFp3CgFUjuR9/cXMDEvcBnn5ytLZ69/2u9tOw0WrZ3y7c/PpECmFsgKSqJyQr2OvY/kXLU3pcevjGM/ak0GSQRF5WqOLPixleiYbCZuEblFL0KqJycmW5kI7xeZcS+KA1hXpTPguCqpoUtpsbBGKRvXyXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jakm70fkLI3cZT4S9raTypSnJce/nqVmvzIioOHAdHc=;
+ b=BFb6zIuOQ8PdThA38CCmsC33G0xO0FIvqxvvEHBtkx36hnWsLepZ3RkZ65DoRK6c122I7bNOAEU6SAsilGEaf3arfBWcIPW4bQuptwekhSFXNoHeo5Q6Y+JLyTtkSz54eyQ8yXwbohXLnSmEeiFt7I4BzEI6zaDpcUjTZy+7aHsFcvtbGRFM0FeWyAN/oxnjjJ5qh24IfU4L/GM4ZdgNF711SBM5XyHxDm1FSOqWjFA694MGWRg30C3ayOqTCrFr6dP6qSP4wc9+SjiOSargOIY8XDzp9/scLG+W0bO1f5LgLzKUQhSqPgTVEdQPXqsOtmgW/rfJV5PXRqLois5noQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sap.com; dmarc=pass action=none header.from=sap.com; dkim=pass
+ header.d=sap.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sap.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jakm70fkLI3cZT4S9raTypSnJce/nqVmvzIioOHAdHc=;
+ b=JVbjronMUytzWb0lWugfd8d7vCIZnUZtw+pOE5wmCDZjZBUBqLHQygFTd4Ys/gVTR3/36hzmDKK4QboH+wGWGB6TxJmlTcvYZbcuJmzAzuCJ5y3pbi+L10bomKbFOl43/Mxo8aQEcNJgEDznzaWSKlbaEpEt7LKdm3ho6MskQUUJteXgQGJcA1FX1zVk++CkK9vD8O3EQD7zb0YuXhG1AeWEvKgPk4OhBw3XdQHXxYVXvaU5X53tp2JLpwOi8/HuStTLrHyx5YQI21AkSF1/nDQklpegA2f9A5SVPWOe1vTlYMvnlp/jZpfCllaMuAD+ALlChOghBAHJB32ErahRqA==
+Received: from DB7PR02MB3626.eurprd02.prod.outlook.com (2603:10a6:5:2::21) by
+ GVXPR02MB10762.eurprd02.prod.outlook.com (2603:10a6:150:158::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.19; Fri, 7 Mar
+ 2025 17:59:49 +0000
+Received: from DB7PR02MB3626.eurprd02.prod.outlook.com
+ ([fe80::26c8:11bf:1fc7:7766]) by DB7PR02MB3626.eurprd02.prod.outlook.com
+ ([fe80::26c8:11bf:1fc7:7766%4]) with mapi id 15.20.8511.020; Fri, 7 Mar 2025
+ 17:59:49 +0000
+From: "Puchert, Aaron" <aaron.puchert@sap.com>
+To: "paulmck@kernel.org" <paulmck@kernel.org>
+CC: Marco Elver <elver@google.com>, Aaron Ballman <aaron@aaronballman.com>,
+	"linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, Bart Van Assche <bvanassche@acm.org>, Boqun Feng
+	<boqun.feng@gmail.com>
+Subject: RE: Thread Safety Analysis and the Linux kernel
+Thread-Topic: Thread Safety Analysis and the Linux kernel
+Thread-Index: AQHbjcR3BpDJv5ufIEK0rDgdN08Y7rNkw8mggAGWK4CAAGY9gIAAB6aAgAEXUGA=
+Date: Fri, 7 Mar 2025 17:59:49 +0000
+Message-ID:
+ <DB7PR02MB36266CD6025FAB7701A344A1E7D52@DB7PR02MB3626.eurprd02.prod.outlook.com>
+References:
+ <CANpmjNPquO=W1JAh1FNQb8pMQjgeZAKCPQUAd7qUg=5pjJ6x=Q@mail.gmail.com>
+ <DB7PR02MB36260C79D8CD91925D0D3447E7CB2@DB7PR02MB3626.eurprd02.prod.outlook.com>
+ <119f37e4-bbcb-403a-9f63-5b9001233c0a@paulmck-laptop>
+ <DB7PR02MB36260D226AF2863E6F404B79E7CA2@DB7PR02MB3626.eurprd02.prod.outlook.com>
+ <03c9e1e0-cd70-4b2b-b494-97b98449adde@paulmck-laptop>
+In-Reply-To: <03c9e1e0-cd70-4b2b-b494-97b98449adde@paulmck-laptop>
+Accept-Language: de-DE, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=sap.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB7PR02MB3626:EE_|GVXPR02MB10762:EE_
+x-ms-office365-filtering-correlation-id: 5eddc69d-8f90-419a-11f9-08dd5da1da6d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?QLYoGuZD/NyCVYpWCVaUcID6TnAXcKMITNfbn/J357zvkFW+/5T7D30cLI3b?=
+ =?us-ascii?Q?ouzwcQ2OfT/UGXkSEh+YuQ56k6BHJMU15Cl5FzwXf1TA522cDTNLFIfUOwJW?=
+ =?us-ascii?Q?DBAM8IUWS0I052WU92CgHfIdU2c9tvoLCn8OqtYdp0BO3g9i23RyTjzSnnB3?=
+ =?us-ascii?Q?ffWBjrtUK+bQV0q+jgY6PA01dO4GrSHOFm9yzuXOEILDKs3/yOKbmhT32GyG?=
+ =?us-ascii?Q?W5zyTLdGTT8BFNlLGfApYYPJrSj3ayTeDH1xx3PLU1CT75Z9sVETN/biCisP?=
+ =?us-ascii?Q?MI5qQi5EYi+R4TyzDTLKdn7au1e+igUDAPS9vBw44dRS2dHJ6RcqN2GG0PsE?=
+ =?us-ascii?Q?hcYeCmzfvyHkUl6BC86j21ybHOEbaF9NCilrsUdT4wF7w567f+4ktr1Nuf2n?=
+ =?us-ascii?Q?U1VbthoEMCUaihCrQI9FErQNQpJqzGFhhTNNUnE+3QrZHraeGZhu+WCz0cuJ?=
+ =?us-ascii?Q?BykSSXtrVsy8R/Zv/LBXmjEz2vhc3MMoSFnRrGAkSrVQgUXXqmt2cYNERVDV?=
+ =?us-ascii?Q?b4NOgbIYnkVvzaFeDta9yt+8eydR0GVbfChDHjbHO6DHajhJubI8SXDnTLs5?=
+ =?us-ascii?Q?jov8oKl7pEsa6E5eeC6ZQp6QBd58t4AuEFnr1nHqghdGD958YAHVyPXuQscy?=
+ =?us-ascii?Q?4rd5fKeDSDtGZABjFYM3V+BFgMkCLJeiZXU0Bf/I9WJZGsXpJsxz9ntf+Pb5?=
+ =?us-ascii?Q?vuWQoj0LR/Nn7qa2G6++hO90+bkjh5lBONV66Imtnlzr1OfhVvwHweq5plcF?=
+ =?us-ascii?Q?qitcpirV/wQYM0Ip4YCmnmua137WvISouTkSqr6YCSKee5LLp9w1YDK0npkW?=
+ =?us-ascii?Q?3MZipREigEgzyu1o2IqEiln0AHhlTIonvMK5bWod9e6HPamdHX8EQR+HQ2T8?=
+ =?us-ascii?Q?hHwR/EzQ56NfTryTdq1gWSz6m3xM5jiDTkqMJepBURIUmJYZOvWnTu9T+POh?=
+ =?us-ascii?Q?GkT0l7PW3rMBF7WnG4yjXpSYmMc79rx63znjjFdmwvSeKc8WrF3qOccRqJnC?=
+ =?us-ascii?Q?NbGZS2ZU7oqZ7tTlY2XbZ/d5pFspvM0LxlRlymPEwBOTJ7ckAvVxQ08c+19D?=
+ =?us-ascii?Q?DGpmUPEAkAj/CMGZMEjWhMpdMaPlsFYkp9CVLDDMGpoYgAXsyD3bBLGtGUsy?=
+ =?us-ascii?Q?WPqYaV9WirfZYN13kgACD5Y5kBLac/LDcG57ZB+xNV5XFI2tn4kyzYxx+DG3?=
+ =?us-ascii?Q?90XyqTzu1z2fQwuGRD3MGTqa8sa7NczSSLYmqGY2VSZwuBUgKGYkZshXvuC5?=
+ =?us-ascii?Q?igMWa29mfHhJZt0TvDxsEcUFUxJ0mU+WQTooSPvcuf5ZwNfV678tbG00bIUa?=
+ =?us-ascii?Q?zI8YX/ab4JSKC9M1dm8KK3GG/Jd2BZR3mPWeuYkc5hp9h7fexf1/KTUJM3nc?=
+ =?us-ascii?Q?jWsEUinfuLKrifMuqMhej85lcdHdpKnNBWxDSYTW61caaFg+5Pq1lwUmEuEj?=
+ =?us-ascii?Q?y6+bUImS8ZeC2pZWk3PVGj0R2rCpl+b2?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR02MB3626.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?3OnurjzmxzGB5F8h/z61MMBTypW8bPq7+QkLObaaJNoRqUaqtIU0lGsTsdm9?=
+ =?us-ascii?Q?vQiw769atiJGirGvdduR3VKfe8B5mSsRweAInvFhuiHzYgtfQf58PQphDeQo?=
+ =?us-ascii?Q?ZsTb996ortOT2t9A4nmWgpcVbBxhGxQuPGjnfaozgymyJBWRXhZMxlzgQgWD?=
+ =?us-ascii?Q?Gi75mBq3EzSWDGDdcf7qc0kplAgYARxS8KlWLH+N/QetNulvkwSTv785yw7r?=
+ =?us-ascii?Q?o2aaMTL/IKN+NTaiTr20ovF50+F3gK4BC3SYXDdD4GUj3UkgUG2rIAhUbHIw?=
+ =?us-ascii?Q?4lTUFcfwN0q1wD9CrmreKzafXwqb6EHVG1NthW3pzK7NgvWEUoYffvNmTasw?=
+ =?us-ascii?Q?zXk5T74/n2svosdLxdt7pBeE5EXVe0S48jb4bQpm9UQLL4U5Ia4swdrV3R4Q?=
+ =?us-ascii?Q?BP1oZ6LoZvZNzeuqmS7JjaYn9qzxJvoSGhNtNitYsP3VwL2nr2y2X/jmHyMk?=
+ =?us-ascii?Q?7pEuMki6HXsJz2bQsbSylNj3ddVy7NBcAJWbpG0wWrBsrnZuwvNEFzuj8C3R?=
+ =?us-ascii?Q?fsODaWeE53phdMlj/MTxn1cdQvdeIVTspmU+0qvTZzyAcN9rHAoOrtpaxhXB?=
+ =?us-ascii?Q?X+x+DjGrdwTbjdLVQZ0GIDfrjjlpz0D1AWnAAeQG0opy7qQ40TjG2CK1ybxo?=
+ =?us-ascii?Q?/5z/hP8CrCemk+7nLOAjeH5GDnbaDJedIImjAcyxzOSja26UclUEXRayXTMd?=
+ =?us-ascii?Q?jJ2ygZItaQVAHnzKQ8KOFc9xdkZSiUm5CUQeaJtoheFcfsbOFcgTLaEQ/jqn?=
+ =?us-ascii?Q?ELqLyGeU09Yk/9Qx9v+qhiD5+NGe4hkTAJq7XF24z6qINoqPeVB877trYtB0?=
+ =?us-ascii?Q?5fit8HW11pECwIe457WqFAHXABWN9wZKzz0As2YR93mz50u1K1jPeZlR+eWa?=
+ =?us-ascii?Q?t6QKFyF1uEjglEav0qI0hKySz5+pPi+2Imkm266xgwAoCdZjCtFjM8A8O45T?=
+ =?us-ascii?Q?oOSKfhBy9YBSjqL6bo1rs8VhKp/mpGW4wEy7m/jpjQ7NK3k/ir4TfOHAplZ/?=
+ =?us-ascii?Q?MbdDp7vBwMwVUO6A4RWdJEVsvlsdXl3Tt/6Jlex6xYiwyfOrxaLQIerX/TgA?=
+ =?us-ascii?Q?VVKGRNx57MJ9uIFM4cVv8C5T35TqldeFWJikxUS8vcR1fyZQpic9SaMEMEtK?=
+ =?us-ascii?Q?qZif1kVBuoH7LC2wzvL8t1Pd8J1VYUox25XJJqQNQL7Vze9LsKldgVvwAezh?=
+ =?us-ascii?Q?F5zkZ/GY1cEdhzZkKyWd2iLacax4X+9mwto2Ts1W6zNDbbTCHaypIGVotsbn?=
+ =?us-ascii?Q?9DjBuOriolLxmDr1NT1BNnADK69brYs9MhecxLDzfc08pNIyjbZADI/PZw4I?=
+ =?us-ascii?Q?r0w8SlqvEoSiNJf6Key4DMZf1cDFLLK4lpWGzQPuMbe8NOp/Reppvwjkyiod?=
+ =?us-ascii?Q?e/866Sod1yQXSQokRCYb3xiBhplyBP2MffUbTf1yb5CZZLmsiZUCRTRkWg50?=
+ =?us-ascii?Q?dIZmVALzRlHFAIDBkllkTV+hqJvxK3Exkj0s9xYlv7syYBUoJmo4Ss3SEJ21?=
+ =?us-ascii?Q?xiTTU2obbVhHWhJA1D9Ua+iJwD50klI5S7UuZCJl6K+gxblxaSLTVq4Rpaa0?=
+ =?us-ascii?Q?3QEOZKXqWAhN55b45ML6waH3PVO3h+HCs+/jfCLP?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250306054532.221138-5-bharata@amd.com>
+X-OriginatorOrg: sap.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR02MB3626.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5eddc69d-8f90-419a-11f9-08dd5da1da6d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2025 17:59:49.1712
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 42f7676c-f455-423c-82f6-dc2d99791af7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AgcfA0XyjxmZLPTM/29B9dEU+BrSeDEvCJaKrm6jcawdJkaoR8e51savMb3TXof7TqkuWwgzhwTuf6VH9d4FTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR02MB10762
 
-Hi Bharata,
+> From: Paul E. McKenney <paulmck@kernel.org>
+> Until such time as the analysis is carried out after inlining.  ;-)
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+The idea behind requiring the attributes is that we'll never have to do tha=
+t. We let the programmer specify interface preconditions/postconditions so =
+that we don't have to inspect the function body.
 
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on tip/x86/mm linus/master v6.14-rc5]
-[cannot apply to akpm-mm/mm-everything next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Inlining has enough disadvantages that it will probably never work here:
+* Since we're looking at individual translation units and not the whole pro=
+gram, we might not see function definitions. So the analysis would behave d=
+ifferently based on whether a function is defined in a header or source fil=
+e, which is undesirable. Some definitions might be in external libraries an=
+d never be available.=20
+* Even if we could see all definitions, there are complexity issues with in=
+lining. We'd have to draw a line somewhere, which would make the analysis u=
+npredictable as well.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bharata-B-Rao/mm-migrate-Allow-misplaced-migration-without-VMA-too/20250306-134949
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20250306054532.221138-5-bharata%40amd.com
-patch subject: [RFC PATCH 4/4] x86: ibs: Enable IBS profiling for memory accesses
-config: x86_64-buildonly-randconfig-005-20250307 (https://download.01.org/0day-ci/archive/20250308/202503080104.AHMWmR7w-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250308/202503080104.AHMWmR7w-lkp@intel.com/reproduce)
+But these are just the reasons for the design decision. What matters is the=
+ decision itself to consider bodies of other functions as black boxes and o=
+nly work with the attributes on their declaration. I guess we could also mo=
+re clearly document this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503080104.AHMWmR7w-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: do_syscall_64+0x11: call to hw_access_profiling_stop() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: do_int80_emulation+0x16: call to hw_access_profiling_stop() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5: call to hw_access_profiling_stop() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0xcc: call to hw_access_profiling_start() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5: call to hw_access_profiling_stop() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0xc2: call to hw_access_profiling_start() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x1c: call to hw_access_profiling_stop() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x63: call to hw_access_profiling_start() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ia32_setup_rt_frame+0x135: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: compat_get_bitmap+0xb3: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: compat_put_bitmap+0xb3: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_cmp1+0xd: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_cmp2+0x10: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_cmp4+0x10: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_cmp8+0xf: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_const_cmp1+0x10: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_const_cmp2+0x10: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_const_cmp4+0x10: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_const_cmp8+0xf: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: __sanitizer_cov_trace_switch+0x51: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: fault_in_writeable+0xae: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: fault_in_readable+0xb5: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: fillonedir+0x179: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: filldir+0x245: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: filldir64+0x244: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: compat_fillonedir+0x1ae: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: compat_filldir+0x28e: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: copy_iovec_from_user+0x98: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: check_zeroed_user+0xce: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: strncpy_from_user+0x8a: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: strnlen_user+0xa7: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-   vmlinux.o: warning: objtool: copy_mc_fragile_handle_tail+0x4d: call to write_comp_data.llvm.15977173092665352742() with UACCESS enabled
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Aaron
