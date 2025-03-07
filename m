@@ -1,67 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1A418CBFB;
-	Fri,  7 Mar 2025 03:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096BB14AD0D;
+	Fri,  7 Mar 2025 03:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741317524; cv=none; b=I3F+T0uWoeTsh61NrLRBvViH33Zam8YOJqsUwXziizWOj6N9cXQ/MwddByUJQc/6pYvi9Y6G1xbfmPTEQs4CxJVq2hxgubE9ehU4DJzJRLJbhzh+i6nvQFITthSFWbGuETiuSdOAj0V2cCYH9Yo/r35ER00LL7Th/MYTcMY/5VM=
+	t=1741318923; cv=none; b=qczlsTR8TXxf4pWxpgcRqQ2OLU2jKtB3/kzMqERgV4AI2d1WPsmH7/HS9O16+xxYYJ35BIrMJ6g5IJOZFJ7uvoJMrCW6qdL7GcWjLsCV4fJNytaqcJ/ip7iIoEPEwfWF9HkJMGP/Fx3G7mJX+Fr/+LzoNFrBjFQWIBEwt+2cWHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741317524; c=relaxed/simple;
-	bh=AqSMa8//pzHQ9mnL+CjQgM8fc8wx7B1+SyGC0Muu/bY=;
+	s=arc-20240116; t=1741318923; c=relaxed/simple;
+	bh=7ZKmaLDPkgzayTW7zs8/xwX8IdPe6S/kyUqYROT1Tkw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ec2tT0KLXLrAnLGcaIsYF8jzrx9dNZpuOfRm12xhZm4TV3R6Xc8QebuHFngLUHM7YDtlrGxmck3YTCLCylYvcYm6I3N9MsghOAN4GcGP+53vPLjwptJOrHq6/ZYSV2QegNByUjukwB6aSKXwOJvZ23wRFOGEObPDKHXY+qwJ+WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3flWHNK; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jxMPr9nkxznTDegmeePDNGaaT4nE+Y/g/XPl4uNvs+Bwz878fawekUW+hHhTpN+LLfwBBEoK4AqIf82qe/vC3SnAJcXNU7zTjA6vOflMUEF6PiLP/bqS+o9xfweYik4N+jJw0sRa4y8RJCdNVgTBxOCemuzxKRT+gvDSiDJu+h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoGU3bhI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3flWHNK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741317524; x=1772853524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AqSMa8//pzHQ9mnL+CjQgM8fc8wx7B1+SyGC0Muu/bY=;
-  b=b3flWHNKVYKHLP3veP2xe9rVpaoIVvoIvBaNZL+IN2CLYbP9aPgRwgqx
-   5SVRru3H+d124AV27c4tGFbbAVGdoGB+fzUbwaG0aVrjt90tza63c8FZs
-   rnSja+oNX2xhZvyFs26ziJQ2mmIDM4quc2U9GxWwLyWeqL0T4aA22sdQo
-   n6BLTpKaUDTqt8VX/PcBnzXy6iuhunSmYk3PHJwVj+dncXZQza1PGL7y1
-   0B0GCQysxrC24WC4a1QO7KpWTFq0ao9EwAau6EdR93/O2YZuJJWH2lDdx
-   LkMIqjueBmx6vOdk2xcRK+oZM8i0rztGll8d0hf6+TLi6TQvW3hAKwzd4
-   w==;
-X-CSE-ConnectionGUID: eXYnY6akR7K/mezDQYqJbw==
-X-CSE-MsgGUID: VHr0bNsAQBugkczx50iUKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="29937389"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="29937389"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 19:18:43 -0800
-X-CSE-ConnectionGUID: wta3WuZJQrKl6l0iODaFEQ==
-X-CSE-MsgGUID: 1bTw2xscT9GVMo0dh9wXYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="123798504"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 06 Mar 2025 19:18:37 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqOEN-000O9y-1B;
-	Fri, 07 Mar 2025 03:18:35 +0000
-Date: Fri, 7 Mar 2025 11:17:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shuai Xue <xueshuai@linux.alibaba.com>, tony.luck@intel.com,
-	bp@alien8.de, peterz@infradead.org, catalin.marinas@arm.com,
-	yazen.ghannam@amd.com, akpm@linux-foundation.org,
-	linmiaohe@huawei.com, nao.horiguchi@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
-	mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, jpoimboe@kernel.org, linux-edac@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com
-Subject: Re: [PATCH v3 1/3] x86/mce: Use is_copy_from_user() to determine
- copy-from-user context
-Message-ID: <202503071154.xQpKARjN-lkp@intel.com>
-References: <20250306021031.5538-2-xueshuai@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoGU3bhI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E67C4CED1;
+	Fri,  7 Mar 2025 03:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741318922;
+	bh=7ZKmaLDPkgzayTW7zs8/xwX8IdPe6S/kyUqYROT1Tkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WoGU3bhIbmj/RgbH4PG/wcamx2JxqjI4P/F+zRU/wQxDnHv1lJFvQmgSLL+IgRmRE
+	 sOLjdcQiryXV5ei9ZgXApTIIe0mm3mSOsWo1Eshg0EF5yWMSycDMpbSPG3wQSEeOPX
+	 dKykgdVeye4scfjjTOvPHSNB5C968bDsFBsyL+q6NPAYKPPHI/dLSJ2waVf0xvPJm7
+	 jyec22eqjat8dDN7W6wO+aPHZzuUWePjb8q3M9DANp/jBzGSFUwh/+CeJEGEhZLnPk
+	 4l9UVcHb8KGemAZJ886iLxmiBg35EoWpiG8b95Hg6+SpVKwdaFfP3MJ2y3TGLlZMqN
+	 O9TCcizARoOnA==
+Date: Thu, 6 Mar 2025 19:41:59 -0800
+From: Kees Cook <kees@kernel.org>
+To: David Gow <davidgow@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] kbuild: clang: Support building UM with SUBARCH=i386
+Message-ID: <202503061939.AAC6EF5A44@keescook>
+References: <20250304162124.it.785-kees@kernel.org>
+ <CABVgOSnEaTVUfZB6KACFJE4mM=oSWnUtcrf7ETHFq8h_k=mFTw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,93 +49,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250306021031.5538-2-xueshuai@linux.alibaba.com>
+In-Reply-To: <CABVgOSnEaTVUfZB6KACFJE4mM=oSWnUtcrf7ETHFq8h_k=mFTw@mail.gmail.com>
 
-Hi Shuai,
+On Thu, Mar 06, 2025 at 04:59:53PM +0800, David Gow wrote:
+> On Wed, 5 Mar 2025 at 00:21, Kees Cook <kees@kernel.org> wrote:
+> >
+> > The UM builds distinguish i386 from x86_64 via SUBARCH, but we don't
+> > support building i386 directly with Clang. To make SUBARCH work for
+> > i386 UM, we need to explicitly test for it.
+> >
+> > This lets me run i386 KUnit tests with Clang:
+> >
+> > $ ./tools/testing/kunit/kunit.py run \
+> >         --make_options LLVM=1 \
+> >         --make_options SUBARCH=i386
+> > ...
+> >
+> > Fixes: c7500c1b53bf ("um: Allow builds with Clang")
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> 
+> Thanks for this -- I'd been using `--kconfig_add CONFIG_64BIT=n` as a
+> way to build i386 UML kernels, which seems to work even without this
+> patch -- but this is definitely an improvement.
 
-kernel test robot noticed the following build errors:
+Thanks! Yeah, I figured there must have been a way to get at it. I
+wanted to make it work the "normal" way.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+> It may be worth noting that CONFIG_FORTIFY_SOURCE is incompatible with
+> clang + i386, which seems to affect UML as well. (That might actually
+> not be required, as I think UML doesn't use any of the strange
+> -mregparm calling convention stuff which appears to be what breaks
+> FORTIFY_SOURCE here.)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/x86-mce-Use-is_copy_from_user-to-determine-copy-from-user-context/20250306-101505
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20250306021031.5538-2-xueshuai%40linux.alibaba.com
-patch subject: [PATCH v3 1/3] x86/mce: Use is_copy_from_user() to determine copy-from-user context
-config: i386-buildonly-randconfig-002-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071154.xQpKARjN-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071154.xQpKARjN-lkp@intel.com/reproduce)
+Also fixed! :)
+https://lore.kernel.org/lkml/20250303214929.work.499-kees@kernel.org/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071154.xQpKARjN-lkp@intel.com/
+> Tested-by: David Gow <davidgow@google.com>
 
-All errors (new ones prefixed by >>):
+Thanks for testing; I've updated the trailers in my tree.
 
-   In file included from arch/x86/kernel/cpu/mce/severity.c:16:
-   In file included from arch/x86/include/asm/traps.h:6:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2321:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/x86/kernel/cpu/mce/severity.c:305:25: error: expected ';' after return statement
-     305 |                 return IN_KERNEL_RECOV
-         |                                       ^
-         |                                       ;
-   1 warning and 1 error generated.
-
-
-vim +305 arch/x86/kernel/cpu/mce/severity.c
-
-   274	
-   275	/*
-   276	 * If mcgstatus indicated that ip/cs on the stack were
-   277	 * no good, then "m->cs" will be zero and we will have
-   278	 * to assume the worst case (IN_KERNEL) as we actually
-   279	 * have no idea what we were executing when the machine
-   280	 * check hit.
-   281	 * If we do have a good "m->cs" (or a faked one in the
-   282	 * case we were executing in VM86 mode) we can use it to
-   283	 * distinguish an exception taken in user from from one
-   284	 * taken in the kernel.
-   285	 */
-   286	static noinstr int error_context(struct mce *m, struct pt_regs *regs)
-   287	{
-   288		int fixup_type;
-   289		bool copy_user;
-   290	
-   291		if ((m->cs & 3) == 3)
-   292			return IN_USER;
-   293	
-   294		if (!mc_recoverable(m->mcgstatus))
-   295			return IN_KERNEL;
-   296	
-   297		/* Allow instrumentation around external facilities usage. */
-   298		instrumentation_begin();
-   299		fixup_type = ex_get_fixup_type(m->ip);
-   300		copy_user  = is_copy_from_user(regs);
-   301		instrumentation_end();
-   302	
-   303		if (copy_user) {
-   304			m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_COPYIN;
- > 305			return IN_KERNEL_RECOV
-   306		}
-   307	
-   308		switch (fixup_type) {
-   309		case EX_TYPE_FAULT_MCE_SAFE:
-   310		case EX_TYPE_DEFAULT_MCE_SAFE:
-   311			m->kflags |= MCE_IN_KERNEL_RECOV;
-   312			return IN_KERNEL_RECOV;
-   313	
-   314		default:
-   315			return IN_KERNEL;
-   316		}
-   317	}
-   318	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
