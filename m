@@ -1,116 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4C121ABB6;
-	Fri,  7 Mar 2025 14:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E7921D3DC
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 16:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741358672; cv=none; b=lWtQh63Bhlq+d4NvBdjCyz5hba3AJNNbe45JVW1yZ62aXqhp1gxeFIuoPvfE+Y0ibkJs632D6isURgTse6TPoiZVt4c7Onr2VBged1fvPaSgmiyIFg3DU8CUDUSnYU6m0B9q7K3ilrUgr3cbNIlOCQt/nraCy0ktGkJx0HGrpVc=
+	t=1741363342; cv=none; b=EpP3SYirYecLxyYgyI7fmz6pToHkHHgqN/E7iiQ2hna1wjkRfNydKgXzc55zu1gwjsH6Ago1wpTZRYBceMfI7urLB7S/Qdq1dl88pRBEgYW8h0Zuyo1/nkn99tUwTNoH5z+82oLpLinTKatIvmKPE1CkiJ8K17Z1IpV9NRMXCQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741358672; c=relaxed/simple;
-	bh=Pon7ODoTxoNcce+huTwStkjHq3PDpXylw4w//cwIeD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JeL47lW1uCbSiKfmJ/46j+Qh/ojahGpujhpaCbnkh78o9nXJMYKztihXq6p4Bz/ntpg5oL3HnXaVjhzD9eemfgQ/A+g6fNLETn5xcL22wkhW3Vppli8C2fDeqBMsPjxR3En9YHvZhz9Ye7/dWaZ+cGlRe26M4w4+pqRE8RYcp9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cQGhKsw7; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741363342; c=relaxed/simple;
+	bh=pZG8OWw9Y4HEMi6CXbC31nuGHnd63vbA2rPcHa3RtiI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=gvmgHykTu++mhxZXIoCPNsUCPl/wFj3vkOVShOIk1iooDZjR9kHRwtLN92O8m2zi3VcU4fjRPFN2rjgFi9SUimdufHyO68pTGevYrugzOoZZtsieszhXuOGg2f36zL0ynhL+y4E6P/tJST3dq61p9mi/2tSdO13iEcP/zEWyLPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e8dFb0gC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cQGhKsw7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741358671; x=1772894671;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Pon7ODoTxoNcce+huTwStkjHq3PDpXylw4w//cwIeD8=;
-  b=cQGhKsw75Dbk/r6OKbgeloAKirxNJdSg42w+AG4YzfB/W6/87Xgp7wAQ
-   Z+i0CfWCQWJDnvKopsJr2TunhXuxbIroSqnT8XwyUsEImifetzvp2wjcR
-   MdLe6rKpdgE+zZxxQBHi6P7hoIRpF45d/baMEU+a2/l1PWcOO2D6DooOw
-   EJkA7+qOMCnu7P6kP8+d8Pd740Fa+pkUnEJTAZlkLE5qq10AJ2eW8PDyS
-   Ccn77ATnFVwbaQk+vK8oQandI8zfdFzmKr3g+ARbWWrI535eLzyzFIL/X
-   YO5IV/f7krbDmA8vMNc9cY1INY0w3ebIzxLDoa7IwBvmNAuPLJ3ZigUom
-   Q==;
-X-CSE-ConnectionGUID: mrDo2d6eTtyOvEGRnHyyqg==
-X-CSE-MsgGUID: AOCTn587RxGnSjmUwYHoOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42264043"
-X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42264043"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 06:44:30 -0800
-X-CSE-ConnectionGUID: c61mI4LvTHKcqlSC0VSPkw==
-X-CSE-MsgGUID: gmtHIQ2iSsCTBgUtbNH+3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="142571818"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 07 Mar 2025 06:44:29 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqYvz-0000aX-0i;
-	Fri, 07 Mar 2025 14:44:21 +0000
-Date: Fri, 7 Mar 2025 22:42:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: [linux-next:master 9380/9634] drivers/rtc/rtc-pl031.c:87: warning:
- Excess struct member 'range_maximum' description in 'pl031_vendor_data'
-Message-ID: <202503072239.fEPJgP3W-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e8dFb0gC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741363340;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Dw290ll+3oPTlYeQsujiqiDib7Di9acSmA60/aRwPSE=;
+	b=e8dFb0gCg0PhYmUBW5vFFyv4eqC4pFby++/p4os87V95A1/wqBrVYrJfRMR1Kj3Qg4RlFL
+	9pNIAYeVMlSKAD5MuKV0kHvleOxbinKRA/LOjtuuTVbfH8FNEkfTLm7n57GXHoE/tvAPrH
+	ZSjsQzwPGJ6nL4fLCvAltYoMAQFrPVo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-619-SF9jQ50OOSqf9y5ZqXtcLg-1; Fri,
+ 07 Mar 2025 11:02:16 -0500
+X-MC-Unique: SF9jQ50OOSqf9y5ZqXtcLg-1
+X-Mimecast-MFC-AGG-ID: SF9jQ50OOSqf9y5ZqXtcLg_1741363335
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 30DBD1809CA3
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 16:02:08 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C67D0300019E;
+	Fri,  7 Mar 2025 16:02:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, 00a7d398)
+Date: Fri, 07 Mar 2025 16:02:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <85629.125030711021613628@us-mta-619.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: osgKRRILU0J3tJlUFJDJNUBXfwZBrhIcpG8-ociE9aA_1741363335
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0a2f889128969dab41861b6e40111aa03dc57014
-commit: 6571ef7dc9cfcf04fb858b54c15c1b645d7b2bc6 [9380/9634] rtc: pl031: document struct pl031_vendor_data members
-config: arm-randconfig-001-20250307 (https://download.01.org/0day-ci/archive/20250307/202503072239.fEPJgP3W-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503072239.fEPJgP3W-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503072239.fEPJgP3W-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/rtc/rtc-pl031.c:87: warning: Function parameter or struct member 'range_max' not described in 'pl031_vendor_data'
->> drivers/rtc/rtc-pl031.c:87: warning: Excess struct member 'range_maximum' description in 'pl031_vendor_data'
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +87 drivers/rtc/rtc-pl031.c
+Kernel information:
+    Commit message: fs/pipe: add simpler helpers for common cases
 
-8ae6e163c1b637e Deepak Saxena     2006-06-25  68  
-aff05ed5d103524 Linus Walleij     2012-07-30  69  /**
-aff05ed5d103524 Linus Walleij     2012-07-30  70   * struct pl031_vendor_data - per-vendor variations
-aff05ed5d103524 Linus Walleij     2012-07-30  71   * @ops: the vendor-specific operations used on this silicon version
-1bb457fc9268bb7 Linus Walleij     2012-07-30  72   * @clockwatch: if this is an ST Microelectronics silicon version with a
-1bb457fc9268bb7 Linus Walleij     2012-07-30  73   *	clockwatch function
-1bb457fc9268bb7 Linus Walleij     2012-07-30  74   * @st_weekday: if this is an ST Microelectronics silicon version that need
-1bb457fc9268bb7 Linus Walleij     2012-07-30  75   *	the weekday fix
-559a6fc0508392a Mattias Wallin    2012-07-30  76   * @irqflags: special IRQ flags per variant
-6571ef7dc9cfcf0 Alexandre Belloni 2025-03-05  77   * @range_min: minimum date/time supported by the RTC
-6571ef7dc9cfcf0 Alexandre Belloni 2025-03-05  78   * @range_maximum: maximum date/time supported by the RTC
-aff05ed5d103524 Linus Walleij     2012-07-30  79   */
-aff05ed5d103524 Linus Walleij     2012-07-30  80  struct pl031_vendor_data {
-aff05ed5d103524 Linus Walleij     2012-07-30  81  	struct rtc_class_ops ops;
-1bb457fc9268bb7 Linus Walleij     2012-07-30  82  	bool clockwatch;
-1bb457fc9268bb7 Linus Walleij     2012-07-30  83  	bool st_weekday;
-559a6fc0508392a Mattias Wallin    2012-07-30  84  	unsigned long irqflags;
-03f2a0e45f395bc Alexandre Belloni 2020-03-06  85  	time64_t range_min;
-03f2a0e45f395bc Alexandre Belloni 2020-03-06  86  	timeu64_t range_max;
-aff05ed5d103524 Linus Walleij     2012-07-30 @87  };
-aff05ed5d103524 Linus Walleij     2012-07-30  88  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1705073301
 
-:::::: The code at line 87 was first introduced by commit
-:::::: aff05ed5d103524bd69bd9d7b621c5c8a6c63198 rtc: pl031: encapsulate per-vendor ops
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1705073301-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1705073301-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1705073301-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-:::::: TO: Linus Walleij <linus.walleij@linaro.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
