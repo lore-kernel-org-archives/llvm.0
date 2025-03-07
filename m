@@ -1,63 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1147217B421;
-	Fri,  7 Mar 2025 02:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519E42E822;
+	Fri,  7 Mar 2025 03:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741313804; cv=none; b=lqZKqx/G1zRk0u+SWGfKyWGimOwq45okIY2OV3mZOX9HWaojlo3/OYCqX1Orz4UdQE01S/84FdpAv5ZwfQ91KD1nzs0szRydp/IaAFExMH/6WWJAWsVBGa4Gw0VI2AXwZV3htDyY76ElbWlZHfyk71EvNj4ukofcGjuIKaR0MpA=
+	t=1741316924; cv=none; b=XUh2YRQW7Liexa04XLpcOC89JXUaH0Z+Arq9BSHzHBFWURBZVBIZOTmdT5tbIaZ2HxBpS0WlOSos365/F7kpLYwCt53bMLA1OOJuCIXft4jui7SkEnXnivZehxfjsNXfa3aKtDVpnhBUO0Loq1hEIWpIcf511TKQJdZLglMxMrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741313804; c=relaxed/simple;
-	bh=ZyOz/uYYyz/4EKksKGOyPQPJsAfnF6veO9NaJZPXjGw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oyv4S6+ZfS4bbxBhk9WZDT2q5HejvZLxn0SRqVFSYiF/VL8VwlVr5dwa8A0T05WDdUlzOl41n2u00wshbfMoHGoQVc6tmtKpeEeAtQBPjhvOqlBKFwsieyVH/Ge1TBggdR/eRnrQdcv5mGEQR0S7e0f09FK8XQ1l7U7mgpK4/48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zo3qBBZO; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1741316924; c=relaxed/simple;
+	bh=DcLJ9aKimVNyrW/43nsjmeGTwBj8U+eyVkMor5z0OH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlzJNjFkIrK8bBBgSQh6krkALjWhwNrby3czd3XWAaqJthstuiMAOXu+YY/VkVQvU7v4dg/+0JQxTeoMnNCAEoTxPQYX7lo7TsdMse4P9QPwgfeDC1FarVHDLt+1800mZVDSEF1P1h9AuJSICR2M/e6LJEjzb0eKx+77rqgIJRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BmYVNQH1; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zo3qBBZO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmYVNQH1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741313803; x=1772849803;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZyOz/uYYyz/4EKksKGOyPQPJsAfnF6veO9NaJZPXjGw=;
-  b=Zo3qBBZOYA3rUli2vUxuoPUhruj/bcgo/eg3OkxgfrpQqhuaod+t8G6y
-   cfCk8QBcu4rhkfFUfnLjnwQFRqSA2/1LVZSTxFycvetQQuWJsXCgZgbdl
-   JT8CG6dk+KHguz1KMvDybpqURACAJl529IGtbA2WPrdPa9hpEifhIxdXH
-   0QRQl74E43VxnR6Gx+dMftZ4gdCTJFEELaeZ4QyB8Gg2NBaZhZZsPWYuJ
-   qcS1Idjglf64Qj9auqqKPe2K2oB0atHBYdAbZHbFM4oloDVWp9+RhX/M5
-   W4pIfRHXt7XUHtQB8VaHev4dGcJjRqThBcG1fCgOfKjr9Z6SK+ynv0Ko5
-   g==;
-X-CSE-ConnectionGUID: XEskx94hTvu3ONlsBTJJ5A==
-X-CSE-MsgGUID: FL4CIjP6QEOH0JDh7hHIyA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="41603434"
+  t=1741316920; x=1772852920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DcLJ9aKimVNyrW/43nsjmeGTwBj8U+eyVkMor5z0OH0=;
+  b=BmYVNQH16msb0sJQ9GcjMHOLg4n+SuJln+cjl6Ke/kh2mO9bb7duYuwM
+   r5oNeYB25w8pwb7YbClYDSd5eY9BZrELjd8h3Yca/RY2JDgMDHMkwHJaQ
+   b4G3ql67IYQfIRsFyb0tEl+ItKuBaBcVkHoKemBeaiQ9BFxGCxbQhb/wb
+   5UTsmhT8ednU81eS40qfqxiBhwqh1GvpXIZJAG/BfpqFeT2te2vRGyxjm
+   E/522LTTBSgjHkTZX4nuvt4KGvWllyj2AcskmAoMQIC0DxDK65l4NUwgq
+   H9OOTvkjVI6u896BhHXoz78mJmmjKYyNizSA+rnWLcQxCOg8jMyFg3Icb
+   A==;
+X-CSE-ConnectionGUID: P7CMQSibSoChL0lofLTLAw==
+X-CSE-MsgGUID: sMz398i+Tmq3GWh7HcmEog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="52996206"
 X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="41603434"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 18:16:41 -0800
-X-CSE-ConnectionGUID: XJlTi61CR2yzyZcjb20p5Q==
-X-CSE-MsgGUID: h3JcmFGhRiG037c3y0o8vg==
+   d="scan'208";a="52996206"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 19:08:39 -0800
+X-CSE-ConnectionGUID: NYB16Ma0QrSPRJ6pD9Bw5g==
+X-CSE-MsgGUID: UPRbNo95TJeuYJ1WV0owAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119715707"
+   d="scan'208";a="119130707"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 06 Mar 2025 18:16:39 -0800
+  by orviesa010.jf.intel.com with ESMTP; 06 Mar 2025 19:08:35 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqNGP-000NwD-0b;
-	Fri, 07 Mar 2025 02:16:37 +0000
-Date: Fri, 7 Mar 2025 10:15:41 +0800
+	id 1tqO4d-000O7i-2r;
+	Fri, 07 Mar 2025 03:08:31 +0000
+Date: Fri, 7 Mar 2025 11:07:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+To: Ryosuke Yasuoka <ryasuoka@redhat.com>,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	kraxel@redhat.com, gurchetansingh@chromium.org, olvaffe@gmail.com,
+	akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
+	dmitry.osipenko@collabora.com, jfalempe@redhat.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org,
-	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Johan Korsnes <johan.korsnes@remarkable.no>,
-	Kristian Krohn <kristian.krohn@remarkable.no>
-Subject: [bluetooth-next:master 42/43] drivers/bluetooth/btnxpuart.c:1322:15:
- error: use of undeclared identifier 'skb'
-Message-ID: <202503071027.4Q1Nm5Zx-lkp@intel.com>
+	Ryosuke Yasuoka <ryasuoka@redhat.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-mm@kvack.org
+Subject: Re: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work
+ drm_panic in GUI
+Message-ID: <202503071022.q1pg7suf-lkp@intel.com>
+References: <20250305152555.318159-3-ryasuoka@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,64 +71,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250305152555.318159-3-ryasuoka@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-head:   8968f507940cad09c8e2ecc4631f90d62709e17b
-commit: 228c506481ea3f6ac5538188517c4a6f9feb5a26 [42/43] Bluetooth: btnxpuart: Add support to set BD address
-config: x86_64-buildonly-randconfig-001-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071027.4Q1Nm5Zx-lkp@intel.com/config)
+Hi Ryosuke,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on e21cba704714c301d04c5fd37a693734b623872a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryosuke-Yasuoka/vmalloc-Add-atomic_vmap/20250305-232918
+base:   e21cba704714c301d04c5fd37a693734b623872a
+patch link:    https://lore.kernel.org/r/20250305152555.318159-3-ryasuoka%40redhat.com
+patch subject: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work drm_panic in GUI
+config: i386-buildonly-randconfig-003-20250306 (https://download.01.org/0day-ci/archive/20250307/202503071022.q1pg7suf-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071027.4Q1Nm5Zx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071022.q1pg7suf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071027.4Q1Nm5Zx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503071022.q1pg7suf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/bluetooth/btnxpuart.c:1322:15: error: use of undeclared identifier 'skb'
-    1322 |                            PTR_ERR(skb));
-         |                                    ^
-   drivers/bluetooth/btnxpuart.c:1724:8: error: no member named 'cmd_timeout' in 'struct hci_dev'; did you mean 'rpa_timeout'?
-    1724 |         hdev->cmd_timeout = nxp_cmd_timeout;
-         |               ^~~~~~~~~~~
-         |               rpa_timeout
-   include/net/bluetooth/hci_core.h:593:10: note: 'rpa_timeout' declared here
-     593 |         __u32                   rpa_timeout;
-         |                                 ^
-   2 errors generated.
-
-
-vim +/skb +1322 drivers/bluetooth/btnxpuart.c
-
-  1308	
-  1309	static int nxp_set_bdaddr(struct hci_dev *hdev, const bdaddr_t *bdaddr)
-  1310	{
-  1311		union nxp_set_bd_addr_payload pcmd;
-  1312		int err;
-  1313	
-  1314		pcmd.data.param_id = 0xfe;
-  1315		pcmd.data.param_len = 6;
-  1316		memcpy(pcmd.data.param, bdaddr, 6);
-  1317	
-  1318		/* BD address can be assigned only after first reset command. */
-  1319		err = __hci_cmd_sync_status(hdev, HCI_OP_RESET, 0, NULL, HCI_INIT_TIMEOUT);
-  1320		if (err) {
-  1321			bt_dev_err(hdev, "Reset before setting local-bd-addr failed (%ld)",
-> 1322				   PTR_ERR(skb));
-  1323			return err;
-  1324		}
-  1325	
-  1326		err = __hci_cmd_sync_status(hdev, HCI_NXP_SET_BD_ADDR, sizeof(pcmd),
-  1327				     pcmd.buf, HCI_CMD_TIMEOUT);
-  1328		if (err) {
-  1329			bt_dev_err(hdev, "Changing device address failed (%d)", err);
-  1330			return err;
-  1331		}
-  1332	
-  1333		return 0;
-  1334	}
-  1335	
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
+ERROR: modpost: "drm_gem_atomic_get_pages" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
+ERROR: modpost: "atomic_vmap" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
+>> ERROR: modpost: "drm_gem_shmem_atomic_vmap" [drivers/gpu/drm/virtio/virtio-gpu.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
