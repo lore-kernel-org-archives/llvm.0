@@ -1,60 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4669219E8;
-	Fri,  7 Mar 2025 23:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107681DC99A
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 23:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741389529; cv=none; b=AvzxUbWJKOsNn9wIXZ+xxZBEAlMdu3flxe1PKFEcVkM4o9/t3aqffRa943IyFWLqXt+7dcJYgJu+Q+xOqv3+HWpchj3mXio0zOWE7DiHC1GFWitVa5V0CvxD04BpkSoMYjRVJoPmXuXV2/xHF+whCRlIzuWzWO4pXrdcywZP/SM=
+	t=1741390387; cv=none; b=h6BQbS0H4V+9oujo6NxvsoP+BoBF7XrEVkAC3EOKxwCyikGxX/DeydekNHRhheMnZvY1ESNInHYdCc3d5EjO87Ba641PBjdG7xi69g4SwczUkndwv5EhDGrRkFPeP5jHp7suAS+yPHT2w78LAxegEVcT635QipE849cO271i1vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741389529; c=relaxed/simple;
-	bh=SGbjZXP+dDpCY4Npn4/qv+l6WgdAJj/ZTXj5Ia9hXV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=W+aHm7cSrnXQZpNdyZ4rG5QlfmIdv6plr1p2+f/ctKZRDFXx+pTWOKPzSrjKSNj3OoVuHnC1gpdSYt2mbnnhOmnW5dt/6FqgtxeXYXTvhDCY5cwgaKr/+iCZm74yLsUIDzxYKkD5171EThYWWzS5DQUFx0cKjbP5teV3S36KvZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=APiaq9Dr; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741390387; c=relaxed/simple;
+	bh=L4aJtPrE2GfnROL3oS1K4BKrQk2bSyTkmLWv+1Ga//g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lrg4zoXII7aWNAeH4o5JoDtNkmP6yQHvbX5qQmeYnkiljEbTBUxBidHCr2Ng7As4cwEvaBzOuJyEaEQTwp1UndUTxmj1kyKS2Uw+j2Jo9a5mtx1C/R3PvFVtATXKt2DtdKpf4/NkHshFvKY2cc2h8TlnlBFGtL3eX94u+ir7DH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wpc7jzE2; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="APiaq9Dr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741389528; x=1772925528;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SGbjZXP+dDpCY4Npn4/qv+l6WgdAJj/ZTXj5Ia9hXV8=;
-  b=APiaq9DrPrdp3r1WK+lRqEyku9+1Ce26hkUuGBS2VTM9ukvKckJM5F6d
-   wi0rekwAcNderg0RnxAZMhVmfozPjq869o0jbpdUqEo2qQDaZ91g6Sz5T
-   hBNZh2BVmyJyMBP+f2c9A1BBKKi0zoPVQ6evQbaoaMF1eHx4ULm5EOc7R
-   +oL7V3ZNLghzZCLnDkUQuYZLW7oV9mkKYFRGrUmmLGCOD0DqPT7jzWMYj
-   mzHMYMkK6o1YyBz0ZxM4NvvrINdy7W9Vxc/J5j590GLoecM5CG7LoCOi7
-   +nSmOqlQqMV6NJkMYuCaAs2npisNjPUjmyX1nRqsKG4l3+PMGc0rpv2DC
-   g==;
-X-CSE-ConnectionGUID: XGA52RWfSkK70q7WcjuyRw==
-X-CSE-MsgGUID: Bn/0Vj8yRNe1Y2+pZIdozA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="42652038"
-X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
-   d="scan'208";a="42652038"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 15:18:48 -0800
-X-CSE-ConnectionGUID: 2/XIlxpORZKAoqhdUeHY3w==
-X-CSE-MsgGUID: lhF5PQgzSsy5AY37GMF1PQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
-   d="scan'208";a="124464035"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 07 Mar 2025 15:18:46 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqgxn-0001Az-1n;
-	Fri, 07 Mar 2025 23:18:43 +0000
-Date: Sat, 8 Mar 2025 07:17:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Skeggs <bskeggs@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dave Airlie <airlied@redhat.com>
-Subject: [jfern:nova-core-experiments 192/411]
- drivers/gpu/drm/nouveau/nouveau_drm.c:824:1: warning: unused label
- 'fail_drm_dev_init'
-Message-ID: <202503080712.rNSoZTIG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wpc7jzE2"
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-85ae9566c52so73201439f.1
+        for <llvm@lists.linux.dev>; Fri, 07 Mar 2025 15:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741390385; x=1741995185; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHFXO9D6YwhROjoFlwWSesjCYFiKET0NT2Feon19Q6U=;
+        b=Wpc7jzE2G26zuBidMm3I1erVFYyZNr5hNSxzAh6LW7FtdWQSXjfCr6HOjHLsKRbybu
+         GmM2dHfWpCxSUQmfdnLJ5gquIgtNJ1gXF6fFuDBfY/H63YZuQ75KtLG+gBc/em9e9Spw
+         bl1BSDTGkSuAP0Ypmmwp8EZFFv8496Ao+Z+rAQmFz9ANLDOMD6KqOmr7+yWrG9Od2Fgp
+         4XEkWFNYQA0VvDi76ztcMT9sZj2l+nRXk0bUFC/R+acbN40CjDHc8DmzgXNcqRXN7g3D
+         z70B8j6xQ2mYef4Oum3iVObjt5b8CS2xQuxukFT5+8U53ua5H59hQBEEP+PpPfLAnbM8
+         lI/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741390385; x=1741995185;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mHFXO9D6YwhROjoFlwWSesjCYFiKET0NT2Feon19Q6U=;
+        b=XvRmoFFuugkeDyDpVhn2a8HO9FJ8Art3RULI0ttVHZPx4rFj+iQ0ISHOeSVOB3Tz3m
+         phhfx2ZjVJbjf1VkuxClbvpXuzP3/PiEofTHKaKJQRnvP4CjxQN7I3Wmy3nwoyag3oAA
+         tEW3atRGX+3+WHIMDUZgtYaoc0K3jzlJU9tWVVwU4gLLoiL0gHQvw1Jodkv5GXmpRCu6
+         POwJ9Y1EU1H0SrrLKGgWKn+45Zdg9O9pJN4xrKzOfnTnS00A5lY8bHYr/aVFZS8pyN8t
+         eagbJ1d2vWx0V/qkYbtia4d5AoxQjPKfiYMlVuOGT9Y40xBDRuWFByAkp8z4bDyfY0Tl
+         o2Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/S8U245HuIpraHnTMPqoFrylwGkchGcwLtTO+VrJma3XwSBuNbCmfM49kAFu6/Ry7u5Wh@lists.linux.dev
+X-Gm-Message-State: AOJu0YwSsT8QEZt34bAw5fnLSMPMdHZfEInRKwSERJj0jbEV5J0v65c0
+	zbTl8ozeRteLu4gNE6lcDBuJUDGCmCtb9Wk/tAeAaEecNrm2axJK3EfcnakHKQ==
+X-Gm-Gg: ASbGncsWLNNMH7rGBiA4MCOFz7AE9XexcYlwi1pb5+EeU+pryx4ol5UzHyY4r86yV+0
+	ZodBtPClBmxkVKbcUqeR/q2QEZExoGmDrS32wAHvO16FF9R2nDeYQUlaZKrQwGhXukbxiNairIt
+	kkUSGgN70asndUVruFDr9PQOAZGwV/0EhLSpw0nWPC23s6/aydQFxUqInfgJSG1oMSLOSCjKRWw
+	4MQw5xhHnorreCzHMoO5U84KS4FgALBjpjVHKW74b+sA/CV/5fKgrv2PUrrwjR0z7jLzBcMJ1uK
+	wIVE5VBhxRAtvfztUAIJGLRK9ufhEsOpUVOhu6GszC/cKLfRvGcr1QOblcTGztkUgODdjgBNgmj
+	HGc5KCnPY
+X-Google-Smtp-Source: AGHT+IFyRzzf7mMzUIJI4y0Th6wZ9sjI35nBIcnhd9RXwZh9GmhLYqRpDr7OO9MYwGSF0/lxYav2hg==
+X-Received: by 2002:a05:6602:4006:b0:855:ac69:32a4 with SMTP id ca18e2360f4ac-85b1d053032mr663250139f.1.1741390384993;
+        Fri, 07 Mar 2025 15:33:04 -0800 (PST)
+Received: from google.com (26.80.59.108.bc.googleusercontent.com. [108.59.80.26])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f22079b1dfsm382085173.118.2025.03.07.15.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 15:33:04 -0800 (PST)
+Date: Fri, 7 Mar 2025 15:33:01 -0800
+From: Justin Stitt <justinstitt@google.com>
+To: Kees Cook <kees@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Hao Luo <haoluo@google.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Bill Wendling <morbo@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Tony Ambardar <tony.ambardar@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Jan Hendrik Farr <kernel@jfarr.cc>, 
+	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 3/3] ubsan/overflow: Enable ignorelist parsing and add
+ type filter
+Message-ID: <upvdnfozcexlpb2x4auimec347adozkl2al4hu2yp3kfagdeyp@dqs2ft6wdmog>
+References: <20250307040948.work.791-kees@kernel.org>
+ <20250307041914.937329-3-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,168 +84,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250307041914.937329-3-kees@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git nova-core-experiments
-head:   3b93174b3502247b0c46bd54a7cf5f4105274edb
-commit: d5f4619b33f18fda53df3bd2b5608cc78d5798b0 [192/411] drm/nouveau/nvkm: move pci probe() enable/disable handling from drm
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250308/202503080712.rNSoZTIG-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250308/202503080712.rNSoZTIG-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503080712.rNSoZTIG-lkp@intel.com/
+On Thu, Mar 06, 2025 at 08:19:11PM -0800, Kees Cook wrote:
+> Limit integer wrap-around mitigation to only the "size_t" type (for
+> now). Notably this covers all special functions/builtins that return
+> "size_t", like sizeof(). This remains an experimental feature and is
+> likely to be replaced with type annotations.
 
-All warnings (new ones prefixed by >>):
+For future travelers, track the progress of type annotations over at
+[1]. There's still discussion on how these will be implemented in Clang.
 
-   In file included from drivers/gpu/drm/nouveau/nouveau_drm.c:26:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/nouveau/nouveau_drm.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/nouveau/nouveau_drm.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/gpu/drm/nouveau/nouveau_drm.c:27:
-   In file included from include/linux/pci.h:39:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/gpu/drm/nouveau/nouveau_drm.c:824:1: warning: unused label 'fail_drm_dev_init' [-Wunused-label]
-     824 | fail_drm_dev_init:
-         | ^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/nouveau/nouveau_drm.c:836:22: warning: unused variable 'device' [-Wunused-variable]
-     836 |         struct nvkm_device *device = drm->nvkm;
-         |                             ^~~~~~
-   drivers/gpu/drm/nouveau/nouveau_drm.c:484:1: warning: unused variable 'nouveau_driver' [-Wunused-const-variable]
-     484 | nouveau_driver = {
-         | ^~~~~~~~~~~~~~
-   19 warnings generated.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>
+> Cc: kasan-dev@googlegroups.com
+> Cc: linux-hardening@vger.kernel.org
+> Cc: linux-kbuild@vger.kernel.org
+> ---
+>  lib/Kconfig.ubsan               | 1 +
+>  scripts/Makefile.ubsan          | 3 ++-
+>  scripts/integer-wrap-ignore.scl | 3 +++
+>  3 files changed, 6 insertions(+), 1 deletion(-)
+>  create mode 100644 scripts/integer-wrap-ignore.scl
+> 
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index 888c2e72c586..4216b3a4ff21 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -125,6 +125,7 @@ config UBSAN_INTEGER_WRAP
+>  	depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
+>  	depends on $(cc-option,-fsanitize=implicit-signed-integer-truncation)
+>  	depends on $(cc-option,-fsanitize=implicit-unsigned-integer-truncation)
+> +	depends on $(cc-option,-fsanitize-ignorelist=/dev/null)
+>  	help
+>  	  This option enables all of the sanitizers involved in integer overflow
+>  	  (wrap-around) mitigation: signed-integer-overflow, unsigned-integer-overflow,
+> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+> index 233379c193a7..9e35198edbf0 100644
+> --- a/scripts/Makefile.ubsan
+> +++ b/scripts/Makefile.ubsan
+> @@ -19,5 +19,6 @@ ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=	\
+>  	-fsanitize=signed-integer-overflow			\
+>  	-fsanitize=unsigned-integer-overflow			\
+>  	-fsanitize=implicit-signed-integer-truncation		\
+> -	-fsanitize=implicit-unsigned-integer-truncation
+> +	-fsanitize=implicit-unsigned-integer-truncation		\
+> +	-fsanitize-ignorelist=$(srctree)/scripts/integer-wrap-ignore.scl
+>  export CFLAGS_UBSAN_INTEGER_WRAP := $(ubsan-integer-wrap-cflags-y)
+> diff --git a/scripts/integer-wrap-ignore.scl b/scripts/integer-wrap-ignore.scl
+> new file mode 100644
+> index 000000000000..431c3053a4a2
+> --- /dev/null
+> +++ b/scripts/integer-wrap-ignore.scl
+> @@ -0,0 +1,3 @@
+> +[{unsigned-integer-overflow,signed-integer-overflow,implicit-signed-integer-truncation,implicit-unsigned-integer-truncation}]
+> +type:*
+> +type:size_t=sanitize
 
+Hi again future travelers, sanitizer special case list support for
+overflow/truncation sanitizers as well as the "=sanitize" comes from a
+new Clang 20 feature allowing SCL's to specify sanitize categories, see [2].
 
-vim +/fail_drm_dev_init +824 drivers/gpu/drm/nouveau/nouveau_drm.c
+> -- 
+> 2.34.1
+> 
+>
 
-   786	
-   787	static int nouveau_drm_probe(struct pci_dev *pdev,
-   788				     const struct pci_device_id *pent)
-   789	{
-   790		struct nvkm_device *device;
-   791		struct nouveau_drm *drm;
-   792		int ret;
-   793	
-   794		/* We need to check that the chipset is supported before booting
-   795		 * fbdev off the hardware, as there's no way to put it back.
-   796		 */
-   797		ret = nvkm_device_pci_driver.probe(pdev, NULL);
-   798		if (ret)
-   799			return ret;
-   800	
-   801		device = pci_get_drvdata(pdev);
-   802	
-   803		if (nouveau_atomic)
-   804			driver_pci.driver_features |= DRIVER_ATOMIC;
-   805	
-   806		drm = nouveau_drm_device_new(&driver_pci, &pdev->dev, device);
-   807		if (IS_ERR(drm)) {
-   808			ret = PTR_ERR(drm);
-   809			goto fail_nvkm;
-   810		}
-   811	
-   812		ret = nouveau_drm_device_init(drm);
-   813		if (ret)
-   814			goto fail_drm;
-   815	
-   816		if (drm->device.impl->ram_size <= 32 * 1024 * 1024)
-   817			drm_fbdev_ttm_setup(drm->dev, 8);
-   818		else
-   819			drm_fbdev_ttm_setup(drm->dev, 32);
-   820	
-   821		quirk_broken_nv_runpm(pdev);
-   822		return 0;
-   823	
- > 824	fail_drm_dev_init:
-   825		nouveau_drm_device_fini(drm);
-   826	fail_drm:
-   827		nouveau_drm_device_del(drm);
-   828	fail_nvkm:
-   829		nvkm_device_del(&device);
-   830		return ret;
-   831	}
-   832	
+The plumbing looks correct,
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+
+[1]: https://discourse.llvm.org/t/rfc-clang-canonical-wrapping-and-non-wrapping-types/84356
+[2]: https://github.com/llvm/llvm-project/pull/107332
+
+Thanks
+Justin
