@@ -1,105 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E29F243379;
-	Thu,  6 Mar 2025 23:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0AB13FD72
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 01:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741305496; cv=none; b=aZg/IeBc5wHbsFcQNcxU+yiRDJcvfgeoRpifaTk2Izk8exyX6NrtoFjGYvkcq1CYonFu0nfmHXK6OsqNA9zSsoxIL0+3kooiYb1cWY8hUM61/kPJBw6XoEtAjFVmdFjLM5AHc6gjxvN8RuVUTOZFE/R0DulBfMsZaPZ324wfGzA=
+	t=1741309827; cv=none; b=aApg5Ag7c8cm+XjOGLAF5rumbfrJwYAELHvyHg10miZNDsR82AcJT1RtuMjIjf5Owr5Li5uuqjRkzJpHJcQUQz7nmW35mKW5fDgjaDeYuzRGZJmYv4Ufn+YYcLkZuLe7ZrDR028peqWF008AG1tHD6q8PXxpvBk1R+LorxMTpwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741305496; c=relaxed/simple;
-	bh=Ysfi3IJpWU0q4KuMX92m4SfIaDX+nhzcOw9b5BXdpgM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKeiDq1fqEfyVuaafOuh3FckpVtO//6PRHoVVnYv88qfFhnuBgyiBS3xh1JdRF6qa75R2wLkC/+Gvk+9qumb9u3xSMPz2Mi3gdzaWcjujVXq/cW6dwX3/vz36f1sb9c4Y8JSDRLq86pvgup2Qu+lqgowq7hchV4wEB3rqnsB0rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PP0Y9EzO; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741309827; c=relaxed/simple;
+	bh=1wC451i+1YK+YHCL/Lq3MatDtPzBmP7gjobXtW86K/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IGmByJfQ4KQFfjfto4rtVGF3p8PuzHRsNBVPp1HSpg8+5zY5WGxxjFJsrfWW9mKGS5g/FvE6Z71zVeLG/uAWSGOGIU4gYg8xIdD/7ZJTU6G9ZDTZ0Xf0z2Xhx4PPN7e4wlIMCWWWR9FOTMWaOvHzm0liZv+ZO8W80N9uyVi/Aj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=niKmMBO1; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PP0Y9EzO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741305495; x=1772841495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ysfi3IJpWU0q4KuMX92m4SfIaDX+nhzcOw9b5BXdpgM=;
-  b=PP0Y9EzOvYKPLTeblmqg/7YZr/GUHTw8+ZVvJQT2b2wJDnqtSq2XuMPQ
-   b7D8BmRrb4YaZhwsLdGYHYJTiOS0QkWg19k7i58a82sxyhcZ2tsf+PaEn
-   hktBEy0PKD94hZSdRYblCFvbP8PlPvUZf0ZmcWr2Ezt7bSMZhaOGoWav8
-   SrTN8vP8pYwLPVqIlko/dByCJJHHA4I2TCCnbgHckE5JHeud8jFIfgbXB
-   KuCH7yrlOkV4ItOamO3S1NtbRhvc1Bdmr+OPdkyvoVrlsp3zq8milQlxT
-   ELFkkHxbxherh4RFxDFqsYStRsAxnUvWofuLtZMGMIkg3AVtk7GvSw0sh
-   A==;
-X-CSE-ConnectionGUID: rSWrR/f0RfqoT2sBcNNaNw==
-X-CSE-MsgGUID: NauFf8XOTl2SSzZDgmc1Vw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42051275"
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="42051275"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 15:58:14 -0800
-X-CSE-ConnectionGUID: iOrXB3uPQIS9LIc4TsgJ+Q==
-X-CSE-MsgGUID: +4LUmdnKRg2IMCJ5r/qOkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="149965485"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 06 Mar 2025 15:58:10 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqL6A-000NmU-29;
-	Thu, 06 Mar 2025 23:58:04 +0000
-Date: Fri, 7 Mar 2025 07:56:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ryosuke Yasuoka <ryasuoka@redhat.com>,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	kraxel@redhat.com, gurchetansingh@chromium.org, olvaffe@gmail.com,
-	akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
-	dmitry.osipenko@collabora.com, jfalempe@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ryosuke Yasuoka <ryasuoka@redhat.com>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-mm@kvack.org
-Subject: Re: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work
- drm_panic in GUI
-Message-ID: <202503070700.ePiUr1E6-lkp@intel.com>
-References: <20250305152555.318159-3-ryasuoka@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="niKmMBO1"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4394a823036so10979455e9.0
+        for <llvm@lists.linux.dev>; Thu, 06 Mar 2025 17:10:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741309823; x=1741914623; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1wC451i+1YK+YHCL/Lq3MatDtPzBmP7gjobXtW86K/c=;
+        b=niKmMBO1YIRHNOR98246siW7VMUpY1r7fR8zLvsecjJ1D67s/SBUsvrSTy/5qx3h9+
+         4FYvkPM852796GlfHADrvwLTtVzhHWgdLl+xpgoBeuSHU97b2A/Ok9AsB93+jp5yhbVg
+         mmndS3tu3T+oBYCqMT5YiPJ4VLDHb/N7iDyagH2uep9t/O1ADOZrc5AHhOx5HMvXdd56
+         kot67QK1GaPPh67GbyA5lpY1Ia4+kofXxO8w+ylrLtcl5pyCGRoGNcLyPFe4DcljnU/A
+         e/lQc+dOptOMv09XKsb+WgkDOO8uMdaRcd4yE2V03DlEhhmnXWkIQgPpD4P8lO3nxI3k
+         S31Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741309823; x=1741914623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1wC451i+1YK+YHCL/Lq3MatDtPzBmP7gjobXtW86K/c=;
+        b=EXinzzx+gYaDlfgerCVbwmypQJ90xY55syi7S0Z1wr1JzbRk1KHNI8OHx5ZFCJdpS6
+         qohHoBBqyQw2RZYqj8CoVpVFWW8IAa8s1Az63FrcAu1IbBl3n2tPcK2wM9IGhoQqwleo
+         WusnmbmclnZGEvh1pW+VgaQgNNemT0hQbMZaOkLwHPAg2a4yML9RRINagm87nJ3KPUoM
+         USe5AtGRYeKU570GYSCmsR1UlLzirR66qlTL4aHUPG/7ETptwMDED1eHoD83TssVTLJp
+         tV7ucCT4LfS8afOIfNmpXZ8ByGws7n5+khHt05sygZnL+FYAiVv8+6ud3qnNVPQ8w+uz
+         Fs6g==
+X-Forwarded-Encrypted: i=1; AJvYcCWxShXkAtwmsrZxn/yynX4Zi1khWpsOZ1chN4i/YS3S5mqVUXLGLUicxFXc7I/MInKh5WF+@lists.linux.dev
+X-Gm-Message-State: AOJu0YzaeaV1bw4uWI5MjqU6Oe7MYgt5Fo4ep7ldE2ZmuIv9JHGs7OuM
+	G4AkkNH4PLt6rdISLq1C5kPyP7hU0yvlgEhRWhYeEsk+HRPcbnQSYsI4pJXYXum597iQ10dlUaz
+	k7M696RbVkNgNC5sWrd1w/u6qycM=
+X-Gm-Gg: ASbGnctDxEhhUop80NXrt4R1uXl4nF+SGJsA7NetFyAs6I9tYzdF+qF8JmtRIi8EFr6
+	geF/9u3VL4+AP/32NcOc/+xRtEhy3tViB6H7aoSEO14UkCHr7lEASjx9iDIC1fMXxeCtSh4KLXl
+	ynNNYGjPCZyazBSXnq6qLsJIEi68a+
+X-Google-Smtp-Source: AGHT+IF6UzqzVOKie9IFCqxeppq4G6+t6iY7fQR70YW71IqLud6fEfFCyOSdlbvoD93AgUNPMyo6tbR6VluYzPs4wUA=
+X-Received: by 2002:a05:6000:1541:b0:390:e62e:f31f with SMTP id
+ ffacd0b85a97d-39132d06e74mr961131f8f.3.1741309823366; Thu, 06 Mar 2025
+ 17:10:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250305152555.318159-3-ryasuoka@redhat.com>
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+ <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
+ <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
+ <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
+ <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
+ <CA+fCnZfb_cF1gbASZsi6Th_zDwXqu4KMtRUDxbsyfnyCfyUGfQ@mail.gmail.com>
+ <paotjsjnoezcdjj57dsy3ufuneezmlxbc3zk3ebfzuiq722kz2@6vhollkdhul7>
+ <CA+fCnZcCCXPmeEQw0cyQt7MLchMiMvzfZj=g-95UOURT4xK9KQ@mail.gmail.com> <aanh34t7p34xwjc757rzzwraewni54a6xx45q26tljs4crnzbb@s2shobk74gtj>
+In-Reply-To: <aanh34t7p34xwjc757rzzwraewni54a6xx45q26tljs4crnzbb@s2shobk74gtj>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Fri, 7 Mar 2025 02:10:12 +0100
+X-Gm-Features: AQ5f1JqsmdGRGu2uHlQaWnjOnFHn8usJJdOQ1XiECzwCgn8ytUJNZ-8vyFlkmEo
+Message-ID: <CA+fCnZdj3_+XPtuq15wbdgLxRqXX+ja6vnPCOx3nfR=Z6Q3ChA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
+	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
+	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
+	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
+	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
+	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
+	guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, mark.rutland@arm.com, 
+	broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, rppt@kernel.org, 
+	kaleshsingh@google.com, richard.weiyang@gmail.com, luto@kernel.org, 
+	glider@google.com, pankaj.gupta@amd.com, pawan.kumar.gupta@linux.intel.com, 
+	kuan-ying.lee@canonical.com, tony.luck@intel.com, tj@kernel.org, 
+	jgross@suse.com, dvyukov@google.com, baohua@kernel.org, 
+	samuel.holland@sifive.com, dennis@kernel.org, akpm@linux-foundation.org, 
+	thomas.weissschuh@linutronix.de, surenb@google.com, kbingham@kernel.org, 
+	ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, xin@zytor.com, 
+	rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, cl@linux.com, 
+	jhubbard@nvidia.com, hpa@zytor.com, scott@os.amperecomputing.com, 
+	david@redhat.com, jan.kiszka@siemens.com, vincenzo.frascino@arm.com, 
+	corbet@lwn.net, maz@kernel.org, mingo@redhat.com, arnd@arndb.de, 
+	ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ryosuke,
+On Tue, Mar 4, 2025 at 1:31=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
+>
+> One other question that came to me about how KASAN works, is there some
+> mechanism to prevent data races between two threads? In the compiler perh=
+aps?
+>
+> For example memory is de-allocated and shadow memory is poisoned but some=
+ other
+> thread was just about to do a shadow memory check and was interrupted?
+>
+> I've read the kasan/vmalloc.c comments and from them I'd extrapolate that=
+ the
+> caller needs to make sure there are not data races / memory barriers are =
+in
+> place.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on e21cba704714c301d04c5fd37a693734b623872a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryosuke-Yasuoka/vmalloc-Add-atomic_vmap/20250305-232918
-base:   e21cba704714c301d04c5fd37a693734b623872a
-patch link:    https://lore.kernel.org/r/20250305152555.318159-3-ryasuoka%40redhat.com
-patch subject: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work drm_panic in GUI
-config: i386-buildonly-randconfig-001-20250306 (https://download.01.org/0day-ci/archive/20250307/202503070700.ePiUr1E6-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503070700.ePiUr1E6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503070700.ePiUr1E6-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "drm_gem_atomic_get_pages" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
->> ERROR: modpost: "atomic_vmap" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+KASAN does nothing to deliberately prevent or detect races. Even if
+the race leads to an OOB or UAF, KASAN might not be able to detect it.
+But sometimes it does: if poisoned shadow memory values become visible
+to the other thread/CPU before it makes a shadow memory value check.
