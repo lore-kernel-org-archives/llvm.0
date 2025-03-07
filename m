@@ -1,88 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087B61519A3;
-	Fri,  7 Mar 2025 07:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C431A3BA1
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 07:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741331613; cv=none; b=B+NT2wtWteVGIlDXZNE5wgJw7ceMMb532OxDDaw7YvI3pwYXbXkOmmaDwYvVb/+q/4MSipn0/AoLvALBWDRStgSWmD8AJPzkNBYhT5iHuz92bwDQQlbNd9yP5cYZFlzHTpNa9CTfg5FeFJlgZXZByEMiaifW4xKmXewUJQNcPqI=
+	t=1741333391; cv=none; b=e1eyjDPJ8MYBMkTTZgdutFiTYm13pINEH27bC3fKDblMWHWiCQQ3ef/HVB14nBCpsaKStsp1iIaIzn41A2JfI34pNkChahC41bo030Y6v9s0eaWeptNYp0V2n3GUbABbvVvrtDk4zXqkvkflvRzRnxpntxU01Fc8ZSwqTyMqIDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741331613; c=relaxed/simple;
-	bh=sYdNk+SKW80ie1FMJ9vgFgzBEe67X9mm38FN3hQcrSM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PRy4WMct9y2vewCvt+K9Xxbs3+6N0Kbhchw31knNgdydi0ZMHCpvjU08Efs25ZWDKeBA/yMtxtuznhHj/V+9fGsQQfQwv+N9923qtobsfeqthKmNnvhPAG75itFghs2paT3+WEa30bLeXfWllYO3qK90M3b2jxX+r+bdRdaywVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fqmd0Eh+; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741333391; c=relaxed/simple;
+	bh=PajHfsDGCVHRrYM8KDX/mRfLtq+6Ac+e1UEgHCG7dbA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ghMNJ/DZV2dlm5E8amVCYk4VHvuCB7GySfBZ/PlQzQUcb6t9baSsAuMUoojG3V9hvOT9eB5GK4ztMMvLBzVMybbSnHxDqMhKRRK6+dQ9xb0Y521T3yqnkkPbU/FGXmTzOosIGrV8+fF0HpPBAN3P+zaWabwQYOI5uovjYmuhdDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RCd0BrX6; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fqmd0Eh+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741331612; x=1772867612;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sYdNk+SKW80ie1FMJ9vgFgzBEe67X9mm38FN3hQcrSM=;
-  b=Fqmd0Eh+IbXqpNYkvNQwF+gvJDAqVl7v/a+RaO698sP9Gc+uVJ3v/2Vv
-   5oPV2Nw3Tofo9LIB4ZE+PM8SHZYdKPNycjE0ICucj/6O3d2KT4I/EfJOs
-   OIt9gczn6Is35idqaABsy0X7nWTxC9OfyB/gpGr0gAF0GQ/OxFiSfq83l
-   AFNWD9P1kWsX2JZkm9H0yYiEWfIsdalS5jkXkFEg5LhxS++Xg4p8gRCMb
-   yw446zYo7CtHdaOG7oNU3g9esehl3C2Dvj/LxUvQUA6k4y/SlZzicfQPZ
-   Gx2UeJ23smdYCFRlWO/X2plszksNr2AHoQTQvCxPbbOWIKRpRXXXTIhBP
-   g==;
-X-CSE-ConnectionGUID: Vik2WPDRSE+fcixSUyyNMw==
-X-CSE-MsgGUID: tYIByAH7RNG/kgdfkspd2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53013442"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="53013442"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 23:13:31 -0800
-X-CSE-ConnectionGUID: PbEKEGt6R4C/xGaXkK0RWA==
-X-CSE-MsgGUID: uVzIPBm+RESX2DdgAPFKBw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="124280128"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 06 Mar 2025 23:13:30 -0800
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqRtL-000079-0i;
-	Fri, 07 Mar 2025 07:13:14 +0000
-Date: Fri, 7 Mar 2025 15:12:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Patrisious Haddad <phaddad@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>
-Subject: [leon-rdma:rdma-next 68/73] ERROR: modpost: "mlx5r_fs_bind_op_fc"
- [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-Message-ID: <202503071503.PnhQY3CE-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RCd0BrX6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741333387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=StgrGxPjJSq1khkYaX2pfD/908h1EPMSTzVDL8BN+vU=;
+	b=RCd0BrX6Zbis5tYn9euKg0XXbBjmbR/p7sPLUqnGMhGtMk4hCUkBOpWWmjy+gMpVXMJC+u
+	TQFhO3fCcDl/74uYDhq5RG3tIF3x5isdJmuS+3zcF5QGmw9dfYGrla7hJ1NnK7NdaRof1Y
+	7DlOxHPaIJJwNFcjzDVD4yj/OeSFC/I=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-210-3wYcsriGOmi9v0xEpCeByA-1; Fri,
+ 07 Mar 2025 02:43:06 -0500
+X-MC-Unique: 3wYcsriGOmi9v0xEpCeByA-1
+X-Mimecast-MFC-AGG-ID: 3wYcsriGOmi9v0xEpCeByA_1741333385
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 54A8D1800257
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 07:43:05 +0000 (UTC)
+Received: from [172.64.10.8] (unknown [10.30.34.106])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E9C9018001E9;
+	Fri,  7 Mar 2025 07:43:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc5,
+ upstream-mainline, f315296c)
+Date: Fri, 07 Mar 2025 07:43:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <25924.125030702430600361@us-mta-210.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: A59Qb6VwODtHtFf-FcEQIWvUFoG-AzKua6E3spvsqjA_1741333385
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   d0ddfe3f2ff8ba858b1b9f604339bc537ef98cff
-commit: 97a3fed386aa190963e63be4bf0ddc5fab34effb [68/73] RDMA/mlx5: Support optional-counters binding for QPs
-config: powerpc64-randconfig-001-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071503.PnhQY3CE-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071503.PnhQY3CE-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071503.PnhQY3CE-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ERROR: modpost: "mlx5r_fs_bind_op_fc" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
->> ERROR: modpost: "mlx5r_fs_destroy_fcs" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
->> ERROR: modpost: "mlx5r_fs_unbind_op_fc" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-ERROR: modpost: "ib_create_ucap" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-ERROR: modpost: "ib_remove_ucap" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+Kernel information:
+    Commit message: Merge tag 'net-6.14-rc6' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1703925967
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703925967-ppc64le-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1703925967-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1703925967-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
