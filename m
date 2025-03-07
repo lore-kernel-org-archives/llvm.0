@@ -1,64 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2749421883F;
-	Fri,  7 Mar 2025 12:06:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAA52192F2;
+	Fri,  7 Mar 2025 12:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741349210; cv=none; b=bov425hw4uSoX1BQC86hOM44KaijIYDlP/ykBkwHetLF/HD0IsLtHXqt8FkC6Sq7WfWivPQgPsV535G7msCTFA8Q7BgdjLzm2hm4PWZhtDKxPdBH4yk8wuQAusATvGIr9o5mpfbekw6J2mPyj1VvJD7eKUjBqqu1nXXRAPHRppA=
+	t=1741350670; cv=none; b=t2j/+7CWRKMO0CDijHGiWB9zmygl/Dy65R2o+S2Pe06bsi+upIVMXsVIPn1biMC4KSHgNpTnM4NHT3K6qNFTQWQunKldtjI66g74dLQPtj2CNprVZexPHxRlAWQCqyPvISuXBsTV135CF3AhzjnVqS/HLVfl1caqghoolT0inoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741349210; c=relaxed/simple;
-	bh=DeTqmEGJpgLjw1WkILyNYBLvvL+fu8TabnQD5UdHxBM=;
+	s=arc-20240116; t=1741350670; c=relaxed/simple;
+	bh=Uy6FJ3J0v1XruHp8GNjv1bqcMX0mLfDNbeuCOVAtdOI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jrqGURxSHzh9vyzexFQQGqv83bCOvbs2ztXzJABRESDrKP0jUXFIty3NHszVMwJy29qs0q5jSwt2LQtj6F7RgLaHkG/MaO084QKio+aoA/7RiWT8hzyG/beh67gcIeB1/Tb0+i18l6OsJ8p2NIM2Wvmknnfyquc+1jDRos17sUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxSm+iGK; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=dMn2uLK7N+DrWxof0ngdEnXWk+/C7P9d/hYE4/2X9eGr5azhwczJB1vg5btWI3GR2jmAk5ZTKO1TxfVTwq8+SrfaGOmwcehZQMBk2o9hdl5/9UxFLLqNVGaYwfz9bBg++hlQzcTY3X5vqCTDrFE+JqNouWemKZhsnLcb3b+G5R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dycfsiRw; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxSm+iGK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dycfsiRw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741349209; x=1772885209;
+  t=1741350669; x=1772886669;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DeTqmEGJpgLjw1WkILyNYBLvvL+fu8TabnQD5UdHxBM=;
-  b=DxSm+iGKZFdeUvDPajXnd1EcuSg7FI5NeuqA8D12nZfL3Uz0sn8BrN7+
-   BRR0Q7aRjDU7dyjveUEHLpmaq8OEa+MtxDMuv9yaQj8g7OuEsdUigIrOM
-   RtwYPePtnBXNWHYn07zTuZ1dTP1CwzmN4ZTqvauEMro4eSmQN7X0mXZJ9
-   aNFxlUGY09t5ijX08tZrags/Br3XUS+MU0u/kewMJfxOmFDLeQPtmUSzW
-   3fxhMxobjPlywcBT7w5a4BS7M5Io2u5/8Zzn/Bn9AI9Q9Oz5ly1mhfpSn
-   HpNYOJ0rzRughPr+miF1znrKkyH2MRuBrfUWb+6Y7jYxKhwKKaUY7rgB5
-   A==;
-X-CSE-ConnectionGUID: RjQul4MFS3yfATCPYeZUYw==
-X-CSE-MsgGUID: OydbQ81YReSCNoatdBbBkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42250761"
+  bh=Uy6FJ3J0v1XruHp8GNjv1bqcMX0mLfDNbeuCOVAtdOI=;
+  b=dycfsiRwn6H6GqGakR1DnrocbnItHDeB0Cvfv+HsPsLnFLLiVxjRCvZO
+   xlUD53SSoryMuI/2nQ5OFdTWjXDm0YJv8vGJieB2gZSmP04ka5OMyq+uu
+   an4YgskG9G/ieFK8hlgV4ivodr3IXcIRIRTg0tpgLGnoAwC3SFmCJBxA2
+   9s9Auf12rc8peEDJrEODmLEjgs+/pK+/BVyIG65NOb+l7DBReziHCFHNr
+   74wCdGjSF+mlB+GzKM16qfSkZ3liAVHMlGFCngdZ9Z2DXM+HDC36G+bqj
+   BEcPqsrtFW/1yJEzY0HI8MpMjJhveMPDPIHYaedS3PyhZQxKsPc6dolfM
+   w==;
+X-CSE-ConnectionGUID: 77Hb+mFQTcyib9eBNmwTPw==
+X-CSE-MsgGUID: ixPPZ1RoT7qdoeroioH01w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42274952"
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42250761"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:06:46 -0800
-X-CSE-ConnectionGUID: 8zz9i99HQRyf+0so0hEGBw==
-X-CSE-MsgGUID: KApKi7SZQC+TTI+NUBhZOg==
+   d="scan'208";a="42274952"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:31:05 -0800
+X-CSE-ConnectionGUID: hV0WpLYSRbywcuBD4ZsF+g==
+X-CSE-MsgGUID: ZD6HatllQCq05fQJLex4dQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="119476458"
+   d="scan'208";a="124230492"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 07 Mar 2025 04:06:46 -0800
+  by orviesa003.jf.intel.com with ESMTP; 07 Mar 2025 04:31:04 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqWTS-0000Qr-0a;
-	Fri, 07 Mar 2025 12:06:42 +0000
-Date: Fri, 7 Mar 2025 20:05:48 +0800
+	id 1tqWr0-0000St-04;
+	Fri, 07 Mar 2025 12:31:02 +0000
+Date: Fri, 7 Mar 2025 20:30:54 +0800
 From: kernel test robot <lkp@intel.com>
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@kernel.org>
-Subject: Re: [PATCH net-next 2/2] udp_tunnel: use static call for GRO hooks
- when possible
-Message-ID: <202503071931.FDaDRKvW-lkp@intel.com>
-References: <740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni@redhat.com>
+To: Bharata B Rao <bharata@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 4/4] x86: ibs: Enable IBS profiling for memory
+ accesses
+Message-ID: <202503072051.xg3CbtA0-lkp@intel.com>
+References: <20250306054532.221138-5-bharata@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,67 +63,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni@redhat.com>
+In-Reply-To: <20250306054532.221138-5-bharata@amd.com>
 
-Hi Paolo,
+Hi Bharata,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on net-next/main]
+[auto build test WARNING on tip/x86/core]
+[also build test WARNING on tip/x86/mm linus/master v6.14-rc5]
+[cannot apply to akpm-mm/mm-everything next-20250306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Abeni/udp_tunnel-create-a-fast-path-GRO-lookup/20250306-235952
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni%40redhat.com
-patch subject: [PATCH net-next 2/2] udp_tunnel: use static call for GRO hooks when possible
-config: mips-rt305x_defconfig (https://download.01.org/0day-ci/archive/20250307/202503071931.FDaDRKvW-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharata-B-Rao/mm-migrate-Allow-misplaced-migration-without-VMA-too/20250306-134949
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20250306054532.221138-5-bharata%40amd.com
+patch subject: [RFC PATCH 4/4] x86: ibs: Enable IBS profiling for memory accesses
+config: x86_64-buildonly-randconfig-003-20250307 (https://download.01.org/0day-ci/archive/20250307/202503072051.xg3CbtA0-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071931.FDaDRKvW-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503072051.xg3CbtA0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071931.FDaDRKvW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503072051.xg3CbtA0-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/ipv4/udp_offload.c:172:9: error: incompatible pointer types returning 'struct sk_buff *' from a function with result type 'struct skbuff *' [-Werror,-Wincompatible-pointer-types]
-     172 |         return call_gro_receive_sk(udp_sk(sk)->gro_receive, sk, head, skb);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/ipv4/udp_offload.c:782:5: error: incompatible pointer types assigning to 'struct sk_buff *' from 'struct skbuff *' [-Werror,-Wincompatible-pointer-types]
-     782 |         pp = udp_tunnel_gro_rcv(sk, head, skb);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/ipv4/udp_offload.c:932:14: error: use of undeclared identifier 'udp_tunnel_gro_type_lock'; did you mean 'udp_tunnel_gro_rcv'?
-     932 |         mutex_init(&udp_tunnel_gro_type_lock);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                     udp_tunnel_gro_rcv
-   include/linux/mutex.h:64:16: note: expanded from macro 'mutex_init'
-      64 |         __mutex_init((mutex), #mutex, &__key);                          \
-         |                       ^
-   net/ipv4/udp_offload.c:168:23: note: 'udp_tunnel_gro_rcv' declared here
-     168 | static struct skbuff *udp_tunnel_gro_rcv(struct sock *sk,
-         |                       ^
->> net/ipv4/udp_offload.c:932:2: error: incompatible pointer types passing 'struct skbuff *(*)(struct sock *, struct list_head *, struct sk_buff *)' to parameter of type 'struct mutex *' [-Werror,-Wincompatible-pointer-types]
-     932 |         mutex_init(&udp_tunnel_gro_type_lock);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mutex.h:64:15: note: expanded from macro 'mutex_init'
-      64 |         __mutex_init((mutex), #mutex, &__key);                          \
-         |                      ^~~~~~~
-   include/linux/mutex.h:89:40: note: passing argument to parameter 'lock' here
-      89 | extern void __mutex_init(struct mutex *lock, const char *name,
-         |                                        ^
-   4 errors generated.
-
-
-vim +172 net/ipv4/udp_offload.c
-
-   167	
- > 168	static struct skbuff *udp_tunnel_gro_rcv(struct sock *sk,
-   169						 struct list_head *head,
-   170						 struct sk_buff *skb)
-   171	{
- > 172		return call_gro_receive_sk(udp_sk(sk)->gro_receive, sk, head, skb);
-   173	}
-   174	
+>> vmlinux.o: warning: objtool: do_syscall_64+0x13: call to hw_access_profiling_stop() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x5: call to hw_access_profiling_stop() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x7b: call to hw_access_profiling_start() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x5: call to hw_access_profiling_stop() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x71: call to hw_access_profiling_start() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_nmi_enter+0x16: call to hw_access_profiling_stop() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_nmi_exit+0x22: call to hw_access_profiling_start() leaves .noinstr.text section
 
 -- 
 0-DAY CI Kernel Test Service
