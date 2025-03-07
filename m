@@ -1,63 +1,63 @@
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107681DC99A
-	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 23:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D8420E014
+	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 23:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741390387; cv=none; b=h6BQbS0H4V+9oujo6NxvsoP+BoBF7XrEVkAC3EOKxwCyikGxX/DeydekNHRhheMnZvY1ESNInHYdCc3d5EjO87Ba641PBjdG7xi69g4SwczUkndwv5EhDGrRkFPeP5jHp7suAS+yPHT2w78LAxegEVcT635QipE849cO271i1vY=
+	t=1741390804; cv=none; b=Z8XsP7aO0no6EIrbsrda5Q535GCfIjdTNiCpQKwJLTpoWTQy92ZO1pCHjmFrQMarVWMH55gL19Xu3Wu3jsR2+mG6wtRmOsTuAvi0ayU5um5SjGXo5jnuaN3kvhv3xbuyUEwFjH8pGeYfX6PDjv486k9zPhZkhLiBR+Baz6LKF/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741390387; c=relaxed/simple;
-	bh=L4aJtPrE2GfnROL3oS1K4BKrQk2bSyTkmLWv+1Ga//g=;
+	s=arc-20240116; t=1741390804; c=relaxed/simple;
+	bh=w436wgjGcjzJ3dyS3A6//n+WNelqPnxFh6A/g8MJI18=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lrg4zoXII7aWNAeH4o5JoDtNkmP6yQHvbX5qQmeYnkiljEbTBUxBidHCr2Ng7As4cwEvaBzOuJyEaEQTwp1UndUTxmj1kyKS2Uw+j2Jo9a5mtx1C/R3PvFVtATXKt2DtdKpf4/NkHshFvKY2cc2h8TlnlBFGtL3eX94u+ir7DH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wpc7jzE2; arc=none smtp.client-ip=209.85.166.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=MVW4LOKu8e/aU9zR1dwAa/ktiXlMnfh/qCVpkI15tOgJHiO4Rs3WOvzEj/3+xoUeOc33lnY92ja4E0nuX95hj3F9hPWCVmR6qvAZnuybjohBNn2LQlGhT+HbufR0s1SaMFMhJoLdgtY4EeU8jhueCVQPxQfWomsm1htiE5Pe29U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0jYYdAzo; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wpc7jzE2"
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-85ae9566c52so73201439f.1
-        for <llvm@lists.linux.dev>; Fri, 07 Mar 2025 15:33:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0jYYdAzo"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8553e7d9459so66213439f.2
+        for <llvm@lists.linux.dev>; Fri, 07 Mar 2025 15:40:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741390385; x=1741995185; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1741390800; x=1741995600; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mHFXO9D6YwhROjoFlwWSesjCYFiKET0NT2Feon19Q6U=;
-        b=Wpc7jzE2G26zuBidMm3I1erVFYyZNr5hNSxzAh6LW7FtdWQSXjfCr6HOjHLsKRbybu
-         GmM2dHfWpCxSUQmfdnLJ5gquIgtNJ1gXF6fFuDBfY/H63YZuQ75KtLG+gBc/em9e9Spw
-         bl1BSDTGkSuAP0Ypmmwp8EZFFv8496Ao+Z+rAQmFz9ANLDOMD6KqOmr7+yWrG9Od2Fgp
-         4XEkWFNYQA0VvDi76ztcMT9sZj2l+nRXk0bUFC/R+acbN40CjDHc8DmzgXNcqRXN7g3D
-         z70B8j6xQ2mYef4Oum3iVObjt5b8CS2xQuxukFT5+8U53ua5H59hQBEEP+PpPfLAnbM8
-         lI/g==
+        bh=jDc72lD8Mhnu3NfUsPcD1oy818yB1nERuThSEkGUHkw=;
+        b=0jYYdAzozw3Pu8H0UHrFaZVqEkBJWL6xamo7jfLx3BODfxMri8BdQXA8h9+Bsff4lF
+         V01dBqGKjDQQLCceJBwdpOHesVQpHS0VOJTuuE9Laq1Ax+aV4wHz0fW9pfa2MGxSxzMU
+         OHHVmPjB7sQrcE59PsCFE5eHAECIdRYNahevcM9RLR27MRPNBxlXG28td8bjJ07ypEd8
+         hdxWjhUXMcgm3mUCOiNGtyGJk3cEMcIbN6ZJK4w/s8ZR69u3gZ7nWnTKYwO42RgZoosu
+         CLrPT6efhVtMPc/BrDBVZ9fo5wz1nfrJLn3uQZ0X/VUUhbE/m8oumLMs31kaJ/BRO8nM
+         lHig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741390385; x=1741995185;
+        d=1e100.net; s=20230601; t=1741390800; x=1741995600;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mHFXO9D6YwhROjoFlwWSesjCYFiKET0NT2Feon19Q6U=;
-        b=XvRmoFFuugkeDyDpVhn2a8HO9FJ8Art3RULI0ttVHZPx4rFj+iQ0ISHOeSVOB3Tz3m
-         phhfx2ZjVJbjf1VkuxClbvpXuzP3/PiEofTHKaKJQRnvP4CjxQN7I3Wmy3nwoyag3oAA
-         tEW3atRGX+3+WHIMDUZgtYaoc0K3jzlJU9tWVVwU4gLLoiL0gHQvw1Jodkv5GXmpRCu6
-         POwJ9Y1EU1H0SrrLKGgWKn+45Zdg9O9pJN4xrKzOfnTnS00A5lY8bHYr/aVFZS8pyN8t
-         eagbJ1d2vWx0V/qkYbtia4d5AoxQjPKfiYMlVuOGT9Y40xBDRuWFByAkp8z4bDyfY0Tl
-         o2Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCV/S8U245HuIpraHnTMPqoFrylwGkchGcwLtTO+VrJma3XwSBuNbCmfM49kAFu6/Ry7u5Wh@lists.linux.dev
-X-Gm-Message-State: AOJu0YwSsT8QEZt34bAw5fnLSMPMdHZfEInRKwSERJj0jbEV5J0v65c0
-	zbTl8ozeRteLu4gNE6lcDBuJUDGCmCtb9Wk/tAeAaEecNrm2axJK3EfcnakHKQ==
-X-Gm-Gg: ASbGncsWLNNMH7rGBiA4MCOFz7AE9XexcYlwi1pb5+EeU+pryx4ol5UzHyY4r86yV+0
-	ZodBtPClBmxkVKbcUqeR/q2QEZExoGmDrS32wAHvO16FF9R2nDeYQUlaZKrQwGhXukbxiNairIt
-	kkUSGgN70asndUVruFDr9PQOAZGwV/0EhLSpw0nWPC23s6/aydQFxUqInfgJSG1oMSLOSCjKRWw
-	4MQw5xhHnorreCzHMoO5U84KS4FgALBjpjVHKW74b+sA/CV/5fKgrv2PUrrwjR0z7jLzBcMJ1uK
-	wIVE5VBhxRAtvfztUAIJGLRK9ufhEsOpUVOhu6GszC/cKLfRvGcr1QOblcTGztkUgODdjgBNgmj
-	HGc5KCnPY
-X-Google-Smtp-Source: AGHT+IFyRzzf7mMzUIJI4y0Th6wZ9sjI35nBIcnhd9RXwZh9GmhLYqRpDr7OO9MYwGSF0/lxYav2hg==
-X-Received: by 2002:a05:6602:4006:b0:855:ac69:32a4 with SMTP id ca18e2360f4ac-85b1d053032mr663250139f.1.1741390384993;
-        Fri, 07 Mar 2025 15:33:04 -0800 (PST)
+        bh=jDc72lD8Mhnu3NfUsPcD1oy818yB1nERuThSEkGUHkw=;
+        b=snt/hAb9LGIimc/ZYCCCelHu0LZ+tPfCFZCK0gkh1tfXm96Y1OuvC9d2jnXUCptiZ4
+         3GCLvvJvedm429E0RFgutqDjsknkMFMO/4IeodBBKSsrLZkxUAWk5J9xq1lqvZ6jprDd
+         hfbTNumOMxOuR50RK4eGVprfDbs5IDt6Dp9JcxHqSDvHBkKslspOMsTbchMN/7Ks5jWM
+         gSBQU+I94cUQl4/9DriL23Y/N7o5CBayz18Jr7/mpnTIFKZ6NhlPfIFP/8F9Pd3ubTX1
+         WCnv5tSZ9grHgAWF7XPCdamB9oLVG0hko1lz0e97oXhLqLDJ0a8wenMSp4rLWWrdW+YD
+         OUYw==
+X-Forwarded-Encrypted: i=1; AJvYcCWy4Y0MZnjl4egm0Ix0vUhFEt1iLEd1SmAmuduAN73Oq9Fz5HmRndTVQyNjqnSC5DTevpy1@lists.linux.dev
+X-Gm-Message-State: AOJu0YygGKrMFs2E91t7O4uo3aPHkYGS/1LBpsMkA/ECoFGleyzz3r61
+	N6nDIzwj0u+/fQ6J4DMQ5S42UFbu/sLEfdV0brHzsOzA6qpaHUIGmn+vfclX0g==
+X-Gm-Gg: ASbGncuIVxPN9JE6Ky+3ncfAfTRD47gax5jGOeQ0D4DN2ZZuXQ9EP3QEV0OWd2WJlmM
+	FlwvRnEKC9qASaddZZj9mr4VA6vM+mgJ/hVdum/P/ybaABF9cf1XhqnRW+Gcyt6KJjOCA0ipy8g
+	P0tg8BGvli/3VwnVl/ZOIOD27LTTkVdrSMVFxJ/JaCFvSUp5dt5oq20HqrgEfy37Yy7yfzUA7n6
+	rsrgq0TA7Uni3heodnYVAvu2HDKQnJ+R81nX8ySTtS02SB+lL6thAlYsckGNDJYeprejT94IlDb
+	CKh8zAFRcMlp5iSOHuY1ZXGFoLiSnobHy/ZM9N/QyiozKD86Du74z7bjYURdNbScgeBUgnr3YnG
+	wsfHsiVNl
+X-Google-Smtp-Source: AGHT+IE5GWqkBP7F2KuCtSZMj3O7YCqwL1LClyQ1d+IKR/y1v4SzZvWajbv9qbfRqrrAzp37TIieCQ==
+X-Received: by 2002:a05:6602:474b:b0:855:9c88:7894 with SMTP id ca18e2360f4ac-85b1d03fb51mr700353139f.11.1741390800315;
+        Fri, 07 Mar 2025 15:40:00 -0800 (PST)
 Received: from google.com (26.80.59.108.bc.googleusercontent.com. [108.59.80.26])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f22079b1dfsm382085173.118.2025.03.07.15.33.03
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f20a06b059sm1193908173.136.2025.03.07.15.39.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 15:33:04 -0800 (PST)
-Date: Fri, 7 Mar 2025 15:33:01 -0800
+        Fri, 07 Mar 2025 15:39:59 -0800 (PST)
+Date: Fri, 7 Mar 2025 15:39:57 -0800
 From: Justin Stitt <justinstitt@google.com>
 To: Kees Cook <kees@kernel.org>
 Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
@@ -73,7 +73,7 @@ Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH 3/3] ubsan/overflow: Enable ignorelist parsing and add
  type filter
-Message-ID: <upvdnfozcexlpb2x4auimec347adozkl2al4hu2yp3kfagdeyp@dqs2ft6wdmog>
+Message-ID: <52samxs253u3t2cmm5xwbmrwzyof36w7xczpuvbkarqwonwl32@2jbmkagpk7za>
 References: <20250307040948.work.791-kees@kernel.org>
  <20250307041914.937329-3-kees@kernel.org>
 Precedence: bulk
@@ -86,17 +86,11 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20250307041914.937329-3-kees@kernel.org>
 
-Hi,
-
 On Thu, Mar 06, 2025 at 08:19:11PM -0800, Kees Cook wrote:
 > Limit integer wrap-around mitigation to only the "size_t" type (for
 > now). Notably this covers all special functions/builtins that return
 > "size_t", like sizeof(). This remains an experimental feature and is
 > likely to be replaced with type annotations.
-
-For future travelers, track the progress of type annotations over at
-[1]. There's still discussion on how these will be implemented in Clang.
-
 > 
 > Signed-off-by: Kees Cook <kees@kernel.org>
 > ---
@@ -153,21 +147,21 @@ For future travelers, track the progress of type annotations over at
 > +type:*
 > +type:size_t=sanitize
 
-Hi again future travelers, sanitizer special case list support for
-overflow/truncation sanitizers as well as the "=sanitize" comes from a
-new Clang 20 feature allowing SCL's to specify sanitize categories, see [2].
+Forgot to mention this in my intial reply but we have to be careful
+with what types are added here. Kees, I know we're on the same page from
+offline chats but for others: using sanitizer case lists to discriminate
+against types for the purposes of sanitizer instrumentation may not work
+properly through various arithmetic conversions. Mainly, implicit
+promotions which tend to break this particular approach.
+
+Now, for size_t we got kind of "lucky" because there are no implicit
+promotions with size_t, it doesn't get promoted. This is not the case
+for other types. This further necessitates the need for canonical
+wrapping types backed by in-source annotations/qualification -- coming
+soon in Clang.
 
 > -- 
 > 2.34.1
 > 
->
 
-The plumbing looks correct,
-
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-
-[1]: https://discourse.llvm.org/t/rfc-clang-canonical-wrapping-and-non-wrapping-types/84356
-[2]: https://github.com/llvm/llvm-project/pull/107332
-
-Thanks
 Justin
