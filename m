@@ -1,68 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519E42E822;
-	Fri,  7 Mar 2025 03:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1A418CBFB;
+	Fri,  7 Mar 2025 03:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741316924; cv=none; b=XUh2YRQW7Liexa04XLpcOC89JXUaH0Z+Arq9BSHzHBFWURBZVBIZOTmdT5tbIaZ2HxBpS0WlOSos365/F7kpLYwCt53bMLA1OOJuCIXft4jui7SkEnXnivZehxfjsNXfa3aKtDVpnhBUO0Loq1hEIWpIcf511TKQJdZLglMxMrE=
+	t=1741317524; cv=none; b=I3F+T0uWoeTsh61NrLRBvViH33Zam8YOJqsUwXziizWOj6N9cXQ/MwddByUJQc/6pYvi9Y6G1xbfmPTEQs4CxJVq2hxgubE9ehU4DJzJRLJbhzh+i6nvQFITthSFWbGuETiuSdOAj0V2cCYH9Yo/r35ER00LL7Th/MYTcMY/5VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741316924; c=relaxed/simple;
-	bh=DcLJ9aKimVNyrW/43nsjmeGTwBj8U+eyVkMor5z0OH0=;
+	s=arc-20240116; t=1741317524; c=relaxed/simple;
+	bh=AqSMa8//pzHQ9mnL+CjQgM8fc8wx7B1+SyGC0Muu/bY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlzJNjFkIrK8bBBgSQh6krkALjWhwNrby3czd3XWAaqJthstuiMAOXu+YY/VkVQvU7v4dg/+0JQxTeoMnNCAEoTxPQYX7lo7TsdMse4P9QPwgfeDC1FarVHDLt+1800mZVDSEF1P1h9AuJSICR2M/e6LJEjzb0eKx+77rqgIJRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BmYVNQH1; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ec2tT0KLXLrAnLGcaIsYF8jzrx9dNZpuOfRm12xhZm4TV3R6Xc8QebuHFngLUHM7YDtlrGxmck3YTCLCylYvcYm6I3N9MsghOAN4GcGP+53vPLjwptJOrHq6/ZYSV2QegNByUjukwB6aSKXwOJvZ23wRFOGEObPDKHXY+qwJ+WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3flWHNK; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmYVNQH1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3flWHNK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741316920; x=1772852920;
+  t=1741317524; x=1772853524;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=DcLJ9aKimVNyrW/43nsjmeGTwBj8U+eyVkMor5z0OH0=;
-  b=BmYVNQH16msb0sJQ9GcjMHOLg4n+SuJln+cjl6Ke/kh2mO9bb7duYuwM
-   r5oNeYB25w8pwb7YbClYDSd5eY9BZrELjd8h3Yca/RY2JDgMDHMkwHJaQ
-   b4G3ql67IYQfIRsFyb0tEl+ItKuBaBcVkHoKemBeaiQ9BFxGCxbQhb/wb
-   5UTsmhT8ednU81eS40qfqxiBhwqh1GvpXIZJAG/BfpqFeT2te2vRGyxjm
-   E/522LTTBSgjHkTZX4nuvt4KGvWllyj2AcskmAoMQIC0DxDK65l4NUwgq
-   H9OOTvkjVI6u896BhHXoz78mJmmjKYyNizSA+rnWLcQxCOg8jMyFg3Icb
-   A==;
-X-CSE-ConnectionGUID: P7CMQSibSoChL0lofLTLAw==
-X-CSE-MsgGUID: sMz398i+Tmq3GWh7HcmEog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="52996206"
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="52996206"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 19:08:39 -0800
-X-CSE-ConnectionGUID: NYB16Ma0QrSPRJ6pD9Bw5g==
-X-CSE-MsgGUID: UPRbNo95TJeuYJ1WV0owAw==
+  bh=AqSMa8//pzHQ9mnL+CjQgM8fc8wx7B1+SyGC0Muu/bY=;
+  b=b3flWHNKVYKHLP3veP2xe9rVpaoIVvoIvBaNZL+IN2CLYbP9aPgRwgqx
+   5SVRru3H+d124AV27c4tGFbbAVGdoGB+fzUbwaG0aVrjt90tza63c8FZs
+   rnSja+oNX2xhZvyFs26ziJQ2mmIDM4quc2U9GxWwLyWeqL0T4aA22sdQo
+   n6BLTpKaUDTqt8VX/PcBnzXy6iuhunSmYk3PHJwVj+dncXZQza1PGL7y1
+   0B0GCQysxrC24WC4a1QO7KpWTFq0ao9EwAau6EdR93/O2YZuJJWH2lDdx
+   LkMIqjueBmx6vOdk2xcRK+oZM8i0rztGll8d0hf6+TLi6TQvW3hAKwzd4
+   w==;
+X-CSE-ConnectionGUID: eXYnY6akR7K/mezDQYqJbw==
+X-CSE-MsgGUID: VHr0bNsAQBugkczx50iUKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="29937389"
+X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
+   d="scan'208";a="29937389"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 19:18:43 -0800
+X-CSE-ConnectionGUID: wta3WuZJQrKl6l0iODaFEQ==
+X-CSE-MsgGUID: 1bTw2xscT9GVMo0dh9wXYw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="119130707"
+X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
+   d="scan'208";a="123798504"
 Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 06 Mar 2025 19:08:35 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 06 Mar 2025 19:18:37 -0800
 Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqO4d-000O7i-2r;
-	Fri, 07 Mar 2025 03:08:31 +0000
-Date: Fri, 7 Mar 2025 11:07:31 +0800
+	id 1tqOEN-000O9y-1B;
+	Fri, 07 Mar 2025 03:18:35 +0000
+Date: Fri, 7 Mar 2025 11:17:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ryosuke Yasuoka <ryasuoka@redhat.com>,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	kraxel@redhat.com, gurchetansingh@chromium.org, olvaffe@gmail.com,
-	akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org,
-	dmitry.osipenko@collabora.com, jfalempe@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ryosuke Yasuoka <ryasuoka@redhat.com>,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-mm@kvack.org
-Subject: Re: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work
- drm_panic in GUI
-Message-ID: <202503071022.q1pg7suf-lkp@intel.com>
-References: <20250305152555.318159-3-ryasuoka@redhat.com>
+To: Shuai Xue <xueshuai@linux.alibaba.com>, tony.luck@intel.com,
+	bp@alien8.de, peterz@infradead.org, catalin.marinas@arm.com,
+	yazen.ghannam@amd.com, akpm@linux-foundation.org,
+	linmiaohe@huawei.com, nao.horiguchi@gmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tglx@linutronix.de,
+	mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+	hpa@zytor.com, jpoimboe@kernel.org, linux-edac@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	baolin.wang@linux.alibaba.com, tianruidong@linux.alibaba.com
+Subject: Re: [PATCH v3 1/3] x86/mce: Use is_copy_from_user() to determine
+ copy-from-user context
+Message-ID: <202503071154.xQpKARjN-lkp@intel.com>
+References: <20250306021031.5538-2-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,35 +70,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250305152555.318159-3-ryasuoka@redhat.com>
+In-Reply-To: <20250306021031.5538-2-xueshuai@linux.alibaba.com>
 
-Hi Ryosuke,
+Hi Shuai,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on e21cba704714c301d04c5fd37a693734b623872a]
+[auto build test ERROR on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ryosuke-Yasuoka/vmalloc-Add-atomic_vmap/20250305-232918
-base:   e21cba704714c301d04c5fd37a693734b623872a
-patch link:    https://lore.kernel.org/r/20250305152555.318159-3-ryasuoka%40redhat.com
-patch subject: [PATCH drm-next 2/2] drm/virtio: Use atomic_vmap to work drm_panic in GUI
-config: i386-buildonly-randconfig-003-20250306 (https://download.01.org/0day-ci/archive/20250307/202503071022.q1pg7suf-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/x86-mce-Use-is_copy_from_user-to-determine-copy-from-user-context/20250306-101505
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20250306021031.5538-2-xueshuai%40linux.alibaba.com
+patch subject: [PATCH v3 1/3] x86/mce: Use is_copy_from_user() to determine copy-from-user context
+config: i386-buildonly-randconfig-002-20250307 (https://download.01.org/0day-ci/archive/20250307/202503071154.xQpKARjN-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071022.q1pg7suf-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071154.xQpKARjN-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503071022.q1pg7suf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503071154.xQpKARjN-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
-ERROR: modpost: "drm_gem_atomic_get_pages" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
-ERROR: modpost: "atomic_vmap" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
->> ERROR: modpost: "drm_gem_shmem_atomic_vmap" [drivers/gpu/drm/virtio/virtio-gpu.ko] undefined!
+   In file included from arch/x86/kernel/cpu/mce/severity.c:16:
+   In file included from arch/x86/include/asm/traps.h:6:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2321:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/x86/kernel/cpu/mce/severity.c:305:25: error: expected ';' after return statement
+     305 |                 return IN_KERNEL_RECOV
+         |                                       ^
+         |                                       ;
+   1 warning and 1 error generated.
+
+
+vim +305 arch/x86/kernel/cpu/mce/severity.c
+
+   274	
+   275	/*
+   276	 * If mcgstatus indicated that ip/cs on the stack were
+   277	 * no good, then "m->cs" will be zero and we will have
+   278	 * to assume the worst case (IN_KERNEL) as we actually
+   279	 * have no idea what we were executing when the machine
+   280	 * check hit.
+   281	 * If we do have a good "m->cs" (or a faked one in the
+   282	 * case we were executing in VM86 mode) we can use it to
+   283	 * distinguish an exception taken in user from from one
+   284	 * taken in the kernel.
+   285	 */
+   286	static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+   287	{
+   288		int fixup_type;
+   289		bool copy_user;
+   290	
+   291		if ((m->cs & 3) == 3)
+   292			return IN_USER;
+   293	
+   294		if (!mc_recoverable(m->mcgstatus))
+   295			return IN_KERNEL;
+   296	
+   297		/* Allow instrumentation around external facilities usage. */
+   298		instrumentation_begin();
+   299		fixup_type = ex_get_fixup_type(m->ip);
+   300		copy_user  = is_copy_from_user(regs);
+   301		instrumentation_end();
+   302	
+   303		if (copy_user) {
+   304			m->kflags |= MCE_IN_KERNEL_COPYIN | MCE_IN_KERNEL_COPYIN;
+ > 305			return IN_KERNEL_RECOV
+   306		}
+   307	
+   308		switch (fixup_type) {
+   309		case EX_TYPE_FAULT_MCE_SAFE:
+   310		case EX_TYPE_DEFAULT_MCE_SAFE:
+   311			m->kflags |= MCE_IN_KERNEL_RECOV;
+   312			return IN_KERNEL_RECOV;
+   313	
+   314		default:
+   315			return IN_KERNEL;
+   316		}
+   317	}
+   318	
 
 -- 
 0-DAY CI Kernel Test Service
