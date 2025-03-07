@@ -1,59 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424CE192D7C;
-	Fri,  7 Mar 2025 12:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2749421883F;
+	Fri,  7 Mar 2025 12:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741349209; cv=none; b=oCJAvP9SCGXZm2acmg96YQozeiQ5/yFKPocG9TkFT5afIG2cTNCejL0oO9dG1fTvtk93r7iVpnDmLNwcPy2e98LpPBMuRpdNpkTeA7bvIYDsNOOhLANcW8aAX/BLLvqIPbaz2Fk3gDYR8m51r6IM2xruW2CaLiSOM+SH9ADP7Kk=
+	t=1741349210; cv=none; b=bov425hw4uSoX1BQC86hOM44KaijIYDlP/ykBkwHetLF/HD0IsLtHXqt8FkC6Sq7WfWivPQgPsV535G7msCTFA8Q7BgdjLzm2hm4PWZhtDKxPdBH4yk8wuQAusATvGIr9o5mpfbekw6J2mPyj1VvJD7eKUjBqqu1nXXRAPHRppA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741349209; c=relaxed/simple;
-	bh=R+Iwzp9qpg8PA6mDWBxkIegdVy0O7yqrJ2qo9DFLk14=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=V2aYPCrAHytpjoc/eNzsJLmUBFL9uJqf64WHVGbz8PWABGydKjra8wEt0Spvofwcu5T3u+Qu7F7yxGg3SGOtTjbkEO5wFb2c5E+nYv3rne2hgczJjjSbKmbSoUZMV1G5aS0RTw+24jqU2aKAr1fUcTCCOI+Wp+v8j8qLSIg4iYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PCjSDCKJ; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1741349210; c=relaxed/simple;
+	bh=DeTqmEGJpgLjw1WkILyNYBLvvL+fu8TabnQD5UdHxBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jrqGURxSHzh9vyzexFQQGqv83bCOvbs2ztXzJABRESDrKP0jUXFIty3NHszVMwJy29qs0q5jSwt2LQtj6F7RgLaHkG/MaO084QKio+aoA/7RiWT8hzyG/beh67gcIeB1/Tb0+i18l6OsJ8p2NIM2Wvmknnfyquc+1jDRos17sUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxSm+iGK; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PCjSDCKJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxSm+iGK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741349206; x=1772885206;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R+Iwzp9qpg8PA6mDWBxkIegdVy0O7yqrJ2qo9DFLk14=;
-  b=PCjSDCKJ3cpuZe25FPx0HmDZIJQIqTkSfoe/rCStagmcgHy74QR6NxxL
-   kOjXO04Jv8He5MH6qh5aVdH2/FL5Op1Xvns+yABJgzMC4Gc+eVh3OxAvR
-   CmHm1LEvwdr+qrrfhmPnLvYAAMisWzKmJCQKkH5SCbCu4VMpbi9lOJJfu
-   pyhZkrgjdq9NnWCerKih2B9QRIvEq9dZzMiDlPp7pXvfgnOvZELhgoUIq
-   NultlKBOAGIo0cG9okUdVtneVWTKfBj6E2niY26wLHSO3xd9/m9TIOBcY
-   5kuK02hiJyyJZnXqjUtAErwsMQL1yJMTFlDMAHz6fpDfr2K87GiBCWY/9
+  t=1741349209; x=1772885209;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DeTqmEGJpgLjw1WkILyNYBLvvL+fu8TabnQD5UdHxBM=;
+  b=DxSm+iGKZFdeUvDPajXnd1EcuSg7FI5NeuqA8D12nZfL3Uz0sn8BrN7+
+   BRR0Q7aRjDU7dyjveUEHLpmaq8OEa+MtxDMuv9yaQj8g7OuEsdUigIrOM
+   RtwYPePtnBXNWHYn07zTuZ1dTP1CwzmN4ZTqvauEMro4eSmQN7X0mXZJ9
+   aNFxlUGY09t5ijX08tZrags/Br3XUS+MU0u/kewMJfxOmFDLeQPtmUSzW
+   3fxhMxobjPlywcBT7w5a4BS7M5Io2u5/8Zzn/Bn9AI9Q9Oz5ly1mhfpSn
+   HpNYOJ0rzRughPr+miF1znrKkyH2MRuBrfUWb+6Y7jYxKhwKKaUY7rgB5
    A==;
-X-CSE-ConnectionGUID: yeGi9iccRg+AOCqleNi0FA==
-X-CSE-MsgGUID: dQ5qrGcZSTWMQxs8u5jDHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42250758"
+X-CSE-ConnectionGUID: RjQul4MFS3yfATCPYeZUYw==
+X-CSE-MsgGUID: OydbQ81YReSCNoatdBbBkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42250761"
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="42250758"
+   d="scan'208";a="42250761"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
   by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 04:06:46 -0800
-X-CSE-ConnectionGUID: COAx3TavSom7TNW/ldO0Bw==
-X-CSE-MsgGUID: 9E1YBsozQ0u5XqqOLZoizw==
+X-CSE-ConnectionGUID: 8zz9i99HQRyf+0so0hEGBw==
+X-CSE-MsgGUID: KApKi7SZQC+TTI+NUBhZOg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,229,1736841600"; 
-   d="scan'208";a="119476457"
+   d="scan'208";a="119476458"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
   by fmviesa008.fm.intel.com with ESMTP; 07 Mar 2025 04:06:46 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqWTS-0000Qw-0n;
+	id 1tqWTS-0000Qr-0a;
 	Fri, 07 Mar 2025 12:06:42 +0000
-Date: Fri, 7 Mar 2025 20:06:35 +0800
+Date: Fri, 7 Mar 2025 20:05:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arm-integrator:b4/arm-generic-entry-v6.14-rc1-cleanup-patch 33/33]
- arch/arm/kernel/entry-common.S:200:2: error: invalid instruction, any one of
- the following would fix this:
-Message-ID: <202503072001.bAYqc08h-lkp@intel.com>
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	David Ahern <dsahern@kernel.org>
+Subject: Re: [PATCH net-next 2/2] udp_tunnel: use static call for GRO hooks
+ when possible
+Message-ID: <202503071931.FDaDRKvW-lkp@intel.com>
+References: <740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,70 +67,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/arm-generic-entry-v6.14-rc1-cleanup-patch
-head:   231c6ca98693dab095d461ce8d7bfdbf73b0f7e0
-commit: 231c6ca98693dab095d461ce8d7bfdbf73b0f7e0 [33/33] ARM: entry: Straighten syscall returns
-config: arm-randconfig-003-20250307 (https://download.01.org/0day-ci/archive/20250307/202503072001.bAYqc08h-lkp@intel.com/config)
+Hi Paolo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Abeni/udp_tunnel-create-a-fast-path-GRO-lookup/20250306-235952
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/740cd03d2982943c313de334977e18cc9de1bc3e.1741275846.git.pabeni%40redhat.com
+patch subject: [PATCH net-next 2/2] udp_tunnel: use static call for GRO hooks when possible
+config: mips-rt305x_defconfig (https://download.01.org/0day-ci/archive/20250307/202503071931.FDaDRKvW-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503072001.bAYqc08h-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503071931.FDaDRKvW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503072001.bAYqc08h-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503071931.FDaDRKvW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/arm/kernel/entry-common.S:200:2: error: invalid instruction, any one of the following would fix this:
-    b 9002
-    ^
-   arch/arm/kernel/entry-common.S:200:4: note: invalid operand for instruction
-    b 9002
-      ^
-   arch/arm/kernel/entry-common.S:200:2: note: instruction requires: thumb
-    b 9002
-    ^
+>> net/ipv4/udp_offload.c:172:9: error: incompatible pointer types returning 'struct sk_buff *' from a function with result type 'struct skbuff *' [-Werror,-Wincompatible-pointer-types]
+     172 |         return call_gro_receive_sk(udp_sk(sk)->gro_receive, sk, head, skb);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/ipv4/udp_offload.c:782:5: error: incompatible pointer types assigning to 'struct sk_buff *' from 'struct skbuff *' [-Werror,-Wincompatible-pointer-types]
+     782 |         pp = udp_tunnel_gro_rcv(sk, head, skb);
+         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/ipv4/udp_offload.c:932:14: error: use of undeclared identifier 'udp_tunnel_gro_type_lock'; did you mean 'udp_tunnel_gro_rcv'?
+     932 |         mutex_init(&udp_tunnel_gro_type_lock);
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                     udp_tunnel_gro_rcv
+   include/linux/mutex.h:64:16: note: expanded from macro 'mutex_init'
+      64 |         __mutex_init((mutex), #mutex, &__key);                          \
+         |                       ^
+   net/ipv4/udp_offload.c:168:23: note: 'udp_tunnel_gro_rcv' declared here
+     168 | static struct skbuff *udp_tunnel_gro_rcv(struct sock *sk,
+         |                       ^
+>> net/ipv4/udp_offload.c:932:2: error: incompatible pointer types passing 'struct skbuff *(*)(struct sock *, struct list_head *, struct sk_buff *)' to parameter of type 'struct mutex *' [-Werror,-Wincompatible-pointer-types]
+     932 |         mutex_init(&udp_tunnel_gro_type_lock);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mutex.h:64:15: note: expanded from macro 'mutex_init'
+      64 |         __mutex_init((mutex), #mutex, &__key);                          \
+         |                      ^~~~~~~
+   include/linux/mutex.h:89:40: note: passing argument to parameter 'lock' here
+      89 | extern void __mutex_init(struct mutex *lock, const char *name,
+         |                                        ^
+   4 errors generated.
 
 
-vim +200 arch/arm/kernel/entry-common.S
+vim +172 net/ipv4/udp_offload.c
 
-   166	
-   167		/* saved_psr and saved_pc are now dead */
-   168	
-   169		uaccess_disable tbl
-   170		get_thread_info tsk
-   171		/* Save a per-task copy of SP for sigreturn */
-   172		str	sp, [tsk, #TI_SP_SYSCALL]
-   173	
-   174		adr	tbl, sys_call_table		@ load syscall table pointer
-   175	
-   176	#if defined(CONFIG_OABI_COMPAT)
-   177		/*
-   178		 * If the swi argument is zero, this is an EABI call and we do nothing.
-   179		 *
-   180		 * If this is an old ABI call, get the syscall number into scno and
-   181		 * get the old ABI syscall table address.
-   182		 */
-   183		bics	r10, r10, #0xff000000
-   184		strne	r10, [tsk, #TI_ABI_SYSCALL]
-   185		streq	scno, [tsk, #TI_ABI_SYSCALL]
-   186		eorne	scno, r10, #__NR_OABI_SYSCALL_BASE
-   187		ldrne	tbl, =sys_oabi_call_table
-   188	#elif !defined(CONFIG_AEABI)
-   189		bic	scno, scno, #0xff000000		@ mask off SWI op-code
-   190		str	scno, [tsk, #TI_ABI_SYSCALL]
-   191		eor	scno, scno, #__NR_SYSCALL_BASE	@ check OS number
-   192	#else
-   193		str	scno, [tsk, #TI_ABI_SYSCALL]
-   194	#endif
-   195		mov	r1, sp				@ put regs into r1
-   196		stmdb	sp!, {r4, r5}			@ push fifth and sixth args
-   197		mov	r0, tbl
-   198		mov	r2, scno			@ syscall number from r7
-   199		bl	invoke_syscall
- > 200		b	9002
-   201	
+   167	
+ > 168	static struct skbuff *udp_tunnel_gro_rcv(struct sock *sk,
+   169						 struct list_head *head,
+   170						 struct sk_buff *skb)
+   171	{
+ > 172		return call_gro_receive_sk(udp_sk(sk)->gro_receive, sk, head, skb);
+   173	}
+   174	
 
 -- 
 0-DAY CI Kernel Test Service
