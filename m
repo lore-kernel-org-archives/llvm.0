@@ -1,59 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5F6137E;
-	Sat,  8 Mar 2025 04:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D4D15B115;
+	Sat,  8 Mar 2025 04:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741407828; cv=none; b=DtcWz05FXmdrlC0edPEBCWvHcS5D15gPewgF16gCW4VbmMNcf4Ib3aDipasukz3hQmdFmza5ze6ppkg5j6YF8iRcoVINlqgX3YjhGXswkxMxmEOTMeFWV6Q3zS491Epd14Ba1gYa40zfE0TG4wNfEc8d7e5MxjHAZ/OV/MfxpwE=
+	t=1741407831; cv=none; b=uun5uea15Cttwx2qs92t5Yuzu+8g5G0N2uogzp9/Syv6jpuNXnJhAs8FEO5aWc903vr0lb8MiVlr+XVgBG/hfTEDlNgv8Fd0waeL1+fdirQ7rw41YKcnu7ve4JNQhHM5Enx7Dw5DPoSquKTRjCJsDvN4r/fGkCxdm9xAnPdMTCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741407828; c=relaxed/simple;
-	bh=kvgsAJV+90xgV/pAns0j6Hj/CqGukrTbv0GV/hx1+Xo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kWNuV3YhZ1YMdLK6spVJaAid0h5EVfx6FGCNNFwhH1saNpxdFrlJthG2/kZm7W1lzffVjvBAttR+FuiJ82Ygq+T3IforbZC0VDU88TTzNhzDe5F4dXhTrT3LR5SaAuOFIctk68pThRLrq9z9sFV9qTUfwyb96g9nStISkhGXc4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kRw0yzc5; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1741407831; c=relaxed/simple;
+	bh=eb4NdFaCXPg7RT+P8Ueib3nR+ht15SPdMq/ZVe/6uco=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FyliFnVpf1x8PePf47XzzA8fLX1Eyk+/YBQqtVu0VLVCma06hsnFjEOi6r3FU4Nzihm0uYnTc+iZ6ZNLvM2sQbeEUW57mwyDiv5pjdJuFqz4hTpbaNozx+mYpUu393JglKGRsvgOBqskclBC8NkuauXQkIqqv7AMxPfGDa9WOjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kK5MU3AG; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kRw0yzc5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kK5MU3AG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741407826; x=1772943826;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kvgsAJV+90xgV/pAns0j6Hj/CqGukrTbv0GV/hx1+Xo=;
-  b=kRw0yzc5WlcHeTmdJcwWj85AXKYQuEeLa7GxTCHjp8o9lT1ahL51+s3p
-   sp0ffPMSWiUKm5cM66Rlz7cYSYKUPFGtUXLoOWsq3mo25u1Y2XIMhvuhI
-   bSU8dps0Cr9+02xaEjjNK68x5Y5FEZZQwq1JiJHaRujf5vGZD+huKpdol
-   4vZdeEBRQ6JsyT05cNcuowyX+eNA+yGwD3sU5CQiNUhXNW8aOiABPqEYx
-   +mNtDm9UFuaWmXX6V8uaQi7LqiNtTnjfB+6qKw53461wHN9VfOQ0wD0s4
-   bZ7Am5S0xSwQpxtUS2c9eEWiKjbcgPdL3VSFsv+jGma6I/AMwOnDfOfds
-   A==;
-X-CSE-ConnectionGUID: SPziYSUVTNKNoXKIGAAuxg==
-X-CSE-MsgGUID: juFMmg4pT52hook49N8MgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="42604629"
+  t=1741407829; x=1772943829;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eb4NdFaCXPg7RT+P8Ueib3nR+ht15SPdMq/ZVe/6uco=;
+  b=kK5MU3AGrNkPX+aX/Kc3LasgXJcfGLbq+K+vmpI00YUgjgadvbFN7W/5
+   NptRtJQMzKnbndZmFM7SVLx3MSL+HYF/k3KC52lU1DEUtXSdSQBQ/+38d
+   731KfK2r7KQSGmtHLmt/ROrkGeGt1bSKWV2oyRj+hERDQhkB0+Z+QP/h6
+   S6onEo+nBLdAsszpfS1BCI7eqf2HdRReiIj954GP5oHMm7yxPfQIkCXxH
+   T55KQh0FoZVR8vDT0Dk93sJXxO5P9Mb1XHyrNpQxYJudkOx21sUMLYrj8
+   TBgySKdERhFd9bTKm440OT0BZngSBWMThXElnc0Lvx6fzpmPIANkHujyy
+   Q==;
+X-CSE-ConnectionGUID: mtepzRMFRKGDwwKkrVZSPA==
+X-CSE-MsgGUID: wQCwCZUSSBWBpwi7nksj8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="42604631"
 X-IronPort-AV: E=Sophos;i="6.14,231,1736841600"; 
-   d="scan'208";a="42604629"
+   d="scan'208";a="42604631"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 20:23:44 -0800
-X-CSE-ConnectionGUID: sEi/n/KZQaa/z5zt+ydJMg==
-X-CSE-MsgGUID: TPVcaNOkS++Bumol6X+BCQ==
+X-CSE-ConnectionGUID: 6gdwkICGTGqeqcwFRLzfbg==
+X-CSE-MsgGUID: prUr5Nj8TXG50mQvTMJ9eg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="156712400"
+   d="scan'208";a="156712399"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
   by orviesa001.jf.intel.com with ESMTP; 07 Mar 2025 20:23:43 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqliu-0001Tf-1p;
+	id 1tqliu-0001Tc-1K;
 	Sat, 08 Mar 2025 04:23:40 +0000
-Date: Sat, 8 Mar 2025 12:22:49 +0800
+Date: Sat, 8 Mar 2025 12:22:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Leon Romanovsky <leon@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 147/149]
- fs/bcachefs/ec.c:1520:6: warning: variable 'ret' is used uninitialized
- whenever 'if' condition is true
-Message-ID: <202503081258.POphtF8J-lkp@intel.com>
+Subject: Re: [PATCH rdma-next v1 4/6] RDMA/mlx5: Check enabled UCAPs when
+ creating ucontext
+Message-ID: <202503081223.ISLOmyVZ-lkp@intel.com>
+References: <8b180583a207cb30deb7a2967934079749cdcc44.1741261611.git.leon@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,194 +63,291 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <8b180583a207cb30deb7a2967934079749cdcc44.1741261611.git.leon@kernel.org>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   65aa26b8b89cdbd4b03e0cf4320e52b76383a9c0
-commit: b99bc31b4606942e15b0b905d0d9eddd74da3636 [147/149] bcachefs: trace_stripe_create
-config: s390-randconfig-002-20250308 (https://download.01.org/0day-ci/archive/20250308/202503081258.POphtF8J-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250308/202503081258.POphtF8J-lkp@intel.com/reproduce)
+Hi Leon,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rdma/for-next]
+[also build test ERROR on linus/master v6.14-rc5 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Romanovsky/RDMA-uverbs-Introduce-UCAP-User-CAPabilities-API/20250306-195708
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/8b180583a207cb30deb7a2967934079749cdcc44.1741261611.git.leon%40kernel.org
+patch subject: [PATCH rdma-next v1 4/6] RDMA/mlx5: Check enabled UCAPs when creating ucontext
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20250308/202503081223.ISLOmyVZ-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250308/202503081223.ISLOmyVZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503081258.POphtF8J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503081223.ISLOmyVZ-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/bcachefs/ec.c:1520:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1520 |         if (ec_nr_failed(&s->new_stripe)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/ec.c:1543:33: note: uninitialized use occurs here
-    1543 |         trace_stripe_create(c, s->idx, ret);
-         |                                        ^~~
-   fs/bcachefs/ec.c:1520:2: note: remove the 'if' if its condition is always false
-    1520 |         if (ec_nr_failed(&s->new_stripe)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1521 |                 bch_err(c, "error creating stripe: error writing redundancy buckets");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1522 |                 goto err;
-         |                 ~~~~~~~~~
-    1523 |         }
-         |         ~
-   fs/bcachefs/ec.c:1495:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1495 |                 if (ec_do_recov(c, &s->existing_stripe)) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/bcachefs/ec.c:1543:33: note: uninitialized use occurs here
-    1543 |         trace_stripe_create(c, s->idx, ret);
-         |                                        ^~~
-   fs/bcachefs/ec.c:1495:3: note: remove the 'if' if its condition is always false
-    1495 |                 if (ec_do_recov(c, &s->existing_stripe)) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1496 |                         bch_err(c, "error creating stripe: error reading existing stripe");
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1497 |                         goto err;
-         |                         ~~~~~~~~~
-    1498 |                 }
-         |                 ~
-   fs/bcachefs/ec.c:1486:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1486 |         if (s->err) {
-         |             ^~~~~~
-   fs/bcachefs/ec.c:1543:33: note: uninitialized use occurs here
-    1543 |         trace_stripe_create(c, s->idx, ret);
-         |                                        ^~~
-   fs/bcachefs/ec.c:1486:2: note: remove the 'if' if its condition is always false
-    1486 |         if (s->err) {
-         |         ^~~~~~~~~~~~~
-    1487 |                 if (!bch2_err_matches(s->err, EROFS))
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1488 |                         bch_err(c, "error creating stripe: error writing data buckets");
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1489 |                 goto err;
-         |                 ~~~~~~~~~
-    1490 |         }
-         |         ~
-   fs/bcachefs/ec.c:1470:9: note: initialize the variable 'ret' to silence this warning
-    1470 |         int ret;
-         |                ^
-         |                 = 0
-   3 warnings generated.
+>> drivers/infiniband/hw/mlx5/main.c:1992:10: error: call to undeclared function 'mlx5_cmd_add_privileged_uid'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           err = mlx5_cmd_add_privileged_uid(dev->mdev,
+                                 ^
+>> drivers/infiniband/hw/mlx5/main.c:2086:3: error: call to undeclared function 'mlx5_cmd_remove_privileged_uid'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                   mlx5_cmd_remove_privileged_uid(dev->mdev, context->devx_uid);
+                   ^
+   drivers/infiniband/hw/mlx5/main.c:2134:4: error: call to undeclared function 'mlx5_cmd_remove_privileged_uid'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+                           mlx5_cmd_remove_privileged_uid(dev->mdev,
+                           ^
+   drivers/infiniband/hw/mlx5/main.c:4229:42: error: use of undeclared identifier 'MLX5_UCTX_CAP_RDMA_CTRL'; did you mean 'MLX5_UCTX_CAP_RAW_TX'?
+           if (MLX5_CAP_GEN(dev->mdev, uctx_cap) & MLX5_UCTX_CAP_RDMA_CTRL)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+                                                   MLX5_UCTX_CAP_RAW_TX
+   include/linux/mlx5/mlx5_ifc.h:1571:2: note: 'MLX5_UCTX_CAP_RAW_TX' declared here
+           MLX5_UCTX_CAP_RAW_TX = 1UL << 0,
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4233:6: error: use of undeclared identifier 'MLX5_UCTX_CAP_RDMA_CTRL_OTHER_VHCA'; did you mean 'RDMA_UCAP_MLX5_CTRL_OTHER_VHCA'?
+               MLX5_UCTX_CAP_RDMA_CTRL_OTHER_VHCA)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               RDMA_UCAP_MLX5_CTRL_OTHER_VHCA
+   include/rdma/ib_ucaps.h:13:2: note: 'RDMA_UCAP_MLX5_CTRL_OTHER_VHCA' declared here
+           RDMA_UCAP_MLX5_CTRL_OTHER_VHCA,
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4241:42: error: use of undeclared identifier 'MLX5_UCTX_CAP_RDMA_CTRL'; did you mean 'MLX5_UCTX_CAP_RAW_TX'?
+           if (MLX5_CAP_GEN(dev->mdev, uctx_cap) & MLX5_UCTX_CAP_RDMA_CTRL) {
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+                                                   MLX5_UCTX_CAP_RAW_TX
+   include/linux/mlx5/mlx5_ifc.h:1571:2: note: 'MLX5_UCTX_CAP_RAW_TX' declared here
+           MLX5_UCTX_CAP_RAW_TX = 1UL << 0,
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4248:6: error: use of undeclared identifier 'MLX5_UCTX_CAP_RDMA_CTRL_OTHER_VHCA'; did you mean 'RDMA_UCAP_MLX5_CTRL_OTHER_VHCA'?
+               MLX5_UCTX_CAP_RDMA_CTRL_OTHER_VHCA) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               RDMA_UCAP_MLX5_CTRL_OTHER_VHCA
+   include/rdma/ib_ucaps.h:13:2: note: 'RDMA_UCAP_MLX5_CTRL_OTHER_VHCA' declared here
+           RDMA_UCAP_MLX5_CTRL_OTHER_VHCA,
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4257:42: error: use of undeclared identifier 'MLX5_UCTX_CAP_RDMA_CTRL'; did you mean 'MLX5_UCTX_CAP_RAW_TX'?
+           if (MLX5_CAP_GEN(dev->mdev, uctx_cap) & MLX5_UCTX_CAP_RDMA_CTRL)
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+                                                   MLX5_UCTX_CAP_RAW_TX
+   include/linux/mlx5/mlx5_ifc.h:1571:2: note: 'MLX5_UCTX_CAP_RAW_TX' declared here
+           MLX5_UCTX_CAP_RAW_TX = 1UL << 0,
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4264:6: error: no member named 'general_obj_types_127_64' in 'mlx5_ifc_cmd_hca_cap_2_bits'
+           if (MLX5_CAP_GEN_2_64(dev->mdev, general_obj_types_127_64) &
+               ^                            ~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mlx5/device.h:1299:2: note: expanded from macro 'MLX5_CAP_GEN_2_64'
+           MLX5_GET64(cmd_hca_cap_2, mdev->caps.hca[MLX5_CAP_GENERAL_2]->cur, cap)
+           ^                                                                  ~~~
+   include/linux/mlx5/device.h:121:63: note: expanded from macro 'MLX5_GET64'
+   #define MLX5_GET64(typ, p, fld) be64_to_cpu(*((__be64 *)(p) + __mlx5_64_off(typ, fld)))
+                                                                 ^                  ~~~
+   include/linux/mlx5/device.h:55:34: note: expanded from macro '__mlx5_64_off'
+   #define __mlx5_64_off(typ, fld) (__mlx5_bit_off(typ, fld) / 64)
+                                    ^                   ~~~
+   include/linux/mlx5/device.h:52:35: note: expanded from macro '__mlx5_bit_off'
+   #define __mlx5_bit_off(typ, fld) (offsetof(struct mlx5_ifc_##typ##_bits, fld))
+                                     ^                                      ~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+                                   ^                        ~~~~~~
+   include/uapi/linux/byteorder/big_endian.h:39:51: note: expanded from macro '__be64_to_cpu'
+   #define __be64_to_cpu(x) ((__force __u64)(__be64)(x))
+                                                     ^
+   drivers/infiniband/hw/mlx5/main.c:4265:6: error: use of undeclared identifier 'MLX5_HCA_CAP_2_GENERAL_OBJECT_TYPES_RDMA_CTRL'; did you mean 'MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER'?
+               MLX5_HCA_CAP_2_GENERAL_OBJECT_TYPES_RDMA_CTRL)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER
+   include/linux/mlx5/mlx5_ifc.h:12493:2: note: 'MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER' declared here
+           MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER = BIT_ULL(0x20),
+           ^
+   drivers/infiniband/hw/mlx5/main.c:4318:6: error: no member named 'general_obj_types_127_64' in 'mlx5_ifc_cmd_hca_cap_2_bits'
+           if (MLX5_CAP_GEN_2_64(dev->mdev, general_obj_types_127_64) &
+               ^                            ~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mlx5/device.h:1299:2: note: expanded from macro 'MLX5_CAP_GEN_2_64'
+           MLX5_GET64(cmd_hca_cap_2, mdev->caps.hca[MLX5_CAP_GENERAL_2]->cur, cap)
+           ^                                                                  ~~~
+   include/linux/mlx5/device.h:121:63: note: expanded from macro 'MLX5_GET64'
+   #define MLX5_GET64(typ, p, fld) be64_to_cpu(*((__be64 *)(p) + __mlx5_64_off(typ, fld)))
+                                                                 ^                  ~~~
+   include/linux/mlx5/device.h:55:34: note: expanded from macro '__mlx5_64_off'
+   #define __mlx5_64_off(typ, fld) (__mlx5_bit_off(typ, fld) / 64)
+                                    ^                   ~~~
+   include/linux/mlx5/device.h:52:35: note: expanded from macro '__mlx5_bit_off'
+   #define __mlx5_bit_off(typ, fld) (offsetof(struct mlx5_ifc_##typ##_bits, fld))
+                                     ^                                      ~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+   #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+                                   ^                        ~~~~~~
+   include/uapi/linux/byteorder/big_endian.h:39:51: note: expanded from macro '__be64_to_cpu'
+   #define __be64_to_cpu(x) ((__force __u64)(__be64)(x))
+                                                     ^
+   drivers/infiniband/hw/mlx5/main.c:4319:6: error: use of undeclared identifier 'MLX5_HCA_CAP_2_GENERAL_OBJECT_TYPES_RDMA_CTRL'; did you mean 'MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER'?
+               MLX5_HCA_CAP_2_GENERAL_OBJECT_TYPES_RDMA_CTRL) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER
+   include/linux/mlx5/mlx5_ifc.h:12493:2: note: 'MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER' declared here
+           MLX5_HCA_CAP_GENERAL_OBJECT_TYPES_SAMPLER = BIT_ULL(0x20),
+           ^
+   12 errors generated.
 
 
-vim +1520 fs/bcachefs/ec.c
+vim +/mlx5_cmd_add_privileged_uid +1992 drivers/infiniband/hw/mlx5/main.c
 
-fba053d2aaca8f Kent Overstreet 2023-03-09  1460  
-cd575ddf57af00 Kent Overstreet 2018-11-01  1461  /*
-cd575ddf57af00 Kent Overstreet 2018-11-01  1462   * data buckets of new stripe all written: create the stripe
-cd575ddf57af00 Kent Overstreet 2018-11-01  1463   */
-cd575ddf57af00 Kent Overstreet 2018-11-01  1464  static void ec_stripe_create(struct ec_stripe_new *s)
-cd575ddf57af00 Kent Overstreet 2018-11-01  1465  {
-cd575ddf57af00 Kent Overstreet 2018-11-01  1466  	struct bch_fs *c = s->c;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1467  	struct open_bucket *ob;
-bf5a261c7af80a Kent Overstreet 2023-08-01  1468  	struct bch_stripe *v = &bkey_i_to_stripe(&s->new_stripe.key)->v;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1469  	unsigned i, nr_data = v->nr_blocks - v->nr_redundant;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1470  	int ret;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1471  
-cd575ddf57af00 Kent Overstreet 2018-11-01  1472  	BUG_ON(s->h->s == s);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1473  
-81d8599e192e85 Kent Overstreet 2020-12-14  1474  	closure_sync(&s->iodone);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1475  
-aebe7a679cbdd8 Kent Overstreet 2023-03-13  1476  	if (!s->err) {
-94bc95c468344d Kent Overstreet 2023-02-26  1477  		for (i = 0; i < nr_data; i++)
-94bc95c468344d Kent Overstreet 2023-02-26  1478  			if (s->blocks[i]) {
-94bc95c468344d Kent Overstreet 2023-02-26  1479  				ob = c->open_buckets + s->blocks[i];
-94bc95c468344d Kent Overstreet 2023-02-26  1480  
-94bc95c468344d Kent Overstreet 2023-02-26  1481  				if (ob->sectors_free)
-94bc95c468344d Kent Overstreet 2023-02-26  1482  					zero_out_rest_of_ec_bucket(c, s, i, ob);
-94bc95c468344d Kent Overstreet 2023-02-26  1483  			}
-aebe7a679cbdd8 Kent Overstreet 2023-03-13  1484  	}
-94bc95c468344d Kent Overstreet 2023-02-26  1485  
-cd575ddf57af00 Kent Overstreet 2018-11-01  1486  	if (s->err) {
-858536c7cea8bb Kent Overstreet 2022-12-11  1487  		if (!bch2_err_matches(s->err, EROFS))
-cd575ddf57af00 Kent Overstreet 2018-11-01  1488  			bch_err(c, "error creating stripe: error writing data buckets");
-cd575ddf57af00 Kent Overstreet 2018-11-01  1489  		goto err;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1490  	}
-cd575ddf57af00 Kent Overstreet 2018-11-01  1491  
-81d8599e192e85 Kent Overstreet 2020-12-14  1492  	if (s->have_existing_stripe) {
-81d8599e192e85 Kent Overstreet 2020-12-14  1493  		ec_validate_checksums(c, &s->existing_stripe);
-81d8599e192e85 Kent Overstreet 2020-12-14  1494  
-81d8599e192e85 Kent Overstreet 2020-12-14  1495  		if (ec_do_recov(c, &s->existing_stripe)) {
-81d8599e192e85 Kent Overstreet 2020-12-14  1496  			bch_err(c, "error creating stripe: error reading existing stripe");
-81d8599e192e85 Kent Overstreet 2020-12-14  1497  			goto err;
-81d8599e192e85 Kent Overstreet 2020-12-14  1498  		}
-81d8599e192e85 Kent Overstreet 2020-12-14  1499  
-81d8599e192e85 Kent Overstreet 2020-12-14  1500  		for (i = 0; i < nr_data; i++)
-bf5a261c7af80a Kent Overstreet 2023-08-01  1501  			if (stripe_blockcount_get(&bkey_i_to_stripe(&s->existing_stripe.key)->v, i))
-81d8599e192e85 Kent Overstreet 2020-12-14  1502  				swap(s->new_stripe.data[i],
-81d8599e192e85 Kent Overstreet 2020-12-14  1503  				     s->existing_stripe.data[i]);
-81d8599e192e85 Kent Overstreet 2020-12-14  1504  
-2a3731e34de936 Kent Overstreet 2021-01-11  1505  		ec_stripe_buf_exit(&s->existing_stripe);
-81d8599e192e85 Kent Overstreet 2020-12-14  1506  	}
-81d8599e192e85 Kent Overstreet 2020-12-14  1507  
-f6b94a3baa956f Kent Overstreet 2020-07-06  1508  	BUG_ON(!s->allocated);
-5be6a274ff7a7c Kent Overstreet 2023-03-05  1509  	BUG_ON(!s->idx);
-f6b94a3baa956f Kent Overstreet 2020-07-06  1510  
-81d8599e192e85 Kent Overstreet 2020-12-14  1511  	ec_generate_ec(&s->new_stripe);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1512  
-81d8599e192e85 Kent Overstreet 2020-12-14  1513  	ec_generate_checksums(&s->new_stripe);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1514  
-cd575ddf57af00 Kent Overstreet 2018-11-01  1515  	/* write p/q: */
-cd575ddf57af00 Kent Overstreet 2018-11-01  1516  	for (i = nr_data; i < v->nr_blocks; i++)
-81d8599e192e85 Kent Overstreet 2020-12-14  1517  		ec_block_io(c, &s->new_stripe, REQ_OP_WRITE, i, &s->iodone);
-81d8599e192e85 Kent Overstreet 2020-12-14  1518  	closure_sync(&s->iodone);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1519  
-81d8599e192e85 Kent Overstreet 2020-12-14 @1520  	if (ec_nr_failed(&s->new_stripe)) {
-cd575ddf57af00 Kent Overstreet 2018-11-01  1521  		bch_err(c, "error creating stripe: error writing redundancy buckets");
-ebe8bd75a073c3 Kent Overstreet 2023-02-18  1522  		goto err;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1523  	}
-cd575ddf57af00 Kent Overstreet 2018-11-01  1524  
-a0d11feefb1998 Kent Overstreet 2024-10-13  1525  	ret = bch2_trans_commit_do(c, &s->res, NULL,
-cb52d23e77a6e5 Kent Overstreet 2023-11-11  1526  		BCH_TRANS_COMMIT_no_check_rw|
-cb52d23e77a6e5 Kent Overstreet 2023-11-11  1527  		BCH_TRANS_COMMIT_no_enospc,
-6bd68ec266ad71 Kent Overstreet 2023-09-12  1528  		ec_stripe_key_update(trans,
-cb6055e66faa0d Kent Overstreet 2024-10-13  1529  				     s->have_existing_stripe
-cb6055e66faa0d Kent Overstreet 2024-10-13  1530  				     ? bkey_i_to_stripe(&s->existing_stripe.key)
-cb6055e66faa0d Kent Overstreet 2024-10-13  1531  				     : NULL,
-cb6055e66faa0d Kent Overstreet 2024-10-13  1532  				     bkey_i_to_stripe(&s->new_stripe.key)));
-cf904c8d964fa4 Kent Overstreet 2023-12-16  1533  	bch_err_msg(c, ret, "creating stripe key");
-cd575ddf57af00 Kent Overstreet 2018-11-01  1534  	if (ret) {
-ebe8bd75a073c3 Kent Overstreet 2023-02-18  1535  		goto err;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1536  	}
-cd575ddf57af00 Kent Overstreet 2018-11-01  1537  
-dea5647e16d15e Kent Overstreet 2022-10-09  1538  	ret = ec_stripe_update_extents(c, &s->new_stripe);
-cf904c8d964fa4 Kent Overstreet 2023-12-16  1539  	bch_err_msg(c, ret, "error updating extents");
-cf904c8d964fa4 Kent Overstreet 2023-12-16  1540  	if (ret)
-4b1e669995a6c1 Kent Overstreet 2023-02-18  1541  		goto err;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1542  err:
-b99bc31b460694 Kent Overstreet 2025-03-07  1543  	trace_stripe_create(c, s->idx, ret);
-b99bc31b460694 Kent Overstreet 2025-03-07  1544  
-af4d05c46b1ef2 Kent Overstreet 2020-07-09  1545  	bch2_disk_reservation_put(c, &s->res);
-af4d05c46b1ef2 Kent Overstreet 2020-07-09  1546  
-6c7585b098c519 Kent Overstreet 2021-01-18  1547  	for (i = 0; i < v->nr_blocks; i++)
-6c7585b098c519 Kent Overstreet 2021-01-18  1548  		if (s->blocks[i]) {
-6c7585b098c519 Kent Overstreet 2021-01-18  1549  			ob = c->open_buckets + s->blocks[i];
-6c7585b098c519 Kent Overstreet 2021-01-18  1550  
-6c7585b098c519 Kent Overstreet 2021-01-18  1551  			if (i < nr_data) {
-cd575ddf57af00 Kent Overstreet 2018-11-01  1552  				ob->ec = NULL;
-cd575ddf57af00 Kent Overstreet 2018-11-01  1553  				__bch2_open_bucket_put(c, ob);
-6c7585b098c519 Kent Overstreet 2021-01-18  1554  			} else {
-6c7585b098c519 Kent Overstreet 2021-01-18  1555  				bch2_open_bucket_put(c, ob);
-6c7585b098c519 Kent Overstreet 2021-01-18  1556  			}
-cd575ddf57af00 Kent Overstreet 2018-11-01  1557  		}
-cd575ddf57af00 Kent Overstreet 2018-11-01  1558  
-81c771b2663911 Kent Overstreet 2023-03-08  1559  	mutex_lock(&c->ec_stripe_new_lock);
-81c771b2663911 Kent Overstreet 2023-03-08  1560  	list_del(&s->list);
-81c771b2663911 Kent Overstreet 2023-03-08  1561  	mutex_unlock(&c->ec_stripe_new_lock);
-99a3d39893615a Kent Overstreet 2023-06-10  1562  	wake_up(&c->ec_stripe_new_wait);
-81c771b2663911 Kent Overstreet 2023-03-08  1563  
-2a3731e34de936 Kent Overstreet 2021-01-11  1564  	ec_stripe_buf_exit(&s->existing_stripe);
-2a3731e34de936 Kent Overstreet 2021-01-11  1565  	ec_stripe_buf_exit(&s->new_stripe);
-81d8599e192e85 Kent Overstreet 2020-12-14  1566  	closure_debug_destroy(&s->iodone);
-fba053d2aaca8f Kent Overstreet 2023-03-09  1567  
-fba053d2aaca8f Kent Overstreet 2023-03-09  1568  	ec_stripe_new_put(c, s, STRIPE_REF_stripe);
-cd575ddf57af00 Kent Overstreet 2018-11-01  1569  }
-cd575ddf57af00 Kent Overstreet 2018-11-01  1570  
-
-:::::: The code at line 1520 was first introduced by commit
-:::::: 81d8599e192e85fa7e01d8a6e8e4095177ff46a3 bcachefs: Don't read existing stripes synchronously in write path
-
-:::::: TO: Kent Overstreet <kent.overstreet@gmail.com>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+  1943	
+  1944	static int mlx5_ib_alloc_ucontext(struct ib_ucontext *uctx,
+  1945					  struct ib_udata *udata)
+  1946	{
+  1947		struct ib_device *ibdev = uctx->device;
+  1948		struct mlx5_ib_dev *dev = to_mdev(ibdev);
+  1949		struct mlx5_ib_alloc_ucontext_req_v2 req = {};
+  1950		struct mlx5_ib_alloc_ucontext_resp resp = {};
+  1951		struct mlx5_ib_ucontext *context = to_mucontext(uctx);
+  1952		struct mlx5_bfreg_info *bfregi;
+  1953		int ver;
+  1954		int err;
+  1955		size_t min_req_v2 = offsetof(struct mlx5_ib_alloc_ucontext_req_v2,
+  1956					     max_cqe_version);
+  1957		bool lib_uar_4k;
+  1958		bool lib_uar_dyn;
+  1959	
+  1960		if (!dev->ib_active)
+  1961			return -EAGAIN;
+  1962	
+  1963		if (udata->inlen == sizeof(struct mlx5_ib_alloc_ucontext_req))
+  1964			ver = 0;
+  1965		else if (udata->inlen >= min_req_v2)
+  1966			ver = 2;
+  1967		else
+  1968			return -EINVAL;
+  1969	
+  1970		err = ib_copy_from_udata(&req, udata, min(udata->inlen, sizeof(req)));
+  1971		if (err)
+  1972			return err;
+  1973	
+  1974		if (req.flags & ~MLX5_IB_ALLOC_UCTX_DEVX)
+  1975			return -EOPNOTSUPP;
+  1976	
+  1977		if (req.comp_mask || req.reserved0 || req.reserved1 || req.reserved2)
+  1978			return -EOPNOTSUPP;
+  1979	
+  1980		req.total_num_bfregs = ALIGN(req.total_num_bfregs,
+  1981					    MLX5_NON_FP_BFREGS_PER_UAR);
+  1982		if (req.num_low_latency_bfregs > req.total_num_bfregs - 1)
+  1983			return -EINVAL;
+  1984	
+  1985		if (req.flags & MLX5_IB_ALLOC_UCTX_DEVX) {
+  1986			err = mlx5_ib_devx_create(dev, true, uctx->enabled_caps);
+  1987			if (err < 0)
+  1988				goto out_ctx;
+  1989			context->devx_uid = err;
+  1990	
+  1991			if (uctx_rdma_ctrl_is_enabled(uctx->enabled_caps)) {
+> 1992				err = mlx5_cmd_add_privileged_uid(dev->mdev,
+  1993								  context->devx_uid);
+  1994				if (err)
+  1995					goto out_devx;
+  1996			}
+  1997		}
+  1998	
+  1999		lib_uar_4k = req.lib_caps & MLX5_LIB_CAP_4K_UAR;
+  2000		lib_uar_dyn = req.lib_caps & MLX5_LIB_CAP_DYN_UAR;
+  2001		bfregi = &context->bfregi;
+  2002	
+  2003		if (lib_uar_dyn) {
+  2004			bfregi->lib_uar_dyn = lib_uar_dyn;
+  2005			goto uar_done;
+  2006		}
+  2007	
+  2008		/* updates req->total_num_bfregs */
+  2009		err = calc_total_bfregs(dev, lib_uar_4k, &req, bfregi);
+  2010		if (err)
+  2011			goto out_ucap;
+  2012	
+  2013		mutex_init(&bfregi->lock);
+  2014		bfregi->lib_uar_4k = lib_uar_4k;
+  2015		bfregi->count = kcalloc(bfregi->total_num_bfregs, sizeof(*bfregi->count),
+  2016					GFP_KERNEL);
+  2017		if (!bfregi->count) {
+  2018			err = -ENOMEM;
+  2019			goto out_ucap;
+  2020		}
+  2021	
+  2022		bfregi->sys_pages = kcalloc(bfregi->num_sys_pages,
+  2023					    sizeof(*bfregi->sys_pages),
+  2024					    GFP_KERNEL);
+  2025		if (!bfregi->sys_pages) {
+  2026			err = -ENOMEM;
+  2027			goto out_count;
+  2028		}
+  2029	
+  2030		err = allocate_uars(dev, context);
+  2031		if (err)
+  2032			goto out_sys_pages;
+  2033	
+  2034	uar_done:
+  2035		err = mlx5_ib_alloc_transport_domain(dev, &context->tdn,
+  2036						     context->devx_uid);
+  2037		if (err)
+  2038			goto out_uars;
+  2039	
+  2040		INIT_LIST_HEAD(&context->db_page_list);
+  2041		mutex_init(&context->db_page_mutex);
+  2042	
+  2043		context->cqe_version = min_t(__u8,
+  2044					 (__u8)MLX5_CAP_GEN(dev->mdev, cqe_version),
+  2045					 req.max_cqe_version);
+  2046	
+  2047		err = set_ucontext_resp(uctx, &resp);
+  2048		if (err)
+  2049			goto out_mdev;
+  2050	
+  2051		resp.response_length = min(udata->outlen, sizeof(resp));
+  2052		err = ib_copy_to_udata(udata, &resp, resp.response_length);
+  2053		if (err)
+  2054			goto out_mdev;
+  2055	
+  2056		bfregi->ver = ver;
+  2057		bfregi->num_low_latency_bfregs = req.num_low_latency_bfregs;
+  2058		context->lib_caps = req.lib_caps;
+  2059		print_lib_caps(dev, context->lib_caps);
+  2060	
+  2061		if (mlx5_ib_lag_should_assign_affinity(dev)) {
+  2062			u32 port = mlx5_core_native_port_num(dev->mdev) - 1;
+  2063	
+  2064			atomic_set(&context->tx_port_affinity,
+  2065				   atomic_add_return(
+  2066					   1, &dev->port[port].roce.tx_port_affinity));
+  2067		}
+  2068	
+  2069		return 0;
+  2070	
+  2071	out_mdev:
+  2072		mlx5_ib_dealloc_transport_domain(dev, context->tdn, context->devx_uid);
+  2073	
+  2074	out_uars:
+  2075		deallocate_uars(dev, context);
+  2076	
+  2077	out_sys_pages:
+  2078		kfree(bfregi->sys_pages);
+  2079	
+  2080	out_count:
+  2081		kfree(bfregi->count);
+  2082	
+  2083	out_ucap:
+  2084		if (req.flags & MLX5_IB_ALLOC_UCTX_DEVX &&
+  2085		    uctx_rdma_ctrl_is_enabled(uctx->enabled_caps))
+> 2086			mlx5_cmd_remove_privileged_uid(dev->mdev, context->devx_uid);
+  2087	
+  2088	out_devx:
+  2089		if (req.flags & MLX5_IB_ALLOC_UCTX_DEVX)
+  2090			mlx5_ib_devx_destroy(dev, context->devx_uid);
+  2091	
+  2092	out_ctx:
+  2093		return err;
+  2094	}
+  2095	
 
 -- 
 0-DAY CI Kernel Test Service
