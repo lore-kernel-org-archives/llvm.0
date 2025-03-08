@@ -1,59 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7E814D2BB;
-	Sat,  8 Mar 2025 17:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9405417A30B;
+	Sat,  8 Mar 2025 17:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741453647; cv=none; b=jGdltH5nXI8BfAemWlByY7bY8pMXv9MiOfSYWKrxjWNsNAowMqyUvWMcgTJdupBGoCVxPJzi1mZlUszWaQ01pfuII/I34J2lIiWJoZ8iJNIioimZPsEpq5wzf8BfRvddlXWZrcznIY8LPxjne0UHguRdQMnqnaEEMiWqGWCgB8A=
+	t=1741453649; cv=none; b=bMRy450VIzRORa83vmQNRDvTS85pRMBxeEDr/rP4lzQ1nmOToR6XmLi3UowGh6gLmJqk0vWnkCeW5DPQL0qm7JqfEtVq/ckVFGVaDKCwyopGyCNeMHyidOOegs9x8mDplU3lIKVjLTEw2uZxf+cFv5YtQAE6tcjp71F7ivjlafk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741453647; c=relaxed/simple;
-	bh=SQDGTz+a7cAQW6CJvt8E8Lr+dpKxOdBVBOwYcRcfgqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fVy0lUskbsR4B18BLqkAMAhPDMDtTKTojZbGkj9XdgY75lRrDbj1Bpsh/xy/OZEDKiYdRqJsIv2kYAZK9cCZvSo013dWQ19NwKyCCi+3gzE7sqZOzVLicPrBvCg94gy3vHMCcOD1queFE9BTOPcHyQOrqcpvsWbX3G0Guj1hjg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iW9RnH3d; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1741453649; c=relaxed/simple;
+	bh=XEORLPQvUAU4keZvxERc+zQuOffs6Mxlu2m+3zLqodM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwGYJOPTx3FeGziN13/0G4m37asfIL/o0LIj757dcTNOn8Q+Afban6dxT6qWef1m32O3/03jbY5mc4ZP7NaRKVwsilR9lwhUnctNz9RdBSvSmDugjEYDZF5fihiEEyY/w8QG+Y/B7f7BtQVwu7plipSGQfYtm+0W0q8JFo27Ukk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHLx5Ipn; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iW9RnH3d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHLx5Ipn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741453646; x=1772989646;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SQDGTz+a7cAQW6CJvt8E8Lr+dpKxOdBVBOwYcRcfgqw=;
-  b=iW9RnH3df4I4xZ+C9BETUt4Nr/aWe9A+Uu9nLT4tIXMZdCV6ViXxB1EV
-   jhGmDYKLkkKGCVKGR3z7ZGQJ95M9eSIuJTA97RLztun4A7tIRX48Nw7jr
-   dobTRV9CIaw0IcbvWxXO31Qamg9Nfep+YMT+GN+L7KPRILDwos0DN9OLt
-   U+49DDORhIJEWprSlPFBNxtoYGakuIyPNAnQmjLhpo04YnscwvKqs9IGv
-   mqnknz05kpxAW1QubUL8IXeuR8713HZMSX5H0YeES9eilCFyl1EoVK4Vc
-   DmTiuG1CCvi5ZRYXeck4W2+ylEDO40tNr4jqnQewkC2dJmA7M1ohZNdEF
-   g==;
-X-CSE-ConnectionGUID: 3tIB4cc3Qt63aCz5jZFBjw==
-X-CSE-MsgGUID: 0d0okJNsT6SRNb4X7vBy9g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42342594"
+  t=1741453648; x=1772989648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XEORLPQvUAU4keZvxERc+zQuOffs6Mxlu2m+3zLqodM=;
+  b=oHLx5Ipnubj5lRRZ6F9xWJ5vjl8L295goDuompxje1+IhqXet8IHCsIk
+   PouSUgBP2NJfcuzZ5DCYv6RhroGgwDerTiR7crLAp2MC1GqGUMOfyw4HZ
+   Xb1GtG1UhM6rizPqOJh4qsJBaHI8wXXQpGv7RndDRHIVcCGijwOsBY0DW
+   bn1MdDHUQJP2n4MJ5k4xv0eMOpNe23H2ZR8gcNuas/vQpjH6T/Rq4ss7X
+   TiJ55+TRNsO/DCwb2Esi0zTl2Bqv58o1ni5/lVvLD3i+92vs+9pGE+9vL
+   tzyRtQ793RaIeZUgtQoiqr26ei6moocqpsO1uQsIZbK0I7ZuT6qTpE+XU
+   w==;
+X-CSE-ConnectionGUID: f9+P7PF6S7iXs/yAFCntqA==
+X-CSE-MsgGUID: 0tCs2yaLQF+A/XpQjSXxEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42403072"
 X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
-   d="scan'208";a="42342594"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 09:07:25 -0800
-X-CSE-ConnectionGUID: ry91zZxeSYiBAgR5iOVrNQ==
-X-CSE-MsgGUID: mND6hwjNQhiQXaZfIkSPgQ==
+   d="scan'208";a="42403072"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 09:07:27 -0800
+X-CSE-ConnectionGUID: Zz8zced5Tj2Is/vg/g/nJg==
+X-CSE-MsgGUID: NosHEJTbQB+TMr2B1FVgrA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
-   d="scan'208";a="119332725"
+   d="scan'208";a="142818194"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 08 Mar 2025 09:07:23 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 08 Mar 2025 09:07:23 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqxdx-00027a-1W;
+	id 1tqxdx-00027Y-1R;
 	Sat, 08 Mar 2025 17:07:21 +0000
-Date: Sun, 9 Mar 2025 01:06:40 +0800
+Date: Sun, 9 Mar 2025 01:06:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Carlos Maiolino <cem@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-xfs@vger.kernel.org
-Subject: [xfs-linux:test-merge 13/13] fs/xfs/xfs_file.c:746:49: error: too
- few arguments to function call, expected 4, have 3
-Message-ID: <202503090149.Wu0ag7zs-lkp@intel.com>
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v4 4/7] nvmem: add support for device and sysfs-based
+ cell lookups
+Message-ID: <202503090029.GNYIypVB-lkp@intel.com>
+References: <20250306093900.2199442-5-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,87 +73,141 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250306093900.2199442-5-o.rempel@pengutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git test-merge
-head:   fac04210bb99888fd453db09239bed27436fd619
-commit: fac04210bb99888fd453db09239bed27436fd619 [13/13] Merge branch 'xfs-6.15-atomicwrites' into for-next
-config: i386-buildonly-randconfig-003-20250308 (https://download.01.org/0day-ci/archive/20250309/202503090149.Wu0ag7zs-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090149.Wu0ag7zs-lkp@intel.com/reproduce)
+Hi Oleksij,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on broonie-regulator/for-next rafael-pm/thermal linus/master v6.14-rc5 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250306-174233
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20250306093900.2199442-5-o.rempel%40pengutronix.de
+patch subject: [PATCH v4 4/7] nvmem: add support for device and sysfs-based cell lookups
+config: hexagon-randconfig-002-20250308 (https://download.01.org/0day-ci/archive/20250309/202503090029.GNYIypVB-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090029.GNYIypVB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503090149.Wu0ag7zs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503090029.GNYIypVB-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/xfs/xfs_file.c:746:49: error: too few arguments to function call, expected 4, have 3
-     746 |         ret = xfs_file_write_checks(iocb, from, &iolock);
-         |               ~~~~~~~~~~~~~~~~~~~~~                    ^
-   fs/xfs/xfs_file.c:434:1: note: 'xfs_file_write_checks' declared here
-     434 | xfs_file_write_checks(
+   In file included from drivers/rtc/rtc-pm8xxx.c:10:
+>> include/linux/nvmem-consumer.h:115:20: warning: no previous prototype for function 'nvmem_cell_get_by_sysfs_name' [-Wmissing-prototypes]
+     115 | struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
+         |                    ^
+   include/linux/nvmem-consumer.h:115:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     115 | struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
          | ^
-     435 |         struct kiocb            *iocb,
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     436 |         struct iov_iter         *from,
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     437 |         unsigned int            *iolock,
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     438 |         struct xfs_zone_alloc_ctx *ac)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+         | static 
+>> include/linux/nvmem-consumer.h:197:22: warning: no previous prototype for function 'nvmem_device_get_by_name' [-Wmissing-prototypes]
+     197 | struct nvmem_device *nvmem_device_get_by_name(const char *name)
+         |                      ^
+   include/linux/nvmem-consumer.h:197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     197 | struct nvmem_device *nvmem_device_get_by_name(const char *name)
+         | ^
+         | static 
+   2 warnings generated.
 
 
-vim +746 fs/xfs/xfs_file.c
+vim +/nvmem_cell_get_by_sysfs_name +115 include/linux/nvmem-consumer.h
 
-2e2383405824b9 Christoph Hellwig 2025-01-27  730  
-307185b178ac26 John Garry        2025-03-03  731  static noinline ssize_t
-307185b178ac26 John Garry        2025-03-03  732  xfs_file_dio_write_atomic(
-307185b178ac26 John Garry        2025-03-03  733  	struct xfs_inode	*ip,
-307185b178ac26 John Garry        2025-03-03  734  	struct kiocb		*iocb,
-307185b178ac26 John Garry        2025-03-03  735  	struct iov_iter		*from)
-307185b178ac26 John Garry        2025-03-03  736  {
-307185b178ac26 John Garry        2025-03-03  737  	unsigned int		iolock = XFS_IOLOCK_SHARED;
-307185b178ac26 John Garry        2025-03-03  738  	unsigned int		dio_flags = 0;
-307185b178ac26 John Garry        2025-03-03  739  	ssize_t			ret;
-307185b178ac26 John Garry        2025-03-03  740  
-307185b178ac26 John Garry        2025-03-03  741  retry:
-307185b178ac26 John Garry        2025-03-03  742  	ret = xfs_ilock_iocb_for_write(iocb, &iolock);
-307185b178ac26 John Garry        2025-03-03  743  	if (ret)
-307185b178ac26 John Garry        2025-03-03  744  		return ret;
-307185b178ac26 John Garry        2025-03-03  745  
-307185b178ac26 John Garry        2025-03-03 @746  	ret = xfs_file_write_checks(iocb, from, &iolock);
-307185b178ac26 John Garry        2025-03-03  747  	if (ret)
-307185b178ac26 John Garry        2025-03-03  748  		goto out_unlock;
-307185b178ac26 John Garry        2025-03-03  749  
-307185b178ac26 John Garry        2025-03-03  750  	if (dio_flags & IOMAP_DIO_FORCE_WAIT)
-307185b178ac26 John Garry        2025-03-03  751  		inode_dio_wait(VFS_I(ip));
-307185b178ac26 John Garry        2025-03-03  752  
-307185b178ac26 John Garry        2025-03-03  753  	trace_xfs_file_direct_write(iocb, from);
-307185b178ac26 John Garry        2025-03-03  754  	ret = iomap_dio_rw(iocb, from, &xfs_atomic_write_iomap_ops,
-307185b178ac26 John Garry        2025-03-03  755  			&xfs_dio_write_ops, dio_flags, NULL, 0);
-307185b178ac26 John Garry        2025-03-03  756  
-307185b178ac26 John Garry        2025-03-03  757  	if (ret == -EAGAIN && !(iocb->ki_flags & IOCB_NOWAIT) &&
-307185b178ac26 John Garry        2025-03-03  758  	    !(dio_flags & IOMAP_DIO_ATOMIC_SW)) {
-307185b178ac26 John Garry        2025-03-03  759  		xfs_iunlock(ip, iolock);
-307185b178ac26 John Garry        2025-03-03  760  		dio_flags = IOMAP_DIO_ATOMIC_SW | IOMAP_DIO_FORCE_WAIT;
-307185b178ac26 John Garry        2025-03-03  761  		iolock = XFS_IOLOCK_EXCL;
-307185b178ac26 John Garry        2025-03-03  762  		goto retry;
-307185b178ac26 John Garry        2025-03-03  763  	}
-307185b178ac26 John Garry        2025-03-03  764  
-307185b178ac26 John Garry        2025-03-03  765  out_unlock:
-307185b178ac26 John Garry        2025-03-03  766  	if (iolock)
-307185b178ac26 John Garry        2025-03-03  767  		xfs_iunlock(ip, iolock);
-307185b178ac26 John Garry        2025-03-03  768  	return ret;
-307185b178ac26 John Garry        2025-03-03  769  }
-307185b178ac26 John Garry        2025-03-03  770  
-
-:::::: The code at line 746 was first introduced by commit
-:::::: 307185b178ac2695cbd964e9b0a5a9b7513bba93 xfs: Add xfs_file_dio_write_atomic()
-
-:::::: TO: John Garry <john.g.garry@oracle.com>
-:::::: CC: Carlos Maiolino <cem@kernel.org>
+   114	
+ > 115	struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
+   116							const char *cell_name)
+   117	{
+   118		return ERR_PTR(-EOPNOTSUPP);
+   119	}
+   120	
+   121	static inline void devm_nvmem_cell_put(struct device *dev,
+   122					       struct nvmem_cell *cell)
+   123	{
+   124	
+   125	}
+   126	static inline void nvmem_cell_put(struct nvmem_cell *cell)
+   127	{
+   128	}
+   129	
+   130	static inline void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len)
+   131	{
+   132		return ERR_PTR(-EOPNOTSUPP);
+   133	}
+   134	
+   135	static inline int nvmem_cell_write(struct nvmem_cell *cell,
+   136					   void *buf, size_t len)
+   137	{
+   138		return -EOPNOTSUPP;
+   139	}
+   140	
+   141	static inline int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes,
+   142					      size_t *bits)
+   143	{
+   144		return -EOPNOTSUPP;
+   145	}
+   146	
+   147	static inline int nvmem_cell_read_u8(struct device *dev,
+   148					     const char *cell_id, u8 *val)
+   149	{
+   150		return -EOPNOTSUPP;
+   151	}
+   152	
+   153	static inline int nvmem_cell_read_u16(struct device *dev,
+   154					      const char *cell_id, u16 *val)
+   155	{
+   156		return -EOPNOTSUPP;
+   157	}
+   158	
+   159	static inline int nvmem_cell_read_u32(struct device *dev,
+   160					      const char *cell_id, u32 *val)
+   161	{
+   162		return -EOPNOTSUPP;
+   163	}
+   164	
+   165	static inline int nvmem_cell_read_u64(struct device *dev,
+   166					      const char *cell_id, u64 *val)
+   167	{
+   168		return -EOPNOTSUPP;
+   169	}
+   170	
+   171	static inline int nvmem_cell_read_variable_le_u32(struct device *dev,
+   172							 const char *cell_id,
+   173							 u32 *val)
+   174	{
+   175		return -EOPNOTSUPP;
+   176	}
+   177	
+   178	static inline int nvmem_cell_read_variable_le_u64(struct device *dev,
+   179							  const char *cell_id,
+   180							  u64 *val)
+   181	{
+   182		return -EOPNOTSUPP;
+   183	}
+   184	
+   185	static inline struct nvmem_device *nvmem_device_get(struct device *dev,
+   186							    const char *name)
+   187	{
+   188		return ERR_PTR(-EOPNOTSUPP);
+   189	}
+   190	
+   191	static inline struct nvmem_device *devm_nvmem_device_get(struct device *dev,
+   192								 const char *name)
+   193	{
+   194		return ERR_PTR(-EOPNOTSUPP);
+   195	}
+   196	
+ > 197	struct nvmem_device *nvmem_device_get_by_name(const char *name)
+   198	{
+   199		return ERR_PTR(-EOPNOTSUPP);
+   200	}
+   201	
 
 -- 
 0-DAY CI Kernel Test Service
