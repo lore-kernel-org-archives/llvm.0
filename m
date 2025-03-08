@@ -1,68 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEDC7E0E4;
-	Sat,  8 Mar 2025 19:03:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091852940D;
+	Sat,  8 Mar 2025 23:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741460641; cv=none; b=UbKC41IxyhoX/7P9JA7w4CMytTRmg6eSw7lO1NYjvjbc9w6Q4XM9UAOMl3VfS8Y9GylXMy15Xtv1/Q/6U8fARkK1hbvbP+JnVPh9Y/anQqbNLfBvNIS8yZjERldksgSDS8eh8M7iYb+/BMpVbko105yk1IXI8X5VUebB0rI01cA=
+	t=1741476766; cv=none; b=igWA4KYpeUuzX/CjZ8ESMKK53bcr99HbAcwAkT3TDf+ze+pUiZNMjSrqI/8VR8jqDS6TbH+NQEtyvLTN9JuV8UtQmX8W4ZN3MBdxb3wTLMIFNdZa+cWyzmAZYTRvoEKLc3mt3plB6KUSzL1x3rXjFTbUqtr6fvm5F6KRVTCbVl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741460641; c=relaxed/simple;
-	bh=+rxHqt446zRcVp/SCTQfHaohEqfDFE3SarBqTFs0xy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LyTZwDF5Mtzstac5raDf89lSc1i96pIwkMSa/TJouw3Eo84DZtK8dU1WAdQO/hxwv+Kewr8ggizx/ps4c9HdZiuTYFVmGht1do80IzrLtinnul4T8Kji3garFWzZNj6W45Yy3PTXhCpZaigXNMCwCFtIou9zt7NKb6k7XbyDjnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEzKvaHC; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1741476766; c=relaxed/simple;
+	bh=IkpJ5pblUOW+N+SmObnVegTlq8d1V2huXGsZY2l/diA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=J9SfWNZjyFDJavCB542LkW1K/2UBGBzZZGsUnL5OF1bQVPpg9eTl2u3OWlf1xaZtHu9lGWkC7946st7yK0wBvLQqi+ET17R1+UQ4xmAWOGm9wESRR0pqBQ2mVuciNgOIw7ash7E89O4irVQvM5aJEsbvx/0MqpVmkEPB0sRrwRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L13jn5WW; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEzKvaHC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L13jn5WW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741460639; x=1772996639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+rxHqt446zRcVp/SCTQfHaohEqfDFE3SarBqTFs0xy0=;
-  b=kEzKvaHCBktvxsKahVR800ta+H9ByKuY9+SVs+mIUZvvR43fyO0CHCqs
-   xFI7a5I7rz5dmjNnw+D6FLq3uJifUlWzepl5S1mV6It800GPpVox0x2oO
-   aAnIEvBCdwh3jfFsddG3m+SPNSBcQ7orVk8IL62BoiDzUw5UrS0LOyKgh
-   VqXdD7zhyClIWOaYY1JPi3ElADGXMOzMDQnR2++CgZrWyk57UZfjoYpqI
-   H0xw7jb/VotXcKwbzOwbgIc6j6abqcIxlsWM2K6sEpanUR3V1XGOY97/3
-   ddt/DnocZc1aK83S1jWyEeAszAPOLCL3EeiW+faGtUDJUAMC/4p/Pd1D9
-   Q==;
-X-CSE-ConnectionGUID: P9ApIdUET+6rYOojEQ3gUg==
-X-CSE-MsgGUID: mdo8A1gRTuaC3TVQVt2/4Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42690733"
-X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
-   d="scan'208";a="42690733"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 11:03:59 -0800
-X-CSE-ConnectionGUID: 1Cr9wz4dQZCCRWNT40jMKQ==
-X-CSE-MsgGUID: E7ZWhpblThK2hTv2JJbWzw==
+  t=1741476764; x=1773012764;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IkpJ5pblUOW+N+SmObnVegTlq8d1V2huXGsZY2l/diA=;
+  b=L13jn5WWq6M9l+4fL4ovjkpuGI7kzWuRsASd5vxbRnWmAUqGLetS1Ty9
+   cBc1sZitWpq71JaVxkUhYD2/8uY/8QDjIoy3/J/Mc3P/MqT3uKWhNHWr4
+   vrxLHlMmbAQexqFohcbPwj28/JD7ZUWTfCHOeuUCqyO5ZElZxpuO63Qco
+   W+EPWsRSh/8hUM3WhUKKVpDXno/dtzuYC+SCghL14zp4S2xk7XgDcaJsv
+   6J++oJDSzugUFH1gqInSm6AvRASsSs8WHFjKwVh8w5Z4otqOU7stSvm6S
+   rJf+wL8LD5GiEwp1zA2JMzGT2nOXUQYgcXMJzERIO6LO1fhnygDCR+NrB
+   w==;
+X-CSE-ConnectionGUID: s6iRMrfiT7uRK6jH18yeSw==
+X-CSE-MsgGUID: xJd4p82JQd2vliH1jA0Dlw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42720059"
+X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
+   d="scan'208";a="42720059"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 15:32:43 -0800
+X-CSE-ConnectionGUID: pnBlAyCSRq6LFavnvHX3LQ==
+X-CSE-MsgGUID: r9Mx33dDRVu5HXkPYUY8fA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
-   d="scan'208";a="120087334"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119590547"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Mar 2025 11:03:55 -0800
+  by orviesa010.jf.intel.com with ESMTP; 08 Mar 2025 15:32:42 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tqzSi-0002Dk-2a;
-	Sat, 08 Mar 2025 19:03:52 +0000
-Date: Sun, 9 Mar 2025 03:03:17 +0800
+	id 1tr3ep-0002RU-1Z;
+	Sat, 08 Mar 2025 23:32:39 +0000
+Date: Sun, 9 Mar 2025 07:32:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dan Carpenter <error27@gmail.com>,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To: Johannes Berg <johannes.berg@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net] ipvs: prevent integer overflow in do_ip_vs_get_ctl()
-Message-ID: <202503090225.vNvZGEfz-lkp@intel.com>
-References: <6dddcc45-78db-4659-80a2-3a2758f491a6@stanley.mountain>
+	linux-kernel@vger.kernel.org
+Subject: lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_147'
+ declared with 'error' attribute: BUILD_BUG_ON failed:
+ !__builtin_constant_p(~var)
+Message-ID: <202503090734.OZPeq3Td-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,215 +63,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6dddcc45-78db-4659-80a2-3a2758f491a6@stanley.mountain>
 
-Hi Dan,
+Hi Johannes,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on net/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dan-Carpenter/ipvs-prevent-integer-overflow-in-do_ip_vs_get_ctl/20250307-214537
-base:   net/main
-patch link:    https://lore.kernel.org/r/6dddcc45-78db-4659-80a2-3a2758f491a6%40stanley.mountain
-patch subject: [PATCH net] ipvs: prevent integer overflow in do_ip_vs_get_ctl()
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250309/202503090225.vNvZGEfz-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090225.vNvZGEfz-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b7c90e3e717abff6fe06445b98be306b732bbd2b
+commit: 53585f9ea40a9466ab9c1151f15984513eb542f7 um: enable UBSAN
+date:   8 months ago
+config: um-randconfig-001-20250309 (https://download.01.org/0day-ci/archive/20250309/202503090734.OZPeq3Td-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090734.OZPeq3Td-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503090225.vNvZGEfz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503090734.OZPeq3Td-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> net/netfilter/ipvs/ip_vs_ctl.c:3099:40: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    3099 |                         pr_err("length: %u != %lu\n", *len, size);
-         |                                               ~~~           ^~~~
-         |                                               %zu
-   include/linux/printk.h:544:33: note: expanded from macro 'pr_err'
-     544 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   net/netfilter/ipvs/ip_vs_ctl.c:3140:40: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-    3140 |                         pr_err("length: %u != %lu\n", *len, size);
-         |                                               ~~~           ^~~~
-         |                                               %zu
-   include/linux/printk.h:544:33: note: expanded from macro 'pr_err'
-     544 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:501:60: note: expanded from macro 'printk'
-     501 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:473:19: note: expanded from macro 'printk_index_wrap'
-     473 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
+>> lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_147' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(~var)
+    1278 |         BUILD_BUG_ON(!__builtin_constant_p(~var));
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:112:1: note: expanded from here
+     112 | __compiletime_assert_147
+         | ^
+   1 error generated.
 
 
-vim +3099 net/netfilter/ipvs/ip_vs_ctl.c
+vim +1278 lib/test_bitmap.c
 
-  3012	
-  3013	static int
-  3014	do_ip_vs_get_ctl(struct sock *sk, int cmd, void __user *user, int *len)
-  3015	{
-  3016		unsigned char arg[MAX_GET_ARGLEN];
-  3017		int ret = 0;
-  3018		unsigned int copylen;
-  3019		struct net *net = sock_net(sk);
-  3020		struct netns_ipvs *ipvs = net_ipvs(net);
-  3021	
-  3022		BUG_ON(!net);
-  3023		BUILD_BUG_ON(sizeof(arg) > 255);
-  3024		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-  3025			return -EPERM;
-  3026	
-  3027		if (cmd < IP_VS_BASE_CTL || cmd > IP_VS_SO_GET_MAX)
-  3028			return -EINVAL;
-  3029	
-  3030		copylen = get_arglen[CMDID(cmd)];
-  3031		if (*len < (int) copylen) {
-  3032			IP_VS_DBG(1, "get_ctl: len %d < %u\n", *len, copylen);
-  3033			return -EINVAL;
-  3034		}
-  3035	
-  3036		if (copy_from_user(arg, user, copylen) != 0)
-  3037			return -EFAULT;
-  3038		/*
-  3039		 * Handle daemons first since it has its own locking
-  3040		 */
-  3041		if (cmd == IP_VS_SO_GET_DAEMON) {
-  3042			struct ip_vs_daemon_user d[2];
-  3043	
-  3044			memset(&d, 0, sizeof(d));
-  3045			mutex_lock(&ipvs->sync_mutex);
-  3046			if (ipvs->sync_state & IP_VS_STATE_MASTER) {
-  3047				d[0].state = IP_VS_STATE_MASTER;
-  3048				strscpy(d[0].mcast_ifn, ipvs->mcfg.mcast_ifn,
-  3049					sizeof(d[0].mcast_ifn));
-  3050				d[0].syncid = ipvs->mcfg.syncid;
-  3051			}
-  3052			if (ipvs->sync_state & IP_VS_STATE_BACKUP) {
-  3053				d[1].state = IP_VS_STATE_BACKUP;
-  3054				strscpy(d[1].mcast_ifn, ipvs->bcfg.mcast_ifn,
-  3055					sizeof(d[1].mcast_ifn));
-  3056				d[1].syncid = ipvs->bcfg.syncid;
-  3057			}
-  3058			if (copy_to_user(user, &d, sizeof(d)) != 0)
-  3059				ret = -EFAULT;
-  3060			mutex_unlock(&ipvs->sync_mutex);
-  3061			return ret;
-  3062		}
-  3063	
-  3064		mutex_lock(&__ip_vs_mutex);
-  3065		switch (cmd) {
-  3066		case IP_VS_SO_GET_VERSION:
-  3067		{
-  3068			char buf[64];
-  3069	
-  3070			sprintf(buf, "IP Virtual Server version %d.%d.%d (size=%d)",
-  3071				NVERSION(IP_VS_VERSION_CODE), ip_vs_conn_tab_size);
-  3072			if (copy_to_user(user, buf, strlen(buf)+1) != 0) {
-  3073				ret = -EFAULT;
-  3074				goto out;
-  3075			}
-  3076			*len = strlen(buf)+1;
-  3077		}
-  3078		break;
-  3079	
-  3080		case IP_VS_SO_GET_INFO:
-  3081		{
-  3082			struct ip_vs_getinfo info;
-  3083			info.version = IP_VS_VERSION_CODE;
-  3084			info.size = ip_vs_conn_tab_size;
-  3085			info.num_services = ipvs->num_services;
-  3086			if (copy_to_user(user, &info, sizeof(info)) != 0)
-  3087				ret = -EFAULT;
-  3088		}
-  3089		break;
-  3090	
-  3091		case IP_VS_SO_GET_SERVICES:
-  3092		{
-  3093			struct ip_vs_get_services *get;
-  3094			size_t size;
-  3095	
-  3096			get = (struct ip_vs_get_services *)arg;
-  3097			size = struct_size(get, entrytable, get->num_services);
-  3098			if (*len != size) {
-> 3099				pr_err("length: %u != %lu\n", *len, size);
-  3100				ret = -EINVAL;
-  3101				goto out;
-  3102			}
-  3103			ret = __ip_vs_get_service_entries(ipvs, get, user);
-  3104		}
-  3105		break;
-  3106	
-  3107		case IP_VS_SO_GET_SERVICE:
-  3108		{
-  3109			struct ip_vs_service_entry *entry;
-  3110			struct ip_vs_service *svc;
-  3111			union nf_inet_addr addr;
-  3112	
-  3113			entry = (struct ip_vs_service_entry *)arg;
-  3114			addr.ip = entry->addr;
-  3115			rcu_read_lock();
-  3116			if (entry->fwmark)
-  3117				svc = __ip_vs_svc_fwm_find(ipvs, AF_INET, entry->fwmark);
-  3118			else
-  3119				svc = __ip_vs_service_find(ipvs, AF_INET,
-  3120							   entry->protocol, &addr,
-  3121							   entry->port);
-  3122			rcu_read_unlock();
-  3123			if (svc) {
-  3124				ip_vs_copy_service(entry, svc);
-  3125				if (copy_to_user(user, entry, sizeof(*entry)) != 0)
-  3126					ret = -EFAULT;
-  3127			} else
-  3128				ret = -ESRCH;
-  3129		}
-  3130		break;
-  3131	
-  3132		case IP_VS_SO_GET_DESTS:
-  3133		{
-  3134			struct ip_vs_get_dests *get;
-  3135			size_t size;
-  3136	
-  3137			get = (struct ip_vs_get_dests *)arg;
-  3138			size = struct_size(get, entrytable, get->num_dests);
-  3139			if (*len != size) {
-  3140				pr_err("length: %u != %lu\n", *len, size);
-  3141				ret = -EINVAL;
-  3142				goto out;
-  3143			}
-  3144			ret = __ip_vs_get_dest_entries(ipvs, get, user);
-  3145		}
-  3146		break;
-  3147	
-  3148		case IP_VS_SO_GET_TIMEOUT:
-  3149		{
-  3150			struct ip_vs_timeout_user t;
-  3151	
-  3152			__ip_vs_get_timeouts(ipvs, &t);
-  3153			if (copy_to_user(user, &t, sizeof(t)) != 0)
-  3154				ret = -EFAULT;
-  3155		}
-  3156		break;
-  3157	
-  3158		default:
-  3159			ret = -EINVAL;
-  3160		}
-  3161	
-  3162	out:
-  3163		mutex_unlock(&__ip_vs_mutex);
-  3164		return ret;
-  3165	}
-  3166	
+291f93ca339f5b Barry Song        2021-08-06  1227  
+2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
+2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
+2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
+2356d198d2b4dd Yury Norov        2023-07-17  1231   */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
+dc34d5036692c6 Alexander Lobakin 2022-06-24 @1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
+7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
+dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
+
+:::::: The code at line 1278 was first introduced by commit
+:::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+
+:::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
+:::::: CC: Yury Norov <yury.norov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
