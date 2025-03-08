@@ -1,81 +1,58 @@
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D8420E014
-	for <llvm@lists.linux.dev>; Fri,  7 Mar 2025 23:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C97F13B7A3;
+	Sat,  8 Mar 2025 01:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741390804; cv=none; b=Z8XsP7aO0no6EIrbsrda5Q535GCfIjdTNiCpQKwJLTpoWTQy92ZO1pCHjmFrQMarVWMH55gL19Xu3Wu3jsR2+mG6wtRmOsTuAvi0ayU5um5SjGXo5jnuaN3kvhv3xbuyUEwFjH8pGeYfX6PDjv486k9zPhZkhLiBR+Baz6LKF/0=
+	t=1741398856; cv=none; b=QtN7v2OJ14gXsDZBUx5l3nPSnqZCOE39YmHD/xTsXxmIo2fLqgGgbFGEnmfviG/uwgNIr/n4M89UEqHkIU+wY3jZp7aPeZk4UmUoap9IdcDR0UGKuJ1J66QWFTlw1Ivt2Jl5Z/2lQAjz85dykik4q2c4Zo7/0uKATN2lJ7QKGmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741390804; c=relaxed/simple;
-	bh=w436wgjGcjzJ3dyS3A6//n+WNelqPnxFh6A/g8MJI18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MVW4LOKu8e/aU9zR1dwAa/ktiXlMnfh/qCVpkI15tOgJHiO4Rs3WOvzEj/3+xoUeOc33lnY92ja4E0nuX95hj3F9hPWCVmR6qvAZnuybjohBNn2LQlGhT+HbufR0s1SaMFMhJoLdgtY4EeU8jhueCVQPxQfWomsm1htiE5Pe29U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0jYYdAzo; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1741398856; c=relaxed/simple;
+	bh=fZu8llA9P1XjspsJVXkVUyO/JGv+jVF8RjMU7tBj6To=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Bn+esQUo6GHX1kAEPoqgaHikQ5anZyv/SERSBvZDWY9ClRC6YV3vNbV+ZS5VSvdz52KLX73ALzdtCmGdyFvsnK6pcpRp2C14vocpVByiptOhQ+5EP81woZKzY6AWJDucd0vFQ4mNoy0x3xOL60T+HHqx4KR994Srvual5bPMrb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GTaoHg0s; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0jYYdAzo"
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8553e7d9459so66213439f.2
-        for <llvm@lists.linux.dev>; Fri, 07 Mar 2025 15:40:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741390800; x=1741995600; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jDc72lD8Mhnu3NfUsPcD1oy818yB1nERuThSEkGUHkw=;
-        b=0jYYdAzozw3Pu8H0UHrFaZVqEkBJWL6xamo7jfLx3BODfxMri8BdQXA8h9+Bsff4lF
-         V01dBqGKjDQQLCceJBwdpOHesVQpHS0VOJTuuE9Laq1Ax+aV4wHz0fW9pfa2MGxSxzMU
-         OHHVmPjB7sQrcE59PsCFE5eHAECIdRYNahevcM9RLR27MRPNBxlXG28td8bjJ07ypEd8
-         hdxWjhUXMcgm3mUCOiNGtyGJk3cEMcIbN6ZJK4w/s8ZR69u3gZ7nWnTKYwO42RgZoosu
-         CLrPT6efhVtMPc/BrDBVZ9fo5wz1nfrJLn3uQZ0X/VUUhbE/m8oumLMs31kaJ/BRO8nM
-         lHig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741390800; x=1741995600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jDc72lD8Mhnu3NfUsPcD1oy818yB1nERuThSEkGUHkw=;
-        b=snt/hAb9LGIimc/ZYCCCelHu0LZ+tPfCFZCK0gkh1tfXm96Y1OuvC9d2jnXUCptiZ4
-         3GCLvvJvedm429E0RFgutqDjsknkMFMO/4IeodBBKSsrLZkxUAWk5J9xq1lqvZ6jprDd
-         hfbTNumOMxOuR50RK4eGVprfDbs5IDt6Dp9JcxHqSDvHBkKslspOMsTbchMN/7Ks5jWM
-         gSBQU+I94cUQl4/9DriL23Y/N7o5CBayz18Jr7/mpnTIFKZ6NhlPfIFP/8F9Pd3ubTX1
-         WCnv5tSZ9grHgAWF7XPCdamB9oLVG0hko1lz0e97oXhLqLDJ0a8wenMSp4rLWWrdW+YD
-         OUYw==
-X-Forwarded-Encrypted: i=1; AJvYcCWy4Y0MZnjl4egm0Ix0vUhFEt1iLEd1SmAmuduAN73Oq9Fz5HmRndTVQyNjqnSC5DTevpy1@lists.linux.dev
-X-Gm-Message-State: AOJu0YygGKrMFs2E91t7O4uo3aPHkYGS/1LBpsMkA/ECoFGleyzz3r61
-	N6nDIzwj0u+/fQ6J4DMQ5S42UFbu/sLEfdV0brHzsOzA6qpaHUIGmn+vfclX0g==
-X-Gm-Gg: ASbGncuIVxPN9JE6Ky+3ncfAfTRD47gax5jGOeQ0D4DN2ZZuXQ9EP3QEV0OWd2WJlmM
-	FlwvRnEKC9qASaddZZj9mr4VA6vM+mgJ/hVdum/P/ybaABF9cf1XhqnRW+Gcyt6KJjOCA0ipy8g
-	P0tg8BGvli/3VwnVl/ZOIOD27LTTkVdrSMVFxJ/JaCFvSUp5dt5oq20HqrgEfy37Yy7yfzUA7n6
-	rsrgq0TA7Uni3heodnYVAvu2HDKQnJ+R81nX8ySTtS02SB+lL6thAlYsckGNDJYeprejT94IlDb
-	CKh8zAFRcMlp5iSOHuY1ZXGFoLiSnobHy/ZM9N/QyiozKD86Du74z7bjYURdNbScgeBUgnr3YnG
-	wsfHsiVNl
-X-Google-Smtp-Source: AGHT+IE5GWqkBP7F2KuCtSZMj3O7YCqwL1LClyQ1d+IKR/y1v4SzZvWajbv9qbfRqrrAzp37TIieCQ==
-X-Received: by 2002:a05:6602:474b:b0:855:9c88:7894 with SMTP id ca18e2360f4ac-85b1d03fb51mr700353139f.11.1741390800315;
-        Fri, 07 Mar 2025 15:40:00 -0800 (PST)
-Received: from google.com (26.80.59.108.bc.googleusercontent.com. [108.59.80.26])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f20a06b059sm1193908173.136.2025.03.07.15.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 15:39:59 -0800 (PST)
-Date: Fri, 7 Mar 2025 15:39:57 -0800
-From: Justin Stitt <justinstitt@google.com>
-To: Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Marco Elver <elver@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Hao Luo <haoluo@google.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Bill Wendling <morbo@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Tony Ambardar <tony.ambardar@gmail.com>, 
-	Alexander Potapenko <glider@google.com>, Jan Hendrik Farr <kernel@jfarr.cc>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] ubsan/overflow: Enable ignorelist parsing and add
- type filter
-Message-ID: <52samxs253u3t2cmm5xwbmrwzyof36w7xczpuvbkarqwonwl32@2jbmkagpk7za>
-References: <20250307040948.work.791-kees@kernel.org>
- <20250307041914.937329-3-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GTaoHg0s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741398854; x=1772934854;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fZu8llA9P1XjspsJVXkVUyO/JGv+jVF8RjMU7tBj6To=;
+  b=GTaoHg0sOZw+1A5+ZSXyto+ChYTs3kHufDJlEpen0Cs11JmrFYSM2GDu
+   xf6EQ4mnivBihIPd0U+sbtMBUG6V5LkN5CHL9/Uu9ES0dbb76iz+N6VTx
+   r8aZ3ZfBA0rjB+u53VFwVToyfYFEFb1yE3zQgBaBr7GyyidpTbj5TAd2e
+   jwSCRteMulvs9tR6yLoAvN/aZzD8k8LnX21TdfOxe8stGDiheJmE8OggO
+   DSC8utD+NHGOYFPT7NOfMDe7t17NwAAsWfE7JdhlauSYTqCBBHhJYcTM8
+   xnzGUYcN4SMHUr0TVj7nO7s9SyUAJIVpgkQnU91FslRVf1Y/FoZMIjQnr
+   g==;
+X-CSE-ConnectionGUID: KFLbPBxzQIG0zOxbq11V3g==
+X-CSE-MsgGUID: o78tvZQYTdKQfjXdHRn9fA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="59867337"
+X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
+   d="scan'208";a="59867337"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 17:54:13 -0800
+X-CSE-ConnectionGUID: ByRX0l9XQ3GF9xqjVELU2A==
+X-CSE-MsgGUID: wzRWFM8qS2GKp9quMifyQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
+   d="scan'208";a="119655933"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 07 Mar 2025 17:54:12 -0800
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqjOE-0001L2-00;
+	Sat, 08 Mar 2025 01:54:10 +0000
+Date: Sat, 8 Mar 2025 09:53:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:irq/msi 9/11] drivers/pci/tph.c:307:38: error: use of
+ undeclared identifier 'msix_idx'
+Message-ID: <202503080952.nzeYvx81-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -84,84 +61,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250307041914.937329-3-kees@kernel.org>
 
-On Thu, Mar 06, 2025 at 08:19:11PM -0800, Kees Cook wrote:
-> Limit integer wrap-around mitigation to only the "size_t" type (for
-> now). Notably this covers all special functions/builtins that return
-> "size_t", like sizeof(). This remains an experimental feature and is
-> likely to be replaced with type annotations.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Justin Stitt <justinstitt@google.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: kasan-dev@googlegroups.com
-> Cc: linux-hardening@vger.kernel.org
-> Cc: linux-kbuild@vger.kernel.org
-> ---
->  lib/Kconfig.ubsan               | 1 +
->  scripts/Makefile.ubsan          | 3 ++-
->  scripts/integer-wrap-ignore.scl | 3 +++
->  3 files changed, 6 insertions(+), 1 deletion(-)
->  create mode 100644 scripts/integer-wrap-ignore.scl
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index 888c2e72c586..4216b3a4ff21 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -125,6 +125,7 @@ config UBSAN_INTEGER_WRAP
->  	depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
->  	depends on $(cc-option,-fsanitize=implicit-signed-integer-truncation)
->  	depends on $(cc-option,-fsanitize=implicit-unsigned-integer-truncation)
-> +	depends on $(cc-option,-fsanitize-ignorelist=/dev/null)
->  	help
->  	  This option enables all of the sanitizers involved in integer overflow
->  	  (wrap-around) mitigation: signed-integer-overflow, unsigned-integer-overflow,
-> diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
-> index 233379c193a7..9e35198edbf0 100644
-> --- a/scripts/Makefile.ubsan
-> +++ b/scripts/Makefile.ubsan
-> @@ -19,5 +19,6 @@ ubsan-integer-wrap-cflags-$(CONFIG_UBSAN_INTEGER_WRAP)     +=	\
->  	-fsanitize=signed-integer-overflow			\
->  	-fsanitize=unsigned-integer-overflow			\
->  	-fsanitize=implicit-signed-integer-truncation		\
-> -	-fsanitize=implicit-unsigned-integer-truncation
-> +	-fsanitize=implicit-unsigned-integer-truncation		\
-> +	-fsanitize-ignorelist=$(srctree)/scripts/integer-wrap-ignore.scl
->  export CFLAGS_UBSAN_INTEGER_WRAP := $(ubsan-integer-wrap-cflags-y)
-> diff --git a/scripts/integer-wrap-ignore.scl b/scripts/integer-wrap-ignore.scl
-> new file mode 100644
-> index 000000000000..431c3053a4a2
-> --- /dev/null
-> +++ b/scripts/integer-wrap-ignore.scl
-> @@ -0,0 +1,3 @@
-> +[{unsigned-integer-overflow,signed-integer-overflow,implicit-signed-integer-truncation,implicit-unsigned-integer-truncation}]
-> +type:*
-> +type:size_t=sanitize
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/msi
+head:   3c18507c3399a1cedf7a102a03c28ffab3e785aa
+commit: defb1c68db9bbe478ff9e59d0dcd70a9d0d1376f [9/11] PCI/TPH: Replace the broken MSI-X control word update
+config: i386-buildonly-randconfig-005-20250308 (https://download.01.org/0day-ci/archive/20250308/202503080952.nzeYvx81-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250308/202503080952.nzeYvx81-lkp@intel.com/reproduce)
 
-Forgot to mention this in my intial reply but we have to be careful
-with what types are added here. Kees, I know we're on the same page from
-offline chats but for others: using sanitizer case lists to discriminate
-against types for the purposes of sanitizer instrumentation may not work
-properly through various arithmetic conversions. Mainly, implicit
-promotions which tend to break this particular approach.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503080952.nzeYvx81-lkp@intel.com/
 
-Now, for size_t we got kind of "lucky" because there are no implicit
-promotions with size_t, it doesn't get promoted. This is not the case
-for other types. This further necessitates the need for canonical
-wrapping types backed by in-source annotations/qualification -- coming
-soon in Clang.
+All errors (new ones prefixed by >>):
 
-> -- 
-> 2.34.1
-> 
+>> drivers/pci/tph.c:307:38: error: use of undeclared identifier 'msix_idx'
+     307 |                 err = pci_msix_write_tph_tag(pdev, msix_idx, tag);
+         |                                                    ^
+   1 error generated.
 
-Justin
+
+vim +/msix_idx +307 drivers/pci/tph.c
+
+   267	
+   268	/**
+   269	 * pcie_tph_set_st_entry() - Set Steering Tag in the ST table entry
+   270	 * @pdev: PCI device
+   271	 * @index: ST table entry index
+   272	 * @tag: Steering Tag to be written
+   273	 *
+   274	 * Figure out the proper location of ST table, either in the MSI-X table or
+   275	 * in the TPH Extended Capability space, and write the Steering Tag into
+   276	 * the ST entry pointed by index.
+   277	 *
+   278	 * Return: 0 if success, otherwise negative value (-errno)
+   279	 */
+   280	int pcie_tph_set_st_entry(struct pci_dev *pdev, unsigned int index, u16 tag)
+   281	{
+   282		u32 loc;
+   283		int err = 0;
+   284	
+   285		if (!pdev->tph_cap)
+   286			return -EINVAL;
+   287	
+   288		if (!pdev->tph_enabled)
+   289			return -EINVAL;
+   290	
+   291		/* No need to write tag if device is in "No ST Mode" */
+   292		if (pdev->tph_mode == PCI_TPH_ST_NS_MODE)
+   293			return 0;
+   294	
+   295		/*
+   296		 * Disable TPH before updating ST to avoid potential instability as
+   297		 * cautioned in PCIe r6.2, sec 6.17.3, "ST Modes of Operation"
+   298		 */
+   299		set_ctrl_reg_req_en(pdev, PCI_TPH_REQ_DISABLE);
+   300	
+   301		loc = get_st_table_loc(pdev);
+   302		/* Convert loc to match with PCI_TPH_LOC_* */
+   303		loc = FIELD_PREP(PCI_TPH_CAP_LOC_MASK, loc);
+   304	
+   305		switch (loc) {
+   306		case PCI_TPH_LOC_MSIX:
+ > 307			err = pci_msix_write_tph_tag(pdev, msix_idx, tag);
+   308			break;
+   309		case PCI_TPH_LOC_CAP:
+   310			err = write_tag_to_st_table(pdev, index, tag);
+   311			break;
+   312		default:
+   313			err = -EINVAL;
+   314		}
+   315	
+   316		if (err) {
+   317			pcie_disable_tph(pdev);
+   318			return err;
+   319		}
+   320	
+   321		set_ctrl_reg_req_en(pdev, pdev->tph_req_type);
+   322	
+   323		pci_dbg(pdev, "set steering tag: %s table, index=%d, tag=%#04x\n",
+   324			(loc == PCI_TPH_LOC_MSIX) ? "MSI-X" : "ST", index, tag);
+   325	
+   326		return 0;
+   327	}
+   328	EXPORT_SYMBOL(pcie_tph_set_st_entry);
+   329	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
