@@ -1,61 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1526224FD;
-	Sun,  9 Mar 2025 07:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A463213665A;
+	Sun,  9 Mar 2025 09:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741505462; cv=none; b=iGGAEk1C+nun0etuluXjO6p3y+WswrDI6tHY65zN3i1em/zio0+8r5bUw0w0YzIn1c7Svvp6HrgjqgtcdVZcej9zn3crP5by3l736m6T0tsFNnhNh56kCF4qJsFfiZ5G83wByCuLj1U/kuv/Z2csW6WN4p4DoJDYHSOh6VkecP8=
+	t=1741511052; cv=none; b=h4Y9/ZqQBFjPumRYCSOOpPK9M9PX3EF6AGwvQK7G53y8yL+Q/+5UBFpmrv72H1QgavCr7Q6FNLeC2nZp50INTeVmi6fyOg0hscet/8JAR2QxMablwYWgVuGNCRtZucSKu5oVL5Ac0CK6s6GOP5D5Nv+QY96tp0OQORNs3skLlqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741505462; c=relaxed/simple;
-	bh=Cia6lT6xUuA8H+EcDTSFlbST4ImZJf631HXUGKhZ9l8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l1Aoz2Ss4hbpXzk710tayvh4IeeOzLk7moFrUUKRI7zo6TrB3rPHMy00iC8AWXfv3xFHo/rbr0cPbXiNHmLzH/vuaVQtmeuOL8HS8ENFVPyl9GPJSHo1v4QumlhGjz4lU5JyiVwfTVMc2Wkm0s98OgvTWEgqXJ+o3ouqtcYJsvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KdIJcUrb; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1741511052; c=relaxed/simple;
+	bh=63WBFYs5qH1ZNqwlOPfqAFd+SnO0pCo7KYpOr5GvfIs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OoFt+kSZ8y9DnMv1sSUxtG68WOsBnEvwLiPcdgBCTvQuEIpDaO/FZTJt3ALTcBM64OKtmRAnJCSMzneCN19z3X5nHCl+nN7FtmLOKAhJx1V8R13k/inqn4PhsJ9ekYP1bLgdT/h0WK2rzYOyp9PQDcz3tgK36zoT9DpYrT2n88A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OH+JxCfF; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KdIJcUrb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OH+JxCfF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741505461; x=1773041461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cia6lT6xUuA8H+EcDTSFlbST4ImZJf631HXUGKhZ9l8=;
-  b=KdIJcUrbthxGWSp5zyLvQtntnTT1R2DMYl/fUHZ0vYlr/1g9tT/YRbPY
-   TTbQeY4XUKAN5mg6FQ0lsJUUDoZsd9ezhTRCICGZzX+b+yE/WHn0Vgjmo
-   oknEDvoyz5KuxhLx2qDmDznxGHzn72nrFJIEFWmq3HcWjhenX8LBXjVay
-   eecxiS9c7Mpq3Bmzqgb6UeT09EctkAmJGKQcaJQKxDMjowtBjmH9BfFfB
-   nzV/ckWGKvhcp06monkg34Ph2DxZGhYVNrEyvyqQqeU4dQ4enl2U2s/J4
-   Rmwt2BwBs2OAd/+IEwYqJqJwQ0+XYCyZXmfaKlMp9XG9xpCVzijMCI++Q
-   w==;
-X-CSE-ConnectionGUID: KUD7LSCRTY+FCprMvr2NUQ==
-X-CSE-MsgGUID: voY3RaEgRPKZu+XheCeMkQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42220754"
+  t=1741511051; x=1773047051;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=63WBFYs5qH1ZNqwlOPfqAFd+SnO0pCo7KYpOr5GvfIs=;
+  b=OH+JxCfFqST/k8tpnHf7PIh/yo63S9u0dhOQnaW6uY7C+9ZiU6aZIjf7
+   fEAjjBZtyWTDmsMR8CS444bue8VnY47/s46DK2V1/6NlmpSoJy4ivzPt5
+   qIJ2WS7OGFeC066/z6zq3y6Bds07lA+fch3kU80427GOsPQazvmuTdWV0
+   F5LEE4zYd32swRd4d1k1jKHgsD2+wchwgkND+I9fFGpgNQghNBeROtIr8
+   ZNPhNFiu1W3KH02AiV1LB42c9iXGbyG+uzgczIa3tmGCfhXHwpOtwjV/I
+   CQCUvY4xJsqrOFUzsr2T4m+GZ8tFknUZsCHJe9Ah5Rwfx4PqzgCVK/B0a
+   A==;
+X-CSE-ConnectionGUID: 2oUbv1joThmBj71QcNxyDA==
+X-CSE-MsgGUID: UXF6oEmoQaejG2ziOc3VNQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="64959253"
 X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
-   d="scan'208";a="42220754"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 23:31:01 -0800
-X-CSE-ConnectionGUID: o3HKVD3qRWWVoApFr60eQw==
-X-CSE-MsgGUID: +IVWokshRQyfvp/KfwUA2Q==
+   d="scan'208";a="64959253"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 01:04:11 -0800
+X-CSE-ConnectionGUID: fZ2bRN+fQV2BwLgzrbbsJA==
+X-CSE-MsgGUID: 3+uruTk+T0qaCCD3B0GyPQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="156906600"
+   d="scan'208";a="119662563"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 08 Mar 2025 23:30:59 -0800
+  by orviesa010.jf.intel.com with ESMTP; 09 Mar 2025 01:04:08 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trB7d-0002nk-3C;
-	Sun, 09 Mar 2025 07:30:54 +0000
-Date: Sun, 9 Mar 2025 15:30:30 +0800
+	id 1trCZq-0002s4-1p;
+	Sun, 09 Mar 2025 09:04:06 +0000
+Date: Sun, 9 Mar 2025 17:04:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-	linux-block@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ming Lei <ming.lei@redhat.com>
-Subject: Re: [RESEND PATCH 1/5] loop: remove 'rw' parameter from lo_rw_aio()
-Message-ID: <202503091516.7U64QwvF-lkp@intel.com>
-References: <20250308162312.1640828-2-ming.lei@redhat.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jolsa-perf:bpf/optimized_usdt_1 19/20] kernel/seccomp.c:769:2:
+ error: expected identifier or '('
+Message-ID: <202503091607.0YyJJrwm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,104 +61,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250308162312.1640828-2-ming.lei@redhat.com>
 
-Hi Ming,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on linus/master v6.14-rc5 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/loop-remove-rw-parameter-from-lo_rw_aio/20250309-002548
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20250308162312.1640828-2-ming.lei%40redhat.com
-patch subject: [RESEND PATCH 1/5] loop: remove 'rw' parameter from lo_rw_aio()
-config: arm-randconfig-001-20250309 (https://download.01.org/0day-ci/archive/20250309/202503091516.7U64QwvF-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503091516.7U64QwvF-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/optimized_usdt_1
+head:   c63f2f86076da544bc726c0e4dc9cb92f556b3d5
+commit: 637a4f5485c20fbeb03d920745ae345b81406600 [19/20] seccomp: passthrough uprobe systemcall without filtering
+config: riscv-randconfig-001-20250309 (https://download.01.org/0day-ci/archive/20250309/202503091607.0YyJJrwm-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503091607.0YyJJrwm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503091516.7U64QwvF-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503091607.0YyJJrwm-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/block/loop.c:250:3: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     250 |                 rq_for_each_segment(bvec, rq, iter) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/blk-mq.h:1043:2: note: expanded from macro 'rq_for_each_segment'
-    1043 |         __rq_for_each_bio(_iter.bio, _rq)                       \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/blk-mq.h:1039:6: note: expanded from macro '__rq_for_each_bio'
-    1039 |         if ((rq->bio))                  \
-         |             ^~~~~~~~~
-   drivers/block/loop.c:256:10: note: uninitialized use occurs here
-     256 |                 return ret;
-         |                        ^~~
-   drivers/block/loop.c:250:3: note: remove the 'if' if its condition is always true
-     250 |                 rq_for_each_segment(bvec, rq, iter) {
-         |                 ^
-   include/linux/blk-mq.h:1043:2: note: expanded from macro 'rq_for_each_segment'
-    1043 |         __rq_for_each_bio(_iter.bio, _rq)                       \
-         |         ^
-   include/linux/blk-mq.h:1039:2: note: expanded from macro '__rq_for_each_bio'
-    1039 |         if ((rq->bio))                  \
-         |         ^
-   drivers/block/loop.c:248:10: note: initialize the variable 'ret' to silence this warning
-     248 |                 int ret;
-         |                        ^
-         |                         = 0
-   1 warning generated.
+   kernel/seccomp.c:747:7: warning: unused variable 'op_res' [-Wunused-variable]
+           bool op_res;
+                ^
+   kernel/seccomp.c:746:15: warning: unused variable 'pc' [-Wunused-variable]
+           unsigned int pc;
+                        ^
+   kernel/seccomp.c:745:15: warning: unused variable 'reg_value' [-Wunused-variable]
+           unsigned int reg_value = 0;
+                        ^
+>> kernel/seccomp.c:767:2: warning: non-void function does not return a value in all control paths [-Wreturn-type]
+           }
+           ^
+>> kernel/seccomp.c:769:2: error: expected identifier or '('
+           for (pc = 0; pc < fprog->len; pc++) {
+           ^
+   kernel/seccomp.c:828:2: error: expected identifier or '('
+           WARN_ON(1);
+           ^
+   include/asm-generic/bug.h:122:29: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                               ^
+>> kernel/seccomp.c:828:2: error: expected ')'
+   include/asm-generic/bug.h:122:29: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                               ^
+   kernel/seccomp.c:828:2: note: to match this '('
+   include/asm-generic/bug.h:122:28: note: expanded from macro 'WARN_ON'
+   #define WARN_ON(condition) ({                                           \
+                              ^
+   kernel/seccomp.c:829:2: error: expected identifier or '('
+           return false;
+           ^
+>> kernel/seccomp.c:830:1: error: extraneous closing brace ('}')
+   }
+   ^
+   4 warnings and 5 errors generated.
 
 
-vim +250 drivers/block/loop.c
+vim +769 kernel/seccomp.c
 
-^1da177e4c3f41 Linus Torvalds    2005-04-16  239  
-e1d39dbf4716cd Ming Lei          2025-03-09  240  static int lo_rw_simple(struct loop_device *lo, struct request *rq, loff_t pos)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  241  {
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  242  	struct bio_vec bvec;
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  243  	struct req_iterator iter;
-e1d39dbf4716cd Ming Lei          2025-03-09  244  	struct iov_iter i;
-e1d39dbf4716cd Ming Lei          2025-03-09  245  	ssize_t len;
-e1d39dbf4716cd Ming Lei          2025-03-09  246  
-e1d39dbf4716cd Ming Lei          2025-03-09  247  	if (req_op(rq) == REQ_OP_WRITE) {
-e1d39dbf4716cd Ming Lei          2025-03-09  248  		int ret;
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  249  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07 @250  		rq_for_each_segment(bvec, rq, iter) {
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  251  			ret = lo_write_bvec(lo->lo_backing_file, &bvec, &pos);
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  252  			if (ret < 0)
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  253  				break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  254  			cond_resched();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  255  		}
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  256  		return ret;
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  257  	}
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  258  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  259  	rq_for_each_segment(bvec, rq, iter) {
-de4eda9de2d957 Al Viro           2022-09-15  260  		iov_iter_bvec(&i, ITER_DEST, &bvec, 1, bvec.bv_len);
-18e9710ee59ce3 Christoph Hellwig 2017-05-27  261  		len = vfs_iter_read(lo->lo_backing_file, &i, &pos, 0);
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  262  		if (len < 0)
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  263  			return len;
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  264  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  265  		flush_dcache_page(bvec.bv_page);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  266  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  267  		if (len != bvec.bv_len) {
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  268  			struct bio *bio;
-fd5821404e6823 Jens Axboe        2007-06-12  269  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  270  			__rq_for_each_bio(bio, rq)
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  271  				zero_fill_bio(bio);
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  272  			break;
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  273  		}
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  274  		cond_resched();
-^1da177e4c3f41 Linus Torvalds    2005-04-16  275  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  276  
-aa4d86163e4e91 Christoph Hellwig 2015-04-07  277  	return 0;
-fd5821404e6823 Jens Axboe        2007-06-12  278  }
-fd5821404e6823 Jens Axboe        2007-06-12  279  
+c8bee430dc52cf Kees Cook   2014-06-27  734  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  735  #ifdef SECCOMP_ARCH_NATIVE
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  736  /**
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  737   * seccomp_is_const_allow - check if filter is constant allow with given data
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  738   * @fprog: The BPF programs
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  739   * @sd: The seccomp data to check against, only syscall number and arch
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  740   *      number are considered constant.
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  741   */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  742  static bool seccomp_is_const_allow(struct sock_fprog_kern *fprog,
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  743  				   struct seccomp_data *sd)
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  744  {
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  745  	unsigned int reg_value = 0;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  746  	unsigned int pc;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  747  	bool op_res;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  748  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  749  	if (WARN_ON_ONCE(!fprog))
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  750  		return false;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  751  
+cf6cb56ef24410 Eyal Birger 2025-02-02  752  	/* Our single exception to filtering. */
+637a4f5485c20f Jiri Olsa   2025-03-08  753  #if defined __NR_uretprobe || defined __NR_uprobe
+cf6cb56ef24410 Eyal Birger 2025-02-02  754  #ifdef SECCOMP_ARCH_COMPAT
+cf6cb56ef24410 Eyal Birger 2025-02-02  755  	if (sd->arch == SECCOMP_ARCH_NATIVE)
+cf6cb56ef24410 Eyal Birger 2025-02-02  756  #endif
+637a4f5485c20f Jiri Olsa   2025-03-08  757  	{
+637a4f5485c20f Jiri Olsa   2025-03-08  758  #ifdef __NR_uretprobe
+cf6cb56ef24410 Eyal Birger 2025-02-02  759  		if (sd->nr == __NR_uretprobe)
+cf6cb56ef24410 Eyal Birger 2025-02-02  760  			return true;
+cf6cb56ef24410 Eyal Birger 2025-02-02  761  #endif
+637a4f5485c20f Jiri Olsa   2025-03-08  762  #ifdef __NR_uprobe
+637a4f5485c20f Jiri Olsa   2025-03-08  763  		if (sd->nr == __NR_uprobe)
+637a4f5485c20f Jiri Olsa   2025-03-08  764  			return true;
+637a4f5485c20f Jiri Olsa   2025-03-08  765  #endif
+637a4f5485c20f Jiri Olsa   2025-03-08  766  #endif
+637a4f5485c20f Jiri Olsa   2025-03-08 @767  	}
+cf6cb56ef24410 Eyal Birger 2025-02-02  768  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11 @769  	for (pc = 0; pc < fprog->len; pc++) {
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  770  		struct sock_filter *insn = &fprog->filter[pc];
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  771  		u16 code = insn->code;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  772  		u32 k = insn->k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  773  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  774  		switch (code) {
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  775  		case BPF_LD | BPF_W | BPF_ABS:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  776  			switch (k) {
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  777  			case offsetof(struct seccomp_data, nr):
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  778  				reg_value = sd->nr;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  779  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  780  			case offsetof(struct seccomp_data, arch):
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  781  				reg_value = sd->arch;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  782  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  783  			default:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  784  				/* can't optimize (non-constant value load) */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  785  				return false;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  786  			}
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  787  			break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  788  		case BPF_RET | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  789  			/* reached return with constant values only, check allow */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  790  			return k == SECCOMP_RET_ALLOW;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  791  		case BPF_JMP | BPF_JA:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  792  			pc += insn->k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  793  			break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  794  		case BPF_JMP | BPF_JEQ | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  795  		case BPF_JMP | BPF_JGE | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  796  		case BPF_JMP | BPF_JGT | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  797  		case BPF_JMP | BPF_JSET | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  798  			switch (BPF_OP(code)) {
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  799  			case BPF_JEQ:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  800  				op_res = reg_value == k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  801  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  802  			case BPF_JGE:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  803  				op_res = reg_value >= k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  804  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  805  			case BPF_JGT:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  806  				op_res = reg_value > k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  807  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  808  			case BPF_JSET:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  809  				op_res = !!(reg_value & k);
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  810  				break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  811  			default:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  812  				/* can't optimize (unknown jump) */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  813  				return false;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  814  			}
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  815  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  816  			pc += op_res ? insn->jt : insn->jf;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  817  			break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  818  		case BPF_ALU | BPF_AND | BPF_K:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  819  			reg_value &= k;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  820  			break;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  821  		default:
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  822  			/* can't optimize (unknown insn) */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  823  			return false;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  824  		}
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  825  	}
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  826  
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  827  	/* ran off the end of the filter?! */
+8e01b51a31a1e0 YiFei Zhu   2020-10-11 @828  	WARN_ON(1);
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  829  	return false;
+8e01b51a31a1e0 YiFei Zhu   2020-10-11 @830  }
+8e01b51a31a1e0 YiFei Zhu   2020-10-11  831  
+
+:::::: The code at line 769 was first introduced by commit
+:::::: 8e01b51a31a1e08e2c3e8fcc0ef6790441be2f61 seccomp/cache: Add "emulator" to check if filter is constant allow
+
+:::::: TO: YiFei Zhu <yifeifz2@illinois.edu>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 -- 
 0-DAY CI Kernel Test Service
