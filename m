@@ -1,143 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8DCF1FB3;
-	Sun,  9 Mar 2025 09:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC67117CA12;
+	Sun,  9 Mar 2025 10:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741513645; cv=none; b=LihVfJiw/RW6UsZVHGxi8XDcr8XxfWa1eMoZH6pDEH8nTGTtPdGIjqcjDgybj6btKnmE5A0XlanXqTPz0rQpArfoeWHpYbYfaMbN2Fd+rXyUkTg1Qu9tHfLARgbXzOTj+t5G4Sy+cxoomtxom5D+nLI3ARkvCdLa06abs0wLGuQ=
+	t=1741516479; cv=none; b=bvraQ4Aav9QqejjJCdVhhQkVGncbvWOie1m6CG9dGluLQQNtYGS11HjR029MilkloKwQYr0w3tTxpisuT5TipeIFpKw2Nx2E/fcLPmu8g7Nsp7b2/zEMrUdt1x3t/LgLWh7+Tz6WSsg0oDWgHiRcfh3yy+SV+qKrMzVL8MPsmc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741513645; c=relaxed/simple;
-	bh=/5tOJ6dvoZUKrdt5kC3lD2gIF7ApQ8RlCheMP9lRgR0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rZQxIwQ1O1NNyuKrT6xnsF7cGlPqC65q9JLCwZ6cR/KwOJAxbm92gckxJ2R67P7nnHUHr5c9VDloe5s7YJyqwEqtZL4cLJnCRntRR+pSnBHsggLMe18VqfveaNLnGlfF6wf/RSaZGpAPdJrgrmBqzT/9piD08XjcnQKtEoenEy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aaKoP8bc; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1741516479; c=relaxed/simple;
+	bh=VVA+1SPK40Lwo6TMSvfP2Ladr8U82jm2GxrtF3EBH+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ikD7uGhcCQvyilF1GHqXGBvdMVuX6orlF/dNdYeX1NRJnHHEaKkVy2f5eTeFhpfv1ck90qIiiixfex2wpW70/32s1ZqEPzPXUKksR/Xafj5hBSCu6AOxSYZJ0YcgHd13oOVbnDJxXmh5BcKssvJdY+NN6P5k/FhgDuZsCloHCLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bxi0NRUo; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aaKoP8bc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bxi0NRUo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741513643; x=1773049643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/5tOJ6dvoZUKrdt5kC3lD2gIF7ApQ8RlCheMP9lRgR0=;
-  b=aaKoP8bcDymMhd9ypdVaw3gQEBc0TPWsPsHYkksQK+GXqJM3wG6sX8HO
-   nSP/axPwZ9D8aHI0e+xPeJTOOVxGzER17Xz7gUtu/kVAlMxcnrXP+JJt9
-   8dRbMmCe3tNEd9G+sqCR8JAX9NZJy7Geb6rxkmnLj9XYdvaz+70tNk2y0
-   UrMg3pvQPPsjwpz7NEgdYVg+dL7CEP6Nu99oGxgpfGHn4Dcd9zPbozlaR
-   XltvHnB4MMKk2sqs64ngbwSKvohOWCYPuJy3gUl0fWhrBycv65dgp/7u1
-   Ib9vpgmOdX485fWtWk2V3G5x4YkLSetoRUD3xRHXYmjzcQuyMSCFT2I2c
+  t=1741516478; x=1773052478;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VVA+1SPK40Lwo6TMSvfP2Ladr8U82jm2GxrtF3EBH+M=;
+  b=Bxi0NRUoPG6bXI72Ov5TlwnEutDlUMrOyJX1L++4u86yqHsGyrvCVpYa
+   8FgdLm1bEr3sDbegPB6TQObJZZyiWt1siG67iEa3tITwyEWvLtUMYvS9U
+   opc4Ez3WDsjR45YmE5ZnBpNwAOTei/nCEyEv9bB+9WUiw55Zd2jSWMbWi
+   oyqnVJ0IfHjblMuhlGaDhABk811Nc2/59vzly0z0idHnBvpPRW14JVQBP
+   RBNWGVWg1dhPvgdnyxxfrxDYcYUI6lqeCH5peRD7y8nEtkzYSNQ5Tp4bx
+   qtT+LiHEKWw3pUM85V0zS2NLWcScXpMivNZofSDryIJMAleFzl18HcsU/
    Q==;
-X-CSE-ConnectionGUID: qsqAc3yFTj2UFqL6R8x4pA==
-X-CSE-MsgGUID: EOCoX7luStuRYFLjlqsXnA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42431819"
+X-CSE-ConnectionGUID: JhYu88ziT4eDbMR5TQ3Sgg==
+X-CSE-MsgGUID: 9r+bhqi7QOOCcHUe0WWZgw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="46299964"
 X-IronPort-AV: E=Sophos;i="6.14,234,1736841600"; 
-   d="scan'208";a="42431819"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 01:47:22 -0800
-X-CSE-ConnectionGUID: p+g5kU1nRYaC0TUJw/nphA==
-X-CSE-MsgGUID: us1zPSDCTnSTDV5V6lYFRA==
+   d="scan'208";a="46299964"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 03:34:35 -0700
+X-CSE-ConnectionGUID: 01hoakgbQP+BOvDMJ7aBYw==
+X-CSE-MsgGUID: CSYZftjBRsG5xe2oR72sbA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="124976344"
+X-IronPort-AV: E=Sophos;i="6.14,234,1736841600"; 
+   d="scan'208";a="124741343"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 09 Mar 2025 01:47:22 -0800
+  by orviesa004.jf.intel.com with ESMTP; 09 Mar 2025 03:34:34 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trDFf-0002tw-1K;
-	Sun, 09 Mar 2025 09:47:19 +0000
-Date: Sun, 9 Mar 2025 17:46:40 +0800
+	id 1trDzM-0002zw-0H;
+	Sun, 09 Mar 2025 10:34:32 +0000
+Date: Sun, 9 Mar 2025 18:34:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v6 15/26] landlock: Log scoped denials
-Message-ID: <202503091759.e9RGYFVV-lkp@intel.com>
-References: <20250308184422.2159360-16-mic@digikod.net>
+Subject: [jpoimboe:asm-call 27/42] arch/x86/include/asm/mshyperv.h:142:9:
+ error: expected ')'
+Message-ID: <202503091841.vKh4oa5M-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250308184422.2159360-16-mic@digikod.net>
 
-Hi Mickaël,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 7eb172143d5508b4da468ed59ee857c6e5e01da6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Micka-l-Sala-n/lsm-Add-audit_log_lsm_data-helper/20250309-025251
-base:   7eb172143d5508b4da468ed59ee857c6e5e01da6
-patch link:    https://lore.kernel.org/r/20250308184422.2159360-16-mic%40digikod.net
-patch subject: [PATCH v6 15/26] landlock: Log scoped denials
-config: i386-buildonly-randconfig-006-20250309 (https://download.01.org/0day-ci/archive/20250309/202503091759.e9RGYFVV-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git asm-call
+head:   44613874d65bd54453e4f3c595459870cf4a8c9c
+commit: aa81a7d76185c9d4373a1f1d5d0b101328e8b4ce [27/42] x86/hyperv: Use asm_call() in hypercall functions
+config: x86_64-buildonly-randconfig-006-20250309 (https://download.01.org/0day-ci/archive/20250309/202503091841.vKh4oa5M-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503091759.e9RGYFVV-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503091841.vKh4oa5M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503091759.e9RGYFVV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503091841.vKh4oa5M-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> security/landlock/fs.c:1816:24: error: no member named 'fown_layer' in 'struct landlock_file_security'
-    1816 |                 landlock_file(file)->fown_layer = handle_layer;
-         |                 ~~~~~~~~~~~~~~~~~~~  ^
-   security/landlock/fs.c:1821:24: error: no member named 'fown_layer' in 'struct landlock_file_security'
-    1821 |                 landlock_file(file)->fown_layer = 0;
-         |                 ~~~~~~~~~~~~~~~~~~~  ^
-   2 errors generated.
---
->> security/landlock/task.c:412:48: error: no member named 'fown_layer' in 'struct landlock_file_security'
-     412 |                 .layer_plus_one = landlock_file(fown->file)->fown_layer + 1,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~  ^
+   In file included from drivers/hv/hv_balloon.c:33:
+>> arch/x86/include/asm/mshyperv.h:142:9: error: expected ')'
+     142 |                          ARG("cc", "r8", "r9", "r10", "r11"));
+         |                              ^
    1 error generated.
+--
+   In file included from drivers/hv/vmbus_drv.c:40:
+>> arch/x86/include/asm/mshyperv.h:142:9: error: expected ')'
+     142 |                          ARG("cc", "r8", "r9", "r10", "r11"));
+         |                              ^
+   drivers/hv/vmbus_drv.c:1928:42: warning: shift count >= width of type [-Wshift-count-overflow]
+    1928 |         dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
+         |                                                 ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 1 error generated.
 
 
-vim +1816 security/landlock/fs.c
+vim +142 arch/x86/include/asm/mshyperv.h
 
-  1792	
-  1793	static void hook_file_set_fowner(struct file *file)
-  1794	{
-  1795		static const struct access_masks signal_scope = {
-  1796			.scope = LANDLOCK_SCOPE_SIGNAL,
-  1797		};
-  1798		const struct landlock_cred_security *new_subject;
-  1799		struct landlock_cred_security *fown_subject;
-  1800		struct landlock_ruleset *prev_dom;
-  1801		size_t handle_layer;
-  1802	
-  1803		/*
-  1804		 * Lock already held by __f_setown(), see commit 26f204380a3c ("fs: Fix
-  1805		 * file_set_fowner LSM hook inconsistencies").
-  1806		 */
-  1807		lockdep_assert_held(&file_f_owner(file)->lock);
-  1808	
-  1809		fown_subject = &landlock_file(file)->fown_subject;
-  1810		prev_dom = fown_subject->domain;
-  1811		new_subject = landlock_get_applicable_subject(
-  1812			current_cred(), signal_scope, &handle_layer);
-  1813		if (new_subject) {
-  1814			landlock_get_ruleset(new_subject->domain);
-  1815			*fown_subject = *new_subject;
-> 1816			landlock_file(file)->fown_layer = handle_layer;
-  1817		} else {
-  1818			static const struct landlock_cred_security empty = {};
-  1819	
-  1820			*fown_subject = empty;
-  1821			landlock_file(file)->fown_layer = 0;
-  1822		}
-  1823	
-  1824		/* Called in an RCU read-side critical section. */
-  1825		landlock_put_ruleset_deferred(prev_dom);
-  1826	}
-  1827	
+   123	
+   124	/* Fast hypercall with 8 bytes of input and no output */
+   125	static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
+   126	{
+   127		u64 hv_status;
+   128	
+   129	#ifdef CONFIG_X86_64
+   130		if (hv_isolation_type_tdx() && !hyperv_paravisor_present)
+   131			return hv_tdx_hypercall(control, input1, 0);
+   132	
+   133		if (hv_isolation_type_snp() && !hyperv_paravisor_present) {
+   134			asm_call("vmmcall",
+   135				 ARG("=a" (hv_status), "+c" (control), "+d" (input1)),
+   136				 ARG(),
+   137				 ARG("cc", "r8", "r9", "r10", "r11"));
+   138		} else {
+   139			asm_call(CALL_NOSPEC,
+   140				 ARG("=a" (hv_status), "+c" (control), "+d" (input1)),
+   141				 ARG(THUNK_TARGET(hv_hypercall_pg))
+ > 142				 ARG("cc", "r8", "r9", "r10", "r11"));
+   143		}
+   144	#else
+   145		{
+   146			u32 input1_hi = upper_32_bits(input1);
+   147			u32 input1_lo = lower_32_bits(input1);
+   148	
+   149			asm_call(CALL_NOSPEC,
+   150				 ARG("=A" (hv_status), "+c" (input1_lo)),
+   151				 ARG("A" (control), "b" (input1_hi),
+   152				     THUNK_TARGET(hv_hypercall_pg)),
+   153				 ARG("cc", "edi", "esi"));
+   154		}
+   155	#endif
+   156			return hv_status;
+   157	}
+   158	
 
 -- 
 0-DAY CI Kernel Test Service
