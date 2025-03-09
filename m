@@ -1,65 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6C41D90C5;
-	Sun,  9 Mar 2025 14:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9D21C2DC8;
+	Sun,  9 Mar 2025 14:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741530730; cv=none; b=bmoR9NFuIYkC/vt8RhmoFt1L3x2/VI5EUKtz07JmEVW+4hVrVyGUBus6nbJ/ao7eFgr34T5hwYxPCqzVic9xUgsszjjvSkEWQHSlcRfiqiHyUeJnqhWcDUz9IbAKjVIB+eRj+tmVElK6wxa0piehY7n8f1gk6+0sR+ITZ5/+fCM=
+	t=1741531149; cv=none; b=QToIze49pwvJVHddKzq1Bikpyl71eY6tpmWfO+WeSb3Y9AGvfhjd0EHpPYJVDR8C5LBEBtKGHyU23Pc+/WhLmAC+xW5cnfrwBxI01AwiHTE6dL3Bgg9jmUpzDBmRoezKSRpy3bMW1wenKI3VKMAr1dRNaNxFPnTJXLdmciPFFWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741530730; c=relaxed/simple;
-	bh=ZWTyKCgzxgzSSnZYEH9mQTJDvRlV/PPeWnE8ql+GB+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PmlBnu195oB1K94UbqIc/3BBDjSs6UsCWCxfSGqSSJckQYS999ERHfe1glKX+hBFUdTkcd49emyV7/MBiJbcGqyNLqhDKuTa9A3jYUoTChRQtAsRcJLfKZvfDd0AkfWc/pofIlzGMO74IbwTb5mTJhc5Oz9p+dpr2nz6Oh7AwS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L3/ENNus; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1741531149; c=relaxed/simple;
+	bh=H+qLGISOVqxW7TufYS/ic2JdiWMTlKBAF5/SXLU3prI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZleGAm9zbByZzbBMMbFb4jekGbi89SLgZ9VJjAeI81u/wJgaboj+hnGz0gstoTlensnWug0Kpgq7MUeHSDOTiLQkMktOqGqDG/441kXTK3dN9okYflChjprHqf1w+M07iEUBtnrC1u+ksFsLgopPGR+vl5bTDwsUo+j8+JCJ4yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m6+CcG9I; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L3/ENNus"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m6+CcG9I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741530729; x=1773066729;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZWTyKCgzxgzSSnZYEH9mQTJDvRlV/PPeWnE8ql+GB+Y=;
-  b=L3/ENNusB9qZO8NGKxrGpsjiYFbDFspbdBD+H5eMMumSHiDl0h65sumq
-   uaiF6T0s7qrJNruIUp8inXH0bYT7z5tPa1gKXA0JBb7JLNNYXCKTV9O8A
-   y42jrTfUBpob4BJcq1Ye6h5obATzxAE5+HbEAoGaaF81YYoFAD1YQOKBM
-   5Xtw3xZelg87rhAHK0HUbsxDRRTq5ZjHAHYYJ/hP/hdO7k838I26cyeaa
-   T+N9tom0GiuCiVcWxALVKqCWZsyEaKH/+i7UGhsqSsiLVKXMmc/Np4rqz
-   H2VWdtpjJfxo0xjhY1i/8Y1zdUCFzoVbHCI+yuqW0RFqnkwcMQjR3VXOq
-   Q==;
-X-CSE-ConnectionGUID: c1QyPciSTe+WC/Kh9QwVJA==
-X-CSE-MsgGUID: 8qUkjJpWRfu8eQosS+BT3w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="59938764"
+  t=1741531146; x=1773067146;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=H+qLGISOVqxW7TufYS/ic2JdiWMTlKBAF5/SXLU3prI=;
+  b=m6+CcG9I6zg5s5+s0QBeBJbKfgW4jvGwuapf1/kC4954kWP1Iqxin+fk
+   +X1S7HItiA1wUzz/qfhLACQmfJfr3fVHfm941eLsZa4rhMmOTGfvzPGY3
+   gKtqGFqrMpXM2hw9gK8y0hO3U4ZT7GS0TVlvHN1xBzqOTwl7QVqJSp2qb
+   jbmQyNchzwn+PWo0LGUon/kt5piOS9Xk/XK8fqfcCCzvNzr6KFWg6fDvu
+   qI/NNAYD9r0xwCVXz/CqDeno2/xQtVmlYGDKoTPtbYoBjmwhtDPpxaAZD
+   UNp1Vbh+UFCdzdTzoOvQGzbFqvG8xWMgMUYnxhuL3gnVU/cXU1nZS3aPM
+   w==;
+X-CSE-ConnectionGUID: NvKSX2O6SXiFF84CaPOY0w==
+X-CSE-MsgGUID: iiV8WVK9RQqxn1hLLsUg/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="42441130"
 X-IronPort-AV: E=Sophos;i="6.14,234,1736841600"; 
-   d="scan'208";a="59938764"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 07:32:08 -0700
-X-CSE-ConnectionGUID: aMco+C0zQ5qpV9QAErOFcw==
-X-CSE-MsgGUID: ZxCFfxEnQMevnKssQarnOA==
+   d="scan'208";a="42441130"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 07:39:05 -0700
+X-CSE-ConnectionGUID: b6z2yB9fQwiARvbpks74mA==
+X-CSE-MsgGUID: X5J3mMRsT2W8xOK+NbWAtg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="123947082"
+X-IronPort-AV: E=Sophos;i="6.14,234,1736841600"; 
+   d="scan'208";a="119500264"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 09 Mar 2025 07:32:04 -0700
+  by orviesa009.jf.intel.com with ESMTP; 09 Mar 2025 07:39:05 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trHhC-0003BM-0K;
-	Sun, 09 Mar 2025 14:32:02 +0000
-Date: Sun, 9 Mar 2025 22:31:37 +0800
+	id 1trHny-0003C4-2c;
+	Sun, 09 Mar 2025 14:39:02 +0000
+Date: Sun, 9 Mar 2025 22:38:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wen Yang <wen.yang@linux.dev>, Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wen Yang <wen.yang@linux.dev>, Jens Axboe <axboe@kernel.dk>,
-	Dylan Yudaken <dylany@fb.com>, David Woodhouse <dwmw@amazon.co.uk>,
-	Paolo Bonzini <pbonzini@redhat.com>, Dave Young <dyoung@redhat.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] eventfd: introduce configurable maximum value for
- eventfd
-Message-ID: <202503092210.z9CcRYoe-lkp@intel.com>
-References: <20250309055003.32194-1-wen.yang@linux.dev>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:master 1/1] include/linux/align.h:5:10: fatal error:
+ 'vdso/align.h' file not found
+Message-ID: <202503092207.nkymxVol-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,47 +62,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250309055003.32194-1-wen.yang@linux.dev>
 
-Hi Wen,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on brauner-vfs/vfs.all]
-[also build test ERROR on linus/master v6.14-rc5 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Wen-Yang/eventfd-introduce-configurable-maximum-value-for-eventfd/20250309-135152
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/20250309055003.32194-1-wen.yang%40linux.dev
-patch subject: [PATCH v3] eventfd: introduce configurable maximum value for eventfd
-config: i386-buildonly-randconfig-002-20250309 (https://download.01.org/0day-ci/archive/20250309/202503092210.z9CcRYoe-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git master
+head:   38bcd10de11e3ae4b49e93a5bd12a490aafc6fed
+commit: 38bcd10de11e3ae4b49e93a5bd12a490aafc6fed [1/1] foo
+config: i386-buildonly-randconfig-001-20250309 (https://download.01.org/0day-ci/archive/20250309/202503092207.nkymxVol-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503092210.z9CcRYoe-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503092207.nkymxVol-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503092210.z9CcRYoe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503092207.nkymxVol-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/eventfd.c:251:69: error: use of undeclared identifier 'ucnt'
-     251 |         return (ctx->maximum > ctx->count) && (ctx->maximum - ctx->count > ucnt);
-         |                                                                            ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:15:
+   In file included from include/linux/completion.h:12:
+   In file included from include/linux/swait.h:7:
+   In file included from include/linux/spinlock.h:63:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:11:
+   In file included from include/linux/kernel.h:15:
+>> include/linux/align.h:5:10: fatal error: 'vdso/align.h' file not found
+       5 | #include <vdso/align.h>
+         |          ^~~~~~~~~~~~~~
    1 error generated.
+   make[3]: *** [scripts/Makefile.build:102: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=2856881087
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1264: prepare0] Error 2 shuffle=2856881087
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2 shuffle=2856881087
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2 shuffle=2856881087
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +/ucnt +251 fs/eventfd.c
+vim +5 include/linux/align.h
 
-   248	
-   249	static inline bool eventfd_is_writable(const struct eventfd_ctx *ctx)
-   250	{
- > 251		return (ctx->maximum > ctx->count) && (ctx->maximum - ctx->count > ucnt);
-   252	}
-   253	
+     4	
+   > 5	#include <vdso/align.h>
+     6	
 
 -- 
 0-DAY CI Kernel Test Service
