@@ -1,59 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD82B2576;
-	Sun,  9 Mar 2025 01:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E5E17BD6;
+	Sun,  9 Mar 2025 03:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741484958; cv=none; b=ECd5Dsnnozr4Qawicdp7sL2mZ4tbgKljbd0cbZbAlEN68oZC4UofrBxtjmG4YB060Jorb7CMKzmIrAAVJfTBskc1xGFd30F7vlUiD2c60ShYoE+CXgSWLKBVOTuEKlFxmC6vsVQeQXG/kXZWrriuLht5N0zE7KWGySTld8DkeU8=
+	t=1741489296; cv=none; b=fgR17b8ynGs54CZ9b8zJd8DGpntHIb9IhBribYDcnrTNgYbDQQfS74AZSGJvuKSAxjAFl8dm++dr6xV+XevhesXw9UF6gjKr3sNXWLXasOgEXbFvAN5rvAGrETr7y+4W4WfqpOUmjujGyi0jVkC4rOwn76fE89gG+RXvawGRpsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741484958; c=relaxed/simple;
-	bh=unOnc0Y2G8Guk1N26qGOaDibNbMwpdYPzLgVDrN2vP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=u6xLb+ImYJyzmtYqVzo+icSe/1tUl5Ltyw9Rxwgl6E9aZNqRP4uHYgfPssAS1c11f1ApBg1EAmF4Cb145EwbI2nk5SqmDM9d99aGFel5NxOVUdLxjJ4eYhVegAnTbrL/RcVV3xXlEbB5EbiMhgRMsQahfLspSz0LikH6J4J0cmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i5lqPDMx; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1741489296; c=relaxed/simple;
+	bh=IVS3L5J251tbHNugEZ3AM4WfhMC0Zjdnd3Dl1hMO1o4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=met3arJToEKCF341zQOvI0U4/J0AN5RdmxwLxMk1K2Xi+AjlolLEl8q2GNDU3JQ+E1hjxls+pZozwW1Br9srVJtm5AONXuZK0C2c+IxttX2XkKtvmB5xXJulZLOEpTeth2V6xv3KJTTTSuCa9cmxAP8w5lSuwSHBMKe55pijGW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IrLdCJov; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i5lqPDMx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IrLdCJov"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741484956; x=1773020956;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=unOnc0Y2G8Guk1N26qGOaDibNbMwpdYPzLgVDrN2vP4=;
-  b=i5lqPDMxsjKlHQn9owkJptw6BvJjSrUZ3aqy32ZUNpYXUW01SaqSoyLJ
-   x62p1QKY3ZOBVyVxNlIgXQYSqvsazRcjEk6Ie+9yhVqLHMq5UNxHHPQN5
-   NqwwGlyrOVTHRu9V6q3uRLYkNd/mabSvZxXbpIB/IYWFLsFxXn+VvVEUf
-   q2xnhU6zboeJ/93706ejFBxKvZx/zb4Elmfowzc5R1jtQ3dK4ND0h00jH
-   tSBspxnhJz0UfxgjKYuU3Du6mepTmRkRK6bEpP4R65znK2WX3Xu868jRy
-   nd2qIuT8jdnqPNDnBhiLg2ecirTMzpanhReMboLSpWmbJJdZBETqpZRt2
+  t=1741489294; x=1773025294;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IVS3L5J251tbHNugEZ3AM4WfhMC0Zjdnd3Dl1hMO1o4=;
+  b=IrLdCJov/vuzFQu+S6ObguXMEOLk72PvmmgoEW/1nuxbzE5P6wrjg29Q
+   lDJKKo+Cj46O8xWzda1cXLo1I1cGFPq+5yuw++TfVYBWqp0WlPx8SyhV3
+   MgIcvHgTTNBhjz9OAxbxhD1nHR9fQ6Gf4jxkaTdMn3bkmnoGvUytb5Qvl
+   1XjHPat7xRvXBUXT5eMg9uiDg5mzP7DW15fte1XdQ0Mm/k1xZBplo9Was
+   SBH5NTkrKCePdm/zOZ+cZubIHEFYByA6wvwSArDg3ypleRjnNtAYdPcni
+   d6SrzXgAKxDRQ4fRKba9WBfi9A+nf4h+6bXSLyPz7vwupOKvOEPvZq7G0
    A==;
-X-CSE-ConnectionGUID: td4Idn8vR4mTvurJwSuyyw==
-X-CSE-MsgGUID: bZffLag6SYOjAsmMXkkzgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="64946252"
+X-CSE-ConnectionGUID: bdgFgtXgR3yUrw8QOTIQSw==
+X-CSE-MsgGUID: YWVMeJJNRjCsoZZy7nem+w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="46422268"
 X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
-   d="scan'208";a="64946252"
+   d="scan'208";a="46422268"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 17:49:16 -0800
-X-CSE-ConnectionGUID: JlBCUp08SMyCVvHzYBiNrA==
-X-CSE-MsgGUID: VozuDkvpRDe3rjlv6EUv0Q==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 19:01:34 -0800
+X-CSE-ConnectionGUID: 7SGGoZ+fS2+Az4L8zuyXfw==
+X-CSE-MsgGUID: fcPirFXBQJGdbTUBxsPpng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,233,1736841600"; 
-   d="scan'208";a="119401481"
+   d="scan'208";a="119408689"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 08 Mar 2025 17:49:14 -0800
+  by orviesa009.jf.intel.com with ESMTP; 08 Mar 2025 19:01:28 -0800
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tr5mx-0002XU-23;
-	Sun, 09 Mar 2025 01:49:11 +0000
-Date: Sun, 9 Mar 2025 09:48:12 +0800
+	id 1tr6ur-0002b0-1Z;
+	Sun, 09 Mar 2025 03:01:25 +0000
+Date: Sun, 9 Mar 2025 11:01:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
+To: Dmitry Baryshkov <lumag@kernel.org>, Rob Clark <robdclark@gmail.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kuogee Hsieh <quic_khsieh@quicinc.com>,
+	Krishna Manikandan <quic_mkrishn@quicinc.com>,
+	Jonathan Marek <jonathan@marek.ca>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Joerg Roedel <joro@8bytes.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Janne Grunau <j@jannau.net>
-Subject: [asahilinux:rust/drm-gem-shmem 4/7] error[E0609]: no field
- `__bindgen_anon_1` on type `iosys_map`
-Message-ID: <202503090907.cipyVyt2-lkp@intel.com>
+	linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 06/10] drm/msm/mdss: add SAR2130P device configuration
+Message-ID: <202503091011.Kwbj8DQz-lkp@intel.com>
+References: <20250308-sar2130p-display-v1-6-1d4c30f43822@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,47 +84,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250308-sar2130p-display-v1-6-1d4c30f43822@linaro.org>
 
-tree:   https://github.com/AsahiLinux/linux rust/drm-gem-shmem
-head:   339fbb10e073c12025d871fe8e23c665c28767c4
-commit: ed5748ba616ea0e97c19fe3e37161c88ee70af1c [4/7] rust: drm: gem: shmem: Add DRM shmem helper abstraction
-config: x86_64-randconfig-007-20250309 (https://download.01.org/0day-ci/archive/20250309/202503090907.cipyVyt2-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090907.cipyVyt2-lkp@intel.com/reproduce)
+Hi Dmitry,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 0a2f889128969dab41861b6e40111aa03dc57014]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/dt-bindings-display-msm-dp-controller-describe-SAR2130P/20250308-094544
+base:   0a2f889128969dab41861b6e40111aa03dc57014
+patch link:    https://lore.kernel.org/r/20250308-sar2130p-display-v1-6-1d4c30f43822%40linaro.org
+patch subject: [PATCH 06/10] drm/msm/mdss: add SAR2130P device configuration
+config: arm64-randconfig-001-20250309 (https://download.01.org/0day-ci/archive/20250309/202503091011.Kwbj8DQz-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503091011.Kwbj8DQz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503090907.cipyVyt2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503091011.Kwbj8DQz-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 19.1.7
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
-   rust/core.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
-   rust/core.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
-   rust/compiler_builtins.o: warning: objtool: asan.module_ctor+0xd: call without frame pointer save/setup
-   rust/compiler_builtins.o: warning: objtool: asan.module_dtor+0xd: call without frame pointer save/setup
->> error[E0609]: no field `__bindgen_anon_1` on type `iosys_map`
-   --> rust/kernel/drm/gem/shmem.rs:291:27
-   |
-   291 |         unsafe { self.map.__bindgen_anon_1.vaddr }
-   |                           ^^^^^^^^^^^^^^^^ unknown field
---
->> error[E0609]: no field `__bindgen_anon_1` on type `iosys_map`
-   --> rust/kernel/drm/gem/shmem.rs:297:27
-   |
-   297 |         unsafe { self.map.__bindgen_anon_1.vaddr }
-   |                           ^^^^^^^^^^^^^^^^ unknown field
+>> drivers/gpu/drm/msm/msm_mdss.c:599:3: error: field designator 'ubwc_static' does not refer to any field in type 'const struct msm_mdss_data'
+           .ubwc_static = 1,
+            ^
+   1 error generated.
+
+
+vim +599 drivers/gpu/drm/msm/msm_mdss.c
+
+   594	
+   595	static const struct msm_mdss_data sar2130p_data = {
+   596		.ubwc_enc_version = UBWC_3_0, /* 4.0.2 in hw */
+   597		.ubwc_dec_version = UBWC_4_3,
+   598		.ubwc_swizzle = 6,
+ > 599		.ubwc_static = 1,
+   600		.highest_bank_bit = 0,
+   601		.macrotile_mode = 1,
+   602		.reg_bus_bw = 74000,
+   603	};
+   604	
 
 -- 
 0-DAY CI Kernel Test Service
