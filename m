@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D769F14F6C;
-	Mon, 10 Mar 2025 01:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9AE3596B;
+	Mon, 10 Mar 2025 01:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741568450; cv=none; b=PmaWw7zasu8ZVV/jGgw9lKqEhFgh+lDb757M0/hSuqxbyGBXSZ/S5dKolCOsGdmvlVSNpdVwqONFpEpyyEMmHA/slHF+tj9M0+Vr+iZntcWN0fVGSqQbzmfOiLJcSHwNrj8Tux3DtXcpmGcnfR1TGY3KlbwCXgNl45t/w526SqA=
+	t=1741569713; cv=none; b=W1U/421Jj+CH6Qx7G3nvobOo+Cjx0zzu+kzppAUszb8qciFOL8dIoOlPYncWhZVuuTtPVXsoO3xf1JIvf28+GOx43tyLbIp8jmOIgn8L3FyP9vUxBlOQKGaRrlDEp3P0onoqrE4BE2qrarrsrUvK2I9t/WZ1srTtQaeYYWN7O7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741568450; c=relaxed/simple;
-	bh=ATKBXs54xojdbxT24WNkcELorESgyhG6mFkqqtotNFY=;
+	s=arc-20240116; t=1741569713; c=relaxed/simple;
+	bh=z8QdkKRYlOpmTs+ivZoED/+3/x2JDmVV+mfVt3piMxQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SzGFrwmAP/VMGcGsN33TyI6trahRryDyQLIbMVUUCAmGtCslJN5ZHZiz87xKboBuwNsFDS+3DCGWSh+0RtfOIsCydlxMc38xvMB5cofUvJ/Y0+wRDFbZLC0h92R3nd7ZAKD+0UhyGSskLhCfl6m6LVhevqKVuqKqSwhKAhw4uSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TGP8AqOE; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=XC0Gdr/wt6cWlu1w1t8in9OJn9tvJXithFhC5jLO3XOfR1Pfbo5zW6juPUWrZVkhyEihjBoDC37Cp2R1XRK9h5TjFjU72IQI95kmeoSEVQWT/CcMTmMjhCSDgHoN3D6pXHnLPoFnNxvaSuGb7PpxChmx+ibdX+U47tTGA13CwuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/0w8Obw; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TGP8AqOE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/0w8Obw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741568448; x=1773104448;
+  t=1741569710; x=1773105710;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ATKBXs54xojdbxT24WNkcELorESgyhG6mFkqqtotNFY=;
-  b=TGP8AqOEMojtVvAXZwA4mzl4I3aMVLc2o92KWg3FpluZikdg02zlu8Sk
-   V2K8/bWD/L8i5RSTwORLOkr1zep7P2xOZKC/aXEvGv/KFEFTgv/q74qst
-   1gz1mJkG5s18Z36I0BpbFZdSj9V/Yjjr0RRGg6y/zViZKidhWoTiHlmEM
-   IREwCHR4qbCRuqzklL5OVftk4jMfeajhXAK+262nyAw5PAYvwT2DaVWBz
-   wUuJ6hLc6dw12QxXSfC92Hye063yi6pW4h+4/UnTR5GqL8odfIEZ5vxHS
-   Sh+/DcMDayYJ2Wp7gsR1fklS+0SjAncshQiVNGHPSy4W0QB/jEPCOCKGg
-   Q==;
-X-CSE-ConnectionGUID: UUn0LGW6QW6XPOrJZKpgdA==
-X-CSE-MsgGUID: O40O9OIPSb6CClDb8lsgtQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="59959526"
+  bh=z8QdkKRYlOpmTs+ivZoED/+3/x2JDmVV+mfVt3piMxQ=;
+  b=l/0w8Obw4iPo2fcIyV75TtHLFdxAepTQ+9iRhfnYCqCDGZnuSPjnAgsL
+   vXMbHKH9IOwUGk+p8Dbhw4hqGu6xBwvBrNUD9RmG6pbJ1YtbPCFVG6uqC
+   HCbtFJHCFWFgqI92oSr3gkgczBg100zFJTwvPvSlEuHLIPbm+9tlsjp2f
+   yNKTcCHsnEujRmCqW2gGCcglcGrvAOLvz+EZq0vAEiCIgiD6aa35LFGN1
+   eOpZv+9Vp0oA1lgqB18RZ/0k7QAEOqCJwdYqqHDevrtck2urcLSpiBhEa
+   ikwFCrogys3YnJaA5WA8tMK6QWELu9uM1i8oufnXioMGtpJervIoyRrKx
+   g==;
+X-CSE-ConnectionGUID: zn2vRNl3RIaRvhSNrFsr1w==
+X-CSE-MsgGUID: Aa7e4IK5SbiIafnFXLy3OA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="53929402"
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="59959526"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:00:47 -0700
-X-CSE-ConnectionGUID: BmLNX371QpaiMXDxa8/IHw==
-X-CSE-MsgGUID: dGmMCrapQkaSnmaU2L1/RA==
+   d="scan'208";a="53929402"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:21:50 -0700
+X-CSE-ConnectionGUID: ZNSrZuboRGCjuTdXMONxgA==
+X-CSE-MsgGUID: Gx/TtrTmTz27T9IJebfdUQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="143065153"
+   d="scan'208";a="119839028"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 09 Mar 2025 18:00:45 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 09 Mar 2025 18:21:46 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trRVb-0003fg-0B;
-	Mon, 10 Mar 2025 01:00:43 +0000
-Date: Mon, 10 Mar 2025 09:00:04 +0800
+	id 1trRpw-0003fw-1Z;
+	Mon, 10 Mar 2025 01:21:44 +0000
+Date: Mon, 10 Mar 2025 09:21:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zsolt Kajtar <soci@c64.rulez.org>, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
+To: Nam Tran <trannamatk@gmail.com>, pavel@kernel.org, lee@kernel.org,
+	krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Zsolt Kajtar <soci@c64.rulez.org>
-Subject: Re: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing
- routines
-Message-ID: <202503100810.9iId3430-lkp@intel.com>
-References: <20250309184716.13732-2-soci@c64.rulez.org>
+	devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Nam Tran <trannamatk@gmail.com>
+Subject: Re: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
+Message-ID: <202503100925.eZz1D0kw-lkp@intel.com>
+References: <20250306172126.24667-4-trannamatk@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,170 +65,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250309184716.13732-2-soci@c64.rulez.org>
+In-Reply-To: <20250306172126.24667-4-trannamatk@gmail.com>
 
-Hi Zsolt,
+Hi Nam,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.14-rc5 next-20250307]
+[auto build test ERROR on lee-leds/for-leds-next]
+[also build test ERROR on robh/for-next linus/master v6.14-rc5 next-20250307]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zsolt-Kajtar/Refactoring-the-fbcon-packed-pixel-drawing-routines/20250310-025619
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250309184716.13732-2-soci%40c64.rulez.org
-patch subject: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing routines
-config: i386-buildonly-randconfig-002-20250310 (https://download.01.org/0day-ci/archive/20250310/202503100810.9iId3430-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Tran/dt-bindings-leds-Add-LP5812-LED-driver/20250307-012604
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20250306172126.24667-4-trannamatk%40gmail.com
+patch subject: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
+config: x86_64-randconfig-005-20250310 (https://download.01.org/0day-ci/archive/20250310/202503100925.eZz1D0kw-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503100810.9iId3430-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503100925.eZz1D0kw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503100810.9iId3430-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503100925.eZz1D0kw-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from drivers/video/fbdev/aty/mach64_cursor.c:9:
->> drivers/video/fbdev/aty/../core/fb_draw.h:16:48: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
-         |                                                ^
->> drivers/video/fbdev/aty/../core/fb_draw.h:18:5: error: incomplete definition of type 'struct fb_address'
-      18 |         adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
-         |         ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:16:48: note: forward declaration of 'struct fb_address'
-      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
-         |                                                ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:22:46: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:24:39: error: incomplete definition of type 'struct fb_address'
-      24 |         unsigned int bits = (unsigned int)adr->bits + offset;
-         |                                           ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:26:5: error: incomplete definition of type 'struct fb_address'
-      26 |         adr->bits = bits & (BITS_PER_LONG - 1u);
-         |         ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:27:5: error: incomplete definition of type 'struct fb_address'
-      27 |         adr->address += (bits & ~(BITS_PER_LONG - 1u)) / BITS_PER_BYTE;
-         |         ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:33:16: error: incomplete definition of type 'struct fb_address'
-      33 |         int bits = adr->bits - (int)offset;
-         |                    ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:35:5: error: incomplete definition of type 'struct fb_address'
-      35 |         adr->bits = bits & (BITS_PER_LONG - 1);
-         |         ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:37:6: error: incomplete definition of type 'struct fb_address'
-      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
-         |                 ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:37:23: error: incomplete definition of type 'struct fb_address'
-      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
-         |                                  ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:39:6: error: incomplete definition of type 'struct fb_address'
-      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
-         |                 ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:39:30: error: incomplete definition of type 'struct fb_address'
-      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
-         |                                         ~~~^
-   drivers/video/fbdev/aty/../core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:50:34: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      50 |                                     int offset, const struct fb_address *dst)
-         |                                                              ^
->> drivers/video/fbdev/aty/../core/fb_draw.h:52:2: error: call to undeclared function 'fb_write_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |         ^
-   drivers/video/fbdev/aty/../core/fb_draw.h:52:2: note: did you mean 'fb_modify_offset'?
-   drivers/video/fbdev/aty/../core/fb_draw.h:49:20: note: 'fb_modify_offset' declared here
-      49 | static inline void fb_modify_offset(unsigned long val, unsigned long mask,
-         |                    ^
-      50 |                                     int offset, const struct fb_address *dst)
-      51 | {
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |         ~~~~~~~~~~~~~~~
-         |         fb_modify_offset
->> drivers/video/fbdev/aty/../core/fb_draw.h:52:31: error: call to undeclared function 'fb_read_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |                                      ^
->> drivers/video/fbdev/aty/mach64_cursor.c:184:9: error: call to undeclared function 'comp'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     184 |                                 l = comp(l, 0xaaaa,
-         |                                     ^
-   4 warnings and 13 errors generated.
-
-
-vim +18 drivers/video/fbdev/aty/../core/fb_draw.h
-
-    14	
-    15	/* move the address pointer by the number of words */
-  > 16	static inline void fb_address_move_long(struct fb_address *adr, int offset)
-    17	{
-  > 18		adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
-    19	}
-    20	
-    21	/* move the address pointer forward with the number of bits */
-    22	static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-    23	{
-    24		unsigned int bits = (unsigned int)adr->bits + offset;
-    25	
-    26		adr->bits = bits & (BITS_PER_LONG - 1u);
-    27		adr->address += (bits & ~(BITS_PER_LONG - 1u)) / BITS_PER_BYTE;
-    28	}
-    29	
-    30	/* move the address pointer backwards with the number of bits */
-    31	static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-    32	{
-    33		int bits = adr->bits - (int)offset;
-    34	
-    35		adr->bits = bits & (BITS_PER_LONG - 1);
-    36		if (bits < 0)
-    37			adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
-    38		else
-    39			adr->address += (bits - adr->bits) / BITS_PER_BYTE;
-    40	}
-    41	
-    42	/* compose pixels based on mask */
-    43	static inline unsigned long fb_comp(unsigned long set, unsigned long unset, unsigned long mask)
-    44	{
-    45		return ((set ^ unset) & mask) ^ unset;
-    46	}
-    47	
-    48	/* framebuffer read-modify-write access for replacing bits in the mask */
-    49	static inline void fb_modify_offset(unsigned long val, unsigned long mask,
-    50					    int offset, const struct fb_address *dst)
-    51	{
-  > 52		fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-    53	}
-    54	
+>> ERROR: modpost: "led_set_autonomous_animation_config" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_initialize" [drivers/leds/leds-lp5812.ko] undefined!
+ERROR: modpost: "lp5812_read" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_write" [drivers/leds/leds-lp5812.ko] undefined!
+ERROR: modpost: "lp5812_disable_all_leds" [drivers/leds/leds-lp5812.ko] undefined!
+ERROR: modpost: "lp5812_enable_disable" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_device_command" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_reset" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_update_regs_config" [drivers/leds/leds-lp5812.ko] undefined!
+>> ERROR: modpost: "lp5812_fault_clear" [drivers/leds/leds-lp5812.ko] undefined!
+WARNING: modpost: suppressed 23 unresolved symbol warnings because there were too many)
 
 -- 
 0-DAY CI Kernel Test Service
