@@ -1,43 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744542309BD;
-	Mon, 10 Mar 2025 18:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2A8156861;
+	Mon, 10 Mar 2025 18:24:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741630957; cv=none; b=cx/nVWrgoHvcsPSj+f3E2Q/JamrfzSU73wFo9AC93uykyRbhz/ebgUI6S6BX58xRtGDGRRTjwgav35NoQS7OTk/WbfKc+qknrooaEShv4sSViEh9D1wnTFfHX/Rf8mCBPzhJxDWAGvwLdBBc9x9srjq4cuG/7rg3F4p0yFTeMyM=
+	t=1741631072; cv=none; b=FnrkozQIgw+dYeCPu+0B3q0sSwRF0967ANc0WFF+OX7bh0w+MzR4B5SoARWR+K5B/3IErOTdwirnYdD/BLH1nMMNaq+Z0uyGFBddTrbndX5aLTXUy/KfCq85W/W/un/W7mquhb8i9hDcMN1QteTYlXRThkHivik++ADdY5THPhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741630957; c=relaxed/simple;
-	bh=fognwa1FjofLcfAc8it2UjirQfh9kt0Vts7CK1wQOWQ=;
+	s=arc-20240116; t=1741631072; c=relaxed/simple;
+	bh=I9v83gD5FScUmGVEHRSB9QRMjjO35gmukcVxbPouQhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SuSHq8dWCrVqtIhXtIenUGMd3WE9kHsG9w2adfT4/q4qzXLlZl0OoLl72fLsD/x+3tDAl0ASW68G2WEo/mfZt4SPTNsG/yzmACGiZqC/SYXdKrHPsqaC/eAqvTFp7YyN32bgPL2KCJBjSf1PyJQMtCtNcR4Iw5cipslBG8/GnXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQj3H104; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=BWTI0sWXOo/avJnKAIaV6Yq31mjJHGqCQBx+WuO2qSJ9hl7IDFNbiugA6c8V59j+ykTiL1lX1vQ1dkxFrIEGtkj48QD/OBZS7GCR3620aR5SJwpvSv0VJxY1Szru6t2x751h7IdfDOCS25mkeuUaxeZ8G0Sge2OjovnBQorlegc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=I901CpS6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQj3H104"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04594C4CEED;
-	Mon, 10 Mar 2025 18:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741630957;
-	bh=fognwa1FjofLcfAc8it2UjirQfh9kt0Vts7CK1wQOWQ=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="I901CpS6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7F1C4CEE5;
+	Mon, 10 Mar 2025 18:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1741631071;
+	bh=I9v83gD5FScUmGVEHRSB9QRMjjO35gmukcVxbPouQhQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gQj3H104rYmuBRDm/aE9h6GqMYat86OyiEImVZB3C5K2EqfHOdBAgyHynqaLqCCPZ
-	 MJiENzw1ahYUauN1oiRfPKorP/iAp7zwthft8PfPYh9p5DH7IOOn9wxsElQ1zOw6uT
-	 IZix7when9A1nn/+fEBkdUaopDCYwLWWu0g5kkMuMP380dYBfm/JVsyE8tkys6sJvD
-	 FcPx9hi69XM3DOGpzrAQxInbrDbe3Z2oVL/BOPF0bVIZHnYqynDIzY+GsPJp0sS/gi
-	 6vqRVKM3oX4gqIFO/B8tlcLhitnb1kpVLPl/didma4hYni1iImmurQEPrSCMgS/PBo
-	 uoysoLZxi0t7A==
-Date: Mon, 10 Mar 2025 19:22:33 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-Subject: Re: [pci:endpoint-test 16/18]
- drivers/pci/controller/dwc/pcie-dw-rockchip.c:316:3: error: field designator
- 'intx_capable' does not refer to any field in type 'const struct
- dw_pcie_ep_ops'
-Message-ID: <Z88t6TEjFCHDznmb@ryzen>
-References: <202503110151.vQXf5yof-lkp@intel.com>
+	b=I901CpS6Vdf3DtNpDgEiDxTsFlIlx7rAUEWgjN2Ufo/lo9UJGZDFf3ywzXYuX1FiF
+	 Bcn+Sf16FRLMQTryJA297F3fT3341P3BA+P9ialV3qSwkBbox4ybZ7Lz4gcAK17sTQ
+	 lJ8mN9QWBAyJ8yEgTCtpFCMk79fFOez7EO4lZyX0=
+Date: Mon, 10 Mar 2025 19:19:36 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Ethan Carter Edwards <ethan@ethancedwards.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] rust/kernel/faux: mark Registration methods inline
+Message-ID: <2025031053-tribute-crudely-0e1d@gregkh>
+References: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,62 +51,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202503110151.vQXf5yof-lkp@intel.com>
+In-Reply-To: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
 
-Hello Krzysztof,
+On Sun, Mar 09, 2025 at 10:14:36PM -0400, Ethan Carter Edwards wrote:
+> When building the kernel on Arch Linux using on x86_64 with tools:
+> $ rustc --version
+> rustc 1.84.0 (9fc6b4312 2025-01-07)
+> $ cargo --version
+> cargo 1.84.0 (66221abde 2024-11-19)
+> $ clang --version
+> clang version 19.1.7
+> Target: x86_64-pc-linux-gnu
+> 
+> The following symbols are generated:
+> $ nm vmlinux | rg ' _R' | rustfilt | rg faux
+> ffffffff81959ae0 T <kernel::faux::Registration>::new
+> ffffffff81959b40 T <kernel::faux::Registration as core::ops::drop::Drop>::drop
+> 
+> However, these Rust symbols are wrappers around bindings in the C faux
+> code. Inlining these functions removes the middle-man wrapper function
+> After applying this patch, the above function signatures disappear.
+> 
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
+> ---
+>  rust/kernel/faux.rs | 2 ++
+>  1 file changed, 2 insertions(+)
 
-On Tue, Mar 11, 2025 at 02:02:12AM +0800, kernel test robot wrote:
-> Hi Niklas,
-> 
-> FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git endpoint-test
-> head:   d87a0e7ac55245a3f75ca5c646ffdf0cfa36e749
-> commit: da8628c06a7f08cb3402d02040d7a6195949772c [16/18] PCI: dw-rockchip: Endpoint mode cannot raise INTx interrupts
-> config: s390-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250311/202503110151.vQXf5yof-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503110151.vQXf5yof-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503110151.vQXf5yof-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/pci/controller/dwc/pcie-dw-rockchip.c:316:3: error: field designator 'intx_capable' does not refer to any field in type 'const struct dw_pcie_ep_ops'
->            .intx_capable = false,
->             ^
->    drivers/pci/controller/dwc/pcie-dw-rockchip.c:530:33: warning: shift count >= width of type [-Wshift-count-overflow]
->            dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
->                                           ^~~~~~~~~~~~~~~~
->    include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
->    #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
->                                                         ^ ~~~
->    1 warning and 1 error generated.
-> 
-> 
-> vim +316 drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> 
->    313	
->    314	static const struct dw_pcie_ep_ops rockchip_pcie_ep_ops = {
->    315		.init = rockchip_pcie_ep_init,
->  > 316		.intx_capable = false,
->    317		.raise_irq = rockchip_pcie_raise_irq,
->    318		.get_features = rockchip_pcie_get_features,
->    319	};
->    320	
->
+This does not apply to my tree.  Can you regenerate it against either
+the driver-core.git driver-core-next branch, or the linux-next tree and
+resend it?
 
-This is not how the patch that I sent out looked like.
+What release/branch did you make this against?
 
-See:
-https://lore.kernel.org/all/20250310111016.859445-14-cassel@kernel.org/
+thanks,
 
-My guess is that you modified it before applying
-(without adding [kwilczynski: ]).
-If you undo your modifications, it should compile :)
-
-
-Kind regards,
-Niklas
+greg k-h
