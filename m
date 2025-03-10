@@ -1,62 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDC222DFB6;
-	Mon, 10 Mar 2025 15:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E34122DFED;
+	Mon, 10 Mar 2025 15:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741622221; cv=none; b=N+yanDyAbk73KPGIIoj24/Bmazs+foOl4fV+1JvutdCKqBQfRA66o30pVEhch7iJN8QbTUNfGF6bQf5Qz5/GJyzqQdtLRV0PGcItPmhNQB/rGJm/H2TFYJfgu7lJb6Qr9cpwGecfFd/CRC27VKQzxiVtc3wF7HRAbE1t/nOOyCA=
+	t=1741622222; cv=none; b=n61HC+wmlZHtW2mPxN1ol5j26dxAR6q6f6+yUS/qsR8DcrApHc/9IbbUHRe76wZ6NCFm7Ppfh7IWMp91T1Q3v8qrxmPiQ4dDsfjJm3kyAfgt6Mnjk8xAGRi1FU3EcfKriOLOeO4V5TPCUY++qxbhaRqFu2XqsLs5mKo4JuiJgXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741622221; c=relaxed/simple;
-	bh=HUOoS96yEGNDr6tmWxBEsNiNGsOwUXnMZoZqjoX9vAA=;
+	s=arc-20240116; t=1741622222; c=relaxed/simple;
+	bh=UfzIwipQYZKlD1IFnNP2s2QWol3tOEz3nnLOdVk3cVc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SvEmTNJ2B88wfoa0iflr6C5BMqte1VFg8Ji37nBhv09iksCfo9s4KW9RVtVhUtHr+qkTBLcJPPz/J2EkdmqJue/PsepKTYnOTpCZI07SXV3iXeftZEz9FvejBh1kZ5iKvXMEXSkaO8QJlGTSAFygGDPzsmd+l8g9J4xCkolspjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jVGCPUE2; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=qMg1VwTeSIn+NMh5pzo+MifOnAgMbSDJdbHBvFPDRdIqOeMxgKbnaAO4qIEvsbOKFOgm5UqiQXbk7/NC//r/DVz0IuDTcU0PUoQQ73lloiKH3E76Z7G7x+jSeX1OmDiWxqL5qqW35q1L+fOOULP3yShrXab8fxj7UIO1wC0eyeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n8Pgzb2W; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jVGCPUE2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n8Pgzb2W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741622220; x=1773158220;
+  t=1741622221; x=1773158221;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=HUOoS96yEGNDr6tmWxBEsNiNGsOwUXnMZoZqjoX9vAA=;
-  b=jVGCPUE2yavaZ6Ej4W6xwNBOM/G+mAAiMgjk25ZeAyzE4o3OURIJLwOa
-   DbH/cxjtkpQi1ze8COSd24mvEET73nfydGkqs2jxuCK6oFp1/6Bc2wZO4
-   mV0Kv8NLV3ydvdp6tDY+dH6VPjDkAsRwSj2wEdR0yuopafyW2tXx08sJ0
-   7mDIKtkSE0Wk1M4QKHAjTQUpYeQcJScmbhU5Tk/R7aZBaJMa72G9QuNOB
-   Pe+0gJ/pLD8Ln14wglTelVqi+3UAdmzi8ZqZB0uOI7ZfxLx2zZ1klqN9J
-   216rYHA1gItlS/ytbZCXn/RuhMqqIslpDEziL7D4I/+O9Hj+6J0SjnDXa
-   w==;
-X-CSE-ConnectionGUID: BdphJXdHTvuDlJkcd0Rn9g==
-X-CSE-MsgGUID: f5qvtEGDS1eGooy8qJScUw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="65081040"
+  bh=UfzIwipQYZKlD1IFnNP2s2QWol3tOEz3nnLOdVk3cVc=;
+  b=n8Pgzb2WOV14A7NUxzKlisL7+yWvmExgEK7NllyK4kWi9XtDGxfzzgk0
+   t6iXnlsNHxXxeBhNhpfZnATHg7RNrAzcdrRRmkxQbSms6zo/gWecCCl5l
+   RDpjmVhoCW/w++1y6rJ4bW0bsp9ATkQ0JBH+/idvkiOKXtXJZQGZRd6gC
+   eNX2pNe3626ph63MdonCrfjRsWX7siNhlROxHCSRAzvFixsBH5wMqk0+j
+   3+ahzQhKjUnpJKcG8Jud/rg5MU+JjiIH61DczgXD3HM0fP5qFrvhXvvtc
+   EUBPPBa3Igy89jy84FYZdciBB+gTSNSFoBEeQBfyDVwGhCgKUZSyRIWKL
+   Q==;
+X-CSE-ConnectionGUID: Cm8K913KTXqXxDSlFYLdYw==
+X-CSE-MsgGUID: G6z1GcFoSF2AFlgYXVLzGw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="53614650"
 X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="65081040"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:56:59 -0700
-X-CSE-ConnectionGUID: h9n+icFATluKVx9K7ImYmQ==
-X-CSE-MsgGUID: pgat/bVPTj+l6ZZfBU3B7A==
+   d="scan'208";a="53614650"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:57:00 -0700
+X-CSE-ConnectionGUID: c+imipRMR2WxBNHrZmx4uQ==
+X-CSE-MsgGUID: jfQTKGA0TxWiiROmb069Gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="125260838"
+   d="scan'208";a="124931255"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 10 Mar 2025 08:56:57 -0700
+  by orviesa003.jf.intel.com with ESMTP; 10 Mar 2025 08:56:57 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trfUs-0004Pw-35;
+	id 1trfUs-0004Py-39;
 	Mon, 10 Mar 2025 15:56:54 +0000
-Date: Mon, 10 Mar 2025 23:56:45 +0800
+Date: Mon, 10 Mar 2025 23:56:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Zsolt Kajtar <soci@c64.rulez.org>, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org
+To: Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Zsolt Kajtar <soci@c64.rulez.org>
-Subject: Re: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing
- routines
-Message-ID: <202503102312.rSGvBwl1-lkp@intel.com>
-References: <20250309184716.13732-2-soci@c64.rulez.org>
+	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org, eric.dumazet@gmail.com,
+	Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next 3/4] inet: frags: change inet_frag_kill() to
+ defer refcount updates
+Message-ID: <202503102308.1uTA6Uxr-lkp@intel.com>
+References: <20250309173151.2863314-4-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,136 +68,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250309184716.13732-2-soci@c64.rulez.org>
+In-Reply-To: <20250309173151.2863314-4-edumazet@google.com>
 
-Hi Zsolt,
+Hi Eric,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.14-rc6 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zsolt-Kajtar/Refactoring-the-fbcon-packed-pixel-drawing-routines/20250310-025619
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250309184716.13732-2-soci%40c64.rulez.org
-patch subject: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing routines
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250310/202503102312.rSGvBwl1-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503102312.rSGvBwl1-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/inet-frags-add-inet_frag_putn-helper/20250310-013501
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250309173151.2863314-4-edumazet%40google.com
+patch subject: [PATCH net-next 3/4] inet: frags: change inet_frag_kill() to defer refcount updates
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250310/202503102308.1uTA6Uxr-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503102308.1uTA6Uxr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503102312.rSGvBwl1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503102308.1uTA6Uxr-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/video/fbdev/wmt_ge_rops.c:15:
->> drivers/video/fbdev/core/fb_draw.h:16:48: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
-         |                                                ^
-   drivers/video/fbdev/core/fb_draw.h:18:5: error: incomplete definition of type 'struct fb_address'
-      18 |         adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
-         |         ~~~^
-   drivers/video/fbdev/core/fb_draw.h:16:48: note: forward declaration of 'struct fb_address'
-      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
-         |                                                ^
-   drivers/video/fbdev/core/fb_draw.h:22:46: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/core/fb_draw.h:24:39: error: incomplete definition of type 'struct fb_address'
-      24 |         unsigned int bits = (unsigned int)adr->bits + offset;
-         |                                           ~~~^
-   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/core/fb_draw.h:26:5: error: incomplete definition of type 'struct fb_address'
-      26 |         adr->bits = bits & (BITS_PER_LONG - 1u);
-         |         ~~~^
-   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/core/fb_draw.h:27:5: error: incomplete definition of type 'struct fb_address'
-      27 |         adr->address += (bits & ~(BITS_PER_LONG - 1u)) / BITS_PER_BYTE;
-         |         ~~~^
-   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
-      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
-         |                                              ^
-   drivers/video/fbdev/core/fb_draw.h:31:47: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:33:16: error: incomplete definition of type 'struct fb_address'
-      33 |         int bits = adr->bits - (int)offset;
-         |                    ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:35:5: error: incomplete definition of type 'struct fb_address'
-      35 |         adr->bits = bits & (BITS_PER_LONG - 1);
-         |         ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:37:6: error: incomplete definition of type 'struct fb_address'
-      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
-         |                 ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:37:23: error: incomplete definition of type 'struct fb_address'
-      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
-         |                                  ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:39:6: error: incomplete definition of type 'struct fb_address'
-      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
-         |                 ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:39:30: error: incomplete definition of type 'struct fb_address'
-      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
-         |                                         ~~~^
-   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
-      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
-         |                                               ^
-   drivers/video/fbdev/core/fb_draw.h:50:34: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
-      50 |                                     int offset, const struct fb_address *dst)
-         |                                                              ^
-   drivers/video/fbdev/core/fb_draw.h:52:2: error: call to undeclared function 'fb_write_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |         ^
-   drivers/video/fbdev/core/fb_draw.h:52:2: note: did you mean 'fb_modify_offset'?
-   drivers/video/fbdev/core/fb_draw.h:49:20: note: 'fb_modify_offset' declared here
-      49 | static inline void fb_modify_offset(unsigned long val, unsigned long mask,
-         |                    ^
-      50 |                                     int offset, const struct fb_address *dst)
-      51 | {
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |         ~~~~~~~~~~~~~~~
-         |         fb_modify_offset
-   drivers/video/fbdev/core/fb_draw.h:52:31: error: call to undeclared function 'fb_read_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
-         |                                      ^
-   drivers/video/fbdev/wmt_ge_rops.c:57:8: error: call to undeclared function 'pixel_to_pat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      57 |         pat = pixel_to_pat(p->var.bits_per_pixel, fg);
-         |               ^
-   4 warnings and 13 errors generated.
+>> net/ieee802154/6lowpan/reassembly.c:312:45: error: too few arguments to function call, expected 4, have 3
+     312 |                 ret = lowpan_frag_queue(fq, skb, frag_type);
+         |                       ~~~~~~~~~~~~~~~~~                   ^
+   net/ieee802154/6lowpan/reassembly.c:86:12: note: 'lowpan_frag_queue' declared here
+      86 | static int lowpan_frag_queue(struct lowpan_frag_queue *fq,
+         |            ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      87 |                              struct sk_buff *skb, u8 frag_type,
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      88 |                              int *refs)
+         |                              ~~~~~~~~~
+   1 error generated.
 
 
-vim +16 drivers/video/fbdev/core/fb_draw.h
+vim +312 net/ieee802154/6lowpan/reassembly.c
 
-    14	
-    15	/* move the address pointer by the number of words */
-  > 16	static inline void fb_address_move_long(struct fb_address *adr, int offset)
-    17	{
-    18		adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
-    19	}
-    20	
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  280  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  281  int lowpan_frag_rcv(struct sk_buff *skb, u8 frag_type)
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  282  {
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  283  	struct lowpan_frag_queue *fq;
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  284  	struct net *net = dev_net(skb->dev);
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  285  	struct lowpan_802154_cb *cb = lowpan_802154_cb(skb);
+f18fa5de5ba7f1d net/ieee802154/6lowpan/reassembly.c Alexander Aring    2018-04-20  286  	struct ieee802154_hdr hdr = {};
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  287  	int err;
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  288  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  289  	if (ieee802154_hdr_peek_addrs(skb, &hdr) < 0)
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  290  		goto err;
+ae531b9475f62c5 net/ieee802154/reassembly.c         Phoebe Buckheister 2014-03-14  291  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  292  	err = lowpan_get_cb(skb, frag_type, cb);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  293  	if (err < 0)
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  294  		goto err;
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  295  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  296  	if (frag_type == LOWPAN_DISPATCH_FRAG1) {
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  297  		err = lowpan_invoke_frag_rx_handlers(skb);
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  298  		if (err == NET_RX_DROP)
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  299  			goto err;
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  300  	}
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  301  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  302  	if (cb->d_size > IPV6_MIN_MTU) {
+6697dabe27e0330 net/ieee802154/reassembly.c         Martin Townsend    2014-08-19  303  		net_warn_ratelimited("lowpan_frag_rcv: datagram size exceeds MTU\n");
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  304  		goto err;
+6697dabe27e0330 net/ieee802154/reassembly.c         Martin Townsend    2014-08-19  305  	}
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  306  
+72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  307  	fq = fq_find(net, cb, &hdr.source, &hdr.dest);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  308  	if (fq != NULL) {
+aec42e105cebf42 net/ieee802154/6lowpan/reassembly.c Eric Dumazet       2025-03-09  309  		int ret, refs = 1;
+4710d806fcb8251 net/ieee802154/reassembly.c         Varka Bhadram      2014-07-02  310  
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  311  		spin_lock(&fq->q.lock);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28 @312  		ret = lowpan_frag_queue(fq, skb, frag_type);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  313  		spin_unlock(&fq->q.lock);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  314  
+aec42e105cebf42 net/ieee802154/6lowpan/reassembly.c Eric Dumazet       2025-03-09  315  		inet_frag_putn(&fq->q, refs);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  316  		return ret;
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  317  	}
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  318  
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  319  err:
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  320  	kfree_skb(skb);
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  321  	return -1;
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  322  }
+7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  323  
 
 -- 
 0-DAY CI Kernel Test Service
