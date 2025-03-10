@@ -1,157 +1,157 @@
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFEB2253EC
-	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 09:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E45D192D83;
+	Mon, 10 Mar 2025 09:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741599625; cv=none; b=rVGkmWGJF7IasxRjnkQCkZ5dX9MBruX8bhWZxurZy7FcFbTBrIptAs89FSW6sN4QRIQLcQnjCAOc09IAa3YicOBs045ESkEecw/RPAG0lGCowofD3uSooZi1XWvMsMHlV/EUAXmmrzRCwvEXvuamUrR6R7J4bq0Qrz2xyXrERkU=
+	t=1741600006; cv=none; b=lH4seTytzsbi7ayjZcFrYgHxG185qWnLRRw3FkPk+LO90twbIdn7mVfTpSc2emFtL/2BF/SOdDFvdzPYHWIXWWjbzMQYciaK7dfcp+AW4PIpOiWmp0eVfsbqDHNkb7uq0ZbQDvl0heqvTOBayNCJLjwowBR0P/iJrfxo3Vvynvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741599625; c=relaxed/simple;
-	bh=+0wn6CEZBMks82wBoIPLAtnrHTCR+LvgWxO/drTJy2c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oBIP0EgiMs3lj3wCa37ePj0BbPLja6GuxWaGCC7xgo0Q32E3PW+pQAHoUu8szKzf9g2ne8Y4dFJbH1QBWHepaQsuCOMDyKdYeI9vqNUISOVNfMQPYRPrvUy5H4ft8xzdoT4VAJULD2n8v99U8L0B1vMjTnxQmTlh08rKKOqLXqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=HjYiFA7F; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+	s=arc-20240116; t=1741600006; c=relaxed/simple;
+	bh=tLWODqbH5RF94Yxo0cAYUlB+9z+8EPee0R1joiIhp3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aaFJ9h1XKWniOoj8jVSuB+5QFSH401OdyYsGprIR5X1K/B+ud+rsgSO85qj8nT+YlL4KLLgod4Ld7k1FXc7s36iR/zzjIzyrcaWd2pYTOowWvksMNaWeXQbD6wv/0AuHlYP24EFYEkvh0hykn/nrVYrGPnyzG7Bv4r2Par4kIOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KjfEVcuo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="HjYiFA7F"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id D25DC240103
-	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 10:40:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1741599620; bh=+0wn6CEZBMks82wBoIPLAtnrHTCR+LvgWxO/drTJy2c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
-	b=HjYiFA7FUOhEeK6QNoDusYHrF7NqumYMc2pTgtGqANSYErV7CfVghhEdfLXF0gb+6
-	 AyBVl8ILXOyVgZZ5hCQrK8MNrAzTN/ZKh7emJ51agDWxniE7an+qTpNEVo2n54Hns9
-	 EjWx/3ZIZg+JYvJw2hAbgB9K6XipWd64anzII64B5pa2m8U4yHkuTNi1EnY85OJCzA
-	 B3CbmWbvg5PRrw3gqxb44vnOqNwGdQcpWrxEbvRECpBcW7LpiSSiub3T67L5BfUmX9
-	 3h+IaMawrDXdB6KbtXZuHHdFtqfI6V4SQcTo82TJQIqVzBA3abEc7Ln+H4+pWhxn9c
-	 fshze9SQECPPg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4ZBBhK6GQdz9rxM;
-	Mon, 10 Mar 2025 10:40:17 +0100 (CET)
-From: Panagiotis Foliadis <pfoliadis@posteo.net>
-Date: Mon, 10 Mar 2025 09:39:15 +0000
-Subject: [PATCH] rust: task: mark Task methods inline
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KjfEVcuo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA15BC4CEE5;
+	Mon, 10 Mar 2025 09:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741600006;
+	bh=tLWODqbH5RF94Yxo0cAYUlB+9z+8EPee0R1joiIhp3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KjfEVcuoY3RI+JjGDJTdAz/LdwQTNDJVyaNjntst2VP7UGi2KUah/yov//JqTObcM
+	 5XXkdk8+OtORnykpoGCoz/s4TrmaJYoElLoGW3WknTqn6xOyR3mGIyI/G8mvwEtmnD
+	 AdCfb7MZn/t1bHeC/3dBfKcoIKH4aryWouNoiF4f0Yz1BFwzowl0srYmLpx/dDcvdq
+	 GZz55DkrYT1w7JV88wJSKFPqMwTWzvJigbFqrZqOvvrn8ANSe5CikZcUCIfGe8OrzJ
+	 yLmP9P2oQGHxJVvnsW2xwnwvOJW82zjWJrI4MqrfYnelCWQocQBea5MZegA3PsP/ka
+	 iDq+fRXr4nyLA==
+Date: Mon, 10 Mar 2025 10:46:39 +0100
+From: Carlos Maiolino <cem@kernel.org>
+To: Philip Li <philip.li@intel.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-xfs@vger.kernel.org
+Subject: Re: [xfs-linux:test-merge 13/13] fs/xfs/xfs_file.c:746:49: error:
+ too few arguments to function call, expected 4, have 3
+Message-ID: <c6qdwojc7hxx4i5uxfgm46prfxeqvafzr65xbifjbnnkyi22ws@ykn4quszepeu>
+References: <PSt0U3K_mmDGWaUOdQei1VdlAVGOrC5kd15x-0yg_rquOtDV_Mh9rhn6hh7E2UkGEaAkraNnR5S41kzJkAmjMg==@protonmail.internalid>
+ <202503090149.Wu0ag7zs-lkp@intel.com>
+ <jclah7ezuc723hjwdr3x5u57rypxafy6olq7ig43b2kawcraid@3ghad6tv23ci>
+ <8x2H4cMliIknhuTd8BqUXGKqQq_c1V-B5JRBKlk_xUczhNdDeyiyQ8CbVH8J5U3QWNeSP28njt80b49ST-grZA==@protonmail.internalid>
+ <Z86zS/kT3yr4Tz5o@rli9-mobl>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net>
-X-B4-Tracking: v=1; b=H4sIAEKzzmcC/x3MQQqAIBBA0avErBtQI5KuEi1EpxoIkxEqEO+et
- HyL/wtkEqYMc1dA6ObMV2zQfQf+cHEn5NAMRplRDcoix5MjocdHXEokGYOzA3ntjZsmaF0S2vj
- 9n8ta6wevQw8GYwAAAA==
-X-Change-ID: 20250308-inline-c-wrappers-da83ec1c2a77
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Panagiotis Foliadis <pfoliadis@posteo.net>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741599617; l=3618;
- i=pfoliadis@posteo.net; s=20250308; h=from:subject:message-id;
- bh=+0wn6CEZBMks82wBoIPLAtnrHTCR+LvgWxO/drTJy2c=;
- b=va5T3sB7VN1Q9VHEsh3uaHTGU4mG5/H7vyeKhbV9ow08fFutaBADQBRBBoxI25knuJk/WSbvd
- lcQNwKQCGwqD1x0sQrVwXOE8i3+IRZRxnESvJFR88YHq6gC+SrYXHQa
-X-Developer-Key: i=pfoliadis@posteo.net; a=ed25519;
- pk=/8ch2dv3mwtZ5ygYwiG7ldc/132K6XmLkAZDmIe0aQw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z86zS/kT3yr4Tz5o@rli9-mobl>
 
-When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-toolchain provided by kernel.org, the following symbols are generated:
+On Mon, Mar 10, 2025 at 05:39:23PM +0800, Philip Li wrote:
+> On Mon, Mar 10, 2025 at 10:21:04AM +0100, Carlos Maiolino wrote:
+> > On Sun, Mar 09, 2025 at 01:06:40AM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git test-merge
+> > > head:   fac04210bb99888fd453db09239bed27436fd619
+> > > commit: fac04210bb99888fd453db09239bed27436fd619 [13/13] Merge branch 'xfs-6.15-atomicwrites' into for-next
+> > > config: i386-buildonly-randconfig-003-20250308 (https://download.01.org/0day-ci/archive/20250309/202503090149.Wu0ag7zs-lkp@intel.com/config)
+> > > compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090149.Wu0ag7zs-lkp@intel.com/reproduce)
+> >
+> > Huh? All xfs branches are monitored? This was by no means to be tested.
+> 
+> thanks for the info, we will ignore this test-merge branch to avoid sending
+> meaningless report.
 
-$ nm vmlinux | grep ' _R'.*Task | rustfilt
-ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
-ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
-ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
-ffffffff817b2d00 T <kernel::task::Task>::signal_pending
-ffffffff817b2cc0 T <kernel::task::Task>::uid
-ffffffff817b2ce0 T <kernel::task::Task>::euid
-ffffffff817b2c70 T <kernel::task::Task>::current
-ffffffff817b2d70 T <kernel::task::Task>::wake_up
-ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
-ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
+No need, I removed this branch already, this was just a temp merge. I expected
+that branches monitored by the bot were Opt-In by default.
 
-Most of these Rust symbols are trivial wrappers around the C functions
-signal_pending, uid, euid, wake_up, dec_ref and inc_ref.It doesn't
-make sense to go through a trivial wrapper for these functions, so
-mark them inline.
+I'll just use my personal repo if I need to discuss a merge again.
 
-After applying this patch, the above command will produce this output:
+Carlos
 
-ffff8000805aa004 T <kernel::task::Task>::get_pid_ns
-ffff8000805aa01c T <kernel::task::Task>::tgid_nr_ns
-ffff8000805a9fe8 T <kernel::task::Task>::current_pid_ns
-ffff8000805a9fd0 T <kernel::task::Task>::current
-
-Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
-Link: https://github.com/Rust-for-Linux/linux/issues/1145
----
- rust/kernel/task.rs | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-index 07bc22a7645c0c7d792a0a163dd55b8ff0fe5f92..996d7c96e48689a5752817f9ca196c021865291d 100644
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@ -273,18 +273,21 @@ pub fn pid(&self) -> Pid {
-     }
- 
-     /// Returns the UID of the given task.
-+    #[inline]
-     pub fn uid(&self) -> Kuid {
-         // SAFETY: It's always safe to call `task_uid` on a valid task.
-         Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
-     }
- 
-     /// Returns the effective UID of the given task.
-+    #[inline]
-     pub fn euid(&self) -> Kuid {
-         // SAFETY: It's always safe to call `task_euid` on a valid task.
-         Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
-     }
- 
-     /// Determines whether the given task has pending signals.
-+    #[inline]
-     pub fn signal_pending(&self) -> bool {
-         // SAFETY: It's always safe to call `signal_pending` on a valid task.
-         unsafe { bindings::signal_pending(self.as_ptr()) != 0 }
-@@ -319,6 +322,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
-     }
- 
-     /// Wakes up the task.
-+    #[inline]
-     pub fn wake_up(&self) {
-         // SAFETY: It's always safe to call `signal_pending` on a valid task, even if the task
-         // running.
-@@ -328,11 +332,13 @@ pub fn wake_up(&self) {
- 
- // SAFETY: The type invariants guarantee that `Task` is always refcounted.
- unsafe impl crate::types::AlwaysRefCounted for Task {
-+    #[inline]
-     fn inc_ref(&self) {
-         // SAFETY: The existence of a shared reference means that the refcount is nonzero.
-         unsafe { bindings::get_task_struct(self.as_ptr()) };
-     }
- 
-+    #[inline]
-     unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
-         // SAFETY: The safety requirements guarantee that the refcount is nonzero.
-         unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
-
----
-base-commit: 7f0e9ee5e44887272627d0fcde0b19a675daf597
-change-id: 20250308-inline-c-wrappers-da83ec1c2a77
-
-Best regards,
--- 
-Panagiotis Foliadis <pfoliadis@posteo.net>
-
+> 
+> >
+> > Carlos
+> >
+> > >
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503090149.Wu0ag7zs-lkp@intel.com/
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > > >> fs/xfs/xfs_file.c:746:49: error: too few arguments to function call, expected 4, have 3
+> > >      746 |         ret = xfs_file_write_checks(iocb, from, &iolock);
+> > >          |               ~~~~~~~~~~~~~~~~~~~~~                    ^
+> > >    fs/xfs/xfs_file.c:434:1: note: 'xfs_file_write_checks' declared here
+> > >      434 | xfs_file_write_checks(
+> > >          | ^
+> > >      435 |         struct kiocb            *iocb,
+> > >          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >      436 |         struct iov_iter         *from,
+> > >          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >      437 |         unsigned int            *iolock,
+> > >          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >      438 |         struct xfs_zone_alloc_ctx *ac)
+> > >          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >    1 error generated.
+> > >
+> > >
+> > > vim +746 fs/xfs/xfs_file.c
+> > >
+> > > 2e2383405824b9 Christoph Hellwig 2025-01-27  730
+> > > 307185b178ac26 John Garry        2025-03-03  731  static noinline ssize_t
+> > > 307185b178ac26 John Garry        2025-03-03  732  xfs_file_dio_write_atomic(
+> > > 307185b178ac26 John Garry        2025-03-03  733  	struct xfs_inode	*ip,
+> > > 307185b178ac26 John Garry        2025-03-03  734  	struct kiocb		*iocb,
+> > > 307185b178ac26 John Garry        2025-03-03  735  	struct iov_iter		*from)
+> > > 307185b178ac26 John Garry        2025-03-03  736  {
+> > > 307185b178ac26 John Garry        2025-03-03  737  	unsigned int		iolock = XFS_IOLOCK_SHARED;
+> > > 307185b178ac26 John Garry        2025-03-03  738  	unsigned int		dio_flags = 0;
+> > > 307185b178ac26 John Garry        2025-03-03  739  	ssize_t			ret;
+> > > 307185b178ac26 John Garry        2025-03-03  740
+> > > 307185b178ac26 John Garry        2025-03-03  741  retry:
+> > > 307185b178ac26 John Garry        2025-03-03  742  	ret = xfs_ilock_iocb_for_write(iocb, &iolock);
+> > > 307185b178ac26 John Garry        2025-03-03  743  	if (ret)
+> > > 307185b178ac26 John Garry        2025-03-03  744  		return ret;
+> > > 307185b178ac26 John Garry        2025-03-03  745
+> > > 307185b178ac26 John Garry        2025-03-03 @746  	ret = xfs_file_write_checks(iocb, from, &iolock);
+> > > 307185b178ac26 John Garry        2025-03-03  747  	if (ret)
+> > > 307185b178ac26 John Garry        2025-03-03  748  		goto out_unlock;
+> > > 307185b178ac26 John Garry        2025-03-03  749
+> > > 307185b178ac26 John Garry        2025-03-03  750  	if (dio_flags & IOMAP_DIO_FORCE_WAIT)
+> > > 307185b178ac26 John Garry        2025-03-03  751  		inode_dio_wait(VFS_I(ip));
+> > > 307185b178ac26 John Garry        2025-03-03  752
+> > > 307185b178ac26 John Garry        2025-03-03  753  	trace_xfs_file_direct_write(iocb, from);
+> > > 307185b178ac26 John Garry        2025-03-03  754  	ret = iomap_dio_rw(iocb, from, &xfs_atomic_write_iomap_ops,
+> > > 307185b178ac26 John Garry        2025-03-03  755  			&xfs_dio_write_ops, dio_flags, NULL, 0);
+> > > 307185b178ac26 John Garry        2025-03-03  756
+> > > 307185b178ac26 John Garry        2025-03-03  757  	if (ret == -EAGAIN && !(iocb->ki_flags & IOCB_NOWAIT) &&
+> > > 307185b178ac26 John Garry        2025-03-03  758  	    !(dio_flags & IOMAP_DIO_ATOMIC_SW)) {
+> > > 307185b178ac26 John Garry        2025-03-03  759  		xfs_iunlock(ip, iolock);
+> > > 307185b178ac26 John Garry        2025-03-03  760  		dio_flags = IOMAP_DIO_ATOMIC_SW | IOMAP_DIO_FORCE_WAIT;
+> > > 307185b178ac26 John Garry        2025-03-03  761  		iolock = XFS_IOLOCK_EXCL;
+> > > 307185b178ac26 John Garry        2025-03-03  762  		goto retry;
+> > > 307185b178ac26 John Garry        2025-03-03  763  	}
+> > > 307185b178ac26 John Garry        2025-03-03  764
+> > > 307185b178ac26 John Garry        2025-03-03  765  out_unlock:
+> > > 307185b178ac26 John Garry        2025-03-03  766  	if (iolock)
+> > > 307185b178ac26 John Garry        2025-03-03  767  		xfs_iunlock(ip, iolock);
+> > > 307185b178ac26 John Garry        2025-03-03  768  	return ret;
+> > > 307185b178ac26 John Garry        2025-03-03  769  }
+> > > 307185b178ac26 John Garry        2025-03-03  770
+> > >
+> > > :::::: The code at line 746 was first introduced by commit
+> > > :::::: 307185b178ac2695cbd964e9b0a5a9b7513bba93 xfs: Add xfs_file_dio_write_atomic()
+> > >
+> > > :::::: TO: John Garry <john.g.garry@oracle.com>
+> > > :::::: CC: Carlos Maiolino <cem@kernel.org>
+> > >
+> > > --
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests/wiki
+> > >
+> >
