@@ -1,62 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9AE3596B;
-	Mon, 10 Mar 2025 01:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C89911CBA;
+	Mon, 10 Mar 2025 01:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741569713; cv=none; b=W1U/421Jj+CH6Qx7G3nvobOo+Cjx0zzu+kzppAUszb8qciFOL8dIoOlPYncWhZVuuTtPVXsoO3xf1JIvf28+GOx43tyLbIp8jmOIgn8L3FyP9vUxBlOQKGaRrlDEp3P0onoqrE4BE2qrarrsrUvK2I9t/WZ1srTtQaeYYWN7O7o=
+	t=1741570311; cv=none; b=jigFkOjqODTk9LApRZ7T2VvyUEVKygZb1MdPFjANTF51NgvQyDayQlXN62bUnz1yxMe3hZxrTB04NurD37aK02RiSlB0AS06k5jF6dgVYSWz4rb3OzgB8ZewU+saxSKqcHfJWeedYTit6gCh/SZRZuey7eLRZVShBh/8+6a9tUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741569713; c=relaxed/simple;
-	bh=z8QdkKRYlOpmTs+ivZoED/+3/x2JDmVV+mfVt3piMxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XC0Gdr/wt6cWlu1w1t8in9OJn9tvJXithFhC5jLO3XOfR1Pfbo5zW6juPUWrZVkhyEihjBoDC37Cp2R1XRK9h5TjFjU72IQI95kmeoSEVQWT/CcMTmMjhCSDgHoN3D6pXHnLPoFnNxvaSuGb7PpxChmx+ibdX+U47tTGA13CwuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/0w8Obw; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1741570311; c=relaxed/simple;
+	bh=55EuGOXC3Kz1nA9VOFTCxz0BojTtSL5EVix6D23D3cw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=q49lK1OCiOiMz1U9XCV2yG5jqeqgMJNGMyPdRFd1YIZNh6qbFnFFzd9vNMJf4e7ESgmSSW8mYEgUp9/6YjzCfg+81zRUyU+LHtaMUMVaGPu2O1IJ5AN4qNYxSCzSKTmK41O+UVPeL0szcaKZg/nfJjNR85xKG1y5ZtXyw2ocvl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9gPanC9; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/0w8Obw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9gPanC9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741569710; x=1773105710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z8QdkKRYlOpmTs+ivZoED/+3/x2JDmVV+mfVt3piMxQ=;
-  b=l/0w8Obw4iPo2fcIyV75TtHLFdxAepTQ+9iRhfnYCqCDGZnuSPjnAgsL
-   vXMbHKH9IOwUGk+p8Dbhw4hqGu6xBwvBrNUD9RmG6pbJ1YtbPCFVG6uqC
-   HCbtFJHCFWFgqI92oSr3gkgczBg100zFJTwvPvSlEuHLIPbm+9tlsjp2f
-   yNKTcCHsnEujRmCqW2gGCcglcGrvAOLvz+EZq0vAEiCIgiD6aa35LFGN1
-   eOpZv+9Vp0oA1lgqB18RZ/0k7QAEOqCJwdYqqHDevrtck2urcLSpiBhEa
-   ikwFCrogys3YnJaA5WA8tMK6QWELu9uM1i8oufnXioMGtpJervIoyRrKx
-   g==;
-X-CSE-ConnectionGUID: zn2vRNl3RIaRvhSNrFsr1w==
-X-CSE-MsgGUID: Aa7e4IK5SbiIafnFXLy3OA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="53929402"
+  t=1741570309; x=1773106309;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=55EuGOXC3Kz1nA9VOFTCxz0BojTtSL5EVix6D23D3cw=;
+  b=D9gPanC9vBEVJ5vJ+OAST92yfzUHx+PIEk91lOYD4BmbdfMJOqvLPAYx
+   Tte5GmS6tIQFHUl5/QDKASUN5V003o3LjzJ9BCw+sfe1qc4CF0HYdLc4f
+   dp3QLT6mCHQh4K4Jd7uzjkH48F60WcpX9rUSwahC2CEn+ttYLnfh6C6QD
+   5Is3xlD7rkwh0bVooY298Fsc+Gfyjs3kp7nyycNgdIZfwqIakpXWmabyS
+   n5LrBLY2IHArvU98FIwbz/d4aq5knZGuQ0zH3nrZB3Ph9oWWi2GNTGBYg
+   27J0lBRE6VDxk/Q0p54hBcM/KSeE5D82LMJ1EsKNKOoijXTOt/mtg6y3h
+   w==;
+X-CSE-ConnectionGUID: i7E6wY39Steq1+kX0k1+Sg==
+X-CSE-MsgGUID: NnZFDhh2SWuOIp1UG3Glug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="53536725"
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="53929402"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:21:50 -0700
-X-CSE-ConnectionGUID: ZNSrZuboRGCjuTdXMONxgA==
-X-CSE-MsgGUID: Gx/TtrTmTz27T9IJebfdUQ==
+   d="scan'208";a="53536725"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 18:31:49 -0700
+X-CSE-ConnectionGUID: aI6baRwrRLyxDEZZ6yX0Vg==
+X-CSE-MsgGUID: bdbFg7MXQwKORVkl0hpLyA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="119839028"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="120752887"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 09 Mar 2025 18:21:46 -0700
+  by orviesa008.jf.intel.com with ESMTP; 09 Mar 2025 18:31:48 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trRpw-0003fw-1Z;
-	Mon, 10 Mar 2025 01:21:44 +0000
-Date: Mon, 10 Mar 2025 09:21:05 +0800
+	id 1trRzd-0003gG-0w;
+	Mon, 10 Mar 2025 01:31:45 +0000
+Date: Mon, 10 Mar 2025 09:31:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nam Tran <trannamatk@gmail.com>, pavel@kernel.org, lee@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
+To: Patrisious Haddad <phaddad@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nam Tran <trannamatk@gmail.com>
-Subject: Re: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
-Message-ID: <202503100925.eZz1D0kw-lkp@intel.com>
-References: <20250306172126.24667-4-trannamatk@gmail.com>
+	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>
+Subject: [rdma-rdma:wip/leon-for-next 29/29] ld.lld: error: undefined symbol:
+ mlx5r_fs_bind_op_fc
+Message-ID: <202503100927.KkG7sWul-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,44 +62,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250306172126.24667-4-trannamatk@gmail.com>
 
-Hi Nam,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on lee-leds/for-leds-next]
-[also build test ERROR on robh/for-next linus/master v6.14-rc5 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Tran/dt-bindings-leds-Add-LP5812-LED-driver/20250307-012604
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20250306172126.24667-4-trannamatk%40gmail.com
-patch subject: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
-config: x86_64-randconfig-005-20250310 (https://download.01.org/0day-ci/archive/20250310/202503100925.eZz1D0kw-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git wip/leon-for-next
+head:   a05e560ea288efd4ff1fd7c86f1aeb9d10678411
+commit: a05e560ea288efd4ff1fd7c86f1aeb9d10678411 [29/29] RDMA/mlx5: Support optional-counters binding for QPs
+config: i386-buildonly-randconfig-005-20250310 (https://download.01.org/0day-ci/archive/20250310/202503100927.KkG7sWul-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503100925.eZz1D0kw-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503100927.KkG7sWul-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503100925.eZz1D0kw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503100927.KkG7sWul-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "led_set_autonomous_animation_config" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_initialize" [drivers/leds/leds-lp5812.ko] undefined!
-ERROR: modpost: "lp5812_read" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_write" [drivers/leds/leds-lp5812.ko] undefined!
-ERROR: modpost: "lp5812_disable_all_leds" [drivers/leds/leds-lp5812.ko] undefined!
-ERROR: modpost: "lp5812_enable_disable" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_device_command" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_reset" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_update_regs_config" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_fault_clear" [drivers/leds/leds-lp5812.ko] undefined!
-WARNING: modpost: suppressed 23 unresolved symbol warnings because there were too many)
+>> ld.lld: error: undefined symbol: mlx5r_fs_bind_op_fc
+   >>> referenced by counters.c
+   >>>               drivers/infiniband/hw/mlx5/counters.o:(mlx5_ib_counter_bind_qp) in archive vmlinux.a
+   >>> referenced by counters.c
+   >>>               drivers/infiniband/hw/mlx5/counters.o:(mlx5_ib_counter_unbind_qp) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mlx5r_fs_unbind_op_fc
+   >>> referenced by counters.c
+   >>>               drivers/infiniband/hw/mlx5/counters.o:(mlx5_ib_counter_unbind_qp) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mlx5r_fs_destroy_fcs
+   >>> referenced by counters.c
+   >>>               drivers/infiniband/hw/mlx5/counters.o:(mlx5_ib_counter_dealloc) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
