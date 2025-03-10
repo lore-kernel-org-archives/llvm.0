@@ -1,190 +1,128 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBA9226CED
-	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 10:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C95E22688B;
+	Mon, 10 Mar 2025 10:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741602218; cv=none; b=nSb7ckfBAjnIjc8NiiUOUytwFNK31Cnev+bzRYV+RjptYjU9GkRuXwU8bRLBaIzkdofTmRBojfT/9GPzLHTasTfSBDa2ynUVmJ6kKWCDFd7Ky51ATFQBH7lp4RC15GnnC050f5wg+xvuarVZyzm9jLknqzoZwrlxL2KkI4ZDbpA=
+	t=1741602328; cv=none; b=UcD+hr22OR7IRL82wuDU/81RSw5lmzYNE1zQHrB6F31evIwfWe9mmLwvq9ZnMOfhdFY2I0GGnZ4x821Cg17vg1QZuFsCCiy1WrMRdAYM7DsVu2CDeM2wQQEG4UvYXTInUtu3uyY7ojZAOLoti28mGHQU/+rKV98fvGZzIMZL4P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741602218; c=relaxed/simple;
-	bh=2XwFGzjDpF0x1UFVmFTA6zIi2TOnyhJHi1l7XwZxEvE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SjS+l0CSbRe85s7Lnkm/2dFw12P84cfhwIlCtvI4bQibKzEDgR361mFzkK7fW+EjIdRnuMzN2I+PeEgKXz8o4GX6zjWxTTs0efbqoSuTV9e4sNr0HcKbwaYT8NzdbC4752//MYxJbQb6KKCCsFtsLu2dycFV2flbFPuYi18/uRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wuj5Coah; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1741602328; c=relaxed/simple;
+	bh=xIE+UTqb+jLSoTXVrKvvWDu1nRgFSGR/ps2L4wLEKN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bCfuFV1JG6JiBfVKwdaqsgRv9qAhFnxuWj4fxpi/sHuNI2pqC9bFjU76yhvj2Z0AeXrNYMtCWgipJVlpmWwUd8ihYYzFODLqXrhbVot2Wqs2xjggKxP0QZEeVmmwuyi37ZkZ8ricoPZD3YA4lc9yEJRLaOYe5vDP4CaGC9eA2rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ghrPLKQU; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wuj5Coah"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38f403edb4eso2152029f8f.3
-        for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 03:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741602215; x=1742207015; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m0xh3FQ2ooUNMv0G7MnOObNExBcu0B8GC8+9Yidwtis=;
-        b=Wuj5CoahVHwdDsgQ3QRuQec5UUjIFA0m8tzsWtIGXB5/fOvZWQvFvf4RpdWPqgdjm6
-         lQ/BC/dz15/fGvhSrJzCa1rAM2GLQ5AaXoF9AgPcsl5q6pM/zvHVm4G/BhlWSNbVhDBO
-         gmgS7cWNiHhaNDlgBu45cYc6JoljyaayukHR7X6wy/9R7abDdGObUN+6nLj9fDmOkZAz
-         /LaWFnD2jxQYmnm7kvzNU2pGxYH/hunn6kw69rGLB9HHBK7hYBNx8k5Ss4bbJtxm83fx
-         IP+VgAyX036hZ7CGjD1Sfa9nwbTx6Lhc0AZ9WCiS/jsmhprd7qdc5Oguj8ntLi2WiQAQ
-         I94g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741602215; x=1742207015;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m0xh3FQ2ooUNMv0G7MnOObNExBcu0B8GC8+9Yidwtis=;
-        b=oak9tyjTAoTTPvf+gDjVN3XoA5y4vkMCwBAaJwbjtSrR3WC2bFZZLb2mzFjeydiJqt
-         tA1SCpCL3KTfyWPjTVWzzvqnu5+afV9N4vXrKGsADT0rFXAibpvNq+Vi7tc0Cul16q+P
-         e0QnvgDOhQH2VDtI+qX52p0JkWiRgn469zI2ko6xB2kkfOCSVT/FKOUS0GnmdsmOnrey
-         IX6fb9vwX11PCUx45Yc+qiYEQ5d9h+9+FS1OlsP1k8cmL7DAmnHaKV3atwHMNxaM/V1E
-         Ma3NaB782jWSNkiId0+AoeqGQ3Dvwg39Kvklhc7WkMz4PA/qm8tL9yhcaBinl/hpJk6o
-         beVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCrJpzjoUeabJOdkMaC5BhRO4K8urtFOauE23Mu5f/aU6UqePdpS63FzJr9xthdfx3Nfn8@lists.linux.dev
-X-Gm-Message-State: AOJu0YwgF44YW+7St8jtbGmuLhNTLsla758XklRssmiEgg0zwXy+NuK1
-	Fl8tUVo2q0tfptv79ezJ9BHaPYBnLQSKRacRNVzuKjShB8vTf7FmU8JuGe0GrPdzQvg636UnaAX
-	yJ/H+3SdVG/dV0kUCOp0Mt9YAiergsO3bv3z1
-X-Gm-Gg: ASbGncuhhGIw6Hn4rf0bKtW2pIhT0GkNI2F4vrKvakpTbqpgq2JthYIC++FXNSRrCIC
-	56bwxS3BOq8/ZZRFZBiRBP7ij8z75pLOG6dEJMpelktA7A3eNCpqgHJQS0uRwTG5SZky8lrEHRo
-	sRg34HXeCgVs9pqvFehYtDeRlC8gxs5x7cuJDDcHi+GoJCd2Jrh6oH2Q==
-X-Google-Smtp-Source: AGHT+IG6hUDw4rYaXTIDcQ0LDrqHThCZrRr65SaZXB8OZtLA5fDQVnneu5xULnptFbYCv65le8nwb6KH/dSV9yt6n+0=
-X-Received: by 2002:a5d:584f:0:b0:391:ffc:2413 with SMTP id
- ffacd0b85a97d-39132da08b4mr7510954f8f.40.1741602214935; Mon, 10 Mar 2025
- 03:23:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ghrPLKQU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741602326; x=1773138326;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xIE+UTqb+jLSoTXVrKvvWDu1nRgFSGR/ps2L4wLEKN4=;
+  b=ghrPLKQUtHBLWczAHjEr8ASliq06B9Ajj5n2LEvBZC39sAkEIyZw/rM5
+   W53znxUvgF40bZA2M8zKhtm4NKHhd93997EN2WWnuxQy8v0IHSAFToCZI
+   pwt367s6y2exWXCjl8hU1Py8VJTwKAsMkLVe2kVv9H+Kp2pTBp8F5tWew
+   BYvfaozwOYCoAoTF2/xdDXLuPkurX+ZpQfGvoOi5jPxYBwdbfjHnxnfAJ
+   84a/vShoDa7yON6CqMq2exM7+qJgaOoJEVm4tcSIj3t+eSE+FnsRgQJ2t
+   9wRnHUQrCyGbv8COf6cVpakebTA8idCOCydu9Sv/MJoiZZj2Ne5Egys59
+   w==;
+X-CSE-ConnectionGUID: fQBMT14oQHyB8OCnvV1uYg==
+X-CSE-MsgGUID: 1g1bgTd1TbWCsGKZsXIWTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="65042739"
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="65042739"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 03:25:25 -0700
+X-CSE-ConnectionGUID: eM0+FtaMRhaL38aq7HZauA==
+X-CSE-MsgGUID: KOSUOua0SaOqdGY33wG4+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="143161859"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 10 Mar 2025 03:25:23 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1traK0-00045q-1u;
+	Mon, 10 Mar 2025 10:25:20 +0000
+Date: Mon, 10 Mar 2025 18:24:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Dumazet <edumazet@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Simon Horman <horms@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	eric.dumazet@gmail.com, Eric Dumazet <edumazet@google.com>,
+	syzbot+377b71db585c9c705f8e@syzkaller.appspotmail.com
+Subject: Re: [PATCH net] net: lapbether: use netdev_lockdep_set_classes()
+ helper
+Message-ID: <202503101824.VtjtbcKN-lkp@intel.com>
+References: <20250309093930.1359048-1-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net>
-In-Reply-To: <20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Mon, 10 Mar 2025 11:23:22 +0100
-X-Gm-Features: AQ5f1JrcfSdFN8DKHXryu_jbKmLUDqV8puN-y6GO6BW9VxRHHXfINkGlFd0wh8s
-Message-ID: <CAH5fLgi1YOP9gbXEmYfBtjWeMaqsYpNrrC1fd2rGABCKWYVcbg@mail.gmail.com>
-Subject: Re: [PATCH] rust: task: mark Task methods inline
-To: Panagiotis Foliadis <pfoliadis@posteo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250309093930.1359048-1-edumazet@google.com>
 
-On Mon, Mar 10, 2025 at 10:40=E2=80=AFAM Panagiotis Foliadis
-<pfoliadis@posteo.net> wrote:
->
-> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> toolchain provided by kernel.org, the following symbols are generated:
->
-> $ nm vmlinux | grep ' _R'.*Task | rustfilt
-> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
-> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
-> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
-> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
-> ffffffff817b2cc0 T <kernel::task::Task>::uid
-> ffffffff817b2ce0 T <kernel::task::Task>::euid
-> ffffffff817b2c70 T <kernel::task::Task>::current
-> ffffffff817b2d70 T <kernel::task::Task>::wake_up
-> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
->::dec_ref
-> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
->::inc_ref
->
-> Most of these Rust symbols are trivial wrappers around the C functions
-> signal_pending, uid, euid, wake_up, dec_ref and inc_ref.It doesn't
-> make sense to go through a trivial wrapper for these functions, so
-> mark them inline.
+Hi Eric,
 
-There's no C function called dec_ref or inc_ref? Please use the C
-function names instead of the Rust ones.
+kernel test robot noticed the following build errors:
 
-> After applying this patch, the above command will produce this output:
->
-> ffff8000805aa004 T <kernel::task::Task>::get_pid_ns
-> ffff8000805aa01c T <kernel::task::Task>::tgid_nr_ns
-> ffff8000805a9fe8 T <kernel::task::Task>::current_pid_ns
-> ffff8000805a9fd0 T <kernel::task::Task>::current
+[auto build test ERROR on net/main]
 
-I think it'd be nice with an explanation of why you did not mark these
-#[inline].
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/net-lapbether-use-netdev_lockdep_set_classes-helper/20250309-174127
+base:   net/main
+patch link:    https://lore.kernel.org/r/20250309093930.1359048-1-edumazet%40google.com
+patch subject: [PATCH net] net: lapbether: use netdev_lockdep_set_classes() helper
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250310/202503101824.VtjtbcKN-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503101824.VtjtbcKN-lkp@intel.com/reproduce)
 
-> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503101824.VtjtbcKN-lkp@intel.com/
 
-The SoB usually goes at the bottom of the tags.
+All errors (new ones prefixed by >>):
 
->  rust/kernel/task.rs | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-> index 07bc22a7645c0c7d792a0a163dd55b8ff0fe5f92..996d7c96e48689a5752817f9c=
-a196c021865291d 100644
-> --- a/rust/kernel/task.rs
-> +++ b/rust/kernel/task.rs
-> @@ -273,18 +273,21 @@ pub fn pid(&self) -> Pid {
->      }
->
->      /// Returns the UID of the given task.
-> +    #[inline]
->      pub fn uid(&self) -> Kuid {
->          // SAFETY: It's always safe to call `task_uid` on a valid task.
->          Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
->      }
->
->      /// Returns the effective UID of the given task.
-> +    #[inline]
->      pub fn euid(&self) -> Kuid {
->          // SAFETY: It's always safe to call `task_euid` on a valid task.
->          Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
->      }
->
->      /// Determines whether the given task has pending signals.
-> +    #[inline]
->      pub fn signal_pending(&self) -> bool {
->          // SAFETY: It's always safe to call `signal_pending` on a valid =
-task.
->          unsafe { bindings::signal_pending(self.as_ptr()) !=3D 0 }
-> @@ -319,6 +322,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>=
-) -> Pid {
->      }
->
->      /// Wakes up the task.
-> +    #[inline]
->      pub fn wake_up(&self) {
->          // SAFETY: It's always safe to call `signal_pending` on a valid =
-task, even if the task
->          // running.
-> @@ -328,11 +332,13 @@ pub fn wake_up(&self) {
->
->  // SAFETY: The type invariants guarantee that `Task` is always refcounte=
-d.
->  unsafe impl crate::types::AlwaysRefCounted for Task {
-> +    #[inline]
->      fn inc_ref(&self) {
->          // SAFETY: The existence of a shared reference means that the re=
-fcount is nonzero.
->          unsafe { bindings::get_task_struct(self.as_ptr()) };
->      }
->
-> +    #[inline]
->      unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
->          // SAFETY: The safety requirements guarantee that the refcount i=
-s nonzero.
->          unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
->
-> ---
-> base-commit: 7f0e9ee5e44887272627d0fcde0b19a675daf597
-> change-id: 20250308-inline-c-wrappers-da83ec1c2a77
->
-> Best regards,
-> --
-> Panagiotis Foliadis <pfoliadis@posteo.net>
->
+   In file included from drivers/net/wan/lapbether.c:27:
+   In file included from include/linux/net.h:24:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wan/lapbether.c:42:10: fatal error: 'net/netdev_lock.h' file not found
+      42 | #include <net/netdev_lock.h>
+         |          ^~~~~~~~~~~~~~~~~~~
+   3 warnings and 1 error generated.
+
+
+vim +42 drivers/net/wan/lapbether.c
+
+    41	
+  > 42	#include <net/netdev_lock.h>
+    43	#include <net/x25device.h>
+    44	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
