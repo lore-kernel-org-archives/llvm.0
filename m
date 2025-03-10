@@ -1,140 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07211DFFD;
-	Mon, 10 Mar 2025 21:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8D41581F9;
+	Mon, 10 Mar 2025 21:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741642418; cv=none; b=ZiiQS+HAdxTyewNvOSrKO/O05Gzt+CafSdTCAilvHRi7qXRYXIgS6XekG7pm4EDuijKvlSelqoV43sMiVUOVnBvr9LCkB6G3DEd53V6B8qvuGxgNd0s5GKK7O7fwV+pcrM6V8bZLISZJx+GNPrBfsTgdwjhRTsl9A278+XpPhdw=
+	t=1741642974; cv=none; b=Qz3ZWC59Hb+W5DebG5J4fGzB3S977K5Nxpc6NIJJoFKOcMFzA2ZtXiOAw86+MH8ahPnSz010vnrPR2VPxZVLVil1w7wDGkj8KuFen3EAlpaQXhxen8yQokhKGkHW+s77InbeCDYKT/jV6wtiqImAq+r3ipf8/wN4NU83Xkw0nHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741642418; c=relaxed/simple;
-	bh=sfRcIWo6fC9vYfEEbwG5irFtI4H4l3WxRKjPF8MQDos=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jbu8gBRM9dPlQQ55moDyvO2c4yII94jyfehxKFP2UVFbzIx8f4swkLQ9V9cgdEyLAIHoiY4e+ZMXWey8F+WMDd7EGv+KNdLXq+gyNTI+LwLpZ8lh1SB4asdnCW1GOJ0BwdmORr2uoTt5XGVjY4b04VbBc07Mg6etltDY4QNeb0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SSF+7SVg; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741642974; c=relaxed/simple;
+	bh=Hgfqycyk5WAvowUEhLw7wDnMIf6XtuNalb//mZR8AGY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WHbKGBbokUAvF+jBKCvHATJWu+0Vyrq7oUcOX6GKrhE91bAho4sEJVbZ9JkmdRtwHC7cHqBSM880vAgpWpJrIS7wHet9V+1hmay6u5YlwdOqardabvX2LbTPehHyQWUKyLs6HHbEuGsZjyUKVIRDr/yaTiK1rQs0xWRaC98UThI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wk22D0YR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SSF+7SVg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741642416; x=1773178416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sfRcIWo6fC9vYfEEbwG5irFtI4H4l3WxRKjPF8MQDos=;
-  b=SSF+7SVgwkLxDizG5oism6gTf+b0wSdlWHYphhOsWDcl1ro/rqZ35X/l
-   tQ+Eig7riwjMIA8q71IgYfE6mKDEzbUPvUXqD6zYGIqJ9pJogyjCdDG3v
-   OvFnVmHTK1NZZzgpKOMMtBR5/qO3AuuBr/M038p39dvDghG901iIN4Ew7
-   IjnQKW1mqYMEV++KSshE8Rwh1/MQRNyreBfKysYcDK/Q9h//eJSOlevxk
-   Kq39bxDhiUC3lJQFWaQHqOd+A12Dgq8+tw7iHVOWY46JYO/HzTsfnCNlJ
-   6OHdYxt+OrrimfKpd0GdpzUYx/V0jOilBdEAi9ZgZkj4xxTx9Y99WIQlk
-   w==;
-X-CSE-ConnectionGUID: rnXb0tu6TyWcodIaullnng==
-X-CSE-MsgGUID: JeAPOfFHRP+edVfgW1Sh0w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="65114209"
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="65114209"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 14:33:35 -0700
-X-CSE-ConnectionGUID: rSG8M5aCQ0uqbNVKLm/l1Q==
-X-CSE-MsgGUID: gV4WmIVcR7aB9aGkv0GkIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="120130684"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 10 Mar 2025 14:33:33 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trkkd-00065W-1Q;
-	Mon, 10 Mar 2025 21:33:31 +0000
-Date: Tue, 11 Mar 2025 05:32:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [sailus-media-tree:devel 22/23]
- drivers/media/platform/atmel/atmel-isi.c:1075:22: error: call to undeclared
- function 'devm_kmemdup_array'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202503110545.xrh6sBcJ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wk22D0YR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFACC4CEE5;
+	Mon, 10 Mar 2025 21:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741642973;
+	bh=Hgfqycyk5WAvowUEhLw7wDnMIf6XtuNalb//mZR8AGY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Wk22D0YR3b17pAiC+UtyGJTkNn4f/SCu58jZlCG8EtJEsYJE0ZTS7FDv7FGYZgvo3
+	 Zw8aIH8Jp1FwXbXAKz+bXKMERwjfFMFrUhJ0bUcw9ic883MXTGjJpiXBmpnrELzxZu
+	 Mr58Hq9+71qorcYrzyL+gee8iYn8JNfHk+Q7POStc5sVPiu5Le65C7DRvQIfu/QqHc
+	 Q59Vnn81tapAcI+efnO87N5WZNvAhSAit/vSYI+8ZgxhWImDr35+sZnF9RQ+XRNZAw
+	 JmkXhvO5xve9PBgSf/UKOUo/1PYDM7dqDlsGK0bSJwkKR2cA3JYZeD9eBe9rwNQ4Sl
+	 4C8cAPiiEkUmg==
+From: Kees Cook <kees@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Hao Luo <haoluo@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	linux-acpi@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Tony Ambardar <tony.ambardar@gmail.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Tejun Heo <tj@kernel.org>,
+	Yoann Congal <yoann.congal@smile.fr>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jens Axboe <axboe@kernel.dk>,
+	Chen Ridong <chenridong@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jann Horn <jannh@google.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] compiler_types: Introduce __nonstring_array
+Date: Mon, 10 Mar 2025 14:42:48 -0700
+Message-Id: <20250310214244.work.194-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4227; i=kees@kernel.org; h=from:subject:message-id; bh=Hgfqycyk5WAvowUEhLw7wDnMIf6XtuNalb//mZR8AGY=; b=owGbwMvMwCVmps19z/KJym7G02pJDOnnY250lb4+9jb5eIJS+5/U8MWXp+Qst9x3Yqqd93nNg MnXEhwndJSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEwk/CzDf9eb1ZL5xsK7Ox6a dWptfW1umrQ/PPH6fWmtGbVi7n5aNgz/NH09gypDt73QUtNrmx0wYxWr98x/dmGb97hmvX0jPWc GJwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   git://linuxtv.org/sailus/media_tree.git devel
-head:   07e07f2cd3ebb7e8b62ccb8f22a16032b599c9e2
-commit: 93c8dabd1d1ed94f03eb9a63c0bc291b62595bda [22/23] media: atmel-isi: use devm_kmemdup_array()
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250311/202503110545.xrh6sBcJ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503110545.xrh6sBcJ-lkp@intel.com/reproduce)
+GCC has expanded support of the "nonstring" attribute so that it can be
+applied to arrays of character arrays[1], which is needed to identify
+correct static initialization of those kinds of objects. Since this was
+not supported prior to GCC 15, we need to distinguish the usage of Linux's
+existing __nonstring macro for the attribute for non-multi-dimensional
+char arrays. Until GCC 15 is the minimum version, use __nonstring_array to
+mark arrays of non-string character arrays. (Regular non-string character
+arrays can continue to use __nonstring.)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503110545.xrh6sBcJ-lkp@intel.com/
+This allows for changes like this:
 
-All errors (new ones prefixed by >>):
+-static const char table_sigs[][ACPI_NAMESEG_SIZE] __initconst = {
++static const char table_sigs[][ACPI_NAMESEG_SIZE] __nonstring_array __initconst = {
+        ACPI_SIG_BERT, ACPI_SIG_BGRT, ACPI_SIG_CPEP, ACPI_SIG_ECDT,
 
->> drivers/media/platform/atmel/atmel-isi.c:1075:22: error: call to undeclared function 'devm_kmemdup_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1075 |         isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-         |                             ^
->> drivers/media/platform/atmel/atmel-isi.c:1075:20: error: incompatible integer to pointer conversion assigning to 'const struct isi_format **' from 'int' [-Wint-conversion]
-    1075 |         isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-         |                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1076 |                                                sizeof(isi_fmts[0]), GFP_KERNEL);
-         |                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Which will silence the coming -Wunterminated-string-initialization
+warnings in GCC 15:
 
+In file included from ../include/acpi/actbl.h:371,                                                                   from ../include/acpi/acpi.h:26,                                                                     from ../include/linux/acpi.h:26,
+                 from ../drivers/acpi/tables.c:19:
+../include/acpi/actbl1.h:30:33: warning: initializer-string for array of 'char' truncates NUL terminator but destination lacks 'nonstring' attribute (5 chars into 4 available) [-Wunterminated-string-initialization]
+   30 | #define ACPI_SIG_BERT           "BERT"  /* Boot Error Record Table */
+      |                                 ^~~~~~                                                      ../drivers/acpi/tables.c:400:9: note: in expansion of macro 'ACPI_SIG_BERT'                           400 |         ACPI_SIG_BERT, ACPI_SIG_BGRT, ACPI_SIG_CPEP, ACPI_SIG_ECDT,
+      |         ^~~~~~~~~~~~~                                                                       ../include/acpi/actbl1.h:31:33: warning: initializer-string for array of 'char' truncates NUL terminator but destination lacks 'nonstring' attribute (5 chars into 4 available) [-Wunterminated-string-initialization]
+   31 | #define ACPI_SIG_BGRT           "BGRT"  /* Boot Graphics Resource Table */
+      |                                 ^~~~~~
 
-vim +/devm_kmemdup_array +1075 drivers/media/platform/atmel/atmel-isi.c
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=117178 [1]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: linux-acpi@vger.kernel.org
+---
+ include/linux/compiler_types.h | 12 ++++++++++++
+ init/Kconfig                   |  3 +++
+ 2 files changed, 15 insertions(+)
 
-  1043	
-  1044	static int isi_formats_init(struct atmel_isi *isi)
-  1045	{
-  1046		const struct isi_format *isi_fmts[ARRAY_SIZE(isi_formats)];
-  1047		unsigned int num_fmts = 0, i, j;
-  1048		struct v4l2_subdev *subdev = isi->entity.subdev;
-  1049		struct v4l2_subdev_mbus_code_enum mbus_code = {
-  1050			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-  1051		};
-  1052	
-  1053		while (!v4l2_subdev_call(subdev, pad, enum_mbus_code,
-  1054					 NULL, &mbus_code)) {
-  1055			for (i = 0; i < ARRAY_SIZE(isi_formats); i++) {
-  1056				if (isi_formats[i].mbus_code != mbus_code.code)
-  1057					continue;
-  1058	
-  1059				/* Code supported, have we got this fourcc yet? */
-  1060				for (j = 0; j < num_fmts; j++)
-  1061					if (isi_fmts[j]->fourcc == isi_formats[i].fourcc)
-  1062						/* Already available */
-  1063						break;
-  1064				if (j == num_fmts)
-  1065					/* new */
-  1066					isi_fmts[num_fmts++] = isi_formats + i;
-  1067			}
-  1068			mbus_code.index++;
-  1069		}
-  1070	
-  1071		if (!num_fmts)
-  1072			return -ENXIO;
-  1073	
-  1074		isi->num_user_formats = num_fmts;
-> 1075		isi->user_formats = devm_kmemdup_array(isi->dev, isi_fmts, num_fmts,
-  1076						       sizeof(isi_fmts[0]), GFP_KERNEL);
-  1077		if (!isi->user_formats)
-  1078			return -ENOMEM;
-  1079	
-  1080		isi->current_fmt = isi->user_formats[0];
-  1081		return 0;
-  1082	}
-  1083	
-
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 981cc3d7e3aa..7ccea700b46d 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -348,6 +348,18 @@ struct ftrace_likely_data {
+ # define __counted_by(member)
+ #endif
+ 
++/*
++ * Optional: only supported since gcc >= 15
++ * Optional: not supported by Clang
++ *
++ * gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=117178
++ */
++#ifdef CONFIG_CC_HAS_MULTIDIMENSIONAL_NONSTRING
++# define __nonstring_array		__attribute__((__nonstring__))
++#else
++# define __nonstring_array
++#endif
++
+ /*
+  * Apply __counted_by() when the Endianness matches to increase test coverage.
+  */
+diff --git a/init/Kconfig b/init/Kconfig
+index d0d021b3fa3b..723dc69507d6 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -129,6 +129,9 @@ config CC_HAS_COUNTED_BY
+ 	# https://github.com/llvm/llvm-project/pull/112636
+ 	depends on !(CC_IS_CLANG && CLANG_VERSION < 190103)
+ 
++config CC_HAS_MULTIDIMENSIONAL_NONSTRING
++	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
++
+ config RUSTC_HAS_COERCE_POINTEE
+ 	def_bool RUSTC_VERSION >= 108400
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
