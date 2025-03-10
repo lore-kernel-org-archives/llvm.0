@@ -1,127 +1,153 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C85C19004A
-	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 02:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20115192D8E;
+	Mon, 10 Mar 2025 02:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741572895; cv=none; b=NKQLpxf0Pm0NSnCKAWUBGH3okxYEuHwXg9Zdrub6ANGvJLdvUoxDb1TjOIefQT9RLvX1CPCxcR/x6WpBrMiMf0ASDnyPwOK+uB2Asfi1ai52g3GAEiEPUIfyaC4Gifr1orh0TkIBwMrj9xYjD0sFXp5h41guKf/yXVeDszAT+g4=
+	t=1741575290; cv=none; b=b3OY5O43U84CPkJHXCSz3DQ8YIpe1rZow2KSLigBPLOsTSjWYw2qJ8yUvR/Ud0BQWo5yX6Eznttng0ZEafQMTbWpmPOh8V/Ertx5NUeezAFZP1C/6Luff4G7ej5qPUmGQoCypCn96LGg6tIUpYFKngxTv1X4JHHu8ck2gX58kWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741572895; c=relaxed/simple;
-	bh=P1T3On3tQTNTqqVq7iaUH7NJxNTY4cbFFUUGfn6kpVA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RWJ4VQd5OGeAhdNm4xRsHf9wnm3k0D1cbxLFAjF1hTDXGzTT8wG99xMyy7orfgmf5xiTpish5MXV+ktjtuZZ27nW6Cog1tw8P13Hejm9DfkOys5mpiPtiadvMR3dKuw5PAXTtymBTlNsZKYXYuL/9n4nC7/Mh8oR0evzcMvq/V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com; spf=pass smtp.mailfrom=ethancedwards.com; dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b=e3SCGore; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ethancedwards.com
+	s=arc-20240116; t=1741575290; c=relaxed/simple;
+	bh=bpYGyaGm/SuFsNipmVP3FIxSqKF/tOnmVKu6dRAU/sA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RKsheW3Z5GbfokLbR6jsMQQhRYevSPS9bI1qKs+m73Rc8pmjv8uAJZWDnm7Ft113gXOEKem00m9zqYWI2AfQTd7wCKaNLj9l5rkaPQktzGRGSDukJ6WWtPzBBiDoxkA1Hf1y8ungB6ir/lMALLCrJda9Dr8eBQg7X+nitaFmBHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d5IHhKpz; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b="e3SCGore"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4ZB0pC6YMYz9sQX;
-	Mon, 10 Mar 2025 03:14:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ethancedwards.com;
-	s=MBO0001; t=1741572884;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PgClmaMdMd5lNbUr6yZ8zi6Q3ctl2WTDB68s025YeDo=;
-	b=e3SCGorePYw2i0g46qGpLBJi/BH4Kcf88f/Zm9Izi0ERBGOhnkpMxHfhHkUbuDRl/S1jts
-	j7jqeKvRw5BDPCrNpSK0DSmF8FOg7HKn7J4Mel9uKnGReOvfH+DsAw4SG+XV0rPyh5vEzA
-	iVLppE17RudH/xZCEFq8K7DqBzlMxKV5ldeEo+wOtXS/WxktjKNojRX3DsjyUtkxWIv8Ec
-	swRy5QaJwI0j8Ibsasu1bKhBXfief2WUBekCay5ulknSYmiI9oVH6iOznFTSnXoaOAWMWT
-	vxob/lcl4cJwVwpRXZmqBgTcaUCXgFfvpLyhmxwuMh0ucOCWf81UrssjRQfQpg==
-From: Ethan Carter Edwards <ethan@ethancedwards.com>
-Date: Sun, 09 Mar 2025 22:14:36 -0400
-Subject: [PATCH] rust/kernel/faux: mark Registration methods inline
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d5IHhKpz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741575289; x=1773111289;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bpYGyaGm/SuFsNipmVP3FIxSqKF/tOnmVKu6dRAU/sA=;
+  b=d5IHhKpz6yit7EePOYfXX8jR/NiN8Kz5D58utxHHe0VDsSJ+6v8Sznto
+   hH3JVTICrkxoSWUsDYQ0s86S8rDuH9vQUZiS59GFVy7r85y1WdQK+y12j
+   4S6zLWstkWkeou4ok7Trq8ZYSL4XMPv/7NRvSSlDRtUaslm7DnAE2uJKU
+   TnXg5iMS5diaoDZTzYN3Vo55snZ/euZHCao/EXEsDw5Y7BuPIeJmaqDTx
+   6Bu4M5FvtRN7+xqDQkKMauuaKA8vPEpaCygx3xjjwEuVEpZAPGM0G+tO7
+   oFwA2pLUaxCoRn+hG+mWQ520YK1hNVYhX9XsnVzxjcH4hHqMmNNjlpjBh
+   Q==;
+X-CSE-ConnectionGUID: 2G+43uuURp2dQlqu+rznZQ==
+X-CSE-MsgGUID: CVxtVVAzTgyEnU4+RLc7qg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="42266060"
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="42266060"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 19:54:48 -0700
+X-CSE-ConnectionGUID: zBiG5oFZRCGvFY9BSb2WHw==
+X-CSE-MsgGUID: Efzbl33CRtmJ58/i+iQZNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="124776590"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 09 Mar 2025 19:54:46 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1trTHv-0003kM-1e;
+	Mon, 10 Mar 2025 02:54:43 +0000
+Date: Mon, 10 Mar 2025 10:54:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Edward Adam Davis <eadavis@qq.com>,
+	syzbot+00c633585760c05507c3@syzkaller.appspotmail.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, omosnace@redhat.com,
+	paul@paul-moore.com, selinux@vger.kernel.org,
+	stephen.smalley.work@gmail.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] selinux: read and write sid under lock
+Message-ID: <202503101039.wURTMnYj-lkp@intel.com>
+References: <tencent_0BEE86CD3878D26D402DDD6F949484E96E0A@qq.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
-X-B4-Tracking: v=1; b=H4sIAAtLzmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDYwNL3bTE0grdzLyczLxUXbNki9TUxBTDpOQUAyWgjoKi1LTMCrBp0bG
- 1tQAfoO5lXQAAAA==
-X-Change-ID: 20250309-faux-inline-6c8eead1bcd0
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <benno.lossin@proton.me>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Ethan Carter Edwards <ethan@ethancedwards.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1825;
- i=ethan@ethancedwards.com; h=from:subject:message-id;
- bh=P1T3On3tQTNTqqVq7iaUH7NJxNTY4cbFFUUGfn6kpVA=;
- b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0o0bkp2QXk4ekFKWGJEOXFoNThlVGp6e
- GhQcXlVeHBKL3o1dHRXazNpcTJaOTc5N0kzUXZ6T2RobXM3REc5ClgydmZMODJxdi9PZlg5WWw0
- bDVIS1F1REdCZURySmdpeS84YzViU0htak1VZHY1MWFZS1p3OG9FTW9TQmkxTUEKSnJLR25aRmg
- 4cXgrcmR5Y1hSekxib3F0ZWIwMHRrNVJjR29UZDVPQlp2VHZpWlVSczdjYk16S2NVZHA0UGVxdA
- poVlFXeHpOVjQzbnAyd1Q3anRXeC9Ybys0ZUR5dU04Y0Z3N3hBZ0FuYlVuSwo9MUxKbgotLS0tL
- UVORCBQR1AgTUVTU0FHRS0tLS0tCg==
-X-Developer-Key: i=ethan@ethancedwards.com; a=openpgp;
- fpr=2E51F61839D1FA947A7300C234C04305D581DBFE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_0BEE86CD3878D26D402DDD6F949484E96E0A@qq.com>
 
-When building the kernel on Arch Linux using on x86_64 with tools:
-$ rustc --version
-rustc 1.84.0 (9fc6b4312 2025-01-07)
-$ cargo --version
-cargo 1.84.0 (66221abde 2024-11-19)
-$ clang --version
-clang version 19.1.7
-Target: x86_64-pc-linux-gnu
+Hi Edward,
 
-The following symbols are generated:
-$ nm vmlinux | rg ' _R' | rustfilt | rg faux
-ffffffff81959ae0 T <kernel::faux::Registration>::new
-ffffffff81959b40 T <kernel::faux::Registration as core::ops::drop::Drop>::drop
+kernel test robot noticed the following build errors:
 
-However, these Rust symbols are wrappers around bindings in the C faux
-code. Inlining these functions removes the middle-man wrapper function
-After applying this patch, the above function signatures disappear.
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Link: https://github.com/Rust-for-Linux/linux/issues/1145
-Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
----
- rust/kernel/faux.rs | 2 ++
- 1 file changed, 2 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Adam-Davis/selinux-read-and-write-sid-under-lock/20250309-130846
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/tencent_0BEE86CD3878D26D402DDD6F949484E96E0A%40qq.com
+patch subject: [PATCH] selinux: read and write sid under lock
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20250310/202503101039.wURTMnYj-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503101039.wURTMnYj-lkp@intel.com/reproduce)
 
-diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs
-index 5acc0c02d451f6d5a26b837d509374d508f26368..5fdd85ea64398130066d38e42f7c7485673f290c 100644
---- a/rust/kernel/faux.rs
-+++ b/rust/kernel/faux.rs
-@@ -24,6 +24,7 @@
- 
- impl Registration {
-     /// Create and register a new faux device with the given name.
-+    #[inline]
-     pub fn new(name: &CStr) -> Result<Self> {
-         // SAFETY:
-         // - `name` is copied by this function into its own storage
-@@ -50,6 +51,7 @@ fn as_ref(&self) -> &device::Device {
- }
- 
- impl Drop for Registration {
-+    #[inline]
-     fn drop(&mut self) {
-         // SAFETY: `self.0` is a valid registered faux_device via our type invariants.
-         unsafe { bindings::faux_device_destroy(self.as_raw()) }
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503101039.wURTMnYj-lkp@intel.com/
 
----
-base-commit: fc2f191f850d9a2fb1b78c51d49076e60fb42c49
-change-id: 20250309-faux-inline-6c8eead1bcd0
+All errors (new ones prefixed by >>):
 
-Best regards,
+>> security/selinux/hooks.c:4718:21: error: no member named 'lock' in 'struct sk_security_struct'
+    4718 |                 spin_lock(&sksec->lock);
+         |                            ~~~~~  ^
+   security/selinux/hooks.c:4721:23: error: no member named 'lock' in 'struct sk_security_struct'
+    4721 |                 spin_unlock(&sksec->lock);
+         |                              ~~~~~  ^
+   security/selinux/hooks.c:5198:20: error: no member named 'lock' in 'struct sk_security_struct'
+    5198 |         spin_lock(&sksec->lock);
+         |                    ~~~~~  ^
+   security/selinux/hooks.c:5200:22: error: no member named 'lock' in 'struct sk_security_struct'
+    5200 |         spin_unlock(&sksec->lock);
+         |                      ~~~~~  ^
+   4 errors generated.
+
+
+vim +4718 security/selinux/hooks.c
+
+  4695	
+  4696	static int selinux_socket_post_create(struct socket *sock, int family,
+  4697					      int type, int protocol, int kern)
+  4698	{
+  4699		const struct task_security_struct *tsec = selinux_cred(current_cred());
+  4700		struct inode_security_struct *isec = inode_security_novalidate(SOCK_INODE(sock));
+  4701		struct sk_security_struct *sksec;
+  4702		u16 sclass = socket_type_to_security_class(family, type, protocol);
+  4703		u32 sid = SECINITSID_KERNEL;
+  4704		int err = 0;
+  4705	
+  4706		if (!kern) {
+  4707			err = socket_sockcreate_sid(tsec, sclass, &sid);
+  4708			if (err)
+  4709				return err;
+  4710		}
+  4711	
+  4712		isec->sclass = sclass;
+  4713		isec->sid = sid;
+  4714		isec->initialized = LABEL_INITIALIZED;
+  4715	
+  4716		if (sock->sk) {
+  4717			sksec = selinux_sock(sock->sk);
+> 4718			spin_lock(&sksec->lock);
+  4719			sksec->sclass = sclass;
+  4720			sksec->sid = sid;
+  4721			spin_unlock(&sksec->lock);
+  4722			/* Allows detection of the first association on this socket */
+  4723			if (sksec->sclass == SECCLASS_SCTP_SOCKET)
+  4724				sksec->sctp_assoc_state = SCTP_ASSOC_UNSET;
+  4725	
+  4726			err = selinux_netlbl_socket_post_create(sock->sk, family);
+  4727		}
+  4728	
+  4729		return err;
+  4730	}
+  4731	
+
 -- 
-Ethan Carter Edwards <ethan@ethancedwards.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
