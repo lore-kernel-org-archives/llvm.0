@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE160233729;
-	Mon, 10 Mar 2025 18:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9581722D7AF;
+	Mon, 10 Mar 2025 18:49:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741631167; cv=none; b=NZoZX5qT5OEwiCFKWvizPkts15W90DyzHzN3JdKEQcbx8wTpVwc2Kr20amxHZJHKekc6Lz9KZg8jszaUq7Asl+JThPNFRLA/McMAY0qs5FsdZwz64fo6oY6Y5BS/avmkpVwbpJQEe9wQ0FGC/iaL1bflrsbV1pQw6W9Vv/7X+Uk=
+	t=1741632546; cv=none; b=Bd6Q9Pg7AlznZ1eJDBXORDHPgMmASVFQQanaGqLDxgdRkf53pcUeZefPNwS1vZ1lyffyw7hy+dH9QOBabboP4j0CtcCiTgbgkiLVGgUCbHap1av/AK7pZZjgJiy49ku6GtqHgmKdhWi5A6sOJAqRAk94P42fg/LvCHEdJNdEeso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741631167; c=relaxed/simple;
-	bh=cyNfw5aBnRiDdtv4MSSnga2Y5mDwrbotVHovHS6Sauo=;
+	s=arc-20240116; t=1741632546; c=relaxed/simple;
+	bh=sNJdbmXy/Tk0MEkmZqvg7WEtMf2IVSmQKv14VkQ4aL8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fVvocER8kgf3mwDr4StkW6ENGL23p0ShPWoPafH1Vaf/qDRrXd5gZMBsxcaAKxpyhqdGRy7Jn7eE5BsJbpT7JsAnQDHCfWXZ6Ei/WkO7dnNp7KfydCeaNPmYbrAhJxG5mnYAre0hLajbPOE4bF8GzbYOTwRHLKp61saY754cZVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TtNKjWT7; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GB/XlZDSw6xLUbOWb7kDAF7NsvsKTxicC3wd1sTsYSpKLg/8ILNoyxyQmRtnt/h0n9XoYOyZWRRbqeiDqEdnQRKbUmb4mNbOSxpkjMe9g5Cq4Ye+xIj14Xv2UXXwZWAXjUZMpmpU2R7gUJZmS2vq2KUDIRHGEI3uS/e90b/G5QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZkM2iHV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TtNKjWT7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8CDC4CEE5;
-	Mon, 10 Mar 2025 18:26:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZkM2iHV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA7C2C4CEE5;
+	Mon, 10 Mar 2025 18:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741631167;
-	bh=cyNfw5aBnRiDdtv4MSSnga2Y5mDwrbotVHovHS6Sauo=;
+	s=k20201202; t=1741632546;
+	bh=sNJdbmXy/Tk0MEkmZqvg7WEtMf2IVSmQKv14VkQ4aL8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TtNKjWT7oRQTj2VMb24xngME8b/ZIFZJ8uA6QGOrpkikPN2iawvwjW5D/EdZGVgJ6
-	 mdhJArF2pnyTRzPsVOr+bvNeQmfRCk5jqwj+zWCK/xMYf5araeiKymYmCWbRSVzlMW
-	 MCIWoqd4zTSlbYY4nglNWdp9UUOaR5hhSh11FZhyV5RXZVhptiCtwYRxfVuReQVUrv
-	 4aGfYc3fbhcjzRH+KXwMBaosRpOtelUQeWLQjzXBPj/XpWdI8QPP7DZy/Gsdf2xb2h
-	 lrZWqz4/ArMDIftqwSYzRKqiVfFMxzPKpEyT1b4CoZeXVOoaErmgGnq6hAXwJQJTW5
-	 TdzEkSS1BZFdg==
-Date: Tue, 11 Mar 2025 03:26:05 +0900
+	b=XZkM2iHVWuWUcGnoVeoG6gEcSxmVQo+wUu8Iymvhi8SYXJGTn3GZUKVNiVsk9Iyz6
+	 jmMYfnL2gdQwMc2YhTuyWYRD9YoU4+zxIguUKW7j1P6b8FCGlp0uqqTOOw4c8F2rPK
+	 wCbnc/wsTZMnUMqDxKi06iPw/K31bC1XZO9O2V04ccyyRcB7Y0G3YtokrlHkWEkBMd
+	 Vwug8CxYDUplCvD8ZCLSFw/jXw9FOGz2At4iCAn8SCbWDkAu2hyPej+dkry0LT+sAy
+	 HRz2YN+bDUNN5S1p2iuCgH/DuzFCxRU5rNFsTTZfUJw5XA5t26FzceqDYPTjI6u22t
+	 af3ffPdXSk84A==
+Date: Tue, 11 Mar 2025 03:49:04 +0900
 From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
 To: kernel test robot <lkp@intel.com>
 Cc: Niklas Cassel <cassel@kernel.org>, llvm@lists.linux.dev,
@@ -35,8 +35,9 @@ Subject: Re: [pci:endpoint-test 16/18]
  drivers/pci/controller/dwc/pcie-dw-rockchip.c:316:3: error: field designator
  'intx_capable' does not refer to any field in type 'const struct
  dw_pcie_ep_ops'
-Message-ID: <20250310182605.GA1179150@rocinante>
+Message-ID: <20250310184904.GB1179150@rocinante>
 References: <202503110151.vQXf5yof-lkp@intel.com>
+ <20250310182605.GA1179150@rocinante>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,29 +46,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202503110151.vQXf5yof-lkp@intel.com>
+In-Reply-To: <20250310182605.GA1179150@rocinante>
 
 Hello,
 
-[...]
-> vim +316 drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> [...]
+> > vim +316 drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> > 
+> >    313	
+> >    314	static const struct dw_pcie_ep_ops rockchip_pcie_ep_ops = {
+> >    315		.init = rockchip_pcie_ep_init,
+> >  > 316		.intx_capable = false,
+> >    317		.raise_irq = rockchip_pcie_raise_irq,
+> >    318		.get_features = rockchip_pcie_get_features,
+> >    319	};
+> >    320	
 > 
->    313	
->    314	static const struct dw_pcie_ep_ops rockchip_pcie_ep_ops = {
->    315		.init = rockchip_pcie_ep_init,
->  > 316		.intx_capable = false,
->    317		.raise_irq = rockchip_pcie_raise_irq,
->    318		.get_features = rockchip_pcie_get_features,
->    319	};
->    320	
+> I moved setting the .intx_capable property to false to the pci_epc_features
+> struct definition for RK3568, which is what I believe the intention was.
+> 
+> Have a look at:
+> 
+>   https://web.git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=endpoint-test&id=cb349262d9770e6478a7e91bdf438122b8cda44d
+> 
+> Let me know if this is OK with you.
 
-I moved setting the .intx_capable property to false to the pci_epc_features
-struct definition for RK3568, which is what I believe the intention was.
+Niklas, I saw your reply to this failure report.
 
-Have a look at:
+Based on it, I fixed the patch and dropped any annotations added (since
+there was no need to do anything aside from retroing the code to its
+orignal form).
 
-  https://web.git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=endpoint-test&id=cb349262d9770e6478a7e91bdf438122b8cda44d
 
-Let me know if this is OK with you.
+That said, I didn't do any edits when applying the patch that I can recall,
+so I think something got its knickers in a twist when I was applying the
+patches.
+
+However, I did miss that it got applied incorrectly when reviewing the
+changes before pushing them.  My bad.
+
+Anyway.  Sorry for the commotion.  I am glad the fix was trivial here.
+
+Thank you!
 
 	Krzysztof
