@@ -1,156 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E34122DFED;
-	Mon, 10 Mar 2025 15:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FF022DFED
+	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 16:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741622222; cv=none; b=n61HC+wmlZHtW2mPxN1ol5j26dxAR6q6f6+yUS/qsR8DcrApHc/9IbbUHRe76wZ6NCFm7Ppfh7IWMp91T1Q3v8qrxmPiQ4dDsfjJm3kyAfgt6Mnjk8xAGRi1FU3EcfKriOLOeO4V5TPCUY++qxbhaRqFu2XqsLs5mKo4JuiJgXQ=
+	t=1741622958; cv=none; b=fQvgrLiNvrvSN+gZEnw9A+amQdz2B5ObL6OUn8A5SOh06qhJwMO56nggGfuTXr0ZBaUjlAiZcGOyuInmS4Jzjtlfq12PtuKvZkemskmyFCsOSuASZwYZaUr0cAocvVtrMLoF5+skv8q0zidv5qDMAD5Fk4rk5GCd2XG9kQ854u4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741622222; c=relaxed/simple;
-	bh=UfzIwipQYZKlD1IFnNP2s2QWol3tOEz3nnLOdVk3cVc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qMg1VwTeSIn+NMh5pzo+MifOnAgMbSDJdbHBvFPDRdIqOeMxgKbnaAO4qIEvsbOKFOgm5UqiQXbk7/NC//r/DVz0IuDTcU0PUoQQ73lloiKH3E76Z7G7x+jSeX1OmDiWxqL5qqW35q1L+fOOULP3yShrXab8fxj7UIO1wC0eyeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n8Pgzb2W; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741622958; c=relaxed/simple;
+	bh=D4Vb33RNqJrJxqz1esDLVLlIZGIk1xCNfU2hCUsdZEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tzDL+ldPmxBzTr3HPjDOQwD9BvuLm2ndWsgu7FXIIRmeYP57EvHhyMpRq6xhJs2OPTZYJ/JYpSJVunRbl+LUtGwicknNOk37Js9wvqevtnTbJWhNogzf+PN943cjXbYKL+NEPrnwyYP9TTrRf7sYRj5Pre/dpk912RdcxykcWzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=oSf6XTIW; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n8Pgzb2W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741622221; x=1773158221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UfzIwipQYZKlD1IFnNP2s2QWol3tOEz3nnLOdVk3cVc=;
-  b=n8Pgzb2WOV14A7NUxzKlisL7+yWvmExgEK7NllyK4kWi9XtDGxfzzgk0
-   t6iXnlsNHxXxeBhNhpfZnATHg7RNrAzcdrRRmkxQbSms6zo/gWecCCl5l
-   RDpjmVhoCW/w++1y6rJ4bW0bsp9ATkQ0JBH+/idvkiOKXtXJZQGZRd6gC
-   eNX2pNe3626ph63MdonCrfjRsWX7siNhlROxHCSRAzvFixsBH5wMqk0+j
-   3+ahzQhKjUnpJKcG8Jud/rg5MU+JjiIH61DczgXD3HM0fP5qFrvhXvvtc
-   EUBPPBa3Igy89jy84FYZdciBB+gTSNSFoBEeQBfyDVwGhCgKUZSyRIWKL
-   Q==;
-X-CSE-ConnectionGUID: Cm8K913KTXqXxDSlFYLdYw==
-X-CSE-MsgGUID: G6z1GcFoSF2AFlgYXVLzGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="53614650"
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="53614650"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:57:00 -0700
-X-CSE-ConnectionGUID: c+imipRMR2WxBNHrZmx4uQ==
-X-CSE-MsgGUID: jfQTKGA0TxWiiROmb069Gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
-   d="scan'208";a="124931255"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 10 Mar 2025 08:56:57 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trfUs-0004Py-39;
-	Mon, 10 Mar 2025 15:56:54 +0000
-Date: Mon, 10 Mar 2025 23:56:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Ahern <dsahern@kernel.org>, Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org, eric.dumazet@gmail.com,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 3/4] inet: frags: change inet_frag_kill() to
- defer refcount updates
-Message-ID: <202503102308.1uTA6Uxr-lkp@intel.com>
-References: <20250309173151.2863314-4-edumazet@google.com>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="oSf6XTIW"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id E55E2240103
+	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 17:09:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1741622953; bh=D4Vb33RNqJrJxqz1esDLVLlIZGIk1xCNfU2hCUsdZEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:Content-Type:
+	 Content-Transfer-Encoding:From;
+	b=oSf6XTIWaf3kcYQPaXMyBvlku3naljwgcKCOjL5MTN4HmVbS5lbHjF/GKS48lQQr2
+	 PQ2IfKNhDK4jgdtVSg87waMP0yJY0TTtZHsWObWvgzub2koRmXtfOX1Q2RuSD6ZNAH
+	 slqAAmiBvgwIo6CR+7O1ysgyY1099U8LOFLJMI7LdOag7lwq2OLFB4bp2wJc870EXd
+	 b9o4x83uoPOxzfslQWoCea50q4BhyjDaqV+rvV+/C2cjVyHFs7YBXnoI6Xsw7dO0yr
+	 G+Hx4Q28I39qEATaSViavXZGuO5smlGIH/q73/1+uA473TOBdA5mUzYq+w9UCNacv2
+	 pChMtSUKN5xOQ==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4ZBMK161dtz6tvZ;
+	Mon, 10 Mar 2025 17:09:09 +0100 (CET)
+Message-ID: <87725b0d-42e9-4273-a51f-90c82aad2254@posteo.net>
+Date: Mon, 10 Mar 2025 16:09:09 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250309173151.2863314-4-edumazet@google.com>
-
-Hi Eric,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Dumazet/inet-frags-add-inet_frag_putn-helper/20250310-013501
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250309173151.2863314-4-edumazet%40google.com
-patch subject: [PATCH net-next 3/4] inet: frags: change inet_frag_kill() to defer refcount updates
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250310/202503102308.1uTA6Uxr-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503102308.1uTA6Uxr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503102308.1uTA6Uxr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/ieee802154/6lowpan/reassembly.c:312:45: error: too few arguments to function call, expected 4, have 3
-     312 |                 ret = lowpan_frag_queue(fq, skb, frag_type);
-         |                       ~~~~~~~~~~~~~~~~~                   ^
-   net/ieee802154/6lowpan/reassembly.c:86:12: note: 'lowpan_frag_queue' declared here
-      86 | static int lowpan_frag_queue(struct lowpan_frag_queue *fq,
-         |            ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      87 |                              struct sk_buff *skb, u8 frag_type,
-         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      88 |                              int *refs)
-         |                              ~~~~~~~~~
-   1 error generated.
+Subject: Re: [PATCH] rust: task: mark Task methods inline
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net>
+ <CAH5fLgi1YOP9gbXEmYfBtjWeMaqsYpNrrC1fd2rGABCKWYVcbg@mail.gmail.com>
+Content-Language: en-US
+From: Panagiotis Foliadis <pfoliadis@posteo.net>
+In-Reply-To: <CAH5fLgi1YOP9gbXEmYfBtjWeMaqsYpNrrC1fd2rGABCKWYVcbg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +312 net/ieee802154/6lowpan/reassembly.c
 
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  280  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  281  int lowpan_frag_rcv(struct sk_buff *skb, u8 frag_type)
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  282  {
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  283  	struct lowpan_frag_queue *fq;
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  284  	struct net *net = dev_net(skb->dev);
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  285  	struct lowpan_802154_cb *cb = lowpan_802154_cb(skb);
-f18fa5de5ba7f1d net/ieee802154/6lowpan/reassembly.c Alexander Aring    2018-04-20  286  	struct ieee802154_hdr hdr = {};
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  287  	int err;
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  288  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  289  	if (ieee802154_hdr_peek_addrs(skb, &hdr) < 0)
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  290  		goto err;
-ae531b9475f62c5 net/ieee802154/reassembly.c         Phoebe Buckheister 2014-03-14  291  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  292  	err = lowpan_get_cb(skb, frag_type, cb);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  293  	if (err < 0)
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  294  		goto err;
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  295  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  296  	if (frag_type == LOWPAN_DISPATCH_FRAG1) {
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  297  		err = lowpan_invoke_frag_rx_handlers(skb);
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  298  		if (err == NET_RX_DROP)
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  299  			goto err;
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  300  	}
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  301  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  302  	if (cb->d_size > IPV6_MIN_MTU) {
-6697dabe27e0330 net/ieee802154/reassembly.c         Martin Townsend    2014-08-19  303  		net_warn_ratelimited("lowpan_frag_rcv: datagram size exceeds MTU\n");
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  304  		goto err;
-6697dabe27e0330 net/ieee802154/reassembly.c         Martin Townsend    2014-08-19  305  	}
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  306  
-72a5e6bb5120d64 net/ieee802154/6lowpan/reassembly.c Alexander Aring    2015-09-02  307  	fq = fq_find(net, cb, &hdr.source, &hdr.dest);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  308  	if (fq != NULL) {
-aec42e105cebf42 net/ieee802154/6lowpan/reassembly.c Eric Dumazet       2025-03-09  309  		int ret, refs = 1;
-4710d806fcb8251 net/ieee802154/reassembly.c         Varka Bhadram      2014-07-02  310  
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  311  		spin_lock(&fq->q.lock);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28 @312  		ret = lowpan_frag_queue(fq, skb, frag_type);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  313  		spin_unlock(&fq->q.lock);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  314  
-aec42e105cebf42 net/ieee802154/6lowpan/reassembly.c Eric Dumazet       2025-03-09  315  		inet_frag_putn(&fq->q, refs);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  316  		return ret;
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  317  	}
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  318  
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  319  err:
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  320  	kfree_skb(skb);
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  321  	return -1;
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  322  }
-7240cdec60b136f net/ieee802154/reassembly.c         Alexander Aring    2014-02-28  323  
+On 10/3/25 12:23, Alice Ryhl wrote:
+> On Mon, Mar 10, 2025 at 10:40 AM Panagiotis Foliadis
+> <pfoliadis@posteo.net> wrote:
+>> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+>> toolchain provided by kernel.org, the following symbols are generated:
+>>
+>> $ nm vmlinux | grep ' _R'.*Task | rustfilt
+>> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
+>> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
+>> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
+>> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
+>> ffffffff817b2cc0 T <kernel::task::Task>::uid
+>> ffffffff817b2ce0 T <kernel::task::Task>::euid
+>> ffffffff817b2c70 T <kernel::task::Task>::current
+>> ffffffff817b2d70 T <kernel::task::Task>::wake_up
+>> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
+>> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
+>>
+>> Most of these Rust symbols are trivial wrappers around the C functions
+>> signal_pending, uid, euid, wake_up, dec_ref and inc_ref.It doesn't
+>> make sense to go through a trivial wrapper for these functions, so
+>> mark them inline.
+> There's no C function called dec_ref or inc_ref? Please use the C
+> function names instead of the Rust ones.
+>
+>> After applying this patch, the above command will produce this output:
+>>
+>> ffff8000805aa004 T <kernel::task::Task>::get_pid_ns
+>> ffff8000805aa01c T <kernel::task::Task>::tgid_nr_ns
+>> ffff8000805a9fe8 T <kernel::task::Task>::current_pid_ns
+>> ffff8000805a9fd0 T <kernel::task::Task>::current
+> I think it'd be nice with an explanation of why you did not mark these
+> #[inline].
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Since the issue focuses on the functions that are trivial wrappers around
+c and `do nothing that call a C function` I thought i would leave this out
+since there is some other functionality (albeit sometimes minimal) other
+that being just a c-wrapper.
+
+>
+>> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+>> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> The SoB usually goes at the bottom of the tags.
+>
+>>   rust/kernel/task.rs | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+>> index 07bc22a7645c0c7d792a0a163dd55b8ff0fe5f92..996d7c96e48689a5752817f9ca196c021865291d 100644
+>> --- a/rust/kernel/task.rs
+>> +++ b/rust/kernel/task.rs
+>> @@ -273,18 +273,21 @@ pub fn pid(&self) -> Pid {
+>>       }
+>>
+>>       /// Returns the UID of the given task.
+>> +    #[inline]
+>>       pub fn uid(&self) -> Kuid {
+>>           // SAFETY: It's always safe to call `task_uid` on a valid task.
+>>           Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
+>>       }
+>>
+>>       /// Returns the effective UID of the given task.
+>> +    #[inline]
+>>       pub fn euid(&self) -> Kuid {
+>>           // SAFETY: It's always safe to call `task_euid` on a valid task.
+>>           Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
+>>       }
+>>
+>>       /// Determines whether the given task has pending signals.
+>> +    #[inline]
+>>       pub fn signal_pending(&self) -> bool {
+>>           // SAFETY: It's always safe to call `signal_pending` on a valid task.
+>>           unsafe { bindings::signal_pending(self.as_ptr()) != 0 }
+>> @@ -319,6 +322,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+>>       }
+>>
+>>       /// Wakes up the task.
+>> +    #[inline]
+>>       pub fn wake_up(&self) {
+>>           // SAFETY: It's always safe to call `signal_pending` on a valid task, even if the task
+>>           // running.
+>> @@ -328,11 +332,13 @@ pub fn wake_up(&self) {
+>>
+>>   // SAFETY: The type invariants guarantee that `Task` is always refcounted.
+>>   unsafe impl crate::types::AlwaysRefCounted for Task {
+>> +    #[inline]
+>>       fn inc_ref(&self) {
+>>           // SAFETY: The existence of a shared reference means that the refcount is nonzero.
+>>           unsafe { bindings::get_task_struct(self.as_ptr()) };
+>>       }
+>>
+>> +    #[inline]
+>>       unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+>>           // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+>>           unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
+>>
+>> ---
+>> base-commit: 7f0e9ee5e44887272627d0fcde0b19a675daf597
+>> change-id: 20250308-inline-c-wrappers-da83ec1c2a77
+>>
+>> Best regards,
+>> --
+>> Panagiotis Foliadis <pfoliadis@posteo.net>
+>>
+
