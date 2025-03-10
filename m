@@ -1,101 +1,162 @@
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C012E17C225;
-	Mon, 10 Mar 2025 02:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D84184F;
+	Mon, 10 Mar 2025 05:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741575551; cv=none; b=M5pwyiFNlgTVTqXWR4ZOJ2yO3oLz/KWUe8xeBa+vp6tU4WwVZG9LWZsb4eTvvZNrfwFVCQkWs2+ETO/QMfmL86AoRJysB1vnUXraY4e6kUTLYMYQDeEhUkiw2bt/k8LJ394RBjpDX/68lSQ7qx0Wqt0HJyRxOitOUzHVBqSFmBw=
+	t=1741585904; cv=none; b=Gvgi7KbBqu2RDFRVuhw7X+eHRgphXWjRnAKJnRQ9BzZxWtRZuQTHCLCZbIowA3H2Q1pwTC4WFTBjMaGfcuNQETbQ1qHTI+csVemMB2MU6PLVcrpOupdIZi6mwLeJbkeNuBpGmg9F52MfwDfraqciIHcJPqjvtAeW49pH/QrOJVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741575551; c=relaxed/simple;
-	bh=GSNZxhA8Oh6wTTIEAqfSBZW5X5jGalcRCqrjPIanACw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fYTfnJ6WWlHvfBfA9LmyZlX4n5CRGN8PAmKp+s9RohrIYZ2DDmx93R65XxmUaTLy/hwO4yOnjNtvAqSmWIrbaWvsG4Er5e/Rde4FnpsGYlMvHrQDshf0Pk1aPtpMaZcr/8WK0Z+JQMlbXCgNFzQh3/SH7MCSfCt8G6pnaQslI+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
-Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
-	by SHSQR01.spreadtrum.com with ESMTP id 52A2x53Z029745;
-	Mon, 10 Mar 2025 10:59:05 +0800 (+08)
-	(envelope-from Xuewen.Yan@unisoc.com)
-Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 52A2v5Oe012412;
-	Mon, 10 Mar 2025 10:57:05 +0800 (+08)
-	(envelope-from Xuewen.Yan@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4ZB1dK6rR1z2KFyXP;
-	Mon, 10 Mar 2025 10:52:05 +0800 (CST)
-Received: from BJ10918NBW01.spreadtrum.com (10.0.73.73) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Mon, 10 Mar 2025 10:57:02 +0800
-From: Xuewen Yan <xuewen.yan@unisoc.com>
-To: <lkp@intel.com>, <rjw@rjwysocki.net>, <daniel.lezcano@kernel.org>
-CC: <devel@acpica.org>, <jeson.gao@unisoc.com>, <linux-acpi@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <llvm@lists.linux.dev>,
-        <lukasz.luba@arm.com>, <oe-kbuild-all@lists.linux.dev>,
-        <rafael@kernel.org>, <ke.wang@unisoc.com>, <di.shen@unisoc.com>,
-        <xuewen.yan94@gmail.com>
-Subject: [RFC PATCH] drivers/powercap: fix build error when CONFIG_SMP is not set
-Date: Mon, 10 Mar 2025 10:56:55 +0800
-Message-ID: <20250310025655.576-1-xuewen.yan@unisoc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202503070326.9hEUez42-lkp@intel.com>
-References: <202503070326.9hEUez42-lkp@intel.com>
+	s=arc-20240116; t=1741585904; c=relaxed/simple;
+	bh=pkvcGoJYqPkfnjx/FWK4pr+tkYcyNCVGpXvtq8+JiDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cug/I0ZVgI/7v0AaSc9qTz5CsIHtoyziwbffkLV2bAEgQ0YXni5MFK2/Ccx5LkQo6FZgF4nPMa3uaPr60A0fGHTEK1HVg6yRnl0gnD5Geeu0yO0mCQ0SM8W8zXgzT1PUy1TdqyxBXVVHmKQWX579BDaAVMypOW3hrGrIofpcX3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qe3CmMar; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qe3CmMar"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741585903; x=1773121903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pkvcGoJYqPkfnjx/FWK4pr+tkYcyNCVGpXvtq8+JiDg=;
+  b=Qe3CmMarjZx+PEsjuMsOSRdLaH7VeoWkINoW9+OgWkKx/CBjRWv7DZHn
+   Rk5Sn+/YY49YCaqQ7fwFZeuImUzY4pa1RutCu4OiEEUeWS/D0IY29qzG4
+   za5cR0fcy0qcSUd5vBJEs0kZ5aZAYMl6pWWaJZvUrSrbOR2ukLEV9S2hb
+   strvG9j/ClPgXvyUN8qj6N9izjcEEvijsEfEOIjyNggqFl9mvDTIo+PXa
+   ZvlP4ur+oM5QXfR/jnSI4YetT6EtZ3NBv0janQ2PD0EAUS0HF86amrGtx
+   MlH/ASQdVWWwVfTAsVkyRvjRyWKCO/m2p9uJ77XS3rGHDhn94Wj+e0T5U
+   g==;
+X-CSE-ConnectionGUID: 91q1teoFRhCzbo4ci0LhrQ==
+X-CSE-MsgGUID: p6CUMQ6LQ7+gX3tzqSt7GQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="65011555"
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="65011555"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 22:51:42 -0700
+X-CSE-ConnectionGUID: DkOHpz8XT+69PlPEmQ9OAg==
+X-CSE-MsgGUID: +2yc0tImToi3QEBT3Ij4jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
+   d="scan'208";a="119737197"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Mar 2025 22:51:40 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1trW38-0003qo-0q;
+	Mon, 10 Mar 2025 05:51:38 +0000
+Date: Mon, 10 Mar 2025 13:51:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2025-03-07 17/40]
+ sound/soc/soc-pcm.c:1635:8: error: call to undeclared function
+ 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202503101300.LhjHiEqb-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL:SHSQR01.spreadtrum.com 52A2v5Oe012412
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When CONFIG_ENERGY_MODEL=y and CONFIG_SMP=n, there is build error:
+Hi Kuninori,
 
->> drivers/powercap/dtpm_cpu.c:83:15: error: call to undeclared function 'sched_cpu_util';
-ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      83 |                 sum_util += sched_cpu_util(cpu);
-         |                             ^
-   1 error generated.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-This is because the sched_cpu_util depends on CONFIG_SMP,
-so using the #ifdef to guarantee the dependence.
+tree:   https://github.com/morimoto/linux sound-cleanup-2025-03-07
+head:   609577579ecf4de9913d0d83a96d240bd935a4a1
+commit: f6c0618b06d3285bd3ddd254ce62c5eb92c6e4f1 [17/40] ASoC: soc-pcm: tidyup function name to snd_soc_dpcm_be_can_xxx()
+config: x86_64-buildonly-randconfig-004-20250310 (https://download.01.org/0day-ci/archive/20250310/202503101300.LhjHiEqb-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503101300.LhjHiEqb-lkp@intel.com/reproduce)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202503070326.9hEUez42-lkp@intel.com/
-Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
----
- drivers/powercap/dtpm_cpu.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503101300.LhjHiEqb-lkp@intel.com/
 
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index 6b6f51b21550..b935e8c38b45 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -68,6 +68,7 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
- 	return power_limit;
- }
- 
-+#ifdef CONFIG_SMP
- static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
- {
- 	unsigned long max, sum_util = 0;
-@@ -84,6 +85,12 @@ static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
- 
- 	return (power * ((sum_util << 10) / max)) >> 10;
- }
-+#else /* !CONFIG_SMP */
-+static inline u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
-+{
-+	return power;
-+}
-+#endif
- 
- static u64 get_pd_power_uw(struct dtpm *dtpm)
- {
+All errors (new ones prefixed by >>):
+
+>> sound/soc/soc-pcm.c:1635:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1635 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:1685:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1685 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2010:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2010 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2076:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2076 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2121:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2121 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2191:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2191 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2468:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2468 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   sound/soc/soc-pcm.c:2626:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2626 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+         |                      ^
+   8 errors generated.
+
+
+vim +/snd_soc_dpcm_can_be_update +1635 sound/soc/soc-pcm.c
+
+  1619	
+  1620	void dpcm_be_dai_stop(struct snd_soc_pcm_runtime *fe, int stream,
+  1621			      int do_hw_free, struct snd_soc_dpcm *last)
+  1622	{
+  1623		struct snd_soc_dpcm *dpcm;
+  1624	
+  1625		/* disable any enabled and non active backends */
+  1626		for_each_dpcm_be(fe, stream, dpcm) {
+  1627			struct snd_soc_pcm_runtime *be = dpcm->be;
+  1628			struct snd_pcm_substream *be_substream =
+  1629				snd_soc_dpcm_get_substream(be, stream);
+  1630	
+  1631			if (dpcm == last)
+  1632				return;
+  1633	
+  1634			/* is this op for this BE ? */
+> 1635			if (!snd_soc_dpcm_can_be_update(fe, be, stream))
+  1636				continue;
+  1637	
+  1638			if (be->dpcm[stream].users == 0) {
+  1639				dev_err(be->dev, "ASoC: no users %s at close - state %d\n",
+  1640					snd_pcm_direction_name(stream),
+  1641					be->dpcm[stream].state);
+  1642				continue;
+  1643			}
+  1644	
+  1645			if (--be->dpcm[stream].users != 0)
+  1646				continue;
+  1647	
+  1648			if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_OPEN) {
+  1649				if (!do_hw_free)
+  1650					continue;
+  1651	
+  1652				if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_HW_FREE) {
+  1653					__soc_pcm_hw_free(be, be_substream);
+  1654					be->dpcm[stream].state = SND_SOC_DPCM_STATE_HW_FREE;
+  1655				}
+  1656			}
+  1657	
+  1658			__soc_pcm_close(be, be_substream);
+  1659			be_substream->runtime = NULL;
+  1660			be->dpcm[stream].state = SND_SOC_DPCM_STATE_CLOSE;
+  1661		}
+  1662	}
+  1663	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
