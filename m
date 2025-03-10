@@ -1,247 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9C62288CC;
-	Mon, 10 Mar 2025 10:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F033117A2E7;
+	Mon, 10 Mar 2025 12:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741603630; cv=none; b=Zie0EwBVA4WOl6fjff2e4EHGggN++ylcxnwT3uhHIRhMMMKfZ5wKzejDSg6lrGDBdfypOdcNTD40mThjoOhx7pod8gA2RiZuz4fvdO2y2J8rE6cEWtLXKmRod0uILwbTi0tMGAHgN23Reec1Fg1j3WcIcN2nf4mqjznUJI5CMG0=
+	t=1741610923; cv=none; b=Q9KPW9Mz1AwjjNoj+d3Yc8NNEKE9a7pEQz2J8FbrmdNQWUHX69Ofgt7lAwxOuueg09qH2fP+ccKBR/ivwYLP2W6ZGMKjcYqjfJbbd8aO1LvKessPCxLN01kt6rTE3cohykNtXGVpI3eh0NHJRS9yczNslyf31FBRJLhu0NDKW4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741603630; c=relaxed/simple;
-	bh=Sc9/v3JuthVpaujL0gcxOlKafMze0NJxxDCqEp489d8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QPOZCJuo8M51gtifAhEUngREE5+YncxGzkirlgZisz7YSYB7oRBEaqLMnHxGRk6nqZ+fyMPAVzXlrjtAf9Jk2147HBYaul5xMd4i8yl62/AhOh/QvlAxRPN9IWDv33PJ78QceV9y452ZyyGJ68gLlJMficW7VI2YG4Ct7ydfRyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rH+4GpSW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741610923; c=relaxed/simple;
+	bh=xSWb5REeYFPZwi1QUoJuIX4lM1Cr4JUM9JjHTFSxWoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rs4HN/kUHbiNPYyP0laCRYEYzvM0KV0ZECkYgvewKTTuu8Gc9L2A4rAT0xnJvuhK9+8Al02jGjVsMOF3r2al/rlkgqxZSmPpHsmA28w9kr3NR72L1sSi8tUhlIiLNDybQBNKS2QvEusiNc9qaUefzND0OfOt/VorkPi+OaLPbXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VsAyhZK1; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rH+4GpSW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC07C4CEEC;
-	Mon, 10 Mar 2025 10:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741603630;
-	bh=Sc9/v3JuthVpaujL0gcxOlKafMze0NJxxDCqEp489d8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rH+4GpSWm70MDdz90J7WW3e4ZM9LjCnSU4zwgbT8SOFlddqVCH/3RCSdyos4/kzyP
-	 dFMWx1NJ4K7McNB9oaj90ertP74A5yQggnQhxCQO1xcO+ozMNrEAX29kJp3jGOK5ls
-	 NBsDiSZr9WR78oOYqfZ78WUGzKDBB2uLHo6aYzW0N9XZLsc3KhKJpz0g49pEdeHpmW
-	 /hX+tKQdtN4vR/t4WAYFEhht6Yox8doDzXITAl6HDpPT4JcTq1oHCRwuWh9LKt2sHv
-	 xr9N5cjFJCMWDe8FzlcYrLFZa+JJrb8athYeufmyntax2/ephCyCUJTwrnRhWRsVh6
-	 2p4kAzh2UgnfA==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abf615d5f31so798143766b.2;
-        Mon, 10 Mar 2025 03:47:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVk1npy1GUWmGNrSZ+wvrPUZzwZKrixj2CvYK4Yvep7VTbLSyDeqD7WXiHzyJlqTYCRIP58@lists.linux.dev, AJvYcCWiEUdnNlD0YTMTWWw7ikfS8Rk6mKIaCzakPeCcnJIIFrJcCvyidAJIKAOrC3F31v6tGUIHm5x2Wa6nFmvnpA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YyMEj2QbqZcOgNjvWXB0s4C9IhM/f44p3NIQO5vT8UMK5llUsHg
-	E4ue9m+3rl8fEXRaqCZPjUHpZTBaQlOhOtd2PGgz4hGfeiX5/BtyGHEibSsQ+H4nT0nEHF242+6
-	5CwRM3JXi/RxiTQkMLd0moJnfUaI=
-X-Google-Smtp-Source: AGHT+IE0Qz01VzgipkgxgkfoRbX692A0lttf+JeI1m/AaZEuHJKWtSe6j975Vn4wdPQ5YcuAZTwi8kxmz+yBkADcLL0=
-X-Received: by 2002:a17:907:1ca3:b0:ab7:b30:42ed with SMTP id
- a640c23a62f3a-ac2521295eamr1615213666b.0.1741603628863; Mon, 10 Mar 2025
- 03:47:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VsAyhZK1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741610921; x=1773146921;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xSWb5REeYFPZwi1QUoJuIX4lM1Cr4JUM9JjHTFSxWoU=;
+  b=VsAyhZK1oY+9zJmEJPv6eX/HlKxDyh1XYCATBROGT6LnMrd/BjjKKeky
+   hJBVD+qhZ7NbHEjvxzT3FifUCPHlp3YajWLwQvKA1WxrjoB/+oAjIzI94
+   HSbyBfNlouylX+Z22vqf+fltH14/W53cTOU0bZKZSTrd9TfHpucmPUZ/p
+   U0KMBiSMuvHG8zwwQw3jxEdBsqqxnkG69jafP12hObK5rd1L98bj1VaTw
+   EVg/N4cPE6NFhgs2mf6ehq31e4DF3Qg7yB91wu6E+V6c7d+hgnX4PQk+/
+   QW6rZa/UtHpJodjTmrrDAKl/28tCfQgD/kTyWc+NnFWNDB+DsBp7Bac6t
+   w==;
+X-CSE-ConnectionGUID: ugESi8n2T6eNtsguuRXEiQ==
+X-CSE-MsgGUID: UDcGuqZ6Q62Mh+mOwmpD1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="65059382"
+X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
+   d="scan'208";a="65059382"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 05:48:40 -0700
+X-CSE-ConnectionGUID: QuT5wmvcRcGZWfrVWsfu1A==
+X-CSE-MsgGUID: +IN/u0q+QcKsj7aOhMegpQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
+   d="scan'208";a="120183702"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Mar 2025 05:48:35 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1trcXr-0004F6-1s;
+	Mon, 10 Mar 2025 12:47:57 +0000
+Date: Mon, 10 Mar 2025 20:47:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>, mingo@redhat.com,
+	peterz@infradead.org, juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, vschneid@redhat.com, lukasz.luba@arm.com,
+	rafael.j.wysocki@intel.com, pierre.gondois@arm.com,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	qyousef@layalina.io, hongyan.xia2@arm.com, christian.loehle@arm.com,
+	luis.machado@arm.com, qperret@google.com,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH 5/7 v5] sched/fair: Add push task mechanism for EAS
+Message-ID: <202503102022.MhverD5b-lkp@intel.com>
+References: <20250302210539.1563190-6-vincent.guittot@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <f6d2a09fb43742fb5be38f820908510e298f8d40.1741354479.git.fdmanana@suse.com>
- <202503090344.SeJrOfHD-lkp@intel.com>
-In-Reply-To: <202503090344.SeJrOfHD-lkp@intel.com>
-From: Filipe Manana <fdmanana@kernel.org>
-Date: Mon, 10 Mar 2025 10:46:32 +0000
-X-Gmail-Original-Message-ID: <CAL3q7H649w5+hRzX_pRB=6kMVQFSfLL7=2dt16taiVzOUYOgzQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JpH99uf8nj-3JsGIluLIezRqAJA4enqoTTq_8A9S1s8aybiFQFmOMw-9rg
-Message-ID: <CAL3q7H649w5+hRzX_pRB=6kMVQFSfLL7=2dt16taiVzOUYOgzQ@mail.gmail.com>
-Subject: Re: [PATCH 4/8] btrfs: make btrfs_iget() return a btrfs inode instead
-To: kernel test robot <lkp@intel.com>
-Cc: linux-btrfs@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250302210539.1563190-6-vincent.guittot@linaro.org>
 
-On Sat, Mar 8, 2025 at 5:49=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on kdave/for-next]
-> [also build test ERROR on next-20250307]
-> [cannot apply to linus/master v6.14-rc5]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/fdmanana-kernel-or=
-g/btrfs-return-a-btrfs_inode-from-btrfs_iget_logging/20250307-214724
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git f=
-or-next
-> patch link:    https://lore.kernel.org/r/f6d2a09fb43742fb5be38f820908510e=
-298f8d40.1741354479.git.fdmanana%40suse.com
-> patch subject: [PATCH 4/8] btrfs: make btrfs_iget() return a btrfs inode =
-instead
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/202503=
-09/202503090344.SeJrOfHD-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
-8029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250309/202503090344.SeJrOfHD-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503090344.SeJrOfHD-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    In file included from fs/btrfs/send.c:11:
->    In file included from include/linux/xattr.h:18:
->    In file included from include/linux/mm.h:2224:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> fs/btrfs/send.c:5535:8: error: incompatible pointer types assigning to=
- 'struct inode *' from 'struct btrfs_inode *' [-Werror,-Wincompatible-point=
-er-types]
->     5535 |         inode =3D btrfs_iget(sctx->cur_ino, root);
->          |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    3 warnings and 1 error generated.
+Hi Vincent,
 
-You're testing against a branch that doesn't contain this dependency:
+kernel test robot noticed the following build errors:
 
-https://lore.kernel.org/linux-btrfs/89867e61f94b9a9f3711f66c141e4d483a9cc6b=
-d.1741283556.git.fdmanana@suse.com/
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on peterz-queue/sched/core linus/master v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-It's in the for-next branch of the github repo:
+url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Guittot/sched-fair-Filter-false-overloaded_group-case-for-EAS/20250303-050850
+base:   tip/sched/core
+patch link:    https://lore.kernel.org/r/20250302210539.1563190-6-vincent.guittot%40linaro.org
+patch subject: [PATCH 5/7 v5] sched/fair: Add push task mechanism for EAS
+config: arm-realview_defconfig (https://download.01.org/0day-ci/archive/20250310/202503102022.MhverD5b-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503102022.MhverD5b-lkp@intel.com/reproduce)
 
-https://github.com/btrfs/linux/commits/for-next/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503102022.MhverD5b-lkp@intel.com/
 
-but not yet in  any kernel.org repo.
+All errors (new ones prefixed by >>):
 
-Thanks.
+>> kernel/sched/fair.c:8675:36: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8675 |         return !plist_head_empty(&rq->cfs.pushable_tasks);
+         |                                   ~~~~~~~ ^
+   kernel/sched/fair.c:8685:33: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8685 |         p = plist_first_entry(&rq->cfs.pushable_tasks,
+         |                                ~~~~~~~ ^
+   include/linux/plist.h:233:27: note: expanded from macro 'plist_first_entry'
+     233 |         container_of(plist_first(head), type, member)
+         |                                  ^~~~
+   include/linux/container_of.h:19:26: note: expanded from macro 'container_of'
+      19 |         void *__mptr = (void *)(ptr);                                   \
+         |                                 ^~~
+   kernel/sched/fair.c:8685:33: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8685 |         p = plist_first_entry(&rq->cfs.pushable_tasks,
+         |                                ~~~~~~~ ^
+   include/linux/plist.h:233:27: note: expanded from macro 'plist_first_entry'
+     233 |         container_of(plist_first(head), type, member)
+         |                                  ^~~~
+   include/linux/container_of.h:20:30: note: expanded from macro 'container_of'
+      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                                     ^~~
+   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
+     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                               ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                                  ^~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   kernel/sched/fair.c:8685:33: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8685 |         p = plist_first_entry(&rq->cfs.pushable_tasks,
+         |                                ~~~~~~~ ^
+   include/linux/plist.h:233:27: note: expanded from macro 'plist_first_entry'
+     233 |         container_of(plist_first(head), type, member)
+         |                                  ^~~~
+   include/linux/container_of.h:21:23: note: expanded from macro 'container_of'
+      21 |                       __same_type(*(ptr), void),                        \
+         |                                     ^~~
+   include/linux/compiler_types.h:483:63: note: expanded from macro '__same_type'
+     483 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                               ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                                  ^~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   kernel/sched/fair.c:8697:41: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8697 |         plist_del(&p->pushable_tasks, &rq->cfs.pushable_tasks);
+         |                                        ~~~~~~~ ^
+   kernel/sched/fair.c:8772:42: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8772 |                 plist_del(&p->pushable_tasks, &rq->cfs.pushable_tasks);
+         |                                                ~~~~~~~ ^
+   kernel/sched/fair.c:8779:43: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8779 |                         plist_del(&p->pushable_tasks, &rq->cfs.pushable_tasks);
+         |                                                        ~~~~~~~ ^
+   kernel/sched/fair.c:8781:43: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    8781 |                         plist_add(&p->pushable_tasks, &rq->cfs.pushable_tasks);
+         |                                                        ~~~~~~~ ^
+   kernel/sched/fair.c:13572:27: error: no member named 'pushable_tasks' in 'struct cfs_rq'
+    13572 |         plist_head_init(&cfs_rq->pushable_tasks);
+          |                          ~~~~~~  ^
+   9 errors generated.
 
->
->
-> vim +5535 fs/btrfs/send.c
->
-> 16e7549f045d33b Josef Bacik   2013-10-22  5519
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5520  static int send_encoded_i=
-nline_extent(struct send_ctx *sctx,
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5521                           =
-             struct btrfs_path *path, u64 offset,
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5522                           =
-             u64 len)
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5523  {
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5524          struct btrfs_root=
- *root =3D sctx->send_root;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5525          struct btrfs_fs_i=
-nfo *fs_info =3D root->fs_info;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5526          struct inode *ino=
-de;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5527          struct fs_path *f=
-spath;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5528          struct extent_buf=
-fer *leaf =3D path->nodes[0];
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5529          struct btrfs_key =
-key;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5530          struct btrfs_file=
-_extent_item *ei;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5531          u64 ram_bytes;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5532          size_t inline_siz=
-e;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5533          int ret;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5534
-> d13240dd0a2d13b Filipe Manana 2024-06-13 @5535          inode =3D btrfs_i=
-get(sctx->cur_ino, root);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5536          if (IS_ERR(inode)=
-)
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5537                  return PT=
-R_ERR(inode);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5538
-> 6054b503e2eafac Filipe Manana 2025-02-18  5539          fspath =3D get_cu=
-r_inode_path(sctx);
-> 6054b503e2eafac Filipe Manana 2025-02-18  5540          if (IS_ERR(fspath=
-)) {
-> 6054b503e2eafac Filipe Manana 2025-02-18  5541                  ret =3D P=
-TR_ERR(fspath);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5542                  goto out;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5543          }
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5544
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5545          ret =3D begin_cmd=
-(sctx, BTRFS_SEND_C_ENCODED_WRITE);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5546          if (ret < 0)
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5547                  goto out;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5548
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5549          btrfs_item_key_to=
-_cpu(leaf, &key, path->slots[0]);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5550          ei =3D btrfs_item=
-_ptr(leaf, path->slots[0], struct btrfs_file_extent_item);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5551          ram_bytes =3D btr=
-fs_file_extent_ram_bytes(leaf, ei);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5552          inline_size =3D b=
-trfs_file_extent_inline_item_len(leaf, path->slots[0]);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5553
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5554          TLV_PUT_PATH(sctx=
-, BTRFS_SEND_A_PATH, fspath);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5555          TLV_PUT_U64(sctx,=
- BTRFS_SEND_A_FILE_OFFSET, offset);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5556          TLV_PUT_U64(sctx,=
- BTRFS_SEND_A_UNENCODED_FILE_LEN,
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5557                      min(k=
-ey.offset + ram_bytes - offset, len));
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5558          TLV_PUT_U64(sctx,=
- BTRFS_SEND_A_UNENCODED_LEN, ram_bytes);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5559          TLV_PUT_U64(sctx,=
- BTRFS_SEND_A_UNENCODED_OFFSET, offset - key.offset);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5560          ret =3D btrfs_enc=
-oded_io_compression_from_extent(fs_info,
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5561                           =
-       btrfs_file_extent_compression(leaf, ei));
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5562          if (ret < 0)
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5563                  goto out;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5564          TLV_PUT_U32(sctx,=
- BTRFS_SEND_A_COMPRESSION, ret);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5565
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5566          ret =3D put_data_=
-header(sctx, inline_size);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5567          if (ret < 0)
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5568                  goto out;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5569          read_extent_buffe=
-r(leaf, sctx->send_buf + sctx->send_size,
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5570                           =
-  btrfs_file_extent_inline_start(ei), inline_size);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5571          sctx->send_size +=
-=3D inline_size;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5572
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5573          ret =3D send_cmd(=
-sctx);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5574
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5575  tlv_put_failure:
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5576  out:
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5577          iput(inode);
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5578          return ret;
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5579  }
-> 3ea4dc5bf00c7d1 Omar Sandoval 2022-03-17  5580
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+
+vim +8675 kernel/sched/fair.c
+
+  8672	
+  8673	static inline int has_pushable_tasks(struct rq *rq)
+  8674	{
+> 8675		return !plist_head_empty(&rq->cfs.pushable_tasks);
+  8676	}
+  8677	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
