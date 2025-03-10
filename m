@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D84184F;
-	Mon, 10 Mar 2025 05:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480FB1D47A6;
+	Mon, 10 Mar 2025 07:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741585904; cv=none; b=Gvgi7KbBqu2RDFRVuhw7X+eHRgphXWjRnAKJnRQ9BzZxWtRZuQTHCLCZbIowA3H2Q1pwTC4WFTBjMaGfcuNQETbQ1qHTI+csVemMB2MU6PLVcrpOupdIZi6mwLeJbkeNuBpGmg9F52MfwDfraqciIHcJPqjvtAeW49pH/QrOJVA=
+	t=1741590381; cv=none; b=fScAK/7ONSwfLahLMWthIUdthN3d1aeRVJqFqV5VmeLANsGHel8ao5viz2qf/rJukN+nLbjo40ZXwuCeiN1sN3Eg23RRGeqWFHG0Tyv7F22dDkQEMFcY5XWqaaxhFsATOop2qpSuiwzMYp8UUxC3xwMH3vCuHy2IGGcFFiwuleA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741585904; c=relaxed/simple;
-	bh=pkvcGoJYqPkfnjx/FWK4pr+tkYcyNCVGpXvtq8+JiDg=;
+	s=arc-20240116; t=1741590381; c=relaxed/simple;
+	bh=BsJiA2ygptrvH1uNkFxANUpxUW22yaXCcjgQIUIM3eo=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cug/I0ZVgI/7v0AaSc9qTz5CsIHtoyziwbffkLV2bAEgQ0YXni5MFK2/Ccx5LkQo6FZgF4nPMa3uaPr60A0fGHTEK1HVg6yRnl0gnD5Geeu0yO0mCQ0SM8W8zXgzT1PUy1TdqyxBXVVHmKQWX579BDaAVMypOW3hrGrIofpcX3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qe3CmMar; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=h/xFJGP9iS7Tk1OP4ctBmOSTNBDgQTDamYDkxU9hktT14Q8co45BzM9yZ7L/fYFKIGE4+1uQM6KqM/MkrcysxcYJxLXqhHJimdQqtyE1ynUtBT3uznlHqxDYUZbczJSCqH6RJnkK0uqra35A2K/3NavtPqbxTSTvBaKbH01I1KU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mriv+YV2; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qe3CmMar"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mriv+YV2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741585903; x=1773121903;
+  t=1741590379; x=1773126379;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pkvcGoJYqPkfnjx/FWK4pr+tkYcyNCVGpXvtq8+JiDg=;
-  b=Qe3CmMarjZx+PEsjuMsOSRdLaH7VeoWkINoW9+OgWkKx/CBjRWv7DZHn
-   Rk5Sn+/YY49YCaqQ7fwFZeuImUzY4pa1RutCu4OiEEUeWS/D0IY29qzG4
-   za5cR0fcy0qcSUd5vBJEs0kZ5aZAYMl6pWWaJZvUrSrbOR2ukLEV9S2hb
-   strvG9j/ClPgXvyUN8qj6N9izjcEEvijsEfEOIjyNggqFl9mvDTIo+PXa
-   ZvlP4ur+oM5QXfR/jnSI4YetT6EtZ3NBv0janQ2PD0EAUS0HF86amrGtx
-   MlH/ASQdVWWwVfTAsVkyRvjRyWKCO/m2p9uJ77XS3rGHDhn94Wj+e0T5U
-   g==;
-X-CSE-ConnectionGUID: 91q1teoFRhCzbo4ci0LhrQ==
-X-CSE-MsgGUID: p6CUMQ6LQ7+gX3tzqSt7GQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="65011555"
+  bh=BsJiA2ygptrvH1uNkFxANUpxUW22yaXCcjgQIUIM3eo=;
+  b=mriv+YV2kYcOtDn4kOobwMR62MpXrOlo+IfvT48sH8arlMVd51ybquub
+   6v7hbrTrGU48cDdr9xjWv64bz0r0pL3PGFN16Vot7jnQPtHgWq6LSxlhe
+   u8ZAyET9bzJ3bHEEJYtUk0Iua6AZRVx4JFnkxMjziW5eUl1/6RzXoKo0i
+   g70EiQMQuQ2qh4HFtphxRYFIRskKCGPfSTgmfRq5zBv219SMFhc7f3YaZ
+   HiDfnZ0ymyyN8Vq2ucQ124qg1pfgyNyQXbbiQ9csUMAH3yDc6qOLc9SDw
+   f9y3V2fhcDAe16Xi1Pc9bXsQUZ+vWKoVmtq4WnzpwKQrWE/IN9gY7nTcz
+   A==;
+X-CSE-ConnectionGUID: +IW1F5p8TsWleLeabea03w==
+X-CSE-MsgGUID: 0cplZWEQTtWV5/SOj8JbLA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="67931905"
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="65011555"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 22:51:42 -0700
-X-CSE-ConnectionGUID: DkOHpz8XT+69PlPEmQ9OAg==
-X-CSE-MsgGUID: +2yc0tImToi3QEBT3Ij4jw==
+   d="scan'208";a="67931905"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 00:06:18 -0700
+X-CSE-ConnectionGUID: dfuxbyzhSqmV7NsTs1FzRA==
+X-CSE-MsgGUID: 0neuSCJGQPOY8uiDwX5Tgg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="119737197"
+   d="scan'208";a="150849378"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 09 Mar 2025 22:51:40 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 10 Mar 2025 00:06:18 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trW38-0003qo-0q;
-	Mon, 10 Mar 2025 05:51:38 +0000
-Date: Mon, 10 Mar 2025 13:51:13 +0800
+	id 1trXDG-0003uY-1C;
+	Mon, 10 Mar 2025 07:06:11 +0000
+Date: Mon, 10 Mar 2025 15:05:08 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2025-03-07 17/40]
- sound/soc/soc-pcm.c:1635:8: error: call to undeclared function
- 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202503101300.LhjHiEqb-lkp@intel.com>
+Subject: [morimoto:sound-cleanup-2025-03-07 40/40]
+ sound/soc/soc-core.c:2895:80: error: use of undeclared identifier 'name'
+Message-ID: <202503101524.cxor4d3p-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,98 +62,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Kuninori,
-
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
 tree:   https://github.com/morimoto/linux sound-cleanup-2025-03-07
 head:   609577579ecf4de9913d0d83a96d240bd935a4a1
-commit: f6c0618b06d3285bd3ddd254ce62c5eb92c6e4f1 [17/40] ASoC: soc-pcm: tidyup function name to snd_soc_dpcm_be_can_xxx()
-config: x86_64-buildonly-randconfig-004-20250310 (https://download.01.org/0day-ci/archive/20250310/202503101300.LhjHiEqb-lkp@intel.com/config)
+commit: 609577579ecf4de9913d0d83a96d240bd935a4a1 [40/40] ASoC: soc-core: merge snd_soc_unregister_component() and snd_soc_unregister_component_by_driver()
+config: x86_64-buildonly-randconfig-004-20250310 (https://download.01.org/0day-ci/archive/20250310/202503101524.cxor4d3p-lkp@intel.com/config)
 compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503101300.LhjHiEqb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503101524.cxor4d3p-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503101300.LhjHiEqb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503101524.cxor4d3p-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/soc-pcm.c:1635:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1635 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:1685:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1685 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2010:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2010 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2076:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2076 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2121:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2121 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2191:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2191 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2468:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2468 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   sound/soc/soc-pcm.c:2626:8: error: call to undeclared function 'snd_soc_dpcm_can_be_update'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2626 |                 if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-         |                      ^
-   8 errors generated.
+>> sound/soc/soc-core.c:2895:80: error: use of undeclared identifier 'name'
+    2895 |                 struct snd_soc_component *component = snd_soc_lookup_component_nolocked(dev, name);
+         |                                                                                              ^
+   1 error generated.
 
 
-vim +/snd_soc_dpcm_can_be_update +1635 sound/soc/soc-pcm.c
+vim +/name +2895 sound/soc/soc-core.c
 
-  1619	
-  1620	void dpcm_be_dai_stop(struct snd_soc_pcm_runtime *fe, int stream,
-  1621			      int do_hw_free, struct snd_soc_dpcm *last)
-  1622	{
-  1623		struct snd_soc_dpcm *dpcm;
-  1624	
-  1625		/* disable any enabled and non active backends */
-  1626		for_each_dpcm_be(fe, stream, dpcm) {
-  1627			struct snd_soc_pcm_runtime *be = dpcm->be;
-  1628			struct snd_pcm_substream *be_substream =
-  1629				snd_soc_dpcm_get_substream(be, stream);
-  1630	
-  1631			if (dpcm == last)
-  1632				return;
-  1633	
-  1634			/* is this op for this BE ? */
-> 1635			if (!snd_soc_dpcm_can_be_update(fe, be, stream))
-  1636				continue;
-  1637	
-  1638			if (be->dpcm[stream].users == 0) {
-  1639				dev_err(be->dev, "ASoC: no users %s at close - state %d\n",
-  1640					snd_pcm_direction_name(stream),
-  1641					be->dpcm[stream].state);
-  1642				continue;
-  1643			}
-  1644	
-  1645			if (--be->dpcm[stream].users != 0)
-  1646				continue;
-  1647	
-  1648			if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_OPEN) {
-  1649				if (!do_hw_free)
-  1650					continue;
-  1651	
-  1652				if (be->dpcm[stream].state != SND_SOC_DPCM_STATE_HW_FREE) {
-  1653					__soc_pcm_hw_free(be, be_substream);
-  1654					be->dpcm[stream].state = SND_SOC_DPCM_STATE_HW_FREE;
-  1655				}
-  1656			}
-  1657	
-  1658			__soc_pcm_close(be, be_substream);
-  1659			be_substream->runtime = NULL;
-  1660			be->dpcm[stream].state = SND_SOC_DPCM_STATE_CLOSE;
-  1661		}
-  1662	}
-  1663	
+  2877	
+  2878	/**
+  2879	 * snd_soc_unregister_component_by_driver - Unregister component using a given driver
+  2880	 * from the ASoC core
+  2881	 *
+  2882	 * @dev: The device to unregister
+  2883	 * @component_driver: The component driver to unregister
+  2884	 */
+  2885	void snd_soc_unregister_component_by_driver(struct device *dev,
+  2886						    const struct snd_soc_component_driver *component_driver)
+  2887	{
+  2888		const char *driver_name = NULL;
+  2889	
+  2890		if (component_driver)
+  2891			driver_name = component_driver->name;
+  2892	
+  2893		mutex_lock(&client_mutex);
+  2894		while (1) {
+> 2895			struct snd_soc_component *component = snd_soc_lookup_component_nolocked(dev, name);
+  2896	
+  2897			if (!component)
+  2898				break;
+  2899	
+  2900			snd_soc_del_component_unlocked(component);
+  2901		}
+  2902		mutex_unlock(&client_mutex);
+  2903	}
+  2904	EXPORT_SYMBOL_GPL(snd_soc_unregister_component_by_driver);
+  2905	
 
 -- 
 0-DAY CI Kernel Test Service
