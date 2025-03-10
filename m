@@ -1,100 +1,201 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDB41A314B
-	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 13:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDC222DFB6;
+	Mon, 10 Mar 2025 15:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741612540; cv=none; b=UjyUa3AADZl+qk6VXwjPMVmEGhc6YyyZMSvqU3/Ix8kK5o5rLIS6oA2RcFr1FAj5VxS3GkpbqqiLF8lyos8HmnnSJs75wdAGLCzOS4cIQvXIDb/rZDWiRk0VzxikgV4fTke5AX2emm1Nq97fRhZeIaa34InLiNxBwHIwOVWnhIU=
+	t=1741622221; cv=none; b=N+yanDyAbk73KPGIIoj24/Bmazs+foOl4fV+1JvutdCKqBQfRA66o30pVEhch7iJN8QbTUNfGF6bQf5Qz5/GJyzqQdtLRV0PGcItPmhNQB/rGJm/H2TFYJfgu7lJb6Qr9cpwGecfFd/CRC27VKQzxiVtc3wF7HRAbE1t/nOOyCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741612540; c=relaxed/simple;
-	bh=vK5tFz6cAoc3BRInBg6lxuhPY7r7H7slA5Y0fpKWcN0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lb9FYc9q67lbcLW6p/Fz07h1Dud6VXnv6pBCgPBvz0yZ3Bm43mmoZoUj4lqAmHxp61LVJWTJJCRnTGQFX5Vzl2V3mcVRYQlJ4sAcyNyt3p0fbhmzKnfDH5PrRMdfkGlWqFjg1nCRc8j0alCjjrQWiGqFaNtT5JS3U51JRLim0Ek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3QDJvc3z; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1741622221; c=relaxed/simple;
+	bh=HUOoS96yEGNDr6tmWxBEsNiNGsOwUXnMZoZqjoX9vAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SvEmTNJ2B88wfoa0iflr6C5BMqte1VFg8Ji37nBhv09iksCfo9s4KW9RVtVhUtHr+qkTBLcJPPz/J2EkdmqJue/PsepKTYnOTpCZI07SXV3iXeftZEz9FvejBh1kZ5iKvXMEXSkaO8QJlGTSAFygGDPzsmd+l8g9J4xCkolspjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jVGCPUE2; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3QDJvc3z"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43947a0919aso35078725e9.0
-        for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 06:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741612537; x=1742217337; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+EEsvDIwxD+0/5fzD3wD3Tbua+FVDD1lHgd/aZ/hTzU=;
-        b=3QDJvc3zznvBZrp1TstDXAzsN/XMd1qfneI7+kK4N64NtcCRPHctt7aze881LiaqLr
-         so7GUPYfavflBsaPq3CtIQTLLRGu8uGkPU5rBnldDKBNpRFzKcQJ2SdtjvQEVgr0m4Fi
-         Ll58xKBgyLjfMH58g6pLScUre3F88AEs2RXZNImylsIXNPPTbQwKR/ukgCYVMnpr1d0k
-         se+KRKUTpYknC9/bjidJTtUTHhDFxHPykD0bqlkq0l9CI6ppZ7rPnViQvKI9P2OGFVqC
-         vt7G0xwNxLt74CeNgnT4C90glPsM04q5kItFNTPh6bCQXOD63Gfv5E43C2MBW7aGCabZ
-         OHQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741612537; x=1742217337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+EEsvDIwxD+0/5fzD3wD3Tbua+FVDD1lHgd/aZ/hTzU=;
-        b=YLELTmDopWBcNpxeyKnJxgJAcKEipxC7i/+wgqQs2j8yBQaN1bNYR2ntP7IHbTRRIr
-         hAqyT/Ur0MZma7/8WX/j7L5eVPI79P/cLuPmvun0Yr+bemBD0nPJLgAMtmazApQMn6gl
-         Ul+A44sWydRMFlw7lJJN3NyM5Wg7du546nU4cWziCfFKbZoxgNafzDMWlwlDyqc4L4lk
-         zo9i8+5OwZ8eI0gO0IvNBpgjOHVQoSVwfkpvnKUFGHmwTLjjHkecOKcN8RjnqOPINazY
-         hdPLunje8TX/RM9CG10E9DkSw4c1wUUyW1QY1yjKzSP9Y+H0R7N9GPQBcqqqE5IAvmhX
-         kzFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqfSIH5gRllfphUzK136YoMjyV0xjgyrCVqD8T9qJI7ZfSJAYltYtP2YTisYmcx25B9c9l@lists.linux.dev
-X-Gm-Message-State: AOJu0YyqKRJxYsIzkxqjAKsedhHHDWdCqim1kbvZm3jOhomWsEI9UbTp
-	S5ZjjkdsTwIPob4bfuZPbQxwjj70JNNosA0LGtVM2WfPD/pglU1nwAVZZQW64M4mfAp8AZSMUD3
-	LZlFy7DGEx45j3w==
-X-Google-Smtp-Source: AGHT+IFAKBqCVDoWZNPtAoyGlnefO3AJox8H3Fg09QiDkuEe6afbmhhVGIrGRzga25ARaMG6blRd6xBWUg2R+xw=
-X-Received: from wmbhc5.prod.google.com ([2002:a05:600c:8705:b0:43c:fab0:ce54])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4fc6:b0:43c:fb95:c752 with SMTP id 5b1f17b1804b1-43cfb95cc79mr20397035e9.3.1741612536744;
- Mon, 10 Mar 2025 06:15:36 -0700 (PDT)
-Date: Mon, 10 Mar 2025 13:15:34 +0000
-In-Reply-To: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jVGCPUE2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741622220; x=1773158220;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HUOoS96yEGNDr6tmWxBEsNiNGsOwUXnMZoZqjoX9vAA=;
+  b=jVGCPUE2yavaZ6Ej4W6xwNBOM/G+mAAiMgjk25ZeAyzE4o3OURIJLwOa
+   DbH/cxjtkpQi1ze8COSd24mvEET73nfydGkqs2jxuCK6oFp1/6Bc2wZO4
+   mV0Kv8NLV3ydvdp6tDY+dH6VPjDkAsRwSj2wEdR0yuopafyW2tXx08sJ0
+   7mDIKtkSE0Wk1M4QKHAjTQUpYeQcJScmbhU5Tk/R7aZBaJMa72G9QuNOB
+   Pe+0gJ/pLD8Ln14wglTelVqi+3UAdmzi8ZqZB0uOI7ZfxLx2zZ1klqN9J
+   216rYHA1gItlS/ytbZCXn/RuhMqqIslpDEziL7D4I/+O9Hj+6J0SjnDXa
+   w==;
+X-CSE-ConnectionGUID: BdphJXdHTvuDlJkcd0Rn9g==
+X-CSE-MsgGUID: f5qvtEGDS1eGooy8qJScUw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="65081040"
+X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
+   d="scan'208";a="65081040"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 08:56:59 -0700
+X-CSE-ConnectionGUID: h9n+icFATluKVx9K7ImYmQ==
+X-CSE-MsgGUID: pgat/bVPTj+l6ZZfBU3B7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,236,1736841600"; 
+   d="scan'208";a="125260838"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 10 Mar 2025 08:56:57 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1trfUs-0004Pw-35;
+	Mon, 10 Mar 2025 15:56:54 +0000
+Date: Mon, 10 Mar 2025 23:56:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zsolt Kajtar <soci@c64.rulez.org>, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Zsolt Kajtar <soci@c64.rulez.org>
+Subject: Re: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing
+ routines
+Message-ID: <202503102312.rSGvBwl1-lkp@intel.com>
+References: <20250309184716.13732-2-soci@c64.rulez.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
-Message-ID: <Z87l9qENkwuea03Z@google.com>
-Subject: Re: [PATCH] rust/kernel/faux: mark Registration methods inline
-From: Alice Ryhl <aliceryhl@google.com>
-To: Ethan Carter Edwards <ethan@ethancedwards.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250309184716.13732-2-soci@c64.rulez.org>
 
-On Sun, Mar 09, 2025 at 10:14:36PM -0400, Ethan Carter Edwards wrote:
-> When building the kernel on Arch Linux using on x86_64 with tools:
-> $ rustc --version
-> rustc 1.84.0 (9fc6b4312 2025-01-07)
-> $ cargo --version
-> cargo 1.84.0 (66221abde 2024-11-19)
-> $ clang --version
-> clang version 19.1.7
-> Target: x86_64-pc-linux-gnu
-> 
-> The following symbols are generated:
-> $ nm vmlinux | rg ' _R' | rustfilt | rg faux
-> ffffffff81959ae0 T <kernel::faux::Registration>::new
-> ffffffff81959b40 T <kernel::faux::Registration as core::ops::drop::Drop>::drop
-> 
-> However, these Rust symbols are wrappers around bindings in the C faux
-> code. Inlining these functions removes the middle-man wrapper function
-> After applying this patch, the above function signatures disappear.
-> 
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
+Hi Zsolt,
 
-LGTM to me.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Zsolt-Kajtar/Refactoring-the-fbcon-packed-pixel-drawing-routines/20250310-025619
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250309184716.13732-2-soci%40c64.rulez.org
+patch subject: [PATCH RESEND 1/2] Refactoring the fbcon packed pixel drawing routines
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250310/202503102312.rSGvBwl1-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503102312.rSGvBwl1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503102312.rSGvBwl1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/video/fbdev/wmt_ge_rops.c:15:
+>> drivers/video/fbdev/core/fb_draw.h:16:48: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
+      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
+         |                                                ^
+   drivers/video/fbdev/core/fb_draw.h:18:5: error: incomplete definition of type 'struct fb_address'
+      18 |         adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
+         |         ~~~^
+   drivers/video/fbdev/core/fb_draw.h:16:48: note: forward declaration of 'struct fb_address'
+      16 | static inline void fb_address_move_long(struct fb_address *adr, int offset)
+         |                                                ^
+   drivers/video/fbdev/core/fb_draw.h:22:46: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
+      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
+         |                                              ^
+   drivers/video/fbdev/core/fb_draw.h:24:39: error: incomplete definition of type 'struct fb_address'
+      24 |         unsigned int bits = (unsigned int)adr->bits + offset;
+         |                                           ~~~^
+   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
+      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
+         |                                              ^
+   drivers/video/fbdev/core/fb_draw.h:26:5: error: incomplete definition of type 'struct fb_address'
+      26 |         adr->bits = bits & (BITS_PER_LONG - 1u);
+         |         ~~~^
+   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
+      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
+         |                                              ^
+   drivers/video/fbdev/core/fb_draw.h:27:5: error: incomplete definition of type 'struct fb_address'
+      27 |         adr->address += (bits & ~(BITS_PER_LONG - 1u)) / BITS_PER_BYTE;
+         |         ~~~^
+   drivers/video/fbdev/core/fb_draw.h:22:46: note: forward declaration of 'struct fb_address'
+      22 | static inline void fb_address_forward(struct fb_address *adr, unsigned int offset)
+         |                                              ^
+   drivers/video/fbdev/core/fb_draw.h:31:47: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:33:16: error: incomplete definition of type 'struct fb_address'
+      33 |         int bits = adr->bits - (int)offset;
+         |                    ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:35:5: error: incomplete definition of type 'struct fb_address'
+      35 |         adr->bits = bits & (BITS_PER_LONG - 1);
+         |         ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:37:6: error: incomplete definition of type 'struct fb_address'
+      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
+         |                 ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:37:23: error: incomplete definition of type 'struct fb_address'
+      37 |                 adr->address -= (adr->bits - bits) / BITS_PER_BYTE;
+         |                                  ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:39:6: error: incomplete definition of type 'struct fb_address'
+      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
+         |                 ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:39:30: error: incomplete definition of type 'struct fb_address'
+      39 |                 adr->address += (bits - adr->bits) / BITS_PER_BYTE;
+         |                                         ~~~^
+   drivers/video/fbdev/core/fb_draw.h:31:47: note: forward declaration of 'struct fb_address'
+      31 | static inline void fb_address_backward(struct fb_address *adr, unsigned int offset)
+         |                                               ^
+   drivers/video/fbdev/core/fb_draw.h:50:34: warning: declaration of 'struct fb_address' will not be visible outside of this function [-Wvisibility]
+      50 |                                     int offset, const struct fb_address *dst)
+         |                                                              ^
+   drivers/video/fbdev/core/fb_draw.h:52:2: error: call to undeclared function 'fb_write_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
+         |         ^
+   drivers/video/fbdev/core/fb_draw.h:52:2: note: did you mean 'fb_modify_offset'?
+   drivers/video/fbdev/core/fb_draw.h:49:20: note: 'fb_modify_offset' declared here
+      49 | static inline void fb_modify_offset(unsigned long val, unsigned long mask,
+         |                    ^
+      50 |                                     int offset, const struct fb_address *dst)
+      51 | {
+      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
+         |         ~~~~~~~~~~~~~~~
+         |         fb_modify_offset
+   drivers/video/fbdev/core/fb_draw.h:52:31: error: call to undeclared function 'fb_read_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      52 |         fb_write_offset(fb_comp(val, fb_read_offset(offset, dst), mask), offset, dst);
+         |                                      ^
+   drivers/video/fbdev/wmt_ge_rops.c:57:8: error: call to undeclared function 'pixel_to_pat'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      57 |         pat = pixel_to_pat(p->var.bits_per_pixel, fg);
+         |               ^
+   4 warnings and 13 errors generated.
+
+
+vim +16 drivers/video/fbdev/core/fb_draw.h
+
+    14	
+    15	/* move the address pointer by the number of words */
+  > 16	static inline void fb_address_move_long(struct fb_address *adr, int offset)
+    17	{
+    18		adr->address += offset * (BITS_PER_LONG / BITS_PER_BYTE);
+    19	}
+    20	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
