@@ -1,62 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1075F1B87F0;
-	Mon, 10 Mar 2025 20:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BA7288D6;
+	Mon, 10 Mar 2025 20:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741638667; cv=none; b=bwAEiCEbdF3en7tX4WiTPdmrnI2yZ+tYu6byq1FArGNHK5e7vkbj0MmwCVACP6+0RB9DRqquHQ46qjRoywhJ1BAq1rz8Jd1hgn7z6/5W/n7bz9S7GJSUKyRQ/Pkz7fkcRcVvmKYXacdCSEnI7U8hoftdTTLEFmqbgyKwoYeoLVY=
+	t=1741639055; cv=none; b=PAXH54Q2gO5j09oK7FTi5M6Q5gACXLgUjBbLZTV2uX+i14XZ51/UiBCIfO61Iloz6lWLAvoTGsm7C7586av8SyIyxI3LX6bUnQUQJTjFGYGLH+AFpY+wAdJzo6DvCLE+DxnXFXqJm7VbFoISaopS8fHGad8fi983rdhHbpLN50E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741638667; c=relaxed/simple;
-	bh=2lWjYVwUD4B+ylfpdDXy2c+UG5vZSSB2NoEDcFhh5yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PSMOdv5bYjFnBmrRGCc1e0vTrl1NpGQi79ide7LED5lG3CLHS+H/cAyCfiyOGcTYF7LZih995mLyH+islJlaynTm616I4B5UJ9QT50KV97Bs1oVVoXkphCMJb9oufIRoveGgf7uviAMT91rdLsWxe6k13E3XQ0hn7OICCKI4mmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qb21qx1C; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741639055; c=relaxed/simple;
+	bh=OfMVYqqFFkSNq/+Ee2JetRRusWo5/h3tArQ8z2C4Z20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ny/+zj3bFlyMDwdlrlDBHDv1vAJYSqMdGPcNO0I4CzvR5yyE3IS8HZVrWHD70HOfwskN0JS5/YtA6ae3va1Ut5PePTBBbQvmJoJTKUNyYPRv1mlDxgdRH7GUybuo5o0Bl6nhaRBgne9dyRBVnjLLdT88E6qhtWj5WsnUrYuJlX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVNRCSLr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qb21qx1C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741638665; x=1773174665;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2lWjYVwUD4B+ylfpdDXy2c+UG5vZSSB2NoEDcFhh5yc=;
-  b=Qb21qx1CC1iry6v0R67nSPqntR2G92jghm1VAgDteaa+LahnMYqacdza
-   esHGLmNcVnsMp3ag42W443LV4YAtWLBcUmcXxqfCvMIsEc5dS+1NXwPPQ
-   1D7xjbh6AOgjGFKJp0rKOmELMFyj02++s0nLWLZg1UZsnICnVY/ifWs+B
-   dx0yo6RL2OmprlejDQxdYszBcydFZw/oub/KPX7k5sQ1a7Xde68vbTts/
-   9i1R0SIdq6uiFx/uMkQ2/TBfy9OGcr/AQt/lRTT/ECAtYSqyEOM/H1eoe
-   JXCXkDDB82p2NBsw9VZdfb1HbhRB4bDffPCHGXk7sg6YNh24ATiOdnxee
-   A==;
-X-CSE-ConnectionGUID: Hc3TTWFBSO6bFmIJ8a+zGw==
-X-CSE-MsgGUID: 1VGknH2iStmhh4ZULWDwXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="54030135"
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="54030135"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 13:31:04 -0700
-X-CSE-ConnectionGUID: XZgJbwoQRLmNcCgb1HNfmQ==
-X-CSE-MsgGUID: Bpa1+CaCTdSnuHBcKhFBww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="125134358"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 10 Mar 2025 13:31:03 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trjm8-00063o-2q;
-	Mon, 10 Mar 2025 20:31:00 +0000
-Date: Tue, 11 Mar 2025 04:30:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: [watchdog-next:v6.15-rc1 4/7]
- drivers/watchdog/lenovo_se30_wdt.c:272:24: error: call to undeclared
- function 'devm_ioremap'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202503110448.Q9dbJblV-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVNRCSLr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2C1C4CEE5;
+	Mon, 10 Mar 2025 20:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741639054;
+	bh=OfMVYqqFFkSNq/+Ee2JetRRusWo5/h3tArQ8z2C4Z20=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GVNRCSLr+1275JLWhr2XlHUVENMs5dBX2OgWgPpeJFqkwc1pcU1G6p0OZimqdJhmZ
+	 5pyMCHbW5anEVCwcDBNq4jjA4ZLYQwuBz9PRRIYk43kP/+txjcWyygMFRZTsLY+uZB
+	 uxmP0/hNH5Bwm7Zly0jPEt9A44Uno355EnI/QC3pqcr/D4FzDgBIwMmXA/8l5O70XI
+	 q/29lLZTYlyU1kIBbzXI1dhOv/i21z/S+M4nLK1TNPMJdiyN3O/LpHXBkxmxEPRlJa
+	 WaXKENBZkFEjB3BiwqudQE/U76lpskmWXmibnUyQx8w7KzLS+b6JihSX2wX/Gi3DuP
+	 VU9naJB+PsefA==
+Date: Mon, 10 Mar 2025 21:37:29 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>, Christian Eggers <ceggers@arri.de>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Yuntao Liu <liuyuntao12@huawei.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ARM: substitute OVERLAY description in linker
+ script
+Message-ID: <20250310203729.GA26968@ax162>
+References: <20250224125414.2184-1-ceggers@arri.de>
+ <202503050230.820w99b6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,149 +51,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202503050230.820w99b6-lkp@intel.com>
 
-tree:   git://www.linux-watchdog.org/linux-watchdog-next.git v6.15-rc1
-head:   d127d9ce2c8ee87d51fdcfff7895661a3c06fb24
-commit: c284153a2c5537db4fec51ac850c17d2eb1ffcfe [4/7] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30 platform
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250311/202503110448.Q9dbJblV-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503110448.Q9dbJblV-lkp@intel.com/reproduce)
+On Wed, Mar 05, 2025 at 02:49:38AM +0800, kernel test robot wrote:
+> Hi Christian,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on soc/for-next]
+> [also build test ERROR on linus/master v6.14-rc5 next-20250304]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Eggers/ARM-avoid-that-vectors-are-removed-during-linker-garbage-collection/20250224-210146
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> patch link:    https://lore.kernel.org/r/20250224125414.2184-1-ceggers%40arri.de
+> patch subject: [PATCH v2 1/2] ARM: substitute OVERLAY description in linker script
+> config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20250305/202503050230.820w99b6-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050230.820w99b6-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503050230.820w99b6-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: section .vectors.bhb.bpiall virtual address range overlaps with .vectors.bhb.loop8
+>    >>> .vectors.bhb.bpiall range is [0xFFFF0000, 0xFFFF001F]
+>    >>> .vectors.bhb.loop8 range is [0xFFFF0000, 0xFFFF001F]
+> --
+> >> ld.lld: error: section .vectors.bhb.loop8 virtual address range overlaps with .vectors
+>    >>> .vectors.bhb.loop8 range is [0xFFFF0000, 0xFFFF001F]
+>    >>> .vectors range is [0xFFFF0000, 0xFFFF001F]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503110448.Q9dbJblV-lkp@intel.com/
+Looking at ld.lld's code, this error is intentionally ignored for
+OVERLAY:
 
-All errors (new ones prefixed by >>):
+https://github.com/llvm/llvm-project/blob/9f170e6abed4a7b393bb8abbf07ac8d6930aa3b0/lld/ELF/Writer.cpp#L2751-L2761
 
-   In file included from drivers/watchdog/lenovo_se30_wdt.c:10:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/watchdog/lenovo_se30_wdt.c:10:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/watchdog/lenovo_se30_wdt.c:10:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/watchdog/lenovo_se30_wdt.c:272:24: error: call to undeclared function 'devm_ioremap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, SHM_WIN_SIZE);
-         |                               ^
-   drivers/watchdog/lenovo_se30_wdt.c:272:22: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
-     272 |         priv->shm_base_addr = devm_ioremap(dev, base_phys, SHM_WIN_SIZE);
-         |                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   12 warnings and 2 errors generated.
+I have submitted a patch that allows KEEP within OVERLAY to match GNU
+ld:
 
+https://github.com/llvm/llvm-project/pull/130661
 
-vim +/devm_ioremap +272 drivers/watchdog/lenovo_se30_wdt.c
+Once/if that is accepted, we should go back to your v1 with something
+like the following diff on top to keep things working for all linkers. I
+hope that it won't take long for the ld.lld change to get reviewed and
+landed but if this needs to be fixed urgently, this whole diff minus
+'|| LLD_VERSION >= 210000' on the init/Kconfig change should work (with
+a comment change). I can always send a follow up change to add it back.
 
-   233	
-   234	static int lenovo_se30_wdt_probe(struct platform_device *pdev)
-   235	{
-   236		struct device *dev = &pdev->dev;
-   237		struct lenovo_se30_wdt *priv;
-   238		unsigned long base_phys;
-   239		unsigned short val;
-   240		int err;
-   241	
-   242		err = superio_enter(UNLOCK_KEY, SIO_REG, LNV_SE30_NAME);
-   243		if (err)
-   244			return err;
-   245	
-   246		val = superio_inb(SIO_REG, CHIPID_REG) << 8;
-   247		val |= superio_inb(SIO_REG, CHIPID_REG + 1);
-   248	
-   249		if ((val & CHIPID_MASK) != LNV_SE30_ID) {
-   250			superio_exit(LOCK_KEY, SIO_REG);
-   251			return -ENODEV;
-   252		}
-   253	
-   254		superio_outb(SIO_REG, LDN_REG, LD_NUM_SHM);
-   255		base_phys = (superio_inb(SIO_REG, LD_BASE_ADDR) |
-   256				 (superio_inb(SIO_REG, LD_BASE_ADDR + 1) << 8) |
-   257				 (superio_inb(SIO_REG, LD_BASE_ADDR + 2) << 16) |
-   258				 (superio_inb(SIO_REG, LD_BASE_ADDR + 3) << 24)) &
-   259				0xFFFFFFFF;
-   260	
-   261		superio_exit(LOCK_KEY, SIO_REG);
-   262		if (base_phys == 0xFFFFFFFF || base_phys == 0)
-   263			return -ENODEV;
-   264	
-   265		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   266		if (!priv)
-   267			return -ENOMEM;
-   268	
-   269		if (!devm_request_mem_region(dev, base_phys, SHM_WIN_SIZE, LNV_SE30_NAME))
-   270			return -EBUSY;
-   271	
- > 272		priv->shm_base_addr = devm_ioremap(dev, base_phys, SHM_WIN_SIZE);
-   273	
-   274		priv->wdt_cfg.mod = WDT_MODULE;
-   275		priv->wdt_cfg.idx = WDT_CFG_INDEX;
-   276		priv->wdt_cnt.mod = WDT_MODULE;
-   277		priv->wdt_cnt.idx = WDT_CNT_INDEX;
-   278	
-   279		priv->wdt.ops = &lenovo_se30_wdt_ops;
-   280		priv->wdt.info = &lenovo_se30_wdt_info;
-   281		priv->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
-   282		priv->wdt.min_timeout = MIN_TIMEOUT;
-   283		priv->wdt.max_timeout = MAX_TIMEOUT;
-   284		priv->wdt.parent = dev;
-   285	
-   286		watchdog_init_timeout(&priv->wdt, timeout, dev);
-   287		watchdog_set_drvdata(&priv->wdt, priv);
-   288		watchdog_set_nowayout(&priv->wdt, nowayout);
-   289		watchdog_stop_on_reboot(&priv->wdt);
-   290		watchdog_stop_on_unregister(&priv->wdt);
-   291	
-   292		return devm_watchdog_register_device(dev, &priv->wdt);
-   293	}
-   294	
+Cheers,
+Nathan
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 835b5f100e92..f3f6b7a33b79 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -121,7 +121,7 @@ config ARM
+ 	select HAVE_KERNEL_XZ
+ 	select HAVE_KPROBES if !XIP_KERNEL && !CPU_ENDIAN_BE32 && !CPU_V7M
+ 	select HAVE_KRETPROBES if HAVE_KPROBES
+-	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if (LD_VERSION >= 23600 || LD_IS_LLD)
++	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if (LD_VERSION >= 23600 || LD_CAN_USE_KEEP_IN_OVERLAY)
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
+ 	select HAVE_OPTPROBES if !THUMB2_KERNEL
+diff --git a/arch/arm/include/asm/vmlinux.lds.h b/arch/arm/include/asm/vmlinux.lds.h
+index f2ff79f740ab..14811b4f48ec 100644
+--- a/arch/arm/include/asm/vmlinux.lds.h
++++ b/arch/arm/include/asm/vmlinux.lds.h
+@@ -34,6 +34,12 @@
+ #define NOCROSSREFS
+ #endif
+ 
++#ifdef CONFIG_LD_CAN_USE_KEEP_IN_OVERLAY
++#define OVERLAY_KEEP(x)		KEEP(x)
++#else
++#define OVERLAY_KEEP(x)		x
++#endif
++
+ /* Set start/end symbol names to the LMA for the section */
+ #define ARM_LMA(sym, section)						\
+ 	sym##_start = LOADADDR(section);				\
+@@ -125,13 +131,13 @@
+ 	__vectors_lma = .;						\
+ 	OVERLAY 0xffff0000 : NOCROSSREFS AT(__vectors_lma) {		\
+ 		.vectors {						\
+-			KEEP(*(.vectors))				\
++			OVERLAY_KEEP(*(.vectors))			\
+ 		}							\
+ 		.vectors.bhb.loop8 {					\
+-			KEEP(*(.vectors.bhb.loop8))			\
++			OVERLAY_KEEP(*(.vectors.bhb.loop8))		\
+ 		}							\
+ 		.vectors.bhb.bpiall {					\
+-			KEEP(*(.vectors.bhb.bpiall))			\
++			OVERLAY_KEEP(*(.vectors.bhb.bpiall))		\
+ 		}							\
+ 	}								\
+ 	ARM_LMA(__vectors, .vectors);					\
+diff --git a/init/Kconfig b/init/Kconfig
+index d0d021b3fa3b..fc994f5cd5db 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -129,6 +129,11 @@ config CC_HAS_COUNTED_BY
+ 	# https://github.com/llvm/llvm-project/pull/112636
+ 	depends on !(CC_IS_CLANG && CLANG_VERSION < 190103)
+ 
++config LD_CAN_USE_KEEP_IN_OVERLAY
++	# ld.lld prior to 21.0.0 did not support KEEP within an overlay description
++	# https://github.com/llvm/llvm-project/pull/130661
++	def_bool LD_IS_BFD || LLD_VERSION >= 210000
++
+ config RUSTC_HAS_COERCE_POINTEE
+ 	def_bool RUSTC_VERSION >= 108400
+ 
