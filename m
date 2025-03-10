@@ -1,186 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69681A935;
-	Mon, 10 Mar 2025 02:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C85C19004A
+	for <llvm@lists.linux.dev>; Mon, 10 Mar 2025 02:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741572233; cv=none; b=qtFGsOGn4qyGdM4NNjJHnej6KN4awnRtQbUe6oqzGWfzdhF/6+nLeKCycXzRC72OzHhfHnSlDrwVyv4YChTVaeCMbBdR2eY2rcVQw+NNeHka4LLEy57hRX8V1hxNl5McVOKypHMpPCBRiqOqW4GZaWb8qXL2i4OwA1jrMeKC/fk=
+	t=1741572895; cv=none; b=NKQLpxf0Pm0NSnCKAWUBGH3okxYEuHwXg9Zdrub6ANGvJLdvUoxDb1TjOIefQT9RLvX1CPCxcR/x6WpBrMiMf0ASDnyPwOK+uB2Asfi1ai52g3GAEiEPUIfyaC4Gifr1orh0TkIBwMrj9xYjD0sFXp5h41guKf/yXVeDszAT+g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741572233; c=relaxed/simple;
-	bh=6CykNk9cUToWOqSzi+0FSLKdtYh2ymFzaVs96PibQ6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOrpxHsAHhgW9/mspaITc4Zz13J/hglJd5jZBUz0OSMlAkGF/vUqhSu2cJO/sUaIWiTq5XQDweOVySFEd/LXNnBoKUYxJYwJ4P74girMsiMGV3q6YxDRvyOmGbe+0K1c6gQKYV3yhXJ9rHjcugk5kHHRR9VEnsjIU92g6MXuuu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bVOnBdhh; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741572895; c=relaxed/simple;
+	bh=P1T3On3tQTNTqqVq7iaUH7NJxNTY4cbFFUUGfn6kpVA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RWJ4VQd5OGeAhdNm4xRsHf9wnm3k0D1cbxLFAjF1hTDXGzTT8wG99xMyy7orfgmf5xiTpish5MXV+ktjtuZZ27nW6Cog1tw8P13Hejm9DfkOys5mpiPtiadvMR3dKuw5PAXTtymBTlNsZKYXYuL/9n4nC7/Mh8oR0evzcMvq/V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com; spf=pass smtp.mailfrom=ethancedwards.com; dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b=e3SCGore; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ethancedwards.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bVOnBdhh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741572232; x=1773108232;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6CykNk9cUToWOqSzi+0FSLKdtYh2ymFzaVs96PibQ6M=;
-  b=bVOnBdhhHR3fLgAUAoxH2rDH8/4BS8UwCRvnhjaX5qMo1hL86QRktfKS
-   FxIcl603aNrBvLmRPcB3xccrcRYkNp0QjHluYkM8KBQcPR3sCSGEPlEA0
-   ZhGIKncuuDPoNIRRviehtnAp6iPqedMz3ZxgDu64raUJ0Of7+il+VG7oG
-   Kwwhd530B/TVPhQ8bYiQvIpfU95+VWdafQfM+ytqHUgbx739FnF/hrL6x
-   LZV1OiEC5kcaOxLtarOwY7RRj0C9Tkpy066L5hVuZTCyvw6fqsrULRgJP
-   wW+iVXRSdLjTtIkaMt1WLG9xD7eK/bAn47VsFYiBtnqllucUyErHYVly0
-   w==;
-X-CSE-ConnectionGUID: RVtvTeJZSxewvTVf13W61Q==
-X-CSE-MsgGUID: q6NgxTRuTlyDp9JBReTj/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11368"; a="53193570"
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="53193570"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2025 19:03:50 -0700
-X-CSE-ConnectionGUID: BjxoIDHuSPq56c0P2KxA4Q==
-X-CSE-MsgGUID: que1fRfzQBqTdfIlhlvZOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,235,1736841600"; 
-   d="scan'208";a="124456649"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Mar 2025 19:03:17 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trSU6-0003hE-2M;
-	Mon, 10 Mar 2025 02:03:14 +0000
-Date: Mon, 10 Mar 2025 10:02:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jan Dakinevich <jan.dakinevich@salutedevices.com>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Jaroslav Kysela <perex@perex.cz>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-sound@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Rob Herring <robh@kernel.org>, Takashi Iwai <tiwai@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/4] ASoC: meson: g12a-toacodec: drop the definition
- of bits
-Message-ID: <202503100909.xnqNYW9u-lkp@intel.com>
-References: <20250309181600.1322701-3-jan.dakinevich@salutedevices.com>
+	dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b="e3SCGore"
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4ZB0pC6YMYz9sQX;
+	Mon, 10 Mar 2025 03:14:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ethancedwards.com;
+	s=MBO0001; t=1741572884;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PgClmaMdMd5lNbUr6yZ8zi6Q3ctl2WTDB68s025YeDo=;
+	b=e3SCGorePYw2i0g46qGpLBJi/BH4Kcf88f/Zm9Izi0ERBGOhnkpMxHfhHkUbuDRl/S1jts
+	j7jqeKvRw5BDPCrNpSK0DSmF8FOg7HKn7J4Mel9uKnGReOvfH+DsAw4SG+XV0rPyh5vEzA
+	iVLppE17RudH/xZCEFq8K7DqBzlMxKV5ldeEo+wOtXS/WxktjKNojRX3DsjyUtkxWIv8Ec
+	swRy5QaJwI0j8Ibsasu1bKhBXfief2WUBekCay5ulknSYmiI9oVH6iOznFTSnXoaOAWMWT
+	vxob/lcl4cJwVwpRXZmqBgTcaUCXgFfvpLyhmxwuMh0ucOCWf81UrssjRQfQpg==
+From: Ethan Carter Edwards <ethan@ethancedwards.com>
+Date: Sun, 09 Mar 2025 22:14:36 -0400
+Subject: [PATCH] rust/kernel/faux: mark Registration methods inline
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250309181600.1322701-3-jan.dakinevich@salutedevices.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250309-faux-inline-v1-1-c1b692862433@ethancedwards.com>
+X-B4-Tracking: v=1; b=H4sIAAtLzmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDYwNL3bTE0grdzLyczLxUXbNki9TUxBTDpOQUAyWgjoKi1LTMCrBp0bG
+ 1tQAfoO5lXQAAAA==
+X-Change-ID: 20250309-faux-inline-6c8eead1bcd0
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Ethan Carter Edwards <ethan@ethancedwards.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1825;
+ i=ethan@ethancedwards.com; h=from:subject:message-id;
+ bh=P1T3On3tQTNTqqVq7iaUH7NJxNTY4cbFFUUGfn6kpVA=;
+ b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0o0bkp2QXk4ekFKWGJEOXFoNThlVGp6e
+ GhQcXlVeHBKL3o1dHRXazNpcTJaOTc5N0kzUXZ6T2RobXM3REc5ClgydmZMODJxdi9PZlg5WWw0
+ bDVIS1F1REdCZURySmdpeS84YzViU0htak1VZHY1MWFZS1p3OG9FTW9TQmkxTUEKSnJLR25aRmg
+ 4cXgrcmR5Y1hSekxib3F0ZWIwMHRrNVJjR29UZDVPQlp2VHZpWlVSczdjYk16S2NVZHA0UGVxdA
+ poVlFXeHpOVjQzbnAyd1Q3anRXeC9Ybys0ZUR5dU04Y0Z3N3hBZ0FuYlVuSwo9MUxKbgotLS0tL
+ UVORCBQR1AgTUVTU0FHRS0tLS0tCg==
+X-Developer-Key: i=ethan@ethancedwards.com; a=openpgp;
+ fpr=2E51F61839D1FA947A7300C234C04305D581DBFE
 
-Hi Jan,
+When building the kernel on Arch Linux using on x86_64 with tools:
+$ rustc --version
+rustc 1.84.0 (9fc6b4312 2025-01-07)
+$ cargo --version
+cargo 1.84.0 (66221abde 2024-11-19)
+$ clang --version
+clang version 19.1.7
+Target: x86_64-pc-linux-gnu
 
-kernel test robot noticed the following build warnings:
+The following symbols are generated:
+$ nm vmlinux | rg ' _R' | rustfilt | rg faux
+ffffffff81959ae0 T <kernel::faux::Registration>::new
+ffffffff81959b40 T <kernel::faux::Registration as core::ops::drop::Drop>::drop
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.14-rc5 next-20250307]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, these Rust symbols are wrappers around bindings in the C faux
+code. Inlining these functions removes the middle-man wrapper function
+After applying this patch, the above function signatures disappear.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jan-Dakinevich/ASoC-meson-codec-glue-add-support-for-capture-stream/20250310-022013
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20250309181600.1322701-3-jan.dakinevich%40salutedevices.com
-patch subject: [PATCH v2 2/4] ASoC: meson: g12a-toacodec: drop the definition of bits
-config: i386-buildonly-randconfig-005-20250310 (https://download.01.org/0day-ci/archive/20250310/202503100909.xnqNYW9u-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250310/202503100909.xnqNYW9u-lkp@intel.com/reproduce)
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
+---
+ rust/kernel/faux.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503100909.xnqNYW9u-lkp@intel.com/
+diff --git a/rust/kernel/faux.rs b/rust/kernel/faux.rs
+index 5acc0c02d451f6d5a26b837d509374d508f26368..5fdd85ea64398130066d38e42f7c7485673f290c 100644
+--- a/rust/kernel/faux.rs
++++ b/rust/kernel/faux.rs
+@@ -24,6 +24,7 @@
+ 
+ impl Registration {
+     /// Create and register a new faux device with the given name.
++    #[inline]
+     pub fn new(name: &CStr) -> Result<Self> {
+         // SAFETY:
+         // - `name` is copied by this function into its own storage
+@@ -50,6 +51,7 @@ fn as_ref(&self) -> &device::Device {
+ }
+ 
+ impl Drop for Registration {
++    #[inline]
+     fn drop(&mut self) {
+         // SAFETY: `self.0` is a valid registered faux_device via our type invariants.
+         unsafe { bindings::faux_device_destroy(self.as_raw()) }
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: fc2f191f850d9a2fb1b78c51d49076e60fb42c49
+change-id: 20250309-faux-inline-6c8eead1bcd0
 
->> sound/soc/meson/g12a-toacodec.c:83:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mclk_sel), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mclk_sel)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-      83 |                                       FIELD_PREP(mclk_sel, mux));
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
-     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
-      72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-      73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      74 |                                  _pfx "type of reg too small for mask"); \
-         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-   include/linux/compiler_types.h:542:22: note: expanded from macro 'compiletime_assert'
-     542 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:530:23: note: expanded from macro '_compiletime_assert'
-     530 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:522:9: note: expanded from macro '__compiletime_assert'
-     522 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   1 warning generated.
-
-
-vim +83 sound/soc/meson/g12a-toacodec.c
-
-    42	
-    43	static int g12a_toacodec_mux_put_enum(struct snd_kcontrol *kcontrol,
-    44					      struct snd_ctl_elem_value *ucontrol)
-    45	{
-    46		struct snd_soc_component *component =
-    47			snd_soc_dapm_kcontrol_component(kcontrol);
-    48		struct g12a_toacodec *priv = snd_soc_component_get_drvdata(component);
-    49		struct snd_soc_dapm_context *dapm =
-    50			snd_soc_dapm_kcontrol_dapm(kcontrol);
-    51		struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
-    52		unsigned int mclk_sel = GENMASK(2, 0);
-    53		unsigned int mux, reg;
-    54	
-    55		if (ucontrol->value.enumerated.item[0] >= e->items)
-    56			return -EINVAL;
-    57	
-    58		mux = snd_soc_enum_item_to_val(e, ucontrol->value.enumerated.item[0]);
-    59		regmap_field_read(priv->field_dat_sel, &reg);
-    60	
-    61		if (mux == reg)
-    62			return 0;
-    63	
-    64		/* Force disconnect of the mux while updating */
-    65		snd_soc_dapm_mux_update_power(dapm, kcontrol, 0, NULL, NULL);
-    66	
-    67		regmap_field_write(priv->field_dat_sel, mux);
-    68		regmap_field_write(priv->field_lrclk_sel, mux);
-    69		regmap_field_write(priv->field_bclk_sel, mux);
-    70	
-    71		/*
-    72		 * FIXME:
-    73		 * On this soc, the glue gets the MCLK directly from the clock
-    74		 * controller instead of going the through the TDM interface.
-    75		 *
-    76		 * Here we assume interface A uses clock A, etc ... While it is
-    77		 * true for now, it could be different. Instead the glue should
-    78		 * find out the clock used by the interface and select the same
-    79		 * source. For that, we will need regmap backed clock mux which
-    80		 * is a work in progress
-    81		 */
-    82		snd_soc_component_update_bits(component, e->reg, mclk_sel,
-  > 83					      FIELD_PREP(mclk_sel, mux));
-    84	
-    85		snd_soc_dapm_mux_update_power(dapm, kcontrol, mux, e, NULL);
-    86	
-    87		return 1;
-    88	}
-    89	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Ethan Carter Edwards <ethan@ethancedwards.com>
+
