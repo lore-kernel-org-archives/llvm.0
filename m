@@ -1,62 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3AF231A24;
-	Tue, 11 Mar 2025 11:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61BD216E05;
+	Tue, 11 Mar 2025 11:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741692081; cv=none; b=oEKvAtDOyDsxLWDIbMTjhCugA5F6+Zxm9gdKxRWB5AUgU1ggRVm8FXf0zETBMEUZivSmgir2FhRmI11R6vZwxYqgdyntYyd6KNczVWHXQRRjswidBZlFaet3AjF70qd6evUFtG2cdPDlO+VT04E2WSY3USvJSQE8kwk50sbyOZY=
+	t=1741692703; cv=none; b=t4UAlACYCHWu+rliPBTRDZAuuFts45rQojgQvznhjxKV063SILJhJIxyAxV/N2k7qBbBWh1L78Nk5gj7n8Dh1NwkShtKZYryYjPIMlk8C4tBfotRHg7PIDg7rdrGm7CD9bqmHBFGSYEm7PMfdNoBvA7R2TXrV9i9T2dCTNpd8RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741692081; c=relaxed/simple;
-	bh=nnIQqMrvpootJdeosqnzjSHdzPQS3AA2sGWdn9jPN9Y=;
+	s=arc-20240116; t=1741692703; c=relaxed/simple;
+	bh=0tsQsh3zhZV4peIz77XXKqRoGd4Q7VV6Rr61QE3yElU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=INuxryHtNpGv1cszry6BlH5V38MiCxzij0OPblytUMM1sxzvCg2FEi1aUBe4Kn9D80TjLgmFqQlgwcVnnv3VMg+bCpdtUKVtSO9SfOvIJNeBqFUEB1qIGz8Io/EYAXOxISj9fk+6tsfReJWhp0EFZIXEv9gzb1MPQKb1LVnjqN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P3HAGsCR; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=aBt9WkliFdnyNkY+rZ2VF0Z9G7JK9tN6jRPVSg6QFGbREyG8WGKjiwxrXBbx2rp+akpnO/4g3Y9k/pFnf5MI6niNXb2DX4tTdVlviWWW1EE6amgbgyQSlPiu+T/px9vqTdjqcvE/SPiKErwUqD/1gDQBPRyd0UUAzKgirJypXUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mMMU27jL; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P3HAGsCR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mMMU27jL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741692079; x=1773228079;
+  t=1741692702; x=1773228702;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=nnIQqMrvpootJdeosqnzjSHdzPQS3AA2sGWdn9jPN9Y=;
-  b=P3HAGsCRRycGYd+qbk0Vhu4hcTV9qmIauxfMaUpeLdMjauv4paYwTw7s
-   erHoSS096xFOWofu48jWK66ItDYoCz/yUb6ZRgDLGVzdprO0xt2+WoSFi
-   lumx+V1AsYFOOL3IMrFTuOZPZqatrhsmyC4KjAA5s8LBDS1oMzWsIsioz
-   3hBJxekgKjQIZeyg4EWZvubWJ+SKYUXzdlpzzERq2+QW1IYh+PU6mWi5N
-   ju8iA6joQ2gdM19iaHer4bZyMmMhAOJmM+MHEzKVTU2OHm9zAz7QuxeuP
-   HsFOkTHj/99YcQKRj415spKvcntaulHl8ddgyKlbhHXJAMDFUTQecD75B
-   g==;
-X-CSE-ConnectionGUID: F/du5rvOSDu/eCgNHqBIXA==
-X-CSE-MsgGUID: JRDMADwwTHaHgzAsqBI43g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="53350824"
+  bh=0tsQsh3zhZV4peIz77XXKqRoGd4Q7VV6Rr61QE3yElU=;
+  b=mMMU27jL531kG8H6/2nP23aZv+1BmSYCxYHjWKwIWI1eVGTkBNgP8DHl
+   7e7GiLCbRGDt1ZzOwI66pNRK7KY/altMdlvRHonBtTiTmJofRWWhdkFu3
+   WI789upI4SoEd/FZ8EK/+Ypac8vuxKRAL22hYT30PQVctAyOrXklDSwd0
+   RSjW8hboqn17TKGvqeSEFeKpsKbk1KjN8/IWovE8eSdrHkNlIffk0QCIP
+   UuujKd77QDXTXG439aY04LhdqmjJPexipu/p1pi1OjShSkZxF/lnztkWK
+   vqcdcVY8gU3qoQgJP/4QyIAfCYrYXf27bDkyRfppNs9YfG/rENWusegjT
+   A==;
+X-CSE-ConnectionGUID: BOpQfb+fTu+DgMzlB4na6g==
+X-CSE-MsgGUID: pgs26kmfSKeiS/HyxbSchw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="65182165"
 X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
-   d="scan'208";a="53350824"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 04:21:18 -0700
-X-CSE-ConnectionGUID: AARiflbFSIGPsZWc9OUZnw==
-X-CSE-MsgGUID: tjfMSEz4RMK62L9a6p2iMQ==
+   d="scan'208";a="65182165"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 04:31:41 -0700
+X-CSE-ConnectionGUID: saD4g5O3RZC3b8rSV/pfXw==
+X-CSE-MsgGUID: cabz44ZsQo6Mwgwk+BYESQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,238,1736841600"; 
-   d="scan'208";a="121000004"
+   d="scan'208";a="124897106"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 11 Mar 2025 04:21:15 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 11 Mar 2025 04:31:36 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trxfX-0006bg-18;
-	Tue, 11 Mar 2025 11:21:09 +0000
-Date: Tue, 11 Mar 2025 19:20:57 +0800
+	id 1trxpd-0006c0-2r;
+	Tue, 11 Mar 2025 11:31:33 +0000
+Date: Tue, 11 Mar 2025 19:31:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nam Tran <trannamatk@gmail.com>, pavel@kernel.org, lee@kernel.org,
-	krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org
+To: Andrey Ryabinin <arbn@yandex-team.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Nam Tran <trannamatk@gmail.com>
-Subject: Re: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
-Message-ID: <202503111910.ko7pwUem-lkp@intel.com>
-References: <20250306172126.24667-4-trannamatk@gmail.com>
+	Alexander Graf <graf@amazon.com>, James Gowans <jgowans@amazon.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+	Pratyush Yadav <ptyadav@amazon.de>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	David Rientjes <rientjes@google.com>,
+	Andrey Ryabinin <arbn@yandex-team.com>
+Subject: Re: [PATCH v2 4/7] kexec, kstate: delay loading of kexec segments
+Message-ID: <202503111944.pfx9UdvP-lkp@intel.com>
+References: <20250310120318.2124-5-arbn@yandex-team.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,46 +76,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250306172126.24667-4-trannamatk@gmail.com>
+In-Reply-To: <20250310120318.2124-5-arbn@yandex-team.com>
 
-Hi Nam,
+Hi Andrey,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on lee-leds/for-leds-next]
-[also build test ERROR on robh/for-next linus/master v6.14-rc6 next-20250307]
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on akpm-mm/mm-nonmm-unstable akpm-mm/mm-everything linus/master v6.14-rc6 next-20250307]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Tran/dt-bindings-leds-Add-LP5812-LED-driver/20250307-012604
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-patch link:    https://lore.kernel.org/r/20250306172126.24667-4-trannamatk%40gmail.com
-patch subject: [PATCH v3 3/3] leds: add new LED driver for TI LP5812
-config: x86_64-randconfig-077-20250310 (https://download.01.org/0day-ci/archive/20250311/202503111910.ko7pwUem-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503111910.ko7pwUem-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrey-Ryabinin/kstate-Add-kstate-a-mechanism-to-describe-and-migrate-kernel-state-across-kexec/20250310-200803
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20250310120318.2124-5-arbn%40yandex-team.com
+patch subject: [PATCH v2 4/7] kexec, kstate: delay loading of kexec segments
+config: i386-buildonly-randconfig-003-20250311 (https://download.01.org/0day-ci/archive/20250311/202503111944.pfx9UdvP-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503111944.pfx9UdvP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503111910.ko7pwUem-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503111944.pfx9UdvP-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in mm/kasan/kasan_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
->> ERROR: modpost: "lp5812_disable_all_leds" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_enable_disable" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_set_pwm_dimming_scale" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_get_pwm_dimming_scale" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_read" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_set_phase_align" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_get_phase_align" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_read_aep_status" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_read_auto_pwm_value" [drivers/leds/leds-lp5812.ko] undefined!
->> ERROR: modpost: "lp5812_read_lsd_status" [drivers/leds/leds-lp5812.ko] undefined!
-WARNING: modpost: suppressed 23 unresolved symbol warnings because there were too many)
+   In file included from kernel/vmcore_info.c:24:
+>> kernel/kexec_internal.h:39:43: error: incomplete definition of type 'struct kimage'
+      39 |         return IS_ENABLED(CONFIG_KSTATE) && image->file_mode &&
+         |                                             ~~~~~^
+   kernel/kexec_internal.h:9:8: note: forward declaration of 'struct kimage'
+       9 | struct kimage *do_kimage_alloc_init(void);
+         |        ^
+   kernel/kexec_internal.h:40:9: error: incomplete definition of type 'struct kimage'
+      40 |                 (image->type == KEXEC_TYPE_DEFAULT);
+         |                  ~~~~~^
+   kernel/kexec_internal.h:9:8: note: forward declaration of 'struct kimage'
+       9 | struct kimage *do_kimage_alloc_init(void);
+         |        ^
+>> kernel/kexec_internal.h:40:19: error: use of undeclared identifier 'KEXEC_TYPE_DEFAULT'
+      40 |                 (image->type == KEXEC_TYPE_DEFAULT);
+         |                                 ^
+   3 errors generated.
+
+
+vim +39 kernel/kexec_internal.h
+
+    36	
+    37	static inline bool kexec_late_load(struct kimage *image)
+    38	{
+  > 39		return IS_ENABLED(CONFIG_KSTATE) && image->file_mode &&
+  > 40			(image->type == KEXEC_TYPE_DEFAULT);
+    41	}
+    42	
 
 -- 
 0-DAY CI Kernel Test Service
