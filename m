@@ -1,132 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22285262818;
-	Tue, 11 Mar 2025 19:18:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA7D1925AF;
+	Tue, 11 Mar 2025 19:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741720683; cv=none; b=XzGOoDN/LXW+B73zOQLTU/pQzklYSGldLsQqafqgFLGMWh1aNCY7kOlg93H7pZtKEZMyFnI+I4yjhl9z1dDs7dDfYomdPYWjQq7tdFwHShoafMBxOlhgd47xmL0iN1EYFLmhhxDuDTzFbGmcTmqo4KfyliEEvW4EuKA4GBGzQ7w=
+	t=1741722236; cv=none; b=jauUCCLTwCkmS5UId8QV9zNjB8PrfEoDri+pRrbvPdF7g+ZDK8NjYh8GY4pLwVlIbrAtCtk1fT7cZrkr44Pho17rcYzKQ3+Uuen9Wb7ahsuMU5DwyjVLC4rAwEv6CqHl5StU/XTxEGEjET/rm/yzsYgbhuPb9YmblTL8Swkf1yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741720683; c=relaxed/simple;
-	bh=SsEEYkxbEBjU9Fy5Mp24bRmDLzFTU2qWFlecfqzLHyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qskgdxbW+51f4dsr4UknmzoOzgkPyRWWFOZTCqMQrvEXoRpiyrXL64k6e0EA4x5s+vWy3Np5IqTJgjfPeXCqJkgYwT594mZEz5AQtOGCYUvHD4F/vO4EEiAWIkV6c7N/zdO/0mPR/WT5MqnwJra1dWebAxyXBmfojelbFT4klsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXj08Ug0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741722236; c=relaxed/simple;
+	bh=6CumdRSXH7JR76ASCBI2D6itGYdbqs/RRrbSSuL1/1E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Zt+VaL8x2LLV+NwMThgaU8xKAGYykuRCfQ7mtMFwEg7OKT8UTld7zRf4b6CgWePZYfNpRhHauJpwovjrg+k2uNem3qlmPYq6R8nTOQM2wbfCe9JqaF6aQzSeXTqbR7ZJ9T6DDUAzGbL3vXFz22rAeQXG/vr5kSp+G64GnNjxIMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtJ8QrRG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXj08Ug0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E668EC4CEEC;
-	Tue, 11 Mar 2025 19:17:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtJ8QrRG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B5BC4CEE9;
+	Tue, 11 Mar 2025 19:43:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741720682;
-	bh=SsEEYkxbEBjU9Fy5Mp24bRmDLzFTU2qWFlecfqzLHyY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JXj08Ug0c18CbzPxiLU41gDA9ruR0ZBzerZ3kg/tNy9TvrFbw/jyUbtGasHdpna69
-	 xaXMUXZq0F0a1S0DpG/ojKgUWQcOp97KntnBBKJQuDgMP6g/Jj44/erNvv/cL3HJ/P
-	 HoRVMwkYEdqwUxRv6Ry7vPeRz5oGODychG1edtRuYQrANg6N84FRuG/x6+DNkpLYZW
-	 O3cXra1SkgFw4s/nqEoh38vBYc4JwZ1nWuCyEPvVIaG5JNwGWik+4ZYVq125jo/+3/
-	 3qQD22qyeGR82NMufqDEc2ARHCWswFC4QzuuHcIAo5rUoBTocr4OFkpLJeSkbJTEn5
-	 eI+q9ah5z9BjQ==
-Date: Tue, 11 Mar 2025 20:17:57 +0100
+	s=k20201202; t=1741722235;
+	bh=6CumdRSXH7JR76ASCBI2D6itGYdbqs/RRrbSSuL1/1E=;
+	h=From:Subject:Date:To:Cc:From;
+	b=dtJ8QrRGG1PP7j6FoFhKm+bfdhMkba2frzhFSbOX8g2w1NZGS2XyJa5+XaXumZZpV
+	 WSmIv+iZaVNENj/I/wTv8FOFabN3LpjFE5YQ2fRXPe5cKE85G/UrNCsfZqegWy5JoF
+	 uU/oXQ64QfuHAfip+wSLAC9vqcnKHbZXk5RDScrQCSZLiHNB8uCBp9JtX3jo+tTzcv
+	 OV5BUYTUbFcmWQvN7xy0/DwrDBdN4NuSaCLI6XknNU3ghU1wengnkrfopfpQy8Oryp
+	 aRjrgU3kH8u8bg/lHh4GToTCpv22PZI6cXgWO99FAlvw/nUwFpwgC2c3gdmreGTc/i
+	 i8iH+nlNB9d+A==
 From: Nathan Chancellor <nathan@kernel.org>
-To: Christian Eggers <ceggers@arri.de>
-Cc: kernel test robot <lkp@intel.com>, Russell King <linux@armlinux.org.uk>,
-	Yuntao Liu <liuyuntao12@huawei.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] ARM: substitute OVERLAY description in linker
- script
-Message-ID: <20250311191757.GA1958594@ax162>
-References: <20250224125414.2184-1-ceggers@arri.de>
- <202503050230.820w99b6-lkp@intel.com>
- <20250310203729.GA26968@ax162>
- <2110116.YKUYFuaPT4@n9w6sw14>
+Subject: [PATCH 0/2] ARM: Fix ARM_VECTORS with
+ CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+Date: Tue, 11 Mar 2025 20:43:41 +0100
+Message-Id: <20250311-arm-fix-vectors-with-linker-dce-v1-0-ec4c382e3bfd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2110116.YKUYFuaPT4@n9w6sw14>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG2S0GcC/x2N0QpAQBAAf0X7bOsOF/kVeXBnseFoTyj5d5fHq
+ WnmgUDCFKBOHhA6OfDmI+g0ATd1fiTkPjJkKjMq1xo7WXHgG09yxyYBLz4mXNjPJNg7wiovSmO
+ VrQZjIVZ2oaj/h6Z93w+tnhrGcQAAAA==
+X-Change-ID: 20250311-arm-fix-vectors-with-linker-dce-83475b0b8f5b
+To: Russell King <linux@armlinux.org.uk>
+Cc: Christian Eggers <ceggers@arri.de>, Arnd Bergmann <arnd@arndb.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Yuntao Liu <liuyuntao12@huawei.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1114; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=6CumdRSXH7JR76ASCBI2D6itGYdbqs/RRrbSSuL1/1E=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOkXJlUyCyWuT3ta8MFbRfqN5bXL3AG9EpufZe80mL/p8
+ ZprUknGHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiTpGMDKfPHKsTUHnVV2C7
+ 5Hh1HPvUkpl/TOcu51l69v5t5srZP2IZ/meu10lad/WXl9Tc4J81TXMffVBfqBG+L+b7pf51Llv
+ dalkA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Mar 11, 2025 at 09:18:48AM +0100, Christian Eggers wrote:
-> thanks for pushing this into the right direction.  Actually I didn't recognize that
-> lld complains about overlapping virtual address ranges, maybe the .config provided
-> by the first LKP report (which I used for testing) didn't enable the necessary options.
+Hi all,
 
-Right, it looks like CONFIG_HARDEN_BRANCH_HISTORY is not enabled in the
-first configuration (since it was a randconfig) whereas it was in the
-second configuration.
+Christian sent a fix [1] for ARM_VECTORS with
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION that exposed a deficiency in ld.lld
+with regards to KEEP() within an OVERLAY description. I have fixed that
+in ld.lld [2] and added a patch before Christian's to disallow
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION when KEEP() cannot be used within
+OVERLAY to keep everything working for all linkers.
 
-> On Monday, 10 March 2025, 21:37:29 CET, Nathan Chancellor wrote:
-> > On Wed, Mar 05, 2025 at 02:49:38AM +0800, kernel test robot wrote:
-> > > Hi Christian,
-> > > 
-> > > kernel test robot noticed the following build errors:
-> > > 
-> > > [auto build test ERROR on soc/for-next]
-> > > [also build test ERROR on linus/master v6.14-rc5 next-20250304]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Eggers/ARM-avoid-that-vectors-are-removed-during-linker-garbage-collection/20250224-210146
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-> > > patch link:    https://lore.kernel.org/r/20250224125414.2184-1-ceggers%40arri.de
-> > > patch subject: [PATCH v2 1/2] ARM: substitute OVERLAY description in linker script
-> > > config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20250305/202503050230.820w99b6-lkp@intel.com/config)
-> > > compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250305/202503050230.820w99b6-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503050230.820w99b6-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> ld.lld: error: section .vectors.bhb.bpiall virtual address range overlaps with .vectors.bhb.loop8
-> > >    >>> .vectors.bhb.bpiall range is [0xFFFF0000, 0xFFFF001F]
-> > >    >>> .vectors.bhb.loop8 range is [0xFFFF0000, 0xFFFF001F]
-> > > --
-> > > >> ld.lld: error: section .vectors.bhb.loop8 virtual address range overlaps with .vectors
-> > >    >>> .vectors.bhb.loop8 range is [0xFFFF0000, 0xFFFF001F]
-> > >    >>> .vectors range is [0xFFFF0000, 0xFFFF001F]
-> > 
-> > Looking at ld.lld's code, this error is intentionally ignored for
-> > OVERLAY:
-> > 
-> > https://github.com/llvm/llvm-project/blob/9f170e6abed4a7b393bb8abbf07ac8d6930aa3b0/lld/ELF/Writer.cpp#L2751-L2761
-> > 
-> > I have submitted a patch that allows KEEP within OVERLAY to match GNU
-> > ld:
-> > 
-> > https://github.com/llvm/llvm-project/pull/130661
-> > 
-> > Once/if that is accepted, we should go back to your v1 with something
-> > like the following diff on top to keep things working for all linkers. I
-> > hope that it won't take long for the ld.lld change to get reviewed and
-> > landed but if this needs to be fixed urgently, this whole diff minus
-> > '|| LLD_VERSION >= 210000' on the init/Kconfig change should work (with
-> > a comment change). I can always send a follow up change to add it back.
-> 
-> 
-> I build from an internal tree, so I am not in hurry.  As the Kconfig changes
-> probably should take your Signed-Off-By, I am also fine if you do the necessary
-> changes on my v1 and resubmit it together with your patch when it is time.
+[1]: https://lore.kernel.org/20250221125520.14035-1-ceggers@arri.de/
+[2]: https://github.com/llvm/llvm-project/commit/381599f1fe973afad3094e55ec99b1620dba7d8c
 
-I landed the ld.lld change a little bit ago so I will go ahead and send
-along my patch plus yours formally shortly.
+---
+Christian Eggers (1):
+      ARM: add KEEP() keyword to ARM_VECTORS
 
-https://github.com/llvm/llvm-project/commit/381599f1fe973afad3094e55ec99b1620dba7d8c
+Nathan Chancellor (1):
+      ARM: Require linker to support KEEP within OVERLAY for DCE
 
-Thanks again for bringing this up.
+ arch/arm/Kconfig                   |  2 +-
+ arch/arm/include/asm/vmlinux.lds.h | 12 +++++++++---
+ init/Kconfig                       |  5 +++++
+ 3 files changed, 15 insertions(+), 4 deletions(-)
+---
+base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
+change-id: 20250311-arm-fix-vectors-with-linker-dce-83475b0b8f5b
 
-Cheers,
-Nathan
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
