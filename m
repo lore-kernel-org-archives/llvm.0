@@ -1,212 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a8-71.smtp-out.amazonses.com (a8-71.smtp-out.amazonses.com [54.240.8.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391D822FF21;
-	Tue, 11 Mar 2025 23:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F206225764
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 23:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741736846; cv=none; b=tQV49Dt3yDDiAiuadmSmgRgrkEm0k5g6NesjVr68fce3KD4xYGw+oMyRrbgVbp/6G5tp9nsz+r2DhAN+RMomLwBVJ70+Fp25Udx2+Y9XZ9XuwKbcsQ7RUms65OTrI+mmz1KDfJkllh+0Wmt0oVi/8r7AJrTJCJnn8/9KPYPI/Tk=
+	t=1741737528; cv=none; b=DQPD/qfXdH9PkSvAwTXI8QTsLa2fYhZfUANINDvzF75nVUVDdFlLy9tsYMnmk0hZ9OlLtdoljv4cw6s1fHT2Cjh5LX0xsGuDAg7w5Qdis67LCj/RMxUiGtTcyK/RxU24e4yaAtIglQyhODKoL78MvDGVAUYo0VIB7F+tt85c6Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741736846; c=relaxed/simple;
-	bh=/lEdIXbI/VJtmkUzwdF68fmABwXOBzciQgEQa6XAc4M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fvnkzHVObMjDESGsBdtgIdT7LsWy5ClVz/BdHVrVbSufpnKrS5IWG95fHSEeVimD5PWRExPugHysIBfhxWLonAvqOOadPqbTKd+dOARXJeuxhqnsfwa0ofSW5rulPqJkS8ujU/GtubXZL5e0tigq1KOGvSA0ybYZjEvXsakGdlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bEiEh0ID; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741737528; c=relaxed/simple;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lN6Y37EjeFPG1tN0vezwUIAnlt1ua43uLUXw14+bsUSmu+sONF5aVJ49e9nkbtQUCYGrsA+jb0Qz9ljg/RUsouaPg1lroZk03KYOBIQ38IlmAfaM567hxPkbZL/PqyHQNVxNpCjjK1/id7cu4K2wZYoziiFgy4uXTontTja23Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=2cNXV4WV; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=UoYVnyIr; arc=none smtp.client-ip=54.240.8.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bEiEh0ID"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741736844; x=1773272844;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/lEdIXbI/VJtmkUzwdF68fmABwXOBzciQgEQa6XAc4M=;
-  b=bEiEh0IDveoyzrUFQa2TxRCVW9ZM0tw0Oq84jDH1HRyrVq0JVj21en/L
-   UypI/zqKc4pdXzNkxwgy1xP6vG3jZf7fk1ivlTvR+TxkRr4uV1dsVfCoj
-   C6drMReNaKYX2KD3a2ReUeLTAUBuSLsd4wg5fsdxRgttJduzIszd9yGY0
-   OOgma67qEAVp9+3P6xM14jwEdih9roLf0ztpO0n17embCH9Di359kdazQ
-   ozQhI2pI+g+ehE7wjPYKq9l6r/JClFoHlNo6vDXST6TVFvEnkkC7GbxzL
-   +ZpmO/rCJYeeVN2u21vjRhVLIgioV5a053v5gJ0ARMsOCSvpD6ga5EG2+
-   g==;
-X-CSE-ConnectionGUID: G0ItK5UxRx2R943Bo/b9MA==
-X-CSE-MsgGUID: Pl9FuI2LRH+qZQlLLSTLsA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="54170936"
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="54170936"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 16:47:21 -0700
-X-CSE-ConnectionGUID: P1dTs0MyQhWF3zPHswrf+g==
-X-CSE-MsgGUID: RnmQ39ZvSeWBq0NcoaySIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="124633697"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Mar 2025 16:47:14 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts9JV-0007xA-14;
-	Tue, 11 Mar 2025 23:47:09 +0000
-Date: Wed, 12 Mar 2025 07:46:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:nfsd-tracepoints 14/14] fs/nfsd/nfsproc.c:57:2: error: call
- to undeclared function 'trace_nfsd_proc_getattr'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202503120709.9Bvf9RNI-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="2cNXV4WV";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="UoYVnyIr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
+	t=1741737526;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	b=2cNXV4WVUh0BE51JLrfSf+4fdWdlgJ9QJYZ+3MJR9psS5FDJhXmyPU/htyhtEv5u
+	S4gm1z87X9wMuV1kMizprRD4MwHzjHGa3glXTd6O5vkjKWy6UX4RI1iwRFy+Bi/Ij2N
+	xTJDWafRJfjEOfgnbLPRay+HGsT5hwTerr2lmABIgRgro0puw+n/o+XBA/9Twx5Zn1o
+	fknYiaYNTkLz3AkzrpMxlZL9uruLXGjm3U0cErnn9z9Ei0NoE/tbUgWEl04rT4/v6+m
+	4H+0F1dh4z0Uj/abO7gJcu5NXWE2QoN0fSoOaCAf+tZ4w1ZSUG7ZslZ27M5WWyTIKxE
+	vwb8KtxL6g==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741737526;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	b=UoYVnyIrpN96davRcwMWnJySD49emQU1HoHu+xreGg2Eqvzb9fJsVclZd4bODTa4
+	cv2PD6EFbiMy4LqPJ043QrhDdq/4N8i33mRNEXZzD15FYnMitQahR9lR4dz5tRB0HmP
+	6t0racLtAVr+6F/Xld/hs5jKiWuajfM7W4Kc6zv4=
+From: Antonio Hickey <contact@antoniohickey.com>
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Antonio Hickey <contact@antoniohickey.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
+Date: Tue, 11 Mar 2025 23:58:45 +0000
+Message-ID: <0100019587a58230-1aed0f55-60a5-48c1-8791-10f28ce74cb3-000000@email.amazonses.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <0100019582fc6956-3b420cce-f122-4a26-8fea-94000b22bc90-000000@email.amazonses.com>
+References: <0100019582fc6956-3b420cce-f122-4a26-8fea-94000b22bc90-000000@email.amazonses.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
+X-SES-Outgoing: 2025.03.11-54.240.8.71
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git nfsd-tracepoints
-head:   406b15fe7fc917eb20c0cfe48d441442adad9918
-commit: 406b15fe7fc917eb20c0cfe48d441442adad9918 [14/14] nfsd: add tracepoint for GETATTR events
-config: arm-randconfig-003-20250312 (https://download.01.org/0day-ci/archive/20250312/202503120709.9Bvf9RNI-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120709.9Bvf9RNI-lkp@intel.com/reproduce)
+When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+toolchain provided by kernel.org with ARCH=x86_64, the following symbols
+are generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120709.9Bvf9RNI-lkp@intel.com/
+$nm vmlinux | grep ' _R'.*UserSliceReader | rustfilt
+ffffffff817c3320 T <kernel::uaccess::UserSliceReader>::read_slice
+ffffffff817c32b0 T <kernel::uaccess::UserSliceReader>::read_raw
 
-All errors (new ones prefixed by >>):
+However, these Rust symbols are trivial wrappers around the functions
+copy_from_user, _copy_from_user respectively. It doesn't
+make sense to go through a trivial wrapper for these functions, so mark
+them inline.
 
->> fs/nfsd/nfsproc.c:57:2: error: call to undeclared function 'trace_nfsd_proc_getattr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      57 |         trace_nfsd_proc_getattr(rqstp, &argp->fh);
-         |         ^
-   fs/nfsd/nfsproc.c:57:2: note: did you mean 'nfsd_proc_getattr'?
-   fs/nfsd/nfsproc.c:52:1: note: 'nfsd_proc_getattr' declared here
-      52 | nfsd_proc_getattr(struct svc_rqst *rqstp)
-         | ^
-      53 | {
-      54 |         struct nfsd_fhandle *argp = rqstp->rq_argp;
-      55 |         struct nfsd_attrstat *resp = rqstp->rq_resp;
-      56 | 
-      57 |         trace_nfsd_proc_getattr(rqstp, &argp->fh);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_getattr
-   fs/nfsd/nfsproc.c:295:2: error: call to undeclared function 'trace_nfsd_proc_create'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     295 |         trace_nfsd_proc_create(rqstp, dirfhp, S_IFREG, argp->name, argp->len);
-         |         ^
-   fs/nfsd/nfsproc.c:295:2: note: did you mean 'nfsd_proc_create'?
-   fs/nfsd/nfsproc.c:279:1: note: 'nfsd_proc_create' declared here
-     279 | nfsd_proc_create(struct svc_rqst *rqstp)
-         | ^
-   fs/nfsd/nfsproc.c:447:2: error: call to undeclared function 'trace_nfsd_proc_remove'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
-         |         ^
-   fs/nfsd/nfsproc.c:447:2: note: did you mean 'nfsd_proc_remove'?
-   fs/nfsd/nfsproc.c:442:1: note: 'nfsd_proc_remove' declared here
-     442 | nfsd_proc_remove(struct svc_rqst *rqstp)
-         | ^
-     443 | {
-     444 |         struct nfsd_diropargs *argp = rqstp->rq_argp;
-     445 |         struct nfsd_stat *resp = rqstp->rq_resp;
-     446 | 
-     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
-         |         ~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_remove
-   fs/nfsd/nfsproc.c:463:2: error: call to undeclared function 'trace_nfsd_proc_rename'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     463 |         trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
-         |         ^
-   fs/nfsd/nfsproc.c:463:2: note: did you mean 'nfsd_proc_rename'?
-   fs/nfsd/nfsproc.c:458:1: note: 'nfsd_proc_rename' declared here
-     458 | nfsd_proc_rename(struct svc_rqst *rqstp)
-         | ^
-     459 | {
-     460 |         struct nfsd_renameargs *argp = rqstp->rq_argp;
-     461 |         struct nfsd_stat *resp = rqstp->rq_resp;
-     462 | 
-     463 |         trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
-         |         ~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_rename
-   fs/nfsd/nfsproc.c:480:2: error: call to undeclared function 'trace_nfsd_proc_link'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     480 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
-         |         ^
-   fs/nfsd/nfsproc.c:480:2: note: did you mean 'nfsd_proc_link'?
-   fs/nfsd/nfsproc.c:475:1: note: 'nfsd_proc_link' declared here
-     475 | nfsd_proc_link(struct svc_rqst *rqstp)
-         | ^
-     476 | {
-     477 |         struct nfsd_linkargs *argp = rqstp->rq_argp;
-     478 |         struct nfsd_stat *resp = rqstp->rq_resp;
-     479 | 
-     480 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
-         |         ~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_link
-   fs/nfsd/nfsproc.c:500:2: error: call to undeclared function 'trace_nfsd_proc_symlink'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     500 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
-         |         ^
-   fs/nfsd/nfsproc.c:500:2: note: did you mean 'nfsd_proc_symlink'?
-   fs/nfsd/nfsproc.c:491:1: note: 'nfsd_proc_symlink' declared here
-     491 | nfsd_proc_symlink(struct svc_rqst *rqstp)
-         | ^
-     492 | {
-     493 |         struct nfsd_symlinkargs *argp = rqstp->rq_argp;
-     494 |         struct nfsd_stat *resp = rqstp->rq_resp;
-     495 |         struct nfsd_attrs attrs = {
-     496 |                 .na_iattr       = &argp->attrs,
-     497 |         };
-     498 |         struct svc_fh   newfh;
-     499 | 
-     500 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
-         |         ~~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_symlink
-   fs/nfsd/nfsproc.c:535:1: error: function definition is not allowed here
-     535 | {
-         | ^
-   fs/nfsd/nfsproc.c:568:1: error: function definition is not allowed here
-     568 | {
-         | ^
-   fs/nfsd/nfsproc.c:584:1: error: function definition is not allowed here
-     584 | {
-         | ^
-   fs/nfsd/nfsproc.c:604:1: error: function definition is not allowed here
-     604 | {
-         | ^
-   fs/nfsd/nfsproc.c:630:1: error: function definition is not allowed here
-     630 | {
-         | ^
-   fs/nfsd/nfsproc.c:814:14: error: use of undeclared identifier 'nfsd_proc_mkdir'; did you mean '_proc_mkdir'?
-     814 |                 .pc_func = nfsd_proc_mkdir,
-         |                            ^~~~~~~~~~~~~~~
-         |                            _proc_mkdir
-   include/linux/proc_fs.h:85:24: note: '_proc_mkdir' declared here
+After applying this patch, the above command will produce no output.
 
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Suggested-by: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+---
+ rust/kernel/uaccess.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-vim +/trace_nfsd_proc_getattr +57 fs/nfsd/nfsproc.c
-
-    46	
-    47	/*
-    48	 * Get a file's attributes
-    49	 * N.B. After this call resp->fh needs an fh_put
-    50	 */
-    51	static __be32
-    52	nfsd_proc_getattr(struct svc_rqst *rqstp)
-    53	{
-    54		struct nfsd_fhandle *argp = rqstp->rq_argp;
-    55		struct nfsd_attrstat *resp = rqstp->rq_resp;
-    56	
-  > 57		trace_nfsd_proc_getattr(rqstp, &argp->fh);
-    58	
-    59		fh_copy(&resp->fh, &argp->fh);
-    60		resp->status = fh_verify(rqstp, &resp->fh, 0,
-    61					 NFSD_MAY_NOP | NFSD_MAY_BYPASS_GSS_ON_ROOT);
-    62		if (resp->status != nfs_ok)
-    63			goto out;
-    64		resp->status = fh_getattr(&resp->fh, &resp->stat);
-    65	out:
-    66		resp->status = nfsd_map_status(resp->status);
-    67		return rpc_success;
-    68	}
-    69	
-
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 719b0a48ff55..3d8a08aeed89 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -218,6 +218,7 @@ pub fn is_empty(&self) -> bool {
+     /// # Guarantees
+     ///
+     /// After a successful call to this method, all bytes in `out` are initialized.
++    #[inline]
+     pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+         let len = out.len();
+         let out_ptr = out.as_mut_ptr().cast::<c_void>();
+@@ -239,6 +240,7 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+     ///
+     /// Fails with [`EFAULT`] if the read happens on a bad address, or if the read goes out of
+     /// bounds of this [`UserSliceReader`]. This call may modify `out` even if it returns an error.
++    #[inline]
+     pub fn read_slice(&mut self, out: &mut [u8]) -> Result {
+         // SAFETY: The types are compatible and `read_raw` doesn't write uninitialized bytes to
+         // `out`.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
