@@ -1,156 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a48-105.smtp-out.amazonses.com (a48-105.smtp-out.amazonses.com [54.240.48.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB4A566A;
-	Tue, 11 Mar 2025 00:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997E518641
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 02:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.48.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741651797; cv=none; b=KT+ItqydD/NvfYNgPvbTx1s3nDVQpVUvh1TQoY1QOjZoMlTMRvDFtPoGi4pxlUIt2LkZBhO5///IJVXC2ceM4xF21nhuB0HDqjr8jm9WSKmjzgGHIlc6p/gs+KSz15q8TPGeNYYpLkbDD2pDwFaVRn+ixn7u2BGY3jpguSFSySg=
+	t=1741659338; cv=none; b=R2QtSVG/3py/jP4dKX9TXg/kox5xjKxS0tm+eGradWNyMz7sE0McHqMjlhFiKn8XXZT2ZcDQgqCdY+Ydz8yPkAPkIpqPr9m+5px3W28ia5ng9bqNLSBL28S6anJQ1rdqz1FctZ0VaplR/lAa0nmvfSVnAY9TzSjVuaIFXmQDFQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741651797; c=relaxed/simple;
-	bh=C56vJT3WoyVaZfPzuUE7DKZkVEo5bzqgeG9ctWKY6Io=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dlvCbqAfrfQe/1cXCRgzazLIaaoEM7ELeCjQF3vttsF6Niffk0g1o4Z0xCEOmyQ3PHgnb2f+HpXvvIxRqJY3NYA8L1j0ImQJg41CrMZ7qdrWTq7ZESLiVctBsi5zlMaYkpWWzCUFOF1QQ0DjHM07byVNCc3IIr+7yieLLZcT2qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HKpbNtra; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741659338; c=relaxed/simple;
+	bh=avBbpXuLghR+QCylMU4TexjL870/yz8BwhT4jBHuwvw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J4uz0z4YSOfCDprYwhyaiPze8ibLFapvWmaG1TRrS7Q6RpJQoCnFkAdELPNxsjSjbgq/uk94S9V8YI5olQICRd/QOWu+Fm1iEzdsP08+lEKv0Omyx5BcCuu6rbBo1oq41gCEVijp4iKx5/Ps8IAoFlMF/PSXcCjVzj4pZok8RzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=eB/RiN0p; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=RnmMrFsP; arc=none smtp.client-ip=54.240.48.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HKpbNtra"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741651795; x=1773187795;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C56vJT3WoyVaZfPzuUE7DKZkVEo5bzqgeG9ctWKY6Io=;
-  b=HKpbNtraGl/jVr8xe3EvpjjfGdKvbcx8wM/NlNBi+ITCKirJUE7fVwKE
-   U8VZwGZzLe4NQASOjK61VuNNpoy87VnKA0KtsUmsqn3WL0lv7HG0JM4nC
-   jL2rjfkXUDg+eKczcUBN9XZPmv0ybtAjAF42MGNXf58e4j7YUZlhuXK+/
-   Hu+PxcVT2hG7hcfnpF9O67AZiv0KM1JKiNww6FWFekAoEyUQDlS79+vz1
-   Zoo5bLAlXge244F6Baf1szVYdAMuC2zWq6tOojx/bu2HHYd/ihVlfSnx/
-   0RrxUUEWfIHTM4IVR5rplMMuInduvaCI1wZ75CTU8XZUBdFUWWGCP2MAb
-   g==;
-X-CSE-ConnectionGUID: 5u/r2GZeR463h5/CP+DpGg==
-X-CSE-MsgGUID: raDKG7BBSSaurSCH9x4RiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11369"; a="42548529"
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="42548529"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2025 17:09:55 -0700
-X-CSE-ConnectionGUID: 8TtlTSTtR6WrN/GsR28ntQ==
-X-CSE-MsgGUID: CbHgZmxCRBGHk+XKRjVJPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,237,1736841600"; 
-   d="scan'208";a="120841359"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 10 Mar 2025 17:09:54 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1trnBr-0006Ce-0p;
-	Tue, 11 Mar 2025 00:09:49 +0000
-Date: Tue, 11 Mar 2025 08:09:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [sailus-media-tree:devel 23/23]
- drivers/media/platform/st/stm32/stm32-dcmi.c:1685:21: error: call to
- undeclared function 'devm_kmemdup_array'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202503110853.F2zqgdx0-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="eB/RiN0p";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="RnmMrFsP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
+	t=1741659335;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=avBbpXuLghR+QCylMU4TexjL870/yz8BwhT4jBHuwvw=;
+	b=eB/RiN0pn76xbGG4OlUovFSY3tgEMvKgSDWbkgSDbAi3d4IhYRKFlR5sQ5cZDYq2
+	jYf+cUF1NUonc4CWMQc5t686Zcq68Usu/vGr6221Culu0w03lmR1LHR800zrB2QXvT9
+	WWZdLrstbnP2GrfS97dJEh5eYfLNjpSUMbY84cBVrdCcFWB1nSYuBh+Z30ZJfQOtDjC
+	DgqfH1oX26X1kO80lVbQZ4PEVS1k9AOyuxqSifSfPgHYpg29aWDF6ugIe1TIr9ex7Lw
+	zn3BO58toJSf4tD+dfM6ix+TQvh7rV9B26uH3up0qpKq4c71d8Ux5+c4sc0WWOo5vGh
+	Wm6SLCZaow==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1741659335;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=avBbpXuLghR+QCylMU4TexjL870/yz8BwhT4jBHuwvw=;
+	b=RnmMrFsPtt7WPSlkWUbdfI5kX7jDoiLKdlmRh48QmHUDCkjmHeHjM9Pa2OCLMpEf
+	NzDzFsJd/7IOKHuvxLrx9l7z5No5NBJ3WPA5HfHFrXXYfU785cgkj1MQH/baqe2s7n8
+	1BPh+HvYpZn7J54sYT4TF5ewj0ayhGtL9XRX3qd4=
+From: Antonio Hickey <contact@antoniohickey.com>
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Antonio Hickey <contact@antoniohickey.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: [PATCH] rust: uaccess: mark UserSliceReader methods inline
+Date: Tue, 11 Mar 2025 02:15:35 +0000
+Message-ID: <0100019582fc6956-3b420cce-f122-4a26-8fea-94000b22bc90-000000@email.amazonses.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
+X-SES-Outgoing: 2025.03.11-54.240.48.105
 
-tree:   git://linuxtv.org/sailus/media_tree.git devel
-head:   07e07f2cd3ebb7e8b62ccb8f22a16032b599c9e2
-commit: 07e07f2cd3ebb7e8b62ccb8f22a16032b599c9e2 [23/23] media: stm32-dcmi: use devm_kmemdup_array()
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250311/202503110853.F2zqgdx0-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503110853.F2zqgdx0-lkp@intel.com/reproduce)
+When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+toolchain provided by kernel.org with ARCH=x86_64, the following symbols
+are generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503110853.F2zqgdx0-lkp@intel.com/
+$nm vmlinux | grep ' _R'.*UserSliceReader | rustfilt
+ffffffff817c3320 T <kernel::uaccess::UserSliceReader>::read_slice
+ffffffff817c32b0 T <kernel::uaccess::UserSliceReader>::read_raw
 
-All errors (new ones prefixed by >>):
+However, these Rust symbols are trivial wrappers around the functions
+copy_from_user, _copy_from_user respectively. It doesn't
+make sense to go through a trivial wrapper for these functions, so mark
+them inline.
 
->> drivers/media/platform/st/stm32/stm32-dcmi.c:1685:21: error: call to undeclared function 'devm_kmemdup_array'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1685 |         dcmi->sd_formats = devm_kmemdup_array(dcmi->dev, sd_fmts, num_fmts,
-         |                            ^
->> drivers/media/platform/st/stm32/stm32-dcmi.c:1685:19: error: incompatible integer to pointer conversion assigning to 'const struct dcmi_format **' from 'int' [-Wint-conversion]
-    1685 |         dcmi->sd_formats = devm_kmemdup_array(dcmi->dev, sd_fmts, num_fmts,
-         |                          ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1686 |                                               sizeof(sd_fmts[0]), GFP_KERNEL);
-         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+After applying this patch, the above command will produce no output.
 
+Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+---
+ rust/kernel/uaccess.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-vim +/devm_kmemdup_array +1685 drivers/media/platform/st/stm32/stm32-dcmi.c
-
-  1639	
-  1640	static int dcmi_formats_init(struct stm32_dcmi *dcmi)
-  1641	{
-  1642		const struct dcmi_format *sd_fmts[ARRAY_SIZE(dcmi_formats)];
-  1643		unsigned int num_fmts = 0, i, j;
-  1644		struct v4l2_subdev *subdev = dcmi->source;
-  1645		struct v4l2_subdev_mbus_code_enum mbus_code = {
-  1646			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-  1647		};
-  1648	
-  1649		while (!v4l2_subdev_call(subdev, pad, enum_mbus_code,
-  1650					 NULL, &mbus_code)) {
-  1651			for (i = 0; i < ARRAY_SIZE(dcmi_formats); i++) {
-  1652				if (dcmi_formats[i].mbus_code != mbus_code.code)
-  1653					continue;
-  1654	
-  1655				/* Exclude JPEG if BT656 bus is selected */
-  1656				if (dcmi_formats[i].fourcc == V4L2_PIX_FMT_JPEG &&
-  1657				    dcmi->bus_type == V4L2_MBUS_BT656)
-  1658					continue;
-  1659	
-  1660				/* Code supported, have we got this fourcc yet? */
-  1661				for (j = 0; j < num_fmts; j++)
-  1662					if (sd_fmts[j]->fourcc ==
-  1663							dcmi_formats[i].fourcc) {
-  1664						/* Already available */
-  1665						dev_dbg(dcmi->dev, "Skipping fourcc/code: %4.4s/0x%x\n",
-  1666							(char *)&sd_fmts[j]->fourcc,
-  1667							mbus_code.code);
-  1668						break;
-  1669					}
-  1670				if (j == num_fmts) {
-  1671					/* New */
-  1672					sd_fmts[num_fmts++] = dcmi_formats + i;
-  1673					dev_dbg(dcmi->dev, "Supported fourcc/code: %4.4s/0x%x\n",
-  1674						(char *)&sd_fmts[num_fmts - 1]->fourcc,
-  1675						sd_fmts[num_fmts - 1]->mbus_code);
-  1676				}
-  1677			}
-  1678			mbus_code.index++;
-  1679		}
-  1680	
-  1681		if (!num_fmts)
-  1682			return -ENXIO;
-  1683	
-  1684		dcmi->num_of_sd_formats = num_fmts;
-> 1685		dcmi->sd_formats = devm_kmemdup_array(dcmi->dev, sd_fmts, num_fmts,
-  1686						      sizeof(sd_fmts[0]), GFP_KERNEL);
-  1687		if (!dcmi->sd_formats) {
-  1688			dev_err(dcmi->dev, "Could not allocate memory\n");
-  1689			return -ENOMEM;
-  1690		}
-  1691	
-  1692		dcmi->sd_format = dcmi->sd_formats[0];
-  1693		return 0;
-  1694	}
-  1695	
-
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 719b0a48ff55..3d8a08aeed89 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -218,6 +218,7 @@ pub fn is_empty(&self) -> bool {
+     /// # Guarantees
+     ///
+     /// After a successful call to this method, all bytes in `out` are initialized.
++    #[inline]
+     pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+         let len = out.len();
+         let out_ptr = out.as_mut_ptr().cast::<c_void>();
+@@ -239,6 +240,7 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+     ///
+     /// Fails with [`EFAULT`] if the read happens on a bad address, or if the read goes out of
+     /// bounds of this [`UserSliceReader`]. This call may modify `out` even if it returns an error.
++    #[inline]
+     pub fn read_slice(&mut self, out: &mut [u8]) -> Result {
+         // SAFETY: The types are compatible and `read_raw` doesn't write uninitialized bytes to
+         // `out`.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
