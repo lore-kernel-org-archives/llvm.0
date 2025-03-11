@@ -1,33 +1,33 @@
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F60199FBA;
-	Tue, 11 Mar 2025 21:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3395123DE;
+	Tue, 11 Mar 2025 21:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741728147; cv=none; b=K+oQcXiwiFAY/lTV7uchvDE0GaUcsz94oMtOgOBeaQy3/J2PtsLev8w1x9oPjQzoxvH5rzFfTCkL53Oz0Pro3TtzdG4Q3YjMPacGxMjng92ud+No6hbtH5s1uLRES4/UU7sdtQ3DlWKzxTq9iqjsPHZYkn2X8a3+trgd54eiA24=
+	t=1741728739; cv=none; b=GQu6OAUR2Hvl4JntiCs/mLcOul7L/AzKL04cxdWO6qqb8hRuidrG4vgiGMvbfs5lCQDy9sXdrHVplpz7HdAKuh8+hzmPfQ0B8SGulBfWZj6Vvjm796wAY3jZvxoZPUO9EHDMv5wM7amKJQJy6vmzKREHh2xVF7udKsP9rSCXeWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741728147; c=relaxed/simple;
-	bh=6FmHrZ28nxIM9+DQ++GJcTP+dTBWDxQyO+o6uzF7GO4=;
+	s=arc-20240116; t=1741728739; c=relaxed/simple;
+	bh=CGysvkbyat2v9Xt5IUN+jtxJSR/j0sVWvbITzTxLaqg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MKpDCHtdME90ECWO9NzhMd5zUsZ7VOrv2GDg9QczF0syu4bU/3GiDvGhPZsBAhQ3zer9ZAqO2jTW2C+hdf32GP1Vvv/EZQZOq2/jreHHhXlnN6VmaRUyqEIb/ROIrC5o2qQo7IlJDdpOb4zafESAWsFktRZPlSpfdLcglOSx9jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=5Cwa0BlJ; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=D9s6KpRP3NDwICHRDHwTAw3Aq3FK4knh2Q94P0T8Dc7TSHchc1djY16m+DmyvgqTezD3tXY5JqhbxUvByEF3dZNoEN3umxK9CujCToWZ5JJrUrquxANHCj9wmwFnkt1IInI7RgKmNtvU7yj2vO1Cz6q5buIM1DF2wlfhAbcgZH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=pc8Cb1Sa; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="5Cwa0BlJ"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="pc8Cb1Sa"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=zHOpgl0ZDBsyqGRYxODkAkcWkAATucDMx8mPREh5p6Q=; b=5Cwa0BlJ3ukKnoZ3ZNphT12BRT
-	fkyZeCdsWNr62Uyyl73vQlHTbQEa+4f6eSGunOOrpZkbXsY0QSM5saAtURZsWepBBKckRD3zjf5rr
-	QVE+54Ck6OX9iI7CSeke2OehbcH084VB8+ktkYXljabuhDJZCKjxsUwPeQ8ed71OP9oI=;
+	bh=fBIv4qkUgiRYJGk6D64lsbFp1htOYMf0DoD3udKRKRQ=; b=pc8Cb1SanRw/DIOqyL1dmo9HBX
+	CJMarEMBHV5yOscodm9n0guO3IijKTZ7TZu3Z9QPOObQxToMuVUlOlSJzP2ZvdOp+hIhazx2zM/AI
+	kPCuD3w4E4TIaR8K6YdV0Qkrz+dbe+mV4wZHlrZ29s4HrMboxzJMyf4SkGS3tvn7Bf6c=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1ts73I-004Sku-QD; Tue, 11 Mar 2025 22:22:16 +0100
-Date: Tue, 11 Mar 2025 22:22:16 +0100
+	id 1ts7Cu-004Ss8-Ai; Tue, 11 Mar 2025 22:32:12 +0100
+Date: Tue, 11 Mar 2025 22:32:12 +0100
 From: Andrew Lunn <andrew@lunn.ch>
 To: Sai Krishna <saikrishnag@marvell.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -37,12 +37,12 @@ Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 	hkelam@marvell.com, sbhatta@marvell.com, andrew+netdev@lunn.ch,
 	bbhushan2@marvell.com, nathan@kernel.org, ndesaulniers@google.com,
 	morbo@google.com, justinstitt@google.com, llvm@lists.linux.dev,
-	horms@kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [net-next PATCH v3 1/2] octeontx2-af: correct __iomem
- annotations flagged by Sparse
-Message-ID: <7009d4cc-a008-49ea-8f50-1e9aec63b592@lunn.ch>
+	horms@kernel.org
+Subject: Re: [net-next PATCH v3 2/2] octeontx2-af: fix compiler warnings
+ flagged by Sparse
+Message-ID: <3bc07f4f-73b4-4d34-98cb-79e84d9f1493@lunn.ch>
 References: <20250311182631.3224812-1-saikrishnag@marvell.com>
- <20250311182631.3224812-2-saikrishnag@marvell.com>
+ <20250311182631.3224812-3-saikrishnag@marvell.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,25 +51,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250311182631.3224812-2-saikrishnag@marvell.com>
+In-Reply-To: <20250311182631.3224812-3-saikrishnag@marvell.com>
 
->  	if (mbox->mbox.hwbase)
-> -		iounmap(mbox->mbox.hwbase);
-> +		iounmap((void __iomem *)mbox->mbox.hwbase);
+On Tue, Mar 11, 2025 at 11:56:31PM +0530, Sai Krishna wrote:
+> Sparse flagged a number of warnings while typecasting iomem
+> type to required data type.
+ 
+> For example, fwdata is just a shared memory data structure used
+> between firmware and kernel, thus remapping and typecasting
+> to required data type may not cause issue.
 
-This looks wrong. If you are unmapping it, you must of mapped it
-somewhere. And that mapping would of returned an __iomem value. So
-mbox.hwbase should be an __iomem value and you would not need this
-cast.
-
->  	for (qidx = 0; qidx < pf->qset.cq_cnt; qidx++) {
-> -		ptr = otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
-> +		ptr = (__force u64 *)otx2_get_regaddr(pf, NIX_LF_CQ_OP_INT);
->  		val = otx2_atomic64_add((qidx << 44), ptr);
-
-This also looks questionable. You should be removing casts, not adding
-them. otx2_get_regaddr() returns an __iomem. So maybe
-otx2_atomic64_add() is actually broken here?
+This is generally wrong. __iomem is there for a reason. If you are
+removing it, it suggests what you do next with the pointer is wrong.
 
     Andrew
 
