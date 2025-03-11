@@ -1,126 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8198625DB0A;
-	Tue, 11 Mar 2025 15:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAC2184F
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 16:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741706732; cv=none; b=Y/QCOmYO3sbDUv2DFT1n3jyq9ANQihrZzmQnewebxvH5BhGQzMZD1fAawCbRnC6rLJxZSILqR3Ey3D5oiulcCB/qfbXv2PVxdUMyt0fO3KfgtS7C+h4XUin87vmXK5w0FQpVn7qwgvpSVDuHLNWJ3a5Va0IPkDNLmYXn7/M08lA=
+	t=1741710805; cv=none; b=H4cHaoPOFLaGlE+XuQv3RSq5iMxwD/vZ2Eak+qd2zyfkvZRANISr7rd04+9QC2mmFTRUk7TCzZl88uPSmSTXuMmCkRGSNC5LC/sTmr2b7tNbQ17dMHfeNlGBwtiJYXOZTr1pvH9cqhT4a+7WJh4prG1ADgZPT4rLG23j/E/zfjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741706732; c=relaxed/simple;
-	bh=/pbrJLS75cPqadHFhAbQ59M5jBD+PgdPS+fqzG7J4Sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cu3BZM3u8i7z95wWYaLQz5BOms/SIRziJt2y5LcCfDQrEUYzUdGvG851PxG1VgXHyFF/qxvkkjvHW7Pchr+2fTBxsshesxBgOm7SpzJSs6iUDteuH0M8nSOQksmlGVinlQfczr5hDUwoH858ylvZXV+OCq5TXYrH3pmSN1zrxqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dHwoQvlz; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741710805; c=relaxed/simple;
+	bh=KXZfn+E+1UOPS6s6xjPmbs9/5t+fveiBOai0moxW8jA=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mQOYymVINTsH0aFTGQU2xsQHieNhuIxh5T7vc4PaId+ppjbSI4/UXGglvIATP2fOm4VvV2jcRXVgLurdEtdGFyvOm9yUQ+Y7tBNHqR4MZEe18Sv7KDji+hhfcz/oOmqi+2yjxEWxGMf6xWewxcj1d2tmV51ZYlGXxsjwasXSJqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Eb6QomPg; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dHwoQvlz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741706730; x=1773242730;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/pbrJLS75cPqadHFhAbQ59M5jBD+PgdPS+fqzG7J4Sk=;
-  b=dHwoQvlzpqYK3nVfICYgZb/r70V5uJiip0Lv9sMIgLvm/LLUrTUEDlyF
-   0gdO3oUFeGJHZePTLj11ix1VrEg7rziU3xuNM9rwyvgdsDEaYjuuDSFgz
-   vV8LHbVdtwJwDTP33GTYWHHBnQw3l3XyJ9D5ZkdNB/0cXH9vp3tBNVtOV
-   UQaKHTe8qHetxSDgfomq5Zn+UjvJRMaxfqpHSMvNsPEgj2fKDwnUJ5Wkk
-   7cJBSg85+FjqJPrWSNzI8xjNClxNKXOia/crUZVo7dqx8l3IMTM048gMz
-   vF40oj8CIg4pt0dYc6JLHBW1x3TdRRi9VnKEUrTXnnvZGG8iwcx51d6uO
-   A==;
-X-CSE-ConnectionGUID: wp3gXO+2S0uc+10aoQqGrw==
-X-CSE-MsgGUID: 5mFxkGNgRBWp3AFrksD2lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="53392539"
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="53392539"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:25:29 -0700
-X-CSE-ConnectionGUID: qQEz04IbR52YkzMO0LPcWw==
-X-CSE-MsgGUID: P5XdEeuTSuKYolsweBzsbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="121049964"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 11 Mar 2025 08:25:26 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts1Tw-00077A-17;
-	Tue, 11 Mar 2025 15:25:24 +0000
-Date: Tue, 11 Mar 2025 23:24:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, osalvador@suse.de,
-	42.hyeyoo@gmail.com, byungchul@sk.com, dave.hansen@linux.intel.com,
-	luto@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-	stable@vger.kernel.org, linux-mm@kvack.org,
-	max.byungchul.park@sk.com, max.byungchul.park@gmail.com
-Subject: Re: [PATCH] mm: introduce include/linux/pgalloc.h
-Message-ID: <202503112344.GSI5KIK4-lkp@intel.com>
-References: <20250311114420.240341-1-gwan-gyeong.mun@intel.com>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Eb6QomPg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=ark2rwdxgbgn7jyg7trvov3zxe.protonmail; t=1741710801; x=1741970001;
+	bh=KXZfn+E+1UOPS6s6xjPmbs9/5t+fveiBOai0moxW8jA=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=Eb6QomPgRoUkiUbVXTyTXTzkIRdUpicXNtrQgACu6wNF7q6skb1Sf2YlqD7Rju1kR
+	 oqZWPUfpTxjGHafGjn6pU5G8NImsXBC2xLR4XfrCPUkM65OkhTGC0rHYiZyqUErS1X
+	 W4rYuRYqHUOkald9coOVF9MKZm/nF+C8lnJcmiuoWC6CIWwGOcqNk1rhlGJxTPZ0MR
+	 8ZGGciIvUK46Aiv//t/wWUpPjDeRH/J8wdDnlAoK5HyfgPBwLYp6xv/4MmneLH8hPR
+	 RIsHBov4eFCLDpHXulDY92A2/azIkU6Xlc6rvovIxjtN8QwvTpkrkJHHheemYOsrK3
+	 tUjMdIrL5EDqA==
+Date: Tue, 11 Mar 2025 16:33:16 +0000
+To: Panagiotis Foliadis <pfoliadis@posteo.net>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] rust: task: mark Task methods inline
+Message-ID: <D8DKY3QWDX9P.1V1M6JXQ1NCSS@proton.me>
+In-Reply-To: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+References: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 0768b22bbf1dc2a7566b643e75c5d7b61f955053
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311114420.240341-1-gwan-gyeong.mun@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Gwan-gyeong,
+On Tue Mar 11, 2025 at 4:05 PM CET, Panagiotis Foliadis wrote:
+> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+> toolchain provided by kernel.org, the following symbols are generated:
+>
+> $ nm vmlinux | grep ' _R'.*Task | rustfilt
+> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
+> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
+> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
+> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
+> ffffffff817b2cc0 T <kernel::task::Task>::uid
+> ffffffff817b2ce0 T <kernel::task::Task>::euid
+> ffffffff817b2c70 T <kernel::task::Task>::current
+> ffffffff817b2d70 T <kernel::task::Task>::wake_up
+> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
+>::dec_ref
+> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
+>::inc_ref
+>
+> These Rust symbols are trivial wrappers around the C functions
+> get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
+> euid, get_current, wake_up, get_task_struct and put_task_struct.It
+> doesn't make sense to go through a trivial wrapper for these
+> functions, so mark them inline.
+>
+> After applying this patch, the above command will produce no output.
+>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-[auto build test ERROR on tip/x86/mm]
-[also build test ERROR on linus/master v6.14-rc6]
-[cannot apply to akpm-mm/mm-everything tip/x86/core next-20250311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+---
+Cheers,
+Benno
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gwan-gyeong-Mun/mm-introduce-include-linux-pgalloc-h/20250311-194723
-base:   tip/x86/mm
-patch link:    https://lore.kernel.org/r/20250311114420.240341-1-gwan-gyeong.mun%40intel.com
-patch subject: [PATCH] mm: introduce include/linux/pgalloc.h
-config: x86_64-buildonly-randconfig-002-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112344.GSI5KIK4-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112344.GSI5KIK4-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503112344.GSI5KIK4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/mm/init_64.c:236:6: error: redefinition of 'arch_sync_global_p4ds'
-     236 | void arch_sync_global_p4ds(unsigned long start, unsigned long end) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/mm/init_64.c:228:6: note: previous definition of 'arch_sync_global_p4ds' with type 'void(long unsigned int,  long unsigned int)'
-     228 | void arch_sync_global_p4ds(unsigned long start, unsigned long end)
-         |      ^~~~~~~~~~~~~~~~~~~~~
->> arch/x86/mm/init_64.c:238:6: error: redefinition of 'arch_sync_global_pgds'
-     238 | void arch_sync_global_pgds(unsigned long start, unsigned long end)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/mm/init_64.c:233:6: note: previous definition of 'arch_sync_global_pgds' with type 'void(long unsigned int,  long unsigned int)'
-     233 | void arch_sync_global_pgds(unsigned long start, unsigned long end) {}
-         |      ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/arch_sync_global_p4ds +236 arch/x86/mm/init_64.c
-
-   234	
-   235	#if CONFIG_PGTABLE_LEVELS > 4
- > 236	void arch_sync_global_p4ds(unsigned long start, unsigned long end) {}
-   237	
- > 238	void arch_sync_global_pgds(unsigned long start, unsigned long end)
-   239	{
-   240		sync_global_pgds(start, end);
-   241	}
-   242	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
