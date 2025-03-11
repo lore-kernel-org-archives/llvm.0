@@ -1,84 +1,173 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAC2184F
-	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 16:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE1184F;
+	Tue, 11 Mar 2025 16:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741710805; cv=none; b=H4cHaoPOFLaGlE+XuQv3RSq5iMxwD/vZ2Eak+qd2zyfkvZRANISr7rd04+9QC2mmFTRUk7TCzZl88uPSmSTXuMmCkRGSNC5LC/sTmr2b7tNbQ17dMHfeNlGBwtiJYXOZTr1pvH9cqhT4a+7WJh4prG1ADgZPT4rLG23j/E/zfjk=
+	t=1741712228; cv=none; b=LMZuuTUW+7kU30xBkO/u5pudWymtsHM2uRVYHroQW4SURDuckP0bXH66Yqhqt5UeBaem3Cidc7JLvJZ9pZJcYDrBMEQaD/qSK4+r0tOYfWK0EVwFmt4F01dQQYhZvJC2naPDuGAKMVWmkK06qF2C1qcl/PPWjE26BFLY2jLvaKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741710805; c=relaxed/simple;
-	bh=KXZfn+E+1UOPS6s6xjPmbs9/5t+fveiBOai0moxW8jA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mQOYymVINTsH0aFTGQU2xsQHieNhuIxh5T7vc4PaId+ppjbSI4/UXGglvIATP2fOm4VvV2jcRXVgLurdEtdGFyvOm9yUQ+Y7tBNHqR4MZEe18Sv7KDji+hhfcz/oOmqi+2yjxEWxGMf6xWewxcj1d2tmV51ZYlGXxsjwasXSJqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=Eb6QomPg; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1741712228; c=relaxed/simple;
+	bh=yFwxyB/vYM+QVK1Xvi2YhsAyqzx7H7T2HfW55Y8XdJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EjpzunBIwwJaQD+qp4b2MfCu4hCtZhBcXl96cHLIjqnRoe5Q9C/iea+tLU0gUF0wvpcp9wIG+d8nqF70iyBiQtd9ykVzHQNvuwH2hffDC1J0UUEg46vcwxJ2QdtypbTeCdyPx+wxnpmQisJ3boBkIgkfY68+5tpC+75g1omaGJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G4Ki6spx; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="Eb6QomPg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=ark2rwdxgbgn7jyg7trvov3zxe.protonmail; t=1741710801; x=1741970001;
-	bh=KXZfn+E+1UOPS6s6xjPmbs9/5t+fveiBOai0moxW8jA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=Eb6QomPgRoUkiUbVXTyTXTzkIRdUpicXNtrQgACu6wNF7q6skb1Sf2YlqD7Rju1kR
-	 oqZWPUfpTxjGHafGjn6pU5G8NImsXBC2xLR4XfrCPUkM65OkhTGC0rHYiZyqUErS1X
-	 W4rYuRYqHUOkald9coOVF9MKZm/nF+C8lnJcmiuoWC6CIWwGOcqNk1rhlGJxTPZ0MR
-	 8ZGGciIvUK46Aiv//t/wWUpPjDeRH/J8wdDnlAoK5HyfgPBwLYp6xv/4MmneLH8hPR
-	 RIsHBov4eFCLDpHXulDY92A2/azIkU6Xlc6rvovIxjtN8QwvTpkrkJHHheemYOsrK3
-	 tUjMdIrL5EDqA==
-Date: Tue, 11 Mar 2025 16:33:16 +0000
-To: Panagiotis Foliadis <pfoliadis@posteo.net>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] rust: task: mark Task methods inline
-Message-ID: <D8DKY3QWDX9P.1V1M6JXQ1NCSS@proton.me>
-In-Reply-To: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
-References: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 0768b22bbf1dc2a7566b643e75c5d7b61f955053
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4Ki6spx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741712227; x=1773248227;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yFwxyB/vYM+QVK1Xvi2YhsAyqzx7H7T2HfW55Y8XdJs=;
+  b=G4Ki6spx8ssB1+sYwNO6jl8JbPSVtLOeFsZVYcaf+Z+/AnOWxeV5v9Wr
+   P5h0ofbTszUOTqwU16BFFOUM1o2G1VGHqbsopPIxriY2p8dzAv8+0IdZi
+   g/J9FLdl6vXrVtBoYwwk8CuyfH4IQr5edrmbL7P12e/jRiQZQOia89Jrh
+   IblJeVNQnvMiHKO0chIL8/cG04n6uY6wi0KxWDDB0TW786puMgBhAO7SE
+   fjFfzFvOAA5BPI1EJvZW01K4hCM5neUiypZgqbKs5CHO0xgE9TECUoQOH
+   foopq3J7AUkYJ8MwvmPcLSE/lFX5FmaTYqJ31kiaj6c3F7Tv7yVgjIFeN
+   g==;
+X-CSE-ConnectionGUID: 4HWq7d2xTEOJqTzASwZ7Tg==
+X-CSE-MsgGUID: 5okQ2NZ4TqOXeoOYIJDGEQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="54135121"
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="54135121"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 09:57:06 -0700
+X-CSE-ConnectionGUID: 2SAKFf+bRjqV6NWtJsv0PQ==
+X-CSE-MsgGUID: 2Zumsmh6TS+qw2vv8LVAyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="125438958"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Mar 2025 09:57:03 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts2ub-0007eW-1H;
+	Tue, 11 Mar 2025 16:57:01 +0000
+Date: Wed, 12 Mar 2025 00:56:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anand Moon <linux.amoon@gmail.com>,
+	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anand Moon <linux.amoon@gmail.com>
+Subject: Re: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when
+ acquiring mutex
+Message-ID: <202503120028.ZL9zhHXe-lkp@intel.com>
+References: <20250310143450.8276-5-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310143450.8276-5-linux.amoon@gmail.com>
 
-On Tue Mar 11, 2025 at 4:05 PM CET, Panagiotis Foliadis wrote:
-> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> toolchain provided by kernel.org, the following symbols are generated:
->
-> $ nm vmlinux | grep ' _R'.*Task | rustfilt
-> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
-> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
-> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
-> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
-> ffffffff817b2cc0 T <kernel::task::Task>::uid
-> ffffffff817b2ce0 T <kernel::task::Task>::euid
-> ffffffff817b2c70 T <kernel::task::Task>::current
-> ffffffff817b2d70 T <kernel::task::Task>::wake_up
-> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
->::dec_ref
-> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted=
->::inc_ref
->
-> These Rust symbols are trivial wrappers around the C functions
-> get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
-> euid, get_current, wake_up, get_task_struct and put_task_struct.It
-> doesn't make sense to go through a trivial wrapper for these
-> functions, so mark them inline.
->
-> After applying this patch, the above command will produce no output.
->
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+Hi Anand,
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+kernel test robot noticed the following build errors:
 
----
-Cheers,
-Benno
+[auto build test ERROR on 80e54e84911a923c40d7bee33a34c1b4be148d7a]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/drivers-thermal-exynos-Refactor-clk_sec-initialization-inside-SOC-specific-case/20250310-223732
+base:   80e54e84911a923c40d7bee33a34c1b4be148d7a
+patch link:    https://lore.kernel.org/r/20250310143450.8276-5-linux.amoon%40gmail.com
+patch subject: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when acquiring mutex
+config: s390-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250312/202503120028.ZL9zhHXe-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120028.ZL9zhHXe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120028.ZL9zhHXe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/thermal/samsung/exynos_tmu.c:721:3: error: cannot jump from this goto statement to its label
+                   goto out;
+                   ^
+   drivers/thermal/samsung/exynos_tmu.c:723:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(mutex)(&data->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:78:1: note: expanded from here
+   __UNIQUE_ID_guard398
+   ^
+   drivers/thermal/samsung/exynos_tmu.c:718:3: error: cannot jump from this goto statement to its label
+                   goto out;
+                   ^
+   drivers/thermal/samsung/exynos_tmu.c:723:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(mutex)(&data->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:78:1: note: expanded from here
+   __UNIQUE_ID_guard398
+   ^
+   2 errors generated.
+
+
+vim +721 drivers/thermal/samsung/exynos_tmu.c
+
+285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  711  
+7ea98f70c73ea37 drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2022-08-05  712  static int exynos_tmu_set_emulation(struct thermal_zone_device *tz, int temp)
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  713  {
+5f68d0785e5258a drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2023-03-01  714  	struct exynos_tmu_data *data = thermal_zone_device_priv(tz);
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  715  	int ret = -EINVAL;
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  716  
+ef3f80fc7f79c32 drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  717  	if (data->soc == SOC_ARCH_EXYNOS4210)
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  718  		goto out;
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  719  
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  720  	if (temp && temp < MCELSIUS)
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11 @721  		goto out;
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  722  
+0c7c68a34f7d0f7 drivers/thermal/samsung/exynos_tmu.c Anand Moon                2025-03-10  723  	guard(mutex)(&data->lock);
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  724  	clk_enable(data->clk);
+285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  725  	data->tmu_set_emulation(data, temp);
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  726  	clk_disable(data->clk);
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  727  	return 0;
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  728  out:
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  729  	return ret;
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  730  }
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  731  #else
+285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  732  #define exynos4412_tmu_set_emulation NULL
+7ea98f70c73ea37 drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2022-08-05  733  static int exynos_tmu_set_emulation(struct thermal_zone_device *tz, int temp)
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  734  	{ return -EINVAL; }
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  735  #endif /* CONFIG_THERMAL_EMULATION */
+bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  736  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
