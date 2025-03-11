@@ -1,60 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE611917F4;
-	Tue, 11 Mar 2025 13:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07DE71D88A4;
+	Tue, 11 Mar 2025 14:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741699136; cv=none; b=eGuHnBTlEggK4yv530w/zptyr7rbGVNAO2HEwjpY6G07Qqhwd1dFD/F7WbI3YeiAE9dDxbFojT5FwKG0dRotRbja6vi4O+EL8/gI4qIioQZ9/po677vRM2gnzp8BvLonax6FXOCDEORVSqq1jMBJ6nNf+r69xHgBvW3joSWJqrg=
+	t=1741702226; cv=none; b=d0UAJoOeL09rxak+4NxRRWARC8J+DX8D9aI2h/WhLj7SS23LVOyz7SCu+nLTnPHA5NBO6iqm9V79Fm73DDuk3P4K7jtVlvPJqd1olId0D7TsT1R0ADsHRi0DXv3MJhyTRdDq39VvAotNSm5mHNObVEjA5Zomp3xe9jQP6zngi84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741699136; c=relaxed/simple;
-	bh=VZ789kDo3hqYjHBuM3KMxTgaR8UhZppYKdPbcbfIxVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gY6K8ISgB78zshAtgLwz27TYB2ckNE2ArUzgicy0/6xhTTR6ne0qt1phg5Nr2IwP3EzGjyYnQVOxNWqejgG80c5CseUd3ooQgzuf8nTaVSSk7Vf93ynYKwXvbi7eF8Xd6U4WZnbfcsA54w61IDdcYwFzi3K57ZVphqovcgsWak8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jT8GNyjx; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1741702226; c=relaxed/simple;
+	bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNmcoIXEc+k2ekDpAkjeWtVlrSNBMGbLEpnA0U6fMQzd2Qu5RVTVQrrnSBcywM85ahzPV3vBWRdoYHwTKF0ljtTyPphMLLpU7eyjgphWdJ17OwkdZ6DeDo1q3E3LE0S15JJ0k29w7fi8b2I7/1wE7VImqFkiz9FNUR97C64wQLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JoThZfxt; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jT8GNyjx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JoThZfxt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741699135; x=1773235135;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VZ789kDo3hqYjHBuM3KMxTgaR8UhZppYKdPbcbfIxVY=;
-  b=jT8GNyjxbR15Ah3O6d/rOcHvcV6OeSWXgzTL4mhozpkuuFTNRJulTBz3
-   15KJAPNOCygli12oJLXkrYpXnwfD4hw6tqnLYpfeihn4lnm3mZf4UcUq5
-   M/iZToGeSVI7gKoEp3Ez5DVOAJ8E0csr+gTJcr60wNGPeMFGASu3q/Ryv
-   cvRYa4Sv9YRMp5HV0eJVoDv8x7bj9ChEm7CRZGiZq+zuEPE01M2eNNQQ0
-   Ql3Fu9mjP+wbTB09GeOLmG4eQSohD2m/UzIS7mQMLro7sdEJXjN8XlUXf
-   nGW1fSmam6/UAVSkHYHwe52YoEKvyhTRDlR8T28APCkQ3sTuMMcUnTjgv
+  t=1741702224; x=1773238224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+  b=JoThZfxtWpBAhqz35ynvdytlBWUKooygdqA1ehBNKiETJA+kgNPGWIeO
+   ALgbTMzxebN3BTl69J4/6+3neK/vHj7zeGBmmlkgCr9E10oJSN2uhIA2K
+   SVgGkPzVwCAzhip4Ked4lXJSDKPS50PKNqpfk347WXw6BzDe0oqw9705i
+   fO2yCukYgtwF/2iMM9hFEB9qlCmijD4IBox0iUtWHDegWXmD9yKmp0b0s
+   HeV06IEFT/qHP+6GvCNdrwx8DxziNukDOiAcxF2ORRPB8qIMEzsQMl9nE
+   4o9c+W6JfNwVi6gAOYgoA4j1PlP7UEPH4PscLKERtAqHm7nYKOxFuNf/B
    Q==;
-X-CSE-ConnectionGUID: JNN5Dn8RTAqgMInMrITOlw==
-X-CSE-MsgGUID: HsXQe3tlSaSuOcQI+QIrGg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42863049"
+X-CSE-ConnectionGUID: g9gFW97cQdWZqDUQi5PalQ==
+X-CSE-MsgGUID: 6zY14PSaTqCZtWks4bAclQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="46523321"
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="42863049"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 06:18:54 -0700
-X-CSE-ConnectionGUID: puXCHVEVTDq0nUK8CqYi8g==
-X-CSE-MsgGUID: Tn6K92Z3Sauvvj9afxPK4Q==
+   d="scan'208";a="46523321"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 07:10:03 -0700
+X-CSE-ConnectionGUID: lwwV97C/Q1Ck5Ar/zlHaNQ==
+X-CSE-MsgGUID: ERKY/U9aQg6zkJ8ybsZURA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="120809143"
+   d="scan'208";a="157534140"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Mar 2025 06:18:52 -0700
+  by orviesa001.jf.intel.com with ESMTP; 11 Mar 2025 07:10:00 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1trzVS-0006fu-2E;
-	Tue, 11 Mar 2025 13:18:50 +0000
-Date: Tue, 11 Mar 2025 21:17:52 +0800
+	id 1ts0Iv-0006hg-0j;
+	Tue, 11 Mar 2025 14:09:57 +0000
+Date: Tue, 11 Mar 2025 22:09:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ming Yen Hsieh <mingyen.hsieh@mediatek.com>
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+	platform-driver-x86@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Felix Fietkau <nbd@nbd.name>
-Subject: [nbd168-wireless:mt76 20/34]
- drivers/net/wireless/mediatek/mt76/mt792x_acpi_sar.h:35:27: warning:
- 'cc_list_be' defined but not used
-Message-ID: <202503112103.Iuy6Ox55-lkp@intel.com>
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: Re: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <202503112130.dl6b3XVs-lkp@intel.com>
+References: <20250309112114.1177361-7-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,103 +74,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250309112114.1177361-7-lkml@antheas.dev>
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   9b717a6cf418a48764fa88ff63fc595980564127
-commit: afa9bec7ee2df76b1e3fabf9221116f7365107c7 [20/34] wifi: mt76: mt792x: extend MTCL of APCI to version3 for EHT control
-config: sparc-randconfig-002-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112103.Iuy6Ox55-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112103.Iuy6Ox55-lkp@intel.com/reproduce)
+Hi Antheas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on sre-power-supply/for-next amd-pstate/linux-next amd-pstate/bleeding-edge rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/hwmon-oxp-sensors-Distinguish-the-X1-variants/20250309-192300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250309112114.1177361-7-lkml%40antheas.dev
+patch subject: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+config: x86_64-randconfig-074-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503112103.Iuy6Ox55-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503112130.dl6b3XVs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/mediatek/mt76/mt792x.h:12,
-                    from drivers/net/wireless/mediatek/mt76/mt792x_dma.c:7:
->> drivers/net/wireless/mediatek/mt76/mt792x_acpi_sar.h:35:27: warning: 'cc_list_be' defined but not used [-Wunused-const-variable=]
-      35 | static const char * const cc_list_be[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt792x_acpi_sar.h:27:27: warning: 'cc_list_eu' defined but not used [-Wunused-const-variable=]
-      27 | static const char * const cc_list_eu[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt792x_acpi_sar.h:20:27: warning: 'cc_list_all' defined but not used [-Wunused-const-variable=]
-      20 | static const char * const cc_list_all[] = {
-         |                           ^~~~~~~~~~~
+>> ld.lld: error: undefined symbol: battery_hook_register
+   >>> referenced by oxpec.c:927 (drivers/platform/x86/oxpec.c:927)
+   >>>               vmlinux.o:(oxp_platform_probe)
 --
-   drivers/net/wireless/mediatek/mt76/mt7925/init.c: In function 'mt7925_regd_channel_update':
-   drivers/net/wireless/mediatek/mt76/mt7925/init.c:105:26: warning: unused variable 'mdev' [-Wunused-variable]
-     105 |         struct mt76_dev *mdev = &dev->mt76;
-         |                          ^~~~
-   In file included from drivers/net/wireless/mediatek/mt76/mt7925/../mt792x.h:12,
-                    from drivers/net/wireless/mediatek/mt76/mt7925/mt7925.h:7,
-                    from drivers/net/wireless/mediatek/mt76/mt7925/init.c:9:
-   drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h: At top level:
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:35:27: warning: 'cc_list_be' defined but not used [-Wunused-const-variable=]
-      35 | static const char * const cc_list_be[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:27:27: warning: 'cc_list_eu' defined but not used [-Wunused-const-variable=]
-      27 | static const char * const cc_list_eu[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:20:27: warning: 'cc_list_all' defined but not used [-Wunused-const-variable=]
-      20 | static const char * const cc_list_all[] = {
-         |                           ^~~~~~~~~~~
---
-   In file included from drivers/net/wireless/mediatek/mt76/mt7925/../mt792x.h:12,
-                    from drivers/net/wireless/mediatek/mt76/mt7925/mt7925.h:7,
-                    from drivers/net/wireless/mediatek/mt76/mt7925/mac.c:7:
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:35:27: warning: 'cc_list_be' defined but not used [-Wunused-const-variable=]
-      35 | static const char * const cc_list_be[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:27:27: warning: 'cc_list_eu' defined but not used [-Wunused-const-variable=]
-      27 | static const char * const cc_list_eu[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7925/../mt792x_acpi_sar.h:20:27: warning: 'cc_list_all' defined but not used [-Wunused-const-variable=]
-      20 | static const char * const cc_list_all[] = {
-         |                           ^~~~~~~~~~~
---
-   In file included from drivers/net/wireless/mediatek/mt76/mt7921/../mt792x.h:12,
-                    from drivers/net/wireless/mediatek/mt76/mt7921/mt7921.h:7,
-                    from drivers/net/wireless/mediatek/mt76/mt7921/mac.c:7:
->> drivers/net/wireless/mediatek/mt76/mt7921/../mt792x_acpi_sar.h:35:27: warning: 'cc_list_be' defined but not used [-Wunused-const-variable=]
-      35 | static const char * const cc_list_be[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7921/../mt792x_acpi_sar.h:27:27: warning: 'cc_list_eu' defined but not used [-Wunused-const-variable=]
-      27 | static const char * const cc_list_eu[] = {
-         |                           ^~~~~~~~~~
->> drivers/net/wireless/mediatek/mt76/mt7921/../mt792x_acpi_sar.h:20:27: warning: 'cc_list_all' defined but not used [-Wunused-const-variable=]
-      20 | static const char * const cc_list_all[] = {
-         |                           ^~~~~~~~~~~
-
-
-vim +/cc_list_be +35 drivers/net/wireless/mediatek/mt76/mt792x_acpi_sar.h
-
-    19	
-  > 20	static const char * const cc_list_all[] = {
-    21		"00", "EU", "AR", "AU", "AZ", "BY", "BO", "BR",
-    22		"CA", "CL", "CN", "ID", "JP", "MY", "MX", "ME",
-    23		"MA", "NZ", "NG", "PH", "RU", "RS", "SG", "KR",
-    24		"TW", "TH", "UA", "GB", "US", "VN", "KH", "PY",
-    25	};
-    26	
-  > 27	static const char * const cc_list_eu[] = {
-    28		"AD", "AT", "BE", "BG", "CY", "CZ", "HR", "DK",
-    29		"EE", "FI", "FR", "DE", "GR", "HU", "IS", "IE",
-    30		"IT", "LV", "LI", "LT", "LU", "MC", "MT", "NL",
-    31		"NO", "PL", "PT", "RO", "SK", "SI", "ES", "SE",
-    32		"CH",
-    33	};
-    34	
-  > 35	static const char * const cc_list_be[] = {
-    36		"AR", "BR", "BY", "CL", "IQ", "MX", "OM", "RU",
-    37		"RW", "VN", "KR", "UA", "", "", "", "",
-    38		"EU", "AT", "CN", "CA", "TW", "NZ", "PH", "UK",
-    39		"US",
-    40	};
-    41	
+>> ld.lld: error: undefined symbol: battery_hook_unregister
+   >>> referenced by oxpec.c:935 (drivers/platform/x86/oxpec.c:935)
+   >>>               vmlinux.o:(oxp_platform_remove)
 
 -- 
 0-DAY CI Kernel Test Service
