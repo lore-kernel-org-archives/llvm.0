@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325852F28;
-	Tue, 11 Mar 2025 22:22:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE11E264A83;
+	Tue, 11 Mar 2025 22:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741731765; cv=none; b=QW+IH+B6TnBd/yPma/hr4tWXmV3G5l9b54TXIr6OyRpKcmm+/ssT/azMFPVd60nBh7k88vp8tetLf/B0AnMtCoHkQB8BYY4kqotdnbzb/u/80QDfd2UThtaLBcgRRjYlg2kHROi2wjzsr72vKPfz7r6tKAsGTA1hQDOcbEpVuLk=
+	t=1741731825; cv=none; b=BUJ6c505aFIckJqU5nyJOQ37coXN2RQkoeLdck2BooVKbve5BAjV0uvcB+kiFch+sr+i6UsDFRjjYjRsi37Lqvw6MgxXChx9Q7wNH8R6fElfOdFlp1kq0Lhxa/ntzj/wNsoSsdKXP/M27oAiCFTD8NPG60U+lr0DqQhcdSRd6Ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741731765; c=relaxed/simple;
-	bh=u/uRz6vvMwGMXX0HyMnm3A9od3J2DezUs/Fmg0Isx4M=;
+	s=arc-20240116; t=1741731825; c=relaxed/simple;
+	bh=EqbDqtfVMJTwG/n5Bk1RmvX5+h+QhnymOUm1LlsP8r0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Slx8FGje5vkCWFRkM7qfYUDfpVhGU2R/jrmNNEOGluhjhLc+2JIWQdtITfQ2AZSJsaMLKeTwmPyym3K/++nXSCpgVppm27/wWoArM84pP0zh2w+xFHmP+Pvi+K4Bnf1/WPPZI6q7ODbuUPp06usJvc7DH1nsw5yjMBatqxb7zWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F1m6vVRI; arc=none smtp.client-ip=198.175.65.21
+	 Content-Disposition; b=K2ffjXteE8CYTsVGV+uUqhV5ys+3vZ0ornp00ywmAFV5KSfj13ddUP4a15uSUHZqbdf+sUURNhUnAtxflcZSzeLPz49IFzdFNpsVfkhdgX84jEGvaH9ZKNV49B+owCG5k9/Gmc0ZT4dzmYu7V41rkExdI8nYkJvtwXAHR7tR6Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f3LgRa3y; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F1m6vVRI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f3LgRa3y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741731764; x=1773267764;
+  t=1741731824; x=1773267824;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=u/uRz6vvMwGMXX0HyMnm3A9od3J2DezUs/Fmg0Isx4M=;
-  b=F1m6vVRI+mn45GvNh3PlI4tJ/jz9iJvL9OAdz6TQ32xNauNqFsc57vPR
-   ieuoMqA4aaObyeTNMtSUx/04xrEnDidVrDb6sbE45qeFgEsKZ8OifQ1Ht
-   7zXr5EGKJKoGdAAVwDDzu/tvnLAPvKb6RIdvTowV+zjMH+ojGSoAR/stu
-   s6MFxZ7EdDySBALzrJb02ARFQY4Z3IDt5GUwiTVkV24EtyLfufQwl65of
-   f8beR/lTvaU2nRXmpnTtERSidpF8OyknrEpC8NA1P56W/jIvdRzCmvXJu
-   AxVl6cOTAAApa3pIBr3imbS+nI6/726P4eLC6oUKtQ0RYc55jwy7kCH5D
-   g==;
-X-CSE-ConnectionGUID: Leh0TAbwR9+VEo1fKifZbw==
-X-CSE-MsgGUID: 9uTVu1MlRo++WAeY6cHEkg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42701567"
+  bh=EqbDqtfVMJTwG/n5Bk1RmvX5+h+QhnymOUm1LlsP8r0=;
+  b=f3LgRa3ycaUTejBe4ApMOEVqKYbsjZWBGg+LdEns0bXqhWfgziWs0RpI
+   n2v3uysb1EFCMrP6wJe6HPLfyCMXifiry0mDiSxM0QgdpH3G9hnbWdmGk
+   CvBvGXaVKasURLF095llatAQJw/Xjo7kCXTB1VdKH2/KFcq8H1DtM88pF
+   cxjed8HfsbMBhrfRJ5RcqRmO9Yk774nODIHtYE6E3J2+3hA+eEOKGEuO2
+   /uMEeKoLfLDN/8sVIMi0qVubbpNTksob6wsrAgQJwtJ35k3oM8zt3uksV
+   ggI27zQv9HQMK0+NmOMBsDMOkrKL2sNFtxyXueZc4j9hGYTWRzCc8KyMJ
+   Q==;
+X-CSE-ConnectionGUID: HYj4Z1PTQ0u4HRY9ivc8iw==
+X-CSE-MsgGUID: X8X+5B13Qbyug6v6f30ITg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42922534"
 X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="42701567"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 15:22:43 -0700
-X-CSE-ConnectionGUID: vVhmWsRoTmK23EwDnRnBEg==
-X-CSE-MsgGUID: P6piaV9+ToWH3ErrlO1xLw==
+   d="scan'208";a="42922534"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 15:23:42 -0700
+X-CSE-ConnectionGUID: vIjh1dIPSIiZHktEmcSotQ==
+X-CSE-MsgGUID: lMZklSaARN+Tb2MmHMEqxw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="125348385"
+   d="scan'208";a="143649022"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 11 Mar 2025 15:22:42 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 11 Mar 2025 15:23:41 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ts7zj-0007sq-0E;
-	Tue, 11 Mar 2025 22:22:39 +0000
-Date: Wed, 12 Mar 2025 06:22:25 +0800
+	id 1ts80h-0007su-0V;
+	Tue, 11 Mar 2025 22:23:39 +0000
+Date: Wed, 12 Mar 2025 06:22:41 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:kdevops 78/81] fs/nfsd/nfsproc.c:57:9: error: implicit
- declaration of function 'trace_nfsd_proc_getattr'; did you mean
- 'nfsd_proc_getattr'?
-Message-ID: <202503120603.hgrmWqsE-lkp@intel.com>
+Subject: [jlayton:nfsd-tracepoints 12/14] fs/nfsd/nfsproc.c:463:2: error:
+ call to undeclared function 'trace_nfsd_proc_rename'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202503120613.HAepZgCr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,143 +63,151 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
-head:   86deeee9a2bdf8ba09cfd0ab66dbf448d2e8b82b
-commit: a063a124db1791568dce722fe7898f375060c76f [78/81] nfsd: add tracepoint for GETATTR events
-config: sparc-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250312/202503120603.hgrmWqsE-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120603.hgrmWqsE-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git nfsd-tracepoints
+head:   406b15fe7fc917eb20c0cfe48d441442adad9918
+commit: 734656d1441cc769a32a2473091c852809e45b6d [12/14] nfsd: add tracepoints to rename events
+config: arm-randconfig-003-20250312 (https://download.01.org/0day-ci/archive/20250312/202503120613.HAepZgCr-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120613.HAepZgCr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120603.hgrmWqsE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120613.HAepZgCr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_getattr':
->> fs/nfsd/nfsproc.c:57:9: error: implicit declaration of function 'trace_nfsd_proc_getattr'; did you mean 'nfsd_proc_getattr'? [-Wimplicit-function-declaration]
-      57 |         trace_nfsd_proc_getattr(rqstp, &argp->fh);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_getattr
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_create':
-   fs/nfsd/nfsproc.c:295:9: error: implicit declaration of function 'trace_nfsd_proc_create'; did you mean 'nfsd_proc_create'? [-Wimplicit-function-declaration]
+   fs/nfsd/nfsproc.c:295:2: error: call to undeclared function 'trace_nfsd_proc_create'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      295 |         trace_nfsd_proc_create(rqstp, dirfhp, S_IFREG, argp->name, argp->len);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_create
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_remove':
-   fs/nfsd/nfsproc.c:447:9: error: implicit declaration of function 'trace_nfsd_proc_remove'; did you mean 'nfsd_proc_remove'? [-Wimplicit-function-declaration]
-     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_remove
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_rename':
-   fs/nfsd/nfsproc.c:463:9: error: implicit declaration of function 'trace_nfsd_proc_rename'; did you mean 'nfsd_proc_rename'? [-Wimplicit-function-declaration]
-     463 |         trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_rename
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_link':
-   fs/nfsd/nfsproc.c:480:9: error: implicit declaration of function 'trace_nfsd_proc_link'; did you mean 'nfsd_proc_link'? [-Wimplicit-function-declaration]
-     480 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
-         |         ^~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_link
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
-   fs/nfsd/nfsproc.c:500:9: error: implicit declaration of function 'trace_nfsd_proc_symlink'; did you mean 'nfsd_proc_symlink'? [-Wimplicit-function-declaration]
-     500 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_symlink
-   fs/nfsd/nfsproc.c:534:1: error: invalid storage class for function 'nfsd_proc_mkdir'
-     534 | nfsd_proc_mkdir(struct svc_rqst *rqstp)
-         | ^~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_mkdir':
-   fs/nfsd/nfsproc.c:542:9: error: implicit declaration of function 'trace_nfsd_proc_mkdir'; did you mean 'nfsd_proc_mkdir'? [-Wimplicit-function-declaration]
-     542 |         trace_nfsd_proc_mkdir(rqstp, &argp->fh, S_IFDIR, argp->name, argp->len);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_mkdir
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
-   fs/nfsd/nfsproc.c:567:1: error: invalid storage class for function 'nfsd_proc_rmdir'
-     567 | nfsd_proc_rmdir(struct svc_rqst *rqstp)
-         | ^~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_rmdir':
-   fs/nfsd/nfsproc.c:572:9: error: implicit declaration of function 'trace_nfsd_proc_rmdir'; did you mean 'nfsd_proc_rmdir'? [-Wimplicit-function-declaration]
-     572 |         trace_nfsd_proc_rmdir(rqstp, &argp->fh, argp->name, argp->len);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_rmdir
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
-   fs/nfsd/nfsproc.c:581:13: error: invalid storage class for function 'nfsd_init_dirlist_pages'
-     581 | static void nfsd_init_dirlist_pages(struct svc_rqst *rqstp,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c:603:1: error: invalid storage class for function 'nfsd_proc_readdir'
-     603 | nfsd_proc_readdir(struct svc_rqst *rqstp)
-         | ^~~~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_readdir':
-   fs/nfsd/nfsproc.c:609:9: error: implicit declaration of function 'trace_nfsd_proc_readdir'; did you mean 'nfsd_proc_readdir'? [-Wimplicit-function-declaration]
-     609 |         trace_nfsd_proc_readdir(rqstp, &argp->fh, argp->cookie, argp->count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_readdir
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
-   fs/nfsd/nfsproc.c:629:1: error: invalid storage class for function 'nfsd_proc_statfs'
-     629 | nfsd_proc_statfs(struct svc_rqst *rqstp)
-         | ^~~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_statfs':
->> fs/nfsd/nfsproc.c:634:9: error: implicit declaration of function 'trace_nfsd_proc_statfs'; did you mean 'nfsd_proc_statfs'? [-Wimplicit-function-declaration]
-     634 |         trace_nfsd_proc_statfs(rqstp, &argp->fh);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-         |         nfsd_proc_statfs
-   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
-   fs/nfsd/nfsproc.c:814:28: error: initializer element is not constant
-     814 |                 .pc_func = nfsd_proc_mkdir,
-         |                            ^~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c:814:28: note: (near initialization for 'nfsd_procedures2[14].pc_func')
-   fs/nfsd/nfsproc.c:826:28: error: initializer element is not constant
-     826 |                 .pc_func = nfsd_proc_rmdir,
-         |                            ^~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c:826:28: note: (near initialization for 'nfsd_procedures2[15].pc_func')
-   fs/nfsd/nfsproc.c:837:28: error: initializer element is not constant
-     837 |                 .pc_func = nfsd_proc_readdir,
-         |                            ^~~~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c:837:28: note: (near initialization for 'nfsd_procedures2[16].pc_func')
-   fs/nfsd/nfsproc.c:847:28: error: initializer element is not constant
-     847 |                 .pc_func = nfsd_proc_statfs,
-         |                            ^~~~~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c:847:28: note: (near initialization for 'nfsd_procedures2[17].pc_func')
-   fs/nfsd/nfsproc.c:868:1: error: expected declaration or statement at end of input
-     868 | };
+         |         ^
+   fs/nfsd/nfsproc.c:295:2: note: did you mean 'nfsd_proc_create'?
+   fs/nfsd/nfsproc.c:279:1: note: 'nfsd_proc_create' declared here
+     279 | nfsd_proc_create(struct svc_rqst *rqstp)
          | ^
-   fs/nfsd/nfsproc.c:861:26: warning: unused variable 'nfsd_version2' [-Wunused-variable]
-     861 | const struct svc_version nfsd_version2 = {
-         |                          ^~~~~~~~~~~~~
-   fs/nfsd/nfsproc.c: At top level:
-   fs/nfsd/nfsproc.c:491:1: warning: 'nfsd_proc_symlink' defined but not used [-Wunused-function]
+   fs/nfsd/nfsproc.c:447:2: error: call to undeclared function 'trace_nfsd_proc_remove'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
+         |         ^
+   fs/nfsd/nfsproc.c:447:2: note: did you mean 'nfsd_proc_remove'?
+   fs/nfsd/nfsproc.c:442:1: note: 'nfsd_proc_remove' declared here
+     442 | nfsd_proc_remove(struct svc_rqst *rqstp)
+         | ^
+     443 | {
+     444 |         struct nfsd_diropargs *argp = rqstp->rq_argp;
+     445 |         struct nfsd_stat *resp = rqstp->rq_resp;
+     446 | 
+     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
+         |         ~~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_remove
+>> fs/nfsd/nfsproc.c:463:2: error: call to undeclared function 'trace_nfsd_proc_rename'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     463 |         trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
+         |         ^
+   fs/nfsd/nfsproc.c:463:2: note: did you mean 'nfsd_proc_rename'?
+   fs/nfsd/nfsproc.c:458:1: note: 'nfsd_proc_rename' declared here
+     458 | nfsd_proc_rename(struct svc_rqst *rqstp)
+         | ^
+     459 | {
+     460 |         struct nfsd_renameargs *argp = rqstp->rq_argp;
+     461 |         struct nfsd_stat *resp = rqstp->rq_resp;
+     462 | 
+     463 |         trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
+         |         ~~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_rename
+   fs/nfsd/nfsproc.c:480:2: error: call to undeclared function 'trace_nfsd_proc_link'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     480 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+         |         ^
+   fs/nfsd/nfsproc.c:480:2: note: did you mean 'nfsd_proc_link'?
+   fs/nfsd/nfsproc.c:475:1: note: 'nfsd_proc_link' declared here
+     475 | nfsd_proc_link(struct svc_rqst *rqstp)
+         | ^
+     476 | {
+     477 |         struct nfsd_linkargs *argp = rqstp->rq_argp;
+     478 |         struct nfsd_stat *resp = rqstp->rq_resp;
+     479 | 
+     480 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+         |         ~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_link
+   fs/nfsd/nfsproc.c:500:2: error: call to undeclared function 'trace_nfsd_proc_symlink'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     500 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+         |         ^
+   fs/nfsd/nfsproc.c:500:2: note: did you mean 'nfsd_proc_symlink'?
+   fs/nfsd/nfsproc.c:491:1: note: 'nfsd_proc_symlink' declared here
      491 | nfsd_proc_symlink(struct svc_rqst *rqstp)
-         | ^~~~~~~~~~~~~~~~~
+         | ^
+     492 | {
+     493 |         struct nfsd_symlinkargs *argp = rqstp->rq_argp;
+     494 |         struct nfsd_stat *resp = rqstp->rq_resp;
+     495 |         struct nfsd_attrs attrs = {
+     496 |                 .na_iattr       = &argp->attrs,
+     497 |         };
+     498 |         struct svc_fh   newfh;
+     499 | 
+     500 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+         |         ~~~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_symlink
+   fs/nfsd/nfsproc.c:535:1: error: function definition is not allowed here
+     535 | {
+         | ^
+   fs/nfsd/nfsproc.c:568:1: error: function definition is not allowed here
+     568 | {
+         | ^
+   fs/nfsd/nfsproc.c:584:1: error: function definition is not allowed here
+     584 | {
+         | ^
+   fs/nfsd/nfsproc.c:604:1: error: function definition is not allowed here
+     604 | {
+         | ^
+   fs/nfsd/nfsproc.c:632:1: error: function definition is not allowed here
+     632 | {
+         | ^
+   fs/nfsd/nfsproc.c:816:14: error: use of undeclared identifier 'nfsd_proc_mkdir'; did you mean '_proc_mkdir'?
+     816 |                 .pc_func = nfsd_proc_mkdir,
+         |                            ^~~~~~~~~~~~~~~
+         |                            _proc_mkdir
+   include/linux/proc_fs.h:85:24: note: '_proc_mkdir' declared here
+      85 | struct proc_dir_entry *_proc_mkdir(const char *, umode_t, struct proc_dir_entry *, void *, bool);
+         |                        ^
+   fs/nfsd/nfsproc.c:828:14: error: use of undeclared identifier 'nfsd_proc_rmdir'
+     828 |                 .pc_func = nfsd_proc_rmdir,
+         |                            ^
+   fs/nfsd/nfsproc.c:839:14: error: use of undeclared identifier 'nfsd_proc_readdir'
+     839 |                 .pc_func = nfsd_proc_readdir,
+         |                            ^
+   fs/nfsd/nfsproc.c:849:14: error: use of undeclared identifier 'nfsd_proc_statfs'; did you mean 'nfsd_proc_setattr'?
+     849 |                 .pc_func = nfsd_proc_statfs,
+         |                            ^~~~~~~~~~~~~~~~
+         |                            nfsd_proc_setattr
+   fs/nfsd/nfsproc.c:75:1: note: 'nfsd_proc_setattr' declared here
+      75 | nfsd_proc_setattr(struct svc_rqst *rqstp)
+         | ^
+   fs/nfsd/nfsproc.c:870:3: error: expected '}'
+     870 | };
+         |   ^
+   fs/nfsd/nfsproc.c:492:1: note: to match this '{'
+     492 | {
+         | ^
+   15 errors generated.
 
 
-vim +57 fs/nfsd/nfsproc.c
+vim +/trace_nfsd_proc_rename +463 fs/nfsd/nfsproc.c
 
-    46	
-    47	/*
-    48	 * Get a file's attributes
-    49	 * N.B. After this call resp->fh needs an fh_put
-    50	 */
-    51	static __be32
-    52	nfsd_proc_getattr(struct svc_rqst *rqstp)
-    53	{
-    54		struct nfsd_fhandle *argp = rqstp->rq_argp;
-    55		struct nfsd_attrstat *resp = rqstp->rq_resp;
-    56	
-  > 57		trace_nfsd_proc_getattr(rqstp, &argp->fh);
-    58	
-    59		fh_copy(&resp->fh, &argp->fh);
-    60		resp->status = fh_verify(rqstp, &resp->fh, 0,
-    61					 NFSD_MAY_NOP | NFSD_MAY_BYPASS_GSS_ON_ROOT);
-    62		if (resp->status != nfs_ok)
-    63			goto out;
-    64		resp->status = fh_getattr(&resp->fh, &resp->stat);
-    65	out:
-    66		resp->status = nfsd_map_status(resp->status);
-    67		return rpc_success;
-    68	}
-    69	
+   456	
+   457	static __be32
+   458	nfsd_proc_rename(struct svc_rqst *rqstp)
+   459	{
+   460		struct nfsd_renameargs *argp = rqstp->rq_argp;
+   461		struct nfsd_stat *resp = rqstp->rq_resp;
+   462	
+ > 463		trace_nfsd_proc_rename(rqstp, &argp->ffh, &argp->tfh, argp->fname,
+   464				       argp->flen, argp->tname, argp->tlen);
+   465	
+   466		resp->status = nfsd_rename(rqstp, &argp->ffh, argp->fname, argp->flen,
+   467					   &argp->tfh, argp->tname, argp->tlen);
+   468		fh_put(&argp->ffh);
+   469		fh_put(&argp->tfh);
+   470		resp->status = nfsd_map_status(resp->status);
+   471		return rpc_success;
+   472	}
+   473	
 
 -- 
 0-DAY CI Kernel Test Service
