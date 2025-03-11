@@ -1,110 +1,118 @@
-Received: from a48-105.smtp-out.amazonses.com (a48-105.smtp-out.amazonses.com [54.240.48.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72582233141
-	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 23:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.48.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478701C3C1C;
+	Tue, 11 Mar 2025 23:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741736691; cv=none; b=tuQ6Fmcz3AB9H8rqufHLyWsWxSWaNBKZSYzAIvQircfaCPJB5TcPnBmP15/uXOC6apLfoqUPuCOB/KqDpcNwg41Phi+ySXpsBjnvon5BfF35wQLosf78vo3SPseUM0s4WAQNzRtphPQtrtWwcTAA+lLTVXVGuUd30hblE7Clf5I=
+	t=1741736840; cv=none; b=BSjI3GTg8kfonuiaGa+w45MbVlQj6s7vjFs2+Dpm+I3JOvyCeQEtC+8hpEucXpNrDjC390hlbE+dqDdK8B8Onono/tZhWh6GBgNiAe2QwyEm6JdBeINYzBu4OfM4dhNjn7NqDQXaYvUZnnFXhWkhfGggMbj8KIdV4FXfztFSxUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741736691; c=relaxed/simple;
-	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MWfH9rHxDHIi+q9clXJgPTaMjGJTI+MeadWnp9oRDZcud2Mo3/MZCHqMLScdwb4d+HtdDwSdcxEBGujDL75BNidFlSyzlWeLfEqoWUTEZo3qW4bQ9ubZMstoBvbrqvR7jau1mxLj6OR9V7JNCXnyViWrs/dTN4PRn2yra06oYeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=PaB7etwo; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=DfrZ0Xrt; arc=none smtp.client-ip=54.240.48.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
+	s=arc-20240116; t=1741736840; c=relaxed/simple;
+	bh=Y6R5ochXZjO0aw+ypmRlwg4ApKaPVzeVljwxvwsY0gs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bSKCpisSv3NLP/Q7+1UJ+owt4ZSbhwJj/0IB0jHNE7pPA7nQ3fPiJuCklBu8YcRzGtgcYso97i8OxRxk3O7QhdmkKHtX5Ibsis9MvpPbhPS8duPLNIiKgQadMuJjrnUwafvNcpkFxWJQKJKRKbS+Bz5M+y0zEqTd89+MNrm9PEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mv/edoJz; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="PaB7etwo";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="DfrZ0Xrt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
-	t=1741736688;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
-	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
-	b=PaB7etwoTpUVDWqWzpBGCip4F2pzz64G/bkm4VKstBA20dVEM8DO6CjpXu0FX2bi
-	StiWAsdOBdDra75ChClOwxQcpn0mH099BCb3PeI7MSzkkwIOX5eBMxVlE7zLRWNGT+M
-	RH1yxh3GcSYqe9eU9hSqAo/gTRiketHH0PaXorlFladxBsnN3oORfX4PKQHe1XkccT0
-	dEZ6UahjDWxAUotAbhVTVI0zdp0m9J9LPzdW3I812awicABp68AQRFipNTmDvnz955p
-	671OBHbSP9v6xUuFkkbGkYGyIxC38YAIEUEXkfMEtsQO9vw8AEZjlswKjnzXlv+INsp
-	AMWVzU+4Gg==
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741736688;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
-	b=DfrZ0Xrt5/J4KFKOyhZND61FHTMXKECxpwF1bWH5UsehDaL4kZi00x/jA6aL2KiV
-	qKgWH470Ssflue7VgdONEHXzKP5q1vYZtF1bwWaBLz1CMSgpClyg4REW1n4ZZ4T+xBC
-	Qg37D9qSyQPqAyi6AT0+DYNGA2lP/jydLnvOY8rA=
-From: Antonio Hickey <contact@antoniohickey.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Antonio Hickey <contact@antoniohickey.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
-Date: Tue, 11 Mar 2025 23:44:48 +0000
-Message-ID: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
-X-Mailer: git-send-email 2.48.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mv/edoJz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741736839; x=1773272839;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Y6R5ochXZjO0aw+ypmRlwg4ApKaPVzeVljwxvwsY0gs=;
+  b=mv/edoJzr1FwtqwyvngpSrhMegsUUhQ5gLMchsl5S2eN3/D/rFxc6FyS
+   baNKd+gKobH2ImOULszlUwcr9hcTzAcMgOuuC5O59yjFC3dNom/tTy5dL
+   eYpB5phkXB2q7atP+qC7DlxAGqA485LUcysEDHvG/gqi+ch3Y+UO3H9Gy
+   jCO4IX6TjSkSO3DYcuMAQ5KRiRK0S+BUTFnU+U97pXSErXC45Cvu4BrQr
+   9Zjqlv7NP/O25Hn7Ha3nGNoadesr10siyoXZZivdFr9mv8NFvok0e3JpY
+   RYo5zhOt1gSzyhU2lNtNhMgo+i6mfjAP8hrduNsfSVtEVzVjYd596RDDz
+   A==;
+X-CSE-ConnectionGUID: XHk857ElTuqwW2V6KcQlIA==
+X-CSE-MsgGUID: sHMOZa6iS9Gfj6M1+YHHAQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="46711327"
+X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
+   d="scan'208";a="46711327"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 16:47:19 -0700
+X-CSE-ConnectionGUID: fgIgXBXPQu6OLHRgtLP/eg==
+X-CSE-MsgGUID: 9PDSeaBqQ/yJ4MIzewbUew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
+   d="scan'208";a="120174077"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 11 Mar 2025 16:47:16 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts9JX-0007xC-2R;
+	Tue, 11 Mar 2025 23:47:12 +0000
+Date: Wed, 12 Mar 2025 07:46:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>
+Subject: [tj-cgroup:tmp 13/16] include/asm-generic/rwonce.h:59:1: error:
+ expected ';' before 'do'
+Message-ID: <202503120719.47sOvfVx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
-X-SES-Outgoing: 2025.03.11-54.240.48.105
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
-toolchain provided by kernel.org with ARCH=x86_64, the following symbols
-are generated:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git tmp
+head:   153926208f7777e220dec1156a44a5fa06623ac1
+commit: c359863bfd828fd03999c17d9bad87e767708fa0 [13/16] mm: Add transformation message for per-memcg swappiness
+config: sparc64-randconfig-002-20250312 (https://download.01.org/0day-ci/archive/20250312/202503120719.47sOvfVx-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120719.47sOvfVx-lkp@intel.com/reproduce)
 
-$nm vmlinux | grep ' _R'.*UserSliceReader | rustfilt
-ffffffff817c3320 T <kernel::uaccess::UserSliceReader>::read_slice
-ffffffff817c32b0 T <kernel::uaccess::UserSliceReader>::read_raw
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120719.47sOvfVx-lkp@intel.com/
 
-However, these Rust symbols are trivial wrappers around the functions
-copy_from_user, _copy_from_user respectively. It doesn't
-make sense to go through a trivial wrapper for these functions, so mark
-them inline.
+All errors (new ones prefixed by >>):
 
-After applying this patch, the above command will produce no output.
+   In file included from ./arch/sparc/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:339,
+                    from include/asm-generic/bug.h:5,
+                    from arch/sparc/include/asm/bug.h:25,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from arch/sparc/include/asm/current.h:15,
+                    from include/linux/sched.h:12,
+                    from include/linux/cgroup.h:12,
+                    from include/linux/memcontrol.h:13,
+                    from mm/memcontrol-v1.c:3:
+   mm/memcontrol-v1.c: In function 'mem_cgroup_swappiness_write':
+>> include/asm-generic/rwonce.h:59:1: error: expected ';' before 'do'
+      59 | do {                                                                    \
+         | ^~
+   mm/memcontrol-v1.c:1861:17: note: in expansion of macro 'WRITE_ONCE'
+    1861 |                 WRITE_ONCE(memcg->swappiness, val);
+         |                 ^~~~~~~~~~
 
-Link: https://github.com/Rust-for-Linux/linux/issues/1145
-Suggested-by: https://github.com/Rust-for-Linux/linux/issues/1145
-Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
----
- rust/kernel/uaccess.rs | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
-index 719b0a48ff55..3d8a08aeed89 100644
---- a/rust/kernel/uaccess.rs
-+++ b/rust/kernel/uaccess.rs
-@@ -218,6 +218,7 @@ pub fn is_empty(&self) -> bool {
-     /// # Guarantees
-     ///
-     /// After a successful call to this method, all bytes in `out` are initialized.
-+    #[inline]
-     pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
-         let len = out.len();
-         let out_ptr = out.as_mut_ptr().cast::<c_void>();
-@@ -239,6 +240,7 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
-     ///
-     /// Fails with [`EFAULT`] if the read happens on a bad address, or if the read goes out of
-     /// bounds of this [`UserSliceReader`]. This call may modify `out` even if it returns an error.
-+    #[inline]
-     pub fn read_slice(&mut self, out: &mut [u8]) -> Result {
-         // SAFETY: The types are compatible and `read_raw` doesn't write uninitialized bytes to
-         // `out`.
+vim +59 include/asm-generic/rwonce.h
+
+e506ea451254ab1 Will Deacon 2019-10-15  57  
+e506ea451254ab1 Will Deacon 2019-10-15  58  #define WRITE_ONCE(x, val)						\
+e506ea451254ab1 Will Deacon 2019-10-15 @59  do {									\
+e506ea451254ab1 Will Deacon 2019-10-15  60  	compiletime_assert_rwonce_type(x);				\
+e506ea451254ab1 Will Deacon 2019-10-15  61  	__WRITE_ONCE(x, val);						\
+e506ea451254ab1 Will Deacon 2019-10-15  62  } while (0)
+e506ea451254ab1 Will Deacon 2019-10-15  63  
+
+:::::: The code at line 59 was first introduced by commit
+:::::: e506ea451254ab17e0bf918ca36232fec2a9b10c compiler.h: Split {READ,WRITE}_ONCE definitions out into rwonce.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
