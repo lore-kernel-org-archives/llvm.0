@@ -1,192 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a48-105.smtp-out.amazonses.com (a48-105.smtp-out.amazonses.com [54.240.48.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D74E22257B;
-	Tue, 11 Mar 2025 23:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72582233141
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 23:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.48.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741736118; cv=none; b=CcdzuEKKk+Ob5skMfItc3l+rElAhD15KasUrpO0jMzKzglL3QJILH2UzKj/CHU2oW4TotrzXAzIod9si1MBy35qEQ5VbU2IQl5WOn6JzCAbLTSr7hgG+olgAKZEHbauVBL8ZcnleOskXnKdJwLfb9H4PjDX3O3ucyTrAg0M8oh8=
+	t=1741736691; cv=none; b=tuQ6Fmcz3AB9H8rqufHLyWsWxSWaNBKZSYzAIvQircfaCPJB5TcPnBmP15/uXOC6apLfoqUPuCOB/KqDpcNwg41Phi+ySXpsBjnvon5BfF35wQLosf78vo3SPseUM0s4WAQNzRtphPQtrtWwcTAA+lLTVXVGuUd30hblE7Clf5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741736118; c=relaxed/simple;
-	bh=elqNsF85TWhSgJAwnZme8MoszZ89P0pZ9HDqIv+k/+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vm6malm8hgPWZfukwmKKwqsAeyUr+zCwpnF4WiuqAmlxc+R+xHSuxLNXJHK4di4EsJOM5dSlS4df+59Ac/WtUBwFJHWCwXJMHpBueAtJiuq2qZNJwvphWOVQFYYzC83FnQD4dLt53kJt7NddZ5a/wsy4zaM2n4qarkv7Kt7ncUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mhHxR1iq; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741736691; c=relaxed/simple;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MWfH9rHxDHIi+q9clXJgPTaMjGJTI+MeadWnp9oRDZcud2Mo3/MZCHqMLScdwb4d+HtdDwSdcxEBGujDL75BNidFlSyzlWeLfEqoWUTEZo3qW4bQ9ubZMstoBvbrqvR7jau1mxLj6OR9V7JNCXnyViWrs/dTN4PRn2yra06oYeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=PaB7etwo; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=DfrZ0Xrt; arc=none smtp.client-ip=54.240.48.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mhHxR1iq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741736116; x=1773272116;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=elqNsF85TWhSgJAwnZme8MoszZ89P0pZ9HDqIv+k/+4=;
-  b=mhHxR1iqfiLk12Dol0zGoGQEnrgu9QP2GSd7z1+s2GG/qQYkdAw+C9Np
-   58CfDlVCDOYLnCRk4WeADTqjgHqaPlHwPKkUYlCjP0MBJYkdHaxwpkX6F
-   DaACXcEMROpKxLbOyAeNEE2gX3gyL5weQWr++5s6+gubCMw0KiZrU2WYC
-   /BvLFCfX1EIujrT+/xTNdeYM666FahgrqilJRZsegZykwZqjBbM2J3Aj1
-   ghEcTa50CjrigisO9ngpibNDr7Bsq45yF4APiKUGPLIjC9C1axW9n8mSo
-   /qCytKIsoS8jK+ZRaZpQS5Wigw30Hhn3/FbzDEo5ROpGdHHr4XKr/nmEa
-   g==;
-X-CSE-ConnectionGUID: Z5rPn+nbSimiRaPZzIJNwg==
-X-CSE-MsgGUID: dRDidJfiTT23qkFH5konDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="54169634"
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="54169634"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 16:35:15 -0700
-X-CSE-ConnectionGUID: CF1404RcSfuQSV8CuiITiw==
-X-CSE-MsgGUID: Jur65i+1S0GENA6ydQlL3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="125361340"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 11 Mar 2025 16:35:10 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts97r-0007wm-1B;
-	Tue, 11 Mar 2025 23:35:07 +0000
-Date: Wed, 12 Mar 2025 07:35:01 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Chen-Yu Tsai <wens@csie.org>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Samuel Holland <samuel@sholland.org>, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH net-next 3/9] net: stmmac: remove of_get_phy_mode()
-Message-ID: <202503120741.lpX5066n-lkp@intel.com>
-References: <E1trbxk-005qYA-Up@rmk-PC.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="PaB7etwo";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="DfrZ0Xrt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
+	t=1741736688;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	b=PaB7etwoTpUVDWqWzpBGCip4F2pzz64G/bkm4VKstBA20dVEM8DO6CjpXu0FX2bi
+	StiWAsdOBdDra75ChClOwxQcpn0mH099BCb3PeI7MSzkkwIOX5eBMxVlE7zLRWNGT+M
+	RH1yxh3GcSYqe9eU9hSqAo/gTRiketHH0PaXorlFladxBsnN3oORfX4PKQHe1XkccT0
+	dEZ6UahjDWxAUotAbhVTVI0zdp0m9J9LPzdW3I812awicABp68AQRFipNTmDvnz955p
+	671OBHbSP9v6xUuFkkbGkYGyIxC38YAIEUEXkfMEtsQO9vw8AEZjlswKjnzXlv+INsp
+	AMWVzU+4Gg==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741736688;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=S89VYiNjTrAawzR8pDNsckPg14WX/oNcDQkKjNu0KPc=;
+	b=DfrZ0Xrt5/J4KFKOyhZND61FHTMXKECxpwF1bWH5UsehDaL4kZi00x/jA6aL2KiV
+	qKgWH470Ssflue7VgdONEHXzKP5q1vYZtF1bwWaBLz1CMSgpClyg4REW1n4ZZ4T+xBC
+	Qg37D9qSyQPqAyi6AT0+DYNGA2lP/jydLnvOY8rA=
+From: Antonio Hickey <contact@antoniohickey.com>
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Antonio Hickey <contact@antoniohickey.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
+Date: Tue, 11 Mar 2025 23:44:48 +0000
+Message-ID: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1trbxk-005qYA-Up@rmk-PC.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
+X-SES-Outgoing: 2025.03.11-54.240.48.105
 
-Hi Russell,
+When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+toolchain provided by kernel.org with ARCH=x86_64, the following symbols
+are generated:
 
-kernel test robot noticed the following build warnings:
+$nm vmlinux | grep ' _R'.*UserSliceReader | rustfilt
+ffffffff817c3320 T <kernel::uaccess::UserSliceReader>::read_slice
+ffffffff817c32b0 T <kernel::uaccess::UserSliceReader>::read_raw
 
-[auto build test WARNING on net-next/main]
+However, these Rust symbols are trivial wrappers around the functions
+copy_from_user, _copy_from_user respectively. It doesn't
+make sense to go through a trivial wrapper for these functions, so mark
+them inline.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-qcom-ethqos-remove-of_get_phy_mode/20250311-001446
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1trbxk-005qYA-Up%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH net-next 3/9] net: stmmac: remove of_get_phy_mode()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250312/202503120741.lpX5066n-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120741.lpX5066n-lkp@intel.com/reproduce)
+After applying this patch, the above command will produce no output.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120741.lpX5066n-lkp@intel.com/
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Suggested-by: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+---
+ rust/kernel/uaccess.rs | 2 ++
+ 1 file changed, 2 insertions(+)
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/stmicro/stmmac/dwmac-anarion.c:11:
-   In file included from include/linux/of_net.h:9:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/stmicro/stmmac/dwmac-anarion.c:94:4: warning: variable 'phy_mode' is uninitialized when used here [-Wuninitialized]
-      94 |                         phy_mode);
-         |                         ^~~~~~~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/net/ethernet/stmicro/stmmac/dwmac-anarion.c:67:2: note: variable 'phy_mode' is declared here
-      67 |         phy_interface_t phy_mode;
-         |         ^
-   4 warnings generated.
-
-
-vim +/phy_mode +94 drivers/net/ethernet/stmicro/stmmac/dwmac-anarion.c
-
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   61  
-41b984be408c088 Russell King (Oracle  2025-03-10   62) static struct anarion_gmac *
-41b984be408c088 Russell King (Oracle  2025-03-10   63) anarion_config_dt(struct platform_device *pdev,
-41b984be408c088 Russell King (Oracle  2025-03-10   64) 		  struct plat_stmmacenet_data *plat_dat)
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   65  {
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   66  	struct anarion_gmac *gmac;
-0c65b2b90d13c1d Andrew Lunn           2019-11-04   67  	phy_interface_t phy_mode;
-0c65b2b90d13c1d Andrew Lunn           2019-11-04   68  	void __iomem *ctl_block;
-0c65b2b90d13c1d Andrew Lunn           2019-11-04   69  	int err;
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   70  
-ad124aa34e51439 YueHaibing            2019-08-21   71  	ctl_block = devm_platform_ioremap_resource(pdev, 1);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   72  	if (IS_ERR(ctl_block)) {
-51fe084b17e795f Simon Horman          2023-04-06   73  		err = PTR_ERR(ctl_block);
-51fe084b17e795f Simon Horman          2023-04-06   74  		dev_err(&pdev->dev, "Cannot get reset region (%d)!\n", err);
-51fe084b17e795f Simon Horman          2023-04-06   75  		return ERR_PTR(err);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   76  	}
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   77  
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   78  	gmac = devm_kzalloc(&pdev->dev, sizeof(*gmac), GFP_KERNEL);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   79  	if (!gmac)
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   80  		return ERR_PTR(-ENOMEM);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   81  
-9f12541d684b925 Simon Horman          2023-04-06   82  	gmac->ctl_block = ctl_block;
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   83  
-41b984be408c088 Russell King (Oracle  2025-03-10   84) 	switch (plat_dat->phy_interface) {
-df561f6688fef77 Gustavo A. R. Silva   2020-08-23   85  	case PHY_INTERFACE_MODE_RGMII:
-df561f6688fef77 Gustavo A. R. Silva   2020-08-23   86  		fallthrough;
-df561f6688fef77 Gustavo A. R. Silva   2020-08-23   87  	case PHY_INTERFACE_MODE_RGMII_ID:
-df561f6688fef77 Gustavo A. R. Silva   2020-08-23   88  	case PHY_INTERFACE_MODE_RGMII_RXID:
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   89  	case PHY_INTERFACE_MODE_RGMII_TXID:
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   90  		gmac->phy_intf_sel = GMAC_CONFIG_INTF_RGMII;
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   91  		break;
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   92  	default:
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   93  		dev_err(&pdev->dev, "Unsupported phy-mode (%d)\n",
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04  @94  			phy_mode);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   95  		return ERR_PTR(-ENOTSUPP);
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   96  	}
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   97  
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   98  	return gmac;
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04   99  }
-2d1611aff3f22a5 Alexandru Gagniuc     2017-08-04  100  
-
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 719b0a48ff55..3d8a08aeed89 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -218,6 +218,7 @@ pub fn is_empty(&self) -> bool {
+     /// # Guarantees
+     ///
+     /// After a successful call to this method, all bytes in `out` are initialized.
++    #[inline]
+     pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+         let len = out.len();
+         let out_ptr = out.as_mut_ptr().cast::<c_void>();
+@@ -239,6 +240,7 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+     ///
+     /// Fails with [`EFAULT`] if the read happens on a bad address, or if the read goes out of
+     /// bounds of this [`UserSliceReader`]. This call may modify `out` even if it returns an error.
++    #[inline]
+     pub fn read_slice(&mut self, out: &mut [u8]) -> Result {
+         // SAFETY: The types are compatible and `read_raw` doesn't write uninitialized bytes to
+         // `out`.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
