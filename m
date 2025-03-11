@@ -1,176 +1,189 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F3525DAE8;
-	Tue, 11 Mar 2025 15:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6685F25DAE8
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 15:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741705392; cv=none; b=nsqycxi+CcUdP8YD4mjUvjDasjz+5qYtIY1Rbv9zcFjXzg4w2yboxkr+rbpYhxJ+l3RMZCIdTwAjGwMyV7fX7A20G9xV+6UZMeweHmB5VdD+lf9Wc08j6MHXOKn69D3IdQBITozpETiMFU65ieHZzVjvt3DNJENdgMtH6lf6WJE=
+	t=1741705571; cv=none; b=GREV2nSD61dxlhBeT3wvujSM0YQ7x6tpEU/Gs6S2pUDWUeEPmxNQuVJCPYKqnGVihiLYgwVrfMjsAWHdojk3oZ+69rOU9MPEdIw79ADHN6xzLZu4UhGMwWcO3PJNv3Tp5TN/SnFboCg71zZWYGBMARgcynoAmx1+winFRVpy7lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741705392; c=relaxed/simple;
-	bh=bwBOhCkyfjaDBhFbEIHAcboh5OGrOLjFxjCLK/1okmM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rOSUF4a2UOcWPl5vMWIbguPgbrexQNjdbzyctFKQepJvQc8PxIM+OWvFfyKPldytVb4y6L4mrehQ8ftY8ZhRkDcNakq6H5xAUPdfhrUZYU7S3oWx0yVqSHdod5AxNAO9J2gQL69CqygxWEsDTNbGRifRk+wImHIx5otz4V9Qdgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dt06dy1h; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741705571; c=relaxed/simple;
+	bh=dBpq38Olwd6UC4G9g5bmtnBJf5Al41dz5nsCXr3LqKA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Rrt2H4xGauoYdV9JA6oSiFuLoO3NZXFr7cKVDj54znw4+guK/dzJ8ML57DAbzDBhpifrR3w14Jl3VtztEBlhH9sWYbCFKNMP6qUscEUNKKPIRYjSh3H3kP/k/rc7BKGo/y3yaANAtqqwxfee7syWyVj1KaqZzK9MRgS0LwM9V5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=IPV75y03; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dt06dy1h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741705390; x=1773241390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bwBOhCkyfjaDBhFbEIHAcboh5OGrOLjFxjCLK/1okmM=;
-  b=dt06dy1hUTd5gg/zBYyyH5M1CI7nX4AuE4RKLKv09DzUiNdsenGiUKL1
-   Rb4dHv4+Olby2SAxP4Dt9yjdiwsy3DsV41AgcX5LdPHhUxtczdvNA0MVS
-   3KkIU4BFR0XaMkyEUTTxHIi/onUPVoQM2aa4IwXr4UctPMcVLIZ8k+Ejs
-   bwnGcLZu57kdEctzpNt3rFoa+O9gsd6YMEbzktBZ2BsuFpzBPR6+vH+jA
-   rUlU5E0PgRXldejHv9sVuW2aDfXj7KFwQtdC3dv6WF22+Rt9tPYdwxphc
-   342H+DuulXCzB8yLW/P/IDtAgqJFy/dZZmZwstoVKbm+54jkmosLJrAVk
-   w==;
-X-CSE-ConnectionGUID: pdtvIlvuQgi+Xl88ibA/GQ==
-X-CSE-MsgGUID: ZylpMyFxSBuwTVJvjcKrrw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42624781"
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="42624781"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:03:09 -0700
-X-CSE-ConnectionGUID: akGYNfHzSjKvRDq8cMcw4g==
-X-CSE-MsgGUID: 3L/0Tn2ZT3y63LcMfbjzgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="120835168"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 11 Mar 2025 08:03:08 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ts18K-0006k4-3B;
-	Tue, 11 Mar 2025 15:03:04 +0000
-Date: Tue, 11 Mar 2025 23:03:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v3] tracing: Show last module text symbols in the
- stacktrace
-Message-ID: <202503112205.joXgt8gR-lkp@intel.com>
-References: <174161444691.1063601.16690699136628689205.stgit@devnote2>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="IPV75y03"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id D5A7224002A
+	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 16:06:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1741705560; bh=dBpq38Olwd6UC4G9g5bmtnBJf5Al41dz5nsCXr3LqKA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
+	b=IPV75y03a34OPW+o2BUW0CLcADmpHj7q/nQbDyqcx5qYeSXHPblPFps4zwGIBiKIu
+	 vWAkQNxpAIL4OyE8lRUVlq+tfr2YV3YFod4ojAb2FBY0Vt6eav9Vy7jyNn4YNd/fAD
+	 5WVWHNEs1bIp8pPZkw11y8XlPxkVp3iOvx2lxHoX105/B+GaghNAwv9qso0TxkVo2D
+	 LpunkZGkX90WQJs7kg8FAkPlczzWkmRntfCa4fydsKmlli1siNRexqTZKj04n69Box
+	 5ACQBVQaufycufsGZSoPF6komegnDkP5aoFhaIu+ZreO6vjJxySm0zYVInkWARl28u
+	 Hbx1tYMSYzqCg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4ZBxsf1Rfrz6tsg;
+	Tue, 11 Mar 2025 16:05:58 +0100 (CET)
+From: Panagiotis Foliadis <pfoliadis@posteo.net>
+Date: Tue, 11 Mar 2025 15:05:52 +0000
+Subject: [PATCH v2] rust: task: mark Task methods inline
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <174161444691.1063601.16690699136628689205.stgit@devnote2>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+X-B4-Tracking: v=1; b=H4sIAE9R0GcC/22NywrCMBBFf6XM2pE8bFNc+R/SRUhHOyBJSEJVS
+ v7dWFy6PAfuuRtkSkwZzt0GiVbOHHwDdejALdbfCXluDEqoXmgxIvsHe0KHz2RjpJRxtqMmJ52
+ yxkDbxUQ3fu3N69R44VxCeu8Xq/zaX02KP7VVosTZqOEkexq0VpcYcqFw9FRgqrV+AMTtd46zA
+ AAA
+X-Change-ID: 20250308-inline-c-wrappers-da83ec1c2a77
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Panagiotis Foliadis <pfoliadis@posteo.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741705558; l=5016;
+ i=pfoliadis@posteo.net; s=20250308; h=from:subject:message-id;
+ bh=dBpq38Olwd6UC4G9g5bmtnBJf5Al41dz5nsCXr3LqKA=;
+ b=LGrVbOOSqFl3D8TT/zQpc1ma8J474qsuoVrLOZb+D++yUmimnXrNuJgl1OQs3is+hFTfDfgj4
+ ls3gW4q3aJ0AtZVv9ZPs5stmo3ex8c4zPLxC7UCOn3hmVYQ3s2PgfE2
+X-Developer-Key: i=pfoliadis@posteo.net; a=ed25519;
+ pk=/8ch2dv3mwtZ5ygYwiG7ldc/132K6XmLkAZDmIe0aQw=
 
-Hi Masami,
+When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+toolchain provided by kernel.org, the following symbols are generated:
 
-kernel test robot noticed the following build errors:
+$ nm vmlinux | grep ' _R'.*Task | rustfilt
+ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
+ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
+ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
+ffffffff817b2d00 T <kernel::task::Task>::signal_pending
+ffffffff817b2cc0 T <kernel::task::Task>::uid
+ffffffff817b2ce0 T <kernel::task::Task>::euid
+ffffffff817b2c70 T <kernel::task::Task>::current
+ffffffff817b2d70 T <kernel::task::Task>::wake_up
+ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
+ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
 
-[auto build test ERROR on trace/for-next]
-[cannot apply to linus/master v6.14-rc6 next-20250311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+These Rust symbols are trivial wrappers around the C functions
+get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
+euid, get_current, wake_up, get_task_struct and put_task_struct.It
+doesn't make sense to go through a trivial wrapper for these
+functions, so mark them inline.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu-Google/tracing-Show-last-module-text-symbols-in-the-stacktrace/20250310-214849
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/174161444691.1063601.16690699136628689205.stgit%40devnote2
-patch subject: [PATCH v3] tracing: Show last module text symbols in the stacktrace
-config: i386-buildonly-randconfig-004-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112205.joXgt8gR-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112205.joXgt8gR-lkp@intel.com/reproduce)
+After applying this patch, the above command will produce no output.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503112205.joXgt8gR-lkp@intel.com/
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+---
+Changes in v2:
+- Added `#[inline] to all the remaining functions of task.rs file
+- Link to v1: https://lore.kernel.org/r/20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net
+---
+ rust/kernel/task.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-All errors (new ones prefixed by >>):
+diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+index 07bc22a7645c0c7d792a0a163dd55b8ff0fe5f92..66b845a83acf3a57a59d281d11fcfb9107a214a8 100644
+--- a/rust/kernel/task.rs
++++ b/rust/kernel/task.rs
+@@ -132,6 +132,7 @@ pub fn current_raw() -> *mut bindings::task_struct {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    #[inline]
+     pub unsafe fn current() -> impl Deref<Target = Task> {
+         struct TaskRef<'a> {
+             task: &'a Task,
+@@ -166,6 +167,7 @@ fn deref(&self) -> &Self::Target {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    #[inline]
+     pub unsafe fn current_pid_ns() -> impl Deref<Target = PidNamespace> {
+         struct PidNamespaceRef<'a> {
+             task: &'a PidNamespace,
+@@ -273,24 +275,28 @@ pub fn pid(&self) -> Pid {
+     }
+ 
+     /// Returns the UID of the given task.
++    #[inline]
+     pub fn uid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_uid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
+     }
+ 
+     /// Returns the effective UID of the given task.
++    #[inline]
+     pub fn euid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_euid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
+     }
+ 
+     /// Determines whether the given task has pending signals.
++    #[inline]
+     pub fn signal_pending(&self) -> bool {
+         // SAFETY: It's always safe to call `signal_pending` on a valid task.
+         unsafe { bindings::signal_pending(self.as_ptr()) != 0 }
+     }
+ 
+     /// Returns task's pid namespace with elevated reference count
++    #[inline]
+     pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+         // SAFETY: By the type invariant, we know that `self.0` is valid.
+         let ptr = unsafe { bindings::task_get_pid_ns(self.as_ptr()) };
+@@ -306,6 +312,7 @@ pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+ 
+     /// Returns the given task's pid in the provided pid namespace.
+     #[doc(alias = "task_tgid_nr_ns")]
++    #[inline]
+     pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+         let pidns = match pidns {
+             Some(pidns) => pidns.as_ptr(),
+@@ -319,6 +326,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+     }
+ 
+     /// Wakes up the task.
++    #[inline]
+     pub fn wake_up(&self) {
+         // SAFETY: It's always safe to call `signal_pending` on a valid task, even if the task
+         // running.
+@@ -328,11 +336,13 @@ pub fn wake_up(&self) {
+ 
+ // SAFETY: The type invariants guarantee that `Task` is always refcounted.
+ unsafe impl crate::types::AlwaysRefCounted for Task {
++    #[inline]
+     fn inc_ref(&self) {
+         // SAFETY: The existence of a shared reference means that the refcount is nonzero.
+         unsafe { bindings::get_task_struct(self.as_ptr()) };
+     }
+ 
++    #[inline]
+     unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+         // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+         unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
 
-   kernel/trace/trace.c:6072:38: error: incomplete definition of type 'struct module'
-    6072 |         entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
-         |                                          ~~~^
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-     394 | struct module;
-         |        ^
-   kernel/trace/trace.c:6072:44: error: use of undeclared identifier 'MOD_TEXT'
-    6072 |         entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
-         |                                                   ^
-   kernel/trace/trace.c:6073:30: error: incomplete definition of type 'struct module'
-    6073 |         strscpy(entry->mod_name, mod->name);
-         |                                  ~~~^
-   include/linux/string.h:114:55: note: expanded from macro 'strscpy'
-     114 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |                                                              ^~~
-   include/linux/string.h:80:21: note: expanded from macro '__strscpy0'
-      80 |         sized_strscpy(dst, src, sizeof(dst) + __must_be_array(dst) +    \
-         |                            ^~~
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-     394 | struct module;
-         |        ^
-   kernel/trace/trace.c:9411:18: error: incomplete definition of type 'struct module'
-    9411 |                 if (!strcmp(mod->name, entry->mod_name)) {
-         |                             ~~~^
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-     394 | struct module;
-         |        ^
-   kernel/trace/trace.c:9412:11: error: incomplete definition of type 'struct module'
-    9412 |                         if (mod->state == MODULE_STATE_GOING)
-         |                             ~~~^
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-     394 | struct module;
-         |        ^
->> kernel/trace/trace.c:9412:22: error: use of undeclared identifier 'MODULE_STATE_GOING'
-    9412 |                         if (mod->state == MODULE_STATE_GOING)
-         |                                           ^
-   kernel/trace/trace.c:9415:41: error: incomplete definition of type 'struct module'
-    9415 |                                 module_delta[i] = (unsigned long)mod->mem[MOD_TEXT].base
-         |                                                                  ~~~^
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-     394 | struct module;
-         |        ^
-   kernel/trace/trace.c:9415:47: error: use of undeclared identifier 'MOD_TEXT'
-    9415 |                                 module_delta[i] = (unsigned long)mod->mem[MOD_TEXT].base
-         |                                                                           ^
-   8 errors generated.
+---
+base-commit: 7f0e9ee5e44887272627d0fcde0b19a675daf597
+change-id: 20250308-inline-c-wrappers-da83ec1c2a77
 
-
-vim +/MODULE_STATE_GOING +9412 kernel/trace/trace.c
-
-  9398	
-  9399	static int make_mod_delta(struct module *mod, void *data)
-  9400	{
-  9401		struct trace_scratch *tscratch;
-  9402		struct trace_mod_entry *entry;
-  9403		struct trace_array *tr = data;
-  9404		long *module_delta;
-  9405		int i;
-  9406	
-  9407		tscratch = tr->scratch;
-  9408		module_delta = READ_ONCE(tscratch->module_delta);
-  9409		for (i = 0; i < tscratch->nr_entries; i++) {
-  9410			entry = &tscratch->entries[i];
-  9411			if (!strcmp(mod->name, entry->mod_name)) {
-> 9412				if (mod->state == MODULE_STATE_GOING)
-  9413					module_delta[i] = 0;
-  9414				else
-  9415					module_delta[i] = (unsigned long)mod->mem[MOD_TEXT].base
-  9416							 - entry->mod_addr;
-  9417				break;
-  9418			}
-  9419		}
-  9420		return 0;
-  9421	}
-  9422	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Panagiotis Foliadis <pfoliadis@posteo.net>
+
