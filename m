@@ -1,68 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE1184F;
-	Tue, 11 Mar 2025 16:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047F92620ED;
+	Tue, 11 Mar 2025 17:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741712228; cv=none; b=LMZuuTUW+7kU30xBkO/u5pudWymtsHM2uRVYHroQW4SURDuckP0bXH66Yqhqt5UeBaem3Cidc7JLvJZ9pZJcYDrBMEQaD/qSK4+r0tOYfWK0EVwFmt4F01dQQYhZvJC2naPDuGAKMVWmkK06qF2C1qcl/PPWjE26BFLY2jLvaKU=
+	t=1741714132; cv=none; b=D16rvJgWjTwgI+zNMVzT8Z+GFeXqiR9fzkeWGrGHEcm37Zelb2z976ETxK2wdztD9aKVE2UCQO+I2cdQNaVuFCv1fvpB06J3Qxq86t4/Pm9tRKNJcl8lxINkrG4/YFUFMuU7U2kAnrQU8Z5pHC6T0EZ6FBVeThTAn5sRcQEN6DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741712228; c=relaxed/simple;
-	bh=yFwxyB/vYM+QVK1Xvi2YhsAyqzx7H7T2HfW55Y8XdJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EjpzunBIwwJaQD+qp4b2MfCu4hCtZhBcXl96cHLIjqnRoe5Q9C/iea+tLU0gUF0wvpcp9wIG+d8nqF70iyBiQtd9ykVzHQNvuwH2hffDC1J0UUEg46vcwxJ2QdtypbTeCdyPx+wxnpmQisJ3boBkIgkfY68+5tpC+75g1omaGJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G4Ki6spx; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1741714132; c=relaxed/simple;
+	bh=qksm7vKFWSXmoo8z8Dy+oNnEBIujGEUMzz9Tn5C2hS8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=u0BCIfm/dAg6HH++7z3cHzdlOd3YFlvfdTyF1q1OwrxnD8i5vPbqyJwDXT5hAqfZPt0tDJOAM69wcKGHWHvwUc9AsBnfuD3ofFX9TZDDgBaA77cuZ+wtL/3b3l/a4VUp+se30IHSOaQA/FOF+GcJJYyN+HMTGMM+tZOYa3XcN+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TAbDUYdH; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G4Ki6spx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TAbDUYdH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741712227; x=1773248227;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yFwxyB/vYM+QVK1Xvi2YhsAyqzx7H7T2HfW55Y8XdJs=;
-  b=G4Ki6spx8ssB1+sYwNO6jl8JbPSVtLOeFsZVYcaf+Z+/AnOWxeV5v9Wr
-   P5h0ofbTszUOTqwU16BFFOUM1o2G1VGHqbsopPIxriY2p8dzAv8+0IdZi
-   g/J9FLdl6vXrVtBoYwwk8CuyfH4IQr5edrmbL7P12e/jRiQZQOia89Jrh
-   IblJeVNQnvMiHKO0chIL8/cG04n6uY6wi0KxWDDB0TW786puMgBhAO7SE
-   fjFfzFvOAA5BPI1EJvZW01K4hCM5neUiypZgqbKs5CHO0xgE9TECUoQOH
-   foopq3J7AUkYJ8MwvmPcLSE/lFX5FmaTYqJ31kiaj6c3F7Tv7yVgjIFeN
-   g==;
-X-CSE-ConnectionGUID: 4HWq7d2xTEOJqTzASwZ7Tg==
-X-CSE-MsgGUID: 5okQ2NZ4TqOXeoOYIJDGEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="54135121"
+  t=1741714131; x=1773250131;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qksm7vKFWSXmoo8z8Dy+oNnEBIujGEUMzz9Tn5C2hS8=;
+  b=TAbDUYdHsQkrDkZVFSynIkSZ03BBas3+qWd1Zn1JRNy/Z4k9GhzVaDJZ
+   94Cw6cU/u3X+BFN1wNVbQhVhG7dFCBK4nMbC8plunvKMgNuKz1pXlak0F
+   P1G98a8wpdvix47wdJopZqba9t6iQK0TTDX8Co1IYETuDXIa4A+6joB4l
+   9/e9zRb8LesCNIXt81snjIlxa7WcFEDZBQ5Kyvn1fQ7ZN7fyfMzdSNA0v
+   RhxcoL1e82kM+upbkiE4QNfWpoPth/ExURmQdmLi5SwRd7OhjZFho2pOT
+   gUFQBZqyV/cYc/ac3BMyKHATaiuwQ5uZTk9GRkwdh0By/ZRuZFsyi8YyC
+   w==;
+X-CSE-ConnectionGUID: zjF7z7afT0+z9qxD3hrJGw==
+X-CSE-MsgGUID: 0wUMj/PATfOtWEbpTgTgMA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="45550125"
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="54135121"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 09:57:06 -0700
-X-CSE-ConnectionGUID: 2SAKFf+bRjqV6NWtJsv0PQ==
-X-CSE-MsgGUID: 2Zumsmh6TS+qw2vv8LVAyA==
+   d="scan'208";a="45550125"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 10:28:50 -0700
+X-CSE-ConnectionGUID: cEqVlkNaQ5amO2a00V7EBw==
+X-CSE-MsgGUID: Ds0B9fxYQbOvmh/SZ8dSow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="125438958"
+   d="scan'208";a="120898387"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 11 Mar 2025 09:57:03 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 11 Mar 2025 10:28:49 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ts2ub-0007eW-1H;
-	Tue, 11 Mar 2025 16:57:01 +0000
-Date: Wed, 12 Mar 2025 00:56:47 +0800
+	id 1ts3PK-0007gS-2P;
+	Tue, 11 Mar 2025 17:28:46 +0000
+Date: Wed, 12 Mar 2025 01:28:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anand Moon <linux.amoon@gmail.com>,
-	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anand Moon <linux.amoon@gmail.com>
-Subject: Re: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when
- acquiring mutex
-Message-ID: <202503120028.ZL9zhHXe-lkp@intel.com>
-References: <20250310143450.8276-5-linux.amoon@gmail.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 74/81] fs/nfsd/nfsproc.c:483:9: error: implicit
+ declaration of function 'trace_nfsd_proc_link'; did you mean
+ 'nfsd_proc_link'?
+Message-ID: <202503120154.ctwnAOLZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,102 +62,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250310143450.8276-5-linux.amoon@gmail.com>
 
-Hi Anand,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 80e54e84911a923c40d7bee33a34c1b4be148d7a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/drivers-thermal-exynos-Refactor-clk_sec-initialization-inside-SOC-specific-case/20250310-223732
-base:   80e54e84911a923c40d7bee33a34c1b4be148d7a
-patch link:    https://lore.kernel.org/r/20250310143450.8276-5-linux.amoon%40gmail.com
-patch subject: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when acquiring mutex
-config: s390-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250312/202503120028.ZL9zhHXe-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120028.ZL9zhHXe-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   86deeee9a2bdf8ba09cfd0ab66dbf448d2e8b82b
+commit: c35bc37489cde3283951cb26a56b8b6aa77c151b [74/81] nfsd: add tracepoints for hardlink events
+config: sparc-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250312/202503120154.ctwnAOLZ-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120154.ctwnAOLZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120028.ZL9zhHXe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120154.ctwnAOLZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/thermal/samsung/exynos_tmu.c:721:3: error: cannot jump from this goto statement to its label
-                   goto out;
-                   ^
-   drivers/thermal/samsung/exynos_tmu.c:723:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-           guard(mutex)(&data->lock);
-           ^
-   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
-           CLASS(_name, __UNIQUE_ID(guard))
-                        ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-                               ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-   #define __PASTE(a,b) ___PASTE(a,b)
-                        ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-   #define ___PASTE(a,b) a##b
-                         ^
-   <scratch space>:78:1: note: expanded from here
-   __UNIQUE_ID_guard398
-   ^
-   drivers/thermal/samsung/exynos_tmu.c:718:3: error: cannot jump from this goto statement to its label
-                   goto out;
-                   ^
-   drivers/thermal/samsung/exynos_tmu.c:723:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-           guard(mutex)(&data->lock);
-           ^
-   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
-           CLASS(_name, __UNIQUE_ID(guard))
-                        ^
-   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
-   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
-                               ^
-   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
-   #define __PASTE(a,b) ___PASTE(a,b)
-                        ^
-   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
-   #define ___PASTE(a,b) a##b
-                         ^
-   <scratch space>:78:1: note: expanded from here
-   __UNIQUE_ID_guard398
-   ^
-   2 errors generated.
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_create':
+   fs/nfsd/nfsproc.c:295:9: error: implicit declaration of function 'trace_nfsd_proc_create'; did you mean 'nfsd_proc_create'? [-Wimplicit-function-declaration]
+     295 |         trace_nfsd_proc_create(rqstp, dirfhp, S_IFREG, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_create
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_link':
+>> fs/nfsd/nfsproc.c:483:9: error: implicit declaration of function 'trace_nfsd_proc_link'; did you mean 'nfsd_proc_link'? [-Wimplicit-function-declaration]
+     483 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+         |         ^~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_link
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
+   fs/nfsd/nfsproc.c:503:9: error: implicit declaration of function 'trace_nfsd_proc_symlink'; did you mean 'nfsd_proc_symlink'? [-Wimplicit-function-declaration]
+     503 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_symlink
+   fs/nfsd/nfsproc.c:537:1: error: invalid storage class for function 'nfsd_proc_mkdir'
+     537 | nfsd_proc_mkdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_mkdir':
+   fs/nfsd/nfsproc.c:545:9: error: implicit declaration of function 'trace_nfsd_proc_mkdir'; did you mean 'nfsd_proc_mkdir'? [-Wimplicit-function-declaration]
+     545 |         trace_nfsd_proc_mkdir(rqstp, &argp->fh, S_IFDIR, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_mkdir
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
+   fs/nfsd/nfsproc.c:570:1: error: invalid storage class for function 'nfsd_proc_rmdir'
+     570 | nfsd_proc_rmdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:584:13: error: invalid storage class for function 'nfsd_init_dirlist_pages'
+     584 | static void nfsd_init_dirlist_pages(struct svc_rqst *rqstp,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:606:1: error: invalid storage class for function 'nfsd_proc_readdir'
+     606 | nfsd_proc_readdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:634:1: error: invalid storage class for function 'nfsd_proc_statfs'
+     634 | nfsd_proc_statfs(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:819:28: error: initializer element is not constant
+     819 |                 .pc_func = nfsd_proc_mkdir,
+         |                            ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:819:28: note: (near initialization for 'nfsd_procedures2[14].pc_func')
+   fs/nfsd/nfsproc.c:831:28: error: initializer element is not constant
+     831 |                 .pc_func = nfsd_proc_rmdir,
+         |                            ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:831:28: note: (near initialization for 'nfsd_procedures2[15].pc_func')
+   fs/nfsd/nfsproc.c:842:28: error: initializer element is not constant
+     842 |                 .pc_func = nfsd_proc_readdir,
+         |                            ^~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:842:28: note: (near initialization for 'nfsd_procedures2[16].pc_func')
+   fs/nfsd/nfsproc.c:852:28: error: initializer element is not constant
+     852 |                 .pc_func = nfsd_proc_statfs,
+         |                            ^~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:852:28: note: (near initialization for 'nfsd_procedures2[17].pc_func')
+   fs/nfsd/nfsproc.c:873:1: error: expected declaration or statement at end of input
+     873 | };
+         | ^
+   fs/nfsd/nfsproc.c:866:26: warning: unused variable 'nfsd_version2' [-Wunused-variable]
+     866 | const struct svc_version nfsd_version2 = {
+         |                          ^~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c: At top level:
+   fs/nfsd/nfsproc.c:494:1: warning: 'nfsd_proc_symlink' defined but not used [-Wunused-function]
+     494 | nfsd_proc_symlink(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~~
 
 
-vim +721 drivers/thermal/samsung/exynos_tmu.c
+vim +483 fs/nfsd/nfsproc.c
 
-285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  711  
-7ea98f70c73ea37 drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2022-08-05  712  static int exynos_tmu_set_emulation(struct thermal_zone_device *tz, int temp)
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  713  {
-5f68d0785e5258a drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2023-03-01  714  	struct exynos_tmu_data *data = thermal_zone_device_priv(tz);
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  715  	int ret = -EINVAL;
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  716  
-ef3f80fc7f79c32 drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  717  	if (data->soc == SOC_ARCH_EXYNOS4210)
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  718  		goto out;
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  719  
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  720  	if (temp && temp < MCELSIUS)
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11 @721  		goto out;
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  722  
-0c7c68a34f7d0f7 drivers/thermal/samsung/exynos_tmu.c Anand Moon                2025-03-10  723  	guard(mutex)(&data->lock);
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  724  	clk_enable(data->clk);
-285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  725  	data->tmu_set_emulation(data, temp);
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  726  	clk_disable(data->clk);
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  727  	return 0;
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  728  out:
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  729  	return ret;
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  730  }
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  731  #else
-285d994a51e45ca drivers/thermal/samsung/exynos_tmu.c Bartlomiej Zolnierkiewicz 2014-11-13  732  #define exynos4412_tmu_set_emulation NULL
-7ea98f70c73ea37 drivers/thermal/samsung/exynos_tmu.c Daniel Lezcano            2022-08-05  733  static int exynos_tmu_set_emulation(struct thermal_zone_device *tz, int temp)
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  734  	{ return -EINVAL; }
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  735  #endif /* CONFIG_THERMAL_EMULATION */
-bffd1f8ac87a798 drivers/thermal/exynos_thermal.c     Amit Daniel Kachhap       2013-02-11  736  
+   476	
+   477	static __be32
+   478	nfsd_proc_link(struct svc_rqst *rqstp)
+   479	{
+   480		struct nfsd_linkargs *argp = rqstp->rq_argp;
+   481		struct nfsd_stat *resp = rqstp->rq_resp;
+   482	
+ > 483		trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+   484	
+   485		resp->status = nfsd_link(rqstp, &argp->tfh, argp->tname, argp->tlen,
+   486					 &argp->ffh);
+   487		fh_put(&argp->ffh);
+   488		fh_put(&argp->tfh);
+   489		resp->status = nfsd_map_status(resp->status);
+   490		return rpc_success;
+   491	}
+   492	
 
 -- 
 0-DAY CI Kernel Test Service
