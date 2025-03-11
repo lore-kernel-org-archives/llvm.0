@@ -1,180 +1,303 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2DD139E
-	for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 18:26:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B362326461A;
+	Tue, 11 Mar 2025 18:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741717621; cv=none; b=dNb9LItxf6IUdJiyBEUyrbPRu15myTcDOI8LBSdEIXbAnKfpCWXPvBHYqII4rX/V8s8FTrDJlmPavEZzmQSk5lWo4S2oVXVMrh/bcdrugafS3IEmxieog9BqHaNK5eTpUqnOhgnAn5xoAigu+RJau4vok0htmHPs6FTkL+ab/8Y=
+	t=1741718487; cv=none; b=AsqPStcsRJP4VVvNRP2imu++QQerL/x3+dJvv8y/pymiRkDjQZC2Ilrm0P3iaAmZpgEP87/Gw1ppd3rrOfbfjbZ/cUPROoMjLtmA6Q7jmjrASgvZntXYhuOd+vvWDTEJvS4G3HnvuEtXw8rAF0V6UMaqLqgXo/5NIcjUFLd8sbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741717621; c=relaxed/simple;
-	bh=gRS9jKtKUzfHkoSdI6Gem96zAZ50zZcSJT5d8SgUYWI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FNsryXmykAtgXpu8RsbexuApMs2SnzyOrGSkImhnq+yMvT3fiq59/lQaJgzNQ3Ec+sTvJ9TQpa30NjE9BVWhtGWD9WjTWPuQoc5i5iyWqyLdZfriTwg+l6DrAEp7R3tUmxOPwrzoyFUrjkWLnwsPy6U60os9oWmqpEoTSz79wD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Jofegoxr; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1741718487; c=relaxed/simple;
+	bh=Oo3+DSJS+GEqpeP+JySy6cB+ydfTdgWYneyZ2LYJm+s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JVRgwwObmM+GGRxWidXpXHhk4nxvp7ehsp2491vLLNmPKkVEM9ST0X/TUvEr1zd8srUxAiUOAWlr4tHRWX5+9bdVpjCUdRzJkEAHl+0AMxHCAcwLbV9ilTI+PNK8nrgeFsVFDlAZcW6MrQUEvlSaSPb7RqojHVkN9BzAOcl+W6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNgPb9I+; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Jofegoxr"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52BB5mva008060;
-	Tue, 11 Mar 2025 11:26:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=l
-	ZliaUORo2mS+3tGSox9M93MAPhOgwb28gKvGOyD+WI=; b=JofegoxrbcyEfkTyT
-	gTVLh0uWIM7BytI0wwr/H3DK+U8ApG5uSUJ6sExAlqDjeeDrxc4S9wwJBFNj5NMM
-	imleVpvIF/AKgHV+d7OLyPMXiNf+f4i+p98G6W6GgavuWbQftnf27bkEmOe2FxlD
-	m4ZWPZCuyzlL44O9gUm7KnOILhoJ6s6j8qbsf7V/FfKJyZACoV6J/Ty8+TU5YtBo
-	Llon+sTmuWLHV0ICJHjtr5WuGkKLRHusW4e5h0awtcY6lp06SdhQ2M2yWSKIqWFS
-	4tcFWBJ9jNGOctR5/Af+rsM1lsjwQ0BwlgjFLC5Us7Svc18gp9DLH9E4iEjhDAHp
-	dJeZQ==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 45akyv10g6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 11 Mar 2025 11:26:54 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 11 Mar 2025 11:26:53 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 11 Mar 2025 11:26:53 -0700
-Received: from hyd1425.marvell.com (unknown [10.29.37.152])
-	by maili.marvell.com (Postfix) with ESMTP id 86A9E3F705D;
-	Tue, 11 Mar 2025 11:26:47 -0700 (PDT)
-From: Sai Krishna <saikrishnag@marvell.com>
-To: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
-        <gakula@marvell.com>, <lcherian@marvell.com>, <jerinj@marvell.com>,
-        <hkelam@marvell.com>, <sbhatta@marvell.com>, <andrew+netdev@lunn.ch>,
-        <bbhushan2@marvell.com>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <morbo@google.com>,
-        <justinstitt@google.com>, <llvm@lists.linux.dev>, <horms@kernel.org>
-CC: Sai Krishna <saikrishnag@marvell.com>
-Subject: [net-next PATCH v3 2/2] octeontx2-af: fix compiler warnings flagged by Sparse
-Date: Tue, 11 Mar 2025 23:56:31 +0530
-Message-ID: <20250311182631.3224812-3-saikrishnag@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250311182631.3224812-1-saikrishnag@marvell.com>
-References: <20250311182631.3224812-1-saikrishnag@marvell.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNgPb9I+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741718486; x=1773254486;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Oo3+DSJS+GEqpeP+JySy6cB+ydfTdgWYneyZ2LYJm+s=;
+  b=mNgPb9I+eXeqsywHJcK2XVi18/XDVKDbJbSnoWej5dNhC2PTtCQ3JMlK
+   LUwtoERuHCRJgFT92+5UY2WkScnjS1CwC+qKz7egtfT6MAMFfcb16nhuO
+   j/wh+oyHvtNMA0xcSMRBPEhubIMO/Tf5q3RPVKGCkKzVxcvjrHlyjwm2n
+   /JreEasxzxhEnHpAMchfnSI4rL0ocBkj3W6dUah+B//sJZDHnmjNccDbg
+   PIPUujvkgHz/o08stc9xdgofKbA0ys2kks29qk5LiLcS8Tymzr8r7FusN
+   DbnHB4/VLqbsBYBquqD6b8Fz/wBv2Fy093Gd9GtGFfWyGUIw7nRePsjUt
+   A==;
+X-CSE-ConnectionGUID: nfOvj7prQKeaCi79AZacoQ==
+X-CSE-MsgGUID: NBc5s59YT1G4v78Ib2G9Ag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="41941905"
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="41941905"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 11:41:25 -0700
+X-CSE-ConnectionGUID: NlbXqsT3S0q0hASlXPvPAQ==
+X-CSE-MsgGUID: NC3RptFFQrKbCr5YXWssxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="121093665"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 11 Mar 2025 11:41:23 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts4XY-0007jE-0v;
+	Tue, 11 Mar 2025 18:41:20 +0000
+Date: Wed, 12 Mar 2025 02:40:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 75/81] fs/nfsd/nfsproc.c:447:9: error: implicit
+ declaration of function 'trace_nfsd_proc_remove'; did you mean
+ 'nfsd_proc_remove'?
+Message-ID: <202503120209.pV3QBDxN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Y1HYLJbtlNAy1R1iF17vu3t8d7Nq5JKs
-X-Proofpoint-ORIG-GUID: Y1HYLJbtlNAy1R1iF17vu3t8d7Nq5JKs
-X-Authority-Analysis: v=2.4 cv=Rsc/LDmK c=1 sm=1 tr=0 ts=67d0806e cx=c_pps a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17 a=Vs1iUdzkB0EA:10 a=M5GUcnROAAAA:8 a=R40iJ15ohJ1Iz6L5NAgA:9 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-11_05,2025-03-11_02,2024-11-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sparse flagged a number of warnings while typecasting iomem
-type to required data type.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   86deeee9a2bdf8ba09cfd0ab66dbf448d2e8b82b
+commit: 7874515959533baab57e883272ac73bd8ec21b9c [75/81] nfsd: add tracepoints for unlink events
+config: sparc-randconfig-001-20250311 (https://download.01.org/0day-ci/archive/20250312/202503120209.pV3QBDxN-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120209.pV3QBDxN-lkp@intel.com/reproduce)
 
-For example, fwdata is just a shared memory data structure used
-between firmware and kernel, thus remapping and typecasting
-to required data type may not cause issue.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503120209.pV3QBDxN-lkp@intel.com/
 
-Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/rvu.c      | 12 +++++++-----
- .../net/ethernet/marvell/octeontx2/nic/otx2_common.c | 10 +++++-----
- 2 files changed, 12 insertions(+), 10 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-index cd0d7b7774f1..c3a346cff05e 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
-@@ -819,13 +819,14 @@ static int rvu_fwdata_init(struct rvu *rvu)
- 		goto fail;
- 
- 	BUILD_BUG_ON(offsetof(struct rvu_fwdata, cgx_fw_data) > FWDATA_CGX_LMAC_OFFSET);
--	rvu->fwdata = ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
-+	rvu->fwdata = (__force struct rvu_fwdata *)
-+		ioremap_wc(fwdbase, sizeof(struct rvu_fwdata));
- 	if (!rvu->fwdata)
- 		goto fail;
- 	if (!is_rvu_fwdata_valid(rvu)) {
- 		dev_err(rvu->dev,
- 			"Mismatch in 'fwdata' struct btw kernel and firmware\n");
--		iounmap(rvu->fwdata);
-+		iounmap((void __iomem *)rvu->fwdata);
- 		rvu->fwdata = NULL;
- 		return -EINVAL;
- 	}
-@@ -838,7 +839,7 @@ static int rvu_fwdata_init(struct rvu *rvu)
- static void rvu_fwdata_exit(struct rvu *rvu)
- {
- 	if (rvu->fwdata)
--		iounmap(rvu->fwdata);
-+		iounmap((void __iomem *)rvu->fwdata);
- }
- 
- static int rvu_setup_nix_hw_resource(struct rvu *rvu, int blkaddr)
-@@ -2384,7 +2385,8 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
- 				bar4 = rvupf_read64(rvu, RVU_PF_VF_BAR4_ADDR);
- 				bar4 += region * MBOX_SIZE;
- 			}
--			mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-+			mbox_addr[region] = (__force void *)
-+				ioremap_wc(bar4, MBOX_SIZE);
- 			if (!mbox_addr[region])
- 				goto error;
- 		}
-@@ -2407,7 +2409,7 @@ static int rvu_get_mbox_regions(struct rvu *rvu, void **mbox_addr,
- 					  RVU_AF_PF_BAR4_ADDR);
- 			bar4 += region * MBOX_SIZE;
- 		}
--		mbox_addr[region] = (void *)ioremap_wc(bar4, MBOX_SIZE);
-+		mbox_addr[region] = (__force void *)ioremap_wc(bar4, MBOX_SIZE);
- 		if (!mbox_addr[region])
- 			goto error;
- 	}
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 2b49bfec7869..e0e592fd02f7 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -29,10 +29,10 @@ static void otx2_nix_rq_op_stats(struct queue_stats *stats,
- 	u64 incr = (u64)qidx << 32;
- 	u64 *ptr;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_OCTS);
- 	stats->bytes = otx2_atomic64_add(incr, ptr);
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_RQ_OP_PKTS);
- 	stats->pkts = otx2_atomic64_add(incr, ptr);
- }
- 
-@@ -42,10 +42,10 @@ static void otx2_nix_sq_op_stats(struct queue_stats *stats,
- 	u64 incr = (u64)qidx << 32;
- 	u64 *ptr;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_OCTS);
- 	stats->bytes = otx2_atomic64_add(incr, ptr);
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_PKTS);
- 	stats->pkts = otx2_atomic64_add(incr, ptr);
- }
- 
-@@ -853,7 +853,7 @@ void otx2_sqb_flush(struct otx2_nic *pfvf)
- 	struct otx2_snd_queue *sq;
- 	u64 incr, *ptr, val;
- 
--	ptr = (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
-+	ptr = (__force u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
- 	for (qidx = 0; qidx < otx2_get_total_tx_queues(pfvf); qidx++) {
- 		sq = &pfvf->qset.sq[qidx];
- 		if (!sq->sqb_ptrs)
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_create':
+   fs/nfsd/nfsproc.c:295:9: error: implicit declaration of function 'trace_nfsd_proc_create'; did you mean 'nfsd_proc_create'? [-Wimplicit-function-declaration]
+     295 |         trace_nfsd_proc_create(rqstp, dirfhp, S_IFREG, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_create
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_remove':
+>> fs/nfsd/nfsproc.c:447:9: error: implicit declaration of function 'trace_nfsd_proc_remove'; did you mean 'nfsd_proc_remove'? [-Wimplicit-function-declaration]
+     447 |         trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_remove
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_link':
+   fs/nfsd/nfsproc.c:482:9: error: implicit declaration of function 'trace_nfsd_proc_link'; did you mean 'nfsd_proc_link'? [-Wimplicit-function-declaration]
+     482 |         trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+         |         ^~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_link
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
+   fs/nfsd/nfsproc.c:502:9: error: implicit declaration of function 'trace_nfsd_proc_symlink'; did you mean 'nfsd_proc_symlink'? [-Wimplicit-function-declaration]
+     502 |         trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_symlink
+   fs/nfsd/nfsproc.c:536:1: error: invalid storage class for function 'nfsd_proc_mkdir'
+     536 | nfsd_proc_mkdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_mkdir':
+   fs/nfsd/nfsproc.c:544:9: error: implicit declaration of function 'trace_nfsd_proc_mkdir'; did you mean 'nfsd_proc_mkdir'? [-Wimplicit-function-declaration]
+     544 |         trace_nfsd_proc_mkdir(rqstp, &argp->fh, S_IFDIR, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_mkdir
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
+   fs/nfsd/nfsproc.c:569:1: error: invalid storage class for function 'nfsd_proc_rmdir'
+     569 | nfsd_proc_rmdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_rmdir':
+>> fs/nfsd/nfsproc.c:574:9: error: implicit declaration of function 'trace_nfsd_proc_rmdir'; did you mean 'nfsd_proc_rmdir'? [-Wimplicit-function-declaration]
+     574 |         trace_nfsd_proc_rmdir(rqstp, &argp->fh, argp->name, argp->len);
+         |         ^~~~~~~~~~~~~~~~~~~~~
+         |         nfsd_proc_rmdir
+   fs/nfsd/nfsproc.c: In function 'nfsd_proc_symlink':
+   fs/nfsd/nfsproc.c:583:13: error: invalid storage class for function 'nfsd_init_dirlist_pages'
+     583 | static void nfsd_init_dirlist_pages(struct svc_rqst *rqstp,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:605:1: error: invalid storage class for function 'nfsd_proc_readdir'
+     605 | nfsd_proc_readdir(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:633:1: error: invalid storage class for function 'nfsd_proc_statfs'
+     633 | nfsd_proc_statfs(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:818:28: error: initializer element is not constant
+     818 |                 .pc_func = nfsd_proc_mkdir,
+         |                            ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:818:28: note: (near initialization for 'nfsd_procedures2[14].pc_func')
+   fs/nfsd/nfsproc.c:830:28: error: initializer element is not constant
+     830 |                 .pc_func = nfsd_proc_rmdir,
+         |                            ^~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:830:28: note: (near initialization for 'nfsd_procedures2[15].pc_func')
+   fs/nfsd/nfsproc.c:841:28: error: initializer element is not constant
+     841 |                 .pc_func = nfsd_proc_readdir,
+         |                            ^~~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:841:28: note: (near initialization for 'nfsd_procedures2[16].pc_func')
+   fs/nfsd/nfsproc.c:851:28: error: initializer element is not constant
+     851 |                 .pc_func = nfsd_proc_statfs,
+         |                            ^~~~~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c:851:28: note: (near initialization for 'nfsd_procedures2[17].pc_func')
+   fs/nfsd/nfsproc.c:872:1: error: expected declaration or statement at end of input
+     872 | };
+         | ^
+   fs/nfsd/nfsproc.c:865:26: warning: unused variable 'nfsd_version2' [-Wunused-variable]
+     865 | const struct svc_version nfsd_version2 = {
+         |                          ^~~~~~~~~~~~~
+   fs/nfsd/nfsproc.c: At top level:
+   fs/nfsd/nfsproc.c:493:1: warning: 'nfsd_proc_symlink' defined but not used [-Wunused-function]
+     493 | nfsd_proc_symlink(struct svc_rqst *rqstp)
+         | ^~~~~~~~~~~~~~~~~
+
+
+vim +447 fs/nfsd/nfsproc.c
+
+   440	
+   441	static __be32
+   442	nfsd_proc_remove(struct svc_rqst *rqstp)
+   443	{
+   444		struct nfsd_diropargs *argp = rqstp->rq_argp;
+   445		struct nfsd_stat *resp = rqstp->rq_resp;
+   446	
+ > 447		trace_nfsd_proc_remove(rqstp, &argp->fh, argp->name, argp->len);
+   448	
+   449		/* Unlink. -SIFDIR means file must not be a directory */
+   450		resp->status = nfsd_unlink(rqstp, &argp->fh, -S_IFDIR,
+   451					   argp->name, argp->len);
+   452		fh_put(&argp->fh);
+   453		resp->status = nfsd_map_status(resp->status);
+   454		return rpc_success;
+   455	}
+   456	
+   457	static __be32
+   458	nfsd_proc_rename(struct svc_rqst *rqstp)
+   459	{
+   460		struct nfsd_renameargs *argp = rqstp->rq_argp;
+   461		struct nfsd_stat *resp = rqstp->rq_resp;
+   462	
+   463		dprintk("nfsd: RENAME   %s %.*s -> \n",
+   464			SVCFH_fmt(&argp->ffh), argp->flen, argp->fname);
+   465		dprintk("nfsd:        ->  %s %.*s\n",
+   466			SVCFH_fmt(&argp->tfh), argp->tlen, argp->tname);
+   467	
+   468		resp->status = nfsd_rename(rqstp, &argp->ffh, argp->fname, argp->flen,
+   469					   &argp->tfh, argp->tname, argp->tlen);
+   470		fh_put(&argp->ffh);
+   471		fh_put(&argp->tfh);
+   472		resp->status = nfsd_map_status(resp->status);
+   473		return rpc_success;
+   474	}
+   475	
+   476	static __be32
+   477	nfsd_proc_link(struct svc_rqst *rqstp)
+   478	{
+   479		struct nfsd_linkargs *argp = rqstp->rq_argp;
+   480		struct nfsd_stat *resp = rqstp->rq_resp;
+   481	
+   482		trace_nfsd_proc_link(rqstp, &argp->ffh, &argp->tfh, argp->tname, argp->tlen);
+   483	
+   484		resp->status = nfsd_link(rqstp, &argp->tfh, argp->tname, argp->tlen,
+   485					 &argp->ffh);
+   486		fh_put(&argp->ffh);
+   487		fh_put(&argp->tfh);
+   488		resp->status = nfsd_map_status(resp->status);
+   489		return rpc_success;
+   490	}
+   491	
+   492	static __be32
+   493	nfsd_proc_symlink(struct svc_rqst *rqstp)
+   494	{
+   495		struct nfsd_symlinkargs *argp = rqstp->rq_argp;
+   496		struct nfsd_stat *resp = rqstp->rq_resp;
+   497		struct nfsd_attrs attrs = {
+   498			.na_iattr	= &argp->attrs,
+   499		};
+   500		struct svc_fh	newfh;
+   501	
+   502		trace_nfsd_proc_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+   503					argp->tname, argp->tlen);
+   504	
+   505		if (argp->tlen == 0) {
+   506		if (argp->tlen > NFS_MAXPATHLEN) {
+   507			resp->status = nfserr_nametoolong;
+   508			goto out;
+   509		}
+   510	
+   511		argp->tname = svc_fill_symlink_pathname(rqstp, &argp->first,
+   512							page_address(rqstp->rq_arg.pages[0]),
+   513							argp->tlen);
+   514		if (IS_ERR(argp->tname)) {
+   515			resp->status = nfserrno(PTR_ERR(argp->tname));
+   516			goto out;
+   517		}
+   518	
+   519		fh_init(&newfh, NFS_FHSIZE);
+   520		resp->status = nfsd_symlink(rqstp, &argp->ffh, argp->fname, argp->flen,
+   521					    argp->tname, &attrs, &newfh);
+   522	
+   523		kfree(argp->tname);
+   524		fh_put(&argp->ffh);
+   525		fh_put(&newfh);
+   526	out:
+   527		resp->status = nfsd_map_status(resp->status);
+   528		return rpc_success;
+   529	}
+   530	
+   531	/*
+   532	 * Make directory. This operation is not idempotent.
+   533	 * N.B. After this call resp->fh needs an fh_put
+   534	 */
+   535	static __be32
+   536	nfsd_proc_mkdir(struct svc_rqst *rqstp)
+   537	{
+   538		struct nfsd_createargs *argp = rqstp->rq_argp;
+   539		struct nfsd_diropres *resp = rqstp->rq_resp;
+   540		struct nfsd_attrs attrs = {
+   541			.na_iattr	= &argp->attrs,
+   542		};
+   543	
+   544		trace_nfsd_proc_mkdir(rqstp, &argp->fh, S_IFDIR, argp->name, argp->len);
+   545	
+   546		if (resp->fh.fh_dentry) {
+   547			printk(KERN_WARNING
+   548				"nfsd_proc_mkdir: response already verified??\n");
+   549		}
+   550	
+   551		argp->attrs.ia_valid &= ~ATTR_SIZE;
+   552		fh_init(&resp->fh, NFS_FHSIZE);
+   553		resp->status = nfsd_create(rqstp, &argp->fh, argp->name, argp->len,
+   554					   &attrs, S_IFDIR, 0, &resp->fh);
+   555		fh_put(&argp->fh);
+   556		if (resp->status != nfs_ok)
+   557			goto out;
+   558	
+   559		resp->status = fh_getattr(&resp->fh, &resp->stat);
+   560	out:
+   561		resp->status = nfsd_map_status(resp->status);
+   562		return rpc_success;
+   563	}
+   564	
+   565	/*
+   566	 * Remove a directory
+   567	 */
+   568	static __be32
+   569	nfsd_proc_rmdir(struct svc_rqst *rqstp)
+   570	{
+   571		struct nfsd_diropargs *argp = rqstp->rq_argp;
+   572		struct nfsd_stat *resp = rqstp->rq_resp;
+   573	
+ > 574		trace_nfsd_proc_rmdir(rqstp, &argp->fh, argp->name, argp->len);
+   575	
+   576		resp->status = nfsd_unlink(rqstp, &argp->fh, S_IFDIR,
+   577					   argp->name, argp->len);
+   578		fh_put(&argp->fh);
+   579		resp->status = nfsd_map_status(resp->status);
+   580		return rpc_success;
+   581	}
+   582	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
