@@ -1,95 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7A95684;
-	Wed, 12 Mar 2025 01:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5E0A31
+	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 01:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741744306; cv=none; b=E1DV+QA9dWlzCA4EUJwgCmn367O6Hl/nTj8doogTUPVZZrArG/hSUjq9kNEtOdU+VK7xErLCspbOIy5QZP6Udi2jrSCJBB8O4Up2XnuU9N2Cew+CGvilihk4277fjvpd+t9biE+DS27wdAgCP2CxK0kGwEJSTn6uzJvtNL25LSs=
+	t=1741744601; cv=none; b=EW2B69HiSZTbTvP9+j3DzcDW7OooD6DYME9TKXoaPJm1qIW1wswCNEkSJFDf0jApd7zMchuWVnhgaGIkGb3SbI1pCR3yNvc5Wz4r/ClGUpCEEjTlWxlbZ13K92V6xPplFZax2TsQlQpRVX1XYWD22hgudCSW6JSkgZdCN9ufhwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741744306; c=relaxed/simple;
-	bh=8tF1c0BMrEsjeXjFAL3/6gIyIoYa1c1UOXeWV20sKd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=X7a8zFgPcC4zHZ6xqhTE/ajHbBI9dkTXxARBzPnuVPY3M8WljjIAKD/U8d7YuXutNBB9o1Ct8lbDB8e88i5RqS50SJH+yHJBapZiSEQOthOeFL9AWWfTu9CdNsrsPi0mEs6xwIl5Yp2NHp+99GT581Lx2koFDJUim30EDdxJ2QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDvsdfkb; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741744601; c=relaxed/simple;
+	bh=i8z2Xb9lFxcMgAI2K80UrHzxA3FJTlfeKI/zXvLiMok=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GJqqzhxzq4192V58HDui+O8GTWRxdcp2rJaTgtLu2c9O4AweQsthKuuBA2EvVSBnxlg015/c7Z+GB6W8bxYyAW5vXG8OcQD02DyQ7AI3E0eSC6NBOgn8EGbkV3OvqzJv2TRVAuQ0jWIC0+kMG6oxh6e5g0G7EUwwLAnPUPLcaQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVlSb7+R; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDvsdfkb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741744305; x=1773280305;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8tF1c0BMrEsjeXjFAL3/6gIyIoYa1c1UOXeWV20sKd4=;
-  b=gDvsdfkb7t2rALc5984cFQ09vQUdGItaV0WSiWe/f3zfLGIPJfmglzgH
-   sv31T9/ChBBW6tU4emwhoKv5iNGJcNKw1AFGA1ymBxDjFYtwCFawhJ5hI
-   ukFM1fUF3WPqQGZI1cSUklouS2JRPW05Bc8ttuPGtC+1DJiX2y9XTZ6fY
-   UEoc68j2i160cq687y1J1r9dvEHgARMlMxhcqD0c+DAt6pZ3cN+zboYCb
-   QJ0dKtvke/Khqj/Tr3zIOZlZFEIxHCEldoJQaF//iJL/omqnBdhgDUG9D
-   UaJtNxeVG1nFBVDdsdbGfplbyZssh2kGwDDXayxwpjoGGBX4Dn8OtAS1n
-   w==;
-X-CSE-ConnectionGUID: Z2w6s01CTqaP5fS6qWlCsA==
-X-CSE-MsgGUID: eQFmtMh8RFuN2PnU5ZbxSA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="54180183"
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="54180183"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 18:51:43 -0700
-X-CSE-ConnectionGUID: On05y0FMREqCTvuVDlceIA==
-X-CSE-MsgGUID: mjFXunIdTR+yb3CIca8JXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
-   d="scan'208";a="125521472"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 11 Mar 2025 18:51:41 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsBFy-00081y-1P;
-	Wed, 12 Mar 2025 01:51:38 +0000
-Date: Wed, 12 Mar 2025 09:51:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [linux-next:master 9090/10334] ld.lld: error: undefined symbol:
- tpm_crb_ffa_init
-Message-ID: <202503120916.TnY8Xobl-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVlSb7+R"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301001bc6a8so385783a91.1
+        for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 18:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741744600; x=1742349400; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hhWzg/d0ytpwp9W4Azext2ZzMQHgy1fZGnKhTFyW2CU=;
+        b=FVlSb7+RVroQcA46wmuVEUq9yt/Zq9giuXFKHIZXq4mSz+ab5pRUBDKInSSlrUI3QQ
+         PkBHmNrWQCrQeOmkCBOfVaf3fRUtUckFu6AWurV6DgSWoUne1Ny9XT43hA6YbTE1JT5b
+         znQ4si6q16CGfQ/hf70VDYQc24BGe9jMpXdNqn7mH9UxmZnPpkJf9Ottn4hfEmtnd2VA
+         ITLps51HRnj/fSKJ/TL7HB+voK9SjvpokiWx5hrk7nazMwPczaOkxTlEcWiqbg/KnTex
+         XgspW8AqsmBioXZnbJHzZuJxdfq0wpDqmyKkueKYEp/DNBOJ9Vlit4mqjefE9UOHf9W1
+         L1nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741744600; x=1742349400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hhWzg/d0ytpwp9W4Azext2ZzMQHgy1fZGnKhTFyW2CU=;
+        b=mH0l3Ncm3nUOK9IIVBptysnEwsc+yfTZ38ymc6UyjekiuOswHX/4LC6kzLapg+eWox
+         v+HelOdCIx0mkCwnLHSyfXx1EojZxRu2+O1q6RMWcPLEfcRLfcG8S7mxRu76CACXrQYp
+         +8FPLDHrEj/wnccniR/8+6RqLu5b//oRLiR9ggTfp1ZCsn+EhSIeZfHoTvSo9suSYDoP
+         nmZZYVlajIa3q0kw+iAXrABxP78+B9DJlzIq/XHymev6cFmBgC7r7+DqOZI4RzUTE3Fa
+         olrbZefWClWK59dVWG6v2BY3SG9jb8GHaMLIHHWtb/QxyQnRihE5OU/QeBfDEI+miW/j
+         UWRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhAiSttFTfKIw6Fzh+WC8r/lNdCXLxFpDvLoLBvVtL3o/gKp10DSWf/Iz8cPsSCONAu1+y@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx7K+f5lFnpA84CJnt3qE5rVAImB2jesUhBxG+LLlnBFT12sMtw
+	Y/tm0VpAI5VuNCfUUZpt0rXpRT17JcGo77QLBwZM0o3j4onhp/LXSegg+YRPcwJf0NJTLkbjmVu
+	R6cag+JS/ECQHL0niaW3p/a+dJms=
+X-Gm-Gg: ASbGncsOYW5XI0QrtWOCGeQraP7eA4dO648nMtKve+fZruQu0BPWqjFXYEgVpZI7G4e
+	4VIb48A+ZBPJlYDItdaRDgQpTObT3LWM+cx+0/dKb+LPdy3BP7QA498tSMqdyZg2hhOZmTsb2JN
+	CrZ91+3ZGLEqT5G1lNt7Gdfc4IyxU+2iQktZtM
+X-Google-Smtp-Source: AGHT+IH2TOWzUeGxG1/VvM5umB2zQLllV6LRmfHEFJ6bEJKnEcBXB5BqfvcaUtU8PlHUHYAax8MNb/fMhf3PDUmziAs=
+X-Received: by 2002:a17:90b:1809:b0:2fe:b972:a2c3 with SMTP id
+ 98e67ed59e1d1-300ff380aaemr2857882a91.0.1741744599798; Tue, 11 Mar 2025
+ 18:56:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
+In-Reply-To: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 12 Mar 2025 02:56:26 +0100
+X-Gm-Features: AQ5f1JqsRDOX4s34-mUC-bMUKfIpM7ebb8PdNYncW_1xsWSlQpvBaseM_USJnec
+Message-ID: <CANiq72mV=160jejuTO8jmsOszrkbXX0UAa1dvZ0VSyKaWcLqBg@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
+To: Antonio Hickey <contact@antoniohickey.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   eea255893718268e1ab852fb52f70c613d109b99
-commit: 9b2015ee9b5bba20097ea1e1f4188067624f4fa3 [9090/10334] tpm_crb: add support for the Arm FF-A start method
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250312/202503120916.TnY8Xobl-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120916.TnY8Xobl-lkp@intel.com/reproduce)
+On Wed, Mar 12, 2025 at 12:44=E2=80=AFAM Antonio Hickey
+<contact@antoniohickey.com> wrote:
+>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Suggested-by: https://github.com/Rust-for-Linux/linux/issues/1145
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503120916.TnY8Xobl-lkp@intel.com/
+The Suggested-by tag is meant to explain who suggested it, rather than
+duplicate the link -- please see:
 
-All errors (new ones prefixed by >>):
+    https://docs.kernel.org/process/submitting-patches.html#using-reported-=
+by-tested-by-reviewed-by-suggested-by-and-fixes
 
->> ld.lld: error: undefined symbol: tpm_crb_ffa_init
-   >>> referenced by tpm_crb.c
-   >>>               drivers/char/tpm/tpm_crb.o:(crb_acpi_add) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: tpm_crb_ffa_start
-   >>> referenced by tpm_crb.c
-   >>>               drivers/char/tpm/tpm_crb.o:(__crb_request_locality) in archive vmlinux.a
-   >>> referenced by tpm_crb.c
-   >>>               drivers/char/tpm/tpm_crb.o:(__crb_relinquish_locality) in archive vmlinux.a
-   >>> referenced by tpm_crb.c
-   >>>               drivers/char/tpm/tpm_crb.o:(crb_send) in archive vmlinux.a
-   >>> referenced 1 more times
+(I typically also put the Link after the tag, if the link is meant to
+show the original suggestion, just like the documentation requests for
+the Reported-by/Closes pair)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+In any case, there is no need to re-send a v3 just for this, you can
+wait to see if there is any feedback.
+
+Thanks for the patch!
+
+Cheers,
+Miguel
