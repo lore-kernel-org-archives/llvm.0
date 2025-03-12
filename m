@@ -1,104 +1,82 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from a8-30.smtp-out.amazonses.com (a8-30.smtp-out.amazonses.com [54.240.8.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5E0A31
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 01:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21ECB5684
+	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 02:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741744601; cv=none; b=EW2B69HiSZTbTvP9+j3DzcDW7OooD6DYME9TKXoaPJm1qIW1wswCNEkSJFDf0jApd7zMchuWVnhgaGIkGb3SbI1pCR3yNvc5Wz4r/ClGUpCEEjTlWxlbZ13K92V6xPplFZax2TsQlQpRVX1XYWD22hgudCSW6JSkgZdCN9ufhwc=
+	t=1741745412; cv=none; b=g4Zhqoq8zQ+jInSKW2EIP0Cw6GFjkpR6U6fTCJ+fj/DQFUPcKRevnV+xozr/mTJjEVIIPPH4d10KGQOHqaTTKRTU8hC5hbOkiFmMy8EzCiihTqlSHcMR9yjXFuzTwN3M+pC1y7BO6ByD9YzHLQq0yTa+RyQ6O0z0J3nv0du1ZXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741744601; c=relaxed/simple;
-	bh=i8z2Xb9lFxcMgAI2K80UrHzxA3FJTlfeKI/zXvLiMok=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GJqqzhxzq4192V58HDui+O8GTWRxdcp2rJaTgtLu2c9O4AweQsthKuuBA2EvVSBnxlg015/c7Z+GB6W8bxYyAW5vXG8OcQD02DyQ7AI3E0eSC6NBOgn8EGbkV3OvqzJv2TRVAuQ0jWIC0+kMG6oxh6e5g0G7EUwwLAnPUPLcaQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVlSb7+R; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1741745412; c=relaxed/simple;
+	bh=MsogWZ4eW/JoOuF7a3G6IOjdj6EOE5vHYUBmx6Ennqw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=csA20Fqp6Ld6oWKxX8DcTkZEzMXdmC53reyaM2/3UbuChw9iTnGOW/3TbReYNLuUEpc2JnmPodd1BlQBbzb1Z1oGoo69/iElARBBvxYmA6tjtINSWP9zqbHPgE68+wyozHJLBjfFk46r/D8NPgbGaD1kU7+2RFptnke2Knav1xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=H5vMqAED; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=hrCHqPfu; arc=none smtp.client-ip=54.240.8.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVlSb7+R"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301001bc6a8so385783a91.1
-        for <llvm@lists.linux.dev>; Tue, 11 Mar 2025 18:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741744600; x=1742349400; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hhWzg/d0ytpwp9W4Azext2ZzMQHgy1fZGnKhTFyW2CU=;
-        b=FVlSb7+RVroQcA46wmuVEUq9yt/Zq9giuXFKHIZXq4mSz+ab5pRUBDKInSSlrUI3QQ
-         PkBHmNrWQCrQeOmkCBOfVaf3fRUtUckFu6AWurV6DgSWoUne1Ny9XT43hA6YbTE1JT5b
-         znQ4si6q16CGfQ/hf70VDYQc24BGe9jMpXdNqn7mH9UxmZnPpkJf9Ottn4hfEmtnd2VA
-         ITLps51HRnj/fSKJ/TL7HB+voK9SjvpokiWx5hrk7nazMwPczaOkxTlEcWiqbg/KnTex
-         XgspW8AqsmBioXZnbJHzZuJxdfq0wpDqmyKkueKYEp/DNBOJ9Vlit4mqjefE9UOHf9W1
-         L1nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741744600; x=1742349400;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hhWzg/d0ytpwp9W4Azext2ZzMQHgy1fZGnKhTFyW2CU=;
-        b=mH0l3Ncm3nUOK9IIVBptysnEwsc+yfTZ38ymc6UyjekiuOswHX/4LC6kzLapg+eWox
-         v+HelOdCIx0mkCwnLHSyfXx1EojZxRu2+O1q6RMWcPLEfcRLfcG8S7mxRu76CACXrQYp
-         +8FPLDHrEj/wnccniR/8+6RqLu5b//oRLiR9ggTfp1ZCsn+EhSIeZfHoTvSo9suSYDoP
-         nmZZYVlajIa3q0kw+iAXrABxP78+B9DJlzIq/XHymev6cFmBgC7r7+DqOZI4RzUTE3Fa
-         olrbZefWClWK59dVWG6v2BY3SG9jb8GHaMLIHHWtb/QxyQnRihE5OU/QeBfDEI+miW/j
-         UWRg==
-X-Forwarded-Encrypted: i=1; AJvYcCXhAiSttFTfKIw6Fzh+WC8r/lNdCXLxFpDvLoLBvVtL3o/gKp10DSWf/Iz8cPsSCONAu1+y@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx7K+f5lFnpA84CJnt3qE5rVAImB2jesUhBxG+LLlnBFT12sMtw
-	Y/tm0VpAI5VuNCfUUZpt0rXpRT17JcGo77QLBwZM0o3j4onhp/LXSegg+YRPcwJf0NJTLkbjmVu
-	R6cag+JS/ECQHL0niaW3p/a+dJms=
-X-Gm-Gg: ASbGncsOYW5XI0QrtWOCGeQraP7eA4dO648nMtKve+fZruQu0BPWqjFXYEgVpZI7G4e
-	4VIb48A+ZBPJlYDItdaRDgQpTObT3LWM+cx+0/dKb+LPdy3BP7QA498tSMqdyZg2hhOZmTsb2JN
-	CrZ91+3ZGLEqT5G1lNt7Gdfc4IyxU+2iQktZtM
-X-Google-Smtp-Source: AGHT+IH2TOWzUeGxG1/VvM5umB2zQLllV6LRmfHEFJ6bEJKnEcBXB5BqfvcaUtU8PlHUHYAax8MNb/fMhf3PDUmziAs=
-X-Received: by 2002:a17:90b:1809:b0:2fe:b972:a2c3 with SMTP id
- 98e67ed59e1d1-300ff380aaemr2857882a91.0.1741744599798; Tue, 11 Mar 2025
- 18:56:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="H5vMqAED";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="hrCHqPfu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
+	t=1741745409;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=MsogWZ4eW/JoOuF7a3G6IOjdj6EOE5vHYUBmx6Ennqw=;
+	b=H5vMqAEDaBGHrvvITPrGCA2/GuInNRUGqwTeBVj9w+QKHDZvdHu7QELUY4BYikb8
+	QXqazZR9rbjcBmByxJEwUoe1+NxV3NyqfGa31lNcApaR7lsy79rs5lMvY/QUNUkqchK
+	CE90EDog0nwJCkRQV9u9Ni12sK8UtIVWXdjxyZvGxyqmFgzfteP6UwxLiGjCpGDlckc
+	77iJGCjSQfgn0LRSFDwefI6a2hs8Sgg5cJTLPxviSXbiBi2ilF3kGQ4fsomYiv4T0Uf
+	eCKkoGT0hNRdlCkWH+7GWEypgOq25PKgrmMA+xxWd103WeXKLNZkMPrYRIYTslxEsrL
+	ZecL1xgG7A==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741745409;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=MsogWZ4eW/JoOuF7a3G6IOjdj6EOE5vHYUBmx6Ennqw=;
+	b=hrCHqPfubVwn2XzLKXNjN/TTeMl6zJyLVT0qkTuZjkI2FoEKW/orW6upZqpAYF6L
+	qiYyUwO2QgnbQf/bM4vWAOaIvRteuSHOa/PGXXU12U26O++NJ9xxV/7BWmnC0WaI2xO
+	F01Ha7FgqUUnXAYyjhpVWU2nmrGbHQhIPa/Hql4M=
+From: Antonio Hickey <contact@antoniohickey.com>
+To: miguel.ojeda.sandonis@gmail.com
+Cc: a.hindborg@kernel.org, alex.gaynor@gmail.com, aliceryhl@google.com, 
+	benno.lossin@proton.me, bjorn3_gh@protonmail.com, 
+	boqun.feng@gmail.com, contact@antoniohickey.com, dakr@kernel.org, 
+	gary@garyguo.net, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com, 
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com, ojeda@kernel.org, 
+	rust-for-linux@vger.kernel.org, tmgross@umich.edu
+Subject: Re: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
+Date: Wed, 12 Mar 2025 02:10:09 +0000
+Message-ID: <01000195881dce87-c9f1ac46-3896-47f7-87de-84de94617a54-000000@email.amazonses.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <CANiq72mV=160jejuTO8jmsOszrkbXX0UAa1dvZ0VSyKaWcLqBg@mail.gmail.com>
+References: <CANiq72mV=160jejuTO8jmsOszrkbXX0UAa1dvZ0VSyKaWcLqBg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
-In-Reply-To: <010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 12 Mar 2025 02:56:26 +0100
-X-Gm-Features: AQ5f1JqsRDOX4s34-mUC-bMUKfIpM7ebb8PdNYncW_1xsWSlQpvBaseM_USJnec
-Message-ID: <CANiq72mV=160jejuTO8jmsOszrkbXX0UAa1dvZ0VSyKaWcLqBg@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: uaccess: mark UserSliceReader methods inline
-To: Antonio Hickey <contact@antoniohickey.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
+X-SES-Outgoing: 2025.03.12-54.240.8.30
 
-On Wed, Mar 12, 2025 at 12:44=E2=80=AFAM Antonio Hickey
-<contact@antoniohickey.com> wrote:
->
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Suggested-by: https://github.com/Rust-for-Linux/linux/issues/1145
+On Wed, Mar 12, 2025 at 02:56:26AM +0100, Miguel Ojeda wrote:
+> The Suggested-by tag is meant to explain who suggested it, rather than
+> duplicate the link -- please see:
+> 
+>     https://docs.kernel.org/process/submitting-patches.html#using-reported-by-tested-by-reviewed-by-suggested-by-and-fixes
+> 
+> (I typically also put the Link after the tag, if the link is meant to
+> show the original suggestion, just like the documentation requests for
+> the Reported-by/Closes pair)
+> 
+> In any case, there is no need to re-send a v3 just for this, you can
+> wait to see if there is any feedback.
 
-The Suggested-by tag is meant to explain who suggested it, rather than
-duplicate the link -- please see:
+Ahh ok yea the Suggested-by tag makes a lot more sense now haha had a feeling duplicating
+the link wasn't right, but was more hesitant to mark someone in specific as suggested by.
 
-    https://docs.kernel.org/process/submitting-patches.html#using-reported-=
-by-tested-by-reviewed-by-suggested-by-and-fixes
+Will make note of this for my future patches.
 
-(I typically also put the Link after the tag, if the link is meant to
-show the original suggestion, just like the documentation requests for
-the Reported-by/Closes pair)
-
-In any case, there is no need to re-send a v3 just for this, you can
-wait to see if there is any feedback.
-
-Thanks for the patch!
-
-Cheers,
-Miguel
+Thanks,
+Antonio
