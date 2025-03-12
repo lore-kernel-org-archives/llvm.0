@@ -1,89 +1,137 @@
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEE023E25B
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 12:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DF323A997;
+	Wed, 12 Mar 2025 13:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741782132; cv=none; b=LxL+9Zjc1pGRTzNMqvZlfJCBr7oFpEIcwIA/lJIBTYJhyQVElm6VAoo2wBOIyiwnGH5v1Ps639eNz67qFJ1BNFCwQ38P+3NX9D74aFri2ZINTyuBcuEWAjKHbStW7dTNbjJVGEP+/jK3tMA/mBR+b57Z9JulPVT5gdVCLs8ltXQ=
+	t=1741784737; cv=none; b=q4W1I7emvEX1Y9OtvNEKH/WC3MvO2BfWS3ioPjEoUgXfsW4P9OL5gghjxFyUurAm9hXhl1I0DA6RBcpoKalLWbjUAiHmPZ9bvd5YolZZcRQ31Z8zBp8YpVBY5htbtz/3hV8MuG1WB+5sQg+f2jME6LeKUEbNoJGrUteNNDFi2H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741782132; c=relaxed/simple;
-	bh=dQEshaF8/RAkmjZOcU+Ndz4W809g96rTGJPqMUi55/Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ilgO2cPN1m+1JDyPzP+J5Sf0lK8XHoQ8am3KEHQW3RU5FVB3n9/hcAdMFlOPiBAh84wKQFpbNV+rigaUZ/iStSB12xCcz98EpHFQK1o9ZWRC9Jh2bhRrTOYf+6KTbz7Yj2MeeYPefoIMf7tOj+t0RhAYNIXkxE3rm1P8hpYC4QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=BOY2Sma3; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+	s=arc-20240116; t=1741784737; c=relaxed/simple;
+	bh=he6E5lxxPq4VJewVuE2Tq6r8+u3GsIYxHcWak46mRMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KMi96uYtkY3nN7DCuh5lA1+g/33sN7ye3c+vRh8AAyVLsvx6mu8f2wBvb+gFDfcXBFwcTEoMCIKGFQmKHOZE0Noxllv/kogzY5JrQl7H1HiYat0gAWf2GoMinCo4C6ePeD57kHYNPSlLKUhun1CRSLO401Ql9eF7RCv5eB4Q5vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hyuV0sHC; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="BOY2Sma3"
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 8D38D24002B
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 13:22:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1741782129; bh=dQEshaF8/RAkmjZOcU+Ndz4W809g96rTGJPqMUi55/Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 From;
-	b=BOY2Sma3SdrK9tloIynxvqBRNH7+t01cTHrkY4p0f4Y/X93sp82kS2hucoCtHL2d/
-	 zaWoooaTW2Zt4k02KLC8K6lbsdgA0hLwpiWirkwqXJxTVYF8/IozmUE38KDG1miHLk
-	 /voNSFH+lrUondtnF3fU9sYGfFh8n230o2xRvE40eyy7kuGc6+oYeEBsjDFWGGga/9
-	 QpCY7Tv6wz2M57bQ4MXXkGqx3lvARL9rXagjjJufc8AkRGkyaKcNnjYzh8RiXzuVFA
-	 Ym4prpjn1mr0Gq6G+ZXqSIjxzLtpqgTxt6AdFajMN8DiVgRlWm5ZizcC0vsnI0mS7r
-	 Fwovd8M6rvEmw==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4ZCVB51Jc8z9rxB;
-	Wed, 12 Mar 2025 13:22:05 +0100 (CET)
-From: Charalampos Mitrodimas <charmitro@posteo.net>
-To: Panagiotis Foliadis <pfoliadis@posteo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,
-  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,
-  =?utf-8?Q?Bj=C3=B6rn?=
- Roy Baron <bjorn3_gh@protonmail.com>,  Benno Lossin
- <benno.lossin@proton.me>,  Andreas Hindborg <a.hindborg@kernel.org>,
-  Alice Ryhl <aliceryhl@google.com>,  Trevor Gross <tmgross@umich.edu>,
-  Nathan Chancellor <nathan@kernel.org>,  Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
-  Justin Stitt <justinstitt@google.com>,  rust-for-linux@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev
-Subject: Re: [PATCH v2] rust: task: mark Task methods inline
-In-Reply-To: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
-	(Panagiotis Foliadis's message of "Tue, 11 Mar 2025 15:05:52 +0000")
-References: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
-Date: Wed, 12 Mar 2025 12:22:04 +0000
-Message-ID: <m28qpacuc3.fsf@Mac.home>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hyuV0sHC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741784736; x=1773320736;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=he6E5lxxPq4VJewVuE2Tq6r8+u3GsIYxHcWak46mRMs=;
+  b=hyuV0sHC4dg2PyIBMQRi+wsEZ71w6Y3XkOYb1tBp80Z3q9Tv+tqxJszo
+   636ijtfPKN1MrjJrCHCnBNCkAkKHc2QDQtWZE1d9uF5+4pLPTA17zqMs2
+   fBV0UOBOhdtzX6HZ3E1Zg32woHV1tBvw3zDfUydjZRjkUHI+htlzwDquI
+   4VOfx0qGxbH+8Y7MZzhDBiZup1fKe8e5cWYL0wwpyXrzZ/q5mb9jh8rVU
+   xJpzVV5y8dhHx0amFOhQpDEzwDmi8jkAJ4XrdOBo+gLHaG97LSjS1CuV6
+   Oa9Za5FhZ+cTmCVJiWoIW9s0Dk3HnjTSoSG7CLUSw1s7i+UvRDJu8XlHo
+   g==;
+X-CSE-ConnectionGUID: VCuqreqkQAOyv0XhvmOx/Q==
+X-CSE-MsgGUID: kZY3iZSPR9m0ziR5TXtwBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="53509711"
+X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
+   d="scan'208";a="53509711"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 06:05:35 -0700
+X-CSE-ConnectionGUID: ffrp5yvPSHitAqDcRs8AKg==
+X-CSE-MsgGUID: 1M7+j/vVQkym13iBdhFelQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
+   d="scan'208";a="125275316"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Mar 2025 06:05:33 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tsLm7-0008Xj-2G;
+	Wed, 12 Mar 2025 13:05:31 +0000
+Date: Wed, 12 Mar 2025 21:05:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:irq/core 26/53] kernel/irq/chip.c:1160:46: error:
+ expected ')'
+Message-ID: <202503122032.WuoV43mt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Panagiotis Foliadis <pfoliadis@posteo.net> writes:
+Hi Thomas,
 
-> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> toolchain provided by kernel.org, the following symbols are generated:
->
-> $ nm vmlinux | grep ' _R'.*Task | rustfilt
-> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
-> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
-> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
-> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
-> ffffffff817b2cc0 T <kernel::task::Task>::uid
-> ffffffff817b2ce0 T <kernel::task::Task>::euid
-> ffffffff817b2c70 T <kernel::task::Task>::current
-> ffffffff817b2d70 T <kernel::task::Task>::wake_up
-> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
-> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
->
-> These Rust symbols are trivial wrappers around the C functions
-> get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
-> euid, get_current, wake_up, get_task_struct and put_task_struct.It
-> doesn't make sense to go through a trivial wrapper for these
-> functions, so mark them inline.
->
-> After applying this patch, the above command will produce no output.
->
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Reviewed-by: Charalampos Mitrodimas <charmitro@posteo.net>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
+head:   369c4f7fd7564a8952129a147cacf88cb4697c79
+commit: 51edc4f39fa21403ccdc03ba52f323ce6a7e3cd4 [26/53] genirq/chip: Rework handle_fasteoi_ack_irq()
+config: x86_64-buildonly-randconfig-001-20250312 (https://download.01.org/0day-ci/archive/20250312/202503122032.WuoV43mt-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503122032.WuoV43mt-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503122032.WuoV43mt-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/irq/chip.c:1160:46: error: expected ')'
+    1160 |         if (unlikely(!irq_can_handle_actions(desc)) {
+         |                                                     ^
+   kernel/irq/chip.c:1160:5: note: to match this '('
+    1160 |         if (unlikely(!irq_can_handle_actions(desc)) {
+         |            ^
+   1 error generated.
+
+
+vim +1160 kernel/irq/chip.c
+
+  1138	
+  1139	#ifdef CONFIG_IRQ_FASTEOI_HIERARCHY_HANDLERS
+  1140	/**
+  1141	 * handle_fasteoi_ack_irq - irq handler for edge hierarchy stacked on
+  1142	 *			    transparent controllers
+  1143	 *
+  1144	 * @desc:	the interrupt description structure for this irq
+  1145	 *
+  1146	 * Like handle_fasteoi_irq(), but for use with hierarchy where the irq_chip
+  1147	 * also needs to have its ->irq_ack() function called.
+  1148	 */
+  1149	void handle_fasteoi_ack_irq(struct irq_desc *desc)
+  1150	{
+  1151		struct irq_chip *chip = desc->irq_data.chip;
+  1152	
+  1153		guard(raw_spinlock)(&desc->lock);
+  1154	
+  1155		if (!irq_can_handle_pm(desc)) {
+  1156			cond_eoi_irq(chip, &desc->irq_data);
+  1157			return;
+  1158		}
+  1159	
+> 1160		if (unlikely(!irq_can_handle_actions(desc)) {
+  1161			mask_irq(desc);
+  1162			cond_eoi_irq(chip, &desc->irq_data);
+  1163			return;
+  1164		}
+  1165	
+  1166		kstat_incr_irqs_this_cpu(desc);
+  1167		if (desc->istate & IRQS_ONESHOT)
+  1168			mask_irq(desc);
+  1169	
+  1170		desc->irq_data.chip->irq_ack(&desc->irq_data);
+  1171	
+  1172		handle_irq_event(desc);
+  1173	
+  1174		cond_unmask_eoi_irq(desc, chip);
+  1175	}
+  1176	EXPORT_SYMBOL_GPL(handle_fasteoi_ack_irq);
+  1177	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
