@@ -1,206 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A3A2405F9;
-	Wed, 12 Mar 2025 12:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEE023E25B
+	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 12:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741781011; cv=none; b=S0kAiQc+qXKwIE6UWIfXdd9lYE6E35HInBGz7WajVcsROo0NNKRatuFz6JNrRexXA+dL434oMkyvNvELRkBmhsRZ9A6uqCpazysKWBBLO7TxiKmPk2oJQL0gnRlBt+qMW0Dz9pekG40JD3QBIlW3g97TcTNPl3yfKN9tGpO7mt0=
+	t=1741782132; cv=none; b=LxL+9Zjc1pGRTzNMqvZlfJCBr7oFpEIcwIA/lJIBTYJhyQVElm6VAoo2wBOIyiwnGH5v1Ps639eNz67qFJ1BNFCwQ38P+3NX9D74aFri2ZINTyuBcuEWAjKHbStW7dTNbjJVGEP+/jK3tMA/mBR+b57Z9JulPVT5gdVCLs8ltXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741781011; c=relaxed/simple;
-	bh=xaWsNN1cs0HzDj9R320RuBTYp1Ti2MBG4Pn6SIigU9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h32Wt4i3mNt5/jNNpMyfRYj8mjsVMxCppgWWLiONfx6NuZjwocoyg3UP/h/RxSNxxUj5XZXTP0ciu3m5tA6BwC9eDCXRmoIfgm9sebwYYs17y9cZx7Kweub+A7pT1PeuF5Q6txU5c2vDc5L5iX6MGiZWEVFtEkGKfGOiXIrYYwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cHYya5RA; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741782132; c=relaxed/simple;
+	bh=dQEshaF8/RAkmjZOcU+Ndz4W809g96rTGJPqMUi55/Y=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ilgO2cPN1m+1JDyPzP+J5Sf0lK8XHoQ8am3KEHQW3RU5FVB3n9/hcAdMFlOPiBAh84wKQFpbNV+rigaUZ/iStSB12xCcz98EpHFQK1o9ZWRC9Jh2bhRrTOYf+6KTbz7Yj2MeeYPefoIMf7tOj+t0RhAYNIXkxE3rm1P8hpYC4QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=BOY2Sma3; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cHYya5RA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741781009; x=1773317009;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xaWsNN1cs0HzDj9R320RuBTYp1Ti2MBG4Pn6SIigU9E=;
-  b=cHYya5RAhU1bEqSPyxiqoLj6L0/sJtiFPtfrg10yuzvu1TyUdf2q9KZ5
-   KB5/tBlLZXa/bIVLxg7gVw8WkhroiYrCtAGszv3V2oYpWZrzi8pN95fU+
-   O43Dw6sa8SZto/2/TtWvy//IFPDjt+kLbT5gNZZZLLceMc9LaFn1L1RAJ
-   txxY4EtKqpy68/4hYEUJabaYsMZq5q9P77Pa9+JPjM6jPjaWaeBi7tDQe
-   oLqhPyEGHpfXT0sQb7vPceQI+WjMWEIVDLgA+wNs5U3Fg7B5YP2Jzzu1Q
-   +EZyMVq2qRL9I2TMIVXwY/uiVbpnEuj+BDZNhVsnCvNMEiVMkoTaH83D0
-   Q==;
-X-CSE-ConnectionGUID: wgAghPlLQLu//9lvS5fbUw==
-X-CSE-MsgGUID: kxPoFRs/T8C4LsdIqmD1+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="60256940"
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="60256940"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 05:03:26 -0700
-X-CSE-ConnectionGUID: EOLlO30hSXG4eXfejVwstw==
-X-CSE-MsgGUID: c6hH1Cm/TvycB4FVprr3vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="151428269"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 12 Mar 2025 05:03:23 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsKnt-0008Vc-1Q;
-	Wed, 12 Mar 2025 12:03:18 +0000
-Date: Wed, 12 Mar 2025 20:02:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kernel@collabora.com, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] drm/tests: hdmi: Add max TMDS rate fallback tests
- for YUV420 mode
-Message-ID: <202503121909.5IeaFEUt-lkp@intel.com>
-References: <20250311-hdmi-conn-yuv-v2-7-fbdb94f02562@collabora.com>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="BOY2Sma3"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 8D38D24002B
+	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 13:22:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1741782129; bh=dQEshaF8/RAkmjZOcU+Ndz4W809g96rTGJPqMUi55/Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 From;
+	b=BOY2Sma3SdrK9tloIynxvqBRNH7+t01cTHrkY4p0f4Y/X93sp82kS2hucoCtHL2d/
+	 zaWoooaTW2Zt4k02KLC8K6lbsdgA0hLwpiWirkwqXJxTVYF8/IozmUE38KDG1miHLk
+	 /voNSFH+lrUondtnF3fU9sYGfFh8n230o2xRvE40eyy7kuGc6+oYeEBsjDFWGGga/9
+	 QpCY7Tv6wz2M57bQ4MXXkGqx3lvARL9rXagjjJufc8AkRGkyaKcNnjYzh8RiXzuVFA
+	 Ym4prpjn1mr0Gq6G+ZXqSIjxzLtpqgTxt6AdFajMN8DiVgRlWm5ZizcC0vsnI0mS7r
+	 Fwovd8M6rvEmw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4ZCVB51Jc8z9rxB;
+	Wed, 12 Mar 2025 13:22:05 +0100 (CET)
+From: Charalampos Mitrodimas <charmitro@posteo.net>
+To: Panagiotis Foliadis <pfoliadis@posteo.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,
+  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,
+  =?utf-8?Q?Bj=C3=B6rn?=
+ Roy Baron <bjorn3_gh@protonmail.com>,  Benno Lossin
+ <benno.lossin@proton.me>,  Andreas Hindborg <a.hindborg@kernel.org>,
+  Alice Ryhl <aliceryhl@google.com>,  Trevor Gross <tmgross@umich.edu>,
+  Nathan Chancellor <nathan@kernel.org>,  Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>,  Bill Wendling <morbo@google.com>,
+  Justin Stitt <justinstitt@google.com>,  rust-for-linux@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  llvm@lists.linux.dev
+Subject: Re: [PATCH v2] rust: task: mark Task methods inline
+In-Reply-To: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+	(Panagiotis Foliadis's message of "Tue, 11 Mar 2025 15:05:52 +0000")
+References: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+Date: Wed, 12 Mar 2025 12:22:04 +0000
+Message-ID: <m28qpacuc3.fsf@Mac.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250311-hdmi-conn-yuv-v2-7-fbdb94f02562@collabora.com>
+Content-Type: text/plain
 
-Hi Cristian,
+Panagiotis Foliadis <pfoliadis@posteo.net> writes:
 
-kernel test robot noticed the following build errors:
+> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+> toolchain provided by kernel.org, the following symbols are generated:
+>
+> $ nm vmlinux | grep ' _R'.*Task | rustfilt
+> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
+> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
+> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
+> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
+> ffffffff817b2cc0 T <kernel::task::Task>::uid
+> ffffffff817b2ce0 T <kernel::task::Task>::euid
+> ffffffff817b2c70 T <kernel::task::Task>::current
+> ffffffff817b2d70 T <kernel::task::Task>::wake_up
+> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
+> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
+>
+> These Rust symbols are trivial wrappers around the C functions
+> get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
+> euid, get_current, wake_up, get_task_struct and put_task_struct.It
+> doesn't make sense to go through a trivial wrapper for these
+> functions, so mark them inline.
+>
+> After applying this patch, the above command will produce no output.
+>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
 
-[auto build test ERROR on 4423e607ff50157aaf088854b145936cbab4d560]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Ciocaltea/drm-connector-hdmi-Evaluate-limited-range-after-computing-format/20250311-190150
-base:   4423e607ff50157aaf088854b145936cbab4d560
-patch link:    https://lore.kernel.org/r/20250311-hdmi-conn-yuv-v2-7-fbdb94f02562%40collabora.com
-patch subject: [PATCH v2 7/7] drm/tests: hdmi: Add max TMDS rate fallback tests for YUV420 mode
-config: x86_64-randconfig-004-20250312 (https://download.01.org/0day-ci/archive/20250312/202503121909.5IeaFEUt-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503121909.5IeaFEUt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503121909.5IeaFEUt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/drm/drm_kunit_helpers.h:10,
-                    from drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c:14:
-   drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c: In function 'drm_test_check_max_tmds_rate_bpc_fallback_yuv420':
->> include/kunit/test.h:776:29: error: SSE register return with SSE disabled
-     776 |         const typeof(right) __right = (right);                                 \
-         |                             ^~~~~~~
-   include/kunit/test.h:805:9: note: in expansion of macro 'KUNIT_BASE_BINARY_ASSERTION'
-     805 |         KUNIT_BASE_BINARY_ASSERTION(test,                                      \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:971:9: note: in expansion of macro 'KUNIT_BINARY_INT_ASSERTION'
-     971 |         KUNIT_BINARY_INT_ASSERTION(test,                                       \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:968:9: note: in expansion of macro 'KUNIT_EXPECT_EQ_MSG'
-     968 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/tests/drm_hdmi_state_helper_test.c:1337:9: note: in expansion of macro 'KUNIT_EXPECT_EQ'
-    1337 |         KUNIT_EXPECT_EQ(test, conn_state->hdmi.tmds_char_rate,
-         |         ^~~~~~~~~~~~~~~
---
-   In file included from include/drm/drm_kunit_helpers.h:10,
-                    from drm_hdmi_state_helper_test.c:14:
-   drm_hdmi_state_helper_test.c: In function 'drm_test_check_max_tmds_rate_bpc_fallback_yuv420':
->> include/kunit/test.h:776:29: error: SSE register return with SSE disabled
-     776 |         const typeof(right) __right = (right);                                 \
-         |                             ^~~~~~~
-   include/kunit/test.h:805:9: note: in expansion of macro 'KUNIT_BASE_BINARY_ASSERTION'
-     805 |         KUNIT_BASE_BINARY_ASSERTION(test,                                      \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:971:9: note: in expansion of macro 'KUNIT_BINARY_INT_ASSERTION'
-     971 |         KUNIT_BINARY_INT_ASSERTION(test,                                       \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/kunit/test.h:968:9: note: in expansion of macro 'KUNIT_EXPECT_EQ_MSG'
-     968 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
-         |         ^~~~~~~~~~~~~~~~~~~
-   drm_hdmi_state_helper_test.c:1337:9: note: in expansion of macro 'KUNIT_EXPECT_EQ'
-    1337 |         KUNIT_EXPECT_EQ(test, conn_state->hdmi.tmds_char_rate,
-         |         ^~~~~~~~~~~~~~~
-
-
-vim +776 include/kunit/test.h
-
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  734  
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  735  #define KUNIT_TRUE_MSG_ASSERTION(test, assert_type, condition, fmt, ...)       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  736  	KUNIT_UNARY_ASSERTION(test,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  737  			      assert_type,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  738  			      condition,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  739  			      true,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  740  			      fmt,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  741  			      ##__VA_ARGS__)
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  742  
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  743  #define KUNIT_FALSE_MSG_ASSERTION(test, assert_type, condition, fmt, ...)      \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  744  	KUNIT_UNARY_ASSERTION(test,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  745  			      assert_type,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  746  			      condition,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  747  			      false,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  748  			      fmt,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  749  			      ##__VA_ARGS__)
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  750  
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  751  /*
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  752   * A factory macro for defining the assertions and expectations for the basic
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  753   * comparisons defined for the built in types.
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  754   *
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  755   * Unfortunately, there is no common type that all types can be promoted to for
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  756   * which all the binary operators behave the same way as for the actual types
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  757   * (for example, there is no type that long long and unsigned long long can
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  758   * both be cast to where the comparison result is preserved for all values). So
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  759   * the best we can do is do the comparison in the original types and then coerce
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  760   * everything to long long for printing; this way, the comparison behaves
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  761   * correctly and the printed out value usually makes sense without
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  762   * interpretation, but can always be interpreted to figure out the actual
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  763   * value.
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  764   */
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  765  #define KUNIT_BASE_BINARY_ASSERTION(test,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  766  				    assert_class,			       \
-064ff292aca500d Daniel Latypov  2022-01-25  767  				    format_func,			       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  768  				    assert_type,			       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  769  				    left,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  770  				    op,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  771  				    right,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  772  				    fmt,				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  773  				    ...)				       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  774  do {									       \
-c2741453478badf Daniel Latypov  2022-01-27  775  	const typeof(left) __left = (left);				       \
-c2741453478badf Daniel Latypov  2022-01-27 @776  	const typeof(right) __right = (right);				       \
-2b6861e2372bac6 Daniel Latypov  2022-01-25  777  	static const struct kunit_binary_assert_text __text = {		       \
-2b6861e2372bac6 Daniel Latypov  2022-01-25  778  		.operation = #op,					       \
-2b6861e2372bac6 Daniel Latypov  2022-01-25  779  		.left_text = #left,					       \
-2b6861e2372bac6 Daniel Latypov  2022-01-25  780  		.right_text = #right,					       \
-2b6861e2372bac6 Daniel Latypov  2022-01-25  781  	};								       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  782  									       \
-8bd5d74babc9255 Mickaël Salaün  2024-04-08  783  	_KUNIT_SAVE_LOC(test);						       \
-97d453bc4007d4a Daniel Latypov  2022-09-30  784  	if (likely(__left op __right))					       \
-97d453bc4007d4a Daniel Latypov  2022-09-30  785  		break;							       \
-97d453bc4007d4a Daniel Latypov  2022-09-30  786  									       \
-97d453bc4007d4a Daniel Latypov  2022-09-30  787  	_KUNIT_FAILED(test,						       \
-21957f90b28f6bc Daniel Latypov  2022-01-13  788  		      assert_type,					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  789  		      assert_class,					       \
-a8495ad8e973cb6 Daniel Latypov  2022-09-30  790  		      format_func,					       \
-697365c08679137 Daniel Latypov  2022-09-30  791  		      KUNIT_INIT_ASSERT(.text = &__text,		       \
-697365c08679137 Daniel Latypov  2022-09-30  792  					.left_value = __left,		       \
-697365c08679137 Daniel Latypov  2022-09-30  793  					.right_value = __right),	       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  794  		      fmt,						       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  795  		      ##__VA_ARGS__);					       \
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  796  } while (0)
-73cda7bb8bfb1d4 Brendan Higgins 2019-09-23  797  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Charalampos Mitrodimas <charmitro@posteo.net>
