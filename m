@@ -1,187 +1,187 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B651E9B04;
-	Wed, 12 Mar 2025 20:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0651EE014
+	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 21:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741813104; cv=none; b=gFcQmsDyKGGOTe9yatax/W0bEyFjWd/nJBtkZOihar5zdlz2+0LOlNzMwYHgJU5Ap3icvmX2RT+vkVgy3BJmKxbZPdsPjiqPclkbVeA9PnR4+NUDDjeEtYyFI9Ggbvngwa1wzvTXgrRRYkOpVrFQ4vGNFC3xQmn+R0mazFntffM=
+	t=1741813484; cv=none; b=GkS8g+j0yMddBUwllXpOfSRYy7gOV0jZ3jaYbwavpu1reMleGxulb9zQlNIti+zk/0FiusERESBeCjxX91hpGTJ4OFpBkWhPGWvsADYpl5IxczcUESmFmo/4qO4eDv98NNHq5f1htGNm+C2kOR8zl6qlKZHsrxnbhdN2XmSpKGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741813104; c=relaxed/simple;
-	bh=kDLAS1ScugmvvPrwS2Ie4t2LPxu9XWmRk19zYcaIOlE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Fcoh9+Ev+K4IlNA24omoI7HZvCZBsg1gRnMHRm0C1W0RRWA/ooDsywqrPyKidjlEsBXlWCEvaCX89dH41tG6Ub7LQTmrAF89XsgWlQirpbHnyu0ucHhyhfrago2LN1jQF3aHUTn9V0Mnh1kyLeVV+XQRrhoGHHwl1P1ZXwVyloY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jdwmhj0E; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741813484; c=relaxed/simple;
+	bh=Ot0S7PtwawZf3AV7XLRs4qgCTdhjXmhj0iYA5pT0WQI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O6juD1yMyraEvvere4h1wEiYJkmv4WA9NdyzUasMy2v11QbQC6Zh7BV+1kCpmICYGmcq1U2qDnXe8Vt5I47kLQduUKaZV3HkQe350fz9aHpndw6etwB5prC3JRaS5O9Z5DOv9J2nKQula2GQP2ci6sMq2iG4IMC+mMzkF9or2fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xbEew9EW; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jdwmhj0E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741813103; x=1773349103;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kDLAS1ScugmvvPrwS2Ie4t2LPxu9XWmRk19zYcaIOlE=;
-  b=Jdwmhj0E0CRzT6DaFdPIOMfIMCHnFOX8uGu3PMwI8K2lrPGoc75GecnR
-   HSASOameFhSGHnH2XM+ztO3haqrO8F1fgRqG3t/POHuwowUK/DU1tBrbL
-   Bj+UtGZC6LVEi5v2S83Z4ibmxFXq3/qE09IqWZL82p3NCcPJCgIZ0YK54
-   2p6dINmigwKmc/0nyOIfgd9BYY2Dzl5iR/vOT+xH8Ixw7cePTpAtqqZts
-   4vO4KGL0g1ftAWugTgLEfQevKTym15aWsQgNNwY4G2OIG2OS5j7FgLorC
-   CZYKn53qj1UV7eh37bzDGIOihX6NOiitVnjzGlZ4eZ1Q8WvQAygCOON9Y
-   g==;
-X-CSE-ConnectionGUID: /99tksotT6iQPxQVb4VNdQ==
-X-CSE-MsgGUID: qXDjvd7pSi+Dl1DHf8iB9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53905014"
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="53905014"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 13:58:23 -0700
-X-CSE-ConnectionGUID: 4GVIapE2RpioAkphKquSJA==
-X-CSE-MsgGUID: e5peB+ieS1+c864f9WtD4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="143943221"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Mar 2025 13:58:20 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsT9e-0008tc-1k;
-	Wed, 12 Mar 2025 20:58:18 +0000
-Date: Thu, 13 Mar 2025 04:57:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jeff Layton <jlayton@kernel.org>
-Subject: [krzk-github:pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
- 3145/4345] samples/vfs/test-list-all-mounts.c:152:62: warning: format '%lu'
- expects argument of type 'long unsigned int', but argument 2 has type
- 'size_t' {aka 'unsigned int'}
-Message-ID: <202503130402.vnrQT0yF-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xbEew9EW"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2242ac37caeso11725ad.1
+        for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 14:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741813482; x=1742418282; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y/NYFOGJx3+utedM/+JCynhnYYN1+cS/l3CV1O7uUWI=;
+        b=xbEew9EWk13Rh7YrmHVWbHzq48GEzGlc8JyjqfdK2b0fheccC0BlRi0UhLPre/6tPp
+         umYvG60T382NTwTN0ff83Tmn4J2BJxumvO+lv2k03z+YOAJucWtG7xvjL9ZKLMBbQ/15
+         g4bhkUpmyd3mgAejyng4w2ODpzOdg2eaBEHF5ZBB5Ws2zyFt2VqxhBFf2WIm4FlfsCkW
+         dkv3HKWixGFbZzraU3yM68Rb2GN5mZUpAKIUiN7u627b/FaL4DjuZc848cqEsrCuSrRR
+         7zMpjm1AxkNdM+lwlsih+XaQ0IlDWMP+kiaTPUjqOhCdEUiytcRPQhgdnUvrBO8tlv6w
+         sQXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741813482; x=1742418282;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y/NYFOGJx3+utedM/+JCynhnYYN1+cS/l3CV1O7uUWI=;
+        b=T1vHIt8s1IT2QKOfL21Nsr2w4oF1tz793mRuAOfbk5h8Ex9seYxrM/KVpVf20zkCCC
+         1jsb68MseYdIn4bTAhARxZ8QTJVZ//D3xsHJ8E3DPgdVDPDepbQ4ELecJH9gAi4Qj/rc
+         vNX04hncvsqkYpSm7O2F0eKKeI8Jxp+IhJ7vmDcOgPjr0C8d4zvBcaj8dfS3mfMXxhLO
+         XVraBpon2wkxXBHWY4IaYFhTwZcsxL9u7X/z9KPJXUmL2GNtDkenX9XRi1UJw7nRG73B
+         QZeLiSB1djK+aDphisicVN0I25wMlegpeUH06M12Cojn9llQPwz4fGdpvbRGLwU+zTNN
+         MkIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXe1GOjTrWBmExYKODeqZ0Igts5qGUyPN5R1IE54RvoLSaafJndXlpA71QdtHFyWc5JyEUo@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx1DKagwhfQoVgceXMP76alW6Lpzuueb91bzpvCj0Td4rKN9VDN
+	j8SUdD4FKEEGTtp0hcZdi4MA1IT6gpIncQ1f1sQay52I58YofMDusyHfrypLIieSIfF1gJRmLEK
+	Q2pAyMMKiqe1X2fLY2W3WNr7V0Ua77W0ZHEIp
+X-Gm-Gg: ASbGncuCW4bIqUwAIddLne/Q9/Li0zSwuZZpcKiDILfKCMkXziM++/T0VaIyVzLP7Pq
+	yv++hfnWo8P0dR3Me2Kxc36zFZeSdAZ695Kao6PPfUNpNBW6Sh/9FTSb3NAcByL5zxwCe3RsFlt
+	rMpetmJu0o1yNc7Nx4A6mbTUMQWGVbX2E9B32ULzbnwCXTdLBefxYMX9c=
+X-Google-Smtp-Source: AGHT+IG2QAgZZb2P1DnYtlbmBhHsH8IbYPaNLVy98uYUpBgu/L7LIECGJjf1D4pL5sBwMndKUFhgflstMybnPkqFZnA=
+X-Received: by 2002:a17:903:2311:b0:216:21cb:2e14 with SMTP id
+ d9443c01a7336-225c5b9ad33mr436225ad.21.1741813481661; Wed, 12 Mar 2025
+ 14:04:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250122062332.577009-1-irogers@google.com> <Z5K712McgLXkN6aR@google.com>
+ <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com> <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
+In-Reply-To: <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 12 Mar 2025 14:04:30 -0700
+X-Gm-Features: AQ5f1Jrj8FttoWaX-jdga6H02EOp221HMf8mceTcXqVwlpfEOeFP0rT3a1IwFQk
+Message-ID: <CAP-5=fV_z+Ev=wDt+QDwx8GTNXNQH30H5KXzaUXQBOG1Mb8hJg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove BUILD_NONDISTRO
+To: Namhyung Kim <namhyung@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, "Steinar H. Gunderson" <sesse@google.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Changbin Du <changbin.du@huawei.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Kajol Jain <kjain@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
+	Li Huafei <lihuafei1@huawei.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andi Kleen <ak@linux.intel.com>, Chaitanya S Prakash <chaitanyas.prakash@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org, 
+	Daniel Xu <dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/krzk/linux pending/dt-bindings-qcom-new-and-fixes-for-warnings-linux-next
-head:   996a3103b95ddfa8c291203115cafb3ded036238
-commit: 713ad4dd44fc1f8e72351e3d0217dde04097d54c [3145/4345] samples/vfs: add STATMOUNT_MNT_{G,U}IDMAP
-config: i386-buildonly-randconfig-004-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130402.vnrQT0yF-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130402.vnrQT0yF-lkp@intel.com/reproduce)
+On Mon, Feb 10, 2025 at 10:06=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> On Thu, Jan 23, 2025 at 3:36=E2=80=AFPM Ian Rogers <irogers@google.com> w=
+rote:
+> > On Thu, Jan 23, 2025 at 1:59=E2=80=AFPM Namhyung Kim <namhyung@kernel.o=
+rg> wrote:
+> > > I like changes up to this in general.  Let me take a look at the
+> > > patches.
+>
+> So it would be nice to make progress with this series given some level
+> of happiness, I don't see any actions currently on the patch series as
+> is. If I may be so bold as to recap the issues that have come up:
+>
+> 1) Andi Kleen mentions that dlopen is inferior to linking against
+> libraries and those libraries aren't a memory overhead if unused.
+>
+> I agree but pointed-out the data center use case means that saving
+> size on binaries can be important to some (me). We've also been trying
+> to reduce perf's dependencies for distributions as perf dragging in
+> say the whole of libLLVM can be annoying for making minimal
+> distributions that contain perf. Perhaps somebody (Arnaldo?) more
+> involved with distributions can confirm or deny the distribution
+> problem, I'm hoping it is self-evident.
+>
+> 2) Namhyung Kim was uncomfortable with the code defining
+> types/constants that were in header files as the two may drift over
+> time
+>
+> I agree but in the same way as a function name is an ABI for dlysym,
+> the types/constants are too. Yes a header file may change, but in
+> doing so the ABI has changed and so it would be an incompatible change
+> and everything would be broken. We'd need to fix the code for this,
+> say as we did when libbpf moved to version 1.0, but using a header
+> file would only weakly guard against this problem. The problem with
+> including the header files is that then the build either breaks
+> without the header or we need to support a no linking against a
+> library and not using dlopen case. I suspect a lot of distributions
+> wouldn't understand the build subtlety in this, the necessary build
+> options and things installed, and we'd end up not using things like
+> libLLVM even when it is known to be a large performance win. I also
+> hope one day we can move from parsing text out of forked commands, as
+> it is slower and more brittle, to just directly using libraries.
+> Making dlopen the fallback (probably with a warning on failure) seems
+> like the right direction for this except we won't get it if we need to
+> drag in extra dependency header files for the build to succeed (well
+> we could have a no library or dlopen option, but then we'd probably
+> find distributions packaging this and things like perf annotate
+> getting broken as they don't even know how to dlopen a library).
+>
+> 3) Namhyung Kim (and I) also raises that the libcapstone patch can be
+> smaller by dropping the print_capstone_detail support on x86
+>
+> Note, given the similarity between capstone and libLLVM for
+> disassembly, it is curious that only capstone gives the extra detail.
+>
+> I agree. Given the capstone disassembly output will be compromised we
+> should warn for this, probably in Makefile.config to avoid running
+> afoul of -Werror. It isn't clear that having a warning is a good move
+> given the handful of structs needed to support print_capstone_detail.
+> I'd prefer to keep the structs so that we haven't got a warning that
+> looks like it needs cleaning up.
+>
+> 4) Namhyung Kim raised concerns over #if placement
+>
+> Namhyung raised that he'd prefer:
+> ```
+> #if HAVE_LIBCAPSTONE_SUPPORT
+> // lots of code
+> #else
+> // lots of code
+> #endif
+> ```
+> rather than the #ifs being inside or around individual functions. I
+> raised that the large #ifs is a problem in the current code as you
+> lose context when trying to understand a function. You may look at a
+> function but not realize it isn't being used because of a #if 10s or
+> 100s of lines above. Namhyung raised that the large #ifs is closer to
+> kernel style, I disagreed as I think kernel style is only doing this
+> when it stubs out a bunch of API functions, not when more context
+> would be useful. Hopefully as the person writing the patches the style
+> choice I've made can be respected.
+>
+> 5) Daniel Xu raised issues with the removal of libbfd for Rust
+> support, as the code implies libbfd C++ demangling is a pre-requisite
+> of legacy rust symbol demangling
+>
+> A separate patch was posted adding Rust v0 symbol demangling with no
+> libbfd dependency:
+> https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com/
+> The legacy support should work with the non-libbfd demanglers as
+> that's what we have today. We should really clean up Rust demangling
+> and have tests. This is blocked on the Rust community responding to:
+> https://github.com/rust-lang/rust/issues/60705
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130402.vnrQT0yF-lkp@intel.com/
+Ping.
 
-All warnings (new ones prefixed by >>):
-
-   samples/vfs/test-list-all-mounts.c: In function 'main':
->> samples/vfs/test-list-all-mounts.c:152:62: warning: format '%lu' expects argument of type 'long unsigned int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     152 |                                         printf("mnt_uidmap[%lu]:\t%s\n", idx, idmap);
-         |                                                            ~~^           ~~~
-         |                                                              |           |
-         |                                                              |           size_t {aka unsigned int}
-         |                                                              long unsigned int
-         |                                                            %u
-   samples/vfs/test-list-all-mounts.c:161:62: warning: format '%lu' expects argument of type 'long unsigned int', but argument 2 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     161 |                                         printf("mnt_gidmap[%lu]:\t%s\n", idx, idmap);
-         |                                                            ~~^           ~~~
-         |                                                              |           |
-         |                                                              |           size_t {aka unsigned int}
-         |                                                              long unsigned int
-         |                                                            %u
-
-
-vim +152 samples/vfs/test-list-all-mounts.c
-
-    70	
-    71	int main(int argc, char *argv[])
-    72	{
-    73	#define LISTMNT_BUFFER 10
-    74		__u64 list[LISTMNT_BUFFER], last_mnt_id = 0;
-    75		int ret, pidfd, fd_mntns;
-    76		struct mnt_ns_info info = {};
-    77	
-    78		pidfd = sys_pidfd_open(getpid(), 0);
-    79		if (pidfd < 0)
-    80			die_errno("pidfd_open failed");
-    81	
-    82		fd_mntns = ioctl(pidfd, PIDFD_GET_MNT_NAMESPACE, 0);
-    83		if (fd_mntns < 0)
-    84			die_errno("ioctl(PIDFD_GET_MNT_NAMESPACE) failed");
-    85	
-    86		ret = ioctl(fd_mntns, NS_MNT_GET_INFO, &info);
-    87		if (ret < 0)
-    88			die_errno("ioctl(NS_GET_MNTNS_ID) failed");
-    89	
-    90		printf("Listing %u mounts for mount namespace %" PRIu64 "\n",
-    91		       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-    92		for (;;) {
-    93			ssize_t nr_mounts;
-    94	next:
-    95			nr_mounts = sys_listmount(LSMT_ROOT, last_mnt_id,
-    96						  info.mnt_ns_id, list, LISTMNT_BUFFER,
-    97						  0);
-    98			if (nr_mounts <= 0) {
-    99				int fd_mntns_next;
-   100	
-   101				printf("Finished listing %u mounts for mount namespace %" PRIu64 "\n\n",
-   102				       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-   103				fd_mntns_next = ioctl(fd_mntns, NS_MNT_GET_NEXT, &info);
-   104				if (fd_mntns_next < 0) {
-   105					if (errno == ENOENT) {
-   106						printf("Finished listing all mount namespaces\n");
-   107						exit(0);
-   108					}
-   109					die_errno("ioctl(NS_MNT_GET_NEXT) failed");
-   110				}
-   111				close(fd_mntns);
-   112				fd_mntns = fd_mntns_next;
-   113				last_mnt_id = 0;
-   114				printf("Listing %u mounts for mount namespace %" PRIu64 "\n",
-   115				       info.nr_mounts, (uint64_t)info.mnt_ns_id);
-   116				goto next;
-   117			}
-   118	
-   119			for (size_t cur = 0; cur < nr_mounts; cur++) {
-   120				struct statmount *stmnt;
-   121	
-   122				last_mnt_id = list[cur];
-   123	
-   124				stmnt = sys_statmount(last_mnt_id, info.mnt_ns_id,
-   125						      STATMOUNT_SB_BASIC |
-   126						      STATMOUNT_MNT_BASIC |
-   127						      STATMOUNT_MNT_ROOT |
-   128						      STATMOUNT_MNT_POINT |
-   129						      STATMOUNT_MNT_NS_ID |
-   130						      STATMOUNT_MNT_OPTS |
-   131						      STATMOUNT_FS_TYPE |
-   132						      STATMOUNT_MNT_UIDMAP |
-   133						      STATMOUNT_MNT_GIDMAP, 0);
-   134				if (!stmnt) {
-   135					printf("Failed to statmount(%" PRIu64 ") in mount namespace(%" PRIu64 ")\n",
-   136					       (uint64_t)last_mnt_id, (uint64_t)info.mnt_ns_id);
-   137					continue;
-   138				}
-   139	
-   140				printf("mnt_id:\t\t%" PRIu64 "\nmnt_parent_id:\t%" PRIu64 "\nfs_type:\t%s\nmnt_root:\t%s\nmnt_point:\t%s\nmnt_opts:\t%s\n",
-   141				       (uint64_t)stmnt->mnt_id,
-   142				       (uint64_t)stmnt->mnt_parent_id,
-   143				       (stmnt->mask & STATMOUNT_FS_TYPE)   ? stmnt->str + stmnt->fs_type   : "",
-   144				       (stmnt->mask & STATMOUNT_MNT_ROOT)  ? stmnt->str + stmnt->mnt_root  : "",
-   145				       (stmnt->mask & STATMOUNT_MNT_POINT) ? stmnt->str + stmnt->mnt_point : "",
-   146				       (stmnt->mask & STATMOUNT_MNT_OPTS)  ? stmnt->str + stmnt->mnt_opts  : "");
-   147	
-   148				if (stmnt->mask & STATMOUNT_MNT_UIDMAP) {
-   149					const char *idmap = stmnt->str + stmnt->mnt_uidmap;
-   150	
-   151					for (size_t idx = 0; idx < stmnt->mnt_uidmap_num; idx++) {
- > 152						printf("mnt_uidmap[%lu]:\t%s\n", idx, idmap);
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Ian
