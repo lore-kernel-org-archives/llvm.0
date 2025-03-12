@@ -1,63 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025101D5173;
-	Wed, 12 Mar 2025 23:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BC81F152E;
+	Wed, 12 Mar 2025 23:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741822519; cv=none; b=aQm089VmGx4596fARo8Q5b7NcW+CLxCiEANDX8Yb4sLNKRruD4m6RboYTXkb8y1lapxigrbWg1RVzJ0EEv+k2M43BtcqWvcFihJ+ImHiAUj+hnDwbSYN5Mob8VTGn8xyL3RFPLP2Yoy3zlTvvcWJCHx0yxoDHi5r+j1doCgUAFM=
+	t=1741822521; cv=none; b=tqIAWS3JS4M3f7ouO6MFm70GXnBkBBDEzqg5xgLcSoi165gLAYVJRM3nxpYD49lDvtURaejHcu1sTihI6L16xam1Z1rRsFR4M1HaWKc4x/WMr7D/dBkNcjABmxcHQL0OOCjzbP+qy60NeQnTuSG4gixkzPPI6RaIYV+jQGQWHPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741822519; c=relaxed/simple;
-	bh=Ku5BAxzw7yeD0n1kP8klsjqCryKh3vE53wmmHsDd0fo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J2LkTmCqFYhwaf/rL13eGUotK7nIT3PLGgW4WRZpBJnD6Xu59dpc6JzaHwKmsQGrA6Odn+Xjqax/9RMDfnH0Y+SA7FRRqdNj/tknHRR89z4NKsJJN/Cnzv838W5yEZLwssHpsCL22i3gjkhO7ivlqiGzQ72Hj9Lr0Z5X6unSTao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SvDnWki8; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1741822521; c=relaxed/simple;
+	bh=YYLNloYAyCecMVrB9L/DBflHRJbx9nzjDI1jsnGVp7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VRvNbcCFmYAiBLfYK/E1qC+vPEP9+fBS/bLiH4GiJNEUbLnekVtJw7+qTG7oO3e0Ee4CYU57EIPMV0eSBydSvdCc7JDSgmWat/VuHv+ASfsDrQW9IIr1F+UqkyB60hogTsfir5pniinrJ8FQlmVxvwCJPTm6VCn9tX0i6Z3p9h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JfSJ0wb5; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SvDnWki8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JfSJ0wb5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741822517; x=1773358517;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ku5BAxzw7yeD0n1kP8klsjqCryKh3vE53wmmHsDd0fo=;
-  b=SvDnWki80AWrTwmD/ZgVWKyI1DBMusg17H5o3iJXL68tXrcVMIpdAR4i
-   h1J2QLR4eTx0zhPOOy5ZA3wquoADqKTZJ0WanWuB2m41VYcy30mnzG63x
-   /6F6aCjfOmjPEANy78UGdE3kKazh7EcA0Yc07anRUKyBb0iNA0Vs6M07y
-   O/iv+tMKLAI0a5jug06GLiXL2xBp3QKCcvtNHL4y8wNqwPMkmFXD+OlF7
-   FQzQq+Vs3eGfhpOTIU6n7muEiXTj/DaR15kS19hyz2l8veEHJFVSD+rcU
-   MWzY+yBsIM3tcgPqQv1OqWjXXPa8eOY7Yl30MVrHlHsgPm/q7DJ9iGQVZ
-   w==;
-X-CSE-ConnectionGUID: R0QVxxZpR3iDfr4oLKNUmA==
-X-CSE-MsgGUID: n9qI9DTxRhOmQ2GuOkcmuw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42092015"
+  t=1741822520; x=1773358520;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YYLNloYAyCecMVrB9L/DBflHRJbx9nzjDI1jsnGVp7w=;
+  b=JfSJ0wb5ds4vuaBUimbFdezY4e2Dkk5Ly2attP0EOw+0jcRZIQ37XKU6
+   YEJfKW2zHJ3SNyWlCJmc0MkKmNtHS3tyoqRd9ZBGWvBtjqp3WiMPFhr1F
+   z/Qa9ZdpOSLsaGMzBnxVAm3nVIlQAx7OBaCA70sY+lTFnE9mtmXfc9Pj7
+   39t453rGO44MGzPwBQO3n1hzdI+eL0Mnz8QCN+1uTrPbph4sFJO/P/45Z
+   A8jfJN/LVOIuGtMlb8U2eZgkb8RtAzKBD7lBvvtA/atFNmfum3uEyqFCC
+   HtB5ZPCKdZUMjHRlVEhFYtxZmyiT2ddciKf213vY8JoTup5cLKkpgXcSB
+   Q==;
+X-CSE-ConnectionGUID: wQa7l50kR8C1Nq191pcgBg==
+X-CSE-MsgGUID: GFBb0JZQQc+HzX5rovX3QQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42092017"
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="42092015"
+   d="scan'208";a="42092017"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 16:35:16 -0700
-X-CSE-ConnectionGUID: HMB0tQllT6i39iMvpaPh0w==
-X-CSE-MsgGUID: QJezwdF3SJiICTyF7ycbLg==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 16:35:19 -0700
+X-CSE-ConnectionGUID: +sDmKPOtRMGZMGRVQWrYyQ==
+X-CSE-MsgGUID: MwP96Cm4Sq6n+GR61F+e/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="125404554"
+   d="scan'208";a="125404562"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 12 Mar 2025 16:35:14 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 12 Mar 2025 16:35:18 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsVbS-0008ya-0t;
-	Wed, 12 Mar 2025 23:35:10 +0000
-Date: Thu, 13 Mar 2025 07:34:50 +0800
+	id 1tsVbU-0008yd-2S;
+	Wed, 12 Mar 2025 23:35:13 +0000
+Date: Thu, 13 Mar 2025 07:34:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Longbin Li <looong.bin@gmail.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed
- resources
-Message-ID: <202503130708.AmtUDVfq-lkp@intel.com>
-References: <20250312172016.4070094-2-andriy.shevchenko@linux.intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 45/45] net/ceph/messenger_v2.c:3246:36:
+ error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages';
+ did you mean 'in_enc_pages'?
+Message-ID: <202503130720.McQoB4iK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,101 +62,121 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250312172016.4070094-2-andriy.shevchenko@linux.intel.com>
 
-Hi Andy,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on broonie-spi/for-next]
-[cannot apply to linus/master v6.14-rc6 next-20250312]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-sg2044-nor-Fully-convert-to-device-managed-resources/20250313-012347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20250312172016.4070094-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed resources
-config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20250313/202503130708.AmtUDVfq-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130708.AmtUDVfq-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   0ce16824859c4d7209abe27da17e23679b6c7c69
+commit: 0ce16824859c4d7209abe27da17e23679b6c7c69 [45/45] ceph: Don't use data_pages
+config: i386-buildonly-randconfig-001-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130720.McQoB4iK-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130720.McQoB4iK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130708.AmtUDVfq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130720.McQoB4iK-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/spi/spi-sg2044-nor.c: In function 'sg2044_spifmc_probe':
->> drivers/spi/spi-sg2044-nor.c:459:44: error: macro "devm_mutex_init" requires 2 arguments, but only 1 given
-     459 |         ret = devm_mutex_init(&spifmc->lock);
-         |                                            ^
-   In file included from include/linux/notifier.h:14,
-                    from include/linux/clk.h:14,
-                    from drivers/spi/spi-sg2044-nor.c:9:
-   include/linux/mutex.h:144:9: note: macro "devm_mutex_init" defined here
-     144 | #define devm_mutex_init(dev, mutex)                     \
-         |         ^~~~~~~~~~~~~~~
->> drivers/spi/spi-sg2044-nor.c:459:15: error: 'devm_mutex_init' undeclared (first use in this function)
-     459 |         ret = devm_mutex_init(&spifmc->lock);
-         |               ^~~~~~~~~~~~~~~
-   drivers/spi/spi-sg2044-nor.c:459:15: note: each undeclared identifier is reported only once for each function it appears in
+   net/ceph/messenger_v2.c: In function 'queue_enc_page':
+>> net/ceph/messenger_v2.c:3246:36: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3246 |         bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
+         |                                    ^~~~~~~~~~~~~
+         |                                    in_enc_pages
+   In file included from arch/x86/include/asm/bug.h:99,
+                    from include/linux/bug.h:5,
+                    from include/linux/fortify-string.h:6,
+                    from include/linux/string.h:392,
+                    from include/linux/ceph/ceph_debug.h:7,
+                    from net/ceph/messenger_v2.c:8:
+>> net/ceph/messenger_v2.c:3254:46: error: 'OUT_S_QUEUE_ENC_PAGE' undeclared (first use in this function); did you mean 'OUT_S_QUEUE_ENC_FOLIOQ'?
+    3254 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
+         |                                              ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:171:32: note: in definition of macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   net/ceph/messenger_v2.c:3254:46: note: each undeclared identifier is reported only once for each function it appears in
+    3254 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
+         |                                              ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:171:32: note: in definition of macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   net/ceph/messenger_v2.c: In function 'finish_message':
+   net/ceph/messenger_v2.c:3292:21: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3292 |         if (con->v2.out_enc_pages) {
+         |                     ^~~~~~~~~~~~~
+         |                     in_enc_pages
+   net/ceph/messenger_v2.c:3294:50: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3294 |                 ceph_release_page_vector(con->v2.out_enc_pages,
+         |                                                  ^~~~~~~~~~~~~
+         |                                                  in_enc_pages
+   net/ceph/messenger_v2.c:3296:25: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3296 |                 con->v2.out_enc_pages = NULL;
+         |                         ^~~~~~~~~~~~~
+         |                         in_enc_pages
+   net/ceph/messenger_v2.c: In function 'populate_out_iter':
+   net/ceph/messenger_v2.c:3331:14: error: 'OUT_S_QUEUE_ENC_PAGE' undeclared (first use in this function); did you mean 'OUT_S_QUEUE_ENC_FOLIOQ'?
+    3331 |         case OUT_S_QUEUE_ENC_PAGE:
+         |              ^~~~~~~~~~~~~~~~~~~~
+         |              OUT_S_QUEUE_ENC_FOLIOQ
+   net/ceph/messenger_v2.c: In function 'ceph_con_v2_revoke':
+   net/ceph/messenger_v2.c:3650:46: error: 'OUT_S_QUEUE_ENC_PAGE' undeclared (first use in this function); did you mean 'OUT_S_QUEUE_ENC_FOLIOQ'?
+    3650 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE &&
+         |                                              ^~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:171:32: note: in definition of macro 'WARN_ON'
+     171 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   net/ceph/messenger_v2.c: In function 'ceph_con_v2_reset_protocol':
+   net/ceph/messenger_v2.c:3818:21: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3818 |         if (con->v2.out_enc_pages) {
+         |                     ^~~~~~~~~~~~~
+         |                     in_enc_pages
+   net/ceph/messenger_v2.c:3820:50: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3820 |                 ceph_release_page_vector(con->v2.out_enc_pages,
+         |                                                  ^~~~~~~~~~~~~
+         |                                                  in_enc_pages
+   net/ceph/messenger_v2.c:3822:25: error: 'struct ceph_connection_v2_info' has no member named 'out_enc_pages'; did you mean 'in_enc_pages'?
+    3822 |                 con->v2.out_enc_pages = NULL;
+         |                         ^~~~~~~~~~~~~
+         |                         in_enc_pages
 
 
-vim +/devm_mutex_init +459 drivers/spi/spi-sg2044-nor.c
+vim +3246 net/ceph/messenger_v2.c
 
-   425	
-   426	static int sg2044_spifmc_probe(struct platform_device *pdev)
-   427	{
-   428		struct spi_controller *ctrl;
-   429		struct sg2044_spifmc *spifmc;
-   430		void __iomem *base;
-   431		int ret;
-   432	
-   433		ctrl = devm_spi_alloc_host(&pdev->dev, sizeof(*spifmc));
-   434		if (!ctrl)
-   435			return -ENOMEM;
-   436	
-   437		spifmc = spi_controller_get_devdata(ctrl);
-   438	
-   439		spifmc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
-   440		if (IS_ERR(spifmc->clk))
-   441			return dev_err_probe(&pdev->dev, PTR_ERR(spifmc->clk),
-   442					     "%s: Cannot get and enable AHB clock\n",
-   443					     __func__);
-   444	
-   445		spifmc->dev = &pdev->dev;
-   446		spifmc->ctrl = ctrl;
-   447	
-   448		spifmc->io_base = devm_platform_ioremap_resource(pdev, 0);
-   449		if (IS_ERR(base))
-   450			return PTR_ERR(base);
-   451	
-   452		ctrl->num_chipselect = 1;
-   453		ctrl->dev.of_node = pdev->dev.of_node;
-   454		ctrl->bits_per_word_mask = SPI_BPW_MASK(8);
-   455		ctrl->auto_runtime_pm = false;
-   456		ctrl->mem_ops = &sg2044_spifmc_mem_ops;
-   457		ctrl->mode_bits = SPI_RX_DUAL | SPI_TX_DUAL | SPI_RX_QUAD | SPI_TX_QUAD;
-   458	
- > 459		ret = devm_mutex_init(&spifmc->lock);
-   460		if (ret)
-   461			return ret;
-   462	
-   463		sg2044_spifmc_init(spifmc);
-   464		sg2044_spifmc_init_reg(spifmc);
-   465	
-   466		ret = devm_spi_register_controller(&pdev->dev, ctrl);
-   467		if (ret) {
-   468			dev_err(&pdev->dev, "spi_register_controller failed\n");
-   469			return ret;
-   470		}
-   471	
-   472		return 0;
-   473	}
-   474	
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3237  
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3238  static void queue_enc_page(struct ceph_connection *con)
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3239  {
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3240  	struct bio_vec bv;
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3241  
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3242  	dout("%s con %p i %d resid %d\n", __func__, con, con->v2.out_enc_i,
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3243  	     con->v2.out_enc_resid);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3244  	WARN_ON(!con->v2.out_enc_resid);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3245  
+1eb9cd15004fa91 Christoph Hellwig 2023-02-03 @3246  	bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
+1eb9cd15004fa91 Christoph Hellwig 2023-02-03  3247  		      min(con->v2.out_enc_resid, (int)PAGE_SIZE), 0);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3248  
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3249  	set_out_bvec(con, &bv, false);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3250  	con->v2.out_enc_i++;
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3251  	con->v2.out_enc_resid -= bv.bv_len;
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3252  
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3253  	if (con->v2.out_enc_resid) {
+cd1a677cad99402 Ilya Dryomov      2020-11-19 @3254  		WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3255  		return;
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3256  	}
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3257  
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3258  	/*
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3259  	 * We've queued the last piece of ciphertext (ending with
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3260  	 * epilogue) + auth tag.  Once it's written, we are done.
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3261  	 */
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3262  	WARN_ON(con->v2.out_enc_i != con->v2.out_enc_page_cnt);
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3263  	con->v2.out_state = OUT_S_FINISH_MESSAGE;
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3264  }
+cd1a677cad99402 Ilya Dryomov      2020-11-19  3265  
+
+:::::: The code at line 3246 was first introduced by commit
+:::::: 1eb9cd15004fa91b6d1911af9fbaff299d8e9e45 libceph: use bvec_set_page to initialize bvecs
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
 
 -- 
 0-DAY CI Kernel Test Service
