@@ -1,67 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0441B0406;
-	Wed, 12 Mar 2025 16:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA5F24FC1F;
+	Wed, 12 Mar 2025 18:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741798391; cv=none; b=M91By3FJ/2bLszQd0+HDz6yESU+2+72OPFF/OoKOrc/vTb9bZuXVUomq7xnE8qNF/PFkVEYSG9d21mSl/5wvWyFA4z5ekUT11/z0dhJW3R7GKaC6KCZe/+ymQ1t/q4bbxKAz2edBjKr0e1z7le+rHy/fukNe11r97GU4qKognMs=
+	t=1741803279; cv=none; b=fLS7haICI/i+CdjqUQTV8La8QNngezjJ5NI+046zhMMZdmSASfkU1dW6PBe9Qpf90bkZH1I/p4fmrSdEZW7b+/tvVuDIVSkGuY3kHtrBAb6kJFLHV60GRAnV2D+aomsJ4qd35oitYRcsOirO9zi1bWjSK9j5cbVYorxKMLGVqSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741798391; c=relaxed/simple;
-	bh=Rafds1S3QkKEajqTbOL/+tj3SV1csF1Cnk6XrXNWmtQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvEOuBREwxUF0MAU4bChVyWK8/aQ+QcluQf77x4JGuIpfBBPGFpNG/zk+1z0nfLc790LssjJG/JtkTJtt5I/jo+3tCwt0uB83eJ9Au1zJZvQyPzg3THIq+qwLxylXiMKMXOw9RUqe4gQjB6Gwyq2I1YYswgxRhROyRXwfwnixjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bNyzO1jj; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1741803279; c=relaxed/simple;
+	bh=gk+7YvwSkCezDc01j33+ePoXK7tXNnjunpjM1DSIigg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YO1LEzYb/6YvP07SKPTeK3LhNZrebJ5bdsXyP83Af5AJZQkAOqGA8O1ptaAw3l6oQI8sBa0ODPNohddNYgn3LFzjW87qXT5WsBHXcs2r6Nj2SjEswnWo8bh4F3XLtvw/a2TZ9OXoNmfLL9odGzLrblOerWQa0+9S+eBqDbifDyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RdjK0PZQ; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bNyzO1jj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RdjK0PZQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741798390; x=1773334390;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Rafds1S3QkKEajqTbOL/+tj3SV1csF1Cnk6XrXNWmtQ=;
-  b=bNyzO1jjvvdcJcK6nYlQkNkMwTR9if/0CbZvorv11UhoBVXn35Q8EigJ
-   MXDd3ziY7logt3oaU8wzwavhyrIU0inFAJymjOlfNAOq7gYYSMYzW2X6s
-   Vta9tEpDYzcV5OFLNIb1Vin/nOritDwf+ts30IizAtZRuRHP8fzK9zcTD
-   fsBc1rekwm81J9BjvkjreL8rZL1ZM+GqyjEjmryxHH60ppfkL7x2oMGRp
-   +xIrCshettJfyFcfwKQjHMgUlga7S2VtQeY66Sti5K/zh1dvQ1lJ6G/Od
-   9BIsN5xJ9fNA4+hGL2ske+MXB99Z40Qs9E6xLaWMBsm70+hCObJxrl6RK
-   w==;
-X-CSE-ConnectionGUID: 7cZ9ZSSwRWqhmHOBuIcKsg==
-X-CSE-MsgGUID: gcQeKiGiTy2yvwbufJdeFg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="45665235"
+  t=1741803278; x=1773339278;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gk+7YvwSkCezDc01j33+ePoXK7tXNnjunpjM1DSIigg=;
+  b=RdjK0PZQ+VJ29m2nd3l1TJ0VpYUsh4WmTPxjSv9hJrUlxKZlEZ9UdE9/
+   dF9FwBiY0AxKGzR4G3x3OpP/GAcqC3n6Yjih2BFflP67TY5e8HGRHlTlG
+   +zzIE3WG+of9lZbRntYevPhfGmCj0/4CuOs3ckyABPxrOfXFkeGrYkOr7
+   GRNf4AbnYGcBLbQ8+0bEqwzEgScSuti36Y7YiCCfShWEJKOL5gU+ARIvI
+   c5LtUEOGmmPZuFC5JgG9GcG7IHnAtShaTtYaLEybnEXwwnQ7ETr6pzWEL
+   vC8hkrxTXtXVqHYdRV2JxvfdCHqr2vGKQv9PIIFKRAUH84n3wOI0cZwpz
+   A==;
+X-CSE-ConnectionGUID: 0u7QSn5GQZuIcD0bTtAYWQ==
+X-CSE-MsgGUID: EAixNe9YRWu9WH9JMTht6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42758714"
 X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="45665235"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 09:53:09 -0700
-X-CSE-ConnectionGUID: zyxy6B8hTM+qrbY2kgBgsQ==
-X-CSE-MsgGUID: HFOG3QH1QfmjPMWslolYtg==
+   d="scan'208";a="42758714"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 11:14:38 -0700
+X-CSE-ConnectionGUID: mp+57j2oRZyHmvcco/+Amg==
+X-CSE-MsgGUID: ZBKf8pHxQB+aTa4HuKj2vw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="125756446"
+   d="scan'208";a="143906825"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 12 Mar 2025 09:53:05 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 12 Mar 2025 11:14:36 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsPKI-0008jw-30;
-	Wed, 12 Mar 2025 16:53:02 +0000
-Date: Thu, 13 Mar 2025 00:52:34 +0800
+	id 1tsQbC-0008nU-0l;
+	Wed, 12 Mar 2025 18:14:34 +0000
+Date: Thu, 13 Mar 2025 02:14:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, sd@queasysnail.net,
-	ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-Subject: Re: [PATCH net-next v22 18/23] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <202503130050.cIMoMcyw-lkp@intel.com>
-References: <20250311-b4-ovpn-v22-18-2b7b02155412@openvpn.net>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [tglx-devel:irq/core 6/53] drivers/irqchip/irq-bcm7120-l2.c:65:86:
+ error: 'base' undeclared
+Message-ID: <202503130259.FuwlJ8l6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,118 +61,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250311-b4-ovpn-v22-18-2b7b02155412@openvpn.net>
 
-Hi Antonio,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-[auto build test WARNING on 40587f749df216889163dd6e02d88ad53e759e66]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Antonio-Quartulli/net-introduce-OpenVPN-Data-Channel-Offload-ovpn/20250311-202334
-base:   40587f749df216889163dd6e02d88ad53e759e66
-patch link:    https://lore.kernel.org/r/20250311-b4-ovpn-v22-18-2b7b02155412%40openvpn.net
-patch subject: [PATCH net-next v22 18/23] ovpn: implement peer add/get/dump/delete via netlink
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503130050.cIMoMcyw-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130050.cIMoMcyw-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
+head:   369c4f7fd7564a8952129a147cacf88cb4697c79
+commit: 75b5ef045115fe0f58281089aedd60cb2e79efcc [6/53] irqchip: Convert generic irqchip locking to guards
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503130259.FuwlJ8l6-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130259.FuwlJ8l6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130050.cIMoMcyw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130259.FuwlJ8l6-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/ovpn/peer.c:10:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ovpn/peer.c:152:6: warning: variable 'ip_len' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     152 |         if (local_ip) {
-         |             ^~~~~~~~
-   drivers/net/ovpn/peer.c:166:33: note: uninitialized use occurs here
-     166 |         memcpy(&bind->local, local_ip, ip_len);
-         |                                        ^~~~~~
-   include/linux/fortify-string.h:690:53: note: expanded from macro 'memcpy'
-     690 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-         |                                                     ^
-   include/linux/fortify-string.h:627:41: note: expanded from macro '__fortify_memcpy_chk'
-     627 |         const size_t __fortify_size = (size_t)(size);                   \
-         |                                                ^~~~
-   drivers/net/ovpn/peer.c:152:2: note: remove the 'if' if its condition is always true
-     152 |         if (local_ip) {
-         |         ^~~~~~~~~~~~~
-   drivers/net/ovpn/peer.c:143:15: note: initialize the variable 'ip_len' to silence this warning
-     143 |         size_t ip_len;
-         |                      ^
-         |                       = 0
-   4 warnings generated.
+   drivers/irqchip/irq-bcm7120-l2.c: In function 'bcm7120_l2_intc_irq_handle':
+>> drivers/irqchip/irq-bcm7120-l2.c:65:86: error: 'base' undeclared (first use in this function)
+      65 |                 struct irq_chip_generic *gc = irq_get_domain_generic_chip(b->domain, base);
+         |                                                                                      ^~~~
+   drivers/irqchip/irq-bcm7120-l2.c:65:86: note: each undeclared identifier is reported only once for each function it appears in
 
 
-vim +152 drivers/net/ovpn/peer.c
+vim +/base +65 drivers/irqchip/irq-bcm7120-l2.c
 
-   129	
-   130	/**
-   131	 * ovpn_peer_reset_sockaddr - recreate binding for peer
-   132	 * @peer: peer to recreate the binding for
-   133	 * @ss: sockaddr to use as remote endpoint for the binding
-   134	 * @local_ip: local IP for the binding
-   135	 *
-   136	 * Return: 0 on success or a negative error code otherwise
-   137	 */
-   138	int ovpn_peer_reset_sockaddr(struct ovpn_peer *peer,
-   139				     const struct sockaddr_storage *ss,
-   140				     const void *local_ip)
-   141	{
-   142		struct ovpn_bind *bind;
-   143		size_t ip_len;
-   144	
-   145		lockdep_assert_held(&peer->lock);
-   146	
-   147		/* create new ovpn_bind object */
-   148		bind = ovpn_bind_from_sockaddr(ss);
-   149		if (IS_ERR(bind))
-   150			return PTR_ERR(bind);
-   151	
- > 152		if (local_ip) {
-   153			if (ss->ss_family == AF_INET) {
-   154				ip_len = sizeof(struct in_addr);
-   155			} else if (ss->ss_family == AF_INET6) {
-   156				ip_len = sizeof(struct in6_addr);
-   157			} else {
-   158				net_dbg_ratelimited("%s: invalid family %u for remote endpoint for peer %u\n",
-   159						    netdev_name(peer->ovpn->dev),
-   160						    ss->ss_family, peer->id);
-   161				kfree(bind);
-   162				return -EINVAL;
-   163			}
-   164		}
-   165	
-   166		memcpy(&bind->local, local_ip, ip_len);
-   167	
-   168		/* set binding */
-   169		ovpn_bind_reset(peer, bind);
-   170	
-   171		return 0;
-   172	}
-   173	
+    54	
+    55	static void bcm7120_l2_intc_irq_handle(struct irq_desc *desc)
+    56	{
+    57		struct bcm7120_l1_intc_data *data = irq_desc_get_handler_data(desc);
+    58		struct bcm7120_l2_intc_data *b = data->b;
+    59		struct irq_chip *chip = irq_desc_get_chip(desc);
+    60		unsigned int idx;
+    61	
+    62		chained_irq_enter(chip, desc);
+    63	
+    64		for (idx = 0; idx < b->n_words; idx++) {
+  > 65			struct irq_chip_generic *gc = irq_get_domain_generic_chip(b->domain, base);
+    66			int base = idx * IRQS_PER_WORD;
+    67			unsigned long pending;
+    68			int hwirq;
+    69	
+    70			scoped_guard (raw_spinlock, &gc->lock) {
+    71				pending = irq_reg_readl(gc, b->stat_offset[idx]) & gc->mask_cache &
+    72					data->irq_map_mask[idx];
+    73			}
+    74	
+    75			for_each_set_bit(hwirq, &pending, IRQS_PER_WORD)
+    76				generic_handle_domain_irq(b->domain, base + hwirq);
+    77		}
+    78	
+    79		chained_irq_exit(chip, desc);
+    80	}
+    81	
 
 -- 
 0-DAY CI Kernel Test Service
