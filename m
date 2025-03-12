@@ -1,178 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1764879EA
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 16:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8FE1C5F1E;
+	Wed, 12 Mar 2025 16:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741795527; cv=none; b=HDA0dAv7CrvWLPYW+eZowKwd3Y6n7iQpMkvxaGoVpHuYMe8Ub66giRvQmlY9z6fgCCspIhVaY8gCQGLqxQ9aVpX8cURup8VwNNtps7J7JC7pUIAxGz6ti8OBlNYFxRoUTDvDVvo2ZtZrJoyIZsp1Amz//YbD17fOzo37uH37yKg=
+	t=1741796596; cv=none; b=jGZbgXXHn+8CUDupv804qE7YVwjA4Hx1yqyQ5u+J3IpCGYT2dy7IORW/mgP/OSVepMNfs4GazH9du42+c3d9uAZAb2QSZ8xukp4RmDaJZ1JSdcn5LPRPX3rSuiaLB19nNZ3uMCM1W9aKRCSO2v1QQRFv8Z320wLvamHW5izo8Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741795527; c=relaxed/simple;
-	bh=tJ/nhHfV0CVrnMQlUMw1ESbGNGb5q3D5vrP/VNuW0Cg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mSSRLdxXRDlUTJ6/slRPWITv5Wp1CcHA53Gv5b9ygHXeFSzKpGw3icmNg+eYQFWql+L/JYTiy/9xMMb9+sZ0qZOjcdO09wcbMro+pXcfbM+y/67RXk359M32ZpKCjgDfO1lBCaBuJEqJEdH6x6ocXDEgBlWhdTiYm+Huupe0+/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T4BmwvNj; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1741796596; c=relaxed/simple;
+	bh=39N4YWbrlRjKgyGmIu2v/Ox99/YqQuXlc6DAmIUPcaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OUvf1PM3sIm2ld4YhLdqV3RG7xImSdY6HXypAayl0EHI6rHw9JDkfRp/bjPejePoe2BH2kk/9sZW6gaV+mWdcIK0jzFtufM0Dy6Dupi/MlD9MosbgwyxLLZTuLiBLF1nUPthltvzMODgA/kfMbBmVPaRKqdpAQiljiLbK7RHUYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uo0tzfzP; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T4BmwvNj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uo0tzfzP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741795527; x=1773331527;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tJ/nhHfV0CVrnMQlUMw1ESbGNGb5q3D5vrP/VNuW0Cg=;
-  b=T4BmwvNjC53NvGU1VPVAnrAWi0lKml6Tub5KMKuzmCY9hw4iz8I1nzyR
-   pz4F4W+t/8VlKU69skybUdYNqGD3LeGekPySze5DV2iviC2am1ftBlkZS
-   ZULalAV0P9EmcBZRFjpu+0oQr5521SAIxYkSexBdofAJXnKwXOKfEwini
-   F+7RLjG3aZLYRY+BOQYiuSHBhhYtHM6xdLRGb51WQRRekRtD05K588cL7
-   DF/zETk6k3JJVhA+IwjXbMeg/hoM0BjLDSSnK3MBJKBs9wkk788laTjuc
-   qH6tcctLg4DUnTEvD1ef7AlObmxhdiPW5LNrIVhc5bnSU82ElHy+lJtBV
-   A==;
-X-CSE-ConnectionGUID: x5oJN+RWR62q+89DefKDiw==
-X-CSE-MsgGUID: i1vZ78y2R7G4q+PjAUM6ow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42991875"
+  t=1741796594; x=1773332594;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=39N4YWbrlRjKgyGmIu2v/Ox99/YqQuXlc6DAmIUPcaE=;
+  b=Uo0tzfzPjqfqvorCpUUHxHuMXCXl95zgNY89rXBQmKCU3zmZIl+RNkcd
+   NczdA3CKbUWrcy/z9EqFTAjkSro+JKZTxFOtepYKPpZOcpLQZ/fk4NsB5
+   6VDo+5M0czOelalsFTDU56O1gUf+C/2Xs1+o7jddlTgZnMoE9jW+/PJxC
+   +8vj81XeH9ykqEE0W+5ANDddV5RfbmUGHOsIveNMovV54d2v6nhakxENu
+   torkduNoMb42+qUUOoGEwTFSuzm9JF5DPEZStxY5QNiXqXV5VMc2DLxKL
+   2X928zYHg1xFNDcm5HxxcRNfjqO01EdHuurKLU+9tB3HsoSBleTPIFXqR
+   Q==;
+X-CSE-ConnectionGUID: msqjRHkpSBKSQ1bjsDh2gw==
+X-CSE-MsgGUID: 1sBM/9JHS7aX2jSmWNGkbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="68244395"
 X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="42991875"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 09:05:26 -0700
-X-CSE-ConnectionGUID: /KSqFaw3RBigt8LNBjfZQw==
-X-CSE-MsgGUID: Qw1McBJaRBW0ZazJlQjESA==
+   d="scan'208";a="68244395"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 09:22:51 -0700
+X-CSE-ConnectionGUID: A0Zfqf7hT6mmPygu7D05/Q==
+X-CSE-MsgGUID: 5MIj5pGkQ3y3hsnBvJ1rEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,242,1736841600"; 
-   d="scan'208";a="124836067"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 09:05:21 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id D20FC1F2; Wed, 12 Mar 2025 18:05:19 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	sound-open-firmware@alsa-project.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] ASoC: SOF: ipc4-topology: Allocate ref_params on stack
-Date: Wed, 12 Mar 2025 18:05:16 +0200
-Message-ID: <20250312160516.3864295-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+   d="scan'208";a="120376505"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 12 Mar 2025 09:22:49 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tsOpQ-0008hw-1n;
+	Wed, 12 Mar 2025 16:22:03 +0000
+Date: Thu, 13 Mar 2025 00:19:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: oushixiong1025@163.com, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Helge Deller <deller@gmx.de>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Samuel Thibault <samuel.thibault@ens-lyon.org>,
+	Zsolt Kajtar <soci@c64.rulez.org>, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Shixiong Ou <oushixiong@kylinos.cn>
+Subject: Re: [PATCH 1/2] fbcon: Register sysfs groups through device_add_group
+Message-ID: <202503122323.h75SQfrd-lkp@intel.com>
+References: <20250311112856.1020095-1-oushixiong1025@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250311112856.1020095-1-oushixiong1025@163.com>
 
-Currently the compiler (clang 19.1.7) is not happy about the size of
-the stack frame in sof_ipc4_prepare_copier_module:
+Hi,
 
-sound/soc/sof/ipc4-topology.c:1800:1: error: stack frame size (1288) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
- 1800 | sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
-      | ^
+kernel test robot noticed the following build errors:
 
-Work around this by allocating ref_params on stack, as it looks the biggest
-variable on stack right now.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.14-rc6 next-20250312]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Note, this only happens when compile for 32-bit machines (x86_32 in my case).
+url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong1025-163-com/fbcon-Change-return-value-type-to-void/20250311-193230
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20250311112856.1020095-1-oushixiong1025%40163.com
+patch subject: [PATCH 1/2] fbcon: Register sysfs groups through device_add_group
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250312/202503122323.h75SQfrd-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503122323.h75SQfrd-lkp@intel.com/reproduce)
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- sound/soc/sof/ipc4-topology.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503122323.h75SQfrd-lkp@intel.com/
 
-diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-index 6d5cda813e48..41110ee6edc7 100644
---- a/sound/soc/sof/ipc4-topology.c
-+++ b/sound/soc/sof/ipc4-topology.c
-@@ -7,6 +7,7 @@
- //
- //
- #include <linux/bitfield.h>
-+#include <linux/cleanup.h>
- #include <uapi/sound/sof/tokens.h>
- #include <sound/pcm_params.h>
- #include <sound/sof/ext_manifest4.h>
-@@ -1807,8 +1808,8 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(scomp);
- 	struct sof_ipc4_copier_data *copier_data;
- 	int input_fmt_index, output_fmt_index;
--	struct snd_pcm_hw_params ref_params;
- 	struct sof_ipc4_copier *ipc4_copier;
-+	struct snd_pcm_hw_params *ref_params __free(kfree) = NULL;
- 	struct snd_sof_dai *dai;
- 	u32 gtw_cfg_config_length;
- 	u32 dma_config_tlv_size = 0;
-@@ -1884,9 +1885,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 		 * for capture.
- 		 */
- 		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
--			ref_params = *fe_params;
-+			ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
- 		else
--			ref_params = *pipeline_params;
-+			ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
-+		if (!ref_params)
-+			return -ENOMEM;
- 
- 		copier_data->gtw_cfg.node_id &= ~SOF_IPC4_NODE_INDEX_MASK;
- 		copier_data->gtw_cfg.node_id |=
-@@ -1919,8 +1922,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 		 * In case of capture the ref_params returned will be used to
- 		 * find the input configuration of the copier.
- 		 */
--		ref_params = *fe_params;
--		ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
-+		ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
-+		if (!ref_params)
-+			return -ENOMEM;
-+
-+		ret = sof_ipc4_prepare_dai_copier(sdev, dai, ref_params, dir);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -1929,7 +1935,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 		 * input configuration of the copier.
- 		 */
- 		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
--			ref_params = *pipeline_params;
-+			memcpy(ref_params, pipeline_params, sizeof(*ref_params));
- 
- 		break;
- 	}
-@@ -1938,7 +1944,10 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 		ipc4_copier = (struct sof_ipc4_copier *)swidget->private;
- 		copier_data = &ipc4_copier->data;
- 		available_fmt = &ipc4_copier->available_fmt;
--		ref_params = *pipeline_params;
-+
-+		ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
-+		if (!ref_params)
-+			return -ENOMEM;
- 
- 		break;
- 	}
-@@ -1951,7 +1960,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 	/* set input and output audio formats */
- 	input_fmt_index = sof_ipc4_init_input_audio_fmt(sdev, swidget,
- 							&copier_data->base_config,
--							&ref_params, available_fmt);
-+							ref_params, available_fmt);
- 	if (input_fmt_index < 0)
- 		return input_fmt_index;
- 
+All errors (new ones prefixed by >>):
+
+>> drivers/video/fbdev/core/fbcon.c:3390:23: error: use of undeclared identifier 'fb_info'
+    3390 |                 device_remove_group(fb_info->dev, &fbcon_device_attr_group);
+         |                                     ^
+   1 error generated.
+
+
+vim +/fb_info +3390 drivers/video/fbdev/core/fbcon.c
+
+  3388	
+  3389		if (fbcon_has_sysfs) {
+> 3390			device_remove_group(fb_info->dev, &fbcon_device_attr_group);
+  3391	
+  3392			fbcon_has_sysfs = 0;
+  3393		}
+  3394	}
+  3395	
+
 -- 
-2.47.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
