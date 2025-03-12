@@ -1,64 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2BC22DF8D;
-	Wed, 12 Mar 2025 07:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C551E1A31;
+	Wed, 12 Mar 2025 08:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741766161; cv=none; b=BrxO8/MWElJJquWDTZz1sk/iB3hoOD+SC6F9ZL90NNEcG2exEC1uKKseeX9xpvVaLwKiEX3ObO1pRSbQwGrXDHuxBi1ezJJ3pYG2kMVS97tbzVjxbPCfXoa36OTj883NIZ0/Z2qy1WHJ0kG9eWwI4ThiSCTelbNWpyqGlEIVARQ=
+	t=1741768024; cv=none; b=jMjog537Z3fOSngdxG3NG+qWshlOAzLWJTD3Qy6BPqqIAqrzQj4mPTYZ2Yb31R4F+XmCHGBwUjfzhgyCvfxwUCXMCkKT+71osho0ZdIUjEHZ3LqJPz3gLtUxyVrifZf7MuGipJ1p/KXirMQ2SlJOnZfW5CLDvA06ialLWNBVozY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741766161; c=relaxed/simple;
-	bh=BAtR3tzpsGfKBLd1V9FOHO2xVMMAacf2DP5E4jiuhcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eT8W1oMZctojQhP9V0QcabCFbj20p1Wj9EDuevtgAKpE8BnpMiRdvDtnE5n36OrVLEOK1vJI/e5vKpwgMoL0LfHHonGdrs/wJzluXC4UpIymMaOAsOEZXX9OBObMhnZcpeJKsEmNNHVW3o8DH4uHwNPADvctzbjqdQP5axcwOys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EBPdtlUq; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1741768024; c=relaxed/simple;
+	bh=4+BkIq/xhPWzW9X0/HenlKotDxcI5KfxG54wawgvm2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZSO1AHG0pRxyqS62G+U2CQURo/A3W9Sh8TUyot/aS4G5KGA0/3fKmxYMcQB3fa/3f1aILcDICFt5g/2zCFXfAmeP4tsx82bMuOZcY8urqaP5Rn3udUFShIZ6z23r01Q1Mhs/hjLY4aJgWwjXCLfLQlcmRlrPJIQYOYtuo5ofgkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fq1E2oJH; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EBPdtlUq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fq1E2oJH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741766160; x=1773302160;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BAtR3tzpsGfKBLd1V9FOHO2xVMMAacf2DP5E4jiuhcQ=;
-  b=EBPdtlUq3DpkzCrMM4Qf6x6bBiBC5mzZa2OmLzasY9M8MDdL2vzqsoRY
-   V8v/4CAZYXT7UcujXfTGkjvzxSEg2x9sd5SSeWBYi7JRrgi9XVLJnag82
-   HXWiSCw7lLIeE5P1rNRWjkrT2VZfe78pr9uRtA/y2fECZEWHgPQXyiM+J
-   K3TBDh/HrZVw1HEHrIcF7jLt8x2VrCOyH4vGBhA+M+1XZDioltIV17rQn
-   oOSaeo7T7UtwBK+KnKHDAffDW6hAGjCjmmvgeOfpeqqtpedqR4blfDcKI
-   fhwR+e+iNb5jtHkD6/PH/4Q7dKx8KPvs1RTTS56F9AvtHOhg2EIJlNEeX
-   A==;
-X-CSE-ConnectionGUID: DuwXfyfRR4CNSyBwyzocGw==
-X-CSE-MsgGUID: TCGRfEUFSre38L6BNlEBpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42745492"
+  t=1741768022; x=1773304022;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4+BkIq/xhPWzW9X0/HenlKotDxcI5KfxG54wawgvm2I=;
+  b=Fq1E2oJHzs49DHj5ffIFSGTkPp0zKhGfPNkKQE9UFV4MFdYh3rOVg5dk
+   /BpTlaXf/DLZndCG29L9MXPl75OVwmIbjft14npfDz4SLRK5iVuNwN8rX
+   lC/d5YF/DdyLsM+FgfPbSiWJFypmlvfUgsZ+mo3TblZWiVekYMBfBOu4m
+   kdOyB4lTLxnpO6O5JRI42+jC/eNFvGWVUW+wXXtgUk5CUN2lEwtSvh8i8
+   ylMZcpUqiQ6ddzJaJCUkAp46+a0fr2K8pinVU89lFN6gt2Gro3z70UT2h
+   FBwLVo7DjeY84HWy7m69lZiFkbCo94OGJ10bGrsoJb8u0sLglKqUoaD8y
+   w==;
+X-CSE-ConnectionGUID: LPMVp2rjSbOGsts8bIqd4A==
+X-CSE-MsgGUID: QZOUR8nqTly676J0QSRlFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42968001"
 X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="42745492"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 00:56:00 -0700
-X-CSE-ConnectionGUID: 5gcEABVfRsesJz+sMDHt8A==
-X-CSE-MsgGUID: UqBupuIVThmnR5o4tcMEmA==
+   d="scan'208";a="42968001"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 01:27:02 -0700
+X-CSE-ConnectionGUID: moC/yCgPRNmdBGWeTUYELA==
+X-CSE-MsgGUID: eMTVckL7Q+uX88LCsUzzng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="157755009"
+   d="scan'208";a="125762012"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 12 Mar 2025 00:55:57 -0700
+  by orviesa005.jf.intel.com with ESMTP; 12 Mar 2025 01:27:00 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsGwU-0008FI-28;
-	Wed, 12 Mar 2025 07:55:54 +0000
-Date: Wed, 12 Mar 2025 15:55:51 +0800
+	id 1tsHQY-0008Gg-2B;
+	Wed, 12 Mar 2025 08:26:58 +0000
+Date: Wed, 12 Mar 2025 16:26:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Selvin Xavier <selvin.xavier@broadcom.com>, leon@kernel.org,
-	jgg@ziepe.ca
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-rdma@vger.kernel.org, andrew.gospodarek@broadcom.com,
-	kalesh-anakkur.purayil@broadcom.com,
-	Preethi G <preethi.gurusiddalingeswaraswamy@broadcom.com>,
-	Selvin Xavier <selvin.xavier@broadcom.com>
-Subject: Re: [PATCH rdma-next] RDMA/bnxt_re: Support Perf management counters
-Message-ID: <202503121530.oThTZxSC-lkp@intel.com>
-References: <1741674104-5477-1-git-send-email-selvin.xavier@broadcom.com>
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:mem_init/v2 10/13] mm/mm_init.c:1768:52: error: use of
+ undeclared identifier 'ZONE_HIGHMEM'
+Message-ID: <202503121623.zH8HRZdp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,89 +62,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1741674104-5477-1-git-send-email-selvin.xavier@broadcom.com>
 
-Hi Selvin,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rdma/for-next]
-[also build test WARNING on linus/master v6.14-rc6 next-20250311]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Selvin-Xavier/RDMA-bnxt_re-Support-Perf-management-counters/20250311-144413
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
-patch link:    https://lore.kernel.org/r/1741674104-5477-1-git-send-email-selvin.xavier%40broadcom.com
-patch subject: [PATCH rdma-next] RDMA/bnxt_re: Support Perf management counters
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20250312/202503121530.oThTZxSC-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503121530.oThTZxSC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git mem_init/v2
+head:   3e32ff055084020fd5780bfed058a34c2547c325
+commit: efdddb6d337877b5467b46600472df230dda03b2 [10/13] arch, mm: set high_memory in free_area_init()
+config: arm-randconfig-001-20250312 (https://download.01.org/0day-ci/archive/20250312/202503121623.zH8HRZdp-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503121623.zH8HRZdp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503121530.oThTZxSC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503121623.zH8HRZdp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/infiniband/hw/bnxt_re/hw_counters.c: In function 'bnxt_re_assign_pma_port_ext_counters':
->> drivers/infiniband/hw/bnxt_re/hw_counters.c:295:13: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
-     295 |         int rc;
-         |             ^~
-   drivers/infiniband/hw/bnxt_re/hw_counters.c: In function 'bnxt_re_assign_pma_port_counters':
-   drivers/infiniband/hw/bnxt_re/hw_counters.c:338:13: warning: variable 'rc' set but not used [-Wunused-but-set-variable]
-     338 |         int rc;
-         |             ^~
+   In file included from mm/mm_init.c:33:
+   In file included from mm/internal.h:13:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+>> mm/mm_init.c:1768:52: error: use of undeclared identifier 'ZONE_HIGHMEM'
+    1768 |         unsigned long pfn = arch_zone_lowest_possible_pfn[ZONE_HIGHMEM];
+         |                                                           ^
+   2 warnings and 1 error generated.
 
 
-vim +/rc +295 drivers/infiniband/hw/bnxt_re/hw_counters.c
+vim +/ZONE_HIGHMEM +1768 mm/mm_init.c
 
-   289	
-   290	int bnxt_re_assign_pma_port_ext_counters(struct bnxt_re_dev *rdev, struct ib_mad *out_mad)
-   291	{
-   292		struct ib_pma_portcounters_ext *pma_cnt_ext;
-   293		struct bnxt_qplib_ext_stat *estat = &rdev->stats.rstat.ext_stat;
-   294		struct ctx_hw_stats *hw_stats = NULL;
- > 295		int rc;
-   296	
-   297		hw_stats = rdev->qplib_ctx.stats.dma;
-   298	
-   299		pma_cnt_ext = (void *)(out_mad->data + 40);
-   300		if (_is_ext_stats_supported(rdev->dev_attr->dev_cap_flags)) {
-   301			u32 fid = PCI_FUNC(rdev->en_dev->pdev->devfn);
-   302	
-   303			rc = bnxt_qplib_qext_stat(&rdev->rcfw, fid, estat);
-   304		}
-   305	
-   306		pma_cnt_ext = (void *)(out_mad->data + 40);
-   307		if ((bnxt_qplib_is_chip_gen_p5(rdev->chip_ctx) && rdev->is_virtfn) ||
-   308		    !bnxt_qplib_is_chip_gen_p5(rdev->chip_ctx)) {
-   309			pma_cnt_ext->port_xmit_data =
-   310				cpu_to_be64(le64_to_cpu(hw_stats->tx_ucast_bytes) / 4);
-   311			pma_cnt_ext->port_rcv_data =
-   312				cpu_to_be64(le64_to_cpu(hw_stats->rx_ucast_bytes) / 4);
-   313			pma_cnt_ext->port_xmit_packets =
-   314				cpu_to_be64(le64_to_cpu(hw_stats->tx_ucast_pkts));
-   315			pma_cnt_ext->port_rcv_packets =
-   316				cpu_to_be64(le64_to_cpu(hw_stats->rx_ucast_pkts));
-   317			pma_cnt_ext->port_unicast_rcv_packets =
-   318				cpu_to_be64(le64_to_cpu(hw_stats->rx_ucast_pkts));
-   319			pma_cnt_ext->port_unicast_xmit_packets =
-   320				cpu_to_be64(le64_to_cpu(hw_stats->tx_ucast_pkts));
-   321	
-   322		} else {
-   323			pma_cnt_ext->port_rcv_packets = cpu_to_be64(estat->rx_roce_good_pkts);
-   324			pma_cnt_ext->port_rcv_data = cpu_to_be64(estat->rx_roce_good_bytes / 4);
-   325			pma_cnt_ext->port_xmit_packets = cpu_to_be64(estat->tx_roce_pkts);
-   326			pma_cnt_ext->port_xmit_data = cpu_to_be64(estat->tx_roce_bytes / 4);
-   327			pma_cnt_ext->port_unicast_rcv_packets = cpu_to_be64(estat->rx_roce_good_pkts);
-   328			pma_cnt_ext->port_unicast_xmit_packets = cpu_to_be64(estat->tx_roce_pkts);
-   329		}
-   330		return 0;
-   331	}
-   332	
+  1765	
+  1766	static void set_high_memory(void)
+  1767	{
+> 1768		unsigned long pfn = arch_zone_lowest_possible_pfn[ZONE_HIGHMEM];
+  1769		phys_addr_t highmem = memblock_end_of_DRAM();
+  1770	
+  1771		/*
+  1772		 * Some architecutures (e.g. ARM) set high_memory very early and
+  1773		 * use it in arch setup code.
+  1774		 * If an architecure already set high_memory don't overwrite it
+  1775		 */
+  1776		if (high_memory)
+  1777			return;
+  1778	
+  1779		if (IS_ENABLED(CONFIG_HIGHMEM) &&
+  1780		    (arch_has_descending_max_zone_pfns() || highmem > PFN_PHYS(pfn)))
+  1781			highmem = PFN_PHYS(pfn);
+  1782	
+  1783		high_memory = phys_to_virt(highmem - 1) + 1;
+  1784	}
+  1785	
 
 -- 
 0-DAY CI Kernel Test Service
