@@ -1,58 +1,58 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4286E1482F5;
-	Wed, 12 Mar 2025 13:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A3C2459D0;
+	Wed, 12 Mar 2025 13:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741787839; cv=none; b=Rv4bsHgLZGU20UFLQNGR92SaykDW03D6QeRH++KHJdgjjCC4j26elKAkVqgBByONqiRfpVvtqH64qvtBH1yd7NQuu9atfGHK1VeNv3dnGMq78PqAGSAkBrsb0GGFaDv7l3qvyGI0QJAqB7V5bfc7jqOfC966fpgaT7XuHn7Wjyw=
+	t=1741787841; cv=none; b=ZbwC7sldYiQbnuBimBNSQX664VTuLOFEDClN9JMc9EYdArva563lC3B4tU28Lqn2e9dJBICdPBSfN/ZbM/24aEZlS8hh1gEzXdrCLLsjHFyBhl8zZgbKE6OAjkqY8M4kDITgfPuFOP2Aa5IIyAJ29dWsUz8gHKsX4TcGV1UAUH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741787839; c=relaxed/simple;
-	bh=z2CHrxP+H1YjDPOMGTILJbPTKopIUBZ4tby0luumJwE=;
+	s=arc-20240116; t=1741787841; c=relaxed/simple;
+	bh=T241Suqgt0T6c17tGqiZew6lZtKA4CHhOKGwwEc8QZY=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e1+tqsoaMwYAfpv1iORZqILiRkB/49SAakHsTmNo3tAtxu2UlCJDzTPuxZnQO/dIOsoAKmnqaLcUSUD7zQYZJssOeYZFvND2uXzrBjuRi9pK3JUsjtIuHyhhofMqHbr9UsIAv4CF07w19jFBGw4HlqbDqvT/zQWQCNrdzfGDaCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jLiVPcOH; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=ixEM3MY/nkme3LvIIUUHkRdpqO750ngD9pZwwsZcKT8PGBodHbIWFM/1G/xwY0plBZvJFEAks9KmDllj3+Rw+eAzBCzSLDBZvVZ1QHTo5KDPhO8HNTtIRitmirJ/8GE5uLT+rZ4epFKsVpwzf1NC2MZpL+hYIYO8n8triKAhP9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cxBcfsAx; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jLiVPcOH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cxBcfsAx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741787838; x=1773323838;
+  t=1741787840; x=1773323840;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z2CHrxP+H1YjDPOMGTILJbPTKopIUBZ4tby0luumJwE=;
-  b=jLiVPcOHaJadqAU/WoQ3tk2UQn0fTa4uGd/1X7FG0jOV0uirqkQRJpEH
-   lt/eMCtzRUON2mISO/pmu+aoqG9mD2mGrD4kEfhcILXMGVVjLaNnlGMg3
-   LIEaIrttVBxq8hlS1ReJxyGGVOPlBsyrzn2PLVBOhtXNXH3Y1EAmsP1OM
-   qAFAJg/lRMONpkq1DQvHmYZsslcfcCIO/BJ36WQWJHaZWFau/KOZ5uoXQ
-   0YONWsgSkYNkkIkjBjEbl9eNwLH7HAp2RB+IVThfW0i78sCvKywsmZQ8L
-   7KTvtQiy24RII90m8e1xT0ugK4mdfMLcX5uadMTwW22vk43ltIW5nRZU4
+  bh=T241Suqgt0T6c17tGqiZew6lZtKA4CHhOKGwwEc8QZY=;
+  b=cxBcfsAxy15/Qdrnx8rUE7DDxiDE7cY9Sjtd5XnFySqxBWTk2mPNHEK8
+   LpbiSeAncNf65hWcp3Mu/WJ2gXqB000wGeThtzW82jIDslYUNZefu+VWt
+   cZLrDlzRGbmHeDIupCulJvjk83JFGgobKqDAEQP9F77eI0pFazsZzdyNr
+   Vxo/ZMsUIMEQBgnKl6H5vQQNo0dagb6adg5bUI0a/e4t+KoqPAZHZJkhG
+   THb/F4Dw/zMesQDB0sgwXRp3UtIo1WQUACYpEYWoYGEKzGrWQjAy9HnLq
+   V//lAAXi33Z9aLtOdHVTQAsHoEqoDUYIHqy1cte/7R0nvqF0spAIw6wil
    A==;
-X-CSE-ConnectionGUID: tQTIW4f5SnKlm2QZ2aAqiw==
-X-CSE-MsgGUID: JNOxNFcnRaKe1glsR5QpgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53858352"
+X-CSE-ConnectionGUID: NO5m2StSQv6pzZl7bCAg4w==
+X-CSE-MsgGUID: zPOlNcJYQMqk0dYfduhrMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53858354"
 X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="53858352"
+   d="scan'208";a="53858354"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
   by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 06:57:17 -0700
-X-CSE-ConnectionGUID: TDW3lLd0R+a6F1raQkak7w==
-X-CSE-MsgGUID: KuYikaP1Qv+d5Zws7VjsAQ==
+X-CSE-ConnectionGUID: oaYccqkYT3mUjn9w2uH67g==
+X-CSE-MsgGUID: HTt65qVsSjuAHTzSX5kXNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
-   d="scan'208";a="124803479"
+   d="scan'208";a="124803478"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
   by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 06:57:15 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsMa9-0008ao-0M;
+	id 1tsMa9-0008am-0H;
 	Wed, 12 Mar 2025 13:57:13 +0000
-Date: Wed, 12 Mar 2025 21:56:50 +0800
+Date: Wed, 12 Mar 2025 21:56:51 +0800
 From: kernel test robot <lkp@intel.com>
 To: Thomas Gleixner <tglx@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:irq/core 6/53] drivers/irqchip/irq-tb10x.c:48:59: error:
- 'im' undeclared; did you mean 'tm'?
-Message-ID: <202503122110.ifAog2e2-lkp@intel.com>
+Subject: [tglx-devel:irq/core 37/53] kernel/irq/manage.c:2308:3: error:
+ cannot jump from this goto statement to its label
+Message-ID: <202503130042.qOd4b2Bi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,75 +68,204 @@ FYI, the error/warning was bisected to this commit, please ignore it if it's irr
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irq/core
 head:   369c4f7fd7564a8952129a147cacf88cb4697c79
-commit: 75b5ef045115fe0f58281089aedd60cb2e79efcc [6/53] irqchip: Convert generic irqchip locking to guards
-config: arc-randconfig-002-20250312 (https://download.01.org/0day-ci/archive/20250312/202503122110.ifAog2e2-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503122110.ifAog2e2-lkp@intel.com/reproduce)
+commit: 1281dce4094964cbfdeb58e04881f04fc2d97c58 [37/53] genirq/manage: Convert to lock guards
+config: s390-randconfig-002-20250312 (https://download.01.org/0day-ci/archive/20250313/202503130042.qOd4b2Bi-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130042.qOd4b2Bi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503122110.ifAog2e2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130042.qOd4b2Bi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/irqchip/irq-tb10x.c: In function 'tb10x_irq_set_type':
->> drivers/irqchip/irq-tb10x.c:48:59: error: 'im' undeclared (first use in this function); did you mean 'tm'?
-      48 |         mod = ab_irqctl_readreg(gc, AB_IRQCTL_SRC_MODE) | im;
-         |                                                           ^~
-         |                                                           tm
-   drivers/irqchip/irq-tb10x.c:48:59: note: each undeclared identifier is reported only once for each function it appears in
+>> kernel/irq/manage.c:2308:3: error: cannot jump from this goto statement to its label
+                   goto err_irq_setup;
+                   ^
+   kernel/irq/manage.c:2310:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(raw_spinlock_irqsave)(&desc->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:69:1: note: expanded from here
+   __UNIQUE_ID_guard587
+   ^
+   kernel/irq/manage.c:2304:3: error: cannot jump from this goto statement to its label
+                   goto err_out;
+                   ^
+   kernel/irq/manage.c:2310:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(raw_spinlock_irqsave)(&desc->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:69:1: note: expanded from here
+   __UNIQUE_ID_guard587
+   ^
+   kernel/irq/manage.c:2649:3: error: cannot jump from this goto statement to its label
+                   goto err_irq_setup;
+                   ^
+   kernel/irq/manage.c:2651:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(raw_spinlock_irqsave)(&desc->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:12:1: note: expanded from here
+   __UNIQUE_ID_guard594
+   ^
+   kernel/irq/manage.c:2645:3: error: cannot jump from this goto statement to its label
+                   goto err_out;
+                   ^
+   kernel/irq/manage.c:2651:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+           guard(raw_spinlock_irqsave)(&desc->lock);
+           ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+           CLASS(_name, __UNIQUE_ID(guard))
+                        ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+   #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+                               ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+   #define __PASTE(a,b) ___PASTE(a,b)
+                        ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+   #define ___PASTE(a,b) a##b
+                         ^
+   <scratch space>:12:1: note: expanded from here
+   __UNIQUE_ID_guard594
+   ^
+   4 errors generated.
 
 
-vim +48 drivers/irqchip/irq-tb10x.c
+vim +2308 kernel/irq/manage.c
 
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  40  
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  41  static int tb10x_irq_set_type(struct irq_data *data, unsigned int flow_type)
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  42  {
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  43  	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(data);
-75b5ef045115fe0 Thomas Gleixner   2025-03-12  44  	uint32_t mod, pol = data->mask;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  45  
-75b5ef045115fe0 Thomas Gleixner   2025-03-12  46  	guard(raw_spinlock)(&gc->lock);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  47  
-b06eb0173ef1d93 Christian Ruppert 2013-06-25 @48  	mod = ab_irqctl_readreg(gc, AB_IRQCTL_SRC_MODE) | im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  49  	pol = ab_irqctl_readreg(gc, AB_IRQCTL_SRC_POLARITY) | im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  50  
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  51  	switch (flow_type & IRQF_TRIGGER_MASK) {
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  52  	case IRQ_TYPE_EDGE_FALLING:
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  53  		pol ^= im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  54  		break;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  55  	case IRQ_TYPE_LEVEL_HIGH:
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  56  		mod ^= im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  57  		break;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  58  	case IRQ_TYPE_NONE:
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  59  		flow_type = IRQ_TYPE_LEVEL_LOW;
-a6992bbe9774e04 Randy Dunlap      2021-04-21  60  		fallthrough;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  61  	case IRQ_TYPE_LEVEL_LOW:
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  62  		mod ^= im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  63  		pol ^= im;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  64  		break;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  65  	case IRQ_TYPE_EDGE_RISING:
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  66  		break;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  67  	default:
-75b5ef045115fe0 Thomas Gleixner   2025-03-12  68  		pr_err("%s: Cannot assign multiple trigger modes to IRQ %d.\n",	__func__, data->irq);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  69  		return -EBADR;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  70  	}
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  71  
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  72  	irqd_set_trigger_type(data, flow_type);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  73  	irq_setup_alt_chip(data, flow_type);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  74  
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  75  	ab_irqctl_writereg(gc, AB_IRQCTL_SRC_MODE, mod);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  76  	ab_irqctl_writereg(gc, AB_IRQCTL_SRC_POLARITY, pol);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  77  	ab_irqctl_writereg(gc, AB_IRQCTL_INT_STATUS, im);
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  78  	return IRQ_SET_MASK_OK;
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  79  }
-b06eb0173ef1d93 Christian Ruppert 2013-06-25  80  
+31d9d9b6d83030f Marc Zyngier    2011-09-23  2238  
+b525903c254dab2 Julien Thierry  2019-01-31  2239  /**
+b525903c254dab2 Julien Thierry  2019-01-31  2240   * request_nmi - allocate an interrupt line for NMI delivery
+b525903c254dab2 Julien Thierry  2019-01-31  2241   * @irq:	Interrupt line to allocate
+b525903c254dab2 Julien Thierry  2019-01-31  2242   * @handler:	Function to be called when the IRQ occurs.
+b525903c254dab2 Julien Thierry  2019-01-31  2243   *		Threaded handler for threaded interrupts.
+b525903c254dab2 Julien Thierry  2019-01-31  2244   * @irqflags:	Interrupt type flags
+b525903c254dab2 Julien Thierry  2019-01-31  2245   * @name:	An ascii name for the claiming device
+b525903c254dab2 Julien Thierry  2019-01-31  2246   * @dev_id:	A cookie passed back to the handler function
+b525903c254dab2 Julien Thierry  2019-01-31  2247   *
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2248   * This call allocates interrupt resources and enables the interrupt line
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2249   * and IRQ handling. It sets up the IRQ line to be handled as an NMI.
+b525903c254dab2 Julien Thierry  2019-01-31  2250   *
+b525903c254dab2 Julien Thierry  2019-01-31  2251   * An interrupt line delivering NMIs cannot be shared and IRQ handling
+b525903c254dab2 Julien Thierry  2019-01-31  2252   * cannot be threaded.
+b525903c254dab2 Julien Thierry  2019-01-31  2253   *
+b525903c254dab2 Julien Thierry  2019-01-31  2254   * Interrupt lines requested for NMI delivering must produce per cpu
+b525903c254dab2 Julien Thierry  2019-01-31  2255   * interrupts and have auto enabling setting disabled.
+b525903c254dab2 Julien Thierry  2019-01-31  2256   *
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2257   * @dev_id must be globally unique. Normally the address of the device data
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2258   * structure is used as the cookie. Since the handler receives this value
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2259   * it makes sense to use it.
+b525903c254dab2 Julien Thierry  2019-01-31  2260   *
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2261   * If the interrupt line cannot be used to deliver NMIs, function will fail
+80e8fd5021f6afb Thomas Gleixner 2025-03-11  2262   * and return a negative value.
+b525903c254dab2 Julien Thierry  2019-01-31  2263   */
+b525903c254dab2 Julien Thierry  2019-01-31  2264  int request_nmi(unsigned int irq, irq_handler_t handler,
+b525903c254dab2 Julien Thierry  2019-01-31  2265  		unsigned long irqflags, const char *name, void *dev_id)
+b525903c254dab2 Julien Thierry  2019-01-31  2266  {
+b525903c254dab2 Julien Thierry  2019-01-31  2267  	struct irqaction *action;
+b525903c254dab2 Julien Thierry  2019-01-31  2268  	struct irq_desc *desc;
+b525903c254dab2 Julien Thierry  2019-01-31  2269  	int retval;
+b525903c254dab2 Julien Thierry  2019-01-31  2270  
+b525903c254dab2 Julien Thierry  2019-01-31  2271  	if (irq == IRQ_NOTCONNECTED)
+b525903c254dab2 Julien Thierry  2019-01-31  2272  		return -ENOTCONN;
+b525903c254dab2 Julien Thierry  2019-01-31  2273  
+b525903c254dab2 Julien Thierry  2019-01-31  2274  	/* NMI cannot be shared, used for Polling */
+b525903c254dab2 Julien Thierry  2019-01-31  2275  	if (irqflags & (IRQF_SHARED | IRQF_COND_SUSPEND | IRQF_IRQPOLL))
+b525903c254dab2 Julien Thierry  2019-01-31  2276  		return -EINVAL;
+b525903c254dab2 Julien Thierry  2019-01-31  2277  
+b525903c254dab2 Julien Thierry  2019-01-31  2278  	if (!(irqflags & IRQF_PERCPU))
+b525903c254dab2 Julien Thierry  2019-01-31  2279  		return -EINVAL;
+b525903c254dab2 Julien Thierry  2019-01-31  2280  
+b525903c254dab2 Julien Thierry  2019-01-31  2281  	if (!handler)
+b525903c254dab2 Julien Thierry  2019-01-31  2282  		return -EINVAL;
+b525903c254dab2 Julien Thierry  2019-01-31  2283  
+b525903c254dab2 Julien Thierry  2019-01-31  2284  	desc = irq_to_desc(irq);
+b525903c254dab2 Julien Thierry  2019-01-31  2285  
+cbe16f35bee6880 Barry Song      2021-03-03  2286  	if (!desc || (irq_settings_can_autoenable(desc) &&
+cbe16f35bee6880 Barry Song      2021-03-03  2287  	    !(irqflags & IRQF_NO_AUTOEN)) ||
+b525903c254dab2 Julien Thierry  2019-01-31  2288  	    !irq_settings_can_request(desc) ||
+b525903c254dab2 Julien Thierry  2019-01-31  2289  	    WARN_ON(irq_settings_is_per_cpu_devid(desc)) ||
+b525903c254dab2 Julien Thierry  2019-01-31  2290  	    !irq_supports_nmi(desc))
+b525903c254dab2 Julien Thierry  2019-01-31  2291  		return -EINVAL;
+b525903c254dab2 Julien Thierry  2019-01-31  2292  
+b525903c254dab2 Julien Thierry  2019-01-31  2293  	action = kzalloc(sizeof(struct irqaction), GFP_KERNEL);
+b525903c254dab2 Julien Thierry  2019-01-31  2294  	if (!action)
+b525903c254dab2 Julien Thierry  2019-01-31  2295  		return -ENOMEM;
+b525903c254dab2 Julien Thierry  2019-01-31  2296  
+b525903c254dab2 Julien Thierry  2019-01-31  2297  	action->handler = handler;
+b525903c254dab2 Julien Thierry  2019-01-31  2298  	action->flags = irqflags | IRQF_NO_THREAD | IRQF_NOBALANCING;
+b525903c254dab2 Julien Thierry  2019-01-31  2299  	action->name = name;
+b525903c254dab2 Julien Thierry  2019-01-31  2300  	action->dev_id = dev_id;
+b525903c254dab2 Julien Thierry  2019-01-31  2301  
+b525903c254dab2 Julien Thierry  2019-01-31  2302  	retval = irq_chip_pm_get(&desc->irq_data);
+b525903c254dab2 Julien Thierry  2019-01-31  2303  	if (retval < 0)
+b525903c254dab2 Julien Thierry  2019-01-31  2304  		goto err_out;
+b525903c254dab2 Julien Thierry  2019-01-31  2305  
+b525903c254dab2 Julien Thierry  2019-01-31  2306  	retval = __setup_irq(irq, desc, action);
+b525903c254dab2 Julien Thierry  2019-01-31  2307  	if (retval)
+b525903c254dab2 Julien Thierry  2019-01-31 @2308  		goto err_irq_setup;
+b525903c254dab2 Julien Thierry  2019-01-31  2309  
+1281dce4094964c Thomas Gleixner 2025-03-11  2310  	guard(raw_spinlock_irqsave)(&desc->lock);
+b525903c254dab2 Julien Thierry  2019-01-31  2311  
+b525903c254dab2 Julien Thierry  2019-01-31  2312  	/* Setup NMI state */
+b525903c254dab2 Julien Thierry  2019-01-31  2313  	desc->istate |= IRQS_NMI;
+b525903c254dab2 Julien Thierry  2019-01-31  2314  	retval = irq_nmi_setup(desc);
+b525903c254dab2 Julien Thierry  2019-01-31  2315  	if (retval) {
+b525903c254dab2 Julien Thierry  2019-01-31  2316  		__cleanup_nmi(irq, desc);
+b525903c254dab2 Julien Thierry  2019-01-31  2317  		return -EINVAL;
+b525903c254dab2 Julien Thierry  2019-01-31  2318  	}
+b525903c254dab2 Julien Thierry  2019-01-31  2319  	return 0;
+b525903c254dab2 Julien Thierry  2019-01-31  2320  
+b525903c254dab2 Julien Thierry  2019-01-31  2321  err_irq_setup:
+b525903c254dab2 Julien Thierry  2019-01-31  2322  	irq_chip_pm_put(&desc->irq_data);
+b525903c254dab2 Julien Thierry  2019-01-31  2323  err_out:
+b525903c254dab2 Julien Thierry  2019-01-31  2324  	kfree(action);
+b525903c254dab2 Julien Thierry  2019-01-31  2325  
+b525903c254dab2 Julien Thierry  2019-01-31  2326  	return retval;
+b525903c254dab2 Julien Thierry  2019-01-31  2327  }
+b525903c254dab2 Julien Thierry  2019-01-31  2328  
 
-:::::: The code at line 48 was first introduced by commit
-:::::: b06eb0173ef1d9366d14b4ca3e8e38dc72b03e8b irqchip: Add TB10x interrupt controller driver
+:::::: The code at line 2308 was first introduced by commit
+:::::: b525903c254dab2491410f0f23707691b7c2c317 genirq: Provide basic NMI management for interrupt lines
 
-:::::: TO: Christian Ruppert <christian.ruppert@abilis.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+:::::: TO: Julien Thierry <julien.thierry@arm.com>
+:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
 
 -- 
 0-DAY CI Kernel Test Service
