@@ -1,89 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A12B225764;
-	Tue, 11 Mar 2025 23:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95926645;
+	Wed, 12 Mar 2025 00:04:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741737593; cv=none; b=E1YO6SRJ8oBIZTQjpKgnpW4umgDibtb21qMmPRrvr99psQPsCgNbpe2ThZOslm2ZW8cBlKQzY+0GdyAmMZKP1pSAG/fnRdWT746gqf4aUKVpkc7j3gUrVlEwpk2YYMGint3IVDX2bmPvmaJJHoHNp0OA6BgGLZpx0F0EeGwPH8g=
+	t=1741737843; cv=none; b=XJici4wv4F5C2HF6jQ2icMKLTztA7icOk55Cuw3B4ShopwCDFrOh1hWoxRcunr4F5qVFt4i1CBxGaRAQ0CPIY48Zj5WosPvk31Bb5ZDjqEQ6YKwghKA6Mrch4w1EgmXIcKpfGh3QvJXk9FBFZCvp5rporqrg5nemJwlSwzfwAMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741737593; c=relaxed/simple;
-	bh=S/xTYReOYh4NPz6mC18vsMNnkJPaisPIMIw02e2v9eQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tGdftChvcrsgEcY0Z9Lv1lAeoSg5U4munTFTuIZayxTgamqFTv7Azoztx5xWeFU5yQt2Dk7iVCepwUiDRIa/1mBSGgqutF+YcLE1alfaa9vH+IHL8ksljoeJuI9yQV5PfIkMW+OpIv65BaqoJCNMBT+3UGjIrJdIUNCkyeinDKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=smGdKmSF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741737843; c=relaxed/simple;
+	bh=pVvYwXP0gQ1oJIiqQk7qHSzwxsq9T8FMCmlNNJluSIE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gs2wyvG6OKe0xis3SR80ulLYN5OINdVtoyvNj4BsQ4u8pdc5hyf9FvS544s6eQAXL7y+z058B0HaJ9tkn/4qDFl2Q68d8wx+LmnAbirx3HRvSlhw6jxpmHBMomOEhxj2QuSVKW+OnQHxe5Xb4wYZS1yQfY0JXatzzMR2MAYMt2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m4Ab04Ja; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="smGdKmSF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3EF2C4CEE9;
-	Tue, 11 Mar 2025 23:59:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m4Ab04Ja"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D609EC4CEE9;
+	Wed, 12 Mar 2025 00:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741737592;
-	bh=S/xTYReOYh4NPz6mC18vsMNnkJPaisPIMIw02e2v9eQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=smGdKmSFRSd/gf6rgcBA1N5JimFPdyni7ra6QuDRfxCu52SwmgCTt8qHjb/lbvnUb
-	 0NdyR0Mr/nEE6133b9k/+zxCBIkeo3HhB7UxdnvoVJEzdgEobrcdChQ9TbuVHsDRps
-	 dLMMNPzGP+ceJrFz6XsDl2BYDgfSjSA1d0jPV3y6z/ZQ9oSsyK2/5sXTcekXA7Yu6Z
-	 dDAwijNnsEovi1PR0rXYTuF7Urzs3WyL5uukZ1pfj8lZH7IkFQzpH4lbZ4hsjX+R0/
-	 nIU+kwoD1grC+tjz3rUMsLkgNXwFvvMdFQiQfveD4fKji6LtGuXOx9RZPOxN0yDzNR
-	 tvPxL4/7+syZA==
-Date: Tue, 11 Mar 2025 13:59:51 -1000
-From: Tejun Heo <tj@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH cgroup/for-6.15] mm: Fix a build breakage in memcontrol-v1.c
-Message-ID: <Z9DOd8Iwz1iGw8_r@slm.duckdns.org>
-References: <202503120710.guZkJx0h-lkp@intel.com>
+	s=k20201202; t=1741737842;
+	bh=pVvYwXP0gQ1oJIiqQk7qHSzwxsq9T8FMCmlNNJluSIE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=m4Ab04Ja1tv70a06NpWbU7+CjYmFO8Tt4GmjX0rtwxwjlNrRX3ePmhRrddlrNBSdS
+	 AjeQozt2sYWE/b5uE/7kRRs05qExhDVyGm+bIC4e4RmaROQdignp91Qtv/zYJZq4qK
+	 gWhqPqwME5RI71jiqt54aM46Mrq2HEUrcbglhNICPMDN/FBQ3D2xtLhg0EGSib5O7r
+	 GvWW3GWNXSxWosjhJ5YEf7xJ+2YP91mN+dsP+3LKbrZaJHPqGd4YtbFSYPZA/GzIzF
+	 CD8S4uz2q457VkNDoHzyZBMuwjCS1+r319MKrP7gxuF0TnbrfG45/pMUuVd4mv59HV
+	 x4yYk0rMFxJFw==
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	linux-hardening@vger.kernel.org,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] kunit/fortify: Expand testing of __compiletime_strlen()
+Date: Tue, 11 Mar 2025 17:03:56 -0700
+Message-Id: <20250312000349.work.786-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202503120710.guZkJx0h-lkp@intel.com>
-
-From b0543d50c4cbc34ca612ab17c3cc9f2d174be8e0 Mon Sep 17 00:00:00 2001
-From: Tejun Heo <tj@kernel.org>
-Date: Tue, 11 Mar 2025 13:56:11 -1000
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2336; i=kees@kernel.org; h=from:subject:message-id; bh=pVvYwXP0gQ1oJIiqQk7qHSzwxsq9T8FMCmlNNJluSIE=; b=owGbwMvMwCVmps19z/KJym7G02pJDOkXzud89I3m82RZ/mcSj5FXX+365zq71p1+VdyfKhvN8 q3pynLljlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgImEPGH4w7nCpH9R2UfOXymf HJIabBwO+ilccZgWUfMmbH5BddnKawz/E4+JnL+3Wv2SkYD30t9X37RlMnvdVxR1sc/cMtvw6S4 +bgA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-While adding a deprecation message, fd4fd0a869e9 ("mm: Add transformation
-message for per-memcg swappiness") missed the semicolon after the new
-pr_info_once() statement causing build breakage when CONFIG_MEMCG_V1 is
-enabled. Fix it.
+It seems that Clang thinks __builtin_constant_p() of undefined variables
+should return true[1]. This is being fixed separately[2], but in the
+meantime, expand the fortify tests to help track this kind of thing down
+faster in the future.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Michal Koutný <mkoutny@suse.com>
-Fixes: fd4fd0a869e9 ("mm: Add transformation message for per-memcg swappiness")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202503120710.guZkJx0h-lkp@intel.com/
+Link: https://github.com/ClangBuiltLinux/linux/issues/2073 [1]
+Link: https://github.com/llvm/llvm-project/pull/130713 [2]
+Signed-off-by: Kees Cook <kees@kernel.org>
 ---
-Applied to cgroup/for-6.15.
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-hardening@vger.kernel.org
+---
+ lib/tests/fortify_kunit.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Thanks.
-
- mm/memcontrol-v1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/memcontrol-v1.c b/mm/memcontrol-v1.c
-index 93291c0e6eac..67e786d3b17c 100644
---- a/mm/memcontrol-v1.c
-+++ b/mm/memcontrol-v1.c
-@@ -1857,7 +1857,7 @@ static int mem_cgroup_swappiness_write(struct cgroup_subsys_state *css,
+diff --git a/lib/tests/fortify_kunit.c b/lib/tests/fortify_kunit.c
+index ecb638d4cde1..18dcdedf777f 100644
+--- a/lib/tests/fortify_kunit.c
++++ b/lib/tests/fortify_kunit.c
+@@ -60,6 +60,7 @@ static int fortify_write_overflows;
  
- 	if (!mem_cgroup_is_root(memcg)) {
- 		pr_info_once("Per memcg swappiness does not exist in cgroup v2. "
--			     "See memory.reclaim or memory.swap.max there\n ")
-+			     "See memory.reclaim or memory.swap.max there\n ");
- 		WRITE_ONCE(memcg->swappiness, val);
- 	} else
- 		WRITE_ONCE(vm_swappiness, val);
+ static const char array_of_10[] = "this is 10";
+ static const char *ptr_of_11 = "this is 11!";
++static const char * const unchanging_12 = "this is 12!!";
+ static char array_unknown[] = "compiler thinks I might change";
+ 
+ void fortify_add_kunit_error(int write)
+@@ -83,12 +84,28 @@ void fortify_add_kunit_error(int write)
+ 
+ static void fortify_test_known_sizes(struct kunit *test)
+ {
++	char stack[80] = "Test!";
++
++	KUNIT_EXPECT_FALSE(test, __is_constexpr(__builtin_strlen(stack)));
++	KUNIT_EXPECT_EQ(test, __compiletime_strlen(stack), 5);
++
++	KUNIT_EXPECT_TRUE(test, __is_constexpr(__builtin_strlen("88888888")));
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen("88888888"), 8);
++
++	KUNIT_EXPECT_TRUE(test, __is_constexpr(__builtin_strlen(array_of_10)));
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_of_10), 10);
++
++	KUNIT_EXPECT_FALSE(test, __is_constexpr(__builtin_strlen(ptr_of_11)));
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen(ptr_of_11), 11);
+ 
++	KUNIT_EXPECT_TRUE(test, __is_constexpr(__builtin_strlen(unchanging_12)));
++	KUNIT_EXPECT_EQ(test, __compiletime_strlen(unchanging_12), 12);
++
++	KUNIT_EXPECT_FALSE(test, __is_constexpr(__builtin_strlen(array_unknown)));
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen(array_unknown), SIZE_MAX);
++
+ 	/* Externally defined and dynamically sized string pointer: */
++	KUNIT_EXPECT_FALSE(test, __is_constexpr(__builtin_strlen(test->name)));
+ 	KUNIT_EXPECT_EQ(test, __compiletime_strlen(test->name), SIZE_MAX);
+ }
+ 
 -- 
-2.48.1
+2.34.1
 
