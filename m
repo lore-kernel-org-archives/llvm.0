@@ -1,131 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66C923C367
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 11:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C4F1A256B;
+	Wed, 12 Mar 2025 11:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741778265; cv=none; b=INZ48oRWYglhZIDFsJbv3LMa7L6FP74A3QaGc9Pm8OQjQ6ujYDeC22BEpkeS/qrYyNZnyZEl8vqMJBkyqVm65gEnHD8afMb0Umvr4443u9BZtux4QSXsx7LqdPubPvxtFiQvX0qQ3sFgUzylKgv/nWfC45FITQfsDBmNJpnFZpc=
+	t=1741779177; cv=none; b=V15VNZ8uG/nYhGhGl7lIE0RCMovhF6nLNhSf1RJnyy2vzxjVt/4rNzvGFezaUVmhb7ZcxTRJB/osIcuSvbznQd2ZY133zH8qsqwl7J7KODccyXU8Qm/PUmnkUFYBKlgMt25FkzxQ+QLbJG/Td1OId0PcraQW2TCuUcwmxTYbVlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741778265; c=relaxed/simple;
-	bh=Difxn6zmWwvn56SZkOIMlT0iFAGft8AMdExKepeek6U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uva1JAI7z/QJR5l+GaGDUYGPQLJvujH9zTtax24wEI9DejuK/Bco0x9aTObW8iAwZrlaqL1kWlh8/u7/X7Mw5GM14XYpoD8msgc1rhJA6WbTRBu6Tf3PEIIYAW5HmZ1UoZFvigP49rV8USpd5xawK9iQa9SpOCDUY/DwGIHoJj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLd5HTb9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741779177; c=relaxed/simple;
+	bh=USiqbd6cawaj7UxsrH/TRbVTMozozGxono8ggdnRlHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sN0/FqLAOlhyQ6Fe+pEp4RitvhaG9ygL3Rf+1yujrsqqKDCBR8QNTebKKaPKu26Fvco+wHH0o9+VPUAOCryFq11MAc4HsQ91pDpX3kIjtu8tf/ZqJArm4oqpuQv9hRekWJcofpnT0AgAAjnUtQXogK3C5N0C2X/gqJgJ6q/oCr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EDKquXDc; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLd5HTb9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89271C4CEED
-	for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 11:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741778264;
-	bh=Difxn6zmWwvn56SZkOIMlT0iFAGft8AMdExKepeek6U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lLd5HTb9MevPNBZ0+2ofgnbkwNBfRmgUrwc/hpm2ntLz5gUINxvMZl1f9dgV//r3X
-	 NN+C/cucaCKatnUGAecN2XCoGZStAen6OOlzOUt1USssK6DK7fNO/AbHA3ldLn6C89
-	 GkjspVQ1zkC9KpaPmtD0dWMhn27h7pHhb59FEFxoGBOl2FM8BBhTgP+Kcv9P4r744L
-	 2U1jUKX0hwTeh/mDD3aKdWtjtCvOaBf0PkLcd1cl773GOAH67RT7xjZvpkTNL+iWCY
-	 JMHRlN+nQud5A2hfp9Mqh7pPOLmc9xzdTKzGCbGSDiKfDh7Nf/gFQlyZDob2kaRX2T
-	 qSYtxYlxiIHJg==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5493b5bc6e8so6757442e87.2
-        for <llvm@lists.linux.dev>; Wed, 12 Mar 2025 04:17:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUBRD1JJwiWBDg/O5xBPVCh0tHVaSNYQDmZbSw6y6pgMD/LWpJlj9PVDb5shxOGsl58Uj5b@lists.linux.dev
-X-Gm-Message-State: AOJu0YxYaJqC/3UrnBflErWYr0wlvcoJU8jW+6Ih73LGZdeetpy/uOk+
-	IVtJyECNkr4aHUvlGXGi4ATh8ZVChOXlmngnC9xTTjAcEVxfKLh1JFIB46RKFIbDTmN+wzATiQS
-	tu7GUN/LqKGDGTWSrTLCBLRiUR/I=
-X-Google-Smtp-Source: AGHT+IFAp+VMLw51ODDXur99a0Agz7RaRFEwezCXMBNUOZVaHg4yigLuulAvrQkyeXc9eyEHkHebcdHujgue2LtHfEU=
-X-Received: by 2002:a05:6512:138b:b0:549:2ae5:99db with SMTP id
- 2adb3069b0e04-549910cc14cmr8818192e87.45.1741778262832; Wed, 12 Mar 2025
- 04:17:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EDKquXDc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741779175; x=1773315175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=USiqbd6cawaj7UxsrH/TRbVTMozozGxono8ggdnRlHw=;
+  b=EDKquXDcsiBHA7O7twvP77334YC3Pb/RftdqDxSvXM6/q2T3UJdJtx3k
+   M2FzxduBD/q5y8TR6boEUc9kq1waqz/qVS9h4epg1tUSz1/l0/95TRq9K
+   ApUZIO4XSt0wa3J9VIlJpr3uxIaPDhkOqb3nruU6E5ZXwOv/CfoTkkquX
+   A22mLl9XH1rxiSulR+DNOct0jQFDsP4WCfUfV9exoo3C9fbciaueJJMvF
+   PMYlRgsH6uK5L+B89e5MP0lxkXIXcMWD1aUWIlmuYiUTk+pA2LwshR8Gw
+   L34ST5XJt1tv0bK8PVXohCgW9b0lz2yvnpIfWk40m5QHYFtOCDpIuuZSu
+   Q==;
+X-CSE-ConnectionGUID: uMXOxVt0RAiYDVzV9dDChQ==
+X-CSE-MsgGUID: UKqTNUr/TXmYb44N/Xhe8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42108153"
+X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
+   d="scan'208";a="42108153"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 04:32:55 -0700
+X-CSE-ConnectionGUID: Y8aNeSvPRbqw5JC3lSdL7g==
+X-CSE-MsgGUID: XCjtZuRVTbuRE/U7WFYDBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
+   d="scan'208";a="121516266"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 12 Mar 2025 04:32:49 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tsKKM-0008Sm-16;
+	Wed, 12 Mar 2025 11:32:46 +0000
+Date: Wed, 12 Mar 2025 19:32:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Kaplan <david.kaplan@amd.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>,
+	Derek Manwaring <derekmn@amazon.com>
+Subject: Re: [PATCH v4 20/36] x86/bugs: Determine relevant vulnerabilities
+ based on attack vector controls.
+Message-ID: <202503121906.IF0k61bY-lkp@intel.com>
+References: <20250310164023.779191-21-david.kaplan@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250312102740.602870-2-ardb+git@google.com> <CAMzpN2ig2wKf89Gx51MK=K96p4nHYPrqKQbpthB7d9bzNi_UDQ@mail.gmail.com>
-In-Reply-To: <CAMzpN2ig2wKf89Gx51MK=K96p4nHYPrqKQbpthB7d9bzNi_UDQ@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 12 Mar 2025 12:17:31 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH=nLb-KTJNz37NAvNHOgx60WRvq+-w-QzmzrtGg1PV8g@mail.gmail.com>
-X-Gm-Features: AQ5f1JowaR2E6oYkS2l_C0H32K5FP8yp4w_PnEdDH6wPRpWBUmm3AS19SQdcCVI
-Message-ID: <CAMj1kXH=nLb-KTJNz37NAvNHOgx60WRvq+-w-QzmzrtGg1PV8g@mail.gmail.com>
-Subject: Re: [PATCH] x86/head/64: Avoid Clang < 17 stack protector in startup code
-To: Brian Gerst <brgerst@gmail.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	x86@kernel.org, Borislav Petkov <bp@alien8.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250310164023.779191-21-david.kaplan@amd.com>
 
-On Wed, 12 Mar 2025 at 12:09, Brian Gerst <brgerst@gmail.com> wrote:
->
-> On Wed, Mar 12, 2025 at 6:27=E2=80=AFAM Ard Biesheuvel <ardb+git@google.c=
-om> wrote:
-> >
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Clang versions before 17 will not honour -fdirect-access-external-data
-> > for the load of the stack cookie emitted into each function's prologue
-> > and epilogue, and will emit a GOT based reference instead, e.g.,
-> >
-> >   4c 8b 2d 00 00 00 00    mov    0x0(%rip),%r13
-> >           18a: R_X86_64_REX_GOTPCRELX     __ref_stack_chk_guard-0x4
-> >   65 49 8b 45 00          mov    %gs:0x0(%r13),%rax
-> >
-> > This is inefficient, but at least, the linker will usually follow the
-> > rules of the x86 psABI, and relax the GOT load into a RIP-relative LEA
-> > instruction.  This is still suboptimal, as the per-CPU load could use a
-> > RIP-relative reference directly, but at least it gets rid of the first
-> > load from memory.
-> >
-> > However, Boris reports that in some cases, when using distro builds of
-> > Clang/LLD 15, the first load gets relaxed into
-> >
-> >   49 c7 c6 20 c0 55 86  mov    $0xffffffff8655c020,%r14
-> >   ffffffff8373bf0f: R_X86_64_32S        __ref_stack_chk_guard
-> >   65 49 8b 06           mov    %gs:(%r14),%rax
-> >
-> > instead, which is fine in principle, as MOV may be cheaper than LEA on
-> > some micro-architectures. However, such absolute references assume that
-> > the variable in question can be accessed via the kernel virtual mapping=
-,
-> > and this is not guaranteed for the startup code residing in .head.text.
-> >
-> > This is therefore a true positive, that was caught using the recently
-> > introduced relocs check for absolute references in the startup code:
-> >
-> >   Absolute reference to symbol '__ref_stack_chk_guard' not permitted in=
- .head.text
-> >
-> > Work around the issue by disabling the stack protector in the startup
-> > code for Clang versions older than 17.
-> >
-> > Fixes: 80d47defddc0 ("x86/stackprotector/64: Convert to normal per-CPU =
-variable")
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Brian Gerst <brgerst@gmail.com>
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  arch/x86/include/asm/init.h | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
-> > index 0e82ebc5d1e1..8b1b1abcef15 100644
-> > --- a/arch/x86/include/asm/init.h
-> > +++ b/arch/x86/include/asm/init.h
-> > @@ -2,7 +2,11 @@
-> >  #ifndef _ASM_X86_INIT_H
-> >  #define _ASM_X86_INIT_H
-> >
-> > +#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION < 170000
-> > +#define __head __section(".head.text") __no_sanitize_undefined __no_st=
-ack_protector
-> > +#else
-> >  #define __head __section(".head.text") __no_sanitize_undefined
-> > +#endif
->
-> Just disable it for all __head code.  This runs long before userspace
-> can mount a stack smashing attack.
->
+Hi David,
 
-Not all of it - some code is emitted into .head.text because it is
-called early, but it could still be called much later as well.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/master]
+[cannot apply to tip/x86/core linus/master tip/auto-latest tip/smp/core v6.14-rc6 next-20250311]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Kaplan/x86-bugs-Restructure-mds-mitigation/20250311-005151
+base:   tip/master
+patch link:    https://lore.kernel.org/r/20250310164023.779191-21-david.kaplan%40amd.com
+patch subject: [PATCH v4 20/36] x86/bugs: Determine relevant vulnerabilities based on attack vector controls.
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20250312/202503121906.IF0k61bY-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503121906.IF0k61bY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503121906.IF0k61bY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/bugs.c:351:11: error: use of undeclared identifier 'smt_mitigations'; did you mean 'l1tf_mitigation'?
+     351 |                        (smt_mitigations != SMT_MITIGATIONS_OFF);
+         |                         ^~~~~~~~~~~~~~~
+         |                         l1tf_mitigation
+   arch/x86/include/asm/processor.h:745:30: note: 'l1tf_mitigation' declared here
+     745 | extern enum l1tf_mitigations l1tf_mitigation;
+         |                              ^
+   arch/x86/kernel/cpu/bugs.c:1561:7: warning: variable 'smt_possible' set but not used [-Wunused-but-set-variable]
+    1561 |         bool smt_possible = IS_ENABLED(CONFIG_SMP);
+         |              ^
+   1 warning and 1 error generated.
+
+
+vim +351 arch/x86/kernel/cpu/bugs.c
+
+   302	
+   303	/*
+   304	 * Returns true if vulnerability should be mitigated based on the
+   305	 * selected attack vector controls.
+   306	 *
+   307	 * See Documentation/admin-guide/hw-vuln/attack_vector_controls.rst
+   308	 */
+   309	static bool __init should_mitigate_vuln(unsigned int bug)
+   310	{
+   311		switch (bug) {
+   312		/*
+   313		 * The only runtime-selected spectre_v1 mitigations in the kernel are
+   314		 * related to SWAPGS protection on kernel entry.  Therefore, protection
+   315		 * is only required for the user->kernel attack vector.
+   316		 */
+   317		case X86_BUG_SPECTRE_V1:
+   318			return cpu_mitigate_attack_vector(CPU_MITIGATE_USER_KERNEL);
+   319	
+   320		case X86_BUG_SPECTRE_V2:
+   321		case X86_BUG_RETBLEED:
+   322		case X86_BUG_SRSO:
+   323		case X86_BUG_L1TF:
+   324			return cpu_mitigate_attack_vector(CPU_MITIGATE_USER_KERNEL) ||
+   325			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_HOST);
+   326	
+   327		case X86_BUG_SPECTRE_V2_USER:
+   328			return cpu_mitigate_attack_vector(CPU_MITIGATE_USER_USER) ||
+   329			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_GUEST);
+   330	
+   331		/*
+   332		 * All the vulnerabilities below allow potentially leaking data
+   333		 * across address spaces.  Therefore, mitigation is required for
+   334		 * any of these 4 attack vectors.
+   335		 */
+   336		case X86_BUG_MDS:
+   337		case X86_BUG_TAA:
+   338		case X86_BUG_MMIO_STALE_DATA:
+   339		case X86_BUG_RFDS:
+   340		case X86_BUG_SRBDS:
+   341			return cpu_mitigate_attack_vector(CPU_MITIGATE_USER_KERNEL) ||
+   342			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_HOST) ||
+   343			       cpu_mitigate_attack_vector(CPU_MITIGATE_USER_USER) ||
+   344			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_GUEST);
+   345	
+   346		case X86_BUG_GDS:
+   347			return cpu_mitigate_attack_vector(CPU_MITIGATE_USER_KERNEL) ||
+   348			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_HOST) ||
+   349			       cpu_mitigate_attack_vector(CPU_MITIGATE_USER_USER) ||
+   350			       cpu_mitigate_attack_vector(CPU_MITIGATE_GUEST_GUEST) ||
+ > 351			       (smt_mitigations != SMT_MITIGATIONS_OFF);
+   352		default:
+   353			WARN(1, "Unknown bug %x\n", bug);
+   354			return false;
+   355		}
+   356	}
+   357	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
