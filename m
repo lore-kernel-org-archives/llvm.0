@@ -1,41 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C05E1C32;
-	Wed, 12 Mar 2025 05:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CD61E5701;
+	Wed, 12 Mar 2025 06:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741759048; cv=none; b=WeJfLG45Zr3pfnGHwEmMCmJU73GnbPjUSmQlt86nu9/wQWbajEzK7gTOxRL2mtJyyu/FytKd3jOJkQsiGX8ydd8rEXiErAs8xbMintJbK9YUzprhuSsQ0HjydERyZo0nSNT2r4czuB83olQobP0Vudbua+r3ENuXzT7EgRXW/RQ=
+	t=1741761770; cv=none; b=Iaz97sstRwVq/ObT7tXTAu7fWIY4HPZg0wGSIa1tHoY2r/56xIvrAx6tZnc2kGYUZuEOF9420IA4UTEST5k91l0VIWyE2C3eG49pUbx/3WnnM7+//GIXEyUgCwgTCv5OMOEs60kJHxuyLsYdey9jK/1TiWfr/cKwhhmZ+iTzRfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741759048; c=relaxed/simple;
-	bh=7/v4JVkTn+NkPhGPwtgahdcMMQDg9/rvMF8GXh/YpDE=;
+	s=arc-20240116; t=1741761770; c=relaxed/simple;
+	bh=+0kb6hprsvRt3Ann0dpGja/F2LgMfmRYXyZsPkWNVmA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmdIxepQOs987tE1qfjQrUH9cQolBBUIyQhFkycSqlvYru1hZ7fpRwmoBtAclr52udpaRpAm8Uj5EmscegivM0OBQa8U7Ci0Os2+vxCWkSf760ssQg4RYSZO/JlYlE8zZdyofLuAKnDmuRhDEjjQtcO4p1zR3++5yk+l3D9P7iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trhC+lZ5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=hrS+iU93hRrG5LDwpndcihDLFbe56tAONDZ7g9PD8yUb84HEVAzY8MkRD0tuXrfDGqp8gcfjUe7iE3QSbP+Dy+vCqn7dHtEDHnZwMeSNpRM8y9fD+CYxBuSEiiDkVnFjl7+DLZwZ25c8s01pP9WSjU5kcSOJTi1zEYP0XZSxIYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dPwAIg+g; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trhC+lZ5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAD15C4CEE3;
-	Wed, 12 Mar 2025 05:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741759048;
-	bh=7/v4JVkTn+NkPhGPwtgahdcMMQDg9/rvMF8GXh/YpDE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=trhC+lZ5Ldj1qWI0DMtowVTk61E6O33eBeURYG+Z62rAVOZsQVJR9E8vnhDDtA3dX
-	 MJ7UspvtAeVBEmNi9JcR+3xHG7jWB2qY4fcwiMiKSmljfSe2fZvpj9UdhjBFjReLNy
-	 9L39Mfl1/vOJz0QZ1ZrwvBkdfAwdXpwL38JHd2oBYZ08FuYcdyBIOoIvGNH82vEGB8
-	 cHBbswbVaRJ1F/5VD6wY+gOO6mW3Gni3f2GCmtfpbncMOMw/dEHV7UG/Fr7qqmYRQB
-	 c+ZNNkCU59jIyjxPQB7lusUF8qi18h5/iIHu2x6C0tOiChyLhgL4BUfAjvKHOINlcU
-	 Tx7m7clvQhvvQ==
-Date: Wed, 12 Mar 2025 07:57:24 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Stuart Yoder <stuart.yoder@arm.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [linux-next:master 9090/10334] ld.lld: error: undefined symbol:
- tpm_crb_ffa_init
-Message-ID: <Z9EiRDuWfPOkcjXN@kernel.org>
-References: <202503120916.TnY8Xobl-lkp@intel.com>
- <Z9EhqAxJjbsUiuC_@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dPwAIg+g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741761770; x=1773297770;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+0kb6hprsvRt3Ann0dpGja/F2LgMfmRYXyZsPkWNVmA=;
+  b=dPwAIg+gjQaSAXBGz5JtjyQW8INGiXUB/TdmC8hzi47kUMoL3oQVD7RI
+   2F7WikXk9CXZKEQ0qg6Ful8QZdgVKGqS5RlPcUNXkzPsIyTNZw9H+DF9u
+   JC08LSFN6NeoPyDm9RLZ1ptbyZvlnaS8/Q8/WE45oJ1C+0eZgSJriSIDg
+   KaRDO0rjfwBS+DR+WoRnm3BmIv7smEP7JtlhK8n2JZIM4OhjIycMAX/lk
+   p7TDk67WXBHYz2WcpBFr2HqP8B2HP5DmN/60UTy8+xOWzKGDq3AcefCvt
+   LysHiXYKpDaQJpTswoR4DePcJ5DaIkcifmYeLWgUWZTnDLHBXH9WPTLTo
+   A==;
+X-CSE-ConnectionGUID: ElwO0vBPQ6uG0FH/iOLxJw==
+X-CSE-MsgGUID: C3RYdLG4TTKP4DUtrAPtsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42682011"
+X-IronPort-AV: E=Sophos;i="6.14,240,1736841600"; 
+   d="scan'208";a="42682011"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 23:42:49 -0700
+X-CSE-ConnectionGUID: 5+7kawooS0ScDp3uA+u/ng==
+X-CSE-MsgGUID: VW6yWhDOTUe5fA99Ecs9gA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,241,1736841600"; 
+   d="scan'208";a="121050021"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 11 Mar 2025 23:42:44 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tsFne-0008CO-0F;
+	Wed, 12 Mar 2025 06:42:42 +0000
+Date: Wed, 12 Mar 2025 14:42:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: alejandro.lucero-palau@amd.com, linux-cxl@vger.kernel.org,
+	netdev@vger.kernel.org, dan.j.williams@intel.com,
+	edward.cree@amd.com, davem@davemloft.net, kuba@kernel.org,
+	pabeni@redhat.com, edumazet@google.com, dave.jiang@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alejandro Lucero <alucerop@amd.com>,
+	Edward Cree <ecree.xilinx@gmail.com>
+Subject: Re: [PATCH v11 23/23] sfc: support pio mapping based on cxl
+Message-ID: <202503121456.SDEFIg2L-lkp@intel.com>
+References: <20250310210340.3234884-24-alejandro.lucero-palau@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,65 +67,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z9EhqAxJjbsUiuC_@kernel.org>
+In-Reply-To: <20250310210340.3234884-24-alejandro.lucero-palau@amd.com>
 
-On Wed, Mar 12, 2025 at 07:54:52AM +0200, Jarkko Sakkinen wrote:
-> On Wed, Mar 12, 2025 at 09:51:04AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> > head:   eea255893718268e1ab852fb52f70c613d109b99
-> > commit: 9b2015ee9b5bba20097ea1e1f4188067624f4fa3 [9090/10334] tpm_crb: add support for the Arm FF-A start method
-> > config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250312/202503120916.TnY8Xobl-lkp@intel.com/config)
-> > compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503120916.TnY8Xobl-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202503120916.TnY8Xobl-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> ld.lld: error: undefined symbol: tpm_crb_ffa_init
-> >    >>> referenced by tpm_crb.c
-> >    >>>               drivers/char/tpm/tpm_crb.o:(crb_acpi_add) in archive vmlinux.a
-> > --
-> > >> ld.lld: error: undefined symbol: tpm_crb_ffa_start
-> >    >>> referenced by tpm_crb.c
-> >    >>>               drivers/char/tpm/tpm_crb.o:(__crb_request_locality) in archive vmlinux.a
-> >    >>> referenced by tpm_crb.c
-> >    >>>               drivers/char/tpm/tpm_crb.o:(__crb_relinquish_locality) in archive vmlinux.a
-> >    >>> referenced by tpm_crb.c
-> >    >>>               drivers/char/tpm/tpm_crb.o:(crb_send) in archive vmlinux.a
-> >    >>> referenced 1 more times
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
-> 
-> Stuart, I did not go through this but this does not look correct even with
-> a quick peak:
-> 
-> config TCG_ARM_CRB_FFA                                                                                                                                                         
->        ~~~~~~~~~~~~~~~
->        TCG_FTPM_FFA (and Kconfig put before TCG_FTPM_TEE)
-> 
-> 
->         tristate "TPM CRB over Arm FF-A Transport"                                                                                                                             
->         depends on ARM_FFA_TRANSPORT                                                                                                                                           
->         default y if (TCG_CRB && ARM_FFA_TRANSPORT)                                                                                                                            
->                                  ~~~~~~~~~~~~~~~~~
-> 				 redundant given "depends on"
-> 
->         help                                                                                                                                                                   
->           If the Arm FF-A transport is used to access the TPM say Yes.                                                                                                         
->           To compile this driver as a module, choose M here; the module                                                                                                        
->           will be called tpm_crb_ffa.                                                                                                                                          
-> 
-> So I'll drop the whole series from my tree for the moment and you'll
-> have to respin.
+Hi,
 
-Commit could use short summary in along the lines of:
+kernel test robot noticed the following build errors:
 
-"tpm: ftpm_ffa: <summary>"
+[auto build test ERROR on 0a14566be090ca51a32ebdd8a8e21678062dac08]
 
-BR, Jarkko
+url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/cxl-add-type2-device-basic-support/20250311-050914
+base:   0a14566be090ca51a32ebdd8a8e21678062dac08
+patch link:    https://lore.kernel.org/r/20250310210340.3234884-24-alejandro.lucero-palau%40amd.com
+patch subject: [PATCH v11 23/23] sfc: support pio mapping based on cxl
+config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20250312/202503121456.SDEFIg2L-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250312/202503121456.SDEFIg2L-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503121456.SDEFIg2L-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   hppa-linux-ld: drivers/net/ethernet/sfc/ef10.o: in function `efx_cxl_init':
+>> (.text.efx_cxl_init+0x0): multiple definition of `efx_cxl_init'; drivers/net/ethernet/sfc/efx.o:(.text.efx_cxl_init+0x0): first defined here
+   hppa-linux-ld: drivers/net/ethernet/sfc/ef10.o: in function `efx_cxl_exit':
+>> (.text.efx_cxl_exit+0x0): multiple definition of `efx_cxl_exit'; drivers/net/ethernet/sfc/efx.o:(.text.efx_cxl_exit+0x0): first defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
