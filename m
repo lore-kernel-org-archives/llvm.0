@@ -1,113 +1,187 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BDC1EE7C4
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 10:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9D81F03E4
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 11:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741862852; cv=none; b=carkPZIsaAkUdN7YsXsK7+GUeM4i4gTw6oOAYwK3n8n4d9xpuFUOEw1N+tak7bt9TWfeqJU6ZXCkqh5yRtYR2wx25dM/tlKiTi7UERXiJP7dZFY/XjYCK6N3DIF069TqscAdkYYHdFXB8Y42ypK/w+WyGP7YLbmdRFWa0pKbnNA=
+	t=1741864846; cv=none; b=N2PsagnzkBwezsewq3F6fJ52bL/XO/7wpmK/V4ZhuqgF7GTUxUHGNiBN876jXEb8KrDUySCMyzBDU95t5UCfMFsbiW11VLtriuKhQQSAUU6/pnlyUFoZkYxvzGj+ywgG/2Epp8cU9otOYNDwvg1wgi0qtRw00Mo9fX08wWJF1kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741862852; c=relaxed/simple;
-	bh=LP5eXeugNTen1bBkv90xRuq2BmM2qnVG2bEcP7+53GM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dnKzxCR5vAlKBH3lR3HHAgB2aBzWJT6j3erU0RqHKDkb5U/ESO0TaP1vVyVRWYuYIdmNUeWPKNsNKKMNxkC2VHMYstsXOpr+IiNypHYfs6mmmwRpQZf4t20xKg3KQuRLn4k1ro+Mqc2EiHmRfAb9DvsEj9bwuXfSPlDShcZshm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yMzbFued; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1741864846; c=relaxed/simple;
+	bh=hToZW9/4x47mKSYrXIUJ2djr0pkTpdYJARGHnq4Nwaw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fn+XzLhVulVJO/5vdxcH5Kxjrs7zCVY2uqh1sxfjKum71YMBu0QPymEv6dpqaK5BfYXqXbNj3rU43Anq2Vt74wA3l1tTgajDgRpG1HO78R+9Be395pUDLpYcNjw8HsH00jnEfghyG6/7/HuvkfkQjDkr6GbOWdPXVM4j4oZTFIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AzwSLWA/; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yMzbFued"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43d0830c3f7so6003385e9.2
-        for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 03:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741862848; x=1742467648; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQ9g0Gaavw77PwDpx2+pgwcbpRIgEDZUZKLzgDfdqpQ=;
-        b=yMzbFuedB2VPF+G5ZsRic9SDbKHVoOAuVOxYrsIrWYqiAqrfjTVtmfT2wlnFd67eIm
-         RE4PfOqI2P62BrXkKgX++VCwSdVVhsW0YvIg+Ewt6P7ixvgrtrXh2VslXT6QO6bR6Z2K
-         b95WlwlnV3WTMKnDQ/3+UdnlSShyNNzBBV7uYRmu4MEIq3KlFJSOqknZILF5fPh1FvLM
-         dRtBy0ohz910jw+GjYoQdZtwDYXHEvwJhiYTLfUFOsnVYA/kGeqbNn4OmVDHyFOt9zPd
-         /zppNOVczES8lArpG4NGbE1OLOUiHWOV7cLasHAnHgX3+NxOypu0lVdD7Vy/qrEw3P2H
-         pqNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741862848; x=1742467648;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQ9g0Gaavw77PwDpx2+pgwcbpRIgEDZUZKLzgDfdqpQ=;
-        b=Jna6Wyg+0Nxo0uYvWX+FJE09h3ZFDHgBDOvyVePCprVV37s7G/jq6HzJQ6q8bto4fj
-         BRcdn18KZq5PunVmBE7Hrt2HGeSq6ZBRh4k32W3auKMrYIX3IesSWB7mBKxMQGBUp7JR
-         Fhyu5k9GM8JzF86h0GZYgHHlV5AVjAalSRRtmWsusY+hRe2rY9nyAS0Bf+lUvoG8o5Ds
-         nJzFndwQ0OVUb2dBVLYuF1l/O2vsitOEUz2qziMUqefwPggdxdB6ATSac1+ymsQGol7a
-         y/g29W4SuCRqsxH8F6grdeKjmXIk9jIOU6ljUrqy3MjBAa2smB6nDKSA+pqXF1b8R0RL
-         Eldg==
-X-Forwarded-Encrypted: i=1; AJvYcCWH7zeBQpy0gUvZcgVRopSXMQb6PHTtFYAhtRRjKvXxk415t9Fz/9ocUwa45kZi4tfNcJhV@lists.linux.dev
-X-Gm-Message-State: AOJu0YzCnGeK6H6neRLudfZ2sq+dgHauY67ZPho+q2rZjdz7Hm/COIOa
-	tQ30zJVW0PdlQ7r7xg6teW8kgWaFQ5zhX1TOEymOaek5Zmhoe2i4B+Tk5wAZfSnm6L6jTgQS/+t
-	xYkeuxRMpQfJc2w==
-X-Google-Smtp-Source: AGHT+IFnP3JhBHMfVAgiBjDgec8Dj8Ys+oEmuI/lcu/U/vWhF0K6dANq8oFHYUxugoP1r6AAO5LgIu0hY38u4Vs=
-X-Received: from wmbbh12.prod.google.com ([2002:a05:600c:3d0c:b0:43c:e9df:2ecd])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:b95:b0:43c:ec97:75db with SMTP id 5b1f17b1804b1-43cec97779fmr192265835e9.11.1741862848323;
- Thu, 13 Mar 2025 03:47:28 -0700 (PDT)
-Date: Thu, 13 Mar 2025 10:47:26 +0000
-In-Reply-To: <20250313084525.773620-1-kunwu.chan@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AzwSLWA/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741864844; x=1773400844;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hToZW9/4x47mKSYrXIUJ2djr0pkTpdYJARGHnq4Nwaw=;
+  b=AzwSLWA/m9b8Ut8PvvghGXiixYOFFzDuyFLgJxGw+fo5H9FlS+55NUek
+   PWW5ue6PebhCz2cwWaJRbj5Jj9vwMQ43YI/zFt98BF5CqEs/JCapwFiw+
+   nnqAYWm4FespyxvUYZ22A82SEIrp0v+NIeWGUWxOCUT+BT/g4GTpCUFli
+   GCrEd7RcTu0Cj6+zVxLtJr/m8YUmxnRTQl1d5p4Ui0hgUiRR+Dwpqdqtu
+   QsUR2BBtK3m/3yNTF2xDf9QsEG+9edWXLQP2oL7S9ac2JxW0f5h7LyL/B
+   b5mvOhiK97v2iVcmyunqH1Kz6iMfG+gBmyY4OGMglstYwZ7sEtvvRuI5X
+   Q==;
+X-CSE-ConnectionGUID: FOaytdj8SGyQo6NJ5BSpNg==
+X-CSE-MsgGUID: 1jyBCpQOSEG4eoQKW5EHTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53970644"
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="53970644"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:20:44 -0700
+X-CSE-ConnectionGUID: GbcQkpQYRLKZjG+vUW2MJg==
+X-CSE-MsgGUID: ZY+zSvjLSVy3pfVtyaAL9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="125094547"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.250.7]) ([10.245.250.7])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:20:38 -0700
+Message-ID: <bdc7b218-8f14-4bfd-8a76-2f35e5a9393c@linux.intel.com>
+Date: Thu, 13 Mar 2025 13:21:17 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250313084525.773620-1-kunwu.chan@linux.dev>
-Message-ID: <Z9K3vokYu5osMCwh@google.com>
-Subject: Re: [PATCH] rust: file: optimize rust symbol generation for FileDescriptorReservation
-From: Alice Ryhl <aliceryhl@google.com>
-To: Kunwu Chan <kunwu.chan@linux.dev>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, 
-	Grace Deng <Grace.Deng006@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] ASoC: SOF: ipc4-topology: Allocate ref_params on
+ stack
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Mark Brown <broonie@kernel.org>,
+ Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
+ Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+ Bard Liao <yung-chuan.liao@linux.intel.com>,
+ sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Daniel Baluta
+ <daniel.baluta@nxp.com>, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20250312160516.3864295-1-andriy.shevchenko@linux.intel.com>
+From: =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20250312160516.3864295-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 13, 2025 at 04:45:25PM +0800, Kunwu Chan wrote:
-> From: Kunwu Chan <kunwu.chan@hotmail.com>
-> 
-> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> with ARCH=arm64, the following symbols are generated:
-> 
-> $ nm vmlinux | grep ' _R'.*FileDescriptorReservation | rustfilt
-> ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>
-> 						::fd_install
-> ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>
-> 						::get_unused_fd_flags
-> ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation
-> 					 as core::ops::drop::Drop>::drop
-> 
-> These Rust symbols are trivial wrappers around the C functions
-> fd_install, put_unused_fd and put_task_struct.It
-> doesn't make sense to go through a trivial wrapper for these
-> functions, so mark them inline.
-> 
-> After doing so, the above symbol will not in output.
-> 
-> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
-> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
-> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
 
-A few notes:
 
-* Your own Signed-off-by must always be last.
-* You're missing Link: and Suggested-by: tags.
-* There are some grammar issues, e.g. a missing space before "It" and
-  the phrase "will not in output" is not good.
-* Let's also add the marker to `reserved_fd` to be on the safe side.
-* I think it is easier to read the symbols if you list each sybmol on
-  one line like this:
+On 12/03/2025 18:05, Andy Shevchenko wrote:
+> Currently the compiler (clang 19.1.7) is not happy about the size of
+> the stack frame in sof_ipc4_prepare_copier_module:
+> 
+> sound/soc/sof/ipc4-topology.c:1800:1: error: stack frame size (1288) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
+>  1800 | sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>       | ^
+> 
+> Work around this by allocating ref_params on stack, as it looks the biggest
+> variable on stack right now.
+> 
+> Note, this only happens when compile for 32-bit machines (x86_32 in my case).
 
-ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>::fd_install
-ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>::get_unused_fd_flags
-ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation as core::ops::drop::Drop>::drop
+I don't have better idea for fix, apart from somehow refactor this huge
+function.
+Thank you for the fix,
 
-Alice
+Acked-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  sound/soc/sof/ipc4-topology.c | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+> index 6d5cda813e48..41110ee6edc7 100644
+> --- a/sound/soc/sof/ipc4-topology.c
+> +++ b/sound/soc/sof/ipc4-topology.c
+> @@ -7,6 +7,7 @@
+>  //
+>  //
+>  #include <linux/bitfield.h>
+> +#include <linux/cleanup.h>
+>  #include <uapi/sound/sof/tokens.h>
+>  #include <sound/pcm_params.h>
+>  #include <sound/sof/ext_manifest4.h>
+> @@ -1807,8 +1808,8 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(scomp);
+>  	struct sof_ipc4_copier_data *copier_data;
+>  	int input_fmt_index, output_fmt_index;
+> -	struct snd_pcm_hw_params ref_params;
+>  	struct sof_ipc4_copier *ipc4_copier;
+> +	struct snd_pcm_hw_params *ref_params __free(kfree) = NULL;
+>  	struct snd_sof_dai *dai;
+>  	u32 gtw_cfg_config_length;
+>  	u32 dma_config_tlv_size = 0;
+> @@ -1884,9 +1885,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * for capture.
+>  		 */
+>  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
+> -			ref_params = *fe_params;
+> +			ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
+>  		else
+> -			ref_params = *pipeline_params;
+> +			ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
+> +		if (!ref_params)
+> +			return -ENOMEM;
+>  
+>  		copier_data->gtw_cfg.node_id &= ~SOF_IPC4_NODE_INDEX_MASK;
+>  		copier_data->gtw_cfg.node_id |=
+> @@ -1919,8 +1922,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * In case of capture the ref_params returned will be used to
+>  		 * find the input configuration of the copier.
+>  		 */
+> -		ref_params = *fe_params;
+> -		ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
+> +		ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
+> +		if (!ref_params)
+> +			return -ENOMEM;
+> +
+> +		ret = sof_ipc4_prepare_dai_copier(sdev, dai, ref_params, dir);
+>  		if (ret < 0)
+>  			return ret;
+>  
+> @@ -1929,7 +1935,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * input configuration of the copier.
+>  		 */
+>  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
+> -			ref_params = *pipeline_params;
+> +			memcpy(ref_params, pipeline_params, sizeof(*ref_params));
+>  
+>  		break;
+>  	}
+> @@ -1938,7 +1944,10 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		ipc4_copier = (struct sof_ipc4_copier *)swidget->private;
+>  		copier_data = &ipc4_copier->data;
+>  		available_fmt = &ipc4_copier->available_fmt;
+> -		ref_params = *pipeline_params;
+> +
+> +		ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
+> +		if (!ref_params)
+> +			return -ENOMEM;
+>  
+>  		break;
+>  	}
+> @@ -1951,7 +1960,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  	/* set input and output audio formats */
+>  	input_fmt_index = sof_ipc4_init_input_audio_fmt(sdev, swidget,
+>  							&copier_data->base_config,
+> -							&ref_params, available_fmt);
+> +							ref_params, available_fmt);
+>  	if (input_fmt_index < 0)
+>  		return input_fmt_index;
+>  
+
+-- 
+Péter
+
