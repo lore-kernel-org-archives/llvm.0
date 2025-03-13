@@ -1,136 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from a8-71.smtp-out.amazonses.com (a8-71.smtp-out.amazonses.com [54.240.8.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED322E339B;
-	Thu, 13 Mar 2025 02:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4B72905
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 02:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741832158; cv=none; b=beCq7QCJcR/CYKlBDcMoZ0Od2hRFmvaTaE3nXcKnNSUlU88hGivbOOp2L6KVyhxMncF6St8dQ4SN46Azq+RwPTminVzdAh8DOKD6F7iaHKVvWoK9Aa3JfVJGbyuBcz1XRqbwlzZ1GWEp3XIx/D+VDqnsJycdToLJy6xW28c63dg=
+	t=1741834287; cv=none; b=tOWNMBGWGsZvB5gJ0sABbPS3lcth3Y+THW/0S5aAc2+94l5PZGdPp1z1J+dyRKmt+Z3E++Q2D/yMO4f/j+aOxOolGUdyKo0oxfviJ7c9JtOK8sfhXpWztDOjBlAvCDvgoxGDxhE4thmRngW7hnT/RlPnHgdLSMdPx6bg5nKJlKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741832158; c=relaxed/simple;
-	bh=96yJDyEP9BeK2cVK+9MUvmIHjdk7wR1LKgFfN3+p/fM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kZG1xr4cXUcwJaTCDlX8eTb7IQU5VBrFpxaB0AJqWviYqcQrlnLFxEcwsvjoPiyu1MyXhW0ORzi15ftKfT1dkUtBMmV4RnksDYZyu4z+56g2WfBDYjrikyyzOUqhJ0dTTmsjviBUPTGODMrKmNVubaF2v1j3XPtMDevw++s9+hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgCkbNU8; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741834287; c=relaxed/simple;
+	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=didfTgK+W/QeVuMYPnkl4GTV/BhC8T1X0dilJwkxvrMF6FHaqwdrXSIst03JghVDHs97MLYqy4j0Oy4qgru1a8jlSAx+eH7bIQdC7mzfRPJgWl63Nnmpl/i2KwA+FRSeSCc6XwOYs+6zY1u8n/xVUKpOAYm2rrd0CuZXEDPtvPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=zck9GqNx; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=M/I5Zlm4; arc=none smtp.client-ip=54.240.8.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgCkbNU8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741832156; x=1773368156;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=96yJDyEP9BeK2cVK+9MUvmIHjdk7wR1LKgFfN3+p/fM=;
-  b=lgCkbNU8xDWZ1tFWchRtnulHPQIWUlxY3OD3fD+cDL96EcvUqAPy3J06
-   OKcXSPPYZHiK82sO39PZWI0YpSt8gQbOxNzdUwKC090bt11bqpfe3yVQP
-   z2uk81FdQbrXjm3zofGQS9yy9kBoUtt5L1aIRugMJh7kVZxRX5vIja0k4
-   3ljTNknrgHnNS3odIlBDBop3MCwbbL3PV8W8h5NxwuYslkLryRV2M6qU/
-   PcSkPHDSBt+xZmPLDZbu2nASjCOARKr+rM+ScnFTTbEAieMEQXBq5m9+L
-   n0yHYRR+OnEV7+ctDhcjeZXmbefb34kc/ZW1dSJHHh7HT0CqYIZo9ji24
-   g==;
-X-CSE-ConnectionGUID: +xjPshH7SlaMeHMKk954QQ==
-X-CSE-MsgGUID: AZicdGCsTZS+iLnDtNo0Uw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="43038849"
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="43038849"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 19:15:55 -0700
-X-CSE-ConnectionGUID: KHahmpZOTNOqvrR+C7Song==
-X-CSE-MsgGUID: H65afRTcQ5CspG2G7V7fvw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="125887063"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 12 Mar 2025 19:15:31 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsY6V-000936-1q;
-	Thu, 13 Mar 2025 02:15:25 +0000
-Date: Thu, 13 Mar 2025 10:15:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Zimmermann <tzimmermann@suse.de>, simona@ffwll.ch,
-	airlied@gmail.com, mripard@kernel.org,
-	maarten.lankhorst@linux.intel.com, geert@linux-m68k.org,
-	tomi.valkeinen@ideasonboard.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
-	freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-	imx@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
-	nouveau@lists.freedesktop.org, virtualization@lists.linux.dev,
-	spice-devel@lists.freedesktop.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
-	intel-xe@lists.freedesktop.org, xen-devel@lists.xenproject.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v4 18/25] drm/renesas/rz-du: Compute dumb-buffer sizes
- with drm_mode_size_dumb()
-Message-ID: <202503130956.VyNIuYfU-lkp@intel.com>
-References: <20250311155120.442633-19-tzimmermann@suse.de>
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="zck9GqNx";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="M/I5Zlm4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
+	t=1741834284;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
+	b=zck9GqNx3MjL3Kr4w7RipkctzPb2N0SW0OxjHUJoUlJ7aCn2WUxAFlBICfqunWYq
+	JjI/eGnyjU6A5kWVsu2fN5ivSKysxYhhk2JEK4Fz7Ipy6Yl+eoFvhsteusHJYZMtebH
+	NR/G/mmI09NOtd8koB+sGw5BNbmkdn4YE4f4ljzUwFHMr0PtHt0G2iniyoRQxRg5Qbr
+	aiHcFopeC3J/0r1ofNloHpbUtJi6nekuz/t6dmk0gq/o8Wh9aHZcEPRrcLnp0E05gtY
+	D2i2NmqJj7BNFRJmshks1e0P2mDLRvFe2tg7dPW42hpZQRMk8GfrpN5D+l5CNhDm8mh
+	TZeddcB6JQ==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741834284;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
+	b=M/I5Zlm4IY+PtMzrnvVBSMshNtbJNl3wm+gBxEFh7F3yF5hD9CQIlMkAch+vueny
+	AWaJS+Bflc1KxdpwVwlJsEEVxtPSmVPYPHK2gjsFRWY+0jI0ZdylOlbvT/a8qOww2ua
+	ZrMHwv8UK2b9Mo/jshXaWLXUentWg2p8eWhS68F0=
+From: Antonio Hickey <contact@antoniohickey.com>
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>
+Cc: Antonio Hickey <contact@antoniohickey.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: [PATCH] rust: uaccess: mark UserSliceWriter method inline
+Date: Thu, 13 Mar 2025 02:51:24 +0000
+Message-ID: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311155120.442633-19-tzimmermann@suse.de>
+Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
+X-SES-Outgoing: 2025.03.13-54.240.8.71
 
-Hi Thomas,
+When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+toolchain provided by kernel.org with ARCH=x86_64, the following symbol
+is generated:
 
-kernel test robot noticed the following build errors:
+$nm vmlinux | grep ' _R' | rustfilt | rg UserSliceWriter
+ffffffff817c3390 T <kernel::uaccess::UserSliceWriter>::write_slice
 
-[auto build test ERROR on next-20250311]
-[also build test ERROR on v6.14-rc6]
-[cannot apply to drm-exynos/exynos-drm-next rockchip/for-next tegra/for-next drm-xe/drm-xe-next linus/master v6.14-rc6 v6.14-rc5 v6.14-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, this Rust symbol is a trivial wrapper around the function
+copy_from_user. It doesn't make sense to go through a trivial wrapper
+for this function, so mark it inline.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-dumb-buffers-Sanitize-output-on-errors/20250311-235818
-base:   next-20250311
-patch link:    https://lore.kernel.org/r/20250311155120.442633-19-tzimmermann%40suse.de
-patch subject: [PATCH v4 18/25] drm/renesas/rz-du: Compute dumb-buffer sizes with drm_mode_size_dumb()
-config: powerpc64-randconfig-003-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130956.VyNIuYfU-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130956.VyNIuYfU-lkp@intel.com/reproduce)
+After applying this patch, the above command will produce no output.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130956.VyNIuYfU-lkp@intel.com/
+Suggested-by: Alice Ryhl <aliceryhl@google.com>
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+---
+ rust/kernel/uaccess.rs | 1 +
+ 1 file changed, 1 insertion(+)
 
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c: In function 'rzg2l_du_dumb_create':
->> drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c:80:15: error: implicit declaration of function 'drm_mode_size_dumb'; did you mean 'drm_mode_set_name'? [-Wimplicit-function-declaration]
-      80 |         ret = drm_mode_size_dumb(dev, args, 16 * args->bpp / 8, 0);
-         |               ^~~~~~~~~~~~~~~~~~
-         |               drm_mode_set_name
-
-
-vim +80 drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c
-
-    70	
-    71	/* -----------------------------------------------------------------------------
-    72	 * Frame buffer
-    73	 */
-    74	
-    75	int rzg2l_du_dumb_create(struct drm_file *file, struct drm_device *dev,
-    76				 struct drm_mode_create_dumb *args)
-    77	{
-    78		int ret;
-    79	
-  > 80		ret = drm_mode_size_dumb(dev, args, 16 * args->bpp / 8, 0);
-    81		if (ret)
-    82			return ret;
-    83	
-    84		return drm_gem_dma_dumb_create_internal(file, dev, args);
-    85	}
-    86	
-
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index 719b0a48ff55..c33ff33d4da2 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -322,6 +322,7 @@ pub fn is_empty(&self) -> bool {
+     /// Fails with [`EFAULT`] if the write happens on a bad address, or if the write goes out of
+     /// bounds of this [`UserSliceWriter`]. This call may modify the associated userspace slice even
+     /// if it returns an error.
++    #[inline]
+     pub fn write_slice(&mut self, data: &[u8]) -> Result {
+         let len = data.len();
+         let data_ptr = data.as_ptr().cast::<c_void>();
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
