@@ -1,193 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89937264FB5;
-	Thu, 13 Mar 2025 10:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BDC1EE7C4
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 10:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741861819; cv=none; b=LzuctnxxcRqJJKOgfHkNfU3RyDKjhrJP/i5V3DogpSXvaHrJI5OAWVf9dg3A92SZk1lI5IweOaUZ5tVcOCM8ZjkReuq0WY8WlHXFC2HuFDnDRuKsudvNWgCmof5mYDJRb7lBXI90dv9DdVMKNxcH8Dr+/nZQSE6NhVdttWoW7dg=
+	t=1741862852; cv=none; b=carkPZIsaAkUdN7YsXsK7+GUeM4i4gTw6oOAYwK3n8n4d9xpuFUOEw1N+tak7bt9TWfeqJU6ZXCkqh5yRtYR2wx25dM/tlKiTi7UERXiJP7dZFY/XjYCK6N3DIF069TqscAdkYYHdFXB8Y42ypK/w+WyGP7YLbmdRFWa0pKbnNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741861819; c=relaxed/simple;
-	bh=QEvxVG8I/hTVZKOvqF1lYUikB1WAzIg+p5U+9zryPT0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SGQV1dZW26pb37q5V/vdr77xp8/ve+SFHeGLVzVDcgBl9gGl+4+ErxrwREZRRQHcTP7R6w2pmv1WKyorVoIlYPn0Dcl1rSCUXjWg3YccXtLXw2Vxtfm5DEao5suAxPfT/+Irs8ZB5UTWaVxpzrR6tBT+U+wDRIzxJV60A8wPvz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gsk66exq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741862852; c=relaxed/simple;
+	bh=LP5eXeugNTen1bBkv90xRuq2BmM2qnVG2bEcP7+53GM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=dnKzxCR5vAlKBH3lR3HHAgB2aBzWJT6j3erU0RqHKDkb5U/ESO0TaP1vVyVRWYuYIdmNUeWPKNsNKKMNxkC2VHMYstsXOpr+IiNypHYfs6mmmwRpQZf4t20xKg3KQuRLn4k1ro+Mqc2EiHmRfAb9DvsEj9bwuXfSPlDShcZshm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yMzbFued; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gsk66exq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192BDC4CEEB;
-	Thu, 13 Mar 2025 10:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741861819;
-	bh=QEvxVG8I/hTVZKOvqF1lYUikB1WAzIg+p5U+9zryPT0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gsk66exqBT/kKfea0fo4Q+0PXcBK0s4a3sQigv+rvzP4d4w2XK1YQERTbFUgUmxBp
-	 ajc7+UuXPVswVpY/MgdzOCPPqFEPMZRe5HS/PlS6Es+uXvGw4Dbp/I7Uqdk+xI94a4
-	 yyVjGgU5aqhZymraWi0rnwcOp88dXSXNEq4W5RYg2lAKej/F6aEVU7WQg8cNTbLqCK
-	 v4ZIDX5mtv+2PtqB1hEsHA3UZ+Y9qFm5JAJbYfyioVGXHo9QXwHHGwIb31mCB+8Mqw
-	 GGo52/0ybPbADOqaSZhtOEcz/EjwEGo44RVi+rfGANjxXjHu5mMfhhiY4SVqdMflkK
-	 rVMDVzGILcrAw==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-30bfe0d2b6dso8587741fa.3;
-        Thu, 13 Mar 2025 03:30:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVUiGMqdzuYAkXqXiz0y4BFbrHDrNzUYCDTv9SpnE9NW2YD1qDjf/vSENga53BC4ihPsPkyqbqUgSzOzFtRpQ==@lists.linux.dev, AJvYcCXNEjLmJz0kCWaPXtcKVdjF5s+uYfsE8Yr0OWXSg+T1tQ3dW3Uo+Hu3VykWgqPegQ1cwDOS@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBDcp3mizPV8SPW0JYOG/CdQkWmoZLos+So0hFBaGcXwQv+xWI
-	K9D+j08Whw6FgznHcY2E5Cd6sbE4IlRWLfBh3j5L0eShPJDolSGAt1wnQn/ulW6M8gL/sx9TzzZ
-	J7+ZYT6P604VTsjmB7ay242xtr5c=
-X-Google-Smtp-Source: AGHT+IHYqyvlbFJWpUpXNCxWAr3gQGfo/B1oVwVdpaiXhvEQDZmER5taQn2phFdz+AWOWgVByaE0iZNyjmX15WzStcU=
-X-Received: by 2002:a05:6512:2342:b0:549:8b24:988f with SMTP id
- 2adb3069b0e04-54990da2790mr8737978e87.0.1741861817726; Thu, 13 Mar 2025
- 03:30:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yMzbFued"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43d0830c3f7so6003385e9.2
+        for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 03:47:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741862848; x=1742467648; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NQ9g0Gaavw77PwDpx2+pgwcbpRIgEDZUZKLzgDfdqpQ=;
+        b=yMzbFuedB2VPF+G5ZsRic9SDbKHVoOAuVOxYrsIrWYqiAqrfjTVtmfT2wlnFd67eIm
+         RE4PfOqI2P62BrXkKgX++VCwSdVVhsW0YvIg+Ewt6P7ixvgrtrXh2VslXT6QO6bR6Z2K
+         b95WlwlnV3WTMKnDQ/3+UdnlSShyNNzBBV7uYRmu4MEIq3KlFJSOqknZILF5fPh1FvLM
+         dRtBy0ohz910jw+GjYoQdZtwDYXHEvwJhiYTLfUFOsnVYA/kGeqbNn4OmVDHyFOt9zPd
+         /zppNOVczES8lArpG4NGbE1OLOUiHWOV7cLasHAnHgX3+NxOypu0lVdD7Vy/qrEw3P2H
+         pqNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741862848; x=1742467648;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NQ9g0Gaavw77PwDpx2+pgwcbpRIgEDZUZKLzgDfdqpQ=;
+        b=Jna6Wyg+0Nxo0uYvWX+FJE09h3ZFDHgBDOvyVePCprVV37s7G/jq6HzJQ6q8bto4fj
+         BRcdn18KZq5PunVmBE7Hrt2HGeSq6ZBRh4k32W3auKMrYIX3IesSWB7mBKxMQGBUp7JR
+         Fhyu5k9GM8JzF86h0GZYgHHlV5AVjAalSRRtmWsusY+hRe2rY9nyAS0Bf+lUvoG8o5Ds
+         nJzFndwQ0OVUb2dBVLYuF1l/O2vsitOEUz2qziMUqefwPggdxdB6ATSac1+ymsQGol7a
+         y/g29W4SuCRqsxH8F6grdeKjmXIk9jIOU6ljUrqy3MjBAa2smB6nDKSA+pqXF1b8R0RL
+         Eldg==
+X-Forwarded-Encrypted: i=1; AJvYcCWH7zeBQpy0gUvZcgVRopSXMQb6PHTtFYAhtRRjKvXxk415t9Fz/9ocUwa45kZi4tfNcJhV@lists.linux.dev
+X-Gm-Message-State: AOJu0YzCnGeK6H6neRLudfZ2sq+dgHauY67ZPho+q2rZjdz7Hm/COIOa
+	tQ30zJVW0PdlQ7r7xg6teW8kgWaFQ5zhX1TOEymOaek5Zmhoe2i4B+Tk5wAZfSnm6L6jTgQS/+t
+	xYkeuxRMpQfJc2w==
+X-Google-Smtp-Source: AGHT+IFnP3JhBHMfVAgiBjDgec8Dj8Ys+oEmuI/lcu/U/vWhF0K6dANq8oFHYUxugoP1r6AAO5LgIu0hY38u4Vs=
+X-Received: from wmbbh12.prod.google.com ([2002:a05:600c:3d0c:b0:43c:e9df:2ecd])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:b95:b0:43c:ec97:75db with SMTP id 5b1f17b1804b1-43cec97779fmr192265835e9.11.1741862848323;
+ Thu, 13 Mar 2025 03:47:28 -0700 (PDT)
+Date: Thu, 13 Mar 2025 10:47:26 +0000
+In-Reply-To: <20250313084525.773620-1-kunwu.chan@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
- <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com> <CAMj1kXEZccymq1OhXErSK+prS3L7sygm7_5_1v+j2cypncQuzA@mail.gmail.com>
-In-Reply-To: <CAMj1kXEZccymq1OhXErSK+prS3L7sygm7_5_1v+j2cypncQuzA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 13 Mar 2025 19:29:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT_NRio2pkR1Km5Nq8KM38zYF7VCoGP0OjEP_Owg-ukpQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JrvxKSzDk58nqsT3nejvFSY6kfeqbfgNaL4ldnTl0LmsnwFvj15KgRa8Ec
-Message-ID: <CAK7LNAT_NRio2pkR1Km5Nq8KM38zYF7VCoGP0OjEP_Owg-ukpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
- relocations preserved
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, x86@kernel.org, Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20250313084525.773620-1-kunwu.chan@linux.dev>
+Message-ID: <Z9K3vokYu5osMCwh@google.com>
+Subject: Re: [PATCH] rust: file: optimize rust symbol generation for FileDescriptorReservation
+From: Alice Ryhl <aliceryhl@google.com>
+To: Kunwu Chan <kunwu.chan@linux.dev>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, 
+	Grace Deng <Grace.Deng006@gmail.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Mar 13, 2025 at 7:18=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
->
-> On Thu, 13 Mar 2025 at 10:34, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> wrote:
-> > >
-> > > Hi Ard,
-> > >
-> > > kernel test robot noticed the following build errors:
-> > >
-> > > [auto build test ERROR on masahiroy-kbuild/for-next]
-> > > [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s390/fe=
-atures linus/master v6.14-rc6 next-20250312]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a not=
-e.
-> > > And when submitting patch, we suggest to use '--base' as documented i=
-n
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > >
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel=
-/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-190926
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/lin=
-ux-kbuild.git for-next
-> > > patch link:    https://lore.kernel.org/r/20250311110616.148682-9-ardb=
-%2Bgit%40google.com
-> > > patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux bui=
-ld with relocations preserved
-> > > config: x86_64-randconfig-076-20250313 (https://download.01.org/0day-=
-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
-> > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
-rchive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
-version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb6CfjhT=
--lkp@intel.com/
-> > >
-> > > All errors (new ones prefixed by >>):
-> > >
-> > > >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot open f=
-ile `vmlinux.map' for reading: No such file or directory
-> > >
-> >
-> > Hmm it seems I missed some things in link-vmlinux.sh - I will take a lo=
-ok.
->
-> We'd need something like the below applied on top - shall I send a v3?
+On Thu, Mar 13, 2025 at 04:45:25PM +0800, Kunwu Chan wrote:
+> From: Kunwu Chan <kunwu.chan@hotmail.com>
+> 
+> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+> with ARCH=arm64, the following symbols are generated:
+> 
+> $ nm vmlinux | grep ' _R'.*FileDescriptorReservation | rustfilt
+> ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>
+> 						::fd_install
+> ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>
+> 						::get_unused_fd_flags
+> ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation
+> 					 as core::ops::drop::Drop>::drop
+> 
+> These Rust symbols are trivial wrappers around the C functions
+> fd_install, put_unused_fd and put_task_struct.It
+> doesn't make sense to go through a trivial wrapper for these
+> functions, so mark them inline.
+> 
+> After doing so, the above symbol will not in output.
+> 
+> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
 
+A few notes:
 
-I will insert this before you patch set.
-https://lore.kernel.org/linux-kbuild/20250313102604.1491732-1-masahiroy@ker=
-nel.org/T/#u
+* Your own Signed-off-by must always be last.
+* You're missing Link: and Suggested-by: tags.
+* There are some grammar issues, e.g. a missing space before "It" and
+  the phrase "will not in output" is not good.
+* Let's also add the marker to `reserved_fd` to be on the safe side.
+* I think it is easier to read the symbols if you list each sybmol on
+  one line like this:
 
-I would have done this earlier.
-That is simply because I always run out of my time
-and I do not have time to fix issues before someone stumbles on them.
+ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>::fd_install
+ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>::get_unused_fd_flags
+ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation as core::ops::drop::Drop>::drop
 
-
-
->
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -46,6 +46,7 @@
->
->  # Link of vmlinux
->  # ${1} - output file
-> +# ${2} - map file
->  vmlinux_link()
->  {
->         local output=3D${1}
-> @@ -99,7 +100,7 @@ vmlinux_link()
->         fi
->
->         if is_enabled CONFIG_VMLINUX_MAP; then
-> -               ldflags=3D"${ldflags} ${wl}-Map=3D${output}.map"
-> +               ldflags=3D"${ldflags} ${wl}-Map=3D${2}"
->         fi
->
->         ${ld} ${ldflags} -o ${output}                                   \
-> @@ -185,7 +186,7 @@
->  {
->         rm -f .btf.*
->         rm -f System.map
-> -       rm -f vmlinux
-> +       rm -f ${VMLINUX}
->         rm -f vmlinux.map
->  }
->
-> @@ -224,7 +225,7 @@
->                 strip_debug=3D1
->         fi
->
-> -       vmlinux_link .tmp_vmlinux1
-> +       vmlinux_link .tmp_vmlinux1 .tmp_vmlinux1.map
->  fi
->
->  if is_enabled CONFIG_DEBUG_INFO_BTF; then
-> @@ -267,19 +268,19 @@
->         sysmap_and_kallsyms .tmp_vmlinux1
->         size1=3D$(${CONFIG_SHELL} "${srctree}/scripts/file-size.sh" ${kal=
-lsymso})
->
-> -       vmlinux_link .tmp_vmlinux2
-> +       vmlinux_link .tmp_vmlinux2 .tmp_vmlinux2.map
->         sysmap_and_kallsyms .tmp_vmlinux2
->         size2=3D$(${CONFIG_SHELL} "${srctree}/scripts/file-size.sh" ${kal=
-lsymso})
->
->         if [ $size1 -ne $size2 ] || [ -n "${KALLSYMS_EXTRA_PASS}" ]; then
-> -               vmlinux_link .tmp_vmlinux3
-> +               vmlinux_link .tmp_vmlinux3 .tmp_vmlinux3.map
->                 sysmap_and_kallsyms .tmp_vmlinux3
->         fi
->  fi
->
->  strip_debug=3D
->
-> -vmlinux_link "${VMLINUX}"
-> +vmlinux_link "${VMLINUX}" vmlinux.map
->
->  # fill in BTF IDs
->  if is_enabled CONFIG_DEBUG_INFO_BTF; then
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+Alice
