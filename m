@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB27E2E338A;
-	Thu, 13 Mar 2025 00:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C85110E3;
+	Thu, 13 Mar 2025 00:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741825169; cv=none; b=Ru/6iN66WWGvKWiPSTNicS62yzSjkILEmdC8JXo//ua4O5yVdDMgZrIHtoJz8Rplj57r5Fhbb6INDro5s1dADypI2zCt5j09inWGD1HuZOwzBB046OseXNLGZOz7MC2O2kE2XZjhHKhUJ0ZGBYDhj9ncKEiDxKNOZOiOrqWtZuw=
+	t=1741826480; cv=none; b=s3E2GqTXmLxbd3lzKyIA9+B+xO9OdwD6Y5SYNCOY4dxDec0El1BdaeKih3vHmkly0NXuc4blC+8PBsfI/TxtWbbgqqJaubPNzHE/QKG07pwiD9uOa4/uubjKA+2Gl4UeixsN2CN46un621ktgwIPDedYut15kxY3dZ2oOgSmYno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741825169; c=relaxed/simple;
-	bh=yu3Oow6Z5U8wZBWXRfew/3Fc8JvXf2c0HEs9fMAnz4k=;
+	s=arc-20240116; t=1741826480; c=relaxed/simple;
+	bh=qg4wkcrZqdQahc+sBAwx21I9SGHYFcxuktnWsZUwsEg=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CtALdButj+XQOso0C5Efi9SW5qV1BTHK1UP1/NHz6BcXbWqZfKIRj04Xb20CgD33qiQSXLJHkdPHOk+gapTj4qHwfdBuLeGU/M4LX2mkllkBQEs/dEshxn5nyQ7aKJvWc7oDlLvr+nwgG46FG04Icn8EDaduALceThAtjQgSs7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KG6LPYDN; arc=none smtp.client-ip=192.198.163.17
+	 Content-Disposition; b=OJEIpEaaEU7LxOlC+qamj5/mGQCG/Ujp11Nmxy7oaYySktF6IGRRQ40uU77C/JHaDI6+E+KNJRxGiCpUSq05TzzvsaR7Fo508576NIYFAz6EEpreFJu8jSLKdbNurCzq1qFdRRCJSKzaQz6zwM+N07G8/dqtNjl1xsoW33ATMgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iJmsWW9I; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KG6LPYDN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iJmsWW9I"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741825167; x=1773361167;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yu3Oow6Z5U8wZBWXRfew/3Fc8JvXf2c0HEs9fMAnz4k=;
-  b=KG6LPYDNdUElysNrNjDupiCAUAJ/ihcvvVsIJuOelo4VGZXwSSZ/GImN
-   NWtbY/lEpnOQk7B/QffxG1bmhIltvB2vAFFOIAbw/pNhdNTp90v82fsQ9
-   4FewLcmzufxDSG6HHAUVFgrgOlcLR8MT/KlAwBVVpD3G2PSkssBKtKjut
-   1xogN/NfTOKinOafboaEciYdZPB8pI34DRjwEAP0XXMzGOlToMsrXk2hV
-   OHGWTqkZSg2EaYuESz6o3spvw/2geKCEs+1ZLfbRXjKQ0OfrNJeU7+psA
-   YxYleaZyYCqSVsLpCucrAI6ZI8sraDiatTubHimaxCKOhSGSSiPb73FYg
-   w==;
-X-CSE-ConnectionGUID: Y6c+7o1ZRYWLe3R/uU2lsQ==
-X-CSE-MsgGUID: dEqo6mMKQxaswFcbK1tDhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42804290"
+  t=1741826478; x=1773362478;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qg4wkcrZqdQahc+sBAwx21I9SGHYFcxuktnWsZUwsEg=;
+  b=iJmsWW9IPdQ1HovBIAYKbkYn3llVtRUw3U5x68lBDbPRlDyE+IO8JrJL
+   fJQnNUxee3vYxUQLqT00GlQG0ImAhN9vCEHHigk1h7t8jflWNn2nUoC2s
+   z5T/P4LpEgLOP03dSRmS8zSvsXbh2AU2oA6r2frXAXJfcreFPJeGY4+t6
+   AWFX+gvgi//I7BSm/XFdeI6ifkHWxA2QnIZC47ohkZwzsvISo51FtzI8m
+   10Jo+Sxi7oQ97gB38fofkc8FU70xet48A9HUEvnbAO+9gCuLZdJx8Yhl2
+   1pTNxZmntJ6vOhjmmPzD/9C6tMl4x4eze7zvPske89oQry5jCk3zks63y
+   g==;
+X-CSE-ConnectionGUID: o12QYmSxTMqTr5xCqWoQyA==
+X-CSE-MsgGUID: Jof6ID3KTLOQJPOyOV7qgQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="46836119"
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="42804290"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:19:26 -0700
-X-CSE-ConnectionGUID: kHtqYG9CSNCD2F9xVmtqeg==
-X-CSE-MsgGUID: 0RTL82vcSFqYlTW3vrxm/Q==
+   d="scan'208";a="46836119"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:41:18 -0700
+X-CSE-ConnectionGUID: 3nO+JddHSnKIyH/21LSluw==
+X-CSE-MsgGUID: TJX4JyxWRh6p8sSYOhk/jg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="124957152"
+   d="scan'208";a="121026618"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 17:19:25 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 12 Mar 2025 17:41:16 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsWIE-00090A-2b;
-	Thu, 13 Mar 2025 00:19:22 +0000
-Date: Thu, 13 Mar 2025 08:19:08 +0800
+	id 1tsWdN-000912-2w;
+	Thu, 13 Mar 2025 00:41:13 +0000
+Date: Thu, 13 Mar 2025 08:40:42 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 41/45] fs/ceph/inode.c:2373:48: warning:
- variable 'pos' is uninitialized when used here
-Message-ID: <202503130859.mdjcTREO-lkp@intel.com>
+Subject: [dhowells-fs:ceph-iter 45/45] net/ceph/messenger_v2.c:1718:29:
+ warning: variable 'enc_page_cnt' is uninitialized when used here
+Message-ID: <202503130859.hiq9p5zB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,473 +61,183 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.g=
-it ceph-iter
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
 head:   0ce16824859c4d7209abe27da17e23679b6c7c69
-commit: ad803558dd62a6ec29196f0a62d96a13e57e5135 [41/45] ceph: Use netfslib
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20250=
-313/202503130859.mdjcTREO-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15=
-545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
-/20250313/202503130859.mdjcTREO-lkp@intel.com/reproduce)
+commit: 0ce16824859c4d7209abe27da17e23679b6c7c69 [45/45] ceph: Don't use data_pages
+config: i386-buildonly-randconfig-003-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130859.hiq9p5zB-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130859.hiq9p5zB-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new versio=
-n of
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130859.mdjcTREO-lkp@i=
-ntel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130859.hiq9p5zB-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/ceph/inode.c:2373:48: warning: variable 'pos' is uninitialized when u=
-sed here [-Wuninitialized]
-    2373 |         ret =3D netfs_unbuffered_read_from_inode(inode, pos, &it=
-er, true);
-         |                                                       ^~~
-   fs/ceph/inode.c:2341:12: note: initialize the variable 'pos' to silence =
-this warning
-    2341 |         loff_t pos, orig_pos =3D round_down(attr->ia_size,
-         |                   ^
-         |                    =3D 0
-   1 warning generated.
---
->> fs/ceph/rdwr.c:975:66: warning: variable 'len' is uninitialized when use=
-d here [-Wuninitialized]
-     975 |         err =3D ceph_get_caps(vma->vm_file, CEPH_CAP_FILE_WR, wa=
-nt, off + len, &got);
-         |                                                                 =
-        ^~~
-   fs/ceph/rdwr.c:956:12: note: initialize the variable 'len' to silence th=
-is warning
-     956 |         size_t len;
-         |                   ^
-         |                    =3D 0
-   1 warning generated.
---
-   fs/netfs/direct_read.c:403:47: warning: variable 'rreq' is uninitialized=
- when used here [-Wuninitialized]
-   403 |         if (test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags) =
-&&
-   |                                                      ^~~~
-   include/linux/bitops.h:61:50: note: expanded from macro 'test_bit'
-   61 | #define test_bit(nr, addr)              bitop(_test_bit, nr, addr)
-   |                                                              ^~~~
-   include/linux/bitops.h:45:37: note: expanded from macro 'bitop'
-   45 |           __builtin_constant_p((uintptr_t)(addr) !=3D (uintptr_t)NU=
-LL) &&       |                                            ^~~~
-   fs/netfs/direct_read.c:395:31: note: initialize the variable 'rreq' to s=
-ilence this warning
-   395 |         struct netfs_io_request *rreq;
-   |                                      ^
-   |                                       =3D NULL
->> error: invalid instruction packet: slot error
-   fatal error: error in backend: Not supported instr: <MCInst 11 <MCOperan=
-d Reg:119>>
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0.	Program arguments: clang -Wp,-MMD,fs/netfs/.direct_read.o.d -nostdinc=
- -Iarch/hexagon/include -I./arch/hexagon/include/generated -Iinclude -I./in=
-clude -Iarch/hexagon/include/uapi -I./arch/hexagon/include/generated/uapi -=
-Iinclude/uapi -I./include/generated/uapi -include include/linux/compiler-ve=
-rsion.h -include include/linux/kconfig.h -include include/linux/compiler_ty=
-pes.h -D__KERNEL__ --target=3Dhexagon-linux-musl -fintegrated-as -fmacro-pr=
-efix-map=3D=3D -Wundef -DKBUILD_EXTRA_WARN1 -std=3Dgnu11 -fshort-wchar -fun=
-signed-char -fno-common -fno-PIE -fno-strict-aliasing -G0 -fno-short-enums =
--mlong-calls -ffixed-r19 -DTHREADINFO_REG=3Dr19 -D__linux__ -fno-delete-nul=
-l-pointer-checks -O2 -fno-stack-protector -fno-omit-frame-pointer -fno-opti=
-mize-sibling-calls -ftrivial-auto-var-init=3Dpattern -fstrict-flex-arrays=
-=3D3 -fno-strict-overflow -fno-stack-check -Wall -Wundef -Werror=3Dimplicit=
--function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Werror=
-=3Dstrict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address=
- -Wno-address-of-packed-member -Wmissing-declarations -Wmissing-prototypes =
--Wframe-larger-than=3D1024 -Wno-gnu -Wno-format-overflow-non-kprintf -Wno-f=
-ormat-truncation-non-kprintf -Wvla -Wno-pointer-sign -Wcast-function-type -=
-Wimplicit-fallthrough -Werror=3Ddate-time -Werror=3Dincompatible-pointer-ty=
-pes -Wenum-conversion -Wextra -Wunused -Wmissing-format-attribute -Wmissing=
--include-dirs -Wunused-const-variable -Wno-missing-field-initializers -Wno-=
-type-limits -Wno-shift-negative-value -Wno-enum-enum-conversion -Wno-sign-c=
-ompare -Wno-unused-parameter -DRANDSTRUCT -frandomize-layout-seed-file=3D./=
-scripts/basic/randstruct.seed -Wtautological-compare -Wno-error=3Dreturn-ty=
-pe -Wreturn-type -Wcast-function-type -funsigned-char -Wundef -fstrict-flex=
--arrays=3D3 -Wformat-overflow -Wformat-truncation -Wenum-conversion -Ifs/ne=
-tfs -Ifs/netfs -DMODULE -mlong-calls -DKBUILD_BASENAME=3D"direct_read" -DKB=
-UILD_MODNAME=3D"netfs" -D__KBUILD_MODNAME=3Dkmod_netfs -c -o fs/netfs/direc=
-t_read.o fs/netfs/direct_read.c
-   1.	<eof> parser at end of file
-   2.	Code generation
-   3.	Running pass 'Function Pass Manager' on module 'fs/netfs/direct_read.=
-c'.
-   4.	Running pass 'Hexagon Assembly Printer' on function '@netfs_unbuffere=
-d_read_from_inode'
-   #0 0x0000563eba23c94b llvm::sys::PrintStackTrace(llvm::raw_ostream&, int=
-) (clang-21+0x3b4194b)
-   #1 0x0000563eba23a8e4 llvm::sys::CleanupOnSignal(unsigned long) (clang-2=
-1+0x3b3f8e4)
-   #2 0x0000563eba18b8d3 llvm::CrashRecoveryContext::HandleExit(int) (clang=
--21+0x3a908d3)
-   #3 0x0000563eba23246e llvm::sys::Process::Exit(int, bool) (clang-21+0x3b=
-3746e)
-   #4 0x0000563eb750da5a LLVMErrorHandler(void*, char const*, bool) cc1_mai=
-n.cpp:0:0
-   #5 0x0000563eba196359 llvm::report_fatal_error(llvm::Twine const&, bool)=
- (clang-21+0x3a9b359)
-   #6 0x0000563eba1964ca (clang-21+0x3a9b4ca)
-   #7 0x0000563eb83c806f llvm::HexagonMCCodeEmitter::getBinaryCodeForInstr(=
-llvm::MCInst const&, llvm::SmallVectorImpl<llvm::MCFixup>&, llvm::MCSubtarg=
-etInfo const&) const (clang-21+0x1ccd06f)
-   #8 0x0000563eb83d278b llvm::HexagonMCCodeEmitter::encodeSingleInstructio=
-n(llvm::MCInst const&, llvm::SmallVectorImpl<char>&, llvm::SmallVectorImpl<=
-llvm::MCFixup>&, llvm::MCSubtargetInfo const&, unsigned int) const (clang-2=
-1+0x1cd778b)
-   #9 0x0000563eb83d2925 llvm::HexagonMCCodeEmitter::encodeInstruction(llvm=
-::MCInst const&, llvm::SmallVectorImpl<char>&, llvm::SmallVectorImpl<llvm::=
-MCFixup>&, llvm::MCSubtargetInfo const&) const (clang-21+0x1cd7925)
-   #10 0x0000563eb9f2e410 llvm::MCELFStreamer::emitInstToFragment(llvm::MCI=
-nst const&, llvm::MCSubtargetInfo const&) (clang-21+0x3833410)
-   #11 0x0000563eb81b99f5 llvm::HexagonAsmPrinter::emitInstruction(llvm::Ma=
-chineInstr const*) (clang-21+0x1abe9f5)
-   #12 0x0000563ebb2007b3 llvm::AsmPrinter::emitFunctionBody() (clang-21+0x=
-4b057b3)
-   #13 0x0000563eb81b8500 llvm::HexagonAsmPrinter::runOnMachineFunction(llv=
-m::MachineFunction&) (clang-21+0x1abd500)
-   #14 0x0000563eb965cd2e llvm::MachineFunctionPass::runOnFunction(llvm::Fu=
-nction&) (.part.0) MachineFunctionPass.cpp:0:0
-   #15 0x0000563eb9bc25a9 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (clang-21+0x34c75a9)
-   #16 0x0000563eb9bc275c llvm::FPPassManager::runOnModule(llvm::Module&) (=
-clang-21+0x34c775c)
-   #17 0x0000563eb9bc196c llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (clang-21+0x34c696c)
-   #18 0x0000563eba4d8960 clang::emitBackendOutput(clang::CompilerInstance&=
-, clang::CodeGenOptions&, llvm::StringRef, llvm::Module*, clang::BackendAct=
-ion, llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem>, std::unique_ptr<llvm:=
-:raw_pwrite_stream, std::default_delete<llvm::raw_pwrite_stream>>, clang::B=
-ackendConsumer*) (clang-21+0x3ddd960)
-   #19 0x0000563ebab5b4a0 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (clang-21+0x44604a0)
-   #20 0x0000563ebc2e35bc clang::ParseAST(clang::Sema&, bool, bool) (clang-=
-21+0x5be85bc)
-   #21 0x0000563ebae44f31 clang::FrontendAction::Execute() (clang-21+0x4749=
-f31)
-   #22 0x0000563ebadbc18b clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (clang-21+0x46c118b)
-   #23 0x0000563ebaf14827 clang::ExecuteCompilerInvocation(clang::CompilerI=
-nstance*) (clang-21+0x4819827)
-   #24 0x0000563eb750f6d0 cc1_main(llvm::ArrayRef<char const*>, char const*=
-, void*) (clang-21+0xe146d0)
-   #25 0x0000563eb750829a ExecuteCC1Tool(llvm::SmallVectorImpl<char const*>=
-&, llvm::ToolContext const&) driver.cpp:0:0
-   #26 0x0000563ebaba8699 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<std::optional<llvm::StringRe=
-f>>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocato=
-r<char>>*, bool*) const::'lambda'()>(long) Job.cpp:0:0
-   #27 0x0000563eba18b7d3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (clang-21+0x3a907d3)
-   #28 0x0000563ebaba8a29 clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<std::optional<llvm::StringRef>>, std::__cxx11::basic_string<char, std::cha=
-r_traits<char>, std::allocator<char>>*, bool*) const (.part.0) Job.cpp:0:0
-   #29 0x0000563ebab6cd7c clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const*&, bool) const (clang=
--21+0x4471d7c)
-   #30 0x0000563ebab6dd79 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand const*>>&, bool) const (clang-21+0x4472d79)
-   #31 0x0000563ebab8128c clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand const*>>&) (clang-21+0x448628c)
-   #32 0x0000563eb750c5ee clang_main(int, char**, llvm::ToolContext const&)=
- (clang-21+0xe115ee)
-   #33 0x0000563eb73d9633 main (clang-21+0xcde633)
-   #34 0x00007faf85dd424a (/lib/x86_64-linux-gnu/libc.so.6+0x2724a)
-   #35 0x00007faf85dd4305 __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x27305)
-   #36 0x0000563eb7507a91 _start (clang-21+0xe0ca91)
-   clang: error: clang frontend command failed with exit code 70 (use -v to=
- see invocation)
-   clang version 21.0.0git (git://gitmirror/llvm_project e15545cad8297ec755=
-5f26e5ae74a9f0511203e7)
-   Target: hexagon-unknown-linux-musl
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-e15545cad8/bin
-   clang: note: diagnostic msg:
-   ********************
---
-   direct_read.c:403:47: warning: variable 'rreq' is uninitialized when use=
-d here [-Wuninitialized]
-   403 |         if (test_bit(NETFS_RREQ_CONTENT_ENCRYPTION, &rreq->flags) =
-&&
-   |                                                      ^~~~
-   include/linux/bitops.h:61:50: note: expanded from macro 'test_bit'
-   61 | #define test_bit(nr, addr)              bitop(_test_bit, nr, addr)
-   |                                                              ^~~~
-   include/linux/bitops.h:45:37: note: expanded from macro 'bitop'
-   45 |           __builtin_constant_p((uintptr_t)(addr) !=3D (uintptr_t)NU=
-LL) &&       |                                            ^~~~
-   direct_read.c:395:31: note: initialize the variable 'rreq' to silence th=
-is warning
-   395 |         struct netfs_io_request *rreq;
-   |                                      ^
-   |                                       =3D NULL
->> error: invalid instruction packet: slot error
-   fatal error: error in backend: Not supported instr: <MCInst 11 <MCOperan=
-d Reg:119>>
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0.	Program arguments: clang -Wp,-MMD,./.direct_read.o.d -nostdinc -Iarch=
-/hexagon/include -Iarch/hexagon/include/generated -Iinclude -Iinclude -Iarc=
-h/hexagon/include/uapi -Iarch/hexagon/include/generated/uapi -Iinclude/uapi=
- -Iinclude/generated/uapi -include include/linux/compiler-version.h -includ=
-e include/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNE=
-L__ --target=3Dhexagon-linux-musl -fintegrated-as -Wundef -DKBUILD_EXTRA_WA=
-RN1 -std=3Dgnu11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno-st=
-rict-aliasing -G0 -fno-short-enums -mlong-calls -ffixed-r19 -DTHREADINFO_RE=
-G=3Dr19 -D__linux__ -fno-delete-null-pointer-checks -O2 -fno-stack-protecto=
-r -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-in=
-it=3Dpattern -fstrict-flex-arrays=3D3 -fno-strict-overflow -fno-stack-check=
- -Wall -Wundef -Werror=3Dimplicit-function-declaration -Werror=3Dimplicit-i=
-nt -Werror=3Dreturn-type -Werror=3Dstrict-prototypes -Wno-format-security -=
-Wno-trigraphs -Wno-frame-address -Wno-address-of-packed-member -Wmissing-de=
-clarations -Wmissing-prototypes -Wframe-larger-than=3D1024 -Wno-gnu -Wno-fo=
-rmat-overflow-non-kprintf -Wno-format-truncation-non-kprintf -Wvla -Wno-poi=
-nter-sign -Wcast-function-type -Wimplicit-fallthrough -Werror=3Ddate-time -=
-Werror=3Dincompatible-pointer-types -Wenum-conversion -Wextra -Wunused -Wmi=
-ssing-format-attribute -Wmissing-include-dirs -Wunused-const-variable -Wno-=
-missing-field-initializers -Wno-type-limits -Wno-shift-negative-value -Wno-=
-enum-enum-conversion -Wno-sign-compare -Wno-unused-parameter -DRANDSTRUCT -=
-frandomize-layout-seed-file=3Dscripts/basic/randstruct.seed -Wtautological-=
-compare -Wno-error=3Dreturn-type -Wreturn-type -Wcast-function-type -funsig=
-ned-char -Wundef -fstrict-flex-arrays=3D3 -Wformat-overflow -Wformat-trunca=
-tion -Wenum-conversion -DMODULE -mlong-calls -DKBUILD_BASENAME=3D"direct_re=
-ad" -DKBUILD_MODNAME=3D"netfs" -D__KBUILD_MODNAME=3Dkmod_netfs -c -o direct=
-_read.o direct_read.c
-   1.	<eof> parser at end of file
-   2.	Code generation
-   3.	Running pass 'Function Pass Manager' on module 'direct_read.c'.
-   4.	Running pass 'Hexagon Assembly Printer' on function '@netfs_unbuffere=
-d_read_from_inode'
-   #0 0x000055c1f925794b llvm::sys::PrintStackTrace(llvm::raw_ostream&, int=
-) (clang-21+0x3b4194b)
-   #1 0x000055c1f92558e4 llvm::sys::CleanupOnSignal(unsigned long) (clang-2=
-1+0x3b3f8e4)
-   #2 0x000055c1f91a68d3 llvm::CrashRecoveryContext::HandleExit(int) (clang=
--21+0x3a908d3)
-   #3 0x000055c1f924d46e llvm::sys::Process::Exit(int, bool) (clang-21+0x3b=
-3746e)
-   #4 0x000055c1f6528a5a LLVMErrorHandler(void*, char const*, bool) cc1_mai=
-n.cpp:0:0
-   #5 0x000055c1f91b1359 llvm::report_fatal_error(llvm::Twine const&, bool)=
- (clang-21+0x3a9b359)
-   #6 0x000055c1f91b14ca (clang-21+0x3a9b4ca)
-   #7 0x000055c1f73e306f llvm::HexagonMCCodeEmitter::getBinaryCodeForInstr(=
-llvm::MCInst const&, llvm::SmallVectorImpl<llvm::MCFixup>&, llvm::MCSubtarg=
-etInfo const&) const (clang-21+0x1ccd06f)
-   #8 0x000055c1f73ed78b llvm::HexagonMCCodeEmitter::encodeSingleInstructio=
-n(llvm::MCInst const&, llvm::SmallVectorImpl<char>&, llvm::SmallVectorImpl<=
-llvm::MCFixup>&, llvm::MCSubtargetInfo const&, unsigned int) const (clang-2=
-1+0x1cd778b)
-   #9 0x000055c1f73ed925 llvm::HexagonMCCodeEmitter::encodeInstruction(llvm=
-::MCInst const&, llvm::SmallVectorImpl<char>&, llvm::SmallVectorImpl<llvm::=
-MCFixup>&, llvm::MCSubtargetInfo const&) const (clang-21+0x1cd7925)
-   #10 0x000055c1f8f49410 llvm::MCELFStreamer::emitInstToFragment(llvm::MCI=
-nst const&, llvm::MCSubtargetInfo const&) (clang-21+0x3833410)
-   #11 0x000055c1f71d49f5 llvm::HexagonAsmPrinter::emitInstruction(llvm::Ma=
-chineInstr const*) (clang-21+0x1abe9f5)
-   #12 0x000055c1fa21b7b3 llvm::AsmPrinter::emitFunctionBody() (clang-21+0x=
-4b057b3)
-   #13 0x000055c1f71d3500 llvm::HexagonAsmPrinter::runOnMachineFunction(llv=
-m::MachineFunction&) (clang-21+0x1abd500)
-   #14 0x000055c1f8677d2e llvm::MachineFunctionPass::runOnFunction(llvm::Fu=
-nction&) (.part.0) MachineFunctionPass.cpp:0:0
-   #15 0x000055c1f8bdd5a9 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (clang-21+0x34c75a9)
-   #16 0x000055c1f8bdd75c llvm::FPPassManager::runOnModule(llvm::Module&) (=
-clang-21+0x34c775c)
-   #17 0x000055c1f8bdc96c llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (clang-21+0x34c696c)
-   #18 0x000055c1f94f3960 clang::emitBackendOutput(clang::CompilerInstance&=
-, clang::CodeGenOptions&, llvm::StringRef, llvm::Module*, clang::BackendAct=
-ion, llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem>, std::unique_ptr<llvm:=
-:raw_pwrite_stream, std::default_delete<llvm::raw_pwrite_stream>>, clang::B=
-ackendConsumer*) (clang-21+0x3ddd960)
-   #19 0x000055c1f9b764a0 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (clang-21+0x44604a0)
-   #20 0x000055c1fb2fe5bc clang::ParseAST(clang::Sema&, bool, bool) (clang-=
-21+0x5be85bc)
-   #21 0x000055c1f9e5ff31 clang::FrontendAction::Execute() (clang-21+0x4749=
-f31)
-   #22 0x000055c1f9dd718b clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (clang-21+0x46c118b)
-   #23 0x000055c1f9f2f827 clang::ExecuteCompilerInvocation(clang::CompilerI=
-nstance*) (clang-21+0x4819827)
-   #24 0x000055c1f652a6d0 cc1_main(llvm::ArrayRef<char const*>, char const*=
-, void*) (clang-21+0xe146d0)
-   #25 0x000055c1f652329a ExecuteCC1Tool(llvm::SmallVectorImpl<char const*>=
-&, llvm::ToolContext const&) driver.cpp:0:0
-   #26 0x000055c1f9bc3699 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<std::optional<llvm::StringRe=
-f>>, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocato=
-r<char>>*, bool*) const::'lambda'()>(long) Job.cpp:0:0
-   #27 0x000055c1f91a67d3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (clang-21+0x3a907d3)
-   #28 0x000055c1f9bc3a29 clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<std::optional<llvm::StringRef>>, std::__cxx11::basic_string<char, std::cha=
-r_traits<char>, std::allocator<char>>*, bool*) const (.part.0) Job.cpp:0:0
-   #29 0x000055c1f9b87d7c clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const*&, bool) const (clang=
--21+0x4471d7c)
-   #30 0x000055c1f9b88d79 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand const*>>&, bool) const (clang-21+0x4472d79)
-   #31 0x000055c1f9b9c28c clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand const*>>&) (clang-21+0x448628c)
-   #32 0x000055c1f65275ee clang_main(int, char**, llvm::ToolContext const&)=
- (clang-21+0xe115ee)
-   #33 0x000055c1f63f4633 main (clang-21+0xcde633)
-   #34 0x00007f104adc424a (/lib/x86_64-linux-gnu/libc.so.6+0x2724a)
-   #35 0x00007f104adc4305 __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x27305)
-   #36 0x000055c1f6522a91 _start (clang-21+0xe0ca91)
-   clang: error: clang frontend command failed with exit code 70 (use -v to=
- see invocation)
-   clang version 21.0.0git (git://gitmirror/llvm_project e15545cad8297ec755=
-5f26e5ae74a9f0511203e7)
-   Target: hexagon-unknown-linux-musl
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-e15545cad8/bin
-   clang: note: diagnostic msg:
-   ********************
+>> net/ceph/messenger_v2.c:1718:29: warning: variable 'enc_page_cnt' is uninitialized when used here [-Wuninitialized]
+    1718 |         con->v2.out_enc_page_cnt = enc_page_cnt;
+         |                                    ^~~~~~~~~~~~
+   net/ceph/messenger_v2.c:1672:18: note: initialize the variable 'enc_page_cnt' to silence this warning
+    1672 |         int enc_page_cnt;
+         |                         ^
+         |                          = 0
+   net/ceph/messenger_v2.c:3246:29: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3246 |         bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
+         |                                    ^~~~~~~~~~~~~
+         |                                    in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3254:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
+    3254 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
+         |                                              ^
+   net/ceph/messenger_v2.c:3292:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3292 |         if (con->v2.out_enc_pages) {
+         |                     ^~~~~~~~~~~~~
+         |                     in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3294:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3294 |                 ceph_release_page_vector(con->v2.out_enc_pages,
+         |                                                  ^~~~~~~~~~~~~
+         |                                                  in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3296:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3296 |                 con->v2.out_enc_pages = NULL;
+         |                         ^~~~~~~~~~~~~
+         |                         in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3331:7: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
+    3331 |         case OUT_S_QUEUE_ENC_PAGE:
+         |              ^
+   net/ceph/messenger_v2.c:3650:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
+    3650 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE &&
+         |                                              ^
+   net/ceph/messenger_v2.c:3818:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3818 |         if (con->v2.out_enc_pages) {
+         |                     ^~~~~~~~~~~~~
+         |                     in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3820:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3820 |                 ceph_release_page_vector(con->v2.out_enc_pages,
+         |                                                  ^~~~~~~~~~~~~
+         |                                                  in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   net/ceph/messenger_v2.c:3822:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
+    3822 |                 con->v2.out_enc_pages = NULL;
+         |                         ^~~~~~~~~~~~~
+         |                         in_enc_pages
+   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
+     305 |         struct page **in_enc_pages;
+         |                       ^
+   1 warning and 10 errors generated.
 
 
-vim +/pos +2373 fs/ceph/inode.c
+vim +/enc_page_cnt +1718 net/ceph/messenger_v2.c
 
-  2326=09
-  2327	/*
-  2328	 * Transfer the encrypted last block to the MDS and the MDS
-  2329	 * will help update it when truncating a smaller size.
-  2330	 *
-  2331	 * We don't support a PAGE_SIZE that is smaller than the
-  2332	 * CEPH_FSCRYPT_BLOCK_SIZE.
-  2333	 */
-  2334	static int fill_fscrypt_truncate(struct inode *inode,
-  2335					 struct ceph_mds_request *req,
-  2336					 struct iattr *attr)
-  2337	{
-  2338		struct ceph_client *cl =3D ceph_inode_to_client(inode);
-  2339		struct ceph_inode_info *ci =3D ceph_inode(inode);
-  2340		int boff =3D attr->ia_size % CEPH_FSCRYPT_BLOCK_SIZE;
-  2341		loff_t pos, orig_pos =3D round_down(attr->ia_size,
-  2342						  CEPH_FSCRYPT_BLOCK_SIZE);
-  2343		u64 block =3D orig_pos >> CEPH_FSCRYPT_BLOCK_SHIFT;
-  2344		struct ceph_databuf *dbuf =3D NULL;
-  2345		struct iov_iter iter;
-  2346		struct ceph_fscrypt_truncate_size_header *header;
-  2347		void *p;
-  2348		int len =3D CEPH_FSCRYPT_BLOCK_SIZE;
-  2349		loff_t i_size =3D i_size_read(inode);
-  2350		int got, ret, issued;
-  2351=09
-  2352		ret =3D __ceph_get_caps(inode, NULL, CEPH_CAP_FILE_RD, 0, -1, &got);
-  2353		if (ret < 0)
-  2354			return ret;
-  2355=09
-  2356		issued =3D __ceph_caps_issued(ci, NULL);
-  2357=09
-  2358		doutc(cl, "size %lld -> %lld got cap refs on %s, issued %s\n",
-  2359		      i_size, attr->ia_size, ceph_cap_string(got),
-  2360		      ceph_cap_string(issued));
-  2361=09
-  2362		ret =3D -ENOMEM;
-  2363		dbuf =3D ceph_databuf_req_alloc(2, 0, GFP_KERNEL);
-  2364		if (!dbuf)
-  2365			goto out;
-  2366=09
-  2367		if (ceph_databuf_insert_frag(dbuf, 0, sizeof(*header), GFP_KERNEL) =
-< 0)
-  2368			goto out;
-  2369		if (ceph_databuf_insert_frag(dbuf, 1, PAGE_SIZE, GFP_KERNEL) < 0)
-  2370			goto out;
-  2371=09
-  2372		iov_iter_bvec(&iter, ITER_DEST, &dbuf->bvec[1], 1, len);
-> 2373		ret =3D netfs_unbuffered_read_from_inode(inode, pos, &iter, true);
-  2374		if (ret < 0 && ret !=3D -ENODATA)
-  2375			goto out;
-  2376=09
-  2377		header =3D kmap_ceph_databuf_page(dbuf, 0);
-  2378=09
-  2379		/* Insert the header first */
-  2380		header->ver =3D 1;
-  2381		header->compat =3D 1;
-  2382		header->change_attr =3D cpu_to_le64(inode_peek_iversion_raw(inode));
-  2383=09
-  2384		/*
-  2385		 * Always set the block_size to CEPH_FSCRYPT_BLOCK_SIZE,
-  2386		 * because in MDS it may need this to do the truncate.
-  2387		 */
-  2388		header->block_size =3D cpu_to_le32(CEPH_FSCRYPT_BLOCK_SIZE);
-  2389=09
-  2390		/*
-  2391		 * If we hit a hole here, we should just skip filling the fscrypt f=
-or
-  2392		 * the request, because once the fscrypt is enabled, the file will =
-be
-  2393		 * split into many blocks with the size of CEPH_FSCRYPT_BLOCK_SIZE.=
-  If
-  2394		 * there was a hole, the hole size should be multiple of block size.
-  2395		 *
-  2396		 * If the Rados object doesn't exist, it will be set to 0.
-  2397		 */
-  2398		if (ret !=3D -ENODATA) {
-  2399			doutc(cl, "hit hole, ppos %lld < size %lld\n", pos, i_size);
-  2400=09
-  2401			header->data_len =3D cpu_to_le32(8 + 8 + 4);
-  2402			header->file_offset =3D 0;
-  2403			ret =3D 0;
-  2404		} else {
-  2405			header->data_len =3D cpu_to_le32(8 + 8 + 4 + CEPH_FSCRYPT_BLOCK_SI=
-ZE);
-  2406			header->file_offset =3D cpu_to_le64(orig_pos);
-  2407=09
-  2408			doutc(cl, "encrypt block boff/bsize %d/%lu\n", boff,
-  2409			      CEPH_FSCRYPT_BLOCK_SIZE);
-  2410=09
-  2411			/* truncate and zero out the extra contents for the last block */
-  2412			p =3D kmap_ceph_databuf_page(dbuf, 1);
-  2413			memset(p + boff, 0, PAGE_SIZE - boff);
-  2414			kunmap_local(p);
-  2415=09
-  2416			/* encrypt the last block */
-  2417			ret =3D ceph_fscrypt_encrypt_block_inplace(
-  2418				inode, ceph_databuf_page(dbuf, 1),
-  2419				CEPH_FSCRYPT_BLOCK_SIZE, 0, block, GFP_KERNEL);
-  2420			if (ret)
-  2421				goto out;
-  2422		}
-  2423=09
-  2424		ceph_databuf_added_data(dbuf, sizeof(*header));
-  2425		if (header->block_size)
-  2426			ceph_databuf_added_data(dbuf, CEPH_FSCRYPT_BLOCK_SIZE);
-  2427=09
-  2428		req->r_dbuf =3D dbuf;
-  2429	out:
-  2430		doutc(cl, "%p %llx.%llx size dropping cap refs on %s\n", inode,
-  2431		      ceph_vinop(inode), ceph_cap_string(got));
-  2432		ceph_put_cap_refs(ci, got);
-  2433		kunmap_local(header);
-  2434		if (ret)
-  2435			ceph_databuf_release(dbuf);
-  2436		return ret;
-  2437	}
-  2438=09
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1654  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1655  /*
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1656   * Unfortunately the kernel crypto API doesn't support streaming
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1657   * (piecewise) operation for AEAD algorithms, so we can't get away
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1658   * with a fixed size buffer and a couple sgs.  Instead, we have to
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1659   * allocate pages for the entire tail of the message (currently up
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1660   * to ~32M) and two sgs arrays (up to ~256K each)...
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1661   */
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1662  static int prepare_message_secure(struct ceph_connection *con)
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1663  {
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1664  	void *zerop = page_address(ceph_zero_page);
+0ce16824859c4d7 David Howells 2023-07-31  1665  	struct folio_queue *enc_buffer = NULL, *fq;
+0ce16824859c4d7 David Howells 2023-07-31  1666  	struct iov_iter enc_iter;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1667  	struct sg_table enc_sgt = {};
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1668  	struct sg_table sgt = {};
+0ce16824859c4d7 David Howells 2023-07-31  1669  	unsigned int nr_segs = 0;
+0ce16824859c4d7 David Howells 2023-07-31  1670  	ssize_t xsize;
+0ce16824859c4d7 David Howells 2023-07-31  1671  	size_t buf_size = 0;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1672  	int enc_page_cnt;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1673  	int tail_len;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1674  	int ret;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1675  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1676  	ret = prepare_head_secure_small(con, con->v2.out_buf,
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1677  					sizeof(struct ceph_msg_header2));
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1678  	if (ret)
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1679  		return ret;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1680  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1681  	tail_len = tail_onwire_len(con->out_msg, true);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1682  	if (!tail_len) {
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1683  		/*
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1684  		 * Empty message: once the head is written,
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1685  		 * we are done -- there is no epilogue.
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1686  		 */
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1687  		con->v2.out_state = OUT_S_FINISH_MESSAGE;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1688  		return 0;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1689  	}
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1690  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1691  	encode_epilogue_secure(con, false);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1692  	ret = setup_message_sgs(&sgt, con->out_msg, zerop, zerop, zerop,
+f36217e35ce13fe Jeff Layton   2022-03-23  1693  				&con->v2.out_epil, NULL, 0, false);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1694  	if (ret)
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1695  		goto out;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1696  
+0ce16824859c4d7 David Howells 2023-07-31  1697  	ret = netfs_alloc_folioq_buffer(NULL, &enc_buffer, &buf_size, tail_len,
+0ce16824859c4d7 David Howells 2023-07-31  1698  					GFP_NOIO);
+0ce16824859c4d7 David Howells 2023-07-31  1699  	if (ret < 0)
+0ce16824859c4d7 David Howells 2023-07-31  1700  		goto out;
+0ce16824859c4d7 David Howells 2023-07-31  1701  
+0ce16824859c4d7 David Howells 2023-07-31  1702  	for (fq = enc_buffer; fq; fq = fq->next)
+0ce16824859c4d7 David Howells 2023-07-31  1703  		nr_segs += folioq_count(fq);
+0ce16824859c4d7 David Howells 2023-07-31  1704  
+0ce16824859c4d7 David Howells 2023-07-31  1705  	ret = sg_alloc_table(&enc_sgt, nr_segs, GFP_NOIO);
+0ce16824859c4d7 David Howells 2023-07-31  1706  	if (ret)
+0ce16824859c4d7 David Howells 2023-07-31  1707  		goto out;
+0ce16824859c4d7 David Howells 2023-07-31  1708  
+0ce16824859c4d7 David Howells 2023-07-31  1709  	iov_iter_folio_queue(&enc_iter, READ, enc_buffer, 0, 0, tail_len);
+0ce16824859c4d7 David Howells 2023-07-31  1710  	xsize = extract_iter_to_sg(&enc_iter, tail_len, &enc_sgt, nr_segs, 0);
+0ce16824859c4d7 David Howells 2023-07-31  1711  	if (WARN_ON(xsize != tail_len)) {
+0ce16824859c4d7 David Howells 2023-07-31  1712  		ret = -EIO;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1713  		goto out;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1714  	}
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1715  
+0ce16824859c4d7 David Howells 2023-07-31  1716  	WARN_ON(con->v2.out_enc_buffer || con->v2.out_enc_page_cnt);
+0ce16824859c4d7 David Howells 2023-07-31  1717  	con->v2.out_enc_buffer = enc_buffer;
+cd1a677cad99402 Ilya Dryomov  2020-11-19 @1718  	con->v2.out_enc_page_cnt = enc_page_cnt;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1719  	con->v2.out_enc_resid = tail_len;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1720  	con->v2.out_enc_i = 0;
+0ce16824859c4d7 David Howells 2023-07-31  1721  	enc_buffer = NULL;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1722  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1723  	ret = gcm_crypt(con, true, sgt.sgl, enc_sgt.sgl,
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1724  			tail_len - CEPH_GCM_TAG_LEN);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1725  	if (ret)
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1726  		goto out;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1727  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1728  	dout("%s con %p msg %p sg_cnt %d enc_page_cnt %d\n", __func__, con,
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1729  	     con->out_msg, sgt.orig_nents, enc_page_cnt);
+0ce16824859c4d7 David Howells 2023-07-31  1730  	con->v2.out_state = OUT_S_QUEUE_ENC_FOLIOQ;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1731  
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1732  out:
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1733  	sg_free_table(&sgt);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1734  	sg_free_table(&enc_sgt);
+0ce16824859c4d7 David Howells 2023-07-31  1735  	netfs_free_folioq_buffer(enc_buffer);
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1736  	return ret;
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1737  }
+cd1a677cad99402 Ilya Dryomov  2020-11-19  1738  
 
---=20
+:::::: The code at line 1718 was first introduced by commit
+:::::: cd1a677cad994021b19665ed476aea63f5d54f31 libceph, ceph: implement msgr2.1 protocol (crc and secure modes)
+
+:::::: TO: Ilya Dryomov <idryomov@gmail.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
+
+-- 
 0-DAY CI Kernel Test Service
 https://github.com/intel/lkp-tests/wiki
