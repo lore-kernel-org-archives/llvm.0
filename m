@@ -1,90 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670A926038E;
-	Thu, 13 Mar 2025 09:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19461C1F0C
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 09:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741858463; cv=none; b=pMEi45WRAiDIen6ndggbdUArrzuMCVRrO4//+gG5fYEKgVmbp6MpO4PkNRLvg5Yl9VwMpG0ubrwE54ZViETNCU6OIcflNtLdCPqkVrgGzKIlsXW6xwMbS7tasR80oarc+CTHDT+KUr/KDdbn7kO/sEhqZ77wq18twU4KPFjQ+Zw=
+	t=1741859539; cv=none; b=JK624fMI3SL1P/hdPRu4ydfvmae/5zzE5QW+tKpJqggwzppTOHyE78DOes6IfYW6u6rFiLZJJkRcbH3YSE/BaQm/td7TQGlSDfeJUuJ8xaIofi2VS0aRzO12WbStJJ6wwLywiY24MovYQLntSpzaMLfoYrlb/TrHC2joHDckx8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741858463; c=relaxed/simple;
-	bh=vZoJDpDTmWHWIWAu2WSeOEgGu9mMhdvsQC0d26Wi4EE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NuIL6pFNSnvQPkJNJBUk6u9ze2HZANGbRyOT8ZX2FHKhw0iWh9Ki+5VuPos0CmoDfV47AxdcYMlCeTaWxD7ECoR036oDWXYrb9v2pUaA/B7rhU4QXGvKkd+GrjxuupOTI0e8tTJgjGfXu4Ao2MYHj7v6CleYrPlrw1b7tEEP1Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJ3v/KQb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741859539; c=relaxed/simple;
+	bh=RImN1egxLchm1OT4LIp3YQNEJIdkxcWAKbh1WlvMwro=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NZWtgP3DSMc2eIE2hfkmYN0bgxZm7fUH5tFAiIYuyr6QqDHNtke/yE+OxUN4MSz+wEC4r1E3GqcB5IYqW3M6351i6QRKgRFizjBbwOJlTh7LClgYL6pgatX8unXfZekfQG7l+ik0d/8qRfoWznXtpQJwTdFTJzswvSAQElhilVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=USXOlYhG; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJ3v/KQb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CC5C4CEE3;
-	Thu, 13 Mar 2025 09:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741858462;
-	bh=vZoJDpDTmWHWIWAu2WSeOEgGu9mMhdvsQC0d26Wi4EE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uJ3v/KQbtHiRxiHdK+WMSahSOVWk23CN1xtmsNpXhXafJuxBYtYFCxuKoRD9Zxj7b
-	 SpuM+892PUms50X1x+iLuWZ9qSh+q75FBjEQR3MTUvkPM/plj8a+JjDdroehSku2/J
-	 DjvT4+Zr8mN9qWW1x1WGnuyE2N40p/y6AhCCeCaFkz3WKsx/T3Ae5015PMD2SzP4hY
-	 l95kFUEDO5JwiQ7FMI2/t9fL2+VFjqH2kZ2p8vX/IisjEwVS3uc/LVPPIGKeunOd/b
-	 DRUyKEKW50XBBKK18ItYM9m8SrIVh9Wh+NdatGuHYDSEukc4bc22Y1ZpCvEizd6r6X
-	 FlO4rxUezCgMw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54954fa61c8so683968e87.1;
-        Thu, 13 Mar 2025 02:34:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUKhHftOWdXp7DlBRiCtLAaU0IUFtnVvZhRwFsngax6iMnHUgLUleeFiuzKRXRXUcMUJwQi@lists.linux.dev, AJvYcCXrP2Yz0cZU4XS+f4oZ/4V7G9U00L+7PaUTVvqqhMS5svpUEN2iSPa21q23k4ztxCiwrmSJJXoRr0GJxIdOAg==@lists.linux.dev
-X-Gm-Message-State: AOJu0YyyaItMCvcdPkBhIoTl6DnJc9Kvi+OSr/77u8P1H75UvY5LbpdK
-	PsOdzM9E6LzKYXIiYprU1QFN/w8/Dpteqr91oTEH6H//aW4OOqUlRgvEdx9q1BttPTtC6hgXkdd
-	cPRKIoUOXD8GQ58nzUGltJAlXNHQ=
-X-Google-Smtp-Source: AGHT+IGiizjDd9U50PgmaruU6eXHUHi2xPUqWWSNcGHullv/aaClM9lkBlv5Mu+wibAEsAHWg3V8TSdK+NMBcnDEej4=
-X-Received: by 2002:a05:6512:159a:b0:545:6fa:bf60 with SMTP id
- 2adb3069b0e04-54990e4a822mr9816194e87.19.1741858461061; Thu, 13 Mar 2025
- 02:34:21 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="USXOlYhG"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741859525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TM8qKG71XU2PpI8GcJlKeLnN9Dz9qQxF9PPdUnLxAQ4=;
+	b=USXOlYhG8LNwCtDKk+I7M2S0G3tn39sxx2ppKNtg3HxS5AfvC49bqJNgf/iDT/zluxuTTx
+	/eZnn2FotMOW13djKC7p5kBVr6ww1kO3zWsbo7T1psBnxZPUMjUTlKigrlUIPKSNhnpj72
+	W+K04HUgkMnwRJtXvrgJGozCnk2o+UQ=
+From: Kunwu Chan <kunwu.chan@linux.dev>
+To: ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	benno.lossin@proton.me,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Kunwu Chan <kunwu.chan@hotmail.com>,
+	Grace Deng <Grace.Deng006@Gmail.com>
+Subject: [PATCH] rust: optimize rust symbol generation for SeqFile
+Date: Thu, 13 Mar 2025 17:51:19 +0800
+Message-ID: <20250313095120.820334-1-kunwu.chan@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
-In-Reply-To: <202503131715.Fb6CfjhT-lkp@intel.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 13 Mar 2025 10:34:09 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
-X-Gm-Features: AQ5f1JrdY_O-dpd_Fst91bV8iY8Z5VXs88uikfiDeXUEQK3ipIbyhHsPjZh6oPs
-Message-ID: <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
- relocations preserved
-To: kernel test robot <lkp@intel.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org, x86@kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Ard,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on masahiroy-kbuild/for-next]
-> [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s390/features linus/master v6.14-rc6 next-20250312]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-190926
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-> patch link:    https://lore.kernel.org/r/20250311110616.148682-9-ardb%2Bgit%40google.com
-> patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with relocations preserved
-> config: x86_64-randconfig-076-20250313 (https://download.01.org/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb6CfjhT-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot open file `vmlinux.map' for reading: No such file or directory
->
+From: Kunwu Chan <kunwu.chan@hotmail.com>
 
-Hmm it seems I missed some things in link-vmlinux.sh - I will take a look.
+When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+with ARCH=arm64, the following symbols are generated:
+
+$nm vmlinux | grep ' _R'.*SeqFile | rustfilt
+ffff8000805b78ac T <kernel::seq_file::SeqFile>::call_printf
+
+This Rust symbol is trivial wrappers around the C functions seq_printf.
+It doesn't make sense to go through a trivial wrapper for its functions,
+so mark it inline.
+
+After doing so, the above symbol will not in output.
+
+Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+---
+ rust/kernel/seq_file.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/rust/kernel/seq_file.rs b/rust/kernel/seq_file.rs
+index 04947c672979..efc4dd09850a 100644
+--- a/rust/kernel/seq_file.rs
++++ b/rust/kernel/seq_file.rs
+@@ -30,6 +30,7 @@ pub unsafe fn from_raw<'a>(ptr: *mut bindings::seq_file) -> &'a SeqFile {
+     }
+ 
+     /// Used by the [`seq_print`] macro.
++    #[inline]
+     pub fn call_printf(&self, args: core::fmt::Arguments<'_>) {
+         // SAFETY: Passing a void pointer to `Arguments` is valid for `%pA`.
+         unsafe {
+-- 
+2.43.0
+
