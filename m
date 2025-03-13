@@ -1,59 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916E5250EC;
-	Thu, 13 Mar 2025 01:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED322E339B;
+	Thu, 13 Mar 2025 02:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741830911; cv=none; b=WrRKvQYk6EYUmF+8u04Lc2gsNEH9/d77Vg/rvXblaV0zfAIENNsVeo0LAGlJ0KWKvAAxEkMu8LXA5wug3ze3P7gc7XTxVuCCkurx6/idlXCTK0y70lJvrMs8KuXCE4vhs0Xh3L/RsoEtrP7KZ/bDuXKoigDej6mBc7nqFAwXQJg=
+	t=1741832158; cv=none; b=beCq7QCJcR/CYKlBDcMoZ0Od2hRFmvaTaE3nXcKnNSUlU88hGivbOOp2L6KVyhxMncF6St8dQ4SN46Azq+RwPTminVzdAh8DOKD6F7iaHKVvWoK9Aa3JfVJGbyuBcz1XRqbwlzZ1GWEp3XIx/D+VDqnsJycdToLJy6xW28c63dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741830911; c=relaxed/simple;
-	bh=sdEWzgKY/ltuErd1lnafMDHBFQHAx3xhMJX33RelzQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=U7GcIbaglbSvVPaIonYldthS2ttjkY86BEBct+2anX0Plrqiemiy13gVupHJKPjQvTxDAzHnWXkCyo4IRkSiFiNeDlsIYyUlSeU/gTnh/uUUm06aESgUNGf6dfZkKtGUYYWUzJ8zd0+l0jZgNTHS+WllK8bQQeGz5n/wWVJ6S2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YJxekCqu; arc=none smtp.client-ip=198.175.65.17
+	s=arc-20240116; t=1741832158; c=relaxed/simple;
+	bh=96yJDyEP9BeK2cVK+9MUvmIHjdk7wR1LKgFfN3+p/fM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kZG1xr4cXUcwJaTCDlX8eTb7IQU5VBrFpxaB0AJqWviYqcQrlnLFxEcwsvjoPiyu1MyXhW0ORzi15ftKfT1dkUtBMmV4RnksDYZyu4z+56g2WfBDYjrikyyzOUqhJ0dTTmsjviBUPTGODMrKmNVubaF2v1j3XPtMDevw++s9+hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgCkbNU8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YJxekCqu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgCkbNU8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741830909; x=1773366909;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sdEWzgKY/ltuErd1lnafMDHBFQHAx3xhMJX33RelzQM=;
-  b=YJxekCquSYhx2MMSqabwWZvPCuNmPwgatRIyR/COeBnnM/cMg1rXMJmE
-   zjCOf7VOs2+l4sbh8P4HIu34g1UDHFFAH6hoFfDYHtdz5mvitELLsiNBi
-   vfT0YqdEH2jmdQm4X+mYgkTLxtMiN8hnKDkoJ4kZb39OY6XxtWN3lNNDC
-   Z2RYizEj3BFHn8rvtoK1fEteKKwsGN0Lpw6HvN3rg/9VaMwHr9VUDELG4
-   10fzRIuRJz4s/dvNqhQJ6lHi60Al5vq1x6l0IpdDs4zUZ41CIhIzYf9At
-   ryA1gWsWxtwo4ne5y5CgXqrDJeJLgmqwcWxxK7+VdRRLvWJOQXByadqWI
-   Q==;
-X-CSE-ConnectionGUID: pj5Rd7DkSjui+az876qE7g==
-X-CSE-MsgGUID: Z/9LGCO+RZmUH4Z3tjoMXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42963553"
+  t=1741832156; x=1773368156;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=96yJDyEP9BeK2cVK+9MUvmIHjdk7wR1LKgFfN3+p/fM=;
+  b=lgCkbNU8xDWZ1tFWchRtnulHPQIWUlxY3OD3fD+cDL96EcvUqAPy3J06
+   OKcXSPPYZHiK82sO39PZWI0YpSt8gQbOxNzdUwKC090bt11bqpfe3yVQP
+   z2uk81FdQbrXjm3zofGQS9yy9kBoUtt5L1aIRugMJh7kVZxRX5vIja0k4
+   3ljTNknrgHnNS3odIlBDBop3MCwbbL3PV8W8h5NxwuYslkLryRV2M6qU/
+   PcSkPHDSBt+xZmPLDZbu2nASjCOARKr+rM+ScnFTTbEAieMEQXBq5m9+L
+   n0yHYRR+OnEV7+ctDhcjeZXmbefb34kc/ZW1dSJHHh7HT0CqYIZo9ji24
+   g==;
+X-CSE-ConnectionGUID: +xjPshH7SlaMeHMKk954QQ==
+X-CSE-MsgGUID: AZicdGCsTZS+iLnDtNo0Uw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="43038849"
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="42963553"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 18:55:09 -0700
-X-CSE-ConnectionGUID: VYQNlhuuRCurMiYaEsbQFw==
-X-CSE-MsgGUID: RpuLrPsYSL66Bp1KdXd/Cw==
+   d="scan'208";a="43038849"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 19:15:55 -0700
+X-CSE-ConnectionGUID: KHahmpZOTNOqvrR+C7Song==
+X-CSE-MsgGUID: H65afRTcQ5CspG2G7V7fvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="121300536"
+   d="scan'208";a="125887063"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 12 Mar 2025 18:55:08 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 12 Mar 2025 19:15:31 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsXmi-00092q-10;
-	Thu, 13 Mar 2025 01:54:59 +0000
-Date: Thu, 13 Mar 2025 09:53:44 +0800
+	id 1tsY6V-000936-1q;
+	Thu, 13 Mar 2025 02:15:25 +0000
+Date: Thu, 13 Mar 2025 10:15:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 45/45] net/ceph/messenger_v2.c:3246:29:
- error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info';
- did you mean 'in_enc_pages'?
-Message-ID: <202503130907.JF4OHYQM-lkp@intel.com>
+To: Thomas Zimmermann <tzimmermann@suse.de>, simona@ffwll.ch,
+	airlied@gmail.com, mripard@kernel.org,
+	maarten.lankhorst@linux.intel.com, geert@linux-m68k.org,
+	tomi.valkeinen@ideasonboard.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+	freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	imx@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+	nouveau@lists.freedesktop.org, virtualization@lists.linux.dev,
+	spice-devel@lists.freedesktop.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+	intel-xe@lists.freedesktop.org, xen-devel@lists.xenproject.org,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v4 18/25] drm/renesas/rz-du: Compute dumb-buffer sizes
+ with drm_mode_size_dumb()
+Message-ID: <202503130956.VyNIuYfU-lkp@intel.com>
+References: <20250311155120.442633-19-tzimmermann@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,126 +76,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250311155120.442633-19-tzimmermann@suse.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
-head:   0ce16824859c4d7209abe27da17e23679b6c7c69
-commit: 0ce16824859c4d7209abe27da17e23679b6c7c69 [45/45] ceph: Don't use data_pages
-config: i386-buildonly-randconfig-003-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130907.JF4OHYQM-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130907.JF4OHYQM-lkp@intel.com/reproduce)
+Hi Thomas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20250311]
+[also build test ERROR on v6.14-rc6]
+[cannot apply to drm-exynos/exynos-drm-next rockchip/for-next tegra/for-next drm-xe/drm-xe-next linus/master v6.14-rc6 v6.14-rc5 v6.14-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/drm-dumb-buffers-Sanitize-output-on-errors/20250311-235818
+base:   next-20250311
+patch link:    https://lore.kernel.org/r/20250311155120.442633-19-tzimmermann%40suse.de
+patch subject: [PATCH v4 18/25] drm/renesas/rz-du: Compute dumb-buffer sizes with drm_mode_size_dumb()
+config: powerpc64-randconfig-003-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130956.VyNIuYfU-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130956.VyNIuYfU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130907.JF4OHYQM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130956.VyNIuYfU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   net/ceph/messenger_v2.c:1718:29: warning: variable 'enc_page_cnt' is uninitialized when used here [-Wuninitialized]
-    1718 |         con->v2.out_enc_page_cnt = enc_page_cnt;
-         |                                    ^~~~~~~~~~~~
-   net/ceph/messenger_v2.c:1672:18: note: initialize the variable 'enc_page_cnt' to silence this warning
-    1672 |         int enc_page_cnt;
-         |                         ^
-         |                          = 0
->> net/ceph/messenger_v2.c:3246:29: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3246 |         bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
-         |                                    ^~~~~~~~~~~~~
-         |                                    in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
->> net/ceph/messenger_v2.c:3254:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3254 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
-         |                                              ^
-   net/ceph/messenger_v2.c:3292:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3292 |         if (con->v2.out_enc_pages) {
-         |                     ^~~~~~~~~~~~~
-         |                     in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   net/ceph/messenger_v2.c:3294:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3294 |                 ceph_release_page_vector(con->v2.out_enc_pages,
-         |                                                  ^~~~~~~~~~~~~
-         |                                                  in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   net/ceph/messenger_v2.c:3296:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3296 |                 con->v2.out_enc_pages = NULL;
-         |                         ^~~~~~~~~~~~~
-         |                         in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   net/ceph/messenger_v2.c:3331:7: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3331 |         case OUT_S_QUEUE_ENC_PAGE:
-         |              ^
-   net/ceph/messenger_v2.c:3650:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3650 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE &&
-         |                                              ^
-   net/ceph/messenger_v2.c:3818:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3818 |         if (con->v2.out_enc_pages) {
-         |                     ^~~~~~~~~~~~~
-         |                     in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   net/ceph/messenger_v2.c:3820:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3820 |                 ceph_release_page_vector(con->v2.out_enc_pages,
-         |                                                  ^~~~~~~~~~~~~
-         |                                                  in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   net/ceph/messenger_v2.c:3822:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'; did you mean 'in_enc_pages'?
-    3822 |                 con->v2.out_enc_pages = NULL;
-         |                         ^~~~~~~~~~~~~
-         |                         in_enc_pages
-   include/linux/ceph/messenger.h:305:16: note: 'in_enc_pages' declared here
-     305 |         struct page **in_enc_pages;
-         |                       ^
-   1 warning and 10 errors generated.
+   drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c: In function 'rzg2l_du_dumb_create':
+>> drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c:80:15: error: implicit declaration of function 'drm_mode_size_dumb'; did you mean 'drm_mode_set_name'? [-Wimplicit-function-declaration]
+      80 |         ret = drm_mode_size_dumb(dev, args, 16 * args->bpp / 8, 0);
+         |               ^~~~~~~~~~~~~~~~~~
+         |               drm_mode_set_name
 
 
-vim +3246 net/ceph/messenger_v2.c
+vim +80 drivers/gpu/drm/renesas/rz-du/rzg2l_du_kms.c
 
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3237  
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3238  static void queue_enc_page(struct ceph_connection *con)
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3239  {
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3240  	struct bio_vec bv;
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3241  
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3242  	dout("%s con %p i %d resid %d\n", __func__, con, con->v2.out_enc_i,
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3243  	     con->v2.out_enc_resid);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3244  	WARN_ON(!con->v2.out_enc_resid);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3245  
-1eb9cd15004fa91 Christoph Hellwig 2023-02-03 @3246  	bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
-1eb9cd15004fa91 Christoph Hellwig 2023-02-03  3247  		      min(con->v2.out_enc_resid, (int)PAGE_SIZE), 0);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3248  
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3249  	set_out_bvec(con, &bv, false);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3250  	con->v2.out_enc_i++;
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3251  	con->v2.out_enc_resid -= bv.bv_len;
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3252  
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3253  	if (con->v2.out_enc_resid) {
-cd1a677cad99402 Ilya Dryomov      2020-11-19 @3254  		WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3255  		return;
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3256  	}
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3257  
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3258  	/*
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3259  	 * We've queued the last piece of ciphertext (ending with
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3260  	 * epilogue) + auth tag.  Once it's written, we are done.
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3261  	 */
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3262  	WARN_ON(con->v2.out_enc_i != con->v2.out_enc_page_cnt);
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3263  	con->v2.out_state = OUT_S_FINISH_MESSAGE;
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3264  }
-cd1a677cad99402 Ilya Dryomov      2020-11-19  3265  
-
-:::::: The code at line 3246 was first introduced by commit
-:::::: 1eb9cd15004fa91b6d1911af9fbaff299d8e9e45 libceph: use bvec_set_page to initialize bvecs
-
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+    70	
+    71	/* -----------------------------------------------------------------------------
+    72	 * Frame buffer
+    73	 */
+    74	
+    75	int rzg2l_du_dumb_create(struct drm_file *file, struct drm_device *dev,
+    76				 struct drm_mode_create_dumb *args)
+    77	{
+    78		int ret;
+    79	
+  > 80		ret = drm_mode_size_dumb(dev, args, 16 * args->bpp / 8, 0);
+    81		if (ret)
+    82			return ret;
+    83	
+    84		return drm_gem_dma_dumb_create_internal(file, dev, args);
+    85	}
+    86	
 
 -- 
 0-DAY CI Kernel Test Service
