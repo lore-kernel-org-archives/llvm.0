@@ -1,84 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6712A1C32;
-	Thu, 13 Mar 2025 22:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317B31F4630;
+	Thu, 13 Mar 2025 22:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741903677; cv=none; b=d/YZGriGijqru/e2+Ma4ivZCsjB1w6cYJPY2dXVK78XMxAVvAtRuZNHDv6X5SBgVEBvWfXw/FXlNgIixzKw1Lu3iNUryXtgm3o3X9Nw1VL6h6fFsJLatDZpChTB5/AnHUH6ZhEYPnVRz6OCtLWGToNe58zlL4Hla4hVdDCezRig=
+	t=1741904665; cv=none; b=B3AveD3xSqj33FAzb4QAa6A2y6QgFz4Ssoz1E7sj/eGxoWyXR/Lb4iWUBICeYrWvL+ELejLk2R1jJos1eGnUM3eNn7lTzNJnsls6mwujoSI1ssIHNSuJyCTy2Fv7OjjGnwW7/LrTNM+x1r9Fs1jpA7OroafpkFc+3vdJb5wIj1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741903677; c=relaxed/simple;
-	bh=CfouBSMwhzbd7hfsjozPKx2WqbBf4z5lKo/G5CWjgsk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=awVohrbr+hGe4iA+tk0DQ3MfC4qfJ2YffbSTWDMyXmaeBYibMZZ9bvSZtVSU8FT5Lh0a1vCIZToWjdBd8/vUm6Df2MC1sqNICmjYM1sOJiZVVQHo+5XaWh5O/G1mzM3Qy9jqPpZ8kUyfWNxaicjmXXTPxH4P827Td5sDILqTEBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PzLb79+s; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741904665; c=relaxed/simple;
+	bh=C3TTb5Ms+0aEPdd4dgKKRbOv77Nyo/jHCcFF8YqhaZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nPlFbqrY9XpzOP+s/4uWtBvSak4Kj/vALHuOZpPLmtz0vHKCaxO72UTJ/y83d3zz5kezupUD4sQVhn7WrUnH5SKruO094wCfsQVVe8CmRYYtKlfrkFEIg72RkEtqlQmfA6pym44/H9LCzjU64kVP82xBz4cEzV8a6lwiaH4BtpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sQR/dARi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PzLb79+s"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741903677; x=1773439677;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CfouBSMwhzbd7hfsjozPKx2WqbBf4z5lKo/G5CWjgsk=;
-  b=PzLb79+sYXT9WKxZDtSbNkT2XojznnSnlNjM8qNsiZNOXiTu+66i1HZ2
-   FKW7CA2qQzLJRNUqgqvN8EcopwbaGH5I3y59xeBwn5yrI+S2RopAgQBDm
-   qoPO8HlWHHcPzv+XGqdoc4M2FqyNkmcPXtuMbowe6+46wsfx1tupb145O
-   yHF381BFvZujnB4+HRi+4Npeop+zLfs1VssdW1l/sFEtK2TxMObLsh2vM
-   VkIegQHiN3hcf0i2PPRQPXEXrni9jN2XXzJZ+H8H2KKsRXQHPx3sdQRu8
-   i0SKn6A3criKLJPApSEJxA9GiObo1ylKk7i3s9onRbWzpfQH5/wKwds7y
-   w==;
-X-CSE-ConnectionGUID: J/WtS9J9RdG2+j3/v+ux4g==
-X-CSE-MsgGUID: 5M9OxjyxSAe7biecSn8nQQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="53697286"
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="53697286"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 15:07:56 -0700
-X-CSE-ConnectionGUID: odHedbxCRsW5iqG0WOgLYw==
-X-CSE-MsgGUID: hBsxIYH2TgiDqh0lyuDYvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="120870031"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 13 Mar 2025 15:07:55 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsqiW-0009xC-23;
-	Thu, 13 Mar 2025 22:07:52 +0000
-Date: Fri, 14 Mar 2025 06:07:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 156/157] random.c:undefined
- reference to `__umoddi3'
-Message-ID: <202503140640.fV7TfwcD-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sQR/dARi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F0BC4CEDD;
+	Thu, 13 Mar 2025 22:24:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741904665;
+	bh=C3TTb5Ms+0aEPdd4dgKKRbOv77Nyo/jHCcFF8YqhaZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sQR/dARim8x9mrB1aT27WjxqmOQRnqm1zxCXydRDRhh2Qt7E2HHIDgePOTgOLNtxH
+	 5O4bKKUiWy1YbBo8+lBAIrm3zpYXJl76XWhGz1mkLy02o+HBa72O/8jvx5Dz3LdxLS
+	 MSwVefC0Kaj8FwgED/bd2dNMsbYxrKf0TttEP5NJYcMZ0hqAouJVlFk6AbNtNAGlFB
+	 G1r43yFKdyhIejJ2DDnf7iRoI5hoLKllChNR1xb26UoV8edo3tHZ52PGG2LKEsA6a2
+	 2FPrkBaXQ5mYMvvjoo29D3g13wC6nQv2eqexu/rn6SuzktY52Kl/f6kaXPsY0ODyYb
+	 lp0V0kEuf4Eqw==
+Date: Thu, 13 Mar 2025 15:24:22 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org, Daniel Xu <dxu@dxuuu.xyz>
+Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove
+ BUILD_NONDISTRO
+Message-ID: <Z9NbFqaDQMjvYxcc@google.com>
+References: <20250122062332.577009-1-irogers@google.com>
+ <Z5K712McgLXkN6aR@google.com>
+ <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
+ <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
+ <CAP-5=fV_z+Ev=wDt+QDwx8GTNXNQH30H5KXzaUXQBOG1Mb8hJg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fV_z+Ev=wDt+QDwx8GTNXNQH30H5KXzaUXQBOG1Mb8hJg@mail.gmail.com>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   a888eae7549b5515b25ca0846d4b39f1195a3020
-commit: 8511d47d2b5a1d421bf69931c84c60f5c4c6e982 [156/157] random: get_random_u64_below()
-config: i386-buildonly-randconfig-004-20250314 (https://download.01.org/0day-ci/archive/20250314/202503140640.fV7TfwcD-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140640.fV7TfwcD-lkp@intel.com/reproduce)
+Hi Ian,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503140640.fV7TfwcD-lkp@intel.com/
+On Wed, Mar 12, 2025 at 02:04:30PM -0700, Ian Rogers wrote:
+> On Mon, Feb 10, 2025 at 10:06 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Thu, Jan 23, 2025 at 3:36 PM Ian Rogers <irogers@google.com> wrote:
+> > > On Thu, Jan 23, 2025 at 1:59 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > > I like changes up to this in general.  Let me take a look at the
+> > > > patches.
+> >
+> > So it would be nice to make progress with this series given some level
+> > of happiness, I don't see any actions currently on the patch series as
+> > is. If I may be so bold as to recap the issues that have come up:
+> >
+> > 1) Andi Kleen mentions that dlopen is inferior to linking against
+> > libraries and those libraries aren't a memory overhead if unused.
+> >
+> > I agree but pointed-out the data center use case means that saving
+> > size on binaries can be important to some (me). We've also been trying
+> > to reduce perf's dependencies for distributions as perf dragging in
+> > say the whole of libLLVM can be annoying for making minimal
+> > distributions that contain perf. Perhaps somebody (Arnaldo?) more
+> > involved with distributions can confirm or deny the distribution
+> > problem, I'm hoping it is self-evident.
+> >
+> > 2) Namhyung Kim was uncomfortable with the code defining
+> > types/constants that were in header files as the two may drift over
+> > time
+> >
+> > I agree but in the same way as a function name is an ABI for dlysym,
+> > the types/constants are too. Yes a header file may change, but in
+> > doing so the ABI has changed and so it would be an incompatible change
+> > and everything would be broken. We'd need to fix the code for this,
+> > say as we did when libbpf moved to version 1.0, but using a header
+> > file would only weakly guard against this problem. The problem with
+> > including the header files is that then the build either breaks
+> > without the header or we need to support a no linking against a
+> > library and not using dlopen case. I suspect a lot of distributions
+> > wouldn't understand the build subtlety in this, the necessary build
+> > options and things installed, and we'd end up not using things like
+> > libLLVM even when it is known to be a large performance win. I also
+> > hope one day we can move from parsing text out of forked commands, as
+> > it is slower and more brittle, to just directly using libraries.
+> > Making dlopen the fallback (probably with a warning on failure) seems
+> > like the right direction for this except we won't get it if we need to
+> > drag in extra dependency header files for the build to succeed (well
+> > we could have a no library or dlopen option, but then we'd probably
+> > find distributions packaging this and things like perf annotate
+> > getting broken as they don't even know how to dlopen a library).
+> >
+> > 3) Namhyung Kim (and I) also raises that the libcapstone patch can be
+> > smaller by dropping the print_capstone_detail support on x86
+> >
+> > Note, given the similarity between capstone and libLLVM for
+> > disassembly, it is curious that only capstone gives the extra detail.
+> >
+> > I agree. Given the capstone disassembly output will be compromised we
+> > should warn for this, probably in Makefile.config to avoid running
+> > afoul of -Werror. It isn't clear that having a warning is a good move
+> > given the handful of structs needed to support print_capstone_detail.
+> > I'd prefer to keep the structs so that we haven't got a warning that
+> > looks like it needs cleaning up.
+> >
+> > 4) Namhyung Kim raised concerns over #if placement
+> >
+> > Namhyung raised that he'd prefer:
+> > ```
+> > #if HAVE_LIBCAPSTONE_SUPPORT
+> > // lots of code
+> > #else
+> > // lots of code
+> > #endif
+> > ```
+> > rather than the #ifs being inside or around individual functions. I
+> > raised that the large #ifs is a problem in the current code as you
+> > lose context when trying to understand a function. You may look at a
+> > function but not realize it isn't being used because of a #if 10s or
+> > 100s of lines above. Namhyung raised that the large #ifs is closer to
+> > kernel style, I disagreed as I think kernel style is only doing this
+> > when it stubs out a bunch of API functions, not when more context
+> > would be useful. Hopefully as the person writing the patches the style
+> > choice I've made can be respected.
+> >
+> > 5) Daniel Xu raised issues with the removal of libbfd for Rust
+> > support, as the code implies libbfd C++ demangling is a pre-requisite
+> > of legacy rust symbol demangling
+> >
+> > A separate patch was posted adding Rust v0 symbol demangling with no
+> > libbfd dependency:
+> > https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com/
+> > The legacy support should work with the non-libbfd demanglers as
+> > that's what we have today. We should really clean up Rust demangling
+> > and have tests. This is blocked on the Rust community responding to:
+> > https://github.com/rust-lang/rust/issues/60705
 
-All errors (new ones prefixed by >>):
+I think #ifdef placements is not a big deal, but I still don't want to
+pull libcapstone details into the perf tree.
 
-   ld: drivers/char/random.o: in function `__get_random_u64_below':
->> random.c:(.text+0x1dcc): undefined reference to `__umoddi3'
+For LLVM, I think you should to build llvm-c-helpers anyway which means
+you still need LLVM headers and don't need to redefine the structures.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can we do the same for capstone?  I think it's best to use capstone
+headers directly and add a build option to use dlopen().
+
+Thanks,
+Namhyung
+
