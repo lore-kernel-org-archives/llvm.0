@@ -1,187 +1,274 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9D81F03E4
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 11:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C451E8325;
+	Thu, 13 Mar 2025 11:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741864846; cv=none; b=N2PsagnzkBwezsewq3F6fJ52bL/XO/7wpmK/V4ZhuqgF7GTUxUHGNiBN876jXEb8KrDUySCMyzBDU95t5UCfMFsbiW11VLtriuKhQQSAUU6/pnlyUFoZkYxvzGj+ywgG/2Epp8cU9otOYNDwvg1wgi0qtRw00Mo9fX08wWJF1kg=
+	t=1741865251; cv=none; b=IKCzrkPtUUlKu9Ovrl0MtOuYc5wx7wEoNw379/oFtlylZqyTM+ZlAINa6TZ3c+nDiXUj5aQFU/t14TDyNn6no1GM/qgw9I0wT1Rjhx8X20Km1KsHzdLqOaQrXv2EoEW4HeMPFImCE+3goUfNX8T6A6qetz8SojQOf4Sg8Lw+OB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741864846; c=relaxed/simple;
-	bh=hToZW9/4x47mKSYrXIUJ2djr0pkTpdYJARGHnq4Nwaw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fn+XzLhVulVJO/5vdxcH5Kxjrs7zCVY2uqh1sxfjKum71YMBu0QPymEv6dpqaK5BfYXqXbNj3rU43Anq2Vt74wA3l1tTgajDgRpG1HO78R+9Be395pUDLpYcNjw8HsH00jnEfghyG6/7/HuvkfkQjDkr6GbOWdPXVM4j4oZTFIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AzwSLWA/; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1741865251; c=relaxed/simple;
+	bh=4PDrgiqVxydTINjwT7e3UwOLeTXNS3x5qH6bmpoC2rc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mzhahfab9KpkykjMydqjOZtpnzedWTLp+1xa3NWqeZCOwgbbYf3QZlT9DdfUr/OX5MlT6NZMchqr9+Bel3uQmsg4BEBD7I3uX9RTeBudEHq6AvSodLZr30Wuk8azBUjKIJVxw6KV13T8u5sOAh4BwzYFVTblYEu7MjoLZ8Dgous=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k4KaakOM; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AzwSLWA/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k4KaakOM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741864844; x=1773400844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hToZW9/4x47mKSYrXIUJ2djr0pkTpdYJARGHnq4Nwaw=;
-  b=AzwSLWA/m9b8Ut8PvvghGXiixYOFFzDuyFLgJxGw+fo5H9FlS+55NUek
-   PWW5ue6PebhCz2cwWaJRbj5Jj9vwMQ43YI/zFt98BF5CqEs/JCapwFiw+
-   nnqAYWm4FespyxvUYZ22A82SEIrp0v+NIeWGUWxOCUT+BT/g4GTpCUFli
-   GCrEd7RcTu0Cj6+zVxLtJr/m8YUmxnRTQl1d5p4Ui0hgUiRR+Dwpqdqtu
-   QsUR2BBtK3m/3yNTF2xDf9QsEG+9edWXLQP2oL7S9ac2JxW0f5h7LyL/B
-   b5mvOhiK97v2iVcmyunqH1Kz6iMfG+gBmyY4OGMglstYwZ7sEtvvRuI5X
+  t=1741865249; x=1773401249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4PDrgiqVxydTINjwT7e3UwOLeTXNS3x5qH6bmpoC2rc=;
+  b=k4KaakOMJsYBxE1m33RNRDqCYd87mafqZeJIBPi7wwVT23Prjm1EYBWk
+   9TVBQEPmrQnI6LpD018x2FiBeaDgrYUhybCavgUV5tamU27UGmi4zHw63
+   tM1KxnsKHeSmpKyKQ8yLxsboZBHgjj1xcEqdz3mslAw5ieFa5xVHlv6uX
+   fvk8bFNwrim0zi9v6JOHDqbEkQu5nKn/XGV/Go0joA5jTeXFhNEnxDx4t
+   cN/Cu6MPNGzbDW0tLRlnum+fIYTCGaKPz/ab+X6ha9FXJ59iO0IPuu2Wh
+   a+tLOL8U3PQZDfRXiCujrBUndfNoRwS5ymm0ACFC6uhTmQKGH10YONpVp
    Q==;
-X-CSE-ConnectionGUID: FOaytdj8SGyQo6NJ5BSpNg==
-X-CSE-MsgGUID: 1jyBCpQOSEG4eoQKW5EHTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53970644"
+X-CSE-ConnectionGUID: fNgb/4rfTUesHoLwA69Low==
+X-CSE-MsgGUID: XQ5wCbBkRIa72bw9FuTb/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53613648"
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="53970644"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:20:44 -0700
-X-CSE-ConnectionGUID: GbcQkpQYRLKZjG+vUW2MJg==
-X-CSE-MsgGUID: ZY+zSvjLSVy3pfVtyaAL9w==
+   d="scan'208";a="53613648"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:27:28 -0700
+X-CSE-ConnectionGUID: JR3O6uszRjO37OvSpMRXAw==
+X-CSE-MsgGUID: 0NC6uYnaSM+fyhLJ/8xtSw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="125094547"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO [10.245.250.7]) ([10.245.250.7])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:20:38 -0700
-Message-ID: <bdc7b218-8f14-4bfd-8a76-2f35e5a9393c@linux.intel.com>
-Date: Thu, 13 Mar 2025 13:21:17 +0200
+   d="scan'208";a="121425384"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 13 Mar 2025 04:27:27 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tsgij-0009M0-0r;
+	Thu, 13 Mar 2025 11:27:25 +0000
+Date: Thu, 13 Mar 2025 19:26:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 43/44] fs/ceph/addr.c:539:9: error: implicit
+ declaration of function 'osd_req_op_raw_data_in_pages'; did you mean
+ 'osd_req_op_raw_data_in_databuf'?
+Message-ID: <202503131940.mrvV7B45-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] ASoC: SOF: ipc4-topology: Allocate ref_params on
- stack
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mark Brown <broonie@kernel.org>,
- Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
- Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
- Bard Liao <yung-chuan.liao@linux.intel.com>,
- sound-open-firmware@alsa-project.org, linux-sound@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Daniel Baluta
- <daniel.baluta@nxp.com>, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <20250312160516.3864295-1-andriy.shevchenko@linux.intel.com>
-From: =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <20250312160516.3864295-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   d96beacafbc048781a87c7188237957ed09d0df0
+commit: 6e6fbe816f6feac19872bb2f900cdff82c31e668 [43/44] libceph: Remove CEPH_OS_DATA_TYPE_PAGES and its attendant helpers
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503131940.mrvV7B45-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131940.mrvV7B45-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503131940.mrvV7B45-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   fs/ceph/addr.c: In function '__ceph_pool_perm_get':
+>> fs/ceph/addr.c:539:9: error: implicit declaration of function 'osd_req_op_raw_data_in_pages'; did you mean 'osd_req_op_raw_data_in_databuf'? [-Wimplicit-function-declaration]
+     539 |         osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         osd_req_op_raw_data_in_databuf
 
 
+vim +539 fs/ceph/addr.c
 
-On 12/03/2025 18:05, Andy Shevchenko wrote:
-> Currently the compiler (clang 19.1.7) is not happy about the size of
-> the stack frame in sof_ipc4_prepare_copier_module:
-> 
-> sound/soc/sof/ipc4-topology.c:1800:1: error: stack frame size (1288) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
->  1800 | sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->       | ^
-> 
-> Work around this by allocating ref_params on stack, as it looks the biggest
-> variable on stack right now.
-> 
-> Note, this only happens when compile for 32-bit machines (x86_32 in my case).
+10183a69551f767 Yan, Zheng    2015-04-27  423  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  424  static int __ceph_pool_perm_get(struct ceph_inode_info *ci,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  425  				s64 pool, struct ceph_string *pool_ns)
+10183a69551f767 Yan, Zheng    2015-04-27  426  {
+5995d90d2d19f33 Xiubo Li      2023-06-12  427  	struct ceph_fs_client *fsc = ceph_inode_to_fs_client(&ci->netfs.inode);
+10183a69551f767 Yan, Zheng    2015-04-27  428  	struct ceph_mds_client *mdsc = fsc->mdsc;
+38d46409c4639a1 Xiubo Li      2023-06-12  429  	struct ceph_client *cl = fsc->client;
+10183a69551f767 Yan, Zheng    2015-04-27  430  	struct ceph_osd_request *rd_req = NULL, *wr_req = NULL;
+10183a69551f767 Yan, Zheng    2015-04-27  431  	struct rb_node **p, *parent;
+10183a69551f767 Yan, Zheng    2015-04-27  432  	struct ceph_pool_perm *perm;
+10183a69551f767 Yan, Zheng    2015-04-27  433  	struct page **pages;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  434  	size_t pool_ns_len;
+10183a69551f767 Yan, Zheng    2015-04-27  435  	int err = 0, err2 = 0, have = 0;
+10183a69551f767 Yan, Zheng    2015-04-27  436  
+10183a69551f767 Yan, Zheng    2015-04-27  437  	down_read(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  438  	p = &mdsc->pool_perm_tree.rb_node;
+10183a69551f767 Yan, Zheng    2015-04-27  439  	while (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  440  		perm = rb_entry(*p, struct ceph_pool_perm, node);
+10183a69551f767 Yan, Zheng    2015-04-27  441  		if (pool < perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  442  			p = &(*p)->rb_left;
+10183a69551f767 Yan, Zheng    2015-04-27  443  		else if (pool > perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  444  			p = &(*p)->rb_right;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  445  		else {
+779fe0fb8e1883d Yan, Zheng    2016-03-07  446  			int ret = ceph_compare_string(pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  447  						perm->pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  448  						perm->pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  449  			if (ret < 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  450  				p = &(*p)->rb_left;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  451  			else if (ret > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  452  				p = &(*p)->rb_right;
+10183a69551f767 Yan, Zheng    2015-04-27  453  			else {
+10183a69551f767 Yan, Zheng    2015-04-27  454  				have = perm->perm;
+10183a69551f767 Yan, Zheng    2015-04-27  455  				break;
+10183a69551f767 Yan, Zheng    2015-04-27  456  			}
+10183a69551f767 Yan, Zheng    2015-04-27  457  		}
+779fe0fb8e1883d Yan, Zheng    2016-03-07  458  	}
+10183a69551f767 Yan, Zheng    2015-04-27  459  	up_read(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  460  	if (*p)
+10183a69551f767 Yan, Zheng    2015-04-27  461  		goto out;
+10183a69551f767 Yan, Zheng    2015-04-27  462  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  463  	if (pool_ns)
+38d46409c4639a1 Xiubo Li      2023-06-12  464  		doutc(cl, "pool %lld ns %.*s no perm cached\n", pool,
+38d46409c4639a1 Xiubo Li      2023-06-12  465  		      (int)pool_ns->len, pool_ns->str);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  466  	else
+38d46409c4639a1 Xiubo Li      2023-06-12  467  		doutc(cl, "pool %lld no perm cached\n", pool);
+10183a69551f767 Yan, Zheng    2015-04-27  468  
+10183a69551f767 Yan, Zheng    2015-04-27  469  	down_write(&mdsc->pool_perm_rwsem);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  470  	p = &mdsc->pool_perm_tree.rb_node;
+10183a69551f767 Yan, Zheng    2015-04-27  471  	parent = NULL;
+10183a69551f767 Yan, Zheng    2015-04-27  472  	while (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  473  		parent = *p;
+10183a69551f767 Yan, Zheng    2015-04-27  474  		perm = rb_entry(parent, struct ceph_pool_perm, node);
+10183a69551f767 Yan, Zheng    2015-04-27  475  		if (pool < perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  476  			p = &(*p)->rb_left;
+10183a69551f767 Yan, Zheng    2015-04-27  477  		else if (pool > perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  478  			p = &(*p)->rb_right;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  479  		else {
+779fe0fb8e1883d Yan, Zheng    2016-03-07  480  			int ret = ceph_compare_string(pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  481  						perm->pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  482  						perm->pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  483  			if (ret < 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  484  				p = &(*p)->rb_left;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  485  			else if (ret > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  486  				p = &(*p)->rb_right;
+10183a69551f767 Yan, Zheng    2015-04-27  487  			else {
+10183a69551f767 Yan, Zheng    2015-04-27  488  				have = perm->perm;
+10183a69551f767 Yan, Zheng    2015-04-27  489  				break;
+10183a69551f767 Yan, Zheng    2015-04-27  490  			}
+10183a69551f767 Yan, Zheng    2015-04-27  491  		}
+779fe0fb8e1883d Yan, Zheng    2016-03-07  492  	}
+10183a69551f767 Yan, Zheng    2015-04-27  493  	if (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  494  		up_write(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  495  		goto out;
+10183a69551f767 Yan, Zheng    2015-04-27  496  	}
+10183a69551f767 Yan, Zheng    2015-04-27  497  
+34b759b4a22b0ac Ilya Dryomov  2016-02-16  498  	rd_req = ceph_osdc_alloc_request(&fsc->client->osdc, NULL,
+10183a69551f767 Yan, Zheng    2015-04-27  499  					 1, false, GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  500  	if (!rd_req) {
+10183a69551f767 Yan, Zheng    2015-04-27  501  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  502  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  503  	}
+10183a69551f767 Yan, Zheng    2015-04-27  504  
+10183a69551f767 Yan, Zheng    2015-04-27  505  	rd_req->r_flags = CEPH_OSD_FLAG_READ;
+10183a69551f767 Yan, Zheng    2015-04-27  506  	osd_req_op_init(rd_req, 0, CEPH_OSD_OP_STAT, 0);
+10183a69551f767 Yan, Zheng    2015-04-27  507  	rd_req->r_base_oloc.pool = pool;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  508  	if (pool_ns)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  509  		rd_req->r_base_oloc.pool_ns = ceph_get_string(pool_ns);
+d30291b985d1854 Ilya Dryomov  2016-04-29  510  	ceph_oid_printf(&rd_req->r_base_oid, "%llx.00000000", ci->i_vino.ino);
+10183a69551f767 Yan, Zheng    2015-04-27  511  
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  512  	err = ceph_osdc_alloc_messages(rd_req, GFP_NOFS);
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  513  	if (err)
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  514  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  515  
+34b759b4a22b0ac Ilya Dryomov  2016-02-16  516  	wr_req = ceph_osdc_alloc_request(&fsc->client->osdc, NULL,
+10183a69551f767 Yan, Zheng    2015-04-27  517  					 1, false, GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  518  	if (!wr_req) {
+10183a69551f767 Yan, Zheng    2015-04-27  519  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  520  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  521  	}
+10183a69551f767 Yan, Zheng    2015-04-27  522  
+54ea0046b6fe36e Ilya Dryomov  2017-02-11  523  	wr_req->r_flags = CEPH_OSD_FLAG_WRITE;
+10183a69551f767 Yan, Zheng    2015-04-27  524  	osd_req_op_init(wr_req, 0, CEPH_OSD_OP_CREATE, CEPH_OSD_OP_FLAG_EXCL);
+63244fa123a755e Ilya Dryomov  2016-04-28  525  	ceph_oloc_copy(&wr_req->r_base_oloc, &rd_req->r_base_oloc);
+d30291b985d1854 Ilya Dryomov  2016-04-29  526  	ceph_oid_copy(&wr_req->r_base_oid, &rd_req->r_base_oid);
+10183a69551f767 Yan, Zheng    2015-04-27  527  
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  528  	err = ceph_osdc_alloc_messages(wr_req, GFP_NOFS);
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  529  	if (err)
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  530  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  531  
+10183a69551f767 Yan, Zheng    2015-04-27  532  	/* one page should be large enough for STAT data */
+10183a69551f767 Yan, Zheng    2015-04-27  533  	pages = ceph_alloc_page_vector(1, GFP_KERNEL);
+10183a69551f767 Yan, Zheng    2015-04-27  534  	if (IS_ERR(pages)) {
+10183a69551f767 Yan, Zheng    2015-04-27  535  		err = PTR_ERR(pages);
+10183a69551f767 Yan, Zheng    2015-04-27  536  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  537  	}
+10183a69551f767 Yan, Zheng    2015-04-27  538  
+10183a69551f767 Yan, Zheng    2015-04-27 @539  	osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
+10183a69551f767 Yan, Zheng    2015-04-27  540  				     0, false, true);
+a8af0d682ae0c9c Jeff Layton   2022-06-30  541  	ceph_osdc_start_request(&fsc->client->osdc, rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  542  
+c453bdb535341b5 Jeff Layton   2023-10-04  543  	wr_req->r_mtime = inode_get_mtime(&ci->netfs.inode);
+a8af0d682ae0c9c Jeff Layton   2022-06-30  544  	ceph_osdc_start_request(&fsc->client->osdc, wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  545  
+10183a69551f767 Yan, Zheng    2015-04-27  546  	err = ceph_osdc_wait_request(&fsc->client->osdc, rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  547  	err2 = ceph_osdc_wait_request(&fsc->client->osdc, wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  548  
+10183a69551f767 Yan, Zheng    2015-04-27  549  	if (err >= 0 || err == -ENOENT)
+10183a69551f767 Yan, Zheng    2015-04-27  550  		have |= POOL_READ;
+131d7eb4faa1fc0 Yan, Zheng    2019-07-25  551  	else if (err != -EPERM) {
+0b98acd61883093 Ilya Dryomov  2020-09-14  552  		if (err == -EBLOCKLISTED)
+0b98acd61883093 Ilya Dryomov  2020-09-14  553  			fsc->blocklisted = true;
+10183a69551f767 Yan, Zheng    2015-04-27  554  		goto out_unlock;
+131d7eb4faa1fc0 Yan, Zheng    2019-07-25  555  	}
+10183a69551f767 Yan, Zheng    2015-04-27  556  
+10183a69551f767 Yan, Zheng    2015-04-27  557  	if (err2 == 0 || err2 == -EEXIST)
+10183a69551f767 Yan, Zheng    2015-04-27  558  		have |= POOL_WRITE;
+10183a69551f767 Yan, Zheng    2015-04-27  559  	else if (err2 != -EPERM) {
+0b98acd61883093 Ilya Dryomov  2020-09-14  560  		if (err2 == -EBLOCKLISTED)
+0b98acd61883093 Ilya Dryomov  2020-09-14  561  			fsc->blocklisted = true;
+10183a69551f767 Yan, Zheng    2015-04-27  562  		err = err2;
+10183a69551f767 Yan, Zheng    2015-04-27  563  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  564  	}
+10183a69551f767 Yan, Zheng    2015-04-27  565  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  566  	pool_ns_len = pool_ns ? pool_ns->len : 0;
+7264745d55422db Thorsten Blum 2024-09-12  567  	perm = kmalloc(struct_size(perm, pool_ns, pool_ns_len + 1), GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  568  	if (!perm) {
+10183a69551f767 Yan, Zheng    2015-04-27  569  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  570  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  571  	}
+10183a69551f767 Yan, Zheng    2015-04-27  572  
+10183a69551f767 Yan, Zheng    2015-04-27  573  	perm->pool = pool;
+10183a69551f767 Yan, Zheng    2015-04-27  574  	perm->perm = have;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  575  	perm->pool_ns_len = pool_ns_len;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  576  	if (pool_ns_len > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  577  		memcpy(perm->pool_ns, pool_ns->str, pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  578  	perm->pool_ns[pool_ns_len] = 0;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  579  
+10183a69551f767 Yan, Zheng    2015-04-27  580  	rb_link_node(&perm->node, parent, p);
+10183a69551f767 Yan, Zheng    2015-04-27  581  	rb_insert_color(&perm->node, &mdsc->pool_perm_tree);
+10183a69551f767 Yan, Zheng    2015-04-27  582  	err = 0;
+10183a69551f767 Yan, Zheng    2015-04-27  583  out_unlock:
+10183a69551f767 Yan, Zheng    2015-04-27  584  	up_write(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  585  
+10183a69551f767 Yan, Zheng    2015-04-27  586  	ceph_osdc_put_request(rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  587  	ceph_osdc_put_request(wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  588  out:
+10183a69551f767 Yan, Zheng    2015-04-27  589  	if (!err)
+10183a69551f767 Yan, Zheng    2015-04-27  590  		err = have;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  591  	if (pool_ns)
+38d46409c4639a1 Xiubo Li      2023-06-12  592  		doutc(cl, "pool %lld ns %.*s result = %d\n", pool,
+38d46409c4639a1 Xiubo Li      2023-06-12  593  		      (int)pool_ns->len, pool_ns->str, err);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  594  	else
+38d46409c4639a1 Xiubo Li      2023-06-12  595  		doutc(cl, "pool %lld result = %d\n", pool, err);
+10183a69551f767 Yan, Zheng    2015-04-27  596  	return err;
+10183a69551f767 Yan, Zheng    2015-04-27  597  }
+10183a69551f767 Yan, Zheng    2015-04-27  598  
 
-I don't have better idea for fix, apart from somehow refactor this huge
-function.
-Thank you for the fix,
+:::::: The code at line 539 was first introduced by commit
+:::::: 10183a69551f76702ac68bc74a437b25419c6de0 ceph: check OSD caps before read/write
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  sound/soc/sof/ipc4-topology.c | 25 +++++++++++++++++--------
->  1 file changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-> index 6d5cda813e48..41110ee6edc7 100644
-> --- a/sound/soc/sof/ipc4-topology.c
-> +++ b/sound/soc/sof/ipc4-topology.c
-> @@ -7,6 +7,7 @@
->  //
->  //
->  #include <linux/bitfield.h>
-> +#include <linux/cleanup.h>
->  #include <uapi/sound/sof/tokens.h>
->  #include <sound/pcm_params.h>
->  #include <sound/sof/ext_manifest4.h>
-> @@ -1807,8 +1808,8 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  	struct snd_sof_dev *sdev = snd_soc_component_get_drvdata(scomp);
->  	struct sof_ipc4_copier_data *copier_data;
->  	int input_fmt_index, output_fmt_index;
-> -	struct snd_pcm_hw_params ref_params;
->  	struct sof_ipc4_copier *ipc4_copier;
-> +	struct snd_pcm_hw_params *ref_params __free(kfree) = NULL;
->  	struct snd_sof_dai *dai;
->  	u32 gtw_cfg_config_length;
->  	u32 dma_config_tlv_size = 0;
-> @@ -1884,9 +1885,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * for capture.
->  		 */
->  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
-> -			ref_params = *fe_params;
-> +			ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
->  		else
-> -			ref_params = *pipeline_params;
-> +			ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
-> +		if (!ref_params)
-> +			return -ENOMEM;
->  
->  		copier_data->gtw_cfg.node_id &= ~SOF_IPC4_NODE_INDEX_MASK;
->  		copier_data->gtw_cfg.node_id |=
-> @@ -1919,8 +1922,11 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * In case of capture the ref_params returned will be used to
->  		 * find the input configuration of the copier.
->  		 */
-> -		ref_params = *fe_params;
-> -		ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
-> +		ref_params = kmemdup(fe_params, sizeof(*ref_params), GFP_KERNEL);
-> +		if (!ref_params)
-> +			return -ENOMEM;
-> +
-> +		ret = sof_ipc4_prepare_dai_copier(sdev, dai, ref_params, dir);
->  		if (ret < 0)
->  			return ret;
->  
-> @@ -1929,7 +1935,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * input configuration of the copier.
->  		 */
->  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
-> -			ref_params = *pipeline_params;
-> +			memcpy(ref_params, pipeline_params, sizeof(*ref_params));
->  
->  		break;
->  	}
-> @@ -1938,7 +1944,10 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		ipc4_copier = (struct sof_ipc4_copier *)swidget->private;
->  		copier_data = &ipc4_copier->data;
->  		available_fmt = &ipc4_copier->available_fmt;
-> -		ref_params = *pipeline_params;
-> +
-> +		ref_params = kmemdup(pipeline_params, sizeof(*ref_params), GFP_KERNEL);
-> +		if (!ref_params)
-> +			return -ENOMEM;
->  
->  		break;
->  	}
-> @@ -1951,7 +1960,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  	/* set input and output audio formats */
->  	input_fmt_index = sof_ipc4_init_input_audio_fmt(sdev, swidget,
->  							&copier_data->base_config,
-> -							&ref_params, available_fmt);
-> +							ref_params, available_fmt);
->  	if (input_fmt_index < 0)
->  		return input_fmt_index;
->  
+:::::: TO: Yan, Zheng <zyan@redhat.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
-Péter
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
