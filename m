@@ -1,100 +1,167 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC53F262814
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 08:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0242926281E;
+	Thu, 13 Mar 2025 08:49:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741855764; cv=none; b=EFqE3XJu+MQAO598raJ3+e6PQ2zy2k5/RaS0LK6aiHnLPwfXWq/3XwzEFfHd7OQqvVi5WD42rzBBh0b5fDnLDhVVO/HMeInQbVQauRdk9zb2hqKecpFAYizh6IKbsaoJgmN+BmJ0WsrJDiC679zFJJkyea3aPr3bsy4EMO2Dwqk=
+	t=1741855790; cv=none; b=MMqAKDx53CAk+Z6DdC8G3qhAPmjX99BJ1N0RVNzC6GH/jX6j8o+ZPZO7Gj2JH/OErb8opFlseeRNQvpR94jVafWsT/5LCOYAB36PlWEjxrW6ClmX+xf5/3nEmq9U64pdzZFh+Nvreuq+JGJpDjxr+7+7nK+6ejG/w+dJCSDQjJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741855764; c=relaxed/simple;
-	bh=wDdfhJhBThiZUn+0LbZ9lmE9r4DbYfHvlI21cG6BxoI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hL5my8XsneMOxwf8uoR8vDgqUzwHGIOU5f0A3DqfrOXwXj8Dx9vH6u7VKY9mxSSojGhN/2nN5A8f6Q6FbLOi7w62QWkZlSNzizbjzv0AV5rn4DlVa2zS38VZ3R4ALuhyS/AJzHm9z7kbmExoFAVXXKX0s6EWDGDx9lvms4bkcjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dsDWmjAH; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1741855790; c=relaxed/simple;
+	bh=vAEaDGijNXNaotmF7hcs6FNxQJRH9+12fIrHcW0asQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MZzkJYIaYXF+l/G6oAQf2ZPP7cmOx6Y+Fe1sSAYGeyFZSLjToE5au/ZZKGjGLOvpeA87x67iRm1JqULholvwnR9p4zTdhO4S4eApsxq3lR/F718Poj9ciEc9Fo6RWgfZbBeb24Vd+wwfAC8TCkfH1KHWCr+FeVe1HdtyYWiKXAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m38hReo9; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dsDWmjAH"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5498d2a8b89so711329e87.1
-        for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 01:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741855760; x=1742460560; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cH0/G8dnIsLEQps0a+QRu5yJlelIyIdUnSqN98914W0=;
-        b=dsDWmjAHdpeuJX1cOID/Ox2hirC9eZ6giz92gaF+MpJPdgN1BpmlKa3IAstbhOY8t7
-         AYvJ6ty3VPNyqr0JVSPr0cmEdGA/5vX/VPD/LYKkeVNe9sd12mIzMKiSi9tBG6jpOS1Y
-         MQ8HafZR3ixSiQBdATQ3ZRHWBjkabHn9AtR2DAcWPNW7k/cbBWxzv5EZqWb62iEtDYBW
-         IfaxBycmBaqNWCxQhmt2j63qkRzMiirrvthj90+IXVgeW1LOXRF6qT3EUVL3gs49THoH
-         5LlWDEImO6TKl4aXX//BgzH1sJi7+xTzmXt8qlLrsNByTSDK0rpF6YFYTjcmq2OSOtK2
-         iEsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741855760; x=1742460560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cH0/G8dnIsLEQps0a+QRu5yJlelIyIdUnSqN98914W0=;
-        b=BiyzCAN3b4Y8Hr3Tup6YeujtIW45KXUzcPmwQP+HXLbt+bo0rK3xZfktqLtS2+Sl1L
-         OC3YeUkEYMHFLRcTu5KfjzhgYFVwCdMpo2mLVhAIAQ3NhS68oxfH18hVdp1tKpaj2Bwm
-         5ttmDNVrXuExOzRgY1lVdWt3kj5+8UP9cuWgK0oHmV7s/udjZR3u9iN6J1Xpfw4+Wmxs
-         jUGCUgE3Qh2TX9LOlsmH/2rJozbFZ3xIy6Jh4YQPQDl06PNV+otdByw71N82crxwUho2
-         bsB4bYdJoFplSbgmWr6Y3qoyWGqYwBmKoI0EinjGsN0VOXMF3ZwCwqOX1iRRy5lMWEbQ
-         eTAw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ+HFIiCtDGmtsftZWtamzd4E0TKMq+YqLMVDv9JB1EOek1iY7BeoaCCEqtJeDFTHO3LC7@lists.linux.dev
-X-Gm-Message-State: AOJu0YzwYRQe7MCdeBsbXALW/6hWkzDITEL6R1LlqE+BF5Xcg1nmNZbS
-	Y/wLL3+UyywT4i7a28T7OhF+CFFGVvP9HNX1gQOoTKvdbMCr87Hcz6Aqq1L+U6M82KRZ0y8luHz
-	IhDnMLOj23GwrcY9evmBu0ddKZJFYy4inQ6xU55EXM7rlMNPbGEHXQA==
-X-Gm-Gg: ASbGncsPZTzwOEV+pckI1/FxiDM+aszh2GJU6x8oSYpOemD4RyQpKkmTZZCX2eW5MsG
-	fsjiP1DuBivZnsJBThkC1INfASo14AQQCQjhDPKzjLrRAh1C285wVqrJXLy6xZQbENM23ObSrf+
-	WPYyLu0HPTxuCQwpCwTInK4DcIWA==
-X-Google-Smtp-Source: AGHT+IHZkAfEyI5h1xNp9EscwBtm7RYtlJrFqFkZLqQeebsL2P20q1EFV/vAiiJ7hbwVCtlIBk24ytpLzUux5mvsmjw=
-X-Received: by 2002:a05:6512:ba6:b0:549:5b54:2c6c with SMTP id
- 2adb3069b0e04-54990e673f2mr9060936e87.23.1741855759797; Thu, 13 Mar 2025
- 01:49:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m38hReo9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741855788; x=1773391788;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vAEaDGijNXNaotmF7hcs6FNxQJRH9+12fIrHcW0asQo=;
+  b=m38hReo9Hj/UpFU1dLFHiK245L8qDdjuvT3kWRoXgTz8Pckmb9+aQvtM
+   A3AtgGtGppLhZJHPLHSNZQD8vib9Wwgz4WOSXymcjy0J8qy6RpAKgM9x2
+   oFlndNJlRMIsnGkNp1eyGxNS+jgSo6ZjnP9jY3eXSzHL2D6vZbcDQlDBO
+   ZI/5345/v5I4p2PoHLHr/QWZKMhte0z2j/BOYlJDOJ/Qh+UfJWSji213y
+   O4xxUlCbG2P1cOkMnfNMlWPaVm51Uquv4fGShdX4lrzTQc6SNwFpIlNgq
+   62Tf8eA7Oj7Gz5WOXh5wXRLLAkBvqY+oBtcsHDINuRzXE8ZTOBW05XpT+
+   w==;
+X-CSE-ConnectionGUID: DsieU08vSNqa84ClUCenAQ==
+X-CSE-MsgGUID: ODqghNbTRgqrR3m4kpYfCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42991365"
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="42991365"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 01:49:47 -0700
+X-CSE-ConnectionGUID: bdW+ocaFSEGMFAJicoe32A==
+X-CSE-MsgGUID: ++zdYlcfT46yHsfeedYqyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="121380567"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2025 01:49:45 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tseG5-0009Fp-2z;
+	Thu, 13 Mar 2025 08:49:41 +0000
+Date: Thu, 13 Mar 2025 16:49:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sarika Sharma <quic_sarishar@quicinc.com>, johannes@sipsolutions.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org,
+	Sarika Sharma <quic_sarishar@quicinc.com>
+Subject: Re: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo
+ structure elements for MLO
+Message-ID: <202503131646.3EOj6ycs-lkp@intel.com>
+References: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250311-arm-fix-vectors-with-linker-dce-v1-0-ec4c382e3bfd@kernel.org>
- <20250311-arm-fix-vectors-with-linker-dce-v1-2-ec4c382e3bfd@kernel.org>
-In-Reply-To: <20250311-arm-fix-vectors-with-linker-dce-v1-2-ec4c382e3bfd@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 13 Mar 2025 09:49:06 +0100
-X-Gm-Features: AQ5f1Jr7N3AP_OP74JY7L1V0VadIJIbOxnWg4sgQC81ix5N9CYiTFnZob5PuCj4
-Message-ID: <CACRpkdatTYZ9oxSBdjTbs-LjF3ONqcA-9vYojPc-KSGZmoEO=A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ARM: add KEEP() keyword to ARM_VECTORS
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>, Christian Eggers <ceggers@arri.de>, 
-	Arnd Bergmann <arnd@arndb.de>, Yuntao Liu <liuyuntao12@huawei.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
 
-On Tue, Mar 11, 2025 at 8:44=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+Hi Sarika,
 
-> From: Christian Eggers <ceggers@arri.de>
->
-> Without this, the vectors are removed if LD_DEAD_CODE_DATA_ELIMINATION
-> is enabled.  At startup, the CPU (silently) hangs in the undefined
-> instruction exception as soon as the first timer interrupt arrives.
->
-> On my setup, the system also boots fine without the 2nd and 3rd KEEP()
-> statements, so I cannot tell whether these are actually required.
->
-> Cc: stable@vger.kernel.org
-> Fixes: ed0f94102251 ("ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_E=
-LIMINATION")
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> [nathan: Use OVERLAY_KEEP() to avoid breaking old ld.lld versions]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+[auto build test ERROR on 9324731b9985478faf7f77713cc5e5fee811716e]
 
-Yours,
-Linus Walleij
+url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-add-support-towards-MLO-handling-of-station-statistics/20250312-145356
+base:   9324731b9985478faf7f77713cc5e5fee811716e
+patch link:    https://lore.kernel.org/r/20250312065132.3397726-5-quic_sarishar%40quicinc.com
+patch subject: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo structure elements for MLO
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20250313/202503131646.3EOj6ycs-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131646.3EOj6ycs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503131646.3EOj6ycs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:12:
+   drivers/net/wireless/intel/iwlwifi/mld/iface.h:172:5: warning: "CONFIG_PM_SLEEP" is not defined, evaluates to 0 [-Wundef]
+     172 | #if CONFIG_PM_SLEEP
+         |     ^~~~~~~~~~~~~~~
+>> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:10: error: 'const struct ieee80211_ops' has no member named 'sta_statistics'; did you mean 'link_sta_statistics'?
+    2637 |         .sta_statistics = iwl_mld_mac80211_sta_statistics,
+         |          ^~~~~~~~~~~~~~
+         |          link_sta_statistics
+>> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:27: error: initialization of 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_sta *)' from incompatible pointer type 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_sta *, struct station_info *)' [-Wincompatible-pointer-types]
+    2637 |         .sta_statistics = iwl_mld_mac80211_sta_statistics,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:27: note: (near initialization for 'iwl_mld_hw_ops.sta_pre_rcu_remove')
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2651:31: warning: initialized field overwritten [-Woverride-init]
+    2651 |         .sta_pre_rcu_remove = iwl_mld_sta_pre_rcu_remove,
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2651:31: note: (near initialization for 'iwl_mld_hw_ops.sta_pre_rcu_remove')
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1985:12: warning: 'iwl_mld_resume' defined but not used [-Wunused-function]
+    1985 | static int iwl_mld_resume(struct ieee80211_hw *hw)
+         |            ^~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1963:1: warning: 'iwl_mld_suspend' defined but not used [-Wunused-function]
+    1963 | iwl_mld_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
+         | ^~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1949:13: warning: 'iwl_mld_set_wakeup' defined but not used [-Wunused-function]
+    1949 | static void iwl_mld_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+         |             ^~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/net/wireless/intel/iwlwifi/mld/mlo.h:13,
+                    from drivers/net/wireless/intel/iwlwifi/mld/stats.c:9:
+   drivers/net/wireless/intel/iwlwifi/mld/iface.h:172:5: warning: "CONFIG_PM_SLEEP" is not defined, evaluates to 0 [-Wundef]
+     172 | #if CONFIG_PM_SLEEP
+         |     ^~~~~~~~~~~~~~~
+   drivers/net/wireless/intel/iwlwifi/mld/stats.c: In function 'iwl_mld_fill_stats_from_oper_notif':
+>> drivers/net/wireless/intel/iwlwifi/mld/stats.c:67:14: error: 'struct station_info' has no member named 'signal_avg'
+      67 |         sinfo->signal_avg = mld_link_sta->signal_avg;
+         |              ^~
+   drivers/net/wireless/intel/iwlwifi/mld/stats.c: In function 'iwl_mld_sta_stats_fill_txrate':
+   drivers/net/wireless/intel/iwlwifi/mld/stats.c:169:41: error: 'struct station_info' has no member named 'txrate'
+     169 |         struct rate_info *rinfo = &sinfo->txrate;
+         |                                         ^~
+
+
+vim +2637 drivers/net/wireless/intel/iwlwifi/mld/mac80211.c
+
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2608  
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2609  const struct ieee80211_ops iwl_mld_hw_ops = {
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2610  	.tx = iwl_mld_mac80211_tx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2611  	.start = iwl_mld_mac80211_start,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2612  	.stop = iwl_mld_mac80211_stop,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2613  	.config = iwl_mld_mac80211_config,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2614  	.add_interface = iwl_mld_mac80211_add_interface,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2615  	.remove_interface = iwl_mld_mac80211_remove_interface,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2616  	.conf_tx = iwl_mld_mac80211_conf_tx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2617  	.prepare_multicast = iwl_mld_mac80211_prepare_multicast,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2618  	.configure_filter = iwl_mld_mac80211_configure_filter,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2619  	.reconfig_complete = iwl_mld_mac80211_reconfig_complete,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2620  	.wake_tx_queue = iwl_mld_mac80211_wake_tx_queue,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2621  	.add_chanctx = iwl_mld_add_chanctx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2622  	.remove_chanctx = iwl_mld_remove_chanctx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2623  	.change_chanctx = iwl_mld_change_chanctx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2624  	.assign_vif_chanctx = iwl_mld_assign_vif_chanctx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2625  	.unassign_vif_chanctx = iwl_mld_unassign_vif_chanctx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2626  	.set_rts_threshold = iwl_mld_mac80211_set_rts_threshold,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2627  	.link_info_changed = iwl_mld_mac80211_link_info_changed,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2628  	.vif_cfg_changed = iwl_mld_mac80211_vif_cfg_changed,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2629  	.set_key = iwl_mld_mac80211_set_key,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2630  	.hw_scan = iwl_mld_mac80211_hw_scan,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2631  	.cancel_hw_scan = iwl_mld_mac80211_cancel_hw_scan,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2632  	.sched_scan_start = iwl_mld_mac80211_sched_scan_start,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2633  	.sched_scan_stop = iwl_mld_mac80211_sched_scan_stop,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2634  	.mgd_prepare_tx = iwl_mld_mac80211_mgd_prepare_tx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2635  	.mgd_complete_tx = iwl_mld_mac_mgd_complete_tx,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16  2636  	.sta_state = iwl_mld_mac80211_sta_state,
+d1e879ec600f9b3 Miri Korenblit 2025-02-16 @2637  	.sta_statistics = iwl_mld_mac80211_sta_statistics,
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
