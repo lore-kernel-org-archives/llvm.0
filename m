@@ -1,75 +1,102 @@
-Received: from mail3.lpse.lkpp.go.id (mail2.lpse.lkpp.go.id [103.55.160.152])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945F4139D1B
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 05:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.55.160.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2038D3A8D2
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 07:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741842559; cv=none; b=EC+vGtim32ojS+8kkA8K3i/D7TEmvyNjFp27FqypGkAMydERB4JJiYQUjUfrnvqHYh3mpN9f89At7/dp8fF++f8+qi1laZRaGTPqg6MKmtkVTZObPUYCDJXzyg87cSBTCHGdxzt+Cc+K4OzOse8y3/hukrA5AXB6hmdXX0K84Jo=
+	t=1741852016; cv=none; b=gFN4KnZ07cYNkoQ70Jj6buSBUEZx7IiEu5Xv5Ux3ls4fCwX2+YymPy/+SV+V19T2pR1+ziF09SupkvXU1vBqUSO1TelhxfHQz9uD/T9dcal/jnGw6MML23GODPo0WWr8LzA9jBNIJjNimd3L1yRs+bgbIh6KRZMO80vY9DcUjEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741842559; c=relaxed/simple;
-	bh=NsVQQzIlrGdQY0hkCKNPB+mG74iYX6e2YkCdxe3Sp3o=;
-	h=Content-Type:MIME-Version:Subject:To:From:Date:Message-Id; b=nV3r5hdb6O5IsnW17ZY6ZUUfeT2alzlncf6yG5C6upW2cbx0Krnlf+Y+D2aLm8mHrJg/SArRrep4FJQWEEleojeIH4lhUTNTSlVSd7SkrMe/oCfm5TwycsQwODmpjtmW5U1dJDHbrfyp0Lxf0SkxEXtNy2zkd1KHhBTkV2/tEQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hillsandwills.com; spf=fail smtp.mailfrom=hillsandwills.com; arc=none smtp.client-ip=103.55.160.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=hillsandwills.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hillsandwills.com
-Received: from localhost (localhost [127.0.0.1])
-	by mail3.lpse.lkpp.go.id (Postfix) with ESMTP id A353FE699D
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 12:09:15 +0700 (WIB)
-X-Virus-Scanned: Debian amavisd-new at mail7.lpse.lkpp.go.id
-Received: from mail3.lpse.lkpp.go.id ([127.0.0.1])
-	by localhost (mail2.lpse.lkpp.go.id [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id iCglz7q3Oy41 for <llvm@lists.linux.dev>;
-	Thu, 13 Mar 2025 12:09:15 +0700 (WIB)
-Received: from [83.147.253.77] (localhost [127.0.0.1])
-	by mail3.lpse.lkpp.go.id (Postfix) with ESMTP id 17B04E6A2D
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 12:09:14 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+	s=arc-20240116; t=1741852016; c=relaxed/simple;
+	bh=Kcw/cri+106dKos1f1Natr9iLqISBP6t2M/k6NuJoeA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TWryv0WVNmBLzD9dO84zV7ZkGMl7UaMJkoP4aaSmM54Di3VtKswdxJptLSoHLwlObnNa2P7t0rDeYTqOocKmW/FCgp5jisfow20PD//+jb+bbnq7Ubj4llWiSm0NS+fPzY1whDCPGW+5jal8HWqbQmPBcEvAdsCp+t4OHwsMLaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wVVBZDUw; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wVVBZDUw"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741852002;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=A1k4rvRiNGwMmsF5RLcMl0KSYAR5wW+8BJa1JeXnczs=;
+	b=wVVBZDUwJMfdTy9EFL9OKjRb4HM/biVq9ZaJh0Ar2oo+cRJH67geNPyjJXZhKgquo6Pz3I
+	Wbpa/MhNEg05bLPlCgxyLOvtff4qSGAzTB/CmziQ+4OAX3PgItsWQYflwsOBo1hP15oKD9
+	QgZ7J4exDWdpCXvn2EGXIGxCzjGmJsE=
+From: Kunwu Chan <kunwu.chan@linux.dev>
+To: ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	boqun.feng@gmail.com,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	benno.lossin@proton.me,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com
+Cc: rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Kunwu Chan <kunwu.chan@hotmail.com>,
+	Grace Deng <Grace.Deng006@Gmail.com>
+Subject: [PATCH] rust: sync: optimize Rust symbol generation for PollCondVar
+Date: Thu, 13 Mar 2025 15:45:36 +0800
+Message-ID: <20250313074537.729578-1-kunwu.chan@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Get back 
-To: llvm@lists.linux.dev
-From: "Gloria"<ads-noreply@hillsandwills.com>
-Date: Thu, 13 Mar 2025 06:09:14 +0100
-Reply-To: hasan.alakbarzade@ecovista.az
-Message-Id: <20250313050915.17B04E6A2D@mail3.lpse.lkpp.go.id>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello.....
+From: Kunwu Chan <kunwu.chan@hotmail.com>
 
+When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+with ARCH=arm64, the following symbols are generated:
 
-Good day to you I am writing this message to you to seek your
-consent regarding onward investment plan,  in any country of yours.
+$nm vmlinux | grep ' _R'.*PollCondVar  | rustfilt
+ffff800080019e90 T <kernel::sync::poll::PollCondVar>
+			::new::{closure#0}::{closure#0}::panic_cold_explicit
+ffff8000805b8e04 T <kernel::sync::poll::PollCondVar
+			as kernel::init::PinnedDrop>::drop
+ffff8000805b8e04 T <kernel::sync::poll::PollCondVar
+			as core::ops::drop::Drop>::drop
 
-My name is Ms Gloria Johson., I'm the CEO of AMP
-Resources  LTD. We are involved in all sectors of oil and gas production.
+This Rust symbol
+(<kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop)
+is trivial wrappers around the C functions __wake_up_pollfree
+and synchronize_rcu. It doesn't make sense to go through a trivial
+wrapper for its functions,so mark them inline.
 
-Our operation range from crude extraction , transportation, retail and dist=
-ribution. =
+After doing so, the above symbol will not in output.
 
-I am a Canadian born Russian resident in Saint Petersburg
-Russia. =
+Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+---
+ rust/kernel/sync/poll.rs | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/rust/kernel/sync/poll.rs b/rust/kernel/sync/poll.rs
+index d5f17153b424..a4f92c545fec 100644
+--- a/rust/kernel/sync/poll.rs
++++ b/rust/kernel/sync/poll.rs
+@@ -107,6 +107,7 @@ fn deref(&self) -> &CondVar {
+ 
+ #[pinned_drop]
+ impl PinnedDrop for PollCondVar {
++    #[inline]
+     fn drop(self: Pin<&mut Self>) {
+         // Clear anything registered using `register_wait`.
+         //
+-- 
+2.43.0
 
-Because of the war in Russia ,  I want to start moving my funds to a truste=
-d person.
-funds out of countries i mentioned as  I can't no longer stand the hard san=
-ctions, over my funds in Holland and Paris and UK
-Base on.russian sanctions  is facing as a result of Putin and his stubbornn=
-ess. I
-have deposits i would like to move, each of the deposit is 20m l need a tru=
-sted
-person to manage the heritage.
-
-
-
-Best regards,
-
-Ms Gloria Johson. =
-
-Send your response to my above email.
