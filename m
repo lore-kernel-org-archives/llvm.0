@@ -1,70 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF66267B83;
-	Thu, 13 Mar 2025 14:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA7E269AE6;
+	Thu, 13 Mar 2025 14:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741875716; cv=none; b=sqb7tFV/1YYWJoAS2VX1I/TR6Sx2hvXIwoxkB17LvzY2887PGbDemoDM93rA3zBn+qu/gsfuX8t9/Lv0O6UD7zVvhDCo+CQ/33nMvRyPPoDca/DhUUNMiJ7YJ3P0hKqUkR0WlecIIS+Uk1YiTo4kvbntkILIZzAhgQpycx/i9yc=
+	t=1741876372; cv=none; b=arMAE/RqEC4ZdxspUdSeir+MZnjm7JSYvz5PoMll669pRxTlCl5eOYLBDUlzqqlp+fvZWZH0WS4EsrrlI8aI6zOyDJLzg0svwkNtZbYmkOX2MMF9mmIw2HqP6I147NVRy3zVUQ5tQyP8JF5U/Cm/lzNl7RtfgeKMoH5TmKlxf9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741875716; c=relaxed/simple;
-	bh=FZGBmGms+TGXeGz/gxxLPrKHWPZfjyc+sRwOk3cnf5k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iDrj7u/9ky/gIhjn8lYU0dhD5wvhcKejAHaEwLnsPl83URM23uox0gDV/m2IWFUd9nZFhTmLjwkeCgzrrPieCKGjy3CilsNArdNjK2J49t8YYG2o+K2oIzGCN4YKUZkOgua3+I6j5EXdf2s48Zmqht9uf1NWcLSjbJKuuLWOjFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQVqXQYJ; arc=none smtp.client-ip=198.175.65.18
+	s=arc-20240116; t=1741876372; c=relaxed/simple;
+	bh=WO29Igs6zIzW9miuwSHyeYHYSHvQrA7d9ttp4Ak/hmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=WBEtfIQ7oKPFdTWkkam4Cd+cdcipVipt4CPI0MsCS4fcsrznFEfBW0jlk1bzw7M4msLBlR5Kk4/MoPV+hx4784q3qrc3SdVTP1ntC1XQbsFOZNYzWXSIvC1OruNtTj8cR6RMmkDMpMuCK7KK7Qq/PsT/R1NT+uXYl5pSmL0OAyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fDHNlzTP; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQVqXQYJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fDHNlzTP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741875715; x=1773411715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FZGBmGms+TGXeGz/gxxLPrKHWPZfjyc+sRwOk3cnf5k=;
-  b=GQVqXQYJFkHrXZkAFcxaIit5/8iKRPe8J0NTLs90N/o2PzSsxkQc1fz0
-   vqm+n+MEjFjyT3qqG/6Ur/vicw+Jj72McEeYQ2onXkZzLX6T+dQLAWL+2
-   lcyMRqJmyxA1KL2DoBCTWVFGEY4BiVYlziLBumsIVozSSHNUTclqSsxFA
-   vos03ulK86xPbocXv1J60uoX5QvuoD/G7lGgtAkQlWlQorvB69s/0Cgg3
-   wweScKgwi0B4K1cQRCygzzsucWoh7HXmxVDDWdI4B0A2MKA+td9myORkh
-   VF97aYQavFNinb1VYVTGfJDHwzTRAlosOYcVESoiCk4pA6+tYP+Mkhv/x
-   g==;
-X-CSE-ConnectionGUID: n3TpjPbAQFyC7S3FCFJoIA==
-X-CSE-MsgGUID: sK0REbvRQoC/S7Tnn5kNrw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43173183"
+  t=1741876371; x=1773412371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WO29Igs6zIzW9miuwSHyeYHYSHvQrA7d9ttp4Ak/hmg=;
+  b=fDHNlzTPzHPVfDbET9oAvaRt7vbdVIcvQsBLQvvhMgdDFCL3/6qm66YX
+   XqF5LT6SMdQzqQW6RMiQ4d8eZqpX9ojl4nLR3UOLW4Zj8XKMF5M/leONY
+   81Dr9L5BOFREfgJuzKjJlVdlo9/CQVjlNqdO/73gbLaV20fgVjjSpdP3l
+   VuL0nArEt8RC/NEPK7V6FaxOgDlo6FDa5zEITv2wxRQIoMViehwkvzkBT
+   8Y/EGlVy8b2PFT9FtltaWtDIJrcNLN+cTjyipSzJkCq23BrRfh7c042yK
+   nKpw2TOH8Ce8nN050Rtg/Uv9R6iKbJhgSmX111cuC5q0KUX/L94tKSNJO
+   w==;
+X-CSE-ConnectionGUID: f+h9zXstQEaNyNmNNJfDMg==
+X-CSE-MsgGUID: r3m+1cNkRQKliQofBGjEwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="68353259"
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="43173183"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:21:55 -0700
-X-CSE-ConnectionGUID: rgVzKyghTUuLgBgj3SL2mA==
-X-CSE-MsgGUID: JQFdTckuTfCVIMwnKqXgYQ==
+   d="scan'208";a="68353259"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:32:50 -0700
+X-CSE-ConnectionGUID: NmYsIyOwSFarMaH8WFFwbw==
+X-CSE-MsgGUID: gArllwrLTOiOt1sGPZuWMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="126026799"
+   d="scan'208";a="121677900"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 13 Mar 2025 07:21:47 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 13 Mar 2025 07:32:49 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsjRQ-0009Vj-3D;
-	Thu, 13 Mar 2025 14:21:44 +0000
-Date: Thu, 13 Mar 2025 22:20:46 +0800
+	id 1tsjc6-0009Wk-0N;
+	Thu, 13 Mar 2025 14:32:46 +0000
+Date: Thu, 13 Mar 2025 22:32:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	pbonzini@redhat.com, chenhuacai@kernel.org, mpe@ellerman.id.au,
-	anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, seanjc@google.com, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
-	xiaoyao.li@intel.com, yilun.xu@intel.com,
-	chao.p.peng@linux.intel.com, jarkko@kernel.org, amoorthy@google.com,
-	dmatlack@google.com, isaku.yamahata@intel.com, mic@digikod.net,
-	vbabka@suse.cz, vannapurve@google.com, ackerleytng@google.com,
-	mail@maciej.szmigiero.name, david@redhat.com, michael.roth@amd.com,
-	wei.w.wang@intel.com
-Subject: Re: [PATCH v6 09/10] KVM: arm64: Enable mapping guest_memfd in arm64
-Message-ID: <202503132205.Ajz52k8I-lkp@intel.com>
-References: <20250312175824.1809636-10-tabba@google.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 43/44] fs/ceph/addr.c:539:2: error: call to
+ undeclared function 'osd_req_op_raw_data_in_pages'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202503140022.dvUPW8MU-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,78 +62,215 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250312175824.1809636-10-tabba@google.com>
 
-Hi Fuad,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 80e54e84911a923c40d7bee33a34c1b4be148d7a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fuad-Tabba/mm-Consolidate-freeing-of-typed-folios-on-final-folio_put/20250313-020010
-base:   80e54e84911a923c40d7bee33a34c1b4be148d7a
-patch link:    https://lore.kernel.org/r/20250312175824.1809636-10-tabba%40google.com
-patch subject: [PATCH v6 09/10] KVM: arm64: Enable mapping guest_memfd in arm64
-config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20250313/202503132205.Ajz52k8I-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503132205.Ajz52k8I-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   d96beacafbc048781a87c7188237957ed09d0df0
+commit: 6e6fbe816f6feac19872bb2f900cdff82c31e668 [43/44] libceph: Remove CEPH_OS_DATA_TYPE_PAGES and its attendant helpers
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250314/202503140022.dvUPW8MU-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140022.dvUPW8MU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503132205.Ajz52k8I-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503140022.dvUPW8MU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/arm64/kernel/asm-offsets.c:15:
->> include/linux/kvm_host.h:725:20: error: redefinition of 'kvm_arch_has_private_mem'
-     725 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/kvm_host.h:45:
-   arch/arm64/include/asm/kvm_host.h:1546:20: note: previous definition of 'kvm_arch_has_private_mem' with type 'bool(struct kvm *)' {aka '_Bool(struct kvm *)'}
-    1546 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/kvm_host.h:736:20: error: redefinition of 'kvm_arch_gmem_supports_shared_mem'
-     736 | static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/include/asm/kvm_host.h:1551:20: note: previous definition of 'kvm_arch_gmem_supports_shared_mem' with type 'bool(struct kvm *)' {aka '_Bool(struct kvm *)'}
-    1551 | static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   make[3]: *** [scripts/Makefile.build:102: arch/arm64/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1269: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:251: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:251: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> fs/ceph/addr.c:539:2: error: call to undeclared function 'osd_req_op_raw_data_in_pages'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     539 |         osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
+         |         ^
+   fs/ceph/addr.c:539:2: note: did you mean 'osd_req_op_raw_data_in_databuf'?
+   include/linux/ceph/osd_client.h:465:6: note: 'osd_req_op_raw_data_in_databuf' declared here
+     465 | void osd_req_op_raw_data_in_databuf(struct ceph_osd_request *osd_req,
+         |      ^
+   1 error generated.
 
 
-vim +/kvm_arch_has_private_mem +725 include/linux/kvm_host.h
+vim +/osd_req_op_raw_data_in_pages +539 fs/ceph/addr.c
 
-f481b069e674378 Paolo Bonzini       2015-05-17  719  
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  720  /*
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  721   * Arch code must define kvm_arch_has_private_mem if support for private memory
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  722   * is enabled.
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  723   */
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  724  #if !defined(kvm_arch_has_private_mem) && !IS_ENABLED(CONFIG_KVM_PRIVATE_MEM)
-a7800aa80ea4d53 Sean Christopherson 2023-11-13 @725  static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  726  {
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  727  	return false;
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  728  }
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  729  #endif
-a7800aa80ea4d53 Sean Christopherson 2023-11-13  730  
-a765e4ca28eb657 Fuad Tabba          2025-03-12  731  /*
-a765e4ca28eb657 Fuad Tabba          2025-03-12  732   * Arch code must define kvm_arch_gmem_supports_shared_mem if support for
-a765e4ca28eb657 Fuad Tabba          2025-03-12  733   * private memory is enabled and it supports in-place shared/private conversion.
-a765e4ca28eb657 Fuad Tabba          2025-03-12  734   */
-a765e4ca28eb657 Fuad Tabba          2025-03-12  735  #if !defined(kvm_arch_gmem_supports_shared_mem) && !IS_ENABLED(CONFIG_KVM_GMEM_SHARED_MEM)
-a765e4ca28eb657 Fuad Tabba          2025-03-12 @736  static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
-a765e4ca28eb657 Fuad Tabba          2025-03-12  737  {
-a765e4ca28eb657 Fuad Tabba          2025-03-12  738  	return false;
-a765e4ca28eb657 Fuad Tabba          2025-03-12  739  }
-a765e4ca28eb657 Fuad Tabba          2025-03-12  740  #endif
-a765e4ca28eb657 Fuad Tabba          2025-03-12  741  
+10183a69551f767 Yan, Zheng    2015-04-27  423  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  424  static int __ceph_pool_perm_get(struct ceph_inode_info *ci,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  425  				s64 pool, struct ceph_string *pool_ns)
+10183a69551f767 Yan, Zheng    2015-04-27  426  {
+5995d90d2d19f33 Xiubo Li      2023-06-12  427  	struct ceph_fs_client *fsc = ceph_inode_to_fs_client(&ci->netfs.inode);
+10183a69551f767 Yan, Zheng    2015-04-27  428  	struct ceph_mds_client *mdsc = fsc->mdsc;
+38d46409c4639a1 Xiubo Li      2023-06-12  429  	struct ceph_client *cl = fsc->client;
+10183a69551f767 Yan, Zheng    2015-04-27  430  	struct ceph_osd_request *rd_req = NULL, *wr_req = NULL;
+10183a69551f767 Yan, Zheng    2015-04-27  431  	struct rb_node **p, *parent;
+10183a69551f767 Yan, Zheng    2015-04-27  432  	struct ceph_pool_perm *perm;
+10183a69551f767 Yan, Zheng    2015-04-27  433  	struct page **pages;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  434  	size_t pool_ns_len;
+10183a69551f767 Yan, Zheng    2015-04-27  435  	int err = 0, err2 = 0, have = 0;
+10183a69551f767 Yan, Zheng    2015-04-27  436  
+10183a69551f767 Yan, Zheng    2015-04-27  437  	down_read(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  438  	p = &mdsc->pool_perm_tree.rb_node;
+10183a69551f767 Yan, Zheng    2015-04-27  439  	while (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  440  		perm = rb_entry(*p, struct ceph_pool_perm, node);
+10183a69551f767 Yan, Zheng    2015-04-27  441  		if (pool < perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  442  			p = &(*p)->rb_left;
+10183a69551f767 Yan, Zheng    2015-04-27  443  		else if (pool > perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  444  			p = &(*p)->rb_right;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  445  		else {
+779fe0fb8e1883d Yan, Zheng    2016-03-07  446  			int ret = ceph_compare_string(pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  447  						perm->pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  448  						perm->pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  449  			if (ret < 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  450  				p = &(*p)->rb_left;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  451  			else if (ret > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  452  				p = &(*p)->rb_right;
+10183a69551f767 Yan, Zheng    2015-04-27  453  			else {
+10183a69551f767 Yan, Zheng    2015-04-27  454  				have = perm->perm;
+10183a69551f767 Yan, Zheng    2015-04-27  455  				break;
+10183a69551f767 Yan, Zheng    2015-04-27  456  			}
+10183a69551f767 Yan, Zheng    2015-04-27  457  		}
+779fe0fb8e1883d Yan, Zheng    2016-03-07  458  	}
+10183a69551f767 Yan, Zheng    2015-04-27  459  	up_read(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  460  	if (*p)
+10183a69551f767 Yan, Zheng    2015-04-27  461  		goto out;
+10183a69551f767 Yan, Zheng    2015-04-27  462  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  463  	if (pool_ns)
+38d46409c4639a1 Xiubo Li      2023-06-12  464  		doutc(cl, "pool %lld ns %.*s no perm cached\n", pool,
+38d46409c4639a1 Xiubo Li      2023-06-12  465  		      (int)pool_ns->len, pool_ns->str);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  466  	else
+38d46409c4639a1 Xiubo Li      2023-06-12  467  		doutc(cl, "pool %lld no perm cached\n", pool);
+10183a69551f767 Yan, Zheng    2015-04-27  468  
+10183a69551f767 Yan, Zheng    2015-04-27  469  	down_write(&mdsc->pool_perm_rwsem);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  470  	p = &mdsc->pool_perm_tree.rb_node;
+10183a69551f767 Yan, Zheng    2015-04-27  471  	parent = NULL;
+10183a69551f767 Yan, Zheng    2015-04-27  472  	while (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  473  		parent = *p;
+10183a69551f767 Yan, Zheng    2015-04-27  474  		perm = rb_entry(parent, struct ceph_pool_perm, node);
+10183a69551f767 Yan, Zheng    2015-04-27  475  		if (pool < perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  476  			p = &(*p)->rb_left;
+10183a69551f767 Yan, Zheng    2015-04-27  477  		else if (pool > perm->pool)
+10183a69551f767 Yan, Zheng    2015-04-27  478  			p = &(*p)->rb_right;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  479  		else {
+779fe0fb8e1883d Yan, Zheng    2016-03-07  480  			int ret = ceph_compare_string(pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  481  						perm->pool_ns,
+779fe0fb8e1883d Yan, Zheng    2016-03-07  482  						perm->pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  483  			if (ret < 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  484  				p = &(*p)->rb_left;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  485  			else if (ret > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  486  				p = &(*p)->rb_right;
+10183a69551f767 Yan, Zheng    2015-04-27  487  			else {
+10183a69551f767 Yan, Zheng    2015-04-27  488  				have = perm->perm;
+10183a69551f767 Yan, Zheng    2015-04-27  489  				break;
+10183a69551f767 Yan, Zheng    2015-04-27  490  			}
+10183a69551f767 Yan, Zheng    2015-04-27  491  		}
+779fe0fb8e1883d Yan, Zheng    2016-03-07  492  	}
+10183a69551f767 Yan, Zheng    2015-04-27  493  	if (*p) {
+10183a69551f767 Yan, Zheng    2015-04-27  494  		up_write(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  495  		goto out;
+10183a69551f767 Yan, Zheng    2015-04-27  496  	}
+10183a69551f767 Yan, Zheng    2015-04-27  497  
+34b759b4a22b0ac Ilya Dryomov  2016-02-16  498  	rd_req = ceph_osdc_alloc_request(&fsc->client->osdc, NULL,
+10183a69551f767 Yan, Zheng    2015-04-27  499  					 1, false, GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  500  	if (!rd_req) {
+10183a69551f767 Yan, Zheng    2015-04-27  501  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  502  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  503  	}
+10183a69551f767 Yan, Zheng    2015-04-27  504  
+10183a69551f767 Yan, Zheng    2015-04-27  505  	rd_req->r_flags = CEPH_OSD_FLAG_READ;
+10183a69551f767 Yan, Zheng    2015-04-27  506  	osd_req_op_init(rd_req, 0, CEPH_OSD_OP_STAT, 0);
+10183a69551f767 Yan, Zheng    2015-04-27  507  	rd_req->r_base_oloc.pool = pool;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  508  	if (pool_ns)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  509  		rd_req->r_base_oloc.pool_ns = ceph_get_string(pool_ns);
+d30291b985d1854 Ilya Dryomov  2016-04-29  510  	ceph_oid_printf(&rd_req->r_base_oid, "%llx.00000000", ci->i_vino.ino);
+10183a69551f767 Yan, Zheng    2015-04-27  511  
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  512  	err = ceph_osdc_alloc_messages(rd_req, GFP_NOFS);
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  513  	if (err)
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  514  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  515  
+34b759b4a22b0ac Ilya Dryomov  2016-02-16  516  	wr_req = ceph_osdc_alloc_request(&fsc->client->osdc, NULL,
+10183a69551f767 Yan, Zheng    2015-04-27  517  					 1, false, GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  518  	if (!wr_req) {
+10183a69551f767 Yan, Zheng    2015-04-27  519  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  520  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  521  	}
+10183a69551f767 Yan, Zheng    2015-04-27  522  
+54ea0046b6fe36e Ilya Dryomov  2017-02-11  523  	wr_req->r_flags = CEPH_OSD_FLAG_WRITE;
+10183a69551f767 Yan, Zheng    2015-04-27  524  	osd_req_op_init(wr_req, 0, CEPH_OSD_OP_CREATE, CEPH_OSD_OP_FLAG_EXCL);
+63244fa123a755e Ilya Dryomov  2016-04-28  525  	ceph_oloc_copy(&wr_req->r_base_oloc, &rd_req->r_base_oloc);
+d30291b985d1854 Ilya Dryomov  2016-04-29  526  	ceph_oid_copy(&wr_req->r_base_oid, &rd_req->r_base_oid);
+10183a69551f767 Yan, Zheng    2015-04-27  527  
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  528  	err = ceph_osdc_alloc_messages(wr_req, GFP_NOFS);
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  529  	if (err)
+13d1ad16d05eebb Ilya Dryomov  2016-04-27  530  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  531  
+10183a69551f767 Yan, Zheng    2015-04-27  532  	/* one page should be large enough for STAT data */
+10183a69551f767 Yan, Zheng    2015-04-27  533  	pages = ceph_alloc_page_vector(1, GFP_KERNEL);
+10183a69551f767 Yan, Zheng    2015-04-27  534  	if (IS_ERR(pages)) {
+10183a69551f767 Yan, Zheng    2015-04-27  535  		err = PTR_ERR(pages);
+10183a69551f767 Yan, Zheng    2015-04-27  536  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  537  	}
+10183a69551f767 Yan, Zheng    2015-04-27  538  
+10183a69551f767 Yan, Zheng    2015-04-27 @539  	osd_req_op_raw_data_in_pages(rd_req, 0, pages, PAGE_SIZE,
+10183a69551f767 Yan, Zheng    2015-04-27  540  				     0, false, true);
+a8af0d682ae0c9c Jeff Layton   2022-06-30  541  	ceph_osdc_start_request(&fsc->client->osdc, rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  542  
+c453bdb535341b5 Jeff Layton   2023-10-04  543  	wr_req->r_mtime = inode_get_mtime(&ci->netfs.inode);
+a8af0d682ae0c9c Jeff Layton   2022-06-30  544  	ceph_osdc_start_request(&fsc->client->osdc, wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  545  
+10183a69551f767 Yan, Zheng    2015-04-27  546  	err = ceph_osdc_wait_request(&fsc->client->osdc, rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  547  	err2 = ceph_osdc_wait_request(&fsc->client->osdc, wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  548  
+10183a69551f767 Yan, Zheng    2015-04-27  549  	if (err >= 0 || err == -ENOENT)
+10183a69551f767 Yan, Zheng    2015-04-27  550  		have |= POOL_READ;
+131d7eb4faa1fc0 Yan, Zheng    2019-07-25  551  	else if (err != -EPERM) {
+0b98acd61883093 Ilya Dryomov  2020-09-14  552  		if (err == -EBLOCKLISTED)
+0b98acd61883093 Ilya Dryomov  2020-09-14  553  			fsc->blocklisted = true;
+10183a69551f767 Yan, Zheng    2015-04-27  554  		goto out_unlock;
+131d7eb4faa1fc0 Yan, Zheng    2019-07-25  555  	}
+10183a69551f767 Yan, Zheng    2015-04-27  556  
+10183a69551f767 Yan, Zheng    2015-04-27  557  	if (err2 == 0 || err2 == -EEXIST)
+10183a69551f767 Yan, Zheng    2015-04-27  558  		have |= POOL_WRITE;
+10183a69551f767 Yan, Zheng    2015-04-27  559  	else if (err2 != -EPERM) {
+0b98acd61883093 Ilya Dryomov  2020-09-14  560  		if (err2 == -EBLOCKLISTED)
+0b98acd61883093 Ilya Dryomov  2020-09-14  561  			fsc->blocklisted = true;
+10183a69551f767 Yan, Zheng    2015-04-27  562  		err = err2;
+10183a69551f767 Yan, Zheng    2015-04-27  563  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  564  	}
+10183a69551f767 Yan, Zheng    2015-04-27  565  
+779fe0fb8e1883d Yan, Zheng    2016-03-07  566  	pool_ns_len = pool_ns ? pool_ns->len : 0;
+7264745d55422db Thorsten Blum 2024-09-12  567  	perm = kmalloc(struct_size(perm, pool_ns, pool_ns_len + 1), GFP_NOFS);
+10183a69551f767 Yan, Zheng    2015-04-27  568  	if (!perm) {
+10183a69551f767 Yan, Zheng    2015-04-27  569  		err = -ENOMEM;
+10183a69551f767 Yan, Zheng    2015-04-27  570  		goto out_unlock;
+10183a69551f767 Yan, Zheng    2015-04-27  571  	}
+10183a69551f767 Yan, Zheng    2015-04-27  572  
+10183a69551f767 Yan, Zheng    2015-04-27  573  	perm->pool = pool;
+10183a69551f767 Yan, Zheng    2015-04-27  574  	perm->perm = have;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  575  	perm->pool_ns_len = pool_ns_len;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  576  	if (pool_ns_len > 0)
+779fe0fb8e1883d Yan, Zheng    2016-03-07  577  		memcpy(perm->pool_ns, pool_ns->str, pool_ns_len);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  578  	perm->pool_ns[pool_ns_len] = 0;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  579  
+10183a69551f767 Yan, Zheng    2015-04-27  580  	rb_link_node(&perm->node, parent, p);
+10183a69551f767 Yan, Zheng    2015-04-27  581  	rb_insert_color(&perm->node, &mdsc->pool_perm_tree);
+10183a69551f767 Yan, Zheng    2015-04-27  582  	err = 0;
+10183a69551f767 Yan, Zheng    2015-04-27  583  out_unlock:
+10183a69551f767 Yan, Zheng    2015-04-27  584  	up_write(&mdsc->pool_perm_rwsem);
+10183a69551f767 Yan, Zheng    2015-04-27  585  
+10183a69551f767 Yan, Zheng    2015-04-27  586  	ceph_osdc_put_request(rd_req);
+10183a69551f767 Yan, Zheng    2015-04-27  587  	ceph_osdc_put_request(wr_req);
+10183a69551f767 Yan, Zheng    2015-04-27  588  out:
+10183a69551f767 Yan, Zheng    2015-04-27  589  	if (!err)
+10183a69551f767 Yan, Zheng    2015-04-27  590  		err = have;
+779fe0fb8e1883d Yan, Zheng    2016-03-07  591  	if (pool_ns)
+38d46409c4639a1 Xiubo Li      2023-06-12  592  		doutc(cl, "pool %lld ns %.*s result = %d\n", pool,
+38d46409c4639a1 Xiubo Li      2023-06-12  593  		      (int)pool_ns->len, pool_ns->str, err);
+779fe0fb8e1883d Yan, Zheng    2016-03-07  594  	else
+38d46409c4639a1 Xiubo Li      2023-06-12  595  		doutc(cl, "pool %lld result = %d\n", pool, err);
+10183a69551f767 Yan, Zheng    2015-04-27  596  	return err;
+10183a69551f767 Yan, Zheng    2015-04-27  597  }
+10183a69551f767 Yan, Zheng    2015-04-27  598  
+
+:::::: The code at line 539 was first introduced by commit
+:::::: 10183a69551f76702ac68bc74a437b25419c6de0 ceph: check OSD caps before read/write
+
+:::::: TO: Yan, Zheng <zyan@redhat.com>
+:::::: CC: Ilya Dryomov <idryomov@gmail.com>
 
 -- 
 0-DAY CI Kernel Test Service
