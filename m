@@ -1,62 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0242926281E;
-	Thu, 13 Mar 2025 08:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F4A2C80;
+	Thu, 13 Mar 2025 09:20:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741855790; cv=none; b=MMqAKDx53CAk+Z6DdC8G3qhAPmjX99BJ1N0RVNzC6GH/jX6j8o+ZPZO7Gj2JH/OErb8opFlseeRNQvpR94jVafWsT/5LCOYAB36PlWEjxrW6ClmX+xf5/3nEmq9U64pdzZFh+Nvreuq+JGJpDjxr+7+7nK+6ejG/w+dJCSDQjJ4=
+	t=1741857647; cv=none; b=l2s5Objt+BssVkHb2cts0Gp+njUdiCFvg/aPAEocb3lMt9IfuaU4XozaCUcWXFMtGDXJgye0IEPuxE42a+HNBMtcBuJwB6tRcu9Ns8z6ntxNTwxZO5XGSlymPQghNA6OhnblcL+APJRJ2Pu+uPv+c5SWNBDZ6Uetz+dIwQfKp8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741855790; c=relaxed/simple;
-	bh=vAEaDGijNXNaotmF7hcs6FNxQJRH9+12fIrHcW0asQo=;
+	s=arc-20240116; t=1741857647; c=relaxed/simple;
+	bh=aOaVRhsJoHJssf1SasDIjbcmYABF1qsyZ0Gh81rOTM4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MZzkJYIaYXF+l/G6oAQf2ZPP7cmOx6Y+Fe1sSAYGeyFZSLjToE5au/ZZKGjGLOvpeA87x67iRm1JqULholvwnR9p4zTdhO4S4eApsxq3lR/F718Poj9ciEc9Fo6RWgfZbBeb24Vd+wwfAC8TCkfH1KHWCr+FeVe1HdtyYWiKXAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m38hReo9; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jy9La//5FYc9jSxFOxJHdArm4sifgI1yVaD9upITBRWAfvGafvrh+XRJWMQJeAG8mQ/d3cTLR+FXJVyusB1rpCPMzkr3j2cO6Po36UzNtVdu/S1PtXFWrwdRZ2nZIA0vdS05X45nXmLXVlQsCgxjAWhh7yevAlS9bzUsPd2QBbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OdfMcqrK; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m38hReo9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OdfMcqrK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741855788; x=1773391788;
+  t=1741857646; x=1773393646;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=vAEaDGijNXNaotmF7hcs6FNxQJRH9+12fIrHcW0asQo=;
-  b=m38hReo9Hj/UpFU1dLFHiK245L8qDdjuvT3kWRoXgTz8Pckmb9+aQvtM
-   A3AtgGtGppLhZJHPLHSNZQD8vib9Wwgz4WOSXymcjy0J8qy6RpAKgM9x2
-   oFlndNJlRMIsnGkNp1eyGxNS+jgSo6ZjnP9jY3eXSzHL2D6vZbcDQlDBO
-   ZI/5345/v5I4p2PoHLHr/QWZKMhte0z2j/BOYlJDOJ/Qh+UfJWSji213y
-   O4xxUlCbG2P1cOkMnfNMlWPaVm51Uquv4fGShdX4lrzTQc6SNwFpIlNgq
-   62Tf8eA7Oj7Gz5WOXh5wXRLLAkBvqY+oBtcsHDINuRzXE8ZTOBW05XpT+
-   w==;
-X-CSE-ConnectionGUID: DsieU08vSNqa84ClUCenAQ==
-X-CSE-MsgGUID: ODqghNbTRgqrR3m4kpYfCA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42991365"
+  bh=aOaVRhsJoHJssf1SasDIjbcmYABF1qsyZ0Gh81rOTM4=;
+  b=OdfMcqrK3GVuuDad2JYE8+S9pF/ln2ed+PzautsoxI6/9t2KvmBNGzLQ
+   ERjNZJ8/zZENK8u8y/t92jP8YHuetRevpmKNHJ+QgeClbft93SkmhkW/h
+   iEJ7mIGOW/cZVaQQnnYiK1SaMMImwX3RM8ORCU/YUJJpbAwaxhIRQQsbd
+   5iojhf1hPYsy5/fhx9i0klNUYc4aEcG5GTHR/7oQkSCZaa3WXYVcjn6QL
+   xqjeVPS1tg3B1tmT9ZCqOwKweS6hEbhmFOP6AxyZ8zn7xWt1tam0LPaUQ
+   Sufc9VBNX/fOj/ABx4SC+0tcVIoePVQESFBUS3P1n9pZmRfE88nhXW87q
+   A==;
+X-CSE-ConnectionGUID: oWMGxLc7SvKicf1cAeMBeA==
+X-CSE-MsgGUID: dBQ7bpVZTJSE4Hpk2o/THQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="53612737"
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="42991365"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 01:49:47 -0700
-X-CSE-ConnectionGUID: bdW+ocaFSEGMFAJicoe32A==
-X-CSE-MsgGUID: ++zdYlcfT46yHsfeedYqyw==
+   d="scan'208";a="53612737"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 02:20:45 -0700
+X-CSE-ConnectionGUID: QfILyGOYSZ+hKJI87ayHLQ==
+X-CSE-MsgGUID: phAPCN/TRruKPJZoOFa0+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="121380567"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2025 01:49:45 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tseG5-0009Fp-2z;
-	Thu, 13 Mar 2025 08:49:41 +0000
-Date: Thu, 13 Mar 2025 16:49:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sarika Sharma <quic_sarishar@quicinc.com>, johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org,
-	Sarika Sharma <quic_sarishar@quicinc.com>
-Subject: Re: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo
- structure elements for MLO
-Message-ID: <202503131646.3EOj6ycs-lkp@intel.com>
-References: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
+   d="scan'208";a="121598319"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 02:20:43 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tsek5-0000000283c-0vLW;
+	Thu, 13 Mar 2025 11:20:41 +0200
+Date: Thu, 13 Mar 2025 11:20:40 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Longbin Li <looong.bin@gmail.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed
+ resources
+Message-ID: <Z9KjaFIO1slBsi8R@smile.fi.intel.com>
+References: <20250312172016.4070094-2-andriy.shevchenko@linux.intel.com>
+ <202503130708.AmtUDVfq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,103 +66,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
+In-Reply-To: <202503130708.AmtUDVfq-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Sarika,
+On Thu, Mar 13, 2025 at 07:34:50AM +0800, kernel test robot wrote:
+> Hi Andy,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on broonie-spi/for-next]
+> [cannot apply to linus/master v6.14-rc6 next-20250312]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-sg2044-nor-Fully-convert-to-device-managed-resources/20250313-012347
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> patch link:    https://lore.kernel.org/r/20250312172016.4070094-2-andriy.shevchenko%40linux.intel.com
+> patch subject: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed resources
+> config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20250313/202503130708.AmtUDVfq-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 14.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130708.AmtUDVfq-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503130708.AmtUDVfq-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 9324731b9985478faf7f77713cc5e5fee811716e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-add-support-towards-MLO-handling-of-station-statistics/20250312-145356
-base:   9324731b9985478faf7f77713cc5e5fee811716e
-patch link:    https://lore.kernel.org/r/20250312065132.3397726-5-quic_sarishar%40quicinc.com
-patch subject: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo structure elements for MLO
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20250313/202503131646.3EOj6ycs-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131646.3EOj6ycs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503131646.3EOj6ycs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:12:
-   drivers/net/wireless/intel/iwlwifi/mld/iface.h:172:5: warning: "CONFIG_PM_SLEEP" is not defined, evaluates to 0 [-Wundef]
-     172 | #if CONFIG_PM_SLEEP
-         |     ^~~~~~~~~~~~~~~
->> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:10: error: 'const struct ieee80211_ops' has no member named 'sta_statistics'; did you mean 'link_sta_statistics'?
-    2637 |         .sta_statistics = iwl_mld_mac80211_sta_statistics,
-         |          ^~~~~~~~~~~~~~
-         |          link_sta_statistics
->> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:27: error: initialization of 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_sta *)' from incompatible pointer type 'void (*)(struct ieee80211_hw *, struct ieee80211_vif *, struct ieee80211_sta *, struct station_info *)' [-Wincompatible-pointer-types]
-    2637 |         .sta_statistics = iwl_mld_mac80211_sta_statistics,
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:27: note: (near initialization for 'iwl_mld_hw_ops.sta_pre_rcu_remove')
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2651:31: warning: initialized field overwritten [-Woverride-init]
-    2651 |         .sta_pre_rcu_remove = iwl_mld_sta_pre_rcu_remove,
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2651:31: note: (near initialization for 'iwl_mld_hw_ops.sta_pre_rcu_remove')
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1985:12: warning: 'iwl_mld_resume' defined but not used [-Wunused-function]
-    1985 | static int iwl_mld_resume(struct ieee80211_hw *hw)
-         |            ^~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1963:1: warning: 'iwl_mld_suspend' defined but not used [-Wunused-function]
-    1963 | iwl_mld_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
-         | ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1949:13: warning: 'iwl_mld_set_wakeup' defined but not used [-Wunused-function]
-    1949 | static void iwl_mld_set_wakeup(struct ieee80211_hw *hw, bool enabled)
-         |             ^~~~~~~~~~~~~~~~~~
---
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mlo.h:13,
-                    from drivers/net/wireless/intel/iwlwifi/mld/stats.c:9:
-   drivers/net/wireless/intel/iwlwifi/mld/iface.h:172:5: warning: "CONFIG_PM_SLEEP" is not defined, evaluates to 0 [-Wundef]
-     172 | #if CONFIG_PM_SLEEP
-         |     ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/stats.c: In function 'iwl_mld_fill_stats_from_oper_notif':
->> drivers/net/wireless/intel/iwlwifi/mld/stats.c:67:14: error: 'struct station_info' has no member named 'signal_avg'
-      67 |         sinfo->signal_avg = mld_link_sta->signal_avg;
-         |              ^~
-   drivers/net/wireless/intel/iwlwifi/mld/stats.c: In function 'iwl_mld_sta_stats_fill_txrate':
-   drivers/net/wireless/intel/iwlwifi/mld/stats.c:169:41: error: 'struct station_info' has no member named 'txrate'
-     169 |         struct rate_info *rinfo = &sinfo->txrate;
-         |                                         ^~
-
-
-vim +2637 drivers/net/wireless/intel/iwlwifi/mld/mac80211.c
-
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2608  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2609  const struct ieee80211_ops iwl_mld_hw_ops = {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2610  	.tx = iwl_mld_mac80211_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2611  	.start = iwl_mld_mac80211_start,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2612  	.stop = iwl_mld_mac80211_stop,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2613  	.config = iwl_mld_mac80211_config,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2614  	.add_interface = iwl_mld_mac80211_add_interface,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2615  	.remove_interface = iwl_mld_mac80211_remove_interface,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2616  	.conf_tx = iwl_mld_mac80211_conf_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2617  	.prepare_multicast = iwl_mld_mac80211_prepare_multicast,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2618  	.configure_filter = iwl_mld_mac80211_configure_filter,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2619  	.reconfig_complete = iwl_mld_mac80211_reconfig_complete,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2620  	.wake_tx_queue = iwl_mld_mac80211_wake_tx_queue,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2621  	.add_chanctx = iwl_mld_add_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2622  	.remove_chanctx = iwl_mld_remove_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2623  	.change_chanctx = iwl_mld_change_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2624  	.assign_vif_chanctx = iwl_mld_assign_vif_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2625  	.unassign_vif_chanctx = iwl_mld_unassign_vif_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2626  	.set_rts_threshold = iwl_mld_mac80211_set_rts_threshold,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2627  	.link_info_changed = iwl_mld_mac80211_link_info_changed,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2628  	.vif_cfg_changed = iwl_mld_mac80211_vif_cfg_changed,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2629  	.set_key = iwl_mld_mac80211_set_key,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2630  	.hw_scan = iwl_mld_mac80211_hw_scan,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2631  	.cancel_hw_scan = iwl_mld_mac80211_cancel_hw_scan,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2632  	.sched_scan_start = iwl_mld_mac80211_sched_scan_start,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2633  	.sched_scan_stop = iwl_mld_mac80211_sched_scan_stop,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2634  	.mgd_prepare_tx = iwl_mld_mac80211_mgd_prepare_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2635  	.mgd_complete_tx = iwl_mld_mac_mgd_complete_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2636  	.sta_state = iwl_mld_mac80211_sta_state,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16 @2637  	.sta_statistics = iwl_mld_mac80211_sta_statistics,
+Oh, indeed, missed the compilation of this module somehow.
+Will be fixed in v2, thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
