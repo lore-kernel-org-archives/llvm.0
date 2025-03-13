@@ -1,200 +1,184 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E70921507B;
-	Thu, 13 Mar 2025 15:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D78D269839
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 15:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741878950; cv=none; b=G/xu6YuYs2ycX+0NNyVGsEoYUh1v4JpL4TxYAH67S+sfbg2Uj04FbX7+I38xL5Tb1SEvKzNvqkcOPetWaGJpdFofCJpwuXl50La/Xu+GrDDUVi2rX/OdGgRwxcm/zT/S+ONICPw5Jy21CBldozPo7MMOwrBSm0bcaleHg/zMe/s=
+	t=1741879810; cv=none; b=NB/FBUTK4/FPzVb65iYKXuDZvofastOQjtsiZS/FrEBI1yNOzx0v7xTcKFLf1lFgc05nfEsnL0kp3/CzhPNdEFwAgvloNIzrvORcwKGUJT6SNX31C3agzKPccwVVxMqQRnmeIE9ZbK1uKB/zxkYLPBk7bch9/sDTze4BLNFM5Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741878950; c=relaxed/simple;
-	bh=DxYmwRKpDd0tnQCFVByN7y7sngics+dT8oStdDQf0DI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xf04SjIhkrOyznZhwfvx0N7a3TBImJ1JU93nLyteDiZ49zEZQBJ66pVKjpphz9ZaWWZphXf0HjymSGP6wOcxk2LPL/A7R0m6/GbBAvpEtC9nkPNNhFWfuLVQKdh2+8KBfMkBjtqkfXSBJow/didN8jc0Ov6wh0x+KlzWBGiZXxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bz0tk6r4; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741879810; c=relaxed/simple;
+	bh=tqYcp36kSOOENz/soiYs13MgeYzT3g5zF8GJrqqqqOU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fA15J+LS2nk3jRIHsUMhCQuLaixvY0SrekRTyc+YC3n5quwl5Go6TcMqT0Dz2mHG8hiU3RdvKU+2x+WHCGrMgvQlCMIsy3yQ59vTpOKdhwjMUnQoEgTbQ3xIspUyI77UBIDa7aRU0uKnpmijV9QYIp+fJzpefBK1fZg/tDK/7aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SENif5k8; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bz0tk6r4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741878947; x=1773414947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DxYmwRKpDd0tnQCFVByN7y7sngics+dT8oStdDQf0DI=;
-  b=Bz0tk6r4Vd//cRCV6rlE3NlMcWj9pT6sZEmjyIdfKvw/XYYxCbEyv+yP
-   x29BKbjxfnq1qFiQ14mGhgkxEpgTMglDstXzaqxNn3UawFPzyI+X5iP0y
-   bG6ls/UuWGl9r5Eriy2wKRZovnLSvNTI16bYNrbDkBeL6Wjo2IPoDrHwP
-   wW/1Ve4JA/+1TCl4gDdd1sZQA+Yv7EIWOT48MptZR9dn0Lt3YiI5xcgfR
-   W65v7lx2n7SEkmbF3e1w9AWXkyhXBac/3HWYUuxxTc6IqVnDxznMGS8eN
-   9otg7C0gdufuQtn/xJnuhl7F93cVtZT7UndWFe+2NDD8akjGOnqgseQ2G
-   Q==;
-X-CSE-ConnectionGUID: WNaHFkvwROecCxFRECqEJQ==
-X-CSE-MsgGUID: IbFhMWu7S7KLFe5/cZJl/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="46904144"
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="46904144"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 08:15:46 -0700
-X-CSE-ConnectionGUID: sj4BoNyoQW6FajNRPC0JWw==
-X-CSE-MsgGUID: i4AIluP9SHGwIipTSk7DSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="121491205"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 13 Mar 2025 08:15:42 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tskHc-0009Yy-1K;
-	Thu, 13 Mar 2025 15:15:40 +0000
-Date: Thu, 13 Mar 2025 23:15:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nam Cao <namcao@linutronix.de>, Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>, john.ogness@linutronix.de,
-	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nam Cao <namcao@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 04/10] rv: Add rtapp_block monitor
-Message-ID: <202503132244.Azu340js-lkp@intel.com>
-References: <c8a1658c6da343b6055cbfcd6ee5ddea48335d31.1741708239.git.namcao@linutronix.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SENif5k8"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ff784dc055so1975959a91.1
+        for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 08:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741879806; x=1742484606; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=00u7ecFNyPAZ4Z5cOSw/OvdLmibjnRE9ersVFXwW+QE=;
+        b=SENif5k8pzVGRctEMhyP9CkjP8LXM8ulcHvg4PQs6/fLC/FkKiKMtyUP9scHv4UCEU
+         I6nQxDS072RNS8hhlskrQS2UeCr99hQXlMhEysgAm6sWPXgtewZ2FTYLSvXvNATgcmA1
+         LmzDJDpK+m8pENjJ1r2/3b+YEI8Rf8rvxkRo0Xm4PlLLUOz5pQm3OM+dMmFA8CpiCEYH
+         THQ/ICKcrA7fSdBflT0psG0J5eIZd7yf3qUgTGPPp5zgSKbHys0/ju55xY/zdHSS6o2k
+         6FkSrPaNqZUw0AC8dohlnRASpdxxkyfBWbi6lf2k0ETA/uSsjMsI5kr1n/M9ovFelvPG
+         R49w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741879806; x=1742484606;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=00u7ecFNyPAZ4Z5cOSw/OvdLmibjnRE9ersVFXwW+QE=;
+        b=GGKwlX99Hh2a4E5gB6fn4kjLeApPidA/v1mMBAoSLvxofB4zhRx7NhtJA5sTUbpPiF
+         5HBvLP3ywqy5m3+3XhZMuSjUXrVJiBlxTd8/aesEWeLDO6HaquihyPI3dFMU5d30YR4+
+         HsWMPoxo80Bstp7yQ6qxW+VtxokQfDm4llOaFZIHEn0/4tokSvxdmJ2IwR4T7AUmgSuD
+         Kezl1FkNmAmM2tRWkTgomnQ+9NDr+H01cKBEZJsyI3yP5J+nJ8VcVKu9Lsd45x3qnQv9
+         r/BpeIgiRTH7TnHU0SXrRjZ/rb01FzPMPKSK9IC+qe/cB9COeVoY0S53yae2ngYwHcPC
+         EWDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXis/IikqPyRS93HUooHY/O7yF8nEif7aqohoirRcGuBROOAo+jTiiU+U1MldPqx6W0+vxK@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyvrv+g0vpXsEuIMAB3MHNuIUd9erKR1jIxv95/lpZ4ilXskTOq
+	uxCPjEqhbRsWvXKKYR9wCwFH6KCxH2hkA1dAGgN0XcMaq/iK3n8VlhZJku9rf+EHt0YnAr8UMNt
+	v1Y5KsYqu9cVuevHWUvn/1qghRa7DMcNGjOaY
+X-Gm-Gg: ASbGnctbHEAwECLozFZ6gYVrUzMi6Z7zpLSi+o9vHUNuuPpksEoHA60wu5a1QEPuWqH
+	SKMwd2oyFXX/dvdot91VAi8eaqdPFzu0aaGdCdPl+NNIhkKzLxPc5H2llpGkGV6FLWVneqpenzB
+	UWksKHdSYFGA9+0YnS35/T6lZ8E1XupS168bOhAw==
+X-Google-Smtp-Source: AGHT+IEv0rtOsQstIMulfJeTHgWikPpW7fu1mPHnescJ1GSms7d/WLQhnr03CyeNMSYLnDPxmDhcIz/mp/0Hr9kM0jc=
+X-Received: by 2002:a17:90b:2741:b0:2ff:7b28:a519 with SMTP id
+ 98e67ed59e1d1-300ff370231mr15211554a91.30.1741879806198; Thu, 13 Mar 2025
+ 08:30:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8a1658c6da343b6055cbfcd6ee5ddea48335d31.1741708239.git.namcao@linutronix.de>
+References: <20250307040948.work.791-kees@kernel.org> <20250307041914.937329-1-kees@kernel.org>
+In-Reply-To: <20250307041914.937329-1-kees@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Thu, 13 Mar 2025 11:29:29 -0400
+X-Gm-Features: AQ5f1Jo2s3dBQmL6L50YXOekPGf_8rCDFxDD6svVuHOtyM0nHf71JobMTMo6fo0
+Message-ID: <CANpmjNOHSanxX7EyXhia4AuVd+6q5v1mXQMTM_k0Rj20P_ASAA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ubsan/overflow: Rework integer overflow sanitizer
+ option to turn on everything
+To: Kees Cook <kees@kernel.org>
+Cc: Justin Stitt <justinstitt@google.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Hao Luo <haoluo@google.com>, 
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>, linux-hardening@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kbuild@vger.kernel.org, 
+	Bill Wendling <morbo@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Tony Ambardar <tony.ambardar@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nam,
+On Thu, 6 Mar 2025 at 23:19, Kees Cook <kees@kernel.org> wrote:
+>
+> Since we're going to approach integer overflow mitigation a type at a
+> time, we need to enable all of the associated sanitizers, and then opt
+> into types one at a time.
+>
+> Rename the existing "signed wrap" sanitizer to just the entire topic area:
+> "integer wrap". Enable the implicit integer truncation sanitizers, with
+> required callbacks and tests.
+>
+> Notably, this requires features (currently) only available in Clang,
+> so we can depend on the cc-option tests to determine availability
+> instead of doing version tests.
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nicolas Schier <nicolas@fjasle.eu>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Hao Luo <haoluo@google.com>
+> Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+> Cc: linux-hardening@vger.kernel.org
+> Cc: kasan-dev@googlegroups.com
+> Cc: linux-kbuild@vger.kernel.org
+> ---
+>  include/linux/compiler_types.h  |  2 +-
+>  kernel/configs/hardening.config |  2 +-
+>  lib/Kconfig.ubsan               | 23 +++++++++++------------
+>  lib/test_ubsan.c                | 18 ++++++++++++++----
+>  lib/ubsan.c                     | 28 ++++++++++++++++++++++++++--
+>  lib/ubsan.h                     |  8 ++++++++
+>  scripts/Makefile.lib            |  4 ++--
+>  scripts/Makefile.ubsan          |  8 ++++++--
+>  8 files changed, 69 insertions(+), 24 deletions(-)
+>
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index f59393464ea7..4ad3e900bc3d 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -360,7 +360,7 @@ struct ftrace_likely_data {
+>  #endif
+>
+>  /* Do not trap wrapping arithmetic within an annotated function. */
+> -#ifdef CONFIG_UBSAN_SIGNED_WRAP
+> +#ifdef CONFIG_UBSAN_INTEGER_WRAP
+>  # define __signed_wrap __attribute__((no_sanitize("signed-integer-overflow")))
+>  #else
+>  # define __signed_wrap
+> diff --git a/kernel/configs/hardening.config b/kernel/configs/hardening.config
+> index 3fabb8f55ef6..dd7c32fb5ac1 100644
+> --- a/kernel/configs/hardening.config
+> +++ b/kernel/configs/hardening.config
+> @@ -46,7 +46,7 @@ CONFIG_UBSAN_BOUNDS=y
+>  # CONFIG_UBSAN_SHIFT is not set
+>  # CONFIG_UBSAN_DIV_ZERO is not set
+>  # CONFIG_UBSAN_UNREACHABLE is not set
+> -# CONFIG_UBSAN_SIGNED_WRAP is not set
+> +# CONFIG_UBSAN_INTEGER_WRAP is not set
+>  # CONFIG_UBSAN_BOOL is not set
+>  # CONFIG_UBSAN_ENUM is not set
+>  # CONFIG_UBSAN_ALIGNMENT is not set
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index 1d4aa7a83b3a..63e5622010e0 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -116,21 +116,20 @@ config UBSAN_UNREACHABLE
+>           This option enables -fsanitize=unreachable which checks for control
+>           flow reaching an expected-to-be-unreachable position.
+>
+> -config UBSAN_SIGNED_WRAP
+> -       bool "Perform checking for signed arithmetic wrap-around"
+> +config UBSAN_INTEGER_WRAP
+> +       bool "Perform checking for integer arithmetic wrap-around"
+>         default UBSAN
+>         depends on !COMPILE_TEST
+> -       # The no_sanitize attribute was introduced in GCC with version 8.
+> -       depends on !CC_IS_GCC || GCC_VERSION >= 80000
+>         depends on $(cc-option,-fsanitize=signed-integer-overflow)
+> -       help
+> -         This option enables -fsanitize=signed-integer-overflow which checks
+> -         for wrap-around of any arithmetic operations with signed integers.
+> -         This currently performs nearly no instrumentation due to the
+> -         kernel's use of -fno-strict-overflow which converts all would-be
+> -         arithmetic undefined behavior into wrap-around arithmetic. Future
+> -         sanitizer versions will allow for wrap-around checking (rather than
+> -         exclusively undefined behavior).
+> +       depends on $(cc-option,-fsanitize=unsigned-integer-overflow)
+> +       depends on $(cc-option,-fsanitize=implicit-signed-integer-truncation)
+> +       depends on $(cc-option,-fsanitize=implicit-unsigned-integer-truncation)
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on tip/x86/core tip/x86/mm linus/master v6.14-rc6 next-20250313]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nam-Cao/rv-Add-undef-TRACE_INCLUDE_FILE/20250312-011043
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/c8a1658c6da343b6055cbfcd6ee5ddea48335d31.1741708239.git.namcao%40linutronix.de
-patch subject: [PATCH 04/10] rv: Add rtapp_block monitor
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250313/202503132244.Azu340js-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503132244.Azu340js-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503132244.Azu340js-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:91:53: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      91 | static void handle_rt_mutex_wake_waiter_begin(void *, struct task_struct *task)
-         |                                                     ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:96:51: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-      96 | static void handle_rt_mutex_wake_waiter_end(void *, struct task_struct *task)
-         |                                                   ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:101:45: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     101 | static void handle_sched_kthread_stop(void *, struct task_struct *task)
-         |                                             ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:109:49: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     109 | static void handle_sched_kthread_stop_ret(void *, int)
-         |                                                 ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:109:54: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     109 | static void handle_sched_kthread_stop_ret(void *, int)
-         |                                                      ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:117:39: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
-     117 | static void handle_sched_wakeup(void *, struct task_struct *task)
-         |                                       ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:164:2: error: call to undeclared function 'check_trace_callback_type_sys_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     164 |         rv_attach_trace_probe("rtapp_block", sys_enter, handle_sys_enter);
-         |         ^
-   include/rv/instrumentation.h:18:3: note: expanded from macro 'rv_attach_trace_probe'
-      18 |                 check_trace_callback_type_##tp(rv_handler);                             \
-         |                 ^
-   <scratch space>:8:1: note: expanded from here
-       8 | check_trace_callback_type_sys_enter
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:164:2: error: call to undeclared function 'register_trace_sys_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   include/rv/instrumentation.h:19:13: note: expanded from macro 'rv_attach_trace_probe'
-      19 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
-         |                           ^
-   <scratch space>:9:1: note: expanded from here
-       9 | register_trace_sys_enter
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:165:2: error: call to undeclared function 'check_trace_callback_type_sys_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     165 |         rv_attach_trace_probe("rtapp_block", sys_exit, handle_sys_exit);
-         |         ^
-   include/rv/instrumentation.h:18:3: note: expanded from macro 'rv_attach_trace_probe'
-      18 |                 check_trace_callback_type_##tp(rv_handler);                             \
-         |                 ^
-   <scratch space>:14:1: note: expanded from here
-      14 | check_trace_callback_type_sys_exit
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:165:2: error: call to undeclared function 'register_trace_sys_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   include/rv/instrumentation.h:19:13: note: expanded from macro 'rv_attach_trace_probe'
-      19 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
-         |                           ^
-   <scratch space>:15:1: note: expanded from here
-      15 | register_trace_sys_exit
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:165:2: note: did you mean 'register_ftrace_direct'?
-   include/rv/instrumentation.h:19:13: note: expanded from macro 'rv_attach_trace_probe'
-      19 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
-         |                           ^
-   <scratch space>:15:1: note: expanded from here
-      15 | register_trace_sys_exit
-         | ^
-   include/linux/ftrace.h:535:19: note: 'register_ftrace_direct' declared here
-     535 | static inline int register_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
-         |                   ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:180:2: error: call to undeclared function 'unregister_trace_sys_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     180 |         rv_detach_trace_probe("rtapp_block", sys_enter, handle_sys_enter);
-         |         ^
-   include/rv/instrumentation.h:28:3: note: expanded from macro 'rv_detach_trace_probe'
-      28 |                 unregister_trace_##tp(rv_handler, NULL);                                \
-         |                 ^
-   <scratch space>:29:1: note: expanded from here
-      29 | unregister_trace_sys_enter
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:181:2: error: call to undeclared function 'unregister_trace_sys_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     181 |         rv_detach_trace_probe("rtapp_block", sys_exit, handle_sys_exit);
-         |         ^
-   include/rv/instrumentation.h:28:3: note: expanded from macro 'rv_detach_trace_probe'
-      28 |                 unregister_trace_##tp(rv_handler, NULL);                                \
-         |                 ^
-   <scratch space>:30:1: note: expanded from here
-      30 | unregister_trace_sys_exit
-         | ^
-   kernel/trace/rv/monitors/rtapp_block/rtapp_block.c:181:2: note: did you mean 'unregister_ftrace_direct'?
-   include/rv/instrumentation.h:28:3: note: expanded from macro 'rv_detach_trace_probe'
-      28 |                 unregister_trace_##tp(rv_handler, NULL);                                \
-         |                 ^
-   <scratch space>:30:1: note: expanded from here
-      30 | unregister_trace_sys_exit
-         | ^
-   include/linux/ftrace.h:539:19: note: 'unregister_ftrace_direct' declared here
-     539 | static inline int unregister_ftrace_direct(struct ftrace_ops *ops, unsigned long addr,
-         |                   ^
-   6 warnings and 6 errors generated.
-
-
-vim +91 kernel/trace/rv/monitors/rtapp_block/rtapp_block.c
-
-    90	
-  > 91	static void handle_rt_mutex_wake_waiter_begin(void *, struct task_struct *task)
-    92	{
-    93		rv_rtapp_block_atom_update(task, RT_MUTEX_WAKING_WAITER, true);
-    94	}
-    95	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can these be in 1 cc-option? I know it might look slightly more ugly,
+but having 3 different ones will shell out to the compiler 3 times,
+which is a little less efficient. At some point it might noticeably
+increase the build initialization latency.
