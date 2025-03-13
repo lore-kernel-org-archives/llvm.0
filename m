@@ -1,41 +1,43 @@
-Received: from a8-71.smtp-out.amazonses.com (a8-71.smtp-out.amazonses.com [54.240.8.71])
+Received: from a8-87.smtp-out.amazonses.com (a8-87.smtp-out.amazonses.com [54.240.8.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4B72905
-	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 02:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7DF747F
+	for <llvm@lists.linux.dev>; Thu, 13 Mar 2025 02:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.8.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741834287; cv=none; b=tOWNMBGWGsZvB5gJ0sABbPS3lcth3Y+THW/0S5aAc2+94l5PZGdPp1z1J+dyRKmt+Z3E++Q2D/yMO4f/j+aOxOolGUdyKo0oxfviJ7c9JtOK8sfhXpWztDOjBlAvCDvgoxGDxhE4thmRngW7hnT/RlPnHgdLSMdPx6bg5nKJlKg=
+	t=1741834633; cv=none; b=D4Z82CUnOxdn4jCyp6rjZsIBF516jMlnAuown9WL5ePYcBsN1ty3MIJuTVpgntP+K/NlMMDOZ1wm9vbAN5Eh++w7tM3ImEj7emrJrrO84yagIbAp4f6/KDk1Vj3JZN2DawS0xXJaJ03oyWk60WTFjNfoJnn4iYUNJjk1xU0Amus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741834287; c=relaxed/simple;
-	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=didfTgK+W/QeVuMYPnkl4GTV/BhC8T1X0dilJwkxvrMF6FHaqwdrXSIst03JghVDHs97MLYqy4j0Oy4qgru1a8jlSAx+eH7bIQdC7mzfRPJgWl63Nnmpl/i2KwA+FRSeSCc6XwOYs+6zY1u8n/xVUKpOAYm2rrd0CuZXEDPtvPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=zck9GqNx; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=M/I5Zlm4; arc=none smtp.client-ip=54.240.8.71
+	s=arc-20240116; t=1741834633; c=relaxed/simple;
+	bh=//GQlZrf5GV3xsSlmBSPrP8XgXqgjfvYg5rycTOIQ50=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=j8kZC7xT31TrXE1ZybHQ1VV2eOsJcGrEjcEYR7jtjtIEg9+I6iXb2PwQjDqeovZHY3nTCQpeJRETb0wN3Zg+QUXPrwljfIprdy/qAA0Mapwm9e97FYpn15dKX0v7xdXzziTJmG+4VIF5MCWOU62I9TaqrVS2hi1t4IHnHT72WzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=amazonses.com; dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b=1Zgj2Gxr; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=F+ArIc9M; arc=none smtp.client-ip=54.240.8.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antoniohickey.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="zck9GqNx";
-	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="M/I5Zlm4"
+	dkim=pass (2048-bit key) header.d=antoniohickey.com header.i=@antoniohickey.com header.b="1Zgj2Gxr";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="F+ArIc9M"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
 	s=cgcwyxycg75iw36cao5ku2ksreqpjkvc; d=antoniohickey.com;
-	t=1741834284;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
-	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
-	b=zck9GqNx3MjL3Kr4w7RipkctzPb2N0SW0OxjHUJoUlJ7aCn2WUxAFlBICfqunWYq
-	JjI/eGnyjU6A5kWVsu2fN5ivSKysxYhhk2JEK4Fz7Ipy6Yl+eoFvhsteusHJYZMtebH
-	NR/G/mmI09NOtd8koB+sGw5BNbmkdn4YE4f4ljzUwFHMr0PtHt0G2iniyoRQxRg5Qbr
-	aiHcFopeC3J/0r1ofNloHpbUtJi6nekuz/t6dmk0gq/o8Wh9aHZcEPRrcLnp0E05gtY
-	D2i2NmqJj7BNFRJmshks1e0P2mDLRvFe2tg7dPW42hpZQRMk8GfrpN5D+l5CNhDm8mh
-	TZeddcB6JQ==
+	t=1741834631;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=//GQlZrf5GV3xsSlmBSPrP8XgXqgjfvYg5rycTOIQ50=;
+	b=1Zgj2Gxr+rWniPhi8/T6OgsnM2XRNqFwpXJiCU/5pr41+eVEfrlvii+NqbGfordT
+	t/DCZeNvFlRAnBbKrMY2P9TitiizpKsvHe0He5NvilGk6JecRgvYe71U76LOfuGRAs+
+	yk2e+tZnpVi4fG4uQYBvdRBKtJkUxs9v6uRfKwWwAdTbmwV86wiDy47N9+z05dHzbfq
+	P+IxYhv70D5dz0YLjlKVPO3MrFag8WORP+ikzLRGuatgVqjzE6xlCKiQ/PsMMb2DrLQ
+	7ocJIv5ZnU2Z2GYcBiySW3B7tMZurbXA9ESR/woM5971uC5uBl7agliZw6/6Mz4m88C
+	lLG63kUv7A==
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741834284;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
-	bh=UnwpjRGOjwu3BdNKqP31+73T3IgQvef5578x4eacuG0=;
-	b=M/I5Zlm4IY+PtMzrnvVBSMshNtbJNl3wm+gBxEFh7F3yF5hD9CQIlMkAch+vueny
-	AWaJS+Bflc1KxdpwVwlJsEEVxtPSmVPYPHK2gjsFRWY+0jI0ZdylOlbvT/a8qOww2ua
-	ZrMHwv8UK2b9Mo/jshXaWLXUentWg2p8eWhS68F0=
+	s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1741834631;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=//GQlZrf5GV3xsSlmBSPrP8XgXqgjfvYg5rycTOIQ50=;
+	b=F+ArIc9Mlbr8MeXg9fTZAjv0LcvslBD1tIdhK6QIYmeGOen5+TyvTK7GmG0o3+aH
+	a2XkNShtrNGH0AxKOUm8aMY/k35x8rEVYO+ulo34HLyTW9mn8PR6p8IBbVnRLpSd6XN
+	Ab6O2Kk78XASoc59JIVUfSOWvcF4ZLXmfZn/LEhg=
 From: Antonio Hickey <contact@antoniohickey.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+To: contact@antoniohickey.com, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, 
 	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
 	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <benno.lossin@proton.me>, 
@@ -46,13 +48,14 @@ To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
 	Bill Wendling <morbo@google.com>, 
 	Justin Stitt <justinstitt@google.com>
-Cc: Antonio Hickey <contact@antoniohickey.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Subject: [PATCH] rust: uaccess: mark UserSliceWriter method inline
-Date: Thu, 13 Mar 2025 02:51:24 +0000
-Message-ID: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v2] rust: uaccess: mark UserSliceWriter method inline
+Date: Thu, 13 Mar 2025 02:57:10 +0000
+Message-ID: <010001958d6f36b2-fb0a1710-a581-4002-889e-e489004bb72d-000000@email.amazonses.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com>
+References: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,7 +64,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Feedback-ID: ::1.us-east-1.3SHHfi5Rh4c+NdtIv+pxNWeqDT0J3zAhYZLMebdhE9o=:AmazonSES
-X-SES-Outgoing: 2025.03.13-54.240.8.71
+X-SES-Outgoing: 2025.03.13-54.240.8.87
 
 When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
 toolchain provided by kernel.org with ARCH=x86_64, the following symbol
@@ -71,7 +74,7 @@ $nm vmlinux | grep ' _R' | rustfilt | rg UserSliceWriter
 ffffffff817c3390 T <kernel::uaccess::UserSliceWriter>::write_slice
 
 However, this Rust symbol is a trivial wrapper around the function
-copy_from_user. It doesn't make sense to go through a trivial wrapper
+copy_to_user. It doesn't make sense to go through a trivial wrapper
 for this function, so mark it inline.
 
 After applying this patch, the above command will produce no output.
