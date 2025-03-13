@@ -1,62 +1,70 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A942D145A11;
-	Thu, 13 Mar 2025 14:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF66267B83;
+	Thu, 13 Mar 2025 14:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741875712; cv=none; b=bjmvSYemhs1Zt02aUAR+LG2OwlK0E0E0N4Mcvuw1sZMg8gbiVCh3GczXjHFMxjGQdD5pUp6vg/hZAIhixllvUkZLtYAyJD7HqgYBpQ5qSgXCWe0HFKGEcarbY3D8xY5twybTJgUZSSbsXFfo4INyXf25Kgt1aDs/Pm7pU3/FlOg=
+	t=1741875716; cv=none; b=sqb7tFV/1YYWJoAS2VX1I/TR6Sx2hvXIwoxkB17LvzY2887PGbDemoDM93rA3zBn+qu/gsfuX8t9/Lv0O6UD7zVvhDCo+CQ/33nMvRyPPoDca/DhUUNMiJ7YJ3P0hKqUkR0WlecIIS+Uk1YiTo4kvbntkILIZzAhgQpycx/i9yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741875712; c=relaxed/simple;
-	bh=OpYwmQPmrqlJTZZ6sU8LZ7L9FwnCsY6dvYTHXKnIMfQ=;
+	s=arc-20240116; t=1741875716; c=relaxed/simple;
+	bh=FZGBmGms+TGXeGz/gxxLPrKHWPZfjyc+sRwOk3cnf5k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M795bxBKv7fFbeHuWthMIPO/qCy5CdAOs8CH4DtWAvYvGtxbPjgIsnQihjLtJIlUNVnf6bLTo2cpbiWrL+5CfP8Utv/HtVClzLkUPuDfxUQkB4HcviOkFqjTtEGmcmhmJW0xr2SO+RfrZzHn07rNDuySC1fmorRN0d6dEd1HVY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IwVkRVgK; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=iDrj7u/9ky/gIhjn8lYU0dhD5wvhcKejAHaEwLnsPl83URM23uox0gDV/m2IWFUd9nZFhTmLjwkeCgzrrPieCKGjy3CilsNArdNjK2J49t8YYG2o+K2oIzGCN4YKUZkOgua3+I6j5EXdf2s48Zmqht9uf1NWcLSjbJKuuLWOjFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQVqXQYJ; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IwVkRVgK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQVqXQYJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741875710; x=1773411710;
+  t=1741875715; x=1773411715;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OpYwmQPmrqlJTZZ6sU8LZ7L9FwnCsY6dvYTHXKnIMfQ=;
-  b=IwVkRVgKUo4gI4lBCmGv2LrOsaORHjKasFrRT39lsYR1gI8twKHUIcke
-   5dxJ0jWwRXcf3+YSClSMmHq1h75qySrCHWiDuPB0u2851nxg292CRhGyp
-   cB60A5IICuEr8zi3aIqW75CoRcg0Htw70Qo/I/qfL0krw596j7U9o1d4v
-   mVoqTLoS5m87ILBR9ppox8sz2FjQnOpkHj2z+vRQkV2043D3Wp055YnPm
-   3hgPXRE/l+WyzRxjqtwKxk4uUSTLU2+zlDLOMYt8K7Ri8jOecPAcSO20I
-   6Rk47ImmzyiFCmJvfxqg3Oyvw9CHC/imyaQhT9LHcr5QorOAQYmWhjEfl
-   Q==;
-X-CSE-ConnectionGUID: iVEFWItFTdGdhGBsr1rZiw==
-X-CSE-MsgGUID: dEP0nM39SkKsHFyPQsCg1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43173175"
+  bh=FZGBmGms+TGXeGz/gxxLPrKHWPZfjyc+sRwOk3cnf5k=;
+  b=GQVqXQYJFkHrXZkAFcxaIit5/8iKRPe8J0NTLs90N/o2PzSsxkQc1fz0
+   vqm+n+MEjFjyT3qqG/6Ur/vicw+Jj72McEeYQ2onXkZzLX6T+dQLAWL+2
+   lcyMRqJmyxA1KL2DoBCTWVFGEY4BiVYlziLBumsIVozSSHNUTclqSsxFA
+   vos03ulK86xPbocXv1J60uoX5QvuoD/G7lGgtAkQlWlQorvB69s/0Cgg3
+   wweScKgwi0B4K1cQRCygzzsucWoh7HXmxVDDWdI4B0A2MKA+td9myORkh
+   VF97aYQavFNinb1VYVTGfJDHwzTRAlosOYcVESoiCk4pA6+tYP+Mkhv/x
+   g==;
+X-CSE-ConnectionGUID: n3TpjPbAQFyC7S3FCFJoIA==
+X-CSE-MsgGUID: sK0REbvRQoC/S7Tnn5kNrw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43173183"
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="43173175"
+   d="scan'208";a="43173183"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:21:49 -0700
-X-CSE-ConnectionGUID: DA8+2EygTLKqTYIg6NYG4w==
-X-CSE-MsgGUID: BvUfFDhXR2C8Qpi6peqVXw==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:21:55 -0700
+X-CSE-ConnectionGUID: rgVzKyghTUuLgBgj3SL2mA==
+X-CSE-MsgGUID: JQFdTckuTfCVIMwnKqXgYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="126026776"
+   d="scan'208";a="126026799"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
   by orviesa004.jf.intel.com with ESMTP; 13 Mar 2025 07:21:47 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsjRQ-0009Vg-32;
+	id 1tsjRQ-0009Vj-3D;
 	Thu, 13 Mar 2025 14:21:44 +0000
-Date: Thu, 13 Mar 2025 22:20:45 +0800
+Date: Thu, 13 Mar 2025 22:20:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Benjamin Coddington <bcodding@redhat.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>
+To: Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-mm@kvack.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-nfs@vger.kernel.org
-Subject: Re: [PATCH 1/1] NFS: New mount option force_rdirplus
-Message-ID: <202503132212.aPAVQklX-lkp@intel.com>
-References: <4a471ab1bdea1052f45d894c967d0a6b6e38d4a6.1741806879.git.bcodding@redhat.com>
+	pbonzini@redhat.com, chenhuacai@kernel.org, mpe@ellerman.id.au,
+	anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, seanjc@google.com, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
+	xiaoyao.li@intel.com, yilun.xu@intel.com,
+	chao.p.peng@linux.intel.com, jarkko@kernel.org, amoorthy@google.com,
+	dmatlack@google.com, isaku.yamahata@intel.com, mic@digikod.net,
+	vbabka@suse.cz, vannapurve@google.com, ackerleytng@google.com,
+	mail@maciej.szmigiero.name, david@redhat.com, michael.roth@amd.com,
+	wei.w.wang@intel.com
+Subject: Re: [PATCH v6 09/10] KVM: arm64: Enable mapping guest_memfd in arm64
+Message-ID: <202503132205.Ajz52k8I-lkp@intel.com>
+References: <20250312175824.1809636-10-tabba@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,500 +73,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a471ab1bdea1052f45d894c967d0a6b6e38d4a6.1741806879.git.bcodding@redhat.com>
+In-Reply-To: <20250312175824.1809636-10-tabba@google.com>
 
-Hi Benjamin,
+Hi Fuad,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 2408a807bfc3f738850ef5ad5e3fd59d66168996]
+[auto build test ERROR on 80e54e84911a923c40d7bee33a34c1b4be148d7a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Coddington/NFS-New-mount-option-force_rdirplus/20250313-034816
-base:   2408a807bfc3f738850ef5ad5e3fd59d66168996
-patch link:    https://lore.kernel.org/r/4a471ab1bdea1052f45d894c967d0a6b6e38d4a6.1741806879.git.bcodding%40redhat.com
-patch subject: [PATCH 1/1] NFS: New mount option force_rdirplus
-config: i386-randconfig-003-20250313 (https://download.01.org/0day-ci/archive/20250313/202503132212.aPAVQklX-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503132212.aPAVQklX-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Fuad-Tabba/mm-Consolidate-freeing-of-typed-folios-on-final-folio_put/20250313-020010
+base:   80e54e84911a923c40d7bee33a34c1b4be148d7a
+patch link:    https://lore.kernel.org/r/20250312175824.1809636-10-tabba%40google.com
+patch subject: [PATCH v6 09/10] KVM: arm64: Enable mapping guest_memfd in arm64
+config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20250313/202503132205.Ajz52k8I-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503132205.Ajz52k8I-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503132212.aPAVQklX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503132205.Ajz52k8I-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/nfs/fs_context.c:642:19: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-     642 |                         if (ctx->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                        ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/fs_context.c:642:19: note: use '&' for a bitwise operation
-     642 |                         if (ctx->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                        ^~
-         |                                        &
-   fs/nfs/fs_context.c:642:19: note: remove constant to silence this warning
-     642 |                         if (ctx->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/fs_context.c:650:18: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-     650 |                 if (ctx->flags && NFS_MOUNT_NORDIRPLUS)
-         |                                ^  ~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/fs_context.c:650:18: note: use '&' for a bitwise operation
-     650 |                 if (ctx->flags && NFS_MOUNT_NORDIRPLUS)
-         |                                ^~
-         |                                &
-   fs/nfs/fs_context.c:650:18: note: remove constant to silence this warning
-     650 |                 if (ctx->flags && NFS_MOUNT_NORDIRPLUS)
-         |                                ^~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
---
->> fs/nfs/dir.c:669:29: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-     669 |         if (NFS_SERVER(dir)->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/nfs/dir.c:669:29: note: use '&' for a bitwise operation
-     669 |         if (NFS_SERVER(dir)->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                    ^~
-         |                                    &
-   fs/nfs/dir.c:669:29: note: remove constant to silence this warning
-     669 |         if (NFS_SERVER(dir)->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+   In file included from arch/arm64/kernel/asm-offsets.c:15:
+>> include/linux/kvm_host.h:725:20: error: redefinition of 'kvm_arch_has_private_mem'
+     725 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/kvm_host.h:45:
+   arch/arm64/include/asm/kvm_host.h:1546:20: note: previous definition of 'kvm_arch_has_private_mem' with type 'bool(struct kvm *)' {aka '_Bool(struct kvm *)'}
+    1546 | static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/kvm_host.h:736:20: error: redefinition of 'kvm_arch_gmem_supports_shared_mem'
+     736 | static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/kvm_host.h:1551:20: note: previous definition of 'kvm_arch_gmem_supports_shared_mem' with type 'bool(struct kvm *)' {aka '_Bool(struct kvm *)'}
+    1551 | static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   make[3]: *** [scripts/Makefile.build:102: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1269: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:251: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:251: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +642 fs/nfs/fs_context.c
+vim +/kvm_arch_has_private_mem +725 include/linux/kvm_host.h
 
-   529	
-   530	/*
-   531	 * Parse a single mount parameter.
-   532	 */
-   533	static int nfs_fs_context_parse_param(struct fs_context *fc,
-   534					      struct fs_parameter *param)
-   535	{
-   536		struct fs_parse_result result;
-   537		struct nfs_fs_context *ctx = nfs_fc2context(fc);
-   538		unsigned short protofamily, mountfamily;
-   539		unsigned int len;
-   540		int ret, opt;
-   541	
-   542		trace_nfs_mount_option(param);
-   543	
-   544		opt = fs_parse(fc, nfs_fs_parameters, param, &result);
-   545		if (opt < 0)
-   546			return (opt == -ENOPARAM && ctx->sloppy) ? 1 : opt;
-   547	
-   548		if (fc->security)
-   549			ctx->has_sec_mnt_opts = 1;
-   550	
-   551		switch (opt) {
-   552		case Opt_source:
-   553			if (fc->source)
-   554				return nfs_invalf(fc, "NFS: Multiple sources not supported");
-   555			fc->source = param->string;
-   556			param->string = NULL;
-   557			break;
-   558	
-   559			/*
-   560			 * boolean options:  foo/nofoo
-   561			 */
-   562		case Opt_soft:
-   563			ctx->flags |= NFS_MOUNT_SOFT;
-   564			ctx->flags &= ~NFS_MOUNT_SOFTERR;
-   565			break;
-   566		case Opt_softerr:
-   567			ctx->flags |= NFS_MOUNT_SOFTERR | NFS_MOUNT_SOFTREVAL;
-   568			ctx->flags &= ~NFS_MOUNT_SOFT;
-   569			break;
-   570		case Opt_hard:
-   571			ctx->flags &= ~(NFS_MOUNT_SOFT |
-   572					NFS_MOUNT_SOFTERR |
-   573					NFS_MOUNT_SOFTREVAL);
-   574			break;
-   575		case Opt_softreval:
-   576			if (result.negated)
-   577				ctx->flags &= ~NFS_MOUNT_SOFTREVAL;
-   578			else
-   579				ctx->flags |= NFS_MOUNT_SOFTREVAL;
-   580			break;
-   581		case Opt_posix:
-   582			if (result.negated)
-   583				ctx->flags &= ~NFS_MOUNT_POSIX;
-   584			else
-   585				ctx->flags |= NFS_MOUNT_POSIX;
-   586			break;
-   587		case Opt_cto:
-   588			if (result.negated)
-   589				ctx->flags |= NFS_MOUNT_NOCTO;
-   590			else
-   591				ctx->flags &= ~NFS_MOUNT_NOCTO;
-   592			break;
-   593		case Opt_trunkdiscovery:
-   594			if (result.negated)
-   595				ctx->flags &= ~NFS_MOUNT_TRUNK_DISCOVERY;
-   596			else
-   597				ctx->flags |= NFS_MOUNT_TRUNK_DISCOVERY;
-   598			break;
-   599		case Opt_alignwrite:
-   600			if (result.negated)
-   601				ctx->flags |= NFS_MOUNT_NO_ALIGNWRITE;
-   602			else
-   603				ctx->flags &= ~NFS_MOUNT_NO_ALIGNWRITE;
-   604			break;
-   605		case Opt_ac:
-   606			if (result.negated)
-   607				ctx->flags |= NFS_MOUNT_NOAC;
-   608			else
-   609				ctx->flags &= ~NFS_MOUNT_NOAC;
-   610			break;
-   611		case Opt_lock:
-   612			if (result.negated) {
-   613				ctx->lock_status = NFS_LOCK_NOLOCK;
-   614				ctx->flags |= NFS_MOUNT_NONLM;
-   615				ctx->flags |= (NFS_MOUNT_LOCAL_FLOCK | NFS_MOUNT_LOCAL_FCNTL);
-   616			} else {
-   617				ctx->lock_status = NFS_LOCK_LOCK;
-   618				ctx->flags &= ~NFS_MOUNT_NONLM;
-   619				ctx->flags &= ~(NFS_MOUNT_LOCAL_FLOCK | NFS_MOUNT_LOCAL_FCNTL);
-   620			}
-   621			break;
-   622		case Opt_udp:
-   623			ctx->flags &= ~NFS_MOUNT_TCP;
-   624			ctx->nfs_server.protocol = XPRT_TRANSPORT_UDP;
-   625			break;
-   626		case Opt_tcp:
-   627		case Opt_rdma:
-   628			ctx->flags |= NFS_MOUNT_TCP; /* for side protocols */
-   629			ret = xprt_find_transport_ident(param->key);
-   630			if (ret < 0)
-   631				goto out_bad_transport;
-   632			ctx->nfs_server.protocol = ret;
-   633			break;
-   634		case Opt_acl:
-   635			if (result.negated)
-   636				ctx->flags |= NFS_MOUNT_NOACL;
-   637			else
-   638				ctx->flags &= ~NFS_MOUNT_NOACL;
-   639			break;
-   640		case Opt_rdirplus:
-   641			if (result.negated) {
- > 642				if (ctx->flags && NFS_MOUNT_FORCE_RDIRPLUS)
-   643					return nfs_invalf(fc, "NFS: Cannot both force and disable READDIR PLUS");
-   644				ctx->flags |= NFS_MOUNT_NORDIRPLUS;
-   645			} else {
-   646				ctx->flags &= ~NFS_MOUNT_NORDIRPLUS;
-   647			}
-   648			break;
-   649		case Opt_force_rdirplus:
-   650			if (ctx->flags && NFS_MOUNT_NORDIRPLUS)
-   651				return nfs_invalf(fc, "NFS: Cannot both force and disable READDIR PLUS");
-   652			ctx->flags |= NFS_MOUNT_FORCE_RDIRPLUS;
-   653			break;
-   654		case Opt_sharecache:
-   655			if (result.negated)
-   656				ctx->flags |= NFS_MOUNT_UNSHARED;
-   657			else
-   658				ctx->flags &= ~NFS_MOUNT_UNSHARED;
-   659			break;
-   660		case Opt_resvport:
-   661			if (result.negated)
-   662				ctx->flags |= NFS_MOUNT_NORESVPORT;
-   663			else
-   664				ctx->flags &= ~NFS_MOUNT_NORESVPORT;
-   665			break;
-   666		case Opt_fscache_flag:
-   667			if (result.negated)
-   668				ctx->options &= ~NFS_OPTION_FSCACHE;
-   669			else
-   670				ctx->options |= NFS_OPTION_FSCACHE;
-   671			kfree(ctx->fscache_uniq);
-   672			ctx->fscache_uniq = NULL;
-   673			break;
-   674		case Opt_fscache:
-   675			trace_nfs_mount_assign(param->key, param->string);
-   676			ctx->options |= NFS_OPTION_FSCACHE;
-   677			kfree(ctx->fscache_uniq);
-   678			ctx->fscache_uniq = param->string;
-   679			param->string = NULL;
-   680			break;
-   681		case Opt_migration:
-   682			if (result.negated)
-   683				ctx->options &= ~NFS_OPTION_MIGRATION;
-   684			else
-   685				ctx->options |= NFS_OPTION_MIGRATION;
-   686			break;
-   687	
-   688			/*
-   689			 * options that take numeric values
-   690			 */
-   691		case Opt_port:
-   692			if (result.uint_32 > USHRT_MAX)
-   693				goto out_of_bounds;
-   694			ctx->nfs_server.port = result.uint_32;
-   695			break;
-   696		case Opt_rsize:
-   697			ctx->rsize = result.uint_32;
-   698			break;
-   699		case Opt_wsize:
-   700			ctx->wsize = result.uint_32;
-   701			break;
-   702		case Opt_bsize:
-   703			ctx->bsize = result.uint_32;
-   704			break;
-   705		case Opt_timeo:
-   706			if (result.uint_32 < 1 || result.uint_32 > INT_MAX)
-   707				goto out_of_bounds;
-   708			ctx->timeo = result.uint_32;
-   709			break;
-   710		case Opt_retrans:
-   711			if (result.uint_32 > INT_MAX)
-   712				goto out_of_bounds;
-   713			ctx->retrans = result.uint_32;
-   714			break;
-   715		case Opt_acregmin:
-   716			ctx->acregmin = result.uint_32;
-   717			break;
-   718		case Opt_acregmax:
-   719			ctx->acregmax = result.uint_32;
-   720			break;
-   721		case Opt_acdirmin:
-   722			ctx->acdirmin = result.uint_32;
-   723			break;
-   724		case Opt_acdirmax:
-   725			ctx->acdirmax = result.uint_32;
-   726			break;
-   727		case Opt_actimeo:
-   728			ctx->acregmin = result.uint_32;
-   729			ctx->acregmax = result.uint_32;
-   730			ctx->acdirmin = result.uint_32;
-   731			ctx->acdirmax = result.uint_32;
-   732			break;
-   733		case Opt_namelen:
-   734			ctx->namlen = result.uint_32;
-   735			break;
-   736		case Opt_mountport:
-   737			if (result.uint_32 > USHRT_MAX)
-   738				goto out_of_bounds;
-   739			ctx->mount_server.port = result.uint_32;
-   740			break;
-   741		case Opt_mountvers:
-   742			if (result.uint_32 < NFS_MNT_VERSION ||
-   743			    result.uint_32 > NFS_MNT3_VERSION)
-   744				goto out_of_bounds;
-   745			ctx->mount_server.version = result.uint_32;
-   746			break;
-   747		case Opt_minorversion:
-   748			if (result.uint_32 > NFS4_MAX_MINOR_VERSION)
-   749				goto out_of_bounds;
-   750			ctx->minorversion = result.uint_32;
-   751			break;
-   752	
-   753			/*
-   754			 * options that take text values
-   755			 */
-   756		case Opt_v:
-   757			ret = nfs_parse_version_string(fc, param->key + 1);
-   758			if (ret < 0)
-   759				return ret;
-   760			break;
-   761		case Opt_vers:
-   762			if (!param->string)
-   763				goto out_invalid_value;
-   764			trace_nfs_mount_assign(param->key, param->string);
-   765			ret = nfs_parse_version_string(fc, param->string);
-   766			if (ret < 0)
-   767				return ret;
-   768			break;
-   769		case Opt_sec:
-   770			ret = nfs_parse_security_flavors(fc, param);
-   771			if (ret < 0)
-   772				return ret;
-   773			break;
-   774		case Opt_xprtsec:
-   775			ret = nfs_parse_xprtsec_policy(fc, param);
-   776			if (ret < 0)
-   777				return ret;
-   778			break;
-   779	
-   780		case Opt_proto:
-   781			if (!param->string)
-   782				goto out_invalid_value;
-   783			trace_nfs_mount_assign(param->key, param->string);
-   784			protofamily = AF_INET;
-   785			switch (lookup_constant(nfs_xprt_protocol_tokens, param->string, -1)) {
-   786			case Opt_xprt_udp6:
-   787				protofamily = AF_INET6;
-   788				fallthrough;
-   789			case Opt_xprt_udp:
-   790				ctx->flags &= ~NFS_MOUNT_TCP;
-   791				ctx->nfs_server.protocol = XPRT_TRANSPORT_UDP;
-   792				break;
-   793			case Opt_xprt_tcp6:
-   794				protofamily = AF_INET6;
-   795				fallthrough;
-   796			case Opt_xprt_tcp:
-   797				ctx->flags |= NFS_MOUNT_TCP;
-   798				ctx->nfs_server.protocol = XPRT_TRANSPORT_TCP;
-   799				break;
-   800			case Opt_xprt_rdma6:
-   801				protofamily = AF_INET6;
-   802				fallthrough;
-   803			case Opt_xprt_rdma:
-   804				/* vector side protocols to TCP */
-   805				ctx->flags |= NFS_MOUNT_TCP;
-   806				ret = xprt_find_transport_ident(param->string);
-   807				if (ret < 0)
-   808					goto out_bad_transport;
-   809				ctx->nfs_server.protocol = ret;
-   810				break;
-   811			default:
-   812				goto out_bad_transport;
-   813			}
-   814	
-   815			ctx->protofamily = protofamily;
-   816			break;
-   817	
-   818		case Opt_mountproto:
-   819			if (!param->string)
-   820				goto out_invalid_value;
-   821			trace_nfs_mount_assign(param->key, param->string);
-   822			mountfamily = AF_INET;
-   823			switch (lookup_constant(nfs_xprt_protocol_tokens, param->string, -1)) {
-   824			case Opt_xprt_udp6:
-   825				mountfamily = AF_INET6;
-   826				fallthrough;
-   827			case Opt_xprt_udp:
-   828				ctx->mount_server.protocol = XPRT_TRANSPORT_UDP;
-   829				break;
-   830			case Opt_xprt_tcp6:
-   831				mountfamily = AF_INET6;
-   832				fallthrough;
-   833			case Opt_xprt_tcp:
-   834				ctx->mount_server.protocol = XPRT_TRANSPORT_TCP;
-   835				break;
-   836			case Opt_xprt_rdma: /* not used for side protocols */
-   837			default:
-   838				goto out_bad_transport;
-   839			}
-   840			ctx->mountfamily = mountfamily;
-   841			break;
-   842	
-   843		case Opt_addr:
-   844			trace_nfs_mount_assign(param->key, param->string);
-   845			len = rpc_pton(fc->net_ns, param->string, param->size,
-   846				       &ctx->nfs_server.address,
-   847				       sizeof(ctx->nfs_server._address));
-   848			if (len == 0)
-   849				goto out_invalid_address;
-   850			ctx->nfs_server.addrlen = len;
-   851			break;
-   852		case Opt_clientaddr:
-   853			trace_nfs_mount_assign(param->key, param->string);
-   854			kfree(ctx->client_address);
-   855			ctx->client_address = param->string;
-   856			param->string = NULL;
-   857			break;
-   858		case Opt_mounthost:
-   859			trace_nfs_mount_assign(param->key, param->string);
-   860			kfree(ctx->mount_server.hostname);
-   861			ctx->mount_server.hostname = param->string;
-   862			param->string = NULL;
-   863			break;
-   864		case Opt_mountaddr:
-   865			trace_nfs_mount_assign(param->key, param->string);
-   866			len = rpc_pton(fc->net_ns, param->string, param->size,
-   867				       &ctx->mount_server.address,
-   868				       sizeof(ctx->mount_server._address));
-   869			if (len == 0)
-   870				goto out_invalid_address;
-   871			ctx->mount_server.addrlen = len;
-   872			break;
-   873		case Opt_nconnect:
-   874			trace_nfs_mount_assign(param->key, param->string);
-   875			if (result.uint_32 < 1 || result.uint_32 > NFS_MAX_CONNECTIONS)
-   876				goto out_of_bounds;
-   877			ctx->nfs_server.nconnect = result.uint_32;
-   878			break;
-   879		case Opt_max_connect:
-   880			trace_nfs_mount_assign(param->key, param->string);
-   881			if (result.uint_32 < 1 || result.uint_32 > NFS_MAX_TRANSPORTS)
-   882				goto out_of_bounds;
-   883			ctx->nfs_server.max_connect = result.uint_32;
-   884			break;
-   885		case Opt_lookupcache:
-   886			trace_nfs_mount_assign(param->key, param->string);
-   887			switch (result.uint_32) {
-   888			case Opt_lookupcache_all:
-   889				ctx->flags &= ~(NFS_MOUNT_LOOKUP_CACHE_NONEG|NFS_MOUNT_LOOKUP_CACHE_NONE);
-   890				break;
-   891			case Opt_lookupcache_positive:
-   892				ctx->flags &= ~NFS_MOUNT_LOOKUP_CACHE_NONE;
-   893				ctx->flags |= NFS_MOUNT_LOOKUP_CACHE_NONEG;
-   894				break;
-   895			case Opt_lookupcache_none:
-   896				ctx->flags |= NFS_MOUNT_LOOKUP_CACHE_NONEG|NFS_MOUNT_LOOKUP_CACHE_NONE;
-   897				break;
-   898			default:
-   899				goto out_invalid_value;
-   900			}
-   901			break;
-   902		case Opt_local_lock:
-   903			trace_nfs_mount_assign(param->key, param->string);
-   904			switch (result.uint_32) {
-   905			case Opt_local_lock_all:
-   906				ctx->flags |= (NFS_MOUNT_LOCAL_FLOCK |
-   907					       NFS_MOUNT_LOCAL_FCNTL);
-   908				break;
-   909			case Opt_local_lock_flock:
-   910				ctx->flags |= NFS_MOUNT_LOCAL_FLOCK;
-   911				break;
-   912			case Opt_local_lock_posix:
-   913				ctx->flags |= NFS_MOUNT_LOCAL_FCNTL;
-   914				break;
-   915			case Opt_local_lock_none:
-   916				ctx->flags &= ~(NFS_MOUNT_LOCAL_FLOCK |
-   917						NFS_MOUNT_LOCAL_FCNTL);
-   918				break;
-   919			default:
-   920				goto out_invalid_value;
-   921			}
-   922			break;
-   923		case Opt_write:
-   924			trace_nfs_mount_assign(param->key, param->string);
-   925			switch (result.uint_32) {
-   926			case Opt_write_lazy:
-   927				ctx->flags &=
-   928					~(NFS_MOUNT_WRITE_EAGER | NFS_MOUNT_WRITE_WAIT);
-   929				break;
-   930			case Opt_write_eager:
-   931				ctx->flags |= NFS_MOUNT_WRITE_EAGER;
-   932				ctx->flags &= ~NFS_MOUNT_WRITE_WAIT;
-   933				break;
-   934			case Opt_write_wait:
-   935				ctx->flags |=
-   936					NFS_MOUNT_WRITE_EAGER | NFS_MOUNT_WRITE_WAIT;
-   937				break;
-   938			default:
-   939				goto out_invalid_value;
-   940			}
-   941			break;
-   942	
-   943			/*
-   944			 * Special options
-   945			 */
-   946		case Opt_sloppy:
-   947			ctx->sloppy = true;
-   948			break;
-   949		}
-   950	
-   951		return 0;
-   952	
-   953	out_invalid_value:
-   954		return nfs_invalf(fc, "NFS: Bad mount option value specified");
-   955	out_invalid_address:
-   956		return nfs_invalf(fc, "NFS: Bad IP address specified");
-   957	out_of_bounds:
-   958		return nfs_invalf(fc, "NFS: Value for '%s' out of range", param->key);
-   959	out_bad_transport:
-   960		return nfs_invalf(fc, "NFS: Unrecognized transport protocol");
-   961	}
-   962	
+f481b069e674378 Paolo Bonzini       2015-05-17  719  
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  720  /*
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  721   * Arch code must define kvm_arch_has_private_mem if support for private memory
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  722   * is enabled.
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  723   */
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  724  #if !defined(kvm_arch_has_private_mem) && !IS_ENABLED(CONFIG_KVM_PRIVATE_MEM)
+a7800aa80ea4d53 Sean Christopherson 2023-11-13 @725  static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  726  {
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  727  	return false;
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  728  }
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  729  #endif
+a7800aa80ea4d53 Sean Christopherson 2023-11-13  730  
+a765e4ca28eb657 Fuad Tabba          2025-03-12  731  /*
+a765e4ca28eb657 Fuad Tabba          2025-03-12  732   * Arch code must define kvm_arch_gmem_supports_shared_mem if support for
+a765e4ca28eb657 Fuad Tabba          2025-03-12  733   * private memory is enabled and it supports in-place shared/private conversion.
+a765e4ca28eb657 Fuad Tabba          2025-03-12  734   */
+a765e4ca28eb657 Fuad Tabba          2025-03-12  735  #if !defined(kvm_arch_gmem_supports_shared_mem) && !IS_ENABLED(CONFIG_KVM_GMEM_SHARED_MEM)
+a765e4ca28eb657 Fuad Tabba          2025-03-12 @736  static inline bool kvm_arch_gmem_supports_shared_mem(struct kvm *kvm)
+a765e4ca28eb657 Fuad Tabba          2025-03-12  737  {
+a765e4ca28eb657 Fuad Tabba          2025-03-12  738  	return false;
+a765e4ca28eb657 Fuad Tabba          2025-03-12  739  }
+a765e4ca28eb657 Fuad Tabba          2025-03-12  740  #endif
+a765e4ca28eb657 Fuad Tabba          2025-03-12  741  
 
 -- 
 0-DAY CI Kernel Test Service
