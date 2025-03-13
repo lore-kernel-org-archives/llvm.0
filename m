@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205F9F50F;
-	Thu, 13 Mar 2025 00:52:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83EB2AE77;
+	Thu, 13 Mar 2025 01:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741827142; cv=none; b=cOBnz5iooO5B47bwuyI6GemUXRB0llpAxlUPv2DN67cd3Mzdxu6aasSpsNKnawMfj/PiHol/n1yItFksEuZEX176PK6aDwz8JLwdOaySanBWpt2t372hifEYn4u1PUqmf31vcs4DrIrSIiALvwfLaRuiXecFrTXpBOvWg1rJS/0=
+	t=1741830830; cv=none; b=f9FyyktkNe6LerF0dXPBQGqCUzakFAl9eFunTV8K2i11BiGl/rDDX2fqfPgS7/MPIuWUONGD018hS2cs1FMt6AA9In8oebFKgP9DXDv3dwUxAbyFChBelXUHdZr3BXTUgVgCiytiCH0JbU1M3gSqQ41XW62CGFiSAt/1iVYTKSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741827142; c=relaxed/simple;
-	bh=WmgE3mwmQdlO+tJxWDxYF+fgylLCl5zX1PvcrMW/G+M=;
+	s=arc-20240116; t=1741830830; c=relaxed/simple;
+	bh=4nColgqOELuFgHL1IbFS/S4uTy/GrD5r3pOic4ag7/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WA5UH6tPHmsvJwJliMf9v5ukxLek9b3eCxeJ1dkXnZANNyPY/YtTRAPjFo8+b5IXICEL+1HQlEAAb3YFNtndcAdZm1mCdG3v260vkC+aNR7GFLkM8XlHol+3P2oqdSa7bnd2np0r7VWbaND+prYPAPeiZCu8FxqBKrFzUzJF0uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DgKpskD5; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=YoA50ODNAsET2X7BEDuf6vLqSf2Q6wcMXEyR8YS2D19l8zGUxH5Ucelz/Hcq307hQqklWRe/PkQk4X6J5/7WsBPnWyexsy+bhBDmtwQfdr/jzdMH2U3b2yBotDX01AW2SR8rhF701+ehTkS3BXzdRFntSIX+3Q5G7V8nIy45/BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Syi7TJYo; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DgKpskD5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Syi7TJYo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741827141; x=1773363141;
+  t=1741830827; x=1773366827;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WmgE3mwmQdlO+tJxWDxYF+fgylLCl5zX1PvcrMW/G+M=;
-  b=DgKpskD5gtxsa4CSUlB8g50CToZF+5N9xC+q+9LyiDlEQyk/wd4Gs+wh
-   VSxg/lCGp2qfcVW2yAu5bpQu44GjIkHA16qOKUCFZtSdyE4JBm3PBzyYM
-   OMDQbE0SiyzopdTQ1wmkE8sfTOshDiNwZvqA4NxIv/IqtilJsCp2KZXOz
-   r3Gfc2PS2JF4PmkXpAh2s5DQIIcOZpNDVTB53KbEJ7a4mAjjwda9Z3KH3
-   o4f/fNSNHm+d6myr0W8XCCzMmCH2nnHxxt+ikmvKmAeQragQBQoKmR9cQ
-   vobDusf1GKDIiBgsLrlmvxcO9I4EEKizjgF3FuNkhovVWPl4E2+nXCreN
+  bh=4nColgqOELuFgHL1IbFS/S4uTy/GrD5r3pOic4ag7/U=;
+  b=Syi7TJYoaF1eJfa2LDnY38l73MqrenpAgZcNZILeFXM2MsdDmuug+O/u
+   PH0MZEsPsM3TWGbhNUap9+NT6Kf4FHdec3GEmi/XRXQDW1rkWlIK6/ClD
+   1dfviF/eRaDb7812tAJ3PyVHiJSGc40f4L8L4UhXZPLUjB5+jPvvT3lMR
+   hpvWQTHE+cj5nvHwcWw84AIvVXh5ku+QfS+yj5pJ49xLeOsNBKwsARjL1
+   Mt9XMZ3i7CynrQphwJqlF2EpkTn81MQ3dnCgNhm6R6JCr02pTvTf9xfFp
+   kynbLqQ2jWPEdqCcqFnGW3ka2ywxON7gsxS57LO4oNJs52BNpolC6sX1Z
    Q==;
-X-CSE-ConnectionGUID: 5j9CxjbRRqOXnacHoyXjyQ==
-X-CSE-MsgGUID: VOZjeuOATPmNv/hS1zYK/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="30517889"
+X-CSE-ConnectionGUID: coRo4rulQ3eYtPJMU1CfUQ==
+X-CSE-MsgGUID: V0qQvKEeSEeLqoujjr13IA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="60331364"
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="30517889"
+   d="scan'208";a="60331364"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:52:18 -0700
-X-CSE-ConnectionGUID: c94EXzykSymV5SW8g6m6hA==
-X-CSE-MsgGUID: AizRmDsHTleapSphFvbl5Q==
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 18:53:47 -0700
+X-CSE-ConnectionGUID: veBJ0OhYR4iCo23Ckye1gQ==
+X-CSE-MsgGUID: GFEQRz2SQi6MtH5yyB4OYQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="124963132"
+   d="scan'208";a="124971853"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 17:52:16 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 18:53:45 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsWo2-00091I-2a;
-	Thu, 13 Mar 2025 00:52:14 +0000
-Date: Thu, 13 Mar 2025 08:51:18 +0800
+	id 1tsXlL-00092i-29;
+	Thu, 13 Mar 2025 01:53:34 +0000
+Date: Thu, 13 Mar 2025 09:53:08 +0800
 From: kernel test robot <lkp@intel.com>
 To: Suraj Patil <surajpatil522@gmail.com>, jic23@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, lars@metafoo.de,
 	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Suraj Patil <surajpatil522@gmail.com>
 Subject: Re: [PATCH] iio: industrialio-trigger: Fix typos in comments
-Message-ID: <202503130826.WiaC6K1E-lkp@intel.com>
+Message-ID: <202503130901.12r9Jl8B-lkp@intel.com>
 References: <20250311155927.467523-1-surajpatil522@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -80,43 +80,42 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Suraj-Patil/iio-industria
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
 patch link:    https://lore.kernel.org/r/20250311155927.467523-1-surajpatil522%40gmail.com
 patch subject: [PATCH] iio: industrialio-trigger: Fix typos in comments
-config: csky-randconfig-002-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130826.WiaC6K1E-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130826.WiaC6K1E-lkp@intel.com/reproduce)
+config: hexagon-randconfig-002-20250313 (https://download.01.org/0day-ci/archive/20250313/202503130901.12r9Jl8B-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130901.12r9Jl8B-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130826.WiaC6K1E-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503130901.12r9Jl8B-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/iio/industrialio-trigger.c: In function 'iio_reenable_work_fn':
->> drivers/iio/industrialio-trigger.c:165:18: error: 'const struct iio_trigger_ops' has no member named 're'
+>> drivers/iio/industrialio-trigger.c:165:13: error: no member named 're' in 'struct iio_trigger_ops'
      165 |         trig->ops->re-enable(trig);
-         |                  ^~
->> drivers/iio/industrialio-trigger.c:165:23: error: implicit declaration of function 'enable'; did you mean 'enable_nmi'? [-Wimplicit-function-declaration]
+         |         ~~~~~~~~~  ^
+>> drivers/iio/industrialio-trigger.c:165:16: error: call to undeclared function 'enable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
      165 |         trig->ops->re-enable(trig);
-         |                       ^~~~~~
-         |                       enable_nmi
-   drivers/iio/industrialio-trigger.c: In function 'iio_trigger_notify_done_atomic':
-   drivers/iio/industrialio-trigger.c:185:22: error: 'const struct iio_trigger_ops' has no member named 're'
+         |                       ^
+   drivers/iio/industrialio-trigger.c:185:17: error: no member named 're' in 'struct iio_trigger_ops'
      185 |             trig->ops->re-enable)
-         |                      ^~
->> drivers/iio/industrialio-trigger.c:185:27: error: 'enable' undeclared (first use in this function)
+         |             ~~~~~~~~~  ^
+>> drivers/iio/industrialio-trigger.c:185:20: error: use of undeclared identifier 'enable'
      185 |             trig->ops->re-enable)
-         |                           ^~~~~~
-   drivers/iio/industrialio-trigger.c:185:27: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/iio/industrialio-trigger.c: In function 'iio_trigger_notify_done':
-   drivers/iio/industrialio-trigger.c:246:22: error: 'const struct iio_trigger_ops' has no member named 're'
+         |                           ^
+   drivers/iio/industrialio-trigger.c:246:17: error: no member named 're' in 'struct iio_trigger_ops'
      246 |             trig->ops->re-enable)
-         |                      ^~
-   drivers/iio/industrialio-trigger.c:246:27: error: 'enable' undeclared (first use in this function)
+         |             ~~~~~~~~~  ^
+   drivers/iio/industrialio-trigger.c:246:20: error: use of undeclared identifier 'enable'
      246 |             trig->ops->re-enable)
-         |                           ^~~~~~
-   drivers/iio/industrialio-trigger.c:247:26: error: 'const struct iio_trigger_ops' has no member named 're'
+         |                           ^
+   drivers/iio/industrialio-trigger.c:247:14: error: no member named 're' in 'struct iio_trigger_ops'
      247 |                 trig->ops->re-enable(trig);
-         |                          ^~
+         |                 ~~~~~~~~~  ^
+   drivers/iio/industrialio-trigger.c:247:17: error: call to undeclared function 'enable'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     247 |                 trig->ops->re-enable(trig);
+         |                               ^
+   8 errors generated.
 
 
 vim +165 drivers/iio/industrialio-trigger.c
