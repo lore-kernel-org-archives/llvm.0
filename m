@@ -1,299 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06B4263C7C;
-	Thu, 13 Mar 2025 09:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670A926038E;
+	Thu, 13 Mar 2025 09:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741857705; cv=none; b=YVRjbqrRBkPoX2+7/xQwVJdlvh0PWL5H7Elr0KbhQYgvLRsnsVxPfw3p8MUJ4FE5SgkbWcj//pMunVNraIjgWsgs5xPXlHeYJlycEyWi20I/gj3+mKMYcJ8OWlDaKu3SMbneQtwqYNcQDVOmZPIfRPv/gwanGsaQYKiyaSMzSkk=
+	t=1741858463; cv=none; b=pMEi45WRAiDIen6ndggbdUArrzuMCVRrO4//+gG5fYEKgVmbp6MpO4PkNRLvg5Yl9VwMpG0ubrwE54ZViETNCU6OIcflNtLdCPqkVrgGzKIlsXW6xwMbS7tasR80oarc+CTHDT+KUr/KDdbn7kO/sEhqZ77wq18twU4KPFjQ+Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741857705; c=relaxed/simple;
-	bh=kxdQjPYAsvPGHs0qy8lVL9SL9t9OxUtVCPDUXMcOojw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AMNjwn+DaDQISxCTVgvUrWw0Uat12TY8kR2qSfNYTWVrt9eFDfJ53d9x8EOo4cYGbiL7E2IsbMtXpTbTy6+8nhPi27nXp6HiUvJ/1W25fhHupDHBR57Wdj7ToKZXlnXOrijJgZlxBHq15qarDZlW/XyfqZIiNQA0XZBfu3lR2Ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4GxEunS; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741858463; c=relaxed/simple;
+	bh=vZoJDpDTmWHWIWAu2WSeOEgGu9mMhdvsQC0d26Wi4EE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NuIL6pFNSnvQPkJNJBUk6u9ze2HZANGbRyOT8ZX2FHKhw0iWh9Ki+5VuPos0CmoDfV47AxdcYMlCeTaWxD7ECoR036oDWXYrb9v2pUaA/B7rhU4QXGvKkd+GrjxuupOTI0e8tTJgjGfXu4Ao2MYHj7v6CleYrPlrw1b7tEEP1Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uJ3v/KQb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4GxEunS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741857703; x=1773393703;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kxdQjPYAsvPGHs0qy8lVL9SL9t9OxUtVCPDUXMcOojw=;
-  b=Q4GxEunS1nDFnceiWqTGKhKtGT32fZbZ0LMuuW8KZHgPBNmENXpE7x8U
-   IsP3DFE4yrgQf2fMfE/dr5dXFh2FjjofpC+bveizPpCAkNy/vJKULKuVk
-   aeBPOFdpAnNWFcK1JHN5BuYbg8WdjCtR45VK/72IdjibfAnRKFGmjE4Ot
-   Z7sd/qoznMiXCLK78vNGwtcPvlFTjOXUd0kKxbevGUIZSlKQadwvdi3lG
-   t6O0GlIqTLaLuAluJJiBfL2lU3bi9lwOA95Cnk0CdMVQOwcRjvtxnNQVF
-   kxWIXF5kS2kxq2q/5OcZcIqO1ldgY8nq1VXIAEyOdgSWZy+VWU6wkf+Za
-   A==;
-X-CSE-ConnectionGUID: /y4D8MSuRkyh3cmLuAXL7g==
-X-CSE-MsgGUID: WjQr72ZvSiGyYpqgYK1eCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="46869757"
-X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="46869757"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 02:21:40 -0700
-X-CSE-ConnectionGUID: 7IGeVyv2QhmRHb0tsYLb1Q==
-X-CSE-MsgGUID: JSjegJHFT0iqB8kRLD1xWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="121819970"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 13 Mar 2025 02:21:38 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsekx-0009HJ-2p;
-	Thu, 13 Mar 2025 09:21:35 +0000
-Date: Thu, 13 Mar 2025 17:21:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sarika Sharma <quic_sarishar@quicinc.com>, johannes@sipsolutions.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-wireless@vger.kernel.org,
-	Sarika Sharma <quic_sarishar@quicinc.com>
-Subject: Re: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo
- structure elements for MLO
-Message-ID: <202503131702.EHtf3ZYe-lkp@intel.com>
-References: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uJ3v/KQb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CC5C4CEE3;
+	Thu, 13 Mar 2025 09:34:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741858462;
+	bh=vZoJDpDTmWHWIWAu2WSeOEgGu9mMhdvsQC0d26Wi4EE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uJ3v/KQbtHiRxiHdK+WMSahSOVWk23CN1xtmsNpXhXafJuxBYtYFCxuKoRD9Zxj7b
+	 SpuM+892PUms50X1x+iLuWZ9qSh+q75FBjEQR3MTUvkPM/plj8a+JjDdroehSku2/J
+	 DjvT4+Zr8mN9qWW1x1WGnuyE2N40p/y6AhCCeCaFkz3WKsx/T3Ae5015PMD2SzP4hY
+	 l95kFUEDO5JwiQ7FMI2/t9fL2+VFjqH2kZ2p8vX/IisjEwVS3uc/LVPPIGKeunOd/b
+	 DRUyKEKW50XBBKK18ItYM9m8SrIVh9Wh+NdatGuHYDSEukc4bc22Y1ZpCvEizd6r6X
+	 FlO4rxUezCgMw==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54954fa61c8so683968e87.1;
+        Thu, 13 Mar 2025 02:34:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUKhHftOWdXp7DlBRiCtLAaU0IUFtnVvZhRwFsngax6iMnHUgLUleeFiuzKRXRXUcMUJwQi@lists.linux.dev, AJvYcCXrP2Yz0cZU4XS+f4oZ/4V7G9U00L+7PaUTVvqqhMS5svpUEN2iSPa21q23k4ztxCiwrmSJJXoRr0GJxIdOAg==@lists.linux.dev
+X-Gm-Message-State: AOJu0YyyaItMCvcdPkBhIoTl6DnJc9Kvi+OSr/77u8P1H75UvY5LbpdK
+	PsOdzM9E6LzKYXIiYprU1QFN/w8/Dpteqr91oTEH6H//aW4OOqUlRgvEdx9q1BttPTtC6hgXkdd
+	cPRKIoUOXD8GQ58nzUGltJAlXNHQ=
+X-Google-Smtp-Source: AGHT+IGiizjDd9U50PgmaruU6eXHUHi2xPUqWWSNcGHullv/aaClM9lkBlv5Mu+wibAEsAHWg3V8TSdK+NMBcnDEej4=
+X-Received: by 2002:a05:6512:159a:b0:545:6fa:bf60 with SMTP id
+ 2adb3069b0e04-54990e4a822mr9816194e87.19.1741858461061; Thu, 13 Mar 2025
+ 02:34:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312065132.3397726-5-quic_sarishar@quicinc.com>
+References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
+In-Reply-To: <202503131715.Fb6CfjhT-lkp@intel.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 13 Mar 2025 10:34:09 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
+X-Gm-Features: AQ5f1JrdY_O-dpd_Fst91bV8iY8Z5VXs88uikfiDeXUEQK3ipIbyhHsPjZh6oPs
+Message-ID: <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
+ relocations preserved
+To: kernel test robot <lkp@intel.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org, x86@kernel.org, 
+	Masahiro Yamada <masahiroy@kernel.org>, Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Sarika,
+On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Ard,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on masahiroy-kbuild/for-next]
+> [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s390/features linus/master v6.14-rc6 next-20250312]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Biesheuvel/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-190926
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+> patch link:    https://lore.kernel.org/r/20250311110616.148682-9-ardb%2Bgit%40google.com
+> patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with relocations preserved
+> config: x86_64-randconfig-076-20250313 (https://download.01.org/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb6CfjhT-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot open file `vmlinux.map' for reading: No such file or directory
+>
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 9324731b9985478faf7f77713cc5e5fee811716e]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sarika-Sharma/wifi-mac80211-add-support-towards-MLO-handling-of-station-statistics/20250312-145356
-base:   9324731b9985478faf7f77713cc5e5fee811716e
-patch link:    https://lore.kernel.org/r/20250312065132.3397726-5-quic_sarishar%40quicinc.com
-patch subject: [PATCH wireless-next v5 04/11] wifi: cfg80211: reorg sinfo structure elements for MLO
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503131702.EHtf3ZYe-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503131702.EHtf3ZYe-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503131702.EHtf3ZYe-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:6:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:6:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:6:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2637:3: error: field designator 'sta_statistics' does not refer to any field in type 'const struct ieee80211_ops'
-    2637 |         .sta_statistics = iwl_mld_mac80211_sta_statistics,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   12 warnings and 1 error generated.
---
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/stats.c:6:
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mld.h:9:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     549 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/stats.c:6:
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mld.h:9:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/stats.c:6:
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mld.h:9:
-   In file included from include/net/mac80211.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     601 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     724 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     737 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     750 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     764 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     792 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/net/wireless/intel/iwlwifi/mld/stats.c:67:9: error: no member named 'signal_avg' in 'struct station_info'
-      67 |         sinfo->signal_avg = mld_link_sta->signal_avg;
-         |         ~~~~~  ^
-   drivers/net/wireless/intel/iwlwifi/mld/stats.c:169:36: error: no member named 'txrate' in 'struct station_info'
-     169 |         struct rate_info *rinfo = &sinfo->txrate;
-         |                                    ~~~~~  ^
-   12 warnings and 2 errors generated.
-
-
-vim +2637 drivers/net/wireless/intel/iwlwifi/mld/mac80211.c
-
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2608  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2609  const struct ieee80211_ops iwl_mld_hw_ops = {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2610  	.tx = iwl_mld_mac80211_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2611  	.start = iwl_mld_mac80211_start,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2612  	.stop = iwl_mld_mac80211_stop,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2613  	.config = iwl_mld_mac80211_config,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2614  	.add_interface = iwl_mld_mac80211_add_interface,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2615  	.remove_interface = iwl_mld_mac80211_remove_interface,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2616  	.conf_tx = iwl_mld_mac80211_conf_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2617  	.prepare_multicast = iwl_mld_mac80211_prepare_multicast,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2618  	.configure_filter = iwl_mld_mac80211_configure_filter,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2619  	.reconfig_complete = iwl_mld_mac80211_reconfig_complete,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2620  	.wake_tx_queue = iwl_mld_mac80211_wake_tx_queue,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2621  	.add_chanctx = iwl_mld_add_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2622  	.remove_chanctx = iwl_mld_remove_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2623  	.change_chanctx = iwl_mld_change_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2624  	.assign_vif_chanctx = iwl_mld_assign_vif_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2625  	.unassign_vif_chanctx = iwl_mld_unassign_vif_chanctx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2626  	.set_rts_threshold = iwl_mld_mac80211_set_rts_threshold,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2627  	.link_info_changed = iwl_mld_mac80211_link_info_changed,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2628  	.vif_cfg_changed = iwl_mld_mac80211_vif_cfg_changed,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2629  	.set_key = iwl_mld_mac80211_set_key,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2630  	.hw_scan = iwl_mld_mac80211_hw_scan,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2631  	.cancel_hw_scan = iwl_mld_mac80211_cancel_hw_scan,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2632  	.sched_scan_start = iwl_mld_mac80211_sched_scan_start,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2633  	.sched_scan_stop = iwl_mld_mac80211_sched_scan_stop,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2634  	.mgd_prepare_tx = iwl_mld_mac80211_mgd_prepare_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2635  	.mgd_complete_tx = iwl_mld_mac_mgd_complete_tx,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  2636  	.sta_state = iwl_mld_mac80211_sta_state,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16 @2637  	.sta_statistics = iwl_mld_mac80211_sta_statistics,
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Hmm it seems I missed some things in link-vmlinux.sh - I will take a look.
