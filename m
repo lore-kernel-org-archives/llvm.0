@@ -1,64 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F80189F56;
-	Thu, 13 Mar 2025 18:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4E71F3FD0;
+	Thu, 13 Mar 2025 19:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741890787; cv=none; b=BKM77WhH9NVtbBbBdQDDM1qsQL5X+jT1oD81DlMiF7iO6vou5pz7EG5hl4eNyTWGyy6781DWSSXvJqk3i1YnbbXaUz2ENQU2hjnJPsuTQTV26hs41M7gXUfyACM/0hAXHKzhapdqYuxK+cfn7/2mpZXg4OyEm1FhOI7/tykAXQU=
+	t=1741892709; cv=none; b=NgaPrj4NoNQ7QEShEXJ1MjRGS8rgJ8guk/kQ4nb/RSvLJ7kpc8L3RTNaZ6Vh3VgkbwF+uhyUjKRtf9vg2CR3dNX21JBi516sFl2mpWREJUe1s3T4VEGRZJWKdPvWV44JFkUCBY5MtD8WK6qgU0BtJUKgf0EdXxiGNu7Riovj/hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741890787; c=relaxed/simple;
-	bh=NNfdweyltKpfxEYdB4dJuUUgTK30BjFlrikEsqHw4SA=;
+	s=arc-20240116; t=1741892709; c=relaxed/simple;
+	bh=iWg4hVFvyTLL0ZXRr8B9fT0VXiGOPMtR0tov4PwJgNE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwFmPNpQcAW3e+BWNPAJAISfKvos2MOuQnpDJpHRUtUkuYx9Nj9g2YGM3VD05ArcaAmA+L+EoHMAadT8xUDKXTViUFFe6X2HC3dPPi0p0ILn4nBBXwx5baNnzQh8TNubExaAElcLiwCRYsnNlZq94bC2nq2myJGX3J9qzNugrNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWyPum2I; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=NpGdQIfaOGJh/8OeM0UoAnoOHsZRoninJmg9r6hfEHeS2nBPUT1gbR/nkK58DwXTkN7X4O9b9IzDcuZ/i1YD/7PhRiOrepUAG7B67s1mpt3Au8VmoglUrCE8+wX4H0e4UNomVzbHgLzsQAeDUs66kRkhzLkqtSIrdjtxo+gA1p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ff4v+jA1; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWyPum2I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ff4v+jA1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741890785; x=1773426785;
+  t=1741892707; x=1773428707;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NNfdweyltKpfxEYdB4dJuUUgTK30BjFlrikEsqHw4SA=;
-  b=FWyPum2IuqRFFAf8Qs9te8FCnEbQTsxQiIFiKyVt4UUmtUJWk2Aa9ZuA
-   pRl0NRcAPS55l1wY4vyBxNYvgPk3NM7q4GuUyz3rAHGZHnLFkgq+byJmO
-   k6xTOlV6uZBo0bZ9nA/W7LDmNKneul9V1FUVt4/nleaml1QzVQI5Kt0L+
-   iW+b9sfrAgDzvVq2WHJXv53yszZUNaaOXun3y6wqo3F2Fi/8n+xpgslWT
-   9IOpKkt3gjYurTeqq5wUFNIIYa3NEMeX9e41JLhf68GydEE2+6/XSAYLv
-   n1WLbpKbgBKlF9sZASxyn08xUYlZ5jHIpKJANxvLy6vu0Ijo+cvSIQwxU
+  bh=iWg4hVFvyTLL0ZXRr8B9fT0VXiGOPMtR0tov4PwJgNE=;
+  b=ff4v+jA11hRrtmGvBQbSobBI2hlpYGHEz6mzuKeTMlesKUOBr5SQZHN+
+   7CxtY4tAimyIbiYj6AOcxRWW6BglZHoogTzV4XZaVJdJ5AzpbXnnQxzoq
+   lqu/k8qdIehnU6ji5LlTl7EITlsIXZvHA+ENBM20DcKIjzwDsV5INMCLC
+   SpNIfmI+8V+O7sx8XT2HV3jZ3De5SBpbzQ8AkTQrtJDXgrcZ3EwwD/dxo
+   HPjTvNDSJNBIPnC7NkC+3E+s2Mx278W2XtGYO7kCWfRMohy3XYIunWxG0
+   V1t6hmVcrCSzjMHnDNoXySaN1B7sgl8AWsSCoTiS0EfmX4bciVulTNHfZ
    Q==;
-X-CSE-ConnectionGUID: tjBjCzLxTBaMh4A2+Yz0Bw==
-X-CSE-MsgGUID: 71MNOBTJSLaaDLbD5wXB5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="42911426"
+X-CSE-ConnectionGUID: iaQFrKfrT4y4GYjIvUp7kA==
+X-CSE-MsgGUID: QsOrTKJKRwSq0gRN6ObCqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="42278592"
 X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="42911426"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 11:33:04 -0700
-X-CSE-ConnectionGUID: FWRYxOsiSAeJW66tDYLG0A==
-X-CSE-MsgGUID: gmOubHMERIa2gAR7Sa2tyg==
+   d="scan'208";a="42278592"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 12:05:06 -0700
+X-CSE-ConnectionGUID: 24YuMAPCSUyHEHtc3yh94w==
+X-CSE-MsgGUID: jfo4HKpeQJGe/AaWt/Jqag==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="125663989"
+   d="scan'208";a="121095565"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Mar 2025 11:33:02 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 13 Mar 2025 12:05:04 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tsnMZ-0009lE-2a;
-	Thu, 13 Mar 2025 18:32:59 +0000
-Date: Fri, 14 Mar 2025 02:32:41 +0800
+	id 1tsnrZ-0009mO-37;
+	Thu, 13 Mar 2025 19:05:01 +0000
+Date: Fri, 14 Mar 2025 03:04:15 +0800
 From: kernel test robot <lkp@intel.com>
-To: Subu Dwevedi <messigoatcr7nop@gmail.com>
+To: Rik van Riel <riel@surriel.com>, Corey Minyard <corey@minyard.net>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Subu Dwevedi <messigoatcr7nop@gmail.com>,
-	Henrik Rydberg <rydberg@bitmath.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon/applesmc: add MMIO for newer macs
-Message-ID: <202503140229.R49CaAYj-lkp@intel.com>
-References: <20250312123055.1735-2-messigoatcr7nop@gmail.com>
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	openipmi-developer@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH] ipmi: fix suspicious RCU usage warning
+Message-ID: <202503140113.cTWvIvtK-lkp@intel.com>
+References: <20250312131932.44d901f7@fangorn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,201 +65,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250312123055.1735-2-messigoatcr7nop@gmail.com>
+In-Reply-To: <20250312131932.44d901f7@fangorn>
 
-Hi Subu,
+Hi Rik,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.14-rc6 next-20250313]
+[auto build test ERROR on v6.14-rc6]
+[also build test ERROR on linus/master next-20250313]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Subu-Dwevedi/hwmon-applesmc-add-MMIO-for-newer-macs/20250312-203248
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20250312123055.1735-2-messigoatcr7nop%40gmail.com
-patch subject: [PATCH 1/2] hwmon/applesmc: add MMIO for newer macs
-config: x86_64-buildonly-randconfig-002-20250313 (https://download.01.org/0day-ci/archive/20250314/202503140229.R49CaAYj-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140229.R49CaAYj-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rik-van-Riel/ipmi-fix-suspicious-RCU-usage-warning/20250313-013222
+base:   v6.14-rc6
+patch link:    https://lore.kernel.org/r/20250312131932.44d901f7%40fangorn
+patch subject: [PATCH] ipmi: fix suspicious RCU usage warning
+config: i386-randconfig-001-20250313 (https://download.01.org/0day-ci/archive/20250314/202503140113.cTWvIvtK-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140113.cTWvIvtK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503140229.R49CaAYj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503140113.cTWvIvtK-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/hwmon/applesmc.c:717:42: error: incomplete definition of type 'struct acpi_device'
-     717 |         status = acpi_get_current_resources(adev->handle, &buffer);
-         |                                             ~~~~^
-   include/linux/acpi.h:801:8: note: forward declaration of 'struct acpi_device'
-     801 | struct acpi_device;
-         |        ^
-   1 error generated.
+   drivers/char/ipmi/ipmi_msghandler.c: In function 'ipmi_create_user':
+>> drivers/char/ipmi/ipmi_msghandler.c:1238:62: error: macro "list_for_each_entry_srcu" requires 4 arguments, but only 3 given
+    1238 |         list_for_each_entry_srcu(intf, &ipmi_interfaces, link) {
+         |                                                              ^
+   In file included from include/linux/dcache.h:8,
+                    from include/linux/fs.h:8,
+                    from include/linux/poll.h:10,
+                    from drivers/char/ipmi/ipmi_msghandler.c:20:
+   include/linux/rculist.h:455: note: macro "list_for_each_entry_srcu" defined here
+     455 | #define list_for_each_entry_srcu(pos, head, member, cond)               \
+         | 
+>> drivers/char/ipmi/ipmi_msghandler.c:1238:9: error: 'list_for_each_entry_srcu' undeclared (first use in this function)
+    1238 |         list_for_each_entry_srcu(intf, &ipmi_interfaces, link) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/char/ipmi/ipmi_msghandler.c:1238:9: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/char/ipmi/ipmi_msghandler.c:1238:33: error: expected ';' before '{' token
+    1238 |         list_for_each_entry_srcu(intf, &ipmi_interfaces, link) {
+         |                                 ^                              ~
+         |                                 ;
+>> drivers/char/ipmi/ipmi_msghandler.c:1246:2: warning: label 'found' defined but not used [-Wunused-label]
+    1246 |  found:
+         |  ^~~~~
 
 
-vim +717 drivers/hwmon/applesmc.c
+vim +/list_for_each_entry_srcu +1238 drivers/char/ipmi/ipmi_msghandler.c
 
-   678	
-   679	static int applesmc_init_index(struct applesmc_registers *s)
-   680	{
-   681		const struct applesmc_entry *entry;
-   682		unsigned int i;
-   683	
-   684		if (s->index)
-   685			return 0;
-   686	
-   687		s->index = kcalloc(s->temp_count, sizeof(s->index[0]), GFP_KERNEL);
-   688		if (!s->index)
-   689			return -ENOMEM;
-   690	
-   691		for (i = s->temp_begin; i < s->temp_end; i++) {
-   692			entry = applesmc_get_entry_by_index(i);
-   693			if (IS_ERR(entry))
-   694				continue;
-   695			if (strcmp(entry->type, TEMP_SENSOR_TYPE))
-   696				continue;
-   697			s->index[s->index_count++] = entry->key;
-   698		}
-   699	
-   700		return 0;
-   701	}
-   702	/*
-   703	 * applesmc_init_mmio_try - Try to initialize MMIO
-   704	 */
-   705	static int applesmc_init_mmio_try(void)
-   706	{
-   707		u8 ldkn_version;
-   708		acpi_status status;
-   709		struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-   710		struct acpi_device *adev;
-   711		struct acpi_resource *res;
-   712	
-   713		adev = acpi_dev_get_first_match_dev("APP0001", NULL, -1);
-   714		if (!adev)
-   715			return -ENXIO;
-   716	
- > 717		status = acpi_get_current_resources(adev->handle, &buffer);
-   718		if (ACPI_FAILURE(status))
-   719			return -ENXIO;
-   720	
-   721		res = buffer.pointer;
-   722		while (res->type != ACPI_RESOURCE_TYPE_END_TAG) {
-   723			if (res->type == ACPI_RESOURCE_TYPE_FIXED_MEMORY32) {
-   724				if (res->data.fixed_memory32.address_length < 0x4006)
-   725					return -ENXIO;
-   726	
-   727				mmio_base_addr = res->data.fixed_memory32.address;
-   728				mmio_base_size = res->data.fixed_memory32.address_length;
-   729				is_mmio = true;
-   730				break;
-   731			}
-   732			res = ACPI_NEXT_RESOURCE(res);
-   733		}
-   734		kfree(buffer.pointer);
-   735		acpi_dev_put(adev);
-   736	
-   737		if (!is_mmio)
-   738			return -ENXIO;
-   739	
-   740		mmio_base = ioremap(mmio_base_addr, mmio_base_size);
-   741	
-   742		if (!mmio_base)
-   743			return -ENXIO;
-   744	
-   745		if (ioread8(mmio_base + 0x4005) == 0xFF)
-   746			goto out;
-   747	
-   748		if (read_smc(APPLESMC_READ_CMD, "LDKN", &ldkn_version, 1))
-   749			goto out;
-   750	
-   751		if (ldkn_version < 2)
-   752			goto out;
-   753	
-   754		return 0;
-   755	out:
-   756		pr_warn("cannot enable MMIO will use PMIO\n");
-   757		iounmap(mmio_base);
-   758		return -ENXIO;
-   759	}
-   760	/*
-   761	 * applesmc_init_smcreg_try - Try to initialize register cache. Idempotent.
-   762	 */
-   763	static int applesmc_init_smcreg_try(void)
-   764	{
-   765		struct applesmc_registers *s = &smcreg;
-   766		bool left_light_sensor = false, right_light_sensor = false;
-   767		unsigned int count;
-   768		u8 tmp[1];
-   769		int ret;
-   770	
-   771		if (s->init_complete)
-   772			return 0;
-   773	
-   774		ret = read_register_count(&count);
-   775		if (ret)
-   776			return ret;
-   777	
-   778		if (s->cache && s->key_count != count) {
-   779			pr_warn("key count changed from %d to %d\n",
-   780				s->key_count, count);
-   781			kfree(s->cache);
-   782			s->cache = NULL;
-   783		}
-   784		s->key_count = count;
-   785	
-   786		if (!s->cache)
-   787			s->cache = kcalloc(s->key_count, sizeof(*s->cache), GFP_KERNEL);
-   788		if (!s->cache)
-   789			return -ENOMEM;
-   790	
-   791		ret = applesmc_read_key(FANS_COUNT, tmp, 1);
-   792		if (ret)
-   793			return ret;
-   794		s->fan_count = tmp[0];
-   795		if (s->fan_count > 10)
-   796			s->fan_count = 10;
-   797	
-   798		ret = applesmc_get_lower_bound(&s->temp_begin, "T");
-   799		if (ret)
-   800			return ret;
-   801		ret = applesmc_get_lower_bound(&s->temp_end, "U");
-   802		if (ret)
-   803			return ret;
-   804		s->temp_count = s->temp_end - s->temp_begin;
-   805	
-   806		ret = applesmc_init_index(s);
-   807		if (ret)
-   808			return ret;
-   809	
-   810		ret = applesmc_has_key(LIGHT_SENSOR_LEFT_KEY, &left_light_sensor);
-   811		if (ret)
-   812			return ret;
-   813		ret = applesmc_has_key(LIGHT_SENSOR_RIGHT_KEY, &right_light_sensor);
-   814		if (ret)
-   815			return ret;
-   816		ret = applesmc_has_key(MOTION_SENSOR_KEY, &s->has_accelerometer);
-   817		if (ret)
-   818			return ret;
-   819		ret = applesmc_has_key(BACKLIGHT_KEY, &s->has_key_backlight);
-   820		if (ret)
-   821			return ret;
-   822	
-   823		s->num_light_sensors = left_light_sensor + right_light_sensor;
-   824		s->init_complete = true;
-   825	
-   826		pr_info("key=%d fan=%d temp=%d index=%d acc=%d lux=%d kbd=%d\n",
-   827		       s->key_count, s->fan_count, s->temp_count, s->index_count,
-   828		       s->has_accelerometer,
-   829		       s->num_light_sensors,
-   830		       s->has_key_backlight);
-   831	
-   832		return 0;
-   833	}
-   834	
+  1203	
+  1204	int ipmi_create_user(unsigned int          if_num,
+  1205			     const struct ipmi_user_hndl *handler,
+  1206			     void                  *handler_data,
+  1207			     struct ipmi_user      **user)
+  1208	{
+  1209		unsigned long flags;
+  1210		struct ipmi_user *new_user;
+  1211		int           rv, index;
+  1212		struct ipmi_smi *intf;
+  1213	
+  1214		/*
+  1215		 * There is no module usecount here, because it's not
+  1216		 * required.  Since this can only be used by and called from
+  1217		 * other modules, they will implicitly use this module, and
+  1218		 * thus this can't be removed unless the other modules are
+  1219		 * removed.
+  1220		 */
+  1221	
+  1222		if (handler == NULL)
+  1223			return -EINVAL;
+  1224	
+  1225		/*
+  1226		 * Make sure the driver is actually initialized, this handles
+  1227		 * problems with initialization order.
+  1228		 */
+  1229		rv = ipmi_init_msghandler();
+  1230		if (rv)
+  1231			return rv;
+  1232	
+  1233		new_user = vzalloc(sizeof(*new_user));
+  1234		if (!new_user)
+  1235			return -ENOMEM;
+  1236	
+  1237		index = srcu_read_lock(&ipmi_interfaces_srcu);
+> 1238		list_for_each_entry_srcu(intf, &ipmi_interfaces, link) {
+  1239			if (intf->intf_num == if_num)
+  1240				goto found;
+  1241		}
+  1242		/* Not found, return an error */
+  1243		rv = -EINVAL;
+  1244		goto out_kfree;
+  1245	
+> 1246	 found:
+  1247		if (atomic_add_return(1, &intf->nr_users) > max_users) {
+  1248			rv = -EBUSY;
+  1249			goto out_kfree;
+  1250		}
+  1251	
+  1252		INIT_WORK(&new_user->remove_work, free_user_work);
+  1253	
+  1254		rv = init_srcu_struct(&new_user->release_barrier);
+  1255		if (rv)
+  1256			goto out_kfree;
+  1257	
+  1258		if (!try_module_get(intf->owner)) {
+  1259			rv = -ENODEV;
+  1260			goto out_kfree;
+  1261		}
+  1262	
+  1263		/* Note that each existing user holds a refcount to the interface. */
+  1264		kref_get(&intf->refcount);
+  1265	
+  1266		atomic_set(&new_user->nr_msgs, 0);
+  1267		kref_init(&new_user->refcount);
+  1268		new_user->handler = handler;
+  1269		new_user->handler_data = handler_data;
+  1270		new_user->intf = intf;
+  1271		new_user->gets_events = false;
+  1272	
+  1273		rcu_assign_pointer(new_user->self, new_user);
+  1274		spin_lock_irqsave(&intf->seq_lock, flags);
+  1275		list_add_rcu(&new_user->link, &intf->users);
+  1276		spin_unlock_irqrestore(&intf->seq_lock, flags);
+  1277		if (handler->ipmi_watchdog_pretimeout)
+  1278			/* User wants pretimeouts, so make sure to watch for them. */
+  1279			smi_add_watch(intf, IPMI_WATCH_MASK_CHECK_WATCHDOG);
+  1280		srcu_read_unlock(&ipmi_interfaces_srcu, index);
+  1281		*user = new_user;
+  1282		return 0;
+  1283	
+  1284	out_kfree:
+  1285		atomic_dec(&intf->nr_users);
+  1286		srcu_read_unlock(&ipmi_interfaces_srcu, index);
+  1287		vfree(new_user);
+  1288		return rv;
+  1289	}
+  1290	EXPORT_SYMBOL(ipmi_create_user);
+  1291	
 
 -- 
 0-DAY CI Kernel Test Service
