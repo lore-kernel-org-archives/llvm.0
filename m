@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AEF1FA272;
-	Fri, 14 Mar 2025 13:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844C320012A;
+	Fri, 14 Mar 2025 14:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741958264; cv=none; b=Yvc7BeOdN+NIYqB9NIudgKkuDQVVMsjAKWPoSkNhfrLAr87M2Kb0NONKQ/YnyhWAOXP+8l0MZq+ukfnTo311KjilQxIMZuNY3AYjw4w/VhJwlYDaa3Y6ccxSGCvFPEHGlt6enXfOw4VzDvu5PP2iPBnkOYOh+TyEDweAzMntxoA=
+	t=1741961996; cv=none; b=jTpPsOndsDUlgi1ZBcXLykmzaW0l1z2rRTrGSyBNPKCuMvAVJIg/uF55hC9T1RLnFBqPT+b0xwMnDAi4e9t21uAfBFp7wYJpcEljDmNSkrhlbcUSHMn7jkIsvQZW/FKT45nWzi/g4R/knqphfdZk8JqYoVmbbFHdvnKlicYQRpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741958264; c=relaxed/simple;
-	bh=i0RUTrC9FArwpoikzWhzz/4Mx27vZuQrifBU6jKpdAA=;
+	s=arc-20240116; t=1741961996; c=relaxed/simple;
+	bh=SV40QSPJiQlccxHG18llzLEn2lrSwbOd5YHTjaimy0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Aba7AzinWu4+fKK030LF04FDi613DI7j3T8CtTouSMaiV/x/gotkG1Wb9ud3L2JqF+Tf4TtxYjzZD16v6REfZg/Lg0xrqHvMuf1/VqzTd5THt8gmfXXKwLFNfCryUyfSilTeQIrz8l3Tq7koC5c2ywVDrfIitkgr7zuJ/Y2gJGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V9C09LUg; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=hdl+EJ5rK/GlW+0F5XShaB86wfjMyWnbSFqaRkD2yVpzyl87gsp/FGtgT9hr9i8mBqwhvG+9w0lQd9NrZK35gqio5T7586QZIM/VaLuSAzVUW1bo3LMbwLl0L/fleY1ubHqoJg5g9dRU3pEOJXsy2Xl6rRv4XvjefaXkYFKkPMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ScPKrwQ1; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V9C09LUg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ScPKrwQ1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741958263; x=1773494263;
+  t=1741961995; x=1773497995;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=i0RUTrC9FArwpoikzWhzz/4Mx27vZuQrifBU6jKpdAA=;
-  b=V9C09LUgoXN2/L4qOgSum8+1SKxRyQNKmjlvwktYJs7B4SpLOWQL+O2M
-   Oo5Vwerf57GvsM63kzaFY7zmHrqHnusbBrgTdTh5NJc4peJcxb4yBrBOf
-   VNkjJN6SQkAyDKDykEYt90rTCSH2FGRI2gZX7tQkaYyrfsGEP3Ulw4R1B
-   tFAYJNSE2uqD4hEjGugmymv83s9Mwyx7pmdM4QEAJhQuWt6MC0UX/2tjQ
-   ru0zIB4NZK04QnZRwgziPjYR0iVRu/MpjmAKfpXZS6f890mJRyolkKtsV
-   1/TDgaTkVOEGKUArgvjlXIDgEHHpPHTyHRIipfmoFXuJdAh8DdOFtde6g
-   g==;
-X-CSE-ConnectionGUID: hugzCZ2jQIWQ8O/QufWN+w==
-X-CSE-MsgGUID: CWoXP86WQC6vL4W/lWuLZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="47005041"
+  bh=SV40QSPJiQlccxHG18llzLEn2lrSwbOd5YHTjaimy0c=;
+  b=ScPKrwQ1J2rXhQket+5GfPw5/Bq7YkWKsz8xht8hMrASx4jlz1TJ1ktq
+   ZTP9T67xcN+urVU7kjPv3E4M1OtOWrLbaY4ZGus3+QbEKusrzr3gNY10C
+   gMii4PURnXGMSyQZNPZYHrdOtRDH+BH3B7HQe7VyQ+QGwZDJ/8VFYmyQH
+   4MiuhzGQj/p0/fSwPe6vy7b6D6IJSA17wSgsZWLllMYPKaioCbsQvUaBZ
+   fxAZR/WMPcBWvzgr3PalpD1bddmFciBD406DxNAepzJYSaW8yX8p8kEVH
+   T5TPqa/4IgHikOJEyXHyJfi3j4apjoiuGwtynl9p2Tj3e2QLB5oSrTaek
+   Q==;
+X-CSE-ConnectionGUID: WH/R/Ci6QuWPqrR8YM21Gw==
+X-CSE-MsgGUID: XpEiwpSfSPK20Ocknm70CA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="53321771"
 X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="47005041"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 06:17:36 -0700
-X-CSE-ConnectionGUID: IRMnjMhLTnSC16EIsR02pw==
-X-CSE-MsgGUID: mJXH0MOjSiqIV7GBUg3iOA==
+   d="scan'208";a="53321771"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 07:19:52 -0700
+X-CSE-ConnectionGUID: LFdvir1aRTenOmcZTLB6xw==
+X-CSE-MsgGUID: 2lVKRUZ1RS6W9yBY0kUg8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="121994941"
+   d="scan'208";a="122238839"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 14 Mar 2025 06:17:35 -0700
+  by orviesa008.jf.intel.com with ESMTP; 14 Mar 2025 07:19:51 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tt4uq-000ATn-2P;
-	Fri, 14 Mar 2025 13:17:32 +0000
-Date: Fri, 14 Mar 2025 21:17:21 +0800
+	id 1tt5t6-000AXc-15;
+	Fri, 14 Mar 2025 14:19:48 +0000
+Date: Fri, 14 Mar 2025 22:19:43 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: [linux-next:master 7927/11207] kernel/trace/trace.c:6021:38: error:
- incomplete definition of type 'struct module'
-Message-ID: <202503142112.7icZH5p9-lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:locking-bench 2/2] lib/locking-benchmark.c:6:10: fatal
+ error: 'asm/tsc.h' file not found
+Message-ID: <202503142224.24EyebC4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,72 +62,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   da920b7df701770e006928053672147075587fb2
-commit: dca91c1c54686914dec4dabea8bae4f365c02007 [7927/11207] tracing: Have persistent trace instances save module addresses
-config: arm64-randconfig-003-20250314 (https://download.01.org/0day-ci/archive/20250314/202503142112.7icZH5p9-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503142112.7icZH5p9-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git locking-bench
+head:   df4891c13ee02fedadd66a990dd65c911f6b7ada
+commit: df4891c13ee02fedadd66a990dd65c911f6b7ada [2/2] lib/test: add locking-benchmark module
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250314/202503142224.24EyebC4-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503142224.24EyebC4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503142112.7icZH5p9-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503142224.24EyebC4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/trace.c:6021:38: error: incomplete definition of type 'struct module'
-           entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
-                                            ~~~^
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-   struct module;
-          ^
->> kernel/trace/trace.c:6021:44: error: use of undeclared identifier 'MOD_TEXT'
-           entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
-                                                     ^
-   kernel/trace/trace.c:6022:30: error: incomplete definition of type 'struct module'
-           strscpy(entry->mod_name, mod->name);
-                                    ~~~^
-   include/linux/string.h:114:55: note: expanded from macro 'strscpy'
-           CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-                                                                ^~~
-   include/linux/string.h:80:21: note: expanded from macro '__strscpy0'
-           sized_strscpy(dst, src, sizeof(dst) + __must_be_array(dst) +    \
-                              ^~~
-   include/linux/printk.h:394:8: note: forward declaration of 'struct module'
-   struct module;
-          ^
-   3 errors generated.
+   In file included from lib/locking-benchmark.c:2:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> lib/locking-benchmark.c:6:10: fatal error: 'asm/tsc.h' file not found
+       6 | #include <asm/tsc.h>
+         |          ^~~~~~~~~~~
+   3 warnings and 1 error generated.
 
 
-vim +6021 kernel/trace/trace.c
+vim +6 lib/locking-benchmark.c
 
-  6001	
-  6002	static int save_mod(struct module *mod, void *data)
-  6003	{
-  6004		struct trace_array *tr = data;
-  6005		struct trace_scratch *tscratch;
-  6006		struct trace_mod_entry *entry;
-  6007		unsigned int size;
-  6008	
-  6009		tscratch = tr->scratch;
-  6010		if (!tscratch)
-  6011			return -1;
-  6012		size = tr->scratch_size;
-  6013	
-  6014		if (struct_size(tscratch, entries, tscratch->nr_entries + 1) > size)
-  6015			return -1;
-  6016	
-  6017		entry = &tscratch->entries[tscratch->nr_entries];
-  6018	
-  6019		tscratch->nr_entries++;
-  6020	
-> 6021		entry->mod_addr = (unsigned long)mod->mem[MOD_TEXT].base;
-  6022		strscpy(entry->mod_name, mod->name);
-  6023	
-  6024		return 0;
-  6025	}
-  6026	
+   > 6	#include <asm/tsc.h>
+     7	
 
 -- 
 0-DAY CI Kernel Test Service
