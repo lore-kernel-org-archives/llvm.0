@@ -1,67 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC4F1FDA89;
-	Fri, 14 Mar 2025 17:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D1A2040A4;
+	Fri, 14 Mar 2025 19:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741972006; cv=none; b=QXC9ne4tcrlOL6g5qcKNLXBov5ch368Stg02sTTlcTjbSUcGKqVso0moci5c+E4cgXSdXw5OZOJ5LE3a5wrJOEbYK794Vuwwrc42efzCAT2kHBu/mvMxwIGzCqXw26Z/z+WjzRjOVPaEsgqlKH6MM2p3BgQruSG+zpEoYf6DKDE=
+	t=1741979165; cv=none; b=uOX9zXvr1AMXAaMgE9tkqilDzAHMZrKnl5H5NPVyuzyk2DUart4rNk/R0luNK5pi50vB6KDOpPSdVlVwnukzPJ42N21U0uyPeSC7LgiSBdjXkr3mCo821ANqh7Hl1csq1iE8NxzckOUzpgtuAU9ttIFyplQ2onyTT4palps1K84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741972006; c=relaxed/simple;
-	bh=iDOL+Pgf68XI5fMo87a+IqebfJjceVppGD9rKghIMl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QTXiqH1Dsx4/HTcJY6GJ4l9DD8CEiNZQuzyNzXik94OoeNvQ6rd7GdxCaF3rZf8SGovRkdyQqZSJ8jLIfKo4ceHIjHIO8HJzYb3HcnLHO9JDi6+uynVBmubd2fX1QcXkJCUYuVVs7+jDKCj7eq/e9sSGKqt66RY76I+idl4kKQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bS8OqIP7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741979165; c=relaxed/simple;
+	bh=BVTMSVCJEOtbhXDRRYx5p27EBsfYi/ZcaWjbmG5NBoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZIbICDGrQiKFEY4QUw0wqHUC1UDbavPyayJSdNnx027J8zHL0spx6IGKj8uRcbY3Kh+kY6qCe3FPXQkws9RBW2GYt+fDjUl54Xeh+JMk1MVe3f2LJ2OV8yX2C7BNwOW1cjRLlaCxeZKE4PxvXT15RYf/R11LgmAYNuaEaAFasUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hAT37glc; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bS8OqIP7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B19C4CEEC;
-	Fri, 14 Mar 2025 17:06:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741972006;
-	bh=iDOL+Pgf68XI5fMo87a+IqebfJjceVppGD9rKghIMl0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bS8OqIP7wINdAElZjuT/hg4AKOH+7zMy69HXrKw1kajUHeonYJkDLGZkiEUO5HbXD
-	 PRuDcvr2agaJwkzm/UEfYIuEJmjqvCd91E4ucyh7eR+KhY5gQEWI/yQT6j0XJNOjsZ
-	 /DQvBOyEyuKgYMx4sBbJjLu7K0Kuf7F91JI8j2Z1n1mAOwHsBmWbT8L8vvANd3rRiz
-	 igGUZz+9IWMxSgdW7hJIfprfp22mK7MCnI2BzD2IezhtZ7SQKRuP0u2SZDlD43fYOR
-	 rvVjYp4mL3UCbPqoCha98OkbDhYfazjV9w0ViNeYzx1F3sv35lb9DNlTCTvtMYTcOW
-	 0U388YuYtIedA==
-Date: Fri, 14 Mar 2025 14:06:43 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Li Huafei <lihuafei1@huawei.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
-	bpf@vger.kernel.org, Daniel Xu <dxu@dxuuu.xyz>
-Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove
- BUILD_NONDISTRO
-Message-ID: <Z9RiI9yjpMUPRYZe@x1>
-References: <20250122062332.577009-1-irogers@google.com>
- <Z5K712McgLXkN6aR@google.com>
- <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
- <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
- <CAP-5=fV_z+Ev=wDt+QDwx8GTNXNQH30H5KXzaUXQBOG1Mb8hJg@mail.gmail.com>
- <Z9NbFqaDQMjvYxcc@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hAT37glc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741979164; x=1773515164;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BVTMSVCJEOtbhXDRRYx5p27EBsfYi/ZcaWjbmG5NBoY=;
+  b=hAT37glcRpJMP7bQo4eBmCRwwBihZ7Y1zT8P6kyr3wEjpXgweae0HSyV
+   luqknmgcsI1Kyf4zp18YU1bQ0dhmpOAFM3ePJgjGXtldZ77Dv0OekyVLC
+   v55wl4drtOATtN9Du2YIjbrZCUdDw26jPsANkualpT9lyiqBlQSY8z8Xu
+   tpsIW9I/C9IarKMqDZGiyP6YoUKFrZ4tP/kvYPOVzQDpe3wAOr95kVHn4
+   LuaJp0LcpcXr2Q7aSL6CpnsZyCe62WV8RDHWQz8CyecWvw+lx7UFIi5db
+   VfurBWnCasqRBnZbBSlZ75fppbM6LFwgLXR8UFLyJOqnUHMg6lh4+aaO6
+   Q==;
+X-CSE-ConnectionGUID: 1LFbdDmaT3i/MKsrc0Dswg==
+X-CSE-MsgGUID: sdjeBJqQR9O0LWipJVgfZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="46792883"
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="46792883"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 12:06:03 -0700
+X-CSE-ConnectionGUID: xXEeTz3DS4GuYYdQfgK0Sw==
+X-CSE-MsgGUID: gjQFeXqrQJakLAUx9rXZ0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="126566675"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 14 Mar 2025 12:06:01 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttAM2-000Aku-2v;
+	Fri, 14 Mar 2025 19:05:58 +0000
+Date: Sat, 15 Mar 2025 03:05:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
+Subject: include/uapi/linux/vbox_vmmdev_types.h:239:4: warning: field u
+ within 'struct vmmdev_hgcm_function_parameter32' is less aligned than 'union
+ (unnamed union at include/uapi/linux/vbox_vmmdev_types.h:223:2)' and is
+ usually due to 'struct vmmdev_hgcm_function...
+Message-ID: <202503150545.aH9KdkEE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,48 +64,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z9NbFqaDQMjvYxcc@google.com>
 
-On Thu, Mar 13, 2025 at 03:24:22PM -0700, Namhyung Kim wrote:
-> I think #ifdef placements is not a big deal, but I still don't want to
-> pull libcapstone details into the perf tree.
- 
-> For LLVM, I think you should to build llvm-c-helpers anyway which means
-> you still need LLVM headers and don't need to redefine the structures.
- 
-> Can we do the same for capstone?  I think it's best to use capstone
-> headers directly and add a build option to use dlopen().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   695caca9345a160ecd9645abab8e70cfe849e9ff
+commit: c99e1e1d0850ff157f1bc16871acd2dff5a9bcc3 vbox: add HAS_IOPORT dependency
+date:   3 weeks ago
+config: arm-randconfig-002-20250315 (https://download.01.org/0day-ci/archive/20250315/202503150545.aH9KdkEE-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503150545.aH9KdkEE-lkp@intel.com/reproduce)
 
-My two cents: if one wants to support some library, then have its devel
-packages available at build time.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503150545.aH9KdkEE-lkp@intel.com/
 
-Then, perf nowadays has lots of dependencies, we need to rein on that,
-making the good to have but not always used things to be dlopen'ed.
+All warnings (new ones prefixed by >>):
 
-Like we did with gtk (that at this point I think is really deprecated,
-BTW).
+   In file included from drivers/virt/vboxguest/vboxguest_utils.c:19:
+   In file included from include/linux/vbox_utils.h:8:
+>> include/uapi/linux/vbox_vmmdev_types.h:239:4: warning: field u within 'struct vmmdev_hgcm_function_parameter32' is less aligned than 'union (unnamed union at include/uapi/linux/vbox_vmmdev_types.h:223:2)' and is usually due to 'struct vmmdev_hgcm_function_parameter32' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     239 |         } u;
+         |           ^
+>> include/uapi/linux/vbox_vmmdev_types.h:254:6: warning: field u within 'struct vmmdev_hgcm_function_parameter64::(unnamed at include/uapi/linux/vbox_vmmdev_types.h:249:3)' is less aligned than 'union (unnamed union at include/uapi/linux/vbox_vmmdev_types.h:251:4)' and is usually due to 'struct vmmdev_hgcm_function_parameter64::(unnamed at include/uapi/linux/vbox_vmmdev_types.h:249:3)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     254 |                         } u;
+         |                           ^
+   2 warnings generated.
 
-gdb has prior art in this area that we could use, it is not even a TUI
-but it asks if debuginfo should be used and if so it goes on on
-potentially lenghty updates of the local buildid cache they keep (which
-is not the one we use, it should be).
 
-And in the recent discussion with Dmitry Vyukov the possibility doing a
-question to the user about a default behaviour to be set and then using
-.perfconfig not to bother anymore the user about things is part of
-helping the user to deal with the myriad possibilites perf offers.
+vim +239 include/uapi/linux/vbox_vmmdev_types.h
 
-gdb could use that as well, why ask at every session if debuginfod
-should be used? Annoying.
+f6ddd094f579344 Hans de Goede 2017-11-30  219  
+f6ddd094f579344 Hans de Goede 2017-11-30  220  /** HGCM function parameter, 32-bit client. */
+f6ddd094f579344 Hans de Goede 2017-11-30  221  struct vmmdev_hgcm_function_parameter32 {
+f6ddd094f579344 Hans de Goede 2017-11-30  222  	enum vmmdev_hgcm_function_parameter_type type;
+f6ddd094f579344 Hans de Goede 2017-11-30  223  	union {
+f6ddd094f579344 Hans de Goede 2017-11-30  224  		__u32 value32;
+f6ddd094f579344 Hans de Goede 2017-11-30  225  		__u64 value64;
+f6ddd094f579344 Hans de Goede 2017-11-30  226  		struct {
+f6ddd094f579344 Hans de Goede 2017-11-30  227  			__u32 size;
+f6ddd094f579344 Hans de Goede 2017-11-30  228  			union {
+f6ddd094f579344 Hans de Goede 2017-11-30  229  				__u32 phys_addr;
+f6ddd094f579344 Hans de Goede 2017-11-30  230  				__u32 linear_addr;
+f6ddd094f579344 Hans de Goede 2017-11-30  231  			} u;
+f6ddd094f579344 Hans de Goede 2017-11-30  232  		} pointer;
+f6ddd094f579344 Hans de Goede 2017-11-30  233  		struct {
+f6ddd094f579344 Hans de Goede 2017-11-30  234  			/** Size of the buffer described by the page list. */
+f6ddd094f579344 Hans de Goede 2017-11-30  235  			__u32 size;
+f6ddd094f579344 Hans de Goede 2017-11-30  236  			/** Relative to the request header. */
+f6ddd094f579344 Hans de Goede 2017-11-30  237  			__u32 offset;
+f6ddd094f579344 Hans de Goede 2017-11-30  238  		} page_list;
+f6ddd094f579344 Hans de Goede 2017-11-30 @239  	} u;
+f6ddd094f579344 Hans de Goede 2017-11-30  240  } __packed;
+f6ddd094f579344 Hans de Goede 2017-11-30  241  VMMDEV_ASSERT_SIZE(vmmdev_hgcm_function_parameter32, 4 + 8);
+f6ddd094f579344 Hans de Goede 2017-11-30  242  
+f6ddd094f579344 Hans de Goede 2017-11-30  243  /** HGCM function parameter, 64-bit client. */
+f6ddd094f579344 Hans de Goede 2017-11-30  244  struct vmmdev_hgcm_function_parameter64 {
+f6ddd094f579344 Hans de Goede 2017-11-30  245  	enum vmmdev_hgcm_function_parameter_type type;
+f6ddd094f579344 Hans de Goede 2017-11-30  246  	union {
+f6ddd094f579344 Hans de Goede 2017-11-30  247  		__u32 value32;
+f6ddd094f579344 Hans de Goede 2017-11-30  248  		__u64 value64;
+f6ddd094f579344 Hans de Goede 2017-11-30  249  		struct {
+f6ddd094f579344 Hans de Goede 2017-11-30  250  			__u32 size;
+f6ddd094f579344 Hans de Goede 2017-11-30  251  			union {
+f6ddd094f579344 Hans de Goede 2017-11-30  252  				__u64 phys_addr;
+f6ddd094f579344 Hans de Goede 2017-11-30  253  				__u64 linear_addr;
+f6ddd094f579344 Hans de Goede 2017-11-30 @254  			} u;
+f6ddd094f579344 Hans de Goede 2017-11-30  255  		} __packed pointer;
+f6ddd094f579344 Hans de Goede 2017-11-30  256  		struct {
+f6ddd094f579344 Hans de Goede 2017-11-30  257  			/** Size of the buffer described by the page list. */
+f6ddd094f579344 Hans de Goede 2017-11-30  258  			__u32 size;
+f6ddd094f579344 Hans de Goede 2017-11-30  259  			/** Relative to the request header. */
+f6ddd094f579344 Hans de Goede 2017-11-30  260  			__u32 offset;
+f6ddd094f579344 Hans de Goede 2017-11-30  261  		} page_list;
+f6ddd094f579344 Hans de Goede 2017-11-30  262  	} __packed u;
+f6ddd094f579344 Hans de Goede 2017-11-30  263  } __packed;
+f6ddd094f579344 Hans de Goede 2017-11-30  264  VMMDEV_ASSERT_SIZE(vmmdev_hgcm_function_parameter64, 4 + 12);
+f6ddd094f579344 Hans de Goede 2017-11-30  265  
 
-I think perf should try to use what is available, both at build and at
-run time, and it shouldn't change the way it output things, but should
-warn the user about recent developments, things we over time figured out
-are problematic and thus a new default would be better, but then obtain
-consent if the user cares about it, and allow for backtracking, to go
-and change .perfconfig when the user realises the old output/behaviour
-is not really nice.
+:::::: The code at line 239 was first introduced by commit
+:::::: f6ddd094f5793447d594aa9f42032a7aba12b4d2 virt: Add vboxguest driver for Virtual Box Guest integration UAPI
 
-But keeping the grass green as it used to be should be the priority.
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-- Arnaldo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
