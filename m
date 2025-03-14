@@ -1,104 +1,116 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7231F09B6
-	for <llvm@lists.linux.dev>; Fri, 14 Mar 2025 09:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4872215573F;
+	Fri, 14 Mar 2025 10:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741944607; cv=none; b=l5VJtdtauux5zmXNXWyWYNwfOvo3pg4hnQUVW2YmCHq67FxPskz8vwU2rlOhbxaBuF+07t2fkwc1Zdff3ZVn0caYQAAZM4nxUaAr9RhH9u2Pi7dtaeYOpL1hROGo0fYb3mdkV5bhFrbIhZ/Dw0vyl3O/PaU90m7EWHNcVtjtLTQ=
+	t=1741949967; cv=none; b=Am0b5jg0KBjl8ArVXz3bET0kZygKavHkI0/yVaM+yTdzCKuyLmNrm2QKMhXmLZQU4RRfhiBK0hx3Seme5W1pigMdz4eoirY1vcfEVzuFoh0sDcimEFgg2v1g8mNm9axTLIaVo65mTR80fIR2woQq8V0UMciQgQzSl9hxvm7/ekY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741944607; c=relaxed/simple;
-	bh=7B240d6j4OExyYUlEP6p1T29DEbvNYI/esoZe1OK7gk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jzSelB3Du4M5yGP1Z4+f4hE98UgAq/XCK40ZDHjtS+Ck2RrrcmVIFNJjDu9/p9vxdZJmJ0vws2/mokoIBFLKhSKxg8t0h8qD+VEdv6XZcwH4V8eWGcVlcLTetBCdiEEt//0OfDGvS2jWxlQbZAt8kOWCVpagKcHLJzBQZg4V3xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kyK04OMd; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1741949967; c=relaxed/simple;
+	bh=zk+oR2u9cowOY2qRK9U4S1zVwZKK1RoIy8IjAJYdjVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CypRtDUM9joO7W1KttfaeJgkKMEHT0EnhpR+h1O0B+1BkT29r1InqLuso3GG8PteS4FOLzHy/VgY36H85862vNh9TEfxPYMINYZgiYxIqZorPtaIOys9QuhpRSiZwNhytdBIfMgoFIryGk63KALrv/hkhUhmjCJJZ4cbby16tpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QtTLKW/e; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kyK04OMd"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43d08915f61so11351865e9.2
-        for <llvm@lists.linux.dev>; Fri, 14 Mar 2025 02:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741944604; x=1742549404; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vx9uDZ+QhqTeL0tFVgUFI0Mccb4hWoxO0D5VjPF0f/8=;
-        b=kyK04OMd7ml+xDVMOJub+QxINiPsrIsrS92wSaJHmO9fOFVnN4fE/Mea4oJxXR5dEl
-         zihLlT4t5dW4jWlwTIuawtJnLU/SLjT6Coo3Ka6dxo32FLTJTPG9K7zfX9J38jPnv9B6
-         FZbMLKi4MBt9snfU5NhT4hoRqKtqgv/czr3v9BVIHGcxwgEaXtttXpBtw6QspFVG14Mg
-         MI9Ndf5jdltkaiM0AEjAxjSmPjuPm1Fl36MY48ICuE1Wo9IAqAX0LUnNX8q593xYGR79
-         efFps17c1yMZjKyqcxZISuH56xxuEdNIBJ3rxPtj5y+U27VAs+t8fQ+zENT/ITxjWj+B
-         7Eyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741944604; x=1742549404;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vx9uDZ+QhqTeL0tFVgUFI0Mccb4hWoxO0D5VjPF0f/8=;
-        b=uzcbEMeDskSF9uMhhd/Bgf9Id1rZjMTtYj1HkEWnYSSK0klS3noumv30DMNyiPQe/E
-         ioAYSkIhg1/Qf1LBm6aWJ+AdX9d6J5MaHCCCLeXi6+yCQgGHz713s8akY/Vu9ywqGGF0
-         SsDla6VcObAQdijM/TUJLxsTN64rSj4J8UAtZkk3FkGDPx2ChidVKsmj70znbY+VvFGF
-         +agH4SItXJaiUtmsrFJX73OH8XhfhmYgNcO/1fFVIhMvQQl8oFSZTZev0G+/QTxK8gka
-         RppY8x7WQgoqj3oVuYvwV1iGedjsnVfVsHir1sO+D9hyZyHtlX00tY3AX91fIA2PcybH
-         eMzA==
-X-Forwarded-Encrypted: i=1; AJvYcCXno8wUd35d0FUCAUGFwHLrGy+LhqaIQCAHGUBKgsQLQ57OjNkzypc16ri+sdJ1koMoJIDs@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7XlEW6eP/9zp8tg35y8ZVorz/F3NpwMqA3QGHp5ap/py6LC/L
-	kHw2LId2xuZB2Mw8R99CJtDiKY2H9h4UX4TQsmzaLk99TxFvF6WFOiwhm13CpFTOixFY12M0RHO
-	lGXB/Juwbic1iJA==
-X-Google-Smtp-Source: AGHT+IGDsrKK697tTln1RD7AuELwm2Txn2iyfq75zdHGM/J4mNu5ImB/Z+SRHD/kqQ29qRrXLQhTzZpkycOOh54=
-X-Received: from wmbay4.prod.google.com ([2002:a05:600c:1e04:b0:43c:ef7b:ffac])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4708:b0:43c:f050:fed3 with SMTP id 5b1f17b1804b1-43d1ec78842mr25457025e9.11.1741944603897;
- Fri, 14 Mar 2025 02:30:03 -0700 (PDT)
-Date: Fri, 14 Mar 2025 09:30:01 +0000
-In-Reply-To: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QtTLKW/e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741949965; x=1773485965;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zk+oR2u9cowOY2qRK9U4S1zVwZKK1RoIy8IjAJYdjVo=;
+  b=QtTLKW/eJo8nkDw7AMY0J1elbZyOlfekTaLaCWcNpvPLKA0+ubKqtzaf
+   1qzzM8grRKHilwDucwFUd5yrRWdoUQAQ14H3uXGxP27kzfUE+HPaEk5um
+   fXogMbM7VgXXNwXBtmeCshOy4FFAlltQDhztH5lludrPxnRUBmbhajoDC
+   M0yayGmIkoPWeitwMGB3QeU8g5iaDzs7B0qkPSfmuhim5IVCOl241pZ3k
+   /WJy0vOA1mZtbTVsruUefWouJ2RrXu1PKQJhE1M+OgOJzpCLK5rqLukUS
+   rn+vVjrXyktA/PK8vV7wqkyoYPkvEEGVKn6AAEi5lxUiK3+xxbRY+NbFz
+   g==;
+X-CSE-ConnectionGUID: /RGnAFeFQm2dhDTuADt7ZQ==
+X-CSE-MsgGUID: w0kk0NZQSH2jfvmeOGbW6Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="53752177"
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="53752177"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 03:59:25 -0700
+X-CSE-ConnectionGUID: AovZK8MNQ6e6oqpLYS1AqQ==
+X-CSE-MsgGUID: QVYoHbOmTsSmZi0jKGHYxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="125427081"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 14 Mar 2025 03:59:23 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tt2l7-000AMk-10;
+	Fri, 14 Mar 2025 10:59:21 +0000
+Date: Fri, 14 Mar 2025 18:58:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jfern:sched/scx-dlserver-boost 13/14] kernel/sched/core.c:6092:26:
+ error: too few arguments to function call, expected 2, have 1
+Message-ID: <202503141839.yUhNCNhO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net>
-Message-ID: <Z9P3GcZ-pstV2Y1p@google.com>
-Subject: Re: [PATCH v2] rust: task: mark Task methods inline
-From: Alice Ryhl <aliceryhl@google.com>
-To: Panagiotis Foliadis <pfoliadis@posteo.net>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Mar 11, 2025 at 03:05:52PM +0000, Panagiotis Foliadis wrote:
-> When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> toolchain provided by kernel.org, the following symbols are generated:
-> 
-> $ nm vmlinux | grep ' _R'.*Task | rustfilt
-> ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
-> ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
-> ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
-> ffffffff817b2d00 T <kernel::task::Task>::signal_pending
-> ffffffff817b2cc0 T <kernel::task::Task>::uid
-> ffffffff817b2ce0 T <kernel::task::Task>::euid
-> ffffffff817b2c70 T <kernel::task::Task>::current
-> ffffffff817b2d70 T <kernel::task::Task>::wake_up
-> ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
-> ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
-> 
-> These Rust symbols are trivial wrappers around the C functions
-> get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
-> euid, get_current, wake_up, get_task_struct and put_task_struct.It
-> doesn't make sense to go through a trivial wrapper for these
-> functions, so mark them inline.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git sched/scx-dlserver-boost
+head:   b9fb6bd57dd59c996babc65c5120897a66dde4aa
+commit: 93829b151cbe44e283851f678b1e671c7650b964 [13/14] BUGGY: Add support to pick functions to take rf
+config: i386-buildonly-randconfig-002-20250314 (https://download.01.org/0day-ci/archive/20250314/202503141839.yUhNCNhO-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503141839.yUhNCNhO-lkp@intel.com/reproduce)
 
-Typo: "put_task_struct.It"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503141839.yUhNCNhO-lkp@intel.com/
 
-> After applying this patch, the above command will produce no output.
-> 
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+All errors (new ones prefixed by >>):
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>> kernel/sched/core.c:6092:26: error: too few arguments to function call, expected 2, have 1
+    6092 |                 p = class->pick_task(rq);
+         |                     ~~~~~~~~~~~~~~~~   ^
+   kernel/sched/core.c:6245:40: error: too few arguments to function call, expected 2, have 1
+    6245 |                                 p = idle_sched_class.pick_task(rq_i);
+         |                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~     ^
+   2 errors generated.
+
+
+vim +6092 kernel/sched/core.c
+
+539f65125d20aac Peter Zijlstra 2020-11-17  6083  
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6084  static inline struct task_struct *pick_task(struct rq *rq)
+539f65125d20aac Peter Zijlstra 2020-11-17  6085  {
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6086  	const struct sched_class *class;
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6087  	struct task_struct *p;
+539f65125d20aac Peter Zijlstra 2020-11-17  6088  
+bd9bbc96e835688 Peter Zijlstra 2024-08-14  6089  	rq->dl_server = NULL;
+bd9bbc96e835688 Peter Zijlstra 2024-08-14  6090  
+a7a9fc549293168 Tejun Heo      2024-06-18  6091  	for_each_active_class(class) {
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24 @6092  		p = class->pick_task(rq);
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6093  		if (p)
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6094  			return p;
+539f65125d20aac Peter Zijlstra 2020-11-17  6095  	}
+539f65125d20aac Peter Zijlstra 2020-11-17  6096  
+bc9ffef31bf5981 Peter Zijlstra 2021-08-24  6097  	BUG(); /* The idle class should always have a runnable task. */
+539f65125d20aac Peter Zijlstra 2020-11-17  6098  }
+539f65125d20aac Peter Zijlstra 2020-11-17  6099  
+
+:::::: The code at line 6092 was first introduced by commit
+:::::: bc9ffef31bf59819c9fc032178534ff9ed7c4981 sched/core: Simplify core-wide task selection
+
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
