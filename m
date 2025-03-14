@@ -1,111 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF9617D2;
-	Fri, 14 Mar 2025 00:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A655217579
+	for <llvm@lists.linux.dev>; Fri, 14 Mar 2025 02:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741912329; cv=none; b=delMs3oXzx1AX1xwc63nQ3QA2u+ChvpRTaJaJ31Wvu11uO3SXQk4LgD5rNvHLGGqU+6HqjBKI2t1YCDq8+nmz04GWS0zaflxSgCxUYuK9FRz6+WDA00OoY+/pkXLWWboULk6UY69Svge69GOAQpWPxtYTJCO4Eo3u7AcZ0rWJmk=
+	t=1741919653; cv=none; b=PGJrUcriOpx9gAuxfXFQdI/4WbittRgcH6s5A6zgm+9+vZMdJ6m3b0SV9p0k5TxV4+05eWWUpo0rS7BpWrTWMJFbKjWi47KygFw0El9t92CF8uz6ap8+BMAdVlWwU+fMlEPk2yuJ6UMzCYoxsU7IM/6i3Oo/T/bZbQukiiSpYQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741912329; c=relaxed/simple;
-	bh=HtnX3fKiPDeZxpTk5T/FrAwvbTQAyZy2SaD3hvVwhbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LqYrFVxm4o0WDzhZQyJ4zvlRdyNCzhoYbjtfDI8idclhafI0360nX9lH+vbt1D4aUDk/SsmEQ10jZBrxoTzKuj+O+3at5WreI+YDnmfianC6UItxvrACsxamryzlViak/FLUe/s1fevKLx5H1UinWuskIMdnKno8T53HuMYmSzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IMWaq4z6; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741919653; c=relaxed/simple;
+	bh=MJbZjBYRRxLsko3DCRXwP/Ob7hw+eq3uF70OQmbeR2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sQZN20vg5IwlsjtAdUFA4MmeZ8B4aokFXcEHcrXa9Wq0e+ZjrjvVcYaEdNZMXtz7VEqNZCRWHV4NGjPxrX7mhaqc07nko8ByWUhEtwiphjs2tQ7tC4OWs4FE9b8wU9RkEyEP6TArlOk1P7w1YPVWqMpfYJ7926TiS2eiplwud1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k0cT0AAo; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IMWaq4z6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741912328; x=1773448328;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HtnX3fKiPDeZxpTk5T/FrAwvbTQAyZy2SaD3hvVwhbk=;
-  b=IMWaq4z65n+eWPBuxFna4n5THlldQCw8rvEqUdsou1CettXKHdWxC4jc
-   7sth5UVXXjbQBceJbL2JBAuO7V9hI3x1MOMpaqCPQTdmxQa54459PZbDN
-   cYbA+EbKxqWgmO3W2ttcx1v0Ez3Ok4wFNbYF6QtvvwppbG2EFwJauxC7B
-   7SXdK7HQgyPamlP4OnciPmbC7i/aUSrzJ8uCyXVtUWVuAE+RRHTbaYsIx
-   TsCJQ1FukhIPVQjVfJ566RBiO+p9g6kPhFwCdtvF3T/lAYFRRaJIYDXew
-   DmkEbswg399wF27Q8F8n+W4zOC4pIvD09vbabsTRTUi85ZNdTQOQjF9Cq
-   A==;
-X-CSE-ConnectionGUID: zmu4UU/hRrqVZfqdI/uYcA==
-X-CSE-MsgGUID: X8KvA0YeSfWDy6iLNVvc+A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="60454988"
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="60454988"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 17:32:07 -0700
-X-CSE-ConnectionGUID: r/qsnK1iRsSiNm1O0yc7lQ==
-X-CSE-MsgGUID: DxGiGVhYT2WyXnvCVgvDsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="125742044"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 13 Mar 2025 17:32:05 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tssy3-000A22-17;
-	Fri, 14 Mar 2025 00:32:03 +0000
-Date: Fri, 14 Mar 2025 08:31:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sudeep-holla:b4/scmi_minor_cleanup 7/7]
- drivers/pmdomain/arm/scmi_pm_domain.c:27:13: warning: unused variable
- 'ret_state'
-Message-ID: <202503140851.OfvuRJ6C-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k0cT0AAo"
+Message-ID: <6c874a4f-439e-4ab2-807d-d0f59b9fe569@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741919645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yqL1Zi4/6PZhtmhssx/6TvDWFYb0gRlk77dWOUqI3Zk=;
+	b=k0cT0AAorSL11q5p/K6C6bCBPkfT482NrjJM76iCAEysMUjCe8gRZXjY+G1rA0fAheDrxv
+	wvWEldj35n+FWNYPJgXoSa69rIETkveLkLXZCTvINSBFc6Lahd0iEm9PsGzwjFXajuElnd
+	bu1Wxsg7m92DlJ8Ck6FzX9Uliod+UYI=
+Date: Fri, 14 Mar 2025 10:33:22 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Subject: Re: [PATCH] rust: file: optimize rust symbol generation for
+ FileDescriptorReservation
+Content-Language: en-US
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+ a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org,
+ nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com,
+ justinstitt@google.com, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
+References: <20250313084525.773620-1-kunwu.chan@linux.dev>
+ <Z9K3vokYu5osMCwh@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kunwu Chan <kunwu.chan@linux.dev>
+In-Reply-To: <Z9K3vokYu5osMCwh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/scmi_minor_cleanup
-head:   51352dcbe987669cc05f54142918faf4240c4bb4
-commit: 51352dcbe987669cc05f54142918faf4240c4bb4 [7/7] pmdomain: arm: scmi_pm_domain: Remove redundant state verification
-config: x86_64-buildonly-randconfig-002-20250314 (https://download.01.org/0day-ci/archive/20250314/202503140851.OfvuRJ6C-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140851.OfvuRJ6C-lkp@intel.com/reproduce)
+On 2025/3/13 18:47, Alice Ryhl wrote:
+> On Thu, Mar 13, 2025 at 04:45:25PM +0800, Kunwu Chan wrote:
+>> From: Kunwu Chan <kunwu.chan@hotmail.com>
+>>
+>> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+>> with ARCH=arm64, the following symbols are generated:
+>>
+>> $ nm vmlinux | grep ' _R'.*FileDescriptorReservation | rustfilt
+>> ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>
+>> 						::fd_install
+>> ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>
+>> 						::get_unused_fd_flags
+>> ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation
+>> 					 as core::ops::drop::Drop>::drop
+>>
+>> These Rust symbols are trivial wrappers around the C functions
+>> fd_install, put_unused_fd and put_task_struct.It
+>> doesn't make sense to go through a trivial wrapper for these
+>> functions, so mark them inline.
+>>
+>> After doing so, the above symbol will not in output.
+>>
+>> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+>> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+>> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+> A few notes:
+>
+> * Your own Signed-off-by must always be last.
+> * You're missing Link: and Suggested-by: tags.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503140851.OfvuRJ6C-lkp@intel.com/
+Thanks for the reply.
 
-All warnings (new ones prefixed by >>):
+I'll change my own Signed-off-by be last and add Link and Suggested-by 
+as the following:
 
->> drivers/pmdomain/arm/scmi_pm_domain.c:27:13: warning: unused variable 'ret_state' [-Wunused-variable]
-      27 |         u32 state, ret_state;
-         |                    ^~~~~~~~~
-   1 warning generated.
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Suggested-by: Alice Ryhl <aliceryhl@google.com>
+Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+
+> * There are some grammar issues, e.g. a missing space before "It" and
+>    the phrase "will not in output" is not good.
+I'll  add a space before "It" and remove the last line.
+> * Let's also add the marker to `reserved_fd` to be on the safe side.
+Sure, I'll make 'reserved_fd ' inline in v2.
+> * I think it is easier to read the symbols if you list each sybmol on
+>    one line like this:
+>
+> ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>::fd_install
+> ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>::get_unused_fd_flags
+> ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation as core::ops::drop::Drop>::drop
+
+If in one line, checkpatch.pl will report a warning:
+
+WARNING:Prefer a maximum 75 chars per line (possible unwrapped commit 
+description?)
+
+If no need to  bother with the warning, I'll change it to one line in v2.
+
+>
+> Alice
 
 
-vim +/ret_state +27 drivers/pmdomain/arm/scmi_pm_domain.c
-
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  24  
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  25  static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  26  {
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14 @27  	u32 state, ret_state;
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  28  	struct scmi_pm_domain *pd = to_scmi_pd(domain);
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  29  
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  30  	if (power_on)
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  31  		state = SCMI_POWER_STATE_GENERIC_ON;
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  32  	else
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  33  		state = SCMI_POWER_STATE_GENERIC_OFF;
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  34  
-51352dcbe987669 drivers/pmdomain/arm/scmi_pm_domain.c      Sudeep Holla 2025-03-13  35  	return power_ops->state_set(pd->ph, pd->domain, state);
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  36  }
-898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  37  
-
-:::::: The code at line 27 was first introduced by commit
-:::::: 898216c97ed2ebfffda659ce12388da43534de6c firmware: arm_scmi: add device power domain support using genpd
-
-:::::: TO: Sudeep Holla <sudeep.holla@arm.com>
-:::::: CC: Sudeep Holla <sudeep.holla@arm.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+   Kunwu.Chan(Tao.chan)
+
