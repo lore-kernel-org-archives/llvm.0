@@ -1,190 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4AC79F5;
-	Fri, 14 Mar 2025 00:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF9617D2;
+	Fri, 14 Mar 2025 00:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741910669; cv=none; b=ZIh4SGyEF1+lLRpxcELOqlNvijaebs/81FOXNcEUJ6kMJ+wGuKDfr3MqkID7KmWwXWGMFYOIKM2nLXfBc73bDVYTqlH7GTZOHU49xKfgmoiGCpTTGRrVw9t2S02Of9Im8pKi9hf85waZe3PtV7I3WBkBDLPKA70znEz2mRFCAzI=
+	t=1741912329; cv=none; b=delMs3oXzx1AX1xwc63nQ3QA2u+ChvpRTaJaJ31Wvu11uO3SXQk4LgD5rNvHLGGqU+6HqjBKI2t1YCDq8+nmz04GWS0zaflxSgCxUYuK9FRz6+WDA00OoY+/pkXLWWboULk6UY69Svge69GOAQpWPxtYTJCO4Eo3u7AcZ0rWJmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741910669; c=relaxed/simple;
-	bh=iy+/mlqotFK2+b4LNmaNTDTHCIY1kqn2/OKiI6vljG4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Wfv2qxqcmQSwglNitYlDpNlqUkJIb4Kis94ieL35TBU/IA0/8unWQe+n9qA9J7ozytNRwlc/JkS0UyVLCzaIkl1XxJAot+QqAqnawf0hQUT0MnTN5Kcl9db6Cj7jMAG9YJWkKn1C1574jLpx4PnZloMdDkk38yAkno5zOzV7PFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taviz52E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1741912329; c=relaxed/simple;
+	bh=HtnX3fKiPDeZxpTk5T/FrAwvbTQAyZy2SaD3hvVwhbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LqYrFVxm4o0WDzhZQyJ4zvlRdyNCzhoYbjtfDI8idclhafI0360nX9lH+vbt1D4aUDk/SsmEQ10jZBrxoTzKuj+O+3at5WreI+YDnmfianC6UItxvrACsxamryzlViak/FLUe/s1fevKLx5H1UinWuskIMdnKno8T53HuMYmSzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IMWaq4z6; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taviz52E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB50C4CEEE;
-	Fri, 14 Mar 2025 00:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741910668;
-	bh=iy+/mlqotFK2+b4LNmaNTDTHCIY1kqn2/OKiI6vljG4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=taviz52EpSNtJVagcI+yCCzKxm6FB4u4RfEbyIqy1BLal+gFZD2oMKObljY1aoCPx
-	 IBPkTHn2SC6TmJZgZmH0s/gXFH9PINYlc7Aq9beg6qTsRUp0z1jnHGyJjyNrZKYSJo
-	 wCGiHFon2jtd4tS+c+aBCufo5qPL7FB1zut4Zn3yuwxbuz2sE8seUrVRwXuxJIpknO
-	 c3Jahtu2V758ParqSaNmFILHgs4wGwPMjiVrkFzfW9bbjTm1GIhimQ2NPAOvTIw0ky
-	 ZZSJOwcTg1qyIFL1Bsr3foy05TYgfJABQshAlOFIp+eVaITP5YXeuLtISG++vm6zmu
-	 h57x+8LIv8AWQ==
-Date: Thu, 13 Mar 2025 17:04:24 -0700
-From: Kees Cook <kees@kernel.org>
-To: Marco Elver <elver@google.com>
-CC: Justin Stitt <justinstitt@google.com>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Miguel Ojeda <ojeda@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Hao Luo <haoluo@google.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- linux-hardening@vger.kernel.org, kasan-dev@googlegroups.com,
- linux-kbuild@vger.kernel.org, Bill Wendling <morbo@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Tony Ambardar <tony.ambardar@gmail.com>,
- Alexander Potapenko <glider@google.com>, Jan Hendrik Farr <kernel@jfarr.cc>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/3=5D_ubsan/overflow=3A_Rework_integer_?=
- =?US-ASCII?Q?overflow_sanitizer_option_to_turn_on_everything?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CANpmjNOHSanxX7EyXhia4AuVd+6q5v1mXQMTM_k0Rj20P_ASAA@mail.gmail.com>
-References: <20250307040948.work.791-kees@kernel.org> <20250307041914.937329-1-kees@kernel.org> <CANpmjNOHSanxX7EyXhia4AuVd+6q5v1mXQMTM_k0Rj20P_ASAA@mail.gmail.com>
-Message-ID: <2AACDA6E-F7EF-4962-937A-C9511E4E2930@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IMWaq4z6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741912328; x=1773448328;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HtnX3fKiPDeZxpTk5T/FrAwvbTQAyZy2SaD3hvVwhbk=;
+  b=IMWaq4z65n+eWPBuxFna4n5THlldQCw8rvEqUdsou1CettXKHdWxC4jc
+   7sth5UVXXjbQBceJbL2JBAuO7V9hI3x1MOMpaqCPQTdmxQa54459PZbDN
+   cYbA+EbKxqWgmO3W2ttcx1v0Ez3Ok4wFNbYF6QtvvwppbG2EFwJauxC7B
+   7SXdK7HQgyPamlP4OnciPmbC7i/aUSrzJ8uCyXVtUWVuAE+RRHTbaYsIx
+   TsCJQ1FukhIPVQjVfJ566RBiO+p9g6kPhFwCdtvF3T/lAYFRRaJIYDXew
+   DmkEbswg399wF27Q8F8n+W4zOC4pIvD09vbabsTRTUi85ZNdTQOQjF9Cq
+   A==;
+X-CSE-ConnectionGUID: zmu4UU/hRrqVZfqdI/uYcA==
+X-CSE-MsgGUID: X8KvA0YeSfWDy6iLNVvc+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="60454988"
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="60454988"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 17:32:07 -0700
+X-CSE-ConnectionGUID: r/qsnK1iRsSiNm1O0yc7lQ==
+X-CSE-MsgGUID: DxGiGVhYT2WyXnvCVgvDsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="125742044"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 13 Mar 2025 17:32:05 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tssy3-000A22-17;
+	Fri, 14 Mar 2025 00:32:03 +0000
+Date: Fri, 14 Mar 2025 08:31:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:b4/scmi_minor_cleanup 7/7]
+ drivers/pmdomain/arm/scmi_pm_domain.c:27:13: warning: unused variable
+ 'ret_state'
+Message-ID: <202503140851.OfvuRJ6C-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/scmi_minor_cleanup
+head:   51352dcbe987669cc05f54142918faf4240c4bb4
+commit: 51352dcbe987669cc05f54142918faf4240c4bb4 [7/7] pmdomain: arm: scmi_pm_domain: Remove redundant state verification
+config: x86_64-buildonly-randconfig-002-20250314 (https://download.01.org/0day-ci/archive/20250314/202503140851.OfvuRJ6C-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503140851.OfvuRJ6C-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503140851.OfvuRJ6C-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pmdomain/arm/scmi_pm_domain.c:27:13: warning: unused variable 'ret_state' [-Wunused-variable]
+      27 |         u32 state, ret_state;
+         |                    ^~~~~~~~~
+   1 warning generated.
 
 
+vim +/ret_state +27 drivers/pmdomain/arm/scmi_pm_domain.c
 
-On March 13, 2025 8:29:29 AM PDT, Marco Elver <elver@google=2Ecom> wrote:
->On Thu, 6 Mar 2025 at 23:19, Kees Cook <kees@kernel=2Eorg> wrote:
->>
->> Since we're going to approach integer overflow mitigation a type at a
->> time, we need to enable all of the associated sanitizers, and then opt
->> into types one at a time=2E
->>
->> Rename the existing "signed wrap" sanitizer to just the entire topic ar=
-ea:
->> "integer wrap"=2E Enable the implicit integer truncation sanitizers, wi=
-th
->> required callbacks and tests=2E
->>
->> Notably, this requires features (currently) only available in Clang,
->> so we can depend on the cc-option tests to determine availability
->> instead of doing version tests=2E
->>
->> Signed-off-by: Kees Cook <kees@kernel=2Eorg>
->> ---
->> Cc: Justin Stitt <justinstitt@google=2Ecom>
->> Cc: "Gustavo A=2E R=2E Silva" <gustavoars@kernel=2Eorg>
->> Cc: Andrew Morton <akpm@linux-foundation=2Eorg>
->> Cc: Marco Elver <elver@google=2Ecom>
->> Cc: Andrey Konovalov <andreyknvl@gmail=2Ecom>
->> Cc: Andrey Ryabinin <ryabinin=2Ea=2Ea@gmail=2Ecom>
->> Cc: Masahiro Yamada <masahiroy@kernel=2Eorg>
->> Cc: Nathan Chancellor <nathan@kernel=2Eorg>
->> Cc: Nicolas Schier <nicolas@fjasle=2Eeu>
->> Cc: Miguel Ojeda <ojeda@kernel=2Eorg>
->> Cc: Nick Desaulniers <ndesaulniers@google=2Ecom>
->> Cc: Hao Luo <haoluo@google=2Ecom>
->> Cc: Przemek Kitszel <przemyslaw=2Ekitszel@intel=2Ecom>
->> Cc: linux-hardening@vger=2Ekernel=2Eorg
->> Cc: kasan-dev@googlegroups=2Ecom
->> Cc: linux-kbuild@vger=2Ekernel=2Eorg
->> ---
->>  include/linux/compiler_types=2Eh  |  2 +-
->>  kernel/configs/hardening=2Econfig |  2 +-
->>  lib/Kconfig=2Eubsan               | 23 +++++++++++------------
->>  lib/test_ubsan=2Ec                | 18 ++++++++++++++----
->>  lib/ubsan=2Ec                     | 28 ++++++++++++++++++++++++++--
->>  lib/ubsan=2Eh                     |  8 ++++++++
->>  scripts/Makefile=2Elib            |  4 ++--
->>  scripts/Makefile=2Eubsan          |  8 ++++++--
->>  8 files changed, 69 insertions(+), 24 deletions(-)
->>
->> diff --git a/include/linux/compiler_types=2Eh b/include/linux/compiler_=
-types=2Eh
->> index f59393464ea7=2E=2E4ad3e900bc3d 100644
->> --- a/include/linux/compiler_types=2Eh
->> +++ b/include/linux/compiler_types=2Eh
->> @@ -360,7 +360,7 @@ struct ftrace_likely_data {
->>  #endif
->>
->>  /* Do not trap wrapping arithmetic within an annotated function=2E */
->> -#ifdef CONFIG_UBSAN_SIGNED_WRAP
->> +#ifdef CONFIG_UBSAN_INTEGER_WRAP
->>  # define __signed_wrap __attribute__((no_sanitize("signed-integer-over=
-flow")))
->>  #else
->>  # define __signed_wrap
->> diff --git a/kernel/configs/hardening=2Econfig b/kernel/configs/hardeni=
-ng=2Econfig
->> index 3fabb8f55ef6=2E=2Edd7c32fb5ac1 100644
->> --- a/kernel/configs/hardening=2Econfig
->> +++ b/kernel/configs/hardening=2Econfig
->> @@ -46,7 +46,7 @@ CONFIG_UBSAN_BOUNDS=3Dy
->>  # CONFIG_UBSAN_SHIFT is not set
->>  # CONFIG_UBSAN_DIV_ZERO is not set
->>  # CONFIG_UBSAN_UNREACHABLE is not set
->> -# CONFIG_UBSAN_SIGNED_WRAP is not set
->> +# CONFIG_UBSAN_INTEGER_WRAP is not set
->>  # CONFIG_UBSAN_BOOL is not set
->>  # CONFIG_UBSAN_ENUM is not set
->>  # CONFIG_UBSAN_ALIGNMENT is not set
->> diff --git a/lib/Kconfig=2Eubsan b/lib/Kconfig=2Eubsan
->> index 1d4aa7a83b3a=2E=2E63e5622010e0 100644
->> --- a/lib/Kconfig=2Eubsan
->> +++ b/lib/Kconfig=2Eubsan
->> @@ -116,21 +116,20 @@ config UBSAN_UNREACHABLE
->>           This option enables -fsanitize=3Dunreachable which checks for=
- control
->>           flow reaching an expected-to-be-unreachable position=2E
->>
->> -config UBSAN_SIGNED_WRAP
->> -       bool "Perform checking for signed arithmetic wrap-around"
->> +config UBSAN_INTEGER_WRAP
->> +       bool "Perform checking for integer arithmetic wrap-around"
->>         default UBSAN
->>         depends on !COMPILE_TEST
->> -       # The no_sanitize attribute was introduced in GCC with version =
-8=2E
->> -       depends on !CC_IS_GCC || GCC_VERSION >=3D 80000
->>         depends on $(cc-option,-fsanitize=3Dsigned-integer-overflow)
->> -       help
->> -         This option enables -fsanitize=3Dsigned-integer-overflow whic=
-h checks
->> -         for wrap-around of any arithmetic operations with signed inte=
-gers=2E
->> -         This currently performs nearly no instrumentation due to the
->> -         kernel's use of -fno-strict-overflow which converts all would=
--be
->> -         arithmetic undefined behavior into wrap-around arithmetic=2E =
-Future
->> -         sanitizer versions will allow for wrap-around checking (rathe=
-r than
->> -         exclusively undefined behavior)=2E
->> +       depends on $(cc-option,-fsanitize=3Dunsigned-integer-overflow)
->> +       depends on $(cc-option,-fsanitize=3Dimplicit-signed-integer-tru=
-ncation)
->> +       depends on $(cc-option,-fsanitize=3Dimplicit-unsigned-integer-t=
-runcation)
->
->Can these be in 1 cc-option? I know it might look slightly more ugly,
->but having 3 different ones will shell out to the compiler 3 times,
->which is a little less efficient=2E At some point it might noticeably
->increase the build initialization latency=2E
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  24  
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  25  static int scmi_pd_power(struct generic_pm_domain *domain, bool power_on)
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  26  {
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14 @27  	u32 state, ret_state;
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  28  	struct scmi_pm_domain *pd = to_scmi_pd(domain);
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  29  
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  30  	if (power_on)
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  31  		state = SCMI_POWER_STATE_GENERIC_ON;
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  32  	else
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  33  		state = SCMI_POWER_STATE_GENERIC_OFF;
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  34  
+51352dcbe987669 drivers/pmdomain/arm/scmi_pm_domain.c      Sudeep Holla 2025-03-13  35  	return power_ops->state_set(pd->ph, pd->domain, state);
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  36  }
+898216c97ed2ebf drivers/firmware/arm_scmi/scmi_pm_domain.c Sudeep Holla 2017-06-14  37  
 
-Yeah, good point=2E I could probably just test the most recently added opt=
-ion, as it implies all the rest, too=2E I'll send an update!
+:::::: The code at line 27 was first introduced by commit
+:::::: 898216c97ed2ebfffda659ce12388da43534de6c firmware: arm_scmi: add device power domain support using genpd
 
--Kees
+:::::: TO: Sudeep Holla <sudeep.holla@arm.com>
+:::::: CC: Sudeep Holla <sudeep.holla@arm.com>
 
-
---=20
-Kees Cook
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
