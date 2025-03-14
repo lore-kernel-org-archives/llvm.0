@@ -1,321 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F3D1E9B26;
-	Fri, 14 Mar 2025 09:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CA41E5B73
+	for <llvm@lists.linux.dev>; Fri, 14 Mar 2025 09:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741943611; cv=none; b=CSORBmw65KPqz6rUyqqfH8Z4AHCek66tDuTSfk2QR8wL8qgU5a3n3oGn2EbQMKib5o7QXETyM8npICXbvYqmfIpXyXPx9CeKagIbvT6CPE+N27smfQtZNYO51ZolZDIPNhD+E5RA96WPCvTayIin87rlLZRTCj1WlPMrumWEFD0=
+	t=1741944135; cv=none; b=b7T83eU3SyvH0GfLtOzNbWj2C//515HXYoqmH9DRZXIYkHN/IZNR2ZXmrYYZUbkU0yrjqzMRb3QqniXoI3KE+R+HhGG6EzsPdo4LzyqGfc6kBN49Luaip0YLu7QjzFc+GO7QctX/AzpUMK8mgxCXY1Dt+wn8oMJ8U8NAGYyTf1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741943611; c=relaxed/simple;
-	bh=B+lIDOUrEmw8+yDgcBsS2DxP5sklwK8Yq2ha/32ny+s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nta8ikvTMm2d1zd7Zzj36TLeXxCie+d8/yEbKwP13ZhYTW63erQJcSIph2dns01yOe2cf/I5/fE6mf3ucV9Vu317c0LdpKToQFW5+EMY+TwBikskRk1oGFnjti8cQbKs75W4X1Oh69dloUtRXKYeBNCrwd2wHCLjXOezHUKTpF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UvTaCxQT; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741944135; c=relaxed/simple;
+	bh=wSLy/tKZRMSxZhgOPYP+lRHCiDRNfSCHCfpnD1lPsyE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YoqDwDgx2g8StXxhW+rbXn/HEIfynsfn9GL/oHFQ8YaSZzieGUPXFGWB3CBlruybaiVG7GL2UwpKIsoECFkHx57nEtJq2utHk3m5ps5zLzSrAAzRGjmXaiJ9GEcssyAqpoUCMkw6COD4AmJQrhCMvwvbNihQkBUIevfiX/6qfTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hTE8UPMc; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UvTaCxQT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741943610; x=1773479610;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B+lIDOUrEmw8+yDgcBsS2DxP5sklwK8Yq2ha/32ny+s=;
-  b=UvTaCxQTaHxpyeLpOCE/gmZoMbQHALdUBpWQ94/F7d5X+mM/Q323JXRp
-   +4gCPMC+sq3zCIaXE+Zy8PAzjW5oYWFuBA19VUzchYSQmIRGqi1QzKWQF
-   3/sguM+sneKn5jdHVPJulM3vSgKrD0zpoDP3t0J9SsN5f1sNWhKM7cNf0
-   UKem37VU8ErotNdDWXJblfOZ4kFn2C2/wb4+OTgG/AQHF7UnhzI44nnVg
-   KdDHtwHO5IZL01/jeC8zf5IQi9J53jLemmuEMSQrHBX83g0f/dBlSX4IV
-   OLsJEU07IrQ5S0oidLgWhw01+crAQOg3Epe8xurTEwZKWqKSecxpU07YO
-   A==;
-X-CSE-ConnectionGUID: lfugcC+VRlqwFxTqOojfTA==
-X-CSE-MsgGUID: 8FHTXrhaTLeZjb4yC3/sEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="53295870"
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="53295870"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 02:13:14 -0700
-X-CSE-ConnectionGUID: pmJvSxPIRoWMgPEXA1D+Kw==
-X-CSE-MsgGUID: prycXBQwR+GYrxpp0oldTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="125398010"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 14 Mar 2025 02:13:09 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tt16J-000AHE-13;
-	Fri, 14 Mar 2025 09:13:07 +0000
-Date: Fri, 14 Mar 2025 17:12:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Liu Ying <victor.liu@nxp.com>
-Subject: Re: [PATCH 06/18] mfd: adp5585: add support for adp5589
-Message-ID: <202503141607.g4arza1A-lkp@intel.com>
-References: <20250313-dev-adp5589-fw-v1-6-20e80d4bd4ea@analog.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hTE8UPMc"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4394345e4d5so12460495e9.0
+        for <llvm@lists.linux.dev>; Fri, 14 Mar 2025 02:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741944132; x=1742548932; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q+KUI4Lx73PJKjwhnAttQQrPPQ9GUBTUAKyve2K4V2c=;
+        b=hTE8UPMcmPu4Lz7LoqMyoWW26VYuCQqllBm+4p/3VXaTSbYjN6CTmNMR4612WA5DPv
+         gCGe9IM4piBErs0kdlcAC+b2z/ky2MIy0JuaW3tOpBhsqFarAOQ8y2qBoTY1ppLcr+vm
+         icX6mq1zctB/h/zeNMvPiXfVFXzatMJlWprv0C9yRZgGYWLMYnX0wkvC/HeCAp0Qdh0I
+         lRAIbu5Xax1f7uWFP2IYtSDTG/UOsvISNSq0eE6BZgphz718z6OpZpfDvB4iWiw13ZAY
+         QlkQgKtaP2MTi+o+Izh701+ElkmO78xWbpHoLfFd1tSNKYJWs3b0CqB8/EkmIh79i/yD
+         8A8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741944132; x=1742548932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q+KUI4Lx73PJKjwhnAttQQrPPQ9GUBTUAKyve2K4V2c=;
+        b=iYe5MU2DePoZnZwOmz4caOJRJbKWHZRIAttb5tlU7aCPB4jZoxvq8Xz0orBXUwnLF0
+         VgyuevbRitdZiuWz9QisY6gtCEiZqe89S4o0prrnzgpi/ayOJZ+p5KKqxXFYsCdq3EC/
+         PIjOcU8fnCEn8bhaiIPFk1ZJ5/Rh6Hc86FOx7TV9FKDDUixZbRcKBXppbDnIg/6/xF3O
+         IZofCcam3tAGR7FGND37OQLnXQYGIatzFKZ5OJgHeUBMZQEboBxWT1b2WwpsPzvdpX8n
+         0iAkiG4Q00J5YeS5mOxNNscTWBMsz23SCwwRRRVXXOvyIrnPjMdpuXe3PNDlSu2tOQ1J
+         S/1w==
+X-Forwarded-Encrypted: i=1; AJvYcCWzCJlftlYwbIEjBdBs1ERPqtprhw/sxM6ZF+BdYlF1UmozqUBQXZ7zljLKrmGk+UVn6GW+@lists.linux.dev
+X-Gm-Message-State: AOJu0YwinKSG2N/nscyksSwyXP2ArWM3n+xYaK2vJT5gGn0y5qO7PZl6
+	NFEdHzeffSUwDGG5g60RoTQiyjqmnswl2HTrqkDDfPDovCko5b2ufpH4Gdn19tRuK5YU4VOQoHu
+	SDl2iwX+0NZKzkyuuPSHtjA7PlQVsNDIIGzON
+X-Gm-Gg: ASbGncvshlUm77cdLxn8TPv39FhfAOIEmqspCirsTo6oTniatDBU9ddDgaShaiFAMbq
+	vzbEsxBZW68JyBLsYibjn3nLitkLW8jYS+YXKIbyV+0F0KM17BEWSLfSlq8yPTySZ4rTdPxVPBf
+	iQcJm0lGsQHulVTQtWFerHudU5/DTkqpVHtQP8sILSPAKN3/wl/jhKyEnq
+X-Google-Smtp-Source: AGHT+IFl2389eiJnSvgHMzd88pzFUgRlQu1y96idOrhkkY6/IW7t5kMp6T08rutu3B31Z91o7d44iA6hdHEiErEfyWc=
+X-Received: by 2002:a05:6000:188f:b0:391:39fb:59b4 with SMTP id
+ ffacd0b85a97d-3971e2ae150mr2211005f8f.27.1741944131623; Fri, 14 Mar 2025
+ 02:22:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250313-dev-adp5589-fw-v1-6-20e80d4bd4ea@analog.com>
+References: <20250313084525.773620-1-kunwu.chan@linux.dev> <Z9K3vokYu5osMCwh@google.com>
+ <6c874a4f-439e-4ab2-807d-d0f59b9fe569@linux.dev>
+In-Reply-To: <6c874a4f-439e-4ab2-807d-d0f59b9fe569@linux.dev>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Fri, 14 Mar 2025 10:21:59 +0100
+X-Gm-Features: AQ5f1JpGzEAx4sBwjKxQGUxQi3t0tVfhh5Eh8mkLZ_0xoZt0Q9ivNhpJmJHKzV8
+Message-ID: <CAH5fLgjErD9r8h_tjekZ+sNNDmkU3J3kcSmCG+Mew+-6zQq8tA@mail.gmail.com>
+Subject: Re: [PATCH] rust: file: optimize rust symbol generation for FileDescriptorReservation
+To: Kunwu Chan <kunwu.chan@linux.dev>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, 
+	Grace Deng <Grace.Deng006@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nuno,
+On Fri, Mar 14, 2025 at 3:34=E2=80=AFAM Kunwu Chan <kunwu.chan@linux.dev> w=
+rote:
+> > * I think it is easier to read the symbols if you list each sybmol on
+> >    one line like this:
+> >
+> > ffff8000805b6ef0 T <kernel::fs::file::FileDescriptorReservation>::fd_in=
+stall
+> > ffff8000805b6e60 T <kernel::fs::file::FileDescriptorReservation>::get_u=
+nused_fd_flags
+> > ffff8000805b6f08 T <kernel::fs::file::FileDescriptorReservation as core=
+::ops::drop::Drop>::drop
+>
+> If in one line, checkpatch.pl will report a warning:
+>
+> WARNING:Prefer a maximum 75 chars per line (possible unwrapped commit
+> description?)
+>
+> If no need to  bother with the warning, I'll change it to one line in v2.
 
-kernel test robot noticed the following build warnings:
+You could do this:
+... T <kernel::fs::file::FileDescriptorReservation>::fd_install
+but if it's still too long I'd just ignore it.
 
-[auto build test WARNING on 4d395cb071a343196ca524d3694790f06978fe91]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-S-via-B4-Relay/dt-bindings-mfd-adp5585-ease-on-the-required-properties/20250313-222511
-base:   4d395cb071a343196ca524d3694790f06978fe91
-patch link:    https://lore.kernel.org/r/20250313-dev-adp5589-fw-v1-6-20e80d4bd4ea%40analog.com
-patch subject: [PATCH 06/18] mfd: adp5585: add support for adp5589
-config: riscv-randconfig-001-20250314 (https://download.01.org/0day-ci/archive/20250314/202503141607.g4arza1A-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250314/202503141607.g4arza1A-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503141607.g4arza1A-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mfd/adp5585.c:48:41: warning: unused variable 'adp5589_volatile_regs' [-Wunused-const-variable]
-      48 | static const struct regmap_access_table adp5589_volatile_regs = {
-         |                                         ^~~~~~~~~~~~~~~~~~~~~
->> drivers/mfd/adp5585.c:229:34: warning: unused variable 'adp5585_info' [-Wunused-const-variable]
-     229 | static const struct adp5585_info adp5585_info = {
-         |                                  ^~~~~~~~~~~~
->> drivers/mfd/adp5585.c:239:34: warning: unused variable 'adp5585_01_info' [-Wunused-const-variable]
-     239 | static const struct adp5585_info adp5585_01_info = {
-         |                                  ^~~~~~~~~~~~~~~
->> drivers/mfd/adp5585.c:249:34: warning: unused variable 'adp5585_02_info' [-Wunused-const-variable]
-     249 | static const struct adp5585_info adp5585_02_info = {
-         |                                  ^~~~~~~~~~~~~~~
-   4 warnings generated.
-
-
-vim +/adp5589_volatile_regs +48 drivers/mfd/adp5585.c
-
-    47	
-  > 48	static const struct regmap_access_table adp5589_volatile_regs = {
-    49		.yes_ranges = adp5589_volatile_ranges,
-    50		.n_yes_ranges = ARRAY_SIZE(adp5589_volatile_ranges),
-    51	};
-    52	
-    53	/*
-    54	 * Chip variants differ in the default configuration of pull-up and pull-down
-    55	 * resistors, and therefore have different default register values:
-    56	 *
-    57	 * - The -00, -01 and -03 variants (collectively referred to as
-    58	 *   ADP5585_REGMAP_00) have pull-up on all GPIO pins by default.
-    59	 * - The -02 variant has no default pull-up or pull-down resistors.
-    60	 * - The -04 variant has default pull-down resistors on all GPIO pins.
-    61	 */
-    62	
-    63	static const u8 adp5585_regmap_defaults_00[ADP5585_MAX_REG + 1] = {
-    64		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    65		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    66		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    67		/* 0x18 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    68		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    69		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    70		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    71		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00,
-    72	};
-    73	
-    74	static const u8 adp5585_regmap_defaults_02[ADP5585_MAX_REG + 1] = {
-    75		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    76		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    77		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc3,
-    78		/* 0x18 */ 0x03, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
-    79		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    80		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    81		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    82		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00,
-    83	};
-    84	
-    85	static const u8 adp5585_regmap_defaults_04[ADP5585_MAX_REG + 1] = {
-    86		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    87		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    88		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55,
-    89		/* 0x18 */ 0x05, 0x55, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-    90		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    91		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    92		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    93		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00,
-    94	};
-    95	
-    96	static const u8 adp5589_regmap_defaults_00[ADP5589_MAX_REG + 1] = {
-    97		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    98		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    99		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   100		/* 0x18 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   101		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   102		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   103		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   104		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   105		/* 0x40 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   106		/* 0x48 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   107	};
-   108	
-   109	static const u8 adp5589_regmap_defaults_01[ADP5589_MAX_REG + 1] = {
-   110		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   111		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   112		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   113		/* 0x18 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   114		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   115		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   116		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   117		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00,
-   118		/* 0x40 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   119		/* 0x48 */ 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00,
-   120	};
-   121	
-   122	static const u8 adp5589_regmap_defaults_02[ADP5589_MAX_REG + 1] = {
-   123		/* 0x00 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   124		/* 0x08 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   125		/* 0x10 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   126		/* 0x18 */ 0x00, 0x41, 0x01, 0x00, 0x11, 0x04, 0x00, 0x00,
-   127		/* 0x20 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   128		/* 0x28 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   129		/* 0x30 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   130		/* 0x38 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   131		/* 0x40 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   132		/* 0x48 */ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-   133	};
-   134	
-   135	enum adp5585_regmap_type {
-   136		ADP5585_REGMAP_00,
-   137		ADP5585_REGMAP_02,
-   138		ADP5585_REGMAP_04,
-   139		ADP5589_REGMAP_00,
-   140		ADP5589_REGMAP_01,
-   141		ADP5589_REGMAP_02,
-   142	};
-   143	
-   144	static const struct regmap_config adp5585_regmap_configs[] = {
-   145		[ADP5585_REGMAP_00] = {
-   146			.reg_bits = 8,
-   147			.val_bits = 8,
-   148			.max_register = ADP5585_MAX_REG,
-   149			.volatile_table = &adp5585_volatile_regs,
-   150			.cache_type = REGCACHE_MAPLE,
-   151			.reg_defaults_raw = adp5585_regmap_defaults_00,
-   152			.num_reg_defaults_raw = sizeof(adp5585_regmap_defaults_00),
-   153		},
-   154		[ADP5585_REGMAP_02] = {
-   155			.reg_bits = 8,
-   156			.val_bits = 8,
-   157			.max_register = ADP5585_MAX_REG,
-   158			.volatile_table = &adp5585_volatile_regs,
-   159			.cache_type = REGCACHE_MAPLE,
-   160			.reg_defaults_raw = adp5585_regmap_defaults_02,
-   161			.num_reg_defaults_raw = sizeof(adp5585_regmap_defaults_02),
-   162		},
-   163		[ADP5585_REGMAP_04] = {
-   164			.reg_bits = 8,
-   165			.val_bits = 8,
-   166			.max_register = ADP5585_MAX_REG,
-   167			.volatile_table = &adp5585_volatile_regs,
-   168			.cache_type = REGCACHE_MAPLE,
-   169			.reg_defaults_raw = adp5585_regmap_defaults_04,
-   170			.num_reg_defaults_raw = sizeof(adp5585_regmap_defaults_04),
-   171		},
-   172		[ADP5589_REGMAP_00] = {
-   173			.reg_bits = 8,
-   174			.val_bits = 8,
-   175			.max_register = ADP5589_MAX_REG,
-   176			.volatile_table = &adp5585_volatile_regs,
-   177			.cache_type = REGCACHE_MAPLE,
-   178			.reg_defaults_raw = adp5589_regmap_defaults_00,
-   179			.num_reg_defaults_raw = sizeof(adp5589_regmap_defaults_00),
-   180		},
-   181		[ADP5589_REGMAP_01] = {
-   182			.reg_bits = 8,
-   183			.val_bits = 8,
-   184			.max_register = ADP5589_MAX_REG,
-   185			.volatile_table = &adp5585_volatile_regs,
-   186			.cache_type = REGCACHE_MAPLE,
-   187			.reg_defaults_raw = adp5589_regmap_defaults_01,
-   188			.num_reg_defaults_raw = sizeof(adp5589_regmap_defaults_01),
-   189		},
-   190		[ADP5589_REGMAP_02] = {
-   191			.reg_bits = 8,
-   192			.val_bits = 8,
-   193			.max_register = ADP5589_MAX_REG,
-   194			.volatile_table = &adp5585_volatile_regs,
-   195			.cache_type = REGCACHE_MAPLE,
-   196			.reg_defaults_raw = adp5589_regmap_defaults_02,
-   197			.num_reg_defaults_raw = sizeof(adp5589_regmap_defaults_02),
-   198		},
-   199	};
-   200	
-   201	static const struct adp5585_regs adp5585_regs = {
-   202		.debounce_dis_a = ADP5585_DEBOUNCE_DIS_A,
-   203		.rpull_cfg_a = ADP5585_RPULL_CONFIG_A,
-   204		.gpo_data_a = ADP5585_GPO_DATA_OUT_A,
-   205		.gpo_out_a = ADP5585_GPO_OUT_MODE_A,
-   206		.gpio_dir_a = ADP5585_GPIO_DIRECTION_A,
-   207		.gpi_stat_a = ADP5585_GPI_STATUS_A,
-   208		.pwm_cfg = ADP5585_PWM_CFG,
-   209		.pwm_offt_low = ADP5585_PWM_OFFT_LOW,
-   210		.pwm_ont_low = ADP5585_PWM_ONT_LOW,
-   211		.gen_cfg = ADP5585_GENERAL_CFG,
-   212		.ext_cfg = ADP5585_PIN_CONFIG_C,
-   213	};
-   214	
-   215	static const struct adp5585_regs adp5589_regs = {
-   216		.debounce_dis_a = ADP5589_DEBOUNCE_DIS_A,
-   217		.rpull_cfg_a = ADP5589_RPULL_CONFIG_A,
-   218		.gpo_data_a = ADP5589_GPO_DATA_OUT_A,
-   219		.gpo_out_a = ADP5589_GPO_OUT_MODE_A,
-   220		.gpio_dir_a = ADP5589_GPIO_DIRECTION_A,
-   221		.gpi_stat_a = ADP5589_GPI_STATUS_A,
-   222		.pwm_cfg = ADP5589_PWM_CFG,
-   223		.pwm_offt_low = ADP5589_PWM_OFFT_LOW,
-   224		.pwm_ont_low = ADP5589_PWM_ONT_LOW,
-   225		.gen_cfg = ADP5589_GENERAL_CFG,
-   226		.ext_cfg = ADP5589_PIN_CONFIG_D,
-   227	};
-   228	
- > 229	static const struct adp5585_info adp5585_info = {
-   230		.adp5585_devs = adp5585_devs,
-   231		.regmap_config = &adp5585_regmap_configs[ADP5585_REGMAP_00],
-   232		.n_devs = ARRAY_SIZE(adp5585_devs),
-   233		.id = ADP5585_MAN_ID_VALUE,
-   234		.regs = &adp5585_regs,
-   235		.max_rows = ADP5585_MAX_ROW_NUM,
-   236		.max_cols = ADP5585_MAX_COL_NUM,
-   237	};
-   238	
- > 239	static const struct adp5585_info adp5585_01_info = {
-   240		.adp5585_devs = adp5585_devs,
-   241		.regmap_config = &adp5585_regmap_configs[ADP5585_REGMAP_00],
-   242		.n_devs = ARRAY_SIZE(adp5585_devs),
-   243		.id = ADP5585_MAN_ID_VALUE,
-   244		.regs = &adp5585_regs,
-   245		.max_rows = ADP5585_MAX_ROW_NUM,
-   246		.max_cols = ADP5585_MAX_COL_NUM,
-   247	};
-   248	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alice
