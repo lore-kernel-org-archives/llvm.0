@@ -1,59 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DFE2036FF;
-	Fri, 14 Mar 2025 16:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC4F1FDA89;
+	Fri, 14 Mar 2025 17:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741970830; cv=none; b=Cd5W2X6D60XJoaF+ckJJA/HvIr/dJ/ITuJn0PZsgL1KeHyTSEvU2qfLtuItqNEml9PgDP81waUkHzttADuvHYSeadt6YjjtFj9Rwe5FkxcWqCzgvkPsr7T9vbB42KQlqfDLqoqMZNnAdrjtMXth0OoMBhFtBlA3ZwMkR6DX9+dA=
+	t=1741972006; cv=none; b=QXC9ne4tcrlOL6g5qcKNLXBov5ch368Stg02sTTlcTjbSUcGKqVso0moci5c+E4cgXSdXw5OZOJ5LE3a5wrJOEbYK794Vuwwrc42efzCAT2kHBu/mvMxwIGzCqXw26Z/z+WjzRjOVPaEsgqlKH6MM2p3BgQruSG+zpEoYf6DKDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741970830; c=relaxed/simple;
-	bh=HYB98YMhPurGnuqME5Vkp3FZMILpUip8QBLmYxs4gis=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BFYHjjxlf29MZhyjP28AGRb9nPnIw0k3VoFy9tVfiY2JmBd4cjPuaf1bNs9EloFfD9kT5WU/wB0W/7VM8IQpxQw9ZVV617/PGsCsAqqD+D96M8y/sQvksGQj6WAjJCMj+FtNB+JR6HsDHzIF7WZsklW3DNXK6Fjlty29QfXtfkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WGXa6VVY; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1741972006; c=relaxed/simple;
+	bh=iDOL+Pgf68XI5fMo87a+IqebfJjceVppGD9rKghIMl0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QTXiqH1Dsx4/HTcJY6GJ4l9DD8CEiNZQuzyNzXik94OoeNvQ6rd7GdxCaF3rZf8SGovRkdyQqZSJ8jLIfKo4ceHIjHIO8HJzYb3HcnLHO9JDi6+uynVBmubd2fX1QcXkJCUYuVVs7+jDKCj7eq/e9sSGKqt66RY76I+idl4kKQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bS8OqIP7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WGXa6VVY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741970828; x=1773506828;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HYB98YMhPurGnuqME5Vkp3FZMILpUip8QBLmYxs4gis=;
-  b=WGXa6VVYMIkQ0JGa1eUmA3yTef7mRyJrh/CN1aLTZ06Z9jqsqJjq2uJP
-   8Rrn8ZADRUItlcxxm/n44ji6dD9Xby9NwrI1hqjVF0tCI/sF4UKvlmaHA
-   8oiY06ATYS3wIkuld8kd2IORcyMKkgXmVGKCJ9PqI6DUfxoCQrHK91I8t
-   SoxP+zdAf4bD/uLW7Ztqe41WHfIj252Pkjs3YokKaAf81Dc4p5V7ncZ0f
-   y1g5E2yoLZ53QAJrSJmpMTmwfQVVgMKJxMulcBu+fl+bthvG0vK0nV0iX
-   xmjax17JBJ6IhlAdnNKdfAoKhVDpMk3GdawcQSb1BiAFCp+50YrA6zZNP
-   A==;
-X-CSE-ConnectionGUID: LtRGn4y5SYSUCr4c6HyF+g==
-X-CSE-MsgGUID: DGchfC7/QySCOi1Km8Y8jg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="43261070"
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="43261070"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 09:47:07 -0700
-X-CSE-ConnectionGUID: js6QUOXdTRapRsEBxuabUA==
-X-CSE-MsgGUID: lOh73XW9SlKUb0CjGk3y0A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
-   d="scan'208";a="126383971"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 14 Mar 2025 09:47:06 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tt8Bb-000AfW-16;
-	Fri, 14 Mar 2025 16:47:03 +0000
-Date: Sat, 15 Mar 2025 00:46:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 9687/11207] ld.lld: error: duplicate symbol:
- amp_rt1019
-Message-ID: <202503150052.OfLBb5o2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bS8OqIP7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B19C4CEEC;
+	Fri, 14 Mar 2025 17:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741972006;
+	bh=iDOL+Pgf68XI5fMo87a+IqebfJjceVppGD9rKghIMl0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bS8OqIP7wINdAElZjuT/hg4AKOH+7zMy69HXrKw1kajUHeonYJkDLGZkiEUO5HbXD
+	 PRuDcvr2agaJwkzm/UEfYIuEJmjqvCd91E4ucyh7eR+KhY5gQEWI/yQT6j0XJNOjsZ
+	 /DQvBOyEyuKgYMx4sBbJjLu7K0Kuf7F91JI8j2Z1n1mAOwHsBmWbT8L8vvANd3rRiz
+	 igGUZz+9IWMxSgdW7hJIfprfp22mK7MCnI2BzD2IezhtZ7SQKRuP0u2SZDlD43fYOR
+	 rvVjYp4mL3UCbPqoCha98OkbDhYfazjV9w0ViNeYzx1F3sv35lb9DNlTCTvtMYTcOW
+	 0U388YuYtIedA==
+Date: Fri, 14 Mar 2025 14:06:43 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Changbin Du <changbin.du@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Li Huafei <lihuafei1@huawei.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org, Daniel Xu <dxu@dxuuu.xyz>
+Subject: Re: [PATCH v2 00/17] Support dynamic opening of capstone/llvm remove
+ BUILD_NONDISTRO
+Message-ID: <Z9RiI9yjpMUPRYZe@x1>
+References: <20250122062332.577009-1-irogers@google.com>
+ <Z5K712McgLXkN6aR@google.com>
+ <CAP-5=fX2n4nCTcSXY9+jU--X010hS9Q-chBWcwEyDzEV05D=FQ@mail.gmail.com>
+ <CAP-5=fUHLP-vtktodVuvMEbOd+TfQPPndkajT=WNf3Mc4VEZaA@mail.gmail.com>
+ <CAP-5=fV_z+Ev=wDt+QDwx8GTNXNQH30H5KXzaUXQBOG1Mb8hJg@mail.gmail.com>
+ <Z9NbFqaDQMjvYxcc@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,88 +70,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Z9NbFqaDQMjvYxcc@google.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   da920b7df701770e006928053672147075587fb2
-commit: 6e60db74b69c29b528c8d10d86108f78f2995dcb [9687/11207] ASoC: amd: acp: Refactor acp machine select
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250315/202503150052.OfLBb5o2-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503150052.OfLBb5o2-lkp@intel.com/reproduce)
+On Thu, Mar 13, 2025 at 03:24:22PM -0700, Namhyung Kim wrote:
+> I think #ifdef placements is not a big deal, but I still don't want to
+> pull libcapstone details into the perf tree.
+ 
+> For LLVM, I think you should to build llvm-c-helpers anyway which means
+> you still need LLVM headers and don't need to redefine the structures.
+ 
+> Can we do the same for capstone?  I think it's best to use capstone
+> headers directly and add a build option to use dlopen().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503150052.OfLBb5o2-lkp@intel.com/
+My two cents: if one wants to support some library, then have its devel
+packages available at build time.
 
-All errors (new ones prefixed by >>):
+Then, perf nowadays has lots of dependencies, we need to rein on that,
+making the good to have but not always used things to be dlopen'ed.
 
->> ld.lld: error: duplicate symbol: amp_rt1019
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(amp_rt1019) in archive vmlinux.a
-   >>> defined at acp-i2s.c
-   >>>            sound/soc/amd/acp/acp-i2s.o:(.data+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: amp_max
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(amp_max) in archive vmlinux.a
-   >>> defined at acp-i2s.c
-   >>>            sound/soc/amd/acp/acp-i2s.o:(.data+0x34) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp63_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp63_acp_machines) in archive vmlinux.a
-   >>> defined at acp-pdm.c
-   >>>            sound/soc/amd/acp/acp-pdm.o:(.data+0x840) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp70_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp70_acp_machines) in archive vmlinux.a
-   >>> defined at acp-pdm.c
-   >>>            sound/soc/amd/acp/acp-pdm.o:(.data+0x9D0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: amp_rt1019
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(amp_rt1019) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: amp_max
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(amp_max) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x34) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp_machines) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x70) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_rmb_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_rmb_acp_machines) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x520) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp63_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp63_acp_machines) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x840) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp70_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp70_acp_machines) in archive vmlinux.a
-   >>> defined at acp-legacy-common.c
-   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x9D0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: snd_soc_acpi_amd_acp63_acp_machines
-   >>> defined at acp-platform.c
-   >>>            sound/soc/amd/acp/acp-platform.o:(snd_soc_acpi_amd_acp63_acp_machines) in archive vmlinux.a
-   >>> defined at acp-pci.c
-   >>>            sound/soc/amd/acp/acp-pci.o:(.data+0x840) in archive vmlinux.a
-..
+Like we did with gtk (that at this point I think is really deprecated,
+BTW).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+gdb has prior art in this area that we could use, it is not even a TUI
+but it asks if debuginfo should be used and if so it goes on on
+potentially lenghty updates of the local buildid cache they keep (which
+is not the one we use, it should be).
+
+And in the recent discussion with Dmitry Vyukov the possibility doing a
+question to the user about a default behaviour to be set and then using
+.perfconfig not to bother anymore the user about things is part of
+helping the user to deal with the myriad possibilites perf offers.
+
+gdb could use that as well, why ask at every session if debuginfod
+should be used? Annoying.
+
+I think perf should try to use what is available, both at build and at
+run time, and it shouldn't change the way it output things, but should
+warn the user about recent developments, things we over time figured out
+are problematic and thus a new default would be better, but then obtain
+consent if the user cares about it, and allow for backtracking, to go
+and change .perfconfig when the user realises the old output/behaviour
+is not really nice.
+
+But keeping the grass green as it used to be should be the priority.
+
+- Arnaldo
