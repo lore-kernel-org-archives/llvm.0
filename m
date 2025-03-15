@@ -1,110 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A89846F;
-	Sat, 15 Mar 2025 03:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340F12907;
+	Sat, 15 Mar 2025 03:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742008554; cv=none; b=V69Efrv37l2SO/A4Pt9lpL+H/tN46k7oQ+HxatGU40j5PR+un/+6beRm9yObQ1NdfRmG6LB0aT9U1EffryjfSTJ613Bw6otEyo1baNBDsil6z88c7taDQ7dUE0N/vUVTD/7ik7pU00tpHOjw0aYZMawTrMDeE+OKJal4Qjp/+XE=
+	t=1742009822; cv=none; b=kiZlhCo/tKOzF5vojOvdiQaXk4uqAdTOAxFdTNErKNq43JiRzjPvet88uP4cvG39VwOv1iowTD6egCaV0mZRYuA+GNUGj3Mi9N85vWR5Dz0E/UK7lhzQohXDqNhCqqAY3NMQk4TiOafDPtS5nvwujxTCeXvSx4+nTJS8JiEXmHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742008554; c=relaxed/simple;
-	bh=YOIQ3ZtSX2tS6vlyFTaYggtRceIaGQgB5shVVBaSPf8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bzy0+KV4zokayEV1mfZUTqzC51KjgYXFW2v2+bU7aZVH3q0zD882VlNm5K6VTo72co8nAuEblrEhM0+IOoeKSLFNF5vOu3ocqO/EB5N+NY0ud3IZ82bqpVgipaNaoOFZXESsICW9njynIUgz0u+5E4i9sXFv//JF97H1lMkJnf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M7sYQkql; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742009822; c=relaxed/simple;
+	bh=DqXA52b3kyXlCggP8zs7E6lrG3AOMUR7Z4HMJOEn/wk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=USMdZfhXTQ25JFPs7Igqyh75fZ4LJ2X1NtoFmA1FQK+wxjILj4QicTY8wMMmHNjH6f1PHaicb/xKLgZd3kZuXPbd6AGml9mK2zHtMH8g8NlJipQDe6709rH0cKn/TZ/70ACaFqH4XDD+GG6I9mqPrEvquzn1mZngFzDv+L6l7Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zo2fsmIj; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M7sYQkql"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60676C4CEE5;
-	Sat, 15 Mar 2025 03:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742008553;
-	bh=YOIQ3ZtSX2tS6vlyFTaYggtRceIaGQgB5shVVBaSPf8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=M7sYQkqlOEiRIE4SRVqqraUu5q+cPrFuPwy686AVAmzPmEl5S1BDWcKGQwZ5aM0qE
-	 RJ58h5EbH5z8dAtCpUHHvT6EZeKfgleYAYIeGMZF1BxSEsSW4v3B1gPcEJZc298UQ+
-	 JrEB2HeR/I5ozwCp6mJeOINNCzCa4NvDZ2M2Gl0XZM/h3FedIbBzChOpQp8LN8pQbF
-	 N8vsKOnlwMfE3fQJ90PL/qxFiE5i8snx43U/s2z0VF49BqTkfizA3i3Iu+N34x4mWW
-	 hGbrcRc6Bn8Wa2Gnt3O5xKzjHRS0zZHtrbfFsX4PzXjE96eLIPKYhyi+ASgv7CFcmE
-	 SZt1d9OedtKag==
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Kees Cook <kees@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Marco Elver <elver@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jann Horn <jannh@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v4 0/2] slab: Introduce kmalloc_obj() and family
-Date: Fri, 14 Mar 2025 20:15:43 -0700
-Message-Id: <20250315025852.it.568-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zo2fsmIj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742009820; x=1773545820;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DqXA52b3kyXlCggP8zs7E6lrG3AOMUR7Z4HMJOEn/wk=;
+  b=Zo2fsmIjK1VJ26xo6+0/ay4x2k8ZzQNHsu72FbKkLkF9kq8wasE3WV1N
+   q39oMmF5xm7Hm4PsXWSoqwiu+9VGITQvaGsdF2Yk+KdQpOU8uSzZeZHSA
+   nipkCwBQOsmwBtzOIiG3l3iPb4uvHnuZNmNAFjz6oRYGHJqEDU8NwJf2i
+   VoyQ5wHwkzWkkBLdX7f5IqafGwcKbtaigpWbX0As/84+0yd3jpJc3bjQv
+   CgmsZ9IdFC5OlAFYryOlGxoOcxamJ/Slg1yCHM3ejNAlOMqDtA0UcyJpa
+   Vxy9yUyS05QQPkDdG28sd/8B30hKdYL2RFyAGI2ve4YGz1o6+a2Wsw91R
+   g==;
+X-CSE-ConnectionGUID: 0Rca9SejQp65SXnrQGox5Q==
+X-CSE-MsgGUID: vKpdyG0pTj6xe6yYL1URrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="54556561"
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="54556561"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 20:37:00 -0700
+X-CSE-ConnectionGUID: OuOJnguvTFqsbtN7DFiTTg==
+X-CSE-MsgGUID: ADINzkhGTgqMRU8fvuJqFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="144646467"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Mar 2025 20:36:58 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttIKW-000B2L-00;
+	Sat, 15 Mar 2025 03:36:56 +0000
+Date: Sat, 15 Mar 2025 11:36:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [pza:reset/next 3/4] ERROR: modpost: drivers/reset/reset-imx-scu:
+ type mismatch between imx_scu_reset_ids[] and MODULE_DEVICE_TABLE(platform,
+ ...)
+Message-ID: <202503151155.HAQUKDAm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1089; i=kees@kernel.org; h=from:subject:message-id; bh=YOIQ3ZtSX2tS6vlyFTaYggtRceIaGQgB5shVVBaSPf8=; b=owGbwMvMwCVmps19z/KJym7G02pJDOlXPjy4avtT6MtM1rKMB+/d62etWc5j7e7Gt/OX0qR7U 5/8nqOm31HKwiDGxSArpsgSZOce5+Lxtj3cfa4izBxWJpAhDFycAjCRGFlGhpuq3Z9uagj3fdLd yZz3Ii176wr+DSbrZJXvLJx1STFpATsjw8drn452fJ0aZOG8ymL71WN3OXk83kfejro6/UVp8Qq DR5wA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+tree:   https://git.pengutronix.de/git/pza/linux reset/next
+head:   c361baf67200a79c878d72cc879b1217c52cec96
+commit: 6b64fde5c183b5ef5b0f0f7321408caf3b876187 [3/4] reset: imx: Add SCU reset driver for i.MX8QXP and i.MX8QM
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250315/202503151155.HAQUKDAm-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151155.HAQUKDAm-lkp@intel.com/reproduce)
 
-Here's a refresh and update on the kmalloc_obj() API proposal. Please
-see patch 2 for the specific details. And note that this is obviously
-not v6.15 material! :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151155.HAQUKDAm-lkp@intel.com/
 
-Thanks!
+Note: the pza/reset/next HEAD c361baf67200a79c878d72cc879b1217c52cec96 builds fine.
+      It only hurts bisectability.
 
--Kees
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
- v4:
- - split __flex_counter() out and add appropriate helpers
- - add flex array examples to commit log
- - add "size" details to commit log
- - add treewide conversion details to commit log
- - improve treewide Coccinelle scripting
- - fix documentation typos
- v3: https://lore.kernel.org/lkml/20240822231324.make.666-kees@kernel.org/
- v2: https://lore.kernel.org/lkml/20240807235433.work.317-kees@kernel.org/
- v1: https://lore.kernel.org/lkml/20240719192744.work.264-kees@kernel.org/
-
-Kees Cook (2):
-  compiler_types: Introduce __flex_counter() and family
-  slab: Introduce kmalloc_obj() and family
-
- Documentation/process/deprecated.rst |  42 +++++++
- include/linux/compiler_types.h       |  31 +++++
- include/linux/overflow.h             |  36 ++++++
- include/linux/slab.h                 | 170 +++++++++++++++++++++++++++
- 4 files changed, 279 insertions(+)
+>> ERROR: modpost: drivers/reset/reset-imx-scu: type mismatch between imx_scu_reset_ids[] and MODULE_DEVICE_TABLE(platform, ...)
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
