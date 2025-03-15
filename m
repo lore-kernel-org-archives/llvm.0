@@ -1,99 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D388633F;
-	Sat, 15 Mar 2025 07:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448631E1020;
+	Sat, 15 Mar 2025 08:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742024755; cv=none; b=U5PJyKDL7/YpPduIW6wGspX9Odd9v+4/8Ch35A95VuteYI0OC8X/jwhE8GjC1UT0RURh8hTDOf6KxqWbsA+oJqcHDcGVm+il4O6hDPs6N/5N3kGiLt0NPYbARL0UZ4Eku7/QMKeJY6xaeobAqNozKtKxy2ybTMM+wDeDBr8htlg=
+	t=1742026433; cv=none; b=WasSRHj6F8KCIDlsBiSHNbbUfgjrDwpFA3ElzxWqfvKWEcsPd22iUHpRD3qLsAe0s13Lp95QTcVN1iATia1wF6WMtTRNo5fFwrZiQlcXlIvoe80u+ltT29MOhOhTNXbpa+yxpsH4Z5EgSyOfP5GFNdT46wzXp1B8yT34TVlVKlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742024755; c=relaxed/simple;
-	bh=7JxOgSe/h1RaEWC42NdexEfAD69T/7lik0SJ40Krvcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AS/qPCWZ4BpAhvZ3d3L37DIw01cxIBEfZKNNa8Hk/Jcn1ju4w9MDskITeFh7HzIMbA87ZqnB1LvZ7ql1s/LdHwdDZWgxkjIOVEQNIEfyGfpRObcLCyP9plsceYP/+C3nMA8gTbwqIAXRu2tjVqFyf7fd5aaVmR2j1EVAiOEUF5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8jHEQhR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742026433; c=relaxed/simple;
+	bh=0VpqOXRE1Sat0P3XtoqSfJL7cq/3vpMy8U+CPrIylfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mabxoaYGslIiRtawcF3WsBflhRfKhWwNjkQ61sqge67oHKzltXT2/uG+T8BtxTWZqSfv9xTFL+OavKjnbYx8SbIHL5rcWgawvcL7jtOz61hRbSgUGKc/1lBoeFR4hebsb+fLz1zEQj9Ip6xyTU78HvJmQnK2HVvEv8QHcLcJ7sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b5VWMY/C; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8jHEQhR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6825BC4AF09;
-	Sat, 15 Mar 2025 07:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742024755;
-	bh=7JxOgSe/h1RaEWC42NdexEfAD69T/7lik0SJ40Krvcg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=D8jHEQhRajb2cgwKnO/LHZyMUXCFQui8CnqprOHsDMmC//qKp7fVsSocHlhnaNFfp
-	 UyZ2mJiMQGzbohaq6wTIIqC9KIM6QrVKmUORvrhBkaaZ6qxUMRDvIaHCey4ZK7Wl6+
-	 aq0gjGCGgyoZWJSVjKh+GGqU2SCprSeCXcQP5dNl2VFVBruihq3oIqGKuzFZdPtm7A
-	 SRdbz8ROR4AicdHc01bUJDBi3gIY9u5SSPE9iVn953ZRAAqyWYnYspRfeDjHLxty32
-	 8BXLDauzGMgyHA14aLSQqPozawLJ/+uVEJBp9mMBb7WlOS9PyP6XCdkL6ejeUz8EFz
-	 jDecDpLzRYRoQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5498d2a8b89so3039751e87.1;
-        Sat, 15 Mar 2025 00:45:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXY8vo8wYXCSIXE+Ium29YLYIDltUplBFLMmO2u34PV2HaNGEQeW/ZaGoHkRuG2UlpJQdTR4Jpt9qQ7hTNr@lists.linux.dev
-X-Gm-Message-State: AOJu0YxpCG/bSaID1ajtNCrBKJhmpAC1D/mkAQ3pBEspjlBY0SUXHnts
-	ccpLBzg/YvUBD7mwcdzXiJ14dE5ZljJPV4m+l6b9I4eh/Rd419scLhy6x1PKusPmon0toYEND0y
-	+jZYFyQyjZe5ecpmCiTKEo2swy9s=
-X-Google-Smtp-Source: AGHT+IHzlGxP5Jac84HYVBDduo1JDy0yLK4tVWVWQcimhOuUgBiCFBKsfj1WDJO6vMeUQhDOnxyEt8s0XqNaZ5vaY8s=
-X-Received: by 2002:a05:6512:4029:b0:545:5a5:b69d with SMTP id
- 2adb3069b0e04-549c3908614mr2197521e87.31.1742024754066; Sat, 15 Mar 2025
- 00:45:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b5VWMY/C"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742026431; x=1773562431;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0VpqOXRE1Sat0P3XtoqSfJL7cq/3vpMy8U+CPrIylfg=;
+  b=b5VWMY/Cy+jLF0OcKQoLSzr3EZS9YT8wHr9GeOUSLJpP0dmpe2yz+Oll
+   ufcqQdy7xkBY6S483sdGvBuUHFh4t91Z72bDxmio9qPZLu4NAxuORvmco
+   sqepxxiKEgDvTByMxN/OdmVPV/HjSt5PedAq8qozKd0kLgn1XR3+6bX5x
+   +wxLoeExniHgvi+WE0XPfa/HJln75e5Or3EA0vrXeYMjAraS725wZmhjY
+   9RB47sX8+t8yvLqGKUdZNaV8MoNKFfKPzZdk4xkXrgYT9ncz/1/MIVxXG
+   jBCcySwFbD7PtgHtUlyDUvNqqmtZXeyUwH5GCC6Rn4MMmY6DD8NWyT4SI
+   g==;
+X-CSE-ConnectionGUID: 02QYBMliQA6hHKsh97c5Zg==
+X-CSE-MsgGUID: Idh0BjMMQ1u+UBeDIzI9AQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="47079745"
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="47079745"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 01:13:50 -0700
+X-CSE-ConnectionGUID: 4mJCDjFeSGyFv1KnlIMl8w==
+X-CSE-MsgGUID: 1dK+MnlhTVSZuW4wTQJYzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="122434859"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 15 Mar 2025 01:13:50 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttMeR-000B9n-07;
+	Sat, 15 Mar 2025 08:13:47 +0000
+Date: Sat, 15 Mar 2025 16:13:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:rpc-shutdown 6/6] fs/nfs/client.c:253:35: error: no member
+ named 'cl_ns_track' in 'struct nfs_client'; did you mean 'cl_ns_tracker'?
+Message-ID: <202503151606.NmxUS6Ck-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Z9IsEPOnC+MGSAEA@rli9-mobl>
-In-Reply-To: <Z9IsEPOnC+MGSAEA@rli9-mobl>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 15 Mar 2025 16:45:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQpbQCzKha63SnJG2TpyXCFB4Vu8Q9xua9G8ht=Fbk_kA@mail.gmail.com>
-X-Gm-Features: AQ5f1JqtQgkkNT5LJwQIIoL85pSILCA9OWIViBVqV0J6yLE8Gy2zJauDfxlQwnQ
-Message-ID: <CAK7LNAQpbQCzKha63SnJG2TpyXCFB4Vu8Q9xua9G8ht=Fbk_kA@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:kbuild 15/20] error: Unrecognized option: 'remap-path-prefix'
-To: kernel test robot <lkp@intel.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Miguel Ojeda <ojeda@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Thomas, Miguel,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git rpc-shutdown
+head:   90f3e7c66179087ea6f82f20f4e4220007bd9628
+commit: 90f3e7c66179087ea6f82f20f4e4220007bd9628 [6/6] nfs: add a refcount tracker for struct net as held by the nfs_client
+config: x86_64-randconfig-005-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151606.NmxUS6Ck-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151606.NmxUS6Ck-lkp@intel.com/reproduce)
 
-On Thu, Mar 13, 2025 at 9:51=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-k=
-build.git kbuild
-> head:   bc5431693696b3f928b0b7acf8d7a120127db7a4
-> commit: 6b5747d07138f8109b1a150830f1d138de146ac2 [15/20] kbuild, rust: us=
-e -fremap-path-prefix to make paths relative
-> :::::: branch date: 24 hours ago
-> :::::: commit date: 30 hours ago
-> config: x86_64-buildonly-randconfig-004-20250312 (https://download.01.org=
-/0day-ci/archive/20250313/202503130111.NH87la6s-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd70=
-8029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250313/202503130111.NH87la6s-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/r/202503130111.NH87la6s-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> error: Unrecognized option: 'remap-path-prefix'
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151606.NmxUS6Ck-lkp@intel.com/
 
-Do you see this?
+All errors (new ones prefixed by >>):
 
-I tried to reproduce it on commit
-6b5747d07138f8109b1a150830f1d138de146ac2,
-but I did not observe the reported error.
+>> fs/nfs/client.c:253:35: error: no member named 'cl_ns_track' in 'struct nfs_client'; did you mean 'cl_ns_tracker'?
+     253 |         put_net_track(clp->cl_net, &clp->cl_ns_track);
+         |                                          ^~~~~~~~~~~
+         |                                          cl_ns_tracker
+   include/linux/nfs_fs_sb.h:127:17: note: 'cl_ns_tracker' declared here
+     127 |         netns_tracker           cl_ns_tracker;
+         |                                 ^
+   1 error generated.
 
 
+vim +253 fs/nfs/client.c
 
---=20
-Best Regards
-Masahiro Yamada
+   241	
+   242	/*
+   243	 * Destroy a shared client record
+   244	 */
+   245	void nfs_free_client(struct nfs_client *clp)
+   246	{
+   247		nfs_localio_disable_client(clp);
+   248	
+   249		/* -EIO all pending I/O */
+   250		if (!IS_ERR(clp->cl_rpcclient))
+   251			rpc_shutdown_client(clp->cl_rpcclient);
+   252	
+ > 253		put_net_track(clp->cl_net, &clp->cl_ns_track);
+   254		put_nfs_version(clp->cl_nfs_mod);
+   255		kfree(clp->cl_hostname);
+   256		kfree(clp->cl_acceptor);
+   257		kfree_rcu(clp, rcu);
+   258	}
+   259	EXPORT_SYMBOL_GPL(nfs_free_client);
+   260	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
