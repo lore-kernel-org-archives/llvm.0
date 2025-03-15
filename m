@@ -1,128 +1,107 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB7E18DB2C
-	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 05:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9B3194091
+	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 06:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742015945; cv=none; b=Q/L8ift4RCnCJY5h/XviPfTeIuFkJnPmWkMrf8S2IiCy796TBIojLwBvzsoKagq+85AxjLmYLd4KwwA4Hds4kmdBKvFNPDtxCj/KHDutFCB4vtml/rvUInnNp2vDM8P+77BP4ni+aVxQ0wMNa50XqsxArpR8yaU/Sxx5wW5q5N4=
+	t=1742020390; cv=none; b=C4gUTQaoLdC6+33Yqq6yKjBMrGFYshhNmcSEUKNWvB+kPpcU6ZqV8Xg8O1A5mV82RQPPGhv/fGTaIpcf3MCPYttPljmB9J+FnJd0CREKK+0EFIFrzY0N9lYoNj9YMZNuYDrahlJOSL6lEv2XUSHk1BUS8yVlmnEASdiN55hXPWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742015945; c=relaxed/simple;
-	bh=gCKOMTSR7SFGeALdClJ4oeqAp32aiNNdltbx70uY+l0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=deGusvpQn4+zXi31vwUNTExkadail5rMYgN8tLCOt+CXtqCYltIRkYaZc3AyiGZVMxMZafgnVDtVn/YSTc+JwFu+s6x2TM8mGCLlrcBL+GVHjlW6bECWvbk9NHknaA+eSK8aq2yHGlU8ATftuCSAF575ilZxoSs1K6+uc9XKfGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=Yr4eOeb1; arc=none smtp.client-ip=35.89.44.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	s=arc-20240116; t=1742020390; c=relaxed/simple;
+	bh=/mYfy5vigFe68jPMXpeMp22ITgCtYpuyHnKQhoU4DKw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DfaYFrWu4RsOCaq8+61hJjcBtukXXU+s8Q7vKs/d96v+8wX3Sj4HppHb7q5qzP8npgUuyiUb8+V6qk89EnNiGLjHt5bkkYGeNF9TlqjnmT6vXvSBWXgEi43tl56XYD3jwracwYX/+CYXC5UMTCIenyh56zyadbboO6SmxzkHePQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c0oGqLJP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="Yr4eOeb1"
-Received: from eig-obgw-6001a.ext.cloudfilter.net ([10.0.30.140])
-	by cmsmtp with ESMTPS
-	id tGmLtFSwPMETltJvFtLAsb; Sat, 15 Mar 2025 05:18:57 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id tJvDt4AO8ecFwtJvEt5q3Q; Sat, 15 Mar 2025 05:18:56 +0000
-X-Authority-Analysis: v=2.4 cv=ZsYmKM7G c=1 sm=1 tr=0 ts=67d50dc0
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=6Vi/Wpy7sgpXGMLew8oZcg==:17
- a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=7T7KSl7uo7wA:10
- a=ZeKeiZ7te2ZlWvWP_YkA:9 a=QEXdDO2ut3YA:10 a=Xt_RvD8W3m28Mn_h3AK8:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Z9CV7YjZm2q81+e0gd2CqFBpJBtXFWEm4J6h1AlGC2s=; b=Yr4eOeb1ZdZrGAUExLuwFtBdA0
-	nLqdok3y8dnsk+9TMsOUiAau/LeIdzsleTe+RsXaC+eKo7WA2vw9O+ZDoCobJc71qNEP3yBDJqSY8
-	V33x6N2YcTNMGeKjinas8zekF6sFG+m3BTqfBGYwID5FBalv6TkQt89yt5QjZxYfJvLzeb7cVW6ad
-	iDiThwZY6Y4mI/m8APdvW+VOiiQ8w8ndJJqtPNQrZKWVVAZHkKeYbJpAOgmqYWHlwES/MB4nUP7OI
-	aXp9T9KRlrJXlq2+RWizYEnzljWrMOMf7yOCuk7ti2bDMNa4xfFfBRwFmlSw3bYfcjxB/e4kNbaZl
-	k6L/kZiQ==;
-Received: from [45.124.203.140] (port=53524 helo=[192.168.0.160])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1ttJv8-00000003Ac1-2JPJ;
-	Sat, 15 Mar 2025 00:18:50 -0500
-Message-ID: <17076519-33fd-4fac-a718-784b9597c9e6@embeddedor.com>
-Date: Sat, 15 Mar 2025 15:48:30 +1030
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c0oGqLJP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742020387;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=gn9ZkvIMq3uIyFoJ80VVU7Xfjaqyfzrf8Ui86i6IXWU=;
+	b=c0oGqLJPAz+64XX06uyq37nPH4omlkWZQu2cr3Jpe/OqjL8ns13M7O6WPicjX3EyqlS51U
+	o4TpYnJ7kaZotVc0NS9tFYClNKWXC8YBE3GIS1E7uA4ndCMnzCkdQ3LmJ1t2mWBZCNapFt
+	HueGx3ciU6cgWGSv2DFcwQFFCv5oOcg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-536-eHWfFOuSMzGDp6Vo3TclxA-1; Sat,
+ 15 Mar 2025 02:33:05 -0400
+X-MC-Unique: eHWfFOuSMzGDp6Vo3TclxA-1
+X-Mimecast-MFC-AGG-ID: eHWfFOuSMzGDp6Vo3TclxA_1742020384
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 920F918007E1
+	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 06:33:04 +0000 (UTC)
+Received: from [172.64.0.42] (unknown [10.30.32.80])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1F9321955F2D;
+	Sat, 15 Mar 2025 06:33:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc6,
+ upstream-mainline, 3571e8b0)
+Date: Sat, 15 Mar 2025 06:33:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] slab: Introduce kmalloc_obj() and family
-To: Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc: Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
- David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>,
- "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jann Horn <jannh@google.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
- Yafang Shao <laoar.shao@gmail.com>, Tony Ambardar <tony.ambardar@gmail.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-References: <20250315025852.it.568-kees@kernel.org>
- <20250315031550.473587-2-kees@kernel.org>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20250315031550.473587-2-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 45.124.203.140
-X-Source-L: No
-X-Exim-ID: 1ttJv8-00000003Ac1-2JPJ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.160]) [45.124.203.140]:53524
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDY5l7SVCLuvryFTFtwXOgs7txAC3rn9jy/m1XEGA7zjJvawJkfhI/v6bq9Fi0ZgtxDjhSYWu+ymYW7mLo1rCPN10JE8jpuKcJhC+TeUdTeetEH7CN2E
- ckJpCX8L4UlukkcmsQk2zmnl6rqG6Mth+KhGw8+Setm6FYwdHJ5zm78ZOqTyEOXGqrWuTMKANVj13h8DA47kXHwANQ+Mwae1p24=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <13914.125031502330500102@us-mta-536.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: l-BOCLOXSBJDCmyaH9aE-EDitRFYkgIjF1Yi-WBXy_A_1742020384
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-> These each return the assigned value of ptr (which may be NULL on
-> failure). For cases where the total size of the allocation is needed,
-> the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz() family
-> of macros can be used. For example:
-> 
-> 	info->size = struct_size(ptr, flex_member, count);
-> 	ptr = kmalloc(info->size, gfp);
-> 
-> becomes:
-> 
-> 	kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+Kernel information:
+    Commit message: Merge tag 'v6.14-rc6-smb3-server-fixes' of git://git.sa=
+mba.org/ksmbd
 
-I wonder if it'd be better to keep the gfp flags as the last argument
-for all these `*_sz()` cases:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1718042493
 
-	kmalloc_flex_sz(ptr, flex_member, count, &info->size, gpf);
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1718042493-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1718042493-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-Probably, even for __alloc_objs()
 
---
-Gustavo
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
