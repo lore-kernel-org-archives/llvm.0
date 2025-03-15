@@ -1,93 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8192618A93F;
-	Sat, 15 Mar 2025 10:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545C113AA27;
+	Sat, 15 Mar 2025 10:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742033785; cv=none; b=ObRHUxwdoj9VU99wykqDK0AE+jO6TQUaLSHiPSem5y3Ez3S8Zo56j4rXeDDMhplx3fAeWm+ncXbB+OXo+b1CM4t7xFGXAiFGVIXhmw1o835l5fMXKV1JtqRN4Oa/MerSrg4c8Pauz4SUXUjoceZ8RFnK+TT01rzVjEgpbGjMb2Y=
+	t=1742034379; cv=none; b=gAdMc3Z4BLVkWASNnz0WD2GftRxxu7zHLzzVHBehPs4xlgd3KftlRqjWkhtwnTt8d72dGgBJ+Nb7XwUZJPVz/Z+Fz59mpkQBawP7fDOkSV9pwJAJVFf95w7fwKWq8b90dm66/I1p5Jt9afk9A7NrF5tkN3qBhBKXPjoop3JQDzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742033785; c=relaxed/simple;
-	bh=3p1zDiW6KHFze+OyLtk2jkwXHgxqqqBOaU1eJhCGyYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=slTXd1a/9MHuGjZjgK0woplywEM2JFjAheUTtfWGO46EuNgvXYDQ4Cqt2TM3BdDTy51x8D/DI4NLBus1le1Zd/kxsw627UBYEXaI8jhvEYiE3EiuHahIaja+hKlzdkOna9P0DS4PgQl5D62bp5HULKgYDmA5jANYLK6/FEdzfSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=spwd3FeY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742034379; c=relaxed/simple;
+	bh=X4Q5OmNEO2RCflqztTRWP1v+33pbm1riAHg2Gfekiqo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ow6yY7yAheAJ+6tnjcwZVn9ScxjsM73fJjrA/vgluFVUWn4yJdlbq35OGL3yD3r2vmGljeZZMhD4ekMx6VWjBL5+lGA+xdV92Qh6BV5jn8OpQ5aCknwdm77tcXYCSq/J4njrvmKQZZ7pza0/07oni3F6fIawTVnRhtspsDTbWWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fj4Ki8cf; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="spwd3FeY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19643C4CEE9;
-	Sat, 15 Mar 2025 10:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742033785;
-	bh=3p1zDiW6KHFze+OyLtk2jkwXHgxqqqBOaU1eJhCGyYI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=spwd3FeY0k4xB+aZRQjOKbG2HMAf1xv1cAV7W0YtuIRqV7nDrw5Hp2soKRyNcaaVt
-	 wcpW9c8PZsBRJPY+1DOiBxWmgHWCjRWJ9ap3c8BHrhTcSR02cQdfx5APBfoBlnQPIz
-	 xG/kAdZmiJINbNFK7ND5Tz/4Ff33fcgmqdU0KamG7MG4VR8/eHXMAT5u/wybG61WCE
-	 qwZc4opY+BaQPXi6MOFbAfaAIiGu31kH+3im4dyOIyA65MyhQwdxVW4Y7WZqcyspM4
-	 QYqg4xO+GC5+PKZC4pZabxA2zUvRoEPYb0jgaAtlZmNNAaE/tuL424ePfS67tBylg/
-	 cG7YF6SIZwYBg==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5499e3ec54dso3028127e87.0;
-        Sat, 15 Mar 2025 03:16:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW8AjHqmEXq4Bmil1o60X5A5mz6ugDe2Dq/2QMUXlbbWIl32i8gihtNY68k2GcnWDaTkFKu@lists.linux.dev, AJvYcCXuDG67DUF97mwDNlFfrV6xMplAF5Iboas+Vj8tvK2jpijmFk/B9kAeLNW7sFa4KGwqsdWvDZpoCvlN3OtHvA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YzcwNuR6dEYxqfgxxzt9FokhTrv69M8Q2zCKiBanLL0k1glSVcR
-	hzqP1BaQ74ZtEUOJStbWGCkX/gTUE1Noq6hTg/IKBlL9Pf9GjSGbPkO2hZNrTWXs+Wz7hnr732u
-	LqFKD2MpkoAqfVpmS+PN7f250/uk=
-X-Google-Smtp-Source: AGHT+IEu3S2Mtxjxcibm98Iml9DVuTG4bdAGzwpSmvDCmQ27tYrRlJ22n3qHFNHj9wH5rG5yjBIf647ClePD4bBSQwU=
-X-Received: by 2002:a05:6512:3f27:b0:548:de7f:b3be with SMTP id
- 2adb3069b0e04-549c39119afmr1794010e87.21.1742033783708; Sat, 15 Mar 2025
- 03:16:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fj4Ki8cf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742034377; x=1773570377;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=X4Q5OmNEO2RCflqztTRWP1v+33pbm1riAHg2Gfekiqo=;
+  b=Fj4Ki8cf9IQI3Gql87mr6Fkr90tfn8VA+Fl6PiB3Upt4jAhV1gVwZb8O
+   eIOgXrm9RAqsfpK3dBK/EbwdvvaSMwbJ0Sa4Vb3qld2DJBhPGDfZbAJkU
+   7XIHoPs4ygIQ+q18TZL359CnyM6QQQKqj6WOvcWTjpFTg0A+3YqPU6BqN
+   BLtSZzjxC3jywriWL/6kWOXeIyuC2L+5BQ7u5FOaQjNl6ILMGqwdbQwEF
+   bTba8hi6iL+qK/Ui7iMm3uYhT+4ToXwIOmGa4Ug4pqL6XDlt0gDCnAU/w
+   UL5DTCfK9mPggRCsZLGx+0830b+d/CkxAHqjArLNwHCrA1lchMxTknb+S
+   w==;
+X-CSE-ConnectionGUID: Yob2f0FhSNKP1pSXeL6dMQ==
+X-CSE-MsgGUID: tX+nwMP9RraR2ZHTi5tZhg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="43391977"
+X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
+   d="scan'208";a="43391977"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 03:26:17 -0700
+X-CSE-ConnectionGUID: /OANnVKNR8yCIf6AmkPAhA==
+X-CSE-MsgGUID: 3gaOF1inRU+Bz43jtAYz9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
+   d="scan'208";a="121323158"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 15 Mar 2025 03:26:15 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttOib-000BFD-2Z;
+	Sat, 15 Mar 2025 10:26:13 +0000
+Date: Sat, 15 Mar 2025 18:25:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:memcg-stock-trylock 1/2] lib/slub_kunit.c:10:10: fatal
+ error: 'asm/tsc.h' file not found
+Message-ID: <202503151838.M5kXUgbl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Z9IsEPOnC+MGSAEA@rli9-mobl> <CAK7LNAQpbQCzKha63SnJG2TpyXCFB4Vu8Q9xua9G8ht=Fbk_kA@mail.gmail.com>
- <CANiq72md8yWAHdZeJFWAQFxb_9ftTFMiQciK+ZGf+3Lp_Jxa8g@mail.gmail.com>
-In-Reply-To: <CANiq72md8yWAHdZeJFWAQFxb_9ftTFMiQciK+ZGf+3Lp_Jxa8g@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 15 Mar 2025 19:15:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASrBdCRVoELc-C0JGgdNJsi5WArsqTkaYEm1CgTsjTC9g@mail.gmail.com>
-X-Gm-Features: AQ5f1JosDYCDMfr73PZ87Bxwlk2526x2znZACH8UywylidWSL1Gf62FgtqsiGZA
-Message-ID: <CAK7LNASrBdCRVoELc-C0JGgdNJsi5WArsqTkaYEm1CgTsjTC9g@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:kbuild 15/20] error: Unrecognized option: 'remap-path-prefix'
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Mar 15, 2025 at 5:39=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Sat, Mar 15, 2025 at 8:45=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > Do you see this?
-> >
-> > I tried to reproduce it on commit
-> > 6b5747d07138f8109b1a150830f1d138de146ac2,
-> > but I did not observe the reported error.
->
-> This is probably:
->
->     https://lore.kernel.org/rust-for-linux/CANiq72ntZj10H1DBqRyX=3DuLertM=
-w59e=3DPM7ESVJ0zWfu_ECnnA@mail.gmail.com/
->     https://lore.kernel.org/rust-for-linux/20250314213333.2230670-1-ojeda=
-@kernel.org/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git memcg-stock-trylock
+head:   478ebf7bfd1fda634d890d435c44fd77c97b163d
+commit: 4e670c5b007b5bc341e53bb4902f72db41a30c2e [1/2] slub, kunit: hack a kmalloc/kfree microbench
+config: powerpc64-randconfig-002-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151838.M5kXUgbl-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151838.M5kXUgbl-lkp@intel.com/reproduce)
 
-This patch addresses an issue of "make rustdoc", correct?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151838.M5kXUgbl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> lib/slub_kunit.c:10:10: fatal error: 'asm/tsc.h' file not found
+      10 | #include <asm/tsc.h>
+         |          ^~~~~~~~~~~
+   1 error generated.
 
 
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250313/202503130111.NH87la6s-lkp@intel.com/reproduce)
+vim +10 lib/slub_kunit.c
 
-The 0day bot provides the reproducer, which only executes
-"make olddefconfig" && "make prepare".
+  > 10	#include <asm/tsc.h>
+    11	
 
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
