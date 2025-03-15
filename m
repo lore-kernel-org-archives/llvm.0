@@ -1,60 +1,63 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEB718A6DF;
-	Sat, 15 Mar 2025 08:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FD71A0B0E;
+	Sat, 15 Mar 2025 08:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742027155; cv=none; b=ET3m0UCpaW3jAROVZhTjPvdktd8/qXv98tKjuQbv6yDSPfAFcjXiY8hpxEOXraAnhK+XquB5JMc2YF8cngymWGYtPkIhRecJMGJVwpWhtiiAFmWhuosl3j8AGOezCMyL8mnlfoqN1TqGcSeLs7vOMLzVG3gyrbU22xxXdKQyKVg=
+	t=1742027155; cv=none; b=Z7iToMmS8r/5cbcT+pbR3k5j6imfOErqICnIn++YxRLtuHUAuC71rqNznCEkHYoQG2E2kwiMtdqloZowwdwnbd+p/ZO0d3XXhSRyB1ZBKJqorZtKwvfO6kLxEJ8+oRJxryauHmlyp+b3/sPj6MPybAgXbjxjBeVIaLnA31KLvQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1742027155; c=relaxed/simple;
-	bh=VAD+24aLk/n0uWIqpG4ZF6+e0slFWlgGHkhRq8hLrzM=;
+	bh=OqCzJ2wDgr7fqdtjwNX9kgQ7EEAIyjSA+n47BJX5y/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sfQNPgEQMf7pOVrJjiGx3FpOR8+Z6ihAimuxkXE503D8ZikogRYozDCtFsNa5/eNb6kX7CALdSKAVzS3N4DqhKROQLwAzMuSkOkeAeZUq/9VPb5Sj+SFmXQEmVa/0K/v338cOkpZYfR2p1m40vdkcysYXINsMDlpSIM9Wl4cmXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V3gYWzGv; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=AZYd0cRk2/srSBfpTYmWjwXqdM/addXQMkzG7rQgdc/UF9SsFdpimKbfIj2zzaNOpH1zvx3cz0FtqT0SlrvOUE9dQUc4fcVOPfxKLsE2OxyjOvFCnf9Z9vmH4QyJRhQke9aO+R8v9rsq3IStIUV/USB/nxJRjtSeFn0hwJKHQUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ccD+AHl3; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V3gYWzGv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ccD+AHl3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742027152; x=1773563152;
+  t=1742027153; x=1773563153;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VAD+24aLk/n0uWIqpG4ZF6+e0slFWlgGHkhRq8hLrzM=;
-  b=V3gYWzGvz+2S8y0eKOc6IINe9BPdsOy0WVOivRyq4W+9I/QCoNB91uws
-   qz/D6hXtxO+nS3PEzzX5+ruuBenSpfuz+qarsmEbwEtdmZVyGqnaAkg2g
-   NXsstjftqFHvgcjvBcn2qFBXUIFCXwXTGCssfEXWi7iBgQnHfaoUTcCaR
-   oD1Q2r9H1MatSZJnFnSphoEer4KMeyF+g6tI/sDIAA73qVIeQBezgA/QN
-   9pLqGBAunGs71abRdPi1XqS7lxEngc2IgCBSy2ECuHF+zD2vDanP30wwF
-   KpndUvF0PtsYw9ISPxIDTKuB9ZrjC3EKt2NE8W7hlNIr2fTlQbAhPzTGr
-   A==;
-X-CSE-ConnectionGUID: 4PbNlCTqQLKs6CA+3hsN+w==
-X-CSE-MsgGUID: Y0lIScdCSem3GeW1JYN9xA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="43388353"
+  bh=OqCzJ2wDgr7fqdtjwNX9kgQ7EEAIyjSA+n47BJX5y/0=;
+  b=ccD+AHl3Jtglyqxgx0EcqvtbSoyKni6oXu1UfiYFqY1EKnhFi7/oVLMK
+   VfB5+W6/2DuJbSZ6i0E1YRXmqVP42KNaG+s51w/Q8L4EJz9QN8a+rjoPY
+   VUTpVW1OQ3vEcjjGqcHTWrL5eCnXW1vrnHfb1V3TyGBWIw6qrBlGCdJ0D
+   22w1Az6XvAXGZKtALTRidWcRDMcs7/EBPKtxRUqOZXv8Dh6Dgsv+dA7l8
+   uNr98qlm41Dg+RYL/o0NExFljhxniYISk8P59dQzVwFhXHIaAAZvO5Je3
+   UhdHxo5ZsSFQ3FJrS5I+byl289XV/+CiNxlNAy6mwzJH/4YPsELWfMJfH
+   Q==;
+X-CSE-ConnectionGUID: PGKEDHBaTcWLsHL8viXK0g==
+X-CSE-MsgGUID: YTeMMjBeSO+sFOeOfA2GKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="43388355"
 X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
-   d="scan'208";a="43388353"
+   d="scan'208";a="43388355"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 01:25:51 -0700
-X-CSE-ConnectionGUID: L+HmjBMOTGOBKuHNcILhPQ==
-X-CSE-MsgGUID: //WxALmsQImSXr+Y9PlB2w==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 01:25:52 -0700
+X-CSE-ConnectionGUID: sqRqEvdhTuKfdU5UgFeguA==
+X-CSE-MsgGUID: JaQqhqKHSCK+XVcUapiJXQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
-   d="scan'208";a="125691057"
+   d="scan'208";a="125691056"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
   by fmviesa003.fm.intel.com with ESMTP; 15 Mar 2025 01:25:50 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ttMq4-000BA0-1a;
+	id 1ttMq4-000B9x-1W;
 	Sat, 15 Mar 2025 08:25:48 +0000
-Date: Sat, 15 Mar 2025 16:24:57 +0800
+Date: Sat, 15 Mar 2025 16:24:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [robh:for-kernelci 10/10]
- drivers/soc/aspeed/aspeed-p2a-ctrl.c:348:7: error: call to undeclared
- function 'of_reserved_mem_region_to_resource'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202503151645.kmsm3pS5-lkp@intel.com>
+To: Sarika Sharma <quic_sarishar@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jeff Johnson <jjohnson@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+	ath12k@lists.infradead.org,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Raj Kumar Bhagat <quic_rajkbhag@quicinc.com>
+Subject: [ath:ath12k-split-phy 141/158]
+ drivers/net/wireless/intel/iwlwifi/dvm/lib.c:589:40: error: too few
+ arguments to function call, expected 2, have 1
+Message-ID: <202503151644.yfAQJbDP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,75 +67,170 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-kernelci
-head:   5b03bf12bca3de24640f5e388ef4d956cf22673e
-commit: 6cc5107d1a7aa24dffaa093cfbeb387890c16970 [10/10] more driver cleanups
-config: x86_64-buildonly-randconfig-005-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151645.kmsm3pS5-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151645.kmsm3pS5-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ath/ath.git ath12k-split-phy
+head:   b8fa5b81fe378ec2bf46db73a2ff7d43151121da
+commit: 203d9de0460ca9a0eb7a281f36d854968a1101bc [141/158] wifi: mac80211: add support towards MLO handling of station statistics
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250315/202503151644.yfAQJbDP-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151644.yfAQJbDP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503151645.kmsm3pS5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151644.yfAQJbDP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/aspeed/aspeed-p2a-ctrl.c:348:7: error: call to undeclared function 'of_reserved_mem_region_to_resource'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     348 |         rc = of_reserved_mem_region_to_resource(dev->of_node, 0, &resm);
-         |              ^
-   1 error generated.
+   In file included from drivers/net/wireless/intel/iwlwifi/dvm/lib.c:6:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/intel/iwlwifi/dvm/lib.c:6:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/intel/iwlwifi/dvm/lib.c:6:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/wireless/intel/iwlwifi/dvm/lib.c:589:40: error: too few arguments to function call, expected 2, have 1
+     589 |         ave_rssi = ieee80211_ave_rssi(ctx->vif);
+         |                    ~~~~~~~~~~~~~~~~~~         ^
+   include/net/mac80211.h:7234:5: note: 'ieee80211_ave_rssi' declared here
+    7234 | int ieee80211_ave_rssi(struct ieee80211_vif *vif, int link_id);
+         |     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   12 warnings and 1 error generated.
 
 
-vim +/of_reserved_mem_region_to_resource +348 drivers/soc/aspeed/aspeed-p2a-ctrl.c
+vim +589 drivers/net/wireless/intel/iwlwifi/dvm/lib.c
 
-   331	
-   332	static int aspeed_p2a_ctrl_probe(struct platform_device *pdev)
-   333	{
-   334		struct aspeed_p2a_ctrl *misc_ctrl;
-   335		struct device *dev;
-   336		struct resource resm;
-   337		int rc = 0;
-   338	
-   339		dev = &pdev->dev;
-   340	
-   341		misc_ctrl = devm_kzalloc(dev, sizeof(*misc_ctrl), GFP_KERNEL);
-   342		if (!misc_ctrl)
-   343			return -ENOMEM;
-   344	
-   345		mutex_init(&misc_ctrl->tracking);
-   346	
-   347		/* optional. */
- > 348		rc = of_reserved_mem_region_to_resource(dev->of_node, 0, &resm);
-   349		if (!rc) {
-   350			misc_ctrl->mem_size = resource_size(&resm);
-   351			misc_ctrl->mem_base = resm.start;
-   352		}
-   353	
-   354		misc_ctrl->regmap = syscon_node_to_regmap(pdev->dev.parent->of_node);
-   355		if (IS_ERR(misc_ctrl->regmap)) {
-   356			dev_err(dev, "Couldn't get regmap\n");
-   357			return -ENODEV;
-   358		}
-   359	
-   360		misc_ctrl->config = of_device_get_match_data(dev);
-   361	
-   362		dev_set_drvdata(&pdev->dev, misc_ctrl);
-   363	
-   364		aspeed_p2a_disable_all(misc_ctrl);
-   365	
-   366		misc_ctrl->miscdev.minor = MISC_DYNAMIC_MINOR;
-   367		misc_ctrl->miscdev.name = DEVICE_NAME;
-   368		misc_ctrl->miscdev.fops = &aspeed_p2a_ctrl_fops;
-   369		misc_ctrl->miscdev.parent = dev;
-   370	
-   371		rc = misc_register(&misc_ctrl->miscdev);
-   372		if (rc)
-   373			dev_err(dev, "Unable to register device\n");
-   374	
-   375		return rc;
-   376	}
-   377	
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  567  
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  568  /*
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  569   * Upon RSSI changes, sends a bt config command with following changes
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  570   *  1. enable/disable "reduced control frames tx power
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  571   *  2. update the "kill)ack_mask" and "kill_cts_mask"
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  572   *
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  573   * If "reduced tx power" is enabled, uCode shall
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  574   *  1. ACK/Back/CTS rate shall reduced to 6Mbps
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  575   *  2. not use duplciate 20/40MHz mode
+83ce21de686a67b drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  576   */
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  577  static bool iwlagn_fill_txpower_mode(struct iwl_priv *priv,
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  578  				struct iwl_bt_uart_msg *uart_msg)
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  579  {
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  580  	bool need_update = false;
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  581  	struct iwl_rxon_context *ctx = &priv->contexts[IWL_RXON_CTX_BSS];
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  582  	int ave_rssi;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  583  
+e19ebcab01cc130 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Ilan Peer  2012-05-10  584  	if (!ctx->vif || (ctx->vif->type != NL80211_IFTYPE_STATION)) {
+e19ebcab01cc130 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Ilan Peer  2012-05-10  585  		IWL_DEBUG_INFO(priv, "BSS ctx not active or not in sta mode\n");
+e19ebcab01cc130 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Ilan Peer  2012-05-10  586  		return false;
+e19ebcab01cc130 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Ilan Peer  2012-05-10  587  	}
+e19ebcab01cc130 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Ilan Peer  2012-05-10  588  
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03 @589  	ave_rssi = ieee80211_ave_rssi(ctx->vif);
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  590  	if (!ave_rssi) {
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  591  		/* no rssi data, no changes to reduce tx power */
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  592  		IWL_DEBUG_COEX(priv, "no rssi data available\n");
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  593  		return need_update;
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  594  	}
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  595  	if (!priv->reduced_txpower &&
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  596  	    !iwl_is_associated(priv, IWL_RXON_CTX_PAN) &&
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  597  	    (ave_rssi > BT_ENABLE_REDUCED_TXPOWER_THRESHOLD) &&
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  598  	    (uart_msg->frame3 & (BT_UART_MSG_FRAME3ACL_MSK |
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  599  	    BT_UART_MSG_FRAME3OBEX_MSK)) &&
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  600  	    !(uart_msg->frame3 & (BT_UART_MSG_FRAME3SCOESCO_MSK |
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  601  	    BT_UART_MSG_FRAME3SNIFF_MSK | BT_UART_MSG_FRAME3A2DP_MSK))) {
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  602  		/* enabling reduced tx power */
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  603  		priv->reduced_txpower = true;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  604  		priv->bt_valid |= IWLAGN_BT_VALID_REDUCED_TX_PWR;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  605  		need_update = true;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  606  	} else if (priv->reduced_txpower &&
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  607  		   (iwl_is_associated(priv, IWL_RXON_CTX_PAN) ||
+dd551ab7b47ace1 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  608  		   (ave_rssi < BT_DISABLE_REDUCED_TXPOWER_THRESHOLD) ||
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  609  		   (uart_msg->frame3 & (BT_UART_MSG_FRAME3SCOESCO_MSK |
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  610  		   BT_UART_MSG_FRAME3SNIFF_MSK | BT_UART_MSG_FRAME3A2DP_MSK)) ||
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  611  		   !(uart_msg->frame3 & (BT_UART_MSG_FRAME3ACL_MSK |
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  612  		   BT_UART_MSG_FRAME3OBEX_MSK)))) {
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  613  		/* disable reduced tx power */
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  614  		priv->reduced_txpower = false;
+f6be8b7845434a5 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-05-03  615  		priv->bt_valid |= IWLAGN_BT_VALID_REDUCED_TX_PWR;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  616  		need_update = true;
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  617  	}
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  618  
+354ce4a4ca613f3 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2012-04-19  619  	return need_update;
+b6e116e8bf7d749 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2010-08-23  620  }
+b6e116e8bf7d749 drivers/net/wireless/iwlwifi/iwl-agn-lib.c Wey-Yi Guy 2010-08-23  621  
+
+:::::: The code at line 589 was first introduced by commit
+:::::: dd551ab7b47ace14753b0d73f79437cc35adcf6b iwlwifi: include rssi as part of decision making for reduce txpower
+
+:::::: TO: Wey-Yi Guy <wey-yi.w.guy@intel.com>
+:::::: CC: John W. Linville <linville@tuxdriver.com>
 
 -- 
 0-DAY CI Kernel Test Service
