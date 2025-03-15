@@ -1,120 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B706A1F3BBC;
-	Sat, 15 Mar 2025 11:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BE11F582A
+	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 12:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742037034; cv=none; b=G1yzkshX5fbKaVDRilVQC7D9Ok/78Jkl2d8T4rDIbX2cJ/cYW2AjanvA+DrNEwGqnmWnalpgF4FmG3sr/C5uvyFW4j5YYMCX04xS+IeLkO7k8I1wa6dxYTS6yJC+PzBrNF8iKo6nAUNtBHUM7l+gNawe0PBJUNDRezfe6WNPekU=
+	t=1742041402; cv=none; b=IAwypu6BO2fXbhCHZJFXoZUMTFuqzcr24eAg8KeGjEdUlFOSpMCB1jWFTUhgt2gLZwJp8SmgAzaOcYud2fheqgTTcQzf2QT0palasyCKYmwmVQcj65spNvkpeS+qu6WhUaZLFaq2lXBLjh3WZMDv4aDrnfnmEyrlQvrkRiC8Gsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742037034; c=relaxed/simple;
-	bh=Vlexr4j79kviA7oP0TzI3WJzUGXEvlQPGsrdOayLrEU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BsvW6Mc6PvB4RN0BzdAkucPBTicq7iesgRXh7HmL6IzhNuu8fcPlF+91OpLJulwsF68w1aKNS1SNfGN12qBgLT95Ic3uXcX/MkwGjurS4SwBLgr4otrlJj7FBUXhW1eMo3+KSHSkhQLtwCzl+As+aWZQD4MUUT3VwKdf+4N4aVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V+gWdOMb; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742041402; c=relaxed/simple;
+	bh=Ukca3/ncqP9vO7wrUJD6tw4YmrjP4fcf9yvG7H3oX8E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uh0FQ5EXCfBpv5mSuckCAPhe91iQqa+0xTwb05rk2yNQkzMifZf0khkgRZ6mOG2BbrlGSe8hV38xGopojk909kjQq/EWpB1nmkZ4YK/i3jTxff1HeyNIri0l5tXRYZ3jnfiHkMjpGEFQ3ZyfZNxlZUzQKvo4nvtJhec6Ub7pZTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=ipKn7+Jq; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V+gWdOMb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742037032; x=1773573032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vlexr4j79kviA7oP0TzI3WJzUGXEvlQPGsrdOayLrEU=;
-  b=V+gWdOMbaZDq5nBUr4cW0Z/dbdxwdXKoSHdw17lgddpL2uWzFnTNVOiL
-   G5Ov3sQ3FkhyAY3ODQRHNg6wPUN9/RDZhX6ZS6a3tizbiUA6UPzN7dY/d
-   Ri/HYhVvbCrt0gJUn0hVVvWEV9QmFOqqzAOMRc2UGG79vN+Jlm4Me3vB/
-   j0uv6mq/EnWWYyW+R1y+1BifdQt+8IeUc+vVPYTtFkHs4BCBRURCWGEku
-   YA/oF+KWGn9HTp/CQhdXyr23NFcuvpJLIUepEDM8v53fa0fJkYvBOwkQZ
-   GlY7QCWQYwWOYaRWNPOlgAjr6i8y83poL60NK6nwFLyGugWyJxcDNjkwD
-   Q==;
-X-CSE-ConnectionGUID: f0eQnUbrTbuZ+b2fMPMgJg==
-X-CSE-MsgGUID: 42GV1VI3R7yrs4nr64Ohnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="43056825"
-X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
-   d="scan'208";a="43056825"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 04:10:32 -0700
-X-CSE-ConnectionGUID: RFNbAvbXSouS1wUiaeokmQ==
-X-CSE-MsgGUID: KWEhhl8WS+6AoDvHHL+whw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,250,1736841600"; 
-   d="scan'208";a="126377075"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 15 Mar 2025 04:10:31 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ttPPM-000BIX-1U;
-	Sat, 15 Mar 2025 11:10:26 +0000
-Date: Sat, 15 Mar 2025 19:09:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:netns-debugfs 1/1] fs/debugfs/netns.c:111:1: warning: no
- previous prototype for function 'debugfs_net_init'
-Message-ID: <202503151941.zNw2k4Vz-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="ipKn7+Jq"
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 98A00240103
+	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 13:23:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1742041393; bh=Ukca3/ncqP9vO7wrUJD6tw4YmrjP4fcf9yvG7H3oX8E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:From;
+	b=ipKn7+JqX40eMQ8BdC86W/3373kybHFYYmEboQbz0Bq/GB15srSJa13z/LmSqjJEC
+	 YAkI2UWEyDE14AbaWDNS5p8TWGipm29J6H8nNZnUS5xADVJvn24aYKNaD5i+usf9Zw
+	 zo3qkBYlxP0NPqPj5VxlH6Ym4p620BlUsz7/lAXuPMT9wAZ16OOFTGaQMNFroEU2Gb
+	 Gn7iysOnQM4w6qROYf5Y3cSr2P1z9QTLIGWcLzMARwJdfTNdeP6h10iLLlxJVPDc3z
+	 OC9npcQYoy+LluYe7kVVZBeiMwa3UPM3ZGHQAWqJZDvT1UHPC4qe2jQRcW5PERdIl6
+	 +Ppkv+ffUBNxg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4ZFL3y4D6Yz9rxD;
+	Sat, 15 Mar 2025 13:23:10 +0100 (CET)
+From: Panagiotis Foliadis <pfoliadis@posteo.net>
+Date: Sat, 15 Mar 2025 12:23:01 +0000
+Subject: [PATCH v3] rust: task: mark Task methods inline
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250315-inline-c-wrappers-v3-1-048e43fcef7d@posteo.net>
+X-B4-Tracking: v=1; b=H4sIACRx1WcC/23NQQrCMBCF4auUrI0kE9u0rryHuAjJ1A5IUpISl
+ dK7mxYXCl3+D+abmSWMhImdq5lFzJQo+BLqUDE7GH9HTq40AwG1UKLl5B/kkVv+jGYcMSbuTKv
+ QSgtGa1buxog9vTbzeis9UJpCfG8vslzXrybFjpYll9xpaE6yxkYpuIwhTRiOHie2chl+CblHQ
+ CE02K5zqu57pf6IZVk+qVJSKPYAAAA=
+X-Change-ID: 20250308-inline-c-wrappers-da83ec1c2a77
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+ Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Christian Schrefl <chrisi.schrefl@gmail.com>, 
+ Charalampos Mitrodimas <charmitro@posteo.net>, 
+ Panagiotis Foliadis <pfoliadis@posteo.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1742041390; l=5384;
+ i=pfoliadis@posteo.net; s=20250308; h=from:subject:message-id;
+ bh=Ukca3/ncqP9vO7wrUJD6tw4YmrjP4fcf9yvG7H3oX8E=;
+ b=v6wCwQhd50JlOIuoLOU8w2aDsC9KzDCmm1LpOPMHGSK9OTPwpSV8WV0szfPYAA2yZNBvDFZnm
+ pWEYaYGdRn0CLYOaZZO3FxyQAswTfULjqB+1jLGHA4kda3Eg+fu1vDp
+X-Developer-Key: i=pfoliadis@posteo.net; a=ed25519;
+ pk=/8ch2dv3mwtZ5ygYwiG7ldc/132K6XmLkAZDmIe0aQw=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git netns-debugfs
-head:   e06d7dd780ab4a50f85115f8ee988e588e4aad57
-commit: e06d7dd780ab4a50f85115f8ee988e588e4aad57 [1/1] net: add a debugfs directory for showing refcount tracking info
-config: x86_64-buildonly-randconfig-002-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151941.zNw2k4Vz-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151941.zNw2k4Vz-lkp@intel.com/reproduce)
+When you build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+toolchain provided by kernel.org, the following symbols are generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503151941.zNw2k4Vz-lkp@intel.com/
+$ nm vmlinux | grep ' _R'.*Task | rustfilt
+ffffffff817b2d30 T <kernel::task::Task>::get_pid_ns
+ffffffff817b2d50 T <kernel::task::Task>::tgid_nr_ns
+ffffffff817b2c90 T <kernel::task::Task>::current_pid_ns
+ffffffff817b2d00 T <kernel::task::Task>::signal_pending
+ffffffff817b2cc0 T <kernel::task::Task>::uid
+ffffffff817b2ce0 T <kernel::task::Task>::euid
+ffffffff817b2c70 T <kernel::task::Task>::current
+ffffffff817b2d70 T <kernel::task::Task>::wake_up
+ffffffff817b2db0 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::dec_ref
+ffffffff817b2d90 T <kernel::task::Task as kernel::types::AlwaysRefCounted>::inc_ref
 
-All warnings (new ones prefixed by >>):
+These Rust symbols are trivial wrappers around the C functions
+get_pid_ns, task_tgid_nr_ns, task_active_pid_ns, signal_pending, uid,
+euid, get_current, wake_up, get_task_struct and put_task_struct. It
+doesn't make sense to go through a trivial wrapper for these
+functions, so mark them inline.
 
-   fs/debugfs/netns.c:14:1: error: unknown type name 'unisgned'; did you mean 'unsigned'?
-      14 | unisgned int debugfs_net_id;
-         | ^~~~~~~~
-         | unsigned
-   fs/debugfs/netns.c:100:27: error: use of undeclared identifier 'dnet'
-     100 |         debugfs_remove_recursive(dnet->netdir);
-         |                                  ^
->> fs/debugfs/netns.c:111:1: warning: no previous prototype for function 'debugfs_net_init' [-Wmissing-prototypes]
-     111 | debugfs_net_init(void)
-         | ^
-   fs/debugfs/netns.c:110:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     110 | int __init
-         | ^
-         | static 
->> fs/debugfs/netns.c:120:1: warning: no previous prototype for function 'debugfs_net_exit' [-Wmissing-prototypes]
-     120 | debugfs_net_exit(void)
-         | ^
-   fs/debugfs/netns.c:119:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     119 | void __exit
-         | ^
-         | static 
-   2 warnings and 2 errors generated.
+After applying this patch, the above command will produce no output.
 
+Link: https://github.com/Rust-for-Linux/linux/issues/1145
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+Reviewed-by: Christian Schrefl <chrisi.schrefl@gmail.com>
+Reviewed-by: Charalampos Mitrodimas <charmitro@posteo.net>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Signed-off-by: Panagiotis Foliadis <pfoliadis@posteo.net>
+---
+Changes in v3:
+- Fix typo in patch description
+- Link to v2: https://lore.kernel.org/r/20250311-inline-c-wrappers-v2-1-72c99d35ff33@posteo.net
 
-vim +/debugfs_net_init +111 fs/debugfs/netns.c
+Changes in v2:
+- Added `#[inline] to all the remaining functions of task.rs file
+- Link to v1: https://lore.kernel.org/r/20250310-inline-c-wrappers-v1-1-d726415e6332@posteo.net
+---
+ rust/kernel/task.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-   109	
-   110	int __init
- > 111	debugfs_net_init(void)
-   112	{
-   113		topdir = debugfs_create_dir("netns", NULL);
-   114		if (IS_ERR(topdir))
-   115			return PTR_ERR(topdir);
-   116		return 0;
-   117	}
-   118	
-   119	void __exit
- > 120	debugfs_net_exit(void)
+diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+index 07bc22a7645c0c7d792a0a163dd55b8ff0fe5f92..66b845a83acf3a57a59d281d11fcfb9107a214a8 100644
+--- a/rust/kernel/task.rs
++++ b/rust/kernel/task.rs
+@@ -132,6 +132,7 @@ pub fn current_raw() -> *mut bindings::task_struct {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    #[inline]
+     pub unsafe fn current() -> impl Deref<Target = Task> {
+         struct TaskRef<'a> {
+             task: &'a Task,
+@@ -166,6 +167,7 @@ fn deref(&self) -> &Self::Target {
+     /// # Safety
+     ///
+     /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    #[inline]
+     pub unsafe fn current_pid_ns() -> impl Deref<Target = PidNamespace> {
+         struct PidNamespaceRef<'a> {
+             task: &'a PidNamespace,
+@@ -273,24 +275,28 @@ pub fn pid(&self) -> Pid {
+     }
+ 
+     /// Returns the UID of the given task.
++    #[inline]
+     pub fn uid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_uid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_uid(self.as_ptr()) })
+     }
+ 
+     /// Returns the effective UID of the given task.
++    #[inline]
+     pub fn euid(&self) -> Kuid {
+         // SAFETY: It's always safe to call `task_euid` on a valid task.
+         Kuid::from_raw(unsafe { bindings::task_euid(self.as_ptr()) })
+     }
+ 
+     /// Determines whether the given task has pending signals.
++    #[inline]
+     pub fn signal_pending(&self) -> bool {
+         // SAFETY: It's always safe to call `signal_pending` on a valid task.
+         unsafe { bindings::signal_pending(self.as_ptr()) != 0 }
+     }
+ 
+     /// Returns task's pid namespace with elevated reference count
++    #[inline]
+     pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+         // SAFETY: By the type invariant, we know that `self.0` is valid.
+         let ptr = unsafe { bindings::task_get_pid_ns(self.as_ptr()) };
+@@ -306,6 +312,7 @@ pub fn get_pid_ns(&self) -> Option<ARef<PidNamespace>> {
+ 
+     /// Returns the given task's pid in the provided pid namespace.
+     #[doc(alias = "task_tgid_nr_ns")]
++    #[inline]
+     pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+         let pidns = match pidns {
+             Some(pidns) => pidns.as_ptr(),
+@@ -319,6 +326,7 @@ pub fn tgid_nr_ns(&self, pidns: Option<&PidNamespace>) -> Pid {
+     }
+ 
+     /// Wakes up the task.
++    #[inline]
+     pub fn wake_up(&self) {
+         // SAFETY: It's always safe to call `signal_pending` on a valid task, even if the task
+         // running.
+@@ -328,11 +336,13 @@ pub fn wake_up(&self) {
+ 
+ // SAFETY: The type invariants guarantee that `Task` is always refcounted.
+ unsafe impl crate::types::AlwaysRefCounted for Task {
++    #[inline]
+     fn inc_ref(&self) {
+         // SAFETY: The existence of a shared reference means that the refcount is nonzero.
+         unsafe { bindings::get_task_struct(self.as_ptr()) };
+     }
+ 
++    #[inline]
+     unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
+         // SAFETY: The safety requirements guarantee that the refcount is nonzero.
+         unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
 
+---
+base-commit: 7f0e9ee5e44887272627d0fcde0b19a675daf597
+change-id: 20250308-inline-c-wrappers-da83ec1c2a77
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Panagiotis Foliadis <pfoliadis@posteo.net>
+
