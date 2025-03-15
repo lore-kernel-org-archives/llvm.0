@@ -1,107 +1,226 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9B3194091
-	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 06:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F69A1DDC2C;
+	Sat, 15 Mar 2025 07:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742020390; cv=none; b=C4gUTQaoLdC6+33Yqq6yKjBMrGFYshhNmcSEUKNWvB+kPpcU6ZqV8Xg8O1A5mV82RQPPGhv/fGTaIpcf3MCPYttPljmB9J+FnJd0CREKK+0EFIFrzY0N9lYoNj9YMZNuYDrahlJOSL6lEv2XUSHk1BUS8yVlmnEASdiN55hXPWg=
+	t=1742023052; cv=none; b=Ep5StgRr+HCAnS9By6AgdfaSwyXzFv4/5Xg41HZ20/R+9UDgrZAyRYB9+6Uxmpcoy3vuBI1XcqOou69BVsMW5/lf27hc2UAleIILUmzEIFRcRmzLhrHbbq3FiXtGfy2J5vORTv6Xk82ip440WrrkNbRWPVoxqq1UGMSlf9JY7y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742020390; c=relaxed/simple;
-	bh=/mYfy5vigFe68jPMXpeMp22ITgCtYpuyHnKQhoU4DKw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DfaYFrWu4RsOCaq8+61hJjcBtukXXU+s8Q7vKs/d96v+8wX3Sj4HppHb7q5qzP8npgUuyiUb8+V6qk89EnNiGLjHt5bkkYGeNF9TlqjnmT6vXvSBWXgEi43tl56XYD3jwracwYX/+CYXC5UMTCIenyh56zyadbboO6SmxzkHePQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c0oGqLJP; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742023052; c=relaxed/simple;
+	bh=D6dyM5fcK5sfnzdnunmUBGtPiFQ2gHj2jDLotPVsetI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TNuFaMSqoRD1LhyePHrdwjpqdWOcOpNsB8xzhYqCqSiXiiSny3aV/w7Z3Bo7SWxkBtHzswPII8Qtvr7ITC/h3bLDBcXHSbG0Hl2Qv3EBxL8hMdIdjDBz/hmfmzQmgPTGU2HX5+dkB/yavpcbX38ZpM6EPmM/DwJY8cIVL41f2KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBwhn4uB; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c0oGqLJP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742020387;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gn9ZkvIMq3uIyFoJ80VVU7Xfjaqyfzrf8Ui86i6IXWU=;
-	b=c0oGqLJPAz+64XX06uyq37nPH4omlkWZQu2cr3Jpe/OqjL8ns13M7O6WPicjX3EyqlS51U
-	o4TpYnJ7kaZotVc0NS9tFYClNKWXC8YBE3GIS1E7uA4ndCMnzCkdQ3LmJ1t2mWBZCNapFt
-	HueGx3ciU6cgWGSv2DFcwQFFCv5oOcg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-536-eHWfFOuSMzGDp6Vo3TclxA-1; Sat,
- 15 Mar 2025 02:33:05 -0400
-X-MC-Unique: eHWfFOuSMzGDp6Vo3TclxA-1
-X-Mimecast-MFC-AGG-ID: eHWfFOuSMzGDp6Vo3TclxA_1742020384
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 920F918007E1
-	for <llvm@lists.linux.dev>; Sat, 15 Mar 2025 06:33:04 +0000 (UTC)
-Received: from [172.64.0.42] (unknown [10.30.32.80])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1F9321955F2D;
-	Sat, 15 Mar 2025 06:33:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc6,
- upstream-mainline, 3571e8b0)
-Date: Sat, 15 Mar 2025 06:33:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBwhn4uB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742023051; x=1773559051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D6dyM5fcK5sfnzdnunmUBGtPiFQ2gHj2jDLotPVsetI=;
+  b=PBwhn4uBbLumsUFXXThK5dL5rz2PTmMmNzHUY0FIDNwL/yF9GSh1iooc
+   ZkOL/KqBoMA1yHhuUaJKy1MDg7R/ynEl4XXmpCho3IX2mTAgznebzN3Ez
+   tH5ilKB9FSvVn8NzyNeVWQEEcWN3QlJ/gVKpqgapAWJXR5CPmpdXgc37I
+   BJAj9uU/atupGJ/uF0qVWkLIcjojL+1DDBsoVcsBnP1HJUboiJS5ZXV4c
+   s8kSj6WYuRZudNHJ1gxAwwu0fRJXwVlxjPPtHe+0nqDRYE9i9g/5nHthQ
+   Dsc/AAjJ2bzrIKah7AyC4oecF6lmz3NGDFyldJmSx+qGwcbDvmkWN8Tw1
+   Q==;
+X-CSE-ConnectionGUID: 4fUEwsA4RTmq3Kba2WPaww==
+X-CSE-MsgGUID: pMQe4CV2RY+4kgw6XX7n6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="42427588"
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="42427588"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 00:17:31 -0700
+X-CSE-ConnectionGUID: mbIXekZnRfqWbHnE0G4Uaw==
+X-CSE-MsgGUID: FtpkTt5YQleFCTfAFY66RQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,249,1736841600"; 
+   d="scan'208";a="125685350"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 15 Mar 2025 00:17:22 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttLln-000B7l-1S;
+	Sat, 15 Mar 2025 07:17:19 +0000
+Date: Sat, 15 Mar 2025 15:16:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tamir Duberstein <tamird@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Russ Weight <russ.weight@linux.dev>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, linux-pci@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] rust: use strict provenance APIs
+Message-ID: <202503151519.6bGsjUd3-lkp@intel.com>
+References: <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <13914.125031502330500102@us-mta-536.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: l-BOCLOXSBJDCmyaH9aE-EDitRFYkgIjF1Yi-WBXy_A_1742020384
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250314-ptr-as-ptr-v3-6-e7ba61048f4a@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Tamir,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on a1eb95d6b5f4cf5cc7b081e85e374d1dd98a213b]
 
-Kernel information:
-    Commit message: Merge tag 'v6.14-rc6-smb3-server-fixes' of git://git.sa=
-mba.org/ksmbd
+url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/rust-retain-pointer-mut-ness-in-container_of/20250315-003150
+base:   a1eb95d6b5f4cf5cc7b081e85e374d1dd98a213b
+patch link:    https://lore.kernel.org/r/20250314-ptr-as-ptr-v3-6-e7ba61048f4a%40gmail.com
+patch subject: [PATCH v3 6/6] rust: use strict provenance APIs
+config: x86_64-randconfig-002-20250315 (https://download.01.org/0day-ci/archive/20250315/202503151519.6bGsjUd3-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250315/202503151519.6bGsjUd3-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1718042493
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503151519.6bGsjUd3-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1718042493-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1718042493-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+All errors (new ones prefixed by >>):
 
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 19.1.7
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+   In file included from rust/helpers/helpers.c:10:
+   In file included from rust/helpers/blk.c:3:
+   In file included from include/linux/blk-mq.h:5:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   In file included from include/linux/mm.h:2224:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   505 |                            item];
+   |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+   512 |                            NR_VM_NUMA_EVENT_ITEMS +
+   |                            ~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+>> error[E0425]: cannot find function `with_exposed_provenance` in module `core::ptr`
+   --> rust/kernel/lib.rs:37:20
+   |
+   37  |         core::ptr::with_exposed_provenance(addr)
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   ::: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:593:1
+   |
+   593 | pub const fn without_provenance<T>(addr: usize) -> *const T {
+   | ----------------------------------------------------------- similarly named function `without_provenance` defined here
+   |
+   help: a function with a similar name exists
+   |
+   37  |         core::ptr::without_provenance(addr)
+   |                    ~~~~~~~~~~~~~~~~~~
+   help: consider importing this function through its public re-export
+   |
+   30  +     use crate::with_exposed_provenance;
+   |
+   help: if you import `with_exposed_provenance`, refer to it directly
+   |
+   37  -         core::ptr::with_exposed_provenance(addr)
+   37  +         with_exposed_provenance(addr)
+   |
+--
+>> error[E0425]: cannot find function `with_exposed_provenance_mut` in module `core::ptr`
+   --> rust/kernel/lib.rs:42:20
+   |
+   42  |         core::ptr::with_exposed_provenance_mut(addr)
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   ::: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:637:1
+   |
+   637 | pub const fn without_provenance_mut<T>(addr: usize) -> *mut T {
+   | ------------------------------------------------------------- similarly named function `without_provenance_mut` defined here
+   |
+   help: a function with a similar name exists
+   |
+   42  |         core::ptr::without_provenance_mut(addr)
+   |                    ~~~~~~~~~~~~~~~~~~~~~~
+   help: consider importing this function through its public re-export
+   |
+   30  +     use crate::with_exposed_provenance_mut;
+   |
+   help: if you import `with_exposed_provenance_mut`, refer to it directly
+   |
+   42  -         core::ptr::with_exposed_provenance_mut(addr)
+   42  +         with_exposed_provenance_mut(addr)
+   |
+--
+>> error[E0599]: no method named `expose_provenance` found for raw pointer `*const T` in the current scope
+   --> rust/kernel/lib.rs:32:14
+   |
+   32 |         addr.expose_provenance()
+   |              ^^^^^^^^^^^^^^^^^ method not found in `*const T`
+   |
+   = note: try using `<*const T>::as_ref()` to get a reference to the type behind the pointer: https://doc.rust-lang.org/std/primitive.pointer.html#method.as_ref
+   = note: using `<*const T>::as_ref()` on a pointer which is unaligned or points to invalid or uninitialized memory is undefined behavior
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
