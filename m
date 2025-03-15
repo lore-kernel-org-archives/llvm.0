@@ -1,96 +1,104 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86F118D64B;
-	Sat, 15 Mar 2025 15:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEC7204085;
+	Sat, 15 Mar 2025 18:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742054012; cv=none; b=C1aJIz50GKYjyY9HjMlSqpTX+UXZ4HluoAzZ+hHmsZJ8RrTgkFg8cJAt5Km2T9y9fSGEFuExKsNKaLAI32uNZ3llchZI2l2aIc3pRgYwtIZPQn7thcdOrSuzhqROyulqo93A3cpOP2OwRgjZJ71H4mLagaIMGhFeluP2xBI3J24=
+	t=1742061830; cv=none; b=Sm2/ZtA4oQfRfc/nHcJ1r0tnXktvvrNHVpXQxsXIZEsAdXSRwdSFhtAkJJbJHjnn0858GAMfIqMYomoyr6a09vgi7cVcFS9IJOac7LHxueqytcAmp7cM6RJQ+QsdrII7UYNrPec82CpweYhDIrD6L6d6fekuTUY8YLsJLGcUeKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742054012; c=relaxed/simple;
-	bh=LwyS+A47iCg56z9vvE9NHobt1hXMoM71/Xb052P68tA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PrybLdDCclDZg0Mh/FbqNw/A6Ritc0IFe3h/AoxW8M9Ok6LNYSqWvYBQB1Ex4pC6JIvnqE2juiMQn5rnXQw8CsyBdbhvR8O7/vyS+VUXhp+XYScKJsgTJmoJbPEnAU5lbqKhB4/9M6OYAZrkPeKTclGpPbMVMdU0fkMk0kwF2vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QMHDNJA6; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742061830; c=relaxed/simple;
+	bh=+Y44pJkK2drE1ZjpcjI0oXLOIywGAfeMnU9+my8wLzU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SrZbDl7oMV+quBLE+pOJHFJuFJZ5XdsCmvCHV/K/34iRw2M2ZwK+4jO2tHQViNGkxktT/f74ewjh9PkBj/F4NfEETHlKoi9Imfwy7scMoy6Sk41fo3ZIMm6jm0m7yTMcHHmzHXUZzL1Bdlba0F8NA2qBi6dJtmz9/TVRtyu3kRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pOvvnAfv; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QMHDNJA6"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ff67f44fcaso135904a91.3;
-        Sat, 15 Mar 2025 08:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742054010; x=1742658810; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LwyS+A47iCg56z9vvE9NHobt1hXMoM71/Xb052P68tA=;
-        b=QMHDNJA6cID1UHXXv/n22XPLiwDGa/dzHAntfuJ+Ff9qKzzbZ8IsNyjItO8NFxTMsv
-         t6rJjdMa853GrJ43qlN0GcZHqjFZGwTA341lJJmF1s4vxTTxTIk0H3zWGIIsUBAeQsTd
-         5o4EdTo4LdMMpwXA4JzLRzGq2gmcuxMAp53QsU9dOm9fx/G0+4ux6sWyLISP+7sdPntZ
-         +4xh73LinkTAnbzEhNNI1Kl1ZlVfKcgYldA3IAyZ6vDYQ7FuvmAuAqTX7A2pxMspnawH
-         wonGAwwUxcLWKdOrFLUWV5juP/99foMgsEC5w7/ZIc94xq5J87kyFonsKY+f05P1hjRm
-         FKgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742054010; x=1742658810;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LwyS+A47iCg56z9vvE9NHobt1hXMoM71/Xb052P68tA=;
-        b=aYmbet6OVi0kNEtnVakI/+5L35Kd+8gGgXAq9tpmx9ycDcxmChN95rFSHez2Wz/G88
-         KaJsM2gfUo54RjQLQ/3xOr13FEfMcTswL2RnUMbTAWqFouFMPxdNuwVRmbhRU9Ku7zhc
-         vrixin+XQOeC1DXaJ2c/ASgDVVZIfV0l+NkHwnlSN3Sf57EkOL7XocXCKgGTFF9nDiW1
-         UJv8sqk3Ph2EUnewjPAYnNaEgOKv3+lCcMNjhFV4cT2v54cShr9r5nbvOFLuOqZ7OUwB
-         nkrkhTUJbXho9wIHkTtIGM7+N46EQuSi2UA4hWGHEN0PCPEYuAwnCfVOA28koR8aIF9c
-         JaIg==
-X-Forwarded-Encrypted: i=1; AJvYcCW78fvy/g1xWE4OLiCihAy96CaWeigDF0VPD/MhLZD28vK9HoHt/TyH9GPmyNJi7THwEwl7@lists.linux.dev, AJvYcCXMaKOCK2YCiA189zJIWMsVU9mLbHW5rFuIe+4U6Nu6PdBn8KV4UwAo3T180rgnoAeqqlt2V7W4Snhad70k9g==@lists.linux.dev
-X-Gm-Message-State: AOJu0YzU9MonnKgibl0jCWQQteCSVaNOpZwdV7grJX+Na8yTe07wbxNa
-	0Gdk9quuJGB2eo2Tp1OnORJQ48kdpm17Rrh2PJLKU6ciqWzp+IIG53OX8s6cNIKBlERCCuxDg0p
-	QqNuxAhM63qCrK4NoohM5pKRROOjv20SR8rw=
-X-Gm-Gg: ASbGnctPeug5YJxNJA3u74RDdMuF8BpM8KDy24MAic1AB8PKDNlSd7cUcFTkvZaHFr9
-	L20jqByiI68FZ6ouPMDomsLUnXSrv9xfSvdLEwEjYoMaPAOWGwilV45Q2cseBFjcsKn2mh9zUR1
-	cYmH6wCi0OdrJBo2mkAmoiY0otSw==
-X-Google-Smtp-Source: AGHT+IHoJdqiFffFIEX4PGH+eNGg8dU9mGGXsxE9RJVlD3AJ3VsW474CP9GQiqncyttxQgyMVKiY1B3MtSw9bjEU4N0=
-X-Received: by 2002:a17:90b:1652:b0:2ff:7b41:c3cf with SMTP id
- 98e67ed59e1d1-30151d4c068mr3167505a91.4.1742054009887; Sat, 15 Mar 2025
- 08:53:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pOvvnAfv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=TxcYWvWfTpFytX2D5Aa/xv5rAouDt22VcPR3LokvoEw=; b=pOvvnAfvZ7o61cTyL4/lUajVig
+	9YiQVI4OybWgNI5DYghOhAKjcN6VInSb+GgUAfY3a4e4c2kD/lCDg1tqroTn8KKftmYcnNRcUjS6Q
+	5wkiyNJHELVsy9EDSUSJePFsyZCYBJqPjs8fHAm13PY9/Q+tuAGqMvwTtDKjdtI3kX5Jg0pd+4+x+
+	FDTlCX2XXmLVo12aJuWxHXhSEdJR59hC5wn+aEOLQN70li/VQuhSYzF7U0t5D3rQ3K0sBSrvvdPMO
+	RZAgzcBVAHep/5DORO2meRd3PiTyxg6g/CDIpD0jZ/1wT92ImW/ooHNUXdQDENm1r3fYbrU0S6iGa
+	VzYUNgJQ==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1ttVq1-000000044np-2gfS;
+	Sat, 15 Mar 2025 18:02:45 +0000
+Message-ID: <04ea2c10-39c5-46ad-a4f9-e5dc98c77eff@infradead.org>
+Date: Sat, 15 Mar 2025 11:02:12 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <Z9IsEPOnC+MGSAEA@rli9-mobl> <CAK7LNAQpbQCzKha63SnJG2TpyXCFB4Vu8Q9xua9G8ht=Fbk_kA@mail.gmail.com>
- <CANiq72md8yWAHdZeJFWAQFxb_9ftTFMiQciK+ZGf+3Lp_Jxa8g@mail.gmail.com> <CAK7LNASrBdCRVoELc-C0JGgdNJsi5WArsqTkaYEm1CgTsjTC9g@mail.gmail.com>
-In-Reply-To: <CAK7LNASrBdCRVoELc-C0JGgdNJsi5WArsqTkaYEm1CgTsjTC9g@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 15 Mar 2025 16:53:17 +0100
-X-Gm-Features: AQ5f1JpLxa31TkNsANiRg7vQHqmi3abo8scORrGuk6pzhcuxvWRzBjzKlLEuvo8
-Message-ID: <CANiq72kL2stNAfmm2HxMXntL2vbHkR0rxrHMRgLu0iG4+mV=dg@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:kbuild 15/20] error: Unrecognized option: 'remap-path-prefix'
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Miguel Ojeda <ojeda@kernel.org>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] slab: Introduce kmalloc_obj() and family
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+ Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Cc: Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+ David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+ "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jann Horn <jannh@google.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sasha Levin <sashal@kernel.org>, linux-mm@kvack.org,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jakub Kicinski <kuba@kernel.org>,
+ Yafang Shao <laoar.shao@gmail.com>, Tony Ambardar <tony.ambardar@gmail.com>,
+ Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Jan Hendrik Farr <kernel@jfarr.cc>, Alexander Potapenko <glider@google.com>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev
+References: <20250315025852.it.568-kees@kernel.org>
+ <20250315031550.473587-2-kees@kernel.org>
+ <17076519-33fd-4fac-a718-784b9597c9e6@embeddedor.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <17076519-33fd-4fac-a718-784b9597c9e6@embeddedor.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, 15 Mar 2025 at 11:16, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The 0day bot provides the reproducer, which only executes
-> "make olddefconfig" && "make prepare".
 
-I got confused here for a bit, because the bot runs other targets too
-(e.g. `rustfmtcheck`), but I didn't know see it in the reproducer, so
-I thought perhaps it did not show it. But I see now that the
-reproducer scripts are different in each case (e.g.
-https://lore.kernel.org/rust-for-linux/Z9IpZucc6V067mh6@rli9-mobl/).
 
-So you are completely right -- what happened is that I fixed the ICE
-issue first, which I checked did not reproduce when combined with the
-`--test` flag, and then when I found the second issue (flag not
-existing) I didn't expand it to the other case that passes
-`--remap-path-prefix`. Sorry...
+On 3/14/25 10:18 PM, Gustavo A. R. Silva wrote:
+> 
+>> These each return the assigned value of ptr (which may be NULL on
+>> failure). For cases where the total size of the allocation is needed,
+>> the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz() family
+>> of macros can be used. For example:
+>>
+>>     info->size = struct_size(ptr, flex_member, count);
+>>     ptr = kmalloc(info->size, gfp);
+>>
+>> becomes:
+>>
+>>     kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+> 
+> I wonder if it'd be better to keep the gfp flags as the last argument
+> for all these `*_sz()` cases:
 
-I am sending v2 -- this time around I will do my usual full test
-matrix, just in case I am missing something else...
+That was my reaction when I reviewed the patch also. [I just didn't express it.]
 
-Cheers,
-Miguel
+> 
+>     kmalloc_flex_sz(ptr, flex_member, count, &info->size, gpf);
+> 
+> Probably, even for __alloc_objs()
+
+
+-- 
+~Randy
+
