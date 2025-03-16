@@ -1,61 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B198440C;
-	Sun, 16 Mar 2025 00:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726A42E338B;
+	Sun, 16 Mar 2025 00:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742085238; cv=none; b=ubMFBZDFHxPy3CaFvS/8XqyROPFRtpLe9I+Jya8bNhiIqtak4M3c5jTzi6EgH1YMxxuZluB5MH2FQsPGtOaHBTLJRpopkvB6QG5dlWV1K5O3M2pIou5JToDiBS9J9BglOl9pBGBzXhYFBLMA+ye25I09ZvICihOYqizhmoYJxi8=
+	t=1742085957; cv=none; b=M711PJ/W/+W1ZHrkJ6SmK1k7x5acs07JkbhG+s5ksWunyalt+DXiT/hXFiecdujFrE68Ffi7lfj5i73EN6PXn3f94+K3wlbm3uXIH+AeSETVIF8GXNu/VPbih83AZdprENLJU9Brolsm/yKkiRxKX1aR1qvcRVUw+R31C8OXRA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742085238; c=relaxed/simple;
-	bh=ictiBmfjhuy9Efecz/e+z07DHqCdQG2BMd23joPbBAI=;
+	s=arc-20240116; t=1742085957; c=relaxed/simple;
+	bh=GnyUQ2wzxa/zIaLr5CDvqAQ+fJHVEE3Z3q1vbpSMHHU=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qyJpuTWkKieXU7Yup/9dIiCmbQ6/fvxpKoLQhzt/hgGk8efybrDFRHMS+t5rlmtxiyi1SQd+Rkpnq6qPps0cwYJD4UzvS6XtXXoR5ChIwCP9Qs6wXrYwNsyyOgwlSuJM6CEr4nC1QlbVeHjyX4jA79qoSLH+EO5MLPx7IM0KZqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OWK/kdn+; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=ttKHoJC7tLZoLxfQABYPqm4nqdJ/Mayev5IWr0e7m6TPw/RwYWI3IKFdWau8/DHxgoyyA0MaLIoqcAEtSgkeU5CqqvdDkyraNnIlU8SllqblmvoXeKlCnqsq7xFdlW9UyywUkOtTBL4oL39817Vj5Brf81gmnO+M37MtBUUb/4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PcfMlY4N; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OWK/kdn+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PcfMlY4N"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742085236; x=1773621236;
+  t=1742085955; x=1773621955;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ictiBmfjhuy9Efecz/e+z07DHqCdQG2BMd23joPbBAI=;
-  b=OWK/kdn+IsRQQkK14SBUGV/bffEG4a3cL6aln08N9Bd2Gqc+2P+2epKn
-   UNskzo8PGCQ72jxgdF117eNX/PCfWZ28dIM0ojtZF6E2XLv14SJxxJy7+
-   R8NW7jKI+f3+WYLa34NTkLdyHbkRa7EeUEE5ibRZeouDuhJh8VBqKVMNK
-   KkiAnzOJsd/uayr27rmH2FQC5tGZTH+4hh+xR3Qa9mpwEIZX+2NsgN1Zj
-   DZl6wh2k49TnWok8vJ9t+s2sGtRmloebnMKnQoc18r9gflsvoH2jKDA1I
-   pzWlnPzpw1see4TCDenB4DN6dbPwTrfiBjosXQ2YJr5I8CY0RdpAKnioa
-   Q==;
-X-CSE-ConnectionGUID: VosGyTiwRtak9CfnmgqKyw==
-X-CSE-MsgGUID: nPndzum2SKiSPwR1ybdXcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="53842334"
+  bh=GnyUQ2wzxa/zIaLr5CDvqAQ+fJHVEE3Z3q1vbpSMHHU=;
+  b=PcfMlY4Nhb6BTikxI8jvv2NbESnZ3m70/mY0mFxb+avxb3iQ9pzMAv4S
+   cAKMn1iQWw1FZ8IvNTWorM92hrJvFkS8mwiF/cose67shWXUltI5E8Zew
+   1GLSG3u4FLWm8YuRiGAvDuZlPUFlTLDj7l9C2sKNFwvje7vx9wTloxMjG
+   bYLw8kahVDtD5T1g8WdEGGHM3y0Ah7yY0Ms16XDrzTOnpD+NWQKIMmOHP
+   9BzgayU11N2BYkpXQzzHWoiO8f3ZKKeoEsLag+N0KM28wUn3HIlHtRPsr
+   LsUFh0UkZ7XNKuh/Li9og+svviA2YIufeUp3dZ0UOXGbSlBotjJk5zlw8
+   A==;
+X-CSE-ConnectionGUID: dMJx1kosTE++KZIxiQ5xYw==
+X-CSE-MsgGUID: r1w1p1/eQfiLOFY3ZCE8kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="54585249"
 X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
-   d="scan'208";a="53842334"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 17:33:53 -0700
-X-CSE-ConnectionGUID: TkUG5QVFTDKQPNjGyn3IKw==
-X-CSE-MsgGUID: KlV0G66oQ+e4ukoe4nwz5g==
+   d="scan'208";a="54585249"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 17:45:54 -0700
+X-CSE-ConnectionGUID: JmLpDbQjSsWEoUx0b7+C1Q==
+X-CSE-MsgGUID: sbKP2K/STvaNmmC9lAXcgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
-   d="scan'208";a="125801417"
+   d="scan'208";a="126803570"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 15 Mar 2025 17:33:52 -0700
+  by orviesa005.jf.intel.com with ESMTP; 15 Mar 2025 17:45:54 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ttbwr-000Bjh-2e;
-	Sun, 16 Mar 2025 00:33:49 +0000
-Date: Sun, 16 Mar 2025 08:33:00 +0800
+	id 1ttc8U-000Bjz-2J;
+	Sun, 16 Mar 2025 00:45:50 +0000
+Date: Sun, 16 Mar 2025 08:45:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Frank Li <Frank.Li@nxp.com>
+To: Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
-Subject: [pci:controller/dwc-cpu-addr-fixup 6/13]
- drivers/pci/controller/dwc/pcie-designware.c:1135:6: warning: format
- specifies type 'unsigned long long' but the argument has type
- 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202503160804.HTvWiBze-lkp@intel.com>
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-sound:for-next 86/105] ld.lld: error: duplicate symbol:
+ acp63_rsrc
+Message-ID: <202503160801.yExt0K2E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,162 +63,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc-cpu-addr-fixup
-head:   40b96cba38232460c691b52bbf9183f9e4d34914
-commit: af175b4797cd4e3e8ff22a4e3c6924443986b797 [6/13] PCI: dwc: Add dw_pcie_parent_bus_offset() checking and debug
-config: riscv-randconfig-001-20250316 (https://download.01.org/0day-ci/archive/20250316/202503160804.HTvWiBze-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503160804.HTvWiBze-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+head:   d9a06936ee9e64952e161849059f6cf096b33e4a
+commit: d08220b6e32e88655f54b497fd45a3982b59093c [86/105] ASoC: amd: acp: Refactor acp63 platform resource structure
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250316/202503160801.yExt0K2E-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503160801.yExt0K2E-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503160804.HTvWiBze-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503160801.yExt0K2E-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     804 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     812 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     820 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     829 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     838 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     847 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
-   In file included from include/linux/dma/edma.h:13:
-   In file included from include/linux/dmaengine.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> drivers/pci/controller/dwc/pcie-designware.c:1135:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    1134 |                         dev_warn(dev, "%#010llx %s reg[%d] == %#010llx; %ps is redundant\n",
-         |                                        ~~~~~~~~
-         |                                        %#010x
-    1135 |                                  cpu_phy_addr, reg_name, index,
-         |                                  ^~~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.c:1139:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    1138 |                         dev_warn(dev, "%#010llx %s reg[%d] != %#010llx fixed up addr; devicetree is broken\n",
-         |                                        ~~~~~~~~
-         |                                        %#010x
-    1139 |                                  cpu_phy_addr, reg_name,
-         |                                  ^~~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-designware.c:1146:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-    1145 |                         dev_warn(dev, "devicetree has incorrect translation; please check parent \"ranges\" property. CPU physical addr %#010llx, parent bus addr %#010llx\n",
-         |                                                                                                                                         ~~~~~~~~
-         |                                                                                                                                         %#010x
-    1146 |                                  cpu_phy_addr, reg_addr);
-         |                                  ^~~~~~~~~~~~
-   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
-     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                     ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   10 warnings generated.
-
-
-vim +1135 drivers/pci/controller/dwc/pcie-designware.c
-
-  1109	
-  1110	resource_size_t dw_pcie_parent_bus_offset(struct dw_pcie *pci,
-  1111						  const char *reg_name,
-  1112						  resource_size_t cpu_phy_addr)
-  1113	{
-  1114		struct device *dev = pci->dev;
-  1115		struct device_node *np = dev->of_node;
-  1116		int index;
-  1117		u64 reg_addr, fixup_addr;
-  1118		u64 (*fixup)(struct dw_pcie *pcie, u64 cpu_addr);
-  1119	
-  1120		/* Look up reg_name address on parent bus */
-  1121		index = of_property_match_string(np, "reg-names", reg_name);
-  1122	
-  1123		if (index < 0) {
-  1124			dev_err(dev, "No %s in devicetree \"reg\" property\n", reg_name);
-  1125			return 0;
-  1126		}
-  1127	
-  1128		of_property_read_reg(np, index, &reg_addr, NULL);
-  1129	
-  1130		fixup = pci->ops->cpu_addr_fixup;
-  1131		if (fixup) {
-  1132			fixup_addr = fixup(pci, cpu_phy_addr);
-  1133			if (reg_addr == fixup_addr) {
-  1134				dev_warn(dev, "%#010llx %s reg[%d] == %#010llx; %ps is redundant\n",
-> 1135					 cpu_phy_addr, reg_name, index,
+>> ld.lld: error: duplicate symbol: acp63_rsrc
+   >>> defined at acp-platform.c
+   >>>            sound/soc/amd/acp/acp-platform.o:(acp63_rsrc) in archive vmlinux.a
+   >>> defined at acp-i2s.c
+   >>>            sound/soc/amd/acp/acp-i2s.o:(.data+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: acp63_rsrc
+   >>> defined at acp-platform.c
+   >>>            sound/soc/amd/acp/acp-platform.o:(acp63_rsrc) in archive vmlinux.a
+   >>> defined at acp-legacy-common.c
+   >>>            sound/soc/amd/acp/acp-legacy-common.o:(.data+0x0) in archive vmlinux.a
+--
+>> ld.lld: error: duplicate symbol: acp63_rsrc
+   >>> defined at acp-platform.c
+   >>>            sound/soc/amd/acp/acp-platform.o:(acp63_rsrc) in archive vmlinux.a
+   >>> defined at acp-pdm.c
+   >>>            sound/soc/amd/acp/acp-pdm.o:(.data+0x0) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
