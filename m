@@ -1,88 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC03319ABD4;
-	Sun, 16 Mar 2025 15:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354B3199FB0
+	for <llvm@lists.linux.dev>; Sun, 16 Mar 2025 17:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742140601; cv=none; b=FBH9xc+6ApKHdRab8ksnvM/8YZbaS5fFwBvWHlVnz3nKO3C3We48VozGwJEzeBFIjStEzIb9ZeSh8GDteoILC00ubTwrGd6rmTLFdSY0e75ScunGsJndUWc62UsGEV2UPFtZvdEB/Om/entvitPW73leJqaMB4/y8pQjNLByx3o=
+	t=1742147270; cv=none; b=JekoDbHpzREmW12dKojC5RZzK6UW6wGOtNQlLElRgS1Z04P/3n7tdc0x0r0fWb7TGRKUOvxy2Hclitl1UiX5HxSDdTFPMaBSEwBDKcsXEeRnuSVH5yd/YbLVKW9A2FHw7DtOT0lDYUAoX+Iu/FQWeAlgbgdGd5zJF0K+25IX+0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742140601; c=relaxed/simple;
-	bh=aS4aFoN8HwweoUFCgBFGAC6wY7cDxKXBsmEzkmxJ1Cw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AKslxH0zsta3vDPOFWO43H+p2n37LUmUmAfxCvbbT2isSV3gTI8zjLnjTeZ+v2gNXM+4itZFBCpecvbHlyJB8pPADLndtmIoiTgiDkIqlruRQUXhcRM63ZxBGvK6e+cEjeDjjZeB9T4sDlJOYQWMR6KIFV4BFhMEEyvyMLZKTuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KM7Jw9j+; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742147270; c=relaxed/simple;
+	bh=oKk+mNkr7TImnO+pZms2+BwrQ4/orsyoRd0HOVQxBic=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dkXJLvi5kQkKgLWhAxvrjwC3OcgswMjK8atV6X5EYjqgyPB5BN6JzeRVTZTSLLRCXTxlYpxZ/BeJtB3QklsvMWB9nTKo+fubTNSwEpOp5Cgc/jqwx+WaLjfQg26dBVAyvqQ8NJG7a7vrDUQkRlQmpOeWhBw5f0OZc+3BG4X1Ges=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=g3xkZXDX; arc=none smtp.client-ip=185.70.40.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KM7Jw9j+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742140599; x=1773676599;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aS4aFoN8HwweoUFCgBFGAC6wY7cDxKXBsmEzkmxJ1Cw=;
-  b=KM7Jw9j+ooDXLnEPY1UJ29DaF/GM+tlmLPNWr3TNLnxz4MCOBYDEw0yz
-   8DZtb5hlYz5YnaE1sB6fPMMB7yN6HYG15zWm6FsEmyMNa7ZMg/jhlbxaN
-   sOopbjpWcGgrXn7JW57s+srsBqPkfiMPRTbWQKuU16SOHut5x7DTZ06XU
-   DckeiGBkePtt+hnN4L6cUFS/qiPP6cc5EYO3bta1v+7hXnnRHewXQ8yl3
-   X55NBcfyA/RUJM5W/0KiaERJhtl4YWodjM765pv4MOShe9h9cngoiUbzZ
-   Xu3UzTSrKajTB3bqTg5qErHDFm/Z60HLiaB1hmTwXLezzm9Zu8uCLe8PO
-   w==;
-X-CSE-ConnectionGUID: EKKMvONDTt6VbUX4V/dWEA==
-X-CSE-MsgGUID: VizkT80GSHCtKB5kLfBtrg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="42415964"
-X-IronPort-AV: E=Sophos;i="6.14,252,1736841600"; 
-   d="scan'208";a="42415964"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2025 08:56:38 -0700
-X-CSE-ConnectionGUID: dJK4oq/nTkyYLIIP8dwotQ==
-X-CSE-MsgGUID: iGFj0y+kTkW8tXq4L3j4Jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,252,1736841600"; 
-   d="scan'208";a="122680093"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 16 Mar 2025 08:56:36 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ttqLq-000C4T-0r;
-	Sun, 16 Mar 2025 15:56:34 +0000
-Date: Sun, 16 Mar 2025 23:56:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rong Xu <xur@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Han Shen <shenhan@google.com>, Kees Cook <kees@kernel.org>
-Subject: vmlinux.o: warning: objtool: .text.dib8000_tune: unexpected end of
- section
-Message-ID: <202503162331.necMbaVm-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="g3xkZXDX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1742147266; x=1742406466;
+	bh=oKk+mNkr7TImnO+pZms2+BwrQ4/orsyoRd0HOVQxBic=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=g3xkZXDXTk5WQKjuHAdYt9KRAQl0q5TQYYKI1ohng0cYo+itwmQObd8zT1+IeUNuW
+	 FSYp8SVw7Oxy8cY+Pj/V/nQmAWr+AtgrNIlNwUb3/eUbky7pBp7Qcwwy6aFTDQnT+K
+	 W2mtTxeNQ3b8XiQS29FXGGjLqb58pIWClsP8ZO+LYvmOo+PDIcUujAlqDMI8HHU9Qf
+	 rpJXALeShbR1Xab1jk9JRiovJeBDErTs/ePyIKfgXm9lhTvJm5TwybCbKcdkRN9NfB
+	 8ziq2TJUUTfK+JBBbJeWH4y66s50gh/Sn/+zTp6i7tHcBUMYLlyXsQj051ASNVWAJM
+	 50MmS6gGEaihQ==
+Date: Sun, 16 Mar 2025 17:47:40 +0000
+To: Antonio Hickey <contact@antoniohickey.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2] rust: uaccess: mark UserSliceWriter method inline
+Message-ID: <D8HVNR3Q3UL8.1007IZIZTQ0XB@proton.me>
+In-Reply-To: <010001958d6f36b2-fb0a1710-a581-4002-889e-e489004bb72d-000000@email.amazonses.com>
+References: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com> <010001958d6f36b2-fb0a1710-a581-4002-889e-e489004bb72d-000000@email.amazonses.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 6b724233661c78c865ac9c2b86a9dc05d801c517
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cb82ca153949c6204af793de24b18a04236e79fd
-commit: 315ad8780a129e82e2c5c65ee6e970d91a577acb kbuild: Add AutoFDO support for Clang build
-date:   4 months ago
-config: x86_64-randconfig-001-20250316 (https://download.01.org/0day-ci/archive/20250316/202503162331.necMbaVm-lkp@intel.com/config)
-compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503162331.necMbaVm-lkp@intel.com/reproduce)
+On Thu Mar 13, 2025 at 3:57 AM CET, Antonio Hickey wrote:
+> When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+> toolchain provided by kernel.org with ARCH=3Dx86_64, the following symbol
+> is generated:
+>
+> $nm vmlinux | grep ' _R' | rustfilt | rg UserSliceWriter
+> ffffffff817c3390 T <kernel::uaccess::UserSliceWriter>::write_slice
+>
+> However, this Rust symbol is a trivial wrapper around the function
+> copy_to_user. It doesn't make sense to go through a trivial wrapper
+> for this function, so mark it inline.
+>
+> After applying this patch, the above command will produce no output.
+>
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503162331.necMbaVm-lkp@intel.com/
+What about the other methods (like `write` and `read`?) in this file?
 
-All warnings (new ones prefixed by >>):
+---
+Cheers,
+Benno
 
-   vmlinux.o: warning: objtool: ___bpf_prog_run+0x1f: sibling call from callable instruction with modified stack frame
->> vmlinux.o: warning: objtool: .text.dib8000_tune: unexpected end of section
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
