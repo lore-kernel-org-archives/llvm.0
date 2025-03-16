@@ -1,73 +1,137 @@
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354B3199FB0
-	for <llvm@lists.linux.dev>; Sun, 16 Mar 2025 17:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E255D19D8B2
+	for <llvm@lists.linux.dev>; Sun, 16 Mar 2025 18:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742147270; cv=none; b=JekoDbHpzREmW12dKojC5RZzK6UW6wGOtNQlLElRgS1Z04P/3n7tdc0x0r0fWb7TGRKUOvxy2Hclitl1UiX5HxSDdTFPMaBSEwBDKcsXEeRnuSVH5yd/YbLVKW9A2FHw7DtOT0lDYUAoX+Iu/FQWeAlgbgdGd5zJF0K+25IX+0c=
+	t=1742151294; cv=none; b=PqFCbi1LtFXu1NDhRQsSE6XvkoIHXvitQoH70BYhpJ29y2P6jBfdNjiGHepEk3dJd/URebUYm1BYeAowdDI9kzJb2JfUF4D+YgsviWxkzyUSgMEaD0L/NpOvjE6zB9cHDJQ5LbEdx4godiaowQOP4+/CcySXbbKOZWJ4ReOlVaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742147270; c=relaxed/simple;
-	bh=oKk+mNkr7TImnO+pZms2+BwrQ4/orsyoRd0HOVQxBic=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dkXJLvi5kQkKgLWhAxvrjwC3OcgswMjK8atV6X5EYjqgyPB5BN6JzeRVTZTSLLRCXTxlYpxZ/BeJtB3QklsvMWB9nTKo+fubTNSwEpOp5Cgc/jqwx+WaLjfQg26dBVAyvqQ8NJG7a7vrDUQkRlQmpOeWhBw5f0OZc+3BG4X1Ges=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=g3xkZXDX; arc=none smtp.client-ip=185.70.40.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1742151294; c=relaxed/simple;
+	bh=zRRGLszJcI9Ww+80z26LGiQuD4y3P7H/6FdpcWOHEnk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=C9YWmAuaEb/+WPzK5sUNap4cP6L2d5pEF9zmfta8vHORk5q9vaEX/W3p1GdH78IL5uUPLTAnLmwKoJ1zU/0oPVXnlLiasY967660CJG5XS0y1CkO5LwQJYWdjBgMvZ5Q4C5p6tG2Oa4mKKgwpS6SO4Rrbq4wSxW0i7B9A/SgbAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com; spf=pass smtp.mailfrom=byte-forge.io; dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b=GK5EJuYa; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=antoniohickey.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=byte-forge.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="g3xkZXDX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742147266; x=1742406466;
-	bh=oKk+mNkr7TImnO+pZms2+BwrQ4/orsyoRd0HOVQxBic=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=g3xkZXDXTk5WQKjuHAdYt9KRAQl0q5TQYYKI1ohng0cYo+itwmQObd8zT1+IeUNuW
-	 FSYp8SVw7Oxy8cY+Pj/V/nQmAWr+AtgrNIlNwUb3/eUbky7pBp7Qcwwy6aFTDQnT+K
-	 W2mtTxeNQ3b8XiQS29FXGGjLqb58pIWClsP8ZO+LYvmOo+PDIcUujAlqDMI8HHU9Qf
-	 rpJXALeShbR1Xab1jk9JRiovJeBDErTs/ePyIKfgXm9lhTvJm5TwybCbKcdkRN9NfB
-	 8ziq2TJUUTfK+JBBbJeWH4y66s50gh/Sn/+zTp6i7tHcBUMYLlyXsQj051ASNVWAJM
-	 50MmS6gGEaihQ==
-Date: Sun, 16 Mar 2025 17:47:40 +0000
-To: Antonio Hickey <contact@antoniohickey.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, rust-for-linux@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=byte-forge-io.20230601.gappssmtp.com header.i=@byte-forge-io.20230601.gappssmtp.com header.b="GK5EJuYa"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6febbd3b75cso31489427b3.0
+        for <llvm@lists.linux.dev>; Sun, 16 Mar 2025 11:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=byte-forge-io.20230601.gappssmtp.com; s=20230601; t=1742151291; x=1742756091; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DvdWb8P4BT1PgWG2fQCxo90ztiExxOPg6h8PgNmmvms=;
+        b=GK5EJuYaOaigQmRuomTOOkzyUZxYEZmSvd9GGDNsEB1qVuNlRL5XLci4zPvZOj8GUF
+         OC+mTXuFLKQDFnMnssjwHpuTJf1QaQNzTARWbqbj7mUrKWOSzTre8Mq6xl5FQg9wxGf8
+         6290r8PwUsmjnx2jnAkT2PNT2KohGRRPb+cEZMH3ZIdf5FWmIENniTarjZ0HMsbPmAV6
+         0ZVfvu8uLphQFU6ATZxORc9x99HdMjfBo47j/7pFiaHRDbSxjU2P9a1vBU7IpEPj5abu
+         RtAUfE64In99/aVqOZPdh33KCKwkkf2Xjf0qcIwsQxM+uuBjuOjhqwa1ah0qoZC/17/Q
+         cO4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742151291; x=1742756091;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DvdWb8P4BT1PgWG2fQCxo90ztiExxOPg6h8PgNmmvms=;
+        b=EiVgfr0vsXR/Y5L6PTriKXfuDLi13CSS8iRoHwobyiJ1OBb3sWuh7qJm7VBL7IcmZj
+         PPQrscpWS0lEyPKgKG9Hs3hOxNLGUBtKZrSBRGR91vgAaUvG2RRh1x2yVAiNN8Am3KNC
+         vzNjjOD6OD4CL3JI2BZ6QMftN1lHkWL/+6UGyoeJ7pDjREnHsMwPhlVkcj4mWcZUsXwD
+         B61z7b6KC4zHbAJR5yPaVjETSu0Pq4HMN1Q0Ta4llf8nydjMGt/K01W3yabM1swqyYk7
+         nqYq8j9Z3Z5eFZbRGEa4WtGYpWn163UI2uXziVW1BG8w7wgWhI/ovj3lqVvjiLGMTULH
+         TePA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ5UiOGjA0UnkkSuF5VM4n5xUTNsxfYGHTjx0em1ecYtY3fE7T/64laigxwGvOjDS2buBj@lists.linux.dev
+X-Gm-Message-State: AOJu0YwNQM6P07ld7t/4aF86I3wS4B80fexXrCL7yx8wn65pjWlZc1by
+	7tlOYI7zFGRt49CwIV47pzGoL8bLNBHVIbDMWstVY4Y95PRQNZ4jGIJCQOHrTN4=
+X-Gm-Gg: ASbGnctEzXT5jWZ8n4aYjKQW+fuXMqpsDK4zlOZCP4QmrkuC1SuWaf+7k/jZHNm/WT4
+	40oBzm7FtCFYDtN5cZXUqgpd++ewSMFSNqVF2bC9+nxlX6eFcZdoQKg6d9KsNVdw8jQ1WlmsPiE
+	QXW2i5Fu7b0fMDnSyqKEZ3woPsrWCfVKWXPZJ4B/xDFsJ6/c+fAUB9OoZTcEAmQ/SAFawN+4m/5
+	J3nQYvpMmzcL512LGAjjQKSnSjXqLX5xqYfTKcZFEFxGZQavBd0k5iuvkjrfgHo+ixSmhpYAoW0
+	ih78RUIWasR6azlQiPsO48wIPT0EDQ7yF078pAGbgMOpMob5DSF7DYXjmXV9Gc1pguP0+hbbCxb
+	66CqlB+AYK910F1PH4LirQm9os8nJBVCG50xCwIQH
+X-Google-Smtp-Source: AGHT+IEf61ITWXTQ0xB0/jw/y4GF9A+lDmm2UolrQcX9mgJQdmkAnFnfFmrsyIE1fbiYnjOGpVmumg==
+X-Received: by 2002:a05:690c:4c0a:b0:6fb:91a9:94d9 with SMTP id 00721157ae682-6ff45e3cc5dmr134299007b3.2.1742151290797;
+        Sun, 16 Mar 2025 11:54:50 -0700 (PDT)
+Received: from Machine.lan (107-219-75-226.lightspeed.wepbfl.sbcglobal.net. [107.219.75.226])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ff32d0036esm18493657b3.124.2025.03.16.11.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Mar 2025 11:54:50 -0700 (PDT)
+From: Antonio Hickey <contact@antoniohickey.com>
+To: benno.lossin@proton.me
+Cc: a.hindborg@kernel.org,
+	alex.gaynor@gmail.com,
+	aliceryhl@google.com,
+	bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com,
+	contact@antoniohickey.com,
+	dakr@kernel.org,
+	gary@garyguo.net,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	morbo@google.com,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	ojeda@kernel.org,
+	rust-for-linux@vger.kernel.org,
+	tmgross@umich.edu
 Subject: Re: [PATCH v2] rust: uaccess: mark UserSliceWriter method inline
-Message-ID: <D8HVNR3Q3UL8.1007IZIZTQ0XB@proton.me>
-In-Reply-To: <010001958d6f36b2-fb0a1710-a581-4002-889e-e489004bb72d-000000@email.amazonses.com>
-References: <010001958d69ed91-0ccd9e4f-cd18-4451-a982-426b951d2e0c-000000@email.amazonses.com> <010001958d6f36b2-fb0a1710-a581-4002-889e-e489004bb72d-000000@email.amazonses.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 6b724233661c78c865ac9c2b86a9dc05d801c517
+Date: Sun, 16 Mar 2025 14:54:39 -0400
+Message-ID: <20250316185439.913013-1-contact@antoniohickey.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <D8HVNR3Q3UL8.1007IZIZTQ0XB@proton.me>
+References: <D8HVNR3Q3UL8.1007IZIZTQ0XB@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu Mar 13, 2025 at 3:57 AM CET, Antonio Hickey wrote:
-> When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
-> toolchain provided by kernel.org with ARCH=3Dx86_64, the following symbol
-> is generated:
->
-> $nm vmlinux | grep ' _R' | rustfilt | rg UserSliceWriter
-> ffffffff817c3390 T <kernel::uaccess::UserSliceWriter>::write_slice
->
-> However, this Rust symbol is a trivial wrapper around the function
-> copy_to_user. It doesn't make sense to go through a trivial wrapper
-> for this function, so mark it inline.
->
-> After applying this patch, the above command will produce no output.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+On Sun, Mar 16, 2025 at 05:47:40PM +0000, Benno Lossin wrote:
+> On Thu Mar 13, 2025 at 3:57 AM CET, Antonio Hickey wrote:
+> > When you build the kernel using the llvm-19.1.4-rust-1.83.0-x86_64
+> > toolchain provided by kernel.org with ARCH=x86_64, the following symbol
+> > is generated:
+> >
+> > $nm vmlinux | grep ' _R' | rustfilt | rg UserSliceWriter
+> > ffffffff817c3390 T <kernel::uaccess::UserSliceWriter>::write_slice
+> >
+> > However, this Rust symbol is a trivial wrapper around the function
+> > copy_to_user. It doesn't make sense to go through a trivial wrapper
+> > for this function, so mark it inline.
+> >
+> > After applying this patch, the above command will produce no output.
+> >
+> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> > Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> > Signed-off-by: Antonio Hickey <contact@antoniohickey.com>
+> 
+> What about the other methods (like `write` and `read`?) in this file?
 
-What about the other methods (like `write` and `read`?) in this file?
+Hey Benno,
 
----
-Cheers,
-Benno
+The other methods in this file were handled with the patch
+linked below. This was one of my first patches, so I was
+unaware of patch sets and did 2 seperate patches.
 
+Link to other patch: https://lore.kernel.org/all/010001958798b97c-4da7647e-d0bc-4f81-9132-ad24353139cb-000000@email.amazonses.com/
+
+Do you think it would be best to send these as new patch which
+includes both of these patches? also if so would it be ok to
+start that new patch set at v1 ?
+
+Sorry for the confusion I'm new to kernel dev and patches,
+but starting to get the hang of it now.
+
+Thanks,
+Antonio
+
+> 
+> ---
+> Cheers,
+> Benno
+>
