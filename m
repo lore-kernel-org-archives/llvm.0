@@ -1,132 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875CE1A9B3E;
-	Sun, 16 Mar 2025 15:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC03319ABD4;
+	Sun, 16 Mar 2025 15:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742138903; cv=none; b=fSYM8jTWiWaJI1md2Ayzlo2p+K/tmvNqYb9bBqBR/3v999lW8IXignlcXm5yS/i564zzSLPMuCaxL9to9I+JzNGsyBfh9qrbdjtcNr6+HHSl0D0IXJH4D3TySOrZs2csdP7GSoTJVFh8ddSRP9EGJzcUZwQrxMbecVYqbyrcRj4=
+	t=1742140601; cv=none; b=FBH9xc+6ApKHdRab8ksnvM/8YZbaS5fFwBvWHlVnz3nKO3C3We48VozGwJEzeBFIjStEzIb9ZeSh8GDteoILC00ubTwrGd6rmTLFdSY0e75ScunGsJndUWc62UsGEV2UPFtZvdEB/Om/entvitPW73leJqaMB4/y8pQjNLByx3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742138903; c=relaxed/simple;
-	bh=vNFIcfTzkV5HNpQWF5fiB0x3n1TkSfLen+jXEaLkoaU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HDdi4dgTV9DLrfPFV8LQw2qDzvu2cMIY2jDV2Ia3uzKG/DroYBnBR232fxzfn25z0OmAN81SAoCQrrPC9qyeSnN/VzA9SVPhRe/sf6Xj8wl/inrsSGq5ghd87F83gdVPEHuNjmX+fSqmZzXpHQB19N51jXBGYmjupJa1wxvIGEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihu+uw4N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742140601; c=relaxed/simple;
+	bh=aS4aFoN8HwweoUFCgBFGAC6wY7cDxKXBsmEzkmxJ1Cw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AKslxH0zsta3vDPOFWO43H+p2n37LUmUmAfxCvbbT2isSV3gTI8zjLnjTeZ+v2gNXM+4itZFBCpecvbHlyJB8pPADLndtmIoiTgiDkIqlruRQUXhcRM63ZxBGvK6e+cEjeDjjZeB9T4sDlJOYQWMR6KIFV4BFhMEEyvyMLZKTuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KM7Jw9j+; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihu+uw4N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178FEC4CEEE;
-	Sun, 16 Mar 2025 15:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742138903;
-	bh=vNFIcfTzkV5HNpQWF5fiB0x3n1TkSfLen+jXEaLkoaU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ihu+uw4NVrI3VGioO3HJt0RrTmRmLKbMN1Mvikqk+VhT1F9yePzBV6bM/p5mL/Jif
-	 TfJghxNKoaaQLm5CFXx4uPxftH/LQdtuZzptF1lWEnvpiURrRpUqWdeAP94+smC6I1
-	 ksnj7kFCtLxoGFoc7sHjJT5C3TxG3XkZWFq6x032McraqNUzkAswrUZBuWWc+ITkfn
-	 nFVcW5HfS3XwxpkGtWxJPcFKqCqpTZv+n7toUeWjo46bIQtIx8m6M57WYkRd9D55gE
-	 EgEGR3PwMNY/10IXXCvyl/ypic19UM3s1d3GR7XjF2cPFCaXjjiS5IQYpLjOAw01YB
-	 AMKKHn/5Ubdaw==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-548430564d9so4077891e87.2;
-        Sun, 16 Mar 2025 08:28:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUypJGQBF7IxmRhXaGYF0Y679E6wLuDLMzf/2KSwb9g/Frodxycuo2arFvDvQCe3olINwxE@lists.linux.dev, AJvYcCXPVOkamrC3zkvaQuCfZ98ZELdmDg8xWS7aLP1kOLwUJw8nKSc8jREyuPRxN8onymxLcE1p/HkcR1NFnVsv7A==@lists.linux.dev
-X-Gm-Message-State: AOJu0YyLyR+do+Dtz21OybEcVsXkHxiOOORRG5xVyw8ritcLSZcKNB2j
-	xAAAHpcF53jV80MOcf1ot/nzs37UUfF1dX8WUj6l0HNi32B28WI0gOAMI+FkO+NAEPDsTZmHhES
-	8H03uAnEdpv0wB3x+HxdO4ABXJUY=
-X-Google-Smtp-Source: AGHT+IF0Dt/laO7zegcvare8prIKHkNI8ibK0zBaerP9xH93a7mlsM62yg1nkaUMORLNbgZvlejJ+P64c8Z98vSiZ/4=
-X-Received: by 2002:a05:6512:1115:b0:545:576:cbd2 with SMTP id
- 2adb3069b0e04-549c38eacbdmr4026754e87.10.1742138901595; Sun, 16 Mar 2025
- 08:28:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KM7Jw9j+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742140599; x=1773676599;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aS4aFoN8HwweoUFCgBFGAC6wY7cDxKXBsmEzkmxJ1Cw=;
+  b=KM7Jw9j+ooDXLnEPY1UJ29DaF/GM+tlmLPNWr3TNLnxz4MCOBYDEw0yz
+   8DZtb5hlYz5YnaE1sB6fPMMB7yN6HYG15zWm6FsEmyMNa7ZMg/jhlbxaN
+   sOopbjpWcGgrXn7JW57s+srsBqPkfiMPRTbWQKuU16SOHut5x7DTZ06XU
+   DckeiGBkePtt+hnN4L6cUFS/qiPP6cc5EYO3bta1v+7hXnnRHewXQ8yl3
+   X55NBcfyA/RUJM5W/0KiaERJhtl4YWodjM765pv4MOShe9h9cngoiUbzZ
+   Xu3UzTSrKajTB3bqTg5qErHDFm/Z60HLiaB1hmTwXLezzm9Zu8uCLe8PO
+   w==;
+X-CSE-ConnectionGUID: EKKMvONDTt6VbUX4V/dWEA==
+X-CSE-MsgGUID: VizkT80GSHCtKB5kLfBtrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="42415964"
+X-IronPort-AV: E=Sophos;i="6.14,252,1736841600"; 
+   d="scan'208";a="42415964"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2025 08:56:38 -0700
+X-CSE-ConnectionGUID: dJK4oq/nTkyYLIIP8dwotQ==
+X-CSE-MsgGUID: iGFj0y+kTkW8tXq4L3j4Jg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,252,1736841600"; 
+   d="scan'208";a="122680093"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 16 Mar 2025 08:56:36 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttqLq-000C4T-0r;
+	Sun, 16 Mar 2025 15:56:34 +0000
+Date: Sun, 16 Mar 2025 23:56:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rong Xu <xur@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Han Shen <shenhan@google.com>, Kees Cook <kees@kernel.org>
+Subject: vmlinux.o: warning: objtool: .text.dib8000_tune: unexpected end of
+ section
+Message-ID: <202503162331.necMbaVm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202503161833.ytx1ivfu-lkp@intel.com> <CAMj1kXGqqW2UPvxB+o_LNSXb3CBk1QsQuCpmY=OsQPY=kWHFnw@mail.gmail.com>
-In-Reply-To: <CAMj1kXGqqW2UPvxB+o_LNSXb3CBk1QsQuCpmY=OsQPY=kWHFnw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 17 Mar 2025 00:27:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASkwp3zecQ0=NQ7FNPD1pO-a+RvJwA_O-whWgMhvLnqqQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JqOtuPZIF1zzaDqY6ahVhL15CrS9kVkzOE7SbAbWWYxP20TDdkaQblTtS4
-Message-ID: <CAK7LNASkwp3zecQ0=NQ7FNPD1pO-a+RvJwA_O-whWgMhvLnqqQ@mail.gmail.com>
-Subject: Re: [masahiroy-kbuild:kbuild 25/35] FAILED cannot open vmlinux: No
- such file or directory
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Mar 16, 2025 at 11:09=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> w=
-rote:
->
-> On Sun, 16 Mar 2025 at 11:20, kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux=
--kbuild.git kbuild
-> > head:   e3de46f775ec29a17f671523798c28222a4ce818
-> > commit: cac289e2b2b0909b52c0a694c4469a9ad9f03764 [25/35] kbuild: Create=
- intermediate vmlinux build with relocations preserved
-> > config: i386-buildonly-randconfig-001-20250316 (https://download.01.org=
-/0day-ci/archive/20250316/202503161833.ytx1ivfu-lkp@intel.com/config)
-> > compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24=
-a30daaa559829ad079f2ff7f73eb4e18095f88)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20250316/202503161833.ytx1ivfu-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202503161833.ytx1ivfu-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> FAILED cannot open vmlinux: No such file or directory
-> >
->
-> We need the below - Masahiro, would you like me to send this is a
-> follow-up patch?
->
->
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -185,7 +185,7 @@ cleanup()
->  {
->         rm -f .btf.*
->         rm -f System.map
-> -       rm -f vmlinux
-> +       rm -f "${VMLINUX}"
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cb82ca153949c6204af793de24b18a04236e79fd
+commit: 315ad8780a129e82e2c5c65ee6e970d91a577acb kbuild: Add AutoFDO support for Clang build
+date:   4 months ago
+config: x86_64-randconfig-001-20250316 (https://download.01.org/0day-ci/archive/20250316/202503162331.necMbaVm-lkp@intel.com/config)
+compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503162331.necMbaVm-lkp@intel.com/reproduce)
 
-This is wrong because the target vmlinux is not passed
-during 'make clean'.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503162331.necMbaVm-lkp@intel.com/
 
-https://github.com/torvalds/linux/blob/v6.14-rc5/Makefile#L1583
+All warnings (new ones prefixed by >>):
 
+   vmlinux.o: warning: objtool: ___bpf_prog_run+0x1f: sibling call from callable instruction with modified stack frame
+>> vmlinux.o: warning: objtool: .text.dib8000_tune: unexpected end of section
 
-
->         rm -f vmlinux.map
->  }
->
-> @@ -288,12 +288,12 @@ vmlinux_link "${VMLINUX}"
->
->  # fill in BTF IDs
->  if is_enabled CONFIG_DEBUG_INFO_BTF; then
-> -       info BTFIDS vmlinux
-> +       info BTFIDS "${VMLINUX}"
->         RESOLVE_BTFIDS_ARGS=3D""
->         if is_enabled CONFIG_WERROR; then
->                 RESOLVE_BTFIDS_ARGS=3D" --fatal_warnings "
->         fi
-> -       ${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_ARGS} vmlinux
-> +       ${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_ARGS} "${VMLINUX}"
-
-These two changes  are correct.
-
-I will squash.
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
