@@ -1,71 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7389A1C8607;
-	Sat, 15 Mar 2025 23:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B198440C;
+	Sun, 16 Mar 2025 00:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742082709; cv=none; b=jRVsDWnSBgXjpHCMShxfNlom1yoM6hzBwx1YMJo+ugNlnuGdpkWUY0GYryXm9ebmzS6mXkZtwnWlr/G3SACxHkSxbJ0ZSJAk+xXHIYh9m9139kqYIiQMNmLAyN4BqhxpGDq8fd3IrRuDBxStDfaGLWmu0wbSe8E2zx1F4LygOFI=
+	t=1742085238; cv=none; b=ubMFBZDFHxPy3CaFvS/8XqyROPFRtpLe9I+Jya8bNhiIqtak4M3c5jTzi6EgH1YMxxuZluB5MH2FQsPGtOaHBTLJRpopkvB6QG5dlWV1K5O3M2pIou5JToDiBS9J9BglOl9pBGBzXhYFBLMA+ye25I09ZvICihOYqizhmoYJxi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742082709; c=relaxed/simple;
-	bh=FT26bfZ8vN5ufmcpCV5KQhxXMg3utTZ9eOrqzjH2+T4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZHv9VO8XhPcHVhNw/KFQ1ukjSU3pU9MkOkpwHgCUkPZ/nRT7PCK+rWLI2J18WRWgoY64NKeN3PkUpSbkNtK/Oy8kEjO1rWu29vnDm7OP0WvSHpPZci03ITXovtRiGenQ/e1eXkdz7NIf9M/cwa33BnzO+SZgI0+oFbseh+d9G/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YEwAr83g; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1742085238; c=relaxed/simple;
+	bh=ictiBmfjhuy9Efecz/e+z07DHqCdQG2BMd23joPbBAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qyJpuTWkKieXU7Yup/9dIiCmbQ6/fvxpKoLQhzt/hgGk8efybrDFRHMS+t5rlmtxiyi1SQd+Rkpnq6qPps0cwYJD4UzvS6XtXXoR5ChIwCP9Qs6wXrYwNsyyOgwlSuJM6CEr4nC1QlbVeHjyX4jA79qoSLH+EO5MLPx7IM0KZqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OWK/kdn+; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YEwAr83g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OWK/kdn+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742082704; x=1773618704;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FT26bfZ8vN5ufmcpCV5KQhxXMg3utTZ9eOrqzjH2+T4=;
-  b=YEwAr83gPyGGA+MGLm6mja+Dg9Z3UQ8gy6W0bap2E1gMZZd5Eec2jJK/
-   FFOJn0+LkRN1ycygBjTmTEhYH+OdiK6CXtLxKCZQEnc2Bk1IlhhznYDoL
-   mnTKLIdZeU6do1GPgocYyANM1olF3lHKJJImpMzZibCVk1pAjMVaLtkPk
-   cC1Os0fd/eY7MyhGMGFJ7laZFZR9jMXRPN4kKVQOzQ4CS5MfvGsuzC/9A
-   6aQk13IrOZ6m729LAkSmMMePOLolSE6chuv/KCgfUxlemhedyYnc+/Lhk
-   BqzE0uLsLbCUsMXJg34Y0QrVaR2alZW0cUNccNc9opKxR0xZwZsnmG72F
+  t=1742085236; x=1773621236;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ictiBmfjhuy9Efecz/e+z07DHqCdQG2BMd23joPbBAI=;
+  b=OWK/kdn+IsRQQkK14SBUGV/bffEG4a3cL6aln08N9Bd2Gqc+2P+2epKn
+   UNskzo8PGCQ72jxgdF117eNX/PCfWZ28dIM0ojtZF6E2XLv14SJxxJy7+
+   R8NW7jKI+f3+WYLa34NTkLdyHbkRa7EeUEE5ibRZeouDuhJh8VBqKVMNK
+   KkiAnzOJsd/uayr27rmH2FQC5tGZTH+4hh+xR3Qa9mpwEIZX+2NsgN1Zj
+   DZl6wh2k49TnWok8vJ9t+s2sGtRmloebnMKnQoc18r9gflsvoH2jKDA1I
+   pzWlnPzpw1see4TCDenB4DN6dbPwTrfiBjosXQ2YJr5I8CY0RdpAKnioa
    Q==;
-X-CSE-ConnectionGUID: Kyu45iFmRiSE05C2e83XGg==
-X-CSE-MsgGUID: c8eQp8J4T++ku7yRuKL1Ag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="53416684"
+X-CSE-ConnectionGUID: VosGyTiwRtak9CfnmgqKyw==
+X-CSE-MsgGUID: nPndzum2SKiSPwR1ybdXcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="53842334"
 X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
-   d="scan'208";a="53416684"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 16:51:43 -0700
-X-CSE-ConnectionGUID: SwcuRti5TVKMoqAxn6T7kw==
-X-CSE-MsgGUID: v/TU6OkeSkKkaz3QKp7eKw==
+   d="scan'208";a="53842334"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2025 17:33:53 -0700
+X-CSE-ConnectionGUID: TkUG5QVFTDKQPNjGyn3IKw==
+X-CSE-MsgGUID: KlV0G66oQ+e4ukoe4nwz5g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
-   d="scan'208";a="122094295"
+   d="scan'208";a="125801417"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 15 Mar 2025 16:51:36 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 15 Mar 2025 17:33:52 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ttbHx-000Bid-1r;
-	Sat, 15 Mar 2025 23:51:33 +0000
-Date: Sun, 16 Mar 2025 07:50:47 +0800
+	id 1ttbwr-000Bjh-2e;
+	Sun, 16 Mar 2025 00:33:49 +0000
+Date: Sun, 16 Mar 2025 08:33:00 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de,
-	bhelgaas@google.com, bp@alien8.de, catalin.marinas@arm.com,
-	conor+dt@kernel.org, dan.carpenter@linaro.org,
-	dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, joey.gouly@arm.com,
-	krzk+dt@kernel.org, kw@linux.com, kys@microsoft.com,
-	lenb@kernel.org, lpieralisi@kernel.org,
-	manivannan.sadhasivam@linaro.org, mark.rutland@arm.com,
-	maz@kernel.org, mingo@redhat.com, oliver.upton@linux.dev,
-	rafael@kernel.org, robh@kernel.org, ssengar@linux.microsoft.com,
-	sudeep.holla@arm.com, suzuki.poulose@arm.com, tglx@linutronix.de,
-	wei.liu@kernel.org, will@kernel.org, yuzenghui@huawei.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH hyperv-next v6 11/11] PCI: hv: Get vPCI MSI IRQ domain
- from DeviceTree
-Message-ID: <202503160700.upkL1tck-lkp@intel.com>
-References: <20250315001931.631210-12-romank@linux.microsoft.com>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>
+Subject: [pci:controller/dwc-cpu-addr-fixup 6/13]
+ drivers/pci/controller/dwc/pcie-designware.c:1135:6: warning: format
+ specifies type 'unsigned long long' but the argument has type
+ 'resource_size_t' (aka 'unsigned int')
+Message-ID: <202503160804.HTvWiBze-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,52 +64,163 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250315001931.631210-12-romank@linux.microsoft.com>
 
-Hi Roman,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on d9608f6dc3e3229a40e1db1dab573d6882f38c2a]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/arm64-kvm-smccc-Introduce-and-use-API-for-detecting-hypervisor-presence/20250315-082319
-base:   d9608f6dc3e3229a40e1db1dab573d6882f38c2a
-patch link:    https://lore.kernel.org/r/20250315001931.631210-12-romank%40linux.microsoft.com
-patch subject: [PATCH hyperv-next v6 11/11] PCI: hv: Get vPCI MSI IRQ domain from DeviceTree
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250316/202503160700.upkL1tck-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503160700.upkL1tck-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/dwc-cpu-addr-fixup
+head:   40b96cba38232460c691b52bbf9183f9e4d34914
+commit: af175b4797cd4e3e8ff22a4e3c6924443986b797 [6/13] PCI: dwc: Add dw_pcie_parent_bus_offset() checking and debug
+config: riscv-randconfig-001-20250316 (https://download.01.org/0day-ci/archive/20250316/202503160804.HTvWiBze-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250316/202503160804.HTvWiBze-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503160700.upkL1tck-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503160804.HTvWiBze-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/pci/controller/pci-hyperv.c:921:21: warning: unused variable 'domain' [-Wunused-variable]
-     921 |         struct irq_domain *domain;
-         |                            ^~~~~~
-   1 warning generated.
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:804:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     804 |         insb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:812:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     812 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:820:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     820 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:829:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     829 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:838:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     838 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:847:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     847 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from drivers/pci/controller/dwc/pcie-designware.c:15:
+   In file included from include/linux/dma/edma.h:13:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> drivers/pci/controller/dwc/pcie-designware.c:1135:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+    1134 |                         dev_warn(dev, "%#010llx %s reg[%d] == %#010llx; %ps is redundant\n",
+         |                                        ~~~~~~~~
+         |                                        %#010x
+    1135 |                                  cpu_phy_addr, reg_name, index,
+         |                                  ^~~~~~~~~~~~
+   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:1139:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+    1138 |                         dev_warn(dev, "%#010llx %s reg[%d] != %#010llx fixed up addr; devicetree is broken\n",
+         |                                        ~~~~~~~~
+         |                                        %#010x
+    1139 |                                  cpu_phy_addr, reg_name,
+         |                                  ^~~~~~~~~~~~
+   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/pci/controller/dwc/pcie-designware.c:1146:6: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
+    1145 |                         dev_warn(dev, "devicetree has incorrect translation; please check parent \"ranges\" property. CPU physical addr %#010llx, parent bus addr %#010llx\n",
+         |                                                                                                                                         ~~~~~~~~
+         |                                                                                                                                         %#010x
+    1146 |                                  cpu_phy_addr, reg_addr);
+         |                                  ^~~~~~~~~~~~
+   include/linux/dev_printk.h:156:70: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   10 warnings generated.
 
 
-vim +/domain +921 drivers/pci/controller/pci-hyperv.c
+vim +1135 drivers/pci/controller/dwc/pcie-designware.c
 
-   918	
-   919	static struct irq_domain *hv_pci_acpi_irq_domain_parent(void)
-   920	{
- > 921		struct irq_domain *domain;
-   922		acpi_gsi_domain_disp_fn gsi_domain_disp_fn;
-   923	
-   924		if (acpi_irq_model != ACPI_IRQ_MODEL_GIC)
-   925			return NULL;
-   926		gsi_domain_disp_fn = acpi_get_gsi_dispatcher();
-   927		if (!gsi_domain_disp_fn)
-   928			return NULL;
-   929		return irq_find_matching_fwnode(gsi_domain_disp_fn(0),
-   930					     DOMAIN_BUS_ANY);
-   931	}
-   932	
+  1109	
+  1110	resource_size_t dw_pcie_parent_bus_offset(struct dw_pcie *pci,
+  1111						  const char *reg_name,
+  1112						  resource_size_t cpu_phy_addr)
+  1113	{
+  1114		struct device *dev = pci->dev;
+  1115		struct device_node *np = dev->of_node;
+  1116		int index;
+  1117		u64 reg_addr, fixup_addr;
+  1118		u64 (*fixup)(struct dw_pcie *pcie, u64 cpu_addr);
+  1119	
+  1120		/* Look up reg_name address on parent bus */
+  1121		index = of_property_match_string(np, "reg-names", reg_name);
+  1122	
+  1123		if (index < 0) {
+  1124			dev_err(dev, "No %s in devicetree \"reg\" property\n", reg_name);
+  1125			return 0;
+  1126		}
+  1127	
+  1128		of_property_read_reg(np, index, &reg_addr, NULL);
+  1129	
+  1130		fixup = pci->ops->cpu_addr_fixup;
+  1131		if (fixup) {
+  1132			fixup_addr = fixup(pci, cpu_phy_addr);
+  1133			if (reg_addr == fixup_addr) {
+  1134				dev_warn(dev, "%#010llx %s reg[%d] == %#010llx; %ps is redundant\n",
+> 1135					 cpu_phy_addr, reg_name, index,
 
 -- 
 0-DAY CI Kernel Test Service
