@@ -1,140 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7241A072A;
-	Mon, 17 Mar 2025 16:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DBDA48;
+	Mon, 17 Mar 2025 17:02:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742228569; cv=none; b=AGxxGX6Ob0Ahpg9yHsawjujVokdgTXRylhcNdUf9J9vL2UQZgAsmr6u0RIkKJ2b+Ix7wfakd4t0SkWbpEYJNwZYfpOST9c+z0DtjjM+GbwNwh+/a4sJlHN6ryJXQFQkabaCADvhLUgItTQrT08To7QyxM0CZEmwZSj9NX+qFygs=
+	t=1742230921; cv=none; b=sg/JEHLYZ5a4cLjghxBvwnG3zsUNUx0SP93n1XIWNQp6unebZD48OSgGmrRAJ7yPYi7wCQYd4b70HlF184/1sUC3t7VhfxqQiVWP/1FbXG/JsMEXdgOz21GopXO3uyHvfp9r3qraKiWPKfI8rwNJXfGKAk9Rk8L4IHcSqIYMitU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742228569; c=relaxed/simple;
-	bh=dRUIl3yQcLybI+RJ6oaOQPFfyifr9VBzmEcrLKujw2A=;
+	s=arc-20240116; t=1742230921; c=relaxed/simple;
+	bh=x/mGAkrV+8U34K+5jMdXc/eUYG9sUfn3SkW/CtmeZXA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r4N7u+LcR0fsZnfaQxR9RvV5wBONhMlsoAHvm2GDif0dVL1zbEnbi65+fo0J8PBLbrkzYQ5ht/bcivezsBS8esjCBvNyIncp1Qzw1NUPQ/nDlqULd9exAEXhTl/N9qg8ck5FwJmab0lpH3YbWB0GKg0cfMBkYk+wmwFHicAXGmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rFYdRWCR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=pD6mzkpvtjn7PEHLwI6KmKLXkBDeHUU15WibuVehQbxLs1Vo6dEQjUE3sIs10U55TjJoWX+x46MQgfBD9IBUHt5LA4F/QG4Kx3xcJoBcak9IEeSM0dg0gOYaZ8E+5/+cM+fMXyK1f8uiu6xrgQ5WqNM9lxmfJ6WiratVCmqccHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MXWjDHjA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rFYdRWCR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D4AC4CEED;
-	Mon, 17 Mar 2025 16:22:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MXWjDHjA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970C2C4CEE3;
+	Mon, 17 Mar 2025 17:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742228569;
-	bh=dRUIl3yQcLybI+RJ6oaOQPFfyifr9VBzmEcrLKujw2A=;
+	s=k20201202; t=1742230920;
+	bh=x/mGAkrV+8U34K+5jMdXc/eUYG9sUfn3SkW/CtmeZXA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rFYdRWCRMHtn3ek5pOSVea3e1aV3dB3WZkMmGn14i+pVDV70xQ4NY4R/ZlTkyS86C
-	 HGEpT+dhq4uqjcBnp1l01qCouQcDLlbj5wo9QOTOFkc7pQMauL03MlK9Y4h3XhlRxh
-	 cnup+q58QqMDwCuZn/G0pO3SmEuZT+0rrpjuXzn5U1gE9tEdYIF2XFctyrV6Z/YrXu
-	 vMXqUWKB4xXGT75JveTVA6Oblr++7aq8T0SPVv/gnlvDtVtsH6QScGRc+4IUhUCZ+d
-	 /xcMHRSGWcLrC/nuHlZIvmcLTNxXmfazqGOGiM4370sgCS3bSRyyCTmGT9+Rmo71w2
-	 26zc6VcvZZdLw==
-Date: Mon, 17 Mar 2025 09:22:46 -0700
-From: Kees Cook <kees@kernel.org>
-To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Miguel Ojeda <ojeda@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Marco Elver <elver@google.com>, linux-hardening@vger.kernel.org,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Alexander Potapenko <glider@google.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 1/2] compiler_types: Introduce __flex_counter() and
- family
-Message-ID: <202503170918.A53A0F2@keescook>
-References: <20250315025852.it.568-kees@kernel.org>
- <20250315031550.473587-1-kees@kernel.org>
- <eb6e6198-dc42-4a63-8d0d-35f3061ff388@intel.com>
- <44a00ad4-b05d-4fb8-87f2-fccbaa068872@intel.com>
+	b=MXWjDHjAQFJe8AyUlboM8EDsbGsI17LHbp41AxpboHEAeN98Ipu+r2oayp08t8UtW
+	 XqG42w5KElVvK7Q+P4xrFXnbGIRvFf6BIg20Zcwty/Z+qVcQwiBvQ8YHbVP1AvqkYY
+	 E2d4w7TbmD8UVSQgMYSfiJUHx+42w8E5HxwCZHb3/CDJqmdbX8+5wMpGe+kDJHEhlw
+	 L9ijnqFj5FKc+wF09fwVT5XKhB1dNY6HSPN8dWHwxl6UOlPSgr0f3ewg3shFuSv8pL
+	 llh1wIQLTV/v8K8jtkQzphsFTQ5djNE/QKPl906ptEVZ6spMGcjtR+XA+2vVi2eW1J
+	 FDf9ctn+TtMuw==
+Date: Mon, 17 Mar 2025 17:01:54 +0000
+From: Simon Horman <horms@kernel.org>
+To: Sai Krishna Gajula <saikrishnag@marvell.com>
+Cc: "davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+	Geethasowjanya Akula <gakula@marvell.com>,
+	Linu Cherian <lcherian@marvell.com>,
+	Jerin Jacob <jerinj@marvell.com>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	Bharat Bhushan <bbhushan2@marvell.com>,
+	"nathan@kernel.org" <nathan@kernel.org>,
+	"ndesaulniers@google.com" <ndesaulniers@google.com>,
+	"morbo@google.com" <morbo@google.com>,
+	"justinstitt@google.com" <justinstitt@google.com>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [net-next PATCH v2] octeontx2-af: fix build warnings flagged by
+ clang, sparse ,kernel test robot
+Message-ID: <20250317170154.GF688833@kernel.org>
+References: <20250305094623.2819994-1-saikrishnag@marvell.com>
+ <20250306164322.GC3666230@kernel.org>
+ <BY3PR18MB470761F0063CA2AA4481DF7CA0D12@BY3PR18MB4707.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <44a00ad4-b05d-4fb8-87f2-fccbaa068872@intel.com>
+In-Reply-To: <BY3PR18MB470761F0063CA2AA4481DF7CA0D12@BY3PR18MB4707.namprd18.prod.outlook.com>
 
-On Mon, Mar 17, 2025 at 10:43:38AM +0100, Przemek Kitszel wrote:
-> On 3/17/25 10:26, Przemek Kitszel wrote:
-> > On 3/15/25 04:15, Kees Cook wrote:
-> > > Introduce __flex_counter() which wraps __builtin_counted_by_ref(),
-> > > as newly introduced by GCC[1] and Clang[2]. Use of __flex_counter()
-> > > allows access to the counter member of a struct's flexible array member
-> > > when it has been annotated with __counted_by().
-> > > 
-> > > Introduce typeof_flex_counter(), can_set_flex_counter(), and
-> > > set_flex_counter() to provide the needed _Generic() wrappers to get sane
-> > > results out of __flex_counter().
-> > > 
-> > > For example, with:
-> > > 
-> > >     struct foo {
-> > >         int counter;
-> > >         short array[] __counted_by(counter);
-> > >     } *p;
-> > > 
-> > > __flex_counter(p->array) will resolve to: &p->counter
-> > > 
-> > > typeof_flex_counter(p->array) will resolve to "int". (If p->array was not
-> > > annotated, it would resolve to "size_t".)
-> > > 
-> > > can_set_flex_counter(p->array, COUNT) is the same as:
-> > > 
-> > >     COUNT <= type_max(p->counter) && COUNT >= type_min(p->counter)
-> > > 
-> > > (If p->array was not annotated it would return true since everything
-> > > fits in size_t.)
-> > > 
-> > > set_flex_counter(p->array, COUNT) is the same as:
-> > > 
-> > >     p->counter = COUNT;
-> > > 
-> > > (It is a no-op if p->array is not annotated with __counted_by().)
-> > > 
-> > > Signed-off-by: Kees Cook <kees@kernel.org>
+On Tue, Mar 11, 2025 at 08:57:22AM +0000, Sai Krishna Gajula wrote:
+
+...
+
+> > > diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+> > > b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+> > > index cd0d7b7774f1..c850ea5d1960 100644
+> > > --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+> > > +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu.c
+> > > @@ -591,7 +591,7 @@ static void rvu_check_min_msix_vec(struct rvu
+> > > *rvu, int nvecs, int pf, int vf)
+> > >
+> > >  check_pf:
+> > >  	if (pf == 0)
+> > > -		min_vecs = RVU_AF_INT_VEC_CNT + RVU_PF_INT_VEC_CNT;
+> > > +		min_vecs = (int)RVU_AF_INT_VEC_CNT +
+> > (int)RVU_PF_INT_VEC_CNT;
+> > >  	else
+> > >  		min_vecs = RVU_PF_INT_VEC_CNT;
+> > >
 > > 
-> > I agree that there is no suitable fallback handy, but I see counter
-> > as integral part of the struct (in contrast to being merely annotation),
-> > IOW, without set_flex_counter() doing the assignment, someone will
-> > reference it later anyway, without any warning when kzalloc()'d
-> > 
-> > So, maybe BUILD_BUG() instead of no-op?
+> > I think that in the light of Linus's feedback and the subsequent patch that
+> > demoted -Wenum-enum-conversion from W=1 to W=1 this is not necessary.
 > 
-> I get that so far this is only used as an internal helper (in the next
-> patch), so for me it would be also fine to just add __ prefix:
-> __set_flex_counter(), at least until the following is true:
->  "manual initialization of the flexible array counter is still
-> required (at some point) after allocation as not all compiler versions
-> support the __counted_by annotation yet"
+> Ack, will ignore these changes which are flagged by  -Wenum-enum-conversion
 
-Yeah, that's fair. I will rename set_... and can_set_...
+Thanks,
 
-Thought FWIW I'm not sure we'll ever want a BUILD_BUG_ON() just because
-there will be flex arrays with future annotations that can't have their
-counter set (e.g. annotations that indicate globals, expressions, etc --
-support for these cases is coming, if slowly[1]).
+FTR this should have read "from W=1 to W=2"
 
--Kees
-
-[1] loooong thread https://gcc.gnu.org/pipermail/gcc-patches/2025-March/677024.html
-
--- 
-Kees Cook
+...
