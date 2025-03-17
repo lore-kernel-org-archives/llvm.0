@@ -1,87 +1,99 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183A1236455
-	for <llvm@lists.linux.dev>; Mon, 17 Mar 2025 10:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A2523BD0B
+	for <llvm@lists.linux.dev>; Mon, 17 Mar 2025 10:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742207040; cv=none; b=iN5dNBVV1J8Vpg1zziZCz79/aHSDZOQvtuuEIHKzirWmi8m7LEdUujXnTsZqwEokABeXkliFVxZvXX4T7mCVJ/VjRorOCbhnZ4JYbNCjdXB0lXh/jtleIfJZ+IrJ/pidHLqJYnvcgHFiejHAk4sYusl15LkYIqMqiod1gAi1SbM=
+	t=1742207061; cv=none; b=MepEwbKWnjECTEHcrpLkM7eSNY1mS7IbXpnmjI9dl6NFvjofTnfByiEBYyIAKr53VEgzGzqZMTPmkoveD/3fGdX0K8TQTYRwvPFk71jcmtYsVkEaA3pJeqOVW5I4i0fc1dOHB0XZhcbdky86XuBuyEQNqd4WdydkVyZ8xCTQci4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742207040; c=relaxed/simple;
-	bh=pIVLFkm47pCR6w+Z+PEWMNYYYxg8mOrqdzANo897rXA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NH2qz/I9ybVAXjtS9hLdNam/nEPvejzUFP9+HeDsMiM4HkPAmkaZkRzN1LgG0jX4MAVc/0o+WwG21nVWzrIsUThiNE4clTgaj1pM9RX7yMAVPa6140bX50vZrVNhRKnnEU3tIPaUnGQsJw5bhzmvAQmyJg0b3pP0dRyQDyYtKdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=iz8umakO; arc=none smtp.client-ip=185.70.40.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1742207061; c=relaxed/simple;
+	bh=T0XmXTPHuSifmlk1GQv7S8pl94t1Wv6LlKDhlqctDvU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gQ+hAOyA9Pnr7NwHuUkc92v9jX0EOHaD9+/Q9l3+TEmvBCzYsmJl1/FbWLRIVTe62SVrAuoClxPhUuyjrtJWDyB67JW2HUqDG6NFYCL99qXFBQZ2vojeLDX+Ie6wdf3hLNKVsXellX5NEzYgbFgpeXV1qZlIhrx76xS6SPkKXok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wTYbtgKN; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="iz8umakO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742207035; x=1742466235;
-	bh=MbL20IMMOiuE0tyDlYbi7mItlyDlTT2h74sF3mfYft8=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=iz8umakObCbHhFhZpKdvjsDl1AcG939QUDlZW+V/42pPgGLjxoQhljGICBVw+ifqU
-	 jCqDOeIYM5tqaOM8F+0WygiytvppMT0huCPuKWws+LUWxyvEquhl+OrFd4AgnrLUlX
-	 mcd7vmadSKpf+wGaydrpqL9OOilpvuAP6gGjZ2yHDoiYRuuCqpq7b3yKgcIz43W+QP
-	 CcFfIYeMJlM58DdsrsEtlhm2bnnPHyrOLkDifY0uXNl0ZHFq8R2cUY6qq/XAkj57IG
-	 kJKbuwCSBv36Al28arGbYFOC7N94+XZ7yZgoDOm0FMXA+mrmyiQSVTNqRgt+HWNwYk
-	 DOcymEIlHKPTA==
-Date: Mon, 17 Mar 2025 10:23:49 +0000
-To: Kunwu Chan <kunwu.chan@linux.dev>, ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@Gmail.com>
-Subject: Re: [PATCH v2] rust: sync: optimize Rust symbol generation for PollCondVar
-Message-ID: <D8IGUG4SGRP4.1JJBWPJ46AJBG@proton.me>
-In-Reply-To: <20250317025205.2366518-1-kunwu.chan@linux.dev>
-References: <20250317025205.2366518-1-kunwu.chan@linux.dev>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: d737427aa33b14d06bf3f49d07aea7ba2e097d12
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wTYbtgKN"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43d007b2c79so15163145e9.2
+        for <llvm@lists.linux.dev>; Mon, 17 Mar 2025 03:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742207058; x=1742811858; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8K4Jrr2cHn05wONB/FH2XsdIcr9ioXUuaymWvPlQBPA=;
+        b=wTYbtgKNDIh2mggNThF5yQmkyYkSEJ8XBENm5msBcLDV7QJauB4lVnTEO+O1VjB9rd
+         6h/Bxs8AQKaD9ys48FY8OntamD9W57njYuN97YXZrCLIk7AL+v/Nl12wRzlsDCK4qik1
+         jDnEX2l3de5JcEUm9/7bqNK/0S37JZH8WPGriHp+0PfFpghvqVkspFrW/Rsz+6Cl1sRp
+         djxAanyMfsyRbtOCard4xmgBU3ALpfY1Z4lWHrDcvyUNKV+XUju2CofIal6mzUeiB4Hk
+         LV97cuvMzYmVaXTC2Ftn5MbHg1FOrM+vYzrXEzotPJNMX6S2gHDeBXOYX4ws0vQC3szH
+         9hEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742207058; x=1742811858;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8K4Jrr2cHn05wONB/FH2XsdIcr9ioXUuaymWvPlQBPA=;
+        b=Eh7sEGQeJP8I2uFpWpUBdDkg1odpv1zs2pqNUXqHvkPGzu5sm/H8SIabAhEtm1MUxD
+         clVpxvEmQSu0cDIpTL9Ruv8Jz7qivh7OQAytoB14LWMOhchdIyFTO6xmc1B1OysQ/AVQ
+         51kfNmHe73TX6I8pg6+5UvPUEJbJugNBMUShiXFUzybTuicLhO1xd8HqZlXA31em+3M3
+         BaFCF4RFW9LmMp6EUI03jVOseXvOH4SYcM1q164OBwhLcJE3OB3fQRH8arSMZyu3zaqI
+         ntJ1+delzK3hfgKCBHH+G+M0bYHdohY2J41hdZKYHSzyOkXasf5c/+VQAZ4PCJkGMbKW
+         2ZiA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0JUVuyT7S7ArVcog0vLYHdR7+tIzvpAz58A3dcBDArXmykU+0guvr69Via3/gCJeyvVYa@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFcxjA9qlxfpHSGSNyaCd4Iw3mw16s00mS0r/Q4dMR8HxOiezz
+	oOIwGuQ4VEqOiLGaqCPBWC3VPmX+/sKGBqL8GMtYjIOtTxL20qgjXJYOF31FxtKE9s7mOlzIoPt
+	5pKQpl38SdbNtKw==
+X-Google-Smtp-Source: AGHT+IGHM9Im2dqX3gfz0NV8cc0x3CfI4wJk+09faVb93t75tZtSx537hGUim5yDjXgoSpEfdSGA14kssfoPG70=
+X-Received: from wmgg6.prod.google.com ([2002:a05:600d:6:b0:43b:c450:ea70])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:3b0a:b0:43c:f969:13c2 with SMTP id 5b1f17b1804b1-43d1ece13a4mr114040775e9.28.1742207058149;
+ Mon, 17 Mar 2025 03:24:18 -0700 (PDT)
+Date: Mon, 17 Mar 2025 10:24:15 +0000
+In-Reply-To: <20250317023702.2360726-1-kunwu.chan@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20250317023702.2360726-1-kunwu.chan@linux.dev>
+Message-ID: <Z9f4Twvl-UaX1NQp@google.com>
+Subject: Re: [PATCH v2] rust: file: optimize rust symbol generation for FileDescriptorReservation
+From: Alice Ryhl <aliceryhl@google.com>
+To: Kunwu Chan <kunwu.chan@linux.dev>, Christian Brauner <brauner@kernel.org>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
+	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, 
+	Grace Deng <Grace.Deng006@gmail.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon Mar 17, 2025 at 3:52 AM CET, Kunwu Chan wrote:
+Adding Christian Brauner who originally merged the
+rust/kernel/fs/file.rs file.
+
+On Mon, Mar 17, 2025 at 10:37:02AM +0800, Kunwu Chan wrote:
 > From: Kunwu Chan <kunwu.chan@hotmail.com>
->
+> 
 > When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> with ARCH=3Darm64, the following symbols are generated:
->
-> $nm vmlinux | grep ' _R'.*PollCondVar  | rustfilt
-> ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::p=
-anic_cold_explicit
-> ... T <kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop
-> ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
->
-> This Rust symbol
-> (<kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop)
-> is trivial wrappers around the C functions __wake_up_pollfree
-> and synchronize_rcu. It doesn't make sense to go through a trivial
-> wrapper for its functions,so mark it inline.
->
+> with ARCH=arm64, the following symbols are generated:
+> 
+> $ nm vmlinux | grep ' _R'.*FileDescriptorReservation | rustfilt
+> ... T <kernel::fs::file::FileDescriptorReservation>::fd_install
+> ... T <kernel::fs::file::FileDescriptorReservation>::get_unused_fd_flags
+> ... T <kernel::fs::file::FileDescriptorReservation as core::ops::drop::Drop>::drop
+> 
+> These Rust symbols are trivial wrappers around the C functions
+> fd_install, put_unused_fd and put_task_struct. It
+> doesn't make sense to go through a trivial wrapper for these
+> functions, so mark them inline.
+> 
 > Link: https://github.com/Rust-for-Linux/linux/issues/1145
 > Suggested-by: Alice Ryhl <aliceryhl@google.com>
 > Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
 > Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
 > Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
-
----
-Cheers,
-Benno
-
-> ---
-> Changes in v2:
->  - Add link and Suggested-by
->  - Reword commit msg
-> ---
->  rust/kernel/sync/poll.rs | 1 +
->  1 file changed, 1 insertion(+)
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
