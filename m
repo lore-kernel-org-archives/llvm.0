@@ -1,105 +1,212 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F4921CC59
-	for <llvm@lists.linux.dev>; Mon, 17 Mar 2025 10:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE38233128;
+	Mon, 17 Mar 2025 10:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742207596; cv=none; b=PBiJi5XiLQqw6OJ6mX1qEkdiu9kSZ1sT/OsnEVP9RZJsGgthqhRhzLtNLhLkRUE8tUfbRIxEtsdGOlMC3pcvHwfukD2uWl4l60EwTm8focxJn3oIhSg1kkv+HpJm2miIvWVOgyfLKXfsNUCH+rKB/n5hxPKkgfeX3hsXqwIZDo8=
+	t=1742208416; cv=none; b=nj1ZqoWT72CSdUtMtPwZKplJEaB+igQdMhMRsWdJtdbO3vhb7QcrWCSSmydQtJb+4NLo7u2FzzX4S6aAY6hbfQDYi9F6SW93CvPv37lfyKsepk/YyI6e43RXmdJFX8rTYYm+ZIxTLdp4BDK/RtL32X6+p6Uosffbkuxs8NXIBs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742207596; c=relaxed/simple;
-	bh=wxqfJvAeKGlWHNzYJYtMeNgpJTRM7JG0J2iuiWF/RpA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VrP2zizMo2T/EHtuH3ceVnuyt25lhZYANJFjYdrLYLRKUcXF54+c0zHDlcQnTkFpoQh6xiA8xQA5mpXyBukq72BwLzsOEMTijO1TwQOMykS5FkxN1Tfs4DC0nAvjXPfFQCfjMrp7QW/K9CZx2Q2BqM2+NXqG14xuN5+5J64PCGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=od68Gf9t; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1742208416; c=relaxed/simple;
+	bh=8c6ITS6NpbhSx8gm6ACJJntAw1mrd8H/LF+M6b1ue70=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iELMl5FEdezdTtyrkdYdrwgpXsG5dsR/7c2dd2NppI2u4edm7BKQf6cCDwseel2AATLvBs0SvTRWs8XSOeBZsNRrKFh5DwhY0Ckx/3wIhhXBPqkrx4TwTrKskPbGs+CoPu1AgtpCCMzC0lJc/mLvZq29ia8A4Yhhj99cnoXrEus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M0DrnS1A; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="od68Gf9t"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43d01024089so16463605e9.1
-        for <llvm@lists.linux.dev>; Mon, 17 Mar 2025 03:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742207592; x=1742812392; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IvLoYXAbsczx0XYVJotNCJOKB5QuWZcwFTDWX8BS84g=;
-        b=od68Gf9tQzmDIYR2XuVCoSIJ2doCVzvV1y+wdvGuuXNERjx8rnyWnRoZO1hPAvVujZ
-         mAQ4mX1sNAg+yQx+Hl23qRfulXnOD8l9U2PXk6nhX36CjvOVg6ODsCnK/vWn8ysxHPe+
-         jyCbdIK0poyMNvoiq7IK4udQwP3gRCmYH7Tod7C8t7cBOU6QKvhuQdzj4KalnNhgnKkg
-         dv7ekmCTmFeQeSARBYyFqs2mZVTclG4rHpK1/txH0H8vR6o5Z17OxoeJC/rRMT8Wiy6X
-         toiZ9kEiQ9w6rnngp8DMgPwO41srgePt7wkNjGmu4PmzDjzN7TiTdPRqCfy4g95Arwdx
-         Xp/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742207592; x=1742812392;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IvLoYXAbsczx0XYVJotNCJOKB5QuWZcwFTDWX8BS84g=;
-        b=r6+nyqVw2O/rvtYf6oEtNltX45DbA5cKvQJ5EYVF2aZF+s/gLRlxT8pEN4KQ/8Can3
-         tqcHSpgMF88ii0/a2aXJXg8NXAJdUcza6C7OuzibECGQQw+1/ZQmtanUjWKNk/DUsGSs
-         zjfrtxW/csqAXOyzLLlJBUTOzeAd5vyMwOXk1JBLJKHnjixjpnCJy04ZpzwjcAsRh8Qp
-         ipUIu6HVsnmSRfE+uEXpNENxIrplqKmX1+ThYJOC6EbBCBgqomxIcTemsns3p2TXZ6aE
-         nmvZAcfKO2OkT/85nJQ5pgUZle1Tl3GSspzPHYZWgNDLSo9pSAy+m4hf+eZr1Kh0mfg/
-         zttA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIdS+vVBTId1uRvIBYDkZ5tuRojUXdJqEp/T8QlLgBA6tJyLEtJvVbQF0LlhOpgH6XFJKH@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3Ko+cMqq7iMLBd5ji1s5ny++t7SFi0fkldI9pIBHGvoKY2P/R
-	UE7e0I9slC8aPYBxQQI9hMaBit6wBtrY9g3Dvt90cwsSjjsSR3EnPZb2fCocXWx2xT9bfSuwD4+
-	yEaClMhXsusAeBQ==
-X-Google-Smtp-Source: AGHT+IHGHyX+6ByhebHTO9V3LY5GS887qbOd27cikxIO2WguSKFpckY3Ttr8Dc4mg9GMsrlGAQAL0Lzpoi+1cFY=
-X-Received: from wmbgz10.prod.google.com ([2002:a05:600c:888a:b0:43b:d6ca:6dd3])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:35c9:b0:43c:fd72:f039 with SMTP id 5b1f17b1804b1-43d1ec835e8mr138658855e9.11.1742207592764;
- Mon, 17 Mar 2025 03:33:12 -0700 (PDT)
-Date: Mon, 17 Mar 2025 10:33:10 +0000
-In-Reply-To: <20250317094004.2622640-1-kunwu.chan@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M0DrnS1A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742208415; x=1773744415;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8c6ITS6NpbhSx8gm6ACJJntAw1mrd8H/LF+M6b1ue70=;
+  b=M0DrnS1Ah0hCCeFbQKcM9uZy/z60mQyb+czPWSUqDZ0e2LHAkxqRg+7G
+   JGxqejYyqO/cK2iES3cHMmoatQrKDzDpUk4EVbLFf4VehC5w0IGeD1p/7
+   ouzLT8+DR2cE433nyC+GSMo6REirjBwY8Da68HDjnCDqAeyj5uEFecxDO
+   IPxq9QjQ0rmOWtkK6FBARB3H2uU4Fg4rou6cfJZth8/UBZC8Pw7iIQ6Pi
+   rKzwbKkGUskUVjwZvsmLQBGkb+U/IWJV09Nnp1wdBVeQIFlQtkd/Otl5C
+   0Xv9zsOgql461JPlUzEtxlHD2zem163SwY+Jl/dOrnTplGP705RsWyI/e
+   Q==;
+X-CSE-ConnectionGUID: //mJIhvmSMmzA+XenL1eoA==
+X-CSE-MsgGUID: 66ZWFKtlRtyQpIuCHhqgng==
+X-IronPort-AV: E=McAfee;i="6700,10204,11375"; a="60687096"
+X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
+   d="scan'208";a="60687096"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 03:46:54 -0700
+X-CSE-ConnectionGUID: XIG5zVxaSEau8G4PxehmOw==
+X-CSE-MsgGUID: bqBqkn7zSO2Yc5RCe+FQgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,253,1736841600"; 
+   d="scan'208";a="121859349"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 17 Mar 2025 03:46:53 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tu7zV-000CgL-04;
+	Mon, 17 Mar 2025 10:46:44 +0000
+Date: Mon, 17 Mar 2025 18:45:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jirislaby:devel 105/111] drivers/tty/serial/serial_core.c:3105:3:
+ error: cannot jump from this goto statement to its label
+Message-ID: <202503171815.hLKSZvJJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20250317094004.2622640-1-kunwu.chan@linux.dev>
-Message-ID: <Z9f6Zi2_eZFFY0Q7@google.com>
-Subject: Re: [PATCH] rust: page:: optimize rust symbol generation for Page
-From: Alice Ryhl <aliceryhl@google.com>
-To: Kunwu Chan <kunwu.chan@linux.dev>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>, 
-	Grace Deng <Grace.Deng006@gmail.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Mar 17, 2025 at 05:40:04PM +0800, Kunwu Chan wrote:
-> From: Kunwu Chan <kunwu.chan@hotmail.com>
-> 
-> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> with ARCH=arm64, the following symbols are generated:
-> 
-> $nm vmlinux | grep ' _R'.*Page | rustfilt
-> ffff8000805b6f98 T <kernel::page::Page>::alloc_page
-> ffff8000805b715c T <kernel::page::Page>::fill_zero_raw
-> ffff8000805b720c T <kernel::page::Page>::copy_from_user_slice_raw
-> ffff8000805b6fb4 T <kernel::page::Page>::read_raw
-> ffff8000805b7088 T <kernel::page::Page>::write_raw
-> ffff8000805b72fc T <kernel::page::Page as core::ops::drop::Drop>::drop
-> 
-> These Rust symbols are trivial wrappers around the C functions
-> alloc_pages, kunmap_local and __free_pages.
-> It doesn't make sense to go through a trivial wrapper for these
-> functions, so mark them inline.
-> 
-> Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
-> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
-> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   a51ffe221e2da2df430888699365394c646aed12
+commit: 3d93b0ef6e12a7eea9ca53e38b755617089374b4 [105/111] serial: drv->state -> xarray
+config: x86_64-buildonly-randconfig-002-20250317 (https://download.01.org/0day-ci/archive/20250317/202503171815.hLKSZvJJ-lkp@intel.com/config)
+compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250317/202503171815.hLKSZvJJ-lkp@intel.com/reproduce)
 
-For sure `alloc_page` and `drop` should be inline, but the other methods
-are not as simple. It is less clear that they should be inline.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503171815.hLKSZvJJ-lkp@intel.com/
 
-At the very least, the claim that they are a trivial wrapper around
-"kunmap_local" is false. They don't just call that method.
+All errors (new ones prefixed by >>):
 
-Alice
+   In file included from drivers/tty/serial/serial_core.c:30:
+   In file included from include/linux/security.h:33:
+   In file included from include/linux/mm.h:2302:
+   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/tty/serial/serial_core.c:3105:3: error: cannot jump from this goto statement to its label
+    3105 |                 goto err_free_state;
+         |                 ^
+   drivers/tty/serial/serial_core.c:3111:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    3111 |         guard(mutex)(&port->mutex);
+         |         ^
+   include/linux/cleanup.h:309:15: note: expanded from macro 'guard'
+     309 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+     166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:41:1: note: expanded from here
+      41 | __UNIQUE_ID_guard589
+         | ^
+   1 warning and 1 error generated.
+
+
+vim +3105 drivers/tty/serial/serial_core.c
+
+  3079	
+  3080	/**
+  3081	 * serial_core_add_one_port - attach a driver-defined port structure
+  3082	 * @drv: pointer to the uart low level driver structure for this port
+  3083	 * @uport: uart port structure to use for this port.
+  3084	 *
+  3085	 * Context: task context, might sleep
+  3086	 *
+  3087	 * This allows the driver @drv to register its own uart_port structure with the
+  3088	 * core driver. The main purpose is to allow the low level uart drivers to
+  3089	 * expand uart_port, rather than having yet more levels of structures.
+  3090	 * Caller must hold port_mutex.
+  3091	 */
+  3092	static int serial_core_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+  3093	{
+  3094		struct uart_state *state;
+  3095		struct tty_port *port;
+  3096		struct device *tty_dev;
+  3097		int num_groups, ret;
+  3098	
+  3099		state = kzalloc(sizeof(*state), GFP_KERNEL);
+  3100		if (!state)
+  3101			return -ENOMEM;
+  3102	
+  3103		ret = xa_err(xa_store(&drv->state, uport->line, state, GFP_KERNEL));
+  3104		if (ret)
+> 3105			goto err_free_state;
+  3106	
+  3107		port = &state->port;
+  3108		tty_port_init(port);
+  3109		port->ops = &uart_port_ops;
+  3110	
+  3111		guard(mutex)(&port->mutex);
+  3112		/* Link the port to the driver state table and vice versa */
+  3113		atomic_set(&state->refcount, 1);
+  3114		init_waitqueue_head(&state->remove_wait);
+  3115		state->uart_port = uport;
+  3116		uport->state = state;
+  3117	
+  3118		/*
+  3119		 * If this port is in use as a console then the spinlock is already
+  3120		 * initialised.
+  3121		 */
+  3122		if (!uart_console_registered(uport))
+  3123			uart_port_spin_lock_init(uport);
+  3124	
+  3125		state->pm_state = UART_PM_STATE_UNDEFINED;
+  3126		uart_port_set_cons(uport, drv->cons);
+  3127		uport->minor = drv->tty_driver->minor_start + uport->line;
+  3128		uport->name = kasprintf(GFP_KERNEL, "%s%d", drv->dev_name,
+  3129					drv->tty_driver->name_base + uport->line);
+  3130		if (!uport->name)
+  3131			return -ENOMEM;
+  3132	
+  3133		if (uport->cons && uport->dev)
+  3134			of_console_check(uport->dev->of_node, uport->cons->name, uport->line);
+  3135	
+  3136		uart_configure_port(drv, state, uport);
+  3137	
+  3138		port->console = uart_console(uport);
+  3139	
+  3140		num_groups = 2;
+  3141		if (uport->attr_group)
+  3142			num_groups++;
+  3143	
+  3144		uport->tty_groups = kcalloc(num_groups, sizeof(*uport->tty_groups),
+  3145					    GFP_KERNEL);
+  3146		if (!uport->tty_groups)
+  3147			return -ENOMEM;
+  3148	
+  3149		uport->tty_groups[0] = &tty_dev_attr_group;
+  3150		if (uport->attr_group)
+  3151			uport->tty_groups[1] = uport->attr_group;
+  3152	
+  3153		/* Ensure serdev drivers can call serdev_device_open() right away */
+  3154		uport->flags &= ~UPF_DEAD;
+  3155	
+  3156		/*
+  3157		 * Register the port whether it's detected or not.  This allows
+  3158		 * setserial to be used to alter this port's parameters.
+  3159		 */
+  3160		tty_dev = tty_port_register_device_attr_serdev(port, drv->tty_driver,
+  3161				uport->line, uport->dev, &uport->port_dev->dev, port,
+  3162				uport->tty_groups);
+  3163		if (!IS_ERR(tty_dev)) {
+  3164			device_set_wakeup_capable(tty_dev, 1);
+  3165		} else {
+  3166			uport->flags |= UPF_DEAD;
+  3167			dev_err(uport->dev, "Cannot register tty device on line %d\n",
+  3168			       uport->line);
+  3169		}
+  3170	
+  3171		return 0;
+  3172	err_free_state:
+  3173		kfree(state);
+  3174		return ret;
+  3175	}
+  3176	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
