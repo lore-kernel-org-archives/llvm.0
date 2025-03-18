@@ -1,60 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7271D2045BF;
-	Tue, 18 Mar 2025 08:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4667A20485F;
+	Tue, 18 Mar 2025 08:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742288078; cv=none; b=Df+yNYEbhoqrluRA/NqUbX1+KgO2JLDlxyth9WASL8Bp4tsoQQwv0yegZP2Qu1juIplo92pmoN2m9pdUxk6asA2p3ps9vvnmBgFk50QUHpa12o3FzVKZ1CGIYDMI8HnsKnYem5vkK5b4H4/z+d8R67D3yud2BIvkT2zWBBk3zpE=
+	t=1742288147; cv=none; b=XVEXKAI2qj5BuwQ/8XSBmQ+TTsdalhDN++8yRk65dEj34l26djpmCvGkjyQ/OoPBHmQYB9js43mtuxUdtxHCSJfCovKciFAw1uE+g+qchGVz45VTZt8upQcj5uObgsB5k6bxILbQ4DM+mlKxwXoWgjJhyjqfRvqlvBdHhJtu6u4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742288078; c=relaxed/simple;
-	bh=zyeRAKjkRqHsBrmxCmfGPXxBwL9hFs37DoCv6zPH/4c=;
+	s=arc-20240116; t=1742288147; c=relaxed/simple;
+	bh=d852++R4Z8qfuBp2rmYw9Ji8iv3IP8iNK+etD5OTlck=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QAVZJYR46lpEvcW/34qWt9FsavUI+PRyYhSkrCMBfYc0UXOyr5yMeG0vWapGXi3p/eciQTx7EOZVHPdIHDd1eOWD6NhTvn0pozUTtN3JLycRmwI2a0DWnqSvl1S99oD4yT+bjfXTmQQr2cIaq48VYD1fHODh5NEma60iTh4OQck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0LRrbbp; arc=none smtp.client-ip=192.198.163.15
+	 Content-Disposition; b=qFhTHrz0ga/+Z05vdc/PpRsUR0BRaGLpA4PbfKI/Zb4+lgR1dmpYpjbJ66cZgjfOnE9n1rTgCpzAf/oHe0k6nds4rFykWaXVCDrvQYdIimnvU4o+dkVZeZfhbCjoGgB3lfTeyWVoeOQMlG7jK3ZSFkckRnwrxgJfUKQ6OcuxJqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QS6XQbQf; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0LRrbbp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QS6XQbQf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742288076; x=1773824076;
+  t=1742288142; x=1773824142;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zyeRAKjkRqHsBrmxCmfGPXxBwL9hFs37DoCv6zPH/4c=;
-  b=b0LRrbbpdQ7Uw0Ts1IsD/p6/9krgIRj+JZqGYn7dOPKkDk0ytMJ6rJjb
-   4BqDCVjmUCr/LN5QKs+KFbnFf6oUa0YnwI2yEjpkT6roLn5mDe9mIW12b
-   kw4vA5n2JGKrMT6Vids3CijwZ0p6WJBerfnop1Tih1zKm7lHpcu/fCINl
-   PWx4JY/HyPnXtOpkoOZVkNPr357pIJCqKrEC3DNhbzaFObIsdpVuJUdxa
-   gxUiYvjwuw4feBlLoOEXDGUhJr0lQe4BIIBX/Rm5IZl3pnVhKtlIoeR33
-   mnjG3E1S8mY/WxOpGlK3r5aE6dUxj8514Gy5HlLadii36kfOKeKU3qfL1
-   g==;
-X-CSE-ConnectionGUID: uQ8GILIeQG+jxWjGa40yyQ==
-X-CSE-MsgGUID: RZ1Fe5TETcaE2CiHqg2gpQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="43547830"
+  bh=d852++R4Z8qfuBp2rmYw9Ji8iv3IP8iNK+etD5OTlck=;
+  b=QS6XQbQfBXrdpyGkOL50STLxDF5yOhu74Zw6OtWwdwytF1PGjwi7TXk3
+   t9exw7yFGdIet+guUR/Y7En2cW0YO6PTjmdwvRRVk5RVDD+BDBsXwFocG
+   yFGi9/99ZMBIMbOrhVuiaAB0D+I8P1FGNHyHD8aATa/s4U7c5jfdwQ/yI
+   mjB1+oiz8RgXyZRIJXs3RIbUYN1P1Otk9OdO1KmjlmuAeWE52AlsnJ/9O
+   gnens1t05qSNw486d/bQHNj4M2tv+ctDuifcqmmJo2Gh/4w/L+mGuLi1T
+   zV2J+Fr69VJgx8+kTfpPIClVcGW++NsYyN+L/8NzPpXrxAowM7aOKSr82
+   A==;
+X-CSE-ConnectionGUID: qWghhsnASD6RNfdB/7G73g==
+X-CSE-MsgGUID: 8VNc0bLKTAGDlIjRydRsjA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="47305268"
 X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="43547830"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 01:54:36 -0700
-X-CSE-ConnectionGUID: pDHzbGU9SiChCaAt3qwE/Q==
-X-CSE-MsgGUID: Kur8WnAzSwivW5H9SvbYwA==
+   d="scan'208";a="47305268"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 01:55:41 -0700
+X-CSE-ConnectionGUID: XJnHQItKTqWkkm8EA12/5w==
+X-CSE-MsgGUID: MhA08L9BRnqBWj2lUvnA2g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="122367990"
+   d="scan'208";a="122697324"
 Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 18 Mar 2025 01:54:34 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 18 Mar 2025 01:55:38 -0700
 Received: from kbuild by a4747d147074 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tuSiW-000DbX-0x;
-	Tue, 18 Mar 2025 08:54:32 +0000
-Date: Tue, 18 Mar 2025 16:54:29 +0800
+	id 1tuSjX-000Dbj-2R;
+	Tue, 18 Mar 2025 08:55:35 +0000
+Date: Tue, 18 Mar 2025 16:54:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alex Markuze <amarkuze@redhat.com>
+To: Balamurugan S <quic_bselvara@quicinc.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ceph-devel@vger.kernel.org
-Subject: [ceph-client:tls_logger 7/19] net/ceph/ceph_san_pagefrag.c:14:
- warning: Function parameter or struct member 'pf' not described in
- 'cephsan_pagefrag_init'
-Message-ID: <202503181619.RZqFxBO6-lkp@intel.com>
+	Jeff Johnson <jjohnson@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+	ath12k@lists.infradead.org,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	P Praneesh <quic_ppranees@quicinc.com>,
+	Raj Kumar Bhagat <quic_rajkbhag@quicinc.com>
+Subject: [ath:pending 19/19] drivers/net/wireless/ath/ath12k/ahb.c:1011:11:
+ warning: cast to smaller integer type 'enum ath12k_hw_rev' from 'const void
+ *'
+Message-ID: <202503181631.ckurxYu4-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,143 +68,196 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/ceph/ceph-client.git tls_logger
-head:   75b56e556ea415e29a13a8b7e98d302fbbec4c01
-commit: f8434cc50705f961b879b491d7ea5524b5da1ca1 [7/19] ceph_san: moving to magzaines
-config: i386-buildonly-randconfig-001-20250318 (https://download.01.org/0day-ci/archive/20250318/202503181619.RZqFxBO6-lkp@intel.com/config)
-compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503181619.RZqFxBO6-lkp@intel.com/reproduce)
+Hi Balamurugan,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ath/ath.git pending
+head:   5bc3e6ca41aa7982442c7c2002d339f1a3343eae
+commit: 5bc3e6ca41aa7982442c7c2002d339f1a3343eae [19/19] wifi: ath12k: enable ath12k AHB support
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250318/202503181631.ckurxYu4-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503181631.ckurxYu4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503181619.RZqFxBO6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503181631.ckurxYu4-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> net/ceph/ceph_san_pagefrag.c:14: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_init'
->> net/ceph/ceph_san_pagefrag.c:54: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_alloc'
->> net/ceph/ceph_san_pagefrag.c:108: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_free'
->> net/ceph/ceph_san_pagefrag.c:119: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_deinit'
+   In file included from drivers/net/wireless/ath/ath12k/ahb.c:7:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/ahb.c:7:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/ahb.c:7:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/wireless/ath/ath12k/ahb.c:1011:11: warning: cast to smaller integer type 'enum ath12k_hw_rev' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+    1011 |         hw_rev = (enum ath12k_hw_rev)of_device_get_match_data(&pdev->dev);
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   13 warnings generated.
 
 
-vim +14 net/ceph/ceph_san_pagefrag.c
+vim +1011 drivers/net/wireless/ath/ath12k/ahb.c
 
-     5	
-     6	/**
-     7	 * cephsan_pagefrag_init - Initialize the pagefrag allocator.
-     8	 *
-     9	 * Allocates a 4MB contiguous buffer and resets head and tail pointers.
-    10	 *
-    11	 * Return: 0 on success, negative error code on failure.
-    12	 */
-    13	int cephsan_pagefrag_init(struct cephsan_pagefrag *pf)
-  > 14	{
-    15	    pf->pages = alloc_pages(GFP_KERNEL, get_order(CEPHSAN_PAGEFRAG_SIZE));
-    16	    if (!pf->pages)
-    17	        return -ENOMEM;
-    18	
-    19	    pf->buffer = page_address(pf->pages);
-    20	    pf->head = 0;
-    21	    pf->tail = 0;
-    22	    return 0;
-    23	}
-    24	EXPORT_SYMBOL(cephsan_pagefrag_init);
-    25	
-    26	/**
-    27	 * cephsan_pagefrag_init_with_buffer - Initialize pagefrag with an existing buffer
-    28	 * @pf: pagefrag allocator to initialize
-    29	 * @buffer: pre-allocated buffer to use
-    30	 * @size: size of the buffer
-    31	 *
-    32	 * Return: 0 on success
-    33	 */
-    34	int cephsan_pagefrag_init_with_buffer(struct cephsan_pagefrag *pf, void *buffer, size_t size)
-    35	{
-    36	    pf->pages = NULL; /* No pages allocated, using provided buffer */
-    37	    pf->buffer = buffer;
-    38	    pf->head = 0;
-    39	    pf->tail = 0;
-    40	    return 0;
-    41	}
-    42	EXPORT_SYMBOL(cephsan_pagefrag_init_with_buffer);
-    43	
-    44	/**
-    45	 * cephsan_pagefrag_alloc - Allocate bytes from the pagefrag buffer.
-    46	 * @n: number of bytes to allocate.
-    47	 *
-    48	 * Allocates @n bytes if there is sufficient free space in the buffer.
-    49	 * Advances the head pointer by @n bytes (wrapping around if needed).
-    50	 *
-    51	 * Return: pointer to the allocated memory, or NULL if not enough space.
-    52	 */
-    53	u64 cephsan_pagefrag_alloc(struct cephsan_pagefrag *pf, unsigned int n)
-  > 54	{
-    55	    /* Case 1: tail > head */
-    56	    if (pf->tail > pf->head) {
-    57	        if (pf->tail - pf->head >= n) {
-    58	            unsigned int prev_head = pf->head;
-    59	            pf->head += n;
-    60	            return ((u64)n << 32) | prev_head;
-    61	        } else {
-    62	            pr_err("Not enough space in pagefrag buffer\n");
-    63	            return 0;
-    64	        }
-    65	    }
-    66	    /* Case 2: tail <= head */
-    67	    if (pf->head + n <= CEPHSAN_PAGEFRAG_SIZE) {
-    68	        /* Normal allocation */
-    69	        unsigned int prev_head = pf->head;
-    70	        pf->head += n;
-    71	        return ((u64)n << 32) | prev_head;
-    72	    } else {
-    73	        /* Need to wrap around */
-    74	        if (n <= pf->tail) {
-    75	            pf->head = n;
-    76	            n += CEPHSAN_PAGEFRAG_SIZE - pf->head;
-    77	            return ((u64)n << 32) | 0;
-    78	        } else {
-    79	            pr_err("Not enough space for wrap-around allocation\n");
-    80	            return 0;
-    81	        }
-    82	    }
-    83	    pr_err("impossible: Not enough space in pagefrag buffer\n");
-    84	    return 0;
-    85	}
-    86	EXPORT_SYMBOL(cephsan_pagefrag_alloc);
-    87	
-    88	/**
-    89	 * cephsan_pagefrag_get_ptr - Get buffer pointer from pagefrag allocation result
-    90	 * @pf: pagefrag allocator
-    91	 * @val: return value from cephsan_pagefrag_alloc
-    92	 *
-    93	 * Return: pointer to allocated buffer region
-    94	 */
-    95	void *cephsan_pagefrag_get_ptr(struct cephsan_pagefrag *pf, u64 val)
-    96	{
-    97	    return pf->buffer + (val & 0xFFFFFFFF);
-    98	}
-    99	EXPORT_SYMBOL(cephsan_pagefrag_get_ptr);
-   100	
-   101	/**
-   102	 * cephsan_pagefrag_free - Free bytes in the pagefrag allocator.
-   103	 * @n: number of bytes to free.
-   104	 *
-   105	 * Advances the tail pointer by @n bytes (wrapping around if needed).
-   106	 */
-   107	void cephsan_pagefrag_free(struct cephsan_pagefrag *pf, unsigned int n)
- > 108	{
-   109	    pf->tail = (pf->tail + n) & (CEPHSAN_PAGEFRAG_SIZE - 1);
-   110	}
-   111	EXPORT_SYMBOL(cephsan_pagefrag_free);
-   112	
-   113	/**
-   114	 * cephsan_pagefrag_deinit - Deinitialize the pagefrag allocator.
-   115	 *
-   116	 * Frees the allocated buffer and resets the head and tail pointers.
-   117	 */
-   118	void cephsan_pagefrag_deinit(struct cephsan_pagefrag *pf)
- > 119	{
+940301a74ff47d Balamurugan S           2025-03-18   990  
+940301a74ff47d Balamurugan S           2025-03-18   991  static int ath12k_ahb_probe(struct platform_device *pdev)
+940301a74ff47d Balamurugan S           2025-03-18   992  {
+940301a74ff47d Balamurugan S           2025-03-18   993  	struct ath12k_base *ab;
+940301a74ff47d Balamurugan S           2025-03-18   994  	const struct ath12k_hif_ops *hif_ops;
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18   995  	struct ath12k_ahb *ab_ahb;
+940301a74ff47d Balamurugan S           2025-03-18   996  	enum ath12k_hw_rev hw_rev;
+dde5891d65c67e Sowmiya Sree Elavalagan 2025-03-18   997  	u32 addr, userpd_id;
+940301a74ff47d Balamurugan S           2025-03-18   998  	int ret;
+940301a74ff47d Balamurugan S           2025-03-18   999  
+940301a74ff47d Balamurugan S           2025-03-18  1000  	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
+940301a74ff47d Balamurugan S           2025-03-18  1001  	if (ret) {
+940301a74ff47d Balamurugan S           2025-03-18  1002  		dev_err(&pdev->dev, "Failed to set 32-bit coherent dma\n");
+940301a74ff47d Balamurugan S           2025-03-18  1003  		return ret;
+940301a74ff47d Balamurugan S           2025-03-18  1004  	}
+940301a74ff47d Balamurugan S           2025-03-18  1005  
+940301a74ff47d Balamurugan S           2025-03-18  1006  	ab = ath12k_core_alloc(&pdev->dev, sizeof(struct ath12k_ahb),
+940301a74ff47d Balamurugan S           2025-03-18  1007  			       ATH12K_BUS_AHB);
+940301a74ff47d Balamurugan S           2025-03-18  1008  	if (!ab)
+940301a74ff47d Balamurugan S           2025-03-18  1009  		return -ENOMEM;
+940301a74ff47d Balamurugan S           2025-03-18  1010  
+940301a74ff47d Balamurugan S           2025-03-18 @1011  	hw_rev = (enum ath12k_hw_rev)of_device_get_match_data(&pdev->dev);
+940301a74ff47d Balamurugan S           2025-03-18  1012  	switch (hw_rev) {
+940301a74ff47d Balamurugan S           2025-03-18  1013  	case ATH12K_HW_IPQ5332_HW10:
+940301a74ff47d Balamurugan S           2025-03-18  1014  		hif_ops = &ath12k_ahb_hif_ops_ipq5332;
+dde5891d65c67e Sowmiya Sree Elavalagan 2025-03-18  1015  		userpd_id = ATH12K_IPQ5332_USERPD_ID;
+940301a74ff47d Balamurugan S           2025-03-18  1016  		break;
+940301a74ff47d Balamurugan S           2025-03-18  1017  	default:
+940301a74ff47d Balamurugan S           2025-03-18  1018  		ret = -EOPNOTSUPP;
+940301a74ff47d Balamurugan S           2025-03-18  1019  		goto err_core_free;
+940301a74ff47d Balamurugan S           2025-03-18  1020  	}
+940301a74ff47d Balamurugan S           2025-03-18  1021  
+940301a74ff47d Balamurugan S           2025-03-18  1022  	ab->hif.ops = hif_ops;
+940301a74ff47d Balamurugan S           2025-03-18  1023  	ab->pdev = pdev;
+940301a74ff47d Balamurugan S           2025-03-18  1024  	ab->hw_rev = hw_rev;
+940301a74ff47d Balamurugan S           2025-03-18  1025  	platform_set_drvdata(pdev, ab);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1026  	ab_ahb = ath12k_ab_to_ahb(ab);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1027  	ab_ahb->ab = ab;
+dde5891d65c67e Sowmiya Sree Elavalagan 2025-03-18  1028  	ab_ahb->userpd_id = userpd_id;
+940301a74ff47d Balamurugan S           2025-03-18  1029  
+940301a74ff47d Balamurugan S           2025-03-18  1030  	/* Set fixed_mem_region to true for platforms that support fixed memory
+940301a74ff47d Balamurugan S           2025-03-18  1031  	 * reservation from DT. If memory is reserved from DT for FW, ath12k driver
+940301a74ff47d Balamurugan S           2025-03-18  1032  	 * need not to allocate memory.
+940301a74ff47d Balamurugan S           2025-03-18  1033  	 */
+940301a74ff47d Balamurugan S           2025-03-18  1034  	if (!of_property_read_u32(ab->dev->of_node, "memory-region", &addr))
+940301a74ff47d Balamurugan S           2025-03-18  1035  		set_bit(ATH12K_FLAG_FIXED_MEM_REGION, &ab->dev_flags);
+940301a74ff47d Balamurugan S           2025-03-18  1036  
+940301a74ff47d Balamurugan S           2025-03-18  1037  	ret = ath12k_core_pre_init(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1038  	if (ret)
+940301a74ff47d Balamurugan S           2025-03-18  1039  		goto err_core_free;
+940301a74ff47d Balamurugan S           2025-03-18  1040  
+940301a74ff47d Balamurugan S           2025-03-18  1041  	ret = ath12k_ahb_resource_init(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1042  	if (ret)
+940301a74ff47d Balamurugan S           2025-03-18  1043  		goto err_core_free;
+940301a74ff47d Balamurugan S           2025-03-18  1044  
+940301a74ff47d Balamurugan S           2025-03-18  1045  	ret = ath12k_hal_srng_init(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1046  	if (ret)
+940301a74ff47d Balamurugan S           2025-03-18  1047  		goto err_resource_deinit;
+940301a74ff47d Balamurugan S           2025-03-18  1048  
+940301a74ff47d Balamurugan S           2025-03-18  1049  	ret = ath12k_ce_alloc_pipes(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1050  	if (ret) {
+940301a74ff47d Balamurugan S           2025-03-18  1051  		ath12k_err(ab, "failed to allocate ce pipes: %d\n", ret);
+940301a74ff47d Balamurugan S           2025-03-18  1052  		goto err_hal_srng_deinit;
+940301a74ff47d Balamurugan S           2025-03-18  1053  	}
+940301a74ff47d Balamurugan S           2025-03-18  1054  
+940301a74ff47d Balamurugan S           2025-03-18  1055  	ath12k_ahb_init_qmi_ce_config(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1056  
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1057  	ret = ath12k_ahb_configure_rproc(ab);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1058  	if (ret)
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1059  		goto err_ce_free;
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1060  
+940301a74ff47d Balamurugan S           2025-03-18  1061  	ret = ath12k_ahb_config_irq(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1062  	if (ret) {
+940301a74ff47d Balamurugan S           2025-03-18  1063  		ath12k_err(ab, "failed to configure irq: %d\n", ret);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1064  		goto err_rproc_deconfigure;
+940301a74ff47d Balamurugan S           2025-03-18  1065  	}
+940301a74ff47d Balamurugan S           2025-03-18  1066  
+940301a74ff47d Balamurugan S           2025-03-18  1067  	ret = ath12k_core_init(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1068  	if (ret) {
+940301a74ff47d Balamurugan S           2025-03-18  1069  		ath12k_err(ab, "failed to init core: %d\n", ret);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1070  		goto err_rproc_deconfigure;
+940301a74ff47d Balamurugan S           2025-03-18  1071  	}
+940301a74ff47d Balamurugan S           2025-03-18  1072  
+940301a74ff47d Balamurugan S           2025-03-18  1073  	return 0;
+940301a74ff47d Balamurugan S           2025-03-18  1074  
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1075  err_rproc_deconfigure:
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1076  	ath12k_ahb_deconfigure_rproc(ab);
+f0b813f6eec3b8 Sowmiya Sree Elavalagan 2025-03-18  1077  
+940301a74ff47d Balamurugan S           2025-03-18  1078  err_ce_free:
+940301a74ff47d Balamurugan S           2025-03-18  1079  	ath12k_ce_free_pipes(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1080  
+940301a74ff47d Balamurugan S           2025-03-18  1081  err_hal_srng_deinit:
+940301a74ff47d Balamurugan S           2025-03-18  1082  	ath12k_hal_srng_deinit(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1083  
+940301a74ff47d Balamurugan S           2025-03-18  1084  err_resource_deinit:
+940301a74ff47d Balamurugan S           2025-03-18  1085  	ath12k_ahb_resource_deinit(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1086  
+940301a74ff47d Balamurugan S           2025-03-18  1087  err_core_free:
+940301a74ff47d Balamurugan S           2025-03-18  1088  	ath12k_core_free(ab);
+940301a74ff47d Balamurugan S           2025-03-18  1089  	platform_set_drvdata(pdev, NULL);
+940301a74ff47d Balamurugan S           2025-03-18  1090  
+940301a74ff47d Balamurugan S           2025-03-18  1091  	return ret;
+940301a74ff47d Balamurugan S           2025-03-18  1092  }
+940301a74ff47d Balamurugan S           2025-03-18  1093  
+
+:::::: The code at line 1011 was first introduced by commit
+:::::: 940301a74ff47d4a2bcdab6800991e875b728d5f wifi: ath12k: add AHB driver support for IPQ5332
+
+:::::: TO: Balamurugan S <quic_bselvara@quicinc.com>
+:::::: CC: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
 
 -- 
 0-DAY CI Kernel Test Service
