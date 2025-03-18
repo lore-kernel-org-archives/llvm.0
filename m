@@ -1,143 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55100146D6A;
-	Tue, 18 Mar 2025 08:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7271D2045BF;
+	Tue, 18 Mar 2025 08:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742286463; cv=none; b=Sw3klnrkzXi52nsSirrxHOhCZwqiO744nLy6E3AWDJCDyiD30Rw1tOngF3J/rJwCXRn+3l2rPq1fJPBvmeuMzHYEALPHVi7d1/VQSR9knKQUzkrkh1vc7SfzGwOcEP2z2Leox36JhE3drhTRgmJ/jHLT9YT8OEm4+vFl+ukS3sM=
+	t=1742288078; cv=none; b=Df+yNYEbhoqrluRA/NqUbX1+KgO2JLDlxyth9WASL8Bp4tsoQQwv0yegZP2Qu1juIplo92pmoN2m9pdUxk6asA2p3ps9vvnmBgFk50QUHpa12o3FzVKZ1CGIYDMI8HnsKnYem5vkK5b4H4/z+d8R67D3yud2BIvkT2zWBBk3zpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742286463; c=relaxed/simple;
-	bh=7lWJUOh5+tuck6WiqVNukyuVjEdMtSkNOW0wDpF/GbA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zzp0pWA5yK83Ck3ZXCj14sbLkUtYWWDyZBCJN6W2xNqEbRprJngsWy3NxwlSGEVlCZ5BG7XzKkBdsFkRonMVLUtVLmIJWDF1h6lDw1aWCOVN6qjEzBCXDm3vRL2j1spf3morukUdU11zjJwxavsZumwqMdjNBFLF2lhyM0c5yRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nwyedMt3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742288078; c=relaxed/simple;
+	bh=zyeRAKjkRqHsBrmxCmfGPXxBwL9hFs37DoCv6zPH/4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QAVZJYR46lpEvcW/34qWt9FsavUI+PRyYhSkrCMBfYc0UXOyr5yMeG0vWapGXi3p/eciQTx7EOZVHPdIHDd1eOWD6NhTvn0pozUTtN3JLycRmwI2a0DWnqSvl1S99oD4yT+bjfXTmQQr2cIaq48VYD1fHODh5NEma60iTh4OQck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b0LRrbbp; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nwyedMt3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF93AC4CEDD;
-	Tue, 18 Mar 2025 08:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742286462;
-	bh=7lWJUOh5+tuck6WiqVNukyuVjEdMtSkNOW0wDpF/GbA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nwyedMt3CIqn9K96+vAu25tgRaMDZbQgBopXOw49HDLAFOxY1/WnwgLz+noq+PtlR
-	 Ed0788Lt3agA1MFc6xa+GCCQFBHWhHlsVgvklJ6LxtyvKGXOVmwxMbdNBK5cYHOFUS
-	 +4Cd6RgnDQBbSDENP4b/U3sGUDrimp5Qnq7Q13fs0BgQkk4nTWopVfmHL/RUbPOuH3
-	 imW/U2iEWWXPQ2StrYrgEMiiZRj0Dm/mojmizlyDI17AQ35vKwdnaKs9KrcIvcOSYK
-	 akHTqj64DfuMXzIRC5XP5EjKFXZlsSmuKhg0sAXBzQoqdvAkjqcUIDMZDGqZQBcvXr
-	 itZ+gbK7SmVeQ==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30c416cdcc0so53081311fa.2;
-        Tue, 18 Mar 2025 01:27:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUlQ1i44fXm6s3EuCkPS2nsgHkMHfpN2SYG15wWTZWKJ4jqM8OzUgL8bfdfqvruYyCb/Xoq@lists.linux.dev, AJvYcCVGfOEJEmmg8x6xY0FUWS7rZpIFTOaeyBCC80bYMOxch7j5oPXhrXXre4bSju409/kIRVoHGtJrX6R3bvRS/Q==@lists.linux.dev
-X-Gm-Message-State: AOJu0YyENxXurRbIVcKwVsza72j/Nw8MFhLPk6CZSAxfPmh8dkugI6Rq
-	UYpcSxBmzz0c4asn5guwyHeck6dVfmxgoXFdx5S3ZB7Kb7G4wGsvWUZHL8xAvFn0HVsyQBkbHij
-	j1OwBk+cB+Qr8XkmbMx7EE0YkAFQ=
-X-Google-Smtp-Source: AGHT+IFm2NNGJ0oxJGat/+Vip0VVv53VVyEJlM96ngexdcI0hc7G/jRjzyAak+F4mkF5WVC6pr9Xly+ALZj24JosKH4=
-X-Received: by 2002:a05:6512:3d05:b0:549:8d07:ff13 with SMTP id
- 2adb3069b0e04-549c3989d78mr9351478e87.51.1742286461210; Tue, 18 Mar 2025
- 01:27:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b0LRrbbp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742288076; x=1773824076;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zyeRAKjkRqHsBrmxCmfGPXxBwL9hFs37DoCv6zPH/4c=;
+  b=b0LRrbbpdQ7Uw0Ts1IsD/p6/9krgIRj+JZqGYn7dOPKkDk0ytMJ6rJjb
+   4BqDCVjmUCr/LN5QKs+KFbnFf6oUa0YnwI2yEjpkT6roLn5mDe9mIW12b
+   kw4vA5n2JGKrMT6Vids3CijwZ0p6WJBerfnop1Tih1zKm7lHpcu/fCINl
+   PWx4JY/HyPnXtOpkoOZVkNPr357pIJCqKrEC3DNhbzaFObIsdpVuJUdxa
+   gxUiYvjwuw4feBlLoOEXDGUhJr0lQe4BIIBX/Rm5IZl3pnVhKtlIoeR33
+   mnjG3E1S8mY/WxOpGlK3r5aE6dUxj8514Gy5HlLadii36kfOKeKU3qfL1
+   g==;
+X-CSE-ConnectionGUID: uQ8GILIeQG+jxWjGa40yyQ==
+X-CSE-MsgGUID: RZ1Fe5TETcaE2CiHqg2gpQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="43547830"
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="43547830"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 01:54:36 -0700
+X-CSE-ConnectionGUID: pDHzbGU9SiChCaAt3qwE/Q==
+X-CSE-MsgGUID: Kur8WnAzSwivW5H9SvbYwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
+   d="scan'208";a="122367990"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 18 Mar 2025 01:54:34 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tuSiW-000DbX-0x;
+	Tue, 18 Mar 2025 08:54:32 +0000
+Date: Tue, 18 Mar 2025 16:54:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Markuze <amarkuze@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	ceph-devel@vger.kernel.org
+Subject: [ceph-client:tls_logger 7/19] net/ceph/ceph_san_pagefrag.c:14:
+ warning: Function parameter or struct member 'pf' not described in
+ 'cephsan_pagefrag_init'
+Message-ID: <202503181619.RZqFxBO6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
- <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
- <CAMj1kXEZccymq1OhXErSK+prS3L7sygm7_5_1v+j2cypncQuzA@mail.gmail.com>
- <CAK7LNAT_NRio2pkR1Km5Nq8KM38zYF7VCoGP0OjEP_Owg-ukpQ@mail.gmail.com> <20250318081753.8448Abd-hca@linux.ibm.com>
-In-Reply-To: <20250318081753.8448Abd-hca@linux.ibm.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Tue, 18 Mar 2025 09:27:29 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
-X-Gm-Features: AQ5f1Jq6lyUmwBDAkReAZ_3PGo-n5HOZWmjSnQq5Gzgz1VOVXF1vvkqoyEHCz6E
-Message-ID: <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
- relocations preserved
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, kernel test robot <lkp@intel.com>, 
-	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org, x86@kernel.org, 
-	Ingo Molnar <mingo@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org, linux-next@vger.kernel.org, 
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 18 Mar 2025 at 09:18, Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> On Thu, Mar 13, 2025 at 07:29:41PM +0900, Masahiro Yamada wrote:
-> > On Thu, Mar 13, 2025 at 7:18=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org=
-> wrote:
-> > > On Thu, 13 Mar 2025 at 10:34, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> wro=
-te:
-> > > > > kernel test robot noticed the following build errors:
-> > > > >
-> > > > > [auto build test ERROR on masahiroy-kbuild/for-next]
-> > > > > [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s39=
-0/features linus/master v6.14-rc6 next-20250312]
-> > > > > [If your patch is applied to the wrong git tree, kindly drop us a=
- note.
-> > > > > And when submitting patch, we suggest to use '--base' as document=
-ed in
-> > > > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > > >
-> > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Bieshe=
-uvel/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-190=
-926
-> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy=
-/linux-kbuild.git for-next
-> > > > > patch link:    https://lore.kernel.org/r/20250311110616.148682-9-=
-ardb%2Bgit%40google.com
-> > > > > patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux=
- build with relocations preserved
-> > > > > config: x86_64-randconfig-076-20250313 (https://download.01.org/0=
-day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
-> > > > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> > > > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-=
-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
-> > > > >
-> > > > > If you fix the issue in a separate patch/commit (i.e. not just a =
-new version of
-> > > > > the same patch/commit), kindly add following tags
-> > > > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb6C=
-fjhT-lkp@intel.com/
-> > > > >
-> > > > > All errors (new ones prefixed by >>):
-> > > > >
-> > > > > >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot op=
-en file `vmlinux.map' for reading: No such file or directory
-> > > > >
-> > > >
-> > > > Hmm it seems I missed some things in link-vmlinux.sh - I will take =
-a look.
-> > >
-> > > We'd need something like the below applied on top - shall I send a v3=
-?
-> >
-> > I will insert this before you patch set.
-> > https://lore.kernel.org/linux-kbuild/20250313102604.1491732-1-masahiroy=
-@kernel.org/T/#u
-> ...
-> > > --- a/scripts/link-vmlinux.sh
-> > > +++ b/scripts/link-vmlinux.sh
-> ...
-> > > -vmlinux_link "${VMLINUX}"
-> > > +vmlinux_link "${VMLINUX}" vmlinux.map
-> > >
-> > >  # fill in BTF IDs
-> > >  if is_enabled CONFIG_DEBUG_INFO_BTF; then
->
-> Building linux-next breaks on s390 with DEBUG_INFO_BTF enabled because
-> of this; just where your addon patch ends:
->
+tree:   https://github.com/ceph/ceph-client.git tls_logger
+head:   75b56e556ea415e29a13a8b7e98d302fbbec4c01
+commit: f8434cc50705f961b879b491d7ea5524b5da1ca1 [7/19] ceph_san: moving to magzaines
+config: i386-buildonly-randconfig-001-20250318 (https://download.01.org/0day-ci/archive/20250318/202503181619.RZqFxBO6-lkp@intel.com/config)
+compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503181619.RZqFxBO6-lkp@intel.com/reproduce)
 
-Apologies for the breakage - this should already have been fixed in
-the kbuild tree [0] but the fix does not appear to have landed yet.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503181619.RZqFxBO6-lkp@intel.com/
 
-[0] https://lore.kernel.org/all/202503161833.ytx1ivfu-lkp@intel.com
+All warnings (new ones prefixed by >>):
+
+>> net/ceph/ceph_san_pagefrag.c:14: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_init'
+>> net/ceph/ceph_san_pagefrag.c:54: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_alloc'
+>> net/ceph/ceph_san_pagefrag.c:108: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_free'
+>> net/ceph/ceph_san_pagefrag.c:119: warning: Function parameter or struct member 'pf' not described in 'cephsan_pagefrag_deinit'
 
 
-Masahiro?
+vim +14 net/ceph/ceph_san_pagefrag.c
+
+     5	
+     6	/**
+     7	 * cephsan_pagefrag_init - Initialize the pagefrag allocator.
+     8	 *
+     9	 * Allocates a 4MB contiguous buffer and resets head and tail pointers.
+    10	 *
+    11	 * Return: 0 on success, negative error code on failure.
+    12	 */
+    13	int cephsan_pagefrag_init(struct cephsan_pagefrag *pf)
+  > 14	{
+    15	    pf->pages = alloc_pages(GFP_KERNEL, get_order(CEPHSAN_PAGEFRAG_SIZE));
+    16	    if (!pf->pages)
+    17	        return -ENOMEM;
+    18	
+    19	    pf->buffer = page_address(pf->pages);
+    20	    pf->head = 0;
+    21	    pf->tail = 0;
+    22	    return 0;
+    23	}
+    24	EXPORT_SYMBOL(cephsan_pagefrag_init);
+    25	
+    26	/**
+    27	 * cephsan_pagefrag_init_with_buffer - Initialize pagefrag with an existing buffer
+    28	 * @pf: pagefrag allocator to initialize
+    29	 * @buffer: pre-allocated buffer to use
+    30	 * @size: size of the buffer
+    31	 *
+    32	 * Return: 0 on success
+    33	 */
+    34	int cephsan_pagefrag_init_with_buffer(struct cephsan_pagefrag *pf, void *buffer, size_t size)
+    35	{
+    36	    pf->pages = NULL; /* No pages allocated, using provided buffer */
+    37	    pf->buffer = buffer;
+    38	    pf->head = 0;
+    39	    pf->tail = 0;
+    40	    return 0;
+    41	}
+    42	EXPORT_SYMBOL(cephsan_pagefrag_init_with_buffer);
+    43	
+    44	/**
+    45	 * cephsan_pagefrag_alloc - Allocate bytes from the pagefrag buffer.
+    46	 * @n: number of bytes to allocate.
+    47	 *
+    48	 * Allocates @n bytes if there is sufficient free space in the buffer.
+    49	 * Advances the head pointer by @n bytes (wrapping around if needed).
+    50	 *
+    51	 * Return: pointer to the allocated memory, or NULL if not enough space.
+    52	 */
+    53	u64 cephsan_pagefrag_alloc(struct cephsan_pagefrag *pf, unsigned int n)
+  > 54	{
+    55	    /* Case 1: tail > head */
+    56	    if (pf->tail > pf->head) {
+    57	        if (pf->tail - pf->head >= n) {
+    58	            unsigned int prev_head = pf->head;
+    59	            pf->head += n;
+    60	            return ((u64)n << 32) | prev_head;
+    61	        } else {
+    62	            pr_err("Not enough space in pagefrag buffer\n");
+    63	            return 0;
+    64	        }
+    65	    }
+    66	    /* Case 2: tail <= head */
+    67	    if (pf->head + n <= CEPHSAN_PAGEFRAG_SIZE) {
+    68	        /* Normal allocation */
+    69	        unsigned int prev_head = pf->head;
+    70	        pf->head += n;
+    71	        return ((u64)n << 32) | prev_head;
+    72	    } else {
+    73	        /* Need to wrap around */
+    74	        if (n <= pf->tail) {
+    75	            pf->head = n;
+    76	            n += CEPHSAN_PAGEFRAG_SIZE - pf->head;
+    77	            return ((u64)n << 32) | 0;
+    78	        } else {
+    79	            pr_err("Not enough space for wrap-around allocation\n");
+    80	            return 0;
+    81	        }
+    82	    }
+    83	    pr_err("impossible: Not enough space in pagefrag buffer\n");
+    84	    return 0;
+    85	}
+    86	EXPORT_SYMBOL(cephsan_pagefrag_alloc);
+    87	
+    88	/**
+    89	 * cephsan_pagefrag_get_ptr - Get buffer pointer from pagefrag allocation result
+    90	 * @pf: pagefrag allocator
+    91	 * @val: return value from cephsan_pagefrag_alloc
+    92	 *
+    93	 * Return: pointer to allocated buffer region
+    94	 */
+    95	void *cephsan_pagefrag_get_ptr(struct cephsan_pagefrag *pf, u64 val)
+    96	{
+    97	    return pf->buffer + (val & 0xFFFFFFFF);
+    98	}
+    99	EXPORT_SYMBOL(cephsan_pagefrag_get_ptr);
+   100	
+   101	/**
+   102	 * cephsan_pagefrag_free - Free bytes in the pagefrag allocator.
+   103	 * @n: number of bytes to free.
+   104	 *
+   105	 * Advances the tail pointer by @n bytes (wrapping around if needed).
+   106	 */
+   107	void cephsan_pagefrag_free(struct cephsan_pagefrag *pf, unsigned int n)
+ > 108	{
+   109	    pf->tail = (pf->tail + n) & (CEPHSAN_PAGEFRAG_SIZE - 1);
+   110	}
+   111	EXPORT_SYMBOL(cephsan_pagefrag_free);
+   112	
+   113	/**
+   114	 * cephsan_pagefrag_deinit - Deinitialize the pagefrag allocator.
+   115	 *
+   116	 * Frees the allocated buffer and resets the head and tail pointers.
+   117	 */
+   118	void cephsan_pagefrag_deinit(struct cephsan_pagefrag *pf)
+ > 119	{
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
