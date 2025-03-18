@@ -1,102 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9739A18E25;
-	Tue, 18 Mar 2025 22:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2721DF743;
+	Tue, 18 Mar 2025 22:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742337166; cv=none; b=FFj8HO763nwS601aBuPD40l2cGm9sjrBgr6LgCyQA+d4KYzKEAp0nTXR0ca1WwSISjTVKyIS1IevYTa+z/lTRlV1wk9kuO/qL+HVKFTTT3qXfChbhgVxSMkg2iN1js4enMrGttewD10kmU+N1dSH4pBq/RjXG4XWI0iTvAzg+Bc=
+	t=1742337975; cv=none; b=lw2CUdtdj+NX+LfgOvt/4RUe96Cq9wz/VuV1qiEBpCzBsCxqTnVfhCTqdOd8IWNJuhRUQXfFWTxiCu8IBd4WeV3zpKHo+l187hYIq1jPlD0ut4vvjT9cz8ZM8lbcQM+iOFHotXT98aM3TRyduAi633AUYLGjp98Nl0zRSB/tJEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742337166; c=relaxed/simple;
-	bh=j1mnXEe9xJfk5P6wQxhe+3cDKh4bM2ddu4bdvZ4iJmw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hdQDwPq1tVw7SVq9C6Qx7maQO36wtCVOvVmaBKVvm4WLetHmlwssz35CgJpwloc3/pdj0fkAQGpTaZb2zQKQ4o5QT7EsXTuKprvR9CYXoe5a9CZFBZHekw7JQTEg3V1dyStdnrSs/XbcNovIDtOj1z1o4Enc+R95kiaFXxeVSq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DLwOJVD8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742337975; c=relaxed/simple;
+	bh=/ZB048TTxFjGbfSmdaWd7vdz2Zt3EkISdjO8KGqJOk0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CB/ID122gb7UHLF1413vHFmAQV66Esp0QUFyEpSd8+Qqp0rYg1CZOoLFStuTj7AFuNd92lw/KH9TNpxt5ZWkJNUGMLHrHM0d643bPRcItG34hq1nqRN0OaIGB2SEWG3n7jZ1NqmLO0uHzbG2fKmUUFPn9TZQrxtngW1Awr3VbS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OgCkbOBz; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DLwOJVD8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B007AC4CEDD;
-	Tue, 18 Mar 2025 22:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742337166;
-	bh=j1mnXEe9xJfk5P6wQxhe+3cDKh4bM2ddu4bdvZ4iJmw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=DLwOJVD8oIy5nEJTXUeTA7Cia8nFmSTZqZXhFZ1YWfVFfeuh6MN5AQPJVDRmF33LP
-	 lZtALYokio2wRuaTEpC+97SDViDDyFn/inZYIcAn2PvAvA7oe53UUVjdvsNvuOQOLX
-	 73A4T7IAEMrJ0h5FgrI1VvYTk9ax6H5CwBy27+S7r/YUtjC0jt4oq53YjnZyB8bqNX
-	 0s4QUSBLN+80unVK3NC9/FAQOyEDwDUJsY+VRXobZxZ4HWRshwoTYDunlmqWKe9Cp8
-	 9K/gGiMRjf1zXPROqHqjpYU6g/n0YpB9JyGCV4ujPszAJ4Ajid+c8A65Mz8Yy7gCmQ
-	 cwuf4hVwGgP3A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 18 Mar 2025 15:32:30 -0700
-Subject: [PATCH] x86/tools: Drop unlikely definition from insn_decoder_test
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OgCkbOBz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742337974; x=1773873974;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/ZB048TTxFjGbfSmdaWd7vdz2Zt3EkISdjO8KGqJOk0=;
+  b=OgCkbOBzzmHl2q9T+viGi/7DrW+nfo0pQPVcdw3m7HRkFsHpuCsLS+xJ
+   HhchgJO4zszfyLC0nWGuA2oM8e0QpljaokGCmZB4+EKSoZ1glulljsScb
+   cQBGy8Dnj2wY8vcPQZAE7dp9WyYK+tRPLrlDzNNxEUTq2uMPlidOItnWL
+   CEcmaZXHMq3uDqb0OWCSKHQlMSvyks5HEvxZEfTG/KS4F6KN8I1I9d8jF
+   h7HnBM0sxdDjk9iqJ1GYtmhkdVIkD54PMhPrLXDfjcwKmaBlJV/UTCI3A
+   N+lYEANgY/u92hF2U9JOedr/4gMPSaoEp0YYs3suUsZ7fbrPONe9yadve
+   g==;
+X-CSE-ConnectionGUID: ZQfZulRFRHa+NHgBxDTTUg==
+X-CSE-MsgGUID: oZdHfYE/Q7OFciabEem3+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11377"; a="47391813"
+X-IronPort-AV: E=Sophos;i="6.14,258,1736841600"; 
+   d="scan'208";a="47391813"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2025 15:46:14 -0700
+X-CSE-ConnectionGUID: 1fp5lZqDSGqiwiEtY3UZ2g==
+X-CSE-MsgGUID: vT6+gysNQAWzyhONbTBcfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,258,1736841600"; 
+   d="scan'208";a="127509613"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 18 Mar 2025 15:46:12 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tufhK-000EDe-0v;
+	Tue, 18 Mar 2025 22:46:10 +0000
+Date: Wed, 19 Mar 2025 06:45:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:b4/plat2faux_dev 4/9]
+ drivers/char/hw_random/arm_smccc_trng.c:113:56: error: use of undeclared
+ identifier 'smccc_trng_available'; did you mean 'smccc_trng_probe'?
+Message-ID: <202503190825.mKnUVJbM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250318-x86-decoder-test-fix-unlikely-redef-v1-1-74c84a7bf05b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAH302WcC/x2NwQqDMBAFf0X23AWjbUz7K+KhmJe6KLFsVBTx3
- xt6HBhmTkpQQaJXcZJikyRzzGBuBfXDO37A4jNTVVaPsjaOd2fZo589lBekhYPsvMZJRkwHKzw
- CG1tb92xwD2gol76KbP0vbXddP/tNTSV1AAAA
-X-Change-ID: 20250318-x86-decoder-test-fix-unlikely-redef-1636897e4fe7
-To: Shuah Khan <skhan@linuxfoundation.org>, x86@kernel.org
-Cc: Rae Moar <rmoar@google.com>, 
- =?utf-8?q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>, 
- David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1509; i=nathan@kernel.org;
- h=from:subject:message-id; bh=j1mnXEe9xJfk5P6wQxhe+3cDKh4bM2ddu4bdvZ4iJmw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOk3v/Qo2nxMkmkKO/HzZpHs+4ffiq6/YFmouUCdTWkV8
- 2ROgVn1HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAi7PMZ/umuv57z8Kep1KVN
- s16c2jvHSKrOaeURxz6n47krrCP3Z25lZFi2d+7vWab5ZeuFl27WEhGMfewz74nJ7u0lLv2aOQ2
- LF/MBAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After commit c104c16073b7 ("Kunit to check the longest symbol length"),
-there is a warning when building with clang because there is now a
-definition of unlikely from compiler.h in tools/include/linux, which
-conflicts with the one in the instruction decoder selftest.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/plat2faux_dev
+head:   14159d6574e30c1adeaa3460bd0abfae968987b2
+commit: 870bdacafb24f3de9a81a35fc434862313f99ec8 [4/9] hwrng: arm-smccc-trng - transition to the faux device interface
+config: arm-randconfig-002-20250319 (https://download.01.org/0day-ci/archive/20250319/202503190825.mKnUVJbM-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250319/202503190825.mKnUVJbM-lkp@intel.com/reproduce)
 
-  arch/x86/tools/insn_decoder_test.c:15:9: warning: 'unlikely' macro redefined [-Wmacro-redefined]
-     15 | #define unlikely(cond) (cond)
-        |         ^
-  tools/include/linux/compiler.h:128:10: note: previous definition is here
-    128 | # define unlikely(x)            __builtin_expect(!!(x), 0)
-        |          ^
-  1 warning generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503190825.mKnUVJbM-lkp@intel.com/
 
-Remove the second unlikely definition, as it is no longer necessary,
-clearing up the warning.
+All errors (new ones prefixed by >>):
 
-Fixes: c104c16073b7 ("Kunit to check the longest symbol length")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/tools/insn_decoder_test.c | 2 --
- 1 file changed, 2 deletions(-)
+>> drivers/char/hw_random/arm_smccc_trng.c:113:56: error: use of undeclared identifier 'smccc_trng_available'; did you mean 'smccc_trng_probe'?
+     113 | module_faux_driver(smccc_trng, smccc_trng_probe, NULL, smccc_trng_available);
+         |                                                        ^~~~~~~~~~~~~~~~~~~~
+         |                                                        smccc_trng_probe
+   include/linux/device/faux.h:116:49: note: expanded from macro 'module_faux_driver'
+     116 |                       faux_device_unregister, __faux_devname, __init_condition)
+         |                                                               ^
+   include/linux/device/driver.h:260:36: note: expanded from macro 'module_driver'
+     260 |         return __register(&(__driver) , ##__VA_ARGS__); \
+         |                                           ^
+   include/linux/device/faux.h:99:32: note: expanded from macro 'faux_device_register'
+      99 |                                &faux_devname##_ops, init_condition)
+         |                                                     ^
+   drivers/char/hw_random/arm_smccc_trng.c:99:12: note: 'smccc_trng_probe' declared here
+      99 | static int smccc_trng_probe(struct faux_device *fdev)
+         |            ^
+   1 error generated.
 
-diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_decoder_test.c
-index 6c2986d2ad11..08cd913cbd4e 100644
---- a/arch/x86/tools/insn_decoder_test.c
-+++ b/arch/x86/tools/insn_decoder_test.c
-@@ -12,8 +12,6 @@
- #include <stdarg.h>
- #include <linux/kallsyms.h>
- 
--#define unlikely(cond) (cond)
--
- #include <asm/insn.h>
- #include <inat.c>
- #include <insn.c>
 
----
-base-commit: 2e0cf2b32f72b20b0db5cc665cd8465d0f257278
-change-id: 20250318-x86-decoder-test-fix-unlikely-redef-1636897e4fe7
+vim +113 drivers/char/hw_random/arm_smccc_trng.c
 
-Best regards,
+   112	
+ > 113	module_faux_driver(smccc_trng, smccc_trng_probe, NULL, smccc_trng_available);
+   114	
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
