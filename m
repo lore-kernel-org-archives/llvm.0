@@ -1,125 +1,210 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA260175D47;
-	Tue, 18 Mar 2025 06:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9631F8741
+	for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 08:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742277893; cv=none; b=I6LsWwOzDk1PLKyQeJ2h4YFoMsVM175KvLS4iEIxVf/l5HkL3MCDwlmhiIPSVXuxXVlt5TAP0bMIozsIDch2eeDY4ugC+OzBAe5dePKuIGkFqaviu54b2Ss2tcYne8NI712vxaDZLiII4ls1uR2RaOvT5qVSXURBrHU2qY3dJk8=
+	t=1742285265; cv=none; b=aFz0oBzUxT9sniqOhz1G9Omkslqp3UhK7Nb48aB/82mDQ/dwZGGvOj8+yWuDuSdABKLjd6/9OsSitnpTMeH8xqdO+qYEMQjCD6ndE5NJbH9BNs4Lt96wdzBNpqI1lqPJ0KAMIMgH+866cnBIEuk1Bez5fAg0GTipDV2boAah3gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742277893; c=relaxed/simple;
-	bh=BlRLEFdWsuBBz31H/uqbH7HRno/06bxYHJWxTHY3eVw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S4bnsE8H+pRkOIZDiLChwKpXsgX47xe/CKCMJVjHFvRB4pAaXG1mFLhkHpRPs81tvPBcChW7C+uX91Tu+qeF6d2Pgyd1O/aya8Qe9VXmLp9kdqkjtnrx6gnCd3FgEWl6s3qh5w3MYRiw2mVzoZsHiX2iOEnxlps3IDYkmvaBBvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fu7sP/YD; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742285265; c=relaxed/simple;
+	bh=0W/cmQEf9YLT5jElZYq01ik/DSCMrJmh2KPa72yVDj0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Is6J4s6P34Tjm9kKfguArFUui8opsx3E+TGqYn31gNb+pLIRtgUsiVI5oxSSYqztxnKWkSsj7FcVyaB93fTcIipxqTTQYxORMXKPen/xXaPH32RZ5ZUBD6iOho/W2eqJQ9lUzhjYJcZ9mZ1AysyP8SuoUE7M1cHm8YNjCSa1AuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tR4oXgO2; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fu7sP/YD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742277892; x=1773813892;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BlRLEFdWsuBBz31H/uqbH7HRno/06bxYHJWxTHY3eVw=;
-  b=Fu7sP/YDS16rnj4iChj1XZlOB53XMyahm5qFH87M2dnYpgLdS4vI32Cx
-   MW/jOvF1CcTqZVAYp4aJlJHObqm/DytH4ZynsJyrPEubhNR8djObtjN9g
-   MWjZYc1DWv2CT8ELFL/7wysCCARFp/T8atMJFM2Qs3nv1bvdXv5GazPJR
-   wUDdqrGEdYBypO9pd8R1ykE+3GLm9iwWbDtmcgFRRVsgQXqJP3yDkBL8D
-   GKkYhO8Vdyya5rinx4CPv2ORNTSTzOAZT8f3Y01aZ//djoATP+fx2I8tG
-   DgdgOzSzVcCBIJId5b9Y8uv9zHTFMq0KFt7Ogd87guw3+tNXD2dTwqkED
-   w==;
-X-CSE-ConnectionGUID: CnVuH+zXSxy+xQhF2kgiNg==
-X-CSE-MsgGUID: YzHqXcd/QbCHcCRcQw3w1Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11376"; a="54775780"
-X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="54775780"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2025 23:04:51 -0700
-X-CSE-ConnectionGUID: S2bVeloPR7maZM5rrIqknA==
-X-CSE-MsgGUID: n024GdPLR4StpQcDUu0nyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,256,1736841600"; 
-   d="scan'208";a="122174319"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 17 Mar 2025 23:04:50 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tuQ3A-000DS3-12;
-	Tue, 18 Mar 2025 06:04:05 +0000
-Date: Tue, 18 Mar 2025 14:00:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC v2 1/6] gpiolib: add gpiochip_add_pin_range_sparse()
- function
-Message-ID: <202503181221.ubMklVAA-lkp@intel.com>
-References: <20250317-aaeon-up-board-pinctrl-support-v2-1-36126e30aa62@bootlin.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tR4oXgO2"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-474f0c1e1c6so49331941cf.1
+        for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 01:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742285263; x=1742890063; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0W/cmQEf9YLT5jElZYq01ik/DSCMrJmh2KPa72yVDj0=;
+        b=tR4oXgO2pL2Bj7sGwSZKAnEhzKXvh9yP6D8/URxrAL+/hdeZ+ZLAb7B4a9OfGt/Bnk
+         PMFIVopj4kl+3RIZEdti8huw41CBpK0yZTbYymmvL21AV5To6aOSRKDf5xSiwa7OLcno
+         yRMs1X+GRkEh49Uxdscb2cBCj7n0QP9ZZ1XTqnwkJr3w2jUObgzGLx/oUH+8bCltQ+qc
+         xDd72odBNeUDjOAgJzgc7s0RfBp90Gts1UFhX20mv9MghNzLKtV9B8ubg98je0vhAmJ8
+         Gb/itVUKu59rsoEnNal3uwABccZevyeBYZ7E4pGYEhMpAHKrKnyoA0fdaLAkjBa7HkW7
+         Fang==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742285263; x=1742890063;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0W/cmQEf9YLT5jElZYq01ik/DSCMrJmh2KPa72yVDj0=;
+        b=NZqJdZPQS6Ik4dj0Q78WDi6VGtHFWuY/I8yfPqBEN+YpOXeWmyBoYWk3w/NJkP26EO
+         S6YrqrbvO/N9BlzGoJ5g1tsGRwdlLe0g/Amt0KbwZDJ/e8LuEaXNo1opWRD9VwwCwDWK
+         edxZGrphjKwx4M0QkGBJYbrnSEzBg/GwUZBv5FbHCgLacQU6O6TOxYMSWuWeg0sYnr8P
+         WMjAn0+pv6nlTtR4snzCdqjoqrro7U3pxYQYgKWroWSD9z1SkSbNTDA8GQTFMvEQ3R7g
+         iCHUNQVqZvKQwlqaKyuA7mtbao02Tk3J6yIqqtIEwz9eHKUTb8YMUORVzo9LeCPsC9Qb
+         oT/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUl4et40YzBxrfeQDeGUjbX2FYgZBA4cknzofyFYdme6aNh2xbpYxABRHO1aPOOmCT3Z0MW@lists.linux.dev
+X-Gm-Message-State: AOJu0YwtYfIKj4qoDwjjgBxlpKgmf4cgBHUmQv/88tt+QrCDsy2G3WxC
+	ybIASoi/beu6rdned2tVRQh6P83YU4K3L+nu3063kQPQ3JWXoclXQVo/C8F2YNTK87zwC+1cz3O
+	ul61JaJuAdVx4zYnkprxno3Giv0cECOkYGaom
+X-Gm-Gg: ASbGncsugbrjibFM/K6R41tv2TcCceEKjF+HjjmqGKoOLik9TbjIeHo9IvWqt/O+RZN
+	hDD+b8LiTdB1mYfn6xT85R3mHvMxCU/SHyrFMXG6yqYWJbjplpsO7T9xBRVe+drqZhhpwjCHQh2
+	wCpx4TnoOyL27MCqo3aTcEJyfB0w0=
+X-Google-Smtp-Source: AGHT+IFXUODysh1m9Gv30WU1iM9GK6zio2ea0ritM/Z7npdgfWiDiscTe68Zbm3hxySc+vdVePwq2PUewsO+jgB2rWw=
+X-Received: by 2002:ad4:5a0f:0:b0:6ea:d40e:2bc5 with SMTP id
+ 6a1803df08f44-6eaea9e9152mr191909016d6.9.1742285262566; Tue, 18 Mar 2025
+ 01:07:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250317-aaeon-up-board-pinctrl-support-v2-1-36126e30aa62@bootlin.com>
+References: <20250208-rust-kunit-v1-0-94a026be6d72@weissschuh.net> <20250208-rust-kunit-v1-1-94a026be6d72@weissschuh.net>
+In-Reply-To: <20250208-rust-kunit-v1-1-94a026be6d72@weissschuh.net>
+From: David Gow <davidgow@google.com>
+Date: Tue, 18 Mar 2025 16:07:31 +0800
+X-Gm-Features: AQ5f1JpRKVNRYSd34to42tulrryjmS3NP8RYOLW-DOLTvOzFH0wYzkK0JSzhOa8
+Message-ID: <CABVgOSnwkDihbRzYF3uh3At_x0MgOB42_E8sUAD8moKwx+zjRw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rust: pass correct target to bindgen on Usermode Linux
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-um <linux-um@lists.infradead.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000003344bb06309966ad"
 
-Hi Thomas,
+--0000000000003344bb06309966ad
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+On Sat, 8 Feb 2025 at 21:32, Thomas Wei=C3=9Fschuh <linux@weissschuh.net> w=
+rote:
+>
+> Usermode Linux uses "um" as primary architecture name and the underlying
+> physical architecture is provided in "SUBARCH".
+> Resolve the target architecture flags through that underlying architectur=
+e.
+> This is the same pattern as used by scripts/Makefile.clang from which
+> the bindgen flags are derived.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
 
-[auto build test WARNING on 12b58398bffc23db89e715414399b0533255da51]
+Is there anything holding this up for the upcoming merge window?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Richard/gpiolib-add-gpiochip_add_pin_range_sparse-function/20250317-234321
-base:   12b58398bffc23db89e715414399b0533255da51
-patch link:    https://lore.kernel.org/r/20250317-aaeon-up-board-pinctrl-support-v2-1-36126e30aa62%40bootlin.com
-patch subject: [PATCH RFC v2 1/6] gpiolib: add gpiochip_add_pin_range_sparse() function
-config: i386-buildonly-randconfig-006-20250318 (https://download.01.org/0day-ci/archive/20250318/202503181221.ubMklVAA-lkp@intel.com/config)
-compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250318/202503181221.ubMklVAA-lkp@intel.com/reproduce)
+Miguel: I'm assuming you'd rather take this (and possibly [1] as well)
+via Rust, but if it goes in via the uml tree, that'd be fine by me,
+too.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503181221.ubMklVAA-lkp@intel.com/
+Cheers,
+-- David
 
-All warnings (new ones prefixed by >>):
+[1]: https://lore.kernel.org/linux-um/20250210105353.2238769-2-davidgow@goo=
+gle.com/
 
->> drivers/gpio/gpiolib.c:2320: warning: Function parameter or struct member 'pins' not described in 'gpiochip_add_pin_range_sparse'
->> drivers/gpio/gpiolib.c:2320: warning: Excess function parameter 'pin_list' description in 'gpiochip_add_pin_range_sparse'
+--0000000000003344bb06309966ad
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-
-vim +2320 drivers/gpio/gpiolib.c
-
-  2300	
-  2301	/**
-  2302	 * gpiochip_add_pin_range_sparse() - add a range for GPIO <-> pin mapping
-  2303	 * @gc: the gpiochip to add the range for
-  2304	 * @pinctl_name: the dev_name() of the pin controller to map to
-  2305	 * @gpio_offset: the start offset in the current gpio_chip number space
-  2306	 * @pin_list: the list of pins to accumulate in this range
-  2307	 * @npins: the number of pins to accumulate in this range
-  2308	 *
-  2309	 * Calling this function directly from a DeviceTree-supported
-  2310	 * pinctrl driver is DEPRECATED. Please see Section 2.1 of
-  2311	 * Documentation/devicetree/bindings/gpio/gpio.txt on how to
-  2312	 * bind pinctrl and gpio drivers via the "gpio-ranges" property.
-  2313	 *
-  2314	 * Returns:
-  2315	 * 0 on success, or a negative errno on failure.
-  2316	 */
-  2317	int gpiochip_add_pin_range_sparse(struct gpio_chip *gc, const char *pinctl_name,
-  2318					  unsigned int gpio_offset, unsigned int const *pins,
-  2319					  unsigned int npins)
-> 2320	{
-  2321		return __gpiochip_add_pin_range(gc, pinctl_name, gpio_offset, 0, pins,
-  2322						npins);
-  2323	}
-  2324	EXPORT_SYMBOL_GPL(gpiochip_add_pin_range_sparse);
-  2325	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+YE9NAgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHgsCGkO2Hex
+N6ybc+GeQEb6790qMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQAs
+exV05yVDmPhHRqOq9lAbfWOUvEf8zydxabZUHna6bayb83jD2eb9nMGGEprfuNBRmFg35sgF1TyN
++ieuQakvQYmY8tzK49hhHa2Y3qhGCTqYTHO3ypHvhHsZiGbL0gmdgB9P8ssVIws//34ae99GUOxo
+XKTxPwwsQ5Arq42besv3/HXAW+4nRAT8d3ht5ZWCHc5rjL/vdGzu7PaYo3u0da69AZ8Sh4Gf5yoc
+QANr2ZkMrxXbLmSmnRvbkQrzlZp2YbTFnczx46429D6q75/FNFOL1vAjxtRAPzkyACvW0eKvchza
+TMvvD3IWERLlcBL5yXpENc3rI8/wVjqgAWYxlFg1b/4b/TCgYe2MZC0rx4Uh3zTIbmPNiHdN6QZ9
+oDiYzWUcqWZ5jCO4bMKNlVJXeCvdANLHuhcC8FONj5VzNgYXs6gWkp9/Wt6XnQPX4dF4JBa8JdL/
+cT46RJIzoiJHEx/8syO5FparZHIKbkunoq6niPsRaQUGeqWc56H4Z1sQXuBJN9fhqkIkG0Ywfrwt
+uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
+PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
+Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgriohMEZ66LjlarBmrJFO9KgnxO/i
+Kun8BMusnsZnvcgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MzE4MDgwNzQzWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
+AQEBBQAEggEAPSwjUKvK4M4Q/c/QHB56/oWCYCS5l4KFHgzneKci49WJ0TY+HEqKPPUZ/VDRnKZm
+bZjzGCMCbROvTRud9C6V3gdlW+6rZc31NqWSk3ZXhHxRQZtLmOE39A49pugrgNI3jAdD7IHe0YrX
+Qo6e8ythXhdYHTcAeJCorJHIWNfgzoVENIJGWrF7wmbBqodB3KYDmqflG8K1PVGp6PMPOVeBE77V
+h3Rm/9znWt7FMx5PL4KQdfJLmYCySNwPle/erqnfcVTuo5wkZZaYGS9PuyMqjbKCtbvKigxc9UD8
+qEgexGu0AYORzeQrDjx8aqrEnT45ByZUDVUt8zcP3y27+CdShw==
+--0000000000003344bb06309966ad--
