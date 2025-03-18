@@ -1,122 +1,159 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADEE199E80
-	for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 15:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB984199384;
+	Tue, 18 Mar 2025 16:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742311982; cv=none; b=G4JdrxmrQMXS/hhl3lG/BrggoyqCyHgHih1l1siFy2YEv9gPyYhRa8PlmeKW6dHda3mVn3XXY7FcLizZ9Z3ZO1rwBTwN8OOfSz1pJgrCDRXqwL4jfiQiYppBM7S+WFZOHfJ14SeZ9VaEPpI2KoFt7/m25jv0MyjJ/cfkMAY41Ko=
+	t=1742315251; cv=none; b=dVBL74tkd+S113rcQ41KPvg3FTlQCcy3xhYo0b+b/z6G9Uxhx9HXV8kqWWvYQzsUV88QndTHKqN9LonHsdVhBlDRN7GPt3zGISMgwOVX0EvzD7j5nziKwvTuInV45CT0UJIV2CTY46OL3r+Bne4myxgN+tl1q5osQu9vECsyv0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742311982; c=relaxed/simple;
-	bh=68y8GkdAQLX6Usa7pa9vQcmtnJMUrq8yth4Y3tc6GKw=;
+	s=arc-20240116; t=1742315251; c=relaxed/simple;
+	bh=+XDY1qmtYjm5+RghuCBaSd2Ai8Ppy/IYl9QmZA0YIPk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WaDhXSdPvrb/ySBYDLqY2sEfBxT8nibSnUt9o/FZutYZodFVvBHLkvUpkplCPQNpHfMlUDK7pvXP2GYBaCbWsHwzX6q6VNg/fAPyUQ9ABLutBIE42w8qrmLwFHgoJ4G/1QFedSeQ5CbySx5llUhHIoCGWmWy5dzHP+efddtcyos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEI2xsX4; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=LXNNVN3DUoxFhiTdGN9XkNLmrrgH7LcFLTHlfzfawcLA3UAOL6nu00lZUTuniukMkuuyOZyozYKjclhz1Q61VKtS8UxLgRWZFTDFxNJww7QGThblKHVA3Zg2MuGAr71pdoK/WwBNvx/bxeqOHsmBKPFGPGvK7OxCS1dOJSzVkLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmTzDc0U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEI2xsX4"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43cf034d4abso37324005e9.3
-        for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 08:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742311979; x=1742916779; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=68y8GkdAQLX6Usa7pa9vQcmtnJMUrq8yth4Y3tc6GKw=;
-        b=QEI2xsX4BTP5E9Czq6ncCZydvjxrE6RrjeSnAuAc6qeEEJA9poB6TGth/xbpOPhsw9
-         qlHxtWZTKDiLzm9T2U1Dfds3Yxug7hHzd71NTvL9upv3pOPPo9Z2Zk01tMVtkr7ez2N7
-         qX7l7dqoBlWtbBTTpmoHE/DXDuatjXfgDYnQYpRN9NLWisqB/xZCf0ZC66H5mt0uHdoX
-         CAI1w2wnF11Bax7jinYqGqeQrWAOMkbfnIMhmcESv4T3ahtQp/6bV54hpUkzLUzYPR2B
-         xe71ho278YB/o7XCdcLp9PAzg44tlH2zb8MpM1QHXlb2Q8Bob4heL04mUYJ123uv7thI
-         0j3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742311979; x=1742916779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=68y8GkdAQLX6Usa7pa9vQcmtnJMUrq8yth4Y3tc6GKw=;
-        b=auewgfoQI05AyFTPbkiwvPjy9JLQcrmiaR6lOkYaztoTnjnS8HD5X2yTlAFXNoiPA/
-         1ykwKgnOcZaMwN2qWf+JC37LtN2KBHNNfOcKA/L4d8/kmFclWk20nuXCEtAZqsM9kqSg
-         t1BBvrv9fIH8UhuSoOto4meb21DrVf9nT1aookQ9Yxpq4veBK6StDo6allzJZIT4J4bV
-         OAQdzsYj7joSNzHoSDxJ3WbMt0Oet069Bcfp7Fbc6QYXe81P5kOaKdUYLTsnZWzDgeZk
-         PbfXDydSjBLYjypNg+p4NfNmsfc7Por9R0gmPdQ5WlQRXw7OfKPqiLIxkQ6Wc2VUl6sm
-         oN7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXyIeCZTlwV3swSk/7N3qI0deEafwIC6AS1nw4undjSFECnd17GmhF9MgD7Ryj5ohFPz+EQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YxCPZz0GUTUgNw6n0l7nCN0BafafjsvPh805hsue6+ZRo/8crZ+
-	+g790KaPzWScETQ5H6J2i6zr594Zp3muSJZrIBk0gE0fWzWbpKsjQqk73nkneorI4kf71eNCHkJ
-	xY62YW6Fk7Rolqdvw+WgwDL2gO+o=
-X-Gm-Gg: ASbGncuI/EHbBSUENEG7dz+NTEAyhQiG6xjxJOgKfV/LwY0q7f89DmSEFvD3qAKEcSd
-	c8IWblT2UbPap5RgQlptyyBzhRFyzzlwW06QZ/OqSaktQGcvGl4MModAo/d6uSsbAIPIAiwY6sJ
-	CWD3+BAkmCdM6vBMHiXcE0nog5MJY=
-X-Google-Smtp-Source: AGHT+IFUQsaiMRIvtR5jHluzCMQLuQzpGcI8hgAnBbkdkQFmyrZjRH1+Z3aerVqSjjiLZTXQuXJjMTVOJy208Ija/YY=
-X-Received: by 2002:a05:6000:1447:b0:391:3207:2e75 with SMTP id
- ffacd0b85a97d-3996b45f0d3mr4021787f8f.18.1742311978657; Tue, 18 Mar 2025
- 08:32:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmTzDc0U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72848C4CEEE;
+	Tue, 18 Mar 2025 16:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742315250;
+	bh=+XDY1qmtYjm5+RghuCBaSd2Ai8Ppy/IYl9QmZA0YIPk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PmTzDc0U8a+w7hMQzYch4lHlEPYdUTBNUNyDqDzV8jA9fae0jd7tX+Qt8zKx+T1XG
+	 kW1H8eXVUwXeVG71+SsuyTQVfejCWJHj/N4it+hCT29BybVAEJPGaxoB+zMHMzJdlP
+	 2Erx9kaVNvoGNTXqBPqYTXbM0B2gppjvWQowP7t8feu2NerK6WUpg6sfzw6faU1dM/
+	 Gfg0n6IDes10FycfVG9m/nkKRJUXe0+EwksdmDVUAp4i9kVVPwqQqbDIpkD9haDwao
+	 U4ooqm+Iss1qyVHHbd0EdmgQJobzAWastktzq7YZq9D1c0WZP5frBUDzBIdUyQo5dM
+	 BnygybhvBIz5Q==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-54996d30bfbso5275663e87.2;
+        Tue, 18 Mar 2025 09:27:30 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU5Y15SgOikdCWRiXe3AyJAN62lvOc0EgY+kOyTcfec2tqwxordAMWEQibWhcYgCpNPWdz57XNWBjkKnx0AMA==@lists.linux.dev, AJvYcCUTaNwapoFuRFAXiRQvwfCUt5PNzlNIqo96yoJvbmv81zBCVYq+WhNBC/iML25plBDL1h37@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw353mKylOiFALP8mBZqmuyF6WbFezgrMMgV7E2zzfvkeqe+9fz
+	5qYu3KMroIQDJEfm7dqMFSXkt5J5ii1Tv8v1M0kpH6LA78Qg6OXoGay6Z1NzWciFQiNKPIF3FNB
+	XBjn0qKiA89lIcWhCy3148Hgugrk=
+X-Google-Smtp-Source: AGHT+IHl+OsJqKBm4A4NcSbJwQrqJRpHwt/4YBmuHBd1yTofEmsxOMxZLSR8ZBbiYP3ugXHJWcUzR5d6OdpkdeVxzaI=
+X-Received: by 2002:a05:6512:2245:b0:545:cc5:be90 with SMTP id
+ 2adb3069b0e04-549c398cf85mr10055980e87.35.1742315249162; Tue, 18 Mar 2025
+ 09:27:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <168f775c4587f3a1338271390204a9fe16b150dd.1739866028.git.maciej.wieczor-retman@intel.com>
- <CA+fCnZcVSwUAC9_xtVAHvO6+RWDzt6wOzWN623m=dT-3G=NnTQ@mail.gmail.com>
- <cik7z3nwspdabtw5n2sfoyrq5nqfhuqcsnm42iet5azibsf4rs@jx3qkqwhf6z2>
- <CA+fCnZd6O0_fc1U-D_i2shcF4Td-6389F3Q=fDkdYYXQupX1NA@mail.gmail.com>
- <uup72ceniis544hgfaojy5omctzf7gs4qlydyv2szkr5hqia32@t6fgaxcaw2oi>
- <CA+fCnZfb_cF1gbASZsi6Th_zDwXqu4KMtRUDxbsyfnyCfyUGfQ@mail.gmail.com>
- <paotjsjnoezcdjj57dsy3ufuneezmlxbc3zk3ebfzuiq722kz2@6vhollkdhul7>
- <CA+fCnZcCCXPmeEQw0cyQt7MLchMiMvzfZj=g-95UOURT4xK9KQ@mail.gmail.com>
- <aanh34t7p34xwjc757rzzwraewni54a6xx45q26tljs4crnzbb@s2shobk74gtj>
- <CA+fCnZdj3_+XPtuq15wbdgLxRqXX+ja6vnPCOx3nfR=Z6Q3ChA@mail.gmail.com> <b2bioloa3qsueqiyjadi5zsvi63v6zh3vwzji4ed4dmsxkaudb@hrxzs4vh7wjf>
-In-Reply-To: <b2bioloa3qsueqiyjadi5zsvi63v6zh3vwzji4ed4dmsxkaudb@hrxzs4vh7wjf>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Tue, 18 Mar 2025 16:32:46 +0100
-X-Gm-Features: AQ5f1JrJPlldmh-W4saMlKXW0Ok9D48DqwKxa7GZ64X93-bATE_KAdVxzbhhhSM
-Message-ID: <CA+fCnZd2xPEwMGP7QRSyqHAJEbs_TY8Pg1ijG0iDFojMzphnfg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/14] kasan: sw_tags: Use arithmetic shift for shadow computation
-To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
-	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
-	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
-	bhe@redhat.com, ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, 
-	will@kernel.org, ardb@kernel.org, jason.andryuk@amd.com, 
-	dave.hansen@linux.intel.com, pasha.tatashin@soleen.com, 
-	guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, mark.rutland@arm.com, 
-	broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, rppt@kernel.org, 
-	kaleshsingh@google.com, richard.weiyang@gmail.com, luto@kernel.org, 
-	glider@google.com, pankaj.gupta@amd.com, pawan.kumar.gupta@linux.intel.com, 
-	kuan-ying.lee@canonical.com, tony.luck@intel.com, tj@kernel.org, 
-	jgross@suse.com, dvyukov@google.com, baohua@kernel.org, 
-	samuel.holland@sifive.com, dennis@kernel.org, akpm@linux-foundation.org, 
-	thomas.weissschuh@linutronix.de, surenb@google.com, kbingham@kernel.org, 
-	ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, xin@zytor.com, 
-	rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, cl@linux.com, 
-	jhubbard@nvidia.com, hpa@zytor.com, scott@os.amperecomputing.com, 
-	david@redhat.com, jan.kiszka@siemens.com, vincenzo.frascino@arm.com, 
-	corbet@lwn.net, maz@kernel.org, mingo@redhat.com, arnd@arndb.de, 
-	ytcoode@gmail.com, xur@google.com, morbo@google.com, 
-	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, 
-	linux-arm-kernel@lists.infradead.org, x86@kernel.org
+References: <20250311110616.148682-9-ardb+git@google.com> <202503131715.Fb6CfjhT-lkp@intel.com>
+ <CAMj1kXGBLV6W7mJcELmsQuDUi0u-DofyD985znmVoHoZKZTuxA@mail.gmail.com>
+ <CAMj1kXEZccymq1OhXErSK+prS3L7sygm7_5_1v+j2cypncQuzA@mail.gmail.com>
+ <CAK7LNAT_NRio2pkR1Km5Nq8KM38zYF7VCoGP0OjEP_Owg-ukpQ@mail.gmail.com>
+ <20250318081753.8448Abd-hca@linux.ibm.com> <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
+In-Reply-To: <CAMj1kXHoCgRu5werVnEJs+w4nkuiHA1SAyhwxqPyPF6Mk6Js3w@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 19 Mar 2025 01:26:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATSABs3GkhGB_27=5m37_d-gNoZ-keuct7GMGOtnMt0Cg@mail.gmail.com>
+X-Gm-Features: AQ5f1JowlnLK7HIqJP34ij3N2k8jfBhKfw1DJz1JIi7Wfp2LDQRTI5vQVU3bNcI
+Message-ID: <CAK7LNATSABs3GkhGB_27=5m37_d-gNoZ-keuct7GMGOtnMt0Cg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] Kbuild: Create intermediate vmlinux build with
+ relocations preserved
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>, kernel test robot <lkp@intel.com>, 
+	Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org, x86@kernel.org, 
+	Ingo Molnar <mingo@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org, linux-next@vger.kernel.org, 
+	Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 14, 2025 at 4:58=E2=80=AFPM Maciej Wieczor-Retman
-<maciej.wieczor-retman@intel.com> wrote:
+On Tue, Mar 18, 2025 at 5:27=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
 >
-> >KASAN does nothing to deliberately prevent or detect races. Even if
-> >the race leads to an OOB or UAF, KASAN might not be able to detect it.
-> >But sometimes it does: if poisoned shadow memory values become visible
-> >to the other thread/CPU before it makes a shadow memory value check.
+> On Tue, 18 Mar 2025 at 09:18, Heiko Carstens <hca@linux.ibm.com> wrote:
+> >
+> > On Thu, Mar 13, 2025 at 07:29:41PM +0900, Masahiro Yamada wrote:
+> > > On Thu, Mar 13, 2025 at 7:18=E2=80=AFPM Ard Biesheuvel <ardb@kernel.o=
+rg> wrote:
+> > > > On Thu, 13 Mar 2025 at 10:34, Ard Biesheuvel <ardb@kernel.org> wrot=
+e:
+> > > > > On Thu, 13 Mar 2025 at 10:21, kernel test robot <lkp@intel.com> w=
+rote:
+> > > > > > kernel test robot noticed the following build errors:
+> > > > > >
+> > > > > > [auto build test ERROR on masahiroy-kbuild/for-next]
+> > > > > > [also build test ERROR on masahiroy-kbuild/fixes tip/x86/core s=
+390/features linus/master v6.14-rc6 next-20250312]
+> > > > > > [If your patch is applied to the wrong git tree, kindly drop us=
+ a note.
+> > > > > > And when submitting patch, we suggest to use '--base' as docume=
+nted in
+> > > > > > https://git-scm.com/docs/git-format-patch#_base_tree_informatio=
+n]
+> > > > > >
+> > > > > > url:    https://github.com/intel-lab-lkp/linux/commits/Ard-Bies=
+heuvel/Kbuild-link-vmlinux-sh-Make-output-file-name-configurable/20250311-1=
+90926
+> > > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahir=
+oy/linux-kbuild.git for-next
+> > > > > > patch link:    https://lore.kernel.org/r/20250311110616.148682-=
+9-ardb%2Bgit%40google.com
+> > > > > > patch subject: [PATCH v2 3/4] Kbuild: Create intermediate vmlin=
+ux build with relocations preserved
+> > > > > > config: x86_64-randconfig-076-20250313 (https://download.01.org=
+/0day-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/config)
+> > > > > > compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> > > > > > reproduce (this is a W=3D1 build): (https://download.01.org/0da=
+y-ci/archive/20250313/202503131715.Fb6CfjhT-lkp@intel.com/reproduce)
+> > > > > >
+> > > > > > If you fix the issue in a separate patch/commit (i.e. not just =
+a new version of
+> > > > > > the same patch/commit), kindly add following tags
+> > > > > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > > > > | Closes: https://lore.kernel.org/oe-kbuild-all/202503131715.Fb=
+6CfjhT-lkp@intel.com/
+> > > > > >
+> > > > > > All errors (new ones prefixed by >>):
+> > > > > >
+> > > > > > >> gawk: scripts/generate_builtin_ranges.awk:82: fatal: cannot =
+open file `vmlinux.map' for reading: No such file or directory
+> > > > > >
+> > > > >
+> > > > > Hmm it seems I missed some things in link-vmlinux.sh - I will tak=
+e a look.
+> > > >
+> > > > We'd need something like the below applied on top - shall I send a =
+v3?
+> > >
+> > > I will insert this before you patch set.
+> > > https://lore.kernel.org/linux-kbuild/20250313102604.1491732-1-masahir=
+oy@kernel.org/T/#u
+> > ...
+> > > > --- a/scripts/link-vmlinux.sh
+> > > > +++ b/scripts/link-vmlinux.sh
+> > ...
+> > > > -vmlinux_link "${VMLINUX}"
+> > > > +vmlinux_link "${VMLINUX}" vmlinux.map
+> > > >
+> > > >  # fill in BTF IDs
+> > > >  if is_enabled CONFIG_DEBUG_INFO_BTF; then
+> >
+> > Building linux-next breaks on s390 with DEBUG_INFO_BTF enabled because
+> > of this; just where your addon patch ends:
+> >
 >
-> Thanks :)
+> Apologies for the breakage - this should already have been fixed in
+> the kbuild tree [0] but the fix does not appear to have landed yet.
 >
-> I've came up with a theoretical issue for the following dense series that=
- might
-> happen if there is some racing but I'll have to experiment if it actually
-> happens.
+> [0] https://lore.kernel.org/all/202503161833.ytx1ivfu-lkp@intel.com
+>
+>
+> Masahiro?
 
-As long as it doesn't lead to false positive reports or crashes in the
-KASAN runtime - I think it should fine.
+Sorry, I had applied the fix-up locally, but
+forgot to do "git push".
+
+The correct one is now available, and I hope
+tomorrow's linux-next will be OK.
+
+--=20
+Best Regards
+Masahiro Yamada
