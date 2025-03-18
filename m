@@ -1,40 +1,40 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2FA5695
-	for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 01:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8AA4A1C
+	for <llvm@lists.linux.dev>; Tue, 18 Mar 2025 02:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742260963; cv=none; b=jEmfsvDLwLwbgr1vd2HIorvMTqqcZEvZEHDuqDpohbYI9I60kaEoc5GxE8X9ECNS41GZQoFFzR2mDBvHoxWtUAAIG+fTZZJoU5+jCwl77w0x98XrcxDUpqYcEbzi2HcfhMNcJuTH+FNfIXGuVXVeTsmDyrVaMwlsPKcp80zLuio=
+	t=1742265107; cv=none; b=HKQTLVHyh0Q8b9kaWQ4WHJ4Lt/Eh0xO5sKKrEKR+4JILeh4l+GXrHg0T0Lud5MfOOL7K1mrFQIl4/YQ9tlCVqZiZgPeNRCtvVP1B1IazoulBq4kXlhgLGW2cnfa5ZuO536tv0nQ9q9OVOSynL7nDMAsJYr5cG67KVYSlqbhSWbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742260963; c=relaxed/simple;
-	bh=r8/U/IPJWLoespvwRuDJcsnKkJLHIhLwyhXh8dkA3fw=;
+	s=arc-20240116; t=1742265107; c=relaxed/simple;
+	bh=vQSLBLyCtrqqUbnB9Jd0JSErcOJ4DeaiJqq0yJ11DkY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B3z78o1wDlk9cMmZdhRiTdqA1Sa6Dmum+IsNgLoVUoGLo2TyFwn/j5iqLDjTEclgdawHLjGKde9D1CEaS/apVRMoqYf2AjsG1D/7H13N4f3cIe7GOt8CS/4UQ/8qxJOP3xRyMTRunrrDYaBVNweAQkjAki/2FA4R6vC4JxAzitc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cg8Q+mfA; arc=none smtp.client-ip=95.215.58.187
+	 In-Reply-To:Content-Type; b=oY22swLQp/9o0r3wQltb2BMmQW/ZqBrqPr/yXE3/KVRRk5N04diDR9uxg2214XVEah5/qIbPEJkfKt1z8c/OfFZhiiarpZhSYG8HVImMmUP9GEgaEjPBstCY4DZQrv8ggz7pJbjIU/4iEDBnuGk6wbPAeTUcVlmXwNVv3lB9Vw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mMEPE/Ic; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cg8Q+mfA"
-Message-ID: <6a852867-42b1-40ec-b2f6-3b869603c2f9@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mMEPE/Ic"
+Message-ID: <0a5408e8-aefc-4e2d-8329-094e17484890@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742260960;
+	t=1742265093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DVUIPR22yim6bsskBIwlUguvazbMUdyjRz6svgNIar8=;
-	b=cg8Q+mfAGht8qZimogMX13sA0+adAHoz53ycZLkaA8Ki3L/RA/IEvRTkEGPSPY62jOXMzN
-	Ph4zh69ddTZnnrvcQQyzv9yRkOLjsfDA64vN1+5zEuRHDBK201PADiyaPboXaF5jsVPCbj
-	jMqVSAFsiA0mCKBkTUNelwg9e31KXwM=
-Date: Tue, 18 Mar 2025 09:21:54 +0800
+	bh=SU2F01MONWPqBi1tnAE5cvFx2suDORnQGe0qTDWa2ig=;
+	b=mMEPE/IcX9CFHq0GR13rSHzBVER0hj/KRdTXlwaI/sf+0uAPAGvCznEhsgqhsaVMNpwLQc
+	MgPkV9Q2yncaSIvaYk5sEfvv2iWqOQHntbNNpUQaJwLd/B9PVx3SPqoClEE+ULlIfAyU/N
+	dvSO8hkn6ZLUvOLp+ujuYfftjvPg2Y0=
+Date: Tue, 18 Mar 2025 10:30:39 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH] rust: sync: optimize rust symbol generation for CondVar
+Subject: Re: [PATCH] rust: page:: optimize rust symbol generation for Page
 Content-Language: en-US
 To: Alice Ryhl <aliceryhl@google.com>
 Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
@@ -44,52 +44,97 @@ Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
  justinstitt@google.com, rust-for-linux@vger.kernel.org,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
  Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
-References: <20250317081351.2503049-1-kunwu.chan@linux.dev>
- <Z9f5fehO186xoNAV@google.com>
+References: <20250317094004.2622640-1-kunwu.chan@linux.dev>
+ <Z9f6Zi2_eZFFY0Q7@google.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Kunwu Chan <kunwu.chan@linux.dev>
-In-Reply-To: <Z9f5fehO186xoNAV@google.com>
+In-Reply-To: <Z9f6Zi2_eZFFY0Q7@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 2025/3/17 18:29, Alice Ryhl wrote:
-> On Mon, Mar 17, 2025 at 04:13:50PM +0800, Kunwu Chan wrote:
+On 2025/3/17 18:33, Alice Ryhl wrote:
+> On Mon, Mar 17, 2025 at 05:40:04PM +0800, Kunwu Chan wrote:
 >> From: Kunwu Chan <kunwu.chan@hotmail.com>
 >>
 >> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
 >> with ARCH=arm64, the following symbols are generated:
 >>
->> $nm vmlinux | grep ' _R'.*CondVar | rustfilt
->> ... T <kernel::sync::condvar::CondVar>::notify_all
->> ... T <kernel::sync::condvar::CondVar>::notify_one
->> ... T <kernel::sync::condvar::CondVar>::notify_sync
->> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
->> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
->> ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
->> ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
+>> $nm vmlinux | grep ' _R'.*Page | rustfilt
+>> ffff8000805b6f98 T <kernel::page::Page>::alloc_page
+>> ffff8000805b715c T <kernel::page::Page>::fill_zero_raw
+>> ffff8000805b720c T <kernel::page::Page>::copy_from_user_slice_raw
+>> ffff8000805b6fb4 T <kernel::page::Page>::read_raw
+>> ffff8000805b7088 T <kernel::page::Page>::write_raw
+>> ffff8000805b72fc T <kernel::page::Page as core::ops::drop::Drop>::drop
 >>
->> These notify* symbols are trivial wrappers around the C functions
->> __wake_up and __wake_up_sync.
+>> These Rust symbols are trivial wrappers around the C functions
+>> alloc_pages, kunmap_local and __free_pages.
 >> It doesn't make sense to go through a trivial wrapper for these
 >> functions, so mark them inline.
-> You don't need to send a new version just for this, but please format
-> the paragraphs better in the future. For example:
->
-> The notify* symbols are trivial wrappers around the C functions
-> __wake_up and __wake_up_sync. It doesn't make sense to go through a
-> trivial wrapper for these functions, so mark them inline.
-
-Thanks, I'll remember that, try to fill one line first and don't start a 
-new one easily.
-
+>>
 >> Link: https://github.com/Rust-for-Linux/linux/issues/1145
 >> Suggested-by: Alice Ryhl <aliceryhl@google.com>
 >> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
 >> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
 >> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> For sure `alloc_page` and `drop` should be inline, but the other methods
+> are not as simple. It is less clear that they should be inline.
 >
+> At the very least, the claim that they are a trivial wrapper around
+> "kunmap_local" is false. They don't just call that method.
+
+Yes, I'm not sure if that's the case, cause there are more layers of 
+nesting and it's more complex.
+
+ From objdump, it can be seen that LLVM will currently inline according 
+to the 'inline' mark.
+
+$aarch64-linux-gnu-objdump -d vmlinux | rustfilt | grep -A 20 
+"kernel::page::"
+ffff8000805b6f6c <kernel::page::page_align>:
+ffff8000805b6f6c:       d503245f        bti     c
+ffff8000805b6f70:       b13ffc08        adds    x8, x0, #0xfff
+ffff8000805b6f74:       54000062        b.cs    ffff8000805b6f80 
+<kernel::page::page_align+0x14>  // b.hs,
+b.nlast
+ffff8000805b6f78:       9274cd00        and     x0, x8, #0xfffffffffffff000
+ffff8000805b6f7c:       d65f03c0        ret
+ffff8000805b6f80:       d503233f        paciasp
+ffff8000805b6f84:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
+ffff8000805b6f88:       910003fd        mov     x29, sp
+ffff8000805b6f8c:       d0006420        adrp    x0, ffff80008123c000 
+<core::unicode::unicode_data::white_sp
+ace::WHITESPACE_MAP+0x6756>
+ffff8000805b6f90:       910b6000        add     x0, x0, #0x2d8
+ffff8000805b6f94:       97e98ac3        bl      ffff800080019aa0 
+<core::panicking::panic_const::panic_const
+_add_overflow>
+
+ffff8000805b6f98 <<kernel::pci::Device>::as_raw>:
+ffff8000805b6f98:       d503245f        bti     c
+ffff8000805b6f9c:       f9400008        ldr     x8, [x0]
+ffff8000805b6fa0:       f1031d1f        cmp     x8, #0xc7
+ffff8000805b6fa4:       54000069        b.ls    ffff8000805b6fb0 
+<<kernel::pci::Device>::as_raw+0x18>  // b
+.plast
+ffff8000805b6fa8:       d1032100        sub     x0, x8, #0xc8
+ffff8000805b6fac:       d65f03c0        ret
+ffff8000805b6fb0:       d503233f        paciasp
+ffff8000805b6fb4:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
+ffff8000805b6fb8:       910003fd        mov     x29, sp
+ffff8000805b6fbc:       b0006420        adrp    x0, ffff80008123b000 
+<core::unicode::unicode_data::white_sp
+ace::WHITESPACE_MAP+0x5756>
+
+
+Either we commits and merges the 'alloc_page' and 'drop' first.
+
+I'll change it in the v2 version.
+
+>
+> Alice
+
 -- 
 Thanks,
    Kunwu.Chan
