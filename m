@@ -1,43 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5242214A92;
-	Wed, 19 Mar 2025 20:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A38214225;
+	Wed, 19 Mar 2025 20:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742416303; cv=none; b=Qfcp6m76yvckxsSqCfhpp630d8ttLQGvo1tlZVbJVDh1DTLaSGyxMWgy9loeJpU6gOGkKSkRbbkkdKWRxSeLsPSg6Wu9SPTfg8tXpogblGYFW5f/3f/9Ygmreizc8ufcMKz/8Vm4dJ/qpUuiicMk8Cmd3uq1CsrPgUCqQESvkZM=
+	t=1742416953; cv=none; b=flRkMvc9k6lUOsx2iaBHAcU0BHiGKVVA9s2oV+7pab29ewx4ntoxMv718luz3NQnaV7CJk2C/S3MNrpb1jo9iU3Lx1gokgV9MtdvKYb6YbVR45cAB75bZB0JwU5i5qphUhAilU5+MeKAKAfHm3GC3MCjugUrb5Zd0myI1IRaK3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742416303; c=relaxed/simple;
-	bh=2UFIZXkD+qWE9W/PWMkF4tSHKIJ/WUElt9x4oj57DRk=;
+	s=arc-20240116; t=1742416953; c=relaxed/simple;
+	bh=PFr45HKKutwFEw7jn6Bw3slxKl9l7TTdnvJ94iSfra8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XdPs6Q1sCiLTKRfCrbZJx1VUJYUKH/+zG6er8GrKA5pgFhSFpRSbtvFiEHuWsotVOXZVt/+ja4bKul/IUvzyJQJ7UxKhLlpDTqlkKM6W6/HDVJD69W44tyVJZ3mjO0d2EO6NU+ub2fhw6hQPVYjakoqhfobEpWvuWJJHlRm0wqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZYorn2C; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7GVdBDJbXQBddrhvH7ZWc50Koz5Hh9xZzXfI5pLnjWib6MT5VGbeXcU15wlgolNA1aIcJahmwsTf6yXf/5jFVbcM35n9ULQiXa6hj4oev79fTI2tdMK6DsxmrxEKgdqhZ8fK18bgUwF+Vcnih2f81W2p7kkz6+veX8hRnfhp08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V+G9RBJ8; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZYorn2C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80492C4CEE4;
-	Wed, 19 Mar 2025 20:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742416303;
-	bh=2UFIZXkD+qWE9W/PWMkF4tSHKIJ/WUElt9x4oj57DRk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jZYorn2CPy7FBhyA14dGfVlB7eZmDphH/ZTHjFn3IsmtLG8klQQSXajl8xHsCkN7E
-	 g/pz3DOaiXz07Y2bLo3LU2N+MRFVxF1iIUsBPOg/vuD7fIHpgl6jAL9fPMS6Xw6Pd+
-	 jBiIYemk1ZobnJg5vzPtUJC0qiVBmfcC1obKSwTveznSBdj/oTYNtoz+lUNfbMZ6YR
-	 i0VqwFkusI/gIhvnRoxkUBLXSCYwVUXzBg+JU0yCN4hxMVvMzjNQAHgk93tJLo8Rpy
-	 t3QbKvYy0XGVDdaNBMI9hdtxxTQq8UbHvK7iQ2Cac5NQJuft3v9Dz2gsm7Bk/y1rBc
-	 7xoU2mPgZPmKA==
-Date: Wed, 19 Mar 2025 21:31:39 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, x86@kernel.org,
-	Rae Moar <rmoar@google.com>,
-	Sergio =?iso-8859-1?Q?Gonz=E1lez?= Collado <sergio.collado@gmail.com>,
-	David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/tools: Drop unlikely definition from
- insn_decoder_test
-Message-ID: <Z9spq9OccwK7vKj7@gmail.com>
-References: <20250318-x86-decoder-test-fix-unlikely-redef-v1-1-74c84a7bf05b@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V+G9RBJ8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742416952; x=1773952952;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PFr45HKKutwFEw7jn6Bw3slxKl9l7TTdnvJ94iSfra8=;
+  b=V+G9RBJ8UOS0Hb7WHJKvVqJQ15flzjGBSLQAy+nikv76XJi0y4eymwDx
+   kKgZXMGhykvGvkDh/IF3V9GYA++LwmVUjQMLKFeMZRBVaoDXg7XgPYIhl
+   61XpYTnimBsXAFdWMOcGbiKjKNe4Zs6bjifMIiTeVgIvZtukch4AI0CfC
+   qgnvxZiU0Hq1UXOPMpk+BwQMV8PfwdK43M05U2wgmxsvVJSeHJybvXjNB
+   sH2LX1kCIl1VYVk8yZ2PuFzhIs8DiON88RzXq3U61EiAyYcpPEIUUva9m
+   PIcQ82tik4k2l1RHizLJKaYuH1tJV7ouO1gTFIR2RA6bTuXOCIcyzjgU1
+   A==;
+X-CSE-ConnectionGUID: 6NIzYrvvSn2XEvFo9niSow==
+X-CSE-MsgGUID: m8Eu9PaSSpKZU7uDdkaphw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="66085226"
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="66085226"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 13:42:29 -0700
+X-CSE-ConnectionGUID: 4b0/JhOJSJuAE5DnHQWF6w==
+X-CSE-MsgGUID: y8moD0ftS/6BPZeGqXvWGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,259,1736841600"; 
+   d="scan'208";a="122782440"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 19 Mar 2025 13:42:24 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tv0F3-000FeQ-2v;
+	Wed, 19 Mar 2025 20:42:21 +0000
+Date: Thu, 20 Mar 2025 04:41:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, upstream@airoha.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [net-next PATCH 5/6] net: pcs: airoha: add PCS driver for Airoha
+ SoC
+Message-ID: <202503200442.3vYzyScu-lkp@intel.com>
+References: <20250318235850.6411-6-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,40 +76,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250318-x86-decoder-test-fix-unlikely-redef-v1-1-74c84a7bf05b@kernel.org>
+In-Reply-To: <20250318235850.6411-6-ansuelsmth@gmail.com>
+
+Hi Christian,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-phylink-reset-PCS-Phylink-double-reference-on-phylink_stop/20250319-080303
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250318235850.6411-6-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH 5/6] net: pcs: airoha: add PCS driver for Airoha SoC
+config: x86_64-randconfig-001-20250320 (https://download.01.org/0day-ci/archive/20250320/202503200442.3vYzyScu-lkp@intel.com/config)
+compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503200442.3vYzyScu-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503200442.3vYzyScu-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/pcs/pcs-airoha.c:2542:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    2542 |         default:
+         |         ^
+   drivers/net/pcs/pcs-airoha.c:2542:2: note: insert '__attribute__((fallthrough));' to silence this warning
+    2542 |         default:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/net/pcs/pcs-airoha.c:2542:2: note: insert 'break;' to avoid fall-through
+    2542 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+vim +2542 drivers/net/pcs/pcs-airoha.c
 
-> After commit c104c16073b7 ("Kunit to check the longest symbol length"),
-> there is a warning when building with clang because there is now a
-> definition of unlikely from compiler.h in tools/include/linux, which
-> conflicts with the one in the instruction decoder selftest.
-> 
->   arch/x86/tools/insn_decoder_test.c:15:9: warning: 'unlikely' macro redefined [-Wmacro-redefined]
->      15 | #define unlikely(cond) (cond)
->         |         ^
->   tools/include/linux/compiler.h:128:10: note: previous definition is here
->     128 | # define unlikely(x)            __builtin_expect(!!(x), 0)
->         |          ^
->   1 warning generated.
-> 
-> Remove the second unlikely definition, as it is no longer necessary,
-> clearing up the warning.
-> 
-> Fixes: c104c16073b7 ("Kunit to check the longest symbol length")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/x86/tools/insn_decoder_test.c | 2 --
->  1 file changed, 2 deletions(-)
+  2521	
+  2522	static void airoha_pcs_an_restart(struct phylink_pcs *pcs)
+  2523	{
+  2524		struct airoha_pcs_priv *priv = phylink_pcs_to_airoha_pcs_port(pcs);
+  2525	
+  2526		switch (priv->interface) {
+  2527		case PHY_INTERFACE_MODE_SGMII:
+  2528		case PHY_INTERFACE_MODE_1000BASEX:
+  2529		case PHY_INTERFACE_MODE_2500BASEX:
+  2530			regmap_set_bits(priv->hsgmii_an, AIROHA_PCS_HSGMII_AN_SGMII_REG_AN_0,
+  2531					AIROHA_PCS_HSGMII_AN_SGMII_AN_RESTART);
+  2532			udelay(3);
+  2533			regmap_clear_bits(priv->hsgmii_an, AIROHA_PCS_HSGMII_AN_SGMII_REG_AN_0,
+  2534					  AIROHA_PCS_HSGMII_AN_SGMII_AN_RESTART);
+  2535			break;
+  2536		case PHY_INTERFACE_MODE_USXGMII:
+  2537			regmap_set_bits(priv->usxgmii_pcs, AIROHA_PCS_USXGMII_PCS_AN_CONTROL_0,
+  2538					AIROHA_PCS_USXGMII_AN_RESTART);
+  2539			udelay(3);
+  2540			regmap_clear_bits(priv->usxgmii_pcs, AIROHA_PCS_USXGMII_PCS_AN_CONTROL_0,
+  2541					  AIROHA_PCS_USXGMII_AN_RESTART);
+> 2542		default:
+  2543			return;
+  2544		}
+  2545	}
+  2546	
 
-I suppose this should be merged into the Kunit tree? The c104c16073b7 
-commit is in -next currently.
-
-Anyway:
-
-  Acked-by: Ingo Molnar <mingo@kernel.org>
-
-Thanks,
-
-	Ingo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
