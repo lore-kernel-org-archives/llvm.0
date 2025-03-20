@@ -1,44 +1,61 @@
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB731DC05F;
-	Thu, 20 Mar 2025 22:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFA81EDA2F;
+	Thu, 20 Mar 2025 22:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742508193; cv=none; b=h6YM251v4NMGR0hEasjRmre+KqguLgvkOIntLBp8/f7tljz/RqtST/hLXbmVXt3dsOfDPx1PrJyCT5CnzCCQWwlPvjzD29njoGN1Csaf2IzNMcWkPapyOD0K/3U9hbgyT1UX6JK1LpT8RbNMkiB6LwLnH+ClC7DubWZvDXEUuPA=
+	t=1742510638; cv=none; b=YZbS3I7G5HQ9gC3v3BU114ej5p7n7J5wyFW0pn3dr40WF942EHcdMMGCPKtWd0w5cHMha/hsEDGBFrwncgelm+BU4+L4pZKRkusei0ozq5e7Mmi4AZq01g21WI/aor4G7t4mw1pNzXSmEtD9boYPdqEENGKLDZNNVQXPKix2RTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742508193; c=relaxed/simple;
-	bh=o/NoRaNjVbaZ9od2IyCqGECRMJQPgyEg8JJo7vsV2r8=;
+	s=arc-20240116; t=1742510638; c=relaxed/simple;
+	bh=auxEEuY+xDpirUEPyxYSNf0pr+NS+Jjo/6xqZzmpriI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b5GdsDxiNR9T6rebaNMGrb9xW0xQQRw7MFuzgQ7UFZlsJNbRnh4Sx+V5bnwx0k9mwxVEB2+fB4Fi+X0AXLo2n0Ekhu2Zddu03X4+Q16JPSIE4ibIG+rulzflomWIi4yMBaKJAz9tHgYiFfptfTLmmcYhhl/Cp00YfCiVFvQHNWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BGuP+IQy; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=FJX5aY9oE6NV9h0ZY2OpHoAh54I8b9zRCAwh9Ii1aj4NxpjgoAISTH4isfcrkdgp0z2jtxx9HYSH2IFHDzSFhAhhLXI6LLuulE9hmBzA6d7qpnrNbFu6VOli9pi8AnrJxsuFgmlFY+0wSuIstxTbV3KdcjToBKJ8dkp5KDzCrdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NcsmhJUo; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BGuP+IQy"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 96B6D44364;
-	Thu, 20 Mar 2025 22:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742508187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q9ANWztryAtzgs9DRNwfWIv3Pg0tyATZHHdZaolpDOY=;
-	b=BGuP+IQyk7BHW5sC3FOEVRzpV0bZKhxuuSXJ3EQgav8x4Vj86p9Iw6osoIrkzejmfEleML
-	c9UcXzN/7Ds8rib6jllcHjvCBSw+UoU5ByU1aYzkxcQ0+R7gaapu7pGFkku3xe3wLBjUJJ
-	3yrwbMpxzrsCXz/q9mepxDs7sTuCMt8f/pcoUI8Iq2j68RnaXFDrdbHNsxGmgQYFE+67YO
-	eP4IfL+c0wBqwdaWeO8N2Emis4FAV7pOfxNrVGpDkbJV3ggwZ3GcDe0eBAR2ua7GDr1vQI
-	FtXUMvOxxGLsCNEQ/SMi6ILGky2/TcE9uMM+8Iu6EZQbPC4gI+UrF1wdR+9QDg==
-Date: Thu, 20 Mar 2025 23:03:05 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>, Frank Li <Frank.Li@nxp.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Stanley Chu <yschu@nuvoton.com>, linux-i3c@lists.infradead.org,
-	imx@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] i3c: master: svc: Fix implicit fallthrough in
- svc_i3c_master_ibi_work()
-Message-ID: <174250817539.3598269.2833694260995006704.b4-ty@bootlin.com>
-References: <20250319-i3c-fix-clang-fallthrough-v1-1-d8e02be1ef5c@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NcsmhJUo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742510638; x=1774046638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=auxEEuY+xDpirUEPyxYSNf0pr+NS+Jjo/6xqZzmpriI=;
+  b=NcsmhJUolzkoEPAOwUPHowmcneTYiJwlOWrXXe/jVgLnfDfyLZMNZ7x7
+   oaYLhETVZvQMWrgJGhONyYct1LSDhdwMuHjYxr1ktfNDFbLGEvtmYTFr4
+   +IQXXraI+uveGBVGpsITo51pxEyUjxKsZOdzytWWpZArZ/hZwkYO8l4/T
+   1CFf1yavXTDag0SMUNv2wqdB1ud5jceIbdM/yo8CewEPh1zSC1JbNhZGP
+   OoXXC0z4YsOjyT34vlpMw1vzkdlCAsdQZYBj+5Pqpf6NGBGNg8dAtj/+O
+   Qurm40hFoa2m5bUOV4osoKXGntWlVWjm02MqlfKTrWFmHWJthuU+TR2zl
+   A==;
+X-CSE-ConnectionGUID: XMaBS1u/SoCWpoxWkrll1w==
+X-CSE-MsgGUID: AnidX/huSi+xA22BfXKHLA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="47543833"
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="47543833"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 15:43:57 -0700
+X-CSE-ConnectionGUID: VJgZY0yFScicTmekw+cYPw==
+X-CSE-MsgGUID: SVQIDu9UQeWEHUtds+YQZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,262,1736841600"; 
+   d="scan'208";a="154124462"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 20 Mar 2025 15:43:55 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvOc7-0000q7-1O;
+	Thu, 20 Mar 2025 22:43:49 +0000
+Date: Fri, 21 Mar 2025 06:43:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Baochen Qiang <quic_bqiang@quicinc.com>, ath11k@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, quic_bqiang@quicinc.com
+Subject: Re: [PATCH ath-next 1/5] wifi: ath11k: determine PM policy based on
+ machine model
+Message-ID: <202503210624.I3zealnl-lkp@intel.com>
+References: <20250320023003.65028-2-quic_bqiang@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,35 +64,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319-i3c-fix-clang-fallthrough-v1-1-d8e02be1ef5c@kernel.org>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeelfeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetlhgvgigrnhgurhgvuceuvghllhhonhhiuceorghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejfefhffekjeeuheevueevjedvleevjeetudffheeutdffudefjeduffeuvddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvugemieefjedtmeejkegvtdemtgdtvgekmedvkedtieemkegrtgeipdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopefhrhgrnhhkrdfnihesnhigphdrtghomhdprhgtphhtt
- hhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihstghhuhesnhhuvhhothhonhdrtghomhdprhgtphhtthhopehlihhnuhigqdhifegtsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepihhmgieslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehprghttghhvghssehlihhsthhsrdhlihhnuhigrdguvghv
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <20250320023003.65028-2-quic_bqiang@quicinc.com>
 
-On Wed, 19 Mar 2025 09:08:01 -0700, Nathan Chancellor wrote:
-> Clang warns (or errors with CONFIG_WERROR=y):
-> 
->   drivers/i3c/master/svc-i3c-master.c:596:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->     596 |         default:
->         |         ^
->   drivers/i3c/master/svc-i3c-master.c:596:2: note: insert 'break;' to avoid fall-through
->     596 |         default:
->         |         ^
->         |         break;
->   1 error generated.
-> 
-> [...]
+Hi Baochen,
 
-Applied, thanks!
+kernel test robot noticed the following build warnings:
 
-[1/1] i3c: master: svc: Fix implicit fallthrough in svc_i3c_master_ibi_work()
-      https://git.kernel.org/abelloni/c/e8d2d287e26d
+[auto build test WARNING on b6f473c96421b8b451a8df8ccb620bcd71d4b3f4]
 
-Best regards,
+url:    https://github.com/intel-lab-lkp/linux/commits/Baochen-Qiang/wifi-ath11k-determine-PM-policy-based-on-machine-model/20250320-103536
+base:   b6f473c96421b8b451a8df8ccb620bcd71d4b3f4
+patch link:    https://lore.kernel.org/r/20250320023003.65028-2-quic_bqiang%40quicinc.com
+patch subject: [PATCH ath-next 1/5] wifi: ath11k: determine PM policy based on machine model
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20250321/202503210624.I3zealnl-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503210624.I3zealnl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503210624.I3zealnl-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/ath/ath11k/core.c:2381:19: warning: cast to smaller integer type 'enum ath11k_pm_policy' from 'void *' [-Wvoid-pointer-to-enum-cast]
+    2381 |                 ab->pm_policy = (enum ath11k_pm_policy)dmi_id->driver_data;
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +2381 drivers/net/wireless/ath/ath11k/core.c
+
+  2373	
+  2374	int ath11k_core_init(struct ath11k_base *ab)
+  2375	{
+  2376		const struct dmi_system_id *dmi_id;
+  2377		int ret;
+  2378	
+  2379		dmi_id = dmi_first_match(ath11k_pm_quirk_table);
+  2380		if (dmi_id)
+> 2381			ab->pm_policy = (enum ath11k_pm_policy)dmi_id->driver_data;
+  2382		else
+  2383			ab->pm_policy = ATH11K_PM_DEFAULT;
+  2384	
+  2385		ath11k_dbg(ab, ATH11K_DBG_BOOT, "pm policy %u\n", ab->pm_policy);
+  2386	
+  2387		ret = ath11k_core_soc_create(ab);
+  2388		if (ret) {
+  2389			ath11k_err(ab, "failed to create soc core: %d\n", ret);
+  2390			return ret;
+  2391		}
+  2392	
+  2393		return 0;
+  2394	}
+  2395	EXPORT_SYMBOL(ath11k_core_init);
+  2396	
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
