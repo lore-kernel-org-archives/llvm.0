@@ -1,186 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9D1EEC8;
-	Thu, 20 Mar 2025 00:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849101C6F55;
+	Thu, 20 Mar 2025 05:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742430581; cv=none; b=Dc8hsAPqgpvJ0Deahn9oBCaZG4Qb4swDnDEvF13qXa24uzPj9tiW6LZ9+AVAierfbAAHHCJj9XqX/yyr3iQ2KjosMzdlEMgLzdqoxYKofTJGxJesHIKP1Jp5WeXMC+OrfdLqEs4A3Kt6dr2Y9zray95ZQdcC5PLVZc0zVT+25CQ=
+	t=1742449404; cv=none; b=XIAbI+Q1TlduhZWXw6eYRNTzweZzhnEVyuc59tDSrLiaz8NWun74m0l2PpjV1fm6ssDn9+M8Ncr5B1+jTNkD+saPg55KJoCkbEurCnsEzYnfqWWHbNsho3kkiOiQuBwl2NxuOfOkb2D/DzYzVEpFV3vKVL7o/tKYiN3ssiEMKhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742430581; c=relaxed/simple;
-	bh=LNg3FuImW/a7lgC1J6rZG2OE2yMgC1aJK3hPWVQtzRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iEKE4kxgCmig0gTj39R5B1yuvpDGYjgU1yu42zx407dTbQi97Na0kfAAXgSqZEjefq3GIybGebceKiCcwErwTq/HEyBlGws/eIRoqYOfy8cM0gvjNd8qflNApJpHtTe33zEoi3un6fM8sE5zji6ZGpOiEBZ2mXbfVfZIYZP8DDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XMUKBxk1; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742449404; c=relaxed/simple;
+	bh=qHCFtESSH+gkbtA8Q6yENB/ys9cpK53s6Vsi3+KGaDE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=psbYurHVdgv+ZlbyBKtbS+As8Z9eZiNNcnuLMQzZ9ezA6xhNZRnmFBRNJLwIboNInvj9CzFzAxDe3Lvmn1MN2xJT37QGNgGhaEZaWT17HEnET+HDIeq7ig7h0i4nBKiaZKsRKFdBRdrDB5pJA1fRxn8tGWtGV6bOQJSlSCR20as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=GEPqQItx; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XMUKBxk1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742430580; x=1773966580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LNg3FuImW/a7lgC1J6rZG2OE2yMgC1aJK3hPWVQtzRg=;
-  b=XMUKBxk1AWUBWkrKx9yLqN8UlS2iu6S8Vrxgx1bED4W5mHOUL//PteFM
-   +T6WFMyWvv8MuFZ2PAvhs7SHLxO4aiXw8ZHc7gcrA4twnXdg+ikPCm8ta
-   neEYO1DPHSjHqryL4E1dwD/OAzcEqMgqjNuys0D/1QC4OJwX4d3R+orr2
-   NRkHp4+IHkba/7paZtX357MN9gcfgQfByZpHBiEECNqru5r4RmKPGQMJh
-   ieQllvW3cCLF+OHkxLmvwKRTh2Xs4lIInCRUb5zAL5vSySPVGIVJZmGOg
-   SL0C/VXU4dDKslf+uALYgEJOYT004ASV8J2JyDU7U5qqEhWVbH91FCwdu
-   A==;
-X-CSE-ConnectionGUID: 3Lv5ak9cTYGuZtvR2uGIBA==
-X-CSE-MsgGUID: YKkyPJqqTYqn9+/pt2/IyQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="43566561"
-X-IronPort-AV: E=Sophos;i="6.14,260,1736841600"; 
-   d="scan'208";a="43566561"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2025 17:29:39 -0700
-X-CSE-ConnectionGUID: QWUz/D9bQUKqCoXzZ6hy+g==
-X-CSE-MsgGUID: lGCtt5pGRimkcoWvqE4D8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,260,1736841600"; 
-   d="scan'208";a="128079837"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 19 Mar 2025 17:29:33 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tv3mp-00002V-01;
-	Thu, 20 Mar 2025 00:29:27 +0000
-Date: Thu, 20 Mar 2025 08:29:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Jose Abreu <joabreu@synopsys.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH net-next v4 3/3] net: stmmac: Add DWMAC glue layer for
- Renesas GBETH
-Message-ID: <202503200755.DoMipQnf-lkp@intel.com>
-References: <20250318205735.122590-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="GEPqQItx"
+Received: from [192.168.7.202] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52K5hD0n1917517
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 19 Mar 2025 22:43:13 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52K5hD0n1917517
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1742449393;
+	bh=mW0VY7G4Mj9xAgiCN/w/UmAjV16d507r/zUQczyqmvg=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=GEPqQItxyHZwo+vPy63upJzOjYxdYe3ETvNlL6Gb+8g2v5cNClqO1bZ3w0BFo+tOf
+	 5f8LEu0nO0mJJeY8Tcig2pPkH9jYASvpU+btWv2oQKdCy2PTvAWzH3lfgtovllkjvk
+	 y6YUnr/Un35aRxvabeT7Gm1E53XuhIRNSYsDKdA1xzUP6D0UjrfF59Jd1+AMBcS4KY
+	 RL/YYPOv5Omwc4+BX45vjcm4o497u507FApkYb07HsRN5oZe2d2IPqHn+hCha6AeTP
+	 kQfuy/C1ysJYmsjdPaPAlG4bEV0TFMqfGfEbsvqBGj3Bcdalx1oMMaH1mrw9tO1uPE
+	 /OHyALgmMvrXg==
+Message-ID: <0fc86279-296e-4d61-bf24-fa9cb2f10629@zytor.com>
+Date: Wed, 19 Mar 2025 22:43:13 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250318205735.122590-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mozilla Thunderbird
+From: Xin Li <xin@zytor.com>
+Subject: Re: [PATCH v3 1/3] x86/fred: Allow variable-sized event frame
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <20250319071009.1390984-2-xin@zytor.com>
+ <202503200325.iKcHqUsb-lkp@intel.com>
+Content-Language: en-US
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <202503200325.iKcHqUsb-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Prabhakar,
+On 3/19/2025 12:45 PM, kernel test robot wrote:
+> Hi Xin,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on 60c162a51180cb2b05d7505a565ab079bfa9cf12]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Li-Intel/x86-fred-Allow-variable-sized-event-frame/20250319-151307
+> base:   60c162a51180cb2b05d7505a565ab079bfa9cf12
+> patch link:    https://lore.kernel.org/r/20250319071009.1390984-2-xin%40zytor.com
+> patch subject: [PATCH v3 1/3] x86/fred: Allow variable-sized event frame
+> config: i386-buildonly-randconfig-003-20250320 (https://download.01.org/0day-ci/archive/20250320/202503200325.iKcHqUsb-lkp@intel.com/config)
+> compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503200325.iKcHqUsb-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202503200325.iKcHqUsb-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> init/init_task.c:68:17: error: use of undeclared identifier '__top_init_kernel_stack'
+>        68 |         .thread_info    = INIT_THREAD_INFO(init_task),
+>           |                           ^
+>     arch/x86/include/asm/thread_info.h:76:36: note: expanded from macro 'INIT_THREAD_INFO'
+>        76 |         .user_pt_regs   = (struct pt_regs *)__top_init_kernel_stack,    \
+>           |                                             ^
+>     1 error generated.
+> 
 
-kernel test robot noticed the following build errors:
+Okay, I need to add:
 
-[auto build test ERROR on net-next/main]
+extern unsigned long __top_init_kernel_stack[];
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/dt-bindings-net-dwmac-Increase-maxItems-for-interrupts-and-interrupt-names/20250319-050021
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250318205735.122590-4-prabhakar.mahadev-lad.rj%40bp.renesas.com
-patch subject: [PATCH net-next v4 3/3] net: stmmac: Add DWMAC glue layer for Renesas GBETH
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250320/202503200755.DoMipQnf-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503200755.DoMipQnf-lkp@intel.com/reproduce)
+Unfortunately my configs don't expose the build issue.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503200755.DoMipQnf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/dwmac-renesas-gbeth.c:125:7: error: use of undeclared identifier 'STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP'
-     125 |                            STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP |
-         |                            ^
-   1 error generated.
+Thanks!
+       Xin
 
 
-vim +/STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP +125 drivers/net/ethernet/stmicro/stmmac/dwmac-renesas-gbeth.c
 
-    72	
-    73	static int renesas_gbeth_probe(struct platform_device *pdev)
-    74	{
-    75		struct plat_stmmacenet_data *plat_dat;
-    76		struct stmmac_resources stmmac_res;
-    77		struct device *dev = &pdev->dev;
-    78		struct renesas_gbeth *gbeth;
-    79		unsigned int i;
-    80		int err;
-    81	
-    82		err = stmmac_get_platform_resources(pdev, &stmmac_res);
-    83		if (err)
-    84			return dev_err_probe(dev, err,
-    85					     "failed to get resources\n");
-    86	
-    87		plat_dat = devm_stmmac_probe_config_dt(pdev, stmmac_res.mac);
-    88		if (IS_ERR(plat_dat))
-    89			return dev_err_probe(dev, PTR_ERR(plat_dat),
-    90					     "dt configuration failed\n");
-    91	
-    92		gbeth = devm_kzalloc(dev, sizeof(*gbeth), GFP_KERNEL);
-    93		if (!gbeth)
-    94			return -ENOMEM;
-    95	
-    96		plat_dat->num_clks = ARRAY_SIZE(renesas_gbeth_clks);
-    97		plat_dat->clks = devm_kcalloc(dev, plat_dat->num_clks,
-    98					      sizeof(*plat_dat->clks), GFP_KERNEL);
-    99		if (!plat_dat->clks)
-   100			return -ENOMEM;
-   101	
-   102		for (i = 0; i < plat_dat->num_clks; i++)
-   103			plat_dat->clks[i].id = renesas_gbeth_clks[i];
-   104	
-   105		err = devm_clk_bulk_get(dev, plat_dat->num_clks, plat_dat->clks);
-   106		if (err < 0)
-   107			return err;
-   108	
-   109		plat_dat->clk_tx_i = renesas_gbeth_find_clk(plat_dat, "tx");
-   110		if (!plat_dat->clk_tx_i)
-   111			return dev_err_probe(dev, -EINVAL,
-   112					     "error finding tx clock\n");
-   113	
-   114		gbeth->rstc = devm_reset_control_get_exclusive(dev, NULL);
-   115		if (IS_ERR(gbeth->rstc))
-   116			return PTR_ERR(gbeth->rstc);
-   117	
-   118		gbeth->dev = dev;
-   119		gbeth->regs = stmmac_res.addr;
-   120		gbeth->plat_dat = plat_dat;
-   121		plat_dat->bsp_priv = gbeth;
-   122		plat_dat->set_clk_tx_rate = stmmac_set_clk_tx_rate;
-   123		plat_dat->clks_config = renesas_gbeth_clks_config;
-   124		plat_dat->flags |= STMMAC_FLAG_HWTSTAMP_CORRECT_LATENCY |
- > 125				   STMMAC_FLAG_EN_TX_LPI_CLK_PHY_CAP |
-   126				   STMMAC_FLAG_SPH_DISABLE;
-   127	
-   128		err = renesas_gbeth_clks_config(gbeth, true);
-   129		if (err)
-   130			return err;
-   131	
-   132		err = stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
-   133		if (err)
-   134			renesas_gbeth_clks_config(gbeth, false);
-   135	
-   136		return err;
-   137	}
-   138	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
