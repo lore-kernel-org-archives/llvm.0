@@ -1,119 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBE02AE99;
-	Thu, 20 Mar 2025 13:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B3F2236E4;
+	Thu, 20 Mar 2025 14:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742477027; cv=none; b=ixrWt7z/+uHUFx7kO+v9nckr+Ccicfy/TfPhf4uGSPFyPF1R3GWuZ6k2oNlQe3Cxd7MzAt/Ln3R4dJiwsuh5+GtMSKNezyaFo6IHFS98hvmSfr71BDLKEx89qk2ln1dv/8sAwbvGXQ7NRqmDg6e+0oSws0aaAcQ9aNt+bLMclAs=
+	t=1742480205; cv=none; b=ioF0k+sEdj+zxr3viEqsXeExvTvWgekvjiXkqFmR7/GO5T5a5CMJ88q20pAUPuOHS9WGWES8XSDov9NYkVhEOBLzf0UEhmwRK7rd9fOYB/5AYThcxLbbX3lTVKeNRgmjg/+xWiCyOUSEWDsogX1/83p18uw+riLgLtUZDw/utXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742477027; c=relaxed/simple;
-	bh=aTZFahf4PN4IZgjNl5guV/m19DIoILMH8u1Mo+hMKeQ=;
+	s=arc-20240116; t=1742480205; c=relaxed/simple;
+	bh=J8LnsHeJmO0fVH7avVIr14dMWf0HIdoxRIKRn5jvHL8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DaG1ccdT4mGY1DS5K7W1u8819gXfx3YnbuobDIpg7gcfGxlMyYY8/jwtPraxTXP0GcRKV7I6+xqEcpdPVB+NQDHHlUPSb8nCnXw1GFNGWnRQjv7gKTgpTTaRiApa3H/o2bS7y+e5bEgsRTVzvlE5PPWVBG+chv+ja6eXpj/JB7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKwwNmxW; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvJbCRv+gyiemPtSlvP3HHmwjSqdI0IUjj7rxj6A/3Cr7x1pLVLDwogepmPBQxs4gXIgjqwl4seV8hvvMLw9cTINR4P48kKwLWsv6A9TPHEcxsyfDVlu6pjp3I0x0Lhf3Zbrjl4x7O3G2zQ6M3qCAw2w91YoOkWdffpiSaCyumI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WIZ82fuy; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKwwNmxW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3F2C4CEDD;
-	Thu, 20 Mar 2025 13:23:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742477027;
-	bh=aTZFahf4PN4IZgjNl5guV/m19DIoILMH8u1Mo+hMKeQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pKwwNmxWvLJjuAg4oaKRxOPkDLQbBYVaEPcMjVyBu1gpELsqg66Es8Zq9tLPX/RJO
-	 lk3yUlfqoWbFiR4l76r3wmGlqlHJiiBhJ+2UicYdr/Su9nms292nBho5352zjud0lJ
-	 S3+R3KReLCqVTXaGNkiruFZ54svriBt2ee2aYYGrGld1cQGERQiQcwd36YKQexICvq
-	 y+nHYOONhqf1x/4SgLEuJckXMFfFMfLvNvmVrqyrI4oFTKzdK+5LCBQ1AxuNjAp07C
-	 Vg4xcS3E2dg9Ce1TadlC8+irftj1Bai8cMI4JzBcuUljT/lCkYp5z7p6tbQJYw/xzu
-	 n3FBNP7aHpUxg==
-Date: Thu, 20 Mar 2025 13:23:40 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 12/16] selftests: vDSO: parse_vdso: Use UAPI headers
- instead of libc headers
-Message-ID: <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
-References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
- <20250226-parse_vdso-nolibc-v2-12-28e14e031ed8@linutronix.de>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WIZ82fuy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742480204; x=1774016204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J8LnsHeJmO0fVH7avVIr14dMWf0HIdoxRIKRn5jvHL8=;
+  b=WIZ82fuyLFuYw5K1JPBiuBHE23OthkK0Zq6J+6oga77OYU1oDsUhu1OE
+   8ZXCqQvP7ros5RI/xMm+ABVzyhGurOClOPwaYG+d4+YIz+sVcthaNSYDx
+   ePlxKv4qaEZDqYNKF02Rclv8hBFNls7OM/y0woCmHRKduo11dTZNrnn8U
+   9Horq+CyXbS9wrqmgHO9+9fWFVpovTG4jlU0N3MEUFRje9ukr+dg5d2qF
+   y4osLnW0xyO3x8Fty6XgBOccW8dhi5Szm1M0cC6rTKlOMbMrVfq8wE9UC
+   8f1gVsP5ri320YyQQub3L6PMs9ktpC375ve5vA5Xn1PcQexhQCrBjr6j0
+   Q==;
+X-CSE-ConnectionGUID: PZP/29OuRJCSmWf/PllxJg==
+X-CSE-MsgGUID: vgTQxuDhSpe/LmaczBJHIg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="61104398"
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="61104398"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 07:16:43 -0700
+X-CSE-ConnectionGUID: IBkT1U8LS3GJrfbOkn8yJw==
+X-CSE-MsgGUID: QsazBzbgTKyjCXEAhTHS4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="127942854"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 20 Mar 2025 07:16:37 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvGhF-0000UR-2H;
+	Thu, 20 Mar 2025 14:16:33 +0000
+Date: Thu, 20 Mar 2025 22:15:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Changyuan Lyu <changyuanl@google.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, graf@amazon.com,
+	akpm@linux-foundation.org, luto@kernel.org,
+	anthony.yznaga@oracle.com, arnd@arndb.de, ashish.kalra@amd.com,
+	benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com, dwmw2@infradead.org,
+	ebiederm@xmission.com, mingo@redhat.com, jgowans@amazon.com,
+	corbet@lwn.net, krzk@kernel.org, rppt@kernel.org,
+	mark.rutland@arm.com, pbonzini@redhat.com,
+	pasha.tatashin@soleen.com, hpa@zytor.com, peterz@infradead.org,
+	ptyadav@amazon.de, robh+dt@kernel.org, robh@kernel.org,
+	saravanak@google.com, skinsburskii@linux.microsoft.com,
+	rostedt@goodmis.org, tglx@linutronix.de
+Subject: Re: [PATCH v5 01/16] kexec: define functions to map and unmap
+ segments
+Message-ID: <202503202151.vHOV0UKU-lkp@intel.com>
+References: <20250320015551.2157511-2-changyuanl@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+yJ/axRur/qwWIeV"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250226-parse_vdso-nolibc-v2-12-28e14e031ed8@linutronix.de>
-X-Cookie: The early worm gets the bird.
+In-Reply-To: <20250320015551.2157511-2-changyuanl@google.com>
+
+Hi Changyuan,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Changyuan-Lyu/kexec-define-functions-to-map-and-unmap-segments/20250320-095900
+base:   a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
+patch link:    https://lore.kernel.org/r/20250320015551.2157511-2-changyuanl%40google.com
+patch subject: [PATCH v5 01/16] kexec: define functions to map and unmap segments
+config: i386-buildonly-randconfig-002-20250320 (https://download.01.org/0day-ci/archive/20250320/202503202151.vHOV0UKU-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503202151.vHOV0UKU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503202151.vHOV0UKU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/reboot.c:13:
+>> include/linux/kexec.h:479:47: warning: declaration of 'struct kimage' will not be visible outside of this function [-Wvisibility]
+     479 | static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
+         |                                               ^
+   1 warning generated.
 
 
---+yJ/axRur/qwWIeV
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +479 include/linux/kexec.h
 
-On Wed, Feb 26, 2025 at 12:44:51PM +0100, Thomas Wei=DFschuh wrote:
-> To allow the usage of parse_vdso.c together with a limited libc like
-> nolibc, use the kernels own elf.h and auxvec.h headers.
+   466	
+   467	#define kexec_dprintk(fmt, arg...) \
+   468	        do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
+   469	
+   470	void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
+   471	void kimage_unmap_segment(void *buffer);
+   472	#else /* !CONFIG_KEXEC_CORE */
+   473	struct pt_regs;
+   474	struct task_struct;
+   475	static inline void __crash_kexec(struct pt_regs *regs) { }
+   476	static inline void crash_kexec(struct pt_regs *regs) { }
+   477	static inline int kexec_should_crash(struct task_struct *p) { return 0; }
+   478	static inline int kexec_crash_loaded(void) { return 0; }
+ > 479	static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
+   480	{ return NULL; }
+   481	static inline void kimage_unmap_segment(void *buffer) { }
+   482	#define kexec_in_progress false
+   483	#endif /* CONFIG_KEXEC_CORE */
+   484	
 
-The vDSO selftests currently fail build for at least arm64 in -next:
-
-  CC       vdso_test_gettimeofday
-  CC       vdso_test_getcpu
-  CC       vdso_test_abi
-  CC       vdso_test_clock_getres
-  CC       vdso_test_correctness
-  CC       vdso_test_getrandom
-  CC       vdso_test_chacha
-/build/stage/linux/tools/include/uapi/linux/types.h: Assembler messages:
-/build/stage/linux/tools/include/uapi/linux/types.h:9: Error: unknown mnemo=
-nic `typedef' -- `typedef __u16 __le16'
-/build/stage/linux/tools/include/uapi/linux/types.h:10: Error: unknown mnem=
-onic `typedef' -- `typedef __u16 __be16'
-/build/stage/linux/tools/include/uapi/linux/types.h:11: Error: unknown mnem=
-onic `typedef' -- `typedef __u32 __le32'
-/build/stage/linux/tools/include/uapi/linux/types.h:12: Error: unknown mnem=
-onic `typedef' -- `typedef __u32 __be32'
-/build/stage/linux/tools/include/uapi/linux/types.h:13: Error: unknown mnem=
-onic `typedef' -- `typedef __u64 __le64'
-/build/stage/linux/tools/include/uapi/linux/types.h:14: Error: unknown mnem=
-onic `typedef' -- `typedef __u64 __be64'
-/build/stage/linux/tools/include/uapi/linux/types.h:16: Error: unknown mnem=
-onic `typedef' -- `typedef __u16 __sum16'
-/build/stage/linux/tools/include/uapi/linux/types.h:17: Error: unknown mnem=
-onic `typedef' -- `typedef __u32 __wsum'
-
-a bisect points at this patch, it looks like that's due to the switch to
-use TOOLS_INCLUDES but I didn't dig into the specifics.
-
---+yJ/axRur/qwWIeV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfcFtsACgkQJNaLcl1U
-h9Afqwf/fQij3ulCqOiAa58owMpIiLlmmbjZFPAWbm2lGrM+xEnImfAvF+SelxzW
-qsP9D70h2z9kaNsAF/0ZNhv2fm6JW3XWOt5oThqVMUubCMaQzdTgFZGFtQtXK5UV
-+ZCViCiUZDKz2F9n8xuq5nmfhIq4gFoatIYHh4L+6A7rnkmleBBcGjM7P9cASwKu
-uaF04HoB2x81IGpGkgmJp2codI1JDC3iBSkXJ+OkiDqAiXUU1Y20w5eW5rvdJu2T
-amytpkiGii+PqfrEMtX5Z9S3vstO5bob4SUVYvJ9LmuJPlQjXo5JIExCyuHrHfqE
-TJGL/l0Y/J7oAVVt6Dku09TTTTs85A==
-=tFYT
------END PGP SIGNATURE-----
-
---+yJ/axRur/qwWIeV--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
