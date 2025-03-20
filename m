@@ -1,131 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B3F2236E4;
-	Thu, 20 Mar 2025 14:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE38226541
+	for <llvm@lists.linux.dev>; Thu, 20 Mar 2025 17:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742480205; cv=none; b=ioF0k+sEdj+zxr3viEqsXeExvTvWgekvjiXkqFmR7/GO5T5a5CMJ88q20pAUPuOHS9WGWES8XSDov9NYkVhEOBLzf0UEhmwRK7rd9fOYB/5AYThcxLbbX3lTVKeNRgmjg/+xWiCyOUSEWDsogX1/83p18uw+riLgLtUZDw/utXc=
+	t=1742492403; cv=none; b=JohYuZ6GbJsTU1n0Cfxa6CH70E9AxXFd+tPpnLL1nNWOFxnDBlo8XTXIvIOY7RmzGIXdYuc89LSMKlgks9+Y2Nb/gKimHvRR1mf9oLyts0nGGnIZWQlkXP9JvN6V9tqIQKPEwNv6a8Ti8Z/1qXMnq0zc0jl+OwUpdbgW6kIZPUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742480205; c=relaxed/simple;
-	bh=J8LnsHeJmO0fVH7avVIr14dMWf0HIdoxRIKRn5jvHL8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nvJbCRv+gyiemPtSlvP3HHmwjSqdI0IUjj7rxj6A/3Cr7x1pLVLDwogepmPBQxs4gXIgjqwl4seV8hvvMLw9cTINR4P48kKwLWsv6A9TPHEcxsyfDVlu6pjp3I0x0Lhf3Zbrjl4x7O3G2zQ6M3qCAw2w91YoOkWdffpiSaCyumI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WIZ82fuy; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742492403; c=relaxed/simple;
+	bh=gpGLVKoREoUi12NpjXgAakIGPXWe4J/DtcP8JYm5+4s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l7xLzG73hX2IczqBCRN6/QYzBLMmnzI6/CocKie9XeMf2xg0Va6Zkk4NMQEURgVpexKRz23F2qpKRUA28Pk03sAwG7oA1BkPrI4rXkp5xdj4SS5bMlqmMnT/B1DKWSjm+7cqeqC7N/8ZV95DSsWBlz0q+53won+OdNBXNqh7jCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzivtCWq; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WIZ82fuy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742480204; x=1774016204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J8LnsHeJmO0fVH7avVIr14dMWf0HIdoxRIKRn5jvHL8=;
-  b=WIZ82fuyLFuYw5K1JPBiuBHE23OthkK0Zq6J+6oga77OYU1oDsUhu1OE
-   8ZXCqQvP7ros5RI/xMm+ABVzyhGurOClOPwaYG+d4+YIz+sVcthaNSYDx
-   ePlxKv4qaEZDqYNKF02Rclv8hBFNls7OM/y0woCmHRKduo11dTZNrnn8U
-   9Horq+CyXbS9wrqmgHO9+9fWFVpovTG4jlU0N3MEUFRje9ukr+dg5d2qF
-   y4osLnW0xyO3x8Fty6XgBOccW8dhi5Szm1M0cC6rTKlOMbMrVfq8wE9UC
-   8f1gVsP5ri320YyQQub3L6PMs9ktpC375ve5vA5Xn1PcQexhQCrBjr6j0
-   Q==;
-X-CSE-ConnectionGUID: PZP/29OuRJCSmWf/PllxJg==
-X-CSE-MsgGUID: vgTQxuDhSpe/LmaczBJHIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="61104398"
-X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
-   d="scan'208";a="61104398"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 07:16:43 -0700
-X-CSE-ConnectionGUID: IBkT1U8LS3GJrfbOkn8yJw==
-X-CSE-MsgGUID: QsazBzbgTKyjCXEAhTHS4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
-   d="scan'208";a="127942854"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 20 Mar 2025 07:16:37 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tvGhF-0000UR-2H;
-	Thu, 20 Mar 2025 14:16:33 +0000
-Date: Thu, 20 Mar 2025 22:15:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Changyuan Lyu <changyuanl@google.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, graf@amazon.com,
-	akpm@linux-foundation.org, luto@kernel.org,
-	anthony.yznaga@oracle.com, arnd@arndb.de, ashish.kalra@amd.com,
-	benh@kernel.crashing.org, bp@alien8.de, catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com, dwmw2@infradead.org,
-	ebiederm@xmission.com, mingo@redhat.com, jgowans@amazon.com,
-	corbet@lwn.net, krzk@kernel.org, rppt@kernel.org,
-	mark.rutland@arm.com, pbonzini@redhat.com,
-	pasha.tatashin@soleen.com, hpa@zytor.com, peterz@infradead.org,
-	ptyadav@amazon.de, robh+dt@kernel.org, robh@kernel.org,
-	saravanak@google.com, skinsburskii@linux.microsoft.com,
-	rostedt@goodmis.org, tglx@linutronix.de
-Subject: Re: [PATCH v5 01/16] kexec: define functions to map and unmap
- segments
-Message-ID: <202503202151.vHOV0UKU-lkp@intel.com>
-References: <20250320015551.2157511-2-changyuanl@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzivtCWq"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43ce4e47a85so1271465e9.0
+        for <llvm@lists.linux.dev>; Thu, 20 Mar 2025 10:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742492400; x=1743097200; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ICJPfH1Men5qwSYszeUMQ6QRHz5SpwAhZQR7oJ7/pJ8=;
+        b=JzivtCWqwVmxlYaZtgEHrn1zRodegs9S/VuNgHooBaq7c/t/uHwnUXeTRGOqZVtSaa
+         vdGtUceQzjkORSg/KDawWToxOeWFyJswHuuZJ/Vd+vTFCnkuLeqS+5HFD+WYpJ1TI5DZ
+         r4ygntPRCuNEW8okWB/XzEYL4u40PpTTD2Wff66okS0MRAxG3ibOuUeverJafd/1ev/y
+         GyKEZA6VwfQwPpoAS5cVQnI24XJYZhaop9BKK11/ccpu5dUazn+n1pzD99WXGzfZzR9k
+         oXRZb//B21wPj0UgLHHjKUfVoQAdhCr6OKE8XRfIwh8/WH7j5QYDG10AWpIjsyaG/5zS
+         ww9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742492400; x=1743097200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ICJPfH1Men5qwSYszeUMQ6QRHz5SpwAhZQR7oJ7/pJ8=;
+        b=fz35KC4clnVhVy316TK34v83i07W617RF5zFLW2/6L2i+rWCE7siQjR1XsL03emwxT
+         1G7Mk2i/sHDh9SrPW3g1nP8nV6qhsMiSiuZTjbyaUtCpv98H/ZINMT6ZyZ3SzSaraKNI
+         Xr7JTAEE8BFSok7bBVwRC9xT2ijer5uhCLnmrJBzUSFYl/wC3IrpZTmGi5BXuwU1LZ1B
+         FWGXNFqiL3fFbWIZuu3HDMVE31HeAuQs00+ROkI0NsJS6hY++FFL7jTPLCXzqGL6PRdj
+         aqiH1FpGHH6VvM/ACI3D3GBHhJr/vdJAIt/S53Ii3pdzhg3MV/UujnrXEyGwy/No6kcz
+         fH/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXrJKZw1bd104t0BLAbecJ3npE9wu9fFqsFM++6u87YWA9jEGtZVtsk7nKvexlVhSflyp8D@lists.linux.dev
+X-Gm-Message-State: AOJu0YwAkfen5WvnG7EMWVpTKWk2Ki+4SDafape7ySuCcgw+DK8MYdiH
+	wyRI4FxNOcv00YCbBgu7X4Iya6WWsAZRgBr3WNlMR+cBoqfGS/PAeOhEHiDu+Z269TSLlJhJ+aW
+	KFJ3ZFGs+yZzJvMWxFYcXy/sUkAU=
+X-Gm-Gg: ASbGncs07LsFhYTHdqCPOfcbQNX3GFHyRnhLY4YPEz4VwdGln2HGqtLt7Mk9XNGa11u
+	xOeAvyF369LrmsJwT643X3zrA/F6L7rygQhSjc4BQ8cBvx666yzpNGzmF/ozpnNCZghpHpJ78Qk
+	UWWrsXLlud/0sq3k8/7QxsKVKwUXG5p0MOEeqqUf2uXM/v22bMb1ftZwQ4
+X-Google-Smtp-Source: AGHT+IEX+FZMqw/uKIyLvjuLIVQFBZHkjVI/CUtdYx+oxdxQMzv1hpI+TEDGWokkbPtcXqceiLtWpgt7xJ7OwvQ//Fc=
+X-Received: by 2002:a05:600c:46c3:b0:43b:bbb9:e25f with SMTP id
+ 5b1f17b1804b1-43d44d75804mr24674625e9.6.1742492399899; Thu, 20 Mar 2025
+ 10:39:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320015551.2157511-2-changyuanl@google.com>
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com> <383482f87ad4f68690021e0cc75df8143b6babe2.1739866028.git.maciej.wieczor-retman@intel.com>
+In-Reply-To: <383482f87ad4f68690021e0cc75df8143b6babe2.1739866028.git.maciej.wieczor-retman@intel.com>
+From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Date: Thu, 20 Mar 2025 18:39:35 +0100
+X-Gm-Features: AQ5f1JqCTLk6bw5pMZNlmkGp7az-6cdHmNjgmKBcGwH1kgc8PZz3csgjGnMk__8
+Message-ID: <CAPAsAGxDRv_uFeMYu9TwhBVWHCCtkSxoWY4xmFB_vowMbi8raw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/14] mm: Pcpu chunk address tag reset
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: kees@kernel.org, julian.stecklina@cyberus-technology.de, 
+	kevinloughlin@google.com, peterz@infradead.org, tglx@linutronix.de, 
+	justinstitt@google.com, catalin.marinas@arm.com, wangkefeng.wang@huawei.com, 
+	bhe@redhat.com, kirill.shutemov@linux.intel.com, will@kernel.org, 
+	ardb@kernel.org, jason.andryuk@amd.com, dave.hansen@linux.intel.com, 
+	pasha.tatashin@soleen.com, ndesaulniers@google.com, 
+	guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, mark.rutland@arm.com, 
+	broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, rppt@kernel.org, 
+	kaleshsingh@google.com, richard.weiyang@gmail.com, luto@kernel.org, 
+	glider@google.com, pankaj.gupta@amd.com, andreyknvl@gmail.com, 
+	pawan.kumar.gupta@linux.intel.com, kuan-ying.lee@canonical.com, 
+	tony.luck@intel.com, tj@kernel.org, jgross@suse.com, dvyukov@google.com, 
+	baohua@kernel.org, samuel.holland@sifive.com, dennis@kernel.org, 
+	akpm@linux-foundation.org, thomas.weissschuh@linutronix.de, surenb@google.com, 
+	kbingham@kernel.org, ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, 
+	xin@zytor.com, rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, 
+	cl@linux.com, jhubbard@nvidia.com, hpa@zytor.com, 
+	scott@os.amperecomputing.com, david@redhat.com, jan.kiszka@siemens.com, 
+	vincenzo.frascino@arm.com, corbet@lwn.net, maz@kernel.org, mingo@redhat.com, 
+	arnd@arndb.de, ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Changyuan,
+On Tue, Feb 18, 2025 at 9:19=E2=80=AFAM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
+>
+> The problem presented here is related to NUMA systems and tag-based
+> KASAN mode. Getting to it can be explained in the following points:
+>
+>         1. A new chunk is created with pcpu_create_chunk() and
+>            vm_structs are allocated. On systems with one NUMA node only
+>            one is allocated, but with more NUMA nodes at least a second
+>            one will be allocated too.
+>
+>         2. chunk->base_addr is assigned the modified value of
+>            vms[0]->addr and thus inherits the tag of this allocated
+>            structure.
+>
+>         3. In pcpu_alloc() for each possible cpu pcpu_chunk_addr() is
+>            executed which calculates per cpu pointers that correspond to
+>            the vms structure addresses. The calculations are based on
+>            adding an offset from a table to chunk->base_addr.
+>
+> Here the problem presents itself since for addresses based on vms[1] and
+> up, the tag will be different than the ones based on vms[0] (base_addr).
+> The tag mismatch happens and an error is reported.
+>
+> Reset the base_addr tag, since it will disable tag checks for pointers
+> derived arithmetically from base_addr that would inherit its tag.
+>
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+>  mm/percpu-vm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/percpu-vm.c b/mm/percpu-vm.c
+> index cd69caf6aa8d..e13750d804f7 100644
+> --- a/mm/percpu-vm.c
+> +++ b/mm/percpu-vm.c
+> @@ -347,7 +347,7 @@ static struct pcpu_chunk *pcpu_create_chunk(gfp_t gfp=
+)
+>         }
+>
+>         chunk->data =3D vms;
+> -       chunk->base_addr =3D vms[0]->addr - pcpu_group_offsets[0];
+> +       chunk->base_addr =3D kasan_reset_tag(vms[0]->addr) - pcpu_group_o=
+ffsets[0];
 
-kernel test robot noticed the following build warnings:
+This looks like a generic tags mode bug. I mean that arm64 is also
+affected by this.
+I assume it just wasn't noticed before because arm64 with multiple
+NUMAs are much less common.
 
-[auto build test WARNING on a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47]
+With this change tag-mode KASAN won't be able to catch bugus accesses
+to pcpu areas.
+I'm thinking it would be better to fix this on the pcpu_get_vm_areas()
+area side by replacing
+this
+    for (area =3D 0; area < nr_vms; area++)
+        vms[area]->addr =3D kasan_unpoison_vmalloc(vms[area]->addr,
+                                             vms[area]->size,
+KASAN_VMALLOC_PROT_NORMAL);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Changyuan-Lyu/kexec-define-functions-to-map-and-unmap-segments/20250320-095900
-base:   a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
-patch link:    https://lore.kernel.org/r/20250320015551.2157511-2-changyuanl%40google.com
-patch subject: [PATCH v5 01/16] kexec: define functions to map and unmap segments
-config: i386-buildonly-randconfig-002-20250320 (https://download.01.org/0day-ci/archive/20250320/202503202151.vHOV0UKU-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503202151.vHOV0UKU-lkp@intel.com/reproduce)
+with something like
+    kasan_unpoison_vmap_areas(vms, nr_vms);
+which will unpoison all areas using the same tag.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503202151.vHOV0UKU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/reboot.c:13:
->> include/linux/kexec.h:479:47: warning: declaration of 'struct kimage' will not be visible outside of this function [-Wvisibility]
-     479 | static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
-         |                                               ^
-   1 warning generated.
-
-
-vim +479 include/linux/kexec.h
-
-   466	
-   467	#define kexec_dprintk(fmt, arg...) \
-   468	        do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
-   469	
-   470	void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
-   471	void kimage_unmap_segment(void *buffer);
-   472	#else /* !CONFIG_KEXEC_CORE */
-   473	struct pt_regs;
-   474	struct task_struct;
-   475	static inline void __crash_kexec(struct pt_regs *regs) { }
-   476	static inline void crash_kexec(struct pt_regs *regs) { }
-   477	static inline int kexec_should_crash(struct task_struct *p) { return 0; }
-   478	static inline int kexec_crash_loaded(void) { return 0; }
- > 479	static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
-   480	{ return NULL; }
-   481	static inline void kimage_unmap_segment(void *buffer) { }
-   482	#define kexec_in_progress false
-   483	#endif /* CONFIG_KEXEC_CORE */
-   484	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thoughts?
