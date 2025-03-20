@@ -1,131 +1,142 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849101C6F55;
-	Thu, 20 Mar 2025 05:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582AF1EFF88;
+	Thu, 20 Mar 2025 08:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742449404; cv=none; b=XIAbI+Q1TlduhZWXw6eYRNTzweZzhnEVyuc59tDSrLiaz8NWun74m0l2PpjV1fm6ssDn9+M8Ncr5B1+jTNkD+saPg55KJoCkbEurCnsEzYnfqWWHbNsho3kkiOiQuBwl2NxuOfOkb2D/DzYzVEpFV3vKVL7o/tKYiN3ssiEMKhU=
+	t=1742459438; cv=none; b=niEL8Uu4+pvGab8zVS3PcTyklKIdh1eOx0inVLM3/0elYAGn9xqeSNzMkHmvLTAw2tlPXdLiGLKo3/pUOUgs7QND9eIWAxvrEt/22KwJvK9NrhPqG/M6QZrBC4lraIpl5Lq7mmm9d5dGffHi6s/Wnme8HP/fd5wWveE35w5VcUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742449404; c=relaxed/simple;
-	bh=qHCFtESSH+gkbtA8Q6yENB/ys9cpK53s6Vsi3+KGaDE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=psbYurHVdgv+ZlbyBKtbS+As8Z9eZiNNcnuLMQzZ9ezA6xhNZRnmFBRNJLwIboNInvj9CzFzAxDe3Lvmn1MN2xJT37QGNgGhaEZaWT17HEnET+HDIeq7ig7h0i4nBKiaZKsRKFdBRdrDB5pJA1fRxn8tGWtGV6bOQJSlSCR20as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=GEPqQItx; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1742459438; c=relaxed/simple;
+	bh=2i1Q07byf32WTdPpCVWmD1WwQ9vrhVP60iBQr1OWOto=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X89tBFOryguSFaqBM8vrzKYiUe+hqGLOpkXqu5vKhA0pJb7HedgqSC3lpbjIvRwQCthIASKhbwn1AvsbgkbOwnQLCNzlugGB1le5CXPBYL6mMHzjZWcKR71zSVnqruX4awLFnkV2/iR3Y0pNHd9he6f1EapsMI4d7VvH0fGCiWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j5JDsh8q; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="GEPqQItx"
-Received: from [192.168.7.202] ([71.202.166.45])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 52K5hD0n1917517
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 19 Mar 2025 22:43:13 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 52K5hD0n1917517
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1742449393;
-	bh=mW0VY7G4Mj9xAgiCN/w/UmAjV16d507r/zUQczyqmvg=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=GEPqQItxyHZwo+vPy63upJzOjYxdYe3ETvNlL6Gb+8g2v5cNClqO1bZ3w0BFo+tOf
-	 5f8LEu0nO0mJJeY8Tcig2pPkH9jYASvpU+btWv2oQKdCy2PTvAWzH3lfgtovllkjvk
-	 y6YUnr/Un35aRxvabeT7Gm1E53XuhIRNSYsDKdA1xzUP6D0UjrfF59Jd1+AMBcS4KY
-	 RL/YYPOv5Omwc4+BX45vjcm4o497u507FApkYb07HsRN5oZe2d2IPqHn+hCha6AeTP
-	 kQfuy/C1ysJYmsjdPaPAlG4bEV0TFMqfGfEbsvqBGj3Bcdalx1oMMaH1mrw9tO1uPE
-	 /OHyALgmMvrXg==
-Message-ID: <0fc86279-296e-4d61-bf24-fa9cb2f10629@zytor.com>
-Date: Wed, 19 Mar 2025 22:43:13 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j5JDsh8q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742459436; x=1773995436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2i1Q07byf32WTdPpCVWmD1WwQ9vrhVP60iBQr1OWOto=;
+  b=j5JDsh8qYpjPqrYZJi2jTBmofgPePwzxYWwolkQ2OuSNVLNOezZxtzV0
+   YdGdPUQN7b1ym2ah8f0BvkUELYQxDXPMyEhE/UWCTbuKRcfGqY8t9Tn2E
+   VOcyBEZZYRgUAVPSKRKQlmwLsvF32c9SsGsxX3rL9wIYTsZwnqtzvknhx
+   E+frREOfcxbLYPa9se/5Hlrv1wHVD0Fu9qaYLff8xtCSdJ8qcYMtjFJaB
+   0Bg8C7qWP2Hm+i9Bfvxd9bOIZtsuG43K6nPQEal5oVD1qnyyLDoCzUohg
+   5UHwgTRqvWHhkFegPSjH/7KF6Ypojv1GlaveL1hMhV6C4824id2vNWdVI
+   w==;
+X-CSE-ConnectionGUID: tndH96GNT7ahpE41t225qA==
+X-CSE-MsgGUID: JC/JKFHlRhufuFkgMJAj+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11378"; a="31264192"
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="31264192"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 01:30:35 -0700
+X-CSE-ConnectionGUID: y1wTRDJWSvqu5O+/2S+L3Q==
+X-CSE-MsgGUID: fro6DZG5Qb+wS2jO1ntJwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,261,1736841600"; 
+   d="scan'208";a="122961957"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 20 Mar 2025 01:30:30 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvBIJ-0000Is-2T;
+	Thu, 20 Mar 2025 08:30:27 +0000
+Date: Thu, 20 Mar 2025 16:29:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: jiebing chen via B4 Relay <devnull+jiebing.chen.amlogic.com@kernel.org>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+	jian.xu@amlogic.com, shuai.li@amlogic.com, zhe.wang@amlogic.com,
+	jiebing chen <jiebing.chen@amlogic.com>
+Subject: Re: [PATCH v4 4/6] ASoC: meson: g12a-toacodec: Add s4 tocodec driver
+Message-ID: <202503201641.wf8Oe0aR-lkp@intel.com>
+References: <20250319-audio_drvier-v4-4-686867fad719@amlogic.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Xin Li <xin@zytor.com>
-Subject: Re: [PATCH v3 1/3] x86/fred: Allow variable-sized event frame
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <20250319071009.1390984-2-xin@zytor.com>
- <202503200325.iKcHqUsb-lkp@intel.com>
-Content-Language: en-US
-Autocrypt: addr=xin@zytor.com; keydata=
- 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
- l75w1xInsg==
-In-Reply-To: <202503200325.iKcHqUsb-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250319-audio_drvier-v4-4-686867fad719@amlogic.com>
 
-On 3/19/2025 12:45 PM, kernel test robot wrote:
-> Hi Xin,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 60c162a51180cb2b05d7505a565ab079bfa9cf12]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Li-Intel/x86-fred-Allow-variable-sized-event-frame/20250319-151307
-> base:   60c162a51180cb2b05d7505a565ab079bfa9cf12
-> patch link:    https://lore.kernel.org/r/20250319071009.1390984-2-xin%40zytor.com
-> patch subject: [PATCH v3 1/3] x86/fred: Allow variable-sized event frame
-> config: i386-buildonly-randconfig-003-20250320 (https://download.01.org/0day-ci/archive/20250320/202503200325.iKcHqUsb-lkp@intel.com/config)
-> compiler: clang version 20.1.0 (https://github.com/llvm/llvm-project 24a30daaa559829ad079f2ff7f73eb4e18095f88)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503200325.iKcHqUsb-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503200325.iKcHqUsb-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> init/init_task.c:68:17: error: use of undeclared identifier '__top_init_kernel_stack'
->        68 |         .thread_info    = INIT_THREAD_INFO(init_task),
->           |                           ^
->     arch/x86/include/asm/thread_info.h:76:36: note: expanded from macro 'INIT_THREAD_INFO'
->        76 |         .user_pt_regs   = (struct pt_regs *)__top_init_kernel_stack,    \
->           |                                             ^
->     1 error generated.
-> 
+Hi jiebing,
 
-Okay, I need to add:
+kernel test robot noticed the following build warnings:
 
-extern unsigned long __top_init_kernel_stack[];
+[auto build test WARNING on 6ecd20965bdc21b265a0671ccf36d9ad8043f5ab]
 
-Unfortunately my configs don't expose the build issue.
+url:    https://github.com/intel-lab-lkp/linux/commits/jiebing-chen-via-B4-Relay/dt-bindings-clock-meson-Add-audio-power-domain-for-s4-soc/20250319-151110
+base:   6ecd20965bdc21b265a0671ccf36d9ad8043f5ab
+patch link:    https://lore.kernel.org/r/20250319-audio_drvier-v4-4-686867fad719%40amlogic.com
+patch subject: [PATCH v4 4/6] ASoC: meson: g12a-toacodec: Add s4 tocodec driver
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250320/202503201641.wf8Oe0aR-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250320/202503201641.wf8Oe0aR-lkp@intel.com/reproduce)
 
-Thanks!
-       Xin
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503201641.wf8Oe0aR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/meson/g12a-toacodec.c:135:38: warning: unused variable 's4_toacodec_clk_enable' [-Wunused-const-variable]
+     135 | static const struct snd_kcontrol_new s4_toacodec_clk_enable =
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
+vim +/s4_toacodec_clk_enable +135 sound/soc/meson/g12a-toacodec.c
 
+   112	
+   113	static SOC_ENUM_SINGLE_DECL(g12a_toacodec_mux_enum, TOACODEC_CTRL0,
+   114				    CTRL0_DAT_SEL_LSB,
+   115				    g12a_toacodec_mux_texts);
+   116	
+   117	static SOC_ENUM_SINGLE_DECL(sm1_toacodec_mux_enum, TOACODEC_CTRL0,
+   118				    CTRL0_DAT_SEL_SM1_LSB,
+   119				    g12a_toacodec_mux_texts);
+   120	
+   121	static const struct snd_kcontrol_new g12a_toacodec_mux =
+   122		SOC_DAPM_ENUM_EXT("Source", g12a_toacodec_mux_enum,
+   123				  snd_soc_dapm_get_enum_double,
+   124				  g12a_toacodec_mux_put_enum);
+   125	
+   126	static const struct snd_kcontrol_new sm1_toacodec_mux =
+   127		SOC_DAPM_ENUM_EXT("Source", sm1_toacodec_mux_enum,
+   128				  snd_soc_dapm_get_enum_double,
+   129				  g12a_toacodec_mux_put_enum);
+   130	
+   131	static const struct snd_kcontrol_new g12a_toacodec_out_enable =
+   132		SOC_DAPM_SINGLE_AUTODISABLE("Switch", TOACODEC_CTRL0,
+   133					    CTRL0_ENABLE_SHIFT, 1, 0);
+   134	
+ > 135	static const struct snd_kcontrol_new s4_toacodec_clk_enable =
+   136		SOC_DAPM_DOUBLE("Switch", TOACODEC_CTRL0,
+   137				CTRL0_BCLK_ENABLE_SHIFT, CTRL0_MCLK_ENABLE_SHIFT, 1, 0);
+   138	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
