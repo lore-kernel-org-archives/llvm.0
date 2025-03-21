@@ -1,97 +1,69 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0111DEFFC
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 17:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E9A22DF8A;
+	Fri, 21 Mar 2025 17:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742578369; cv=none; b=nLtDkIVWoupZBlene+yo425nuReD9Yfcf4BeOOyfc9YCii5l/bGQeDD4WMfmu4yIHX5hfGgMWfhiMu3FB1XZjHixAlN8ok7TGcEyqPmieLYLpM3HAzZXP4lSRxD7IxPue9W8tYtxJdVPNyThLJVm625PGOCZ1QJ8ZA0VOy3XPco=
+	t=1742579069; cv=none; b=WhqrRtHCydQMh43EsTOLtmHRgAwLxzxhmbB9y89nzJGHY5gNrZ/3tJ72YCeRjshhaCyGrCIzfTqZBl8E4iRXr6RglaspDJPiui3peuZySiEfvRsyBRa2LF/zo/QQNeGfwTHc5ld5I30y6nZiogvHXrj5FGXxBjdWvjua9wp3+Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742578369; c=relaxed/simple;
-	bh=ylazAiId8B+tXX/5u3yopnZM1vrUb4IkzGMknQShfq8=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jMwf3mcx37kodmm3gpQFbUNj7YwcOFF7LnpgCOnDYAbP4jHKdhxltd00ZSGKL521J0QOEoX8vRl3t1EV0+feRoFEn3MJeHmCJjVdvLm7vsj/aeSzbs7HO+aEbPikVqfGXJX30EnqEV7sGdueOtW03j38ob2uSZ5CaAStSbXZAJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=js9XcrS6; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1742579069; c=relaxed/simple;
+	bh=DjlAGlHjS9GqXLhTgfhRah3yZAUnReyXOR1W3OIyrxU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XxCgiGo9Npu23KpmbSO7ZPJhRIC1afX93gy5mkWWOEiD3TsCcQ5L7GHCSijW0FnmJGeahkRHIjKk5CGmQhZN0Rcv35GaATut178ikZU0bEPp2e4kz1mHqvJCAaL7jJyx9/DPN7T+NQtkaLdzXn/yzYz1yR4ruc2/dXJkH3yp0Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCk1oP/y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="js9XcrS6"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D0FF741061
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1742578367; bh=e8LnavV6SlTbyQVO8z9IZ0GGY7kUoVlnZAAZGa1WgGY=;
-	h=From:To:Subject:In-Reply-To:References:Date:From;
-	b=js9XcrS6T1hU9105EYTWYu8QHp3SNxGbUpoLpab9Trijr4b0fesgpaniwQWJfswlh
-	 ATPI9S0oPNQlRiMt/7T6OWkafx8InYbdl0QfVKu54wTi7xwYHBClpJNe4IoP9ylwMP
-	 u3e1fJie/f4Az/VmsumaL5+OQ3pCvYh07XbrS3INkKg36etVNNpcqGwjUaEU/tE368
-	 psPv+vn1tLmkpGJwmZQt9u7FbgBq08sjXUGShJL+ykeWs4mCvk9U5qrPxmvQGpGYRd
-	 Faurwchzh6Jow6jkU10g6YSpsNJprVUCpYFanKdZXtGl9dnZaoFMjTFso0dT/pPV9b
-	 qDt4mgKUSeKuw==
-Received: from localhost (mdns.lwn.net [45.79.72.68])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id D0FF741061;
-	Fri, 21 Mar 2025 17:32:46 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, David Howells
- <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S.
- Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro
- Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
- =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BC?=
- =?utf-8?Q?nther?= Noack <gnoack@google.com>, Nick
- Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Blaise Boscaccy
- <bboscaccy@linux.microsoft.com>, Jarkko Sakkinen <jarkko@kernel.org>, Jan
- Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
- roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
-Subject: Re: [RFC PATCH security-next 1/4] security: Hornet LSM
-In-Reply-To: <20250321164537.16719-2-bboscaccy@linux.microsoft.com>
-References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
- <20250321164537.16719-2-bboscaccy@linux.microsoft.com>
-Date: Fri, 21 Mar 2025 11:32:45 -0600
-Message-ID: <87frj6l26a.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCk1oP/y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF59C4CEE3;
+	Fri, 21 Mar 2025 17:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742579068;
+	bh=DjlAGlHjS9GqXLhTgfhRah3yZAUnReyXOR1W3OIyrxU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nCk1oP/yRnZej5wtJYmlpz3pkfrlu08gHJtwK8Ez6JSDYv1l08/AvMUmXbHzEj5En
+	 hwuRgfIzjS0to+VfkTGL+9+8MMpKv+vuqRAHTISwt/aa7YodmycjIPJe+1Fj1smstR
+	 xfAmtOJb2ZLw4JWFto7fSrNrO4apTSYnxg/nW4o9BkQLvUgAN7pznvWWqJoWPiiG0/
+	 BFItQso3D1ogYUijpNbgQQiO+35ATVTK2ZljZs88c4WMt8/T+PI46Uh8bu5la8ZTP7
+	 FchI8JLRXIzDN5eFudIwk8quayaWmLY7TbUkun4aJFw6Ts4fkogjnxQbzUAboJSsgp
+	 0RG0wUa+68umA==
+Date: Fri, 21 Mar 2025 18:44:22 +0100
+From: Danilo Krummrich <dakr@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: bhelgaas@google.com, gregkh@linuxfoundation.org, rafael@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
+Message-ID: <Z92ldvI4ihlm0HJd@cassiopeiae>
+References: <20250320222823.16509-4-dakr@kernel.org>
+ <202503220040.TDePlxma-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202503220040.TDePlxma-lkp@intel.com>
 
-Blaise Boscaccy <bboscaccy@linux.microsoft.com> writes:
+On Sat, Mar 22, 2025 at 12:56:58AM +0800, kernel test robot wrote:
+> >> error[E0133]: use of extern static is unsafe and requires unsafe block
+>    --> rust/kernel/pci.rs:473:43
+>    |
+>    473 |         if dev.bus_type_raw() != addr_of!(bindings::pci_bus_type) {
+>    |                                           ^^^^^^^^^^^^^^^^^^^^^^ use of extern static
+>    |
+>    = note: extern statics are not controlled by the Rust type system: invalid data, aliasing violations or data races will cause undefined behavior
 
-> This adds the Hornet Linux Security Module which provides signature
-> verification of eBPF programs.
->
-> Hornet uses a similar signature verification scheme similar to that of
-> kernel modules. A pkcs#7 signature is appended to the end of an
-> executable file. During an invocation of bpf_prog_load, the signature
-> is fetched from the current task's executable file. That signature is
-> used to verify the integrity of the bpf instructions and maps which
-> where passed into the kernel. Additionally, Hornet implicitly trusts any
-> programs which where loaded from inside kernel rather than userspace,
-> which allows BPF_PRELOAD programs along with outputs for BPF_SYSCALL
-> programs to run.
->
-> Hornet allows users to continue to maintain an invariant that all code
-> running inside of the kernel has been signed and works well with
-> light-skeleton based loaders, or any statically generated program that
-> doesn't require userspace instruction rewriting.
->
-> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-> ---
->  Documentation/admin-guide/LSM/Hornet.rst |  51 +++++
+This requires an unsafe block for compilers < 1.82. For compilers >= 1.82 it
+turns into a warning *if* using an unsafe block.
 
-You will need to add that file to .../index.rst, or it won't be included
-in the docs build.
+*Not* requiring unsafe for this seems like the correct thing -- was this a
+bugfix in the compiler?
 
-Thanks,
-
-jon
+I guess to make it work for all compiler versions supported by the kernel we
+have to use unsafe and suppress the warning?
