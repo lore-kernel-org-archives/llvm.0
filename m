@@ -1,53 +1,44 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB0A1F099F
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 08:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CB18BEE;
+	Fri, 21 Mar 2025 08:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742544147; cv=none; b=gTOOZhRlbPuByyN7ZmQvAo/m2Dc8duLbLB31CMXKfeXbT4N8fa8R0I8JsVHTdlp3ipFa+zYx4AeAmFWSl9YjyMVRqutvjtQK41uwI3GASmAIWdEfXbN/AKsKSx9nISMkNn9lbDpTv9XfPzcV30XM6qwf8bfTVPuBnzFnqYqI3CY=
+	t=1742547200; cv=none; b=WpiC754+8oiUE+1Fd3DIr1LNz0QVqa6p3rNeXMx5hK43VVMgI4Pgi3+F/26Q9tnRaFcOCPHea2WqPbYskdH7GuDru5dXoVuZ5kQZRJKaYLbaWvButnoIsxA6vU8ZXqOcK0T351iX+eziSc8sQqDLh1CZP/ySQL1FC9Knvdt6BBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742544147; c=relaxed/simple;
-	bh=E/3xA5TSRplkqcvUWy2xH8YWhw0I/szCKQFmgqO5W1U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p/ooTsv3KmrsRsSFVvu3la5mVLImF9khTS4Saob0ytTuIIdyAEncB1udpbkjw2EWQJ5gDwOsHBIv9O7OssFE6B+l4LYIDxMDv/ILkYKglnKC40roMX+K4MSbuZsqoe21csK7VHXY+mBJ0wm4VNbDTTNpZo0bHYnvdnvV6+3p+KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HU3zTDFk; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1742547200; c=relaxed/simple;
+	bh=t977FsMUBlc8ZNdRKWvO4yugH+jGz1A2sc1tshC8jrM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tujl0FtBII+53ldPirOpv/dq3qhE9vFGfVvQ0qZdhvDEw2bG0l1aAMIpwFBnIu+1fNRnwVmyQEUFfzV2blboOiIvy8sFhrZqKM6kT2ZSQL+d791QS8EalirDgfVbBtY9GvCNV3BWz5DKXacR0OrIuUI/oaKGy32p+J9LzvLGOyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ms4pzBpa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HU3zTDFk"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742544139;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=M5i/nd2YL8RmqyaRGqU7qQe2+6A4Zpd/zpAtI9MB0u4=;
-	b=HU3zTDFkcJOvYJTXaZJQ7JFJNmvrrrYlYjO5+jHb0byL1Rsq6z90YZH/783BxGh/e+zCBd
-	vYLD/e+w/1DHmaxsn+Xqm05oG4ppONLzJGnOr5DU/gIjCxSvnd887GKG5piCGJX1+Ag4Qd
-	1jeC+BvlUXpW/oGq3zTVbow/MiqDRy4=
-From: Kunwu Chan <kunwu.chan@linux.dev>
-To: ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	benno.lossin@proton.me,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: rust-for-linux@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ms4pzBpa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF8BC4CEE3;
+	Fri, 21 Mar 2025 08:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742547199;
+	bh=t977FsMUBlc8ZNdRKWvO4yugH+jGz1A2sc1tshC8jrM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Ms4pzBpaF/ixuovfKG+R1TVujRf7aHWkE/tkeCd54XjmQ9qwc4CES7TSycue/7rKU
+	 myePBDQ+9MlZGEx/VvPcvtI3qucGbohG8rJz/8KQfs0aHTZkfpTPYbVplmuvgAvQB5
+	 kuT8K041TiNyMUM9CtTYlaH2wnw2MH9le98d3ykJLkqkSl5Dsm1LZ54K5H8qvhJTAh
+	 J0YShJegdRenxGw2pitUd5YrRvIxUE5n9J5wfRbpX9hsxFZVvZKrVIVM6Z0DdeU3kR
+	 65yCl++79NzULnmfVenZRkXWV2uO9q3lFnOcqGpjddk6R4IgGzLYrl0mkYOj5vhjVR
+	 iuL14M7aVO8lg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: kernel test robot <lkp@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Kunwu Chan <kunwu.chan@hotmail.com>,
-	Grace Deng <Grace.Deng006@Gmail.com>
-Subject: [PATCH v2] rust: page:: optimize rust symbol generation for Page
-Date: Fri, 21 Mar 2025 16:01:24 +0800
-Message-ID: <20250321080124.484647-1-kunwu.chan@linux.dev>
+	llvm@lists.linux.dev
+Subject: [PATCH] platform: cznic: fix function parameter names
+Date: Fri, 21 Mar 2025 09:53:07 +0100
+Message-Id: <20250321085315.915808-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,59 +46,42 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Kunwu Chan <kunwu.chan@hotmail.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-with ARCH=arm64, the following symbols are generated:
+A invalid prototype made it into a previous patch, causing an clang warning:
 
-$nm vmlinux | grep ' _R'.*Page | rustfilt
-ffff8000805b6f98 T <kernel::page::Page>::alloc_page
-ffff8000805b715c T <kernel::page::Page>::fill_zero_raw
-ffff8000805b720c T <kernel::page::Page>::copy_from_user_slice_raw
-ffff8000805b6fb4 T <kernel::page::Page>::read_raw
-ffff8000805b7088 T <kernel::page::Page>::write_raw
-ffff8000805b72fc T <kernel::page::Page as core::ops::drop::Drop>::drop
+drivers/platform/cznic/turris-signing-key.c:25:55: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
 
-These Rust symbols(alloc_page and drop) are trivial wrappers around the C
-functions alloc_pages and __free_pages. It doesn't make sense to go
-through a trivial wrapper for these functions, so mark them inline.
+and a slightly different warning with gcc-11 and earlier but not gcc-12 and up:
 
-Link: https://github.com/Rust-for-Linux/linux/issues/1145
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
-Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
-Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
-Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+drivers/platform/cznic/turris-signing-key.c: In function 'turris_signing_key_instantiate':
+drivers/platform/cznic/turris-signing-key.c:25:43: error: parameter name omitted
 
+Add the parameters to get a clean build with all compilers.
+
+Fixes: 0b28b7080ef5 ("platform: cznic: Add keyctl helpers for Turris platform")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202503210450.AoOpbJXC-lkp@intel.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Changes in v2:
-- mark inline only for 'alloc_page' and 'drop'
-- reword commit msg
----
- rust/kernel/page.rs | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/platform/cznic/turris-signing-key.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/rust/kernel/page.rs b/rust/kernel/page.rs
-index f6126aca33a6..7c1b17246ed5 100644
---- a/rust/kernel/page.rs
-+++ b/rust/kernel/page.rs
-@@ -69,6 +69,7 @@ impl Page {
-     /// let page = Page::alloc_page(GFP_KERNEL | __GFP_ZERO)?;
-     /// # Ok::<(), kernel::alloc::AllocError>(())
-     /// ```
-+    #[inline]
-     pub fn alloc_page(flags: Flags) -> Result<Self, AllocError> {
-         // SAFETY: Depending on the value of `gfp_flags`, this call may sleep. Other than that, it
-         // is always safe to call this method.
-@@ -251,6 +252,7 @@ pub unsafe fn copy_from_user_slice_raw(
- }
+diff --git a/drivers/platform/cznic/turris-signing-key.c b/drivers/platform/cznic/turris-signing-key.c
+index 3b12e5245fb7..3827178565e2 100644
+--- a/drivers/platform/cznic/turris-signing-key.c
++++ b/drivers/platform/cznic/turris-signing-key.c
+@@ -22,7 +22,8 @@
  
- impl Drop for Page {
-+    #[inline]
-     fn drop(&mut self) {
-         // SAFETY: By the type invariants, we have ownership of the page and can free it.
-         unsafe { bindings::__free_pages(self.page.as_ptr(), 0) };
+ #include <linux/turris-signing-key.h>
+ 
+-static int turris_signing_key_instantiate(struct key *, struct key_preparsed_payload *)
++static int turris_signing_key_instantiate(struct key *key,
++					  struct key_preparsed_payload *payload)
+ {
+ 	return 0;
+ }
 -- 
-2.43.0
+2.39.5
 
