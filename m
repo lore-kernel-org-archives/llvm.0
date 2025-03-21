@@ -1,125 +1,146 @@
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368B31EFFBB;
-	Fri, 21 Mar 2025 08:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D199B1F4179;
+	Fri, 21 Mar 2025 09:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742547206; cv=none; b=Mv7sJpIf9rgm7dBMms5KNTGgKQoJUkCXJSPoTe6Qg3Dh0PWBCQbsov5eOK/b1VCWzHPZkvfoFEMqHAfx9QaNb5ZRiADXnhyYdf8M/baH27LMixnRfFMcnt6Zv4dpDGUl5B9aEOPlV4CFaEo+qODoVNYd+Xsy7JRopv+CjUAwE5o=
+	t=1742549888; cv=none; b=j2JWzzSWUjEUQh2wlH+naCiLesdfHck2myITpqwbirJKbsp0n/upByhtbElNBvFSuDBL5rxq3dlUtRpEVqt9Iz2YVRD1BqT5gApY92+dp4/B4bYTtuTUsNS5JLcopj4SLCRKkLIFQgnLbcIBPlfpxhVVu/fWBuA/zz0IuqED/Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742547206; c=relaxed/simple;
-	bh=OcWQ5THCVYNw46yJhiczAJFOz5dDR3HDog5uBWJtLPo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=qTrndC53YpU8C0iLsm8JLTUpFcQu4HidSBrrCj27yLoKW80iHBW/gt1e6eCcYzG7mEUGelm5BvvvtA0UC+GV+Y6holO/Ket+iojTiptcr397x8uYSPUA31JBY28lbLDI9uwKsMNO3FxvjUzMPSWIF+ljQoU8yrtYm4nSf+nM9v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=iBq2ERFK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=3VL44u0x; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1742549888; c=relaxed/simple;
+	bh=YF+mLtY8hsOcRA7tQ/0JU9ySe8NFQscVPQfA0gMcFMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FELcUROwkTEyGPkQ0g0IaNbU+UmdP1ubodyzCDgd07yQeeKeFpjZZnuhSZNPScd8f3Nh1i+LjljUJvA4+FGQIx4sMz98EqGhVhWN339OlYMO97kGBBczrVW99t+QnUxFAje15A+6x9HAbQUP56Cj5LysRxIhOKUu9xpz+6RGrkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P51VhCVV; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="iBq2ERFK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3VL44u0x"
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 2609B114013F;
-	Fri, 21 Mar 2025 04:53:23 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Fri, 21 Mar 2025 04:53:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742547203;
-	 x=1742633603; bh=+aayfzE7jgJlc50bcARK1+tQmGPggXiqzYcB0Ie7pLE=; b=
-	iBq2ERFK4oLW/f/OZuSBg4fs5BrZAXfLimVU4wv4uRwZa41AQspkXOfTVTz9zJqb
-	cwUlpfhTonWpHTK+orK05gVkcX0xDictVg5W1apIghevrOr2lt1xS3ZoNhEOvsSC
-	q3aaUmyXPUNmNcL6bgMpEoj7QQV5d0GmHFAkNK3M/TRXnvpc0uPy6EpyTFy4Jvls
-	6T3QWkiCQCwaxScGfOq9ZFHvJLyvGzlIwUzpVy7LGreYpQMtTJDXpbRFY1sW8Z3m
-	DWtYLqC6F9DseK4qT64k1HFHErssawJb4xLeg/gCyqqEmMEOB40yU+whOsmA1dja
-	eI0ZK2InftNm9PFt5Jr5cw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742547203; x=
-	1742633603; bh=+aayfzE7jgJlc50bcARK1+tQmGPggXiqzYcB0Ie7pLE=; b=3
-	VL44u0xa/wlJpz0PO7/pndRGKPUuIn6xnUVtUEnmQgizCNLZmyOX5U5kvFEyg2VQ
-	LJBTH2lmqHdvFIwAX6swoVzzwFbOQ6IhlXAqxkAFWiAsn5ZHjIjvRcBGN8CiB5pT
-	k6GRr61abQx8YxE+TD/GEAdYWxCbrtl15VulItIDEUgdxfgn/kr3q65VBqf3lstf
-	T3qUygwZtd4/ZYYlDHmEgllaNmapy9kWvD1FId8BWhA496KBR/nuIUXcYbPY4YAW
-	Q9UTHSHm3GMpEQP6KZITq4l8SJADVG1LohoCusN+ni+s4VhEs8BFdwg3kEf4epoG
-	EPH5ff9BNyTJsnV7bo5yw==
-X-ME-Sender: <xms:AindZ1fxbCSaPNodVLmM0WUdyJN6U7PS_im8aCCha8l1_DdfTxCPsg>
-    <xme:AindZzMIYZmlGshRfqW31ptbxwqceNCIBQCRpFCv8cb8dYXYQE2cniV26q2f7UErS
-    SS_oTeHUlF1hHi-mBE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduhedtieeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefogg
-    ffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegvrhhg
-    mhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeefhf
-    ehteffuddvgfeigefhjeetvdekteekjeefkeekleffjeetvedvgefhhfeihfenucffohhm
-    rghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomh
-    dprhgtphhtthhopegrrhhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrggsvghl
-    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlh
-    eslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehllhhvmheslhhi
-    shhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlse
-    hlihhsthhsrdhlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:AindZ-inEjxWvS3EfnJoR6OgW9sR8ESayHBZl6l3Hyhrzj8OauVF_g>
-    <xmx:AindZ-9Zj5UC7QmN1XEh3_ydNJM_1SFxHsFZxGXei01cuLD26cOv0A>
-    <xmx:AindZxvJbd9yVrfP6EMq9GUdOMphfApmalv5k9sT5Y1K1AzDDy0wcg>
-    <xmx:AindZ9F-NxTRRMBl54RMbDbyuLcevtCGeymO1LwrpcAI9uBoCmYJ4A>
-    <xmx:AyndZ_XXYQcK97jQmBg4zTjuE1eqdvWcnqcN-RrSOKAkWO8BUtkEXK1a>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8DB2E2220072; Fri, 21 Mar 2025 04:53:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P51VhCVV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742549887; x=1774085887;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YF+mLtY8hsOcRA7tQ/0JU9ySe8NFQscVPQfA0gMcFMw=;
+  b=P51VhCVVOAm/wySoB9QAA8HdGg68Lnz9Smn3h1E26R+NEEs9+DTyz5tY
+   RpC3fIz/NTkdFndEAZWN0OvBVuptIuYPVnCy3QWH8lN4dlW7/SdV8mUGQ
+   Xu4e8ZmH6Lc8XSyejPHN6KRGT6BtoRw5RfcCP5WfxGm9DaLx0CIXyCgnb
+   ep52nlFOs+0KQWTH3Lmv5qScmkLWXBtaDQC5bZoAK0BQ5McMqyEu5vkR0
+   td67EQAtxi/gK0nHINQHcG9FhqaJxMJHGgIMgLjghqVNIoKBU3WWTUa/8
+   oyjkCvWwY6YQvR/a11vY3blFf0O1suAei8enqfhSd9N1k06hNAa7mNOn2
+   w==;
+X-CSE-ConnectionGUID: K81GsKxdT+m5f7s4blqIcQ==
+X-CSE-MsgGUID: gjCmpYdfSV2/XRmOpL65Lw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="47692797"
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="47692797"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 02:38:04 -0700
+X-CSE-ConnectionGUID: Y1dnO9t8QS6pC0ONrEEqFA==
+X-CSE-MsgGUID: t8aobA94RvaPPneaJvsrCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="124131267"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 21 Mar 2025 02:38:01 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvYpD-0001ET-1a;
+	Fri, 21 Mar 2025 09:37:59 +0000
+Date: Fri, 21 Mar 2025 17:37:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kw@linux.com,
+	manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	bhelgaas@google.com, jingoohan1@gmail.com,
+	thomas.richard@bootlin.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hans Zhang <18255117159@163.com>
+Subject: Re: [v3 1/4] PCI: Introduce generic capability search functions
+Message-ID: <202503211730.XKhqW2Mw-lkp@intel.com>
+References: <20250321040358.360755-2-18255117159@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T1182011179345e0e
-Date: Fri, 21 Mar 2025 09:53:01 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "kernel test robot" <lkp@intel.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, arm <arm@kernel.org>
-Message-Id: <e4c87dd0-1648-4453-9a0a-f38f0045cac9@app.fastmail.com>
-In-Reply-To: <202503211042.Uf5Ln7hI-lkp@intel.com>
-References: <202503211042.Uf5Ln7hI-lkp@intel.com>
-Subject: Re: [soc:soc/drivers 22/24] drivers/platform/cznic/turris-signing-key.c:25:55:
- warning: omitting the parameter name in a function definition is a C2x
- extension
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250321040358.360755-2-18255117159@163.com>
 
-On Fri, Mar 21, 2025, at 03:41, kernel test robot wrote:
+Hi Hans,
 
-> If you fix the issue in a separate patch/commit (i.e. not just a new 
-> version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: 
-> https://lore.kernel.org/oe-kbuild-all/202503211042.Uf5Ln7hI-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/platform/cznic/turris-signing-key.c:25:55: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
->       25 | static int turris_signing_key_instantiate(struct key *, 
-> struct key_preparsed_payload *)
->          |                                                       ^
->    drivers/platform/cznic/turris-signing-key.c:25:87: warning: omitting 
-> the parameter name in a function definition is a C2x extension 
-> [-Wc2x-extensions]
->       25 | static int turris_signing_key_instantiate(struct key *, 
-> struct key_preparsed_payload *)
->          |                                                              
->                          ^
->    2 warnings generated.
+kernel test robot noticed the following build warnings:
 
-I've added a fix for this to the tree now. I was surprised that clang
-warns about it but gcc does not, and apparently this was changed with
-gcc-12 no longer warning about it.
+[auto build test WARNING on a1cffe8cc8aef85f1b07c4464f0998b9785b795a]
 
-     Arnd
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-Introduce-generic-capability-search-functions/20250321-120748
+base:   a1cffe8cc8aef85f1b07c4464f0998b9785b795a
+patch link:    https://lore.kernel.org/r/20250321040358.360755-2-18255117159%40163.com
+patch subject: [v3 1/4] PCI: Introduce generic capability search functions
+config: arm-randconfig-004-20250321 (https://download.01.org/0day-ci/archive/20250321/202503211730.XKhqW2Mw-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503211730.XKhqW2Mw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503211730.XKhqW2Mw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/arm/mm/iomap.c:9:
+>> include/linux/pci.h:2021:4: warning: no previous prototype for function 'pci_generic_find_capability' [-Wmissing-prototypes]
+    2021 | u8 pci_generic_find_capability(void *priv, pci_generic_read_cfg read_cfg,
+         |    ^
+   include/linux/pci.h:2021:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2021 | u8 pci_generic_find_capability(void *priv, pci_generic_read_cfg read_cfg,
+         | ^
+         | static 
+>> include/linux/pci.h:2024:5: warning: no previous prototype for function 'pci_generic_find_ext_capability' [-Wmissing-prototypes]
+    2024 | u16 pci_generic_find_ext_capability(void *priv, pci_generic_read_cfg read_cfg,
+         |     ^
+   include/linux/pci.h:2024:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2024 | u16 pci_generic_find_ext_capability(void *priv, pci_generic_read_cfg read_cfg,
+         | ^
+         | static 
+   2 warnings generated.
+
+
+vim +/pci_generic_find_capability +2021 include/linux/pci.h
+
+  1999	
+  2000	static inline void pci_set_master(struct pci_dev *dev) { }
+  2001	static inline void pci_clear_master(struct pci_dev *dev) { }
+  2002	static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
+  2003	static inline void pci_disable_device(struct pci_dev *dev) { }
+  2004	static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
+  2005	static inline int pci_assign_resource(struct pci_dev *dev, int i)
+  2006	{ return -EBUSY; }
+  2007	static inline int __must_check __pci_register_driver(struct pci_driver *drv,
+  2008							     struct module *owner,
+  2009							     const char *mod_name)
+  2010	{ return 0; }
+  2011	static inline int pci_register_driver(struct pci_driver *drv)
+  2012	{ return 0; }
+  2013	static inline void pci_unregister_driver(struct pci_driver *drv) { }
+  2014	static inline u8 pci_find_capability(struct pci_dev *dev, int cap)
+  2015	{ return 0; }
+  2016	static inline u8 pci_find_next_capability(struct pci_dev *dev, u8 post, int cap)
+  2017	{ return 0; }
+  2018	static inline u16 pci_find_ext_capability(struct pci_dev *dev, int cap)
+  2019	{ return 0; }
+  2020	typedef u32 (*pci_generic_read_cfg)(void *priv, int where, int size);
+> 2021	u8 pci_generic_find_capability(void *priv, pci_generic_read_cfg read_cfg,
+  2022				       u8 cap)
+  2023	{ return 0; }
+> 2024	u16 pci_generic_find_ext_capability(void *priv, pci_generic_read_cfg read_cfg,
+  2025					    u8 cap)
+  2026	{ return 0; }
+  2027	static inline u64 pci_get_dsn(struct pci_dev *dev)
+  2028	{ return 0; }
+  2029	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
