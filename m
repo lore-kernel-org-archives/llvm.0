@@ -1,230 +1,116 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6251C22D4FD
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 16:46:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29F813635C;
+	Fri, 21 Mar 2025 16:57:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575595; cv=none; b=SFFbld68xVDKDqyu8FWZYEd5Bt/+sMN+OwTmrnSS8JZ4FVXaTzSWKdjc+ilAkotbCeu8+/O+Ai+Whl0feQI+yt2swH7n0xc7CxyYgBHqOfhvWZpLiRQMSIEQ9haXf5zQ1kdnW0y515skGvX++HfGT5uSE8YxDy//GwqJ57U3mtU=
+	t=1742576261; cv=none; b=QCnDzG2QQN4zzoNyRxQ+Y538+7CpbwRS4JHzVPj8X982qxruG0kIlCz/yMSVroLACeTt7MvzhhQVYB9X9e0tytHC2kbIA3sJVz84XapIBvZiBIbtnDRPHHTYUe4PwEDQbkpak8+FAZv9WY9UvYvvM5tfi2gxMImno56Vcq7ws2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575595; c=relaxed/simple;
-	bh=xPu6bWbiDSkAMwrWg2n9WeSm35U8Pgyygg+KOPt0bbU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Arg8MJlj/1LPndIdcamuA3B/M6Ln4J5hBOi0iTI9AerPnoMTkH4jUy0N3Y1yK9T7WPGbEQFp5m+Rcn/49gY5buTjz/iTqmlE8WSIWips+v5pCnoPCY9OjtFc/6BtvcC7bbjVxUa6l3QE5fntvqu+dE4+S7fymvgK8/9R0+w/rZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=f7FyeNFg; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1742576261; c=relaxed/simple;
+	bh=TI8QswTMwvsvAErK9ByhmOgqwM19DkY5k0TsQ8B24Uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o12CxOXgr431Kf07qfi4X0lSHR43lo7mrOR3mVyd9COoo+qdaKlSuiOav+4/CUs4UYPIPqIHG0qLy60wsNyxvExlH2e4mtcu6P3+tp2KPtv0XgFDy5Xz+qEu9YYHaQPFKzTfPH8bWxM7gTnswPQQLyMw4KQ9VDeKXU3R2G/ECXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+rnIrBT; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="f7FyeNFg"
-Received: from narnia.corp.microsoft.com (unknown [167.220.2.28])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 82BC72025389;
-	Fri, 21 Mar 2025 09:46:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 82BC72025389
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742575594;
-	bh=jCQG/f9mso2uZ0UQYO3u+rgplW0McG0EQhJ+HbLrs+k=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=f7FyeNFg+XQdXM8uWdkpzsBDBJHkhAWjDy9MIEDbBem62if8Qj94fO1tOF/hXDYNx
-	 fW2+7L/T22bWmKF1eKkUWiBQcj0/hYQB6CVsq0Rnu1oCrW6xpQSc9PNo5YJ59BGYmQ
-	 bmRYnpS1aXA3AunaJAsUYoGkXPnJajvRNlThDLqY=
-From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jan Stancek <jstancek@redhat.com>,
-	Neal Gompa <neal@gompa.dev>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	nkapron@google.com,
-	teknoraver@meta.com,
-	roberto.sassu@huawei.com,
-	xiyou.wangcong@gmail.com
-Subject: [RFC PATCH security-next 4/4] selftests/hornet: Add a selftest for the hornet LSM
-Date: Fri, 21 Mar 2025 09:45:06 -0700
-Message-ID: <20250321164537.16719-5-bboscaccy@linux.microsoft.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
-References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+rnIrBT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742576260; x=1774112260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TI8QswTMwvsvAErK9ByhmOgqwM19DkY5k0TsQ8B24Uc=;
+  b=m+rnIrBTLgWMf8plFwRr+3xDP4UJButh7LjzzS40CpxSWxf9rkWDJh5I
+   Z3vLVeFs371H6CtC73ng6eW9tbeuCwYnQoqoPN06Og0rnmznzS/EVWjhc
+   5yBnkPQM5+dRqhbqhtQBsgVoNU4USKkSZXlFxhDwIE+tzIkmjx/y6nG8t
+   g5FL41xam/Vq6RQMYXFphQyLfhZyKifR+YxH8G75sfUys1IsFqn4w6/PC
+   7FUrUBesS6alW9L6IUVl1Xc6f9uG3dp9iFFT7v1oQKixLGC6jBLnQNXKX
+   +BWROXKw23dDKns0PtEQfEKTirvgO0x6LT2Vt9sFO6HLd5XyCq8TT8ExC
+   w==;
+X-CSE-ConnectionGUID: Ul2sMZz6QlG5jLWrA0uC3g==
+X-CSE-MsgGUID: B/gKVJnaR1y4CJFeI+aWKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="31439952"
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="31439952"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:57:39 -0700
+X-CSE-ConnectionGUID: QLURwVkwRgCf9s9H6tFF6Q==
+X-CSE-MsgGUID: IjjcQovXTG+DsaKdJVeKVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="128130989"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 21 Mar 2025 09:57:35 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvfgV-0001WD-0g;
+	Fri, 21 Mar 2025 16:57:29 +0000
+Date: Sat, 22 Mar 2025 00:56:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@kernel.org>, bhelgaas@google.com,
+	gregkh@linuxfoundation.org, rafael@kernel.org, ojeda@kernel.org,
+	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+	bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@kernel.org>
+Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
+Message-ID: <202503220040.TDePlxma-lkp@intel.com>
+References: <20250320222823.16509-4-dakr@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250320222823.16509-4-dakr@kernel.org>
 
-This selftest tests contains a simple testcase that utilizes an lskel
-loader. One version of the lskel is signed with the autogenerated
-module signing key, another is not. A test driver attempts to load the
-lskels. With hornet enabled, the signed version should successfully be
-loaded, and the unsigned version should fail.
+Hi Danilo,
 
-Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
----
- tools/testing/selftests/Makefile             |  1 +
- tools/testing/selftests/hornet/Makefile      | 51 ++++++++++++++++++++
- tools/testing/selftests/hornet/loader.c      | 21 ++++++++
- tools/testing/selftests/hornet/trivial.bpf.c | 33 +++++++++++++
- 4 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/hornet/Makefile
- create mode 100644 tools/testing/selftests/hornet/loader.c
- create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8daac70c2f9d2..fce32ee4de328 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -41,6 +41,7 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
-+TARGETS += hornet
- TARGETS += intel_pstate
- TARGETS += iommu
- TARGETS += ipc
-diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/selftests/hornet/Makefile
-new file mode 100644
-index 0000000000000..93da70f41d40c
---- /dev/null
-+++ b/tools/testing/selftests/hornet/Makefile
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../build/Build.include
-+include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
-+
-+CLANG ?= clang
-+CFLAGS := -g -O2 -Wall
-+BPFTOOL ?= bpftool
-+SCRIPTSDIR := $(abspath ../../../../scripts/hornet)
-+TOOLSDIR := $(abspath ../../..)
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+APIDIR := $(TOOLSINCDIR)/uapi
-+CERTDIR := $(abspath ../../../../certs)
-+
-+TEST_GEN_PROGS_EXTENDED := loader
-+TEST_GEN_PROGS := signed_loader
-+TEST_PROGS := fail_loader
-+TEST_GEN_FILES := vmlinux.h loader.h trivial.bin trivial.bpf.o
-+$(TEST_GEN_PROGS): LDLIBS += -lbpf
-+$(TEST_GEN_PROGS): $(TEST_GEN_FILES)
-+
-+include ../lib.mk
-+
-+BPF_CFLAGS := -target bpf \
-+              -D__TARGET_ARCH_$(ARCH) \
-+              -I/usr/include/$(shell uname -m)-linux-gnu \
-+               $(KHDR_INCLUDES)
-+vmlinux.h:
-+	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
-+
-+trivial.bpf.o: trivial.bpf.c vmlinux.h
-+	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
-+
-+loader.h: trivial.bpf.o
-+	$(BPFTOOL) gen skeleton -L $< name trivial > $@
-+
-+trivial.bin: loader.h
-+	$(SCRIPTSDIR)/extract-skel.sh $< $@
-+
-+loader: loader.c loader.h
-+	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-+
-+fail_loader: fail_loader.c loader.h
-+	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-+
-+signed_loader: trivial.bin loader fail_loader
-+	$(SCRIPTSDIR)/sign-ebpf sha256 $(CERTDIR)/signing_key.pem  $(CERTDIR)/signing_key.x509 \
-+		trivial.bin loader signed_loader
-+	chmod u+x $@
-diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/selftests/hornet/loader.c
-new file mode 100644
-index 0000000000000..9a43bb012d1b2
---- /dev/null
-+++ b/tools/testing/selftests/hornet/loader.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stddef.h>
-+#include <sys/resource.h>
-+#include <bpf/libbpf.h>
-+#include <errno.h>
-+#include  "loader.h"
-+
-+int main(int argc, char **argv)
-+{
-+	struct trivial *skel;
-+
-+	skel = trivial__open_and_load();
-+	if (!skel)
-+		return -1;
-+
-+	trivial__destroy(skel);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing/selftests/hornet/trivial.bpf.c
-new file mode 100644
-index 0000000000000..d38c5b53ff932
---- /dev/null
-+++ b/tools/testing/selftests/hornet/trivial.bpf.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+int monitored_pid = 0;
-+
-+SEC("tracepoint/syscalls/sys_enter_unlinkat")
-+int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
-+{
-+	char filename[128] = { 0 };
-+	struct task_struct *task;
-+	unsigned long start_time = 0;
-+	int pid = bpf_get_current_pid_tgid() >> 32;
-+	char *pathname_ptr = (char *) BPF_CORE_READ(ctx, args[1]);
-+
-+	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
-+	task = (struct task_struct *)bpf_get_current_task();
-+	start_time = BPF_CORE_READ(task, start_time);
-+
-+	bpf_printk("BPF triggered unlinkat by PID: %d, start_time %ld. pathname = %s",
-+		   pid, start_time, filename);
-+
-+	if (monitored_pid == pid)
-+		bpf_printk("target pid found");
-+
-+	return 0;
-+}
+[auto build test ERROR on 51d0de7596a458096756c895cfed6bc4a7ecac10]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/rust-device-implement-Device-parent/20250321-063101
+base:   51d0de7596a458096756c895cfed6bc4a7ecac10
+patch link:    https://lore.kernel.org/r/20250320222823.16509-4-dakr%40kernel.org
+patch subject: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
+config: x86_64-buildonly-randconfig-005-20250321 (https://download.01.org/0day-ci/archive/20250322/202503220040.TDePlxma-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250322/202503220040.TDePlxma-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503220040.TDePlxma-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ***
+   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
+   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
+   *** unless patched (like Debian's).
+   ***   Your bindgen version:  0.65.1
+   ***   Your libclang version: 20.1.1
+   ***
+   ***
+   *** Please see Documentation/rust/quick-start.rst for details
+   *** on how to set up the Rust support.
+   ***
+>> error[E0133]: use of extern static is unsafe and requires unsafe block
+   --> rust/kernel/pci.rs:473:43
+   |
+   473 |         if dev.bus_type_raw() != addr_of!(bindings::pci_bus_type) {
+   |                                           ^^^^^^^^^^^^^^^^^^^^^^ use of extern static
+   |
+   = note: extern statics are not controlled by the Rust type system: invalid data, aliasing violations or data races will cause undefined behavior
+
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
