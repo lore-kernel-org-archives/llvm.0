@@ -1,116 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29F813635C;
-	Fri, 21 Mar 2025 16:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0111DEFFC
+	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 17:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742576261; cv=none; b=QCnDzG2QQN4zzoNyRxQ+Y538+7CpbwRS4JHzVPj8X982qxruG0kIlCz/yMSVroLACeTt7MvzhhQVYB9X9e0tytHC2kbIA3sJVz84XapIBvZiBIbtnDRPHHTYUe4PwEDQbkpak8+FAZv9WY9UvYvvM5tfi2gxMImno56Vcq7ws2c=
+	t=1742578369; cv=none; b=nLtDkIVWoupZBlene+yo425nuReD9Yfcf4BeOOyfc9YCii5l/bGQeDD4WMfmu4yIHX5hfGgMWfhiMu3FB1XZjHixAlN8ok7TGcEyqPmieLYLpM3HAzZXP4lSRxD7IxPue9W8tYtxJdVPNyThLJVm625PGOCZ1QJ8ZA0VOy3XPco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742576261; c=relaxed/simple;
-	bh=TI8QswTMwvsvAErK9ByhmOgqwM19DkY5k0TsQ8B24Uc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o12CxOXgr431Kf07qfi4X0lSHR43lo7mrOR3mVyd9COoo+qdaKlSuiOav+4/CUs4UYPIPqIHG0qLy60wsNyxvExlH2e4mtcu6P3+tp2KPtv0XgFDy5Xz+qEu9YYHaQPFKzTfPH8bWxM7gTnswPQQLyMw4KQ9VDeKXU3R2G/ECXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m+rnIrBT; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742578369; c=relaxed/simple;
+	bh=ylazAiId8B+tXX/5u3yopnZM1vrUb4IkzGMknQShfq8=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jMwf3mcx37kodmm3gpQFbUNj7YwcOFF7LnpgCOnDYAbP4jHKdhxltd00ZSGKL521J0QOEoX8vRl3t1EV0+feRoFEn3MJeHmCJjVdvLm7vsj/aeSzbs7HO+aEbPikVqfGXJX30EnqEV7sGdueOtW03j38ob2uSZ5CaAStSbXZAJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=js9XcrS6; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m+rnIrBT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742576260; x=1774112260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TI8QswTMwvsvAErK9ByhmOgqwM19DkY5k0TsQ8B24Uc=;
-  b=m+rnIrBTLgWMf8plFwRr+3xDP4UJButh7LjzzS40CpxSWxf9rkWDJh5I
-   Z3vLVeFs371H6CtC73ng6eW9tbeuCwYnQoqoPN06Og0rnmznzS/EVWjhc
-   5yBnkPQM5+dRqhbqhtQBsgVoNU4USKkSZXlFxhDwIE+tzIkmjx/y6nG8t
-   g5FL41xam/Vq6RQMYXFphQyLfhZyKifR+YxH8G75sfUys1IsFqn4w6/PC
-   7FUrUBesS6alW9L6IUVl1Xc6f9uG3dp9iFFT7v1oQKixLGC6jBLnQNXKX
-   +BWROXKw23dDKns0PtEQfEKTirvgO0x6LT2Vt9sFO6HLd5XyCq8TT8ExC
-   w==;
-X-CSE-ConnectionGUID: Ul2sMZz6QlG5jLWrA0uC3g==
-X-CSE-MsgGUID: B/gKVJnaR1y4CJFeI+aWKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="31439952"
-X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
-   d="scan'208";a="31439952"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:57:39 -0700
-X-CSE-ConnectionGUID: QLURwVkwRgCf9s9H6tFF6Q==
-X-CSE-MsgGUID: IjjcQovXTG+DsaKdJVeKVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
-   d="scan'208";a="128130989"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 21 Mar 2025 09:57:35 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tvfgV-0001WD-0g;
-	Fri, 21 Mar 2025 16:57:29 +0000
-Date: Sat, 22 Mar 2025 00:56:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@kernel.org>, bhelgaas@google.com,
-	gregkh@linuxfoundation.org, rafael@kernel.org, ojeda@kernel.org,
-	alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, benno.lossin@proton.me,
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@kernel.org>
-Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
-Message-ID: <202503220040.TDePlxma-lkp@intel.com>
-References: <20250320222823.16509-4-dakr@kernel.org>
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="js9XcrS6"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D0FF741061
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1742578367; bh=e8LnavV6SlTbyQVO8z9IZ0GGY7kUoVlnZAAZGa1WgGY=;
+	h=From:To:Subject:In-Reply-To:References:Date:From;
+	b=js9XcrS6T1hU9105EYTWYu8QHp3SNxGbUpoLpab9Trijr4b0fesgpaniwQWJfswlh
+	 ATPI9S0oPNQlRiMt/7T6OWkafx8InYbdl0QfVKu54wTi7xwYHBClpJNe4IoP9ylwMP
+	 u3e1fJie/f4Az/VmsumaL5+OQ3pCvYh07XbrS3INkKg36etVNNpcqGwjUaEU/tE368
+	 psPv+vn1tLmkpGJwmZQt9u7FbgBq08sjXUGShJL+ykeWs4mCvk9U5qrPxmvQGpGYRd
+	 Faurwchzh6Jow6jkU10g6YSpsNJprVUCpYFanKdZXtGl9dnZaoFMjTFso0dT/pPV9b
+	 qDt4mgKUSeKuw==
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id D0FF741061;
+	Fri, 21 Mar 2025 17:32:46 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, David Howells
+ <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, "David S.
+ Miller" <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James
+ Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro
+ Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
+ =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BC?=
+ =?utf-8?Q?nther?= Noack <gnoack@google.com>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Blaise Boscaccy
+ <bboscaccy@linux.microsoft.com>, Jarkko Sakkinen <jarkko@kernel.org>, Jan
+ Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
+ roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH security-next 1/4] security: Hornet LSM
+In-Reply-To: <20250321164537.16719-2-bboscaccy@linux.microsoft.com>
+References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+ <20250321164537.16719-2-bboscaccy@linux.microsoft.com>
+Date: Fri, 21 Mar 2025 11:32:45 -0600
+Message-ID: <87frj6l26a.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320222823.16509-4-dakr@kernel.org>
+Content-Type: text/plain
 
-Hi Danilo,
+Blaise Boscaccy <bboscaccy@linux.microsoft.com> writes:
 
-kernel test robot noticed the following build errors:
+> This adds the Hornet Linux Security Module which provides signature
+> verification of eBPF programs.
+>
+> Hornet uses a similar signature verification scheme similar to that of
+> kernel modules. A pkcs#7 signature is appended to the end of an
+> executable file. During an invocation of bpf_prog_load, the signature
+> is fetched from the current task's executable file. That signature is
+> used to verify the integrity of the bpf instructions and maps which
+> where passed into the kernel. Additionally, Hornet implicitly trusts any
+> programs which where loaded from inside kernel rather than userspace,
+> which allows BPF_PRELOAD programs along with outputs for BPF_SYSCALL
+> programs to run.
+>
+> Hornet allows users to continue to maintain an invariant that all code
+> running inside of the kernel has been signed and works well with
+> light-skeleton based loaders, or any statically generated program that
+> doesn't require userspace instruction rewriting.
+>
+> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> ---
+>  Documentation/admin-guide/LSM/Hornet.rst |  51 +++++
 
-[auto build test ERROR on 51d0de7596a458096756c895cfed6bc4a7ecac10]
+You will need to add that file to .../index.rst, or it won't be included
+in the docs build.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/rust-device-implement-Device-parent/20250321-063101
-base:   51d0de7596a458096756c895cfed6bc4a7ecac10
-patch link:    https://lore.kernel.org/r/20250320222823.16509-4-dakr%40kernel.org
-patch subject: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
-config: x86_64-buildonly-randconfig-005-20250321 (https://download.01.org/0day-ci/archive/20250322/202503220040.TDePlxma-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250322/202503220040.TDePlxma-lkp@intel.com/reproduce)
+Thanks,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503220040.TDePlxma-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ***
-   *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang >= 19.1
-   *** may not work due to a bug (https://github.com/rust-lang/rust-bindgen/pull/2824),
-   *** unless patched (like Debian's).
-   ***   Your bindgen version:  0.65.1
-   ***   Your libclang version: 20.1.1
-   ***
-   ***
-   *** Please see Documentation/rust/quick-start.rst for details
-   *** on how to set up the Rust support.
-   ***
->> error[E0133]: use of extern static is unsafe and requires unsafe block
-   --> rust/kernel/pci.rs:473:43
-   |
-   473 |         if dev.bus_type_raw() != addr_of!(bindings::pci_bus_type) {
-   |                                           ^^^^^^^^^^^^^^^^^^^^^^ use of extern static
-   |
-   = note: extern statics are not controlled by the Rust type system: invalid data, aliasing violations or data races will cause undefined behavior
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+jon
