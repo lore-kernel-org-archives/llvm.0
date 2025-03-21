@@ -1,59 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0501E990E;
-	Fri, 21 Mar 2025 06:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C78F1E0E0D;
+	Fri, 21 Mar 2025 06:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742537651; cv=none; b=gEvMrqH530f0r6K0Q9QHlAjl9gXW5hiAa0jn6aYJrYCD940rqrN8nLaYy7rTIzkBrPq0Ckr84ZZcU+ne1zVvNSE+rJ3+GWOFZARNbTgAuA3UqM62dE12Ow8yJmEwU7j5c+8LSFQc5ogUu+ajDpWviwACLvTZqLyFiHULA4pTJ1Q=
+	t=1742538972; cv=none; b=o3I3MeGr9YMZ/dSB+2AK5E+sdbODl+7zuPlAsSeES6c5oB/nsOkG5MXyneBrqggWx36E1b5UcinvnInX5dUxg1NnTKUkiXdVcsc2NDfPqoJtA3hKMZybto7/LZOrWxsTM0IN3C1dP6igM+kCDhyPlBE6+SUJp/0KoVzcfs39jtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742537651; c=relaxed/simple;
-	bh=gPewbbVgRuOlKvneWv7ERQTNcx8yFZRrOEwjlo4GIGo=;
+	s=arc-20240116; t=1742538972; c=relaxed/simple;
+	bh=HaWvwtYJ/oU8MJuWlBp9GYIsMVjPAUFk2f+KucFWzzI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yc5jIJG3/A1Vt1uUlKbgtfpxSA2AnYRf8feMiuXrM4kMlXqntWWbwa0U0frObr0KRBJAb70pdn//mva/MK78FGyPRKrDonqxJh2/uJ53lbJFpjKIaETbTkfut4Ftbh6X/riHvGfLd+Z25V5FOUR0WXwkCwh2sFFbuIIsPGqx3SY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n0hIwvgQ; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=S3ooDmtCYgvWHyAJIPKh4eXz5bIIcyolO01y5lJSfDIeN79Mr+yF88SFx2nxM8S+fVZ5BGkXXbGfrtivARybusfLWAWJtGoL3jao0yc6GcmiKyZ2rrwPbQ1iFm8+8lPADtuZpqjepp0deof9d27ueTsaZEEGD8BcqAjSLERbW1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TsOwUOPV; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n0hIwvgQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TsOwUOPV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742537649; x=1774073649;
+  t=1742538970; x=1774074970;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gPewbbVgRuOlKvneWv7ERQTNcx8yFZRrOEwjlo4GIGo=;
-  b=n0hIwvgQp3Tk/cezBwwuEvI+285g7j5ugoN9e3AgwWgQbWoemsbf2ebH
-   9LZwRcDf3ycV6kdTE3SwIHl5fPyRYXhx/RS5jzomRZMtE+F6PYJaQ6IW3
-   v1R/U46n1O1K/4shfqCeylNqBm8Uwkde0rRZytGBuv0ZqDcyFPvJ7udLo
-   BH8CG8UPbZ2haEjmAPw4zCQ5gy12BceuXbxUAPp/i8kEDDnFuwuzopt1G
-   4tv8SzAR1i6PfUSTkl70hP+KwQ8mOTB/XltvJqftl57OrL6/U0Ix1xLIN
-   ASCUd0fZU1GAMrNo1e6r/TaHr4J1lfCuvSf6QCgTE0At9+NfYDHKAGkAQ
+  bh=HaWvwtYJ/oU8MJuWlBp9GYIsMVjPAUFk2f+KucFWzzI=;
+  b=TsOwUOPVbJm6EL7zw9ZjdVBlo4UDIrrI0/a5OIbfwJyYebBGkfOXx0NQ
+   puB2nsiAwMXrUh7miIX89QTuGv6OobbzH2zYWRpYomQChgaeTf6T6+qxC
+   k2kyEJ4D1OwQ78oGWoj2osi5VVhQkHTlT0wwojGcRLbPZER3SyC197cL/
+   ynThNNfXBV9djq1Q61W5uZFE9A2kdXNXyaLnzwMsmmVzoF3paPTcyNSMU
+   EL9/YosGN1Bd5rgEp8BCLeKFRnPgzMPyUw/Ycp44ANMRicAKFx5JzfX8s
+   TZYeDCoebSChl+egmz4t1UMEfWKRZSS6vo4BI3om/Ts945Gf/EwwOgsQZ
    A==;
-X-CSE-ConnectionGUID: ZlQiOyMwQc+e+/d5A40pMw==
-X-CSE-MsgGUID: k54pzxtPQ4yIbdGft/sw9A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="54460209"
+X-CSE-ConnectionGUID: 4rBmWs3fSIaXJfuoOod+DQ==
+X-CSE-MsgGUID: KeBfjwT8Tx2+4NfX844T9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11379"; a="43985022"
 X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
-   d="scan'208";a="54460209"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 23:14:09 -0700
-X-CSE-ConnectionGUID: OWrTXGSaQtin2askx3z5uA==
-X-CSE-MsgGUID: TBZPduSxRa6e1/pBL2R9gg==
+   d="scan'208";a="43985022"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Mar 2025 23:36:09 -0700
+X-CSE-ConnectionGUID: YaSh7HXlQ+OnX5jNfa5gzA==
+X-CSE-MsgGUID: h72+9HCnRUyhlf7lh60ncg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,263,1736841600"; 
-   d="scan'208";a="154317058"
+   d="scan'208";a="123830796"
 Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Mar 2025 23:14:07 -0700
+  by orviesa007.jf.intel.com with ESMTP; 20 Mar 2025 23:36:05 -0700
 Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tvVdp-00015N-0W;
-	Fri, 21 Mar 2025 06:14:02 +0000
-Date: Fri, 21 Mar 2025 14:12:51 +0800
+	id 1tvVz8-00016A-2R;
+	Fri, 21 Mar 2025 06:36:02 +0000
+Date: Fri, 21 Mar 2025 14:35:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC 3/3] mm: integrate GCMA with CMA using dt-bindings
-Message-ID: <202503211329.lucpLTfc-lkp@intel.com>
-References: <20250320173931.1583800-4-surenb@google.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Daniel Golle <daniel@makrotopia.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, upstream@airoha.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [net-next PATCH 5/6] net: pcs: airoha: add PCS driver for Airoha
+ SoC
+Message-ID: <202503211416.eZCW1LF6-lkp@intel.com>
+References: <20250318235850.6411-6-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,41 +76,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250320173931.1583800-4-surenb@google.com>
+In-Reply-To: <20250318235850.6411-6-ansuelsmth@gmail.com>
 
-Hi Suren,
+Hi Christian,
 
-[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 40caf747267c18b6206e26a37d6ea6b695236c11]
+[auto build test ERROR on net-next/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-implement-cleancache/20250321-014107
-base:   40caf747267c18b6206e26a37d6ea6b695236c11
-patch link:    https://lore.kernel.org/r/20250320173931.1583800-4-surenb%40google.com
-patch subject: [RFC 3/3] mm: integrate GCMA with CMA using dt-bindings
-config: arm64-randconfig-004-20250321 (https://download.01.org/0day-ci/archive/20250321/202503211329.lucpLTfc-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 87916f8c32ebd8e284091db9b70339df57fd1e90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503211329.lucpLTfc-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-phylink-reset-PCS-Phylink-double-reference-on-phylink_stop/20250319-080303
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250318235850.6411-6-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH 5/6] net: pcs: airoha: add PCS driver for Airoha SoC
+config: i386-randconfig-007-20250321 (https://download.01.org/0day-ci/archive/20250321/202503211416.eZCW1LF6-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250321/202503211416.eZCW1LF6-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503211329.lucpLTfc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503211416.eZCW1LF6-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: gcma_alloc_range
-   >>> referenced by cma.c:829 (mm/cma.c:829)
-   >>>               mm/cma.o:(__cma_alloc) in archive vmlinux.a
+>> ld.lld: error: undefined symbol: of_pcs_simple_get
+   >>> referenced by pcs-airoha.c:2818 (drivers/net/pcs/pcs-airoha.c:2818)
+   >>>               drivers/net/pcs/pcs-airoha.o:(airoha_pcs_probe) in archive vmlinux.a
 --
->> ld.lld: error: undefined symbol: gcma_free_range
-   >>> referenced by cma.c:1012 (mm/cma.c:1012)
-   >>>               mm/cma.o:(cma_release) in archive vmlinux.a
+>> ld.lld: error: undefined symbol: of_pcs_add_provider
+   >>> referenced by pcs-airoha.c:2818 (drivers/net/pcs/pcs-airoha.c:2818)
+   >>>               drivers/net/pcs/pcs-airoha.o:(airoha_pcs_probe) in archive vmlinux.a
 --
->> ld.lld: error: undefined symbol: gcma_register_area
-   >>> referenced by cma.c:174 (mm/cma.c:174)
-   >>>               mm/cma.o:(cma_activate_area) in archive vmlinux.a
+>> ld.lld: error: undefined symbol: of_pcs_del_provider
+   >>> referenced by pcs-airoha.c:2828 (drivers/net/pcs/pcs-airoha.c:2828)
+   >>>               drivers/net/pcs/pcs-airoha.o:(airoha_pcs_remove) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
