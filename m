@@ -1,107 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A97E2309A6
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 20:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DA5233701;
+	Fri, 21 Mar 2025 20:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742589730; cv=none; b=n1t/w88Yul9+F3EvkPktD2twz0+EsiiLgtZBPmDuaIj1LpTMfp43OnfXRukKQZXyLl3FnYV3pHznSTJePxfAOddmOg1b3YDcllO/vz8fzyzaDhxtOlaQWkfI9tkvcIes63tNrN89gLN64odl08gQhIvIjZaYUlfzdGcs8w1nUVM=
+	t=1742590660; cv=none; b=LMGzCbfY+5UeU5x7dwQjK7Mm5yD94iHglEwTGOE/bSbbraeEIWC2b7rUUtR8RJHdRcsKy69LjusM5U47JxMx4wjRSZuGQbm5vXwo9IVMOZ8eVqcExKBEL0qZBihQQ0yG4F2CJFC6kZeW89O26RqCdGAVo+i9Bo2WRq5MQ34t3+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742589730; c=relaxed/simple;
-	bh=APCNHAaknHH7M1DTdyYqSWnB3x74eA7xfMByLmCBcBI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=q/WYDrRzeNHgJ8EsY5LkCSAzZ/VCJCpWSznQsHqAPoKgmt20UpGqC0ytw0BOzwYLVLljYYuPlY/YiCDyXJVXM0HCUJ7a30KUCLWTNWb3U01nbGt5rveJbdo09XXS9YPFfKlBOSYmxkdu52HPC8n/q6FMciA4OeoKAylShG56ECo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z9CckV8b; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742590660; c=relaxed/simple;
+	bh=qftLK0hY/WZVD7D76hBXKUfNnZ4vTnHp/AThCTwwWlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ltIh2RpqugT5ZZfAa998WiUIXBSyWPyoyC120kClAPJMfSC9EoHemo0kqvA/GzZjt6Wdw6B6z9QAt9249ct+JYjVJJWj42Y5b8Ej1MayKAZt8U3zvMORowJCraPA0wimj1iUOyEqLRHfqSZdPbJCXQNwrAn8iWkEOavPd9pQmSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VF1A/hMp; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z9CckV8b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742589727;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=F3s1s6b3AWfa/S8pdadDzIxXWgBvmVLDEjMo3YRLGvI=;
-	b=Z9CckV8bLArUQMOlbi8GRYVv8YugYWr+IQyk1um+l0/HIe4H+Byf2/eazDFJwV2ZeqohuW
-	LQ7floVtCvh49ygPpwWiT2BxlvrhASRIXc81pclA4gQW2ggaPXKnMvddBvccwmG584u0du
-	BIs1kpCAOnp3ORWN7kLCnATD7XL+QtU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-64-JJAUhCZwOdCxhtSx1s9GEQ-1; Fri,
- 21 Mar 2025 16:42:05 -0400
-X-MC-Unique: JJAUhCZwOdCxhtSx1s9GEQ-1
-X-Mimecast-MFC-AGG-ID: JJAUhCZwOdCxhtSx1s9GEQ_1742589725
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A5FE019560B0
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 20:42:04 +0000 (UTC)
-Received: from [172.64.14.55] (unknown [10.30.33.138])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3D9CA1828A93;
-	Fri, 21 Mar 2025 20:42:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0-rc7,
- upstream-mainline, d07de43e)
-Date: Fri, 21 Mar 2025 20:42:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VF1A/hMp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742590659; x=1774126659;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qftLK0hY/WZVD7D76hBXKUfNnZ4vTnHp/AThCTwwWlI=;
+  b=VF1A/hMpo6VLRkrobVjDCEhjI2hIDp+S9rAJv3BewrFiA8IWykK0xwSQ
+   13Z5jykQeSb0V8eDUGdkSjg5RVkG61WC6rkkNTjdX2F9r1+uly9Mv+xZl
+   NLKW2T38SssB2leRQ4cuE9yC/v8X9t8NJm3MzpDIuWLrcj1bHAoZptcmA
+   T26OR0jiUjdfv7vGZ6Phj8kq1T/2WfDqHlicPE0objM+apkK8Ru6TD+hT
+   TrvSQBZVMIKQPZW+Y/PJ76U9IZkLsdj1Xs6vWIrSkug3+9A4C6gT8RJYD
+   n4IqfSiJHGYztJ6wFQPvSNU6IrJ64MjUHkJiPjL6iDtsA5AjsCzK2+mTM
+   Q==;
+X-CSE-ConnectionGUID: m3taM0X+QVu3qseNykdkig==
+X-CSE-MsgGUID: nZPpTq0LQNCNXh334YFoxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="44057313"
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="44057313"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 13:57:36 -0700
+X-CSE-ConnectionGUID: Vn+KcVw8SRGcuhdF5Ii7XQ==
+X-CSE-MsgGUID: SR/EuMXvQQyjeRe0yupHVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,265,1736841600"; 
+   d="scan'208";a="128179653"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 21 Mar 2025 13:57:33 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tvjQo-0001gl-2i;
+	Fri, 21 Mar 2025 20:57:30 +0000
+Date: Sat, 22 Mar 2025 04:57:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kw@linux.com,
+	manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	bhelgaas@google.com, jingoohan1@gmail.com,
+	thomas.richard@bootlin.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hans Zhang <18255117159@163.com>
+Subject: Re: [v5 1/4] PCI: Introduce generic capability search functions
+Message-ID: <202503220409.NDrvLkQF-lkp@intel.com>
+References: <20250321163803.391056-2-18255117159@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <98277.125032116420500813@us-mta-64.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2ZkdNIih7p3A69sMSNczdln_4UJpZ4Wk1n45AwBbccg_1742589725
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250321163803.391056-2-18255117159@163.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Hans,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on a1cffe8cc8aef85f1b07c4464f0998b9785b795a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-Introduce-generic-capability-search-functions/20250322-004312
+base:   a1cffe8cc8aef85f1b07c4464f0998b9785b795a
+patch link:    https://lore.kernel.org/r/20250321163803.391056-2-18255117159%40163.com
+patch subject: [v5 1/4] PCI: Introduce generic capability search functions
+config: arm64-randconfig-001-20250322 (https://download.01.org/0day-ci/archive/20250322/202503220409.NDrvLkQF-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250322/202503220409.NDrvLkQF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503220409.NDrvLkQF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hv/vmbus_drv.c:38:
+>> include/linux/pci.h:2025:1: error: expected identifier or '('
+    2025 | { return 0; }
+         | ^
+   include/linux/pci.h:2029:1: error: expected identifier or '('
+    2029 | { return 0; }
+         | ^
+   drivers/hv/vmbus_drv.c:1928:42: warning: shift count >= width of type [-Wshift-count-overflow]
+    1928 |         dma_set_mask(&child_device_obj->device, DMA_BIT_MASK(64));
+         |                                                 ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:73:54: note: expanded from macro 'DMA_BIT_MASK'
+      73 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   1 warning and 2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'io_uring-6.14-20250321' of git://git.kernel.=
-dk/linux
+vim +2025 include/linux/pci.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1728848376
+  2000	
+  2001	static inline void pci_set_master(struct pci_dev *dev) { }
+  2002	static inline void pci_clear_master(struct pci_dev *dev) { }
+  2003	static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
+  2004	static inline void pci_disable_device(struct pci_dev *dev) { }
+  2005	static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
+  2006	static inline int pci_assign_resource(struct pci_dev *dev, int i)
+  2007	{ return -EBUSY; }
+  2008	static inline int __must_check __pci_register_driver(struct pci_driver *drv,
+  2009							     struct module *owner,
+  2010							     const char *mod_name)
+  2011	{ return 0; }
+  2012	static inline int pci_register_driver(struct pci_driver *drv)
+  2013	{ return 0; }
+  2014	static inline void pci_unregister_driver(struct pci_driver *drv) { }
+  2015	static inline u8 pci_find_capability(struct pci_dev *dev, int cap)
+  2016	{ return 0; }
+  2017	static inline u8 pci_find_next_capability(struct pci_dev *dev, u8 post, int cap)
+  2018	{ return 0; }
+  2019	static inline u16 pci_find_ext_capability(struct pci_dev *dev, int cap)
+  2020	{ return 0; }
+  2021	typedef u32 (*pci_host_bridge_read_cfg)(void *priv, int where, int size);
+  2022	static inline u8
+  2023	pci_host_bridge_find_capability(void *priv, pci_host_bridge_read_cfg read_cfg,
+  2024					u8 cap);
+> 2025	{ return 0; }
+  2026	static inline u16
+  2027	pci_host_bridge_find_ext_capability(void *priv,
+  2028					    pci_host_bridge_read_cfg read_cfg, u8 cap);
+  2029	{ return 0; }
+  2030	static inline u64 pci_get_dsn(struct pci_dev *dev)
+  2031	{ return 0; }
+  2032	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1728848376-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1728848376-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
