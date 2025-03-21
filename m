@@ -1,104 +1,116 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA7B1D54D1
-	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 19:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E1918FC75;
+	Fri, 21 Mar 2025 19:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742585345; cv=none; b=T4FPXoLYqrOkbYVBEeviXU1Xv2TuLFiSqgz64qkWhAG+RWrQ0lVYuJqcrpurWMA4nTqn6hWRGP+GJseC4pBXRaoxat4ezYwXfjrRgeXCijKfWBzs1Yr6CebFqkf4owqiI57a2AD86RWAYaA9e3iXVleUY8Pcf1RUpdeAxeT+Y74=
+	t=1742585881; cv=none; b=USMjUuJmrj9uAd6rXr+bkEdRnhKE7X1CA3Vx6oxtxBMSEoxDowawgI5Gl4H1+WfAaGGwB4oQduGTbnazSaxS8uS9ySuNMwGBIcKD7HYz5tAr6nmAxhlvavbt2A2tuoSo065XNpSUvABWW5PphQqDB/yquwEX+1EG1VXLtpvidXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742585345; c=relaxed/simple;
-	bh=BuvsGhJHZ8Xw+48Ecwh+fuc4DRA4GXHKSEgROs4+XPM=;
+	s=arc-20240116; t=1742585881; c=relaxed/simple;
+	bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nHWf/JVsEDxPzh6Dv8eW0rDNywuENiGwfHI8NjEtljJwl/csIqgXTQfjd7q44n91wmObNhsaczygpmCsLLFl2+ifhWxB5xSEpKzgL8FnBh0+DUzt30DM7mHwfkJXroFzluWvurqfTN9KNOaHp9DXHCynOXWcabshh9V3Yz/Q6dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LQmWXCNf; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=okQEfRPJQ8qiX5+nUnjdoKHoi7XYxBzetlCKH/jiQfiRcUyjPOnsIm3GuSZDegPj8ouDvriiNE9acW5iJBnT47bLaDQ9dOwui46BuU4h4Rx4zgvICVTL1kAk3dkxUWykk/p6IBXMzGJcEYMj0x7uVgxtT3gD2u2Ed9TtW9u0pto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0wg1ia1; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LQmWXCNf"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ac3b12e8518so511825466b.0
-        for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 12:29:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0wg1ia1"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ff62f9b6e4so679264a91.0;
+        Fri, 21 Mar 2025 12:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742585342; x=1743190142; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1742585879; x=1743190679; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j2hED09Hatc/530rZzT/g3h0VUVivrA2PSH7ts/rtDc=;
-        b=LQmWXCNfuYYfAfNp4vbv/4Lqut5MeQ7Loz77eVldu+ZHUvS2Zl4FuL/Ob3lTam+IL/
-         gdRXb/A9geI2Yg2QXwWe3Nukea8sYKB8tKePVRGytUx3yIMKbuyJCf+Z8R2lbCDGU7E8
-         uzjrnXwG8rTDsFZLf8MlMTlI5SpUv75Tm4lzhE+OK46xKpdLJhKnAFrXQpW6xEBLhQWZ
-         JPbClwotn7PkD6qAQ2K4+GDoj+TSxUKcYyY0FM2J2w3AHlM//A5ECkxwTVEBaawIgWWP
-         OF4bRUCN83BmSa+OjsLP9oYwmVxxuoXg82Fzo9csGEHs00h5otOmTN6/cPJO8l3VYmae
-         SfZw==
+        bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
+        b=W0wg1ia1/uhOW/H/LOtb+AQdg7r2WBpB0GvkXU7gtL0JvdFik0gCxPA7vYmulURwpz
+         FofmxGQwKUDh+YzNwqZZ9sjIHTDVCqax9xclWipk4SbuYUKQcQ86Q29eGCfWAlIRVcCN
+         9+/HOul67YS0nZzgKjb3WfaGYciJcFOOgoynL3GLnLeBClTR4XWOigRyHERwsqaq01DS
+         GdySmV8FxAXLKLsF/0/+W9qPKqBkXT0b9Fi/qlPfL6OhgD9nyRBeg5RdaQu86p2E3/hn
+         y062UMbLcEmppvaYzlC0U8SX/rTH+Bwj0iXb8KtmIIrSVvzavecf8jvYz5sQcezSb2K2
+         uy6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742585342; x=1743190142;
+        d=1e100.net; s=20230601; t=1742585879; x=1743190679;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j2hED09Hatc/530rZzT/g3h0VUVivrA2PSH7ts/rtDc=;
-        b=rgurfnWy0NgSPzc10gKsMN067BVtdzQP/6eP+wa+nxjseeMR+KLYt9CbFRLr5E0spV
-         141y/txFYYnn2fP2NuTL5k2JDuTRlhMCfgjRivEUzLyQWgq5kDaRdjh+TMi9XxNWzli/
-         ItsTG5pZ/a5PRpfLIpBzvu1I9BwS1qbFZHVpMQs0PpxldIaKU5ApZep6w6gC/F/5QteZ
-         04GXb4krf27uVRvSFSS4+acEchSmbt/wBuTcJdvWzXbV0WFrcQMjk4cQPRkhD+3bj3c+
-         EwumeXbu4gVwTvPwuFxIDWekRqWwMr0WEhi3jTDW5EyZkyn+Ny/JPjFG2FvnQ4TN81KX
-         xXBg==
-X-Forwarded-Encrypted: i=1; AJvYcCXUFUdEtpjXm315WY0rJ6ammdY9e70aetilGIunrGMn/HfH2W1sl2Vylsq7hezEESGmnXJe@lists.linux.dev
-X-Gm-Message-State: AOJu0YykdY7ZGw8UYsTG2enUL/N0PfOs2Ex0iMOd+ozAHsVYApEw3zEF
-	GLY7OEzFoIbPy9PmzaQi7hjav7ezfftjaKtR796aG91QUwQnwZpR5pM9/roy17D+mYjPIIM0upS
-	WAagLBjtQbWzAWUvJH6gCAePW9t2HvxWfsxo=
-X-Gm-Gg: ASbGncujQtRdEEGqZMOwt0VKxZ6YpVBmrk5rIwQk91lHG/wohlQcjO3ZzCP/onGuLmZ
-	seWny95VHFOp7w5+UGSIDS3Gax0/by38Kj85XAa0MWHg6dNZgAflvTGIVUOznBF3eviDg3GXPBS
-	wlUt9iNJGkhJ+pnfL2uLowtPM=
-X-Google-Smtp-Source: AGHT+IFr6DHIIXCK2jv2tQeCJB9flyjvB19jQyVNG+m61yysVbGI2vUqrhw0CPy/4k7NDizCoPraQg+p9VazXzLcBqg=
-X-Received: by 2002:a17:907:c7cd:b0:ac3:da3:a1b1 with SMTP id
- a640c23a62f3a-ac3f2238346mr451667366b.26.1742585341652; Fri, 21 Mar 2025
- 12:29:01 -0700 (PDT)
+        bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
+        b=t2NsR6YYBstZGELOhkg32zohdB7szsi0mtfnEzGOVGVqfe4P1RVXG4G7kMCc9AcCqc
+         d+2Cj+XrVeqM+BXvHQjTDXLUfqOdgyvq8UxK+lSKBigWydFpqmwnggpAWZ/gbIfjejCx
+         GA2ewrVYLKnrOjCMmSZ7tihWclUPkv8WYyvK55K7Hm5nRqHnpzdZuvUWNADUgqIKkBJO
+         zKPrbaA43/k/AH47S4JxdLyA46QUdc/3PrnlEYhv6q1vurT1GVPNI0pjyRNL1901886r
+         dAZRkPhvWTMtiJcO79dAOpLCEGS6XsbCpLWa4X1SbZ+k3Y22GjuvbgPQrci05wK86jyq
+         h96Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZkfbyWpneK2Tip2sc1Ale1EGHL8FxKmKb/UhtDid8PAnuNsiYrj5ZXqkomD/htFsy19lics1tyS7lWC/4xA==@lists.linux.dev, AJvYcCWoPawjEtSRz4h/64aJfd7eIwtMsdX9LvpA/UZiE/JuUID6WFMV+ivmpYMpbf0KEN2FNbpK@lists.linux.dev
+X-Gm-Message-State: AOJu0YxIVByJlIjnmoIz9ZP/t9Obk/6fKMrwe6UPQLwtfeb9Xw/Wybpc
+	B66xFCzu1jvH4PbvrAYAMk2BuO4Xmj+crylavf5SS+AWj5rJUPmqJw1vpi2IcExbq4vTAkR3xpf
+	gC67UcY+nsp1xGqXn0yFfZu0IeasBcFKYBfo=
+X-Gm-Gg: ASbGncsQmGdqL2iW6NMA5c19CL1CgjhBHuaFfD5LUq14PoNELuVM6qXSPkBROX0R29F
+	EN2QR+lGZhkwp5YhQfYc0oU/tZFA29q3Fb0SjsgbDV7H8uNURuSq3+Jbo3kKJ0M/DCzODy181B5
+	/TpNQSqqkR9THxjLiF0cnaf5scGA==
+X-Google-Smtp-Source: AGHT+IHcbZzF+JlsnM7N1XM9q9dnz9lZIXPMELUd/weF/NBB/+ylTDpLlAt78Ks9jpFQJPhbWPjCqFXH0ARLhFmlQwA=
+X-Received: by 2002:a17:90a:e7cc:b0:2fe:7f51:d2ec with SMTP id
+ 98e67ed59e1d1-3030fb1fff3mr2593669a91.0.1742585879537; Fri, 21 Mar 2025
+ 12:37:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250320235910.334620-1-changyuanl@google.com>
-In-Reply-To: <20250320235910.334620-1-changyuanl@google.com>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 21 Mar 2025 12:28:44 -0700
-X-Gm-Features: AQ5f1Jpu1bzXyoskz236qYXLKL_6cPSKwyh10XNtASrfDEnHoVGM76uniVMGG08
-Message-ID: <CAGG=3QUEY_Gmu-6K7rk6-y8AB7HVuV2V9sP5K3h379teAZXyHQ@mail.gmail.com>
-Subject: Re: [PATCH] clang-format: add for_each macros from libfdt
-To: Changyuan Lyu <changyuanl@google.com>
-Cc: ojeda@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	Daisuke Nishimura <nishimura@mxp.nes.nec.co.jp>, justinstitt@google.com, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20250320222823.16509-4-dakr@kernel.org> <202503220040.TDePlxma-lkp@intel.com>
+ <Z92ldvI4ihlm0HJd@cassiopeiae> <CANiq72=s3rQwRt-TOr0_n=EKHwJSQSGmKfu_4TtoEhSTc2Fvqg@mail.gmail.com>
+ <Z9253sEI_cRS3mtN@pollux>
+In-Reply-To: <Z9253sEI_cRS3mtN@pollux>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 21 Mar 2025 20:37:47 +0100
+X-Gm-Features: AQ5f1JrVmdS3YKYMvAc3O62mGzPeFxqsSgBlARAqJZSbBraEX8Zy_C2Dxa7CiEw
+Message-ID: <CANiq72nvp_fWD6oDULgq1PVBD417iUVVWcZr_cvfd8r9Lpk=rg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, bhelgaas@google.com, gregkh@linuxfoundation.org, 
+	rafael@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+	benno.lossin@proton.me, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 20, 2025 at 4:59=E2=80=AFPM Changyuan Lyu <changyuanl@google.co=
-m> wrote:
+On Fri, Mar 21, 2025 at 8:11=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
+wrote:
 >
-> Add two for_each macros from scripts/dtc/libfdt/libfdt.h.
+> From the second link:
 >
-> Signed-off-by: Changyuan Lyu <changyuanl@google.com>
-> ---
->  .clang-format | 2 ++
->  1 file changed, 2 insertions(+)
+> "Previously, the compiler's safety checks were not aware that the raw ref
+> operator did not actually affect the operand's place, treating it as a po=
+ssible
+> read or write to a pointer. No unsafety is actually present, however, as =
+it just
+> creates a pointer.
 >
-> diff --git a/.clang-format b/.clang-format
-> index fe1aa1a30d40..4decda7474e1 100644
-> --- a/.clang-format
-> +++ b/.clang-format
-> @@ -210,6 +210,8 @@ ForEachMacros:
->    - 'evlist__for_each_entry_from'
->    - 'evlist__for_each_entry_reverse'
->    - 'evlist__for_each_entry_safe'
-> +  - 'fdt_for_each_property_offset'
-> +  - 'fdt_for_each_subnode'
+> That sounds like it was a bug, or do I miss anything?
 
-Could you alphabetize these please?
+Yeah, if they didn't intend it originally, then I would call it a bug
+-- they also seemed to considered it a bug themselves in the end, so I
+think you are right.
 
->    - 'flow_action_for_each'
->    - 'for_each_acpi_consumer_dev'
->    - 'for_each_acpi_dev_match'
-> --
-> 2.49.0.395.g12beb8f557-goog
->
+I meant it from the point of view of the language, i.e. in the sense
+that it was a restriction before, and now they relaxed it, so more
+programs are accepted, and the feature would be "you need less
+`unsafe`" etc.
+
+The blog post seems to mention both sides of the coin ("This code is
+now allowed", "Relaxed this", "A future version of Rust is expected to
+generalize this").
+
+> Yeah, thanks a lot. Especially for the second link, I couldn't find it ev=
+en
+> after quite a while of searching.
+
+You're welcome!
+
+Cheers,
+Miguel
