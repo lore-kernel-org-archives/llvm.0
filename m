@@ -1,116 +1,143 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E1918FC75;
-	Fri, 21 Mar 2025 19:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E576F1EBFFC
+	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 20:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742585881; cv=none; b=USMjUuJmrj9uAd6rXr+bkEdRnhKE7X1CA3Vx6oxtxBMSEoxDowawgI5Gl4H1+WfAaGGwB4oQduGTbnazSaxS8uS9ySuNMwGBIcKD7HYz5tAr6nmAxhlvavbt2A2tuoSo065XNpSUvABWW5PphQqDB/yquwEX+1EG1VXLtpvidXo=
+	t=1742588187; cv=none; b=CC20nhsVpROyWMXfUwmafXZX+i20wxqzdlVvT5fvR+hVyhefBB7qwg8I5waNSPvoo6GKIr3GACGO9sVIv0UyLKi023HONr1wyfSPyI6dpV8x6cRyafDlFQ0H3RoiLyO74qK9CcELGmenhGWB+4WfEZ0jTIjbF6wY6YGgnVizxBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742585881; c=relaxed/simple;
-	bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
+	s=arc-20240116; t=1742588187; c=relaxed/simple;
+	bh=C0+RouyfLpsQW5xvPju9cRpnBiU/H1OG+89X01tDYOY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=okQEfRPJQ8qiX5+nUnjdoKHoi7XYxBzetlCKH/jiQfiRcUyjPOnsIm3GuSZDegPj8ouDvriiNE9acW5iJBnT47bLaDQ9dOwui46BuU4h4Rx4zgvICVTL1kAk3dkxUWykk/p6IBXMzGJcEYMj0x7uVgxtT3gD2u2Ed9TtW9u0pto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0wg1ia1; arc=none smtp.client-ip=209.85.216.53
+	 To:Cc:Content-Type; b=c3rzu9sLhIkk+hGWYc3MCEZszOmFVKPZx9T43+N6P5PpzMCA7AggFJ18rdkS8dmsNK9/GPEyyHutjSPVnDX0dNcLc3075InrqQ5sRFM4lYvkXRbro5V9rH3dfhng6qKaACsAYq7zYFR4xA2y1E7jtbLOnZDxD5TBLR0SsOdDtu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b7UlbbBU; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0wg1ia1"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ff62f9b6e4so679264a91.0;
-        Fri, 21 Mar 2025 12:38:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7UlbbBU"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-399744f74e9so1557429f8f.1
+        for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 13:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742585879; x=1743190679; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1742588184; x=1743192984; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
-        b=W0wg1ia1/uhOW/H/LOtb+AQdg7r2WBpB0GvkXU7gtL0JvdFik0gCxPA7vYmulURwpz
-         FofmxGQwKUDh+YzNwqZZ9sjIHTDVCqax9xclWipk4SbuYUKQcQ86Q29eGCfWAlIRVcCN
-         9+/HOul67YS0nZzgKjb3WfaGYciJcFOOgoynL3GLnLeBClTR4XWOigRyHERwsqaq01DS
-         GdySmV8FxAXLKLsF/0/+W9qPKqBkXT0b9Fi/qlPfL6OhgD9nyRBeg5RdaQu86p2E3/hn
-         y062UMbLcEmppvaYzlC0U8SX/rTH+Bwj0iXb8KtmIIrSVvzavecf8jvYz5sQcezSb2K2
-         uy6w==
+        bh=C0+RouyfLpsQW5xvPju9cRpnBiU/H1OG+89X01tDYOY=;
+        b=b7UlbbBUnS6R/W9zvuQFaLYDHljBPwvx8HFYLexfE537fEd20q3Zb50jnBTntM9OnG
+         ZgoHtLU7JXR8nqS0njRi2Xk++Dno8JugnjHZIGbBVIdQQzv0P+c81R0lKM3sB80IV6JJ
+         ZqKF4dqgE6HTo+uUi3VCql7klRW/GYNLlpOBgOn06ZiK6iNie1Op7fUVZ6St5P2UpFPi
+         1jU4asuFNwx20BkNKDdCcP4G1ZPGOUAJJ6UcG2QyZd4rwqqlHrjE4mzOOR8KQfN/ntsO
+         Pm02NV4AYqP/RA0BkuR4IsJMI4s1F7L5xfJr18el+VaU7Kp+3DFHm86KpumC5dCpHZpJ
+         jCbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742585879; x=1743190679;
+        d=1e100.net; s=20230601; t=1742588184; x=1743192984;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VmGk2QKnCgeNy1W5/I3wjMhcHhVvDTr6PEDFoCrfs4g=;
-        b=t2NsR6YYBstZGELOhkg32zohdB7szsi0mtfnEzGOVGVqfe4P1RVXG4G7kMCc9AcCqc
-         d+2Cj+XrVeqM+BXvHQjTDXLUfqOdgyvq8UxK+lSKBigWydFpqmwnggpAWZ/gbIfjejCx
-         GA2ewrVYLKnrOjCMmSZ7tihWclUPkv8WYyvK55K7Hm5nRqHnpzdZuvUWNADUgqIKkBJO
-         zKPrbaA43/k/AH47S4JxdLyA46QUdc/3PrnlEYhv6q1vurT1GVPNI0pjyRNL1901886r
-         dAZRkPhvWTMtiJcO79dAOpLCEGS6XsbCpLWa4X1SbZ+k3Y22GjuvbgPQrci05wK86jyq
-         h96Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUZkfbyWpneK2Tip2sc1Ale1EGHL8FxKmKb/UhtDid8PAnuNsiYrj5ZXqkomD/htFsy19lics1tyS7lWC/4xA==@lists.linux.dev, AJvYcCWoPawjEtSRz4h/64aJfd7eIwtMsdX9LvpA/UZiE/JuUID6WFMV+ivmpYMpbf0KEN2FNbpK@lists.linux.dev
-X-Gm-Message-State: AOJu0YxIVByJlIjnmoIz9ZP/t9Obk/6fKMrwe6UPQLwtfeb9Xw/Wybpc
-	B66xFCzu1jvH4PbvrAYAMk2BuO4Xmj+crylavf5SS+AWj5rJUPmqJw1vpi2IcExbq4vTAkR3xpf
-	gC67UcY+nsp1xGqXn0yFfZu0IeasBcFKYBfo=
-X-Gm-Gg: ASbGncsQmGdqL2iW6NMA5c19CL1CgjhBHuaFfD5LUq14PoNELuVM6qXSPkBROX0R29F
-	EN2QR+lGZhkwp5YhQfYc0oU/tZFA29q3Fb0SjsgbDV7H8uNURuSq3+Jbo3kKJ0M/DCzODy181B5
-	/TpNQSqqkR9THxjLiF0cnaf5scGA==
-X-Google-Smtp-Source: AGHT+IHcbZzF+JlsnM7N1XM9q9dnz9lZIXPMELUd/weF/NBB/+ylTDpLlAt78Ks9jpFQJPhbWPjCqFXH0ARLhFmlQwA=
-X-Received: by 2002:a17:90a:e7cc:b0:2fe:7f51:d2ec with SMTP id
- 98e67ed59e1d1-3030fb1fff3mr2593669a91.0.1742585879537; Fri, 21 Mar 2025
- 12:37:59 -0700 (PDT)
+        bh=C0+RouyfLpsQW5xvPju9cRpnBiU/H1OG+89X01tDYOY=;
+        b=m8emu5OyTyxsBDA8UJItgWxbCIFXd39v9gvDam2o5P6aJnoXBOTmDLZJALyTSxwJLB
+         yChR2U8acbeJclN9BVaBLj+fBN0P3kZXM5vbsODG3ysDUA/PwIGlM61Fa5XWedl3iUKy
+         NJVamxcIwmr/hHD8tJVc5vPECdmFHMVrOugED1+I2N+4Y1TMRfKEcHl/rydnibQBZOEF
+         0TXlH88Mg9dqzRObMumfMhin2+AE25Kuvu7GDMDkjCO4nEOPo5yoMIEcBJlr/5NwEuaE
+         ZneY3oa0YXZk8fwvwJXucpgsWTjSl7gS2X9hglTRjyKLhLDSyWwyCv7+01U2SdD0iWcJ
+         n/gA==
+X-Forwarded-Encrypted: i=1; AJvYcCXigmgyP7E/Ihzl0x0z3ngKmvPAumbYMSJEvk0FA0+OZYNQOuishgtH30SIUiMZaIRgQZOE@lists.linux.dev
+X-Gm-Message-State: AOJu0YzLYNWbkNlAqXlk4M68RZP2kpVn/a6m3K18HpZXrlKK6b/LJOh7
+	hbDN0up4aFCZGgDwoe8vaiN6uUE8lOZZVA3z4RguHt1DPXql8FG9WHs5P1N2ynirbVPbNKD90/p
+	np7LzMQpYKwDThscaiTBCuHm7lvo=
+X-Gm-Gg: ASbGncsexorgEHE1KbpBOxw2aYWiA1j3OzgSd+H7zThIqCLVS/tMzbQ8a660IZfV3Ts
+	i8UVqRCCT0nhSVbl6Q0yRLlJfl/4dSsA08+/nugp8xHfpyzwrlZG80w1DucHyTr9EyCPfzid+v1
+	LV19U+KsD2KqqXTUb+D80lSR1a3IE=
+X-Google-Smtp-Source: AGHT+IG96TW62bsJhBDZbnfMPxfAxceG/bIkR9QnkTX8HFU26Hzcqf/Z/0wc9M9c7myGqdnMqBXKa2D8CUSlfaQ28eQ=
+X-Received: by 2002:a5d:5846:0:b0:391:4559:8761 with SMTP id
+ ffacd0b85a97d-3997f94da30mr4175995f8f.36.1742588183868; Fri, 21 Mar 2025
+ 13:16:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250320222823.16509-4-dakr@kernel.org> <202503220040.TDePlxma-lkp@intel.com>
- <Z92ldvI4ihlm0HJd@cassiopeiae> <CANiq72=s3rQwRt-TOr0_n=EKHwJSQSGmKfu_4TtoEhSTc2Fvqg@mail.gmail.com>
- <Z9253sEI_cRS3mtN@pollux>
-In-Reply-To: <Z9253sEI_cRS3mtN@pollux>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 21 Mar 2025 20:37:47 +0100
-X-Gm-Features: AQ5f1JrVmdS3YKYMvAc3O62mGzPeFxqsSgBlARAqJZSbBraEX8Zy_C2Dxa7CiEw
-Message-ID: <CANiq72nvp_fWD6oDULgq1PVBD417iUVVWcZr_cvfd8r9Lpk=rg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, bhelgaas@google.com, gregkh@linuxfoundation.org, 
-	rafael@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
-	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-	benno.lossin@proton.me, a.hindborg@kernel.org, aliceryhl@google.com, 
-	tmgross@umich.edu, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <cover.1739866028.git.maciej.wieczor-retman@intel.com>
+ <2a2f08bc8118b369610d34e4d190a879d44f76b8.1739866028.git.maciej.wieczor-retman@intel.com>
+ <CA+fCnZdtJj7VcEJfsjkjr3UhmkcKS25SEPTs=dB9k3cEFvfX2g@mail.gmail.com>
+ <lcbigfjrgkckybimqx6cjoogon7nwyztv2tbet62wxbkm7hsyr@nyssicid3kwb>
+ <CA+fCnZcOjyFrT7HKeSEvAEW05h8dFPMJKMB=PC_11h2W6g5eMw@mail.gmail.com>
+ <uov3nar7yt7p3gb76mrmtw6fjfbxm5nmurn3hl72bkz6qwsfmv@ztvxz235oggw>
+ <CA+fCnZcsg13eoaDJpueZ=erWjosgLDeTrjXVaifA305qAFEYDQ@mail.gmail.com>
+ <ffr673gcremzfvcmjnt5qigfjfkrgchipgungjgnzqnf6kc7y6@n4kdu7nxoaw4>
+ <CA+fCnZejp4YKT0-9Ak_8kauXDg5MsTLy0CVNQzzvtP29rqQ6Bw@mail.gmail.com> <t5bgb7eiyfc2ufsljsrdcinaqtzsnpyyorh2tqww2x35mg6tbt@sexrvo55uxfi>
+In-Reply-To: <t5bgb7eiyfc2ufsljsrdcinaqtzsnpyyorh2tqww2x35mg6tbt@sexrvo55uxfi>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Fri, 21 Mar 2025 21:16:12 +0100
+X-Gm-Features: AQ5f1Jrn_9IapCqgYgSltS6n-7mZrLrWLtgtTd5C1mwQlaSaD5HTlmPhaoggwwM
+Message-ID: <CA+fCnZdunJhoNgsQMm4cPyephj9L7sMq-YF9sE7ANk0e7h7d=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 13/14] x86: runtime_const used for KASAN_SHADOW_END
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: Florian Mayer <fmayer@google.com>, Vitaly Buka <vitalybuka@google.com>, kees@kernel.org, 
+	julian.stecklina@cyberus-technology.de, kevinloughlin@google.com, 
+	peterz@infradead.org, tglx@linutronix.de, justinstitt@google.com, 
+	catalin.marinas@arm.com, wangkefeng.wang@huawei.com, bhe@redhat.com, 
+	ryabinin.a.a@gmail.com, kirill.shutemov@linux.intel.com, will@kernel.org, 
+	ardb@kernel.org, jason.andryuk@amd.com, dave.hansen@linux.intel.com, 
+	pasha.tatashin@soleen.com, ndesaulniers@google.com, 
+	guoweikang.kernel@gmail.com, dwmw@amazon.co.uk, mark.rutland@arm.com, 
+	broonie@kernel.org, apopple@nvidia.com, bp@alien8.de, rppt@kernel.org, 
+	kaleshsingh@google.com, richard.weiyang@gmail.com, luto@kernel.org, 
+	glider@google.com, pankaj.gupta@amd.com, pawan.kumar.gupta@linux.intel.com, 
+	kuan-ying.lee@canonical.com, tony.luck@intel.com, tj@kernel.org, 
+	jgross@suse.com, dvyukov@google.com, baohua@kernel.org, 
+	samuel.holland@sifive.com, dennis@kernel.org, akpm@linux-foundation.org, 
+	thomas.weissschuh@linutronix.de, surenb@google.com, kbingham@kernel.org, 
+	ankita@nvidia.com, nathan@kernel.org, ziy@nvidia.com, xin@zytor.com, 
+	rafael.j.wysocki@intel.com, andriy.shevchenko@linux.intel.com, cl@linux.com, 
+	jhubbard@nvidia.com, hpa@zytor.com, scott@os.amperecomputing.com, 
+	david@redhat.com, jan.kiszka@siemens.com, vincenzo.frascino@arm.com, 
+	corbet@lwn.net, maz@kernel.org, mingo@redhat.com, arnd@arndb.de, 
+	ytcoode@gmail.com, xur@google.com, morbo@google.com, 
+	thiago.bauermann@linaro.org, linux-doc@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-mm@kvack.org, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 21, 2025 at 8:11=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
+On Fri, Mar 21, 2025 at 8:21=E2=80=AFPM Maciej Wieczor-Retman
+<maciej.wieczor-retman@intel.com> wrote:
 >
-> From the second link:
+> >To account for this, let's then set hwasan-instrument-with-calls=3D0
+> >when CONFIG_KASAN_INLINE is enabled. And also please add a comment
+> >explaining why this is done.
 >
-> "Previously, the compiler's safety checks were not aware that the raw ref
-> operator did not actually affect the operand's place, treating it as a po=
-ssible
-> read or write to a pointer. No unsafety is actually present, however, as =
-it just
-> creates a pointer.
+> After adding this option the kernel doesn't want to boot past uncompressi=
+ng :b
 >
-> That sounds like it was a bug, or do I miss anything?
+> I went into Samuel's clang PR [1] and found there might be one more LShr =
+that
+> needs changing into AShr [2]? But I'm not very good at clang code. Do you=
+ maybe
+> know if anything else in the clang code could be messing things up?
+>
+> After changing that LShr to AShr it moves a little further and hangs on s=
+ome
+> initmem setup code. Then I thought my KASAN_SHADOW_OFFSET is an issue so =
+I
+> changed to 4-level paging and the offset to 0xfffffc0000000000 and it mov=
+es a
+> little further and panics on kmem_cache_init. I'll be debugging that furt=
+her but
+> just thought I'd ask if you know about something missing from the compile=
+r side?
+>
+> [1] https://github.com/llvm/llvm-project/pull/103727
+> [2] https://github.com/SiFiveHolland/llvm-project/blob/up/hwasan-opt/llvm=
+/lib/Transforms/Instrumentation/HWAddressSanitizer.cpp#L995
 
-Yeah, if they didn't intend it originally, then I would call it a bug
--- they also seemed to considered it a bug themselves in the end, so I
-think you are right.
+Hm, I only recall looking at the compiler code when investigating [1].
+But as this series points out, [1] can be considered a feature and not
+a bug. Other than that, nothing comes to mind.
 
-I meant it from the point of view of the language, i.e. in the sense
-that it was a restriction before, and now they relaxed it, so more
-programs are accepted, and the feature would be "you need less
-`unsafe`" etc.
+Thanks!
 
-The blog post seems to mention both sides of the coin ("This code is
-now allowed", "Relaxed this", "A future version of Rust is expected to
-generalize this").
-
-> Yeah, thanks a lot. Especially for the second link, I couldn't find it ev=
-en
-> after quite a while of searching.
-
-You're welcome!
-
-Cheers,
-Miguel
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D218043
