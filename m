@@ -1,101 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D6E2343C9;
-	Fri, 21 Mar 2025 21:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E712E1F12F3
+	for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 22:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742593723; cv=none; b=RWKAcmJHMOj6CKSzGldiYE1j/m5W/7yuy0Q72xsaslCT/MR4vVjc/thRlCmGfG8rx/g57JO5Y6F7K7hqpwlzk6q6hwLOcV395sOBcmH2p4WCwKcrVxRMgwh5L0JM9TQB9WrISXfrEbqDlF3wk/eszvP2vM1h0xzEkPs0QJqvK3U=
+	t=1742594749; cv=none; b=NxJEIwWkLhvYn6/sAi526RFlaiW4f4dQp0XUisdny9imHVfDyLFwSYouf0usG3yDBdzdobhtWI1luysQ3KL/9rvwp0nJQgVUgiDWDOn/iis2MGbeeTM5n6Mcrdi7HA2BZpiGHFwpsuWO5g9q1keCLFcz6oqsLdL30FsD//TgV54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742593723; c=relaxed/simple;
-	bh=6mk8O9eU4JBqV3sDPb+BhAhyW+xE/8Ms1o6FontpNk0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LE1W51YbZllT9sQweHUQOVsmAMg4RGE4QEMyo2gqQ1IW6zAsIUDDUjY6YXEQvZY9sldVNmu6qFiSeEm1HS7QnBa4dgxrevSbQDjCO5JFGKSvdM49i/vAf6MQygqm+CZaDlMM9v5D/cLOhcvz3ifEeck0u9DdJLnHt9QrOXbA+V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IEMhb+VN; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742594749; c=relaxed/simple;
+	bh=GPWoxH3npdvl8WN2CEBUpA4DabBGBvrnSd1ljgk0us4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YbYuVt+LzPd6oPev58cqj93XIOIXI46LcWZrQvEjQyXR/sqBvfaTeNoNUkTxd8naWxORLBVua5SpxoOuexmiN3k6dbF5Ach84QhDWDO2S4OB6TCvam0vqEuIIA2suhMehBsPCiPRNAF3k/rzjCBnsjw+RnqE57bSIBo4mRIgF8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--changyuanl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QJdncY3e; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--changyuanl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IEMhb+VN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742593722; x=1774129722;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6mk8O9eU4JBqV3sDPb+BhAhyW+xE/8Ms1o6FontpNk0=;
-  b=IEMhb+VNGsVCkRiSZeq47mVOIePeZt1cOeUgxOY+4vyIilwGIDL+ihnL
-   fxDqtindsjbZ+4S3dRMlx/66QV3sCNdvRi5Tf2Nua1wN8rBC0I27jUkZd
-   eigQU76UQKt4GwRWj10CA7W2q98TE8+oAmorWUKyo1Wbw+dDdT++OVadz
-   KmiKjvXV+R4WcAVg0Lif9ZgWKQIoTQ6yQxjqiUlyycoiLLVPdmvqhRQmX
-   syM8RyoE/5OVI0HsN/BAQs6u6PXhMtPj2M60MiKutVsE7+ULhmHz2r19u
-   +0BPPvHyr2CBwncYxRNGsVt4I6MgBxyzV/POElZC+lpEI+Ik6FgbqljIJ
-   Q==;
-X-CSE-ConnectionGUID: vK8GS7CMQqmeWpzimsYA0Q==
-X-CSE-MsgGUID: SJvetHztT3K+OSpQarvznQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="54866590"
-X-IronPort-AV: E=Sophos;i="6.14,266,1736841600"; 
-   d="scan'208";a="54866590"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 14:48:40 -0700
-X-CSE-ConnectionGUID: /wLrNCUOQ2SgHy/NTvIK6A==
-X-CSE-MsgGUID: zK42QOquRfGgwK35IBT04Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,266,1736841600"; 
-   d="scan'208";a="124289750"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 21 Mar 2025 14:48:38 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tvkEG-0001i5-1b;
-	Fri, 21 Mar 2025 21:48:36 +0000
-Date: Sat, 22 Mar 2025 05:48:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [congwang:net 13/15] ld.lld: error: relocation R_PPC_ADDR16_HA
- cannot be used against symbol 'cur_cpu_spec'; recompile with -fPIC
-Message-ID: <202503220548.ryFEa8Fa-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QJdncY3e"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-225429696a9so58647945ad.1
+        for <llvm@lists.linux.dev>; Fri, 21 Mar 2025 15:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742594747; x=1743199547; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZeooS45TQglyMMDVF6rkeuWL2/GQyCi5QA5y17By+RA=;
+        b=QJdncY3e68KM1LUCxywp7cOoCgL3jYW7VmhUihaPheiBAziUuuRiD1VoPx61Djm28a
+         eWD1v7U8xPVd3Pw8EHuHgkY7XV/VMlsY+TYwKMgaxeKYcoYeMOpdMdvBAOmxmSIpJgdV
+         wp+xDswya6LCG5dymQnHef2dEOStFiEkvmcDbsE9msnt5Hc4me7wIjD7IFqqgUJKlwBt
+         p/+0OFoxt5RPxSvtMAAd5YkIfOi+yPEWwCT52zLwHZxCshLLCkkg2BIMSoqr2AFOQIQz
+         Ewzp75MuQpu1SImemEJw8V3IByVr+kgwWzJJPnCcYdkQMsOQg7bi2u0qjvVk7Vl0R8a5
+         6P9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742594747; x=1743199547;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZeooS45TQglyMMDVF6rkeuWL2/GQyCi5QA5y17By+RA=;
+        b=rOTYwOcQ8dpdzB1kIwecdoctkdnY4zG1oOBgKDPcHaWHp9Jzu7xY2dIOItgiThALNN
+         sbswaAyPGNdDzhIHhyxocglLk59hZ70AtDQEsIN+HrjLLNh3ZrRIZRVnZ2k3oZ7UmudJ
+         QcQjxBsteTk7oBrbTVXIrzcRRRpoKqsFYSYjRwg6VYwzLxN6waRfpy1Xi4UO5wlnCIOw
+         gCe88y+yPcPt7FDESkK8XG56jRSejljtXUQM9NtjSVgDC426kJdYj3ZVRYXckbqUroCS
+         4gEcsNn6PvoYp6qxvLdwIxyNf7Em2btzu/I6GG1aSXyD2Mi8nv5PLBgsI+iFHS//ajLI
+         DBiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXzs8k3uFuqsP+QQdQOPfBhE64xGI4E5Bv1VqfGdLzZGBuLm/KH35RB1sx+sTVHN4opmaY@lists.linux.dev
+X-Gm-Message-State: AOJu0YzBOVDOXVBv9wag0x5HcKviJ1nBpwUphcvxdK84DcRGGg9UsyeZ
+	mfLwclon7gNIpToGlOqI75H83+ZyPQUIMsadcXtfx37XC615lBpJK/09hFaWAgDImZS8tf+zNFN
+	TWb59sZHTIDFkzIzpnw==
+X-Google-Smtp-Source: AGHT+IH8oUHOd8cDU3Sg4aTfcA9eCg006OOlCicgX9+Yz8rj7I1UgXvDgxqTd/osjeg/tlyBTgtyuVc/MG3MozO3
+X-Received: from plbbf3.prod.google.com ([2002:a17:902:b903:b0:224:5a4:9be2])
+ (user=changyuanl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f643:b0:224:2667:8115 with SMTP id d9443c01a7336-22780e307eamr102834375ad.48.1742594747216;
+ Fri, 21 Mar 2025 15:05:47 -0700 (PDT)
+Date: Fri, 21 Mar 2025 15:05:37 -0700
+In-Reply-To: <CAGG=3QUEY_Gmu-6K7rk6-y8AB7HVuV2V9sP5K3h379teAZXyHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+References: <CAGG=3QUEY_Gmu-6K7rk6-y8AB7HVuV2V9sP5K3h379teAZXyHQ@mail.gmail.com>
+X-Mailer: git-send-email 2.49.0.395.g12beb8f557-goog
+Message-ID: <20250321220537.507917-1-changyuanl@google.com>
+Subject: Re: [PATCH] clang-format: add for_each macros from libfdt
+From: Changyuan Lyu <changyuanl@google.com>
+To: morbo@google.com
+Cc: changyuanl@google.com, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, nishimura@mxp.nes.nec.co.jp, 
+	ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://github.com/congwang/linux.git net
-head:   159606d3b1bf9dcaecb690f6f3032ef6a091a7eb
-commit: 6985f9f0bf76ac3fc6d025a19f0224b636c00823 [13/15] selftests/tc-testing: Add a test case for FQ_CODEL with HFSC parent
-config: powerpc-randconfig-001-20250322 (https://download.01.org/0day-ci/archive/20250322/202503220548.ryFEa8Fa-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250322/202503220548.ryFEa8Fa-lkp@intel.com/reproduce)
+Hi Bill,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503220548.ryFEa8Fa-lkp@intel.com/
+On Fri, Mar 21, 2025 at 12:28:44 -0700, Bill Wendling <morbo@google.com> wrote:
+> On Thu, Mar 20, 2025 at 4:59=E2=80=AFPM Changyuan Lyu <changyuanl@google.co=
+> m> wrote:
+> >
+> > Add two for_each macros from scripts/dtc/libfdt/libfdt.h.
+> >
+> > Signed-off-by: Changyuan Lyu <changyuanl@google.com>
+> > ---
+> >  .clang-format | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/.clang-format b/.clang-format
+> > index fe1aa1a30d40..4decda7474e1 100644
+> > --- a/.clang-format
+> > +++ b/.clang-format
+> > @@ -210,6 +210,8 @@ ForEachMacros:
+> >    - 'evlist__for_each_entry_from'
+> >    - 'evlist__for_each_entry_reverse'
+> >    - 'evlist__for_each_entry_safe'
+> > +  - 'fdt_for_each_property_offset'
+> > +  - 'fdt_for_each_subnode'
+>
+> Could you alphabetize these please?
+>
+> >    - 'flow_action_for_each'
+> >    - 'for_each_acpi_consumer_dev'
+> >    - 'for_each_acpi_dev_match'
+> > --
+> > 2.49.0.395.g12beb8f557-goog
+> >
 
-All errors (new ones prefixed by >>):
+Thanks for taking a look, but I think the list `ForEachMacros`
+is already sorted alphabetically.
+Am I missing anything?
 
->> ld.lld: error: relocation R_PPC_ADDR16_HA cannot be used against symbol 'cur_cpu_spec'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/powerpc/kernel/cputable.o)
-   >>> referenced by cputable.c:82 (arch/powerpc/kernel/cputable.c:82)
-   >>>               arch/powerpc/kernel/cputable.o:(setup_cpu_spec) in archive vmlinux.a
---
->> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'cur_cpu_spec'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/powerpc/kernel/cputable.o)
-   >>> referenced by cputable.c:82 (arch/powerpc/kernel/cputable.c:82)
-   >>>               arch/powerpc/kernel/cputable.o:(setup_cpu_spec) in archive vmlinux.a
---
->> ld.lld: error: relocation R_PPC_ADDR16_HA cannot be used against symbol 'cur_cpu_spec'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/powerpc/kernel/cputable.o)
-   >>> referenced by cputable.c:44 (arch/powerpc/kernel/cputable.c:44)
-   >>>               arch/powerpc/kernel/cputable.o:(set_cur_cpu_spec) in archive vmlinux.a
---
->> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'cur_cpu_spec'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/powerpc/kernel/cputable.o)
-   >>> referenced by cputable.c:44 (arch/powerpc/kernel/cputable.c:44)
-   >>>               arch/powerpc/kernel/cputable.o:(set_cur_cpu_spec) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best,
+Changyuan
