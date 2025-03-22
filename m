@@ -1,131 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140DB8BF8;
-	Sat, 22 Mar 2025 21:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3329A1DF24A;
+	Sat, 22 Mar 2025 23:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742679797; cv=none; b=KqS4/bmh8Axed1XSEg62dCrxER8Kh+AZSQ52NpzBE/5fug3ZEAHQGo3nAmtKaBx2YXxM2ns6Wy9z162EEKelCAGfsGyYq6fpWfVsJqyb1/s2W3gG2qmNME/i1s0LbNSbjSQtr4riewU6vmy0XOb85lxjQ2wSFWmuPkNfvPONtW8=
+	t=1742686031; cv=none; b=Nazi8l1/ZevI2ZuGulwIG1Y9qwvYVsM6f2NuUyZNZuBfZjLawxgCpwymL7zUlBKKlFVNf55ccMxi1yVYPcisXxlT7Ee8bITZRdCAW5gkJ3r0i5+RpLoXCsGeV2IYr70NKhcLj/HAT7/DTCg0ddpTWkCuw09Rx5nLrG/3IXvw3gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742679797; c=relaxed/simple;
-	bh=5bCoGZGcAjvnQ2yuOtHVcGZyivQ/TivOd5Z/SZ0HmkQ=;
+	s=arc-20240116; t=1742686031; c=relaxed/simple;
+	bh=Pc4EaFka8WBeGBfYm0TdQucMC1+YmV4+nK+iUH4S1XA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=auVkzcxUc5sIjMNsMeWaQF1UagCGNXJpBKeiA81gAbid9LVY/jxD5XSnR+qz3sF1setr5Ei06Qc6nR8jyx0wpeCHMOimglyJQTYssNDx3OrOGe0UCXCCcK/kM5fjv0vbbMqBDwe8KfSWxgxiXbRPBJJUw2ZuHSsu673qSDEk7dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9nNlh4P; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=f8x+nD93jVl2xOG97s1yKbJZem/H8fBVhdQYxBnnKFLRlNHK3i3L1HI62onrcACfyVE6i+zejeGH6RU9BX89Wc9VXtBGXcTyhrRcynpncQv8AjAgb9QsXoQ/UPWm6HLUy61clTP5bXinb/NTQuB8nqr/FFkgIMlBIEap43A0+5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kqg3ts3A; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9nNlh4P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3D4C4CEDD;
-	Sat, 22 Mar 2025 21:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742679796;
-	bh=5bCoGZGcAjvnQ2yuOtHVcGZyivQ/TivOd5Z/SZ0HmkQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U9nNlh4PT1t55mkfZ07SkYx3a9oZkB0wlBt/BcqXQ5g5mbU7NfQDLBsIBuBkOy8hz
-	 Ax7tPzyD3i9MeloGdh4FgfERxIDBnvXGLupANF/THnDRDfUrcTTQkhwo+ys16y9/Ub
-	 NgxZzRuaJB59wqs0OhIaLRZnD3YYBCJRQRc70bCA0r6Gp4EroQ9AMmhQwsOoRPuzCR
-	 BDcNMlP/8h8gKE9/KpQRqCKufspTm2LpmtVyn0ZJSVCJZSJ5CO58qSRMa74rW5AfwB
-	 B5soMw2usoooapZZ7PHYIbjUbur2Kox2JIxSUFE7u0Hi6Mp0aP0HvOWVVtvqCOVmow
-	 J08+B4P2DUHVQ==
-Date: Sat, 22 Mar 2025 23:43:12 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
-	roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
-Subject: Re: [RFC PATCH security-next 0/4] Introducing Hornet LSM
-Message-ID: <Z98u8BAMJKqUiojn@kernel.org>
-References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
- <Z97xvUul1ObkmulE@kernel.org>
- <CAHC9VhQ4a4Dinq+WLxM88KqJF8ruQ_rOdQx7UNrKcJqTpGGG+w@mail.gmail.com>
- <CAHC9VhSfPz4fYU-YxxQ++3OP_hqtiD=J9fJXyUHmcj8NHd1pZQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kqg3ts3A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742686030; x=1774222030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pc4EaFka8WBeGBfYm0TdQucMC1+YmV4+nK+iUH4S1XA=;
+  b=Kqg3ts3AWZzzAzDGh4qMGFv5nRL4LZ0xiKV4n/GW9q/dQu4cmy8RjcvH
+   pkfHZT5ky03lfc5Vsbddzn2uPUdSq+yQ0uSltSiga+fljfjrWQ2+XHjBA
+   +vTrCiIiJt+0fwkTEuxqQ/K/vvfgGtO4zYwvN5YkACCV4Fm6mIBQKXxtH
+   xAyU2HhYFio5XOYc0qiWZ9L3MjrgfU8PrjBuoFN4n3j+2b0TbOW3kEs+9
+   uCP8rTNMl6mZXlaiv3EBgMHsI81Cl6DfKjXDmdRywpfLho0Gr0IewG/LO
+   U4XsZpKOs937irN50Pnzbjrbo0TO5CtqTbjWWMT2+y5+WfQUONQSkNGPw
+   Q==;
+X-CSE-ConnectionGUID: dkAnSjweTdu5N43g2ET3iQ==
+X-CSE-MsgGUID: Eu5ERlf2Ti2A9sJVAJSdsg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11381"; a="47698295"
+X-IronPort-AV: E=Sophos;i="6.14,268,1736841600"; 
+   d="scan'208";a="47698295"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2025 16:27:09 -0700
+X-CSE-ConnectionGUID: Y78lcGebR4G74DzfyKPtTA==
+X-CSE-MsgGUID: OAAblMt3QSaG9/0EZzoMxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,268,1736841600"; 
+   d="scan'208";a="128925105"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 22 Mar 2025 16:27:07 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tw8F6-0002Rx-1t;
+	Sat, 22 Mar 2025 23:27:04 +0000
+Date: Sun, 23 Mar 2025 07:26:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julian Stecklina via B4 Relay <devnull+julian.stecklina.cyberus-technology.de@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Gao Xiang <xiang@kernel.org>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	Julian Stecklina <julian.stecklina@cyberus-technology.de>
+Subject: Re: [PATCH v2 4/9] fs: minix: register an initrd fs detector
+Message-ID: <202503230754.YpVap9pi-lkp@intel.com>
+References: <20250322-initrd-erofs-v2-4-d66ee4a2c756@cyberus-technology.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhSfPz4fYU-YxxQ++3OP_hqtiD=J9fJXyUHmcj8NHd1pZQ@mail.gmail.com>
+In-Reply-To: <20250322-initrd-erofs-v2-4-d66ee4a2c756@cyberus-technology.de>
 
-On Sat, Mar 22, 2025 at 04:48:14PM -0400, Paul Moore wrote:
-> On Sat, Mar 22, 2025 at 4:44 PM Paul Moore <paul@paul-moore.com> wrote:
-> >
-> > On Sat, Mar 22, 2025 at 1:22 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > On Fri, Mar 21, 2025 at 09:45:02AM -0700, Blaise Boscaccy wrote:
-> > > > This patch series introduces the Hornet LSM.
-> > > >
-> > > > Hornet takes a simple approach to light-skeleton-based eBPF signature
-> > >
-> > > Can you define "light-skeleton-based" before using the term.
-> > >
-> > > This is the first time in my life when I hear about it.
-> >
-> > I was in the same situation a few months ago when I first heard about it :)
-> >
-> > Blaise can surely provide a much better answer that what I'm about to
-> > write, but since Blaise is going to be at LSFMMBPF this coming week I
-> > suspect he might not have a lot of time to respond to email in the
-> > next few days so I thought I would do my best to try and answer :)
-> >
-> > An eBPF "light skeleton" is basically a BPF loader program and while
-> > I'm sure there are several uses for a light skeleton, or lskel for
-> > brevity, the single use case that we are interested in here, and the
-> > one that Hornet deals with, is the idea of using a lskel to enable
-> > signature verification of BPF programs as it seems to be the one way
-> > that has been deemed acceptable by the BPF maintainers.
-> >
-> > Once again, skipping over a lot of details, the basic idea is that you
-> > take your original BPF program (A), feed it into a BPF userspace tool
-> > to encapsulate the original program A into a BPF map and generate a
-> > corresponding light skeleton BPF program (B), and then finally sign
-> > the resulting binary containing the lskel program (B) and map
-> > corresponding to the original program A.
-> 
-> Forgive me, I mixed up my "A" and "B" above :/
-> 
-> > At runtime, the lskel binary
-> > is loaded into the kernel, and if Hornet is enabled, the signature of
-> > both the lskel program A and original program B is verified.
-> 
-> ... and I did again here
-> 
-> > If the
-> > signature verification passes, lskel program A performs the necessary
-> > BPF CO-RE transforms on BPF program A stored in the BPF map and then
-> > attempts to load the original BPF program B, all from within the
-> > kernel, and with the map frozen to prevent tampering from userspace.
-> 
-> ... and once more here because why not? :)
+Hi Julian,
 
-No worries I was able to decipher this :-)
+kernel test robot noticed the following build errors:
 
-> 
-> > Hopefully that helps fill in some gaps until someone more
-> > knowledgeable can provide a better answer and/or correct any mistakes
-> > in my explanation above ;)
-> 
-> -- 
-> paul-moore.com
+[auto build test ERROR on 88d324e69ea9f3ae1c1905ea75d717c08bdb8e15]
 
-BR, Jarkko
+url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Stecklina-via-B4-Relay/initrd-remove-ASCII-spinner/20250323-043649
+base:   88d324e69ea9f3ae1c1905ea75d717c08bdb8e15
+patch link:    https://lore.kernel.org/r/20250322-initrd-erofs-v2-4-d66ee4a2c756%40cyberus-technology.de
+patch subject: [PATCH v2 4/9] fs: minix: register an initrd fs detector
+config: um-randconfig-002-20250323 (https://download.01.org/0day-ci/archive/20250323/202503230754.YpVap9pi-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250323/202503230754.YpVap9pi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503230754.YpVap9pi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/minix/initrd.c:23:34: error: too many arguments provided to function-like macro invocation
+      23 | initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
+         |                                  ^
+   include/linux/initrd.h:63:9: note: macro 'initrd_fs_detect' defined here
+      63 | #define initrd_fs_detect(detectfn)
+         |         ^
+>> fs/minix/initrd.c:23:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+      23 | initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
+         | ^
+         | int
+   2 errors generated.
+
+
+vim +23 fs/minix/initrd.c
+
+    22	
+  > 23	initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
