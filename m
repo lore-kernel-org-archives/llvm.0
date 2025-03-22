@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3329A1DF24A;
-	Sat, 22 Mar 2025 23:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D4E1EBFE4;
+	Sat, 22 Mar 2025 23:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742686031; cv=none; b=Nazi8l1/ZevI2ZuGulwIG1Y9qwvYVsM6f2NuUyZNZuBfZjLawxgCpwymL7zUlBKKlFVNf55ccMxi1yVYPcisXxlT7Ee8bITZRdCAW5gkJ3r0i5+RpLoXCsGeV2IYr70NKhcLj/HAT7/DTCg0ddpTWkCuw09Rx5nLrG/3IXvw3gE=
+	t=1742686638; cv=none; b=NhnQuNdFrkiobRz5L0LYT6M5BmjFH+kt4XySQziU967wS0VDVqgYHqw4uEfBWON3/ZMGNkmoqfQQajWQJCP3FIFGSA2dbDfcXniflSc2wV9CU/Px7pNXSZse6/eZ9K+0s6YRcS4LcHD8ZZmhulLVqjWdzHS3eNC5VNhBG9SbVEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742686031; c=relaxed/simple;
-	bh=Pc4EaFka8WBeGBfYm0TdQucMC1+YmV4+nK+iUH4S1XA=;
+	s=arc-20240116; t=1742686638; c=relaxed/simple;
+	bh=/fL38PohfZNzoYeO4e3wD60/qTiXOlKjNyMjNKu+IRc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f8x+nD93jVl2xOG97s1yKbJZem/H8fBVhdQYxBnnKFLRlNHK3i3L1HI62onrcACfyVE6i+zejeGH6RU9BX89Wc9VXtBGXcTyhrRcynpncQv8AjAgb9QsXoQ/UPWm6HLUy61clTP5bXinb/NTQuB8nqr/FFkgIMlBIEap43A0+5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kqg3ts3A; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=P8xzqmP9/BhcsiH/JJUgjaHjvv5VlNzI2lO74knovG94MI+xsbUfIczYUQL7wBr/QhN7YKIgD8sI9pg7Ux1O55mDARYJufFLK3seZYHQcdOdVP8sijVYN7mJ6Z669I0EpB0YG7y5lFiMdLFWklu1MZf1RkXFjVdu87pvwA0HLkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IGbs2Tlk; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kqg3ts3A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IGbs2Tlk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742686030; x=1774222030;
+  t=1742686636; x=1774222636;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Pc4EaFka8WBeGBfYm0TdQucMC1+YmV4+nK+iUH4S1XA=;
-  b=Kqg3ts3AWZzzAzDGh4qMGFv5nRL4LZ0xiKV4n/GW9q/dQu4cmy8RjcvH
-   pkfHZT5ky03lfc5Vsbddzn2uPUdSq+yQ0uSltSiga+fljfjrWQ2+XHjBA
-   +vTrCiIiJt+0fwkTEuxqQ/K/vvfgGtO4zYwvN5YkACCV4Fm6mIBQKXxtH
-   xAyU2HhYFio5XOYc0qiWZ9L3MjrgfU8PrjBuoFN4n3j+2b0TbOW3kEs+9
-   uCP8rTNMl6mZXlaiv3EBgMHsI81Cl6DfKjXDmdRywpfLho0Gr0IewG/LO
-   U4XsZpKOs937irN50Pnzbjrbo0TO5CtqTbjWWMT2+y5+WfQUONQSkNGPw
+  bh=/fL38PohfZNzoYeO4e3wD60/qTiXOlKjNyMjNKu+IRc=;
+  b=IGbs2Tlk3Y5kngOGHK+DRtMRydCzJ7gAAQDRbgI4KBdifMEgXIF4IiZM
+   vJ+X9fvlUgMvUXKGoY/vO/4quD2+ByDwglS/zsZZM+z+egSg3bZNiY1uJ
+   lWsFD/VVltjHc4/VjXOrJZzUzt1A7tQz7XON1Ltqo4JknZEjRHg51BquP
+   fo1iKwkqp/3gWufL9Aoc+qHVea6IOVebbCmtKQ/eng+diQ7pYZ6AmyjTu
+   zmBfgcOPuhMWTHqhYb3S5C5tYfvl2Rj/oLD2NcjHudTeoaiyUvCaBOV3I
+   RSqyj3QbuWgXypMn/fp0fcs5dRHSnpGFcnU4AOP4stDZ75G+Z0wgVcYh1
    Q==;
-X-CSE-ConnectionGUID: dkAnSjweTdu5N43g2ET3iQ==
-X-CSE-MsgGUID: Eu5ERlf2Ti2A9sJVAJSdsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11381"; a="47698295"
+X-CSE-ConnectionGUID: xBI7AumrSAqbP/enE4bENA==
+X-CSE-MsgGUID: 2PvzA+i7QqelDgWqlXBlww==
+X-IronPort-AV: E=McAfee;i="6700,10204,11381"; a="54553321"
 X-IronPort-AV: E=Sophos;i="6.14,268,1736841600"; 
-   d="scan'208";a="47698295"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2025 16:27:09 -0700
-X-CSE-ConnectionGUID: Y78lcGebR4G74DzfyKPtTA==
-X-CSE-MsgGUID: OAAblMt3QSaG9/0EZzoMxQ==
+   d="scan'208";a="54553321"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2025 16:37:11 -0700
+X-CSE-ConnectionGUID: Q4gcij9bRf6YlCYCu1aUrA==
+X-CSE-MsgGUID: T10ovpUaTTKIen4JafwWaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,268,1736841600"; 
-   d="scan'208";a="128925105"
+   d="scan'208";a="128530006"
 Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 22 Mar 2025 16:27:07 -0700
+  by orviesa003.jf.intel.com with ESMTP; 22 Mar 2025 16:37:08 -0700
 Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tw8F6-0002Rx-1t;
-	Sat, 22 Mar 2025 23:27:04 +0000
-Date: Sun, 23 Mar 2025 07:26:46 +0800
+	id 1tw8On-0002SR-1u;
+	Sat, 22 Mar 2025 23:37:05 +0000
+Date: Sun, 23 Mar 2025 07:36:57 +0800
 From: kernel test robot <lkp@intel.com>
 To: Julian Stecklina via B4 Relay <devnull+julian.stecklina.cyberus-technology.de@kernel.org>,
 	Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
@@ -58,9 +58,9 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Gao Xiang <xiang@kernel.org>, linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-erofs@lists.ozlabs.org,
 	Julian Stecklina <julian.stecklina@cyberus-technology.de>
-Subject: Re: [PATCH v2 4/9] fs: minix: register an initrd fs detector
-Message-ID: <202503230754.YpVap9pi-lkp@intel.com>
-References: <20250322-initrd-erofs-v2-4-d66ee4a2c756@cyberus-technology.de>
+Subject: Re: [PATCH v2 8/9] fs: ext2, ext4: register an initrd fs detector
+Message-ID: <202503230718.5DYAbNZO-lkp@intel.com>
+References: <20250322-initrd-erofs-v2-8-d66ee4a2c756@cyberus-technology.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250322-initrd-erofs-v2-4-d66ee4a2c756@cyberus-technology.de>
+In-Reply-To: <20250322-initrd-erofs-v2-8-d66ee4a2c756@cyberus-technology.de>
 
 Hi Julian,
 
@@ -79,36 +79,36 @@ kernel test robot noticed the following build errors:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Stecklina-via-B4-Relay/initrd-remove-ASCII-spinner/20250323-043649
 base:   88d324e69ea9f3ae1c1905ea75d717c08bdb8e15
-patch link:    https://lore.kernel.org/r/20250322-initrd-erofs-v2-4-d66ee4a2c756%40cyberus-technology.de
-patch subject: [PATCH v2 4/9] fs: minix: register an initrd fs detector
-config: um-randconfig-002-20250323 (https://download.01.org/0day-ci/archive/20250323/202503230754.YpVap9pi-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250323/202503230754.YpVap9pi-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20250322-initrd-erofs-v2-8-d66ee4a2c756%40cyberus-technology.de
+patch subject: [PATCH v2 8/9] fs: ext2, ext4: register an initrd fs detector
+config: i386-buildonly-randconfig-001-20250323 (https://download.01.org/0day-ci/archive/20250323/202503230718.5DYAbNZO-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250323/202503230718.5DYAbNZO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503230754.YpVap9pi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503230718.5DYAbNZO-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/minix/initrd.c:23:34: error: too many arguments provided to function-like macro invocation
-      23 | initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
-         |                                  ^
+>> fs/ext2/initrd.c:27:33: error: too many arguments provided to function-like macro invocation
+      27 | initrd_fs_detect(detect_ext2fs, BLOCK_SIZE);
+         |                                 ^
    include/linux/initrd.h:63:9: note: macro 'initrd_fs_detect' defined here
       63 | #define initrd_fs_detect(detectfn)
          |         ^
->> fs/minix/initrd.c:23:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-      23 | initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
+>> fs/ext2/initrd.c:27:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+      27 | initrd_fs_detect(detect_ext2fs, BLOCK_SIZE);
          | ^
          | int
    2 errors generated.
 
 
-vim +23 fs/minix/initrd.c
+vim +27 fs/ext2/initrd.c
 
-    22	
-  > 23	initrd_fs_detect(detect_minixfs, BLOCK_SIZE);
+    26	
+  > 27	initrd_fs_detect(detect_ext2fs, BLOCK_SIZE);
 
 -- 
 0-DAY CI Kernel Test Service
