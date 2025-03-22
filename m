@@ -1,126 +1,97 @@
-Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CC11F4603
-	for <llvm@lists.linux.dev>; Sat, 22 Mar 2025 10:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A32642AB0;
+	Sat, 22 Mar 2025 17:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742638150; cv=none; b=Xv5NJ/MfVKU0lJ+ozydIFboXFDN9T5x4OdtuFG2wh8yrpMPO1MkuaWwlmXXvRQP52TyaDY9+q1x+G6SXF7CjazBHxw6zd5ftH1x04QAns1UxwJxZ/hNm3iaho1M+7xdFbSh5oV3e12R4ekRIcAHqJc2mmxKbY6t9RUf+/Of8YNM=
+	t=1742664130; cv=none; b=ANGfP2Xo4Coo3y015aLSn2OXfW/xx5xT6DpFJeW83fOu0HL31AlkTbDRq/dmaO2limBdrRputwz7TizBuMTvO04+zp2Fq2e3AjAfRxbStBlIQYsOr6FgvRXuwQV6icm2CGoFqdb++CvR9dwJ8qlidr1q/eevbdE0UKjAWyzv6iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742638150; c=relaxed/simple;
-	bh=Hdv42PI+SQv5JUjnRTSo8idtKkWDywJe2XkqlGKHXbk=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h1z8UkmyJhPqzjsfZn2JuCkdbyXbuZJfrxEVB2JmHC7F9q0tK5IH90y+2FzhljjzfAt3aJUTlVYi5H8NS9iB9vgGVb/Ap7lfMOBmEdPapgznWNc067MjIN8KsZsMyrTuqiN4v45pFg+qoOEY9Fv5wrAQVkT9Li7aAeii9aJ2M6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=As+i6puU; arc=none smtp.client-ip=79.135.106.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1742664130; c=relaxed/simple;
+	bh=AEjZNS6nIZ7hhnu6lMixBJVfFla5acmxyBZrFBrcxC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I573FbOxjq8yTwy+kIMwRIbgejQuVwt0nQQOIcLP+o+lr459GHW72khHRlKq/ke0fhY4JPd76f2FuTLQbPRDpD1Pl1sKN7KY3JaPVXPRIdzkSCyNdLS6vxQJd3HBVe43hMH6xsVD8ByAP18uc8fFUhRS3g3NmjF4V5hOJCpeO+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+mw4Xjm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="As+i6puU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1742638138; x=1742897338;
-	bh=ZFFKz10EMacfDB3xAKr3jPI1Qcnx3CwnTAUEEkeCMJo=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=As+i6puUOChqNYwjfuQbipHqiHnACG+UwFrA+edTl42+0UFiXWTzD4tcgdaGwMqLU
-	 8cu8mBWPDyKg4fu5zvg8aLH9COXNyWd7D2vEiQU5hr0UKwsuFq9qAjD1z8N1sUvZ6p
-	 sRYKDRiub1ZX2qHx1VV7djzTwPKnP1N8Ha6VtRrOMJ9PUiapxHj/T/tqxr04TRPBfk
-	 MJZt0KwVBayBmwVaQCOuqnh1ZTGu5+gzqYjSi/3dj/+jto6XCYlfFAw+CkNg4fqrfT
-	 44rcKBAZomTosmwdCDQhkwJXCf0iOK8jidYdlPUkFKq76bnI9PmW2LRcHX7dxTHuRe
-	 V5zRzmShxw5+g==
-Date: Sat, 22 Mar 2025 10:08:53 +0000
-To: kernel test robot <lkp@intel.com>, Danilo Krummrich <dakr@kernel.org>, bhelgaas@google.com, gregkh@linuxfoundation.org, rafael@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-pci@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::Device
-Message-ID: <D8MPNRAYNZIS.T7U3XLKHN523@proton.me>
-In-Reply-To: <202503220040.TDePlxma-lkp@intel.com>
-References: <20250320222823.16509-4-dakr@kernel.org> <202503220040.TDePlxma-lkp@intel.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: dfc469007ca1960c05e3b75300ee8c8b99f6f5a4
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+mw4Xjm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEE1C4CEEC;
+	Sat, 22 Mar 2025 17:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742664129;
+	bh=AEjZNS6nIZ7hhnu6lMixBJVfFla5acmxyBZrFBrcxC0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e+mw4XjmovYmbMRL07ViC5rSmSoJGh2BR60s3oVNSJJWnUcLgEzcSRz2JM0+87K7I
+	 7e/80pd+9FyNxjgz/cfkfgxuTxhbVBKvHrUy9844htcl1gURvy5wFDkNlAXP3Zw/25
+	 VGEiV84C6cpsId0vccpO8ma07XRw54XmqHyF++rutKalQC8ZsBnRX87iun7CBu5N1s
+	 kMCj7BWr5/1b2a4Fo2RjzFH3TtOnNkNLde8f6hOsyM0XQ5gtlf7IRtfC5HCiwwQ9Rs
+	 5gB5E7xCHyFXrlGjgAd6bBefhws1dkXzWSvUu1yNvY+dzW5Aa2pHxLebH8bl2DJKtk
+	 C+vTe5Vrg1Pbg==
+Date: Sat, 22 Mar 2025 19:22:05 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jan Stancek <jstancek@redhat.com>, Neal Gompa <neal@gompa.dev>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, nkapron@google.com, teknoraver@meta.com,
+	roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH security-next 0/4] Introducing Hornet LSM
+Message-ID: <Z97xvUul1ObkmulE@kernel.org>
+References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
 
-On Fri Mar 21, 2025 at 5:56 PM CET, kernel test robot wrote:
-> Hi Danilo,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on 51d0de7596a458096756c895cfed6bc4a7ecac10]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/r=
-ust-device-implement-Device-parent/20250321-063101
-> base:   51d0de7596a458096756c895cfed6bc4a7ecac10
-> patch link:    https://lore.kernel.org/r/20250320222823.16509-4-dakr%40ke=
-rnel.org
-> patch subject: [PATCH v2 3/4] rust: pci: impl TryFrom<&Device> for &pci::=
-Device
-> config: x86_64-buildonly-randconfig-005-20250321 (https://download.01.org=
-/0day-ci/archive/20250322/202503220040.TDePlxma-lkp@intel.com/config)
-> compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c=
-2d9b7e4de40d0804dd374721e6411c27d1d1)
-> rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20250322/202503220040.TDePlxma-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202503220040.TDePlxma-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    ***
->    *** Rust bindings generator 'bindgen' < 0.69.5 together with libclang =
->=3D 19.1
->    *** may not work due to a bug (https://github.com/rust-lang/rust-bindg=
-en/pull/2824),
->    *** unless patched (like Debian's).
->    ***   Your bindgen version:  0.65.1
->    ***   Your libclang version: 20.1.1
->    ***
->    ***
->    *** Please see Documentation/rust/quick-start.rst for details
->    *** on how to set up the Rust support.
->    ***
->>> error[E0133]: use of extern static is unsafe and requires unsafe block
->    --> rust/kernel/pci.rs:473:43
->    |
->    473 |         if dev.bus_type_raw() !=3D addr_of!(bindings::pci_bus_ty=
-pe) {
->    |                                           ^^^^^^^^^^^^^^^^^^^^^^ use=
- of extern static
->    |
->    =3D note: extern statics are not controlled by the Rust type system: i=
-nvalid data, aliasing violations or data races will cause undefined behavio=
-r
+On Fri, Mar 21, 2025 at 09:45:02AM -0700, Blaise Boscaccy wrote:
+> This patch series introduces the Hornet LSM.
+> 
+> Hornet takes a simple approach to light-skeleton-based eBPF signature
 
-This is just a minor annoyance with these error reports, but I would
-very much like the error to have the correct indentation:
+Can you define "light-skeleton-based" before using the term.
 
->> error[E0133]: use of extern static is unsafe and requires unsafe block
-    --> rust/kernel/pci.rs:473:43
-        |
-    473 |         if dev.bus_type_raw() !=3D addr_of!(bindings::pci_bus_typ=
-e) {
-        |                                           ^^^^^^^^^^^^^^^^^^^^^^ =
-use of extern static
-        |
+This is the first time in my life when I hear about it.
 
-Would that be possible to fix? That way the `^^^^` align with the item
-they are referencing.
+> verification. Signature data can be easily generated for the binary
 
-Otherwise they are very helpful!
+s/easily//
 
----
-Cheers,
-Benno
+Useless word having no measure.
 
+> data that is generated via bpftool gen -L. This signature can be
+
+I have no idea what that command does.
+
+"Signature data can be generated for the binary data as follows:
+
+bpftool gen -L
+
+<explanation>"
+
+Here you'd need to answer to couple of unknowns:
+
+1. What is in exact terms "signature data"?
+2. What does "bpftool gen -L" do?
+
+This feedback maps to other examples too in the cover letter.
+
+BR, Jarkko 
