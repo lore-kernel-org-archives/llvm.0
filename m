@@ -1,157 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C643273FD;
-	Sun, 23 Mar 2025 10:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8472E338A
+	for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 10:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742726640; cv=none; b=F0fP2jaXJ2gym0o9sQ8ADvfx1xViDy+RGy/EBxUaURVujjG+Ixnfm45j03SBuYxopO4sXp+Zs+rLZN2TFDGPuWIYlMM6RGOvcgbsKmZmMvI35RJam7/AfM2vc0IUgCQYq7TcI3lnGTWjqLbYVQYACUSXFYJ36hvTXTicYBJNACY=
+	t=1742727190; cv=none; b=lX1I6lgmIClsBn6uZZso2ixe2tWQm12x78Ndyms2cip5RAxABB5dacMOif56MYOY7bU4ktzod+XrcGD5dnbZupd8/nd7PCgw5rX66EUm7/69skYFRV4Q8Uke5ptnPb7FsfNelQr5AbjvBMHUsDS2SatRjUhSanBa+lTAX+kGkdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742726640; c=relaxed/simple;
-	bh=56fghpzNcXcuJRMxoGiBZ6btoUwmvBYYxwm2FKh3Rbw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Qwsue3E1ixtRa7+M4S4D5rrhnu21rYKccIA66q7sGe2hVtEjp/ZJaQTERjy8HrDt2/N9t9IrX5ry+Pjy34J7E5KDQBzFqUQRKYy9cmuceh3N0eeT1EakYVbFQi0spFyV0XyEm3CBJF5y+wkkvJQgriy55vRA9e0rFEUhjPsAlPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LCXMYm2w; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742727190; c=relaxed/simple;
+	bh=uffvmTlMMmGJpJoMN3P9vtJLJtt5AuZpH8l3cz6j0GY=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=H5QFgYuT9BdPU3nGoNyS6NZZRkwGf6Xtz84EfxGW3E5611DOFxnu9LAJzrGdI8Zhs95Y4j5Rs5uGuOydmcB9pZE96Tp9EKucqdVK3kZdEYvWU+alqetGNA9oMfCUCfmnnA9p9kXUQgINYh+wnT86o15xAlaKE0TlC4JjMgdd6VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cUfvDGZW; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LCXMYm2w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742726639; x=1774262639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=56fghpzNcXcuJRMxoGiBZ6btoUwmvBYYxwm2FKh3Rbw=;
-  b=LCXMYm2wucP8i/vy/vDMIYn4QDBkWqGfj9K9AzSQDbgZFZuqJND2uDBN
-   FIjabAouno7SFLtv9IOwYRH6rLTf6YHS5Hc+mo39jnFRcwpFb3F8uEwA1
-   UqHW6MPGsCISzwLqcxrJA4cMiweVZdPlXAlOfaO9NRIHXpWyhBkdpQmE+
-   ypLEZAJ51EPmnZQQ0CKnApJ+KqqWOsVLADSGZynZoH5HMGqD3d7RUF5Mi
-   N1x1dtJE4+m/RkyDjcG5v0Dv7At03Ew9BcIXDRkjvj3tXmg5vPhy3xWP0
-   RQ9sFY+IsnGiFLY1wZXs8AVbmpUNeyjg9X750uTyIWqLA8zlTfBjmxPKZ
-   g==;
-X-CSE-ConnectionGUID: Mo+yhjRvSqGweXqLkcyF8w==
-X-CSE-MsgGUID: Ks01B4/kT+e2t0iciyOzEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11381"; a="43817036"
-X-IronPort-AV: E=Sophos;i="6.14,269,1736841600"; 
-   d="scan'208";a="43817036"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 03:43:58 -0700
-X-CSE-ConnectionGUID: 6B7X1+YSTsa8njkp9SL7Ag==
-X-CSE-MsgGUID: 5DUaBCn0TUK9zWq1dItmzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,269,1736841600"; 
-   d="scan'208";a="124253735"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 23 Mar 2025 03:43:57 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1twIo6-0002iJ-2a;
-	Sun, 23 Mar 2025 10:43:54 +0000
-Date: Sun, 23 Mar 2025 18:43:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-werror 9/21] drivers/pwm/pwm-mediatek.c:142:34:
- error: incompatible integer to pointer conversion passing 'unsigned long' to
- parameter of type 'struct clk *'
-Message-ID: <202503231837.DYHg04BB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cUfvDGZW"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac2bdea5a38so579807266b.0
+        for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 03:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742727187; x=1743331987; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5/bXkWabeXE+wAwm2BjjvZWbnX5FoFmjofMNNAwDsBw=;
+        b=cUfvDGZWbctOHN1BNeGx0GkOPbcbGtztwI30GralHEaVLcbGU2UjB2QlTCAE93GfYT
+         b/m1/8P29mHeg2WiTZQWAUWTpYjfC3rqzwlc70crM3zIaEKy81r/nrFdyl0+2nAYHUfy
+         ltrRkoLoWiu/LHziyQ9CLGgzzrTUHMvEl3QaTbkXqTwXga8yT28/eu9Kg6Gw7X8+w/xh
+         5o0pQLqvAOlU6N6f0e+jC0i0Z4fEh0ypaCz24al7fIT27zCoLaNW9qJvEnd/PAnhK66N
+         A1IFmSE/FEarpVyxDLYVBKc325XvMiMnsRlTr8HjJTzgNO/eAXZgjxWXnoyPxVt98720
+         hALA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742727187; x=1743331987;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/bXkWabeXE+wAwm2BjjvZWbnX5FoFmjofMNNAwDsBw=;
+        b=Ma2lJtw5e0d2f6Rw+hP7LLcVpC2wOi2TvmVNr/gg30tVbvWUIz3Z7ikJIS5G+vCTjP
+         PmMBB1SN5WliPy5cRsYrvYhQRAbpXdVNQLqX+n7JX3AIFaHRsvYcltvvGpLv5eUOI2X9
+         aWXrPX0Plz0r7Yguu4RDw3rY4ie50/Y8VI3a2C3/esB8LPDRUVqLPbZ1TuwHV8/fYgqs
+         vy8LIvDjtvfrvv9YlqU2bNLcb+/MivvTAVAXV6R9O/hT/p151/K7ZR79PxuKEAD8k7ta
+         wPZm/4aCGNsZqp95AUytQwFuP88F9tOOS9X5e/CKgiiFCHoiIenJ9ccyR7jlV3w1owmB
+         9SnQ==
+X-Gm-Message-State: AOJu0YzPHiWs+rqbd0TXCe/XcfhDrfBf1ZEkl6DkF/WaSVHovl0h0nCZ
+	q28uB/yRC/k3qZWY3YoYWwxpmMnx4xJ3HYN48gXYkdYtMq9ESXHqzdRdVINVGlg7joukHCSj7EZ
+	m
+X-Gm-Gg: ASbGncuerH5Avel2ohM4AGQn8N2gFqG6fG2vLeXKywAuKmpid9xryRM4GsTVgmGtBch
+	cmnsT5ouIOlwXArBI6pzV2fgUgiTuXXTpdzc0sKagrfQztc10Pcojf0NoI+9sJWBnQJL7EByLS5
+	N8g3Aelj2rd3uBK0ilYEsg152M3Mw+x7j5zpPMyqVVmQB6jvVd27c9EhEMsl6ZuhHyW27H2Whgv
+	3EqU27AIV+OWr0vKQZJ0D0KAYioviZLQ8UfQfyM+3+HiIE+pFzPYQM8dIPeyVgJlNaWONkzOSw3
+	xXBVW4qhkbBL/G4PFlnMl0y0ZLMakl5pMcs+qzYTwXabfzebF16hfHxgJ0E37WBMAHQNC9E240J
+	3d6yzAWek49Ocn+aX
+X-Google-Smtp-Source: AGHT+IGXlXa7Dvj1QKMbxrdmBFEOjkp0Rg8kxFW461h2+vMtRxOrYSoaDJ1Bx7onRfzqMnNwOQg2hg==
+X-Received: by 2002:a17:907:724f:b0:abf:38a:6498 with SMTP id a640c23a62f3a-ac3f24ce705mr734485366b.55.1742727186418;
+        Sun, 23 Mar 2025 03:53:06 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3ef8d3961sm486892866b.45.2025.03.23.03.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Mar 2025 03:53:05 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sun, 23 Mar 2025 10:53:04 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <193242711.173777.1742727185695@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-21-init-5943-gac9049df7e62: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_173776_211413130.1742727184904"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allyesconfig
+X-Jenkins-Result: SUCCESS
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-werror
-head:   aecd65419533fc7a9eb88c055189d4ec4c9fbdca
-commit: 38fca6d9fa6497b95c4b53427d3e83908b807cf3 [9/21] pwm: mediatek: Prevent divide-by-zero in pwm_mediatek_config()
-config: i386-buildonly-randconfig-004-20250323 (https://download.01.org/0day-ci/archive/20250323/202503231837.DYHg04BB-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250323/202503231837.DYHg04BB-lkp@intel.com/reproduce)
+------=_Part_173776_211413130.1742727184904
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503231837.DYHg04BB-lkp@intel.com/
+Dear contributor,
 
-All errors (new ones prefixed by >>):
+Our automatic CI has detected problems related to your patch(es). Please find some details below.
 
->> drivers/pwm/pwm-mediatek.c:142:34: error: incompatible integer to pointer conversion passing 'unsigned long' to parameter of type 'struct clk *' [-Wint-conversion]
-     142 |         do_div(resolution, clk_get_rate(clk_rate));
-         |                                         ^~~~~~~~
-   arch/x86/include/asm/div64.h:25:12: note: expanded from macro 'do_div'
-      25 |         __base = (base);                                        \
-         |                   ^~~~
-   include/linux/clk.h:751:40: note: passing argument to parameter 'clk' here
-     751 | unsigned long clk_get_rate(struct clk *clk);
-         |                                        ^
-   1 error generated.
+In tcwg_kernel/llvm-master-aarch64-next-allyesconfig, after:
+  | commit llvmorg-21-init-5943-gac9049df7e62
+  | Author: Henry Jiang <h243jian@uwaterloo.ca>
+  | Date:   Fri Mar 21 09:49:10 2025 -0400
+  | 
+  |     Reland "[Transforms] LoopIdiomRecognize recognize strlen and wcslen (#108985)" (#131412)
+  |     
+  |     Relands https://github.com/llvm/llvm-project/pull/108985
+  |     
+  |     This PR continues the effort made in
+  | ... 15 lines of the commit log omitted.
+
+Produces Failure:
+  | Results changed to
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23757
+  | 
+  | From
+  | # reset_artifacts:
+  | -10
+  | # build_abe binutils:
+  | -9
+  | # build_kernel_llvm:
+  | -5
+  | # build_abe qemu:
+  | -2
+  | # linux_n_obj:
+  | 23760
+
+Used configuration :
+ tcwg_kernel/llvm-master-aarch64-next-allyesconfig
+
+We track this bug report under https://linaro.atlassian.net/browse/LLVM-1635. Please let us know if you have a fix.
+
+If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+
+The information below contains the details of the failures, and the ways to reproduce a debug environment:
 
 
-vim +142 drivers/pwm/pwm-mediatek.c
 
-   117	
-   118	static int pwm_mediatek_config(struct pwm_chip *chip, struct pwm_device *pwm,
-   119				       int duty_ns, int period_ns)
-   120	{
-   121		struct pwm_mediatek_chip *pc = to_pwm_mediatek_chip(chip);
-   122		u32 clkdiv = 0, cnt_period, cnt_duty, reg_width = PWMDWIDTH,
-   123		    reg_thres = PWMTHRES;
-   124		unsigned long clk_rate;
-   125		u64 resolution;
-   126		int ret;
-   127	
-   128		ret = pwm_mediatek_clk_enable(chip, pwm);
-   129		if (ret < 0)
-   130			return ret;
-   131	
-   132		clk_rate = clk_get_rate(pc->clk_pwms[pwm->hwpwm]);
-   133		if (!clk_rate)
-   134			return -EINVAL;
-   135	
-   136		/* Make sure we use the bus clock and not the 26MHz clock */
-   137		if (pc->soc->has_ck_26m_sel)
-   138			writel(0, pc->regs + PWM_CK_26M_SEL);
-   139	
-   140		/* Using resolution in picosecond gets accuracy higher */
-   141		resolution = (u64)NSEC_PER_SEC * 1000;
- > 142		do_div(resolution, clk_get_rate(clk_rate));
-   143	
-   144		cnt_period = DIV_ROUND_CLOSEST_ULL((u64)period_ns * 1000, resolution);
-   145		while (cnt_period > 8191) {
-   146			resolution *= 2;
-   147			clkdiv++;
-   148			cnt_period = DIV_ROUND_CLOSEST_ULL((u64)period_ns * 1000,
-   149							   resolution);
-   150		}
-   151	
-   152		if (clkdiv > PWM_CLK_DIV_MAX) {
-   153			pwm_mediatek_clk_disable(chip, pwm);
-   154			dev_err(pwmchip_parent(chip), "period of %d ns not supported\n", period_ns);
-   155			return -EINVAL;
-   156		}
-   157	
-   158		if (pc->soc->pwm45_fixup && pwm->hwpwm > 2) {
-   159			/*
-   160			 * PWM[4,5] has distinct offset for PWMDWIDTH and PWMTHRES
-   161			 * from the other PWMs on MT7623.
-   162			 */
-   163			reg_width = PWM45DWIDTH_FIXUP;
-   164			reg_thres = PWM45THRES_FIXUP;
-   165		}
-   166	
-   167		cnt_duty = DIV_ROUND_CLOSEST_ULL((u64)duty_ns * 1000, resolution);
-   168		pwm_mediatek_writel(pc, pwm->hwpwm, PWMCON, BIT(15) | clkdiv);
-   169		pwm_mediatek_writel(pc, pwm->hwpwm, reg_width, cnt_period);
-   170		pwm_mediatek_writel(pc, pwm->hwpwm, reg_thres, cnt_duty);
-   171	
-   172		pwm_mediatek_clk_disable(chip, pwm);
-   173	
-   174		return 0;
-   175	}
-   176	
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/350/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/349/artifact/artifacts
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/ac9049df7e62e2ca4dc5d103593b51639b5715e3/tcwg_kernel/llvm-master-aarch64-next-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/ac9049df7e62e2ca4dc5d103593b51639b5715e3
+------=_Part_173776_211413130.1742727184904--
