@@ -1,58 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5742C80;
-	Sun, 23 Mar 2025 19:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507C4190057;
+	Sun, 23 Mar 2025 19:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742757284; cv=none; b=PHLBpdMlTuAXIo0RcQM1v6Qi2skOaTvcJkqJfl375SJP/L+d6LGLvogVZKUVM4QmxARvweoOcO38iDrOOCtSkEP4LpRo117yE5aX71Mp+xgwKov7BL3iayl6D2nDG/D7y3iG6I6/KQibL20VewhMiJeO6I74J2tH9r+tErqeEKk=
+	t=1742758008; cv=none; b=Pz/UjGQYV/peJ+KjkfPw2oTnyXdAUHLkhW8R39A+N09KGC5jUawERntzAbaynL6gPnBZ4oY5MgFtXUBz22PLHPdELo5SZSXnpPbAgot/5smdaho1Ys7GLAvRxYTf6Lj9HOHMH/PdaVw6c+TKoEGPE+1SAOf8enloe/kbuDrvx2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742757284; c=relaxed/simple;
-	bh=JtKIOsvTUP3rZVv5khuYqMBwf/wtkrXscXYCsiGZkP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ojatELwPjFFpNo9QtOm0oATb4cgt7HspG9bClPPaPD3VMvHAULCkBYmfsmV/5i1GqhHIuBfUrTu1oJEM6GW5t+pNoMzia42XGxrW63V+KsxYCgIRxzxLK+W2A3LfPm+4JxDDUi5vm6JN1jXl+KRNgq2fWxcBXX8rxkA/Gjyc5Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hbzy/Rk9; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1742758008; c=relaxed/simple;
+	bh=YezEgk1iCgYxkv79mD9bPU21i+VeN7khhGctWDqAaH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DzkEc9Vz3r5lDSxEuKv47QxA6LXJF8wcvNf80wyBsN5ae4DdDzi6cmvk12AqDUEOYDZ4JwW7C39sVnFqaENVkoUzut1kH5OXsHXT0YEP99+yXd2fSdE+l6y7szK5QY+Tn2AhZezQhxnxOEsVG7ej/a9wC9RCr99ps0Yf6wGFvls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFGf4qJ/; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hbzy/Rk9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFGf4qJ/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742757282; x=1774293282;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JtKIOsvTUP3rZVv5khuYqMBwf/wtkrXscXYCsiGZkP0=;
-  b=Hbzy/Rk9Pf/yKZL+NxWxadeggri0NzXB5rqcjjaGXPO9kRFDOxnN1H7G
-   U1rSMvmL/yFaueUiTR+O3QrnOJFa7UozvzZWa8Qkx9yynM48QsIPmWzYt
-   YiEZDn91vm6bDQc40/USUP9qQH5uZqwSI4pozY6k6ttl+zkTO8W05ildi
-   RoFBxLWvlxQLoqZkzBAV3ZG6L7G3a/PYBxoS9SK2OqcsFc6DrqqZ4SXSI
-   qbGeax140JYAGcQp9jw/othKfyf3jBejlmtM5qGnhCbXkBuo3uvswsuZk
-   gTEtq6GgzYJWZooHvOt1pl2CiH19F8EnTCZsarEdwYkjIg/q115feqwIp
-   A==;
-X-CSE-ConnectionGUID: N8PDLuKiSPiwoZhW/yEPRQ==
-X-CSE-MsgGUID: TRN1Fe1SRDaW6oxONqgfaA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="43885942"
+  t=1742758006; x=1774294006;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YezEgk1iCgYxkv79mD9bPU21i+VeN7khhGctWDqAaH8=;
+  b=WFGf4qJ/oPeJQ0psB+U8L2boW7axsbLgLunLHXUF38DuQ5xA8rCAihTP
+   MpFZA5iIWtGFDWBh+wlVIH8EfqvX1n6gb2mBm5LsI8m7pgjcWGLeIBQgH
+   ahu5TKoq/vBvkvWMGWJz/yGytmy83ABjBxjkGp1f/BfArxVUbonyhBsxN
+   kUiAOys5XiXC+r5pEX9kucAtSXCrlJjNIg1qYtUtdBmxlRMUVFpHsOPdB
+   gUOVnINvniKj+wETLehzg75vAaY6M9+F+5eVjr0T0NKT5XoROk7AC6Dn8
+   UFObcZYbYMFOui5zXuMzyPI05CdE8u2aV0vNU5QRycWX0vT9N/6g8yf1v
+   g==;
+X-CSE-ConnectionGUID: k1yN24KdSLys7rFkq2XjFw==
+X-CSE-MsgGUID: MB9Mg/55TV+76iQTo8NJ4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="43685423"
 X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
-   d="scan'208";a="43885942"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 12:14:42 -0700
-X-CSE-ConnectionGUID: /96aq/12SVS1pxQ6OjdENA==
-X-CSE-MsgGUID: q9xHRHonTjm9Bj7nArhfaA==
+   d="scan'208";a="43685423"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 12:26:45 -0700
+X-CSE-ConnectionGUID: mAZak0DkR/yNjmwT4L+UcQ==
+X-CSE-MsgGUID: gw8cFEQ5QZyVQfCML4f3JQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
-   d="scan'208";a="123655219"
+   d="scan'208";a="124378757"
 Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Mar 2025 12:14:40 -0700
+  by orviesa007.jf.intel.com with ESMTP; 23 Mar 2025 12:26:41 -0700
 Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1twQmM-0002v4-1M;
-	Sun, 23 Mar 2025 19:14:38 +0000
-Date: Mon, 24 Mar 2025 03:14:30 +0800
+	id 1twQxz-0002vK-1A;
+	Sun, 23 Mar 2025 19:26:39 +0000
+Date: Mon, 24 Mar 2025 03:26:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-werror 13/21] vmlinux.o: warning: objtool:
- zone_set_pageset_high_and_batch+0xf1: call without frame pointer save/setup
-Message-ID: <202503240313.975vIIG4-lkp@intel.com>
+To: Hans Zhang <18255117159@163.com>, lpieralisi@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kw@linux.com,
+	manivannan.sadhasivam@linaro.org, robh@kernel.org,
+	bhelgaas@google.com, jingoohan1@gmail.com,
+	thomas.richard@bootlin.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hans Zhang <18255117159@163.com>
+Subject: Re: [v6 3/5] PCI: cadence: Use common PCI host bridge APIs for
+ finding the capabilities
+Message-ID: <202503240338.N37HXlm9-lkp@intel.com>
+References: <20250323164852.430546-4-18255117159@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,22 +67,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250323164852.430546-4-18255117159@163.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-werror
-head:   fa33949c27ae0a9ef85355c20c9f0e567fd4f035
-commit: 77ebfa6826689650aa4df04c030a283fe87d03ce [13/21] objtool: Fix X86_FEATURE_SMAP alternative handling
-config: x86_64-buildonly-randconfig-001-20250324 (https://download.01.org/0day-ci/archive/20250324/202503240313.975vIIG4-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250324/202503240313.975vIIG4-lkp@intel.com/reproduce)
+Hi Hans,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on a1cffe8cc8aef85f1b07c4464f0998b9785b795a]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Hans-Zhang/PCI-Introduce-generic-capability-search-functions/20250324-005300
+base:   a1cffe8cc8aef85f1b07c4464f0998b9785b795a
+patch link:    https://lore.kernel.org/r/20250323164852.430546-4-18255117159%40163.com
+patch subject: [v6 3/5] PCI: cadence: Use common PCI host bridge APIs for finding the capabilities
+config: riscv-randconfig-001-20250324 (https://download.01.org/0day-ci/archive/20250324/202503240338.N37HXlm9-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250324/202503240338.N37HXlm9-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503240313.975vIIG4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503240338.N37HXlm9-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> vmlinux.o: warning: objtool: zone_set_pageset_high_and_batch+0xf1: call without frame pointer save/setup
+   drivers/pci/controller/cadence/pcie-cadence.c:20:11: warning: variable 'val' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      20 |         else if (size == 1)
+         |                  ^~~~~~~~~
+   drivers/pci/controller/cadence/pcie-cadence.c:23:9: note: uninitialized use occurs here
+      23 |         return val;
+         |                ^~~
+   drivers/pci/controller/cadence/pcie-cadence.c:20:7: note: remove the 'if' if its condition is always true
+      20 |         else if (size == 1)
+         |              ^~~~~~~~~~~~~~
+      21 |                 val = readb(pcie->reg_base + where);
+   drivers/pci/controller/cadence/pcie-cadence.c:14:9: note: initialize the variable 'val' to silence this warning
+      14 |         u32 val;
+         |                ^
+         |                 = 0
+>> drivers/pci/controller/cadence/pcie-cadence.c:28:9: error: call to undeclared function 'pci_host_bridge_find_capability'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      28 |         return pci_host_bridge_find_capability(pcie, cdns_pcie_read_cfg, cap);
+         |                ^
+>> drivers/pci/controller/cadence/pcie-cadence.c:33:9: error: call to undeclared function 'pci_host_bridge_find_ext_capability'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      33 |         return pci_host_bridge_find_ext_capability(pcie, cdns_pcie_read_cfg, cap);
+         |                ^
+   drivers/pci/controller/cadence/pcie-cadence.c:33:9: note: did you mean 'cdns_pcie_find_ext_capability'?
+   drivers/pci/controller/cadence/pcie-cadence.c:31:5: note: 'cdns_pcie_find_ext_capability' declared here
+      31 | u16 cdns_pcie_find_ext_capability(struct cdns_pcie *pcie, u8 cap)
+         |     ^
+      32 | {
+      33 |         return pci_host_bridge_find_ext_capability(pcie, cdns_pcie_read_cfg, cap);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                cdns_pcie_find_ext_capability
+   1 warning and 2 errors generated.
+
+
+vim +/pci_host_bridge_find_capability +28 drivers/pci/controller/cadence/pcie-cadence.c
+
+    25	
+    26	u8 cdns_pcie_find_capability(struct cdns_pcie *pcie, u8 cap)
+    27	{
+  > 28		return pci_host_bridge_find_capability(pcie, cdns_pcie_read_cfg, cap);
+    29	}
+    30	
+    31	u16 cdns_pcie_find_ext_capability(struct cdns_pcie *pcie, u8 cap)
+    32	{
+  > 33		return pci_host_bridge_find_ext_capability(pcie, cdns_pcie_read_cfg, cap);
+    34	}
+    35	
 
 -- 
 0-DAY CI Kernel Test Service
