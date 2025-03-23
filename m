@@ -1,60 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66AE42AA6;
-	Sun, 23 Mar 2025 17:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069742BAF7
+	for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 17:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742750543; cv=none; b=VuVFIeMDkS4Mh3Ebc39bK5dX7Etbc+2wfT7+UUbhVJY9AElQZtUKxqkVrKFuL3Hn5vvvxJ8zeWCOFk/lhLznI4MJtFpK95ygN6fK/q3j6+exo4Pj4stpk9Jh17mZKZo3EohenMR+qyzFU41wHcTEkcnQiOUfhSq7VLq1tWPPhv8=
+	t=1742751393; cv=none; b=XTFOImEWL8lVLubaUtxds7/mV/OLTIz7XQXPA8O4F2Ei7om/eCCXVlIJ/eBdIBrUPvOspBBxDUjJQNq76R17DbmZYqxLS4BjcKPkgKsRh6F1F0nO174oYv4OkZoZAC1H4ffSdBZnSqVjxG43QujIv06LP1wY14ezv0uYGE6g/is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742750543; c=relaxed/simple;
-	bh=iFxhqIf/S9KhBltDLEcS4TSY/Srmtm/aItOAL50xGJM=;
+	s=arc-20240116; t=1742751393; c=relaxed/simple;
+	bh=tw3/0MDVahV5gYA1D5ZUev1jqNbxH7cuac9JUXXrv2U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lSsUJd483jnppyKCHmgUF90lqTHfep0urhq04jNOPEcJE1yu30p8UvNlNfbc0lEC5yGrybJZ+xWlL5EtbuDD3J9lxhmcCJLLjnUClRtl6BGiNBdTAQu0pKGkqp8+lVXfcvtOA1zSXlp7FSuYi/9VRSlrQfRx+7O2WI5jKvu8AwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dDNVfj7N; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=VqUIaZzecFtkaJ6EQn4LCng+dMoh1Gw+KnSaQ7UWI3fW2xoHeV43eIp7PflCyYF/xwLO2OZ1GgKIQL03jwRVwdrSbFoMim4o6BcfI830S5abCZCvuykj4jPiNCs7nSyd0uPeB8QrA19XjBMk5tyVhGYVFDMHt5ML8OV1p+ZosZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mp/z2CFR; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dDNVfj7N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742750542; x=1774286542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iFxhqIf/S9KhBltDLEcS4TSY/Srmtm/aItOAL50xGJM=;
-  b=dDNVfj7NPSw+VlKfd1atkSGT7NWBXZXO8diYJpyFkETjRyLRjSonAzld
-   nqdo8yHbu+dykZBbyzmAoi9OdoK32M9UJZkjhkJwZXc3QYOu4oSR+L3aC
-   Yg0DNirgyQDV8i8sTSQFAeY8oTvRYhsw9ZS4vCr6dd/RdBQH1lK5p7Y/l
-   2ioJmtMjVqkTOC/6gaUTSg6fLk0UJSDA/tu6msVdnNhPt2SABswzkVBbm
-   Kjbzj14trTE72ykeInbiXm0cSaf8OhCpAQVRMTY9nOG29POe80aEi4gmj
-   M4HyRYxuSN/v8jukuv9p2J4YqnB/Ya1D54K6NVDcz6gddeH41//MzmFSX
-   A==;
-X-CSE-ConnectionGUID: EgGvL4ViQxCSZRh5GVdCpA==
-X-CSE-MsgGUID: I3KprlV1SxG4UjseKQmyOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="55332193"
-X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
-   d="scan'208";a="55332193"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 10:22:21 -0700
-X-CSE-ConnectionGUID: vbwlofbpQYCXb8AF8OT9jQ==
-X-CSE-MsgGUID: cZ1HFfghQNa/e8+OLzqezQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
-   d="scan'208";a="124791346"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 23 Mar 2025 10:22:21 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1twP1d-0002sQ-07;
-	Sun, 23 Mar 2025 17:22:17 +0000
-Date: Mon, 24 Mar 2025 01:21:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roopni Devanathan <quic_rdevanat@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 3/5] wifi: mac80211: Set RTS threshold on per-radio
- basis
-Message-ID: <202503240144.urFDLtwW-lkp@intel.com>
-References: <20250323073959.2872641-4-quic_rdevanat@quicinc.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mp/z2CFR"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c59e7039eeso524306985a.2
+        for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 10:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742751391; x=1743356191; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qJmxmLHnI0b74eLfgzEkn0Xb7QzO7kjHFPv4KK92C4k=;
+        b=mp/z2CFRpcB1vRFUrPuevocuBdduedLUmPG09yXhf+QzsOyGhfh32hyfRYljxVm/Di
+         h1BYnVuGgwz45lBmK/TZ+6c1RGlEshwQgid+jywNYtOvm+zOQDIxcrSOXPTB32HI6vEl
+         5Jb7QshiIEVTOAVOni7uMQWvOQcRDumIm+MgIROHUveB6+hN6YJClHIl5StQrOfyEsnk
+         ovc+TMaJIGZ/FHuWIpmanGuBSnAngo4ZAruSNHkJtAbAeaB7x2LlNkvQDAuxgLaMB7eb
+         TaNEsFdWlHfQaHZ6/KMnipCXtQi9T3jfO8+d2wYoT/h5J16wd1qqyMMJ6AXg6zInfaPk
+         gOOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742751391; x=1743356191;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qJmxmLHnI0b74eLfgzEkn0Xb7QzO7kjHFPv4KK92C4k=;
+        b=cmWESCIndNizToveOd6sbg3QKgN5uQ/eIjhb2wdexoxfe0VP6CmasJeF4dRyR5b0JW
+         oENIdqKh3Y9dutWGdxHf/kLEPrGdsO60OwEadhnjc6p4ALHoIUExrxgBANsIBwauOM2P
+         ucAr5+WJo+3YZCR85Yo5Bn64PFLC1LtwOX/G6FPtOlZrIopy02KY2ctzGOki+tLUwWts
+         ZCDtKjKZIC7cSY2vSvN8MkKKlTYloWcKdVz5pIlrd5KKEIyDnYWHDZaZU1RPw1+qC58o
+         YgyQqVM21BfoDnPIvmQdo9gInTxP+0f6fuSoC03C2QOJWpsJIomPmKFjg59kcGwvhqHR
+         eOBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVdhFsdFAUzUalHd4jtywVF7hgXzH+qyK8sedy43Z/qiWIL/2z9W1ey3CUVgzzY02hRon+@lists.linux.dev
+X-Gm-Message-State: AOJu0YzcOJMv31IQc9siLxRc0Cm0wPEBSv8KZeOzmayEXadztkbbA/wL
+	+V5rqgqxNRhHMCpBJPB1DeyJALzwx0Hy1CUbOkTkFWTFxP4UR87V
+X-Gm-Gg: ASbGnctzQetNxCI7ofWzKS5JPavhfZUEQSnqItHJYy0YOjbGhGv5PH/Yv1u+9UUnHD4
+	y6UHmBZdY84xH7g5/ONnGNNaAI/xkhc4ODo64gwb/+2IuSjYIMjGIsjJ33NATw/p0aHe1QcGUS7
+	jGq+3SORIEZ0mZh9Ig8D2h/It1hQJQLxcUPrBj4pstqRiEEPSqO9OVrF7OrouYli4+iXGuxMRR8
+	5qrKwnKyq45lRYSwWcS7ycSaBGymIUyChgEe39cY86ptgKo/zgLUEj4baj8VvBq26FykkgVoSCE
+	7vzrpk6KNnqzWOz8aDGOn+Jxha53y6dI0/h8aRfxZCrBpEdqdo25dp1Duhdw27828xFQFVgVskR
+	REyeD/vnUkcaIOyg4EH86HsF2Hp3ex5Lb9/Q=
+X-Google-Smtp-Source: AGHT+IFPXx3Q4TX1Xs2Z84TncJkMZsWBNJhJ343KnGGojWAVSXxnbqwjcFG7410Xa+SesHkkJ5NJcg==
+X-Received: by 2002:a05:620a:29c5:b0:7c5:9a10:7824 with SMTP id af79cd13be357-7c5ba15d9famr1184377385a.24.1742751390630;
+        Sun, 23 Mar 2025 10:36:30 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5b92cfe65sm384903485a.28.2025.03.23.10.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Mar 2025 10:36:29 -0700 (PDT)
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 42AC81200043;
+	Sun, 23 Mar 2025 13:36:29 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-07.internal (MEProxy); Sun, 23 Mar 2025 13:36:29 -0400
+X-ME-Sender: <xms:nUbgZ8Hy1gTIxowI2y2C-W_Y0z2hfWYovxZgPJevFIS-YQFT0N77Sw>
+    <xme:nUbgZ1XegJ1sibZCAMIvAwQ-Te3mIZohopMiyXckDwexXgF26Rb3LS8Q9-iuoVQjQ
+    G-P_BPQzrHTOKKATQ>
+X-ME-Received: <xmr:nUbgZ2JgW3uB0mTmllBXEif9LeoiRy2jqL6LVvKosEkkBoh0VXWUDIun>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheejgeekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
+    hlrdgtohhmqeenucggtffrrghtthgvrhhnpefftdeihfeigedtvdeuueffieetvedtgeej
+    uefhhffgudfgfeeggfeftdeigeehvdenucffohhmrghinhepghhithhhuhgsrdgtohhmne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
+    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
+    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
+    nhgrmhgvpdhnsggprhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhunhif
+    uhdrtghhrghnsehlihhnuhigrdguvghvpdhrtghpthhtohepohhjvggurgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdp
+    rhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorh
+    hnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopegsvghnnhhordhl
+    ohhsshhinhesphhrohhtohhnrdhmvgdprhgtphhtthhopegrrdhhihhnuggsohhrgheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepthhmghhrohhsshesuhhmihgthhdrvgguuh
+X-ME-Proxy: <xmx:nUbgZ-GBu7karf7bxbSTuXjOrc3z5CeO4meI733rVw8v5mMfWUfUvg>
+    <xmx:nUbgZyU3NqHbamDSNkk9sbFzZX97-PHhioyTcJrtgVSsYU2WEvyG8g>
+    <xmx:nUbgZxNVo8Yv1hxoYNi0O6FcW81f-526reDkRUSopUsRdjxMLordag>
+    <xmx:nUbgZ53cG6zvlV6vCYO4c6xafq44DB0cDqIhLfz_Yi__rs39bGhEZg>
+    <xmx:nUbgZ7XJft9LcxmzcTaFm4p0v2uNPgplr_2L0IDjMnTQ2o1NyfkzZjGM>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 23 Mar 2025 13:36:28 -0400 (EDT)
+Date: Sun, 23 Mar 2025 10:36:27 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Kunwu Chan <kunwu.chan@linux.dev>, ojeda@kernel.org,
+	alex.gaynor@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+	benno.lossin@proton.me, a.hindborg@kernel.org, tmgross@umich.edu,
+	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	morbo@google.com, justinstitt@google.com,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>,
+	Grace Deng <Grace.Deng006@gmail.com>
+Subject: Re: [PATCH] rust: sync: optimize rust symbol generation for CondVar
+Message-ID: <Z-BGm3zBEGazp5gb@Mac.home>
+References: <20250317081351.2503049-1-kunwu.chan@linux.dev>
+ <Z9f5fehO186xoNAV@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,57 +116,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250323073959.2872641-4-quic_rdevanat@quicinc.com>
+In-Reply-To: <Z9f5fehO186xoNAV@google.com>
 
-Hi Roopni,
+On Mon, Mar 17, 2025 at 10:29:17AM +0000, Alice Ryhl wrote:
+> On Mon, Mar 17, 2025 at 04:13:50PM +0800, Kunwu Chan wrote:
+> > From: Kunwu Chan <kunwu.chan@hotmail.com>
+> > 
+> > When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+> > with ARCH=arm64, the following symbols are generated:
+> > 
+> > $nm vmlinux | grep ' _R'.*CondVar | rustfilt
+> > ... T <kernel::sync::condvar::CondVar>::notify_all
+> > ... T <kernel::sync::condvar::CondVar>::notify_one
+> > ... T <kernel::sync::condvar::CondVar>::notify_sync
+> > ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> > ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> > ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> > ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
+> > 
+> > These notify* symbols are trivial wrappers around the C functions
+> > __wake_up and __wake_up_sync.
+> > It doesn't make sense to go through a trivial wrapper for these
+> > functions, so mark them inline.
+> 
+> You don't need to send a new version just for this, but please format
+> the paragraphs better in the future. For example:
+> 
+> The notify* symbols are trivial wrappers around the C functions
+> __wake_up and __wake_up_sync. It doesn't make sense to go through a
+> trivial wrapper for these functions, so mark them inline.
+> 
+> > Link: https://github.com/Rust-for-Linux/linux/issues/1145
+> > Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> > Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+> > Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+> > Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+> 
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> 
 
-kernel test robot noticed the following build errors:
+Queued for future tests and reviews, thank you all.
 
-[auto build test ERROR on 1794d7ab34d2221ac7eb921b171e75b856e10561]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Roopni-Devanathan/wifi-cfg80211-Add-Support-to-Set-RTS-Threshold-for-each-Radio/20250323-154228
-base:   1794d7ab34d2221ac7eb921b171e75b856e10561
-patch link:    https://lore.kernel.org/r/20250323073959.2872641-4-quic_rdevanat%40quicinc.com
-patch subject: [PATCH v5 3/5] wifi: mac80211: Set RTS threshold on per-radio basis
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20250324/202503240144.urFDLtwW-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250324/202503240144.urFDLtwW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503240144.urFDLtwW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:2618:23: error: incompatible function pointer types initializing 'int (*)(struct ieee80211_hw *, s8, u32)' (aka 'int (*)(struct ieee80211_hw *, signed char, unsigned int)') with an expression of type 'int (struct ieee80211_hw *, u32)' (aka 'int (struct ieee80211_hw *, unsigned int)') [-Wincompatible-function-pointer-types]
-    2618 |         .set_rts_threshold = iwl_mld_mac80211_set_rts_threshold,
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +2618 drivers/net/wireless/intel/iwlwifi/mld/mac80211.c
-
-d1e879ec600f9b Miri Korenblit 2025-02-16  2600  
-d1e879ec600f9b Miri Korenblit 2025-02-16  2601  const struct ieee80211_ops iwl_mld_hw_ops = {
-d1e879ec600f9b Miri Korenblit 2025-02-16  2602  	.tx = iwl_mld_mac80211_tx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2603  	.start = iwl_mld_mac80211_start,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2604  	.stop = iwl_mld_mac80211_stop,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2605  	.config = iwl_mld_mac80211_config,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2606  	.add_interface = iwl_mld_mac80211_add_interface,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2607  	.remove_interface = iwl_mld_mac80211_remove_interface,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2608  	.conf_tx = iwl_mld_mac80211_conf_tx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2609  	.prepare_multicast = iwl_mld_mac80211_prepare_multicast,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2610  	.configure_filter = iwl_mld_mac80211_configure_filter,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2611  	.reconfig_complete = iwl_mld_mac80211_reconfig_complete,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2612  	.wake_tx_queue = iwl_mld_mac80211_wake_tx_queue,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2613  	.add_chanctx = iwl_mld_add_chanctx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2614  	.remove_chanctx = iwl_mld_remove_chanctx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2615  	.change_chanctx = iwl_mld_change_chanctx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2616  	.assign_vif_chanctx = iwl_mld_assign_vif_chanctx,
-d1e879ec600f9b Miri Korenblit 2025-02-16  2617  	.unassign_vif_chanctx = iwl_mld_unassign_vif_chanctx,
-d1e879ec600f9b Miri Korenblit 2025-02-16 @2618  	.set_rts_threshold = iwl_mld_mac80211_set_rts_threshold,
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Boqun
