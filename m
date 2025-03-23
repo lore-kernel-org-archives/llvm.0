@@ -1,141 +1,134 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8472E338A
-	for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 10:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892BC2AD20;
+	Sun, 23 Mar 2025 14:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742727190; cv=none; b=lX1I6lgmIClsBn6uZZso2ixe2tWQm12x78Ndyms2cip5RAxABB5dacMOif56MYOY7bU4ktzod+XrcGD5dnbZupd8/nd7PCgw5rX66EUm7/69skYFRV4Q8Uke5ptnPb7FsfNelQr5AbjvBMHUsDS2SatRjUhSanBa+lTAX+kGkdY=
+	t=1742740780; cv=none; b=JysCdPeS50o5wlr9iP/Wht2GY/Qlg1nkgX2nYOG/m3wNUSN/VkjOmVpuYhFhnO5nAu6GeMNAYpfBw9yd7MT+UbWQquqqFAQ34yFJDvlfnoe3/tbv7PPAoVq4V7vMoz7Nr43Nixj58l0EYlvhMg0dgUPgIWiL/fikfIXVXCI9SPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742727190; c=relaxed/simple;
-	bh=uffvmTlMMmGJpJoMN3P9vtJLJtt5AuZpH8l3cz6j0GY=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=H5QFgYuT9BdPU3nGoNyS6NZZRkwGf6Xtz84EfxGW3E5611DOFxnu9LAJzrGdI8Zhs95Y4j5Rs5uGuOydmcB9pZE96Tp9EKucqdVK3kZdEYvWU+alqetGNA9oMfCUCfmnnA9p9kXUQgINYh+wnT86o15xAlaKE0TlC4JjMgdd6VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cUfvDGZW; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1742740780; c=relaxed/simple;
+	bh=dzeePklCjjDXcwlEKKOvsCYGgJAbfAR98wRHWSSvePE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GK8wCAhI0fivmBNw1Xewn7ykhFwhD4Wj83YW5W7ah2rDGbl/+is8b+NVBspORkdfEXpyB7eG2HlwkJGB+tFGSkfujCY5P34Bg1/10zQCkGIoGp0jDM+WWkEcdmD6X8EWWEWPLpj1GmnFUd2vv6A7U7yVM461jVWJiN2cv4hJRk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fRH8F2hN; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cUfvDGZW"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ac2bdea5a38so579807266b.0
-        for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 03:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742727187; x=1743331987; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5/bXkWabeXE+wAwm2BjjvZWbnX5FoFmjofMNNAwDsBw=;
-        b=cUfvDGZWbctOHN1BNeGx0GkOPbcbGtztwI30GralHEaVLcbGU2UjB2QlTCAE93GfYT
-         b/m1/8P29mHeg2WiTZQWAUWTpYjfC3rqzwlc70crM3zIaEKy81r/nrFdyl0+2nAYHUfy
-         ltrRkoLoWiu/LHziyQ9CLGgzzrTUHMvEl3QaTbkXqTwXga8yT28/eu9Kg6Gw7X8+w/xh
-         5o0pQLqvAOlU6N6f0e+jC0i0Z4fEh0ypaCz24al7fIT27zCoLaNW9qJvEnd/PAnhK66N
-         A1IFmSE/FEarpVyxDLYVBKc325XvMiMnsRlTr8HjJTzgNO/eAXZgjxWXnoyPxVt98720
-         hALA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742727187; x=1743331987;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/bXkWabeXE+wAwm2BjjvZWbnX5FoFmjofMNNAwDsBw=;
-        b=Ma2lJtw5e0d2f6Rw+hP7LLcVpC2wOi2TvmVNr/gg30tVbvWUIz3Z7ikJIS5G+vCTjP
-         PmMBB1SN5WliPy5cRsYrvYhQRAbpXdVNQLqX+n7JX3AIFaHRsvYcltvvGpLv5eUOI2X9
-         aWXrPX0Plz0r7Yguu4RDw3rY4ie50/Y8VI3a2C3/esB8LPDRUVqLPbZ1TuwHV8/fYgqs
-         vy8LIvDjtvfrvv9YlqU2bNLcb+/MivvTAVAXV6R9O/hT/p151/K7ZR79PxuKEAD8k7ta
-         wPZm/4aCGNsZqp95AUytQwFuP88F9tOOS9X5e/CKgiiFCHoiIenJ9ccyR7jlV3w1owmB
-         9SnQ==
-X-Gm-Message-State: AOJu0YzPHiWs+rqbd0TXCe/XcfhDrfBf1ZEkl6DkF/WaSVHovl0h0nCZ
-	q28uB/yRC/k3qZWY3YoYWwxpmMnx4xJ3HYN48gXYkdYtMq9ESXHqzdRdVINVGlg7joukHCSj7EZ
-	m
-X-Gm-Gg: ASbGncuerH5Avel2ohM4AGQn8N2gFqG6fG2vLeXKywAuKmpid9xryRM4GsTVgmGtBch
-	cmnsT5ouIOlwXArBI6pzV2fgUgiTuXXTpdzc0sKagrfQztc10Pcojf0NoI+9sJWBnQJL7EByLS5
-	N8g3Aelj2rd3uBK0ilYEsg152M3Mw+x7j5zpPMyqVVmQB6jvVd27c9EhEMsl6ZuhHyW27H2Whgv
-	3EqU27AIV+OWr0vKQZJ0D0KAYioviZLQ8UfQfyM+3+HiIE+pFzPYQM8dIPeyVgJlNaWONkzOSw3
-	xXBVW4qhkbBL/G4PFlnMl0y0ZLMakl5pMcs+qzYTwXabfzebF16hfHxgJ0E37WBMAHQNC9E240J
-	3d6yzAWek49Ocn+aX
-X-Google-Smtp-Source: AGHT+IGXlXa7Dvj1QKMbxrdmBFEOjkp0Rg8kxFW461h2+vMtRxOrYSoaDJ1Bx7onRfzqMnNwOQg2hg==
-X-Received: by 2002:a17:907:724f:b0:abf:38a:6498 with SMTP id a640c23a62f3a-ac3f24ce705mr734485366b.55.1742727186418;
-        Sun, 23 Mar 2025 03:53:06 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3ef8d3961sm486892866b.45.2025.03.23.03.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Mar 2025 03:53:05 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Sun, 23 Mar 2025 10:53:04 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <193242711.173777.1742727185695@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] llvmorg-21-init-5943-gac9049df7e62: Failure on
- aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fRH8F2hN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742740779; x=1774276779;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dzeePklCjjDXcwlEKKOvsCYGgJAbfAR98wRHWSSvePE=;
+  b=fRH8F2hNQto8T6R7OgMnGxyJREPr564NO6++3q6MzHjRJNhVGJ3FDshW
+   zPB98c/7zvX935FxSq7srSOT0zTCs0X3iFHkQ6YJypkWZFf7a8kdlOS0y
+   MRgUvqPn4n+f8SupaxTSnmiSwJ9XvNKUs260rHx/X5f2WktNpNct82WF+
+   IUTYQs4cBGpMZxv7O868ToGDMfYCLEyEXjl4zZULFqkFQKwaklmgCzrcj
+   4C0twcCJgJ+7H9ayOUKj6lb7BD9pkFoC6u2BOyMmHiHXNLw5xlVBS+eqt
+   BqI2NY8h65RxiYgX8/eyXKzgnY+/xwfD/Cj/Xu/C/FSAJcGetT6nsn8OM
+   w==;
+X-CSE-ConnectionGUID: K6IR+RTdS461ank+/1qfxQ==
+X-CSE-MsgGUID: VYticP1USXKXnDmd0xq3RA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="47826512"
+X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
+   d="scan'208";a="47826512"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 07:39:38 -0700
+X-CSE-ConnectionGUID: gwOJvhC+SWWIwKb1Tb50Zg==
+X-CSE-MsgGUID: cxJ1jymFQjuURaRGos+MtQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,270,1736841600"; 
+   d="scan'208";a="124609095"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 23 Mar 2025 07:39:36 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1twMUA-0002mx-12;
+	Sun, 23 Mar 2025 14:39:34 +0000
+Date: Sun, 23 Mar 2025 22:39:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Douglas Raillard <douglas.raillard@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [trace:trace/for-next 15/16]
+ kernel/trace/trace_events_synth.c:862:7: error: use of undeclared identifier
+ 'TRACE_REG_PERF_REGISTER'
+Message-ID: <202503232230.TeREVy8R-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_173776_211413130.1742727184904"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allyesconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_173776_211413130.1742727184904
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace trace/for-next
+head:   a1e3ad43115efe4c764775dc3e6d8e22e5870339
+commit: 21581dd4e7ff6c07d0ab577e3c32b13a74b31522 [15/16] tracing: Ensure module defining synth event cannot be unloaded while tracing
+config: um-randconfig-002-20250323 (https://download.01.org/0day-ci/archive/20250323/202503232230.TeREVy8R-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250323/202503232230.TeREVy8R-lkp@intel.com/reproduce)
 
-Dear contributor,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503232230.TeREVy8R-lkp@intel.com/
 
-Our automatic CI has detected problems related to your patch(es). Please find some details below.
+All errors (new ones prefixed by >>):
 
-In tcwg_kernel/llvm-master-aarch64-next-allyesconfig, after:
-  | commit llvmorg-21-init-5943-gac9049df7e62
-  | Author: Henry Jiang <h243jian@uwaterloo.ca>
-  | Date:   Fri Mar 21 09:49:10 2025 -0400
-  | 
-  |     Reland "[Transforms] LoopIdiomRecognize recognize strlen and wcslen (#108985)" (#131412)
-  |     
-  |     Relands https://github.com/llvm/llvm-project/pull/108985
-  |     
-  |     This PR continues the effort made in
-  | ... 15 lines of the commit log omitted.
-
-Produces Failure:
-  | Results changed to
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23757
-  | 
-  | From
-  | # reset_artifacts:
-  | -10
-  | # build_abe binutils:
-  | -9
-  | # build_kernel_llvm:
-  | -5
-  | # build_abe qemu:
-  | -2
-  | # linux_n_obj:
-  | 23760
-
-Used configuration :
- tcwg_kernel/llvm-master-aarch64-next-allyesconfig
-
-We track this bug report under https://linaro.atlassian.net/browse/LLVM-1635. Please let us know if you have a fix.
-
-If you have any questions regarding this report, please ask on linaro-toolchain@lists.linaro.org mailing list.
-
------------------8<--------------------------8<--------------------------8<--------------------------
-
-The information below contains the details of the failures, and the ways to reproduce a debug environment:
+>> kernel/trace/trace_events_synth.c:862:7: error: use of undeclared identifier 'TRACE_REG_PERF_REGISTER'
+     862 |         case TRACE_REG_PERF_REGISTER:
+         |              ^
+>> kernel/trace/trace_events_synth.c:874:7: error: use of undeclared identifier 'TRACE_REG_PERF_UNREGISTER'; did you mean 'TRACE_REG_UNREGISTER'?
+     874 |         case TRACE_REG_PERF_UNREGISTER:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |              TRACE_REG_UNREGISTER
+   include/linux/trace_events.h:249:2: note: 'TRACE_REG_UNREGISTER' declared here
+     249 |         TRACE_REG_UNREGISTER,
+         |         ^
+>> kernel/trace/trace_events_synth.c:874:7: error: duplicate case value 'TRACE_REG_UNREGISTER'
+     874 |         case TRACE_REG_PERF_UNREGISTER:
+         |              ^
+   kernel/trace/trace_events_synth.c:873:7: note: previous case defined here
+     873 |         case TRACE_REG_UNREGISTER:
+         |              ^
+   3 errors generated.
 
 
+vim +/TRACE_REG_PERF_REGISTER +862 kernel/trace/trace_events_synth.c
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/350/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/349/artifact/artifacts
+   854	
+   855	static int synth_event_reg(struct trace_event_call *call,
+   856			    enum trace_reg type, void *data)
+   857	{
+   858		struct synth_event *event = container_of(call, struct synth_event, call);
+   859	
+   860		switch (type) {
+   861		case TRACE_REG_REGISTER:
+ > 862		case TRACE_REG_PERF_REGISTER:
+   863			if (!try_module_get(event->mod))
+   864				return -EBUSY;
+   865			break;
+   866		default:
+   867			break;
+   868		}
+   869	
+   870		int ret = trace_event_reg(call, type, data);
+   871	
+   872		switch (type) {
+   873		case TRACE_REG_UNREGISTER:
+ > 874		case TRACE_REG_PERF_UNREGISTER:
+   875			module_put(event->mod);
+   876			break;
+   877		default:
+   878			break;
+   879		}
+   880		return ret;
+   881	}
+   882	
 
-Instruction to reproduce the build : https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/ac9049df7e62e2ca4dc5d103593b51639b5715e3/tcwg_kernel/llvm-master-aarch64-next-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://github.com/llvm/llvm-project/commit/ac9049df7e62e2ca4dc5d103593b51639b5715e3
-------=_Part_173776_211413130.1742727184904--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
