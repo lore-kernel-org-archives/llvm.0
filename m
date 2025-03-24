@@ -1,203 +1,148 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772CA36D
-	for <llvm@lists.linux.dev>; Mon, 24 Mar 2025 04:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338FE17084F
+	for <llvm@lists.linux.dev>; Mon, 24 Mar 2025 06:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742790232; cv=none; b=C92s83ZpDaqeFCTAeLmsMMjd88KEawVnw9jZVL3917rMqtUFPrLrpSFh5N25wYtszNrAI3q7HvxkKZlMFcQTQgRjH7dDk8QVEekJAsJyA51VBgKU++jFANDyWVUfez62wT9rtm6DzkXKPHkQts8XWEYfcsbjvBQ/3NkzhQ5snuw=
+	t=1742796162; cv=none; b=pxeRBnlwLqWxz8gY2Wyn6CKt0FS7C1EOofObwUGEPBal6lXXxJpRgwcrM08TqIc44FjIiPVAjEzaoF+PRKJhO3avPZ02ip11WG9PQVR6gsqNMf/+jRJYZLzoDzQfUcfd4FKM7qOU3daTajkM49uQUn9/fVXXOgOI9KNl5bQiPP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742790232; c=relaxed/simple;
-	bh=OhQTM0oPvorXpOX6xascKz4fAPipJPuQnPzwGvw7uIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mE53BmQLYolte2IUuP8J8vr8rsDBphVwWJadyGG0D5h01zquPCZFkXW1Yfs/Vqwt9QtRQZja9KYYKR5bgobg4TD82y/PVfYyR8oZSTgaeQef77sXJRl+p0Dc+D2TG4JY55dpBjS7q3Tk8e3a7J+33K9dCTgF5s73qC85dKD+ovk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krLXStuc; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742796162; c=relaxed/simple;
+	bh=OjuHwzZy1fDH8hUH/qkLbPBSKDMKbHAYEurbzkK4X6M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n4Lhq2gcmCcgjIM6Mkok2KItUujeGoMPze2b4Kuzr1kaCOuP9T42qm8M8ntYr9FuDc2WUCdlEIO18k8h/iOI+7eiGjdld3KqlzwJeRcyzZqPIANjpqbCp3j8fPI6YyCi9GlyhHSUhKBKNa8yJyQD8YxM2j2ApWYKsNNfEySo7gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q/itCYGO; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krLXStuc"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6e8fca43972so42215646d6.1
-        for <llvm@lists.linux.dev>; Sun, 23 Mar 2025 21:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742790229; x=1743395029; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ncJdng0B2Xy6DMBtk4X6687fyX5Q3U18Frs5Fc9lOM=;
-        b=krLXStuciyIRzWh5iaaYiOF8BiXCHqDpnpdSA4PDepMAoLO38CO0amCgvwgjgodL/V
-         KkZErxpE7NwDuxE7wBiozxPNIBLRhiDEGxAjWr5EVfAdXKQUs35TvRN1yTIvu7OEyodd
-         wufb7dlB6HQCLO8Qu+9TED4yvD17n9edgghx1HRul/7VmohqrK/JFy82biLJOWxUsw3f
-         4dxNMo7jWYWXMsPh8xlpx5pihK55SsIfItHrK3RLX4ok+1GgkzwoyHZzNvkzmlfRP5eJ
-         /w5yUq5Bkjzt9eF67Jgx4waMHv+dF+GezATmYi7h/7XvrX8LP/00oMShx2ZNRjJlbw36
-         A6eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742790229; x=1743395029;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2ncJdng0B2Xy6DMBtk4X6687fyX5Q3U18Frs5Fc9lOM=;
-        b=hW1dCe2/d07t8TzVZxOhyyZ3yt5bgMuIw+E6qszk+tPsGVQiKRgI7Wpcnmhe3YCJYC
-         AKxl+zVZy+fFyKJ8VrwBzIloVQF0RP4bqq1H9XFs78bnNoVaiST0AyG3Xy9Y6ZgPknoi
-         rXeFc6qTANY/Sxbc0Cv4Ea8ta34a8QJkvD/EEqoVBSvwezCunDFmuV/eyntSwJmShZqT
-         rBbuMmxMB1J0KH9sXCvTNh3BSVonR294n+N4dBvwixwq6hbj2NPKh7jT1BvbKPlCeuvm
-         4PGLBXwhfzivVKzPZ82q7qERBNhB2QZ5nLR3FtpKRAW6z+w4eXRgaRiaYDQLRo5rQUqg
-         35Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCXyQ7ZYAfcfZXaf6S8dyM9+22r1Rwuon+q+lIY5qghEteY65azEDVB03vJ1iZjSmciEVQnG@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx3bLFhox7DPW0wUUwIYoZa8uofh95R7o3LAyY4bzMwQK16nQb0
-	1ndr2MB0sQAF6TuqbpXHd38m2FbQjzt8KJBL756ACfLNhjZHxqCN
-X-Gm-Gg: ASbGncuor830bwJEEUlNeGIg8tDtQ5bcMkoLl9zgwxXAmMi/0SmB5inWAXHNWil18F4
-	mBLMKGxLIivDijl2fr58ryu1OgrjtSB3UgXjPIY7wK0UIwoKcGnx24Lursm7rO9wEFjuroRSbn7
-	HHGue9kmS9gZVKOi1JZPZ894IXvaa2bOZhNy3ZPR1WB7WUeU6BFxnPhu/+hEqiLI0QHUeC7MedZ
-	1zAqhmAfkhOEyYv7K3C9LWSRM3pR5iuLnm0A4kfacoHXbjK642alTY2xjAHGSlNkCUc9lU86K8Q
-	kWSX7KSxNbqbmcmRiuqAE+nsRnswnTf/OtXcNrRbknycDT4BOY/Pd0nBYbNk/EFcbBRIRmQ94/M
-	CSPn98uZP4CeGSkxPBp0NalEbpjeF5C1hGTE=
-X-Google-Smtp-Source: AGHT+IFYj4MuiWqakak2B3w+iKIXGikciSs3YkdDYfrd8r6Jjbs72ELdlAAXvKZwDHD1U9wUUWwU0g==
-X-Received: by 2002:a05:6214:c8a:b0:6e8:fa7a:14ab with SMTP id 6a1803df08f44-6eb3f284a8fmr109954316d6.6.1742790228928;
-        Sun, 23 Mar 2025 21:23:48 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6eb3ef0ebc1sm39588166d6.9.2025.03.23.21.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Mar 2025 21:23:48 -0700 (PDT)
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B3C931200043;
-	Mon, 24 Mar 2025 00:23:47 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Mon, 24 Mar 2025 00:23:47 -0400
-X-ME-Sender: <xms:U97gZweSXPmfd9XLE6SKa-fys5SCFYKm5mGAx9wV05aTGGQMBVOeKw>
-    <xme:U97gZyOTBlCSm7pGlU9Jk3JCFnfpTq2POr9n78bE3SoNUAluzD7W5U4Zza7VW2cK9
-    4CQxHxXh57H6OTE6A>
-X-ME-Received: <xmr:U97gZxhwovApCeqBR--zYKfoc2DHre9UtPNDzXAWrob420waxGin0Aa4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheekjeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrih
-    hlrdgtohhmqeenucggtffrrghtthgvrhhnpefftdeihfeigedtvdeuueffieetvedtgeej
-    uefhhffgudfgfeeggfeftdeigeehvdenucffohhmrghinhepghhithhhuhgsrdgtohhmne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhu
-    nhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqdduje
-    ejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdr
-    nhgrmhgvpdhnsggprhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpth
-    htohepkhhunhifuhdrtghhrghnsehlihhnuhigrdguvghvpdhrtghpthhtohepohhjvggu
-    rgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrg
-    hilhdrtghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphht
-    thhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhope
-    gsvghnnhhordhlohhsshhinhesphhrohhtohhnrdhmvgdprhgtphhtthhopegrrdhhihhn
-    uggsohhrgheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlihgtvghrhihhlhesgh
-    hoohhglhgvrdgtohhmpdhrtghpthhtohepthhmghhrohhsshesuhhmihgthhdrvgguuh
-X-ME-Proxy: <xmx:U97gZ1-24tAJn3BK1e8_WScaCRECw0qeKJ_D0n8IUFTHOpgCEO6xmQ>
-    <xmx:U97gZ8vEOF5vhXZJe-pCeVQCgWBBqNNVpfGAUzbDq9qANXZED4rpMA>
-    <xmx:U97gZ8HIBBX6f7smFasa0uiGXmyPR4-93VMmWWwoLOS3dmdKmtXOpA>
-    <xmx:U97gZ7Nx8CEl6Nam4x-Pzmu0KTvbFqdQkbqaJCGCJzRK69lF_LjYDA>
-    <xmx:U97gZxMIPI1w3ra8nnehC9gtcSXr3TDBM8HVXw3eDne4RQ10m6sOlAIG>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Mar 2025 00:23:47 -0400 (EDT)
-Date: Sun, 23 Mar 2025 21:23:46 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Kunwu Chan <kunwu.chan@linux.dev>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, benno.lossin@proton.me,
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
-	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	morbo@google.com, justinstitt@google.com,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>,
-	Grace Deng <Grace.Deng006@gmail.com>
-Subject: Re: [PATCH] rust: sync: optimize rust symbol generation for CondVar
-Message-ID: <Z-DeUmA-aouWUZBT@Mac.home>
-References: <20250317081351.2503049-1-kunwu.chan@linux.dev>
- <Z-BL_DFA3afcRYGE@Mac.home>
- <0d0b186d-6e07-4a46-b8e2-698a97796e44@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q/itCYGO"
+Message-ID: <01c67d96-6477-4851-81ae-0cbee3b9e893@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742796156;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tLb2IZkCs0bDiF2iretT/d5drfU5zFcnC3Q5G3NqRrw=;
+	b=q/itCYGO/j4kiRkJ8toFeEMJoRFzpbkRLesA0lMZR41R+YiIQz8MsbLziQHFJTJnZKr65Y
+	WscrDtH57UAR4s6BHfPXvmWUUZ1nmdKfukLJ8uzpiI0QBDyS8ihorGNNLpKTCWUMuKrvnp
+	tDnavqWrElbr+l/v0gXXsCDdD9DsIuA=
+Date: Mon, 24 Mar 2025 14:01:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d0b186d-6e07-4a46-b8e2-698a97796e44@linux.dev>
+Subject: Re: [PATCH] rust: sync: optimize rust symbol generation for CondVar
+Content-Language: en-US
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
+ nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>,
+ Grace Deng <Grace.Deng006@gmail.com>
+References: <20250317081351.2503049-1-kunwu.chan@linux.dev>
+ <Z-BL_DFA3afcRYGE@Mac.home> <0d0b186d-6e07-4a46-b8e2-698a97796e44@linux.dev>
+ <Z-DeUmA-aouWUZBT@Mac.home>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kunwu Chan <kunwu.chan@linux.dev>
+In-Reply-To: <Z-DeUmA-aouWUZBT@Mac.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 24, 2025 at 10:08:29AM +0800, Kunwu Chan wrote:
-> On 2025/3/24 01:59, Boqun Feng wrote:
-> > On Mon, Mar 17, 2025 at 04:13:50PM +0800, Kunwu Chan wrote:
-> > > From: Kunwu Chan <kunwu.chan@hotmail.com>
-> > > 
-> > > When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
-> > > with ARCH=arm64, the following symbols are generated:
-> > > 
-> > > $nm vmlinux | grep ' _R'.*CondVar | rustfilt
-> > > ... T <kernel::sync::condvar::CondVar>::notify_all
-> > > ... T <kernel::sync::condvar::CondVar>::notify_one
-> > > ... T <kernel::sync::condvar::CondVar>::notify_sync
-> > > ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-> > > ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-> > > ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-> > > ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
-> > > 
-> > > These notify* symbols are trivial wrappers around the C functions
-> > > __wake_up and __wake_up_sync.
-> > > It doesn't make sense to go through a trivial wrapper for these
-> > > functions, so mark them inline.
-> > > 
-> > > Link: https://github.com/Rust-for-Linux/linux/issues/1145
-> > > Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> > > Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
-> > > Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
-> > > Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
-> > > ---
-> > >   rust/kernel/sync/condvar.rs | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/rust/kernel/sync/condvar.rs b/rust/kernel/sync/condvar.rs
-> > > index 7df565038d7d..a826896ba3f0 100644
-> > > --- a/rust/kernel/sync/condvar.rs
-> > > +++ b/rust/kernel/sync/condvar.rs
-> > > @@ -181,6 +181,7 @@ pub fn wait_interruptible_timeout<T: ?Sized, B: Backend>(
-> > >       }
-> > >       /// Calls the kernel function to notify the appropriate number of threads.
-> > > +    #[inline]
-> > >       fn notify(&self, count: c_int) {
-> > Hmm.. I think CondVar::notify() gets inlined even without this
-> > `#[inline]` attribute, do we need this actually?
-> 
-> Actualy, after add '#[inline]', the build result is (compilecmd is 'make
-> ARCH=arm64 LLVM=1-j8' ):
-> 
+On 2025/3/24 12:23, Boqun Feng wrote:
+> On Mon, Mar 24, 2025 at 10:08:29AM +0800, Kunwu Chan wrote:
+>> On 2025/3/24 01:59, Boqun Feng wrote:
+>>> On Mon, Mar 17, 2025 at 04:13:50PM +0800, Kunwu Chan wrote:
+>>>> From: Kunwu Chan <kunwu.chan@hotmail.com>
+>>>>
+>>>> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
+>>>> with ARCH=arm64, the following symbols are generated:
+>>>>
+>>>> $nm vmlinux | grep ' _R'.*CondVar | rustfilt
+>>>> ... T <kernel::sync::condvar::CondVar>::notify_all
+>>>> ... T <kernel::sync::condvar::CondVar>::notify_one
+>>>> ... T <kernel::sync::condvar::CondVar>::notify_sync
+>>>> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+>>>> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+>>>> ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+>>>> ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
+>>>>
+>>>> These notify* symbols are trivial wrappers around the C functions
+>>>> __wake_up and __wake_up_sync.
+>>>> It doesn't make sense to go through a trivial wrapper for these
+>>>> functions, so mark them inline.
+>>>>
+>>>> Link: https://github.com/Rust-for-Linux/linux/issues/1145
+>>>> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+>>>> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
+>>>> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
+>>>> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
+>>>> ---
+>>>>    rust/kernel/sync/condvar.rs | 4 ++++
+>>>>    1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/rust/kernel/sync/condvar.rs b/rust/kernel/sync/condvar.rs
+>>>> index 7df565038d7d..a826896ba3f0 100644
+>>>> --- a/rust/kernel/sync/condvar.rs
+>>>> +++ b/rust/kernel/sync/condvar.rs
+>>>> @@ -181,6 +181,7 @@ pub fn wait_interruptible_timeout<T: ?Sized, B: Backend>(
+>>>>        }
+>>>>        /// Calls the kernel function to notify the appropriate number of threads.
+>>>> +    #[inline]
+>>>>        fn notify(&self, count: c_int) {
+>>> Hmm.. I think CondVar::notify() gets inlined even without this
+>>> `#[inline]` attribute, do we need this actually?
+>> Actualy, after add '#[inline]', the build result is (compilecmd is 'make
+>> ARCH=arm64 LLVM=1-j8' ):
+>>
+>> $nm vmlinux | grep ' _R'.*CondVar | rustfilt
+>> ffff800080019e90 T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_ex
+>> plicit
+>> ffff800080019e90 T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_ex
+>> plicit
+>> ffff800080019e90 T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_e
+>> xplicit
+>> ffff8000805b8c7c T <kernel::sync::poll::PollCondVar as
+>> core::ops::drop::Drop>::drop
+>>
+>>
+>> And before add '#[inline]',the 'nm vmlinux | grep ' _R'.*CondVar | rustfilt'
+>> appear 'notify' function,
+>>
+>> Seems like the LLVM didn't make it inline.
+>>
+> Your commit log said:
+>
+> ... the following symbols are generated:
+>
 > $nm vmlinux | grep ' _R'.*CondVar | rustfilt
-> ffff800080019e90 T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_ex
-> plicit
-> ffff800080019e90 T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_ex
-> plicit
-> ffff800080019e90 T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_e
-> xplicit
-> ffff8000805b8c7c T <kernel::sync::poll::PollCondVar as
-> core::ops::drop::Drop>::drop
-> 
-> 
-> And before add '#[inline]',the 'nm vmlinux | grep ' _R'.*CondVar | rustfilt'
-> appear 'notify' function,
-> 
-> Seems like the LLVM didn't make it inline.
-> 
+> ... T <kernel::sync::condvar::CondVar>::notify_all
+> ... T <kernel::sync::condvar::CondVar>::notify_one
+> ... T <kernel::sync::condvar::CondVar>::notify_sync
+> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> ... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
+> ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
+>
+> so no *notify* symbol even before the patch, right? I also checked with
 
-Your commit log said:
+My bad,I mistakenly thought it was some other 'notify_*' functions,
 
-... the following symbols are generated:
+it should be LLVM automatically inline 'notify', I will remove it in the 
+next version.
 
-$nm vmlinux | grep ' _R'.*CondVar | rustfilt
-... T <kernel::sync::condvar::CondVar>::notify_all
-... T <kernel::sync::condvar::CondVar>::notify_one
-... T <kernel::sync::condvar::CondVar>::notify_sync
-... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-... T <kernel::sync::condvar::CondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
-... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
+> my local build, without your patch, there is still no symbol for
+> notify().
+>
+> Regards,
+> Boqun
 
-so no *notify* symbol even before the patch, right? I also checked with
-my local build, without your patch, there is still no symbol for
-notify().
+-- 
+Thanks,
+   Kunwu.Chan(Tao.Chan)
 
-Regards,
-Boqun
