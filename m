@@ -1,113 +1,141 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A939C8E0
-	for <llvm@lists.linux.dev>; Mon, 24 Mar 2025 02:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4321E511;
+	Mon, 24 Mar 2025 03:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742782420; cv=none; b=uLsiy6AS9UJt9IiTu8I/mpLL87vWkwKNdlNTQEhn4oXGqtCyk/KfCF+S456NGOyWzOv2gH3uYTkE2w9ItES+Qor/gM0L97f/Rv18cfi3TqE7lnWQgE+1KRFFS5tZ8HKSYuu850djDH7Masw/lfRzm0Elco6yWqhdxfiW8y/YP9M=
+	t=1742786416; cv=none; b=D1QLK/HkaANeCgufnkgT91PHBfePVSWFEJJpmmA7UiQx8H4SJK8SJBGAKLOWSzlZ2t3wQt8cnFBjZpfSD95rx157JArHzXReKYht2i8IGbOYhDWhwAzKRnjS8EJrdeDflt+C9mJZSpR/+mncl5tWUHPzsq5HqOXk/UcpEYVUry8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742782420; c=relaxed/simple;
-	bh=2BE2IxPPQMMhXsHKXbpGoOMsNi48zxmr5E2HFB9zuvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cWUe+nQBriRYMkX6TmStmnlOnTYSi9K3ZOhvW4OG6eT47nEefMMQX9GYXplTRD7TR1IQhy8wmUa71hOZFAGSXRsX/U+avlKI/cM13p2MVj4kZ5CJ5oUq0KSq6hr7a7VcjM3kdzGNxQxXC4eUyVvl9t54Qlcy4aRgMu1qmB2Jcsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dGzFw8Vv; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1742786416; c=relaxed/simple;
+	bh=5U2hz6Ps5Y0/LkUJRaC8iNmpBLjaBL4x57nl2s22ReE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CC361PA49VEKWABdMobNa1Oaefj8HS8TS2X24f3yeIlbYtfW5JiqudTSC6zVaQqMZIdSt0sHt5Cd7dR3P8KXkE3D7iajG4ziRkXKwlawO58WrXqEROrblfrIpGxQ+g8I9UbiB684wOIaZ4y29SC3CO5BgkILDDl8JJI1vb5HVTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fs4RMN9x; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dGzFw8Vv"
-Message-ID: <c7408be8-52eb-4919-a60d-3cadfa185e02@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742782416;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k4/tJLm3+fY5j+LgerUyhgXjA8+RDlZ48rnTRfZESKM=;
-	b=dGzFw8Vv8Ymgj3/9soVLnzadth3gBcSF++sGJ96e1UXfO22V3E6lPeygUVjUDWxH9Lr5D7
-	+f1cJWtLCXJN/cN2DKF51hn297RFL9Y4ncRn0sIwciPsVU8tYPrA5w4gkSMM7sOaoJHXr7
-	ACtTQOiYc+p5zW5YPcnsJxD47WE2+cc=
-Date: Mon, 24 Mar 2025 10:13:29 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fs4RMN9x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742786415; x=1774322415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5U2hz6Ps5Y0/LkUJRaC8iNmpBLjaBL4x57nl2s22ReE=;
+  b=fs4RMN9xF0hzCcCt/oXiKsL+hjZ0Od5vaVqQLUM0RlSGr101uBy8Q6im
+   3KjKCsi/8RcFEx9Gkvh0OpoG9ykDXDOYXpbY7T9skqw7cl974Xmax0d4i
+   anqUXobzAAJGOUia3M9sEeN1r3PqexVLFMh4aJtrNVhmuCfYRps5SIm3h
+   gH1B9vT/GcTor0/ykKCezHLguf8H2ajXqBVx4Ft+PBsgI9PKKn42YxGRN
+   FoJoFxS/GwicIQAvFebAWoRY4oRdxNLujq3kNit1+iuNOXRcpc4TdmVGX
+   TsETdNbcxIKHU7RBx3RX+gen1LzoOqyZ9NTJ8nHCHoNmtFyEjxp3jNFsL
+   w==;
+X-CSE-ConnectionGUID: s0AjPLq1SAq2EpPnEXhVtw==
+X-CSE-MsgGUID: eXlP31dmQB2bTUw+wAwi8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11382"; a="43701680"
+X-IronPort-AV: E=Sophos;i="6.14,271,1736841600"; 
+   d="scan'208";a="43701680"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2025 20:20:14 -0700
+X-CSE-ConnectionGUID: Ctcp6A7VTQi+FQAgva4eWQ==
+X-CSE-MsgGUID: z3XqtjwiRLaLcbzzETLP3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,271,1736841600"; 
+   d="scan'208";a="124700753"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 23 Mar 2025 20:20:10 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1twYMC-0003Cy-0j;
+	Mon, 24 Mar 2025 03:20:08 +0000
+Date: Mon, 24 Mar 2025 11:19:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [net-next PATCH 1/2] net: phy: Add support for new Aeonsemi PHYs
+Message-ID: <202503241125.KKDZ7C9F-lkp@intel.com>
+References: <20250323225439.32400-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] rust: sync: optimize Rust symbol generation for
- PollCondVar
-Content-Language: en-US
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, gary@garyguo.net,
- bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org,
- nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Kunwu Chan <kunwu.chan@hotmail.com>,
- Grace Deng <Grace.Deng006@gmail.com>
-References: <20250317025205.2366518-1-kunwu.chan@linux.dev>
- <Z-BJjjEZBzwKJ9mS@Mac.home>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kunwu Chan <kunwu.chan@linux.dev>
-In-Reply-To: <Z-BJjjEZBzwKJ9mS@Mac.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250323225439.32400-1-ansuelsmth@gmail.com>
 
-On 2025/3/24 01:49, Boqun Feng wrote:
-> On Mon, Mar 17, 2025 at 10:52:05AM +0800, Kunwu Chan wrote:
->> From: Kunwu Chan <kunwu.chan@hotmail.com>
->>
->> When build the kernel using the llvm-18.1.3-rust-1.85.0-x86_64
->> with ARCH=arm64, the following symbols are generated:
->>
->> $nm vmlinux | grep ' _R'.*PollCondVar  | rustfilt
->> ... T <kernel::sync::poll::PollCondVar>::new::{closure#0}::{closure#0}::panic_cold_explicit
->> ... T <kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop
->> ... T <kernel::sync::poll::PollCondVar as core::ops::drop::Drop>::drop
->>
->> This Rust symbol
->> (<kernel::sync::poll::PollCondVar as kernel::init::PinnedDrop>::drop)
->> is trivial wrappers around the C functions __wake_up_pollfree
->> and synchronize_rcu. It doesn't make sense to go through a trivial
->> wrapper for its functions,so mark it inline.
->>
->> Link: https://github.com/Rust-for-Linux/linux/issues/1145
->> Suggested-by: Alice Ryhl <aliceryhl@google.com>
->> Co-developed-by: Grace Deng <Grace.Deng006@Gmail.com>
->> Signed-off-by: Grace Deng <Grace.Deng006@Gmail.com>
->> Signed-off-by: Kunwu Chan <kunwu.chan@hotmail.com>
->>
-> Queued for future tests and reviews. Thanks!
-Ok, if need do testing-related work, feel free to contact me
->
-> Regards,
-> Boqun
->
->> ---
->> Changes in v2:
->>   - Add link and Suggested-by
->>   - Reword commit msg
->> ---
->>   rust/kernel/sync/poll.rs | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/rust/kernel/sync/poll.rs b/rust/kernel/sync/poll.rs
->> index d5f17153b424..a4f92c545fec 100644
->> --- a/rust/kernel/sync/poll.rs
->> +++ b/rust/kernel/sync/poll.rs
->> @@ -107,6 +107,7 @@ fn deref(&self) -> &CondVar {
->>   
->>   #[pinned_drop]
->>   impl PinnedDrop for PollCondVar {
->> +    #[inline]
->>       fn drop(self: Pin<&mut Self>) {
->>           // Clear anything registered using `register_wait`.
->>           //
->> -- 
->> 2.43.0
->>
+Hi Christian,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/dt-bindings-net-Document-support-for-Aeonsemi-PHYs/20250324-065920
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250323225439.32400-1-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH 1/2] net: phy: Add support for new Aeonsemi PHYs
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250324/202503241125.KKDZ7C9F-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250324/202503241125.KKDZ7C9F-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503241125.KKDZ7C9F-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/as21xxx.c:767:14: warning: variable 'val' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
+     767 |         for (i = 0; i < ARRAY_SIZE(as21xxx_led_supported_pattern); i++)
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/as21xxx.c:775:33: note: uninitialized use occurs here
+     775 |                               VEND1_LED_REG_A_EVENT, val);
+         |                                                      ^~~
+   drivers/net/phy/as21xxx.c:767:14: note: remove the condition if it is always true
+     767 |         for (i = 0; i < ARRAY_SIZE(as21xxx_led_supported_pattern); i++)
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/as21xxx.c:761:9: note: initialize the variable 'val' to silence this warning
+     761 |         u16 val;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +767 drivers/net/phy/as21xxx.c
+
+   757	
+   758	static int as21xxx_led_hw_control_set(struct phy_device *phydev, u8 index,
+   759					      unsigned long rules)
+   760	{
+   761		u16 val;
+   762		int i;
+   763	
+   764		if (index > AEON_MAX_LDES)
+   765			return -EINVAL;
+   766	
+ > 767		for (i = 0; i < ARRAY_SIZE(as21xxx_led_supported_pattern); i++)
+   768			if (rules == as21xxx_led_supported_pattern[i].pattern) {
+   769				val = as21xxx_led_supported_pattern[i].val;
+   770				break;
+   771			}
+   772	
+   773		return phy_modify_mmd(phydev, MDIO_MMD_VEND1,
+   774				      VEND1_LED_REG(index),
+   775				      VEND1_LED_REG_A_EVENT, val);
+   776	}
+   777	
+
 -- 
-Thanks,
-   Kunwu.Chan(Tao.Chan)
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
