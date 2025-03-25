@@ -1,263 +1,197 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3901625C717
-	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 17:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625F219F422;
+	Tue, 25 Mar 2025 21:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742924689; cv=none; b=LsZzkyrAVfL/ozSte2UY5ce7gawb72GMmQP7by+0E+DtNkLt7lTN49GHXeVgR4ZTi/TQpYCfQ4xKDzOx1HCbTD84pCgKWflGSeaknbZUgB/6M9m11M5fwKHpad9OOPtl61El0xm1qQnJntbFQ/Pq7LniSsV3DZfueSya5zx2hVg=
+	t=1742939121; cv=none; b=ekzG9GeEWpWwHEOVFFaGpfqjrHepwyDeHn6U6OYkz1mAeB4ZxwJ7h3gspnaDXZf2SF43C5bP7xvCFFO/uymPxRL/Um1R0X8/v/GvcGT2VstSoc6gyDVybir5s+zjUu3H367wnWv/vAj7YqZvonyL+N7T9aYXaq/v+K/TBIwYPFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742924689; c=relaxed/simple;
-	bh=o6g5HoC32I+6BiDO8vCfhv3kf+WezCmeDCwVZM3gAjo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=FwwmbLg4IHdXD3lHDR5Vbb2DzZpfM1N3Pa893ZxGCGqYYK1NKksMwuGHh03dgk05X7oeUhaa8Z67BWBrAXy28rhcvmqAEEPsUJWUC/8SEHLTnme67jjjOTq9mJQCodXF1+Gr3u4aMboUPC9Mon4gk6dtjQmcjb7FcKD0bgrHth0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=av++vD5D; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1742939121; c=relaxed/simple;
+	bh=rDdLVVOB1kS1Rur+co5d17dcdxdeV+fdRJuaWwVbsuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YCGLrwOcAhuW7BqiZYFj4IJyJ7nQ5lmEDC7MwdNsnWeZVFPqmIH8cc25t6iDZxkFBL6AkJAchlcI1Ryb5jjWDL9UBdLRGUk8FM7ETpyRrDy7jHuHrNWOGZkQoOKRyCv6I+kNf6H3I9b9HvG9pTKm+a1DuInwwhhyM/TBfOfbwo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLIa4DHk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="av++vD5D"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2240aad70f2so18555ad.0
-        for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 10:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742924687; x=1743529487; darn=lists.linux.dev;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C557zFYMQNx6YZaNFk9a2tG90MlGVtliFmUOKVTtxbE=;
-        b=av++vD5DXfTv8/ur2zPh9bluyYQTKiXRp9wdDc+UNftwPUu/pIDXJubG4R69Y38npa
-         wghsWxP9ZXUQO1rhg3+Kl3ZWjsTYyTfQjxvskSAuNI9YUGb9YetHoSxrZ9rnqeHY5HqD
-         oICoHd2saIcefI5ogQfS/uhnmJUO+6CgxprDXWQj89cHgnvIJqftbs15bmVhVoTDgh4Z
-         YKOBBsVhlhi0QtaBmAi3dZ+sSCfopDyJ5RYkXZ0gW4RNETxhcD6sVajNS1cNIPzlr92U
-         vcEi4JG92vhDSQS6hiCrLTcIrT/h/2e1juDrgiGTAuJUZ8AthNd+Jp77NhBx7CeBhYEo
-         66JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742924687; x=1743529487;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C557zFYMQNx6YZaNFk9a2tG90MlGVtliFmUOKVTtxbE=;
-        b=f5SPJ9aV6eU4S3Ibu/7cb0LQyvfUc1n1p4lG2l9d9uF08awUfnfGclrHf+SlAFVDfO
-         Sam/aC+hP8tfF2WWtzIRKdM4RW5DMa+sFyvyQf8GKw5MzTd8aEIacBrZPXSpfdO1KpHO
-         DXiaLsHEciuL7YigAR2C6NYcULR06rNrNe5shHcHeDOhnItXDqQGIncpKQPJFevPgBP/
-         i1p31pVUxulCnKKibcZLSC4QMdrEoYnSQuRif7qmQBoDfknkTkQBRlsvIOuuR6s8oBzV
-         3JjYBlqKhHS6kh1NOXfODu08bAZx30/sX9bR3rSWg1Er5zZWQYYXh9xg8lOIYC7GAwWy
-         ljQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXcxKf0TtBfKOCUIzl7+0reGBWSyjkvL2HIMkfwftMgntl85616Su6SuiqSn5Dg7EKJyil3@lists.linux.dev
-X-Gm-Message-State: AOJu0YzBDbdggwohmW5zdIU/1FUT8C/+MjNgCGNX3YErY8OhkFg1cnZV
-	nSPlZH0MS3UPb4ds5CYPwrjPTN85sfPr6EF/xlN+p5NDCNB090B2crHiguu6UCFPcBaFxdVqXut
-	78uwygv92tjJSFvRt2HGEY42m1OjXI8RGCqaA
-X-Gm-Gg: ASbGncubC5YpzjBUS9uI+Rb2OEIkdWcn+goOM5j3/HthZL9M3MvGJ3Cw0jHp2BHKv64
-	dcuZYZfVXCj0vja2i5oInFBz963jfj/s7uAKf0cV4QJOy899nqcQQ4EkVt8ULir2PfmfxwdKYwN
-	0/VgRzNZ85eeRndURKJ210v+LT4E9JnpW64tbl7RMZ21g3TErrT0jsUQ==
-X-Google-Smtp-Source: AGHT+IHPelgDScufsa6zAdrdNBGBs5B6xqAFz7eUGQGOmOqHwOhJ5MfpsvqJ85TCgQC7BKeJ/DkvYhul0b9i7GXTf4c=
-X-Received: by 2002:a17:903:2c6:b0:21f:2ded:bfa0 with SMTP id
- d9443c01a7336-22799f80a6bmr9127625ad.25.1742924687095; Tue, 25 Mar 2025
- 10:44:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLIa4DHk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB043C4CEE9;
+	Tue, 25 Mar 2025 21:45:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742939120;
+	bh=rDdLVVOB1kS1Rur+co5d17dcdxdeV+fdRJuaWwVbsuo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cLIa4DHkHu6DZUzJ7CVPddiUkvWsIOiF5FxQZabr9XLtulzdbDbAcTzYSk4t3bwff
+	 fL16Cj00rxs5iw/B3tlh+4c+lX+8qBz9ZIu8yto0AvURVKOdZdweCpRcmPRS+UTgMt
+	 Vnsmaj2R4ykyNtr6dHqLJtkkunoPGZcXVkBrXySAjNmqWxSTgMfD/TtbtmLTlqs4SC
+	 ar/TtJ9JnjHpNxNQ9AByKrCO6gSpujk4AkQ9LypD8CP1wgBZRZ5giznshuO0bWdnyf
+	 2qnDR1rhwwG54j1Yqt6y8t9aiVN9tOZpZmjZCBLbexmYOHm6woI5N/CtzXTBIazeX7
+	 nxlz8s0mckJ+w==
+Date: Tue, 25 Mar 2025 14:45:16 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	linux-efi@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] wcslen() prototype in string.h
+Message-ID: <20250325214516.GA672870@ax162>
+References: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
+ <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
+ <Z-LXHssrcpdtFqqn@smile.fi.intel.com>
+ <20250325165847.GA2603000@ax162>
+ <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250122174308.350350-1-irogers@google.com> <20250122174308.350350-11-irogers@google.com>
-In-Reply-To: <20250122174308.350350-11-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 25 Mar 2025 10:44:34 -0700
-X-Gm-Features: AQ5f1JpIGP8wbMVFe85DxBTilH4hLmUR3dv-unPSph-h7lFMwMVjU6DwDza6nuM
-Message-ID: <CAP-5=fUt4rvEWRY=O6-EM0GGgOxz3VL933OgSYET2HxCi8fsCA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/18] perf dso: Support BPF programs in dso__read_symbol
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Aditya Gupta <adityag@linux.ibm.com>, 
-	"Steinar H. Gunderson" <sesse@google.com>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Changbin Du <changbin.du@huawei.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Li Huafei <lihuafei1@huawei.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>, 
-	Chaitanya S Prakash <chaitanyas.prakash@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev, 
-	Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
 
-On Wed, Jan 22, 2025 at 9:43=E2=80=AFAM Ian Rogers <irogers@google.com> wro=
-te:
->
-> Set the buffer to the code in the BPF linear info. This enables BPF
-> JIT code disassembly by LLVM and capstone. Move the disassmble_bpf
-> calls to disassemble_objdump so that they are only called after
-> falling back to the objdump option.
+On Tue, Mar 25, 2025 at 07:05:28PM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 25, 2025 at 09:58:47AM -0700, Nathan Chancellor wrote:
+> > On Tue, Mar 25, 2025 at 06:17:34PM +0200, Andy Shevchenko wrote:
+> > > On Tue, Mar 25, 2025 at 08:45:19AM -0700, Nathan Chancellor wrote:
+> 
+> ...
+> 
+> > > > Rename the efi function to avoid the conflict.
+> > > 
+> > > Hmm... Why not split this to two, rename patch as a standalone makes sense to
+> > > me even outside of this series.
+> > 
+> > How so? If nls.h is not included in printk.c via string.h, which does
+> > not happen without this series, what value does the rename have? I do
+> > not mind splitting it up that way to keep things cleaner, I am just
+> > wondering what would be the justification in the changelog (I guess just
+> > that nls.h may get included in the future for some reason)?
+> 
+> Inside this series the justification is obvious (a.k.a. the same), outside
+> yes something like "Put EFI specific function to the respective namespace
+> to avoid potential clash in the future when including another header."
 
-It would be nice to land this series in part because of supporting BPF
-disassembly with LLVM and capstone, possible because of the cleanups
-and refactorings.
+Okay, sounds reasonable to me. This is what I ended up with for that
+change, which will become patch one of the series.
 
-Thanks,
-Ian
+From f79267c05d2853c034e2c490f171aed064b85dd6 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 25 Mar 2025 14:31:25 -0700
+Subject: [PATCH] efi: libstub: Rename utf8_to_utf32() to avoid collision with
+ NLS version
 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/disasm.c | 12 +++---
->  tools/perf/util/dso.c    | 85 +++++++++++++++++++++++++---------------
->  2 files changed, 60 insertions(+), 37 deletions(-)
->
-> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-> index a9cc588a3006..99b9c21e02b0 100644
-> --- a/tools/perf/util/disasm.c
-> +++ b/tools/perf/util/disasm.c
-> @@ -1500,6 +1500,12 @@ static int symbol__disassemble_objdump(const char =
-*filename, struct symbol *sym,
->         struct child_process objdump_process;
->         int err;
->
-> +       if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_PROG_INFO)
-> +               return symbol__disassemble_bpf(sym, args);
-> +
-> +       if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_IMAGE)
-> +               return symbol__disassemble_bpf_image(sym, args);
-> +
->         err =3D asprintf(&command,
->                  "%s %s%s --start-address=3D0x%016" PRIx64
->                  " --stop-address=3D0x%016" PRIx64
-> @@ -1681,11 +1687,7 @@ int symbol__disassemble(struct symbol *sym, struct=
- annotate_args *args)
->
->         pr_debug("annotating [%p] %30s : [%p] %30s\n", dso, dso__long_nam=
-e(dso), sym, sym->name);
->
-> -       if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_PROG_INFO) =
-{
-> -               return symbol__disassemble_bpf(sym, args);
-> -       } else if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_IMAG=
-E) {
-> -               return symbol__disassemble_bpf_image(sym, args);
-> -       } else if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__NOT_FOUN=
-D) {
-> +       if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__NOT_FOUND) {
->                 return SYMBOL_ANNOTATE_ERRNO__COULDNT_DETERMINE_FILE_TYPE=
-;
->         } else if (dso__is_kcore(dso)) {
->                 kce.addr =3D map__rip_2objdump(map, sym->start);
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 0285904ed26d..a90799bed230 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -1686,48 +1686,69 @@ const u8 *dso__read_symbol(struct dso *dso, const=
- char *symfs_filename,
->                            const struct map *map, const struct symbol *sy=
-m,
->                            u8 **out_buf, u64 *out_buf_len, bool *is_64bit=
-)
->  {
-> -       struct nscookie nsc;
->         u64 start =3D map__rip_2objdump(map, sym->start);
->         u64 end =3D map__rip_2objdump(map, sym->end);
-> -       int fd, count;
-> -       u8 *buf =3D NULL;
-> -       size_t len;
-> -       struct find_file_offset_data data =3D {
-> -               .ip =3D start,
-> -       };
-> +       const u8 *buf;
-> +       size_t len =3D end - start;
->
->         *out_buf =3D NULL;
->         *out_buf_len =3D 0;
->         *is_64bit =3D false;
->
-> -       nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
-> -       fd =3D open(symfs_filename, O_RDONLY);
-> -       nsinfo__mountns_exit(&nsc);
-> -       if (fd < 0)
-> +       if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_IMAGE) {
-> +               pr_debug("No BPF image disassembly support\n");
->                 return NULL;
-> +       } else if (dso__binary_type(dso) =3D=3D DSO_BINARY_TYPE__BPF_PROG=
-_INFO) {
-> +#ifdef HAVE_LIBBPF_SUPPORT
-> +               struct bpf_prog_info_node *info_node;
-> +               struct perf_bpil *info_linear;
-> +
-> +               *is_64bit =3D sizeof(void *) =3D=3D sizeof(u64);
-> +               info_node =3D perf_env__find_bpf_prog_info(dso__bpf_prog(=
-dso)->env,
-> +                                                        dso__bpf_prog(ds=
-o)->id);
-> +               if (!info_node) {
-> +                       errno =3D SYMBOL_ANNOTATE_ERRNO__BPF_MISSING_BTF;
-> +                       return NULL;
-> +               }
-> +               info_linear =3D info_node->info_linear;
-> +               buf =3D (const u8 *)(uintptr_t)(info_linear->info.jited_p=
-rog_insns);
-> +               assert(len <=3D info_linear->info.jited_prog_len);
-> +#else
-> +               pr_debug("No BPF program disassembly support\n");
-> +               return NULL;
-> +#endif
-> +       } else {
-> +               struct nscookie nsc;
-> +               int fd;
-> +               ssize_t count;
-> +               struct find_file_offset_data data =3D {
-> +                       .ip =3D start,
-> +               };
-> +               u8 *code_buf =3D NULL;
->
-> -       if (file__read_maps(fd, /*exe=3D*/true, find_file_offset, &data, =
-is_64bit) =3D=3D 0)
-> -               goto err;
-> -
-> -       len =3D end - start;
-> -       buf =3D malloc(len);
-> -       if (buf =3D=3D NULL)
-> -               goto err;
-> -
-> -       count =3D pread(fd, buf, len, data.offset);
-> -       close(fd);
-> -       fd =3D -1;
-> -
-> -       if ((u64)count !=3D len)
-> -               goto err;
-> +               nsinfo__mountns_enter(dso__nsinfo(dso), &nsc);
-> +               fd =3D open(symfs_filename, O_RDONLY);
-> +               nsinfo__mountns_exit(&nsc);
-> +               if (fd < 0)
-> +                       return NULL;
->
-> -       *out_buf =3D buf;
-> +               if (file__read_maps(fd, /*exe=3D*/true, find_file_offset,=
- &data, is_64bit) =3D=3D 0) {
-> +                       close(fd);
-> +                       return NULL;
-> +               }
-> +               buf =3D code_buf =3D malloc(len);
-> +               if (buf =3D=3D NULL) {
-> +                       close(fd);
-> +                       return NULL;
-> +               }
-> +               count =3D pread(fd, code_buf, len, data.offset);
-> +               close(fd);
-> +               if ((u64)count !=3D len) {
-> +                       free(code_buf);
-> +                       return NULL;
-> +               }
-> +               *out_buf =3D code_buf;
-> +       }
->         *out_buf_len =3D len;
->         return buf;
-> -
-> -err:
-> -       if (fd >=3D 0)
-> -               close(fd);
-> -       free(buf);
-> -       return NULL;
->  }
-> --
-> 2.48.1.262.g85cc9f2d1e-goog
->
+A future change will add nls.h to string.h, which will break the libstub
+build because NLS includes its own version of utf8_to_utf32():
+
+  drivers/firmware/efi/libstub/printk.c:27:5: error: static declaration of 'utf8_to_utf32' follows non-static declaration
+     27 | u32 utf8_to_utf32(const u8 **s8)
+        |     ^
+  include/linux/nls.h:55:12: note: previous declaration is here
+     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
+        |            ^
+  drivers/firmware/efi/libstub/printk.c:85:26: error: too few arguments to function call, expected 3, have 1
+     85 |                 c32 = utf8_to_utf32(&s8);
+        |                       ~~~~~~~~~~~~~    ^
+  include/linux/nls.h:55:12: note: 'utf8_to_utf32' declared here
+     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
+        |            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  2 errors generated.
+
+Rename the libstub version since it is static to avoid the conflict.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/firmware/efi/libstub/printk.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/firmware/efi/libstub/printk.c b/drivers/firmware/efi/libstub/printk.c
+index 3a67a2cea7bd..334f7e89845c 100644
+--- a/drivers/firmware/efi/libstub/printk.c
++++ b/drivers/firmware/efi/libstub/printk.c
+@@ -24,7 +24,7 @@ void efi_char16_puts(efi_char16_t *str)
+ }
+ 
+ static
+-u32 utf8_to_utf32(const u8 **s8)
++u32 efi_utf8_to_utf32(const u8 **s8)
+ {
+ 	u32 c32;
+ 	u8 c0, cx;
+@@ -82,7 +82,7 @@ void efi_puts(const char *str)
+ 	while (*s8) {
+ 		if (*s8 == '\n')
+ 			buf[pos++] = L'\r';
+-		c32 = utf8_to_utf32(&s8);
++		c32 = efi_utf8_to_utf32(&s8);
+ 		if (c32 < 0x10000) {
+ 			/* Characters in plane 0 use a single word. */
+ 			buf[pos++] = c32;
+-- 
+2.49.0
+
+Then the first patch (which becomes the second) becomes:
+
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 0403a4ca4c11..45e01cf3434c 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -7,6 +7,7 @@
+ #include <linux/cleanup.h>	/* for DEFINE_FREE() */
+ #include <linux/compiler.h>	/* for inline */
+ #include <linux/types.h>	/* for size_t */
++#include <linux/nls.h>		/* for wchar_t */
+ #include <linux/stddef.h>	/* for NULL */
+ #include <linux/err.h>		/* for ERR_PTR() */
+ #include <linux/errno.h>	/* for E2BIG */
+@@ -203,6 +204,7 @@ extern __kernel_size_t strlen(const char *);
+ #ifndef __HAVE_ARCH_STRNLEN
+ extern __kernel_size_t strnlen(const char *,__kernel_size_t);
+ #endif
++extern __kernel_size_t wcslen(const wchar_t *s);
+ #ifndef __HAVE_ARCH_STRPBRK
+ extern char * strpbrk(const char *,const char *);
+ #endif
+diff --git a/lib/string.c b/lib/string.c
+index eb4486ed40d2..1aa09925254b 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -21,6 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/limits.h>
+ #include <linux/linkage.h>
++#include <linux/nls.h>
+ #include <linux/stddef.h>
+ #include <linux/string.h>
+ #include <linux/types.h>
+@@ -429,6 +430,16 @@ size_t strnlen(const char *s, size_t count)
+ EXPORT_SYMBOL(strnlen);
+ #endif
+ 
++size_t wcslen(const wchar_t *s)
++{
++	const wchar_t *sc;
++
++	for (sc = s; *sc != '\0'; ++sc)
++		/* nothing */;
++	return sc - s;
++}
++EXPORT_SYMBOL(wcslen);
++
+ #ifndef __HAVE_ARCH_STRSPN
+ /**
+  * strspn - Calculate the length of the initial substring of @s which only contain letters in @accept
+---
+
+with basically the same changelog.
+
+I will send v2 either tomorrow afternoon or Thursday morning to give a
+little more time for initial review/comments.
+
+Thanks for the quick feedback!
+
+Cheers,
+Nathan
