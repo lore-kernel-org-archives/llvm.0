@@ -1,148 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA4E25BABA;
-	Tue, 25 Mar 2025 15:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5492561B8;
+	Tue, 25 Mar 2025 15:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742917547; cv=none; b=N8FQVJNHicYvfdJcu/wYre5m6OvAPKT593mOMAhKGIK3MEOG6hGnAdzlPKAgeOYGV8xBzVdW/OINa6SRxRxAXRSVb7Guv+H2aY+eZC+ui6FDGkC77hQfapIkpfgN71o94VVXJFVtyA7LQHsoqS1Bl75b3qDJOuzzuf/5uk7Pp5A=
+	t=1742918351; cv=none; b=Cgcl+Lzzjsie8WgtRs0fCjXrMWHFnG+L0PrMaAD8v81Y4yO6JuREfde22hHos3vQmxJjmASUGhW/RWrhbzhtojzhc6k5uNNjMf0zT+tD996CNwS6hkhy5mGxdNe1BLmdHniQFeeuXVb0/fzA8yvYK2lNS2EzJLUTDDXkDwRfGlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742917547; c=relaxed/simple;
-	bh=xVCx2kciP/eq/LO5hKJChVYRZx47bjD2BczzGnahD9o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hzuhl83J5Nlcmbi7sLtoMQ7IildwGXChxJbUsWCZqolYorbUYHEjZ5BVIRmQyHp087tOkbgSYPhI5wAVHntHIOtKYZ9CrZlQjXWQRGbTKD95P6b84kW0J2d1H61sOOVai4HkUS4evcajIwMMhrqZhh0eN/pA0PLSKVUqmiOxrnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j3+mul1B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742918351; c=relaxed/simple;
+	bh=Hj9iUmChR+8d/DA0X8uEVz7oxaYB43JGSC9g8Q7U1Gw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S05WM3xouyZu6dz2b4Z7PqZQgPdhtuz/bkXxL73XkvpoW6yiKinUeFjO6pQiZyOVnsR7xz0nONx42ZwidND+gWM2wDxZdRowHQcWJCdnwLc2ZBC2qQ6lVvWgo0zMHsyVZxc7aojyDy+krFllrvPYZ8gn3H07PO5mMw76mk5PXps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6nfM5Py; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j3+mul1B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049A0C4CEF1;
-	Tue, 25 Mar 2025 15:45:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6nfM5Py"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C9A5C4CEEF;
+	Tue, 25 Mar 2025 15:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742917546;
-	bh=xVCx2kciP/eq/LO5hKJChVYRZx47bjD2BczzGnahD9o=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=j3+mul1B2B616Ow0fu3XYA8oZCiKaJB13Q8/KHhLIGGTVhfu3WhYy4d6YFfY+Upo6
-	 8I1YXzSXD7tKrMEOQdJB2Wl3NSq1OhZ8JXp9hXJ8cRgx3sqInJ58J9VGRSITJP3NgZ
-	 Vg7WZ66uCvuA0mBfmXMjSJjdpKoScY5H/kBaypQdHyTqOKlTH+gkzRaGIjzv/kRBWM
-	 BNfR9eHh3t+vkLygqOwrOLBGPSDSsFBVXEl7rkeCRAW20TGN5X51z3abNij8eONKXk
-	 7KRku3GVkCkKpDbEyooIdi+0DZK7RG1Tju0K7kjiFZ5P5VjInhuLq8yj5P/ciRNU2i
-	 nga+c5cHXDRsw==
+	s=k20201202; t=1742918350;
+	bh=Hj9iUmChR+8d/DA0X8uEVz7oxaYB43JGSC9g8Q7U1Gw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C6nfM5PytlRiRwvENoHvQLzMdshWAT+bkAJwF27SipW8Z/7W4Bu6xs7vyB0LU1XXD
+	 JyvvX1Vnc3r+fc3KZauUjqF7yhax/uhN0/+hOI1qaadtRNRnC+SecVbTqgYGmLFHSc
+	 DKiGv5Z7qWGaVxD65DMSsbUuij+JgaUa1S7WUpHVzDaihN6BBi3M2G8pGvqYeryJgC
+	 hnDQn3LiwZN+Eo3mDBnkGpYSnwTHRJH0abEweIis7wRPW+HZziFmPd7qWrf6e/TCtc
+	 OjJqpEOLWPLr3WPMvRmMhMzkVNLW+kfsaLtUsIWFto1sL0W9jTk9VcYe44jfdIRrY4
+	 +qcnuCvrBzqfg==
+Date: Tue, 25 Mar 2025 08:59:06 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 25 Mar 2025 08:45:19 -0700
-Subject: [PATCH RFC 2/2] wcslen() prototype in string.h
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] platform: cznic: fix function parameter names
+Message-ID: <20250325155906.GA1886499@ax162>
+References: <20250321085315.915808-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
-References: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
-In-Reply-To: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Andy Shevchenko <andy@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
- linux-efi@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3349; i=nathan@kernel.org;
- h=from:subject:message-id; bh=xVCx2kciP/eq/LO5hKJChVYRZx47bjD2BczzGnahD9o=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDOmPzi/6svQ4k8Dxq/xirT+S42+WK99wP7JxJ6PDo6Un9
- 596Zysp0lHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAm4uvP8D/CZ6PjhDlGi/0m
- LdGR/f54W+qPkifaP8XZKtQfrv767psTI8N6949nvwo+/d92LvZhbtbF3zqvWpQqj81deu9W4em
- Yu/wMAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250321085315.915808-1-arnd@kernel.org>
 
-If this is desired, it should be squashed into the previous change. I
-wrote it separately because it is slightly more invasive.
+On Fri, Mar 21, 2025 at 09:53:07AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A invalid prototype made it into a previous patch, causing an clang warning:
+> 
+> drivers/platform/cznic/turris-signing-key.c:25:55: warning: omitting the parameter name in a function definition is a C23 extension [-Wc23-extensions]
+> 
+> and a slightly different warning with gcc-11 and earlier but not gcc-12 and up:
+> 
+> drivers/platform/cznic/turris-signing-key.c: In function 'turris_signing_key_instantiate':
+> drivers/platform/cznic/turris-signing-key.c:25:43: error: parameter name omitted
+> 
+> Add the parameters to get a clean build with all compilers.
+> 
+> Fixes: 0b28b7080ef5 ("platform: cznic: Add keyctl helpers for Turris platform")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202503210450.AoOpbJXC-lkp@intel.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-In order to export wcslen() to the rest of the kernel (should it ever be
-necessary elsewhere), it needs to be added to string.h, along with nls.h
-for the typedef of wchar_t. However, dragging in nls.h into string.h
-causes an error in the efistub due to a conflicting function name:
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-  drivers/firmware/efi/libstub/printk.c:27:5: error: static declaration of 'utf8_to_utf32' follows non-static declaration
-     27 | u32 utf8_to_utf32(const u8 **s8)
-        |     ^
-  include/linux/nls.h:55:12: note: previous declaration is here
-     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
-        |            ^
-  drivers/firmware/efi/libstub/printk.c:85:26: error: too few arguments to function call, expected 3, have 1
-     85 |                 c32 = utf8_to_utf32(&s8);
-        |                       ~~~~~~~~~~~~~    ^
-  include/linux/nls.h:55:12: note: 'utf8_to_utf32' declared here
-     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
-        |            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  2 errors generated.
+You will be taking this I assume?
 
-Rename the efi function to avoid the conflict.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/firmware/efi/libstub/printk.c | 4 ++--
- include/linux/string.h                | 2 ++
- lib/string.c                          | 1 -
- 3 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/firmware/efi/libstub/printk.c b/drivers/firmware/efi/libstub/printk.c
-index 3a67a2cea7bd..334f7e89845c 100644
---- a/drivers/firmware/efi/libstub/printk.c
-+++ b/drivers/firmware/efi/libstub/printk.c
-@@ -24,7 +24,7 @@ void efi_char16_puts(efi_char16_t *str)
- }
- 
- static
--u32 utf8_to_utf32(const u8 **s8)
-+u32 efi_utf8_to_utf32(const u8 **s8)
- {
- 	u32 c32;
- 	u8 c0, cx;
-@@ -82,7 +82,7 @@ void efi_puts(const char *str)
- 	while (*s8) {
- 		if (*s8 == '\n')
- 			buf[pos++] = L'\r';
--		c32 = utf8_to_utf32(&s8);
-+		c32 = efi_utf8_to_utf32(&s8);
- 		if (c32 < 0x10000) {
- 			/* Characters in plane 0 use a single word. */
- 			buf[pos++] = c32;
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 0403a4ca4c11..45e01cf3434c 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -7,6 +7,7 @@
- #include <linux/cleanup.h>	/* for DEFINE_FREE() */
- #include <linux/compiler.h>	/* for inline */
- #include <linux/types.h>	/* for size_t */
-+#include <linux/nls.h>		/* for wchar_t */
- #include <linux/stddef.h>	/* for NULL */
- #include <linux/err.h>		/* for ERR_PTR() */
- #include <linux/errno.h>	/* for E2BIG */
-@@ -203,6 +204,7 @@ extern __kernel_size_t strlen(const char *);
- #ifndef __HAVE_ARCH_STRNLEN
- extern __kernel_size_t strnlen(const char *,__kernel_size_t);
- #endif
-+extern __kernel_size_t wcslen(const wchar_t *s);
- #ifndef __HAVE_ARCH_STRPBRK
- extern char * strpbrk(const char *,const char *);
- #endif
-diff --git a/lib/string.c b/lib/string.c
-index bbee8a9e4d83..1aa09925254b 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -430,7 +430,6 @@ size_t strnlen(const char *s, size_t count)
- EXPORT_SYMBOL(strnlen);
- #endif
- 
--size_t wcslen(const wchar_t *s);
- size_t wcslen(const wchar_t *s)
- {
- 	const wchar_t *sc;
-
--- 
-2.49.0
-
+> ---
+>  drivers/platform/cznic/turris-signing-key.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/cznic/turris-signing-key.c b/drivers/platform/cznic/turris-signing-key.c
+> index 3b12e5245fb7..3827178565e2 100644
+> --- a/drivers/platform/cznic/turris-signing-key.c
+> +++ b/drivers/platform/cznic/turris-signing-key.c
+> @@ -22,7 +22,8 @@
+>  
+>  #include <linux/turris-signing-key.h>
+>  
+> -static int turris_signing_key_instantiate(struct key *, struct key_preparsed_payload *)
+> +static int turris_signing_key_instantiate(struct key *key,
+> +					  struct key_preparsed_payload *payload)
+>  {
+>  	return 0;
+>  }
+> -- 
+> 2.39.5
+> 
