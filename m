@@ -1,107 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BCB5228
-	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 02:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DBD42A96
+	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 03:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742869931; cv=none; b=aSKW8vG+E4HxgXZ6CUarLKNyOe5j9mlVAEXeti6y7+b2ceCrXmPYWFzbnMf11iToLAnY++DWUuo3dNfd+DsOQAm5oinUO0ubb3E9R4lUS77/Cf1pP6UbYlphMtDQfox2X0AirrSUbHYtpZPQEz8hjEbAXdeWJNPsPC0a0uLyw/o=
+	t=1742871764; cv=none; b=WtqxNC2ZfEedjSTZvjKknt9rhPA/JQzqLICft62j1xPKR96kTSjdJxPe4talqbFXz8L1P51rdRoYkQkyfsIibv8L4rsgeqRkFtM1y3BDw9yysbuW5XxmgzSF8lGHEd56eU6PUKbrMNCcAw7CCws8+iK3ajaYaU5tQOtqMj98uzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742869931; c=relaxed/simple;
-	bh=MKxc1d/OcO9iXLMMeZly0cuPU7OEisoh/M3/4xkWZz0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=FADmbNM6M9y63WCQzcn5FaKaiUL7qeghXX8oAikDBXNxVcYwuC0VshX+ZWSlx6B7OF67FwY9H0xkK816Kh7p60gZMjiU3xY2sRbO5VLZjeTOmtDOiGx0WqhUFfkjot348swH6el1GIdGdq0YZq5PBR5siC5k2je2QKYCSha1IUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lki1/rGU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742871764; c=relaxed/simple;
+	bh=p+6PwRCtOXKT7ZJv96aTDIh/LRMyr3o7sI/Y1/kJn5I=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Sg9B6yTv3bh7PkpW4qI1822DCj4ZInef/lGiji9bHAMkWdUVWD1csn1UyZqrUfixvgdp4Cg8x/aXVXPG2AM4W0gxy9v5PMRKyaPbZsoh81mgVTA/pRVfGMMzOoefJOX4CoU7OGZyEb/Fgc6OoyG+omc4OyFMXR4P7RZvCBLU2j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PUu+TYpj; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lki1/rGU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742869928;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PUu+TYpj"
+Message-ID: <52e7d34e-cf86-40d6-a294-b318df98d72a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742871760;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=s4m8YjT46uFGiciYSYKKic4wq7Pf2s7S/3tWqYHfOMo=;
-	b=Lki1/rGUb560Q3joFFWMvplCBM6tL9joRqwSw0RKiEvW9bVRM3eRM26VFuydQTsnwezO0b
-	6XfQ4xkRRBa5F91XCXhDuJiqU0vJ9wchWUZQL2w/b/8s8OrA2qIDhj6lfrPYZFPR6lX5Ru
-	G+P8g5FQFY1w7XrPIYPwvsOsEOYmRyc=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-281-0K8pjXTCMfK5p6w8AIs0oQ-1; Mon,
- 24 Mar 2025 22:32:06 -0400
-X-MC-Unique: 0K8pjXTCMfK5p6w8AIs0oQ-1
-X-Mimecast-MFC-AGG-ID: 0K8pjXTCMfK5p6w8AIs0oQ_1742869926
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 07425196B344
-	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 02:32:06 +0000 (UTC)
-Received: from [172.64.12.49] (unknown [10.30.33.24])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6CBCE180A803;
-	Tue, 25 Mar 2025 02:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, bcb04425)
-Date: Tue, 25 Mar 2025 02:32:05 -0000
-To: llvm@lists.linux.dev
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IGGsd72H09Ek4y5Nasx3ldah0+WIfjmF4R9A3El2Gqs=;
+	b=PUu+TYpjV89j/VYrhe12ry4OhxeGSCw5aIZ3H1/JBah4h8SPGbDBX7xlgwnNaSRF5bdnYw
+	Ex9q8FoYlmI6FH0MWym2+K6fCdyFdznFmZChjy6qVGWvCS80saUwOh3nqhlOa2H05nGVua
+	/ha1F1sMacAizT5OrurYNI8iWw7xMGc=
+Date: Tue, 25 Mar 2025 11:01:45 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <93497.125032422320600461@us-mta-281.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: p5ZDkDhhZ9NDA5I6UWzOXbjOYRzwq3vhHiP6KC7m0FA_1742869926
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kunwu Chan <kunwu.chan@linux.dev>
+Subject: Re: [PATCH v2] rust: sync: optimize rust symbol generation for
+ CondVar
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+ a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+ dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
+References: <20250324061835.1693125-1-kunwu.chan@linux.dev>
+ <CANiq72=KjT8HRJA0NStHeqm-9286gay496CU8edNALPQ9_N+ww@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CANiq72=KjT8HRJA0NStHeqm-9286gay496CU8edNALPQ9_N+ww@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi, we tested your kernel and here are the results:
+On 2025/3/24 17:37, Miguel Ojeda wrote:
+> On Mon, Mar 24, 2025 at 7:19 AM Kunwu Chan<kunwu.chan@linux.dev> wrote:
+>> Link:https://github.com/Rust-for-Linux/linux/issues/1145
+>> Suggested-by: Alice Ryhl<aliceryhl@google.com>
+> Nit: I typically use Link after Suggested-by, to mimic what the docs
+> require about Reported-by with Link. (No need to resend a new version
+> just for this :)
+Thanks for the kind reminder, I'll follow this next time
+>> - Remove '#[inline]' for notify()
+> It is good that the commit matches the log now, though I wonder if in
+> the future we may want the `#[inline]` for `notify` anyway, even if
+> LLVM does that one on its own today.
+Now, the default '-Copt-level' is 2 when define 
+'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE',
+and in  KBUILD_RUSTFLAGS the  '-Ccodegen-units' is 1.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+So if the config not change, the result should be the same.
 
+And the actualy compile steps for rust/kernel.o is as following:
 
-Kernel information:
-    Commit message: Merge tag 'sched_ext-for-6.15' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/tj/sched_ext
+make -f ./scripts/Makefile.build obj=rust
+# RUSTC L rust/kernel.o
+OBJTREE=/media/kunwuchan/68d922f3-5dde-45b0-af93-c45ba81d85ef/linux-next 
+rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features 
+-Dnon_ascii_idents -Dunsafe_op_in_unsafe_fn -Wmissing_docs 
+-Wrust_2018_idioms -Wunreachable_pub -Wclippy::all 
+-Wclippy::ignored_unit_patterns -Wclippy::mut_mut 
+-Wclippy::needless_bitwise_bool -Wclippy::needless_continue 
+-Aclippy::needless_lifetimes -Wclippy::no_mangle_with_rust_abi 
+-Wclippy::undocumented_unsafe_blocks 
+-Wclippy::unnecessary_safety_comment -Wclippy::unnecessary_safety_doc 
+-Wrustdoc::missing_crate_level_docs -Wrustdoc::unescaped_backticks 
+-Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n 
+-Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static 
+-Zfunction-sections=n -Wclippy::float_arithmetic 
+--target=aarch64-unknown-none-softfloat -Cforce-unwind-tables=n 
+-Zbranch-protection=bti,pac-ret -Copt-level=2 -Cdebug-assertions=y 
+-Coverflow-checks=y -Cforce-frame-pointers=y -Cdebuginfo=1 
+@./include/generated/rustc_cfg --extern ffi --extern pin_init --extern 
+build_error --extern macros --extern bindings --extern uapi 
+--emit=dep-info=rust/.kernel.o.d --emit=obj=rust/kernel.o 
+--emit=metadata=rust/libkernel.rmeta --crate-type rlib -L./rust 
+--crate-name kernel rust/kernel/lib.rs --sysroot=/dev/null
+# EXPORTS rust/exports_kernel_generated.h
+   llvm-nm -p --defined-only rust/kernel.o | awk '$2~/(T|R|D|B)/ && 
+$3!~/__cfi/ && $3!~/__odr_asan/ { printf "EXPORT_SYMBOL_RUST_GPL(%s);
+",$3 }' > rust/exports_kernel_generated.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1732979658
+> Cheers,
+> Miguel
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1732979658-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1732979658-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+Thanks,
+   Kunwu.Chan(Tao.Chan)
 
