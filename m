@@ -1,100 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001BA1FDE09;
-	Tue, 25 Mar 2025 06:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC84A93D
+	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 06:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742884435; cv=none; b=C4sd0jVaDxrd4SP710K/DOxnJlcY+ohi/J/AHHSWR5mn3WJNLxiV/PO0MLvuQGuSGfJrPpU+YbwMtEzFjklRjztq9mHGfHoUmKWBl9r1rAEMUJSJys2cm2zKV4zCeRYznybGeIS6/Fuy1E8EBHCmKmBHRL8iocNBvepCdJq9sOs=
+	t=1742884989; cv=none; b=OrzeKtNd5D7bjqU6WVKZxX4wfW2gUMq4PLhnbkAWw1PSrYyWuZ+52yPuiQZ/XDNVqe0xHQM1hZfxx4fT4iWPG1rS9mvRp+C44vQAU93EDDyWHunjZP52Qog2ty4h5nO01KWczEmfJiPwsz2XwKVbF0hdPX7/moTH0Pi4VsB/ni8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742884435; c=relaxed/simple;
-	bh=zqJFi6BXvfUH05c4Zk5WMj/85UfrnAU+ysG58ub1WDM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gq3T/P/8cjs9fM3ZK3BT8QXI6oIZ7d9ymbLTjdn6DcalC+VwhhZB/ejZvtK52dDOhFcblBDu8RBcO2B4fVb4TKTrfWSAJI2G14m1mS0d4F25V60spDMYiIBLiQ5SfbJcar01DG1YPYYy6WoMi67nHVcH7jzxOcxcRZfQBYm7B58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TDzZr/+h; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1742884989; c=relaxed/simple;
+	bh=2R+quN3lBSZuhs/LuOXxb0SqbWDONZSjoMV2Q6MA62Y=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=QOBV220tloSpPXbJJDExfk6rNa4pJ+aS6/rNg5ZOxiVVnmiu2Uou5CsFJzr8zuDUQ3baRU6MxUF1844De8n5MoUE/b0sSJf87GW5lzZLWkszehkRNi3hWX4YdwHx4snAkoxCaWiVMq4pfGCiR5ObaM+tZVFjNotv0zW4QS0cGJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Eyeyb0uI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TDzZr/+h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742884434; x=1774420434;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zqJFi6BXvfUH05c4Zk5WMj/85UfrnAU+ysG58ub1WDM=;
-  b=TDzZr/+hM4dlyXv9dPRFiwyHcx6Uv7Rq6GyFTc1ReoDHHfdCPB26EoBS
-   WFbAskGp1hghUtpGED9lfvyl152awfA1iyUjUfRY/BXBmqfAW6O+H+Q53
-   OHKAoDt9GYsvn+SpG26aPq2+teQoygc9RkjXAqdqVBIqP96x9Ov2nJQql
-   GqX4MoxDjYvzrh42H9n0FuK27RfCcvDWK3UL4syiT6WV3fIMiDu8yfqDS
-   0dLlYyRP3+YGKSigJargWZmylWW3b2jcW+D3yMKEn486BB4p6mNKK5HLa
-   YBPzom/AXtQu/xURdGbcFrRgn+v+VbltiIIqTh5Xn1AXVYDb9Dre64lOO
-   A==;
-X-CSE-ConnectionGUID: 4OZ4nBh2SN22lY2/whDq6w==
-X-CSE-MsgGUID: f2kSnFgjSq2eMTGgCdEXqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11383"; a="43350595"
-X-IronPort-AV: E=Sophos;i="6.14,274,1736841600"; 
-   d="scan'208";a="43350595"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2025 23:33:53 -0700
-X-CSE-ConnectionGUID: zRo0MWEERcGBU+oyRD0ViQ==
-X-CSE-MsgGUID: yfOOMcXrSx2MQsoRQ8Wu3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,274,1736841600"; 
-   d="scan'208";a="129335587"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 24 Mar 2025 23:33:51 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1twxr5-0004Ab-1g;
-	Tue, 25 Mar 2025 06:33:44 +0000
-Date: Tue, 25 Mar 2025 14:32:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antheas Kapenekakis <lkml@antheas.dev>,
-	platform-driver-x86@vger.kernel.org, linux-input@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Corentin Chary <corentin.chary@gmail.com>,
-	"Luke D . Jones" <luke@ljones.dev>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: Re: [PATCH v4 09/11] HID: asus: add basic RGB support
-Message-ID: <202503251335.BQVOomT2-lkp@intel.com>
-References: <20250324210151.6042-10-lkml@antheas.dev>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Eyeyb0uI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742884986;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fVxl10GnF81FpZbglzeo0P4ooEZJUIwlXp6vzKyi/Vk=;
+	b=Eyeyb0uIABgMAqXdIgWelBBlRQmouRj5aJpVuNWhZvyb68DzumsT9ObsmfpgvI67ChK0jp
+	M3ZqZIp/VXX0Z57GmQZM4hlWBEWWSYB7XI2LmjC7MtqzMNruKNHI1jxTX7Qp0ypwfoX5ah
+	U8jF3DAfKObntoT7QNWw3CsRJk6ou0c=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-253-4RB4c_9OMRqS2S4mcPnxew-1; Tue,
+ 25 Mar 2025 02:43:04 -0400
+X-MC-Unique: 4RB4c_9OMRqS2S4mcPnxew-1
+X-Mimecast-MFC-AGG-ID: 4RB4c_9OMRqS2S4mcPnxew_1742884984
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1952C18EBE8F
+	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 06:43:04 +0000 (UTC)
+Received: from [172.20.55.199] (unknown [10.30.45.42])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9CE7C30001A1;
+	Tue, 25 Mar 2025 06:43:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 327ecdbc)
+Date: Tue, 25 Mar 2025 06:43:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250324210151.6042-10-lkml@antheas.dev>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <37595.125032502430500145@us-mta-253.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: iQjfGbdTkfHtb8xIWWnfbS2GMEbqPAvpC1WiR82HgXQ_1742884984
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Antheas,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-[auto build test ERROR on 38fec10eb60d687e30c8c6b5420d86e8149f7557]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/HID-asus-refactor-init-sequence-per-spec/20250325-051852
-base:   38fec10eb60d687e30c8c6b5420d86e8149f7557
-patch link:    https://lore.kernel.org/r/20250324210151.6042-10-lkml%40antheas.dev
-patch subject: [PATCH v4 09/11] HID: asus: add basic RGB support
-config: arm64-randconfig-004-20250325 (https://download.01.org/0day-ci/archive/20250325/202503251335.BQVOomT2-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250325/202503251335.BQVOomT2-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'perf-core-2025-03-22' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/tip/tip
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503251335.BQVOomT2-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1733409445
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1733409445-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1733409445-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
->> ERROR: modpost: "devm_led_classdev_multicolor_register_ext" [drivers/hid/hid-asus.ko] undefined!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
