@@ -1,120 +1,92 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643161A23AA
-	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 10:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9392729408;
+	Tue, 25 Mar 2025 15:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742897594; cv=none; b=X9EG6p+ht4jRBPJxwNT3QJ455EYB02mNwo2PGC8hFHMqAyVYyTowdz00NzFNZwR0R0mv9vHDQxM+YYYQWKXccagCITHt6PaXXSVmQpWW/9XjXHH2OBb9XbbTNLLZzJMqKcCg8XVeJAw9tkDF9WJH0hS201zgL81VfUK4vcy1tdY=
+	t=1742917543; cv=none; b=QihRNIreegX/d3ckfBTObbSbFdRU7Toykmz3pZ7xx9HLXkF7ximf1ST0sYMI/E4+8p4SEx8DlHsPCELEhMjqWCLlVG+WV7PAAheabzGr8CiQo9EORffJ1lc10R5LSzKjAF7iXi4HtrMncleN8mxzkCmI6T+gjiA7fZphMY4fdtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742897594; c=relaxed/simple;
-	bh=EsU90UIiG95rJav2ydFFuzd10jY7lOEUJhuV6bJUvE4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LpaBHolAQxewLwuZmFp8PgqztioFAJ8UmhbAExJAegPr0GiZPPx5fCd25+PMQwzebRyx4oDfkeQ9ib8Aumb2TiP/pqvIhkyB8DwMg0DK1bJoq3Vb0X+AE+b6bNYM2H9/wNNHAYDdXYwhOiA8bNDXgtBBi/Yvgn0lUg/NIMj+m2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aPrrMkgN; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742917543; c=relaxed/simple;
+	bh=EmbT1j95ZQlEX79VYjHMceTDJmKdtuHVQmu6wl1izBc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T+/kVoGXhmmK6MdCtVUtETJonPJTLX7yPTJfboGFDrzKBxZ8aMt480SMLfGAr8cp7dvMB++KN8eREg1BHJWDANFgpKfq7tXOi67dYRKe2FAVDe5Sg+oR0qwJUjDUkvt3ht3olGrZRShZ4ozi5QK6+lLDy2EQ9rRaf0n3F3TcES4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cn6hlADy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aPrrMkgN"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2264aefc3b5so12632325ad.0
-        for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 03:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742897593; x=1743502393; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JEDq1UJUqtq05PctL877nPjaHHGlNyms9RQr2/wNvlE=;
-        b=aPrrMkgNn1WuSlUzjHR9JG+b1pqZM6rxGXNFdVqC/pFjDKLu8TZRLsJO7T4FSD81qe
-         aurO7JjvbnNDmre7nSwXF/yNDDKGgITVHRORiKhhQp7kgw2TpzQFtq7oN8wqTUP6CHIB
-         bsplY2kq8mxTVNxvCAnwfH6CUyiRS+W49EQLOjwWx8gn+gxQILBMgRFCulL1GA1Plg4p
-         zNUXc0t8vIMuzjqANUQuDjKMhtbWfVv46UySs+ynpislSHA7HRndMJPhRQVZZrMRVTwI
-         rEQwRwLmBXcixdBta33QhphiD9WKaEH2cyv/xTPUp22bJACZQXPqR18PRiTVNn/03o2r
-         udsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742897593; x=1743502393;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JEDq1UJUqtq05PctL877nPjaHHGlNyms9RQr2/wNvlE=;
-        b=lWDobDG52uus6zUQuRlVf030MV23Px1PEA06WmBwEBpiTD3lmQQlysUQNfcSWIRIUf
-         O60EW1ZnKdxh2ER8jP8K1hRZo8DhcMfuTiEzVnkJACYnhbLi3gmVNcqcxUnqHntDohD/
-         4L59S7S9k2TFY/OOn3Crq/aRCU6vGITd89tKnV71/yP7dBM9jsgdEBOhq2oVz2m8nDD0
-         9nQwBZbjlVdnlrhtJJx6TI9Asf1DMgF6PtKUcKvw6csE798hRitxv1vdJmwWUKoEx5qZ
-         oY8vlbW1eGMoPFsCByZtULArUdmFfxttCZRQTb3F6SCntqeqW/UHX3ejgJ8AUmd1LShf
-         QPmg==
-X-Forwarded-Encrypted: i=1; AJvYcCUP+KLDfxG5bIYzP4FhpmCOqxPtHVVYvV6RawKF+uriL+qhNnr2s73/QuRAqxpcuTdPj1l6@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzwzk3MnAfGsWu6e0HhLbn7okb4ZFJc1QMhiAjJvs7o2o8/mnXu
-	biESqlA+wcTxpUAL9DeGVDyEf3gmO9p6gEekMiLPz5GZBuXdz+2aVXNESHT8lhsyI8zs85labut
-	p5bnsdFpUSqSFbEZzzi1h5UYlUsg=
-X-Gm-Gg: ASbGncto3GtNTxNnDJcnHoYiKeaCFGua7FvBNL3fLGVisXF0EaEnkhSgoZvWEV/Xyeo
-	TwWxi57Xdj6YTKFj50PLl5QXyxaQr+vKqSBmIpgwulvu2gCP9Hj67X6Xy5hQzyKiIC+xBghBU+k
-	KzCaB7+EJJ0SNuA/N5e3jh53fBFw==
-X-Google-Smtp-Source: AGHT+IGNIu/26kDQcyv6aovbIEaxRmM9jIjrb8hE/W/g3KOwMrnzrKUZGYd3te7lujLCPoR0R3YJ3Fd4QcZ+SvYxRao=
-X-Received: by 2002:a17:902:ec84:b0:224:10b0:4ee5 with SMTP id
- d9443c01a7336-22780ba2e0emr81920905ad.0.1742897592462; Tue, 25 Mar 2025
- 03:13:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cn6hlADy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AB6C4CEED;
+	Tue, 25 Mar 2025 15:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742917541;
+	bh=EmbT1j95ZQlEX79VYjHMceTDJmKdtuHVQmu6wl1izBc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=cn6hlADy45e95gGtO2Uas/mCsaTF9UXYTXZmLjJKW5iCNe4N/zMTdP75HRqK5HHl7
+	 w1mFxMewMdzQIClzTgod+/+f3OueAncrkt9uQT2jH271X0bsY9BGBM0Ll2lKYvP38+
+	 MXTcmufY468yAaRQJrxe0rF0HQF54QXcAWPTzosqEzbWiYw5nmI8XOedpbwGwptyk5
+	 LVwZ2vUrJL2QWZzY5x83TAeeMe+wV1VVTyovXf518Y/uNYd0n1//DZFR2FJZwT2bJ6
+	 m7lpyaz9BTz0IW4I+2p+XGPBMXeAYBaDH+npjEQQCWmsn1XSlCou0mQ7k11bp66LDn
+	 tLbIFkObn75qQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 0/2] string.c: Add wcslen()
+Date: Tue, 25 Mar 2025 08:45:17 -0700
+Message-Id: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250324061835.1693125-1-kunwu.chan@linux.dev>
- <CANiq72=KjT8HRJA0NStHeqm-9286gay496CU8edNALPQ9_N+ww@mail.gmail.com> <52e7d34e-cf86-40d6-a294-b318df98d72a@linux.dev>
-In-Reply-To: <52e7d34e-cf86-40d6-a294-b318df98d72a@linux.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 25 Mar 2025 11:12:59 +0100
-X-Gm-Features: AQ5f1JqyCfGL5XbhQM2bU_PPn0fepDdpk4JpK1BPHHTum3dXPrHhVO5NorHN1DI
-Message-ID: <CANiq72=iMaEOALbh8EBrgEc5t0KQ2BTPADro3vmBtEM75pO3aw@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: sync: optimize rust symbol generation for CondVar
-To: Kunwu Chan <kunwu.chan@linux.dev>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com, 
-	gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me, 
-	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI3P4mcC/x3NQQqEMAxA0atI1gZqVUSvIi6cNjqBTiuJ6IB4d
+ 4vLt/n/AiVhUhiKC4QOVk4xoyoLcN85roTss8Ea25raNqi7cFxx9h5Pp4EiLkkwhOOHaduxM23
+ XV/7TW2cgRzahhf/vYJzu+wF52/OvcAAAAA==
+X-Change-ID: 20250324-string-add-wcslen-for-llvm-opt-705791db92c0
+To: Kees Cook <kees@kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-efi@vger.kernel.org, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1097; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=EmbT1j95ZQlEX79VYjHMceTDJmKdtuHVQmu6wl1izBc=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOmPzi+abfrzlvaVKNNg1brL545ZhTSszvigyqZ6zEzyR
+ yvrs3aLjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAnCRX4wMs6e8PPE3Tv0+/zrx
+ y4/fcJ1JOZmjELapOqF0WmeO2TbDqwz/A7KYLgvpWdWKdL9Kzbdx05cS9zG7am203oyhJZRh0T8
+ +AA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Mar 25, 2025 at 4:02=E2=80=AFAM Kunwu Chan <kunwu.chan@linux.dev> w=
-rote:
->
-> Thanks for the kind reminder, I'll follow this next time
+Hi all,
 
-You're welcome!
+A recent LLVM change [1] introduces a call to wcslen() in
+fs/smb/client/smb2pdu.c through UniStrcat() via
+alloc_path_with_tree_prefix(). Similar to the bcmp() and stpcpy()
+additions that happened in 5f074f3e192f and 1e1b6d63d634, add wcslen()
+to fix the linkage failure.
 
-> Now, the default '-Copt-level' is 2 when define
-> 'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE',
-> and in  KBUILD_RUSTFLAGS the  '-Ccodegen-units' is 1.
->
-> So if the config not change, the result should be the same.
+The second change is RFC because it makes the first change a little more
+convoluted for the sake of making it externally available, which may or
+may not be desirable. See the commit message for more details.
 
-I don't think that is true, because there are a few `rustc` versions
-as well as LLVM ones that we support, so how inlining happens (at both
-`rustc` and LLVM levels) may change even if the configuration is
-essentially the same.
+[1]: https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d
 
-And, of course, then there are other non-compiler-related kernel
-config options (i.e. not compiler flags, but other stuff, like `cfg`s)
-that influence which and how gets emitted and thus the inlining
-decisions.
+---
+Nathan Chancellor (2):
+      lib/string.c: Add wcslen()
+      [RFC] wcslen() prototype in string.h
 
-Eventually we should have pure GCC builds too, which is yet another factor.=
-..
+ drivers/firmware/efi/libstub/printk.c |  4 ++--
+ include/linux/string.h                |  2 ++
+ lib/string.c                          | 11 +++++++++++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+---
+base-commit: 78ab93c78fb31c5dfe207318aa2b7bd4e41f8dba
+change-id: 20250324-string-add-wcslen-for-llvm-opt-705791db92c0
 
-To be clear, I agree with Boqun that having to write `#[inline]`
-everywhere is not great. Rust 1.75 already started to tag small
-functions as `#[inline]` to try to prevent the proliferation of the
-attribute, which is good (i.e. which is what triggered the message in
-Compiler Explorer).
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-By the way, one difference is whether it is `pub` -- the `notify()`
-isn't (unlike the others), but if it were, then we would have needed
-the `#[inline]`, from a quick test.
-
-Thanks!
-
-Cheers,
-Miguel
