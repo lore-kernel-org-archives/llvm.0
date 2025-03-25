@@ -1,111 +1,126 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DBD42A96
-	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 03:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B8D1FDD;
+	Tue, 25 Mar 2025 03:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742871764; cv=none; b=WtqxNC2ZfEedjSTZvjKknt9rhPA/JQzqLICft62j1xPKR96kTSjdJxPe4talqbFXz8L1P51rdRoYkQkyfsIibv8L4rsgeqRkFtM1y3BDw9yysbuW5XxmgzSF8lGHEd56eU6PUKbrMNCcAw7CCws8+iK3ajaYaU5tQOtqMj98uzI=
+	t=1742872988; cv=none; b=AYUmFM8EJt0H0l0d7Ydp8BkTDXp/OM3J0Ec1wdS89bWvWtr/QIgg1HuWnKAmOFKYVEyterqHTnsQGxAp3gio7rUFNukCreeoWt5kOYujUDHxwVUGZ7e2uc9NalZ9/dAu9tvRHdRaL0bBOA+iXFH8d/UlVe7xEbOCTuzbOCwtqtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742871764; c=relaxed/simple;
-	bh=p+6PwRCtOXKT7ZJv96aTDIh/LRMyr3o7sI/Y1/kJn5I=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Sg9B6yTv3bh7PkpW4qI1822DCj4ZInef/lGiji9bHAMkWdUVWD1csn1UyZqrUfixvgdp4Cg8x/aXVXPG2AM4W0gxy9v5PMRKyaPbZsoh81mgVTA/pRVfGMMzOoefJOX4CoU7OGZyEb/Fgc6OoyG+omc4OyFMXR4P7RZvCBLU2j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PUu+TYpj; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1742872988; c=relaxed/simple;
+	bh=B5CgC8k+ueVLbr3bDHXKKpwXdQGUkovCwBBrpjyzWUA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eEixY6b5idgi+MwbDThk9+nRkRoJ3tRkXCXGdwxHpJRoNYY9G1FaRt705xOKdWixIW6iBmRFrYRQ5JXuOQIRiemZ1/fF6N1ORx8JwS2WQMCH5I68+LtUiqnLmW+NfauMZ66lYtQyRr3dwApKutOTsa3n6Rtw3aNqc4/jME1irAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ooFJ2Q67; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PUu+TYpj"
-Message-ID: <52e7d34e-cf86-40d6-a294-b318df98d72a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1742871760;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IGGsd72H09Ek4y5Nasx3ldah0+WIfjmF4R9A3El2Gqs=;
-	b=PUu+TYpjV89j/VYrhe12ry4OhxeGSCw5aIZ3H1/JBah4h8SPGbDBX7xlgwnNaSRF5bdnYw
-	Ex9q8FoYlmI6FH0MWym2+K6fCdyFdznFmZChjy6qVGWvCS80saUwOh3nqhlOa2H05nGVua
-	/ha1F1sMacAizT5OrurYNI8iWw7xMGc=
-Date: Tue, 25 Mar 2025 11:01:45 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ooFJ2Q67"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AFFC4CEE9;
+	Tue, 25 Mar 2025 03:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742872988;
+	bh=B5CgC8k+ueVLbr3bDHXKKpwXdQGUkovCwBBrpjyzWUA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ooFJ2Q67kbdBSmW/v/YQ/aS2T0IPwN7RTFZ/VUw/TkYuNp1tag/+U2XZ9dO1dVGcS
+	 COMqqPodrEd+eL/IMPjwTmZZydkI2hx54iir4fcqig91lOAATTA6VmF9KBu22FDmLH
+	 Sq0mPMZm0GS/yST0xr5skh5Bk6Sm7VCq0iJaLAQ8leiuRhiYl4EscWAa9yjhoqpZyb
+	 1khkmEJ9duDXZMS23R7UqlbNTYdlvmsAeU7X8AUp+MHqaDPyMpakOaH3pGx8OpAA4/
+	 otx/bQ74NfYZ9kFZW3Py/X9VqO63ZLHyQcEcW4gbl7i2iiJbipYfoEH1t2pJys6V7+
+	 Jo8Jg0qb521YQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 24 Mar 2025 20:23:00 -0700
+Subject: [PATCH] x86/kbuild/64: Restrict clang versions that can use
+ '-march=native'
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kunwu Chan <kunwu.chan@linux.dev>
-Subject: Re: [PATCH v2] rust: sync: optimize rust symbol generation for
- CondVar
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
- gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
- a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
- dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Kunwu Chan <kunwu.chan@hotmail.com>, Grace Deng <Grace.Deng006@gmail.com>
-References: <20250324061835.1693125-1-kunwu.chan@linux.dev>
- <CANiq72=KjT8HRJA0NStHeqm-9286gay496CU8edNALPQ9_N+ww@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CANiq72=KjT8HRJA0NStHeqm-9286gay496CU8edNALPQ9_N+ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250324-x86-march-native-clang-19-and-newer-v1-1-3a05ed32a89e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJMh4mcC/x2N0QqDMAwAf0XyvIBmreh+ZfjQtdkMuGykooL47
+ xYfD467HTKbcIZHtYPxIll+WqC5VRDHoB9GSYWBavL1nRxuXYvfYHFEDbMsjHEqGjY9Bk2ovLI
+ hOfKp8+T41UMp/Y3fsl2X53AcJ9T21pd1AAAA
+X-Change-ID: 20250324-x86-march-native-clang-19-and-newer-2425d8524eb9
+To: Ingo Molnar <mingo@redhat.com>
+Cc: x86@kernel.org, Tor Vic <torvic9@mailbox.org>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2832; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=B5CgC8k+ueVLbr3bDHXKKpwXdQGUkovCwBBrpjyzWUA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOmPFGdVWufEby7Kbd8/+Xb1GUVBjzPuDgt0HLkT9I9e/
+ HP7pnxmRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjIVFFGhrNrJ816kC3q+2GP
+ Q1WNv1OXfpFWmo1xIr/6QYH/9lOnXGb4Xz2JPbt77XLX/tCUb1fbQmX+vTuzYvoLobZ5WiI/itN
+ 3MwMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 2025/3/24 17:37, Miguel Ojeda wrote:
-> On Mon, Mar 24, 2025 at 7:19 AM Kunwu Chan<kunwu.chan@linux.dev> wrote:
->> Link:https://github.com/Rust-for-Linux/linux/issues/1145
->> Suggested-by: Alice Ryhl<aliceryhl@google.com>
-> Nit: I typically use Link after Suggested-by, to mimic what the docs
-> require about Reported-by with Link. (No need to resend a new version
-> just for this :)
-Thanks for the kind reminder, I'll follow this next time
->> - Remove '#[inline]' for notify()
-> It is good that the commit matches the log now, though I wonder if in
-> the future we may want the `#[inline]` for `notify` anyway, even if
-> LLVM does that one on its own today.
-Now, the default '-Copt-level' is 2 when define 
-'CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE',
-and in  KBUILD_RUSTFLAGS the  '-Ccodegen-units' is 1.
+There are two issues that can appear when building with clang and
+'-march=native'.
 
-So if the config not change, the result should be the same.
+The first issue is a compiler crash in the ipv6 stack with clang-18,
+such as when building allmodconfig. This was frequently reported on the
+LLVM issue tracker [1].
 
-And the actualy compile steps for rust/kernel.o is as following:
+  Stack dump:
+  0.      Program arguments: clang ... -march=native ... net/ipv6/ip6_input.c
+  1.      <eof> parser at end of file
+  2.      Code generation
+  3.      Running pass 'Function Pass Manager' on module 'net/ipv6/ip6_input.c'.
+  4.      Running pass 'X86 DAG->DAG Instruction Selection' on function '@ip6_rcv_core'
 
-make -f ./scripts/Makefile.build obj=rust
-# RUSTC L rust/kernel.o
-OBJTREE=/media/kunwuchan/68d922f3-5dde-45b0-af93-c45ba81d85ef/linux-next 
-rustc --edition=2021 -Zbinary_dep_depinfo=y -Astable_features 
--Dnon_ascii_idents -Dunsafe_op_in_unsafe_fn -Wmissing_docs 
--Wrust_2018_idioms -Wunreachable_pub -Wclippy::all 
--Wclippy::ignored_unit_patterns -Wclippy::mut_mut 
--Wclippy::needless_bitwise_bool -Wclippy::needless_continue 
--Aclippy::needless_lifetimes -Wclippy::no_mangle_with_rust_abi 
--Wclippy::undocumented_unsafe_blocks 
--Wclippy::unnecessary_safety_comment -Wclippy::unnecessary_safety_doc 
--Wrustdoc::missing_crate_level_docs -Wrustdoc::unescaped_backticks 
--Cpanic=abort -Cembed-bitcode=n -Clto=n -Cforce-unwind-tables=n 
--Ccodegen-units=1 -Csymbol-mangling-version=v0 -Crelocation-model=static 
--Zfunction-sections=n -Wclippy::float_arithmetic 
---target=aarch64-unknown-none-softfloat -Cforce-unwind-tables=n 
--Zbranch-protection=bti,pac-ret -Copt-level=2 -Cdebug-assertions=y 
--Coverflow-checks=y -Cforce-frame-pointers=y -Cdebuginfo=1 
-@./include/generated/rustc_cfg --extern ffi --extern pin_init --extern 
-build_error --extern macros --extern bindings --extern uapi 
---emit=dep-info=rust/.kernel.o.d --emit=obj=rust/kernel.o 
---emit=metadata=rust/libkernel.rmeta --crate-type rlib -L./rust 
---crate-name kernel rust/kernel/lib.rs --sysroot=/dev/null
-# EXPORTS rust/exports_kernel_generated.h
-   llvm-nm -p --defined-only rust/kernel.o | awk '$2~/(T|R|D|B)/ && 
-$3!~/__cfi/ && $3!~/__odr_asan/ { printf "EXPORT_SYMBOL_RUST_GPL(%s);
-",$3 }' > rust/exports_kernel_generated.h
+The second issue is certain -Wframe-larger-than warnings that appear
+with clang versions prior to 19, which introduced an optimization that
+produces much better code [2].
 
-> Cheers,
-> Miguel
+clang-18:
 
+  drivers/media/pci/saa7164/saa7164-core.c:605:20: error: stack frame size (2392) exceeds limit (2048) in 'saa7164_irq' [-Werror,-Wframe-larger-than]
+    605 | static irqreturn_t saa7164_irq(int irq, void *dev_id)
+        |                    ^
+
+clang-19:
+
+  drivers/media/pci/saa7164/saa7164-core.c:605:20: error: stack frame size (216) exceeds limit (128) in 'saa7164_irq' [-Werror,-Wframe-larger-than]
+    605 | static irqreturn_t saa7164_irq(int irq, void *dev_id)
+        |                    ^
+
+Restrict the testing of the availability of '-march=native' to all
+supported GCC versions and clang-19 and newer to avoid these known
+resolved issues.
+
+Fixes: 0480bc7e65dc ("x86/kbuild/64: Add the CONFIG_X86_NATIVE_CPU option to locally optimize the kernel with '-march=native'")
+Link: https://github.com/llvm/llvm-project/issues?q=is%3Aissue%20ip6_rcv_core [1]
+Link: https://github.com/llvm/llvm-project/commit/90ba33099cbb17e7c159e9ebc5a512037db99d6d [2]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/Kconfig.cpu | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+index 87bede96e800..f928cf6e3252 100644
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -248,6 +248,12 @@ endchoice
+ config CC_HAS_MARCH_NATIVE
+ 	# This flag might not be available in cross-compilers:
+ 	def_bool $(cc-option, -march=native)
++	# LLVM 18 has an easily triggered internal compiler error in core
++	# networking code with '-march=native' on certain systems:
++	# https://github.com/llvm/llvm-project/issues/72026
++	# LLVM 19 introduces an optimization that resolves some high stack
++	# usage warnings that only appear wth '-march=native'.
++	depends on CC_IS_GCC || CLANG_VERSION >= 190100
+ 
+ config X86_NATIVE_CPU
+ 	bool "Build and optimize for local/native CPU"
+
+---
+base-commit: 7c241e07bddf9300af40c0dd44367a83df633f35
+change-id: 20250324-x86-march-native-clang-19-and-newer-2425d8524eb9
+
+Best regards,
 -- 
-Thanks,
-   Kunwu.Chan(Tao.Chan)
+Nathan Chancellor <nathan@kernel.org>
 
