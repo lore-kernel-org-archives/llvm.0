@@ -1,197 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625F219F422;
-	Tue, 25 Mar 2025 21:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A9718EB0
+	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 23:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742939121; cv=none; b=ekzG9GeEWpWwHEOVFFaGpfqjrHepwyDeHn6U6OYkz1mAeB4ZxwJ7h3gspnaDXZf2SF43C5bP7xvCFFO/uymPxRL/Um1R0X8/v/GvcGT2VstSoc6gyDVybir5s+zjUu3H367wnWv/vAj7YqZvonyL+N7T9aYXaq/v+K/TBIwYPFQ=
+	t=1742944388; cv=none; b=svR0jJXXL20/x3FvTsahg9VdBuRg6xvDs4x5UVow9eX1Kz9UX1v1wBeq7Mj8IOnJDHNMSGQ3DxVvGe4LSdRfpTO1ODsap6ayoFX11CNle778sLOTEdwf54yTsaoElxEgRlI3P+thT9MJGZNT+pwTKTw8I/KoHWOzGVfqu2TPiOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742939121; c=relaxed/simple;
-	bh=rDdLVVOB1kS1Rur+co5d17dcdxdeV+fdRJuaWwVbsuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YCGLrwOcAhuW7BqiZYFj4IJyJ7nQ5lmEDC7MwdNsnWeZVFPqmIH8cc25t6iDZxkFBL6AkJAchlcI1Ryb5jjWDL9UBdLRGUk8FM7ETpyRrDy7jHuHrNWOGZkQoOKRyCv6I+kNf6H3I9b9HvG9pTKm+a1DuInwwhhyM/TBfOfbwo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLIa4DHk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742944388; c=relaxed/simple;
+	bh=Iq/elrbpR1uZ2hr/U9XSxmPSLTvUMpJtnixfBvbr5Y8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=W74YvhDVkBd5+RQTyEC2TnzQAOkSFqSamdp4UaY35cPAjgRCnXeOVqRlD4PLeBEWb3xarqIDTYziwVgpROR4vkp9+AekJEOThQLOBqLADEYNOQUvbs+O3Wu7LqKNFgKY5oGcplTIhEnD9jLF5EBEY9sQGP/Zxwx/MUTy7en75hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uw8PTv0G; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLIa4DHk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB043C4CEE9;
-	Tue, 25 Mar 2025 21:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742939120;
-	bh=rDdLVVOB1kS1Rur+co5d17dcdxdeV+fdRJuaWwVbsuo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cLIa4DHkHu6DZUzJ7CVPddiUkvWsIOiF5FxQZabr9XLtulzdbDbAcTzYSk4t3bwff
-	 fL16Cj00rxs5iw/B3tlh+4c+lX+8qBz9ZIu8yto0AvURVKOdZdweCpRcmPRS+UTgMt
-	 Vnsmaj2R4ykyNtr6dHqLJtkkunoPGZcXVkBrXySAjNmqWxSTgMfD/TtbtmLTlqs4SC
-	 ar/TtJ9JnjHpNxNQ9AByKrCO6gSpujk4AkQ9LypD8CP1wgBZRZ5giznshuO0bWdnyf
-	 2qnDR1rhwwG54j1Yqt6y8t9aiVN9tOZpZmjZCBLbexmYOHm6woI5N/CtzXTBIazeX7
-	 nxlz8s0mckJ+w==
-Date: Tue, 25 Mar 2025 14:45:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] wcslen() prototype in string.h
-Message-ID: <20250325214516.GA672870@ax162>
-References: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
- <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
- <Z-LXHssrcpdtFqqn@smile.fi.intel.com>
- <20250325165847.GA2603000@ax162>
- <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uw8PTv0G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742944385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6UppM3IRpBJCdecdrVjgVpWlMLJlDROZ9nKw6bqvKJ4=;
+	b=Uw8PTv0Ge9Jc4c3PwL9iaXpu/v/X++WeF0Y7mBN8kJ16Cno/AhbsV99u2/EvMsz5zMsQt6
+	PeJATU2Cola5i10EdevJ6/3/OYbLdaQcfoj0Gq0nGxJlakQJHCG4CJgtSP4Ui4yThdpLca
+	43uk66TvzNZ3R4TONRVTjagCtdpc7iE=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-494-_mFh8gyvPVu9KYF7w2yNFQ-1; Tue,
+ 25 Mar 2025 19:13:03 -0400
+X-MC-Unique: _mFh8gyvPVu9KYF7w2yNFQ-1
+X-Mimecast-MFC-AGG-ID: _mFh8gyvPVu9KYF7w2yNFQ_1742944383
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0FE201801A12
+	for <llvm@lists.linux.dev>; Tue, 25 Mar 2025 23:13:03 +0000 (UTC)
+Received: from [172.20.55.199] (unknown [10.30.45.42])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE1B019560AB;
+	Tue, 25 Mar 2025 23:13:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 0d86c239)
+Date: Tue, 25 Mar 2025 23:13:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <42409.125032519130301348@us-mta-494.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: vqFkjZvR_NcpcjEEAHq44jP_Tqx589ryvNgBbJPfr2g_1742944383
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 25, 2025 at 07:05:28PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 25, 2025 at 09:58:47AM -0700, Nathan Chancellor wrote:
-> > On Tue, Mar 25, 2025 at 06:17:34PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Mar 25, 2025 at 08:45:19AM -0700, Nathan Chancellor wrote:
-> 
-> ...
-> 
-> > > > Rename the efi function to avoid the conflict.
-> > > 
-> > > Hmm... Why not split this to two, rename patch as a standalone makes sense to
-> > > me even outside of this series.
-> > 
-> > How so? If nls.h is not included in printk.c via string.h, which does
-> > not happen without this series, what value does the rename have? I do
-> > not mind splitting it up that way to keep things cleaner, I am just
-> > wondering what would be the justification in the changelog (I guess just
-> > that nls.h may get included in the future for some reason)?
-> 
-> Inside this series the justification is obvious (a.k.a. the same), outside
-> yes something like "Put EFI specific function to the respective namespace
-> to avoid potential clash in the future when including another header."
+Hi, we tested your kernel and here are the results:
 
-Okay, sounds reasonable to me. This is what I ended up with for that
-change, which will become patch one of the series.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-From f79267c05d2853c034e2c490f171aed064b85dd6 Mon Sep 17 00:00:00 2001
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 25 Mar 2025 14:31:25 -0700
-Subject: [PATCH] efi: libstub: Rename utf8_to_utf32() to avoid collision with
- NLS version
 
-A future change will add nls.h to string.h, which will break the libstub
-build because NLS includes its own version of utf8_to_utf32():
+Kernel information:
+    Commit message: Merge tag 'ras_core_for_v6.15' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/tip/tip
 
-  drivers/firmware/efi/libstub/printk.c:27:5: error: static declaration of 'utf8_to_utf32' follows non-static declaration
-     27 | u32 utf8_to_utf32(const u8 **s8)
-        |     ^
-  include/linux/nls.h:55:12: note: previous declaration is here
-     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
-        |            ^
-  drivers/firmware/efi/libstub/printk.c:85:26: error: too few arguments to function call, expected 3, have 1
-     85 |                 c32 = utf8_to_utf32(&s8);
-        |                       ~~~~~~~~~~~~~    ^
-  include/linux/nls.h:55:12: note: 'utf8_to_utf32' declared here
-     55 | extern int utf8_to_utf32(const u8 *s, int len, unicode_t *pu);
-        |            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  2 errors generated.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1735132724
 
-Rename the libstub version since it is static to avoid the conflict.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1735132724-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1735132724-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/firmware/efi/libstub/printk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/printk.c b/drivers/firmware/efi/libstub/printk.c
-index 3a67a2cea7bd..334f7e89845c 100644
---- a/drivers/firmware/efi/libstub/printk.c
-+++ b/drivers/firmware/efi/libstub/printk.c
-@@ -24,7 +24,7 @@ void efi_char16_puts(efi_char16_t *str)
- }
- 
- static
--u32 utf8_to_utf32(const u8 **s8)
-+u32 efi_utf8_to_utf32(const u8 **s8)
- {
- 	u32 c32;
- 	u8 c0, cx;
-@@ -82,7 +82,7 @@ void efi_puts(const char *str)
- 	while (*s8) {
- 		if (*s8 == '\n')
- 			buf[pos++] = L'\r';
--		c32 = utf8_to_utf32(&s8);
-+		c32 = efi_utf8_to_utf32(&s8);
- 		if (c32 < 0x10000) {
- 			/* Characters in plane 0 use a single word. */
- 			buf[pos++] = c32;
--- 
-2.49.0
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Then the first patch (which becomes the second) becomes:
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 0403a4ca4c11..45e01cf3434c 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -7,6 +7,7 @@
- #include <linux/cleanup.h>	/* for DEFINE_FREE() */
- #include <linux/compiler.h>	/* for inline */
- #include <linux/types.h>	/* for size_t */
-+#include <linux/nls.h>		/* for wchar_t */
- #include <linux/stddef.h>	/* for NULL */
- #include <linux/err.h>		/* for ERR_PTR() */
- #include <linux/errno.h>	/* for E2BIG */
-@@ -203,6 +204,7 @@ extern __kernel_size_t strlen(const char *);
- #ifndef __HAVE_ARCH_STRNLEN
- extern __kernel_size_t strnlen(const char *,__kernel_size_t);
- #endif
-+extern __kernel_size_t wcslen(const wchar_t *s);
- #ifndef __HAVE_ARCH_STRPBRK
- extern char * strpbrk(const char *,const char *);
- #endif
-diff --git a/lib/string.c b/lib/string.c
-index eb4486ed40d2..1aa09925254b 100644
---- a/lib/string.c
-+++ b/lib/string.c
-@@ -21,6 +21,7 @@
- #include <linux/errno.h>
- #include <linux/limits.h>
- #include <linux/linkage.h>
-+#include <linux/nls.h>
- #include <linux/stddef.h>
- #include <linux/string.h>
- #include <linux/types.h>
-@@ -429,6 +430,16 @@ size_t strnlen(const char *s, size_t count)
- EXPORT_SYMBOL(strnlen);
- #endif
- 
-+size_t wcslen(const wchar_t *s)
-+{
-+	const wchar_t *sc;
-+
-+	for (sc = s; *sc != '\0'; ++sc)
-+		/* nothing */;
-+	return sc - s;
-+}
-+EXPORT_SYMBOL(wcslen);
-+
- #ifndef __HAVE_ARCH_STRSPN
- /**
-  * strspn - Calculate the length of the initial substring of @s which only contain letters in @accept
----
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-with basically the same changelog.
-
-I will send v2 either tomorrow afternoon or Thursday morning to give a
-little more time for initial review/comments.
-
-Thanks for the quick feedback!
-
-Cheers,
-Nathan
