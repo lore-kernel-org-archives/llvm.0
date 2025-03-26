@@ -1,76 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA221FC102;
-	Wed, 26 Mar 2025 16:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D8C3A1BA
+	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 16:28:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743006240; cv=none; b=lYIwBriWIjZ/JEFOuE0LvX0+/7OX0yh9soNE/eaGWSbFmfoyzCeRfAq0YNovGR8Z/H5kdK4AfDHB8/WAsJSoQYt2GeGGGehNcxsNad0kDRMh9wg5SkIhhaElrvf4EujFCJ9gC4J51HchF8Zzq7HM6kg9D1tJHWZASkw5z9A9qgU=
+	t=1743006508; cv=none; b=gMXEDJTx4TAgWGTR/8FkK3ujfLkeWaTyCkAvji2unoYniU5Ae5QKQ+eP8YRR9uJXvNUQ9+8P64BwmU9DiQ53BphSaSM6FML1ov9hEMZunQCzcfCkQEhJo2v5BfrJrAwZZClmwB/r3k8owR21gE4UW6VR28VUY2kSFk8KOCJrdLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743006240; c=relaxed/simple;
-	bh=GV/y8tsCl8u4IHkv+X6NQ5VR2Oo4PNlnCZdyU9Tbk3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bR/B2A6oejXvPE27EdFFdtsxGg3S1mekY/bYfUa2c6AIUrKa9BosmTPUb1uK1pmvuVpRp/eyb712x7b5SKyrDViJgd3jIr5evZCu5u0S6H3JsdgS6PFB9sJgDRzbB+FLaGX5FPzZG8ua0zq/dJ3pHTWQFJCI8weZTTaGlvQUY10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EU+wfLGY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743006508; c=relaxed/simple;
+	bh=Zr7f/8/DLp7ZcIJKcBxvh5ealTCm0c3f38yxMGSpCI0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=XARyJql3ybWRvPw+/EkvIGUyw/c6eaSoKd7AHQmxmR+MugUq9dfBGsDMcWTC7CVSCJky/qzfLnSOA4hw2ABtFN8kG3oqQQOMJ78yFQKgpgemRJw5zab/Gw72qFbAWaROVKnN4+3VT/kjiIWbVuw73LDbkkUsidrnuvC/LqsK2Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bYza4FJz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dN+aaHNp; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EU+wfLGY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683ABC4CEEE;
-	Wed, 26 Mar 2025 16:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743006240;
-	bh=GV/y8tsCl8u4IHkv+X6NQ5VR2Oo4PNlnCZdyU9Tbk3g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EU+wfLGY+hHERi+iH4We4P9cz0UMyZuJvRZcwuV3iwLu7+JrNY96trd1CH3mWSWxv
-	 mRpw4HPg2ovMKW9VQ3Pmj7zOzRiXWtvhZTuOFvQmr2X5xepaPUtBkDxD1gfiGytbNQ
-	 Kq4LQdQRNXsw1GT6AHXGHV3+yoDPQOnfLOmSAsrMzP68UoPEja9nllBDhzDQH5YuEA
-	 GZmt9IJPLNSnfD81CIvXjLek8TbfYPfWJJN/wfgeG09iZ85VfPeXUKtWsNSwYqDvZd
-	 Yotc+KHoVJQpISSSqOllfpFg0kB5t6aFdnTGaP0wFOruUA9YfEqqqlTAQuvdjACPKB
-	 8IFeF6KartZWw==
-Date: Wed, 26 Mar 2025 09:23:55 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	kernel test robot <lkp@intel.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] platform: cznic: fix function parameter names
-Message-ID: <20250326162355.GA2072652@ax162>
-References: <20250321085315.915808-1-arnd@kernel.org>
- <20250325155906.GA1886499@ax162>
- <l77cp7hlskzkauoohviwonal53upcyc74j7x57ycn7sdfkmu4f@fsm4tv2lbtn6>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bYza4FJz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dN+aaHNp"
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id C8B032540187;
+	Wed, 26 Mar 2025 12:28:24 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 26 Mar 2025 12:28:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743006504;
+	 x=1743092904; bh=AB6R+XAWI5VcKXrLaJxDqz1rDPlHoJLM/7kKxB4tnP8=; b=
+	bYza4FJzECBO72rof60HJoFTp6I2Wa41aoHgQDN7vpU5em9wfPyguszH7AVWS9vF
+	/Vfneyfzj7ua1KQSX9nhf8OeXnUSkFZ0uLgfMLmqKUNKicnXBRkMYeAh2hTWJLlp
+	3Agt2J9bbAktSxqMfC+36TzilMVziHbv4aC94tfqxiA5CgUbk0QdGZYoFyH1mg/l
+	Adj8bH7Ys2WJRN4gVK4D5p/cCjtc5Go+5m72IfzZ/3LpQyyo3xGNGyAl3SuZ5PcC
+	2zfPGYos9pHGTVSJszAmQGnip9J34pTDvJbr034jf2TmHbERIPiOQty0B73rtxUT
+	X3DZDiiM6aF1r4/tOhQ6sg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743006504; x=
+	1743092904; bh=AB6R+XAWI5VcKXrLaJxDqz1rDPlHoJLM/7kKxB4tnP8=; b=d
+	N+aaHNpYWBhtLvfkJ0TSNXcj72rVcMxBx7XdOfmJJDn8iTmbKUqSZa069FNJnDBX
+	CWsGFYgyZsKMlV0BVUDrGMHi/y1CM2e7Rluz2OYhXWOQ22C3zFTrwcFxKcNoVg8s
+	MXg5IJe5atVVYA9xU7rSq4Z4KyhQowgUfdUyQ5oegbziNdhObaFOKfbTG2rtMg/Q
+	+O72zLQPb/F+9AqakGYo3u03lmISdyde28FgSU7AL4JtjExmhbjafPZE0ZpERcme
+	ArNzmF6ZGCZp6b7pmrPO8XqJOiCufvysGbrDPPLoBtByeJYH6QgWVAvgjy4q/kxF
+	YuTHX4NKPJ0ucujxFLcRw==
+X-ME-Sender: <xms:KCvkZ0CSLsjRdDc6oGjEa4dPP79ndWuW1w0KDGQ8jmkl--ufIqce_g>
+    <xme:KCvkZ2jhL640cSqcthRRVopEblQXTaC6nl2rVTlxn261cukSshI_i_VJ8DK8xBi1V
+    Q6QxZ-Ps1ImCRA7XlQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeitdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
+    tdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhepkedvuefhiedtueeijeevtdeiieejfeelveff
+    feelkeeiteejffdvkefgteeuhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
+    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivg
+    hrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdp
+    rhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgrsggvlh
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtth
+    hopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:KCvkZ3nBJiJaO22TFr8Km6vsAzvzCkIS6cI23vFWgnq8xx66OyME6Q>
+    <xmx:KCvkZ6yCwup_CKGYRI0_l0hMd-PyFWIUWC3O3cLNzrE8pewqfPjbuQ>
+    <xmx:KCvkZ5TvC5GRPg0x0lGVq9z14udj4ENgdjDzNHUhYAqgjpMRvlteMA>
+    <xmx:KCvkZ1aWqjD8faAI51prhAi8HlQ8eSRegsFcyE5BrIOhkjzXlXTevg>
+    <xmx:KCvkZ0H63DvBfOxS4_Ij-hhbwPC8zWOLPO_oIxld8-Z7cf70PCN6XaTu>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 501632220072; Wed, 26 Mar 2025 12:28:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <l77cp7hlskzkauoohviwonal53upcyc74j7x57ycn7sdfkmu4f@fsm4tv2lbtn6>
+X-ThreadId: T1240cda14fee069e
+Date: Wed, 26 Mar 2025 17:28:03 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nathan Chancellor" <nathan@kernel.org>,
+ =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>, "kernel test robot" <lkp@intel.com>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <801c7017-ec5a-4439-91e6-36e35020a579@app.fastmail.com>
+In-Reply-To: <20250326162355.GA2072652@ax162>
+References: <20250321085315.915808-1-arnd@kernel.org>
+ <20250325155906.GA1886499@ax162>
+ <l77cp7hlskzkauoohviwonal53upcyc74j7x57ycn7sdfkmu4f@fsm4tv2lbtn6>
+ <20250326162355.GA2072652@ax162>
+Subject: Re: [PATCH] platform: cznic: fix function parameter names
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 26, 2025 at 10:38:47AM +0100, Marek Behún wrote:
-> > 
-> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> > 
-> > You will be taking this I assume?
-> 
-> Arnd already took it into for-next:
->   https://web.git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=for-next
+On Wed, Mar 26, 2025, at 17:23, Nathan Chancellor wrote:
+> On Wed, Mar 26, 2025 at 10:38:47AM +0100, Marek Beh=C3=BAn wrote:
+>> >=20
+>> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> >=20
+>> > You will be taking this I assume?
+>>=20
+>> Arnd already took it into for-next:
+>>   https://web.git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log=
+/?h=3Dfor-next
+>
+> Ah odd, it just showed up in -next even though it was applied a few da=
+ys
+> ago:
 
-Ah odd, it just showed up in -next even though it was applied a few days
-ago:
+Sorry about that, my previous git push had failed because of some other
+problem. I also still see two more build issues in the cznic driver,
+so I'm sending the pull 6.16 pull request without that one but still
+plan to send a follow-up that includes this one and two more changes
+once it builds cleanly.
 
-$ git log --oneline next-20250325 -- drivers/platform/cznic/turris-signing-key.c
-0b28b7080ef5 platform: cznic: Add keyctl helpers for Turris platform
-
-$ git log --oneline next-20250326 -- drivers/platform/cznic/turris-signing-key.c
-eece12237a13 platform: cznic: fix function parameter names
-0b28b7080ef5 platform: cznic: Add keyctl helpers for Turris platform
-
-Glad that it is resolved now though.
-
-Cheers,
-Nathan
+       Arnd
