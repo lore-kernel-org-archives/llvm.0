@@ -1,107 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39C6199BC
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 00:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA02A11185;
+	Wed, 26 Mar 2025 01:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742949732; cv=none; b=mHTW9jqyXcjU4uVVLGyZax7ikvC/A1bD7BREuq+EHOQewtgZ5T6VpiCOeZDw10rjBLpSuYP8huQWsTccSjpltjxqsYNjhe4C9c56nFkKfY63ZZ7iSaD3dv0ec7aoVCGmL9hmPmJFFRN6AIjiFJa+P8oO9lHF4qnP5ILrWd3KvFA=
+	t=1742952169; cv=none; b=qwJ4olzIgZaUMvUF2KMoXwmvESDuK2PtRQEagApIfy+uMbCa7LqC+fMS6jJB9eiuwowoVERhD5lODTa4cXzBp6QAUSZiDNnCr8DcZO1ui+p0/Si309BVwPtlixga45RncBSiiTWgUi/BaEI56t3mS3gfH0j4FGs/RmmVIs4vkAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742949732; c=relaxed/simple;
-	bh=oHC9A4w3WfKKoC4A0njJrxHolPbi0mrc+aT9rH42kBI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=c4DJk4J5HNxhlkrKmq7jmlYhkrKhm6Z0L2acsRs3AgwK4ZGh1gIx+tA0KlsK1SlZ4tfYpbWIvULP5rykXGLjlJqON3G76Pyrnrllgqe8WhK1vy0FCFPGxGiqWuMXx333/g8BYpHkWRIHDlqKesAHEqV35S+B7aOyEUeqbI+JWJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JKyLNlEh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742952169; c=relaxed/simple;
+	bh=EW2WUYnXzEeFiqZb4aNRiXPv+E5nRHDeYMd6+zBYJ/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hr5QipnNquq5tATTEq3I0Og2tZWjuv1ENj6rWEULbcVF1Cseu+nese1SLhUrSKWYwBKyOBpZYMfGZjD+FDli0bkp9vM+ITiR6Wo17E95MRSuAGp3RtwJVcG5VV0oWFWUdQgKjrJayLGypaCE+kmn8ragQ3wUDSuoU2FeoU15gjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SI9Cp3CL; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JKyLNlEh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742949728;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eJmKdM0IwmSBHQPVcFE4Rxv48jCpIczZDE978Hf7Pi0=;
-	b=JKyLNlEhKx61q/9x4PLqVwGj2oIF+uYOMd238cGDANyNqfunrsLHHxGVhFucq1m/QpJtnx
-	DtTjGoHoZW7zKZHxhoV7pVaPBaHOiYVY5qG1P+ak04cpE5hJ/ON+RlZihq4Zz0Eglvc1j1
-	VtNJvnie+DRyW2dx13isbric3LOMdhQ=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-3-vZhrf_omOLCLa4KMDBxe8Q-1; Tue,
- 25 Mar 2025 20:42:06 -0400
-X-MC-Unique: vZhrf_omOLCLa4KMDBxe8Q-1
-X-Mimecast-MFC-AGG-ID: vZhrf_omOLCLa4KMDBxe8Q_1742949726
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11F281809CA5
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 00:42:06 +0000 (UTC)
-Received: from [172.20.55.199] (unknown [10.30.45.42])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AFB8B1800944;
-	Wed, 26 Mar 2025 00:42:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, b3c623b9)
-Date: Wed, 26 Mar 2025 00:42:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SI9Cp3CL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742952167; x=1774488167;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EW2WUYnXzEeFiqZb4aNRiXPv+E5nRHDeYMd6+zBYJ/E=;
+  b=SI9Cp3CLYDpZsG+MsFbUQl2gprTPFiIcf0ZL6+IqDFg/l02VNQG0wmGf
+   WsLrgYt7O/Qy34N8ycpjkdzPMy7vDTO0ty0Wl2uRIWE995nKbPldnIUTJ
+   Mw24R59ksDOMfft1tT5NiPWNybFG2ocfSaSwhcIWO8Tosp0rdD5fqrPNv
+   amtY+JbeKq3bBdktyF+ovSnQARGhKVAC3LyGmVXQbFe/PWZGibjImPJfP
+   xxJRqpZp/jziqUSSAJCS8sZZHBqn2r/SLtyD07gjoXWy9QOW0VIV+4fnm
+   i914TW9leb73XnkrzPuvipdwyB8zhR6CqcuIc0vgXa+02m4ltX42HL225
+   g==;
+X-CSE-ConnectionGUID: LrfXrL7TRMuc6tKozRasuQ==
+X-CSE-MsgGUID: sfv1nkD0TwapHa3qvk2Ipw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11384"; a="43951818"
+X-IronPort-AV: E=Sophos;i="6.14,276,1736841600"; 
+   d="scan'208";a="43951818"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2025 18:22:47 -0700
+X-CSE-ConnectionGUID: 5oOBzU7oSCaHqS8SQxa1SA==
+X-CSE-MsgGUID: 5n/uCNutQEePq1cdGOjfgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,276,1736841600"; 
+   d="scan'208";a="125350033"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 25 Mar 2025 18:22:43 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txFTd-0005MR-1a;
+	Wed, 26 Mar 2025 01:22:41 +0000
+Date: Wed, 26 Mar 2025 09:21:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anusha Srivatsa <asrivats@redhat.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <quic_jesszhan@quicinc.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Anusha Srivatsa <asrivats@redhat.com>
+Subject: Re: [PATCH 2/5] drm/panel: Add refcount support
+Message-ID: <202503260820.3wTF0Zap-lkp@intel.com>
+References: <20250325-b4-panel-refcounting-v1-2-4e2bf5d19c5d@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <43624.125032520420700103@us-mta-3.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Ss34fY16wCRnHliV3CjLY8TiE1qJrqrhfbLlzoZt0NA_1742949726
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250325-b4-panel-refcounting-v1-2-4e2bf5d19c5d@redhat.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Anusha,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on c8ba07caaecc622a9922cda49f24790821af8a71]
 
-Kernel information:
-    Commit message: Merge tag 'thermal-6.15-rc1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/rafael/linux-pm
+url:    https://github.com/intel-lab-lkp/linux/commits/Anusha-Srivatsa/drm-panel-Add-new-helpers-for-refcounted-panel-allocatons/20250326-012651
+base:   c8ba07caaecc622a9922cda49f24790821af8a71
+patch link:    https://lore.kernel.org/r/20250325-b4-panel-refcounting-v1-2-4e2bf5d19c5d%40redhat.com
+patch subject: [PATCH 2/5] drm/panel: Add refcount support
+config: s390-randconfig-002-20250326 (https://download.01.org/0day-ci/archive/20250326/202503260820.3wTF0Zap-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250326/202503260820.3wTF0Zap-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1735213056
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503260820.3wTF0Zap-lkp@intel.com/
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1735213056-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1735213056-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/drm_panel.c:408: warning: expecting prototype for drm_bridge_put_void(). Prototype was for drm_panel_put_void() instead
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +408 drivers/gpu/drm/drm_panel.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   398	
+   399	/**
+   400	 * drm_bridge_put_void - wrapper to drm_bridge_put() taking a void pointer
+   401	 *
+   402	 * @data: pointer to @struct drm_bridge, cast to a void pointer
+   403	 *
+   404	 * Wrapper of drm_bridge_put() to be used when a function taking a void
+   405	 * pointer is needed, for example as a devm action.
+   406	 */
+   407	static void drm_panel_put_void(void *data)
+ > 408	{
+   409		struct drm_panel *panel = (struct drm_panel *)data;
+   410	
+   411		drm_panel_put(panel);
+   412	}
+   413	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
