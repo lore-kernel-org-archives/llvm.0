@@ -1,123 +1,94 @@
-Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D8C3A1BA
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 16:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184D51F3B9C;
+	Wed, 26 Mar 2025 17:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743006508; cv=none; b=gMXEDJTx4TAgWGTR/8FkK3ujfLkeWaTyCkAvji2unoYniU5Ae5QKQ+eP8YRR9uJXvNUQ9+8P64BwmU9DiQ53BphSaSM6FML1ov9hEMZunQCzcfCkQEhJo2v5BfrJrAwZZClmwB/r3k8owR21gE4UW6VR28VUY2kSFk8KOCJrdLU=
+	t=1743008875; cv=none; b=jPjsxfxUFHgO+2hMQkhObPds2bdpDO5Mjm6PuZQTBp0idc9WEKptcZ/m4n9mrWzBZZrsG0m6gDcz/NJgGYLk6MVmVfjiBKxvWam/Z7RCLrHvnueVbUvaXfeqe5hg8pQ6fktQ0DcHG9h+aYZHdXdTwehVUllROtTT9QB4ELYpiVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743006508; c=relaxed/simple;
-	bh=Zr7f/8/DLp7ZcIJKcBxvh5ealTCm0c3f38yxMGSpCI0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=XARyJql3ybWRvPw+/EkvIGUyw/c6eaSoKd7AHQmxmR+MugUq9dfBGsDMcWTC7CVSCJky/qzfLnSOA4hw2ABtFN8kG3oqQQOMJ78yFQKgpgemRJw5zab/Gw72qFbAWaROVKnN4+3VT/kjiIWbVuw73LDbkkUsidrnuvC/LqsK2Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bYza4FJz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dN+aaHNp; arc=none smtp.client-ip=202.12.124.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1743008875; c=relaxed/simple;
+	bh=ScM9Tu7B3RUWqTHYxV6sXTtuyDIzrk10U+OhEj6Jr7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XHbz8/SiITbcTh7mRouovNlPaY4VDCsx46u9TSMlDD9e/YLqGAQy3DWsREY1ag/4k3yNiIcfc9r6jctoktG0sjU3WpYCkVl96Mzp2hyZwkCJTUyJbEFozrqBBXMHVxdhw7rVhhsWmEBOSYyetnrG1e6/ei3+d6Uu8kIcEB08gbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=US6jfn8e; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bYza4FJz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dN+aaHNp"
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id C8B032540187;
-	Wed, 26 Mar 2025 12:28:24 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Wed, 26 Mar 2025 12:28:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1743006504;
-	 x=1743092904; bh=AB6R+XAWI5VcKXrLaJxDqz1rDPlHoJLM/7kKxB4tnP8=; b=
-	bYza4FJzECBO72rof60HJoFTp6I2Wa41aoHgQDN7vpU5em9wfPyguszH7AVWS9vF
-	/Vfneyfzj7ua1KQSX9nhf8OeXnUSkFZ0uLgfMLmqKUNKicnXBRkMYeAh2hTWJLlp
-	3Agt2J9bbAktSxqMfC+36TzilMVziHbv4aC94tfqxiA5CgUbk0QdGZYoFyH1mg/l
-	Adj8bH7Ys2WJRN4gVK4D5p/cCjtc5Go+5m72IfzZ/3LpQyyo3xGNGyAl3SuZ5PcC
-	2zfPGYos9pHGTVSJszAmQGnip9J34pTDvJbr034jf2TmHbERIPiOQty0B73rtxUT
-	X3DZDiiM6aF1r4/tOhQ6sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743006504; x=
-	1743092904; bh=AB6R+XAWI5VcKXrLaJxDqz1rDPlHoJLM/7kKxB4tnP8=; b=d
-	N+aaHNpYWBhtLvfkJ0TSNXcj72rVcMxBx7XdOfmJJDn8iTmbKUqSZa069FNJnDBX
-	CWsGFYgyZsKMlV0BVUDrGMHi/y1CM2e7Rluz2OYhXWOQ22C3zFTrwcFxKcNoVg8s
-	MXg5IJe5atVVYA9xU7rSq4Z4KyhQowgUfdUyQ5oegbziNdhObaFOKfbTG2rtMg/Q
-	+O72zLQPb/F+9AqakGYo3u03lmISdyde28FgSU7AL4JtjExmhbjafPZE0ZpERcme
-	ArNzmF6ZGCZp6b7pmrPO8XqJOiCufvysGbrDPPLoBtByeJYH6QgWVAvgjy4q/kxF
-	YuTHX4NKPJ0ucujxFLcRw==
-X-ME-Sender: <xms:KCvkZ0CSLsjRdDc6oGjEa4dPP79ndWuW1w0KDGQ8jmkl--ufIqce_g>
-    <xme:KCvkZ2jhL640cSqcthRRVopEblQXTaC6nl2rVTlxn261cukSshI_i_VJ8DK8xBi1V
-    Q6QxZ-Ps1ImCRA7XlQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeitdduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhepkedvuefhiedtueeijeevtdeiieejfeelveff
-    feelkeeiteejffdvkefgteeuhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
-    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehmohhrsghosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivg
-    hrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdp
-    rhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgrsggvlh
-    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtth
-    hopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:KCvkZ3nBJiJaO22TFr8Km6vsAzvzCkIS6cI23vFWgnq8xx66OyME6Q>
-    <xmx:KCvkZ6yCwup_CKGYRI0_l0hMd-PyFWIUWC3O3cLNzrE8pewqfPjbuQ>
-    <xmx:KCvkZ5TvC5GRPg0x0lGVq9z14udj4ENgdjDzNHUhYAqgjpMRvlteMA>
-    <xmx:KCvkZ1aWqjD8faAI51prhAi8HlQ8eSRegsFcyE5BrIOhkjzXlXTevg>
-    <xmx:KCvkZ0H63DvBfOxS4_Ij-hhbwPC8zWOLPO_oIxld8-Z7cf70PCN6XaTu>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 501632220072; Wed, 26 Mar 2025 12:28:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="US6jfn8e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743008870; x=1774544870;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ScM9Tu7B3RUWqTHYxV6sXTtuyDIzrk10U+OhEj6Jr7Y=;
+  b=US6jfn8eXCCWQNlUPQ63UwgfDQBCqWigGYMx2B2dv4Xiwy9LG+fEXN1k
+   HPrTHE6QL0fojIO5RAy8XOyJ/i22/nZNe8idLZ8Ey94pMcVxjJQ/VoxUb
+   SgCQTmyFkIl4bCzjICK+cw8wqVY9JtICIRM4eiYz96ah2VsCavk2uHESU
+   8TIfP/MR1eVklwEyc927/MztsC1f3s9MMSxR+EzR29Gfn2cVJ9oqP7yeI
+   39fFIzmv2FaOEfvGZVACQ/5BZDGZfRi5665jTSiL49nIZjnD91zEQ0BtP
+   obeE1CLCTLT/JaOVomAwi9lqcHrInutt9UTHWoCuwrQwAMm0wOFP9SwdJ
+   Q==;
+X-CSE-ConnectionGUID: y6wCRyu1TdeKmzPgsHS0lw==
+X-CSE-MsgGUID: lzVEAqsKT/ebxLPKFVPxTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44430959"
+X-IronPort-AV: E=Sophos;i="6.14,278,1736841600"; 
+   d="scan'208";a="44430959"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 10:07:49 -0700
+X-CSE-ConnectionGUID: +wfmBtukSBSiSRKYURdOEA==
+X-CSE-MsgGUID: ppqWQlPoQUyZJTSO7bEM7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,278,1736841600"; 
+   d="scan'208";a="125351417"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 26 Mar 2025 10:07:48 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txUED-0005vN-2O;
+	Wed, 26 Mar 2025 17:07:45 +0000
+Date: Thu, 27 Mar 2025 01:07:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/kunit-kselftests 15/19] ld.lld: error:
+ undefined symbol: kunit_log_append
+Message-ID: <202503270036.cmDgUd6x-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: T1240cda14fee069e
-Date: Wed, 26 Mar 2025 17:28:03 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "kernel test robot" <lkp@intel.com>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <801c7017-ec5a-4439-91e6-36e35020a579@app.fastmail.com>
-In-Reply-To: <20250326162355.GA2072652@ax162>
-References: <20250321085315.915808-1-arnd@kernel.org>
- <20250325155906.GA1886499@ax162>
- <l77cp7hlskzkauoohviwonal53upcyc74j7x57ycn7sdfkmu4f@fsm4tv2lbtn6>
- <20250326162355.GA2072652@ax162>
-Subject: Re: [PATCH] platform: cznic: fix function parameter names
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Mar 26, 2025, at 17:23, Nathan Chancellor wrote:
-> On Wed, Mar 26, 2025 at 10:38:47AM +0100, Marek Beh=C3=BAn wrote:
->> >=20
->> > Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->> >=20
->> > You will be taking this I assume?
->>=20
->> Arnd already took it into for-next:
->>   https://web.git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log=
-/?h=3Dfor-next
->
-> Ah odd, it just showed up in -next even though it was applied a few da=
-ys
-> ago:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/kunit-kselftests
+head:   d10563e28bf421b3991f2c36e20b2e14e03c8c41
+commit: 0387b99af182a8e49e0873834ebe0e226726dcf2 [15/19] kunit: Introduce UAPI testing framework
+config: i386-buildonly-randconfig-002-20250326 (https://download.01.org/0day-ci/archive/20250327/202503270036.cmDgUd6x-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250327/202503270036.cmDgUd6x-lkp@intel.com/reproduce)
 
-Sorry about that, my previous git push had failed because of some other
-problem. I also still see two more build issues in the cznic driver,
-so I'm sending the pull 6.16 pull request without that one but still
-plan to send a follow-up that includes this one and two more changes
-once it builds cleanly.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503270036.cmDgUd6x-lkp@intel.com/
 
-       Arnd
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: kunit_log_append
+   >>> referenced by uapi.c
+   >>>               lib/kunit/uapi.o:(kunit_uapi_run_kselftest) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: kunit_fail_assert_format
+   >>> referenced by uapi.c
+   >>>               lib/kunit/uapi.o:(kunit_uapi_run_kselftest) in archive vmlinux.a
+   >>> referenced by uapi.c
+   >>>               lib/kunit/uapi.o:(kunit_uapi_run_kselftest) in archive vmlinux.a
+   >>> referenced by uapi.c
+   >>>               lib/kunit/uapi.o:(kunit_uapi_run_kselftest) in archive vmlinux.a
+   >>> referenced 2 more times
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
