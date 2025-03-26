@@ -1,107 +1,106 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62C91AF0CE
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 10:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5331A0BDB;
+	Wed, 26 Mar 2025 13:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742984597; cv=none; b=MAiYARw28vmwPsa2nVpT64l9w/c2rU/Be6o0L6tQd6rf+wsNrc6pHCqu98L+B56DtO2eQMb7IFedq8hE/Ry24UuJ5k5JwbLvpB/A00WgJ23todByFfgtJ7IKXLRiAXRfT+UIMky/2IlYkQErREXZBMI1sCoBbPu7jvabF8IB+I8=
+	t=1742994178; cv=none; b=bOhIlYbcH0SJbDLoE/WgVXivuIpvwAioaj77lPTeyLtIWRoAwvTXzF0Cke9azwyN55IV6bjRE/m05DlrUOSTOgaOIbYxHx6zplAQQNnseizKulBbuFAiSvJCJNfMoD8NMEJwEuAfGZJQPfXvTsixHeMYvLnSmtaQp5R7kLGiF08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742984597; c=relaxed/simple;
-	bh=3SS+Q5gJLOeDmj6fkWawn6e80cqmCPAQXGjFN3oCayc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Pp5++aCvHavYlVXpamMuKmPBpVk1TDIqzP+V3uaEWi9xK7HeAJ+jpJOdNXo0RQgSliUEdHjkKk3zZ3qxEJ4H5yJn0iRr8ugngSsMPYjNE7H1X1meYLiA+TDLDkgdophj9b4Su8EXxut1V/Uy3ezrxBqK6AMGVZCdI9FQuFwlBBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NQRuDjwS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742994178; c=relaxed/simple;
+	bh=rXIFR/R8SHfXktzrfprxQJFu2B4i2waRkFsCXkleVr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p5cTZ3N00y7ZMrb6qfw/jzxjEj2tmd8ZxV1o+noM5KYIxYc2QHAVVoQEzWmaK5UR5EphusRaB8jcjogaQb2Gw9nclemZGyDApEVKvQQ1rSNcb0gM6ddjQsOL1KMjMnEb/eWFPy5KriuubK+hePVbzLaQvKTn9EIIx9IOyJ2nrTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SA4zxPUO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NQRuDjwS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742984593;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=mKxUejDaFNyMoK1yA96wTf6irCuNvdz5XfdlMoPMXmA=;
-	b=NQRuDjwSF+k7k+v1p5oLfbqWghdq1rB0LKrPphLI4/eZxVo7r9tGQnlN/wfwkKmYEkKiDK
-	OHLf37lW9NKrZTOWQzC8hqUudXno88A19x3n+XIKOQxbn6fDAP7/1TryKhSDNstlmQQhKA
-	LFJ+aVhDsE7EgLKCAWGkiJSl5XkMF/8=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-52-x0iY_6RmP6WCL_xtTG97TA-1; Wed,
- 26 Mar 2025 06:23:12 -0400
-X-MC-Unique: x0iY_6RmP6WCL_xtTG97TA-1
-X-Mimecast-MFC-AGG-ID: x0iY_6RmP6WCL_xtTG97TA_1742984591
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7AD1219560B1
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 10:23:11 +0000 (UTC)
-Received: from [172.20.55.199] (unknown [10.30.45.42])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F418419560AB;
-	Wed, 26 Mar 2025 10:23:10 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 47618bc8)
-Date: Wed, 26 Mar 2025 10:23:10 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SA4zxPUO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298E9C4CEE2;
+	Wed, 26 Mar 2025 13:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742994178;
+	bh=rXIFR/R8SHfXktzrfprxQJFu2B4i2waRkFsCXkleVr8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SA4zxPUOxJzl9g1Cmp/0+e2JUkdFRgNYywGxSkueu66VsIAbuB8K5Bnhmn+CEnWvz
+	 WeAE2HPkmhwW2HRYhyR0+nlwxB1Zmez0MvJ67MRxA0P50WiimtWqld0eGstw2rtZJZ
+	 GKSzc2cSg8h1nk/MejxVsuh15qlIngtvhIugUtrOB6c/kNpucIrGMThg5ngCFfF6dq
+	 paBbr2nTLv8fT6z6jlmuNyFsaIpljulhdt/Zbx6I8Ro1MbcfmZ+LidjISgZVYotX50
+	 jbypfa9kWmLphmoPZ8mXIk6zCc4QHQNb8K9XCKVP5hP5pJD1F1p4sfF1ms6ifqEXS1
+	 ME6rqxgJomHgw==
+Date: Wed, 26 Mar 2025 13:02:50 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 12/16] selftests: vDSO: parse_vdso: Use UAPI headers
+ instead of libc headers
+Message-ID: <c7bea938-ee3b-477e-9ed0-db29ca02a538@sirena.org.uk>
+References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
+ <20250226-parse_vdso-nolibc-v2-12-28e14e031ed8@linutronix.de>
+ <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <02924.125032606231200335@us-mta-52.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: IfX4u4av86_O-isk0sgqDC053Dclpr1J9-nREEBd3Uk_1742984591
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wNTtUR/e22jNGr//"
+Content-Disposition: inline
+In-Reply-To: <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
+X-Cookie: Don't get mad, get interest.
+
+
+--wNTtUR/e22jNGr//
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Thu, Mar 20, 2025 at 01:23:47PM +0000, Mark Brown wrote:
+> On Wed, Feb 26, 2025 at 12:44:51PM +0100, Thomas Wei=DFschuh wrote:
+> > To allow the usage of parse_vdso.c together with a limited libc like
+> > nolibc, use the kernels own elf.h and auxvec.h headers.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+> The vDSO selftests currently fail build for at least arm64 in -next:
 
+=2E..
 
-Kernel information:
-    Commit message: Merge tag 'spi-v6.15' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/broonie/spi
+> a bisect points at this patch, it looks like that's due to the switch to
+> use TOOLS_INCLUDES but I didn't dig into the specifics.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1735409889
+This bug is now in mainline.  A fix was posted by Thomas the day after
+the original report:
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1735409889-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1735409889-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
+   https://lore.kernel.org/r/20250321-uapi-consistency-v1-1-439070118dc0@li=
+nutronix.de
 
+but it has apparently slipped through the cracks.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+--wNTtUR/e22jNGr//
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+-----BEGIN PGP SIGNATURE-----
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfj+voACgkQJNaLcl1U
+h9BSMwf+OsWYshguAPVfP5dQO8s2eY4aQLLauAOAK9BYf5penC9o9X79UTjc4YEL
+/LYnie2aWsE4jrp8BhOvEY+OWAc80G8iwyuGi76TOEuPggmK06ql6Qb/7Giuh6Xx
+MuwkE4/k4SvcGsLuQHDTvyf73Kyu4/Oagu8NSrsBLctlWOIMThNgDkF9AcF4W526
+1Fe9pnkH1+xgexfieaJ0rr/FMQgHSp5+7ehXZ39lvySqknLvZi8SHZc7iX21Puj6
+wJRb8qR0Qgfdh8Nnde+LYqE74V1wZrpFBT/HTY9CXCbcx8EsP55xLsgMO7RRLeFs
+bCG7NmKf02mLDsa4mbDkpiRjuK4rbA==
+=Dy6e
+-----END PGP SIGNATURE-----
 
+--wNTtUR/e22jNGr//--
