@@ -1,106 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5331A0BDB;
-	Wed, 26 Mar 2025 13:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272651F37C3;
+	Wed, 26 Mar 2025 14:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742994178; cv=none; b=bOhIlYbcH0SJbDLoE/WgVXivuIpvwAioaj77lPTeyLtIWRoAwvTXzF0Cke9azwyN55IV6bjRE/m05DlrUOSTOgaOIbYxHx6zplAQQNnseizKulBbuFAiSvJCJNfMoD8NMEJwEuAfGZJQPfXvTsixHeMYvLnSmtaQp5R7kLGiF08=
+	t=1743000192; cv=none; b=szxBvMLklB2E1HhJAAZy6CeST8KmmvASKVVtXafvHwjv8oiOasgEwzzdtwwHIYJBov1A+46zdxtL1m9jbgSplqAbG94eAlj54Vahaf8abdxNSj5fAX1Nmv668Nke2MzpcPq2p4FfQLqbiM6H+fRvgLkMuZjueON2xndefuI+8+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742994178; c=relaxed/simple;
-	bh=rXIFR/R8SHfXktzrfprxQJFu2B4i2waRkFsCXkleVr8=;
+	s=arc-20240116; t=1743000192; c=relaxed/simple;
+	bh=8ruiAexsDkLplsXd3Wz44waqyHX3oMolkpYe0zqHwws=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p5cTZ3N00y7ZMrb6qfw/jzxjEj2tmd8ZxV1o+noM5KYIxYc2QHAVVoQEzWmaK5UR5EphusRaB8jcjogaQb2Gw9nclemZGyDApEVKvQQ1rSNcb0gM6ddjQsOL1KMjMnEb/eWFPy5KriuubK+hePVbzLaQvKTn9EIIx9IOyJ2nrTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SA4zxPUO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gd/EnIPk/ALxSCZQOMfh4JTad5BRDaryHNIRwX8S/ap+SVtxGHKvXfB3GyX6ZqcJ8yFDS9g9SZuhs6OYiJ1g0OxY0h8d5FnbPrb1Pd8lJJyA041d7DQThOStMo9hxeRhfaDEBjJCRYWR5gyUL6Gq6W8FZORi5tWbMb5EGbAtbvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SSDHVgs8; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SA4zxPUO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298E9C4CEE2;
-	Wed, 26 Mar 2025 13:02:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742994178;
-	bh=rXIFR/R8SHfXktzrfprxQJFu2B4i2waRkFsCXkleVr8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SA4zxPUOxJzl9g1Cmp/0+e2JUkdFRgNYywGxSkueu66VsIAbuB8K5Bnhmn+CEnWvz
-	 WeAE2HPkmhwW2HRYhyR0+nlwxB1Zmez0MvJ67MRxA0P50WiimtWqld0eGstw2rtZJZ
-	 GKSzc2cSg8h1nk/MejxVsuh15qlIngtvhIugUtrOB6c/kNpucIrGMThg5ngCFfF6dq
-	 paBbr2nTLv8fT6z6jlmuNyFsaIpljulhdt/Zbx6I8Ro1MbcfmZ+LidjISgZVYotX50
-	 jbypfa9kWmLphmoPZ8mXIk6zCc4QHQNb8K9XCKVP5hP5pJD1F1p4sfF1ms6ifqEXS1
-	 ME6rqxgJomHgw==
-Date: Wed, 26 Mar 2025 13:02:50 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2 12/16] selftests: vDSO: parse_vdso: Use UAPI headers
- instead of libc headers
-Message-ID: <c7bea938-ee3b-477e-9ed0-db29ca02a538@sirena.org.uk>
-References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
- <20250226-parse_vdso-nolibc-v2-12-28e14e031ed8@linutronix.de>
- <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SSDHVgs8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743000190; x=1774536190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8ruiAexsDkLplsXd3Wz44waqyHX3oMolkpYe0zqHwws=;
+  b=SSDHVgs80DhSOJ4IaxTDZFC4NnhPvaGqJZnSDJJbgkU06JCwJOOiBgpx
+   DeiT1qKKuHtGrEM+O3Nm/LUWjXy0uDV3BVk/moJo75uy6TOPQmFqBb8EM
+   GZCl3v+dgcz9HPTv+bUz+uGlunIY46uwXNGQlWOOAIjKwoDHlRY1PvbYi
+   1Fejm+zU8UhMKykVZzpOobE61QTvGWE4Dkqrlgp9Wg+RImu/CWQt3qxkR
+   zsu/+qfG3G5gZSLE05LnsTtOuXzbt5es0L5NXSpG5/3gIZ+NdCdGtlF+J
+   /lxGVVISn7Bl8XlJ45zECVYDVdjCzEYLHXKXUUPxHm9uVBbE5v6ariW7v
+   Q==;
+X-CSE-ConnectionGUID: 2yRLBVQJRd6SxdghIz13xg==
+X-CSE-MsgGUID: Vg/Xm9gTTROSbMwYKp38gA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44179690"
+X-IronPort-AV: E=Sophos;i="6.14,278,1736841600"; 
+   d="scan'208";a="44179690"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 07:43:09 -0700
+X-CSE-ConnectionGUID: jI/+7xQ0QY+hOlssQhJQDA==
+X-CSE-MsgGUID: oVDthJJ2SIuQ1QogZ8W1Rw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,278,1736841600"; 
+   d="scan'208";a="129982866"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 26 Mar 2025 07:43:03 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txRy0-0005oR-1c;
+	Wed, 26 Mar 2025 14:42:55 +0000
+Date: Wed, 26 Mar 2025 22:42:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	pbonzini@redhat.com, chenhuacai@kernel.org, mpe@ellerman.id.au,
+	anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, seanjc@google.com, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
+	xiaoyao.li@intel.com, yilun.xu@intel.com,
+	chao.p.peng@linux.intel.com, jarkko@kernel.org, amoorthy@google.com,
+	dmatlack@google.com, isaku.yamahata@intel.com, mic@digikod.net,
+	vbabka@suse.cz, vannapurve@google.com, ackerleytng@google.com,
+	mail@maciej.szmigiero.name, david@redhat.com, michael.roth@amd.com,
+	wei.w.wang@intel.com
+Subject: Re: [PATCH v7 5/9] KVM: x86: Mark KVM_X86_SW_PROTECTED_VM as
+ supporting guest_memfd shared memory
+Message-ID: <202503262202.WSGvs92t-lkp@intel.com>
+References: <20250318161823.4005529-6-tabba@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wNTtUR/e22jNGr//"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
-X-Cookie: Don't get mad, get interest.
+In-Reply-To: <20250318161823.4005529-6-tabba@google.com>
 
+Hi Fuad,
 
---wNTtUR/e22jNGr//
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-On Thu, Mar 20, 2025 at 01:23:47PM +0000, Mark Brown wrote:
-> On Wed, Feb 26, 2025 at 12:44:51PM +0100, Thomas Wei=DFschuh wrote:
-> > To allow the usage of parse_vdso.c together with a limited libc like
-> > nolibc, use the kernels own elf.h and auxvec.h headers.
+[auto build test ERROR on 4701f33a10702d5fc577c32434eb62adde0a1ae1]
 
-> The vDSO selftests currently fail build for at least arm64 in -next:
+url:    https://github.com/intel-lab-lkp/linux/commits/Fuad-Tabba/mm-Consolidate-freeing-of-typed-folios-on-final-folio_put/20250319-003340
+base:   4701f33a10702d5fc577c32434eb62adde0a1ae1
+patch link:    https://lore.kernel.org/r/20250318161823.4005529-6-tabba%40google.com
+patch subject: [PATCH v7 5/9] KVM: x86: Mark KVM_X86_SW_PROTECTED_VM as supporting guest_memfd shared memory
+config: x86_64-randconfig-078-20250326 (https://download.01.org/0day-ci/archive/20250326/202503262202.WSGvs92t-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250326/202503262202.WSGvs92t-lkp@intel.com/reproduce)
 
-=2E..
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503262202.WSGvs92t-lkp@intel.com/
 
-> a bisect points at this patch, it looks like that's due to the switch to
-> use TOOLS_INCLUDES but I didn't dig into the specifics.
+All errors (new ones prefixed by >>):
 
-This bug is now in mainline.  A fix was posted by Thomas the day after
-the original report:
+>> ld.lld: error: undefined symbol: kvm_gmem_handle_folio_put
+   >>> referenced by swap.c:110 (mm/swap.c:110)
+   >>>               mm/swap.o:(free_typed_folio) in archive vmlinux.a
 
-   https://lore.kernel.org/r/20250321-uapi-consistency-v1-1-439070118dc0@li=
-nutronix.de
-
-but it has apparently slipped through the cracks.
-
---wNTtUR/e22jNGr//
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfj+voACgkQJNaLcl1U
-h9BSMwf+OsWYshguAPVfP5dQO8s2eY4aQLLauAOAK9BYf5penC9o9X79UTjc4YEL
-/LYnie2aWsE4jrp8BhOvEY+OWAc80G8iwyuGi76TOEuPggmK06ql6Qb/7Giuh6Xx
-MuwkE4/k4SvcGsLuQHDTvyf73Kyu4/Oagu8NSrsBLctlWOIMThNgDkF9AcF4W526
-1Fe9pnkH1+xgexfieaJ0rr/FMQgHSp5+7ehXZ39lvySqknLvZi8SHZc7iX21Puj6
-wJRb8qR0Qgfdh8Nnde+LYqE74V1wZrpFBT/HTY9CXCbcx8EsP55xLsgMO7RRLeFs
-bCG7NmKf02mLDsa4mbDkpiRjuK4rbA==
-=Dy6e
------END PGP SIGNATURE-----
-
---wNTtUR/e22jNGr//--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
