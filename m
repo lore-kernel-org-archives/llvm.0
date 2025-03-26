@@ -1,59 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCD123A563;
-	Tue, 25 Mar 2025 23:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FB818035;
+	Wed, 26 Mar 2025 00:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742946955; cv=none; b=npFQnqsP/s22sYBD8RR2tgdrNLhsWYSuV2Z90xAaZIQJJwm3HbK1XO23B6aOg2TCb+3yQxVW/MPLLuk8SiiAgV5t1yxDSL3aQGVkAyh4XcWgHZ3EvLYGWW0L2FXu6B3PJWOHRzZNf3nAO2smz1b4LQbPnRPGV3jTlE+z5ovDA70=
+	t=1742949188; cv=none; b=TjKSkRx0iqT7cfGbPxDOrmG/xRbEOFGLmR/M1HKFEsPu/Dm8X89N2/5olldmXvCaTIfDfuveiOBGAoTDvqvXn3MjG+iY0w4oEijAbIkKAWgL7X8KC5KR1eDKSQ1m6/iyxFWBadCPqmgOYlWaWgAySgBibK9E8e9jEmdVlRNvSb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742946955; c=relaxed/simple;
-	bh=z7HoTnhGW1pjczak6MKNvrbSCSHoUahswbUyv5Okgcw=;
+	s=arc-20240116; t=1742949188; c=relaxed/simple;
+	bh=Pp6Sv1svN0R+5ALGT58L3atxeP++biFN0Qd6UhpdUwE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P1ACGEyJyBmgIFg/Q9J+GHLz9QTauILi9Y3mToXlB8feR3CL72McF+SAaRc910Gfwo/nsA8PN2gCkqLrZkjO8E+0VJPRtGWbSEy9POB9lSLWLJGfssZ3rI5wknvVH52UiQ7wnUMVB0HziJ1mMqqB515ty3g0oR5fM+6tdU06PMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LMahqHHq; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fT8ZP8WglGiPE/wGx8TsvHiq4VPdwdbC4wcIH78fa+o7UB83kyCL+NJg8i0Uk/f+pr0tcnQNRqtNGse5uthviMI6PyP/ebIO2Vx8tYw4A756CufjLIsBZlh9tBIgjKC0Sd5ldK8M2sW3dyxqhq/1tZMPGtEfY+CM28Crzxj+inI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmOL0bL9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LMahqHHq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742946954; x=1774482954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z7HoTnhGW1pjczak6MKNvrbSCSHoUahswbUyv5Okgcw=;
-  b=LMahqHHqG6jEmur90y9g1NJwzDhRR2GjpM7CmszQTXt+ek+RhWgMJSed
-   vg6dLnaW1aeXQelYMjlTA55dFwEE8rh+pcxdsdqFPiza/CNzxHzYjXMCd
-   hXtiXGsnhqdHJNfJJF+KzMHtPFN6+bT8et6v5d2SXYBF/fcevEQcWYqqQ
-   OksxaK5tlkOVQIvU20vx6gwJZT5ybyotaz1ZqJtqzM/PgziIBXdwiHeNB
-   6aKmfVnSj0Dc7KwRtv04h8DGADICcan70Enui8cWci2/uA9nE16l1QZjT
-   BU0m8Nu2XFGMUtXRGn/5qUCEOYqZJllp6iafa0Gt8WKpNkCTkkOBg1TPP
-   w==;
-X-CSE-ConnectionGUID: 5Q5VR1gSRxG8tZawEFKc2w==
-X-CSE-MsgGUID: HBMWza7HRKi0GDp5H4ZQaA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11384"; a="55583785"
-X-IronPort-AV: E=Sophos;i="6.14,276,1736841600"; 
-   d="scan'208";a="55583785"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2025 16:55:53 -0700
-X-CSE-ConnectionGUID: 7krFlAy+T/Sl0X1oxSfumA==
-X-CSE-MsgGUID: U4u9R2dCSYaJwhNpgeZfZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,276,1736841600"; 
-   d="scan'208";a="124334105"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 25 Mar 2025 16:55:51 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1txE7Y-0005Jb-2k;
-	Tue, 25 Mar 2025 23:55:48 +0000
-Date: Wed, 26 Mar 2025 07:55:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmOL0bL9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C56C4CEE4;
+	Wed, 26 Mar 2025 00:33:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742949188;
+	bh=Pp6Sv1svN0R+5ALGT58L3atxeP++biFN0Qd6UhpdUwE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nmOL0bL9dyQGD3ksmImeJ7yNFrkhfxtvZjm3qZdlfSLpW/wPnnYbeaCoaSTYaAEWB
+	 2bHokC+5jNqL2J8aFT4b/2AxHvP/qhRPX1B7WNeZxp2CVIkCyxoQ+lwYzsSRzRFYgr
+	 1sd7dsGMUdcNxLbD0/B5j928pXelikVH8gWVwZkfFhl2pxZmoLTKboV0yja3iIz6rn
+	 BpRcbo5TiN4Cc/ORDAeGiLIOvo7REHEaGx5LkkDQi0XCrOPHOCkFoiFhVW/XewfU/I
+	 AvffqEky0rIJMWTn6T9YLQeyoD6ITuxPfNRF5279Lz3SpO/WOPTv5XQzwavGywNs5n
+	 sPhMxAlAPtq2Q==
+Date: Tue, 25 Mar 2025 17:33:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Shevchenko <andy@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	linux-efi@vger.kernel.org
 Subject: Re: [PATCH RFC 2/2] wcslen() prototype in string.h
-Message-ID: <202503260611.MDurOUhF-lkp@intel.com>
-References: <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
+Message-ID: <20250326003303.GA2394@ax162>
+References: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
+ <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
+ <Z-LXHssrcpdtFqqn@smile.fi.intel.com>
+ <20250325165847.GA2603000@ax162>
+ <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
+ <20250325214516.GA672870@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,90 +52,178 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
+In-Reply-To: <20250325214516.GA672870@ax162>
 
-Hi Nathan,
+On Tue, Mar 25, 2025 at 02:45:21PM -0700, Nathan Chancellor wrote:
+> Okay, sounds reasonable to me. This is what I ended up with for that
+> change, which will become patch one of the series.
+...
+> diff --git a/drivers/firmware/efi/libstub/printk.c b/drivers/firmware/efi/libstub/printk.c
+> index 3a67a2cea7bd..334f7e89845c 100644
+> --- a/drivers/firmware/efi/libstub/printk.c
+> +++ b/drivers/firmware/efi/libstub/printk.c
+> @@ -24,7 +24,7 @@ void efi_char16_puts(efi_char16_t *str)
+>  }
+>  
+>  static
+> -u32 utf8_to_utf32(const u8 **s8)
+> +u32 efi_utf8_to_utf32(const u8 **s8)
+>  {
+>  	u32 c32;
+>  	u8 c0, cx;
+> @@ -82,7 +82,7 @@ void efi_puts(const char *str)
+>  	while (*s8) {
+>  		if (*s8 == '\n')
+>  			buf[pos++] = L'\r';
+> -		c32 = utf8_to_utf32(&s8);
+> +		c32 = efi_utf8_to_utf32(&s8);
+>  		if (c32 < 0x10000) {
+>  			/* Characters in plane 0 use a single word. */
+>  			buf[pos++] = c32;
+> -- 
+> 2.49.0
+> 
+> Then the first patch (which becomes the second) becomes:
+> 
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index 0403a4ca4c11..45e01cf3434c 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -7,6 +7,7 @@
+>  #include <linux/cleanup.h>	/* for DEFINE_FREE() */
+>  #include <linux/compiler.h>	/* for inline */
+>  #include <linux/types.h>	/* for size_t */
+> +#include <linux/nls.h>		/* for wchar_t */
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+Good thing I waited :) This include makes s390 unhappy:
 
-[auto build test WARNING on 78ab93c78fb31c5dfe207318aa2b7bd4e41f8dba]
+https://lore.kernel.org/202503260611.MDurOUhF-lkp@intel.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/lib-string-c-Add-wcslen/20250325-234847
-base:   78ab93c78fb31c5dfe207318aa2b7bd4e41f8dba
-patch link:    https://lore.kernel.org/r/20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888%40kernel.org
-patch subject: [PATCH RFC 2/2] wcslen() prototype in string.h
-config: s390-randconfig-001-20250326 (https://download.01.org/0day-ci/archive/20250326/202503260611.MDurOUhF-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250326/202503260611.MDurOUhF-lkp@intel.com/reproduce)
+It is possible that should be fixed by adding -Wno-pointer-sign to
+KBUILD_CFLAGS_DECOMPRESSOR so that arch/s390/boot matches the rest of
+the kernel but...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503260611.MDurOUhF-lkp@intel.com/
+> diff --git a/lib/string.c b/lib/string.c
+> index eb4486ed40d2..1aa09925254b 100644
+> --- a/lib/string.c
+> +++ b/lib/string.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/limits.h>
+>  #include <linux/linkage.h>
+> +#include <linux/nls.h>
+>  #include <linux/stddef.h>
+>  #include <linux/string.h>
+>  #include <linux/types.h>
 
-All warnings (new ones prefixed by >>):
+I wonder if would be better to do something like the below patch in lieu
+of the EFI change above (since there is no chance for a collision) then
+change both of the includes for wchar_t in this diff to nls_types.h? I
+have no strong opinion but this seems like it would be cleaner for the
+sake of backports while not being a bad solution upstream?
 
-   In file included from arch/s390/boot/ipl_data.c:3:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:12:
-   In file included from include/linux/alloc_tag.h:13:
-   In file included from include/linux/cpumask.h:12:
-   In file included from include/linux/bitmap.h:13:
-   In file included from include/linux/string.h:10:
->> include/linux/nls.h:101:34: warning: passing 'char[6]' to parameter of type 'unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-           charlen = codepage->uni2char(0, tmp, NLS_MAX_CHARSET_SIZE);
-                                           ^~~
-   1 warning generated.
---
-   In file included from arch/s390/boot/decompressor.c:11:
-   In file included from include/linux/string.h:10:
->> include/linux/nls.h:101:34: warning: passing 'char[6]' to parameter of type 'unsigned char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-           charlen = codepage->uni2char(0, tmp, NLS_MAX_CHARSET_SIZE);
-                                           ^~~
-   In file included from arch/s390/boot/decompressor.c:48:
-   arch/s390/include/uapi/../../../../lib/decompress_unlz4.c:160:29: warning: passing 'u8 *' (aka 'unsigned char *') to parameter of type 'const char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                   ret = LZ4_decompress_fast(inp, outp, dest_len);
-                                             ^~~
-   arch/s390/include/uapi/../../../../lib/lz4/lz4_decompress.c:477:37: note: passing argument to parameter 'source' here
-   int LZ4_decompress_fast(const char *source, char *dest, int originalSize)
-                                       ^
-   In file included from arch/s390/boot/decompressor.c:48:
-   arch/s390/include/uapi/../../../../lib/decompress_unlz4.c:160:34: warning: passing 'u8 *' (aka 'unsigned char *') to parameter of type 'char *' converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
-                   ret = LZ4_decompress_fast(inp, outp, dest_len);
-                                                  ^~~~
-   arch/s390/include/uapi/../../../../lib/lz4/lz4_decompress.c:477:51: note: passing argument to parameter 'dest' here
-   int LZ4_decompress_fast(const char *source, char *dest, int originalSize)
-                                                     ^
-   3 warnings generated.
+Subject: [PATCH] include: Move typedefs in nls.h to their own header
 
+In order to allow commonly included headers such as string.h to access
+typedefs such as wchar_t without running into issues with the rest of
+the NLS library, refactor the typedefs out into their own header that
+can be included in a much safer manner.
 
-vim +101 include/linux/nls.h
+Cc: stable@vger.kernel.org
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ include/linux/nls.h       | 19 +------------------
+ include/linux/nls_types.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 18 deletions(-)
+ create mode 100644 include/linux/nls_types.h
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16   86  
-d37dc42ab6f040 Jeff Layton    2009-04-30   87  /*
-d37dc42ab6f040 Jeff Layton    2009-04-30   88   * nls_nullsize - return length of null character for codepage
-d37dc42ab6f040 Jeff Layton    2009-04-30   89   * @codepage - codepage for which to return length of NULL terminator
-d37dc42ab6f040 Jeff Layton    2009-04-30   90   *
-d37dc42ab6f040 Jeff Layton    2009-04-30   91   * Since we can't guarantee that the null terminator will be a particular
-d37dc42ab6f040 Jeff Layton    2009-04-30   92   * length, we have to check against the codepage. If there's a problem
-d37dc42ab6f040 Jeff Layton    2009-04-30   93   * determining it, assume a single-byte NULL terminator.
-d37dc42ab6f040 Jeff Layton    2009-04-30   94   */
-d37dc42ab6f040 Jeff Layton    2009-04-30   95  static inline int
-d37dc42ab6f040 Jeff Layton    2009-04-30   96  nls_nullsize(const struct nls_table *codepage)
-d37dc42ab6f040 Jeff Layton    2009-04-30   97  {
-d37dc42ab6f040 Jeff Layton    2009-04-30   98  	int charlen;
-d37dc42ab6f040 Jeff Layton    2009-04-30   99  	char tmp[NLS_MAX_CHARSET_SIZE];
-d37dc42ab6f040 Jeff Layton    2009-04-30  100  
-d37dc42ab6f040 Jeff Layton    2009-04-30 @101  	charlen = codepage->uni2char(0, tmp, NLS_MAX_CHARSET_SIZE);
-d37dc42ab6f040 Jeff Layton    2009-04-30  102  
-d37dc42ab6f040 Jeff Layton    2009-04-30  103  	return charlen > 0 ? charlen : 1;
-d37dc42ab6f040 Jeff Layton    2009-04-30  104  }
-d37dc42ab6f040 Jeff Layton    2009-04-30  105  
-
+diff --git a/include/linux/nls.h b/include/linux/nls.h
+index e0bf8367b274..3d416d1f60b6 100644
+--- a/include/linux/nls.h
++++ b/include/linux/nls.h
+@@ -3,24 +3,7 @@
+ #define _LINUX_NLS_H
+ 
+ #include <linux/init.h>
+-
+-/* Unicode has changed over the years.  Unicode code points no longer
+- * fit into 16 bits; as of Unicode 5 valid code points range from 0
+- * to 0x10ffff (17 planes, where each plane holds 65536 code points).
+- *
+- * The original decision to represent Unicode characters as 16-bit
+- * wchar_t values is now outdated.  But plane 0 still includes the
+- * most commonly used characters, so we will retain it.  The newer
+- * 32-bit unicode_t type can be used when it is necessary to
+- * represent the full Unicode character set.
+- */
+-
+-/* Plane-0 Unicode character */
+-typedef u16 wchar_t;
+-#define MAX_WCHAR_T	0xffff
+-
+-/* Arbitrary Unicode character */
+-typedef u32 unicode_t;
++#include <linux/nls_types.h>
+ 
+ struct nls_table {
+ 	const char *charset;
+diff --git a/include/linux/nls_types.h b/include/linux/nls_types.h
+new file mode 100644
+index 000000000000..8caefdba19b1
+--- /dev/null
++++ b/include/linux/nls_types.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_NLS_TYPES_H
++#define _LINUX_NLS_TYPES_H
++
++#include <linux/types.h>
++
++/* Unicode has changed over the years.  Unicode code points no longer
++ * fit into 16 bits; as of Unicode 5 valid code points range from 0
++ * to 0x10ffff (17 planes, where each plane holds 65536 code points).
++ *
++ * The original decision to represent Unicode characters as 16-bit
++ * wchar_t values is now outdated.  But plane 0 still includes the
++ * most commonly used characters, so we will retain it.  The newer
++ * 32-bit unicode_t type can be used when it is necessary to
++ * represent the full Unicode character set.
++ */
++
++/* Plane-0 Unicode character */
++typedef u16 wchar_t;
++#define MAX_WCHAR_T	0xffff
++
++/* Arbitrary Unicode character */
++typedef u32 unicode_t;
++
++#endif /* _LINUX_NLS_TYPES_H */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.49.0
+
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 45e01cf3434c..4a48f8eac301 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -7,7 +7,7 @@
+ #include <linux/cleanup.h>	/* for DEFINE_FREE() */
+ #include <linux/compiler.h>	/* for inline */
+ #include <linux/types.h>	/* for size_t */
+-#include <linux/nls.h>		/* for wchar_t */
++#include <linux/nls_types.h>	/* for wchar_t */
+ #include <linux/stddef.h>	/* for NULL */
+ #include <linux/err.h>		/* for ERR_PTR() */
+ #include <linux/errno.h>	/* for E2BIG */
+diff --git a/lib/string.c b/lib/string.c
+index 1aa09925254b..2c6f8c8f4159 100644
+--- a/lib/string.c
++++ b/lib/string.c
+@@ -21,7 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/limits.h>
+ #include <linux/linkage.h>
+-#include <linux/nls.h>
++#include <linux/nls_types.h>
+ #include <linux/stddef.h>
+ #include <linux/string.h>
+ #include <linux/types.h>
