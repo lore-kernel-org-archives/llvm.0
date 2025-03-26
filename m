@@ -1,58 +1,58 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60A6253331
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 18:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA3424E4A8
+	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 18:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743013652; cv=none; b=GIXvBQbkPXxoET3yyTObAHX1jk2GWlMSD341HExwkCuRntkBu6XWW2uqD0Bjs6w8H0btdIftZTJehLFK0yuILzhqgjF5mBAhhsIWp1hMu5Coh8FskzOLr8IV4MCz98tIMe/qYMRJ8Sl5ua+sZQrr6T8r4N3lJP5QWAvlpoI02wM=
+	t=1743014417; cv=none; b=EQ+v4Cr74gRH/MfWAqjZ8AT/pjBhyMXZzaozh4Bjnfe/wLvqNE8pz0sV8Jnb9+233ENHjQGfNq1+whz3OLkX4V3enT+tiV1H1h9xF8omGIjw4FG4t/WJgsH/VmZriqa7oZwzoDzRnmtZaNbhrt1DDIgQTP/vCvBOW5VO7DxUdEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743013652; c=relaxed/simple;
-	bh=WmQEkXsfznu8w+rBf6ZgS1QtNrnadeHs+aER+P43DfE=;
+	s=arc-20240116; t=1743014417; c=relaxed/simple;
+	bh=F5Y3RF0ndf8/9azcsuLfDmtYTAz9gCrDPqNMbnYLM/c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JpEdXNv7vWjUnIweyIEzSOwq65/h5neZXeRSCOdrsiPZpSXaITuHmNOC5QqUkOpPj4wDXGF8RCcIEURVkAfO47CudT0Al+gVOqLJ0rRE5lTp6Sy5InXLSHq/jNzJI3qkx2HaJ+XGvXG0j+L0gpzqPPBATSTWGLBUqrblYxaBrkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IrE3+64P; arc=none smtp.client-ip=209.85.218.42
+	 To:Cc:Content-Type; b=iW1MaRX1lPV3oPCjwNX5o/R5nafaUmqrkDKnEXQAPbjGx/EvsjtOkeuo1ksZHSQjWFHPVOXUx+XAyn2PswCgPRpyndarTISvCRql68426IqEOc2oRPWm5I4l770ezWlDgbEk1T1aeuOUO091AzSAKpe8cITIm3q3YQkbga+O7no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHK3CMjS; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrE3+64P"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ac25d2b2354so23369866b.1
-        for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 11:27:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHK3CMjS"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso235379a12.3
+        for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 11:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743013649; x=1743618449; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1743014414; x=1743619214; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wwZ/kZVKA3ly+94BX9Iupd7sb0MCbfiMrJTL+cNfKIk=;
-        b=IrE3+64P2QcuBkltJlFEGo93r5TSQaXqr9QlGDDHyb5cOj/6ZWzByVwmiD8reRIfYV
-         FgetbFDVVlT7OVbVdJm9ev6dGCbwVIkMF52SigWHuxcfH9lkMJsQNq8UYGykEgYjFyAZ
-         rM+SYnu9PO8oq/pP5/+7X/Mn940kEF84mlpwpeluA2cSkeLnXqQLb1tZABDVH2cg4nEq
-         lpcSKxUxhSGCeW5y3GGHLQR/6U+m+Sbv8oKLxuGzK5mdkFSK3XWxfm+5O+sUDXgG10w5
-         bSj0/MAiMPsUx9St4hO4v95rieNDGWDe8D8C7fiEL5brv4KFT6ouUBs3Dv9ZhBt9D11Y
-         CChw==
+        bh=sOrtiNV+oGhM+385d+TAFbT9mzLoUCEIKut5q82hzIo=;
+        b=dHK3CMjSZrtfKf+SlMb1wqjEsRzdGpYbRtqrU5Cyar6pnyVQ0BroqL7U7F8XZ+4vna
+         oc82kF6qil4sOfqG4jgl4Y3pzX36Ifz8vWgMI8BpPYwxnTjUR+UgLPasthBclJJNJyTM
+         rgG/uvhFAlBmDQfcov1XcpKnODcw5pMuvoLryZTkI9js/mE47dLb7+d6BysbuhfJwRgX
+         Tg7w9tbNYz18pYyKdmM7bjxpVP8sGgb8SBIlQKklNA2JLWMWPJYJG2YV2csIeCvk50vO
+         gGadMcwyjU/z/bHaPRKWFF5OncCe6AGKdFkdvlSpv0OvnbnZs9cjklfrX/4NeodF45fw
+         Bdew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743013649; x=1743618449;
+        d=1e100.net; s=20230601; t=1743014414; x=1743619214;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wwZ/kZVKA3ly+94BX9Iupd7sb0MCbfiMrJTL+cNfKIk=;
-        b=N9Xi4iuM3KqgJ13DXMss9ZREVTdfY0wM5mNrlob+BeV8BXO4rdHhrGi7F8zl3wHhkb
-         32KUVIJFLzvLcUPZZFxp0x96kMqRVSdoMOEmjvOYRExz/26ftvMpGsrizsU1TQYGbYMC
-         BAlqFZ6c1uAxmFN297/yt3JUOujPmY+E4SahbH0Uo1zBzXfwUZcwnO6d9IWEqHhfTztf
-         7/cFvq/uRoFtdCieZ9UZ9BxG7dQu/IWrhcy0uyJ8gETSWJOR8wjlRnwpxWtKVCQfIuc9
-         79PRlCZFsibkq0Ye3jHtKvKYyUN/kRMT3QEKya7tiZfrgPDhaBsez+2dUc2ShBQIma+i
-         qi+A==
-X-Forwarded-Encrypted: i=1; AJvYcCW5RDrw1HEZ7AX+0FeHFtMzb6xOW0WWCyxx2wbNMI8fJxYmIeKnNdhnIrp7LaSCabNcmx4y@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx1WHXF8Q9nv5skQfE5pUfX/1xCcbTuWgNywd6moflnTtiZaPzy
-	s93lFuUYtMDjUKRSv8UuTaGL4DEb1W7B6GRFMoqedeb6hdPQxC3z7IlWt87lY6LRjGGIj7nN2GN
-	MrtsanpkmKzHRTj82p1UZbj4ZnSQ=
-X-Gm-Gg: ASbGncuOGVtNFYQofuspP6ixddxB7onyhWenZSRd0h1an0tUqtTKoeRvjrgDFKeNt5M
-	iFIwqcwt9FSu45dNovho1E3UzGUbUDxm5D2MJGZA+o23lgVpZpmGI3U+juXMJAMDrCUVHnhOOm7
-	llcK1yDCjnoDsRa8wNBm7ZmoIajw==
-X-Google-Smtp-Source: AGHT+IHEdBI95BIvNnCvD45NxkwA9Jfkjd2N/HbrhhEJ2QD36+kiqZsHBQL6YYQBJvkZKUHnv2ISqLpkZVcqd7Q0+Sc=
-X-Received: by 2002:a17:907:94c5:b0:ac2:84db:5916 with SMTP id
- a640c23a62f3a-ac6faf0a6a9mr43494566b.31.1743013648829; Wed, 26 Mar 2025
- 11:27:28 -0700 (PDT)
+        bh=sOrtiNV+oGhM+385d+TAFbT9mzLoUCEIKut5q82hzIo=;
+        b=HKtZk87ev8ooxDZXY2fhhm/bBjY/O4mjQIvRXUGFIrGd3HTQe6HkieNyfMVQ8WYWax
+         q6HkAELWU9ff4YbJf+wETOUN1zguHgMrYuO5r6fvg0aRd6RAsfSn1iJgbg0D1+/a160/
+         /mIPGNbWm2cFd4e3dJR7/LRf9YVfXSU+8rUB4I7H9hnujPGM277IR0S6ziJ1jCfTQosE
+         FDfCuSq/JaDt3Q7uohHMVv8HSZpmE0lRpzVELSDaMBYv2vID9J93BfxYRjG8GRLLQoXY
+         rcKbDQDaBrIp9q0Id/kM0nvky56GJeviqbo0uBkc/atV1KKl5NHWprwGkRiUbcXO/yzm
+         XFqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKvBjcg0dMtcFw4UnETOEp5RcXAijceXZn9FCUBfs/sTWOccrwqVhSkEDGXiu6ZHTqpzIJ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy+E9sJW1gjTDXbWi02c78sTST3SHMswWNuW2ihAgyRsrjvqeUL
+	ri2MmMc0259n2GTjmo1nRXsrI+bik17XCfTOHTO9Ywy4bXp/qM1FNz6Trz0lkUnC9xBeTVKtvYC
+	nNxS70V+XbbG2l+6QSLgqMEeknmqdY3jn1Jw=
+X-Gm-Gg: ASbGnctf+cKbWK/fwlCeBBT3o9oHPs+0GVfnxP2hU6PHG6ovuq3Xj2+SZsvkVbfisih
+	v2kkXTb0jB8xkmdU/gBb0WvQGWAnD/JXTMbFxqJBQmM7CfBRPLKU22XxHpoGoX2fM3q8OofkdUq
+	ib51hTqqa/+wEuc4d0aYCjx1RQAQ==
+X-Google-Smtp-Source: AGHT+IG/c8A09fmH4Hvi2r2iNvibbo0gF+QCVgYY3qZ1UUFDvGnHQ5yFC2x9sm4XWN8Ulm3xGBe6lcMopbawOHcqDlo=
+X-Received: by 2002:a17:907:3da1:b0:ac2:6bb5:413c with SMTP id
+ a640c23a62f3a-ac6faf45fbcmr48841566b.31.1743014413852; Wed, 26 Mar 2025
+ 11:40:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,13 +60,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250326-string-add-wcslen-for-llvm-opt-v2-0-d864ab2cbfe4@kernel.org>
- <20250326-string-add-wcslen-for-llvm-opt-v2-1-d864ab2cbfe4@kernel.org>
-In-Reply-To: <20250326-string-add-wcslen-for-llvm-opt-v2-1-d864ab2cbfe4@kernel.org>
+ <20250326-string-add-wcslen-for-llvm-opt-v2-2-d864ab2cbfe4@kernel.org>
+In-Reply-To: <20250326-string-add-wcslen-for-llvm-opt-v2-2-d864ab2cbfe4@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 26 Mar 2025 20:26:51 +0200
-X-Gm-Features: AQ5f1JpKCzAXQfQrm4wlizX6k3LQpGAsnw7BZMrTEbEqg_iMhTRlQx6b_DF8dWw
-Message-ID: <CAHp75VfdNcQKCza0gYMg_hKAbZK_J3uSwZsoTS5-Bbt5_P5HPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] include: Move typedefs in nls.h to their own header
+Date: Wed, 26 Mar 2025 20:39:37 +0200
+X-Gm-Features: AQ5f1JqlCAtx3V-rK5Wv2QTv2YVgCmrK0MvTDzYhi8EajWnLgB-2pLN4PzLaYE0
+Message-ID: <CAHp75Vd_mJggRRLfziWUf0tgr3K125uVBNh9VdSo9LHVJz2r_w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] lib/string.c: Add wcslen()
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Kees Cook <kees@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
@@ -78,36 +78,64 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Mar 26, 2025 at 7:19=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
 g> wrote:
 >
-> In order to allow commonly included headers such as string.h to access
-> typedefs such as wchar_t without running into issues with the rest of
-> the NLS library, refactor the typedefs out into their own header that
-> can be included in a much safer manner.
+> A recent optimization change in LLVM [1] aims to transform certain loop
+> idioms into calls to strlen() or wcslen(). This change transforms the
+> first while loop in UniStrcat() into a call to wcslen(), breaking the
+> build when UniStrcat() gets inlined into alloc_path_with_tree_prefix():
+>
+>   ld.lld: error: undefined symbol: wcslen
+>   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2=
+_utils.h:54)
+>   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
+>   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2=
+_utils.h:54)
+>   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
+>
+> The kernel does not build with '-ffreestanding' (which would avoid this
+> transformation) because it does want libcall optimizations in general
+> and turning on '-ffreestanding' disables the majority of them. While
+> '-fno-builtin-wcslen' would be more targeted at the problem, it does not
+> work with LTO.
+>
+> Add a basic wcslen() to avoid this linkage failure. While no
+> architecture or FORTIFY_SOURCE overrides this, add it to string.c
+> instead of string_helpers.c so that it is built with '-ffreestanding',
+> otherwise the compiler might transform it into a call to itself.
 
 ...
 
-While the below is the original text, we can reduce churn for the
-future by doing the following change while at it (no need to recend,
-maybe Kees can amend this while applying):
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -7,6 +7,7 @@
+>  #include <linux/cleanup.h>     /* for DEFINE_FREE() */
+>  #include <linux/compiler.h>    /* for inline */
+>  #include <linux/types.h>       /* for size_t */
 
-> +/* Unicode has changed over the years.  Unicode code points no longer
+> +#include <linux/nls_types.h>   /* for wchar_t */
 
-/*
- * This is an incorrect comment style. Should be
- * like in this example.
- */
+I know it's not ordered, but can we at least not make it worse, i.e.
+squeeze this to be after the compiler.h? Or even somewhere after below
+the err*.h? Whatever gives a better (sparsely) ordered overall
+result...
 
-> + * fit into 16 bits; as of Unicode 5 valid code points range from 0
-> + * to 0x10ffff (17 planes, where each plane holds 65536 code points).
-> + *
-> + * The original decision to represent Unicode characters as 16-bit
-> + * wchar_t values is now outdated.  But plane 0 still includes the
-> + * most commonly used characters, so we will retain it.  The newer
-> + * 32-bit unicode_t type can be used when it is necessary to
-> + * represent the full Unicode character set.
-> + */
+>  #include <linux/stddef.h>      /* for NULL */
+>  #include <linux/err.h>         /* for ERR_PTR() */
 
-In either case it's fine and not a big deal,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+...
+
+>  #ifndef __HAVE_ARCH_STRNLEN
+>  extern __kernel_size_t strnlen(const char *,__kernel_size_t);
+>  #endif
+> +extern __kernel_size_t wcslen(const wchar_t *s);
+
+I'm wondering why we still continue putting this 'extern' keyword.
+Yes, I see that the rest is like this, but for new code do we really
+need it?
+
+>  #ifndef __HAVE_ARCH_STRPBRK
+>  extern char * strpbrk(const char *,const char *);
+>  #endif
+
 
 --=20
 With Best Regards,
