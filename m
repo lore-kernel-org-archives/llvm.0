@@ -1,58 +1,58 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA3424E4A8
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 18:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA48224E4A8
+	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 18:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743014417; cv=none; b=EQ+v4Cr74gRH/MfWAqjZ8AT/pjBhyMXZzaozh4Bjnfe/wLvqNE8pz0sV8Jnb9+233ENHjQGfNq1+whz3OLkX4V3enT+tiV1H1h9xF8omGIjw4FG4t/WJgsH/VmZriqa7oZwzoDzRnmtZaNbhrt1DDIgQTP/vCvBOW5VO7DxUdEs=
+	t=1743014544; cv=none; b=bofQAhKJfRNEwJ/dIBQ1KnWKZ+pKNi7z8lz/+mHvQeu/1imMYkj0Oxa/B9hB1Jdl6Waa3RXENyzxYZDPIE5esgXZSbXUI29DQfAAtf9eidRYp7Q9Ix6VAiEYJw/rQLzACzoLKifglD42koSujTkrf1eFpefwIkk6AmYnTaSn60E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743014417; c=relaxed/simple;
-	bh=F5Y3RF0ndf8/9azcsuLfDmtYTAz9gCrDPqNMbnYLM/c=;
+	s=arc-20240116; t=1743014544; c=relaxed/simple;
+	bh=3GCuaFRiBJqbAVFYSqi9R3hp1bxmX5HXeie7MDE5R1s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iW1MaRX1lPV3oPCjwNX5o/R5nafaUmqrkDKnEXQAPbjGx/EvsjtOkeuo1ksZHSQjWFHPVOXUx+XAyn2PswCgPRpyndarTISvCRql68426IqEOc2oRPWm5I4l770ezWlDgbEk1T1aeuOUO091AzSAKpe8cITIm3q3YQkbga+O7no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHK3CMjS; arc=none smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=hqX7VnVfjdLnLxnpQLeUMqqG/B7WdLD8IorHLSDJVpvMvBxLEzJSMcWVLdc7MYhUxMGKNVtSYTX9Nac0jDBMYMXTQ709epM7X0TRzMT5ikrHIP+vOK+80kPWfTCnBCjPv3r5tmqxKvr09Vp4lE2WO/xlaYQYVBpHsF4jkmjScqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYHgq6SU; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHK3CMjS"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso235379a12.3
-        for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 11:40:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYHgq6SU"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5e8274a74so216815a12.1
+        for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 11:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743014414; x=1743619214; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1743014541; x=1743619341; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sOrtiNV+oGhM+385d+TAFbT9mzLoUCEIKut5q82hzIo=;
-        b=dHK3CMjSZrtfKf+SlMb1wqjEsRzdGpYbRtqrU5Cyar6pnyVQ0BroqL7U7F8XZ+4vna
-         oc82kF6qil4sOfqG4jgl4Y3pzX36Ifz8vWgMI8BpPYwxnTjUR+UgLPasthBclJJNJyTM
-         rgG/uvhFAlBmDQfcov1XcpKnODcw5pMuvoLryZTkI9js/mE47dLb7+d6BysbuhfJwRgX
-         Tg7w9tbNYz18pYyKdmM7bjxpVP8sGgb8SBIlQKklNA2JLWMWPJYJG2YV2csIeCvk50vO
-         gGadMcwyjU/z/bHaPRKWFF5OncCe6AGKdFkdvlSpv0OvnbnZs9cjklfrX/4NeodF45fw
-         Bdew==
+        bh=fsiPA+wQiDjy+/qU9eR9YHSnTKpdRuheNLQ9Ls8sYTc=;
+        b=NYHgq6SUxVGDE8afVqBB/taJ0NWGD/UzXFB/0lsPV9tVXAbXD+HpPTMbAyKzsPD7ZM
+         EfGRrMUIaoaAr8pzT8e2xoN+Ubj2/gQPpLoZUDwCY9/SyNgRUlBDU/Ei6HFBX4PJWAmY
+         UHn7HcXZ9CP5J7VBu3nERKruDbP5EWNg7V7qB9iPX0fLQWQc13s2WPguVbgBozsTEf47
+         sO2wx8wOBiwCfQiNmqxcvU3vECv5of/4C9o3zLwSJkiks9C51YL/y56FrMStiA/wxmQD
+         iNm7BJewsGExWCKBNfN0GUbC+P9tAWA7Q1GaKQD7E2DixTsCMsXvzaz2S50NAuSuUeLl
+         QE1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743014414; x=1743619214;
+        d=1e100.net; s=20230601; t=1743014541; x=1743619341;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sOrtiNV+oGhM+385d+TAFbT9mzLoUCEIKut5q82hzIo=;
-        b=HKtZk87ev8ooxDZXY2fhhm/bBjY/O4mjQIvRXUGFIrGd3HTQe6HkieNyfMVQ8WYWax
-         q6HkAELWU9ff4YbJf+wETOUN1zguHgMrYuO5r6fvg0aRd6RAsfSn1iJgbg0D1+/a160/
-         /mIPGNbWm2cFd4e3dJR7/LRf9YVfXSU+8rUB4I7H9hnujPGM277IR0S6ziJ1jCfTQosE
-         FDfCuSq/JaDt3Q7uohHMVv8HSZpmE0lRpzVELSDaMBYv2vID9J93BfxYRjG8GRLLQoXY
-         rcKbDQDaBrIp9q0Id/kM0nvky56GJeviqbo0uBkc/atV1KKl5NHWprwGkRiUbcXO/yzm
-         XFqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKvBjcg0dMtcFw4UnETOEp5RcXAijceXZn9FCUBfs/sTWOccrwqVhSkEDGXiu6ZHTqpzIJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy+E9sJW1gjTDXbWi02c78sTST3SHMswWNuW2ihAgyRsrjvqeUL
-	ri2MmMc0259n2GTjmo1nRXsrI+bik17XCfTOHTO9Ywy4bXp/qM1FNz6Trz0lkUnC9xBeTVKtvYC
-	nNxS70V+XbbG2l+6QSLgqMEeknmqdY3jn1Jw=
-X-Gm-Gg: ASbGnctf+cKbWK/fwlCeBBT3o9oHPs+0GVfnxP2hU6PHG6ovuq3Xj2+SZsvkVbfisih
-	v2kkXTb0jB8xkmdU/gBb0WvQGWAnD/JXTMbFxqJBQmM7CfBRPLKU22XxHpoGoX2fM3q8OofkdUq
-	ib51hTqqa/+wEuc4d0aYCjx1RQAQ==
-X-Google-Smtp-Source: AGHT+IG/c8A09fmH4Hvi2r2iNvibbo0gF+QCVgYY3qZ1UUFDvGnHQ5yFC2x9sm4XWN8Ulm3xGBe6lcMopbawOHcqDlo=
-X-Received: by 2002:a17:907:3da1:b0:ac2:6bb5:413c with SMTP id
- a640c23a62f3a-ac6faf45fbcmr48841566b.31.1743014413852; Wed, 26 Mar 2025
- 11:40:13 -0700 (PDT)
+        bh=fsiPA+wQiDjy+/qU9eR9YHSnTKpdRuheNLQ9Ls8sYTc=;
+        b=a+S5UEri9fP1rRYrO0OGgiZs7GkmF6TrsbWAOX4/fW816+AjN5oahly6ff9kGmL7Qo
+         NvtGhG/IyckPdelHx26yFmZZjFgQ/lVHHc7pHEDvKCn2CNcnEHfSH6RjdnjGnVCPalOR
+         DqXlvG9WREYg+I5qjWDLnozf3DmWoEVSDJ8HOcfUs4vhKIgIQrILH8KrMTxPB0wi6Oc1
+         3q0I5HywQ2vShN0dbBzd4Ju20iiFY9u+Ai9Zv2vfwH27wWuI5Ius979OC+QuGjQx1mbC
+         RhQtg7cI0LyrGxZzwkidirDvhihUOS5LbmgXlzpR3K9u/kLWsGtDXnTZWh/+ymJPuG9o
+         xkDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsZrxcW0To7GTXV5FkKF0EZf94L28FvM1ChUDNu3DvTNjgjnNSGFOEtB8GAHaDGt4KyHuR@lists.linux.dev
+X-Gm-Message-State: AOJu0YyLoKb6iXmkIs2YqcANNtjj4NGdZZIQkG0CAZPwWpY4w8Ignvv6
+	d9xX5Xjkt4LdBaBOuPSPxJG1ukTt76wcv6vpirZBqX281h49KzeV+RkRn+rINe6tDRhiw+7ruzs
+	LO78hICRFGooZ/7oAPgvKflHbTXI=
+X-Gm-Gg: ASbGncuqohuPDQW9bkgC810DVekd+eTta3bEV5CiJSuVR/QgonREr5xUyCS5sWN5/G1
+	yCzcXwzp/sk3wKfzsH/jcy+JFiDs9y6VAflTSAjBmYn8VRvEB0jB0ySwc1CU9PwB9irRzEikm2s
+	/hiGLxqANV9ZCsbt0N9zI1WHxF0AjSZiVad9u3
+X-Google-Smtp-Source: AGHT+IHvjBEb8u3bGux3ahHtVwunzcocu6dQwS2Xse9Cp8eI4Z66HuwdqhCdzBpOe4XmdyMVe7tLDyY+cjoIXRJFZBM=
+X-Received: by 2002:a17:907:3fa3:b0:abf:6ebf:5500 with SMTP id
+ a640c23a62f3a-ac6faeb7134mr50473666b.16.1743014540877; Wed, 26 Mar 2025
+ 11:42:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,12 +60,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250326-string-add-wcslen-for-llvm-opt-v2-0-d864ab2cbfe4@kernel.org>
- <20250326-string-add-wcslen-for-llvm-opt-v2-2-d864ab2cbfe4@kernel.org>
-In-Reply-To: <20250326-string-add-wcslen-for-llvm-opt-v2-2-d864ab2cbfe4@kernel.org>
+ <20250326-string-add-wcslen-for-llvm-opt-v2-2-d864ab2cbfe4@kernel.org> <CAHp75Vd_mJggRRLfziWUf0tgr3K125uVBNh9VdSo9LHVJz2r_w@mail.gmail.com>
+In-Reply-To: <CAHp75Vd_mJggRRLfziWUf0tgr3K125uVBNh9VdSo9LHVJz2r_w@mail.gmail.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 26 Mar 2025 20:39:37 +0200
-X-Gm-Features: AQ5f1JqlCAtx3V-rK5Wv2QTv2YVgCmrK0MvTDzYhi8EajWnLgB-2pLN4PzLaYE0
-Message-ID: <CAHp75Vd_mJggRRLfziWUf0tgr3K125uVBNh9VdSo9LHVJz2r_w@mail.gmail.com>
+Date: Wed, 26 Mar 2025 20:41:44 +0200
+X-Gm-Features: AQ5f1JqGF7dttWsEgjPhabIJU0Qow2xz-VT0UfD-t8uVq_PkVNBOsCT8C5GAZHk
+Message-ID: <CAHp75VdQv=0wvgMDGNoXojALWh2B-92gjkO7zrv=d42ocamM4Q@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] lib/string.c: Add wcslen()
 To: Nathan Chancellor <nathan@kernel.org>
 Cc: Kees Cook <kees@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
@@ -75,67 +75,33 @@ Cc: Kees Cook <kees@kernel.org>, Andy Shevchenko <andy@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 26, 2025 at 7:19=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> A recent optimization change in LLVM [1] aims to transform certain loop
-> idioms into calls to strlen() or wcslen(). This change transforms the
-> first while loop in UniStrcat() into a call to wcslen(), breaking the
-> build when UniStrcat() gets inlined into alloc_path_with_tree_prefix():
->
->   ld.lld: error: undefined symbol: wcslen
->   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2=
-_utils.h:54)
->   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
->   >>> referenced by nls_ucs2_utils.h:54 (fs/smb/client/../../nls/nls_ucs2=
-_utils.h:54)
->   >>>               vmlinux.o:(alloc_path_with_tree_prefix)
->
-> The kernel does not build with '-ffreestanding' (which would avoid this
-> transformation) because it does want libcall optimizations in general
-> and turning on '-ffreestanding' disables the majority of them. While
-> '-fno-builtin-wcslen' would be more targeted at the problem, it does not
-> work with LTO.
->
-> Add a basic wcslen() to avoid this linkage failure. While no
-> architecture or FORTIFY_SOURCE overrides this, add it to string.c
-> instead of string_helpers.c so that it is built with '-ffreestanding',
-> otherwise the compiler might transform it into a call to itself.
+On Wed, Mar 26, 2025 at 8:39=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Wed, Mar 26, 2025 at 7:19=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
+org> wrote:
 
 ...
 
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -7,6 +7,7 @@
->  #include <linux/cleanup.h>     /* for DEFINE_FREE() */
->  #include <linux/compiler.h>    /* for inline */
->  #include <linux/types.h>       /* for size_t */
+> > --- a/include/linux/string.h
+> > +++ b/include/linux/string.h
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/cleanup.h>     /* for DEFINE_FREE() */
+> >  #include <linux/compiler.h>    /* for inline */
+> >  #include <linux/types.h>       /* for size_t */
+>
+> > +#include <linux/nls_types.h>   /* for wchar_t */
+>
+> I know it's not ordered, but can we at least not make it worse, i.e.
+> squeeze this to be after the compiler.h? Or even somewhere after below
+> the err*.h? Whatever gives a better (sparsely) ordered overall
+> result...
 
-> +#include <linux/nls_types.h>   /* for wchar_t */
+I just checked, and the only unordered piece is those two: types +
+stddef right now, and if you move nls_types.h after errno.h it will
+keep the status quo.
 
-I know it's not ordered, but can we at least not make it worse, i.e.
-squeeze this to be after the compiler.h? Or even somewhere after below
-the err*.h? Whatever gives a better (sparsely) ordered overall
-result...
-
->  #include <linux/stddef.h>      /* for NULL */
->  #include <linux/err.h>         /* for ERR_PTR() */
-
-...
-
->  #ifndef __HAVE_ARCH_STRNLEN
->  extern __kernel_size_t strnlen(const char *,__kernel_size_t);
->  #endif
-> +extern __kernel_size_t wcslen(const wchar_t *s);
-
-I'm wondering why we still continue putting this 'extern' keyword.
-Yes, I see that the rest is like this, but for new code do we really
-need it?
-
->  #ifndef __HAVE_ARCH_STRPBRK
->  extern char * strpbrk(const char *,const char *);
->  #endif
-
+> >  #include <linux/stddef.h>      /* for NULL */
+> >  #include <linux/err.h>         /* for ERR_PTR() */
 
 --=20
 With Best Regards,
