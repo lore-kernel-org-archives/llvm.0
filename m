@@ -1,56 +1,42 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F851862BB
-	for <llvm@lists.linux.dev>; Wed, 26 Mar 2025 08:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA8F13D539;
+	Wed, 26 Mar 2025 09:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742979600; cv=none; b=WIl33/dQWk03gHTNOMBUDWgmviuO7ggKshc1GvRMtkcv1Wy4F23N4fA91umS3uFxWQoTogKptSGrERevf0xU5L/R2FkKh0IH/6Nj0qBnzRnu5pn342EfgbPXbw2obgy8Ac7rgPHPKK8gcBWp+TWRghbtz/uw4zPc5tutmFI3oYM=
+	t=1742981932; cv=none; b=B9iQrVPzA1mYx/Qa1ljhd9J6X9WIU3sAuhpwNJ/3/40i4KI2WRQHLn2nsP7oVYXL/N1okaS6KnmDrrwF/65p/dfi4JH2DlXtb5++HwA5he5kGPSsQ6SN3vN7i9jW70v/IHBfZH+tATXVmcd6L7yZQrNPIJlxTiKKaCTfRz1nD+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742979600; c=relaxed/simple;
-	bh=cEOMS4NEOhLRyL6A1qhVyFvxw9AAqRQ8LmqLAn9RWWE=;
+	s=arc-20240116; t=1742981932; c=relaxed/simple;
+	bh=G6UbKjsg9joraVPAmFvugruvd+PtNhFl3BmnBmylux0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=awIQ2ohJghWsFeRAug8Lv0gY8H9z6txaw5DzTcLXFh0kAduDbheQ2f0qf20NCqVcb2aU+LmcsDZ7D19kN+oJFwe+43aKc3QxudV1ZeoTf00jRReuOg11Zj+IH5xtYpe+KCC4f+DTOWlYb9xTiobxWojB775WimlrE54hO1gUqRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: D2iLDiXgSHyiUgZl8lLvtg==
-X-CSE-MsgGUID: 3d8fh8EyQf2+419d+k/iow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11384"; a="43409484"
-X-IronPort-AV: E=Sophos;i="6.14,277,1736841600"; 
-   d="scan'208";a="43409484"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 01:59:58 -0700
-X-CSE-ConnectionGUID: pyw8qMDbTZqZu4Krs27rzw==
-X-CSE-MsgGUID: R7zM2+QWTt6T8FnX4whgMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,277,1736841600"; 
-   d="scan'208";a="161898657"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 01:59:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andy@kernel.org>)
-	id 1txMc4-000000061Ja-3Xo1;
-	Wed, 26 Mar 2025 10:59:52 +0200
-Date: Wed, 26 Mar 2025 10:59:52 +0200
-From: Andy Shevchenko <andy@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cd+x2rFN540AalkukSQuOP86Sx+c2KyI2bkNYoLKxR5frOKDUyt3FpiFaRTSoqF3axDTqjzWZaCd5aolafEONf+Y+EV7rMb5crEsxHVUtyhtLCWquONaYRcBq8eqBPYg6jpDVWUUrhChdfZEZbfmPD9TLqg9wMsgX7B4iB7Rhb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ifqv2Mdx; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ifqv2Mdx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7451C4CEE2;
+	Wed, 26 Mar 2025 09:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742981931;
+	bh=G6UbKjsg9joraVPAmFvugruvd+PtNhFl3BmnBmylux0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ifqv2MdxBUU67/TW5gV2dsD5l1PBiRob5ltQZqjEWJxGX3rd6KooeElqfaAbOexXX
+	 r5FrCMLnpyjsYMixwkZdEPL9QrUKYBYlZLL5R1+bxlcfzCsz9bH/kGIeJkNTYW6CHx
+	 SG/lI9bQV1DYjj75ebX04NsZ6LGDadVN4V1LUom8UzMRoXg2R2nYTUkrcIODyCCSsF
+	 ExR+MLmaoPl4uzIPuIaoT+NUZrnzUWUyXiH4NzJmX4isqfv5UxPxjybLXgxPb0L/os
+	 UT/PqUqB0VPQ6yNRDXYYkNOhxNpUZaW87ICFhu8kGPGcHN4VBsYJSfwsq6ZgpT9L+J
+	 AceSW6wzK9GsQ==
+Date: Wed, 26 Mar 2025 10:38:47 +0100
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
 To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] wcslen() prototype in string.h
-Message-ID: <Z-PCCCAPS4uvL3jZ@smile.fi.intel.com>
-References: <20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org>
- <20250325-string-add-wcslen-for-llvm-opt-v1-2-b8f1e2c17888@kernel.org>
- <Z-LXHssrcpdtFqqn@smile.fi.intel.com>
- <20250325165847.GA2603000@ax162>
- <Z-LiWDbrEvVaTLZU@smile.fi.intel.com>
- <20250325214516.GA672870@ax162>
- <20250326003303.GA2394@ax162>
+Cc: Arnd Bergmann <arnd@kernel.org>, 
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>, Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] platform: cznic: fix function parameter names
+Message-ID: <l77cp7hlskzkauoohviwonal53upcyc74j7x57ycn7sdfkmu4f@fsm4tv2lbtn6>
+References: <20250321085315.915808-1-arnd@kernel.org>
+ <20250325155906.GA1886499@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,63 +45,13 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250326003303.GA2394@ax162>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20250325155906.GA1886499@ax162>
 
-On Tue, Mar 25, 2025 at 05:33:03PM -0700, Nathan Chancellor wrote:
-> On Tue, Mar 25, 2025 at 02:45:21PM -0700, Nathan Chancellor wrote:
-
-...
-
-> > +#include <linux/nls.h>		/* for wchar_t */
 > 
-> Good thing I waited :) This include makes s390 unhappy:
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> https://lore.kernel.org/202503260611.MDurOUhF-lkp@intel.com/
-> 
-> It is possible that should be fixed by adding -Wno-pointer-sign to
-> KBUILD_CFLAGS_DECOMPRESSOR so that arch/s390/boot matches the rest of
-> the kernel but...
+> You will be taking this I assume?
 
-Ah, yes, you beat me up to commenting on this, the string.h and string.c made
-in a way that they may be and are used in early boot code, i.e. it must not be
-dirtyfied with the kernel code.
-
-...
-
-> >  #include <linux/errno.h>
-> >  #include <linux/limits.h>
-> >  #include <linux/linkage.h>
-> > +#include <linux/nls.h>
-> >  #include <linux/stddef.h>
-> >  #include <linux/string.h>
-> >  #include <linux/types.h>
-> 
-> I wonder if would be better to do something like the below patch in lieu
-> of the EFI change above (since there is no chance for a collision) then
-> change both of the includes for wchar_t in this diff to nls_types.h? I
-> have no strong opinion but this seems like it would be cleaner for the
-> sake of backports while not being a bad solution upstream?
-
->  #define _LINUX_NLS_H
->  
->  #include <linux/init.h>
-
-As I just replied to your previous mail, consider fixing this list as well
-by adding module.h and types.h.
-
-...
-
-Overall, can you browse the Ingo's series [1] for the stuff related to this,
-if any?
-
-I would avoid doing double efforts or different approaches if we already have
-something ready.
-
-[1]: https://lore.kernel.org/linux-kernel/YjBr10JXLGHfEFfi@gmail.com/
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Arnd already took it into for-next:
+  https://web.git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=for-next
 
