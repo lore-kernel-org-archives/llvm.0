@@ -1,107 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053001FC8
-	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 05:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8874C1BC3C;
+	Thu, 27 Mar 2025 05:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743054190; cv=none; b=WSRTJGQ30G33H1uNjXCVkdC/UW9uMTJmd3YS1DSQ0ut9VgvhTbX5CWQ5EhRGiC3oMKg00BcWzztAWdTtouCrD1QpAZ2UlKvejLKZ7J2cK46He22zRHSP1UxKZA1QenSp1GGU9SazI51IVRhF1ZpOB3MKknB0SKXLgJdGcb8uGSo=
+	t=1743054653; cv=none; b=dSH5WwvVGJzUCUiPtHtJ9QoZy9InSJaSBXrQCRO7fp0UurNcXTxBctEHs2I6JsOBTF+QZ4fzq+fhVih16j3numeDusue4Tz79f3NyjpCBDQdqRhq1WOv1aqwt5gCjZIJnGaLEFZRRuNJp/UOsK+0t6RmdUBwlSUH5Es7Pwo6Bak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743054190; c=relaxed/simple;
-	bh=JGrTZ1cc3BQ4uJLFCpbkxPqAqEzd8hdqhJAsZgGhY/c=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Cu60I/7lVO1Nh/0NPNPWm4rdhY+kqd0JF6ccd+dFlw894a63RKKGOdc4udSuA5Lmt59HgVGRdlzLKvbdJF28VYPmTpl38nWivpbkM7YxANEOm1ULdwkaZeDAtIHHlVCytrtvzPuuz+52tacpJ2T9pt/6E32sgzaL6HnFMeLtzVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H95uwjsL; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743054653; c=relaxed/simple;
+	bh=kjxGxePqFK4+jxNMfiIo1rW7Pw9zfVMmHZbBFG8olLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kPYxk4lXyTEQKwrpLheL1vTMkdvkU1WyGBRMG0LvqGAt6r1Mu/xo6VTF0JtU7VZfp4c3iIt96uNIyOTXxy3ECl1gfPMJ6HLHzzSmW42e8lolM5WTiCOs0TevWM601aTlwQCKeqMr7tpBZD4/7EH1SE84bZqQ9yfaPLG89/ClDS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I4jpvAS8; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H95uwjsL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743054187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=CLca6ndXz33mFBbuUpnNY9xkRErAggCkonEGu0lof0s=;
-	b=H95uwjsLH0ecTKTMmZO3rCyU7yHmO4K5wBAK5I4oB2DhplqdVtNFPbbnWK3H/qHrUXckTc
-	dlNR3KjnGcscWmsi2nlrS0jxIuhBjYCiAXpIWTYcoyTtidvOb6mD4r+3E8O48+VoFR4N1G
-	3tVzGSCjVqGyDK+aVbeNjjW/EDhhK90=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-160-zqB-FShuMhOPl18NcGOKvA-1; Thu,
- 27 Mar 2025 01:43:05 -0400
-X-MC-Unique: zqB-FShuMhOPl18NcGOKvA-1
-X-Mimecast-MFC-AGG-ID: zqB-FShuMhOPl18NcGOKvA_1743054185
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D95CC1944F0A
-	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 05:43:04 +0000 (UTC)
-Received: from [172.20.32.163] (unknown [10.30.44.171])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 81204180B487;
-	Thu, 27 Mar 2025 05:43:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 336b4dae)
-Date: Thu, 27 Mar 2025 05:43:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I4jpvAS8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743054651; x=1774590651;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kjxGxePqFK4+jxNMfiIo1rW7Pw9zfVMmHZbBFG8olLs=;
+  b=I4jpvAS8PgFYU7eAPjordIuhZ8/uyvHjx3guDdEEz5Cmddt8Yb6LUkFA
+   6yDrbe3h/HXDjKhzIfiM9yq8aUQeR7J3VB2lxvG0B/Jdvz49iVfVTbile
+   3bV+Yzl+bbFuuE4+V2VEYBTY2+30Z+gjOJdzOIL7pNNEcBRx6pqj4wETr
+   4zP0ld3rJR8IqikcNl6FQa0ZL0pK8aI5znH3yMeA4h+AOpBPdv1VlVJuG
+   0Kalp36D+f9PvUsHoZ+hGhZKW4nD5tWCZITpGzbWcynBWIedjQPdIi+qE
+   y16HQliwmW3vDmLd1ljZaA6eCM6Tub9unjAiIg3calh0HOtT76k6dH9Ys
+   A==;
+X-CSE-ConnectionGUID: MO6kYyDLTeeYZSrO00nWuw==
+X-CSE-MsgGUID: +ClO/zntTBO1z5HRXLbdAA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44490516"
+X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
+   d="scan'208";a="44490516"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 22:50:51 -0700
+X-CSE-ConnectionGUID: vGR01uu2RPmHS5IX13JdTA==
+X-CSE-MsgGUID: 2ikHRTgvRVGRFcZP00yDzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
+   d="scan'208";a="124800182"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 26 Mar 2025 22:50:50 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txg8d-0006PV-1C;
+	Thu, 27 Mar 2025 05:50:47 +0000
+Date: Thu, 27 Mar 2025 13:49:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/kunit-kselftests 15/21] s390x-linux-ld:
+ uapi.c:undefined reference to `kunit_fail_assert_format'
+Message-ID: <202503271314.y9TiWMiT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <90413.125032701430600159@us-mta-160.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: dNsoaGR8uwlxGwUmiFHmyXqZJSz91rRQK0AB88uZP9Y_1743054185
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/kunit-kselftests
+head:   c1f41508dfc38dc5750d2b2c5b29f1f819ae053a
+commit: 926e32cf9160e7403dbe68341e15fc5e583c1aae [15/21] kunit: Introduce UAPI testing framework
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250327/202503271314.y9TiWMiT-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250327/202503271314.y9TiWMiT-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503271314.y9TiWMiT-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'iommu-updates-v6.15' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/iommu/linux
+   s390x-linux-ld: lib/kunit/uapi.o: in function `kunit_uapi_run_kselftest':
+   uapi.c:(.text+0x39e): undefined reference to `kunit_log_append'
+>> s390x-linux-ld: uapi.c:(.text+0x5be): undefined reference to `kunit_fail_assert_format'
+>> s390x-linux-ld: uapi.c:(.text+0x5f2): undefined reference to `__kunit_do_failed_assertion'
+   s390x-linux-ld: uapi.c:(.text+0x63c): undefined reference to `kunit_fail_assert_format'
+   s390x-linux-ld: uapi.c:(.text+0x670): undefined reference to `__kunit_do_failed_assertion'
+   s390x-linux-ld: uapi.c:(.text+0x726): undefined reference to `kunit_fail_assert_format'
+   s390x-linux-ld: uapi.c:(.text+0x77a): undefined reference to `kunit_fail_assert_format'
+   s390x-linux-ld: uapi.c:(.text+0x7d2): undefined reference to `kunit_fail_assert_format'
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1737428643
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1737428643-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1737428643-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
