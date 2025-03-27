@@ -1,146 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D8C19A;
-	Thu, 27 Mar 2025 01:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E4518C345
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 02:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743038259; cv=none; b=fusWfwx1ErFVOTLQyqmEDhFTCuvvWqtqwt1nqVofRui6WR9rUm2cMT50YUMo6rSOeF5g2kFEFOUsUZysJzHtuiAnBJbT7Y+4tPruLP1gErvvgnIogpEEGnl4ClLLo8cm7gan88y7BnAWMHErytuquotrV1yYmJMZVGf3vnVej78=
+	t=1743043389; cv=none; b=A9/cJFneoHuWq5PYCllaIbmS93Xo5HBwLCjLvnVYmRm1TtAYhMwZ7+wwEd43Q+m9Lx8ouxzbXhm+sMAkDZFj6H5nhPqJf7/wEm2J96eONKdtGKDmNslqR1claHsUQI9dxfVC5ivesyelteuTMuz8VwV9wVCSwqBTdcnsGZuUSE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743038259; c=relaxed/simple;
-	bh=+Hk5s1oFhRBpMBubVZx+RbTQHJlajqYsCNk5c4+OWUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jCogd0DEFi14eJV2Q9dFCmrmdPl2pIXm+E/OzpRJgicU9z6D8GRAHsZRWWzlE7gHVLZsMWbFRVOGXRw7HEVoRJfu7SaHFY3bu5CyYewJ27cYaeJqPytzDkVxjvVFlWH8cIClDzOy6i/vw0uohSRiqETmEsbF/ioiqj8vHSN6klc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZExYN+hq; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743043389; c=relaxed/simple;
+	bh=XqrNY//tYCHVjAoVrJs+OIttpDtPJ0vME+FTOFTSDGE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ez8h/ckc04W42lkTvOEhxQ499HcDyMggWWUEOvi3ZwA79drbsojp5iEU52LsRjYHoCYk9fWDXvLqUmOLodUJcBZp7iazW3oDeuEmxQzEWN21yN5uBS2h8b82WOnWIyYaVleLtJii31ddhSHYfQ+yQ3zXqQ7af1BjYMEbdTgrKTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c1DzC6eI; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZExYN+hq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743038257; x=1774574257;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+Hk5s1oFhRBpMBubVZx+RbTQHJlajqYsCNk5c4+OWUI=;
-  b=ZExYN+hqkhn3R5cNsXT1xpVi6guTI3CyseI9y/kbsFIG0tN7b+12Rp3x
-   1vGf4TiulS2LbUWsMXiHzJVjsm8PfwXAduGh2NJrizboh3d7Qj9/H+CQD
-   IgZk4UUhlLRAgenYW13IlHWNMaHCuAOecsVwvxyeBvCY3EIGHWXghAYo4
-   GPq8EDAfUBzOErSL14KO5XOvnkg3lA3qCvR0FRPXFFTYkLiMqyoPWre1D
-   LkeMjgEUgK8xMfk1xc96xRM1vbifEocMSf+/Rn6MQn2rn8SBRVh8nWmO3
-   9msnxV3yJOto3vF5YucMyEPDMyXDlu/Nxpaszt4nMx6yBsQ1tQr1Lwo9x
-   A==;
-X-CSE-ConnectionGUID: SwiHbuB6ReuTJHlJpx1dbw==
-X-CSE-MsgGUID: fwnCqkm/SOaGNu1ONVGS1g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44514257"
-X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
-   d="scan'208";a="44514257"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 18:17:36 -0700
-X-CSE-ConnectionGUID: w/4s3eZgRC+ZT1jzxWaXRA==
-X-CSE-MsgGUID: /81fVfMGQ5SEkWwthIkKaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
-   d="scan'208";a="155915298"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 26 Mar 2025 18:17:35 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1txbsC-0006GV-10;
-	Thu, 27 Mar 2025 01:17:32 +0000
-Date: Thu, 27 Mar 2025 09:16:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes.berg@intel.com>,
-	Emmanuel Grumbach <emmanuel.grumbach@intel.com>
-Subject: [linux-next:master 9215/13775]
- drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:513:16: warning: variable
- 'ret' is uninitialized when used here
-Message-ID: <202503271133.8XFKhu8E-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c1DzC6eI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743043386;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zPLFPZasSh25L4t84oLpnTDzqB3fNAr57chY+VnIoGU=;
+	b=c1DzC6eIztirXCotAf3U7Mg/IuvAdg1HyCsiY+bY5ZjW3q4m90geas1zSd5JHY59oOfpBK
+	a6O7NCjfCygh5C0MhxFGJwfNdtjOnv191wprh7cVlWH8P3CJlQMdWFc/bBKeALG2GqdKck
+	1YYmtm4L66ZLRy4oFArx8cImXeoXXFI=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-324-VWWbICtdP5CehH5zhX-bhA-1; Wed,
+ 26 Mar 2025 22:43:05 -0400
+X-MC-Unique: VWWbICtdP5CehH5zhX-bhA-1
+X-Mimecast-MFC-AGG-ID: VWWbICtdP5CehH5zhX-bhA_1743043384
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 03D321809CA5
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 02:43:04 +0000 (UTC)
+Received: from [172.20.32.163] (unknown [10.30.44.171])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9077319560AD;
+	Thu, 27 Mar 2025 02:43:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 1e1ba8d2)
+Date: Thu, 27 Mar 2025 02:43:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <14834.125032622430500497@us-mta-324.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: WdvYu64q-xL6jOFhFIu5Q0jqRWZu__wvgZeq1kNYupk_1743043384
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0e871365f7f9aeb9b590e345458b2083e067cd13
-commit: 834bfc698bf7cee3bf61c0209b410c7f97a54108 [9215/13775] wifi: iwlwifi: mld: fix build with CONFIG_PM_SLEEP undefined
-config: x86_64-randconfig-004-20250327 (https://download.01.org/0day-ci/archive/20250327/202503271133.8XFKhu8E-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250327/202503271133.8XFKhu8E-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503271133.8XFKhu8E-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:12:
-   drivers/net/wireless/intel/iwlwifi/mld/iface.h:170:5: warning: 'CONFIG_PM_SLEEP' is not defined, evaluates to 0 [-Wundef]
-     170 | #if CONFIG_PM_SLEEP
-         |     ^
->> drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:513:16: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     513 |         if (!in_d3 || ret) {
-         |                       ^~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:487:9: note: initialize the variable 'ret' to silence this warning
-     487 |         int ret;
-         |                ^
-         |                 = 0
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1942:13: warning: unused function 'iwl_mld_set_wakeup' [-Wunused-function]
-    1942 | static void iwl_mld_set_wakeup(struct ieee80211_hw *hw, bool enabled)
-         |             ^~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1956:1: warning: unused function 'iwl_mld_suspend' [-Wunused-function]
-    1956 | iwl_mld_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
-         | ^~~~~~~~~~~~~~~
-   drivers/net/wireless/intel/iwlwifi/mld/mac80211.c:1978:12: warning: unused function 'iwl_mld_resume' [-Wunused-function]
-    1978 | static int iwl_mld_resume(struct ieee80211_hw *hw)
-         |            ^~~~~~~~~~~~~~
-   5 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/ret +513 drivers/net/wireless/intel/iwlwifi/mld/mac80211.c
+Kernel information:
+    Commit message: Merge tag 'timers-clocksource-2025-03-26' of git://git.=
+kernel.org/pub/scm/linux/kernel/git/tip/tip
 
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  507  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  508  	if (mld->fw_status.in_hw_restart) {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  509  		iwl_mld_stop_fw(mld);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  510  		iwl_mld_restart_cleanup(mld);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  511  	}
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  512  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16 @513  	if (!in_d3 || ret) {
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  514  		ret = iwl_mld_start_fw(mld);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  515  		if (ret)
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  516  			goto error;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  517  	}
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  518  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  519  	mld->scan.last_start_time_jiffies = jiffies;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  520  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  521  	iwl_dbg_tlv_time_point(&mld->fwrt, IWL_FW_INI_TIME_POINT_POST_INIT,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  522  			       NULL);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  523  	iwl_dbg_tlv_time_point(&mld->fwrt, IWL_FW_INI_TIME_POINT_PERIODIC,
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  524  			       NULL);
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  525  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  526  	return 0;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  527  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  528  error:
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  529  	/* If we failed to restart the hw, there is nothing useful
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  530  	 * we can do but indicate we are no longer in restart.
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  531  	 */
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  532  	mld->fw_status.in_hw_restart = false;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  533  
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  534  	return ret;
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  535  }
-d1e879ec600f9b3 Miri Korenblit 2025-02-16  536  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1737298896
 
-:::::: The code at line 513 was first introduced by commit
-:::::: d1e879ec600f9b3bdd253167533959facfefb17b wifi: iwlwifi: add iwlmld sub-driver
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1737298896-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1737298896-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
 
-:::::: TO: Miri Korenblit <miriam.rachel.korenblit@intel.com>
-:::::: CC: Johannes Berg <johannes.berg@intel.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
