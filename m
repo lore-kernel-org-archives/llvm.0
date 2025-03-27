@@ -1,123 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6341E1E10;
-	Thu, 27 Mar 2025 07:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7D42054E3
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 08:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743060142; cv=none; b=S48bFVcQlMaqcuha5qKIPE6Q6JAllx8Jjmw5KSMGwuarizQY1NsTHsSr0FGsqUw2d0y0PWH81McvIvwlyhqaIJsdqD5layZO8HgdVIXqsXHoNxaPIzzhxesBfLMSPlV/7dafh9hIBtwNM1HaVUXPHTFXONpMDnqkLDCQ2BuEToU=
+	t=1743063816; cv=none; b=twlj8NLjgPr6fJlkFehaHfU8za1iJM5yx+3bU7Eil1fU3tq7Rx2wcfapRHi4jtciMiYzlYHQFPVRtM3dfLz0998CYDSe/uHb2mpHKPgVLxyogOZ5yH7Y7PSyBx4H56jVGFZ6WlnhB3K3mwjkZq2LzVqSxJ8u/5TSjJIBrtP3ZRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743060142; c=relaxed/simple;
-	bh=vxJW2l18axeAXkYulnRPg1B27S05azCpN2XT8ogc1CI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=D5D/VtRLJK81ORgLLFlpiwFSFMUROpFP1R94KbRe0TFXCZJmhIsLcmHjqD3jbo0HisCSjCzuG4zEQ/95cRpZk5n/PSG2qEjXNkDYfmE3JSoQPMIKJw1q7GInh/UwPjhTbaw5SfcDFpFf5nnmloM2REJr7LxXJYd73B/h/Soe7D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBhquX5J; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743063816; c=relaxed/simple;
+	bh=Kqkf+fwTBplFalrOsCh9daI2K2rXSw/k3EBDbEqYyX8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hCdYq6R2x7cGjijHXOIzw5IyiBPG0WTkYZkEudoZfoq9g2If4im8M/Mju65yZfnsBddNKm8f8OmP5WKY88X6nvDYgImkc5KxeyYkFJ/I3hC5TMX7h7gHxhErv0m3+JxPfOiMZgFDdUwVwm91NU29IgMmzk0j7BGEXOfd4tYeJsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DcDi18gv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBhquX5J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743060140; x=1774596140;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vxJW2l18axeAXkYulnRPg1B27S05azCpN2XT8ogc1CI=;
-  b=QBhquX5JFlfJsigYKxVuBlyAQsOYGnDsBdZlDr0fUxbabyMGnng2Noig
-   uMTLHpLitT+na1EtALFOEnFYws+huP+b53PU1TM6rjtI4J8LgVwH5FEGB
-   JVbaVJmBZmPM/og2Od/KaciuhFXvzh3ymD3vmkA/R5ZTp7zCUtW+NUYum
-   uJX8PNCLs5J+7aQJV+yklLcDizrTToNQh/0O5ggiTqyq+j8+KCPkTcaQr
-   Y/fV2vhC2EqIquiB7BjGuAWCYJdXBMMfCQCCJpoMqmp91YTMHVwmHBCTV
-   oVY7AJF4Wc9a+txJ7dhQ/UOQLxjvBfW8glDLZfTlnt7JouxsmSNjJnyvn
-   Q==;
-X-CSE-ConnectionGUID: 9GWMBXfqQze5+E50UabVeA==
-X-CSE-MsgGUID: Z86DIlrkQUaWez7/gQso6A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44560483"
-X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
-   d="scan'208";a="44560483"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2025 00:22:19 -0700
-X-CSE-ConnectionGUID: DxUY8+3PSBieDHtVcMb2gA==
-X-CSE-MsgGUID: xRrEiH4mSQS13bn3sfKTMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
-   d="scan'208";a="124818023"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 27 Mar 2025 00:22:18 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1txhZ9-0006Tt-2t;
-	Thu, 27 Mar 2025 07:22:15 +0000
-Date: Thu, 27 Mar 2025 15:21:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Courbot <acourbot@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jfern:nova-gsp 25/48] error: cannot find macro `register` in this
- scope
-Message-ID: <202503271532.6ZuniB3h-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DcDi18gv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743063813;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=TfGy/yMh0L8/nnDw+Epl1rsE1401JngtacqNk/ble5g=;
+	b=DcDi18gvBaCAzjFCQFfj3j31dV2wEraTZ8BKqY0ueqRaX1KaHxP9qcRTT3lCn8MLZoX220
+	/EfaMy9ZQ+HAlSqMIHyoqGsL8Rs81KVA25rAJXTtPE2NLMIjV4k22y73nfaZUGOksgE/07
+	fuovjwuwtDP89fimX2s5ZVlu7rNWVKM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-548-K6rWDRDDOmyIWXj68u5mpQ-1; Thu,
+ 27 Mar 2025 04:23:31 -0400
+X-MC-Unique: K6rWDRDDOmyIWXj68u5mpQ-1
+X-Mimecast-MFC-AGG-ID: K6rWDRDDOmyIWXj68u5mpQ_1743063810
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 67D05180025F
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 08:23:30 +0000 (UTC)
+Received: from [172.20.32.163] (unknown [10.30.44.171])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 184971956095;
+	Thu, 27 Mar 2025 08:23:28 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 1a9239bb)
+Date: Thu, 27 Mar 2025 08:23:28 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <55718.125032704233100460@us-mta-548.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: dd3TKIgRj6Woscmn5yjzgyl3mKzDgZNCzy0z-2xapfY_1743063810
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git nova-gsp
-head:   8a5d4dee8e431c4d46aa04b30d0928d29a4d3522
-commit: e8b2fbb30d806d93bbd9cede710958aa0b76a843 [25/48] [RFC] rust: add macros to define registers layout
-config: x86_64-randconfig-072-20250327 (https://download.01.org/0day-ci/archive/20250327/202503271532.6ZuniB3h-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250327/202503271532.6ZuniB3h-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503271532.6ZuniB3h-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All errors (new ones prefixed by >>):
 
->> error: cannot find macro `register` in this scope
-   --> rust/doctests_kernel_generated.rs:3748:1
-   |
-   3748 | register!(Boot0@0x00000100, "Basic revision information about the chip";
-   | ^^^^^^^^
-   |
-   help: consider importing this macro
-   |
-   3    + use kernel::register;
-   |
---
->> error[E0425]: cannot find value `bar` in this scope
-   --> rust/doctests_kernel_generated.rs:3799:26
-   |
-   3799 | let boot0 = Boot0::read(&bar);
-   |                          ^^^ not found in this scope
---
->> error[E0425]: cannot find value `bar` in this scope
-   --> rust/doctests_kernel_generated.rs:3807:49
-   |
-   3807 | boot0.set_major_rev(3).set_minor_rev(10).write(&bar);
-   |                                                 ^^^ not found in this scope
---
->> error[E0425]: cannot find value `bar` in this scope
-   --> rust/doctests_kernel_generated.rs:3810:15
-   |
-   3810 | Boot0::alter(&bar, |r| r.set_major_rev(3).set_minor_rev(10));
-   |               ^^^ not found in this scope
---
->> error[E0433]: failed to resolve: use of undeclared type `Boot0`
-   --> rust/doctests_kernel_generated.rs:3799:13
-   |
-   3799 | let boot0 = Boot0::read(&bar);
-   |             ^^^^^ use of undeclared type `Boot0`
---
->> error[E0433]: failed to resolve: use of undeclared type `Boot0`
-   --> rust/doctests_kernel_generated.rs:3810:1
-   |
-   3810 | Boot0::alter(&bar, |r| r.set_major_rev(3).set_minor_rev(10));
-   | ^^^^^ use of undeclared type `Boot0`
+Kernel information:
+    Commit message: Merge tag 'net-next-6.15' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/netdev/net-next
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1737535874
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1737535874-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1737535874-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
