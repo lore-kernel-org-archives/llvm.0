@@ -1,107 +1,140 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E4518C345
-	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 02:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D379D2;
+	Thu, 27 Mar 2025 04:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743043389; cv=none; b=A9/cJFneoHuWq5PYCllaIbmS93Xo5HBwLCjLvnVYmRm1TtAYhMwZ7+wwEd43Q+m9Lx8ouxzbXhm+sMAkDZFj6H5nhPqJf7/wEm2J96eONKdtGKDmNslqR1claHsUQI9dxfVC5ivesyelteuTMuz8VwV9wVCSwqBTdcnsGZuUSE4=
+	t=1743049185; cv=none; b=ia3TGd+MNn2TKhPOaGSbgzXwGX5h8nhG5Tc+oiVwkn99FKF1Yp0tWwOzelrtny1Cw86BceG0mf8OJysPYwooojpu7f9D9T2UPCb2wvLicOUCr7UeR9qAZpBW9B28+n/5Oqh3kbllEWKZBCuDyFbiyw5Vg7rPxXSZ+rI68ov1IBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743043389; c=relaxed/simple;
-	bh=XqrNY//tYCHVjAoVrJs+OIttpDtPJ0vME+FTOFTSDGE=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ez8h/ckc04W42lkTvOEhxQ499HcDyMggWWUEOvi3ZwA79drbsojp5iEU52LsRjYHoCYk9fWDXvLqUmOLodUJcBZp7iazW3oDeuEmxQzEWN21yN5uBS2h8b82WOnWIyYaVleLtJii31ddhSHYfQ+yQ3zXqQ7af1BjYMEbdTgrKTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c1DzC6eI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743049185; c=relaxed/simple;
+	bh=Su3bdLMcybouxNZi1ddRJgjkw76FbhVIu5fJEwGvaNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dOJvIor/B0H0SVuzX4uf0OmodDgNe6TX8XK1jHLBrFYSDZJ0HdZMH9Z7BXhAfJE+p75BOfg25QyyA0jq2hzK5EVrwmhFzte5XN0lzg0bjOH17/Fo7dywBzGmR3MorGRodWoNevvHvPW1nvE1zLJ6H+wq4hlaCu8qaKOATkpPDlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V8JYseaq; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c1DzC6eI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743043386;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zPLFPZasSh25L4t84oLpnTDzqB3fNAr57chY+VnIoGU=;
-	b=c1DzC6eIztirXCotAf3U7Mg/IuvAdg1HyCsiY+bY5ZjW3q4m90geas1zSd5JHY59oOfpBK
-	a6O7NCjfCygh5C0MhxFGJwfNdtjOnv191wprh7cVlWH8P3CJlQMdWFc/bBKeALG2GqdKck
-	1YYmtm4L66ZLRy4oFArx8cImXeoXXFI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-324-VWWbICtdP5CehH5zhX-bhA-1; Wed,
- 26 Mar 2025 22:43:05 -0400
-X-MC-Unique: VWWbICtdP5CehH5zhX-bhA-1
-X-Mimecast-MFC-AGG-ID: VWWbICtdP5CehH5zhX-bhA_1743043384
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 03D321809CA5
-	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 02:43:04 +0000 (UTC)
-Received: from [172.20.32.163] (unknown [10.30.44.171])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9077319560AD;
-	Thu, 27 Mar 2025 02:43:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 1e1ba8d2)
-Date: Thu, 27 Mar 2025 02:43:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V8JYseaq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743049183; x=1774585183;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Su3bdLMcybouxNZi1ddRJgjkw76FbhVIu5fJEwGvaNk=;
+  b=V8JYseaqBH0GEFRJD8mnB2f3tsCIgQHQT0ONoq6CAHvuhQ/F5yT05s09
+   29gdfN4G8YLoiEP8Xx3+PVx/aptaAlzcGlSRIT/3grc0dVIuWLf5x7NRg
+   ni8uNN+zWhJGskeW+KYJC4UoJoQ+mnh0yHa44wzN2xCPCiN+Flv5Kir+b
+   a2cuGXZdNLRUWj+WfjJwZYiLHJlz12ZMROBnpqFEV2XxuEA3MvT+AcLUN
+   4u4+W2Fwema9oYrcYiXNxel4Vvj5qaVBBex6yv1OFv2++DHKJVyOJT3Yk
+   7ftu5yUnJ/SsR5KhbxCsE84hwbdTI5enef/kFnx7Oi/gxrAWYkhrgOpTV
+   w==;
+X-CSE-ConnectionGUID: xZd5G4QYRCSdcKrmFxR6kA==
+X-CSE-MsgGUID: aEpI+15zT6W/SVRMq6LUOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="47101418"
+X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
+   d="scan'208";a="47101418"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2025 21:19:42 -0700
+X-CSE-ConnectionGUID: U/PonzexSUKeDIPx+yv1zA==
+X-CSE-MsgGUID: 7iAryXGJTRaJiyK8/aTvMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,279,1736841600"; 
+   d="scan'208";a="124951010"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 26 Mar 2025 21:19:37 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txeiL-0006MZ-2Y;
+	Thu, 27 Mar 2025 04:19:33 +0000
+Date: Thu, 27 Mar 2025 12:19:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Terry Bowman <terry.bowman@amd.com>, linux-cxl@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	nifan.cxl@gmail.com, dave@stgolabs.net, jonathan.cameron@huawei.com,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	vishal.l.verma@intel.com, dan.j.williams@intel.com,
+	bhelgaas@google.com, mahesh@linux.ibm.com, ira.weiny@intel.com,
+	oohall@gmail.com, Benjamin.Cheatham@amd.com, rrichter@amd.com,
+	nathan.fontenot@amd.com, Smita.KoralahalliChannabasappa@amd.com,
+	lukas@wunner.de, ming.li@zohomail.com,
+	PradeepVineshReddy.Kodamati@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v8 06/16] CXL/PCI: Introduce CXL uncorrectable protocol
+ error 'recovery'
+Message-ID: <202503271128.zMRuNISx-lkp@intel.com>
+References: <20250327014717.2988633-7-terry.bowman@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <14834.125032622430500497@us-mta-324.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: WdvYu64q-xL6jOFhFIu5Q0jqRWZu__wvgZeq1kNYupk_1743043384
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250327014717.2988633-7-terry.bowman@amd.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Terry,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on aae0594a7053c60b82621136257c8b648c67b512]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/PCI-CXL-Introduce-PCIe-helper-function-pcie_is_cxl/20250327-095738
+base:   aae0594a7053c60b82621136257c8b648c67b512
+patch link:    https://lore.kernel.org/r/20250327014717.2988633-7-terry.bowman%40amd.com
+patch subject: [PATCH v8 06/16] CXL/PCI: Introduce CXL uncorrectable protocol error 'recovery'
+config: arm-mv78xx0_defconfig (https://download.01.org/0day-ci/archive/20250327/202503271128.zMRuNISx-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250327/202503271128.zMRuNISx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503271128.zMRuNISx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/pci/access.c:2:
+>> include/linux/pci.h:1873:6: warning: no previous prototype for function 'pci_aer_clear_fatal_status' [-Wmissing-prototypes]
+    1873 | void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+         |      ^
+   include/linux/pci.h:1873:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1873 | void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+         | ^
+         | static 
+   1 warning generated.
+--
+   In file included from drivers/pci/probe.c:9:
+>> include/linux/pci.h:1873:6: warning: no previous prototype for function 'pci_aer_clear_fatal_status' [-Wmissing-prototypes]
+    1873 | void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+         |      ^
+   include/linux/pci.h:1873:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    1873 | void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+         | ^
+         | static 
+   In file included from drivers/pci/probe.c:16:
+   include/linux/aer.h:76:20: error: static declaration of 'pci_aer_clear_fatal_status' follows non-static declaration
+      76 | static inline void pci_aer_clear_fatal_status(struct pci_dev *dev) { }
+         |                    ^
+   include/linux/pci.h:1873:6: note: previous definition is here
+    1873 | void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+         |      ^
+   1 warning and 1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'timers-clocksource-2025-03-26' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/tip/tip
+vim +/pci_aer_clear_fatal_status +1873 include/linux/pci.h
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1737298896
+  1867	
+  1868	#ifdef CONFIG_PCIEAER
+  1869	bool pci_aer_available(void);
+  1870	void pci_aer_clear_fatal_status(struct pci_dev *dev);
+  1871	#else
+  1872	static inline bool pci_aer_available(void) { return false; }
+> 1873	void pci_aer_clear_fatal_status(struct pci_dev *dev) { };
+  1874	#endif
+  1875	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1737298896-x86_64-kernel-debug
-    We also see the following known issues which are not related to your ch=
-anges:
-          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1737298896-x86_64-kernel
-                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
-rror: malformed line
-                          https://github.com/Rust-for-Linux/linux/issues/11=
-34
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
