@@ -1,74 +1,107 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF8A2185BD
-	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 14:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22C535964
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 20:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743086764; cv=none; b=kgl68KkB9ECzEI9N5SMIx71wfRc+1afPXPSvyT9RLfx23uRhFwMFy7n8M1KFe+Ntpn0XXUQi3aG4mcxY1/UeCpeVHbkPUHiqaXiyQblDWTnsFPJO5U1woh4JLckFUZOjEHRUbE4+JHt1EMbM/g57n1xBJe97DnHPAarLyi7Macw=
+	t=1743108730; cv=none; b=DQQ6S94EukLPWX1eiKd9bkLta9whtchrYgS0UAHjXS1pi5mYMVAOgda/eYTWqk64UmvYX7YkJT7QoohIQyt3vxMgftFwDuBjN+QZnhvgbLpVmnbNQ3N+QVyJu7eVEoW9b/vozllAP/im4blTLjDGnhcbAgn6P4Ge4tivcshz0rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743086764; c=relaxed/simple;
-	bh=bBLBi+/uszXJrNS0RExv+HyTwvtK2Dqw8vfB6OTf6tQ=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=prnneCDyK8Jg8YN3zcL9A0tHz5o2rPxXvkKIpmYaXCnkTckHky5ITEwnDeSPur6gzixYvCxF6hqpjYL1u9mlREJ+9SdwuHydsSBoD/iGG6RdLKfK8dU2+t1TbsHtPQFtnjdaDmegay19svjaNm4lW/969K/efU4alnD9HJ/EkMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3d586b968cfso19051085ab.1
-        for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 07:46:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743086762; x=1743691562;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O31EDqZnf42bmiyYjE9Gv1Kig77RT2Jp/txzXzrDTBI=;
-        b=iHBRtrEJL62DQ3rDcwZ6VqW3JYjbhc58hyT1zmUcbPJIRkE8ejngDlb2GPTwv34QsV
-         pkW79Y4WucnFeCpRXmzUrvMRBDsuUNBG/cUdzwV6qWZSwH+Xp+gYnH4HqOBeOaaCGHnX
-         Ma2ny/u0vqYOiF/Xab4JeziKij1sPgoISeHU7atx1dxS2q74Av0Fo7FEbCGc3aoRr5jX
-         WoH0qMGHWGBI+w9SLdt2+1DR7o5P9UO6OwVif5f5Ugf8He0+UWOqMk/fxVktydKrZN2O
-         QNexz8BwdyWTW6Xod70efGE0mfjKDkSwg1QuiHCMBejK3x1Qw7NAtQgY+MmS5quwHk0u
-         Qxdg==
-X-Forwarded-Encrypted: i=1; AJvYcCXsENAWOO2Xor0XJ5HWsnzBsITiVVoD9gGANFxRkXxcPIqxIy4sIQkkz4zHHJqVVL6Xy3ZY@lists.linux.dev
-X-Gm-Message-State: AOJu0YxkmOaFXy5TTB13JZOekyCa+euvC6Tcs7uLEaZm/bpcbACKO/9z
-	dylbUV9c5LvzMxTTjOkeWzAmW2dbFnPgim75d1YGPq634xSOA5qYz34A3wG/vGBCtexfbA+GKp7
-	NObVuYEO/x+A29TdsjflIlgLNOIHdU9m/gnrgGuCRnFJSaQDQYxtIoCo=
-X-Google-Smtp-Source: AGHT+IH3/YAoWyMyOT2ZmZKztUVHp0JJQajrmaritGZ7UtKATN1DB+AKdKLwXrPb1fsB9Cnl/8Zof7ODuhfQc/4UsqLHRutL++np
+	s=arc-20240116; t=1743108730; c=relaxed/simple;
+	bh=wNCS7ueWOIdP4RecoXI2sA1f+AmJaxoYG1OgC1msmvs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=S2wcwGNbsS5lF+n1hsVEUMEOoQHqhBjGNR9H97ad9b6YxYDf6IccJ6IjSeijMiOvUG9X+WwMQiXrSp0wOl3Ap7mR+LKEIQKuZm6XXUCetEbrZq+n2mzgUSvgx5VxXuH2REbhfVkrpiPjccBMOgdIoqtSwIXZ2EhIOm6icd/4Sz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DFXLELSN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DFXLELSN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743108727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CwzP9c01nSGw5NAbJiplpwfsWrPhc9/F9rZbwBtGFpY=;
+	b=DFXLELSNBgnuNQWJCkp5s9zwgY7rLasr6HcgniKpCzHnXx6YVmURhjGOgweVhfOXWBsztl
+	cfh3LOW9FDMMM7kFco8Mj1uPhdtD6Pd/P6o2sEuYJ1AuwI38COZtY63sIh/2tHKeIUsjki
+	1SpXsaPRrNoPGF0nKEQqqUxP5ducddI=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-681-KtZ4IGK7O0KDpgtCY4Hpzg-1; Thu,
+ 27 Mar 2025 16:52:06 -0400
+X-MC-Unique: KtZ4IGK7O0KDpgtCY4Hpzg-1
+X-Mimecast-MFC-AGG-ID: KtZ4IGK7O0KDpgtCY4Hpzg_1743108725
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A66B18EBE95
+	for <llvm@lists.linux.dev>; Thu, 27 Mar 2025 20:52:05 +0000 (UTC)
+Received: from [172.20.32.163] (unknown [10.30.44.171])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 138351801750;
+	Thu, 27 Mar 2025 20:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 3a90a72a)
+Date: Thu, 27 Mar 2025 20:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1646:b0:3d3:dfc2:912f with SMTP id
- e9e14a558f8ab-3d5ccdd1496mr40599045ab.7.1743086762074; Thu, 27 Mar 2025
- 07:46:02 -0700 (PDT)
-Date: Thu, 27 Mar 2025 07:46:02 -0700
-In-Reply-To: <Z-ViZoezAdjY8TC-@mini-arch>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67e564aa.050a0220.2f068f.0031.GAE@google.com>
-Subject: Re: [syzbot] [x25?] possible deadlock in lapbeth_device_event
-From: syzbot <syzbot+377b71db585c9c705f8e@syzkaller.appspotmail.com>
-To: andrew@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	eric.dumazet@gmail.com, horms@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-x25@vger.kernel.org, lkp@intel.com, 
-	llvm@lists.linux.dev, ms@dev.tdt.de, netdev@vger.kernel.org, 
-	oe-kbuild-all@lists.linux.dev, pabeni@redhat.com, sdf@fomichev.me, 
-	stfomichev@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <10094.125032716520600758@us-mta-681.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: LInsH3K_qqCLkNzY3p55cEeK1O6BXOxT6DbICjGnIbM_1743108725
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi, we tested your kernel and here are the results:
 
-syzbot tried to test the proposed patch but the build/boot failed:
-
-drivers/net/wan/lapbether.c:376:36: error: 'netdev' undeclared (first use in this function); did you mean 'net_eq'?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-Tested on:
+Kernel information:
+    Commit message: Merge tag 'asm-generic-6.15-2' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/arnd/asm-generic
 
-commit:         1a9239bb Merge tag 'net-next-6.15' of git://git.kernel..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95c3bbe7ce8436a7
-dashboard link: https://syzkaller.appspot.com/bug?extid=377b71db585c9c705f8e
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15a66bb0580000
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1738965307
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1738965307-x86_64-kernel-debug
+    We also see the following known issues which are not related to your ch=
+anges:
+          x86_64 - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1738965307-x86_64-kernel
+                   Issue: Kernel build: arch/x86/tools/insn_decoder_test: e=
+rror: malformed line
+                          https://github.com/Rust-for-Linux/linux/issues/11=
+34
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
