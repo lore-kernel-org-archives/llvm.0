@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F6718C345;
-	Thu, 27 Mar 2025 23:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565B01714C6;
+	Fri, 28 Mar 2025 02:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743119816; cv=none; b=HINjVDwO9mdQx7KZz9mJ2DLqBfry4VAGKnXkw+RiM6MrnMr5WTOc0uhg5iWfE829Lhnam2a9DzO5ND0zBpqqkfjt8wKSkpu2zJC1RXuglVFNOAh1Jh9lLcnqMzR+bPqPp+6hkD/JQf9ai60amA6YjHLfXrUMH5wMXT9dBx3ReUQ=
+	t=1743127448; cv=none; b=iphPKPLO3x6V1KhecXJ63jpZ/RWbtJUgsuk7KFAoAGqh7wmtJpMsw4pkbs0W6v69mrsnSEcPknYG68yR2EO+oec64w9CmzUyjqyH+R0K88NyYBCAxByfPSSToanOUMhEvY+CJ+Zyc22fF/KM+iWSgXjDrTVHg3Hj+2M687fw8DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743119816; c=relaxed/simple;
-	bh=U8hrut4e7c/zelG75regQTMHaSOj6OqyRyQaaAwaVhY=;
+	s=arc-20240116; t=1743127448; c=relaxed/simple;
+	bh=ydAfFR2QyoIlAay2PemZpZg7AC2VjaggoCXfQdMnP40=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EJIuonxn17KnJeF2ihnXi255WrSoBlFTjQZxkw80tn3hqIUMtpCi1cJMmA66ocnO3KZEUTU3fF8sRykgf2Qb5AzRM6wgRfmyQpDbQcN8NU3fgcFenf6fSD8eUv39VT7VT55j7vjXXExQejNs/JJ3dszU5MrOY7tvTOVbz1OLiwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WjVVIaj/; arc=none smtp.client-ip=198.175.65.10
+	 Content-Disposition; b=oa1o+btmeX2uhgDYHNQFSPM9be8WzjseiK6Nmc6Y5tN6wJv126FjdwnFTefGhBU1F960aYoNnS01PyLLccwE1faiCvsA+0+vepsVszbdTqNik075GeZRT/u9jUSjLDUkW+wKh5QiOQB6q72zbH8kgG2CiOlT7iRxZNJSp+SiXf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AI6hOgWt; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WjVVIaj/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AI6hOgWt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743119815; x=1774655815;
+  t=1743127447; x=1774663447;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U8hrut4e7c/zelG75regQTMHaSOj6OqyRyQaaAwaVhY=;
-  b=WjVVIaj/5LIiI2Nm3l4gNgX2sPkhjIY49va7w62rY2ooVTSDPB7KDLWF
-   gPZDDYDkty+7VIbHmCF3+TRPYpcuXYhyVSF4q59C4A6NvvypGuVyLoQgi
-   fo1bShPpHfBt02Sx6/4jGc/ArH2xciRmLW5BQVD3omfwmaEwSfdTGkFJl
-   pn7vEXlNA9GO21bnbVrDIQNpAdRwTNa7b4VlGvL8wfqZoVTUehS+Sby19
-   zRH4EEWWnLTHwP4xjoNW2uFPWrryAGCcCxpgUf+vERQQdTVq6sreGVRu4
-   stnAT7w2q8nxrSUt7YpjUpieCb99QeJb58p8ta6kwbepJbzGuXQ8e43I6
-   w==;
-X-CSE-ConnectionGUID: GGNAXq52SJW0pEribOYKbQ==
-X-CSE-MsgGUID: KdMCK1b1TbCK1twfT3Kejg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="61872064"
-X-IronPort-AV: E=Sophos;i="6.14,281,1736841600"; 
-   d="scan'208";a="61872064"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2025 16:56:54 -0700
-X-CSE-ConnectionGUID: /ckNeIfxSz2GFoVS1oDgOw==
-X-CSE-MsgGUID: iB2z3XWsQGSGTg9sh/+R9w==
+  bh=ydAfFR2QyoIlAay2PemZpZg7AC2VjaggoCXfQdMnP40=;
+  b=AI6hOgWtotaR/FvTKxdnMd7a42G9Toypsx3Q5ksd5B98Eh8eRhQdB9Fn
+   iiNB6M+SB2Es0lXoQUE+4mx1UfI3QCgiV3Xl1gikEffjy15SmMA4l3KIA
+   phHKxHrPOCKAeYAfB0QSKixPJDulIHmFlG4FmG0AsbrBY1rgVCo6jVhg0
+   RJhsjha2LtrQSez3RWBJpUOnPi04hVhE3MvJp3l/OEAT8WzwA0FGfT/50
+   frIcxGOzSBMFiZiNfy29h6NJuEk9GBbGbf1JKA8H30lT0LKz1C/zz4+UC
+   4h3LToUey2LYSHpo5q1fEl1stD9KEjlgFgDFLWZI0MjiohRpr95zWkHaJ
+   g==;
+X-CSE-ConnectionGUID: Ufxtz5c9SfmompqBEzAuMA==
+X-CSE-MsgGUID: /LbSVsXFReK5GvjJ2oxeQQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="48141011"
+X-IronPort-AV: E=Sophos;i="6.14,282,1736841600"; 
+   d="scan'208";a="48141011"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2025 19:04:06 -0700
+X-CSE-ConnectionGUID: rCG89HRRQYWssfxLOo+tEw==
+X-CSE-MsgGUID: NJ6XsOe1RpOKop/9tTD5PQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,281,1736841600"; 
-   d="scan'208";a="125266151"
+X-IronPort-AV: E=Sophos;i="6.14,282,1736841600"; 
+   d="scan'208";a="126125279"
 Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 27 Mar 2025 16:56:53 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 27 Mar 2025 19:04:04 -0700
 Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1txx5f-000718-0U;
-	Thu, 27 Mar 2025 23:56:51 +0000
-Date: Fri, 28 Mar 2025 07:56:15 +0800
+	id 1txz4d-00074x-1F;
+	Fri, 28 Mar 2025 02:03:57 +0000
+Date: Fri, 28 Mar 2025 10:02:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Ingo Molnar <mingo@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:file3No0df 19/20] ERROR: modpost: "qcom_nandc_alloc"
- [drivers/spi/spi-qpic-snand.ko] undefined!
-Message-ID: <202503280759.XhwLcV7m-lkp@intel.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:WIP.x86/alternatives 32/43] vmlinux.o: warning: objtool:
+ text_poke_int3_handler+0x15: call to try_get_tp_array() leaves .noinstr.text
+ section
+Message-ID: <202503280943.gnyusUlI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,37 +64,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Geert,
-
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file3No0df
-head:   40369bfe717e96e26650eeecfa5a6363563df6e4
-commit: d32c4e58545f17caaa854415f854691e32d42075 [19/20] spi: SPI_QPIC_SNAND should be tristate and depend on MTD
-config: powerpc-randconfig-003-20250328 (https://download.01.org/0day-ci/archive/20250328/202503280759.XhwLcV7m-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project c2692afc0a92cd5da140dfcdfff7818a5b8ce997)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250328/202503280759.XhwLcV7m-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git WIP.x86/alternatives
+head:   89555c4754bde7a509d7992c1ecefeb00229fac9
+commit: 2559956f36daa294cc4c3beef0a2853cfe02f230 [32/43] x86/alternatives: Simplify try_get_tp_array()
+config: x86_64-buildonly-randconfig-004-20250328 (https://download.01.org/0day-ci/archive/20250328/202503280943.gnyusUlI-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250328/202503280943.gnyusUlI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503280759.XhwLcV7m-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503280943.gnyusUlI-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "qcom_nandc_alloc" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_nandc_unalloc" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_write_reg_dma" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_submit_descs" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_clear_read_regs" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_clear_bam_transaction" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_read_data_dma" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_nandc_dev_to_mem" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_write_data_dma" [drivers/spi/spi-qpic-snand.ko] undefined!
->> ERROR: modpost: "qcom_read_reg_dma" [drivers/spi/spi-qpic-snand.ko] undefined!
+>> vmlinux.o: warning: objtool: text_poke_int3_handler+0x15: call to try_get_tp_array() leaves .noinstr.text section
 
 -- 
 0-DAY CI Kernel Test Service
