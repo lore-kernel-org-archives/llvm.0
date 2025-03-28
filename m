@@ -1,39 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A1D1E834F
-	for <llvm@lists.linux.dev>; Fri, 28 Mar 2025 20:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7151A08BC;
+	Fri, 28 Mar 2025 20:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743192132; cv=none; b=nadIDSul/nWsxE/x1hHVjV4s76hS3ZE+ZKDZZfvhWea1nvNSZHacVmlqXpCh8TMNcL2+tClCbhRT8zO+7AVexhILA1lcOuKgg5GesSSs2IhAACj8MmbglN7egZWXWZq+saw9VX6w03En2R0Oh0WwoAGkzf/32NqJd+JI9cHC+h4=
+	t=1743193241; cv=none; b=oUEkwYFLo6nWomHalnNZVUVe1Llm3oEk79k+9h3on+C98q3GZJ3jyao5QIO0VQCZ2KyFVNZRunDF4VrNAUiitipYdsCksy+rSnv7uazvATVkOSjiyVfL7wuAMEDrHOk9yKuQ3DEH/TTVodGZnWNYKGHwfuHu1c7vLZI23xVhT/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743192132; c=relaxed/simple;
-	bh=AUjAt8EQvv7yejaoyrYJsZyAHUvStK4j2ZTL5LLS9j0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CapR+CUNXDce414fGeRcAe2dfQ1CqCJYpN6Tmm313U7hQXP1ZCCM/TFlG823jSzergCY09R89qkNYwGIQIfPndIya2a8S82Wfq+agoCfuSxV0LiIkgCZ7vaf+V6ZWnUBCntfV7y3iXc/4k6yybwGkcfDvpSiPeHxg2qEMIy6ZSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzTwS7MW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743193241; c=relaxed/simple;
+	bh=Dun8URzIUdihCaS0dGvB6zHYpzGMq2w67tiSvH81GDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=H+bW/irsMMgHcgxuCAg8SAoIXQDjqUtBP2Sy8jdd3UePn7JxxweVL6jAZaMkSyUMo+5mg/A8W+JAX7dvBWQN8mtjqIppemfFzuzxxOS/u5xBgRtPUItKkg1jMwv+dPUJNWSu6sYXT3ygiteq2jzgsQahLMr1fdCdpBCdYHYWYRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGUTUnic; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzTwS7MW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878CFC4CEE4;
-	Fri, 28 Mar 2025 20:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743192132;
-	bh=AUjAt8EQvv7yejaoyrYJsZyAHUvStK4j2ZTL5LLS9j0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HzTwS7MWPOYZlfcpNJdFf6Ea/6GoxYPabkq31+VT8ow25GBBzGiHZ2+lUb8W9ztp/
-	 paU/cPlDT01uI1Z92375OLQkAaOoKG8b6Uepqh7XicPrBFAW48PlhpUoqP8yFLxsUg
-	 jI5pNZvuHrxT4FfsaA61gNpAnkA9fWbehiivO3fo6R9hFHqNXKy2wQ6TXX4a3ZULA5
-	 oas/BwCQhGukLvIHrsiy/CemnyttPn29u3mPjVy1LsYmCo3BK/e7mEVW8+1rP1K5zy
-	 m8AUu3t9qrSjSNicVDtmVAmDhpCIm4ESV2BQACxVoQRH1Opi+miR0p9wmxeYbWrYky
-	 b1VPuIHPucNBA==
-Date: Fri, 28 Mar 2025 13:02:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: linaro-toolchain@lists.linaro.org
-Cc: llvm@lists.linux.dev
-Subject: Re: [Linaro-TCWG-CI] llvmorg-21-init-6198-g9694844d7e36: Failure on
- aarch64
-Message-ID: <20250328200208.GB426640@ax162>
-References: <1405005597.178104.1743175727731@jenkins.jenkins>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGUTUnic"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743193240; x=1774729240;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Dun8URzIUdihCaS0dGvB6zHYpzGMq2w67tiSvH81GDw=;
+  b=RGUTUnicX3KgVf4jn8/VtOCD/Jm8bKc57UQb+12ifjIyVaLIAb5C/9rw
+   39XVvqYjrpMxyIVjmUIbRBs3UpQDMlw/Vh0Hp0H9Pw6ou2klxYTfIpMBV
+   gy2asWdSctsKrVm9X6YesHzalX2ToGZCpgxn7X6lksi1YC9TQB81Ktc96
+   ogMimUeFunn1UzyxFCHI/4oxPLBceIv3uBIHkemSRlke8HWtlDddvYa3e
+   bgekRr6EaBhivUHQ95w67rADJFMtLR4dBQ9qHNk0Z9wJxcxQaYgSiAwkY
+   zuWRkaHm81KcxQIrrxQ/Ea+5kDzUTFRRZWgplDzaHOyVdUiiSVGZ4b2Q9
+   A==;
+X-CSE-ConnectionGUID: ZJ118E9YQ1mUhnGcDnoPNQ==
+X-CSE-MsgGUID: yJVEREe/RFudwx0xmWjjXw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11387"; a="55935013"
+X-IronPort-AV: E=Sophos;i="6.14,284,1736841600"; 
+   d="scan'208";a="55935013"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 13:20:39 -0700
+X-CSE-ConnectionGUID: Amahi2BBQWKXCBuAJelPMg==
+X-CSE-MsgGUID: Kts6jgtURRa+HHZURxpZwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,284,1736841600"; 
+   d="scan'208";a="125304729"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 28 Mar 2025 13:20:38 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tyGBv-0007gK-12;
+	Fri, 28 Mar 2025 20:20:35 +0000
+Date: Sat, 29 Mar 2025 04:20:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:WIP.x86/alternatives 31/51] vmlinux.o: warning: objtool:
+ smp_text_poke_int3_trap_handler+0x15: call to try_get_text_poke_array()
+ leaves .noinstr.text section
+Message-ID: <202503290433.IufZBqKJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,30 +63,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1405005597.178104.1743175727731@jenkins.jenkins>
 
-On Fri, Mar 28, 2025 at 03:28:46PM +0000, ci_notify@linaro.org wrote:
-> Dear contributor,
-> 
-> Our automatic CI has detected problems related to your patch(es). Please find some details below.
-> 
-> In tcwg_kernel/llvm-master-aarch64-stable-allmodconfig, after:
->   | commit llvmorg-21-init-6198-g9694844d7e36
->   | Author: Henry Jiang <h243jian@uwaterloo.ca>
->   | Date:   Mon Mar 24 09:49:31 2025 -0400
->   | 
->   |     Reland "[Transforms] LoopIdiomRecognize recognize strlen and wcslen #108985" (#132572)
->   |     
->   |     Reland https://github.com/llvm/llvm-project/pull/108985
->   |     
->   |     Extend `LoopIdiomRecognize` to find and replace loops of the form
->   | ... 12 lines of the commit log omitted.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git WIP.x86/alternatives
+head:   5c21e894a3e5752ac672af6e542775b3914c6668
+commit: 87e9984ae6f497399e1e0a6fc794a166cf8ddbde [31/51] x86/alternatives: Simplify try_get_text_poke_array()
+config: x86_64-buildonly-randconfig-004-20250328 (https://download.01.org/0day-ci/archive/20250329/202503290433.IufZBqKJ-lkp@intel.com/config)
+compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250329/202503290433.IufZBqKJ-lkp@intel.com/reproduce)
 
-Thanks a lot for the report. I sent the third version of the patchset
-that should resolve this issue this morning so I hope it will be moved
-on soon:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503290433.IufZBqKJ-lkp@intel.com/
 
-https://lore.kernel.org/20250328-string-add-wcslen-for-llvm-opt-v3-0-a180b4c0c1c4@kernel.org/
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Nathan
+>> vmlinux.o: warning: objtool: smp_text_poke_int3_trap_handler+0x15: call to try_get_text_poke_array() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
