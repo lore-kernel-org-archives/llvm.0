@@ -1,173 +1,112 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46AE417CA12
-	for <llvm@lists.linux.dev>; Fri, 28 Mar 2025 16:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A42D14D70E;
+	Fri, 28 Mar 2025 16:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743179996; cv=none; b=eih+ZCYoNbqxz8J12ReQ1Fe0qyQXUCeg9iVIQMd1g48HHiUveAECvLBiy1TJR6v7gHM24shvwqhg7f86H5COOnT7MBGCT4eLEXjmwJMDJIjdAkR5zbZMDuqJl49AaQhth5QG0r/CaMvVvIyQ1G0LYfm2RZmBvqlTY+aTwptULZ0=
+	t=1743180878; cv=none; b=ei+aH+BqiXKB0nLM6zhrOhzOcgLOLuA0sg3GKaW3RUiqo4QwCMJBY1vsP2HwgnwbW0AkpoWILHSHIgotZOap5k9Jtlei8FqNuW99QhMW25b8LDpuKargmMxUcWcB4DcFLmE7ot8kIsEDv1CWIIpRjl8BsJY9UmqbxfZTiJfCD5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743179996; c=relaxed/simple;
-	bh=ZacKuhiyChdsT91YTCJru7KavN6apd7FNn7UGaUQz5c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D2poqaEMC7AY2+4GVn42cRNiQ6G35FB0vrvi0Vx0cljG7jl3dViXRlXKuMlpuvHoys1Wa+402G0pYNZCIyIqMoe98nZpLQE3JcEx9+72PHw1B2aMeWOLHqDGQ705L0E1go+8YsbkDsFBwrFcWW6XA96g6CZavS1cJ6lq7rrfJPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h5rbXlm5; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1743180878; c=relaxed/simple;
+	bh=qXaW0Zadz4blAQX7mFXbHyYMTPkoMtEdHjKgemnjRX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nmvkgmwc2kVIpUrw6V7rk2Xaro5IaBZ/f/WbYyMZi8OBbJpRI4UewDAf8t0eeGoSvuLIOkNE6GO9i15BgsYG41XkP/UFi1PnoE541pOQmud+BDz0JzNOV/GIJ3M75oRTracu4mi1hMU+hPIXBVrqLCKMifEvzbvEbZzvOQDL7rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JQdHm+Fu; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h5rbXlm5"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2242ac37caeso184865ad.1
-        for <llvm@lists.linux.dev>; Fri, 28 Mar 2025 09:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743179993; x=1743784793; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wcE6ARy1rUfxvRGohneaNEBtA+LaOXSM2dLoJGL3SHA=;
-        b=h5rbXlm5HtXX+L4GX4Wsndztc1HGkmb3YcVGf6sgi3koAiz7/2KAJ90y6PB/o1bxmU
-         wFfFTOIpdIa9bHso36A7NRmrgtJLMH6SSTpE3UV3mVoOKkrkOJhe/8TVrrv4SnNwvv7E
-         th8OCBH9SRhFmwc8HUpmpLfgn0KuWanvfmFBTPluBFFtGy4081+FngfxbiRQRvv5cc79
-         08FBglCXRWtN3FwV0odw/FH9kZvV7FdNjU82qoXaCCyNf+QF7S7l8SbYbL28YYmW7oeB
-         Lk2t3mH71Z/0rRvMiqicI+l8tJSNcIK79rPPMZXPYn4mmv/3MozG1TGk4TWkJHBXXDLe
-         iKCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743179993; x=1743784793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wcE6ARy1rUfxvRGohneaNEBtA+LaOXSM2dLoJGL3SHA=;
-        b=VHF8f7t5WLZvFcw30FToH2KnsDjNUQ9S9+NStXvPLQ3xTbcDQj6ddJ+zwfmbccU+IT
-         WmaDzar+ke/CagqwIoMmmaOXRyZahjm1hT/FPgwFdLBYFf474ykYlT9RbjVErDHu+jQP
-         m6BRzilbpKxLTJZXALSf5MeRwK5N1melfx8EJyk01wB8AQMPVpdEUL2e+rizlb2Lz6Cb
-         9VjAbYbfwiXl09+rLRg436eI5/y1MprseInjoVYEQ5FPa1ZvsN7jgf9Qma6adrXRGfIJ
-         TtXfTNFVhczV1rL30DeWPja4w5ohnNgir48EFU387vJQuKcycf/HZpxT2Kg8zZt5kgPT
-         7p/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXHQ4HR7jmwret44/Ooxib6DuSVb2Bvi6fbD7UbDaCY1mDfF9tOf73TD1GqQDbHJW2SRwvC@lists.linux.dev
-X-Gm-Message-State: AOJu0YzXpae8DoREunXcW5TJZMbkGFWQru6TK2jofpvykflJT2ebNCO0
-	mgPVTwpDOvDdxsIydnPTuHpOwkAWoQcHOfKPJICVKWKt74s+uuOxh20SQdQsIug/YGUZjIDW/n8
-	lI4sBKM/02wptke482LZE9mYoEBxWGDjKWXzu
-X-Gm-Gg: ASbGnctLMyfA1jdXnOpFt/urOiWmBpqAuhPqobwbVE0uhpFZaixZGwpfF4hZDmsvhuQ
-	CaPok20W7Ne8cQGIXN5RpdBbNgGuCEu2D/K68kkNH66CepDNTsp6nyOxuCCXIpd4xpnMhPgaGk0
-	LTo05+R2x0neFAPUDFLpaHi/H0eEI=
-X-Google-Smtp-Source: AGHT+IETTkV/cGIS2O59Mcs+/mE1owA30OPhyKUkj7VBuXWdvRUbRDBdmL0g+tZHFqn9h+WIqqqBY/9gRriAXKqSLwk=
-X-Received: by 2002:a17:902:d585:b0:217:8612:b690 with SMTP id
- d9443c01a7336-22920ad2436mr3317935ad.8.1743179993199; Fri, 28 Mar 2025
- 09:39:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JQdHm+Fu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743180876; x=1774716876;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qXaW0Zadz4blAQX7mFXbHyYMTPkoMtEdHjKgemnjRX0=;
+  b=JQdHm+Fu1uMM6wWn39eZUPJBNr2U8zcnZQX6rsqPFSw2Dr3kum+LXV7V
+   HMdUPPuR/1rRFrHVq7kG+fgjd/W1qK28OHt87JjmKlIb7FiHnm+xGxIDX
+   31+yzRc16scwrdzhT7t2BOiWxmWRsW16045CHNdirMOZ89wKQ8m3mqrd6
+   aa3FoI8wA0lSDzHBC/lttEiUHkCHLtM3uo5g+rNTgKEFCw7/E+KnaI/Ke
+   ZDuq8QGeoajHU/8l/0zO4rQDBVJxZCzJZV1LekqD9OkhJ8JrL/Bfq1fI0
+   eZY+MyNxa5aJIG6lcSjVfxhZKvFgei9Pp4MMT5e3/69U7AxLPtKJb8G6H
+   g==;
+X-CSE-ConnectionGUID: fVuSr/kOSbaMd0+hCoFRGw==
+X-CSE-MsgGUID: +tnVkNvmTJqb4e6Oyv4XjA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11387"; a="44463651"
+X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
+   d="scan'208";a="44463651"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 09:54:35 -0700
+X-CSE-ConnectionGUID: wQYS+dyWRh+omzm0x3PPXQ==
+X-CSE-MsgGUID: 5VM/2BchRHG3LBJHcCVYDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
+   d="scan'208";a="125720466"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Mar 2025 09:54:34 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tyCyL-0007b0-2x;
+	Fri, 28 Mar 2025 16:54:24 +0000
+Date: Sat, 29 Mar 2025 00:54:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 13920/14010] arch/riscv/mm/tlbflush.c:195:16:
+ error: redefinition of 'start'
+Message-ID: <202503290040.CiWtsZNi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20250328135221.10274-1-leo.yan@arm.com>
-In-Reply-To: <20250328135221.10274-1-leo.yan@arm.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 28 Mar 2025 09:39:41 -0700
-X-Gm-Features: AQ5f1JoJ2on2fM5C_xTgqBXgthup1ISLyfPcE0FmDBiCkXLSGsQ5w9qhH9dU0Qg
-Message-ID: <CAP-5=fU5y_xKaWnh8tumyjTfJZdr2i+tPUaECyPs_vdhKdYWLg@mail.gmail.com>
-Subject: Re: [PATCH] tools build: Use -fzero-init-padding-bits=all
-To: Leo Yan <leo.yan@arm.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	James Clark <james.clark@linaro.org>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Mar 28, 2025 at 6:52=E2=80=AFAM Leo Yan <leo.yan@arm.com> wrote:
->
-> GCC-15 release claims [1]:
->
->   {0} initializer in C or C++ for unions no longer guarantees clearing
->   of the whole union (except for static storage duration initialization),
->   it just initializes the first union member to zero. If initialization
->   of the whole union including padding bits is desirable, use {} (valid
->   in C23 or C++) or use -fzero-init-padding-bits=3Dunions option to
->   restore old GCC behavior.
->
-> As a result, this new behaviour might cause unexpected data when we
-> initialize a union with using the '{ 0 }' initializer.
->
-> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=3Dall"),
-> the kernel has enabled -fzero-init-padding-bits=3Dall to zero padding bit=
-s
-> in unions and structures.  This commit applies the same option for tools
-> building.
->
-> The option is not supported neither by any version older than GCC 15 and
-> is also not supported by LLVM, this patch adds the cc-option function to
-> dynamically detect the compiler option.
->
-> [1] https://gcc.gnu.org/gcc-15/changes.html
->
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->
-> This patch was originally from [1]. After consideration, the top level
-> of the tools directory is a better place to accommodate this option
-> rather than perf folder.
->
-> [1] https://lore.kernel.org/linux-perf-users/20250320105235.3498106-1-leo=
-.yan@arm.com/
->
->  tools/scripts/Makefile.include | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
-ude
-> index 0aa4005017c7..e912a10afd89 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -40,6 +40,19 @@ EXTRA_WARNINGS +=3D -Wwrite-strings
->  EXTRA_WARNINGS +=3D -Wformat
->  EXTRA_WARNINGS +=3D -Wno-type-limits
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   e21edb1638e82460f126a6e49bcdd958d452929c
+commit: 5744739d8ce78876d4b62a20fd6bc65f01ba142e [13920/14010] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+config: riscv-randconfig-002-20250328 (https://download.01.org/0day-ci/archive/20250329/202503290040.CiWtsZNi-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250329/202503290040.CiWtsZNi-lkp@intel.com/reproduce)
 
-It'd be nice to bring in the comment for try-run that's in
-./scripts/Makefile.compiler:
-```
-# try-run
-# Usage: option =3D $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-# Exit code chooses option. "$$TMP" serves as a temporary file and is
-# automatically cleaned up.
-```
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503290040.CiWtsZNi-lkp@intel.com/
 
-> +try-run =3D $(shell set -e;              \
-> +       if ($(1)) >/dev/null 2>&1;      \
-> +       then echo "$(2)";               \
-> +       else echo "$(3)";               \
-> +       fi)
-> +
-> +__cc-option =3D $(call try-run,\
-> +       $(1) -Werror $(2) -c -x c /dev/null -o /dev/null,$(2),)
-> +cc-option =3D $(call __cc-option, $(CC),$(1))
-> +
+All errors (new ones prefixed by >>):
 
-I see differences with the ./scripts/Makefile.compiler version of
-these functions:
-```
-# __cc-option
-# Usage: MY_CFLAGS +=3D $(call
-__cc-option,$(CC),$(MY_CFLAGS),-march=3Dwinchip-c6,-march=3Di586)
-__cc-option =3D $(call try-run,\
-       $(1) -Werror $(2) $(3) -c -x c /dev/null -o "$$TMP",$(3),$(4))
+>> arch/riscv/mm/tlbflush.c:195:16: error: redefinition of 'start'
+     195 |         unsigned long start = uaddr & PAGE_MASK;
+         |                       ^
+   arch/riscv/mm/tlbflush.c:193:39: note: previous definition is here
+     193 |                 struct mm_struct *mm, unsigned long start, unsigned long end)
+         |                                                     ^
+>> arch/riscv/mm/tlbflush.c:195:24: error: use of undeclared identifier 'uaddr'
+     195 |         unsigned long start = uaddr & PAGE_MASK;
+         |                               ^
+   2 errors generated.
 
-cc-option =3D $(call __cc-option, $(CC),\
-       $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS),$(1),$(2))
-```
-I'm just wondering why as if we need to update these in the future
-it'd be easier if the two were identical.
 
-Thanks,
-Ian
+vim +/start +195 arch/riscv/mm/tlbflush.c
 
-> +# Explicitly clear padding bits with the initializer '{ 0 }'
-> +CFLAGS +=3D $(call cc-option,-fzero-init-padding-bits=3Dall)
-> +
->  # Makefiles suck: This macro sets a default value of $(2) for the
->  # variable named by $(1), unless the variable has been set by
->  # environment or command line. This is necessary for CC and AR
-> --
-> 2.34.1
->
+54d7431af73e2f Alexandre Ghiti 2024-01-08  191  
+54d7431af73e2f Alexandre Ghiti 2024-01-08  192  void arch_tlbbatch_add_pending(struct arch_tlbflush_unmap_batch *batch,
+2f4ab3ac10e147 Barry Song      2025-02-14  193  		struct mm_struct *mm, unsigned long start, unsigned long end)
+54d7431af73e2f Alexandre Ghiti 2024-01-08  194  {
+d9be2b9b60497a Alexandre Ghiti 2025-01-13 @195  	unsigned long start = uaddr & PAGE_MASK;
+d9be2b9b60497a Alexandre Ghiti 2025-01-13  196  
+54d7431af73e2f Alexandre Ghiti 2024-01-08  197  	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
+d9be2b9b60497a Alexandre Ghiti 2025-01-13  198  	mmu_notifier_arch_invalidate_secondary_tlbs(mm, start, start + PAGE_SIZE);
+54d7431af73e2f Alexandre Ghiti 2024-01-08  199  }
+54d7431af73e2f Alexandre Ghiti 2024-01-08  200  
+
+:::::: The code at line 195 was first introduced by commit
+:::::: d9be2b9b60497a82aeceec3a98d8b37fdd2960f2 riscv: Call secondary mmu notifier when flushing the tlb
+
+:::::: TO: Alexandre Ghiti <alexghiti@rivosinc.com>
+:::::: CC: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
