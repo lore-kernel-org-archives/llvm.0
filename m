@@ -1,185 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700E41DF72F;
-	Fri, 28 Mar 2025 18:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C5F1537A7;
+	Fri, 28 Mar 2025 19:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743186510; cv=none; b=dwSx8HYAmP5drm0BUnNSamb+FpFrJ9v4WdlCedn0pEe7Og9Gc+Etgf0wQivedxxRKwutGiXSuUP3eygS8kL25nfV1tHrzf61jD7jJGTNbD2ig0aMvxhUWlFDi87fHIH3PICcOP14jUyFMdAXvLBR6/vh2fXdGtbExOpzFomiwks=
+	t=1743190007; cv=none; b=p9y76pbRODanw7g4vJwXoIacKrvBobhO1Lu2TB0xhiW55TaELMfLdZoXOlk4UjxH2FICX+7xYimV1n+SPzaw7j9c7hYDXTpKXN9KeUc3bQxtsoy4XVFO+X4bw8I61n71Edw7pQJmTX37XwFBk+vmZZsM7jeXS4V+FSn1eh3Cuj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743186510; c=relaxed/simple;
-	bh=heWJyGVjzqaT+WCJXTAuSkwIwCGqctjljBgF1ZeXxpI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Jo9xXgOH6Sj7CAeYq1c3DWkWD8uUZD2Smh/SGv3mnRQC94NpnFlMnap8raNXq0B0PCT9cQ5FZHlblWyL83p90hVlhkMmOOedi3KYsbMwWaLTWrXW94rWHqXHPucB1V18olTNXWUWG0t7IqHTK6Q4wVNLfEr1Rb4FCOkwd0ftLoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ft+6wXZE; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743190007; c=relaxed/simple;
+	bh=JNRQiP8x2T6lr/cpXu/ktLllk3HPQgUE+Ivnd7EMXUY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O9f2nIHHGOPMk45foFU5cmh8PEozGEWGQmQRBeQR0YWCJ0HlFnia354tUA7Z4Gdu3UTVD5DBai30cMl1JG6fmoXa53u1facFFDfkmOmEOyjcK4cDto6PgDlrI3858xpBQDCEfkkaWkqDSbrU2AyuunZlH+ARKPyxbCc9++ZsUVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qm2LZMxC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ft+6wXZE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743186509; x=1774722509;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=heWJyGVjzqaT+WCJXTAuSkwIwCGqctjljBgF1ZeXxpI=;
-  b=Ft+6wXZEt82cN48zivG3Dlz8xUghIn/4s2SyCnqXClZUbcEAFsTSAC5X
-   XjnyQc+2UMSpVi8UKDntNjO/cJdYMDKFFIaYMO6z1WZkY5qvMScy0+3sB
-   8OpG3F6glrqJT74rQS9XZRG+MnjSuojvx6MNNziN7aOYltn083ekqFzqS
-   Ji6DLmgJiBT8jq7aVKvqf5J4nJkosnypNEpMd1fjIT77p0QupPN1rKP7/
-   Qc/8/IxXhxdyjeNM1wyF8HC8ZyE8v3qmMbzR0W7nGbol4/Qt4dYctv+41
-   TLduB6tEJNzFrKnQQIqGZ1Za5q/zqofuYdqDlDfkN/TC2z+rYmf0fiEct
-   A==;
-X-CSE-ConnectionGUID: 4XsZTO8iTdevLbJU3rMNKQ==
-X-CSE-MsgGUID: bllM6JPkRqi0Y8QFmRAgoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11387"; a="44452552"
-X-IronPort-AV: E=Sophos;i="6.14,284,1736841600"; 
-   d="scan'208";a="44452552"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 11:28:28 -0700
-X-CSE-ConnectionGUID: RzIePqphSjyh1FR52/lWrg==
-X-CSE-MsgGUID: 0jQpNG+3RrmNhLmq+dALSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,284,1736841600"; 
-   d="scan'208";a="125502815"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 28 Mar 2025 11:28:26 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tyERJ-0007d8-1d;
-	Fri, 28 Mar 2025 18:28:22 +0000
-Date: Sat, 29 Mar 2025 02:27:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:hack/ppi 17/17]
- drivers/irqchip/irq-stm32-exti.c:382:22: warning: shift count >= width of
- type
-Message-ID: <202503290229.BUv4UWwI-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qm2LZMxC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31D4C4CEE4;
+	Fri, 28 Mar 2025 19:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743190006;
+	bh=JNRQiP8x2T6lr/cpXu/ktLllk3HPQgUE+Ivnd7EMXUY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=qm2LZMxCob/cxdar/2ug+1NYh3kiEDfLszNp9WaeRJkoqi3qaJ+cC+IZzZWDaDQjI
+	 tDqOvypao2tQauzs4T+dCnTUXnlH2gq1lbik+1DG1Rb2A7igT5C6bowwN/P8s14FSs
+	 m25g+6iOdVFN71MxpSCfN0oHY0SHxmNdEmpG+YAA2kKPBJg3hFHd5/XHGVNsTAImbQ
+	 8QPHlOXXzVEVp4XpgPQzmr1eoW8J8i4Pvx0bsR70T06NiYkBNFRBNkCkCWAIRzV1kd
+	 jmd6CGAYk2u4zxMB15hXG+NYPkTKeRdUcul0xeTHOfaB8Q8H3XOTmRcQNyiOo+MBNr
+	 rRyGVLYfxvnRw==
+From: Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v3 0/2] Add wcslen()
+Date: Fri, 28 Mar 2025 12:26:30 -0700
+Message-Id: <20250328-string-add-wcslen-for-llvm-opt-v3-0-a180b4c0c1c4@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOb35mcC/4XNSw7CIBSF4a00jL0G6Is6ch/GQQuXllihgQY1T
+ fcubWKiI4f/GXxnIQG9wUBO2UI8RhOMsynyQ0bk0NoewajUhFNe0pwXEGZvbA+tUvCQYUQL2nk
+ Yx3gHN81Q07JumOoaLilJyORRm+d+cLmmHkyYnX/tf5Ft64cu/9GRAYVOaIZcsloIcb6htzgen
+ e/JZkf+7VV/PZ48Jaqi7bjsNBY/3rqub4znF2gdAQAA
+X-Change-ID: 20250324-string-add-wcslen-for-llvm-opt-705791db92c0
+To: Kees Cook <kees@kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2054; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=JNRQiP8x2T6lr/cpXu/ktLllk3HPQgUE+Ivnd7EMXUY=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDOnPvn9uVXYOSWxeKTg35IFVnP1z+QXLi2+uP1DC/kzmt
+ 9UTwc3tHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiTesYGTo0g/Sao2fvtdm2
+ zNFSZ9F77oCKvR++64iHnD70euLsKfmMDHc3LqwxUlH3S7df3ZO3deqBE+FeHY/+M//+m2QsGed
+ vwwUA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git hack/ppi
-head:   e9141d0584201dc14a70533175804e111ab53f36
-commit: e9141d0584201dc14a70533175804e111ab53f36 [17/17] WIP
-config: arm-randconfig-001-20250328 (https://download.01.org/0day-ci/archive/20250329/202503290229.BUv4UWwI-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250329/202503290229.BUv4UWwI-lkp@intel.com/reproduce)
+Hi all,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503290229.BUv4UWwI-lkp@intel.com/
+A recent LLVM change [1] introduces a call to wcslen() in
+fs/smb/client/smb2pdu.c through UniStrcat() via
+alloc_path_with_tree_prefix(). Similar to the bcmp() and stpcpy()
+additions that happened in 5f074f3e192f and 1e1b6d63d634, add wcslen()
+to fix the linkage failure.
 
-All warnings (new ones prefixed by >>):
+[1]: https://github.com/llvm/llvm-project/commit/9694844d7e36fd5e01011ab56b64f27b867aa72d
 
-   In file included from drivers/irqchip/irq-stm32-exti.c:9:
-   include/linux/interrupt.h:130:2: error: expected member name or ';' after declaration specifiers
-     129 |         cpumask_t               *valid_mask,
-         |         ~~~~~~~~~
-     130 |         struct irqaction        *next;
-         |         ^
-   include/linux/interrupt.h:129:25: error: expected ';' at end of declaration list
-     129 |         cpumask_t               *valid_mask,
-         |                                             ^
-         |                                             ;
->> drivers/irqchip/irq-stm32-exti.c:382:22: warning: shift count >= width of type [-Wshift-count-overflow]
-     382 |                 gc->wake_enabled = IRQ_MSK(IRQS_PER_BANK);
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/irq.h:1223:41: note: expanded from macro 'IRQ_MSK'
-    1223 | #define IRQ_MSK(n) (u32)((n) < 32 ? ((1 << (n)) - 1) : UINT_MAX)
-         |                                         ^  ~~~
-   1 warning and 2 errors generated.
+---
+Changes in v3:
+- During comment shuffle in patch 1, move to standard multi-line comment
+  kernel style (Andy). Carry forward Andy's review.
+- Move nls_types.h include in string.c in patch 2 to a better place
+  alphabetically (Andy).
+- Drop 'extern' from wcslen() declaration in string.h, as external linkage
+  is the default for functions and the coding style explicitly forbids
+  it (Andy).
+- Link to v2: https://lore.kernel.org/r/20250326-string-add-wcslen-for-llvm-opt-v2-0-d864ab2cbfe4@kernel.org
 
+Changes in v2:
+- Refactor typedefs from nls.h into nls_types.h to make it safe to
+  include in string.h, which may be included in many places throughout
+  the kernel that may not like the other stuff nls.h brings in:
+  https://lore.kernel.org/202503260611.MDurOUhF-lkp@intel.com/
+- Drop libstub change due to the above change, as it is no longer
+  necessary.
+- Move prototype shuffle of patch 2 into the patch that adds wcslen()
+  (Andy)
+- Use new nls_types.h in string.{c,h}
+- Link to v1: https://lore.kernel.org/r/20250325-string-add-wcslen-for-llvm-opt-v1-0-b8f1e2c17888@kernel.org
 
-vim +382 drivers/irqchip/irq-stm32-exti.c
+---
+Nathan Chancellor (2):
+      include: Move typedefs in nls.h to their own header
+      lib/string.c: Add wcslen()
 
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  333  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  334  static int __init stm32_exti_init(const struct stm32_exti_drv_data *drv_data,
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  335  				  struct device_node *node)
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  336  {
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  337  	struct stm32_exti_host_data *host_data;
-e072041688ca73f Alexandre TORGUE 2016-09-20  338  	unsigned int clr = IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN;
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  339  	int nr_irqs, ret, i;
-e072041688ca73f Alexandre TORGUE 2016-09-20  340  	struct irq_chip_generic *gc;
-e072041688ca73f Alexandre TORGUE 2016-09-20  341  	struct irq_domain *domain;
-e072041688ca73f Alexandre TORGUE 2016-09-20  342  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  343  	host_data = stm32_exti_host_init(drv_data, node);
-4096165d55218a6 Dan Carpenter    2018-08-08  344  	if (!host_data)
-4096165d55218a6 Dan Carpenter    2018-08-08  345  		return -ENOMEM;
-e072041688ca73f Alexandre TORGUE 2016-09-20  346  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  347  	domain = irq_domain_add_linear(node, drv_data->bank_nr * IRQS_PER_BANK,
-e072041688ca73f Alexandre TORGUE 2016-09-20  348  				       &irq_exti_domain_ops, NULL);
-e072041688ca73f Alexandre TORGUE 2016-09-20  349  	if (!domain) {
-f9c75bca44d4754 Yangtao Li       2018-11-23  350  		pr_err("%pOFn: Could not register interrupt domain.\n",
-f9c75bca44d4754 Yangtao Li       2018-11-23  351  		       node);
-e072041688ca73f Alexandre TORGUE 2016-09-20  352  		ret = -ENOMEM;
-e072041688ca73f Alexandre TORGUE 2016-09-20  353  		goto out_unmap;
-e072041688ca73f Alexandre TORGUE 2016-09-20  354  	}
-e072041688ca73f Alexandre TORGUE 2016-09-20  355  
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  356  	ret = irq_alloc_domain_generic_chips(domain, IRQS_PER_BANK, 1, "exti",
-e072041688ca73f Alexandre TORGUE 2016-09-20  357  					     handle_edge_irq, clr, 0, 0);
-e072041688ca73f Alexandre TORGUE 2016-09-20  358  	if (ret) {
-e81f54c668d89e5 Rob Herring      2017-07-18  359  		pr_err("%pOF: Could not allocate generic interrupt chip.\n",
-e81f54c668d89e5 Rob Herring      2017-07-18  360  		       node);
-e072041688ca73f Alexandre TORGUE 2016-09-20  361  		goto out_free_domain;
-e072041688ca73f Alexandre TORGUE 2016-09-20  362  	}
-e072041688ca73f Alexandre TORGUE 2016-09-20  363  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  364  	for (i = 0; i < drv_data->bank_nr; i++) {
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  365  		const struct stm32_exti_bank *stm32_bank;
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  366  		struct stm32_exti_chip_data *chip_data;
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  367  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  368  		stm32_bank = drv_data->exti_banks[i];
-cfbf9e497094dcf Fabien Dessenne  2019-04-17  369  		chip_data = stm32_exti_chip_init(host_data, i, node);
-d9e2b19b0274406 Ludovic Barre    2018-04-26  370  
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  371  		gc = irq_get_domain_generic_chip(domain, i * IRQS_PER_BANK);
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  372  
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  373  		gc->reg_base = host_data->base;
-e072041688ca73f Alexandre TORGUE 2016-09-20  374  		gc->chip_types->type = IRQ_TYPE_EDGE_BOTH;
-be6230f0c2bd5d2 Ludovic Barre    2018-04-26  375  		gc->chip_types->chip.irq_ack = stm32_irq_ack;
-e072041688ca73f Alexandre TORGUE 2016-09-20  376  		gc->chip_types->chip.irq_mask = irq_gc_mask_clr_bit;
-e072041688ca73f Alexandre TORGUE 2016-09-20  377  		gc->chip_types->chip.irq_unmask = irq_gc_mask_set_bit;
-e072041688ca73f Alexandre TORGUE 2016-09-20  378  		gc->chip_types->chip.irq_set_type = stm32_irq_set_type;
-d9e2b19b0274406 Ludovic Barre    2018-04-26  379  		gc->chip_types->chip.irq_set_wake = irq_gc_set_wake;
-d9e2b19b0274406 Ludovic Barre    2018-04-26  380  		gc->suspend = stm32_irq_suspend;
-d9e2b19b0274406 Ludovic Barre    2018-04-26  381  		gc->resume = stm32_irq_resume;
-d9e2b19b0274406 Ludovic Barre    2018-04-26 @382  		gc->wake_enabled = IRQ_MSK(IRQS_PER_BANK);
-d9e2b19b0274406 Ludovic Barre    2018-04-26  383  
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  384  		gc->chip_types->regs.mask = stm32_bank->imr_ofst;
-d9e2b19b0274406 Ludovic Barre    2018-04-26  385  		gc->private = (void *)chip_data;
-6dd64ee17e04c39 Ludovic Barre    2017-11-06  386  	}
-e072041688ca73f Alexandre TORGUE 2016-09-20  387  
-e072041688ca73f Alexandre TORGUE 2016-09-20  388  	nr_irqs = of_irq_count(node);
-e072041688ca73f Alexandre TORGUE 2016-09-20  389  	for (i = 0; i < nr_irqs; i++) {
-e072041688ca73f Alexandre TORGUE 2016-09-20  390  		unsigned int irq = irq_of_parse_and_map(node, i);
-e072041688ca73f Alexandre TORGUE 2016-09-20  391  
-e072041688ca73f Alexandre TORGUE 2016-09-20  392  		irq_set_handler_data(irq, domain);
-e072041688ca73f Alexandre TORGUE 2016-09-20  393  		irq_set_chained_handler(irq, stm32_irq_handler);
-e072041688ca73f Alexandre TORGUE 2016-09-20  394  	}
-e072041688ca73f Alexandre TORGUE 2016-09-20  395  
-e072041688ca73f Alexandre TORGUE 2016-09-20  396  	return 0;
-e072041688ca73f Alexandre TORGUE 2016-09-20  397  
-e072041688ca73f Alexandre TORGUE 2016-09-20  398  out_free_domain:
-e072041688ca73f Alexandre TORGUE 2016-09-20  399  	irq_domain_remove(domain);
-e072041688ca73f Alexandre TORGUE 2016-09-20  400  out_unmap:
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  401  	iounmap(host_data->base);
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  402  	kfree(host_data->chips_data);
-f9fc1745501e7b9 Ludovic Barre    2018-04-26  403  	kfree(host_data);
-e072041688ca73f Alexandre TORGUE 2016-09-20  404  	return ret;
-e072041688ca73f Alexandre TORGUE 2016-09-20  405  }
-e072041688ca73f Alexandre TORGUE 2016-09-20  406  
+ include/linux/nls.h       | 19 +------------------
+ include/linux/nls_types.h | 26 ++++++++++++++++++++++++++
+ include/linux/string.h    |  2 ++
+ lib/string.c              | 11 +++++++++++
+ 4 files changed, 40 insertions(+), 18 deletions(-)
+---
+base-commit: 78ab93c78fb31c5dfe207318aa2b7bd4e41f8dba
+change-id: 20250324-string-add-wcslen-for-llvm-opt-705791db92c0
 
-:::::: The code at line 382 was first introduced by commit
-:::::: d9e2b19b02744068b1cc16ca7d5249a62e789601 irqchip/stm32: Add suspend support
-
-:::::: TO: Ludovic Barre <ludovic.barre@st.com>
-:::::: CC: Marc Zyngier <marc.zyngier@arm.com>
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nathan Chancellor <nathan@kernel.org>
+
