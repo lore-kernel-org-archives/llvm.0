@@ -1,126 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6ABE1C460A;
-	Sat, 29 Mar 2025 21:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFF919004B
+	for <llvm@lists.linux.dev>; Sat, 29 Mar 2025 23:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743285031; cv=none; b=oIYyuHT7SfdlvEPT6Dy7mCSWEX/iYI1deRg1hoUjfbhP7/h5FexDN+wP4FlFVyF0hepOkribiNmORwRRwY/AIkpCqsMqwgZ+9M/UKXOuH8eqagLiKNIAjmRle+TltUDM6XYQz8qp9EsDTNECw55v7hXGbqKZZ6A4rkD5bnu66UY=
+	t=1743290589; cv=none; b=GDB+irdi1/z9w5sQJJg5HGatVcMT3cPyVZCIE/lW7woFwhvqSSp0yxufGIMPVrm8yip1MBgClkTrX8qIqUqzF3kcw+xNstSOylARqHgNMW3l7p1J+1LbFI+Kgaf/rlL2n2JDIO5T4jHViFtat6WLSuUAVfb/whoR3ZbAhNSrt8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743285031; c=relaxed/simple;
-	bh=iPxZ8Ldb6PYOZVa90GDdFztH1FU38pAny2gaWtOz47w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=maP//ZW4pnk7eUPqBObpJz1atrF7IlCBp2KtXTzeTZjag8vRF5NTYbf47XNHtiKPPj6DMfDWpRlQTSJO3R6Xgzalyfi5L5SZt1+tTkJjFv6MMs6oV8V2mqqr51kICc88Ye9NsVgBt4yFrjYovPGcmwyTa93JhEKIEAaTaFetLtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CLCzGBTu; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743290589; c=relaxed/simple;
+	bh=Tu1NESlbTCN1oOEXQjJtftnpRXFhGtJgDu9nT2hlCas=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I6IGnctcMb6q1/FELp41MAuFQZqgcF60q7i8pVUWem9SLMIcFCKSP7W1UGh7kJuEafNwQGWKmN2qs1k+BA0jLnjTTzAn8xa2wMTN7+m1SgwmdrAGTt2Jcup1SGcOTTjT2IryZyLIDRFugrJhzyrylbn2x/QW1mfbDmUHT8GfPCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eQfNIghJ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CLCzGBTu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743285029; x=1774821029;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iPxZ8Ldb6PYOZVa90GDdFztH1FU38pAny2gaWtOz47w=;
-  b=CLCzGBTurQRs2MuYAWbOuNp9Eb05NLPBOhNGCsRQcTGa5US17x6ecpwh
-   tWBqXxlEl2bXN5dctfgnhepCdWdQFMeX7pMldwedQsxaEMqXxSQllxBcH
-   5ENCMloJoa2zZYRcijs3qSmxdbSkq3tvc3ziXjkeQthCYuG/PB6FFuMu6
-   8P3XewR5V6eBCJrSHN9/LdXekoYfhrEzfaWKHRwX4BPkZzK9JNQcSGLeM
-   C3AMdZZDxN8AWz+VOEaKyNHT7JuXMhC1/sGKjZK7e67MvNpAE49KCBhGN
-   zeTtBdfgUknEW1kTpUYo9aWiHLDCW2DJ3jiXjLthGEukxTmlTaS9Pc9b1
-   w==;
-X-CSE-ConnectionGUID: TwVM1iwyT9+j3YDCCwf0fw==
-X-CSE-MsgGUID: Qd3v+58FQH2CyLMwUezorw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11388"; a="62011075"
-X-IronPort-AV: E=Sophos;i="6.14,286,1736841600"; 
-   d="scan'208";a="62011075"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2025 14:50:29 -0700
-X-CSE-ConnectionGUID: J3P1M3csQLirtuyqwSQyIg==
-X-CSE-MsgGUID: DPKxeR4sQ3SiXpkalLyorA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,286,1736841600"; 
-   d="scan'208";a="125749777"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 29 Mar 2025 14:50:26 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tye4N-0008Ne-27;
-	Sat, 29 Mar 2025 21:50:23 +0000
-Date: Sun, 30 Mar 2025 05:49:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, Cosmin Ratiu <cratiu@nvidia.com>
-Subject: Re: [PATCH net v3 01/11] net: switch to netif_disable_lro in
- inetdev_init
-Message-ID: <202503300552.i2jDOcpl-lkp@intel.com>
-References: <20250329185704.676589-2-sdf@fomichev.me>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eQfNIghJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743290586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OzBUCvEVH+Thd3ePo5RsCjpg7Qh3X+zUvyCVR/XOtb8=;
+	b=eQfNIghJ/zSz/ZJWvPhl4j0+76Unw9IXcoK7waiyXvsdUfB1ddhIu6AvHagBkocsW3Nmij
+	TNw1xQO96flfcClgQUpuIfkCeXy8wu+UCRIjjJaghrP8LwKl2UJSQsG6Ji1L4PQce9OweI
+	+4hIBHNwMz1RkuialTWsRlhfrAL9HRs=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-630-tHQusVi3OQKQI8p9WNeTpg-1; Sat,
+ 29 Mar 2025 19:23:04 -0400
+X-MC-Unique: tHQusVi3OQKQI8p9WNeTpg-1
+X-Mimecast-MFC-AGG-ID: tHQusVi3OQKQI8p9WNeTpg_1743290584
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ED60C190308B
+	for <llvm@lists.linux.dev>; Sat, 29 Mar 2025 23:23:03 +0000 (UTC)
+Received: from [172.20.107.51] (unknown [10.30.45.88])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9643719560AB;
+	Sat, 29 Mar 2025 23:23:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 93d52288)
+Date: Sat, 29 Mar 2025 23:23:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250329185704.676589-2-sdf@fomichev.me>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <50596.125032919230400779@us-mta-630.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: nbDZMZBm9JAbu1gnYxnOOQbMOppU3eku68Au7Ms9NGI_1743290584
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stanislav,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/net-switch-to-netif_disable_lro-in-inetdev_init/20250330-030132
-base:   net/main
-patch link:    https://lore.kernel.org/r/20250329185704.676589-2-sdf%40fomichev.me
-patch subject: [PATCH net v3 01/11] net: switch to netif_disable_lro in inetdev_init
-config: s390-randconfig-002-20250330 (https://download.01.org/0day-ci/archive/20250330/202503300552.i2jDOcpl-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250330/202503300552.i2jDOcpl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503300552.i2jDOcpl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/dev.c:1774:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Werror,-Wimplicit-int]
-   EXPORT_IPV6_MOD(netif_disable_lro);
-   ^
-   int
->> net/core/dev.c:1774:17: error: a parameter list without types is only allowed in a function definition
-   EXPORT_IPV6_MOD(netif_disable_lro);
-                   ^
-   2 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/int +1774 net/core/dev.c
+Kernel information:
+    Commit message: Merge tag 'backlight-next-6.15' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/lee/backlight
 
-  1756	
-  1757	void netif_disable_lro(struct net_device *dev)
-  1758	{
-  1759		struct net_device *lower_dev;
-  1760		struct list_head *iter;
-  1761	
-  1762		dev->wanted_features &= ~NETIF_F_LRO;
-  1763		netdev_update_features(dev);
-  1764	
-  1765		if (unlikely(dev->features & NETIF_F_LRO))
-  1766			netdev_WARN(dev, "failed to disable LRO!\n");
-  1767	
-  1768		netdev_for_each_lower_dev(dev, lower_dev, iter) {
-  1769			netdev_lock_ops(lower_dev);
-  1770			netif_disable_lro(lower_dev);
-  1771			netdev_unlock_ops(lower_dev);
-  1772		}
-  1773	}
-> 1774	EXPORT_IPV6_MOD(netif_disable_lro);
-  1775	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1742787270
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1742787270-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
