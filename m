@@ -1,99 +1,100 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFF919004B
-	for <llvm@lists.linux.dev>; Sat, 29 Mar 2025 23:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06B8320F;
+	Sun, 30 Mar 2025 02:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743290589; cv=none; b=GDB+irdi1/z9w5sQJJg5HGatVcMT3cPyVZCIE/lW7woFwhvqSSp0yxufGIMPVrm8yip1MBgClkTrX8qIqUqzF3kcw+xNstSOylARqHgNMW3l7p1J+1LbFI+Kgaf/rlL2n2JDIO5T4jHViFtat6WLSuUAVfb/whoR3ZbAhNSrt8M=
+	t=1743302670; cv=none; b=NquVSNjT9dwSZ/DP0lqYbW+LTbrF4OGrepgqs28JdCSFP5XHLvFOmEF6VQrIRIPJ3zzkA/uiTfOI/ErxvHmCsZk57KFChgWLjRKS+9p819CNkxSrhEKqKD11HSd8o+Uw8hChQaQ1j5FlM0sSP+aMUjOjbap6+fcy3IzS6PWpeNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743290589; c=relaxed/simple;
-	bh=Tu1NESlbTCN1oOEXQjJtftnpRXFhGtJgDu9nT2hlCas=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I6IGnctcMb6q1/FELp41MAuFQZqgcF60q7i8pVUWem9SLMIcFCKSP7W1UGh7kJuEafNwQGWKmN2qs1k+BA0jLnjTTzAn8xa2wMTN7+m1SgwmdrAGTt2Jcup1SGcOTTjT2IryZyLIDRFugrJhzyrylbn2x/QW1mfbDmUHT8GfPCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eQfNIghJ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743302670; c=relaxed/simple;
+	bh=bUzG6iHMdOHdWj6cWwdHg2M6/1+L2tvVKFq6qVVQydg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FrJURInAs3i6Lx2IBd4QOUR26Xz4klAqWy3uabd/SmZWBPaovfmab2sUXR+GB7MA8Y1QvPz8pAKDpFSW1stMFPNggNx7OZfyxQSdjT94X8RemhNi2QDO9bxaCKzNsrv7JlCjq4wNDVd2ZN4dTM+8QuIfyZu822Xsthylwm2fHlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=heUNqwVA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eQfNIghJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743290586;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=OzBUCvEVH+Thd3ePo5RsCjpg7Qh3X+zUvyCVR/XOtb8=;
-	b=eQfNIghJ/zSz/ZJWvPhl4j0+76Unw9IXcoK7waiyXvsdUfB1ddhIu6AvHagBkocsW3Nmij
-	TNw1xQO96flfcClgQUpuIfkCeXy8wu+UCRIjjJaghrP8LwKl2UJSQsG6Ji1L4PQce9OweI
-	+4hIBHNwMz1RkuialTWsRlhfrAL9HRs=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-630-tHQusVi3OQKQI8p9WNeTpg-1; Sat,
- 29 Mar 2025 19:23:04 -0400
-X-MC-Unique: tHQusVi3OQKQI8p9WNeTpg-1
-X-Mimecast-MFC-AGG-ID: tHQusVi3OQKQI8p9WNeTpg_1743290584
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ED60C190308B
-	for <llvm@lists.linux.dev>; Sat, 29 Mar 2025 23:23:03 +0000 (UTC)
-Received: from [172.20.107.51] (unknown [10.30.45.88])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9643719560AB;
-	Sat, 29 Mar 2025 23:23:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 93d52288)
-Date: Sat, 29 Mar 2025 23:23:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="heUNqwVA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02478C4CEE2;
+	Sun, 30 Mar 2025 02:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743302669;
+	bh=bUzG6iHMdOHdWj6cWwdHg2M6/1+L2tvVKFq6qVVQydg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=heUNqwVAKv5Ln40Suv3V4UVj5eQxLD1nDvfA399+VbFU6zRBgkLCmWNowbozLRj3e
+	 3efZsPNHIqAR1xJ7jYr4cTpT6HiXfhEkkIoyYCpzXTEqo0KhxULDF1wH1HReJDNAgq
+	 8z0xt+L5KAjAnlDx/W1ZBYX2eqPLdGDD984f2Mmtc1HDbNmQE0i93H6q3nNDmcqaXL
+	 I9JX6g3yzkHKbji0a3iNKk4J/FeQaJs9v0y9w151fEy8o1DRf4xZjU8cI8ksgQ/FVl
+	 IZv6aZaJXaL8+dFQXZsoZLiKnUftmT1Bg1V903pP0R85QcNr0y2yaYy1u158jx8NUr
+	 0SkjVZQxohP4Q==
+Date: Sat, 29 Mar 2025 19:44:26 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Ingo Molnar <mingo@kernel.org>
+Subject: Re: [tip:objtool/urgent 9/23] vmlinux.o: warning: objtool:
+ cdns_mrvl_xspi_setup_clock: unexpected end of section
+ .text.cdns_mrvl_xspi_setup_clock
+Message-ID: <rza3hjwh5j4trizohbc4um53mej4nz7ie6adydbepncxjpoqd2@l67idl6i5mmy>
+References: <202503282236.UhfRsF3B-lkp@intel.com>
+ <az2awlpfs7wt46kwql7ke3iereryykdroymfuaxawz5gozaxyi@rhlmbjkp3sdg>
+ <20250328232449.GA2955081@ax162>
+ <nbth6u2fgdbtw52ll5tzc5qfrfasikqcjbx4eltdezqcagnkkg@wwtkkf2vrjbc>
+ <20250329200656.GA127272@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <50596.125032919230400779@us-mta-630.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: nbDZMZBm9JAbu1gnYxnOOQbMOppU3eku68Au7Ms9NGI_1743290584
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250329200656.GA127272@ax162>
 
-Hi, we tested your kernel and here are the results:
+On Sat, Mar 29, 2025 at 01:06:56PM -0700, Nathan Chancellor wrote:
+> On Fri, Mar 28, 2025 at 09:46:06PM -0700, Josh Poimboeuf wrote:
+> > On Fri, Mar 28, 2025 at 04:24:49PM -0700, Nathan Chancellor wrote:
+> > > vmlinux.o: warning: objtool: synaptics_report_mt_data: unexpected end of section .text.synaptics_report_mt_data
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x33e: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x254: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x1d4: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x1b8: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x156: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x13a: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0xda: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0xbe: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x63: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x48: (branch)
+> > > vmlinux.o: warning: objtool:   synaptics_report_mt_data+0x0: <=== (sym)
+> > > ./tools/objtool/objtool --hacks=jump_label --hacks=noinstr --static-call --uaccess --noinstr --link vmlinux.o.orig -o vmlinux.o
+> > 
+> > Nice!  Can you share the disassembly of the function?
+> 
+> Sure thing!
+> 
+> >   objdump -drw -j .text.synaptics_report_mt_data vmlinux.o.orig
+> 
+> 0000000000000000 <synaptics_report_mt_data>:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+This is KCOV leaving dead code again.  I thought I had silenced those
+with
 
+  6b023c784204 ("objtool: Silence more KCOV warnings")
 
-Kernel information:
-    Commit message: Merge tag 'backlight-next-6.15' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/lee/backlight
+but it looks like I mixed up GCOV_KERNEL with KCOV.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1742787270
+Can you confirm this fixes?
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1742787270-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index b93597420daf..4d543054f723 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -275,7 +275,7 @@ objtool-args-$(CONFIG_MITIGATION_SLS)			+= --sls
+ objtool-args-$(CONFIG_STACK_VALIDATION)			+= --stackval
+ objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
+ objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
+-objtool-args-$(CONFIG_GCOV_KERNEL)			+= --no-unreachable
++objtool-args-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
+ objtool-args-$(CONFIG_PREFIX_SYMBOLS)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
+ objtool-args-$(CONFIG_OBJTOOL_WERROR)			+= --Werror
+ 
