@@ -1,85 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E539420E6;
-	Sun, 30 Mar 2025 22:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8352E3395
+	for <llvm@lists.linux.dev>; Mon, 31 Mar 2025 00:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743375437; cv=none; b=OPWDE+mu5PFz5NMp1RgxXTSN/GmYvTbQKHCM7s7ao3qHIc1SXBJ6ZcY9Uwv9tiurq14KrhkIdzeYxLU/52iRJJzGn277iLC9lxnVx1nm3TdJvMDYI/OMWZjZtp1s2Ex4P2HFr0siMEU5lQ8CXFUZVv8l0+g8I5DUAx7tnr5Va3Y=
+	t=1743382337; cv=none; b=caZe4gqzsl1DH83wS3YDpRPL02CsIOGiW53/HdTyvPgEpuq4O4sdKSCXENKUGnPsl23+yxDgymjJsNg/2wWlhNDKf4QPmdkndpGdNEmoi9MwRsBCc1Gb2I5ugdrUUQRTY6r95mYIhr8eDhwTD+adNrnw1vYIrb4i86IipCUb3LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743375437; c=relaxed/simple;
-	bh=gjxedMQ41MoCDQnK+MvIwaRMTqJLgSBdXjruxPY5h6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SYy4K6mDfyRiVA8I5xMLGLwsGMP86+GEk04/z5PPzxml0Q/BRizwvPhJ/6vg61AnKcotFzApiMli2uzZZIzC/jQZdwL+mI7a1x1qj4c07WPPdJkPyd84gX2HPbWTTAPEL3phqjMcMyT+xcjAwYEJMMnVs+z01UtqgL9HXteDam8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MOqecLzc; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743382337; c=relaxed/simple;
+	bh=Rr+q3I6vEMbyj8p71GzElcXegrV9nObt7PXF5TUHVXw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=pj1E2ND3tZ7fjbppyxUHuGHvpDvWJC7+DBJQpKVjOppA3jJo+QkQFcCoJt+rXtSHXlLtelm7pGJ5C84TfRMmUcCVGysgWLzcUE4biLdKjS3Vrq5jv2/eOgu0c2DlWXuGUZs+EOwdhXgbx6/KIBBo2Jq3MqZ54rVgswkPbozmljw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cn69L70p; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MOqecLzc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743375435; x=1774911435;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=gjxedMQ41MoCDQnK+MvIwaRMTqJLgSBdXjruxPY5h6E=;
-  b=MOqecLzcJq5+tru+sX+VV5bSibjVhvTQiKDLTGr2WM9gCBdo+6YQFBq3
-   Mag/Zi/TgD5/b7eZH5+e8zdwWU6oIKH4odsreUOn6cu1/kYO8daJkXHle
-   ZNuISckQhaHuKzm44OkzWOb5rXgxxcOKvFzozshDeflHVNqgs+8+luHdc
-   YK6kei6tBQsC9bgZmuPaXaG2oM6dce2I92hXN8dbG53crfpksyBeVQWPG
-   mQPTDk9YhNt6eVVgPJGXDMgbfdUOxVrE4s7CslfqHsPGz6D5h+kc24Sii
-   fG3d7CptOML+VmCJc6O3gA3kn+YbrfGGYJPcrBuPkRIsI7z5+11CyZscm
-   Q==;
-X-CSE-ConnectionGUID: KhfdNtJ4TqCyL8ZYmiyENw==
-X-CSE-MsgGUID: AQ5aXULTRpquncT5RHq4VQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11389"; a="43907088"
-X-IronPort-AV: E=Sophos;i="6.14,289,1736841600"; 
-   d="scan'208";a="43907088"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2025 15:57:14 -0700
-X-CSE-ConnectionGUID: mwW0p2c8Ry66ov9e8sdG0g==
-X-CSE-MsgGUID: qkw7sUBoTIma1OBvf8zGgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,289,1736841600"; 
-   d="scan'208";a="131154893"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 30 Mar 2025 15:57:12 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tz1aT-0008v0-37;
-	Sun, 30 Mar 2025 22:57:07 +0000
-Date: Mon, 31 Mar 2025 06:56:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Eric Biggers <ebiggers@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ebiggers:wip-crypto 12/12] ERROR: modpost:
- "__kcfi_typeid_sha256_block_data_order_neon" [arch/arm/crypto/sha256-arm.ko]
- undefined!
-Message-ID: <202503310608.Sfq1hKkn-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cn69L70p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743382332;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KsL/2q4p8/PJIb/w3H9DEF6+zoXLfC6kpBdYW5alA1I=;
+	b=cn69L70pvTxWDebkGOZR/lUNaVj0JFeQ2Htb6peB8ZngRMzeWxpKJDy6idNA4b74Paq4CO
+	dtk9hR1NObJQ+N7kPOV6mJYj/JzCFlurEmXvAjcB/gFTqDDK9i+1odZ87Z8nSlh1B4OFof
+	ozOC82XsPvqs4T0n7F6IWgZ1X1h67Hk=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-225-bzIcfRrUPN677Dp4EDEY2A-1; Sun,
+ 30 Mar 2025 20:52:08 -0400
+X-MC-Unique: bzIcfRrUPN677Dp4EDEY2A-1
+X-Mimecast-MFC-AGG-ID: bzIcfRrUPN677Dp4EDEY2A_1743382325
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BAD9E180AF5E
+	for <llvm@lists.linux.dev>; Mon, 31 Mar 2025 00:52:05 +0000 (UTC)
+Received: from [172.20.107.51] (unknown [10.30.45.88])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E3381801747;
+	Mon, 31 Mar 2025 00:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 01d5b167)
+Date: Mon, 31 Mar 2025 00:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <69786.125033020520800773@us-mta-225.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: TP6IY3RsuGBOOQi7jfi_sDGGRWpDWmpCgK5RSOC4uIg_1743382325
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-crypto
-head:   5e0c73a309dc89400fca72e888f4879582465293
-commit: 5e0c73a309dc89400fca72e888f4879582465293 [12/12] crypto: arm - add missing CFI annotations
-config: arm-randconfig-003-20250331 (https://download.01.org/0day-ci/archive/20250331/202503310608.Sfq1hKkn-lkp@intel.com/config)
-compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 7eccafc3c84606587a175c0a8c1ebea6e4fb21cd)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250331/202503310608.Sfq1hKkn-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503310608.Sfq1hKkn-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ERROR: modpost: "__kcfi_typeid_sha256_block_data_order_neon" [arch/arm/crypto/sha256-arm.ko] undefined!
->> ERROR: modpost: "__kcfi_typeid_sha512_block_data_order_neon" [arch/arm/crypto/sha512-arm.ko] undefined!
+Kernel information:
+    Commit message: Merge tag 'modules-6.15-rc1' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/modules/linux
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1743619167
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1743619167-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
