@@ -1,303 +1,566 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFED215178;
-	Mon, 31 Mar 2025 17:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831B22E40E
+	for <llvm@lists.linux.dev>; Mon, 31 Mar 2025 20:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743442500; cv=none; b=cpLBb0i+jFV81tgLZU9AS9gPjqpDbf6UX3RE1FK7H9YitM4W51Oh6w7rhlmxDeeiJO6NRYsixEnr/vGe7Ia/Q3EZP8duIUoEsGKeAbMXlMBvV2fsvw5RkDCfyM78GMEzEfG96L0L0JGUXqdkP6UVW7QN0nivmm4pHyYtwF7rKDk=
+	t=1743451244; cv=none; b=Y8qoghvhNhr9o7gV+l4myNhfMLzaThtvycjbJGJpvPECfbDINVSRjw1NG+QG4KQJfFFSCfyGsIaqGHxuVsXuMO6ESCctF4NDdUjLyD8tAQ5ojB9PVyMPdAXgz1pUGukkBG+6IwidfPlAeaDunoACpBzuzZHygWUqpj8gk0LD8D0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743442500; c=relaxed/simple;
-	bh=H6XhfcM8+zvk/bd4cJqhtQDP2Ar0dNpqo+MKPNGNO4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eyQCypSi3CfMRj5RzETbAB8WQ6APrVX9e9/QYQ0YSipi5f9MEO7rn8LBgtTP4EP8tg4DiUIi5zrggzkfXrXWhxO2bbBXCtBSfrLy0P/nq5jeUoL7Xnm6H1qbyPge89LzkDdwA0Gx6z3PupdxBkrgBO6pr3rOMQd7QfqFl3GKHVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=na/vulXX; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743451244; c=relaxed/simple;
+	bh=LJ2pLNX9/A/YnCNJEv8/2x5aDNTiy3gQMHFL8Gu0AKc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=DTn256bNxmoMUudwCAtchZT8b9yAbMSkDsEJTe3lKn1LQQwZA9mm9D2/M4hU2t6Kf5QuwPJCKm1KgjKz87ik7fkXT8GmcnGdEmXB//zr/LOXEXekVQzusSQ+6o6sEUmg/C7VZd6A+8d2Dt7UffNk6VYeE1rU0OgORRWw44bB2SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=FmQiax15; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="na/vulXX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743442497; x=1774978497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H6XhfcM8+zvk/bd4cJqhtQDP2Ar0dNpqo+MKPNGNO4U=;
-  b=na/vulXXXYv7PkegChwsEuZ0IfBNxY6Wb++uznZb/3davBlS/v/+K3wK
-   c+PCrv52T61aakD/TFQWPSX7rx5bBw28x/vqvwBWvkIg8WhY2UMRKsgHQ
-   iocWrK418rMppR7zidA1dWcMsCDJ2lca1dRMgdZ/m8/MMYQhiw9rXBVxw
-   K1qa+ClVSfPr5xokHio4IgkVE4EoDC344APe+kc0qdtDl4u8RMymL5mPS
-   zFx+z2zE+cNzYOwREBzu2aGHiGtVz7NS4b9f0rkh1Vr6XaDB2M40PAKLQ
-   mww0XUL5S2kkQ7gDPqXAax+I9J+7adVwDm6buSvHLAHjjW7ilB9hh2ol7
-   A==;
-X-CSE-ConnectionGUID: IrR0S1iKQ62J708w3g6qoQ==
-X-CSE-MsgGUID: hUxN1JIPTeGPfvP+HrkdoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11390"; a="44652433"
-X-IronPort-AV: E=Sophos;i="6.14,291,1736841600"; 
-   d="scan'208";a="44652433"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2025 10:34:40 -0700
-X-CSE-ConnectionGUID: LR864KQ1TJixdxDWZ50DlA==
-X-CSE-MsgGUID: AbEV+Wp6RFG72Nx+i3U4Mg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,291,1736841600"; 
-   d="scan'208";a="126145831"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 31 Mar 2025 10:34:40 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tzJ1u-0009Mm-2I;
-	Mon, 31 Mar 2025 17:34:35 +0000
-Date: Tue, 1 Apr 2025 01:33:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Taehee Yoo <ap420073@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC net-next 1/2] eth: bnxt: refactor buffer descriptor
-Message-ID: <202504010152.IPLHfrBc-lkp@intel.com>
-References: <20250331114729.594603-2-ap420073@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="FmQiax15"
+Received: from narnia (unknown [167.220.2.28])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 522DD210237E;
+	Mon, 31 Mar 2025 13:00:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 522DD210237E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1743451241;
+	bh=fIovqkBitXFZRQ//g6BuZpszSPejDeke8e/+BQorTCk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=FmQiax15Emr+HO7GFbg654Oa6oexdb9pXvdUjsUZpIuu42L0xy5p8WDzlIIDrG/5j
+	 ySOAeVcw/6yTfRgtP2xHcP8ETiFgVFrNvK7H7oHiVccAXOOgoXWtE+mxyv6C9E+s0s
+	 hnuUi9mndmMldFbdQMO+EDIff98hHWYURD2ixY18=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Howells <dhowells@redhat.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller"
+ <davem@davemloft.net>, Paul Moore <paul@paul-moore.com>, James Morris
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Shuah Khan <shuah@kernel.org>, =?utf-8?Q?Mick?=
+ =?utf-8?Q?a=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Nick
+ Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jan Stancek <jstancek@redhat.com>,
+ Neal Gompa <neal@gompa.dev>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, nkapron@google.com,
+ teknoraver@meta.com, roberto.sassu@huawei.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH security-next 2/4] hornet: Introduce sign-ebpf
+In-Reply-To: <Z97y578XhzkTt0mK@kernel.org>
+References: <20250321164537.16719-1-bboscaccy@linux.microsoft.com>
+ <20250321164537.16719-3-bboscaccy@linux.microsoft.com>
+ <Z97y578XhzkTt0mK@kernel.org>
+Date: Mon, 31 Mar 2025 13:00:29 -0700
+Message-ID: <87cydx6kde.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250331114729.594603-2-ap420073@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Taehee,
+Jarkko Sakkinen <jarkko@kernel.org> writes:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
+> On Fri, Mar 21, 2025 at 09:45:04AM -0700, Blaise Boscaccy wrote:
+>> This introduces the sign-ebpf tool. It is very similar to the existing
+>> sign-file script, with one key difference, it will sign a file with
+>> with a signature computed off of arbitrary input data. This can used
+>> to sign an ebpf light skeleton loader program for verification via
+>> hornet.
+>>=20
+>> Typical usage is to provide a payload containing the lskel ebpf
+>> syscall program binary and it's associated maps, which can be
+>> extracted from the auto-generated skel header.
+>>=20
+>> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+>> ---
+>>  scripts/Makefile           |   1 +
+>>  scripts/hornet/Makefile    |   5 +
+>>  scripts/hornet/sign-ebpf.c | 420 +++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 426 insertions(+)
+>>  create mode 100644 scripts/hornet/Makefile
+>>  create mode 100644 scripts/hornet/sign-ebpf.c
+>>=20
+>> diff --git a/scripts/Makefile b/scripts/Makefile
+>> index 46f860529df5e..a2cace05d7342 100644
+>> --- a/scripts/Makefile
+>> +++ b/scripts/Makefile
+>> @@ -57,6 +57,7 @@ subdir-$(CONFIG_GENKSYMS) +=3D genksyms
+>>  subdir-$(CONFIG_GENDWARFKSYMS) +=3D gendwarfksyms
+>>  subdir-$(CONFIG_SECURITY_SELINUX) +=3D selinux
+>>  subdir-$(CONFIG_SECURITY_IPE) +=3D ipe
+>> +subdir-$(CONFIG_SECURITY_HORNET) +=3D hornet
+>>=20=20
+>>  # Let clean descend into subdirs
+>>  subdir-	+=3D basic dtc gdb kconfig mod
+>> diff --git a/scripts/hornet/Makefile b/scripts/hornet/Makefile
+>> new file mode 100644
+>> index 0000000000000..ab71dbb8688e4
+>> --- /dev/null
+>> +++ b/scripts/hornet/Makefile
+>> @@ -0,0 +1,5 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +hostprogs-always-y	:=3D sign-ebpf
+>> +
+>> +HOSTCFLAGS_sign-ebpf.o =3D $(shell $(HOSTPKG_CONFIG) --cflags libcrypto=
+ 2> /dev/null)
+>> +HOSTLDLIBS_sign-ebpf =3D $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> =
+/dev/null || echo -lcrypto)
+>> diff --git a/scripts/hornet/sign-ebpf.c b/scripts/hornet/sign-ebpf.c
+>> new file mode 100644
+>> index 0000000000000..ff98fddb79a15
+>> --- /dev/null
+>> +++ b/scripts/hornet/sign-ebpf.c
+>> @@ -0,0 +1,420 @@
+>> +/* Sign ebpf programs and skeletons using the given key.
+>> + *
+>> + * This program is heavily based on the kernel's sign-file tool
+>> + * with some minor additions to support the signing of eBPF lskels.
+>> + *
+>> + * Copyright =C2=A9 2014-2016 Red Hat, Inc. All Rights Reserved.
+>> + * Copyright =C2=A9 2015      Intel Corporation.
+>> + * Copyright =C2=A9 2016      Hewlett Packard Enterprise Development LP
+>> + * Copyright =C2=A9 2025      Microsoft Corporation.
+>> + *
+>> + * Authors: David Howells <dhowells@redhat.com>
+>> + *          David Woodhouse <dwmw2@infradead.org>
+>> + *          Juerg Haefliger <juerg.haefliger@hpe.com>
+>> + *          Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+>
+> I don't think that for new code ad-hoc authors lists in source code
+> make any sense.
+>
+>
 
-[auto build test WARNING on net-next/main]
+I'll remove that. This script is mostly copy-paste of sign-file with
+some new args and usage. I'll leave the copywrite and nuke the author
+list.=20
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Taehee-Yoo/eth-bnxt-add-support-rx-side-device-memory-TCP/20250331-204815
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250331114729.594603-2-ap420073%40gmail.com
-patch subject: [RFC net-next 1/2] eth: bnxt: refactor buffer descriptor
-config: x86_64-buildonly-randconfig-003-20250331 (https://download.01.org/0day-ci/archive/20250401/202504010152.IPLHfrBc-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250401/202504010152.IPLHfrBc-lkp@intel.com/reproduce)
+>> + *
+>> + * This program is free software; you can redistribute it and/or
+>> + * modify it under the terms of the GNU Lesser General Public License
+>> + * as published by the Free Software Foundation; either version 2.1
+>> + * of the licence, or (at your option) any later version.
+>
+> Redundant given SPDX.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504010152.IPLHfrBc-lkp@intel.com/
+Sounds good.=20
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:1236:14: warning: variable 'mapping' set but not used [-Wunused-but-set-variable]
-    1236 |                 dma_addr_t mapping;
-         |                            ^
->> drivers/net/ethernet/broadcom/bnxt/bnxt.c:1385:6: warning: variable 'data' set but not used [-Wunused-but-set-variable]
-    1385 |         u8 *data = xdp->data;
-         |             ^
-   drivers/net/ethernet/broadcom/bnxt/bnxt.c:1802:13: warning: variable 'mapping' set but not used [-Wunused-but-set-variable]
-    1802 |         dma_addr_t mapping;
-         |                    ^
-   3 warnings generated.
---
->> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:219:18: warning: variable 'pdev' set but not used [-Wunused-but-set-variable]
-     219 |         struct pci_dev *pdev;
-         |                         ^
-   1 warning generated.
-
-
-vim +/mapping +1236 drivers/net/ethernet/broadcom/bnxt/bnxt.c
-
-c0c050c58d8409 Michael Chan    2015-10-22  1212  
-23e4c0469ad03f Andy Gospodarek 2022-04-08  1213  static u32 __bnxt_rx_agg_pages(struct bnxt *bp,
-e44758b78ae814 Michael Chan    2018-10-14  1214  			       struct bnxt_cp_ring_info *cpr,
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1215  			       struct skb_shared_info *shinfo,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1216  			       u16 idx, u32 agg_bufs, bool tpa,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1217  			       struct xdp_buff *xdp)
-c0c050c58d8409 Michael Chan    2015-10-22  1218  {
-e44758b78ae814 Michael Chan    2018-10-14  1219  	struct bnxt_napi *bnapi = cpr->bnapi;
-431e37cd471b9e Taehee Yoo      2025-03-31  1220  	struct bnxt_rx_ring_info *rxr;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1221  	u32 i, total_frag_len = 0;
-bfcd8d791ec184 Michael Chan    2019-07-29  1222  	bool p5_tpa = false;
-431e37cd471b9e Taehee Yoo      2025-03-31  1223  	u16 prod;
-431e37cd471b9e Taehee Yoo      2025-03-31  1224  
-431e37cd471b9e Taehee Yoo      2025-03-31  1225  	rxr = bnapi->rx_ring;
-431e37cd471b9e Taehee Yoo      2025-03-31  1226  	prod = rxr->rx_agg_prod;
-c0c050c58d8409 Michael Chan    2015-10-22  1227  
-1c7fd6ee2fe4ec Randy Schacher  2023-11-20  1228  	if ((bp->flags & BNXT_FLAG_CHIP_P5_PLUS) && tpa)
-bfcd8d791ec184 Michael Chan    2019-07-29  1229  		p5_tpa = true;
-bfcd8d791ec184 Michael Chan    2019-07-29  1230  
-c0c050c58d8409 Michael Chan    2015-10-22  1231  	for (i = 0; i < agg_bufs; i++) {
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1232  		skb_frag_t *frag = &shinfo->frags[i];
-431e37cd471b9e Taehee Yoo      2025-03-31  1233  		struct bnxt_sw_rx_bd *cons_rx_buf;
-c0c050c58d8409 Michael Chan    2015-10-22  1234  		struct rx_agg_cmp *agg;
-431e37cd471b9e Taehee Yoo      2025-03-31  1235  		u16 cons, frag_len;
-c0c050c58d8409 Michael Chan    2015-10-22 @1236  		dma_addr_t mapping;
-431e37cd471b9e Taehee Yoo      2025-03-31  1237  		struct page *page;
-c0c050c58d8409 Michael Chan    2015-10-22  1238  
-bfcd8d791ec184 Michael Chan    2019-07-29  1239  		if (p5_tpa)
-bfcd8d791ec184 Michael Chan    2019-07-29  1240  			agg = bnxt_get_tpa_agg_p5(bp, rxr, idx, i);
-bfcd8d791ec184 Michael Chan    2019-07-29  1241  		else
-4a228a3a5e58e5 Michael Chan    2019-07-29  1242  			agg = bnxt_get_agg(bp, cpr, idx, i);
-c0c050c58d8409 Michael Chan    2015-10-22  1243  		cons = agg->rx_agg_cmp_opaque;
-c0c050c58d8409 Michael Chan    2015-10-22  1244  		frag_len = (le32_to_cpu(agg->rx_agg_cmp_len_flags_type) &
-c0c050c58d8409 Michael Chan    2015-10-22  1245  			    RX_AGG_CMP_LEN) >> RX_AGG_CMP_LEN_SHIFT;
-c0c050c58d8409 Michael Chan    2015-10-22  1246  
-c0c050c58d8409 Michael Chan    2015-10-22  1247  		cons_rx_buf = &rxr->rx_agg_ring[cons];
-b51f4113ebb020 Yunsheng Lin    2023-05-11  1248  		skb_frag_fill_page_desc(frag, cons_rx_buf->page,
-b51f4113ebb020 Yunsheng Lin    2023-05-11  1249  					cons_rx_buf->offset, frag_len);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1250  		shinfo->nr_frags = i + 1;
-c0c050c58d8409 Michael Chan    2015-10-22  1251  		__clear_bit(cons, rxr->rx_agg_bmap);
-c0c050c58d8409 Michael Chan    2015-10-22  1252  
-431e37cd471b9e Taehee Yoo      2025-03-31  1253  		/* It is possible for bnxt_alloc_rx_agg_page() to allocate
-c0c050c58d8409 Michael Chan    2015-10-22  1254  		 * a sw_prod index that equals the cons index, so we
-c0c050c58d8409 Michael Chan    2015-10-22  1255  		 * need to clear the cons entry now.
-c0c050c58d8409 Michael Chan    2015-10-22  1256  		 */
-11cd119d31a71b Michael Chan    2017-02-06  1257  		mapping = cons_rx_buf->mapping;
-c0c050c58d8409 Michael Chan    2015-10-22  1258  		page = cons_rx_buf->page;
-c0c050c58d8409 Michael Chan    2015-10-22  1259  		cons_rx_buf->page = NULL;
-c0c050c58d8409 Michael Chan    2015-10-22  1260  
-31b9998bf225ec Andy Gospodarek 2022-04-08  1261  		if (xdp && page_is_pfmemalloc(page))
-31b9998bf225ec Andy Gospodarek 2022-04-08  1262  			xdp_buff_set_frag_pfmemalloc(xdp);
-31b9998bf225ec Andy Gospodarek 2022-04-08  1263  
-431e37cd471b9e Taehee Yoo      2025-03-31  1264  		if (bnxt_alloc_rx_agg_page(bp, rxr, prod, GFP_ATOMIC) != 0) {
-278fda0d52f672 Yunsheng Lin    2023-05-11  1265  			--shinfo->nr_frags;
-c0c050c58d8409 Michael Chan    2015-10-22  1266  			cons_rx_buf->page = page;
-c0c050c58d8409 Michael Chan    2015-10-22  1267  
-c0c050c58d8409 Michael Chan    2015-10-22  1268  			/* Update prod since possibly some pages have been
-c0c050c58d8409 Michael Chan    2015-10-22  1269  			 * allocated already.
-c0c050c58d8409 Michael Chan    2015-10-22  1270  			 */
-c0c050c58d8409 Michael Chan    2015-10-22  1271  			rxr->rx_agg_prod = prod;
-4a228a3a5e58e5 Michael Chan    2019-07-29  1272  			bnxt_reuse_rx_agg_bufs(cpr, idx, i, agg_bufs - i, tpa);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1273  			return 0;
-c0c050c58d8409 Michael Chan    2015-10-22  1274  		}
-c0c050c58d8409 Michael Chan    2015-10-22  1275  
-431e37cd471b9e Taehee Yoo      2025-03-31  1276  		page_pool_dma_sync_for_cpu(rxr->page_pool, page, 0,
-431e37cd471b9e Taehee Yoo      2025-03-31  1277  					   BNXT_RX_PAGE_SIZE);
-c0c050c58d8409 Michael Chan    2015-10-22  1278  
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1279  		total_frag_len += frag_len;
-c0c050c58d8409 Michael Chan    2015-10-22  1280  		prod = NEXT_RX_AGG(prod);
-c0c050c58d8409 Michael Chan    2015-10-22  1281  	}
-c0c050c58d8409 Michael Chan    2015-10-22  1282  	rxr->rx_agg_prod = prod;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1283  	return total_frag_len;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1284  }
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1285  
-23e4c0469ad03f Andy Gospodarek 2022-04-08  1286  static struct sk_buff *bnxt_rx_agg_pages_skb(struct bnxt *bp,
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1287  					     struct bnxt_cp_ring_info *cpr,
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1288  					     struct sk_buff *skb, u16 idx,
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1289  					     u32 agg_bufs, bool tpa)
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1290  {
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1291  	struct skb_shared_info *shinfo = skb_shinfo(skb);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1292  	u32 total_frag_len = 0;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1293  
-31b9998bf225ec Andy Gospodarek 2022-04-08  1294  	total_frag_len = __bnxt_rx_agg_pages(bp, cpr, shinfo, idx,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1295  					     agg_bufs, tpa, NULL);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1296  	if (!total_frag_len) {
-86b05508f7759f Somnath Kotur   2023-08-17  1297  		skb_mark_for_recycle(skb);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1298  		dev_kfree_skb(skb);
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1299  		return NULL;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1300  	}
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1301  
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1302  	skb->data_len += total_frag_len;
-ca1df2dd8e2f2c Andy Gospodarek 2022-04-08  1303  	skb->len += total_frag_len;
-f6974b4c2d8e10 Somnath Kotur   2023-07-31  1304  	skb->truesize += BNXT_RX_PAGE_SIZE * agg_bufs;
-c0c050c58d8409 Michael Chan    2015-10-22  1305  	return skb;
-c0c050c58d8409 Michael Chan    2015-10-22  1306  }
-c0c050c58d8409 Michael Chan    2015-10-22  1307  
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1308  static u32 bnxt_rx_agg_pages_xdp(struct bnxt *bp,
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1309  				 struct bnxt_cp_ring_info *cpr,
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1310  				 struct xdp_buff *xdp, u16 idx,
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1311  				 u32 agg_bufs, bool tpa)
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1312  {
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1313  	struct skb_shared_info *shinfo = xdp_get_shared_info_from_buff(xdp);
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1314  	u32 total_frag_len = 0;
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1315  
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1316  	if (!xdp_buff_has_frags(xdp))
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1317  		shinfo->nr_frags = 0;
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1318  
-31b9998bf225ec Andy Gospodarek 2022-04-08  1319  	total_frag_len = __bnxt_rx_agg_pages(bp, cpr, shinfo,
-31b9998bf225ec Andy Gospodarek 2022-04-08  1320  					     idx, agg_bufs, tpa, xdp);
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1321  	if (total_frag_len) {
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1322  		xdp_buff_set_frags_flag(xdp);
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1323  		shinfo->nr_frags = agg_bufs;
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1324  		shinfo->xdp_frags_size = total_frag_len;
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1325  	}
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1326  	return total_frag_len;
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1327  }
-4c6c123c9af9c9 Andy Gospodarek 2022-04-08  1328  
-c0c050c58d8409 Michael Chan    2015-10-22  1329  static int bnxt_agg_bufs_valid(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
-c0c050c58d8409 Michael Chan    2015-10-22  1330  			       u8 agg_bufs, u32 *raw_cons)
-c0c050c58d8409 Michael Chan    2015-10-22  1331  {
-c0c050c58d8409 Michael Chan    2015-10-22  1332  	u16 last;
-c0c050c58d8409 Michael Chan    2015-10-22  1333  	struct rx_agg_cmp *agg;
-c0c050c58d8409 Michael Chan    2015-10-22  1334  
-c0c050c58d8409 Michael Chan    2015-10-22  1335  	*raw_cons = ADV_RAW_CMP(*raw_cons, agg_bufs);
-c0c050c58d8409 Michael Chan    2015-10-22  1336  	last = RING_CMP(*raw_cons);
-c0c050c58d8409 Michael Chan    2015-10-22  1337  	agg = (struct rx_agg_cmp *)
-c0c050c58d8409 Michael Chan    2015-10-22  1338  		&cpr->cp_desc_ring[CP_RING(last)][CP_IDX(last)];
-c0c050c58d8409 Michael Chan    2015-10-22  1339  	return RX_AGG_CMP_VALID(agg, *raw_cons);
-c0c050c58d8409 Michael Chan    2015-10-22  1340  }
-c0c050c58d8409 Michael Chan    2015-10-22  1341  
-431e37cd471b9e Taehee Yoo      2025-03-31  1342  static struct sk_buff *bnxt_copy_data(struct bnxt_napi *bnapi,
-431e37cd471b9e Taehee Yoo      2025-03-31  1343  				      struct page *page,
-431e37cd471b9e Taehee Yoo      2025-03-31  1344  				      unsigned int offset,
-431e37cd471b9e Taehee Yoo      2025-03-31  1345  				      unsigned int len)
-c0c050c58d8409 Michael Chan    2015-10-22  1346  {
-431e37cd471b9e Taehee Yoo      2025-03-31  1347  	struct bnxt_rx_ring_info *rxr = bnapi->rx_ring;
-c0c050c58d8409 Michael Chan    2015-10-22  1348  	struct bnxt *bp = bnapi->bp;
-c0c050c58d8409 Michael Chan    2015-10-22  1349  	struct sk_buff *skb;
-c0c050c58d8409 Michael Chan    2015-10-22  1350  
-c0c050c58d8409 Michael Chan    2015-10-22  1351  	skb = napi_alloc_skb(&bnapi->napi, len);
-c0c050c58d8409 Michael Chan    2015-10-22  1352  	if (!skb)
-c0c050c58d8409 Michael Chan    2015-10-22  1353  		return NULL;
-c0c050c58d8409 Michael Chan    2015-10-22  1354  
-431e37cd471b9e Taehee Yoo      2025-03-31  1355  	page_pool_dma_sync_for_cpu(rxr->head_pool, page,
-431e37cd471b9e Taehee Yoo      2025-03-31  1356  				   offset + bp->rx_dma_offset,
-431e37cd471b9e Taehee Yoo      2025-03-31  1357  				   bp->rx_copybreak);
-c0c050c58d8409 Michael Chan    2015-10-22  1358  
-431e37cd471b9e Taehee Yoo      2025-03-31  1359  	memcpy(skb->data - NET_IP_ALIGN,
-431e37cd471b9e Taehee Yoo      2025-03-31  1360  	       bnxt_data_ptr(bp, page, offset) - NET_IP_ALIGN,
-6bb19474391d17 Michael Chan    2017-02-06  1361  	       len + NET_IP_ALIGN);
-c0c050c58d8409 Michael Chan    2015-10-22  1362  
-431e37cd471b9e Taehee Yoo      2025-03-31  1363  	page_pool_dma_sync_for_device(rxr->head_pool, page_to_netmem(page),
-431e37cd471b9e Taehee Yoo      2025-03-31  1364  				      bp->rx_dma_offset, bp->rx_copybreak);
-c0c050c58d8409 Michael Chan    2015-10-22  1365  	skb_put(skb, len);
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1366  
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1367  	return skb;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1368  }
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1369  
-431e37cd471b9e Taehee Yoo      2025-03-31  1370  static struct sk_buff *bnxt_copy_skb(struct bnxt_napi *bnapi,
-431e37cd471b9e Taehee Yoo      2025-03-31  1371  				     struct page *page,
-431e37cd471b9e Taehee Yoo      2025-03-31  1372  				     unsigned int offset,
-431e37cd471b9e Taehee Yoo      2025-03-31  1373  				     unsigned int len)
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1374  {
-431e37cd471b9e Taehee Yoo      2025-03-31  1375  	return bnxt_copy_data(bnapi, page, offset, len);
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1376  }
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1377  
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1378  static struct sk_buff *bnxt_copy_xdp(struct bnxt_napi *bnapi,
-431e37cd471b9e Taehee Yoo      2025-03-31  1379  				     struct page *page,
-431e37cd471b9e Taehee Yoo      2025-03-31  1380  				     unsigned int offset,
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1381  				     struct xdp_buff *xdp,
-431e37cd471b9e Taehee Yoo      2025-03-31  1382  				     unsigned int len)
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1383  {
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1384  	unsigned int metasize = 0;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02 @1385  	u8 *data = xdp->data;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1386  	struct sk_buff *skb;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1387  
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1388  	len = xdp->data_end - xdp->data_meta;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1389  	metasize = xdp->data - xdp->data_meta;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1390  	data = xdp->data_meta;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1391  
-431e37cd471b9e Taehee Yoo      2025-03-31  1392  	skb = bnxt_copy_data(bnapi, page, offset, len);
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1393  	if (!skb)
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1394  		return skb;
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1395  
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1396  	if (metasize) {
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1397  		skb_metadata_set(skb, metasize);
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1398  		__skb_pull(skb, metasize);
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1399  	}
-0ae1fafc8be6d4 Somnath Kotur   2024-04-02  1400  
-c0c050c58d8409 Michael Chan    2015-10-22  1401  	return skb;
-c0c050c58d8409 Michael Chan    2015-10-22  1402  }
-c0c050c58d8409 Michael Chan    2015-10-22  1403  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> + */
+>> +#define _GNU_SOURCE
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <stdint.h>
+>> +#include <stdbool.h>
+>> +#include <string.h>
+>> +#include <getopt.h>
+>> +#include <err.h>
+>> +#include <arpa/inet.h>
+>> +#include <openssl/opensslv.h>
+>> +#include <openssl/bio.h>
+>> +#include <openssl/evp.h>
+>> +#include <openssl/pem.h>
+>> +#include <openssl/err.h>
+>> +#if OPENSSL_VERSION_MAJOR >=3D 3
+>> +# define USE_PKCS11_PROVIDER
+>> +# include <openssl/provider.h>
+>> +# include <openssl/store.h>
+>> +#else
+>> +# if !defined(OPENSSL_NO_ENGINE) && !defined(OPENSSL_NO_DEPRECATED_3_0)
+>> +#  define USE_PKCS11_ENGINE
+>> +#  include <openssl/engine.h>
+>> +# endif
+>> +#endif
+>> +#include "../ssl-common.h"
+>> +
+>> +/*
+>> + * Use CMS if we have openssl-1.0.0 or newer available - otherwise we h=
+ave to
+>> + * assume that it's not available and its header file is missing and th=
+at we
+>> + * should use PKCS#7 instead.  Switching to the older PKCS#7 format res=
+tricts
+>> + * the options we have on specifying the X.509 certificate we want.
+>> + *
+>> + * Further, older versions of OpenSSL don't support manually adding sig=
+ners to
+>> + * the PKCS#7 message so have to accept that we get a certificate inclu=
+ded in
+>> + * the signature message.  Nor do such older versions of OpenSSL support
+>> + * signing with anything other than SHA1 - so we're stuck with that if =
+such is
+>> + * the case.
+>> + */
+>> +#if defined(LIBRESSL_VERSION_NUMBER) || \
+>> +	OPENSSL_VERSION_NUMBER < 0x10000000L || \
+>> +	defined(OPENSSL_NO_CMS)
+>> +#define USE_PKCS7
+>> +#endif
+>> +#ifndef USE_PKCS7
+>> +#include <openssl/cms.h>
+>> +#else
+>> +#include <openssl/pkcs7.h>
+>> +#endif
+>> +
+>> +struct module_signature {
+>> +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
+>> +	uint8_t		hash;		/* Digest algorithm [0] */
+>> +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+>> +	uint8_t		signer_len;	/* Length of signer's name [0] */
+>> +	uint8_t		key_id_len;	/* Length of key identifier [0] */
+>> +	uint8_t		__pad[3];
+>> +	uint32_t	sig_len;	/* Length of signature data */
+>> +};
+>> +
+>> +#define PKEY_ID_PKCS7 2
+>> +
+>> +static char magic_number[] =3D "~eBPF signature appended~\n";
+>> +
+>> +static __attribute__((noreturn))
+>> +void format(void)
+>> +{
+>> +	fprintf(stderr,
+>> +		"Usage: scripts/sign-ebpf [-dp] <hash algo> <key> <x509> <bin> <loade=
+r> [<dest>]\n");
+>> +	exit(2);
+>> +}
+>> +
+>> +static const char *key_pass;
+>> +
+>> +static int pem_pw_cb(char *buf, int len, int w, void *v)
+>> +{
+>> +	int pwlen;
+>> +
+>> +	if (!key_pass)
+>> +		return -1;
+>> +
+>> +	pwlen =3D strlen(key_pass);
+>> +	if (pwlen >=3D len)
+>> +		return -1;
+>> +
+>> +	strcpy(buf, key_pass);
+>> +
+>> +	/* If it's wrong, don't keep trying it. */
+>> +	key_pass =3D NULL;
+>> +
+>> +	return pwlen;
+>> +}
+>> +
+>> +static EVP_PKEY *read_private_key_pkcs11(const char *private_key_name)
+>> +{
+>> +	EVP_PKEY *private_key =3D NULL;
+>> +#ifdef USE_PKCS11_PROVIDER
+>> +	OSSL_STORE_CTX *store;
+>> +
+>> +	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
+>> +		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
+>> +	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
+>> +		ERR(1, "OSSL_PROVIDER_try_load(default)");
+>> +
+>> +	store =3D OSSL_STORE_open(private_key_name, NULL, NULL, NULL, NULL);
+>> +	ERR(!store, "OSSL_STORE_open");
+>> +
+>> +	while (!OSSL_STORE_eof(store)) {
+>> +		OSSL_STORE_INFO *info =3D OSSL_STORE_load(store);
+>> +
+>> +		if (!info) {
+>> +			drain_openssl_errors(__LINE__, 0);
+>> +			continue;
+>> +		}
+>> +		if (OSSL_STORE_INFO_get_type(info) =3D=3D OSSL_STORE_INFO_PKEY) {
+>> +			private_key =3D OSSL_STORE_INFO_get1_PKEY(info);
+>> +			ERR(!private_key, "OSSL_STORE_INFO_get1_PKEY");
+>> +		}
+>> +		OSSL_STORE_INFO_free(info);
+>> +		if (private_key)
+>> +			break;
+>> +	}
+>> +	OSSL_STORE_close(store);
+>> +#elif defined(USE_PKCS11_ENGINE)
+>> +	ENGINE *e;
+>> +
+>> +	ENGINE_load_builtin_engines();
+>> +	drain_openssl_errors(__LINE__, 1);
+>> +	e =3D ENGINE_by_id("pkcs11");
+>> +	ERR(!e, "Load PKCS#11 ENGINE");
+>> +	if (ENGINE_init(e))
+>> +		drain_openssl_errors(__LINE__, 1);
+>> +	else
+>> +		ERR(1, "ENGINE_init");
+>> +	if (key_pass)
+>> +		ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0), "Set PKCS#11 PIN"=
+);
+>> +	private_key =3D ENGINE_load_private_key(e, private_key_name, NULL, NUL=
+L);
+>> +	ERR(!private_key, "%s", private_key_name);
+>> +#else
+>> +	fprintf(stderr, "no pkcs11 engine/provider available\n");
+>> +	exit(1);
+>> +#endif
+>> +	return private_key;
+>> +}
+>> +
+>> +static EVP_PKEY *read_private_key(const char *private_key_name)
+>> +{
+>> +	if (!strncmp(private_key_name, "pkcs11:", 7)) {
+>> +		return read_private_key_pkcs11(private_key_name);
+>> +	} else {
+>> +		EVP_PKEY *private_key;
+>> +		BIO *b;
+>> +
+>> +		b =3D BIO_new_file(private_key_name, "rb");
+>> +		ERR(!b, "%s", private_key_name);
+>> +		private_key =3D PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
+>> +						      NULL);
+>> +		ERR(!private_key, "%s", private_key_name);
+>> +		BIO_free(b);
+>> +
+>> +		return private_key;
+>> +	}
+>> +}
+>> +
+>> +static X509 *read_x509(const char *x509_name)
+>> +{
+>> +	unsigned char buf[2];
+>> +	X509 *x509;
+>> +	BIO *b;
+>> +	int n;
+>> +
+>> +	b =3D BIO_new_file(x509_name, "rb");
+>> +	ERR(!b, "%s", x509_name);
+>> +
+>> +	/* Look at the first two bytes of the file to determine the encoding */
+>> +	n =3D BIO_read(b, buf, 2);
+>> +	if (n !=3D 2) {
+>> +		if (BIO_should_retry(b)) {
+>> +			fprintf(stderr, "%s: Read wanted retry\n", x509_name);
+>> +			exit(1);
+>> +		}
+>> +		if (n >=3D 0) {
+>> +			fprintf(stderr, "%s: Short read\n", x509_name);
+>> +			exit(1);
+>> +		}
+>> +		ERR(1, "%s", x509_name);
+>> +	}
+>> +
+>> +	ERR(BIO_reset(b) !=3D 0, "%s", x509_name);
+>> +
+>> +	if (buf[0] =3D=3D 0x30 && buf[1] >=3D 0x81 && buf[1] <=3D 0x84)
+>> +		/* Assume raw DER encoded X.509 */
+>> +		x509 =3D d2i_X509_bio(b, NULL);
+>> +	else
+>> +		/* Assume PEM encoded X.509 */
+>> +		x509 =3D PEM_read_bio_X509(b, NULL, NULL, NULL);
+>> +
+>> +	BIO_free(b);
+>> +	ERR(!x509, "%s", x509_name);
+>> +
+>> +	return x509;
+>> +}
+>> +
+>> +int main(int argc, char **argv)
+>> +{
+>> +	struct module_signature sig_info =3D { .id_type =3D PKEY_ID_PKCS7 };
+>> +	char *hash_algo =3D NULL;
+>> +	char *private_key_name =3D NULL, *raw_sig_name =3D NULL;
+>> +	char *x509_name, *bin_name, *loader_name, *dest_name;
+>> +	bool save_sig =3D false, replace_orig;
+>> +	bool sign_only =3D false;
+>> +	bool raw_sig =3D false;
+>> +	unsigned char buf[4096];
+>> +	unsigned long loader_size, sig_size;
+>> +	unsigned int use_signed_attrs;
+>> +	const EVP_MD *digest_algo;
+>> +	EVP_PKEY *private_key;
+>> +#ifndef USE_PKCS7
+>> +	CMS_ContentInfo *cms =3D NULL;
+>> +	unsigned int use_keyid =3D 0;
+>> +#else
+>> +	PKCS7 *pkcs7 =3D NULL;
+>> +#endif
+>> +	X509 *x509;
+>> +	BIO *bd, *bm, *bl;
+>> +	int opt, n;
+>> +	OpenSSL_add_all_algorithms();
+>> +	ERR_load_crypto_strings();
+>> +	ERR_clear_error();
+>> +
+>> +	key_pass =3D getenv("KBUILD_SIGN_PIN");
+>> +
+>> +#ifndef USE_PKCS7
+>> +	use_signed_attrs =3D CMS_NOATTR;
+>> +#else
+>> +	use_signed_attrs =3D PKCS7_NOATTR;
+>> +#endif
+>> +
+>> +	do {
+>> +		opt =3D getopt(argc, argv, "sdpk");
+>> +		switch (opt) {
+>> +		case 's': raw_sig =3D true; break;
+>> +		case 'p': save_sig =3D true; break;
+>> +		case 'd': sign_only =3D true; save_sig =3D true; break;
+>> +#ifndef USE_PKCS7
+>> +		case 'k': use_keyid =3D CMS_USE_KEYID; break;
+>> +#endif
+>> +		case -1: break;
+>> +		default: format();
+>> +		}
+>> +	} while (opt !=3D -1);
+>> +
+>> +	argc -=3D optind;
+>> +	argv +=3D optind;
+>> +	if (argc < 5 || argc > 6)
+>> +		format();
+>> +
+>> +	if (raw_sig) {
+>> +		raw_sig_name =3D argv[0];
+>> +		hash_algo =3D argv[1];
+>> +	} else {
+>> +		hash_algo =3D argv[0];
+>> +		private_key_name =3D argv[1];
+>> +	}
+>> +	x509_name =3D argv[2];
+>> +	bin_name =3D argv[3];
+>> +	loader_name =3D argv[4];
+>> +	if (argc =3D=3D 6 && strcmp(argv[4], argv[5]) !=3D 0) {
+>> +		dest_name =3D argv[5];
+>> +		replace_orig =3D false;
+>> +	} else {
+>> +		ERR(asprintf(&dest_name, "%s.~signed~", loader_name) < 0,
+>> +		    "asprintf");
+>> +		replace_orig =3D true;
+>> +	}
+>> +
+>> +#ifdef USE_PKCS7
+>> +	if (strcmp(hash_algo, "sha1") !=3D 0) {
+>> +		fprintf(stderr, "sign-file: %s only supports SHA1 signing\n",
+>> +			OPENSSL_VERSION_TEXT);
+>> +		exit(3);
+>> +	}
+>> +#endif
+>> +
+>> +	/* Open the bin file */
+>> +	bm =3D BIO_new_file(bin_name, "rb");
+>> +	ERR(!bm, "%s", bin_name);
+>> +
+>> +	if (!raw_sig) {
+>> +		/* Read the private key and the X.509 cert the PKCS#7 message
+>> +		 * will point to.
+>> +		 */
+>> +		private_key =3D read_private_key(private_key_name);
+>> +		x509 =3D read_x509(x509_name);
+>> +
+>> +		/* Digest the module data. */
+>> +		OpenSSL_add_all_digests();
+>> +		drain_openssl_errors(__LINE__, 0);
+>> +		digest_algo =3D EVP_get_digestbyname(hash_algo);
+>> +		ERR(!digest_algo, "EVP_get_digestbyname");
+>> +
+>> +#ifndef USE_PKCS7
+>> +		/* Load the signature message from the digest buffer. */
+>> +		cms =3D CMS_sign(NULL, NULL, NULL, NULL,
+>> +			       CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
+>> +			       CMS_DETACHED | CMS_STREAM);
+>> +		ERR(!cms, "CMS_sign");
+>> +
+>> +		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
+>> +				     CMS_NOCERTS | CMS_BINARY |
+>> +				     CMS_NOSMIMECAP | use_keyid |
+>> +				     use_signed_attrs),
+>> +		    "CMS_add1_signer");
+>> +		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) !=3D 1,
+>> +		    "CMS_final");
+>> +
+>> +#else
+>> +		pkcs7 =3D PKCS7_sign(x509, private_key, NULL, bm,
+>> +				   PKCS7_NOCERTS | PKCS7_BINARY |
+>> +				   PKCS7_DETACHED | use_signed_attrs);
+>> +		ERR(!pkcs7, "PKCS7_sign");
+>> +#endif
+>> +
+>> +		if (save_sig) {
+>> +			char *sig_file_name;
+>> +			BIO *b;
+>> +
+>> +			ERR(asprintf(&sig_file_name, "%s.p7s", bin_name) < 0,
+>> +			    "asprintf");
+>> +			b =3D BIO_new_file(sig_file_name, "wb");
+>> +			ERR(!b, "%s", sig_file_name);
+>> +#ifndef USE_PKCS7
+>> +			ERR(i2d_CMS_bio_stream(b, cms, NULL, 0) !=3D 1,
+>> +			    "%s", sig_file_name);
+>> +#else
+>> +			ERR(i2d_PKCS7_bio(b, pkcs7) !=3D 1,
+>> +			    "%s", sig_file_name);
+>> +#endif
+>> +			BIO_free(b);
+>> +		}
+>> +
+>> +		if (sign_only) {
+>> +			BIO_free(bm);
+>> +			return 0;
+>> +		}
+>> +	}
+>> +
+>> +	/* Open the destination file now so that we can shovel the loader data
+>> +	 * across as we read it.
+>> +	 */
+>> +	bd =3D BIO_new_file(dest_name, "wb");
+>> +	ERR(!bd, "%s", dest_name);
+>> +
+>> +	bl =3D BIO_new_file(loader_name, "rb");
+>> +	ERR(!bl, "%s", loader_name);
+>> +
+>> +
+>> +	/* Append the marker and the PKCS#7 message to the destination file */
+>> +	ERR(BIO_reset(bm) < 0, "%s", bin_name);
+>> +	ERR(BIO_reset(bl) < 0, "%s", loader_name);
+>> +	while ((n =3D BIO_read(bl, buf, sizeof(buf))),
+>> +	       n > 0) {
+>> +		ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
+>> +	}
+>> +	BIO_free(bl);
+>> +	BIO_free(bm);
+>> +	ERR(n < 0, "%s", loader_name);
+>> +	loader_size =3D BIO_number_written(bd);
+>> +
+>> +	if (!raw_sig) {
+>> +#ifndef USE_PKCS7
+>> +		ERR(i2d_CMS_bio_stream(bd, cms, NULL, 0) !=3D 1, "%s", dest_name);
+>> +#else
+>> +		ERR(i2d_PKCS7_bio(bd, pkcs7) !=3D 1, "%s", dest_name);
+>> +#endif
+>> +	} else {
+>> +		BIO *b;
+>> +
+>> +		/* Read the raw signature file and write the data to the
+>> +		 * destination file
+>> +		 */
+>> +		b =3D BIO_new_file(raw_sig_name, "rb");
+>> +		ERR(!b, "%s", raw_sig_name);
+>> +		while ((n =3D BIO_read(b, buf, sizeof(buf))), n > 0)
+>> +			ERR(BIO_write(bd, buf, n) < 0, "%s", dest_name);
+>> +		BIO_free(b);
+>> +	}
+>> +
+>> +	sig_size =3D BIO_number_written(bd) - loader_size;
+>> +	sig_info.sig_len =3D htonl(sig_size);
+>> +	ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
+>> +	ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", d=
+est_name);
+>> +
+>> +	ERR(BIO_free(bd) !=3D 1, "%s", dest_name);
+>> +
+>> +	/* Finally, if we're signing in place, replace the original. */
+>> +	if (replace_orig)
+>> +		ERR(rename(dest_name, loader_name) < 0, "%s", dest_name);
+>> +
+>> +	return 0;
+>> +}
+>> --=20
+>> 2.48.1
+>>=20
+>
+> BR, Jarkko
