@@ -1,89 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8D51DF26A;
-	Mon, 31 Mar 2025 10:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5871E104E;
+	Mon, 31 Mar 2025 11:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743416799; cv=none; b=J4TLaoF3L0UkFJPKmddp1G75c53k2RrVgKPRaspYzzhwUcJg/f+RQzzCvnjUasq43AGJ+Ahy9cLCSft4Ek/ezYXTRtNtDWYCQmApYMKrWDTznqKcyBJ0eQdL+mdp4V2huVNfNQ+Sm8MLW+widjVdexlbAN8XvvlqQTfq7cUgj+c=
+	t=1743422186; cv=none; b=sXecmRNKt0OlusZPbj2l3Rmx6TkHnKGxtSLbcea4DTO6ViWhV9KZ+RrlAQrvA8+w7YiFAnvNbg8akXzdM0eWHPNre6L9cV3AZrVVzC2C9u/IVT4Ps8GBLR4sE6Y31fReHJcZYuLhBkHptgmQz0rO4SA4YVc4Y0af7Qbvm8k4l5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743416799; c=relaxed/simple;
-	bh=4YXZdHVM0TkXA+0kc8GIpKW5NQU7AZ4Je/lg8aqKF/Q=;
+	s=arc-20240116; t=1743422186; c=relaxed/simple;
+	bh=+2tIP000T17A8Oc7t3JMilpXBYVfCrNZDt+OW//gigc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WWV1iVhFAJ2IW4yyT6mWt+uZS49rdqf9/WN8JSh1ieIDDA2uGVEg52iXXjMkCBqQGBeAXN0V8M0rZPC5IVU1cjTZcYfcQ6G+S5XQFxZeKyjcASeHuHEnlhQOwVD56gmD14sCX6R0OaI6NCzPlBaQeyeDM0IBiWbUP3rSGnjt3as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNKRTAv+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKeLwxvrC0cxzWJy6YnTZpVv9WNqRLcOnj5f80V3wMogMFsMT2MtRceUz0mMdOVkxdoI9GL0282jLPnaSqkTgYS3pGQD07Tqy8DVd6Za4KRu2F0u9gsd6yMVj0YVcOx7LQw6uNReCsewTG3URZevs6v2orjBavzn+obxL5NtwQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKpUSAvL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNKRTAv+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C478CC4CEE5;
-	Mon, 31 Mar 2025 10:26:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKpUSAvL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EB87C4CEE3;
+	Mon, 31 Mar 2025 11:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743416798;
-	bh=4YXZdHVM0TkXA+0kc8GIpKW5NQU7AZ4Je/lg8aqKF/Q=;
+	s=k20201202; t=1743422186;
+	bh=+2tIP000T17A8Oc7t3JMilpXBYVfCrNZDt+OW//gigc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SNKRTAv+gMnEVEwVPROIdVIANRJxm8LbYKcIVbFb3ADa4Tkur5F2mIuL95LZ7LZb1
-	 5fqJ0aBp2v5cFupU9A4gdGZiDQ1FWpWF3RCKNziWJG18GDcV6Jku/oKEjoRuxnV9/n
-	 tqlZBxLFrIHJZzvGETM/513c/sebuShZlti7+3NBoNv5JHNxaHW/38O4XPILpzN97I
-	 97iuaFpjHX7UB0m+lxE7N2TRS5XllBFMdKrljOLOTYBow7YWoYoVOY+uLAOAiLaGN5
-	 pBXF5L41ks0BVBoY1cpe8K/TydBaKSrGHdJwYFT4xSUwiCnyQTV/TVlvgKRxOXMEvV
-	 AeHP4P5OJqZDg==
-Date: Mon, 31 Mar 2025 12:26:21 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-edac@vger.kernel.org, kvm@vger.kernel.org,
-	xen-devel@lists.xenproject.org, linux-ide@vger.kernel.org,
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	jgross@suse.com, andrew.cooper3@citrix.com, peterz@infradead.org,
-	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, wei.liu@kernel.org,
-	ajay.kaher@broadcom.com, alexey.amakhalov@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-	pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-	luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-	haiyangz@microsoft.com, decui@microsoft.com
-Subject: Re: [RFC PATCH v1 02/15] x86/msr: Replace __rdmsr() with
- native_rdmsrl()
-Message-ID: <Z-ptzZBePzh05HQI@gmail.com>
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-3-xin@zytor.com>
+	b=jKpUSAvL1CD7IFs2UvGzkDo6iHdIfzQXRDwjWfHvPmUJXwX5VGnSEK1Dc8jjBYk/Y
+	 d/fwhHzvd1jUrQg/Pr6jlSYhv3ZOImcnFKf8CXC/qPn449d14yAFi8NkZkC8WNDVbE
+	 o8vKw8u26lGFPt26pgXotQ0+SOEgLIeQJTun+kMtKE37T6cJ12XoRp6DyfW7g1J/4s
+	 Oq9G75tUw4lGyZVDZ06iFHAhfXkEWNX8NeLhmb9q1WM47lsb/87ahYEq0qBRP1o59F
+	 J6fh9Ha6fLZQOhtzpk69py7w7LeXSzchJlb/ermD0d7mBLIu2ZHhwgqXbsEeShvoJF
+	 Rs05onYuLQpvg==
+Date: Mon, 31 Mar 2025 12:56:19 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>, Eric Biederman <ebiederm@xmission.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2 12/16] selftests: vDSO: parse_vdso: Use UAPI headers
+ instead of libc headers
+Message-ID: <708e303e-4de6-4322-8065-1dacf0cc0d53@sirena.org.uk>
+References: <20250226-parse_vdso-nolibc-v2-0-28e14e031ed8@linutronix.de>
+ <20250226-parse_vdso-nolibc-v2-12-28e14e031ed8@linutronix.de>
+ <af553c62-ca2f-4956-932c-dd6e3a126f58@sirena.org.uk>
+ <c7bea938-ee3b-477e-9ed0-db29ca02a538@sirena.org.uk>
+ <75ea2dcf-0ba3-4076-9a54-6b39e4e72a3d@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KalBa86xIdoMygpC"
+Content-Disposition: inline
+In-Reply-To: <75ea2dcf-0ba3-4076-9a54-6b39e4e72a3d@linuxfoundation.org>
+X-Cookie: The Ranger isn't gonna like it, Yogi.
+
+
+--KalBa86xIdoMygpC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250331082251.3171276-3-xin@zytor.com>
 
+On Fri, Mar 28, 2025 at 05:08:26PM -0600, Shuah Khan wrote:
+> On 3/26/25 07:02, Mark Brown wrote:
 
-* Xin Li (Intel) <xin@zytor.com> wrote:
+> > This bug is now in mainline.  A fix was posted by Thomas the day after
+> > the original report:
 
-> __rdmsr() is the lowest level primitive MSR read API, and its direct 
-> use is NOT preferred.  Use its wrapper function native_rdmsrl() 
-> instead.
+> >     https://lore.kernel.org/r/20250321-uapi-consistency-v1-1-439070118dc0@linutronix.de
 
-This description is very misleading. As of today, native_rdmsrl() 
-doesn't exist in-tree, so it cannot be 'preferred' in any fashion.
+> > but it has apparently slipped through the cracks.
 
-We have native_read_msr(), a confusingly similar function name, and 
-this changelog doesn't make it clear, at all, why the extra 
-native_rdmsrl() indirection is introduced.
+> If this is going through tip
 
-Please split this into two changes and explain them properly:
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
- - x86/msr: Add the native_rdmsrl() helper
- - x86/msr: Convert __rdmsr() uses to native_rdmsrl() uses
+> Otherwise, I can send this up
 
-For the first patch you should explain why you want an extra layer of 
-indirection within these APIs and how it relates to native_read_msr() 
-and why there is a _read_msr() and a _rdmsr() variant...
+Given that this hasn't had a response from tip for several weeks it's
+probably as well for you to pick it up - I was considering sending it
+directly to Linus myself.
 
-Thanks,
+--KalBa86xIdoMygpC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	Ingo
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfqguIACgkQJNaLcl1U
+h9AmYwgAhU5OAjRIyrT55ORFUEnAgksOlpfOa+SMX3JjNaLJjSNnBKc9lpq1L0Zv
+3Gzudpo//l44I7kiHFHhujQhH1A5FwGBd8pghgzbu6lICqABVXqdBaQ/6x6qE/VW
+v2N8s9oVgeEtybhAtZb2MGo1Z43LrIzHVV6p1aJI8EHklaNqTzQHXCabK+hEVZKx
+QC8tTWgy2uNqxzGGmJTXrW949sTqpO2nhk0EqnejnjCEjI9C8iR01GCj0XOum4sT
+mk3BX8OdBX1pdZO8PhSgfnsccB11czt+FR+gGO3QcqiuJ4bnkm4ypOKJqrYdMDfc
+rR7IUBjoKGYr/QFro/1Uae0npyqFtg==
+=u7w3
+-----END PGP SIGNATURE-----
+
+--KalBa86xIdoMygpC--
