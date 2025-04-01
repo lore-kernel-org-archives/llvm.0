@@ -1,55 +1,55 @@
-Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C66F21E08B
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447B42206BA
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531906; cv=none; b=X7Wh0jX/fUBmG3vpuh/ZFrSIOBmGO70YvHu7p2AnlfuHSuYfmskoFoLQBtfIzqW/LR86tt0Rqyell8hRI0KqyX3Tehq2jjJPgoY9J5ce57cyUvLX+GVf6vkSNcUzUMz5dGLtfEBlW4+m4NMJ2eFUqvLHqgJuiQGkMI2zpEjxWCg=
+	t=1743531910; cv=none; b=hSg+Z5HIiyYCPXHvxj8TUgkcmF5VZREXUETAd9yQd1TrvPI1CanimjsrrP+Bfi3ScFT7WsWNHOfaAiqaFjxq1qfKKKnd+gLKq13z4qcYQ0o7nY5uSL5lH2QslQRbgdZO4Hanx0j8mNirnOmlGFDTDDkUZnGBpHwPMYa4Yx6BzMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531906; c=relaxed/simple;
-	bh=BdxBvdM8Nz1jjfzc2QOyKg4s6TJ+thWky0MjwWyO/zs=;
+	s=arc-20240116; t=1743531910; c=relaxed/simple;
+	bh=LJ5bCbL+1daj73vhuubS5IIoYg4jtmiDU7rvTqttR9Q=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=k7WD34n7tuUh7qtvrJr+Od6gKimQ4vODpWhg8SE8JoohoXOwjPnpFLxbbatnHRYkKLgvknzgpHFuwsLdAfp5M6yd/vNkIJHb+1TI+YZKAD+GOMPXHit8mES1z0xXmqqvexc/XZmXNDf045lFbRcpfDjQoL/4Qczbs937/Je07kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RvbAwgO2; arc=none smtp.client-ip=209.85.210.73
+	 To:Content-Type; b=eqUmgqIau0EKTCVt3sDfKCtT6h53iuEN4icQXy+UAwchyxl9FHyZKFConM7g8DyYtq6rOZ1WGj2qldCmHrx71EK4IVhHSJ482EoJSFJ/88ao5JSFRiiMqrDSHloZ4fvBNRgA72XuRJQ3SFBUL3LvsMnSmoPA3Lpje6B+hrUSb94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ddS1KcTH; arc=none smtp.client-ip=209.85.160.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RvbAwgO2"
-Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-72a2107154bso2238600a34.2
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ddS1KcTH"
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-2c7ece3d81dso1584230fac.3
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531903; x=1744136703; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531907; x=1744136707; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5ZOeKL1qyiNLxvN/oZiofK7bOvfFp8Vu2ELG7LdRApM=;
-        b=RvbAwgO2DtiK6vmdy1Vu1QQtIaS1kS6FreMtqtiEQXiBV/0f8IZppSc8uAjvyOG69w
-         fXwpij8+pjz5ij0EjntOHUhpzOhSfBmWJw0j0D4RSmqm5DHYFDcQcqYqAkd1GkAt3KKD
-         lLZtZsiWibbddZ0cMqR//0BU5MclRACBEElR+ymJPyflUUuaQ2facLGl+0rEZiX+n2ac
-         g2AKALZL4NGOo5bscTrDS8u/7JLFH8RoKxKs6xtcTjEHtJWodbIjma+wKY4vx5dDR2HD
-         GyEoJSYYPUZEcU5wQSr8qFFpS6nrRk9s6Mnmo1Vy6Wswr0kfz0TsKBWEWlaKZo4Teqi8
-         WbhA==
+        bh=Da5DUiJVSsEnsA3gzfAHXUpLTR3Ufuk1FvHZfSFlCg4=;
+        b=ddS1KcTHxGpMll/XMn+Oqdn4sgz79n7CGXvG5l/QMwjf0KV3t9iasqNAc27kGc79AR
+         RsER2cWVLu6jkXS/CHAuhAU5rVgLoNCW8dQTjskpoKJ49m3YHbHKvRCwN698dsiQyfhK
+         1ijqzbWBGHnmURiku9SzWNp+ei/NYbIRrqK5necG0YfloByHQxoWf9wi3rBLdsm9Elwm
+         z1Q4CQnjNjgniji747RnAZ2J8kFWbxfz14nlDxAuXICTBAwFHvl56LAUtOFcXVxcIRP6
+         vrd4rNQCDmAeKHSyjDcgzOIzUAsAy75JPrudghoBMldDID44Pb+WN2UjWvZbsblWWBfu
+         XWsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531903; x=1744136703;
+        d=1e100.net; s=20230601; t=1743531907; x=1744136707;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ZOeKL1qyiNLxvN/oZiofK7bOvfFp8Vu2ELG7LdRApM=;
-        b=WOnWG9ZoHoSiSBqJ2/L+SSnhLBzHmOihpquQLwgk6Xlh3u2uxVEvbMMHY6wC0Twh+B
-         YIQtSq/Q097UE9YYePjeEFJvA3kC/mnlkQ1s86PgD5Lf5566qiJzQnnySO0iR6SN39DA
-         UPHh4/haVNVol2pK/clOJLcQG2dbybc3QfeCrP9fUHxQL2JHyGnI2gLm7umDNOH5iHKo
-         iqHrM52GchyiQfI0ctLLeleyEEt2xxhFUpxaJDjceUNlpdlhd05070zAgNrqMECz3mvn
-         J9pkDIF8X92X79sBGcuVeji/XlXKaKejkz5XiUwDUfTXxGV4O3/G7lPhvhTqAZMg2ukh
-         ZLng==
-X-Forwarded-Encrypted: i=1; AJvYcCUvpaMGvfQakYxTgH8sYHh7QIoEkmabA6SZXLAv2NTE6OixaARnQcxthcsDYfCNPdjZbw72@lists.linux.dev
-X-Gm-Message-State: AOJu0YxW9FQvxnoZCXvPWah6Qdh/te4Emm9VHJAaurYgl4L5Cje2WGb/
-	GG6V0a7C8vhQNH5EDwtyOfg+82e9r+KAiaRl0VcE1dmpnkO4buTHEcE+3DLCubzzQraGdpoputG
-	fKCg9Gg==
-X-Google-Smtp-Source: AGHT+IEJjExpoJgVVZs6Hlo908U0oi37UxrWtfgmlindyP0XfVD6VZ0siD4yNQUpQLPVE+N9T3e9cbC/UfJi
-X-Received: from oacmm9.prod.google.com ([2002:a05:6871:7289:b0:2b8:e735:4798])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6830:7002:b0:72b:a61c:cbb2
- with SMTP id 46e09a7af769-72c6378e768mr9367054a34.10.1743531903184; Tue, 01
- Apr 2025 11:25:03 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:11 -0700
+        bh=Da5DUiJVSsEnsA3gzfAHXUpLTR3Ufuk1FvHZfSFlCg4=;
+        b=UxILRK8yMx38PuaCV+Jsw9o6Zji+vxR3g4x6hDDNG9qBBnM3Wveu0o/po4K12Z63WE
+         FHzYK0ZB7uy/wh+k9lFs/vQFP0zYVsqAAfqVRA/bPc/Gip+h/CJjXluPoTp6r3W0Xs05
+         EEoPEdEEDM9mOzbl6YL0+fasIM/Lr/U8xcQSTHn5t4tSS/ECpY0KYJTqMrH6FsH3yzf0
+         PGjqzJo02SzFlMccbwrGik9SyU5E5IJld+cIluOgH2Ep9dFIqfljtO6tYXYIWfkYryGH
+         4dAvuAdrMMZwgpie9f+hqKlnWSWFYpVPA75Niwsj62LiEytp0XWWeSnmzmkLHRaKHfAZ
+         DM5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVYPxQ6wlGS+yOrSuYyLAUoUILYk+B4CDRoXcyx8YJyjw++qidR5lDkXedd++QHi3YOEOJX@lists.linux.dev
+X-Gm-Message-State: AOJu0YzigJIJA33+3x2H/51+ZWpFkJoGosyh2g6oLD/6N76YAEIaGoBp
+	zES4aNyW7mg4PRyndy5IWi9oGSOE4rUSkZUJfoFRSa3hKbnEHwCiRbrV9beeE4qchx5cG+PfHmF
+	icTisiw==
+X-Google-Smtp-Source: AGHT+IHEwV4zAtKk0PBs2gzq5sOI+YyZoow9R1UWlEQXJU1TorP5CNFdlUvUeobymJBu8Fg99nd3p4RriyMG
+X-Received: from oabsc17.prod.google.com ([2002:a05:6871:2211:b0:2c1:665d:545e])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6871:3a0b:b0:29e:5897:e9d1
+ with SMTP id 586e51a60fabf-2cbcf825a7emr7646545fac.39.1743531907119; Tue, 01
+ Apr 2025 11:25:07 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:13 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-14-irogers@google.com>
-Subject: [PATCH v1 13/48] perf trace-event: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-16-irogers@google.com>
+Subject: [PATCH v1 15/48] perf pmu: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,211 +114,174 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/python.c                      |  4 ++--
- .../scripting-engines/trace-event-python.c    | 13 ++++++-----
- tools/perf/util/trace-event-info.c            |  3 ++-
- tools/perf/util/trace-event-parse.c           |  2 +-
- tools/perf/util/trace-event-read.c            | 23 +++++++++----------
- tools/perf/util/trace-event-scripting.c       |  2 +-
- 6 files changed, 24 insertions(+), 23 deletions(-)
+ tools/perf/util/hwmon_pmu.c |  8 ++++----
+ tools/perf/util/pmu.c       |  9 ++++-----
+ tools/perf/util/pmus.c      | 16 ++++++++--------
+ tools/perf/util/tool_pmu.c  |  2 +-
+ 4 files changed, 17 insertions(+), 18 deletions(-)
 
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index f3c05da25b4a..f55b2b7435ad 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -305,7 +305,7 @@ tracepoint_field(const struct pyrf_event *pe, struct tep_format_field *field)
- 		len    = field->size;
- 		if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 			val     = tep_read_number(pevent, data + offset, len);
--			offset  = val;
-+			offset  = (unsigned int)val;
- 			len     = offset >> 16;
- 			offset &= 0xffff;
- 			if (tep_field_is_relative(field->flags))
-@@ -599,7 +599,7 @@ static PyObject *pyrf_thread_map__item(PyObject *obj, Py_ssize_t i)
- 	if (i >= perf_thread_map__nr(pthreads->threads))
+diff --git a/tools/perf/util/hwmon_pmu.c b/tools/perf/util/hwmon_pmu.c
+index 3cce77fc8004..6245eeb593c9 100644
+--- a/tools/perf/util/hwmon_pmu.c
++++ b/tools/perf/util/hwmon_pmu.c
+@@ -170,7 +170,7 @@ bool parse_hwmon_filename(const char *filename,
+ 	for (size_t i = 0; fn_type[i] != '\0'; i++) {
+ 		if (fn_type[i] >= '0' && fn_type[i] <= '9') {
+ 			fn_type[i] = '\0';
+-			*number = strtoul(&filename[i], (char **)&fn_item, 10);
++			*number = (int)strtoul(&filename[i], (char **)&fn_item, 10);
+ 			if (*fn_item == '_')
+ 				fn_item++;
+ 			break;
+@@ -194,7 +194,7 @@ bool parse_hwmon_filename(const char *filename,
+ 		return false;
+ 	}
+ 
+-	*type = elem - &hwmon_type_strs[0];
++	*type = (enum hwmon_type)(elem - &hwmon_type_strs[0]);
+ 	if (!item)
+ 		return true;
+ 
+@@ -213,7 +213,7 @@ bool parse_hwmon_filename(const char *filename,
+ 			 fn_item, filename);
+ 		return false;
+ 	}
+-	*item = elem - &hwmon_item_strs[0];
++	*item = (enum hwmon_item)(elem - &hwmon_item_strs[0]);
+ 	return true;
+ }
+ 
+@@ -352,7 +352,7 @@ struct perf_pmu *hwmon_pmu__new(struct list_head *pmus, int hwmon_dir, const cha
  		return NULL;
  
--	return Py_BuildValue("i", perf_thread_map__pid(pthreads->threads, i));
-+	return Py_BuildValue("i", (int)perf_thread_map__pid(pthreads->threads, (int)i));
- }
- 
- static PySequenceMethods pyrf_thread_map__sequence_methods = {
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index 520729e78965..547eeb45a832 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -713,9 +713,10 @@ static void set_sample_datasrc_in_dict(PyObject *dict,
- 			_PyUnicode_FromString(decode));
- }
- 
--static void regs_map(struct regs_dump *regs, uint64_t mask, const char *arch, char *bf, int size)
-+static void regs_map(struct regs_dump *regs, uint64_t mask, const char *arch, char *bf, size_t size)
+ 	hwm->hwmon_dir_fd = hwmon_dir;
+-	hwm->pmu.type = PERF_PMU_TYPE_HWMON_START + strtoul(sysfs_name + 5, NULL, 10);
++	hwm->pmu.type = PERF_PMU_TYPE_HWMON_START + (int)strtoul(sysfs_name + 5, NULL, 10);
+ 	if (hwm->pmu.type > PERF_PMU_TYPE_HWMON_END) {
+ 		pr_err("Unable to encode hwmon type from %s in valid PMU type\n", sysfs_name);
+ 		goto err_out;
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index b7ebac5ab1d1..5a940bf004fb 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1269,7 +1269,7 @@ __u64 perf_pmu__format_bits(struct perf_pmu *pmu, const char *name)
  {
--	unsigned int i = 0, r;
-+	unsigned int i = 0;
-+	u64 r;
- 	int printed = 0;
+ 	struct perf_pmu_format *format = pmu_find_format(&pmu->format, name);
+ 	__u64 bits = 0;
+-	int fbit;
++	size_t fbit;
  
- 	bf[0] = 0;
-@@ -731,7 +732,7 @@ static void regs_map(struct regs_dump *regs, uint64_t mask, const char *arch, ch
- 
- 		printed += scnprintf(bf + printed, size - printed,
- 				     "%5s:0x%" PRIx64 " ",
--				     perf_reg_name(r, arch), val);
-+				     perf_reg_name((int)r, arch), val);
- 	}
- }
- 
-@@ -744,7 +745,7 @@ static int set_regs_in_dict(PyObject *dict,
- 	struct perf_event_attr *attr = &evsel->core.attr;
- 	const char *arch = perf_env__arch(evsel__env(evsel));
- 
--	int size = (__sw_hweight64(attr->sample_regs_intr) * MAX_REG_SIZE) + 1;
-+	size_t size = (__sw_hweight64(attr->sample_regs_intr) * MAX_REG_SIZE) + 1;
- 	char *bf = NULL;
- 
- 	if (sample->intr_regs) {
-@@ -957,7 +958,7 @@ static void python_process_tracepoint(struct perf_sample *sample,
- 		Py_FatalError(handler_name);
- 	}
- 
--	pid = raw_field_value(event, "common_pid", data);
-+	pid = (int)raw_field_value(event, "common_pid", data);
- 
- 	sprintf(handler_name, "%s__%s", event->system, event->name);
- 
-@@ -1017,7 +1018,7 @@ static void python_process_tracepoint(struct perf_sample *sample,
- 			if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 				val     = tep_read_number(scripting_context->pevent,
- 							  data + offset, len);
--				offset  = val;
-+				offset  = (unsigned int)val;
- 				len     = offset >> 16;
- 				offset &= 0xffff;
- 				if (tep_field_is_relative(field->flags))
-diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
-index c8755679281e..0f012890ff21 100644
---- a/tools/perf/util/trace-event-info.c
-+++ b/tools/perf/util/trace-event-info.c
-@@ -45,7 +45,8 @@ static int record_file(const char *file, ssize_t hdr_sz)
- 	unsigned long long size = 0;
- 	char buf[BUFSIZ], *sizep;
- 	off_t hdr_pos = lseek(output_fd, 0, SEEK_CUR);
--	int r, fd;
-+	int fd;
-+	ssize_t r;
- 	int err = -EIO;
- 
- 	fd = open(file, O_RDONLY);
-diff --git a/tools/perf/util/trace-event-parse.c b/tools/perf/util/trace-event-parse.c
-index 9c015fc2bcfb..982cbbc57168 100644
---- a/tools/perf/util/trace-event-parse.c
-+++ b/tools/perf/util/trace-event-parse.c
-@@ -34,7 +34,7 @@ static int get_common_field(struct scripting_context *context,
- 		*size = field->size;
- 	}
- 
--	return tep_read_number(pevent, context->event_data + *offset, *size);
-+	return (int)tep_read_number(pevent, context->event_data + *offset, *size);
- }
- 
- int common_lock_depth(struct scripting_context *context)
-diff --git a/tools/perf/util/trace-event-read.c b/tools/perf/util/trace-event-read.c
-index ecbbb93f0185..78a3b3801d69 100644
---- a/tools/perf/util/trace-event-read.c
-+++ b/tools/perf/util/trace-event-read.c
-@@ -25,18 +25,18 @@ static int input_fd;
- static ssize_t trace_data_size;
- static bool repipe;
- 
--static int __do_read(int fd, void *buf, int size)
-+static int __do_read(int fd, void *buf, size_t size)
- {
--	int rsize = size;
-+	int rsize = (int)size;
- 
- 	while (size) {
--		int ret = read(fd, buf, size);
-+		ssize_t ret = read(fd, buf, size);
- 
- 		if (ret <= 0)
- 			return -1;
- 
- 		if (repipe) {
--			int retw = write(STDOUT_FILENO, buf, ret);
-+			ssize_t retw = write(STDOUT_FILENO, buf, ret);
- 
- 			if (retw <= 0 || retw != ret) {
- 				pr_debug("repiping input file");
-@@ -51,14 +51,13 @@ static int __do_read(int fd, void *buf, int size)
- 	return rsize;
- }
- 
--static int do_read(void *data, int size)
-+static int do_read(void *data, size_t size)
- {
- 	int r;
- 
- 	r = __do_read(input_fd, data, size);
- 	if (r <= 0) {
--		pr_debug("reading input file (size expected=%d received=%d)",
--			 size, r);
-+		pr_debug("reading input file (size expected=%zd received=%d)", size, r);
- 		return -1;
- 	}
- 
-@@ -68,10 +67,10 @@ static int do_read(void *data, int size)
- }
- 
- /* If it fails, the next read will report it */
--static void skip(int size)
-+static void skip(unsigned long long size)
- {
- 	char buf[BUFSIZ];
--	int r;
-+	unsigned long long r;
- 
- 	while (size) {
- 		r = size > BUFSIZ ? BUFSIZ : size;
-@@ -86,7 +85,7 @@ static unsigned int read4(struct tep_handle *pevent)
- 
- 	if (do_read(&data, 4) < 0)
+ 	if (!format)
  		return 0;
--	return tep_read_number(pevent, &data, 4);
-+	return (unsigned int)tep_read_number(pevent, &data, 4);
- }
+@@ -1314,9 +1314,8 @@ static void pmu_format_value(unsigned long *format, __u64 value, __u64 *v,
  
- static unsigned long long read8(struct tep_handle *pevent)
-@@ -119,7 +118,7 @@ static char *read_string(void)
- 		}
+ static __u64 pmu_format_max_value(const unsigned long *format)
+ {
+-	int w;
++	size_t w = bitmap_weight(format, PERF_PMU_FORMAT_BITS);
  
- 		if (repipe) {
--			int retw = write(STDOUT_FILENO, &c, 1);
-+			ssize_t retw = write(STDOUT_FILENO, &c, 1);
+-	w = bitmap_weight(format, PERF_PMU_FORMAT_BITS);
+ 	if (!w)
+ 		return 0;
+ 	if (w < 64)
+@@ -1824,7 +1823,7 @@ int perf_pmu__for_each_format(struct perf_pmu *pmu, void *state, pmu_format_call
+ 	if (!pmu->is_core)
+ 		return 0;
  
- 			if (retw <= 0 || retw != r) {
- 				pr_debug("repiping input file string");
-@@ -365,7 +364,7 @@ static int read_saved_cmdline(struct tep_handle *pevent)
+-	for (size_t i = 0; i < ARRAY_SIZE(terms); i++) {
++	for (int i = 0; i < (int)ARRAY_SIZE(terms); i++) {
+ 		int config = PERF_PMU_FORMAT_VALUE_CONFIG;
+ 
+ 		if (i < PERF_PMU_FORMAT_VALUE_CONFIG_END)
+@@ -2281,7 +2280,7 @@ static void perf_pmu__compute_config_masks(struct perf_pmu *pmu)
+ 		return;
+ 
+ 	list_for_each_entry(format, &pmu->format, list)	{
+-		unsigned int i;
++		size_t i;
+ 		__u64 *mask;
+ 
+ 		if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END)
+diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+index b99292de7669..0b9071219376 100644
+--- a/tools/perf/util/pmus.c
++++ b/tools/perf/util/pmus.c
+@@ -59,7 +59,7 @@ static void pmu_read_sysfs(unsigned int to_read_pmus);
+ 
+ size_t pmu_name_len_no_suffix(const char *str)
+ {
+-	int orig_len, len;
++	size_t orig_len, len;
+ 	bool has_hex_digits = false;
+ 
+ 	orig_len = len = strlen(str);
+@@ -353,7 +353,7 @@ struct perf_pmu *perf_pmus__scan_core(struct perf_pmu *pmu)
+ static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
+ {
+ 	bool use_core_pmus = !pmu || pmu->is_core;
+-	int last_pmu_name_len = 0;
++	size_t last_pmu_name_len = 0;
+ 	const char *last_pmu_name = (pmu && pmu->name) ? pmu->name : "";
+ 
+ 	if (!pmu) {
+@@ -364,7 +364,7 @@ static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
+ 
+ 	if (use_core_pmus) {
+ 		list_for_each_entry_continue(pmu, &core_pmus, list) {
+-			int pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
++			size_t pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
+ 
+ 			if (last_pmu_name_len == pmu_name_len &&
+ 			    !strncmp(last_pmu_name, pmu->name ?: "", pmu_name_len))
+@@ -376,7 +376,7 @@ static struct perf_pmu *perf_pmus__scan_skip_duplicates(struct perf_pmu *pmu)
+ 		pmu = list_prepare_entry(pmu, &other_pmus, list);
  	}
- 	buf[ret] = '\0';
+ 	list_for_each_entry_continue(pmu, &other_pmus, list) {
+-		int pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
++		size_t pmu_name_len = pmu_name_len_no_suffix(pmu->name ?: "");
  
--	parse_saved_cmdline(pevent, buf, size);
-+	parse_saved_cmdline(pevent, buf, (unsigned int)size);
- 	ret = 0;
- out:
- 	free(buf);
-diff --git a/tools/perf/util/trace-event-scripting.c b/tools/perf/util/trace-event-scripting.c
-index 72abb28b7b5a..fb1fa227c98e 100644
---- a/tools/perf/util/trace-event-scripting.c
-+++ b/tools/perf/util/trace-event-scripting.c
-@@ -422,5 +422,5 @@ int perf_sample__sprintf_flags(u32 flags, char *str, size_t sz)
- 	if (pos < sz)
- 		str[pos] = 0;
+ 		if (last_pmu_name_len == pmu_name_len &&
+ 		    !strncmp(last_pmu_name, pmu->name ?: "", pmu_name_len))
+@@ -581,7 +581,7 @@ static int build_format_string(void *state, const char *name, int config,
+ 			       const unsigned long *bits)
+ {
+ 	struct build_format_string_args *args = state;
+-	unsigned int num_bits;
++	size_t num_bits;
+ 	int ret1, ret2 = 0;
  
--	return pos;
-+	return (int)pos;
+ 	(void)config;
+@@ -631,14 +631,14 @@ void perf_pmus__print_raw_pmu_events(const struct print_callbacks *print_cb, voi
+ 			.long_string = STRBUF_INIT,
+ 			.num_formats = 0,
+ 		};
+-		int len = pmu_name_len_no_suffix(pmu->name);
++		size_t len = pmu_name_len_no_suffix(pmu->name);
+ 		const char *desc = "(see 'man perf-list' or 'man perf-record' on how to encode it)";
+ 
+ 		if (!pmu->is_core)
+ 			desc = NULL;
+ 
+-		strbuf_addf(&format_args.short_string, "%.*s/", len, pmu->name);
+-		strbuf_addf(&format_args.long_string, "%.*s/", len, pmu->name);
++		strbuf_addf(&format_args.short_string, "%.*s/", (int)len, pmu->name);
++		strbuf_addf(&format_args.long_string, "%.*s/", (int)len, pmu->name);
+ 		perf_pmu__for_each_format(pmu, &format_args, build_format_string);
+ 
+ 		if (format_args.num_formats > 3)
+diff --git a/tools/perf/util/tool_pmu.c b/tools/perf/util/tool_pmu.c
+index 97b327d1ce4a..155eea8a0a49 100644
+--- a/tools/perf/util/tool_pmu.c
++++ b/tools/perf/util/tool_pmu.c
+@@ -103,7 +103,7 @@ enum tool_pmu_event evsel__tool_event(const struct evsel *evsel)
+ 
+ const char *evsel__tool_pmu_event_name(const struct evsel *evsel)
+ {
+-	return tool_pmu__event_to_str(evsel->core.attr.config);
++	return tool_pmu__event_to_str((enum tool_pmu_event)evsel->core.attr.config);
  }
+ 
+ static bool read_until_char(struct io *io, char e)
 -- 
 2.49.0.504.g3bcea36a83-goog
 
