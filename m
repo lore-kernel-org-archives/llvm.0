@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E035A20FAB9
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F43215793
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531886; cv=none; b=EPsD2B5fDPvYEixgDBUKiZITDlpHXjTRBfqfpBaeV0QdBX+cbRwXVt7439SzgJ2+qBsWe7E1lwNiLQmPeJhlptXpVTC40+S1ySsZrM8rrVrMoorV1ktB2tGm6obBnvmuZPq0ZdtNbO69XIqhCiRO7sN0oSKcdRUWhmBBK1rqEpY=
+	t=1743531890; cv=none; b=iiUGJchpJbfuZArgwt/EKjZdyJ+oHDau541Em0UlpdtEGEA7d8anZgypvizfRtyATkk557IeQ0R8K+Wh81FLiotkpM3K95qjSyojvIrr9iHQF6mOtq8y9F2590fmgems6cteiGWkOWbXfcHJkM6pow6UE6sv6t07FV5pYRZ8EwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531886; c=relaxed/simple;
-	bh=guxdRnrTDsKRPLu/puDo9eu9W2e6fcELE5Ljd2OeYKc=;
+	s=arc-20240116; t=1743531890; c=relaxed/simple;
+	bh=bs+hau3BfGPgjfML6AAaTQNI5hHZ1yXB3kHmZBCp/iY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=L1WaMXUnZR1kcD7XlSe8dbazZFInttbTNp6h+oU06OlWS9CXK1RIL1wuPA8qrPz5rKK7LtasjfqanPkTwTbk8Wd0l2ZeyC6kzyzBr2yj25EKtRkQ7INRDpIbqwRFcl+h2Pd/do7KNzY7XBd705GO+05pssvrp1Tm/9FIeLBhX2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=je58wVuT; arc=none smtp.client-ip=209.85.216.73
+	 To:Content-Type; b=Q/E1pSSacIH99LvFwd/9PiZokju81xJ6lEN2pCl6czNy+ocpb7LJgfEZEljaUSHhCoAieZ8mzQChgTpPUOBi/yq94OEXUHl0rtqGQAGzYPSke44x0lWT3UfbyMGuPHka7Sm5FeCyV/eN0wUr4chD9OlFSj0LCfLvqpcg6wzRtaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TLOEUtxW; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="je58wVuT"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3011bee1751so9919782a91.1
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TLOEUtxW"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-224192ff68bso103801895ad.1
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531884; x=1744136684; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531887; x=1744136687; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b03QLZJN6J+QLgEpCYYygJKz9Mi0k6OnsOnu/XQ1qHI=;
-        b=je58wVuTsJzu+it3TtnyP1NQDrG6w+IW6emLfVP/79PUq3Xkqfjj8l3EzvwHElQuHt
-         N2fbmIR8iiWX8olxzBGcsMp/XYZ0CmMboYIW2aAsLIxoSBSY3ae9EwTa/Py+FiYAdayb
-         J/wujaLZNL9mNhwKnF6uUJIf+BedsqZTg/wmXGhe1VArsGp2NEwi3Kgs8DQnl7cw3vOW
-         krybP/p+24LJbPeGvtjCEcQvL/fiLO8tFycNJZXmQIvpp2vgb8+1pBCTQNASWrd2dr6B
-         zQexmzsNpDO1Rk5/Ztz6OxhdY1YC3OAmhKpuqRlLTNd8oJ27ot5Rq7++Y2xpMH7kcMNY
-         naAA==
+        bh=Lwp5jWQnZd0R1nLl4eHrnW+r9QoCXnSEZWGom8Yr2/Q=;
+        b=TLOEUtxWoVO84uMD21hBna+ljoMYSCfq90ruayNnzB2uYeq4bzHo/A0w2s7/sHwaa1
+         zkP8ZY0YeXO1Ss0MgkpBXwWPw5IaPvXHEpgrzJnuxKi+QrUV0G6yQ6pDCsZDv1ohr7TQ
+         YUTqADupqo/2aK1bns8ZbrRE/27rV9AxGE3Fon/TSvermySOcFHpxsDH+mq+ZBRQ91Qi
+         TVvoyG171u9y9KCQ8w3a9Ps2XTRB1gUpOZUtnciuQo6riX3icKkAKrVQwx4EvD3VV9D5
+         gC/PkTr7VbgU0kZnrTkk19xVDRmeHaZizqOjOaIP/37Fas33+mXMbCt3p9H3bDBMUL7H
+         k0Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531884; x=1744136684;
+        d=1e100.net; s=20230601; t=1743531887; x=1744136687;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b03QLZJN6J+QLgEpCYYygJKz9Mi0k6OnsOnu/XQ1qHI=;
-        b=rRC3uenDf+4wDGubfQfoC3SImEtdPOk6fVUahE3Weg+TwSrJeqtCgimEOW5rTVbvyz
-         9viwFHTBcM17StbY4B6JxHspHa7tMGnjikwzgUSCPSaqw5YxzEcva40GXZU6LMM4C0md
-         iiy/UHEkPe0G7eo1ttD4iU0xW9owyYtigKPTxogasxBMDT7dGlUePmZrKz4aE2lT/qMj
-         ed8QnL5jdGB7IVqz0BoDgJvkcxZbNHY+Y4+IE+y+R8zwaNX3lhHprFkN8AH1xSRgXYA1
-         j7SiDG8bM+cDILXtzRqldTj9cmk+VziBtOvvtvRt6RpUfb5uXNSM3M6DWvpOZBEmXpSN
-         PpAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5x2IYLAa8/1NHcYwAwx69H++nE+6InQXxvNWi+weeVd71SdhtiESZYeVCUVhctrp/m3VM@lists.linux.dev
-X-Gm-Message-State: AOJu0YzoxXjfruETUIY0urwerQmTdNhvTs44lCWRljtReEbEVLu6JI0P
-	WeChkfysLoDjP22z0jjFmVAAo7HZph5fbeCdu1jIwGaVE7d3mclM6j0t6rwul+TLD0b3B/uSq3F
-	WDk/mog==
-X-Google-Smtp-Source: AGHT+IGBA/7l2Y00mq2tKuHgsoC2Vh7DTpI1vMh/ziPIV8TEof2vJ3kfBxvx6xwbQVY5kq+NVe6D9rLs+nTL
-X-Received: from pjbos13.prod.google.com ([2002:a17:90b:1ccd:b0:2ff:8471:8e53])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:51cb:b0:301:c5cb:7b13
- with SMTP id 98e67ed59e1d1-30531f7c81bmr21841967a91.3.1743531884353; Tue, 01
- Apr 2025 11:24:44 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:02 -0700
+        bh=Lwp5jWQnZd0R1nLl4eHrnW+r9QoCXnSEZWGom8Yr2/Q=;
+        b=B/A6Fv2HsBngsVLHkVWpunRMN57MB/fabfQt/fSGvFlfJAKMDP+uykwvcEJ3eV5twM
+         KNngV5D21SM/3Ux1I+NlPntAWjCjEHXfpe1qYKlhEM8n3hM9gPTc2U8eE2J0NlgKF8ku
+         anuOi210dxAcYn6JeQkdwLp0m84Zq++LmJyEM21ofS0P8cObcJanZbgxsTnG4BaIex85
+         T37/GCjyXEXnIP1t/IDQdsUzNbR8TVLdoWxoDizgkreF+A/7uO3qc8yOiSy4TI0DEi0D
+         tRH3uRbOghYp1SBXKoRnfAETCI/cCS8jBjxMm4fbSa2kesV2B+G+6q+yC0TVZceCbfGm
+         9V2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVrRZ1C1wGOj/kuCmzc8/44E9js0gsyQ/voFcGkyqQyAB5IUxrHHIkXy5MK1kxiovACCWuy@lists.linux.dev
+X-Gm-Message-State: AOJu0YyAki7uFCgUy7hxshiAidhtbXb5QCymVDKI/jIGB23vbUEG6Heu
+	w+7UXI24RvMxAc6I5SU6c85KGuo7524LwoMsO6QTRKzO/r0MWcNM0TwV7P3eqQbSj7D2JJ1esu4
+	JXp/dGw==
+X-Google-Smtp-Source: AGHT+IFzLtYxGxyTxV1rkwdh9UBSEEBVvK00y1AbRI2exTnDGJCaOS8iSdXoMves7V2W+aK2MyJ5/OHSrlvi
+X-Received: from plbbh9.prod.google.com ([2002:a17:902:a989:b0:223:49f0:9077])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d54f:b0:224:584:6f07
+ with SMTP id d9443c01a7336-2292f9e63damr210311785ad.37.1743531886714; Tue, 01
+ Apr 2025 11:24:46 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:03 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-5-irogers@google.com>
-Subject: [PATCH v1 04/48] x86/insn: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-6-irogers@google.com>
+Subject: [PATCH v1 05/48] tools lib: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,22 +114,107 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/arch/x86/lib/insn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/api/fs/fs.c | 4 ++--
+ tools/lib/bitmap.c    | 2 +-
+ tools/lib/string.c    | 6 +++---
+ tools/lib/vsprintf.c  | 6 +++---
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/arch/x86/lib/insn.c b/tools/arch/x86/lib/insn.c
-index e91d4c4e1c16..5fa8697498fe 100644
---- a/tools/arch/x86/lib/insn.c
-+++ b/tools/arch/x86/lib/insn.c
-@@ -92,7 +92,7 @@ static int __insn_get_emulate_prefix(struct insn *insn,
- 			goto err_out;
+diff --git a/tools/lib/api/fs/fs.c b/tools/lib/api/fs/fs.c
+index edec23406dbc..2c4677901de9 100644
+--- a/tools/lib/api/fs/fs.c
++++ b/tools/lib/api/fs/fs.c
+@@ -349,7 +349,7 @@ int filename__read_str(const char *filename, char **buf, size_t *sizep)
+ {
+ 	struct io io;
+ 	char bf[128];
+-	int err;
++	ssize_t err;
+ 
+ 	io.fd = open(filename, O_RDONLY);
+ 	if (io.fd < 0)
+@@ -363,7 +363,7 @@ int filename__read_str(const char *filename, char **buf, size_t *sizep)
+ 	} else
+ 		err = 0;
+ 	close(io.fd);
+-	return err;
++	return (int)err;
+ }
+ 
+ int filename__write_int(const char *filename, int value)
+diff --git a/tools/lib/bitmap.c b/tools/lib/bitmap.c
+index 2178862bb114..87bd15e3968e 100644
+--- a/tools/lib/bitmap.c
++++ b/tools/lib/bitmap.c
+@@ -32,7 +32,7 @@ size_t bitmap_scnprintf(unsigned long *bitmap, unsigned int nbits,
+ 			char *buf, size_t size)
+ {
+ 	/* current bit is 'cur', most recently seen range is [rbot, rtop] */
+-	unsigned int cur, rbot, rtop;
++	size_t cur, rbot, rtop;
+ 	bool first = true;
+ 	size_t ret = 0;
+ 
+diff --git a/tools/lib/string.c b/tools/lib/string.c
+index 3126d2cff716..638e75b63538 100644
+--- a/tools/lib/string.c
++++ b/tools/lib/string.c
+@@ -182,7 +182,7 @@ char *strreplace(char *s, char old, char new)
+ 	return s;
+ }
+ 
+-static void *check_bytes8(const u8 *start, u8 value, unsigned int bytes)
++static void *check_bytes8(const u8 *start, u8 value, size_t bytes)
+ {
+ 	while (bytes) {
+ 		if (*start != value)
+@@ -206,7 +206,7 @@ void *memchr_inv(const void *start, int c, size_t bytes)
+ {
+ 	u8 value = c;
+ 	u64 value64;
+-	unsigned int words, prefix;
++	size_t words, prefix;
+ 
+ 	if (bytes <= 16)
+ 		return check_bytes8(start, value, bytes);
+@@ -216,7 +216,7 @@ void *memchr_inv(const void *start, int c, size_t bytes)
+ 	value64 |= value64 << 16;
+ 	value64 |= value64 << 32;
+ 
+-	prefix = (unsigned long)start % 8;
++	prefix = (size_t)start % 8;
+ 	if (prefix) {
+ 		u8 *r;
+ 
+diff --git a/tools/lib/vsprintf.c b/tools/lib/vsprintf.c
+index 8780b4cdab21..62028a5eea7e 100644
+--- a/tools/lib/vsprintf.c
++++ b/tools/lib/vsprintf.c
+@@ -8,7 +8,7 @@ int vscnprintf(char *buf, size_t size, const char *fmt, va_list args)
+        int i = vsnprintf(buf, size, fmt, args);
+        ssize_t ssize = size;
+ 
+-       return (i >= ssize) ? (ssize - 1) : i;
++       return (i >= ssize) ? (int)(ssize - 1) : i;
+ }
+ 
+ int scnprintf(char * buf, size_t size, const char * fmt, ...)
+@@ -21,7 +21,7 @@ int scnprintf(char * buf, size_t size, const char * fmt, ...)
+        i = vsnprintf(buf, size, fmt, args);
+        va_end(args);
+ 
+-       return (i >= ssize) ? (ssize - 1) : i;
++       return (i >= ssize) ? (int)(ssize - 1) : i;
+ }
+ 
+ int scnprintf_pad(char * buf, size_t size, const char * fmt, ...)
+@@ -40,5 +40,5 @@ int scnprintf_pad(char * buf, size_t size, const char * fmt, ...)
+ 		buf[i] = 0x0;
  	}
  
--	insn->emulate_prefix_size = len;
-+	insn->emulate_prefix_size = (int)len;
- 	insn->next_byte += len;
- 
- 	return 1;
+-	return (i >= ssize) ? (ssize - 1) : i;
++	return (i >= ssize) ? (int)(ssize - 1) : i;
+ }
 -- 
 2.49.0.504.g3bcea36a83-goog
 
