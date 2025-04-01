@@ -1,57 +1,57 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D191D1F1536
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 11:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792DD1F152F
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 11:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743506015; cv=none; b=JsvN5nCQxpKZWGzfaQ0Ph0sROS2P+NW2rCFwIHIO/ioo7HjRqECg8Wi2fCojWp7VTIRntBhKpPqO1oTIGr/Vv+MyxMXaUo/ttjQiU0qrNFNUjf/yl06T6cAf6ODCjxBOYr+FvO/CNYP1n3myHZ/UX1YjE+tltv2O9VLNi9LPpuI=
+	t=1743506458; cv=none; b=cFoVsR1ZXh9pn9sWWJ4mD+u1ltKTOeet9Ss7wzUco3mP0n8XyWv5sHRnNZm2vRl1xf3UdvkcX3C0nOlz7SmOmbokc6ZjPHbZwAAG/VoSmNDneBhzwczrLBZO7yT/17NOJ6KYA3HCDnr1mciZQlhoSm4frU55hjfuKncaS+xClrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743506015; c=relaxed/simple;
-	bh=zec2RCMRClZzaBv/89qRA4s9VgNbDdJvUtT/oGpfa0M=;
+	s=arc-20240116; t=1743506458; c=relaxed/simple;
+	bh=eiGtsQFzAxF57nNUAs9/1Tr4sRdk24379Nfq9qrZFco=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MszKzXHeTQRzNndG2cLaGGfSgVLXJjvsGcHJAD0F3q1LQCKPKhab93ytE2rLk0mtmc5M1eWlm5lKz1Ap0IQ1+aU+eUo+ZRPNUrAi4iWDlnhrhPIGjpCr3DUxD9YJyk7u9std69/JzRf09Lhm4Hkcm6pBwZs9DQqN4LB8XH8ZkCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gp0q8F2p; arc=none smtp.client-ip=209.85.219.54
+	 To:Cc:Content-Type; b=RqM7o1DWlcqjo5ozSxtD0GP8ySqDgyv59kP7qsqoUQ0GiJ/o2kGhczwjaOzYH/JnoJKWsLUaTPDGgUqzQM62sMTnKC0YfP9PRKLHZtn51kqViiQKMS34XrkIIkAis9xeOgeAjA7uHL3OPerJBGwAhym5jjkwmr3ZDZXtZ/njixQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VTgSqyT0; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gp0q8F2p"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6e8f254b875so50122836d6.1
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 04:13:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VTgSqyT0"
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6e8fce04655so52212106d6.3
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 04:20:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743506013; x=1744110813; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1743506455; x=1744111255; darn=lists.linux.dev;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RhXqDSYOjOxsXszNE/hmSOtQ7jPTUIhg+8zdDPCBQfc=;
-        b=Gp0q8F2pSKIKymTPKyw8cOXu5Sxs8nnfJU+pIdcrF7C8kQV7R4hxjII/LGTvIzSi2C
-         v+Bg8uvaJSedOWXhbLY9mbMEPUSVJBxZK/uveH1fwWzg/BMN4EN8PQ/2Z4qPxNw+JaCL
-         BmN1TXLGuCcgM48ZKR12n09ZBePH0fOkKhHpzAufKhcDUuOl38p1RSJGqAo2zDV5fw4c
-         R+uzwqDy0Tn3/pe3Ci5V6WpxFlcnuZiwCHxzIVFg2RiWu2DO4s0/UEh8tvvbQ9WQct2J
-         5Tt1D4KNjtSl6U+G7v+ISBXOo5cC0x34ap6WwGUWOUHUVUxMOLMFehrh71zWQ2OviaJX
-         WYyw==
+        bh=zyYvK18sL7Sms9HOD6wLOj02iesaKqNDYnihADT8IVI=;
+        b=VTgSqyT0m3guu5kfji2yjKSWEN8ijmlJq3fyYg0Vl+xZz3Ri8Y/xyDhenoV6MJHoBs
+         eBVfj3Ozrh4sDh4gE89Spnn0oFENwuiX+8ar+lrrQIiYOz/lkThpN0KVA/choPuARK9E
+         ndK7mQtEF2qXePqN7v/TKKGXwxQPxcI3GaoGblOjvSjdI4v8jkGWUQKv7LmQjROhqiOv
+         bRxeQz+dfqMpMhUSchznWtUOSi5TGkvuBS7AoJczYLCtogXnVZmq+sDc50yk+WSsa8Jy
+         9a+PVdh6P4z9jPu2OTYauWRnx297qvlSXrPeyBTJBE3Fb94+NXrLX8gdy6lYWGOg2LGZ
+         8xsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743506013; x=1744110813;
+        d=1e100.net; s=20230601; t=1743506455; x=1744111255;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RhXqDSYOjOxsXszNE/hmSOtQ7jPTUIhg+8zdDPCBQfc=;
-        b=FLJjTbdAml5R9o8G26gPWXtnL8J0PDysN6khvddcu0RQmCdItYMknrkRRnhTt+lYhs
-         CWYIWAVzFRIP0HBWydSG3HlwE7aQy5yf6a5xAsX081ktPaYJKPUHv7f0pnLSVZtY6xmJ
-         dD8DLlcdf07GVD+wn8dyQYzSgWcIXBXypntU5LCp2SLWg8NfqwZUPKLC7pAtPYH8YklT
-         JHrizp+aXkChr7IyYUIA+VrlIK422ZeHYHX9+RQlCgLICDr3xM5ei9/OeIiw55C3VS1I
-         4u/d+4+QraE5PSEmeqj6fjnPWrTNCCXwSLSfaUpBwYXgljqZ5QT4mmBsH1LWQEalmEE2
-         F/4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXjbkYmVBHhokQLESaPYGmhWdbk7C0t7LxQ4NHFXWSYEKCGZqEeEQ0ShpgDKkrdJ8dDfd1i@lists.linux.dev
-X-Gm-Message-State: AOJu0YwcgL400OoLewATA11AgG/MfvCZsa+R2Hfop8ywsyOAaJiCphhG
-	vBGzxbPINylkQHx+U1DFf1UUrGxbcBYE1OC43H5pS16AGEHqWFV6NYgfLCSL8gRs0Xf+kpHx2CA
-	yo3vORPZRYr/3lI+O0HRS5KJgcLU=
-X-Gm-Gg: ASbGncsQrABZLbRjWlNy0IEyYNHITNKJFGMyAanya2BWnl4WxYKJCYkCzVfEplf2gz3
-	TBnrQH7YXWAIRjflppjKg7jri9UFq4Dk6uV4Wfw1q8q2cOzvwjkKOM9xa3zbnUYbF5+BuWHwHMs
-	K5p+00TCvdqZo+43/PDXBUBkWO
-X-Google-Smtp-Source: AGHT+IHo5fEJFngga4+GOhfC2NhUrJuj08Wu097yQz8MreDqZ8dmYQnArSlhZCL4U3YiLwUMSk6CWpiamq4vswZAjMU=
-X-Received: by 2002:a05:6214:1301:b0:6e8:e828:820d with SMTP id
- 6a1803df08f44-6eed6226e16mr263447586d6.36.1743506012761; Tue, 01 Apr 2025
- 04:13:32 -0700 (PDT)
+        bh=zyYvK18sL7Sms9HOD6wLOj02iesaKqNDYnihADT8IVI=;
+        b=NIyCz/qDXrPDqmqXNGrsuuzpZ+I+SSzVqO3iAzeA/XaUqvzRNRZcTshHMWiUXC1BBL
+         V+CCVWI+GpIfc65VRW67iYxGezCg1QnUChi8Eogb+i81XMr7yD9wlYzbEsVjeCrDWGHG
+         Y7LJnCSGjLk3HyaKVJVBIfbQ4j48NzGfBCRCJ8sFFHrUxveoFw9EqwEeNxq6+B4X9Omn
+         R1+XT4FW7nVTw2lxzh1LqVdIDP4+ghiIpweT1id7TeZoAiEhogtlU9iPQHVgD9f+dRpy
+         jLExYmoh5G792vxNWKK59PlqkV7wWWJpvLuTWvuNP+eLKHPLw0RCeDS3gH0MEqaAC+Ha
+         zcLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcVPU3k7Z6w8/ka/2cJed60e6y/rXWa4ZWtcSqFoWiLHsgbr5IhlBEXmQ6vb+lucKVDqgx@lists.linux.dev
+X-Gm-Message-State: AOJu0YzaNMSwHLgq65JpNtPLsd583tqC3ysnBOTApnTHli5SGZUwEg21
+	kIP7liMvBYc8P0RnZeFZtvvMEk5zvyb5TuR/yDMtLwwTTqBGFJ0TsfocXJPAPls6qDZMUONep89
+	XZ14Vj7s3Gq7s8mC6R4Hjqg2yA64=
+X-Gm-Gg: ASbGncuUZ2TYjWZfhK+Wj7qYzMhgBSpHdUQB9magA89uvmlp+JZuhg6rMaAsx5D1nP+
+	6RN1i1tykLcl2jm0YiaVlSWe+V4Lad2DifwzQ1gOZyS8edivRxUO3gtpTdiWsVnKCW8WJ+niels
+	h2kiPEKODbkgOJv0iqa13aawWd
+X-Google-Smtp-Source: AGHT+IGVM4NtvvnMjwPf4ND9jwxgAPzQn9QkZGxSalUZQi1yrmLRglBW7qsxWQ8Z6yPKdl0LpoUdx6JaHEwNgvl0CuI=
+X-Received: by 2002:a05:6214:29e3:b0:6e6:6aa5:2326 with SMTP id
+ 6a1803df08f44-6eed60a792fmr158786426d6.24.1743506455223; Tue, 01 Apr 2025
+ 04:20:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,12 +59,13 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20250114123935.18346-1-ansuelsmth@gmail.com> <20250114123935.18346-4-ansuelsmth@gmail.com>
- <Z-vFkUmd6vgciU6V@gondor.apana.org.au>
-In-Reply-To: <Z-vFkUmd6vgciU6V@gondor.apana.org.au>
+ <Z-u67D7xl2_SR-hg@gondor.apana.org.au> <CA+_ehUzZruhT7Bko2Xm2kyOaZxUPA4vNLQhq_5V30gfjgmfcng@mail.gmail.com>
+ <Z-vGkbmX2PQ_gt7Z@gondor.apana.org.au>
+In-Reply-To: <Z-vGkbmX2PQ_gt7Z@gondor.apana.org.au>
 From: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>
-Date: Tue, 1 Apr 2025 13:13:21 +0200
-X-Gm-Features: AQ5f1JrMsiz9OVJ4AuViP6vrfqHG0abox8RT085aKR8cHOMDja2lm3-nBFW-_go
-Message-ID: <CA+_ehUy0qHfQseVv4D4BbZa+wHKTCvY9dVNfUtcDF3x7XHss0Q@mail.gmail.com>
+Date: Tue, 1 Apr 2025 13:20:44 +0200
+X-Gm-Features: AQ5f1JrP9iCrauxAuRFhrzBH1SFUJTtI1qP7DuS86ze821f3jbX2JZfIFOSBW1M
+Message-ID: <CA+_ehUxCD1+CUJ_6rXa8ra=tZ1Nr1LCZVYQ0X9RhDndJ33F=ug@mail.gmail.com>
 Subject: Re: [PATCH v11 3/3] crypto: Add Inside Secure SafeXcel EIP-93 crypto
  engine support
 To: Herbert Xu <herbert@gondor.apana.org.au>
@@ -80,57 +81,56 @@ Cc: "David S. Miller" <davem@davemloft.net>, Rob Herring <robh@kernel.org>,
 	Richard van Schagen <vschagen@icloud.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Il giorno mar 1 apr 2025 alle ore 12:53 Herbert Xu
+Il giorno mar 1 apr 2025 alle ore 12:57 Herbert Xu
 <herbert@gondor.apana.org.au> ha scritto:
 >
-> On Tue, Jan 14, 2025 at 01:36:36PM +0100, Christian Marangi wrote:
+> On Tue, Apr 01, 2025 at 12:54:05PM +0200, Christian Marangi (Ansuel) wrote:
+> > Il giorno mar 1 apr 2025 alle ore 12:08 Herbert Xu
+> > <herbert@gondor.apana.org.au> ha scritto:
+> > >
+> > > On Tue, Jan 14, 2025 at 01:36:36PM +0100, Christian Marangi wrote:
+> > > >
+> > > > +static int eip93_send_hash_req(struct crypto_async_request *async, u8 *data,
+> > > > +                            dma_addr_t *data_dma, u32 len, bool last)
+> > > > +{
+> > >
+> > > ...
+> > >
+> > > > +again:
+> > > > +     ret = eip93_put_descriptor(eip93, &cdesc);
+> > > > +     if (ret) {
+> > > > +             usleep_range(EIP93_RING_BUSY_DELAY,
+> > > > +                          EIP93_RING_BUSY_DELAY * 2);
+> > > > +             goto again;
+> > > > +     }
+> > > > +
+> > > > +     /* Writing new descriptor count starts DMA action */
+> > > > +     writel(1, eip93->base + EIP93_REG_PE_CD_COUNT);
+> > >
+> > > Why is there no locking here? Shouldn't this be under ring->write_lock?
+> > >
 > >
-> > +static void eip93_hash_export_sa_state(struct ahash_request *req,
-> > +                                    struct eip93_hash_export_state *state)
-> > +{
-> > +     struct eip93_hash_reqctx *rctx = ahash_request_ctx_dma(req);
-> > +     struct sa_state *sa_state = &rctx->sa_state;
-> > +
-> > +     /*
-> > +      * EIP93 have special handling for state_byte_cnt in sa_state.
-> > +      * Even if a zero packet is passed (and a BADMSG is returned),
-> > +      * state_byte_cnt is incremented to the digest handled (with the hash
-> > +      * primitive). This is problematic with export/import as EIP93
-> > +      * expect 0 state_byte_cnt for the very first iteration.
-> > +      */
-> > +     if (!rctx->len)
-> > +             memset(state->state_len, 0, sizeof(u32) * 2);
+> > Hi Herbert,
+> > this is really to tell DMA that there is new packet to process and
+> > gets decreased instantly.
+> > The lock is used to track what descriptor index should be used in the
+> > ring in the put and get
+> > functions.
 >
-> I don't understand when this can occur.  As far as I can see,
-> zero-length packets are never passed to the hardware for hashing.
+> AFAICS it's not safe to call eip93_put_descriptor simultaneously
+> since it doesn't use atomics.  Without locking in eip93_send_hash_req
+> two threads hashing into two separate eip93 requests will be calling
+> eip93_put_descriptor at the same time.
 >
 
-I did some extra check on this and you are right. This was a leftover
-(and discovery) when we were discussing on how to correctly
-implement import/export.
+Sorry but isn't it enough to acquire lock before eip93_put_descriptor to
+prevent 2 thread?
 
-My initial idea was to send a zero packet on export to sync and wait
-for DMA to finish. But this was scrapped in favor of -EINPROGRESS
-in the update function (that wasn't aware of possible)
+Or you are suggesting that also
 
-If you are ok I can send a patch to drop this (and maybe leave the
-comment just to document this strange finding)
+writel(1, eip93->base + EIP93_REG_PE_CD_COUNT);
 
-What do you think?
+should be done atomically?
 
-> > +     else
-> > +             memcpy(state->state_len, sa_state->state_byte_cnt,
-> > +                    sizeof(u32) * 2);
->
-> I need to know the endianness of state_byte_cnt, which I presume
-> is the number of bytes that have been hashed into the partial
-> hash state.
-
-It's LE.
-
->
-> I need this because I'm changing the export format of all ahash
-> algorithms to match that of the generic implementation.  This is
-> so that you can seamlessly switch between an async ahash and its
-> sync fallback.
->
+Maybe I can better handle that writel(1) by using atomic_t
+value and atomic_inc/dec?
