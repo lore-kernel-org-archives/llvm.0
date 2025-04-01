@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1911F20F07E
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC18921147A
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531883; cv=none; b=W6kDJfZeT4Kpsr9LOhvaUNyBCFYWs0ef/Ah3f29TrhVP2bZgSnrYIqUR0uZKfFTiisfbUQrSrPYXqfMO6AGIAdaK52AuDKOpvown+eogZJS868W4Biv8ivU1PDlyGBmqGi1a32GQ+aDaY+wcmBi/RJtvg6n1Z93lJEFDxkveITM=
+	t=1743531883; cv=none; b=T7m1m4AKRsMOaKArz0UW+CBj+Ra+moB6hUel2lE0abO6L7NTgEzysBVI1sFb3MLK3iXF4LWh2GoePvOevuk8X25LvEDUXUW/AvkwrIBjfNAgDoPJ+iIuTfq0vI2neF7pdS9EgahaW3wd0lLnNTYBnyIsxcrvKcJCzLAo/NY5cN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1743531883; c=relaxed/simple;
-	bh=49l7ADb3p3Yt9ABBM2gRd7j5skKd2Ri396uT1ankTM4=;
+	bh=pDEY6QUrKKu+6/w+/nx5MSD4U+mmn81kdmBZaMJfAFI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=XojHEqzDJiDCoQUPrU94BzeKK8hoow/lbyOTS+TanmA9JcYZsCYS3Kbmk1xGDRgbeOPIrDf05x5btiKOMl/8wnAq95PE34kHE9r0Hv3Rr54xqalSBmwGruZEVi7E5+bC9Ab5Yw01hhX+xM6/euUnlFO1KJrV2sMQ4Rw1EvruMHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c7I+8dB1; arc=none smtp.client-ip=209.85.216.73
+	 To:Content-Type; b=nZeZth0Q7UN15jpX8aOksULg53lSyNsTZSDhS0pHpCzZeOApQ8wSl+/oVhyfDjreujoxA6inTi+KRaXT+LJ8O9jF9RLhu0sCndxLBDnRZvEiYuzTlFizdhCMRwti7vkO6PfIe2rJ6yR90jlbj0Vw+e6EiOtMFUsFA+6Au1av1uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BqQa75nk; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c7I+8dB1"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3032f4ea8cfso10907871a91.3
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BqQa75nk"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3055f2e1486so4310785a91.0
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531879; x=1744136679; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531881; x=1744136681; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iRjxFcSihUrg8jPg2GdkHyPzaMHS3sRgicHABls9JzI=;
-        b=c7I+8dB1U/pUtYXxFfHT9mqsCsiWvPGqf0XoMQurWSLccIHttrY+W9L9KiA/KNAYtT
-         KP+pVFL1FiAAsfceYsl/BgyS0G0VpXn+YZtpnGSyWgln/8bMVMAg5FOKlTXcsOlyf9zT
-         VY2MpBKzqWST10RhuwVo3N05EFhb4Yd0Vdlxi1I6BFPAnDJm852noFOTBtjm+2cFVkQc
-         elPSx4EqqpT8DsVK5nY1wmJglCaQVwsgTF+tnvhQg8BTFRfssZVvc4SDGf7Gbli36kC8
-         4ITv+u6V0OcNrs3E4/7bokCIFaVoeSUYVu8g7UcReXHT/XOY1uO/SwAr6L34w8Oan9CO
-         bi4w==
+        bh=ejyIbF8uM4xzteCjzh4//KGHrg3ytk/YNXw3C8hPSCI=;
+        b=BqQa75nkpPypLBpRn9pOsY1Q8cjuA/e1CGjt/2yXnuK/d6ETg0wvUXlUUcXgWi2esP
+         jPU1J1wDj5wzpjjmrBQItHs06Bp9g+d5yGyiCu4A1sdWLQAf817ffueT/NIObEizjlUI
+         UeAurgAb1Wl9fDYOig6CcFGelFSg60U63QEEvwQ7tM7ozyvejloe1vyh1ugdSby0enYA
+         n03ViqanwWeN6sSeP88iFE9xHaPce+QM0dzPL7WcxnTQMyT4vA6VHAkmrP51KDS4iImN
+         Wfj2PaOtAP63c2B/b+WVGjU3NlZwg+6QziNKjn0VIouaqCSsZPFVX4YPG4Y/IcsxtwNV
+         YqJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531879; x=1744136679;
+        d=1e100.net; s=20230601; t=1743531881; x=1744136681;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iRjxFcSihUrg8jPg2GdkHyPzaMHS3sRgicHABls9JzI=;
-        b=BzTyNcvzRVE9fLu6jbelZf0eU+KF8baiHL9UHhDrOqe/HXMQuCP4OVIE5JxWIgdY6L
-         VGypOqjEerebxni2ty0oltx7C+ilUYUD0wqcMU5J1w67qnhzEohaRV93PFJlbaXeE/Lg
-         MP8GXFle7Z5dg5FFB49WMtprddotSBG0X5BfjBYtiMOAXIPyaBeX3bvKN1Lf58i/YNSf
-         ssaBbJqAS7sGrONGttgbDXGxiA7idPjxO1pKCMjkv20HHAf+PqIbdV0Z2qk14soljv9d
-         jRc3REeMzjUMd5ipHpkmj/zSxcVVhbUE1IN0G2fO5iNPz6WDSEr6iMEz0FT4Dcnmt+zH
-         RTIg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0NbCnzWSYlSqv6YIOPEL2nqy8YeKihQvR8QWhTJ1lnnnMvECQjniyDS9Dqyn+BE4Tja2D@lists.linux.dev
-X-Gm-Message-State: AOJu0YwDZu1OUmru6ndSfVtYiEqhuubhHsgWl8bPsckpGd1QqqEMnMOf
-	46OEHQLHRvNxpFDBwZar9wHdvzdbTFVSRq0XtPSMThLOm0Xc21xV9uJpQ+LKk6aeNuj+NKNnoHY
-	5lsi6UQ==
-X-Google-Smtp-Source: AGHT+IEFoEdW54+8IzXF8SrRli8AZBce5TP8glO5taNb/WkCtgqcwxjpvN6TkKqQcxglUuElnk9l67f2Meoj
-X-Received: from pjvf3.prod.google.com ([2002:a17:90a:da83:b0:2f9:dc36:b11])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2704:b0:2fa:13d9:39c
- with SMTP id 98e67ed59e1d1-30531fa6be2mr25430589a91.14.1743531879230; Tue, 01
- Apr 2025 11:24:39 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:22:59 -0700
+        bh=ejyIbF8uM4xzteCjzh4//KGHrg3ytk/YNXw3C8hPSCI=;
+        b=TMZsOUJNfqD18zLYaWkqJuRnyVF4Z+mqHXr4RdvPCw055zTr1G1yfVY+Y/sWFWC3LH
+         Gx+lRtLs4slpP0gzles8q1/tePXtf3PB7vFMd/c/6xroemagYjw9TyNBEauep8TtWYt5
+         mlLHYS0oJ2WvEmw4ldkKNEzPdnGF0tvzz4i2XhcZq/qhtWUWtplPfD5qXT9rYD2bNlog
+         mQ1D87Bqb588TKm51P7MkrZHJZzuAa4kLu2+2g16h71F9160MGtERkCwEnfnPTlDQWWG
+         sejDbPmZlVIY7kh8DgV62kAGzOUKOApy5d7rfeu5ZEESRtRi3Nl+yLMowVAEp1VzFO+Q
+         4e5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUHjNiuegToA7YoTOMjOpelnso9xINmQLTj8IkvW1JJYK1yI327a5h91gjyilWCfGYGMmlM@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFWqUHlO9UGArERsA/oEv3hYJUjZwJQSlJbdih41kG0Y+ju4Tj
+	jyLlh8KKTr2/2U6V8XrjIOotVDwrnIudntz9di7F74D1ptgO5DfDxX15hxDj24EuXdQZ3d/3wVW
+	XlXWiYw==
+X-Google-Smtp-Source: AGHT+IHKgH1xWvHb6WqzhnDdwTyWnZi/5XdVRlBtY5wQp/4b0QnFXY8X8tmjidjtAADQw2pYukFdkyHd+gGs
+X-Received: from pjbhl3.prod.google.com ([2002:a17:90b:1343:b0:2f4:4222:ebba])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3909:b0:2ee:9b2c:3253
+ with SMTP id 98e67ed59e1d1-30532177065mr17860323a91.30.1743531880957; Tue, 01
+ Apr 2025 11:24:40 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:00 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-2-irogers@google.com>
-Subject: [PATCH v1 01/48] perf build: Avoid building libbpf/bpftool with LIBBPF_DYNAMIC
+Message-ID: <20250401182347.3422199-3-irogers@google.com>
+Subject: [PATCH v1 02/48] tools headers: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -106,68 +106,100 @@ To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.d
 	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Building with LIBBPF_DYNAMIC still requires building libbpf as part of
-bpftool, but the build also still accidentally builds it. Make the
-parts of the build bringing in libbpf conditional. Don't build bpftool
-is a bpftool exists from the which command.
+The clang warning -Wshorten-64-to-32 can be useful to catch
+inadvertent truncation. In some instances this truncation can lead to
+changing the sign of a result, for example, truncation to return an
+int to fit a sort routine. Silence the warning by making the implicit
+truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/include/asm-generic/bitops/fls64.h | 2 +-
+ tools/include/linux/bitfield.h           | 2 +-
+ tools/include/linux/bitmap.h             | 2 +-
+ tools/include/linux/err.h                | 2 +-
+ tools/include/linux/hash.h               | 2 +-
+ tools/include/linux/math64.h             | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index d335151736ed..c836e01c8279 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1001,10 +1001,12 @@ $(LIBAPI)-clean:
- 	$(call QUIET_CLEAN, libapi)
- 	$(Q)$(RM) -r -- $(LIBAPI_OUTPUT)
+diff --git a/tools/include/asm-generic/bitops/fls64.h b/tools/include/asm-generic/bitops/fls64.h
+index 866f2b2304ff..9ad3ff12f454 100644
+--- a/tools/include/asm-generic/bitops/fls64.h
++++ b/tools/include/asm-generic/bitops/fls64.h
+@@ -21,7 +21,7 @@ static __always_inline int fls64(__u64 x)
+ 	__u32 h = x >> 32;
+ 	if (h)
+ 		return fls(h) + 32;
+-	return fls(x);
++	return fls((__u32)x);
+ }
+ #elif BITS_PER_LONG == 64
+ static __always_inline int fls64(__u64 x)
+diff --git a/tools/include/linux/bitfield.h b/tools/include/linux/bitfield.h
+index 6093fa6db260..aa0b8e52214f 100644
+--- a/tools/include/linux/bitfield.h
++++ b/tools/include/linux/bitfield.h
+@@ -146,7 +146,7 @@ static __always_inline __##type type##_encode_bits(base v, base field)	\
+ {									\
+ 	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+ 		__field_overflow();					\
+-	return to((v & field_mask(field)) * field_multiplier(field));	\
++	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
+ }									\
+ static __always_inline __##type type##_replace_bits(__##type old,	\
+ 					base val, base field)		\
+diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
+index 2a7f260ef9dc..b7a7c752e4f2 100644
+--- a/tools/include/linux/bitmap.h
++++ b/tools/include/linux/bitmap.h
+@@ -63,7 +63,7 @@ static inline bool bitmap_full(const unsigned long *src, unsigned int nbits)
+ 	return find_first_zero_bit(src, nbits) == nbits;
+ }
  
-+ifndef LIBBPF_DYNAMIC
- $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
- 	$(Q)$(MAKE) -C $(LIBBPF_DIR) FEATURES_DUMP=$(FEATURE_DUMP_EXPORT) \
- 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= subdir= \
- 		EXTRA_CFLAGS="-fPIC" $@ install_headers
-+endif
+-static inline unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
++static inline unsigned long bitmap_weight(const unsigned long *src, unsigned int nbits)
+ {
+ 	if (small_const_nbits(nbits))
+ 		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+diff --git a/tools/include/linux/err.h b/tools/include/linux/err.h
+index 332b983ead1e..9c1746e3696d 100644
+--- a/tools/include/linux/err.h
++++ b/tools/include/linux/err.h
+@@ -55,7 +55,7 @@ static inline bool __must_check IS_ERR_OR_NULL(__force const void *ptr)
+ static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
+ {
+ 	if (IS_ERR(ptr))
+-		return PTR_ERR(ptr);
++		return (int)PTR_ERR(ptr);
+ 	else
+ 		return 0;
+ }
+diff --git a/tools/include/linux/hash.h b/tools/include/linux/hash.h
+index 38edaa08f862..ecc8296cb397 100644
+--- a/tools/include/linux/hash.h
++++ b/tools/include/linux/hash.h
+@@ -75,7 +75,7 @@ static __always_inline u32 hash_64_generic(u64 val, unsigned int bits)
+ {
+ #if BITS_PER_LONG == 64
+ 	/* 64x64-bit multiply is efficient on all 64-bit processors */
+-	return val * GOLDEN_RATIO_64 >> (64 - bits);
++	return (u32)(val * GOLDEN_RATIO_64 >> (64 - bits));
+ #else
+ 	/* Hash 64 bits using only 32x32-bit multiply. */
+ 	return hash_32((u32)val ^ __hash_32(val >> 32), bits);
+diff --git a/tools/include/linux/math64.h b/tools/include/linux/math64.h
+index 4ad45d5943dc..03d6c5220957 100644
+--- a/tools/include/linux/math64.h
++++ b/tools/include/linux/math64.h
+@@ -48,7 +48,7 @@ static inline u64 mul_u64_u32_shr(u64 a, u32 b, unsigned int shift)
+ 	u32 ah, al;
+ 	u64 ret;
  
- $(LIBBPF)-clean:
- 	$(call QUIET_CLEAN, libbpf)
-@@ -1224,7 +1226,11 @@ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_
- 	$(Q)$(MKDIR) -p $@
+-	al = a;
++	al = (u32)a;
+ 	ah = a >> 32;
  
- ifeq ($(CONFIG_PERF_BPF_SKEL),y)
-+BPFTOOL := $(shell which bpftool)
-+ifeq ($(BPFTOOL),)
- BPFTOOL := $(SKEL_TMP_OUT)/bootstrap/bpftool
-+BUILD_BPFTOOL := y
-+endif
- # Get Clang's default includes on this system, as opposed to those seen by
- # '--target=bpf'. This fixes "missing" files on some architectures/distros,
- # such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-@@ -1243,16 +1249,21 @@ endif
- 
- CLANG_OPTIONS = -Wall
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
--BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES)
-+BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. $(CLANG_SYS_INCLUDES)
-+ifneq ($(LIBBPF_INCLUDE),)
-+  BPF_INCLUDE += -I$(LIBBPF_INCLUDE)
-+endif
- TOOLS_UAPI_INCLUDE := -I$(srctree)/tools/include/uapi
- 
- ifneq ($(WERROR),0)
-   CLANG_OPTIONS += -Werror
- endif
- 
-+ifneq ($(BUILD_BPFTOOL),)
- $(BPFTOOL): | $(SKEL_TMP_OUT)
- 	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
- 		OUTPUT=$(SKEL_TMP_OUT)/ bootstrap
-+endif
- 
- # Paths to search for a kernel to generate vmlinux.h from.
- VMLINUX_BTF_ELF_PATHS ?= $(if $(O),$(O)/vmlinux)			\
+ 	ret = mul_u32_u32(al, b) >> shift;
 -- 
 2.49.0.504.g3bcea36a83-goog
 
