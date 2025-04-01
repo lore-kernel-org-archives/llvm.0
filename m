@@ -1,55 +1,55 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC18213240
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E035A20FAB9
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531885; cv=none; b=aeUR/38d80I8yb2ZngI5urLX/cbdQg90NZuOMxkeAhkIO3PxdtV4R3wT00jMSQsIBu1PH6DMNv3azdhNYA/sqMfGi4u2Rqpj4uVcjNSziOoAK6aLWenj5q/7/XhnxL5jKZJXYAc+ZavDB6Q7fafCZ/2gild1KMAWK4D/lWevmwg=
+	t=1743531886; cv=none; b=EPsD2B5fDPvYEixgDBUKiZITDlpHXjTRBfqfpBaeV0QdBX+cbRwXVt7439SzgJ2+qBsWe7E1lwNiLQmPeJhlptXpVTC40+S1ySsZrM8rrVrMoorV1ktB2tGm6obBnvmuZPq0ZdtNbO69XIqhCiRO7sN0oSKcdRUWhmBBK1rqEpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531885; c=relaxed/simple;
-	bh=nXp5NVw8ZWXmsMvB5pE9U5xeZ45CVeKd2OU9K5iWouQ=;
+	s=arc-20240116; t=1743531886; c=relaxed/simple;
+	bh=guxdRnrTDsKRPLu/puDo9eu9W2e6fcELE5Ljd2OeYKc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=bfEcgqhdJ4Zf2Ubb+ixB7R6l1Nbot+j0Q4RNxsgp2Z0r9hODqiBvKMc2Tb/M4nKy71GVFfQZFhh9fhkY0yCy5Ak1QgKRkmd9tTaSIfDe2fuBKxScI29s2w0x1lMw2Q/Y4Ezq5g3mOOVwbclaXzm0yfPqYnBk5GXfyelTmO5YGAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mpDsOAbA; arc=none smtp.client-ip=209.85.214.202
+	 To:Content-Type; b=L1WaMXUnZR1kcD7XlSe8dbazZFInttbTNp6h+oU06OlWS9CXK1RIL1wuPA8qrPz5rKK7LtasjfqanPkTwTbk8Wd0l2ZeyC6kzyzBr2yj25EKtRkQ7INRDpIbqwRFcl+h2Pd/do7KNzY7XBd705GO+05pssvrp1Tm/9FIeLBhX2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=je58wVuT; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mpDsOAbA"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-22647ff3cf5so95121505ad.0
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="je58wVuT"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3011bee1751so9919782a91.1
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531883; x=1744136683; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531884; x=1744136684; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bVxTOI2rMy74E5I1GCMK0hz9Q6EgaUNiUbpk59hX6VA=;
-        b=mpDsOAbAq06qG1xT5sd86GP/4DASprkY0htjaZrQG1AbW11WQl4zFiEMyryXBR5wpW
-         EEdcyQxl4u36mSKT8X4Iwv6oTgRxTtUmYI+8iFswCVKNmg8M5yct7nlPXwwUL57zrMoF
-         bRf7mzLzH/r8/hTaFLfYnkciIPZy9Mo/H1ZKhpUlZQoiHqn/oHacMW/46L2Thuq1S3kI
-         XDqWdR0gdViu7rx6cfgJHYxjiIBXxwM73Ehq/8ag5X9tLSXhLKbwlVn4SoVRhOpxlAaC
-         eVusadKHw85/b9kxYGlnGLg6QqIilzW31qLOT/+rHzOUddkbZE6hFtsuDO2mDO0QE4nF
-         qMcA==
+        bh=b03QLZJN6J+QLgEpCYYygJKz9Mi0k6OnsOnu/XQ1qHI=;
+        b=je58wVuTsJzu+it3TtnyP1NQDrG6w+IW6emLfVP/79PUq3Xkqfjj8l3EzvwHElQuHt
+         N2fbmIR8iiWX8olxzBGcsMp/XYZ0CmMboYIW2aAsLIxoSBSY3ae9EwTa/Py+FiYAdayb
+         J/wujaLZNL9mNhwKnF6uUJIf+BedsqZTg/wmXGhe1VArsGp2NEwi3Kgs8DQnl7cw3vOW
+         krybP/p+24LJbPeGvtjCEcQvL/fiLO8tFycNJZXmQIvpp2vgb8+1pBCTQNASWrd2dr6B
+         zQexmzsNpDO1Rk5/Ztz6OxhdY1YC3OAmhKpuqRlLTNd8oJ27ot5Rq7++Y2xpMH7kcMNY
+         naAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531883; x=1744136683;
+        d=1e100.net; s=20230601; t=1743531884; x=1744136684;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVxTOI2rMy74E5I1GCMK0hz9Q6EgaUNiUbpk59hX6VA=;
-        b=BophZDfKYPxGqMbAdJyb0UdkpVbZgXvabhtCLwA+cCBjF0MMEaafqJIGxCYbDNqDbS
-         jgbKk4WutfEI3GIv4jGzYNmEl6alSQGXMaHNypTs72MWKG7H289dFlIIqAQe4PRFHWFu
-         05TVddsrhWkKsUzmU6k90oxrb2Jlp2tgOtzBAEjvXVjrKafv+WkNQIKXUz15ragamAyi
-         6XE3b8Bwe7i84JU5vs+DbifE04b+P1gxsYAkthHJuDPDZrRIwZC7W4fkDp1nOCeq4z4z
-         FU4tLW3F6xmae8L3hBa7Db/sxO7XcKEDB2y6LktdqK5n4ck0SRrwrvDtyEp+U5yjXR77
-         wrlA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6vUcTSmQsTCawFFs7gSLxJYkQEJRk4k059+lhWvKwtdNYi3sTucOPuz9Okbm9PRexvnlP@lists.linux.dev
-X-Gm-Message-State: AOJu0YwKFmBzbz31J6qyJTUlfJ8+drUPN44DJ8DxRxm0XTzNaeKs5s29
-	gXIPGouZ8Rwj1fPimMUaUt7naJb3LJXUPbZTM4zuFycZKSmYbDSv8Ttz/Bi0xEtJqs3ghGzgokw
-	LWJLiFg==
-X-Google-Smtp-Source: AGHT+IE/R/FUWdBKFYsppwkRwS7FEQKz3QhCXqgTnVjNJsrzfSerhDPlhvxPM0XuhZf8Dg7Zd48cy0mqhLr/
-X-Received: from plck11.prod.google.com ([2002:a17:902:f28b:b0:223:501f:f398])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:da2d:b0:220:fe50:5b44
- with SMTP id d9443c01a7336-2292f98769cmr202554215ad.31.1743531882714; Tue, 01
- Apr 2025 11:24:42 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:01 -0700
+        bh=b03QLZJN6J+QLgEpCYYygJKz9Mi0k6OnsOnu/XQ1qHI=;
+        b=rRC3uenDf+4wDGubfQfoC3SImEtdPOk6fVUahE3Weg+TwSrJeqtCgimEOW5rTVbvyz
+         9viwFHTBcM17StbY4B6JxHspHa7tMGnjikwzgUSCPSaqw5YxzEcva40GXZU6LMM4C0md
+         iiy/UHEkPe0G7eo1ttD4iU0xW9owyYtigKPTxogasxBMDT7dGlUePmZrKz4aE2lT/qMj
+         ed8QnL5jdGB7IVqz0BoDgJvkcxZbNHY+Y4+IE+y+R8zwaNX3lhHprFkN8AH1xSRgXYA1
+         j7SiDG8bM+cDILXtzRqldTj9cmk+VziBtOvvtvRt6RpUfb5uXNSM3M6DWvpOZBEmXpSN
+         PpAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5x2IYLAa8/1NHcYwAwx69H++nE+6InQXxvNWi+weeVd71SdhtiESZYeVCUVhctrp/m3VM@lists.linux.dev
+X-Gm-Message-State: AOJu0YzoxXjfruETUIY0urwerQmTdNhvTs44lCWRljtReEbEVLu6JI0P
+	WeChkfysLoDjP22z0jjFmVAAo7HZph5fbeCdu1jIwGaVE7d3mclM6j0t6rwul+TLD0b3B/uSq3F
+	WDk/mog==
+X-Google-Smtp-Source: AGHT+IGBA/7l2Y00mq2tKuHgsoC2Vh7DTpI1vMh/ziPIV8TEof2vJ3kfBxvx6xwbQVY5kq+NVe6D9rLs+nTL
+X-Received: from pjbos13.prod.google.com ([2002:a17:90b:1ccd:b0:2ff:8471:8e53])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:51cb:b0:301:c5cb:7b13
+ with SMTP id 98e67ed59e1d1-30531f7c81bmr21841967a91.3.1743531884353; Tue, 01
+ Apr 2025 11:24:44 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:02 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-4-irogers@google.com>
-Subject: [PATCH v1 03/48] arm64: cputype: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-5-irogers@google.com>
+Subject: [PATCH v1 04/48] x86/insn: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,22 +114,22 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/arch/arm64/include/asm/cputype.h | 2 +-
+ tools/arch/x86/lib/insn.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/arch/arm64/include/asm/cputype.h b/tools/arch/arm64/include/asm/cputype.h
-index 488f8e751349..d7289b9d2758 100644
---- a/tools/arch/arm64/include/asm/cputype.h
-+++ b/tools/arch/arm64/include/asm/cputype.h
-@@ -227,7 +227,7 @@
+diff --git a/tools/arch/x86/lib/insn.c b/tools/arch/x86/lib/insn.c
+index e91d4c4e1c16..5fa8697498fe 100644
+--- a/tools/arch/x86/lib/insn.c
++++ b/tools/arch/x86/lib/insn.c
+@@ -92,7 +92,7 @@ static int __insn_get_emulate_prefix(struct insn *insn,
+ 			goto err_out;
+ 	}
  
- #include <asm/sysreg.h>
+-	insn->emulate_prefix_size = len;
++	insn->emulate_prefix_size = (int)len;
+ 	insn->next_byte += len;
  
--#define read_cpuid(reg)			read_sysreg_s(SYS_ ## reg)
-+#define read_cpuid(reg)			((u32)read_sysreg_s(SYS_ ## reg))
- 
- /*
-  * Represent a range of MIDR values for a given CPU model and a
+ 	return 1;
 -- 
 2.49.0.504.g3bcea36a83-goog
 
