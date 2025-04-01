@@ -1,55 +1,55 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E57422370C
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAE4223708
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531935; cv=none; b=DM7cBMLsC4EKh/G+y8pLoZwZjAv+dA1H61v6hXMUA9isJe6vLyZe9Z5MlwalDsjku11XKqhi/Z1CJXanHI8IZ/qf84mjfDp828y3BagrtMA++6Kx/0wm7FghWipQVjIwqlxULf+XB4v2RTPBftXsnrvnxwRzZnbhuy8R2L7RTu4=
+	t=1743531937; cv=none; b=LXYRwbPZbHq97jRuaucehBaCIYKqFM5C1omGmxebYuKJ5HxDiMJm+q1IOa3K92W6Y6x12Bsz2QfVPZ1D+w1pa1xtlG9uUm2O3JUY3xppcXZ/IVNOBAemKL4z55sG20fQX80/Hie7lVn4Nquu38KJ4zkpqBSlC5sNH0NaJkxoqsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531935; c=relaxed/simple;
-	bh=6iSRMZZj3v5z7XPvnu1Z2u1YsIqNAF8ssFyQ2+0Z+Rc=;
+	s=arc-20240116; t=1743531937; c=relaxed/simple;
+	bh=TA9MBJKZGnM8bN2F3H667zTwUG3oMX/UHc/LW06bLSE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=OxELUYz+YIocA0FrqxQZwtH/WHbM9Awr1VbYtRoOVEVnKD6hWPP7tXMoMzrxw32+3FxYOZeb/6p/cqR6tZv7cyUSMI9T0iR6qBwwiDRX2bHKNPZ5YH7dO3JbcpkGvtpdq6H98oMOCHYR9Gigv+QIGH192bumzybQavDDD+O5OoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j7lIFFke; arc=none smtp.client-ip=209.85.214.202
+	 To:Content-Type; b=MRFr4+QiYikX5r9BX+opbBeKs8teRqHj3YePane1LbaU3fjuA9o+YBIJLQPYNbiXZLct5x9Ww3N7BI30eQp8s1E+6TXa2nPd6PexLd2zGxC6dhbd+Y5pAb2fKIKubPdTtDV6j1vU2eQcZ9ZZ2wucXUIcU0Hx2xz3nPOvIipQXio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D8C+JmWj; arc=none smtp.client-ip=209.85.160.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j7lIFFke"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-225429696a9so170478455ad.1
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D8C+JmWj"
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-2c2a9abc5b2so1826869fac.1
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531933; x=1744136733; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531935; x=1744136735; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=az0IuCUiWa/ckJI17G7Uo5hKOqaliVyKlYqJwWzsWPo=;
-        b=j7lIFFkeOCbY48MSAzodL5OZSL9STWEikLir8gTvKhPOMQ9CvqhAmz6w5Yr9IMikqn
-         hVUFLtwziTV9A+IuEY169tUeLD+ZVaLcu9SJTDTgE9Y3Fy3fiyT9LACki7bWnXmSR7X6
-         m85uF32rxnHniXMIj5X3QZDEcHXVNn+0/FbWdgwDG9v5RfTIfRS6APYL3D5/HWVpmBW6
-         4u/YDuzFxe9GMoj5w8fRUeMA6FJR+/EIJX0X4O8NFqSwu3qEO5q4zcdR3scQsbB6WzAg
-         oyfHmPj1ov7Rfc/rEcTJvtqzZlUeSFDQcP6zRjNvSALT0ZE0m1H97a8N5Jm0BG5BSnxR
-         VLgw==
+        bh=3QC+vjZ+uxGeny3upI0J2RrDdb+/2bXijdeBhXiDIiY=;
+        b=D8C+JmWjophh26igcgtSU1g40p2V/TfjhpmKowjZpg5UZ8u74LaQmCQs74+uwoVnPJ
+         XZ4zMDj4JzwNZ93H11F2TVMTxDUD5IrJKsmhmufsrFOhq+5bD7CjwyHBAulVAf67use2
+         A449KY9inS5Is+QuzXye8IHQ/OQ0HBofzMiqF33IXQS4QzV8BR8FfP12N9w9imCRVN2Q
+         +rdUop9kjbcCDKET0G+ppfEZoJOgnVe6YkKCYb2ct9XHMCL3rLid8bDdx78A/7LKdXQN
+         LwMuyrVPyrDmfAA93UH/jTBs5WTxkrbR+1g7snIGla+zT2lvHSm+HVRHi5CoSWH5ryDh
+         fUmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531933; x=1744136733;
+        d=1e100.net; s=20230601; t=1743531935; x=1744136735;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=az0IuCUiWa/ckJI17G7Uo5hKOqaliVyKlYqJwWzsWPo=;
-        b=AFHurVqKxQ8KO+CK7NdVmXc6K3hJuoFVKeQ3kaRk69R3Ijej+G7isXt2lSBpuu6lOC
-         2KbLZPn/WnhwCAfDcHu5XVZE0LBCzfcuoSoh+090/bsm4EUKi3D3CWw32eOUyudwqaXK
-         x5oGnG3rOVopk+z0adat21Byh2SdUyUX4EaO8qUCekVaTuQdgiNllJkGqPuRC5vFa2Vi
-         JrNVgTBGAOeutJckUWW4HGwvWbvFFUGBQOzhWTDK7aVlmQt/FksmqDD9oE2l66xBeU0E
-         IIhu4Md2wbB7ppuhugx3ivwUcf39lkqwmSgCGmZiEQV2zFxdY65vCdkISe5Mx30QhSpU
-         LWiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXaK+XxX3yLdutAj47v2KQp5BocaQx2UHp7ZpEy/uy7X9uGzuK7frSDTvFbtetnDR4ojdDb@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7u6sOUh2dCckaqIf4WRjp1zsXAivuBS051H/d2pWfdLdRU2LK
-	X9YZkWob4DlNK7rlUy3Lt5u/pB4xYQQEs5ogbwLgGYGA8ufYB1e6E5oQHZUlZ9h/WY1bcC5S0MW
-	QJHE7IQ==
-X-Google-Smtp-Source: AGHT+IHFPEAwrg2tiCWHHOiMEW4gbtvOV2RAPznerXo6Udh5LKZ1f2eE8NP4qr792/A9GrRaC2p4ssXFKeT3
-X-Received: from pjbsp3.prod.google.com ([2002:a17:90b:52c3:b0:301:a339:b558])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e541:b0:221:7b4a:475a
- with SMTP id d9443c01a7336-2292fa0af62mr156948135ad.52.1743531932510; Tue, 01
- Apr 2025 11:25:32 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:26 -0700
+        bh=3QC+vjZ+uxGeny3upI0J2RrDdb+/2bXijdeBhXiDIiY=;
+        b=HO2r/xg34TVHMXK7p6vGBzJE2EyXy0/BBTq3GTmXO9x3hazoLxlCjD4t2PQHDJh/3l
+         doIY6nFUYOStcE1eJgFo5uwrLzYJaJP1QRVs9HhXScJQFOyIkZFnCvoDF+LNT/NX38qL
+         +3inpIjZNwzjVHugvbw0NaGtxkOCGfWNCKo9c6lDL0+iFwjVsd1JtDMuZCoIgSRvPrJ5
+         4UBdY6VPx5G/C6cfhSFsKth9TnS8UQo9BNotb7E5TSShEpACWur9WftJwRn6kcLujq5E
+         Ux+lr+xiJsj4wOmWtxX24rfp5JR+WlOLsMLEtV1yj39KCNWgGoA/apEreTv+2qhaze0w
+         Qi8w==
+X-Forwarded-Encrypted: i=1; AJvYcCVNeNgkrPRd/PyNxakfTTcFyIt5X77e97mgBezNUYS8OlCtGwQHqwm+ASm826E7mBf2/3B5@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx7bv7yPwnF1EuBoCllv3FUMnKHygRiHa+yPF4/tk0Y66wVIvbk
+	olMEX/JptEIBull7pxleuVXZ6W8TOXv+PLfYUE+31qOTyFi0V5wCvMhbcqgVhaOXVmFvW7rvoDv
+	4jZOexw==
+X-Google-Smtp-Source: AGHT+IExn2cUPsKHag87+ixWWT8lIhcsbUX86fXDEHLuW52QwQ4G2bpj9G8hgmkcPun76Arl4dDyofdwGznJ
+X-Received: from oabhl24.prod.google.com ([2002:a05:6870:1b18:b0:289:d40:52c])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6870:b149:b0:2c2:5c26:2d8e
+ with SMTP id 586e51a60fabf-2cbcf51534cmr8318955fac.16.1743531934478; Tue, 01
+ Apr 2025 11:25:34 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:27 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-29-irogers@google.com>
-Subject: [PATCH v1 28/48] perf kwork: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-30-irogers@google.com>
+Subject: [PATCH v1 29/48] perf buildid: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,66 +114,50 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-kwork.c      | 11 +++++------
- tools/perf/util/bpf_kwork_top.c |  2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ tools/perf/builtin-buildid-cache.c | 2 +-
+ tools/perf/builtin-buildid-list.c  | 2 +-
+ tools/perf/util/build-id.c         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/builtin-kwork.c b/tools/perf/builtin-kwork.c
-index c41a68d073de..cc5488cb98e4 100644
---- a/tools/perf/builtin-kwork.c
-+++ b/tools/perf/builtin-kwork.c
-@@ -1574,8 +1574,7 @@ static void top_print_per_cpu_load(struct perf_kwork *kwork)
- 		load = stat->cpus_runtime[i].load;
- 		if (test_bit(i, stat->all_cpus_bitmap) && total) {
- 			load_ratio = load * 10000 / total;
--			load_width = PRINT_CPU_USAGE_HIST_WIDTH *
--				load_ratio / 10000;
-+			load_width = (int)(PRINT_CPU_USAGE_HIST_WIDTH * load_ratio / 10000);
+diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
+index b0511d16aeb6..7f7ebd625ed6 100644
+--- a/tools/perf/builtin-buildid-cache.c
++++ b/tools/perf/builtin-buildid-cache.c
+@@ -450,7 +450,7 @@ int cmd_buildid_cache(int argc, const char **argv)
  
- 			printf("%%Cpu%-*d[%.*s%.*s %*.*f%%]\n",
- 			       PRINT_CPU_WIDTH, i,
-@@ -1595,7 +1594,7 @@ static void top_print_cpu_usage(struct perf_kwork *kwork)
- 	u64 idle_time = stat->cpus_runtime[MAX_NR_CPUS].idle;
- 	u64 hardirq_time = stat->cpus_runtime[MAX_NR_CPUS].irq;
- 	u64 softirq_time = stat->cpus_runtime[MAX_NR_CPUS].softirq;
--	int cpus_nr = bitmap_weight(stat->all_cpus_bitmap, MAX_NR_CPUS);
-+	int cpus_nr = (int)bitmap_weight(stat->all_cpus_bitmap, MAX_NR_CPUS);
- 	u64 cpus_total_time = stat->cpus_runtime[MAX_NR_CPUS].total;
- 
- 	printf("Total  : %*.*f ms, %d cpus\n",
-@@ -1801,7 +1800,7 @@ static int perf_kwork__read_events(struct perf_kwork *kwork)
- 	session = perf_session__new(&data, &kwork->tool);
- 	if (IS_ERR(session)) {
- 		pr_debug("Error creating perf session\n");
--		return PTR_ERR(session);
-+		return (int)PTR_ERR(session);
+ 		session = perf_session__new(&data, NULL);
+ 		if (IS_ERR(session))
+-			return PTR_ERR(session);
++			return (int)PTR_ERR(session);
  	}
  
- 	symbol__init(&session->header.env);
-@@ -2088,8 +2087,8 @@ static void top_calc_cpu_usage(struct perf_kwork *kwork)
+ 	if (symbol__init(session ? &session->header.env : NULL) < 0)
+diff --git a/tools/perf/builtin-buildid-list.c b/tools/perf/builtin-buildid-list.c
+index 52dfacaff8e3..ef84d1adb98f 100644
+--- a/tools/perf/builtin-buildid-list.c
++++ b/tools/perf/builtin-buildid-list.c
+@@ -109,7 +109,7 @@ static int perf_session__list_build_ids(bool force, bool with_hits)
  
- 		top_subtract_irq_runtime(kwork, work);
+ 	session = perf_session__new(&data, &build_id__mark_dso_hit_ops);
+ 	if (IS_ERR(session))
+-		return PTR_ERR(session);
++		return (int)PTR_ERR(session);
  
--		work->cpu_usage = work->total_runtime * 10000 /
--			stat->cpus_runtime[work->cpu].total;
-+		work->cpu_usage = (u32)(work->total_runtime *
-+					10000 / stat->cpus_runtime[work->cpu].total);
+ 	/*
+ 	 * We take all buildids when the file contains AUX area tracing data
+diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+index e763e8d99a43..6a3ae17b1ccf 100644
+--- a/tools/perf/util/build-id.c
++++ b/tools/perf/util/build-id.c
+@@ -81,7 +81,7 @@ int build_id__sprintf(const struct build_id *build_id, char *bf)
+ 		bid += 2;
+ 	}
  
- 		top_calc_idle_time(kwork, work);
- next:
-diff --git a/tools/perf/util/bpf_kwork_top.c b/tools/perf/util/bpf_kwork_top.c
-index b6f187dd9136..808d0c84d26d 100644
---- a/tools/perf/util/bpf_kwork_top.c
-+++ b/tools/perf/util/bpf_kwork_top.c
-@@ -219,7 +219,7 @@ static void read_task_info(struct kwork_work *work)
- 	int fd;
- 	struct task_data data;
- 	struct task_key key = {
--		.pid = work->id,
-+		.pid = (__u32)work->id,
- 		.cpu = work->cpu,
- 	};
+-	return (bid - bf) + 1;
++	return (int)(bid - bf) + 1;
+ }
  
+ int sysfs__sprintf_build_id(const char *root_dir, char *sbuild_id)
 -- 
 2.49.0.504.g3bcea36a83-goog
 
