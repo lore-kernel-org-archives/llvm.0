@@ -1,143 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E82271E7C02;
-	Tue,  1 Apr 2025 19:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4CE84039
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 19:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743535723; cv=none; b=h6HqXeEHvw11uSzzKYl7paJdd4f/lxbOZjlPwAidQR9vGn6mgmdbVqNSicI4QSpnkwnMnQKfTeV0LYwz1Qu73mTYUwVbKPtHYSZNuDDHOdYFU1aux2GRWDRMOF29CSjWbzXfHTS9pFEwQDEdHtoXfqLplYD/Nss9hhIes41ns9w=
+	t=1743537188; cv=none; b=rByq7yzJ2n6NpVGt0e5iZPkJX9jBckbZsSBpLXVcVGwzN/+lFHpKt3wsbCz4OcZkocysW4G6IYkDZdOIgbcHY6ehPcdnq+jlnLlp4FrWAt8uWUtnUdB1nkXfsGsFxly5v1T+mgXdSYdr52NFXi9k+CPjFCewMVyEa2iItAsxcO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743535723; c=relaxed/simple;
-	bh=MVpO4VaTcru+BmvxoHYy51uFa0XePQy4IVWWKC/dItU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W6ISOwmoC4FFZPBS6NYPb7uq/+5KpswY4l3H3nMa9QfroGjw0ZM88rqLdwb/K7toe8kOtBV0zxqvWeiEZe6YhoSzhpuU66rLkwC7JrWyV71GbaINOFKWbIGhw9WJdvfIAuETnf0f13r6i1NZcG+Ob+DQXSdVYT7Fj+0Amh1lpU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byeaJBNR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743537188; c=relaxed/simple;
+	bh=2STIo2dlTF8dqdgC9dWo4QrP+2EIMTuL0YRVHjtoW1c=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o0P29uLyWpOmTpvKoOGj8gSa14u7X2sVxs67/MipEk8zboAwtKblh6SBb22z6lTGL9hM6iZ/2gr86Hptj/nkSbsLJzApFnMnCWiTj+pXLlWZtq3XyXdK5cBmG85+U7JLTiMz1HtSAlMr50VGyTWoJ8X2X11/kYzjR+hbFpy6BRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wti0cu17; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byeaJBNR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8892C4CEE5;
-	Tue,  1 Apr 2025 19:28:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743535720;
-	bh=MVpO4VaTcru+BmvxoHYy51uFa0XePQy4IVWWKC/dItU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=byeaJBNRrzh+RDHWOK3VOpW1obL/hnTlDiIvpTQ0a1s/wYR6PWSqBUzYXksg0eQid
-	 lgxY0Q0+sNREBFJKlhvruETVHYs2W3J4/XKTJpm9nh78TSQVAEa2XR8D5Cmdlb5cQy
-	 P7PYBizvRYC2a2Gtft/znwlhgxaVZtdaKEXC2mx1bSLWHOMLAcoI42BxOv76KPpRfO
-	 kFMfs6j2YnXGref7V8CP1vqJ19rKK1whdTrqHP5PRxlW6/vCZsOuvkdv79Wv4ufIIb
-	 FDDP/1hLsdPPncD7I+wZTM1oZwwUA9hkgRWXNLweHxGHTFHjzgMOHboZvnyLG/bKEg
-	 BYSo7CcVkjLFA==
-Date: Tue, 1 Apr 2025 12:28:33 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>,
-	Pasha Bouzarjomehri <pasha@rivosinc.com>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v10 2/2] riscv: Add runtime constant support
-Message-ID: <20250401192833.GA3645424@ax162>
-References: <20250319-runtime_const_riscv-v10-0-745b31a11d65@rivosinc.com>
- <20250319-runtime_const_riscv-v10-2-745b31a11d65@rivosinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wti0cu17"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743537186;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=D357ge+OHHBvqPVxq9uClWomgFQNIl2FNbkA6vhkxL8=;
+	b=Wti0cu17YOuxwKEcbgMkp9t21LdHJBZH8p0bGZQ6COX9Td27R6IBNapcuojvASZVgwfx8q
+	2KCcMXw7mDmAFY/wm3/+8ijgE/ctMf30jVjucrNrgeR3H4J7Nf/TmT4tFxX4dYWHZALAFB
+	JzLPEyX55xRsU90mpZwDY0TTnRYlZBw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-468--VA_MfbROsmXqaTo6XkkWw-1; Tue,
+ 01 Apr 2025 15:53:04 -0400
+X-MC-Unique: -VA_MfbROsmXqaTo6XkkWw-1
+X-Mimecast-MFC-AGG-ID: -VA_MfbROsmXqaTo6XkkWw_1743537184
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D31EC180AF4C
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 19:53:03 +0000 (UTC)
+Received: from [172.20.219.140] (unknown [10.30.44.44])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5C749180174E;
+	Tue,  1 Apr 2025 19:53:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 25601e85)
+Date: Tue, 01 Apr 2025 19:53:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250319-runtime_const_riscv-v10-2-745b31a11d65@rivosinc.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <78180.125040115530401690@us-mta-468.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: WttttABEKQr3ee_HVrYmzebCYCkOavZqJcxRQKKUc5E_1743537184
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Charlie,
+Hi, we tested your kernel and here are the results:
 
-On Wed, Mar 19, 2025 at 11:35:20AM -0700, Charlie Jenkins wrote:
-> Implement the runtime constant infrastructure for riscv. Use this
-> infrastructure to generate constants to be used by the d_hash()
-> function.
-> 
-> This is the riscv variant of commit 94a2bc0f611c ("arm64: add 'runtime
-> constant' support") and commit e3c92e81711d ("runtime constants: add
-> x86 architecture support").
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-...
-> diff --git a/arch/riscv/include/asm/runtime-const.h b/arch/riscv/include/asm/runtime-const.h
-...
-> +#define RISCV_RUNTIME_CONST_64_ZBA				\
-> +	".option push\n\t"					\
-> +	".option arch,+zba\n\t"					\
-> +	"slli	%[__tmp],%[__tmp],32\n\t"			\
-> +	"add.uw %[__ret],%[__ret],%[__tmp]\n\t"			\
-> +	"nop\n\t"						\
-> +	"nop\n\t"						\
-> +	".option pop\n\t"					\
-...
-> +#if defined(CONFIG_RISCV_ISA_ZBA) && defined(CONFIG_RISCV_ISA_ZBKB)
-...
-> +#elif defined(CONFIG_RISCV_ISA_ZBA)
-> +#define runtime_const_ptr(sym)						\
-> +({									\
-> +	typeof(sym) __ret, __tmp;					\
-> +	asm_inline(RISCV_RUNTIME_CONST_64_PREAMBLE			\
-> +		ALTERNATIVE(						\
-> +			RISCV_RUNTIME_CONST_64_BASE,			\
-> +			RISCV_RUNTIME_CONST_64_ZBA,			\
-> +			0, RISCV_ISA_EXT_ZBA, 1				\
-> +		)							\
-> +		RISCV_RUNTIME_CONST_64_POSTAMBLE(sym)			\
-> +		: [__ret] "=r" (__ret), [__tmp] "=r" (__tmp));		\
-> +	__ret;								\
-> +})
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-This breaks the build for clang versions 16 and earlier because they do
-not support '.option arch' and it is used in CONFIG_RISCV_ISA_ZBA, which
-has no dependencies and it is default on.
 
-  $ make -skj"$(nproc)" ARCH=riscv LLVM=1 mrproper defconfig fs/dcache.o
-  fs/dcache.c:117:9: warning: unknown option, expected 'push', 'pop', 'rvc', 'norvc', 'relax' or 'norelax' [-Winline-asm]
-          return runtime_const_ptr(dentry_hashtable) +
-                 ^
-  arch/riscv/include/asm/runtime-const.h:103:4: note: expanded from macro 'runtime_const_ptr'
-                          RISCV_RUNTIME_CONST_64_ZBA,                     \
-                          ^
-  arch/riscv/include/asm/runtime-const.h:57:17: note: expanded from macro 'RISCV_RUNTIME_CONST_64_ZBA'
-          ".option push\n\t"                                      \
-                         ^
-  <inline asm>:32:10: note: instantiated into assembly here
-          .option arch,+zba
-                  ^
-  fs/dcache.c:117:9: error: instruction requires the following: 'Zba' (Address Generation Instructions)
-          return runtime_const_ptr(dentry_hashtable) +
-                 ^
-  arch/riscv/include/asm/runtime-const.h:103:4: note: expanded from macro 'runtime_const_ptr'
-                          RISCV_RUNTIME_CONST_64_ZBA,                     \
-                          ^
-  arch/riscv/include/asm/runtime-const.h:59:30: note: expanded from macro 'RISCV_RUNTIME_CONST_64_ZBA'
-          "slli   %[__tmp],%[__tmp],32\n\t"                       \
-                                        ^
-  <inline asm>:34:2: note: instantiated into assembly here
-          add.uw a2,a2,a3
-          ^
-  ...
+Kernel information:
+    Commit message: Merge tag 'char-misc-6.15-rc1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/gregkh/char-misc
 
-  $ rg 'OPTION_ARCH|ZBA' .config
-  364:CONFIG_RISCV_ISA_ZBA=y
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1747192371
 
-Should it grow a dependency on AS_HAS_OPTION_ARCH or should there be a
-different fix?
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1747192371-x86_64-kernel-debug
 
-Cheers,
-Nathan
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
