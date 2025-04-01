@@ -1,55 +1,55 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C51C2147E7
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C94221F34
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531918; cv=none; b=Vy2pL9FWMQ/HjgECUVDw1ExZap/hY0u7e5jPzz8Uu7FLwusokYvTCXb0an/3dubqcNyPiRYyoS7DJc6Z9spIHm3v1AxIkAjMNsJh5maNYdIpJeNTH+PpEk0+bjQ35RAYsApGt4+1uSc1bRfJe5pZg6MH7qBaOd2ca8e7TVXG0CQ=
+	t=1743531920; cv=none; b=B5YguXi8A4TnZ7MHNLMpydpvuj34jYcA+YaCfoKGY+D4/qdE7DOOX37OvFRlFHQbRiT5QVgZWex8NF/PZBtZ92uDUu9KhfW2tTcXLlvJAGf7ZuBOrPQY6PTWt4nkFjptucS0HHSEtxED4W6uFdQLzDgv10wNZFG+uH5zySPMrQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531918; c=relaxed/simple;
-	bh=3ipXD9lA5krXojMgzTZJeNFbDoGDG3hIVLo9GFGHUwM=;
+	s=arc-20240116; t=1743531920; c=relaxed/simple;
+	bh=aWhjaWaNDxw7ETA3oWWKbhRWDFg1+yjRGI+RbsdYOsU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=V+IqwgB9SbAyF9gOHFIXvGymewQU2YWstkINu6lrQzRCTT6aHpLmO/woguezIAbpcMafkjHL8qjDKCMUjiGUTHJA39LeoMKV/BFtP7mFOHY4PZM6kjje59+cWBu9ayfE9NxdRJoA1d6MB5MUG4k45Y+IvPfuQ33yW/M/wmjzcsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xc6Vag55; arc=none smtp.client-ip=209.85.216.74
+	 To:Content-Type; b=thgN/C9JkxssrGIrpI1sbiNo2W7d6Wzcu0eluvZKBUX8tOkCbmYL0yUQQ95HEEpgYq4pbGhGmswnbph7ApGMCOmtFEH7sHi9CxgvVEvdAHChxvX9BGeAhw1/yL0pyB0j/chSi4Wewi8vUzeXrkKMniN7MAMK7iIAT+Ab0oH+aFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fY7RXIy3; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xc6Vag55"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff6aaa18e8so10318277a91.1
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fY7RXIy3"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff798e8c90so9669526a91.1
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531917; x=1744136717; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531919; x=1744136719; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qbFOgtsegWIP33hU2q1VfvbvAOcEKBmypAgL+fgEkks=;
-        b=Xc6Vag55VHzixGI3gqhZzyRauTClx8i8b5PM4OF1sIGgFLxzYzgoHW9FFsHKPT3u/D
-         wmPz187RfSMpy48acPuD4fGl4AlusQvxgDLxbfslLWbUAONviDjOmEZDDszCr57pUgEK
-         sWTg5ED8Pyng/gcbk9rYg3W0QkhuItn/Y3MstKrXpAt63E60AVamNvAbrKYwxBzn+IUM
-         uHHuaphs4zfQj0qe5gdYAu3F5qmJnx6v0z/sbTDk8mKxTAp0Pbvu/kCQpQmN72mro88f
-         8GXdsOlfwh1RQf+lTliC2kGPMvO167Qn+6Na++XyOwZH2IYHQ/QqTB0ZcPktCxN1Tfy3
-         M9Sg==
+        bh=PrYWWuE6sPSS+h6suzb5zsvazVTJqNriEiozkF9ksBc=;
+        b=fY7RXIy3YjstQijKcyu5njNI5M2Qb+nhOI/AAYlqtsiv3s5vozR5/+0NQRtb1hueaV
+         mgE8HbbZYi42O97O5ndTS3cXVuHOrHns3suZeJif5zJ+0XL6SOPhVVbAZ53ilSOx27yH
+         Bj/wb5ER+DyMm0sYtnJfp0XVO0fcivk0zVcl6Bqg0FRTiH/iPDvgDOOhjETiCsXb/TWk
+         abRthEEPJIOKtPFxW3p2JfifYh1K444BfTrrxpB/JvrxLvKTf0rJEVI4TjkIfI1LlPzb
+         SjGdqXiQGoFrOzETj0dFLAQGyK2pKFAggiUokAMRR4bb/EWp98yAX4/w3IjU9sqXbl08
+         cKqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531917; x=1744136717;
+        d=1e100.net; s=20230601; t=1743531919; x=1744136719;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qbFOgtsegWIP33hU2q1VfvbvAOcEKBmypAgL+fgEkks=;
-        b=WUxo8EXHjbH/KiFGWA5W0GSWJIWG+/PwFKrHe/BkvbyPiBRahgd1x1sANnUMGNi6q3
-         xoX1cKCZje7S6NVd3csSH4rPOUlJAtgDmLQgob7B2A4xomzy5jfRfze9dEcBOcGVII9t
-         QsrvHHGtw3fx/9iA3GKndQtz2er9lkNtVe9nd36zJr1abQJspdDq0Qq6MmvKCzcXx45m
-         NDuvGKsR6z1txJWIFVU5Bj4DmHqhQ4mzMA2rcm1hEz9UImSo3H4ctC7ZuNiv6DiJUcm2
-         2dIHw51z6A0w+vQ6KsT3PEa/wOYHOjgebWTfx8ZzimSoY4A1v2FT/BrfkK9Lf40V6kuc
-         J9qA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeGe0yOaxdMDmalXgJsVqa6/obzFV/n0mREz431mm/j92+H/z7605O7C5vhJZqj4Rum7zZ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy289HfX5PK5JThwOj5o5jQAOs+xIDJWAft/PgTeJUb8OhuCeUJ
-	hXpZlFGlzxufcNW+K5fH1FKSgJPnvC3nPgbHThbGTm6zXCalt+L/yqHe3X1Hg46vVoxn9uD883z
-	CF/KzOQ==
-X-Google-Smtp-Source: AGHT+IHS8CwqpCMF7HFeq4dKWZ9ly2piLbucMCbuAUmYD9n4d1+U+fgWdEeYJVD2NQ881z/O0fjUe65Qoc4e
-X-Received: from pjl14.prod.google.com ([2002:a17:90b:2f8e:b0:2fa:26f0:c221])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:264d:b0:305:5f55:899
- with SMTP id 98e67ed59e1d1-305608774f4mr6510152a91.11.1743531916860; Tue, 01
- Apr 2025 11:25:16 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:18 -0700
+        bh=PrYWWuE6sPSS+h6suzb5zsvazVTJqNriEiozkF9ksBc=;
+        b=m9+G5WrVZIjUk1fnv6T+8diqfMAycrvSrt+mJmi+VWgQGcZ8DuokIx2zjwEghCgaTd
+         FCz63YpZj76ewu9ZAstPedyuBQZQoj/Gnbn8Mm4Pk2Zwqlx/J4PA5YX5S4RV/xLf6ZOL
+         U+JY7aeNN3jWEz7gIW+eelV05gfF2+Zm0k883QwVbSlLefXli6LKyMbOMOuWkrzdUasu
+         Ici1jxUsnK6d4vk50rMBtc1sH5JAZgcIydvIOWyoizaj03JsQwV/4LvOrtNJeBTm7wiK
+         qkOEww03axDXfy8waKCxmf5Ay57BdX3lFNPabRQANqjMIoSgUPOsWS3srgk/sH+d9mmg
+         RGrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvioDxoMImFs6d8NIlCeZ4uOjaXZ9n+JzXNpZThXQO5hSB+EiQN3oD+YuWxQveW0fO1kif@lists.linux.dev
+X-Gm-Message-State: AOJu0YztqxSSDx7yk7rMO0S/j2qnTSWw1n82ugTlwNt1dkFhw9na/p3x
+	O6QNa+aI2eLpD0rJQj/mDSFE21+oU/mDtPrQrHmFrGy5vnbkIX+hidretFc4+CKotxHyH420pdm
+	15vddgw==
+X-Google-Smtp-Source: AGHT+IE1i0iieUCDh7eWrhy6Ik1SYOR9eTB7LYFda3ROvNxcBt4D/jdzBlQzp5ihSJVDTMonP2rg4A/ftUf8
+X-Received: from pfbdf3.prod.google.com ([2002:a05:6a00:4703:b0:739:4820:6f18])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:668c:b0:1f5:97c3:41b9
+ with SMTP id adf61e73a8af0-2009f5c4a5emr19263259637.5.1743531918807; Tue, 01
+ Apr 2025 11:25:18 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:19 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-21-irogers@google.com>
-Subject: [PATCH v1 20/48] perf dlfilter: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-22-irogers@google.com>
+Subject: [PATCH v1 21/48] perf demangle: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,64 +114,40 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/dlfilters/dlfilter-test-api-v0.c |  4 ++--
- tools/perf/util/dlfilter.c                  | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ tools/perf/util/demangle-java.c  | 4 ++--
+ tools/perf/util/demangle-ocaml.c | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/dlfilters/dlfilter-test-api-v0.c b/tools/perf/dlfilters/dlfilter-test-api-v0.c
-index 4ca2d7b2ea6c..bf2a1a7b3c71 100644
---- a/tools/perf/dlfilters/dlfilter-test-api-v0.c
-+++ b/tools/perf/dlfilters/dlfilter-test-api-v0.c
-@@ -166,10 +166,10 @@ int start(void **data, void *ctx)
+diff --git a/tools/perf/util/demangle-java.c b/tools/perf/util/demangle-java.c
+index ddf33d58bcd3..ee20f4d08765 100644
+--- a/tools/perf/util/demangle-java.c
++++ b/tools/perf/util/demangle-java.c
+@@ -42,9 +42,9 @@ static const char *base_types['Z' - 'A' + 1] = {
+  *	error  : NULL
+  */
+ static char *
+-__demangle_java_sym(const char *str, const char *end, char *buf, int maxlen, int mode)
++__demangle_java_sym(const char *str, const char *end, char *buf, size_t maxlen, int mode)
+ {
+-	int rlen = 0;
++	size_t rlen = 0;
+ 	int array = 0;
+ 	int narg = 0;
+ 	const char *q;
+diff --git a/tools/perf/util/demangle-ocaml.c b/tools/perf/util/demangle-ocaml.c
+index 9d707bb60b4b..25fe755df5ab 100644
+--- a/tools/perf/util/demangle-ocaml.c
++++ b/tools/perf/util/demangle-ocaml.c
+@@ -30,8 +30,7 @@ ocaml_demangle_sym(const char *sym)
+ {
+ 	char *result;
+ 	int j = 0;
+-	int i;
+-	int len;
++	size_t i, len;
  
- 	CHECK(dlargc == 6);
- 	CHECK(!strcmp(dlargv[0], "first"));
--	verbose = strtol(dlargv[1], NULL, 0);
-+	verbose = (int)strtol(dlargv[1], NULL, 0);
- 	d->ip = strtoull(dlargv[2], NULL, 0);
- 	d->addr = strtoull(dlargv[3], NULL, 0);
--	d->do_early = strtol(dlargv[4], NULL, 0);
-+	d->do_early = (int)strtol(dlargv[4], NULL, 0);
- 	CHECK(!strcmp(dlargv[5], "last"));
- 
- 	pr_debug("%s API\n", __func__);
-diff --git a/tools/perf/util/dlfilter.c b/tools/perf/util/dlfilter.c
-index ddacef881af2..0e513ac7feae 100644
---- a/tools/perf/util/dlfilter.c
-+++ b/tools/perf/util/dlfilter.c
-@@ -38,7 +38,7 @@ static void al_to_d_al(struct addr_location *al, struct perf_dlfilter_al *d_al)
- 		else
- 			d_al->dso = dso__name(dso);
- 		d_al->is_64_bit = dso__is_64_bit(dso);
--		d_al->buildid_size = dso__bid(dso)->size;
-+		d_al->buildid_size = (__u32)dso__bid(dso)->size;
- 		d_al->buildid = dso__bid(dso)->data;
- 	} else {
- 		d_al->dso = NULL;
-@@ -51,9 +51,9 @@ static void al_to_d_al(struct addr_location *al, struct perf_dlfilter_al *d_al)
- 		d_al->sym_start = sym->start;
- 		d_al->sym_end = sym->end;
- 		if (al->addr < sym->end)
--			d_al->symoff = al->addr - sym->start;
-+			d_al->symoff = (__u32)(al->addr - sym->start);
- 		else if (al->map)
--			d_al->symoff = al->addr - map__start(al->map) - sym->start;
-+			d_al->symoff = (__u32)(al->addr - map__start(al->map) - sym->start);
- 		else
- 			d_al->symoff = 0;
- 		d_al->sym_binding = sym->binding;
-@@ -290,9 +290,9 @@ static __s32 code_read(__u64 ip, struct map *map, struct machine *machine, void
- 	u64 offset = map__map_ip(map, ip);
- 
- 	if (ip + len >= map__end(map))
--		len = map__end(map) - ip;
-+		len = (__u32)(map__end(map) - ip);
- 
--	return dso__data_read_offset(map__dso(map), machine, offset, buf, len);
-+	return (__s32)dso__data_read_offset(map__dso(map), machine, offset, buf, len);
- }
- 
- static __s32 dlfilter__object_code(void *ctx, __u64 ip, void *buf, __u32 len)
+ 	if (!ocaml_is_mangled(sym)) {
+ 		return NULL;
 -- 
 2.49.0.504.g3bcea36a83-goog
 
