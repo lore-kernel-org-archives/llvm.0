@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C94221F34
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F12222CB
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531920; cv=none; b=B5YguXi8A4TnZ7MHNLMpydpvuj34jYcA+YaCfoKGY+D4/qdE7DOOX37OvFRlFHQbRiT5QVgZWex8NF/PZBtZ92uDUu9KhfW2tTcXLlvJAGf7ZuBOrPQY6PTWt4nkFjptucS0HHSEtxED4W6uFdQLzDgv10wNZFG+uH5zySPMrQU=
+	t=1743531924; cv=none; b=iEgEV9x4Yq+JS/O92aW5L8jRbLMjjbLN9cAxhWOBI6h1N3kNRW09y0H3WH1jC5oZjv4u3rjO9lw2WPUvJIVEDajwIlc42dqQ0eR97krzz4m38mfmPCCFF7hdtHfugqqc+IgDCNHku8+JHqXQQ6AEK0z2S+d1UuLPxEorZj/P6ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531920; c=relaxed/simple;
-	bh=aWhjaWaNDxw7ETA3oWWKbhRWDFg1+yjRGI+RbsdYOsU=;
+	s=arc-20240116; t=1743531924; c=relaxed/simple;
+	bh=4RVSKWGtcfQih+UknNAMb9Mk513Qf/LPLfe1Z5Wk/Hs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=thgN/C9JkxssrGIrpI1sbiNo2W7d6Wzcu0eluvZKBUX8tOkCbmYL0yUQQ95HEEpgYq4pbGhGmswnbph7ApGMCOmtFEH7sHi9CxgvVEvdAHChxvX9BGeAhw1/yL0pyB0j/chSi4Wewi8vUzeXrkKMniN7MAMK7iIAT+Ab0oH+aFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fY7RXIy3; arc=none smtp.client-ip=209.85.216.73
+	 To:Content-Type; b=Eze9JLw4cLkc7/fLjsGrTY5wLWLjpfj5/8JpFxDJ1x5F0eb6qae5hEyR3e3i7BX7ShpDel6Swrg8ndTHL58D22x39kXUJsxTqoJShhmZPaf2l3vCpTqRoqx4FRQmn2BT72RezhoJlFnry/uQ3s477+FIPrWgzqkc0BkPsdvKPlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FSUbjjcO; arc=none smtp.client-ip=209.85.160.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fY7RXIy3"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff798e8c90so9669526a91.1
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FSUbjjcO"
+Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-2c2339b26fcso4672457fac.3
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531919; x=1744136719; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531921; x=1744136721; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PrYWWuE6sPSS+h6suzb5zsvazVTJqNriEiozkF9ksBc=;
-        b=fY7RXIy3YjstQijKcyu5njNI5M2Qb+nhOI/AAYlqtsiv3s5vozR5/+0NQRtb1hueaV
-         mgE8HbbZYi42O97O5ndTS3cXVuHOrHns3suZeJif5zJ+0XL6SOPhVVbAZ53ilSOx27yH
-         Bj/wb5ER+DyMm0sYtnJfp0XVO0fcivk0zVcl6Bqg0FRTiH/iPDvgDOOhjETiCsXb/TWk
-         abRthEEPJIOKtPFxW3p2JfifYh1K444BfTrrxpB/JvrxLvKTf0rJEVI4TjkIfI1LlPzb
-         SjGdqXiQGoFrOzETj0dFLAQGyK2pKFAggiUokAMRR4bb/EWp98yAX4/w3IjU9sqXbl08
-         cKqw==
+        bh=N34/+E3ZGw12pVAa/alsyA6/izX5NgJHni0nGvXBgPQ=;
+        b=FSUbjjcOafBhRXCrzw9ZYNApr0OSGlTbrqCDdNK3RVAcp9LbQ+UwV7CqalwmdmaNGx
+         o8LcC4mgp1IonyPE2K3wUD5S5LyY2ZBlD6ZzXP/E90hGq6kFgNnvRyEsLwdP9SUC273N
+         yCdpEYpeMeDqEKY79if6B0ANau/D8ybPFCGVr2mWju3CNfNnRQ8RbEDa6WWpM3mGM4LI
+         Xkavw5I9XJ1HWB7eJR7w8m6P51HxqoyNosBck/3wLODAxjclT0quDT5x6AFMB4qJyonD
+         4iQNJrm3PJP5s87XtUt+AzXVTZbxEoSpn+0nHgFVr+NOcZoqU1os8qG8NnrI5xWg8DuL
+         i6zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531919; x=1744136719;
+        d=1e100.net; s=20230601; t=1743531921; x=1744136721;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PrYWWuE6sPSS+h6suzb5zsvazVTJqNriEiozkF9ksBc=;
-        b=m9+G5WrVZIjUk1fnv6T+8diqfMAycrvSrt+mJmi+VWgQGcZ8DuokIx2zjwEghCgaTd
-         FCz63YpZj76ewu9ZAstPedyuBQZQoj/Gnbn8Mm4Pk2Zwqlx/J4PA5YX5S4RV/xLf6ZOL
-         U+JY7aeNN3jWEz7gIW+eelV05gfF2+Zm0k883QwVbSlLefXli6LKyMbOMOuWkrzdUasu
-         Ici1jxUsnK6d4vk50rMBtc1sH5JAZgcIydvIOWyoizaj03JsQwV/4LvOrtNJeBTm7wiK
-         qkOEww03axDXfy8waKCxmf5Ay57BdX3lFNPabRQANqjMIoSgUPOsWS3srgk/sH+d9mmg
-         RGrg==
-X-Forwarded-Encrypted: i=1; AJvYcCWvioDxoMImFs6d8NIlCeZ4uOjaXZ9n+JzXNpZThXQO5hSB+EiQN3oD+YuWxQveW0fO1kif@lists.linux.dev
-X-Gm-Message-State: AOJu0YztqxSSDx7yk7rMO0S/j2qnTSWw1n82ugTlwNt1dkFhw9na/p3x
-	O6QNa+aI2eLpD0rJQj/mDSFE21+oU/mDtPrQrHmFrGy5vnbkIX+hidretFc4+CKotxHyH420pdm
-	15vddgw==
-X-Google-Smtp-Source: AGHT+IE1i0iieUCDh7eWrhy6Ik1SYOR9eTB7LYFda3ROvNxcBt4D/jdzBlQzp5ihSJVDTMonP2rg4A/ftUf8
-X-Received: from pfbdf3.prod.google.com ([2002:a05:6a00:4703:b0:739:4820:6f18])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6300:668c:b0:1f5:97c3:41b9
- with SMTP id adf61e73a8af0-2009f5c4a5emr19263259637.5.1743531918807; Tue, 01
- Apr 2025 11:25:18 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:19 -0700
+        bh=N34/+E3ZGw12pVAa/alsyA6/izX5NgJHni0nGvXBgPQ=;
+        b=me5BZofCKCx/A+1Ia71Uw75IbYWIc5B7cEzXiborKGSNwCBHvtwLuGHHDUj/9sVSAj
+         M1UM6joSnUDPDSSLUJeniTS7GODh4QTQ2empDs+GrRYHFv3QbTVoeXphPTRjZPDtzF9d
+         qsGkA7PqLwpP4LZP+Cayp75bK3/jFBwqqlrhtQ5Th64nFGmhoJ1n1a/LrpZDgWZLm6lP
+         P9s4utiMTpfQWJkWrCwFDmXaFCxHFwRjseL1D1hcvU1czK2c8FVucDE3CSb7szxVPJPh
+         hbq0lqVcyRlPjgRSS5R89U/7l0zRhEotFQZ7ZZxnm4SvFezL74rRTWl9EPltuqTIpUZD
+         Pn0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXD93bMBZwnyxjXpyzFx3oik9bDm6jmgR7EqVSp515QlHKLVE4UGmhepVMQgcnXc/Z44MSB@lists.linux.dev
+X-Gm-Message-State: AOJu0YyeS7xbvXjLHYWo/snxazVEG/bJIHpCt9ub7/96i670SfIacOJE
+	q9qeJYiND+QYjBzfTATuuJmjPed0Jfjr6YUFzx2jyINnsoTll22wZ3xFfjKasn9HgG3jRIkeR7Y
+	bAFO7jQ==
+X-Google-Smtp-Source: AGHT+IHZQN/TkPazOpz69O2OfTzOMRhutI7f6IM7JKtjYAx4h6Oo/m6aJeCrTVl4+t7sC7yi/LtnKHYPftrK
+X-Received: from oachx16.prod.google.com ([2002:a05:6871:5310:b0:2c2:5922:a060])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6870:6f14:b0:2a3:832e:5492
+ with SMTP id 586e51a60fabf-2cc3822669emr2359419fac.25.1743531921129; Tue, 01
+ Apr 2025 11:25:21 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:20 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-22-irogers@google.com>
-Subject: [PATCH v1 21/48] perf demangle: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-23-irogers@google.com>
+Subject: [PATCH v1 22/48] perf ui: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,40 +114,111 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/demangle-java.c  | 4 ++--
- tools/perf/util/demangle-ocaml.c | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ tools/perf/ui/hist.c       | 18 ++++++++----------
+ tools/perf/ui/stdio/hist.c |  5 ++---
+ 2 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/util/demangle-java.c b/tools/perf/util/demangle-java.c
-index ddf33d58bcd3..ee20f4d08765 100644
---- a/tools/perf/util/demangle-java.c
-+++ b/tools/perf/util/demangle-java.c
-@@ -42,9 +42,9 @@ static const char *base_types['Z' - 'A' + 1] = {
-  *	error  : NULL
-  */
- static char *
--__demangle_java_sym(const char *str, const char *end, char *buf, int maxlen, int mode)
-+__demangle_java_sym(const char *str, const char *end, char *buf, size_t maxlen, int mode)
+diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
+index ae3b7fe1dadc..72f40984e2d3 100644
+--- a/tools/perf/ui/hist.c
++++ b/tools/perf/ui/hist.c
+@@ -233,7 +233,7 @@ static int __hpp__group_sort_idx(struct hist_entry *a, struct hist_entry *b,
+ static int __hpp__sort(struct hist_entry *a, struct hist_entry *b,
+ 		       hpp_field_fn get_field)
  {
--	int rlen = 0;
-+	size_t rlen = 0;
- 	int array = 0;
- 	int narg = 0;
- 	const char *q;
-diff --git a/tools/perf/util/demangle-ocaml.c b/tools/perf/util/demangle-ocaml.c
-index 9d707bb60b4b..25fe755df5ab 100644
---- a/tools/perf/util/demangle-ocaml.c
-+++ b/tools/perf/util/demangle-ocaml.c
-@@ -30,8 +30,7 @@ ocaml_demangle_sym(const char *sym)
+-	s64 ret;
++	int ret;
+ 	int i, nr_members;
+ 	struct evsel *evsel;
+ 	u64 *fields_a, *fields_b;
+@@ -272,7 +272,7 @@ static int __hpp__sort(struct hist_entry *a, struct hist_entry *b,
+ static int __hpp__sort_acc(struct hist_entry *a, struct hist_entry *b,
+ 			   hpp_field_fn get_field)
  {
- 	char *result;
- 	int j = 0;
--	int i;
--	int len;
-+	size_t i, len;
+-	s64 ret = 0;
++	int ret = 0;
  
- 	if (!ocaml_is_mangled(sym)) {
- 		return NULL;
+ 	if (symbol_conf.cumulate_callchain) {
+ 		/*
+@@ -287,7 +287,7 @@ static int __hpp__sort_acc(struct hist_entry *a, struct hist_entry *b,
+ 		    !hist_entry__has_callchains(a) || !symbol_conf.use_callchain)
+ 			return 0;
+ 
+-		ret = b->callchain->max_depth - a->callchain->max_depth;
++		ret = field_cmp(b->callchain->max_depth, a->callchain->max_depth);
+ 		if (callchain_param.order == ORDER_CALLER)
+ 			ret = -ret;
+ 	}
+@@ -299,6 +299,7 @@ static int hpp__width_fn(struct perf_hpp_fmt *fmt,
+ 			 struct hists *hists)
+ {
+ 	int len = fmt->user_len ?: fmt->len;
++	int fmt_len = (int)strlen(fmt->name);
+ 	struct evsel *evsel = hists_to_evsel(hists);
+ 
+ 	if (symbol_conf.event_group) {
+@@ -314,10 +315,7 @@ static int hpp__width_fn(struct perf_hpp_fmt *fmt,
+ 		len = max(len, nr * fmt->len);
+ 	}
+ 
+-	if (len < (int)strlen(fmt->name))
+-		len = strlen(fmt->name);
+-
+-	return len;
++	return len < fmt_len ? fmt_len : len;
+ }
+ 
+ static int hpp__header_fn(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+@@ -341,7 +339,7 @@ int hpp_color_scnprintf(struct perf_hpp *hpp, const char *fmt, ...)
+ 	ret = percent_color_len_snprintf(hpp->buf, hpp->size, fmt, len, percent);
+ 	va_end(args);
+ 
+-	return (ret >= ssize) ? (ssize - 1) : ret;
++	return (ret >= ssize) ? (int)(ssize - 1) : ret;
+ }
+ 
+ static int hpp_entry_scnprintf(struct perf_hpp *hpp, const char *fmt, ...)
+@@ -354,7 +352,7 @@ static int hpp_entry_scnprintf(struct perf_hpp *hpp, const char *fmt, ...)
+ 	ret = vsnprintf(hpp->buf, hpp->size, fmt, args);
+ 	va_end(args);
+ 
+-	return (ret >= ssize) ? (ssize - 1) : ret;
++	return (ret >= ssize) ? (int)(ssize - 1) : ret;
+ }
+ 
+ #define __HPP_COLOR_PERCENT_FN(_type, _field, _fmttype)				\
+@@ -914,7 +912,7 @@ void perf_hpp__set_user_width(const char *width_list_str)
+ 	perf_hpp_list__for_each_format(&perf_hpp_list, fmt) {
+ 		char *p;
+ 
+-		int len = strtol(ptr, &p, 10);
++		int len = (int)strtol(ptr, &p, 10);
+ 		fmt->user_len = len;
+ 
+ 		if (*p == ',')
+diff --git a/tools/perf/ui/stdio/hist.c b/tools/perf/ui/stdio/hist.c
+index 7ac4b98e28bc..6a981f95b4ec 100644
+--- a/tools/perf/ui/stdio/hist.c
++++ b/tools/perf/ui/stdio/hist.c
+@@ -450,7 +450,7 @@ int __hist_entry__snprintf(struct hist_entry *he, struct perf_hpp *hpp,
+ 		advance_hpp(hpp, ret);
+ 	}
+ 
+-	return hpp->buf - start;
++	return (int)(hpp->buf - start);
+ }
+ 
+ static int hist_entry__snprintf(struct hist_entry *he, struct perf_hpp *hpp)
+@@ -612,8 +612,7 @@ static int hist_entry__fprintf(struct hist_entry *he, size_t size,
+ 	ret = fprintf(fp, "%s\n", bf);
+ 
+ 	if (hist_entry__has_callchains(he) && !ignore_callchains)
+-		callchain_ret = hist_entry_callchain__fprintf(he, total_period,
+-							      0, fp);
++		callchain_ret = (int)hist_entry_callchain__fprintf(he, total_period, 0, fp);
+ 
+ 	ret += callchain_ret;
+ 
 -- 
 2.49.0.504.g3bcea36a83-goog
 
