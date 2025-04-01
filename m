@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-ot1-f73.google.com (mail-ot1-f73.google.com [209.85.210.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D34D227EB6
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A2A228C8D
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531969; cv=none; b=LM4PW51wSUlqTBDv8oLW0XsJZdLoP+lTqWIjHRXT2DGXeIaP03L+swFOjBmlJMjk65NhlaMA160YUAtJojtiJgEzhfOmdb24JJbn/HE7amvGtNHUzSb+WoE9RPsE6ONMBSJQY6jdSPcRthsBTW0MNM+0auheESvuOyM1WMefzL4=
+	t=1743531971; cv=none; b=fFGjkvMhQi0npSnT2IqTkPDsThqbQL8mEEOckRi8nCchJhxDyu/V+hi4kDtE5iY6PBOO/x3HodHlTSAxAu/MFSyzOL4fHcaUV4SPHeLIlXhwmSS/l0+fv0/CXjWA3IB922PsQgDFFCoovFeZctiNEuzGSxSrxOS7bmgJmihwnYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531969; c=relaxed/simple;
-	bh=VYAhgSHR8CjW8YATc0oZ3XPUiaGVjv/5MYlkyFYu2lI=;
+	s=arc-20240116; t=1743531971; c=relaxed/simple;
+	bh=loSeINwlbc6XnjqNUnme9Ii2wesULU3u9gelnKxDOWo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=NPxnYuLTX2PUXRDnYiBGW9rAuz7FFg1ZR3JB9IisqOUSrL2z4bUOKBNnEiGCRpgTT9ODyq04Sg/MXiT147Oj7ICmY8JQoMxKOxArnwMI7VLCbsgV/G/R1AY0jCgBr7ob3ClQwzlGQbZAICVC78wgscZIxLV2JXW6LtIqBUrv/Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qgx77zgx; arc=none smtp.client-ip=209.85.216.73
+	 To:Content-Type; b=RnhaVD1jqvXOE2PPwRz1XCWwizuC1DP77UCmQyuZGdAI8ey/dHXspXHegCsC9Q4+DoQ1RBUIJP7BE6p4KU1X2ZsXwd5d4Q6jsRhgNVPPF+N7/3y7Ujv9y3LGOzCIC4c0HQsVyYeSvL0AI/CSNiY4GGvPkX6xqObOXVQon77vrRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H5N8QoVX; arc=none smtp.client-ip=209.85.210.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qgx77zgx"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ff7cf599beso10931671a91.0
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:26:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H5N8QoVX"
+Received: by mail-ot1-f73.google.com with SMTP id 46e09a7af769-72bc289077fso343240a34.0
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531966; x=1744136766; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531968; x=1744136768; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3GhpEMZc+Go5hXkRH+5nn2InkEe+78BeHi9RfDz0OEg=;
-        b=Qgx77zgx8KLZcwIrLr8clqPtORM8bIxo1ZYicZ/0zgBz4yYvI5Dv0bGwzA9lANJKi1
-         ohb4O5z3wQvrkctstHq1MaTTRgCAiJbGYaxo3ewqXJ/xZpx1Ees59Nzp5X8s0toNCMmN
-         PdCTq1UkElS/UcVVitsX4paVcTksxc4s4UvLHDfg1Rnz4dMkucRTvlJrFio9R7fHOpYs
-         FRfLrcUxQIpxxIjvRuJN5av+AVwvjjBS98IITzTGNh2cdZW0tOUtMBV8/IYOJAZkixqo
-         92koRzuzNVRK85GB5ew+2zR4EsCQ3tZysBFKVqu9MVnT6DAlu0Gh0jVIMO4fj3cCsHAv
-         3/dg==
+        bh=iXDN2IiTwXgBiyK9J/TipFHWdZHNwXGG7JKhdVlTKrc=;
+        b=H5N8QoVXtf8WFz8jLlQO1ZIFFS+yYJ3VtMUEUli8kwc9aHGfYTvJ7QnMvAVmSVys4k
+         HylDEgPKYGQNMljUG/1lN1SzzVb5YWNAvEE8wV9m4AYpA9U17OCZuk0QFiEFSXp9/LRj
+         RfBqizuZw6UE0Z8SjbniK7Z09Cu/MFKW/JvSUGU1gQLKTxqQo0q50oik1Wp0MmT0iLLN
+         w6e+/38ilhsGhaSI9mlmqZTVGplT4JrFhnDRkK6aquBFnF7WcpMoJxQmOpbaKaQck/Mq
+         zQUtBkfFxbGxjI4Azr9Ws4hrobuDxs0DyW8RajyKEqpTuQTWgfPizsqxWtIayfk1YRIA
+         AF8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531966; x=1744136766;
+        d=1e100.net; s=20230601; t=1743531968; x=1744136768;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GhpEMZc+Go5hXkRH+5nn2InkEe+78BeHi9RfDz0OEg=;
-        b=Jszvl6tn5LfJQtadLpkCs+vSMLmC3ScAM8Lc2WSAWHcMFBRTezpjLfFPQUWyqd9dIr
-         ZXmjs6yCKXxn87fq/7sCil+UQUiOClaUK4L478EgkUzPl4Zhudf4Mue12aL06gnQCkwo
-         5qqTawAW4I29o9eln7wN2EpGLN4rE1iiB42xR4jG+ITEtmpaDa81YHMog+T7a1eaQjWG
-         6zutHpWu8uPNdJuTfyhGXg1XCC5XoOS47P6S3iTqVDTjnVyyLPTXNirBcbqSLCDxcxNM
-         OI6A8C5KhAeNHnmY5Qv6xNqi76rsfV1iK6trEPhOGwBgMTBNFPDi/Yp5ZzJVIW6a3l8S
-         VUqw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3p1v7jCqK1Y0gj0eG/S4SLhzOAPkPNU/kl5zkIw6UpTS/sDWLGBt+7Qxa1G7RsGo1Goat@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLTfmUbjYls2kvIZxoRfowuGua/alCKLA+vRZhKiYdngHZyxO6
-	HvSp0dWbiPLuXM7s3gDfFGzrV8KL5gXUWBiJkj7tECquo/J+syS/9WKObiLgdh3tNBOLpbTtHEp
-	gxtxVMw==
-X-Google-Smtp-Source: AGHT+IH28uehI5+J49TPsEd9NihvXOguO0Bih1z8y7KT4XeqjB74B1qbmMSKwRKZHS/+SGf0DQUxAQTZmWKE
-X-Received: from pjbqn13.prod.google.com ([2002:a17:90b:3d4d:b0:2e9:38ea:ca0f])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:53d0:b0:2ee:8430:b831
- with SMTP id 98e67ed59e1d1-30531f715eamr22653376a91.2.1743531966013; Tue, 01
- Apr 2025 11:26:06 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:42 -0700
+        bh=iXDN2IiTwXgBiyK9J/TipFHWdZHNwXGG7JKhdVlTKrc=;
+        b=X+R89mwUdE5N/1vpiCecPgwaf6Ni8tY7KpmPKNtDs6A7gVFezVQFOxZ+YwQpq/VGz5
+         IpInTJGbWoSQ31aVY8GPTfVJu3ah6GAGZYxL8ygssxtcrSbR6cs9dFkY4acqGs8DwpFY
+         Uzv0c6xJg2Q8PDe/Df+/T5zVQfLgBYRQGXfkAJJ5gaJhKzrsOJyG/9YSv32zigA6OyZu
+         5jmWhQDUHddKgFsM7GayWARU2b3iEPnTehbdvL2vOfJtYRxML0RPL0e3W1q4d+KIywEt
+         DemliKa7ejGHLIWmn8eRpayEMXkJMhzyOfHJGbabb1HgTYDuDgnA7jqB7EiRH5l4XebQ
+         s8Yg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZd4gx3yjCPMYnCurlC+euLMIR4FUWj18sgNJR50ukEaxtauHsrSCZtSetu5pBnIcRrTIc@lists.linux.dev
+X-Gm-Message-State: AOJu0YyLx6v+nhXhaubBcUquE0QdSr4iZ98mIn/ttsV3WwDQKHQ7dmiD
+	l/cuyWVZ/6pzbRY3dBZe6E3/jYdvYyU3MZTz5+Dlvi+5xdo1PWhzhqN+Ybcv/hRiB3kwXhWCa6d
+	wfcY6Qg==
+X-Google-Smtp-Source: AGHT+IHUffenbdrxtR2eLoeeVEpZywaWbKXEVYkXtogEfzNSPRpDS6P26p637BPNcEuYtvO3lbjegNy1msNO
+X-Received: from oabhi26.prod.google.com ([2002:a05:6870:c99a:b0:2c1:5c70:acac])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6830:2808:b0:72a:f44b:13ed
+ with SMTP id 46e09a7af769-72c637771c3mr8057489a34.2.1743531968061; Tue, 01
+ Apr 2025 11:26:08 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:43 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-45-irogers@google.com>
-Subject: [PATCH v1 44/48] perf zlib: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-46-irogers@google.com>
+Subject: [PATCH v1 45/48] perf symbol: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,22 +114,177 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/zlib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/symbol-elf.c | 33 +++++++++++++++++----------------
+ tools/perf/util/symbol.c     | 10 +++++-----
+ 2 files changed, 22 insertions(+), 21 deletions(-)
 
-diff --git a/tools/perf/util/zlib.c b/tools/perf/util/zlib.c
-index 78d2297c1b67..d30597701fd1 100644
---- a/tools/perf/util/zlib.c
-+++ b/tools/perf/util/zlib.c
-@@ -44,7 +44,7 @@ int gzip_decompress_to_file(const char *input, int output_fd)
- 		goto out_unmap;
+diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+index fbf6d0f73af9..9de6e963ca79 100644
+--- a/tools/perf/util/symbol-elf.c
++++ b/tools/perf/util/symbol-elf.c
+@@ -261,7 +261,7 @@ static int elf_read_program_header(Elf *elf, u64 vaddr, GElf_Phdr *phdr)
+ 		return -1;
  
- 	zs.next_in = ptr;
--	zs.avail_in = stbuf.st_size;
-+	zs.avail_in = (uInt)stbuf.st_size;
+ 	for (i = 0; i < phdrnum; i++) {
+-		if (gelf_getphdr(elf, i, phdr) == NULL)
++		if (gelf_getphdr(elf, (int)i, phdr) == NULL)
+ 			return -1;
  
- 	do {
- 		zs.next_out = buf;
+ 		if (phdr->p_type != PT_LOAD)
+@@ -550,7 +550,7 @@ static void get_rela_dyn_info(Elf *elf, GElf_Ehdr *ehdr, struct rela_dyn_info *d
+ 	if (!scn || !rela_dyn_shdr.sh_link || !rela_dyn_shdr.sh_entsize)
+ 		return;
+ 
+-	di->nr_entries = rela_dyn_shdr.sh_size / rela_dyn_shdr.sh_entsize;
++	di->nr_entries = (u32)(rela_dyn_shdr.sh_size / rela_dyn_shdr.sh_entsize);
+ 	di->rela_dyn_data = elf_getdata(scn, NULL);
+ 
+ 	scn = elf_getscn(elf, rela_dyn_shdr.sh_link);
+@@ -789,7 +789,7 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
+ 	if (symstrs->d_size == 0)
+ 		goto out_elf_end;
+ 
+-	ri.nr_entries = shdr_rel_plt.sh_size / shdr_rel_plt.sh_entsize;
++	ri.nr_entries = (u32)(shdr_rel_plt.sh_size / shdr_rel_plt.sh_entsize);
+ 
+ 	ri.is_rela = shdr_rel_plt.sh_type == SHT_RELA;
+ 
+@@ -925,7 +925,7 @@ static int elf_read_build_id(Elf *elf, void *bf, size_t size)
+ 				size_t sz = min(size, descsz);
+ 				memcpy(bf, ptr, sz);
+ 				memset(bf + sz, 0, size - sz);
+-				err = sz;
++				err = (int)sz;
+ 				break;
+ 			}
+ 		}
+@@ -1066,14 +1066,14 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+ 			} else if (read(fd, bf, descsz) != (ssize_t)descsz)
+ 				break;
+ 		} else {
+-			int n = namesz + descsz;
++			size_t n = namesz + descsz;
+ 
+-			if (n > (int)sizeof(bf)) {
++			if (n > sizeof(bf)) {
+ 				n = sizeof(bf);
+ 				pr_debug("%s: truncating reading of build id in sysfs file %s: n_namesz=%u, n_descsz=%u.\n",
+ 					 __func__, filename, nhdr.n_namesz, nhdr.n_descsz);
+ 			}
+-			if (read(fd, bf, n) != n)
++			if (read(fd, bf, n) != (ssize_t)n)
+ 				break;
+ 		}
+ 	}
+@@ -1426,7 +1426,7 @@ static u64 max_text_section(Elf *elf, GElf_Ehdr *ehdr)
+ 		if (!gelf_getshdr(sec, &shdr))
+ 			break;
+ 
+-		if (!is_exe_text(shdr.sh_flags))
++		if (!is_exe_text((int)shdr.sh_flags))
+ 			continue;
+ 
+ 		/* .init and .exit sections are not placed with .text */
+@@ -1546,7 +1546,7 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
+ 	 * perf does not record module section addresses except for .text, but
+ 	 * some sections can use the same mapping as .text.
+ 	 */
+-	if (kmodule && adjust_kernel_syms && is_exe_text(shdr->sh_flags) &&
++	if (kmodule && adjust_kernel_syms && is_exe_text((int)shdr->sh_flags) &&
+ 	    shdr->sh_offset <= max_text_sh_offset) {
+ 		dso__put(*curr_dsop);
+ 		*curr_dsop = dso__get(dso);
+@@ -1672,7 +1672,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 	if (secstrs_sym == NULL)
+ 		goto out_elf_end;
+ 
+-	nr_syms = shdr.sh_size / shdr.sh_entsize;
++	nr_syms = (uint32_t)(shdr.sh_size / shdr.sh_entsize);
+ 
+ 	memset(&sym, 0, sizeof(sym));
+ 
+@@ -1734,7 +1734,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
+ 		}
+ 
+ 		if (runtime_ss->opdsec && sym.st_shndx == runtime_ss->opdidx) {
+-			u32 offset = sym.st_value - syms_ss->opdshdr.sh_addr;
++			u32 offset = (u32)(sym.st_value - syms_ss->opdshdr.sh_addr);
+ 			u64 *opd = opddata->d_buf + offset;
+ 			sym.st_value = DSO__SWAP(dso, u64, *opd);
+ 			sym.st_shndx = elf_addr_to_index(runtime_ss->elf,
+@@ -1946,7 +1946,7 @@ static int elf_read_maps(Elf *elf, bool exe, mapfn_t mapfn, void *data)
+ 		return -1;
+ 
+ 	for (i = 0; i < phdrnum; i++) {
+-		if (gelf_getphdr(elf, i, &phdr) == NULL)
++		if (gelf_getphdr(elf, (int)i, &phdr) == NULL)
+ 			return -1;
+ 		if (phdr.p_type != PT_LOAD)
+ 			continue;
+@@ -2767,14 +2767,15 @@ static void sdt_adjust_loc(struct sdt_note *tmp, GElf_Addr base_off)
+ 	if (!base_off)
+ 		return;
+ 
+-	if (tmp->bit32)
++	if (tmp->bit32) {
+ 		tmp->addr.a32[SDT_NOTE_IDX_LOC] =
+-			tmp->addr.a32[SDT_NOTE_IDX_LOC] + base_off -
+-			tmp->addr.a32[SDT_NOTE_IDX_BASE];
+-	else
++			(Elf32_Addr)(tmp->addr.a32[SDT_NOTE_IDX_LOC] + base_off -
++				     tmp->addr.a32[SDT_NOTE_IDX_BASE]);
++	} else {
+ 		tmp->addr.a64[SDT_NOTE_IDX_LOC] =
+ 			tmp->addr.a64[SDT_NOTE_IDX_LOC] + base_off -
+ 			tmp->addr.a64[SDT_NOTE_IDX_BASE];
++	}
+ }
+ 
+ static void sdt_adjust_refctr(struct sdt_note *tmp, GElf_Addr base_addr,
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 11540219481b..7eceb6679ed5 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -111,7 +111,7 @@ static int prefix_underscores_count(const char *str)
+ 	while (*tail == '_')
+ 		tail++;
+ 
+-	return tail - str;
++	return (int)(tail - str);
+ }
+ 
+ const char * __weak arch__normalize_symbol_name(const char *name)
+@@ -481,10 +481,10 @@ int symbol__match_symbol_name(const char *name, const char *str,
+ 
+ 	if (includes == SYMBOL_TAG_INCLUDE__DEFAULT_ONLY &&
+ 	    (versioning = strstr(name, "@@"))) {
+-		int len = strlen(str);
++		int len = (int)strlen(str);
+ 
+ 		if (len < versioning - name)
+-			len = versioning - name;
++			len = (int)(versioning - name);
+ 
+ 		return arch__compare_symbol_names_n(name, str, len);
+ 	} else
+@@ -638,7 +638,7 @@ void dso__sort_by_name(struct dso *dso)
+  * While we find nice hex chars, build a long_val.
+  * Return number of chars processed.
+  */
+-static int hex2u64(const char *ptr, u64 *long_val)
++static size_t hex2u64(const char *ptr, u64 *long_val)
+ {
+ 	char *p;
+ 
+@@ -1532,7 +1532,7 @@ static int dso__load_perf_map(const char *map_path, struct dso *dso)
+ 	while (!feof(file)) {
+ 		u64 start, size;
+ 		struct symbol *sym;
+-		int line_len, len;
++		size_t line_len, len;
+ 
+ 		line_len = getline(&line, &n, file);
+ 		if (line_len < 0)
 -- 
 2.49.0.504.g3bcea36a83-goog
 
