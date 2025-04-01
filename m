@@ -1,55 +1,55 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E21213E7B
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC5F222596
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531927; cv=none; b=I32ExN4hFBeBcxnetB0EjvMOsAVUQ2tP8tXfjmjvUBLjCEbiHE1A9O95yCdwI2Q08vnmd99ki+RjXBPNcYzWgzGQEG5XIjmfvnyG8ANbcnDJRhT2G3u3RWcb42e/BTOoS46qOyz97wGGLia5o0y2jXUh7jEf36rSzRwBLpTmLvc=
+	t=1743531929; cv=none; b=XYM2zVvvK7pctFFfUiXAuTVZZvdDQxfKsK7vizDeVPrVv7WgI9W3osgw1jDJfA/cZcMv0nfS6ZblOU8RULMRrK6EcX3tv+UTnExpF8R2RIZ4m5AdJqi/WVRIc6UwA09wwZjcyemCrOH9uJeVmmdJatzt7scBCT+zsGtMGJENlLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531927; c=relaxed/simple;
-	bh=OHSwmVRTG0HD488JeBe67A2CUxy+O0gCaGl1hO/MrlY=;
+	s=arc-20240116; t=1743531929; c=relaxed/simple;
+	bh=sjYPBHk2RL4AjpW6aV3agLcV+PsNHpxvrXhMbpH8T90=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=Lj0AmS6I8tvKRWPhqFXGZdynxyFqI55kjRtp62Q13ZtFpn80uUFeXqXY/iMJr2gsQelJCujlnDPQCMXK3LFPKuIo92AU6n4CEcdbLToU+JtMAc88loego54ii2qkspfaiZXIXXIGPhsNkOiydKQr3/sILjhy6PN1SIA6E9sChxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mkg7Jcim; arc=none smtp.client-ip=209.85.214.201
+	 To:Content-Type; b=r6C0sbOm23Hriby/2dOSNAswBldfiAPEyheRQla1byvLwL1MailnQDYmT/KayoM/mIEA0uMJaw46cLQxl083Q2eFpioIzp4ibWihLFZr/eua2q6fTSnApgxWQBWy5Kf7BfAYhMd+oIp87WBXScSAsHwrIAaw+zald5WmoBhky00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gNKj9grV; arc=none smtp.client-ip=209.85.160.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mkg7Jcim"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22650077995so161755955ad.3
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gNKj9grV"
+Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-2c2a9abc5b2so1826795fac.1
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531925; x=1744136725; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531927; x=1744136727; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=maDKewcfrTN/pXEuAvy1eHGZYrBP9VzStu+Vbun6bP0=;
-        b=Mkg7JcimxhOg6watzBukj+JIHAmgi8rYyLIyoe1Ceswa9Bj0G/UJ1/eg3LAP91Ifj2
-         oXLoHCmHQbYOzXKwLrZnvsi0eRygsz7dhcfVdUyscG0E4q1aFxjr03+fuUJ3DnI/Q/H7
-         2jcj5O6yrQdyoS5nWi0bvGb/+14r49hgO+Tkt7YdmqF853YtyPNC3x5crvTcmro/lBtT
-         xdU8ABCisSgdeB95pzcrxjfvwF7dBzkmNcFA7Y5Yj/B4d1kGoPykhSM0IMQbPNdjkprg
-         4DA/S+n4xFfCWEtHxwU/3AJziCdoboeVfTTDo5lkyy1RmzXAwjC6Xx8YQTCRgD0fCD0H
-         6pVQ==
+        bh=XWBe4FBRBVRgr9j7LcjV776a5KxBaguCaqx3R+ckSTU=;
+        b=gNKj9grVFIMEI552KOXq3xssy9hBhiZ5Mxhr+YUr0DQMcCQVQntoPkRW6DAFpt7uOS
+         SeCbNK6irAy7R9Qb3xkgXFtfs4aYtbXoLCMUMze/qz/pRHXXlv+J+Cj5J86Ilhn7H209
+         PTY0N3+M/lMXZLwNJaCYdbO3KEKLJtCCJH9lUKlbEC+ysSKQovcXph1ye5x6JajK0U4j
+         NsgbEM6ElGcI3g5H83ChS5uPOUWHMBVQSQ+az6VWKv/VEMadZyF8vvRfsUZeC9XlQhi9
+         psoAHRwNSUwEQgbJ9BDMEwV00j5G0tSM8aCw5AUUlpjTHf37eb6Z584xSGQ0GF/qUx89
+         7tlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531925; x=1744136725;
+        d=1e100.net; s=20230601; t=1743531927; x=1744136727;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maDKewcfrTN/pXEuAvy1eHGZYrBP9VzStu+Vbun6bP0=;
-        b=LtnkQEmiH0tYWr7MxajBwXzF9nFskvvP10tkYnTyvOisG8f4/JZtP35fGyarX/ZQ4G
-         C5LNsuaEiSedca+pgdwea71GOhkbdUhjcc/vNYcWK5UmdRz8rLurUOF5a0G2lZLNlVmo
-         cwps+1FTPOLKFlPh9L6BJddG1ufkmpR7yxGm1LZAvl3Fsd3gtARGfD2uezVurLhGQ6B4
-         OAaxJ+XwkNbXSWV6ErThJ/r+OfAW5l+vNznON39UPWkANfZ6HzMyzPzdAQpNcW/fjQAr
-         v7CkftljHBkvItXZFRfPzYvzEZDW2BUdKR1QAnecKBDCDortnj5Hzyqy2sbqCwhJ7qc0
-         nwhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZNsNYceaEFANV2OtqcVhq1JOUCmw1nJ0A/2rCW1OtSskGVQld9jN6ZPlnwXm5Q+HO7rXF@lists.linux.dev
-X-Gm-Message-State: AOJu0YwmfRVKhu3oWoUw1cQ3lHTCgqSXysjCIzBsOZwMj+DiVXvxez+a
-	3gKUCXYPtLIgz1ao8BmmrwC6odeVh9L7GhCek5BafSg2wJ22V/QiozoXLXVCLgiRd+DWfvV+wal
-	D4XvdOw==
-X-Google-Smtp-Source: AGHT+IFNI0r4xdlVep8eZmgL2ok0j2hkk8AtyWpy1qsBmfszW0qOT/+uO0dTUbBWJ2V47z6JGjdY7ibJE2zJ
-X-Received: from plpf4.prod.google.com ([2002:a17:903:3c44:b0:223:58e2:570d])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ebc6:b0:224:c76:5e57
- with SMTP id d9443c01a7336-2292f9e8652mr220203935ad.39.1743531924561; Tue, 01
- Apr 2025 11:25:24 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:22 -0700
+        bh=XWBe4FBRBVRgr9j7LcjV776a5KxBaguCaqx3R+ckSTU=;
+        b=KmsX5Yj9GEGtNTFZ0BuFf6NcCRc+iFuOmR5/J9R41BqrvjAwiwrJrgM7SYg5EtDxRW
+         QKVBADgXXc43V6F8ITiKLoq6+fSeE697+k00aOPwUKbfX43X68S5GGM6x5uBzihRHZT4
+         PLqNFi5TtxVVNgRl+f5YTbK44/f7ZDmpsbIbWh3e6nt6ZeJ7j90p2H0LITrjNBtVmp1r
+         Vq2xjKys+Nq6wxNKRNn25Q7LcffEof6Ur3AYMYl3dWbfipKcZ9wvrd3LvEpztDI6Ymcw
+         sf6kN+xKCnUPkPX1fXHXypjtD/+fowyATs3Yryk2JyllFsLMLAGMJKzIqLId0fe0QIoK
+         3Oqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXsTY1BUYrBbvk6PP79mKbaWapv6XfmEhl4CZePn4A0dCDdR93+oNRq2BjAHB7Ezm0VSV6B@lists.linux.dev
+X-Gm-Message-State: AOJu0YxFY+lqbnh1oI38+9Ef/tw7UnxN1rGjfDiCQpM5kSiZjv+znf4v
+	Qmp6c0S2DvsB0z66NLI1baik4XmeNpcg/VMcvxiWYlKz8JKJR47eUOOMtKfT/bkFQwtsBIt7cnw
+	WPK/97g==
+X-Google-Smtp-Source: AGHT+IEJ2D69UYPiouVutAbkRbHVsxjAhnNCDOYzCLqniaLRZ6J5FNujGK2lT5LaK02WEQghfdvYk/R5HGWC
+X-Received: from oablk13.prod.google.com ([2002:a05:6870:3e0d:b0:29d:f69c:1743])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6871:293:b0:29e:40f8:ad9b
+ with SMTP id 586e51a60fabf-2cbcf513e8dmr8987528fac.14.1743531926639; Tue, 01
+ Apr 2025 11:25:26 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:23 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-25-irogers@google.com>
-Subject: [PATCH v1 24/48] perf report: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-26-irogers@google.com>
+Subject: [PATCH v1 25/48] perf help: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,149 +114,120 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-report.c |  4 ++--
- tools/perf/util/callchain.c | 12 ++++++------
- tools/perf/util/callchain.h |  2 +-
- tools/perf/util/srccode.c   |  6 +++---
- tools/perf/util/srcline.c   |  2 +-
- 5 files changed, 13 insertions(+), 13 deletions(-)
+ tools/perf/builtin-help.c          |  4 ++--
+ tools/perf/util/help-unknown-cmd.c | 14 ++++++++------
+ tools/perf/util/levenshtein.c      | 18 +++++++++---------
+ 3 files changed, 19 insertions(+), 17 deletions(-)
 
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index b030ce72e13e..fff8f3db788e 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -800,7 +800,7 @@ static int count_lost_samples_event(const struct perf_tool *tool,
- 	evsel = evlist__id2evsel(rep->session->evlist, sample->id);
- 	if (evsel) {
- 		struct hists *hists = evsel__hists(evsel);
--		u32 count = event->lost_samples.lost;
-+		u32 count = (u32)event->lost_samples.lost;
+diff --git a/tools/perf/builtin-help.c b/tools/perf/builtin-help.c
+index 7be6fb6df595..05151c68191f 100644
+--- a/tools/perf/builtin-help.c
++++ b/tools/perf/builtin-help.c
+@@ -301,7 +301,7 @@ static struct cmdnames main_cmds, other_cmds;
  
- 		if (event->header.misc & PERF_RECORD_MISC_LOST_SAMPLES_BPF)
- 			hists__inc_nr_dropped_samples(hists, count);
-@@ -1602,7 +1602,7 @@ int cmd_report(int argc, const char **argv)
- 
- 	session = perf_session__new(&data, &report.tool);
- 	if (IS_ERR(session)) {
--		ret = PTR_ERR(session);
-+		ret = (int)PTR_ERR(session);
- 		goto exit;
- 	}
- 
-diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-index d7b7eef740b9..c3206b9d7b52 100644
---- a/tools/perf/util/callchain.c
-+++ b/tools/perf/util/callchain.c
-@@ -214,7 +214,7 @@ __parse_callchain_report_opt(const char *arg, bool allow_record_opt)
- 
- 			if (get_stack_size(tok, &size) < 0)
- 				return -1;
--			callchain_param.dump_size = size;
-+			callchain_param.dump_size = (u32)size;
- 			try_stack_size = false;
- 		} else if (!minpcnt_set) {
- 			/* try to get the min percent */
-@@ -224,7 +224,7 @@ __parse_callchain_report_opt(const char *arg, bool allow_record_opt)
- 			minpcnt_set = true;
- 		} else {
- 			/* try print limit at last */
--			callchain_param.print_limit = strtoul(tok, &endptr, 0);
-+			callchain_param.print_limit = (u32)strtoul(tok, &endptr, 0);
- 			if (tok == endptr)
- 				return -1;
- 		}
-@@ -295,7 +295,7 @@ int parse_callchain_record(const char *arg, struct callchain_param *param)
- 				unsigned long size = 0;
- 
- 				ret = get_stack_size(tok, &size);
--				param->dump_size = size;
-+				param->dump_size = (u32)size;
- 			}
- 		} else if (!strncmp(name, "lbr", sizeof("lbr"))) {
- 			if (!strtok_r(NULL, ",", &saveptr)) {
-@@ -332,7 +332,7 @@ int perf_callchain_config(const char *var, const char *value)
- 		int ret;
- 
- 		ret = get_stack_size(value, &size);
--		callchain_param.dump_size = size;
-+		callchain_param.dump_size = (u32)size;
- 
- 		return ret;
- 	}
-@@ -817,7 +817,7 @@ split_add_child(struct callchain_node *parent,
+ void list_common_cmds_help(void)
  {
- 	struct callchain_node *new;
- 	struct list_head *old_tail;
--	unsigned int idx_total = idx_parents + idx_local;
-+	u64 idx_total = idx_parents + idx_local;
+-	unsigned int i, longest = 0;
++	size_t i, longest = 0;
  
- 	/* split */
- 	new = create_child(parent, true);
-@@ -1027,7 +1027,7 @@ merge_chain_branch(struct callchain_cursor *cursor,
- 	struct callchain_node *child;
- 	struct callchain_list *list, *next_list;
- 	struct rb_node *n;
--	int old_pos = cursor->nr;
-+	u64 old_pos = cursor->nr;
- 	int err = 0;
+ 	for (i = 0; i < ARRAY_SIZE(common_cmds); i++) {
+ 		if (longest < strlen(common_cmds[i].name))
+@@ -310,7 +310,7 @@ void list_common_cmds_help(void)
  
- 	list_for_each_entry_safe(list, next_list, &src->val, list) {
-diff --git a/tools/perf/util/callchain.h b/tools/perf/util/callchain.h
-index 86ed9e4d04f9..7a2abff6d0a5 100644
---- a/tools/perf/util/callchain.h
-+++ b/tools/perf/util/callchain.h
-@@ -65,7 +65,7 @@ struct callchain_node {
- 	struct rb_node		rb_node;    /* to sort nodes in an output tree */
- 	struct rb_root		rb_root_in; /* input tree of children */
- 	struct rb_root		rb_root;    /* sorted output tree of children */
--	unsigned int		val_nr;
-+	u64			val_nr;
- 	unsigned int		count;
- 	unsigned int		children_count;
- 	u64			hit;
-diff --git a/tools/perf/util/srccode.c b/tools/perf/util/srccode.c
-index 476e99896d5e..f5f8cdfd00c1 100644
---- a/tools/perf/util/srccode.c
-+++ b/tools/perf/util/srccode.c
-@@ -37,7 +37,7 @@ static LIST_HEAD(srcfile_list);
- static long map_total_sz;
- static int num_srcfiles;
- 
--static int countlines(char *map, int maplen)
-+static int countlines(char *map, size_t maplen)
- {
- 	int numl;
- 	char *end = map + maplen;
-@@ -136,7 +136,7 @@ static struct srcfile *find_srcfile(char *fn)
- 	h->lines = calloc(h->numlines, sizeof(char *));
- 	if (!h->lines)
- 		goto out_map;
--	fill_lines(h->lines, h->numlines, h->map, h->maplen);
-+	fill_lines(h->lines, h->numlines, h->map, (int)h->maplen);
- 	list_add(&h->nd, &srcfile_list);
- 	hlist_add_head(&h->hash_nd, &srcfile_htab[hval]);
- 	map_total_sz += h->maplen;
-@@ -166,6 +166,6 @@ char *find_sourceline(char *fn, unsigned line, int *lenp)
- 	if (!l)
- 		return NULL;
- 	p = memchr(l, '\n', sf->map + sf->maplen - l);
--	*lenp = p - l;
-+	*lenp = (int)(p - l);
- 	return l;
+ 	puts(" The most commonly used perf commands are:");
+ 	for (i = 0; i < ARRAY_SIZE(common_cmds); i++) {
+-		printf("   %-*s   ", longest, common_cmds[i].name);
++		printf("   %-*s   ", (int)longest, common_cmds[i].name);
+ 		puts(common_cmds[i].help);
+ 	}
  }
-diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index f32d0d4f4bc9..b2003c5490a2 100644
---- a/tools/perf/util/srcline.c
-+++ b/tools/perf/util/srcline.c
-@@ -443,7 +443,7 @@ static int filename_split(char *filename, unsigned int *line_nr)
- 	sep = strchr(filename, ':');
- 	if (sep) {
- 		*sep++ = '\0';
--		*line_nr = strtoul(sep, NULL, 0);
-+		*line_nr = (unsigned int)strtoul(sep, NULL, 0);
- 		return 1;
+diff --git a/tools/perf/util/help-unknown-cmd.c b/tools/perf/util/help-unknown-cmd.c
+index a0a46e34f8d1..f0a0b8c13a92 100644
+--- a/tools/perf/util/help-unknown-cmd.c
++++ b/tools/perf/util/help-unknown-cmd.c
+@@ -24,14 +24,15 @@ static int levenshtein_compare(const void *p1, const void *p2)
+ {
+ 	const struct cmdname *const *c1 = p1, *const *c2 = p2;
+ 	const char *s1 = (*c1)->name, *s2 = (*c2)->name;
+-	int l1 = (*c1)->len;
+-	int l2 = (*c2)->len;
+-	return l1 != l2 ? l1 - l2 : strcmp(s1, s2);
++	ssize_t l1 = (*c1)->len;
++	ssize_t l2 = (*c2)->len;
++
++	return l1 != l2 ? (int)(l1 - l2) : (int)strcmp(s1, s2);
+ }
+ 
+ static int add_cmd_list(struct cmdnames *cmds, struct cmdnames *old)
+ {
+-	unsigned int i, nr = cmds->cnt + old->cnt;
++	size_t nr = cmds->cnt + old->cnt;
+ 	void *tmp;
+ 
+ 	if (nr > cmds->alloc) {
+@@ -45,7 +46,7 @@ static int add_cmd_list(struct cmdnames *cmds, struct cmdnames *old)
+ 			return -1;
+ 		cmds->names = tmp;
  	}
- 	pr_debug("addr2line missing ':' in filename split\n");
+-	for (i = 0; i < old->cnt; i++)
++	for (size_t i = 0; i < old->cnt; i++)
+ 		cmds->names[cmds->cnt++] = old->names[i];
+ 	zfree(&old->names);
+ 	old->cnt = 0;
+@@ -54,7 +55,8 @@ static int add_cmd_list(struct cmdnames *cmds, struct cmdnames *old)
+ 
+ const char *help_unknown_cmd(const char *cmd, struct cmdnames *main_cmds)
+ {
+-	unsigned int i, n = 0, best_similarity = 0;
++	unsigned int i, n = 0;
++	size_t best_similarity = 0;
+ 	struct cmdnames other_cmds;
+ 
+ 	memset(&other_cmds, 0, sizeof(other_cmds));
+diff --git a/tools/perf/util/levenshtein.c b/tools/perf/util/levenshtein.c
+index 6a6712635aa4..f6912b848c4a 100644
+--- a/tools/perf/util/levenshtein.c
++++ b/tools/perf/util/levenshtein.c
+@@ -44,19 +44,19 @@
+ int levenshtein(const char *string1, const char *string2,
+ 		int w, int s, int a, int d)
+ {
+-	int len1 = strlen(string1), len2 = strlen(string2);
++	size_t len1 = strlen(string1), len2 = strlen(string2);
+ 	int *row0 = malloc(sizeof(int) * (len2 + 1));
+ 	int *row1 = malloc(sizeof(int) * (len2 + 1));
+ 	int *row2 = malloc(sizeof(int) * (len2 + 1));
+-	int i, j;
++	int ret;
+ 
+-	for (j = 0; j <= len2; j++)
+-		row1[j] = j * a;
+-	for (i = 0; i < len1; i++) {
++	for (size_t j = 0; j <= len2; j++)
++		row1[j] = (int)j * a;
++	for (size_t i = 0; i < len1; i++) {
+ 		int *dummy;
+ 
+-		row2[0] = (i + 1) * d;
+-		for (j = 0; j < len2; j++) {
++		row2[0] = ((int)i + 1) * d;
++		for (size_t j = 0; j < len2; j++) {
+ 			/* substitution */
+ 			row2[j + 1] = row1[j] + s * (string1[i] != string2[j]);
+ 			/* swap */
+@@ -78,10 +78,10 @@ int levenshtein(const char *string1, const char *string2,
+ 		row2 = dummy;
+ 	}
+ 
+-	i = row1[len2];
++	ret = row1[len2];
+ 	free(row0);
+ 	free(row1);
+ 	free(row2);
+ 
+-	return i;
++	return ret;
+ }
 -- 
 2.49.0.504.g3bcea36a83-goog
 
