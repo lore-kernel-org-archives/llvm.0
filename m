@@ -1,55 +1,55 @@
 Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D071D21B9DE
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9BD21B9DE
+	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 18:24:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743531895; cv=none; b=ecXL3DO6RQW7GjJCnLKjFXaXubyuRK0suFdB3td5zlij246ur3z1/VrlLey0PQ+RTGtU8HmQplrcMF+nxs1rvQjoHDEFMcx2eXLtpo22wjT5B9QZpDpZNWIaLe00zwlMfOIfvB5+g7VI96Nif5ZDinWay6s4/HEwGrR5pXG1Kxg=
+	t=1743531897; cv=none; b=eeJnB6onQidF52pAuKRK1Ee5bMdjuaXYDMt/VB/re3g6VMo5ZY7YSbfDOSkCYfsQvZUMlITffFCAq4yLmvdzQ46ljGB5hX1YG19/qLX57y2nHHh8zEaxbj8xhKVYOb0Um5Fv10/Vo5NI9niONWSVeqrqfvpjfZ4kNYucKGLYUig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743531895; c=relaxed/simple;
-	bh=evtKcJO6JgreVhXQ519ZpEqcukEoNZa/Zt1QGZHfhNE=;
+	s=arc-20240116; t=1743531897; c=relaxed/simple;
+	bh=AORnD1om4C2sypJLzjCz8efPFZxPS6C3udp8jTr5i34=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=G9y5Pxzf1wWcKj6w2hVgBEWJZY+9tS/OJlen40LtOfR8bVb+r/4FtGFccg5E39mxmpyjvyWI+JkN7EB3R4vcYg/BrssBxssGmi6XpATXQ4zazPPt2sLSyNaklwTyHZobZ+2NUPI4iuI+xy6/UIWgwyhUfcuPqHCgP0VoYiTZm2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gd6cS0+k; arc=none smtp.client-ip=209.85.214.201
+	 To:Content-Type; b=fkjc3MoyEVGkLc0AgbM2DpYhOJur9kLcUivuNej/SM44FwDTLrKOo2pPmPlG33aQRijwcIhIamKaTOXnCvn/p0WasjGI4IubZHZgNBwqpxB+HlQ0asyzwMLUPc+s+QbfO5sJMcXrcGXvr+BzRpd1oRP7Nq7Clp6WMFyXr9DbQEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HlnO0CLW; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gd6cS0+k"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22647ff3cf5so95124265ad.0
-        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HlnO0CLW"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-22650077995so161733775ad.3
+        for <llvm@lists.linux.dev>; Tue, 01 Apr 2025 11:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743531893; x=1744136693; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1743531895; x=1744136695; darn=lists.linux.dev;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G+pFNUFuvg3sBu986hGcTsi3XWrtdH4pSJphzXQPDGw=;
-        b=Gd6cS0+kIcGRnPOkgw7XnXqvPKaw4y0gjKPuon5dneeOOFm6SEMPI7ggwdiC89ZVfG
-         OCyfllYSOl7Ku7T8oPI9DJWMtqO0YKh7dVUK/BDFQY4jSB9zv4rUqjpnH1AC1NyQMb9E
-         zpOB319wG02M73ibriJ/fE/mATIdMqlYZBn5rjIGIqT7lrScg3HWZ9XoInDr9Uo9UAKk
-         V+2SMjF3MkzzrHYCvZFqEdnQvdyY/z1aJ8Bsokrh/4VUjn/2kY8r/ZDuIFYu3DMWDD+2
-         k8xfcb+r+Eu3KdWWBPq0G0hFMV6SiF4W4RwvtkgWlkSLfiQGnGV7t134opubyI/AJl2M
-         4D2Q==
+        bh=1ougT7jDU8A9cudDjFwokt57F5i+izAS3bT+Nyxperg=;
+        b=HlnO0CLWsyHPBuR4oOg7Bwg8/jBiAJQ2LVWTlxlUp0ciSuVSgTqKXsbi93l5CcOOiC
+         mMsLcYMyLsc3UTEso1SgyNx+C9vnvBreBznB1YvLSwV2Xi1ScdhzS/EsFYV2ePNB6KFh
+         3Y8vGnQCi3O9LXGnbK0nbCC3H6vs2VGO1oiiRtXybpkFvNOpSWX2gmK0xjXqg0f2i7jT
+         hFYdrJkKytHkvUysm+i12zjOQWtDa25m3tAwdiFEWCv49sEvvWfPYkYEqisziDVrVBeo
+         7DBWux+BWfArkRVT/mGzYtnoPiyWmGnBQ2n6XK+p6T3dnylldwUDeDAcEwvzS4k/PSij
+         xY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743531893; x=1744136693;
+        d=1e100.net; s=20230601; t=1743531895; x=1744136695;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+pFNUFuvg3sBu986hGcTsi3XWrtdH4pSJphzXQPDGw=;
-        b=DchGxVgASDgNU6K1e7mB32BiONPtnQeEKoWNBwkPjZKAuJTAgcuOzg/T9mDe2LG6Ai
-         KJf40KbLlgvti9WEh5cGCt+lsIac2d/0QxAtiTTtVCsWTH/E6uraKUgp1VsrQ+zU9P4I
-         6kq7Ny3EJoIPXsJ9wvOd+9zZ/LVArRjyfaj8JHbVgI9PdHVbtrc05rOSedrVRi/cywTv
-         ldOwf/Y1tB75EC0XMEdSmTnM80npM193VGXq7/9E6XqcLPiviWV9VLNMGir6CpOpO+HS
-         RY2I7j+kvHvUcw1+mZt08Zamewvx5uNisw8Igaip9nLnJhYL6Ytl4o3l9ZeazUnn0kdu
-         /R/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUBfZWCSqT4Iy4CuwQ3+i01NlQBl0Dbcws4q15JnEJRR/zQNzpXBrGxZkYyEgefXSTr4rHE@lists.linux.dev
-X-Gm-Message-State: AOJu0YwKT67C2N5PY9leEywZyadOSVSgxD4KppdgMBT2MWtVnEEufBw7
-	j9U4lJokfJ24Lo4TVd15+1JxIAJutgSbGp/8J7rCJPMuZPKVK/Gkm7VQbnlKRhDbJ7YhDQYKLMA
-	hc+JQjw==
-X-Google-Smtp-Source: AGHT+IEGuoaOgsEiiCmj+DYkQlzD6TAEH+/gDN4mTjdSDcZNHVUirS5RJWIVMLKioVyAkZjKmJMVmsLL2Kq0
-X-Received: from pfbln13.prod.google.com ([2002:a05:6a00:3ccd:b0:736:47b8:9b88])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2446:b0:223:525b:2a7
- with SMTP id d9443c01a7336-2292f95f084mr213479705ad.15.1743531892980; Tue, 01
- Apr 2025 11:24:52 -0700 (PDT)
-Date: Tue,  1 Apr 2025 11:23:06 -0700
+        bh=1ougT7jDU8A9cudDjFwokt57F5i+izAS3bT+Nyxperg=;
+        b=wvLygxA5VP4e3eaPSn4Z2PAEdN7+AtyTl8j6FKuihW4o1Ejx9Zg/HuIoiudcHLaryt
+         sDHWeG8bUYAhYTV3g3J1YemK2TJbNHsGNNXxUywPVpB8ELn3dCT5L1OwWS4iz2opeP8d
+         1yWbi/58ux0IUvrOdI3k9/lZOta4GHY2uDKxmIv0iBKPrcEmH+zQzsQD3F9SaoIaHb0y
+         CxshWwCkyfBV8HbG7ww1iGnmrUcnEcwTvN8hnlIvOvaQShdZ0aiN6vbpISjb6Thlnva5
+         QhxVTtMBKzYqj1n4amNmkwLmy9g6w0MnylkbiGotQoW2tmHNZPNo3hY07QTttl3CPmkU
+         6vsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXM/03MWrjpXa1F5Mdyqzb4GNL9ELkRltLmRgeU6xswXWB65DZlXXnKrseeJ2B8s0R21UFQ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyc6eawxMyLjKdGTu+fvd5TFwAN9162aqawYFWHmXpJlH1b55n5
+	qX8jltY0lrN0XZH+ew6SZtNd1nwAOR+AY2U6sni6Jf/1CbRbJ40fRsi618a+vrFfPCtYyrWPkQM
+	m7bzURA==
+X-Google-Smtp-Source: AGHT+IHJykACnjjgWPAWibGCmtd45+SU33aGZAT7wMdq/fqMroEpb2uj9+hf6s6MhADeGdU+pE8Kf/7i45Xn
+X-Received: from plble11.prod.google.com ([2002:a17:902:fb0b:b0:220:e7dc:350d])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:daca:b0:223:6180:1bea
+ with SMTP id d9443c01a7336-2292f9e601emr208087855ad.37.1743531895008; Tue, 01
+ Apr 2025 11:24:55 -0700 (PDT)
+Date: Tue,  1 Apr 2025 11:23:07 -0700
 In-Reply-To: <20250401182347.3422199-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20250401182347.3422199-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250401182347.3422199-9-irogers@google.com>
-Subject: [PATCH v1 08/48] perf bench: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250401182347.3422199-10-irogers@google.com>
+Subject: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -114,373 +114,325 @@ truncation explicit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/bench/breakpoint.c           |  8 +++++---
- tools/perf/bench/epoll-wait.c           |  3 ++-
- tools/perf/bench/evlist-open-close.c    |  8 ++++----
- tools/perf/bench/find-bit-bench.c       |  5 +++--
- tools/perf/bench/futex.h                |  4 ++--
- tools/perf/bench/inject-buildid.c       |  8 ++++----
- tools/perf/bench/mem-functions.c        |  2 +-
- tools/perf/bench/pmu-scan.c             | 12 ++++++------
- tools/perf/bench/sched-messaging.c      |  4 ++--
- tools/perf/bench/sched-pipe.c           | 15 +++++++++------
- tools/perf/bench/sched-seccomp-notify.c |  2 +-
- tools/perf/bench/synthesize.c           |  6 +++---
- tools/perf/builtin-bench.c              |  2 +-
- 13 files changed, 43 insertions(+), 36 deletions(-)
+ tools/perf/tests/api-io.c                   |  2 +-
+ tools/perf/tests/bp_signal.c                |  6 +++---
+ tools/perf/tests/bp_signal_overflow.c       |  6 +++---
+ tools/perf/tests/builtin-test.c             |  9 +++++----
+ tools/perf/tests/code-reading.c             |  4 ++--
+ tools/perf/tests/dso-data.c                 | 10 +++++-----
+ tools/perf/tests/mmap-thread-lookup.c       |  2 +-
+ tools/perf/tests/openat-syscall-tp-fields.c |  2 +-
+ tools/perf/tests/pmu-events.c               |  2 +-
+ tools/perf/tests/sigtrap.c                  |  4 ++--
+ tools/perf/tests/switch-tracking.c          | 11 ++++++-----
+ tools/perf/tests/vmlinux-kallsyms.c         |  4 ++--
+ tools/perf/tests/wp.c                       |  4 ++--
+ 13 files changed, 34 insertions(+), 32 deletions(-)
 
-diff --git a/tools/perf/bench/breakpoint.c b/tools/perf/bench/breakpoint.c
-index dfd18f5db97d..72802b334eeb 100644
---- a/tools/perf/bench/breakpoint.c
-+++ b/tools/perf/bench/breakpoint.c
-@@ -57,7 +57,7 @@ static int breakpoint_setup(void *addr)
- 	attr.bp_addr = (unsigned long)addr;
- 	attr.bp_type = HW_BREAKPOINT_RW;
- 	attr.bp_len = HW_BREAKPOINT_LEN_1;
--	fd = syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
-+	fd = (int)syscall(SYS_perf_event_open, &attr, 0, -1, -1, 0);
- 
- 	if (fd < 0)
- 		fd = -errno;
-@@ -111,7 +111,8 @@ static void *breakpoint_thread(void *arg)
- // then starts nparallel threads which create and join bench_repeat batches of nthreads threads.
- int bench_breakpoint_thread(int argc, const char **argv)
- {
--	unsigned int i, result_usec;
-+	unsigned int i;
-+	long result_usec;
- 	int repeat = bench_repeat;
- 	struct breakpoint *breakpoints;
- 	pthread_t *parallel;
-@@ -197,7 +198,8 @@ static const char * const enable_usage[] = {
- // and then disables and enables the breakpoint bench_repeat times.
- int bench_breakpoint_enable(int argc, const char **argv)
- {
--	unsigned int i, nthreads, result_usec, done = 0;
-+	unsigned int i, nthreads, done = 0;
-+	long result_usec;
- 	char watched;
- 	int fd;
- 	pthread_t *threads;
-diff --git a/tools/perf/bench/epoll-wait.c b/tools/perf/bench/epoll-wait.c
-index 20fe4f72b4af..5ea3e0b2daf2 100644
---- a/tools/perf/bench/epoll-wait.c
-+++ b/tools/perf/bench/epoll-wait.c
-@@ -182,7 +182,8 @@ static void shuffle(void *array, size_t n, size_t size)
- 
- static void *workerfn(void *arg)
- {
--	int fd, ret, r;
-+	int fd, ret;
-+	ssize_t r;
- 	struct worker *w = (struct worker *) arg;
- 	unsigned long ops = w->ops;
- 	struct epoll_event ev;
-diff --git a/tools/perf/bench/evlist-open-close.c b/tools/perf/bench/evlist-open-close.c
-index 5a27691469ed..770d9db176ee 100644
---- a/tools/perf/bench/evlist-open-close.c
-+++ b/tools/perf/bench/evlist-open-close.c
-@@ -192,16 +192,16 @@ static char *bench__repeat_event_string(const char *evstr, int n)
- {
- 	char sbuf[STRERR_BUFSIZE];
- 	struct strbuf buf;
--	int i, str_size = strlen(evstr),
--	    final_size = str_size * n + n,
--	    err = strbuf_init(&buf, final_size);
-+	size_t str_size = strlen(evstr);
-+	size_t final_size = str_size * n + n;
-+	int err = strbuf_init(&buf, final_size);
- 
- 	if (err) {
- 		pr_err("strbuf_init: %s\n", str_error_r(err, sbuf, sizeof(sbuf)));
- 		goto out_error;
+diff --git a/tools/perf/tests/api-io.c b/tools/perf/tests/api-io.c
+index 0ba3d5ccebcf..4aee1cff062e 100644
+--- a/tools/perf/tests/api-io.c
++++ b/tools/perf/tests/api-io.c
+@@ -74,7 +74,7 @@ static int setup_test(char path[PATH_MAX], const char *contents,
+ 		unlink(path);
+ 		return -1;
  	}
- 
--	for (i = 0; i < n; i++) {
-+	for (int i = 0; i < n; i++) {
- 		err = strbuf_add(&buf, evstr, str_size);
- 		if (err) {
- 			pr_err("strbuf_add: %s\n", str_error_r(err, sbuf, sizeof(sbuf)));
-diff --git a/tools/perf/bench/find-bit-bench.c b/tools/perf/bench/find-bit-bench.c
-index 7e25b0e413f6..59b00e89f71b 100644
---- a/tools/perf/bench/find-bit-bench.c
-+++ b/tools/perf/bench/find-bit-bench.c
-@@ -31,7 +31,7 @@ static const char *const bench_usage[] = {
- static unsigned int accumulator;
- static unsigned int use_of_val;
- 
--static noinline void workload(int val)
-+static noinline void workload(unsigned long val)
- {
- 	use_of_val += val;
- 	accumulator++;
-@@ -59,8 +59,9 @@ static int do_for_each_set_bit(unsigned int num_bits)
- 	u64 runtime_us;
- 	struct stats fb_time_stats, tb_time_stats;
- 	double time_average, time_stddev;
--	unsigned int bit, i, j;
-+	unsigned int i, j;
- 	unsigned int set_bits, skip;
-+	unsigned long bit;
- 
- 	init_stats(&fb_time_stats);
- 	init_stats(&tb_time_stats);
-diff --git a/tools/perf/bench/futex.h b/tools/perf/bench/futex.h
-index ebdc2b032afc..6d9076e091eb 100644
---- a/tools/perf/bench/futex.h
-+++ b/tools/perf/bench/futex.h
-@@ -49,14 +49,14 @@ static inline int
- futex_syscall(volatile u_int32_t *uaddr, int op, u_int32_t val, struct timespec *timeout,
- 	      volatile u_int32_t *uaddr2, int val3, int opflags)
- {
--	return syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, val3);
-+	return (int)syscall(SYS_futex, uaddr, op | opflags, val, timeout, uaddr2, val3);
+-	io__init(io, io->fd, io->buf, buf_size);
++	io__init(io, io->fd, io->buf, (unsigned int)buf_size);
+ 	return 0;
  }
  
- static inline int
- futex_syscall_nr_requeue(volatile u_int32_t *uaddr, int op, u_int32_t val, int nr_requeue,
- 			 volatile u_int32_t *uaddr2, int val3, int opflags)
+diff --git a/tools/perf/tests/bp_signal.c b/tools/perf/tests/bp_signal.c
+index 3faeb5b6fe0b..5ecac6c2d8b6 100644
+--- a/tools/perf/tests/bp_signal.c
++++ b/tools/perf/tests/bp_signal.c
+@@ -64,7 +64,7 @@ static noinline int test_function(void)
  {
--	return syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2, val3);
-+	return (int)syscall(SYS_futex, uaddr, op | opflags, val, nr_requeue, uaddr2, val3);
+ 	__test_function(&the_var);
+ 	the_var++;
+-	return time(NULL);
++	return (int)time(NULL);
  }
  
- /**
-diff --git a/tools/perf/bench/inject-buildid.c b/tools/perf/bench/inject-buildid.c
-index f55c07e4be94..b78de817e721 100644
---- a/tools/perf/bench/inject-buildid.c
-+++ b/tools/perf/bench/inject-buildid.c
-@@ -175,7 +175,7 @@ static ssize_t synthesize_mmap(struct bench_data *data, struct bench_dso *dso, u
- 	union perf_event event;
- 	size_t len = offsetof(struct perf_record_mmap2, filename);
- 	u64 *id_hdr_ptr = (void *)&event;
--	int ts_idx;
-+	size_t ts_idx;
- 
- 	len += roundup(strlen(dso->name) + 1, 8) + bench_id_hdr_size;
- 
-@@ -250,14 +250,14 @@ static void *data_reader(void *arg)
- 	struct bench_data *data = arg;
- 	char buf[8192];
- 	int flag;
--	int n;
- 
- 	flag = fcntl(data->output_pipe[0], F_GETFL);
- 	fcntl(data->output_pipe[0], F_SETFL, flag | O_NONBLOCK);
- 
- 	/* read out data from child */
- 	while (true) {
--		n = read(data->output_pipe[0], buf, sizeof(buf));
-+		ssize_t n = read(data->output_pipe[0], buf, sizeof(buf));
-+
- 		if (n > 0)
- 			continue;
- 		if (n == 0)
-@@ -451,7 +451,7 @@ static void do_inject_loop(struct bench_data *data, bool build_id_all)
- static int do_inject_loops(struct bench_data *data)
+ static void sig_handler_2(int signum __maybe_unused,
+@@ -151,11 +151,11 @@ static int wp_event(void *addr, int sig)
+ static long long bp_count(int fd)
  {
- 
--	srand(time(NULL));
-+	srand((int)time(NULL));
- 	symbol__init(NULL);
- 
- 	bench_sample_type  = PERF_SAMPLE_IDENTIFIER | PERF_SAMPLE_IP;
-diff --git a/tools/perf/bench/mem-functions.c b/tools/perf/bench/mem-functions.c
-index 19d45c377ac1..672b76eb8f99 100644
---- a/tools/perf/bench/mem-functions.c
-+++ b/tools/perf/bench/mem-functions.c
-@@ -82,7 +82,7 @@ static int init_cycles(void)
- 
- static u64 get_cycles(void)
- {
+ 	long long count;
 -	int ret;
 +	ssize_t ret;
- 	u64 clk;
  
- 	ret = read(cycles_fd, &clk, sizeof(u64));
-diff --git a/tools/perf/bench/pmu-scan.c b/tools/perf/bench/pmu-scan.c
-index 9e4d36486f62..4a885d4bd279 100644
---- a/tools/perf/bench/pmu-scan.c
-+++ b/tools/perf/bench/pmu-scan.c
-@@ -19,8 +19,8 @@ static unsigned int iterations = 100;
- 
- struct pmu_scan_result {
- 	char *name;
--	int nr_aliases;
--	int nr_formats;
-+	size_t nr_aliases;
-+	size_t nr_formats;
- 	int nr_caps;
- 	bool is_core;
- };
-@@ -63,7 +63,7 @@ static int save_result(void)
- 		list_for_each(list, &pmu->format)
- 			r->nr_formats++;
- 
--		pr_debug("pmu[%d] name=%s, nr_caps=%d, nr_aliases=%d, nr_formats=%d\n",
-+		pr_debug("pmu[%d] name=%s, nr_caps=%d, nr_aliases=%zu, nr_formats=%zu\n",
- 			nr_pmus, r->name, r->nr_caps, r->nr_aliases, r->nr_formats);
- 		nr_pmus++;
+ 	ret = read(fd, &count, sizeof(long long));
+ 	if (ret != sizeof(long long)) {
+-		pr_debug("failed to read: %d\n", ret);
++		pr_debug("failed to read: %zd\n", ret);
+ 		return TEST_FAIL;
  	}
-@@ -77,7 +77,7 @@ static int check_result(bool core_only)
- 	struct pmu_scan_result *r;
- 	struct perf_pmu *pmu;
- 	struct list_head *list;
--	int nr;
-+	size_t nr;
  
- 	for (int i = 0; i < nr_pmus; i++) {
- 		r = &results[i];
-@@ -98,7 +98,7 @@ static int check_result(bool core_only)
+diff --git a/tools/perf/tests/bp_signal_overflow.c b/tools/perf/tests/bp_signal_overflow.c
+index ee560e156be6..eb9021ad8177 100644
+--- a/tools/perf/tests/bp_signal_overflow.c
++++ b/tools/perf/tests/bp_signal_overflow.c
+@@ -33,7 +33,7 @@ static int overflows;
  
- 		nr = perf_pmu__num_events(pmu);
- 		if (nr != r->nr_aliases) {
--			pr_err("Unmatched number of event aliases in %s: expect %d vs got %d\n",
-+			pr_err("Unmatched number of event aliases in %s: expect %zu vs got %zu\n",
- 				pmu->name, r->nr_aliases, nr);
- 			return -1;
- 		}
-@@ -107,7 +107,7 @@ static int check_result(bool core_only)
- 		list_for_each(list, &pmu->format)
- 			nr++;
- 		if (nr != r->nr_formats) {
--			pr_err("Unmatched number of event formats in %s: expect %d vs got %d\n",
-+			pr_err("Unmatched number of event formats in %s: expect %zu vs got %zu\n",
- 				pmu->name, r->nr_formats, nr);
- 			return -1;
- 		}
-diff --git a/tools/perf/bench/sched-messaging.c b/tools/perf/bench/sched-messaging.c
-index 93dcd9dba3d0..a2eb47944f44 100644
---- a/tools/perf/bench/sched-messaging.c
-+++ b/tools/perf/bench/sched-messaging.c
-@@ -102,7 +102,7 @@ static void *sender(struct sender_context *ctx)
- 	/* Now pump to every receiver. */
- 	for (i = 0; i < nr_loops; i++) {
- 		for (j = 0; j < ctx->num_fds; j++) {
--			int ret, done = 0;
-+			ssize_t ret, done = 0;
- 
- again:
- 			ret = write(ctx->out_fds[j], data + done,
-@@ -133,7 +133,7 @@ static void *receiver(struct receiver_context* ctx)
- 	/* Receive them all */
- 	for (i = 0; i < ctx->num_packets; i++) {
- 		char data[DATASIZE];
--		int ret, done = 0;
-+		ssize_t ret, done = 0;
- 
- again:
- 		ret = read(ctx->in_fds[0], data + done, DATASIZE - done);
-diff --git a/tools/perf/bench/sched-pipe.c b/tools/perf/bench/sched-pipe.c
-index 70139036d68f..b847213fd616 100644
---- a/tools/perf/bench/sched-pipe.c
-+++ b/tools/perf/bench/sched-pipe.c
-@@ -102,7 +102,8 @@ static const char * const bench_sched_pipe_usage[] = {
- static int enter_cgroup(int nr)
+ static noinline int test_function(void)
  {
- 	char buf[32];
--	int fd, len, ret;
-+	int fd;
-+	ssize_t ret, len;
- 	int saved_errno;
- 	struct cgroup *cgrp;
- 	pid_t pid;
-@@ -118,7 +119,7 @@ static int enter_cgroup(int nr)
- 	cgrp = cgrps[nr];
- 
- 	if (threaded)
--		pid = syscall(__NR_gettid);
-+		pid = (pid_t)syscall(__NR_gettid);
- 	else
- 		pid = getpid();
- 
-@@ -172,23 +173,25 @@ static void exit_cgroup(int nr)
- 
- static inline int read_pipe(struct thread_data *td)
- {
--	int ret, m;
-+	ssize_t ret;
-+	int m;
- retry:
- 	if (nonblocking) {
- 		ret = epoll_wait(td->epoll_fd, &td->epoll_ev, 1, -1);
- 		if (ret < 0)
--			return ret;
-+			return (int)ret;
- 	}
- 	ret = read(td->pipe_read, &m, sizeof(int));
- 	if (nonblocking && ret < 0 && errno == EWOULDBLOCK)
- 		goto retry;
--	return ret;
-+	return (int)ret;
+-	return time(NULL);
++	return (int)time(NULL);
  }
  
- static void *worker_thread(void *__tdata)
+ static void sig_handler(int signum __maybe_unused,
+@@ -46,11 +46,11 @@ static void sig_handler(int signum __maybe_unused,
+ static long long bp_count(int fd)
  {
- 	struct thread_data *td = __tdata;
--	int i, ret, m = 0;
-+	int i, m = 0;
+ 	long long count;
+-	int ret;
 +	ssize_t ret;
  
- 	ret = enter_cgroup(td->nr);
- 	if (ret < 0) {
-diff --git a/tools/perf/bench/sched-seccomp-notify.c b/tools/perf/bench/sched-seccomp-notify.c
-index 269c1f4a6852..4f0c68b366e3 100644
---- a/tools/perf/bench/sched-seccomp-notify.c
-+++ b/tools/perf/bench/sched-seccomp-notify.c
-@@ -43,7 +43,7 @@ static const char * const bench_seccomp_usage[] = {
+ 	ret = read(fd, &count, sizeof(long long));
+ 	if (ret != sizeof(long long)) {
+-		pr_debug("failed to read: %d\n", ret);
++		pr_debug("failed to read: %zd\n", ret);
+ 		return TEST_FAIL;
+ 	}
  
- static int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--	return syscall(__NR_seccomp, op, flags, args);
-+	return (int)syscall(__NR_seccomp, op, flags, args);
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 14d30a5053be..4ea840580876 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -301,7 +301,7 @@ static int print_test_result(struct test_suite *t, int curr_suite, int curr_test
+ 	return 0;
  }
  
- static int user_notif_syscall(int nr, unsigned int flags)
-diff --git a/tools/perf/bench/synthesize.c b/tools/perf/bench/synthesize.c
-index 9b333276cbdb..484ba825fcf4 100644
---- a/tools/perf/bench/synthesize.c
-+++ b/tools/perf/bench/synthesize.c
-@@ -120,7 +120,7 @@ static int run_single_threaded(void)
- 	session = perf_session__new(NULL, NULL);
- 	if (IS_ERR(session)) {
- 		pr_err("Session creation failed.\n");
--		return PTR_ERR(session);
-+		return (int)PTR_ERR(session);
- 	}
- 	threads = thread_map__new_by_pid(getpid());
- 	if (!threads) {
-@@ -163,7 +163,7 @@ static int do_run_multi_threaded(struct target *target,
- 	for (i = 0; i < multi_iterations; i++) {
- 		session = perf_session__new(NULL, NULL);
- 		if (IS_ERR(session))
--			return PTR_ERR(session);
-+			return (int)PTR_ERR(session);
- 
- 		atomic_set(&event_count, 0);
- 		gettimeofday(&start, NULL);
-@@ -210,7 +210,7 @@ static int run_multi_threaded(void)
- 	int err;
- 
- 	if (max_threads == UINT_MAX)
--		max_threads = sysconf(_SC_NPROCESSORS_ONLN);
-+		max_threads = (int)sysconf(_SC_NPROCESSORS_ONLN);
- 
- 	puts(
- "Computing performance of multi threaded perf event synthesis by\n"
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 2c1a9f3d847a..2f6a34908273 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -212,7 +212,7 @@ static int bench_str2int(const char *str)
- static int run_bench(const char *coll_name, const char *bench_name, bench_fn_t fn,
- 		     int argc, const char **argv)
+-static void finish_test(struct child_test **child_tests, int running_test, int child_test_num,
++static void finish_test(struct child_test **child_tests, size_t running_test, size_t child_test_num,
+ 		int width)
  {
--	int size;
-+	size_t size;
- 	char *name;
- 	int ret;
+ 	struct child_test *child_test = child_tests[running_test];
+@@ -349,7 +349,7 @@ static void finish_test(struct child_test **child_tests, int running_test, int c
+ 		if (perf_use_color_default) {
+ 			int running = 0;
  
+-			for (int y = running_test; y < child_test_num; y++) {
++			for (size_t y = running_test; y < child_test_num; y++) {
+ 				if (child_tests[y] == NULL)
+ 					continue;
+ 				if (check_if_command_finished(&child_tests[y]->process) == 0)
+@@ -478,13 +478,14 @@ static int __cmd_test(struct test_suite **suites, int argc, const char *argv[],
+ 	int err = 0;
+ 
+ 	for (struct test_suite **t = suites; *t; t++) {
+-		int i, len = strlen(test_description(*t, -1));
++		int i;
++		int len = (int)strlen(test_description(*t, -1));
+ 
+ 		if (width < len)
+ 			width = len;
+ 
+ 		test_suite__for_each_test_case(*t, i) {
+-			len = strlen(test_description(*t, i));
++			len = (int)strlen(test_description(*t, i));
+ 			if (width < len)
+ 				width = len;
+ 			num_tests += runs_per_test;
+diff --git a/tools/perf/tests/code-reading.c b/tools/perf/tests/code-reading.c
+index cf6edbe697b2..0c31d5ff77e2 100644
+--- a/tools/perf/tests/code-reading.c
++++ b/tools/perf/tests/code-reading.c
+@@ -188,7 +188,7 @@ static int objdump_version(void)
+ 	char *line = NULL;
+ 	const char *fmt;
+ 	FILE *f;
+-	int ret;
++	ssize_t ret;
+ 
+ 	int version_tmp, version_num = 0;
+ 	char *version = 0, *token;
+@@ -295,7 +295,7 @@ static int read_via_objdump(const char *filename, u64 addr, void *buf,
+ 	if (len) {
+ 		pr_debug("objdump read too few bytes: %zd\n", len);
+ 		if (!ret)
+-			ret = len;
++			ret = (int)len;
+ 	}
+ 
+ 	pclose(f);
+diff --git a/tools/perf/tests/dso-data.c b/tools/perf/tests/dso-data.c
+index a1fff4203b75..2954e06ae5b3 100644
+--- a/tools/perf/tests/dso-data.c
++++ b/tools/perf/tests/dso-data.c
+@@ -233,14 +233,14 @@ static int dsos__create(int cnt, int size, struct dsos *dsos)
+ 	return 0;
+ }
+ 
+-static int set_fd_limit(int n)
++static int set_fd_limit(long n)
+ {
+ 	struct rlimit rlim;
+ 
+ 	if (getrlimit(RLIMIT_NOFILE, &rlim))
+ 		return -1;
+ 
+-	pr_debug("file limit %ld, new %d\n", (long) rlim.rlim_cur, n);
++	pr_debug("file limit %ld, new %ld\n", (long) rlim.rlim_cur, n);
+ 
+ 	rlim.rlim_cur = n;
+ 	return setrlimit(RLIMIT_NOFILE, &rlim);
+@@ -249,8 +249,8 @@ static int set_fd_limit(int n)
+ static int test__dso_data_cache(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+ 	struct machine machine;
+-	long nr_end, nr = open_files_cnt();
+-	int dso_cnt, limit, i, fd;
++	long dso_cnt, limit, nr_end, nr = open_files_cnt();
++	int i, fd;
+ 
+ 	/* Rest the internal dso open counter limit. */
+ 	reset_fd_limit();
+@@ -264,7 +264,7 @@ static int test__dso_data_cache(struct test_suite *test __maybe_unused, int subt
+ 	/* and this is now our dso open FDs limit */
+ 	dso_cnt = limit / 2;
+ 	TEST_ASSERT_VAL("failed to create dsos\n",
+-			!dsos__create(dso_cnt, TEST_FILE_SIZE, &machine.dsos));
++			!dsos__create((int)dso_cnt, TEST_FILE_SIZE, &machine.dsos));
+ 
+ 	for (i = 0; i < (dso_cnt - 1); i++) {
+ 		struct dso *dso = machine.dsos.dsos[i];
+diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
+index 446a3615d720..b328ad6973a3 100644
+--- a/tools/perf/tests/mmap-thread-lookup.c
++++ b/tools/perf/tests/mmap-thread-lookup.c
+@@ -45,7 +45,7 @@ static int thread_init(struct thread_data *td)
+ 	}
+ 
+ 	td->map = map;
+-	td->tid = syscall(SYS_gettid);
++	td->tid = (pid_t)syscall(SYS_gettid);
+ 
+ 	pr_debug("tid = %d, map = %p\n", td->tid, map);
+ 	return 0;
+diff --git a/tools/perf/tests/openat-syscall-tp-fields.c b/tools/perf/tests/openat-syscall-tp-fields.c
+index 0ef4ba7c1571..68f1498d0a47 100644
+--- a/tools/perf/tests/openat-syscall-tp-fields.c
++++ b/tools/perf/tests/openat-syscall-tp-fields.c
+@@ -119,7 +119,7 @@ static int test__syscall_openat_tp_fields(struct test_suite *test __maybe_unused
+ 					goto out_delete_evlist;
+ 				}
+ 
+-				tp_flags = evsel__intval(evsel, &sample, "flags");
++				tp_flags = (int)evsel__intval(evsel, &sample, "flags");
+ 				perf_sample__exit(&sample);
+ 				if (flags != tp_flags) {
+ 					pr_debug("%s: Expected flags=%#x, got %#x\n",
+diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+index db004d26fcb0..2762794827ce 100644
+--- a/tools/perf/tests/pmu-events.c
++++ b/tools/perf/tests/pmu-events.c
+@@ -609,7 +609,7 @@ static int __test_uncore_pmu_event_aliases(struct perf_pmu_test_pmu *test_pmu)
+ 	pmu_add_sys_aliases(pmu);
+ 
+ 	/* Count how many aliases we generated */
+-	alias_count = perf_pmu__num_events(pmu);
++	alias_count = (int)perf_pmu__num_events(pmu);
+ 
+ 	/* Count how many aliases we expect from the known table */
+ 	for (table = &test_pmu->aliases[0]; *table; table++)
+diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+index a67c756f90b8..b7d7735f8a72 100644
+--- a/tools/perf/tests/sigtrap.c
++++ b/tools/perf/tests/sigtrap.c
+@@ -154,13 +154,13 @@ sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __may
+ {
+ 	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
+ 		ctx.first_siginfo = *info;
+-	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
++	__atomic_fetch_sub(&ctx.tids_want_signal, (pid_t)syscall(SYS_gettid), __ATOMIC_RELAXED);
+ }
+ 
+ static void *test_thread(void *arg)
+ {
+ 	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
+-	pid_t tid = syscall(SYS_gettid);
++	pid_t tid = (pid_t)syscall(SYS_gettid);
+ 	int i;
+ 
+ 	pthread_barrier_wait(barrier);
+diff --git a/tools/perf/tests/switch-tracking.c b/tools/perf/tests/switch-tracking.c
+index 8df3f9d9ffd2..1f0f8321ae40 100644
+--- a/tools/perf/tests/switch-tracking.c
++++ b/tools/perf/tests/switch-tracking.c
+@@ -140,8 +140,8 @@ static int process_sample_event(struct evlist *evlist,
+ 
+ 	evsel = evlist__id2evsel(evlist, sample.id);
+ 	if (evsel == switch_tracking->switch_evsel) {
+-		next_tid = evsel__intval(evsel, &sample, "next_pid");
+-		prev_tid = evsel__intval(evsel, &sample, "prev_pid");
++		next_tid = (int)evsel__intval(evsel, &sample, "next_pid");
++		prev_tid = (int)evsel__intval(evsel, &sample, "prev_pid");
+ 		cpu = sample.cpu;
+ 		pr_debug3("sched_switch: cpu: %d prev_tid %d next_tid %d\n",
+ 			  cpu, prev_tid, next_tid);
+@@ -262,9 +262,10 @@ static int compar(const void *a, const void *b)
+ {
+ 	const struct event_node *nodea = a;
+ 	const struct event_node *nodeb = b;
+-	s64 cmp = nodea->event_time - nodeb->event_time;
+ 
+-	return cmp;
++	if (nodea->event_time == nodeb->event_time)
++		return 0;
++	return nodea->event_time < nodeb->event_time ? -1 : 1;
+ }
+ 
+ static int process_events(struct evlist *evlist,
+@@ -398,7 +399,7 @@ static int test__switch_tracking(struct test_suite *test __maybe_unused, int sub
+ 
+ 	switch_evsel = evlist__add_sched_switch(evlist, true);
+ 	if (IS_ERR(switch_evsel)) {
+-		err = PTR_ERR(switch_evsel);
++		err = (int)PTR_ERR(switch_evsel);
+ 		pr_debug("Failed to create event %s\n", sched_switch);
+ 		goto out_err;
+ 	}
+diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
+index 74cdbd2ce9d0..fbdb463e965d 100644
+--- a/tools/perf/tests/vmlinux-kallsyms.c
++++ b/tools/perf/tests/vmlinux-kallsyms.c
+@@ -82,7 +82,7 @@ static bool is_ignored_symbol(const char *name, char type)
+ 			return true;
+ 
+ 	for (p = ignored_suffixes; *p; p++) {
+-		int l = strlen(name) - strlen(*p);
++		ssize_t l = strlen(name) - strlen(*p);
+ 
+ 		if (l >= 0 && !strcmp(name + l, *p))
+ 			return true;
+@@ -313,7 +313,7 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
+ 				 * _really_ have a problem.
+ 				 */
+ 				s64 skew = mem_end - UM(pair->end);
+-				if (llabs(skew) >= page_size)
++				if (llabs(skew) >= (s64)page_size)
+ 					pr_debug("WARN: %#" PRIx64 ": diff end addr for %s v: %#" PRIx64 " k: %#" PRIx64 "\n",
+ 						 mem_start, sym->name, mem_end,
+ 						 UM(pair->end));
+diff --git a/tools/perf/tests/wp.c b/tools/perf/tests/wp.c
+index 6c178985e37f..d5dd17eb5c05 100644
+--- a/tools/perf/tests/wp.c
++++ b/tools/perf/tests/wp.c
+@@ -31,10 +31,10 @@ volatile u8 data2[3];
+ #ifndef __s390x__
+ static int wp_read(int fd, long long *count, int size)
+ {
+-	int ret = read(fd, count, size);
++	ssize_t ret = read(fd, count, size);
+ 
+ 	if (ret != size) {
+-		pr_debug("failed to read: %d\n", ret);
++		pr_debug("failed to read: %zd\n", ret);
+ 		return -1;
+ 	}
+ 	return 0;
 -- 
 2.49.0.504.g3bcea36a83-goog
 
