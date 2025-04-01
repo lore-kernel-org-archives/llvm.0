@@ -1,99 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8C4B673
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 03:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C82D78C9C;
+	Tue,  1 Apr 2025 05:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743477787; cv=none; b=Vm2Ix6nxKn1o/zmV8tQrJNBirf/ykvQudUV73hACvreY4dTpC+mgpzAfsfK3UjCk0PxC7Gq+t75MzAH2T7NX5mHbX1b/cnYdHCLnfwymyvJ3rf8fYF7ueIMlpVs8G40uk1T1Pssd1pFFhFMJN2nbGb1F80BTGD7eCjszDTNiFhQ=
+	t=1743484474; cv=none; b=rNPzRhBYd53fcNfNG10s+vAfnqM3iLp6J1Fex9Q/RYDWO1OYFDufXJc+xssDPD3b/UaPNZJiTGVYr1RyZ+hYYG65d8Fw9FDEwG40OIzv2OvURZaTdWWed2F6MTVuQrSUzD0kFnUU+MHRQnKM1wfNOqcfHcs+/95c5lOwXZUZsgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743477787; c=relaxed/simple;
-	bh=smrKSUydvRiacZIfefxStSoGvwmhRUkYPp6+9z+n3tM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=i4dwU34dP6A0kqMYTxonbDADF9WtrltZrT9gc3yI1bSCM/oHz26avIKxQ7dX3r4ma2MIVijLRj28XBcpBM5+0OWZbbqK0UqRwswGxI34Aj40fESFpLSXq58mLzbOu4rHFCE6OoxVXXjZ/N2bGT6rc1oA0bzC2Mvc/Sg7G3am218=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c8gpaCCt; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1743484474; c=relaxed/simple;
+	bh=L4FrkKu0168YmHHVcoVFsbWR9Sf3R8pkxT3Lnke5KJM=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=HrSy5Xo75Ax6cWi2MupklZzNlLamfbqA6T2ojMy7ThwpmNBOw6+gitiEesZIVAOp/B+sIc/gZ1CZhKS6KLeBdi67RarPI7Mmy/GwTwOIUCn30Acxaz3ElvJp/tVeAFLO5C2fwjn31gGDT6pIgeZB3trYL4FcyJYossM0xKSgspU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=kDAtkLct; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c8gpaCCt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743477784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8gvJp6jgDk1eYQVh7j+bj7zuZuEu6MmOBSHLjrialM4=;
-	b=c8gpaCCtexXLoAHi264IGqb7W+c1fHxZqJM47rLGAe5ksMoyqdc4aaKFdhzuQ3x0aK94Sk
-	Soq6PWIRqjf+hNrKvYDhvTv9VdEQ1Y0QqUFlFR0KyXE/Iqc91iAGBCzZSh00tjyjYPXVPR
-	VHzF3z4GGLTnqVKiisW152PdRnfjfU4=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-548-cN239JvsOBmRKuEimR5AMg-1; Mon,
- 31 Mar 2025 23:23:02 -0400
-X-MC-Unique: cN239JvsOBmRKuEimR5AMg-1
-X-Mimecast-MFC-AGG-ID: cN239JvsOBmRKuEimR5AMg_1743477781
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C4A4180025C
-	for <llvm@lists.linux.dev>; Tue,  1 Apr 2025 03:23:01 +0000 (UTC)
-Received: from [172.20.219.140] (unknown [10.30.44.44])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0FCE71801747;
-	Tue,  1 Apr 2025 03:23:00 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
- upstream-mainline, 08733088)
-Date: Tue, 01 Apr 2025 03:23:00 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="kDAtkLct"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 5315DrPW3571921
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 31 Mar 2025 22:13:53 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 5315DrPW3571921
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1743484436;
+	bh=fXArKFGaxt8nFnaWBdSW+pU45Be8cuJJXPIK/BFyt00=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=kDAtkLct4ESsM95J+GAXm6Ip9nS2vCeNnpZd5bqqzetTLzyI1dGpO4FHTdCywuUb7
+	 WGNeXx4i+jLpuQrfsgKmAO//REzlRpcJIhlg3BiQafg1GzI6ikQM3j7rveeHHx8qEQ
+	 CWx/fzNgtVCbn/YdOsKRTX3+ivqNDh7QpvYGnD8XTDDfehr8TQnDZRQ5T6cB2w2NXq
+	 sNL/9PBtrg1oFPYF0fJT9aZRbEjTs4UCCHnnJFtzzQgDFxprnhDKMIRSwjt3dTD6q1
+	 Lo7DVLOnslrIY9K+rdbbOdFCWR3dM3o3/+miqBEdIWuSpByt20GZTiNiujHjtNVCBm
+	 M4aSJPmJLqUXA==
+Date: Mon, 31 Mar 2025 22:13:51 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Xin Li (Intel)" <xin@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+CC: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jgross@suse.com,
+        peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, wei.liu@kernel.org, ajay.kaher@broadcom.com,
+        alexey.amakhalov@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        tony.luck@intel.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        seanjc@google.com, luto@kernel.org, boris.ostrovsky@oracle.com,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com
+Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_v1_01/15=5D_x86/msr=3A_Re?=
+ =?US-ASCII?Q?place_=5F=5Fwrmsr=28=29_with_native=5Fwrmsrl=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <0da43a86-81b0-4388-b47b-3a76b15f2a4c@citrix.com>
+References: <20250331082251.3171276-1-xin@zytor.com> <20250331082251.3171276-2-xin@zytor.com> <0da43a86-81b0-4388-b47b-3a76b15f2a4c@citrix.com>
+Message-ID: <03874E9B-FAEB-4ACA-B13D-0BED7D54F443@zytor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <48276.125033123230201460@us-mta-548.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: ukstYAUSmkLUrr43GUWIiau6urLQ9gtqPgbn8oki5hM_1743477781
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On March 31, 2025 2:45:43 PM PDT, Andrew Cooper <andrew=2Ecooper3@citrix=2E=
+com> wrote:
+>On 31/03/2025 9:22 am, Xin Li (Intel) wrote:
+>> __wrmsr() is the lowest level primitive MSR write API, and its direct
+>> use is NOT preferred=2E  Use its wrapper function native_wrmsrl() inste=
+ad=2E
+>>
+>> No functional change intended=2E
+>>
+>> Signed-off-by: Xin Li (Intel) <xin@zytor=2Ecom>
+>
+>The critical piece of information you're missing from the commit message
+>is that the MSR_IMM instructions take a single u64=2E
+>
+>Therefore to use them, you've got to arrange for all callers to provide
+>a single u64, rather than a split u32 pair=2E
+>
+>~Andrew
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'rust-fixes-6.15-merge' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/ojeda/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1745743414
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1745743414-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+That being said, there is nothing wrong with having a two-word convenience=
+ wrapper=2E
