@@ -1,100 +1,72 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46F5149C7D
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 14:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F0527735;
+	Wed,  2 Apr 2025 14:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743604548; cv=none; b=WyEkyIi/ELA4JZ9val0C8PeXRJVZrcJMwbHFQlflzA1DAIA7Z8s6sp41D2FG0gk8byrCR/qqe7AlNHxLkXZlBMBBMxNRu5od74DB9hnj3pugqfkz2n+mO21Vz2LkIJzPbFWiVQ71WO/n4DkBXCXOAtZGn3LLe4LGzay5j95TZSM=
+	t=1743604854; cv=none; b=Q+t7EpD9WTL2m4B92ILZtAJBd3WlNacz59g6pjJlUz5f50o3AXBcaK74tZkkHWZxx1JhOwtPzetWr82wANAc2Ar/vgQCrY0dO0k8Z9XF2a+8/k+Ch+W3x8CRGwo++uYI66zazmBtwFKk8FHv/ui2ZZ3D82XxASYXE9BN6d2dYzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743604548; c=relaxed/simple;
-	bh=ICFQu9uatwHq5mRLnVZDPfIvCDIZp3w6Sx8ogDkBt3w=;
+	s=arc-20240116; t=1743604854; c=relaxed/simple;
+	bh=5he6GMcbyMyNUKtUTvwdESnzhSBNkpXaYxscQK6pilA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cywkEANd8rNjFqgJhpxDgdCBOKZjfbJpDsy3OL95VxVNsE2uE4r1q6lJgoom14k/QMwj27V4iS1A24HqDJzngKjy4YB2s/E5BENlBl24Z3LHggFyxnzm/VxC3UOBpNXiT3kIA1OlBuSp//j/Ex6/eBNzOfHx6ww7X/fw8oJnCkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDCA31F91;
-	Wed,  2 Apr 2025 07:35:48 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99FAA3F63F;
-	Wed,  2 Apr 2025 07:35:45 -0700 (PDT)
-Date: Wed, 2 Apr 2025 15:35:41 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Yicong Yang <yangyicong@hisilicon.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
-	Ben Gainey <ben.gainey@arm.com>,
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-	Kajol Jain <kjain@linux.ibm.com>,
-	Aditya Gupta <adityag@linux.ibm.com>,
-	Eder Zulian <ezulian@redhat.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
-	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Howard Chu <howardchu95@gmail.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Jann Horn <jannh@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Yang Jihong <yangjihong@bytedance.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
-	Graham Woodward <graham.woodward@arm.com>,
-	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
-	Tengda Wu <wutengda@huaweicloud.com>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Chun-Tse Shao <ctshao@google.com>,
-	Casey Chen <cachen@purestorage.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Li Huafei <lihuafei1@huawei.com>,
-	"Steinar H. Gunderson" <sesse@google.com>,
-	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
-	Thomas Falcon <thomas.falcon@intel.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Andrew Kreimer <algonell@gmail.com>,
-	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
-	Junhao He <hejunhao3@huawei.com>,
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-	Xu Yang <xu.yang_2@nxp.com>,
-	Steve Clevenger <scclevenger@os.amperecomputing.com>,
-	Zixian Cai <fzczx123@gmail.com>,
-	Stephen Brennan <stephen.s.brennan@oracle.com>,
-	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
-Message-ID: <20250402143541.GM115840@e132581.arm.com>
-References: <20250401182347.3422199-1-irogers@google.com>
- <20250401182347.3422199-10-irogers@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHbn+8+6Q/9PxeouxITeOAKE/xTWixjj+MgHO+HZNokL5OjEfLv8UBKdrCw3xPb4nw6dcVui841njjC979LBqOkp5nM1xyCQzeQUyZ3HBQzN4xp/axJ9oWrja178YjPNiDrV0BGSZvzQ6fGw7LjUvVdhE9qTmEOpjyzJDH6qBZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iVEk5nQX; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVEk5nQX"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-47691d82bfbso130294371cf.0;
+        Wed, 02 Apr 2025 07:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743604851; x=1744209651; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpoA+/FwVBLUBjhAQS2EtLKl9KXxA9hOY12cSfrhkrA=;
+        b=iVEk5nQXLKxYVe9XCiv5t1l9iYXsFg113fTKZNRgj6H5HzGtpsIlEmXND6u44iwqzi
+         lJ7Mmbe/4qSWrsE5djuHcTDuK6TiiYsTxbZNTxu/XZ5UyfrOUZi2YGo1RrybGYFwkUMC
+         PngtlSfoBvvQx+p5lP9twwFPpH+szwOqESPbGZTkMzcv2zVVzUTsvW0ALWHGGgBZVPHy
+         m21i9eRgnSKPDFYT+aBgf+ENfwwg/NqhtzaQ8wAwJdQMlo6ulDcxFz5UB2am8IThhr/c
+         UbRPItLSvj+LrFZITnw/zp+K41gvQ0Hv71XfiD0WHoFwgmBkf0Wpuo/lMBU28JhS6h+s
+         lOGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743604851; x=1744209651;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tpoA+/FwVBLUBjhAQS2EtLKl9KXxA9hOY12cSfrhkrA=;
+        b=RljEdZO0Z8snwQhO5oQD1Qvrto4x4oc5EeeGtdQIeiiKMEaQ9XxwckcSlx12eluUTw
+         oUOnsJAbjJlGfiFtY2A+djALRYfxw9gt7TsL8iE5BWlMZ0bn2D8p5NTv5NRY99NLwog7
+         Y2VwL/Wz19NMJb3syDYNxKepddkoPwobL8sZInQ6faaMdkwOW8eLYmRsvYpHKhQwsG4r
+         5XNf6E9DCxMOid90ttGz8bG/5oWS8FKUcpUy+CyZXWpVLEIwlY/LTXS3Fi48tXA0kMOX
+         /wNiaqmYJmkxx79W8IStOG778iHzvT0VHNvO3RLZV5mYCEqFmupW/1iMhcS8/7t49uEY
+         rBxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUliCjPeWXvn2qVtZRugG9eFi16B4anMTSmtey9vVsTslzxZ49fjMZ7FcGRuouqSgqaCh/qGT5uNMgO0h0f@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzivl+JjJIjFdIHNH3g4eTQPcMe7sTABLuMYQbpu1pqRVvW3eYl
+	+D1oQYtSsRM0IS0vTt0AScq3LUpL9GkXuLg3I6udjARwXe3ID+ee0isPuw==
+X-Gm-Gg: ASbGncuZFaP6kP0Cmjwv6PmDULcgsP/sA3CmiuHiLGAHa21SRSFEA9y02mC+vHtozUG
+	w6dt2/ofjHmRTaugMslQ49x1zmX456syj8QCadOhC/DPQy4aHvfGgTi3oJvuhAfcSj8ABxazLFX
+	bObhS7JIACvH/Cfewg2KPmOmoJNTR+Q+iLR9ybLyAQOzURXNprKTtC3TTFjP/vj/p2C7vp6jVgl
+	aXY3iwFXTNSXaCtfKWxXzr8ycXmLPsAvZIvOPlRVDcUdMCmgwK+vDUOBFsj+ruxjjkCq4XMod79
+	DwbmV617TrgNyon6hAXdc0p6rarwJGNXdfKFYhkVh2c22EY/w/RAu1qdu8wRgIafo+282fA4buY
+	fCvxI
+X-Google-Smtp-Source: AGHT+IEZTXJ6mg76+N8I050KHAsfQ0xKBzovVUSqYzZKgZ3N4Yf6pShgedwdkkMoUPBLZRtQOk3N7A==
+X-Received: by 2002:a05:620a:440d:b0:7c3:c869:1aff with SMTP id af79cd13be357-7c68f406bb9mr2375042985a.16.1743604850452;
+        Wed, 02 Apr 2025 07:40:50 -0700 (PDT)
+Received: from glsmbp.wifi.local.cmu.edu (cmu-device2.nat.cmu.net. [128.2.149.252])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c5f7764e8dsm794309785a.88.2025.04.02.07.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Apr 2025 07:40:50 -0700 (PDT)
+Date: Wed, 2 Apr 2025 10:40:48 -0400
+From: "Gabriel L. Somlo" <gsomlo@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	geert@linux-m68k.org
+Subject: Re: [litex-hub:litex-rebase 8/18] drivers/gpio/gpio-litex.c:157:2:
+ error: use of undeclared identifier 'class_spin_lock_irqsave_t'; did you
+ mean '_raw_spin_lock_irqsave'?
+Message-ID: <Z-1McIALVutx79ns@glsmbp.wifi.local.cmu.edu>
+References: <202504021531.LSDxngLf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -103,187 +75,326 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250401182347.3422199-10-irogers@google.com>
+In-Reply-To: <202504021531.LSDxngLf-lkp@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 
-On Tue, Apr 01, 2025 at 11:23:07AM -0700, Ian Rogers wrote:
-
-[...]
-
-> @@ -478,13 +478,14 @@ static int __cmd_test(struct test_suite **suites, int argc, const char *argv[],
->  	int err = 0;
->  
->  	for (struct test_suite **t = suites; *t; t++) {
-> -		int i, len = strlen(test_description(*t, -1));
-> +		int i;
-> +		int len = (int)strlen(test_description(*t, -1));
-
-Thanks for huge polish.
-
-Just a concern from me.  Throughout this patch, the methodology is not
-consistent.  Some changes update variable types which is fine for me.
-
-But the case above it simply cast size_t to int.  Should we update the
-variable type as 'size_t' at here?
-
->  		if (width < len)
->  			width = len;
->  
->  		test_suite__for_each_test_case(*t, i) {
-> -			len = strlen(test_description(*t, i));
-> +			len = (int)strlen(test_description(*t, i));
->  			if (width < len)
->  				width = len;
->  			num_tests += runs_per_test;
-> diff --git a/tools/perf/tests/code-reading.c b/tools/perf/tests/code-reading.c
-> index cf6edbe697b2..0c31d5ff77e2 100644
-> --- a/tools/perf/tests/code-reading.c
-> +++ b/tools/perf/tests/code-reading.c
-> @@ -188,7 +188,7 @@ static int objdump_version(void)
->  	char *line = NULL;
->  	const char *fmt;
->  	FILE *f;
-> -	int ret;
-> +	ssize_t ret;
->  
->  	int version_tmp, version_num = 0;
->  	char *version = 0, *token;
-> @@ -295,7 +295,7 @@ static int read_via_objdump(const char *filename, u64 addr, void *buf,
->  	if (len) {
->  		pr_debug("objdump read too few bytes: %zd\n", len);
->  		if (!ret)
-> -			ret = len;
-> +			ret = (int)len;
-
-A proper change is to update the function type to:
-
-  size_t read_via_objdump(...)
-
-[...]
-
-> diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-> index db004d26fcb0..2762794827ce 100644
-> --- a/tools/perf/tests/pmu-events.c
-> +++ b/tools/perf/tests/pmu-events.c
-> @@ -609,7 +609,7 @@ static int __test_uncore_pmu_event_aliases(struct perf_pmu_test_pmu *test_pmu)
->  	pmu_add_sys_aliases(pmu);
->  
->  	/* Count how many aliases we generated */
-> -	alias_count = perf_pmu__num_events(pmu);
-> +	alias_count = (int)perf_pmu__num_events(pmu);
-
-Could we change the variable 'alias_count' to size_t type?
-
-Or in another way, we need to update perf_pmu__num_events() with
-returning int type.
-
-My understanding is rather than using cast, we should polish code for
-using consistent type for both variables and return values.
-
->  	/* Count how many aliases we expect from the known table */
->  	for (table = &test_pmu->aliases[0]; *table; table++)
-> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
-> index a67c756f90b8..b7d7735f8a72 100644
-> --- a/tools/perf/tests/sigtrap.c
-> +++ b/tools/perf/tests/sigtrap.c
-> @@ -154,13 +154,13 @@ sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __may
->  {
->  	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
->  		ctx.first_siginfo = *info;
-> -	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
-> +	__atomic_fetch_sub(&ctx.tids_want_signal, (pid_t)syscall(SYS_gettid), __ATOMIC_RELAXED);
->  }
->  
->  static void *test_thread(void *arg)
->  {
->  	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
-> -	pid_t tid = syscall(SYS_gettid);
-> +	pid_t tid = (pid_t)syscall(SYS_gettid);
->  	int i;
->  
->  	pthread_barrier_wait(barrier);
-> diff --git a/tools/perf/tests/switch-tracking.c b/tools/perf/tests/switch-tracking.c
-> index 8df3f9d9ffd2..1f0f8321ae40 100644
-> --- a/tools/perf/tests/switch-tracking.c
-> +++ b/tools/perf/tests/switch-tracking.c
-> @@ -140,8 +140,8 @@ static int process_sample_event(struct evlist *evlist,
->  
->  	evsel = evlist__id2evsel(evlist, sample.id);
->  	if (evsel == switch_tracking->switch_evsel) {
-> -		next_tid = evsel__intval(evsel, &sample, "next_pid");
-> -		prev_tid = evsel__intval(evsel, &sample, "prev_pid");
-> +		next_tid = (int)evsel__intval(evsel, &sample, "next_pid");
-> +		prev_tid = (int)evsel__intval(evsel, &sample, "prev_pid");
-
-Change 'prev_tid' and 'next_tid' to pid_t type?
+Thanks, I think that was a typo. Fixed in `afc33fa39c5e` by
+s/spin_lock_irqsave/spinlock_irqsave/
 
 Thanks,
-Leo
+--Gabriel
 
->  		cpu = sample.cpu;
->  		pr_debug3("sched_switch: cpu: %d prev_tid %d next_tid %d\n",
->  			  cpu, prev_tid, next_tid);
-> @@ -262,9 +262,10 @@ static int compar(const void *a, const void *b)
->  {
->  	const struct event_node *nodea = a;
->  	const struct event_node *nodeb = b;
-> -	s64 cmp = nodea->event_time - nodeb->event_time;
->  
-> -	return cmp;
-> +	if (nodea->event_time == nodeb->event_time)
-> +		return 0;
-> +	return nodea->event_time < nodeb->event_time ? -1 : 1;
->  }
->  
->  static int process_events(struct evlist *evlist,
-> @@ -398,7 +399,7 @@ static int test__switch_tracking(struct test_suite *test __maybe_unused, int sub
->  
->  	switch_evsel = evlist__add_sched_switch(evlist, true);
->  	if (IS_ERR(switch_evsel)) {
-> -		err = PTR_ERR(switch_evsel);
-> +		err = (int)PTR_ERR(switch_evsel);
->  		pr_debug("Failed to create event %s\n", sched_switch);
->  		goto out_err;
->  	}
-> diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
-> index 74cdbd2ce9d0..fbdb463e965d 100644
-> --- a/tools/perf/tests/vmlinux-kallsyms.c
-> +++ b/tools/perf/tests/vmlinux-kallsyms.c
-> @@ -82,7 +82,7 @@ static bool is_ignored_symbol(const char *name, char type)
->  			return true;
->  
->  	for (p = ignored_suffixes; *p; p++) {
-> -		int l = strlen(name) - strlen(*p);
-> +		ssize_t l = strlen(name) - strlen(*p);
->  
->  		if (l >= 0 && !strcmp(name + l, *p))
->  			return true;
-> @@ -313,7 +313,7 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
->  				 * _really_ have a problem.
->  				 */
->  				s64 skew = mem_end - UM(pair->end);
-> -				if (llabs(skew) >= page_size)
-> +				if (llabs(skew) >= (s64)page_size)
->  					pr_debug("WARN: %#" PRIx64 ": diff end addr for %s v: %#" PRIx64 " k: %#" PRIx64 "\n",
->  						 mem_start, sym->name, mem_end,
->  						 UM(pair->end));
-> diff --git a/tools/perf/tests/wp.c b/tools/perf/tests/wp.c
-> index 6c178985e37f..d5dd17eb5c05 100644
-> --- a/tools/perf/tests/wp.c
-> +++ b/tools/perf/tests/wp.c
-> @@ -31,10 +31,10 @@ volatile u8 data2[3];
->  #ifndef __s390x__
->  static int wp_read(int fd, long long *count, int size)
->  {
-> -	int ret = read(fd, count, size);
-> +	ssize_t ret = read(fd, count, size);
->  
->  	if (ret != size) {
-> -		pr_debug("failed to read: %d\n", ret);
-> +		pr_debug("failed to read: %zd\n", ret);
->  		return -1;
->  	}
->  	return 0;
+On Wed, Apr 02, 2025 at 03:11:46PM +0800, kernel test robot wrote:
+> tree:   https://github.com/litex-hub/linux litex-rebase
+> head:   27cd831fb75ec1b1667350dcdad43e58d34ac9f5
+> commit: 639fd3757f161027e4f8ec56033e598bf06d7923 [8/18] fixup: use scoped_guard() with LiteGPIO
+> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250402/202504021531.LSDxngLf-lkp@intel.com/config)
+> compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250402/202504021531.LSDxngLf-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202504021531.LSDxngLf-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/gpio/gpio-litex.c:157:2: error: use of undeclared identifier 'class_spin_lock_irqsave_t'; did you mean '_raw_spin_lock_irqsave'?
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:7: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |              ^
+>    include/linux/cleanup.h:258:2: note: expanded from macro 'CLASS'
+>      258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+>          |         ^
+>    <scratch space>:159:1: note: expanded from here
+>      159 | class_spin_lock_irqsave_t
+>          | ^
+>    include/linux/spinlock_api_smp.h:32:26: note: '_raw_spin_lock_irqsave' declared here
+>       32 | unsigned long __lockfunc _raw_spin_lock_irqsave(raw_spinlock_t *lock)
+>          |                          ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: expected ';' in 'for' statement specifier
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:20: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |                           ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: use of undeclared identifier 'scope'; did you mean 'sclp'?
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:20: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |                           ^
+>    arch/s390/include/asm/sclp.h:119:25: note: 'sclp' declared here
+>      119 | extern struct sclp_info sclp;
+>          |                         ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: expected ';' in 'for' statement specifier
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:7: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |              ^
+>    include/linux/cleanup.h:258:24: note: expanded from macro 'CLASS'
+>      258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+>          |                               ^
+>    include/linux/compiler-clang.h:15:25: note: expanded from macro '__cleanup'
+>       15 | #define __cleanup(func) __maybe_unused __attribute__((__cleanup__(func)))
+>          |                         ^
+>    include/linux/compiler_attributes.h:343:41: note: expanded from macro '__maybe_unused'
+>      343 | #define __maybe_unused                  __attribute__((__unused__))
+>          |                                         ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: call to undeclared function 'class_spin_lock_irqsave_lock_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:7: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |              ^
+>    include/linux/cleanup.h:321:28: note: expanded from macro '__guard_ptr'
+>      321 | #define __guard_ptr(_name) class_##_name##_lock_ptr
+>          |                            ^
+>    <scratch space>:165:1: note: expanded from here
+>      165 | class_spin_lock_irqsave_lock_ptr
+>          | ^
+>    drivers/gpio/gpio-litex.c:157:2: note: did you mean 'class_spinlock_irqsave_lock_ptr'?
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:7: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |              ^
+>    include/linux/cleanup.h:321:28: note: expanded from macro '__guard_ptr'
+>      321 | #define __guard_ptr(_name) class_##_name##_lock_ptr
+>          |                            ^
+>    <scratch space>:165:1: note: expanded from here
+>      165 | class_spin_lock_irqsave_lock_ptr
+>          | ^
+>    include/linux/spinlock.h:585:1: note: 'class_spinlock_irqsave_lock_ptr' declared here
+>      585 | DEFINE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
+>          | ^
+>    include/linux/cleanup.h:408:49: note: expanded from macro 'DEFINE_LOCK_GUARD_1'
+>      408 | __DEFINE_CLASS_IS_CONDITIONAL(_name, false);                            \
+>          |                                                                         ^
+>    include/linux/cleanup.h:387:10: note: expanded from macro '\
+>    __DEFINE_UNLOCK_GUARD'
+>      387 |                                                                         \
+>          |                                                                         ^
+>    include/linux/cleanup.h:295:23: note: expanded from macro '\
+>    __DEFINE_GUARD_LOCK_PTR'
+>      295 |         static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+>          |                              ^
+>    <scratch space>:133:1: note: expanded from here
+>      133 | class_spinlock_irqsave_lock_ptr
+>          | ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: use of undeclared identifier 'scope'; did you mean 'sclp'?
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:27: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |                                  ^
+>    arch/s390/include/asm/sclp.h:119:25: note: 'sclp' declared here
+>      119 | extern struct sclp_info sclp;
+>          |                         ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: use of undeclared identifier 'class_spin_lock_irqsave_is_conditional'; did you mean 'class_spinlock_irqsave_is_conditional'?
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:38: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |                                             ^
+>    include/linux/cleanup.h:322:30: note: expanded from macro '__is_cond_ptr'
+>      322 | #define __is_cond_ptr(_name) class_##_name##_is_conditional
+>          |                              ^
+>    <scratch space>:167:1: note: expanded from here
+>      167 | class_spin_lock_irqsave_is_conditional
+>          | ^
+>    include/linux/spinlock.h:585:1: note: 'class_spinlock_irqsave_is_conditional' declared here
+>      585 | DEFINE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
+>          | ^
+>    include/linux/cleanup.h:407:65: note: expanded from macro 'DEFINE_LOCK_GUARD_1'
+>      407 | #define DEFINE_LOCK_GUARD_1(_name, _type, _lock, _unlock, ...)          \
+>          |                                                                         ^
+>    include/linux/cleanup.h:292:34: note: expanded from macro '\
+>    __DEFINE_CLASS_IS_CONDITIONAL'
+>      292 | static __maybe_unused const bool class_##_name##_is_conditional = _is_cond
+>          |                                  ^
+>    <scratch space>:125:1: note: expanded from here
+>      125 | class_spinlock_irqsave_is_conditional
+>          | ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: expected ')'
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:58: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |                                                                 ^
+>    drivers/gpio/gpio-litex.c:157:2: note: to match this '('
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:6: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |             ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: expected ';' after expression
+>      157 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:336:25: note: expanded from macro '__scoped_guard'
+>      336 |              ({ goto _label; }))                                        \
+>          |                                ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: expected expression
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:336:25: note: expanded from macro '__scoped_guard'
+>      336 |              ({ goto _label; }))                                        \
+>          |                                ^
+> >> drivers/gpio/gpio-litex.c:157:2: error: use of undeclared label '__UNIQUE_ID_label556'
+>    include/linux/cleanup.h:343:24: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |                               ^
+>    include/linux/compiler.h:166:29: note: expanded from macro '__UNIQUE_ID'
+>      166 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+>          |                             ^
+>    include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+>       84 | #define __PASTE(a,b) ___PASTE(a,b)
+>          |                      ^
+>    include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+>       83 | #define ___PASTE(a,b) a##b
+>          |                       ^
+>    <scratch space>:157:1: note: expanded from here
+>      157 | __UNIQUE_ID_label556
+>          | ^
+>    drivers/gpio/gpio-litex.c:173:2: error: use of undeclared identifier 'class_spin_lock_irqsave_t'; did you mean '_raw_spin_lock_irqsave'?
+>      173 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:7: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |              ^
+>    include/linux/cleanup.h:258:2: note: expanded from macro 'CLASS'
+>      258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+>          |         ^
+>    <scratch space>:173:1: note: expanded from here
+>      173 | class_spin_lock_irqsave_t
+>          | ^
+>    include/linux/spinlock_api_smp.h:32:26: note: '_raw_spin_lock_irqsave' declared here
+>       32 | unsigned long __lockfunc _raw_spin_lock_irqsave(raw_spinlock_t *lock)
+>          |                          ^
+>    drivers/gpio/gpio-litex.c:173:2: error: expected ';' in 'for' statement specifier
+>      173 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:20: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |                           ^
+>    drivers/gpio/gpio-litex.c:173:2: error: use of undeclared identifier 'scope'; did you mean 'sclp'?
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:20: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |                           ^
+>    arch/s390/include/asm/sclp.h:119:25: note: 'sclp' declared here
+>      119 | extern struct sclp_info sclp;
+>          |                         ^
+>    drivers/gpio/gpio-litex.c:173:2: error: expected ';' in 'for' statement specifier
+>      173 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:334:7: note: expanded from macro '__scoped_guard'
+>      334 |         for (CLASS(_name, scope)(args);                                 \
+>          |              ^
+>    include/linux/cleanup.h:258:24: note: expanded from macro 'CLASS'
+>      258 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+>          |                               ^
+>    include/linux/compiler-clang.h:15:25: note: expanded from macro '__cleanup'
+>       15 | #define __cleanup(func) __maybe_unused __attribute__((__cleanup__(func)))
+>          |                         ^
+>    include/linux/compiler_attributes.h:343:41: note: expanded from macro '__maybe_unused'
+>      343 | #define __maybe_unused                  __attribute__((__unused__))
+>          |                                         ^
+>    drivers/gpio/gpio-litex.c:173:2: error: call to undeclared function 'class_spin_lock_irqsave_lock_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:7: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |              ^
+>    include/linux/cleanup.h:321:28: note: expanded from macro '__guard_ptr'
+>      321 | #define __guard_ptr(_name) class_##_name##_lock_ptr
+>          |                            ^
+>    <scratch space>:179:1: note: expanded from here
+>      179 | class_spin_lock_irqsave_lock_ptr
+>          | ^
+>    drivers/gpio/gpio-litex.c:173:2: error: use of undeclared identifier 'scope'; did you mean 'sclp'?
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:27: note: expanded from macro '__scoped_guard'
+>      335 |              __guard_ptr(_name)(&scope) || !__is_cond_ptr(_name);       \
+>          |                                  ^
+>    arch/s390/include/asm/sclp.h:119:25: note: 'sclp' declared here
+>      119 | extern struct sclp_info sclp;
+>          |                         ^
+>    drivers/gpio/gpio-litex.c:173:2: error: use of undeclared identifier 'class_spin_lock_irqsave_is_conditional'; did you mean 'class_spinlock_irqsave_is_conditional'?
+>      173 |         scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>          |         ^
+>    include/linux/cleanup.h:343:2: note: expanded from macro 'scoped_guard'
+>      343 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+>          |         ^
+>    include/linux/cleanup.h:335:38: note: expanded from macro '__scoped_guard'
+> 
+> 
+> vim +157 drivers/gpio/gpio-litex.c
+> 
+>    145	
+>    146	static void litex_gpio_irq_unmask(struct irq_data *idata)
+>    147	{
+>    148		struct gpio_chip *chip = irq_data_get_irq_chip_data(idata);
+>    149		struct litex_gpio *gpio_s = gpiochip_get_data(chip);
+>    150		int offset = irqd_to_hwirq(idata) % GPIO_PINS_MAX;
+>    151		u32 bit = BIT(offset);
+>    152		u32 enable;
+>    153	
+>    154		gpiochip_enable_irq(chip, idata->hwirq);
+>    155	
+>    156		/* Clear any sticky pending interrupts */
+>  > 157		scoped_guard(spin_lock_irqsave, &gpio_s->gpio_lock) {
+>    158			litex_gpio_set_reg(gpio_s, LITEX_GPIO_PENDING_OFFSET, bit);
+>    159			enable = litex_gpio_get_reg(gpio_s, LITEX_GPIO_ENABLE_OFFSET);
+>    160			enable |= bit;
+>    161			litex_gpio_set_reg(gpio_s, LITEX_GPIO_ENABLE_OFFSET, enable);
+>    162		}
+>    163	}
+>    164	
+> 
 > -- 
-> 2.49.0.504.g3bcea36a83-goog
-> 
-> 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
