@@ -1,85 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C0820AF87;
-	Wed,  2 Apr 2025 04:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2A122DF8B
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 04:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743567024; cv=none; b=mPGvbG1lylVBiZrfFVVNRhvvxXvy4KiBr3xmtvCBXzxy8QFPkfe6b1MWOMcYE4GEYWYt2OSpm1ezyA1Fr0jEzyUUSxUWXWRceRBTtzKlg75ajJHGitQ7MRJij+5AA6urMUll6gIZfgN7vrP4+Vu0q/6mDuBU4O78y56yBOnB4yU=
+	t=1743567731; cv=none; b=mj6P0Ux6PgVP0RoMXFVchIK2XDRjIjgNIICOCLDo+btYtIKvvltXE/xPji9MezhB6epi45i5t0Yxrlwtu4fOKmnLFOhkvNbdaNzfa3YZrIXHRpOFdAywAFTZ7WL5uRwPUGamq6EgPtJieSK9ur4lVajGfO1zTFdfpzhiVwsRDhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743567024; c=relaxed/simple;
-	bh=I0s5Gv1mQHqnKIzWxsoxCEERoVHvYzeckwE8nOas3VU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jIAkqr2yjXXvz9b41k+FqQcRpJTSK1Hk68oNqIbZ4USFppSpp8alP5JmcVFq8WuRGUlF6a1K+zqZyjTjw73/vgmWISi4ripyT+6ylz13JpCWo4ess2kWdzbQvYZGsAIYDMFHLmVKVmKRPYczTc0cW9Kas8ysHIR4KefXc4G6DPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TnGYyG5P; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743567731; c=relaxed/simple;
+	bh=lgwrHFCla5/Z7XOCm5uIOPHVZJVGr6SaIo8Covvv8tk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ur32k+6o/6Q14SE+W2ubse/BkbfMsI8l3fxLsKiXOJjDeWFg3fSIFAEgDEeebHFwPSdD8dYZNeWKNgSr19razwye4MjX5tHDRdv8DBKDGWRhQ/ZyL8dL+mI/NXAv2UEBFeaCDpd3GfQrP2uqUZ0r5/43Ilk++FB06WlpfiKpaB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vnbl3wah; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TnGYyG5P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD29C4CEE9;
-	Wed,  2 Apr 2025 04:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743567024;
-	bh=I0s5Gv1mQHqnKIzWxsoxCEERoVHvYzeckwE8nOas3VU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TnGYyG5PegnZexH78EkVEZhjl67pWL7sXIuankw0lLUoS6l525yDJb1k2Y991Swzi
-	 Y/BQdn5EKeOPY4iCMiCsl/wcs58dUo6w4xmkNpQPl13ChnxQG34bUHyTmZ9oI5i9zj
-	 GXNesFcifbImdVA7Krak7NrblCx3xnxnf0NZrjadpmZUOlSF3sDsu4Wqsh/OKamc5N
-	 +/zpZVi9YHfAGYahd4Ce8z4sLXldFsNZWZ5Nqw2T1fjxJ8DAvB6m9Rtz/uEQMlDmh/
-	 IRy6AIGMdjxGih5ykPwxvU4bKYE7f4SM5B+pULQxCAmH41LRub4Yb6OVvdI2LbooM3
-	 g8DLjexGSgPew==
-Date: Wed, 2 Apr 2025 06:10:12 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Xin Li <xin@zytor.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-edac@vger.kernel.org,
-	kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-	linux-ide@vger.kernel.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, jgross@suse.com, andrew.cooper3@citrix.com,
-	peterz@infradead.org, acme@kernel.org, namhyung@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, wei.liu@kernel.org,
-	ajay.kaher@broadcom.com, alexey.amakhalov@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com, tony.luck@intel.com,
-	pbonzini@redhat.com, vkuznets@redhat.com, seanjc@google.com,
-	luto@kernel.org, boris.ostrovsky@oracle.com, kys@microsoft.com,
-	haiyangz@microsoft.com, decui@microsoft.com,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH v1 01/15] x86/msr: Replace __wrmsr() with
- native_wrmsrl()
-Message-ID: <Z-y4pGxgiP55lpOj@gmail.com>
-References: <20250331082251.3171276-1-xin@zytor.com>
- <20250331082251.3171276-2-xin@zytor.com>
- <Z-pruogreCuU66wm@gmail.com>
- <9D15DE81-2E68-4FCD-A133-4963602E18C9@zytor.com>
- <Z-ubVFyoOzwKhI53@gmail.com>
- <7a503d55-db41-42da-8133-4a3dbbd36c7e@zytor.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vnbl3wah"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743567728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SAao+TS6k20r30IVZ3Oake75c6JTpV6/A/uJ5IKPqLY=;
+	b=Vnbl3wahmhWaPM/LCC/gyz3grOvM0vCVE1knrDSj7uJEyL9H1yQUlgVs2MC8w+zjFHKLXZ
+	2sRO2FOW3KCtoeVVv+Ilp2nhucE83aRV7KrXF8Tqt594wxrbqcmRrXMrTBqAvrvTEeETuV
+	yyA/ccrZbW3C59DXNS6yS6Pc8ykEM5g=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-246-0bG797mQOZ6eVAByaudgrg-1; Wed,
+ 02 Apr 2025 00:22:07 -0400
+X-MC-Unique: 0bG797mQOZ6eVAByaudgrg-1
+X-Mimecast-MFC-AGG-ID: 0bG797mQOZ6eVAByaudgrg_1743567726
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2DC221801A07
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 04:22:06 +0000 (UTC)
+Received: from [172.20.219.140] (unknown [10.30.44.44])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8B58919560AD;
+	Wed,  2 Apr 2025 04:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, 3491aa04)
+Date: Wed, 02 Apr 2025 04:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a503d55-db41-42da-8133-4a3dbbd36c7e@zytor.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <56641.125040200220700371@us-mta-246.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: xQsZ4Eckchzb815BcRSy3hAOAVkSAgiVdSCCt1WaazU_1743567726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-* Xin Li <xin@zytor.com> wrote:
+Kernel information:
+    Commit message: Merge tag 'vfio-v6.15-rc1' of https://github.com/awilli=
+am/linux-vfio
 
-> Hi Ingo,
-> 
-> Is this branch public?
-> 
-> I wanted to rebase on it and then incooperate your review comments, but
-> couldn't find the branch.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1747680670
 
-Yeah, I moved it over to:
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1747680670-x86_64-kernel-debug
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.x86/msr
 
-Thanks,
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-	Ingo
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
