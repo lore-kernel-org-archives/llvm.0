@@ -1,137 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361F2230BFA;
-	Wed,  2 Apr 2025 04:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B271AD27
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 04:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743567826; cv=none; b=PGyqivmrqWQnypbqe0CqbYJNSdLpawrc6htDLvHu72rinfLCQCo4iatuFZkTVF34qksVa+czGfZYYPSBcSAyc1KWfff0iPxKPNH8D+M4K8O9uHBdC93Vnapb6Szogh4ZPeUOFW/4RqJPMrmeb1CwlEz5VYcWNbnyX8/nVJXB2GY=
+	t=1743569531; cv=none; b=b4qgY/KGZBwZukIyeEXo5L8F3B0jVBhsfmV/29X/oAiBR98/M2G48GOo9fIIm/4P3f9uHpVbAVwQ7bgzMq7IpsB7l/DNmtPjwlChFA60AZSRWOPx5ENhfP73/YSL89EnkyYaugNzB0M25G6DMFhsxtUVFHGZ7aZlXSBKeln9Am0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743567826; c=relaxed/simple;
-	bh=uk+jCp/FuYXV7XyCCDRWAs858M7p/r7TeKVlBYXv6ZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Fsz6Q1nJKFcz6NsZu9ZUA2i86aV3jJjw4QuH1Sq35F5MZdw1K98n1St4siTEfR58v3EgAFWAskAHSUt5RI2+CD90wZsHuIrLnhn9o+veBic1n9dRsH9hu7o+MDtCHCPqSevEvykVZyos1fxD4cx3zT1cCw4fS6uz8bUcZ4q1i9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S39IRO3A; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1743569531; c=relaxed/simple;
+	bh=ncSSDdfYTuROxMvWrgTJCdGYdkoODh+muwETjBRQkbw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ImyqG+Q3paTnW8kugH5s+E7uh+q+xoN8/7jUjTMPzMdIR98Lui80YQ8BEKGBeWuJ+OYsM8iNTTVeVUB/MDY+irqbc8EinN3Xny9ZqWfALd3QvnNhhqMzRiVK+trmmgNgv32Kdo0Xwftj6zMCA+/9/puPhIZWnEzaxZmaz3ujbW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CsB2SGvr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S39IRO3A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743567824; x=1775103824;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uk+jCp/FuYXV7XyCCDRWAs858M7p/r7TeKVlBYXv6ZQ=;
-  b=S39IRO3A9ESB3vwMxGBpG2PiEGUHyyJCxkmHBlEVAkF0KguQWbiRYPYq
-   SY63kz27lRE+gV/+42O763wF2ke2Um/wQVk7FLbU+sWk90jJa94TEFEK2
-   yDDnPBtFVc5j3+h+33zrzWINadY/pULp/SFVtUNChUGFAgj4v6x8HVaM0
-   AAEeSBR7iaBT5an6iqDed1AHPOrVs8dkCk2A03eydeV8uexTmpAsLlsFp
-   jYQZqC0vzVVtTsdtMJakz4frpF2thVSW7bagGA3F9Zzii7H2Xkpwyrng2
-   ODTC7WtDqe/RwfA04yQr/8RY2QCvGZkFlO31kmkqo1oLhe315jPq/lGGe
-   w==;
-X-CSE-ConnectionGUID: b7B1TXu8TJuA0Bq0gHZPkA==
-X-CSE-MsgGUID: 9qLyCgUCQH+PfIuI+0Y48w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11391"; a="56280098"
-X-IronPort-AV: E=Sophos;i="6.14,295,1736841600"; 
-   d="scan'208";a="56280098"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2025 21:23:43 -0700
-X-CSE-ConnectionGUID: wAbpNMTFTPWsb+vc4b+HPg==
-X-CSE-MsgGUID: cy35nKcVTMe3J5HTUsyGZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,295,1736841600"; 
-   d="scan'208";a="126828673"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 01 Apr 2025 21:23:42 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tzpdc-000AT8-0A;
-	Wed, 02 Apr 2025 04:23:40 +0000
-Date: Wed, 2 Apr 2025 12:23:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, Farrah Chen <farrah.chen@intel.com>
-Subject: [kvm:planes-20250401 58/62] arch/x86/kvm/lapic.c:1327:37: error:
- incompatible pointer types passing 'atomic_t *' to parameter of type
- 'volatile unsigned long *'
-Message-ID: <202504021219.U3GWMel8-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CsB2SGvr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743569528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pvGW5p3Dz1B+r+Gz0ksC02e9D0kJcdG1lI9aJwQIXcg=;
+	b=CsB2SGvrVRnOS2RxYFN79FQOnUUaNvuIXUqjt5dxg/CLTwKHBsFzVScIkVHZFprZEzmFnq
+	rhgTdIR+nWbxyS45FXU6OIRrZ7JDlQTeHNaPVBmLhRsijSIrEzOTWPhcd8FzNtC+Rc8Ebg
+	4yLHULANh2pxi1KkOZbJbom9CagGj2Q=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-456-t6POnoxyOYWziIsvgCQ_tA-1; Wed,
+ 02 Apr 2025 00:52:06 -0400
+X-MC-Unique: t6POnoxyOYWziIsvgCQ_tA-1
+X-Mimecast-MFC-AGG-ID: t6POnoxyOYWziIsvgCQ_tA_1743569525
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7CEE519560AB
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 04:52:05 +0000 (UTC)
+Received: from [172.20.219.140] (unknown [10.30.44.44])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0C58D3001D0E;
+	Wed,  2 Apr 2025 04:52:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.14.0,
+ upstream-mainline, acc4d5ff)
+Date: Wed, 02 Apr 2025 04:52:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <74389.125040200520600391@us-mta-456.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: tGgM2EhuHq9Qn3Qn1h08y_gG7L1SEUyysZBojr02QLs_1743569525
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git planes-20250401
-head:   73685d9c23b7122b44f07d59244416f8b56ed48e
-commit: 08db55297a7b060909a0121cb4ce6abbc3e6b2ea [58/62] KVM: x86: handle interrupt priorities for planes
-config: i386-buildonly-randconfig-006-20250402 (https://download.01.org/0day-ci/archive/20250402/202504021219.U3GWMel8-lkp@intel.com/config)
-compiler: clang version 20.1.1 (https://github.com/llvm/llvm-project 424c2d9b7e4de40d0804dd374721e6411c27d1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250402/202504021219.U3GWMel8-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504021219.U3GWMel8-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/lapic.c:1327:37: error: incompatible pointer types passing 'atomic_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
-    1327 |         if (!test_and_set_bit(vcpu->plane, &plane0_vcpu->arch.irr_pending_planes)) {
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bitops/instrumented-atomic.h:68:79: note: passing argument to parameter 'addr' here
-      68 | static __always_inline bool test_and_set_bit(long nr, volatile unsigned long *addr)
-         |                                                                               ^
-   1 error generated.
---
->> arch/x86/kvm/x86.c:11745:23: error: incompatible pointer types passing 'atomic_t *' to parameter of type 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
-    11745 |                 clear_bit(plane_id, &plane0_vcpu->arch.irr_pending_planes);
-          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bitops/instrumented-atomic.h:39:72: note: passing argument to parameter 'addr' here
-      39 | static __always_inline void clear_bit(long nr, volatile unsigned long *addr)
-         |                                                                        ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +1327 arch/x86/kvm/lapic.c
+Kernel information:
+    Commit message: Merge tag 'net-6.15-rc0' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-  1313	
-  1314	static void kvm_lapic_deliver_interrupt(struct kvm_vcpu *vcpu, struct kvm_lapic *apic,
-  1315						int delivery_mode, int trig_mode, int vector)
-  1316	{
-  1317		struct kvm_vcpu *plane0_vcpu = vcpu->plane0;
-  1318		struct kvm_plane *running_plane;
-  1319		u16 req_exit_planes;
-  1320	
-  1321		kvm_x86_call(deliver_interrupt)(apic, delivery_mode, trig_mode, vector);
-  1322	
-  1323		/*
-  1324		 * test_and_set_bit implies a memory barrier, so IRR is written before
-  1325		 * reading irr_pending_planes below...
-  1326		 */
-> 1327		if (!test_and_set_bit(vcpu->plane, &plane0_vcpu->arch.irr_pending_planes)) {
-  1328			/*
-  1329			 * ... and also running_plane and req_exit_planes are read after writing
-  1330			 * irr_pending_planes.  Both barriers pair with kvm_arch_vcpu_ioctl_run().
-  1331			 */
-  1332			smp_mb__after_atomic();
-  1333	
-  1334			running_plane = READ_ONCE(plane0_vcpu->running_plane);
-  1335			if (!running_plane)
-  1336				return;
-  1337	
-  1338			req_exit_planes = READ_ONCE(plane0_vcpu->req_exit_planes);
-  1339			if (!(req_exit_planes & BIT(vcpu->plane)))
-  1340				return;
-  1341	
-  1342			kvm_make_request(KVM_REQ_PLANE_INTERRUPT,
-  1343					 kvm_get_plane_vcpu(running_plane, vcpu->vcpu_id));
-  1344		}
-  1345	}
-  1346	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1747723683
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1747723683-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
