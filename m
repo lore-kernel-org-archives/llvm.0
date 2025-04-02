@@ -1,248 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF55E288DA
-	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 22:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6715F1F428F
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 22:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743631979; cv=none; b=Apvg/iyrBMLbs3hLzRh+lUMIu+DhFsUJF50dlchkVsKTzH+JGOHsZPwDnJCaDVyJq91DfOj3If289SaesZQZtO3hTA3mV7zP2S79neal/GhoJkpgL3p7syO+6tMXbKGbzgRsqtjThtQTijHUd0qAk+GMx3zbB+4PRodhXILv4Ec=
+	t=1743633190; cv=none; b=NJrAsXF1XAoqvXGbUKbGuaPrX7iAbsc/di2842+bDueP0NIbQKD1fEIhs+iligTFDfS94hhcJiVyKXbd/VVJteIQMbWDedUWlXzDwqj+Dwqz9Y5gKH1fftgAoC6KiVlEsZ2K0DRYmbuvjQqp1qlCLrS1/MWxeXRhN+px6zN3tFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743631979; c=relaxed/simple;
-	bh=N/S8OOVe5xr0/JnHBpC5RJRQZwys6OonPMJLX3WhJj8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RQCW0MvGPbzV5JFfkUd5j9P+nfadobNrRTeuV/MVDjg2PF2hJTwZo8BvIrJM8nMRBp7s0+PpGHYldu2fJH01EoRSf9ZtPCsSgPz9WAY7EYXEYNrWxwUv9pGSzJa2eWJ/43pRZRfIDNTp/nUyER2HsQ+QMmDcPoiryMIX9UEsUP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fiy+mxX+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1743633190; c=relaxed/simple;
+	bh=vpL5MYiXWzk/TTfDMt9SK1ICgCeny9hniT1+NGgwpEY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YlUsUOMQdyPFro7CRTpaV+mbDgodTZd3DP7ysIGh90y8Cr7O/LYNpivTp4Ips+iK5p8/wvnNQ9QUA59M6pR7VrBj77hDvrP9GJnrXywQkSW7jeLwN/txgKlVf0GiXyDWAZLpK2XD7cKvIe7Tg62NiQyPlSy5UCtBnRv1Z1oRb98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NKYhEzIW; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fiy+mxX+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EDFC4CEDD;
-	Wed,  2 Apr 2025 22:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743631978;
-	bh=N/S8OOVe5xr0/JnHBpC5RJRQZwys6OonPMJLX3WhJj8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fiy+mxX+hhBs5FqFfXJaHRcWD9ajsOx3kXV9VPHwm/Q3U2YAlilM9/gfXksAHfX0f
-	 tyIqKU7ehuhAFmxSvGqdAtYHtZ/QgZ9jJZZX2HwzFRfm3Y1NRTTYHpJllFLTyKmYJF
-	 QV/ZdAd8lt0ag0UqmDWm2SN8cAT9A4pZekRVDnk/iofuqKDDQh3//4gJnRM9jdBRMo
-	 RKqlRgkxKVkvl37yX82uzHjaTeedqPtd7O24WDbMDc/XKryc5qag6S6yLRY0okJm76
-	 jM4bzfV5BMSFFZdwb1VW6eCOcTsDiAySKIT7IU4QJx/xJmr8bWzjCV0xjjVSw0rcFI
-	 fW/9xjxPfj8FQ==
-Date: Wed, 2 Apr 2025 15:12:54 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: linux-um@lists.infradead.org, Johannes Berg <johannes.berg@intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] um: mark rodata read-only and implement _nofault
- accesses
-Message-ID: <20250402221254.GA384@ax162>
-References: <20250210160926.420133-1-benjamin@sipsolutions.net>
- <20250210160926.420133-2-benjamin@sipsolutions.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NKYhEzIW"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2240aad70f2so373845ad.0
+        for <llvm@lists.linux.dev>; Wed, 02 Apr 2025 15:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1743633189; x=1744237989; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFoV6Jzg/d3+puQvt+e32UWddq8Y5WjF4RLVz5wXa1A=;
+        b=NKYhEzIWcgChnyoEkRnQCtt1igiD3rhAig+tZGjuXC7PR2lawwqc+d4QcgdfnfItoV
+         agwqjfu48hEr0JKsmxIwGBS+5WR1gydXIHlCfGXlECRArKJMU794Z5GchSZEZ+Vmltdv
+         agTNAe7/novL2VBbrCK6d8SczQ3053XXAALDvh/yIGvEjbBWTJG0fI3mT3mOz4gToxJq
+         LiQbpwcP+VfcUvHI0tdTl7dHjlWzWFLbJJyiLhdR83t+0NpqXKM7noaTvE5jUdmdMU8K
+         HzvfpSwRWM7dmjtiJgQqnYgbfAKDsCCvimiGMvrtPvvwdv5VjP9l3TolTzW7Qu5+eQsM
+         91AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743633189; x=1744237989;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VFoV6Jzg/d3+puQvt+e32UWddq8Y5WjF4RLVz5wXa1A=;
+        b=inBCMuLIuv0FnUqjaKvGhX6XgKbeWnBpUF7O6eko2L/zetkCPhk7N/WhrZl4DVXndw
+         zCaXqQeLR/tMhpgzlrZgcb6eKF1dmk/AuKRXoZa6BsnuMNMsognZQpxuUNoLGo/4rLsv
+         BtIUS3ND/WXyZAiCy5JrgwEGovpwRRfd7OC5XmxUN6erlyk+tMC6aQHtTsiqaaYlSCVO
+         bWT6mW1oaVA+MU1xLAU0PdxPEEC1wNvv48O3KG4KYb+CEXUTsO6w5KKOGcop77+cGAXX
+         xp/mjPRMoRClyppQ+XVXqlKFgl0eS8uy91N/ygy7lNxM1genEqWMkEsMrPmJjk9biUk9
+         75Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdo9i0mCvxHle/v1xfV+N1DM1s8LV1/Q1JgZbtUzjyqbOBqa4HCm/Cut/asIAJhO/4e2NZ@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVj26twpSfr3AdCgu2/FICtbRV9EB0dCZUfmKYEAKhA4IJAh8u
+	N0/CCzz8smi97D/Hhh0p0fKsMX95YSPyXeYhMQYY0AOhNiOAZ4s6tu4o+46FjeNisPN0vlCGXPD
+	ydELEKaFLahU0bHUxUDalBFscCH7CeGdYj12N
+X-Gm-Gg: ASbGncvyJpSqPgF3/gtaaaL1KcD1rpP9a0xz/qzenM9K5qRe3ZKV0H3cE9THV8cpTau
+	MlWhu66ZO1KN6k7NAkAh/hfEWs4H9cYOjVIXyAyhol5QLsDoVegt0IjahXLk178UdHo+eIVWZP8
+	mJQdRB4B89Ckj43UGDLsTGQFYZMneJnKNTstmaYpmyGGdfdxRsIaKH8l+1m7sP2I0=
+X-Google-Smtp-Source: AGHT+IGeD+R7itL1TPM9ELId2uzX7pKMbUUuKfNfuvM39HjMgfv4HNBG65B/Era82HmhwK2fm9Jftl72TclUySUeWKE=
+X-Received: by 2002:a17:902:ecc5:b0:215:65f3:27ef with SMTP id
+ d9443c01a7336-22977502490mr1273235ad.12.1743633188346; Wed, 02 Apr 2025
+ 15:33:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210160926.420133-2-benjamin@sipsolutions.net>
+References: <20250401182347.3422199-1-irogers@google.com> <20250401182347.3422199-10-irogers@google.com>
+ <20250402143541.GM115840@e132581.arm.com> <CAP-5=fVqax8cxdZ4HLBP4AMxL6jADfYNrORC97T6F23mjf3N1w@mail.gmail.com>
+ <20250402163807.GP115840@e132581.arm.com> <20250402230125.366ac21c@pumpkin>
+In-Reply-To: <20250402230125.366ac21c@pumpkin>
+From: Ian Rogers <irogers@google.com>
+Date: Wed, 2 Apr 2025 15:32:57 -0700
+X-Gm-Features: AQ5f1JoGDdvG3SyzAeolredX1Q4rcDlM_rn1uPkwDSeBGYU8h0-XIsAUN3GlKck
+Message-ID: <CAP-5=fVMk+1+Jv3OavMwHmm1b0YNZPnmETOW7nTbW9-7tS4MNw@mail.gmail.com>
+Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Leo Yan <leo.yan@arm.com>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
+	Leo Yan <leo.yan@linux.dev>, Yicong Yang <yangyicong@hisilicon.com>, 
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Kyle Meyer <kyle.meyer@hpe.com>, Ben Gainey <ben.gainey@arm.com>, 
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Kajol Jain <kjain@linux.ibm.com>, 
+	Aditya Gupta <adityag@linux.ibm.com>, Eder Zulian <ezulian@redhat.com>, 
+	Dapeng Mi <dapeng1.mi@linux.intel.com>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
+	He Zhe <zhe.he@windriver.com>, Dirk Gouders <dirk@gouders.net>, 
+	Brian Geffon <bgeffon@google.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
+	Howard Chu <howardchu95@gmail.com>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, Dominique Martinet <asmadeus@codewreck.org>, 
+	Jann Horn <jannh@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Yang Jihong <yangjihong@bytedance.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andi Kleen <ak@linux.intel.com>, Graham Woodward <graham.woodward@arm.com>, 
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>, 
+	Anshuman Khandual <anshuman.khandual@arm.com>, Zhongqiu Han <quic_zhonhan@quicinc.com>, 
+	Hao Ge <gehao@kylinos.cn>, Tengda Wu <wutengda@huaweicloud.com>, 
+	Gabriele Monaco <gmonaco@redhat.com>, Chun-Tse Shao <ctshao@google.com>, 
+	Casey Chen <cachen@purestorage.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
+	Li Huafei <lihuafei1@huawei.com>, "Steinar H. Gunderson" <sesse@google.com>, Levi Yun <yeoreum.yun@arm.com>, 
+	Weilin Wang <weilin.wang@intel.com>, Thomas Falcon <thomas.falcon@intel.com>, 
+	Thomas Richter <tmricht@linux.ibm.com>, Andrew Kreimer <algonell@gmail.com>, 
+	=?UTF-8?Q?Krzysztof_=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>, Junhao He <hejunhao3@huawei.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Xu Yang <xu.yang_2@nxp.com>, 
+	Steve Clevenger <scclevenger@os.amperecomputing.com>, Zixian Cai <fzczx123@gmail.com>, 
+	Stephen Brennan <stephen.s.brennan@oracle.com>, Yujie Liu <yujie.liu@intel.com>, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Benjamin and Johannes,
+On Wed, Apr 2, 2025 at 3:01=E2=80=AFPM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Wed, 2 Apr 2025 17:38:07 +0100
+> Leo Yan <leo.yan@arm.com> wrote:
+>
+> > Hi Ian,
+> ...
+> > If we use casts just to silence warnings, we also lose the opportunity
+> > to improve code quality.  The changes in this series that fix type
+> > mismatches are good, but I think the use of casts is not particularly
+> > helpful - we're simply switching from implicit compiler casts to
+> > explicit ones.
+>
+> It is certainly my experience (a lot of years) that casts between
+> integers of different sizes just make code harder to read and possibly
+> even more buggy.
+>
+> If the compiler really knew the valid range of the value (rather than
+> just the type) then perhaps a warning that significant bits were being
+> discarded might be more reasonable.
+> But even then you don't want anything for code like:
+>         hi_32 =3D val_64 >> 32;
+>         lo_32 =3D val_64;
 
-On Mon, Feb 10, 2025 at 05:09:25PM +0100, Benjamin Berg wrote:
-> From: Johannes Berg <johannes.berg@intel.com>
-> 
-> Mark read-only data actually read-only (simple mprotect), and
-> to be able to test it also implement _nofault accesses. This
-> works by setting up a new "segv_continue" pointer in current,
-> and then when we hit a segfault we change the signal return
-> context so that we continue at that address. The code using
-> this sets it up so that it jumps to a label and then aborts
-> the access that way, returning -EFAULT.
-> 
-> It's possible to optimize the ___backtrack_faulted() thing by
-> using asm goto (compiler version dependent) and/or gcc's (not
-> sure if clang has it) &&label extension, but at least in one
-> attempt I made the && caused the compiler to not load -EFAULT
-> into the register in case of jumping to the &&label from the
-> fault handler. So leave it like this for now.
-> 
-> Co-developed-by: Benjamin Berg <benjamin.berg@intel.com>
-> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> ---
->  arch/um/Kconfig                          |  1 +
->  arch/um/include/asm/processor-generic.h  |  2 ++
->  arch/um/include/asm/uaccess.h            | 20 ++++++++++++-----
->  arch/um/include/shared/arch.h            |  2 ++
->  arch/um/include/shared/as-layout.h       |  2 +-
->  arch/um/include/shared/irq_user.h        |  3 ++-
->  arch/um/include/shared/kern_util.h       | 12 ++++++----
->  arch/um/kernel/irq.c                     |  3 ++-
->  arch/um/kernel/mem.c                     | 10 +++++++++
->  arch/um/kernel/trap.c                    | 28 +++++++++++++++++++-----
->  arch/um/os-Linux/signal.c                |  4 ++--
->  arch/um/os-Linux/skas/process.c          |  8 +++----
->  arch/x86/um/os-Linux/mcontext.c          | 12 ++++++++++
->  arch/x86/um/shared/sysdep/faultinfo_32.h | 12 ++++++++++
->  arch/x86/um/shared/sysdep/faultinfo_64.h | 12 ++++++++++
->  15 files changed, 108 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-> index 18051b1cfce0..79509c7f39de 100644
-> --- a/arch/um/Kconfig
-> +++ b/arch/um/Kconfig
-> @@ -12,6 +12,7 @@ config UML
->  	select ARCH_HAS_KCOV
->  	select ARCH_HAS_STRNCPY_FROM_USER
->  	select ARCH_HAS_STRNLEN_USER
-> +	select ARCH_HAS_STRICT_KERNEL_RWX
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_KASAN if X86_64
->  	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
-> diff --git a/arch/um/include/asm/processor-generic.h b/arch/um/include/asm/processor-generic.h
-> index 5d6356eafffe..8a789c17acd8 100644
-> --- a/arch/um/include/asm/processor-generic.h
-> +++ b/arch/um/include/asm/processor-generic.h
-> @@ -31,6 +31,8 @@ struct thread_struct {
->  		} thread;
->  	} request;
->  
-> +	void *segv_continue;
-> +
->  	/* Contains variable sized FP registers */
->  	struct pt_regs regs;
->  };
-> diff --git a/arch/um/include/asm/uaccess.h b/arch/um/include/asm/uaccess.h
-> index 1d4b6bbc1b65..3a08f9029a3f 100644
-> --- a/arch/um/include/asm/uaccess.h
-> +++ b/arch/um/include/asm/uaccess.h
-> @@ -9,6 +9,7 @@
->  
->  #include <asm/elf.h>
->  #include <linux/unaligned.h>
-> +#include <sysdep/faultinfo.h>
->  
->  #define __under_task_size(addr, size) \
->  	(((unsigned long) (addr) < TASK_SIZE) && \
-> @@ -44,19 +45,28 @@ static inline int __access_ok(const void __user *ptr, unsigned long size)
->  		 __access_ok_vsyscall(addr, size));
->  }
->  
-> -/* no pagefaults for kernel addresses in um */
->  #define __get_kernel_nofault(dst, src, type, err_label)			\
->  do {									\
-> -	*((type *)dst) = get_unaligned((type *)(src));			\
-> -	if (0) /* make sure the label looks used to the compiler */	\
-> +	int __faulted;							\
-> +									\
-> +	___backtrack_faulted(__faulted);				\
-> +	if (__faulted) {						\
-> +		*((type *)dst) = (type) 0;				\
->  		goto err_label;						\
-> +	}								\
-> +	*((type *)dst) = get_unaligned((type *)(src));			\
-> +	current->thread.segv_continue = NULL;				\
->  } while (0)
->  
->  #define __put_kernel_nofault(dst, src, type, err_label)			\
->  do {									\
-> -	put_unaligned(*((type *)src), (type *)(dst));			\
-> -	if (0) /* make sure the label looks used to the compiler */	\
-> +	int __faulted;							\
-> +									\
-> +	___backtrack_faulted(__faulted);				\
-> +	if (__faulted)							\
->  		goto err_label;						\
-> +	put_unaligned(*((type *)src), (type *)(dst));			\
-> +	current->thread.segv_continue = NULL;				\
->  } while (0)
->  
->  #endif
-...
-> diff --git a/arch/x86/um/shared/sysdep/faultinfo_64.h b/arch/x86/um/shared/sysdep/faultinfo_64.h
-> index ee88f88974ea..26fb4835d3e9 100644
-> --- a/arch/x86/um/shared/sysdep/faultinfo_64.h
-> +++ b/arch/x86/um/shared/sysdep/faultinfo_64.h
-> @@ -29,4 +29,16 @@ struct faultinfo {
->  
->  #define PTRACE_FULL_FAULTINFO 1
->  
-> +#define ___backtrack_faulted(_faulted)					\
-> +	asm volatile (							\
-> +		"mov $0, %0\n"						\
-> +		"movq $__get_kernel_nofault_faulted_%=,%1\n"		\
-> +		"jmp _end_%=\n"						\
-> +		"__get_kernel_nofault_faulted_%=:\n"			\
-> +		"mov $1, %0;"						\
-> +		"_end_%=:"						\
-> +		: "=r" (_faulted),					\
-> +		  "=m" (current->thread.segv_continue) ::		\
-> +	)
-> +
->  #endif
+There is an instance of this in:
+https://lore.kernel.org/lkml/20250401182347.3422199-3-irogers@google.com/
 
-I bisected a crash that our CI sees with this change as
-commit d1d7f01f7cd3 ("um: mark rodata read-only and implement _nofault
-accesses"). Unfortunately, I only see this with clang, I do not see it
-with GCC 14.2.0 but I am not sure where I would start trying to figure
-out what is going on here.
+The particular problem that Leo Yan [1] found in the code base is if a
+compare function like:
 
-  $ make -skj"$(nproc)" ARCH=um LLVM=1 mrproper defconfig vmlinux
+  int cmp(long *a, long *b)
+  {
+      return *a - *b;
+  }
 
-  # Get rootfs via
-  #   curl -LSs https://github.com/ClangBuiltLinux/boot-utils/releases/download/20241120-044434/x86_64-rootfs.ext4.zst | zstd -d >rootfs.ext4
-  # if necessary
-  $ ./vmlinux ubd0=$PWD/rootfs.ext4
-  Core dump limits :
-          soft - NONE
-          hard - NONE
-  Checking that ptrace can change system call numbers...OK
-  Checking syscall emulation for ptrace...OK
-  Checking environment variables for a tempdir...none found
-  Checking if /dev/shm is on tmpfs...OK
-  Checking PROT_EXEC mmap in /dev/shm...OK
-  Linux version 6.14.0-rc5-00002-gd1d7f01f7cd3 (nathan@n3-xlarge-x86) (ClangBuiltLinux clang version 20.1.2 (https://github.com/llvm/llvm-project.git 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247), ClangBuiltLinux LLD 20.1.2 (https://github.com/llvm/llvm-project.git 58df0ef89dd64126512e4ee27b4ac3fd8ddf6247)) #1 Wed Apr  2 15:07:50 MST 2025
-  ...
-  EXT4-fs (ubda): orphan cleanup on readonly fs
-  EXT4-fs (ubda): mounted filesystem 267f8e03-3e3c-4aec-979b-f4d9b964b716 ro with ordered data mode. Quota mode: none.
-  VFS: Mounted root (ext4 filesystem) readonly on device 98:0.
-  devtmpfs: mounted
-  Run /sbin/init as init process
+which are typically passed to routines like list_sort, qsort or
+bsearch. The subtract is potentially 64-bit and the implicit cast to
+32-bit loses the sign information. Generally the problem is more
+opaque than this as here you can quite easily see the types of "a" and
+"b". If we say we don't warn for implicit truncating assignments then:
 
-  Modules linked in:
-  Pid: 24, comm: mount Not tainted 6.14.0-rc5-00002-gd1d7f01f7cd3
-  RIP: 0033:_end_0+0x38/0x45
-  RSP: 00000000648bfca0  EFLAGS: 00010206
-  RAX: 0000000000000000 RBX: 00000000609c7ff8 RCX: 00000000606350b8
-  RDX: 00000000648bfc5e RSI: 0000000000001000 RDI: 0000000060c0c000
-  RBP: 00000000648bfcc0 R08: 0000000000000000 R09: 0000000060c0c780
-  R10: 0000000000000000 R11: 0000000000000206 R12: 00000000648bfd60
-  R13: 0000000060c0c900 R14: 0000000060c0c9f8 R15: 0000000000000007
-  Kernel panic - not syncing: Kernel mode fault at addr 0x790, ip 0x600c268a
-  CPU: 0 UID: 0 PID: 24 Comm: mount Not tainted 6.14.0-rc5-00002-gd1d7f01f7cd3 #1
-  Stack:
-   600c25e9 00000007 609c7ff8 608c4780
-   648bfcf0 601533ca 601533ab 648bfd60
-   648bfdb0 608c4780 648bfd10 60152ebe
-  Call Trace:
-   [<600c25e9>] ? copy_from_kernel_nofault+0x0/0x64
-   [<601533ca>] prepend_copy+0x1f/0x51
-   [<601533ab>] ? prepend_copy+0x0/0x51
-   [<60152ebe>] prepend+0x60/0x67
-   [<60153379>] prepend_name+0x1f/0x51
-   [<6015335a>] ? prepend_name+0x0/0x51
-   [<60152bad>] prepend_path+0xb9/0x1d8
-   [<6003cb83>] ? um_set_signals+0x0/0x3b
-   [<60152e17>] d_path+0xce/0x115
-   [<601867f5>] proc_pid_readlink+0xa1/0x17d
-   [<6012b182>] vfs_readlink+0xec/0xee
-   [<60138920>] ? touch_atime+0x0/0x162
-   [<60120341>] do_readlinkat+0xbe/0x13a
-   [<6011f91b>] sys_readlinkat+0x10/0x14
-   [<6002caad>] handle_syscall+0x7b/0xaa
-   [<6002ca32>] ? handle_syscall+0x0/0xaa
-   [<6003f687>] userspace+0x289/0x4a5
-   [<6002a8e3>] fork_handler+0x56/0x5d
+  int cmp(long *a, long *b)
+  {
+      int ret =3D *a - *b;
+      return ret;
+  }
 
-Cheers,
-Nathan
+becomes valid, but it is identical and as broken as the code before.
+I'm happy for a better alternative than clang's `-Wshorten-64-to-32`
+but haven't found it and I agree it's unfortunate for the churn it
+kicks up.
+
+As an aside, I wrote a Java check for this as I found a similar bug in
+Android. That check found instances where the subtract and truncate
+were happening in a cache that would sort elements deleting the
+oldest. Unfortunately the truncation meant it could also be deleting
+the newest elements. In Java lossy conversions require a cast so I
+could target the warning on casts within compare routines. C of course
+has given us a good way to shoot ourselves in the foot with implicit
+conversion and -Wshorten-64-to-32 seems to be a good way of avoiding
+that particular foot cannon. Making ordering routines use a less-than
+comparison avoids the problem in C++.
+
+Thanks,
+Ian
+
+[1] https://lore.kernel.org/lkml/20250331172759.115604-1-leo.yan@arm.com/
+>     David
