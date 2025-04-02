@@ -1,61 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EEF5BAF0;
-	Wed,  2 Apr 2025 13:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46F5149C7D
+	for <llvm@lists.linux.dev>; Wed,  2 Apr 2025 14:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743599065; cv=none; b=TfbjtgLNFNG7JlD/YPcq/8MT/f9fvf0hccuph62dgWvT87IBKosh/H1y55nTJWhDMdowrLjF2hdh4IZTlqwaC2XRBdXuxSIau3zZS1mmx76vq+I9jRGG9zygeOhGWSXjqOAQxvRHbgrUFfAgrEJvdhIVcO/ZMmq20+KTEIKG5E4=
+	t=1743604548; cv=none; b=WyEkyIi/ELA4JZ9val0C8PeXRJVZrcJMwbHFQlflzA1DAIA7Z8s6sp41D2FG0gk8byrCR/qqe7AlNHxLkXZlBMBBMxNRu5od74DB9hnj3pugqfkz2n+mO21Vz2LkIJzPbFWiVQ71WO/n4DkBXCXOAtZGn3LLe4LGzay5j95TZSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743599065; c=relaxed/simple;
-	bh=Tdlq5TiqO/XE83VfPFoedqdq3+BQTGJ0oksFEq8Tkac=;
+	s=arc-20240116; t=1743604548; c=relaxed/simple;
+	bh=ICFQu9uatwHq5mRLnVZDPfIvCDIZp3w6Sx8ogDkBt3w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kmD+GMvreBC0NZFJR6w/9M3uTaEOoYMeXnq/siARbC6nOGVxv7r2jSvajQaxhbx0DeOrC2aw7bFdo5vaHr3w21RDaZO+yjOPSHSD4s9XIYH0lg/6C4M3GbB72w/ajtiRtRRlZKDQKcrcM2FJaMsfHyBX9EWr0IQWu/IiXcYS1h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbSt5y5Y; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbSt5y5Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1743599064; x=1775135064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tdlq5TiqO/XE83VfPFoedqdq3+BQTGJ0oksFEq8Tkac=;
-  b=IbSt5y5YJxTPpRvzio+4DaoRs7KvFVJsxPyL+TpI8w1OM/3RSGMUr6rf
-   f/bg/WFDE0xWBYAqS6NFQ2ZicTkWju6dbQ8TC4K5akWRcq0vOiGe6TzU+
-   /nsdXEInnGSaryYYPYis54s2TT6F3oSwkcWhOtgQi45QZzI9wt/3rkrbI
-   Z7BAJtI7uNMuTCZg49dIe3yK7h7pNjQd5zaiybCYjjBMjBMoFpiRLuVDo
-   53iLUY2cjkHzwbSqISU8zZpRGa7YPrY2Y/CKK53SBquBZXUJ14EzWIJtc
-   aGsJtQUKFj86x+l7ULXX6sHxJ9XC6GtHijIc1S97zqejem92QT4D5tTpT
-   Q==;
-X-CSE-ConnectionGUID: F1Tpq2a/S7q/N8lP0ufaHw==
-X-CSE-MsgGUID: h5pdGO69S+yfz+88raSQXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11392"; a="67428842"
-X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="67428842"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2025 06:04:23 -0700
-X-CSE-ConnectionGUID: qmKex5JwTMW1UzwSiae5cQ==
-X-CSE-MsgGUID: hTAoWUDMQPWZBMYsH59Vjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,182,1739865600"; 
-   d="scan'208";a="163920317"
-Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 02 Apr 2025 06:04:21 -0700
-Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tzxlS-000Ai6-0q;
-	Wed, 02 Apr 2025 13:04:18 +0000
-Date: Wed, 2 Apr 2025 21:03:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vitaly Wool <vitaly.wool@konsulko.se>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	akpm@linux-foundation.org, Vitaly Wool <vitaly.wool@konsulko.se>,
-	Igor Belousov <igor.b@beldev.am>
-Subject: Re: [PATCH] mm: add zblock allocator
-Message-ID: <202504022017.kHAz8bGB-lkp@intel.com>
-References: <20250401171754.2686501-1-vitaly.wool@konsulko.se>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cywkEANd8rNjFqgJhpxDgdCBOKZjfbJpDsy3OL95VxVNsE2uE4r1q6lJgoom14k/QMwj27V4iS1A24HqDJzngKjy4YB2s/E5BENlBl24Z3LHggFyxnzm/VxC3UOBpNXiT3kIA1OlBuSp//j/Ex6/eBNzOfHx6ww7X/fw8oJnCkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDCA31F91;
+	Wed,  2 Apr 2025 07:35:48 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99FAA3F63F;
+	Wed,  2 Apr 2025 07:35:45 -0700 (PDT)
+Date: Wed, 2 Apr 2025 15:35:41 +0100
+From: Leo Yan <leo.yan@arm.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Kyle Meyer <kyle.meyer@hpe.com>,
+	Ben Gainey <ben.gainey@arm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Eder Zulian <ezulian@redhat.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Kuan-Wei Chiu <visitorckw@gmail.com>, He Zhe <zhe.he@windriver.com>,
+	Dirk Gouders <dirk@gouders.net>, Brian Geffon <bgeffon@google.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Howard Chu <howardchu95@gmail.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Jann Horn <jannh@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Graham Woodward <graham.woodward@arm.com>,
+	Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Zhongqiu Han <quic_zhonhan@quicinc.com>, Hao Ge <gehao@kylinos.cn>,
+	Tengda Wu <wutengda@huaweicloud.com>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	Chun-Tse Shao <ctshao@google.com>,
+	Casey Chen <cachen@purestorage.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Li Huafei <lihuafei1@huawei.com>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	Levi Yun <yeoreum.yun@arm.com>, Weilin Wang <weilin.wang@intel.com>,
+	Thomas Falcon <thomas.falcon@intel.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Andrew Kreimer <algonell@gmail.com>,
+	Krzysztof =?utf-8?Q?=C5=81opatowski?= <krzysztof.m.lopatowski@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Jean-Philippe Romain <jean-philippe.romain@foss.st.com>,
+	Junhao He <hejunhao3@huawei.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	Steve Clevenger <scclevenger@os.amperecomputing.com>,
+	Zixian Cai <fzczx123@gmail.com>,
+	Stephen Brennan <stephen.s.brennan@oracle.com>,
+	Yujie Liu <yujie.liu@intel.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v1 09/48] perf tests: Silence -Wshorten-64-to-32 warnings
+Message-ID: <20250402143541.GM115840@e132581.arm.com>
+References: <20250401182347.3422199-1-irogers@google.com>
+ <20250401182347.3422199-10-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,278 +103,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250401171754.2686501-1-vitaly.wool@konsulko.se>
+In-Reply-To: <20250401182347.3422199-10-irogers@google.com>
 
-Hi Vitaly,
+On Tue, Apr 01, 2025 at 11:23:07AM -0700, Ian Rogers wrote:
 
-kernel test robot noticed the following build warnings:
+[...]
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.14]
-[cannot apply to akpm-mm/mm-everything next-20250402]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> @@ -478,13 +478,14 @@ static int __cmd_test(struct test_suite **suites, int argc, const char *argv[],
+>  	int err = 0;
+>  
+>  	for (struct test_suite **t = suites; *t; t++) {
+> -		int i, len = strlen(test_description(*t, -1));
+> +		int i;
+> +		int len = (int)strlen(test_description(*t, -1));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vitaly-Wool/mm-add-zblock-allocator/20250402-011953
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20250401171754.2686501-1-vitaly.wool%40konsulko.se
-patch subject: [PATCH] mm: add zblock allocator
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250402/202504022017.kHAz8bGB-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250402/202504022017.kHAz8bGB-lkp@intel.com/reproduce)
+Thanks for huge polish.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504022017.kHAz8bGB-lkp@intel.com/
+Just a concern from me.  Throughout this patch, the methodology is not
+consistent.  Some changes update variable types which is fine for me.
 
-All warnings (new ones prefixed by >>):
+But the case above it simply cast size_t to int.  Should we update the
+variable type as 'size_t' at here?
 
->> mm/zblock.c:56: warning: Function parameter or struct member 'free_slots' not described in 'zblock_block'
->> mm/zblock.c:56: warning: Function parameter or struct member 'slot_info' not described in 'zblock_block'
->> mm/zblock.c:56: warning: Function parameter or struct member 'cache_idx' not described in 'zblock_block'
->> mm/zblock.c:102: warning: Function parameter or struct member 'slot_size' not described in 'block_desc'
->> mm/zblock.c:102: warning: Function parameter or struct member 'slots_per_block' not described in 'block_desc'
->> mm/zblock.c:102: warning: Function parameter or struct member 'order' not described in 'block_desc'
->> mm/zblock.c:102: warning: Function parameter or struct member 'block_desc' not described in 'block_desc'
->> mm/zblock.c:114: warning: Function parameter or struct member 'lock' not described in 'block_list'
->> mm/zblock.c:114: warning: Function parameter or struct member 'block_cache' not described in 'block_list'
->> mm/zblock.c:114: warning: Function parameter or struct member 'block_count' not described in 'block_list'
->> mm/zblock.c:249: warning: Excess function parameter 'ops' description in 'zblock_create_pool'
+>  		if (width < len)
+>  			width = len;
+>  
+>  		test_suite__for_each_test_case(*t, i) {
+> -			len = strlen(test_description(*t, i));
+> +			len = (int)strlen(test_description(*t, i));
+>  			if (width < len)
+>  				width = len;
+>  			num_tests += runs_per_test;
+> diff --git a/tools/perf/tests/code-reading.c b/tools/perf/tests/code-reading.c
+> index cf6edbe697b2..0c31d5ff77e2 100644
+> --- a/tools/perf/tests/code-reading.c
+> +++ b/tools/perf/tests/code-reading.c
+> @@ -188,7 +188,7 @@ static int objdump_version(void)
+>  	char *line = NULL;
+>  	const char *fmt;
+>  	FILE *f;
+> -	int ret;
+> +	ssize_t ret;
+>  
+>  	int version_tmp, version_num = 0;
+>  	char *version = 0, *token;
+> @@ -295,7 +295,7 @@ static int read_via_objdump(const char *filename, u64 addr, void *buf,
+>  	if (len) {
+>  		pr_debug("objdump read too few bytes: %zd\n", len);
+>  		if (!ret)
+> -			ret = len;
+> +			ret = (int)len;
 
+A proper change is to update the function type to:
 
-vim +56 mm/zblock.c
+  size_t read_via_objdump(...)
 
-    42	
-    43	/**
-    44	 * struct zblock_block - block metadata
-    45	 * Block consists of several (1/2/4/8) pages and contains fixed
-    46	 * integer number of slots for allocating compressed pages.
-    47	 *
-    48	 * free_slots:	number of free slots in the block
-    49	 * slot_info:	contains data about free/occupied slots
-    50	 * cache_idx:	index of the block in cache
-    51	 */
-    52	struct zblock_block {
-    53		atomic_t free_slots;
-    54		u64 slot_info[1];
-    55		int cache_idx;
-  > 56	};
-    57	
-    58	/**
-    59	 * struct block_desc - general metadata for block lists
-    60	 * Each block list stores only blocks of corresponding type which means
-    61	 * that all blocks in it have the same number and size of slots.
-    62	 * All slots are aligned to size of long.
-    63	 *
-    64	 * slot_size:		size of slot for this list
-    65	 * slots_per_block:	number of slots per block for this list
-    66	 * order:		order for __get_free_pages
-    67	 */
-    68	static const struct block_desc {
-    69		const unsigned int slot_size;
-    70		const unsigned short slots_per_block;
-    71		const unsigned short order;
-    72	} block_desc[] = {
-    73		{ SLOT_SIZE(32, 0), 32, 0 },
-    74		{ SLOT_SIZE(22, 0), 22, 0 },
-    75		{ SLOT_SIZE(17, 0), 17, 0 },
-    76		{ SLOT_SIZE(13, 0), 13, 0 },
-    77		{ SLOT_SIZE(11, 0), 11, 0 },
-    78		{ SLOT_SIZE(9, 0), 9, 0 },
-    79		{ SLOT_SIZE(8, 0), 8, 0 },
-    80		{ SLOT_SIZE(14, 1), 14, 1 },
-    81		{ SLOT_SIZE(12, 1), 12, 1 },
-    82		{ SLOT_SIZE(11, 1), 11, 1 },
-    83		{ SLOT_SIZE(10, 1), 10, 1 },
-    84		{ SLOT_SIZE(9, 1), 9, 1 },
-    85		{ SLOT_SIZE(8, 1), 8, 1 },
-    86		{ SLOT_SIZE(15, 2), 15, 2 },
-    87		{ SLOT_SIZE(14, 2), 14, 2 },
-    88		{ SLOT_SIZE(13, 2), 13, 2 },
-    89		{ SLOT_SIZE(12, 2), 12, 2 },
-    90		{ SLOT_SIZE(11, 2), 11, 2 },
-    91		{ SLOT_SIZE(10, 2), 10, 2 },
-    92		{ SLOT_SIZE(9, 2), 9, 2 },
-    93		{ SLOT_SIZE(8, 2), 8, 2 },
-    94		{ SLOT_SIZE(15, 3), 15, 3 },
-    95		{ SLOT_SIZE(14, 3), 14, 3 },
-    96		{ SLOT_SIZE(13, 3), 13, 3 },
-    97		{ SLOT_SIZE(12, 3), 12, 3 },
-    98		{ SLOT_SIZE(11, 3), 11, 3 },
-    99		{ SLOT_SIZE(10, 3), 10, 3 },
-   100		{ SLOT_SIZE(9, 3), 9, 3 },
-   101		{ SLOT_SIZE(7, 3), 7, 3 }
- > 102	};
-   103	
-   104	/**
-   105	 * struct block_list - stores metadata of particular list
-   106	 * lock:		protects block_cache
-   107	 * block_cache:		blocks with free slots
-   108	 * block_count:		total number of blocks in the list
-   109	 */
-   110	struct block_list {
-   111		spinlock_t lock;
-   112		struct zblock_block *block_cache[BLOCK_CACHE_SIZE];
-   113		unsigned long block_count;
- > 114	};
-   115	
-   116	/**
-   117	 * struct zblock_pool - stores metadata for each zblock pool
-   118	 * @block_lists:	array of block lists
-   119	 * @zpool:		zpool driver
-   120	 * @alloc_flag:		protects block allocation from memory leak
-   121	 *
-   122	 * This structure is allocated at pool creation time and maintains metadata
-   123	 * for a particular zblock pool.
-   124	 */
-   125	struct zblock_pool {
-   126		struct block_list block_lists[ARRAY_SIZE(block_desc)];
-   127		struct zpool *zpool;
-   128		atomic_t alloc_flag;
-   129	};
-   130	
-   131	/*****************
-   132	 * Helpers
-   133	 *****************/
-   134	
-   135	static int cache_insert_block(struct zblock_block *block, struct block_list *list)
-   136	{
-   137		unsigned int i, min_free_slots = atomic_read(&block->free_slots);
-   138		int min_index = -1;
-   139	
-   140		if (WARN_ON(block->cache_idx != -1))
-   141			return -EINVAL;
-   142	
-   143		min_free_slots = atomic_read(&block->free_slots);
-   144		for (i = 0; i < BLOCK_CACHE_SIZE; i++) {
-   145			if (!list->block_cache[i] || !atomic_read(&(list->block_cache[i])->free_slots)) {
-   146				min_index = i;
-   147				break;
-   148			}
-   149			if (atomic_read(&(list->block_cache[i])->free_slots) < min_free_slots) {
-   150				min_free_slots = atomic_read(&(list->block_cache[i])->free_slots);
-   151				min_index = i;
-   152			}
-   153		}
-   154		if (min_index >= 0) {
-   155			if (list->block_cache[min_index])
-   156				(list->block_cache[min_index])->cache_idx = -1;
-   157			list->block_cache[min_index] = block;
-   158			block->cache_idx = min_index;
-   159		}
-   160		return min_index < 0 ? min_index : 0;
-   161	}
-   162	
-   163	static struct zblock_block *cache_find_block(struct block_list *list)
-   164	{
-   165		int i;
-   166		struct zblock_block *z = NULL;
-   167	
-   168		for (i = 0; i < BLOCK_CACHE_SIZE; i++) {
-   169			if (list->block_cache[i] &&
-   170			    atomic_dec_if_positive(&list->block_cache[i]->free_slots) >= 0) {
-   171				z = list->block_cache[i];
-   172				break;
-   173			}
-   174		}
-   175		return z;
-   176	}
-   177	
-   178	static int cache_remove_block(struct block_list *list, struct zblock_block *block)
-   179	{
-   180		int idx = block->cache_idx;
-   181	
-   182		block->cache_idx = -1;
-   183		if (idx >= 0)
-   184			list->block_cache[idx] = NULL;
-   185		return idx < 0 ? idx : 0;
-   186	}
-   187	
-   188	/*
-   189	 * Encodes the handle of a particular slot in the pool using metadata
-   190	 */
-   191	static inline unsigned long metadata_to_handle(struct zblock_block *block,
-   192								unsigned int block_type, unsigned int slot)
-   193	{
-   194		return (unsigned long)(block) + (block_type << SLOT_BITS) + slot;
-   195	}
-   196	
-   197	/* Returns block, block type and slot in the pool corresponding to handle */
-   198	static inline struct zblock_block *handle_to_metadata(unsigned long handle,
-   199							unsigned int *block_type, unsigned int *slot)
-   200	{
-   201		*block_type = (handle & (PAGE_SIZE - 1)) >> SLOT_BITS;
-   202		*slot = handle & SLOT_MASK;
-   203		return (struct zblock_block *)(handle & PAGE_MASK);
-   204	}
-   205	
-   206	
-   207	/*
-   208	 * allocate new block and add it to corresponding block list
-   209	 */
-   210	static struct zblock_block *alloc_block(struct zblock_pool *pool,
-   211						int block_type, gfp_t gfp,
-   212						unsigned long *handle)
-   213	{
-   214		struct zblock_block *block;
-   215		struct block_list *list;
-   216	
-   217		block = (void *)__get_free_pages(gfp, block_desc[block_type].order);
-   218		if (!block)
-   219			return NULL;
-   220	
-   221		list = &(pool->block_lists)[block_type];
-   222	
-   223		/* init block data  */
-   224		memset(&block->slot_info, 0, sizeof(block->slot_info));
-   225		atomic_set(&block->free_slots, block_desc[block_type].slots_per_block - 1);
-   226		block->cache_idx = -1;
-   227		set_bit(BIT_SLOT_OCCUPIED, (unsigned long *)block->slot_info);
-   228		*handle = metadata_to_handle(block, block_type, 0);
-   229	
-   230		spin_lock(&list->lock);
-   231		cache_insert_block(block, list);
-   232		list->block_count++;
-   233		spin_unlock(&list->lock);
-   234		return block;
-   235	}
-   236	
-   237	/*****************
-   238	 * API Functions
-   239	 *****************/
-   240	/**
-   241	 * zblock_create_pool() - create a new zblock pool
-   242	 * @gfp:	gfp flags when allocating the zblock pool structure
-   243	 * @ops:	user-defined operations for the zblock pool
-   244	 *
-   245	 * Return: pointer to the new zblock pool or NULL if the metadata allocation
-   246	 * failed.
-   247	 */
-   248	static struct zblock_pool *zblock_create_pool(gfp_t gfp)
- > 249	{
-   250		struct zblock_pool *pool;
-   251		struct block_list *list;
-   252		int i, j;
-   253	
-   254		pool = kmalloc(sizeof(struct zblock_pool), gfp);
-   255		if (!pool)
-   256			return NULL;
-   257	
-   258		/* init each block list */
-   259		for (i = 0; i < ARRAY_SIZE(block_desc); i++) {
-   260			list = &(pool->block_lists)[i];
-   261			spin_lock_init(&list->lock);
-   262			for (j = 0; j < BLOCK_CACHE_SIZE; j++)
-   263				list->block_cache[j] = NULL;
-   264			list->block_count = 0;
-   265		}
-   266		atomic_set(&pool->alloc_flag, 0);
-   267		return pool;
-   268	}
-   269	
+[...]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+> index db004d26fcb0..2762794827ce 100644
+> --- a/tools/perf/tests/pmu-events.c
+> +++ b/tools/perf/tests/pmu-events.c
+> @@ -609,7 +609,7 @@ static int __test_uncore_pmu_event_aliases(struct perf_pmu_test_pmu *test_pmu)
+>  	pmu_add_sys_aliases(pmu);
+>  
+>  	/* Count how many aliases we generated */
+> -	alias_count = perf_pmu__num_events(pmu);
+> +	alias_count = (int)perf_pmu__num_events(pmu);
+
+Could we change the variable 'alias_count' to size_t type?
+
+Or in another way, we need to update perf_pmu__num_events() with
+returning int type.
+
+My understanding is rather than using cast, we should polish code for
+using consistent type for both variables and return values.
+
+>  	/* Count how many aliases we expect from the known table */
+>  	for (table = &test_pmu->aliases[0]; *table; table++)
+> diff --git a/tools/perf/tests/sigtrap.c b/tools/perf/tests/sigtrap.c
+> index a67c756f90b8..b7d7735f8a72 100644
+> --- a/tools/perf/tests/sigtrap.c
+> +++ b/tools/perf/tests/sigtrap.c
+> @@ -154,13 +154,13 @@ sigtrap_handler(int signum __maybe_unused, siginfo_t *info, void *ucontext __may
+>  {
+>  	if (!__atomic_fetch_add(&ctx.signal_count, 1, __ATOMIC_RELAXED))
+>  		ctx.first_siginfo = *info;
+> -	__atomic_fetch_sub(&ctx.tids_want_signal, syscall(SYS_gettid), __ATOMIC_RELAXED);
+> +	__atomic_fetch_sub(&ctx.tids_want_signal, (pid_t)syscall(SYS_gettid), __ATOMIC_RELAXED);
+>  }
+>  
+>  static void *test_thread(void *arg)
+>  {
+>  	pthread_barrier_t *barrier = (pthread_barrier_t *)arg;
+> -	pid_t tid = syscall(SYS_gettid);
+> +	pid_t tid = (pid_t)syscall(SYS_gettid);
+>  	int i;
+>  
+>  	pthread_barrier_wait(barrier);
+> diff --git a/tools/perf/tests/switch-tracking.c b/tools/perf/tests/switch-tracking.c
+> index 8df3f9d9ffd2..1f0f8321ae40 100644
+> --- a/tools/perf/tests/switch-tracking.c
+> +++ b/tools/perf/tests/switch-tracking.c
+> @@ -140,8 +140,8 @@ static int process_sample_event(struct evlist *evlist,
+>  
+>  	evsel = evlist__id2evsel(evlist, sample.id);
+>  	if (evsel == switch_tracking->switch_evsel) {
+> -		next_tid = evsel__intval(evsel, &sample, "next_pid");
+> -		prev_tid = evsel__intval(evsel, &sample, "prev_pid");
+> +		next_tid = (int)evsel__intval(evsel, &sample, "next_pid");
+> +		prev_tid = (int)evsel__intval(evsel, &sample, "prev_pid");
+
+Change 'prev_tid' and 'next_tid' to pid_t type?
+
+Thanks,
+Leo
+
+>  		cpu = sample.cpu;
+>  		pr_debug3("sched_switch: cpu: %d prev_tid %d next_tid %d\n",
+>  			  cpu, prev_tid, next_tid);
+> @@ -262,9 +262,10 @@ static int compar(const void *a, const void *b)
+>  {
+>  	const struct event_node *nodea = a;
+>  	const struct event_node *nodeb = b;
+> -	s64 cmp = nodea->event_time - nodeb->event_time;
+>  
+> -	return cmp;
+> +	if (nodea->event_time == nodeb->event_time)
+> +		return 0;
+> +	return nodea->event_time < nodeb->event_time ? -1 : 1;
+>  }
+>  
+>  static int process_events(struct evlist *evlist,
+> @@ -398,7 +399,7 @@ static int test__switch_tracking(struct test_suite *test __maybe_unused, int sub
+>  
+>  	switch_evsel = evlist__add_sched_switch(evlist, true);
+>  	if (IS_ERR(switch_evsel)) {
+> -		err = PTR_ERR(switch_evsel);
+> +		err = (int)PTR_ERR(switch_evsel);
+>  		pr_debug("Failed to create event %s\n", sched_switch);
+>  		goto out_err;
+>  	}
+> diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
+> index 74cdbd2ce9d0..fbdb463e965d 100644
+> --- a/tools/perf/tests/vmlinux-kallsyms.c
+> +++ b/tools/perf/tests/vmlinux-kallsyms.c
+> @@ -82,7 +82,7 @@ static bool is_ignored_symbol(const char *name, char type)
+>  			return true;
+>  
+>  	for (p = ignored_suffixes; *p; p++) {
+> -		int l = strlen(name) - strlen(*p);
+> +		ssize_t l = strlen(name) - strlen(*p);
+>  
+>  		if (l >= 0 && !strcmp(name + l, *p))
+>  			return true;
+> @@ -313,7 +313,7 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
+>  				 * _really_ have a problem.
+>  				 */
+>  				s64 skew = mem_end - UM(pair->end);
+> -				if (llabs(skew) >= page_size)
+> +				if (llabs(skew) >= (s64)page_size)
+>  					pr_debug("WARN: %#" PRIx64 ": diff end addr for %s v: %#" PRIx64 " k: %#" PRIx64 "\n",
+>  						 mem_start, sym->name, mem_end,
+>  						 UM(pair->end));
+> diff --git a/tools/perf/tests/wp.c b/tools/perf/tests/wp.c
+> index 6c178985e37f..d5dd17eb5c05 100644
+> --- a/tools/perf/tests/wp.c
+> +++ b/tools/perf/tests/wp.c
+> @@ -31,10 +31,10 @@ volatile u8 data2[3];
+>  #ifndef __s390x__
+>  static int wp_read(int fd, long long *count, int size)
+>  {
+> -	int ret = read(fd, count, size);
+> +	ssize_t ret = read(fd, count, size);
+>  
+>  	if (ret != size) {
+> -		pr_debug("failed to read: %d\n", ret);
+> +		pr_debug("failed to read: %zd\n", ret);
+>  		return -1;
+>  	}
+>  	return 0;
+> -- 
+> 2.49.0.504.g3bcea36a83-goog
+> 
+> 
